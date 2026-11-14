@@ -22,7 +22,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "2555b208"
+      "dh": "2555b208",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca103",
@@ -43,7 +61,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "0e1d904c"
+      "dh": "0e1d904c",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

@@ -20,7 +20,17 @@
         "D2StatInfoStrc",
         "int32_t"
       ],
-      "dh": "84231582"
+      "dh": "84231582",
+      "paramStorage": [
+        [
+          "nStatKey",
+          "EDI:4"
+        ],
+        [
+          "pStatInfo",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_BinarySearchInsertPos",
@@ -39,7 +49,17 @@
         "D2StatInfoStrc",
         "int32_t"
       ],
-      "dh": "a822162a"
+      "dh": "a822162a",
+      "paramStorage": [
+        [
+          "nStatKey",
+          "EDI:4"
+        ],
+        [
+          "pStatInfo",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_BinarySearchStatInfoArray",
@@ -58,7 +78,17 @@
         "D2StatInfoStrc",
         "int32_t"
       ],
-      "dh": "7a087189"
+      "dh": "7a087189",
+      "paramStorage": [
+        [
+          "nStatKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatInfo",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_InsertStatIntoArray",
@@ -82,7 +112,21 @@
         "D2StatStrc",
         "int32_t"
       ],
-      "dh": "ce07bb98"
+      "dh": "ce07bb98",
+      "paramStorage": [
+        [
+          "pStatInfo",
+          "ESI:4"
+        ],
+        [
+          "nStatKey",
+          "EAX:4"
+        ],
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_RemoveStatFromArray",
@@ -104,7 +148,25 @@
         "D2StatInfoStrc",
         "D2StatStrc"
       ],
-      "dh": "ec9ca049"
+      "dh": "ec9ca049",
+      "paramStorage": [
+        [
+          "pPoolManager1",
+          "ECX:4"
+        ],
+        [
+          "pStat",
+          "EDX:4"
+        ],
+        [
+          "pPoolManager2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppStatArray",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_BinarySearchChangedInsertPos",
@@ -123,7 +185,17 @@
         "D2ChangedStatArrayStrc",
         "int32_t"
       ],
-      "dh": "8d80bbe6"
+      "dh": "8d80bbe6",
+      "paramStorage": [
+        [
+          "pStatInfo",
+          "EAX:4"
+        ],
+        [
+          "nStatKey",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_TrackChangedStat",
@@ -148,7 +220,17 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "735ffd4f"
+      "dh": "735ffd4f",
+      "paramStorage": [
+        [
+          "nShiftedStat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatEx",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_LookupBaseStatWithMinAccr",
@@ -170,7 +252,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6b48bf10"
+      "dh": "6b48bf10",
+      "paramStorage": [
+        [
+          "pItemStatCostLine",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatList",
+          "EBX:4"
+        ],
+        [
+          "nStatKey",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetEffectiveStatsArray",
@@ -189,7 +285,13 @@
         "D2StatInfoStrc",
         "D2StatListExStrc"
       ],
-      "dh": "682dd475"
+      "dh": "682dd475",
+      "paramStorage": [
+        [
+          "pStatList",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_ItemStatCost_GetMinimumStatValueShifted",
@@ -213,7 +315,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1ff17a9b"
+      "dh": "1ff17a9b",
+      "paramStorage": [
+        [
+          "pItemStatCostLine",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatEx",
+          "EBX:4"
+        ],
+        [
+          "nStatKey",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_CalcFullStatFromChildren",
@@ -235,7 +351,21 @@
         "D2StatListExStrc",
         "int32_t"
       ],
-      "dh": "b064e712"
+      "dh": "b064e712",
+      "paramStorage": [
+        [
+          "nStatId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTxtItemStatCostLine",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pStatListEx",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_PropagateStatDelta",
@@ -261,7 +391,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "aa4a85cb"
+      "dh": "aa4a85cb",
+      "paramStorage": [
+        [
+          "nShiftedStat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDelta",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pItemStatCostTxt",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCallbackArg",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pSkillsTxt",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_SetFullStatValue",
@@ -287,7 +439,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1c660be2"
+      "dh": "1c660be2",
+      "paramStorage": [
+        [
+          "nStatKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNewValue",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pItemStatCostTxt",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pCallbackUnit",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pSkillsTxt",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "AllocStatList",
@@ -310,7 +484,29 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "08bc516c"
+      "dh": "08bc516c",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFrame",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwUnitGUID",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "GetOwnerType",
@@ -329,7 +525,13 @@
         "D2StatListExStrc",
         "eD2UnitType"
       ],
-      "dh": "bbc17602"
+      "dh": "bbc17602",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetStatCountFromStatList",
@@ -348,7 +550,13 @@
         "D2StatListExStrc",
         "int32_t"
       ],
-      "dh": "b76f5281"
+      "dh": "b76f5281",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetUnitTotalStats",
@@ -367,7 +575,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7b545cd5"
+      "dh": "7b545cd5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetOwnerGUID",
@@ -386,7 +600,13 @@
         "D2StatListExStrc",
         "int32_t"
       ],
-      "dh": "756bd883"
+      "dh": "756bd883",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetState",
@@ -405,7 +625,17 @@
         "D2StatListExStrc",
         "eD2States"
       ],
-      "dh": "ad8b46dc"
+      "dh": "ad8b46dc",
+      "paramStorage": [
+        [
+          "pStatsEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eState",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetState",
@@ -424,7 +654,13 @@
         "D2StatListExStrc",
         "eD2States"
       ],
-      "dh": "37220a62"
+      "dh": "37220a62",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetTimeout_WithFlag",
@@ -443,7 +679,17 @@
         "D2StatListExStrc",
         "int32_t"
       ],
-      "dh": "77618247"
+      "dh": "77618247",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTimeout",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetFullListFromStatList",
@@ -461,7 +707,13 @@
       "usedTypes": [
         "D2StatListExStrc"
       ],
-      "dh": "054b3cbf"
+      "dh": "054b3cbf",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetStatFromBaseArray",
@@ -483,7 +735,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "754e72c1"
+      "dh": "754e72c1",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "SERVER_GetUnitStat",
@@ -505,7 +771,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "cc169337"
+      "dh": "cc169337",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetMinimalStatValueShifted",
@@ -527,7 +807,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "cc1fabde"
+      "dh": "cc1fabde",
+      "paramStorage": [
+        [
+          "pStatsEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "STATSEX_GetCurrentStat",
@@ -548,7 +842,21 @@
         "eD2UnitStat",
         "uint16_t"
       ],
-      "dh": "cf0be6c4"
+      "dh": "cf0be6c4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "thunk_STATLIST_GetStatFromBaseArray",
@@ -570,7 +878,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e2230f65"
+      "dh": "e2230f65",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_STATLIST_GetMinimalStatValueShifted",
@@ -592,7 +914,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "760e7821"
+      "dh": "760e7821",
+      "paramStorage": [
+        [
+          "pStatListEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetMinimalStatValueShifted",
@@ -614,7 +950,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "917c955c"
+      "dh": "917c955c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetStatBonusFromList",
@@ -637,7 +987,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "01358744"
+      "dh": "01358744",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetStatBonusFromLists",
@@ -661,7 +1025,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4324985b"
+      "dh": "4324985b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_CalcStatWithPercentBonus",
@@ -684,7 +1062,25 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "29ddd0c8"
+      "dh": "29ddd0c8",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStat",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bIncludeBonus",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_CalcUnitStatWithPercentBonus",
@@ -705,7 +1101,25 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "69740aa9"
+      "dh": "69740aa9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ePercentStat",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetStatValueByIndex",
@@ -724,7 +1138,17 @@
         "D2StatListExStrc",
         "int32_t"
       ],
-      "dh": "aa7a1e9c"
+      "dh": "aa7a1e9c",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetStatListByState",
@@ -744,7 +1168,17 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "b8bf0fed"
+      "dh": "b8bf0fed",
+      "paramStorage": [
+        [
+          "pStatsEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eState",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetStatsByState",
@@ -765,7 +1199,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "b53be47c"
+      "dh": "b53be47c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eState",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetStatListByFlags",
@@ -784,7 +1228,17 @@
         "D2StatListExStrc",
         "uint32_t"
       ],
-      "dh": "3b28af61"
+      "dh": "3b28af61",
+      "paramStorage": [
+        [
+          "pStatsEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStatListFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_FindStatListWithFlags",
@@ -803,7 +1257,17 @@
         "D2StatListExStrc",
         "uint32_t"
       ],
-      "dh": "da234395"
+      "dh": "da234395",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetStatsByFlags",
@@ -824,7 +1288,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "3d12f4dc"
+      "dh": "3d12f4dc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStatListFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetStatListByStateOrFlagsIfNotExists",
@@ -847,7 +1321,21 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "a3e84eec"
+      "dh": "a3e84eec",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eState",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nStatListFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetStatList",
@@ -868,7 +1356,21 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "158f43eb"
+      "dh": "158f43eb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eState",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatListFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SEVER_ITEM_GetOwner",
@@ -888,7 +1390,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "486a8d3b"
+      "dh": "486a8d3b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbStatNotDynamic",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_DispatchUnchangedStatToCallback",
@@ -912,7 +1424,25 @@
         "int32_t",
         "pfnStatChangedCb"
       ],
-      "dh": "ca0b0ecf"
+      "dh": "ca0b0ecf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_IterateChangedStats",
@@ -934,7 +1464,21 @@
         "pfnStatChangedCb",
         "uint32_t"
       ],
-      "dh": "f31b490b"
+      "dh": "f31b490b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_ClearChangedStatFlags",
@@ -954,7 +1498,13 @@
         "D2StatListExStrc",
         "D2UnitStrc"
       ],
-      "dh": "0d608d14"
+      "dh": "0d608d14",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATSEX_GetAlignment",
@@ -976,7 +1526,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "2d94035a"
+      "dh": "2d94035a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_ClearOverlayFlags",
@@ -994,7 +1550,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "2c1e041c"
+      "dh": "2c1e041c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_HasChangedStats",
@@ -1013,7 +1575,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "f590d89d"
+      "dh": "f590d89d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetStatByState",
@@ -1034,7 +1602,17 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "30325040"
+      "dh": "30325040",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_SetUnitState",
@@ -1059,7 +1637,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b33604c0"
+      "dh": "b33604c0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eState",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bSet",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetStateBitFlag",
@@ -1079,7 +1671,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "5142cc9a"
+      "dh": "5142cc9a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eState",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetStateFlags",
@@ -1098,7 +1700,13 @@
         "D2StatListExStrc",
         "D2UnitStrc"
       ],
-      "dh": "a8a90cf6"
+      "dh": "a8a90cf6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetUnitGfxFlags",
@@ -1117,7 +1725,13 @@
         "D2StatListExStrc",
         "D2UnitStrc"
       ],
-      "dh": "f6965db7"
+      "dh": "f6965db7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_CopyStatsToBuffer",
@@ -1139,7 +1753,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "769b8773"
+      "dh": "769b8773",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "CopyStatsToBuffer",
@@ -1160,7 +1788,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "6760f042"
+      "dh": "6760f042",
+      "paramStorage": [
+        [
+          "pStatListEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutput",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nOutputSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_SetExpireFunction",
@@ -1179,7 +1821,17 @@
         "D2StatListExStrc",
         "PFN_StatExpireCallback"
       ],
-      "dh": "4343463e"
+      "dh": "4343463e",
+      "paramStorage": [
+        [
+          "pStatsEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnExpire",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetBaseStatValue",
@@ -1201,7 +1853,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bb3421b3"
+      "dh": "bb3421b3",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetTxtMaxHp",
@@ -1221,7 +1887,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "dd1ddc9f"
+      "dh": "dd1ddc9f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetTxtMaxMana",
@@ -1241,7 +1913,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c0b7b36a"
+      "dh": "c0b7b36a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetTxtMaxStamina",
@@ -1261,7 +1939,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "fe4de35e"
+      "dh": "fe4de35e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetTxtMaxDurability",
@@ -1284,7 +1968,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5e542946"
+      "dh": "5e542946",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetTxtMaxDamage",
@@ -1304,7 +1994,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "30bb55ed"
+      "dh": "30bb55ed",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bCheckSecondaryDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetTxtMinDamage",
@@ -1324,7 +2024,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "cd360749"
+      "dh": "cd360749",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bCheckSecondaryDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetTxtThrowMaxDamage",
@@ -1344,7 +2054,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "39132fc1"
+      "dh": "39132fc1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetTxtThrowMinDamage",
@@ -1364,7 +2080,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1b15ce64"
+      "dh": "1b15ce64",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetTxtArmorClass",
@@ -1384,7 +2106,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "3b6aca87"
+      "dh": "3b6aca87",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetStatForDamageCalc",
@@ -1405,7 +2133,21 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "f0a28e87"
+      "dh": "f0a28e87",
+      "paramStorage": [
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetFullListPtr",
@@ -1423,7 +2165,13 @@
       "usedTypes": [
         "D2StatListExStrc"
       ],
-      "dh": "60388c28"
+      "dh": "60388c28",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATSEX_SetStatListTimeout",
@@ -1442,7 +2190,17 @@
         "D2StatListExStrc",
         "int32_t"
       ],
-      "dh": "2cf19f4c"
+      "dh": "2cf19f4c",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTimeout",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetSkillId",
@@ -1461,7 +2219,17 @@
         "D2StatListExStrc",
         "eD2Skills"
       ],
-      "dh": "a5f89adc"
+      "dh": "a5f89adc",
+      "paramStorage": [
+        [
+          "pStatsEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillId",
@@ -1480,7 +2248,13 @@
         "D2StatListExStrc",
         "eD2Skills"
       ],
-      "dh": "856fd3c7"
+      "dh": "856fd3c7",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetSkillLevel",
@@ -1499,7 +2273,17 @@
         "D2StatListExStrc",
         "int32_t"
       ],
-      "dh": "2145778d"
+      "dh": "2145778d",
+      "paramStorage": [
+        [
+          "pStatsEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillLevel",
@@ -1517,7 +2301,13 @@
       "usedTypes": [
         "D2StatListExStrc"
       ],
-      "dh": "31657f48"
+      "dh": "31657f48",
+      "paramStorage": [
+        [
+          "pStatListEx",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_CopyStatPairsByStatIndex",
@@ -1540,7 +2330,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d5e062bd"
+      "dh": "d5e062bd",
+      "paramStorage": [
+        [
+          "pOutStatPairs",
+          "ECX:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxCount",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pStatList",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "STATSEX_CopyStatPairsFromStatList",
@@ -1562,7 +2370,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ae19c9fa"
+      "dh": "ae19c9fa",
+      "paramStorage": [
+        [
+          "nStatListPtr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOutStatPairs",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMaxCount",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_GetItemStatBonusValues",
@@ -1585,7 +2411,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f7b8f5be"
+      "dh": "f7b8f5be",
+      "paramStorage": [
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStatIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOutStatPairs",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMaxCount",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_CalcCombinedStatValue",
@@ -1624,7 +2468,17 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "ea7920e0"
+      "dh": "ea7920e0",
+      "paramStorage": [
+        [
+          "pStatList",
+          "ECX:4"
+        ],
+        [
+          "nStatShifted",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_ApplyComplexStatFormula",
@@ -1652,7 +2506,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "c1a66879"
+      "dh": "c1a66879",
+      "paramStorage": [
+        [
+          "pStatList",
+          "ECX:4"
+        ],
+        [
+          "nStatKey",
+          "EDX:4"
+        ],
+        [
+          "pItemStatCostStat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnitOwner",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_PropagateStatChange",
@@ -1676,7 +2548,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7163eaa9"
+      "dh": "7163eaa9",
+      "paramStorage": [
+        [
+          "pStatsEx",
+          "ECX:4"
+        ],
+        [
+          "nShiftedStat",
+          "EDX:4"
+        ],
+        [
+          "nDelta",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_DetachAndRecalc",
@@ -1702,7 +2592,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c40b4431"
+      "dh": "c40b4431",
+      "paramStorage": [
+        [
+          "pStatListEx",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreeAnyStatList",
@@ -1723,7 +2619,13 @@
         "D2StatListExStrc",
         "D2StatStrc"
       ],
-      "dh": "f5db0105"
+      "dh": "f5db0105",
+      "paramStorage": [
+        [
+          "pPlayerStatsEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FreeStatList",
@@ -1742,7 +2644,13 @@
       "usedTypes": [
         "D2StatListStrc"
       ],
-      "dh": "2439d40a"
+      "dh": "2439d40a",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00626cf0",
@@ -1761,7 +2669,13 @@
       "usedTypes": [
         "D2StatListExStrc"
       ],
-      "dh": "fc2ee2b2"
+      "dh": "fc2ee2b2",
+      "paramStorage": [
+        [
+          "pStatListEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_FreeStatListMemory",
@@ -1781,7 +2695,13 @@
         "D2StatListExStrc",
         "D2UnitStrc"
       ],
-      "dh": "79317909"
+      "dh": "79317909",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AllocStatListEx",
@@ -1806,7 +2726,25 @@
         "fpStatListExChangeCb",
         "uint32_t"
       ],
-      "dh": "dfbb1add"
+      "dh": "dfbb1add",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pfnStatChangeCb",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_AttachStatListToUnit",
@@ -1836,7 +2774,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "33d00ab9"
+      "dh": "33d00ab9",
+      "paramStorage": [
+        [
+          "pOp45Owner",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatsEx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bActive",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_AddStatValue",
@@ -1863,7 +2815,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "34e14d0f"
+      "dh": "34e14d0f",
+      "paramStorage": [
+        [
+          "pStatsEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSubIndex",
+          "Stack[0x10]:2"
+        ]
+      ]
     },
     {
       "name": "STATLIST_SetStatValue",
@@ -1891,7 +2861,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "65cec1db"
+      "dh": "65cec1db",
+      "paramStorage": [
+        [
+          "pStatEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0xc]:4"
+        ],
+        [
+          "low",
+          "Stack[0x10]:2"
+        ]
+      ]
     },
     {
       "name": "D2AddStatToStatsListEx",
@@ -1913,7 +2901,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1b7b3666"
+      "dh": "1b7b3666",
+      "paramStorage": [
+        [
+          "pStatsEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_SetStatValueInBaseArray",
@@ -1942,7 +2948,29 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "459642a8"
+      "dh": "459642a8",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0x10]:2"
+        ],
+        [
+          "pUnit",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_SetStatValueInBaseArraySafe",
@@ -1965,7 +2993,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ab336047"
+      "dh": "ab336047",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_STATLIST_SetStatValue",
@@ -1987,7 +3037,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d327fa00"
+      "dh": "d327fa00",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_SetUnitStat",
@@ -2010,7 +3078,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "c58c3869"
+      "dh": "c58c3869",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0x10]:2"
+        ]
+      ]
     },
     {
       "name": "thunk_STATLIST_AddStatValue",
@@ -2032,7 +3118,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "b453ca7d"
+      "dh": "b453ca7d",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSubIndex",
+          "Stack[0x10]:2"
+        ]
+      ]
     },
     {
       "name": "STATLIST_AddUnitStat",
@@ -2054,7 +3158,25 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "e8f03507"
+      "dh": "e8f03507",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0x10]:2"
+        ]
+      ]
     },
     {
       "name": "STATLIST_MarkUnitStatsChanged",
@@ -2076,7 +3198,13 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "3b7140ef"
+      "dh": "3b7140ef",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_FreeChildStatLists",
@@ -2099,7 +3227,13 @@
         "D2StatListExStrc",
         "D2StatStrc"
       ],
-      "dh": "cdf65e45"
+      "dh": "cdf65e45",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_FreeUnitChildStatLists",
@@ -2120,7 +3254,13 @@
         "D2StatListExStrc",
         "D2UnitStrc"
       ],
-      "dh": "eba21054"
+      "dh": "eba21054",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveStatListAfterTimeout",
@@ -2142,7 +3282,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "00084a49"
+      "dh": "00084a49",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFrameNumber",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CopyStatListEx",
@@ -2162,7 +3312,17 @@
         "D2StatListExStrc",
         "D2StatStrc"
       ],
-      "dh": "c3244b5d"
+      "dh": "c3244b5d",
+      "paramStorage": [
+        [
+          "pStatListExDest",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatListExSource",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_RecalcAfterRemove",
@@ -2183,7 +3343,13 @@
         "D2StatListExStrc",
         "D2UnitStrc"
       ],
-      "dh": "4e2014ec"
+      "dh": "4e2014ec",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateResourceStats",
@@ -2208,7 +3374,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "41faebc0"
+      "dh": "41faebc0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ItemUpdateStatsAfterSocketing",
@@ -2234,7 +3406,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "53f06e0f"
+      "dh": "53f06e0f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_RemoveAndRecalc",
@@ -2254,7 +3436,17 @@
         "D2StatListExStrc",
         "D2UnitStrc"
       ],
-      "dh": "ef16eafd"
+      "dh": "ef16eafd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatListEx",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_RemoveFromOwnerAndRecalc",
@@ -2273,7 +3465,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "997417d2"
+      "dh": "997417d2",
+      "paramStorage": [
+        [
+          "pOwner",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_SetStatValueSimple",
@@ -2294,7 +3496,25 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "464175b9"
+      "dh": "464175b9",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_CalcCombinedStatValue",
@@ -2316,7 +3536,17 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "3cb5772e"
+      "dh": "3cb5772e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_ActivateItemStats",
@@ -2343,7 +3573,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "834f06df"
+      "dh": "834f06df",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_SetItemStatActive",
@@ -2369,7 +3609,21 @@
         "eD2BodyLoc",
         "int32_t"
       ],
-      "dh": "b07b79d0"
+      "dh": "b07b79d0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bActive",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_ToggleStateDisabled",
@@ -2393,7 +3647,21 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "16bca0ab"
+      "dh": "16bca0ab",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eState",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bDisabled",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "STATLIST_DeactivateItemStats",
@@ -2420,7 +3688,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "68da9f7f"
+      "dh": "68da9f7f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ValidateSkillDescIndex",
@@ -2438,7 +3716,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "09e765f2"
+      "dh": "09e765f2",
+      "paramStorage": [
+        [
+          "nSkillId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00627b30",
@@ -2471,7 +3755,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6588720e"
+      "dh": "6588720e",
+      "paramStorage": [
+        [
+          "nCalcCode",
+          "ECX:4"
+        ],
+        [
+          "pContext",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MATH_Min",
@@ -2489,7 +3783,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "171acff5"
+      "dh": "171acff5",
+      "paramStorage": [
+        [
+          "nLeft",
+          "ECX:4"
+        ],
+        [
+          "nRight",
+          "EDX:4"
+        ],
+        [
+          "dwParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MATH_Max",
@@ -2507,7 +3819,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "572569ed"
+      "dh": "572569ed",
+      "paramStorage": [
+        [
+          "nLeft",
+          "ECX:4"
+        ],
+        [
+          "nRight",
+          "EDX:4"
+        ],
+        [
+          "nOperand3",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MATH_RandomRange",
@@ -2528,7 +3858,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "57163cd8"
+      "dh": "57163cd8",
+      "paramStorage": [
+        [
+          "nMin",
+          "ECX:4"
+        ],
+        [
+          "nMax",
+          "EDX:4"
+        ],
+        [
+          "nRangeMax",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSeed",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_GetStatValueByType",
@@ -2553,7 +3901,25 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "e7eee39d"
+      "dh": "e7eee39d",
+      "paramStorage": [
+        [
+          "eUnitStat",
+          "ECX:4"
+        ],
+        [
+          "nQueryMode",
+          "EDX:4"
+        ],
+        [
+          "dwContext",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

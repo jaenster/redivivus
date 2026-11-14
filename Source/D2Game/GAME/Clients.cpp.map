@@ -53,7 +53,13 @@
         "D2ClientStrc",
         "uint32_t"
       ],
-      "dh": "5b2926bf"
+      "dh": "5b2926bf",
+      "paramStorage": [
+        [
+          "nToken",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LeaveCriticalSection_ClientById",
@@ -91,7 +97,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "d8863349"
+      "dh": "d8863349",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nClientNo",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENTS_GetControlUnit",
@@ -115,7 +131,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6d6677cb"
+      "dh": "6d6677cb",
+      "paramStorage": [
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "alwaysZero",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_LinkServerPlayerUnitToClient",
@@ -138,7 +164,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "2fddf561"
+      "dh": "2fddf561",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SendHandshakePacket0x0B",
@@ -158,7 +194,17 @@
         "D2ClientStrc",
         "D2UnitStrc"
       ],
-      "dh": "bcc23537"
+      "dh": "bcc23537",
+      "paramStorage": [
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SetCientFlag0x01",
@@ -180,7 +226,13 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "faa0da2d"
+      "dh": "faa0da2d",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetGameDataHook",
@@ -198,7 +250,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "6b820d4d"
+      "dh": "6b820d4d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AppearenceItems",
@@ -224,7 +282,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5c649ff1"
+      "dh": "5c649ff1",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAppearanceBuf",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBufSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AppearenceItems2",
@@ -249,7 +325,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6b03a188"
+      "dh": "6b03a188",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAppearanceBuf",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBufSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00537ab0",
@@ -269,7 +363,17 @@
       "usedTypes": [
         "D2RoomStrc"
       ],
-      "dh": "7ee157e6"
+      "dh": "7ee157e6",
+      "paramStorage": [
+        [
+          "pRoom2",
+          "EDI:4"
+        ],
+        [
+          "pRoom1",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "FreeClientList",
@@ -289,7 +393,13 @@
         "D2ClientStrc",
         "SGAMEDATA"
       ],
-      "dh": "c0fbc8d2"
+      "dh": "c0fbc8d2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_UpdatePortalFlags",
@@ -312,7 +422,13 @@
         "D2ClientStrc",
         "uint32_t"
       ],
-      "dh": "a852dffa"
+      "dh": "a852dffa",
+      "paramStorage": [
+        [
+          "gameContext",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GAME_OnClientRoomChange",
@@ -346,7 +462,17 @@
         "eD2LevelId",
         "uint32_t"
       ],
-      "dh": "d18d6b18"
+      "dh": "d18d6b18",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pClient",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_AddUnitToProximitySortedList",
@@ -371,7 +497,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "61991e3b"
+      "dh": "61991e3b",
+      "paramStorage": [
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppnMaxDist",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nMaxSlots",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pNodes",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_PopulateVisibilityPacketBuffer",
@@ -396,7 +552,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f3637f65"
+      "dh": "f3637f65",
+      "paramStorage": [
+        [
+          "pNodes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pClient",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GAME_CollectNearbyUnitPositions",
@@ -428,7 +594,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c07663a0"
+      "dh": "c07663a0",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nUnitLimit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UpdateSingleClient",
@@ -463,7 +639,17 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "c9da067a"
+      "dh": "c9da067a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "IsClientInGame",
@@ -483,7 +669,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "ded67584"
+      "dh": "ded67584",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nClientid",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SetRoom",
@@ -507,7 +703,17 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "c4555c4f"
+      "dh": "c4555c4f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetRoom",
@@ -529,7 +735,13 @@
         "D2ClientStrc",
         "D2RoomStrc"
       ],
-      "dh": "4233b2c4"
+      "dh": "4233b2c4",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AttachUnitType",
@@ -551,7 +763,17 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "9edea678"
+      "dh": "9edea678",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnitDesc",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetAct",
@@ -574,7 +796,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "5d7070c1"
+      "dh": "5d7070c1",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SetAct",
@@ -597,7 +825,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1ace1166"
+      "dh": "1ace1166",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nAct",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "ClientSetDwSaveTo1",
@@ -619,7 +857,13 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "7453b2e2"
+      "dh": "7453b2e2",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetUnk0x1AD",
@@ -641,7 +885,13 @@
         "D2ClientStrc",
         "uint8_t"
       ],
-      "dh": "e363c050"
+      "dh": "e363c050",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SetUnk0x1AD",
@@ -663,7 +913,17 @@
         "D2ClientStrc",
         "uint8_t"
       ],
-      "dh": "9be39986"
+      "dh": "9be39986",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "InitUnitForClient",
@@ -694,7 +954,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "69cd8f42"
+      "dh": "69cd8f42",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RemoveUnitForClient",
@@ -723,7 +993,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7fd4bfb8"
+      "dh": "7fd4bfb8",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetClientNo",
@@ -745,7 +1025,13 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "19440b44"
+      "dh": "19440b44",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ReturnFFFFFFFF",
@@ -775,7 +1061,13 @@
       "calledFunctions": [
         "ReturnVoid"
       ],
-      "dh": "0843eacf"
+      "dh": "0843eacf",
+      "paramStorage": [
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetPlayerClassId",
@@ -798,7 +1090,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "513ffcca"
+      "dh": "513ffcca",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetClassOfClient",
@@ -816,7 +1114,17 @@
       "usedTypes": [
         "D2ClientStrc"
       ],
-      "dh": "61198267"
+      "dh": "61198267",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nClass",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetFileFlags",
@@ -835,7 +1143,17 @@
         "D2ClientStrc",
         "int16_t"
       ],
-      "dh": "3059cd71"
+      "dh": "3059cd71",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nCharStatus",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "GetCharacterStatus",
@@ -854,7 +1172,13 @@
         "D2ClientStrc",
         "uint32_t"
       ],
-      "dh": "b6db8d14"
+      "dh": "b6db8d14",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetFlagIf",
@@ -873,7 +1197,21 @@
         "D2ClientStrc",
         "uint16_t"
       ],
-      "dh": "ebe57ec7"
+      "dh": "ebe57ec7",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nFlag",
+          "DX:2"
+        ],
+        [
+          "nSet",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_TestFileFlags",
@@ -893,7 +1231,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "e03738fb"
+      "dh": "e03738fb",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "fFileFlag",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "SetClientStatus",
@@ -913,7 +1261,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1d4af6e8"
+      "dh": "1d4af6e8",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nQuestProgress",
+          "EDX:4"
+        ],
+        [
+          "nDifficulty",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SetConnectionState",
@@ -935,7 +1297,17 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "0879629a"
+      "dh": "0879629a",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nConnectionState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetGolem",
@@ -957,7 +1329,17 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "f41c8953"
+      "dh": "f41c8953",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nGolemGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetGolemGUID",
@@ -978,7 +1360,13 @@
       "usedTypes": [
         "D2ClientStrc"
       ],
-      "dh": "92f42d3d"
+      "dh": "92f42d3d",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetCreateTime",
@@ -1001,7 +1389,17 @@
         "__time32_t",
         "int32_t"
       ],
-      "dh": "5237b1ae"
+      "dh": "5237b1ae",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nCreateTime",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetCreateTime",
@@ -1023,7 +1421,13 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "2242b7ec"
+      "dh": "2242b7ec",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetGame",
@@ -1046,7 +1450,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "77e18060"
+      "dh": "77e18060",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IsUnitNearClient",
@@ -1068,7 +1478,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "15d87b38"
+      "dh": "15d87b38",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetCharName",
@@ -1090,7 +1510,13 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "11546ee6"
+      "dh": "11546ee6",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_SetClientDead",
@@ -1113,7 +1539,17 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "8e45f419"
+      "dh": "8e45f419",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "isDeadMaybe",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_IsClientDead",
@@ -1136,7 +1572,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5ea37b0e"
+      "dh": "5ea37b0e",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetCharTemplate",
@@ -1158,7 +1600,13 @@
         "D2ClientStrc",
         "uint8_t"
       ],
-      "dh": "e19533de"
+      "dh": "e19533de",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_IsClientAllowedToJoin",
@@ -1177,7 +1625,17 @@
         "D2ClientStrc",
         "uint32_t"
       ],
-      "dh": "a717269f"
+      "dh": "a717269f",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ],
+        [
+          "nExpectedState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SendPongByClientId",
@@ -1208,7 +1666,25 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "ad1fab53"
+      "dh": "ad1fab53",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ],
+        [
+          "dwSendTick",
+          "EDX:4"
+        ],
+        [
+          "dwClientTick",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_GetPlayerNameByClientId",
@@ -1228,7 +1704,17 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "5745d0b7"
+      "dh": "5745d0b7",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ],
+        [
+          "szPlayerName",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetClientId",
@@ -1249,7 +1735,13 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "eb8bc000"
+      "dh": "eb8bc000",
+      "paramStorage": [
+        [
+          "szCharName",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_IsPlayerCharacterInGame",
@@ -1271,7 +1763,17 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "8902f787"
+      "dh": "8902f787",
+      "paramStorage": [
+        [
+          "szCharName",
+          "ECX:4"
+        ],
+        [
+          "szCharNameOut",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_AccumulateSaveData",
@@ -1298,7 +1800,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c05fcdff"
+      "dh": "c05fcdff",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ],
+        [
+          "buffer",
+          "EDX:4"
+        ],
+        [
+          "size",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTotalSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwSaveFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwParam1",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "GetSaveGame",
@@ -1321,7 +1853,13 @@
         "D2SaveFileHeaderStrc",
         "int32_t"
       ],
-      "dh": "4704e0b7"
+      "dh": "4704e0b7",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSaveGameSize",
@@ -1343,7 +1881,13 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "f313ac2b"
+      "dh": "f313ac2b",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CopySafeBuffer",
@@ -1369,7 +1913,21 @@
         "D2SaveFileHeaderStrc",
         "int32_t"
       ],
-      "dh": "670e4737"
+      "dh": "670e4737",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pSaveBuffer",
+          "EDX:4"
+        ],
+        [
+          "nSaveSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DeleteCurrentSave",
@@ -1392,7 +1950,13 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "02cfdc21"
+      "dh": "02cfdc21",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENTS_ResetSaveTransferState",
@@ -1414,7 +1978,13 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "33fa48ca"
+      "dh": "33fa48ca",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_HasSaveData",
@@ -1436,7 +2006,13 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "7627eab9"
+      "dh": "7627eab9",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAMECLIENT_GetFlags0x20",
@@ -1458,7 +2034,13 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "1fb0346f"
+      "dh": "1fb0346f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetSaveCompleteFlag",
@@ -1481,7 +2063,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "089a3b85"
+      "dh": "089a3b85",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetFirstClientOfGame",
@@ -1500,7 +2088,13 @@
         "D2ClientStrc",
         "SGAMEDATA"
       ],
-      "dh": "b3011640"
+      "dh": "b3011640",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetNext",
@@ -1518,7 +2112,13 @@
       "usedTypes": [
         "D2ClientStrc"
       ],
-      "dh": "b7784799"
+      "dh": "b7784799",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetGotkeyInfo",
@@ -1540,7 +2140,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "93e6cfe8"
+      "dh": "93e6cfe8",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nHotkey",
+          "EDX:4"
+        ],
+        [
+          "wSkillId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "byHand",
+          "Stack[0x8]:1"
+        ],
+        [
+          "dwSkillTxt",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetHotKey",
@@ -1560,7 +2182,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "691b1fe3"
+      "dh": "691b1fe3",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nHotKeyIndex",
+          "EDX:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkillType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nItemGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetGuildFlags",
@@ -1579,7 +2223,13 @@
         "D2ClientStrc",
         "uint16_t"
       ],
-      "dh": "a1b8f29f"
+      "dh": "a1b8f29f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetGuildFlags",
@@ -1597,7 +2247,17 @@
       "usedTypes": [
         "D2ClientStrc"
       ],
-      "dh": "64085eda"
+      "dh": "64085eda",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nGuildFlags",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "GetGuildTag",
@@ -1615,7 +2275,17 @@
       "usedTypes": [
         "D2ClientStrc"
       ],
-      "dh": "70d1de12"
+      "dh": "70d1de12",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pDest",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetGuildTag",
@@ -1633,7 +2303,17 @@
       "usedTypes": [
         "D2ClientStrc"
       ],
-      "dh": "10c51b2e"
+      "dh": "10c51b2e",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "szGuildTag",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetGuildName",
@@ -1651,7 +2331,17 @@
       "usedTypes": [
         "D2ClientStrc"
       ],
-      "dh": "627f7363"
+      "dh": "627f7363",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "szGuildName",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetGuildName",
@@ -1669,7 +2359,17 @@
       "usedTypes": [
         "D2ClientStrc"
       ],
-      "dh": "96b6c432"
+      "dh": "96b6c432",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "szGuildName",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetGuildInfo",
@@ -1688,7 +2388,25 @@
         "D2ClientStrc",
         "uint8_t"
       ],
-      "dh": "b678004e"
+      "dh": "b678004e",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pGuildInfo1",
+          "EDX:4"
+        ],
+        [
+          "pGuildInfo2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGuildInfo3",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetGuildInfo",
@@ -1707,7 +2425,25 @@
         "D2ClientStrc",
         "uint8_t"
       ],
-      "dh": "5812b639"
+      "dh": "5812b639",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "byGuildInfo1",
+          "DL:1"
+        ],
+        [
+          "byGuildInfo2",
+          "Stack[0x4]:1"
+        ],
+        [
+          "byGuildInfo3",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "SetExperience",
@@ -1729,7 +2465,17 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "9a688df0"
+      "dh": "9a688df0",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nExp",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetExperience",
@@ -1748,7 +2494,13 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "c48b3e3d"
+      "dh": "c48b3e3d",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HasWeaponSwapped",
@@ -1766,7 +2518,13 @@
       "usedTypes": [
         "D2ClientStrc"
       ],
-      "dh": "061bccb1"
+      "dh": "061bccb1",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetWeaponSwap",
@@ -1785,7 +2543,17 @@
         "D2ClientStrc",
         "uint8_t"
       ],
-      "dh": "387db051"
+      "dh": "387db051",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "bWeaponSwapped",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "SERVER_PutPacketInQueueList",
@@ -1804,7 +2572,17 @@
         "D2ClientStrc",
         "D2PacketListStrc"
       ],
-      "dh": "41fb4a94"
+      "dh": "41fb4a94",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacketList",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SetPacketList",
@@ -1823,7 +2601,17 @@
         "D2ClientStrc",
         "D2PacketListStrc"
       ],
-      "dh": "8881bd03"
+      "dh": "8881bd03",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacketList",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_ClearDispatchList",
@@ -1842,7 +2630,13 @@
         "D2ClientStrc",
         "D2PacketListStrc"
       ],
-      "dh": "b56876d0"
+      "dh": "b56876d0",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetPacketList",
@@ -1861,7 +2655,13 @@
         "D2ClientStrc",
         "D2PacketListStrc"
       ],
-      "dh": "eedf2667"
+      "dh": "eedf2667",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetDispatchList",
@@ -1880,7 +2680,13 @@
         "D2ClientStrc",
         "D2PacketListStrc"
       ],
-      "dh": "8ad22149"
+      "dh": "8ad22149",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetAccountName",
@@ -1899,7 +2705,17 @@
       "usedTypes": [
         "D2ClientStrc"
       ],
-      "dh": "37fcb438"
+      "dh": "37fcb438",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetClientContainer",
@@ -1917,7 +2733,17 @@
       "usedTypes": [
         "D2ClientStrc"
       ],
-      "dh": "38fdce02"
+      "dh": "38fdce02",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pdwContainer",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetRealm",
@@ -1935,7 +2761,17 @@
       "usedTypes": [
         "D2ClientStrc"
       ],
-      "dh": "c4f30c3c"
+      "dh": "c4f30c3c",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pdwRealm",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetRealm",
@@ -1954,7 +2790,17 @@
         "D2ClientStrc",
         "uint32_t"
       ],
-      "dh": "6d9038be"
+      "dh": "6d9038be",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "dwRealm",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetPlayerBasicsData",
@@ -1977,7 +2823,13 @@
         "D2PlayerBasicsData",
         "int32_t"
       ],
-      "dh": "87d076e9"
+      "dh": "87d076e9",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RecordSyncWarpTimestamp",
@@ -2002,7 +2854,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "0ead24ef"
+      "dh": "0ead24ef",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CheckSyncWarpRateExceeded",
@@ -2027,7 +2889,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "d09c7dfd"
+      "dh": "d09c7dfd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetLangId",
@@ -2048,7 +2920,13 @@
       "usedTypes": [
         "D2ClientStrc"
       ],
-      "dh": "1bf63b83"
+      "dh": "1bf63b83",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_PlacePlayerInRoom",
@@ -2110,7 +2988,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cb09763f"
+      "dh": "cb09763f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDrlgAct",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pSpawnXY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_LoadCharacterAndSendGameData",
@@ -2157,7 +3061,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "18878980"
+      "dh": "18878980",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ],
+        [
+          "bLoadFromSave",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CreateClient",
@@ -2187,7 +3117,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b6465318"
+      "dh": "b6465318",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nClientId",
+          "EDX:4"
+        ],
+        [
+          "nClass",
+          "Stack[0x4]:1"
+        ],
+        [
+          "pCharName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szAccountName",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pClientContainer",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nLanguageId",
+          "Stack[0x14]:1"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x18]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "CleanUp",
@@ -2216,7 +3184,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d8d46f06"
+      "dh": "d8d46f06",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pBuffer",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CleanUpClient",
@@ -2265,7 +3243,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "f5374027"
+      "dh": "f5374027",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nClientId",
+          "EDX:4"
+        ],
+        [
+          "bSavePlayer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetAttachedUnit",
@@ -2290,7 +3282,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "b1909061"
+      "dh": "b1909061",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UnusedClientJoinGame",
@@ -2326,7 +3328,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d78f1881"
+      "dh": "d78f1881",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nClass",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UnusedClientJoinGame2",
@@ -2358,7 +3370,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3b8a5665"
+      "dh": "3b8a5665",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ],
+        [
+          "bActNo",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SendRoomUnitUpdates",
@@ -2381,7 +3407,17 @@
         "D2ClientStrc",
         "D2RoomStrc"
       ],
-      "dh": "9bd153e5"
+      "dh": "9bd153e5",
+      "paramStorage": [
+        [
+          "pRoom",
+          "EAX:4"
+        ],
+        [
+          "pClient",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "UnusedUpdateFunctionForUnits",
@@ -2409,7 +3445,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b1b33b71"
+      "dh": "b1b33b71",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FreePendingDrlgDeletes",
@@ -2432,7 +3478,13 @@
         "D2RoomStrc",
         "SGAMEDATA"
       ],
-      "dh": "a9045535"
+      "dh": "a9045535",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MovementUpdateForClient",
@@ -2459,7 +3511,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "1d58c059"
+      "dh": "1d58c059",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "ppRoom",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_BroadcastMovementToAdjacentRooms",
@@ -2487,7 +3553,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "935b1610"
+      "dh": "935b1610",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ReturnVoid_Unref_0053c740",
@@ -2502,7 +3582,13 @@
       "calledFunctions": [
         "ReturnVoid_Unref_0053c740"
       ],
-      "dh": "060c6e89"
+      "dh": "060c6e89",
+      "paramStorage": [
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

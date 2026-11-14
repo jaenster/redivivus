@@ -21,7 +21,13 @@
         "IgnoreList",
         "int32_t"
       ],
-      "dh": "cc0edcb2"
+      "dh": "cc0edcb2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "GetPersistentSetting",
@@ -40,7 +46,13 @@
         "IgnoreList",
         "int32_t"
       ],
-      "dh": "54b88ef6"
+      "dh": "54b88ef6",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "SavePersistentSetting",
@@ -60,7 +72,17 @@
         "IgnoreList",
         "int32_t"
       ],
-      "dh": "0fd42369"
+      "dh": "0fd42369",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nPersistent",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AppendLineToFile",
@@ -88,7 +110,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5999ccb8"
+      "dh": "5999ccb8",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "szLine",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SaveToFile",
@@ -112,7 +144,13 @@
         "int32_t",
         "intptr_t"
       ],
-      "dh": "a6ecdc83"
+      "dh": "a6ecdc83",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "ClearAccountMappings",
@@ -131,7 +169,13 @@
       "usedTypes": [
         "IgnoreList"
       ],
-      "dh": "45aba096"
+      "dh": "45aba096",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "GetMappedValue",
@@ -153,7 +197,25 @@
         "MappingEntryNode",
         "int32_t"
       ],
-      "dh": "cb49ddaa"
+      "dh": "cb49ddaa",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "szKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szOut",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nOutSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveByPattern",
@@ -179,7 +241,17 @@
         "StringEntryNode",
         "int32_t"
       ],
-      "dh": "e4e8c475"
+      "dh": "e4e8c475",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "szPattern",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveByAccountName",
@@ -202,7 +274,17 @@
         "StringEntryNode",
         "int32_t"
       ],
-      "dh": "da6c66e0"
+      "dh": "da6c66e0",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "szAccountName",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CheckAccountNameIgnored",
@@ -229,7 +311,17 @@
         "int32_t",
         "intptr_t"
       ],
-      "dh": "7517b7db"
+      "dh": "7517b7db",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "szAccountName",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CheckCharNameIgnored",
@@ -250,7 +342,17 @@
         "StringEntryNode",
         "int32_t"
       ],
-      "dh": "424b76b9"
+      "dh": "424b76b9",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "szCharName",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CheckIgnored",
@@ -274,7 +376,17 @@
         "IgnoreList",
         "int32_t"
       ],
-      "dh": "b96157c2"
+      "dh": "b96157c2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "szPlayerName",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor",
@@ -294,7 +406,13 @@
         "IgnoreList",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "08eb8756"
+      "dh": "08eb8756",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -315,7 +433,17 @@
         "IgnoreList",
         "uint32_t"
       ],
-      "dh": "02af38f5"
+      "dh": "02af38f5",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AddByPattern",
@@ -341,7 +469,17 @@
         "StringEntryNode",
         "int32_t"
       ],
-      "dh": "e4fcf892"
+      "dh": "e4fcf892",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "szPattern",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AddByAccountName",
@@ -367,7 +505,17 @@
         "StringEntryNode",
         "int32_t"
       ],
-      "dh": "1a0acd70"
+      "dh": "1a0acd70",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "szAccountName",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LoadFromFile",
@@ -395,7 +543,13 @@
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
         "uint32_t"
       ],
-      "dh": "5779f02f"
+      "dh": "5779f02f",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "Constructor",
@@ -424,7 +578,13 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "a7176445"
+      "dh": "a7176445",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     }
   ]
 }

@@ -26,7 +26,21 @@
         "eOverlayId",
         "int32_t"
       ],
-      "dh": "e16f83a9"
+      "dh": "e16f83a9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSDRU_CltCreateShapeShiftMissile",
@@ -57,7 +71,41 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "cd07290c"
+      "dh": "cd07290c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nNumMissiles",
+          "EDX:4"
+        ],
+        [
+          "eMissileId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nAnimSpeed",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bSpawnLeadMissile",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bClearPathFlag0x40",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Dru_ShapeShift_FwdArc",
@@ -82,7 +130,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "4b6c4aa1"
+      "dh": "4b6c4aa1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Dru_ShapeShift_SideArc",
@@ -107,7 +169,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "5bc504d2"
+      "dh": "5bc504d2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Dru_ShapeShift_BackArc",
@@ -132,7 +208,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "1773d3da"
+      "dh": "1773d3da",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

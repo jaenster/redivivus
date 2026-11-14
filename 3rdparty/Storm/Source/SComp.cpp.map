@@ -20,7 +20,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "f0c2ff58"
+      "dh": "f0c2ff58",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_Unlink",
@@ -39,7 +45,17 @@
         "D2BitStreamReaderStrc",
         "uint32_t"
       ],
-      "dh": "590538ce"
+      "dh": "590538ce",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0041d8a0",
@@ -57,7 +73,13 @@
       "usedTypes": [
         "D2BitStreamReader32Strc"
       ],
-      "dh": "5ea9a7c5"
+      "dh": "5ea9a7c5",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BITBUFFER_PeekBits",
@@ -77,7 +99,21 @@
         "uint16_t *",
         "uint32_t"
       ],
-      "dh": "28e8d634"
+      "dh": "28e8d634",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "ECX:4"
+        ],
+        [
+          "nBitCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMask",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_Clear",
@@ -96,7 +132,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "8def77cb"
+      "dh": "8def77cb",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "ECX:4"
+        ],
+        [
+          "nBits",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_InsertAfter",
@@ -116,7 +162,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "f4f78899"
+      "dh": "f4f78899",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pNewNode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BITBUFFER_GetRemainingBits",
@@ -134,7 +194,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "3e4b67e6"
+      "dh": "3e4b67e6",
+      "paramStorage": [
+        [
+          "pBitStream",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BITSTREAM_WriteBits",
@@ -154,7 +220,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "22a9d8a7"
+      "dh": "22a9d8a7",
+      "paramStorage": [
+        [
+          "pBitStream",
+          "ECX:4"
+        ],
+        [
+          "nBitsValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBitCount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BITSTREAM_Flush",
@@ -173,7 +253,13 @@
         "D2BitStreamWriterStrc",
         "uint32_t"
       ],
-      "dh": "d61ce67a"
+      "dh": "d61ce67a",
+      "paramStorage": [
+        [
+          "pBitStream",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BITSTREAM_WriteLiteralByte",
@@ -196,7 +282,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f5eede68"
+      "dh": "f5eede68",
+      "paramStorage": [
+        [
+          "pHuffState",
+          "ECX:4"
+        ],
+        [
+          "pBitStream",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSymbol",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_SelectADPCMParams",
@@ -215,7 +315,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "57f0b2f9"
+      "dh": "57f0b2f9",
+      "paramStorage": [
+        [
+          "pnBitsPerSample",
+          "ECX:4"
+        ],
+        [
+          "nChannels",
+          "EDX:4"
+        ],
+        [
+          "pnStepShift",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_ADPCMEncode",
@@ -235,7 +349,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0c09e52d"
+      "dh": "0c09e52d",
+      "paramStorage": [
+        [
+          "nMaxOutSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInSamples",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nInSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nChannels",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nBitsPerSample",
+          "Stack[0x14]:1"
+        ],
+        [
+          "pOutBuffer",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_ADPCMDecode",
@@ -255,7 +395,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0434350d"
+      "dh": "0434350d",
+      "paramStorage": [
+        [
+          "pOut",
+          "ECX:4"
+        ],
+        [
+          "nOutSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pIn",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nChannels",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nInSize",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_PkwareBufferRead",
@@ -275,7 +437,21 @@
         "PKWARE_STREAM",
         "uint32_t"
       ],
-      "dh": "94df2338"
+      "dh": "94df2338",
+      "paramStorage": [
+        [
+          "pDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnReqSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pStream",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_PkwareBufferWrite",
@@ -295,7 +471,21 @@
         "PKWARE_STREAM",
         "uint32_t"
       ],
-      "dh": "09ceb926"
+      "dh": "09ceb926",
+      "paramStorage": [
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnReqSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pStream",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_PkwareCompress",
@@ -318,7 +508,33 @@
         "TCmpStruct",
         "uint32_t"
       ],
-      "dh": "5fc83457"
+      "dh": "5fc83457",
+      "paramStorage": [
+        [
+          "pOutBuf",
+          "ECX:4"
+        ],
+        [
+          "pdwOutLength",
+          "EDX:4"
+        ],
+        [
+          "pInBuf",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_PkwareDecompress",
@@ -341,7 +557,29 @@
         "TDcmpStruct",
         "uint32_t"
       ],
-      "dh": "96deffeb"
+      "dh": "96deffeb",
+      "paramStorage": [
+        [
+          "pOutBuf",
+          "ECX:4"
+        ],
+        [
+          "pdwOutLength",
+          "EDX:4"
+        ],
+        [
+          "pInBuf",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_ArenaAlloc",
@@ -363,7 +601,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "636880f6"
+      "dh": "636880f6",
+      "paramStorage": [
+        [
+          "pArenaState",
+          "ECX:4"
+        ],
+        [
+          "nItems",
+          "EDX:4"
+        ],
+        [
+          "nItemSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_ArenaFree",
@@ -382,7 +634,17 @@
       "usedTypes": [
         "D2ScompArenaStrc"
       ],
-      "dh": "69de7a59"
+      "dh": "69de7a59",
+      "paramStorage": [
+        [
+          "pArenaState",
+          "ECX:4"
+        ],
+        [
+          "pBlock",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_ZlibCompress",
@@ -407,7 +669,25 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "2afbc187"
+      "dh": "2afbc187",
+      "paramStorage": [
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSrcLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnOutLen",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_ZlibCompressWithLevel",
@@ -428,7 +708,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "801f8095"
+      "dh": "801f8095",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pnDstLen",
+          "EDX:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSrcLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUserData",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_InflateZlibStackArena",
@@ -454,7 +760,25 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "7b3b0d87"
+      "dh": "7b3b0d87",
+      "paramStorage": [
+        [
+          "pnOutLen",
+          "ESI:4"
+        ],
+        [
+          "pDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSrcLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSrc",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_Bzip2Decompress",
@@ -474,7 +798,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f1fc6347"
+      "dh": "f1fc6347",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pnDstLen",
+          "EDX:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSrcLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUserData",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_AdpcmMonoCompress",
@@ -494,7 +840,33 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "569fcedd"
+      "dh": "569fcedd",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pnDstLen",
+          "EDX:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSrcLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUserData",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBitsPerSample",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_AdpcmMonoDecompress",
@@ -515,7 +887,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7e3ab520"
+      "dh": "7e3ab520",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pnDstLen",
+          "EDX:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSrcLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUserData",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_AdpcmStereoCompress",
@@ -535,7 +929,33 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "be1cb7cb"
+      "dh": "be1cb7cb",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pnDstLen",
+          "EDX:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSrcLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUserData",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBitsPerSample",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_AdpcmStereoDecompress",
@@ -556,7 +976,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "54094429"
+      "dh": "54094429",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pnDstLen",
+          "EDX:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSrcLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUserData",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_s_AllocDecompressBuffer",
@@ -577,7 +1019,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c42529ea"
+      "dh": "c42529ea",
+      "paramStorage": [
+        [
+          "nSize",
+          "EAX:4"
+        ],
+        [
+          "pbShared",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_ReleaseTempBuffer",
@@ -596,7 +1048,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "93ba4267"
+      "dh": "93ba4267",
+      "paramStorage": [
+        [
+          "bShared",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBuf",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SCompCompress",
@@ -619,7 +1081,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "88827f3d"
+      "dh": "88827f3d",
+      "paramStorage": [
+        [
+          "pDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnDstLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSrcLen",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nMethodMask",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x18]:4"
+        ],
+        [
+          "dwUserData",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "SCompDecompress",
@@ -644,7 +1136,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fdae2db3"
+      "dh": "fdae2db3",
+      "paramStorage": [
+        [
+          "pDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnDstSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSrcSizeIn",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_CleanupTempBuffer",
@@ -680,7 +1194,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "378027af"
+      "dh": "378027af",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ],
+        [
+          "pBase",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0041e930",
@@ -698,7 +1222,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "0bd943b8"
+      "dh": "0bd943b8",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_NodeDestructor_Unref_0041e970",
@@ -717,7 +1247,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "264a2202"
+      "dh": "264a2202",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0041e9b0",
@@ -735,7 +1271,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "6709c326"
+      "dh": "6709c326",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0041e9d0",
@@ -750,7 +1292,17 @@
       "calledFunctions": [
         "Unreferenced_0041e9d0"
       ],
-      "dh": "806b5a05"
+      "dh": "806b5a05",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BITBUFFER_ReadBits",
@@ -770,7 +1322,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "6b2d0261"
+      "dh": "6b2d0261",
+      "paramStorage": [
+        [
+          "pBitBuf",
+          "ECX:4"
+        ],
+        [
+          "nBits",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMask",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_DecompressSimple",
@@ -789,7 +1355,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "3119f46e"
+      "dh": "3119f46e",
+      "paramStorage": [
+        [
+          "pDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnDstSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSrcSize",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0041ea40",
@@ -807,7 +1391,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "cb9381ab"
+      "dh": "cb9381ab",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0041ea60",
@@ -822,7 +1412,13 @@
       "calledFunctions": [
         "Unreferenced_0041ea60"
       ],
-      "dh": "84c21823"
+      "dh": "84c21823",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_NodeDestructor_Unref_0041eae0",
@@ -841,7 +1437,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "18e1f7d7"
+      "dh": "18e1f7d7",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HUFFMAN_GetNextNodeOrDefault",
@@ -859,7 +1461,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "11b36612"
+      "dh": "11b36612",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nChildOrDefault",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkNode",
@@ -880,7 +1492,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "96988586"
+      "dh": "96988586",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0041ebb0",
@@ -898,7 +1520,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "4fcd084e"
+      "dh": "4fcd084e",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HUFFMAN_DecodeSymbol",
@@ -921,7 +1549,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "e67e1c3d"
+      "dh": "e67e1c3d",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pBitBuf",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_NodeDestructor_Unref_0041ed30",
@@ -940,7 +1578,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "ad68aa29"
+      "dh": "ad68aa29",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0041ed70",
@@ -958,7 +1602,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "520e5d46"
+      "dh": "520e5d46",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_MoveNode",
@@ -980,7 +1630,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a620cf7a"
+      "dh": "a620cf7a",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInsertAtHead",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pInsertRef",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkAll",
@@ -1001,7 +1669,13 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "42ca7904"
+      "dh": "42ca7904",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_LinkBefore",
@@ -1016,7 +1690,13 @@
       "calledFunctions": [
         "LINKEDLIST_LinkBefore"
       ],
-      "dh": "e2c25bd2"
+      "dh": "e2c25bd2",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_NodeDestructor",
@@ -1034,7 +1714,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "a6b699e6"
+      "dh": "a6b699e6",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HUFFMAN_AllocateNode",
@@ -1055,7 +1741,17 @@
         "D2HuffmanContextStrc",
         "int32_t"
       ],
-      "dh": "d5730704"
+      "dh": "d5730704",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMPRESS_InitEncoderContext",
@@ -1078,7 +1774,17 @@
         "int *",
         "uint32_t"
       ],
-      "dh": "fde5148a"
+      "dh": "fde5148a",
+      "paramStorage": [
+        [
+          "pEncoder",
+          "ECX:4"
+        ],
+        [
+          "pTableSel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMPRESS_UpdateFrequencies",
@@ -1098,7 +1804,17 @@
         "D2CompressHuffNodeStrc",
         "D2CompressHuffNodeStrc *"
       ],
-      "dh": "06775690"
+      "dh": "06775690",
+      "paramStorage": [
+        [
+          "pEncoder",
+          "ECX:4"
+        ],
+        [
+          "pSymbolNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMPRESS_FlushEncoderState",
@@ -1120,7 +1836,13 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "b953bb87"
+      "dh": "b953bb87",
+      "paramStorage": [
+        [
+          "pEncoder",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HUFFMAN_InitContext",
@@ -1138,7 +1860,13 @@
       "usedTypes": [
         "D2CompressEncoderStrc"
       ],
-      "dh": "d9453687"
+      "dh": "d9453687",
+      "paramStorage": [
+        [
+          "pEncoder",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "COMPRESS_EncodeSymbol",
@@ -1160,7 +1888,17 @@
         "D2CompressHuffNodeStrc *",
         "uint32_t"
       ],
-      "dh": "a8a187e7"
+      "dh": "a8a187e7",
+      "paramStorage": [
+        [
+          "pEncoder",
+          "ECX:4"
+        ],
+        [
+          "nSymbol",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMPRESS_DestroyEncoderContext",
@@ -1181,7 +1919,13 @@
         "D2CompressHuffNodeStrc",
         "D2CompressHuffNodeStrc *"
       ],
-      "dh": "efd5bb6d"
+      "dh": "efd5bb6d",
+      "paramStorage": [
+        [
+          "pEncoder",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HUFFMAN_DecompressBlock",
@@ -1208,7 +1952,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2ec1f1f9"
+      "dh": "2ec1f1f9",
+      "paramStorage": [
+        [
+          "pDecoderCtx",
+          "ECX:4"
+        ],
+        [
+          "pDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstMax",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBitBuf",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "COMPRESS_EncodeBuffer",
@@ -1237,7 +1999,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ae107149"
+      "dh": "ae107149",
+      "paramStorage": [
+        [
+          "pHuffCtx",
+          "ECX:4"
+        ],
+        [
+          "pBitStream",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbSrc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSrcLen",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTableSel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "HUFFMAN_Constructor",
@@ -1256,7 +2040,13 @@
       "usedTypes": [
         "D2CompressEncoderStrc"
       ],
-      "dh": "d9aba57a"
+      "dh": "d9aba57a",
+      "paramStorage": [
+        [
+          "pEncoder",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HUFFMAN_ConstructorWithTable",
@@ -1276,7 +2066,13 @@
         "D2HuffmanContextStrc",
         "uint32_t"
       ],
-      "dh": "40d04412"
+      "dh": "40d04412",
+      "paramStorage": [
+        [
+          "pHuffCtx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_HuffmanCompress",
@@ -1301,7 +2097,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a6538ab9"
+      "dh": "a6538ab9",
+      "paramStorage": [
+        [
+          "pBitStreamCtx",
+          "ECX:4"
+        ],
+        [
+          "pnBytesWritten",
+          "EDX:4"
+        ],
+        [
+          "pbSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSrcLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbTableSel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SCOMP_HuffmanDecompress",
@@ -1323,7 +2145,29 @@
       "usedTypes": [
         "D2HuffmanContextStrc"
       ],
-      "dh": "293324e9"
+      "dh": "293324e9",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pnDstSize",
+          "EDX:4"
+        ],
+        [
+          "pBitStreamCtx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_NodeDestructor_Unref_00420430",
@@ -1342,7 +2186,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "c5a3ff44"
+      "dh": "c5a3ff44",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_CriticalSection_00779214",

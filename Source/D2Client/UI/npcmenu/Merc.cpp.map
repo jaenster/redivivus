@@ -19,7 +19,13 @@
       "usedTypes": [
         "D2GSPacketSrv0x4E"
       ],
-      "dh": "f4cb9291"
+      "dh": "f4cb9291",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x4F_INITMERCENARYLIST",
@@ -34,7 +40,13 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x4F_INITMERCENARYLIST"
       ],
-      "dh": "d572be94"
+      "dh": "d572be94",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_GetMercHireCost",
@@ -72,7 +84,13 @@
         "D2MercForHire",
         "int16_t"
       ],
-      "dh": "26bb9d81"
+      "dh": "26bb9d81",
+      "paramStorage": [
+        [
+          "wMercNameId",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_MercItemFoundCb",
@@ -90,7 +108,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "29ed48d1"
+      "dh": "29ed48d1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_HandleMercListPacket",
@@ -117,7 +141,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6091caa8"
+      "dh": "6091caa8",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_ResurrectMerc",
@@ -186,7 +216,13 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "7b447cfc"
+      "dh": "7b447cfc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

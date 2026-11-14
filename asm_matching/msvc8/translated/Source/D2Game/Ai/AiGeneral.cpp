@@ -349,11 +349,7 @@ D2MonsterAiCmdStrc * __fastcall AI_CreateCmdIfNotExists(::SGAMEDATA * pGame, D2U
 }
 
 D2MapAIStrc * * __stdcall GetMonsterMapAi(D2UnitStrc * pMonster) {
-    if (pMonster && pMonster->eUnitType == UNIT_MONSTER && pMonster->pUnitData.pUnitDataMonster) {
-      return &pMonster->pUnitData.pUnitDataMonster->pAiGeneral->pMapAi;
-    }
-
-    return (D2MapAIStrc**)0x38;
+    return (D2MapAIStrc**)((uintptr_t)(pMonster && pMonster->eUnitType == UNIT_MONSTER && pMonster->pUnitData.pUnitDataMonster ? pMonster->pUnitData.pUnitDataMonster->pAiGeneral : 0) + offsetof(D2AiGeneralStrc, pMapAi));
 }
 
 void __fastcall AssignMinionOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nOwnerGUID, eD2UnitType eOwnerType, int32_t nParam, BOOL bTransferBoss) {

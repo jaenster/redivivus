@@ -62,10 +62,9 @@ void __fastcall SErrSetBlizzardErrorFunction(pfnBlizzardError pfnFunc) {
 // @blizzard AddStormFacility (SERR.CPP)
 void __stdcall SERR_AddStormFacility(uint16_t wModuleId) {
     D2SErrMessageSourceStrc** ppTailLink = &gpErrorModuleList;
-    D2SErrMessageSourceStrc* pNewNode = gpErrorModuleList;
-    while (pNewNode) {
+    D2SErrMessageSourceStrc* pNewNode;
+    while (*ppTailLink) {
       ppTailLink = &(*ppTailLink)->pNext;
-      pNewNode = *ppTailLink;
     }
 
     SIZE_T dwBytes = 0xc;

@@ -49,7 +49,13 @@
       "calledFunctions": [
         "zError"
       ],
-      "dh": "2138efea"
+      "dh": "2138efea",
+      "paramStorage": [
+        [
+          "nErr",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "zcalloc",
@@ -68,7 +74,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "e4a38d89"
+      "dh": "e4a38d89",
+      "paramStorage": [
+        [
+          "opaque",
+          "ECX:4"
+        ],
+        [
+          "items",
+          "EDX:4"
+        ],
+        [
+          "size",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "zcfree",
@@ -84,7 +104,17 @@
         "zcfree",
         "free"
       ],
-      "dh": "87e07f60"
+      "dh": "87e07f60",
+      "paramStorage": [
+        [
+          "opaque",
+          "ECX:4"
+        ],
+        [
+          "ptr",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

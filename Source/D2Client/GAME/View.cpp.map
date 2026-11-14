@@ -20,7 +20,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "dff4e79a"
+      "dh": "dff4e79a",
+      "paramStorage": [
+        [
+          "nWorldX",
+          "ECX:4"
+        ],
+        [
+          "nWorldY",
+          "EDX:4"
+        ],
+        [
+          "pOutIntensity",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutRed",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOutGreen",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pOutBlue",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawLight",
@@ -76,7 +102,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bf889987"
+      "dh": "bf889987",
+      "paramStorage": [
+        [
+          "nDim",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSteps",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00475c30",
@@ -92,7 +128,13 @@
         "Unreferenced_00475c30",
         "D2MEM_VirtualFree"
       ],
-      "dh": "2529c1f8"
+      "dh": "2529c1f8",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "VIEW_AllocPalettePointerTable",
@@ -112,7 +154,17 @@
         "uint32_t",
         "uint8_t *"
       ],
-      "dh": "f5406450"
+      "dh": "f5406450",
+      "paramStorage": [
+        [
+          "nDim",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSteps",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00475d20",
@@ -128,7 +180,13 @@
         "Unreferenced_00475d20",
         "D2MEM_VirtualFree"
       ],
-      "dh": "e1804f32"
+      "dh": "e1804f32",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "VIEW_AllocPalettePointerTable2",
@@ -149,7 +207,17 @@
         "uint32_t",
         "uint8_t *"
       ],
-      "dh": "d719ad47"
+      "dh": "d719ad47",
+      "paramStorage": [
+        [
+          "nDim",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSteps",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00475de0",
@@ -165,7 +233,13 @@
         "Unreferenced_00475de0",
         "D2MEM_VirtualFree"
       ],
-      "dh": "124fa08d"
+      "dh": "124fa08d",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "VIEW_InitLookupTables",
@@ -249,7 +323,13 @@
       "usedTypes": [
         "D2GameViewStrc"
       ],
-      "dh": "83b3d692"
+      "dh": "83b3d692",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetFlag0x1",
@@ -267,7 +347,13 @@
       "usedTypes": [
         "D2GameViewStrc"
       ],
-      "dh": "b33b7399"
+      "dh": "b33b7399",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetViewRectangleSize",
@@ -288,7 +374,29 @@
         "int32_t",
         "tagRECT"
       ],
-      "dh": "808dc2d2"
+      "dh": "808dc2d2",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ],
+        [
+          "xLeft",
+          "EDX:4"
+        ],
+        [
+          "yTop",
+          "Stack[0x4]:4"
+        ],
+        [
+          "xRight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "yBottom",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "VIEW_GetViewRect",
@@ -306,7 +414,29 @@
       "usedTypes": [
         "D2GameViewStrc"
       ],
-      "dh": "1bf2f55d"
+      "dh": "1bf2f55d",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ],
+        [
+          "pLeft",
+          "EDX:4"
+        ],
+        [
+          "pTop",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBottom",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetCenterXY",
@@ -325,7 +455,21 @@
         "D2GameViewStrc",
         "uint32_t"
       ],
-      "dh": "6b5af31a"
+      "dh": "6b5af31a",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ],
+        [
+          "x",
+          "EDX:4"
+        ],
+        [
+          "y",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetCenterXY",
@@ -343,7 +487,21 @@
       "usedTypes": [
         "D2GameViewStrc"
       ],
-      "dh": "1c37e5d4"
+      "dh": "1c37e5d4",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ],
+        [
+          "nCenterX",
+          "EDX:4"
+        ],
+        [
+          "nCenterY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "VIEW_ConvertViewCoordsToIsometric",
@@ -366,7 +524,29 @@
         "D2GameViewStrc",
         "int32_t"
       ],
-      "dh": "3ff8a82c"
+      "dh": "3ff8a82c",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ],
+        [
+          "nOffsetX",
+          "EDX:4"
+        ],
+        [
+          "nOffsetY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOutY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GAMEVIEW_PrepareScene",
@@ -391,7 +571,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5f5475d0"
+      "dh": "5f5475d0",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ],
+        [
+          "nFlags",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "VIEW_GenerateRandomViewParams",
@@ -412,7 +602,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fa30ad4e"
+      "dh": "fa30ad4e",
+      "paramStorage": [
+        [
+          "nStarIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bRespawn",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_Overlay_ArcaneStars",
@@ -471,7 +671,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "628b3121"
+      "dh": "628b3121",
+      "paramStorage": [
+        [
+          "pPlayerUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_TogglePerspective_Unref_004769b0",
@@ -509,7 +715,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d62ed24a"
+      "dh": "d62ed24a",
+      "paramStorage": [
+        [
+          "nShakeIntensity",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SetShake",
@@ -528,7 +740,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "85432c1f"
+      "dh": "85432c1f",
+      "paramStorage": [
+        [
+          "nAmplitude",
+          "ECX:4"
+        ],
+        [
+          "nArg3",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SHAKE_GetShake",
@@ -543,7 +773,17 @@
       "calledFunctions": [
         "SHAKE_GetShake"
       ],
-      "dh": "c1b4bb5c"
+      "dh": "c1b4bb5c",
+      "paramStorage": [
+        [
+          "pShakeX",
+          "ECX:4"
+        ],
+        [
+          "pShakeY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SHAKE_Reset",
@@ -634,7 +874,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2f3f87ea"
+      "dh": "2f3f87ea",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SHAKE_AdjustCenterByShake",
@@ -657,7 +903,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "398dbd76"
+      "dh": "398dbd76",
+      "paramStorage": [
+        [
+          "pCenterX",
+          "ECX:4"
+        ],
+        [
+          "pCenterY",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

@@ -19,7 +19,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "f88b33a8"
+      "dh": "f88b33a8",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetCount_Unref_004177c0",
@@ -37,7 +43,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "b92c0689"
+      "dh": "b92c0689",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetCount_Unref_0041c4e0",
@@ -55,7 +67,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "913dd040"
+      "dh": "913dd040",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetCount_Unref_0041eab0",
@@ -73,7 +91,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "b9cfce95"
+      "dh": "b9cfce95",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetCount_Unref_00420490",
@@ -91,7 +115,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "70528688"
+      "dh": "70528688",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SEVT_NextPowerOf2",
@@ -109,7 +139,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "b65a867f"
+      "dh": "b65a867f",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SEVT_CopyIdHashTable",
@@ -132,7 +168,17 @@
         "D2SevtHandlerTableStrc",
         "uint32_t"
       ],
-      "dh": "346c4eb9"
+      "dh": "346c4eb9",
+      "paramStorage": [
+        [
+          "pDstTable",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcTable",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SEVT_DeleteIdHashTable",
@@ -154,7 +200,13 @@
         "D2SevtHandlerTableStrc",
         "uint32_t"
       ],
-      "dh": "def1db20"
+      "dh": "def1db20",
+      "paramStorage": [
+        [
+          "pTable",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SEVT_FindTypeHashEntry",
@@ -173,7 +225,17 @@
         "D2SevtTypeEntryStrc",
         "uint32_t"
       ],
-      "dh": "7c107606"
+      "dh": "7c107606",
+      "paramStorage": [
+        [
+          "nSubId",
+          "EDX:4"
+        ],
+        [
+          "nEventId",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SEvtDestroy",
@@ -217,7 +279,17 @@
         "D2SevtTypeEntryStrc",
         "uint32_t"
       ],
-      "dh": "214d638d"
+      "dh": "214d638d",
+      "paramStorage": [
+        [
+          "nEventId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSubId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SEvtRegisterHandler",
@@ -245,7 +317,29 @@
         "pfnSEvtHandler",
         "uint32_t"
       ],
-      "dh": "96dfdcb7"
+      "dh": "96dfdcb7",
+      "paramStorage": [
+        [
+          "dwEventId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwSubId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwKey",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwReserved",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pfnHandler",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SEvtUnregisterHandler",
@@ -269,7 +363,25 @@
         "pfnSEvtHandler",
         "uint32_t"
       ],
-      "dh": "0820fe62"
+      "dh": "0820fe62",
+      "paramStorage": [
+        [
+          "nEventId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSubId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwKey",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnHandler",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SEvtUnregisterType",
@@ -292,7 +404,17 @@
         "D2SevtTypeEntryStrc *",
         "uint32_t"
       ],
-      "dh": "e0189636"
+      "dh": "e0189636",
+      "paramStorage": [
+        [
+          "nEventId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSubId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetNextOffset",
@@ -310,7 +432,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "833ab32e"
+      "dh": "833ab32e",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetNodeOffset",
@@ -330,7 +458,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "4a66db11"
+      "dh": "4a66db11",
+      "paramStorage": [
+        [
+          "pListInfo",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkSelf",
@@ -350,7 +488,13 @@
         "StormLinkStrc *",
         "uint32_t"
       ],
-      "dh": "22c8a19b"
+      "dh": "22c8a19b",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004269a0",
@@ -368,7 +512,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "dc9bbedf"
+      "dh": "dc9bbedf",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SEvtPopState",
@@ -390,7 +540,17 @@
         "D2SevtTypeEntryStrc",
         "uint32_t"
       ],
-      "dh": "f95f755c"
+      "dh": "f95f755c",
+      "paramStorage": [
+        [
+          "szText1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetCount",
@@ -408,7 +568,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "dad5bfba"
+      "dh": "dad5bfba",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetNextOrHead",
@@ -426,7 +592,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ff69acae"
+      "dh": "ff69acae",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_LinkNode",
@@ -449,7 +625,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "68d01e92"
+      "dh": "68d01e92",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "ppNodeSlot",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppTargetList",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetCountMasked",
@@ -469,7 +663,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "39e12287"
+      "dh": "39e12287",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetHead",
@@ -490,7 +694,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "3aa7b9fa"
+      "dh": "3aa7b9fa",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pListHead",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00426c60",
@@ -508,7 +722,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "987d6e59"
+      "dh": "987d6e59",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetValueAtIndex",
@@ -528,7 +748,17 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "3b91e1b9"
+      "dh": "3b91e1b9",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ],
+        [
+          "nNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkAll",
@@ -571,7 +801,13 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "5ee2dc9a"
+      "dh": "5ee2dc9a",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00426d70",
@@ -589,7 +825,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "86f6c7ab"
+      "dh": "86f6c7ab",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_AllocNode",
@@ -611,7 +853,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8e7152ba"
+      "dh": "8e7152ba",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ],
+        [
+          "pList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDataSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwAllocFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkAndFree",
@@ -633,7 +893,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "520e462d"
+      "dh": "520e462d",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ],
+        [
+          "bFreeMemory",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "SEvtBreakHandlerChain",
@@ -655,7 +925,13 @@
         "StormLinkStrc *",
         "uint32_t"
       ],
-      "dh": "48007d0a"
+      "dh": "48007d0a",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkFreeAndGetCount",
@@ -678,7 +954,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "ecc89cb2"
+      "dh": "ecc89cb2",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SEvtDispatch",
@@ -703,7 +989,25 @@
         "pfnSEvtHandler",
         "uint32_t"
       ],
-      "dh": "d7b2637b"
+      "dh": "d7b2637b",
+      "paramStorage": [
+        [
+          "dwEventId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwSubId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwKey",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pData",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkSelf_Unref_0044de90",
@@ -722,7 +1026,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "26e9ee35"
+      "dh": "26e9ee35",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkSelf_Unref_0044ecc0",
@@ -741,7 +1051,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "5ed5d511"
+      "dh": "5ed5d511",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetCount_Unref_0044ed00",
@@ -759,7 +1075,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "04001f64"
+      "dh": "04001f64",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkSelf_Unref_0045b9f0",
@@ -778,7 +1100,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "d1103317"
+      "dh": "d1103317",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkSelf_Unref_0045ba30",
@@ -797,7 +1125,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "42900117"
+      "dh": "42900117",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkSelf_Unref_00601bf0",
@@ -816,7 +1150,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "43ff27d1"
+      "dh": "43ff27d1",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkSelf_Unref_00601d60",
@@ -835,7 +1175,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "2db91f93"
+      "dh": "2db91f93",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetCount_Unref_00601f00",
@@ -853,7 +1199,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "3fdf013c"
+      "dh": "3fdf013c",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkSelf_Unref_00601f60",
@@ -872,7 +1224,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "7b61aa15"
+      "dh": "7b61aa15",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetCount_Unref_006020b0",
@@ -890,7 +1248,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "32e11837"
+      "dh": "32e11837",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkSelf_Unref_006024a0",
@@ -909,7 +1273,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "ad448ff4"
+      "dh": "ad448ff4",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkSelf_Unref_0060e3b0",
@@ -928,7 +1298,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "021a1b1f"
+      "dh": "021a1b1f",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetCount_Unref_0060e440",
@@ -946,7 +1322,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "df0b4eca"
+      "dh": "df0b4eca",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetCount_Unref_0060e5d0",
@@ -964,7 +1346,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "23de4840"
+      "dh": "23de4840",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkSelf_Unref_0060e690",
@@ -983,7 +1371,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "41cb03b1"
+      "dh": "41cb03b1",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkSelf_Unref_0060e760",
@@ -1002,7 +1396,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "6a8470a7"
+      "dh": "6a8470a7",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_UnlinkSelf_Unref_006c4070",
@@ -1021,7 +1421,13 @@
         "StormLinkStrc",
         "StormLinkStrc *"
       ],
-      "dh": "c60f0c9f"
+      "dh": "c60f0c9f",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gSevtBreakCmdList",

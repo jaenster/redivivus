@@ -20,7 +20,13 @@
         "D2MonPropTxt",
         "int32_t"
       ],
-      "dh": "51a494d0"
+      "dh": "51a494d0",
+      "paramStorage": [
+        [
+          "nClassId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetAiState",
@@ -38,7 +44,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "b8c4a2ce"
+      "dh": "b8c4a2ce",
+      "paramStorage": [
+        [
+          "pMonster",
+          "ECX:4"
+        ],
+        [
+          "nAiState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetAiState",
@@ -56,7 +72,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "070dba47"
+      "dh": "070dba47",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetLevelId",
@@ -75,7 +97,17 @@
         "D2UnitStrc",
         "eD2LevelId"
       ],
-      "dh": "27e67c71"
+      "dh": "27e67c71",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eLevel",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetMonsterArea",
@@ -94,7 +126,13 @@
         "D2UnitStrc",
         "eD2LevelId"
       ],
-      "dh": "c325d23a"
+      "dh": "c325d23a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetMonsterFlags",
@@ -114,7 +152,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "e29e7f05"
+      "dh": "e29e7f05",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eFlag",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "SetUnsetSummonerFlags",
@@ -134,7 +182,21 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "50b8d22d"
+      "dh": "50b8d22d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nSummonerFlag",
+          "DX:2"
+        ],
+        [
+          "bSetUnset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SetVelocityAndTransition",
@@ -162,7 +224,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "497799ea"
+      "dh": "497799ea",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FreeMonsters",
@@ -184,7 +268,13 @@
         "D2UnitStrc *",
         "SGAMEDATA"
       ],
-      "dh": "89f97f3c"
+      "dh": "89f97f3c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_FreeAllResources",
@@ -211,7 +301,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c5e5869c"
+      "dh": "c5e5869c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_ClearTargetIfMatch",
@@ -233,7 +333,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "df640407"
+      "dh": "df640407",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_TriggerMageThink",
@@ -257,7 +371,17 @@
         "eD2MonsterAnimMode",
         "eD2MonsterClassId"
       ],
-      "dh": "037e9a73"
+      "dh": "037e9a73",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_StartAiAndRegenTimers",
@@ -277,7 +401,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a8efd4d2"
+      "dh": "a8efd4d2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PlayerMultiplyer",
@@ -295,7 +429,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "47d3c275"
+      "dh": "47d3c275",
+      "paramStorage": [
+        [
+          "nPlayers",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PlayerMultiplyer2",
@@ -313,7 +453,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "3a447bf7"
+      "dh": "3a447bf7",
+      "paramStorage": [
+        [
+          "nPlayerCount",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_InitLevelDifficultyScaling",
@@ -341,7 +487,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "b42f3a20"
+      "dh": "b42f3a20",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterLevelData",
+          "EDX:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_RollComponentAppearance",
@@ -366,7 +530,17 @@
         "uint64_t",
         "uint8_t"
       ],
-      "dh": "3da64356"
+      "dh": "3da64356",
+      "paramStorage": [
+        [
+          "pMonRegionField",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CheckComponents",
@@ -385,7 +559,13 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "1f8e0001"
+      "dh": "1f8e0001",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_CreateAndEquipItem",
@@ -421,7 +601,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f365ad43"
+      "dh": "f365ad43",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppItemId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eQuality",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_KillAllInLevel",
@@ -452,7 +654,25 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "7c3d447e"
+      "dh": "7c3d447e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nAltMonClassId",
+          "EDX:4"
+        ],
+        [
+          "nAltMonClassId2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_InitStats",
@@ -514,7 +734,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b120804a"
+      "dh": "b120804a",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pMonRegionField",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_FillDataMonster",
@@ -554,7 +792,25 @@
         "eD2MonsterAnimMode",
         "int32_t"
       ],
-      "dh": "2a79e133"
+      "dh": "2a79e133",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnitGUID",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_TransformMonsterClass",
@@ -579,7 +835,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8a58adf9"
+      "dh": "8a58adf9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nMonStatId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUpdateFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

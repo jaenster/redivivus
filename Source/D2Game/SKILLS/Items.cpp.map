@@ -21,7 +21,25 @@
         "D2MagicAffixTxt",
         "int32_t"
       ],
-      "dh": "2f7955e4"
+      "dh": "2f7955e4",
+      "paramStorage": [
+        [
+          "pCandidatePairs",
+          "ECX:4"
+        ],
+        [
+          "pAffixTxt",
+          "EDX:4"
+        ],
+        [
+          "nAffixIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCount",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLITEMS_GetDispatchTableRange",
@@ -39,7 +57,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "fe3799f0"
+      "dh": "fe3799f0",
+      "paramStorage": [
+        [
+          "pDispatchTable",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLITEMS_ApplyPercentWithMinimum",
@@ -57,7 +89,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "fe33b48f"
+      "dh": "fe33b48f",
+      "paramStorage": [
+        [
+          "nValue",
+          "EAX:4"
+        ],
+        [
+          "nMinimum",
+          "ESI:4"
+        ],
+        [
+          "nPercent",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_RollStaffModSkills",
@@ -90,7 +136,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d9f20f73"
+      "dh": "d9f20f73",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillBaseId",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "STAFFMOD_RollStaffModSkills",
@@ -125,7 +185,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "511bfb34"
+      "dh": "511bfb34",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillBaseOffset",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBonusCount",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "StaffMod",
@@ -153,7 +231,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "0694936f"
+      "dh": "0694936f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pItemData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_RollMagicAffixLegacy",
@@ -184,7 +272,33 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "0d6a73d7"
+      "dh": "0d6a73d7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSpawnableOnly",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bForceRoll",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bApplyStats",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bIsPrefix",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nForcedAffix",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "HasSufixOrPrefix",
@@ -208,7 +322,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "4e10b3e0"
+      "dh": "4e10b3e0",
+      "paramStorage": [
+        [
+          "nGroupId",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_RollMagicAffix",
@@ -248,7 +372,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2f330502"
+      "dh": "2f330502",
+      "paramStorage": [
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSpawnableOnly",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bForceRoll",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bApplyAffixStats",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bIsPrefix",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nForcedAffix",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nAutoMagicGroup",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_RollMagicAffixVersioned",
@@ -273,7 +427,33 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "4aa61de7"
+      "dh": "4aa61de7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bSpawnableOnly",
+          "EDX:4"
+        ],
+        [
+          "bForceRoll",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bApplyAffixStats",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIsPrefix",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nForcedAffix",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_RollMagicAffixVersionedEx",
@@ -297,7 +477,37 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "719846c0"
+      "dh": "719846c0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bSpawnableOnly",
+          "EDX:4"
+        ],
+        [
+          "bForceRoll",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bApplyAffixStats",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIsPrefix",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nForcedAffix",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nAutoMagicGroup",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_GetMaxAffixGroupClassic",
@@ -325,7 +535,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "989f102a"
+      "dh": "989f102a",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetMaxToRoll",
@@ -353,7 +573,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2fb208f6"
+      "dh": "2fb208f6",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_SelectMagicAffixVersioned",
@@ -377,7 +607,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "5d65d8e9"
+      "dh": "5d65d8e9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bIsPrefix",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_GenerateRareAffixes",
@@ -422,7 +662,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "e41f9eaa"
+      "dh": "e41f9eaa",
+      "paramStorage": [
+        [
+          "pItemGenContext",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "RollPrefixes",
@@ -464,7 +714,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "f576796b"
+      "dh": "f576796b",
+      "paramStorage": [
+        [
+          "pItemGenContext",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "RollingItem",
@@ -489,7 +749,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "4693382c"
+      "dh": "4693382c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pItemGenContext",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_RollRareAffixes",
@@ -529,7 +799,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "74bd92cb"
+      "dh": "74bd92cb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pItemGenContext",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_GetScrollBookIndex",
@@ -553,7 +833,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "28816b9e"
+      "dh": "28816b9e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bMatchScrollCode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_GenerateSetItem",
@@ -585,7 +875,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "9c510e7a"
+      "dh": "9c510e7a",
+      "paramStorage": [
+        [
+          "pItemGenContext",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_GenerateUniqueItem",
@@ -618,7 +918,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "edaadb38"
+      "dh": "edaadb38",
+      "paramStorage": [
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_GenerateSetOrUniqueVersioned",
@@ -641,7 +947,17 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "e9ccc870"
+      "dh": "e9ccc870",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pItemGenContext",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_GenerateQualityItem",
@@ -675,7 +991,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "d67d4b10"
+      "dh": "d67d4b10",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pItemGenContext",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_RollSuperiorQualityMods",
@@ -696,7 +1022,17 @@
         "D2ItemGenContextStrc",
         "D2UnitStrc"
       ],
-      "dh": "1c5c8dd5"
+      "dh": "1c5c8dd5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pItemGenContext",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_ApplyCrudeQuality",
@@ -733,7 +1069,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "504b0491"
+      "dh": "504b0491",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_ApplyCrudeQualityClassic",
@@ -772,7 +1114,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6a8f34e1"
+      "dh": "6a8f34e1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pItemGenContext",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_ApplyCrudeQualityVersioned",
@@ -795,7 +1147,17 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "6b7f203d"
+      "dh": "6b7f203d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pItemGenContext",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

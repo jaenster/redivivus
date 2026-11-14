@@ -25,7 +25,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "16f0779e"
+      "dh": "16f0779e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q32_Callback02_NpcDeactivate",
@@ -46,7 +60,17 @@
         "D2QuestDataA5Q2Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "a542de7e"
+      "dh": "a542de7e",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_UpdateQuestStep",
@@ -71,7 +95,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "fe7d0fc1"
+      "dh": "fe7d0fc1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q32_Callback11_ScrollMessage",
@@ -115,7 +153,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "a086936d"
+      "dh": "a086936d",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_Callback00_NpcActivate",
@@ -143,7 +191,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "467b5f18"
+      "dh": "467b5f18",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_SetCompleteForPartyMember",
@@ -175,7 +233,21 @@
         "eAct",
         "eD2LevelId"
       ],
-      "dh": "282086d7"
+      "dh": "282086d7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q32_Callback10_PlayerLeavesGame",
@@ -196,7 +268,17 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "b90cffa3"
+      "dh": "b90cffa3",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_SetCannotComplete",
@@ -220,7 +302,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "72abf0f0"
+      "dh": "72abf0f0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q32_FindBarricadeGroup",
@@ -240,7 +336,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9bb0ea53"
+      "dh": "9bb0ea53",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_Callback08_MonsterKilled",
@@ -272,7 +378,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "392e56af"
+      "dh": "392e56af",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_Callback03_ChangedLevel",
@@ -300,7 +416,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "47edef5c"
+      "dh": "47edef5c",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_ActiveFilter",
@@ -322,7 +448,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1c2d6b36"
+      "dh": "1c2d6b36",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q32_SequenceFilter",
@@ -345,7 +493,13 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "e4a55fec"
+      "dh": "e4a55fec",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_Callback14_PlayerJoinedGame",
@@ -368,7 +522,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "462d1aff"
+      "dh": "462d1aff",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_Callback13_PlayerStartedGame",
@@ -393,7 +557,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "bf979ed4"
+      "dh": "bf979ed4",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_InitData",
@@ -416,7 +590,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "f7a2d074"
+      "dh": "f7a2d074",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_SpawnBarricadePrisoners",
@@ -439,7 +619,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a6751871"
+      "dh": "a6751871",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nBarricadeObjPtr",
+          "EDX:4"
+        ],
+        [
+          "nBarricadeGroupIdx",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn62_CagedWussie",
@@ -464,7 +658,13 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "4d6cfa62"
+      "dh": "4d6cfa62",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_PropagateCompleteToParty",
@@ -488,7 +688,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "b47230e5"
+      "dh": "b47230e5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q32_PlayCompletionSound",
@@ -511,7 +725,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2a43b3dc"
+      "dh": "2a43b3dc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q32_CheckWussieBarricade",
@@ -534,7 +762,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "59e8193c"
+      "dh": "59e8193c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_IncrementWussieKillCount",
@@ -558,7 +796,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8778019f"
+      "dh": "8778019f",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "nBarricadeGroupId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q32_OnBarricadeDestroyed",
@@ -605,7 +853,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3413b61c"
+      "dh": "3413b61c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBarricadeUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q32_GetRemainingPrisonersCount",
@@ -625,7 +887,13 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "126508cd"
+      "dh": "126508cd",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_PrisonerTimerCallback",
@@ -649,7 +917,17 @@
         "eD2MonsterAnimMode",
         "int32_t"
       ],
-      "dh": "a50ce096"
+      "dh": "a50ce096",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q32_FindBarricadePortal",
@@ -675,7 +953,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "0ac4054d"
+      "dh": "0ac4054d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppPortalOut",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q32_OnWussieAllPrisonersFreed",
@@ -697,7 +989,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a0a5c322"
+      "dh": "a0a5c322",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit1",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

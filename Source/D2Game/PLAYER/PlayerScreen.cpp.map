@@ -24,7 +24,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "afecdeaf"
+      "dh": "afecdeaf",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pUnitGid",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPartyEventCode",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "SendPlayerInfo",
@@ -49,7 +63,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "2018d175"
+      "dh": "2018d175",
+      "paramStorage": [
+        [
+          "wRelationFlag",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nRelationState",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PARTYSCREEN_SetCorpseLootPermission",
@@ -75,7 +111,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a0c3b39f"
+      "dh": "a0c3b39f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bNewState",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnError",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PARTYSCREEN_UpdateMuteRelation",
@@ -99,7 +157,29 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "3d89eb00"
+      "dh": "3d89eb00",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bNewState",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnError",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PARTYSCREEN_UpdateSquelchRelation",
@@ -123,7 +203,29 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "c999a5f2"
+      "dh": "c999a5f2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bNewState",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnError",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "RefreshPlayerStatus",
@@ -145,7 +247,17 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "458ad6f0"
+      "dh": "458ad6f0",
+      "paramStorage": [
+        [
+          "pUnit1",
+          "ESI:4"
+        ],
+        [
+          "pUnit2",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "AssignPlayerToParty",
@@ -174,7 +286,21 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "b70537d7"
+      "dh": "b70537d7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPartyJoinArgs",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTYSCREEN_AcceptPartyInvite",
@@ -206,7 +332,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "ee3a794a"
+      "dh": "ee3a794a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pInvitee",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PARTYSCREEN_CancelPartyInvite",
@@ -236,7 +384,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5c5c9331"
+      "dh": "5c5c9331",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pInvitee",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PARTYSCREEN_SendPartyInvite",
@@ -264,7 +434,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "77a6086e"
+      "dh": "77a6086e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PARTY_SendPlayerLeftEvent",
@@ -287,7 +479,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "039a4195"
+      "dh": "039a4195",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOther",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SendPlayerPartyInfo",
@@ -310,7 +516,21 @@
         "SGAMEDATA",
         "uint16_t"
       ],
-      "dh": "05d59efe"
+      "dh": "05d59efe",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTYSCREEN_LeaveParty",
@@ -334,7 +554,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "24669a7b"
+      "dh": "24669a7b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnError",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PARTYSCREEN_SetHostileForPlayer",
@@ -361,7 +603,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "eb1572eb"
+      "dh": "eb1572eb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTYSCREEN_SetHostileWithParty",
@@ -391,7 +647,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "681c52ae"
+      "dh": "681c52ae",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PARTYSCREEN_ToggleHostile",
@@ -435,7 +705,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "933e4208"
+      "dh": "933e4208",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bWantHostile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnError",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SendAllPlayersPartyInfo",
@@ -455,7 +747,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "03198da1"
+      "dh": "03198da1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PlayerScreen_DispatchAction",
@@ -477,7 +779,29 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "e78087e1"
+      "dh": "e78087e1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nActionIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwTargetUnitId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwArg",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PARTYSCREEN_ClearHostileRelation",
@@ -502,7 +826,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "efa9ce79"
+      "dh": "efa9ce79",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTYSCREEN_SetHostileRelation",
@@ -527,7 +865,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8ef2ee0c"
+      "dh": "8ef2ee0c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERSCREEN_CheckUnitsCanSeeEachOther",
@@ -549,7 +901,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "4bdf6888"
+      "dh": "4bdf6888",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOtherUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

@@ -24,7 +24,13 @@
         "eD2Sounds",
         "int32_t"
       ],
-      "dh": "70f60a2a"
+      "dh": "70f60a2a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_HandleMouseMove",
@@ -75,7 +81,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4b28d859"
+      "dh": "4b28d859",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "ECX:4"
+        ],
+        [
+          "nMouseY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_UseItemClick",
@@ -112,7 +128,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "34c38543"
+      "dh": "34c38543",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_UseItemPassthrough",
@@ -131,7 +153,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "56cd56eb"
+      "dh": "56cd56eb",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_DrawCashDisplay",

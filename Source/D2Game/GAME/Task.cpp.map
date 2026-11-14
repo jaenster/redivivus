@@ -22,7 +22,17 @@
       "usedTypes": [
         "D2LinkNodeStrc"
       ],
-      "dh": "f984c5ef"
+      "dh": "f984c5ef",
+      "paramStorage": [
+        [
+          "pPrev",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TASK_LinkTaskToList",
@@ -45,7 +55,17 @@
         "D2LinkNodeStrc",
         "uint32_t"
       ],
-      "dh": "7f8ec301"
+      "dh": "7f8ec301",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "LINKLIST_AppendToList",
@@ -67,7 +87,17 @@
         "D2LinkNodeStrc",
         "D2LinkNodeStrc *"
       ],
-      "dh": "3150f6b0"
+      "dh": "3150f6b0",
+      "paramStorage": [
+        [
+          "ppList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TASK_UnlinkTaskFromList",
@@ -89,7 +119,13 @@
         "D2LinkNodeStrc",
         "int32_t"
       ],
-      "dh": "eb1282b4"
+      "dh": "eb1282b4",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TASK_GetTimestamp",
@@ -131,7 +167,13 @@
         "D2TaskQueueSlotStrc",
         "uint32_t"
       ],
-      "dh": "45fef095"
+      "dh": "45fef095",
+      "paramStorage": [
+        [
+          "nSlotToken",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TASK_LeaveQueueCriticalSection",
@@ -153,7 +195,13 @@
       "usedTypes": [
         "D2TaskQueueSlotStrc"
       ],
-      "dh": "08b12732"
+      "dh": "08b12732",
+      "paramStorage": [
+        [
+          "pSlot",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TASK_InsertTaskAtTimestamp",
@@ -177,7 +225,21 @@
         "D2TaskQueueSlotStrc",
         "int32_t"
       ],
-      "dh": "6006c653"
+      "dh": "6006c653",
+      "paramStorage": [
+        [
+          "pSlot",
+          "ECX:4"
+        ],
+        [
+          "pTaskNode",
+          "EDX:4"
+        ],
+        [
+          "nDelay",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TASK_MoveTasksToSlotAndLinkSlot",
@@ -203,7 +265,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f28e43c4"
+      "dh": "f28e43c4",
+      "paramStorage": [
+        [
+          "pSlot",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TASK_GameTickCallback",
@@ -245,7 +313,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6f752917"
+      "dh": "6f752917",
+      "paramStorage": [
+        [
+          "nParam",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTaskNode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_QueryPerformanceFrequency_B",
@@ -303,7 +381,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "799ef606"
+      "dh": "799ef606",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TASK_AllocateTaskQueue",
@@ -350,7 +434,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d4bb859d"
+      "dh": "d4bb859d",
+      "paramStorage": [
+        [
+          "pTaskNode",
+          "ECX:4"
+        ],
+        [
+          "dwCallbackId",
+          "EDX:4"
+        ],
+        [
+          "dwUserData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TASK_DequeueReadyTask",
@@ -377,7 +475,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "89c1d777"
+      "dh": "89c1d777",
+      "paramStorage": [
+        [
+          "nSlotToken",
+          "ECX:4"
+        ],
+        [
+          "ppTaskOut",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TASK_Dispatch",
@@ -400,7 +508,17 @@
         "D2TaskNodeStrc",
         "uint32_t"
       ],
-      "dh": "1ef8bcd0"
+      "dh": "1ef8bcd0",
+      "paramStorage": [
+        [
+          "nParam",
+          "ECX:4"
+        ],
+        [
+          "pTaskNode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TASK_ReturnTrue",
@@ -433,7 +551,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "8a03763d"
+      "dh": "8a03763d",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_CriticalSection_0088caa8",

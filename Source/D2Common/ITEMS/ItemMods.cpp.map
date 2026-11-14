@@ -25,7 +25,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "91d9332a"
+      "dh": "91d9332a",
+      "paramStorage": [
+        [
+          "pMagicAffixLine",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_UniqueItems_GetModEntry",
@@ -46,7 +56,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "be05ad0d"
+      "dh": "be05ad0d",
+      "paramStorage": [
+        [
+          "pTxtLine",
+          "ECX:4"
+        ],
+        [
+          "nMod",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_GetMaxLevelAtIndex",
@@ -70,7 +90,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d25c350e"
+      "dh": "d25c350e",
+      "paramStorage": [
+        [
+          "pMagixAffixLine",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "nModIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_GetPropertyFromAffix",
@@ -97,7 +131,25 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "33aca616"
+      "dh": "33aca616",
+      "paramStorage": [
+        [
+          "pMagicAffixLine",
+          "ECX:4"
+        ],
+        [
+          "nGemModType",
+          "EDX:4"
+        ],
+        [
+          "nNumber",
+          "EAX:4"
+        ],
+        [
+          "nSelector",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMODS_GetQualityMinMax",
@@ -115,7 +167,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "401fcfb0"
+      "dh": "401fcfb0",
+      "paramStorage": [
+        [
+          "nPackedQuality",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnSkillLevel",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMODS_GetQualityAllFields",
@@ -133,7 +199,29 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "231664ae"
+      "dh": "231664ae",
+      "paramStorage": [
+        [
+          "nPackedQuality",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnParam1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnParam2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnParam3",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnParam4",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_FindChargedSkill",
@@ -161,7 +249,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "612c77c1"
+      "dh": "612c77c1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnCharges",
+          "Stack[0x10]:4"
+        ],
+        [
+          "ppStatList",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_SetChargedSkillCharges",
@@ -189,7 +299,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "70a27cb6"
+      "dh": "70a27cb6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nChargeSlot",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nNewChargeCount",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMODS_CalculateRepairCost",
@@ -208,7 +336,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0794ccc4"
+      "dh": "0794ccc4",
+      "paramStorage": [
+        [
+          "nPackedRepairData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDurability",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnTimePeriod",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnMinValue",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnMaxValue",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMODS_GetQualityField1",
@@ -226,7 +380,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a0c10639"
+      "dh": "a0c10639",
+      "paramStorage": [
+        [
+          "nParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMODS_GetQualityFields2_3_4",
@@ -244,7 +408,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "0be18167"
+      "dh": "0be18167",
+      "paramStorage": [
+        [
+          "nPackedQuality",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnChance",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMODS_GetQualityField2",
@@ -262,7 +444,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f754bd3d"
+      "dh": "f754bd3d",
+      "paramStorage": [
+        [
+          "nParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam3",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMODS_GetQualityFields1_2_3",
@@ -284,7 +480,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "96ebcbf7"
+      "dh": "96ebcbf7",
+      "paramStorage": [
+        [
+          "nPackedQuality",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnPlayerClass",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnSkillTab",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnSkillLevels",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMODS_GetQualityField3",
@@ -302,7 +516,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6d03ee90"
+      "dh": "6d03ee90",
+      "paramStorage": [
+        [
+          "nPlayerClass",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillTab",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevels",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_GetOrCreateStatList",
@@ -330,7 +558,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a829c05d"
+      "dh": "a829c05d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "EBX:4"
+        ],
+        [
+          "pUnitUnknown",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_MaximizeStatForEnhanced",
@@ -358,7 +604,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cadfa85d"
+      "dh": "cadfa85d",
+      "paramStorage": [
+        [
+          "eEnhancedProp",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_ScaleValueForStatType",
@@ -376,7 +632,17 @@
       "usedTypes": [
         "eD2UnitStat"
       ],
-      "dh": "fbc31174"
+      "dh": "fbc31174",
+      "paramStorage": [
+        [
+          "pnValue",
+          "ECX:4"
+        ],
+        [
+          "eStatType",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_ApplyRandomStatValue",
@@ -412,7 +678,45 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "ce4725c2"
+      "dh": "ce4725c2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bMaximize",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x18]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pProperty",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_SimpleStat",
@@ -442,7 +746,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e0a0c95b"
+      "dh": "e0a0c95b",
+      "paramStorage": [
+        [
+          "nType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nStatValue",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bMaximize",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ],
+        [
+          "eUnitStat",
+          "EDI:4"
+        ],
+        [
+          "dwStatListFlags",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_SimpleStatWithContext",
@@ -473,7 +815,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d5a0bb77"
+      "dh": "d5a0bb77",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMODS_PropFunc_ApplyRolledStat",
@@ -496,7 +876,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "88405cfb"
+      "dh": "88405cfb",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_SimpleStatThunk1",
@@ -518,7 +936,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bd8e7f93"
+      "dh": "bd8e7f93",
+      "paramStorage": [
+        [
+          "bClearStat",
+          "ECX:4"
+        ],
+        [
+          "param_1",
+          "EDX:4"
+        ],
+        [
+          "nType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nState",
+          "EAX:4"
+        ],
+        [
+          "eUnitStat",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_ApplySocketCount",
@@ -545,7 +997,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0cdd800b"
+      "dh": "0cdd800b",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_ApplyIndestructible",
@@ -568,7 +1058,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "78ddfbd8"
+      "dh": "78ddfbd8",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMODS_PropFunc_ApplyRolledStatAndMaximize",
@@ -591,7 +1119,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dda2ceef"
+      "dh": "dda2ceef",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_SimpleStatThunk2",
@@ -613,7 +1179,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c7d302ac"
+      "dh": "c7d302ac",
+      "paramStorage": [
+        [
+          "nFastCallECX",
+          "ECX:4"
+        ],
+        [
+          "pPropData",
+          "EDX:4"
+        ],
+        [
+          "nType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nState",
+          "EAX:4"
+        ],
+        [
+          "eUnitStat",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_AllResistances",
@@ -645,7 +1245,45 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "e4635294"
+      "dh": "e4635294",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_AllMaxResistances",
@@ -677,7 +1315,45 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "d8acb1ae"
+      "dh": "d8acb1ae",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_MinDamage",
@@ -712,7 +1388,45 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "936be055"
+      "dh": "936be055",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_MaxDamage",
@@ -747,7 +1461,45 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "6e687f8a"
+      "dh": "6e687f8a",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_EnhancedDamage",
@@ -784,7 +1536,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a0d69b9b"
+      "dh": "a0d69b9b",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_AllSkills",
@@ -807,7 +1597,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8941925c"
+      "dh": "8941925c",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_Charges",
@@ -838,7 +1666,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "58422bc2"
+      "dh": "58422bc2",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_PackedStat",
@@ -866,7 +1732,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "72f5ddab"
+      "dh": "72f5ddab",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_MinMaxDamagePair",
@@ -901,7 +1805,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b965e075"
+      "dh": "b965e075",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_ApplyTripleStat",
@@ -931,7 +1873,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "060a191a"
+      "dh": "060a191a",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_SingleSkillBonus",
@@ -962,7 +1942,45 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "b4e9b549"
+      "dh": "b4e9b549",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_ElemSkillBonus",
@@ -993,7 +2011,45 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "3cab1b1e"
+      "dh": "3cab1b1e",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_ClassSkillsBonus",
@@ -1024,7 +2080,45 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "b1c55bb6"
+      "dh": "b1c55bb6",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_ReturnTrue",
@@ -1046,7 +2140,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "957794d7"
+      "dh": "957794d7",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "PropertyFunc_SimpleStatWithRoll",
@@ -1074,7 +2206,45 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "20a52f8b"
+      "dh": "20a52f8b",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStatCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_ApplyEtherealBonus",
@@ -1102,7 +2272,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "51290204"
+      "dh": "51290204",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_CanApplyAutomod",
@@ -1130,7 +2306,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7a8acf93"
+      "dh": "7a8acf93",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMagicAffixTxt",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_CanApplyAffix",
@@ -1155,7 +2341,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "abfd8b6c"
+      "dh": "abfd8b6c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRareAffixTxt",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_MatchesRepairType",
@@ -1178,7 +2374,17 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "18adc73f"
+      "dh": "18adc73f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szRepairModes",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_RollGemRuneType",
@@ -1201,7 +2407,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "678b7c46"
+      "dh": "678b7c46",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0065e9b0",
@@ -1221,7 +2433,17 @@
         "D2ItemsTxt",
         "D2UnitStrc"
       ],
-      "dh": "e3054d06"
+      "dh": "e3054d06",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pFallback",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_RollRandomValue",
@@ -1244,7 +2466,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3cd260ac"
+      "dh": "3cd260ac",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMin",
+          "EDX:4"
+        ],
+        [
+          "nMax",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_AddStatToItem",
@@ -1273,7 +2509,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7f9e2699"
+      "dh": "7f9e2699",
+      "paramStorage": [
+        [
+          "pUnit2",
+          "ECX:4"
+        ],
+        [
+          "dwFlags",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:2"
+        ],
+        [
+          "nSubIndex",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddStat_EnhancedIfItem",
@@ -1297,7 +2571,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9c044ba1"
+      "dh": "9c044ba1",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddStat_EnhancedAlways",
@@ -1321,7 +2641,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0b098452"
+      "dh": "0b098452",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddStat_PreserveRolledValue_EnhancedIfItem",
@@ -1345,7 +2711,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "665f7461"
+      "dh": "665f7461",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddStat_PreserveRolledValue",
@@ -1369,7 +2781,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "412f90a2"
+      "dh": "412f90a2",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddMinDamage",
@@ -1397,7 +2855,53 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "26717cfa"
+      "dh": "26717cfa",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddMaxDamage",
@@ -1425,7 +2929,53 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "acc6bb7c"
+      "dh": "acc6bb7c",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddEnhancedDamage",
@@ -1459,7 +3009,53 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "05f23e53"
+      "dh": "05f23e53",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nPercent",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddStat_Simple",
@@ -1482,7 +3078,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3b81a6be"
+      "dh": "3b81a6be",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddSkillBonus",
@@ -1505,7 +3147,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "01f0d596"
+      "dh": "01f0d596",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddStat_WithLayerFromParam4",
@@ -1528,7 +3216,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "de7aee13"
+      "dh": "de7aee13",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddClassSkillBonus",
@@ -1551,7 +3285,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "81d258f3"
+      "dh": "81d258f3",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddSkillOnEvent",
@@ -1577,7 +3357,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e8182336"
+      "dh": "e8182336",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_SetSockets",
@@ -1604,7 +3430,53 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "076a2ca0"
+      "dh": "076a2ca0",
+      "paramStorage": [
+        [
+          "dwParam1",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddSkillCharges",
@@ -1637,7 +3509,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "96afd0d7"
+      "dh": "96afd0d7",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddTimedStat",
@@ -1661,7 +3579,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ec7cc97f"
+      "dh": "ec7cc97f",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatCode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_SetFixedMinDamage",
@@ -1684,7 +3648,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1080c4b6"
+      "dh": "1080c4b6",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_SetFixedMaxDamage",
@@ -1707,7 +3717,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "37f14a52"
+      "dh": "37f14a52",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddStat_FixedOrRolledMaxDamageAware",
@@ -1731,7 +3787,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dc35f8d6"
+      "dh": "dc35f8d6",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_SetIndestructible",
@@ -1755,7 +3857,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "05369ebb"
+      "dh": "05369ebb",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddStat_WithLayerFromParam7",
@@ -1778,7 +3926,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8033b72b"
+      "dh": "8033b72b",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddStat_LayerFromRoll_ValueFromParam7",
@@ -1801,7 +3995,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "13f851bb"
+      "dh": "13f851bb",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddStat_LayerFromParam4Lo",
@@ -1824,7 +4064,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6bcaf9cb"
+      "dh": "6bcaf9cb",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddStat_RandLevelAsLayer",
@@ -1847,7 +4133,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ba015eb7"
+      "dh": "ba015eb7",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_AddStat_WithMaxDurabilityReset",
@@ -1873,7 +4205,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8e12c895"
+      "dh": "8e12c895",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPropPtr",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nStatLayer",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMPROP_ApplyEthereal",
@@ -1897,7 +4275,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3d864719"
+      "dh": "3d864719",
+      "paramStorage": [
+        [
+          "nType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSet",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRolledValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_ApplyPropertyToUnitStatsExpansion",
@@ -1919,7 +4343,49 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bdc1f11d"
+      "dh": "bdc1f11d",
+      "paramStorage": [
+        [
+          "nType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwParam3",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwParam4",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pSetsTxtF",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x20]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x24]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x28]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_ApplyPropertyToUnitStats",
@@ -1946,7 +4412,53 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "e488481c"
+      "dh": "e488481c",
+      "paramStorage": [
+        [
+          "nType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSetsTxtF",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwParam3",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwParam4",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwStatListFlags",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pContextUnit",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ApplyRuneAndGemStats",
@@ -1976,7 +4488,33 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "8846e887"
+      "dh": "8846e887",
+      "paramStorage": [
+        [
+          "nType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pMagicAffixLine",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nGemModType",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bClearStat",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "RollRunewordMostlikely",
@@ -2003,7 +4541,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d64b00d5"
+      "dh": "d64b00d5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_ApplySetBonuses",
@@ -2032,7 +4584,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b4b6d62b"
+      "dh": "b4b6d62b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "nApplyFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_ApplyRunewordProperties",
@@ -2055,7 +4621,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7c330702"
+      "dh": "7c330702",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pProperty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bExpansion",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

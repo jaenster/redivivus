@@ -25,7 +25,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "dd12dc94"
+      "dh": "dd12dc94",
+      "paramStorage": [
+        [
+          "ppUnitHashTable",
+          "EDX:4"
+        ],
+        [
+          "nListIndex",
+          "EAX:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_FindClientSideUnit",
@@ -46,7 +64,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "32759b73"
+      "dh": "32759b73",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "eUnitType",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_FindServerSideUnit",
@@ -67,7 +95,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "6b72c900"
+      "dh": "6b72c900",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "eUnitType",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_GetOwnerUnit",
@@ -92,7 +130,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8fe7e163"
+      "dh": "8fe7e163",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "InsertIntoHashTable",
@@ -117,7 +161,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "14eb83d5"
+      "dh": "14eb83d5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SendIdlePlayerMessage",
@@ -139,7 +189,13 @@
         "D2UnitStrc",
         "eD2PlayerAnimMode"
       ],
-      "dh": "48575082"
+      "dh": "48575082",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CUNIT_IterateHashTableWithCallback",
@@ -159,7 +215,17 @@
         "D2UnitStrc *",
         "fnUnitIterCallback"
       ],
-      "dh": "8f43a539"
+      "dh": "8f43a539",
+      "paramStorage": [
+        [
+          "UnitHashTable",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnCallback",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_ClearChangedStatFlags_Thunk",
@@ -178,7 +244,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "3049239a"
+      "dh": "3049239a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetGfxInfo",
@@ -197,7 +269,13 @@
         "D2GfxInfoStrc",
         "D2UnitStrc"
       ],
-      "dh": "7806b91c"
+      "dh": "7806b91c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetGfxSequenceData",
@@ -220,7 +298,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "4abc1240"
+      "dh": "4abc1240",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "dwCofDataFlags",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetGfxSequenceData",
@@ -243,7 +331,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "51643cd6"
+      "dh": "51643cd6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetPalShiftIndex",
@@ -266,7 +360,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "55e10a4c"
+      "dh": "55e10a4c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nPalShiftIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetPalShiftIndex",
@@ -289,7 +393,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "4cd20cc6"
+      "dh": "4cd20cc6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WARP_IsPointInClickArea",
@@ -319,7 +429,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "a7d6f942"
+      "dh": "a7d6f942",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nClickX",
+          "EDX:4"
+        ],
+        [
+          "nClickY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CUNIT_IsClickInSpriteBounds",
@@ -344,7 +468,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "df2de8b6"
+      "dh": "df2de8b6",
+      "paramStorage": [
+        [
+          "nClickY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pObjectsTxt",
+          "EDI:4"
+        ],
+        [
+          "nClickX",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "CUNIT_CalculateSpriteBounds",
@@ -384,7 +526,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a4a9f49d"
+      "dh": "a4a9f49d",
+      "paramStorage": [
+        [
+          "nFrame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAnimMode",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pBoundsRect",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_ExecuteSelectProc",
@@ -405,7 +565,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cf6c96d4"
+      "dh": "cf6c96d4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "EAX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CheckActiveSkillSelectProc",
@@ -431,7 +605,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "71b1ba4b"
+      "dh": "71b1ba4b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pTargetUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "IsSelected",
@@ -453,7 +637,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "b6c231c8"
+      "dh": "b6c231c8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CUNIT_IsPlayerOrMonster",
@@ -474,7 +664,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "98facb65"
+      "dh": "98facb65",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetTargetByTypeAndGUID",
@@ -496,7 +692,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "d1c4cfc8"
+      "dh": "d1c4cfc8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eUnitType",
+          "EDX:4"
+        ],
+        [
+          "nTargetGUID",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FacePlayer",
@@ -524,7 +734,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "669cac35"
+      "dh": "669cac35",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_TurnPlayerToFaceUnit",
@@ -551,7 +767,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "2a42d1ef"
+      "dh": "2a42d1ef",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_IsSequenceInputReady",
@@ -575,7 +797,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fadda0cb"
+      "dh": "fadda0cb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pSkillUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PlayerCanBeInterrupted",
@@ -597,7 +829,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "b603dd7d"
+      "dh": "b603dd7d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetCurrentRoom",
@@ -664,7 +906,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6a286be1"
+      "dh": "6a286be1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetServerCmd",
@@ -687,7 +935,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "2bc24f3a"
+      "dh": "2bc24f3a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pServerCmd",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "IsAttackable",
@@ -707,7 +965,13 @@
         "D2UnitStrc",
         "eD2UnitFlags"
       ],
-      "dh": "b230f97a"
+      "dh": "b230f97a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetDeadFlag",
@@ -725,7 +989,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "3db2655c"
+      "dh": "3db2655c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IsActive",
@@ -744,7 +1014,13 @@
         "D2UnitStrc",
         "eD2PlayerAnimMode"
       ],
-      "dh": "bf451b99"
+      "dh": "bf451b99",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IsAlive",
@@ -767,7 +1043,13 @@
         "eD2ObjectAnimMode",
         "int32_t"
       ],
-      "dh": "3d06be53"
+      "dh": "3d06be53",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetConfirmedTargetUnit",
@@ -791,7 +1073,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "295a48b5"
+      "dh": "295a48b5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FreeLightMap",
@@ -809,7 +1097,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "6bad9d01"
+      "dh": "6bad9d01",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CUNIT_IterateServerUnitsWithCallback",
@@ -832,7 +1126,13 @@
         "fnUnitIterCallback",
         "int32_t"
       ],
-      "dh": "172e8b9b"
+      "dh": "172e8b9b",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CUNIT_IterateMissilesWithCallback",
@@ -855,7 +1155,13 @@
         "fnUnitIterCallback",
         "int32_t"
       ],
-      "dh": "4f0edff1"
+      "dh": "4f0edff1",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CUNIT_IterateItemsWithCallback",
@@ -878,7 +1184,13 @@
         "fnUnitIterCallback",
         "int32_t"
       ],
-      "dh": "e245fedb"
+      "dh": "e245fedb",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CUNIT_IterateUntilWarp",
@@ -896,7 +1208,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "6b409ccf"
+      "dh": "6b409ccf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ROOM_GetWarpDestinationName",
@@ -920,7 +1238,17 @@
         "WCHAR",
         "eD2LevelId"
       ],
-      "dh": "8e995a40"
+      "dh": "8e995a40",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "pWarpUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetName",
@@ -961,7 +1289,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "04658ab2"
+      "dh": "04658ab2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DecrementGfxTimer",
@@ -985,7 +1319,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2dff9bbc"
+      "dh": "2dff9bbc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CUNIT_SetUnitFlag3",
@@ -1007,7 +1347,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f2b999f2"
+      "dh": "f2b999f2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CUNIT_GetStartLight",
@@ -1029,7 +1375,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "6294debf"
+      "dh": "6294debf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetLightRadius",
@@ -1051,7 +1403,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e47edb25"
+      "dh": "e47edb25",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nLightRadiusX",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CUNIT_IsItemInUnitInventory",
@@ -1077,7 +1439,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a635cab3"
+      "dh": "a635cab3",
+      "paramStorage": [
+        [
+          "pExcludeUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pContainerUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CUNIT_IsItemInAnyInventory",
@@ -1098,7 +1474,17 @@
         "D2UnitStrc *[128]",
         "uint32_t"
       ],
-      "dh": "acb7ca8e"
+      "dh": "acb7ca8e",
+      "paramStorage": [
+        [
+          "pExcludeUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UnitDoOverlay",
@@ -1122,7 +1508,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "43989590"
+      "dh": "43989590",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eOverlay",
+          "EDX:4"
+        ],
+        [
+          "nDuration",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_IsTargetOwnedPet",
@@ -1149,7 +1549,17 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "20caa693"
+      "dh": "20caa693",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pnSkillParams",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_IsTargetAlliedUnit",
@@ -1175,7 +1585,17 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "322707dc"
+      "dh": "322707dc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pnSkillParams",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SyncPathFromServer",
@@ -1216,7 +1636,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dc825605"
+      "dh": "dc825605",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetPlayerUnitPartyId",
@@ -1236,7 +1662,13 @@
         "D2UnitStrc",
         "int16_t"
       ],
-      "dh": "8eefaa0e"
+      "dh": "8eefaa0e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FindRoom",
@@ -1263,7 +1695,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "763b0e93"
+      "dh": "763b0e93",
+      "paramStorage": [
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_TeleportUnitToPosition",
@@ -1313,7 +1755,25 @@
         "eD2PlayerAnimMode",
         "int32_t"
       ],
-      "dh": "7f50411f"
+      "dh": "7f50411f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bWarpFade",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_PlaySkillVisualEffect",
@@ -1339,7 +1799,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5ebdd879"
+      "dh": "5ebdd879",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nEffectId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "FreeAny",
@@ -1376,7 +1846,13 @@
         "D2LightMapStrc",
         "D2UnitStrc"
       ],
-      "dh": "27a00aad"
+      "dh": "27a00aad",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "FreeAllUnits",
@@ -1445,7 +1921,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "641278dd"
+      "dh": "641278dd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bImmediate",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CanInteractWith",
@@ -1477,7 +1963,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "968fd64e"
+      "dh": "968fd64e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RemoveObject",
@@ -1500,7 +1996,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "2a2bf6b6"
+      "dh": "2a2bf6b6",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "EBX:4"
+        ],
+        [
+          "eUnitType",
+          "EDI:4"
+        ],
+        [
+          "ppUnitTable",
+          "EDX:4"
+        ],
+        [
+          "nIndex",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RemoveObjectFromServerObjectTable",
@@ -1520,7 +2034,17 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "133f11b8"
+      "dh": "133f11b8",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "eUnitType",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_RemoveFromClientHashTable",
@@ -1540,7 +2064,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "641c22a9"
+      "dh": "641c22a9",
+      "paramStorage": [
+        [
+          "dwUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "nUnitType",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FinalizeCreation",
@@ -1567,7 +2101,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e032e389"
+      "dh": "e032e389",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "InitCommonData",
@@ -1615,7 +2155,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7450f642"
+      "dh": "7450f642",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "EBX:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nItemAnimMode",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nObjectAnimMode",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "UNIT_CreateWarp",
@@ -1637,7 +2211,33 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "23d9fc53"
+      "dh": "23d9fc53",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "nClassId",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nItemAnimMode",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "UNIT_CreatePlayer",
@@ -1673,7 +2273,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "13d3c4c6"
+      "dh": "13d3c4c6",
+      "paramStorage": [
+        [
+          "nUnitGuid",
+          "ECX:4"
+        ],
+        [
+          "nClassId",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szName",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "CreateObject",
@@ -1697,7 +2319,41 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "ae734099"
+      "dh": "ae734099",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "nClassId",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nInteraction",
+          "Stack[0x18]:1"
+        ]
+      ]
     },
     {
       "name": "UNIT_CreateMonster",
@@ -1765,7 +2421,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "244984a6"
+      "dh": "244984a6",
+      "paramStorage": [
+        [
+          "pCreateData",
+          "ECX:4"
+        ],
+        [
+          "pItemSeed",
+          "EDX:4"
+        ],
+        [
+          "pMonUModList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNameSeed",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBossId",
+          "Stack[0xc]:2"
+        ],
+        [
+          "bClientUnit",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CreateMissileOrMonster",
@@ -1789,7 +2471,29 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "2659dcef"
+      "dh": "2659dcef",
+      "paramStorage": [
+        [
+          "nMonstatId",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nItemAnimMode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ROOM_SpawnPresetUnitAtCoords",
@@ -1810,7 +2514,17 @@
         "D2DrlgRoomCoordsStrc",
         "D2RoomStrc"
       ],
-      "dh": "e7a2cb87"
+      "dh": "e7a2cb87",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "pPresetUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CreateUnitsForMissiles",
@@ -1833,7 +2547,13 @@
         "D2PresetUnitStrc",
         "D2RoomStrc"
       ],
-      "dh": "7d569ad3"
+      "dh": "7d569ad3",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HitTestScreen",
@@ -1883,7 +2603,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9d7a4814"
+      "dh": "9d7a4814",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nClickX",
+          "EDX:4"
+        ],
+        [
+          "nClickY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pObjectsTxt",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CleanupInventory",
@@ -1914,7 +2652,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a1e9698f"
+      "dh": "a1e9698f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bCheckInventory",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

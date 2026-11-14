@@ -21,7 +21,13 @@
       "usedTypes": [
         "fnAppModeRun *"
       ],
-      "dh": "bc5a96bc"
+      "dh": "bc5a96bc",
+      "paramStorage": [
+        [
+          "hModule",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AppModeClientShutdown",
@@ -58,7 +64,13 @@
         "D2IniConfigStrc",
         "int32_t"
       ],
-      "dh": "17b3faa6"
+      "dh": "17b3faa6",
+      "paramStorage": [
+        [
+          "pD2IniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientAppModeQueue",
@@ -80,7 +92,13 @@
         "eD2ClientAppMode",
         "int32_t"
       ],
-      "dh": "27688ab0"
+      "dh": "27688ab0",
+      "paramStorage": [
+        [
+          "eAppMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENTMODE_GetCurrentAppMode",
@@ -122,7 +140,17 @@
         "CMDPARAMS",
         "int32_t"
       ],
-      "dh": "ed9dd558"
+      "dh": "ed9dd558",
+      "paramStorage": [
+        [
+          "pParams",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szCmdLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CmdLine_StopRecordingSetFlags",
@@ -141,7 +169,17 @@
       "usedTypes": [
         "CMDPARAMS"
       ],
-      "dh": "aeafada1"
+      "dh": "aeafada1",
+      "paramStorage": [
+        [
+          "pParams",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szCmdLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CmdLine_EnableRecording",
@@ -160,7 +198,17 @@
       "usedTypes": [
         "CMDPARAMS"
       ],
-      "dh": "b5d5887c"
+      "dh": "b5d5887c",
+      "paramStorage": [
+        [
+          "pParams",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szCmdLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CmdLine_ShowHelpCallback",
@@ -176,7 +224,13 @@
         "CmdLine_ShowHelpCallback",
         "CmdLine_ShowHelpIfNotDeveloper"
       ],
-      "dh": "f167e64f"
+      "dh": "f167e64f",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENTMODEIN_CmdLineCallback_ShowHelp",
@@ -195,7 +249,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "ca204491"
+      "dh": "ca204491",
+      "paramStorage": [
+        [
+          "pnErrorCode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CmdLine_SaveDefaultCommandLine",
@@ -215,7 +275,17 @@
         "CMDPARAMS",
         "int32_t"
       ],
-      "dh": "32e63bca"
+      "dh": "32e63bca",
+      "paramStorage": [
+        [
+          "pParams",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szCmdLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CmdLine_SetAppMode",
@@ -237,7 +307,17 @@
         "eD2ClientAppMode",
         "int32_t"
       ],
-      "dh": "80dddff3"
+      "dh": "80dddff3",
+      "paramStorage": [
+        [
+          "pParams",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szCmdLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "LoadDataForGameAndSetupServer",
@@ -261,7 +341,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9ebdde50"
+      "dh": "9ebdde50",
+      "paramStorage": [
+        [
+          "D2IniData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0044b780",
@@ -407,7 +493,13 @@
       "calledFunctions": [
         "D2CLIENT_SetExitVar1"
       ],
-      "dh": "80900777"
+      "dh": "80900777",
+      "paramStorage": [
+        [
+          "bResult",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2IniData_Getter_Unref_0044b890",
@@ -463,7 +555,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0128a264"
+      "dh": "0128a264",
+      "paramStorage": [
+        [
+          "hModule",
+          "Stack[0x4]:4"
+        ],
+        [
+          "D2IniData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SetScreenResolution",
@@ -488,7 +590,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "c05662f2"
+      "dh": "c05662f2",
+      "paramStorage": [
+        [
+          "RequestedScreenModeMaybe",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENTMODE_WaitForQServerConnection",
@@ -514,7 +622,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "59d4032e"
+      "dh": "59d4032e",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0044bb70",
@@ -582,7 +696,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e7773f85"
+      "dh": "e7773f85",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0044bc10",
@@ -599,7 +719,17 @@
         "NET_D2GS_ConnectToServer",
         "MessageGameLoop"
       ],
-      "dh": "3a07f86b"
+      "dh": "3a07f86b",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_QServer_StartServer",
@@ -651,7 +781,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f7fa189b"
+      "dh": "f7fa189b",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_QServer_ShutdownServer",

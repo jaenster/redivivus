@@ -23,7 +23,17 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "77da363d"
+      "dh": "77da363d",
+      "paramStorage": [
+        [
+          "pCainUnit",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_NotifyQuestStateToPlayer",
@@ -46,7 +56,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "209d2ad1"
+      "dh": "209d2ad1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_SyncQuestStepToPlayer",
@@ -72,7 +96,21 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "7ce668bb"
+      "dh": "7ce668bb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_Callback02_NpcDeactivate",
@@ -94,7 +132,17 @@
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "e54c6214"
+      "dh": "e54c6214",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_Callback11_ScrollMessage",
@@ -139,7 +187,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "f7a65986"
+      "dh": "f7a65986",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_Callback00_NpcActivate",
@@ -172,7 +230,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4a1e7238"
+      "dh": "4a1e7238",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "QuestStartDebugNotify",
@@ -191,7 +259,13 @@
       "usedTypes": [
         "D2QuestDataStrc"
       ],
-      "dh": "a78ff92e"
+      "dh": "a78ff92e",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_SendQuestStatePacket",
@@ -212,7 +286,13 @@
         "D2GSPacketSrv0x5D",
         "D2UnitStrc"
       ],
-      "dh": "3c9654c1"
+      "dh": "3c9654c1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_DespawnRogueGuards",
@@ -238,7 +318,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c98a11dd"
+      "dh": "c98a11dd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_SpawnDeckardCainNpc",
@@ -268,7 +362,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "a182f8c8"
+      "dh": "a182f8c8",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ESI:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_MarkCannotComplete",
@@ -294,7 +406,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c454b4aa"
+      "dh": "c454b4aa",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_Callback14_PlayerJoinedGame",
@@ -314,7 +440,17 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "f021aa0f"
+      "dh": "f021aa0f",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_DeactivateCairnStones",
@@ -338,7 +474,13 @@
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "81fde931"
+      "dh": "81fde931",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Q04_Callback09_PlayerDroppedWithQuestItem",
@@ -362,7 +504,17 @@
         "D2QuestDataStrc",
         "uint32_t"
       ],
-      "dh": "003af8c7"
+      "dh": "003af8c7",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_Callback10_PlayerLeavesGame",
@@ -383,7 +535,17 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "7de57368"
+      "dh": "7de57368",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_SpawnTristramPortal",
@@ -411,7 +573,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "53d9cb05"
+      "dh": "53d9cb05",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pQuestData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_Callback04_ItemPickedUp",
@@ -432,7 +604,17 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "1ca11d0a"
+      "dh": "1ca11d0a",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_Callback06_Unused",
@@ -453,7 +635,17 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "71b0420a"
+      "dh": "71b0420a",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RollStonesOrder",
@@ -478,7 +670,13 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "a73a925d"
+      "dh": "a73a925d",
+      "paramStorage": [
+        [
+          "pQuestSpecificData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_SetRescueTrigger",
@@ -499,7 +697,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "70836e83"
+      "dh": "70836e83",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pQuestData",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_ActiveFilter",
@@ -525,7 +737,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "800bc40a"
+      "dh": "800bc40a",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_AutoCompleteForActIPlayer",
@@ -552,7 +786,21 @@
         "SGAMEDATA",
         "eAct"
       ],
-      "dh": "716e63ac"
+      "dh": "716e63ac",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_CompleteOnEnterTristram",
@@ -580,7 +828,21 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "7d6809a2"
+      "dh": "7d6809a2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_SetQuestCannotComplete",
@@ -604,7 +866,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "64ba8311"
+      "dh": "64ba8311",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_RegisterTristramVisitor",
@@ -629,7 +905,21 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "015079cd"
+      "dh": "015079cd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_TimerDespawnRogueGuards",
@@ -651,7 +941,17 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "0fcd9ee7"
+      "dh": "0fcd9ee7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pQuestData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MakeTownPortalFromScroolTree",
@@ -691,7 +991,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "5dc6d5b9"
+      "dh": "5dc6d5b9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_A1Q4_OpenCainGibbet",
@@ -729,7 +1039,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "4b18f422"
+      "dh": "4b18f422",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn06_CairnStone",
@@ -755,7 +1071,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1d4e0460"
+      "dh": "1d4e0460",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_HandleNpcInteraction",
@@ -783,7 +1105,21 @@
         "eAct",
         "eD2LevelId"
       ],
-      "dh": "a6cbde11"
+      "dh": "a6cbde11",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_A1Q4_ActivateCairnStone",
@@ -837,7 +1173,13 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "2df97a68"
+      "dh": "2df97a68",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_A1Q4_ActivateInifussTree",
@@ -872,7 +1214,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "58b82f35"
+      "dh": "58b82f35",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_SendStonesOrderToClient",
@@ -902,7 +1250,17 @@
         "SGAMEDATA",
         "uint16_t"
       ],
-      "dh": "7bbd19de"
+      "dh": "7bbd19de",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_SequenceFilter",
@@ -926,7 +1284,13 @@
       "usedTypes": [
         "D2QuestDataStrc"
       ],
-      "dh": "817304cc"
+      "dh": "817304cc",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_SetCainRescuedFlag",
@@ -946,7 +1310,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "4c39da00"
+      "dh": "4c39da00",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_SetSecretCowLevelDiscovered",
@@ -971,7 +1341,21 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "f931298e"
+      "dh": "f931298e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_Callback08_MonsterKilled",
@@ -998,7 +1382,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "125345e7"
+      "dh": "125345e7",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_SetScrollActivatedFlag",
@@ -1018,7 +1412,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "fe57dd1b"
+      "dh": "fe57dd1b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_GetPortalCreatedFlag",
@@ -1041,7 +1441,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "abd0512d"
+      "dh": "abd0512d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn09_InifussTree",
@@ -1061,7 +1467,13 @@
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "1949f413"
+      "dh": "1949f413",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn13_InvisibleObject",
@@ -1083,7 +1495,13 @@
         "D2ObjectInitFnArg",
         "D2QuestDataStrc"
       ],
-      "dh": "610bdbc7"
+      "dh": "610bdbc7",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_InitializeCainGibbetObject",
@@ -1104,7 +1522,17 @@
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "6a1db329"
+      "dh": "6a1db329",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pInitArg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_RemovePlayerFromList",
@@ -1126,7 +1554,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "201ee2df"
+      "dh": "201ee2df",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn54_CainStartPosition",
@@ -1148,7 +1586,13 @@
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "8ed56c93"
+      "dh": "8ed56c93",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_SpecialOutput_CowPortal",
@@ -1181,7 +1625,17 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "19abb9a3"
+      "dh": "19abb9a3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_SpecialOutput_Quest_Unused2",
@@ -1200,7 +1654,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "16a7725f"
+      "dh": "16a7725f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_SpecialOutput_Quest_Unused3",
@@ -1219,7 +1683,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "cf1e4a14"
+      "dh": "cf1e4a14",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn61_CainPortal",
@@ -1239,7 +1713,13 @@
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "959b325a"
+      "dh": "959b325a",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_UpdateFrozenAnyaNpcState",
@@ -1268,7 +1748,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "35afa30d"
+      "dh": "35afa30d",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_GetCainPortalCoordinates",
@@ -1290,7 +1780,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "6698f534"
+      "dh": "6698f534",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pOutCoords",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_SpawnCainCage",
@@ -1316,7 +1816,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "8d67d24f"
+      "dh": "8d67d24f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_GetCainPosition",
@@ -1340,7 +1850,21 @@
         "POINT",
         "SGAMEDATA"
       ],
-      "dh": "8e698c6d"
+      "dh": "8e698c6d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPoint",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_StoreCairnStonesPosition",
@@ -1363,7 +1887,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "ef1da7f9"
+      "dh": "ef1da7f9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_InitializeTristramObjects",
@@ -1395,7 +1929,17 @@
         "POINT",
         "SGAMEDATA"
       ],
-      "dh": "855662dc"
+      "dh": "855662dc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_SetTristramActiveFlag",
@@ -1415,7 +1959,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "e48a25f7"
+      "dh": "e48a25f7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_IsTristramActive",
@@ -1436,7 +1986,13 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "308fec1b"
+      "dh": "308fec1b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_DropShieldRewards",
@@ -1462,7 +2018,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "472bcbd8"
+      "dh": "472bcbd8",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_SetCainUnitGUID",
@@ -1483,7 +2049,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "9e9deab3"
+      "dh": "9e9deab3",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nCainGUID",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q04_ActivateCairnStonesAndTree",
@@ -1508,7 +2084,21 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "7f0fefe7"
+      "dh": "7f0fefe7",
+      "paramStorage": [
+        [
+          "bDeferGuardDespawn",
+          "Stack[0x4]:1"
+        ],
+        [
+          "bStartQuest",
+          "Stack[0x8]:1"
+        ],
+        [
+          "pQuestData",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "Q04_ForceStartQuestProgression",
@@ -1532,7 +2122,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "eb400ffd"
+      "dh": "eb400ffd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_Callback03_ChangedLevel",
@@ -1572,7 +2168,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "9a7b3827"
+      "dh": "9a7b3827",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_Callback13_PlayerStartedGame",
@@ -1600,7 +2206,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "295a8956"
+      "dh": "295a8956",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q04_InitData",
@@ -1623,7 +2239,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "16826c99"
+      "dh": "16826c99",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ForceStartQuest",
@@ -1652,7 +2274,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "791ffa67"
+      "dh": "791ffa67",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

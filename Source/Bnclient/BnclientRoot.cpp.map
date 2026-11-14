@@ -17,7 +17,17 @@
         "BNCLIENT_InitFilestream",
         "SLogCreate"
       ],
-      "dh": "8236a2aa"
+      "dh": "8236a2aa",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "szFilePath",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BNCLIENT_DestroyCompressor",
@@ -37,7 +47,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "aae0010b"
+      "dh": "aae0010b",
+      "paramStorage": [
+        [
+          "pCompressor",
+          "ECX:4"
+        ],
+        [
+          "bFreeMemory",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "NET_InitAndGetLobbyChatQueue",
@@ -127,7 +147,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "f58b2158"
+      "dh": "f58b2158",
+      "paramStorage": [
+        [
+          "nKeyScheduleIdx",
+          "ECX:4"
+        ],
+        [
+          "pPlaintext",
+          "EDX:4"
+        ],
+        [
+          "pCiphertext",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_SetupIDEAKey",
@@ -149,7 +183,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "e12ef901"
+      "dh": "e12ef901",
+      "paramStorage": [
+        [
+          "nKeyScheduleIdx",
+          "ECX:4"
+        ],
+        [
+          "bEncryptMode",
+          "EDX:4"
+        ],
+        [
+          "pdwKeyMaterial",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_DestroyContext",
@@ -168,7 +216,13 @@
       "usedTypes": [
         "D2Srp *"
       ],
-      "dh": "4ce57fa2"
+      "dh": "4ce57fa2",
+      "paramStorage": [
+        [
+          "ppContext",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

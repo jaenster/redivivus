@@ -19,7 +19,13 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
       ],
-      "dh": "f76b6034"
+      "dh": "f76b6034",
+      "paramStorage": [
+        [
+          "nCursor",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_GetCursorFrameOffset",
@@ -40,7 +46,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0705fe7d"
+      "dh": "0705fe7d",
+      "paramStorage": [
+        [
+          "nCursorIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_GetCursorMaxFrames",
@@ -61,7 +73,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "8789f975"
+      "dh": "8789f975",
+      "paramStorage": [
+        [
+          "nCursorIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_HandleCursorMouseDown",
@@ -80,7 +98,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "357f9315"
+      "dh": "357f9315",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_HandleCursorMouseMove",
@@ -99,7 +123,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "b557adc5"
+      "dh": "b557adc5",
+      "paramStorage": [
+        [
+          "pMsgEvent",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_HandleCursorMouseUp",
@@ -118,7 +148,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "8a2a3dc7"
+      "dh": "8a2a3dc7",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CURSOR_SetCursorItem",
@@ -137,7 +173,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "3212ab97"
+      "dh": "3212ab97",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nAnimFrame",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetCursorItem_Unref_00468030",
@@ -173,7 +219,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d1cce6b1"
+      "dh": "d1cce6b1",
+      "paramStorage": [
+        [
+          "nAnimFrame",
+          "ECX:4"
+        ],
+        [
+          "bAltIcon",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetItemOnHand",
@@ -191,7 +247,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "fd1f3cfc"
+      "dh": "fd1f3cfc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetCursorItem",
@@ -234,7 +296,13 @@
         "char *",
         "int32_t"
       ],
-      "dh": "ba8c4a2d"
+      "dh": "ba8c4a2d",
+      "paramStorage": [
+        [
+          "nCursorType",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_FreeCursor",
@@ -475,7 +543,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b6cdadbb"
+      "dh": "b6cdadbb",
+      "paramStorage": [
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetMouseXY",
@@ -500,7 +578,17 @@
         "tagRECT",
         "uint32_t"
       ],
-      "dh": "a6b2f830"
+      "dh": "a6b2f830",
+      "paramStorage": [
+        [
+          "x",
+          "ECX:4"
+        ],
+        [
+          "y",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetItemType",
@@ -540,7 +628,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a023ed96"
+      "dh": "a023ed96",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

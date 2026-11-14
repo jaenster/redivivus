@@ -25,7 +25,13 @@
         "D2WinAccountListEntry",
         "int32_t"
       ],
-      "dh": "4dcf6fcc"
+      "dh": "4dcf6fcc",
+      "paramStorage": [
+        [
+          "pAccountList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINACCOUNTLIST_AddAccount",
@@ -50,7 +56,17 @@
         "D2WinAccountListEntry",
         "int32_t"
       ],
-      "dh": "b3c5ee90"
+      "dh": "b3c5ee90",
+      "paramStorage": [
+        [
+          "pAccountList",
+          "ECX:4"
+        ],
+        [
+          "szAccountName",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINACCOUNTLIST_RemoveAccount",
@@ -75,7 +91,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "e391ae89"
+      "dh": "e391ae89",
+      "paramStorage": [
+        [
+          "pAccountList",
+          "ECX:4"
+        ],
+        [
+          "szAccountName",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINACCOUNTLIST_GetSelectedAccountName",
@@ -96,7 +122,17 @@
       "usedTypes": [
         "D2WinAccountList"
       ],
-      "dh": "13f8a445"
+      "dh": "13f8a445",
+      "paramStorage": [
+        [
+          "pAccountList",
+          "ECX:4"
+        ],
+        [
+          "szDest",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Push",
@@ -121,7 +157,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0aca312c"
+      "dh": "0aca312c",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FORMS_DestroyD2WinAccountList",
@@ -145,7 +187,13 @@
         "D2WinAccountList",
         "int32_t"
       ],
-      "dh": "42e86bf4"
+      "dh": "42e86bf4",
+      "paramStorage": [
+        [
+          "pAccountList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -176,7 +224,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a1b0d8bd"
+      "dh": "a1b0d8bd",
+      "paramStorage": [
+        [
+          "pAccountList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WinAccountList",
@@ -199,7 +253,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e47ec30d"
+      "dh": "e47ec30d",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nSizeX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUserData",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pdwFontData",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

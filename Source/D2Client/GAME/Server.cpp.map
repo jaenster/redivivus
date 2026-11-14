@@ -27,7 +27,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "adf30eb6"
+      "dh": "adf30eb6",
+      "paramStorage": [
+        [
+          "lpThreadParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

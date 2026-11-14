@@ -22,7 +22,21 @@
       "usedTypes": [
         "D2DataArrayStrc"
       ],
-      "dh": "22ab98ff"
+      "dh": "22ab98ff",
+      "paramStorage": [
+        [
+          "pszName",
+          "ECX:4"
+        ],
+        [
+          "numObjects",
+          "EDX:4"
+        ],
+        [
+          "nObjectSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreeWeatherPointer",
@@ -39,7 +53,13 @@
         "memset",
         "FreeClientMemory"
       ],
-      "dh": "0c44b985"
+      "dh": "0c44b985",
+      "paramStorage": [
+        [
+          "pDataArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FOG_InitDataArray",
@@ -60,7 +80,13 @@
       "usedTypes": [
         "D2DataArrayStrc"
       ],
-      "dh": "65455c43"
+      "dh": "65455c43",
+      "paramStorage": [
+        [
+          "pDataArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FOG_GetMissileField",
@@ -84,7 +110,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "87ffc287"
+      "dh": "87ffc287",
+      "paramStorage": [
+        [
+          "pMissilesTxt",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FOG_GetDataArrayEntry",
@@ -106,7 +138,17 @@
         "D2DataArrayStrc",
         "int32_t"
       ],
-      "dh": "8f8c9ef9"
+      "dh": "8f8c9ef9",
+      "paramStorage": [
+        [
+          "pDataArray",
+          "ECX:4"
+        ],
+        [
+          "nHandle",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FOG_GetDataArrayEntryOrHalt",
@@ -128,7 +170,17 @@
       "usedTypes": [
         "D2DataArrayStrc"
       ],
-      "dh": "c940cd12"
+      "dh": "c940cd12",
+      "paramStorage": [
+        [
+          "pDataArray",
+          "ECX:4"
+        ],
+        [
+          "nHandle",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FOG_CloseDataArray",
@@ -147,7 +199,13 @@
       "usedTypes": [
         "D2DataArrayStrc"
       ],
-      "dh": "ddc4c253"
+      "dh": "ddc4c253",
+      "paramStorage": [
+        [
+          "pDataArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FOG_ArrayFreeAtIndex",
@@ -170,7 +228,17 @@
         "D2DataArrayStrc",
         "int32_t"
       ],
-      "dh": "ed1b2173"
+      "dh": "ed1b2173",
+      "paramStorage": [
+        [
+          "pDataArray",
+          "ECX:4"
+        ],
+        [
+          "nHandle",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FOG_FillArrayWithRandomInts",
@@ -193,7 +261,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ae068954"
+      "dh": "ae068954",
+      "paramStorage": [
+        [
+          "nArrayOffset",
+          "ECX:4"
+        ],
+        [
+          "pArrayData",
+          "EDX:4"
+        ],
+        [
+          "fParam",
+          "Stack[0x4]:8"
+        ],
+        [
+          "nElementSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nMaxValue",
+          "Stack[0x14]:4"
+        ]
+      ]
     }
   ]
 }

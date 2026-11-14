@@ -19,7 +19,13 @@
       "usedTypes": [
         "fnAppModeRun *"
       ],
-      "dh": "e7851160"
+      "dh": "e7851160",
+      "paramStorage": [
+        [
+          "hModule",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AppModeLauncherShutdown",
@@ -50,7 +56,17 @@
         "thunk__strstr",
         "strstr"
       ],
-      "dh": "4f5d5657"
+      "dh": "4f5d5657",
+      "paramStorage": [
+        [
+          "szText1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MAINMENU_ShowBnetConnectionError",
@@ -87,7 +103,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "27afbeaa"
+      "dh": "27afbeaa",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UIMENU_DisconnectAndReturnToMainMenu",
@@ -107,7 +129,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "b8892dd9"
+      "dh": "b8892dd9",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MAINMENU_ConnectViaTCPIPAndSelectChar",
@@ -131,7 +159,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "dd153309"
+      "dh": "dd153309",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MAINMENU_OnPressSkipEmailAddress",
@@ -150,7 +184,13 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "0e11cc50"
+      "dh": "0e11cc50",
+      "paramStorage": [
+        [
+          "pControl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_UIMENU_MainMenuAgain",
@@ -169,7 +209,13 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "7ab556ec"
+      "dh": "7ab556ec",
+      "paramStorage": [
+        [
+          "pControl",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

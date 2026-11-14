@@ -23,7 +23,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b62804a5"
+      "dh": "b62804a5",
+      "paramStorage": [
+        [
+          "pTileProject",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFilename",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TILEPROJECT_FreeSlot",
@@ -43,7 +53,17 @@
         "D2TileLibraryHeaderStrc",
         "int32_t"
       ],
-      "dh": "dcaa3d83"
+      "dh": "dcaa3d83",
+      "paramStorage": [
+        [
+          "pnProjectIds",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTileLibrary",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TILEPROJECT_LookupTilesInAllProjects",
@@ -68,7 +88,33 @@
         "uint32_t",
         "void *"
       ],
-      "dh": "6cca5393"
+      "dh": "6cca5393",
+      "paramStorage": [
+        [
+          "ppProjects",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTileType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTileSubType",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSubIndex",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnFoundTiles",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nMaxTiles",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "GetOrientation",
@@ -90,7 +136,13 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "8d7ce6f4"
+      "dh": "8d7ce6f4",
+      "paramStorage": [
+        [
+          "pTileLibraryEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetIndex",
@@ -112,7 +164,13 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "26046fbc"
+      "dh": "26046fbc",
+      "paramStorage": [
+        [
+          "pTileLibraryEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TILEPROJECT_GetTileCount",
@@ -135,7 +193,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1875a416"
+      "dh": "1875a416",
+      "paramStorage": [
+        [
+          "pTileEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TILEPROJECT_GetTileDataPtr",
@@ -157,7 +221,13 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "d4e2559c"
+      "dh": "d4e2559c",
+      "paramStorage": [
+        [
+          "nParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TILEPROJECT_GetAnimatedTileDataPtr",
@@ -179,7 +249,13 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "6322b02b"
+      "dh": "6322b02b",
+      "paramStorage": [
+        [
+          "pTileLibraryEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetSubIndex",
@@ -201,7 +277,13 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "81dd6307"
+      "dh": "81dd6307",
+      "paramStorage": [
+        [
+          "pTileLibraryEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TILEPROJECT_GetTileOrientationIndex",
@@ -223,7 +305,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9edb074c"
+      "dh": "9edb074c",
+      "paramStorage": [
+        [
+          "pnOrientationIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TILEPROJECT_GetRoofHeightIndex",
@@ -245,7 +333,13 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "26d8bf0c"
+      "dh": "26d8bf0c",
+      "paramStorage": [
+        [
+          "pTileLibraryEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TILE_GetTileFlags",
@@ -267,7 +361,13 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "d8aca622"
+      "dh": "d8aca622",
+      "paramStorage": [
+        [
+          "pTileLibraryEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

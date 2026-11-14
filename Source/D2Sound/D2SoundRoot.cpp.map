@@ -16,7 +16,25 @@
       "calledFunctions": [
         "SOUND_DetectLegacySoundDrivers"
       ],
-      "dh": "56ff57f1"
+      "dh": "56ff57f1",
+      "paramStorage": [
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szDeviceName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szDriverVxd",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetLanguageCode",
@@ -142,7 +160,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "9bb8d16e"
+      "dh": "9bb8d16e",
+      "paramStorage": [
+        [
+          "nPresetType",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetDirectSoundErrorString",
@@ -157,7 +181,13 @@
       "calledFunctions": [
         "SOUND_GetDirectSoundErrorString"
       ],
-      "dh": "d8354cc0"
+      "dh": "d8354cc0",
+      "paramStorage": [
+        [
+          "hResult",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

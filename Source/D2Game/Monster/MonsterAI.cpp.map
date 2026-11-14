@@ -26,7 +26,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1738edf9"
+      "dh": "1738edf9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MERC_ApplyLevelStats",
@@ -65,7 +79,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "93041ecc"
+      "dh": "93041ecc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "pMerc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AllocMonsterAI",
@@ -85,7 +117,13 @@
         "D2MonsterAiStrc",
         "SGAMEDATA"
       ],
-      "dh": "4c56c0e6"
+      "dh": "4c56c0e6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FreeMonsterAi",
@@ -106,7 +144,17 @@
         "D2MonsterAiSubStrc",
         "SGAMEDATA"
       ],
-      "dh": "d23ef7b1"
+      "dh": "d23ef7b1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonster",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NPC_BeginInteraction",
@@ -151,7 +199,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c99a261e"
+      "dh": "c99a261e",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pAi",
+          "Stack[0x8]:4"
+        ],
+        [
+          "questActionType",
+          "Stack[0xc]:1"
+        ],
+        [
+          "pPlayer",
+          "EBX:4"
+        ],
+        [
+          "pNpcUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CountMonstersByAi",
@@ -171,7 +241,13 @@
         "D2MonsterAiSubStrc",
         "int32_t"
       ],
-      "dh": "289b5cc1"
+      "dh": "289b5cc1",
+      "paramStorage": [
+        [
+          "pMonsterAi",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HasAiSub",
@@ -190,7 +266,13 @@
         "D2MonsterAiStrc",
         "D2MonsterAiSubStrc"
       ],
-      "dh": "20a67c53"
+      "dh": "20a67c53",
+      "paramStorage": [
+        [
+          "pMonsterAi",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HasUnitInSubAi",
@@ -210,7 +292,17 @@
         "D2MonsterAiSubStrc",
         "D2UnitStrc"
       ],
-      "dh": "2df80b63"
+      "dh": "2df80b63",
+      "paramStorage": [
+        [
+          "pMonsterAiArg",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FreeSpecificAiForUnit",
@@ -232,7 +324,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "007d73c0"
+      "dh": "007d73c0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAi",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NpcState_MoveState0To1",
@@ -254,7 +360,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "1cf02285"
+      "dh": "1cf02285",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMonsterAi",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NpcState_MoveState1To2",
@@ -274,7 +398,17 @@
         "D2MonsterAiSubStrc",
         "D2UnitStrc"
       ],
-      "dh": "2c5d449e"
+      "dh": "2c5d449e",
+      "paramStorage": [
+        [
+          "pNpc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NpcStateIs2",
@@ -295,7 +429,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "3030bf2c"
+      "dh": "3030bf2c",
+      "paramStorage": [
+        [
+          "pNpc",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FreeAndResetAiSub",
@@ -324,7 +468,25 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "a9a64f38"
+      "dh": "a9a64f38",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMonster",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMonsterAi",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NPC_BeginInteractionFromUnit",
@@ -346,7 +508,29 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "f23abd9d"
+      "dh": "f23abd9d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMonster",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMonsterAi",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nQuestActionType",
+          "Stack[0xc]:1"
+        ]
+      ]
     },
     {
       "name": "UnitHasSwitchAiSet",
@@ -365,7 +549,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c150104c"
+      "dh": "c150104c",
+      "paramStorage": [
+        [
+          "pMonster",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "AI_SetSwitchAiTargetParams",
@@ -387,7 +577,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "da15ee45"
+      "dh": "da15ee45",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nSwitchAiMode",
+          "EDX:4"
+        ],
+        [
+          "nTargetGUID",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_GetSwitchAiParam1",
@@ -406,7 +610,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ac7cf401"
+      "dh": "ac7cf401",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AI_GetSwitchAiParam2",
@@ -425,7 +635,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "5a2763a2"
+      "dh": "5a2763a2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AI_ClearSwitchAiTargetParams",
@@ -444,7 +660,13 @@
         "D2UnitDataMonsterStrc",
         "D2UnitStrc"
       ],
-      "dh": "22c70a3d"
+      "dh": "22c70a3d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NpcStateIsntZero",
@@ -465,7 +687,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "cac68131"
+      "dh": "cac68131",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ClearAISub",
@@ -497,7 +729,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ab171b69"
+      "dh": "ab171b69",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "fpFunction",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bClientSide",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "MERC_HireAndReplaceMerc",
@@ -544,7 +794,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bed196b6"
+      "dh": "bed196b6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMinion",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMercLevelOverride",
+          "Stack[0x8]:2"
+        ],
+        [
+          "pHireInfo",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bSkipUnitNodeCreate",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

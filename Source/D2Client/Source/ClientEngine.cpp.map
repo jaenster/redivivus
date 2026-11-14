@@ -56,7 +56,13 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "8c23796f"
+      "dh": "8c23796f",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_QuestEvent_DenOfEvilLightReset",
@@ -254,7 +260,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "39c0b25c"
+      "dh": "39c0b25c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_QuestEvent_FreeAnyaFromIce",
@@ -352,7 +364,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "27fc8f00"
+      "dh": "27fc8f00",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleIncoming0x89",
@@ -373,7 +391,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0471fc73"
+      "dh": "0471fc73",
+      "paramStorage": [
+        [
+          "nEventId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_BossDeath_BloodRaven",
@@ -395,7 +419,13 @@
         "D2SkillArgStrc",
         "D2UnitStrc"
       ],
-      "dh": "9bdb7546"
+      "dh": "9bdb7546",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SpawnTowerMistEffect",
@@ -425,7 +455,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "7a887af6"
+      "dh": "7a887af6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SpawnOrbMistEffect",
@@ -455,7 +491,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "d999a864"
+      "dh": "d999a864",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_BossDeath_Mephisto",
@@ -478,7 +520,13 @@
         "D2SkillArgStrc",
         "D2UnitStrc"
       ],
-      "dh": "6788f125"
+      "dh": "6788f125",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_BossDeath_Andariel",
@@ -499,7 +547,13 @@
         "D2SkillArgStrc",
         "D2UnitStrc"
       ],
-      "dh": "bfc77dca"
+      "dh": "bfc77dca",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_BossDeath_Radament",
@@ -523,7 +577,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "c8e511f6"
+      "dh": "c8e511f6",
+      "paramStorage": [
+        [
+          "pBossUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_BossDeath_SandMaggotQueen",
@@ -547,7 +607,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "0b50b6d4"
+      "dh": "0b50b6d4",
+      "paramStorage": [
+        [
+          "pBossUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_BossDeath_Duriel",
@@ -571,7 +637,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "7291dfff"
+      "dh": "7291dfff",
+      "paramStorage": [
+        [
+          "pBossUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_BossDeath_Izual",
@@ -593,7 +665,13 @@
         "D2SkillArgStrc",
         "D2UnitStrc"
       ],
-      "dh": "c96577f0"
+      "dh": "c96577f0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_StoreUnitGuidForQuestTracking",
@@ -611,7 +689,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "e1218de4"
+      "dh": "e1218de4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_BossDeath_Baal",
@@ -659,7 +743,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "647b1b0d"
+      "dh": "647b1b0d",
+      "paramStorage": [
+        [
+          "pRed",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGreen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBlue",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ROOM_GetLevelLightColor",
@@ -680,7 +778,25 @@
         "D2RoomStrc",
         "eD2LevelId"
       ],
-      "dh": "f5f20e07"
+      "dh": "f5f20e07",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "pRed",
+          "EDX:4"
+        ],
+        [
+          "pGreen",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBlue",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DenOfEvilLight",
@@ -705,7 +821,13 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "97a3f1ca"
+      "dh": "97a3f1ca",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientLight_UpdateLightTimers",
@@ -745,7 +867,13 @@
         "D2UnitStrc",
         "eD2LevelId"
       ],
-      "dh": "731f71a5"
+      "dh": "731f71a5",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_InitializeQuestStateGlobals",
@@ -781,7 +909,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "95bc95a6"
+      "dh": "95bc95a6",
+      "paramStorage": [
+        [
+          "nSeconds",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SpawnWorldstoneShakeParticle",
@@ -812,7 +946,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "a1d7ea19"
+      "dh": "a1d7ea19",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_Overlay_SecondsLeftToGame",
@@ -875,7 +1015,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ce98cb0a"
+      "dh": "ce98cb0a",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMonsterClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSeed",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SpawnMonstersAroundUnit",
@@ -904,7 +1058,21 @@
         "int32_t",
         "uint64_t"
       ],
-      "dh": "e137c4c6"
+      "dh": "e137c4c6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMonsterClassId",
+          "EDX:4"
+        ],
+        [
+          "nSpawnCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_SpawnRandomMonsters",
@@ -931,7 +1099,13 @@
         "eD2LevelId",
         "uint32_t"
       ],
-      "dh": "61217036"
+      "dh": "61217036",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_ForEachUnitInAdjacentRooms",
@@ -957,7 +1131,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "56f1af0b"
+      "dh": "56f1af0b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "ppBestUnit",
+          "EDX:4"
+        ],
+        [
+          "pnBestValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_FindClosestDeadUnitCallback",
@@ -979,7 +1171,25 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "e6f4a550"
+      "dh": "e6f4a550",
+      "paramStorage": [
+        [
+          "pSourceUnit",
+          "ECX:4"
+        ],
+        [
+          "pCandidate",
+          "EDX:4"
+        ],
+        [
+          "ppBestUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBestDistance",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_FindNearbyCorpseCallback",
@@ -1005,7 +1215,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "66466a69"
+      "dh": "66466a69",
+      "paramStorage": [
+        [
+          "pSourceUnit",
+          "ECX:4"
+        ],
+        [
+          "pCandidate",
+          "EDX:4"
+        ],
+        [
+          "ppBestUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBestDistance",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_RegisterActiveUnitInSlot",
@@ -1024,7 +1252,13 @@
         "D2UnitStrc",
         "D2UnitStrc *"
       ],
-      "dh": "3a51ba45"
+      "dh": "3a51ba45",
+      "paramStorage": [
+        [
+          "nUnitId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_UnregisterActiveUnitFromSlot",
@@ -1043,7 +1277,13 @@
         "D2UnitStrc",
         "D2UnitStrc *"
       ],
-      "dh": "d694bfea"
+      "dh": "d694bfea",
+      "paramStorage": [
+        [
+          "nUnitId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_FindClosestTrackedUnit",
@@ -1064,7 +1304,17 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "4e2ee65f"
+      "dh": "4e2ee65f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnClosestDist",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SendMonsterMoveToUnitMessage",
@@ -1089,7 +1339,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1d254c92"
+      "dh": "1d254c92",
+      "paramStorage": [
+        [
+          "nSenderId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pTarget",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_TryMoveTowardTarget",
@@ -1123,7 +1391,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "53de4a02"
+      "dh": "53de4a02",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bMoveStep",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nSenderId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwAnimMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pTarget",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SendMonsterMoveToRandomNearbyPosMessage",
@@ -1153,7 +1443,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "01de70b7"
+      "dh": "01de70b7",
+      "paramStorage": [
+        [
+          "nOffsetRange",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSenderId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SendMonsterMoveToTargetMessage",
@@ -1178,7 +1486,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "68713314"
+      "dh": "68713314",
+      "paramStorage": [
+        [
+          "nTargetX",
+          "EAX:4"
+        ],
+        [
+          "nTargetY",
+          "ECX:4"
+        ],
+        [
+          "nSenderId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SendMonsterAttackMessage",
@@ -1201,7 +1531,13 @@
         "D2UnitStrc",
         "eD2UnitType"
       ],
-      "dh": "794f155d"
+      "dh": "794f155d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SendMonsterWanderMessage",
@@ -1224,7 +1560,13 @@
         "D2UnitStrc",
         "eD2UnitType"
       ],
-      "dh": "b6c47e35"
+      "dh": "b6c47e35",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SetMonsterAiTimer",
@@ -1244,7 +1586,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e4204570"
+      "dh": "e4204570",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "sMonsterAi",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_CheckIfUnitPositionsMatch",
@@ -1266,7 +1618,17 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "ac2bb279"
+      "dh": "ac2bb279",
+      "paramStorage": [
+        [
+          "pnUnit1",
+          "EAX:4"
+        ],
+        [
+          "pnUnit2",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_FindAndChaseNearestEnemy",
@@ -1293,7 +1655,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "53332426"
+      "dh": "53332426",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_MonsterAi_IdleWanderBehavior",
@@ -1315,7 +1683,21 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "18c45e43"
+      "dh": "18c45e43",
+      "paramStorage": [
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetDistance",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_MonsterIdleApproach",
@@ -1344,7 +1726,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "ffab7051"
+      "dh": "ffab7051",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_MonsterThinkBehavior",
@@ -1371,7 +1759,17 @@
         "eD2PlayerAnimMode",
         "int32_t"
       ],
-      "dh": "142af8ad"
+      "dh": "142af8ad",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_MonsterAi_CorpseSeekerBehavior",
@@ -1402,7 +1800,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "15be9f63"
+      "dh": "15be9f63",
+      "paramStorage": [
+        [
+          "nTargetDistance",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_MonsterAi_BasicChaseBehavior",
@@ -1430,7 +1842,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d843d1be"
+      "dh": "d843d1be",
+      "paramStorage": [
+        [
+          "nTargetDistance",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_MonsterSeekCorpse",
@@ -1465,7 +1891,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "17b1e167"
+      "dh": "17b1e167",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SpawnWorldstoneChipDebris",
@@ -1500,7 +1932,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "c91ad6f6"
+      "dh": "c91ad6f6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_ProcessPathCallback",
@@ -1529,7 +1967,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "18e05982"
+      "dh": "18e05982",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pTarget",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_ClearActiveUnitSlotArray",
@@ -1578,7 +2026,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "06b0f3be"
+      "dh": "06b0f3be",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0046d9c0",
@@ -1596,7 +2050,13 @@
       "usedTypes": [
         "D2OverlayTxt"
       ],
-      "dh": "882a6c94"
+      "dh": "882a6c94",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetEffectiveUnitType",
@@ -1618,7 +2078,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "aca61ae2"
+      "dh": "aca61ae2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetEffectiveAnimMode",
@@ -1640,7 +2106,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "99f875ff"
+      "dh": "99f875ff",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetEffectiveClassId",
@@ -1662,7 +2134,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "7b4300b9"
+      "dh": "7b4300b9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_DRAW_Overlay_SecondsLeftToGame_Unref_00477690",
@@ -1726,7 +2204,13 @@
         "thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047f940",
         "WARDEN_FreeModuleLibraries"
       ],
-      "dh": "483b4774"
+      "dh": "483b4774",
+      "paramStorage": [
+        [
+          "ppWardenModule",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047fbe0",
@@ -1742,7 +2226,13 @@
         "thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047fbe0",
         "WARDEN_FreeModuleLibraries"
       ],
-      "dh": "4b76cb8b"
+      "dh": "4b76cb8b",
+      "paramStorage": [
+        [
+          "ppWardenModule",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

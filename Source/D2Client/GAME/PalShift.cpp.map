@@ -88,7 +88,13 @@
         "D2PalShiftEntryStrc",
         "int32_t"
       ],
-      "dh": "73133f77"
+      "dh": "73133f77",
+      "paramStorage": [
+        [
+          "nToken",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PALSHIFT_ApplyGreenBloodPalette",
@@ -108,7 +114,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "44a4e11f"
+      "dh": "44a4e11f",
+      "paramStorage": [
+        [
+          "pPaletteData",
+          "EDX:4"
+        ],
+        [
+          "nMonsterId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PALSHIFT_LoadMonsterPalShift",
@@ -138,7 +154,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7bd80f6d"
+      "dh": "7bd80f6d",
+      "paramStorage": [
+        [
+          "nMonsterId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PALSHIFT_InitPalShiftTable",
@@ -188,7 +210,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e7b24266"
+      "dh": "e7b24266",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PALSHIFT_GenerateShiftDuration",
@@ -210,7 +238,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "2ea34ac4"
+      "dh": "2ea34ac4",
+      "paramStorage": [
+        [
+          "pUnitSeedBase",
+          "ECX:4"
+        ],
+        [
+          "nSeedInput",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "PALSHIFT_GetGreenBloodTable",

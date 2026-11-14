@@ -24,7 +24,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ca278cc3"
+      "dh": "ca278cc3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CUNITEVENT_Alloc",
@@ -45,7 +51,37 @@
         "D2UnitStrc",
         "fnCUnitEventCallback"
       ],
-      "dh": "71057839"
+      "dh": "71057839",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nClientEvent",
+          "EDX:4"
+        ],
+        [
+          "dwEventData1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwEventData2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nEventType",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nEventState",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "CUNITEVENT_RemoveByTypeAndState",
@@ -68,7 +104,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8297c1a1"
+      "dh": "8297c1a1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nEventType",
+          "EDX:4"
+        ],
+        [
+          "nEventState",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

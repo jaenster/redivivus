@@ -16,7 +16,13 @@
       "calledFunctions": [
         "SPRITECACHE_SetMaxSize_Unref_00624700"
       ],
-      "dh": "544eec17"
+      "dh": "544eec17",
+      "paramStorage": [
+        [
+          "nSize",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISC_SafeStrncpy",
@@ -35,7 +41,17 @@
       "usedTypes": [
         "_SYSTEMTIME"
       ],
-      "dh": "36cdc4fa"
+      "dh": "36cdc4fa",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "StoreLogging",
@@ -61,7 +77,45 @@
         "uint32_t",
         "va_list"
       ],
-      "dh": "2dd82991"
+      "dh": "2dd82991",
+      "paramStorage": [
+        [
+          "szFormat",
+          "ECX:4"
+        ],
+        [
+          "pArgs",
+          "EDX:4"
+        ],
+        [
+          "pFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nThreadId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLogLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nComponent",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSubsystem",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nSequence",
+          "Stack[0x18]:4"
+        ],
+        [
+          "szContext",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "LOGGING_FilePrintf",
@@ -140,7 +194,13 @@
         "fopen",
         "LOGGING_LogLine"
       ],
-      "dh": "d7721233"
+      "dh": "d7721233",
+      "paramStorage": [
+        [
+          "szLogFileName",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CloseLogging",

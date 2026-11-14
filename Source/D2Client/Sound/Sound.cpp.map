@@ -39,7 +39,13 @@
       "usedTypes": [
         "D2MPQFileStrc"
       ],
-      "dh": "d1666c7c"
+      "dh": "d1666c7c",
+      "paramStorage": [
+        [
+          "szFileName",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_CalculateAngle1",
@@ -54,7 +60,17 @@
       "calledFunctions": [
         "SOUND_CalculateAngle1"
       ],
-      "dh": "d8421f90"
+      "dh": "d8421f90",
+      "paramStorage": [
+        [
+          "fParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "fParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_CalculateAngle2",
@@ -69,7 +85,17 @@
       "calledFunctions": [
         "SOUND_CalculateAngle2"
       ],
-      "dh": "2508acbf"
+      "dh": "2508acbf",
+      "paramStorage": [
+        [
+          "fParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "fParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_CalculatePanning",
@@ -84,7 +110,21 @@
       "calledFunctions": [
         "SOUND_CalculatePanning"
       ],
-      "dh": "94477875"
+      "dh": "94477875",
+      "paramStorage": [
+        [
+          "fParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "fParam2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "fParam3",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetChannelArray",
@@ -122,7 +162,13 @@
       "usedTypes": [
         "D2SoundChannelStrc"
       ],
-      "dh": "d985d27f"
+      "dh": "d985d27f",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDINST_StopChannel",
@@ -144,7 +190,13 @@
       "usedTypes": [
         "D2SoundChannelStrc"
       ],
-      "dh": "a88b9d5b"
+      "dh": "a88b9d5b",
+      "paramStorage": [
+        [
+          "pSoundInst",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_ReleaseChannel",
@@ -171,7 +223,13 @@
         "D2SoundListNodeStrc",
         "int32_t"
       ],
-      "dh": "90b5dfe6"
+      "dh": "90b5dfe6",
+      "paramStorage": [
+        [
+          "pChannel",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004b9560",
@@ -186,7 +244,13 @@
       "calledFunctions": [
         "Unreferenced_004b9560"
       ],
-      "dh": "77cbff1b"
+      "dh": "77cbff1b",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetSoundId",
@@ -205,7 +269,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e1f14d85"
+      "dh": "e1f14d85",
+      "paramStorage": [
+        [
+          "nChannelHandle",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetSoundByIndex",
@@ -227,7 +297,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1a326003"
+      "dh": "1a326003",
+      "paramStorage": [
+        [
+          "nChannelHandle",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_StopSound",
@@ -245,7 +321,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "76fccacd"
+      "dh": "76fccacd",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_IsChannelPlaying",
@@ -266,7 +348,13 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "93a8abca"
+      "dh": "93a8abca",
+      "paramStorage": [
+        [
+          "nSoundGroup",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_SetChannelProperties",
@@ -288,7 +376,21 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "dcaf81df"
+      "dh": "dcaf81df",
+      "paramStorage": [
+        [
+          "nSoundGroup",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pListKey",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nExcludeChannel",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_FindActiveStreamChannel",
@@ -308,7 +410,17 @@
         "D2SoundChannelStrc",
         "intptr_t"
       ],
-      "dh": "b4a4a304"
+      "dh": "b4a4a304",
+      "paramStorage": [
+        [
+          "pExcludeChannel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nListKey",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_CalculateDistance",
@@ -331,7 +443,17 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "4f1127fe"
+      "dh": "4f1127fe",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nExcludeChannel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_CalculateUnitDirection",
@@ -353,7 +475,21 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "35d9e771"
+      "dh": "35d9e771",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSoundId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pfDirection",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_CalculateUnitDistance",
@@ -380,7 +516,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1d9c78c5"
+      "dh": "1d9c78c5",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_Calculate3DPosition",
@@ -404,7 +550,17 @@
         "D2SoundChannelStrc",
         "int32_t"
       ],
-      "dh": "4817b357"
+      "dh": "4817b357",
+      "paramStorage": [
+        [
+          "pfPosition",
+          "ESI:4"
+        ],
+        [
+          "pChannel",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_PlayEnvironmentSound",
@@ -425,7 +581,25 @@
         "D2SoundChannelNodeStrc *",
         "int32_t"
       ],
-      "dh": "2b82f396"
+      "dh": "2b82f396",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosZ",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_PlaySound",
@@ -457,7 +631,29 @@
         "eD2Sounds",
         "int32_t"
       ],
-      "dh": "58ff93bf"
+      "dh": "58ff93bf",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nDelay",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nVolume",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_SetMasterVolume",
@@ -475,7 +671,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d6c47be0"
+      "dh": "d6c47be0",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_SetChannelPriority",
@@ -495,7 +697,17 @@
         "D2SoundChannelNodeStrc *",
         "int32_t"
       ],
-      "dh": "93994b25"
+      "dh": "93994b25",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ],
+        [
+          "nPriority",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_PlayItemSound",
@@ -514,7 +726,25 @@
         "D2SoundChannelStrc",
         "int32_t"
       ],
-      "dh": "2aa3be6a"
+      "dh": "2aa3be6a",
+      "paramStorage": [
+        [
+          "nChannelData",
+          "ECX:4"
+        ],
+        [
+          "pItemData",
+          "EDX:4"
+        ],
+        [
+          "nStartTick",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDuration",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetSoundChannel",
@@ -533,7 +763,13 @@
         "D2SoundListNodeStrc",
         "int32_t"
       ],
-      "dh": "9039934b"
+      "dh": "9039934b",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_IsMusicPlaying",
@@ -581,7 +817,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "036ec1aa"
+      "dh": "036ec1aa",
+      "paramStorage": [
+        [
+          "nChannelHandle",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004b9cd0",
@@ -599,7 +841,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "0a35ebe2"
+      "dh": "0a35ebe2",
+      "paramStorage": [
+        [
+          "nChannelHandle",
+          "ECX:4"
+        ],
+        [
+          "nPriority",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "SOUND_PauseAll",
@@ -656,7 +908,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a9f0396f"
+      "dh": "a9f0396f",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_IsChannelAvailable",
@@ -676,7 +934,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "437ec7b3"
+      "dh": "437ec7b3",
+      "paramStorage": [
+        [
+          "pChanA",
+          "ECX:4"
+        ],
+        [
+          "pChanB",
+          "EDX:4"
+        ],
+        [
+          "bComparePan",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bCompareTime",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_FindChannelForSound",
@@ -697,7 +973,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "f74bd059"
+      "dh": "f74bd059",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004b9eb0",
@@ -746,7 +1028,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ced457ca"
+      "dh": "ced457ca",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ],
+        [
+          "nFadeTarget",
+          "EDX:4"
+        ],
+        [
+          "nFadeDelay",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFadeDuration",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_UpdateAllChannels",
@@ -805,7 +1105,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6c83de75"
+      "dh": "6c83de75",
+      "paramStorage": [
+        [
+          "nFrameTime",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_StopUnitSound",
@@ -826,7 +1132,13 @@
         "D2SoundChannelStrc",
         "D2SoundsTxt"
       ],
-      "dh": "0792cc8a"
+      "dh": "0792cc8a",
+      "paramStorage": [
+        [
+          "pChannel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_StopUnitSoundByIndex",
@@ -854,7 +1166,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c8aa8bff"
+      "dh": "c8aa8bff",
+      "paramStorage": [
+        [
+          "nChannelHandle",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "bForceStop",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_StopById",
@@ -878,7 +1204,13 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "e4ca8b8a"
+      "dh": "e4ca8b8a",
+      "paramStorage": [
+        [
+          "nChannelHandle",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_FadeOutMusic",
@@ -900,7 +1232,13 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "c6de5df6"
+      "dh": "c6de5df6",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_StopMusic",
@@ -946,7 +1284,17 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "4d37da38"
+      "dh": "4d37da38",
+      "paramStorage": [
+        [
+          "nKeepGroup1",
+          "ECX:4"
+        ],
+        [
+          "nKeepGroup2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_SetRightVolume",
@@ -969,7 +1317,17 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "2e644bae"
+      "dh": "2e644bae",
+      "paramStorage": [
+        [
+          "nKeepGroup1",
+          "ECX:4"
+        ],
+        [
+          "nKeepGroup2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_DebugPrintChannels",
@@ -1089,7 +1447,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "5554ae81"
+      "dh": "5554ae81",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_CycleSoundMixerMode",
@@ -1112,7 +1480,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "7b9390ca"
+      "dh": "7b9390ca",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_PlayFootstepSound",
@@ -1131,7 +1509,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f3d164d0"
+      "dh": "f3d164d0",
+      "paramStorage": [
+        [
+          "nFrame",
+          "ECX:4"
+        ],
+        [
+          "nFootstepFrame",
+          "EDX:4"
+        ],
+        [
+          "nModulus",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004e41e0",
@@ -1199,7 +1591,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f1572bf5"
+      "dh": "f1572bf5",
+      "paramStorage": [
+        [
+          "nChannelIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_TogglePauseAll",
@@ -1258,7 +1656,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "324ca65e"
+      "dh": "324ca65e",
+      "paramStorage": [
+        [
+          "nTick",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

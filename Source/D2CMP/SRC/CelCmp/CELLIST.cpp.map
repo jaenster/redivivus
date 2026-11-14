@@ -23,7 +23,13 @@
         "TSLink<TCELENTRY> *",
         "uint32_t"
       ],
-      "dh": "46eba190"
+      "dh": "46eba190",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -47,7 +53,17 @@
         "TSLink<TCELENTRY> *",
         "uint32_t"
       ],
-      "dh": "92cd4f27"
+      "dh": "92cd4f27",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CopyConstructor",
@@ -65,7 +81,17 @@
       "usedTypes": [
         "CELLIST"
       ],
-      "dh": "9ce0dd8e"
+      "dh": "9ce0dd8e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

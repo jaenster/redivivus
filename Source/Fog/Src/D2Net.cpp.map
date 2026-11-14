@@ -39,7 +39,17 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "957e7268"
+      "dh": "957e7268",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_CompressPacket",
@@ -58,7 +68,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e25e3481"
+      "dh": "e25e3481",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "ECX:4"
+        ],
+        [
+          "nBufferSize",
+          "EDX:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBytesSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_DecompressPacket",
@@ -78,7 +106,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7fd92628"
+      "dh": "7fd92628",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "ECX:4"
+        ],
+        [
+          "nBufferSize",
+          "EDX:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBytesSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

@@ -222,7 +222,7 @@ static void __stdcall DRLGENV_UpdateLightColor(int32_t nActNo, D2DrlgEnvironment
     uint8_t byNextBlue = *(uint8_t*)((intptr_t)&pDataNext->nLightColorRGB + 2);
     uint8_t byCurBlue = *(uint8_t*)((intptr_t)&pDataCurrent->nLightColorRGB + 2);
     uint8_t byRedBase = (uint8_t)pDataCurrent->nLightColorRGB;
-    char nRedDelta = (char)(int)std::nearbyint((double)(int)((uint32_t)(uint8_t)pDataNext->nLightColorRGB - (uint32_t)byRedBase) * fBlendFactor + 0.5);
+    char nRedDelta = (char)(int)((double)(int)((uint32_t)(uint8_t)pDataNext->nLightColorRGB - (uint32_t)byRedBase) * fBlendFactor + 0.5);
     pDrlgEnvironment->nGlobalLightRed = nRedDelta + byRedBase;
     char nGreenDeltaByte = (char)(int)((double)(int)((uint32_t)byNextGreen - (uint32_t)byCurGreen) * fBlendFactor + 0.5);
     pDrlgEnvironment->nGlobalLightGreen = *(char*)((intptr_t)&pDataCurrent->nLightColorRGB + 1) + nGreenDeltaByte;

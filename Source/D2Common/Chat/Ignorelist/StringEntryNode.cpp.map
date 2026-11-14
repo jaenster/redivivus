@@ -22,7 +22,17 @@
         "StringEntryNode",
         "uint32_t"
       ],
-      "dh": "a8178d90"
+      "dh": "a8178d90",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

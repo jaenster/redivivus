@@ -178,8 +178,8 @@ int32_t __stdcall SFILE_DecompressLzw(uint8_t * pDstData, uint8_t * pSrcData, in
       gpSFileExplodeWorkBuffer = SMem::SMemAlloc(0x3134, ".\\SOURCE\\SFILE.CPP", 0x2c9, 0);
     }
 
-    sBufState.pDst = pDstData;
     sBufState.pSrc = pSrcData;
+    sBufState.pDst = pDstData;
     sBufState.nSrcPos = 0;
     sBufState.nDstPos = 0;
     sBufState.nSrcSize = nSrcSize;
@@ -329,10 +329,10 @@ static uint32_t __stdcall SFILE_SearchHashTable(D2ArchiveStrc * pArchive, int16_
       }
       if (pHashSlot->dwHashA == nHashA && pHashSlot->dwHashB == nHashB && pHashSlot->dwBlockIndex != -2) {
         nEntryLocale = pHashSlot->wLocale;
-        if (nEntryLocale == nLocale && (char)pHashSlot->wPlatform == cPlatform) {
+        if (nEntryLocale == (uint16_t)nLocale && (char)pHashSlot->wPlatform == cPlatform) {
           return nSlot;
         }
-        if (!nEntryLocale || nEntryLocale == nLocale) {
+        if (!nEntryLocale || nEntryLocale == (uint16_t)nLocale) {
           cEntryPlatform = (char)pHashSlot->wPlatform;
           if (cEntryPlatform == '\0' || cEntryPlatform == cPlatform) {
             nBestSlot = nSlot;

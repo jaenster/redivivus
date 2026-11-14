@@ -20,7 +20,13 @@
         "TGAHeaderStrc",
         "uint8_t"
       ],
-      "dh": "d067c8f2"
+      "dh": "d067c8f2",
+      "paramStorage": [
+        [
+          "descriptor",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_DecodeTGAPalette",
@@ -40,7 +46,25 @@
         "D2TgaHeaderStrc",
         "uint32_t"
       ],
-      "dh": "7112343d"
+      "dh": "7112343d",
+      "paramStorage": [
+        [
+          "pHeader",
+          "ECX:4"
+        ],
+        [
+          "nPaletteDataSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPaletteOut",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPaletteData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_DecodeTGAPixels",
@@ -60,7 +84,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "4f2181b7"
+      "dh": "4f2181b7",
+      "paramStorage": [
+        [
+          "pSrcData",
+          "ECX:4"
+        ],
+        [
+          "pTgaHeader",
+          "EDX:4"
+        ],
+        [
+          "nSrcDataSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDstPixels",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxBytes",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_DecodeTgaFile",
@@ -90,7 +136,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0887f3cf"
+      "dh": "0887f3cf",
+      "paramStorage": [
+        [
+          "hFile",
+          "EDI:4"
+        ],
+        [
+          "pWidth",
+          "EDX:4"
+        ],
+        [
+          "palette",
+          "ECX:4"
+        ],
+        [
+          "pixels",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxPixelBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pHeight",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pBpp",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_LoadFromMemory",
@@ -113,7 +189,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8bdf43e5"
+      "dh": "8bdf43e5",
+      "paramStorage": [
+        [
+          "pData",
+          "ESI:4"
+        ],
+        [
+          "dataSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPaletteOut",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pixels",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMaxPixelBytes",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pWidth",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pHeight",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pBpp",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_WriteTGA",
@@ -133,7 +243,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "11d37151"
+      "dh": "11d37151",
+      "paramStorage": [
+        [
+          "pPixels",
+          "ECX:4"
+        ],
+        [
+          "hFile",
+          "EBX:4"
+        ],
+        [
+          "nPalettePtr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "width",
+          "Stack[0x8]:4"
+        ],
+        [
+          "height",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bpp",
+          "Stack[0x10]:4"
+        ],
+        [
+          "stride",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_FlipImage",
@@ -153,7 +293,33 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "524b5024"
+      "dh": "524b5024",
+      "paramStorage": [
+        [
+          "numRows",
+          "EAX:4"
+        ],
+        [
+          "dst",
+          "ECX:4"
+        ],
+        [
+          "src",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dstSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "rowWidth",
+          "Stack[0xc]:4"
+        ],
+        [
+          "srcStride",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_FlushPacket",
@@ -173,7 +339,17 @@
         "D2GifLzwEncoderStrc",
         "uint8_t *"
       ],
-      "dh": "e1b37db6"
+      "dh": "e1b37db6",
+      "paramStorage": [
+        [
+          "pState",
+          "ESI:4"
+        ],
+        [
+          "ppOutput",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_Output",
@@ -193,7 +369,21 @@
         "D2GifLzwEncoderStrc",
         "uint8_t *"
       ],
-      "dh": "b4541925"
+      "dh": "b4541925",
+      "paramStorage": [
+        [
+          "pState",
+          "EDX:4"
+        ],
+        [
+          "ppOutput",
+          "ECX:4"
+        ],
+        [
+          "value",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_CompressPcxRow",
@@ -212,7 +402,21 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "8c730cab"
+      "dh": "8c730cab",
+      "paramStorage": [
+        [
+          "count",
+          "EAX:4"
+        ],
+        [
+          "ppInput",
+          "EDI:4"
+        ],
+        [
+          "ppOutput",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_EncodePcx256File",
@@ -236,7 +440,29 @@
         "D2PcxHeaderStrc",
         "uint8_t"
       ],
-      "dh": "19eab62b"
+      "dh": "19eab62b",
+      "paramStorage": [
+        [
+          "nWidth",
+          "ECX:4"
+        ],
+        [
+          "nHeight",
+          "EDX:4"
+        ],
+        [
+          "hFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPalettePtr",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPixels",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_UncompressPcxImage",
@@ -256,7 +482,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "98beda17"
+      "dh": "98beda17",
+      "paramStorage": [
+        [
+          "dstSize",
+          "EAX:4"
+        ],
+        [
+          "dst",
+          "ECX:4"
+        ],
+        [
+          "srcSize",
+          "EDX:4"
+        ],
+        [
+          "src",
+          "Stack[0x4]:4"
+        ],
+        [
+          "width",
+          "Stack[0x8]:4"
+        ],
+        [
+          "stride",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bytesPerPixel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_FindExtension",
@@ -272,7 +528,13 @@
         "SBMP_FindExtension",
         "SStrChr"
       ],
-      "dh": "3a837370"
+      "dh": "3a837370",
+      "paramStorage": [
+        [
+          "path",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_DetermineImageType",
@@ -290,7 +552,13 @@
       "usedTypes": [
         "uint16_t"
       ],
-      "dh": "e0486b88"
+      "dh": "e0486b88",
+      "paramStorage": [
+        [
+          "magic",
+          "AX:2"
+        ]
+      ]
     },
     {
       "name": "SBMP_DecodeBmpFile",
@@ -318,7 +586,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8c7a2c6c"
+      "dh": "8c7a2c6c",
+      "paramStorage": [
+        [
+          "pWidth",
+          "EAX:4"
+        ],
+        [
+          "palette",
+          "ECX:4"
+        ],
+        [
+          "hFile",
+          "EBX:4"
+        ],
+        [
+          "pixels",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstStride",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pHeight",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pBpp",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_DecodeBmpMem",
@@ -338,7 +636,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "29d2163a"
+      "dh": "29d2163a",
+      "paramStorage": [
+        [
+          "pWidth",
+          "EAX:4"
+        ],
+        [
+          "pHeight",
+          "ECX:4"
+        ],
+        [
+          "pBpp",
+          "EDX:4"
+        ],
+        [
+          "pData",
+          "EDI:4"
+        ],
+        [
+          "palette",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pixels",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dstSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_EncodeBmp256File",
@@ -364,7 +692,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7c1a9e17"
+      "dh": "7c1a9e17",
+      "paramStorage": [
+        [
+          "nPalettePtr",
+          "EAX:4"
+        ],
+        [
+          "nSrcStride",
+          "EDI:4"
+        ],
+        [
+          "hFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pixels",
+          "Stack[0x8]:4"
+        ],
+        [
+          "height",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_ClearBlock",
@@ -385,7 +735,17 @@
         "D2GifLzwEncoderStrc",
         "uint8_t *"
       ],
-      "dh": "a870c0ee"
+      "dh": "a870c0ee",
+      "paramStorage": [
+        [
+          "pState",
+          "ESI:4"
+        ],
+        [
+          "pDstBuf",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_CompressGifByte",
@@ -407,7 +767,21 @@
         "uint32_t",
         "uint8_t *"
       ],
-      "dh": "dfc98705"
+      "dh": "dfc98705",
+      "paramStorage": [
+        [
+          "pState",
+          "EAX:4"
+        ],
+        [
+          "pDstBuf",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNewCode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_CompressGifImage",
@@ -433,7 +807,21 @@
         "D2GifLzwEncoderStrc",
         "uint8_t"
       ],
-      "dh": "14a20ba8"
+      "dh": "14a20ba8",
+      "paramStorage": [
+        [
+          "nSrcLen",
+          "ECX:4"
+        ],
+        [
+          "pSrcPixels",
+          "EDX:4"
+        ],
+        [
+          "pDstBuf",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_EncodeGif256File",
@@ -455,7 +843,29 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "10de04ad"
+      "dh": "10de04ad",
+      "paramStorage": [
+        [
+          "width",
+          "ECX:4"
+        ],
+        [
+          "hFile",
+          "ESI:4"
+        ],
+        [
+          "palette",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pixels",
+          "Stack[0x8]:4"
+        ],
+        [
+          "height",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_DecodePcxFile",
@@ -483,7 +893,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bc8e120b"
+      "dh": "bc8e120b",
+      "paramStorage": [
+        [
+          "hFile",
+          "EDI:4"
+        ],
+        [
+          "pixels",
+          "ECX:4"
+        ],
+        [
+          "pHeight",
+          "EDX:4"
+        ],
+        [
+          "palette",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPixelBufferSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pWidth",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pBpp",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SBMP_DecodePcxMem",
@@ -504,7 +944,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3d97e31d"
+      "dh": "3d97e31d",
+      "paramStorage": [
+        [
+          "pWidth",
+          "EAX:4"
+        ],
+        [
+          "gifData",
+          "ECX:4"
+        ],
+        [
+          "dataSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "palette",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pixels",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dstSize",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pHeight",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pBpp",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SBmpDecodeImage",
@@ -528,7 +1002,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d6bb40cd"
+      "dh": "d6bb40cd",
+      "paramStorage": [
+        [
+          "nFormat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDataSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pbPixels",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nPixelBufSize",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pnWidth",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pnHeight",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pnBpp",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "SBmpLoadImage",
@@ -556,7 +1068,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a5a2d6db"
+      "dh": "a5a2d6db",
+      "paramStorage": [
+        [
+          "pszPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPixels",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnWidth",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnHeight",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pnBpp",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "SBmpSaveImageEx",
@@ -583,7 +1125,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7ea1e933"
+      "dh": "7ea1e933",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPalette",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbPixels",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nBpp",
+          "Stack[0x18]:4"
+        ],
+        [
+          "dwStride",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "SBmpAllocLoadImage",
@@ -613,7 +1185,41 @@
         "uint32_t",
         "void *"
       ],
-      "dh": "b1d96a62"
+      "dh": "b1d96a62",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppOutputBuf",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnWidth",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnHeight",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnBpp",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nBppOverride",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pfnAlloc",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "SBmpSaveImage",
@@ -633,7 +1239,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "7c7ea83c"
+      "dh": "7c7ea83c",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPalette",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbPixels",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nBpp",
+          "Stack[0x18]:4"
+        ]
+      ]
     }
   ]
 }

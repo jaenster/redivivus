@@ -321,9 +321,8 @@ char * __stdcall CLIENTMODE_GetGamePasswordPart1() {
       return nullptr;
     }
 
-    char* pszCursor = D2IniData_client->szGAMENAME;
-    pszCursor = pszCursor + strlen(pszCursor) + 1;
-    if (pszCursor != D2IniData_client->szGAMENAME + 1) {
+    char* pszCursor;
+    if (strlen(D2IniData_client->szGAMENAME) >= 1) {
       return D2IniData_client->szGAMENAME;
     }
 
@@ -336,9 +335,8 @@ char * __stdcall CLIENTMODE_GetGamePasswordPart2() {
       return nullptr;
     }
 
-    char* pszCursor = D2IniData_client->szGamePassword;
-    pszCursor = pszCursor + strlen(pszCursor) + 1;
-    if (pszCursor != D2IniData_client->szGamePassword + 1) {
+    char* pszCursor;
+    if (strlen(D2IniData_client->szGamePassword) >= 1) {
       return D2IniData_client->szGamePassword;
     }
 
@@ -351,9 +349,8 @@ char * __stdcall CLIENTMODE_GetGamePasswordPart3() {
       return nullptr;
     }
 
-    char* pServerIp = D2IniData_client->szSERVERIP;
-    pServerIp = pServerIp + strlen(pServerIp) + 1;
-    if (pServerIp != D2IniData_client->szSERVERIP + 1) {
+    char* pServerIp;
+    if (strlen(D2IniData_client->szSERVERIP) >= 1) {
       return D2IniData_client->szSERVERIP;
     }
 

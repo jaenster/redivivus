@@ -25,7 +25,13 @@
         "D2PoolManagerStrc",
         "WCHAR"
       ],
-      "dh": "91525c57"
+      "dh": "91525c57",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Objects_GetLine",
@@ -47,7 +53,13 @@
         "D2ObjectsTxt",
         "int32_t"
       ],
-      "dh": "e0b488d6"
+      "dh": "e0b488d6",
+      "paramStorage": [
+        [
+          "nClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_FreeTxt_Objects",
@@ -99,7 +111,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "beaae141"
+      "dh": "beaae141",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_GetObjGroupTxtRecord",
@@ -118,7 +136,13 @@
         "D2ObjGroupTxt",
         "int32_t"
       ],
-      "dh": "f0aa8b64"
+      "dh": "f0aa8b64",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_shrines",
@@ -138,7 +162,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "4ac5b2b3"
+      "dh": "4ac5b2b3",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Shrines_GetLine",
@@ -160,7 +190,13 @@
         "D2ShrinesTxt",
         "int32_t"
       ],
-      "dh": "aa3fd962"
+      "dh": "aa3fd962",
+      "paramStorage": [
+        [
+          "nShrineId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetShrinesSize",

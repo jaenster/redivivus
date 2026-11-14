@@ -21,7 +21,17 @@
         "D2MonStatsTxt",
         "int32_t"
       ],
-      "dh": "6ecae237"
+      "dh": "6ecae237",
+      "paramStorage": [
+        [
+          "nMonstatId",
+          "ECX:4"
+        ],
+        [
+          "nDifficulty",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERS_OnInitMonster_NoOp_Unref_0063db80",
@@ -39,7 +49,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "cb0ff94e"
+      "dh": "cb0ff94e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERS_OnInitMonster_NoOp_Unref_0063e050",
@@ -57,7 +77,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "e4bbf333"
+      "dh": "e4bbf333",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_GetMissileForAnimEvent",
@@ -80,7 +110,17 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "93d08755"
+      "dh": "93d08755",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCurrentFrame",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERS_GetGfxOffsetTable1",
@@ -98,7 +138,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "edf66d9a"
+      "dh": "edf66d9a",
+      "paramStorage": [
+        [
+          "bParam",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "MONSTERS_GetGfxOffsetTable2",
@@ -116,7 +162,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "3744f2eb"
+      "dh": "3744f2eb",
+      "paramStorage": [
+        [
+          "byDirection",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "MONSTERS_GetGfxOffsetTable3",
@@ -134,7 +186,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "88f6a27c"
+      "dh": "88f6a27c",
+      "paramStorage": [
+        [
+          "bParam",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "MONSTERS_GetCompositeDimensions",
@@ -152,7 +210,21 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "a9c20a33"
+      "dh": "a9c20a33",
+      "paramStorage": [
+        [
+          "nDirection",
+          "Stack[0x4]:1"
+        ],
+        [
+          "pnOffsetX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnOffsetY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetSuperUniqueName",
@@ -175,7 +247,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "edf89f2b"
+      "dh": "edf89f2b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_IsBossOrChampion",
@@ -194,7 +276,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "af9f8866"
+      "dh": "af9f8866",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_IsAndarielNormal",
@@ -213,7 +301,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c646db07"
+      "dh": "c646db07",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "IsDemon",
@@ -232,7 +330,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "994cb58f"
+      "dh": "994cb58f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_IsMonsterUndead",
@@ -251,7 +355,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "ee1f5ec8"
+      "dh": "ee1f5ec8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnitIsMarkedBoss",
@@ -271,7 +381,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "336f40a6"
+      "dh": "336f40a6",
+      "paramStorage": [
+        [
+          "pMonStatsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CheckIfMonsterIsDead",
@@ -289,7 +409,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "31890c44"
+      "dh": "31890c44",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SummonOrSpawnMode",
@@ -312,7 +438,37 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "4d587ddb"
+      "dh": "4d587ddb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bUseMonStatsSpawn",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnMode",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnSpawnX",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pnSpawnY",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERS_OnInitMonster_NoOp",
@@ -330,7 +486,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "4ac05f1c"
+      "dh": "4ac05f1c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERS_GetMaxLightRadiusFromEquipment",
@@ -353,7 +519,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "251d631d"
+      "dh": "251d631d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetMonsterBaseId",
@@ -380,7 +552,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cb92d435"
+      "dh": "cb92d435",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMonsterId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERS_CheckMonStatFlag0xc_Bit7",
@@ -399,7 +581,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "87352efd"
+      "dh": "87352efd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERS_GetUpgradeSkillsAndCount",
@@ -423,7 +611,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1c656f7e"
+      "dh": "1c656f7e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pdwAnimFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pdwValidFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_GetMercType",
@@ -442,7 +644,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "98c6a40e"
+      "dh": "98c6a40e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_ApplyDifficultyScaling",
@@ -467,7 +675,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6b4d75a5"
+      "dh": "6b4d75a5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bExpansion",
+          "Stack[0x8]:4"
+        ],
+        [
+          "byDifficulty",
+          "Stack[0xc]:1"
+        ]
+      ]
     },
     {
       "name": "MONSTER_GetSpawnParameters",
@@ -509,7 +731,37 @@
         "pfnMonsterSpawnClassIdCb",
         "uint32_t"
       ],
-      "dh": "5af06ea0"
+      "dh": "5af06ea0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnMonId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnPosX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnPosY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pdwSpawnMode",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRandSeed",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0x1c]:4"
+        ]
+      ]
     }
   ]
 }

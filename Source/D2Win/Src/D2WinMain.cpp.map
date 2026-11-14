@@ -34,7 +34,13 @@
       "usedTypes": [
         "DC6"
       ],
-      "dh": "04ee7055"
+      "dh": "04ee7055",
+      "paramStorage": [
+        [
+          "pBackgroundDC6",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_SetCursorDC6",
@@ -52,7 +58,13 @@
       "usedTypes": [
         "DC6"
       ],
-      "dh": "c98080e2"
+      "dh": "c98080e2",
+      "paramStorage": [
+        [
+          "pCursorDC6",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_SetExitCallback",
@@ -70,7 +82,13 @@
       "usedTypes": [
         "pfnVoidNoArgCallback"
       ],
-      "dh": "dc0c637c"
+      "dh": "dc0c637c",
+      "paramStorage": [
+        [
+          "pfnExitCallback",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_ClearMessageLoopFlag",
@@ -104,7 +122,17 @@
         "D2ControlStrc",
         "DC6"
       ],
-      "dh": "df5a72ba"
+      "dh": "df5a72ba",
+      "paramStorage": [
+        [
+          "pControl",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwValue",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_SetFocusedControl",
@@ -123,7 +151,13 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "f4ae88b9"
+      "dh": "f4ae88b9",
+      "paramStorage": [
+        [
+          "pControl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FORMS_GetFormTextAndEditBox",
@@ -159,7 +193,13 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "3e3af818"
+      "dh": "3e3af818",
+      "paramStorage": [
+        [
+          "pControl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FORMS_AppendFormToDestroyQueue",
@@ -177,7 +217,13 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "7c2691fa"
+      "dh": "7c2691fa",
+      "paramStorage": [
+        [
+          "pControl",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_FreeLeadingFormControls",
@@ -212,7 +258,13 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "7f7b8b01"
+      "dh": "7f7b8b01",
+      "paramStorage": [
+        [
+          "pControl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FORMS_CreateAnyForm",
@@ -245,7 +297,13 @@
         "DC6",
         "FORMS_PredefinedFormStrc"
       ],
-      "dh": "2ae153fa"
+      "dh": "2ae153fa",
+      "paramStorage": [
+        [
+          "pForm",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FORMS_DestroyAnyForm",
@@ -276,7 +334,13 @@
         "D2ControlStrc *",
         "D2WinEditBox"
       ],
-      "dh": "0be8d7bd"
+      "dh": "0be8d7bd",
+      "paramStorage": [
+        [
+          "pForm",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_SetControlVisible",
@@ -294,7 +358,17 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "5cf9cf63"
+      "dh": "5cf9cf63",
+      "paramStorage": [
+        [
+          "pControl",
+          "ECX:4"
+        ],
+        [
+          "bVisible",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_GetControlVisible",
@@ -316,7 +390,13 @@
         "D2ControlStrc",
         "int32_t"
       ],
-      "dh": "2cfa5dec"
+      "dh": "2cfa5dec",
+      "paramStorage": [
+        [
+          "pControl",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_SetControlActive",
@@ -338,7 +418,17 @@
         "D2ControlStrc",
         "int32_t"
       ],
-      "dh": "8f93dff2"
+      "dh": "8f93dff2",
+      "paramStorage": [
+        [
+          "pControl",
+          "ECX:4"
+        ],
+        [
+          "bActive",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_IsControlActive",
@@ -359,7 +449,13 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "47bab727"
+      "dh": "47bab727",
+      "paramStorage": [
+        [
+          "pControl",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_TestMouseInRect",
@@ -377,7 +473,13 @@
       "usedTypes": [
         "RECT"
       ],
-      "dh": "f1bfb17c"
+      "dh": "f1bfb17c",
+      "paramStorage": [
+        [
+          "pRect",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FORMS_GetFormTextAndEditBox_Unref_004f97d0",
@@ -490,7 +592,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "587d86b9"
+      "dh": "587d86b9",
+      "paramStorage": [
+        [
+          "hWnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "uMsg",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nWParam",
+          "Stack[0xc]:4"
+        ],
+        [
+          "lParam",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004f9b30",
@@ -508,7 +628,13 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "4afd5538"
+      "dh": "4afd5538",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_FormKeyHandler",
@@ -530,7 +656,13 @@
         "D2UIMouseMsgStrc",
         "D2WinEditBox"
       ],
-      "dh": "870db147"
+      "dh": "870db147",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_FormKeyUpHandler",
@@ -552,7 +684,13 @@
         "D2UIMouseMsgStrc",
         "D2WinEditBox"
       ],
-      "dh": "984180e5"
+      "dh": "984180e5",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_FormActivate",
@@ -571,7 +709,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "f08ca232"
+      "dh": "f08ca232",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_FormDeactivate",
@@ -590,7 +734,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "a1f5a4d5"
+      "dh": "a1f5a4d5",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WIN_HandleSystemCommand",
@@ -620,7 +770,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "290ba34c"
+      "dh": "290ba34c",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WIN_HandleActivation",
@@ -646,7 +802,13 @@
         "D2UIMouseMsgStrc",
         "uint32_t"
       ],
-      "dh": "0990eda5"
+      "dh": "0990eda5",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WIN_SaveScreenshotToFile",
@@ -670,7 +832,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "39f00555"
+      "dh": "39f00555",
+      "paramStorage": [
+        [
+          "pDibBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFileName",
+          "ESI:4"
+        ],
+        [
+          "nWidth",
+          "EDI:4"
+        ],
+        [
+          "nHeight",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "D2WIN_TakeThrottledScreenshot",
@@ -691,7 +871,13 @@
         "D2WIN_SaveScreenshotToFile",
         "FreeClientMemory"
       ],
-      "dh": "ec96c758"
+      "dh": "ec96c758",
+      "paramStorage": [
+        [
+          "szFileName",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WIN_ToggleMusicOptions",
@@ -714,7 +900,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "aa6254d7"
+      "dh": "aa6254d7",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WIN_FindClosestControlToMouse",
@@ -732,7 +924,17 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "3ac8bbb5"
+      "dh": "3ac8bbb5",
+      "paramStorage": [
+        [
+          "pControl1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pControl2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_FormMouseWheel",
@@ -759,7 +961,13 @@
         "D2WinScrollbar",
         "int32_t"
       ],
-      "dh": "f258f44a"
+      "dh": "f258f44a",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_SetCursorVisible",
@@ -774,7 +982,13 @@
       "calledFunctions": [
         "D2WINMAIN_SetCursorVisible"
       ],
-      "dh": "cfe1fa9e"
+      "dh": "cfe1fa9e",
+      "paramStorage": [
+        [
+          "bVisible",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetUnsetFlag0x08",
@@ -793,7 +1007,17 @@
         "D2ControlStrc",
         "int32_t"
       ],
-      "dh": "c9d308fb"
+      "dh": "c9d308fb",
+      "paramStorage": [
+        [
+          "pControl",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSet",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_SetFormFourth",
@@ -811,7 +1035,13 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "312a9379"
+      "dh": "312a9379",
+      "paramStorage": [
+        [
+          "pControl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_GetWinMainState",
@@ -848,7 +1078,17 @@
         "D2ControlStrc",
         "int32_t"
       ],
-      "dh": "2edaa83a"
+      "dh": "2edaa83a",
+      "paramStorage": [
+        [
+          "pControl",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInitialFormState",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_GetFirstElement",
@@ -866,7 +1106,13 @@
       "usedTypes": [
         "void *"
       ],
-      "dh": "2cff8f44"
+      "dh": "2cff8f44",
+      "paramStorage": [
+        [
+          "ppHead",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINMAIN_GetFormImage",
@@ -903,7 +1149,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "b7c7bcaf"
+      "dh": "b7c7bcaf",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WIN_HandleMouseLeave",
@@ -922,7 +1174,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "30da5f2c"
+      "dh": "30da5f2c",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_PreSetupBeforeCreatingWindow",
@@ -942,7 +1200,25 @@
       "usedTypes": [
         "eD2RendererMode"
       ],
-      "dh": "24c2c6d7"
+      "dh": "24c2c6d7",
+      "paramStorage": [
+        [
+          "hInstance",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eRenderedMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bWindowed",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bDontUseCompression",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "FreeInGameGFX",
@@ -987,7 +1263,13 @@
         "tagMSG",
         "uint32_t"
       ],
-      "dh": "769b9894"
+      "dh": "769b9894",
+      "paramStorage": [
+        [
+          "pfnFrameCallback",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MOUSE_CaptureMousePosition",
@@ -1010,7 +1292,13 @@
         "tagTRACKMOUSEEVENT",
         "uint32_t"
       ],
-      "dh": "5690118f"
+      "dh": "5690118f",
+      "paramStorage": [
+        [
+          "phWnd",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_FormTabKey",
@@ -1032,7 +1320,13 @@
         "D2ControlStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "7c5976bf"
+      "dh": "7c5976bf",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TakeScreenshot",
@@ -1072,7 +1366,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "b42de4de"
+      "dh": "b42de4de",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_FormMouseHandler",
@@ -1096,7 +1396,13 @@
         "D2ControlStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "6b0b18ef"
+      "dh": "6b0b18ef",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

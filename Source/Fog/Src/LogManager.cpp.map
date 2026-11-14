@@ -36,7 +36,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b2d3f057"
+      "dh": "b2d3f057",
+      "paramStorage": [
+        [
+          "nModel",
+          "ECX:4"
+        ],
+        [
+          "nBrandId",
+          "EDX:4"
+        ],
+        [
+          "pOutName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nVendor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFamily",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nType",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "GetTimestamp",
@@ -136,7 +162,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6e8bec39"
+      "dh": "6e8bec39",
+      "paramStorage": [
+        [
+          "nLeaf",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LogCpuInfo",
@@ -191,7 +223,17 @@
       "calledFunctions": [
         "ReturnParam2_Stub"
       ],
-      "dh": "4201b340"
+      "dh": "4201b340",
+      "paramStorage": [
+        [
+          "dwParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "LOGMANAGER_UnwindDestructor_NoOp",
@@ -221,7 +263,13 @@
       "calledFunctions": [
         "Unreferenced_0040eb40"
       ],
-      "dh": "97761594"
+      "dh": "97761594",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "InitCriticalSection",
@@ -236,7 +284,13 @@
       "calledFunctions": [
         "InitCriticalSection"
       ],
-      "dh": "a6a16dfd"
+      "dh": "a6a16dfd",
+      "paramStorage": [
+        [
+          "pElement",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "InitLogFilePathPointers",
@@ -256,7 +310,17 @@
         "uint32_t",
         "uint8_t *"
       ],
-      "dh": "3bb85820"
+      "dh": "3bb85820",
+      "paramStorage": [
+        [
+          "pPathPtrArray",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OpenLogFileWithTimestamp",
@@ -282,7 +346,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a842201d"
+      "dh": "a842201d",
+      "paramStorage": [
+        [
+          "szFilePrefix",
+          "ECX:4"
+        ],
+        [
+          "pSystemTime",
+          "EDX:4"
+        ],
+        [
+          "szOpenMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbIsNewFile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szOutPath",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nOutPathLen",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "WriteLogFileHeader",
@@ -304,7 +394,17 @@
         "SYSTEMTIME",
         "uint32_t"
       ],
-      "dh": "8f851ece"
+      "dh": "8f851ece",
+      "paramStorage": [
+        [
+          "pFile",
+          "ECX:4"
+        ],
+        [
+          "pTime",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "WriteRealmStartupHeader",
@@ -325,7 +425,13 @@
         "FILE",
         "uint32_t"
       ],
-      "dh": "3983c9b2"
+      "dh": "3983c9b2",
+      "paramStorage": [
+        [
+          "pFile",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FindOrOpenLogFileSlot",
@@ -355,7 +461,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e7872eba"
+      "dh": "e7872eba",
+      "paramStorage": [
+        [
+          "szFileName",
+          "ECX:4"
+        ],
+        [
+          "pnSlotIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder",
@@ -379,7 +495,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c9b5f5da"
+      "dh": "c9b5f5da",
+      "paramStorage": [
+        [
+          "szGameLogsPath",
+          "ECX:4"
+        ],
+        [
+          "nGameLogsPathLength",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "WriteHexDumpLogEntry",
@@ -411,7 +537,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0bda8b80"
+      "dh": "0bda8b80",
+      "paramStorage": [
+        [
+          "pLogRecord",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CloseStaleLogFileHandles",
@@ -453,7 +585,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "bde9d8a4"
+      "dh": "bde9d8a4",
+      "paramStorage": [
+        [
+          "pRefFileTime",
+          "ECX:4"
+        ],
+        [
+          "szFileName",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CloseLogFileByName",
@@ -473,7 +615,13 @@
         "char[16]",
         "uint8_t"
       ],
-      "dh": "1f4f532e"
+      "dh": "1f4f532e",
+      "paramStorage": [
+        [
+          "szFileName",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ComputeAbsoluteFromRelative",
@@ -493,7 +641,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "446e4352"
+      "dh": "446e4352",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ],
+        [
+          "pBase",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0040f520",
@@ -511,7 +669,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "6a86690b"
+      "dh": "6a86690b",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0040f580",
@@ -530,7 +694,13 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "19db7302"
+      "dh": "19db7302",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FILETOOLS_SetLogFilePathWithoutDateAndExtension2",
@@ -551,7 +721,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "2ed1235a"
+      "dh": "2ed1235a",
+      "paramStorage": [
+        [
+          "szSuffix",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetLogFileSize",
@@ -576,7 +752,13 @@
         "_SYSTEMTIME",
         "uint8_t"
       ],
-      "dh": "454403a4"
+      "dh": "454403a4",
+      "paramStorage": [
+        [
+          "szFileName",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ReadLogFileRange",
@@ -604,7 +786,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6d7eb47b"
+      "dh": "6d7eb47b",
+      "paramStorage": [
+        [
+          "szFileName",
+          "ECX:4"
+        ],
+        [
+          "nStartOffset",
+          "EDX:4"
+        ],
+        [
+          "nEndOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LogToFile",
@@ -633,7 +829,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f1928571"
+      "dh": "f1928571",
+      "paramStorage": [
+        [
+          "pLogRecord",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0040f810",
@@ -651,7 +853,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "d4dae873"
+      "dh": "d4dae873",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkListNode",
@@ -670,7 +878,13 @@
         "StormLinkStrc",
         "uint32_t"
       ],
-      "dh": "bd3d5c7b"
+      "dh": "bd3d5c7b",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NormalizeListNodePointer",
@@ -688,7 +902,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "bcf16643"
+      "dh": "bcf16643",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pNodePtr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ExitOrCrashCleanup",
@@ -767,7 +991,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "850ac47f"
+      "dh": "850ac47f",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "InitListHead",
@@ -785,7 +1015,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "a5925f73"
+      "dh": "a5925f73",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "InsertListNode",
@@ -804,7 +1040,25 @@
         "int *",
         "int32_t"
       ],
-      "dh": "b08bd32f"
+      "dh": "b08bd32f",
+      "paramStorage": [
+        [
+          "ppListHead",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bInsertAtHead",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppTarget",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveListNode",
@@ -824,7 +1078,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "74b685e3"
+      "dh": "74b685e3",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ClearListNode",
@@ -839,7 +1103,13 @@
       "calledFunctions": [
         "ClearListNode"
       ],
-      "dh": "3e5805d2"
+      "dh": "3e5805d2",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RemoveAllListNodes",
@@ -858,7 +1128,13 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "b5254eda"
+      "dh": "b5254eda",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DestroyListWithHandler",
@@ -877,7 +1153,13 @@
       "usedTypes": [
         "pfnEHHandlerRoutine"
       ],
-      "dh": "bea22a27"
+      "dh": "bea22a27",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TeardownListFull",
@@ -899,7 +1181,13 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "e102d4d0"
+      "dh": "e102d4d0",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ZeroListNode",
@@ -914,7 +1202,13 @@
       "calledFunctions": [
         "ZeroListNode"
       ],
-      "dh": "adc39636"
+      "dh": "adc39636",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DestroyListNodeAndFree",
@@ -935,7 +1229,17 @@
         "pfnEHHandlerRoutine",
         "uint8_t"
       ],
-      "dh": "c664d2e8"
+      "dh": "c664d2e8",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "bFreeMemory",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "DestroyAllListNodes",
@@ -956,7 +1260,13 @@
         "StormLinkedListStrc",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "cf652c5b"
+      "dh": "cf652c5b",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AllocateAndInsertMessageNode",
@@ -980,7 +1290,25 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "6d644ec4"
+      "dh": "6d644ec4",
+      "paramStorage": [
+        [
+          "ppListHead",
+          "ECX:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPayloadSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwAllocFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "StopLogWriterThread",
@@ -1021,7 +1349,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "17828e62"
+      "dh": "17828e62",
+      "paramStorage": [
+        [
+          "szText1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pData",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDataLen",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pCategory",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bSkipData",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nVerbose",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "LOGMANAGER_LogWriterThreadProc",
@@ -1048,7 +1406,13 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "7bb6a76a"
+      "dh": "7bb6a76a",
+      "paramStorage": [
+        [
+          "lpThreadParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EnqueueFormattedLogMessage",
@@ -1076,7 +1440,29 @@
         "uint32_t",
         "va_list"
       ],
-      "dh": "8528ea9c"
+      "dh": "8528ea9c",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nPriority",
+          "EDX:4"
+        ],
+        [
+          "bAppendNewline",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFormat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "vaArgs",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "StartLogWriterThread",
@@ -1223,7 +1609,13 @@
       "usedTypes": [
         "__time32_t"
       ],
-      "dh": "c8915cca"
+      "dh": "c8915cca",
+      "paramStorage": [
+        [
+          "pTime",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "LOGMGR_DeleteHighResTimerLock",
@@ -1256,7 +1648,17 @@
       "usedTypes": [
         "int64_t"
       ],
-      "dh": "064cf94d"
+      "dh": "064cf94d",
+      "paramStorage": [
+        [
+          "pllTarget",
+          "ECX:4"
+        ],
+        [
+          "pllValue",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Atomic64Load",
@@ -1274,7 +1676,17 @@
       "usedTypes": [
         "int64_t"
       ],
-      "dh": "a2c1c061"
+      "dh": "a2c1c061",
+      "paramStorage": [
+        [
+          "pllResult",
+          "ECX:4"
+        ],
+        [
+          "pllSource",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetFreeDiskSpaceForSavePath",
@@ -1314,7 +1726,13 @@
       "usedTypes": [
         "LPMEMORYSTATUS"
       ],
-      "dh": "e665ea82"
+      "dh": "e665ea82",
+      "paramStorage": [
+        [
+          "pMemoryStatus",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsWindowsNT",
@@ -1451,7 +1869,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "c3ddf12b"
+      "dh": "c3ddf12b",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6c9d3b",
@@ -1473,7 +1909,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "2fff6432"
+      "dh": "2fff6432",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6c9d98",
@@ -1495,7 +1949,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "83a00ae3"
+      "dh": "83a00ae3",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6c9dc8",
@@ -1517,7 +1989,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "c140479b"
+      "dh": "c140479b",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6c9e11",
@@ -1539,7 +2029,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "6ee90e1f"
+      "dh": "6ee90e1f",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6c9e38",
@@ -1561,7 +2069,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "efdae5be"
+      "dh": "efdae5be",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SehHandler_6c9e6a",
@@ -1582,7 +2108,25 @@
         "EHRegistrationNode",
         "_CONTEXT"
       ],
-      "dh": "4e8d2ee4"
+      "dh": "4e8d2ee4",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gLogMessageQueueCS",

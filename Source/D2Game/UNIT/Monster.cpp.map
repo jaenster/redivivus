@@ -20,7 +20,21 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "4f95fc6e"
+      "dh": "4f95fc6e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nComponent",
+          "DL:1"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "GetAiGeneral",
@@ -39,7 +53,13 @@
         "D2AiGeneralStrc",
         "D2UnitStrc"
       ],
-      "dh": "33533ec3"
+      "dh": "33533ec3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

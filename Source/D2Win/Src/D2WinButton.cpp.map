@@ -24,7 +24,13 @@
         "D2WinButton",
         "int32_t"
       ],
-      "dh": "24a4ccb3"
+      "dh": "24a4ccb3",
+      "paramStorage": [
+        [
+          "pButton",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINBUTTON_IsPressed",
@@ -46,7 +52,13 @@
         "D2WinButton",
         "int32_t"
       ],
-      "dh": "c182c569"
+      "dh": "c182c569",
+      "paramStorage": [
+        [
+          "pButton",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINBUTTON_SetPressed",
@@ -68,7 +80,17 @@
         "D2WinButton",
         "int32_t"
       ],
-      "dh": "7e42cb12"
+      "dh": "7e42cb12",
+      "paramStorage": [
+        [
+          "pButton",
+          "ECX:4"
+        ],
+        [
+          "bPressed",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINBUTTON_SetTextWithFont",
@@ -92,7 +114,25 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "9b9ba5bc"
+      "dh": "9b9ba5bc",
+      "paramStorage": [
+        [
+          "pButton",
+          "ECX:4"
+        ],
+        [
+          "nFontId",
+          "EDX:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTextColor",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINBUTTON_SetLocalizedTextWithFont",
@@ -118,7 +158,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "8daae42b"
+      "dh": "8daae42b",
+      "paramStorage": [
+        [
+          "pButton",
+          "ECX:4"
+        ],
+        [
+          "nFontId",
+          "EDX:4"
+        ],
+        [
+          "wStringId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nTextColor",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINBUTTON_SetBounds",
@@ -140,7 +198,29 @@
         "D2WinButton",
         "int32_t"
       ],
-      "dh": "a59827ee"
+      "dh": "a59827ee",
+      "paramStorage": [
+        [
+          "pButton",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINBUTTON_InvokeClickCallback",
@@ -162,7 +242,13 @@
         "D2ControlMsg",
         "int32_t"
       ],
-      "dh": "5d9ba6a2"
+      "dh": "5d9ba6a2",
+      "paramStorage": [
+        [
+          "ppButton",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINBUTTON_SetImageIndex",
@@ -184,7 +270,17 @@
         "D2WinButton",
         "int32_t"
       ],
-      "dh": "5be59a0e"
+      "dh": "5be59a0e",
+      "paramStorage": [
+        [
+          "pButton",
+          "ECX:4"
+        ],
+        [
+          "nImageIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINBUTTON_HandleMouseWheel",
@@ -208,7 +304,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f0e6dc52"
+      "dh": "f0e6dc52",
+      "paramStorage": [
+        [
+          "pButton",
+          "ECX:4"
+        ],
+        [
+          "nWheelDelta",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINBUTTON_SetCustomData",
@@ -230,7 +336,17 @@
         "D2WinButton",
         "int32_t"
       ],
-      "dh": "47adeba6"
+      "dh": "47adeba6",
+      "paramStorage": [
+        [
+          "pButton",
+          "ECX:4"
+        ],
+        [
+          "nCustomData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINBUTTON_IsPointInside",
@@ -249,7 +365,21 @@
         "D2WinButton",
         "int32_t"
       ],
-      "dh": "9fedbb3f"
+      "dh": "9fedbb3f",
+      "paramStorage": [
+        [
+          "pButton",
+          "EAX:4"
+        ],
+        [
+          "nX",
+          "ESI:4"
+        ],
+        [
+          "nY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "D2WINBUTTON_DrawText",
@@ -277,7 +407,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "183e089e"
+      "dh": "183e089e",
+      "paramStorage": [
+        [
+          "pButton",
+          "ESI:4"
+        ],
+        [
+          "nOffsetY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -309,7 +449,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e65efd90"
+      "dh": "e65efd90",
+      "paramStorage": [
+        [
+          "pButton",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Push",
@@ -335,7 +481,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "818cc687"
+      "dh": "818cc687",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Mouse",
@@ -360,7 +512,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "33e2cbff"
+      "dh": "33e2cbff",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINBUTTON_HandleHotkey",
@@ -383,7 +541,13 @@
         "D2WinButton",
         "int32_t"
       ],
-      "dh": "9317a2f8"
+      "dh": "9317a2f8",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WinButton",
@@ -412,7 +576,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7883625e"
+      "dh": "7883625e",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nSizeX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDC6",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnOnPress",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nHotkeyVK",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nInitialImageIndex",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nButtonFlags",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "wLabelStringId",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pMouse",
+          "Stack[0x24]:4"
+        ]
+      ]
     }
   ]
 }

@@ -20,7 +20,25 @@
         "CONTAINER_TypeInitialValue",
         "int32_t"
       ],
-      "dh": "466756ff"
+      "dh": "466756ff",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTypeSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "fpInitValueCallback",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CRASH_DumpRegisters",
@@ -45,7 +63,21 @@
         "fnCrashOutputLine",
         "uint32_t"
       ],
-      "dh": "b296e3a4"
+      "dh": "b296e3a4",
+      "paramStorage": [
+        [
+          "dwThreadId",
+          "ECX:4"
+        ],
+        [
+          "pOutputCallback",
+          "EDX:4"
+        ],
+        [
+          "pReport",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CRASH_EnumerateThreads",
@@ -67,7 +99,21 @@
         "fnCrashOutputLine",
         "uint32_t"
       ],
-      "dh": "aef6e267"
+      "dh": "aef6e267",
+      "paramStorage": [
+        [
+          "pOutputCallback",
+          "ECX:4"
+        ],
+        [
+          "pReport",
+          "EDX:4"
+        ],
+        [
+          "dwSkipThreadId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CRASH_GetExceptionName",
@@ -83,7 +129,17 @@
         "CRASH_GetExceptionName",
         "strncpy_s"
       ],
-      "dh": "59d466d7"
+      "dh": "59d466d7",
+      "paramStorage": [
+        [
+          "szText",
+          "EDI:4"
+        ],
+        [
+          "dwExceptionCode",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ERRORMANAGER_UnhandledExceptionFilter",
@@ -105,7 +161,13 @@
         "_EXCEPTION_POINTERS",
         "uint32_t"
       ],
-      "dh": "89aa9c8b"
+      "dh": "89aa9c8b",
+      "paramStorage": [
+        [
+          "pExceptionPointers",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CRASH_SetExceptionHandler",
@@ -123,7 +185,21 @@
       "usedTypes": [
         "pfnFogExceptionFilter"
       ],
-      "dh": "70320148"
+      "dh": "70320148",
+      "paramStorage": [
+        [
+          "pfnFilter",
+          "ECX:4"
+        ],
+        [
+          "pContext",
+          "EDX:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FILETOOLS_ExtractDirectory",
@@ -143,7 +219,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "f21a48ff"
+      "dh": "f21a48ff",
+      "paramStorage": [
+        [
+          "szDest",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDestSize",
+          "EBX:4"
+        ],
+        [
+          "szSrcPath",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "FILETOOLS_ExtractFilename",
@@ -162,7 +252,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "ff5be53b"
+      "dh": "ff5be53b",
+      "paramStorage": [
+        [
+          "szDest",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szSrcPath",
+          "EAX:4"
+        ],
+        [
+          "nDestSize",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "STRING_AppendBlizzardErrorSubfolderToPath",
@@ -178,7 +282,13 @@
         "STRING_AppendBlizzardErrorSubfolderToPath",
         "STRING_CopyStringBounded"
       ],
-      "dh": "241329e7"
+      "dh": "241329e7",
+      "paramStorage": [
+        [
+          "szPath",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "STRING_CopyStringBounded",
@@ -196,7 +306,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d7b8b7d4"
+      "dh": "d7b8b7d4",
+      "paramStorage": [
+        [
+          "nDestSize",
+          "ECX:4"
+        ],
+        [
+          "szDest",
+          "EDX:4"
+        ],
+        [
+          "szSrc",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "STRING_AppendStringToString",
@@ -214,7 +338,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "49aa5334"
+      "dh": "49aa5334",
+      "paramStorage": [
+        [
+          "szDest",
+          "ECX:4"
+        ],
+        [
+          "nDestSize",
+          "EAX:4"
+        ],
+        [
+          "szSrc",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STRING_FormatVarArgs",
@@ -256,7 +394,17 @@
         "_STARTUPINFOW",
         "uint32_t"
       ],
-      "dh": "8ac80b94"
+      "dh": "8ac80b94",
+      "paramStorage": [
+        [
+          "lpApplicationName",
+          "ECX:4"
+        ],
+        [
+          "szCommandLine",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FILETOOLS_CheckIfFileExists_UTF8",
@@ -277,7 +425,13 @@
         "_WIN32_FIND_DATAW",
         "uint32_t"
       ],
-      "dh": "c8e1d2e7"
+      "dh": "c8e1d2e7",
+      "paramStorage": [
+        [
+          "lpMultiByteStr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FILETOOLS_OpenFile_WriteMode_UTF8",
@@ -299,7 +453,13 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "74cb3998"
+      "dh": "74cb3998",
+      "paramStorage": [
+        [
+          "lpMultiByteStr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FILETOOLS_CopyFile_UTF8",
@@ -319,7 +479,17 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "c39105b8"
+      "dh": "c39105b8",
+      "paramStorage": [
+        [
+          "szSrcPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szDestPath",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "FILETOOLS_GetTempPath_UTF8",
@@ -339,7 +509,13 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "73c9e4ff"
+      "dh": "73c9e4ff",
+      "paramStorage": [
+        [
+          "szDest",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "FILETOOLS_CreateDirectoryW",
@@ -355,7 +531,13 @@
         "FILETOOLS_CreateDirectoryW",
         "wcsrchr"
       ],
-      "dh": "edf6d86f"
+      "dh": "edf6d86f",
+      "paramStorage": [
+        [
+          "lpPathName",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FILETOOLS_CreateFolder_UTF8",
@@ -376,7 +558,13 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "8c994949"
+      "dh": "8c994949",
+      "paramStorage": [
+        [
+          "szPathName",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_CaptureThreadContext",
@@ -395,7 +583,17 @@
         "LPCONTEXT",
         "uint32_t"
       ],
-      "dh": "6cc62a72"
+      "dh": "6cc62a72",
+      "paramStorage": [
+        [
+          "dwThreadId",
+          "ECX:4"
+        ],
+        [
+          "pContext",
+          "EAX:4"
+        ]
+      ]
     }
   ]
 }

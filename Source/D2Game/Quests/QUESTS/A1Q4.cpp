@@ -1705,8 +1705,8 @@ BOOL __fastcall Q04_SetSecretCowLevelDiscovered(::SGAMEDATA * pGame, D2UnitStrc 
 void __fastcall Q04_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL BVar1;
     D2BitBufferStrc* pBitBuffer;
+    D2QuestDataStrc* pQuestDataTmp;
     ::SGAMEDATA* pGame;
-    D2QuestDataStrc* pQuestDataTmp = pQuestData;
     if (pQuestArgs->pPlayer) {
       D2UnitDataPlayerStrc* pPlayerData;
       pGame = pQuestArgs->pGame;

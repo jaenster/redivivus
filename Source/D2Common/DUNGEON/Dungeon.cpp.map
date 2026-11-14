@@ -20,7 +20,13 @@
         "D2RoomExStrc",
         "D2RoomStrc"
       ],
-      "dh": "d22a99bc"
+      "dh": "d22a99bc",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AllocAct",
@@ -51,7 +57,45 @@
         "fTownAutoMap",
         "int32_t"
       ],
-      "dh": "eb55ff6c"
+      "dh": "eb55ff6c",
+      "paramStorage": [
+        [
+          "nActNo",
+          "Stack[0x4]:1"
+        ],
+        [
+          "dwInitSeed",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bClientSide",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nDifficulty",
+          "Stack[0x14]:1"
+        ],
+        [
+          "pMemory",
+          "Stack[0x18]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pfAutoMap",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pfTownAutoMap",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "GetMemPoolFromAct",
@@ -70,7 +114,13 @@
         "D2DrlgActStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "d0352daf"
+      "dh": "d0352daf",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_SetWarpTileSelect",
@@ -93,7 +143,17 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "3623e9f3"
+      "dh": "3623e9f3",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSelect",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TakeStairsInternal",
@@ -119,7 +179,21 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "ae91263a"
+      "dh": "ae91263a",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevelId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppRoomEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DUNGEON_GetLvlWarpTxtForWarpUnit",
@@ -144,7 +218,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "4fc78b05"
+      "dh": "4fc78b05",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetFloorTilesFromRoom",
@@ -163,7 +247,17 @@
         "D2DrlgTileDataStrc",
         "D2RoomStrc"
       ],
-      "dh": "e1ce7b79"
+      "dh": "e1ce7b79",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pFloorCount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetWallTilesFromRoom",
@@ -186,7 +280,17 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "b1572c5b"
+      "dh": "b1572c5b",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pWallCount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetRoofTilesFromRoom",
@@ -209,7 +313,17 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "cb91e8ef"
+      "dh": "cb91e8ef",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoofCount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetTileDataFromAct",
@@ -228,7 +342,13 @@
         "D2DrlgActStrc",
         "D2DrlgTileDataStrc"
       ],
-      "dh": "2b6d0abc"
+      "dh": "2b6d0abc",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetRoomCoordinates",
@@ -251,7 +371,17 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "1dee55ac"
+      "dh": "1dee55ac",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCoords",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetAdjacentRoomsList",
@@ -274,7 +404,21 @@
         "D2RoomStrc * *",
         "int32_t"
       ],
-      "dh": "243465da"
+      "dh": "243465da",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pppRoomList",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pNumRooms",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_AllocRoomStrc",
@@ -295,7 +439,13 @@
         "D2PoolManagerStrc",
         "D2RoomStrc"
       ],
-      "dh": "0f2b7ec5"
+      "dh": "0f2b7ec5",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_UpdateRoomsNearAndCount",
@@ -323,7 +473,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7775dc28"
+      "dh": "7775dc28",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "AllocRoom",
@@ -355,7 +515,33 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "314e52c9"
+      "dh": "314e52c9",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "ECX:4"
+        ],
+        [
+          "pRoomEx",
+          "EDX:4"
+        ],
+        [
+          "pDrlgCoords",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoomTiles",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nInitSeed",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DoRoomsTouchOrOverlap",
@@ -378,7 +564,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7a6521e2"
+      "dh": "7a6521e2",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AreTileCoordinatesInsideRoom",
@@ -400,7 +596,21 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "4dea5c16"
+      "dh": "4dea5c16",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetRoomShape",
@@ -422,7 +632,17 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "5ad6dd7c"
+      "dh": "5ad6dd7c",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FindRoomByTileCoordinates",
@@ -442,7 +662,21 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "a58fb6d5"
+      "dh": "a58fb6d5",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetAdjacentRoomByCoordinates",
@@ -466,7 +700,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "36b3830c"
+      "dh": "36b3830c",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "CallRoomCallback",
@@ -490,7 +738,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5b732ff3"
+      "dh": "5b732ff3",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnRoomCallback",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pArgs",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetMinimapRect",
@@ -513,7 +775,17 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "c0646d56"
+      "dh": "c0646d56",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRect",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetSubtileRect",
@@ -536,7 +808,17 @@
         "RECT",
         "int32_t"
       ],
-      "dh": "6610958f"
+      "dh": "6610958f",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRect",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetRGB_IntensityFromRoom",
@@ -555,7 +837,29 @@
       "usedTypes": [
         "D2RoomStrc"
       ],
-      "dh": "bbb85def"
+      "dh": "bbb85def",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIntensity",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nRed",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGreen",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nBlue",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "FindRoomBySubtileCoordinates",
@@ -575,7 +879,21 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "b7205adb"
+      "dh": "b7205adb",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "AreSubtileCoordinatesInsideRoom",
@@ -597,7 +915,21 @@
         "D2DrlgCoordsStrc",
         "int32_t"
       ],
-      "dh": "2f905d0c"
+      "dh": "2f905d0c",
+      "paramStorage": [
+        [
+          "pDrlgCoords",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FindActSpawnLocation",
@@ -622,7 +954,29 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "e1f11828"
+      "dh": "e1f11828",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "a3",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetFirstUnitInRoom",
@@ -646,7 +1000,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1c3a484f"
+      "dh": "1c3a484f",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_IncreaseAlliedCount",
@@ -664,7 +1024,13 @@
       "usedTypes": [
         "D2RoomStrc"
       ],
-      "dh": "3beff321"
+      "dh": "3beff321",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetAlliedCountFromRoom",
@@ -683,7 +1049,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "97708e0b"
+      "dh": "97708e0b",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_DecreaseAlliedCount",
@@ -705,7 +1077,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "208c4265"
+      "dh": "208c4265",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetUnitListFromRoom",
@@ -728,7 +1106,13 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "41d42fb7"
+      "dh": "41d42fb7",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetUnitUpdateListFromRoom",
@@ -751,7 +1135,17 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "9ea1007e"
+      "dh": "9ea1007e",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "bUpdate",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetPresetUnitsFromRoom",
@@ -775,7 +1169,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "48666774"
+      "dh": "48666774",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetCollisionGridFromRoom",
@@ -798,7 +1198,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "549f0610"
+      "dh": "549f0610",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_SetCollisionGridInRoom",
@@ -821,7 +1227,17 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "c136d977"
+      "dh": "c136d977",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "pCollisionMap",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AddRoomData",
@@ -847,7 +1263,29 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "b5d6eba8"
+      "dh": "b5d6eba8",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pRoomCache",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveRoomData",
@@ -873,7 +1311,29 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "fd194aa1"
+      "dh": "fd194aa1",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_SwapRoomDataForRoomEx",
@@ -893,7 +1353,17 @@
         "D2RoomExStrc",
         "D2RoomStrc"
       ],
-      "dh": "239d8172"
+      "dh": "239d8172",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetRoomFromActAndCoord",
@@ -917,7 +1387,21 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "a1923fde"
+      "dh": "a1923fde",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetRoomFromAct",
@@ -940,7 +1424,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "9b891b12"
+      "dh": "9b891b12",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetLevelIdFromRoom",
@@ -960,7 +1450,13 @@
         "D2RoomStrc",
         "eD2LevelId"
       ],
-      "dh": "55dac136"
+      "dh": "55dac136",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetWarpDestinationLevel",
@@ -980,7 +1476,17 @@
         "D2RoomStrc",
         "eD2LevelId"
       ],
-      "dh": "d2247c12"
+      "dh": "d2247c12",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetLevelIdFromPopulatedRoom",
@@ -1000,7 +1506,13 @@
         "D2RoomStrc",
         "eD2LevelId"
       ],
-      "dh": "79c4c531"
+      "dh": "79c4c531",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HasWaypoint",
@@ -1022,7 +1534,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "92011100"
+      "dh": "92011100",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetPickedLevelPrestFilePathFromRoom",
@@ -1041,7 +1559,13 @@
       "usedTypes": [
         "D2RoomStrc"
       ],
-      "dh": "7613bff9"
+      "dh": "7613bff9",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AllocDrlgDelete",
@@ -1063,7 +1587,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "16bbe375"
+      "dh": "16bbe375",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_FreeDrlgDelete",
@@ -1088,7 +1626,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "cdfac809"
+      "dh": "cdfac809",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetDrlgDeleteFromRoom",
@@ -1111,7 +1655,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "d308005b"
+      "dh": "d308005b",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetActMiscSubA0FromAct",
@@ -1135,7 +1685,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "85426dd9"
+      "dh": "85426dd9",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetActMiscSubA0FromRoom",
@@ -1159,7 +1715,17 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "3c0a1957"
+      "dh": "3c0a1957",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_TestRoomCanUntile",
@@ -1183,7 +1749,17 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "2ded7a91"
+      "dh": "2ded7a91",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Is0x44Above2",
@@ -1204,7 +1780,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "78c57cec"
+      "dh": "78c57cec",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_AreAllNearRoomsActive",
@@ -1229,7 +1811,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f8701be8"
+      "dh": "f8701be8",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_IsUnitInactiveProcessed",
@@ -1251,7 +1839,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "bacd3711"
+      "dh": "bacd3711",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_SetUnitInactiveProcessed",
@@ -1273,7 +1867,17 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "5a9f215e"
+      "dh": "5a9f215e",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSet",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_ValidateClientList",
@@ -1297,7 +1901,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4f1b28c8"
+      "dh": "4f1b28c8",
+      "paramStorage": [
+        [
+          "pRoom",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_SortClientList",
@@ -1323,7 +1933,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1c2786c3"
+      "dh": "1c2786c3",
+      "paramStorage": [
+        [
+          "pRoom",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_AddClientToRoom",
@@ -1351,7 +1967,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "54782ad3"
+      "dh": "54782ad3",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClientId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_RemoveClientFromRoom",
@@ -1378,7 +2004,17 @@
         "D2RoomStrc",
         "uint32_t"
       ],
-      "dh": "448d2ac1"
+      "dh": "448d2ac1",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClientId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_RemoveClientFromRoom_HaltTail",
@@ -1396,7 +2032,13 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
       ],
-      "dh": "63965364"
+      "dh": "63965364",
+      "paramStorage": [
+        [
+          "nLine",
+          "Stack[0x0]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetIdleTicks",
@@ -1418,7 +2060,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "1cac48c2"
+      "dh": "1cac48c2",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_HasUniqueClient",
@@ -1437,7 +2085,17 @@
         "D2ClientStrc *",
         "D2RoomStrc"
       ],
-      "dh": "022c252d"
+      "dh": "022c252d",
+      "paramStorage": [
+        [
+          "pRoom1",
+          "ECX:4"
+        ],
+        [
+          "pRoom2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FreeRoom",
@@ -1461,7 +2119,17 @@
         "D2RoomStrc",
         "D2UnitStrc"
       ],
-      "dh": "b5c0271e"
+      "dh": "b5c0271e",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DUNGEON_ClearRoomTiles",
@@ -1482,7 +2150,13 @@
       "usedTypes": [
         "D2RoomStrc"
       ],
-      "dh": "d2e13ea5"
+      "dh": "d2e13ea5",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_RemoveRoomFromAct",
@@ -1509,7 +2183,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "872a3cc4"
+      "dh": "872a3cc4",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_SwapActiveRoomExBetweenLevels",
@@ -1529,7 +2213,17 @@
         "D2RoomExStrc",
         "D2RoomStrc"
       ],
-      "dh": "dbe307a8"
+      "dh": "dbe307a8",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FreeDungeons",
@@ -1548,7 +2242,13 @@
       "usedTypes": [
         "D2DrlgActStrc"
       ],
-      "dh": "96e6998c"
+      "dh": "96e6998c",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_CheckLOSDraw",
@@ -1568,7 +2268,13 @@
         "D2RoomStrc",
         "uint32_t"
       ],
-      "dh": "bbdea2a0"
+      "dh": "bbdea2a0",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_GetEnvironmentFromAct",
@@ -1591,7 +2297,13 @@
         "D2DrlgEnvironmentStrc",
         "int32_t"
       ],
-      "dh": "6edcb10a"
+      "dh": "6edcb10a",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetDrlgFromAct",
@@ -1614,7 +2326,13 @@
         "D2DrlgStrc",
         "int32_t"
       ],
-      "dh": "798da48b"
+      "dh": "798da48b",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetInitSeedFromAct",
@@ -1633,7 +2351,13 @@
         "D2DrlgActStrc",
         "int32_t"
       ],
-      "dh": "aa805dec"
+      "dh": "aa805dec",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetRoomExFromRoom",
@@ -1652,7 +2376,13 @@
         "D2RoomExStrc",
         "D2RoomStrc"
       ],
-      "dh": "0144643d"
+      "dh": "0144643d",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IsTownLevelId",
@@ -1671,7 +2401,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "316c9498"
+      "dh": "316c9498",
+      "paramStorage": [
+        [
+          "nLevelId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_IsRoomInTown",
@@ -1692,7 +2428,13 @@
         "D2RoomStrc",
         "eD2LevelId"
       ],
-      "dh": "10cc6261"
+      "dh": "10cc6261",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Return0",
@@ -1714,7 +2456,13 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "9bd9426e"
+      "dh": "9bd9426e",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_IsUpdateLocked",
@@ -1732,7 +2480,13 @@
       "usedTypes": [
         "D2RoomStrc"
       ],
-      "dh": "40c92b94"
+      "dh": "40c92b94",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetTownLevelIdFromActNo",
@@ -1755,7 +2509,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6a64b3dc"
+      "dh": "6a64b3dc",
+      "paramStorage": [
+        [
+          "nAct",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_HasOutdoorBorder",
@@ -1779,7 +2539,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "97ed0732"
+      "dh": "97ed0732",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetNumberOfPopulatedRoomsInLevel",
@@ -1800,7 +2566,17 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "e40c4e77"
+      "dh": "e40c4e77",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetWarpCoordinatesFromRoom",
@@ -1824,7 +2600,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "a8cab3b8"
+      "dh": "a8cab3b8",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateWarpRoomSelect",
@@ -1848,7 +2630,17 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "a3e1f52c"
+      "dh": "a3e1f52c",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateWarpRoomDeselect",
@@ -1872,7 +2664,17 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "05b7e78f"
+      "dh": "05b7e78f",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UpdatePops",
@@ -1894,7 +2696,25 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "aa478266"
+      "dh": "aa478266",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bOtherRoom",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GetTombStoneTileCoords",
@@ -1913,7 +2733,21 @@
         "D2CoordStrc *",
         "D2RoomStrc"
       ],
-      "dh": "e802715a"
+      "dh": "e802715a",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppTombStoneTiles",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnTombStoneTiles",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetCoordListFromSubtilePos",
@@ -1934,7 +2768,21 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "001c6ebf"
+      "dh": "001c6ebf",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSubtileX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSubtileY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetCoordList",
@@ -1953,7 +2801,13 @@
         "D2RoomCoordListStrc",
         "D2RoomStrc"
       ],
-      "dh": "8abeb2fa"
+      "dh": "8abeb2fa",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetPortalLevelArrayFromPortalFlags",
@@ -1980,7 +2834,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e8a75415"
+      "dh": "e8a75415",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppLevels",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnLevels",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GetPortalFlagFromLevelId",
@@ -2000,7 +2872,13 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "54280b61"
+      "dh": "54280b61",
+      "paramStorage": [
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetTownLevelIdFromAct",
@@ -2023,7 +2901,13 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "f45c2c9d"
+      "dh": "f45c2c9d",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetHoradricStaffTombLevelId",
@@ -2042,7 +2926,13 @@
         "D2DrlgActStrc",
         "eD2LevelId"
       ],
-      "dh": "796218b9"
+      "dh": "796218b9",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ToggleHasPortalFlagRoom",
@@ -2061,7 +2951,17 @@
       "usedTypes": [
         "D2RoomStrc"
       ],
-      "dh": "bdb6c8f1"
+      "dh": "bdb6c8f1",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bReset",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AnimateTiles",
@@ -2079,7 +2979,13 @@
       "usedTypes": [
         "D2RoomStrc"
       ],
-      "dh": "cf83bfdc"
+      "dh": "cf83bfdc",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "InitRoomTileAnimation",
@@ -2100,7 +3006,21 @@
         "D2RoomExStrc",
         "D2RoomStrc"
       ],
-      "dh": "720a7ab2"
+      "dh": "720a7ab2",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRoom2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetActCallbackFunc",
@@ -2123,7 +3043,17 @@
         "D2DrlgActStrc",
         "int32_t"
       ],
-      "dh": "ee905bad"
+      "dh": "ee905bad",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pFunc",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SaveKilledUnitGUID",
@@ -2142,7 +3072,17 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "bc531e25"
+      "dh": "bc531e25",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FreeAct",
@@ -2169,7 +3109,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "449b6cce"
+      "dh": "449b6cce",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SpawnUnit",
@@ -2199,7 +3145,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4d365911"
+      "dh": "4d365911",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSpawnTypeOrMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnSpawnX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnSpawnY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nUnitSize",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "GetGridIndex",
@@ -2220,7 +3192,21 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "af3594d2"
+      "dh": "af3594d2",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_InitRoomExData",
@@ -2244,7 +3230,17 @@
         "D2PoolManagerStrc",
         "D2RoomExStrc"
       ],
-      "dh": "3657e5e1"
+      "dh": "3657e5e1",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pRoomEx",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_MoveToActivationList",
@@ -2263,7 +3259,17 @@
         "D2RoomExStrc",
         "uint8_t"
       ],
-      "dh": "36a305f6"
+      "dh": "36a305f6",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "EAX:4"
+        ],
+        [
+          "nNewStatus",
+          "BL:1"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_SetPriority0",
@@ -2282,7 +3288,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "23db4d7d"
+      "dh": "23db4d7d",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_SetPriority1",
@@ -2301,7 +3313,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "637824e5"
+      "dh": "637824e5",
+      "paramStorage": [
+        [
+          "pRoom",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_SetPriority3",
@@ -2320,7 +3338,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "a28cf4b7"
+      "dh": "a28cf4b7",
+      "paramStorage": [
+        [
+          "pRoomExStrc",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DUNGEON_ActivationHandler0_SetRoomExPriority0",
@@ -2339,7 +3363,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "68c30466"
+      "dh": "68c30466",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_ActivateRoomEx",
@@ -2361,7 +3391,13 @@
         "D2DrlgStrc",
         "D2RoomExStrc"
       ],
-      "dh": "4ada1167"
+      "dh": "4ada1167",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_InitTileDataAndPresets",
@@ -2382,7 +3418,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "9ac3c3ed"
+      "dh": "9ac3c3ed",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "InitNearRooms",
@@ -2405,7 +3447,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9646c8d5"
+      "dh": "9646c8d5",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pRoomEx",
+          "EDX:4"
+        ],
+        [
+          "nRecursion",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "AddRoomDataActual",
@@ -2427,7 +3483,17 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "c546aebb"
+      "dh": "c546aebb",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "EDI:4"
+        ],
+        [
+          "nInitDepth",
+          "BL:1"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_RecalcPriority",
@@ -2448,7 +3514,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9c7c44f2"
+      "dh": "9c7c44f2",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_RecalcPriority_Case4",
@@ -2467,7 +3539,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "6472b5cc"
+      "dh": "6472b5cc",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_RecalcPriority_Case5",
@@ -2486,7 +3564,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "2ab1630c"
+      "dh": "2ab1630c",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_RecalcPriority_Case6",
@@ -2505,7 +3589,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "511b43c0"
+      "dh": "511b43c0",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClearRoomExIfFlag0x01",
@@ -2526,7 +3616,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "3c0f6f3d"
+      "dh": "3c0f6f3d",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_PropagateDecRefCount",
@@ -2545,7 +3641,17 @@
         "D2RoomExStrc",
         "uint8_t"
       ],
-      "dh": "3315ab56"
+      "dh": "3315ab56",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "nPriority",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "AddRoomDataPrepare",
@@ -2569,7 +3675,29 @@
         "D2RoomExStrc",
         "int32_t"
       ],
-      "dh": "442085a1"
+      "dh": "442085a1",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "ECX:4"
+        ],
+        [
+          "eLevelId",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRoomExCache",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_RemoveRoomDataPrepare",
@@ -2594,7 +3722,29 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "fb51e07a"
+      "dh": "fb51e07a",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "ECX:4"
+        ],
+        [
+          "eLevelId",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRoomEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_SwapActiveRoomEx",
@@ -2614,7 +3764,17 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "403dfe8e"
+      "dh": "403dfe8e",
+      "paramStorage": [
+        [
+          "pRoomExNew",
+          "ECX:4"
+        ],
+        [
+          "pRoomExOld",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "InitRoomEx",
@@ -2640,7 +3800,13 @@
         "D2RoomExStrc",
         "D2RoomStrc"
       ],
-      "dh": "f33ea5fd"
+      "dh": "f33ea5fd",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_GetRoomByCoords",
@@ -2663,7 +3829,21 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "19539889"
+      "dh": "19539889",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGACTMISC_InitializeSubA0",
@@ -2683,7 +3863,13 @@
         "D2RoomExStrc",
         "uint32_t"
       ],
-      "dh": "c85c2022"
+      "dh": "c85c2022",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_GetCurrentSubA0",
@@ -2703,7 +3889,13 @@
         "D2RoomExStrc",
         "D2RoomStrc"
       ],
-      "dh": "f1a5cbc6"
+      "dh": "f1a5cbc6",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_GetSubA0ForRoom",
@@ -2723,7 +3915,17 @@
         "D2RoomExStrc",
         "D2RoomStrc"
       ],
-      "dh": "708203be"
+      "dh": "708203be",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "ECX:4"
+        ],
+        [
+          "pRoomEx",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_GetActMiscCacheInfo",
@@ -2741,7 +3943,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a2970245"
+      "dh": "a2970245",
+      "paramStorage": [
+        [
+          "pnCacheA",
+          "ECX:4"
+        ],
+        [
+          "pnCacheB",
+          "EDX:4"
+        ],
+        [
+          "pnCacheC",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnCacheD",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_UpdateClientRoomExActivation",
@@ -2763,7 +3983,13 @@
         "D2RoomExStrc",
         "uint8_t"
       ],
-      "dh": "7797d9f7"
+      "dh": "7797d9f7",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LEVEL_IsNotTownAndNotArreatSummit",
@@ -2782,7 +4008,13 @@
       "usedTypes": [
         "eD2LevelId"
       ],
-      "dh": "56a6623f"
+      "dh": "56a6623f",
+      "paramStorage": [
+        [
+          "eLevel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_TestCanUntile",
@@ -2809,7 +4041,13 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "8db444ca"
+      "dh": "8db444ca",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ToggleHasPortalFlag",
@@ -2827,7 +4065,17 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "042dc7e4"
+      "dh": "042dc7e4",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "bReset",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Get0x44FromRoomEx",
@@ -2845,7 +4093,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "8788295c"
+      "dh": "8788295c",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_DemoteAndActivate",
@@ -2865,7 +4119,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "a7f34813"
+      "dh": "a7f34813",
+      "paramStorage": [
+        [
+          "pRoomExStrc",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_DemoteIfReady",
@@ -2885,7 +4145,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "f4d1ac98"
+      "dh": "f4d1ac98",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_DRLGROOMEX_ActivateRoomEx",
@@ -2897,6 +4163,12 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
+      ],
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
       ]
     },
     {
@@ -2916,7 +4188,17 @@
         "D2DrlgEnvironmentStrc",
         "eD2LevelId"
       ],
-      "dh": "88d71adc"
+      "dh": "88d71adc",
+      "paramStorage": [
+        [
+          "pAmbientColorBytes",
+          "EAX:4"
+        ],
+        [
+          "nLevelId",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

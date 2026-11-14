@@ -21,7 +21,13 @@
         "D2UnitStrc",
         "eD2UnitType"
       ],
-      "dh": "c85e0b56"
+      "dh": "c85e0b56",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CheckFlags",
@@ -42,7 +48,17 @@
         "eD2UnitFlags",
         "uint32_t"
       ],
-      "dh": "3257f964"
+      "dh": "3257f964",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nFlagsC4",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetGUID",
@@ -62,7 +78,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b2cf559b"
+      "dh": "b2cf559b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetClassId",
@@ -82,7 +104,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c97671dc"
+      "dh": "c97671dc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetAnimMode",
@@ -102,7 +130,13 @@
         "D2UnitStrc",
         "eD2PlayerAnimMode"
       ],
-      "dh": "99ebacce"
+      "dh": "99ebacce",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetXPosFromDynamicPathUnit",
@@ -124,7 +158,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "76937be7"
+      "dh": "76937be7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetYPosFromDynamicPathUnit",
@@ -146,7 +186,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "601925ac"
+      "dh": "601925ac",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CheckFlagWithMask",
@@ -166,7 +212,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "140ad8a3"
+      "dh": "140ad8a3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "dwMask",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetMemPool",
@@ -186,7 +242,13 @@
         "D2PoolManagerStrc",
         "D2UnitStrc"
       ],
-      "dh": "6660a5cd"
+      "dh": "6660a5cd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Return_Unref_005fe100",
@@ -205,7 +267,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "050daaae"
+      "dh": "050daaae",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetDirection",
@@ -228,7 +300,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "3b5adbe5"
+      "dh": "3b5adbe5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetFirstSkill",
@@ -251,7 +329,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "fc5ae444"
+      "dh": "fc5ae444",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetLeftSkill",
@@ -274,7 +358,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d29d3ed9"
+      "dh": "d29d3ed9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetRightSkill",
@@ -297,7 +387,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "326a9113"
+      "dh": "326a9113",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetCurrentSkill",
@@ -320,7 +416,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a35246ec"
+      "dh": "a35246ec",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetCurrentSkill",
@@ -343,7 +449,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "42088a45"
+      "dh": "42088a45",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AllocUnit",
@@ -366,7 +478,17 @@
         "D2UnitStrc",
         "eD2UnitType"
       ],
-      "dh": "d1290dbb"
+      "dh": "d1290dbb",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Free",
@@ -387,7 +509,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "98bfddbb"
+      "dh": "98bfddbb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_SetWarpStaticPathCoords",
@@ -410,7 +538,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "aeeeeebf"
+      "dh": "aeeeeebf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnkX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnkY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetPrecisionX",
@@ -433,7 +583,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "38ecef93"
+      "dh": "38ecef93",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetPrecisionY",
@@ -456,7 +612,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "c714e89d"
+      "dh": "c714e89d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetXForStaticUnit",
@@ -479,7 +641,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "6947bc1c"
+      "dh": "6947bc1c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetYForStaticUnit",
@@ -502,7 +674,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "cac8f702"
+      "dh": "cac8f702",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetUnitSizeX",
@@ -525,7 +707,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "237b04b3"
+      "dh": "237b04b3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetUnitSizeY",
@@ -551,7 +739,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "3660c849"
+      "dh": "3660c849",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetTargetX",
@@ -574,7 +768,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "1c710494"
+      "dh": "1c710494",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetTargetY",
@@ -597,7 +797,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "cfed5cae"
+      "dh": "cfed5cae",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetAbsoluteXDistance",
@@ -618,7 +824,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "a6b42ed9"
+      "dh": "a6b42ed9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetAbsoluteYDistance",
@@ -639,7 +855,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "b3b73a2c"
+      "dh": "b3b73a2c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetTargetX",
@@ -661,7 +887,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7b765416"
+      "dh": "7b765416",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetTargetY",
@@ -683,7 +919,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "cc04ca0f"
+      "dh": "cc04ca0f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetCoords",
@@ -709,7 +955,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "542410de"
+      "dh": "542410de",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPoint",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetTargetCoords",
@@ -735,7 +991,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "b3ba67bb"
+      "dh": "b3ba67bb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPoint",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetTargetXYForWarp",
@@ -758,7 +1024,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1c08a98c"
+      "dh": "1c08a98c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nTargetX",
+          "EDX:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetCollisionType",
@@ -782,7 +1062,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "8ec73227"
+      "dh": "8ec73227",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BlockCollisionPath",
@@ -810,7 +1096,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8c4ae17a"
+      "dh": "8c4ae17a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "InitializeStaticPath",
@@ -835,7 +1139,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "2267b723"
+      "dh": "2267b723",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ResetRoom",
@@ -859,7 +1181,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "998da40b"
+      "dh": "998da40b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_GetRoom",
@@ -884,7 +1212,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "1d64ee18"
+      "dh": "1d64ee18",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetTargetUnitForDynamicUnit",
@@ -908,7 +1242,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "aa2ca320"
+      "dh": "aa2ca320",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetTargetTypeFromDynamicUnit",
@@ -932,7 +1276,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "c311cd1e"
+      "dh": "c311cd1e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetTargetGUIDFromDynamicUnit",
@@ -957,7 +1307,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7fdd7c79"
+      "dh": "7fdd7c79",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetTargetUnitForPlayerOrMonster",
@@ -981,7 +1337,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a5afdf3f"
+      "dh": "a5afdf3f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetAnimSpeedForMonster",
@@ -1002,7 +1368,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "951be670"
+      "dh": "951be670",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetRunAndWalkVelocityForPlayer",
@@ -1022,7 +1394,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d1bbe29c"
+      "dh": "d1bbe29c",
+      "paramStorage": [
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ePlayerClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pWalkVelocity",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pRunVelocity",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "AddWalkVelocityStatIfExistToPlayer",
@@ -1048,7 +1438,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "a15e8001"
+      "dh": "a15e8001",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "ePlayerClassId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SetAnimData",
@@ -1072,7 +1472,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "49b6f752"
+      "dh": "49b6f752",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnitType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "NeedsRoomUpdate",
@@ -1096,7 +1514,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "25f5a5a3"
+      "dh": "25f5a5a3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ChangeAnimMode",
@@ -1120,7 +1544,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "2c5318d1"
+      "dh": "2c5318d1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "RefreshInventory",
@@ -1139,7 +1573,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "951eb5e2"
+      "dh": "951eb5e2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bHasInventory",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetInventoryPage",
@@ -1165,7 +1609,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8ed7dff4"
+      "dh": "8ed7dff4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInvPage",
+          "Stack[0x8]:1"
+        ],
+        [
+          "bLoD",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetLightMap",
@@ -1188,7 +1646,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "18ecf151"
+      "dh": "18ecf151",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetAnimOrSeqMode",
@@ -1207,7 +1671,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "40a5de42"
+      "dh": "40a5de42",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetAnimOrSeqMode",
@@ -1229,7 +1699,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "125e71e8"
+      "dh": "125e71e8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateSequenceMode",
@@ -1251,7 +1731,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b89ea6ba"
+      "dh": "b89ea6ba",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nSeqMode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "InitializeSequence",
@@ -1276,7 +1766,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2e82b250"
+      "dh": "2e82b250",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetSequenceFrame",
@@ -1298,7 +1794,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8dee14be"
+      "dh": "8dee14be",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSequenceFrame",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateFrame",
@@ -1316,7 +1822,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "4a4d1376"
+      "dh": "4a4d1376",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetFrameNonRate",
@@ -1335,7 +1847,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "fa4480ea"
+      "dh": "fa4480ea",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRate",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFailRate",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_GetBaseWalkVelocity",
@@ -1354,7 +1880,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "8d27e1c4"
+      "dh": "8d27e1c4",
+      "paramStorage": [
+        [
+          "eUnitType",
+          "ECX:4"
+        ],
+        [
+          "nClassId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_GetAnimFrameTime",
@@ -1374,7 +1910,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "d84b881f"
+      "dh": "d84b881f",
+      "paramStorage": [
+        [
+          "eUnitType",
+          "EDX:4"
+        ],
+        [
+          "nClassId",
+          "ECX:4"
+        ],
+        [
+          "nAnimMode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_GetAnimTableEntry",
@@ -1392,7 +1942,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f766700f"
+      "dh": "f766700f",
+      "paramStorage": [
+        [
+          "nClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAnimMode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CanPlayAnimMode",
@@ -1419,7 +1979,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "864bde1c"
+      "dh": "864bde1c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClassId",
+          "ESI:4"
+        ],
+        [
+          "eUnitType",
+          "ECX:4"
+        ],
+        [
+          "nAnimMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_CheckAnimateAtFrameEnd",
@@ -1449,7 +2027,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5043eb26"
+      "dh": "5043eb26",
+      "paramStorage": [
+        [
+          "nAnimMode",
+          "ECX:4"
+        ],
+        [
+          "eUnitType",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_GetAnimFrameSkip",
@@ -1468,7 +2064,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "27898147"
+      "dh": "27898147",
+      "paramStorage": [
+        [
+          "nAnimMode",
+          "ECX:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitType",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "HasSequenceTransition",
@@ -1494,7 +2104,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "9585b94d"
+      "dh": "9585b94d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nAnimMode",
+          "EDX:4"
+        ],
+        [
+          "eUnitType",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GetDiminishedStat",
@@ -1514,7 +2138,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9584aaf8"
+      "dh": "9584aaf8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SetAnimationSpeed",
@@ -1534,7 +2168,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "50f22b23"
+      "dh": "50f22b23",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSpeed",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "IsAtEndOfFrameCycle",
@@ -1557,7 +2201,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8e450fff"
+      "dh": "8e450fff",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetShiftedFrameMetrics",
@@ -1580,7 +2230,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "d8b83d62"
+      "dh": "d8b83d62",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCurrentFrame",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pFrameCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetFrameMetrics",
@@ -1598,7 +2262,21 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "ae43a8de"
+      "dh": "ae43a8de",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCurrentFrame",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pFrameCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetAnimActionFrame",
@@ -1618,7 +2296,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7bb56c08"
+      "dh": "7bb56c08",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFrame",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetEventFrameInfo",
@@ -1644,7 +2332,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "54853e24"
+      "dh": "54853e24",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFrame",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "HasCollision",
@@ -1662,7 +2360,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "6288ad2d"
+      "dh": "6288ad2d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillFromSkillId",
@@ -1688,7 +2392,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "25340b72"
+      "dh": "25340b72",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "IsDoor",
@@ -1710,7 +2424,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f929bbd1"
+      "dh": "f929bbd1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CheckIfObjectOrientationIs1",
@@ -1732,7 +2452,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "54632fa7"
+      "dh": "54632fa7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IsShrine",
@@ -1750,7 +2476,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "f5f10acc"
+      "dh": "f5f10acc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetObjectTxtRecordFromObject",
@@ -1773,7 +2505,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8606ebea"
+      "dh": "8606ebea",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetShrineTxtRecordFromObject",
@@ -1796,7 +2534,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8e1d8a5c"
+      "dh": "8e1d8a5c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetShrineTxtRecordInObjectData",
@@ -1819,7 +2563,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a9f98495"
+      "dh": "a9f98495",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pShrinesTxt",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateDirectionAndSpeed",
@@ -1839,7 +2593,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "049a3d09"
+      "dh": "049a3d09",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "StoreOwnerTypeAndGUID",
@@ -1865,7 +2633,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "b49333ba"
+      "dh": "b49333ba",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOwnerGUID",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "StoreOwnerInfo",
@@ -1886,7 +2668,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "fd21e8a9"
+      "dh": "fd21e8a9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nOwnerId",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "StoreOwner",
@@ -1910,7 +2706,17 @@
         "D2StatListExStrc",
         "D2UnitStrc"
       ],
-      "dh": "82a42352"
+      "dh": "82a42352",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "StoreLastAttacker",
@@ -1933,7 +2739,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "47b7302f"
+      "dh": "47b7302f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pKiller",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetDirectionToCoords",
@@ -1957,7 +2773,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d53fa859"
+      "dh": "d53fa859",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNewX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNewY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetOverlay",
@@ -1986,7 +2816,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "04aa34f4"
+      "dh": "04aa34f4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOverlay",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetBeltType",
@@ -2010,7 +2854,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "19c60e65"
+      "dh": "19c60e65",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetCurrentLifePercentage",
@@ -2031,7 +2881,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "079e669f"
+      "dh": "079e669f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsSoftMonster",
@@ -2050,7 +2906,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "f6439621"
+      "dh": "f6439621",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AllocPlayerData",
@@ -2083,7 +2945,13 @@
         "D2WaypointStrc",
         "int32_t"
       ],
-      "dh": "91b6ea05"
+      "dh": "91b6ea05",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreePlayerData",
@@ -2110,7 +2978,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6b55a774"
+      "dh": "6b55a774",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetNameInPlayerData",
@@ -2133,7 +3011,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bd0303f9"
+      "dh": "bd0303f9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szName",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetPlayerName",
@@ -2155,7 +3043,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "69bc5894"
+      "dh": "69bc5894",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetPlayerData",
@@ -2178,7 +3072,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "224aa6c3"
+      "dh": "224aa6c3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetPlayerPortalFlags",
@@ -2200,7 +3100,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6712e82f"
+      "dh": "6712e82f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPortalFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetPlayerPortalFlags",
@@ -2222,7 +3132,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "539ded1f"
+      "dh": "539ded1f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetNameOffsetFromObject",
@@ -2245,7 +3161,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0303131d"
+      "dh": "0303131d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetObjectPortalFlags",
@@ -2268,7 +3190,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "e36ccbd4"
+      "dh": "e36ccbd4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetObjectPortalFlags",
@@ -2291,7 +3219,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "9c671a16"
+      "dh": "9c671a16",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPortalFlag",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "CheckObjectPortalFlag",
@@ -2314,7 +3252,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "832a36cb"
+      "dh": "832a36cb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPortalFlag",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "GetOverlayHeight",
@@ -2336,7 +3284,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "6b2515df"
+      "dh": "6b2515df",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetDefense",
@@ -2367,7 +3321,13 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "bb57413c"
+      "dh": "bb57413c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetAttackRate",
@@ -2390,7 +3350,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "03e6e732"
+      "dh": "03e6e732",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HasShield",
@@ -2414,7 +3380,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d199d393"
+      "dh": "d199d393",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetBlockRate",
@@ -2438,7 +3410,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "781a9cf7"
+      "dh": "781a9cf7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bExpansion",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetEquippedWeapon",
@@ -2458,7 +3440,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c9dc845e"
+      "dh": "c9dc845e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetMeleeRange",
@@ -2486,7 +3474,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "7f9871bc"
+      "dh": "7f9871bc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TestCollision",
@@ -2506,7 +3500,41 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "2f7f2fa5"
+      "dh": "2f7f2fa5",
+      "paramStorage": [
+        [
+          "x",
+          "ECX:4"
+        ],
+        [
+          "size",
+          "EDX:4"
+        ],
+        [
+          "x2",
+          "EAX:4"
+        ],
+        [
+          "y",
+          "Stack[0x4]:4"
+        ],
+        [
+          "size2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "y2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "TestCollisionByCoordinates",
@@ -2532,7 +3560,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "a003e42a"
+      "dh": "a003e42a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "TestCollisionWithUnit",
@@ -2560,7 +3606,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f88a7c9c"
+      "dh": "f88a7c9c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TestCollisionBetweenInteractingUnits",
@@ -2589,7 +3649,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "fc25db5f"
+      "dh": "fc25db5f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "IsInMeleeRange",
@@ -2612,7 +3686,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "97750183"
+      "dh": "97750183",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAttackerExtendRange",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "IsInMovingMode",
@@ -2639,7 +3727,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ac8fd993"
+      "dh": "ac8fd993",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsInMovingModeEx",
@@ -2658,7 +3752,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "83f81ef4"
+      "dh": "83f81ef4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CalcRecoveryPriority",
@@ -2680,7 +3780,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "a3fd2d4e"
+      "dh": "a3fd2d4e",
+      "paramStorage": [
+        [
+          "nMpDeficit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetInventoryGoldLimit",
@@ -2701,7 +3807,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6c44147a"
+      "dh": "6c44147a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Return",
@@ -2720,7 +3832,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b99c60e0"
+      "dh": "b99c60e0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "InitRightSkill",
@@ -2748,7 +3870,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "fb3c0edb"
+      "dh": "fb3c0edb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "InitLeftSkill",
@@ -2776,7 +3904,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "912b4df5"
+      "dh": "912b4df5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "InitSwitchRightSkill",
@@ -2804,7 +3938,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "5d6f622b"
+      "dh": "5d6f622b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "InitSwitchLeftSkill",
@@ -2832,7 +3972,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "7ea6af39"
+      "dh": "7ea6af39",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetRightSkillData",
@@ -2856,7 +4002,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "eb034d2b"
+      "dh": "eb034d2b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRightSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRightSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetLeftSkillData",
@@ -2880,7 +4040,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "4c072954"
+      "dh": "4c072954",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLeftSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pLeftSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetSwitchRightSkillDataResetRightSkill",
@@ -2904,7 +4078,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "d120c052"
+      "dh": "d120c052",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pShiftRightSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pShiftRightSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetSwitchLeftSkillDataResetLeftSkill",
@@ -2928,7 +4116,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "7229b3b5"
+      "dh": "7229b3b5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pShiftLeftSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pShiftLeftSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetShiftLeftSkillData",
@@ -2952,7 +4154,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "2e11142b"
+      "dh": "2e11142b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pShiftLeftSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pShiftLeftSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetShiftRightSkillData",
@@ -2976,7 +4192,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "26d19d30"
+      "dh": "26d19d30",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pShiftRightSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pShiftRightSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetShiftLeftSkillData",
@@ -3000,7 +4230,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "9d8f2c71"
+      "dh": "9d8f2c71",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nShiftLeftSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetShiftRightSkillData",
@@ -3024,7 +4268,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "81d4225d"
+      "dh": "81d4225d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nShiftRightSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetWeaponGUID",
@@ -3047,7 +4305,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f986427d"
+      "dh": "f986427d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pWeapon",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetWeaponGUID",
@@ -3069,7 +4337,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e5b9c102"
+      "dh": "e5b9c102",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetStashGoldLimit",
@@ -3088,7 +4362,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "3c0ff5eb"
+      "dh": "3c0ff5eb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CanSwitchAI",
@@ -3109,7 +4389,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c45d86ea"
+      "dh": "c45d86ea",
+      "paramStorage": [
+        [
+          "nMonsterId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetTimerArg",
@@ -3132,7 +4418,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c1c7d8b4"
+      "dh": "c1c7d8b4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTimerArg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetTimerArg",
@@ -3155,7 +4451,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "57487c24"
+      "dh": "57487c24",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AllocStaticPath",
@@ -3175,7 +4477,13 @@
         "D2StaticPathStrc",
         "D2UnitStrc"
       ],
-      "dh": "b90b130d"
+      "dh": "b90b130d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreeStaticPath",
@@ -3194,7 +4502,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "a313af58"
+      "dh": "a313af58",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CanDualWield",
@@ -3214,7 +4528,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "9fbcac99"
+      "dh": "9fbcac99",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsCorpseUseable",
@@ -3235,7 +4555,13 @@
         "D2MonStats2Txt",
         "D2UnitStrc"
       ],
-      "dh": "886effb2"
+      "dh": "886effb2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsObjectInInteractRange",
@@ -3261,7 +4587,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "155ad3da"
+      "dh": "155ad3da",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pObject",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveCollision_Vector",
@@ -3289,7 +4625,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "aa94a463"
+      "dh": "aa94a463",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PATH_GetCurrentDirection",
@@ -3320,7 +4662,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9e3cb9ba"
+      "dh": "9e3cb9ba",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetWeaponBySkill",
@@ -3352,7 +4700,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "290afce3"
+      "dh": "290afce3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetWeaponAnimClass",
@@ -3378,7 +4736,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "b6ab2604"
+      "dh": "b6ab2604",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetHitClassForPlayerOrMonster",
@@ -3402,7 +4766,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3adabb3d"
+      "dh": "3adabb3d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetWeaponClass",
@@ -3424,7 +4794,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a15c413d"
+      "dh": "a15c413d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UpdateDualWieldStats",
@@ -3449,7 +4825,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "2fd6dcd0"
+      "dh": "2fd6dcd0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetItemComponent",
@@ -3477,7 +4863,17 @@
         "eD2BodyLoc",
         "uint8_t"
       ],
-      "dh": "614b0c44"
+      "dh": "614b0c44",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AdvanceAnimFrame",
@@ -3499,7 +4895,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "7bab2a65"
+      "dh": "7bab2a65",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateAnimSpeed",
@@ -3541,7 +4943,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "05568831"
+      "dh": "05568831",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "InitAnimMode",
@@ -3579,7 +4995,13 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "ba7e6757"
+      "dh": "ba7e6757",
+      "paramStorage": [
+        [
+          "pUnitArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetupUpdateFlag",
@@ -3601,7 +5023,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d99ae983"
+      "dh": "d99ae983",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

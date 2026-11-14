@@ -29,7 +29,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "88347af5"
+      "dh": "88347af5",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pClient",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SendRoomUnitUpdates",
@@ -55,7 +69,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "00e4f40f"
+      "dh": "00e4f40f",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoomNode",
+          "EAX:4"
+        ],
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SendAdjacentRoomUpdates",
@@ -83,7 +111,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "bb63c975"
+      "dh": "bb63c975",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GAME_SendRemoveObjectsForAdjacentRooms",
@@ -115,7 +157,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "56c6af5e"
+      "dh": "56c6af5e",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_RevealRoomAndSendUnits",
@@ -150,7 +202,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "77011785"
+      "dh": "77011785",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RoomClearForClientAndHideMap",
@@ -184,7 +250,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "335007dc"
+      "dh": "335007dc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_RemoveFromAdjacentRooms",
@@ -211,7 +291,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b9be499b"
+      "dh": "b9be499b",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nClientId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TellClientToLoadAct",
@@ -239,7 +329,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "889867f8"
+      "dh": "889867f8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "InitDrlgAct",
@@ -265,7 +365,17 @@
         "eD2LevelId",
         "uint32_t"
       ],
-      "dh": "0ecb9130"
+      "dh": "0ecb9130",
+      "paramStorage": [
+        [
+          "pGame",
+          "ESI:4"
+        ],
+        [
+          "nActNo",
+          "BL:1"
+        ]
+      ]
     },
     {
       "name": "CLIENT_WarpToAct",
@@ -316,7 +426,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5e3d193a"
+      "dh": "5e3d193a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSpawnTypeOrMode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "InitLevel",
@@ -354,7 +482,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "42ec622d"
+      "dh": "42ec622d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMasks",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "EnsureDrlgActLoaded",
@@ -373,7 +519,17 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "0720386f"
+      "dh": "0720386f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nActNo",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "FreeAllUnits",
@@ -397,7 +553,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "fd4b9fd1"
+      "dh": "fd4b9fd1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ProcessUnitUpdateFlags",
@@ -423,7 +585,13 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "7a4ef22a"
+      "dh": "7a4ef22a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LEVEL_CountRoomsInAct",
@@ -447,7 +615,17 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "b719f149"
+      "dh": "b719f149",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nAct",
+          "DL:1"
+        ]
+      ]
     }
   ]
 }

@@ -47,7 +47,13 @@
         "D2TileCmpTileNodeStrc",
         "int32_t"
       ],
-      "dh": "2e56ebdc"
+      "dh": "2e56ebdc",
+      "paramStorage": [
+        [
+          "pTileNode",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_AllocTileSet",
@@ -95,7 +101,13 @@
         "D2TileCmpTileSetStrc",
         "int32_t"
       ],
-      "dh": "7b5d5ff0"
+      "dh": "7b5d5ff0",
+      "paramStorage": [
+        [
+          "pTileSet",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_AllocTileLink",
@@ -118,7 +130,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ce4ba881"
+      "dh": "ce4ba881",
+      "paramStorage": [
+        [
+          "dwTileRef",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwLinkData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_FreeTileSetChain",
@@ -143,7 +165,13 @@
         "D2TileCmpTileSetStrc",
         "int32_t"
       ],
-      "dh": "1c6a4c7c"
+      "dh": "1c6a4c7c",
+      "paramStorage": [
+        [
+          "pTileSetList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_AddTileToSet",
@@ -168,7 +196,45 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "1b6cebe4"
+      "dh": "1b6cebe4",
+      "paramStorage": [
+        [
+          "pTileSetList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wFlags",
+          "Stack[0x8]:2"
+        ],
+        [
+          "wRoofHeight",
+          "Stack[0xc]:2"
+        ],
+        [
+          "nOrientation",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nMainIndex",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nSubIndex",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nRarity",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nDirection",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pSubTileFlags",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_ValidateTilePixels",
@@ -189,7 +255,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "84e3cb89"
+      "dh": "84e3cb89",
+      "paramStorage": [
+        [
+          "pTilePixels",
+          "ECX:4"
+        ],
+        [
+          "nPitch",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTile",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_CacheTileData",
@@ -218,7 +298,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "00adf5c6"
+      "dh": "00adf5c6",
+      "paramStorage": [
+        [
+          "pTileMeasures",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTilePixels",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPitch",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nOffsetX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nOffsetY",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_CheckTilePatternRLE",
@@ -236,7 +338,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "2b6f6037"
+      "dh": "2b6f6037",
+      "paramStorage": [
+        [
+          "dwColorKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPixelBuf",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_ExtractIsometricSubTile",
@@ -265,7 +377,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "60808c6d"
+      "dh": "60808c6d",
+      "paramStorage": [
+        [
+          "pSubTile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTileData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColorKey",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSubTileIndex",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSubTileOffset",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_Generate25SubTiles",
@@ -291,7 +425,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "86dcbec9"
+      "dh": "86dcbec9",
+      "paramStorage": [
+        [
+          "pTileSet",
+          "ESI:4"
+        ],
+        [
+          "pDT1Data",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_InitTileSetFromDT1",
@@ -314,7 +458,17 @@
         "D2TileCmpTileSetStrc",
         "int32_t"
       ],
-      "dh": "9b475f30"
+      "dh": "9b475f30",
+      "paramStorage": [
+        [
+          "pTileSet",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDT1Data",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_SerializeTileSet",
@@ -341,7 +495,21 @@
         "D2TileLibraryEntryStrc",
         "uint16_t"
       ],
-      "dh": "1a281549"
+      "dh": "1a281549",
+      "paramStorage": [
+        [
+          "pSrcTileSet",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDstEntry",
+          "EBX:4"
+        ],
+        [
+          "nErrLine",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_ExportCacheToBuffer",
@@ -369,7 +537,21 @@
         "D2TileLibraryHeaderStrc",
         "D2TileLibraryHeaderStrc *"
       ],
-      "dh": "58b0fc42"
+      "dh": "58b0fc42",
+      "paramStorage": [
+        [
+          "pTileSetList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppOutBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nErrLine",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_FreeTileCache",
@@ -394,7 +576,17 @@
         "D2TileLibraryHeaderStrc",
         "int32_t"
       ],
-      "dh": "9db2e125"
+      "dh": "9db2e125",
+      "paramStorage": [
+        [
+          "pTileLibrary",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_CalculateCacheSize",
@@ -417,7 +609,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "b512147f"
+      "dh": "b512147f",
+      "paramStorage": [
+        [
+          "pTileCmpHdr",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_CopyTileNodes",
@@ -438,7 +636,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c66c3291"
+      "dh": "c66c3291",
+      "paramStorage": [
+        [
+          "pDstBuf",
+          "EAX:4"
+        ],
+        [
+          "pTileSetEntry",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_DeserializeAndFixup",
@@ -467,7 +675,25 @@
         "uint8_t",
         "void *"
       ],
-      "dh": "5d9b3a48"
+      "dh": "5d9b3a48",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pTileSetData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppDstBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSizeOut",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_FixupPointersInPlace",
@@ -491,7 +717,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "019484f1"
+      "dh": "019484f1",
+      "paramStorage": [
+        [
+          "pTileCmpHdr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppTileCmpHdrOut",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_FixupMinimalPointers",
@@ -514,7 +754,21 @@
         "D2TileLibraryHeaderStrc",
         "D2TileLibraryHeaderStrc *"
       ],
-      "dh": "bfed38e8"
+      "dh": "bfed38e8",
+      "paramStorage": [
+        [
+          "pTileCmpHdr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppTileCmpHdrOut",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_FixupMinimalPointers_HaltTail",
@@ -532,7 +786,13 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
       ],
-      "dh": "78962acb"
+      "dh": "78962acb",
+      "paramStorage": [
+        [
+          "nLine",
+          "Stack[0x0]:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_RegisterTilesForLookup",
@@ -557,7 +817,13 @@
         "D2TileLibraryHeaderStrc",
         "int32_t"
       ],
-      "dh": "808a38c4"
+      "dh": "808a38c4",
+      "paramStorage": [
+        [
+          "pTileCmpHdr",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_RelocateSubTilePixelData",
@@ -580,7 +846,13 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "1583fd48"
+      "dh": "1583fd48",
+      "paramStorage": [
+        [
+          "pTile",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_ApplyFunctionToPixels",
@@ -600,7 +872,21 @@
         "pfnTilecmpPixelCallback",
         "uint8_t"
       ],
-      "dh": "4e115a0d"
+      "dh": "4e115a0d",
+      "paramStorage": [
+        [
+          "pPixelData",
+          "ECX:4"
+        ],
+        [
+          "nPixelBytes",
+          "EAX:4"
+        ],
+        [
+          "pPixelCallback",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_ProcessAllTilePixels",
@@ -624,7 +910,17 @@
         "D2TileLibraryHeaderStrc",
         "int32_t"
       ],
-      "dh": "738f85ee"
+      "dh": "738f85ee",
+      "paramStorage": [
+        [
+          "pTileCmpHdr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pNodeByteIter",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_CompressSubTile",
@@ -653,7 +949,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "191a2bde"
+      "dh": "191a2bde",
+      "paramStorage": [
+        [
+          "pSrcSubTile",
+          "EDX:4"
+        ],
+        [
+          "pDstSubTile",
+          "ESI:4"
+        ],
+        [
+          "pfnGetPaletteIndex",
+          "EAX:4"
+        ],
+        [
+          "dwColorKey",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_DeepCopyWithRecompression",
@@ -680,7 +994,21 @@
         "D2TileLibraryHeaderStrc *",
         "int32_t"
       ],
-      "dh": "e71ae5d4"
+      "dh": "e71ae5d4",
+      "paramStorage": [
+        [
+          "pSrcTileCmpHdr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppDstTileCmpHdr",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPaletteContext",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TILECMP_ShallowCopyZeroPointers",
@@ -706,7 +1034,21 @@
         "int32_t",
         "void *"
       ],
-      "dh": "c53c334d"
+      "dh": "c53c334d",
+      "paramStorage": [
+        [
+          "pSrcDt1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppDt1Copy",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

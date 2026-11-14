@@ -21,7 +21,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ce7494aa"
+      "dh": "ce7494aa",
+      "paramStorage": [
+        [
+          "nAllocSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SMemInitPerfCounters",
@@ -86,7 +92,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0c2cc1f4"
+      "dh": "0c2cc1f4",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

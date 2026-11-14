@@ -33,7 +33,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e2c2d846"
+      "dh": "e2c2d846",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ],
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEntry",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GFXHASH_InitHashTable",
@@ -49,7 +63,13 @@
         "GFXHASH_InitHashTable",
         "memset"
       ],
-      "dh": "92d98bae"
+      "dh": "92d98bae",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_UnlinkCacheEntry",
@@ -73,7 +93,21 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "1d5a9539"
+      "dh": "1d5a9539",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pHashTable",
+          "EDX:4"
+        ],
+        [
+          "pEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IGNORELIST_Initialize_Unref_0060ab70",
@@ -110,7 +144,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "14338fb0"
+      "dh": "14338fb0",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "ECX:4"
+        ],
+        [
+          "pnDirectionDivisor",
+          "EDX:4"
+        ],
+        [
+          "pCelEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GFXHASH_CalcHashKey",
@@ -137,7 +185,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "273c6ee3"
+      "dh": "273c6ee3",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "ECX:4"
+        ],
+        [
+          "pnDirectionDivisor",
+          "EDX:4"
+        ],
+        [
+          "pnDirectionIndex",
+          "EDI:4"
+        ],
+        [
+          "pCelEntry",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFXHASH_FindEntryByGfxData",
@@ -161,7 +227,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "444baea4"
+      "dh": "444baea4",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ],
+        [
+          "pGfxData",
+          "EDX:4"
+        ],
+        [
+          "pnDirIdx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnFrameStep",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCelEntry",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_AllocCacheEntry",
@@ -187,7 +275,29 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "64b33965"
+      "dh": "64b33965",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pHashTable",
+          "EDX:4"
+        ],
+        [
+          "pCacheBlock",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGfxData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCelEntry",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

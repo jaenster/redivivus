@@ -19,7 +19,13 @@
       "usedTypes": [
         "fnAppModeRun *"
       ],
-      "dh": "3d781632"
+      "dh": "3d781632",
+      "paramStorage": [
+        [
+          "hModule",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AppModeMultiplayerShutdown",
@@ -54,7 +60,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "1c76474f"
+      "dh": "1c76474f",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "cSeparator",
+          "DL:1"
+        ],
+        [
+          "bFindLast",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0043cc20",
@@ -69,7 +89,13 @@
       "calledFunctions": [
         "Unreferenced_0043cc20"
       ],
-      "dh": "1ab6f0f6"
+      "dh": "1ab6f0f6",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IMAGE_LoadPredefinedImagesExEx",
@@ -138,7 +164,13 @@
         "D2ControlMsg",
         "uint16_t"
       ],
-      "dh": "56c97c5f"
+      "dh": "56c97c5f",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressUserListPrevPage",
@@ -157,7 +189,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "2eae681f"
+      "dh": "2eae681f",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressUserListNextPage",
@@ -176,7 +214,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "a4ff0f08"
+      "dh": "a4ff0f08",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressUserListPrevLine",
@@ -195,7 +239,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "d034ea56"
+      "dh": "d034ea56",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressUserListNextLine",
@@ -214,7 +264,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "cf923598"
+      "dh": "cf923598",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LAUNCHER_SetGameListCacheActive",
@@ -230,7 +286,13 @@
         "LAUNCHER_SetGameListCacheActive",
         "D2WINMAIN_SetControlActive"
       ],
-      "dh": "7c9524de"
+      "dh": "7c9524de",
+      "paramStorage": [
+        [
+          "bActive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_IsLobbyInitialized",
@@ -307,7 +369,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "9341bffb"
+      "dh": "9341bffb",
+      "paramStorage": [
+        [
+          "pCharInfo",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0043dce0",
@@ -344,7 +412,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "8e966c65"
+      "dh": "8e966c65",
+      "paramStorage": [
+        [
+          "nDifficulty",
+          "EAX:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "UIMENU_CantTestItBeacuseItCrash",
@@ -420,7 +498,25 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "1308d7ed"
+      "dh": "1308d7ed",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAddBlankLine",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText",
+          "EAX:4"
+        ],
+        [
+          "nColor",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SERR_InternalLeaveCriticalSection_Unref_0043e230",
@@ -473,7 +569,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "854273e5"
+      "dh": "854273e5",
+      "paramStorage": [
+        [
+          "nColor",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLength",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pString",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_FreeChatMsgNode",
@@ -492,7 +602,13 @@
       "usedTypes": [
         "void *"
       ],
-      "dh": "0b9648f6"
+      "dh": "0b9648f6",
+      "paramStorage": [
+        [
+          "pChatNode",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "StoreData",
@@ -512,7 +628,21 @@
         "D2ChatDlgUnknown_0x10",
         "int32_t"
       ],
-      "dh": "168095e4"
+      "dh": "168095e4",
+      "paramStorage": [
+        [
+          "nColor",
+          "ECX:4"
+        ],
+        [
+          "nLength",
+          "EAX:4"
+        ],
+        [
+          "szText",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0043e370",
@@ -574,7 +704,21 @@
         "_SYSTEMTIME",
         "int32_t"
       ],
-      "dh": "b2125de5"
+      "dh": "b2125de5",
+      "paramStorage": [
+        [
+          "pFileTime",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBufSize",
+          "EBX:4"
+        ],
+        [
+          "szText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_DisplayTimestampedMessage",
@@ -601,7 +745,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dbded859"
+      "dh": "dbded859",
+      "paramStorage": [
+        [
+          "nUnixTime",
+          "ECX:4"
+        ],
+        [
+          "pszMessage",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_EnqueueClearMessage",
@@ -640,7 +794,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "9694cce4"
+      "dh": "9694cce4",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nLineStyle",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_AppendTextToTextBox_ForComCallback",
@@ -660,7 +824,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "cef17a15"
+      "dh": "cef17a15",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nLineStyle",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FORMS_DisplayBattleNetNews",
@@ -680,7 +854,13 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "2f08f177"
+      "dh": "2f08f177",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_UpdateChannelOkButtonState",
@@ -720,7 +900,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4b291fdb"
+      "dh": "4b291fdb",
+      "paramStorage": [
+        [
+          "szText1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_HandleNotifyCommand",
@@ -742,7 +932,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "80053c25"
+      "dh": "80053c25",
+      "paramStorage": [
+        [
+          "szCommand",
+          "EBX:4"
+        ],
+        [
+          "szInput",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_FindSubstringMatch",
@@ -763,7 +963,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "576cd5ee"
+      "dh": "576cd5ee",
+      "paramStorage": [
+        [
+          "nTargetHash",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWordLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_DetectCDKeyInString",
@@ -783,7 +997,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "21cd6e2e"
+      "dh": "21cd6e2e",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FORMS_CreateAnyFormFromListEx",
@@ -806,7 +1026,13 @@
         "D2ControlStrc",
         "int32_t"
       ],
-      "dh": "e87ad76c"
+      "dh": "e87ad76c",
+      "paramStorage": [
+        [
+          "nFormIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "FORMS_DestroyListEx",
@@ -851,7 +1077,17 @@
         "D2WinTextBox",
         "WCHAR"
       ],
-      "dh": "f79b70fd"
+      "dh": "f79b70fd",
+      "paramStorage": [
+        [
+          "wszTitle",
+          "ECX:4"
+        ],
+        [
+          "wszSubTitle",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_DestroyListCallback",
@@ -870,7 +1106,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "c8d1d657"
+      "dh": "c8d1d657",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_InvokeCallbackIfSet",
@@ -888,7 +1130,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "56a90676"
+      "dh": "56a90676",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OpenLadderTypeMenu",
@@ -951,7 +1199,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "ee5a241d"
+      "dh": "ee5a241d",
+      "paramStorage": [
+        [
+          "nFilterMode",
+          "CL:1"
+        ],
+        [
+          "nRank",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_RequestLadderRank",
@@ -972,7 +1230,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9cbaa658"
+      "dh": "9cbaa658",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "bHardcore",
+          "EDX:4"
+        ],
+        [
+          "nLadderRequestMode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressLadderPageUp",
@@ -990,7 +1262,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "b5500710"
+      "dh": "b5500710",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressLadderPageDown",
@@ -1008,7 +1286,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "2f75361d"
+      "dh": "2f75361d",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UIMENU_LadderBoard_PrintClassButtonLabels",
@@ -1093,7 +1377,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6aae59dc"
+      "dh": "6aae59dc",
+      "paramStorage": [
+        [
+          "nLadderTab",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCurrentFilterMode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressLadderOverall",
@@ -1117,7 +1411,13 @@
         "D2ControlMsg",
         "int32_t"
       ],
-      "dh": "9f2318a3"
+      "dh": "9f2318a3",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressLadderAmazon",
@@ -1141,7 +1441,13 @@
         "D2ControlMsg",
         "int32_t"
       ],
-      "dh": "8422fc24"
+      "dh": "8422fc24",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressLadderSorceress",
@@ -1165,7 +1471,13 @@
         "D2ControlMsg",
         "int32_t"
       ],
-      "dh": "865b5795"
+      "dh": "865b5795",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressLadderNecromancer",
@@ -1189,7 +1501,13 @@
         "D2ControlMsg",
         "int32_t"
       ],
-      "dh": "081af07b"
+      "dh": "081af07b",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressLadderPaladin",
@@ -1213,7 +1531,13 @@
         "D2ControlMsg",
         "int32_t"
       ],
-      "dh": "1b6179df"
+      "dh": "1b6179df",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressLadderBarbarian",
@@ -1237,7 +1561,13 @@
         "D2ControlMsg",
         "int32_t"
       ],
-      "dh": "cf6baf3c"
+      "dh": "cf6baf3c",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressLadderDruid",
@@ -1261,7 +1591,13 @@
         "D2ControlMsg",
         "int32_t"
       ],
-      "dh": "80c39d07"
+      "dh": "80c39d07",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressLadderAssassin",
@@ -1285,7 +1621,13 @@
         "D2ControlMsg",
         "int32_t"
       ],
-      "dh": "4a3488f7"
+      "dh": "4a3488f7",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_ClearChatHistory",
@@ -1319,7 +1661,13 @@
         "CHATDLG_AppendChatToHistory",
         "memmove"
       ],
-      "dh": "e3071a6c"
+      "dh": "e3071a6c",
+      "paramStorage": [
+        [
+          "szText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_SetControlParent",
@@ -1339,7 +1687,13 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "05e9ffcf"
+      "dh": "05e9ffcf",
+      "paramStorage": [
+        [
+          "pControl",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_PollUserProfileReply",
@@ -1355,7 +1709,13 @@
         "CHATDLG_PollUserProfileReply",
         "D2WINMAIN_ClearMessageLoopFlag"
       ],
-      "dh": "b2a68788"
+      "dh": "b2a68788",
+      "paramStorage": [
+        [
+          "nFrameIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_SendProfileData",
@@ -1373,7 +1733,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "9866f05f"
+      "dh": "9866f05f",
+      "paramStorage": [
+        [
+          "szAccount",
+          "ECX:4"
+        ],
+        [
+          "szSex",
+          "EDX:4"
+        ],
+        [
+          "szLocation",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szDescription",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_ToggleLadderNews",
@@ -1399,7 +1777,13 @@
         "WCHAR",
         "uint16_t"
       ],
-      "dh": "1aec17ed"
+      "dh": "1aec17ed",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressChatCommandsOK",
@@ -1418,7 +1802,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "52d6ae37"
+      "dh": "52d6ae37",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_RefreshGameNameDisplay",
@@ -1497,7 +1887,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "1ebc10db"
+      "dh": "1ebc10db",
+      "paramStorage": [
+        [
+          "nMaxLen",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szSource",
+          "EAX:4"
+        ],
+        [
+          "szDest",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SafeDefaultChannel",
@@ -1513,7 +1917,13 @@
         "SafeDefaultChannel",
         "SRegSaveString"
       ],
-      "dh": "afdfc682"
+      "dh": "afdfc682",
+      "paramStorage": [
+        [
+          "pszChannel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_DestroyAllForms",
@@ -1559,7 +1969,17 @@
         "ChatDlgCallback",
         "int32_t"
       ],
-      "dh": "b3acb573"
+      "dh": "b3acb573",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_HandleTabCompletion",
@@ -1586,7 +2006,21 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "37d6e9f5"
+      "dh": "37d6e9f5",
+      "paramStorage": [
+        [
+          "nKeyCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UIMENU_DrawSpecificJoinGameError",
@@ -1610,7 +2044,17 @@
         "ChatDlgCallback",
         "WCHAR"
       ],
-      "dh": "ca214a67"
+      "dh": "ca214a67",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "pfnCallback",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_ResetButtonsAndForms",
@@ -1694,7 +2138,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "854ba229"
+      "dh": "854ba229",
+      "paramStorage": [
+        [
+          "pMcpData",
+          "ECX:4"
+        ],
+        [
+          "szServerIp",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OOGMENU_JoinGame",
@@ -1725,7 +2179,25 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "95e5c3b5"
+      "dh": "95e5c3b5",
+      "paramStorage": [
+        [
+          "nJoinId",
+          "CX:2"
+        ],
+        [
+          "szGameName",
+          "EDX:4"
+        ],
+        [
+          "szPassword",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szServerIp",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "EDITBOX_Cb_CHATDLG_UpdateChannelOkButtonState",
@@ -1741,7 +2213,13 @@
         "EDITBOX_Cb_CHATDLG_UpdateChannelOkButtonState",
         "CHATDLG_UpdateChannelOkButtonState"
       ],
-      "dh": "de29a4d0"
+      "dh": "de29a4d0",
+      "paramStorage": [
+        [
+          "pUnknown",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressChatWarningCancel",
@@ -1761,7 +2239,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "7bf0e082"
+      "dh": "7bf0e082",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UIMENU_DrawTitleOnCenterSmaller",
@@ -1787,7 +2271,17 @@
         "D2WinTextBox",
         "WCHAR"
       ],
-      "dh": "ff11d7dc"
+      "dh": "ff11d7dc",
+      "paramStorage": [
+        [
+          "wszTitle",
+          "ECX:4"
+        ],
+        [
+          "pCallback",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UIMENU_PrintSmallTitleOnCenterScreen",
@@ -1814,7 +2308,17 @@
         "D2WinTextBox",
         "WCHAR"
       ],
-      "dh": "d563a20b"
+      "dh": "d563a20b",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "pCallback",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressCloseDialog",
@@ -1835,7 +2339,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "414ac99a"
+      "dh": "414ac99a",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressCloseLadderBoard",
@@ -1857,7 +2367,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "7e6df316"
+      "dh": "7e6df316",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_UpdateChatRoomList",
@@ -1901,7 +2417,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "ad35e21f"
+      "dh": "ad35e21f",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_HandleChatListClick",
@@ -1935,7 +2457,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "798e99a0"
+      "dh": "798e99a0",
+      "paramStorage": [
+        [
+          "nStartRank",
+          "ECX:4"
+        ],
+        [
+          "nRankCount",
+          "EDX:4"
+        ],
+        [
+          "nEntryIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFilterMode",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nLadderData",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UIMENU_LadderBoard_PrintClassesAndTableHeaders",
@@ -2100,7 +2644,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "d47fa958"
+      "dh": "d47fa958",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressLadderExpansionSoftcore",
@@ -2120,7 +2670,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "a31aff28"
+      "dh": "a31aff28",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressLadderExpansionHardcore",
@@ -2140,7 +2696,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "15cd85e6"
+      "dh": "15cd85e6",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_ReadUserProfile",
@@ -2163,7 +2725,25 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "7d83e109"
+      "dh": "7d83e109",
+      "paramStorage": [
+        [
+          "szAccount",
+          "ECX:4"
+        ],
+        [
+          "szSex",
+          "EDX:4"
+        ],
+        [
+          "szLocation",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szDescription",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_StorePlayerName",
@@ -2185,7 +2765,21 @@
         "D2ChatPlayerNameNodeStrc",
         "uint32_t"
       ],
-      "dh": "592141c8"
+      "dh": "592141c8",
+      "paramStorage": [
+        [
+          "nPlayerId",
+          "ECX:4"
+        ],
+        [
+          "nDataLength",
+          "EDX:4"
+        ],
+        [
+          "pMessageData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_RunChatLobbyScreen",
@@ -2261,7 +2855,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8b3edd8d"
+      "dh": "8b3edd8d",
+      "paramStorage": [
+        [
+          "pD2IniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_HandleReplyCommand",
@@ -2289,7 +2889,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ed08db5b"
+      "dh": "ed08db5b",
+      "paramStorage": [
+        [
+          "szText1",
+          "EBX:4"
+        ],
+        [
+          "szText2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OnPressLadderClassicHardcore",
@@ -2309,7 +2919,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "a147025d"
+      "dh": "a147025d",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_HandleChatCommands",
@@ -2349,7 +2965,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "ea094a51"
+      "dh": "ea094a51",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_SendChatMessage",
@@ -2377,7 +2999,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "61e394c8"
+      "dh": "61e394c8",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "bUseChannelPrefix",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_6ca960",

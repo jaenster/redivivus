@@ -20,7 +20,13 @@
         "D2ItemTypesTxt",
         "int32_t"
       ],
-      "dh": "9404d763"
+      "dh": "9404d763",
+      "paramStorage": [
+        [
+          "nItemType",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_SearchItemCodeTable",
@@ -41,7 +47,21 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "e369e9a0"
+      "dh": "e369e9a0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwContext",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_CreateDataItem",
@@ -67,7 +87,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "49a29ac9"
+      "dh": "49a29ac9",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMDATA_Free",
@@ -88,7 +118,17 @@
         "D2PoolManagerStrc",
         "D2UnitStrc"
       ],
-      "dh": "f1ef0cf4"
+      "dh": "f1ef0cf4",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetBodyLocation",
@@ -107,7 +147,13 @@
         "D2UnitStrc",
         "eD2BodyLoc"
       ],
-      "dh": "2cad2742"
+      "dh": "2cad2742",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetBodyLoc",
@@ -126,7 +172,17 @@
         "D2UnitStrc",
         "eD2BodyLoc"
       ],
-      "dh": "6862c7c0"
+      "dh": "6862c7c0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eBodyLoc",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "GetItemSeed",
@@ -145,7 +201,13 @@
         "D2SeedStrc",
         "D2UnitStrc"
       ],
-      "dh": "9d07d72d"
+      "dh": "9d07d72d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ResetItemSeed",
@@ -164,7 +226,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "e0a60da6"
+      "dh": "e0a60da6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetModSeed",
@@ -183,7 +251,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "68f9d742"
+      "dh": "68f9d742",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetModSeed",
@@ -205,7 +279,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b2b2987d"
+      "dh": "b2b2987d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nModSeed",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetItemQuality",
@@ -223,7 +307,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "302fc621"
+      "dh": "302fc621",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetItemQuality",
@@ -242,7 +332,17 @@
         "D2UnitStrc",
         "eD2ItemQuality"
       ],
-      "dh": "278c1697"
+      "dh": "278c1697",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemQuality",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetMagicPrefix",
@@ -262,7 +362,17 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "a039ac55"
+      "dh": "a039ac55",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetMagixPrefix",
@@ -282,7 +392,21 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "ad18613b"
+      "dh": "ad18613b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wMagicPrefix",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nIndex",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetAutoMagic",
@@ -301,7 +425,13 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "b1fc08b2"
+      "dh": "b1fc08b2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetAutoMagic",
@@ -320,7 +450,17 @@
         "D2UnitStrc",
         "int16_t"
       ],
-      "dh": "da9e8a8a"
+      "dh": "da9e8a8a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wAutoMagic",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "GetMagicSuffix",
@@ -339,7 +479,17 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "a9753e40"
+      "dh": "a9753e40",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetMagicSuffix",
@@ -359,7 +509,21 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "012d70ec"
+      "dh": "012d70ec",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wMagicSuffix",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nIndex",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetRarePrefix",
@@ -378,7 +542,13 @@
         "D2UnitStrc",
         "int16_t"
       ],
-      "dh": "89ab7378"
+      "dh": "89ab7378",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetRarePrefix",
@@ -397,7 +567,17 @@
         "D2UnitStrc",
         "int16_t"
       ],
-      "dh": "8d940a58"
+      "dh": "8d940a58",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wRarePrefix",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "GetRareSuffix",
@@ -416,7 +596,13 @@
         "D2UnitStrc",
         "int16_t"
       ],
-      "dh": "f613e40a"
+      "dh": "f613e40a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetRareSuffix",
@@ -435,7 +621,17 @@
         "D2UnitStrc",
         "int16_t"
       ],
-      "dh": "ee2c7413"
+      "dh": "ee2c7413",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wRareSuffix",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "CheckItemFlag",
@@ -455,7 +651,25 @@
         "eD2ItemFlag",
         "int32_t"
       ],
-      "dh": "da8ec0db"
+      "dh": "da8ec0db",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "neD2ItemFlag",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_EditItemData_eItemFlag",
@@ -475,7 +689,21 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "020b14bb"
+      "dh": "020b14bb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bSet",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_eD2ItemFlag",
@@ -494,7 +722,13 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "9b51cc94"
+      "dh": "9b51cc94",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CheckItemData_eD2ItemCmd",
@@ -514,7 +748,17 @@
         "eD2ItemCmd",
         "uint32_t"
       ],
-      "dh": "adb30cd1"
+      "dh": "adb30cd1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemCmd",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_EditItemData_eD2ItemCmd",
@@ -534,7 +778,21 @@
         "D2UnitStrc",
         "eD2ItemCmd"
       ],
-      "dh": "278ec686"
+      "dh": "278ec686",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemCmd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bRemove",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_eD2ItemCmd",
@@ -553,7 +811,13 @@
         "D2UnitStrc",
         "eD2ItemCmd"
       ],
-      "dh": "40564e6e"
+      "dh": "40564e6e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_nItemLevel",
@@ -573,7 +837,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bca29567"
+      "dh": "bca29567",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetItemData_nItemLevel",
@@ -592,7 +862,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "15d6842c"
+      "dh": "15d6842c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetContainingInventoryPage",
@@ -611,7 +891,13 @@
         "D2UnitStrc",
         "eInventoryPage"
       ],
-      "dh": "bfaa55b4"
+      "dh": "bfaa55b4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetItemData_ePage",
@@ -630,7 +916,17 @@
         "D2UnitStrc",
         "eInventoryPage"
       ],
-      "dh": "585968de"
+      "dh": "585968de",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ePage",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_eExchangePage",
@@ -649,7 +945,13 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "8e5c1906"
+      "dh": "8e5c1906",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetItemData_eExchangePage",
@@ -668,7 +970,17 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "25f82a97"
+      "dh": "25f82a97",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eExchangePage",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_ePreviousPage",
@@ -687,7 +999,13 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "68cb77e1"
+      "dh": "68cb77e1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetItemData_ePreviousPage",
@@ -706,7 +1024,17 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "7b77ff36"
+      "dh": "7b77ff36",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ePreviousPage",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_szPlayerName",
@@ -724,7 +1052,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "e6355413"
+      "dh": "e6355413",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetPlayerNameAkaNamedString",
@@ -742,7 +1076,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "79a59355"
+      "dh": "79a59355",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCustomName",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_nEarLevel",
@@ -761,7 +1105,13 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "cacbf6d0"
+      "dh": "cacbf6d0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetItemData_nEarLevel",
@@ -780,7 +1130,17 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "d8ae2f28"
+      "dh": "d8ae2f28",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nEarLevel",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_bVariant",
@@ -799,7 +1159,13 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "24046055"
+      "dh": "24046055",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetItemData_bVariant",
@@ -817,7 +1183,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "0eb6426a"
+      "dh": "0eb6426a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bVariant",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "ITEMTYPE_IsShoots",
@@ -835,7 +1211,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "801cb5e0"
+      "dh": "801cb5e0",
+      "paramStorage": [
+        [
+          "nItemType",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTYPE_IsQuiver",
@@ -853,7 +1235,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "52d59605"
+      "dh": "52d59605",
+      "paramStorage": [
+        [
+          "nItemType",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTYPE_IsAutostack",
@@ -871,7 +1259,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4a4fa730"
+      "dh": "4a4fa730",
+      "paramStorage": [
+        [
+          "nItemType",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_dwWClass",
@@ -892,7 +1286,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "342ab170"
+      "dh": "342ab170",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_dw2HandedWClass",
@@ -916,7 +1316,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b5e28022"
+      "dh": "b5e28022",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_szCode",
@@ -941,7 +1347,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d2adb866"
+      "dh": "d2adb866",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_dwAlternateGfxIfExists",
@@ -965,7 +1377,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c88bfb56"
+      "dh": "c88bfb56",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_bComponent",
@@ -990,7 +1408,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "c23af763"
+      "dh": "c23af763",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_nWidthAndHeight",
@@ -1011,7 +1435,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ae225f31"
+      "dh": "ae225f31",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pWidth",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pHeight",
+          "Stack[0xc]:4"
+        ],
+        [
+          "szSourceFile",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_GetType",
@@ -1036,7 +1482,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "efc80a58"
+      "dh": "efc80a58",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_nLevel",
@@ -1061,7 +1513,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "aeff4428"
+      "dh": "aeff4428",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMFLAG_CheckFlag",
@@ -1080,7 +1538,17 @@
         "eD2ItemFlag",
         "uint32_t"
       ],
-      "dh": "2b91c7e4"
+      "dh": "2b91c7e4",
+      "paramStorage": [
+        [
+          "neD2ItemFlag",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eD2ItemFlag2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetServerSideFlag",
@@ -1099,7 +1567,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e33789ac"
+      "dh": "e33789ac",
+      "paramStorage": [
+        [
+          "bFlagsByte",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlagMask",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bSet",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "IITEM_GetItemsTxt_dwNormCode",
@@ -1123,7 +1605,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "97f3d5f2"
+      "dh": "97f3d5f2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_AccumulateAffixLevelRequirement",
@@ -1143,7 +1631,21 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "b0a168ac"
+      "dh": "b0a168ac",
+      "paramStorage": [
+        [
+          "nMaxLvlReq",
+          "EAX:4"
+        ],
+        [
+          "pAffixTxt",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_ItemTypes_CheckIfTypeIsThrowable",
@@ -1161,7 +1663,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0cf138ae"
+      "dh": "0cf138ae",
+      "paramStorage": [
+        [
+          "nItemType",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_wMissileType",
@@ -1182,7 +1690,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "6c9eb375"
+      "dh": "6c9eb375",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_nRangeAdder",
@@ -1203,7 +1717,13 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "47751d13"
+      "dh": "47751d13",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_ConfirmWClass",
@@ -1227,7 +1747,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5f8b1391"
+      "dh": "5f8b1391",
+      "paramStorage": [
+        [
+          "nClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwWClass",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "HasWeaponClass",
@@ -1247,7 +1777,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "cfd2df50"
+      "dh": "cfd2df50",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwWClass",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_Getb2Handed",
@@ -1271,7 +1811,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d880291c"
+      "dh": "d880291c",
+      "paramStorage": [
+        [
+          "nClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsTwoHanded",
@@ -1290,7 +1836,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "7e7bf796"
+      "dh": "7e7bf796",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsStackable",
@@ -1314,7 +1866,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "099ffcc2"
+      "dh": "099ffcc2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CheckIfBothItemsAreSameTypeOfPotions",
@@ -1335,7 +1893,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "97ee94f2"
+      "dh": "97ee94f2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemEx",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CheckIfItemCanBeAutoBelted",
@@ -1361,7 +1929,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "730e6209"
+      "dh": "730e6209",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "IsUseable",
@@ -1385,7 +1963,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e5b93e91"
+      "dh": "e5b93e91",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsUnique",
@@ -1409,7 +1993,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "0e8ab2af"
+      "dh": "0e8ab2af",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsQuestItem",
@@ -1433,7 +2023,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7f76bf7d"
+      "dh": "7f76bf7d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_CalcChargedSkillPriceModifier",
@@ -1455,7 +2051,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1b7e2158"
+      "dh": "1b7e2158",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMultiplier",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_AddStatCostsToPrices",
@@ -1482,7 +2088,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0a5689d3"
+      "dh": "0a5689d3",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pnSellPrice",
+          "EDX:4"
+        ],
+        [
+          "pnBuyPrice",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnRepairPrice",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDivisor",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_AddInventoryValueToTotal",
@@ -1505,7 +2133,25 @@
         "D2ItemsTxt",
         "D2UnitStrc"
       ],
-      "dh": "f8e82fe9"
+      "dh": "f8e82fe9",
+      "paramStorage": [
+        [
+          "pTotal1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTotal2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTotal3",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pOwnerUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_CalculateGamblePrice",
@@ -1534,7 +2180,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a5e4684a"
+      "dh": "a5e4684a",
+      "paramStorage": [
+        [
+          "nLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_GetMaxStack",
@@ -1558,7 +2214,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b071404b"
+      "dh": "b071404b",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetMaxStack",
@@ -1582,7 +2244,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d6bfb0be"
+      "dh": "d6bfb0be",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_GetSpawnStack",
@@ -1606,7 +2274,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b0c65cc4"
+      "dh": "b0c65cc4",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_dwSpawnStack",
@@ -1629,7 +2303,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e42e9548"
+      "dh": "e42e9548",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_GetMinStack",
@@ -1653,7 +2333,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "25f4397f"
+      "dh": "25f4397f",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_dwMinStack",
@@ -1676,7 +2362,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a3710369"
+      "dh": "a3710369",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_GetBitFieldAnd0x08",
@@ -1701,7 +2393,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ff1af369"
+      "dh": "ff1af369",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_bDurWarning",
@@ -1725,7 +2423,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c7d456af"
+      "dh": "c7d456af",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_bQntWarning",
@@ -1749,7 +2453,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "eef2ad84"
+      "dh": "eef2ad84",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_wStrBonus",
@@ -1770,7 +2480,13 @@
         "D2UnitStrc",
         "int16_t"
       ],
-      "dh": "0126351c"
+      "dh": "0126351c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_wDexBonus",
@@ -1791,7 +2507,13 @@
         "D2UnitStrc",
         "int16_t"
       ],
-      "dh": "41f8827f"
+      "dh": "41f8827f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_GetHavInv",
@@ -1811,7 +2533,13 @@
         "D2ItemsTxt",
         "uint32_t"
       ],
-      "dh": "65ca6aa1"
+      "dh": "65ca6aa1",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_bHasInv",
@@ -1832,7 +2560,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "283acbfd"
+      "dh": "283acbfd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CheckIfItemHasDurability",
@@ -1856,7 +2590,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "14ce1086"
+      "dh": "14ce1086",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_GetGemSockets",
@@ -1876,7 +2616,13 @@
         "D2ItemsTxt",
         "uint32_t"
       ],
-      "dh": "432e83a8"
+      "dh": "432e83a8",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetSocketsCount",
@@ -1899,7 +2645,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "0fa4dab9"
+      "dh": "0fa4dab9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_GetGemApplyType",
@@ -1922,7 +2674,13 @@
         "D2ItemsTxt",
         "uint32_t"
       ],
-      "dh": "c0c401ad"
+      "dh": "c0c401ad",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_bGemApplyType",
@@ -1946,7 +2704,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "65db27f3"
+      "dh": "65db27f3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_ItemTypes_CheckEquivalence",
@@ -1968,7 +2732,17 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "61f8f8ee"
+      "dh": "61f8f8ee",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemType",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_CheckItemTypeEquivalence",
@@ -1987,7 +2761,17 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "783f9632"
+      "dh": "783f9632",
+      "paramStorage": [
+        [
+          "eItemType1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemType2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_IsA",
@@ -2010,7 +2794,17 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "8288d4fd"
+      "dh": "8288d4fd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemType",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_GetBitFieldAnd0x01",
@@ -2033,7 +2827,13 @@
         "D2ItemsTxt",
         "uint32_t"
       ],
-      "dh": "fe044ced"
+      "dh": "fe044ced",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_GetBitFieldAnd0x02",
@@ -2056,7 +2856,13 @@
         "D2ItemsTxt",
         "uint32_t"
       ],
-      "dh": "80919822"
+      "dh": "80919822",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_GetBitFieldAnd0x04",
@@ -2079,7 +2885,13 @@
         "D2ItemsTxt",
         "uint32_t"
       ],
-      "dh": "fb67d8e7"
+      "dh": "fb67d8e7",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_IsNotQuestOrHammerType",
@@ -2102,7 +2914,13 @@
         "D2ItemsTxt",
         "uint32_t"
       ],
-      "dh": "12193d34"
+      "dh": "12193d34",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_nFileIndex",
@@ -2124,7 +2942,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "81afc68a"
+      "dh": "81afc68a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetItemData_nFileIndex",
@@ -2146,7 +2970,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "97873c1d"
+      "dh": "97873c1d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwFileIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_0x1Cand0x20",
@@ -2165,7 +2999,21 @@
         "D2UnitDataItemStrc",
         "D2UnitStrc"
       ],
-      "dh": "72b3b17d"
+      "dh": "72b3b17d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnParam1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnParam2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetItemData_0x1Cand0x20",
@@ -2185,7 +3033,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f2f802ef"
+      "dh": "f2f802ef",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pWaypoint0",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pWaypoint1",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetItemData_nPlayerGUID",
@@ -2207,7 +3069,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "78342173"
+      "dh": "78342173",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPlayerGUID",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_nPlayerGUID",
@@ -2229,7 +3101,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c995a1ee"
+      "dh": "c995a1ee",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_CheckIfHasClass",
@@ -2254,7 +3132,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "36bf8634"
+      "dh": "36bf8634",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetWeaponAnimClass",
@@ -2280,7 +3164,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2ee76558"
+      "dh": "2ee76558",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_CheckTransmogrify",
@@ -2304,7 +3194,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dc0009ca"
+      "dh": "dc0009ca",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CheckItemsTxt_bTransmogrify",
@@ -2327,7 +3223,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8952802b"
+      "dh": "8952802b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CheckItemData_ItemQualityIsMagicOrBetter",
@@ -2347,7 +3249,13 @@
         "eD2ItemQuality",
         "int32_t"
       ],
-      "dh": "7d1c4f1d"
+      "dh": "7d1c4f1d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CheckItemData_eD2ItemFlag_Monster",
@@ -2367,7 +3275,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "af1c014e"
+      "dh": "af1c014e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemsTxt_bHitClass",
@@ -2392,7 +3306,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "bbbf5416"
+      "dh": "bbbf5416",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BARBARIAN_CheckItemData_b1or2Handed_isTrue",
@@ -2416,7 +3336,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bb81d4cb"
+      "dh": "bb81d4cb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_ValidateItemQualityCode",
@@ -2435,7 +3365,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "45712173"
+      "dh": "45712173",
+      "paramStorage": [
+        [
+          "nQuality",
+          "ECX:4"
+        ],
+        [
+          "nCode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_HasSocketedItems",
@@ -2456,7 +3396,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "82891612"
+      "dh": "82891612",
+      "paramStorage": [
+        [
+          "pItem",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_GetCompactSaveFlag",
@@ -2481,7 +3427,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3555cf85"
+      "dh": "3555cf85",
+      "paramStorage": [
+        [
+          "pItem",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "QualityCanHaveSockets",
@@ -2499,7 +3451,13 @@
       "usedTypes": [
         "eD2ItemQuality"
       ],
-      "dh": "7331b653"
+      "dh": "7331b653",
+      "paramStorage": [
+        [
+          "eQuality",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ValidateItemQuantity",
@@ -2522,7 +3480,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "76fbe999"
+      "dh": "76fbe999",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ReturnFalse",
@@ -2540,7 +3504,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "c06dbb85"
+      "dh": "c06dbb85",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_GetEquippedSetItemsMask",
@@ -2572,7 +3546,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f607da64"
+      "dh": "f607da64",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIncludeItem",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetSetItemsLine",
@@ -2592,7 +3580,13 @@
         "D2SetItemsTxt",
         "D2UnitStrc"
       ],
-      "dh": "0b356fd6"
+      "dh": "0b356fd6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CheckIfItemIsNotBrokenAndNotDisabled",
@@ -2610,7 +3604,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "a022c760"
+      "dh": "a022c760",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_GetUnidentifiedItemsCount",
@@ -2633,7 +3633,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d18119b9"
+      "dh": "d18119b9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_ModifyPotionValueByDifficulty",
@@ -2652,7 +3658,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "57dc01e1"
+      "dh": "57dc01e1",
+      "paramStorage": [
+        [
+          "pNpc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_ModifyPotionSellValueByDifficulty",
@@ -2671,7 +3687,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5e883eaf"
+      "dh": "5e883eaf",
+      "paramStorage": [
+        [
+          "pNpc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_wItemVersion",
@@ -2694,7 +3720,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "9e836155"
+      "dh": "9e836155",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetItemData_wItemVersion",
@@ -2717,7 +3749,17 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "b4938756"
+      "dh": "b4938756",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wItemVersion",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "ITEM_CalcWeaponAttackSpeed",
@@ -2747,7 +3789,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d28a3f10"
+      "dh": "d28a3f10",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_CheckChargedSkillFullyCharged",
@@ -2768,7 +3820,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d6325c37"
+      "dh": "d6325c37",
+      "paramStorage": [
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutFullyCharged",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_eD2ItemFlag_IsEthereal",
@@ -2787,7 +3849,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "20b7ddae"
+      "dh": "20b7ddae",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_CountContainerItems",
@@ -2810,7 +3878,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "103d3d29"
+      "dh": "103d3d29",
+      "paramStorage": [
+        [
+          "pItem",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_DeserializeItemHeader",
@@ -2856,7 +3930,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3aa6fdeb"
+      "dh": "3aa6fdeb",
+      "paramStorage": [
+        [
+          "bIsOnGround",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFileVersion",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pItem",
+          "EAX:4"
+        ],
+        [
+          "pBitBuffer",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_DeserializeSingleStat",
@@ -2881,7 +3973,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "772a1986"
+      "dh": "772a1986",
+      "paramStorage": [
+        [
+          "nFileVersion",
+          "ECX:4"
+        ],
+        [
+          "eUnitStat",
+          "EDX:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatList",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pItemStatCost",
+          "ESI:4"
+        ],
+        [
+          "nStatIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ReadInfoFromStreamVersioned",
@@ -2908,7 +4026,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "507ab1aa"
+      "dh": "507ab1aa",
+      "paramStorage": [
+        [
+          "pBytesAfterId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "size",
+          "Stack[0x8]:4"
+        ],
+        [
+          "isSave",
+          "Stack[0xc]:4"
+        ],
+        [
+          "itemData",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nFileVersion",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_WriteClampedValueToBitBuffer",
@@ -2929,7 +4069,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "572f89bf"
+      "dh": "572f89bf",
+      "paramStorage": [
+        [
+          "nBits",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "EDX:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SerializeSimpleItem",
@@ -2972,7 +4126,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "fbaceac8"
+      "dh": "fbaceac8",
+      "paramStorage": [
+        [
+          "pItem",
+          "EAX:4"
+        ],
+        [
+          "pBitBuffer",
+          "EBX:4"
+        ],
+        [
+          "pStatListEx",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtSetItems_setIndex",
@@ -2992,7 +4160,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d374753e"
+      "dh": "d374753e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_wType",
@@ -3016,7 +4190,13 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "2983e442"
+      "dh": "2983e442",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_SumSocketedItemStats",
@@ -3043,7 +4223,21 @@
         "eD2PlayerAnimMode",
         "eD2UnitStat"
       ],
-      "dh": "8952ca5b"
+      "dh": "8952ca5b",
+      "paramStorage": [
+        [
+          "eUnitStat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutTotal",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pItem",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_CheckIfUpgradeable",
@@ -3068,7 +4262,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6eb3e32d"
+      "dh": "6eb3e32d",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ValidateAndGetClass",
@@ -3092,7 +4292,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "047bfede"
+      "dh": "047bfede",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CalcRequiredLevel",
@@ -3141,7 +4347,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9f510fec"
+      "dh": "9f510fec",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetRequiredLevel",
@@ -3161,7 +4377,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "08e60b3c"
+      "dh": "08e60b3c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_throwable",
@@ -3182,7 +4408,13 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "f557bb0c"
+      "dh": "f557bb0c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_beltable",
@@ -3203,7 +4435,13 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "7dfd708a"
+      "dh": "7dfd708a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetSpellIcon",
@@ -3230,7 +4468,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5c0d1c39"
+      "dh": "5c0d1c39",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_staffmods",
@@ -3251,7 +4495,13 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "4f56b858"
+      "dh": "4f56b858",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetMaxSockCount",
@@ -3278,7 +4528,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "77d5ed81"
+      "dh": "77d5ed81",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RollSocketCount",
@@ -3305,7 +4561,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6141b509"
+      "dh": "6141b509",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxSocksRandom",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetSocketCount",
@@ -3330,7 +4596,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9f3c9836"
+      "dh": "9f3c9836",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSockCount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_IsSocketable",
@@ -3350,7 +4626,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "99ae9e43"
+      "dh": "99ae9e43",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CalculateRunewordByItem",
@@ -3380,7 +4662,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c0383ba5"
+      "dh": "c0383ba5",
+      "paramStorage": [
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_ItemTypes_CheckClass",
@@ -3401,7 +4689,13 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "b3c69fc9"
+      "dh": "b3c69fc9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_ItemTypes_GetClass",
@@ -3423,7 +4717,13 @@
         "eD2PlayerClassIDDWORD",
         "uint8_t"
       ],
-      "dh": "cb18719a"
+      "dh": "cb18719a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetItemColor",
@@ -3467,7 +4767,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "eddffb38"
+      "dh": "eddffb38",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTransType",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "IsValidImbumeItem",
@@ -3500,7 +4818,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7eeb7bb5"
+      "dh": "7eeb7bb5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CheckIfItemCanBeNamed",
@@ -3531,7 +4855,13 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "06909107"
+      "dh": "06909107",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CheckIfItemCanHaveSockets",
@@ -3564,7 +4894,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1df245a6"
+      "dh": "1df245a6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsItemSocketable",
@@ -3592,7 +4928,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e73f80d0"
+      "dh": "e73f80d0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ResolvePercentStatToBaseValue",
@@ -3621,7 +4967,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "644394e0"
+      "dh": "644394e0",
+      "paramStorage": [
+        [
+          "nRecipeType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_DeserializeFromBitBuffer",
@@ -3701,7 +5057,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "be88b211"
+      "dh": "be88b211",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bIsExtended",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnSocketedItemCount",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nFileVersion",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "ExtractItemDetails",
@@ -3721,7 +5103,25 @@
         "D2UnitDataItemDetailsStrc",
         "uint8_t"
       ],
-      "dh": "e2287a6f"
+      "dh": "e2287a6f",
+      "paramStorage": [
+        [
+          "pBytesAfterId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "size",
+          "Stack[0x8]:4"
+        ],
+        [
+          "isSave",
+          "Stack[0xc]:4"
+        ],
+        [
+          "itemData",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_LoadFromSaveData",
@@ -3750,7 +5150,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "dc81f59c"
+      "dh": "dc81f59c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSaveData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bCheckHeader",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnSocketedItemCount",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nVersion",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pUnitDataItemDetails",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_IsReplenishable",
@@ -3778,7 +5208,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b5437787"
+      "dh": "b5437787",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CanBeRepaired",
@@ -3805,7 +5241,13 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "2bf51ae9"
+      "dh": "2bf51ae9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_shoots",
@@ -3826,7 +5268,13 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "67dfbfce"
+      "dh": "67dfbfce",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_quiver",
@@ -3847,7 +5295,13 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "30275395"
+      "dh": "30275395",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_autostack",
@@ -3868,7 +5322,13 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "8af3a412"
+      "dh": "8af3a412",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_reload",
@@ -3889,7 +5349,13 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "08f5ddf7"
+      "dh": "08f5ddf7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_reequip",
@@ -3910,7 +5376,13 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "d8c28eb4"
+      "dh": "d8c28eb4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_storepage",
@@ -3931,7 +5403,13 @@
         "eD2ItemTypes",
         "uint8_t"
       ],
-      "dh": "f09c549d"
+      "dh": "f09c549d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_varinvgfx",
@@ -3952,7 +5430,13 @@
         "eD2ItemTypes",
         "uint8_t"
       ],
-      "dh": "d87f9157"
+      "dh": "d87f9157",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_invgfx",
@@ -3975,7 +5459,17 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "6b619514"
+      "dh": "6b619514",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGfxIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_rare",
@@ -3996,7 +5490,13 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "0447ed74"
+      "dh": "0447ed74",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_magic",
@@ -4017,7 +5517,13 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "be3f8f41"
+      "dh": "be3f8f41",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_normal",
@@ -4038,7 +5544,13 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "4d5fd2bb"
+      "dh": "4d5fd2bb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2",
@@ -4060,7 +5572,21 @@
         "eD2BodyLoc",
         "eD2ItemTypes"
       ],
-      "dh": "ac230e24"
+      "dh": "ac230e24",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBodyLoc1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBodyLoc2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CheckEquipRequirements",
@@ -4095,7 +5621,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "da714f5a"
+      "dh": "da714f5a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCharUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIncludeSocketedStats",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnStrength",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnDexterity",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnLevel",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_CheckBodyLocationFit",
@@ -4116,7 +5668,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c3a1bf1b"
+      "dh": "c3a1bf1b",
+      "paramStorage": [
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eBodyLoc",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_CalcStaffModsPriceModifier",
@@ -4140,7 +5702,29 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "ad2a4813"
+      "dh": "ad2a4813",
+      "paramStorage": [
+        [
+          "pBuy",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSell",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRepair",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDivisor",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pItem",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_CalcTransactionCost",
@@ -4213,7 +5797,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0f27e68f"
+      "dh": "0f27e68f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pItem",
+          "EDX:4"
+        ],
+        [
+          "nDifficulty",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pQuestBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNpcId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTransactionType",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CalculateTransactionCost_Thunk",
@@ -4234,7 +5844,33 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f8996c57"
+      "dh": "f8996c57",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDifficulty",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pQuestBitBuffer",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nNpcId",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nTransactionType",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_GetRequiredBodyType",
@@ -4256,7 +5892,13 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "c0f32e5f"
+      "dh": "c0f32e5f",
+      "paramStorage": [
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_CalculateRepairAllCost",
@@ -4289,7 +5931,33 @@
         "pfnItemTransactionCb",
         "uint32_t"
       ],
-      "dh": "05d01fe9"
+      "dh": "05d01fe9",
+      "paramStorage": [
+        [
+          "unk",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPlayer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNpcId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDifficulty",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_IsActiveCharm",
@@ -4310,7 +5978,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "1b825537"
+      "dh": "1b825537",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SerializeComplexItem",
@@ -4377,7 +6055,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1ee8acdb"
+      "dh": "1ee8acdb",
+      "paramStorage": [
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pStatListEx",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bIncludeNorm",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SerializeItemToBitBuffer",
@@ -4413,7 +6109,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0dd342ec"
+      "dh": "0dd342ec",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBitBuffer",
+          "EDX:4"
+        ],
+        [
+          "pStatListEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAllItems",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIsCrude",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SerializeItem",
@@ -4438,7 +6156,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "ae87c12f"
+      "dh": "ae87c12f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitStream",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBitStreamSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStatListEx",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bAllItems",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bIsCrude",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "ReturnFalse_Unref_00648390",
@@ -4456,7 +6200,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "937ca781"
+      "dh": "937ca781",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ReturnFalse_Unref_00654e70",
@@ -4474,7 +6228,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "a97d5528"
+      "dh": "a97d5528",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ReturnFalse_Unref_0066a230",
@@ -4492,7 +6256,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "8d99fdea"
+      "dh": "8d99fdea",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ReturnFalse_Unref_0066a240",
@@ -4510,7 +6284,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "a3e9e680"
+      "dh": "a3e9e680",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

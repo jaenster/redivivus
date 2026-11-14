@@ -25,7 +25,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8d66fcf3"
+      "dh": "8d66fcf3",
+      "paramStorage": [
+        [
+          "nByteLen",
+          "ECX:4"
+        ],
+        [
+          "pbData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CACHE_DecryptBlock",
@@ -43,7 +53,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "ac5a9234"
+      "dh": "ac5a9234",
+      "paramStorage": [
+        [
+          "dwKey",
+          "ECX:4"
+        ],
+        [
+          "pdwData",
+          "EDX:4"
+        ],
+        [
+          "nByteLen",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CACHE_EncryptBlock",
@@ -61,7 +85,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "66b9ceba"
+      "dh": "66b9ceba",
+      "paramStorage": [
+        [
+          "dwKey",
+          "ECX:4"
+        ],
+        [
+          "nByteLen",
+          "EDX:4"
+        ],
+        [
+          "pdwData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CACHE_GetFileTime",
@@ -82,7 +120,13 @@
         "_SYSTEMTIME",
         "uint32_t"
       ],
-      "dh": "288c9201"
+      "dh": "288c9201",
+      "paramStorage": [
+        [
+          "nSecondsFromNow",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CACHE_HashString",
@@ -102,7 +146,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "eaba1c02"
+      "dh": "eaba1c02",
+      "paramStorage": [
+        [
+          "nHashType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CACHE_InitCryptTable",
@@ -139,7 +193,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "6e4687ba"
+      "dh": "6e4687ba",
+      "paramStorage": [
+        [
+          "nLocale",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CACHE_RemoveEntry",
@@ -159,7 +223,13 @@
         "D2BnCacheBlockEntryStrc",
         "uint32_t"
       ],
-      "dh": "f3902833"
+      "dh": "f3902833",
+      "paramStorage": [
+        [
+          "szText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CACHE_BuildFilePath",
@@ -181,7 +251,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e3a6dc01"
+      "dh": "e3a6dc01",
+      "paramStorage": [
+        [
+          "szText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CACHE_DeleteFile",
@@ -236,7 +312,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "130f36dd"
+      "dh": "130f36dd",
+      "paramStorage": [
+        [
+          "pMem",
+          "ECX:4"
+        ],
+        [
+          "dwSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CACHE_Open",
@@ -326,7 +412,25 @@
         "uint32_t",
         "uint32_t *"
       ],
-      "dh": "f4950278"
+      "dh": "f4950278",
+      "paramStorage": [
+        [
+          "szKey",
+          "ECX:4"
+        ],
+        [
+          "pCrc32Out",
+          "EDX:4"
+        ],
+        [
+          "ppDataBuf",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDataSizeOut",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CACHE_WriteData",
@@ -362,7 +466,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dac7da0a"
+      "dh": "dac7da0a",
+      "paramStorage": [
+        [
+          "szCacheKey",
+          "ECX:4"
+        ],
+        [
+          "pDataToWrite",
+          "EDX:4"
+        ],
+        [
+          "nDataSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pFileTime",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nExpiryTime",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCacheExpiry",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_CriticalSection_00881894",

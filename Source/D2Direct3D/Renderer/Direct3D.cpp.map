@@ -19,7 +19,17 @@
       "usedTypes": [
         "DDPIXELFORMAT"
       ],
-      "dh": "72bb27df"
+      "dh": "72bb27df",
+      "paramStorage": [
+        [
+          "lpDDPixFmt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnDeviceFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ClearCaches",
@@ -67,7 +77,13 @@
       "calledFunctions": [
         "UpdateScaleFactor"
       ],
-      "dh": "b38c06bc"
+      "dh": "b38c06bc",
+      "paramStorage": [
+        [
+          "nScaleFactor",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CheckGamma",
@@ -112,7 +128,17 @@
       "calledFunctions": [
         "GetScreenSize"
       ],
-      "dh": "85853687"
+      "dh": "85853687",
+      "paramStorage": [
+        [
+          "pWidth",
+          "ECX:4"
+        ],
+        [
+          "pHeight",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetPalette",
@@ -133,7 +159,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8c472205"
+      "dh": "8c472205",
+      "paramStorage": [
+        [
+          "pPalette",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PALETTE_GetColorByIndex",
@@ -151,7 +183,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "4f68a52a"
+      "dh": "4f68a52a",
+      "paramStorage": [
+        [
+          "nPaletteIndex",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetPaletteTable",
@@ -169,7 +207,13 @@
       "usedTypes": [
         "BYTE *"
       ],
-      "dh": "d733c00b"
+      "dh": "d733c00b",
+      "paramStorage": [
+        [
+          "ppPaletteTable",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_ConvertPalettedTo16Bit",
@@ -188,7 +232,33 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "92a61952"
+      "dh": "92a61952",
+      "paramStorage": [
+        [
+          "pSrc8Bit",
+          "ECX:4"
+        ],
+        [
+          "pDest16Bit",
+          "EDX:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDestPitchInPixels",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_ConvertPalettedTo32Bit",
@@ -207,7 +277,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d4508369"
+      "dh": "d4508369",
+      "paramStorage": [
+        [
+          "pSrc8Bit",
+          "ECX:4"
+        ],
+        [
+          "pDest32Bit",
+          "EDX:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDestPitchInPixels",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwParam6",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_SetBlendMode",
@@ -222,7 +318,13 @@
       "calledFunctions": [
         "RENDERER_D3D_SetBlendMode"
       ],
-      "dh": "24331e35"
+      "dh": "24331e35",
+      "paramStorage": [
+        [
+          "nBlendMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetBlendMode",
@@ -240,7 +342,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "07c1c4f6"
+      "dh": "07c1c4f6",
+      "paramStorage": [
+        [
+          "nBlendMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_SetTextureFilterMode",
@@ -255,7 +363,13 @@
       "calledFunctions": [
         "RENDERER_D3D_SetTextureFilterMode"
       ],
-      "dh": "404cccd9"
+      "dh": "404cccd9",
+      "paramStorage": [
+        [
+          "nFilterMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRenderStatistics",
@@ -300,7 +414,17 @@
       "calledFunctions": [
         "SetOption"
       ],
-      "dh": "20d83c3a"
+      "dh": "20d83c3a",
+      "paramStorage": [
+        [
+          "nOption",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DIRECTD3D_LogError",
@@ -316,7 +440,17 @@
         "DIRECTD3D_LogError",
         "LOGFILE_WriteStringToFile"
       ],
-      "dh": "31f51c4e"
+      "dh": "31f51c4e",
+      "paramStorage": [
+        [
+          "szErrorMessage",
+          "ECX:4"
+        ],
+        [
+          "nResult",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20",
@@ -349,7 +483,13 @@
       "calledFunctions": [
         "SPRITECACHE_SetMaxSize_Unref_006b2f30"
       ],
-      "dh": "720f8179"
+      "dh": "720f8179",
+      "paramStorage": [
+        [
+          "nSize",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_SaveDeviceConfigToRegistry",
@@ -371,7 +511,17 @@
         "LSTATUS",
         "uint32_t"
       ],
-      "dh": "29b968e1"
+      "dh": "29b968e1",
+      "paramStorage": [
+        [
+          "nRenderMode",
+          "ECX:4"
+        ],
+        [
+          "nDeviceIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_AllocateTextureCaches",
@@ -514,7 +664,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "e4436a8a"
+      "dh": "e4436a8a",
+      "paramStorage": [
+        [
+          "nGamma",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetBackBuffer",
@@ -535,7 +691,13 @@
         "DDSURFACEDESC",
         "uint32_t"
       ],
-      "dh": "3377db69"
+      "dh": "3377db69",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_CreateSystemMemoryTexture",
@@ -559,7 +721,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cde9c9ce"
+      "dh": "cde9c9ce",
+      "paramStorage": [
+        [
+          "ppSurface",
+          "ECX:4"
+        ],
+        [
+          "ppTexture",
+          "EDX:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_ClearBackbuffer",
@@ -603,7 +783,21 @@
         "IDirectDrawSurface7",
         "uint8_t"
       ],
-      "dh": "56675915"
+      "dh": "56675915",
+      "paramStorage": [
+        [
+          "pSrcSurface",
+          "ECX:4"
+        ],
+        [
+          "pDestSurface",
+          "EDX:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_DIRECT3D_ErrorLog",
@@ -620,7 +814,17 @@
         "LOGFILE_WriteStringToFile",
         "DIRECTD3D_LogError"
       ],
-      "dh": "e64d6fd8"
+      "dh": "e64d6fd8",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "dwHResult",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_EnumDisplayModeCallback",
@@ -647,7 +851,17 @@
         "IDirectDrawSurface7",
         "uint32_t"
       ],
-      "dh": "cb51c5ff"
+      "dh": "cb51c5ff",
+      "paramStorage": [
+        [
+          "pDisplayModeDesc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pModeList",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Direct3DCallBack",
@@ -683,7 +897,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "ab100dc2"
+      "dh": "ab100dc2",
+      "paramStorage": [
+        [
+          "lpGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "lpDriverDescription",
+          "Stack[0x8]:4"
+        ],
+        [
+          "lpDriverName",
+          "Stack[0xc]:4"
+        ],
+        [
+          "lpContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Catch_All_006b4c42",
@@ -739,7 +971,13 @@
         "WNDCLASSA",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "5e16b84b"
+      "dh": "5e16b84b",
+      "paramStorage": [
+        [
+          "hInstance",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Catch_All_006b4d4b",
@@ -783,7 +1021,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "42ccbde3"
+      "dh": "42ccbde3",
+      "paramStorage": [
+        [
+          "hInstance",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_InitializeDevice",
@@ -814,7 +1058,17 @@
         "DDSCAPS",
         "DDSURFACEDESC"
       ],
-      "dh": "8ffb0b1b"
+      "dh": "8ffb0b1b",
+      "paramStorage": [
+        [
+          "nResolutionMode",
+          "EAX:4"
+        ],
+        [
+          "hWnd",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_006b5520",
@@ -865,7 +1119,17 @@
         "RENDERER_D3D_InitializeDevice",
         "RENDERER_D3D_ClearBackbuffer"
       ],
-      "dh": "45aba728"
+      "dh": "45aba728",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "EndCutScene",
@@ -885,7 +1149,21 @@
         "RENDERER_D3D_ReleaseDevice",
         "CreateWindow"
       ],
-      "dh": "24a8b918"
+      "dh": "24a8b918",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ],
+        [
+          "nWindowState",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PlayCutScene",
@@ -902,7 +1180,21 @@
         "RENDERER_D3D_ClearBackbuffer",
         "D3D_PlayBinkVideo"
       ],
-      "dh": "7f77fe6e"
+      "dh": "7f77fe6e",
+      "paramStorage": [
+        [
+          "szFile",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ],
+        [
+          "fpFrame",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BeginScene",
@@ -923,7 +1215,25 @@
         "SetGlobalLight",
         "RENDERER_DIRECT3D_ErrorLog"
       ],
-      "dh": "8190ce3f"
+      "dh": "8190ce3f",
+      "paramStorage": [
+        [
+          "bClear",
+          "ECX:4"
+        ],
+        [
+          "nRed",
+          "DL:1"
+        ],
+        [
+          "nGreen",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nBlue",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "EndScene1",
@@ -960,7 +1270,17 @@
         "RENDERER_D3D_InitializeDevice",
         "RENDERER_D3D_ClearBackbuffer"
       ],
-      "dh": "7607c7c1"
+      "dh": "7607c7c1",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "bForceResize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_CreateSurfaceWithTexture",
@@ -984,7 +1304,25 @@
         "uint32_t",
         "void *"
       ],
-      "dh": "97ee77fd"
+      "dh": "97ee77fd",
+      "paramStorage": [
+        [
+          "ppSurface",
+          "ECX:4"
+        ],
+        [
+          "ppTexture",
+          "EDX:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_Release",
@@ -1024,7 +1362,17 @@
         "IDirectDraw1",
         "uint8_t"
       ],
-      "dh": "5d81be8f"
+      "dh": "5d81be8f",
+      "paramStorage": [
+        [
+          "pSettings",
+          "ECX:4"
+        ],
+        [
+          "pHelpers",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_ReleaseTexturePools",
@@ -1059,7 +1407,13 @@
       "calledFunctions": [
         "D3D_PixelDataFreeCallback_ClearCacheNodes"
       ],
-      "dh": "e7b06cca"
+      "dh": "e7b06cca",
+      "paramStorage": [
+        [
+          "pCacheIndices",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_ExtractSpriteInfo",
@@ -1085,7 +1439,17 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "7e910db4"
+      "dh": "7e910db4",
+      "paramStorage": [
+        [
+          "pSprite",
+          "ESI:4"
+        ],
+        [
+          "pOutput",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_CalculateTextureSize",
@@ -1103,7 +1467,13 @@
       "usedTypes": [
         "D2D3DSpriteInfoStrc"
       ],
-      "dh": "4e079582"
+      "dh": "4e079582",
+      "paramStorage": [
+        [
+          "pStruct",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_DIRECT3D_UploadTextureToCache",
@@ -1138,7 +1508,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a1d5a164"
+      "dh": "a1d5a164",
+      "paramStorage": [
+        [
+          "pTexInfo",
+          "ECX:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOutlineColor",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nMode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_DrawShadowQuad",
@@ -1159,7 +1547,25 @@
         "D2D3DVertexStrc",
         "uint8_t"
       ],
-      "dh": "ece6541d"
+      "dh": "ece6541d",
+      "paramStorage": [
+        [
+          "pTextureInfo",
+          "EAX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0xc]:1"
+        ]
+      ]
     },
     {
       "name": "RENDERER_DIRECT3D_DrawPalettedQuad",
@@ -1184,7 +1590,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3fd45f85"
+      "dh": "3fd45f85",
+      "paramStorage": [
+        [
+          "pTextureInfo",
+          "EAX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x14]:1"
+        ],
+        [
+          "nParam6",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SetDrawModeAndGetAlpha",
@@ -1203,7 +1639,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "b53daa4a"
+      "dh": "b53daa4a",
+      "paramStorage": [
+        [
+          "nDrawMode",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DrawPerspectiveImage",
@@ -1232,7 +1674,37 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "12c3a7f5"
+      "dh": "12c3a7f5",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "DrawImage",
@@ -1257,7 +1729,33 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "c0b7ac1e"
+      "dh": "c0b7ac1e",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawShiftedImage",
@@ -1282,7 +1780,33 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "70d01e0f"
+      "dh": "70d01e0f",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGlobalPaletteShift",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawVerticalCropImage",
@@ -1307,7 +1831,33 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "e18b2535"
+      "dh": "e18b2535",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkipLines",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawLines",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_ClipSpriteToRect",
@@ -1329,7 +1879,29 @@
         "D2RenderClipOutStrc",
         "uint32_t"
       ],
-      "dh": "41e0e249"
+      "dh": "41e0e249",
+      "paramStorage": [
+        [
+          "pClipResult",
+          "EAX:4"
+        ],
+        [
+          "pSpriteInfo",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pClipRect",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DrawClippedImage",
@@ -1356,7 +1928,29 @@
         "D2RenderClipOutStrc",
         "int32_t"
       ],
-      "dh": "5b7fb9f9"
+      "dh": "5b7fb9f9",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCropRect",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DrawShadow",
@@ -1385,7 +1979,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "5f1e1226"
+      "dh": "5f1e1226",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DrawImageFast",
@@ -1410,7 +2018,25 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "17462b44"
+      "dh": "17462b44",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "DebugFillBackBuffer",
@@ -1425,7 +2051,17 @@
       "calledFunctions": [
         "DebugFillBackBuffer"
       ],
-      "dh": "5a1671b0"
+      "dh": "5a1671b0",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_InitializeTexturePools",
@@ -1520,7 +2156,13 @@
         "DIRECTD3D_LogError",
         "SetPalette"
       ],
-      "dh": "4b511025"
+      "dh": "4b511025",
+      "paramStorage": [
+        [
+          "pPalette",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_DrawGlyph",
@@ -1535,7 +2177,21 @@
       "calledFunctions": [
         "RENDERER_D3D_DrawGlyph"
       ],
-      "dh": "21c519d4"
+      "dh": "21c519d4",
+      "paramStorage": [
+        [
+          "cGlyph",
+          "AL:1"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DrawString",
@@ -1557,7 +2213,25 @@
       "usedTypes": [
         "va_list"
       ],
-      "dh": "588c05dd"
+      "dh": "588c05dd",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "szFormat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "va",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DrawLight",
@@ -1572,7 +2246,25 @@
       "calledFunctions": [
         "DrawLight"
       ],
-      "dh": "8e7e0a46"
+      "dh": "8e7e0a46",
+      "paramStorage": [
+        [
+          "pLight",
+          "ECX:4"
+        ],
+        [
+          "pPlayerLight",
+          "EDX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_InitializeFontSystem",
@@ -1588,7 +2280,13 @@
         "RENDERER_D3D_InitializeFontSystem",
         "RENDERER_D3D_CreateFontTextures"
       ],
-      "dh": "1fd5469d"
+      "dh": "1fd5469d",
+      "paramStorage": [
+        [
+          "nBaseOffset",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_IsShadowBlendingEnabled",
@@ -1629,7 +2327,33 @@
         "D2D3DVertexStrc",
         "uint32_t"
       ],
-      "dh": "f3074785"
+      "dh": "f3074785",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawSolidRectAlpha",
@@ -1655,7 +2379,33 @@
         "D2D3DVertexStrc",
         "uint32_t"
       ],
-      "dh": "d22943e8"
+      "dh": "d22943e8",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "DrawLine",
@@ -1678,7 +2428,33 @@
         "D2D3DVertexStrc",
         "uint32_t"
       ],
-      "dh": "0612296a"
+      "dh": "0612296a",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "DrawRect",
@@ -1702,7 +2478,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8700ed69"
+      "dh": "8700ed69",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DrawRectEx",
@@ -1725,7 +2511,17 @@
         "RECT",
         "uint32_t"
       ],
-      "dh": "4ded1608"
+      "dh": "4ded1608",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DrawSolidRect",
@@ -1747,7 +2543,17 @@
       "usedTypes": [
         "RECT"
       ],
-      "dh": "1998fab0"
+      "dh": "1998fab0",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "DrawSolidSquare",
@@ -1768,7 +2574,21 @@
         "tagRECT",
         "uint32_t"
       ],
-      "dh": "d3b60298"
+      "dh": "d3b60298",
+      "paramStorage": [
+        [
+          "pPoint",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "DL:1"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "ClearScreen",
@@ -1787,7 +2607,13 @@
       "usedTypes": [
         "RECT"
       ],
-      "dh": "1e3f5be6"
+      "dh": "1e3f5be6",
+      "paramStorage": [
+        [
+          "bPartial",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_CalculateViewportRect",
@@ -1808,7 +2634,25 @@
       "usedTypes": [
         "RECT"
       ],
-      "dh": "90e7c488"
+      "dh": "90e7c488",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nScreenPanels",
+          "ESI:4"
+        ],
+        [
+          "pOffset",
+          "EDI:4"
+        ],
+        [
+          "nParam1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_InitPerspectiveVertexBuffer",
@@ -1848,7 +2692,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "9efa5e4c"
+      "dh": "9efa5e4c",
+      "paramStorage": [
+        [
+          "pTileLibraryEntryStrc",
+          "ECX:4"
+        ],
+        [
+          "nTilePosX",
+          "EDX:4"
+        ],
+        [
+          "nTilePosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byLightRow",
+          "Stack[0x8]:1"
+        ],
+        [
+          "dwAlpha",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenSplitIndex",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_RenderShadowTileWithPerspective",
@@ -1874,7 +2744,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "c25d2086"
+      "dh": "c25d2086",
+      "paramStorage": [
+        [
+          "pTileEntry",
+          "ECX:4"
+        ],
+        [
+          "nTilePosX",
+          "EDX:4"
+        ],
+        [
+          "nTilePosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byLightRow",
+          "Stack[0x8]:1"
+        ],
+        [
+          "dwAlpha",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenSplitIndex",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawShadowTile",
@@ -1901,7 +2797,29 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "8558d14d"
+      "dh": "8558d14d",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_BuildWallTileVerticesNoPerspective",
@@ -1924,7 +2842,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "50bdb213"
+      "dh": "50bdb213",
+      "paramStorage": [
+        [
+          "nScreenPanels",
+          "ECX:4"
+        ],
+        [
+          "pTile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pTexColorTable",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nParam4",
+          "Stack[0x14]:1"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_RenderWallTileWithPerspective",
@@ -1955,7 +2899,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "25be347e"
+      "dh": "25be347e",
+      "paramStorage": [
+        [
+          "nScreenPanels",
+          "EAX:4"
+        ],
+        [
+          "pTile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pLightColors",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_DrawTransparentWallTile",
@@ -1982,7 +2952,33 @@
         "D2TileLibraryEntryStrc",
         "uint8_t"
       ],
-      "dh": "924d5e4a"
+      "dh": "924d5e4a",
+      "paramStorage": [
+        [
+          "pTile",
+          "ESI:4"
+        ],
+        [
+          "nAlpha",
+          "BL:1"
+        ],
+        [
+          "nScreenPanels",
+          "EDI:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pLight",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DrawTransWallTile",
@@ -2002,7 +2998,33 @@
         "D2GfxLightStrc",
         "D2TileLibraryEntryStrc"
       ],
-      "dh": "f9dc0a6c"
+      "dh": "f9dc0a6c",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "DrawWallTile",
@@ -2028,7 +3050,29 @@
         "D2GfxLightStrc",
         "D2TileLibraryEntryStrc"
       ],
-      "dh": "991de12a"
+      "dh": "991de12a",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_InitGroundTileCache",
@@ -2092,7 +3136,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b529c18c"
+      "dh": "b529c18c",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ],
+        [
+          "pLight",
+          "EDX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nWorldXpos",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nWorldYpos",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pTileData",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_InitLightingTable",
@@ -2125,7 +3207,21 @@
       "calledFunctions": [
         "SetGlobalLight"
       ],
-      "dh": "fac92490"
+      "dh": "fac92490",
+      "paramStorage": [
+        [
+          "nRed",
+          "ECX:4"
+        ],
+        [
+          "nGreen",
+          "EDX:4"
+        ],
+        [
+          "nBlue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_ApplyShadowTextureCoords",
@@ -2144,7 +3240,21 @@
         "D2D3DVertexStrc",
         "uint8_t"
       ],
-      "dh": "098c8cb0"
+      "dh": "098c8cb0",
+      "paramStorage": [
+        [
+          "pVertex",
+          "ECX:4"
+        ],
+        [
+          "nLightIndex",
+          "DL:1"
+        ],
+        [
+          "byAlpha",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_SetTextureStageColor",
@@ -2163,7 +3273,21 @@
         "D2D3DVertexStrc",
         "uint32_t"
       ],
-      "dh": "fc9f4af1"
+      "dh": "fc9f4af1",
+      "paramStorage": [
+        [
+          "pVertex",
+          "ECX:4"
+        ],
+        [
+          "dwGamma",
+          "EDX:4"
+        ],
+        [
+          "byAlpha",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_InitPerspectiveTransformTable",
@@ -2211,7 +3335,17 @@
       "calledFunctions": [
         "SetPerspectiveScale"
       ],
-      "dh": "4b6f1992"
+      "dh": "4b6f1992",
+      "paramStorage": [
+        [
+          "nScaleX",
+          "ECX:4"
+        ],
+        [
+          "nScaleY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AdjustPerspectivePosition",
@@ -2229,7 +3363,29 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "8fc376de"
+      "dh": "8fc376de",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nBais",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pXAdjust",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pYAdjust",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PerspectiveScalePosition",
@@ -2247,7 +3403,33 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "6ce009ba"
+      "dh": "6ce009ba",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nAngle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pXAdjust",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pYAdjust",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bOrder",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SetDefaultPerspectiveFactor",
@@ -2302,7 +3484,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "8adac66d"
+      "dh": "8adac66d",
+      "paramStorage": [
+        [
+          "nParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_ReleaseSmackerBuffer",
@@ -2355,7 +3543,13 @@
       "usedTypes": [
         "D2SmackerContextStrc"
       ],
-      "dh": "0836dff6"
+      "dh": "0836dff6",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_ResetSmackerSurfaces",
@@ -2392,7 +3586,21 @@
       "usedTypes": [
         "D2SmackerContextStrc"
       ],
-      "dh": "db049b47"
+      "dh": "db049b47",
+      "paramStorage": [
+        [
+          "nHeight",
+          "EAX:4"
+        ],
+        [
+          "pSurface",
+          "ECX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_CopySmackerRowWithAlpha",
@@ -2411,7 +3619,21 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "71e7c83d"
+      "dh": "71e7c83d",
+      "paramStorage": [
+        [
+          "pDest",
+          "EAX:4"
+        ],
+        [
+          "pSrc",
+          "ECX:4"
+        ],
+        [
+          "nPitch",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_PresentSmackerFrame",
@@ -2465,7 +3687,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cb534789"
+      "dh": "cb534789",
+      "paramStorage": [
+        [
+          "szSmacker",
+          "ECX:4"
+        ],
+        [
+          "pBuffer",
+          "EDX:4"
+        ],
+        [
+          "nVersion",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PlayerSmacker",
@@ -2488,7 +3724,13 @@
         "D2SmackerContextStrc",
         "Smack"
       ],
-      "dh": "62c0fc20"
+      "dh": "62c0fc20",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SehHandler_6ca520",
@@ -2509,7 +3751,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "06c7f63e"
+      "dh": "06c7f63e",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SehHandler_6ca530",
@@ -2530,7 +3790,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "a2178a80"
+      "dh": "a2178a80",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

@@ -16,7 +16,17 @@
       "calledFunctions": [
         "GFXUTIL_PadTokenString"
       ],
-      "dh": "aa0ed7fb"
+      "dh": "aa0ed7fb",
+      "paramStorage": [
+        [
+          "szText1",
+          "EDX:4"
+        ],
+        [
+          "szText2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetCompositePaletteIndex",
@@ -35,7 +45,17 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "cc6f0493"
+      "dh": "cc6f0493",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "byComponent",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "InitializeModeTokens",
@@ -87,7 +107,17 @@
         "D2GfxDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "035f6ecf"
+      "dh": "035f6ecf",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMissile",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "AllocGfxUtil",
@@ -110,7 +140,33 @@
         "int32_t",
         "void *"
       ],
-      "dh": "fb3a4513"
+      "dh": "fb3a4513",
+      "paramStorage": [
+        [
+          "ppListHead",
+          "ECX:4"
+        ],
+        [
+          "dwParam",
+          "EDX:4"
+        ],
+        [
+          "dwValue1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwValue2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnNodeCount",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnBytesAllocated",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_FindGfxNodeByTypeAndId",
@@ -129,7 +185,21 @@
         "D2GfxUtilNodeStrc",
         "int32_t"
       ],
-      "dh": "c19d6f0f"
+      "dh": "c19d6f0f",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ],
+        [
+          "nType",
+          "EDX:4"
+        ],
+        [
+          "nId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_FreeGfxNodeList",
@@ -149,7 +219,17 @@
         "D2GfxUtilNodeStrc",
         "D2GfxUtilNodeStrc *"
       ],
-      "dh": "afec55fc"
+      "dh": "afec55fc",
+      "paramStorage": [
+        [
+          "ppListHead",
+          "ECX:4"
+        ],
+        [
+          "pnBytesAllocated",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetUnitToken",
@@ -172,7 +252,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "980167b3"
+      "dh": "980167b3",
+      "paramStorage": [
+        [
+          "pUnitStrc",
+          "ECX:4"
+        ],
+        [
+          "eUnitType",
+          "EDX:4"
+        ],
+        [
+          "nId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_NormalizeItemMode",
@@ -191,7 +285,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "1d4ed01b"
+      "dh": "1d4ed01b",
+      "paramStorage": [
+        [
+          "pUnitStrc",
+          "ECX:4"
+        ],
+        [
+          "pnMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetArmorAppearanceFromTorso",
@@ -216,7 +320,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6ba7437d"
+      "dh": "6ba7437d",
+      "paramStorage": [
+        [
+          "pUnitStrc",
+          "ECX:4"
+        ],
+        [
+          "pInventory",
+          "EDX:4"
+        ],
+        [
+          "bCheckBroken",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutAppearance",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_IsDC6BlockOnScreen",
@@ -240,7 +362,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1a56e699"
+      "dh": "1a56e699",
+      "paramStorage": [
+        [
+          "pDC6Block",
+          "ECX:4"
+        ],
+        [
+          "nDrawX",
+          "EDX:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bFlipped",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_SetItemGfxFile",
@@ -274,7 +414,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f9258d83"
+      "dh": "f9258d83",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetOverlayNumDirections",
@@ -292,7 +442,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f8be4833"
+      "dh": "f8be4833",
+      "paramStorage": [
+        [
+          "nOverlayId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetBodyLocWeaponToken",
@@ -321,7 +477,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "18c5f4f5"
+      "dh": "18c5f4f5",
+      "paramStorage": [
+        [
+          "nBodyLoc",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_UnitHasAnimMode",
@@ -348,7 +514,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "94021f37"
+      "dh": "94021f37",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetNumDirectionsForUnit",
@@ -378,7 +554,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "db8a9061"
+      "dh": "db8a9061",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitType",
+          "EAX:4"
+        ],
+        [
+          "nMode",
+          "EBX:4"
+        ],
+        [
+          "nClassId",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_Identity",
@@ -393,7 +587,13 @@
       "calledFunctions": [
         "GFXUTIL_Identity"
       ],
-      "dh": "a297cc66"
+      "dh": "a297cc66",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetCofFrameCount",
@@ -412,7 +612,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0cd830b2"
+      "dh": "0cd830b2",
+      "paramStorage": [
+        [
+          "pbCof",
+          "ECX:4"
+        ],
+        [
+          "nComponent",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetCofAnimSpeed",
@@ -431,7 +641,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "94c10c31"
+      "dh": "94c10c31",
+      "paramStorage": [
+        [
+          "pbCof",
+          "ECX:4"
+        ],
+        [
+          "nComponent",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetCofDirection",
@@ -450,7 +670,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2b487c7d"
+      "dh": "2b487c7d",
+      "paramStorage": [
+        [
+          "pbCof",
+          "ECX:4"
+        ],
+        [
+          "nComponent",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetCofLayerData",
@@ -469,7 +699,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "f80aad6d"
+      "dh": "f80aad6d",
+      "paramStorage": [
+        [
+          "pbCof",
+          "ECX:4"
+        ],
+        [
+          "nDirection",
+          "EDX:4"
+        ],
+        [
+          "nLayerOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetCofDrawOrder",
@@ -488,7 +732,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "549e4ad9"
+      "dh": "549e4ad9",
+      "paramStorage": [
+        [
+          "pbCof",
+          "ECX:4"
+        ],
+        [
+          "nComponent",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_IsValidUnitType",
@@ -506,7 +760,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "5f8070bc"
+      "dh": "5f8070bc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetGfxInfoComponent",
@@ -528,7 +788,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "10944915"
+      "dh": "10944915",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nComponent",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_SetGfxInfoComponent",
@@ -550,7 +820,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a174791e"
+      "dh": "a174791e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nComponentIndex",
+          "EDX:4"
+        ],
+        [
+          "byComponentVal",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_UpdateDirectionForMode",
@@ -574,7 +858,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1d293b92"
+      "dh": "1d293b92",
+      "paramStorage": [
+        [
+          "nDirection",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPrevDirection",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nNewDirection",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_ConvertDirectionBits",
@@ -594,7 +900,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a60b425b"
+      "dh": "a60b425b",
+      "paramStorage": [
+        [
+          "nFromDirs",
+          "ECX:4"
+        ],
+        [
+          "nToDirs",
+          "EAX:4"
+        ],
+        [
+          "pnDirection",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_CalcDirectionAndFrame",
@@ -618,7 +938,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "20593dc7"
+      "dh": "20593dc7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nAnimDir",
+          "EDX:4"
+        ],
+        [
+          "nTypeId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCofComponent",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnDirection",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnFrameHandler",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnNumDirections",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nNumDirs",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetEtherealTransparency",
@@ -651,7 +1009,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "79262f86"
+      "dh": "79262f86",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nComponent",
+          "EDX:4"
+        ],
+        [
+          "pOutTransTable",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemClassId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetItemColorForBodyLoc",
@@ -681,7 +1057,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "02f859f1"
+      "dh": "02f859f1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nBodyLoc",
+          "EDX:4"
+        ],
+        [
+          "pDefaultColor",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetUnitCofDirectionOnScreen",
@@ -722,7 +1112,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c29f3006"
+      "dh": "c29f3006",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nUnitDirection",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_BuildCofParams",
@@ -774,7 +1174,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "09fdcb7c"
+      "dh": "09fdcb7c",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pEquipContext",
+          "EAX:4"
+        ],
+        [
+          "pOutItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DC6_AssignParams",
@@ -797,7 +1215,41 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6f537c97"
+      "dh": "6f537c97",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pDC6",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDirection",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFrameNumber",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnOutItemClassId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nComponentType",
+          "Stack[0x14]:1"
+        ],
+        [
+          "nMode",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_BuildMonsterCofParams",
@@ -825,7 +1277,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6e84f2af"
+      "dh": "6e84f2af",
+      "paramStorage": [
+        [
+          "pCofFile",
+          "EDX:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pComponentTable",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pMonStatsTxt",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nComponentRow",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nWeaponClass",
+          "EAX:4"
+        ],
+        [
+          "pGfxData",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_InitAndBuildMonsterCofParams",
@@ -847,7 +1329,49 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "f0f41d1e"
+      "dh": "f0f41d1e",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "ECX:4"
+        ],
+        [
+          "nDirection",
+          "EDX:4"
+        ],
+        [
+          "nFrameNumber",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nComponentType",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nWeaponClass",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pCofFile",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pComponentTable",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pMonStatsTxt",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nComponentRow",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_CalcMaxSpriteHeight",
@@ -878,7 +1402,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d13aa944"
+      "dh": "d13aa944",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pbyLayerCount",
+          "EDX:4"
+        ],
+        [
+          "pLayerArray",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutMaxY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPaletteShift",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nFrame",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetOverlayFrameDelay",
@@ -905,7 +1455,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "74606e1d"
+      "dh": "74606e1d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pOverlayEntry",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_GetOverlayDimensions",
@@ -931,7 +1491,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "01dd4668"
+      "dh": "01dd4668",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nPaletteShift",
+          "EDX:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutWidth",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOutHeight",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_IsUnitSpriteOnScreen",
@@ -962,7 +1544,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "48ea4e65"
+      "dh": "48ea4e65",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nWorldX",
+          "EDX:4"
+        ],
+        [
+          "nWorldY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_Identity_Unref_005641e0",
@@ -977,7 +1573,13 @@
       "calledFunctions": [
         "GFXUTIL_Identity_Unref_005641e0"
       ],
-      "dh": "ba45788a"
+      "dh": "ba45788a",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFXUTIL_Identity_Unref_006c40c0",
@@ -992,7 +1594,13 @@
       "calledFunctions": [
         "GFXUTIL_Identity_Unref_006c40c0"
       ],
-      "dh": "c3605a72"
+      "dh": "c3605a72",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

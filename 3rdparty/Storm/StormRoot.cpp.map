@@ -17,7 +17,13 @@
         "SMsgBreakHandlerChain",
         "SEvtBreakHandlerChain"
       ],
-      "dh": "a6dd8bea"
+      "dh": "a6dd8bea",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

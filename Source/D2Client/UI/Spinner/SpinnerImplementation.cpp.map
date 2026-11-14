@@ -21,7 +21,13 @@
         "SpinnerImplementation",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "e080673e"
+      "dh": "e080673e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -42,7 +48,13 @@
         "D2GfxDataStrc",
         "SpinnerImplementation"
       ],
-      "dh": "5e33d585"
+      "dh": "5e33d585",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "IsMouseOnUpButton",
@@ -62,7 +74,17 @@
         "SpinnerImplementation",
         "uint32_t"
       ],
-      "dh": "ecd7f759"
+      "dh": "ecd7f759",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsMouseOnDownButton",
@@ -82,7 +104,17 @@
         "SpinnerImplementation",
         "uint32_t"
       ],
-      "dh": "c4ab1d20"
+      "dh": "c4ab1d20",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetValue",
@@ -100,7 +132,13 @@
       "usedTypes": [
         "SpinnerImplementation"
       ],
-      "dh": "25110c00"
+      "dh": "25110c00",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "GetRepeatDelta",
@@ -120,7 +158,13 @@
         "SpinnerImplementation",
         "uint32_t"
       ],
-      "dh": "0b479856"
+      "dh": "0b479856",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "OnMouseWheel",
@@ -140,7 +184,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
       ],
-      "dh": "959da839"
+      "dh": "959da839",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseDown",
@@ -162,7 +216,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c0ba0e55"
+      "dh": "c0ba0e55",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseUp",
@@ -181,7 +245,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
       ],
-      "dh": "62abd061"
+      "dh": "62abd061",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnChar",
@@ -200,7 +274,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
       ],
-      "dh": "b7ee494e"
+      "dh": "b7ee494e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseMove",
@@ -219,7 +303,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
       ],
-      "dh": "855fe035"
+      "dh": "855fe035",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnUpArrow",
@@ -238,7 +332,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
       ],
-      "dh": "1e6de8ec"
+      "dh": "1e6de8ec",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnDownArrow",
@@ -257,7 +361,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
       ],
-      "dh": "33ff2ea7"
+      "dh": "33ff2ea7",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnRightArrow",
@@ -276,7 +390,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
       ],
-      "dh": "e628cdc5"
+      "dh": "e628cdc5",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnLeftArrow",
@@ -295,7 +419,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
       ],
-      "dh": "f52cd72a"
+      "dh": "f52cd72a",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Constructor",
@@ -324,7 +458,29 @@
         "int32_t",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "e75fa76c"
+      "dh": "e75fa76c",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bHorizontal",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnRepeatAction",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -345,7 +501,17 @@
         "SpinnerImplementation",
         "uint32_t"
       ],
-      "dh": "967d81d3"
+      "dh": "967d81d3",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

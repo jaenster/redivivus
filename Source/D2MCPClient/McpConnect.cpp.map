@@ -34,7 +34,17 @@
       "calledFunctions": [
         "NET_MCP_CLIENT_IncomingReturn_Unref_0043f840"
       ],
-      "dh": "c145b905"
+      "dh": "c145b905",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_IncomingReturn_Unref_004473f0",
@@ -49,7 +59,17 @@
       "calledFunctions": [
         "NET_MCP_CLIENT_IncomingReturn_Unref_004473f0"
       ],
-      "dh": "be8dd2de"
+      "dh": "be8dd2de",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_IncomingReturn_Unref_004476f0",
@@ -64,7 +84,17 @@
       "calledFunctions": [
         "NET_MCP_CLIENT_IncomingReturn_Unref_004476f0"
       ],
-      "dh": "a6662b8d"
+      "dh": "a6662b8d",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetMCPThread",
@@ -200,13 +230,20 @@
         }
       ],
       "namespace": "D2MCPClient::McpConnect",
+      "definedIn": "D2MCPClient/McpConnect.inline.h",
       "calledFunctions": [
         "SetD2GSJoinResult"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "547148d4"
+      "dh": "547148d4",
+      "paramStorage": [
+        [
+          "nResult",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetD2GSJoinResult",
@@ -254,7 +291,13 @@
       "calledFunctions": [
         "MCPSTATE_SetConnectionEstablished"
       ],
-      "dh": "e9543864"
+      "dh": "e9543864",
+      "paramStorage": [
+        [
+          "bEstablished",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MCPSTATE_GetCharLogonSuccess",
@@ -284,7 +327,13 @@
       "calledFunctions": [
         "MCPSTATE_SetCharLogonSuccess"
       ],
-      "dh": "040ec99f"
+      "dh": "040ec99f",
+      "paramStorage": [
+        [
+          "bSuccess",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MCPSTATE_GetJoinGameSuccess",
@@ -314,7 +363,13 @@
       "calledFunctions": [
         "MCPSTATE_SetJoinGameSuccess"
       ],
-      "dh": "e5684b84"
+      "dh": "e5684b84",
+      "paramStorage": [
+        [
+          "bSuccess",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MCPSTATE_GetCreateGameSuccess",
@@ -344,7 +399,13 @@
       "calledFunctions": [
         "MCPSTATE_SetCreateGameSuccess"
       ],
-      "dh": "394e1ddf"
+      "dh": "394e1ddf",
+      "paramStorage": [
+        [
+          "bSuccess",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MCPSTATE_SetListGameSuccess",
@@ -359,7 +420,13 @@
       "calledFunctions": [
         "MCPSTATE_SetListGameSuccess"
       ],
-      "dh": "9b590a4a"
+      "dh": "9b590a4a",
+      "paramStorage": [
+        [
+          "bSuccess",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MCPSTATE_GetCreateGameSuccess_Unref_00449ca0",
@@ -404,7 +471,13 @@
       "calledFunctions": [
         "MCPSTATE_SetCharDeleteSuccess"
       ],
-      "dh": "fb8f7ebd"
+      "dh": "fb8f7ebd",
+      "paramStorage": [
+        [
+          "bSuccess",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MCPCONNECT_GetGameNameAndPassword",
@@ -422,7 +495,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ad102a89"
+      "dh": "ad102a89",
+      "paramStorage": [
+        [
+          "pGameNameOut",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPasswordOut",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MCPCONNECT_SetGameNameAndPassword",
@@ -437,7 +520,21 @@
       "calledFunctions": [
         "MCPCONNECT_SetGameNameAndPassword"
       ],
-      "dh": "3e37e580"
+      "dh": "3e37e580",
+      "paramStorage": [
+        [
+          "nDifficulty",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szGameName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szPassword",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MCPCONNECT_GetCharSelectBuffer",
@@ -504,7 +601,13 @@
       "calledFunctions": [
         "MCPSTATE_SetCharUpgradeSuccess"
       ],
-      "dh": "5c59bbfc"
+      "dh": "5c59bbfc",
+      "paramStorage": [
+        [
+          "bSuccess",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MCPCONNECT_GetD2GSGameHash_Unref_00449da0",
@@ -537,7 +640,13 @@
       "calledFunctions": [
         "MCPSTATE_SetCharCreateSuccess"
       ],
-      "dh": "e6cb652b"
+      "dh": "e6cb652b",
+      "paramStorage": [
+        [
+          "bSuccess",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MCPCONNECT_GetD2GSGameHash_Unref_00449dc0",
@@ -570,7 +679,13 @@
       "calledFunctions": [
         "MCPSTATE_SetD2GSConnectReady"
       ],
-      "dh": "7a5c2923"
+      "dh": "7a5c2923",
+      "paramStorage": [
+        [
+          "bReady",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MCPCONNECT_GetD2GSGameHash",
@@ -604,7 +719,21 @@
         "MCPCONNECT_SendCharCreate",
         "NET_MCP_CLIENT_Send_0x02_CharCreate"
       ],
-      "dh": "035af7f7"
+      "dh": "035af7f7",
+      "paramStorage": [
+        [
+          "szCharName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_NET_MCP_CLIENT_Send_0x07_CharLogon",
@@ -620,7 +749,13 @@
         "thunk_NET_MCP_CLIENT_Send_0x07_CharLogon",
         "NET_MCP_CLIENT_Send_0x07_CharLogon"
       ],
-      "dh": "c0d8ffda"
+      "dh": "c0d8ffda",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MCPSTATE_GetJoinTimestamp",
@@ -653,7 +788,13 @@
       "calledFunctions": [
         "MCPSTATE_SetJoinTimestamp"
       ],
-      "dh": "9ced6a7a"
+      "dh": "9ced6a7a",
+      "paramStorage": [
+        [
+          "nJoinTimestamp",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "getIsMPCJoinSuccesfull",
@@ -683,7 +824,13 @@
       "calledFunctions": [
         "SetIsMPCJoinSuccesfull"
       ],
-      "dh": "d0579801"
+      "dh": "d0579801",
+      "paramStorage": [
+        [
+          "bSuccess",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MCPCONNECT_GetCharListPacket",
@@ -724,7 +871,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "450267b5"
+      "dh": "450267b5",
+      "paramStorage": [
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "McpConnectionLoop",
@@ -748,7 +905,13 @@
         "int32_t",
         "sockaddr"
       ],
-      "dh": "63e0afd9"
+      "dh": "63e0afd9",
+      "paramStorage": [
+        [
+          "pnParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ThreadHandler",
@@ -795,7 +958,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "c620194d"
+      "dh": "c620194d",
+      "paramStorage": [
+        [
+          "pSrcState",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STRING_GetStringLength",
@@ -817,7 +986,25 @@
         "char *",
         "int32_t"
       ],
-      "dh": "dbe22cc1"
+      "dh": "dbe22cc1",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "ppszText",
+          "EDX:4"
+        ],
+        [
+          "pszBufferEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szDest",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x01_StartUp",
@@ -842,7 +1029,13 @@
         "MCPPacketClt0x",
         "int32_t"
       ],
-      "dh": "90d5df68"
+      "dh": "90d5df68",
+      "paramStorage": [
+        [
+          "pnStartupInfo",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x02_CharCreate",
@@ -868,7 +1061,21 @@
         "MCP_CHARCREATE",
         "int32_t"
       ],
-      "dh": "0a904393"
+      "dh": "0a904393",
+      "paramStorage": [
+        [
+          "szCharName",
+          "ECX:4"
+        ],
+        [
+          "dwCharClassFlags",
+          "EDX:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x07_CharLogon",
@@ -892,7 +1099,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "aa0489d1"
+      "dh": "aa0489d1",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x03_CreateGame",
@@ -919,7 +1132,17 @@
         "int32_t",
         "mcp0x03data"
       ],
-      "dh": "884c81a4"
+      "dh": "884c81a4",
+      "paramStorage": [
+        [
+          "pMcpData",
+          "ECX:4"
+        ],
+        [
+          "nRequestId",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x04_JoinGame",
@@ -945,7 +1168,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "8688ff9c"
+      "dh": "8688ff9c",
+      "paramStorage": [
+        [
+          "szGameName",
+          "ECX:4"
+        ],
+        [
+          "szGamePassword",
+          "EDX:4"
+        ],
+        [
+          "nRequestId",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x05_GameList",
@@ -967,7 +1204,17 @@
         "MCPPacketClt0x",
         "uint16_t"
       ],
-      "dh": "f4a06f56"
+      "dh": "f4a06f56",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "wRequestIdArg",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x06_GameInfo",
@@ -989,7 +1236,17 @@
         "MCPPacketCltStr",
         "uint16_t"
       ],
-      "dh": "7399c7fc"
+      "dh": "7399c7fc",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "wRequestIdArg",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x08",
@@ -1015,7 +1272,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "547f7172"
+      "dh": "547f7172",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "wRequestIdArg",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x09",
@@ -1041,7 +1308,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "d0c8e213"
+      "dh": "d0c8e213",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "wRequestIdArg",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x0A_CharDelete",
@@ -1065,7 +1342,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "1d57c1fb"
+      "dh": "1d57c1fb",
+      "paramStorage": [
+        [
+          "szCharName",
+          "ECX:4"
+        ],
+        [
+          "wRequestIdArg",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x18_CharUpgrade",
@@ -1087,7 +1374,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "29815a6f"
+      "dh": "29815a6f",
+      "paramStorage": [
+        [
+          "szCharName",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x0B",
@@ -1111,7 +1404,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "1bab7007"
+      "dh": "1bab7007",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x0C",
@@ -1135,7 +1438,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "8f09b5cb"
+      "dh": "8f09b5cb",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x0D",
@@ -1216,7 +1525,17 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "09f59389"
+      "dh": "09f59389",
+      "paramStorage": [
+        [
+          "nLadderFilterMode",
+          "CL:1"
+        ],
+        [
+          "wRequestId",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x12_MOTD",
@@ -1302,7 +1621,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "51bf0aac"
+      "dh": "51bf0aac",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "dwField1",
+          "EDX:4"
+        ],
+        [
+          "dwField2",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_IncomingReturn",
@@ -1317,7 +1650,17 @@
       "calledFunctions": [
         "NET_MCP_CLIENT_IncomingReturn"
       ],
-      "dh": "c7e7ef46"
+      "dh": "c7e7ef46",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MCP_INCOMING_SetD2GSJoinResultAndSignal",
@@ -1334,7 +1677,13 @@
         "SetD2GSJoinResult",
         "SetEvent"
       ],
-      "dh": "4c02f3f4"
+      "dh": "4c02f3f4",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x02",
@@ -1351,7 +1700,17 @@
         "SetD2GSJoinResult",
         "MCPSTATE_SetConnectionEstablished"
       ],
-      "dh": "0e9b737f"
+      "dh": "0e9b737f",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x07",
@@ -1368,7 +1727,17 @@
         "SetD2GSJoinResult",
         "MCPSTATE_SetCharLogonSuccess"
       ],
-      "dh": "16ed914f"
+      "dh": "16ed914f",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x03",
@@ -1384,7 +1753,17 @@
         "NET_MCP_CLIENT_Incoming0x03",
         "SetD2GSJoinResult"
       ],
-      "dh": "c30d14c6"
+      "dh": "c30d14c6",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x04",
@@ -1406,7 +1785,17 @@
         "MCPPacketSrv0x04",
         "int32_t"
       ],
-      "dh": "052ce90d"
+      "dh": "052ce90d",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x06",
@@ -1427,7 +1816,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "29caabcd"
+      "dh": "29caabcd",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x08",
@@ -1442,7 +1841,17 @@
       "calledFunctions": [
         "NET_MCP_CLIENT_Incoming0x08"
       ],
-      "dh": "a9a39a89"
+      "dh": "a9a39a89",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x09",
@@ -1457,7 +1866,17 @@
       "calledFunctions": [
         "NET_MCP_CLIENT_Incoming0x09"
       ],
-      "dh": "b9e0355a"
+      "dh": "b9e0355a",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x0A",
@@ -1474,7 +1893,17 @@
         "SetD2GSJoinResult",
         "MCPSTATE_SetJoinGameSuccess"
       ],
-      "dh": "37ef204b"
+      "dh": "37ef204b",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x18",
@@ -1491,7 +1920,17 @@
         "SetD2GSJoinResult",
         "MCPSTATE_SetCreateGameSuccess"
       ],
-      "dh": "0c0db84d"
+      "dh": "0c0db84d",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x0B",
@@ -1508,7 +1947,17 @@
         "SetD2GSJoinResult",
         "MCPSTATE_SetListGameSuccess"
       ],
-      "dh": "bad916ff"
+      "dh": "bad916ff",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x0C",
@@ -1525,7 +1974,17 @@
         "SetD2GSJoinResult",
         "MCPSTATE_SetCharDeleteSuccess"
       ],
-      "dh": "8532e346"
+      "dh": "8532e346",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x0E",
@@ -1541,7 +2000,17 @@
         "NET_MCP_CLIENT_Incoming0x0E",
         "MCPCONNECT_SetGameNameAndPassword"
       ],
-      "dh": "bc5b9144"
+      "dh": "bc5b9144",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x0D",
@@ -1558,7 +2027,17 @@
         "SetD2GSJoinResult",
         "MCPSTATE_SetCharUpgradeSuccess"
       ],
-      "dh": "ca6a35a7"
+      "dh": "ca6a35a7",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x0F",
@@ -1575,7 +2054,17 @@
         "SetD2GSJoinResult",
         "MCPSTATE_SetCharCreateSuccess"
       ],
-      "dh": "866d8e8b"
+      "dh": "866d8e8b",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x10",
@@ -1597,7 +2086,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b0078cab"
+      "dh": "b0078cab",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x11",
@@ -1617,7 +2116,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "99e7bf54"
+      "dh": "99e7bf54",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x12",
@@ -1632,7 +2141,17 @@
       "calledFunctions": [
         "NET_MCP_CLIENT_Incoming0x12"
       ],
-      "dh": "6a553f52"
+      "dh": "6a553f52",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x14",
@@ -1649,7 +2168,17 @@
         "MCPSTATE_SetJoinTimestamp",
         "SetIsMPCJoinSuccesfull"
       ],
-      "dh": "65c416d4"
+      "dh": "65c416d4",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x17",
@@ -1665,7 +2194,17 @@
         "NET_MCP_CLIENT_Incoming0x17",
         "CopyCharListToGlobal"
       ],
-      "dh": "70e1c046"
+      "dh": "70e1c046",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x19",
@@ -1681,7 +2220,17 @@
         "NET_MCP_CLIENT_Incoming0x19",
         "CopyCharListToGlobal"
       ],
-      "dh": "f74340f7"
+      "dh": "f74340f7",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "HandleIncomingPacket",
@@ -1696,7 +2245,17 @@
       "calledFunctions": [
         "HandleIncomingPacket"
       ],
-      "dh": "dcbea959"
+      "dh": "dcbea959",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MCPCONNECT_SocketCallback_Dispatch",
@@ -1714,7 +2273,21 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "43346e3c"
+      "dh": "43346e3c",
+      "paramStorage": [
+        [
+          "pPacketBuf",
+          "ECX:4"
+        ],
+        [
+          "nPacketSize",
+          "EDX:4"
+        ],
+        [
+          "pContext",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MCPCONNECT_SetGameListCallbacks",
@@ -1733,7 +2306,17 @@
         "pfnMCPGameListEntry",
         "pfnVoidNoArgCallback"
       ],
-      "dh": "4fa02d31"
+      "dh": "4fa02d31",
+      "paramStorage": [
+        [
+          "pfnEntryCallback",
+          "ECX:4"
+        ],
+        [
+          "pfnCompleteCallback",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MCPCONNECT_SetMessageCallback",
@@ -1751,7 +2334,13 @@
       "usedTypes": [
         "pfnMCPMessage"
       ],
-      "dh": "95939c3a"
+      "dh": "95939c3a",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MCPCONNECT_SanitizeWideString",
@@ -1777,7 +2366,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "4d637634"
+      "dh": "4d637634",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Incoming0x05",
@@ -1802,7 +2397,17 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "f337b74b"
+      "dh": "f337b74b",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

@@ -106,7 +106,7 @@ template<> TSLink<::CELLIST>* TSExplicitList<CELLIST, -572662307>::Link(::CELLIS
     return &this->m_terminator;
 }
 
-template<> void TSHashTable<CELLIST, HASHKEY_NONE>::Unlink(::CELLIST * pNode) {
+template<> __attribute__((noinline)) inline void TSHashTable<CELLIST, HASHKEY_NONE>::Unlink(::CELLIST * pNode) {
     TSLink<::CELLIST>** pBackLink2;
     intptr_t nLinkField;
     if (!pNode->m_linktoslot.m_next) {
@@ -330,7 +330,7 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::Delete(::CELLIST * pNode) {
     this->pVtable->InternalDelete(this, pNode);
 }
 
-template<> void TSExplicitList<CELLIST, -572662307>::UnlinkAll() {
+template<> __attribute__((noinline)) inline void TSExplicitList<CELLIST, -572662307>::UnlinkAll() {
     TSLink<::CELLIST>** pPrev;
     intptr_t nBucketIdx;
     TSLink<::CELLIST>* nNext;
@@ -348,7 +348,7 @@ template<> void TSExplicitList<CELLIST, -572662307>::UnlinkAll() {
     }
 }
 
-template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::UnlinkAll() {
+template<> __attribute__((noinline)) inline void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::UnlinkAll() {
     TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>** pPrev;
     intptr_t nBucketIdx;
     TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* nNext;
@@ -475,7 +475,7 @@ template<> void TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCrit
 }
 
 // Walk the chunk list and free all CelList object chunks
-template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Clear() {
+template<> __attribute__((noinline)) inline void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Clear() {
     TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>** pBackLink;
     TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pObject;
     TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* nNext;

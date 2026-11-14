@@ -24,7 +24,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ee746cea"
+      "dh": "ee746cea",
+      "paramStorage": [
+        [
+          "eLevel",
+          "ECX:4"
+        ],
+        [
+          "pDrlgEnvironment",
+          "ESI:4"
+        ],
+        [
+          "nActNo",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_UpdateLightColor",
@@ -45,7 +59,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "9199367e"
+      "dh": "9199367e",
+      "paramStorage": [
+        [
+          "nActNo",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDrlgEnvironment",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_InitEnvironmentCycle",
@@ -63,7 +87,13 @@
       "usedTypes": [
         "D2DrlgEnvironmentStrc"
       ],
-      "dh": "eef715a1"
+      "dh": "eef715a1",
+      "paramStorage": [
+        [
+          "pDrlgEnvironment",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_AllocEnvironment",
@@ -89,7 +119,13 @@
         "D2PoolManagerStrc",
         "uint32_t"
       ],
-      "dh": "1e3ebd7e"
+      "dh": "1e3ebd7e",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_FreeEnvironment",
@@ -109,7 +145,17 @@
         "D2DrlgEnvironmentStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "4cc19bdf"
+      "dh": "4cc19bdf",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pDrlgEnvironment",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_UpdateEnvironmentCycle",
@@ -128,7 +174,17 @@
         "D2DrlgActEnvironmentData",
         "D2DrlgEnvironmentStrc"
       ],
-      "dh": "ba977b95"
+      "dh": "ba977b95",
+      "paramStorage": [
+        [
+          "pEnvironment",
+          "EAX:4"
+        ],
+        [
+          "nActNo",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_UpdatePeriodOfDay",
@@ -155,7 +211,17 @@
         "D2RoomStrc",
         "uint32_t"
       ],
-      "dh": "7cab9b3e"
+      "dh": "7cab9b3e",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_UpdateCycleIndex",
@@ -177,7 +243,17 @@
         "D2DrlgEnvironmentStrc",
         "int32_t"
       ],
-      "dh": "cab87199"
+      "dh": "cab87199",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nActNo",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_GetLightColorFromAct",
@@ -198,7 +274,25 @@
         "D2DrlgEnvironmentStrc",
         "uint8_t"
       ],
-      "dh": "35ba7caa"
+      "dh": "35ba7caa",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRed",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nGreen",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBlue",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_GetIntensityFromAct",
@@ -219,7 +313,13 @@
         "D2DrlgEnvironmentStrc",
         "int32_t"
       ],
-      "dh": "7c72a89a"
+      "dh": "7c72a89a",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_GetPeriodOfDayFromAct",
@@ -240,7 +340,17 @@
         "D2DrlgEnvironmentStrc",
         "int32_t"
       ],
-      "dh": "bd23f718"
+      "dh": "bd23f718",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBaseTime",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_GetUnusedMember",
@@ -261,7 +371,13 @@
         "D2DrlgEnvironmentStrc",
         "int32_t"
       ],
-      "dh": "a23b7846"
+      "dh": "a23b7846",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_NextEnvCycle",
@@ -287,7 +403,17 @@
         "D2RoomStrc",
         "eAct"
       ],
-      "dh": "b53dae0e"
+      "dh": "b53dae0e",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_GetCycleIndexFromAct",
@@ -308,7 +434,13 @@
         "D2DrlgEnvironmentStrc",
         "int32_t"
       ],
-      "dh": "2c364ad7"
+      "dh": "2c364ad7",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_InitializeEnvironment",
@@ -339,7 +471,29 @@
         "eAct",
         "int32_t"
       ],
-      "dh": "b80c4a13"
+      "dh": "b80c4a13",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nAngle",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bEclipse",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_GetCycleIndex_Ticks_EclipseFromAct",
@@ -359,7 +513,25 @@
         "D2DrlgActStrc",
         "D2DrlgEnvironmentStrc"
       ],
-      "dh": "1d00061f"
+      "dh": "1d00061f",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTimeIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTicks",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pEclipse",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_GetStatistics",
@@ -379,7 +551,29 @@
         "D2DrlgActStrc",
         "D2DrlgEnvironmentStrc"
       ],
-      "dh": "f68f7e1e"
+      "dh": "f68f7e1e",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCos",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pLast",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pSin",
+          "Stack[0x10]:4"
+        ],
+        [
+          "a5",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_GetTimeRateFromAct",
@@ -400,7 +594,13 @@
         "D2DrlgEnvironmentStrc",
         "int32_t"
       ],
-      "dh": "3373b82b"
+      "dh": "3373b82b",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_SetNextTimeRate",
@@ -427,7 +627,17 @@
         "eAct",
         "uint32_t"
       ],
-      "dh": "d0b0b0c0"
+      "dh": "d0b0b0c0",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_TaintedSunBegin",
@@ -452,7 +662,13 @@
         "D2DrlgEnvironmentStrc",
         "eAct"
       ],
-      "dh": "df2ff47b"
+      "dh": "df2ff47b",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGENV_TaintedSunEnd",
@@ -475,7 +691,13 @@
         "D2DrlgEnvironmentStrc",
         "eAct"
       ],
-      "dh": "53b37c9f"
+      "dh": "53b37c9f",
+      "paramStorage": [
+        [
+          "pDrlgAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

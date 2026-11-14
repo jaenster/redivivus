@@ -2227,9 +2227,8 @@ static void COMCALLBACK_OnChannelUserJoined(uint32_t * pCharData, uint32_t dwSta
       return;
     }
 
-    char* pszFormattedName = pCreatedUser->szFormattedName;
-    pszFormattedName = pszFormattedName + strlen(pszFormattedName) + 1;
-    if (pszFormattedName != pCreatedUser->szFormattedName + 1) {
+    char* pszFormattedName;
+    if (strlen(pCreatedUser->szFormattedName) != 0) {
       pszUsername = (uint32_t*)pCreatedUser->szFormattedName;
     }
 

@@ -18,7 +18,13 @@
         "LOGGING_OpenLogFile",
         "fclose"
       ],
-      "dh": "246259a9"
+      "dh": "246259a9",
+      "paramStorage": [
+        [
+          "bEnable",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

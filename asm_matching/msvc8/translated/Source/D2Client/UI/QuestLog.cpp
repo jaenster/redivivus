@@ -2694,8 +2694,7 @@ void __stdcall DRAW_UI_Quest() {
               nStringIndex = gQuestLog.aQuestLogEntries[nActIndex].wTitleStringId;
               if (nStringIndex != 0xe8c) {
                 pwszText = D2Lang::StrTable::strtable::GetLocaleString(nStringIndex);
-                nQuestSlot = gQuestUIDescInitC - Inv::gnPanelOffsetY;
-                D2Win::Src::D2WinFont::DRAW_text(pwszText, Inv::gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(pwszText) / 2 + 0xa0, nQuestSlot, 0, 0);
+                D2Win::Src::D2WinFont::DRAW_text(pwszText, Inv::gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(pwszText) / 2 + 0xa0, gQuestUIDescInitC - Inv::gnPanelOffsetY, 0, 0);
               }
               if (gQuestLog.bQuestLogButtonDown == '\0' && gQuestLog.aQuestLogEntries[nActIndex].wszDescription[0] != L'\0') {
                 pWordWrapList = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(gQuestLog.aQuestLogEntries[nActIndex].wszDescription, aTabXOffsets + 5, 0x10e);

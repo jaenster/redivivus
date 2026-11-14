@@ -16,7 +16,13 @@
       "calledFunctions": [
         "LOADER_SetConnectionLostFlag_Unref_0045ae50"
       ],
-      "dh": "8b8a8148"
+      "dh": "8b8a8148",
+      "paramStorage": [
+        [
+          "bConnectionLost",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LOADER_SetConnectionLostFlag_Unref_0045ae70",
@@ -31,7 +37,13 @@
       "calledFunctions": [
         "LOADER_SetConnectionLostFlag_Unref_0045ae70"
       ],
-      "dh": "4fa6c098"
+      "dh": "4fa6c098",
+      "paramStorage": [
+        [
+          "bConnectionLost",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_IsMouseInRect",
@@ -51,7 +63,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "870d3b3d"
+      "dh": "870d3b3d",
+      "paramStorage": [
+        [
+          "nRectLeftX",
+          "EAX:4"
+        ],
+        [
+          "nRectBottomY",
+          "EBX:4"
+        ],
+        [
+          "nRectWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRectHeight",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DrawPopupOk",
@@ -72,7 +102,13 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "5a219ff5"
+      "dh": "5a219ff5",
+      "paramStorage": [
+        [
+          "bDiscPrompt",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LOADER_CheckForInsertedDiscs",
@@ -116,7 +152,13 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "8bf66994"
+      "dh": "8bf66994",
+      "paramStorage": [
+        [
+          "nFrameNumber",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LOADER_DrawInsertDiscMessage",
@@ -166,7 +208,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ae5711bb"
+      "dh": "ae5711bb",
+      "paramStorage": [
+        [
+          "nUnused",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_CharScreenOkDown",
@@ -189,7 +237,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "6a3ef828"
+      "dh": "6a3ef828",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_CharScreenOkUp",
@@ -211,7 +265,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "a948922f"
+      "dh": "a948922f",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_CharScreenOkForce",
@@ -231,7 +291,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "8a665e5f"
+      "dh": "8a665e5f",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_CharScreenOkCancel",
@@ -249,7 +315,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "8aeea94a"
+      "dh": "8aeea94a",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LOADER_DrawConnectionLostMessage",
@@ -293,7 +365,17 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "f6698767"
+      "dh": "f6698767",
+      "paramStorage": [
+        [
+          "nOkFrame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCancelFrame",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UI_OkCancel",
@@ -358,7 +440,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "08265b67"
+      "dh": "08265b67",
+      "paramStorage": [
+        [
+          "nUnused",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_CharScreenDualButtonDown",
@@ -381,7 +469,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "08347eb8"
+      "dh": "08347eb8",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_CharScreenDualButtonUp",
@@ -403,7 +497,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "71b4be37"
+      "dh": "71b4be37",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_CharScreenDualButtonForce",
@@ -423,7 +523,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "aa434942"
+      "dh": "aa434942",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_CharScreenDualButtonCancel",
@@ -441,7 +547,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "a40ba6a0"
+      "dh": "a40ba6a0",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LOADER_FreePopupImages",
@@ -473,7 +585,13 @@
       "calledFunctions": [
         "LOADER_SetConnectionLostFlag"
       ],
-      "dh": "b888da03"
+      "dh": "b888da03",
+      "paramStorage": [
+        [
+          "bConnectionLost",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "fpGameLoopFunction",
@@ -505,7 +623,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cdaf1470"
+      "dh": "cdaf1470",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "fpRequiredUserAction",
@@ -557,7 +681,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b45c957d"
+      "dh": "b45c957d",
+      "paramStorage": [
+        [
+          "nDrawMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ENGINE_RunDrawModeGameLoopAlt",
@@ -582,7 +712,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c091746b"
+      "dh": "c091746b",
+      "paramStorage": [
+        [
+          "nDrawMode",
+          "ECX:4"
+        ],
+        [
+          "dwRetVal",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SetUnitFlag",
@@ -602,7 +742,21 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "8dad8a77"
+      "dh": "8dad8a77",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "wFlag",
+          "DX:2"
+        ],
+        [
+          "bSet",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00460760",
@@ -620,7 +774,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "715f17a1"
+      "dh": "715f17a1",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004607d0",
@@ -638,7 +802,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "58296ec9"
+      "dh": "58296ec9",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004607f0",
@@ -656,7 +826,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "90420684"
+      "dh": "90420684",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00460810",
@@ -674,7 +850,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "73899fba"
+      "dh": "73899fba",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_PreloadMonsterCofsInAdjacentRooms",
@@ -726,7 +908,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ac938dc5"
+      "dh": "ac938dc5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nRadiusBonus",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SetUnitLightColor",
@@ -747,7 +939,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "c9fd1ca4"
+      "dh": "c9fd1ca4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "dwRGB",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "LOADER_SetConnectionLostFlag_Unref_00468000",
@@ -762,7 +964,13 @@
       "calledFunctions": [
         "LOADER_SetConnectionLostFlag_Unref_00468000"
       ],
-      "dh": "08b5fa78"
+      "dh": "08b5fa78",
+      "paramStorage": [
+        [
+          "bConnectionLost",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

@@ -21,7 +21,13 @@
         "_PROCESS_INFORMATION",
         "_STARTUPINFOA"
       ],
-      "dh": "1f23db22"
+      "dh": "1f23db22",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2FILE_VerifyFileSignature",
@@ -44,7 +50,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1282c9da"
+      "dh": "1282c9da",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CheckIfFileExists",
@@ -66,7 +78,25 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "fb60165b"
+      "dh": "fb60165b",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "szFilename",
+          "EDX:4"
+        ],
+        [
+          "ppFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bDontLogError",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2FILE_CloseFile",
@@ -90,7 +120,17 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "ac61883a"
+      "dh": "ac61883a",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pFile",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2FILE_GetFileSize",
@@ -118,7 +158,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f7c6f618"
+      "dh": "f7c6f618",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pFile",
+          "EDX:4"
+        ],
+        [
+          "pFileSizeOut",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2FILE_SeekFile",
@@ -145,7 +199,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "74b259cb"
+      "dh": "74b259cb",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pFile",
+          "EDX:4"
+        ],
+        [
+          "nDistanceToMove",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnNewPos",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwMoveMethod",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2FILE_ReadFile",
@@ -172,7 +248,25 @@
         "D2PoolManagerStrc",
         "uint32_t"
       ],
-      "dh": "ded2669b"
+      "dh": "ded2669b",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pFile",
+          "EDX:4"
+        ],
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBytesToRead",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2FILE_ReadFile_HaltTail",
@@ -190,7 +284,13 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
       ],
-      "dh": "c3b877a3"
+      "dh": "c3b877a3",
+      "paramStorage": [
+        [
+          "nLine",
+          "Stack[0x0]:4"
+        ]
+      ]
     },
     {
       "name": "D2FILE_OpenAndReadFile",
@@ -218,7 +318,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b1ccae56"
+      "dh": "b1ccae56",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBufSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2FILE_AllocAndLoadD2File",
@@ -244,7 +362,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "69604576"
+      "dh": "69604576",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "szFilename",
+          "EDX:4"
+        ],
+        [
+          "pSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FindMPQOnCd",
@@ -268,7 +408,25 @@
         "D2ArchiveStrc *",
         "uint32_t"
       ],
-      "dh": "3c4487c4"
+      "dh": "3c4487c4",
+      "paramStorage": [
+        [
+          "pszMpqName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnPriority",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppArchive",
+          "Stack[0xc]:4"
+        ],
+        [
+          "szText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "FindMpqFromDiskOrCd",
@@ -291,7 +449,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "4834cb1a"
+      "dh": "4834cb1a",
+      "paramStorage": [
+        [
+          "pszMpqName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnPriority",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppArchive",
+          "Stack[0xc]:4"
+        ],
+        [
+          "szText",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ARCHIVE_LoadMPQ",
@@ -315,7 +491,25 @@
         "fpRequiredUserAction",
         "int32_t"
       ],
-      "dh": "0777435d"
+      "dh": "0777435d",
+      "paramStorage": [
+        [
+          "szMpqFileName",
+          "ECX:4"
+        ],
+        [
+          "nZero",
+          "EDX:4"
+        ],
+        [
+          "nfpRequiredUserAction",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTimeTBC",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ARCHIVE_FreeMpqFile",
@@ -335,7 +529,13 @@
       "usedTypes": [
         "D2FogArchiveStrc"
       ],
-      "dh": "053592a8"
+      "dh": "053592a8",
+      "paramStorage": [
+        [
+          "pFogArchive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RegisterExitFunction",
@@ -353,7 +553,13 @@
       "usedTypes": [
         "pfnFaultError"
       ],
-      "dh": "0e0f337e"
+      "dh": "0e0f337e",
+      "paramStorage": [
+        [
+          "pfnNewCallback",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FAULT_TerminateCurrentProcess",
@@ -384,7 +590,13 @@
         "FAULT_ShowErrorAndTerminate",
         "FAULT_TerminateCurrentProcess"
       ],
-      "dh": "0a1eb3be"
+      "dh": "0a1eb3be",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FAULT_ShowErrorMessageBox",
@@ -399,7 +611,13 @@
       "calledFunctions": [
         "FAULT_ShowErrorMessageBox"
       ],
-      "dh": "d1d887c3"
+      "dh": "d1d887c3",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FAULT_FormatAndShowError",
@@ -419,7 +637,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "1fb6ba0b"
+      "dh": "1fb6ba0b",
+      "paramStorage": [
+        [
+          "szFile",
+          "ECX:4"
+        ],
+        [
+          "nLine",
+          "EDX:4"
+        ],
+        [
+          "szExpression",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetNodePointer",
@@ -439,7 +671,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "948659eb"
+      "dh": "948659eb",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ],
+        [
+          "nLinkOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSLink_TMESSAGESOURCE_Unlink",
@@ -458,7 +700,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "0c6bbf77"
+      "dh": "0c6bbf77",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetOffset",
@@ -477,7 +725,17 @@
         "StormLinkStrc",
         "StormLinkedListStrc"
       ],
-      "dh": "87c4ab28"
+      "dh": "87c4ab28",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_SetNodeValue",
@@ -496,7 +754,17 @@
         "StormLinkedListStrc",
         "int32_t"
       ],
-      "dh": "be98f82f"
+      "dh": "be98f82f",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ],
+        [
+          "dwValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_InsertNode",
@@ -519,7 +787,25 @@
         "StormLinkedListStrc",
         "int32_t"
       ],
-      "dh": "2dd18434"
+      "dh": "2dd18434",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNewItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRefItem",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetNodeAt",
@@ -539,7 +825,17 @@
         "StormLinkStrc",
         "int32_t"
       ],
-      "dh": "d87c19f8"
+      "dh": "d87c19f8",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_RemoveNode",
@@ -560,7 +856,17 @@
         "StormFaultHandlerNodeStrc",
         "StormLinkStrc"
       ],
-      "dh": "1b36d3de"
+      "dh": "1b36d3de",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetNodeLinkAtOffset",
@@ -580,7 +886,17 @@
         "StormLinkStrc",
         "int32_t"
       ],
-      "dh": "d6a3941a"
+      "dh": "d6a3941a",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSList_TMESSAGESOURCE_UnlinkAll",
@@ -599,7 +915,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "1b2a06fd"
+      "dh": "1b2a06fd",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSList_TMESSAGESOURCE_Destructor",
@@ -619,7 +941,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "7d65cde0"
+      "dh": "7d65cde0",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_AllocAndInsertNode",
@@ -641,7 +969,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ad1c506a"
+      "dh": "ad1c506a",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_DetachNode",
@@ -662,7 +1008,17 @@
         "FILE",
         "uint8_t"
       ],
-      "dh": "044a64cb"
+      "dh": "044a64cb",
+      "paramStorage": [
+        [
+          "pFile",
+          "ECX:4"
+        ],
+        [
+          "bFree",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "TSList_TMESSAGESOURCE_Destructor_5176d3",
@@ -682,7 +1038,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "21107d4f"
+      "dh": "21107d4f",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSList_TMESSAGESOURCE_Clear",
@@ -703,7 +1065,13 @@
         "FILE",
         "StormLinkedListStrc"
       ],
-      "dh": "defe367e"
+      "dh": "defe367e",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_FindNode",
@@ -724,7 +1092,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0b0f7834"
+      "dh": "0b0f7834",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AtexitCleanup_FreeLinkedListAndCritSec",
@@ -761,7 +1139,13 @@
         "StormFaultHandlerNodeStrc",
         "pfnStormErrorHandler"
       ],
-      "dh": "1cd952e8"
+      "dh": "1cd952e8",
+      "paramStorage": [
+        [
+          "pfnHandler",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FAULT_LookupErrorString",
@@ -782,7 +1166,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dc5fb373"
+      "dh": "dc5fb373",
+      "paramStorage": [
+        [
+          "nErrorCode",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "nMaxLen",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FAULT_ShowFormattedError",
@@ -860,7 +1258,13 @@
       "calledFunctions": [
         "D2MEM_VirtualAlloc"
       ],
-      "dh": "4e82f224"
+      "dh": "4e82f224",
+      "paramStorage": [
+        [
+          "nSize",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2MEM_VirtualFree",
@@ -875,7 +1279,13 @@
       "calledFunctions": [
         "D2MEM_VirtualFree"
       ],
-      "dh": "e8282d60"
+      "dh": "e8282d60",
+      "paramStorage": [
+        [
+          "pAddress",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2MEM_CopyRows",
@@ -895,7 +1305,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b76f1154"
+      "dh": "b76f1154",
+      "paramStorage": [
+        [
+          "pCharSelComp",
+          "ECX:4"
+        ],
+        [
+          "pSrc",
+          "EDX:4"
+        ],
+        [
+          "nDstStride",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSrcStride",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nRows",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBytesPerRow",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2MEM_CompareBytes",
@@ -914,7 +1350,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fc83d1a7"
+      "dh": "fc83d1a7",
+      "paramStorage": [
+        [
+          "pBuf1",
+          "ECX:4"
+        ],
+        [
+          "pBuf2",
+          "EDX:4"
+        ],
+        [
+          "nByteCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2MEM_FindLowestSetBit",
@@ -933,7 +1383,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "743377f4"
+      "dh": "743377f4",
+      "paramStorage": [
+        [
+          "dwMask",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2FILE_VerifySignatureWinTrust",
@@ -959,7 +1415,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3b4e1269"
+      "dh": "3b4e1269",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2FILE_GetSignerOrganization",
@@ -988,7 +1450,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7e0f4a51"
+      "dh": "7e0f4a51",
+      "paramStorage": [
+        [
+          "szFilePath",
+          "ECX:4"
+        ],
+        [
+          "szOrgOut",
+          "EDX:4"
+        ],
+        [
+          "nOrgMaxLen",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CRC32_Calculate",
@@ -1010,7 +1486,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cb666bdb"
+      "dh": "cb666bdb",
+      "paramStorage": [
+        [
+          "pbData",
+          "ECX:4"
+        ],
+        [
+          "nLen",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SSTR_StringLength",
@@ -1025,7 +1511,13 @@
       "calledFunctions": [
         "SSTR_StringLength"
       ],
-      "dh": "6cf92495"
+      "dh": "6cf92495",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FOG_ParseFieldValue",
@@ -1043,7 +1535,21 @@
       "usedTypes": [
         "char *"
       ],
-      "dh": "7a4272fd"
+      "dh": "7a4272fd",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "ppszCursor",
+          "EDX:4"
+        ],
+        [
+          "pnOut",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FOG_FindCharInString",
@@ -1058,7 +1564,17 @@
       "calledFunctions": [
         "FOG_FindCharInString"
       ],
-      "dh": "9e0deb92"
+      "dh": "9e0deb92",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "cSearchChar",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gFaultHandlerList",

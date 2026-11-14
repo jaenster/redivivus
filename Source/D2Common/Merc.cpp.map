@@ -21,7 +21,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8736b307"
+      "dh": "8736b307",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GetMonsterSequenceTable",
@@ -53,7 +59,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2994ba84"
+      "dh": "2994ba84",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MERC_GetSequenceTxt",
@@ -74,7 +86,13 @@
         "D2MonSeqTxt",
         "D2UnitStrc"
       ],
-      "dh": "2226ee0f"
+      "dh": "2226ee0f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetCounter1",
@@ -95,7 +113,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "3188fba6"
+      "dh": "3188fba6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetCounter2",
@@ -116,7 +140,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "2bf75f7c"
+      "dh": "2bf75f7c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ANIM_GetSequenceFrameInfo",
@@ -137,7 +167,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "161ac9dc"
+      "dh": "161ac9dc",
+      "paramStorage": [
+        [
+          "pSeqData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStartFrame",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nEndFrame",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnFrame",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnDirection",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pnEvent",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "ANIM_GetEventFrame",
@@ -157,7 +217,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ce9c5b1a"
+      "dh": "ce9c5b1a",
+      "paramStorage": [
+        [
+          "pSeqData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFrameIdx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnEvent",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MERC_GenerateStatsFromSeed",
@@ -182,7 +256,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ee5d855d"
+      "dh": "ee5d855d",
+      "paramStorage": [
+        [
+          "nSeed",
+          "ECX:4"
+        ],
+        [
+          "pMercStats",
+          "EDX:4"
+        ],
+        [
+          "nDifficulty",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "GetMercTypeString",
@@ -202,7 +290,13 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "e0708eb3"
+      "dh": "e0708eb3",
+      "paramStorage": [
+        [
+          "nIndex",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetMercAct",
@@ -224,7 +318,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "b466c0a4"
+      "dh": "b466c0a4",
+      "paramStorage": [
+        [
+          "bIsExpansion",
+          "ECX:4"
+        ],
+        [
+          "nClassId",
+          "EDX:4"
+        ],
+        [
+          "nMercNameId",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "GetBaseExperience",
@@ -242,7 +350,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "60ab1322"
+      "dh": "60ab1322",
+      "paramStorage": [
+        [
+          "nLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExpPerLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetReviveCost",
@@ -262,7 +380,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "70971a7a"
+      "dh": "70971a7a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RollMercStats",
@@ -290,7 +414,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "141035cd"
+      "dh": "141035cd",
+      "paramStorage": [
+        [
+          "nVersion",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nMercSeed",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAct",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDifficulty",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pHireData",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

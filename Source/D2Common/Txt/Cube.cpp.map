@@ -19,7 +19,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "59f4c132"
+      "dh": "59f4c132",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648370",
@@ -37,7 +43,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "ac494a05"
+      "dh": "ac494a05",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648380",
@@ -55,7 +67,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "c56ca5c0"
+      "dh": "c56ca5c0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648430",
@@ -73,7 +91,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "8aac717c"
+      "dh": "8aac717c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648440",
@@ -91,7 +115,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "7db41f0f"
+      "dh": "7db41f0f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648450",
@@ -109,7 +139,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "f0c489d4"
+      "dh": "f0c489d4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00650ea0",
@@ -127,7 +163,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "0331db35"
+      "dh": "0331db35",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_AllocPlayerData_NoOp_Unref_00663740",
@@ -145,7 +187,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "fcecab4b"
+      "dh": "fcecab4b",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_GetRecipeCount_Unref_00665760",
@@ -178,7 +226,17 @@
       "calledFunctions": [
         "CUBE_PadItemCodeString"
       ],
-      "dh": "9584b55c"
+      "dh": "9584b55c",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_TokenizeAndParseInt",
@@ -198,7 +256,17 @@
         "char *",
         "int32_t"
       ],
-      "dh": "1ca278d5"
+      "dh": "1ca278d5",
+      "paramStorage": [
+        [
+          "szText",
+          "EAX:4"
+        ],
+        [
+          "ppszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_ParseInputItem",
@@ -225,7 +293,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "b06ce7ad"
+      "dh": "b06ce7ad",
+      "paramStorage": [
+        [
+          "pszField",
+          "EAX:4"
+        ],
+        [
+          "pInput",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_ParseOutputItem",
@@ -252,7 +330,17 @@
         "D2ItemsTxt",
         "int32_t"
       ],
-      "dh": "0b264181"
+      "dh": "0b264181",
+      "paramStorage": [
+        [
+          "pOutput",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pszField",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_ParseInputItemField",
@@ -272,7 +360,33 @@
         "D2CubeMainTxt",
         "int32_t"
       ],
-      "dh": "8fd6699e"
+      "dh": "8fd6699e",
+      "paramStorage": [
+        [
+          "pszField",
+          "ECX:4"
+        ],
+        [
+          "pLine",
+          "EDX:4"
+        ],
+        [
+          "index",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwUnused3",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_ParseOutputItemField",
@@ -292,7 +406,33 @@
         "D2CubeMainTxt",
         "int32_t"
       ],
-      "dh": "e538a5db"
+      "dh": "e538a5db",
+      "paramStorage": [
+        [
+          "pszField",
+          "ECX:4"
+        ],
+        [
+          "pLine",
+          "EDX:4"
+        ],
+        [
+          "index",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwUnused3",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_LinkerItemStatCost",
@@ -311,7 +451,33 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "854e8049"
+      "dh": "854e8049",
+      "paramStorage": [
+        [
+          "pszStatName",
+          "ECX:4"
+        ],
+        [
+          "pnStatId",
+          "EDX:4"
+        ],
+        [
+          "nParam3",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam4",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam5",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nParam6",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_LoadCubeMainTable",
@@ -338,7 +504,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "05f0689e"
+      "dh": "05f0689e",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_FreeCubeMainTable",
@@ -376,7 +548,13 @@
         "D2CubeMainTxt",
         "int32_t"
       ],
-      "dh": "1ae07951"
+      "dh": "1ae07951",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_GetRecipeCount",
@@ -412,7 +590,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "ea8c457e"
+      "dh": "ea8c457e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "nullsub",
@@ -430,7 +618,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "4d614268"
+      "dh": "4d614268",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_AllocPlayerData_NoOp",
@@ -448,7 +646,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "a511cb0b"
+      "dh": "a511cb0b",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_FreePlayerData_STUB",
@@ -466,7 +670,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "4745b547"
+      "dh": "4745b547",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_InitTxtFiles_NoOp",
@@ -484,7 +694,13 @@
       "usedTypes": [
         "D2PoolManagerStrc"
       ],
-      "dh": "aa90de13"
+      "dh": "aa90de13",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_FreeTables_NoOp",
@@ -583,7 +799,17 @@
       "calledFunctions": [
         "CUBE_PadItemCodeString_Unref_006bcd50"
       ],
-      "dh": "0cbea488"
+      "dh": "0cbea488",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EAX:4"
+        ]
+      ]
     }
   ]
 }

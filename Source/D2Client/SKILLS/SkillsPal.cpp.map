@@ -33,7 +33,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4b56598d"
+      "dh": "4b56598d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Pal_ChargePathMissile",
@@ -62,7 +76,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "3bef2d18"
+      "dh": "3bef2d18",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Pal_FistOfHeavens",
@@ -92,7 +120,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "391acbbe"
+      "dh": "391acbbe",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Pal_RandomRadiusMissileField",
@@ -129,7 +171,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f3241a4a"
+      "dh": "f3241a4a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_DrawChargeTrail",
@@ -163,7 +219,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "72312591"
+      "dh": "72312591",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nGamma",
+          "EDX:4"
+        ],
+        [
+          "nDirectionFlag",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_SetupHolyChargeMovement",
@@ -215,7 +285,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e3cda3e7"
+      "dh": "e3cda3e7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_FindClosestTargetExcludingGUID",
@@ -234,7 +318,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "c5484940"
+      "dh": "c5484940",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nExcludeGUID",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetSequenceEventFrame",
@@ -256,7 +350,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7a2ac404"
+      "dh": "7a2ac404",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Pal_Charge",
@@ -302,7 +402,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "935cf6ae"
+      "dh": "935cf6ae",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_StopAndClearUninterruptable",
@@ -327,7 +441,17 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "9b7f0449"
+      "dh": "9b7f0449",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Pal_RateThrottledBloodParticles",
@@ -350,7 +474,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a67e41db"
+      "dh": "a67e41db",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_ExecuteItemCast",
@@ -387,7 +525,37 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "e2e8bd1a"
+      "dh": "e2e8bd1a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "pDoFuncData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0xc]:2"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x10]:2"
+        ],
+        [
+          "bHasTarget",
+          "Stack[0x14]:2"
+        ]
+      ]
     },
     {
       "name": "SKILL_ExecuteItemCastOnUnit",
@@ -409,7 +577,29 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "83859675"
+      "dh": "83859675",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillLevelData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bHasTarget",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "SKILL_ExecuteItemCastAtCoords",
@@ -431,7 +621,33 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "0199568e"
+      "dh": "0199568e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillLevelData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nItemParam",
+          "Stack[0x10]:2"
+        ]
+      ]
     }
   ]
 }

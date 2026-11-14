@@ -16,7 +16,13 @@
       "calledFunctions": [
         "Abs"
       ],
-      "dh": "f5fddc70"
+      "dh": "f5fddc70",
+      "paramStorage": [
+        [
+          "fValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Abs2",
@@ -31,7 +37,13 @@
       "calledFunctions": [
         "Abs2"
       ],
-      "dh": "7c4f8240"
+      "dh": "7c4f8240",
+      "paramStorage": [
+        [
+          "fValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WEATHER_Init",
@@ -130,7 +142,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "73e03d5a"
+      "dh": "73e03d5a",
+      "paramStorage": [
+        [
+          "bForceReset",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bNewState",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "WEATHER_InitializeRngParams",
@@ -185,7 +207,13 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "5a5f92be"
+      "dh": "5a5f92be",
+      "paramStorage": [
+        [
+          "bForceDisable",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISC_PrepareWeatherOverlay",
@@ -213,7 +241,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9399973a"
+      "dh": "9399973a",
+      "paramStorage": [
+        [
+          "eLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WEATHER_FreeDC6Graphics",
@@ -249,7 +283,13 @@
         "FOG_InitDataArray",
         "WEATHER_UpdateStateAct5"
       ],
-      "dh": "33fde4c3"
+      "dh": "33fde4c3",
+      "paramStorage": [
+        [
+          "bUpdateAct5",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WEATHER_InitBlizzardState",
@@ -264,7 +304,13 @@
       "calledFunctions": [
         "WEATHER_InitBlizzardState"
       ],
-      "dh": "8acc62ea"
+      "dh": "8acc62ea",
+      "paramStorage": [
+        [
+          "nSpellId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WEATHER_UpdateSplashes",
@@ -286,7 +332,13 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "dc002459"
+      "dh": "dc002459",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WEATHER_UpdateBubbles",
@@ -308,7 +360,13 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "e622b8b2"
+      "dh": "e622b8b2",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WEATHER_SpawnSplash",
@@ -337,7 +395,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1a4aa765"
+      "dh": "1a4aa765",
+      "paramStorage": [
+        [
+          "nScreenX",
+          "ECX:4"
+        ],
+        [
+          "nScreenY",
+          "EDX:4"
+        ],
+        [
+          "nWorldX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWorldY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "WEATHER_SpawnBubble",
@@ -366,7 +442,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d8a3ba5e"
+      "dh": "d8a3ba5e",
+      "paramStorage": [
+        [
+          "nScreenX",
+          "ECX:4"
+        ],
+        [
+          "nScreenY",
+          "EDX:4"
+        ],
+        [
+          "nWorldX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWorldY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "WEATHER_GetLightingTint",
@@ -394,7 +488,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "078586c9"
+      "dh": "078586c9",
+      "paramStorage": [
+        [
+          "pOutAlpha",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIntensity",
+          "EDI:4"
+        ],
+        [
+          "pOutTint",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "WEATHER_SpawnParticle",
@@ -422,7 +530,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fe8fbca6"
+      "dh": "fe8fbca6",
+      "paramStorage": [
+        [
+          "pSeed",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "WEATHER_UpdateParticles",
@@ -445,7 +559,13 @@
         "D2SeedStrc",
         "D2WeatherParticleStrc"
       ],
-      "dh": "a499c0e3"
+      "dh": "a499c0e3",
+      "paramStorage": [
+        [
+          "pSeed",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WEATHER_DrawParticles",
@@ -490,7 +610,17 @@
         "LEVEL_CanHaveRain",
         "LEVEL_CanHaveMud"
       ],
-      "dh": "1f569738"
+      "dh": "1f569738",
+      "paramStorage": [
+        [
+          "pbCanRain",
+          "EBX:4"
+        ],
+        [
+          "pbCanMud",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "WEATHER_GetCurrentLevelWeatherFlags",
@@ -538,7 +668,13 @@
         "D2SeedStrc",
         "uint64_t"
       ],
-      "dh": "9ff6073c"
+      "dh": "9ff6073c",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_Overlay_Weather",
@@ -606,7 +742,17 @@
         "DC6 *",
         "uint32_t"
       ],
-      "dh": "a27f406a"
+      "dh": "a27f406a",
+      "paramStorage": [
+        [
+          "pBubbleArray",
+          "ECX:4"
+        ],
+        [
+          "pDC6Table",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_WORLD_RainEffectOnFloor",
@@ -679,7 +825,13 @@
       "calledFunctions": [
         "WEATHER_SetGlobalFlag"
       ],
-      "dh": "7c2d4b3e"
+      "dh": "7c2d4b3e",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ENV_Rcv0x54_NoOp",
@@ -694,7 +846,13 @@
       "calledFunctions": [
         "ENV_Rcv0x54_NoOp"
       ],
-      "dh": "d44fa75e"
+      "dh": "d44fa75e",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ENV_Rcv0x54_NoOp_Unref_00473cb0",
@@ -709,7 +867,13 @@
       "calledFunctions": [
         "ENV_Rcv0x54_NoOp_Unref_00473cb0"
       ],
-      "dh": "8ece6528"
+      "dh": "8ece6528",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ENV_Rcv0x54_NoOp_Unref_00473cc0",
@@ -724,7 +888,13 @@
       "calledFunctions": [
         "ENV_Rcv0x54_NoOp_Unref_00473cc0"
       ],
-      "dh": "41a76974"
+      "dh": "41a76974",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ENV_InitClientSide_NoOp_Unref_00473cd0",
@@ -796,7 +966,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "56ac5d62"
+      "dh": "56ac5d62",
+      "paramStorage": [
+        [
+          "nState",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WEATHER_ToggleTransitionLock",
@@ -845,7 +1021,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7ea46215"
+      "dh": "7ea46215",
+      "paramStorage": [
+        [
+          "pSeed",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WeatherEffects",
@@ -903,7 +1085,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "512502c9"
+      "dh": "512502c9",
+      "paramStorage": [
+        [
+          "nDeltaX",
+          "ECX:4"
+        ],
+        [
+          "nDeltaY",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

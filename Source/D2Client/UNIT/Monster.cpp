@@ -2824,7 +2824,6 @@ void __fastcall MERC_InitializeFromPacket(D2UnitStrc * pUnit, D2MercInitArgStrc 
     uint8_t bVar1;
     BOOL bIsExpansion;
     uint32_t nDifficulty;
-    D2UnitStrc* pPlayerUnit_lcl;
     int32_t nLevel;
     uint16_t* pMercName;
     uint16_t nNameId;
@@ -2850,9 +2849,7 @@ void __fastcall MERC_InitializeFromPacket(D2UnitStrc * pUnit, D2MercInitArgStrc 
     nSkillModeVal = pMercInit->nSeed;
     nDifficulty = (uint32_t)bVar1;
     pHireData = &sHireData;
-    pPlayerUnit_lcl = Player::GetPlayerUnit_UI();
-    bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-    bIsExpansion = D2Common::Merc::RollMercStats(bIsExpansion, pPlayerUnit_lcl, nSkillModeVal, nLevel, nDifficulty, pHireData);
+    bIsExpansion = D2Common::Merc::RollMercStats(GAME::Game::CLIENT_CheckExpansion(), Player::GetPlayerUnit_UI(), nSkillModeVal, nLevel, nDifficulty, pHireData);
     if (!bIsExpansion) {
       return;
     }

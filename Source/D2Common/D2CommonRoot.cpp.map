@@ -19,7 +19,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "3f775f02"
+      "dh": "3f775f02",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTBLS_CalcExpr_ParseTokenType",
@@ -38,7 +44,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "3680660f"
+      "dh": "3680660f",
+      "paramStorage": [
+        [
+          "szKey",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTBLS_CalcExpr_GetConstTwo",
@@ -53,7 +65,13 @@
       "calledFunctions": [
         "ITEMTBLS_CalcExpr_GetConstTwo"
       ],
-      "dh": "52953bdb"
+      "dh": "52953bdb",
+      "paramStorage": [
+        [
+          "nFunctionIndex",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CalcVMCallback_GetSpecialParam",
@@ -74,7 +92,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d880fdf8"
+      "dh": "d880fdf8",
+      "paramStorage": [
+        [
+          "nCalcOp",
+          "ECX:4"
+        ],
+        [
+          "pCalcCtx",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_RollRandomInRange",
@@ -95,7 +123,21 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "2b568e62"
+      "dh": "2b568e62",
+      "paramStorage": [
+        [
+          "nRangeStart",
+          "EAX:4"
+        ],
+        [
+          "nRangeEnd",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_GetObjectTableActCount",
@@ -114,7 +156,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "00e20d9d"
+      "dh": "00e20d9d",
+      "paramStorage": [
+        [
+          "nActNo",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_GetObjectIdFromActTable",
@@ -133,7 +181,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "923c1d23"
+      "dh": "923c1d23",
+      "paramStorage": [
+        [
+          "nActNo",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

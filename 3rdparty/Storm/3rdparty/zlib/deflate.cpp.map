@@ -24,7 +24,13 @@
         "uint32_t",
         "z_stream"
       ],
-      "dh": "2e77ae7f"
+      "dh": "2e77ae7f",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "deflateSetHeader",
@@ -44,7 +50,17 @@
         "gz_header",
         "z_stream"
       ],
-      "dh": "0179c009"
+      "dh": "0179c009",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "pHead",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "deflatePending",
@@ -62,7 +78,21 @@
       "usedTypes": [
         "z_stream"
       ],
-      "dh": "acb1f4f7"
+      "dh": "acb1f4f7",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "pPending",
+          "EDX:4"
+        ],
+        [
+          "pBits",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "deflatePrime",
@@ -84,7 +114,21 @@
         "uint32_t",
         "z_stream"
       ],
-      "dh": "e0f0c01a"
+      "dh": "e0f0c01a",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "nBits",
+          "EDX:4"
+        ],
+        [
+          "uValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "deflateTune",
@@ -105,7 +149,29 @@
         "uint32_t",
         "z_stream"
       ],
-      "dh": "d1b5a93d"
+      "dh": "d1b5a93d",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "nGoodMatch",
+          "EDX:4"
+        ],
+        [
+          "nMaxLazyMatch",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNiceMatch",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxChainLen",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "deflateBound",
@@ -128,7 +194,17 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "b9657eaa"
+      "dh": "b9657eaa",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "nSourceLen",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "putShortMSB",
@@ -147,7 +223,17 @@
         "deflate_state",
         "uint32_t"
       ],
-      "dh": "6a4f8a84"
+      "dh": "6a4f8a84",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "EAX:4"
+        ],
+        [
+          "wValue",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "flush_pending",
@@ -169,7 +255,13 @@
         "uint32_t",
         "z_stream"
       ],
-      "dh": "78a2e9a8"
+      "dh": "78a2e9a8",
+      "paramStorage": [
+        [
+          "pStream",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "deflateEnd",
@@ -189,7 +281,13 @@
         "uint32_t",
         "z_stream"
       ],
-      "dh": "3d28ae27"
+      "dh": "3d28ae27",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "deflateCopy",
@@ -212,7 +310,17 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "74914a48"
+      "dh": "74914a48",
+      "paramStorage": [
+        [
+          "pDestStream",
+          "ECX:4"
+        ],
+        [
+          "pSrcStream",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "read_buf",
@@ -235,7 +343,21 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "f45956a4"
+      "dh": "f45956a4",
+      "paramStorage": [
+        [
+          "pStream",
+          "ESI:4"
+        ],
+        [
+          "pBuf",
+          "EBX:4"
+        ],
+        [
+          "nSize",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "lm_init",
@@ -255,7 +377,13 @@
         "deflate_state",
         "uint16_t"
       ],
-      "dh": "c73c8adc"
+      "dh": "c73c8adc",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "longest_match",
@@ -275,7 +403,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7fa6b25e"
+      "dh": "7fa6b25e",
+      "paramStorage": [
+        [
+          "nCurMatch",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDeflateState",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "fill_window",
@@ -301,7 +439,13 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "162d8dc8"
+      "dh": "162d8dc8",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "deflate_stored",
@@ -328,7 +472,17 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "af94c1f7"
+      "dh": "af94c1f7",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "ECX:4"
+        ],
+        [
+          "nFlush",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "deflate_fast",
@@ -357,7 +511,17 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "c5f8d061"
+      "dh": "c5f8d061",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "ECX:4"
+        ],
+        [
+          "nFlush",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "deflate_slow",
@@ -386,7 +550,17 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "1722eebe"
+      "dh": "1722eebe",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "ECX:4"
+        ],
+        [
+          "nFlush",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "deflate_rle",
@@ -414,7 +588,17 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "5fd6a4c5"
+      "dh": "5fd6a4c5",
+      "paramStorage": [
+        [
+          "nFlush",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDeflateState",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "deflate_huff",
@@ -442,7 +626,17 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "e89b1a7a"
+      "dh": "e89b1a7a",
+      "paramStorage": [
+        [
+          "nFlush",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDeflateState",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "deflateSetDictionary",
@@ -465,7 +659,21 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "fd0b8299"
+      "dh": "fd0b8299",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "pDictionary",
+          "EDX:4"
+        ],
+        [
+          "nDictLength",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "deflateReset",
@@ -486,7 +694,13 @@
         "int32_t",
         "z_stream"
       ],
-      "dh": "12e5ce48"
+      "dh": "12e5ce48",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "deflate",
@@ -518,7 +732,17 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "353ae4e4"
+      "dh": "353ae4e4",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "nFlush",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "deflateInit2_",
@@ -543,7 +767,41 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "80d98b1b"
+      "dh": "80d98b1b",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "nLevel",
+          "EDX:4"
+        ],
+        [
+          "nMethod",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWindowBits",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMemLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStrategy",
+          "Stack[0x10]:4"
+        ],
+        [
+          "szVersion",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nStreamSize",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "deflateParams",
@@ -565,7 +823,21 @@
         "uint32_t",
         "z_stream"
       ],
-      "dh": "c086a546"
+      "dh": "c086a546",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "nLevel",
+          "EDX:4"
+        ],
+        [
+          "nStrategy",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "deflateInit_",
@@ -586,7 +858,25 @@
         "uint32_t",
         "z_stream"
       ],
-      "dh": "686dae82"
+      "dh": "686dae82",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "nLevel",
+          "EDX:4"
+        ],
+        [
+          "szVersion",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStreamSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

@@ -21,7 +21,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "7bf44e7e"
+      "dh": "7bf44e7e",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetArenaTxtRecord",
@@ -43,7 +49,13 @@
         "D2ArenaTxt",
         "int32_t"
       ],
-      "dh": "2cbe118f"
+      "dh": "2cbe118f",
+      "paramStorage": [
+        [
+          "nArenaType",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FreeArenaTxt",
@@ -83,7 +95,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "00c0e080"
+      "dh": "00c0e080",
+      "paramStorage": [
+        [
+          "pCharTemplateTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCount",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "TXT_LoadCharTemplateTxt",
@@ -104,7 +126,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "642e41f8"
+      "dh": "642e41f8",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FreeCharTemplateTxt",
@@ -141,7 +169,17 @@
       "usedTypes": [
         "D2CharTemplateTxt"
       ],
-      "dh": "2ddd036b"
+      "dh": "2ddd036b",
+      "paramStorage": [
+        [
+          "nTemplate",
+          "ECX:4"
+        ],
+        [
+          "nLevelIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetClassFromCharTemplateTxt",
@@ -163,7 +201,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "caa458c6"
+      "dh": "caa458c6",
+      "paramStorage": [
+        [
+          "nTemplate",
+          "ECX:4"
+        ],
+        [
+          "nLevel",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

@@ -21,7 +21,13 @@
         "D2MonStatsTxt",
         "int32_t"
       ],
-      "dh": "bae2a987"
+      "dh": "bae2a987",
+      "paramStorage": [
+        [
+          "nMonStatsId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_MonStats_GetMonStats2",
@@ -41,7 +47,13 @@
         "D2MonStats2Txt",
         "int32_t"
       ],
-      "dh": "ad387e2a"
+      "dh": "ad387e2a",
+      "paramStorage": [
+        [
+          "nClassId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_MonStats_GetFlagsByBitOffset",
@@ -61,7 +73,17 @@
         "TxtMonStatsField0x0c",
         "int32_t"
       ],
-      "dh": "3c824144"
+      "dh": "3c824144",
+      "paramStorage": [
+        [
+          "nMonStatsId",
+          "ECX:4"
+        ],
+        [
+          "nBitOffset",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_MonStats_GetBaseId",
@@ -81,7 +103,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1b69f1db"
+      "dh": "1b69f1db",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
@@ -101,7 +129,17 @@
         "TXTMonStats2Field0x04DWORD",
         "int32_t"
       ],
-      "dh": "e1263c77"
+      "dh": "e1263c77",
+      "paramStorage": [
+        [
+          "nMonStatsId",
+          "ECX:4"
+        ],
+        [
+          "nBitOffset",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ValidateClassId",
@@ -120,7 +158,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a1850e96"
+      "dh": "a1850e96",
+      "paramStorage": [
+        [
+          "nClassId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSomeMonsterStatFlag",
@@ -140,7 +184,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "05ab76c6"
+      "dh": "05ab76c6",
+      "paramStorage": [
+        [
+          "nMonsterClassId",
+          "ECX:4"
+        ],
+        [
+          "nStatBitIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CheckMonStatId",
@@ -159,7 +213,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "7f332069"
+      "dh": "7f332069",
+      "paramStorage": [
+        [
+          "nMonStatsId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FilterNameString",
@@ -174,7 +234,17 @@
       "calledFunctions": [
         "FilterNameString"
       ],
-      "dh": "a7d5bbe9"
+      "dh": "a7d5bbe9",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERTBLS_AllocateTransformArrays",
@@ -195,7 +265,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c1d81d4f"
+      "dh": "c1d81d4f",
+      "paramStorage": [
+        [
+          "nMonStatsSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERTBLS_FreeTransformArrays",
@@ -232,7 +308,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "32848054"
+      "dh": "32848054",
+      "paramStorage": [
+        [
+          "nMonStatsId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUpgradeCount",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERTBLS_ParseMonStatsField",
@@ -254,7 +344,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b5a71b79"
+      "dh": "b5a71b79",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "pRecord",
+          "EDX:4"
+        ],
+        [
+          "nSkillIdx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMonStatsOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nReserved1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nReserved2",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_monstats",
@@ -281,7 +397,13 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "7830e05d"
+      "dh": "7830e05d",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_CalculateLevelScaledStats",
@@ -304,7 +426,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "68afed79"
+      "dh": "68afed79",
+      "paramStorage": [
+        [
+          "nMonStatsId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bIsChampion",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDifficultyIdx",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMonLevel",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nStatFlags",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pOutStats",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00653d30",
@@ -343,7 +491,17 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "52198b22"
+      "dh": "52198b22",
+      "paramStorage": [
+        [
+          "nMonStatsId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nVelocity",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_CompileUniqueTitleTxt",
@@ -365,7 +523,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "459e72c2"
+      "dh": "459e72c2",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "nTitleIdx",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_UnloadUniqueMonsterNameTables",
@@ -405,7 +577,17 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "5b321325"
+      "dh": "5b321325",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_GetRandomUniquePrefix_Unref_00653e90",
@@ -426,7 +608,13 @@
         "D2UnitStrc",
         "WCHAR"
       ],
-      "dh": "db13a7ce"
+      "dh": "db13a7ce",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_GetRandomUniquePrefix",
@@ -448,7 +636,13 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "31033f36"
+      "dh": "31033f36",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_GetRandomUniqueSuffix",
@@ -470,7 +664,13 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "0b5d30d5"
+      "dh": "0b5d30d5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_GetRandomUniqueAppelation",
@@ -492,7 +692,13 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "d6f3f9b5"
+      "dh": "d6f3f9b5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TC_ExtendTreasureClassSize",
@@ -514,7 +720,13 @@
         "D2ParsedTreasureClassStrc",
         "uint32_t"
       ],
-      "dh": "bc49da0d"
+      "dh": "bc49da0d",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResizeParsedTCEntries",
@@ -536,7 +748,17 @@
         "D2ParsedTreasureClassStrc",
         "int32_t"
       ],
-      "dh": "41ee2100"
+      "dh": "41ee2100",
+      "paramStorage": [
+        [
+          "pParsedTC",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AddOneParsedTCEntry",
@@ -556,7 +778,13 @@
         "D2ParsedTreasureClassEntriesStrc",
         "D2ParsedTreasureClassStrc"
       ],
-      "dh": "f5c0d9ac"
+      "dh": "f5c0d9ac",
+      "paramStorage": [
+        [
+          "pParsedTC",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AdjustRarities",
@@ -577,7 +805,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "829c32aa"
+      "dh": "829c32aa",
+      "paramStorage": [
+        [
+          "pParsedTC",
+          "ECX:4"
+        ],
+        [
+          "pParsedTCEntry",
+          "EDX:4"
+        ],
+        [
+          "nRarity",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bIsNotVersion100",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TC_GenerateAutoItemTypeTreasureClasses",
@@ -633,7 +879,17 @@
         "uint32_t",
         "uint32_t *"
       ],
-      "dh": "e2b55b63"
+      "dh": "e2b55b63",
+      "paramStorage": [
+        [
+          "cSeparator",
+          "AL:1"
+        ],
+        [
+          "ppCursor",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "TC_ParseTreasureClassEntry",
@@ -663,7 +919,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3af91833"
+      "dh": "3af91833",
+      "paramStorage": [
+        [
+          "pParsedTC",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nProb",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szItemCode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_TreasureClassEx",
@@ -689,7 +959,13 @@
         "D2TreasureClassExSubSubTxt",
         "D2TreasureClassExTxt"
       ],
-      "dh": "b1ca2bd0"
+      "dh": "b1ca2bd0",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreeParsedTC",
@@ -726,7 +1002,13 @@
         "D2ParsedTreasureClassStrc",
         "int32_t"
       ],
-      "dh": "8bd52694"
+      "dh": "8bd52694",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TC_GetParsedTreasureClassByLevel",
@@ -746,7 +1028,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "1bf4c47c"
+      "dh": "1bf4c47c",
+      "paramStorage": [
+        [
+          "nTreasureClassId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "RollTreasureClass",
@@ -766,7 +1058,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8fa3b4b3"
+      "dh": "8fa3b4b3",
+      "paramStorage": [
+        [
+          "nDifficulty",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAct",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERTBLS_Unused_HaltLine1710",
@@ -804,7 +1110,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "6e962507"
+      "dh": "6e962507",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_UnloadBin_MonStats",
@@ -842,7 +1154,13 @@
         "D2MonItemPercentTxt",
         "int32_t"
       ],
-      "dh": "90215064"
+      "dh": "90215064",
+      "paramStorage": [
+        [
+          "nTCArrayIdx",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_monumod",
@@ -863,7 +1181,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "e8977e57"
+      "dh": "e8977e57",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_006552a0",
@@ -905,7 +1229,13 @@
         "D2PoolManagerStrc",
         "uint32_t"
       ],
-      "dh": "935d5e46"
+      "dh": "935d5e46",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_006556a0",
@@ -941,7 +1271,13 @@
         "D2SuperUniquesTxt",
         "int32_t"
       ],
-      "dh": "659ddd1e"
+      "dh": "659ddd1e",
+      "paramStorage": [
+        [
+          "nSuperUnique",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERTBLS_GetSuperUniquesTxtCount",
@@ -987,7 +1323,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f972d48f"
+      "dh": "f972d48f",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERTBLS_FreeHirelingTxt",
@@ -1022,7 +1364,21 @@
         "D2HirelingTxt",
         "int32_t"
       ],
-      "dh": "e3947455"
+      "dh": "e3947455",
+      "paramStorage": [
+        [
+          "bIsExpansion",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHirelingId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetHirelingEntryByNameId",
@@ -1042,7 +1398,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "76770fec"
+      "dh": "76770fec",
+      "paramStorage": [
+        [
+          "bIsExpansion",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMercNameId",
+          "Stack[0x8]:2"
+        ],
+        [
+          "pPrevEntry",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetHirelingEntryByClassId",
@@ -1061,7 +1431,21 @@
         "D2HirelingTxt",
         "int32_t"
       ],
-      "dh": "50830e21"
+      "dh": "50830e21",
+      "paramStorage": [
+        [
+          "bIsExpansion",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPrevEntry",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetHirelingEntry",
@@ -1080,7 +1464,25 @@
         "D2HirelingTxt",
         "int32_t"
       ],
-      "dh": "33880535"
+      "dh": "33880535",
+      "paramStorage": [
+        [
+          "bIsExpansion",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNpcClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDifficulty",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pPrevEntry",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GetHirelingDataTable",
@@ -1099,7 +1501,25 @@
         "D2HirelingTxt",
         "int32_t"
       ],
-      "dh": "b6852bfc"
+      "dh": "b6852bfc",
+      "paramStorage": [
+        [
+          "nVersion",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAct",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDifficulty",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pHirelingTxt",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_npc",
@@ -1119,7 +1539,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "ac49cb63"
+      "dh": "ac49cb63",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_UnloadBin_MonStats_Unref_006568f0",
@@ -1154,7 +1580,13 @@
         "D2NpcTxt",
         "int32_t"
       ],
-      "dh": "2875dd13"
+      "dh": "2875dd13",
+      "paramStorage": [
+        [
+          "nNpc",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_monsounds",
@@ -1175,7 +1607,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "ae2104b0"
+      "dh": "ae2104b0",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_FreeTxt_sounds_Unref_00656f60",
@@ -1211,7 +1649,13 @@
         "D2MonSoundsTxt",
         "int32_t"
       ],
-      "dh": "ab74dac8"
+      "dh": "ab74dac8",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERTBLS_GetMonSoundsTxtRecord",
@@ -1230,7 +1674,13 @@
         "D2MonSoundsTxt",
         "int32_t"
       ],
-      "dh": "fc2f8ba9"
+      "dh": "fc2f8ba9",
+      "paramStorage": [
+        [
+          "nMonStatsId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERTBLS_ParseMonSeqField",
@@ -1252,7 +1702,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "336eda9d"
+      "dh": "336eda9d",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "pRecord",
+          "EDX:4"
+        ],
+        [
+          "nSeqSlot",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLinkerCtx1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLinkerCtx2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLinkerCtx3",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_monstats2",
@@ -1273,7 +1749,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "beff2268"
+      "dh": "beff2268",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00658440",
@@ -1308,7 +1790,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9135e651"
+      "dh": "9135e651",
+      "paramStorage": [
+        [
+          "nMonTypeId",
+          "ECX:4"
+        ],
+        [
+          "nCheckTypeId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_montype",
@@ -1333,7 +1825,13 @@
         "D2PoolManagerStrc",
         "uint32_t"
       ],
-      "dh": "9ca7bc23"
+      "dh": "9ca7bc23",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERTBLS_FreeMonPlaceTxt",
@@ -1372,7 +1870,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "16da88b7"
+      "dh": "16da88b7",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_006594d0",
@@ -1409,7 +1913,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "c874ae05"
+      "dh": "c874ae05",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00659970",
@@ -1444,7 +1954,33 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "88c0f811"
+      "dh": "88c0f811",
+      "paramStorage": [
+        [
+          "pName",
+          "ECX:4"
+        ],
+        [
+          "pRecord",
+          "EDX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTxtRow",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTxtColumn",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_monpreset",
@@ -1465,7 +2001,13 @@
         "D2MonPresetTxt",
         "D2PoolManagerStrc"
       ],
-      "dh": "96230401"
+      "dh": "96230401",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERTBLS_FreeMonPresetTxt",
@@ -1500,7 +2042,17 @@
         "D2MonPresetTxt",
         "uint32_t"
       ],
-      "dh": "5cd35c5e"
+      "dh": "5cd35c5e",
+      "paramStorage": [
+        [
+          "nAct",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnRecordCount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERTBLS_GetPresetActValue",
@@ -1518,7 +2070,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "31d28eab"
+      "dh": "31d28eab",
+      "paramStorage": [
+        [
+          "nType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSuperUniqueId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_sounds",
@@ -1539,7 +2101,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "9a18cfcf"
+      "dh": "9a18cfcf",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_FreeTxt_sounds",
@@ -1579,7 +2147,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "fef60d67"
+      "dh": "fef60d67",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERTBLS_FreeMonPropTxt",
@@ -1616,7 +2190,13 @@
         "D2MonSeqMonsterTbls",
         "int32_t"
       ],
-      "dh": "a903f31d"
+      "dh": "a903f31d",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_MonEquip",
@@ -1643,7 +2223,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "3ce41019"
+      "dh": "3ce41019",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0065a170",
@@ -1732,7 +2318,13 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "7a580c0c"
+      "dh": "7a580c0c",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ClearScreen_Unref_0065a3f0",
@@ -1751,7 +2343,13 @@
       "usedTypes": [
         "D2PoolManagerStrc"
       ],
-      "dh": "64568337"
+      "dh": "64568337",
+      "paramStorage": [
+        [
+          "bPartial",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocMonsterTables",
@@ -1784,7 +2382,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "21f97186"
+      "dh": "21f97186",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

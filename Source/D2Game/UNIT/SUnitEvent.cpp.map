@@ -22,7 +22,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "b52dfaf0"
+      "dh": "b52dfaf0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITEVENT_Alloc",
@@ -47,7 +57,41 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "4f87e5dd"
+      "dh": "4f87e5dd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nUnitEvent",
+          "Stack[0x4]:1"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "fpItemEventFunc",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nQueueNo",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nOwnerKey",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITEVENT_RemoveEventsByQueueAndOwner",
@@ -69,7 +113,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "b9700073"
+      "dh": "b9700073",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nQueueNo",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOwnerKey",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UNITEVENT_FindByCallbackParams",
@@ -91,7 +153,29 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "c81e3889"
+      "dh": "c81e3889",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nQueueNo",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOwnerKey",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UNITEVENT_DispatchEventsByType",
@@ -115,7 +199,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3d3dbe54"
+      "dh": "3d3dbe54",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eEventType",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOtherUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

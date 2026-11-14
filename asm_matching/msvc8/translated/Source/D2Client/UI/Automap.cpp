@@ -2334,13 +2334,9 @@ void __stdcall AUTOMAP_DrawDifficulty() {
       exit(-1);
     }
 
-    BOOL bMultiLineCenter;
     pZeroFill = D2Lang::StrTable::strtable::GetLocaleString(nDiffStringId);
     D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(300, wText, D2Lang::StrTable::strtable::GetLocaleString(0x1057), pZeroFill);
-    bMultiLineCenter = 0;
-    nFormatLen = 4;
-    nY = AUTOMAP_TextHeightOffset;
-    D2Win::Src::D2WinFont::DRAW_text(wText, SpellSel::WindowSizeX - D2Win::Src::D2WinFont::DRAW_text0(wText) - 0x10, nY, nFormatLen, bMultiLineCenter);
+    D2Win::Src::D2WinFont::DRAW_text(wText, SpellSel::WindowSizeX - D2Win::Src::D2WinFont::DRAW_text0(wText) - 0x10, AUTOMAP_TextHeightOffset, 4, 0);
     AUTOMAP_TextHeightOffset += 0x10;
     return;
 }

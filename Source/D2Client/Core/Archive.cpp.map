@@ -26,7 +26,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b9afc7e8"
+      "dh": "b9afc7e8",
+      "paramStorage": [
+        [
+          "szFilename",
+          "ECX:4"
+        ],
+        [
+          "bUseDccExtension",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "IMAGE_LoadWeatherDC6ToPointer",
@@ -51,7 +61,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "277f8d79"
+      "dh": "277f8d79",
+      "paramStorage": [
+        [
+          "szFilename",
+          "ECX:4"
+        ],
+        [
+          "pnSize",
+          "EDX:4"
+        ],
+        [
+          "pDC6",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DC6_FreeAndDelete",
@@ -71,7 +95,13 @@
       "usedTypes": [
         "DC6"
       ],
-      "dh": "caeee968"
+      "dh": "caeee968",
+      "paramStorage": [
+        [
+          "pDC6",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

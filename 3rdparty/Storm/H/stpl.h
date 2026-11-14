@@ -293,11 +293,11 @@ template<> void TSExplicitList<CELLIST, -572662307>::SetLinkOffset(int32_t nLink
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::Next(::CELLIST * pNode);
 template<> TSExplicitList<::CELLIST, -572662307>* TSExplicitList<CELLIST, -572662307>::CopyConstructor(TSExplicitList<::CELLIST, -572662307>* pSource);
 template<> void TSExplicitList<CELLIST, -572662307>::LinkNode(::CELLIST * pNode, uint32_t nLinkType, ::CELLIST * pExisting);
-template<> void TSExplicitList<CELLIST, -572662307>::UnlinkAll();
+template<> __attribute__((noinline)) inline void TSExplicitList<CELLIST, -572662307>::UnlinkAll();
 template<> void TSExplicitList<CELLIST, -572662307>::ChangeLinkOffset(int32_t nLinkOffset);
 template<> void TSExplicitList<CELLIST, -572662307>::Destructor();
 template<> TSExplicitList<::CELLIST, -572662307>* TSExplicitList<CELLIST, -572662307>::ScalarDeletingDestructor(uint32_t dwFlags);
-template<> void TSExplicitList<CELLIST, -572662307>::Clear();
+template<> __attribute__((noinline)) inline void TSExplicitList<CELLIST, -572662307>::Clear();
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::DeleteNode(::CELLIST * pNode);
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags);
 
@@ -336,14 +336,14 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::SetLinkOffset(int32_t nLi
 // Copy constructor: takes pSource's link offset and starts with an empty terminator; returns this.
 // Byte-identical to TSExplicitList<CELLIST,..>::CopyConstructor 006023b0; T not proven (no xrefs), filed with the SGAMEDATA block.
 template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -572662307>::CopyConstructor(TSExplicitList<::SGAMEDATA, -572662307>* pSource);
-template<> void TSExplicitList<SGAMEDATA, -572662307>::UnlinkAll();
+template<> __attribute__((noinline)) inline void TSExplicitList<SGAMEDATA, -572662307>::UnlinkAll();
 // Changes the link offset; when it differs, unlinks every node first and resets the terminator.
 // Same code as TSExplicitList<CELLIST,..>::ChangeLinkOffset 006026e0; T from its call to UnlinkAll 0044f8e0.
 template<> void TSExplicitList<SGAMEDATA, -572662307>::ChangeLinkOffset(int32_t nLinkOffset);
 // Destructor: unlinks every node, then unlinks the terminator.
 // Same code as TSExplicitList<CELLIST,..>::Destructor 00602aa0; T from its call to UnlinkAll 0044f8e0; reached from Unwind_006ca010.
 template<> void TSExplicitList<SGAMEDATA, -572662307>::Destructor();
-template<> void TSExplicitList<SGAMEDATA, -572662307>::Clear();
+template<> __attribute__((noinline)) inline void TSExplicitList<SGAMEDATA, -572662307>::Clear();
 // Scalar deleting destructor: destructs, then SMemFree when dwFlags & 1; returns this.
 // Same code as TSExplicitList<CELLIST,..>::ScalarDeletingDestructor 00602b70; T from its call to UnlinkAll 0044f8e0.
 template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -572662307>::ScalarDeletingDestructor(uint32_t dwFlags);
@@ -363,7 +363,7 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::LinkNode(::StringEn
 template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::RawNext(::StringEntryNode * pNode);
 template<> void TSExplicitList<StringEntryNode, -572662307>::UnlinkNode(::StringEntryNode * pNode);
 template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::Next(::StringEntryNode * pNode);
-template<> void TSExplicitList<StringEntryNode, -572662307>::UnlinkAll();
+template<> __attribute__((noinline)) inline void TSExplicitList<StringEntryNode, -572662307>::UnlinkAll();
 template<> TSExplicitList<::StringEntryNode, -572662307>* TSExplicitList<StringEntryNode, -572662307>::CopyConstructor(TSExplicitList<::StringEntryNode, -572662307>* pSource);
 template<> void TSExplicitList<StringEntryNode, -572662307>::ChangeLinkOffset(int32_t nLinkOffset);
 template<> void TSExplicitList<StringEntryNode, -572662307>::Destructor();
@@ -375,10 +375,10 @@ template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::NewN
 template<> TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* TSHashObjectChunk<CELLIST, HASHKEY_NONE>::ScalarDeletingDestructor(uint32_t dwFlags);
 
 // TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>
-template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::UnlinkAll();
+template<> __attribute__((noinline)) inline void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::UnlinkAll();
 template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Destructor();
 // Walk the chunk list and free all CelList object chunks
-template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Clear();
+template<> __attribute__((noinline)) inline void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Clear();
 // Copies pSource's link offset and resets this list's terminator to empty.
 // Byte-identical to TSExplicitList<StringEntryNode,..>::Assign 0060e370.
 template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Assign(TSExplicitList<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>, 16>* pSource);
@@ -392,11 +392,11 @@ template<> TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* TSExplicitList<TSHashObje
 template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>::ScalarDeletingDestructor(uint32_t dwFlags);
 
 // TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>
-template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::UnlinkAll();
+template<> __attribute__((noinline)) inline void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::UnlinkAll();
 // Destructor: unlinks every chunk, then unlinks the terminator.
 // Same code as TSExplicitList<TSHashObjectChunk<CELLIST,..>,16>::Destructor 006028d0; T from its call to UnlinkAll 0044f930.
 template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::Destructor();
-template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::Clear();
+template<> __attribute__((noinline)) inline void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::Clear();
 template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::LinkNode(TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pNode, uint32_t nLinkType, TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pExisting);
 template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags);
 
@@ -422,7 +422,7 @@ template<> void TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::Delete(::SGAME
 // Looks up a game by 32-bit token in the hash-map without acquiring locks. Calls QSERVER_HashMapLookup with token as both key and unused parameter. Returns SGAMEDATA pointer if found, otherwise NULL. Caller must hold appropriate critical section.
 template<> ::SGAMEDATA * TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::Ptr(uint32_t nHandle);
 // Generates a unique 32-bit game token by incrementing nNextGameToken monotonic counter. If counter wraps to zero, sets nTokenCounterWrapped flag and validates uniqueness via hash-map lookup. Returns token only when confirmed not to collide with any existing game in the hash map.
-template<> uint32_t TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::GenerateUniqueHandle();
+template<> __attribute__((noinline)) inline uint32_t TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::GenerateUniqueHandle();
 template<> ::SGAMEDATA * TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::New(uint32_t * pHandle);
 
 // TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>
@@ -455,7 +455,7 @@ template<> ::SGAMEDATA * TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATAL
 template<> ::SGAMEDATA * TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::NewLock(uint32_t * pHandle, int32_t * pLockedHandle);
 
 // TSGrowableArray<CELLIST>
-template<> void TSGrowableArray<CELLIST>::Destructor();
+template<> __attribute__((noinline)) inline void TSGrowableArray<CELLIST>::Destructor();
 template<> uint32_t TSGrowableArray<CELLIST>::CalcChunkSize(uint32_t nCount);
 // Resize the pool block array to nNewCapacity slots; realloc or alloc+copy; re-init moved nodes
 template<> __attribute__((noinline)) inline void TSGrowableArray<CELLIST>::ReallocData(uint32_t nAlloc);
@@ -483,7 +483,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
 template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor();
 template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Reserve(uint32_t nCount, int32_t bRound);
 template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor_UnwindThunk_Unref_00603270();
-template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::SetCount(uint32_t nCount);
+template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::SetCount(uint32_t nCount);
 template<> TSGrowableArray<TSExplicitList<CELLIST, -572662307>> * TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::ScalarDeletingDestructor(uint32_t dwFlags);
 template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Clear();
 template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor_UnwindThunk_Unref_00604460();
@@ -515,7 +515,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
 template<> void __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044fff0(TSGrowableArray<::SGAMEDATA>* pArray);
 template<> TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_00450030(TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * param_1);
 template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Reserve(uint32_t nCount, int32_t bRound);
-template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::SetCount(uint32_t nCount);
+template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::SetCount(uint32_t nCount);
 template<> TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::ScalarDeletingDestructor(uint32_t dwFlags);
 template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Clear();
 template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Destructor_UnwindThunk_Unref_00450f70();
@@ -541,7 +541,7 @@ template<> void TSHashObject<CELLIST, HASHKEY_NONE>::Destructor();
 template<> void TSHashObject<MappingEntryNode, HASHKEY_STRI>::Destructor();
 
 // TSHashObject<SGAMEDATA, HASHKEY_NONE>
-template<> void TSHashObject<SGAMEDATA, HASHKEY_NONE>::Destructor();
+template<> __attribute__((noinline)) inline void TSHashObject<SGAMEDATA, HASHKEY_NONE>::Destructor();
 
 // TSHashObject<StringEntryNode, HASHKEY_STRI>
 template<> void TSHashObject<StringEntryNode, HASHKEY_STRI>::Destructor();
@@ -550,10 +550,10 @@ template<> void TSHashObject<StringEntryNode, HASHKEY_STRI>::Destructor();
 // const TSHashTable<struct CELLIST,class HASHKEY_NONE>::vftable
 template<> void * TSHashTable<CELLIST, HASHKEY_NONE>::vftable[4];
 template<> uint32_t TSHashTable<CELLIST, HASHKEY_NONE>::ComputeSlot(uint32_t dwHashVal);
-template<> void TSHashTable<CELLIST, HASHKEY_NONE>::Unlink(::CELLIST * pNode);
+template<> __attribute__((noinline)) inline void TSHashTable<CELLIST, HASHKEY_NONE>::Unlink(::CELLIST * pNode);
 template<> void TSHashTable<CELLIST, HASHKEY_NONE>::Delete(::CELLIST * pNode);
 template<> void TSHashTable<CELLIST, HASHKEY_NONE>::InternalClear(int32_t bUnlinkOnly);
-template<> ::CELLIST * TSHashTable<CELLIST, HASHKEY_NONE>::Ptr(uint32_t dwHashVal, HASHKEY_NONE * pKey);
+template<> __attribute__((noinline)) inline ::CELLIST * TSHashTable<CELLIST, HASHKEY_NONE>::Ptr(uint32_t dwHashVal, HASHKEY_NONE * pKey);
 template<> __attribute__((noinline)) inline void TSHashTable<CELLIST, HASHKEY_NONE>::Destructor();
 // @blizzard TSHashTable<CELLIST,HASHKEY_NONE>::InternalNew (STORM.H)
 template<> ::CELLIST * __thiscall TSHashTable<CELLIST, HASHKEY_NONE>::InternalNew(TSHashTable<::CELLIST, HASHKEY_NONE>* pThis, TSExplicitList<::CELLIST, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags);
@@ -578,11 +578,11 @@ template<> void TSHashTable<MappingEntryNode, HASHKEY_STRI>::Clear_Unref_0060407
 // Test a flag bit in nBucketMask field of the hash table (variant 2)
 template<> uint32_t TSHashTable<MappingEntryNode, HASHKEY_STRI>::ComputeSlot(uint32_t dwHashVal);
 template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Next(::MappingEntryNode * pNode);
-template<> void TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalClear(int32_t bUnlinkOnly);
+template<> __attribute__((noinline)) inline void TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalClear(int32_t bUnlinkOnly);
 template<> void TSHashTable<MappingEntryNode, HASHKEY_STRI>::Clear();
 template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Ptr(uint32_t dwHashVal, ::HASHKEY_STRI * pKey);
 template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Ptr(char * szKey);
-template<> void TSHashTable<MappingEntryNode, HASHKEY_STRI>::Destructor();
+template<> __attribute__((noinline)) inline void TSHashTable<MappingEntryNode, HASHKEY_STRI>::Destructor();
 // @sourcefile .\Chat\Ignorelist.cpp
 // @blizzard TSHashTable<MappingEntryNode,HASHKEY_STRI>::InternalDelete (STORM.H)
 template<> void __thiscall TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalDelete(TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* pThis, ::MappingEntryNode * pNode);
@@ -602,7 +602,7 @@ template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::New
 // TSHashTable<SGAMEDATA, HASHKEY_NONE>
 // const TSHashTable<struct SGAMEDATA,class HASHKEY_NONE>::vftable
 template<> void * TSHashTable<SGAMEDATA, HASHKEY_NONE>::vftable[4];
-template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalClear(int32_t bUnlinkOnly);
+template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalClear(int32_t bUnlinkOnly);
 template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Destructor();
 // @blizzard TSHashTable<SGAMEDATA,HASHKEY_NONE>::InternalDelete (STORM.H)
 template<> void __thiscall TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalDelete(TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis, ::SGAMEDATA * pNode);
@@ -617,19 +617,19 @@ template<> TSHashTable<::SGAMEDATA, HASHKEY_NONE>* TSHashTable<SGAMEDATA, HASHKE
 template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Unlink(::SGAMEDATA * pNode);
 template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Delete(::SGAMEDATA * pNode);
 // Register arguments: only this (ECX, the hash table); EDX is first written at 0052e653 from [ECX+0x1c] (1.14d asm).
-template<> ::SGAMEDATA * TSHashTable<SGAMEDATA, HASHKEY_NONE>::Ptr(uint32_t dwHashVal, HASHKEY_NONE * pKey);
+template<> __attribute__((noinline)) inline ::SGAMEDATA * TSHashTable<SGAMEDATA, HASHKEY_NONE>::Ptr(uint32_t dwHashVal, HASHKEY_NONE * pKey);
 // QServer game-token hash-table resize/rehash. Grows the game-token bucket array (pGameTokenHashBuckets) to 2*(old mask+1) entries via TSExplicitListArray_EnsureCount, detaching all existing intrusive list nodes into a temporary pending list, re-initializing every new bucket as an empty self-linked intrusive list, updating nGameTokenHashMask, then re-inserting each pending node into its new bucket by (token & newMask). Operates on the QServer (game-gateway) token->game lookup map using the engine's TSIntrusiveList helpers; the heavy negated-pointer arithmetic is the intrusive-list back-link idiom. Internal hash-map maintenance; no network I/O.
 template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::GrowListArray();
 template<> __attribute__((noinline)) inline int32_t TSHashTable<SGAMEDATA, HASHKEY_NONE>::MonitorFullness(uint32_t nSlot);
 // Allocates a new SGAMEDATA in the QServer hash map using nHashVal as key. Rehashes the bucket array if overloaded, then calls the vtable CreateGame factory, splices the new game into the active-game doubly-linked list, and sets pGame->nToken. Returns the new game or NULL on allocation failure.
-template<> ::SGAMEDATA * TSHashTable<SGAMEDATA, HASHKEY_NONE>::New(uint32_t dwHashVal, HASHKEY_NONE * pKey, uint32_t nExtraBytes, uint32_t dwFlags);
+template<> __attribute__((noinline)) inline ::SGAMEDATA * TSHashTable<SGAMEDATA, HASHKEY_NONE>::New(uint32_t dwHashVal, HASHKEY_NONE * pKey, uint32_t nExtraBytes, uint32_t dwFlags);
 
 // TSHashTable<StringEntryNode, HASHKEY_STRI>
 // const TSHashTable<struct StringEntryNode,class HASHKEY_STRI>::vftable
 template<> void * TSHashTable<StringEntryNode, HASHKEY_STRI>::vftable[4];
 // Test a flag bit in nBucketMask field of the hash table
 template<> uint32_t TSHashTable<StringEntryNode, HASHKEY_STRI>::ComputeSlot(uint32_t dwHashVal);
-template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Unlink(::StringEntryNode * pNode);
+template<> __attribute__((noinline)) inline void TSHashTable<StringEntryNode, HASHKEY_STRI>::Unlink(::StringEntryNode * pNode);
 template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Delete(::StringEntryNode * pNode);
 template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::Next(::StringEntryNode * pNode);
 template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalClear(int32_t bUnlinkOnly);
@@ -637,7 +637,7 @@ template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Clear();
 template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::DeleteNode(::StringEntryNode * pNode);
 template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::Ptr(uint32_t dwHashVal, ::HASHKEY_STRI * pKey);
 template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::Ptr(char * szKey);
-template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Destructor();
+template<> __attribute__((noinline)) inline void TSHashTable<StringEntryNode, HASHKEY_STRI>::Destructor();
 // @blizzard TSHashTable<StringEntryNode,HASHKEY_STRI>::InternalNew (STORM.H)
 template<> ::StringEntryNode * __thiscall TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalNew(TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pThis, TSExplicitList<::StringEntryNode, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags);
 // @blizzard TSHashTable<StringEntryNode,HASHKEY_STRI>::InternalDelete (STORM.H)
@@ -664,7 +664,7 @@ template<> void __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::InternalD
 // @blizzard TSHashTableReuse<CELLIST,HASHKEY_NONE,0>::InternalNew (STORM.H)
 template<> ::CELLIST * __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::InternalNew(TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* pThis, TSExplicitList<::CELLIST, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags);
 // Destructor: free all chunk lists and pool nodes, unlink free lists, call base hash table dtor
-template<> void TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::Destructor();
+template<> __attribute__((noinline)) inline void TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::Destructor();
 // Clear all bucket chains and free all CelList chunk pools
 // @blizzard TSHashTableReuse<CELLIST,HASHKEY_NONE,0>::Destroy (STORM.H)
 template<> void __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::Destroy(TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* pThis);
@@ -684,7 +684,7 @@ template<> ::SGAMEDATA * __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>
 template<> void __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Destroy(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis);
 // @blizzard TSHashTableReuse<SGAMEDATA,HASHKEY_NONE,0> scalar deleting destructor (STORM.H)
 template<> TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::ScalarDeletingDestructor(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, uint32_t dwFlags);
-template<> TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Constructor();
+template<> __attribute__((noinline)) inline TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Constructor();
 
 // TSLink<CELLIST>
 template<> TSLink<::CELLIST>* TSLink<CELLIST>::NextLink(intptr_t nLinkOffset);
@@ -715,7 +715,7 @@ template<> __attribute__((noinline)) inline void TSList<CMDDEF, TSGetLink<CMDDEF
 template<> CMDDEF * TSList<CMDDEF, TSGetLink<CMDDEF>>::Next(CMDDEF * ptr);
 template<> void TSList<CMDDEF, TSGetLink<CMDDEF>>::UnlinkNode(CMDDEF * ptr);
 template<> CMDDEF * TSList<CMDDEF, TSGetLink<CMDDEF>>::RawNext(CMDDEF * ptr);
-template<> void TSList<CMDDEF, TSGetLink<CMDDEF>>::UnlinkAll();
+template<> __attribute__((noinline)) inline void TSList<CMDDEF, TSGetLink<CMDDEF>>::UnlinkAll();
 template<> void TSList<CMDDEF, TSGetLink<CMDDEF>>::Destructor();
 template<> CMDDEF * TSList<CMDDEF, TSGetLink<CMDDEF>>::NewNode(uint32_t nLinkType, uint32_t nExtraBytes, uint32_t dwFlags);
 template<> void TSList<CMDDEF, TSGetLink<CMDDEF>>::Clear();
@@ -738,7 +738,7 @@ template<> __attribute__((noinline)) inline void TSList<TCELENTRY, TSGetLink<TCE
 template<> ::TCELENTRY * TSList<TCELENTRY, TSGetLink<TCELENTRY>>::Next(::TCELENTRY * ptr);
 template<> void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::UnlinkNode(::TCELENTRY * ptr);
 template<> ::TCELENTRY * TSList<TCELENTRY, TSGetLink<TCELENTRY>>::RawNext(::TCELENTRY * ptr);
-template<> void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::UnlinkAll();
+template<> __attribute__((noinline)) inline void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::UnlinkAll();
 template<> void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::Destructor();
 template<> TSList<::TCELENTRY, TSGetLink<TCELENTRY>>* TSList<TCELENTRY, TSGetLink<TCELENTRY>>::CopyConstructor(TSList<::TCELENTRY, TSGetLink<TCELENTRY>>* pSource);
 template<> ::TCELENTRY * TSList<TCELENTRY, TSGetLink<TCELENTRY>>::NewNode(uint32_t nLinkType, uint32_t nExtraBytes, uint32_t dwFlags);

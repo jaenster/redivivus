@@ -28,7 +28,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e6e66db6"
+      "dh": "e6e66db6",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nVramStart",
+          "EDX:4"
+        ],
+        [
+          "nVramEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwSubtileSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GLSUBTILE_AppendNodeToTail",
@@ -47,7 +65,17 @@
         "GlSubtileCacheNodeStrc",
         "GlSubtileCacheStrc"
       ],
-      "dh": "1d108b57"
+      "dh": "1d108b57",
+      "paramStorage": [
+        [
+          "pCache",
+          "EAX:4"
+        ],
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GLSUBTILE_RemoveNodeFromHead",
@@ -67,7 +95,17 @@
         "GlSubtileCacheStrc",
         "uint8_t"
       ],
-      "dh": "7794a6a9"
+      "dh": "7794a6a9",
+      "paramStorage": [
+        [
+          "dwParam",
+          "ECX:4"
+        ],
+        [
+          "pCache",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GLSUBTILE_RemoveNodeByIndex",
@@ -92,7 +130,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "49582618"
+      "dh": "49582618",
+      "paramStorage": [
+        [
+          "pCache",
+          "EDX:4"
+        ],
+        [
+          "nNodeIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GLSUBTILE_AllocateNode",
@@ -115,7 +163,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "9812d1bc"
+      "dh": "9812d1bc",
+      "paramStorage": [
+        [
+          "pCache",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GLSUBTILE_PromoteNodeToMRU",
@@ -139,7 +193,17 @@
         "GlSubtileCacheStrc",
         "int32_t"
       ],
-      "dh": "aa111d86"
+      "dh": "aa111d86",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nNodeIndex1Based",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GLSUBTILE_InvalidateByIndex",
@@ -158,7 +222,17 @@
       "usedTypes": [
         "GlSubtileCacheStrc"
       ],
-      "dh": "bcde80dd"
+      "dh": "bcde80dd",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nNodeIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GLSUBTILE_Destroy",
@@ -179,7 +253,17 @@
         "GlSubtileCacheStrc",
         "uint32_t"
       ],
-      "dh": "c3d937d4"
+      "dh": "c3d937d4",
+      "paramStorage": [
+        [
+          "pCacheData",
+          "ECX:4"
+        ],
+        [
+          "pCache",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GLSUBTILE_EnsureCapacity",
@@ -199,7 +283,13 @@
         "GlSubtileCacheNodeStrc",
         "GlSubtileCacheStrc"
       ],
-      "dh": "80da50c6"
+      "dh": "80da50c6",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

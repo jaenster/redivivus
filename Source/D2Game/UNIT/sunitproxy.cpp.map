@@ -20,7 +20,13 @@
         "D2MonsterAiStrc",
         "D2UnitStrc"
       ],
-      "dh": "f57b29c8"
+      "dh": "f57b29c8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetGameNpcbyClassId",
@@ -44,7 +50,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "49a44806"
+      "dh": "49a44806",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nNpcClassId",
+          "EDX:4"
+        ],
+        [
+          "pNpcIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetGameNpcByUnit",
@@ -65,7 +85,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "643a805e"
+      "dh": "643a805e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pNpcIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_AddItemToNpcProxy",
@@ -90,7 +124,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "3817b044"
+      "dh": "3817b044",
+      "paramStorage": [
+        [
+          "pNpcUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwTradeParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_InitNpcTradeItems",
@@ -116,7 +168,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "51bab197"
+      "dh": "51bab197",
+      "paramStorage": [
+        [
+          "nNpcTableIdx",
+          "EAX:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ],
+        [
+          "pTradeList",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_AllocNpcControl",
@@ -153,7 +219,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "7ba13e79"
+      "dh": "7ba13e79",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_FreeInventoryItems",
@@ -182,7 +254,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "a84c3f47"
+      "dh": "a84c3f47",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInventory",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_FreeNpcProxyData",
@@ -207,7 +289,17 @@
         "D2SUnitProxyStrc_Line0x85",
         "SGAMEDATA"
       ],
-      "dh": "9600311e"
+      "dh": "9600311e",
+      "paramStorage": [
+        [
+          "pNpcEntry",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "FreeNpcControl",
@@ -230,7 +322,13 @@
         "D2NpcTradeItemStrc *",
         "SGAMEDATA"
       ],
-      "dh": "fcf6a3de"
+      "dh": "fcf6a3de",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_AddTradeQueueEntry",
@@ -254,7 +352,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b2628b43"
+      "dh": "b2628b43",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwTradeParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAction",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pGame",
+          "EAX:4"
+        ],
+        [
+          "pNpc",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_QueueTradeAction",
@@ -278,7 +398,29 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "d9dbc351"
+      "dh": "d9dbc351",
+      "paramStorage": [
+        [
+          "pNpcUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwTradeParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTradeAction",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_CountPlayerInLevel",
@@ -302,7 +444,21 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "2a9c54f3"
+      "dh": "2a9c54f3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArgs",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_RefreshGambleForAllNpcs",
@@ -325,7 +481,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "e0486593"
+      "dh": "e0486593",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "dwGameTick",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_ProcessNpcItemQueue",
@@ -360,7 +526,17 @@
         "eInventoryPage",
         "int32_t"
       ],
-      "dh": "82fd91c1"
+      "dh": "82fd91c1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_GetNpcInventory",
@@ -382,7 +558,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "161030b1"
+      "dh": "161030b1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nNpcClassId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_GetNpcControl",
@@ -401,7 +587,13 @@
         "D2SeedStrc",
         "SGAMEDATA"
       ],
-      "dh": "20066e5b"
+      "dh": "20066e5b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_RemovePlayerFromNpc",
@@ -430,7 +622,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "4018bee2"
+      "dh": "4018bee2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_GetPlayerProxyInventory",
@@ -454,7 +660,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "a0b25ef1"
+      "dh": "a0b25ef1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pNpcUnit",
+          "EDX:4"
+        ],
+        [
+          "pPlayerUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_AddPlayerInteraction",
@@ -476,7 +696,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "1576b58e"
+      "dh": "1576b58e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pNpcProxy",
+          "EDX:4"
+        ],
+        [
+          "pPlayerUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_ResetNpcProxy",
@@ -499,7 +733,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "8a345364"
+      "dh": "8a345364",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pNpcProxy",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_BuildNpcItemTables",
@@ -522,7 +770,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "d3071459"
+      "dh": "d3071459",
+      "paramStorage": [
+        [
+          "nNpcIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_InitAllNpcItemTables",
@@ -588,7 +842,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e08867a6"
+      "dh": "e08867a6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pProxyUnit",
+          "EDX:4"
+        ],
+        [
+          "pPlayerUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_UpdateNpcProxiesForAct",
@@ -620,7 +888,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6a45fee4"
+      "dh": "6a45fee4",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAct",
+          "Stack[0x8]:1"
+        ],
+        [
+          "bResult",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "IterateNpcIntroUnits",
@@ -645,7 +927,25 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "d820c157"
+      "dh": "d820c157",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevelIdTwo",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_InitClassicTowns",
@@ -670,7 +970,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "d739b2eb"
+      "dh": "d739b2eb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITPROXY_SendProxyItemsToClient",
@@ -693,7 +1003,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "7168e94b"
+      "dh": "7168e94b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nNpcProxy",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

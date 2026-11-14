@@ -22,7 +22,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "8d049758"
+      "dh": "8d049758",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OVERLAYTBLS_FreeOverlayTables",
@@ -57,7 +63,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "72df4fa7"
+      "dh": "72df4fa7",
+      "paramStorage": [
+        [
+          "nOverlayId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OVERLAYTBLS_GetPreDraw",
@@ -76,7 +88,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2e31551b"
+      "dh": "2e31551b",
+      "paramStorage": [
+        [
+          "nOverlayId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OVERLAYTBLS_GetXOffset",
@@ -94,7 +112,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f211a97c"
+      "dh": "f211a97c",
+      "paramStorage": [
+        [
+          "nOverlayId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OVERLAYTBLS_GetYOffset",
@@ -112,7 +136,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d2dfbc2e"
+      "dh": "d2dfbc2e",
+      "paramStorage": [
+        [
+          "nOverlayId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OVERLAYTBLS_GetTrans",
@@ -131,7 +161,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4074897c"
+      "dh": "4074897c",
+      "paramStorage": [
+        [
+          "nOverlayId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OVERLAYTBLS_GetLightRadiusAndRGB",
@@ -150,7 +186,33 @@
         "D2OverlayTxt",
         "int32_t"
       ],
-      "dh": "e05fb604"
+      "dh": "e05fb604",
+      "paramStorage": [
+        [
+          "nOverlayId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnInitRadius",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnRadius",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pbyRed",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pbyGreen",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pbyBlue",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "OVERLAYTBLS_Get1ofN",
@@ -168,7 +230,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "178a244c"
+      "dh": "178a244c",
+      "paramStorage": [
+        [
+          "nOverlayId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OVERLAYTBLS_GetDir",
@@ -187,7 +255,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b91833ba"
+      "dh": "b91833ba",
+      "paramStorage": [
+        [
+          "nOverlayId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetComponentsData",
@@ -208,7 +282,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "113a0a6c"
+      "dh": "113a0a6c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00664800",
@@ -223,7 +307,17 @@
       "calledFunctions": [
         "Unreferenced_00664800"
       ],
-      "dh": "cc72fd63"
+      "dh": "cc72fd63",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_GetComponentOverlay",
@@ -254,7 +348,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f3b49930"
+      "dh": "f3b49930",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nComponentIdx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nVariantIdx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "OVERLAYTBLS_GetMonsterComponentOverlay",
@@ -275,7 +383,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "59e8e924"
+      "dh": "59e8e924",
+      "paramStorage": [
+        [
+          "nMonStatId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nComponentIdx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nVariantIdx",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

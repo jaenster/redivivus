@@ -74,7 +74,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c7ac4ba2"
+      "dh": "c7ac4ba2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ClearSelectedUnit",
@@ -130,7 +136,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "837f292d"
+      "dh": "837f292d",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "nClick1X",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClick1Y",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClick2X",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nClick2Y",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnDoubleClickState",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SELECT_ScreenToWorldCoords",
@@ -152,7 +192,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4d361012"
+      "dh": "4d361012",
+      "paramStorage": [
+        [
+          "pnX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnY",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SELECT_HandleMouseInput",
@@ -186,7 +236,17 @@
         "eD2LevelId",
         "uint32_t"
       ],
-      "dh": "ae08396b"
+      "dh": "ae08396b",
+      "paramStorage": [
+        [
+          "pnMouseX",
+          "ESI:4"
+        ],
+        [
+          "pnMouseY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SELECT_IsDoorBlockingUnit",
@@ -210,7 +270,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "fa52e95c"
+      "dh": "fa52e95c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SELECT_IsUnitBehindDoor",
@@ -234,7 +304,17 @@
         "POINT",
         "uint32_t"
       ],
-      "dh": "c5439e49"
+      "dh": "c5439e49",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SELECT_GetDistanceSquared",
@@ -255,7 +335,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "0c2a49cc"
+      "dh": "0c2a49cc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SELECT_GetConstant13_Y_Unref_00467400",
@@ -291,7 +381,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "11429490"
+      "dh": "11429490",
+      "paramStorage": [
+        [
+          "bEnabled",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nTimestamp",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SELECT_SetExclusionRect",
@@ -309,7 +413,13 @@
       "usedTypes": [
         "RECT"
       ],
-      "dh": "4f7fb11c"
+      "dh": "4f7fb11c",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_FindTargetInRange",
@@ -350,7 +460,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "efeac9ff"
+      "dh": "efeac9ff",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pSkillsTxt",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UnitIsOfTypeMonster",
@@ -369,7 +501,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2ec1a0bf"
+      "dh": "2ec1a0bf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SELECT_FindTargetInFacingDirection",
@@ -401,7 +543,17 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "aa2aca65"
+      "dh": "aa2aca65",
+      "paramStorage": [
+        [
+          "pPlayerUnit_lcl",
+          "EBX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SELECT_GetTargetCoords",
@@ -428,7 +580,21 @@
         "eCollisionFlags",
         "eD2UnitType"
       ],
-      "dh": "3ce0e8e7"
+      "dh": "3ce0e8e7",
+      "paramStorage": [
+        [
+          "pnOutX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pnOutY",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_ValidateTarget",
@@ -466,7 +632,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "dec38fd1"
+      "dh": "dec38fd1",
+      "paramStorage": [
+        [
+          "pSkill",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bUseFlags",
+          "Stack[0xc]:1"
+        ],
+        [
+          "bAllowDirectional",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SELECT_InitConstants",
@@ -523,7 +715,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "080d8ed7"
+      "dh": "080d8ed7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SELECT_UpdateSelectedUnit",

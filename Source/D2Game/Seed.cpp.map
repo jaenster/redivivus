@@ -22,7 +22,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d78dd469"
+      "dh": "d78dd469",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ],
+        [
+          "nMin",
+          "EDX:4"
+        ],
+        [
+          "nMax",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SEED_RollRange",
@@ -43,7 +57,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c230b154"
+      "dh": "c230b154",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ],
+        [
+          "nMin",
+          "EDX:4"
+        ],
+        [
+          "nMax",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SEED_RollRangeInclusive",
@@ -65,7 +93,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b6583944"
+      "dh": "b6583944",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ],
+        [
+          "nMinValue",
+          "EDX:4"
+        ],
+        [
+          "nMaxValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

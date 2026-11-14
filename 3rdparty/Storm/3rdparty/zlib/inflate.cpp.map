@@ -21,7 +21,13 @@
         "inflate_state",
         "z_stream"
       ],
-      "dh": "e0c8b362"
+      "dh": "e0c8b362",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "inflateReset",
@@ -41,7 +47,13 @@
         "inflate_state",
         "z_stream"
       ],
-      "dh": "c170e415"
+      "dh": "c170e415",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "inflateReset2",
@@ -63,7 +75,17 @@
         "uint32_t",
         "z_stream"
       ],
-      "dh": "05eeb052"
+      "dh": "05eeb052",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "nWindowBits",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "inflateInit2_",
@@ -85,7 +107,25 @@
         "uint32_t",
         "z_stream"
       ],
-      "dh": "af1c4dfc"
+      "dh": "af1c4dfc",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "nWindowBits",
+          "EDX:4"
+        ],
+        [
+          "szVersion",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStreamSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "inflateInit_",
@@ -105,7 +145,21 @@
         "int32_t",
         "z_stream"
       ],
-      "dh": "e74f7ec4"
+      "dh": "e74f7ec4",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "szVersion",
+          "EDX:4"
+        ],
+        [
+          "nStreamSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "inflatePrime",
@@ -126,7 +180,21 @@
         "uint32_t",
         "z_stream"
       ],
-      "dh": "19d19bfe"
+      "dh": "19d19bfe",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "nBits",
+          "EDX:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "fixedtables",
@@ -144,7 +212,13 @@
       "usedTypes": [
         "inflate_state"
       ],
-      "dh": "a482e6d0"
+      "dh": "a482e6d0",
+      "paramStorage": [
+        [
+          "state",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "updatewindow",
@@ -166,7 +240,21 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "241939d9"
+      "dh": "241939d9",
+      "paramStorage": [
+        [
+          "nCopy",
+          "ECX:4"
+        ],
+        [
+          "pEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStream",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "inflate",
@@ -197,7 +285,17 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "171e1ead"
+      "dh": "171e1ead",
+      "paramStorage": [
+        [
+          "pInflateStream",
+          "ECX:4"
+        ],
+        [
+          "nFlush",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "inflateEnd",
@@ -215,7 +313,13 @@
       "usedTypes": [
         "z_stream"
       ],
-      "dh": "9b86f723"
+      "dh": "9b86f723",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "inflateGetDictionary",
@@ -236,7 +340,21 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "b2fc936e"
+      "dh": "b2fc936e",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "pDictionary",
+          "EDX:4"
+        ],
+        [
+          "pnDictLength",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "inflateSetDictionary",
@@ -259,7 +377,21 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "615c1b30"
+      "dh": "615c1b30",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "pDictionary",
+          "EDX:4"
+        ],
+        [
+          "nDictLength",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "inflateGetHeader",
@@ -279,7 +411,17 @@
         "inflate_state",
         "z_stream"
       ],
-      "dh": "5022df96"
+      "dh": "5022df96",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "pHead",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "syncsearch",
@@ -298,7 +440,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "254b91c5"
+      "dh": "254b91c5",
+      "paramStorage": [
+        [
+          "pnMatchState",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBuf",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "inflateSync",
@@ -321,7 +477,13 @@
         "uint32_t",
         "z_stream"
       ],
-      "dh": "cd6fea73"
+      "dh": "cd6fea73",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "inflateSyncPoint",
@@ -339,7 +501,13 @@
       "usedTypes": [
         "z_stream"
       ],
-      "dh": "126dabe3"
+      "dh": "126dabe3",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "inflateCopy",
@@ -361,7 +529,17 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "3aea622f"
+      "dh": "3aea622f",
+      "paramStorage": [
+        [
+          "pDestStream",
+          "ECX:4"
+        ],
+        [
+          "pSrcStream",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "inflateUndermine",
@@ -379,7 +557,17 @@
       "usedTypes": [
         "z_stream"
       ],
-      "dh": "bb7f28f3"
+      "dh": "bb7f28f3",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ],
+        [
+          "nSubvert",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "inflateMark",
@@ -398,7 +586,13 @@
         "int32_t",
         "z_stream"
       ],
-      "dh": "6477f1a1"
+      "dh": "6477f1a1",
+      "paramStorage": [
+        [
+          "pStream",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

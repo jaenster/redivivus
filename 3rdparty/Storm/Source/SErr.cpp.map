@@ -19,7 +19,13 @@
       "usedTypes": [
         "pfnBlizzardError"
       ],
-      "dh": "af99d974"
+      "dh": "af99d974",
+      "paramStorage": [
+        [
+          "pfnFunc",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SERR_AddStormFacility",
@@ -41,7 +47,13 @@
         "D2SErrMessageSourceStrc *",
         "uint16_t"
       ],
-      "dh": "d8bfd66b"
+      "dh": "d8bfd66b",
+      "paramStorage": [
+        [
+          "wModuleId",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "SERR_AddStormMessages",
@@ -76,7 +88,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "bd8976f6"
+      "dh": "bd8976f6",
+      "paramStorage": [
+        [
+          "nErrorIndex",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SERR_InternalEnterCriticalSection",
@@ -129,7 +147,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c1f6ac41"
+      "dh": "c1f6ac41",
+      "paramStorage": [
+        [
+          "szMangled",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxLen",
+          "EBX:4"
+        ],
+        [
+          "szText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SErrPrepareAppFatal",
@@ -149,7 +181,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "a7f857f8"
+      "dh": "a7f857f8",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCallbackParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SErrRegisterMessageSource",
@@ -170,7 +212,21 @@
         "D2SErrMessageSourceStrc",
         "uint16_t"
       ],
-      "dh": "e9eb5269"
+      "dh": "e9eb5269",
+      "paramStorage": [
+        [
+          "wModuleId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "dwModuleBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SErrSetLastError",
@@ -185,7 +241,13 @@
       "calledFunctions": [
         "SErrSetLastError"
       ],
-      "dh": "f23d876f"
+      "dh": "f23d876f",
+      "paramStorage": [
+        [
+          "dwErrCode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SSYSTEM_ListOffsetToPointer",
@@ -205,7 +267,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "98334035"
+      "dh": "98334035",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ],
+        [
+          "pBase",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0041c410",
@@ -223,7 +295,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "1ffd9b4b"
+      "dh": "1ffd9b4b",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SErrGetErrorStr",
@@ -246,7 +324,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "94a293d7"
+      "dh": "94a293d7",
+      "paramStorage": [
+        [
+          "dwMessageId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SSYSTEM_ListGetPointer",
@@ -264,7 +356,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f1d11485"
+      "dh": "f1d11485",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SSYSTEM_ListUnlinkAndInsert",
@@ -286,7 +388,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1d33c949"
+      "dh": "1d33c949",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppTarget",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SSYSTEM_ListGetNext",
@@ -306,7 +426,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "3ae5cb1a"
+      "dh": "3ae5cb1a",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SSYSTEM_ListUnlink",
@@ -327,7 +457,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "fee31410"
+      "dh": "fee31410",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0041c6e0",
@@ -345,7 +485,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "bbf9a515"
+      "dh": "bbf9a515",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SSYSTEM_ListGetData",
@@ -365,7 +511,17 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "f05579d2"
+      "dh": "f05579d2",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkAll",
@@ -408,7 +564,13 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "d34568a8"
+      "dh": "d34568a8",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0041c7f0",
@@ -426,7 +588,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "4fc00be9"
+      "dh": "4fc00be9",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SSYSTEM_ListAllocNode",
@@ -448,7 +616,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e8fc4810"
+      "dh": "e8fc4810",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDataSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAllocFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SSYSTEM_ListFreeNode",
@@ -470,7 +656,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b6eb9bf6"
+      "dh": "b6eb9bf6",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ],
+        [
+          "bFreeMemory",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "SErrRegisterHandler",
@@ -495,7 +691,13 @@
         "pfnSErrDisplayCallback",
         "uint32_t"
       ],
-      "dh": "4cb49bac"
+      "dh": "4cb49bac",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSList_HANDLER_Clear",
@@ -517,7 +719,13 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "dfd48850"
+      "dh": "dfd48850",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SSYSTEM_ListRemoveAndFree",
@@ -540,7 +748,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "a83703db"
+      "dh": "a83703db",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SErrDisplayError",
@@ -576,7 +794,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b0c3ba90"
+      "dh": "b0c3ba90",
+      "paramStorage": [
+        [
+          "nErrorCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStackTrace",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTraceFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pCustomMsg",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nMessageFlags",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nExitCode",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SErrDisplayErrorFmt",
@@ -617,7 +861,17 @@
         "SErrDisplayError",
         "__security_check_cookie"
       ],
-      "dh": "f1a942fb"
+      "dh": "f1a942fb",
+      "paramStorage": [
+        [
+          "szMessage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SErrUnregisterHandler",
@@ -639,7 +893,13 @@
         "HANDLER",
         "pfnSErrDisplayCallback"
       ],
-      "dh": "61de90bb"
+      "dh": "61de90bb",
+      "paramStorage": [
+        [
+          "nCallbackId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SErrDisplayAppFatal",
@@ -678,7 +938,13 @@
         "SErrReportResourceLeak",
         "SErrReportNamedResourceLeak"
       ],
-      "dh": "1eaefab2"
+      "dh": "1eaefab2",
+      "paramStorage": [
+        [
+          "szMessage",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gStormErrorCallbackList",

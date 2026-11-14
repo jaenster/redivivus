@@ -19,7 +19,13 @@
       "usedTypes": [
         "UIWidget"
       ],
-      "dh": "ca4c7cdf"
+      "dh": "ca4c7cdf",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "Destructor",
@@ -37,7 +43,13 @@
       "usedTypes": [
         "UIWidget"
       ],
-      "dh": "0ebf4b6b"
+      "dh": "0ebf4b6b",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     }
   ]
 }

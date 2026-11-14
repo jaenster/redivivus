@@ -21,7 +21,13 @@
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
         "uint32_t"
       ],
-      "dh": "33b483c8"
+      "dh": "33b483c8",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NextLink",
@@ -40,7 +46,13 @@
         "TSLink<MappingEntryNode>",
         "intptr_t"
       ],
-      "dh": "13ca1a54"
+      "dh": "13ca1a54",
+      "paramStorage": [
+        [
+          "nLinkOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ComputeSlot",
@@ -59,7 +71,13 @@
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "uint32_t"
       ],
-      "dh": "7b9a73eb"
+      "dh": "7b9a73eb",
+      "paramStorage": [
+        [
+          "dwHashVal",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

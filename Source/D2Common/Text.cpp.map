@@ -21,7 +21,13 @@
         "D2GSPacketSrv0x27_TextStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "efe7c6b0"
+      "dh": "efe7c6b0",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_FreeAllMessages",
@@ -41,7 +47,13 @@
         "D2GSPacketSrv0x27_EntryStrc",
         "D2GSPacketSrv0x27_TextStrc"
       ],
-      "dh": "c98c4664"
+      "dh": "c98c4664",
+      "paramStorage": [
+        [
+          "ppPoolManager",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_FreeTxtMessageForPacket0x27",
@@ -61,7 +73,13 @@
         "D2GSPacketSrv0x27_EntryStrc",
         "D2GSPacketSrv0x27_TextStrc"
       ],
-      "dh": "f4e0efdc"
+      "dh": "f4e0efdc",
+      "paramStorage": [
+        [
+          "pGSPacketSrv0x27_Text",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AddNewGossipText",
@@ -82,7 +100,21 @@
         "D2GSPacketSrv0x27_TextStrc",
         "int32_t"
       ],
-      "dh": "35765f44"
+      "dh": "35765f44",
+      "paramStorage": [
+        [
+          "pGossipText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStringIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bMenu",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_RemoveMessageById",
@@ -103,7 +135,17 @@
         "D2GSPacketSrv0x27_TextStrc",
         "int16_t"
       ],
-      "dh": "57b3e5d1"
+      "dh": "57b3e5d1",
+      "paramStorage": [
+        [
+          "ppPoolManager",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMessageId",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "TEXT_CountMessagesOfType2",
@@ -123,7 +165,13 @@
         "D2GSPacketSrv0x27_TextStrc",
         "int32_t"
       ],
-      "dh": "2b227580"
+      "dh": "2b227580",
+      "paramStorage": [
+        [
+          "pMsgList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_GetMessageByIndex",
@@ -144,7 +192,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "46c7dde1"
+      "dh": "46c7dde1",
+      "paramStorage": [
+        [
+          "pMsgList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "OVERHEAD_GetMessageType0",
@@ -165,7 +223,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "e529ea2e"
+      "dh": "e529ea2e",
+      "paramStorage": [
+        [
+          "pGSPacketSrv0x27_Text",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "OVERHEAD_GetMessageType1",
@@ -186,7 +254,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "ab7a669c"
+      "dh": "ab7a669c",
+      "paramStorage": [
+        [
+          "pGSPacketSrv0x27_Text",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BuildPacket0x27Messages",
@@ -210,7 +288,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "fe1620a5"
+      "dh": "fe1620a5",
+      "paramStorage": [
+        [
+          "pTxtMsg",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutMessageData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "StoreMessages",
@@ -236,7 +324,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "9344bbd9"
+      "dh": "9344bbd9",
+      "paramStorage": [
+        [
+          "pGSPacketSrv0x27_Text",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPacketData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_CompareMessagesByCode",
@@ -255,7 +353,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "31152af7"
+      "dh": "31152af7",
+      "paramStorage": [
+        [
+          "pnCodeA",
+          "ECX:4"
+        ],
+        [
+          "pnCodeB",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_SortMessages",
@@ -276,7 +384,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "2f518a39"
+      "dh": "2f518a39",
+      "paramStorage": [
+        [
+          "nCount",
+          "CX:2"
+        ],
+        [
+          "pEntries",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnCompare",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_SortMessageList",
@@ -303,7 +425,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "9ec0c640"
+      "dh": "9ec0c640",
+      "paramStorage": [
+        [
+          "pGSPacketSrv0x27_Text",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

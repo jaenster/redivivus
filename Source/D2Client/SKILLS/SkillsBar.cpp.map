@@ -24,7 +24,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c938c34e"
+      "dh": "c938c34e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Bar_BloodParticlesOnTarget",
@@ -46,7 +60,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "7b841f32"
+      "dh": "7b841f32",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_AllocStatListByCltCalc",
@@ -68,7 +96,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "d8d1895c"
+      "dh": "d8d1895c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Bar_DoubleSwing_Sound",
@@ -98,7 +140,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "66765c7d"
+      "dh": "66765c7d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Bar_ThrowItem",
@@ -128,7 +184,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "652bab45"
+      "dh": "652bab45",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_CheckTargetIsSelectableCorpse",
@@ -150,7 +220,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "4a279709"
+      "dh": "4a279709",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Bar_SoftMonster_BloodParticles",
@@ -173,7 +257,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "f6ce19d4"
+      "dh": "f6ce19d4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Bar_GrimWard",
@@ -209,7 +307,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "bc67f08a"
+      "dh": "bc67f08a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_ValidateTeleportDestination",
@@ -248,7 +360,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "897d6bed"
+      "dh": "897d6bed",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnDestX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnDestY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CanUseAtLocation",
@@ -273,7 +407,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "2018bcaa"
+      "dh": "2018bcaa",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_SetupLeapTeleportDest",
@@ -321,7 +473,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6f007073"
+      "dh": "6f007073",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_SetupLeapPath",
@@ -356,7 +522,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "58897c1a"
+      "dh": "58897c1a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CreateLeapArcParticle",
@@ -385,7 +561,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bac87293"
+      "dh": "bac87293",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_UpdateSkillMissilePosition",
@@ -427,7 +613,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "fc96c4a4"
+      "dh": "fc96c4a4",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDestX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDestY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDynamicPath",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "PATH_ResetCollisionOnLanding",
@@ -458,7 +662,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "0daad93b"
+      "dh": "0daad93b",
+      "paramStorage": [
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_PlaySkillSound",
@@ -493,7 +711,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "42fc9714"
+      "dh": "42fc9714",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAddDust",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDynamicPath",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_HandleTeleportLanding",
@@ -528,7 +760,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "5bc841fc"
+      "dh": "5bc841fc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Bar_Leap_ArcParticle",
@@ -559,7 +797,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b5c4505a"
+      "dh": "b5c4505a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_FindTeleportPositionForTarget",
@@ -602,7 +854,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e8b0f3c8"
+      "dh": "e8b0f3c8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Bar_LeapAttack_ArcParticle",
@@ -644,7 +910,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "67049ba5"
+      "dh": "67049ba5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_DrawUnitAtRotatedAngle",
@@ -678,7 +958,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2e8320b6"
+      "dh": "2e8320b6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nGamma",
+          "EDX:4"
+        ],
+        [
+          "bHalfRotation",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_CalcWhirlwindDestViaPathfind",
@@ -728,7 +1022,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a7245e3f"
+      "dh": "a7245e3f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Bar_Whirlwind_EndCollision",
@@ -766,7 +1074,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b3332010"
+      "dh": "b3332010",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_StopAndClearSound",
@@ -793,7 +1115,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8f1daa6b"
+      "dh": "8f1daa6b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

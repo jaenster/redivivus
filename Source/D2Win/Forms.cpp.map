@@ -26,7 +26,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "eefdb8c7"
+      "dh": "eefdb8c7",
+      "paramStorage": [
+        [
+          "hHandle",
+          "ECX:4"
+        ],
+        [
+          "nHandlerType",
+          "EDX:4"
+        ],
+        [
+          "nMessage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCallback",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2WIN_UnregisterWindowHandler",
@@ -52,7 +70,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "69f60410"
+      "dh": "69f60410",
+      "paramStorage": [
+        [
+          "hHandle",
+          "ECX:4"
+        ],
+        [
+          "nHandlerType",
+          "EDX:4"
+        ],
+        [
+          "nMessage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCallback",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2WIN_RegisterWindowHandlerArray",
@@ -75,7 +111,21 @@
         "D2WinWndHandlerStrc",
         "int32_t"
       ],
-      "dh": "f9ad8f2a"
+      "dh": "f9ad8f2a",
+      "paramStorage": [
+        [
+          "hHandle",
+          "ECX:4"
+        ],
+        [
+          "pHandlerArray",
+          "EDX:4"
+        ],
+        [
+          "nHandlerCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WIN_UnregisterWindowHandlerArray",
@@ -98,7 +148,21 @@
         "D2WinWndHandlerStrc",
         "int32_t"
       ],
-      "dh": "2c565246"
+      "dh": "2c565246",
+      "paramStorage": [
+        [
+          "hHandle",
+          "ECX:4"
+        ],
+        [
+          "pHandlerArray",
+          "EDX:4"
+        ],
+        [
+          "nHandlerCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINLIST_AddListItemFromCharName",
@@ -122,7 +186,37 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "5e544de4"
+      "dh": "5e544de4",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "szCharName",
+          "EDX:4"
+        ],
+        [
+          "nItemData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bItemFlags",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nUserData",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bPrepend",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bSelect",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetCustomData",
@@ -144,7 +238,17 @@
         "D2WinProgressBar",
         "int32_t"
       ],
-      "dh": "be8da6e2"
+      "dh": "be8da6e2",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCustomData",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

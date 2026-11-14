@@ -33,7 +33,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a6d12d99"
+      "dh": "a6d12d99",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

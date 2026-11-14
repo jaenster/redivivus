@@ -19,7 +19,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "d165eb3b"
+      "dh": "d165eb3b",
+      "paramStorage": [
+        [
+          "nDeltaX",
+          "EAX:4"
+        ],
+        [
+          "nDeltaY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_TogglePerspective_Unref_00474140",
@@ -60,7 +70,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "340c9c6d"
+      "dh": "340c9c6d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nLightType",
+          "EDX:4"
+        ],
+        [
+          "nDiameter",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGamma",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nRed",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nGreen",
+          "Stack[0x10]:1"
+        ],
+        [
+          "nBlue",
+          "Stack[0x14]:1"
+        ]
+      ]
     },
     {
       "name": "SetRadiusY",
@@ -82,7 +122,17 @@
         "D2LightMapStrc",
         "int32_t"
       ],
-      "dh": "8471f929"
+      "dh": "8471f929",
+      "paramStorage": [
+        [
+          "pLightMap",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_SetRadius",
@@ -105,7 +155,17 @@
         "D2LightMapStrc",
         "int32_t"
       ],
-      "dh": "0b16e6e3"
+      "dh": "0b16e6e3",
+      "paramStorage": [
+        [
+          "pLightMap",
+          "ECX:4"
+        ],
+        [
+          "nDiameter",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetRadiusX",
@@ -127,7 +187,13 @@
         "D2LightMapStrc",
         "int32_t"
       ],
-      "dh": "378cfe72"
+      "dh": "378cfe72",
+      "paramStorage": [
+        [
+          "pLightMap",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00474380",
@@ -165,7 +231,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "80041e0a"
+      "dh": "80041e0a",
+      "paramStorage": [
+        [
+          "pLightMap",
+          "ECX:4"
+        ],
+        [
+          "nRed",
+          "DL:1"
+        ],
+        [
+          "nGreen",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nBlue",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "FreeLightMap",
@@ -188,7 +272,13 @@
         "D2LightMapStrc",
         "int32_t"
       ],
-      "dh": "09d4155e"
+      "dh": "09d4155e",
+      "paramStorage": [
+        [
+          "pLightMap",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_ValidateAndReset",
@@ -210,7 +300,13 @@
         "D2LightMapStrc",
         "int32_t"
       ],
-      "dh": "a43b1246"
+      "dh": "a43b1246",
+      "paramStorage": [
+        [
+          "pLightMap",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_FillGridRect",
@@ -230,7 +326,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7d997c59"
+      "dh": "7d997c59",
+      "paramStorage": [
+        [
+          "nYStart",
+          "ECX:4"
+        ],
+        [
+          "nColorARGB",
+          "EDX:4"
+        ],
+        [
+          "nXStart",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "EAX:4"
+        ],
+        [
+          "nXEnd",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ROOM_GetAmbientLightColor",
@@ -254,7 +372,33 @@
         "D2RoomStrc",
         "uint32_t"
       ],
-      "dh": "6ee70c30"
+      "dh": "6ee70c30",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "pIntensity",
+          "EDX:4"
+        ],
+        [
+          "pRed",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGreen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBlue",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bUseLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_InitFromPlayerAndRooms",
@@ -282,7 +426,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "8a4c40b4"
+      "dh": "8a4c40b4",
+      "paramStorage": [
+        [
+          "bForceBlack",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_ClearToBlack",
@@ -322,7 +472,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d1d212a4"
+      "dh": "d1d212a4",
+      "paramStorage": [
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nIntensity",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRed",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nGreen",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nBlue",
+          "Stack[0x10]:1"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_ApplyPointLight",
@@ -347,7 +523,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d12595e1"
+      "dh": "d12595e1",
+      "paramStorage": [
+        [
+          "nQuality",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLightMap",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_SampleGridToBuffer",
@@ -367,7 +553,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ceac4c5e"
+      "dh": "ceac4c5e",
+      "paramStorage": [
+        [
+          "pLightMap",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_ComputeInterpolationDir",
@@ -386,7 +578,21 @@
         "D2LightMapStrc",
         "uint32_t"
       ],
-      "dh": "3ffe3eab"
+      "dh": "3ffe3eab",
+      "paramStorage": [
+        [
+          "nSrcX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSrcY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pLightMap",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_InterpolateCell",
@@ -404,7 +610,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "998198a0"
+      "dh": "998198a0",
+      "paramStorage": [
+        [
+          "nBufferX",
+          "ECX:4"
+        ],
+        [
+          "nBufferY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_ApplyStaticLightWithShadow",
@@ -430,7 +646,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "affc4149"
+      "dh": "affc4149",
+      "paramStorage": [
+        [
+          "pLightMap",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_ApplyCollisionOccludedLight",
@@ -466,7 +688,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "68fa3a73"
+      "dh": "68fa3a73",
+      "paramStorage": [
+        [
+          "pLightMap",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_ApplyLightWithPixelMap",
@@ -492,7 +720,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "83536f40"
+      "dh": "83536f40",
+      "paramStorage": [
+        [
+          "pLightMap",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_UpdateSingleLight",
@@ -524,7 +758,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "c08afff5"
+      "dh": "c08afff5",
+      "paramStorage": [
+        [
+          "nQuality",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLightMap",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_BuildCollisionFlags",
@@ -645,7 +889,13 @@
         "D2UnitStrc",
         "eD2UnitType"
       ],
-      "dh": "c87e562e"
+      "dh": "c87e562e",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

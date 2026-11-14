@@ -36,7 +36,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7034d566"
+      "dh": "7034d566",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_064_Sacrifice",
@@ -69,7 +87,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "801e97ae"
+      "dh": "801e97ae",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_150_Smite",
@@ -110,7 +146,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "5ce44aee"
+      "dh": "5ce44aee",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLPAL_OnAuraExpire",
@@ -134,7 +188,21 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "0d33a2e0"
+      "dh": "0d33a2e0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLPAL_ReducePoisonAndCurseDuration",
@@ -164,7 +232,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6f4fe531"
+      "dh": "6f4fe531",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPercent",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLPAL_ApplyAuraStateToTarget",
@@ -206,7 +288,17 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "00d3947a"
+      "dh": "00d3947a",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_065_Prayer",
@@ -238,7 +330,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "a23d9bf7"
+      "dh": "a23d9bf7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLPAL_HandleFistOfHeavensLightningBolt",
@@ -264,7 +374,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "02a1ad03"
+      "dh": "02a1ad03",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_066_Conviction",
@@ -305,7 +425,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "e8309031"
+      "dh": "e8309031",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pCaster",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILPAL_SrvStFn31_Charge",
@@ -356,7 +494,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "34fa235f"
+      "dh": "34fa235f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLPAL_GetAttackFrameIndex",
@@ -378,7 +534,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7c4dc493"
+      "dh": "7c4dc493",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_067_Charge",
@@ -434,7 +596,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "1835f9e3"
+      "dh": "1835f9e3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLPAL_RollRandomDamage",
@@ -459,7 +639,13 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "d498a949"
+      "dh": "d498a949",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILPAL_SrvStFn35_Vengeance",
@@ -498,7 +684,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "662fe3fe"
+      "dh": "662fe3fe",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_073_BlessedHammer",
@@ -533,7 +737,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2958d0f8"
+      "dh": "2958d0f8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILPAL_SrvStFn36_HolyShield",
@@ -555,7 +777,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "39fe8e3e"
+      "dh": "39fe8e3e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLPAL_OnConversionExpire",
@@ -591,7 +831,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e35e122f"
+      "dh": "e35e122f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLPAL_CanConvertTarget",
@@ -618,7 +872,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9215626c"
+      "dh": "9215626c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bRollChance",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "EAX:4"
+        ],
+        [
+          "pUnit2",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_079_Conversion",
@@ -668,7 +944,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "58588ce2"
+      "dh": "58588ce2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_080_FistOfTheHeavens",
@@ -701,7 +995,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "a35b2319"
+      "dh": "a35b2319",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLPAL_OnFreezeExpire",
@@ -725,7 +1037,21 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "599be9ed"
+      "dh": "599be9ed",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_HitTargetApplyDamageAndShatter",
@@ -755,7 +1081,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f42c7199"
+      "dh": "f42c7199",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_081_HolyFreeze",
@@ -796,7 +1132,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "1d7c8a2f"
+      "dh": "1d7c8a2f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSOR_GetBlizzardSubMissileCount",
@@ -827,7 +1181,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6be7b503"
+      "dh": "6be7b503",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCorpse",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bSkipChanceRoll",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSOR_IsValidBlizzardTargetType",
@@ -858,7 +1238,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e1e26571"
+      "dh": "e1e26571",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_082_Redemption",
@@ -896,7 +1286,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "3afedbfc"
+      "dh": "3afedbfc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

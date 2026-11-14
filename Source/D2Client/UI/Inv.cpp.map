@@ -66,7 +66,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "11850722"
+      "dh": "11850722",
+      "paramStorage": [
+        [
+          "nItemHeight",
+          "CL:1"
+        ],
+        [
+          "nItemWidth",
+          "DL:1"
+        ],
+        [
+          "nCellX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nColorIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCellY",
+          "EAX:4"
+        ],
+        [
+          "pCoords",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INV_DrawBodySlotHighlight",
@@ -86,7 +112,17 @@
         "D2InventoryEntryStrc",
         "int32_t"
       ],
-      "dh": "b5abc3f8"
+      "dh": "b5abc3f8",
+      "paramStorage": [
+        [
+          "pSlotRect",
+          "EAX:4"
+        ],
+        [
+          "nColorIndex",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "IsInInventoryScreenRange",
@@ -104,7 +140,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "603ea3b6"
+      "dh": "603ea3b6",
+      "paramStorage": [
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "IsInTradepage1ScreenRange",
@@ -122,7 +168,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9c5eab1d"
+      "dh": "9c5eab1d",
+      "paramStorage": [
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IsInTradePage2ScreenRange",
@@ -140,7 +196,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a728cf7f"
+      "dh": "a728cf7f",
+      "paramStorage": [
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IsInBankPageScreenRange",
@@ -159,7 +225,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "cb301f91"
+      "dh": "cb301f91",
+      "paramStorage": [
+        [
+          "nX",
+          "ESI:4"
+        ],
+        [
+          "nY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "IsInBankPageScreenRangeOpenTop",
@@ -178,7 +254,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e2ea68d5"
+      "dh": "e2ea68d5",
+      "paramStorage": [
+        [
+          "nX",
+          "ESI:4"
+        ],
+        [
+          "nY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "IsInTransmogrifyScreenRange",
@@ -196,7 +282,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b961db7e"
+      "dh": "b961db7e",
+      "paramStorage": [
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INV_DrawGridPlacementHighlight",
@@ -229,7 +325,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a4d5f845"
+      "dh": "a4d5f845",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "byColor",
+          "EBX:4"
+        ],
+        [
+          "nGridIndex",
+          "EAX:4"
+        ],
+        [
+          "pGridCoords",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INV_IsPlayerInventoryMode",
@@ -276,7 +394,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5d416d55"
+      "dh": "5d416d55",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGridCoords",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBaseX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBaseY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "INV_IsQuestItemConsumable",
@@ -299,7 +435,13 @@
         "eD2QuestState",
         "eD2Quests"
       ],
-      "dh": "69c67415"
+      "dh": "69c67415",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UI_InventoryContent",
@@ -357,7 +499,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "363d2038"
+      "dh": "363d2038",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CanTheseBeSocketed",
@@ -384,7 +532,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "16cb80b1"
+      "dh": "16cb80b1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTargetItem",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_DrawBodySlotCursorHighlight",
@@ -415,7 +573,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "71f60925"
+      "dh": "71f60925",
+      "paramStorage": [
+        [
+          "pInventory",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "InitInventory",
@@ -480,7 +644,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "eec0e1cc"
+      "dh": "eec0e1cc",
+      "paramStorage": [
+        [
+          "nPageIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatEtherealSocketedText",
@@ -507,7 +677,17 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "4ba507e9"
+      "dh": "4ba507e9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatPlayerNameOnItem",
@@ -536,7 +716,17 @@
         "uint32_t",
         "wchar_t"
       ],
-      "dh": "0dcebcce"
+      "dh": "0dcebcce",
+      "paramStorage": [
+        [
+          "wszText",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatPlayerNameWithBase",
@@ -562,7 +752,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2b9bd48d"
+      "dh": "2b9bd48d",
+      "paramStorage": [
+        [
+          "wszText1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatQuantityText",
@@ -588,7 +792,21 @@
         "D2UnitStrc",
         "WCHAR"
       ],
-      "dh": "abe48c78"
+      "dh": "abe48c78",
+      "paramStorage": [
+        [
+          "pQualityRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatDurabilityText",
@@ -620,7 +838,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "20e9870e"
+      "dh": "20e9870e",
+      "paramStorage": [
+        [
+          "wszText",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatStackCountText",
@@ -644,7 +872,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "2bc93bfb"
+      "dh": "2bc93bfb",
+      "paramStorage": [
+        [
+          "nStackCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatReqStrText",
@@ -669,7 +907,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "18657fa3"
+      "dh": "18657fa3",
+      "paramStorage": [
+        [
+          "pItemsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nReqAdjust",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wszText",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatReqDexText",
@@ -694,7 +946,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "f2404a2a"
+      "dh": "f2404a2a",
+      "paramStorage": [
+        [
+          "pItemsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nReqAdjust",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wszText",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "INV_CalcWeaponDamageRange",
@@ -723,7 +989,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "be2f3cfe"
+      "dh": "be2f3cfe",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eMinDmgStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eMaxDmgStat",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnOutMin",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnOutMax",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pbOutModified",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pItem",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "szPrintfBuffer",
@@ -767,7 +1063,17 @@
         "uint8_t",
         "wchar_t"
       ],
-      "dh": "a394e799"
+      "dh": "a394e799",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatBlockChanceText",
@@ -802,7 +1108,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "20a339fb"
+      "dh": "20a339fb",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemsTxt",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatDefenseRangeText",
@@ -836,7 +1156,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "269de826"
+      "dh": "269de826",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatRecord",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatArmorClassText",
@@ -872,7 +1206,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bb60512b"
+      "dh": "bb60512b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wszText",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "AppendQuanity",
@@ -898,7 +1246,17 @@
         "D2UnitStrc",
         "WCHAR"
       ],
-      "dh": "7cfc547d"
+      "dh": "7cfc547d",
+      "paramStorage": [
+        [
+          "wszText",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatAttackSpeedText",
@@ -928,7 +1286,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c48be120"
+      "dh": "c48be120",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatItemSpellDescText",
@@ -960,7 +1328,21 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "0c7d6af7"
+      "dh": "0c7d6af7",
+      "paramStorage": [
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemsTxt",
+          "EDI:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatSocketFillerDesc",
@@ -987,7 +1369,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ee05dd07"
+      "dh": "ee05dd07",
+      "paramStorage": [
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatRunewordName",
@@ -1019,7 +1407,17 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "76113c3a"
+      "dh": "76113c3a",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GetSetItem",
@@ -1050,7 +1448,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "c6a48423"
+      "dh": "c6a48423",
+      "paramStorage": [
+        [
+          "nId",
+          "EBX:4"
+        ],
+        [
+          "pInventory",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_IsMouseInRect",
@@ -1070,7 +1478,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b1159894"
+      "dh": "b1159894",
+      "paramStorage": [
+        [
+          "nLeftX",
+          "EAX:4"
+        ],
+        [
+          "nBottomY",
+          "EBX:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INV_IsMouseOverWeaponSwapSlot",
@@ -1088,7 +1514,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "72f3c9ba"
+      "dh": "72f3c9ba",
+      "paramStorage": [
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_LoadBodySlotImages",
@@ -1236,7 +1672,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "debeff5c"
+      "dh": "debeff5c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMouseX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMouseY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnCol",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnRow",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pGridLayout",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_CheckActionThrottle",
@@ -1294,7 +1756,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a6768aa3"
+      "dh": "a6768aa3",
+      "paramStorage": [
+        [
+          "nX",
+          "EDI:4"
+        ],
+        [
+          "nY",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INV_IsMouseOverCloseButton",
@@ -1312,7 +1784,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0e6ca86f"
+      "dh": "0e6ca86f",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "ECX:4"
+        ],
+        [
+          "nMouseY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleHighResDropClick",
@@ -1338,7 +1820,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "aa751ca6"
+      "dh": "aa751ca6",
+      "paramStorage": [
+        [
+          "nMouseY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMsg",
+          "ESI:4"
+        ],
+        [
+          "nMouseX",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleInventoryRightClick",
@@ -1367,7 +1863,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5f42b3fe"
+      "dh": "5f42b3fe",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_UpdateItemUnderCursor",
@@ -1397,7 +1899,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4b4e3d20"
+      "dh": "4b4e3d20",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInventory",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCursorItem",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMouseX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nMouseY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nPage",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pGridLayout",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_UpdateBodySlotUnderCursor",
@@ -1422,7 +1954,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5d2d450d"
+      "dh": "5d2d450d",
+      "paramStorage": [
+        [
+          "nBodyLoc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "pInventory",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleMouseMove",
@@ -1460,7 +2006,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d6d59206"
+      "dh": "d6d59206",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ClickItemRight",
@@ -1504,7 +2056,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "011ae5fe"
+      "dh": "011ae5fe",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pGridCoords",
+          "EDX:4"
+        ],
+        [
+          "nPage",
+          "EAX:4"
+        ],
+        [
+          "pPlayer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInventory",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INV_ResetHoverAndContextState",
@@ -1537,7 +2111,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "602511bf"
+      "dh": "602511bf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INV_SetShopPageFromNpc",
@@ -1565,7 +2145,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c5d3337e"
+      "dh": "c5d3337e",
+      "paramStorage": [
+        [
+          "byPage",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "INV_ResetInventoryState",
@@ -1631,7 +2217,37 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "4b87f1cb"
+      "dh": "4b87f1cb",
+      "paramStorage": [
+        [
+          "nAction",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwSell",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bSkipConfirm",
+          "ESI:4"
+        ],
+        [
+          "dwMode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_EnterShopMode",
@@ -1789,7 +2405,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e3bd902f"
+      "dh": "e3bd902f",
+      "paramStorage": [
+        [
+          "nButtonIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_SetNpcButtonSell",
@@ -1807,7 +2429,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "39191f69"
+      "dh": "39191f69",
+      "paramStorage": [
+        [
+          "nButtonIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_ClearNpcButton",
@@ -1825,7 +2453,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d3f3dab0"
+      "dh": "d3f3dab0",
+      "paramStorage": [
+        [
+          "nButtonIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_InitNpcButtonsByClass",
@@ -1888,7 +2522,13 @@
         "uint32_t",
         "wchar_t"
       ],
-      "dh": "b3c0a3c4"
+      "dh": "b3c0a3c4",
+      "paramStorage": [
+        [
+          "nGoldPanelMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UI_Inventory_DrawShop",
@@ -2017,7 +2657,13 @@
         "D2UIMouseMsgStrc",
         "D2UnitStrc"
       ],
-      "dh": "0ee81b60"
+      "dh": "0ee81b60",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleShopMouseMove",
@@ -2043,7 +2689,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "75c3f958"
+      "dh": "75c3f958",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleShopLeftClick",
@@ -2081,7 +2733,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "ff428b55"
+      "dh": "ff428b55",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_ConsumeInputEvent",
@@ -2100,7 +2758,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "ddc11b33"
+      "dh": "ddc11b33",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_UpdateNpcButtonHighlightState",
@@ -2118,7 +2782,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "1449257c"
+      "dh": "1449257c",
+      "paramStorage": [
+        [
+          "nSelection",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleShopEnterKey",
@@ -2140,7 +2810,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "9303b58a"
+      "dh": "9303b58a",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleShopRightClick",
@@ -2160,7 +2836,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "44ea44a0"
+      "dh": "44ea44a0",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleShopReturnAction",
@@ -2209,7 +2891,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "d2acf22a"
+      "dh": "d2acf22a",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleInventoryLeftClick",
@@ -2230,7 +2918,13 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "0ac5265f"
+      "dh": "0ac5265f",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleInventoryLeftDown",
@@ -2251,7 +2945,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cd04abec"
+      "dh": "cd04abec",
+      "paramStorage": [
+        [
+          "pMsg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INV_LoadShopTabImages",
@@ -2309,7 +3009,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "57d9c68d"
+      "dh": "57d9c68d",
+      "paramStorage": [
+        [
+          "nTradeMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INV_IsMouseOverAcceptTradeBtn",
@@ -2327,7 +3033,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9ef25ca2"
+      "dh": "9ef25ca2",
+      "paramStorage": [
+        [
+          "nMouseY",
+          "EDX:4"
+        ],
+        [
+          "nMouseX",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_IsMouseOverCancelTradeBtn",
@@ -2345,7 +3061,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "fbd2260e"
+      "dh": "fbd2260e",
+      "paramStorage": [
+        [
+          "nMouseY",
+          "EDX:4"
+        ],
+        [
+          "nMouseX",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleTradeMouseMove",
@@ -2366,7 +3092,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "7411811b"
+      "dh": "7411811b",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleTradeLeftClick",
@@ -2399,7 +3131,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "08847095"
+      "dh": "08847095",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleTradeRightClick",
@@ -2418,7 +3156,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "69693180"
+      "dh": "69693180",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleTradeEscapeKey",
@@ -2439,7 +3183,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "69feb845"
+      "dh": "69feb845",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_PlayTradeStatusSound",
@@ -2459,7 +3209,17 @@
         "eD2Sounds",
         "int32_t"
       ],
-      "dh": "bc0c6802"
+      "dh": "bc0c6802",
+      "paramStorage": [
+        [
+          "bLocalAcceptState",
+          "ECX:4"
+        ],
+        [
+          "bPartnerAcceptState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "INV_IsShopBuySellMode",
@@ -2556,7 +3316,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "fc909593"
+      "dh": "fc909593",
+      "paramStorage": [
+        [
+          "bActive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INV_IsMouseOverStashCloseBtn",
@@ -2575,7 +3341,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "dabada10"
+      "dh": "dabada10",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "EDI:4"
+        ],
+        [
+          "nMouseY",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INV_IsMouseOverStashGoldBtn",
@@ -2595,7 +3371,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f919cec5"
+      "dh": "f919cec5",
+      "paramStorage": [
+        [
+          "nMouseY",
+          "EDI:4"
+        ],
+        [
+          "nMouseX",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00489a10",
@@ -2634,7 +3420,13 @@
         "D2UIMouseMsgStrc",
         "D2UnitStrc"
       ],
-      "dh": "19a718a5"
+      "dh": "19a718a5",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleStashLeftClick",
@@ -2667,7 +3459,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "b39b188b"
+      "dh": "b39b188b",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_PanelKeyNoOp_Unref_00489cd0",
@@ -2685,7 +3483,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "5943a668"
+      "dh": "5943a668",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleStashEscapeKey",
@@ -2707,7 +3511,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "04eda503"
+      "dh": "04eda503",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleStashRightClick",
@@ -2727,7 +3537,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "ea8ca36d"
+      "dh": "ea8ca36d",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_SetStashNpcGuid",
@@ -2752,7 +3568,13 @@
         "eAct",
         "eD2LevelId"
       ],
-      "dh": "5d60bb3f"
+      "dh": "5d60bb3f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CloseStash2",
@@ -2841,7 +3663,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d3af7929"
+      "dh": "d3af7929",
+      "paramStorage": [
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CheckSomeCoords",
@@ -2859,7 +3691,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "81f01d01"
+      "dh": "81f01d01",
+      "paramStorage": [
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CloseCube",
@@ -2900,7 +3742,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ae4f392a"
+      "dh": "ae4f392a",
+      "paramStorage": [
+        [
+          "nParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleCubeMouseMove",
@@ -2920,7 +3768,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "f5505720"
+      "dh": "f5505720",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleCubeLeftClick",
@@ -2954,7 +3808,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a53aa1c2"
+      "dh": "a53aa1c2",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleCubeRightClick",
@@ -2973,7 +3833,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "2f33b166"
+      "dh": "2f33b166",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleCubeEscapeKey",
@@ -2995,7 +3861,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "d29ed1e4"
+      "dh": "d29ed1e4",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OpenCube",
@@ -3072,7 +3944,13 @@
         "eD2Quests",
         "int32_t"
       ],
-      "dh": "1ac07f6c"
+      "dh": "1ac07f6c",
+      "paramStorage": [
+        [
+          "nMenuActionId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INV_FreeItemGfxCache",
@@ -3240,7 +4118,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d96bb75f"
+      "dh": "d96bb75f",
+      "paramStorage": [
+        [
+          "nLeft",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTop",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nRight",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBottom",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "INV_DrawHirelingName",
@@ -3265,7 +4161,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "f2877582"
+      "dh": "f2877582",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_DrawHirelingStatLabels",
@@ -3350,7 +4252,13 @@
         "uint8_t",
         "wchar_t"
       ],
-      "dh": "c6294dac"
+      "dh": "c6294dac",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "INV_DrawHirelingEmptySlots",
@@ -3374,7 +4282,13 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "1bca98fb"
+      "dh": "1bca98fb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_CanHirelingEquipItem",
@@ -3401,7 +4315,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3006fa4c"
+      "dh": "3006fa4c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "EBX:4"
+        ],
+        [
+          "pbSlotMatch",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "INV_DrawHirelingCursorHighlight",
@@ -3431,7 +4359,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ce01b343"
+      "dh": "ce01b343",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INV_DrawHirelingEquippedItems",
@@ -3459,7 +4393,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "95c18598"
+      "dh": "95c18598",
+      "paramStorage": [
+        [
+          "pMercUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0048b640",
@@ -3509,7 +4449,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7a3092fa"
+      "dh": "7a3092fa",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleMercInvLeftClick",
@@ -3550,7 +4496,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7bccaa73"
+      "dh": "7bccaa73",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_HandleMercInvMouseMove",
@@ -3582,7 +4534,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "025154c2"
+      "dh": "025154c2",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CloseScrollOfWhatever",
@@ -3603,7 +4561,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "9acdd5cd"
+      "dh": "9acdd5cd",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_DrawRecipeScroll",
@@ -3653,7 +4621,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "1662bddb"
+      "dh": "1662bddb",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_PanelKeyNoOp",
@@ -3671,7 +4645,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "316e30e3"
+      "dh": "316e30e3",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_ExtractTextBetweenBrackets",
@@ -3695,7 +4675,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "406823f4"
+      "dh": "406823f4",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "wszDelimStart",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "wsprintf",
@@ -3793,7 +4783,21 @@
         "uint8_t",
         "wchar_t"
       ],
-      "dh": "e77a0e22"
+      "dh": "e77a0e22",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "wBuffer",
+          "EDX:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_FormatItemTooltipWithCost",
@@ -3819,7 +4823,17 @@
         "uint32_t",
         "wchar_t"
       ],
-      "dh": "9e60239f"
+      "dh": "9e60239f",
+      "paramStorage": [
+        [
+          "wszSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszDest",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INV_ShowBookTooltip",
@@ -3930,7 +4944,13 @@
         "uint32_t",
         "wchar_t"
       ],
-      "dh": "3347aa56"
+      "dh": "3347aa56",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INV_ShowTransmogrifyTooltip",
@@ -4059,7 +5079,17 @@
         "uint32_t",
         "wchar_t"
       ],
-      "dh": "9711ad18"
+      "dh": "9711ad18",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bUsePlayer",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UI_Inventory",
@@ -4202,7 +5232,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0eb674e8"
+      "dh": "0eb674e8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInventory",
+          "Stack[0x8]:4"
+        ],
+        [
+          "x",
+          "Stack[0xc]:4"
+        ],
+        [
+          "y",
+          "Stack[0x10]:4"
+        ],
+        [
+          "targetItem",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pInvLayout",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nPage",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "EQUIP_ItemRight",
@@ -4243,7 +5303,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "17986801"
+      "dh": "17986801",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pInventory",
+          "EDX:4"
+        ],
+        [
+          "nBodySlot",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EQUIP_ItemLeft",
@@ -4284,7 +5358,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "90c672d9"
+      "dh": "90c672d9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pInventory",
+          "EDX:4"
+        ],
+        [
+          "nBodySlot",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EQUIP_ItemDefault",
@@ -4325,7 +5413,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "429eea80"
+      "dh": "429eea80",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pInventory",
+          "EDX:4"
+        ],
+        [
+          "bodyLocation",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ClickItemHandler",
@@ -4378,7 +5480,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "90b3c7d4"
+      "dh": "90b3c7d4",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_InventoryRightClick",
@@ -4411,7 +5519,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a5dce349"
+      "dh": "a5dce349",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SelectDefaultTabForNPC",
@@ -4478,7 +5592,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b7046e91"
+      "dh": "b7046e91",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_InventoryLeftClick",
@@ -4520,7 +5640,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "b7e60de9"
+      "dh": "b7e60de9",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_InventoryMouseMove",
@@ -4541,7 +5667,13 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "aa415942"
+      "dh": "aa415942",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_TradeScreenLeftClick",
@@ -4573,7 +5705,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "4ee0c686"
+      "dh": "4ee0c686",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_StashLeftClick",
@@ -4605,7 +5743,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bab535f7"
+      "dh": "bab535f7",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_WeaponSwap",
@@ -4627,7 +5771,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "99bf2add"
+      "dh": "99bf2add",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_CubeLeftClick",
@@ -4659,7 +5809,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bb676d99"
+      "dh": "bb676d99",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DrawMercInventory",

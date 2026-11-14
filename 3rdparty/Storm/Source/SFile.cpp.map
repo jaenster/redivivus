@@ -19,7 +19,29 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "32191a49"
+      "dh": "32191a49",
+      "paramStorage": [
+        [
+          "pdwValues",
+          "ECX:4"
+        ],
+        [
+          "pVal0",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pVal1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pVal2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pVal3",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CopyStreamBuffer4",
@@ -37,7 +59,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "70da71f1"
+      "dh": "70da71f1",
+      "paramStorage": [
+        [
+          "pDest",
+          "ECX:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00415190",
@@ -52,7 +84,13 @@
       "calledFunctions": [
         "Unreferenced_00415190"
       ],
-      "dh": "7b325499"
+      "dh": "7b325499",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004151b0",
@@ -67,7 +105,13 @@
       "calledFunctions": [
         "Unreferenced_004151b0"
       ],
-      "dh": "14977e2a"
+      "dh": "14977e2a",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_DecompressLzw_BufferRead",
@@ -87,7 +131,21 @@
         "D2LzwBufferStateStrc",
         "uint32_t"
       ],
-      "dh": "e65a2b09"
+      "dh": "e65a2b09",
+      "paramStorage": [
+        [
+          "pDstBuf",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBytesRequested",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pReadState",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_DecompressLzw_BufferWrite",
@@ -107,7 +165,21 @@
         "D2LzwBufferStateStrc",
         "uint32_t"
       ],
-      "dh": "ab31b86f"
+      "dh": "ab31b86f",
+      "paramStorage": [
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBufState",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_DecompressLzw",
@@ -129,7 +201,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1b5b798f"
+      "dh": "1b5b798f",
+      "paramStorage": [
+        [
+          "pDstData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSrcSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_Decrypt",
@@ -147,7 +233,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "bc1b6bba"
+      "dh": "bc1b6bba",
+      "paramStorage": [
+        [
+          "nSeed",
+          "ECX:4"
+        ],
+        [
+          "pData",
+          "EDX:4"
+        ],
+        [
+          "nByteLen",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_Hash",
@@ -167,7 +267,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "93b386c6"
+      "dh": "93b386c6",
+      "paramStorage": [
+        [
+          "nHashKind",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_InitializeHashSource",
@@ -186,7 +296,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "14d3d28b"
+      "dh": "14d3d28b",
+      "paramStorage": [
+        [
+          "nSeed",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_ReadFileChecked",
@@ -208,7 +324,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "79a1ed15"
+      "dh": "79a1ed15",
+      "paramStorage": [
+        [
+          "pMPQFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutputBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBytesToRead",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnBytesRead",
+          "Stack[0x10]:4"
+        ],
+        [
+          "hFile",
+          "EBX:4"
+        ],
+        [
+          "pdwBytesRead",
+          "ESI:4"
+        ],
+        [
+          "nFileOffset",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_SyncReadFile",
@@ -229,7 +375,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2189d407"
+      "dh": "2189d407",
+      "paramStorage": [
+        [
+          "pOutputBuf",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBytesToRead",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnBytesRead",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nFileOffset",
+          "EDI:4"
+        ],
+        [
+          "pFileHandle",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_GetBlockTableEntry",
@@ -249,7 +417,17 @@
         "D2MPQBlockEntryStrc",
         "int32_t"
       ],
-      "dh": "1f2113d5"
+      "dh": "1f2113d5",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ],
+        [
+          "nHashIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_SearchHashTable",
@@ -272,7 +450,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "04985ebc"
+      "dh": "04985ebc",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ],
+        [
+          "nLocale",
+          "Stack[0x4]:2"
+        ],
+        [
+          "cPlatform",
+          "Stack[0x8]:1"
+        ],
+        [
+          "szFileName",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_ShiftSectorTable",
@@ -293,7 +489,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "70514bf9"
+      "dh": "70514bf9",
+      "paramStorage": [
+        [
+          "pSectorTable",
+          "ECX:4"
+        ],
+        [
+          "nSectorCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00415730",
@@ -308,7 +514,13 @@
       "calledFunctions": [
         "Unreferenced_00415730"
       ],
-      "dh": "711bc836"
+      "dh": "711bc836",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_GetStreamPosition",
@@ -328,7 +540,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8c6c2b25"
+      "dh": "8c6c2b25",
+      "paramStorage": [
+        [
+          "pStream",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_HandleAsyncReadError",
@@ -351,7 +569,13 @@
         "uint32_t",
         "void *"
       ],
-      "dh": "8e469920"
+      "dh": "8e469920",
+      "paramStorage": [
+        [
+          "pAsyncOp",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_BuildDefaultBasePath",
@@ -387,7 +611,17 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "d64fff17"
+      "dh": "d64fff17",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ],
+        [
+          "ppArchive",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_FileExistsOnDisk",
@@ -405,7 +639,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "5e545e2b"
+      "dh": "5e545e2b",
+      "paramStorage": [
+        [
+          "szText",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CheckFileHandle",
@@ -424,7 +664,17 @@
         "D2MPQFileStrc",
         "D2MPQFileStrc *"
       ],
-      "dh": "7dbeb339"
+      "dh": "7dbeb339",
+      "paramStorage": [
+        [
+          "pMPQFile",
+          "ECX:4"
+        ],
+        [
+          "ppMPQFile",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CheckForCdRom",
@@ -447,7 +697,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "b87b5bb7"
+      "dh": "b87b5bb7",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_ConvertRelativePathName",
@@ -470,7 +726,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "26c909dd"
+      "dh": "26c909dd",
+      "paramStorage": [
+        [
+          "bStripDir",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFileName",
+          "ECX:4"
+        ],
+        [
+          "szOutPath",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_FindFileOnDisk",
@@ -493,7 +763,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3cb6e247"
+      "dh": "3cb6e247",
+      "paramStorage": [
+        [
+          "bSearchFlags",
+          "Stack[0x4]:1"
+        ],
+        [
+          "szOutPath",
+          "EAX:4"
+        ],
+        [
+          "szFileName",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_EnsureHashSource",
@@ -536,7 +820,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f986a0e7"
+      "dh": "f986a0e7",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pdwAuthResult",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pModulusBytes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nModulusLen",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pExponentBytes",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nExponentLen",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_ComputeFileHash",
@@ -559,7 +869,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d875a912"
+      "dh": "d875a912",
+      "paramStorage": [
+        [
+          "szFileName",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFileRegisterLoadNotifyProc",
@@ -577,7 +893,17 @@
       "usedTypes": [
         "pfnSFileOpenCallback"
       ],
-      "dh": "f95a46bd"
+      "dh": "f95a46bd",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUserParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SFileDdaInitialize",
@@ -596,7 +922,13 @@
       "usedTypes": [
         "IDirectSound"
       ],
-      "dh": "c6cbfd25"
+      "dh": "c6cbfd25",
+      "paramStorage": [
+        [
+          "lpDS",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_SetArchivePriority",
@@ -616,7 +948,17 @@
         "D2ArchiveStrc",
         "int32_t"
       ],
-      "dh": "190243e3"
+      "dh": "190243e3",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bDecrement",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SFileEnableDirectAccess",
@@ -636,7 +978,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4b554170"
+      "dh": "4b554170",
+      "paramStorage": [
+        [
+          "D2Ini_bUseDirect",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFileEnableSeekOptimization",
@@ -651,7 +999,13 @@
       "calledFunctions": [
         "SFileEnableSeekOptimization"
       ],
-      "dh": "03e127d1"
+      "dh": "03e127d1",
+      "paramStorage": [
+        [
+          "bEnable",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFileGetArchiveInfo",
@@ -671,7 +1025,21 @@
         "D2ArchiveStrc",
         "uint32_t"
       ],
-      "dh": "f1c6762d"
+      "dh": "f1c6762d",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnArchiveType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnIsPriority",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFileGetArchiveName",
@@ -693,7 +1061,21 @@
         "D2ArchiveStrc",
         "int32_t"
       ],
-      "dh": "f959ba4a"
+      "dh": "f959ba4a",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szOutBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFileGetBasePath",
@@ -714,7 +1096,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "82397c5b"
+      "dh": "82397c5b",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxLength",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_GetFileTime",
@@ -735,7 +1127,17 @@
         "D2MPQFileStrc",
         "int32_t"
       ],
-      "dh": "b50dc00d"
+      "dh": "b50dc00d",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pFileTime",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_GetFileLocale",
@@ -755,7 +1157,13 @@
         "D2ArchiveStrc",
         "int32_t"
       ],
-      "dh": "7449cbea"
+      "dh": "7449cbea",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_GetFilePlatform",
@@ -775,7 +1183,17 @@
         "D2ArchiveStrc",
         "uint32_t"
       ],
-      "dh": "e953d6ee"
+      "dh": "e953d6ee",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPlatformInfo",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SFileGetFileName",
@@ -798,7 +1216,21 @@
         "D2MPQFileStrc",
         "int32_t"
       ],
-      "dh": "e8133f39"
+      "dh": "e8133f39",
+      "paramStorage": [
+        [
+          "pFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CopyFileRecordNameOrAlias",
@@ -820,7 +1252,21 @@
         "D2MPQFileStrc",
         "int32_t"
       ],
-      "dh": "2a124fbe"
+      "dh": "2a124fbe",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szOutName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufferOutputLength",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFileGetFileCompressedSize",
@@ -839,7 +1285,17 @@
       "usedTypes": [
         "D2MPQFileStrc"
       ],
-      "dh": "6132ba97"
+      "dh": "6132ba97",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pdwSizeHigh",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SFileGetFileSize",
@@ -859,7 +1315,17 @@
         "D2MPQFileStrc",
         "LPDWORD"
       ],
-      "dh": "71065731"
+      "dh": "71065731",
+      "paramStorage": [
+        [
+          "pMPQFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pdwFileSizeHigh",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_GetFileTimestamp",
@@ -880,7 +1346,17 @@
         "D2MPQFileStrc",
         "LPFILETIME"
       ],
-      "dh": "7e4e3ddf"
+      "dh": "7e4e3ddf",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pFileTime",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SFileSetAsyncBudget",
@@ -895,7 +1371,13 @@
       "calledFunctions": [
         "SFileSetAsyncBudget"
       ],
-      "dh": "1fc14702"
+      "dh": "1fc14702",
+      "paramStorage": [
+        [
+          "nBudgetBytesPerSec",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFileSetBasePath",
@@ -919,7 +1401,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bd136ce4"
+      "dh": "bd136ce4",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFileSetDataChunkSize",
@@ -938,7 +1426,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "05b1c1a3"
+      "dh": "05b1c1a3",
+      "paramStorage": [
+        [
+          "nChunkSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFileSetFilePointer",
@@ -959,7 +1453,25 @@
         "D2MPQFileStrc",
         "int32_t"
       ],
-      "dh": "58badd5b"
+      "dh": "58badd5b",
+      "paramStorage": [
+        [
+          "pMPQFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDistanceToMove",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnDistanceToMoveHigh",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwMoveMethod",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SFileSetIoErrorMode",
@@ -978,7 +1490,17 @@
         "int32_t",
         "pfnSFileReadError"
       ],
-      "dh": "12b03c65"
+      "dh": "12b03c65",
+      "paramStorage": [
+        [
+          "nErrorMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnErrorHandler",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SFileSetLocale",
@@ -996,7 +1518,13 @@
       "usedTypes": [
         "uint16_t"
       ],
-      "dh": "f4224b54"
+      "dh": "f4224b54",
+      "paramStorage": [
+        [
+          "nLocale",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "SFileSetPlatform",
@@ -1011,7 +1539,13 @@
       "calledFunctions": [
         "SFileSetPlatform"
       ],
-      "dh": "8c158240"
+      "dh": "8c158240",
+      "paramStorage": [
+        [
+          "byPlatform",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "SFileUnloadFile",
@@ -1031,7 +1565,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ee681e77"
+      "dh": "ee681e77",
+      "paramStorage": [
+        [
+          "pFile",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CompareFileTime1",
@@ -1051,7 +1591,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "e69ec59d"
+      "dh": "e69ec59d",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ],
+        [
+          "pLeft",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004167a0",
@@ -1069,7 +1619,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "a4badbdc"
+      "dh": "a4badbdc",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004167f0",
@@ -1087,7 +1643,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "3a48b276"
+      "dh": "3a48b276",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00416820",
@@ -1105,7 +1667,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "baeecc61"
+      "dh": "baeecc61",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00416850",
@@ -1123,7 +1691,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "449083ce"
+      "dh": "449083ce",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CompareFileTime2",
@@ -1143,7 +1717,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "7ef1ee9b"
+      "dh": "7ef1ee9b",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ],
+        [
+          "pLeft",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_004168f0",
@@ -1162,7 +1746,13 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "cff1ceae"
+      "dh": "cff1ceae",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CompareFileSize1",
@@ -1182,7 +1772,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "e8510e4c"
+      "dh": "e8510e4c",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ],
+        [
+          "pLeft",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CompareFileSize2",
@@ -1202,7 +1802,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "41ab708d"
+      "dh": "41ab708d",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ],
+        [
+          "pLeft",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CompareFileName",
@@ -1222,7 +1832,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "cfbb63da"
+      "dh": "cfbb63da",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ],
+        [
+          "pLeft",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004169f0",
@@ -1240,7 +1860,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "b9e3e57d"
+      "dh": "b9e3e57d",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00416a00",
@@ -1258,7 +1884,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "42d679e8"
+      "dh": "42d679e8",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00416a10",
@@ -1277,7 +1909,13 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "1b84cbd3"
+      "dh": "1b84cbd3",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00416a20",
@@ -1296,7 +1934,13 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "049e5590"
+      "dh": "049e5590",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00416a30",
@@ -1314,7 +1958,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "b31cbee9"
+      "dh": "b31cbee9",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00416a90",
@@ -1329,7 +1979,13 @@
       "calledFunctions": [
         "Unreferenced_00416a90"
       ],
-      "dh": "afd74813"
+      "dh": "afd74813",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00416ab0",
@@ -1344,7 +2000,13 @@
       "calledFunctions": [
         "Unreferenced_00416ab0"
       ],
-      "dh": "fca8225a"
+      "dh": "fca8225a",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_InternalReadAligned",
@@ -1373,7 +2035,25 @@
         "D2MPQFileStrc",
         "uint32_t"
       ],
-      "dh": "93207221"
+      "dh": "93207221",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFileOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDstBuf",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nReadLen",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_InternalReadAlignedSector",
@@ -1394,7 +2074,17 @@
         "D2MPQFileStrc",
         "uint32_t"
       ],
-      "dh": "a04314da"
+      "dh": "a04314da",
+      "paramStorage": [
+        [
+          "nAlignedOffset",
+          "EDX:4"
+        ],
+        [
+          "pMPQFile",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_InternalReadUnaligned",
@@ -1419,7 +2109,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c5c4c6a8"
+      "dh": "c5c4c6a8",
+      "paramStorage": [
+        [
+          "pMPQFile",
+          "ECX:4"
+        ],
+        [
+          "pOutputBuf",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBytesToRead",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFileOffset",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SFileAuthenticateArchive",
@@ -1460,7 +2168,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "00884bc3"
+      "dh": "00884bc3",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pdwAuthResult",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00417850",
@@ -1478,7 +2196,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "00df4d0c"
+      "dh": "00df4d0c",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004178a0",
@@ -1496,7 +2220,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "3b7e5cce"
+      "dh": "3b7e5cce",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_00417900",
@@ -1515,7 +2245,13 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "cf83c698"
+      "dh": "cf83c698",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00417940",
@@ -1533,7 +2269,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "076005d4"
+      "dh": "076005d4",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00417990",
@@ -1551,7 +2293,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "bdebc6d5"
+      "dh": "bdebc6d5",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_AllocateFileRecord1",
@@ -1569,7 +2317,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "35a9b653"
+      "dh": "35a9b653",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_FreeFileRecord1",
@@ -1587,7 +2345,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9d61484f"
+      "dh": "9d61484f",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSList_FILEREC_LinkNode",
@@ -1610,7 +2378,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2f6a8ae0"
+      "dh": "2f6a8ae0",
+      "paramStorage": [
+        [
+          "ppListContainer",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppListHead",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CompareFileRecord1",
@@ -1630,7 +2416,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "e6932b02"
+      "dh": "e6932b02",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_FreeFileRecord2",
@@ -1648,7 +2444,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "c04836a5"
+      "dh": "c04836a5",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_InsertFileRecordIntoList2",
@@ -1672,7 +2478,25 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "39fc759e"
+      "dh": "39fc759e",
+      "paramStorage": [
+        [
+          "ppListContainer",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppListHead",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_FreeFileRecord3",
@@ -1690,7 +2514,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "159f3ab0"
+      "dh": "159f3ab0",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_InsertFileRecordIntoList3",
@@ -1712,7 +2546,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "78fcf13d"
+      "dh": "78fcf13d",
+      "paramStorage": [
+        [
+          "ppListContainer",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppListHead",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CompareFileRecord2",
@@ -1732,7 +2584,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "2ccf7b49"
+      "dh": "2ccf7b49",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_FreeFileRecord4",
@@ -1750,7 +2612,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b6383cf7"
+      "dh": "b6383cf7",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_InsertFileRecordIntoList4",
@@ -1772,7 +2644,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7865d1d0"
+      "dh": "7865d1d0",
+      "paramStorage": [
+        [
+          "ppListContainer",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppListHead",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CompareFileRecord3",
@@ -1792,7 +2682,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "865ed52b"
+      "dh": "865ed52b",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSList_UnlinkNode_00417e90",
@@ -1813,7 +2713,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "c13e67c2"
+      "dh": "c13e67c2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_SearchFileInArchives",
@@ -1843,7 +2753,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8f7e903f"
+      "dh": "8f7e903f",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ],
+        [
+          "ppBlockEntryOut",
+          "EDX:4"
+        ],
+        [
+          "szFileName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSearchFlags",
+          "Stack[0x8]:1"
+        ],
+        [
+          "ppArchiveOut",
+          "Stack[0xc]:4"
+        ],
+        [
+          "szDiskPathOut",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SFileDdaGetPos",
@@ -1865,7 +2801,21 @@
         "D2MPQFileStrc",
         "uint32_t"
       ],
-      "dh": "38d53577"
+      "dh": "38d53577",
+      "paramStorage": [
+        [
+          "pFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pdwCurrentPos",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pdwEndPos",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFileDdaGetVolume",
@@ -1887,7 +2837,21 @@
         "D2StormAudioStreamRec",
         "int32_t"
       ],
-      "dh": "0b6f88d4"
+      "dh": "0b6f88d4",
+      "paramStorage": [
+        [
+          "hFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "plVolume",
+          "Stack[0x8]:4"
+        ],
+        [
+          "plPan",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFileDdaSetVolume",
@@ -1909,7 +2873,21 @@
         "D2StormAudioStreamRec",
         "int32_t"
       ],
-      "dh": "9c691bc6"
+      "dh": "9c691bc6",
+      "paramStorage": [
+        [
+          "hFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "lVolume",
+          "Stack[0x8]:4"
+        ],
+        [
+          "lPan",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_OpenFileInternal",
@@ -1931,7 +2909,21 @@
         "D2ArchiveStrc",
         "uint8_t"
       ],
-      "dh": "755d598a"
+      "dh": "755d598a",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFileName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bSearchFlags",
+          "Stack[0xc]:1"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_004183f0",
@@ -1950,7 +2942,13 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "d211721e"
+      "dh": "d211721e",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_00418430",
@@ -1969,7 +2967,13 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "8ffba0a6"
+      "dh": "8ffba0a6",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00418470",
@@ -1987,7 +2991,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "6f3e1c53"
+      "dh": "6f3e1c53",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_InsertFileRecordIntoList5",
@@ -2009,7 +3019,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6be1ec44"
+      "dh": "6be1ec44",
+      "paramStorage": [
+        [
+          "ppListContainer",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppListHead",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TSList_UnlinkNode_00418560",
@@ -2030,7 +3058,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "ff57262f"
+      "dh": "ff57262f",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004185b0",
@@ -2048,7 +3086,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "7bc74dca"
+      "dh": "7bc74dca",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSList_RawNext_004185d0",
@@ -2068,7 +3112,17 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "787cdf15"
+      "dh": "787cdf15",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSList_UnlinkNode_004185f0",
@@ -2089,7 +3143,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "7be4a31a"
+      "dh": "7be4a31a",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSList_UnlinkNode_00418660",
@@ -2110,7 +3174,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "c2b9c80e"
+      "dh": "c2b9c80e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSList_RawNext_004186d0",
@@ -2130,7 +3204,17 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "2aef76f8"
+      "dh": "2aef76f8",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSList_RawNext_004186f0",
@@ -2150,7 +3234,17 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "9d6e6b1a"
+      "dh": "9d6e6b1a",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pRecord",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSList_UnlinkNode_00418710",
@@ -2171,7 +3265,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "09bec48e"
+      "dh": "09bec48e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_004187c0",
@@ -2190,7 +3294,13 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "2dc8ae11"
+      "dh": "2dc8ae11",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_00418800",
@@ -2209,7 +3319,13 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "1c31742f"
+      "dh": "1c31742f",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_00418840",
@@ -2228,7 +3344,13 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "ef3722cf"
+      "dh": "ef3722cf",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_00418880",
@@ -2247,7 +3369,13 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "56fadabe"
+      "dh": "56fadabe",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_004188c0",
@@ -2266,7 +3394,13 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "cee61fc7"
+      "dh": "cee61fc7",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkAll",
@@ -2308,7 +3442,13 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "d9fcf168"
+      "dh": "d9fcf168",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkAll",
@@ -2371,7 +3511,13 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "286b0e61"
+      "dh": "286b0e61",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00418a40",
@@ -2389,7 +3535,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "124c8163"
+      "dh": "124c8163",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_FreeArchiveRecord",
@@ -2409,7 +3561,13 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "c9a61f9b"
+      "dh": "c9a61f9b",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_FreeArchiveRecord1",
@@ -2430,7 +3588,17 @@
         "D2ArchiveStrc",
         "uint8_t"
       ],
-      "dh": "0dc6ff5e"
+      "dh": "0dc6ff5e",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ],
+        [
+          "byFlags",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "SFILE_GetOpenFlags",
@@ -2468,7 +3636,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "8c18425f"
+      "dh": "8c18425f",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_00418ba0",
@@ -2487,7 +3661,13 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "ec0d5f49"
+      "dh": "ec0d5f49",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseAllOpenFiles1",
@@ -2506,7 +3686,13 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "dc091523"
+      "dh": "dc091523",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseAllOpenFiles2",
@@ -2525,7 +3711,13 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "9ba75b18"
+      "dh": "9ba75b18",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseStream1",
@@ -2547,7 +3739,13 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "0a3d2fad"
+      "dh": "0a3d2fad",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseStream2",
@@ -2569,7 +3767,13 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "e0c20add"
+      "dh": "e0c20add",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseStream3",
@@ -2591,7 +3795,13 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "ac1ccbb2"
+      "dh": "ac1ccbb2",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseStream4",
@@ -2613,7 +3823,13 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "95e6d6e2"
+      "dh": "95e6d6e2",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00418d80",
@@ -2631,7 +3847,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "a6b9da30"
+      "dh": "a6b9da30",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CloseStream5",
@@ -2653,7 +3875,13 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "4d58896f"
+      "dh": "4d58896f",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00418de0",
@@ -2671,7 +3899,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "6f050e97"
+      "dh": "6f050e97",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00418e50",
@@ -2689,7 +3923,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "28331e16"
+      "dh": "28331e16",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_DestroyFileRecord",
@@ -2710,7 +3950,13 @@
         "D2MPQFileStrc",
         "uint32_t"
       ],
-      "dh": "121727e7"
+      "dh": "121727e7",
+      "paramStorage": [
+        [
+          "pMPQFile",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_AllocFileRecord1",
@@ -2733,7 +3979,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a5a0c75a"
+      "dh": "a5a0c75a",
+      "paramStorage": [
+        [
+          "ppArchive",
+          "ECX:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_AllocFileRecord",
@@ -2756,7 +4020,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dc427c34"
+      "dh": "dc427c34",
+      "paramStorage": [
+        [
+          "ppArchive",
+          "ECX:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_AllocFileRecord2",
@@ -2779,7 +4061,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0f096964"
+      "dh": "0f096964",
+      "paramStorage": [
+        [
+          "ppArchive",
+          "ECX:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00418ff0",
@@ -2797,7 +4097,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "2dd9d406"
+      "dh": "2dd9d406",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_FreeArchiveRecord2",
@@ -2818,7 +4124,17 @@
         "D2ArchiveStrc *",
         "uint8_t"
       ],
-      "dh": "76a6fafb"
+      "dh": "76a6fafb",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ],
+        [
+          "byFlags",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00419060",
@@ -2836,7 +4152,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "f43eddc8"
+      "dh": "f43eddc8",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_FreeFileRecord",
@@ -2857,7 +4179,13 @@
         "D2MPQFileStrc",
         "D2MPQFileStrc *"
       ],
-      "dh": "8387f04a"
+      "dh": "8387f04a",
+      "paramStorage": [
+        [
+          "pMPQFile",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_FreeArchiveRecord3",
@@ -2878,7 +4206,17 @@
         "D2ArchiveStrc",
         "uint8_t"
       ],
-      "dh": "dd85d19b"
+      "dh": "dd85d19b",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ],
+        [
+          "byFlags",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "SFILE_EnumFilesInternal",
@@ -2903,7 +4241,29 @@
         "StormLinkStrc",
         "uint32_t"
       ],
-      "dh": "3797dea3"
+      "dh": "3797dea3",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pFileRecord",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x10]:4"
+        ],
+        [
+          "ppArchive",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SFileOpenFileEx",
@@ -2935,7 +4295,25 @@
         "uint32_t",
         "void *"
       ],
-      "dh": "d958f8ab"
+      "dh": "d958f8ab",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFileName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "phFile",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_AllocFileRecord3",
@@ -2958,7 +4336,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "29fc092f"
+      "dh": "29fc092f",
+      "paramStorage": [
+        [
+          "ppArchive",
+          "ECX:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_RemoveAsyncRequestFromQueue",
@@ -2980,7 +4376,17 @@
         "StormLinkStrc *",
         "uint32_t"
       ],
-      "dh": "81d4e512"
+      "dh": "81d4e512",
+      "paramStorage": [
+        [
+          "pListContext",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_AllocFileRecord4",
@@ -3003,7 +4409,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "637c3c27"
+      "dh": "637c3c27",
+      "paramStorage": [
+        [
+          "ppArchive",
+          "ECX:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_IssueRequest",
@@ -3031,7 +4455,65 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5645d523"
+      "dh": "5645d523",
+      "paramStorage": [
+        [
+          "nFileOffset",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pChunkWritePtr",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pReadBufferBase",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStream",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUserCtx2",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pParentStream",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nChunkSize",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nTimeoutMs",
+          "Stack[0x20]:4"
+        ],
+        [
+          "bUrgent",
+          "Stack[0x24]:4"
+        ],
+        [
+          "hCompletionEvent",
+          "Stack[0x28]:4"
+        ],
+        [
+          "bQueueImmediately",
+          "Stack[0x2c]:4"
+        ],
+        [
+          "bIsLastChunk",
+          "Stack[0x30]:4"
+        ],
+        [
+          "pCompletion",
+          "Stack[0x34]:4"
+        ],
+        [
+          "pMPQFile",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SFileCloseFile",
@@ -3054,7 +4536,13 @@
         "D2MPQFileStrc *",
         "uint32_t"
       ],
-      "dh": "32abc98e"
+      "dh": "32abc98e",
+      "paramStorage": [
+        [
+          "pMPQFile",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFileOpenFile",
@@ -3076,7 +4564,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e8c29949"
+      "dh": "e8c29949",
+      "paramStorage": [
+        [
+          "szFilename",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppFile",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AUDIOSTREAM_Destructor",
@@ -3099,7 +4597,13 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "2d7e1cb2"
+      "dh": "2d7e1cb2",
+      "paramStorage": [
+        [
+          "pAudioStream",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_DeleteAudioStream",
@@ -3120,7 +4624,17 @@
         "D2StormAudioStreamRec",
         "uint8_t"
       ],
-      "dh": "a41ab815"
+      "dh": "a41ab815",
+      "paramStorage": [
+        [
+          "pAudioStream",
+          "ECX:4"
+        ],
+        [
+          "bDelete",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "SFileCloseArchive",
@@ -3144,7 +4658,13 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
       ],
-      "dh": "1bacab78"
+      "dh": "1bacab78",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_AudioStreamListDeleteNode",
@@ -3165,7 +4685,17 @@
         "D2StormAudioStreamRec",
         "StormLinkedListStrc"
       ],
-      "dh": "7f8b17b9"
+      "dh": "7f8b17b9",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_ReleaseAudioStream",
@@ -3186,7 +4716,13 @@
         "D2StormAudioStreamRec",
         "uint32_t"
       ],
-      "dh": "4dfea73c"
+      "dh": "4dfea73c",
+      "paramStorage": [
+        [
+          "pAudioStream",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CheckAudioStreams",
@@ -3258,7 +4794,13 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "8c777dcb"
+      "dh": "8c777dcb",
+      "paramStorage": [
+        [
+          "pAsyncOp",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_DeleteAsyncRequest",
@@ -3279,7 +4821,17 @@
         "D2StormAsyncOpStrc",
         "uint8_t"
       ],
-      "dh": "cf47a50d"
+      "dh": "cf47a50d",
+      "paramStorage": [
+        [
+          "pAsyncOp",
+          "ECX:4"
+        ],
+        [
+          "byFlags",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "SFileDestroy",
@@ -3328,7 +4880,17 @@
         "D2StormAsyncOpStrc",
         "StormLinkedListStrc"
       ],
-      "dh": "ff3a92f1"
+      "dh": "ff3a92f1",
+      "paramStorage": [
+        [
+          "pListContext",
+          "ECX:4"
+        ],
+        [
+          "pAsyncOp",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CancelRequest",
@@ -3354,7 +4916,17 @@
         "StormLinkStrc *",
         "uint32_t"
       ],
-      "dh": "a6bd3341"
+      "dh": "a6bd3341",
+      "paramStorage": [
+        [
+          "hFileHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMPQFile",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_SelectAsyncRequest",
@@ -3377,7 +4949,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "69213809"
+      "dh": "69213809",
+      "paramStorage": [
+        [
+          "nFileHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCurrentFilePos",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppReadyRequest",
+          "Stack[0xc]:4"
+        ],
+        [
+          "ppTimeoutRequest",
+          "Stack[0x10]:4"
+        ],
+        [
+          "ppMinTimeout",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CdThreadProc",
@@ -3414,7 +5008,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "876f8a81"
+      "dh": "876f8a81",
+      "paramStorage": [
+        [
+          "lpThreadParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CreateCdThread",
@@ -3445,7 +5045,17 @@
         "Unreferenced_0041a8d0",
         "SFILE_CreateCdThread"
       ],
-      "dh": "affcaf6c"
+      "dh": "affcaf6c",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_SetRequestUrgentByBuffer",
@@ -3463,7 +5073,17 @@
       "usedTypes": [
         "D2StormAsyncOpStrc"
       ],
-      "dh": "8d43d8ab"
+      "dh": "8d43d8ab",
+      "paramStorage": [
+        [
+          "pReadBuffer",
+          "ESI:4"
+        ],
+        [
+          "bUrgent",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CancelAsyncRequestNoReturn",
@@ -3480,7 +5100,13 @@
         "SErrSetLastError",
         "SFILE_CancelRequest"
       ],
-      "dh": "9e4464ca"
+      "dh": "9e4464ca",
+      "paramStorage": [
+        [
+          "nAsyncHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CancelAsyncRequestWithStatus",
@@ -3497,7 +5123,13 @@
         "SErrSetLastError",
         "SFILE_CancelRequest"
       ],
-      "dh": "9fdb088d"
+      "dh": "9fdb088d",
+      "paramStorage": [
+        [
+          "nRequestHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFileDdaEnd",
@@ -3522,7 +5154,13 @@
         "D2StormAudioStreamRec *",
         "uint32_t"
       ],
-      "dh": "cdb8d838"
+      "dh": "cdb8d838",
+      "paramStorage": [
+        [
+          "hFile",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_SetRequestPriorityByBuffer",
@@ -3540,7 +5178,17 @@
         "SErrSetLastError",
         "SetEvent"
       ],
-      "dh": "ec8f5c32"
+      "dh": "ec8f5c32",
+      "paramStorage": [
+        [
+          "pReadBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPriority",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SFileReadFileEx2",
@@ -3575,7 +5223,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2ce089c3"
+      "dh": "2ce089c3",
+      "paramStorage": [
+        [
+          "pFileHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutputBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBytesToRead",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pBytesRead",
+          "Stack[0x10]:4"
+        ],
+        [
+          "lpOverlapped",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwReadFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pCompletion",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "SFileLoadFileEx2",
@@ -3605,7 +5283,41 @@
         "uint8_t",
         "void *"
       ],
-      "dh": "44f83e0e"
+      "dh": "44f83e0e",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pFileHandle",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppOutBuffer",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pdwOutSize",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nExtraPadBytes",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nSearchScope",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nReadCtx",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nReadFlags",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "SFileReadFile",
@@ -3626,7 +5338,29 @@
         "LPOVERLAPPED",
         "uint32_t"
       ],
-      "dh": "3e8fd3c0"
+      "dh": "3e8fd3c0",
+      "paramStorage": [
+        [
+          "pMPQFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutputBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBytesToRead",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnSize",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pAsyncReadCtx",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SFileReadFileEx",
@@ -3648,7 +5382,33 @@
         "LPOVERLAPPED",
         "uint32_t"
       ],
-      "dh": "cfacc77f"
+      "dh": "cfacc77f",
+      "paramStorage": [
+        [
+          "pMPQFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutputBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBytesToRead",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnSize",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pAsyncReadCtx",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pCompletion",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_ReadAdditionalAttributes",
@@ -3676,7 +5436,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f0e92fd7"
+      "dh": "f0e92fd7",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ECX:4"
+        ],
+        [
+          "pAttributesBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNumEntries",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_FindChunk",
@@ -3699,7 +5473,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "83967dfd"
+      "dh": "83967dfd",
+      "paramStorage": [
+        [
+          "nChunkId",
+          "EBX:4"
+        ],
+        [
+          "pMPQFile",
+          "ESI:4"
+        ],
+        [
+          "pnChunkSize",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SFileDdaBeginEx",
@@ -3733,7 +5521,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7c1e643c"
+      "dh": "7c1e643c",
+      "paramStorage": [
+        [
+          "hFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwBufferBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwInitialPos",
+          "Stack[0x10]:4"
+        ],
+        [
+          "lVolume",
+          "Stack[0x14]:4"
+        ],
+        [
+          "lPan",
+          "Stack[0x18]:4"
+        ],
+        [
+          "lpDSB",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "SFileLoadFile",
@@ -3756,7 +5574,29 @@
         "uint32_t",
         "void *"
       ],
-      "dh": "1f89a581"
+      "dh": "1f89a581",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppOutBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pdwOutSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nReadCtx",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SFileLoadFileEx",
@@ -3778,7 +5618,37 @@
         "uint32_t",
         "void *"
       ],
-      "dh": "d8786718"
+      "dh": "d8786718",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pFileHandle",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppOutBuffer",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pdwOutSize",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nExtraPadBytes",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nSearchScope",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nReadCtx",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_s_OpenArchive",
@@ -3815,7 +5685,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "81c690b4"
+      "dh": "81c690b4",
+      "paramStorage": [
+        [
+          "ppArchive",
+          "ECX:4"
+        ],
+        [
+          "nFlags",
+          "EDX:4"
+        ],
+        [
+          "bAllowEmpty",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppArchiveOut",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SFileDdaBegin",
@@ -3835,7 +5723,21 @@
         "D2MPQFileStrc",
         "uint32_t"
       ],
-      "dh": "d7ebe945"
+      "dh": "d7ebe945",
+      "paramStorage": [
+        [
+          "hFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwBufferBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFileOpenArchive",
@@ -3866,7 +5768,25 @@
         "D2MPQHeaderStrc",
         "uint32_t"
       ],
-      "dh": "82b9faa5"
+      "dh": "82b9faa5",
+      "paramStorage": [
+        [
+          "szArchiveName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUserData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "ppArchive",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SFileOpenFileAsArchive",
@@ -3900,7 +5820,29 @@
         "D2MPQHeaderStrc",
         "uint32_t"
       ],
-      "dh": "ed474445"
+      "dh": "ed474445",
+      "paramStorage": [
+        [
+          "nParentArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFileName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUserData",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x10]:4"
+        ],
+        [
+          "ppArchive",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "CrcBuffer",
@@ -3920,7 +5862,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "080df563"
+      "dh": "080df563",
+      "paramStorage": [
+        [
+          "pbData",
+          "ECX:4"
+        ],
+        [
+          "nLength",
+          "EDX:4"
+        ],
+        [
+          "pdwCrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byFlags",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6c9e98",
@@ -3942,7 +5902,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "986b4a32"
+      "dh": "986b4a32",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6c9ec8",
@@ -3964,7 +5942,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "78e297dd"
+      "dh": "78e297dd",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gMpqArchiveList",

@@ -44,7 +44,7 @@ BOOL __stdcall SOUND_IsEaxAvailable_ForEaxItem() {
 }
 
 uint32_t __fastcall SOUND_FileExists(char * szFileName) {
-    D2MPQFileStrc* pFile = (D2MPQFileStrc*)szFileName;
+    D2MPQFileStrc* pFile;
     int bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, szFileName, 0, (void**)&pFile);
     if (!bOpened) {
       return 0;

@@ -19,7 +19,13 @@
       "usedTypes": [
         "ListBoxImplementation"
       ],
-      "dh": "bf48ff85"
+      "dh": "bf48ff85",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "GetItemCount",
@@ -37,7 +43,13 @@
       "usedTypes": [
         "ListBoxImplementation"
       ],
-      "dh": "fb237d84"
+      "dh": "fb237d84",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "Clear",
@@ -56,7 +68,13 @@
         "ListBoxImplementation",
         "wchar_t[1024]"
       ],
-      "dh": "a0ab0f39"
+      "dh": "a0ab0f39",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "DrawScrollbar",
@@ -79,7 +97,13 @@
         "uint32_t",
         "wchar_t[1024]"
       ],
-      "dh": "8def67c5"
+      "dh": "8def67c5",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "GetVisibleItemCount",
@@ -99,7 +123,13 @@
         "uint32_t",
         "wchar_t[1024]"
       ],
-      "dh": "76bba1c1"
+      "dh": "76bba1c1",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "DrawTruncatedText",
@@ -123,7 +153,29 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "67189b2b"
+      "dh": "67189b2b",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "AddItem",
@@ -144,7 +196,53 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "d5b8915e"
+      "dh": "d5b8915e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "wszLine0",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszLine1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wszLine2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "wszLine3",
+          "Stack[0x10]:4"
+        ],
+        [
+          "wszLine4",
+          "Stack[0x14]:4"
+        ],
+        [
+          "wszLine5",
+          "Stack[0x18]:4"
+        ],
+        [
+          "dwItemData",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x20]:4"
+        ],
+        [
+          "bUseDefaultColor",
+          "Stack[0x24]:4"
+        ],
+        [
+          "nFont",
+          "Stack[0x28]:4"
+        ]
+      ]
     },
     {
       "name": "IsMouseOnScrollUp",
@@ -164,7 +262,17 @@
         "ListBoxImplementation",
         "int32_t"
       ],
-      "dh": "3dc68e65"
+      "dh": "3dc68e65",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsMouseOnScrollDown",
@@ -184,7 +292,17 @@
         "ListBoxImplementation",
         "int32_t"
       ],
-      "dh": "168307fa"
+      "dh": "168307fa",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsMouseOnScrollTrack",
@@ -204,7 +322,17 @@
         "ListBoxImplementation",
         "int32_t"
       ],
-      "dh": "052ca468"
+      "dh": "052ca468",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsMouseInBounds",
@@ -224,7 +352,17 @@
         "ListBoxImplementation",
         "uint32_t"
       ],
-      "dh": "07e619ba"
+      "dh": "07e619ba",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseWheel",
@@ -244,7 +382,17 @@
         "D2UIMouseMsgStrc",
         "ListBoxImplementation"
       ],
-      "dh": "9fa2fde1"
+      "dh": "9fa2fde1",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EnsureSelectionVisible",
@@ -262,7 +410,13 @@
       "usedTypes": [
         "ListBoxImplementation"
       ],
-      "dh": "3fe52e61"
+      "dh": "3fe52e61",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "OnUpArrow",
@@ -282,7 +436,17 @@
         "D2UIMouseMsgStrc",
         "ListBoxImplementation"
       ],
-      "dh": "b079afa1"
+      "dh": "b079afa1",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnDownArrow",
@@ -302,7 +466,17 @@
         "D2UIMouseMsgStrc",
         "ListBoxImplementation"
       ],
-      "dh": "ec731968"
+      "dh": "ec731968",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnLeftArrow",
@@ -321,7 +495,17 @@
         "D2UIMouseMsgStrc",
         "ListBoxImplementation"
       ],
-      "dh": "e7de7674"
+      "dh": "e7de7674",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnRightArrow",
@@ -340,7 +524,17 @@
         "D2UIMouseMsgStrc",
         "ListBoxImplementation"
       ],
-      "dh": "ad4a3704"
+      "dh": "ad4a3704",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HitTestItem",
@@ -361,7 +555,17 @@
         "uint32_t",
         "wchar_t[1024]"
       ],
-      "dh": "c3ba693d"
+      "dh": "c3ba693d",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseMove",
@@ -382,7 +586,17 @@
         "ListBoxImplementation",
         "int32_t"
       ],
-      "dh": "6787e888"
+      "dh": "6787e888",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnChar",
@@ -402,7 +616,17 @@
         "D2UIMouseMsgStrc",
         "ListBoxImplementation"
       ],
-      "dh": "c55a9c90"
+      "dh": "c55a9c90",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetValue",
@@ -420,7 +644,13 @@
       "usedTypes": [
         "ListBoxImplementation"
       ],
-      "dh": "d38023e8"
+      "dh": "d38023e8",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "GetItemUserData",
@@ -443,7 +673,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e51fc75e"
+      "dh": "e51fc75e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -477,7 +717,13 @@
         "uint32_t",
         "wchar_t[1024]"
       ],
-      "dh": "7d2f02d9"
+      "dh": "7d2f02d9",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "HandleScrollTrackClick",
@@ -500,7 +746,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7cdf4d20"
+      "dh": "7cdf4d20",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseDown",
@@ -525,7 +781,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "cbaa5ec9"
+      "dh": "cbaa5ec9",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseUp",
@@ -549,7 +815,17 @@
         "D2UIMouseMsgStrc",
         "ListBoxImplementation"
       ],
-      "dh": "0bea17bd"
+      "dh": "0bea17bd",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Constructor",
@@ -572,7 +848,49 @@
         "pfnEHHandlerRoutine",
         "wchar_t[1024]"
       ],
-      "dh": "91df4c5f"
+      "dh": "91df4c5f",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nItemSpacing",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nDefaultColor",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nDefaultFont",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pfnOnItemActivated",
+          "Stack[0x20]:4"
+        ],
+        [
+          "bTallRows",
+          "Stack[0x24]:1"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -592,7 +910,17 @@
         "ListBoxImplementation",
         "uint32_t"
       ],
-      "dh": "b5904bb3"
+      "dh": "b5904bb3",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnRightArrow_Unref_0052e090",
@@ -611,7 +939,17 @@
         "D2UIMouseMsgStrc",
         "ListBoxImplementation"
       ],
-      "dh": "072b5712"
+      "dh": "072b5712",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnRightArrow_Unref_0063c4b0",
@@ -630,7 +968,17 @@
         "D2UIMouseMsgStrc",
         "ListBoxImplementation"
       ],
-      "dh": "855c322b"
+      "dh": "855c322b",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnRightArrow_Unref_0063e060",
@@ -649,7 +997,17 @@
         "D2UIMouseMsgStrc",
         "ListBoxImplementation"
       ],
-      "dh": "654298b3"
+      "dh": "654298b3",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnRightArrow_Unref_00645030",
@@ -668,7 +1026,17 @@
         "D2UIMouseMsgStrc",
         "ListBoxImplementation"
       ],
-      "dh": "3d389676"
+      "dh": "3d389676",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnRightArrow_Unref_00645ff0",
@@ -687,7 +1055,17 @@
         "D2UIMouseMsgStrc",
         "ListBoxImplementation"
       ],
-      "dh": "1421178e"
+      "dh": "1421178e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnRightArrow_Unref_00646000",
@@ -706,7 +1084,17 @@
         "D2UIMouseMsgStrc",
         "ListBoxImplementation"
       ],
-      "dh": "11675f12"
+      "dh": "11675f12",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

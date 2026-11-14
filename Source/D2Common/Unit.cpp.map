@@ -29,7 +29,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "b60a2f53"
+      "dh": "b60a2f53",
+      "paramStorage": [
+        [
+          "bHaltIfPresent",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ROOM_LinkUnitToUpdateList",
@@ -56,7 +70,13 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "09e3bd33"
+      "dh": "09e3bd33",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SortUnitListByTargetY",
@@ -79,7 +99,13 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "d012bb43"
+      "dh": "d012bb43",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ROOM_ClearUnitUpdateList",
@@ -100,7 +126,13 @@
         "D2UnitStrc",
         "D2UnitStrc *"
       ],
-      "dh": "90267eaf"
+      "dh": "90267eaf",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_RemoveUnitFromUpdateList",
@@ -126,7 +158,13 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "74808607"
+      "dh": "74808607",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_IsUnitInRoom",
@@ -151,7 +189,17 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "a10c0041"
+      "dh": "a10c0041",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_AddUnitToRoomList",
@@ -181,7 +229,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "a2de4b1b"
+      "dh": "a2de4b1b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnitType",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_AddUnitToRoom",
@@ -201,7 +263,17 @@
         "D2RoomStrc",
         "D2UnitStrc"
       ],
-      "dh": "5fcf49d0"
+      "dh": "5fcf49d0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveUnitFromRoom",
@@ -231,7 +303,13 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "1ae48c8c"
+      "dh": "1ae48c8c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOM_ClearUnitRoomLink",
@@ -257,7 +335,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "37f94b97"
+      "dh": "37f94b97",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

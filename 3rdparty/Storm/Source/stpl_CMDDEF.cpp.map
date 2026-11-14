@@ -21,7 +21,13 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "73384d9b"
+      "dh": "73384d9b",
+      "paramStorage": [
+        [
+          "nLinkOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Link",
@@ -41,7 +47,13 @@
         "TSLink<CMDDEF>",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>"
       ],
-      "dh": "c4d460e6"
+      "dh": "c4d460e6",
+      "paramStorage": [
+        [
+          "ptr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LinkNode",
@@ -62,7 +74,21 @@
         "TSList<CMDDEF, TSGetLink<CMDDEF>>",
         "uint32_t"
       ],
-      "dh": "adab1c24"
+      "dh": "adab1c24",
+      "paramStorage": [
+        [
+          "ptr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLinkType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pExisting",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Next",
@@ -81,7 +107,13 @@
         "CMDDEF",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>"
       ],
-      "dh": "3a093af1"
+      "dh": "3a093af1",
+      "paramStorage": [
+        [
+          "ptr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkNode",
@@ -101,7 +133,13 @@
         "CMDDEF *",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>"
       ],
-      "dh": "655e5901"
+      "dh": "655e5901",
+      "paramStorage": [
+        [
+          "ptr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RawNext",
@@ -120,7 +158,13 @@
         "CMDDEF",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>"
       ],
-      "dh": "be2f0e18"
+      "dh": "be2f0e18",
+      "paramStorage": [
+        [
+          "ptr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkAll",
@@ -185,7 +229,21 @@
         "TSList<CMDDEF, TSGetLink<CMDDEF>>",
         "uint32_t"
       ],
-      "dh": "df7d730a"
+      "dh": "df7d730a",
+      "paramStorage": [
+        [
+          "nLinkType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Clear",
@@ -227,7 +285,13 @@
         "StormLinkStrc *",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>"
       ],
-      "dh": "2a7423e7"
+      "dh": "2a7423e7",
+      "paramStorage": [
+        [
+          "ptr",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

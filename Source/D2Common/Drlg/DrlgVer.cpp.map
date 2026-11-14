@@ -22,7 +22,17 @@
         "D2PoolManagerStrc",
         "uint8_t"
       ],
-      "dh": "3474e783"
+      "dh": "3474e783",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "nDirection",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "DRLGVER_SetVertexFlags",
@@ -40,7 +50,17 @@
       "usedTypes": [
         "D2DrlgVertexStrc"
       ],
-      "dh": "9205d96f"
+      "dh": "9205d96f",
+      "paramStorage": [
+        [
+          "pVertex",
+          "EAX:4"
+        ],
+        [
+          "nFlag",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGVER_CreateVerticesFromEdges",
@@ -67,7 +87,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "e575cfa7"
+      "dh": "e575cfa7",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pFirstVertex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDrlgCoord",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDirection",
+          "Stack[0x10]:1"
+        ],
+        [
+          "pDrlgRoomData",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGVER_CreateRoomVertices",
@@ -92,7 +134,29 @@
         "D2PoolManagerStrc",
         "uint8_t"
       ],
-      "dh": "e6d11ae8"
+      "dh": "e6d11ae8",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "ppVertices",
+          "EDX:4"
+        ],
+        [
+          "pDrlgCoord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDirection",
+          "Stack[0x8]:1"
+        ],
+        [
+          "pDrlgRoomData",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGVER_FreeVertices",
@@ -113,7 +177,17 @@
         "D2DrlgVertexStrc *",
         "D2PoolManagerStrc"
       ],
-      "dh": "096266e7"
+      "dh": "096266e7",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "ppVertices",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0067d250",
@@ -131,7 +205,13 @@
       "usedTypes": [
         "D2DrlgVertexStrc *"
       ],
-      "dh": "2e931499"
+      "dh": "2e931499",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetCoordDiff",
@@ -149,7 +229,21 @@
       "usedTypes": [
         "D2DrlgVertexStrc"
       ],
-      "dh": "f8a90c6e"
+      "dh": "f8a90c6e",
+      "paramStorage": [
+        [
+          "pDrlgVertex",
+          "ECX:4"
+        ],
+        [
+          "pDiffX",
+          "EDX:4"
+        ],
+        [
+          "pDiffY",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

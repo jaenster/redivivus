@@ -69,7 +69,21 @@
         "uint8_t",
         "void *"
       ],
-      "dh": "a1fd2167"
+      "dh": "a1fd2167",
+      "paramStorage": [
+        [
+          "pFile",
+          "ECX:4"
+        ],
+        [
+          "pMemory",
+          "EDX:4"
+        ],
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AllocDrlgFile",
@@ -94,7 +108,21 @@
         "D2PoolManagerStrc",
         "uint8_t"
       ],
-      "dh": "f5588fa9"
+      "dh": "f5588fa9",
+      "paramStorage": [
+        [
+          "ppDrlgFile",
+          "ECX:4"
+        ],
+        [
+          "pMemory",
+          "EDX:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_CopyMapAI",
@@ -116,7 +144,17 @@
         "D2PathPosStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "7012d465"
+      "dh": "7012d465",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pSrcMapAI",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_TransferMapAI",
@@ -136,7 +174,17 @@
         "D2MapAIStrc",
         "D2MapAIStrc *"
       ],
-      "dh": "426cab6f"
+      "dh": "426cab6f",
+      "paramStorage": [
+        [
+          "ppSrcMapAI",
+          "ECX:4"
+        ],
+        [
+          "ppDstMapAI",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_FreeSpawnPointList",
@@ -156,7 +204,17 @@
         "D2AiGeneralStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "53484458"
+      "dh": "53484458",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pAiGeneral",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CreatePresetObject_Unused",
@@ -178,7 +236,29 @@
         "D2PresetUnitStrc",
         "int32_t"
       ],
-      "dh": "0c43c03e"
+      "dh": "0c43c03e",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nClassId",
+          "EDX:4"
+        ],
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "EAX:4"
+        ],
+        [
+          "pDrlgMap",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CreateObjectPresets",
@@ -201,7 +281,25 @@
         "D2PresetUnitStrc",
         "int32_t"
       ],
-      "dh": "2bcf9027"
+      "dh": "2bcf9027",
+      "paramStorage": [
+        [
+          "nWorldX",
+          "ECX:4"
+        ],
+        [
+          "nWorldY",
+          "EAX:4"
+        ],
+        [
+          "pMap",
+          "ESI:4"
+        ],
+        [
+          "pMemory",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CreateObjectPresets2",
@@ -227,7 +325,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5bdad901"
+      "dh": "5bdad901",
+      "paramStorage": [
+        [
+          "xOffset",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGrid",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pMemory",
+          "EDI:4"
+        ],
+        [
+          "pMapStrc",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CreateObjectPresetsForMap",
@@ -254,7 +370,17 @@
         "D2PoolManagerStrc",
         "uint32_t"
       ],
-      "dh": "9b9cb93b"
+      "dh": "9b9cb93b",
+      "paramStorage": [
+        [
+          "pMapStrc",
+          "ECX:4"
+        ],
+        [
+          "pMemory",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CreateMonsterPreset",
@@ -277,7 +403,17 @@
         "D2PresetUnitStrc",
         "int32_t"
       ],
-      "dh": "1b0336f4"
+      "dh": "1b0336f4",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDrlgMap",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_FreePresetRoomGrids",
@@ -299,7 +435,17 @@
         "D2PoolManagerStrc",
         "D2RoomExStrc"
       ],
-      "dh": "6e5afdd6"
+      "dh": "6e5afdd6",
+      "paramStorage": [
+        [
+          "pRoomExData",
+          "EAX:4"
+        ],
+        [
+          "pPoolManagerStrc",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_FreeRoomExDataPresetArea",
@@ -320,7 +466,13 @@
         "D2PoolManagerStrc",
         "D2RoomExStrc"
       ],
-      "dh": "c7216d36"
+      "dh": "c7216d36",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_FreePresetRoomGridsFromRoomEx",
@@ -339,7 +491,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "5686ffae"
+      "dh": "5686ffae",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_AllocRoomExDataPresetArea",
@@ -360,7 +518,13 @@
         "D2DrlgPresetRoomStrc",
         "D2RoomExStrc"
       ],
-      "dh": "7a159998"
+      "dh": "7a159998",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_AllocRoomExTypePreset",
@@ -384,7 +548,37 @@
         "D2RoomExStrc",
         "int32_t"
       ],
-      "dh": "bcf80197"
+      "dh": "bcf80197",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ],
+        [
+          "pDrlgMap",
+          "EDX:4"
+        ],
+        [
+          "pCoord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDT1Mask",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwRoomExFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nPickedFile",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pParentDrlgMap",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_AddAndSetPresetUnits",
@@ -407,7 +601,13 @@
         "D2PresetUnitStrc",
         "D2RoomExStrc"
       ],
-      "dh": "329fa55e"
+      "dh": "329fa55e",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_InitGridsFromDS1File",
@@ -434,7 +634,13 @@
         "D2RoomExStrc",
         "void *"
       ],
-      "dh": "bbc70ae6"
+      "dh": "bbc70ae6",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_AllocRoomExData_WorldPointsBurialGrounds",
@@ -458,7 +664,17 @@
         "D2RoomExStrc",
         "uint32_t"
       ],
-      "dh": "969b5e6f"
+      "dh": "969b5e6f",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pRoomEx",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "GetTombStoneTileCoords",
@@ -478,7 +694,21 @@
         "D2DrlgPresetRoomStrc",
         "D2RoomExStrc"
       ],
-      "dh": "9a86e4ff"
+      "dh": "9a86e4ff",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "ppTombStoneTiles",
+          "EDX:4"
+        ],
+        [
+          "pnTombStoneTiles",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMEX_InitializePresetRoom",
@@ -516,7 +746,13 @@
         "D2RoomExStrc",
         "DRLGROOMEX_InitializePresetRoom_Slotm"
       ],
-      "dh": "124b308e"
+      "dh": "124b308e",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_InitDrlgMapPopLocations",
@@ -535,7 +771,17 @@
         "D2DrlgMapStrc",
         "int32_t"
       ],
-      "dh": "6220e9f4"
+      "dh": "6220e9f4",
+      "paramStorage": [
+        [
+          "nPopCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDrlgMap",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_SetPickedFileInDrlgMap",
@@ -554,7 +800,17 @@
         "D2DrlgMapStrc",
         "int32_t"
       ],
-      "dh": "77f0de05"
+      "dh": "77f0de05",
+      "paramStorage": [
+        [
+          "pDrlgMap",
+          "ECX:4"
+        ],
+        [
+          "nPickedFile",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_AllocDrlgMap",
@@ -582,7 +838,25 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "89567b0f"
+      "dh": "89567b0f",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ],
+        [
+          "nLvlPrestId",
+          "EDX:4"
+        ],
+        [
+          "pDrlgCoord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSeed",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetSizeX",
@@ -602,7 +876,13 @@
         "D2LvlPrestTxt",
         "int32_t"
       ],
-      "dh": "c3880c32"
+      "dh": "c3880c32",
+      "paramStorage": [
+        [
+          "nLvlPrestId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSizeY",
@@ -622,7 +902,13 @@
         "D2LvlPrestTxt",
         "int32_t"
       ],
-      "dh": "c71ad325"
+      "dh": "c71ad325",
+      "paramStorage": [
+        [
+          "nLvlPrestId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00666ff0",
@@ -641,7 +927,13 @@
         "D2DrlgGridStrc",
         "D2RoomExStrc"
       ],
-      "dh": "49edd3fe"
+      "dh": "49edd3fe",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00667000",
@@ -659,7 +951,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "2f9f36ea"
+      "dh": "2f9f36ea",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_GetPickedFilePathFromRoomEx",
@@ -678,7 +976,13 @@
         "D2DrlgMapStrc",
         "D2RoomExStrc"
       ],
-      "dh": "82ee0bc0"
+      "dh": "82ee0bc0",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_GetDrlgFileSize",
@@ -698,7 +1002,21 @@
         "D2RoomExStrc",
         "int32_t"
       ],
-      "dh": "1acdd85e"
+      "dh": "1acdd85e",
+      "paramStorage": [
+        [
+          "pDrlgMap",
+          "ECX:4"
+        ],
+        [
+          "pnWidth",
+          "EDX:4"
+        ],
+        [
+          "pnHeight",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_UpdatePopTiles",
@@ -725,7 +1043,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "709f9af2"
+      "dh": "709f9af2",
+      "paramStorage": [
+        [
+          "nTickCount",
+          "EDI:4"
+        ],
+        [
+          "pRoomEx",
+          "EBX:4"
+        ],
+        [
+          "pPopLocation",
+          "ECX:4"
+        ],
+        [
+          "nMatchTileLibIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bFadeIn",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UpdatePops",
@@ -750,7 +1090,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "483b22f8"
+      "dh": "483b22f8",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bOtherRoom",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00667420",
@@ -769,7 +1127,13 @@
         "D2DrlgLevelStrc",
         "D2DrlgVertexStrc"
       ],
-      "dh": "ffbcd783"
+      "dh": "ffbcd783",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGLEVEL_InitializeWithPresetArea",
@@ -798,7 +1162,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0b79a2f5"
+      "dh": "0b79a2f5",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_FreePresetLevelData",
@@ -817,7 +1187,17 @@
       "usedTypes": [
         "D2DrlgLevelStrc"
       ],
-      "dh": "6f98b95b"
+      "dh": "6f98b95b",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ],
+        [
+          "bKeepData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CopyPresetUnit",
@@ -841,7 +1221,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1511dad0"
+      "dh": "1511dad0",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pPresetUnit",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESETUNIT_FreeDrlgPresetUnit",
@@ -861,7 +1259,17 @@
         "D2PoolManagerStrc",
         "D2PresetUnitStrc"
       ],
-      "dh": "b9e3caad"
+      "dh": "b9e3caad",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pPresetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_AddPresetUnitToDrlgMap",
@@ -887,7 +1295,21 @@
         "int32_t",
         "int64_t"
       ],
-      "dh": "c8c294a4"
+      "dh": "c8c294a4",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pDrlgMap",
+          "EDX:4"
+        ],
+        [
+          "pSeed",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_CreateMonsterPresets",
@@ -912,7 +1334,13 @@
         "D2PoolManagerStrc",
         "D2RoomExStrc"
       ],
-      "dh": "05c24d34"
+      "dh": "05c24d34",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_BuildPresetArea",
@@ -958,7 +1386,29 @@
         "uint32_t",
         "void *"
       ],
-      "dh": "e21f410c"
+      "dh": "e21f410c",
+      "paramStorage": [
+        [
+          "pDrlgMap",
+          "EAX:4"
+        ],
+        [
+          "pLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDrlgGrid",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bSingleRoom",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "BuildArea",
@@ -989,7 +1439,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6ad62352"
+      "dh": "6ad62352",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ],
+        [
+          "pDrlgMap",
+          "EDX:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSingleRoom",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_InitializeRoomEx",
@@ -1019,7 +1487,13 @@
         "eD2LevelId",
         "fTownAutoMap"
       ],
-      "dh": "df39758e"
+      "dh": "df39758e",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_FreeDrlgFile",
@@ -1041,7 +1515,13 @@
         "D2MapAIStrc",
         "D2PresetUnitStrc"
       ],
-      "dh": "5944716c"
+      "dh": "5944716c",
+      "paramStorage": [
+        [
+          "pDrlgFile",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_ReleaseDrlgFile",
@@ -1062,7 +1542,13 @@
         "D2DrlgFileCacheNodeStrc",
         "D2DrlgFileStrc *"
       ],
-      "dh": "30c1bf77"
+      "dh": "30c1bf77",
+      "paramStorage": [
+        [
+          "ppDrlgFile",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_FreeDrlgMapList",
@@ -1087,7 +1573,17 @@
         "D2PoolManagerStrc",
         "D2PresetUnitStrc"
       ],
-      "dh": "094ef6d8"
+      "dh": "094ef6d8",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pDrlgMap",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPRESET_FindPresetTypeIndex",
@@ -1106,7 +1602,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "49693f87"
+      "dh": "49693f87",
+      "paramStorage": [
+        [
+          "nLevelType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOrientationFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSubIndex",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_CriticalSection_0096d610",

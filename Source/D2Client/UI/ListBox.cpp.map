@@ -22,7 +22,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "371736be"
+      "dh": "371736be",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

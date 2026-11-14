@@ -39,6 +39,7 @@ BOOL __stdcall NET_MCP_CLIENT_ReadAndParsePacket();
 char * __stdcall GetD2GSConnectIp();
 int16_t __stdcall GetD2GSRequestId();
 int32_t __stdcall GetD2GSGameToken();
+__declspec(noinline) inline void __stdcall SetD2GSJoinResult(int32_t nResult);
 int32_t __stdcall GetD2GSJoinResult();
 BOOL __stdcall MCPSTATE_GetConnectionEstablished();
 void __stdcall MCPSTATE_SetConnectionEstablished(BOOL bEstablished);

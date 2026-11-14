@@ -19,7 +19,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "5a1c8424"
+      "dh": "5a1c8424",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_0041e960",
@@ -37,7 +43,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "970b0a9e"
+      "dh": "970b0a9e",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_00420d90",
@@ -55,7 +67,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a934bc63"
+      "dh": "a934bc63",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_0044bdd0",
@@ -73,7 +91,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4f257416"
+      "dh": "4f257416",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ServerInit_nullsub_Unref_0052b8f0",
@@ -166,7 +190,13 @@
       "calledFunctions": [
         "Unreferenced_0052bdd0"
       ],
-      "dh": "46583181"
+      "dh": "46583181",
+      "paramStorage": [
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0052bde0",
@@ -184,7 +214,17 @@
       "usedTypes": [
         "LPCRITICAL_SECTION"
       ],
-      "dh": "6fa3e6fc"
+      "dh": "6fa3e6fc",
+      "paramStorage": [
+        [
+          "pCriticalSection",
+          "ECX:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0052bdf0",
@@ -202,7 +242,17 @@
       "usedTypes": [
         "LPCRITICAL_SECTION"
       ],
-      "dh": "299377b0"
+      "dh": "299377b0",
+      "paramStorage": [
+        [
+          "pCriticalSection",
+          "ECX:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0052be00",
@@ -217,7 +267,13 @@
       "calledFunctions": [
         "Unreferenced_0052be00"
       ],
-      "dh": "91661229"
+      "dh": "91661229",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0052be10",
@@ -232,7 +288,13 @@
       "calledFunctions": [
         "Unreferenced_0052be10"
       ],
-      "dh": "79530e5b"
+      "dh": "79530e5b",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SRVLog",
@@ -265,7 +327,17 @@
       "calledFunctions": [
         "_TableNullSub0"
       ],
-      "dh": "ad86946f"
+      "dh": "ad86946f",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub1",
@@ -280,7 +352,81 @@
       "calledFunctions": [
         "_TableNullSub1"
       ],
-      "dh": "87779db2"
+      "dh": "87779db2",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwArg3",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwArg4",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwArg5",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwArg6",
+          "Stack[0x18]:4"
+        ],
+        [
+          "dwArg7",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwArg8",
+          "Stack[0x20]:4"
+        ],
+        [
+          "dwArg9",
+          "Stack[0x24]:4"
+        ],
+        [
+          "dwArg10",
+          "Stack[0x28]:4"
+        ],
+        [
+          "dwArg11",
+          "Stack[0x2c]:4"
+        ],
+        [
+          "dwArg12",
+          "Stack[0x30]:4"
+        ],
+        [
+          "dwArg13",
+          "Stack[0x34]:4"
+        ],
+        [
+          "dwArg14",
+          "Stack[0x38]:4"
+        ],
+        [
+          "dwArg15",
+          "Stack[0x3c]:4"
+        ],
+        [
+          "dwArg16",
+          "Stack[0x40]:4"
+        ],
+        [
+          "dwArg17",
+          "Stack[0x44]:4"
+        ],
+        [
+          "dwArg18",
+          "Stack[0x48]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub2",
@@ -295,7 +441,17 @@
       "calledFunctions": [
         "_TableNullSub2"
       ],
-      "dh": "9076245b"
+      "dh": "9076245b",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub3",
@@ -310,7 +466,25 @@
       "calledFunctions": [
         "_TableNullSub3"
       ],
-      "dh": "59d5fb8b"
+      "dh": "59d5fb8b",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwArg3",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwArg4",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub4",
@@ -340,7 +514,21 @@
       "calledFunctions": [
         "_TableNullSub5"
       ],
-      "dh": "8dae6dff"
+      "dh": "8dae6dff",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwArg3",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub6",
@@ -355,7 +543,37 @@
       "calledFunctions": [
         "_TableNullSub6"
       ],
-      "dh": "b9254f2d"
+      "dh": "b9254f2d",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwArg3",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwArg4",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwArg5",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwArg6",
+          "Stack[0x18]:4"
+        ],
+        [
+          "dwArg7",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub7",
@@ -370,7 +588,13 @@
       "calledFunctions": [
         "_TableNullSub7"
       ],
-      "dh": "77f752d9"
+      "dh": "77f752d9",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub8",
@@ -385,7 +609,13 @@
       "calledFunctions": [
         "_TableNullSub8"
       ],
-      "dh": "98b5c0cd"
+      "dh": "98b5c0cd",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub9",
@@ -400,7 +630,17 @@
       "calledFunctions": [
         "_TableNullSub9"
       ],
-      "dh": "4498bace"
+      "dh": "4498bace",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub10",
@@ -415,7 +655,29 @@
       "calledFunctions": [
         "_TableNullSub10"
       ],
-      "dh": "6286c052"
+      "dh": "6286c052",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwArg3",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwArg4",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwArg5",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub11",
@@ -430,7 +692,17 @@
       "calledFunctions": [
         "_TableNullSub11"
       ],
-      "dh": "3d135c4f"
+      "dh": "3d135c4f",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub12",
@@ -475,7 +747,13 @@
       "calledFunctions": [
         "_TableNullSub14"
       ],
-      "dh": "e723bd48"
+      "dh": "e723bd48",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub15",
@@ -505,7 +783,17 @@
       "calledFunctions": [
         "_TableNullSub16"
       ],
-      "dh": "16ae0616"
+      "dh": "16ae0616",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub17",
@@ -520,7 +808,25 @@
       "calledFunctions": [
         "_TableNullSub17"
       ],
-      "dh": "e111a21b"
+      "dh": "e111a21b",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwArg3",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwArg4",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub18",
@@ -581,7 +887,13 @@
         "_TableNullSub21",
         "SMemZero"
       ],
-      "dh": "325ecf80"
+      "dh": "325ecf80",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub22",
@@ -626,7 +938,25 @@
       "calledFunctions": [
         "_TableNullSub24"
       ],
-      "dh": "07a9c932"
+      "dh": "07a9c932",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwArg3",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwArg4",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0052bfc0",
@@ -693,7 +1023,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "b9982026"
+      "dh": "b9982026",
+      "paramStorage": [
+        [
+          "nToken",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "QSERVER_SetGlobalInstance",
@@ -715,7 +1051,17 @@
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t"
       ],
-      "dh": "f699aa1f"
+      "dh": "f699aa1f",
+      "paramStorage": [
+        [
+          "pQServerState",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInitState",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetupAsBnetServer",
@@ -733,7 +1079,13 @@
       "usedTypes": [
         "D2BattleNetEventCallbackTable"
       ],
-      "dh": "00add54b"
+      "dh": "00add54b",
+      "paramStorage": [
+        [
+          "pBnetCallbacks",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_PutNewGameOnTokenList",
@@ -756,7 +1108,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "0ded18c3"
+      "dh": "0ded18c3",
+      "paramStorage": [
+        [
+          "dwGameServerAddr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nToken",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GenerateToken",
@@ -802,7 +1164,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "80c4a4eb"
+      "dh": "80c4a4eb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SendGameFlagsAndSetState1",
@@ -824,7 +1196,17 @@
         "D2ClientStrc",
         "SGAMEDATA"
       ],
-      "dh": "2b386421"
+      "dh": "2b386421",
+      "paramStorage": [
+        [
+          "pGame",
+          "EAX:4"
+        ],
+        [
+          "pClient",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "RollSeed",
@@ -848,7 +1230,13 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "644f4fbd"
+      "dh": "644f4fbd",
+      "paramStorage": [
+        [
+          "pGamee",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "GAME_SetForcedGameSeed",
@@ -863,7 +1251,13 @@
       "calledFunctions": [
         "GAME_SetForcedGameSeed"
       ],
-      "dh": "60a8f424"
+      "dh": "60a8f424",
+      "paramStorage": [
+        [
+          "dwForcedSeed",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetupGameChecks",
@@ -889,7 +1283,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3a4dcac8"
+      "dh": "3a4dcac8",
+      "paramStorage": [
+        [
+          "nClientID2",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_InitializeMemoryCounters",
@@ -907,7 +1311,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "7e093247"
+      "dh": "7e093247",
+      "paramStorage": [
+        [
+          "nInitialValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SendPong",
@@ -927,7 +1337,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "98c3699d"
+      "dh": "98c3699d",
+      "paramStorage": [
+        [
+          "nClientID",
+          "ECX:4"
+        ],
+        [
+          "nPingTime",
+          "EDX:4"
+        ],
+        [
+          "nSeqNum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwPingData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BroadcastPlayerJoin",
@@ -960,7 +1388,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "289b9fb7"
+      "dh": "289b9fb7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BroadcastPlayerLeave",
@@ -984,7 +1422,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "f6d42c44"
+      "dh": "f6d42c44",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_IsClientAllowedToJoin",
@@ -1003,7 +1451,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "5bde7ac5"
+      "dh": "5bde7ac5",
+      "paramStorage": [
+        [
+          "nClientID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LeaveHackPlayer",
@@ -1026,7 +1480,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1cf5763f"
+      "dh": "1cf5763f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nClientID",
+          "EDX:4"
+        ],
+        [
+          "szPlayerName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHackType",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STRING_CheckIfPlayerNameDoNotContainForbidenChars",
@@ -1045,7 +1517,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7d86b7e3"
+      "dh": "7d86b7e3",
+      "paramStorage": [
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "nMaxLen",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_IsValidChecks",
@@ -1075,7 +1557,61 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f685574e"
+      "dh": "f685574e",
+      "paramStorage": [
+        [
+          "nClientID",
+          "ECX:4"
+        ],
+        [
+          "nGameToken",
+          "DX:2"
+        ],
+        [
+          "charClass",
+          "Stack[0x4]:1"
+        ],
+        [
+          "pPlayerName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "gameHash",
+          "Stack[0xc]:4"
+        ],
+        [
+          "byRef1",
+          "Stack[0x10]:4"
+        ],
+        [
+          "byRef2",
+          "Stack[0x14]:4"
+        ],
+        [
+          "language",
+          "Stack[0x18]:1"
+        ],
+        [
+          "byRef3",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "byRef4",
+          "Stack[0x20]:4"
+        ],
+        [
+          "byRef5",
+          "Stack[0x24]:4"
+        ],
+        [
+          "byRef6",
+          "Stack[0x28]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x2c]:4"
+        ]
+      ]
     },
     {
       "name": "GAME_DestroyGame",
@@ -1110,7 +1646,17 @@
         "SGAMEDATA *",
         "int32_t"
       ],
-      "dh": "24069855"
+      "dh": "24069855",
+      "paramStorage": [
+        [
+          "nGameToken",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_IsClientAllowedToLeave",
@@ -1129,7 +1675,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "7e43cb1e"
+      "dh": "7e43cb1e",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SavePlayerOnCleanUp",
@@ -1159,7 +1711,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d05ffff6"
+      "dh": "d05ffff6",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SaveAllPlayers",
@@ -1190,7 +1752,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f76b0390"
+      "dh": "f76b0390",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_DisconnectClient",
@@ -1222,7 +1790,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9d066e89"
+      "dh": "9d066e89",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ],
+        [
+          "nDisconnectReason",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "FindMe_6E_Handler",
@@ -1243,7 +1825,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b0f90c4a"
+      "dh": "b0f90c4a",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "KillConnection",
@@ -1263,7 +1851,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a506003d"
+      "dh": "a506003d",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_ProcessClientMessage_System",
@@ -1290,7 +1884,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "98ea0cad"
+      "dh": "98ea0cad",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "iSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_HandleAnyIncomingPacket",
@@ -1335,7 +1939,17 @@
         "D2UnitStrc *",
         "SGAMEDATA"
       ],
-      "dh": "9b0d247d"
+      "dh": "9b0d247d",
+      "paramStorage": [
+        [
+          "pUnitHead",
+          "EAX:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_PopulateRoom",
@@ -1358,7 +1972,17 @@
         "D2RoomStrc",
         "SGAMEDATA"
       ],
-      "dh": "366dc776"
+      "dh": "366dc776",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "EDI:4"
+        ],
+        [
+          "pRoomStrc",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SetSomeRoomFlags",
@@ -1385,7 +2009,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "0785d35d"
+      "dh": "0785d35d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "InitNewRooms",
@@ -1418,7 +2052,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "85e1e239"
+      "dh": "85e1e239",
+      "paramStorage": [
+        [
+          "pGame",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CleanupIdleRooms",
@@ -1445,7 +2085,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "7dcc670c"
+      "dh": "7dcc670c",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GAME_FreeUnusedItemsPeriodic",
@@ -1465,7 +2111,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "10ef8d1c"
+      "dh": "10ef8d1c",
+      "paramStorage": [
+        [
+          "pGamee",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CheckClientTimeouts",
@@ -1493,7 +2145,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "ae6187ba"
+      "dh": "ae6187ba",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbAnyDisconnected",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateClients",
@@ -1537,7 +2199,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0069867e"
+      "dh": "0069867e",
+      "paramStorage": [
+        [
+          "pGame",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "UpdatePerformanceMetrics",
@@ -1558,7 +2226,13 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "f856bc82"
+      "dh": "f856bc82",
+      "paramStorage": [
+        [
+          "pGame",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "UpdateActEnvironments",
@@ -1586,7 +2260,13 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "9171993d"
+      "dh": "9171993d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ServerGameLoop",
@@ -1622,7 +2302,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "24e67036"
+      "dh": "24e67036",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAME_SendPlayerVitalStats",
@@ -1649,7 +2335,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e19a5fc9"
+      "dh": "e19a5fc9",
+      "paramStorage": [
+        [
+          "pClient",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GAME_SendNearbyUnitPositions",
@@ -1678,7 +2370,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a12b7cd7"
+      "dh": "a12b7cd7",
+      "paramStorage": [
+        [
+          "pClient",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "Unlock",
@@ -1700,7 +2398,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "eea01fe2"
+      "dh": "eea01fe2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_Unused_HaltLine4453",
@@ -1768,7 +2472,17 @@
         "D2GSMsg6CUploadSaveStrc",
         "uint32_t"
       ],
-      "dh": "766e8bcc"
+      "dh": "766e8bcc",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GAME_GetUnusedServerConstant_Unref_0052db90",
@@ -1805,7 +2519,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "9c9af871"
+      "dh": "9c9af871",
+      "paramStorage": [
+        [
+          "pOutCurrent",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutMax",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetUnitCount",
@@ -1826,7 +2550,13 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "7f0b2946"
+      "dh": "7f0b2946",
+      "paramStorage": [
+        [
+          "ppUnitBuckets",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "ReturnArgument",
@@ -1841,7 +2571,13 @@
       "calledFunctions": [
         "ReturnArgument"
       ],
-      "dh": "8865e43d"
+      "dh": "8865e43d",
+      "paramStorage": [
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GAME_GetUnusedServerConstant",
@@ -1883,7 +2619,21 @@
         "D2Game_Line0x13af",
         "int32_t"
       ],
-      "dh": "c705862f"
+      "dh": "c705862f",
+      "paramStorage": [
+        [
+          "pStatRoot",
+          "EAX:4"
+        ],
+        [
+          "nGameToken",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNodeValue",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_GetPlayerClassName",
@@ -1901,7 +2651,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "7734ac40"
+      "dh": "7734ac40",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MonsterIdToName",
@@ -1922,7 +2682,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6c89fe6b"
+      "dh": "6c89fe6b",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ObjectIdToName",
@@ -1942,7 +2712,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "333b997c"
+      "dh": "333b997c",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ItemIdToName",
@@ -1965,7 +2745,17 @@
         "D2ItemsTxt",
         "int32_t"
       ],
-      "dh": "a7d16831"
+      "dh": "a7d16831",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MissileIdToname",
@@ -1984,7 +2774,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "96580737"
+      "dh": "96580737",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ForEachClient",
@@ -2008,7 +2808,21 @@
         "fpForEachClientFn",
         "int32_t"
       ],
-      "dh": "08fa8a05"
+      "dh": "08fa8a05",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "fpFunction",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LeaveCriticalSectionLastGameServer",
@@ -2047,7 +2861,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e8299362"
+      "dh": "e8299362",
+      "paramStorage": [
+        [
+          "nFrameRate",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetupStartingAct",
@@ -2062,7 +2882,13 @@
       "calledFunctions": [
         "SetupStartingAct"
       ],
-      "dh": "6708ec95"
+      "dh": "6708ec95",
+      "paramStorage": [
+        [
+          "nAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveObject",
@@ -2091,7 +2917,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5c9dbe7f"
+      "dh": "5c9dbe7f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RemoveObjects",
@@ -2112,7 +2948,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "bc7e0975"
+      "dh": "bc7e0975",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub20_Unref_0052e070",
@@ -2161,7 +3007,21 @@
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t"
       ],
-      "dh": "8f460990"
+      "dh": "8f460990",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pCriticalSection",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ParamIsOne",
@@ -2180,7 +3040,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0be72555"
+      "dh": "0be72555",
+      "paramStorage": [
+        [
+          "nParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_TestGameFlags",
@@ -2199,7 +3065,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ddaf1334"
+      "dh": "ddaf1334",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_HasActiveTaskQueue",
@@ -2217,7 +3093,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "bc5672be"
+      "dh": "bc5672be",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetTaskQueuePointer",
@@ -2235,7 +3117,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "93ffb20d"
+      "dh": "93ffb20d",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xB3_SendSaveFile",
@@ -2261,7 +3149,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "684865d7"
+      "dh": "684865d7",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pClient",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SendSaveFileToClient",
@@ -2286,7 +3184,13 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e86499a9"
+      "dh": "e86499a9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FlushClientPackets",
@@ -2318,7 +3222,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "54bdbd0e"
+      "dh": "54bdbd0e",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSendStatusUpdates",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pClient",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "FlushAllClientPackets",
@@ -2338,7 +3256,13 @@
         "D2ClientStrc",
         "SGAMEDATA"
       ],
-      "dh": "757685eb"
+      "dh": "757685eb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_DestroyGameByToken",
@@ -2366,7 +3290,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e3e74a90"
+      "dh": "e3e74a90",
+      "paramStorage": [
+        [
+          "nToken",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_FindAndLockGame",
@@ -2392,7 +3322,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a7233724"
+      "dh": "a7233724",
+      "paramStorage": [
+        [
+          "nToken",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RequestHostedGames",
@@ -2421,7 +3357,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "18c20183"
+      "dh": "18c20183",
+      "paramStorage": [
+        [
+          "nClientId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_RequestHostedGames",
@@ -2440,7 +3382,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0598866b"
+      "dh": "0598866b",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_ShutdownAllGames",
@@ -2524,7 +3472,17 @@
         "SGAMEDATA *",
         "int32_t"
       ],
-      "dh": "85605810"
+      "dh": "85605810",
+      "paramStorage": [
+        [
+          "pHistogramOut",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxPlayers",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetGameListByAge",
@@ -2549,7 +3507,17 @@
         "SGAMEDATA *",
         "int32_t"
       ],
-      "dh": "c44557fd"
+      "dh": "c44557fd",
+      "paramStorage": [
+        [
+          "pHistogramOut",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxMinutes",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetClientCountByServerId",
@@ -2574,7 +3542,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "064c211a"
+      "dh": "064c211a",
+      "paramStorage": [
+        [
+          "nServerId",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "QSERVER_ExportGameStats",
@@ -2606,7 +3580,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "c9bc3bd0"
+      "dh": "c9bc3bd0",
+      "paramStorage": [
+        [
+          "nServerId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "pStats",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_FillServerTokenArray",
@@ -2631,7 +3615,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "05e8aba6"
+      "dh": "05e8aba6",
+      "paramStorage": [
+        [
+          "pOutArray",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxCount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetUnitCountByServerId",
@@ -2656,7 +3650,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "00931f28"
+      "dh": "00931f28",
+      "paramStorage": [
+        [
+          "nServerId",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "QSERVER_ExportUnitListByServerId",
@@ -2684,7 +3684,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0cff5898"
+      "dh": "0cff5898",
+      "paramStorage": [
+        [
+          "nServerId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Unused_GetUnitList",
@@ -2712,7 +3726,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "20e26bda"
+      "dh": "20e26bda",
+      "paramStorage": [
+        [
+          "ppUnitArray",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatRoot",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnitId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pGameStats",
+          "EDI:4"
+        ],
+        [
+          "nGameId",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_FindUnitsAndExportByServerId",
@@ -2741,7 +3777,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "85901d0f"
+      "dh": "85901d0f",
+      "paramStorage": [
+        [
+          "nServerId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nCount",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitTypes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pClassIds",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pOutBuffer",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_CountObjectsAndPlayersAllGames",
@@ -2768,7 +3826,13 @@
         "SGAMEDATA *",
         "int32_t"
       ],
-      "dh": "7168500e"
+      "dh": "7168500e",
+      "paramStorage": [
+        [
+          "pBucketCountdown",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_BroadcastPlayerMessage",
@@ -2797,7 +3861,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9e94a375"
+      "dh": "9e94a375",
+      "paramStorage": [
+        [
+          "nMsgType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwEventPayload",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pszMessage",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_BroadcastChatByServerId",
@@ -2823,7 +3901,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "40166cf5"
+      "dh": "40166cf5",
+      "paramStorage": [
+        [
+          "nServerId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "pMessageBuffer",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetFirstActiveGame",
@@ -2861,7 +3949,13 @@
       "usedTypes": [
         "D2PlayerMessageThreadArgsStrc"
       ],
-      "dh": "55ea374b"
+      "dh": "55ea374b",
+      "paramStorage": [
+        [
+          "lpThreadParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GAME_CreatePlayerMessageThread",
@@ -2882,7 +3976,21 @@
         "D2PlayerMessageThreadArgsStrc",
         "int32_t"
       ],
-      "dh": "d00fd8af"
+      "dh": "d00fd8af",
+      "paramStorage": [
+        [
+          "nGameToken",
+          "ECX:4"
+        ],
+        [
+          "nClientId",
+          "EDX:4"
+        ],
+        [
+          "szMessageBuffer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_FindGameTokenByName",
@@ -2909,7 +4017,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9d7e240c"
+      "dh": "9d7e240c",
+      "paramStorage": [
+        [
+          "szGameName",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetFirstActiveGameSeed",
@@ -2957,7 +4071,13 @@
         "SGAMEDATA *",
         "int32_t"
       ],
-      "dh": "6c94da93"
+      "dh": "6c94da93",
+      "paramStorage": [
+        [
+          "szGameName",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetGameName",
@@ -2984,7 +4104,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "7b5ca80b"
+      "dh": "7b5ca80b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "szGameName",
+          "EDX:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_SrvJoinGame",
@@ -3020,7 +4154,61 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "151cf4b1"
+      "dh": "151cf4b1",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ],
+        [
+          "nGameToken",
+          "DX:2"
+        ],
+        [
+          "byCharClass",
+          "Stack[0x4]:1"
+        ],
+        [
+          "szPlayerName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwCharFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pAccountName",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwRealmData",
+          "Stack[0x14]:4"
+        ],
+        [
+          "byLanguage",
+          "Stack[0x18]:1"
+        ],
+        [
+          "dwCharData1",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwCharData2",
+          "Stack[0x20]:4"
+        ],
+        [
+          "dwCharData3",
+          "Stack[0x24]:4"
+        ],
+        [
+          "dwCharData4",
+          "Stack[0x28]:4"
+        ],
+        [
+          "dwCharData5",
+          "Stack[0x2c]:4"
+        ]
+      ]
     },
     {
       "name": "SrvProcessAllGames",
@@ -3047,7 +4235,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d3893803"
+      "dh": "d3893803",
+      "paramStorage": [
+        [
+          "bLimitFrameSkip",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_DispatchAndCleanup",
@@ -3074,7 +4268,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "88cb6a9e"
+      "dh": "88cb6a9e",
+      "paramStorage": [
+        [
+          "pTokenCursor",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bForceDispatch",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SERVER_FindGameByClientId",
@@ -3098,7 +4302,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "49bde339"
+      "dh": "49bde339",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_ClientDisconnectCallback",
@@ -3127,7 +4337,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cbf6c8f8"
+      "dh": "cbf6c8f8",
+      "paramStorage": [
+        [
+          "nClientId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_SrvJoinAct",
@@ -3164,7 +4388,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e3a5608e"
+      "dh": "e3a5608e",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QServer_AlternativeDisconnect",
@@ -3190,7 +4420,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "c94afa85"
+      "dh": "c94afa85",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ],
+        [
+          "nDisconnectReason",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_DisconnectClientByName",
@@ -3210,7 +4450,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "f51425a4"
+      "dh": "f51425a4",
+      "paramStorage": [
+        [
+          "szClientName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nReason",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_DisconnectClientFromGame",
@@ -3243,7 +4493,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6310c66b"
+      "dh": "6310c66b",
+      "paramStorage": [
+        [
+          "nClientId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_LeaveServer",
@@ -3289,7 +4545,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2d8e7926"
+      "dh": "2d8e7926",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ],
+        [
+          "bBroadcastLeave",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "LeaveServer",
@@ -3312,7 +4578,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "a39c7185"
+      "dh": "a39c7185",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nClientToken",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_InitializeServerState",
@@ -3360,7 +4636,41 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "afbe2622"
+      "dh": "afbe2622",
+      "paramStorage": [
+        [
+          "nClientId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSaveData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nChunkSize",
+          "Stack[0xc]:2"
+        ],
+        [
+          "nTotalSize",
+          "Stack[0x10]:2"
+        ],
+        [
+          "nCsResult",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwCharFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pFileTimeData",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pClientContainer",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "GAME_CreateBattleNetGame",
@@ -3410,7 +4720,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9cb07228"
+      "dh": "9cb07228",
+      "paramStorage": [
+        [
+          "szGameName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szGamePassword",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szGameDescription",
+          "Stack[0xc]:4"
+        ],
+        [
+          "flags",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bTemplate",
+          "Stack[0x14]:1"
+        ],
+        [
+          "bReserved",
+          "Stack[0x18]:1"
+        ],
+        [
+          "bLadder",
+          "Stack[0x1c]:1"
+        ],
+        [
+          "pServerTokenOut",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "GAME_CreateSingleplayerGame",
@@ -3466,7 +4810,65 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e32b98d1"
+      "dh": "e32b98d1",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ],
+        [
+          "szGameName",
+          "EDX:4"
+        ],
+        [
+          "neD2HostGameType",
+          "Stack[0x4]:1"
+        ],
+        [
+          "ePlayerClass",
+          "Stack[0x8]:1"
+        ],
+        [
+          "szCharName",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nArena",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eArenaFlags",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nTemplate",
+          "Stack[0x18]:1"
+        ],
+        [
+          "Unknown6",
+          "Stack[0x1c]:1"
+        ],
+        [
+          "Unknown7",
+          "Stack[0x20]:1"
+        ],
+        [
+          "nDifficulty",
+          "Stack[0x24]:1"
+        ],
+        [
+          "nLanguageCode",
+          "Stack[0x28]:1"
+        ],
+        [
+          "arg11",
+          "Stack[0x2c]:4"
+        ],
+        [
+          "arg12",
+          "Stack[0x30]:4"
+        ]
+      ]
     },
     {
       "name": "SetStat",
@@ -3490,7 +4892,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "97e0004b"
+      "dh": "97e0004b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eUnitStat",
+          "EDX:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub12_Unref_00532580",
@@ -3538,7 +4954,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "15064073"
+      "dh": "15064073",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub16_Unref_0053bbc0",
@@ -3553,7 +4975,17 @@
       "calledFunctions": [
         "_TableNullSub16_Unref_0053bbc0"
       ],
-      "dh": "b8d37839"
+      "dh": "b8d37839",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub16_Unref_0053bbd0",
@@ -3568,7 +5000,17 @@
       "calledFunctions": [
         "_TableNullSub16_Unref_0053bbd0"
       ],
-      "dh": "516ae545"
+      "dh": "516ae545",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub16_Unref_0053bbe0",
@@ -3583,7 +5025,17 @@
       "calledFunctions": [
         "_TableNullSub16_Unref_0053bbe0"
       ],
-      "dh": "c1113b25"
+      "dh": "c1113b25",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub16_Unref_0053bbf0",
@@ -3598,7 +5050,17 @@
       "calledFunctions": [
         "_TableNullSub16_Unref_0053bbf0"
       ],
-      "dh": "2488092e"
+      "dh": "2488092e",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "_TableNullSub16_Unref_0053bc00",
@@ -3613,7 +5075,17 @@
       "calledFunctions": [
         "_TableNullSub16_Unref_0053bc00"
       ],
-      "dh": "14520d5a"
+      "dh": "14520d5a",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_HasActiveTaskQueue_Unref_00601dc0",
@@ -3631,7 +5103,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "bcc68b8a"
+      "dh": "bcc68b8a",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_00601dd0",
@@ -3649,7 +5127,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "3c1ebc0a"
+      "dh": "3c1ebc0a",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_HasActiveTaskQueue_Unref_0060e0c0",
@@ -3667,7 +5151,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d22c2d53"
+      "dh": "d22c2d53",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_0060e230",
@@ -3685,7 +5175,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "fd2217bd"
+      "dh": "fd2217bd",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_00650e90",
@@ -3703,7 +5199,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "7b78aaf7"
+      "dh": "7b78aaf7",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_00666eb0",
@@ -3721,7 +5223,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "90f6ce33"
+      "dh": "90f6ce33",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_Frames_TimeBetweenFrames",

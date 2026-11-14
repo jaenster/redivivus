@@ -20,7 +20,13 @@
         "D2SeedStrc",
         "int32_t"
       ],
-      "dh": "df78b564"
+      "dh": "df78b564",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

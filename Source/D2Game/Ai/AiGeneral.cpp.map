@@ -22,7 +22,13 @@
         "D2AiGeneralStrc",
         "SGAMEDATA"
       ],
-      "dh": "3952de91"
+      "dh": "3952de91",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetAiArgument",
@@ -42,7 +48,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "da9c81bc"
+      "dh": "da9c81bc",
+      "paramStorage": [
+        [
+          "pMonster",
+          "ECX:4"
+        ],
+        [
+          "nArgNumber",
+          "EDX:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetAiArgument",
@@ -62,7 +82,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "dfff13b6"
+      "dh": "dfff13b6",
+      "paramStorage": [
+        [
+          "pMonster",
+          "ECX:4"
+        ],
+        [
+          "nArgNumber",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CreateAiCmdStrc",
@@ -84,7 +114,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2cfe98e3"
+      "dh": "2cfe98e3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonster",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FreeAi",
@@ -106,7 +146,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "7d01709f"
+      "dh": "7d01709f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FreeAiCmds",
@@ -127,7 +177,17 @@
         "D2MonsterAiCmdStrc",
         "SGAMEDATA"
       ],
-      "dh": "7f17fd89"
+      "dh": "7f17fd89",
+      "paramStorage": [
+        [
+          "pAiGeneral",
+          "ESI:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ResetAiGeneralStrc",
@@ -149,7 +209,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "b5ed58a0"
+      "dh": "b5ed58a0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetAiCmd",
@@ -169,7 +239,13 @@
         "D2MonsterAiCmdStrc",
         "D2UnitStrc"
       ],
-      "dh": "13be1620"
+      "dh": "13be1620",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AI_SetCurrentAiCommand",
@@ -190,7 +266,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a65c2655"
+      "dh": "a65c2655",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nStepDelta",
+          "EDX:4"
+        ],
+        [
+          "pAiCmd",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FindMonsterAiCmd",
@@ -211,7 +301,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "2c6880e4"
+      "dh": "2c6880e4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nCmdArg0",
+          "EDX:4"
+        ],
+        [
+          "bSetCurrent",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CreateAiCmdAndFill",
@@ -234,7 +338,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "72f7b7ff"
+      "dh": "72f7b7ff",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pmonster",
+          "EDX:4"
+        ],
+        [
+          "pArgs",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_CreateCmdIfNotExists",
@@ -258,7 +376,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "69262e60"
+      "dh": "69262e60",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nId2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetMonsterMapAi",
@@ -277,7 +413,13 @@
         "D2MapAIStrc *",
         "D2UnitStrc"
       ],
-      "dh": "481af176"
+      "dh": "481af176",
+      "paramStorage": [
+        [
+          "pMonster",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AssignMinionOwner",
@@ -300,7 +442,33 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "5a9589c4"
+      "dh": "5a9589c4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nOwnerGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eOwnerType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bTransferBoss",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GetMonsterNameAndAi",
@@ -320,7 +488,21 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "993abc3f"
+      "dh": "993abc3f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pMonsterName",
+          "EDX:4"
+        ],
+        [
+          "pMonsterAi",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetOwnerUnit",
@@ -340,7 +522,13 @@
         "D2AiGeneralStrc",
         "D2UnitStrc"
       ],
-      "dh": "e1cc9199"
+      "dh": "e1cc9199",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AddMinionToList",
@@ -362,7 +550,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "cf511119"
+      "dh": "cf511119",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMinion",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreeAiOfMinions",
@@ -386,7 +588,13 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f5cdb475"
+      "dh": "f5cdb475",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FreeAiOfMinionsLessSafe",
@@ -409,7 +617,13 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "d90965f2"
+      "dh": "d90965f2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClearMinionList",
@@ -429,7 +643,17 @@
         "D2MonsterDataMinionList",
         "SGAMEDATA"
       ],
-      "dh": "2e51a9db"
+      "dh": "2e51a9db",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMinionList",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CallForEachMinion",
@@ -456,7 +680,25 @@
         "int32_t",
         "pfnMinionForEachCallback"
       ],
-      "dh": "77a9198a"
+      "dh": "77a9198a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pContext",
+          "EDX:4"
+        ],
+        [
+          "pArgument",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnProc",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetAndRemoveMinionList",
@@ -479,7 +721,33 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "73971c55"
+      "dh": "73971c55",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pOwnerId",
+          "EDX:4"
+        ],
+        [
+          "pType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlagBit1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlagBit2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pMinionList",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ReplaceMinionList",
@@ -504,7 +772,37 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "de82b84f"
+      "dh": "de82b84f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bTransferBoss",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pMinionList",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "AddMinionToAi",
@@ -528,7 +826,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2c1541ab"
+      "dh": "2c1541ab",
+      "paramStorage": [
+        [
+          "pOwner",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTargetAi",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "RemoveMinionsFromAiIfFlag1Set2Not",
@@ -553,7 +861,13 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "8ff02b48"
+      "dh": "8ff02b48",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_GetUnitData_AiGeneral_Offset0x3C",
@@ -572,7 +886,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a5da5c2c"
+      "dh": "a5da5c2c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CreateMinion",
@@ -597,7 +917,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "288991f7"
+      "dh": "288991f7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pOwner",
+          "EDX:4"
+        ],
+        [
+          "pAiArguments",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreeMonsterAi",
@@ -620,7 +954,17 @@
         "D2MonsterDataMinionList",
         "SGAMEDATA"
       ],
-      "dh": "ce496094"
+      "dh": "ce496094",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pAiGeneral",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

@@ -22,7 +22,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "1bc42288"
+      "dh": "1bc42288",
+      "paramStorage": [
+        [
+          "eUnitType",
+          "ECX:4"
+        ],
+        [
+          "nUnitGUID",
+          "EAX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_AllocTimerPool",
@@ -44,7 +58,13 @@
         "D2TimerStrc",
         "SGAMEDATA"
       ],
-      "dh": "186fc123"
+      "dh": "186fc123",
+      "paramStorage": [
+        [
+          "pGame",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_GetTimerOrAllocNew",
@@ -67,7 +87,17 @@
         "D2TimerStrc",
         "SGAMEDATA"
       ],
-      "dh": "bb180478"
+      "dh": "bb180478",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTimerQueue",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_RemoveAndRecycleTimer",
@@ -91,7 +121,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "322428e5"
+      "dh": "322428e5",
+      "paramStorage": [
+        [
+          "pTimer",
+          "ESI:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_AllocTimerToUnit",
@@ -115,7 +155,17 @@
         "SGAMEDATA",
         "eD2UnitType"
       ],
-      "dh": "7ad6e1cd"
+      "dh": "7ad6e1cd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_RemoveUnitTimersByType",
@@ -139,7 +189,25 @@
         "eD2TimerTypeDWORD",
         "int32_t"
       ],
-      "dh": "c728667e"
+      "dh": "c728667e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nTimerType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_RemoveCustomTimer",
@@ -163,7 +231,25 @@
         "eD2TimerTypeDWORD",
         "fpTimerFunctionUnit"
       ],
-      "dh": "87b3f68a"
+      "dh": "87b3f68a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eTimerType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nfpTimerFunction",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_FreeAllTimersForUnit",
@@ -186,7 +272,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a378b977"
+      "dh": "a378b977",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_ClearTimerList",
@@ -209,7 +305,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f7d9f7f6"
+      "dh": "f7d9f7f6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_DispatchPlayerTimers",
@@ -232,7 +338,25 @@
         "SGAMEDATA",
         "fpTimerFunctionUnit"
       ],
-      "dh": "358cea73"
+      "dh": "358cea73",
+      "paramStorage": [
+        [
+          "pTimerQueue",
+          "EBX:4"
+        ],
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pTimer",
+          "EAX:4"
+        ],
+        [
+          "bImmediate",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_DispatchMonsterTimers",
@@ -254,7 +378,25 @@
         "D2TimerStrc",
         "SGAMEDATA"
       ],
-      "dh": "802748d4"
+      "dh": "802748d4",
+      "paramStorage": [
+        [
+          "pTimerQueue",
+          "EBX:4"
+        ],
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pTimer",
+          "EAX:4"
+        ],
+        [
+          "bImmediate",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_DispatchObjectTimers",
@@ -276,7 +418,25 @@
         "D2TimerStrc",
         "SGAMEDATA"
       ],
-      "dh": "ec08f3ed"
+      "dh": "ec08f3ed",
+      "paramStorage": [
+        [
+          "pTimerQueue",
+          "EBX:4"
+        ],
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pTimer",
+          "EAX:4"
+        ],
+        [
+          "bImmediate",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_DispatchMissileTimers",
@@ -298,7 +458,25 @@
         "D2TimerStrc",
         "SGAMEDATA"
       ],
-      "dh": "d8918781"
+      "dh": "d8918781",
+      "paramStorage": [
+        [
+          "pTimerQueue",
+          "EBX:4"
+        ],
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pTimer",
+          "EAX:4"
+        ],
+        [
+          "bImmediate",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_DispatchItemTimers",
@@ -320,7 +498,25 @@
         "D2TimerStrc",
         "SGAMEDATA"
       ],
-      "dh": "721622af"
+      "dh": "721622af",
+      "paramStorage": [
+        [
+          "pTimerQueue",
+          "EBX:4"
+        ],
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pTimer",
+          "EAX:4"
+        ],
+        [
+          "bImmediate",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_FreeTimerQueue",
@@ -341,7 +537,13 @@
         "D2TimerQueueStrc",
         "SGAMEDATA"
       ],
-      "dh": "1950dc39"
+      "dh": "1950dc39",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_AllocTimerQueue",
@@ -365,7 +567,13 @@
         "D2TimerQueueStrc",
         "SGAMEDATA"
       ],
-      "dh": "0bd3712f"
+      "dh": "0bd3712f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_DispatchAllTimers",
@@ -390,7 +598,13 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "d3e473ae"
+      "dh": "d3e473ae",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_TimerTypeExistsOnUnit",
@@ -412,7 +626,21 @@
         "SGAMEDATA",
         "eD2TimerTypeDWORD"
       ],
-      "dh": "8df2a0c2"
+      "dh": "8df2a0c2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eTimerType",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_TriggerTimerInternal",
@@ -437,7 +665,33 @@
         "fpTimerFunctionUnit",
         "int32_t"
       ],
-      "dh": "3fcaa216"
+      "dh": "3fcaa216",
+      "paramStorage": [
+        [
+          "nfpTimerFunction",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "nTimerType",
+          "EBX:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_TriggerImmediate",
@@ -459,7 +713,29 @@
         "eD2TimerTypeDWORD",
         "int32_t"
       ],
-      "dh": "04196958"
+      "dh": "04196958",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nTimerType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "EVENT_TriggerWithCallback",
@@ -482,7 +758,33 @@
         "fpTimerFunctionUnit",
         "int32_t"
       ],
-      "dh": "f3a0df17"
+      "dh": "f3a0df17",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nTimerType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnTimer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SetEventInternal",
@@ -511,7 +813,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "be7f2286"
+      "dh": "be7f2286",
+      "paramStorage": [
+        [
+          "eTimerType",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ],
+        [
+          "nFrame",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "fpFunction",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SetEvent",
@@ -532,7 +864,33 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "626dbd7e"
+      "dh": "626dbd7e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eTimerType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDelay",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SetEventMapReveal",
@@ -555,7 +913,37 @@
         "fpTimerFunctionUnit",
         "int32_t"
       ],
-      "dh": "aa8fff07"
+      "dh": "aa8fff07",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eTimerType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFrame",
+          "Stack[0x8]:4"
+        ],
+        [
+          "fpFunction",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x14]:4"
+        ]
+      ]
     }
   ]
 }

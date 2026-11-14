@@ -45,7 +45,13 @@
         "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>> *",
         "uint32_t"
       ],
-      "dh": "d1592c38"
+      "dh": "d1592c38",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Clear",
@@ -92,7 +98,13 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "95d4aa4a"
+      "dh": "95d4aa4a",
+      "paramStorage": [
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor",
@@ -134,7 +146,13 @@
         "TSLink<SGAMEDATA> *",
         "uint32_t"
       ],
-      "dh": "ef09060d"
+      "dh": "ef09060d",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ReallocData",
@@ -160,7 +178,13 @@
         "TSLink<SGAMEDATA> *",
         "uint32_t"
       ],
-      "dh": "e919b01f"
+      "dh": "e919b01f",
+      "paramStorage": [
+        [
+          "nAlloc",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor",
@@ -203,7 +227,13 @@
       "usedTypes": [
         "TSGrowableArray<SGAMEDATA>"
       ],
-      "dh": "e17cf67e"
+      "dh": "e17cf67e",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00450030",
@@ -221,7 +251,13 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>"
       ],
-      "dh": "6a51c638"
+      "dh": "6a51c638",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Reserve",
@@ -243,7 +279,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "82333b3f"
+      "dh": "82333b3f",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bRound",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor_UnwindThunk",
@@ -255,6 +301,12 @@
       ],
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>"
+      ],
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ]
       ]
     },
     {
@@ -279,7 +331,13 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "3e4169ed"
+      "dh": "3e4169ed",
+      "paramStorage": [
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetCount",
@@ -303,7 +361,13 @@
         "TSLink<SGAMEDATA> *",
         "uint32_t"
       ],
-      "dh": "3bbba8e1"
+      "dh": "3bbba8e1",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor",
@@ -350,7 +414,21 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "6ae99f66"
+      "dh": "6ae99f66",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLinkType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pExisting",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00450350",
@@ -368,7 +446,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "39771520"
+      "dh": "39771520",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00450370",
@@ -386,7 +470,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "d7ee3c3d"
+      "dh": "d7ee3c3d",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NewNode",
@@ -408,7 +498,21 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "uint32_t"
       ],
-      "dh": "e3712395"
+      "dh": "e3712395",
+      "paramStorage": [
+        [
+          "nLocation",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "InternalDelete",
@@ -429,7 +533,17 @@
         "SGAMEDATA",
         "TSHashTable<SGAMEDATA, HASHKEY_NONE>"
       ],
-      "dh": "1a2b50ab"
+      "dh": "1a2b50ab",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "InternalNew",
@@ -453,7 +567,25 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "c798d502"
+      "dh": "c798d502",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -474,7 +606,13 @@
         "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
         "uint32_t"
       ],
-      "dh": "03787f5b"
+      "dh": "03787f5b",
+      "paramStorage": [
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Clear",
@@ -513,7 +651,13 @@
       "usedTypes": [
         "TSHashTable<SGAMEDATA, HASHKEY_NONE>"
       ],
-      "dh": "2f2508ac"
+      "dh": "2f2508ac",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -534,7 +678,17 @@
         "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
         "uint32_t"
       ],
-      "dh": "35630256"
+      "dh": "35630256",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Clear",
@@ -579,7 +733,17 @@
         "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
         "uint32_t"
       ],
-      "dh": "088b1afa"
+      "dh": "088b1afa",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "InternalDestroy",
@@ -664,7 +828,13 @@
         "TSGrowableArray<SGAMEDATA>",
         "uint32_t"
       ],
-      "dh": "e679e137"
+      "dh": "e679e137",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RoundToMultiple",
@@ -682,7 +852,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "bd69e938"
+      "dh": "bd69e938",
+      "paramStorage": [
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMultiple",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "LinkNode",
@@ -705,7 +885,21 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "1e272ab5"
+      "dh": "1e272ab5",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLinkType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pExisting",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

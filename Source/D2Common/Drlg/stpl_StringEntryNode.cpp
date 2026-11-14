@@ -141,7 +141,7 @@ template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::Next
     return (::StringEntryNode*)(nFirstLink <= 0 ? 0 : nFirstLink);
 }
 
-template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Unlink(::StringEntryNode * pNode) {
+template<> __attribute__((noinline)) inline void TSHashTable<StringEntryNode, HASHKEY_STRI>::Unlink(::StringEntryNode * pNode) {
     TSLink<::StringEntryNode>** pPrevLink2;
     intptr_t nNextLink;
     if (!pNode->m_linktoslot.m_next) {
@@ -189,7 +189,7 @@ template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Delete(::StringEntry
     this->pVtable->InternalDelete(this, pNode);
 }
 
-template<> void TSExplicitList<StringEntryNode, -572662307>::UnlinkAll() {
+template<> __attribute__((noinline)) inline void TSExplicitList<StringEntryNode, -572662307>::UnlinkAll() {
     TSLink<::StringEntryNode>** pPrevLink;
     TSLink<::StringEntryNode>* pHeadEntry;
     intptr_t nSlotOffset;

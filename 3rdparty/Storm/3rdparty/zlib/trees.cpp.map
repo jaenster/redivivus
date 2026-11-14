@@ -110,7 +110,13 @@
         "ct_data",
         "deflate_state"
       ],
-      "dh": "3a3692e1"
+      "dh": "3a3692e1",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "pqdownheap",
@@ -130,7 +136,21 @@
         "deflate_state",
         "int32_t"
       ],
-      "dh": "f7a1e52a"
+      "dh": "f7a1e52a",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDeflateState",
+          "EAX:4"
+        ],
+        [
+          "pTree",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "gen_bitlen",
@@ -154,7 +174,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "7fea4b5d"
+      "dh": "7fea4b5d",
+      "paramStorage": [
+        [
+          "pTreeDesc",
+          "ECX:4"
+        ],
+        [
+          "pDeflateState",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "scan_tree",
@@ -176,7 +206,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "afb3c488"
+      "dh": "afb3c488",
+      "paramStorage": [
+        [
+          "nMaxCode",
+          "ECX:4"
+        ],
+        [
+          "pDeflateState",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTree",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "send_tree",
@@ -199,7 +243,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "65f9cda7"
+      "dh": "65f9cda7",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "EAX:4"
+        ],
+        [
+          "pTree",
+          "EDX:4"
+        ],
+        [
+          "nMaxCode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "send_all_trees",
@@ -220,7 +278,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "3eaf75c6"
+      "dh": "3eaf75c6",
+      "paramStorage": [
+        [
+          "nLCodes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDCodes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBlCodes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDeflateState",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "_tr_tally",
@@ -241,7 +317,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2928218a"
+      "dh": "2928218a",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "ECX:4"
+        ],
+        [
+          "nDist",
+          "EDX:4"
+        ],
+        [
+          "nLc",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "compress_block",
@@ -263,7 +353,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f59b894c"
+      "dh": "f59b894c",
+      "paramStorage": [
+        [
+          "pLTree",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDTree",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDeflateState",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "detect_data_type",
@@ -283,7 +387,13 @@
         "deflate_state",
         "uint32_t"
       ],
-      "dh": "fce5a120"
+      "dh": "fce5a120",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "bi_reverse",
@@ -301,7 +411,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "aaed1f92"
+      "dh": "aaed1f92",
+      "paramStorage": [
+        [
+          "nCode",
+          "ECX:4"
+        ],
+        [
+          "nLen",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "bi_flush",
@@ -320,7 +440,13 @@
         "deflate_state",
         "uint8_t"
       ],
-      "dh": "22425cfd"
+      "dh": "22425cfd",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "bi_windup",
@@ -339,7 +465,13 @@
         "deflate_state",
         "uint8_t"
       ],
-      "dh": "327c2d41"
+      "dh": "327c2d41",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "copy_block",
@@ -359,7 +491,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "b5d81cf3"
+      "dh": "b5d81cf3",
+      "paramStorage": [
+        [
+          "nLen",
+          "ECX:4"
+        ],
+        [
+          "pbBuf",
+          "EDX:4"
+        ],
+        [
+          "bWriteHeader",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDeflateState",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "_tr_init",
@@ -378,7 +528,13 @@
       "usedTypes": [
         "deflate_state"
       ],
-      "dh": "b20161e9"
+      "dh": "b20161e9",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "gen_codes",
@@ -400,7 +556,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "8cd6aa40"
+      "dh": "8cd6aa40",
+      "paramStorage": [
+        [
+          "pTree",
+          "EDI:4"
+        ],
+        [
+          "nMaxCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBlCount",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "build_tree",
@@ -425,7 +595,17 @@
         "tree_desc",
         "uint8_t"
       ],
-      "dh": "f261e2ec"
+      "dh": "f261e2ec",
+      "paramStorage": [
+        [
+          "pTreeDesc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDeflateState",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "build_bl_tree",
@@ -446,7 +626,13 @@
         "deflate_state",
         "int32_t"
       ],
-      "dh": "fc2c02d2"
+      "dh": "fc2c02d2",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "_tr_stored_block",
@@ -468,7 +654,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1cf48853"
+      "dh": "1cf48853",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "ECX:4"
+        ],
+        [
+          "pbBuf",
+          "EDX:4"
+        ],
+        [
+          "nStoredLen",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLast",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "_tr_flush_bits",
@@ -487,7 +691,13 @@
       "usedTypes": [
         "deflate_state"
       ],
-      "dh": "c1fabe18"
+      "dh": "c1fabe18",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "_tr_align",
@@ -506,7 +716,13 @@
       "usedTypes": [
         "deflate_state"
       ],
-      "dh": "b15b0d47"
+      "dh": "b15b0d47",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "_tr_flush_block",
@@ -536,7 +752,25 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "80aa271f"
+      "dh": "80aa271f",
+      "paramStorage": [
+        [
+          "pDeflateState",
+          "ECX:4"
+        ],
+        [
+          "pbBuf",
+          "EDX:4"
+        ],
+        [
+          "nStoredLen",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLast",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

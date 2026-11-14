@@ -22,7 +22,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "1d722a60"
+      "dh": "1d722a60",
+      "paramStorage": [
+        [
+          "cSubIndex",
+          "ECX:4"
+        ],
+        [
+          "cIndex",
+          "EDX:4"
+        ],
+        [
+          "cTileSubType",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "FINDTILE_AllocHashTable",
@@ -67,7 +81,13 @@
         "D2TileLibraryHashRefStrc",
         "D2TileLibraryHashStrc"
       ],
-      "dh": "02c53118"
+      "dh": "02c53118",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FINDTILE_AddTileToChain",
@@ -92,7 +112,17 @@
         "D2TileLibraryHashRefStrc",
         "int32_t"
       ],
-      "dh": "77101261"
+      "dh": "77101261",
+      "paramStorage": [
+        [
+          "pHashNode",
+          "ESI:4"
+        ],
+        [
+          "pTileData",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "FINDTILE_AllocHashEntry",
@@ -118,7 +148,17 @@
         "D2TileLibraryHashRefStrc",
         "int32_t"
       ],
-      "dh": "660d956b"
+      "dh": "660d956b",
+      "paramStorage": [
+        [
+          "pTileData",
+          "EDI:4"
+        ],
+        [
+          "ppHashSlot",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "FINDTILE_Register",
@@ -147,7 +187,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7d409ce1"
+      "dh": "7d409ce1",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ],
+        [
+          "pTileData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FINDTILE_Lookup",
@@ -174,7 +224,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d2122d3f"
+      "dh": "d2122d3f",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ],
+        [
+          "pResultArray",
+          "EDX:4"
+        ],
+        [
+          "nMaxResults",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTileType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTileSubType",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSubIndex",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

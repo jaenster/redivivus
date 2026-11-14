@@ -24,7 +24,29 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "c5f8afae"
+      "dh": "c5f8afae",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q12_Callback10_PlayerLeavesGame",
@@ -37,6 +59,16 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
+      ],
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
       ]
     },
     {
@@ -59,7 +91,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "64026cd3"
+      "dh": "64026cd3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q12_UpdateQuestRecord",
@@ -85,7 +131,21 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "52a45f2e"
+      "dh": "52a45f2e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q12_Callback02_NpcDeactivate",
@@ -107,7 +167,17 @@
         "D2QuestDataA2Q4Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "785aa1cb"
+      "dh": "785aa1cb",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q12_CheckJournalState",
@@ -127,7 +197,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "6116b278"
+      "dh": "6116b278",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q12_OnJournalActivate",
@@ -150,7 +226,17 @@
         "D2QuestDataA2Q4Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "009fc336"
+      "dh": "009fc336",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "EAX:4"
+        ],
+        [
+          "pQuestContext",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "Q12_Callback11_ScrollMessage",
@@ -187,7 +273,17 @@
         "POINT",
         "uint32_t"
       ],
-      "dh": "88364a5e"
+      "dh": "88364a5e",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q12_Callback00_NpcActivate",
@@ -216,7 +312,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e941ec9f"
+      "dh": "e941ec9f",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q12_SetCannotComplete",
@@ -238,7 +344,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "808ad47d"
+      "dh": "808ad47d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q12_CheckArcaneAndReward",
@@ -267,7 +387,21 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "ea34cb9d"
+      "dh": "ea34cb9d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q12_SequenceFilterInlined",
@@ -289,7 +423,13 @@
       "usedTypes": [
         "D2QuestDataStrc"
       ],
-      "dh": "8680e4fc"
+      "dh": "8680e4fc",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "Q12_SequenceFilter",
@@ -309,7 +449,13 @@
       "usedTypes": [
         "D2QuestDataStrc"
       ],
-      "dh": "cf24a267"
+      "dh": "cf24a267",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q12_Callback13_PlayerStartedGame",
@@ -336,7 +482,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "13b03393"
+      "dh": "13b03393",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q12_OnHoradricStaffAssembled",
@@ -358,7 +514,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "7911fc7a"
+      "dh": "7911fc7a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "A2Q4_OnMonsterDeathClass201_NoOp",
@@ -373,7 +535,17 @@
       "calledFunctions": [
         "A2Q4_OnMonsterDeathClass201_NoOp"
       ],
-      "dh": "da4cb2d3"
+      "dh": "da4cb2d3",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "A2Q4_OnMonsterDeathClass331_NoOp",
@@ -388,7 +560,17 @@
       "calledFunctions": [
         "A2Q4_OnMonsterDeathClass331_NoOp"
       ],
-      "dh": "1b2398d0"
+      "dh": "1b2398d0",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Q12_CheckJerhynGateOpen",
@@ -407,7 +589,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "957b3fa0"
+      "dh": "957b3fa0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BlockHaremRoomForPlayerAccess",
@@ -435,7 +623,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b6fb9635"
+      "dh": "b6fb9635",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn30_HaremBlocker",
@@ -457,7 +655,13 @@
         "D2ObjectInitFnArg",
         "int32_t"
       ],
-      "dh": "37c67feb"
+      "dh": "37c67feb",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q14_CheckDurielProximity",
@@ -484,7 +688,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "17cdab50"
+      "dh": "17cdab50",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q12_IsSanctuaryComplete",
@@ -503,7 +721,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "54e3d42c"
+      "dh": "54e3d42c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q12_GetSummonerCoords",
@@ -523,7 +747,17 @@
         "D2CoordStrc",
         "SGAMEDATA"
       ],
-      "dh": "c613b086"
+      "dh": "c613b086",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pCoord",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q12_CheckJustCompleted",
@@ -544,7 +778,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "cab2e91c"
+      "dh": "cab2e91c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_A2Q4_ReadHorazonsJournal",
@@ -573,7 +821,13 @@
         "D2QuestDataA2Q4Strc",
         "D2RoomStrc"
       ],
-      "dh": "121ba271"
+      "dh": "121ba271",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn29_ArcaneSanctuaryPortal",
@@ -601,7 +855,13 @@
         "D2UnitStrc",
         "eD2LevelId"
       ],
-      "dh": "b398e8eb"
+      "dh": "b398e8eb",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q12_SetObjectOperateState",
@@ -621,7 +881,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "99f98f64"
+      "dh": "99f98f64",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nFromLevelId",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

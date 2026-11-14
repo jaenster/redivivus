@@ -54,13 +54,7 @@ D2SUnitEventStrc * __fastcall SUNITEVENT_Alloc(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     D2SUnitEventStrc* pNewEvent = D2_NEW_POOL_AT(pGame->pMemoryPool, D2SUnitEventStrc, ".\\UNIT\\SUnitEvent.cpp", 0x57);
-    pNewEvent->nUnitEvent = '\0';
-    pNewEvent->field_0x1 = 0;
-    pNewEvent->nFlags = 0;
-    pNewEvent->nQueueNo = 0;
-    pNewEvent->nOwnerKey = 0;
-    pNewEvent->pPrev = 0;
-    pNewEvent->pNext = 0;
+    memset(pNewEvent, 0, sizeof(*pNewEvent));
     pNewEvent->nUnitEvent = nUnitEvent;
     pNewEvent->eSkill = eSkill;
     pNewEvent->nSkillLevel = nSkillLevel;

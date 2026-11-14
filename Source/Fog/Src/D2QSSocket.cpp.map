@@ -19,7 +19,21 @@
       "usedTypes": [
         "D2QSSocketStrc"
       ],
-      "dh": "1fdc0911"
+      "dh": "1fdc0911",
+      "paramStorage": [
+        [
+          "pQSSocket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "fpCallback",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_SendPacketToSafesocket",
@@ -39,7 +53,21 @@
         "D2NetDataStrc",
         "LPCRITICAL_SECTION"
       ],
-      "dh": "27fe030a"
+      "dh": "27fe030a",
+      "paramStorage": [
+        [
+          "pSafesocket",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QSSOCKET_SendWithTimeout",
@@ -63,7 +91,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "b75a1512"
+      "dh": "b75a1512",
+      "paramStorage": [
+        [
+          "pQSSocket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLength",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "ReadBytesFromSocket",
@@ -83,7 +125,21 @@
         "D2QSSocketStrc",
         "uint32_t"
       ],
-      "dh": "bbf1e0f9"
+      "dh": "bbf1e0f9",
+      "paramStorage": [
+        [
+          "pMCPQSocket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxBytes",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ProcessReceivedData",
@@ -108,7 +164,21 @@
         "D2QSSocketStrc",
         "uint32_t"
       ],
-      "dh": "bcba3733"
+      "dh": "bcba3733",
+      "paramStorage": [
+        [
+          "pQServerStrc",
+          "EAX:4"
+        ],
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "QSSOCKET_SetCallbackHandler2",
@@ -126,7 +196,25 @@
       "usedTypes": [
         "D2QSSocketStrc"
       ],
-      "dh": "ece5eb57"
+      "dh": "ece5eb57",
+      "paramStorage": [
+        [
+          "pQSSocket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeaderSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSizeFieldOffset",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nHeaderLeadByte",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "QSSOCKET_BlockSocket",
@@ -144,7 +232,13 @@
       "usedTypes": [
         "D2QSSocketStrc"
       ],
-      "dh": "61eecf74"
+      "dh": "61eecf74",
+      "paramStorage": [
+        [
+          "pQSSocketStrc",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CloseSocket",
@@ -163,7 +257,13 @@
       "usedTypes": [
         "D2QSSocketStrc"
       ],
-      "dh": "41a26b6a"
+      "dh": "41a26b6a",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ReceiveLoopCallback",
@@ -190,7 +290,13 @@
         "D2QSSocketStrc",
         "uint32_t"
       ],
-      "dh": "9fdde54d"
+      "dh": "9fdde54d",
+      "paramStorage": [
+        [
+          "pQSSocket",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QSSOCKET_ThreadEntryPoint",
@@ -210,7 +316,13 @@
         "D2NetDataStrc",
         "D2QSSocketStrc"
       ],
-      "dh": "f1909ac7"
+      "dh": "f1909ac7",
+      "paramStorage": [
+        [
+          "lpThreadParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_CreateConnectionThread",
@@ -228,7 +340,13 @@
       "usedTypes": [
         "D2QSSocketStrc"
       ],
-      "dh": "fc3f1747"
+      "dh": "fc3f1747",
+      "paramStorage": [
+        [
+          "NET_MCP_CLIENT_D2QSSocket",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QSSOCKET_Initialize",
@@ -246,7 +364,13 @@
       "usedTypes": [
         "D2QSSocketStrc"
       ],
-      "dh": "cf264f52"
+      "dh": "cf264f52",
+      "paramStorage": [
+        [
+          "pQSSocket",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2QSSOCKET_BlockSocketIfValid",
@@ -265,7 +389,13 @@
       "usedTypes": [
         "D2QSSocketStrc"
       ],
-      "dh": "9ccfaecc"
+      "dh": "9ccfaecc",
+      "paramStorage": [
+        [
+          "pQSSocket",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_D2QSSocket_Init",
@@ -291,7 +421,21 @@
         "D2QSSocketStrc",
         "int32_t"
       ],
-      "dh": "53765867"
+      "dh": "53765867",
+      "paramStorage": [
+        [
+          "szIpAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPort",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szName",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FreeD2QSSocket",
@@ -312,7 +456,13 @@
       "usedTypes": [
         "D2QSSocketStrc"
       ],
-      "dh": "cb74e2d3"
+      "dh": "cb74e2d3",
+      "paramStorage": [
+        [
+          "pSocket",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QSSOCKET_WaitForEvent",
@@ -330,7 +480,17 @@
       "usedTypes": [
         "D2QSSocketStrc"
       ],
-      "dh": "b75b1625"
+      "dh": "b75b1625",
+      "paramStorage": [
+        [
+          "pQSSocket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwTimeout",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2QSocket_GetSafesock",
@@ -349,7 +509,13 @@
         "D2NetDataStrc",
         "D2QSSocketStrc"
       ],
-      "dh": "740e3060"
+      "dh": "740e3060",
+      "paramStorage": [
+        [
+          "pQSSocket",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QSSOCKET_SignalEvent",
@@ -368,7 +534,13 @@
       "usedTypes": [
         "D2QSSocketStrc"
       ],
-      "dh": "aacfe23d"
+      "dh": "aacfe23d",
+      "paramStorage": [
+        [
+          "pQSSocket",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_SendPacketToQSocket",
@@ -388,7 +560,21 @@
         "D2QSSocketStrc",
         "uint16_t"
       ],
-      "dh": "a543cdab"
+      "dh": "a543cdab",
+      "paramStorage": [
+        [
+          "pQSocket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_Send",
@@ -416,7 +602,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cd587088"
+      "dh": "cd587088",
+      "paramStorage": [
+        [
+          "pQSocket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDataSizeNoHeader",
+          "Stack[0xc]:2"
+        ]
+      ]
     }
   ]
 }

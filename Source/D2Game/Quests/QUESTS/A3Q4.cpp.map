@@ -24,7 +24,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a61828ee"
+      "dh": "a61828ee",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q21_PlayerNotifyCompleted",
@@ -47,7 +69,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "ba7f726a"
+      "dh": "ba7f726a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q21_Callback00_NpcActivate",
@@ -74,7 +110,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "42c7dcde"
+      "dh": "42c7dcde",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q21_Callback03_ChangedLevel",
@@ -94,7 +140,17 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "9eb4eb99"
+      "dh": "9eb4eb99",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q21_Callback02_NpcDeactivate",
@@ -116,7 +172,17 @@
         "D2QuestDataA3Q4Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "f45bc2b7"
+      "dh": "f45bc2b7",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q21_StatusFilter",
@@ -138,7 +204,29 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "0449e6b4"
+      "dh": "0449e6b4",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBufferEx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbyStatusCode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q21_PlayerSetGoldenBirdQuestState",
@@ -163,7 +251,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "8f25d7bd"
+      "dh": "8f25d7bd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q21_PartySetGoldenBirdState",
@@ -184,7 +286,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "23d56b82"
+      "dh": "23d56b82",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q21_Callback11_ScrollMessage",
@@ -228,7 +340,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "53a30bd3"
+      "dh": "53a30bd3",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q21_Callback04_ItemPickedUp",
@@ -258,7 +380,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "79e0ff29"
+      "dh": "79e0ff29",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q21_SequenceFilter",
@@ -281,7 +413,13 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "96228548"
+      "dh": "96228548",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q21_Callback13_PlayerStartedGame",
@@ -307,7 +445,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2acf814a"
+      "dh": "2acf814a",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q21_Callback10_PlayerLeavesGame",
@@ -320,6 +468,16 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
+      ],
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
       ]
     },
     {
@@ -342,7 +500,17 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "23d9e37c"
+      "dh": "23d9e37c",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q21_Callback14_PlayerJoinedGame",
@@ -365,7 +533,17 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "96a1e042"
+      "dh": "96a1e042",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q21_InitData",
@@ -387,7 +565,13 @@
         "D2QuestDataA3Q4Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "b855f6d3"
+      "dh": "b855f6d3",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q21_Callback08_MonsterKilled",
@@ -417,7 +601,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "c509ed1c"
+      "dh": "c509ed1c",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

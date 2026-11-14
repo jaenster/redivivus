@@ -23,7 +23,17 @@
         "DC6",
         "uint32_t"
       ],
-      "dh": "fe3305b0"
+      "dh": "fe3305b0",
+      "paramStorage": [
+        [
+          "szFilename",
+          "ECX:4"
+        ],
+        [
+          "bUseDccExtension",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINARCHIVE_LoadImageFromArchive",
@@ -45,7 +55,21 @@
         "DC6",
         "uint32_t"
       ],
-      "dh": "fcbc01f3"
+      "dh": "fcbc01f3",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "pnSize",
+          "EDX:4"
+        ],
+        [
+          "pDC6",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IMAGE_FreeImage",
@@ -65,7 +89,13 @@
       "usedTypes": [
         "DC6"
       ],
-      "dh": "4bc3fab9"
+      "dh": "4bc3fab9",
+      "paramStorage": [
+        [
+          "pDC6",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MessageBoxA_InsertExpansionDisc",
@@ -192,7 +222,21 @@
         "fpRequiredUserAction",
         "int32_t"
       ],
-      "dh": "e9544d02"
+      "dh": "e9544d02",
+      "paramStorage": [
+        [
+          "nfpRequiredUserAction",
+          "ECX:4"
+        ],
+        [
+          "nZero",
+          "EDX:4"
+        ],
+        [
+          "bExpansion",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MPQ_UnloadAllMediaMpqFiles",
@@ -250,7 +294,25 @@
         "fpRequiredUserAction",
         "int32_t"
       ],
-      "dh": "c9857d1d"
+      "dh": "c9857d1d",
+      "paramStorage": [
+        [
+          "fpInsertPlayCd",
+          "ECX:4"
+        ],
+        [
+          "fpInsertExpansionCd",
+          "EDX:4"
+        ],
+        [
+          "nZero",
+          "Stack[0x4]:4"
+        ],
+        [
+          "D2IniData",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

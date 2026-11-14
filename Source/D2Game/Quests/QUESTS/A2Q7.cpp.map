@@ -21,7 +21,13 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "77e495bf"
+      "dh": "77e495bf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q14_IsSevenTombsAtState1",
@@ -42,7 +48,13 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "4596c592"
+      "dh": "4596c592",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q14_IsSevenTombsProgressed",
@@ -62,7 +74,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "ad10ec6b"
+      "dh": "ad10ec6b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q14_GetPortalCreatedFlag",
@@ -83,7 +101,13 @@
         "D2QuestDataStrc",
         "uint8_t"
       ],
-      "dh": "c4d8c911"
+      "dh": "c4d8c911",
+      "paramStorage": [
+        [
+          "pQuestArgs",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q14_CheckUnitDistanceToTyrael",
@@ -105,7 +129,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "fc4d4bc9"
+      "dh": "fc4d4bc9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pA2Q6Data",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q14_IsNpcStationary",
@@ -128,7 +166,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e56c7941"
+      "dh": "e56c7941",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pNpc",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q14_IsSevenTombsLessThanState4",
@@ -147,7 +195,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "3ae9d4d7"
+      "dh": "3ae9d4d7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q14_GetTyraelSpawnCoords",
@@ -173,7 +227,21 @@
         "POINT",
         "SGAMEDATA"
       ],
-      "dh": "85720c1d"
+      "dh": "85720c1d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPoint",
+          "EDX:4"
+        ],
+        [
+          "ppSpawnRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q14_SetTyraelState",
@@ -194,7 +262,17 @@
         "D2QuestDataStrc",
         "eD2HostGameType"
       ],
-      "dh": "e10b44e7"
+      "dh": "e10b44e7",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "bClear",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "Q15_Callback02_NpcDeactivate",
@@ -213,7 +291,17 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "40da7afa"
+      "dh": "40da7afa",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q15_Callback11_ScrollMessage",
@@ -237,7 +325,17 @@
         "SGAMEDATA",
         "uint16_t"
       ],
-      "dh": "1806b48e"
+      "dh": "1806b48e",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q15_Callback00_NpcActivate",
@@ -267,7 +365,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "721dcac0"
+      "dh": "721dcac0",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q15_Callback08_MonsterKilled",
@@ -286,7 +394,17 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "0662338f"
+      "dh": "0662338f",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q15_StatusFilter",
@@ -306,7 +424,29 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "61b06929"
+      "dh": "61b06929",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBufferEx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbyStatusCode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q15_ActiveFilter",
@@ -331,7 +471,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "7a04cc46"
+      "dh": "7a04cc46",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q15_InitData",
@@ -353,7 +515,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "3401fbcb"
+      "dh": "3401fbcb",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

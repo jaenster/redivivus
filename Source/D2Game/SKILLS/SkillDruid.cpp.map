@@ -31,7 +31,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1a8bc733"
+      "dh": "1a8bc733",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_115_SummonPoisonCreeper",
@@ -62,7 +80,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "efae1891"
+      "dh": "efae1891",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDRUID_GetTransformGfx",
@@ -83,7 +119,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "f3fb0d8a"
+      "dh": "f3fb0d8a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nDefaultGfx",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDRUID_OnShapeshiftExpire",
@@ -112,7 +158,21 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "4b849861"
+      "dh": "4b849861",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2SetAurastatsFromSkills",
@@ -140,7 +200,29 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "b92b3ba9"
+      "dh": "b92b3ba9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pStatList",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2SetPassiveStatsFromSkills",
@@ -168,7 +250,29 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "7267f2fd"
+      "dh": "7267f2fd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pStatList",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_116_Werewolf",
@@ -206,7 +310,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "9cfc4c53"
+      "dh": "9cfc4c53",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDRUID_CastMultiMissile",
@@ -236,7 +358,37 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "99bc5e1d"
+      "dh": "99bc5e1d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nMissileCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMissileId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_117_Firestorm",
@@ -268,7 +420,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "129ec402"
+      "dh": "129ec402",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_118_Twister",
@@ -294,7 +464,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "eb99a9a7"
+      "dh": "eb99a9a7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_119_SummonDireWolf",
@@ -325,7 +513,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "dee8982c"
+      "dh": "dee8982c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDRUID_CreateSummon",
@@ -355,7 +561,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "bc036941"
+      "dh": "bc036941",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDRUID_SrvStFn56_FeralRageMaul",
@@ -387,7 +611,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6519100f"
+      "dh": "6519100f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_120_FeralRage",
@@ -429,7 +671,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "7a3c84f8"
+      "dh": "7a3c84f8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDRUID_SrvStFn57_Rabies",
@@ -462,7 +722,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "bd8577a0"
+      "dh": "bd8577a0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDRUID_ApplyTimedAuraBuff",
@@ -495,7 +773,33 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "e7f65db4"
+      "dh": "e7f65db4",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDuration",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDRUID_GetSummonDamageBonus",
@@ -525,7 +829,37 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "4a71e022"
+      "dh": "4a71e022",
+      "paramStorage": [
+        [
+          "pSkillTxt",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMinToHit",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "EAX:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDRUID_CreateAuraMissile",
@@ -554,7 +888,33 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "3edd24dc"
+      "dh": "3edd24dc",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTargetUnit",
+          "EBX:4"
+        ],
+        [
+          "nDuration",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDRUID_ApplyAuraWithMissile",
@@ -577,7 +937,33 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "3525d518"
+      "dh": "3525d518",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDuration",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDRUID_SrvStFn58_FireClaws",
@@ -607,7 +993,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "abbccf5c"
+      "dh": "abbccf5c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_122_Hunger",
@@ -639,7 +1043,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "ffd55439"
+      "dh": "ffd55439",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_123_Volcano",
@@ -670,7 +1092,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8c19c077"
+      "dh": "8c19c077",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_124_Armageddon",
@@ -712,7 +1152,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c7f60926"
+      "dh": "c7f60926",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_145_Hurricane",
@@ -752,7 +1210,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "cf45fd0a"
+      "dh": "cf45fd0a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_146_ArmageddonTick",
@@ -804,7 +1280,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1b0621f1"
+      "dh": "1b0621f1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDRUID_GetSummonHealthBonus",
@@ -822,7 +1316,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "524abd42"
+      "dh": "524abd42",
+      "paramStorage": [
+        [
+          "pnAbsorb",
+          "EDX:4"
+        ],
+        [
+          "nAbsorbDelta",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_DruidSummonHpAura",
@@ -857,7 +1361,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9e5c91b5"
+      "dh": "9e5c91b5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDRUID_ApplyAccumulatedStateDamage",
@@ -893,7 +1427,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d887a149"
+      "dh": "d887a149",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_121_Rabies",
@@ -926,7 +1474,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "5b8db53a"
+      "dh": "5b8db53a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

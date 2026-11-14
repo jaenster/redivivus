@@ -20,7 +20,13 @@
         "D2MonEquipTxt",
         "int32_t"
       ],
-      "dh": "79bbcc22"
+      "dh": "79bbcc22",
+      "paramStorage": [
+        [
+          "nMonStatsId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_SrvStFn22_PsychicHammer",
@@ -45,7 +51,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "58b362bc"
+      "dh": "58b362bc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_033_PsychicHammer",
@@ -81,7 +105,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a3a56471"
+      "dh": "a3a56471",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_SrvStFn23_MartialArtsCharge",
@@ -104,7 +146,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "5b4e2059"
+      "dh": "5b4e2059",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_AddChargeUpStack",
@@ -142,7 +202,33 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "f0db39f2"
+      "dh": "f0db39f2",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eState",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_034_ChargeUpStackMelee",
@@ -175,7 +261,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4fa1cf4c"
+      "dh": "4fa1cf4c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_035_ElementalChargeRelease",
@@ -202,7 +306,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5b2b46b6"
+      "dh": "5b2b46b6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_HandleWarCryStun",
@@ -233,7 +355,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "baa740dd"
+      "dh": "baa740dd",
+      "paramStorage": [
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_AddChargeUpDamageRange",
@@ -261,7 +397,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "3c34cf0f"
+      "dh": "3c34cf0f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatList",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_ApplyChargeUpDamage",
@@ -289,7 +439,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "ee12ee08"
+      "dh": "ee12ee08",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatList",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_ApplyChargeUpConvertDamage",
@@ -321,7 +485,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "bbf07e9b"
+      "dh": "bbf07e9b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatList",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_ApplyProgressiveDamageToTarget",
@@ -348,7 +526,17 @@
         "D2UnitStrc",
         "eD2Skills"
       ],
-      "dh": "9b9041c5"
+      "dh": "9b9041c5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pDamage",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_DispatchChargeUpDamage",
@@ -378,7 +566,17 @@
         "eD2Skills",
         "uint8_t"
       ],
-      "dh": "bdb34b7c"
+      "dh": "bdb34b7c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pDamage",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_ApplyWarCryDamage",
@@ -400,7 +598,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "d886b820"
+      "dh": "d886b820",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_GetChargeUpMissile",
@@ -423,7 +631,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b937bf6e"
+      "dh": "b937bf6e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nSkillId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_GetChargeUpCalcValue",
@@ -449,7 +667,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2d02948c"
+      "dh": "2d02948c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_038_ChargeRelease_AreaExplosion",
@@ -482,7 +714,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a1ecb591"
+      "dh": "a1ecb591",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn",
@@ -519,7 +769,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2d9d2cec"
+      "dh": "2d9d2cec",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_SetupMissilePath",
@@ -547,7 +815,17 @@
         "int32_t",
         "intptr_t"
       ],
-      "dh": "05a7484a"
+      "dh": "05a7484a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nInitSeed",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_SpawnMissileRing",
@@ -577,7 +855,49 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "0a274dbb"
+      "dh": "0a274dbb",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eMissileId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nMissileStride",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_BuildSpiralMissilePath",
@@ -617,7 +937,17 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "8f157ca4"
+      "dh": "8f157ca4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nSeed",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_SpawnSpiralMissileRing",
@@ -647,7 +977,49 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "35da34e0"
+      "dh": "35da34e0",
+      "paramStorage": [
+        [
+          "dwParam",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eMissileId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nMissileStride",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_036_ChargeRelease_MissileRing",
@@ -675,7 +1047,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "0d330e3c"
+      "dh": "0d330e3c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_037_ChargeRelease_MultiElementScatter",
@@ -703,7 +1093,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "87084e6f"
+      "dh": "87084e6f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_143_ChargeRelease_GroundStrike",
@@ -731,7 +1139,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e95ab5b3"
+      "dh": "e95ab5b3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_040_ChargeRelease_SingleMissile",
@@ -757,7 +1183,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7e083b2d"
+      "dh": "7e083b2d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_041_ChargeRelease_RandomMissileBurst",
@@ -792,7 +1236,25 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "ed70190a"
+      "dh": "ed70190a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_ReleaseChargeUpAttack",
@@ -835,7 +1297,21 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "71a66b85"
+      "dh": "71a66b85",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_ApplyWhirlwindDamage",
@@ -878,7 +1354,33 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "937ac615"
+      "dh": "937ac615",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit1",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pUnit2",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "D2CalcKickDamage",
@@ -908,7 +1410,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "282ac2ce"
+      "dh": "282ac2ce",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSkillTxt",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bKickCheck",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pAttacker",
+          "EAX:4"
+        ],
+        [
+          "eSkill",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_SrvStFn24_DragonTalon",
@@ -937,7 +1469,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "eb78cad6"
+      "dh": "eb78cad6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_042_DragonTalon",
@@ -977,7 +1527,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e4a300b1"
+      "dh": "e4a300b1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_CastScatterMissiles",
@@ -1010,7 +1578,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ee609ad2"
+      "dh": "ee609ad2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMissileTxtId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMissileCount",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSpread",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_043_ChargeRelease_ScatterMissiles",
@@ -1038,7 +1640,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c2e3de57"
+      "dh": "c2e3de57",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_CreateSummon",
@@ -1081,7 +1701,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d06e3351"
+      "dh": "d06e3351",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSpawnY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_044_SummonBladeSentinel",
@@ -1118,7 +1768,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2469e172"
+      "dh": "2469e172",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_045_SummonTrapSentry",
@@ -1143,7 +1811,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "23ab8302"
+      "dh": "23ab8302",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_SkillMeleeAttack",
@@ -1177,7 +1863,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a1da5a07"
+      "dh": "a1da5a07",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "EBX:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_SrvStFn25_DragonClaw",
@@ -1199,7 +1907,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "d0f5d5bc"
+      "dh": "d0f5d5bc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_046_DragonClaw",
@@ -1226,7 +1952,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0e83fade"
+      "dh": "0e83fade",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_ClearAllChargeUpStates",
@@ -1255,7 +1999,13 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "4161c77d"
+      "dh": "4161c77d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_ApplyTimedStateWithCurseExpiry",
@@ -1284,7 +2034,17 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "fa6a5832"
+      "dh": "fa6a5832",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_047_CloakOfShadows",
@@ -1316,7 +2076,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "e249acbe"
+      "dh": "e249acbe",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_048_BladeFury",
@@ -1351,7 +2129,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "47d01d38"
+      "dh": "47d01d38",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSASS_StatExpireCallback_ClearStateSetFlag",
@@ -1372,7 +2168,21 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "7a4cccaa"
+      "dh": "7a4cccaa",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_SrvStFn26_BladeFury",
@@ -1411,7 +2221,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "8263ed60"
+      "dh": "8263ed60",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_EquipSummonItems",
@@ -1442,7 +2270,37 @@
         "uint64_t",
         "uint8_t"
       ],
-      "dh": "382b5c6f"
+      "dh": "382b5c6f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pOwner",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nItemLevel",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bOnInit",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_ApplyLevelScaledBuffs",
@@ -1474,7 +2332,29 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "e46a7eeb"
+      "dh": "e46a7eeb",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_049_SummonShadowClone",
@@ -1513,7 +2393,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "e5bf007a"
+      "dh": "e5bf007a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_SrvStFn27_DragonTail",
@@ -1544,7 +2442,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d75a9f44"
+      "dh": "d75a9f44",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_050_DragonTail_FireExplosion",
@@ -1580,7 +2496,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "45666732"
+      "dh": "45666732",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLAMZ_GetGuidedArrowPiercingBonus",
@@ -1604,7 +2538,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c1e36810"
+      "dh": "c1e36810",
+      "paramStorage": [
+        [
+          "pCaster",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nChancePct",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_OnConversionExpire",
@@ -1639,7 +2587,21 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "2105ea3b"
+      "dh": "2105ea3b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_ApplyConversionToUnit",
@@ -1684,7 +2646,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "16e6f097"
+      "dh": "16e6f097",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLAMZ_HandleStrafeDamageAndNextDelay",
@@ -1709,7 +2689,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "e0b6e564"
+      "dh": "e0b6e564",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_051_MindBlast",
@@ -1742,7 +2732,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b6c0966f"
+      "dh": "b6c0966f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_052_DragonFlight",
@@ -1786,7 +2794,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8480ef22"
+      "dh": "8480ef22",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASS_SrvStFn28_BladeShield",
@@ -1817,7 +2843,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "5ce83f47"
+      "dh": "5ce83f47",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_053_Venom_BladeShield_AreaPulse",
@@ -1846,7 +2890,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "0afa8ecc"
+      "dh": "0afa8ecc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLAMZ_GetStrafeArrowCount",
@@ -1872,7 +2934,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "b2fccf62"
+      "dh": "b2fccf62",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_142_BladeShield_SpinDamage",
@@ -1903,7 +2975,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "e8840f22"
+      "dh": "e8840f22",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_054_BladeShield_Activate",
@@ -1929,7 +3019,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "b7e7af43"
+      "dh": "b7e7af43",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

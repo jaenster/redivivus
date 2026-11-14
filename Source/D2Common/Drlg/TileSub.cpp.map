@@ -24,7 +24,17 @@
         "D2UnkOutdoorStrc",
         "uint32_t"
       ],
-      "dh": "106668ae"
+      "dh": "106668ae",
+      "paramStorage": [
+        [
+          "pUnkOutdoor",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLvlSub",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "InitializeDrlgFile",
@@ -53,7 +63,17 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "b41ab259"
+      "dh": "b41ab259",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pLvlSubTxtRecord",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AddSecondaryBorder",
@@ -76,7 +96,13 @@
         "D2PoolManagerStrc",
         "D2UnkOutdoorStrc"
       ],
-      "dh": "c032aa13"
+      "dh": "c032aa13",
+      "paramStorage": [
+        [
+          "pOutdoorCtx",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

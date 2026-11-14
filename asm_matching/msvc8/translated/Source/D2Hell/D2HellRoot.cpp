@@ -202,7 +202,7 @@ void __stdcall D2FILE_ReadFile_HaltTail(int nLine) {
 }
 
 uint32_t __fastcall D2FILE_OpenAndReadFile(D2PoolManagerStrc * pMemory, char * szText, void * pBuffer, uint32_t nBufSize) {
-    D2MPQFileStrc* pFile = (D2MPQFileStrc*)pMemory;
+    D2MPQFileStrc* pFile;
     CheckIfFileExists(pMemory, szText, &pFile, 0);
     DWORD dwFileSize = D2FILE_GetFileSize(pMemory, pFile, (LPDWORD)0x0);
     if (nBufSize < dwFileSize) {
@@ -226,7 +226,6 @@ void * __fastcall D2FILE_AllocAndLoadD2File(D2PoolManagerStrc * pMemory, char * 
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     __frame0.dwFileSizeOut = (DWORD)pMemory;
-    __frame0.pFile = (D2MPQFileStrc*)pMemory;
     BOOL bFileExistsResult = CheckIfFileExists(pMemory, szFilename, &__frame0.pFile, 0);
     void* pBuffer = 0;
     if (bFileExistsResult) {

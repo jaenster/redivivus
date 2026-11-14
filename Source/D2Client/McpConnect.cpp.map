@@ -19,7 +19,13 @@
       "usedTypes": [
         "pfnMCPMessage"
       ],
-      "dh": "eb061320"
+      "dh": "eb061320",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MCPCONNECT_SetMessageCallback_Unref_0044b200",
@@ -37,7 +43,13 @@
       "usedTypes": [
         "pfnMCPMessage"
       ],
-      "dh": "4541c110"
+      "dh": "4541c110",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

@@ -27,7 +27,25 @@
         "D3DSubtileCacheStrc",
         "uint32_t"
       ],
-      "dh": "cd74c8f8"
+      "dh": "cd74c8f8",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nBaseMemoryUsed",
+          "EDX:4"
+        ],
+        [
+          "nAvailableMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwTextureSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D3DSUBTILE_SetPalette",
@@ -48,7 +66,17 @@
         "D3DSubtileCacheStrc",
         "IDirectDrawSurface7"
       ],
-      "dh": "d9628a02"
+      "dh": "d9628a02",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "pPalette",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D3DSUBTILE_InsertNodeAtTail",
@@ -67,7 +95,17 @@
         "D3DSubtileCacheNodeStrc",
         "D3DSubtileCacheStrc"
       ],
-      "dh": "3d5a411c"
+      "dh": "3d5a411c",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ],
+        [
+          "pCache",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D3DSUBTILE_RemoveNodeByIndex",
@@ -88,7 +126,17 @@
         "D3DSubtileCacheNodeStrc",
         "D3DSubtileCacheStrc"
       ],
-      "dh": "727fb66e"
+      "dh": "727fb66e",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D3DSUBTILE_AllocateNodeFromFreeList",
@@ -107,7 +155,13 @@
         "D3DSubtileCacheNodeStrc",
         "D3DSubtileCacheStrc"
       ],
-      "dh": "8b10791f"
+      "dh": "8b10791f",
+      "paramStorage": [
+        [
+          "pCache",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D3DSUBTILE_PromoteNodeToMRU",
@@ -131,7 +185,17 @@
       "usedTypes": [
         "D3DSubtileCacheStrc"
       ],
-      "dh": "779c3075"
+      "dh": "779c3075",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D3DSUBTILE_InvalidateByIndex",
@@ -151,7 +215,17 @@
       "usedTypes": [
         "D3DSubtileCacheStrc"
       ],
-      "dh": "54957f1e"
+      "dh": "54957f1e",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nTileIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D3DSUBTILE_Free",
@@ -175,7 +249,17 @@
         "D3DSubtileCacheStrc",
         "IUnknown"
       ],
-      "dh": "f99f9ca0"
+      "dh": "f99f9ca0",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "bInvalidateAll",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D3DSUBTILE_EnsureAvailableNode",
@@ -196,7 +280,13 @@
         "D3DSubtileCacheStrc",
         "int32_t"
       ],
-      "dh": "14cf22c9"
+      "dh": "14cf22c9",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

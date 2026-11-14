@@ -74,7 +74,13 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "91bd3ece"
+      "dh": "91bd3ece",
+      "paramStorage": [
+        [
+          "nBaseY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawPartyButtonFrame",
@@ -96,7 +102,25 @@
         "DC6",
         "int32_t"
       ],
-      "dh": "970d74c4"
+      "dh": "970d74c4",
+      "paramStorage": [
+        [
+          "pDC6",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFrame",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "FreeAllUiParty",
@@ -130,7 +154,41 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "1e4a27ab"
+      "dh": "1e4a27ab",
+      "paramStorage": [
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ],
+        [
+          "nDC6OrCallback",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFrame",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nButtonType",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nData1",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nData2",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pButton",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SetupPartyButtons",
@@ -157,7 +215,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ca660a10"
+      "dh": "ca660a10",
+      "paramStorage": [
+        [
+          "pRoster",
+          "EBX:4"
+        ],
+        [
+          "pUiParty",
+          "ESI:4"
+        ],
+        [
+          "nPositionY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "AllocUiPartyFromRoster",
@@ -186,7 +258,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9072644d"
+      "dh": "9072644d",
+      "paramStorage": [
+        [
+          "pRoster",
+          "EAX:4"
+        ],
+        [
+          "nPositionY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0049a2a0",
@@ -226,7 +308,25 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "6d9c9297"
+      "dh": "6d9c9297",
+      "paramStorage": [
+        [
+          "szPlayerName",
+          "EDX:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bNarrowMode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawPartyMemberClass",
@@ -248,7 +348,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "de9adb83"
+      "dh": "de9adb83",
+      "paramStorage": [
+        [
+          "nScreenY",
+          "EAX:4"
+        ],
+        [
+          "nCharType",
+          "ECX:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawPartyButtonLabelText",
@@ -271,7 +385,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "3a4efd11"
+      "dh": "3a4efd11",
+      "paramStorage": [
+        [
+          "eButtonType",
+          "ECX:4"
+        ],
+        [
+          "nBaseY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bHostileMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPartyId",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "UI_DrawPartyLeaveButton",
@@ -383,7 +515,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "65a26059"
+      "dh": "65a26059",
+      "paramStorage": [
+        [
+          "pUiParty",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawPartyMemberLevelName",
@@ -411,7 +549,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "5ec27a11"
+      "dh": "5ec27a11",
+      "paramStorage": [
+        [
+          "pUiParty",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawPartyAcceptButton",
@@ -474,7 +626,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "92d03382"
+      "dh": "92d03382",
+      "paramStorage": [
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "UI_CalculateCenteredTextXPosition",
@@ -497,7 +667,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "1562557e"
+      "dh": "1562557e",
+      "paramStorage": [
+        [
+          "nLocaleId",
+          "CX:2"
+        ],
+        [
+          "nCenterX",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ShowToolTipOnPartyButtons",
@@ -521,7 +701,25 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "8f8edeef"
+      "dh": "8f8edeef",
+      "paramStorage": [
+        [
+          "nLocaleIdLine1",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nLocaleIdLine2",
+          "AX:2"
+        ],
+        [
+          "nOffsetX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIsTwoLiner",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UI_PartyWindow_II",
@@ -579,7 +777,37 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "be368e9e"
+      "dh": "be368e9e",
+      "paramStorage": [
+        [
+          "nLocaleId1",
+          "CX:2"
+        ],
+        [
+          "nLocaleId2",
+          "Stack[0x4]:2"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine2Y",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nOffsetX",
+          "EBX:4"
+        ],
+        [
+          "nLine1Y",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_DrawPlayerTooltip",
@@ -615,7 +843,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "1f80566c"
+      "dh": "1f80566c",
+      "paramStorage": [
+        [
+          "pRoster",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_HandlePartyButtonTooltips",
@@ -693,7 +927,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0174e125"
+      "dh": "0174e125",
+      "paramStorage": [
+        [
+          "eButtonType",
+          "EAX:4"
+        ],
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_HandlePartyButtonClick",
@@ -718,7 +962,21 @@
         "D2UiPartyStrc",
         "int32_t"
       ],
-      "dh": "c3195423"
+      "dh": "c3195423",
+      "paramStorage": [
+        [
+          "pUiParty",
+          "ECX:4"
+        ],
+        [
+          "pRoster",
+          "ESI:4"
+        ],
+        [
+          "nButtonIdx",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_PartyScreenLeftClick",
@@ -749,7 +1007,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "92d92570"
+      "dh": "92d92570",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_PartyScreenMouseUp",
@@ -788,7 +1052,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "f9f57c6e"
+      "dh": "f9f57c6e",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LoadPartyDC6",
@@ -845,7 +1115,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "63780caf"
+      "dh": "63780caf",
+      "paramStorage": [
+        [
+          "nCharLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawPartyMembers",

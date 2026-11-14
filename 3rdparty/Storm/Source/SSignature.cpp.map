@@ -20,7 +20,13 @@
       "usedTypes": [
         "BigData *"
       ],
-      "dh": "60ddc01f"
+      "dh": "60ddc01f",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SSIG_FreeBigNum",
@@ -39,7 +45,13 @@
       "usedTypes": [
         "void *"
       ],
-      "dh": "a2281b35"
+      "dh": "a2281b35",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SSIG_FindSignatureMarker",
@@ -59,7 +71,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "487dfeae"
+      "dh": "487dfeae",
+      "paramStorage": [
+        [
+          "nOffset",
+          "ECX:4"
+        ],
+        [
+          "nTotalSize",
+          "EDX:4"
+        ],
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnFoundOffset",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SSIG_HashData",
@@ -83,7 +113,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e48d9795"
+      "dh": "e48d9795",
+      "paramStorage": [
+        [
+          "nDataLen",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pData",
+          "ESI:4"
+        ],
+        [
+          "pDigestOut",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SSignatureVerifyStream_Begin",
@@ -106,7 +150,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d521a3c4"
+      "dh": "d521a3c4",
+      "paramStorage": [
+        [
+          "ppContext",
+          "ECX:4"
+        ],
+        [
+          "nModulusLen",
+          "EDX:4"
+        ],
+        [
+          "nExponentLen",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SSignatureVerifyStream_GetSignatureLength",
@@ -125,7 +183,13 @@
         "D2SsigContextStrc",
         "uint32_t"
       ],
-      "dh": "09532965"
+      "dh": "09532965",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SSignatureVerifyStream_ProvideData",
@@ -148,7 +212,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "efd6a94d"
+      "dh": "efd6a94d",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pData",
+          "EDX:4"
+        ],
+        [
+          "nDataLen",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SSIG_InitRSAPair",
@@ -168,7 +246,13 @@
         "BigData *",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "9fe3ee8c"
+      "dh": "9fe3ee8c",
+      "paramStorage": [
+        [
+          "pRSAPair",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SSIG_FreeRSAPair",
@@ -188,7 +272,13 @@
         "BigData *",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "033e55b9"
+      "dh": "033e55b9",
+      "paramStorage": [
+        [
+          "pRSAPair",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SSignatureGenerate",
@@ -219,7 +309,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1c45aa38"
+      "dh": "1c45aa38",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "pnDataLen",
+          "EDX:4"
+        ],
+        [
+          "pModulusBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nKeySize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPrivateExponent",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nPrivateExponentLen",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pPublicExponent",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nPublicExponentLen",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SSignatureVerifyStream_Finish",
@@ -249,7 +373,21 @@
         "D2SsigContextStrc",
         "uint32_t"
       ],
-      "dh": "e20abb0b"
+      "dh": "e20abb0b",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pModulusBytes",
+          "EDX:4"
+        ],
+        [
+          "pExponentBytes",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SSignatureVerify",
@@ -271,7 +409,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "efbca9d9"
+      "dh": "efbca9d9",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nDataLen",
+          "EDX:4"
+        ],
+        [
+          "pModulusBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nModulusLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pExponentBytes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nExponentLen",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_Round1",
@@ -289,7 +453,33 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "4585be1b"
+      "dh": "4585be1b",
+      "paramStorage": [
+        [
+          "nA",
+          "ECX:4"
+        ],
+        [
+          "pnB",
+          "EDX:4"
+        ],
+        [
+          "nC",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nD",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnE",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnW",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_Round2",
@@ -307,7 +497,33 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "5e75ce81"
+      "dh": "5e75ce81",
+      "paramStorage": [
+        [
+          "nA",
+          "ECX:4"
+        ],
+        [
+          "pnB",
+          "EDX:4"
+        ],
+        [
+          "nC",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nD",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnE",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnW",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_Round3",
@@ -325,7 +541,33 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "829277cd"
+      "dh": "829277cd",
+      "paramStorage": [
+        [
+          "nA",
+          "ECX:4"
+        ],
+        [
+          "pnB",
+          "EDX:4"
+        ],
+        [
+          "nC",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nD",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnE",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnW",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_Round4",
@@ -343,7 +585,33 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "bc83dcf1"
+      "dh": "bc83dcf1",
+      "paramStorage": [
+        [
+          "nA",
+          "ECX:4"
+        ],
+        [
+          "pnB",
+          "EDX:4"
+        ],
+        [
+          "nC",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nD",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnE",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnW",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00425830",
@@ -362,7 +630,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "944075f2"
+      "dh": "944075f2",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Sha1_Pump",
@@ -380,7 +658,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "60a0fa3e"
+      "dh": "60a0fa3e",
+      "paramStorage": [
+        [
+          "pHashState",
+          "ECX:4"
+        ],
+        [
+          "pBuffer",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Sha1_Initialize",
@@ -399,7 +687,13 @@
       "usedTypes": [
         "D2Sha1ContextStrc"
       ],
-      "dh": "ddf3b33a"
+      "dh": "ddf3b33a",
+      "paramStorage": [
+        [
+          "pCtx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Sha1_Append",
@@ -420,7 +714,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "323e6189"
+      "dh": "323e6189",
+      "paramStorage": [
+        [
+          "pCtx",
+          "ECX:4"
+        ],
+        [
+          "pData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLen",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SSIG_StoreBigEndian64",
@@ -439,7 +747,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bc3f8780"
+      "dh": "bc3f8780",
+      "paramStorage": [
+        [
+          "pbOut",
+          "ECX:4"
+        ],
+        [
+          "dwHighWord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00425ee0",
@@ -457,7 +779,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "cd4c55c2"
+      "dh": "cd4c55c2",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Sha1_Finalize",
@@ -479,7 +811,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "71dbb79a"
+      "dh": "71dbb79a",
+      "paramStorage": [
+        [
+          "pCtx",
+          "ECX:4"
+        ],
+        [
+          "pDigest",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SSIGNATURE_RsaPowMod",
@@ -498,7 +840,25 @@
       "usedTypes": [
         "BigData *"
       ],
-      "dh": "fd6f94d1"
+      "dh": "fd6f94d1",
+      "paramStorage": [
+        [
+          "ppResult",
+          "ECX:4"
+        ],
+        [
+          "ppBase",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppExponent",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppModulus",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SSIGNATURE_RsaExportZeroPadded",
@@ -520,7 +880,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "294766b2"
+      "dh": "294766b2",
+      "paramStorage": [
+        [
+          "ppBig",
+          "ECX:4"
+        ],
+        [
+          "pOutBuf",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBufLen",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SSIGNATURE_RsaLoadComponent",
@@ -540,7 +914,21 @@
         "BigData *",
         "uint32_t"
       ],
-      "dh": "1f45f6ca"
+      "dh": "1f45f6ca",
+      "paramStorage": [
+        [
+          "ppBig",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nByteCount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CryptRSA_Prepare",
@@ -561,7 +949,29 @@
         "BigData *",
         "uint32_t"
       ],
-      "dh": "0508e52f"
+      "dh": "0508e52f",
+      "paramStorage": [
+        [
+          "ppKey",
+          "ECX:4"
+        ],
+        [
+          "pModulusBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nModulusLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pExponentBytes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nExponentLen",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CryptRSA_Process",
@@ -589,7 +999,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "41fdca18"
+      "dh": "41fdca18",
+      "paramStorage": [
+        [
+          "ppKey",
+          "ECX:4"
+        ],
+        [
+          "pData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDataLen",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SSIG_FreeBigNum_Unref_00518b80",
@@ -608,7 +1032,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "f9717693"
+      "dh": "f9717693",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6c9ef8",
@@ -630,7 +1060,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "5354c791"
+      "dh": "5354c791",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6c9f28",
@@ -652,7 +1100,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "edc70c1c"
+      "dh": "edc70c1c",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

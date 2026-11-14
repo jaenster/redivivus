@@ -19,7 +19,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "24c35350"
+      "dh": "24c35350",
+      "paramStorage": [
+        [
+          "pX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLG_MapWorldToScreenCoords",
@@ -37,7 +47,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "5ce41fb9"
+      "dh": "5ce41fb9",
+      "paramStorage": [
+        [
+          "pX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLG_CoordsWorldToScreenTile",
@@ -55,7 +75,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "3bf7dfba"
+      "dh": "3bf7dfba",
+      "paramStorage": [
+        [
+          "pX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CoordsMiniMapToScreen",
@@ -73,7 +103,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f1ef019c"
+      "dh": "f1ef019c",
+      "paramStorage": [
+        [
+          "pX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLG_OrthToIsoCoordsDiv160",
@@ -91,7 +131,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "35f58233"
+      "dh": "35f58233",
+      "paramStorage": [
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SizeMiniMapToScreen",
@@ -109,7 +167,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "afa34871"
+      "dh": "afa34871",
+      "paramStorage": [
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRLG_OrthToIsoCoordsDiv32",
@@ -127,7 +203,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "fb0a01b7"
+      "dh": "fb0a01b7",
+      "paramStorage": [
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SizeMapToScreen",
@@ -145,7 +239,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "55f8c593"
+      "dh": "55f8c593",
+      "paramStorage": [
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SizeRoomToWorld",
@@ -163,7 +275,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "493fa2a7"
+      "dh": "493fa2a7",
+      "paramStorage": [
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SizeWorldToRoom",
@@ -181,7 +311,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "29383b15"
+      "dh": "29383b15",
+      "paramStorage": [
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRLG_WorldToScreenShift5",
@@ -199,7 +347,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "548d2100"
+      "dh": "548d2100",
+      "paramStorage": [
+        [
+          "pX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLG_WorldToScreenNoShift",
@@ -217,7 +375,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a6127147"
+      "dh": "a6127147",
+      "paramStorage": [
+        [
+          "pX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CoordsRoomToWorld",
@@ -235,7 +403,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "7b39e9c4"
+      "dh": "7b39e9c4",
+      "paramStorage": [
+        [
+          "pX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

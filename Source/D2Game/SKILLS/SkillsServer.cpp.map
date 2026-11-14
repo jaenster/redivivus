@@ -42,7 +42,21 @@
         "eD2PlayerAnimMode",
         "uint32_t"
       ],
-      "dh": "e06097df"
+      "dh": "e06097df",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "nTargetFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ClampHpManaStamina",
@@ -67,7 +81,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1a35cf95"
+      "dh": "1a35cf95",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_InvokeCallbackNoTarget",
@@ -88,7 +108,25 @@
         "SGAMEDATA",
         "pfnSkillNoTargetCb"
       ],
-      "dh": "1f2e96ca"
+      "dh": "1f2e96ca",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCallbackArg",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_IsRoomInRange",
@@ -109,7 +147,25 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "189939dc"
+      "dh": "189939dc",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nRadius",
+          "EDI:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ApplyAreaEffect",
@@ -146,7 +202,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5d4ff4d0"
+      "dh": "5d4ff4d0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwTargetFlags",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pCallbackArg",
+          "Stack[0x18]:4"
+        ],
+        [
+          "bSkipNoAuraMonsters",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x20]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ApplyDamageToTarget",
@@ -173,7 +275,29 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "22e4e017"
+      "dh": "22e4e017",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ApplyDamageCallback",
@@ -195,7 +319,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "ecea7951"
+      "dh": "ecea7951",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ApplyAreaDamage",
@@ -218,7 +352,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f8314bd3"
+      "dh": "f8314bd3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nCollisionFlags",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_AreaEffect_FindNearestUnit",
@@ -242,7 +406,17 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "040d28d2"
+      "dh": "040d28d2",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ApplyAreaHitAtUnit",
@@ -268,7 +442,25 @@
         "fpAreaHitUnitFilter",
         "int32_t"
       ],
-      "dh": "357bc1af"
+      "dh": "357bc1af",
+      "paramStorage": [
+        [
+          "nGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nRange",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_AreaEffect_IncrementHitCount",
@@ -288,7 +480,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "e80cfc8d"
+      "dh": "e80cfc8d",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ApplyAreaHitAtPos",
@@ -311,7 +513,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "396d3b44"
+      "dh": "396d3b44",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCollisionFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_AreaEffect_TrackBestUnitByUnitId",
@@ -332,7 +560,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "e2927a11"
+      "dh": "e2927a11",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_FindNextUnitInAreaByGUID",
@@ -355,7 +593,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "125b3cf7"
+      "dh": "125b3cf7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCollisionFlags",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nAfterGUID",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnUnitCount",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_UpdatePetMax",
@@ -386,7 +658,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "9ee21012"
+      "dh": "9ee21012",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_UseChargedSkillCharge",
@@ -418,7 +704,25 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "8d110147"
+      "dh": "8d110147",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWeaponUnitId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CalculateManaUse",
@@ -450,7 +754,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8d9436d5"
+      "dh": "8d9436d5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_DeductManaCost",
@@ -473,7 +795,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "30de00f5"
+      "dh": "30de00f5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nManaCost",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CheckManaForCast",
@@ -501,7 +833,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fb2d8f12"
+      "dh": "fb2d8f12",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_FindUnitsInRange",
@@ -529,7 +867,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8ab5027b"
+      "dh": "8ab5027b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nRange",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_FreeUnitFindData",
@@ -550,7 +910,17 @@
         "D2UnitFindDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "6d21b1ad"
+      "dh": "6d21b1ad",
+      "paramStorage": [
+        [
+          "nGame",
+          "ECX:4"
+        ],
+        [
+          "pUnitFindData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SetSrvDoFuncAndAttackTarget",
@@ -572,7 +942,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "0dfaea32"
+      "dh": "0dfaea32",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BowDecreaseQuantity",
@@ -602,7 +986,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "3d587ecc"
+      "dh": "3d587ecc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveQuanityOnUse",
@@ -631,7 +1029,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "22489fc9"
+      "dh": "22489fc9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CheckThrowableAmmo",
@@ -662,7 +1070,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "90e6f618"
+      "dh": "90e6f618",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ApplySkillToHitAndDamage",
@@ -685,7 +1099,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "723e4642"
+      "dh": "723e4642",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "pWeapon",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetWeaponBySkillType",
@@ -705,7 +1133,17 @@
         "D2InventoryStrc",
         "int32_t"
       ],
-      "dh": "942e0bdb"
+      "dh": "942e0bdb",
+      "paramStorage": [
+        [
+          "nSkillType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInventory",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Transmorgify",
@@ -730,7 +1168,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "391073dd"
+      "dh": "391073dd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsSkillBoundToClass",
@@ -750,7 +1202,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "46421b2f"
+      "dh": "46421b2f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nSkillId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2UpdateState",
@@ -778,7 +1240,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "3db6b51f"
+      "dh": "3db6b51f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "bRemoveOnly",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SetSkillDataByEType",
@@ -798,7 +1274,25 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "5b6b873a"
+      "dh": "5b6b873a",
+      "paramStorage": [
+        [
+          "pUnitStrc",
+          "ECX:4"
+        ],
+        [
+          "nUnitLow",
+          "EDX:4"
+        ],
+        [
+          "dwValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_AppendDamageToUnitEvent",
@@ -821,7 +1315,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b9ab6ea1"
+      "dh": "b9ab6ea1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pEvent",
+          "EDX:4"
+        ],
+        [
+          "eSkillType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "randomizeValue",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDuration",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pdwHitSfxOut",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnSkillETypeOut",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SrvStFn01_Attack",
@@ -850,7 +1374,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cb39e2d9"
+      "dh": "cb39e2d9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SrvStFn65_Throw",
@@ -874,7 +1416,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "3e7b6b61"
+      "dh": "3e7b6b61",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SrvStFn02_Kick",
@@ -900,7 +1460,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "555d755b"
+      "dh": "555d755b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SrvStFn03_Unsummon",
@@ -929,7 +1507,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "b93ad810"
+      "dh": "b93ad810",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_004_RemovePetBySkillParam",
@@ -954,7 +1550,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "fbaeb44a"
+      "dh": "fbaeb44a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ValidateSkillTarget",
@@ -981,7 +1595,21 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "380c8a66"
+      "dh": "380c8a66",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CalcPerDelayInterval",
@@ -1004,7 +1632,29 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "e1b7b50d"
+      "dh": "e1b7b50d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSkillData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SetPeriodicSkillTimer",
@@ -1029,7 +1679,29 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "5cf54d17"
+      "dh": "5cf54d17",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bReset",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SetPeriodicStatOrSkillTimer",
@@ -1054,7 +1726,33 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "c6ff533c"
+      "dh": "c6ff533c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bPeriodicSkill",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "LinkPortal",
@@ -1099,7 +1797,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "16a9baad"
+      "dh": "16a9baad",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pOwner",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLevelId2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_SpawnPortal",
@@ -1141,7 +1861,45 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "9ad2431c"
+      "dh": "9ad2431c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x10]:4"
+        ],
+        [
+          "ppPortal",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0x18]:4"
+        ],
+        [
+          "bIgnoreFindSpawnLocationMaybe",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetTargetOrCursorPos",
@@ -1168,7 +1926,25 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "f4006403"
+      "dh": "f4006403",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pnOutX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnOutY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_NormalizeDirectionMin",
@@ -1183,7 +1959,17 @@
       "calledFunctions": [
         "SKILLS_NormalizeDirectionMin"
       ],
-      "dh": "111b6edd"
+      "dh": "111b6edd",
+      "paramStorage": [
+        [
+          "pnDx",
+          "ECX:4"
+        ],
+        [
+          "pnDy",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_NormalizeDirectionPerp",
@@ -1198,7 +1984,17 @@
       "calledFunctions": [
         "SKILLS_NormalizeDirectionPerp"
       ],
-      "dh": "c2b57c44"
+      "dh": "c2b57c44",
+      "paramStorage": [
+        [
+          "pnDx",
+          "ECX:4"
+        ],
+        [
+          "pnDy",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CreateMissileRing",
@@ -1226,7 +2022,37 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "75652674"
+      "dh": "75652674",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMissileTxtNo",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVelocity",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CreateMissileStar",
@@ -1250,7 +2076,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "9d07afef"
+      "dh": "9d07afef",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nMissileCount",
+          "EDX:4"
+        ],
+        [
+          "pSkillArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SpawnWeaponForHand",
@@ -1286,7 +2126,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ac09b6dc"
+      "dh": "ac09b6dc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "szItemCode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_DispatchStateActiveFunc",
@@ -1308,7 +2162,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "6ed30484"
+      "dh": "6ed30484",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_DispatchSrvDoFunc",
@@ -1330,7 +2202,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a02f61bc"
+      "dh": "a02f61bc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nSrvDoFuncIdx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ClearNecroPet",
@@ -1359,7 +2253,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bcd0cfe4"
+      "dh": "bcd0cfe4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_InitSummonedPet",
@@ -1383,7 +2287,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "39678b36"
+      "dh": "39678b36",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGame",
+          "EAX:4"
+        ],
+        [
+          "pMonsterCastPet",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CreateSummon",
@@ -1422,7 +2340,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b531ba6c"
+      "dh": "b531ba6c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPetCreation",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_DropItemByCode",
@@ -1456,7 +2384,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "913be606"
+      "dh": "913be606",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "szItemCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eQuality",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ForEachUnitInRangeCallback",
@@ -1491,7 +2437,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "812fda52"
+      "dh": "812fda52",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitFindFlags",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDistance",
+          "Stack[0xc]:4"
+        ],
+        [
+          "ppfnProc",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ForEachUnitBaalWave",
@@ -1525,7 +2497,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0a9926d7"
+      "dh": "0a9926d7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pBaalWaveParam",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SetupBaalWaveParams",
@@ -1549,7 +2531,41 @@
         "fpBaalWaveFunction",
         "int32_t"
       ],
-      "dh": "bf77eb27"
+      "dh": "bf77eb27",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitFindFlags",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pfnBaalWave",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_UpdatePassivesAndPets",
@@ -1571,7 +2587,13 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "235e0b70"
+      "dh": "235e0b70",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_AllocSkillAndUpdatePassives",
@@ -1596,7 +2618,17 @@
         "SGAMEDATA",
         "eD2Skills"
       ],
-      "dh": "fbb3e047"
+      "dh": "fbb3e047",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetSkill",
@@ -1621,7 +2653,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "3e2db219"
+      "dh": "3e2db219",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bBool",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_FreeSkillAndUpdatePassives",
@@ -1645,7 +2695,17 @@
         "SGAMEDATA",
         "eD2Skills"
       ],
-      "dh": "33d2f935"
+      "dh": "33d2f935",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_IsSkillEquipped",
@@ -1668,7 +2728,17 @@
         "D2UnitStrc",
         "eD2Skills"
       ],
-      "dh": "bbf840d2"
+      "dh": "bbf840d2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ApplyAllPassiveStates",
@@ -1695,7 +2765,13 @@
         "eD2Skills",
         "eD2States"
       ],
-      "dh": "ba0a074a"
+      "dh": "ba0a074a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CalcSkillMinMaxToHit",
@@ -1720,7 +2796,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "320aec72"
+      "dh": "320aec72",
+      "paramStorage": [
+        [
+          "pnMinMaxToHit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "eSkill",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CalcPetSkillDamage",
@@ -1740,7 +2830,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "ea432ef4"
+      "dh": "ea432ef4",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pnDamageOut",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetDamageOnEvent",
@@ -1768,7 +2868,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cabb7503"
+      "dh": "cabb7503",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pEvent",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_AddRandomSkillDamage",
@@ -1792,7 +2910,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9eccc332"
+      "dh": "9eccc332",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pDamageAccum",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetWeaponClassBitfield",
@@ -1813,7 +2949,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f0d309e0"
+      "dh": "f0d309e0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SetupAnimTimerPercent",
@@ -1835,7 +2977,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "866051b0"
+      "dh": "866051b0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nPercent",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ForceAttackTarget",
@@ -1865,7 +3017,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "55a22b8a"
+      "dh": "55a22b8a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2CheckCorpseConsumed",
@@ -1886,7 +3052,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f1ef811d"
+      "dh": "f1ef811d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_UnitFindTestCallback",
@@ -1908,7 +3084,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7f0b8a82"
+      "dh": "7f0b8a82",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkillParam",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_FindNearbyCorpse",
@@ -1940,7 +3126,25 @@
         "UNITFINDTEST",
         "int32_t"
       ],
-      "dh": "3bcbfc5f"
+      "dh": "3bcbfc5f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxCorpses",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CheckMissileCollision",
@@ -1970,7 +3174,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e2257139"
+      "dh": "e2257139",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetMeleeRangePlusFour",
@@ -1990,7 +3208,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5516f86d"
+      "dh": "5516f86d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ApplyAttackRateBuff",
@@ -2015,7 +3239,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "06cb663d"
+      "dh": "06cb663d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nAttackRate",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_FreeMonsterMinions",
@@ -2036,7 +3270,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "a6b98ac8"
+      "dh": "a6b98ac8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetUnitWalkVelocity",
@@ -2055,7 +3295,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "251f81e9"
+      "dh": "251f81e9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetSummonMonsterClassId",
@@ -2076,7 +3322,37 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "234a4230"
+      "dh": "234a4230",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bUseMonsterSpawnData",
+          "EDX:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSummonParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPtr",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnSpawnX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnSpawnY",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CalcToHitAndApply",
@@ -2102,7 +3378,41 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a97f532a"
+      "dh": "a97f532a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nExtraRange",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CalcMissileToHit",
@@ -2126,7 +3436,37 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "30713355"
+      "dh": "30713355",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwResultFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nToHitBonusExtra",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nExtraRange",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "D2SetAuraEvent",
@@ -2150,7 +3490,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "759cbe73"
+      "dh": "759cbe73",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nUnitEvent",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nItemEventFuncId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nQueueNo",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nOwnerKey",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ApplyEffectToUnitsInRange",
@@ -2185,7 +3559,33 @@
         "pfnSkillRangeCb",
         "uint32_t"
       ],
-      "dh": "dc2d1299"
+      "dh": "dc2d1299",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nTargetFlags",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0x8]:4"
+        ],
+        [
+          "fpCallback",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pCallbackCtx",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DefaultExpireFunction",
@@ -2216,7 +3616,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7ef20aa3"
+      "dh": "7ef20aa3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetStateWithExpiryTime",
@@ -2270,7 +3684,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c75e7502"
+      "dh": "c75e7502",
+      "paramStorage": [
+        [
+          "pStateExArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SetStateWithCurse",
@@ -2299,7 +3719,37 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "4b3539fd"
+      "dh": "4b3539fd",
+      "paramStorage": [
+        [
+          "pUnitStrc",
+          "ECX:4"
+        ],
+        [
+          "pAttacker",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStat",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eAuraState",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pFunction",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "CreatingAMissile",
@@ -2330,7 +3780,49 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "36418d39"
+      "dh": "36418d39",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nSrvMissle",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nOffsetX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nOffsetY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "bConsumeAmmo",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CreateMissileAtTarget",
@@ -2358,7 +3850,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e1229915"
+      "dh": "e1229915",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CreateMissileFromUnit",
@@ -2388,7 +3910,49 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "8f1c6d25"
+      "dh": "8f1c6d25",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nMissileId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nOffsetX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nOffsetY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "bConsumeAmmo",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "SetTimeoutEffect",
@@ -2416,7 +3980,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "c4647159"
+      "dh": "c4647159",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "timeoutFrame",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ApplySkillDelay",
@@ -2439,7 +4017,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "e71c3b20"
+      "dh": "e71c3b20",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_001_ShootArrow",
@@ -2480,7 +4076,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "73dd8f6f"
+      "dh": "73dd8f6f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_002_GenericMeleeHit",
@@ -2517,7 +4131,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "fc3fecf5"
+      "dh": "fc3fecf5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pAttacker",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_003_ThrowWeaponLeftHand",
@@ -2549,7 +4181,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "fd423956"
+      "dh": "fd423956",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_005_ThrowWeaponRightHand",
@@ -2581,7 +4231,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "f94e68bd"
+      "dh": "f94e68bd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SrvStartSkill",
@@ -2614,7 +4282,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "08b98bac"
+      "dh": "08b98bac",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bSkipManaCost",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_SpawnMissileFunction",
@@ -2660,7 +4350,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2e71d4e8"
+      "dh": "2e71d4e8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bApplyCastCost",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nParam3",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_OnModeComplete",
@@ -2698,7 +4418,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bcfab0dc"
+      "dh": "bcfab0dc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_PeriodicSkillSpawnAndTimer",
@@ -2724,7 +4454,17 @@
         "SGAMEDATA",
         "eD2Skills"
       ],
-      "dh": "9ed84b43"
+      "dh": "9ed84b43",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_PeriodicSkillsCallback",
@@ -2759,7 +4499,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "a914e6f3"
+      "dh": "a914e6f3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_PeriodicStatsCallback",
@@ -2784,7 +4542,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "64bb8cbc"
+      "dh": "64bb8cbc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nOwnerGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_InitAuraSkill",
@@ -2820,7 +4596,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "c22ae40b"
+      "dh": "c22ae40b",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_AllocSkillPoint",
@@ -2860,7 +4650,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "034a8a6e"
+      "dh": "034a8a6e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Server_SelectSkill",
@@ -2904,7 +4704,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d156212b"
+      "dh": "d156212b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "leftOrRight",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ownerId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ClearSkills",
@@ -2939,7 +4757,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6cb809d1"
+      "dh": "6cb809d1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_ApplyStunState",
@@ -2974,7 +4802,21 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "4867f604"
+      "dh": "4867f604",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eState",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_StunExpireAndRestoreAi",
@@ -3000,7 +4842,21 @@
         "SGAMEDATA",
         "eD2States"
       ],
-      "dh": "6fce8f54"
+      "dh": "6fce8f54",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "pStatListEx",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CreateTimedAuraStatList",
@@ -3032,7 +4888,33 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "e10bb37d"
+      "dh": "e10bb37d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eState",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MAINMENU_ShowPopupWithCancel_Unref_005c6cb0",
@@ -3052,7 +4934,17 @@
         "WCHAR",
         "eD2States"
       ],
-      "dh": "4e70b5b9"
+      "dh": "4e70b5b9",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "pfnMenuInstance",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

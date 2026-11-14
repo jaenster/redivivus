@@ -20,7 +20,13 @@
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t"
       ],
-      "dh": "962c5d43"
+      "dh": "962c5d43",
+      "paramStorage": [
+        [
+          "nLockedHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unlink",
@@ -41,7 +47,13 @@
         "TSLink<SGAMEDATA>",
         "intptr_t"
       ],
-      "dh": "47717e85"
+      "dh": "47717e85",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RawNext",
@@ -60,7 +72,13 @@
         "SGAMEDATA",
         "TSExplicitList<SGAMEDATA, -572662307>"
       ],
-      "dh": "4af98ec9"
+      "dh": "4af98ec9",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Next",
@@ -80,7 +98,13 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "intptr_t"
       ],
-      "dh": "ea10299d"
+      "dh": "ea10299d",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unlock",
@@ -99,7 +123,13 @@
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t"
       ],
-      "dh": "6fbe9492"
+      "dh": "6fbe9492",
+      "paramStorage": [
+        [
+          "nLockedHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Delete",
@@ -119,7 +149,13 @@
         "SGAMEDATA",
         "TSHashTable<SGAMEDATA, HASHKEY_NONE>"
       ],
-      "dh": "9768c2fe"
+      "dh": "9768c2fe",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Delete",
@@ -139,7 +175,13 @@
         "SGAMEDATA",
         "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>"
       ],
-      "dh": "975f626e"
+      "dh": "975f626e",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DeleteUnlock",
@@ -160,7 +202,17 @@
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t"
       ],
-      "dh": "13f8765d"
+      "dh": "13f8765d",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLockedHandle",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DeleteNode",
@@ -183,7 +235,13 @@
         "TSLink<SGAMEDATA>",
         "intptr_t"
       ],
-      "dh": "0f8fd1ab"
+      "dh": "0f8fd1ab",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Ptr",
@@ -204,7 +262,17 @@
         "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
         "uint32_t"
       ],
-      "dh": "3f7aff61"
+      "dh": "3f7aff61",
+      "paramStorage": [
+        [
+          "dwHashVal",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pKey",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Ptr",
@@ -224,7 +292,13 @@
         "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>",
         "uint32_t"
       ],
-      "dh": "5a47ff40"
+      "dh": "5a47ff40",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GenerateUniqueHandle",
@@ -267,7 +341,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8da118ae"
+      "dh": "8da118ae",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLockedHandle",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bForWriting",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GrowListArray",
@@ -314,7 +402,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "21cc95a1"
+      "dh": "21cc95a1",
+      "paramStorage": [
+        [
+          "nSlot",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "New",
@@ -338,7 +432,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2fb437f5"
+      "dh": "2fb437f5",
+      "paramStorage": [
+        [
+          "dwHashVal",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pKey",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nExtraBytes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "New",
@@ -359,7 +471,13 @@
         "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>",
         "uint32_t"
       ],
-      "dh": "f59edf65"
+      "dh": "f59edf65",
+      "paramStorage": [
+        [
+          "pHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NewLock",
@@ -382,7 +500,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "57181cba"
+      "dh": "57181cba",
+      "paramStorage": [
+        [
+          "pHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLockedHandle",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

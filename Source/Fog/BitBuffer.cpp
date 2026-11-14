@@ -228,12 +228,11 @@ void __stdcall InitBitBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pBytes, siz
 }
 
 int32_t __stdcall GetNextPositon(D2BitBufferStrc * pBitBuffer) {
-    size_t nNextPos = pBitBuffer->nCurrentPos;
     if (pBitBuffer->nBitsAtPos) {
-      nNextPos++;
+      return (size_t)((size_t)pBitBuffer->nCurrentPos + 1);
     }
 
-    return nNextPos;
+    return (size_t)pBitBuffer->nCurrentPos;
 }
 
 void __stdcall WriteValueToBitBuffer(D2BitBufferStrc * pBitBuffer, int32_t nValue, int32_t nSizeInBits) {

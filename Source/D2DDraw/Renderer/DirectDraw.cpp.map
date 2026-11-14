@@ -20,7 +20,25 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "e5542232"
+      "dh": "e5542232",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "PerspectiveScalePosition_Unref_005043d0",
@@ -38,7 +56,33 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ffa182b5"
+      "dh": "ffa182b5",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nAngle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pXAdjust",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pYAdjust",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bOrder",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Initialize",
@@ -65,7 +109,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3f72afc7"
+      "dh": "3f72afc7",
+      "paramStorage": [
+        [
+          "hInstance",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClearCaches",
@@ -113,7 +163,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "56e96d5c"
+      "dh": "56e96d5c",
+      "paramStorage": [
+        [
+          "pWidth",
+          "ECX:4"
+        ],
+        [
+          "pHeight",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetPalette",
@@ -134,7 +194,13 @@
         "PALETTEENTRY",
         "uint8_t"
       ],
-      "dh": "0a08c1ad"
+      "dh": "0a08c1ad",
+      "paramStorage": [
+        [
+          "pPalette",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetPaletteTable",
@@ -152,7 +218,13 @@
       "usedTypes": [
         "BYTE *"
       ],
-      "dh": "51ec669d"
+      "dh": "51ec669d",
+      "paramStorage": [
+        [
+          "ppPaletteTable",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UpdateScaleFactor",
@@ -170,7 +242,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "55f67e66"
+      "dh": "55f67e66",
+      "paramStorage": [
+        [
+          "nScaleFactor",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetGamma",
@@ -189,7 +267,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b16a2492"
+      "dh": "b16a2492",
+      "paramStorage": [
+        [
+          "nGamma",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CheckGamma",
@@ -222,7 +306,21 @@
       "calledFunctions": [
         "SetGlobalLight"
       ],
-      "dh": "25070f88"
+      "dh": "25070f88",
+      "paramStorage": [
+        [
+          "nRed",
+          "ECX:4"
+        ],
+        [
+          "nGreen",
+          "EDX:4"
+        ],
+        [
+          "nBlue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetPerspectiveScale",
@@ -240,7 +338,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9d570651"
+      "dh": "9d570651",
+      "paramStorage": [
+        [
+          "nScaleX",
+          "ECX:4"
+        ],
+        [
+          "nScaleY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AdjustPerspectivePosition",
@@ -258,7 +366,29 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "691533ef"
+      "dh": "691533ef",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nBais",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pXAdjust",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pYAdjust",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PerspectiveScalePosition",
@@ -276,7 +406,33 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "863d8512"
+      "dh": "863d8512",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nAngle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pXAdjust",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pYAdjust",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bOrder",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SetDefaultPerspectiveFactor",
@@ -339,7 +495,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b8a7e8f6"
+      "dh": "b8a7e8f6",
+      "paramStorage": [
+        [
+          "nOption",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DirectDrawErrorHandler",
@@ -358,7 +524,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "c861240a"
+      "dh": "c861240a",
+      "paramStorage": [
+        [
+          "szContext",
+          "ECX:4"
+        ],
+        [
+          "nErrorCode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "InternalOpenWindow",
@@ -385,7 +561,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7988e0ac"
+      "dh": "7988e0ac",
+      "paramStorage": [
+        [
+          "nResolutionMode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "InternalCutsceneWindow",
@@ -431,7 +613,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "443f7109"
+      "dh": "443f7109",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PlayCutScene",
@@ -456,7 +648,21 @@
         "DDBLTFX",
         "int32_t"
       ],
-      "dh": "cfff15a6"
+      "dh": "cfff15a6",
+      "paramStorage": [
+        [
+          "szFile",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ],
+        [
+          "fpFrame",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BeginScene",
@@ -481,7 +687,25 @@
         "DDSURFACEDESC",
         "int32_t"
       ],
-      "dh": "2cfe97a3"
+      "dh": "2cfe97a3",
+      "paramStorage": [
+        [
+          "bClear",
+          "ECX:4"
+        ],
+        [
+          "nRed",
+          "DL:1"
+        ],
+        [
+          "nGreen",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nBlue",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "EndScene1",
@@ -544,7 +768,13 @@
         "DDSURFACEDESC",
         "uint8_t"
       ],
-      "dh": "269d3a34"
+      "dh": "269d3a34",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "InternalReleaseWindow",
@@ -611,7 +841,17 @@
         "InternalReleaseWindow",
         "InternalOpenWindow"
       ],
-      "dh": "a4eda3fb"
+      "dh": "a4eda3fb",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "bForceResize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Release",
@@ -652,7 +892,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "be40b00f"
+      "dh": "be40b00f",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ],
+        [
+          "nWindowState",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_Release",
@@ -685,7 +939,17 @@
         "D2GfxSettingsStrc",
         "GUID"
       ],
-      "dh": "ff219c73"
+      "dh": "ff219c73",
+      "paramStorage": [
+        [
+          "pSettings",
+          "ECX:4"
+        ],
+        [
+          "pHelpers",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_DIRECTDRAW_GetPalettePointer",
@@ -703,7 +967,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "7f55d77c"
+      "dh": "7f55d77c",
+      "paramStorage": [
+        [
+          "nPaletteMode",
+          "ECX:4"
+        ],
+        [
+          "pnOutHeight",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_DDRAW_SetHorizontalBounds",
@@ -721,7 +995,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "8ec44981"
+      "dh": "8ec44981",
+      "paramStorage": [
+        [
+          "bWidescreen",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_DDRAW_IsDC6OffScreen",
@@ -744,7 +1024,25 @@
         "DC6Block",
         "int32_t"
       ],
-      "dh": "a6771a3b"
+      "dh": "a6771a3b",
+      "paramStorage": [
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIsometric",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDC6Block",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_DDRAW_ComputeDC6ClipRect",
@@ -771,7 +1069,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b3ef837e"
+      "dh": "b3ef837e",
+      "paramStorage": [
+        [
+          "nY",
+          "ECX:4"
+        ],
+        [
+          "pDC6Block",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutClipRect",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pInClipBounds",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DrawImage",
@@ -799,7 +1119,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c11bc696"
+      "dh": "c11bc696",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawShiftedImage",
@@ -826,7 +1172,33 @@
         "DC6Block",
         "int32_t"
       ],
-      "dh": "79924705"
+      "dh": "79924705",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGlobalPaletteShift",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawVerticalCropImage",
@@ -853,7 +1225,33 @@
         "DC6Block",
         "int32_t"
       ],
-      "dh": "a10bfbff"
+      "dh": "a10bfbff",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkipLines",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawLines",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawClippedImage",
@@ -877,7 +1275,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ddf247ad"
+      "dh": "ddf247ad",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCropRect",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DrawShadow",
@@ -904,7 +1324,21 @@
         "DC6Block",
         "int32_t"
       ],
-      "dh": "63d7483c"
+      "dh": "63d7483c",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DrawImageFast",
@@ -923,7 +1357,25 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "1dbd0f0f"
+      "dh": "1dbd0f0f",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "DebugFillBackBuffer",
@@ -945,7 +1397,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "72dc8481"
+      "dh": "72dc8481",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DrawPerspectiveImage",
@@ -965,7 +1427,37 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "52f2563e"
+      "dh": "52f2563e",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "D2ddDebugFont_Alloc",
@@ -1026,7 +1518,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1bab67bb"
+      "dh": "1bab67bb",
+      "paramStorage": [
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "cCharacter",
+          "AL:1"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DrawString",
@@ -1047,7 +1553,25 @@
         "int32_t",
         "va_list"
       ],
-      "dh": "eb9f472d"
+      "dh": "eb9f472d",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "szFormat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "va",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DrawLight",
@@ -1065,7 +1589,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "58116bc7"
+      "dh": "58116bc7",
+      "paramStorage": [
+        [
+          "pLight",
+          "ECX:4"
+        ],
+        [
+          "pPlayerLight",
+          "EDX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_DDRAW_AreBlendedShadowsEnabled",
@@ -1105,7 +1647,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c36a00cd"
+      "dh": "c36a00cd",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawSolidRectAlpha",
@@ -1124,7 +1692,33 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f0a1d9bc"
+      "dh": "f0a1d9bc",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "RENDERER_DDRAW_DrawPixel",
@@ -1142,7 +1736,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "8799c28f"
+      "dh": "8799c28f",
+      "paramStorage": [
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "DrawLine",
@@ -1160,7 +1768,33 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6d5a16f8"
+      "dh": "6d5a16f8",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "RENDERER_DDRAW_DrawLine",
@@ -1178,7 +1812,21 @@
       "usedTypes": [
         "POINT"
       ],
-      "dh": "4a129d37"
+      "dh": "4a129d37",
+      "paramStorage": [
+        [
+          "pStartPoint",
+          "ECX:4"
+        ],
+        [
+          "pEndPoint",
+          "EDX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "DrawRect",
@@ -1203,7 +1851,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f7b09892"
+      "dh": "f7b09892",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nColor",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "DrawRectEx",
@@ -1227,7 +1885,17 @@
         "RECT",
         "int32_t"
       ],
-      "dh": "7e3ca2a9"
+      "dh": "7e3ca2a9",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nColor",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "DrawSolidRect",
@@ -1250,7 +1918,17 @@
         "RECT",
         "int32_t"
       ],
-      "dh": "433ba381"
+      "dh": "433ba381",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "DrawSolidSquare",
@@ -1271,7 +1949,21 @@
         "tagRECT",
         "uint32_t"
       ],
-      "dh": "b620fdbb"
+      "dh": "b620fdbb",
+      "paramStorage": [
+        [
+          "pPoint",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "DL:1"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "ClearScreen",
@@ -1291,7 +1983,13 @@
       "usedTypes": [
         "DDBLTFX"
       ],
-      "dh": "e021f754"
+      "dh": "e021f754",
+      "paramStorage": [
+        [
+          "bPartial",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DrawShadowTile",
@@ -1312,7 +2010,29 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "0777b4b3"
+      "dh": "0777b4b3",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DrawTransWallTile",
@@ -1334,7 +2054,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fd8873a4"
+      "dh": "fd8873a4",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawWallTile",
@@ -1356,7 +2102,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e6269537"
+      "dh": "e6269537",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DrawGroundTile",
@@ -1377,7 +2145,45 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "1c0b9a15"
+      "dh": "1c0b9a15",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ],
+        [
+          "pLight",
+          "EDX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nWorldXpos",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nWorldYpos",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x14]:1"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pTileData",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "CloseSmacker",
@@ -1396,7 +2202,13 @@
       "usedTypes": [
         "D2SmackerContextStrc"
       ],
-      "dh": "4ff633c8"
+      "dh": "4ff633c8",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_DDRAW_BlitSmackerFrame",
@@ -1416,7 +2228,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "99a0a4dc"
+      "dh": "99a0a4dc",
+      "paramStorage": [
+        [
+          "nHeight",
+          "ECX:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDestRect",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DecodeSmacker",
@@ -1444,7 +2270,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e85b020a"
+      "dh": "e85b020a",
+      "paramStorage": [
+        [
+          "szSmacker",
+          "ECX:4"
+        ],
+        [
+          "pBuffer",
+          "EDX:4"
+        ],
+        [
+          "nVersion",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PlayerSmacker",
@@ -1466,7 +2306,13 @@
         "D2SmackerContextStrc",
         "uint8_t"
       ],
-      "dh": "b433556f"
+      "dh": "b433556f",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BINK_RenderVideoFrame",
@@ -1516,7 +2362,21 @@
         "tagMSG",
         "uint32_t"
       ],
-      "dh": "963ac38c"
+      "dh": "963ac38c",
+      "paramStorage": [
+        [
+          "szFileName",
+          "ECX:4"
+        ],
+        [
+          "nParam",
+          "EDX:4"
+        ],
+        [
+          "pfnFrameCallback",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ActivateWindow_Unref_00513b80",

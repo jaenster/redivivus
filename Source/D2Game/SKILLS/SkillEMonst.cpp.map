@@ -28,7 +28,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "7ecfa855"
+      "dh": "7ecfa855",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAttacker",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCombatEntry",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_125_CatapultFireBomb",
@@ -60,7 +78,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3803cf0c"
+      "dh": "3803cf0c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLEMONST_SrvStFn59_ImpInferno",
@@ -89,7 +125,25 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "3656f4a5"
+      "dh": "3656f4a5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_126_ImpInferno",
@@ -134,7 +188,25 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "4d58587b"
+      "dh": "4d58587b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLEMONST_SrvStFn60_SuckBlood",
@@ -164,7 +236,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "4e6f0c35"
+      "dh": "4e6f0c35",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_127_SuckBlood",
@@ -196,7 +286,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "0f1337ec"
+      "dh": "0f1337ec",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_128_MonsterCreateMinion",
@@ -223,7 +331,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "1c29beb1"
+      "dh": "1c29beb1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLEMONST_AttachToHost",
@@ -250,7 +376,29 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "ac356edb"
+      "dh": "ac356edb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pHostUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLEMONST_DetachFromHost",
@@ -279,7 +427,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8b991a3d"
+      "dh": "8b991a3d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pHostUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nEventParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_129_AttachOrDetachFromHost",
@@ -313,7 +483,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "aeec559c"
+      "dh": "aeec559c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLEMONST_SrvStFn61_SelfResurrect",
@@ -336,7 +524,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "47897c3a"
+      "dh": "47897c3a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSOR_GetMeteorSubMissileCount",
@@ -362,7 +568,33 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "511251e0"
+      "dh": "511251e0",
+      "paramStorage": [
+        [
+          "eMissileId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "nCount",
+          "EBX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_130_SpawnSubMissiles",
@@ -386,7 +618,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "1a2d6149"
+      "dh": "1a2d6149",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLEMONST_ApplyAuraBuff",
@@ -412,7 +662,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "ef9fc0d7"
+      "dh": "ef9fc0d7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDI:4"
+        ],
+        [
+          "nSkillLvl",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLEMONST_TransformMonsterClass",
@@ -449,7 +717,29 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "87a1ed4d"
+      "dh": "87a1ed4d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ],
+        [
+          "nSkillId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_131_ConditionalTransformOrBuff",
@@ -481,7 +771,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3e075b44"
+      "dh": "3e075b44",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_132_FireClassUpgradedMissile",
@@ -504,7 +812,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "ab8b90f4"
+      "dh": "ab8b90f4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSOR_GetFrozenOrbBoltCount",
@@ -527,7 +853,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f7d2d822"
+      "dh": "f7d2d822",
+      "paramStorage": [
+        [
+          "pUnitStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLEMONST_OnDeathSpawnExpire",
@@ -558,7 +894,21 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "564392fe"
+      "dh": "564392fe",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "nStatListParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_133_SetDeathSpawnState",
@@ -583,7 +933,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "3ddbf639"
+      "dh": "3ddbf639",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_134_AreaExplosionAttack",
@@ -611,7 +979,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "931cbc27"
+      "dh": "931cbc27",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLEMONST_SrvStFn62_MinionSpawner",
@@ -639,7 +1025,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "bf28086f"
+      "dh": "bf28086f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_135_SpawnMinionFromParams",
@@ -675,7 +1079,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c0d63f1e"
+      "dh": "c0d63f1e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_136_FireSpeedScaledMissile",
@@ -707,7 +1129,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d68e0585"
+      "dh": "d68e0585",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_137_CorpseConsumptionAura",
@@ -735,7 +1175,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9c1699ea"
+      "dh": "9c1699ea",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_138_FirePerpendicularMissileLine",
@@ -771,7 +1229,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "62c288cc"
+      "dh": "62c288cc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_139_FireOrthogonalMissile",
@@ -800,7 +1276,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c5be247f"
+      "dh": "c5be247f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLEMONST_SrvStFn63_CorpseCycler",
@@ -831,7 +1325,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "6dcb6e9c"
+      "dh": "6dcb6e9c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_147_ReturnToOwner",
@@ -854,7 +1366,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "e236927e"
+      "dh": "e236927e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_005d2b40",
@@ -875,7 +1405,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "5193bd9e"
+      "dh": "5193bd9e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLEMONST_ProcessBloodMana",
@@ -903,7 +1439,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "57dc2a4f"
+      "dh": "57dc2a4f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nHpCost",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_140_BaalTentacle",
@@ -939,7 +1485,25 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "74b076bb"
+      "dh": "74b076bb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "fpBaalWaveFunction",
@@ -962,7 +1526,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6273f075"
+      "dh": "6273f075",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pAttacker",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_141_BaalCorpseExplosionWave",
@@ -989,7 +1575,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "8c0759b3"
+      "dh": "8c0759b3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLEMONST_FindNearbyCorpse",
@@ -1022,7 +1626,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "f3c0accf"
+      "dh": "f3c0accf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pExcludeUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSearchRadius",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

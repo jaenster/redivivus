@@ -21,7 +21,13 @@
         "toupper",
         "tolower"
       ],
-      "dh": "188def0f"
+      "dh": "188def0f",
+      "paramStorage": [
+        [
+          "pMcpData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SMemStringToUppercase",
@@ -40,7 +46,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "3d220616"
+      "dh": "3d220616",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nMaxLen",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SMemEscapeString",
@@ -63,7 +79,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "89e33d64"
+      "dh": "89e33d64",
+      "paramStorage": [
+        [
+          "pbDst",
+          "ECX:4"
+        ],
+        [
+          "pbSrc",
+          "EDX:4"
+        ],
+        [
+          "nBufSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byQuoteChar",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "SMemFormat64BitWithSeparators",
@@ -84,7 +118,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "c1894d48"
+      "dh": "c1894d48",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nWidth",
+          "EDX:4"
+        ],
+        [
+          "nValueLo",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nValueHi",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

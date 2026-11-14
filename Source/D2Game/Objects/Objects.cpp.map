@@ -31,7 +31,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f533bbcf"
+      "dh": "f533bbcf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nMonStatsId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bUseMonStats",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MakeRandomChest",
@@ -64,7 +90,33 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "307c69c0"
+      "dh": "307c69c0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nMonStatsId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bUseMonStats",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MakeRandomSparklyChest",
@@ -92,7 +144,33 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "57aef954"
+      "dh": "57aef954",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nMonStatsId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bUseMonStats",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_CreateTombPortal",
@@ -119,7 +197,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5c5c4dcd"
+      "dh": "5c5c4dcd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nMonStatsId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bUseMonStats",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_InitUnitObject",
@@ -143,7 +247,33 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "fe73595d"
+      "dh": "fe73595d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nMonStatsId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bUseMonStats",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "AllocTimer",
@@ -163,7 +293,13 @@
         "D2TimerArgStrc",
         "SGAMEDATA"
       ],
-      "dh": "bfdc60d0"
+      "dh": "bfdc60d0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FrreeTimer",
@@ -183,7 +319,17 @@
         "SGAMEDATA",
         "void *"
       ],
-      "dh": "268ea086"
+      "dh": "268ea086",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "ppTimerList",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_InitializeObject",
@@ -220,7 +366,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "200e17a8"
+      "dh": "200e17a8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nAnimModeOrGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_SelectRandomShrineType",
@@ -251,7 +423,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3fe5fe52"
+      "dh": "3fe5fe52",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLevelId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "byShrineCategory",
+          "AL:1"
+        ],
+        [
+          "pRoom",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn10",
@@ -273,7 +463,13 @@
         "D2ObjectInitFnArg",
         "eD2LevelId"
       ],
-      "dh": "1dec6079"
+      "dh": "1dec6079",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn28_GoldPlaceholder",
@@ -300,7 +496,13 @@
         "eCollisionFlags",
         "uint32_t"
       ],
-      "dh": "06e39c0a"
+      "dh": "06e39c0a",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn01_Shrine",
@@ -328,7 +530,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bbd611b0"
+      "dh": "bbd611b0",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn05_Door_Unref_0054fb30",
@@ -346,7 +554,13 @@
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "7be87153"
+      "dh": "7be87153",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn22_Fire",
@@ -367,7 +581,13 @@
         "D2ObjectInitFnArg",
         "D2UnitStrc"
       ],
-      "dh": "281b9879"
+      "dh": "281b9879",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn24_FloorTrap",
@@ -386,7 +606,13 @@
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "e7b6b0b8"
+      "dh": "e7b6b0b8",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn02_Urn",
@@ -411,7 +637,13 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "08c88e55"
+      "dh": "08c88e55",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn27_GooPile",
@@ -430,7 +662,13 @@
         "D2ObjectInitFnArg",
         "uint8_t"
       ],
-      "dh": "9d4b0c3f"
+      "dh": "9d4b0c3f",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn03_Chest",
@@ -456,7 +694,13 @@
         "eD2LevelId",
         "uint8_t"
       ],
-      "dh": "8538d560"
+      "dh": "8538d560",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn57_SparklyChest",
@@ -476,7 +720,13 @@
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "05a6ecd5"
+      "dh": "05a6ecd5",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn58_Fissure",
@@ -497,7 +747,13 @@
         "D2ObjectInitFnArg",
         "D2SeedStrc"
       ],
-      "dh": "48d47a34"
+      "dh": "48d47a34",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn59_VileDogAfterglow",
@@ -518,7 +774,13 @@
         "D2ObjectInitFnArg",
         "D2UnitStrc"
       ],
-      "dh": "e7df00d2"
+      "dh": "e7df00d2",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn12_PermanentPortal",
@@ -545,7 +807,13 @@
         "eD2LevelId",
         "uint8_t"
       ],
-      "dh": "47764205"
+      "dh": "47764205",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn08_Torch",
@@ -564,7 +832,13 @@
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "eea638fd"
+      "dh": "eea638fd",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn14",
@@ -583,7 +857,13 @@
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "540ea9a7"
+      "dh": "540ea9a7",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn26",
@@ -602,7 +882,13 @@
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "a226fd90"
+      "dh": "a226fd90",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn34_HellBrazier",
@@ -623,7 +909,13 @@
         "D2ObjectInitFnArg",
         "D2SeedStrc"
       ],
-      "dh": "1e200a7e"
+      "dh": "1e200a7e",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn05_Door",
@@ -641,7 +933,13 @@
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "bd9c11d6"
+      "dh": "bd9c11d6",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn11_TownPortal",
@@ -670,7 +968,13 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "dc43d0fb"
+      "dh": "dc43d0fb",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn51_TrappedSoul",
@@ -690,7 +994,13 @@
         "D2ObjectInitFnArg",
         "D2UnitStrc"
       ],
-      "dh": "b6d37820"
+      "dh": "b6d37820",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROOM_CheckSpawnCollision",
@@ -711,7 +1021,29 @@
         "eCollisionFlags",
         "uint32_t"
       ],
-      "dh": "a183fac6"
+      "dh": "a183fac6",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnRoomCoords",
+          "EAX:4"
+        ],
+        [
+          "pnSpawnCoord",
+          "ESI:4"
+        ],
+        [
+          "nSizeX",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ROOM_CheckSpawnCollisionSimple",
@@ -732,7 +1064,29 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "b0a1ae73"
+      "dh": "b0a1ae73",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSizeX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnRoomCoords",
+          "EAX:4"
+        ],
+        [
+          "pnSpawnCoord",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_PlaceAtRandomPosition",
@@ -764,7 +1118,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ba380d37"
+      "dh": "ba380d37",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nObjClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXMargin",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nYMargin",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_PlaceWithCallback",
@@ -797,7 +1173,37 @@
         "pfnObjectPlaceTestCallback",
         "uint32_t"
       ],
-      "dh": "4ad649cf"
+      "dh": "4ad649cf",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nObjClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSizeX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pfnProc",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn46",
@@ -828,7 +1234,13 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "e155a914"
+      "dh": "e155a914",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_PlaceAtBiasedPosition",
@@ -862,7 +1274,41 @@
         "pfnObjectPlaceTestCallback",
         "uint32_t"
       ],
-      "dh": "e6833680"
+      "dh": "e6833680",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSizeX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nBiasMode",
+          "Stack[0x18]:4"
+        ],
+        [
+          "dwCallbackArg",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pfnProc",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "Objects_PopulateFn1",
@@ -899,7 +1345,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7f656772"
+      "dh": "7f656772",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nDensity",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nObjectClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nChancePercent",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "OBJECT_SpawnBonusChest",
@@ -929,7 +1397,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "0f49d77e"
+      "dh": "0f49d77e",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Objects_PopulateFn7_CorpseOnStick",
@@ -967,7 +1445,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "95541e43"
+      "dh": "95541e43",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nDensity",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nObjectClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nChancePercent",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "Objects_PopulateFn3",
@@ -1000,7 +1500,29 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "f7ed6de2"
+      "dh": "f7ed6de2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nDensity",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nObjectClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nChancePercent",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "Objects_PopulateFn9_TrappedSoul",
@@ -1032,7 +1554,29 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "b9be0bf7"
+      "dh": "b9be0bf7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nDensity",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nObjectClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nChancePercent",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "Objects_PopulateFn6_Corpse",
@@ -1057,7 +1601,29 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "72bbf5df"
+      "dh": "72bbf5df",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nDensity",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nObjectClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nChancePercent",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "Objects_PopulateFn8",
@@ -1098,7 +1664,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1a496cce"
+      "dh": "1a496cce",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nDensity",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nObjectClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nChancePercent",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "Objects_PopulateFn4",
@@ -1135,7 +1723,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "94cbf6f9"
+      "dh": "94cbf6f9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nDensity",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nObjectClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nChancePercent",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "Objects_PopulateFn5_Crate",
@@ -1173,7 +1783,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "48565862"
+      "dh": "48565862",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nDensity",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nObjectClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nChancePercent",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "OBJECT_AlwaysReturnOne",
@@ -1194,7 +1826,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "e8d0d3ba"
+      "dh": "e8d0d3ba",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pRoomCoords",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_PopulateGridObjects",
@@ -1225,7 +1871,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f04381c3"
+      "dh": "f04381c3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pGridBounds",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_PopulateGridItems",
@@ -1250,7 +1910,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2065b610"
+      "dh": "2065b610",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pGridBounds",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Roll",
@@ -1281,7 +1955,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4e60d747"
+      "dh": "4e60d747",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDrlgCoords",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nRackType",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "RollArmorStand",
@@ -1303,7 +1995,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "5f21602e"
+      "dh": "5f21602e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pDrlgCoords",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RollWeaponRack",
@@ -1325,7 +2031,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "29716854"
+      "dh": "29716854",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pDrlgCoords",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_RollAndDispatchPopulateFn",
@@ -1351,7 +2071,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b3305659"
+      "dh": "b3305659",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwPopulateMask",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pObjRng",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_PopulateRoomSpecialObjects",
@@ -1381,7 +2119,21 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "6cc1c5ad"
+      "dh": "6cc1c5ad",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLevelsTxt",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRoom",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_PopulateRoomObjects",
@@ -1418,7 +2170,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2245c45a"
+      "dh": "2245c45a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_CallPopulateFn",
@@ -1445,7 +2207,21 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "19637ca3"
+      "dh": "19637ca3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nObjectClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_PopulateFromObjGroup",
@@ -1477,7 +2253,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7ce776ab"
+      "dh": "7ce776ab",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nObjGroupId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_FreeObjectData",
@@ -1501,7 +2291,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "14b47f62"
+      "dh": "14b47f62",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FreeObjects",
@@ -1523,7 +2323,13 @@
         "D2UnitStrc *",
         "SGAMEDATA"
       ],
-      "dh": "e40a5f74"
+      "dh": "e40a5f74",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_GetDoubledTxtSize",
@@ -1542,7 +2348,13 @@
         "D2ObjectsTxt",
         "int32_t"
       ],
-      "dh": "3c577a0a"
+      "dh": "3c577a0a",
+      "paramStorage": [
+        [
+          "pObjectsTxt",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_GetDefaultSize",
@@ -1581,7 +2393,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "28a20379"
+      "dh": "28a20379",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "OBJECTS_SetUnitIdInTimerArg",
@@ -1602,7 +2420,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c6f9b977"
+      "dh": "c6f9b977",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nUnitGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetUnitGUIDFromUnitTimerArg",
@@ -1623,7 +2451,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "471ba272"
+      "dh": "471ba272",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn16_Well",
@@ -1641,7 +2475,13 @@
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "14a1298b"
+      "dh": "14a1298b",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_PopulateFn2_WaypointShrine",
@@ -1684,7 +2524,29 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "e6a24837"
+      "dh": "e6a24837",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nDensity",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nObjectClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nChancePercent",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SetSpawnCoordList",
@@ -1704,7 +2566,17 @@
         "D2RoomCoordListStrc",
         "D2UnitStrc"
       ],
-      "dh": "700b7666"
+      "dh": "700b7666",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pCoordList",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gaObjectSpawnOffsetTables",

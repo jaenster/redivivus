@@ -21,7 +21,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "757d27be"
+      "dh": "757d27be",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IsUnitDistanceLowerThan700",
@@ -43,7 +49,13 @@
         "D2UnitStrc",
         "POINT"
       ],
-      "dh": "2b21d090"
+      "dh": "2b21d090",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

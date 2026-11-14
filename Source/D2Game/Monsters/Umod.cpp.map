@@ -21,7 +21,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bc83674e"
+      "dh": "bc83674e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnique",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UMOD_IncreaseMonsterHp",
@@ -44,7 +58,17 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "7a561e13"
+      "dh": "7a561e13",
+      "paramStorage": [
+        [
+          "nUmodConstant",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "MONUMOD_ApplyHpBonus",
@@ -71,7 +95,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "73db0d07"
+      "dh": "73db0d07",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnique",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONUMOD_ApplyChampionLevelBonus",
@@ -93,7 +131,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "595e0f4e"
+      "dh": "595e0f4e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnknown",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONUMOD_ApplyChampionStats",
@@ -124,7 +176,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3a554311"
+      "dh": "3a554311",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnique",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONUMOD_ApplyColdEnchant",
@@ -155,7 +221,21 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "10ab87ba"
+      "dh": "10ab87ba",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnknown",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONUMOD_ApplyBerserker",
@@ -176,7 +256,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9192c60d"
+      "dh": "9192c60d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnique",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONUMOD_ApplyPossessed",
@@ -198,7 +292,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "2b1a265e"
+      "dh": "2b1a265e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnique",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONUMOD_ApplyFanatic",
@@ -225,7 +333,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "103e343f"
+      "dh": "103e343f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnique",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONUMOD_SetEventTimer",
@@ -247,7 +369,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "3bd891af"
+      "dh": "3bd891af",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MagicResist",
@@ -268,7 +404,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "12658515"
+      "dh": "12658515",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnknown",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TeleHeal",
@@ -291,7 +441,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5b28b1e6"
+      "dh": "5b28b1e6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnique",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AuraEnchanted",
@@ -319,7 +483,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "bb4f169e"
+      "dh": "bb4f169e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnknown",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ExtraStrong",
@@ -345,7 +523,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "b595d85a"
+      "dh": "b595d85a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnique",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ExtraFast",
@@ -365,7 +557,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "eee59767"
+      "dh": "eee59767",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnknown",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FireEnchanted",
@@ -392,7 +598,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1a89df4d"
+      "dh": "1a89df4d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnique",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LightningEnchanted",
@@ -419,7 +639,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ac9c50a1"
+      "dh": "ac9c50a1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnique",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ColdEnchanted",
@@ -446,7 +680,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "327f335b"
+      "dh": "327f335b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnique",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PoisonEnchanted",
@@ -473,7 +721,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "aff4d46e"
+      "dh": "aff4d46e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnique",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ManaBurn",
@@ -500,7 +762,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7ac551e7"
+      "dh": "7ac551e7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ],
+        [
+          "bUnique",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

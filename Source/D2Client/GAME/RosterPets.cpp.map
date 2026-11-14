@@ -38,7 +38,13 @@
       "usedTypes": [
         "D2RosterPetStrc"
       ],
-      "dh": "0d042d4e"
+      "dh": "0d042d4e",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTERPETS_RemoveRosterPetsBySkillID",
@@ -59,7 +65,13 @@
         "D2RosterPetStrc *",
         "int32_t"
       ],
-      "dh": "86dab628"
+      "dh": "86dab628",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AddRosterPet",
@@ -81,7 +93,25 @@
         "D2RosterPetStrc",
         "int32_t"
       ],
-      "dh": "0b52ae57"
+      "dh": "0b52ae57",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ],
+        [
+          "nOwnerGUID",
+          "EDX:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRosterType",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AddRosterPetMerc",
@@ -113,7 +143,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "057b3625"
+      "dh": "057b3625",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ],
+        [
+          "nOwnerGUID",
+          "EDX:4"
+        ],
+        [
+          "nSkillID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRosterType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pMercArg",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveRosterPet",
@@ -135,7 +187,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "249613ea"
+      "dh": "249613ea",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_GetPetOwnershipRelation",
@@ -160,7 +218,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "6c699365"
+      "dh": "6c699365",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSeed",
@@ -180,7 +244,13 @@
         "D2RosterPetStrc",
         "int32_t"
       ],
-      "dh": "aa00ae6b"
+      "dh": "aa00ae6b",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_AreUnitsHostile",
@@ -202,7 +272,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "0496a9b3"
+      "dh": "0496a9b3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pRosterUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CountRostersForUnitFilterBySkill",
@@ -222,7 +302,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e25c52a0"
+      "dh": "e25c52a0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nSkillId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterPetGUID",
@@ -242,7 +332,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "dbe55aac"
+      "dh": "dbe55aac",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nSkillId",
+          "EDX:4"
+        ],
+        [
+          "bAllowActive",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CheckIfUnitHasRosterPet",
@@ -261,7 +365,13 @@
         "D2RosterPetStrc",
         "D2UnitStrc"
       ],
-      "dh": "f16a88c7"
+      "dh": "f16a88c7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_UpdateHostileColors",
@@ -310,7 +420,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "bfb35558"
+      "dh": "bfb35558",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ],
+        [
+          "nHpPercent",
+          "EDX:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "GetRosterPerHPPercent",
@@ -329,7 +453,13 @@
         "D2RosterPetStrc",
         "int32_t"
       ],
-      "dh": "3073faf3"
+      "dh": "3073faf3",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTERPETS_GetPetData",
@@ -348,7 +478,21 @@
         "D2RosterPetStrc",
         "int32_t"
       ],
-      "dh": "27ca719c"
+      "dh": "27ca719c",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ],
+        [
+          "pnSkillId",
+          "EDX:4"
+        ],
+        [
+          "pnField6_0x18",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterClass",
@@ -367,7 +511,13 @@
         "D2RosterPetStrc",
         "int32_t"
       ],
-      "dh": "4aa13766"
+      "dh": "4aa13766",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterOwnerGUID",
@@ -385,7 +535,13 @@
       "usedTypes": [
         "D2RosterPetStrc"
       ],
-      "dh": "a8f275c7"
+      "dh": "a8f275c7",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillId",
@@ -404,7 +560,13 @@
         "D2RosterPetStrc",
         "int32_t"
       ],
-      "dh": "fca49545"
+      "dh": "fca49545",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_IsUnitHostileToPlayer",
@@ -430,7 +592,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cca6e7f5"
+      "dh": "cca6e7f5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_UpdateMercHostileColors",
@@ -457,7 +625,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e7dfad89"
+      "dh": "e7dfad89",
+      "paramStorage": [
+        [
+          "nOwnerGUID",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

@@ -16,7 +16,13 @@
       "calledFunctions": [
         "NET_SID_CLIENT_SHA1Init"
       ],
-      "dh": "6f36231c"
+      "dh": "6f36231c",
+      "paramStorage": [
+        [
+          "pSha1Context",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SHA0_Update",
@@ -35,7 +41,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "c42cae99"
+      "dh": "c42cae99",
+      "paramStorage": [
+        [
+          "pnData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLength",
+          "EAX:4"
+        ],
+        [
+          "pnContext",
+          "EBX:4"
+        ]
+      ]
     }
   ]
 }

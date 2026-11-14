@@ -63,7 +63,13 @@
         "D2WinPopupEntry",
         "int32_t"
       ],
-      "dh": "087f6f4d"
+      "dh": "087f6f4d",
+      "paramStorage": [
+        [
+          "pEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINPOPUP_HandleClick",
@@ -86,7 +92,13 @@
         "int32_t",
         "pfnVoidNoArgCallback"
       ],
-      "dh": "1b372b02"
+      "dh": "1b372b02",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DrawEx",
@@ -108,7 +120,13 @@
         "D2WinPopup",
         "int32_t"
       ],
-      "dh": "a8bbfb21"
+      "dh": "a8bbfb21",
+      "paramStorage": [
+        [
+          "pPopup",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -137,7 +155,13 @@
         "RECT",
         "int32_t"
       ],
-      "dh": "9e6e59bf"
+      "dh": "9e6e59bf",
+      "paramStorage": [
+        [
+          "pPopup",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WinPopup",

@@ -28,7 +28,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "2e545b35"
+      "dh": "2e545b35",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreeParticle",
@@ -50,7 +56,13 @@
         "D2ParticleStrc",
         "D2UnitStrc"
       ],
-      "dh": "790e02a5"
+      "dh": "790e02a5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_GetX",
@@ -71,7 +83,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7a711b26"
+      "dh": "7a711b26",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_GetY",
@@ -92,7 +110,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "02761c67"
+      "dh": "02761c67",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_GetScreenZ",
@@ -113,7 +137,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "591386b2"
+      "dh": "591386b2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_GetPosXShifted",
@@ -134,7 +164,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "16d6a1c4"
+      "dh": "16d6a1c4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_GetPosYShifted",
@@ -155,7 +191,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "65a0dc8d"
+      "dh": "65a0dc8d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_GetPosZShifted",
@@ -176,7 +218,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c9cf860c"
+      "dh": "c9cf860c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_GetPosXRaw",
@@ -197,7 +245,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d1d2014e"
+      "dh": "d1d2014e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_GetPosYRaw",
@@ -218,7 +272,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bfac5fd6"
+      "dh": "bfac5fd6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_GetPosZRaw",
@@ -239,7 +299,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "add11ea6"
+      "dh": "add11ea6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetPosVectorShifted",
@@ -260,7 +326,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "513bca21"
+      "dh": "513bca21",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nPosZ",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SetOffsetVector",
@@ -281,7 +365,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7c3941af"
+      "dh": "7c3941af",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOffsetX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nOffsetY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nOffsetZ",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bShifted",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_SetVelocityOffset",
@@ -302,7 +408,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "98cd0a6e"
+      "dh": "98cd0a6e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nVelX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nVelY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nVelZ",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bShifted",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_SetBoundsOffset",
@@ -323,7 +451,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9f37e4e0"
+      "dh": "9f37e4e0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBoundX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBoundY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBoundZ",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bShifted",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_SetBounceParams",
@@ -344,7 +494,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "dd9864f9"
+      "dh": "dd9864f9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDurationFrames",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nZAnimScale",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_GetBounceCount",
@@ -365,7 +529,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9efda08d"
+      "dh": "9efda08d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_ClearLifetimeFlag",
@@ -385,7 +555,13 @@
         "D2ParticleStrc",
         "D2UnitStrc"
       ],
-      "dh": "212e1e9d"
+      "dh": "212e1e9d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_UpdatePosition",
@@ -418,7 +594,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a6ed0aac"
+      "dh": "a6ed0aac",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_InitProjectile",
@@ -439,7 +621,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "92489f9b"
+      "dh": "92489f9b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nInitialHeight",
+          "EDX:4"
+        ],
+        [
+          "nBounceCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_SetAttachedToOwner",
@@ -459,7 +655,17 @@
         "D2ParticleStrc",
         "D2UnitStrc"
       ],
-      "dh": "886a1326"
+      "dh": "886a1326",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bReset",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_SetStopped",
@@ -479,7 +685,13 @@
         "D2ParticleStrc",
         "D2UnitStrc"
       ],
-      "dh": "3db20ee7"
+      "dh": "3db20ee7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_IsStopped",
@@ -499,7 +711,13 @@
         "D2ParticleStrc",
         "D2UnitStrc"
       ],
-      "dh": "4f159ad0"
+      "dh": "4f159ad0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_SetStoppedWithFade",
@@ -519,7 +737,13 @@
         "D2ParticleStrc",
         "D2UnitStrc"
       ],
-      "dh": "e8fb73ae"
+      "dh": "e8fb73ae",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_IsStoppedOrFading",
@@ -539,7 +763,13 @@
         "D2ParticleStrc",
         "D2UnitStrc"
       ],
-      "dh": "3410122b"
+      "dh": "3410122b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTICLE_SetReverseDirection",
@@ -559,7 +789,17 @@
         "D2ParticleStrc",
         "D2UnitStrc"
       ],
-      "dh": "a0ca16db"
+      "dh": "a0ca16db",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bReset",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

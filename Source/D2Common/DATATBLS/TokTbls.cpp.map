@@ -30,7 +30,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ee94b2a6"
+      "dh": "ee94b2a6",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_monmode",
@@ -51,7 +57,13 @@
         "D2PoolManagerStrc",
         "uint32_t"
       ],
-      "dh": "36d0d575"
+      "dh": "36d0d575",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_objtype_objmode",
@@ -81,7 +93,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b9e7b276"
+      "dh": "b9e7b276",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_composit",
@@ -101,7 +119,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "c86c0eb2"
+      "dh": "c86c0eb2",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_armtype",
@@ -121,7 +145,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "8224e786"
+      "dh": "8224e786",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FreeTokenTables",
@@ -161,7 +191,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "07e085b5"
+      "dh": "07e085b5",
+      "paramStorage": [
+        [
+          "nMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nModeIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TxtGetMonModeLine",
@@ -184,7 +224,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e72566cf"
+      "dh": "e72566cf",
+      "paramStorage": [
+        [
+          "nId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nModeIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TxtGetObjTypeModeLine",
@@ -207,7 +257,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "773c63c0"
+      "dh": "773c63c0",
+      "paramStorage": [
+        [
+          "nId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nModeIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TxtCompositGetLine",
@@ -229,7 +289,13 @@
         "D2CompositTxt",
         "int32_t"
       ],
-      "dh": "6f3db977"
+      "dh": "6f3db977",
+      "paramStorage": [
+        [
+          "nId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TxtGetArmTypeLine",
@@ -251,7 +317,13 @@
         "D2ArmTypeTxt",
         "int32_t"
       ],
-      "dh": "6fc63230"
+      "dh": "6fc63230",
+      "paramStorage": [
+        [
+          "nId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_inventory",
@@ -275,7 +347,13 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "6c06c4e2"
+      "dh": "6c06c4e2",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FreeInventoryTable",
@@ -313,7 +391,13 @@
         "D2InventoryTxt",
         "uint32_t"
       ],
-      "dh": "64382fb6"
+      "dh": "64382fb6",
+      "paramStorage": [
+        [
+          "nIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GetInvDimensions",
@@ -337,7 +421,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3a2a9891"
+      "dh": "3a2a9891",
+      "paramStorage": [
+        [
+          "neInventoryPage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOutput",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetGridDimensions",
@@ -362,7 +460,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "baded09d"
+      "dh": "baded09d",
+      "paramStorage": [
+        [
+          "neInventoryPage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOutput",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetBodyDimensions",
@@ -388,7 +500,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "18c595d4"
+      "dh": "18c595d4",
+      "paramStorage": [
+        [
+          "neInventoryPage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOutput",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eBodyLoc",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "TOKTBLS_GetTokenIndex",
@@ -406,7 +536,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "29b59c2c"
+      "dh": "29b59c2c",
+      "paramStorage": [
+        [
+          "nParam1",
+          "EAX:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

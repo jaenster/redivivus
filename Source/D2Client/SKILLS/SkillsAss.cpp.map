@@ -27,7 +27,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5a09cd8c"
+      "dh": "5a09cd8c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Ass_Melee_TargetValidate",
@@ -53,7 +67,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "89de6c29"
+      "dh": "89de6c29",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_SetParam1FromCalc",
@@ -79,7 +107,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "d8d660b2"
+      "dh": "d8d660b2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Ass_Blade_DecrementCharge",
@@ -105,7 +147,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "4c5a0e2c"
+      "dh": "4c5a0e2c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSASS_GetCltMissileByAuraLevel",
@@ -128,7 +184,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "52e36415"
+      "dh": "52e36415",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nSkillId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSASS_GetPrgCalcByAuraLevel",
@@ -154,7 +220,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e786e64f"
+      "dh": "e786e64f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileRandom",
@@ -181,7 +261,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "63886549"
+      "dh": "63886549",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_CheckAuraStateInactive",
@@ -202,7 +296,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "86781086"
+      "dh": "86781086",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSASS_CltSetChargeUpState",
@@ -238,7 +346,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "f016d51a"
+      "dh": "f016d51a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_SetChargeUpState",
@@ -259,7 +381,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "e5864e86"
+      "dh": "e5864e86",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileCharge",
@@ -295,7 +431,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f4734b27"
+      "dh": "f4734b27",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_AllocStatListByParam3",
@@ -316,7 +466,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "453f098f"
+      "dh": "453f098f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Ass_AuraLevel_CastAttackTarget",
@@ -340,7 +504,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "07645f56"
+      "dh": "07645f56",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Ass_AuraLevel_StreamMissile",
@@ -368,7 +546,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "24c61348"
+      "dh": "24c61348",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

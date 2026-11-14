@@ -7456,10 +7456,7 @@ void __stdcall DRAW_ConfigControlsMenu() {
     rcFrame.top = (WindowSizeY - 0x1a4) / 2 + 0x143;
     DRAW_Direct_RectFrame(&rcFrame);
     nTmpY = (WindowSizeY - 0x1a4) / 2 + 0x1e;
-    bBold = 0;
-    nColor_lcl = 4;
-    nTmpWidth = ScreenSizeX - 0x26c;
-    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xf51), nTmpWidth / 2 + 0x12, nTmpY, nColor_lcl, bBold);
+    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xf51), (ScreenSizeX - 0x26c) / 2 + 0x12, nTmpY, 4, 0);
     nLeftEdge2 = (ScreenSizeX - 0x26c) / 2;
     bBold = 0;
     nTmpY = (WindowSizeY - 0x1a4) / 2 + 0x1e;
@@ -8424,8 +8421,7 @@ void __stdcall DRAW_UI_NewStatPoints_II() {
     nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszLabel);
     eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode != 2) {
-      bMouseOnButton = Inv::ScreenSizeY - 0x8e;
-      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xf92), nButtonWidth / 2 - nTextWidth / 2 + 1 + nBaseX, bMouseOnButton, 0, 0);
+      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xf92), nButtonWidth / 2 - nTextWidth / 2 + 1 + nBaseX, Inv::ScreenSizeY - 0x8e, 0, 0);
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nBaseX, Inv::ScreenSizeY - 0x69, -1, DRAW_SOLID, nullptr);
     }
 
@@ -8572,8 +8568,7 @@ void __stdcall Draw_UI_NewStatPoints() {
     nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszLabel);
     eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode != 2) {
-      bMouseOnButton = Inv::ScreenSizeY - 0x8e;
-      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xf93), nButtonWidth / 2 - nTextWidth / 2 + 1 + iVar2 - 0x49, bMouseOnButton, 0, 0);
+      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xf93), nButtonWidth / 2 - nTextWidth / 2 + 1 + iVar2 - 0x49, Inv::ScreenSizeY - 0x8e, 0, 0);
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar2 - 0x49, Inv::ScreenSizeY - 0x69, -1, DRAW_SOLID, nullptr);
     }
 
@@ -9159,10 +9154,8 @@ static void __stdcall DRAW_UI_StatWindow_II(int32_t bUpperEnabled, int32_t bLowe
 
     Engine::Gfx::D2GFX_DrawSolidRectExBySize(gaStatWindowRowLayout[nBtnIndex * 6] + Inv::gnPanelOffsetX, gaStatWindowRowLayout[nBtnIndex * 6 + 1] + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY, 0x9b, 0x1e, (uint32_t)gbUIStatWindowDrawFlag, DRAW_LESSTRANSPARENT);
     int nX = gaStatWindowRowLayout[nBtnIndex * 6 + 2] + Inv::gnPanelOffsetX;
-    BOOL bMultiLineCenter = 0;
-    int nMonsterIdx = gaStatWindowRowLayout[nBtnIndex * 6 + 3] + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY;
-    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x103f), nX, nMonsterIdx, 0, bMultiLineCenter);
-    nMonsterIdx = GAME::Select::SELECT_GetConstant13_X();
+    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x103f), nX, gaStatWindowRowLayout[nBtnIndex * 6 + 3] + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY, 0, 0);
+    int nMonsterIdx = GAME::Select::SELECT_GetConstant13_X();
     D2MonStatsTxt* pMonStatsTxt = nMonsterIdx >= 0 && nMonsterIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonsterIdx : nullptr;
     if (!pMonStatsTxt) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xec);
@@ -9293,7 +9286,6 @@ void __stdcall DRAW_UI_StatWindow_I() {
     uint8_t bVar1;
     uint8_t byDifficulty;
     uint16_t* nStatPts2;
-    int32_t iVar8;
     int nWidth;
     int nDrawY;
     uint32_t nStatVal;
@@ -9340,13 +9332,10 @@ void __stdcall DRAW_UI_StatWindow_I() {
     int nTmp;
     nTmp = Cursor::GetMouseY();
     if (nMouseXCast >= Inv::gnPanelOffsetX + 0x80 && nMouseXCast <= Inv::gnPanelOffsetX + 0xa0 && nTmp >= Inv::gnPanelOffsetY - 0x5c + Inv::ScreenSizeY && nTmp <= Inv::gnPanelOffsetY - 0x3c + Inv::ScreenSizeY) {
-      nDrawX = 1;
-      iVar2 = Inv::gnPanelOffsetY - 0x5f + Inv::ScreenSizeY;
-      iVar8 = 0;
-      nDrawY = Inv::gnPanelOffsetX + 0x8f;
-      D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1030), nDrawY, iVar2, iVar8, nDrawX);
+      D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1030), Inv::gnPanelOffsetX + 0x8f, Inv::gnPanelOffsetY - 0x5f + Inv::ScreenSizeY, 0, 1);
     }
 
+    int32_t iVar8;
     iVar8 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayer, UNITSTAT_statpts, 0);
     if (iVar8) {
       sGfxData.pDC6 = Panel::skillpoints;
@@ -9816,10 +9805,6 @@ void __stdcall DRAW_UI_TradePrompt() {
     uint32_t bIsDialogActive;
     eD2LevelId eLevelId;
     BOOL bIsTown;
-    int nTooltipY;
-    int32_t nCenterFlag;
-    int32_t nColor;
-    int nMouseX;
     int nMouseX2;
     nMouseX2 = Cursor::GetMouseX();
     int nMouseY;
@@ -9828,25 +9813,13 @@ void __stdcall DRAW_UI_TradePrompt() {
       bIsDialogActive = DRAW_IsDialogActive();
       if (!bIsDialogActive) {
         if (nMouseX2 >= Inv::gnPanelOffsetX + 0x111 && nMouseX2 <= Inv::gnPanelOffsetX + 0x133 && nMouseY >= 0xa8 - Inv::gnPanelOffsetY && nMouseY <= 0xca - Inv::gnPanelOffsetY) {
-          nCenterFlag = 0;
-          nColor = 0;
-          nTooltipY = 0xa7 - Inv::gnPanelOffsetY;
-          nMouseX = Inv::gnPanelOffsetX + 0xef;
-          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1023), nMouseX, nTooltipY, nColor, nCenterFlag);
+          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1023), Inv::gnPanelOffsetX + 0xef, 0xa7 - Inv::gnPanelOffsetY, 0, 0);
         }
         if (nMouseX2 >= Inv::gnPanelOffsetX + 0xdd && nMouseX2 <= Inv::gnPanelOffsetX + 0xff && nMouseY >= 0x17f - Inv::gnPanelOffsetY && nMouseY <= 0x1a1 - Inv::gnPanelOffsetY) {
-          nCenterFlag = 0;
-          nColor = 0;
-          nTooltipY = 0x17e - Inv::gnPanelOffsetY;
-          nMouseX = Inv::gnPanelOffsetX + 0xbb;
-          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1023), nMouseX, nTooltipY, nColor, nCenterFlag);
+          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1023), Inv::gnPanelOffsetX + 0xbb, 0x17e - Inv::gnPanelOffsetY, 0, 0);
         }
         if (nMouseX2 >= Inv::gnPanelOffsetX + 0x111 && nMouseX2 <= Inv::gnPanelOffsetX + 0x133 && nMouseY >= 0x17f - Inv::gnPanelOffsetY && nMouseY <= 0x1a1 - Inv::gnPanelOffsetY) {
-          nCenterFlag = 0;
-          nColor = 0;
-          nMouseY = 0x17e - Inv::gnPanelOffsetY;
-          nMouseX2 = Inv::gnPanelOffsetX + 0x107;
-          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1022), nMouseX2, nMouseY, nColor, nCenterFlag);
+          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1022), Inv::gnPanelOffsetX + 0x107, 0x17e - Inv::gnPanelOffsetY, 0, 0);
         }
       }
     }

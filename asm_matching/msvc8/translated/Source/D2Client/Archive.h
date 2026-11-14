@@ -59,6 +59,7 @@ __pragma(pack(push, 1)) struct TALLOCREC {
 namespace D2Client { namespace Archive {
 
 // Function declarations
+__declspec(noinline) inline void __fastcall ARCHIVE_ClearList(struct StormLinkedListStrc * nList);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 // Writes formatted text to a file handle using wvsprintfA. Variadic printf-style format arguments follow pFormat on the stack. Epilogue is a bare RET (no stack cleanup by callee), so the convention is __cdecl, not __stdcall.
@@ -73,7 +74,6 @@ void __fastcall ARCHIVE_UnlinkNode(struct StormLinkedListStrc * pThis, int, int 
 void __fastcall ARCHIVE_LinkNode(int * * ppList, int, int * * ppNode, int32_t nMode, int * * ppTarget);
 intptr_t __fastcall ARCHIVE_GetNodeSize(struct StormLinkedListStrc * pThis, int, struct StormLinkStrc * nNode);
 int __fastcall Unreferenced_0045bcb0(int param_1);
-void __fastcall ARCHIVE_ClearList(struct StormLinkedListStrc * nList);
 void __fastcall ARCHIVE_ClearAndFreeHead(struct StormLinkedListStrc * nList);
 uint32_t * __fastcall Unreferenced_0045bd80(uint32_t * param_1);
 int * * __fastcall ARCHIVE_AllocNode(int * * ppList, int, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags);

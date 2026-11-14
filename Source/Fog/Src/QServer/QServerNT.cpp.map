@@ -19,7 +19,13 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "9c748306"
+      "dh": "9c748306",
+      "paramStorage": [
+        [
+          "pQserver",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BeginAsyncReadForClient",
@@ -44,7 +50,17 @@
         "D2QServerClientConnectionStrc",
         "D2QServerStrc"
       ],
-      "dh": "361d058b"
+      "dh": "361d058b",
+      "paramStorage": [
+        [
+          "pQServer",
+          "EBX:4"
+        ],
+        [
+          "pClient",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "NET_QServerClientPacket_CreateStructAndCopyBytesThere",
@@ -65,7 +81,21 @@
         "D2QServerClientConnectionStrc",
         "D2QServerClientPacketStrc"
       ],
-      "dh": "164e838c"
+      "dh": "164e838c",
+      "paramStorage": [
+        [
+          "pQServerClient",
+          "EBX:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "AcceptConnection",
@@ -103,7 +133,25 @@
         "sockaddr",
         "u_long"
       ],
-      "dh": "a0caa3d7"
+      "dh": "a0caa3d7",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "pSockAddr",
+          "EAX:4"
+        ],
+        [
+          "nWorkerIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSockAddrLen",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BeginAsyncWriteForClient",
@@ -128,7 +176,17 @@
         "D2QServerClientConnectionStrc",
         "D2QServerStrc"
       ],
-      "dh": "37ff40ab"
+      "dh": "37ff40ab",
+      "paramStorage": [
+        [
+          "pQServer",
+          "EBX:4"
+        ],
+        [
+          "pClient",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PopAndFreeCompletedSendPacket",
@@ -147,7 +205,13 @@
       "usedTypes": [
         "D2QServerClientConnectionStrc"
       ],
-      "dh": "1187dd96"
+      "dh": "1187dd96",
+      "paramStorage": [
+        [
+          "pClient",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "AcceptThreadMain",
@@ -178,7 +242,13 @@
         "timeval",
         "uint32_t"
       ],
-      "dh": "bc5d674a"
+      "dh": "bc5d674a",
+      "paramStorage": [
+        [
+          "lpThreadParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SendToClientLocal",
@@ -204,7 +274,25 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "ee0de15c"
+      "dh": "ee0de15c",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "pQServerClient",
+          "EDX:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PumpIoCompletionQueueForWorker",
@@ -241,7 +329,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "341206e9"
+      "dh": "341206e9",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nWorkerIndex",
+          "EDX:4"
+        ],
+        [
+          "dwTimeoutMs",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IoWorkerThreadMain",
@@ -265,7 +367,13 @@
       "usedTypes": [
         "D2QServerWorkerThreadContextStrc"
       ],
-      "dh": "1ce06f01"
+      "dh": "1ce06f01",
+      "paramStorage": [
+        [
+          "lpThreadParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PumpIoCompletionQueues",
@@ -285,7 +393,17 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "ebcb9d73"
+      "dh": "ebcb9d73",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "dwTimeoutMs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StartListening",
@@ -318,7 +436,17 @@
         "u_short",
         "uint32_t"
       ],
-      "dh": "2cb0efb1"
+      "dh": "2cb0efb1",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nPort",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CreateSocketLocal",
@@ -341,7 +469,17 @@
         "WSADATA",
         "uint32_t"
       ],
-      "dh": "c9b39c50"
+      "dh": "c9b39c50",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nPort",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

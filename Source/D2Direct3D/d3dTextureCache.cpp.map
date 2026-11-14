@@ -26,7 +26,29 @@
         "D3DTextureCacheNodeStrc",
         "D3DTextureCacheStrc"
       ],
-      "dh": "2f06a3fe"
+      "dh": "2f06a3fe",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nBaseMemoryUsed",
+          "EDX:4"
+        ],
+        [
+          "nAvailableMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTextureWidth",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTextureHeight",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D3DTEXCACHE_SetPalette",
@@ -47,7 +69,17 @@
         "D3DTextureCacheStrc",
         "IDirectDrawSurface7"
       ],
-      "dh": "38227c1c"
+      "dh": "38227c1c",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "pPalette",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D3DTEXCACHE_InsertNodeAtTail",
@@ -66,7 +98,17 @@
         "D3DTextureCacheNodeStrc",
         "D3DTextureCacheStrc"
       ],
-      "dh": "2576cb26"
+      "dh": "2576cb26",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ],
+        [
+          "pCache",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D3DTEXCACHE_RemoveNodeByIndex",
@@ -85,7 +127,17 @@
         "D3DTextureCacheNodeStrc",
         "D3DTextureCacheStrc"
       ],
-      "dh": "f880af90"
+      "dh": "f880af90",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D3DTEXCACHE_AllocateNodeFromFreeList",
@@ -107,7 +159,13 @@
         "D3DTextureCacheNodeStrc",
         "D3DTextureCacheStrc"
       ],
-      "dh": "88fd6a4c"
+      "dh": "88fd6a4c",
+      "paramStorage": [
+        [
+          "pCache",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D3DTEXCACHE_InvalidateByIndex",
@@ -130,7 +188,17 @@
       "usedTypes": [
         "D3DTextureCacheStrc"
       ],
-      "dh": "9c8dd3f1"
+      "dh": "9c8dd3f1",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D3DTEXCACHE_InvalidateByTilePtr",
@@ -149,7 +217,13 @@
         "D3DTextureCacheNodeStrc",
         "D3DTextureCacheStrc"
       ],
-      "dh": "a16b6a56"
+      "dh": "a16b6a56",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D3DTEXCACHE_Free",
@@ -174,7 +248,17 @@
         "D3DTextureCacheStrc",
         "IUnknown"
       ],
-      "dh": "c5003104"
+      "dh": "c5003104",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "bInvalidateAll",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D3DTEXCACHE_EnsureAvailableNode",
@@ -195,7 +279,13 @@
         "D3DTextureCacheStrc",
         "int32_t"
       ],
-      "dh": "0c72d05e"
+      "dh": "0c72d05e",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

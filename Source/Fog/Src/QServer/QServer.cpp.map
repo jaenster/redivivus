@@ -19,7 +19,17 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "1ecc418b"
+      "dh": "1ecc418b",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "_NullSubRet4_Unref_006bc850",
@@ -34,7 +44,13 @@
       "calledFunctions": [
         "_NullSubRet4_Unref_006bc850"
       ],
-      "dh": "1b73483c"
+      "dh": "1b73483c",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "_NullSubTrace",
@@ -79,7 +95,13 @@
       "calledFunctions": [
         "_unused_SetupDefaultValues"
       ],
-      "dh": "7e270d0e"
+      "dh": "7e270d0e",
+      "paramStorage": [
+        [
+          "pnQServerSettings",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "StartListening",
@@ -100,7 +122,17 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "b79b4c01"
+      "dh": "b79b4c01",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nToken",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SwapWorkerSlotValue",
@@ -118,7 +150,21 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "57844aac"
+      "dh": "57844aac",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWorkerIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNewSlotValueOrZero",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ClearModePacketQueues",
@@ -137,7 +183,13 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "0da74d57"
+      "dh": "0da74d57",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetConnectedClients",
@@ -155,7 +207,13 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "a9a49ab8"
+      "dh": "a9a49ab8",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsSingleplayer",
@@ -173,7 +231,13 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "6adb23cb"
+      "dh": "6adb23cb",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetPerIpConnectionLimit",
@@ -191,7 +255,17 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "7075a605"
+      "dh": "7075a605",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPerIpConnectionLimit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "WaitForEmptyEvent",
@@ -209,7 +283,17 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "c04cee93"
+      "dh": "c04cee93",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwTimeoutMs",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "EnterCriticalSection_QServer",
@@ -228,7 +312,17 @@
         "FogCritSectLockStrc",
         "LPCRITICAL_SECTION"
       ],
-      "dh": "cd388921"
+      "dh": "cd388921",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "pCriticalSection",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LeaveCriticalSection_QServer",
@@ -246,7 +340,13 @@
       "usedTypes": [
         "FogCritSectLockStrc"
       ],
-      "dh": "3b4bad3b"
+      "dh": "3b4bad3b",
+      "paramStorage": [
+        [
+          "ppCriticalSection",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FindClientByClientId",
@@ -266,7 +366,17 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "bdffb38a"
+      "dh": "bdffb38a",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nClientId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FindClientBySocket",
@@ -287,7 +397,17 @@
         "SOCKET",
         "uint32_t"
       ],
-      "dh": "312ffc9c"
+      "dh": "312ffc9c",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "Socket",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "IncrementClientRefCount",
@@ -306,7 +426,17 @@
         "D2QServerClientConnectionStrc",
         "D2QServerStrc"
       ],
-      "dh": "49d6505e"
+      "dh": "49d6505e",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "pQServerClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_QServerClientPacket_FreeAllPackets",
@@ -327,7 +457,13 @@
         "D2QServerClientConnectionStrc",
         "D2QServerClientPacketStrc"
       ],
-      "dh": "e31c2d14"
+      "dh": "e31c2d14",
+      "paramStorage": [
+        [
+          "pQServerClient",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "LogHackList",
@@ -344,7 +480,13 @@
         "GetTickCount",
         "LOGMANAGER_TraceToModuleLog"
       ],
-      "dh": "5710743d"
+      "dh": "5710743d",
+      "paramStorage": [
+        [
+          "nHacklistSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SweepExpiredHackEntries",
@@ -366,7 +508,13 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "be278871"
+      "dh": "be278871",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HACKL_RemoveIpFromHacklist",
@@ -389,7 +537,21 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "5920fec3"
+      "dh": "5920fec3",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nIpAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "HACKL_CheckAndResetHacklistEntry",
@@ -408,7 +570,17 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "0baf06aa"
+      "dh": "0baf06aa",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nIpAddress",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsPerIpLimitReached",
@@ -429,7 +601,17 @@
         "in_addr",
         "uint32_t"
       ],
-      "dh": "3a0f2e5d"
+      "dh": "3a0f2e5d",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "pClientIp",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CountQueuedPacketsInMode",
@@ -447,7 +629,17 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "8dba78c1"
+      "dh": "8dba78c1",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DequeueModePacket",
@@ -467,7 +659,25 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "329fc0fc"
+      "dh": "329fc0fc",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "WaitForEmptyEventOrPumpIo",
@@ -487,7 +697,17 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "08f25847"
+      "dh": "08f25847",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwTimeoutMs",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetTokenHashMapByTokenId",
@@ -508,7 +728,21 @@
         "D2TSExplicitListHeadStrc *",
         "uint32_t"
       ],
-      "dh": "0c9bf7cb"
+      "dh": "0c9bf7cb",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nToken",
+          "EDX:4"
+        ],
+        [
+          "pBucket",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetClientLocalIpByToken",
@@ -530,7 +764,17 @@
         "D2TSExplicitListHeadStrc",
         "uint32_t"
       ],
-      "dh": "3a54bff2"
+      "dh": "3a54bff2",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nToken",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetClientLocalPortByToken",
@@ -554,7 +798,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "0dbe17f2"
+      "dh": "0dbe17f2",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nToken",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetClientPeerIpByToken",
@@ -576,7 +830,17 @@
         "LPCRITICAL_SECTION",
         "uint32_t"
       ],
-      "dh": "e8b6bb8f"
+      "dh": "e8b6bb8f",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nToken",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetClientPeerPortByToken",
@@ -600,7 +864,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "70cc2627"
+      "dh": "70cc2627",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nToken",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetClientIpStringByClientId",
@@ -620,7 +894,25 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "054d0f75"
+      "dh": "054d0f75",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClientId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szIpAddress",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GetClientIpByToken",
@@ -641,7 +933,17 @@
         "in_addr",
         "uint32_t"
       ],
-      "dh": "68f87fe1"
+      "dh": "68f87fe1",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nToken",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ProbePeerNameByToken",
@@ -662,7 +964,17 @@
         "sockaddr",
         "uint32_t"
       ],
-      "dh": "52a29aad"
+      "dh": "52a29aad",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nToken",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetClientSocketByToken",
@@ -682,7 +994,17 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "01c1e837"
+      "dh": "01c1e837",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClientToken",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "QSHackUnlistIP",
@@ -704,7 +1026,25 @@
         "in_addr",
         "uint32_t"
       ],
-      "dh": "d87efd97"
+      "dh": "d87efd97",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pIp",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szFile2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "QSHackListSize",
@@ -723,7 +1063,21 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "f9be0e59"
+      "dh": "f9be0e59",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetHacklistLineHook",
@@ -745,7 +1099,17 @@
         "D2QServerStrc",
         "fpD2QServerLineHook"
       ],
-      "dh": "c88e346e"
+      "dh": "c88e346e",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnHook",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetReservedHook",
@@ -763,7 +1127,17 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "5c267336"
+      "dh": "5c267336",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnHook",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetClientServerTokenByClientId",
@@ -784,7 +1158,21 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "fec10584"
+      "dh": "fec10584",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClientId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nServerToken",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetClientServerTokenByClientId",
@@ -804,7 +1192,17 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "4b831072"
+      "dh": "4b831072",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClientId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FreeHacklistBuckets",
@@ -825,7 +1223,13 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "a6878d4a"
+      "dh": "a6878d4a",
+      "paramStorage": [
+        [
+          "pQServer",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_006bf170",
@@ -845,7 +1249,13 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "14f163b9"
+      "dh": "14f163b9",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IncrementPerIpConnCount",
@@ -867,7 +1277,17 @@
         "in_addr",
         "uint32_t"
       ],
-      "dh": "ab2370b6"
+      "dh": "ab2370b6",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ESI:4"
+        ],
+        [
+          "pClientIp",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "NET_QServer_DecrementPerIpConnectionCount",
@@ -888,7 +1308,17 @@
         "in_addr",
         "uint32_t"
       ],
-      "dh": "a236bb86"
+      "dh": "a236bb86",
+      "paramStorage": [
+        [
+          "pClientIp",
+          "EAX:4"
+        ],
+        [
+          "pQServer",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "PruneIpRateList",
@@ -909,7 +1339,13 @@
         "D2QServerIpRateEntryStrc",
         "D2QServerStrc"
       ],
-      "dh": "6e80747c"
+      "dh": "6e80747c",
+      "paramStorage": [
+        [
+          "pQServer",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "FreeIpRateList",
@@ -929,7 +1365,13 @@
         "D2QServerIpRateEntryStrc",
         "D2QServerStrc"
       ],
-      "dh": "73bf70bd"
+      "dh": "73bf70bd",
+      "paramStorage": [
+        [
+          "pQServer",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SendPacketToClient",
@@ -953,7 +1395,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8b9f2637"
+      "dh": "8b9f2637",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nClientId",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SetHackMode",
@@ -971,7 +1431,17 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "74a876f6"
+      "dh": "74a876f6",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bUseQServerHack",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Listen98Nt",
@@ -994,7 +1464,17 @@
         "WSADATA",
         "uint32_t"
       ],
-      "dh": "e0c60263"
+      "dh": "e0c60263",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ESI:4"
+        ],
+        [
+          "pPort",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CountAllQueuedPackets",
@@ -1014,7 +1494,13 @@
         "D2QServerModePacketNodeStrc *",
         "D2QServerStrc"
       ],
-      "dh": "d3fa61f8"
+      "dh": "d3fa61f8",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "_NullSubRet4",
@@ -1032,7 +1518,13 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "57d4e6d1"
+      "dh": "57d4e6d1",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "_NullSubRet8",
@@ -1050,7 +1542,17 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "43f1489b"
+      "dh": "43f1489b",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AddGameTokenFilter",
@@ -1070,7 +1572,21 @@
         "D2QServerTokenFilterEntryStrc",
         "uint32_t"
       ],
-      "dh": "6fed2b32"
+      "dh": "6fed2b32",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nMaskTableIndex",
+          "EDX:4"
+        ],
+        [
+          "nExpectedMaskedToken",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MatchesGameTokenFilter",
@@ -1089,7 +1605,17 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "b5455ec6"
+      "dh": "b5455ec6",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MatchesGameTokenFilter_Thunk",
@@ -1109,7 +1635,17 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "ced75aef"
+      "dh": "ced75aef",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CopyWorkerTelemetrySnapshot",
@@ -1130,7 +1666,21 @@
         "D2QServerWorkerTelemetryStrc",
         "uint32_t"
       ],
-      "dh": "8856d08b"
+      "dh": "8856d08b",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "pOutTelemetry",
+          "EDX:4"
+        ],
+        [
+          "nWorkers",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "_NullSub",
@@ -1183,7 +1733,41 @@
         "fpD2QServerSourceLineHook",
         "uint32_t"
       ],
-      "dh": "dfcd1772"
+      "dh": "dfcd1772",
+      "paramStorage": [
+        [
+          "neD2GSConnectionType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPort",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eD2GameType",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pfnPacketClassifier",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pfnOnClientAcceptedHook",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pfnOnClientFreedHook",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pfnSinglePlayerSendHook",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "BroadcastToAllClients",
@@ -1204,7 +1788,21 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "6883d91c"
+      "dh": "6883d91c",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "AddClient",
@@ -1230,7 +1828,21 @@
         "SOCKET",
         "uint32_t"
       ],
-      "dh": "53baa044"
+      "dh": "53baa044",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "pSock",
+          "EDX:4"
+        ],
+        [
+          "nIp",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveClient",
@@ -1259,7 +1871,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "314ad718"
+      "dh": "314ad718",
+      "paramStorage": [
+        [
+          "pQServer",
+          "EAX:4"
+        ],
+        [
+          "nClientToken",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BanIpAddress",
@@ -1282,7 +1904,25 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "3f7a2096"
+      "dh": "3f7a2096",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "szFile",
+          "EDX:4"
+        ],
+        [
+          "nIpAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CheckIpConnectionRate",
@@ -1306,7 +1946,17 @@
         "_struct_",
         "in_addr"
       ],
-      "dh": "b2affe5c"
+      "dh": "b2affe5c",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "pIpAddress",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "QSSpamCheck",
@@ -1327,7 +1977,21 @@
         "D2QServerClientConnectionStrc",
         "D2QServerStrc"
       ],
-      "dh": "d034579f"
+      "dh": "d034579f",
+      "paramStorage": [
+        [
+          "pQServerClientConnectionStrc",
+          "ESI:4"
+        ],
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBytes",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Shutdown",
@@ -1357,7 +2021,21 @@
         "D2QServerStrc",
         "SOCKET"
       ],
-      "dh": "91570a8d"
+      "dh": "91570a8d",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveClientAndClearLog",
@@ -1378,7 +2056,17 @@
         "D2QServerClientConnectionStrc",
         "D2QServerStrc"
       ],
-      "dh": "1c8b1433"
+      "dh": "1c8b1433",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SendPacketByClientId",
@@ -1400,7 +2088,25 @@
         "D2QServerStrc",
         "int32_t"
       ],
-      "dh": "ffae6b2e"
+      "dh": "ffae6b2e",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClientId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CloseRemoteConnection",
@@ -1425,7 +2131,25 @@
         "D2QServerStrc",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "a3f638c0"
+      "dh": "a3f638c0",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nClientId",
+          "EDX:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BanClient",
@@ -1449,7 +2173,25 @@
         "_struct_",
         "uint32_t"
       ],
-      "dh": "098b3f01"
+      "dh": "098b3f01",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClientId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DisconnectAndBanIp",
@@ -1472,7 +2214,25 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "a2bd91b7"
+      "dh": "a2bd91b7",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIpAddress",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_CloseRemoteConnection",
@@ -1491,7 +2251,25 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "7030b3a7"
+      "dh": "7030b3a7",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClientId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "QSDisconnectIP",
@@ -1514,7 +2292,25 @@
         "in_addr",
         "uint32_t"
       ],
-      "dh": "6a615065"
+      "dh": "6a615065",
+      "paramStorage": [
+        [
+          "pQServer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "addr",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "HACKL_DisconnectAndBanClient",
@@ -1536,7 +2332,25 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "135c8b5c"
+      "dh": "135c8b5c",
+      "paramStorage": [
+        [
+          "nClientToken",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pReason",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pQServerStrc",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CheckIfPlayerIsBannedByAddress",
@@ -1561,7 +2375,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5951f29d"
+      "dh": "5951f29d",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "pAddr",
+          "EDX:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "RecvForClient",
@@ -1593,7 +2425,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "56515d6b"
+      "dh": "56515d6b",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

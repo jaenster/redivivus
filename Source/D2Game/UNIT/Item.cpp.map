@@ -49,7 +49,21 @@
         "eD2ItemAnimMode",
         "uint32_t"
       ],
-      "dh": "1389ebc2"
+      "dh": "1389ebc2",
+      "paramStorage": [
+        [
+          "pClient",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pItem",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SendUpdatedItemsToClient",
@@ -84,7 +98,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0b11a5cf"
+      "dh": "0b11a5cf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInventory",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ClearFlagsAndCommands",
@@ -106,7 +138,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "3866a6c8"
+      "dh": "3866a6c8",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HasPendingInventoryUpdates",
@@ -131,7 +173,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "aa45e991"
+      "dh": "aa45e991",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00597aa0",
@@ -152,7 +204,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "9de0b079"
+      "dh": "9de0b079",
+      "paramStorage": [
+        [
+          "pItem",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ProcessInventoryUpdates",
@@ -189,7 +247,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e009e040"
+      "dh": "e009e040",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SendNpcEnchantsToClient",
@@ -215,7 +283,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a528b066"
+      "dh": "a528b066",
+      "paramStorage": [
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SendNpcHealthUpdate",
@@ -240,7 +318,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "046f4289"
+      "dh": "046f4289",
+      "paramStorage": [
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PacketUpdateForClient",
@@ -284,7 +372,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "c698858a"
+      "dh": "c698858a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIsNew",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

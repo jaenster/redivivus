@@ -23,7 +23,33 @@
         "D2RoomCoordListStrc",
         "D2RoomStrc"
       ],
-      "dh": "6a08aeab"
+      "dh": "6a08aeab",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnRight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnLeft",
+          "EDI:4"
+        ],
+        [
+          "pnTop",
+          "ESI:4"
+        ],
+        [
+          "pnBottom",
+          "EBX:4"
+        ],
+        [
+          "pCoordList",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CheckWarpSpawnCoords",
@@ -53,7 +79,25 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "211af5d9"
+      "dh": "211af5d9",
+      "paramStorage": [
+        [
+          "pRoom",
+          "EAX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SPAWN_FindRandomPositionForMonster",
@@ -82,7 +126,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "68d1cdfc"
+      "dh": "68d1cdfc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pCoordList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bCheckWarpDistance",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SPAWN_SpawnMonsterGroupAtRandom",
@@ -111,7 +185,37 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "879cdd2b"
+      "dh": "879cdd2b",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCoordList",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnGroupLayout",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pOffsetX",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pOffsetY",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "SPAWN_SpawnMonsterWithMinions",
@@ -144,7 +248,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8329416b"
+      "dh": "8329416b",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCoordList",
+          "Stack[0xc]:4"
+        ],
+        [
+          "byGroupSizeMin",
+          "Stack[0x10]:1"
+        ],
+        [
+          "byGroupSizeMax",
+          "Stack[0x14]:1"
+        ],
+        [
+          "nClassId",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SpawnMonsterGroup",
@@ -173,7 +303,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "39ab5314"
+      "dh": "39ab5314",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SPAWN_SpawnMonsterFormation",
@@ -195,7 +347,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "37753f66"
+      "dh": "37753f66",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "EBX:4"
+        ],
+        [
+          "nClassId",
+          "EDI:4"
+        ],
+        [
+          "pGroupOffsetTable",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SetMinionsForBoss",
@@ -220,7 +390,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "957a0247"
+      "dh": "957a0247",
+      "paramStorage": [
+        [
+          "pRoomCoordList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMinionClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SpawnUniquePackInRoom",
@@ -244,7 +432,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "90fd5118"
+      "dh": "90fd5118",
+      "paramStorage": [
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCoordList",
+          "EBX:4"
+        ],
+        [
+          "nClassId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_ValidateSpawnForLevel",
@@ -263,7 +469,17 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "9df80a9d"
+      "dh": "9df80a9d",
+      "paramStorage": [
+        [
+          "nClassId",
+          "EAX:4"
+        ],
+        [
+          "eLevelId",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SPAWN_IsExcludedMonsterClass",
@@ -281,7 +497,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "45d705cd"
+      "dh": "45d705cd",
+      "paramStorage": [
+        [
+          "nClassId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SPAWN_SpawnMonsterWithCollisionObj",
@@ -313,7 +535,33 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "cc65a73c"
+      "dh": "cc65a73c",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eAnimMode",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nClassId",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SpawnMonster",
@@ -360,7 +608,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "eb9e1ecb"
+      "dh": "eb9e1ecb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nMonCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_CanSpawnInRoom",
@@ -387,7 +661,17 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "502bd9cb"
+      "dh": "502bd9cb",
+      "paramStorage": [
+        [
+          "pRoom",
+          "EDI:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "CheckIfBaseIsFallenOrScarabAndSet",
@@ -405,7 +689,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9c191e8e"
+      "dh": "9c191e8e",
+      "paramStorage": [
+        [
+          "nMonstatId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SpawnRoomMonsters",
@@ -446,7 +736,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b3e223f4"
+      "dh": "b3e223f4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_InitWanderingMonsterRegion",
@@ -476,7 +776,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a22093d0"
+      "dh": "a22093d0",
+      "paramStorage": [
+        [
+          "pMonsterRegion",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ],
+        [
+          "pLevelsTxt",
+          "EAX:4"
+        ],
+        [
+          "pRoom",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_InitWanderingForLevel",
@@ -501,7 +819,25 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "d79180d0"
+      "dh": "d79180d0",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRoom",
+          "EAX:4"
+        ],
+        [
+          "pLevelsTxt",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_TrySpawnWanderingMonster",
@@ -526,7 +862,17 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "619bea27"
+      "dh": "619bea27",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

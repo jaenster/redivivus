@@ -22,7 +22,33 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "531ae143"
+      "dh": "531ae143",
+      "paramStorage": [
+        [
+          "nDeltaX",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nMaxDistSq",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSourceX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSourceY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDeltaY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_InitializeVisual",
@@ -51,7 +77,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1ddaea65"
+      "dh": "1ddaea65",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSourceUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_GetSpeedByRemainingFrames",
@@ -71,7 +107,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "29fd8f0c"
+      "dh": "29fd8f0c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_GetPoisonNovaRadius",
@@ -90,7 +132,17 @@
         "D2MissilesTxt",
         "int32_t"
       ],
-      "dh": "12b8743c"
+      "dh": "12b8743c",
+      "paramStorage": [
+        [
+          "pMissileTxtRaw",
+          "ECX:4"
+        ],
+        [
+          "nCurrentFrame",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn10_ProgOverlay",
@@ -110,7 +162,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "4aa3b8d1"
+      "dh": "4aa3b8d1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_SetupHoming",
@@ -145,7 +207,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "14de6765"
+      "dh": "14de6765",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_RetargetClosest",
@@ -171,7 +243,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "99268e56"
+      "dh": "99268e56",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn13_Homing",
@@ -201,7 +279,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bbd3ef00"
+      "dh": "bbd3ef00",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn34_MephistoDoNotDraw",
@@ -221,7 +309,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "46ec0a7c"
+      "dh": "46ec0a7c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_SetPathFromTotalFrames_ForCatapultChargedBall",
@@ -248,7 +346,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "fd63b8a9"
+      "dh": "fd63b8a9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nParam",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn46_CatapultChargedBall",
@@ -280,7 +388,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "b69c982c"
+      "dh": "b69c982c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn51_LightTrailJavelin",
@@ -308,7 +426,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9749a3fe"
+      "dh": "9749a3fe",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn61_WorldStoneShake",
@@ -328,7 +456,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1c4de731"
+      "dh": "1c4de731",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_SetQualityLevel",
@@ -343,7 +481,13 @@
       "calledFunctions": [
         "LIGHTMAP_SetQualityLevel"
       ],
-      "dh": "ddad5ca6"
+      "dh": "ddad5ca6",
+      "paramStorage": [
+        [
+          "nQualityLastCheck",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LIGHTMAP_GetQualityLevel",
@@ -381,7 +525,25 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "675dd5c2"
+      "dh": "675dd5c2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit1",
+          "ESI:4"
+        ],
+        [
+          "pMissileTxt",
+          "EBX:4"
+        ],
+        [
+          "pUnit2",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDoFuncData_02",
@@ -403,7 +565,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2a163ca9"
+      "dh": "2a163ca9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pCtx",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDoFuncData_01",
@@ -426,7 +598,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bdee6c47"
+      "dh": "bdee6c47",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pCtx",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDoFuncData_03",
@@ -448,7 +630,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9ee0c0ac"
+      "dh": "9ee0c0ac",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pCtx",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDoFuncData_07",
@@ -468,7 +660,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7b11940a"
+      "dh": "7b11940a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pCtx",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_InitMissileUnit",
@@ -496,7 +698,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "14b10c7e"
+      "dh": "14b10c7e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_FreeClientMissile",
@@ -521,7 +745,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "bcf28d4d"
+      "dh": "bcf28d4d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_UpdateLightFlicker",
@@ -546,7 +776,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2cee1451"
+      "dh": "2cee1451",
+      "paramStorage": [
+        [
+          "pUnitRaw",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn40_HealingBolt",
@@ -567,7 +803,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "69818b00"
+      "dh": "69818b00",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_GetSpeedTier",
@@ -585,7 +831,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "7827e0eb"
+      "dh": "7827e0eb",
+      "paramStorage": [
+        [
+          "nRemainingFrames",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CheckAndDecrementPierce",
@@ -608,7 +860,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "76c5d253"
+      "dh": "76c5d253",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_RemoveClientSide",
@@ -634,7 +892,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8387bc37"
+      "dh": "8387bc37",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CalculatePierceCount",
@@ -662,7 +926,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "70ba579b"
+      "dh": "70ba579b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MakeMissile",
@@ -737,7 +1011,13 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "30243994"
+      "dh": "30243994",
+      "paramStorage": [
+        [
+          "pSkillArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CastAttack",
@@ -761,7 +1041,33 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "53f92f89"
+      "dh": "53f92f89",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMissileId",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MakeMissileAtXY",
@@ -786,7 +1092,33 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "1cd8b168"
+      "dh": "1cd8b168",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "neMissilesId",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateFromUnitWithOffset",
@@ -815,7 +1147,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5ade0a0c"
+      "dh": "5ade0a0c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMissileId",
+          "EDX:4"
+        ],
+        [
+          "nOffsetX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOffsetY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nParticleParam",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateAtOwnerCoords",
@@ -841,7 +1211,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "04bdd89a"
+      "dh": "04bdd89a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMissileId",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_SpawnAreaOfEffect",
@@ -878,7 +1266,33 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "99682610"
+      "dh": "99682610",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pMissileIds",
+          "EDX:4"
+        ],
+        [
+          "nMissileArraySize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nChanceDivisor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nChanceThreshold",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateTrailMissile",
@@ -909,7 +1323,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2db814b5"
+      "dh": "2db814b5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMissileId",
+          "EDX:4"
+        ],
+        [
+          "nTotalFrames",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSubLoopParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_SpawnRandomScatter",
@@ -942,7 +1374,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c3db7af7"
+      "dh": "c3db7af7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nSpawnInterval",
+          "EDX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreatePeriodicTrail",
@@ -977,7 +1431,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b761f956"
+      "dh": "b761f956",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nRadius",
+          "EDX:4"
+        ],
+        [
+          "nInterval",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_SetupFallingZPos",
@@ -1001,7 +1473,13 @@
         "D2MissilesTxt",
         "D2UnitStrc"
       ],
-      "dh": "c6fd5585"
+      "dh": "c6fd5585",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_SetupDescentAnim",
@@ -1025,7 +1503,13 @@
         "D2MissilesTxt",
         "D2UnitStrc"
       ],
-      "dh": "ffdaee8b"
+      "dh": "ffdaee8b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateRandomOffset",
@@ -1056,7 +1540,25 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "84578d71"
+      "dh": "84578d71",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateMultiShatter",
@@ -1088,7 +1590,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "43d2b901"
+      "dh": "43d2b901",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateSubWithSound",
@@ -1121,7 +1641,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "163e7a67"
+      "dh": "163e7a67",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGameFrame",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateRandomSubInRadius",
@@ -1160,7 +1702,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ace8b9b0"
+      "dh": "ace8b9b0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "pChosenMissileTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreatePeriodicAreaSub",
@@ -1181,7 +1741,25 @@
         "eMissilesId",
         "uint32_t"
       ],
-      "dh": "43d65bc6"
+      "dh": "43d65bc6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGameFrame",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateDirectionalSub",
@@ -1208,7 +1786,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a674f771"
+      "dh": "a674f771",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMissileId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_SpawnMissilesInArea",
@@ -1239,7 +1827,45 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "18cc0706"
+      "dh": "18cc0706",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nCenterX",
+          "EDX:4"
+        ],
+        [
+          "nCenterY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nChance",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nStep",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreatePatternAtUnitPos",
@@ -1265,7 +1891,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bf2f74e0"
+      "dh": "bf2f74e0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nRadius",
+          "EDX:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nChance",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nStep",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateRadialBurst",
@@ -1295,7 +1951,29 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "2e08a709"
+      "dh": "2e08a709",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMissileId",
+          "EDX:4"
+        ],
+        [
+          "nSecondaryCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStep",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSubLoopMult",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn64_Unused",
@@ -1323,7 +2001,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6c5be502"
+      "dh": "6c5be502",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn01_FireExplosion",
@@ -1348,7 +2036,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0abe29ef"
+      "dh": "0abe29ef",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn02_GasCloud",
@@ -1369,7 +2067,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f49b5027"
+      "dh": "f49b5027",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn03_PotionExplode",
@@ -1396,7 +2104,17 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "03267241"
+      "dh": "03267241",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn09_HolyBolt",
@@ -1428,7 +2146,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1549cada"
+      "dh": "1549cada",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn12_ImmolationArrow",
@@ -1457,7 +2185,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "adcace6e"
+      "dh": "adcace6e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn14_IceShatter",
@@ -1487,7 +2225,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d4764c82"
+      "dh": "d4764c82",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn16_ChainLightning",
@@ -1524,7 +2272,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "1dc8c5fc"
+      "dh": "1dc8c5fc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn18_MeteorCenter",
@@ -1557,7 +2315,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5f355ec8"
+      "dh": "5f355ec8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn19_RandomSubMissile",
@@ -1584,7 +2352,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "556d3dd9"
+      "dh": "556d3dd9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn24_BoneSpear",
@@ -1608,7 +2386,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "a401a67a"
+      "dh": "a401a67a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_SkillFuncCreateAtTarget",
@@ -1634,7 +2422,17 @@
         "D2fpSkillFuncSub",
         "eD2UnitType"
       ],
-      "dh": "b957265a"
+      "dh": "b957265a",
+      "paramStorage": [
+        [
+          "pArg",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn25_LightningFury",
@@ -1664,7 +2462,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e0da5ba2"
+      "dh": "e0da5ba2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_SkillFuncCreateAtTargetB",
@@ -1690,7 +2498,17 @@
         "D2fpSkillFuncSub",
         "eD2UnitType"
       ],
-      "dh": "047c4d07"
+      "dh": "047c4d07",
+      "paramStorage": [
+        [
+          "pArg",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn26_FistOfHeavensDelay",
@@ -1724,7 +2542,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "febd021d"
+      "dh": "febd021d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_Create8DirectionalClient",
@@ -1753,7 +2581,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3d762138"
+      "dh": "3d762138",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStep",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn28_PantherPotGreen",
@@ -1778,7 +2632,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "4f71c253"
+      "dh": "4f71c253",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn29_GrimWard",
@@ -1811,7 +2675,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "bce75094"
+      "dh": "bce75094",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn30_FrozenOrb",
@@ -1839,7 +2713,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "05ef2476"
+      "dh": "05ef2476",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn04_Unused",
@@ -1867,7 +2751,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6e8cdbb4"
+      "dh": "6e8cdbb4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn32_FireHead",
@@ -1894,7 +2788,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "07ec98f3"
+      "dh": "07ec98f3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn33_MephistoFlyingRocks",
@@ -1923,7 +2827,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1f6dae13"
+      "dh": "1f6dae13",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn36_HellMeteorDown",
@@ -1951,7 +2865,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "35a7b88e"
+      "dh": "35a7b88e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn44_InAirLanding",
@@ -1982,7 +2906,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "9261e101"
+      "dh": "9261e101",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn47_CatapultSpikeBall",
@@ -2013,7 +2947,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "70a1c137"
+      "dh": "70a1c137",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateFlyingRockDebris",
@@ -2047,7 +2991,29 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "18519924"
+      "dh": "18519924",
+      "paramStorage": [
+        [
+          "pMissileUnit",
+          "EAX:4"
+        ],
+        [
+          "nSplashCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nVelocity",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDebrisCount",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDebrisMissileId",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn50_CatapultMeteorBall",
@@ -2068,7 +3034,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b453eea5"
+      "dh": "b453eea5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn52_MoltenBoulder",
@@ -2097,7 +3073,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "95160641"
+      "dh": "95160641",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn53_MoltenBoulderEmerge",
@@ -2131,7 +3117,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "5dc12430"
+      "dh": "5dc12430",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn54_VinesTrail",
@@ -2151,7 +3147,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "dfd5e59a"
+      "dh": "dfd5e59a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn55_FallingRock",
@@ -2177,7 +3183,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "647131b2"
+      "dh": "647131b2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn56_RecyclerVine",
@@ -2206,7 +3222,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "ecf90e99"
+      "dh": "ecf90e99",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn57_BaalSpawnMonsters",
@@ -2231,7 +3257,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ed86b524"
+      "dh": "ed86b524",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn60_Nihlithak",
@@ -2258,7 +3294,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ff27589e"
+      "dh": "ff27589e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateRandomOffsetHit",
@@ -2289,7 +3335,21 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "9a5c312e"
+      "dh": "9a5c312e",
+      "paramStorage": [
+        [
+          "nRadius",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn31_IceBreak",
@@ -2323,7 +3383,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "930578f3"
+      "dh": "930578f3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateFootprint",
@@ -2349,7 +3419,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "ba7fd7f2"
+      "dh": "ba7fd7f2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nStartFrame",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateTowardObject",
@@ -2383,7 +3463,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "6e1d76ea"
+      "dh": "6e1d76ea",
+      "paramStorage": [
+        [
+          "nObjectId",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn42_HfFragment1",
@@ -2410,7 +3504,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bf11b467"
+      "dh": "bf11b467",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn43_HfFragment2",
@@ -2442,7 +3546,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "461882dc"
+      "dh": "461882dc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateCircularRing",
@@ -2471,7 +3585,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7d05e03a"
+      "dh": "7d05e03a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn37_RadamentHandOfGod",
@@ -2504,7 +3628,17 @@
         "int32_t",
         "uint64_t"
       ],
-      "dh": "5c0c2758"
+      "dh": "5c0c2758",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn38_TaintedSunFlash",
@@ -2536,7 +3670,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "3dea199a"
+      "dh": "3dea199a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn39_QueenDeathGlob",
@@ -2565,7 +3709,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6f2719fc"
+      "dh": "6f2719fc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn41_DurielDeathRock",
@@ -2589,7 +3743,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "fad98eae"
+      "dh": "fad98eae",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateAtMonsterFacing",
@@ -2626,7 +3790,21 @@
         "eMissilesId",
         "uint32_t"
       ],
-      "dh": "d99541f9"
+      "dh": "d99541f9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateRandomCardinal",
@@ -2658,7 +3836,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c0b59cbb"
+      "dh": "c0b59cbb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateBaalLightningBolt",
@@ -2686,7 +3874,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "4d7ed4a9"
+      "dh": "4d7ed4a9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateDebrisWithCollision",
@@ -2721,7 +3919,21 @@
         "eD2CollisionUnitSize",
         "int32_t"
       ],
-      "dh": "b57a5c71"
+      "dh": "b57a5c71",
+      "paramStorage": [
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "nPosY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn66_WorldStoneShake",
@@ -2756,7 +3968,13 @@
         "int32_t",
         "uint64_t"
       ],
-      "dh": "79d8cbc8"
+      "dh": "79d8cbc8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn48_CatapultColdBall",
@@ -2792,7 +4010,17 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "67713dcd"
+      "dh": "67713dcd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CreateSteamVent",
@@ -2819,7 +4047,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "ad699bde"
+      "dh": "ad699bde",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pMissile",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn62_BaalTauntLightning",
@@ -2850,7 +4096,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a19043c3"
+      "dh": "a19043c3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltHitFn63_BaalTauntPoison",
@@ -2871,7 +4127,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8d4c113e"
+      "dh": "8d4c113e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_ClientFrameUpdate",
@@ -2900,7 +4166,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "c81a6a6a"
+      "dh": "c81a6a6a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_ClientHitExplode",
@@ -2957,7 +4229,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fbef10b1"
+      "dh": "fbef10b1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ],
+        [
+          "bForceExplode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn43_FollowOwner",
@@ -2981,7 +4267,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "41d03f69"
+      "dh": "41d03f69",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn01_BasicMissile",
@@ -3029,7 +4321,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "94776450"
+      "dh": "94776450",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn02_GroundSplat",
@@ -3059,7 +4357,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "78cee978"
+      "dh": "78cee978",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn03_TrailOnStep",
@@ -3086,7 +4390,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1ea6cc6d"
+      "dh": "1ea6cc6d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn04_PoisonCloud",
@@ -3107,7 +4417,13 @@
         "D2MissilesTxt",
         "D2UnitStrc"
       ],
-      "dh": "fb93a16d"
+      "dh": "fb93a16d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn05_FireWall",
@@ -3133,7 +4449,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "402d7406"
+      "dh": "402d7406",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn06_FireWallMaker",
@@ -3171,7 +4493,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9ce491ea"
+      "dh": "9ce491ea",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn07_Homing",
@@ -3206,7 +4534,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ddb4e605"
+      "dh": "ddb4e605",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn08_LightningTrail",
@@ -3239,7 +4573,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "faa084fd"
+      "dh": "faa084fd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn09_MeteorCenter",
@@ -3281,7 +4621,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "498d545f"
+      "dh": "498d545f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn10_MonBlizzCenter",
@@ -3309,7 +4655,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "16731c3f"
+      "dh": "16731c3f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn11_DieAtAnimEnd",
@@ -3332,7 +4684,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "fb272cc0"
+      "dh": "fb272cc0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn12_ScreenShake",
@@ -3356,7 +4714,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "24a3d582"
+      "dh": "24a3d582",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn67_Unused",
@@ -3386,7 +4750,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "5ce3c23a"
+      "dh": "5ce3c23a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn13_Blizzard",
@@ -3419,7 +4789,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "05d2258e"
+      "dh": "05d2258e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn14_Unused",
@@ -3449,7 +4825,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c43c727c"
+      "dh": "c43c727c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn15_FingerMageSpider",
@@ -3489,7 +4871,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8c0f7c0f"
+      "dh": "8c0f7c0f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn16_DiabWallMaker",
@@ -3521,7 +4909,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "58039b48"
+      "dh": "58039b48",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn17_CurseCenter",
@@ -3552,7 +4946,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "92388f80"
+      "dh": "92388f80",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn18_BoneSpear",
@@ -3593,7 +4993,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "24b998db"
+      "dh": "24b998db",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn19_FrozenOrb",
@@ -3625,7 +5031,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b7aa8ceb"
+      "dh": "b7aa8ceb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn20_FrozenOrbNova",
@@ -3656,7 +5068,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8940a006"
+      "dh": "8940a006",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn21_BrDeathControl",
@@ -3690,7 +5108,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e2b86646"
+      "dh": "e2b86646",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn22_BrDeathLightningBolt",
@@ -3731,7 +5155,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2d273a0f"
+      "dh": "2d273a0f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn23_DenOfEvilLight",
@@ -3753,7 +5183,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "71f44c60"
+      "dh": "71f44c60",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn24_CairnStones",
@@ -3795,7 +5231,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3040d3cf"
+      "dh": "3040d3cf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn25_Mist",
@@ -3829,7 +5271,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ce870d9e"
+      "dh": "ce870d9e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn26_MephistoDeathControl",
@@ -3863,7 +5311,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "bc0a8646"
+      "dh": "bc0a8646",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn27_BossFireWallMaker",
@@ -3903,7 +5357,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "87e6fb77"
+      "dh": "87e6fb77",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn28_MephistoDoNotDraw",
@@ -3934,7 +5394,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e0054c2d"
+      "dh": "e0054c2d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn29_AndyControl",
@@ -3964,7 +5430,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a4f98862"
+      "dh": "a4f98862",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn30_TowerChestSpawner",
@@ -3999,7 +5471,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3359c0c2"
+      "dh": "3359c0c2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn44_Distraction",
@@ -4031,7 +5509,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d7578fbb"
+      "dh": "d7578fbb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn45_DistractionFog",
@@ -4053,7 +5537,13 @@
         "D2MissilesTxt",
         "D2UnitStrc"
       ],
-      "dh": "d488579c"
+      "dh": "d488579c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn46_LightningTrailingJavelin",
@@ -4092,7 +5582,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5b3a5488"
+      "dh": "5b3a5488",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn68_SucFireball",
@@ -4123,7 +5619,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "61e18b6c"
+      "dh": "61e18b6c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn47_MoltenBoulder",
@@ -4149,7 +5651,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a881e299"
+      "dh": "a881e299",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn48_EruptionCenter",
@@ -4192,7 +5700,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "903d7fca"
+      "dh": "903d7fca",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn49_Vines",
@@ -4216,7 +5730,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5dedf61b"
+      "dh": "5dedf61b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn50_Volcano",
@@ -4255,7 +5775,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f60a4ca7"
+      "dh": "f60a4ca7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn51_RecyclerDelay",
@@ -4289,7 +5815,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ed276600"
+      "dh": "ed276600",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn52_WakeMaker",
@@ -4321,7 +5853,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "80827015"
+      "dh": "80827015",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn53_TigerFury",
@@ -4350,7 +5888,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "a0812a0c"
+      "dh": "a0812a0c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn56_BaalTauntControl",
@@ -4385,7 +5929,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c5465a7b"
+      "dh": "c5465a7b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn57_BladeShield",
@@ -4420,7 +5970,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "655257d8"
+      "dh": "655257d8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn58_RoyalStrikeChaosIce",
@@ -4454,7 +6010,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "33fd1713"
+      "dh": "33fd1713",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn37_DiabloAppears",
@@ -4477,7 +6039,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "fb257c37"
+      "dh": "fb257c37",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn41_HfSpirit",
@@ -4500,7 +6068,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f2f244dd"
+      "dh": "f2f244dd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn40_HfFragment3",
@@ -4525,7 +6099,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f81a0d75"
+      "dh": "f81a0d75",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn39_HfFragment",
@@ -4545,7 +6125,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "cab6af21"
+      "dh": "cab6af21",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn38_HfControl",
@@ -4570,7 +6156,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "68b3363b"
+      "dh": "68b3363b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn42_IzualControl",
@@ -4606,7 +6198,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c08febb7"
+      "dh": "c08febb7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn31_HoradricStaff",
@@ -4649,7 +6247,13 @@
         "uint64_t",
         "uint8_t"
       ],
-      "dh": "f4b3ac72"
+      "dh": "f4b3ac72",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn32_RadamentDeath",
@@ -4683,7 +6287,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "93937901"
+      "dh": "93937901",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn33_TaintedSunControl",
@@ -4721,7 +6331,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4636b3cf"
+      "dh": "4636b3cf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn34_TaintedSunBall",
@@ -4760,7 +6376,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f3db2ee9"
+      "dh": "f3db2ee9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn35_QueenDeathCenter",
@@ -4790,7 +6412,13 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "df4cc538"
+      "dh": "df4cc538",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn36_DurielDeathControl",
@@ -4828,7 +6456,13 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "efd9bb65"
+      "dh": "efd9bb65",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn61_OverseerControl",
@@ -4855,7 +6489,13 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "453473d8"
+      "dh": "453473d8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn62_NehlithakControl",
@@ -4886,7 +6526,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "215e9469"
+      "dh": "215e9469",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn63_NehlithakOrbit",
@@ -4914,7 +6560,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "a6e3db4b"
+      "dh": "a6e3db4b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn64_BaalFxControl",
@@ -4956,7 +6608,13 @@
         "int32_t",
         "uint64_t"
       ],
-      "dh": "57fcc550"
+      "dh": "57fcc550",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn65_BaalFxSpirit",
@@ -4991,7 +6649,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5014f6a1"
+      "dh": "5014f6a1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn59_WorldStoneChip",
@@ -5015,7 +6679,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c8afebb7"
+      "dh": "c8afebb7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn54_AnyaCenter",
@@ -5052,7 +6722,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "359244e7"
+      "dh": "359244e7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn55_AncientDeathCenter",
@@ -5084,7 +6760,13 @@
         "int32_t",
         "uint64_t"
       ],
-      "dh": "963b8544"
+      "dh": "963b8544",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_CltDoFn60_Hurricane",
@@ -5114,7 +6796,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7ed656dc"
+      "dh": "7ed656dc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

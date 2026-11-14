@@ -36,7 +36,13 @@
       "usedTypes": [
         "HIMC"
       ],
-      "dh": "550cf65e"
+      "dh": "550cf65e",
+      "paramStorage": [
+        [
+          "hImc",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleIMENotify",
@@ -61,7 +67,13 @@
         "HKL",
         "LPCANDIDATELIST"
       ],
-      "dh": "4c975859"
+      "dh": "4c975859",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_CheckIMELanguage",
@@ -99,7 +111,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "e0aab33c"
+      "dh": "e0aab33c",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_InitIME",
@@ -165,7 +183,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "5b3688c5"
+      "dh": "5b3688c5",
+      "paramStorage": [
+        [
+          "szText1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_DrawCursor",
@@ -187,7 +215,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "257f8e37"
+      "dh": "257f8e37",
+      "paramStorage": [
+        [
+          "nPosY",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nColor",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_InitEmpty",
@@ -239,7 +281,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0b40949e"
+      "dh": "0b40949e",
+      "paramStorage": [
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_DrawIMECandidates",
@@ -335,7 +387,13 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "c5dff635"
+      "dh": "c5dff635",
+      "paramStorage": [
+        [
+          "pwSrc",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_ScrollHistory",
@@ -353,7 +411,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e90b0ddd"
+      "dh": "e90b0ddd",
+      "paramStorage": [
+        [
+          "nDirection",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_ParseCommand",
@@ -382,7 +446,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "13a6e3bc"
+      "dh": "13a6e3bc",
+      "paramStorage": [
+        [
+          "ppszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbCommandType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szOutParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_CheckChatboxBounds",
@@ -401,7 +479,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "4b7c2970"
+      "dh": "4b7c2970",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleChatScroll",
@@ -422,7 +506,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "e70894ac"
+      "dh": "e70894ac",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_IsWideStringASCII",
@@ -442,7 +532,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "40a06185"
+      "dh": "40a06185",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_InitHistoryIndices",
@@ -473,7 +569,13 @@
         "CHAT_ExtractWhisperTarget",
         "SStrChr"
       ],
-      "dh": "bedc4415"
+      "dh": "bedc4415",
+      "paramStorage": [
+        [
+          "szText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_ExtractWhisperPrefix",
@@ -491,7 +593,17 @@
         "memcpy",
         "SStrCopy"
       ],
-      "dh": "f8e68569"
+      "dh": "f8e68569",
+      "paramStorage": [
+        [
+          "szInput",
+          "ESI:4"
+        ],
+        [
+          "szOutPrefix",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_ClearInput",
@@ -568,7 +680,17 @@
         "MessageStrc",
         "int32_t"
       ],
-      "dh": "cc8f5b43"
+      "dh": "cc8f5b43",
+      "paramStorage": [
+        [
+          "szCommandName",
+          "EBX:4"
+        ],
+        [
+          "szInput",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_HandleWhisperCommand",
@@ -600,7 +722,21 @@
         "MessageStrc",
         "int32_t"
       ],
-      "dh": "415b2b37"
+      "dh": "415b2b37",
+      "paramStorage": [
+        [
+          "bInGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szCommandName",
+          "EBX:4"
+        ],
+        [
+          "szInput",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_ExtractCommandParameter",
@@ -620,7 +756,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2f243afa"
+      "dh": "2f243afa",
+      "paramStorage": [
+        [
+          "nMaxLength",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szInput",
+          "EAX:4"
+        ],
+        [
+          "szOutParam",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ChatCommandProcessor",
@@ -673,7 +823,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "bf57932a"
+      "dh": "bf57932a",
+      "paramStorage": [
+        [
+          "pwInputMessage",
+          "ECX:4"
+        ],
+        [
+          "pszInputBase",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInputOffset",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleChatCharInput",
@@ -705,7 +869,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2a0a302e"
+      "dh": "2a0a302e",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gwszChatInputText",

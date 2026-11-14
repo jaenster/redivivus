@@ -22,7 +22,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ba3c29cf"
+      "dh": "ba3c29cf",
+      "paramStorage": [
+        [
+          "bWindowed",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nResolutionMode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INIT_SetWndProcBGlobalPointer",
@@ -40,7 +50,13 @@
       "usedTypes": [
         "WndProcB"
       ],
-      "dh": "49975b97"
+      "dh": "49975b97",
+      "paramStorage": [
+        [
+          "pWndProcB",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_Init",
@@ -119,7 +135,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2b120ce8"
+      "dh": "2b120ce8",
+      "paramStorage": [
+        [
+          "nResolutionMode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_SetVideoMode",
@@ -145,7 +167,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "3887cb40"
+      "dh": "3887cb40",
+      "paramStorage": [
+        [
+          "nResolutionMode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_D2GFX_ClearCaches",

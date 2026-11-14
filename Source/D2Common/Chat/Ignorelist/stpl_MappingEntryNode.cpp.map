@@ -25,7 +25,13 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "333bde88"
+      "dh": "333bde88",
+      "paramStorage": [
+        [
+          "bUnlinkOnly",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor_Unreferenced",
@@ -47,7 +53,13 @@
         "TSLink<MappingEntryNode> *",
         "uint32_t"
       ],
-      "dh": "dd896e9e"
+      "dh": "dd896e9e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ChangeLinkOffset",
@@ -67,7 +79,13 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "int32_t"
       ],
-      "dh": "e690f8c0"
+      "dh": "e690f8c0",
+      "paramStorage": [
+        [
+          "nLinkOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DeleteNode",
@@ -90,7 +108,13 @@
         "TSLink<MappingEntryNode>",
         "intptr_t"
       ],
-      "dh": "376eb03d"
+      "dh": "376eb03d",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CopyConstructor_Unreferenced",
@@ -110,7 +134,17 @@
         "TSLink<MappingEntryNode>",
         "uint32_t"
       ],
-      "dh": "eebf4b63"
+      "dh": "eebf4b63",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Clear",
@@ -175,7 +209,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "95114eb7"
+      "dh": "95114eb7",
+      "paramStorage": [
+        [
+          "dwHashVal",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pKey",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -199,7 +243,13 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "e12adfe6"
+      "dh": "e12adfe6",
+      "paramStorage": [
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Ptr",
@@ -224,7 +274,13 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "a5cea638"
+      "dh": "a5cea638",
+      "paramStorage": [
+        [
+          "szKey",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor_UnreferencedCopy",
@@ -246,7 +302,13 @@
         "TSLink<MappingEntryNode> *",
         "uint32_t"
       ],
-      "dh": "683d5fda"
+      "dh": "683d5fda",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ReallocData",
@@ -272,7 +334,13 @@
         "TSLink<MappingEntryNode> *",
         "uint32_t"
       ],
-      "dh": "68271ca1"
+      "dh": "68271ca1",
+      "paramStorage": [
+        [
+          "nAlloc",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor",
@@ -318,7 +386,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7b22dca2"
+      "dh": "7b22dca2",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bRound",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_Destructor",
@@ -330,6 +408,12 @@
       ],
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>"
+      ],
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ]
       ]
     },
     {
@@ -354,7 +438,13 @@
         "TSLink<MappingEntryNode> *",
         "uint32_t"
       ],
-      "dh": "045e2c3c"
+      "dh": "045e2c3c",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor",
@@ -401,7 +491,21 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "uint32_t"
       ],
-      "dh": "027e242b"
+      "dh": "027e242b",
+      "paramStorage": [
+        [
+          "nLocation",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "InternalDelete",
@@ -422,7 +526,17 @@
         "MappingEntryNode",
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>"
       ],
-      "dh": "79a0d2b5"
+      "dh": "79a0d2b5",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "InternalNew",
@@ -447,7 +561,25 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "78e78b31"
+      "dh": "78e78b31",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -468,7 +600,13 @@
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
         "uint32_t"
       ],
-      "dh": "6a5e1186"
+      "dh": "6a5e1186",
+      "paramStorage": [
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Clear",
@@ -507,7 +645,13 @@
       "usedTypes": [
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>"
       ],
-      "dh": "1ed2bc65"
+      "dh": "1ed2bc65",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -528,7 +672,17 @@
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "uint32_t"
       ],
-      "dh": "9a8be3ae"
+      "dh": "9a8be3ae",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetCount_Unreferenced",
@@ -548,7 +702,17 @@
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
         "uint32_t"
       ],
-      "dh": "cd2ea751"
+      "dh": "cd2ea751",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GrowListArray",
@@ -617,7 +781,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dc4ef2c4"
+      "dh": "dc4ef2c4",
+      "paramStorage": [
+        [
+          "nSlot",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "New",
@@ -644,7 +814,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4fa8e1c8"
+      "dh": "4fa8e1c8",
+      "paramStorage": [
+        [
+          "dwHashVal",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pKey",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nExtraBytes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "New",
@@ -668,7 +856,21 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "3855cab6"
+      "dh": "3855cab6",
+      "paramStorage": [
+        [
+          "szKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

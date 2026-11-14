@@ -22,7 +22,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9eaa5345"
+      "dh": "9eaa5345",
+      "paramStorage": [
+        [
+          "szPathOut",
+          "EDI:4"
+        ],
+        [
+          "nFontIndex",
+          "EBX:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetFontTablePath",
@@ -43,7 +57,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "48dc3525"
+      "dh": "48dc3525",
+      "paramStorage": [
+        [
+          "nBufSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFontIndex",
+          "EBX:4"
+        ],
+        [
+          "szFontTablePath",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "InitFontCache",
@@ -68,7 +96,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "109200be"
+      "dh": "109200be",
+      "paramStorage": [
+        [
+          "nFontIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_FreeFontCache",
@@ -107,7 +141,13 @@
         "D2FontGlyphStrc",
         "uint16_t"
       ],
-      "dh": "c4280b9c"
+      "dh": "c4280b9c",
+      "paramStorage": [
+        [
+          "wCharCode",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_LookupGlyphEntry",
@@ -126,7 +166,13 @@
         "D2FontGlyphStrc",
         "uint16_t"
       ],
-      "dh": "9a98f94f"
+      "dh": "9a98f94f",
+      "paramStorage": [
+        [
+          "wCharCode",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_GetStringPixelWidthN",
@@ -146,7 +192,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "bc8815cc"
+      "dh": "bc8815cc",
+      "paramStorage": [
+        [
+          "pwszString",
+          "ECX:4"
+        ],
+        [
+          "nMaxChars",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_GetStringPixelWidth",
@@ -166,7 +222,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "4ce89cab"
+      "dh": "4ce89cab",
+      "paramStorage": [
+        [
+          "pwszString",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_text0",
@@ -187,7 +253,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "0a11e8d2"
+      "dh": "0a11e8d2",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_CalculateTextWidth",
@@ -212,7 +284,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "80f79e69"
+      "dh": "80f79e69",
+      "paramStorage": [
+        [
+          "szBuffer",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_GetFirstLinePixelWidth",
@@ -237,7 +315,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "78b2b2d2"
+      "dh": "78b2b2d2",
+      "paramStorage": [
+        [
+          "pwszString",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_CalculateTextHeight",
@@ -260,7 +344,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "91f0f8a2"
+      "dh": "91f0f8a2",
+      "paramStorage": [
+        [
+          "szBuffer",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_GetCurrentFontHeight",
@@ -299,7 +389,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7230dafe"
+      "dh": "7230dafe",
+      "paramStorage": [
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "eDrawMode",
+          "EDX:4"
+        ],
+        [
+          "nWidth",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_DrawWideString",
@@ -326,7 +442,33 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "94a97e6b"
+      "dh": "94a97e6b",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eGlobalPalette",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bCenterHorizontally",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_DrawWideStringWithDrawMode",
@@ -354,7 +496,37 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "eba54411"
+      "dh": "eba54411",
+      "paramStorage": [
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "EDX:4"
+        ],
+        [
+          "eGlobalPalette",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bCenterHorizontally",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eDrawMode",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_DrawVerticalCroppedText",
@@ -386,7 +558,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c0c3b37a"
+      "dh": "c0c3b37a",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCropStartY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCropHeight",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_DrawWideStringRightToLeft",
@@ -413,7 +611,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b0fab9ee"
+      "dh": "b0fab9ee",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nXStart",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eGlobalPalette",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLeftBound",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nRightBound",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_DrawWideStringSimple",
@@ -437,7 +661,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "a8cfddca"
+      "dh": "a8cfddca",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_TooltipSetAttributes",
@@ -459,7 +697,29 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "0cca7666"
+      "dh": "0cca7666",
+      "paramStorage": [
+        [
+          "wszBuffer",
+          "ECX:4"
+        ],
+        [
+          "nTooltipX",
+          "EDX:4"
+        ],
+        [
+          "nTooltipY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTooltipColor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCenterFlag",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_SetTooltipAttributesWithCustomField",
@@ -479,7 +739,33 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "74ca2fa6"
+      "dh": "74ca2fa6",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nFontId",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAlignment",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCustomField",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_text",
@@ -500,7 +786,29 @@
         "int32_t",
         "wchar_t"
       ],
-      "dh": "a23251f8"
+      "dh": "a23251f8",
+      "paramStorage": [
+        [
+          "wMessage",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bMultiLineCenter",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_DrawTextWithOptionalBackground",
@@ -524,7 +832,33 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "52ba8032"
+      "dh": "52ba8032",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eGlobalPalette",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bDrawBackground",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eDrawMode",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_DrawWideStringSimpleThunk",
@@ -544,7 +878,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "2a39f35e"
+      "dh": "2a39f35e",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_DrawTextWithBackgroundRect",
@@ -571,7 +919,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "283353d6"
+      "dh": "283353d6",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwBackgroundColor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eGlobalPalette",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_DrawTextWithSimpleBackground",
@@ -597,7 +971,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a36bd202"
+      "dh": "a36bd202",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwBackgroundColor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eGlobalPalette",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_CalcTextDimensions",
@@ -618,7 +1018,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "f895a6ed"
+      "dh": "f895a6ed",
+      "paramStorage": [
+        [
+          "szBuffer",
+          "ECX:4"
+        ],
+        [
+          "nSizeX",
+          "EDX:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_IsFontCharacterValid",
@@ -640,7 +1054,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "08f92b06"
+      "dh": "08f92b06",
+      "paramStorage": [
+        [
+          "nCharCode",
+          "CL:1"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_DrawTextWithOffsetBackground",
@@ -666,7 +1086,37 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "75516e23"
+      "dh": "75516e23",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwBackgroundColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eDrawMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eGlobalPalette",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "IMAGE_DrawDC6ImageOnScreen",
@@ -696,7 +1146,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c040e849"
+      "dh": "c040e849",
+      "paramStorage": [
+        [
+          "pDC6",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPoxY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAlignment",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGlobalPaletteShift",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_DrawTextWithProgressBar",
@@ -724,7 +1200,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fc4c5e19"
+      "dh": "fc4c5e19",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eGlobalPalette",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAlignMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nProgressPercent",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_FreeWordWrapList",
@@ -743,7 +1245,13 @@
       "usedTypes": [
         "void *"
       ],
-      "dh": "427836eb"
+      "dh": "427836eb",
+      "paramStorage": [
+        [
+          "ppNodeList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_AllocWordWrapNode",
@@ -766,7 +1274,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "22b9a8a0"
+      "dh": "22b9a8a0",
+      "paramStorage": [
+        [
+          "pwszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bTrimLeadingSpace",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_WordWrapString",
@@ -793,7 +1315,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "638173bd"
+      "dh": "638173bd",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "pnLineCount",
+          "EDX:4"
+        ],
+        [
+          "nMaxWidth",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00502c40",
@@ -808,7 +1344,13 @@
       "calledFunctions": [
         "Unreferenced_00502c40"
       ],
-      "dh": "b0cb49ad"
+      "dh": "b0cb49ad",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINFONT_InitFontSystem",
@@ -858,7 +1400,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b73b1216"
+      "dh": "b73b1216",
+      "paramStorage": [
+        [
+          "nFontId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Draw_UnitNameUnderCursor",

@@ -21,7 +21,13 @@
         "D2SetsTxt",
         "int32_t"
       ],
-      "dh": "4b36aace"
+      "dh": "4b36aace",
+      "paramStorage": [
+        [
+          "nSetId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSetItemsLine",
@@ -41,7 +47,13 @@
         "D2SetItemsTxt",
         "int32_t"
       ],
-      "dh": "54fd9f38"
+      "dh": "54fd9f38",
+      "paramStorage": [
+        [
+          "nSetItemId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INV_GetUniqueItemsTxtLine",
@@ -61,7 +73,13 @@
         "D2UniqueItemsTxt",
         "int32_t"
       ],
-      "dh": "76e72e9a"
+      "dh": "76e72e9a",
+      "paramStorage": [
+        [
+          "nFileIndex",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTBLS_ParseItemStatCostOrBase",
@@ -81,7 +99,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "1190fe38"
+      "dh": "1190fe38",
+      "paramStorage": [
+        [
+          "szFieldValue",
+          "ECX:4"
+        ],
+        [
+          "pResultType",
+          "EDX:4"
+        ],
+        [
+          "nFieldType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTableId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTBLS_CompileItemCodeExpression",
@@ -104,7 +140,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e1ea3107"
+      "dh": "e1ea3107",
+      "paramStorage": [
+        [
+          "szExpression",
+          "ECX:4"
+        ],
+        [
+          "pRecord",
+          "EDX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTxtRow",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTxtColumn",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_items",
@@ -132,7 +194,13 @@
         "D2ItemsTxt",
         "D2PoolManagerStrc"
       ],
-      "dh": "28f62db6"
+      "dh": "28f62db6",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_FreeTxt_Items",
@@ -189,7 +257,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "782d06d3"
+      "dh": "782d06d3",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_GetLine",
@@ -212,7 +286,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f25c94a0"
+      "dh": "f25c94a0",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ConvertItemCodeToClassIdAndGetItemsTxtLine",
@@ -233,7 +313,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7ea603c0"
+      "dh": "7ea603c0",
+      "paramStorage": [
+        [
+          "dwItemCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pClassId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Items_ConvertItemCodeToItemClassId",
@@ -253,7 +343,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d096f169"
+      "dh": "d096f169",
+      "paramStorage": [
+        [
+          "szTag",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTBLS_ParseSkillMonTypeOrStateId",
@@ -272,7 +368,33 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "69482ba5"
+      "dh": "69482ba5",
+      "paramStorage": [
+        [
+          "szValue",
+          "ECX:4"
+        ],
+        [
+          "pRecord",
+          "EDX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTxtRow",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTxtColumn",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_MagicAffixes",
@@ -298,7 +420,13 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "a2e90208"
+      "dh": "a2e90208",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTBLS_FreeMagicAffixes",
@@ -354,7 +482,13 @@
         "D2MagicAffixTxt",
         "int32_t"
       ],
-      "dh": "9d9916b8"
+      "dh": "9d9916b8",
+      "paramStorage": [
+        [
+          "nAffixIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_RareAffixes",
@@ -380,7 +514,13 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "1673b1c8"
+      "dh": "1673b1c8",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTBLS_FreeRareAffixes",
@@ -436,7 +576,13 @@
         "D2RareAffixTxt",
         "int32_t"
       ],
-      "dh": "3a868769"
+      "dh": "3a868769",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_uniqueitems",
@@ -465,7 +611,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "18c0affd"
+      "dh": "18c0affd",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTBLS_FreeUniqueItems",
@@ -513,7 +665,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c97676cb"
+      "dh": "c97676cb",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTBLS_FreeSetsAndSetItems",
@@ -553,7 +711,13 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "f38b8528"
+      "dh": "f38b8528",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_UnloadBin_Lvl",
@@ -609,7 +773,13 @@
         "D2QualityItemsTxt",
         "int32_t"
       ],
-      "dh": "4fb59499"
+      "dh": "4fb59499",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_gems",
@@ -633,7 +803,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "98addf93"
+      "dh": "98addf93",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_UnloadBin_LvlType",
@@ -689,7 +865,13 @@
         "D2GemsTxt",
         "int32_t"
       ],
-      "dh": "fc193d89"
+      "dh": "fc193d89",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_books",
@@ -709,7 +891,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "30ac114d"
+      "dh": "30ac114d",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_UnloadBin_LvlWarp",
@@ -765,7 +953,13 @@
         "D2BooksTxt",
         "int32_t"
       ],
-      "dh": "a4b14fb0"
+      "dh": "a4b14fb0",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_lowqualityitems",
@@ -788,7 +982,13 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "2132afe5"
+      "dh": "2132afe5",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_UnloadBin_LvlPrest",
@@ -844,7 +1044,13 @@
         "D2LowQualityItemsTxt",
         "int32_t"
       ],
-      "dh": "c960de05"
+      "dh": "c960de05",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_itemratio",
@@ -864,7 +1070,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "7a6d9e2d"
+      "dh": "7a6d9e2d",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_UnloadBin_LvlMaze",
@@ -924,7 +1136,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "27d3f136"
+      "dh": "27d3f136",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nQualityTier",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "SORT_ItemDescPriority",
@@ -939,7 +1165,17 @@
       "calledFunctions": [
         "SORT_ItemDescPriority"
       ],
-      "dh": "db8dbf8a"
+      "dh": "db8dbf8a",
+      "paramStorage": [
+        [
+          "pEntry1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEntry2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_itemstatcost",
@@ -971,7 +1207,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5b4c4008"
+      "dh": "5b4c4008",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTBLS_FreeItemStatCost",
@@ -1010,7 +1252,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "e2745eab"
+      "dh": "e2745eab",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTBLS_FreeProperties",
@@ -1042,7 +1290,17 @@
       "calledFunctions": [
         "TXT_Gamble_SortFunction"
       ],
-      "dh": "1b70fe25"
+      "dh": "1b70fe25",
+      "paramStorage": [
+        [
+          "pEntry1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEntry2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_gamble",
@@ -1071,7 +1329,13 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "1717de6a"
+      "dh": "1717de6a",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FreeGambleTable",
@@ -1123,7 +1387,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e248b350"
+      "dh": "e248b350",
+      "paramStorage": [
+        [
+          "nItemTypeId",
+          "ECX:4"
+        ],
+        [
+          "nTargetTypeId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_itemtypes",
@@ -1149,7 +1423,13 @@
         "D2PoolManagerStrc",
         "uint32_t"
       ],
-      "dh": "d7c1cd33"
+      "dh": "d7c1cd33",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTBLS_FreeItemTypes",
@@ -1190,7 +1470,21 @@
         "D2PoolManagerStrc",
         "uint32_t"
       ],
-      "dh": "f499a200"
+      "dh": "f499a200",
+      "paramStorage": [
+        [
+          "szFileName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPoolManagerStrc",
+          "ESI:4"
+        ],
+        [
+          "szFileExt",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_runes",
@@ -1219,7 +1513,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a6162106"
+      "dh": "a6162106",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTBLS_FreeRunes",
@@ -1275,7 +1575,17 @@
         "D2RunesTxt",
         "int32_t"
       ],
-      "dh": "32ec3b62"
+      "dh": "32ec3b62",
+      "paramStorage": [
+        [
+          "nRunewordId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSourceRecord",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMTBLS_GetRunewordTxtRecord",
@@ -1297,7 +1607,13 @@
         "D2RunesTxt",
         "int32_t"
       ],
-      "dh": "ddafa2f7"
+      "dh": "ddafa2f7",
+      "paramStorage": [
+        [
+          "nRunewordId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_GetRuneTableSize_Unref_00654fd0",

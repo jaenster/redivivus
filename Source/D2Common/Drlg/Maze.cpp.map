@@ -23,7 +23,21 @@
         "D2DrlgOrthStrc",
         "D2RoomExStrc"
       ],
-      "dh": "3d0e961d"
+      "dh": "3d0e961d",
+      "paramStorage": [
+        [
+          "nDirection",
+          "EAX:4"
+        ],
+        [
+          "pNewRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoomExStrc",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_SetRoomPresetDirect",
@@ -42,7 +56,25 @@
         "D2RoomExStrc",
         "int32_t"
       ],
-      "dh": "8d871a2f"
+      "dh": "8d871a2f",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "EAX:4"
+        ],
+        [
+          "nPresetId",
+          "EDX:4"
+        ],
+        [
+          "nVariant",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bHasPreset",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_PickRoomPreset",
@@ -68,7 +100,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "79bd8840"
+      "dh": "79bd8840",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "EBX:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_FindAndReplacePreset",
@@ -87,7 +129,29 @@
         "D2DrlgLevelStrc",
         "D2RoomExStrc"
       ],
-      "dh": "0079ad53"
+      "dh": "0079ad53",
+      "paramStorage": [
+        [
+          "pCtx",
+          "EAX:4"
+        ],
+        [
+          "nPresetId",
+          "ESI:4"
+        ],
+        [
+          "nNewPresetId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNewArg1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nEnableFlag",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_PickRoomPresets",
@@ -113,7 +177,13 @@
         "D2SeedStrc",
         "eDrlgDirection"
       ],
-      "dh": "a7f14af7"
+      "dh": "a7f14af7",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AllocateRoomEx",
@@ -139,7 +209,21 @@
         "D2RoomExStrc",
         "eDrlgDirection"
       ],
-      "dh": "044df42c"
+      "dh": "044df42c",
+      "paramStorage": [
+        [
+          "pSourceRoom",
+          "EAX:4"
+        ],
+        [
+          "eNeighborDir",
+          "EBX:4"
+        ],
+        [
+          "bPickPresets",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_AllocRoomExAndPickPreset",
@@ -167,7 +251,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "737d3e18"
+      "dh": "737d3e18",
+      "paramStorage": [
+        [
+          "eDir",
+          "EAX:4"
+        ],
+        [
+          "pSourceRoom",
+          "ECX:4"
+        ],
+        [
+          "argPresetIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "argVariant",
+          "Stack[0x8]:4"
+        ],
+        [
+          "argPickSource",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_AllocRoomAndPickPreset",
@@ -188,7 +294,21 @@
         "D2RoomExStrc",
         "eDrlgDirection"
       ],
-      "dh": "57ff78c2"
+      "dh": "57ff78c2",
+      "paramStorage": [
+        [
+          "eDirection",
+          "EAX:4"
+        ],
+        [
+          "pSourceRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bPickPresets",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ReplaceRoomWith",
@@ -215,7 +335,25 @@
         "D2RoomExStrc",
         "int32_t"
       ],
-      "dh": "8a7515e4"
+      "dh": "8a7515e4",
+      "paramStorage": [
+        [
+          "nDirection",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPresetIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nVariant",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_BuildRoomGrid",
@@ -243,7 +381,17 @@
         "D2RoomExStrc",
         "int32_t"
       ],
-      "dh": "d443b642"
+      "dh": "d443b642",
+      "paramStorage": [
+        [
+          "nGridSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GetRandomRoomExFromLevel",
@@ -265,7 +413,13 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "72187e89"
+      "dh": "72187e89",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ActualLevelGeneration",
@@ -295,7 +449,13 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "5ec84607"
+      "dh": "5ec84607",
+      "paramStorage": [
+        [
+          "pLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_ExpandRoomsWithPresets",
@@ -326,7 +486,21 @@
         "D2RoomExStrc *",
         "uint32_t"
       ],
-      "dh": "0e6aa628"
+      "dh": "0e6aa628",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EAX:4"
+        ],
+        [
+          "argDefaultPresetId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "argSkipRoom",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetupBaalChamber",
@@ -352,7 +526,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "aee7fb06"
+      "dh": "aee7fb06",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_ExpandCatacombsLevel",
@@ -382,7 +562,17 @@
         "D2SeedStrc",
         "int32_t"
       ],
-      "dh": "d1ea2ff7"
+      "dh": "d1ea2ff7",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ],
+        [
+          "bIsCatacombsLevel1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GenerateWolrdstoneAndTombs",
@@ -411,7 +601,13 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "7d322ef1"
+      "dh": "7d322ef1",
+      "paramStorage": [
+        [
+          "pLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RollArcaneTypePath",
@@ -442,7 +638,13 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "8c8cc484"
+      "dh": "8c8cc484",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_CanPlaceRoomInDirection",
@@ -469,7 +671,17 @@
         "D2RoomExStrc",
         "eDrlgDirection"
       ],
-      "dh": "11fbefc1"
+      "dh": "11fbefc1",
+      "paramStorage": [
+        [
+          "eDirection",
+          "EAX:4"
+        ],
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_FindTopMostRoom",
@@ -489,7 +701,13 @@
         "D2DrlgLevelStrc",
         "D2RoomExStrc"
       ],
-      "dh": "33da9e2d"
+      "dh": "33da9e2d",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_FindLeftMostRoom",
@@ -509,7 +727,13 @@
         "D2DrlgLevelStrc",
         "D2RoomExStrc"
       ],
-      "dh": "fba7c080"
+      "dh": "fba7c080",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_FindRightMostRoom",
@@ -529,7 +753,13 @@
         "D2DrlgLevelStrc",
         "D2RoomExStrc"
       ],
-      "dh": "3801c7c8"
+      "dh": "3801c7c8",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_FindBottomMostRoom",
@@ -549,7 +779,13 @@
         "D2DrlgLevelStrc",
         "D2RoomExStrc"
       ],
-      "dh": "64fe3fdc"
+      "dh": "64fe3fdc",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ReplaceRoom",
@@ -572,7 +808,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8100fd4c"
+      "dh": "8100fd4c",
+      "paramStorage": [
+        [
+          "pDrlgReplaceRoom",
+          "EDX:4"
+        ],
+        [
+          "pLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoll",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Caves",
@@ -594,7 +844,13 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "8635637b"
+      "dh": "8635637b",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Crypt",
@@ -614,7 +870,13 @@
         "D2DrlgLevelStrc",
         "uint32_t"
       ],
-      "dh": "7e7d89ee"
+      "dh": "7e7d89ee",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "RollRooms",
@@ -634,7 +896,13 @@
         "D2DrlgLevelStrc",
         "uint32_t"
       ],
-      "dh": "dab8e0ed"
+      "dh": "dab8e0ed",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_ReplaceCatacombsRooms",
@@ -655,7 +923,13 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "1baa9003"
+      "dh": "1baa9003",
+      "paramStorage": [
+        [
+          "pDrlgLevelStrc",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_GenerateSewerLevel",
@@ -688,7 +962,13 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "5b57afa0"
+      "dh": "5b57afa0",
+      "paramStorage": [
+        [
+          "pDrlgLevelStrc",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ReplaceAreas",
@@ -715,7 +995,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d8e64337"
+      "dh": "d8e64337",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Lair",
@@ -736,7 +1022,13 @@
         "D2DrlgReplaceRoomStrc",
         "uint32_t"
       ],
-      "dh": "8a902028"
+      "dh": "8a902028",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PickSummonerLocation",
@@ -756,7 +1048,13 @@
         "D2DrlgLevelStrc",
         "uint32_t"
       ],
-      "dh": "ead86f94"
+      "dh": "ead86f94",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DungeonRoll",
@@ -776,7 +1074,13 @@
         "D2DrlgLevelStrc",
         "uint32_t"
       ],
-      "dh": "f1839560"
+      "dh": "f1839560",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_ReplaceSewerRooms",
@@ -797,7 +1101,13 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "0b011173"
+      "dh": "0b011173",
+      "paramStorage": [
+        [
+          "pDrlgLevelStrc",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_ReplaceDuranceRooms",
@@ -818,7 +1128,13 @@
         "D2DrlgLevelStrc",
         "uint32_t"
       ],
-      "dh": "c5f6fb31"
+      "dh": "c5f6fb31",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ReplaceRooms",
@@ -842,7 +1158,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2c51c2ee"
+      "dh": "2c51c2ee",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PutRedNextLevelAreasInPlace",
@@ -862,7 +1184,13 @@
         "D2DrlgLevelStrc",
         "uint32_t"
       ],
-      "dh": "fc8be10f"
+      "dh": "fc8be10f",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_GenerateBarracksLayout",
@@ -890,7 +1218,13 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "7792611e"
+      "dh": "7792611e",
+      "paramStorage": [
+        [
+          "pDrlgLevelStrc",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_GenerateRiverOfFlames",
@@ -924,7 +1258,13 @@
         "D2LvlMazeTxt",
         "D2RoomExStrc"
       ],
-      "dh": "41f17171"
+      "dh": "41f17171",
+      "paramStorage": [
+        [
+          "pDrlgLevelStrc",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_ReplaceIceCavesRooms",
@@ -944,7 +1284,13 @@
         "D2DrlgLevelStrc",
         "uint32_t"
       ],
-      "dh": "8f424247"
+      "dh": "8f424247",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ForAllButDenOfEvil",
@@ -962,7 +1308,13 @@
       "usedTypes": [
         "D2DrlgLevelStrc"
       ],
-      "dh": "964181c2"
+      "dh": "964181c2",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_SelectRandomPresetFile",
@@ -986,7 +1338,21 @@
         "eLvlTypes",
         "uint32_t"
       ],
-      "dh": "93605ff4"
+      "dh": "93605ff4",
+      "paramStorage": [
+        [
+          "nPresetFile",
+          "EAX:4"
+        ],
+        [
+          "pLevel",
+          "EDI:4"
+        ],
+        [
+          "pState",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "InitAllRoomsEx",
@@ -1012,7 +1378,17 @@
         "D2DrlgOrthStrc",
         "D2RoomExStrc"
       ],
-      "dh": "b8098e40"
+      "dh": "b8098e40",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_InitializeLevel",
@@ -1033,7 +1409,13 @@
         "D2DrlgLevelStrc",
         "D2LvlMazeTxt"
       ],
-      "dh": "17736371"
+      "dh": "17736371",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_GenerateLevel",
@@ -1088,7 +1470,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6dfe9aa8"
+      "dh": "6dfe9aa8",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGMAZE_ResetMazeRecord",
@@ -1106,7 +1494,17 @@
       "usedTypes": [
         "D2DrlgLevelStrc"
       ],
-      "dh": "2aee1dd8"
+      "dh": "2aee1dd8",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ],
+        [
+          "bKeepRecord",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

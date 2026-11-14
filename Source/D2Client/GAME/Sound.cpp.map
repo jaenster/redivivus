@@ -71,7 +71,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d78d97ed"
+      "dh": "d78d97ed",
+      "paramStorage": [
+        [
+          "pSoundStream",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_SetEaxEnvironment",
@@ -95,7 +101,13 @@
         "D2SoundEnvironTxt",
         "int32_t"
       ],
-      "dh": "08a24730"
+      "dh": "08a24730",
+      "paramStorage": [
+        [
+          "nEnvId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_MatchesSoundId",
@@ -114,7 +126,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "953c2806"
+      "dh": "953c2806",
+      "paramStorage": [
+        [
+          "pSoundEntry",
+          "ECX:4"
+        ],
+        [
+          "nSoundId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_DetachUnit",
@@ -132,7 +154,13 @@
       "usedTypes": [
         "D2ClientSoundChannelStrc"
       ],
-      "dh": "c9e2f728"
+      "dh": "c9e2f728",
+      "paramStorage": [
+        [
+          "pSoundEntry",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_StopAndDetach",
@@ -153,7 +181,13 @@
         "D2ClientSoundChannelStrc",
         "uint32_t"
       ],
-      "dh": "0b0d7465"
+      "dh": "0b0d7465",
+      "paramStorage": [
+        [
+          "ppnParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CleanUpGame",
@@ -252,7 +286,13 @@
         "D2ClientSoundChannelStrc",
         "uint32_t"
       ],
-      "dh": "3f64ae22"
+      "dh": "3f64ae22",
+      "paramStorage": [
+        [
+          "pChannel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_ShutdownAudio_Thunk_Unref_004df910",
@@ -327,7 +367,13 @@
         "D2ClientSoundChannelStrc",
         "int32_t"
       ],
-      "dh": "5249f519"
+      "dh": "5249f519",
+      "paramStorage": [
+        [
+          "nId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetPlaybackStatus",
@@ -347,7 +393,13 @@
         "int *",
         "uint32_t"
       ],
-      "dh": "7d53e1f5"
+      "dh": "7d53e1f5",
+      "paramStorage": [
+        [
+          "ppnParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_ShutdownAudio",
@@ -394,7 +446,13 @@
         "IDirectSound",
         "int32_t"
       ],
-      "dh": "e862ba9b"
+      "dh": "e862ba9b",
+      "paramStorage": [
+        [
+          "nMixerMode",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_FindAvailableChannel",
@@ -420,7 +478,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "87877f32"
+      "dh": "87877f32",
+      "paramStorage": [
+        [
+          "pSound",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nChannelType",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_UpdateChannelParams",
@@ -460,7 +528,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d4f22f21"
+      "dh": "d4f22f21",
+      "paramStorage": [
+        [
+          "pSoundChannel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_SetSoundMixer",
@@ -483,7 +557,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "7ea5c789"
+      "dh": "7ea5c789",
+      "paramStorage": [
+        [
+          "nMixer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_SetBackgroundSoundsActive",
@@ -507,7 +587,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d88efa08"
+      "dh": "d88efa08",
+      "paramStorage": [
+        [
+          "bActive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_ShutdownAudio_Thunk",
@@ -552,7 +638,13 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "830d28f1"
+      "dh": "830d28f1",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetNpcGreetingSounds",
@@ -572,7 +664,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "b97755a5"
+      "dh": "b97755a5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_SelectNpcGreetingSound",
@@ -598,7 +696,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4efea4df"
+      "dh": "4efea4df",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_IsInitializedDup_Unref_004e0680",

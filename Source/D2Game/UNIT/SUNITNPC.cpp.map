@@ -32,7 +32,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "44dc55ac"
+      "dh": "44dc55ac",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nNpcClassId",
+          "EDX:4"
+        ],
+        [
+          "nNpcUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_UpdateNpcInventory",
@@ -66,7 +80,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "90f36fe6"
+      "dh": "90f36fe6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pItem",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_RepairAllItemCallback",
@@ -86,7 +114,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "0709ad55"
+      "dh": "0709ad55",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pItem",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_SetItemForNpc",
@@ -111,7 +153,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "29e6e705"
+      "dh": "29e6e705",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bVendorItem",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_GenerateNpcItems",
@@ -159,7 +223,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d3145308"
+      "dh": "d3145308",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "dwItemCode",
+          "EDX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bIsVendorItem",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eQuality",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nItemLevel",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nPlayerLevel",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_RefreshNpcItem",
@@ -186,7 +280,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "0fcf046f"
+      "dh": "0fcf046f",
+      "paramStorage": [
+        [
+          "pPlayerUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_FillNpcInventory",
@@ -214,7 +330,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "ddb5c2b1"
+      "dh": "ddb5c2b1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bDeleteItem",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SendMercForHireList",
@@ -248,7 +382,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "35a55478"
+      "dh": "35a55478",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ],
+        [
+          "pNpcUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bFirstInteraction",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_GetActCappedLevel",
@@ -271,7 +423,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "d46d1d81"
+      "dh": "d46d1d81",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_RollStoreItemQuality",
@@ -293,7 +459,17 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "e2406bb4"
+      "dh": "e2406bb4",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ],
+        [
+          "nItemLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_FillNpcStore",
@@ -334,7 +510,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e83efd02"
+      "dh": "e83efd02",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "pNpcUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTradeState",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_RepairAllItems",
@@ -359,7 +553,17 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "ab4513e4"
+      "dh": "ab4513e4",
+      "paramStorage": [
+        [
+          "pPlayer",
+          "ECX:4"
+        ],
+        [
+          "pInventory",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_RollTradeListItemCode",
@@ -389,7 +593,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4a22435c"
+      "dh": "4a22435c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSeed",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwReserved",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pdwOutItemCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pdwReservedOut",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CheckIfPlayerCanAffordCost",
@@ -415,7 +645,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "84ec0bc8"
+      "dh": "84ec0bc8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nCost",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_ApplyScrollSkill",
@@ -445,7 +689,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "48db7e14"
+      "dh": "48db7e14",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nQuantityUsed",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_CheckNpcCanSellItem",
@@ -468,7 +726,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "5e46fe0a"
+      "dh": "5e46fe0a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pNpcUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_GiveGoldOrDrop",
@@ -489,7 +761,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "717dca4a"
+      "dh": "717dca4a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nGoldAmount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_DeductGoldForPurchase",
@@ -517,7 +803,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "1086d82a"
+      "dh": "1086d82a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPlayerRaw",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBuyMode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ResetNpcHireListIfEmpty",
@@ -546,7 +854,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9659d897"
+      "dh": "9659d897",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nNpcClassId",
+          "EDX:4"
+        ],
+        [
+          "nFilledSlots",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NPC_ProcessMercHire",
@@ -592,7 +914,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "11109c49"
+      "dh": "11109c49",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pNPC",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMarcNameId",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_ValidateGambleItem",
@@ -618,7 +958,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c0f492ac"
+      "dh": "c0f492ac",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_ProcessGambleResult",
@@ -642,7 +992,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "7c782585"
+      "dh": "7c782585",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CreateMerc",
@@ -680,7 +1036,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ba6c59fd"
+      "dh": "ba6c59fd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nMercNameId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "dwHireFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNameIdOverride",
+          "Stack[0xc]:2"
+        ],
+        [
+          "nClassIdOverride",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nReplaceFlag",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_GetBuyableStackSize",
@@ -702,7 +1088,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "3a3694b1"
+      "dh": "3a3694b1",
+      "paramStorage": [
+        [
+          "pNpcUnit",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_CloneItemFromSerialized",
@@ -722,7 +1118,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "995f0dd9"
+      "dh": "995f0dd9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSourceItem",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_FindExistingStackInInventory",
@@ -750,7 +1160,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "87ea8c8a"
+      "dh": "87ea8c8a",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnStackOut",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_BuyItem",
@@ -814,7 +1242,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b5504bc6"
+      "dh": "b5504bc6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "pBoughtItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNpcId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClientGUID",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBuyMode",
+          "Stack[0x10]:2"
+        ],
+        [
+          "nCursorItemGUID",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bStackBuy",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_HandleBuyConfirmation",
@@ -847,7 +1309,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5f494f49"
+      "dh": "5f494f49",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nNpcGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClientGUID",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBuyMode",
+          "Stack[0x10]:2"
+        ],
+        [
+          "nCursorItemGUID",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bStackBuy",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "NPC_ValidateAndProcessMercHire",
@@ -876,7 +1372,25 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "42ce2af2"
+      "dh": "42ce2af2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nNpcGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMercNameId",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_ProcessGamble",
@@ -927,7 +1441,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ddec1908"
+      "dh": "ddec1908",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nNpcGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_HandleIdentify",
@@ -968,7 +1508,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "47e4ec88"
+      "dh": "47e4ec88",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nNpcGUID",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnitHasItemInInventory",
@@ -988,7 +1542,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "da67a6df"
+      "dh": "da67a6df",
+      "paramStorage": [
+        [
+          "guid",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_CheckCanIdentify",
@@ -1012,7 +1576,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "092068d5"
+      "dh": "092068d5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nItemGUID",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_RepairAndRecharge",
@@ -1038,7 +1616,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "71061dde"
+      "dh": "71061dde",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUberChanceMult",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUltraChanceMult",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nPlayerLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GAMBLE_GenerateGambleInventory",
@@ -1084,7 +1684,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cff3b8e5"
+      "dh": "cff3b8e5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPlayerUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNpcGameData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_ValidateNpcInteraction",
@@ -1106,7 +1724,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "ae8a5e3a"
+      "dh": "ae8a5e3a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPlayerUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNpcGameData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_ProcessNpcAction",
@@ -1133,7 +1769,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "319ee35f"
+      "dh": "319ee35f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pNpc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_HandleHireableAction",
@@ -1159,7 +1813,13 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "80850249"
+      "dh": "80850249",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HealByPlayerPetsByNPC",
@@ -1186,7 +1846,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "34a52b22"
+      "dh": "34a52b22",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbChanged",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "HealByPlayerByNPC",
@@ -1220,7 +1890,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "b4f85fba"
+      "dh": "b4f85fba",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pNpc",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Init",
@@ -1240,7 +1924,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "7b4f363c"
+      "dh": "7b4f363c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pNpc",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ExecutePrayUnused",
@@ -1274,7 +1972,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2f8c5743"
+      "dh": "2f8c5743",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nNpcGUID",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_DiscardTradeListRolls",
@@ -1299,7 +2011,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "10fa8f7c"
+      "dh": "10fa8f7c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nQueueEntryField0",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwTradeEntryValue",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_HandleResurrect",
@@ -1327,7 +2057,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "468a83cb"
+      "dh": "468a83cb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_CloseNpcInteraction",
@@ -1348,7 +2088,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "914452cd"
+      "dh": "914452cd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pNpc",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HireMercFromNpc",
@@ -1385,7 +2139,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "48f97300"
+      "dh": "48f97300",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "nNpcClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_OpenTradeScreen",
@@ -1414,7 +2182,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "3588b384"
+      "dh": "3588b384",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "pNpc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNpcDataIdx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_HandleTradeAction",
@@ -1443,7 +2233,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "d8c37251"
+      "dh": "d8c37251",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pNpc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bIsRepair",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_SellItem",
@@ -1525,7 +2337,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5de91eea"
+      "dh": "5de91eea",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "nNpcGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nPrice",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_ProcessSellConfirmation",
@@ -1565,7 +2403,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "6cabff2d"
+      "dh": "6cabff2d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMerc",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITNPC_HandleSellAction",
@@ -1601,7 +2453,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1d30170d"
+      "dh": "1d30170d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nNpcGUID",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UseMenu",
@@ -1693,7 +2559,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "03f80b44"
+      "dh": "03f80b44",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pQState",
+          "Stack[0x4]:4"
+        ],
+        [
+          "guid",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nGuid",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

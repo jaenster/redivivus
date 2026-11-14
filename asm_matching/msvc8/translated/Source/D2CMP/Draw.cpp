@@ -146,7 +146,7 @@ static void DRAW_ConvertPaletteHSLtoRGB(D2HSLColorStrc * pHSLIn, uint8_t * pRGBO
     do {
       uint8_t byRed;
       if (pHSLIn->dSaturation == 0.0) {
-        byChannel = (uint8_t)(int)std::nearbyint(pHSLIn->dLightness * 255.0);
+        byChannel = (uint8_t)(int)(pHSLIn->dLightness * 255.0);
         byRed = byChannel;
         byGreen = byChannel;
       } else {
@@ -158,13 +158,13 @@ static void DRAW_ConvertPaletteHSLtoRGB(D2HSLColorStrc * pHSLIn, uint8_t * pRGBO
 
         m1 = pHSLIn->dLightness + pHSLIn->dLightness - dP;
         dVar1 = DRAW_GetHueSector(m1, dP, pHSLIn->dHue + 120.0);
-        byChannel = (uint8_t)(int)std::nearbyint(dVar1 * 255.0);
+        byChannel = (uint8_t)(int)(dVar1 * 255.0);
         byRed = byChannel;
         dVar1 = DRAW_GetHueSector(m1, dP, pHSLIn->dHue);
-        byChannel = (uint8_t)(int)std::nearbyint(dVar1 * 255.0);
+        byChannel = (uint8_t)(int)(dVar1 * 255.0);
         byGreen = byChannel;
         dP = DRAW_GetHueSector(m1, dP, pHSLIn->dHue - 120.0);
-        byChannel = (uint8_t)(int)std::nearbyint(dP * 255.0);
+        byChannel = (uint8_t)(int)(dP * 255.0);
       }
 
       *pRGBOut = byRed;
@@ -1065,7 +1065,7 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
     int pHSLSource = 0x100;
     do {
       fColorMagnitude = sqrt((double)((uint32_t)*pbSrcPalEntry * (uint32_t)*pbSrcPalEntry + (uint32_t)((tagPALETTEENTRY*)(pbSrcPalEntry - 1))->peRed * (uint32_t)((tagPALETTEENTRY*)(pbSrcPalEntry - 1))->peRed + (uint32_t)pbSrcPalEntry[1] * (uint32_t)pbSrcPalEntry[1]));
-      nTableIdx = (int)std::nearbyint(fColorMagnitude) & 0xff;
+      nTableIdx = (int)fColorMagnitude & 0xff;
       bVar3 = D2GFX_GetColorWithAlphaFromPallete(pPalette, 0x100, nTableIdx, 0, 0);
       pDestEntry[-0x40].peRed = bVar3;
       bVar3 = D2GFX_GetColorWithAlphaFromPallete(pPalette, 0x100, 0, nTableIdx, 0);

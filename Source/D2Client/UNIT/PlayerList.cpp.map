@@ -44,7 +44,13 @@
         "D2PlayerListStrc",
         "D2PlayerListSubStrc"
       ],
-      "dh": "d2dee939"
+      "dh": "d2dee939",
+      "paramStorage": [
+        [
+          "pPlayerList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AllocPlayerListSub",
@@ -66,7 +72,17 @@
         "D2PlayerListSubStrc",
         "int32_t"
       ],
-      "dh": "cb2c918d"
+      "dh": "cb2c918d",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "nRosterGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FreePlayerListSub",
@@ -88,7 +104,17 @@
         "D2PlayerListSubStrc",
         "int32_t"
       ],
-      "dh": "0b989822"
+      "dh": "0b989822",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "nRosterGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetUnsetFlags",
@@ -110,7 +136,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b8fdbe80"
+      "dh": "b8fdbe80",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "nRosterGUID",
+          "EDX:4"
+        ],
+        [
+          "nFlag",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSetUnset",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetFlag",
@@ -132,7 +176,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fb56f911"
+      "dh": "fb56f911",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "nRosterGUID",
+          "EDX:4"
+        ],
+        [
+          "nFlag",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004dc480",
@@ -148,7 +206,17 @@
         "Unreferenced_004dc480",
         "GetPlayerList"
       ],
-      "dh": "998bc6fd"
+      "dh": "998bc6fd",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetFlag",
@@ -170,7 +238,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b027058d"
+      "dh": "b027058d",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "nRosterGUID",
+          "EDX:4"
+        ],
+        [
+          "nFlag",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

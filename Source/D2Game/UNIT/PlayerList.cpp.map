@@ -21,7 +21,17 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc"
       ],
-      "dh": "96f3ef71"
+      "dh": "96f3ef71",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERLIST_AddPlayerEntry",
@@ -50,7 +60,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "0290ea8e"
+      "dh": "0290ea8e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit1",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERLIST_RemoveFromList",
@@ -74,7 +98,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "fef116bf"
+      "dh": "fef116bf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOtherPlayer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SendRelationshipStatus",
@@ -99,7 +137,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "758fb224"
+      "dh": "758fb224",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwFlagMask",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bSet",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERLIST_GetFlagsMasked",
@@ -121,7 +181,21 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "fbc18a27"
+      "dh": "fbc18a27",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "nMaskFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERLIST_GetFlags",
@@ -144,7 +218,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "97b8996f"
+      "dh": "97b8996f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetPlayerRelationship",
@@ -166,7 +250,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c82ebbdf"
+      "dh": "c82ebbdf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "nRelationship",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERLIST_IsPartied",
@@ -188,7 +286,17 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "f941eed3"
+      "dh": "f941eed3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Send0x8bRelationshipStatus",
@@ -212,7 +320,17 @@
         "D2UnitPlayerListStrc",
         "D2UnitStrc"
       ],
-      "dh": "8dab348c"
+      "dh": "8dab348c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PARTY_SendRelationshipForPlayer",
@@ -235,7 +353,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "7bfddf12"
+      "dh": "7bfddf12",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOtherUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERLIST_AddBothWays",
@@ -265,7 +397,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a31370d5"
+      "dh": "a31370d5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOtherPlayer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PARTY_BroadcastPlayerToAllUnits",
@@ -289,7 +435,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "867af42d"
+      "dh": "867af42d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PARTY_RefreshPlayerListRelationships",
@@ -315,7 +471,17 @@
         "SGAMEDATA",
         "int16_t"
       ],
-      "dh": "170878ab"
+      "dh": "170878ab",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetHostileDelay",
@@ -336,7 +502,17 @@
         "D2UnitPlayerListStrc",
         "D2UnitStrc"
       ],
-      "dh": "999bdb2d"
+      "dh": "999bdb2d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERLIST_SetHostileDelay",
@@ -359,7 +535,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1c523f64"
+      "dh": "1c523f64",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "nDelayFrames",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERLIST_RemoveFromListCallback",
@@ -379,7 +569,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "049371f7"
+      "dh": "049371f7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERDATA_FreePlayerList",
@@ -403,7 +607,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "40a01865"
+      "dh": "40a01865",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

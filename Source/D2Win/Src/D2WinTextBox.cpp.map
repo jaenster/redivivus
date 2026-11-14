@@ -23,7 +23,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a0ebf187"
+      "dh": "a0ebf187",
+      "paramStorage": [
+        [
+          "nFontIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_ClearAllLines",
@@ -47,7 +53,13 @@
         "D2WinTextBoxLineStrc",
         "int32_t"
       ],
-      "dh": "697807ea"
+      "dh": "697807ea",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetLinePadding",
@@ -69,7 +81,21 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "3ede4388"
+      "dh": "3ede4388",
+      "paramStorage": [
+        [
+          "pnTextBox",
+          "ECX:4"
+        ],
+        [
+          "nPadLeft",
+          "EDX:4"
+        ],
+        [
+          "nPadding",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetLineCellTextW",
@@ -97,7 +123,25 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "89c50173"
+      "dh": "89c50173",
+      "paramStorage": [
+        [
+          "pnTextBox",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "EDX:4"
+        ],
+        [
+          "nRow",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCol",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_ClearLineRow",
@@ -121,7 +165,17 @@
         "D2WinTextBoxLineStrc",
         "int32_t"
       ],
-      "dh": "028b8e05"
+      "dh": "028b8e05",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "nRow",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_GetLineCount",
@@ -143,7 +197,13 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "e769f568"
+      "dh": "e769f568",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_GetScrollPosition",
@@ -165,7 +225,13 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "3d39261f"
+      "dh": "3d39261f",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_GetSelectedLine",
@@ -187,7 +253,13 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "4b0ae98c"
+      "dh": "4b0ae98c",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetSelectedLine",
@@ -209,7 +281,17 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "e7c3eff2"
+      "dh": "e7c3eff2",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "nLineIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_ScrollToLine",
@@ -233,7 +315,17 @@
         "D2WinTextBoxLineStrc",
         "int32_t"
       ],
-      "dh": "ed627650"
+      "dh": "ed627650",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "nTargetLine",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_GetVisibleLineCount",
@@ -259,7 +351,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "456ba5dc"
+      "dh": "456ba5dc",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_GetSelectedLineText",
@@ -283,7 +381,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "8203f4a9"
+      "dh": "8203f4a9",
+      "paramStorage": [
+        [
+          "pnTextBox",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_GetLineCellValue",
@@ -307,7 +411,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "fa86119e"
+      "dh": "fa86119e",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "nRow",
+          "EDX:4"
+        ],
+        [
+          "nColIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetColumnCount",
@@ -329,7 +447,17 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "f5d660f7"
+      "dh": "f5d660f7",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "nColumnCount",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetColumnWidth",
@@ -351,7 +479,21 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "4c870ec9"
+      "dh": "4c870ec9",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "nColumnIndex",
+          "EDX:4"
+        ],
+        [
+          "nColumnWidth",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetColumnAlignment",
@@ -373,7 +515,21 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "7174d482"
+      "dh": "7174d482",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "nColumnIndex",
+          "EDX:4"
+        ],
+        [
+          "nAlignment",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_GetLastLineIndex",
@@ -396,7 +552,13 @@
         "D2WinTextBoxLineStrc",
         "int32_t"
       ],
-      "dh": "bda72ac9"
+      "dh": "bda72ac9",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetActive",
@@ -418,7 +580,17 @@
       "usedTypes": [
         "D2WinTextBox"
       ],
-      "dh": "4e30f335"
+      "dh": "4e30f335",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "bActive",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_Unused_HaltLine814",
@@ -459,7 +631,21 @@
         "D2WinTextBoxLineStrc",
         "int32_t"
       ],
-      "dh": "e5849acd"
+      "dh": "e5849acd",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "nRow",
+          "EDX:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_GetVisibleLinesFromScroll",
@@ -482,7 +668,13 @@
         "D2WinTextBoxLineStrc",
         "int32_t"
       ],
-      "dh": "570b25e2"
+      "dh": "570b25e2",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_TruncateStringToFitWidth",
@@ -503,7 +695,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "9929bf70"
+      "dh": "9929bf70",
+      "paramStorage": [
+        [
+          "nMaxWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -543,7 +745,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "82b7e184"
+      "dh": "82b7e184",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Push",
@@ -570,7 +778,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a83cfb49"
+      "dh": "a83cfb49",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Key",
@@ -598,7 +812,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a05c29ac"
+      "dh": "a05c29ac",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_GetScrollbarMaxValue",
@@ -620,7 +840,13 @@
       "usedTypes": [
         "D2WinTextBox"
       ],
-      "dh": "e4edfae6"
+      "dh": "e4edfae6",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetScrollbarMaxRange",
@@ -644,7 +870,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a184f9a3"
+      "dh": "a184f9a3",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "nMaxValue",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_RefreshScrollbar",
@@ -667,7 +903,13 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "ff548c06"
+      "dh": "ff548c06",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetScrollbarPosition",
@@ -690,7 +932,17 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "886b080c"
+      "dh": "886b080c",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "nPosition",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetScrollbarCallbackA",
@@ -713,7 +965,17 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "e6193e4c"
+      "dh": "e6193e4c",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "pLinkedTextBox",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetScrollbarCallbackB",
@@ -738,7 +1000,17 @@
         "fpD2WinScrollbarOnChange",
         "int32_t"
       ],
-      "dh": "62630944"
+      "dh": "62630944",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "fpOnChange",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetScrollbarStyle",
@@ -761,7 +1033,17 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "36ee6a24"
+      "dh": "36ee6a24",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "nStyle",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_GetScrollbarStyle",
@@ -783,7 +1065,13 @@
       "usedTypes": [
         "D2WinTextBox"
       ],
-      "dh": "0fa63393"
+      "dh": "0fa63393",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WinTextBox",
@@ -814,7 +1102,53 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3fcf6871"
+      "dh": "3fcf6871",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFormType",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStyleDC6",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pDC6",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pOnPress",
+          "Stack[0x18]:4"
+        ],
+        [
+          "dwStyleFlags",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pnScrollSize",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pnScrollbarRect",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "FORMS_DestroyD2WinTextBox",
@@ -839,7 +1173,13 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "5a7b4b5c"
+      "dh": "5a7b4b5c",
+      "paramStorage": [
+        [
+          "pWinTextBox",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetText",
@@ -879,7 +1219,29 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "b58da113"
+      "dh": "b58da113",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "nLineStyle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bIndent",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nAlignment",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_AddLines",
@@ -908,7 +1270,29 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "12660b15"
+      "dh": "12660b15",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "EDX:4"
+        ],
+        [
+          "nRepeatCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLineStyle",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIndent",
+          "Stack[0xc]:1"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetLineCellTextA",
@@ -930,7 +1314,25 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "9e04f5a2"
+      "dh": "9e04f5a2",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "nRowIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nColIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetLineCellTextWDirect",
@@ -951,7 +1353,25 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "6de339cc"
+      "dh": "6de339cc",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "EDX:4"
+        ],
+        [
+          "nRow",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCol",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_WordWrapAndSetText",
@@ -983,7 +1403,25 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "8020eb42"
+      "dh": "8020eb42",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "EDX:4"
+        ],
+        [
+          "nLineStyle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAlignment",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetTextFromAnsiSimple",
@@ -1008,7 +1446,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "d11c6520"
+      "dh": "d11c6520",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTEXTBOX_SetTextFromAnsi",
@@ -1033,7 +1481,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "725fb9fd"
+      "dh": "725fb9fd",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "nLineStyle",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

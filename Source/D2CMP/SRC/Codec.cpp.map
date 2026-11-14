@@ -21,7 +21,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "076e5f8e"
+      "dh": "076e5f8e",
+      "paramStorage": [
+        [
+          "pBitState",
+          "EDX:4"
+        ],
+        [
+          "nNumBits",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CODEC_ReadBitsWithTransparency",
@@ -42,7 +52,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "318ce7e7"
+      "dh": "318ce7e7",
+      "paramStorage": [
+        [
+          "pCharSelComp",
+          "ECX:4"
+        ],
+        [
+          "pBitState",
+          "EDX:4"
+        ],
+        [
+          "bSigned",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBitWidthCode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CODEC_AdvanceFrameIterator",
@@ -62,7 +90,17 @@
         "D2CodecFrameComponentStrc",
         "uint32_t"
       ],
-      "dh": "6772cb43"
+      "dh": "6772cb43",
+      "paramStorage": [
+        [
+          "pFrameBounds",
+          "EAX:4"
+        ],
+        [
+          "pIterState",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CODEC_InitializeFrameIterator",
@@ -82,7 +120,13 @@
       "usedTypes": [
         "D2CodecFrameBoundsStrc"
       ],
-      "dh": "5c8e58c3"
+      "dh": "5c8e58c3",
+      "paramStorage": [
+        [
+          "pFrameBounds",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CODEC_CalculateFrameBounds",
@@ -103,7 +147,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a28b9eb5"
+      "dh": "a28b9eb5",
+      "paramStorage": [
+        [
+          "pFrameData",
+          "ECX:4"
+        ],
+        [
+          "nMaxXAccum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutBounds",
+          "EDI:4"
+        ],
+        [
+          "pFrameArray",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CODEC_BuildInversePalette",
@@ -123,7 +185,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "61a01884"
+      "dh": "61a01884",
+      "paramStorage": [
+        [
+          "nPaletteBase",
+          "ECX:4"
+        ],
+        [
+          "nPaletteMaskBase",
+          "EDX:4"
+        ],
+        [
+          "nInverseMapBase",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPaletteTableBase",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CODEC_BuildInversePaletteFromBitmask",
@@ -143,7 +223,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "370a11d3"
+      "dh": "370a11d3",
+      "paramStorage": [
+        [
+          "pInversePalette",
+          "ECX:4"
+        ],
+        [
+          "pUsedColourBits",
+          "EDX:4"
+        ],
+        [
+          "pPaletteData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CODEC_DecodeFramePixels",
@@ -169,7 +263,29 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "84d0808d"
+      "dh": "84d0808d",
+      "paramStorage": [
+        [
+          "ppPixelValues",
+          "ECX:4"
+        ],
+        [
+          "pEqualCellStream",
+          "EDX:4"
+        ],
+        [
+          "nBitStream2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPrevIterState",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCurIterState",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CODEC_DecompressFrameData",
@@ -195,7 +311,45 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "3edb2336"
+      "dh": "3edb2336",
+      "paramStorage": [
+        [
+          "nCodecState",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitState1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBits1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pBitState2",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nBits2",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pBitState3",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pBitOffsets",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "ppOutBuffer",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pBitsRead",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "CODEC_EncodeRLE",
@@ -218,7 +372,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fa966b17"
+      "dh": "fa966b17",
+      "paramStorage": [
+        [
+          "pSrcImage",
+          "ECX:4"
+        ],
+        [
+          "pFrameHeader",
+          "EDX:4"
+        ],
+        [
+          "pOutBuf",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CODEC_LoadPaletteFromFile",
@@ -243,7 +411,17 @@
         "D2MPQFileStrc",
         "uint32_t"
       ],
-      "dh": "c69ea417"
+      "dh": "c69ea417",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "pCelEntry",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CODEC_DecompressAllFrames",
@@ -285,7 +463,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "47a26d7d"
+      "dh": "47a26d7d",
+      "paramStorage": [
+        [
+          "pdwCompressedData",
+          "ECX:4"
+        ],
+        [
+          "pMemory",
+          "EDX:4"
+        ],
+        [
+          "nReadSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCelHeader",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDecodeState",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStartFrame",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nFrameCount",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnSize",
+          "Stack[0x18]:4"
+        ],
+        [
+          "szFileName",
+          "Stack[0x1c]:4"
+        ]
+      ]
     }
   ]
 }

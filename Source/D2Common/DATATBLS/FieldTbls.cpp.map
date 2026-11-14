@@ -28,7 +28,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7b110859"
+      "dh": "7b110859",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_FreeFieldData",
@@ -59,7 +69,17 @@
       "calledFunctions": [
         "FIELDTBLS_GetFieldCenterOffsets"
       ],
-      "dh": "ac44fd63"
+      "dh": "ac44fd63",
+      "paramStorage": [
+        [
+          "pdwHalfWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pdwHalfHeight",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_AllocPoint",
@@ -105,7 +125,13 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "c8624707"
+      "dh": "c8624707",
+      "paramStorage": [
+        [
+          "pPoint",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetXY",
@@ -127,7 +153,21 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "ed975cbd"
+      "dh": "ed975cbd",
+      "paramStorage": [
+        [
+          "pPoint",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_GetFieldValueAtCoords",
@@ -149,7 +189,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b6705e2b"
+      "dh": "b6705e2b",
+      "paramStorage": [
+        [
+          "pnFieldOrigin",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_StepFieldTowardsPoint",
@@ -173,7 +227,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d03138d6"
+      "dh": "d03138d6",
+      "paramStorage": [
+        [
+          "pPoint",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_TracePathCheckCollision",
@@ -198,7 +266,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3e129540"
+      "dh": "3e129540",
+      "paramStorage": [
+        [
+          "pPoint",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "FIELDTBLS_LoadExpFieldFile",
@@ -221,7 +311,13 @@
         "D2PoolManagerStrc",
         "uint32_t"
       ],
-      "dh": "efe87e8c"
+      "dh": "efe87e8c",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

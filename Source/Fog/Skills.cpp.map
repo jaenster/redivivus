@@ -16,7 +16,17 @@
       "calledFunctions": [
         "SKILLS_PushValue"
       ],
-      "dh": "af910520"
+      "dh": "af910520",
+      "paramStorage": [
+        [
+          "pStack",
+          "EAX:4"
+        ],
+        [
+          "value",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_PopValue",
@@ -31,7 +41,13 @@
       "calledFunctions": [
         "SKILLS_PopValue"
       ],
-      "dh": "382e1bba"
+      "dh": "382e1bba",
+      "paramStorage": [
+        [
+          "pValueStack",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CompileSkillFormula",
@@ -55,7 +71,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "96745083"
+      "dh": "96745083",
+      "paramStorage": [
+        [
+          "pFormula",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFormulaSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pFunction",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pFunctionArray",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nFunctionArraySize",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ParseSkillDescription",
@@ -82,7 +124,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "64d9c472"
+      "dh": "64d9c472",
+      "paramStorage": [
+        [
+          "pFuncLookup",
+          "ECX:4"
+        ],
+        [
+          "pfnSkillLookup",
+          "EDX:4"
+        ],
+        [
+          "nParserContext",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szToken",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTokenType",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnTokenValue",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetOpcodePrecedence",
@@ -102,7 +170,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c52a705c"
+      "dh": "c52a705c",
+      "paramStorage": [
+        [
+          "opcode",
+          "AL:1"
+        ],
+        [
+          "pFunctionTable",
+          "EDX:4"
+        ],
+        [
+          "nFunctionArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_EmitFormulaBytecode",
@@ -123,7 +205,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c88174b0"
+      "dh": "c88174b0",
+      "paramStorage": [
+        [
+          "pWritePtr",
+          "EAX:4"
+        ],
+        [
+          "pOperatorStack",
+          "ESI:4"
+        ],
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bToken",
+          "Stack[0xc]:1"
+        ],
+        [
+          "pFunction",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nFunctionArg",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_WriteValueToBuffer",
@@ -142,7 +254,29 @@
         "D2QuestDataA5Q2Strc",
         "uint8_t"
       ],
-      "dh": "56e75d0f"
+      "dh": "56e75d0f",
+      "paramStorage": [
+        [
+          "pBase",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "EDX:4"
+        ],
+        [
+          "nBufferSize",
+          "ESI:4"
+        ],
+        [
+          "pStruct",
+          "EDI:4"
+        ],
+        [
+          "pWritePtr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_WriteValueToBuffer2",
@@ -161,7 +295,29 @@
         "D2QuestDataA5Q2Strc",
         "uint8_t"
       ],
-      "dh": "37a2fddf"
+      "dh": "37a2fddf",
+      "paramStorage": [
+        [
+          "pBase",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "EDX:4"
+        ],
+        [
+          "nBufferSize",
+          "ESI:4"
+        ],
+        [
+          "pStruct",
+          "EDI:4"
+        ],
+        [
+          "pWritePtr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ParseCalcExpression",
@@ -192,7 +348,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "08831b51"
+      "dh": "08831b51",
+      "paramStorage": [
+        [
+          "szExpressionString",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbByteCodeOutput",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxOutputSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDescTable",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pOpcodeInfo",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pfnGetLinkerIndex",
+          "Stack[0x18]:4"
+        ]
+      ]
     }
   ]
 }

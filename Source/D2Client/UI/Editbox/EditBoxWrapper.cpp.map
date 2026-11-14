@@ -20,7 +20,13 @@
         "EditBoxWrapper",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "55adf6c4"
+      "dh": "55adf6c4",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -41,7 +47,17 @@
         "EditBoxWrapper",
         "uint32_t"
       ],
-      "dh": "ca4c78e1"
+      "dh": "ca4c78e1",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseWheel",
@@ -60,7 +76,17 @@
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
       ],
-      "dh": "b976ba5b"
+      "dh": "b976ba5b",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseDown",
@@ -79,7 +105,17 @@
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
       ],
-      "dh": "06e3bde4"
+      "dh": "06e3bde4",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseUp",
@@ -98,7 +134,17 @@
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
       ],
-      "dh": "996566d6"
+      "dh": "996566d6",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseMove",
@@ -117,7 +163,17 @@
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
       ],
-      "dh": "ed3f70a2"
+      "dh": "ed3f70a2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -135,7 +191,13 @@
       "usedTypes": [
         "EditBoxWrapper"
       ],
-      "dh": "b3124fe3"
+      "dh": "b3124fe3",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "OnChar",
@@ -154,7 +216,17 @@
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
       ],
-      "dh": "fe711231"
+      "dh": "fe711231",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnDownArrow",
@@ -173,7 +245,17 @@
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
       ],
-      "dh": "9200d0af"
+      "dh": "9200d0af",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnUpArrow",
@@ -192,7 +274,17 @@
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
       ],
-      "dh": "52277bf3"
+      "dh": "52277bf3",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnRightArrow",
@@ -211,7 +303,17 @@
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
       ],
-      "dh": "5a956bdc"
+      "dh": "5a956bdc",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnLeftArrow",
@@ -230,7 +332,17 @@
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
       ],
-      "dh": "b57a1cb7"
+      "dh": "b57a1cb7",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetValue",
@@ -248,7 +360,13 @@
       "usedTypes": [
         "EditBoxWrapper"
       ],
-      "dh": "f14173c2"
+      "dh": "f14173c2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "GetRepeatDelta",
@@ -266,7 +384,17 @@
       "usedTypes": [
         "EditBoxWrapper"
       ],
-      "dh": "515709ea"
+      "dh": "515709ea",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetNumber",
@@ -284,7 +412,17 @@
       "usedTypes": [
         "EditBoxWrapper"
       ],
-      "dh": "c11b105e"
+      "dh": "c11b105e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nNumber",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetText",
@@ -302,7 +440,17 @@
       "usedTypes": [
         "EditBoxWrapper"
       ],
-      "dh": "9a31c418"
+      "dh": "9a31c418",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetText",
@@ -320,7 +468,17 @@
       "usedTypes": [
         "EditBoxWrapper"
       ],
-      "dh": "5fa1a08d"
+      "dh": "5fa1a08d",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "szBuffer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetCharFilter",
@@ -339,7 +497,17 @@
         "EditBoxWrapper",
         "fpUIWidgetCharFilter"
       ],
-      "dh": "b44cb376"
+      "dh": "b44cb376",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pfnCharFilter",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetWidth",
@@ -357,7 +525,17 @@
       "usedTypes": [
         "EditBoxWrapper"
       ],
-      "dh": "763013b3"
+      "dh": "763013b3",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetKeyRepeat",
@@ -375,7 +553,17 @@
       "usedTypes": [
         "EditBoxWrapper"
       ],
-      "dh": "7769ccde"
+      "dh": "7769ccde",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "bAllow",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetNumericOnly",
@@ -393,7 +581,17 @@
       "usedTypes": [
         "EditBoxWrapper"
       ],
-      "dh": "799fa3bf"
+      "dh": "799fa3bf",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "bNumericOnly",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Constructor",
@@ -416,7 +614,45 @@
         "pfnEHHandlerRoutine",
         "uint16_t"
       ],
-      "dh": "d907d875"
+      "dh": "d907d875",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMaxLines",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nMaxValue",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nMaxLength",
+          "Stack[0x18]:2"
+        ],
+        [
+          "pfnOnEnter",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nFont",
+          "Stack[0x20]:4"
+        ]
+      ]
     }
   ]
 }

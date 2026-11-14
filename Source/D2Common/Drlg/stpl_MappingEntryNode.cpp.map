@@ -20,7 +20,13 @@
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
         "uint32_t"
       ],
-      "dh": "5693c947"
+      "dh": "5693c947",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RoundToMultiple",
@@ -38,7 +44,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "214c5201"
+      "dh": "214c5201",
+      "paramStorage": [
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMultiple",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Assign",
@@ -58,7 +74,13 @@
         "TSLink<MappingEntryNode>",
         "uint32_t"
       ],
-      "dh": "f880986f"
+      "dh": "f880986f",
+      "paramStorage": [
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetLinkOffset",
@@ -78,7 +100,13 @@
         "TSLink<MappingEntryNode>",
         "int32_t"
       ],
-      "dh": "ab6465a1"
+      "dh": "ab6465a1",
+      "paramStorage": [
+        [
+          "nLinkOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Link",
@@ -98,7 +126,13 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSLink<MappingEntryNode>"
       ],
-      "dh": "fe755edd"
+      "dh": "fe755edd",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Next",
@@ -118,7 +152,13 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "intptr_t"
       ],
-      "dh": "0369d6ed"
+      "dh": "0369d6ed",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LinkNode",
@@ -141,7 +181,21 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "ea02bee4"
+      "dh": "ea02bee4",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLinkType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pExisting",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "RawNext",
@@ -160,7 +214,13 @@
         "MappingEntryNode",
         "TSExplicitList<MappingEntryNode, -572662307>"
       ],
-      "dh": "35130dc9"
+      "dh": "35130dc9",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkNode",
@@ -182,7 +242,13 @@
         "TSLink<MappingEntryNode> *",
         "uint32_t"
       ],
-      "dh": "d0448a11"
+      "dh": "d0448a11",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor",
@@ -224,7 +290,13 @@
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "intptr_t"
       ],
-      "dh": "a57935a9"
+      "dh": "a57935a9",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkAll",
@@ -265,7 +337,13 @@
         "TSLink<MappingEntryNode>",
         "uint32_t"
       ],
-      "dh": "13eef8e4"
+      "dh": "13eef8e4",
+      "paramStorage": [
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

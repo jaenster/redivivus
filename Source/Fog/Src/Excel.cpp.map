@@ -21,7 +21,13 @@
       "usedTypes": [
         "D2BinFieldExcelStrc"
       ],
-      "dh": "4020a7b6"
+      "dh": "4020a7b6",
+      "paramStorage": [
+        [
+          "pBinFieldExcel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_GetLinesCountFromBinFieldExcel",
@@ -39,7 +45,13 @@
       "usedTypes": [
         "D2BinFieldExcelStrc"
       ],
-      "dh": "5ad8a2b1"
+      "dh": "5ad8a2b1",
+      "paramStorage": [
+        [
+          "pBinFieldExcel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FOG_ParseBinField",
@@ -69,7 +81,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7d879653"
+      "dh": "7d879653",
+      "paramStorage": [
+        [
+          "pOutMapping",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBinFieldExcel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBinFieldInput",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_CreateTxtLinkStrc",
@@ -88,7 +114,17 @@
       "usedTypes": [
         "D2TxtLinkStrc"
       ],
-      "dh": "2c7a1aa2"
+      "dh": "2c7a1aa2",
+      "paramStorage": [
+        [
+          "szFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_FreeTxtLinkNode",
@@ -107,7 +143,13 @@
       "usedTypes": [
         "D2TxtLinkNodeStrc"
       ],
-      "dh": "55e8fb9e"
+      "dh": "55e8fb9e",
+      "paramStorage": [
+        [
+          "pTxtLinkNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_FreeTxtLink",
@@ -128,7 +170,13 @@
         "D2TxtLinkNodeStrc",
         "D2TxtLinkStrc"
       ],
-      "dh": "ec86818e"
+      "dh": "ec86818e",
+      "paramStorage": [
+        [
+          "pTxtLink",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetClassIdFromName",
@@ -148,7 +196,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "18484b73"
+      "dh": "18484b73",
+      "paramStorage": [
+        [
+          "pTxtLink",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemsTxt",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam3",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FOG_GetTxtLinkRecord",
@@ -168,7 +230,21 @@
         "D2TxtLinkSub0x08Strc",
         "uint32_t"
       ],
-      "dh": "1f86b06d"
+      "dh": "1f86b06d",
+      "paramStorage": [
+        [
+          "pTxtLink",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRecordId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pResult",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FOG_AddTxtLinkRecord",
@@ -194,7 +270,17 @@
         "D2TxtLinkSub0x08Strc",
         "uint32_t"
       ],
-      "dh": "be2394fe"
+      "dh": "be2394fe",
+      "paramStorage": [
+        [
+          "pTxtLink",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemCode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FOG_GetRecordField",
@@ -212,7 +298,17 @@
       "usedTypes": [
         "D2TxtLinkNodeStrc"
       ],
-      "dh": "650d7c06"
+      "dh": "650d7c06",
+      "paramStorage": [
+        [
+          "pClientSideData",
+          "ECX:4"
+        ],
+        [
+          "nLinkIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FOG_ParseIntField",
@@ -231,7 +327,21 @@
       "usedTypes": [
         "D2TxtLinkStrc"
       ],
-      "dh": "7c13c54e"
+      "dh": "7c13c54e",
+      "paramStorage": [
+        [
+          "pTxtLink",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLinkIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetLinkNodeIndex",
@@ -259,7 +369,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3dfa7942"
+      "dh": "3dfa7942",
+      "paramStorage": [
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szItemCode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam3",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FOG_ValidateBytePtr",
@@ -278,7 +402,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "cc10cf10"
+      "dh": "cc10cf10",
+      "paramStorage": [
+        [
+          "pbyte",
+          "EAX:4"
+        ],
+        [
+          "pKey",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FOG_ParseStringField",
@@ -304,7 +438,17 @@
       "usedTypes": [
         "D2TxtLinkStrc"
       ],
-      "dh": "55771c7d"
+      "dh": "55771c7d",
+      "paramStorage": [
+        [
+          "pTxtLink",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FOG_ParseTxtLink",
@@ -331,7 +475,17 @@
       "usedTypes": [
         "D2TxtLinkStrc"
       ],
-      "dh": "e71ed158"
+      "dh": "e71ed158",
+      "paramStorage": [
+        [
+          "pTxtLink",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_CreateBinFieldExcelAndFillData",
@@ -359,7 +513,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "17e57bdf"
+      "dh": "17e57bdf",
+      "paramStorage": [
+        [
+          "pD2Archive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_ParseDataAndPutIntoStructure",
@@ -397,7 +561,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "960f4b2f"
+      "dh": "960f4b2f",
+      "paramStorage": [
+        [
+          "pBinFieldExcel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBinFieldInput",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRecord",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLinesCount",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nEndOffset",
+          "Stack[0x14]:4"
+        ]
+      ]
     }
   ]
 }

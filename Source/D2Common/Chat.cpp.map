@@ -25,7 +25,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "14e8647c"
+      "dh": "14e8647c",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szMessage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDuration",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Free",
@@ -45,7 +59,17 @@
         "D2HoverTextStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "0abadbab"
+      "dh": "0abadbab",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pHoverText",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_GetChatField",
@@ -60,7 +84,13 @@
       "calledFunctions": [
         "CHAT_GetChatField"
       ],
-      "dh": "94f2d8e2"
+      "dh": "94f2d8e2",
+      "paramStorage": [
+        [
+          "pdwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetExpireFrame",
@@ -79,7 +109,13 @@
         "D2HoverTextStrc",
         "int32_t"
       ],
-      "dh": "f9503464"
+      "dh": "f9503464",
+      "paramStorage": [
+        [
+          "pHover",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_CopyHoverMessageString",
@@ -97,7 +133,17 @@
       "usedTypes": [
         "D2HoverTextStrc"
       ],
-      "dh": "86596af2"
+      "dh": "86596af2",
+      "paramStorage": [
+        [
+          "pHover",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szMessageOut",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "HOVERTEXT_GetTextLineList",
@@ -115,7 +161,13 @@
       "usedTypes": [
         "D2HoverTextStrc"
       ],
-      "dh": "1af93416"
+      "dh": "1af93416",
+      "paramStorage": [
+        [
+          "pHover",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HOVERTEXT_SetTextLineList",
@@ -133,7 +185,17 @@
       "usedTypes": [
         "D2HoverTextStrc"
       ],
-      "dh": "72ff1a1c"
+      "dh": "72ff1a1c",
+      "paramStorage": [
+        [
+          "pHoverText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTextLineList",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetLanguageCode",
@@ -152,7 +214,13 @@
         "D2HoverTextStrc",
         "uint8_t"
       ],
-      "dh": "34c41362"
+      "dh": "34c41362",
+      "paramStorage": [
+        [
+          "pHoverText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetLanguageCode",
@@ -171,7 +239,17 @@
         "D2HoverTextStrc",
         "uint8_t"
       ],
-      "dh": "c2bbab6c"
+      "dh": "c2bbab6c",
+      "paramStorage": [
+        [
+          "pHover",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLanguageCode",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca2b8",
@@ -193,7 +271,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "1ff368c7"
+      "dh": "1ff368c7",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca2e8",
@@ -215,7 +311,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "e0a5a7d7"
+      "dh": "e0a5a7d7",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca326",
@@ -237,7 +351,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "96d52a4d"
+      "dh": "96d52a4d",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca366",
@@ -259,7 +391,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "a56ac6b3"
+      "dh": "a56ac6b3",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca3b9",
@@ -281,7 +431,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "d19c9707"
+      "dh": "d19c9707",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca3e8",
@@ -303,7 +471,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "c04efdde"
+      "dh": "c04efdde",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca418",
@@ -325,7 +511,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "b6c6b756"
+      "dh": "b6c6b756",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca475",
@@ -347,7 +551,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "59d2e92d"
+      "dh": "59d2e92d",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca4b1",
@@ -369,7 +591,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "4a9e006f"
+      "dh": "4a9e006f",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca4e1",
@@ -391,7 +631,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "cbb8df2a"
+      "dh": "cbb8df2a",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

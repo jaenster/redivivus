@@ -21,7 +21,13 @@
         "D2StatesTxt",
         "eD2States"
       ],
-      "dh": "b26a7f7a"
+      "dh": "b26a7f7a",
+      "paramStorage": [
+        [
+          "eState",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2ApplyPercent",
@@ -42,7 +48,21 @@
         "int32_t",
         "int64_t"
       ],
-      "dh": "aaef79ae"
+      "dh": "aaef79ae",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ],
+        [
+          "nPercent",
+          "EDX:4"
+        ],
+        [
+          "n100Percent",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INV_GetCharStatsTxtLine",
@@ -62,7 +82,13 @@
         "D2CharStatsTxt",
         "int32_t"
       ],
-      "dh": "49af3ec9"
+      "dh": "49af3ec9",
+      "paramStorage": [
+        [
+          "nClassId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillParam4",
@@ -82,7 +108,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "405f41bd"
+      "dh": "405f41bd",
+      "paramStorage": [
+        [
+          "eSkill",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_NormalizeCodeTo4Chars",
@@ -97,7 +129,17 @@
       "calledFunctions": [
         "DATATBLS_NormalizeCodeTo4Chars"
       ],
-      "dh": "f56b8b3c"
+      "dh": "f56b8b3c",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_LookupStringId",
@@ -118,7 +160,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d85d7366"
+      "dh": "d85d7366",
+      "paramStorage": [
+        [
+          "szKey",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_GetCompCodeByIndex",
@@ -137,7 +185,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c978cf44"
+      "dh": "c978cf44",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Experience_GetLineLevel",
@@ -155,7 +209,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4aeffe7d"
+      "dh": "4aeffe7d",
+      "paramStorage": [
+        [
+          "ePlayerClass",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Experience_GetMaxLevel",
@@ -173,7 +237,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "bb9d2ad4"
+      "dh": "bb9d2ad4",
+      "paramStorage": [
+        [
+          "ePlayerClass",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_GetLevelFromExperience",
@@ -192,7 +262,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "17d06c92"
+      "dh": "17d06c92",
+      "paramStorage": [
+        [
+          "ePlayerClass",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExperience",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_AppendDataToBuffer",
@@ -213,7 +293,29 @@
         "int32_t",
         "void *"
       ],
-      "dh": "27ef9340"
+      "dh": "27ef9340",
+      "paramStorage": [
+        [
+          "ppBuffer",
+          "ECX:4"
+        ],
+        [
+          "pnSize",
+          "EDX:4"
+        ],
+        [
+          "pnCapacity",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_CalcExpr_ParseTokenType",
@@ -232,7 +334,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "3f59cffc"
+      "dh": "3f59cffc",
+      "paramStorage": [
+        [
+          "szKey",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_CalcExpr_GetArgCount",
@@ -247,7 +355,13 @@
       "calledFunctions": [
         "DATATBLS_CalcExpr_GetArgCount"
       ],
-      "dh": "b5a030b2"
+      "dh": "b5a030b2",
+      "paramStorage": [
+        [
+          "nFunctionIndex",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_LookupCalcCode",
@@ -269,7 +383,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6977ad24"
+      "dh": "6977ad24",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "pOutHasResolvedToConstant",
+          "EDX:4"
+        ],
+        [
+          "nAST",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nKeywordNumber",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_CompileSkillCode",
@@ -292,7 +424,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "60f47c9b"
+      "dh": "60f47c9b",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "pRecord",
+          "EDX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTxtRow",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTxtColumn",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_CompileSkillDescCode",
@@ -315,7 +473,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3760dc7f"
+      "dh": "3760dc7f",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "pRecord",
+          "EDX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTxtRow",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTxtColumn",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AnimTbls_Get_Unref_00611d10",
@@ -370,7 +554,13 @@
         "D2DifficultyLevelsTxt",
         "int32_t"
       ],
-      "dh": "e559aac5"
+      "dh": "e559aac5",
+      "paramStorage": [
+        [
+          "nDifficulty",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_BuildStatesDataBitMask",
@@ -390,7 +580,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "975b99ed"
+      "dh": "975b99ed",
+      "paramStorage": [
+        [
+          "pStatesData",
+          "ECX:4"
+        ],
+        [
+          "nFlagBit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_BuildStatesDataList",
@@ -414,7 +614,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "983d90fc"
+      "dh": "983d90fc",
+      "paramStorage": [
+        [
+          "ppAllStatesData",
+          "ECX:4"
+        ],
+        [
+          "pCounter",
+          "EDX:4"
+        ],
+        [
+          "nFlag",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_States_AllocItemTypesStateDataTable",
@@ -437,7 +651,21 @@
         "D2StatesTxt",
         "int32_t"
       ],
-      "dh": "c0bf7bfe"
+      "dh": "c0bf7bfe",
+      "paramStorage": [
+        [
+          "ppAllStatesData",
+          "ECX:4"
+        ],
+        [
+          "pCounter",
+          "EDX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetPlayerClassIdToName",
@@ -457,7 +685,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "7adbb93a"
+      "dh": "7adbb93a",
+      "paramStorage": [
+        [
+          "nClassId",
+          "ECX:4"
+        ],
+        [
+          "szResult",
+          "EDI:4"
+        ],
+        [
+          "nSize",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GetMonsterClassIdToName",
@@ -480,7 +722,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "83bc242f"
+      "dh": "83bc242f",
+      "paramStorage": [
+        [
+          "nClassId",
+          "EDX:4"
+        ],
+        [
+          "szResult",
+          "EDI:4"
+        ],
+        [
+          "nSize",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GetObjectClassIdToName",
@@ -502,7 +758,21 @@
         "D2ObjectsTxt",
         "int32_t"
       ],
-      "dh": "0931c926"
+      "dh": "0931c926",
+      "paramStorage": [
+        [
+          "nClassId",
+          "EBX:4"
+        ],
+        [
+          "szResult",
+          "EDI:4"
+        ],
+        [
+          "nSize",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GetItemClassIdToName",
@@ -526,7 +796,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "73d71b3c"
+      "dh": "73d71b3c",
+      "paramStorage": [
+        [
+          "nClassId",
+          "EBX:4"
+        ],
+        [
+          "szResult",
+          "EDI:4"
+        ],
+        [
+          "nSize",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GetMissileClassIdToName",
@@ -545,7 +829,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "bf7ef313"
+      "dh": "bf7ef313",
+      "paramStorage": [
+        [
+          "nClassId",
+          "EAX:4"
+        ],
+        [
+          "szResult",
+          "EDI:4"
+        ],
+        [
+          "nSize",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GetUnitClassIdToName",
@@ -569,7 +867,21 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "6459873a"
+      "dh": "6459873a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szResult",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetNameByClassIdAndType",
@@ -594,7 +906,25 @@
         "eD2UnitType",
         "int16_t"
       ],
-      "dh": "13d3a569"
+      "dh": "13d3a569",
+      "paramStorage": [
+        [
+          "eUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0x8]:2"
+        ],
+        [
+          "szResult",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "StoreDataTables",
@@ -618,7 +948,25 @@
         "FILE",
         "uint32_t"
       ],
-      "dh": "95b9af14"
+      "dh": "95b9af14",
+      "paramStorage": [
+        [
+          "szFileName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInventoryToBeUpdated",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwVersion",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ARCHIVE_LoadDataTables",
@@ -641,7 +989,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "80b44aeb"
+      "dh": "80b44aeb",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "szTableName",
+          "EDX:4"
+        ],
+        [
+          "szExtension",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CompileTxt",
@@ -679,7 +1053,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a54a53c7"
+      "dh": "a54a53c7",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szTableName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBinFieldInput",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTxtTableSize",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nEndOffset",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "sgtDataTableSetupIfUseTxt",
@@ -697,7 +1093,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2b619c41"
+      "dh": "2b619c41",
+      "paramStorage": [
+        [
+          "nMode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnloadBin",
@@ -713,7 +1115,13 @@
         "UnloadBin",
         "FreeServerMemory"
       ],
-      "dh": "e8932617"
+      "dh": "e8932617",
+      "paramStorage": [
+        [
+          "pTxtTable",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_CharStats_DefineWideStringClass",
@@ -742,7 +1150,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a20a93e4"
+      "dh": "a20a93e4",
+      "paramStorage": [
+        [
+          "pTxtCharStats",
+          "ECX:4"
+        ],
+        [
+          "nTxtCharStatsSize",
+          "EDX:4"
+        ],
+        [
+          "nStructStride",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSrcFieldOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDstFieldOffset",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nWstringSize",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_VariousSmallTables",
@@ -763,7 +1197,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "acdc5524"
+      "dh": "acdc5524",
+      "paramStorage": [
+        [
+          "pMemory",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_FreeMiscTxtTables",
@@ -820,7 +1260,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "3e3d50f4"
+      "dh": "3e3d50f4",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_experience",
@@ -840,7 +1286,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "89b1b316"
+      "dh": "89b1b316",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Experience_GetExpRatio",
@@ -858,7 +1310,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6fafbb8d"
+      "dh": "6fafbb8d",
+      "paramStorage": [
+        [
+          "nLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_SaveTableToBinFile",
@@ -886,7 +1344,29 @@
         "FILE",
         "uint32_t"
       ],
-      "dh": "b5b484c2"
+      "dh": "b5b484c2",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "szTableName",
+          "EDX:4"
+        ],
+        [
+          "ppInput",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSize2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSize1",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_skill_skilldesc",
@@ -920,7 +1400,13 @@
         "D2TxtLinkStrc",
         "int32_t"
       ],
-      "dh": "463b2e1b"
+      "dh": "463b2e1b",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_FreeSkillsTxtTables",
@@ -966,7 +1452,13 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "e41023be"
+      "dh": "e41023be",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_states",
@@ -998,7 +1490,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6bd8a80d"
+      "dh": "6bd8a80d",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_FreeStatesTxtTables",
@@ -1045,7 +1543,13 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "d9a0ec96"
+      "dh": "d9a0ec96",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_FreePetTypeTxtTables",
@@ -1206,7 +1710,21 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "a8953eff"
+      "dh": "a8953eff",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nZero2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bGametypeIsOBNetHost",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AnimTbls_Get_Unref_00624710",

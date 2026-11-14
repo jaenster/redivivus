@@ -28,7 +28,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a0e1f8f4"
+      "dh": "a0e1f8f4",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "pGrid",
+          "EDX:4"
+        ],
+        [
+          "pOrientGrid",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnused",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nKillEdgeX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nKillEdgeY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "AnimateTile",
@@ -47,7 +73,13 @@
         "D2DrlgAnimTileGridStrc",
         "D2RoomExStrc"
       ],
-      "dh": "09e5d9ba"
+      "dh": "09e5d9ba",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "AnimateTiles",
@@ -66,7 +98,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "31670146"
+      "dh": "31670146",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGANIM_AllocAnimatedTiles",
@@ -107,7 +145,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a1ead50a"
+      "dh": "a1ead50a",
+      "paramStorage": [
+        [
+          "pGrids",
+          "ECX:4"
+        ],
+        [
+          "pRoomEx",
+          "EDX:4"
+        ],
+        [
+          "nFrameStep",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTiles",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTileCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_AllocAnimTiles",
@@ -128,7 +188,37 @@
         "D2DrlgTileGridStrc",
         "D2RoomExStrc"
       ],
-      "dh": "d3dd9abc"
+      "dh": "d3dd9abc",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "nFrameStep",
+          "EDX:4"
+        ],
+        [
+          "pWallGrids",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnused1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pFloorGrids",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nUnused2",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pRoofGrids",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGANIM_GetOrientationFromIndex_Unref_0066d7e0",
@@ -143,7 +233,13 @@
       "calledFunctions": [
         "DRLGANIM_GetOrientationFromIndex_Unref_0066d7e0"
       ],
-      "dh": "c99d669d"
+      "dh": "c99d669d",
+      "paramStorage": [
+        [
+          "nAnimIndex",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGANIM_GetOrientationFromIndex",
@@ -158,7 +254,13 @@
       "calledFunctions": [
         "DRLGANIM_GetOrientationFromIndex"
       ],
-      "dh": "e293d347"
+      "dh": "e293d347",
+      "paramStorage": [
+        [
+          "nAnimIndex",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

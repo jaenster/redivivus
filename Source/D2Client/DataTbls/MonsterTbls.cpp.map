@@ -19,7 +19,13 @@
       "usedTypes": [
         "D2MonStats2Txt"
       ],
-      "dh": "00e4355e"
+      "dh": "00e4355e",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00452020",

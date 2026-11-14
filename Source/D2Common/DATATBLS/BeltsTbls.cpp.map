@@ -25,7 +25,13 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "ff7a8a27"
+      "dh": "ff7a8a27",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FreeBeltsTxt",
@@ -62,7 +68,13 @@
       "usedTypes": [
         "D2BeltsTxt"
       ],
-      "dh": "d12ccaa9"
+      "dh": "d12ccaa9",
+      "paramStorage": [
+        [
+          "nIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GetBeltsLine",
@@ -85,7 +97,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "2c598d0a"
+      "dh": "2c598d0a",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bHigherRes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRecord",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetInvRectFromBeltsTxt",
@@ -107,7 +133,25 @@
         "D2BeltsEntryStrc",
         "int32_t"
       ],
-      "dh": "86be314c"
+      "dh": "86be314c",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bHigherRes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pInvRect",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBoxId",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

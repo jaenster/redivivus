@@ -20,7 +20,21 @@
         "D2UnitStrc",
         "eD2UnitFlags"
       ],
-      "dh": "8c8010df"
+      "dh": "8c8010df",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "neD2UnitFlags",
+          "EDX:4"
+        ],
+        [
+          "bSet",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

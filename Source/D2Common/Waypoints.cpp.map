@@ -22,7 +22,17 @@
         "eD2LevelId",
         "uint16_t"
       ],
-      "dh": "b8a2d3a8"
+      "dh": "b8a2d3a8",
+      "paramStorage": [
+        [
+          "nWaypointId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "pLevelId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FindWaypointIdByLevelId",
@@ -44,7 +54,17 @@
         "int16_t",
         "uint8_t"
       ],
-      "dh": "e6b41589"
+      "dh": "e6b41589",
+      "paramStorage": [
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pWaypointId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CheckWaypoint",
@@ -68,7 +88,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "5d332ca9"
+      "dh": "5d332ca9",
+      "paramStorage": [
+        [
+          "pWaypoint",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWaypointId",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "EnableWaypoint",
@@ -91,7 +121,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "17475d3a"
+      "dh": "17475d3a",
+      "paramStorage": [
+        [
+          "pWaypoint",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWaypointId",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "Alloc",
@@ -111,7 +151,13 @@
         "D2PoolManagerStrc",
         "D2WaypointStrc"
       ],
-      "dh": "6b5ec44e"
+      "dh": "6b5ec44e",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WAYPOINT_UpgradeSignature",
@@ -133,7 +179,13 @@
         "D2WaypointStrc",
         "uint16_t"
       ],
-      "dh": "e2f05c7b"
+      "dh": "e2f05c7b",
+      "paramStorage": [
+        [
+          "pWaypoint",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Free",
@@ -158,7 +210,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "5d72e3a6"
+      "dh": "5d72e3a6",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pWaypoint",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CopyWaypointBits",
@@ -182,7 +244,17 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "b94c5ade"
+      "dh": "b94c5ade",
+      "paramStorage": [
+        [
+          "pWaypoint",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWaypointBits",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CopyWaypoint",
@@ -205,7 +277,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "2b1954aa"
+      "dh": "2b1954aa",
+      "paramStorage": [
+        [
+          "pWaypoint",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEntry",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

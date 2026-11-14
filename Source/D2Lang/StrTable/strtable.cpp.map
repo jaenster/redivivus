@@ -65,7 +65,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "d6e25ccd"
+      "dh": "d6e25ccd",
+      "paramStorage": [
+        [
+          "pStrTable",
+          "ECX:4"
+        ],
+        [
+          "ppEntryTable",
+          "EDX:4"
+        ],
+        [
+          "wRawIndex",
+          "Stack[0x4]:2"
+        ],
+        [
+          "dwErrorCode",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_FreeMemory",
@@ -81,7 +99,13 @@
         "STRTABLE_FreeMemory",
         "FreeClientMemory"
       ],
-      "dh": "c7bff7d4"
+      "dh": "c7bff7d4",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_HashString",
@@ -99,7 +123,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "2675abe5"
+      "dh": "2675abe5",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBucketCount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetLocaleString",
@@ -123,7 +157,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "4ab0fa9e"
+      "dh": "4ab0fa9e",
+      "paramStorage": [
+        [
+          "nStringIndex",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_GetTranslatedString",
@@ -149,7 +189,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "986309f6"
+      "dh": "986309f6",
+      "paramStorage": [
+        [
+          "pbKey",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_FindStringByKey",
@@ -175,7 +221,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "24e9e0a4"
+      "dh": "24e9e0a4",
+      "paramStorage": [
+        [
+          "ppHashTable",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbKey",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnTextOut",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStrTable",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_LookupString",
@@ -202,7 +266,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "16bbffe5"
+      "dh": "16bbffe5",
+      "paramStorage": [
+        [
+          "pbKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppwszText",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_GetStringByKey",
@@ -222,7 +296,13 @@
         "WCHAR",
         "uint8_t"
       ],
-      "dh": "6a243839"
+      "dh": "6a243839",
+      "paramStorage": [
+        [
+          "szKey",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "STRINGTABLE_FreeStringTables",
@@ -257,7 +337,13 @@
       "calledFunctions": [
         "STRTABLE_InitCRC"
       ],
-      "dh": "0da57d29"
+      "dh": "0da57d29",
+      "paramStorage": [
+        [
+          "pwCRC",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_UpdateCRC",
@@ -276,7 +362,17 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "30cbfacc"
+      "dh": "30cbfacc",
+      "paramStorage": [
+        [
+          "pwCRC",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byData",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00525010",
@@ -294,7 +390,13 @@
       "usedTypes": [
         "uint16_t"
       ],
-      "dh": "e515ef44"
+      "dh": "e515ef44",
+      "paramStorage": [
+        [
+          "wValue",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_CalculateCRC",
@@ -318,7 +420,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f1607483"
+      "dh": "f1607483",
+      "paramStorage": [
+        [
+          "pwCRC",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nEndOffset",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_NormalizeLanguageCode",
@@ -337,7 +457,13 @@
       "usedTypes": [
         "D2LangTableEntryStrc"
       ],
-      "dh": "82195581"
+      "dh": "82195581",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_GetLanguageId",
@@ -357,7 +483,13 @@
         "D2LangTableEntryStrc",
         "uint32_t"
       ],
-      "dh": "0badce1a"
+      "dh": "0badce1a",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISC_GetLanguageCode",
@@ -422,7 +554,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "65c81116"
+      "dh": "65c81116",
+      "paramStorage": [
+        [
+          "szOutAbbrev",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFormat",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_FormatNumber",
@@ -449,7 +591,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e5666140"
+      "dh": "e5666140",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxLen",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_FormatInt64",
@@ -475,7 +631,25 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "f90d0b94"
+      "dh": "f90d0b94",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nValueLo",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValueHi",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMaxLen",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_FormatUInt64WithAbbrev",
@@ -502,7 +676,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f07b27b1"
+      "dh": "f07b27b1",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwValueLo",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwValueHi",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMaxLen",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_LoadAbbreviationSymbols",
@@ -528,7 +720,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "32d559e7"
+      "dh": "32d559e7",
+      "paramStorage": [
+        [
+          "dwParam",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "STRTABLE_LoadStringTableFile",
@@ -553,7 +751,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "926777e1"
+      "dh": "926777e1",
+      "paramStorage": [
+        [
+          "szFileName",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TABLES_LoadStrings",
@@ -591,7 +795,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "1a0cedfa"
+      "dh": "1a0cedfa",
+      "paramStorage": [
+        [
+          "pPoolManager",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "isXpac",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

@@ -23,7 +23,17 @@
         "D2WaypointStrc",
         "SGAMEDATA"
       ],
-      "dh": "9746da62"
+      "dh": "9746da62",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UpgradeLifeAndHitClass",
@@ -49,7 +59,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6215ac44"
+      "dh": "6215ac44",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SendReassignPlayer",
@@ -74,7 +94,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d60d904c"
+      "dh": "d60d904c",
+      "paramStorage": [
+        [
+          "pUnitStrc",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ],
+        [
+          "bWarpFade",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "SendUnitCast0x4d",
@@ -111,7 +145,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "aecd17b7"
+      "dh": "aecd17b7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGameParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SendPlayerMoveOrObject",
@@ -148,7 +200,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fc4a1875"
+      "dh": "fc4a1875",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nModeIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SendPlayerMove",
@@ -179,7 +249,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "121e034a"
+      "dh": "121e034a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnitRaw",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nModeIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SendPlayerStop",
@@ -208,7 +296,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "650e7265"
+      "dh": "650e7265",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eAnimMode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMSG_SendPlayerStopToOtherClient",
@@ -236,7 +342,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "c095aadf"
+      "dh": "c095aadf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nModeIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DispatchPlayerModeNetMsg",
@@ -263,7 +387,21 @@
         "pfnPlayerModeNetMsg",
         "uint32_t"
       ],
-      "dh": "f48a81cc"
+      "dh": "f48a81cc",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SendAttributeUpdate",
@@ -291,7 +429,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "99b1aac8"
+      "dh": "99b1aac8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nStatId",
+          "DX:2"
+        ],
+        [
+          "dwStatValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwnerUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetHPRegen",
@@ -319,7 +475,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "bbdc8859"
+      "dh": "bbdc8859",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GetMPRegen",
@@ -346,7 +508,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "367effc7"
+      "dh": "367effc7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate",
@@ -386,7 +554,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "89bd2a62"
+      "dh": "89bd2a62",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "bForceUpdate",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SendInitUpdateAttributes",
@@ -410,7 +592,17 @@
         "eD2UnitStat",
         "uint32_t"
       ],
-      "dh": "02e8522b"
+      "dh": "02e8522b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StartModeID",
@@ -433,7 +625,29 @@
         "eD2Skills",
         "eD2UnitType"
       ],
-      "dh": "da4f00e2"
+      "dh": "da4f00e2",
+      "paramStorage": [
+        [
+          "eSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "eUnitType",
+          "EDI:4"
+        ],
+        [
+          "nUid",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "IsOtherAct",
@@ -458,7 +672,17 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "a7fb7ea4"
+      "dh": "a7fb7ea4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_AreInDifferentActs",
@@ -483,7 +707,17 @@
         "eD2LevelId",
         "uint32_t"
       ],
-      "dh": "e26c8685"
+      "dh": "e26c8685",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_InteractOrPick",
@@ -534,7 +768,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1f95220d"
+      "dh": "1f95220d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eUnitType",
+          "EDX:4"
+        ],
+        [
+          "uuid",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSetting",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pGame",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERMSG_GetMessageType",
@@ -553,7 +809,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "e60c5946"
+      "dh": "e60c5946",
+      "paramStorage": [
+        [
+          "nParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERMSG_GetMessagePriority",
@@ -572,7 +838,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9893273f"
+      "dh": "9893273f",
+      "paramStorage": [
+        [
+          "nParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CheckIfCoordsAreInRange",
@@ -596,7 +868,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "27034330"
+      "dh": "27034330",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "nRange",
+          "EBX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "CloseEnoughToInteract",
@@ -630,7 +920,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e18d3a6e"
+      "dh": "e18d3a6e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eUnitType",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "nUid",
+          "EAX:4"
+        ],
+        [
+          "nRange",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_IsItemOnCursor",
@@ -657,7 +969,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2fd37803"
+      "dh": "2fd37803",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwItemGUID",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "IsPlayerTheOwner",
@@ -684,7 +1010,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2194b3f7"
+      "dh": "2194b3f7",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemGid",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ItemBelongsToUnit",
@@ -711,7 +1051,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8e62f9b2"
+      "dh": "8e62f9b2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemGid",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ItemIsOfPlayerAndNotOnCursor",
@@ -739,7 +1093,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7c348b45"
+      "dh": "7c348b45",
+      "paramStorage": [
+        [
+          "nItemGid",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPlayer",
+          "EDI:4"
+        ],
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PLRMSG_CheckWeaponSlotEmpty",
@@ -759,7 +1127,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1f376036"
+      "dh": "1f376036",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBodyLoc",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ItemBelongsToInventoryOf",
@@ -786,7 +1164,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "37a658ff"
+      "dh": "37a658ff",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemGid",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "IsAccessableCheck",
@@ -817,7 +1209,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0b3261d1"
+      "dh": "0b3261d1",
+      "paramStorage": [
+        [
+          "nItemGid",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_FindNearbyAllyUnit",
@@ -843,7 +1249,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "94cba471"
+      "dh": "94cba471",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "bCheckRange",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppUnit",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "nUnitId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CheckIfCanBeSkilled",
@@ -866,7 +1294,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "2d0956b6"
+      "dh": "2d0956b6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "eSkill",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "OrficeStaffCheck",
@@ -890,7 +1328,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "9d00bd9d"
+      "dh": "9d00bd9d",
+      "paramStorage": [
+        [
+          "pUid",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:2"
+        ],
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "dwObjectGUID",
+          "EAX:4"
+        ],
+        [
+          "pGame",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PlayerCanInteractWithWaypoint",
@@ -933,7 +1393,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "6c04f497"
+      "dh": "6c04f497",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAreaId",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nGid",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CheckIfInrangeAndReassign",
@@ -965,7 +1443,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f7376d29"
+      "dh": "f7376d29",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "outNx",
+          "Stack[0xc]:4"
+        ],
+        [
+          "outNy",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pPacket",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x01_WalkToLocation",
@@ -990,7 +1494,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d0b4f485"
+      "dh": "d0b4f485",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AnyPacketClickOnMap",
@@ -1014,7 +1536,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "833cee10"
+      "dh": "833cee10",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "peUnitTypeOut",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSizeEx",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pPacket",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x02_WalkToEntity",
@@ -1039,7 +1587,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "f8cdbf9d"
+      "dh": "f8cdbf9d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x03_RunToLocation",
@@ -1064,7 +1630,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b037441f"
+      "dh": "b037441f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x04_RunToEntity",
@@ -1089,7 +1673,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "6e81ff34"
+      "dh": "6e81ff34",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetDualSwingSkill",
@@ -1124,7 +1726,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "44052710"
+      "dh": "44052710",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPlayer",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_SendInventoryFullMessage",
@@ -1148,7 +1760,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "8c94eb5c"
+      "dh": "8c94eb5c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CastSkillOnLocation",
@@ -1179,7 +1797,29 @@
         "eD2ServerIncomingStatus",
         "int32_t"
       ],
-      "dh": "906f1293"
+      "dh": "906f1293",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pSkill",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_ProcessSkillOnEntity",
@@ -1218,7 +1858,33 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "2116d45d"
+      "dh": "2116d45d",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EAX:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTargetGUID",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bMoveToTarget",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x05_LeftSkillOnLocation",
@@ -1248,7 +1914,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "656970ca"
+      "dh": "656970ca",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x06_LeftSkillOnEntity",
@@ -1278,7 +1962,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "46a29a1d"
+      "dh": "46a29a1d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x07_LeftSkillOnEntityEx",
@@ -1308,7 +2010,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "1cca5520"
+      "dh": "1cca5520",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x08_LeftSkillOnLocationEx",
@@ -1335,7 +2055,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "40d7cf29"
+      "dh": "40d7cf29",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMSG_Cmd0x09_CheckRangeThenLeftSkillOnEntity",
@@ -1362,7 +2100,25 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "49e0582a"
+      "dh": "49e0582a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x0A_LeftSkillOnEntityEx3",
@@ -1389,7 +2145,25 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "1cb38ee8"
+      "dh": "1cb38ee8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x0B_Keepalive",
@@ -1411,7 +2185,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "4681828d"
+      "dh": "4681828d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x0C_RightSkillOnLocation",
@@ -1441,7 +2233,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "7cc60351"
+      "dh": "7cc60351",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x0D_RightSkillOnEntity",
@@ -1470,7 +2280,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2aa3e9ba"
+      "dh": "2aa3e9ba",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x0E_RightSkillOnEntityEx",
@@ -1499,7 +2327,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "36ba2a43"
+      "dh": "36ba2a43",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x0F_RightSkillOnLocationEx",
@@ -1526,7 +2372,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "28146664"
+      "dh": "28146664",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMSG_Cmd0x10_CheckRangeThenRightSkillOnEntity",
@@ -1553,7 +2417,25 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "c457132f"
+      "dh": "c457132f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x11_RightSkillOnEntityEx3",
@@ -1580,7 +2462,25 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "d2310f0c"
+      "dh": "d2310f0c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x12_CancelChanneledSkill",
@@ -1603,7 +2503,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "d281d93b"
+      "dh": "d281d93b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x14_OverheadMessage",
@@ -1636,7 +2554,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "34cca1a7"
+      "dh": "34cca1a7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_IsInteractingWithOtherPlayer",
@@ -1659,7 +2595,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "c08a9de6"
+      "dh": "c08a9de6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOtherUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_BroadcastToClient",
@@ -1688,7 +2638,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "31b18765"
+      "dh": "31b18765",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pContext",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_DeliverWhisper",
@@ -1719,7 +2679,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4f6ab043"
+      "dh": "4f6ab043",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pContext",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x26_Chat",
@@ -1732,6 +2702,16 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2GSPacketSrv0x26"
+      ],
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket",
+          "EDX:4"
+        ]
       ]
     },
     {
@@ -1774,7 +2754,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "950c0eec"
+      "dh": "950c0eec",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PrepareClientMessage",
@@ -1796,7 +2794,21 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "f1959b4e"
+      "dh": "f1959b4e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "szMessage",
+          "EDX:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "CHAT_BroadcastMessageToAllClients",
@@ -1818,7 +2830,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "361a138c"
+      "dh": "361a138c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pdwMessage",
+          "EDX:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BroadcastEventMessage",
@@ -1838,7 +2864,17 @@
         "D2Packet0x5aEventStructure",
         "SGAMEDATA"
       ],
-      "dh": "25a42c01"
+      "dh": "25a42c01",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pEventData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x13_InteractWithEntity",
@@ -1862,7 +2898,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "dc67d4f8"
+      "dh": "dc67d4f8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x16_InteractWithEntityEx",
@@ -1886,7 +2940,25 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "fd8d958d"
+      "dh": "fd8d958d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x17_DropItem",
@@ -1913,7 +2985,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "81c70884"
+      "dh": "81c70884",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x18_ItemToInventory",
@@ -1945,7 +3035,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "08efff81"
+      "dh": "08efff81",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x19_PickUpToCursor",
@@ -1975,7 +3083,25 @@
         "eInventoryPage",
         "uint32_t"
       ],
-      "dh": "9b5a3822"
+      "dh": "9b5a3822",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x1A_EquipItem",
@@ -2000,7 +3126,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "a07e7f26"
+      "dh": "a07e7f26",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x1B_EquipToSwapSlot",
@@ -2024,7 +3168,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "74255c9e"
+      "dh": "74255c9e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x1C_UnequipToInventory",
@@ -2051,7 +3213,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "7518e11d"
+      "dh": "7518e11d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x1D_SwapBodyItem",
@@ -2079,7 +3259,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ea7f6597"
+      "dh": "ea7f6597",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x1E_EquipToWeaponSwap",
@@ -2105,7 +3303,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "951aad96"
+      "dh": "951aad96",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x1F_UseItem",
@@ -2134,7 +3350,25 @@
         "eInventoryPage",
         "uint32_t"
       ],
-      "dh": "7127d330"
+      "dh": "7127d330",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x20_UseItemAtLocation",
@@ -2161,7 +3395,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5a1e018f"
+      "dh": "5a1e018f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x27_UseItemOnItem",
@@ -2185,7 +3437,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "30e1d457"
+      "dh": "30e1d457",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x21_MergeStackables",
@@ -2209,7 +3479,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "4409d2dd"
+      "dh": "4409d2dd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMSG_Cmd0x22_RemoveStackItem",
@@ -2233,7 +3521,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "27ce6df3"
+      "dh": "27ce6df3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x23_ItemToBelt",
@@ -2257,7 +3563,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "3e580ab7"
+      "dh": "3e580ab7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x24_ItemFromBelt",
@@ -2283,7 +3607,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "a42986fe"
+      "dh": "a42986fe",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x25_SwapBeltItem",
@@ -2308,7 +3650,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "805e8c2a"
+      "dh": "805e8c2a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x26_UseItemAtPlayerCoords",
@@ -2337,7 +3697,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "db7ee2ef"
+      "dh": "db7ee2ef",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x28_SocketItem",
@@ -2365,7 +3743,25 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "3c7d5df9"
+      "dh": "3c7d5df9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x29_ScrollIntoBook",
@@ -2390,7 +3786,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "b0e0f277"
+      "dh": "b0e0f277",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x2A_ItemToCube",
@@ -2415,7 +3829,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "3fe06ff2"
+      "dh": "3fe06ff2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMSG_Cmd0x2C_ReturnBadParams",
@@ -2437,7 +3869,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "d1beafca"
+      "dh": "d1beafca",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMSG_Cmd0x2D_ReturnBadParams",
@@ -2459,7 +3909,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "fdf041a5"
+      "dh": "fdf041a5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "LoadAreaOrSpawnPortal",
@@ -2491,7 +3959,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "b8d32f77"
+      "dh": "b8d32f77",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMasks",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMSG_Cmd0x2E_ReturnOk",
@@ -2513,7 +3999,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "ba0bcba7"
+      "dh": "ba0bcba7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x2F_NpcInteract",
@@ -2544,7 +4048,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "435600b0"
+      "dh": "435600b0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x30_NpcCancelDialog",
@@ -2570,7 +4092,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e44295ee"
+      "dh": "e44295ee",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x31_NpcGossip",
@@ -2593,7 +4133,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "2c201a9c"
+      "dh": "2c201a9c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x32_NpcBuyConfirm",
@@ -2616,7 +4174,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "8e1fde63"
+      "dh": "8e1fde63",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x33_NpcSell",
@@ -2639,7 +4215,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "a831ac59"
+      "dh": "a831ac59",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x35_NpcGamble",
@@ -2662,7 +4256,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "d1b1cd17"
+      "dh": "d1b1cd17",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x34_CainIdentify",
@@ -2685,7 +4297,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "01e00721"
+      "dh": "01e00721",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x36_HireMerc",
@@ -2708,7 +4338,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "1bf201d4"
+      "dh": "1bf201d4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x62_NpcSellExpansion",
@@ -2731,7 +4379,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "75f28010"
+      "dh": "75f28010",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x37_GambleConfirm",
@@ -2757,7 +4423,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "b7ade1ba"
+      "dh": "b7ade1ba",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x38_NpcMenuSelect",
@@ -2782,7 +4466,25 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "6f4a38cf"
+      "dh": "6f4a38cf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMSG_Cmd0x39_ReturnBadParams",
@@ -2803,7 +4505,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "11f527b3"
+      "dh": "11f527b3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x3A_AllocStatPoint",
@@ -2827,7 +4547,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "5aaeaec7"
+      "dh": "5aaeaec7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x3B_AllocSkillPoint",
@@ -2863,7 +4601,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6eb61755"
+      "dh": "6eb61755",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x3C_SelectSkill",
@@ -2892,7 +4648,25 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "7a5dc34f"
+      "dh": "7a5dc34f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x3D_ActivateObject",
@@ -2916,7 +4690,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "8e229663"
+      "dh": "8e229663",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x3E_QuestItemPickup",
@@ -2952,7 +4744,25 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "b280f34e"
+      "dh": "b280f34e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x3F_PlayEmote",
@@ -2975,7 +4785,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "cdb93bc4"
+      "dh": "cdb93bc4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x40_RefreshQuestData",
@@ -2998,7 +4826,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "a344bcd6"
+      "dh": "a344bcd6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x41_Resurrect",
@@ -3047,7 +4893,25 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "ffde1fca"
+      "dh": "ffde1fca",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x5D_CubeRecipeCheck",
@@ -3071,7 +4935,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "7b041e23"
+      "dh": "7b041e23",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x5E_CubeApply",
@@ -3095,7 +4977,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "c919ad2d"
+      "dh": "c919ad2d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x42_StaffInOrifice1",
@@ -3116,7 +5016,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "ef94a502"
+      "dh": "ef94a502",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x43_StaffInOrifice2",
@@ -3137,7 +5055,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "fe31a3f2"
+      "dh": "fe31a3f2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x44_StaffInOrifice",
@@ -3164,7 +5100,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d43256da"
+      "dh": "d43256da",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x45_Unused",
@@ -3185,7 +5139,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "049c7d03"
+      "dh": "049c7d03",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CanInteractWithMerc",
@@ -3213,7 +5185,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5b2242d0"
+      "dh": "5b2242d0",
+      "paramStorage": [
+        [
+          "nCmdArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCmdArg2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCmdId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "nMercGUID",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x46_NpcInteractMerc",
@@ -3238,7 +5236,25 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "02a08e86"
+      "dh": "02a08e86",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x47_CommandMercenary",
@@ -3263,7 +5279,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "06b26d99"
+      "dh": "06b26d99",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x48_CutsceneOver",
@@ -3288,7 +5322,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "2fd8497b"
+      "dh": "2fd8497b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x49_TakeWaypoint",
@@ -3320,7 +5372,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "bb7faa65"
+      "dh": "bb7faa65",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x4D_ResetNpcIntroFlag",
@@ -3343,7 +5413,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "5b221b6a"
+      "dh": "5b221b6a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x4B_ForceUnitUpdate",
@@ -3369,7 +5457,25 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "b62bd6e9"
+      "dh": "b62bd6e9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x4C_TransmogrifyItem2",
@@ -3393,7 +5499,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "907666b8"
+      "dh": "907666b8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x4F_GoToTownFolk",
@@ -3416,7 +5540,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "57c75a1c"
+      "dh": "57c75a1c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x50_DropGold",
@@ -3442,7 +5584,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7caeb37e"
+      "dh": "7caeb37e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x51_SetHotkey",
@@ -3469,7 +5629,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "761121f0"
+      "dh": "761121f0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x52_Unused",
@@ -3491,7 +5669,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "2f00ed35"
+      "dh": "2f00ed35",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x53_GamepadInput",
@@ -3515,7 +5711,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "ee5c4067"
+      "dh": "ee5c4067",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x54_StopRunning",
@@ -3538,7 +5752,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "dce43ca5"
+      "dh": "dce43ca5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x58_MarkQuestDone",
@@ -3564,7 +5796,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "689bd542"
+      "dh": "689bd542",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x59_CommandNPC",
@@ -3595,7 +5845,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8c23645e"
+      "dh": "8c23645e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ValidateSyncWarpPath",
@@ -3636,7 +5904,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "51212d24"
+      "dh": "51212d24",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_StatExpireCallback_ClearState",
@@ -3657,7 +5943,21 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "5d7a2892"
+      "dh": "5d7a2892",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RelocateAndApplySyncWarp",
@@ -3690,7 +5990,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "879ac8a2"
+      "dh": "879ac8a2",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x5F_SyncPosition",
@@ -3728,7 +6046,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "80fdd2d8"
+      "dh": "80fdd2d8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x60_WeaponSwap",
@@ -3754,7 +6090,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "dabb2716"
+      "dh": "dabb2716",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MERC_SwapEquippedItem",
@@ -3803,7 +6157,25 @@
         "eD2BodyLoc",
         "uint32_t"
       ],
-      "dh": "2707ccf2"
+      "dh": "2707ccf2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pGame",
+          "ESI:4"
+        ],
+        [
+          "pUnit2",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "EquipOrUnequipMercItem",
@@ -3839,7 +6211,25 @@
         "eD2ServerIncomingStatus",
         "int32_t"
       ],
-      "dh": "3ec3c460"
+      "dh": "3ec3c460",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eBodyLoc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "MERC_CanEquipItem",
@@ -3870,7 +6260,25 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "e433cffd"
+      "dh": "e433cffd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x61_MercEquipItem",
@@ -3905,7 +6313,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "708da302"
+      "dh": "708da302",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_0x63_ItemToBeltAuto",
@@ -3958,7 +6384,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5829fac5"
+      "dh": "5829fac5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMSG_Cmd0x66_WardenResponse_ReturnOk",
@@ -3980,7 +6424,25 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "f24b7963"
+      "dh": "f24b7963",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_HandleIncomingPacketAfterClientCheck",
@@ -4008,7 +6470,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8bb0bd5f"
+      "dh": "8bb0bd5f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERMSG_BroadcastPlayerSlain",
@@ -4045,7 +6525,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0bbb9f2c"
+      "dh": "0bbb9f2c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pVictim",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SendPlayerStopAndAtributeUpdate",
@@ -4071,7 +6565,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0d7166ed"
+      "dh": "0d7166ed",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStopReason",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

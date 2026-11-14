@@ -20,7 +20,13 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "2bd0e597"
+      "dh": "2bd0e597",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INV_SubstituteFormatToken",
@@ -42,7 +48,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "b04b5476"
+      "dh": "b04b5476",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nTokenIndex",
+          "EDX:4"
+        ],
+        [
+          "wszReplacement",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

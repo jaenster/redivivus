@@ -126,7 +126,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e95a37ab"
+      "dh": "e95a37ab",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pszDstBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufLen",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "IGNORELIST_ExtractSuffix",
@@ -146,7 +164,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "23b65163"
+      "dh": "23b65163",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufLen",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "IGNORELIST_ParsePattern",
@@ -173,7 +209,25 @@
         "IgnoreList",
         "int32_t"
       ],
-      "dh": "53d874a7"
+      "dh": "53d874a7",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "AddAccountMapping",
@@ -203,7 +257,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ea5e720e"
+      "dh": "ea5e720e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "szRaw",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRawLen",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISC_InitIgnorelist",

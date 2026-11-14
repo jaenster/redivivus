@@ -26,7 +26,13 @@
         "D2WinListEntry",
         "int32_t"
       ],
-      "dh": "3a0128ac"
+      "dh": "3a0128ac",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINLIST_AddListItem",
@@ -57,7 +63,37 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "0cfa0da1"
+      "dh": "0cfa0da1",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "EDX:4"
+        ],
+        [
+          "nItemData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bItemFlags",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nUserData",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bPrepend",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bSelect",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINLIST_GetSelectedIndex",
@@ -78,7 +114,13 @@
       "usedTypes": [
         "D2WinList"
       ],
-      "dh": "f88429d1"
+      "dh": "f88429d1",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINLIST_GetEntryByIndex",
@@ -100,7 +142,17 @@
         "D2WinList",
         "D2WinListEntry"
       ],
-      "dh": "e237de15"
+      "dh": "e237de15",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINLIST_GetItemCount",
@@ -121,7 +173,13 @@
       "usedTypes": [
         "D2WinList"
       ],
-      "dh": "6eb43943"
+      "dh": "6eb43943",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINLIST_LoadPentSpinCursor",
@@ -187,7 +245,13 @@
         "D2WinListEntry",
         "int32_t"
       ],
-      "dh": "b668ff21"
+      "dh": "b668ff21",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Push",
@@ -212,7 +276,13 @@
         "D2WinListEntry",
         "int32_t"
       ],
-      "dh": "dd3e69d2"
+      "dh": "dd3e69d2",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ListCheck",
@@ -236,7 +306,13 @@
         "D2WinListEntry",
         "int32_t"
       ],
-      "dh": "4702421c"
+      "dh": "4702421c",
+      "paramStorage": [
+        [
+          "pList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Key",
@@ -262,7 +338,13 @@
         "fpListEntryCallback",
         "int32_t"
       ],
-      "dh": "59a7f0e5"
+      "dh": "59a7f0e5",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WinList",
@@ -295,7 +377,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f09c8407"
+      "dh": "f09c8407",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nSizeX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnItemArray",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnFontType",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

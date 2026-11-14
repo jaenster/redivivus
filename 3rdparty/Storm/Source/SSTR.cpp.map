@@ -17,7 +17,17 @@
         "SStrChr",
         "SErrSetLastError"
       ],
-      "dh": "4274ecc0"
+      "dh": "4274ecc0",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "cTarget",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "SStrChrR",
@@ -33,7 +43,17 @@
         "SStrChrR",
         "SErrSetLastError"
       ],
-      "dh": "ef931d2e"
+      "dh": "ef931d2e",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "cTarget",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "SSTR_FindChar",
@@ -54,7 +74,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d68f1367"
+      "dh": "d68f1367",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "cTarget",
+          "Stack[0x8]:1"
+        ],
+        [
+          "bFromEnd",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SStrCmp",
@@ -74,7 +108,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "3e0868a1"
+      "dh": "3e0868a1",
+      "paramStorage": [
+        [
+          "str_1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "str_2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SStrCmpI",
@@ -94,7 +142,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "76adde83"
+      "dh": "76adde83",
+      "paramStorage": [
+        [
+          "str_1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "str_2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SStrCopy",
@@ -114,7 +176,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c83b30a7"
+      "dh": "c83b30a7",
+      "paramStorage": [
+        [
+          "szBufferOutput",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szBufferInput",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufferOutputLength",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SStrLen",
@@ -133,7 +209,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "49153362"
+      "dh": "49153362",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SStrPack",
@@ -152,7 +234,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "20730ad2"
+      "dh": "20730ad2",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szSource",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufferLength",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2vsprintf",
@@ -173,7 +269,25 @@
         "uint32_t",
         "va_list"
       ],
-      "dh": "c78c1074"
+      "dh": "c78c1074",
+      "paramStorage": [
+        [
+          "szFormat",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "ESI:4"
+        ],
+        [
+          "pBuffer",
+          "EDI:4"
+        ],
+        [
+          "pArgs",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SStrPrintf",
@@ -214,7 +328,25 @@
         "uint32_t",
         "va_list"
       ],
-      "dh": "c3b8a323"
+      "dh": "c3b8a323",
+      "paramStorage": [
+        [
+          "szOutput",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szFormatString",
+          "Stack[0xc]:4"
+        ],
+        [
+          "vaArgs",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SStrToInt",
@@ -234,7 +366,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a52e3703"
+      "dh": "a52e3703",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SStrToUnsigned",
@@ -253,7 +391,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "1dc4c086"
+      "dh": "1dc4c086",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SStrTokenize",
@@ -274,7 +418,29 @@
         "char *",
         "uint32_t"
       ],
-      "dh": "4c734f67"
+      "dh": "4c734f67",
+      "paramStorage": [
+        [
+          "ppszCursor",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szTokenOut",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxLen",
+          "Stack[0xc]:4"
+        ],
+        [
+          "szDelimiters",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pbWasQuoted",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SStrHash",
@@ -294,7 +460,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f8875758"
+      "dh": "f8875758",
+      "paramStorage": [
+        [
+          "pszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bCaseSensitive",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nSeed",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SSTR_HashString64",
@@ -317,7 +497,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "53a7cc0f"
+      "dh": "53a7cc0f",
+      "paramStorage": [
+        [
+          "pszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bCaseSensitive",
+          "Stack[0x8]:1"
+        ],
+        [
+          "qwSeed",
+          "Stack[0xc]:8"
+        ]
+      ]
     },
     {
       "name": "SSTR_bjhash",
@@ -336,7 +530,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5cfde6a3"
+      "dh": "5cfde6a3",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nLength",
+          "EDX:4"
+        ],
+        [
+          "nInitVal",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SStrHashHT",
@@ -357,7 +565,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f6ca7303"
+      "dh": "f6ca7303",
+      "paramStorage": [
+        [
+          "pszText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SStrUpper",
@@ -373,7 +587,13 @@
         "SStrUpper",
         "_strupr"
       ],
-      "dh": "daa2a8cf"
+      "dh": "daa2a8cf",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SStrLower",
@@ -389,7 +609,13 @@
         "SStrLower",
         "_strlwr"
       ],
-      "dh": "5f775c1f"
+      "dh": "5f775c1f",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "_Pow_int",
@@ -407,7 +633,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "d40adaf4"
+      "dh": "d40adaf4",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ],
+        [
+          "dBase",
+          "Stack[0x4]:8"
+        ]
+      ]
     },
     {
       "name": "SSTR_PowDoubleInt",
@@ -425,7 +661,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "bfb8f0fd"
+      "dh": "bfb8f0fd",
+      "paramStorage": [
+        [
+          "dBase",
+          "Stack[0x4]:8"
+        ],
+        [
+          "nExp",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SSTR_InitPow10Table",
@@ -465,7 +711,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "8937a9a7"
+      "dh": "8937a9a7",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SSTR_InitConversionTables",
@@ -504,7 +756,13 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "8f444b40"
+      "dh": "8f444b40",
+      "paramStorage": [
+        [
+          "pStr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SStrToDouble",
@@ -526,7 +784,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "0d906840"
+      "dh": "0d906840",
+      "paramStorage": [
+        [
+          "pStr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SStrToFloat",
@@ -548,7 +812,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "723995da"
+      "dh": "723995da",
+      "paramStorage": [
+        [
+          "pStr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UTF16_CalculateUTF8Length",
@@ -567,7 +837,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "216ae9b8"
+      "dh": "216ae9b8",
+      "paramStorage": [
+        [
+          "pszUTF16",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxChars",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnCharsRead",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UTF16_ToUTF8",
@@ -587,7 +871,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4d3ffa49"
+      "dh": "4d3ffa49",
+      "paramStorage": [
+        [
+          "pbUTF8",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOutMaxChars",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pszUTF16Out",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nInBytes",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnCharsWritten",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnBytesRead",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "UTF8_CalculateUTF16Length",
@@ -605,7 +915,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "ac0b7da9"
+      "dh": "ac0b7da9",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnBytesRead",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UTF8_ToUTF16",
@@ -624,7 +948,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "79ae1d25"
+      "dh": "79ae1d25",
+      "paramStorage": [
+        [
+          "pszUTF16Out",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOutMaxChars",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbUTF8In",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nInBytes",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnCharsWritten",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnBytesRead",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "UTF8_DecodeNextChar",
@@ -643,7 +993,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fe719c7c"
+      "dh": "fe719c7c",
+      "paramStorage": [
+        [
+          "pbText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBytesRead",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UTF8_EncodeChar",
@@ -662,7 +1022,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "69dfd39a"
+      "dh": "69dfd39a",
+      "paramStorage": [
+        [
+          "uCodepoint",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbOut",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UTF8_AdvanceToCharBoundary",
@@ -680,7 +1050,21 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "2035aa47"
+      "dh": "2035aa47",
+      "paramStorage": [
+        [
+          "pszBase",
+          "EDX:4"
+        ],
+        [
+          "nPosition",
+          "EAX:4"
+        ],
+        [
+          "nDirection",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "UTF8_StepBackOneChar",
@@ -699,7 +1083,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "0c4c6b0f"
+      "dh": "0c4c6b0f",
+      "paramStorage": [
+        [
+          "str_base",
+          "Stack[0x4]:4"
+        ],
+        [
+          "position",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UTF8_StepForwardOneChar",
@@ -718,7 +1112,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "65e74fd9"
+      "dh": "65e74fd9",
+      "paramStorage": [
+        [
+          "str_base",
+          "Stack[0x4]:4"
+        ],
+        [
+          "position",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TRANSTBL_UnicodeToSingleByte",
@@ -738,7 +1142,25 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "44db8dfd"
+      "dh": "44db8dfd",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pXlatTbl",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbOut",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCount",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TRANSTBL_SingleByteToUnicode",
@@ -757,7 +1179,25 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "15f7b55e"
+      "dh": "15f7b55e",
+      "paramStorage": [
+        [
+          "pbSrc",
+          "EDX:4"
+        ],
+        [
+          "nCount",
+          "EAX:4"
+        ],
+        [
+          "pDest",
+          "EBX:4"
+        ],
+        [
+          "pXlatTbl",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "TRANSTBL_UnicodeToLatin1",
@@ -777,7 +1217,21 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "8c85b443"
+      "dh": "8c85b443",
+      "paramStorage": [
+        [
+          "pbOut",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcUTF16",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TRANSTBL_UnicodeToLatin2",
@@ -797,7 +1251,21 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "ac2c55b5"
+      "dh": "ac2c55b5",
+      "paramStorage": [
+        [
+          "pbOut",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcUTF16",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TRANSTBL_UnicodeToKorean",
@@ -817,7 +1285,21 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "b42d6cdf"
+      "dh": "b42d6cdf",
+      "paramStorage": [
+        [
+          "pbOut",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcUTF16",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TRANSTBL_Latin1ToUnicode",
@@ -836,7 +1318,21 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "7fcb4494"
+      "dh": "7fcb4494",
+      "paramStorage": [
+        [
+          "dest",
+          "Stack[0x4]:4"
+        ],
+        [
+          "src",
+          "Stack[0x8]:4"
+        ],
+        [
+          "count",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TRANSTBL_Latin2ToUnicode",
@@ -855,7 +1351,21 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "0dbd08dd"
+      "dh": "0dbd08dd",
+      "paramStorage": [
+        [
+          "dest",
+          "Stack[0x4]:4"
+        ],
+        [
+          "src",
+          "Stack[0x8]:4"
+        ],
+        [
+          "count",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TRANSTBL_KoreanToUnicode",
@@ -874,7 +1384,21 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "f698d472"
+      "dh": "f698d472",
+      "paramStorage": [
+        [
+          "dest",
+          "Stack[0x4]:4"
+        ],
+        [
+          "src",
+          "Stack[0x8]:4"
+        ],
+        [
+          "count",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

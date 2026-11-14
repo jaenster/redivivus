@@ -16,7 +16,13 @@
       "calledFunctions": [
         "DEBUG_Trace_Unref_00515ec0"
       ],
-      "dh": "504e6e82"
+      "dh": "504e6e82",
+      "paramStorage": [
+        [
+          "str",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_Trace_Unref_00515ed0",
@@ -31,7 +37,13 @@
       "calledFunctions": [
         "DEBUG_Trace_Unref_00515ed0"
       ],
-      "dh": "3845054b"
+      "dh": "3845054b",
+      "paramStorage": [
+        [
+          "str",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_LogFormattedMessage",
@@ -47,7 +59,17 @@
         "DEBUG_LogFormattedMessage",
         "SLogWrite"
       ],
-      "dh": "5732fd85"
+      "dh": "5732fd85",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "szMessage",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_SetLoggingFlag",
@@ -65,7 +87,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "acbfde5d"
+      "dh": "acbfde5d",
+      "paramStorage": [
+        [
+          "nLoggingFlag",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_GetTime32",
@@ -84,7 +112,13 @@
       "usedTypes": [
         "__time32_t"
       ],
-      "dh": "9cbce83d"
+      "dh": "9cbce83d",
+      "paramStorage": [
+        [
+          "pTime",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_Trace",
@@ -114,7 +148,13 @@
       "calledFunctions": [
         "DEBUG_Trace_Unref_0051d2d0"
       ],
-      "dh": "62771703"
+      "dh": "62771703",
+      "paramStorage": [
+        [
+          "str",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_Trace_Unref_0051d2e0",
@@ -129,7 +169,13 @@
       "calledFunctions": [
         "DEBUG_Trace_Unref_0051d2e0"
       ],
-      "dh": "3848a875"
+      "dh": "3848a875",
+      "paramStorage": [
+        [
+          "str",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

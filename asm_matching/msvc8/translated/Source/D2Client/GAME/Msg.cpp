@@ -424,53 +424,11 @@ static void __stdcall NET_D2GS_CLIENT_Send(uint8_t * pBytes, int32_t nSize) {
           if (dwTick - gdwLastPacketSendTick >= 0x32) {
             goto record_and_send;
           }
-
-          pLastBuf = gaLastSentPacketBuffer;
-          pCurBytes = pBytes;
-          for (nRemaining = nSize; nRemaining >= 4; nRemaining -= 4) {
-            if (*(int*)pLastBuf != *(int*)pCurBytes) {
-              goto skill_cmp_bytes;
-            }
-
-            pCurBytes += 4;
-            pLastBuf += 4;
+          if (!::memcmp(gaLastSentPacketBuffer, pBytes, (uint32_t)nSize)) {
+            return;
           }
 
-          if (nRemaining) {
-            skill_cmp_bytes:
-            nByteDiff = (uint32_t)(uint8_t)*pLastBuf - (uint32_t)*pCurBytes;
-            if (!nByteDiff) {
-              if (nRemaining == 1) {
-                goto bytes_equal;
-              }
-
-              nByteDiff = (uint32_t)(uint8_t)pLastBuf[1] - (uint32_t)pCurBytes[1];
-              if (nByteDiff) {
-                goto bytes_differ;
-              }
-              if (nRemaining == 2) {
-                goto bytes_equal;
-              }
-
-              nByteDiff = (uint32_t)(uint8_t)pLastBuf[2] - (uint32_t)pCurBytes[2];
-              if (nByteDiff) {
-                goto bytes_differ;
-              }
-              if (nRemaining == 3) {
-                goto bytes_equal;
-              }
-
-              nByteDiff = (uint32_t)(uint8_t)pLastBuf[3] - (uint32_t)pCurBytes[3];
-              test_byte3_diff:
-              if (!nByteDiff) {
-                goto bytes_equal;
-              }
-            }
-
-            goto bytes_differ;
-          }
-
-          goto bytes_equal;
+          goto record_and_send;
         }
       default:
         break;
@@ -479,53 +437,11 @@ static void __stdcall NET_D2GS_CLIENT_Send(uint8_t * pBytes, int32_t nSize) {
     }
 
     if (dwTick - gdwLastPacketSendTick < 200) {
-      pLastBuf = gaLastSentPacketBuffer;
-      pCurBytes = pBytes;
-      for (nRemaining = nSize; nRemaining >= 4; nRemaining -= 4) {
-        if (*(int*)pLastBuf != *(int*)pCurBytes) {
-          goto cmp_bytes;
-        }
-
-        pCurBytes += 4;
-        pLastBuf += 4;
-      }
-
-      if (!nRemaining) {
-        bytes_equal:
-        nCmpResult = 0;
-      } else {
-        cmp_bytes:
-        nByteDiff = (uint32_t)(uint8_t)*pLastBuf - (uint32_t)*pCurBytes;
-        if (!nByteDiff) {
-          if (nRemaining != 1) {
-            nByteDiff = (uint32_t)(uint8_t)pLastBuf[1] - (uint32_t)pCurBytes[1];
-            if (nByteDiff) {
-              goto bytes_differ;
-            }
-            if (nRemaining != 2) {
-              nByteDiff = (uint32_t)(uint8_t)pLastBuf[2] - (uint32_t)pCurBytes[2];
-              if (nByteDiff) {
-                goto bytes_differ;
-              }
-              if (nRemaining != 3) {
-                nByteDiff = (uint32_t)(uint8_t)pLastBuf[3] - (uint32_t)pCurBytes[3];
-                goto test_byte3_diff;
-              }
-            }
-          }
-
-          nCmpResult = 0;
-        } else {
-          bytes_differ:
-          nCmpResult = 1;
-          if (nByteDiff <= 0) {
-            nCmpResult = -1;
-          }
-        }
-      }
-      if (!nCmpResult) {
+      if (!::memcmp(gaLastSentPacketBuffer, pBytes, (uint32_t)nSize)) {
         return;
       }
+
+      goto record_and_send;
     }
 
     record_and_send:

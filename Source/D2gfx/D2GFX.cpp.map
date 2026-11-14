@@ -58,7 +58,21 @@
       "calledFunctions": [
         "Unreferenced_004f5040"
       ],
-      "dh": "72e18788"
+      "dh": "72e18788",
+      "paramStorage": [
+        [
+          "param_1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "param_2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "param_3",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_Release",
@@ -170,7 +184,13 @@
       "calledFunctions": [
         "D2GFX_SetPerspectiveCapable"
       ],
-      "dh": "8dfc3c3a"
+      "dh": "8dfc3c3a",
+      "paramStorage": [
+        [
+          "bResult",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsWindowMode",
@@ -221,7 +241,13 @@
       "calledFunctions": [
         "D2GFX_SetPerspective"
       ],
-      "dh": "5dd70211"
+      "dh": "5dd70211",
+      "paramStorage": [
+        [
+          "bPerspective",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_GetLowQuality_Unref_004f51f0",
@@ -251,7 +277,13 @@
       "calledFunctions": [
         "D2GFX_SetBlendedShadows"
       ],
-      "dh": "0f0fb76e"
+      "dh": "0f0fb76e",
+      "paramStorage": [
+        [
+          "bResult",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_GetLowQuality",
@@ -281,7 +313,13 @@
       "calledFunctions": [
         "D2GFX_SetLowQuality"
       ],
-      "dh": "6307561f"
+      "dh": "6307561f",
+      "paramStorage": [
+        [
+          "bResult",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_SetGamma",
@@ -296,7 +334,13 @@
       "calledFunctions": [
         "D2GFX_SetGamma"
       ],
-      "dh": "1fceb3cd"
+      "dh": "1fceb3cd",
+      "paramStorage": [
+        [
+          "dwGamma",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_CheckGamma",
@@ -371,7 +415,13 @@
       "calledFunctions": [
         "D2GFX_SetOverlayMode"
       ],
-      "dh": "e923bf1f"
+      "dh": "e923bf1f",
+      "paramStorage": [
+        [
+          "dwMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_SetOption",
@@ -389,7 +439,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a53d7dc6"
+      "dh": "a53d7dc6",
+      "paramStorage": [
+        [
+          "nOption",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_Initialize",
@@ -417,7 +477,25 @@
         "WNDPROC",
         "eD2RendererMode"
       ],
-      "dh": "178e1489"
+      "dh": "178e1489",
+      "paramStorage": [
+        [
+          "hInstance",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfWndProc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eRenderedMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bWindowed",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_TogglePerspective",
@@ -513,7 +591,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "056a4beb"
+      "dh": "056a4beb",
+      "paramStorage": [
+        [
+          "nResolutionMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_CreateWindow",
@@ -543,7 +635,17 @@
         "int32_t",
         "tagRECT"
       ],
-      "dh": "2414b58e"
+      "dh": "2414b58e",
+      "paramStorage": [
+        [
+          "bWindowed",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nResolution",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DestroyWindow",
@@ -580,7 +682,13 @@
       "calledFunctions": [
         "D2GFX_OnActivationChange"
       ],
-      "dh": "19a54639"
+      "dh": "19a54639",
+      "paramStorage": [
+        [
+          "bActive",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetHwnd",
@@ -616,7 +724,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4b83e63e"
+      "dh": "4b83e63e",
+      "paramStorage": [
+        [
+          "pWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pHeight",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateOSCursorVisibilty",
@@ -636,7 +754,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ddb75e9e"
+      "dh": "ddb75e9e",
+      "paramStorage": [
+        [
+          "shouldHide",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsFullscreen",
@@ -675,7 +799,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "c63cb13a"
+      "dh": "c63cb13a",
+      "paramStorage": [
+        [
+          "bActive",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_ResizeWindow",
@@ -699,7 +829,17 @@
         "int32_t",
         "tagRECT"
       ],
-      "dh": "f338dbdd"
+      "dh": "f338dbdd",
+      "paramStorage": [
+        [
+          "nResolution",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bForceResize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_UpdateWindowSize",
@@ -722,7 +862,13 @@
         "int32_t",
         "tagRECT"
       ],
-      "dh": "ae0e2aa8"
+      "dh": "ae0e2aa8",
+      "paramStorage": [
+        [
+          "nResolutionMode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_ClearCaches",
@@ -779,7 +925,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "84c40174"
+      "dh": "84c40174",
+      "paramStorage": [
+        [
+          "szFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nResolution",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pfFrame",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_CheckCutScene",
@@ -822,7 +982,21 @@
         "D2SmackerContextStrc",
         "int32_t"
       ],
-      "dh": "58ff6c4b"
+      "dh": "58ff6c4b",
+      "paramStorage": [
+        [
+          "szSmacker",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nVersion",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_PlayerSmacker",
@@ -844,7 +1018,13 @@
         "D2SmackerContextStrc",
         "int32_t"
       ],
-      "dh": "108d379d"
+      "dh": "108d379d",
+      "paramStorage": [
+        [
+          "pContext",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_CloseSmacker",
@@ -866,7 +1046,13 @@
         "D2SmackerContextStrc",
         "int32_t"
       ],
-      "dh": "7b086ebc"
+      "dh": "7b086ebc",
+      "paramStorage": [
+        [
+          "pContext",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_HideTaskbarAppBars",
@@ -972,7 +1158,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "602feb31"
+      "dh": "602feb31",
+      "paramStorage": [
+        [
+          "nResolution",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_BeginScene",
@@ -987,7 +1179,25 @@
       "calledFunctions": [
         "D2GFX_BeginScene"
       ],
-      "dh": "a77e5a71"
+      "dh": "a77e5a71",
+      "paramStorage": [
+        [
+          "bClear",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRed",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nGreen",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBlue",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_GetPerformanceFrequency",
@@ -1055,7 +1265,13 @@
       "calledFunctions": [
         "D2GFX_GetBackBuffer"
       ],
-      "dh": "5e777aaa"
+      "dh": "5e777aaa",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_IsWindowActive",
@@ -1091,7 +1307,17 @@
       "usedTypes": [
         "RECT"
       ],
-      "dh": "03006abd"
+      "dh": "03006abd",
+      "paramStorage": [
+        [
+          "pRect",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawRectEx",
@@ -1109,7 +1335,17 @@
       "usedTypes": [
         "RECT"
       ],
-      "dh": "81824d34"
+      "dh": "81824d34",
+      "paramStorage": [
+        [
+          "pRect",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawSolidRect",
@@ -1127,7 +1363,17 @@
       "usedTypes": [
         "RECT"
       ],
-      "dh": "898d9b84"
+      "dh": "898d9b84",
+      "paramStorage": [
+        [
+          "pRect",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawSolidSquare",
@@ -1145,7 +1391,21 @@
       "usedTypes": [
         "POINT"
       ],
-      "dh": "d199a09e"
+      "dh": "d199a09e",
+      "paramStorage": [
+        [
+          "pPoint",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0xc]:1"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawSolidRectEx",
@@ -1164,7 +1424,33 @@
         "DRAWMODE",
         "int32_t"
       ],
-      "dh": "a5fbca1f"
+      "dh": "a5fbca1f",
+      "paramStorage": [
+        [
+          "nXStart",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYStart",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawSolidRectAlpha",
@@ -1182,7 +1468,33 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e9919b96"
+      "dh": "e9919b96",
+      "paramStorage": [
+        [
+          "nXStart",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYStart",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawLine",
@@ -1200,7 +1512,33 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "67843bd9"
+      "dh": "67843bd9",
+      "paramStorage": [
+        [
+          "nXStart",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYStart",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_ClearScreen",
@@ -1215,7 +1553,13 @@
       "calledFunctions": [
         "D2GFX_ClearScreen"
       ],
-      "dh": "9d88171c"
+      "dh": "9d88171c",
+      "paramStorage": [
+        [
+          "bPartial",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_SetPalette",
@@ -1234,7 +1578,13 @@
         "LPPALETTEENTRY",
         "tagPALETTEENTRY"
       ],
-      "dh": "3be6d477"
+      "dh": "3be6d477",
+      "paramStorage": [
+        [
+          "pPalette",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_SetPaletteTable",
@@ -1253,7 +1603,13 @@
       "usedTypes": [
         "BYTE *"
       ],
-      "dh": "93381c19"
+      "dh": "93381c19",
+      "paramStorage": [
+        [
+          "ppPaletteTable",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_SetGlobalLight",
@@ -1268,7 +1624,21 @@
       "calledFunctions": [
         "D2GFX_SetGlobalLight"
       ],
-      "dh": "e5b5a2d2"
+      "dh": "e5b5a2d2",
+      "paramStorage": [
+        [
+          "nRed",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGreen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBlue",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawPerspectiveImage",
@@ -1287,7 +1657,37 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "fdff1a93"
+      "dh": "fdff1a93",
+      "paramStorage": [
+        [
+          "pData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nScreenMode",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawImage",
@@ -1308,7 +1708,33 @@
         "DRAWMODE",
         "int32_t"
       ],
-      "dh": "3ece0c9e"
+      "dh": "3ece0c9e",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPositionX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPositionY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eDrawMode",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawShiftedImage",
@@ -1329,7 +1755,33 @@
         "GLOBALPALLETE",
         "int32_t"
       ],
-      "dh": "a41294ab"
+      "dh": "a41294ab",
+      "paramStorage": [
+        [
+          "pDC6Context",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPositionX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPositionY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eMode",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nGlobalPaletteShift",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawVerticalCropImage",
@@ -1349,7 +1801,33 @@
         "DRAWMODE",
         "int32_t"
       ],
-      "dh": "2eecc10c"
+      "dh": "2eecc10c",
+      "paramStorage": [
+        [
+          "pDC6Context",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPositionX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPositionY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nPercentHideFromBottom",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nPercentShowFromBottom",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawSprite6",
@@ -1369,7 +1847,29 @@
         "D2GfxTileRectStrc",
         "int32_t"
       ],
-      "dh": "bb8ee36f"
+      "dh": "bb8ee36f",
+      "paramStorage": [
+        [
+          "pDC6Context",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pClipRect",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawShadow",
@@ -1388,7 +1888,21 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "96ce0f12"
+      "dh": "96ce0f12",
+      "paramStorage": [
+        [
+          "pDC6Context",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPositionX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPositionY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawImageColoredShape",
@@ -1407,7 +1921,25 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "d2232469"
+      "dh": "d2232469",
+      "paramStorage": [
+        [
+          "pDC6Context",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPositionX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPositionY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DebugFillBackBuffer",
@@ -1425,7 +1957,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "cce59a51"
+      "dh": "cce59a51",
+      "paramStorage": [
+        [
+          "nXpos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYpos",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_UpdateScaleFactor",
@@ -1524,7 +2066,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a62adfaa"
+      "dh": "a62adfaa",
+      "paramStorage": [
+        [
+          "nXScale",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYScale",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_IsInPerspectiveBounds",
@@ -1546,7 +2098,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ff4bf1fb"
+      "dh": "ff4bf1fb",
+      "paramStorage": [
+        [
+          "nXpos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYpos",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_AdjustPerspectivePosition",
@@ -1567,7 +2129,29 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d2e63834"
+      "dh": "d2e63834",
+      "paramStorage": [
+        [
+          "nXpos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYpos",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBais",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pXAdjust",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pYAdjust",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_PerspecitveScalePosition",
@@ -1588,7 +2172,33 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "8f00f79c"
+      "dh": "8f00f79c",
+      "paramStorage": [
+        [
+          "nXpos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYpos",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAngle",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pXpos",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pYpos",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bOrder",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_SetDefaultPerspectiveFactor",
@@ -1645,7 +2255,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a5f3b35a"
+      "dh": "a5f3b35a",
+      "paramStorage": [
+        [
+          "pLight",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPlayerLight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXpos",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nYpos",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawGroundTile",
@@ -1665,7 +2293,45 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "7f2684c3"
+      "dh": "7f2684c3",
+      "paramStorage": [
+        [
+          "pTile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nWorldXpos",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nWorldYpos",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x1c]:1"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pTileData",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawWallTile",
@@ -1685,7 +2351,29 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "66b587b8"
+      "dh": "66b587b8",
+      "paramStorage": [
+        [
+          "pTile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pLight",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawTransWallTile",
@@ -1705,7 +2393,33 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "27eb6542"
+      "dh": "27eb6542",
+      "paramStorage": [
+        [
+          "pTile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pLight",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x18]:1"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawShadowTile",
@@ -1724,7 +2438,29 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "0d56c9fa"
+      "dh": "0d56c9fa",
+      "paramStorage": [
+        [
+          "pTile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawTileSimple",
@@ -1742,7 +2478,21 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "271bd325"
+      "dh": "271bd325",
+      "paramStorage": [
+        [
+          "pbSrcBase",
+          "ECX:4"
+        ],
+        [
+          "pbDstBase",
+          "EDX:4"
+        ],
+        [
+          "pbPaletteRow",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawTileAdvanced",
@@ -1761,7 +2511,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "f4f728aa"
+      "dh": "f4f728aa",
+      "paramStorage": [
+        [
+          "pbSrcBase",
+          "ECX:4"
+        ],
+        [
+          "pbDstBase",
+          "EDX:4"
+        ],
+        [
+          "nLightAccumX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLightStepX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLightAccumY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLightStepY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawWallTileBasic",
@@ -1781,7 +2557,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "da6d2653"
+      "dh": "da6d2653",
+      "paramStorage": [
+        [
+          "pbTileData",
+          "ECX:4"
+        ],
+        [
+          "pbDstRow",
+          "EDX:4"
+        ],
+        [
+          "pbPaletteRow",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRowsLeft",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawWallTileWithPerspective",
@@ -1802,7 +2596,41 @@
         "uint8_t",
         "uint8_t[32]"
       ],
-      "dh": "e1cba0f5"
+      "dh": "e1cba0f5",
+      "paramStorage": [
+        [
+          "pbTileData",
+          "ECX:4"
+        ],
+        [
+          "pbDstRow",
+          "EDX:4"
+        ],
+        [
+          "nLightAccumX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLightStepX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLightAccumY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLightStepY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nRowsLeft",
+          "Stack[0x14]:4"
+        ],
+        [
+          "byShift",
+          "Stack[0x18]:1"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawGroundTileBasic",
@@ -1822,7 +2650,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f5ff6905"
+      "dh": "f5ff6905",
+      "paramStorage": [
+        [
+          "nClipOriginX",
+          "ECX:4"
+        ],
+        [
+          "nScreenYStart",
+          "EDX:4"
+        ],
+        [
+          "pbTileData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbDstRow",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbPaletteRow",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawGroundTileWithPerspective",
@@ -1843,7 +2697,49 @@
         "uint8_t",
         "uint8_t[32]"
       ],
-      "dh": "9234372d"
+      "dh": "9234372d",
+      "paramStorage": [
+        [
+          "nClipOriginX",
+          "ECX:4"
+        ],
+        [
+          "nScreenYStart",
+          "EDX:4"
+        ],
+        [
+          "pbTileData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstRowBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLightAccumX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLightStepX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nLightAccumY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nLightStepY",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "byShift",
+          "Stack[0x20]:1"
+        ]
+      ]
     },
     {
       "name": "D2GFX_InitializeLineBuffer",
@@ -1882,7 +2778,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ea87f000"
+      "dh": "ea87f000",
+      "paramStorage": [
+        [
+          "nScreenWidth",
+          "ECX:4"
+        ],
+        [
+          "nScreenHeight",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PALETTE_InitColorLookupTables",
@@ -1901,7 +2807,13 @@
         "BYTE *",
         "uint8_t"
       ],
-      "dh": "9ab965ad"
+      "dh": "9ab965ad",
+      "paramStorage": [
+        [
+          "ppPaletteTable",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004f8e90",

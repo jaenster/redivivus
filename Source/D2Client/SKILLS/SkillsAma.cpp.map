@@ -22,7 +22,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "e4825079"
+      "dh": "e4825079",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_SetParam1Zero",
@@ -45,7 +59,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "7e74a80e"
+      "dh": "7e74a80e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_CheckAmmoFindClosestTarget",
@@ -79,7 +107,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "e0f63c18"
+      "dh": "e0f63c18",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_FindClosestMeleeTargetSetParams",
@@ -115,7 +157,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f9b91fd7"
+      "dh": "f9b91fd7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_FindMeleeTargetSetCalcParam",
@@ -149,7 +205,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "19cca62e"
+      "dh": "19cca62e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Ama_PlayDoSound",
@@ -171,7 +241,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "d6be669e"
+      "dh": "d6be669e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Ama_MultiShotArrows",
@@ -204,7 +288,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b2ff9597"
+      "dh": "b2ff9597",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Ama_GuidedArrow",
@@ -235,7 +333,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "66a5c3eb"
+      "dh": "66a5c3eb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Ama_LinearMissileSpray",
@@ -265,7 +377,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "8dbe548e"
+      "dh": "8dbe548e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Ama_Strafe",
@@ -311,7 +437,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8590159d"
+      "dh": "8590159d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Ama_Fend",
@@ -355,7 +495,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "20f12e53"
+      "dh": "20f12e53",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Ama_PiercingShot",
@@ -388,7 +542,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7ed92298"
+      "dh": "7ed92298",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

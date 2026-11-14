@@ -25,7 +25,17 @@
         "SGAMEDATA",
         "uint16_t"
       ],
-      "dh": "50c16541"
+      "dh": "50c16541",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q00_Callback00_NpcActivate",
@@ -49,7 +59,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "424b8a36"
+      "dh": "424b8a36",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q00_StatusFilter",
@@ -69,7 +89,29 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "382e9e9a"
+      "dh": "382e9e9a",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBufferEx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbyStatusCode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q00_ActiveFilter",
@@ -91,7 +133,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1289e18c"
+      "dh": "1289e18c",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q00_InitData",
@@ -110,7 +174,13 @@
       "usedTypes": [
         "D2QuestDataStrc"
       ],
-      "dh": "a6db3444"
+      "dh": "a6db3444",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

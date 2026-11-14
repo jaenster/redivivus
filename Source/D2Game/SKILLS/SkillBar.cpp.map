@@ -46,7 +46,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "72a5ddb0"
+      "dh": "72a5ddb0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_SrvStFn33_TargetRevivableCorpse",
@@ -71,7 +89,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4aaf238d"
+      "dh": "4aaf238d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLAMZ_CreateLightningFuryBolts",
@@ -101,7 +137,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "098c5b53"
+      "dh": "098c5b53",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_069_FindPotion",
@@ -133,7 +183,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1a1eae4d"
+      "dh": "1a1eae4d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_ApplyWarCryBuff",
@@ -168,7 +236,29 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "4b99f709"
+      "dh": "4b99f709",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCaster",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_068_WarCry",
@@ -193,7 +283,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "8bf38785"
+      "dh": "8bf38785",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_070_DoubleSwing",
@@ -221,7 +329,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b3284a66"
+      "dh": "b3284a66",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CheckCorpseCanBeConsumed",
@@ -244,7 +370,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "7034094b"
+      "dh": "7034094b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_071_Taunt",
@@ -281,7 +417,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "387d0d71"
+      "dh": "387d0d71",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_SrvStFn34_FindItem",
@@ -304,7 +458,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "1800073c"
+      "dh": "1800073c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_072_FindItem",
@@ -335,7 +507,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "61db5749"
+      "dh": "61db5749",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_074_DoubleThrow",
@@ -368,7 +558,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "62c11b5f"
+      "dh": "62c11b5f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_075_GrimWard",
@@ -408,7 +616,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6e11efa8"
+      "dh": "6e11efa8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_SkillMeleeAttack",
@@ -443,7 +669,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2d231d72"
+      "dh": "2d231d72",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_ApplyFrenzyStack",
@@ -482,7 +730,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "3a62430c"
+      "dh": "3a62430c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_009_FrenzyMeleeHit",
@@ -513,7 +779,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "44d9e231"
+      "dh": "44d9e231",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_OnWarCryExpire",
@@ -543,7 +827,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "26709635"
+      "dh": "26709635",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_SrvStFn38_Whirlwind",
@@ -607,7 +905,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "9ce1c374"
+      "dh": "9ce1c374",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLAMZ_GetPlagueJavelinCloudCount",
@@ -629,7 +945,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "fb9f4059"
+      "dh": "fb9f4059",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLAMZ_CreatePlagueJavelinClouds",
@@ -656,7 +978,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "cf52ea38"
+      "dh": "cf52ea38",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_DeactivateAndRestoreCollision",
@@ -695,7 +1031,33 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "2d05d2ce"
+      "dh": "2d05d2ce",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCollideX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCollideY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_076_Whirlwind",
@@ -741,7 +1103,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1950fe8e"
+      "dh": "1950fe8e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_SrvStFn39_Berserk",
@@ -782,7 +1162,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "132a9e71"
+      "dh": "132a9e71",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_FindValidLeapTarget",
@@ -819,7 +1217,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7d55dfeb"
+      "dh": "7d55dfeb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnTargetX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnTargetY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_InitChargeTarget",
@@ -844,7 +1264,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "365f254e"
+      "dh": "365f254e",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pSkill",
+          "EBX:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_CanTargetPosition",
@@ -868,7 +1306,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "413d8faa"
+      "dh": "413d8faa",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_SrvStFn40_Leap",
@@ -917,7 +1373,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4b9c029c"
+      "dh": "4b9c029c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_InitTransportPath",
@@ -952,7 +1426,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8129e5ac"
+      "dh": "8129e5ac",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_CalculateChargePath",
@@ -995,7 +1479,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c199f95f"
+      "dh": "c199f95f",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pSkill",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_ArriveAtChargeTarget",
@@ -1042,7 +1548,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1ce000c5"
+      "dh": "1ce000c5",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_077_Leap",
@@ -1076,7 +1596,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dec33522"
+      "dh": "dec33522",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_AcquireNextTarget",
@@ -1108,7 +1646,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a9e0a405"
+      "dh": "a9e0a405",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSkill",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_SrvStFn41_LeapAttack",
@@ -1150,7 +1702,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "af7d3277"
+      "dh": "af7d3277",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLBAR_WhirlwindHitCycle",
@@ -1190,7 +1760,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a44984ae"
+      "dh": "a44984ae",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_078_LeapAttack",
@@ -1223,7 +1811,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5f4ef6dd"
+      "dh": "5f4ef6dd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

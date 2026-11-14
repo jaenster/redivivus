@@ -17,7 +17,13 @@
         "SetupGamma",
         "D2GFX_SetGamma"
       ],
-      "dh": "03942bfb"
+      "dh": "03942bfb",
+      "paramStorage": [
+        [
+          "dwGamma",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetCurrentEngineToOne",

@@ -22,7 +22,17 @@
         "D2InventoryToBeUpdatedStrc",
         "SGAMEDATA"
       ],
-      "dh": "145e3e37"
+      "dh": "145e3e37",
+      "paramStorage": [
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_FindAndRemoveInactiveUnitsByRoom",
@@ -51,7 +61,25 @@
         "SGAMEDATA",
         "eAct"
       ],
-      "dh": "196f60d7"
+      "dh": "196f60d7",
+      "paramStorage": [
+        [
+          "ppInactiveUnits",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppInactiveItems",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRoom",
+          "EAX:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_RestoreInactiveItem",
@@ -85,7 +113,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0bff569a"
+      "dh": "0bff569a",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pInactiveData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_RestoreInactiveItemList",
@@ -107,7 +149,21 @@
         "D2RoomStrc",
         "SGAMEDATA"
       ],
-      "dh": "76cfa07e"
+      "dh": "76cfa07e",
+      "paramStorage": [
+        [
+          "pGame",
+          "EBX:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemRecord",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_SerializeAndDeactivateItem",
@@ -145,7 +201,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "663905a3"
+      "dh": "663905a3",
+      "paramStorage": [
+        [
+          "pGame",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pInactiveList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutInactiveRecord",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_RemoveInactiveMonsterByClassId",
@@ -171,7 +245,21 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "42b8f047"
+      "dh": "42b8f047",
+      "paramStorage": [
+        [
+          "byActNo",
+          "AL:1"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "nClassId",
+          "BX:2"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_FreeInactiveMonsterList",
@@ -194,7 +282,17 @@
         "D2InactiveUnitListStrc",
         "SGAMEDATA"
       ],
-      "dh": "1c2adf6e"
+      "dh": "1c2adf6e",
+      "paramStorage": [
+        [
+          "pGame",
+          "EBX:4"
+        ],
+        [
+          "pInactiveUnitList",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_AllocOrFindInactiveList",
@@ -215,7 +313,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "2ac5824e"
+      "dh": "2ac5824e",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAct",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bCreate",
+          "Stack[0x10]:4"
+        ],
+        [
+          "x",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_AllocInactiveListForRoom",
@@ -242,7 +362,21 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "b8cedec8"
+      "dh": "b8cedec8",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bCreate",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRoom",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_RestoreMonsterStateFromInactive",
@@ -271,7 +405,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0c5804e7"
+      "dh": "0c5804e7",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInactiveMonRec",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_SaveMonsterStateToInactive",
@@ -299,7 +447,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "7902e73b"
+      "dh": "7902e73b",
+      "paramStorage": [
+        [
+          "pInactiveMonsterRecord",
+          "EDI:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_DeactivateMonster",
@@ -363,7 +525,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "592e3114"
+      "dh": "592e3114",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_RoomInitMonsters",
@@ -423,7 +595,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b22c1f8a"
+      "dh": "b22c1f8a",
+      "paramStorage": [
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_CheckDeadMonsterAtCoords",
@@ -458,7 +640,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "77ea03ba"
+      "dh": "77ea03ba",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_FreeUnusedItems",
@@ -480,7 +684,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "dd974bb8"
+      "dh": "dd974bb8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nAct",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_RoomInit",
@@ -525,7 +739,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "92baef37"
+      "dh": "92baef37",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_SaveInactiveUnit",
@@ -558,7 +782,17 @@
         "SGAMEDATA",
         "eD2UnitType"
       ],
-      "dh": "bf0800b4"
+      "dh": "bf0800b4",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_FreeAllInactiveLists",
@@ -582,7 +816,13 @@
         "D2InactiveUnitRecordStrc",
         "SGAMEDATA"
       ],
-      "dh": "b381ff36"
+      "dh": "b381ff36",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_RemoveInactiveUnitByTypeAndId",
@@ -606,7 +846,25 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "69c84c24"
+      "dh": "69c84c24",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitType",
+          "DX:2"
+        ],
+        [
+          "nClassId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "byActNo",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "UNITS_ProcessDeadOrInactiveMonster",
@@ -647,7 +905,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "21f866bd"
+      "dh": "21f866bd",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SUNITINACTIVE_SaveOrFreeUnit",
@@ -682,7 +950,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "09de8c3b"
+      "dh": "09de8c3b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

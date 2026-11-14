@@ -16,7 +16,13 @@
       "calledFunctions": [
         "ReturnFirstArgument_Unref_00518b90"
       ],
-      "dh": "7ba49eaf"
+      "dh": "7ba49eaf",
+      "paramStorage": [
+        [
+          "pdwParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetDistanceBetween",
@@ -38,7 +44,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "98bf2da0"
+      "dh": "98bf2da0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pOther",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_None",
@@ -58,7 +74,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "224beac6"
+      "dh": "224beac6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_Idle",
@@ -81,7 +111,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "6c95e6bd"
+      "dh": "6c95e6bd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_FindClosestAllyOfSameType",
@@ -105,7 +149,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "df9a8ee3"
+      "dh": "df9a8ee3",
+      "paramStorage": [
+        [
+          "nUnusedCtx",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCandidate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppBestResult",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ReturnFirstArgument",
@@ -120,7 +182,13 @@
       "calledFunctions": [
         "ReturnFirstArgument"
       ],
-      "dh": "561520f4"
+      "dh": "561520f4",
+      "paramStorage": [
+        [
+          "pdwParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetDwArgsIfNotNeg0x29a",
@@ -139,7 +207,25 @@
         "D2AiGeneralStrc",
         "int32_t"
       ],
-      "dh": "8171b688"
+      "dh": "8171b688",
+      "paramStorage": [
+        [
+          "pMonsterAi",
+          "ECX:4"
+        ],
+        [
+          "dwArg0",
+          "EDX:4"
+        ],
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_CanApplyColdState",
@@ -164,7 +250,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e99f0d73"
+      "dh": "e99f0d73",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pMonStatsTxtRecord",
+          "EDX:4"
+        ],
+        [
+          "eState",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AttachCorrectAiFunctionToMonster",
@@ -196,7 +300,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "611b795d"
+      "dh": "611b795d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMonsterAiGeneral",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFunctionId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MonsterNeedsToOpenDoor",
@@ -224,7 +346,21 @@
         "SGAMEDATA",
         "eCollisionFlags"
       ],
-      "dh": "bfb102ca"
+      "dh": "bfb102ca",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUMMON_CheckOwnerAlive",
@@ -254,7 +390,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6379ea6e"
+      "dh": "6379ea6e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CheckStunnedOpenDoorAndParent",
@@ -278,7 +428,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "94b401e1"
+      "dh": "94b401e1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MonsterIsBossHasCloseByPlayerTarget",
@@ -305,7 +469,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "92423127"
+      "dh": "92423127",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CheckIfBossNeedsToTeleport",
@@ -349,7 +527,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "28d52716"
+      "dh": "28d52716",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiGeneral",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DistanceAndCollisionChecks",
@@ -384,7 +576,21 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "fe538fcc"
+      "dh": "fe538fcc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HirelingFarWander",
@@ -411,7 +617,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "36ef3b5c"
+      "dh": "36ef3b5c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_GetAiFunctionFromTable",
@@ -433,7 +653,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "38dc9ca4"
+      "dh": "38dc9ca4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nFunctionId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AiDecideTarget",
@@ -459,7 +689,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "740c8e40"
+      "dh": "740c8e40",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_ExecuteAiFunction",
@@ -487,7 +731,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b9a3d7bb"
+      "dh": "b9a3d7bb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_None_Unref_005b72a0",
@@ -507,7 +769,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "932e7502"
+      "dh": "932e7502",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_None_Unref_005b8740",
@@ -527,7 +803,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "699b7d20"
+      "dh": "699b7d20",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetDistance",
@@ -550,7 +840,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "2af38e25"
+      "dh": "2af38e25",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_GetWeightedDistanceToPoint",
@@ -574,7 +874,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "126a1533"
+      "dh": "126a1533",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nTargetX",
+          "EDX:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetCollisionDistanceFromXY",
@@ -596,7 +910,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "8c3aa520"
+      "dh": "8c3aa520",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nTargetX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_GetDistanceToCoords",
@@ -622,7 +950,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9fc2ad61"
+      "dh": "9fc2ad61",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TestIfMonsterCanHitTarget",
@@ -649,7 +991,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9b85d3bf"
+      "dh": "9b85d3bf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_005dc840",
@@ -668,7 +1020,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "b4dc2918"
+      "dh": "b4dc2918",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindNearestAllyCallback",
@@ -693,7 +1051,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "977f4181"
+      "dh": "977f4181",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOther",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScan",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_ForEachFn04_FindDyingMonster",
@@ -715,7 +1091,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ca6088bc"
+      "dh": "ca6088bc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOther",
+          "Stack[0x4]:4"
+        ],
+        [
+          "test",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_GetThreatLevel",
@@ -734,7 +1128,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "73d217bc"
+      "dh": "73d217bc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CanTargetUnit",
@@ -763,7 +1163,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "c6bc191c"
+      "dh": "c6bc191c",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pTarget",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_IsValidTarget",
@@ -785,7 +1199,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "ba08f459"
+      "dh": "ba08f459",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "AI_ForEachFn05_ScanTargetsByThreat",
@@ -821,7 +1249,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "28b2402b"
+      "dh": "28b2402b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOther",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScan",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_ForEachFn06_NearestTargetByThreat",
@@ -847,7 +1293,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "896535b9"
+      "dh": "896535b9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOther",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppResults",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_ForEachFn07_AltHighThreatTarget",
@@ -872,7 +1336,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "05de94a5"
+      "dh": "05de94a5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOther",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppResults",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_ForEachFn11_AltHittableTarget",
@@ -899,7 +1381,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2968d4a4"
+      "dh": "2968d4a4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOther",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppResults",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_ForEachFn08_NearestClosedDoor",
@@ -921,7 +1421,25 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "d87df411"
+      "dh": "d87df411",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pSourceUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppResults",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_ForEachFn09_FindOwnMinionCorpse",
@@ -944,7 +1462,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "021b0204"
+      "dh": "021b0204",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOther",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScan",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_ForEachFn12_CountClassInRange",
@@ -967,7 +1503,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ecb6a816"
+      "dh": "ecb6a816",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOther",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScan",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ForEachCallOther",
@@ -994,7 +1548,25 @@
         "uint32_t",
         "uintptr_t"
       ],
-      "dh": "fe7415b3"
+      "dh": "fe7415b3",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pParams",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pFunc",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ForEachCallType1",
@@ -1020,7 +1592,25 @@
         "uint32_t",
         "uintptr_t"
       ],
-      "dh": "f78e429f"
+      "dh": "f78e429f",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnAiForEach",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ForEachCallType2",
@@ -1049,7 +1639,25 @@
         "uint32_t",
         "uintptr_t"
       ],
-      "dh": "862951a7"
+      "dh": "862951a7",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pParams",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pFunc",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ForEachMinion",
@@ -1068,7 +1676,21 @@
         "D2MinionForEachCtx",
         "D2UnitStrc"
       ],
-      "dh": "bcf613a4"
+      "dh": "bcf613a4",
+      "paramStorage": [
+        [
+          "nUnitParam",
+          "ECX:4"
+        ],
+        [
+          "ppCallbackCtx",
+          "EDX:4"
+        ],
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ForEachCallType3",
@@ -1094,7 +1716,25 @@
         "uint32_t",
         "uintptr_t"
       ],
-      "dh": "23fad771"
+      "dh": "23fad771",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pAiParams",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pFunc",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ForEach",
@@ -1122,7 +1762,29 @@
         "uint32_t",
         "uintptr_t"
       ],
-      "dh": "550f240f"
+      "dh": "550f240f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pParams",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBackupFunc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParamValue",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "AI_CountNearbyMinionsByClass",
@@ -1144,7 +1806,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e6b168a2"
+      "dh": "e6b168a2",
+      "paramStorage": [
+        [
+          "nUnused",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOther",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCountBuf",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetFlagBit",
@@ -1164,7 +1844,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "d550df63"
+      "dh": "d550df63",
+      "paramStorage": [
+        [
+          "pAiGeneral",
+          "ECX:4"
+        ],
+        [
+          "nFlags",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "SetUnsetAiFlag",
@@ -1183,7 +1873,21 @@
         "D2AiGeneralStrc",
         "uint16_t"
       ],
-      "dh": "ccbc0963"
+      "dh": "ccbc0963",
+      "paramStorage": [
+        [
+          "pAiGeneral",
+          "ECX:4"
+        ],
+        [
+          "nAiFlag",
+          "DX:2"
+        ],
+        [
+          "bSet",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetUnsetAiFlags0x20",
@@ -1202,7 +1906,17 @@
         "D2AiGeneralStrc",
         "D2UnitStrc"
       ],
-      "dh": "13cf9981"
+      "dh": "13cf9981",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bSet",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_GetCurrentLifePercentage",
@@ -1222,7 +1936,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "692004be"
+      "dh": "692004be",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CollisionWithWall",
@@ -1242,7 +1962,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "70af6c7f"
+      "dh": "70af6c7f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_IsMonsterAttacking",
@@ -1261,7 +1991,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "cdf387a0"
+      "dh": "cdf387a0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_HasSkillInSlots",
@@ -1280,7 +2016,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6fff4d4a"
+      "dh": "6fff4d4a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nSkillId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_SetTargetUnit",
@@ -1299,7 +2045,17 @@
         "D2AiGeneralStrc",
         "D2UnitStrc"
       ],
-      "dh": "888f4463"
+      "dh": "888f4463",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnitType",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_FindUnitAtPositionByBaseId",
@@ -1327,7 +2083,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7cbb1c2c"
+      "dh": "7cbb1c2c",
+      "paramStorage": [
+        [
+          "nUnused",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBaseIdFilter",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CanApplyDebuffState",
@@ -1354,7 +2132,17 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "3b40b5eb"
+      "dh": "3b40b5eb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_ValidateSwitchTarget",
@@ -1389,7 +2177,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a1ef08af"
+      "dh": "a1ef08af",
+      "paramStorage": [
+        [
+          "ppUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDistance",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindSwitchAiTarget",
@@ -1429,7 +2239,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1decd1cf"
+      "dh": "1decd1cf",
+      "paramStorage": [
+        [
+          "pSwitchParam",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bRequireLOS",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppOutUnit",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pOutDistance",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pGame",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindBestTarget",
@@ -1476,7 +2312,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c4ef7ec5"
+      "dh": "c4ef7ec5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMonsterAiGeneral",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnDistanceToTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bEngagedInCombat",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FindTargetAndDistance",
@@ -1501,7 +2359,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "4f48f263"
+      "dh": "4f48f263",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pDistance",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInMelee",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_ApplyTerrorToMonster",
@@ -1536,7 +2412,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "75a152f3"
+      "dh": "75a152f3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetMonster",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnused2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTerrorDurationFrames",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindTargetInRange",
@@ -1558,7 +2460,33 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "100d5e90"
+      "dh": "100d5e90",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiGeneral",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDistanceOut",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bResult",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMaxDistance",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindNearestInteractNpc",
@@ -1581,7 +2509,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "d7025524"
+      "dh": "d7025524",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPlayerCandidate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSearchData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindNearestUnit",
@@ -1604,7 +2550,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "b16bac5e"
+      "dh": "b16bac5e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pbIsClose",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_ChangeModeAndTargetUnit",
@@ -1627,7 +2587,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "0fcff045"
+      "dh": "0fcff045",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pAttacker",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandSkillAtPosition",
@@ -1650,7 +2628,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "aef47d44"
+      "dh": "aef47d44",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandSkillSequence",
@@ -1677,7 +2677,33 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "419a7689"
+      "dh": "419a7689",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "PlanNextAiMove",
@@ -1702,7 +2728,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "f96c223f"
+      "dh": "f96c223f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nFrames",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RestartAiThink",
@@ -1724,7 +2764,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "b9f6b386"
+      "dh": "b9f6b386",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nFrames",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ScheduleAiThink",
@@ -1748,7 +2802,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "73d370af"
+      "dh": "73d370af",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nDelayFrames",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ApplyCombatAndMonStats",
@@ -1772,7 +2840,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "0c119023"
+      "dh": "0c119023",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nPathType",
+          "EDX:4"
+        ],
+        [
+          "nVelocity",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSteps",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "WalkRandomOffset",
@@ -1799,7 +2885,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bc0a35c5"
+      "dh": "bc0a35c5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SendNpcMessageOrHoverText",
@@ -1832,7 +2932,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "df2598f1"
+      "dh": "df2598f1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pNpc",
+          "EDX:4"
+        ],
+        [
+          "pPlayer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMessageId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bSendPacket",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandMoveToPosition",
@@ -1856,7 +2978,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "2c38cbcf"
+      "dh": "2c38cbcf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnitMode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandSkillInPlace",
@@ -1880,7 +3024,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "6fcf5166"
+      "dh": "6fcf5166",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnitMode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MoveAndCastSkill",
@@ -1909,7 +3075,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "05240c9a"
+      "dh": "05240c9a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXOffset",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nYOffset",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CastSkillWithDistanceOffset",
@@ -1929,7 +3121,29 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2e698649"
+      "dh": "2e698649",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nXOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nYOffset",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_WalkPartialTowardTarget",
@@ -1957,7 +3171,29 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "d29c170d"
+      "dh": "d29c170d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiGeneral",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDistanceFromTarget",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_GetAliveKillerUnit",
@@ -1979,7 +3215,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "e853f003"
+      "dh": "e853f003",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_GetTarget_WithWander",
@@ -2013,7 +3259,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "965d8689"
+      "dh": "965d8689",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMonsterAiGeneral",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnDistanceToTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bEngagedInCombat",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_GetTarget_Hidden",
@@ -2049,7 +3317,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a15e77f6"
+      "dh": "a15e77f6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMonsterAiGeneral",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDistanceToTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bEngagedInCombat",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_UNIT_CastSkill",
@@ -2078,7 +3368,37 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "cbca00fd"
+      "dh": "cbca00fd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nSkillMode",
+          "Stack[0x4]:1"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "StartMonsterMove",
@@ -2112,7 +3432,41 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "c1fa7f8b"
+      "dh": "c1fa7f8b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSteps",
+          "Stack[0x14]:1"
+        ],
+        [
+          "nFlags",
+          "Stack[0x18]:1"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandWalkToUnit",
@@ -2134,7 +3488,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "93786296"
+      "dh": "93786296",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "ResetCombatTargetAndIdle",
@@ -2157,7 +3529,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c9d12246"
+      "dh": "c9d12246",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAttacker",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandRunToUnit",
@@ -2179,7 +3565,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "0f03ffda"
+      "dh": "0f03ffda",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandRunToUnitDirect",
@@ -2199,7 +3603,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "444f713d"
+      "dh": "444f713d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandFleeFromUnit",
@@ -2223,7 +3641,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "35d1bdef"
+      "dh": "35d1bdef",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "WalkToCoords",
@@ -2247,7 +3683,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "e3e9e662"
+      "dh": "e3e9e662",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandMoveToCoords",
@@ -2275,7 +3729,25 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "3462bdfe"
+      "dh": "3462bdfe",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandWalkToCoords",
@@ -2300,7 +3772,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "44609668"
+      "dh": "44609668",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandMoveToCoordsRetry",
@@ -2329,7 +3819,25 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "db2f90e1"
+      "dh": "db2f90e1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandWalkToCoordsImmediate",
@@ -2353,7 +3861,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "d1eba714"
+      "dh": "d1eba714",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandWalkToUnitMinStep",
@@ -2375,7 +3901,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "4afb00ff"
+      "dh": "4afb00ff",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMinStep",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandRunToUnitMinStep",
@@ -2396,7 +3940,25 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "7bf923f0"
+      "dh": "7bf923f0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMinStep",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "WalkTowardsUnitOffset",
@@ -2422,7 +3984,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6f565ca1"
+      "dh": "6f565ca1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x8]:1"
+        ],
+        [
+          "bForce",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandRunAwayFromUnit",
@@ -2450,7 +4034,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cc9e157e"
+      "dh": "cc9e157e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pFleeTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFleeDistance",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandWalkAwayFromUnit",
@@ -2479,7 +4085,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4ef42562"
+      "dh": "4ef42562",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pFleeTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFleeDistance",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandWalkRandomOffset",
@@ -2510,7 +4134,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "91d9b8ab"
+      "dh": "91d9b8ab",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCenterUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "WalkRandomOffsetAroundUnit",
@@ -2541,7 +4183,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "04c58fec"
+      "dh": "04c58fec",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOther",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetCombatStateAndApproachTarget",
@@ -2565,7 +4225,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "f36b613d"
+      "dh": "f36b613d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x8]:1"
+        ],
+        [
+          "directionFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CastSkillAtRandomOffset",
@@ -2594,7 +4276,25 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "62e5bc4a"
+      "dh": "62e5bc4a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nRange",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillMode",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CalculateTrapDamage",
@@ -2619,7 +4319,29 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "5c5a6530"
+      "dh": "5c5a6530",
+      "paramStorage": [
+        [
+          "nHitRoll",
+          "ECX:4"
+        ],
+        [
+          "nDamageMax",
+          "EDX:4"
+        ],
+        [
+          "nDamageMin",
+          "EDI:4"
+        ],
+        [
+          "dwParam2",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CalculateCounterAttackDamage",
@@ -2658,7 +4380,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dc386023"
+      "dh": "dc386023",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pVictim",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDmgType",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_ConvertMonstersInRadius",
@@ -2698,7 +4438,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0c91103e"
+      "dh": "0c91103e",
+      "paramStorage": [
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "nUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMinDelay",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxDelay",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bUndeadOnly",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_ThinkRangedSpecial",
@@ -2718,7 +4484,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "1f05efdb"
+      "dh": "1f05efdb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_Mephisto_SpawnDeathMissile",
@@ -2740,7 +4516,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "08c9a70e"
+      "dh": "08c9a70e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_ThinkRangedShort",
@@ -2760,7 +4546,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e98e7133"
+      "dh": "e98e7133",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_Diablo_SpawnRingAttack",
@@ -2787,7 +4583,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b62d17a1"
+      "dh": "b62d17a1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_Boss_LaunchOrbAtObject",
@@ -2825,7 +4631,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "581d01ab"
+      "dh": "581d01ab",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_ThinkMeleeSkill",
@@ -2845,7 +4661,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f10ba9ca"
+      "dh": "f10ba9ca",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_ThinkRangedNormal",
@@ -2865,7 +4691,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "72f49030"
+      "dh": "72f49030",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_Noop",
@@ -2905,7 +4741,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "022cabed"
+      "dh": "022cabed",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_InvisoSpawner",
@@ -2936,7 +4782,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "38fb280a"
+      "dh": "38fb280a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_MosquitoNest",
@@ -2967,7 +4827,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "5baec543"
+      "dh": "5baec543",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn0_BoneWall",
@@ -2987,7 +4861,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "9e1f0351"
+      "dh": "9e1f0351",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_BoneWall",
@@ -3009,7 +4897,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "0d06ce43"
+      "dh": "0d06ce43",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindAlliedMonsterToHeal",
@@ -3036,7 +4938,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "266deaee"
+      "dh": "266deaee",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMonsterCandidate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScan",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_HighPriest",
@@ -3078,7 +4998,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "4ca4f4b6"
+      "dh": "4ca4f4b6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_DesertTurret",
@@ -3115,7 +5049,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e32878b5"
+      "dh": "e32878b5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_Megademon",
@@ -3150,7 +5098,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "b2879085"
+      "dh": "b2879085",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_ArcaneTower",
@@ -3175,7 +5137,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "9468fefa"
+      "dh": "9468fefa",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_PantherJavelin",
@@ -3207,7 +5183,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "55df6564"
+      "dh": "55df6564",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_FetishBlowgun",
@@ -3244,7 +5234,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "b3d829d8"
+      "dh": "b3d829d8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_ReanimatedHorde",
@@ -3274,7 +5278,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "f35ebc6b"
+      "dh": "f35ebc6b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindNeutralMonsterInRange",
@@ -3302,7 +5320,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "23a1f129"
+      "dh": "23a1f129",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCandidate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBestDist",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_UpdateClosestTarget",
@@ -3327,7 +5363,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d1ad599e"
+      "dh": "d1ad599e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pCandidate",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_SiegeTower",
@@ -3354,7 +5400,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "da2a5079"
+      "dh": "da2a5079",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_SiegeBeast",
@@ -3393,7 +5453,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "c8bebb8e"
+      "dh": "c8bebb8e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_Minion",
@@ -3425,7 +5499,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "d3b073ed"
+      "dh": "d3b073ed",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_SuicideMinion",
@@ -3450,7 +5538,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "ff9b0f34"
+      "dh": "ff9b0f34",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_Succubus",
@@ -3485,7 +5587,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a4b85c8d"
+      "dh": "a4b85c8d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_SuccubusWitch",
@@ -3522,7 +5638,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c211d29a"
+      "dh": "c211d29a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HirelingRandomMoveCheck",
@@ -3546,7 +5676,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "3ead825f"
+      "dh": "3ead825f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Baal_FindMinionToHeal",
@@ -3575,7 +5719,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3ccf2a1f"
+      "dh": "3ccf2a1f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCandidate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScan",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_Overseer",
@@ -3613,7 +5775,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2ba3410d"
+      "dh": "2ba3410d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CountGolemReviveMonsters",
@@ -3636,7 +5812,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "99970ce5"
+      "dh": "99970ce5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMonsterCandidate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCounter",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_MinionSpawner",
@@ -3663,7 +5857,21 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "eaca5d9b"
+      "dh": "eaca5d9b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_SpecialMounting",
@@ -3687,7 +5895,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "9fca2771"
+      "dh": "9fca2771",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_SpecialMounting",
@@ -3723,7 +5945,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c1eec9fe"
+      "dh": "c1eec9fe",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_Imp",
@@ -3743,7 +5979,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "56839705"
+      "dh": "56839705",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Imp",
@@ -3783,7 +6033,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "76739597"
+      "dh": "76739597",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Catapult",
@@ -3807,7 +6071,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f9aadb89"
+      "dh": "f9aadb89",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_FrozenHorror",
@@ -3838,7 +6116,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "1baa1a29"
+      "dh": "1baa1a29",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_BloodLord",
@@ -3865,7 +6157,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "8636cf12"
+      "dh": "8636cf12",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Spirit",
@@ -3887,7 +6193,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e389d406"
+      "dh": "e389d406",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Smith",
@@ -3911,7 +6231,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "16f12308"
+      "dh": "16f12308",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CheckAdjacentUnit",
@@ -3932,7 +6266,17 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "a048ebd5"
+      "dh": "a048ebd5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "HirelingFollowOwnerAction",
@@ -3989,7 +6333,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3309e721"
+      "dh": "3309e721",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pOwner",
+          "EDX:4"
+        ],
+        [
+          "pMerc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAction",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bRun",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nVelocity",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nWalkRadius",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Pet_ExecuteMovementBehavior",
@@ -4051,7 +6425,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ffcfb8b8"
+      "dh": "ffcfb8b8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pOwner",
+          "EDX:4"
+        ],
+        [
+          "pPet",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBehaviorMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bRun",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nVelocity",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nWalkRadius",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Pet_EvaluateMovementPriority",
@@ -4092,7 +6496,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cbfcf0c4"
+      "dh": "cbfcf0c4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "bHasTeleported",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pUnitDataPlayerInteractedNPC",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Pet_ThinkCombatAndFollow",
@@ -4134,7 +6572,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "070cd11b"
+      "dh": "070cd11b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK4_PetThinkCastSkillAndFollow",
@@ -4174,7 +6626,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "77c7129c"
+      "dh": "77c7129c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_NecroPet",
@@ -4197,7 +6663,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e527816b"
+      "dh": "e527816b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Hireling_SelectAndCastSkill",
@@ -4236,7 +6716,33 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "ad8090f9"
+      "dh": "ad8090f9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nMonStatIdx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHirelingType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pSeed",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "HirelingCombatThink",
@@ -4274,7 +6780,37 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "d22abf23"
+      "dh": "d22abf23",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMerc",
+          "EDX:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pSeed",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "NihlathakMercAi_ClearInfernoState",
@@ -4299,7 +6835,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "aeca5ad1"
+      "dh": "aeca5ad1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Hireable",
@@ -4355,7 +6905,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0f583e77"
+      "dh": "0f583e77",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Function0_AttachedCasterInit",
@@ -4384,7 +6948,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "a30cf79a"
+      "dh": "a30cf79a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Function1_SummonMaster",
@@ -4426,7 +7004,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "e76b3a1a"
+      "dh": "e76b3a1a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Griswold",
@@ -4450,7 +7042,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "7e16781b"
+      "dh": "7e16781b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_TryCastRateLimitedSkill",
@@ -4473,7 +7079,21 @@
         "SGAMEDATA",
         "eD2Skills"
       ],
-      "dh": "eeabebbc"
+      "dh": "eeabebbc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_SpecialCountess",
@@ -4519,7 +7139,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "99c8bee5"
+      "dh": "99c8bee5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_GetRandomMonsterClassForLevel",
@@ -4546,7 +7180,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2482c875"
+      "dh": "2482c875",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiGeneral",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_GenericSpawner",
@@ -4567,7 +7215,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "90a2619e"
+      "dh": "90a2619e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_GenericSpawner",
@@ -4599,7 +7261,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "02288547"
+      "dh": "02288547",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_BloodRaven",
@@ -4619,7 +7295,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "8420677d"
+      "dh": "8420677d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_BloodRaven",
@@ -4669,7 +7359,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "da0d0042"
+      "dh": "da0d0042",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_InitializeHomePosition",
@@ -4695,7 +7399,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "d7d3d711"
+      "dh": "d7d3d711",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_CheckReturnToHome",
@@ -4722,7 +7440,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "4d8e22a6"
+      "dh": "4d8e22a6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nReturnThreshold",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "_PlayerNpcInteraction",
@@ -4759,7 +7495,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8d477fa7"
+      "dh": "8d477fa7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_ExecuteAiCommands",
@@ -4792,7 +7542,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f0f69180"
+      "dh": "f0f69180",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_WalkToStoredPosition",
@@ -4819,7 +7583,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5808e3fd"
+      "dh": "5808e3fd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPathPos",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_WalkToStoredPositionSlow",
@@ -4843,7 +7625,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "3cf0d590"
+      "dh": "3cf0d590",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPathPos",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK4_MapAiHandler3_WalkToStoredPosition",
@@ -4865,7 +7665,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "f8f33d2b"
+      "dh": "f8f33d2b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPathPos",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_WalkToPositionAndFace",
@@ -4890,7 +7708,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "0775a958"
+      "dh": "0775a958",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPathPos",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK4_WalkToPositionAndFace_MonStatFlag9",
@@ -4915,7 +7751,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "24e54806"
+      "dh": "24e54806",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPathPos",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_ExecuteMapAiBehavior",
@@ -4939,7 +7793,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "dcd8da88"
+      "dh": "dcd8da88",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_Npc",
@@ -4984,7 +7852,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "68f42057"
+      "dh": "68f42057",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_TryDefaultIdleIfNoSub",
@@ -5006,7 +7888,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2d7aaf70"
+      "dh": "2d7aaf70",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_NpcStationary",
@@ -5041,7 +7933,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "6a88849a"
+      "dh": "6a88849a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_Towner",
@@ -5065,7 +7971,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a3c17381"
+      "dh": "a3c17381",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_JarJar",
@@ -5103,7 +8023,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "006bd837"
+      "dh": "006bd837",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_QuestNpc_InitializeQuestPhase",
@@ -5134,7 +8068,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "906c422b"
+      "dh": "906c422b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_NpcOutOfTown",
@@ -5173,7 +8121,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "da6f437d"
+      "dh": "da6f437d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_GoodNpcRanged",
@@ -5207,7 +8169,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "d12f6d39"
+      "dh": "d12f6d39",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_SpecialHireNoOwner",
@@ -5240,7 +8216,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "14ba4af8"
+      "dh": "14ba4af8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_005e7d30",
@@ -5260,7 +8250,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "e2722fd9"
+      "dh": "e2722fd9",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_TownRogue",
@@ -5283,7 +8279,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "43d94e06"
+      "dh": "43d94e06",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_SpecialTownRogue",
@@ -5306,7 +8316,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "ce4aa425"
+      "dh": "ce4aa425",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Navi",
@@ -5338,7 +8362,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6621933c"
+      "dh": "6621933c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Buffy",
@@ -5361,7 +8399,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e7181218"
+      "dh": "e7181218",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_MinionReset",
@@ -5391,7 +8443,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2380cffb"
+      "dh": "2380cffb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_SpecialDimVision",
@@ -5417,7 +8483,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "0dd7a54c"
+      "dh": "0dd7a54c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn0_SpecialTerror",
@@ -5440,7 +8520,21 @@
         "SGAMEDATA",
         "eD2UnitType"
       ],
-      "dh": "b63b24d3"
+      "dh": "b63b24d3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_SpecialTerror",
@@ -5476,7 +8570,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7f6bc67a"
+      "dh": "7f6bc67a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_SpecialTaunt",
@@ -5510,7 +8618,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "5b8c8e68"
+      "dh": "5b8c8e68",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DiabloAi_ResetInfernoAndReattach",
@@ -5539,7 +8661,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "b662f9fe"
+      "dh": "b662f9fe",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CalculateRiskAncientsAndDiablo",
@@ -5575,7 +8711,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a5e26201"
+      "dh": "a5e26201",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMonsterAi",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Diablo_DecideAction",
@@ -5627,7 +8781,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "def02005"
+      "dh": "def02005",
+      "paramStorage": [
+        [
+          "pDiabloAiCtx",
+          "ECX:4"
+        ],
+        [
+          "pDiabloUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetEnemyUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetDistance",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nChaosArenaRadius",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pChaosArenaData",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "AI_IsTargetWithinBossRange",
@@ -5653,7 +8833,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1c3bf072"
+      "dh": "1c3bf072",
+      "paramStorage": [
+        [
+          "pSource",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SelectTarget",
@@ -5694,7 +8884,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f88c8978"
+      "dh": "f88c8978",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBestRisk",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCandidateCount",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pAi",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Diablo",
@@ -5743,7 +8959,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "83a54218"
+      "dh": "83a54218",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_BAAL_ChooseCombatAction",
@@ -5796,7 +9026,33 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "01af256d"
+      "dh": "01af256d",
+      "paramStorage": [
+        [
+          "nAiContext",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDistanceMetric",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDifficultyContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pAiCommand",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_SpawnSpecificMinions",
@@ -5816,7 +9072,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "9efb0c7d"
+      "dh": "9efb0c7d",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_UberDiablo",
@@ -5836,7 +9102,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "feb66da2"
+      "dh": "feb66da2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Vendor",
@@ -5859,7 +9139,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "9ddc297c"
+      "dh": "9ddc297c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Hydra",
@@ -5883,7 +9177,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f3fc70d3"
+      "dh": "f3fc70d3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_TrappedSoul",
@@ -5908,7 +9216,21 @@
         "POINT",
         "SGAMEDATA"
       ],
-      "dh": "1a11c989"
+      "dh": "1a11c989",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_7TIllusion",
@@ -5933,7 +9255,21 @@
         "SGAMEDATA",
         "eD2UnitType"
       ],
-      "dh": "82c9e829"
+      "dh": "82c9e829",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_DarkWanderer",
@@ -5963,7 +9299,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "657a09d6"
+      "dh": "657a09d6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_SentryTimerInit",
@@ -5984,7 +9334,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f57fdb9d"
+      "dh": "f57fdb9d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Summon_CheckSkillCooldownTimer",
@@ -6017,7 +9381,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "69ce35c3"
+      "dh": "69ce35c3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSkillCooldownTable",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bDecrement",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_AssassinSentry",
@@ -6053,7 +9435,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "79b0a2ae"
+      "dh": "79b0a2ae",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_BladeCreeper",
@@ -6074,7 +9470,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e9b226a5"
+      "dh": "e9b226a5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_BladeCreeper",
@@ -6119,7 +9529,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3adafeed"
+      "dh": "3adafeed",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_InvisoPet",
@@ -6152,7 +9576,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "44a83e26"
+      "dh": "44a83e26",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_DeathSentry",
@@ -6187,7 +9625,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7d980629"
+      "dh": "7d980629",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CanSummonPetType",
@@ -6211,7 +9663,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "18153042"
+      "dh": "18153042",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "byPetTypeA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byPetTypeB",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_ValidateSkillConditions",
@@ -6239,7 +9709,29 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "31c62df4"
+      "dh": "31c62df4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_ShouldCastSkill",
@@ -6269,7 +9761,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5826db54"
+      "dh": "5826db54",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CalculateSkillAuraRange",
@@ -6291,7 +9813,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6ffcdd5c"
+      "dh": "6ffcdd5c",
+      "paramStorage": [
+        [
+          "pUnitStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pAiStateBlock",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_ShadowWarrior",
@@ -6316,7 +9856,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "4828e3d5"
+      "dh": "4828e3d5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_ShadowWarrior",
@@ -6362,7 +9916,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8b4f2a09"
+      "dh": "8b4f2a09",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CalcEffectiveSkillLevel",
@@ -6386,7 +9954,29 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "b8923bfc"
+      "dh": "b8923bfc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pAiUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBaseSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_ShadowMaster",
@@ -6423,7 +10013,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "97beb1a7"
+      "dh": "97beb1a7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_ShadowMasterNoInit",
@@ -6452,7 +10056,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "227a12f4"
+      "dh": "227a12f4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_IsValidResurrectionTarget",
@@ -6477,7 +10095,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "6bc66f0b"
+      "dh": "6bc66f0b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_Baal_FindEnemyAndMinionCallback",
@@ -6506,7 +10134,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c486f73e"
+      "dh": "c486f73e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOtherUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScan",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_HasConflictingStateInGroup",
@@ -6528,7 +10174,17 @@
         "eD2States",
         "uint8_t"
       ],
-      "dh": "d5129fc7"
+      "dh": "d5129fc7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_CastSkillOnTarget",
@@ -6559,7 +10215,45 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "84e978b9"
+      "dh": "84e978b9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bInMeleeRange",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pSkillTarget",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_ShadowMaster",
@@ -6632,7 +10326,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3febd085"
+      "dh": "3febd085",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_VineInit",
@@ -6652,7 +10360,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "82de4a46"
+      "dh": "82de4a46",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Vines",
@@ -6690,7 +10412,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5a8901ce"
+      "dh": "5a8901ce",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_CycleOfLife",
@@ -6735,7 +10471,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a1de900f"
+      "dh": "a1de900f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_Raven",
@@ -6758,7 +10508,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "af12ed2b"
+      "dh": "af12ed2b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CommandWalkToUnitWithCombat",
@@ -6784,7 +10548,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "0353bd14"
+      "dh": "0353bd14",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pWalkTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSteps",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nPathType",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Raven",
@@ -6824,7 +10610,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9114bef9"
+      "dh": "9114bef9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Hireling_ThinkRangedCombat",
@@ -6872,7 +10672,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6a6a0295"
+      "dh": "6a6a0295",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppAiGeneralTable",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Hireling_ThinkMeleeCombat",
@@ -6922,7 +10736,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8bc4267e"
+      "dh": "8bc4267e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppAiGeneralTable",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_DruidWolf",
@@ -6944,7 +10772,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "becae7ca"
+      "dh": "becae7ca",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_DruidBear",
@@ -6983,7 +10825,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e2a59487"
+      "dh": "e2a59487",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Totem",
@@ -7021,7 +10877,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "40a6fa92"
+      "dh": "40a6fa92",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_SetStoredPosition",
@@ -7043,7 +10913,25 @@
         "D2AiParamStrc",
         "int32_t"
       ],
-      "dh": "0c26438d"
+      "dh": "0c26438d",
+      "paramStorage": [
+        [
+          "pAiParam",
+          "ECX:4"
+        ],
+        [
+          "nParam",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_NpcBarb",
@@ -7063,7 +10951,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f9981615"
+      "dh": "f9981615",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_NpcBarb",
@@ -7098,7 +11000,21 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "a45b3a45"
+      "dh": "a45b3a45",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_FindDeadMonsterNearby",
@@ -7128,7 +11044,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "46e10826"
+      "dh": "46e10826",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_CatapultSpotter",
@@ -7165,7 +11091,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "87d2cc2f"
+      "dh": "87d2cc2f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_DeathMauler",
@@ -7191,7 +11131,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "672adf07"
+      "dh": "672adf07",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Wussie",
@@ -7244,7 +11198,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "134d521e"
+      "dh": "134d521e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_Nihlathak",
@@ -7264,7 +11232,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "76907e54"
+      "dh": "76907e54",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Nihlathak",
@@ -7313,7 +11295,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ac2a3a52"
+      "dh": "ac2a3a52",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_AncientStatue",
@@ -7344,7 +11340,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "e637f7ac"
+      "dh": "e637f7ac",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_SelectTarget_SameLevelFilter",
@@ -7369,7 +11379,17 @@
         "D2UnitStrc",
         "eD2LevelId"
       ],
-      "dh": "19a994b2"
+      "dh": "19a994b2",
+      "paramStorage": [
+        [
+          "pSelf",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_AncientKoric",
@@ -7412,7 +11432,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c3ed60f3"
+      "dh": "c3ed60f3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_AncientTalic",
@@ -7448,7 +11482,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "a4361a9d"
+      "dh": "a4361a9d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_AncientMadawc",
@@ -7484,7 +11532,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "ffa74b0c"
+      "dh": "ffa74b0c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Ancient",
@@ -7507,7 +11569,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "000f2df2"
+      "dh": "000f2df2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_005ef1e0",
@@ -7525,7 +11601,17 @@
       "usedTypes": [
         "uint8_t *"
       ],
-      "dh": "ce1e1b9f"
+      "dh": "ce1e1b9f",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_SetClearFlags",
@@ -7545,7 +11631,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "60d64a2c"
+      "dh": "60d64a2c",
+      "paramStorage": [
+        [
+          "pAiParam",
+          "ECX:4"
+        ],
+        [
+          "nFlags",
+          "EDX:4"
+        ],
+        [
+          "bSet",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BaalThroneClearFunc",
@@ -7578,7 +11678,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "b3beb659"
+      "dh": "b3beb659",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMonsterPresetId",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_BaalThrone",
@@ -7598,7 +11712,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "9d80bd0f"
+      "dh": "9d80bd0f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_BaalThrone",
@@ -7647,7 +11775,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4ac0655e"
+      "dh": "4ac0655e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_BaalToStairs",
@@ -7686,7 +11828,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "87d26b0b"
+      "dh": "87d26b0b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_BaalTaunt",
@@ -7717,7 +11873,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f997cf46"
+      "dh": "f997cf46",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_BaalTentacle",
@@ -7745,7 +11915,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "a3c85f13"
+      "dh": "a3c85f13",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_BaalMinion",
@@ -7774,7 +11958,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "cee37b4f"
+      "dh": "cee37b4f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindEnergyMonster",
@@ -7795,7 +11993,25 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "6a08f532"
+      "dh": "6a08f532",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCandidate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_PutridDefiler",
@@ -7824,7 +12040,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2b3607ac"
+      "dh": "2b3607ac",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Brute",
@@ -7851,7 +12081,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "58233905"
+      "dh": "58233905",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Skeleton",
@@ -7876,7 +12120,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a77f7c65"
+      "dh": "a77f7c65",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Zombie",
@@ -7907,7 +12165,21 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "d304e93d"
+      "dh": "d304e93d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Bighead",
@@ -7941,7 +12213,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "759dbd9f"
+      "dh": "759dbd9f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_BloodHawk",
@@ -7971,7 +12257,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "c0f6018c"
+      "dh": "c0f6018c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Fallen",
@@ -8021,7 +12321,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6de3af9c"
+      "dh": "6de3af9c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindNearestEvilMonster",
@@ -8045,7 +12359,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "752d5ca1"
+      "dh": "752d5ca1",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCandidate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutResult",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_SandRaider",
@@ -8083,7 +12415,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "b4effab3"
+      "dh": "b4effab3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Wraith",
@@ -8108,7 +12454,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "6447f187"
+      "dh": "6447f187",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_CorruptRogue",
@@ -8141,7 +12501,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "1b2493bb"
+      "dh": "1b2493bb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Baboon",
@@ -8178,7 +12552,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "49953e5b"
+      "dh": "49953e5b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_QuillRat",
@@ -8208,7 +12596,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "f29d78c4"
+      "dh": "f29d78c4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Goatman",
@@ -8233,7 +12635,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "3ed3065d"
+      "dh": "3ed3065d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindFallenForRevival",
@@ -8261,7 +12677,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3de0e11e"
+      "dh": "3de0e11e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCandidate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScan",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_FallenShaman",
@@ -8299,7 +12733,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "78593c8f"
+      "dh": "78593c8f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SandMaggotAi_CastDelayedSkill",
@@ -8328,7 +12776,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "d7964c6d"
+      "dh": "d7964c6d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_SandMaggot",
@@ -8359,7 +12821,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "da70a97c"
+      "dh": "da70a97c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_ClawViper",
@@ -8391,7 +12867,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a73e43e3"
+      "dh": "a73e43e3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_ClawViperEx",
@@ -8424,7 +12914,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ea99c095"
+      "dh": "ea99c095",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_SandLeaper",
@@ -8454,7 +12958,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "e75d6af0"
+      "dh": "e75d6af0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_PantherWoman",
@@ -8485,7 +13003,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "0b72d8da"
+      "dh": "0b72d8da",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Swarm",
@@ -8510,7 +13042,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "f1d4045c"
+      "dh": "f1d4045c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Scarab",
@@ -8547,7 +13093,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "133feef0"
+      "dh": "133feef0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Mummy",
@@ -8573,7 +13133,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a7ef3cfb"
+      "dh": "a7ef3cfb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindMonsterToResurrect",
@@ -8605,7 +13179,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c17e19ee"
+      "dh": "c17e19ee",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCandidate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScan",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_GreaterMummy",
@@ -8642,7 +13234,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "bdd8c293"
+      "dh": "bdd8c293",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ClearCollisionAndResetPath",
@@ -8671,7 +13277,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "e586b004"
+      "dh": "e586b004",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_ShrinkCollisionSize",
@@ -8704,7 +13320,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c5955f09"
+      "dh": "c5955f09",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindLowHpTarget",
@@ -8729,7 +13355,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9d0eb2ea"
+      "dh": "9d0eb2ea",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCandidate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScan",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Vulture",
@@ -8780,7 +13424,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "3d42d87d"
+      "dh": "3d42d87d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Mosquito",
@@ -8809,7 +13467,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "22c63be7"
+      "dh": "22c63be7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_IsSpecificMonsterAlive",
@@ -8832,7 +13504,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "508b828f"
+      "dh": "508b828f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnitFindArg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_WillOWisp",
@@ -8886,7 +13568,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1f8919a2"
+      "dh": "1f8919a2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Arach",
@@ -8922,7 +13618,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f207f8df"
+      "dh": "f207f8df",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_ThornHulk",
@@ -8954,7 +13664,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "8f9f29f9"
+      "dh": "8f9f29f9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Vampire",
@@ -8990,7 +13714,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d5f872b0"
+      "dh": "d5f872b0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BatDemonAi_HandleThrowCompletion",
@@ -9015,7 +13753,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "eb90e5fc"
+      "dh": "eb90e5fc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_BatDemon",
@@ -9050,7 +13802,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e0c0aea8"
+      "dh": "e0c0aea8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Fetish",
@@ -9087,7 +13853,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ef30ab09"
+      "dh": "ef30ab09",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_HellMeteor",
@@ -9116,7 +13896,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "0555f332"
+      "dh": "0555f332",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AndarielAi_DecideSkillCast",
@@ -9145,7 +13939,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "0a556015"
+      "dh": "0a556015",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_CorruptArcher",
@@ -9180,7 +13988,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "baad90b8"
+      "dh": "baad90b8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_CorruptLancer",
@@ -9212,7 +14034,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "05d97c9a"
+      "dh": "05d97c9a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_SkeletonBow",
@@ -9240,7 +14076,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "6116a778"
+      "dh": "6116a778",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_MaggotLarva",
@@ -9266,7 +14116,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f5cf0c9a"
+      "dh": "f5cf0c9a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_PinHead",
@@ -9293,7 +14157,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "5de60d01"
+      "dh": "5de60d01",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_MaggotEgg",
@@ -9321,7 +14199,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2c005d78"
+      "dh": "2c005d78",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn0_SpawnTimerInit",
@@ -9342,7 +14234,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f996d4f1"
+      "dh": "f996d4f1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_FoulCrowNest",
@@ -9374,7 +14280,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "d1e361d2"
+      "dh": "d1e361d2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Duriel",
@@ -9404,7 +14324,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "b0244f08"
+      "dh": "b0244f08",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Sarcophagus",
@@ -9436,7 +14370,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "ac955d42"
+      "dh": "ac955d42",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_ElementalBeast",
@@ -9467,7 +14415,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "671d225f"
+      "dh": "671d225f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_FlyingScimitar",
@@ -9495,7 +14457,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "527e47fe"
+      "dh": "527e47fe",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_005f6e20",
@@ -9513,7 +14489,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "6cc9d641"
+      "dh": "6cc9d641",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_ZakarumZealot",
@@ -9566,7 +14548,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "008c45e9"
+      "dh": "008c45e9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindWoundedHydraGolem",
@@ -9594,7 +14590,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "95de9bb3"
+      "dh": "95de9bb3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCandidate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScan",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_ZakarumPriest",
@@ -9633,7 +14647,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "79be55af"
+      "dh": "79be55af",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CollectMephistoTargetInfo",
@@ -9659,7 +14687,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d6a1503f"
+      "dh": "d6a1503f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScan",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DecideMephistoAlternateTarget",
@@ -9681,7 +14727,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f90cd799"
+      "dh": "f90cd799",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nMonStatsOffset",
+          "Stack[0x4]:4"
+        ],
+        [
+          "fallback",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_Mephisto",
@@ -9722,7 +14786,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "8e0898a9"
+      "dh": "8e0898a9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_UberBoss_SpawnMinion",
@@ -9748,7 +14826,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "452adac9"
+      "dh": "452adac9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSpawnAtUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_BAAL_FindRandomTargetPlayer",
@@ -9783,7 +14875,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2513f6b5"
+      "dh": "2513f6b5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_UberMephisto",
@@ -9803,7 +14905,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2b526584"
+      "dh": "2b526584",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn2_FrogDemon",
@@ -9828,7 +14944,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "3ec59a89"
+      "dh": "3ec59a89",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AITHINK_Fn1_FrogDemon",
@@ -9869,7 +14999,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5c94c3da"
+      "dh": "5c94c3da",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_Summoner",
@@ -9904,7 +15048,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "db033716"
+      "dh": "db033716",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_Izual",
@@ -9938,7 +15096,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "02673300"
+      "dh": "02673300",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_UberIzual",
@@ -9973,7 +15145,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "40251ac2"
+      "dh": "40251ac2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_Tentacle",
@@ -10006,7 +15192,21 @@
         "eD2PlayerAnimMode",
         "uint32_t"
       ],
-      "dh": "63db955d"
+      "dh": "63db955d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_TentacleHead",
@@ -10036,7 +15236,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0bc39d15"
+      "dh": "0bc39d15",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_GargoyleTrap",
@@ -10068,7 +15282,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a2d63d24"
+      "dh": "a2d63d24",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_SkeletonMage",
@@ -10098,7 +15326,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "13ecfd6c"
+      "dh": "13ecfd6c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FetishShamanAi_ClearInfernoState",
@@ -10123,7 +15365,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "422668e8"
+      "dh": "422668e8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Necromancer_FindOwnedSummonCallback",
@@ -10152,7 +15408,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a5151b7b"
+      "dh": "a5151b7b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCandidateUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScan",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_FetishShaman",
@@ -10191,7 +15465,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "efe7bcb7"
+      "dh": "efe7bcb7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_SandMaggotQueen",
@@ -10226,7 +15514,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1a3e257f"
+      "dh": "1a3e257f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_CastDirectionalSkillAtTarget",
@@ -10261,7 +15563,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3ac57f2e"
+      "dh": "3ac57f2e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMonStats",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_VileMother",
@@ -10297,7 +15617,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "54d005b5"
+      "dh": "54d005b5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_VileDog",
@@ -10322,7 +15656,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "5b8eee02"
+      "dh": "5b8eee02",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_FingerMage",
@@ -10359,7 +15707,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4d217ce4"
+      "dh": "4d217ce4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindCorpseForRaising",
@@ -10385,7 +15747,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b1da0c96"
+      "dh": "b1da0c96",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCandidate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppSearchParams",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_Regurgitator",
@@ -10421,7 +15801,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4b347767"
+      "dh": "4b347767",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_DoomKnight",
@@ -10446,7 +15840,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "20f9fc02"
+      "dh": "20f9fc02",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_AbyssKnight",
@@ -10480,7 +15888,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "60f4d7dd"
+      "dh": "60f4d7dd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindBloodLordTarget",
@@ -10507,7 +15929,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7ba9e970"
+      "dh": "7ba9e970",
+      "paramStorage": [
+        [
+          "nCallbackResult",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCandidate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScan",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_OblivionKnight",
@@ -10546,7 +15986,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "34b26dd8"
+      "dh": "34b26dd8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_QuillMother",
@@ -10575,7 +16029,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "64297d47"
+      "dh": "64297d47",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_EvilHole",
@@ -10610,7 +16078,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "15c88a0a"
+      "dh": "15c88a0a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_TrapMissile",
@@ -10635,7 +16117,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "b7ce932b"
+      "dh": "b7ce932b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_GetMonsterRegionBehaviorType",
@@ -10662,7 +16158,17 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "c27691cd"
+      "dh": "c27691cd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_TrapRightArrow",
@@ -10691,7 +16197,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "102f6be3"
+      "dh": "102f6be3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_TrapLeftArrow",
@@ -10720,7 +16240,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "b4ae6704"
+      "dh": "b4ae6704",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_TrapPoison",
@@ -10745,7 +16279,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e5035240"
+      "dh": "e5035240",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_TrapNova",
@@ -10770,7 +16318,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "13045573"
+      "dh": "13045573",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_TrapMelee",
@@ -10794,7 +16356,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "977397f2"
+      "dh": "977397f2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CanSpawnMonsterAt",
@@ -10816,7 +16392,29 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "cedf774f"
+      "dh": "cedf774f",
+      "paramStorage": [
+        [
+          "nMonsterClassId",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bAllowSpecialCase",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_ValidateSkillAtPosition",
@@ -10854,7 +16452,33 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "3329b46b"
+      "dh": "3329b46b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCastX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCastY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_SetSpecialAttackSkill",
@@ -10878,7 +16502,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "8d752348"
+      "dh": "8d752348",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nParam",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FindRandomWalkPoint",
@@ -10911,7 +16545,25 @@
         "int32_t",
         "uint64_t"
       ],
-      "dh": "0d8511e7"
+      "dh": "0d8511e7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSubSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_FindAndTargetCorpse",
@@ -10935,7 +16587,33 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "3f7bfe73"
+      "dh": "3f7bfe73",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nRange",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "peUnitType",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pTargetGUID",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_AcquireKillerAsTarget",
@@ -10958,7 +16636,33 @@
         "SGAMEDATA",
         "eD2UnitType"
       ],
-      "dh": "031f574a"
+      "dh": "031f574a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nRange",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "peUnitType",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pTargetGUID",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Monster_CastItemEffectSkill",
@@ -10994,7 +16698,57 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9d6eb320"
+      "dh": "9d6eb320",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSubSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x10]:2"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x14]:2"
+        ],
+        [
+          "peUnitType",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pTargetGUID",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pOutX",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pOutY",
+          "Stack[0x24]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x28]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CastOnTargetUnit",
@@ -11021,7 +16775,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1230a1d2"
+      "dh": "1230a1d2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSubSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_CastItemEffectSkill",
@@ -11048,7 +16824,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e6b70384"
+      "dh": "e6b70384",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSubSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCoordX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCoordY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

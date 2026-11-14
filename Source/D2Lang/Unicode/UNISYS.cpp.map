@@ -17,7 +17,13 @@
       "calledFunctions": [
         "STRING_ZeroOneWCHAR"
       ],
-      "dh": "951679af"
+      "dh": "951679af",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "STRING_CompareWideStrings",
@@ -36,7 +42,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "dbf0a86b"
+      "dh": "dbf0a86b",
+      "paramStorage": [
+        [
+          "wszText1",
+          "ECX:4"
+        ],
+        [
+          "wszText2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_CompareWideStringsN",
@@ -55,7 +71,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "33cca0d0"
+      "dh": "33cca0d0",
+      "paramStorage": [
+        [
+          "wszFirst",
+          "ECX:4"
+        ],
+        [
+          "wszSecond",
+          "EDX:4"
+        ],
+        [
+          "nMaxChars",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_CompareWideStringsNoCase",
@@ -75,7 +105,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "b9c13e72"
+      "dh": "b9c13e72",
+      "paramStorage": [
+        [
+          "pwszText1",
+          "ECX:4"
+        ],
+        [
+          "pwszText2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_CompareWideStringsNNoCase",
@@ -96,7 +136,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "0164d406"
+      "dh": "0164d406",
+      "paramStorage": [
+        [
+          "pwszText1",
+          "ECX:4"
+        ],
+        [
+          "pwszText2",
+          "EDX:4"
+        ],
+        [
+          "nMaxChars",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_FindWideChar",
@@ -114,7 +168,17 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "edd2d2b8"
+      "dh": "edd2d2b8",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "wCharToFind",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "AppendToBuffer",
@@ -133,7 +197,17 @@
         "WCHAR",
         "wchar_t"
       ],
-      "dh": "4003384e"
+      "dh": "4003384e",
+      "paramStorage": [
+        [
+          "wszText1",
+          "ECX:4"
+        ],
+        [
+          "wszText2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_AppendWideStringN",
@@ -152,7 +226,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "7923bc83"
+      "dh": "7923bc83",
+      "paramStorage": [
+        [
+          "pwszDst",
+          "ECX:4"
+        ],
+        [
+          "pwszSrc",
+          "EDX:4"
+        ],
+        [
+          "nMaxChars",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WSTRING_PutWideCharIntoBuffer",
@@ -171,7 +259,21 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "72cec467"
+      "dh": "72cec467",
+      "paramStorage": [
+        [
+          "pDestination",
+          "ECX:4"
+        ],
+        [
+          "wszChar",
+          "EDX:4"
+        ],
+        [
+          "nSizeMaybe",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STRING_CopyWideString",
@@ -189,7 +291,17 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "e9ef4d36"
+      "dh": "e9ef4d36",
+      "paramStorage": [
+        [
+          "wDestination",
+          "ECX:4"
+        ],
+        [
+          "wSource",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "STRING_GetWideStringLength",
@@ -208,7 +320,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "562fb054"
+      "dh": "562fb054",
+      "paramStorage": [
+        [
+          "wszString",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_FindSubstringNoCase",
@@ -227,7 +345,17 @@
         "WCHAR",
         "uint16_t"
       ],
-      "dh": "39d685c8"
+      "dh": "39d685c8",
+      "paramStorage": [
+        [
+          "pwszHaystack",
+          "ECX:4"
+        ],
+        [
+          "pwszNeedle",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_FindSubstring",
@@ -245,7 +373,17 @@
       "usedTypes": [
         "uint16_t"
       ],
-      "dh": "fb74204c"
+      "dh": "fb74204c",
+      "paramStorage": [
+        [
+          "pwszHaystack",
+          "ECX:4"
+        ],
+        [
+          "pwszNeedle",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_FormatWideString",
@@ -295,7 +433,13 @@
       "usedTypes": [
         "uint16_t"
       ],
-      "dh": "a6fd4406"
+      "dh": "a6fd4406",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_CheckLineBreakPosition",
@@ -317,7 +461,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2df79bf9"
+      "dh": "2df79bf9",
+      "paramStorage": [
+        [
+          "pWszText",
+          "ECX:4"
+        ],
+        [
+          "nPos",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "STRING_ConvertCharToWchar",
@@ -338,7 +492,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "57d09866"
+      "dh": "57d09866",
+      "paramStorage": [
+        [
+          "pwszBuffer",
+          "ECX:4"
+        ],
+        [
+          "pszBuffer",
+          "EDX:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STRING_CopyCharToWCharWithSetMaxSize",
@@ -357,7 +525,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "1baa1345"
+      "dh": "1baa1345",
+      "paramStorage": [
+        [
+          "pDestination",
+          "ECX:4"
+        ],
+        [
+          "szSource",
+          "EDX:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_WideToMultiByte",
@@ -376,7 +558,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "f9170ab6"
+      "dh": "f9170ab6",
+      "paramStorage": [
+        [
+          "pszDst",
+          "ECX:4"
+        ],
+        [
+          "pwszSrc",
+          "EDX:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_CheckTrailingPunctuation",
@@ -397,7 +593,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "876d3c0b"
+      "dh": "876d3c0b",
+      "paramStorage": [
+        [
+          "szSourceFile",
+          "ECX:4"
+        ],
+        [
+          "pwChar",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_CheckLeadingPunctuation",
@@ -418,7 +624,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "a7b744a2"
+      "dh": "a7b744a2",
+      "paramStorage": [
+        [
+          "pszTable",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_FormatPossessiveName",
@@ -446,7 +662,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "ddaa7820"
+      "dh": "ddaa7820",
+      "paramStorage": [
+        [
+          "wszText1",
+          "ECX:4"
+        ],
+        [
+          "wszText2",
+          "EDX:4"
+        ],
+        [
+          "wszSuffix",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxChars",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLang",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_FreeBuffer",
@@ -462,7 +700,13 @@
         "UNICODE_FreeBuffer",
         "SMemFree"
       ],
-      "dh": "7234b93e"
+      "dh": "7234b93e",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_AllocBuffer",
@@ -481,7 +725,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "80e17575"
+      "dh": "80e17575",
+      "paramStorage": [
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_ReadByteRange",
@@ -499,7 +749,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "78f7a87f"
+      "dh": "78f7a87f",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pByteRange",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_CheckByteInRange",
@@ -517,7 +777,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "a84ef7e5"
+      "dh": "a84ef7e5",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "byValue",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "UNICODE_IsControlChar",
@@ -536,7 +806,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "3e6279e8"
+      "dh": "3e6279e8",
+      "paramStorage": [
+        [
+          "byChar",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "UNICODE_FreeKamapTables",
@@ -583,7 +859,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5f5e5df5"
+      "dh": "5f5e5df5",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "szFilename",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_MapCharacterToCode",
@@ -602,7 +888,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a76895d8"
+      "dh": "a76895d8",
+      "paramStorage": [
+        [
+          "wChar",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "UNICODE_CompareKamapEntry",
@@ -617,7 +909,17 @@
       "calledFunctions": [
         "UNICODE_CompareKamapEntry"
       ],
-      "dh": "73f83417"
+      "dh": "73f83417",
+      "paramStorage": [
+        [
+          "pKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEntry",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_BinarySearchKamap",
@@ -637,7 +939,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "68d4d9e4"
+      "dh": "68d4d9e4",
+      "paramStorage": [
+        [
+          "wChar",
+          "AX:2"
+        ]
+      ]
     },
     {
       "name": "UNICODE_ConvertMultiByteToWide",
@@ -662,7 +970,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d6ab0a3c"
+      "dh": "d6ab0a3c",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "szSource",
+          "EDX:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_ConvertWideToMultiByte",
@@ -684,7 +1006,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "23745a69"
+      "dh": "23745a69",
+      "paramStorage": [
+        [
+          "szDest",
+          "ECX:4"
+        ],
+        [
+          "wszSource",
+          "EDX:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_GetMultiByteLength",
@@ -706,7 +1042,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "3d68a232"
+      "dh": "3d68a232",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nMaxChars",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNICODE_GetWideCharCount",
@@ -725,7 +1071,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "61e5d8a9"
+      "dh": "61e5d8a9",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "szSourceFile",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

@@ -19,7 +19,13 @@
       "usedTypes": [
         "D2QuestDataStrc"
       ],
-      "dh": "5f417a4f"
+      "dh": "5f417a4f",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q02_NotifyQuestStateToPlayer",
@@ -43,7 +49,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "5b8cdb7c"
+      "dh": "5b8cdb7c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q02_SyncQuestStepToPlayer",
@@ -66,7 +86,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "4f039c6f"
+      "dh": "4f039c6f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q02_Callback02_NpcDeactivate",
@@ -89,7 +123,17 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "4b127949"
+      "dh": "4b127949",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q02_Callback11_ScrollMessage",
@@ -127,7 +171,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "970e9b96"
+      "dh": "970e9b96",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q02_Callback00_NpcActivate",
@@ -156,7 +210,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "14b7cafc"
+      "dh": "14b7cafc",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q02_TimerNotifyCompletion",
@@ -177,7 +241,17 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "e7ab6bcd"
+      "dh": "e7ab6bcd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pQuestData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q02_Callback10_PlayerLeavesGame",
@@ -197,7 +271,17 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "811dbd3b"
+      "dh": "811dbd3b",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q02_SetRewardForNearbyPlayers",
@@ -233,7 +317,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "23b6a03e"
+      "dh": "23b6a03e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "fpExecuteOnUnitFunction",
@@ -260,7 +358,21 @@
         "SGAMEDATA",
         "eAct"
       ],
-      "dh": "a266771a"
+      "dh": "a266771a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q02_SetCannotCompleteInGame",
@@ -284,7 +396,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "0ba078fd"
+      "dh": "0ba078fd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q02_PlayCompletionSound",
@@ -307,7 +433,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "8e2671b5"
+      "dh": "8e2671b5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q02_PropagateRewardToParty",
@@ -330,7 +470,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "1eccd29c"
+      "dh": "1eccd29c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q02_Callback08_MonsterKilled",
@@ -361,7 +515,17 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "28af25d3"
+      "dh": "28af25d3",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q02_Callback03_ChangedLevel",
@@ -390,7 +554,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "12c02649"
+      "dh": "12c02649",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q02_ActiveFilter",
@@ -412,7 +586,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "209eef38"
+      "dh": "209eef38",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q02_SequenceFilter",
@@ -436,7 +632,13 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "162b32a5"
+      "dh": "162b32a5",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q02_Callback13_PlayerStartedGame",
@@ -460,7 +662,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "6e63fa13"
+      "dh": "6e63fa13",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q02_InitData",
@@ -482,7 +694,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "78a8460f"
+      "dh": "78a8460f",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

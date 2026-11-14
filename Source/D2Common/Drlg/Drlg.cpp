@@ -3266,9 +3266,10 @@ void __fastcall DRLGROOMEX_InitializeOutdoorRoom(D2RoomExStrc * pRoomEx) {
     RoomTile::InitRoomTiles(pRoomEx, pFloorGrid, &pOrientGrid->pOrientationGrid, 0, 0, 0);
     RoomTile::InitRoomTiles(pRoomEx, &pOrientGrid->pFloorGrid, nullptr, 0, 0, 0);
     D2DrlgTileGridStrc* pRoomTiles = pRoomEx->pRoomTiles;
-    pRoomTiles->sRoomTiles.nWallTilesCount = pRoomTiles->nWalls;
-    pRoomTiles->sRoomTiles.nFloorTilesCount = pRoomTiles->nFloors;
-    pRoomTiles->sRoomTiles.nRoofTilesCount = pRoomTiles->nShadows;
+    D2DrlgRoomTilesStrc* pTiles = &pRoomTiles->sRoomTiles;
+    pTiles->nWallTilesCount = pRoomTiles->nWalls;
+    pTiles->nFloorTilesCount = pRoomTiles->nFloors;
+    pTiles->nRoofTilesCount = pRoomTiles->nShadows;
     DrlgLogic::AllocDrlgCoordList(pRoomEx);
 }
 

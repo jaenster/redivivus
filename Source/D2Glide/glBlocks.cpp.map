@@ -52,7 +52,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "0b16f7ad"
+      "dh": "0b16f7ad",
+      "paramStorage": [
+        [
+          "pbSrc",
+          "ECX:4"
+        ],
+        [
+          "pbDstRow",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GLBLOCKS_RenderTileSubBlocks",
@@ -77,7 +87,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "acce8d80"
+      "dh": "acce8d80",
+      "paramStorage": [
+        [
+          "pTileEntry",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbDstBuf",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GLBLOCKS_LoadFloorTileTexture",
@@ -105,7 +125,13 @@
         "FxU",
         "int32_t"
       ],
-      "dh": "2ac9128d"
+      "dh": "2ac9128d",
+      "paramStorage": [
+        [
+          "pTileLibraryEntry",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GLBLOCKS_LoadWallSubtileTexture",
@@ -132,7 +158,13 @@
         "FxU",
         "int32_t"
       ],
-      "dh": "a4bcefba"
+      "dh": "a4bcefba",
+      "paramStorage": [
+        [
+          "pSubTile",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GLBLOCKS_ReleaseTileTextures",
@@ -152,7 +184,13 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc"
       ],
-      "dh": "5a5069e8"
+      "dh": "5a5069e8",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GLBLOCKS_RenderBinkVideoFrame",
@@ -201,7 +239,21 @@
         "tagMSG",
         "uint32_t"
       ],
-      "dh": "69a8d89d"
+      "dh": "69a8d89d",
+      "paramStorage": [
+        [
+          "szFileName",
+          "ECX:4"
+        ],
+        [
+          "nAudioChannel",
+          "EDX:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

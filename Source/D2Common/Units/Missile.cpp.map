@@ -22,7 +22,13 @@
         "D2UnitDataMissileStrc",
         "D2UnitStrc"
       ],
-      "dh": "7c3a5c34"
+      "dh": "7c3a5c34",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreeMissileData",
@@ -41,7 +47,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "5a3a7be2"
+      "dh": "5a3a7be2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetFlags",
@@ -60,7 +72,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d2d97f6b"
+      "dh": "d2d97f6b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetFlags",
@@ -79,7 +97,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b7b99283"
+      "dh": "b7b99283",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetLevel",
@@ -97,7 +125,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "ca7a3017"
+      "dh": "ca7a3017",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetLevel",
@@ -116,7 +154,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "103c3f0a"
+      "dh": "103c3f0a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetSkill",
@@ -135,7 +179,17 @@
         "D2UnitStrc",
         "eD2Skills"
       ],
-      "dh": "ac59216a"
+      "dh": "ac59216a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillId",
@@ -154,7 +208,13 @@
         "D2UnitStrc",
         "eD2Skills"
       ],
-      "dh": "4f3357b6"
+      "dh": "4f3357b6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetTotalFrames",
@@ -174,7 +234,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8f806349"
+      "dh": "8f806349",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTotalFrames",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetTotalFrames",
@@ -193,7 +263,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "11275795"
+      "dh": "11275795",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetCurrentFrame",
@@ -213,7 +289,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5711477a"
+      "dh": "5711477a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCurrentFrame",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetCurrentFrame",
@@ -232,7 +318,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ec81d065"
+      "dh": "ec81d065",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetRemainingFrames",
@@ -252,7 +344,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c845a5ee"
+      "dh": "c845a5ee",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetClassId",
@@ -271,7 +369,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "2f6a1a07"
+      "dh": "2f6a1a07",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetOwner",
@@ -290,7 +394,17 @@
         "D2UnitDataMissileStrc",
         "D2UnitStrc"
       ],
-      "dh": "ba4d125d"
+      "dh": "ba4d125d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CheckUnitIfOwner",
@@ -308,7 +422,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "f579f84d"
+      "dh": "f579f84d",
+      "paramStorage": [
+        [
+          "pMissile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetStreamMissile",
@@ -326,7 +450,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "42a27cf4"
+      "dh": "42a27cf4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStreamMissile",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetStreamMissile",
@@ -345,7 +479,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c269594e"
+      "dh": "c269594e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetStreamRange",
@@ -364,7 +504,17 @@
         "D2UnitStrc",
         "int16_t"
       ],
-      "dh": "5b30a90b"
+      "dh": "5b30a90b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStreamRange",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "GetStreamRange",
@@ -383,7 +533,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1301e1cb"
+      "dh": "1301e1cb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetHitClass",
@@ -402,7 +558,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "385ad91f"
+      "dh": "385ad91f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetActivateFrame",
@@ -422,7 +584,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "25156595"
+      "dh": "25156595",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nActivateFrame",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetActivateFrame",
@@ -441,7 +613,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "0f1b502e"
+      "dh": "0f1b502e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetAnimSpeed",
@@ -460,7 +638,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f24b438d"
+      "dh": "f24b438d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetAnimSpeed",
@@ -479,7 +663,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "35370af0"
+      "dh": "35370af0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAnimSpeed",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetStream",
@@ -498,7 +692,17 @@
         "D2MissileStreamStrc",
         "D2UnitStrc"
       ],
-      "dh": "b6fd5649"
+      "dh": "b6fd5649",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pStream",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetStream",
@@ -517,7 +721,13 @@
         "D2MissileStreamStrc",
         "D2UnitStrc"
       ],
-      "dh": "491b6a51"
+      "dh": "491b6a51",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetTargetX",
@@ -536,7 +746,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "24e45e7f"
+      "dh": "24e45e7f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetTargetX",
@@ -555,7 +775,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9f0cb7eb"
+      "dh": "9f0cb7eb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetTargetY",
@@ -574,7 +800,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d7a8888a"
+      "dh": "d7a8888a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetTargetY",
@@ -593,7 +829,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ded1f9b6"
+      "dh": "ded1f9b6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetHomeType",
@@ -612,7 +854,17 @@
         "D2UnitDataMissileStrc",
         "D2UnitStrc"
       ],
-      "dh": "1d717ec0"
+      "dh": "1d717ec0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetHomeType",
@@ -631,7 +883,21 @@
         "D2UnitDataMissileStrc",
         "D2UnitStrc"
       ],
-      "dh": "f79b7bf0"
+      "dh": "f79b7bf0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHomeType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nHomeGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "HasBonusStats",
@@ -654,7 +920,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8bd645e0"
+      "dh": "8bd645e0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "AddStatsToDamage",
@@ -676,7 +952,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "f96afde8"
+      "dh": "f96afde8",
+      "paramStorage": [
+        [
+          "pMissileDamageData",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "nShift",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "CalculateFinalDamage",
@@ -695,7 +985,17 @@
         "D2MissileDamageDataStrc",
         "int32_t"
       ],
-      "dh": "ced2b286"
+      "dh": "ced2b286",
+      "paramStorage": [
+        [
+          "pMissileDamageData",
+          "ECX:4"
+        ],
+        [
+          "nSrcDamage",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CalculateMasteryBonus",
@@ -717,7 +1017,21 @@
         "eD2ElementalDamageTypeDWORD",
         "int32_t"
       ],
-      "dh": "46337d26"
+      "dh": "46337d26",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "nElemType",
+          "ECX:4"
+        ],
+        [
+          "nSrcDamage",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SetDamageStats",
@@ -741,7 +1055,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "62d10b61"
+      "dh": "62d10b61",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMissile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pMissileDamageData",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GetMinDamage",
@@ -765,7 +1097,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "11c48aba"
+      "dh": "11c48aba",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GetMaxDamage",
@@ -788,7 +1138,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f4f9762e"
+      "dh": "f4f9762e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GetElemTypeFromMissileId",
@@ -807,7 +1175,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "7234cf27"
+      "dh": "7234cf27",
+      "paramStorage": [
+        [
+          "nMissileId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetMinElemDamage",
@@ -830,7 +1204,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b1be199d"
+      "dh": "b1be199d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GetMaxElemDamage",
@@ -853,7 +1245,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "2b9aa40e"
+      "dh": "2b9aa40e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GetElementalLength",
@@ -873,7 +1283,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f6d728a6"
+      "dh": "f6d728a6",
+      "paramStorage": [
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GetSpecialParamValue",
@@ -900,7 +1328,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "eb573d0a"
+      "dh": "eb573d0a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParamId",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_Min",
@@ -915,7 +1365,25 @@
       "calledFunctions": [
         "MISSILE_Min"
       ],
-      "dh": "4941512b"
+      "dh": "4941512b",
+      "paramStorage": [
+        [
+          "nLeft",
+          "ECX:4"
+        ],
+        [
+          "nRight",
+          "EDX:4"
+        ],
+        [
+          "dwParam3",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam4",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_Max",
@@ -930,7 +1398,25 @@
       "calledFunctions": [
         "MISSILE_Max"
       ],
-      "dh": "1b51cbec"
+      "dh": "1b51cbec",
+      "paramStorage": [
+        [
+          "nLeft",
+          "ECX:4"
+        ],
+        [
+          "nRight",
+          "EDX:4"
+        ],
+        [
+          "dwParam3",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam4",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetRandomNumberInRange",
@@ -950,7 +1436,25 @@
         "D2MissileRandCalcStrc",
         "int32_t"
       ],
-      "dh": "6b28b0a8"
+      "dh": "6b28b0a8",
+      "paramStorage": [
+        [
+          "nMin",
+          "ECX:4"
+        ],
+        [
+          "nMax",
+          "EDX:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCalc",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetSpecialParamValueForSkillMissile",
@@ -975,7 +1479,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "dfc3aebc"
+      "dh": "dfc3aebc",
+      "paramStorage": [
+        [
+          "eSkill",
+          "ECX:4"
+        ],
+        [
+          "nParamId",
+          "DL:1"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMissileCalc",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_EvalMissileCalc",
@@ -997,7 +1519,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "906a005c"
+      "dh": "906a005c",
+      "paramStorage": [
+        [
+          "pMissile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCalcExpression",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nMissileLevel",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "EvaluateMissileFormula",
@@ -1053,7 +1597,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "422a741d"
+      "dh": "422a741d",
+      "paramStorage": [
+        [
+          "pMissileDamageData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pMissile",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x14]:4"
+        ]
+      ]
     }
   ]
 }

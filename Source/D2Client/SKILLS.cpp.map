@@ -38,7 +38,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "11afcf34"
+      "dh": "11afcf34",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSCLT_CreateMultiMissileDirected",
@@ -73,7 +87,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "983f2b5c"
+      "dh": "983f2b5c",
+      "paramStorage": [
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_MultiMissileDirected",
@@ -102,7 +134,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "46c51ff4"
+      "dh": "46c51ff4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_DualMissileWithZ",
@@ -130,7 +176,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "301bf513"
+      "dh": "301bf513",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_DualMissileAtCoords",
@@ -156,7 +216,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "3a60e526"
+      "dh": "3a60e526",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_CheckTargetIsMonsterOrPlayer",
@@ -177,7 +251,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "cdb0dc95"
+      "dh": "cdb0dc95",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSCLT_CreateMissileWithGfx",
@@ -207,7 +295,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a58aff8a"
+      "dh": "a58aff8a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nSeed",
+          "EDX:4"
+        ],
+        [
+          "pMissileId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCenterX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCenterY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_AuraLevel_MissileAtTarget",
@@ -238,7 +360,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cabfb96f"
+      "dh": "cabfb96f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSCLT_SetMissilePathAndCalc",
@@ -266,7 +402,17 @@
         "int32_t",
         "intptr_t"
       ],
-      "dh": "9a5b3cc1"
+      "dh": "9a5b3cc1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nInitSeed",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSCLT_CltCreateMissileAtTarget",
@@ -295,7 +441,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3e476e42"
+      "dh": "3e476e42",
+      "paramStorage": [
+        [
+          "dwSeed",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMissileId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nCount",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSCLT_SetMissilePathExtended",
@@ -336,7 +520,17 @@
         "uint64_t",
         "uint8_t"
       ],
-      "dh": "a852415b"
+      "dh": "a852415b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nInitSeed",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath",
@@ -365,7 +559,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ec32782c"
+      "dh": "ec32782c",
+      "paramStorage": [
+        [
+          "dwSeed",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMissileId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nCount",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_AuraLevel_MissilesOnTargetVelocity",
@@ -390,7 +622,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "71fc3c53"
+      "dh": "71fc3c53",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_AuraLevel_CltCreateMissileAtTarget",
@@ -419,7 +665,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0c100542"
+      "dh": "0c100542",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CltDoFunc_AuraLevelMissileAtTarget_ExtendedPath",
@@ -448,7 +708,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8347b609"
+      "dh": "8347b609",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_AuraState_OverlayOnTarget",
@@ -477,7 +751,21 @@
         "eOverlayId",
         "int32_t"
       ],
-      "dh": "83011e92"
+      "dh": "83011e92",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_AuraState_OverlayOnCaster",
@@ -505,7 +793,21 @@
         "eOverlayId",
         "int32_t"
       ],
-      "dh": "65106081"
+      "dh": "65106081",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSCLT_CreateProjectileMissile",
@@ -536,7 +838,45 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "9ab7e4ec"
+      "dh": "9ab7e4ec",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "nSeed",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pMissileId",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nCount",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_AuraLevel_CastAttackAtCoords",
@@ -560,7 +900,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "e88f0022"
+      "dh": "e88f0022",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_AuraLevel_ProjectileMissile",
@@ -585,7 +939,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5c8b1069"
+      "dh": "5c8b1069",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSCLT_ValidateSkillAndMissile",
@@ -606,7 +974,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5dbea3ed"
+      "dh": "5dbea3ed",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMonId",
+          "EDX:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSCLT_CalcChargeSkillDuration",
@@ -629,7 +1015,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cef8cdd2"
+      "dh": "cef8cdd2",
+      "paramStorage": [
+        [
+          "pMonUnit",
+          "ECX:4"
+        ],
+        [
+          "nSkillId",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

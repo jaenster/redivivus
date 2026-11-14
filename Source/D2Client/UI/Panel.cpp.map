@@ -189,7 +189,29 @@
         "GLOBALPALLETE",
         "int32_t"
       ],
-      "dh": "49eda633"
+      "dh": "49eda633",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIsLeftHand",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PANEL_DrawSkillIcons",
@@ -246,7 +268,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f8abe7d3"
+      "dh": "f8abe7d3",
+      "paramStorage": [
+        [
+          "eUnitStat",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PANEL_DrawHealthOrb",
@@ -420,7 +448,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "8834b358"
+      "dh": "8834b358",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "ECX:4"
+        ],
+        [
+          "nMouseY",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PANEL_DrawRunButton",
@@ -495,7 +533,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "23796985"
+      "dh": "23796985",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "ECX:4"
+        ],
+        [
+          "nMouseY",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PANEL_DrawMenuButton",
@@ -539,7 +587,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d767e635"
+      "dh": "d767e635",
+      "paramStorage": [
+        [
+          "nBeltSlot",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHighlightColor",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_HandleBeltSlotClick",
@@ -565,7 +623,13 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "7b761cd3"
+      "dh": "7b761cd3",
+      "paramStorage": [
+        [
+          "pInventory",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "PANEL_GetBeltSlotHoverFlag",
@@ -663,7 +727,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "da4c4aac"
+      "dh": "da4c4aac",
+      "paramStorage": [
+        [
+          "nFrameNumber",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Draw_EquipmentNeedToRepairBody_1",
@@ -687,7 +757,25 @@
         "eD2BodyLocDWORD",
         "int32_t"
       ],
-      "dh": "483adda7"
+      "dh": "483adda7",
+      "paramStorage": [
+        [
+          "bIsLeftSide",
+          "ECX:4"
+        ],
+        [
+          "nSlotVariant",
+          "EDX:4"
+        ],
+        [
+          "eEquipSlot",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRowBase",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_EquipmentNeedArrows",
@@ -852,7 +940,13 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "12c4132e"
+      "dh": "12c4132e",
+      "paramStorage": [
+        [
+          "nPanelOffsetY",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UI_BorderLeft",
@@ -916,7 +1010,17 @@
         "D2BeltsTxt",
         "int32_t"
       ],
-      "dh": "bfbff598"
+      "dh": "bfbff598",
+      "paramStorage": [
+        [
+          "nMouseY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMouseX",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ClickBelt",
@@ -949,7 +1053,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6232f5f3"
+      "dh": "6232f5f3",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMouseX",
+          "ECX:4"
+        ],
+        [
+          "nMouseY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_HandleBeltMouseDown",
@@ -976,7 +1094,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9a514dd1"
+      "dh": "9a514dd1",
+      "paramStorage": [
+        [
+          "pInventory",
+          "ECX:4"
+        ],
+        [
+          "nMouseX",
+          "EDX:4"
+        ],
+        [
+          "nMouseY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PANEL_CheckEquipmentClickable",
@@ -1001,7 +1133,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "22e2cc36"
+      "dh": "22e2cc36",
+      "paramStorage": [
+        [
+          "pItemTxt",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemSlot",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ClickBeltRight",
@@ -1044,7 +1190,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "79bfc0c2"
+      "dh": "79bfc0c2",
+      "paramStorage": [
+        [
+          "nBeltSlot",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pInventory",
+          "ECX:4"
+        ],
+        [
+          "bToMercenary",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CMD_UseBeltSlot1",
@@ -1154,7 +1318,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "3d651f80"
+      "dh": "3d651f80",
+      "paramStorage": [
+        [
+          "nIndex",
+          "ECX:4"
+        ],
+        [
+          "byValue",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PANEL_ClearBeltSlotHover",
@@ -1187,7 +1361,13 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
       ],
-      "dh": "a43907ff"
+      "dh": "a43907ff",
+      "paramStorage": [
+        [
+          "nState",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PANEL_CalculateBeltSlotIndex",
@@ -1208,7 +1388,13 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "1952ebbc"
+      "dh": "1952ebbc",
+      "paramStorage": [
+        [
+          "pMsg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PANEL_SetBottomPanelGlobals1",
@@ -1393,7 +1579,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e3b192f5"
+      "dh": "e3b192f5",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_PanelLeftClickUp",
@@ -1429,7 +1621,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d2add3d2"
+      "dh": "d2add3d2",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PANEL_UpdatePanelFromMode",
@@ -1458,7 +1656,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f34cd288"
+      "dh": "f34cd288",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_PanelRightClick",
@@ -1489,7 +1693,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "db04708d"
+      "dh": "db04708d",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

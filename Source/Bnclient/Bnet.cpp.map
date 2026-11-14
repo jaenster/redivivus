@@ -25,7 +25,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "eef7fcbf"
+      "dh": "eef7fcbf",
+      "paramStorage": [
+        [
+          "nIndentAction",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDelta",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BnetLog_WriteLine",

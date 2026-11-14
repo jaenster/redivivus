@@ -20,7 +20,13 @@
         "D2UnitStrc",
         "eD2UnitType"
       ],
-      "dh": "286b50af"
+      "dh": "286b50af",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_CheckSkillWhipAndLeap",
@@ -47,7 +53,17 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "f2bdf8b5"
+      "dh": "f2bdf8b5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nGamma",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_DrawChargeTrailIfPrimary",
@@ -60,6 +76,16 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
+      ],
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nGamma",
+          "EDX:4"
+        ]
       ]
     },
     {
@@ -87,7 +113,17 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "03204fc7"
+      "dh": "03204fc7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nGamma",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_DrawChargeTrailIfSecondary",
@@ -100,6 +136,16 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
+      ],
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nGamma",
+          "EDX:4"
+        ]
       ]
     },
     {
@@ -121,7 +167,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f2e6115c"
+      "dh": "f2e6115c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOverlayId",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn01_ProgressiveCharge",
@@ -143,7 +199,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "bcba7464"
+      "dh": "bcba7464",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateRemFn01_ProgressiveCharge",
@@ -163,7 +229,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "341bf132"
+      "dh": "341bf132",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn02_CloakOfShadows",
@@ -193,7 +269,17 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "655287e7"
+      "dh": "655287e7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn03_Blaze",
@@ -224,7 +310,17 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "47dd5847"
+      "dh": "47dd5847",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn04_SourceUnit",
@@ -248,7 +344,17 @@
         "eD2States",
         "eD2UnitType"
       ],
-      "dh": "ada6bb0d"
+      "dh": "ada6bb0d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateRemFn02_SourceUnit",
@@ -268,7 +374,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "b00124de"
+      "dh": "b00124de",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn05_ChangeClass",
@@ -298,7 +414,17 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "79502b6c"
+      "dh": "79502b6c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "STATES_CalcDamageSeverityTier",
@@ -316,7 +442,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "60d608f5"
+      "dh": "60d608f5",
+      "paramStorage": [
+        [
+          "nMax",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nValue",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateRemFn03_BoneArmor",
@@ -337,7 +473,17 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "9a5c001a"
+      "dh": "9a5c001a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn06_BoneArmor",
@@ -364,7 +510,17 @@
         "eD2States",
         "eOverlayId"
       ],
-      "dh": "68f6aeef"
+      "dh": "68f6aeef",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_CalcDamageSeverityTier_Unreferenced",
@@ -382,7 +538,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a910da57"
+      "dh": "a910da57",
+      "paramStorage": [
+        [
+          "nMaxValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nValue",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateRemFn05_CycloneArmor",
@@ -403,7 +569,17 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "1d21f017"
+      "dh": "1d21f017",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn08_CycloneArmor",
@@ -430,7 +606,17 @@
         "eD2States",
         "eOverlayId"
       ],
-      "dh": "183376fa"
+      "dh": "183376fa",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn07_Hurricane",
@@ -454,7 +640,17 @@
         "eD2Skills",
         "eD2States"
       ],
-      "dh": "72a7e9ec"
+      "dh": "72a7e9ec",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateRemFn04_Hurricane",
@@ -480,7 +676,17 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "bf70b822"
+      "dh": "bf70b822",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn09_ShrineSkill",
@@ -500,7 +706,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "a238bfac"
+      "dh": "a238bfac",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateRemFn06_ShrineSkill",
@@ -520,7 +736,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "5fe3a66a"
+      "dh": "5fe3a66a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn10_Redeemed",
@@ -544,7 +770,17 @@
         "eD2Skills",
         "eD2States"
       ],
-      "dh": "99f24481"
+      "dh": "99f24481",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateRemFn07_Uninterruptable",
@@ -576,7 +812,17 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "09814ac9"
+      "dh": "09814ac9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn11_VineBeast",
@@ -595,7 +841,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "eeb01321"
+      "dh": "eeb01321",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn12_Invis",
@@ -614,7 +870,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "a639b070"
+      "dh": "a639b070",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateRemFn08_Invis",
@@ -633,7 +899,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "9aadf918"
+      "dh": "9aadf918",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn13_Attached",
@@ -654,7 +930,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "f25d2fe6"
+      "dh": "f25d2fe6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateRemFn09_Attached",
@@ -675,7 +961,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "378d3e4e"
+      "dh": "378d3e4e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateRemFn10_Pregnant",
@@ -687,6 +983,12 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
+      ],
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
       ]
     },
     {
@@ -712,7 +1014,17 @@
         "eD2States",
         "eD2UnitType"
       ],
-      "dh": "e1d67471"
+      "dh": "e1d67471",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn15_Revive",
@@ -733,7 +1045,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "8ee6195a"
+      "dh": "8ee6195a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn16_StackOverlay",
@@ -763,7 +1085,17 @@
         "eOverlayId",
         "int32_t"
       ],
-      "dh": "c0078ee7"
+      "dh": "c0078ee7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateRemFn11_StackOverlay",
@@ -783,7 +1115,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "4e370a25"
+      "dh": "4e370a25",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn17_RestInPeace",
@@ -805,7 +1147,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "5d669553"
+      "dh": "5d669553",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn18_CorpseExp",
@@ -828,7 +1180,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "3a3e029e"
+      "dh": "3a3e029e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateSetFn19RemFn12_SkillDelay",
@@ -848,7 +1210,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "345fe790"
+      "dh": "345fe790",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "STATES_UpdateColorShiftAndLight",
@@ -874,7 +1246,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2f4e067c"
+      "dh": "2f4e067c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_AddStateOverlays",
@@ -903,7 +1281,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8b05ee22"
+      "dh": "8b05ee22",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "STATES_ResetUnitGfxAndMode",
@@ -926,7 +1314,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "7590fcc2"
+      "dh": "7590fcc2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "STATES_SetStateOnUnit",
@@ -956,7 +1350,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "bc0e964c"
+      "dh": "bc0e964c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_RemoveStateFromUnit",
@@ -993,7 +1397,17 @@
         "eOverlayId",
         "uint32_t"
       ],
-      "dh": "427ae171"
+      "dh": "427ae171",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_HandleAddSTatUnit",
@@ -1024,7 +1438,33 @@
         "eD2UnitStat",
         "uint32_t"
       ],
-      "dh": "c5e2d283"
+      "dh": "c5e2d283",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pStatList",
+          "EDX:4"
+        ],
+        [
+          "eState",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_DispatchSetFunc",
@@ -1048,7 +1488,17 @@
         "eD2Skills",
         "eD2States"
       ],
-      "dh": "751bc056"
+      "dh": "751bc056",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "STATES_DispatchRemFunc",
@@ -1070,7 +1520,17 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "9df983c2"
+      "dh": "9df983c2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_CanUseSkillCheck",
@@ -1095,7 +1555,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "19afd9a5"
+      "dh": "19afd9a5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateRemFn10_Pregnant_Unref_004da070",
@@ -1114,7 +1584,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "8af2cd0f"
+      "dh": "8af2cd0f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PLRSKILLS_StateRemFn10_Pregnant_Unref_004dca20",
@@ -1133,7 +1609,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "443076ae"
+      "dh": "443076ae",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

@@ -19,7 +19,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "97644951"
+      "dh": "97644951",
+      "paramStorage": [
+        [
+          "nDirX",
+          "ECX:4"
+        ],
+        [
+          "nDirY",
+          "EDX:4"
+        ],
+        [
+          "nRoadType",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTPLACE_GetAdjacentRoadPresetId",
@@ -37,7 +51,29 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "fd132586"
+      "dh": "fd132586",
+      "paramStorage": [
+        [
+          "nDirX",
+          "ECX:4"
+        ],
+        [
+          "nDirY",
+          "EDX:4"
+        ],
+        [
+          "nPrevDirX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPrevDirY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nRoadType",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetBlankBorderGridCells",
@@ -60,7 +96,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "420d37a1"
+      "dh": "420d37a1",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetOutGridLinkFlags",
@@ -84,7 +126,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "155964d5"
+      "dh": "155964d5",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PlaceAct1245OutdoorBorders",
@@ -115,7 +163,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5e12b2ad"
+      "dh": "5e12b2ad",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGACT_SetWarpConnectionsBetweenTwoAreas",
@@ -140,7 +194,21 @@
         "D2DrlgStrc",
         "eD2LevelId"
       ],
-      "dh": "8ce5cfa6"
+      "dh": "8ce5cfa6",
+      "paramStorage": [
+        [
+          "pDrlgStrc",
+          "EBX:4"
+        ],
+        [
+          "eLevelFirst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLevelLast",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGLEVEL_AllocOrthForAdjacentLevel",
@@ -165,7 +233,21 @@
         "eD2LevelId",
         "eDrlgDirection"
       ],
-      "dh": "45f86964"
+      "dh": "45f86964",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "ECX:4"
+        ],
+        [
+          "pLevelData",
+          "EDI:4"
+        ],
+        [
+          "eLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId",
@@ -192,7 +274,21 @@
         "eD2LevelId",
         "eDrlgDirection"
       ],
-      "dh": "34fa9c7e"
+      "dh": "34fa9c7e",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLevelIdStart",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTPLACE_CalcSubLevelPlacement",
@@ -211,7 +307,29 @@
         "D2DrlgSubLevelPlaceStrc",
         "int32_t"
       ],
-      "dh": "64e88a5c"
+      "dh": "64e88a5c",
+      "paramStorage": [
+        [
+          "nHeight",
+          "ESI:4"
+        ],
+        [
+          "nWidth",
+          "EDI:4"
+        ],
+        [
+          "pOutCoords",
+          "EBX:4"
+        ],
+        [
+          "pBasePlace",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDirection",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGLEVEL_FixDrlgLevelForSpiderForest",
@@ -246,7 +364,13 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "29009d6f"
+      "dh": "29009d6f",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGLEVEL_FixDrlgLevelForLowerKurast",
@@ -269,7 +393,13 @@
         "D2LevelDefsTxt",
         "eD2LevelId"
       ],
-      "dh": "d8c621fa"
+      "dh": "d8c621fa",
+      "paramStorage": [
+        [
+          "pLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGActMisc_InitAct3",
@@ -295,7 +425,13 @@
         "D2DrlgStrc",
         "D2LevelDefsTxt"
       ],
-      "dh": "4d8fd93a"
+      "dh": "4d8fd93a",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGACTMISC_AllocDrlgLevelForAct",
@@ -320,7 +456,17 @@
         "D2DrlgStrc",
         "eAct"
       ],
-      "dh": "e00d5549"
+      "dh": "e00d5549",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "ECX:4"
+        ],
+        [
+          "nActNo",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_CreateOutdoorRoomEx",
@@ -347,7 +493,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8b338ede"
+      "dh": "8b338ede",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwRoomFlags",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwOutdoorFlags",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwOutdoorFlagsEx",
+          "Stack[0x18]:4"
+        ],
+        [
+          "dwDT1Mask",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "BuildKurast",
@@ -371,7 +555,13 @@
       "usedTypes": [
         "D2DrlgLevelStrc"
       ],
-      "dh": "e84bf72d"
+      "dh": "e84bf72d",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BuildTravincal",
@@ -390,7 +580,13 @@
       "usedTypes": [
         "D2DrlgLevelStrc"
       ],
-      "dh": "a10d91e6"
+      "dh": "a10d91e6",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "InitAct3OutdoorLevel",
@@ -412,7 +608,13 @@
       "usedTypes": [
         "D2DrlgLevelStrc"
       ],
-      "dh": "91184b94"
+      "dh": "91184b94",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

@@ -24,7 +24,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "cba1b54c"
+      "dh": "cba1b54c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ],
+        [
+          "nMonStatsId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CheckIfSpokenWithNPC",
@@ -47,7 +61,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "42e3ef19"
+      "dh": "42e3ef19",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ],
+        [
+          "nMonStatsId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INTRONPC_SetSpokenWithNPC_Intro2",
@@ -67,7 +95,17 @@
         "D2UnitDataPlayerInteractedNPCStrc",
         "int32_t"
       ],
-      "dh": "e8782be5"
+      "dh": "e8782be5",
+      "paramStorage": [
+        [
+          "pInteractedNPCs",
+          "ECX:4"
+        ],
+        [
+          "nMonStatsId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "INTRONPC_CheckIfSpokenWithNPC_Intro2",
@@ -87,7 +125,17 @@
         "D2UnitDataPlayerInteractedNPCStrc",
         "int32_t"
       ],
-      "dh": "0c040770"
+      "dh": "0c040770",
+      "paramStorage": [
+        [
+          "pInteractedNPCs",
+          "ECX:4"
+        ],
+        [
+          "nMonStatsId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_UnsetSpokenWithNPC_Intro2",
@@ -110,7 +158,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "282724e4"
+      "dh": "282724e4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nMonStatsId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CopyBufferToPointer",
@@ -129,7 +191,17 @@
         "D2BitBufferStrc",
         "uint32_t"
       ],
-      "dh": "70006e90"
+      "dh": "70006e90",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "ECX:4"
+        ],
+        [
+          "pDest",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CopySizeAndPosToBuffer",
@@ -149,7 +221,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "16a50155"
+      "dh": "16a50155",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "ECX:4"
+        ],
+        [
+          "pDest",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERINTRO_CopyIntroData8Bytes",
@@ -168,7 +250,17 @@
         "D2UnitDataPlayerInteractedNPCStrc",
         "uint8_t"
       ],
-      "dh": "370641c0"
+      "dh": "370641c0",
+      "paramStorage": [
+        [
+          "pdwParam1",
+          "ECX:4"
+        ],
+        [
+          "pdwSrc",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERINTRO_CopyIntroDataIndirect",
@@ -187,7 +279,17 @@
         "D2UnitDataPlayerInteractedNPCStrc",
         "uint32_t"
       ],
-      "dh": "7adfc516"
+      "dh": "7adfc516",
+      "paramStorage": [
+        [
+          "pSrc",
+          "ECX:4"
+        ],
+        [
+          "pdwIntroData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_AllocPlayerInteractedNPC",
@@ -210,7 +312,13 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "cb526229"
+      "dh": "cb526229",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERDATA_FreeInteractedNPCs",
@@ -230,7 +338,17 @@
         "D2UnitDataPlayerInteractedNPCStrc",
         "SGAMEDATA"
       ],
-      "dh": "1d886d75"
+      "dh": "1d886d75",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pInteractedNPCs",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

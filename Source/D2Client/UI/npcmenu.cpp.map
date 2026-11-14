@@ -52,7 +52,17 @@
       "usedTypes": [
         "uint16_t"
       ],
-      "dh": "3219e5a8"
+      "dh": "3219e5a8",
+      "paramStorage": [
+        [
+          "nInput",
+          "ECX:4"
+        ],
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetInteractedUnit",
@@ -89,7 +99,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "85cb10cb"
+      "dh": "85cb10cb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GetInteractedUnitClassId",
@@ -131,7 +147,13 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "be55fe99"
+      "dh": "be55fe99",
+      "paramStorage": [
+        [
+          "pSpeech",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_RandomizeAllNpcDialogs",
@@ -172,7 +194,13 @@
         "int16_t",
         "uint16_t"
       ],
-      "dh": "bbf8ccdb"
+      "dh": "bbf8ccdb",
+      "paramStorage": [
+        [
+          "nMsgTypeToFind",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_ScrollCompleteShowNextMessage",
@@ -195,7 +223,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "a4e4fe6f"
+      "dh": "a4e4fe6f",
+      "paramStorage": [
+        [
+          "pUserParam",
+          "ECX:4"
+        ],
+        [
+          "nReason",
+          "EDX:4"
+        ],
+        [
+          "bDismissed",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004b1970",
@@ -225,7 +267,13 @@
       "calledFunctions": [
         "NPCMENU_AddHandledMessageId"
       ],
-      "dh": "40f04e83"
+      "dh": "40f04e83",
+      "paramStorage": [
+        [
+          "wMsgId",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_CheckQuestDependentCallbacks",
@@ -246,7 +294,25 @@
         "D2NpcQuestCallbackEntry",
         "int32_t"
       ],
-      "dh": "38619916"
+      "dh": "38619916",
+      "paramStorage": [
+        [
+          "pCallbackTable",
+          "ECX:4"
+        ],
+        [
+          "nNpcClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nEntryCount",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "inline_NPC_IsInteractableSideNpc",
@@ -264,7 +330,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "428f8368"
+      "dh": "428f8368",
+      "paramStorage": [
+        [
+          "nNpcClassId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_ShowSelectedDialogOption",
@@ -362,7 +434,13 @@
         "POINT",
         "tagRECT"
       ],
-      "dh": "5c676206"
+      "dh": "5c676206",
+      "paramStorage": [
+        [
+          "pPoint",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CheckSpeachVersusInteractedUnit",
@@ -474,7 +552,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "61e34e64"
+      "dh": "61e34e64",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_CanItemBeRepaired",
@@ -503,7 +587,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d59c85a1"
+      "dh": "d59c85a1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_EmptyDialogDrawHandler_Unref_004b2010",
@@ -582,7 +672,13 @@
       "calledFunctions": [
         "NPCMENU_RemoveRowOptionSlot2"
       ],
-      "dh": "519adaed"
+      "dh": "519adaed",
+      "paramStorage": [
+        [
+          "nRowIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_RemoveRowOptionSlot3",
@@ -597,7 +693,13 @@
       "calledFunctions": [
         "NPCMENU_RemoveRowOptionSlot3"
       ],
-      "dh": "662dfe6d"
+      "dh": "662dfe6d",
+      "paramStorage": [
+        [
+          "nRowIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_RemoveRowOptionSlot4",
@@ -612,7 +714,13 @@
       "calledFunctions": [
         "NPCMENU_RemoveRowOptionSlot4"
       ],
-      "dh": "f8a9e672"
+      "dh": "f8a9e672",
+      "paramStorage": [
+        [
+          "nRowIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_EnableCainIdentifyOption",
@@ -627,7 +735,13 @@
       "calledFunctions": [
         "NPCMENU_EnableCainIdentifyOption"
       ],
-      "dh": "51d78f63"
+      "dh": "51d78f63",
+      "paramStorage": [
+        [
+          "nRowIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_InitializeMenuOptions",
@@ -658,7 +772,13 @@
         "SubmitItem",
         "NET_D2GS_CLIENT_Send_INT_INT_INT"
       ],
-      "dh": "a4103aeb"
+      "dh": "a4103aeb",
+      "paramStorage": [
+        [
+          "dwItemId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_ValidateNpcForShop",
@@ -677,7 +797,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "39d82add"
+      "dh": "39d82add",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_Initialize",
@@ -739,7 +865,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "63f0d3ca"
+      "dh": "63f0d3ca",
+      "paramStorage": [
+        [
+          "pMsg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QuestHandeling",
@@ -755,7 +887,13 @@
         "QuestHandeling",
         "ReadQuestRecordFromBuffer"
       ],
-      "dh": "3ea51a87"
+      "dh": "3ea51a87",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_SetInventoryNeedsRefresh",
@@ -811,7 +949,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d5e01e44"
+      "dh": "d5e01e44",
+      "paramStorage": [
+        [
+          "bSkipConfirm",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byMode",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_CancelShopTransaction",
@@ -874,7 +1022,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ca49efee"
+      "dh": "ca49efee",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_OnItemRemovedFromContainer",
@@ -893,7 +1047,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "5a39dc01"
+      "dh": "5a39dc01",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_OnItemUnequip",
@@ -912,7 +1072,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "18c504b4"
+      "dh": "18c504b4",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_OnItemPutInContainer",
@@ -931,7 +1097,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "5e3f72d3"
+      "dh": "5e3f72d3",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_OnItemPutInBelt",
@@ -950,7 +1122,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "29604055"
+      "dh": "29604055",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_OnItemInShop",
@@ -973,7 +1151,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "df7bca54"
+      "dh": "df7bca54",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_CalculateItemTransactionCost",
@@ -1016,7 +1200,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "c9e6a02f"
+      "dh": "c9e6a02f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nTransactionMode",
+          "EDX:4"
+        ],
+        [
+          "pTransactionCost",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pszBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufferMaxLen",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_IsShopActive",
@@ -1054,7 +1260,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e560bd89"
+      "dh": "e560bd89",
+      "paramStorage": [
+        [
+          "pNpcUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_ConfirmTransactionCallback",
@@ -1150,7 +1362,13 @@
       "calledFunctions": [
         "GetInteractedUnitGuid"
       ],
-      "dh": "e05d155f"
+      "dh": "e05d155f",
+      "paramStorage": [
+        [
+          "pNpcGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetQuestInfo",
@@ -1257,7 +1475,13 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "c9e40080"
+      "dh": "c9e40080",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004b3560",
@@ -1275,7 +1499,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "f809d6a2"
+      "dh": "f809d6a2",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_ItemServiceOptionCallback",
@@ -1362,7 +1592,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bbb68bb3"
+      "dh": "bbb68bb3",
+      "paramStorage": [
+        [
+          "nNpcGuid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ShopAction",
@@ -1403,7 +1639,41 @@
         "pfnItemTransactionCb",
         "uint32_t"
       ],
-      "dh": "8e7a1f21"
+      "dh": "8e7a1f21",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pItem",
+          "EDX:4"
+        ],
+        [
+          "dwSell",
+          "Stack[0x4]:4"
+        ],
+        [
+          "unk",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwItemCost",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "_2",
+          "Stack[0x14]:4"
+        ],
+        [
+          "_3",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_OnItemEquip",
@@ -1422,7 +1692,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "c1508553"
+      "dh": "c1508553",
+      "paramStorage": [
+        [
+          "nItemGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_CloseNpcInteraction",
@@ -1450,7 +1726,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6aff1cf0"
+      "dh": "6aff1cf0",
+      "paramStorage": [
+        [
+          "nNpcGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_CloseScrollAndInteraction",
@@ -1471,7 +1753,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "64de9525"
+      "dh": "64de9525",
+      "paramStorage": [
+        [
+          "nNpcGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_OpenNpcShop",
@@ -1541,7 +1829,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "4a767c63"
+      "dh": "4a767c63",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_CloseShopUI",
@@ -1683,7 +1977,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bb63046f"
+      "dh": "bb63046f",
+      "paramStorage": [
+        [
+          "bUseGossip",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nSpeechIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_ShowCurrentGossipCallback",
@@ -2047,7 +2351,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "2af0ea06"
+      "dh": "2af0ea06",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_WarrivGoEastOptionCallback",
@@ -2174,7 +2484,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "9eac60cc"
+      "dh": "9eac60cc",
+      "paramStorage": [
+        [
+          "byUnitType",
+          "CL:1"
+        ],
+        [
+          "nUnitGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_HandleTradeAccepted",
@@ -2333,7 +2653,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a61dce54"
+      "dh": "a61dce54",
+      "paramStorage": [
+        [
+          "nTitleStringId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nSpeechIdx",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_ShowNpcActionConfirmDialog",
@@ -2364,7 +2694,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "d6cda260"
+      "dh": "d6cda260",
+      "paramStorage": [
+        [
+          "nTitleStringId",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_ReopenTalkDialog",
@@ -2495,7 +2831,13 @@
         "eD2UnitStat",
         "uint16_t"
       ],
-      "dh": "5c45a752"
+      "dh": "5c45a752",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_EnableKashyaHireOption",
@@ -2532,7 +2874,17 @@
         "D2NpcMenuOptionFunc *",
         "int32_t"
       ],
-      "dh": "72745daa"
+      "dh": "72745daa",
+      "paramStorage": [
+        [
+          "bAddTradeOption",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNpcMenuOptionId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_EnableWarrivGoEastOption",
@@ -2637,7 +2989,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "d6f2ce2b"
+      "dh": "d6f2ce2b",
+      "paramStorage": [
+        [
+          "bReopenMenu",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SetPlayersMercInfo",
@@ -2657,7 +3019,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "32ef48de"
+      "dh": "32ef48de",
+      "paramStorage": [
+        [
+          "wMercNameId",
+          "CX:2"
+        ],
+        [
+          "nReviveCost",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_RefreshMenuDialog",
@@ -2708,7 +3080,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "509c5562"
+      "dh": "509c5562",
+      "paramStorage": [
+        [
+          "pUserParam",
+          "ECX:4"
+        ],
+        [
+          "nReason",
+          "EDX:4"
+        ],
+        [
+          "nScrollState",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_TalkOptionCallback",
@@ -2825,7 +3211,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1101b5c6"
+      "dh": "1101b5c6",
+      "paramStorage": [
+        [
+          "nUpdateType",
+          "CL:1"
+        ],
+        [
+          "nUnitGUID",
+          "EDX:4"
+        ],
+        [
+          "pQuestBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nActionType",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca09b",
@@ -2846,7 +3250,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "f4488e11"
+      "dh": "f4488e11",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gNpcMenuConfirmDialogStrings",

@@ -3995,7 +3995,6 @@ void __stdcall INV_InitNpcButtonsByClass() {
 void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
     D2UnitStrc* pPlayerUnit_lcl;
     uint16_t* pwString;
-    BOOL bIsExpansionGfx;
     int32_t iTmp;
     int nCoinY;
     char szGoldAmountBuffer[20];
@@ -4008,9 +4007,9 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
     int nButtonX;
     int nGoldY;
     int nCoinX;
+    int nTooltipY;
     eD2UnitStat eStatType;
     int32_t nColorFlag;
-    int nTooltipXPos;
     int32_t nPrevFont;
     nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
     int nTextY;
@@ -4046,7 +4045,7 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
         nTextY = gnPanelOffsetY - 0x45 + ScreenSizeY;
       }
     } else {
-      int nTooltipY;
+      BOOL bIsExpansionGfx;
       eStatType = UNITSTAT_goldbank;
       pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
       nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, eStatType, nLayer);
@@ -4071,9 +4070,7 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
           nTooltipY = gnPanelOffsetY - 0x1ca + ScreenSizeY;
           show_gold_button_tooltip:
           nColorFlag = 0;
-          iTmp = 0;
-          nTooltipXPos = gnPanelOffsetX + 0x35;
-          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x101c), nTooltipXPos, nTooltipY, iTmp, nColorFlag);
+          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x101c), gnPanelOffsetX + 0x35, nTooltipY, 0, nColorFlag);
         }
       } else {
         bIsExpansionGfx = INV_IsMouseInRect(gnPanelOffsetX + 0x49, gnPanelOffsetY - 0xf2 + ScreenSizeY, 0x14, 0x12);
@@ -4107,10 +4104,7 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
       iTmp = nCoinX + 2;
     } else {
       if (nGoldPanelMode != 1) {
-        bIsExpansionGfx = 0;
-        iTmp = 0;
-        nTextY = gnPanelOffsetX + 0x15;
-        D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xcf3), nTextY, nCoinY, iTmp, bIsExpansionGfx);
+        D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xcf3), gnPanelOffsetX + 0x15, nCoinY, 0, 0);
         D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
         return;
       }
@@ -4215,12 +4209,10 @@ void __stdcall DRAW_UI_Inventory_DrawShop() {
 
 void __stdcall INV_DrawNpcButtonTooltip() {
     D2UnitStrc* pNpcUnit;
-    int nTooltipX;
     uint16_t wszTooltipText[256];
     int nButtonAreaTop;
     int32_t nRepairAllCost;
     int32_t nNpcTypeId;
-    int32_t nTooltipColor;
     if (!(gnInvMouseX >= pNpcInventoryScreenCoordinates.nLeft && gnInvMouseX <= pNpcInventoryScreenCoordinates.nRight)) {
       return;
     }
@@ -4255,11 +4247,7 @@ void __stdcall INV_DrawNpcButtonTooltip() {
         return;
       }
     } else {
-      nTooltipColor = 0;
-      nNpcTypeId = 0;
-      nButtonX = gnPanelOffsetY - 100 + ScreenSizeY;
-      nTooltipX = NPCButtonArray[nButtonIdx + CurrentNpcButtonSelection * 4] + gnPanelOffsetX;
-      D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(gaNpcShopButtons[nButtonIdx].wStringId), nTooltipX, nButtonX, nNpcTypeId, nTooltipColor);
+      D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(gaNpcShopButtons[nButtonIdx].wStringId), NPCButtonArray[nButtonIdx + CurrentNpcButtonSelection * 4] + gnPanelOffsetX, gnPanelOffsetY - 100 + ScreenSizeY, 0, 0);
     }
 }
 
@@ -9202,9 +9190,7 @@ void __stdcall DRAW_UI_Inventory() {
       bIsTwoHandedEquipped = D2CLIENT_GetTradeAcceptedFlags();
       Storm::Source::SSTR::SStrPrintf(szGoldCount, 0xf, "%d", bIsTwoHandedEquipped);
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszGoldText, szGoldCount, 0xf);
-      bIsExpansion = 0;
-      bIsTwoHandedEquipped = 0x1b - gnPanelOffsetY;
-      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(wszGoldText) + 0x124, bIsTwoHandedEquipped, 0, bIsExpansion);
+      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(wszGoldText) + 0x124, 0x1b - gnPanelOffsetY, 0, 0);
       bIsExpansion = 0;
       bIsTwoHandedEquipped = 0xf2 - gnPanelOffsetY;
       nDrawY = 0;
@@ -9216,9 +9202,7 @@ void __stdcall DRAW_UI_Inventory() {
       bIsTwoHandedEquipped = D2CLIENT_GetTradePlayerGoldAmount();
       Storm::Source::SSTR::SStrPrintf(szGoldCount, 0xf, "%d", bIsTwoHandedEquipped);
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszGoldText, szGoldCount, 0xf);
-      bIsExpansion = 0;
-      bIsTwoHandedEquipped = 0xf2 - gnPanelOffsetY;
-      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(wszGoldText) + 0x124, bIsTwoHandedEquipped, 0, bIsExpansion);
+      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(wszGoldText) + 0x124, 0xf2 - gnPanelOffsetY, 0, 0);
     }
 
     byPrevInvPage = CurrentInventoryPage;

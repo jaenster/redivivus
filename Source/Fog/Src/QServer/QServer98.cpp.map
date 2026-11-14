@@ -19,7 +19,13 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "de913a32"
+      "dh": "de913a32",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SendToClientOnline",
@@ -39,7 +45,25 @@
         "D2QServerClientConnectionStrc",
         "D2QServerStrc"
       ],
-      "dh": "d95d1de4"
+      "dh": "d95d1de4",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "pQServerClient",
+          "EDX:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_AllocateConnectionStruct",
@@ -60,7 +84,21 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "2946a869"
+      "dh": "2946a869",
+      "paramStorage": [
+        [
+          "nSocket",
+          "EDX:4"
+        ],
+        [
+          "nIpAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pQServerStrc",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SocketThreadMain",
@@ -104,7 +142,13 @@
         "timeval",
         "uint32_t"
       ],
-      "dh": "1c4d0c5b"
+      "dh": "1c4d0c5b",
+      "paramStorage": [
+        [
+          "lpThreadParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CreateSocketOnline",
@@ -129,7 +173,17 @@
         "u_short",
         "uint32_t"
       ],
-      "dh": "2c8a7fb3"
+      "dh": "2c8a7fb3",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nPort",
+          "DX:2"
+        ]
+      ]
     }
   ]
 }

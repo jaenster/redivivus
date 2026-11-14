@@ -312,7 +312,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a8436af3"
+      "dh": "a8436af3",
+      "paramStorage": [
+        [
+          "nScrollDirection",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CMD_ValidateMouseButtonBinding",
@@ -331,7 +337,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "56093a0c"
+      "dh": "56093a0c",
+      "paramStorage": [
+        [
+          "nCmdIndex",
+          "ECX:4"
+        ],
+        [
+          "pErrorCode",
+          "EDX:4"
+        ],
+        [
+          "nMouseButton",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SORT_CompareInts",
@@ -349,7 +369,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "99f092b4"
+      "dh": "99f092b4",
+      "paramStorage": [
+        [
+          "pA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pB",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CMD_RebuildDerivedBindings",
@@ -388,7 +418,17 @@
         "SafeCreateDirectoryTree",
         "thunk_CreateFileA"
       ],
-      "dh": "b80ebb5e"
+      "dh": "b80ebb5e",
+      "paramStorage": [
+        [
+          "dwDesiredAccess",
+          "EDI:4"
+        ],
+        [
+          "dwCreationDisposition",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CMD_WriteKeyFile",
@@ -447,7 +487,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8a371756"
+      "dh": "8a371756",
+      "paramStorage": [
+        [
+          "bUseInstallDir",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CMD_ResetKeyBindingsToDefaults",
@@ -468,7 +514,13 @@
         "D2KeyBindStrc",
         "uint16_t"
       ],
-      "dh": "e223aa81"
+      "dh": "e223aa81",
+      "paramStorage": [
+        [
+          "bUseInstallDir",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CMD_GetKeyForCommand",
@@ -488,7 +540,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "7594d8d4"
+      "dh": "7594d8d4",
+      "paramStorage": [
+        [
+          "nCmdIndex",
+          "ECX:4"
+        ],
+        [
+          "nSlot",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CMD_IsBindableKey",
@@ -509,7 +571,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "aae7e557"
+      "dh": "aae7e557",
+      "paramStorage": [
+        [
+          "wKeyCode",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "CMD_SetKeyBinding",
@@ -532,7 +600,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a6a86458"
+      "dh": "a6a86458",
+      "paramStorage": [
+        [
+          "nCmdIndex",
+          "ECX:4"
+        ],
+        [
+          "nSlot",
+          "EDX:4"
+        ],
+        [
+          "nKeyCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pErrorCode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CMD_AcceptKeyBindings",
@@ -606,7 +692,17 @@
         "PD2KeyBindSlot",
         "int32_t"
       ],
-      "dh": "14002d48"
+      "dh": "14002d48",
+      "paramStorage": [
+        [
+          "nCmdIndex",
+          "ECX:4"
+        ],
+        [
+          "nSlot",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CMD_IsCommandBound",
@@ -626,7 +722,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "61b29022"
+      "dh": "61b29022",
+      "paramStorage": [
+        [
+          "nCmdIndex",
+          "ECX:4"
+        ],
+        [
+          "nSlot",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CMD_GetKeyNameForCommand",
@@ -648,7 +754,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "5ad48061"
+      "dh": "5ad48061",
+      "paramStorage": [
+        [
+          "nCmdIndex",
+          "ECX:4"
+        ],
+        [
+          "nSlot",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CMD_GetKeyDescForCommand",
@@ -671,7 +787,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "715fc25e"
+      "dh": "715fc25e",
+      "paramStorage": [
+        [
+          "nCmdIndex",
+          "ECX:4"
+        ],
+        [
+          "nSlot",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "WindowsKeyPressedEvent",
@@ -695,7 +821,13 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "e6b0dde1"
+      "dh": "e6b0dde1",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_DispatchKeyCommand",
@@ -719,7 +851,13 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "65fb929e"
+      "dh": "65fb929e",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CMD_ToggleKeyConfigMode",
@@ -740,7 +878,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "7584bdd6"
+      "dh": "7584bdd6",
+      "paramStorage": [
+        [
+          "nEnable",
+          "ECX:4"
+        ],
+        [
+          "bUpdateUIHandlers",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CMD_LoadUserKeyBindings",
@@ -831,7 +979,29 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "618f942a"
+      "dh": "618f942a",
+      "paramStorage": [
+        [
+          "nFadeInDuration",
+          "ECX:4"
+        ],
+        [
+          "nHoldDuration",
+          "EDX:4"
+        ],
+        [
+          "nFadeOutDuration",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevelId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bForce",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_6caab0",

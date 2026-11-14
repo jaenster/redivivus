@@ -89,9 +89,8 @@ void __stdcall UI_FormatNumberWithCommas(uint16_t * wszText, int32_t nNumber, in
     }
 
     _itoa(nNumber, __frame0.aDigitBuffer, 10);
-    char* pcDigitPtr = __frame0.aDigitBuffer;
-    pcDigitPtr = pcDigitPtr + strlen(pcDigitPtr) + 1;
-    int nDigitCount = (intptr_t)pcDigitPtr - (intptr_t)(__frame0.aDigitBuffer + 1);
+    char* pcDigitPtr;
+    int nDigitCount = (int)strlen(__frame0.aDigitBuffer);
     if (nDigitCount) {
       nFormattedLen = (nDigitCount - 1) / 3 + nDigitCount;
       if (nFormattedLen >= 1 && nFormattedLen < nMaxLen - 1) {
@@ -103,9 +102,7 @@ void __stdcall UI_FormatNumberWithCommas(uint16_t * wszText, int32_t nNumber, in
           nWritePos = nFormattedLen - 1;
           wszText[nWritePos] = (short int)__frame0.aDigitBuffer[nDigitIdx];
           if (__frame0.nCommaCounter >= 3) {
-            pcDigitPtr = __frame0.aDigitBuffer;
-            pcDigitPtr = pcDigitPtr + strlen(pcDigitPtr) + 1;
-            if ((uint32_t)((intptr_t)pcDigitPtr - (intptr_t)(__frame0.aDigitBuffer + 1)) > 3) {
+            if ((uint32_t)(int)strlen(__frame0.aDigitBuffer) > 3) {
               __frame0.nCommaCounter = 0;
               if (nWritePos > 0) {
                 nWritePos = nFormattedLen - 2;

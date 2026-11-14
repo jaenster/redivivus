@@ -21,7 +21,13 @@
         "D2ItemStatCostTxt",
         "eD2UnitStat"
       ],
-      "dh": "08714278"
+      "dh": "08714278",
+      "paramStorage": [
+        [
+          "eUnitStat",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetState",
@@ -43,7 +49,21 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "06887d98"
+      "dh": "06887d98",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eState",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bSet",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UNIT_GetUnitState",
@@ -64,7 +84,17 @@
         "eD2States",
         "eD2UnitType"
       ],
-      "dh": "16c56f5a"
+      "dh": "16c56f5a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eState",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2StatesTogglegfx",
@@ -86,7 +116,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0da87f85"
+      "dh": "0da87f85",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStateId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bSet",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetStateGfxFlag",
@@ -107,7 +151,17 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "531a2f34"
+      "dh": "531a2f34",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eState",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_ClearGfxFlags",
@@ -127,7 +181,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "53403f03"
+      "dh": "53403f03",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasAnyGfxFlag",
@@ -147,7 +207,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "468a6031"
+      "dh": "468a6031",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_AssertGetGfxFlags",
@@ -170,7 +236,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "354c008f"
+      "dh": "354c008f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_FilterStatesByContext",
@@ -193,7 +265,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d0ecc2b1"
+      "dh": "d0ecc2b1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bIsBoss",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_UNIT_GetStateList_StateFlags",
@@ -212,7 +294,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "62cf10da"
+      "dh": "62cf10da",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasMatchingStateFlag",
@@ -233,7 +321,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "c03288f5"
+      "dh": "c03288f5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pStatesData",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "STATES_MoveToGfxFlags",
@@ -255,7 +353,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "b13af80f"
+      "dh": "b13af80f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMaskWords",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMSTATS_CheckStateFlagArray1",
@@ -274,7 +382,13 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "e918ebfb"
+      "dh": "e918ebfb",
+      "paramStorage": [
+        [
+          "eState",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasHideState",
@@ -293,7 +407,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "9a509f4f"
+      "dh": "9a509f4f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMSTATS_CheckStateFlagArray4",
@@ -312,7 +432,13 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "94ca7b03"
+      "dh": "94ca7b03",
+      "paramStorage": [
+        [
+          "eState",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasTransformState",
@@ -331,7 +457,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "72e757c2"
+      "dh": "72e757c2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_MoveTransformToGfx",
@@ -350,7 +482,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "c1338c9e"
+      "dh": "c1338c9e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMSTATS_CheckStateFlagArray2",
@@ -369,7 +507,13 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "92c7c75e"
+      "dh": "92c7c75e",
+      "paramStorage": [
+        [
+          "eState",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasLightState",
@@ -388,7 +532,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "1b8e7e7a"
+      "dh": "1b8e7e7a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasDamageState",
@@ -407,7 +557,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "c02128b5"
+      "dh": "c02128b5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasBlueState",
@@ -426,7 +582,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "e5888193"
+      "dh": "e5888193",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasAttackSpeedState",
@@ -445,7 +607,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "caf85be1"
+      "dh": "caf85be1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasAuraState",
@@ -464,7 +632,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "5a414fb7"
+      "dh": "5a414fb7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasResistState",
@@ -483,7 +657,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "818dfc37"
+      "dh": "818dfc37",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasArmorState",
@@ -502,7 +682,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "47f7ee64"
+      "dh": "47f7ee64",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_IsShapeshifted",
@@ -520,7 +706,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "1eb4dbfb"
+      "dh": "1eb4dbfb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMSTATS_CheckStateFlagArray11",
@@ -539,7 +731,13 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "f53098a5"
+      "dh": "f53098a5",
+      "paramStorage": [
+        [
+          "eState",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMSTATS_CheckStateFlagArray12",
@@ -557,7 +755,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "62cb31f5"
+      "dh": "62cb31f5",
+      "paramStorage": [
+        [
+          "nStateId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_IsStateActive",
@@ -576,7 +780,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "3f2d81bd"
+      "dh": "3f2d81bd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStateId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasPoisonState",
@@ -595,7 +809,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "e33c3cac"
+      "dh": "e33c3cac",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasColdState",
@@ -614,7 +834,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "5370921f"
+      "dh": "5370921f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasFireState",
@@ -633,7 +859,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "3c757abb"
+      "dh": "3c757abb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasLifeState",
@@ -652,7 +884,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "b6ef3b34"
+      "dh": "b6ef3b34",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasManaState",
@@ -671,7 +909,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "c0b36462"
+      "dh": "c0b36462",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasStaminaState",
@@ -690,7 +934,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "9417478d"
+      "dh": "9417478d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasDefenseState",
@@ -709,7 +959,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "0b9af3c5"
+      "dh": "0b9af3c5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasExpState",
@@ -728,7 +984,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "650533c8"
+      "dh": "650533c8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasGoldState",
@@ -747,7 +1009,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "40719ecc"
+      "dh": "40719ecc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasMagicFindState",
@@ -766,7 +1034,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "68914dc0"
+      "dh": "68914dc0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasSkillState",
@@ -785,7 +1059,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "cff02ddb"
+      "dh": "cff02ddb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasAbsorbState",
@@ -804,7 +1084,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "42b06156"
+      "dh": "42b06156",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasCurseState",
@@ -823,7 +1109,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "311a1e98"
+      "dh": "311a1e98",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMSTATS_CheckStateFlagArray30",
@@ -841,7 +1133,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "18be8b05"
+      "dh": "18be8b05",
+      "paramStorage": [
+        [
+          "nStateId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasMaxState",
@@ -860,7 +1158,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "26b97701"
+      "dh": "26b97701",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMSTATS_CheckStateFlagArray31",
@@ -878,7 +1182,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "5f88c676"
+      "dh": "5f88c676",
+      "paramStorage": [
+        [
+          "nStateId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasProgressiveState",
@@ -897,7 +1207,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "e4474e13"
+      "dh": "e4474e13",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasPassiveState",
@@ -916,7 +1232,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "dfd4430c"
+      "dh": "dfd4430c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_HasDisguiseState",
@@ -935,7 +1257,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "2a3d7ea6"
+      "dh": "2a3d7ea6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMSTATS_CheckUnitHasStateFlagIndex",
@@ -955,7 +1283,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "cfb47236"
+      "dh": "cfb47236",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlagArrayIdx",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

@@ -22,7 +22,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "8d70b0d2"
+      "dh": "8d70b0d2",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_Unused2",
@@ -41,7 +47,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "9473fa91"
+      "dh": "9473fa91",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_ShowGatewaySelectTitle",
@@ -62,7 +74,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "c034420d"
+      "dh": "c034420d",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_DestroyFormsAndOpenChannelDialog",
@@ -83,7 +101,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "30d8ce1a"
+      "dh": "30d8ce1a",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_DestroyFormsAndJoinGame",
@@ -104,7 +128,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "1bea48fb"
+      "dh": "1bea48fb",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_DestroyFormsAndOpenCreateGameDialog",
@@ -125,7 +155,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "b9eebb26"
+      "dh": "b9eebb26",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHATDLG_OpenChatCommandsDialogRestoreFocus",
@@ -145,7 +181,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "59fe2ab5"
+      "dh": "59fe2ab5",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

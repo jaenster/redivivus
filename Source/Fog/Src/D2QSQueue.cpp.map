@@ -19,7 +19,13 @@
       "usedTypes": [
         "D2QSQueueStrc"
       ],
-      "dh": "e124c2b5"
+      "dh": "e124c2b5",
+      "paramStorage": [
+        [
+          "pQueue",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Free",
@@ -38,7 +44,13 @@
       "usedTypes": [
         "D2QSQueueStrc"
       ],
-      "dh": "acb8307f"
+      "dh": "acb8307f",
+      "paramStorage": [
+        [
+          "pPoolManager",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetAddress",
@@ -56,7 +68,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "2155dc58"
+      "dh": "2155dc58",
+      "paramStorage": [
+        [
+          "pQueue",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FOG_EnqueueMessage",
@@ -81,7 +99,21 @@
         "D2QSQueueStrc",
         "uint16_t"
       ],
-      "dh": "bb1e05cf"
+      "dh": "bb1e05cf",
+      "paramStorage": [
+        [
+          "pClientSideData",
+          "ECX:4"
+        ],
+        [
+          "pMessage",
+          "EDX:4"
+        ],
+        [
+          "wMsgSize",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "D2QSQUEUE_Dequeue",
@@ -103,7 +135,21 @@
         "D2QSQueueStrc",
         "uint32_t"
       ],
-      "dh": "1d3f2cc1"
+      "dh": "1d3f2cc1",
+      "paramStorage": [
+        [
+          "pQueue",
+          "ECX:4"
+        ],
+        [
+          "pOutBuffer",
+          "EDX:4"
+        ],
+        [
+          "nMaxSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

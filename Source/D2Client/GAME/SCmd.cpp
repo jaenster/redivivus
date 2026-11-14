@@ -1372,7 +1372,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x0A_RemoveObject(D2GSPacketSrv0x0A * pB
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x0B_UNITCTRL(char * pBytes) {
-    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), (eD2UnitType)(uint8_t)pBytes[1]);
+    int32_t nGuid = *(int32_t*)(pBytes + 2);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nGuid, (eD2UnitType)(uint8_t)pBytes[1]);
     if (pUnit) {
       UNIT::Player::HANDSHAKE_SetClientPlayerUnit(pUnit);
     }
@@ -2514,7 +2515,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x91_WELCOME_BACK(D2GSPacketSrv0x91 * pB
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x92_CLEARINVENTORY(char * pBytes) {
-    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), (eD2UnitType)(uint8_t)pBytes[1]);
+    int32_t nGuid = *(int32_t*)(pBytes + 2);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nGuid, (eD2UnitType)(uint8_t)pBytes[1]);
     if (!pUnit) {
       return;
     }

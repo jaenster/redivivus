@@ -26,7 +26,21 @@
         "eD2PlayerAnimMode",
         "eD2UnitType"
       ],
-      "dh": "409ac26c"
+      "dh": "409ac26c",
+      "paramStorage": [
+        [
+          "nAnimMode",
+          "EDX:4"
+        ],
+        [
+          "bMovePlayerUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_OnStatChanged",
@@ -60,7 +74,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "94ef58ce"
+      "dh": "94ef58ce",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwStatIdAndSubIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "JoinRoomSetup",
@@ -104,7 +144,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "490bda3e"
+      "dh": "490bda3e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_FreePlayerUnit",
@@ -136,7 +194,13 @@
         "D2LightMapStrc",
         "D2UnitStrc"
       ],
-      "dh": "b43f59b4"
+      "dh": "b43f59b4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_UpdateUnitRoomPops",
@@ -163,7 +227,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3876e345"
+      "dh": "3876e345",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_OnPlayerEnterRoom",
@@ -196,7 +266,13 @@
         "eD2LevelId",
         "uint32_t"
       ],
-      "dh": "a4785141"
+      "dh": "a4785141",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_ResolvePlayerCollision",
@@ -228,7 +304,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "2fd11228"
+      "dh": "2fd11228",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_HandlePlayerDeath",
@@ -253,7 +335,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "fe000619"
+      "dh": "fe000619",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_PlayIndexedUnitSound",
@@ -276,7 +364,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "97cf08f9"
+      "dh": "97cf08f9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSoundIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CheckSkillUsability",
@@ -304,7 +402,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "263b3b6e"
+      "dh": "263b3b6e",
+      "paramStorage": [
+        [
+          "pnUsabilityCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "ppSkill",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_ValidateSkillMessage",
@@ -329,7 +441,21 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "6c51bfdb"
+      "dh": "6c51bfdb",
+      "paramStorage": [
+        [
+          "pnUsabilityCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pServerMessageHandle",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_ApplyCurrentSkillFlags",
@@ -354,7 +480,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "152aaf3d"
+      "dh": "152aaf3d",
+      "paramStorage": [
+        [
+          "bIsLocalPlayer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "PlayerMessage",
@@ -421,7 +557,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ad0e3e31"
+      "dh": "ad0e3e31",
+      "paramStorage": [
+        [
+          "nMessageType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMessage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eNeutralMode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_ExecuteModeBasedAction",
@@ -446,7 +600,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ef22ffe0"
+      "dh": "ef22ffe0",
+      "paramStorage": [
+        [
+          "nActionContext",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnderMouse",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_MovePlayerToPosition",
@@ -473,7 +637,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "45e806bf"
+      "dh": "45e806bf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "nX",
+          "CX:2"
+        ],
+        [
+          "nY",
+          "AX:2"
+        ],
+        [
+          "nSkillActionMode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_InteractWithObject",
@@ -511,7 +693,17 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "7f257206"
+      "dh": "7f257206",
+      "paramStorage": [
+        [
+          "nObjectGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnderMouse",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_InteractWithUnit",
@@ -534,7 +726,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4fd8d08a"
+      "dh": "4fd8d08a",
+      "paramStorage": [
+        [
+          "nTargetGUID",
+          "EDI:4"
+        ],
+        [
+          "pUnderMouse",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_InteractAtTarget",
@@ -555,7 +757,13 @@
         "D2UnderMouseStrc",
         "D2UnitStrc"
       ],
-      "dh": "f2109465"
+      "dh": "f2109465",
+      "paramStorage": [
+        [
+          "pTargetUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CheckAuraRange",
@@ -582,7 +790,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9dd6d493"
+      "dh": "9dd6d493",
+      "paramStorage": [
+        [
+          "pSkill",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pnMinX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnMinY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_ExecuteSkillWithAura",
@@ -612,7 +838,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2864d3ea"
+      "dh": "2864d3ea",
+      "paramStorage": [
+        [
+          "nTargetGUID",
+          "EAX:4"
+        ],
+        [
+          "eTargetUnitType",
+          "ECX:4"
+        ],
+        [
+          "pUnderMouse",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_ExecuteSkillAtUnit",
@@ -646,7 +886,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cc3ac78c"
+      "dh": "cc3ac78c",
+      "paramStorage": [
+        [
+          "eTargetUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnderMouse",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CheckPendingInteraction",
@@ -667,7 +921,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1c572337"
+      "dh": "1c572337",
+      "paramStorage": [
+        [
+          "nTargetType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetGUID",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_InteractWithUnitByType",
@@ -711,7 +975,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "af704f22"
+      "dh": "af704f22",
+      "paramStorage": [
+        [
+          "eTargetUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnderMouse",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_ValidateSkillAction",
@@ -746,7 +1024,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "910261c9"
+      "dh": "910261c9",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_ContinuePlayerMovement",
@@ -768,7 +1052,13 @@
         "D2UnitStrc",
         "eD2PlayerAnimMode"
       ],
-      "dh": "85310149"
+      "dh": "85310149",
+      "paramStorage": [
+        [
+          "pMouse",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CalculateMovementTarget",
@@ -795,7 +1085,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ba7ed499"
+      "dh": "ba7ed499",
+      "paramStorage": [
+        [
+          "pPlayerUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMouseCtx",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_IsPassiveSkill",
@@ -817,7 +1117,13 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "7dcab6b8"
+      "dh": "7dcab6b8",
+      "paramStorage": [
+        [
+          "pSkill",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_ExecuteSkillCommand",
@@ -863,7 +1169,13 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "2c239c66"
+      "dh": "2c239c66",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_ClearRecursionClick",
@@ -899,7 +1211,13 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "9c5d9fbe"
+      "dh": "9c5d9fbe",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleLeftClickRepeat",
@@ -927,7 +1245,13 @@
         "D2UnderMouseStrc",
         "D2UnitStrc"
       ],
-      "dh": "1f224281"
+      "dh": "1f224281",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "WalkToCoordOrUnit",
@@ -959,7 +1283,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "69926bb3"
+      "dh": "69926bb3",
+      "paramStorage": [
+        [
+          "pMouse",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleLeftClickWithPet",
@@ -986,7 +1316,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ae357b4e"
+      "dh": "ae357b4e",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ClickMapRightSkill",
@@ -1012,7 +1348,13 @@
         "D2UnderMouseStrc",
         "eD2Skills"
       ],
-      "dh": "c07a86da"
+      "dh": "c07a86da",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleRightClickRepeat",
@@ -1038,7 +1380,13 @@
         "D2UnderMouseStrc",
         "eD2Skills"
       ],
-      "dh": "6640579c"
+      "dh": "6640579c",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleRightClickWithPet",
@@ -1064,7 +1412,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ca52f26b"
+      "dh": "ca52f26b",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "ClickMap",
@@ -1100,7 +1454,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a36b8d0f"
+      "dh": "a36b8d0f",
+      "paramStorage": [
+        [
+          "clickType",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "mouseEventFlags",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "PLAYER_GetWeaponTypeForAnimation",
@@ -1126,7 +1498,17 @@
         "eD2BodyLoc",
         "uint8_t"
       ],
-      "dh": "9c19144c"
+      "dh": "9c19144c",
+      "paramStorage": [
+        [
+          "pPlayerUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_HandlePlayerDeath",
@@ -1182,7 +1564,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "246fcb7b"
+      "dh": "246fcb7b",
+      "paramStorage": [
+        [
+          "pDeathMsg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_GetAppearanceBytes",
@@ -1203,7 +1591,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "5efe1969"
+      "dh": "5efe1969",
+      "paramStorage": [
+        [
+          "pAppearanceOut",
+          "ECX:4"
+        ],
+        [
+          "nBufSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_GetMercAppearanceBytes",
@@ -1224,7 +1622,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "bff0f62e"
+      "dh": "bff0f62e",
+      "paramStorage": [
+        [
+          "pAppearanceOut",
+          "ECX:4"
+        ],
+        [
+          "nBufSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_WarpPlayerAndContinueMove",
@@ -1252,7 +1660,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "291c3424"
+      "dh": "291c3424",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nNewX",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nNewY",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "CLIENT_CancelRunAndWalk",
@@ -1294,7 +1720,13 @@
         "eD2PlayerAnimMode",
         "uint32_t"
       ],
-      "dh": "00a75d1d"
+      "dh": "00a75d1d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_ProcessPlayerModeSimulation",
@@ -1354,7 +1786,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "52072c94"
+      "dh": "52072c94",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004637f0",
@@ -1373,7 +1811,13 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "c09435ae"
+      "dh": "c09435ae",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_GetMonsterOwnerId",
@@ -1392,7 +1836,13 @@
         "D2UnitStrc",
         "WCHAR"
       ],
-      "dh": "f420ae8d"
+      "dh": "f420ae8d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_PlaceUnitInRoom",
@@ -1415,7 +1865,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "59ff6234"
+      "dh": "59ff6234",
+      "paramStorage": [
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nY",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_UpdateMonsterAllegiance",
@@ -1439,7 +1907,21 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "6840e41f"
+      "dh": "6840e41f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "byOldAllegiance",
+          "DL:1"
+        ],
+        [
+          "byNewAllegiance",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "CLIENT_ClearServerAndClientUnitLists",
@@ -1485,7 +1967,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d78f8abd"
+      "dh": "d78f8abd",
+      "paramStorage": [
+        [
+          "pUnitHashTable",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HANDSHAKE_SetClientPlayerUnit",
@@ -1507,7 +1995,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "6ea725b7"
+      "dh": "6ea725b7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetPlayerUnit_UI",

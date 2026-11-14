@@ -21,7 +21,13 @@
         "PFN_CrtExceptionFilter",
         "int32_t"
       ],
-      "dh": "958ee500"
+      "dh": "958ee500",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -42,7 +48,17 @@
         "ButtonWrapper",
         "uint32_t"
       ],
-      "dh": "cda94cc5"
+      "dh": "cda94cc5",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseWheel",
@@ -61,7 +77,17 @@
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "c288f966"
+      "dh": "c288f966",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseDown",
@@ -80,7 +106,17 @@
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "f28086bf"
+      "dh": "f28086bf",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseUp",
@@ -99,7 +135,17 @@
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "8b0e7031"
+      "dh": "8b0e7031",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseMove",
@@ -118,7 +164,17 @@
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "d01598ca"
+      "dh": "d01598ca",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -136,7 +192,13 @@
       "usedTypes": [
         "ButtonWrapper"
       ],
-      "dh": "f375c6b3"
+      "dh": "f375c6b3",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "OnChar",
@@ -155,7 +217,17 @@
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "347b9530"
+      "dh": "347b9530",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnDownArrow",
@@ -174,7 +246,17 @@
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "56f04f52"
+      "dh": "56f04f52",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnUpArrow",
@@ -193,7 +275,17 @@
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "8900de0a"
+      "dh": "8900de0a",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnRightArrow",
@@ -212,7 +304,17 @@
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "74253d64"
+      "dh": "74253d64",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnLeftArrow",
@@ -231,7 +333,17 @@
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "ebadd74c"
+      "dh": "ebadd74c",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetValue",
@@ -249,7 +361,13 @@
       "usedTypes": [
         "ButtonWrapper"
       ],
-      "dh": "c5367d04"
+      "dh": "c5367d04",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "SetAccelerator",
@@ -267,7 +385,17 @@
       "usedTypes": [
         "ButtonWrapper"
       ],
-      "dh": "81c64faf"
+      "dh": "81c64faf",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "bEnable",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Constructor",
@@ -290,7 +418,29 @@
         "int32_t",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "8c7b8d26"
+      "dh": "8c7b8d26",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nButtonKind",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnOnActivate",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

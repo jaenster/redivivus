@@ -109,7 +109,21 @@
         "pfnSymGetModuleInfo64",
         "uint32_t"
       ],
-      "dh": "32e71d8d"
+      "dh": "32e71d8d",
+      "paramStorage": [
+        [
+          "dwQueryAddr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pdwModuleBase",
+          "EDI:4"
+        ],
+        [
+          "szModuleName",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GetSymbolNameForAddress",
@@ -135,7 +149,21 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "503c5336"
+      "dh": "503c5336",
+      "paramStorage": [
+        [
+          "dwQueryAddr",
+          "EDI:4"
+        ],
+        [
+          "szSymbolName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pdwSymDisplacement",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSourceLineForAddress",
@@ -158,7 +186,21 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "6c368b89"
+      "dh": "6c368b89",
+      "paramStorage": [
+        [
+          "dwQueryAddr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFileName",
+          "EDI:4"
+        ],
+        [
+          "pdwLineNumber",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "EnumerateLoadedModules",
@@ -177,7 +219,17 @@
       "usedTypes": [
         "pfnEHHandlerRoutine"
       ],
-      "dh": "d7204888"
+      "dh": "d7204888",
+      "paramStorage": [
+        [
+          "pfnModuleCallback",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUserContext",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetSymbolSearchPath",
@@ -198,7 +250,13 @@
       "usedTypes": [
         "pfnEHHandlerRoutine"
       ],
-      "dh": "c1c84af7"
+      "dh": "c1c84af7",
+      "paramStorage": [
+        [
+          "szSearchPath",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FindSymbolFile",
@@ -219,7 +277,45 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "5924df61"
+      "dh": "5924df61",
+      "paramStorage": [
+        [
+          "pfnFindCallback",
+          "ECX:4"
+        ],
+        [
+          "szSearchPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFileName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwTimestamp",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nThree",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "szFoundFile",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pUserContext",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "LoadModuleSymbols",
@@ -240,7 +336,33 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "afa2ed50"
+      "dh": "afa2ed50",
+      "paramStorage": [
+        [
+          "hFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szImageName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szModuleName",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwBaseOfDll",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwSizeOfDll",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwBaseHigh",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "UnloadModuleSymbols",
@@ -261,7 +383,17 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "d74eedb1"
+      "dh": "d74eedb1",
+      "paramStorage": [
+        [
+          "dwBaseOfDll",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwBaseHigh",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "WalkStackFrame",
@@ -281,7 +413,21 @@
       "usedTypes": [
         "pfnEHHandlerRoutine"
       ],
-      "dh": "6b071c92"
+      "dh": "6b071c92",
+      "paramStorage": [
+        [
+          "hThread",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStackFrame",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContextRecord",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "WriteCrashDumpViaThread",
@@ -321,7 +467,13 @@
         "WriteCrashDumpViaThread",
         "SetEvent"
       ],
-      "dh": "7b7220cc"
+      "dh": "7b7220cc",
+      "paramStorage": [
+        [
+          "lpThreadParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CrashDumpWriterThread",
@@ -346,7 +498,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b451183d"
+      "dh": "b451183d",
+      "paramStorage": [
+        [
+          "szDumpPath",
+          "ECX:4"
+        ],
+        [
+          "pExceptionPtrs",
+          "EDX:4"
+        ],
+        [
+          "nEventHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwThreadId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "InitializeDebugSubsystem",
@@ -380,7 +550,17 @@
         "_MODULEINFO",
         "uint32_t"
       ],
-      "dh": "89244eb7"
+      "dh": "89244eb7",
+      "paramStorage": [
+        [
+          "ppBaseOfDll",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pdwSizeOfImage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CleanupDebugSymbols",
@@ -413,7 +593,13 @@
       "calledFunctions": [
         "ZeroStruct36Bytes"
       ],
-      "dh": "c815976c"
+      "dh": "c815976c",
+      "paramStorage": [
+        [
+          "pStruct",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ZeroStruct16Bytes",
@@ -428,7 +614,13 @@
       "calledFunctions": [
         "ZeroStruct16Bytes"
       ],
-      "dh": "9bd7853a"
+      "dh": "9bd7853a",
+      "paramStorage": [
+        [
+          "pStruct",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ZeroStruct16BytesDuplicate",
@@ -443,7 +635,13 @@
       "calledFunctions": [
         "ZeroStruct16BytesDuplicate"
       ],
-      "dh": "e5d5ef96"
+      "dh": "e5d5ef96",
+      "paramStorage": [
+        [
+          "pStruct",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSTXT_ZeroOutFields",
@@ -461,7 +659,13 @@
       "usedTypes": [
         "D2SkillsTxt"
       ],
-      "dh": "6ce55a66"
+      "dh": "6ce55a66",
+      "paramStorage": [
+        [
+          "pSkillsTxt",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CompareUintDescending",
@@ -476,7 +680,17 @@
       "calledFunctions": [
         "CompareUintDescending"
       ],
-      "dh": "45ef80b3"
+      "dh": "45ef80b3",
+      "paramStorage": [
+        [
+          "pLeft",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRight",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00402c30",
@@ -495,7 +709,17 @@
         "D2FogDebugModuleEntryStrc",
         "D2FogDebugModuleTableStrc"
       ],
-      "dh": "10c4a823"
+      "dh": "10c4a823",
+      "paramStorage": [
+        [
+          "pSrcEntry",
+          "ECX:4"
+        ],
+        [
+          "pTable",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FormatModuleDebugString",
@@ -516,7 +740,17 @@
         "D2FogDebugModuleEntryStrc",
         "uint32_t"
       ],
-      "dh": "ac5e55d4"
+      "dh": "ac5e55d4",
+      "paramStorage": [
+        [
+          "szText",
+          "EDI:4"
+        ],
+        [
+          "pModule",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "FormatAddressDebugString",
@@ -537,7 +771,21 @@
         "D2CrashFrameStrc",
         "uint32_t"
       ],
-      "dh": "7edbf882"
+      "dh": "7edbf882",
+      "paramStorage": [
+        [
+          "pAddrInfo",
+          "ECX:4"
+        ],
+        [
+          "pSymInfo",
+          "EDX:4"
+        ],
+        [
+          "szOutput",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EnumerateAndDumpAllFunctions",
@@ -566,7 +814,17 @@
         "fnCrashOutputLine",
         "uint32_t"
       ],
-      "dh": "22408e30"
+      "dh": "22408e30",
+      "paramStorage": [
+        [
+          "pOutputCallback",
+          "ECX:4"
+        ],
+        [
+          "pReport",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "InitializeDebugInfoTable",
@@ -587,7 +845,13 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "8378b94e"
+      "dh": "8378b94e",
+      "paramStorage": [
+        [
+          "pTable",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CRASH_DumpThreadContext",
@@ -611,7 +875,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "852f149b"
+      "dh": "852f149b",
+      "paramStorage": [
+        [
+          "dwThreadId",
+          "ECX:4"
+        ],
+        [
+          "pContext",
+          "EDX:4"
+        ],
+        [
+          "pOutputCallback",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pReport",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIncludeThreadName",
+          "Stack[0xc]:1"
+        ],
+        [
+          "bIncludeStackInfo",
+          "Stack[0x10]:1"
+        ],
+        [
+          "nMaxFrames",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "CRASH_FormatStackTrace",
@@ -639,7 +933,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "459cc8d0"
+      "dh": "459cc8d0",
+      "paramStorage": [
+        [
+          "dwThreadId",
+          "ECX:4"
+        ],
+        [
+          "aFrameAddrs",
+          "EDX:4"
+        ],
+        [
+          "nNumFrames",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutputCallback",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pReport",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bIncludeThreadName",
+          "Stack[0x10]:1"
+        ],
+        [
+          "bIncludeStackInfo",
+          "Stack[0x14]:1"
+        ]
+      ]
     },
     {
       "name": "DEBUG_UnloadStackCrawlDbgHelp",
@@ -676,7 +1000,13 @@
       "usedTypes": [
         "CONTEXT"
       ],
-      "dh": "651580db"
+      "dh": "651580db",
+      "paramStorage": [
+        [
+          "hHandle",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSourceLineWithRetry",
@@ -691,7 +1021,25 @@
       "calledFunctions": [
         "GetSourceLineWithRetry"
       ],
-      "dh": "1f4e47e9"
+      "dh": "1f4e47e9",
+      "paramStorage": [
+        [
+          "hProcess",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAddress",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pdwDisplacement",
+          "EDI:4"
+        ],
+        [
+          "pLine",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "FOG_FreeModuleList",
@@ -710,7 +1058,13 @@
       "usedTypes": [
         "D2FogModuleNodeStrc"
       ],
-      "dh": "52dc91a4"
+      "dh": "52dc91a4",
+      "paramStorage": [
+        [
+          "pModuleList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "EnumerateModulesToolhelp32",
@@ -737,7 +1091,13 @@
         "pfnModule32Next",
         "uint32_t"
       ],
-      "dh": "2e03cee7"
+      "dh": "2e03cee7",
+      "paramStorage": [
+        [
+          "dwProcessId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EnumerateModulesPsapi",
@@ -766,7 +1126,13 @@
         "pfnGetModuleInformation",
         "uint32_t"
       ],
-      "dh": "e4bd3c9b"
+      "dh": "e4bd3c9b",
+      "paramStorage": [
+        [
+          "hProcess",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EnumerateAndLogModules",
@@ -788,7 +1154,17 @@
         "D2FogModuleNodeStrc",
         "uint32_t"
       ],
-      "dh": "5ba47d63"
+      "dh": "5ba47d63",
+      "paramStorage": [
+        [
+          "hProcess",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwProcessId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "FindModuleContainingAddress",
@@ -807,7 +1183,17 @@
         "D2FogModuleNodeStrc",
         "uint32_t"
       ],
-      "dh": "cb1ff8c1"
+      "dh": "cb1ff8c1",
+      "paramStorage": [
+        [
+          "nAddress",
+          "ECX:4"
+        ],
+        [
+          "pModuleList",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DumpAnnotatedStackMemory",
@@ -840,7 +1226,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "08c8263e"
+      "dh": "08c8263e",
+      "paramStorage": [
+        [
+          "hSymHandle",
+          "ECX:4"
+        ],
+        [
+          "pContext",
+          "EDX:4"
+        ],
+        [
+          "pModuleListHead",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LoadSymbolsForAllModules",
@@ -862,7 +1262,17 @@
         "D2FogModuleNodeStrc",
         "uint32_t"
       ],
-      "dh": "13ad498d"
+      "dh": "13ad498d",
+      "paramStorage": [
+        [
+          "hProcess",
+          "EBX:4"
+        ],
+        [
+          "dwProcessId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FILETOOLS_GetExecutableFolderPath",
@@ -880,7 +1290,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "07e3bfcf"
+      "dh": "07e3bfcf",
+      "paramStorage": [
+        [
+          "lpFilename",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BuildSymbolSearchPath",
@@ -902,7 +1322,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "fbdf9452"
+      "dh": "fbdf9452",
+      "paramStorage": [
+        [
+          "szSearchPath",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "COMPRESS_Implode",
@@ -921,7 +1347,29 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "8430011d"
+      "dh": "8430011d",
+      "paramStorage": [
+        [
+          "pAddress",
+          "ECX:4"
+        ],
+        [
+          "szModulePath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnSectionIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppSectionOffset",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBufferSize",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "InitializeSymbolsWithRefcount",
@@ -961,7 +1409,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "8adf3073"
+      "dh": "8adf3073",
+      "paramStorage": [
+        [
+          "bForceCleanup",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QuickStackWalkWithSymbols",
@@ -993,7 +1447,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "296e68c9"
+      "dh": "296e68c9",
+      "paramStorage": [
+        [
+          "szSearchPath",
+          "ECX:4"
+        ],
+        [
+          "hProcess",
+          "EDX:4"
+        ],
+        [
+          "pContext",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FullStackWalkWithAnnotations",
@@ -1032,7 +1500,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "70218551"
+      "dh": "70218551",
+      "paramStorage": [
+        [
+          "hThread",
+          "ECX:4"
+        ],
+        [
+          "pContext",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "WriteCrashDump",
@@ -1060,7 +1538,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "51f02a72"
+      "dh": "51f02a72",
+      "paramStorage": [
+        [
+          "dwHeader0",
+          "ECX:4"
+        ],
+        [
+          "dwHeader1",
+          "EDX:4"
+        ],
+        [
+          "dwRecordType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDwordCount",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pData",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "LoadPreviousCrashDump",
@@ -1092,7 +1592,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1e8116e5"
+      "dh": "1e8116e5",
+      "paramStorage": [
+        [
+          "pOutBuffer",
+          "ECX:4"
+        ],
+        [
+          "pnBufferSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "HandleExceptionWithStackDump",
@@ -1112,7 +1622,17 @@
       "usedTypes": [
         "_EXCEPTION_POINTERS"
       ],
-      "dh": "d625977f"
+      "dh": "d625977f",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pExceptionPointers",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_LoadStackCrawlDbgHelp",
@@ -1151,7 +1671,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "31aaadf4"
+      "dh": "31aaadf4",
+      "paramStorage": [
+        [
+          "szCategory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca575",
@@ -1173,7 +1699,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "7a02f1d7"
+      "dh": "7a02f1d7",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca595",
@@ -1195,7 +1739,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "8ca3dc62"
+      "dh": "8ca3dc62",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca5b5",
@@ -1217,7 +1779,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "7287dad6"
+      "dh": "7287dad6",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca5d5",
@@ -1239,7 +1819,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "e58c422f"
+      "dh": "e58c422f",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca5f5",
@@ -1261,7 +1859,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "fc17fbcf"
+      "dh": "fc17fbcf",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca615",
@@ -1283,7 +1899,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "f33015a7"
+      "dh": "f33015a7",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca635",
@@ -1305,7 +1939,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "350668b2"
+      "dh": "350668b2",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca655",
@@ -1327,7 +1979,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "575eb913"
+      "dh": "575eb913",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca675",
@@ -1349,7 +2019,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "d454976f"
+      "dh": "d454976f",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca695",
@@ -1371,7 +2059,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "00272bc2"
+      "dh": "00272bc2",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca6c5",
@@ -1393,7 +2099,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "9cf50bf4"
+      "dh": "9cf50bf4",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

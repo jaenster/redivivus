@@ -42,7 +42,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0595ff27"
+      "dh": "0595ff27",
+      "paramStorage": [
+        [
+          "dwBits",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Return_Unref_00409c70",
@@ -186,7 +192,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f219aafa"
+      "dh": "f219aafa",
+      "paramStorage": [
+        [
+          "findex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MATH_sinTable_f32_Lookup",
@@ -204,7 +216,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "31e15c90"
+      "dh": "31e15c90",
+      "paramStorage": [
+        [
+          "findex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "THREADING_DeleteCriticalSection_Thunk",
@@ -219,7 +237,13 @@
       "calledFunctions": [
         "THREADING_DeleteCriticalSection_Thunk"
       ],
-      "dh": "8d199925"
+      "dh": "8d199925",
+      "paramStorage": [
+        [
+          "pElement",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb70",
@@ -234,7 +258,13 @@
       "calledFunctions": [
         "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb70"
       ],
-      "dh": "a6b48283"
+      "dh": "a6b48283",
+      "paramStorage": [
+        [
+          "pElement",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb80",
@@ -249,7 +279,13 @@
       "calledFunctions": [
         "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb80"
       ],
-      "dh": "c1efa03c"
+      "dh": "c1efa03c",
+      "paramStorage": [
+        [
+          "pElement",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca548",
@@ -271,7 +307,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "28e696a1"
+      "dh": "28e696a1",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

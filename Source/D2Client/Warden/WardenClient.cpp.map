@@ -21,7 +21,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "94240921"
+      "dh": "94240921",
+      "paramStorage": [
+        [
+          "pState",
+          "ECX:4"
+        ],
+        [
+          "pData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLen",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_CheckSignatureMagic",
@@ -41,7 +55,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "91d2c508"
+      "dh": "91d2c508",
+      "paramStorage": [
+        [
+          "nDataLen",
+          "ECX:4"
+        ],
+        [
+          "nTotalLen",
+          "EDX:4"
+        ],
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnSigOffset",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_ComputeModuleHash",
@@ -67,7 +99,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cd9f90f2"
+      "dh": "cd9f90f2",
+      "paramStorage": [
+        [
+          "szModuleName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pHashOut",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSplitOffset",
+          "ESI:4"
+        ],
+        [
+          "nTotalLen",
+          "EAX:4"
+        ],
+        [
+          "pModuleData",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_VerifyModuleSignature",
@@ -102,7 +156,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bfd856ba"
+      "dh": "bfd856ba",
+      "paramStorage": [
+        [
+          "nKeySize",
+          "ECX:4"
+        ],
+        [
+          "szModuleName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pExponent",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nExponentLen",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nSigDataLen",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nTotalLen",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0047fbc0",
@@ -117,7 +205,13 @@
       "calledFunctions": [
         "Unreferenced_0047fbc0"
       ],
-      "dh": "611bc381"
+      "dh": "611bc381",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_CbAllocModuleStruct",
@@ -136,7 +230,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "d2766bb0"
+      "dh": "d2766bb0",
+      "paramStorage": [
+        [
+          "nSize",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_CbFreeModuleStruct",
@@ -152,7 +252,13 @@
         "WARDEN_CbFreeModuleStruct",
         "SMemFree"
       ],
-      "dh": "ea854ab9"
+      "dh": "ea854ab9",
+      "paramStorage": [
+        [
+          "pModuleStruct",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_DestroyModuleObject",
@@ -172,7 +278,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "048e9419"
+      "dh": "048e9419",
+      "paramStorage": [
+        [
+          "ppModule",
+          "ECX:4"
+        ],
+        [
+          "bFreeStruct",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "WARDEN_DecryptAndLoadModule",
@@ -205,7 +321,21 @@
         "uint32_t",
         "uint32_t *"
       ],
-      "dh": "6d37708a"
+      "dh": "6d37708a",
+      "paramStorage": [
+        [
+          "pSrcData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRc4Key",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_ResolveAndLoadModule",
@@ -228,7 +358,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6f66a3d6"
+      "dh": "6f66a3d6",
+      "paramStorage": [
+        [
+          "pRc4Key",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pModuleHash",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_DownloadModule",
@@ -247,7 +387,21 @@
         "_FILETIME",
         "uint32_t"
       ],
-      "dh": "0da07f6e"
+      "dh": "0da07f6e",
+      "paramStorage": [
+        [
+          "szKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SendPacket",
@@ -267,7 +421,21 @@
         "WardenClient",
         "uint32_t"
       ],
-      "dh": "1765ada0"
+      "dh": "1765ada0",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLen",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CheckModule",
@@ -287,7 +455,21 @@
         "WardenClient",
         "uint8_t"
       ],
-      "dh": "507fbad8"
+      "dh": "507fbad8",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pModuleHash",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRc4Key",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "LoadModule",
@@ -310,7 +492,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "16ba232e"
+      "dh": "16ba232e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pModuleHash",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "AllocateMemory",
@@ -330,7 +530,17 @@
         "WardenClient",
         "uint32_t"
       ],
-      "dh": "82648d12"
+      "dh": "82648d12",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreeMemory",
@@ -349,7 +559,17 @@
       "usedTypes": [
         "WardenClient"
       ],
-      "dh": "f3d9e129"
+      "dh": "f3d9e129",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMem",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetRC4Data",
@@ -371,7 +591,21 @@
         "WardenClient",
         "uint32_t"
       ],
-      "dh": "b33a7256"
+      "dh": "b33a7256",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetRC4Data",
@@ -392,7 +626,21 @@
         "WardenClient",
         "uint32_t"
       ],
-      "dh": "1243b69d"
+      "dh": "1243b69d",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pDest",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Constructor",
@@ -410,7 +658,13 @@
       "usedTypes": [
         "WardenClient"
       ],
-      "dh": "add180fb"
+      "dh": "add180fb",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "WARDEN_UnloadActiveModule",
@@ -451,7 +705,13 @@
         "D2WardenModuleObjectStrc",
         "D2WardenModuleStrc"
       ],
-      "dh": "ab3014e8"
+      "dh": "ab3014e8",
+      "paramStorage": [
+        [
+          "dwModuleParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_HandleServerPacket",
@@ -470,7 +730,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "bba2ed75"
+      "dh": "bba2ed75",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ],
+        [
+          "nPacketLen",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_Tick",
@@ -489,7 +759,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "95d0e7d7"
+      "dh": "95d0e7d7",
+      "paramStorage": [
+        [
+          "dwTickArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_Cleanup",
@@ -529,7 +805,13 @@
         "WARDEN_ResolveAndLoadModule",
         "WARDEN_ActivatePendingModule"
       ],
-      "dh": "82b90197"
+      "dh": "82b90197",
+      "paramStorage": [
+        [
+          "dwModuleParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_SetGlobalFlag",
@@ -544,7 +826,13 @@
       "calledFunctions": [
         "WARDEN_SetGlobalFlag"
       ],
-      "dh": "2edf18d6"
+      "dh": "2edf18d6",
+      "paramStorage": [
+        [
+          "dwParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_FreeModuleLibraries",
@@ -559,7 +847,13 @@
       "calledFunctions": [
         "WARDEN_FreeModuleLibraries"
       ],
-      "dh": "da0ad0cb"
+      "dh": "da0ad0cb",
+      "paramStorage": [
+        [
+          "ppWardenModule",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

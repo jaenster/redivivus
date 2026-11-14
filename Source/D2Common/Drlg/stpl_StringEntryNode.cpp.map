@@ -20,7 +20,13 @@
         "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
         "uint32_t"
       ],
-      "dh": "02921d3c"
+      "dh": "02921d3c",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RoundToMultiple",
@@ -38,7 +44,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "c495b1bb"
+      "dh": "c495b1bb",
+      "paramStorage": [
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMultiple",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Assign",
@@ -58,7 +74,13 @@
         "TSLink<StringEntryNode>",
         "uint32_t"
       ],
-      "dh": "8bc3aa66"
+      "dh": "8bc3aa66",
+      "paramStorage": [
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Link",
@@ -78,7 +100,13 @@
         "TSExplicitList<StringEntryNode, -572662307>",
         "TSLink<StringEntryNode>"
       ],
-      "dh": "40df01f2"
+      "dh": "40df01f2",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetLinkOffset",
@@ -98,7 +126,13 @@
         "TSLink<StringEntryNode>",
         "int32_t"
       ],
-      "dh": "28f8d02d"
+      "dh": "28f8d02d",
+      "paramStorage": [
+        [
+          "nLinkOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LinkNode",
@@ -121,7 +155,21 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "2d23fdeb"
+      "dh": "2d23fdeb",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLinkType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pExisting",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "RawNext",
@@ -140,7 +188,13 @@
         "StringEntryNode",
         "TSExplicitList<StringEntryNode, -572662307>"
       ],
-      "dh": "6687ba7b"
+      "dh": "6687ba7b",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkNode",
@@ -162,7 +216,13 @@
         "TSLink<StringEntryNode> *",
         "uint32_t"
       ],
-      "dh": "90837633"
+      "dh": "90837633",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Next",
@@ -182,7 +242,13 @@
         "TSExplicitList<StringEntryNode, -572662307>",
         "intptr_t"
       ],
-      "dh": "abc5d3d4"
+      "dh": "abc5d3d4",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unlink",
@@ -204,7 +270,13 @@
         "TSLink<StringEntryNode> *",
         "intptr_t"
       ],
-      "dh": "550289cb"
+      "dh": "550289cb",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Delete",
@@ -224,7 +296,13 @@
         "StringEntryNode",
         "TSHashTable<StringEntryNode, HASHKEY_STRI>"
       ],
-      "dh": "1d06f53a"
+      "dh": "1d06f53a",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkAll",
@@ -265,7 +343,13 @@
         "TSLink<StringEntryNode>",
         "uint32_t"
       ],
-      "dh": "5282c604"
+      "dh": "5282c604",
+      "paramStorage": [
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CopyConstructor_Unreferenced",
@@ -285,7 +369,17 @@
         "TSLink<StringEntryNode>",
         "uint32_t"
       ],
-      "dh": "4e96a363"
+      "dh": "4e96a363",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Next",
@@ -305,7 +399,13 @@
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
         "intptr_t"
       ],
-      "dh": "5a9fc556"
+      "dh": "5a9fc556",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor",
@@ -351,7 +451,13 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "e7e96464"
+      "dh": "e7e96464",
+      "paramStorage": [
+        [
+          "bUnlinkOnly",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor_Unreferenced",
@@ -373,7 +479,13 @@
         "TSLink<StringEntryNode> *",
         "uint32_t"
       ],
-      "dh": "2654f77b"
+      "dh": "2654f77b",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ChangeLinkOffset",
@@ -393,7 +505,13 @@
         "TSExplicitList<StringEntryNode, -572662307>",
         "int32_t"
       ],
-      "dh": "668b3cec"
+      "dh": "668b3cec",
+      "paramStorage": [
+        [
+          "nLinkOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

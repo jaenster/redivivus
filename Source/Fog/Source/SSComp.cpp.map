@@ -19,7 +19,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "db60a6dc"
+      "dh": "db60a6dc",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "EDX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMPRESS_HeapSort",
@@ -38,7 +52,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "70c51e70"
+      "dh": "70c51e70",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "COMPRESS_BuildHuffmanTree",
@@ -56,7 +80,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ab2e2d04"
+      "dh": "ab2e2d04",
+      "paramStorage": [
+        [
+          "pWeights",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "COMPRESS_BuildHuffmanDecodeTable",
@@ -78,7 +112,13 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "65f8b258"
+      "dh": "65f8b258",
+      "paramStorage": [
+        [
+          "pCodeLengths",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

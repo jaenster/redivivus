@@ -1353,7 +1353,7 @@ void __stdcall SUNITPROXY_UpdateNpcProxiesForAct(::SGAMEDATA * pGame, char nAct,
 
     uint8_t* pNpcEntry = &pNpcArray->pNpc[0].sTrade.bRefillStorePending;
     do {
-      if (pNpcEntry != (uint8_t*)0x7 && pNpcEntry[-5] == nAct && pNpcEntry[-4] == 1 && *(int*)(pNpcEntry - 0xb) == 1 && ((D2NpcTradeStateStrc*)(pNpcEntry - 7))->bStoreFilled == 1) {
+      if (pNpcEntry != (uint8_t*)0x7 && pNpcEntry[-5] == (uint8_t)nAct && pNpcEntry[-4] == 1 && *(int*)(pNpcEntry - 0xb) == 1 && ((D2NpcTradeStateStrc*)(pNpcEntry - 7))->bStoreFilled == 1) {
         if (bResult) {
           pLiveUnit = SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, *(uint32_t*)(pNpcEntry + 0x19));
           if (!pLiveUnit || pLiveUnit->nClassId != *(int*)(pNpcEntry - 0x27)) {

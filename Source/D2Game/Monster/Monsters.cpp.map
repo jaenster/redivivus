@@ -20,7 +20,13 @@
         "D2MonLvlTxt",
         "int32_t"
       ],
-      "dh": "9ae39746"
+      "dh": "9ae39746",
+      "paramStorage": [
+        [
+          "nMonLvlId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_005a0030",
@@ -53,7 +59,13 @@
       "usedTypes": [
         "D2MonUModTxt"
       ],
-      "dh": "9166b458"
+      "dh": "9166b458",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_005a0060",
@@ -89,7 +101,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f1c7dede"
+      "dh": "f1c7dede",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMonTypeFlag",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetUmodConstant",
@@ -107,7 +129,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "217a66f5"
+      "dh": "217a66f5",
+      "paramStorage": [
+        [
+          "nUmodId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetMonUModList",
@@ -126,7 +154,13 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "17dcdd8d"
+      "dh": "17dcdd8d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetNameSeed",
@@ -145,7 +179,13 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "52464604"
+      "dh": "52464604",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CheckMonsterType",
@@ -165,7 +205,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "836682df"
+      "dh": "836682df",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eMonsterType",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SetMonsterDataFlags",
@@ -186,7 +236,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "2563b694"
+      "dh": "2563b694",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nFlagMask",
+          "DX:2"
+        ],
+        [
+          "nFlagValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetBossNo",
@@ -205,7 +269,13 @@
         "D2UnitStrc",
         "int16_t"
       ],
-      "dh": "0b16dd81"
+      "dh": "0b16dd81",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SetMonsterDataField0x26",
@@ -224,7 +294,17 @@
         "D2UnitStrc",
         "int16_t"
       ],
-      "dh": "085b8d74"
+      "dh": "085b8d74",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nBossNo",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "CountActiveUMods",
@@ -243,7 +323,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "e85ddf75"
+      "dh": "e85ddf75",
+      "paramStorage": [
+        [
+          "pUModList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_AddEnchantmentToList",
@@ -263,7 +349,17 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "190ced22"
+      "dh": "190ced22",
+      "paramStorage": [
+        [
+          "byEnchantId",
+          "Stack[0x4]:1"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SetUniqueMonsterType",
@@ -287,7 +383,17 @@
         "eD2LevelId",
         "uint16_t"
       ],
-      "dh": "8e037e56"
+      "dh": "8e037e56",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CheckMonUModList",
@@ -306,7 +412,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "01d636fd"
+      "dh": "01d636fd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_GetBossNo",
@@ -327,7 +439,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "d5d46663"
+      "dh": "d5d46663",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_CanApplyUniqueModifier",
@@ -349,7 +471,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "4d49bd61"
+      "dh": "4d49bd61",
+      "paramStorage": [
+        [
+          "pD2MonUModTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bExpansion",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SelectChampionMod",
@@ -374,7 +510,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "3b75319e"
+      "dh": "3b75319e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MONUMOD_RollRandomModifier",
@@ -400,7 +546,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9394aa55"
+      "dh": "9394aa55",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUsedUModFlags",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGame",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_RollAndAssignUMods",
@@ -431,7 +591,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7bd60994"
+      "dh": "7bd60994",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bResult",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_TransferEnchantments",
@@ -451,7 +625,21 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "736c3d4b"
+      "dh": "736c3d4b",
+      "paramStorage": [
+        [
+          "pDstUnit",
+          "ECX:4"
+        ],
+        [
+          "bAppend",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_SpawnMonsterInternal",
@@ -483,7 +671,41 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "2e557ba2"
+      "dh": "2e557ba2",
+      "paramStorage": [
+        [
+          "nClassId",
+          "EBX:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCoordList",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nGUID",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bSetOrNotUnknown",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_GetMinion1MonstatId",
@@ -502,7 +724,13 @@
         "D2UnitDataMonsterStrc",
         "int32_t"
       ],
-      "dh": "7f313e6b"
+      "dh": "7f313e6b",
+      "paramStorage": [
+        [
+          "pMonData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SpawnMinionsForBoss",
@@ -536,7 +764,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "e2573630"
+      "dh": "e2573630",
+      "paramStorage": [
+        [
+          "pCoordList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMinionCountMin",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMinionCountMax",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "UMOD_DispatchInitFunction",
@@ -555,7 +805,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e65398af"
+      "dh": "e65398af",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nUModId",
+          "EDX:4"
+        ],
+        [
+          "bApply",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UMOD_ApplyEnchantmentsToMonster",
@@ -579,7 +843,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "72dbe5db"
+      "dh": "72dbe5db",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCoordList",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bSpawnMinions",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMinionCountMin",
+          "ECX:4"
+        ],
+        [
+          "nMinionCountMax",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SetElementalDamageFromLevel",
@@ -606,7 +896,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b6f278af"
+      "dh": "b6f278af",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStat1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eStat2",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pGame",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_ApplyAmplifyDamageCurse",
@@ -634,7 +946,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3ba7447b"
+      "dh": "3ba7447b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAttacker",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDuration",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_OnDeathAmplifyDamageAura",
@@ -658,7 +988,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "716c2f63"
+      "dh": "716c2f63",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bShouldTrigger",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_OnDeathScheduleDelayed",
@@ -679,7 +1027,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "e36cde7a"
+      "dh": "e36cde7a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bShouldTrigger",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_CorpseExplode",
@@ -718,7 +1084,25 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "ff4ad3bd"
+      "dh": "ff4ad3bd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnused2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_CorpseExplodeFixed",
@@ -744,7 +1128,25 @@
         "SGAMEDATA",
         "eD2UnitType"
       ],
-      "dh": "07a5c406"
+      "dh": "07a5c406",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_ShadowDeathNova",
@@ -772,7 +1174,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "dce33d7c"
+      "dh": "dce33d7c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bShouldTrigger",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_LightningUniqueDeathBolts",
@@ -800,7 +1220,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "d38dda50"
+      "dh": "d38dda50",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bShouldTrigger",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_LightningDeathIfNotRunning",
@@ -821,7 +1259,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "1d5ec52f"
+      "dh": "1d5ec52f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bShouldTrigger",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_DeathMissileRing",
@@ -845,7 +1301,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "04b7a2ae"
+      "dh": "04b7a2ae",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bShouldTrigger",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_DeathPoisonCloud",
@@ -870,7 +1344,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "afc1f3f7"
+      "dh": "afc1f3f7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_KillWithMinions",
@@ -894,7 +1386,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "16691131"
+      "dh": "16691131",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_OnDeathKillOwnerAndMinions",
@@ -919,7 +1425,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "7028aa47"
+      "dh": "7028aa47",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UMOD_AddBaseDamageBonus",
@@ -941,7 +1465,25 @@
         "D2StatListExStrc",
         "D2UnitStrc"
       ],
-      "dh": "0d3bb266"
+      "dh": "0d3bb266",
+      "paramStorage": [
+        [
+          "dwUnused1",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused3",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_ScaleMissileDamageByOwner",
@@ -963,7 +1505,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "881583bc"
+      "dh": "881583bc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_BugLightningDeathBolts",
@@ -989,7 +1549,25 @@
         "SGAMEDATA",
         "eD2UnitType"
       ],
-      "dh": "56e58ca9"
+      "dh": "56e58ca9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UMOD_SetRandomElementalDamage",
@@ -1011,7 +1589,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "ab1bf3da"
+      "dh": "ab1bf3da",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bShouldTrigger",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UMOD_SetRandomElementalForMissile",
@@ -1032,7 +1628,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "e8577d2b"
+      "dh": "e8577d2b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bShouldTrigger",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_StealPotionFromBelt",
@@ -1073,7 +1687,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6e5aff09"
+      "dh": "6e5aff09",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bShouldTrigger",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_DispatchSpecialDeath",
@@ -1101,7 +1733,25 @@
         "SGAMEDATA",
         "eD2MonsterClassId"
       ],
-      "dh": "6242e636"
+      "dh": "6242e636",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_QueenPoisonCloudDeath",
@@ -1127,7 +1777,25 @@
         "SGAMEDATA",
         "eD2UnitType"
       ],
-      "dh": "1003635d"
+      "dh": "1003635d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_MissileSplitOnHit",
@@ -1165,7 +1833,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "646ee04f"
+      "dh": "646ee04f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_ScheduleEventIfRunning",
@@ -1186,7 +1872,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "f2d20de2"
+      "dh": "f2d20de2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bShouldTrigger",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_ScheduleDeathEvent",
@@ -1207,7 +1911,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "10e7bd6a"
+      "dh": "10e7bd6a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nEventId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bShouldTrigger",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_OnDeathTryScheduleRevive",
@@ -1232,7 +1954,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "c8b6b359"
+      "dh": "c8b6b359",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SelfResurrect",
@@ -1269,7 +2009,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bbc6f9b5"
+      "dh": "bbc6f9b5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_ShatterOnDeath",
@@ -1291,7 +2049,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9a56c93d"
+      "dh": "9a56c93d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nUModId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_HandleMinionDeath",
@@ -1318,7 +2094,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c9efa129"
+      "dh": "c9efa129",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UMOD_SetLevelAndAttackRating",
@@ -1350,7 +2144,25 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "8c4e69a4"
+      "dh": "8c4e69a4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_AoEPhysicalDamage",
@@ -1380,7 +2192,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e5db477e"
+      "dh": "e5db477e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_HandleModeTransition",
@@ -1404,7 +2234,25 @@
         "SGAMEDATA",
         "eD2MonsterAnimMode"
       ],
-      "dh": "35c50abf"
+      "dh": "35c50abf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SuicideExplosion",
@@ -1439,7 +2287,25 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "4db2e7e3"
+      "dh": "4db2e7e3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnused2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SpawnWormOnDeath",
@@ -1462,7 +2328,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2d76d470"
+      "dh": "2d76d470",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nUModId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_PeriodicMageThink",
@@ -1486,7 +2370,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "429f4f61"
+      "dh": "429f4f61",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nUModId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bUnique",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_DispatchUniqueModifiers",
@@ -1508,7 +2410,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "202aa29b"
+      "dh": "202aa29b",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMissile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nEvent",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_DispatchUModOnSpawn",
@@ -1528,7 +2448,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a11f5875"
+      "dh": "a11f5875",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_DispatchUModOnDeath",
@@ -1548,7 +2478,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "9870a779"
+      "dh": "9870a779",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_DispatchUModOnHit",
@@ -1569,7 +2509,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "ba96a206"
+      "dh": "ba96a206",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_DispatchUModOnAttack",
@@ -1589,7 +2547,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "0443a096"
+      "dh": "0443a096",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_DispatchUModOnSpecial",
@@ -1609,7 +2577,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "803146e4"
+      "dh": "803146e4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_DispatchUModOnSkill",
@@ -1629,7 +2607,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f364795a"
+      "dh": "f364795a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMissile",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SpawnUniquePack",
@@ -1655,7 +2647,41 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "c4ebb253"
+      "dh": "c4ebb253",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pCoordList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bMostOfTimesTrue",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x10]:2"
+        ],
+        [
+          "nY",
+          "Stack[0x14]:2"
+        ],
+        [
+          "bSetOrNotUnknown",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_SpawnMonster",
@@ -1684,7 +2710,53 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "0c150d48"
+      "dh": "0c150d48",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGUID",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSeed",
+          "Stack[0x14]:2"
+        ],
+        [
+          "bIsChampion",
+          "Stack[0x18]:4"
+        ],
+        [
+          "bIsSuperUnique",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nSuperUniqueId",
+          "Stack[0x20]:2"
+        ],
+        [
+          "mods",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SpawnWithUniqueModifiers",
@@ -1709,7 +2781,37 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "e7f2a8dc"
+      "dh": "e7f2a8dc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUModListSrc",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "InitUmods",
@@ -1731,7 +2833,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a1141cfb"
+      "dh": "a1141cfb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bInitType",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_AddUniqueModifier",
@@ -1757,7 +2877,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "1f1852de"
+      "dh": "1f1852de",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "uMod",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "MONSTER_PromoteToUnique",
@@ -1782,7 +2916,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a590c5aa"
+      "dh": "a590c5aa",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SPAWN_UniqueMonster",
@@ -1830,7 +2974,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c2e5a479"
+      "dh": "c2e5a479",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_IsMonsterUnit",
@@ -1849,7 +3015,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8615c4ef"
+      "dh": "8615c4ef",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_AwardKillExperience",
@@ -1869,7 +3041,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "7f9a3167"
+      "dh": "7f9a3167",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pVictim",
+          "EDX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_CalculateCorpseBombDamage",
@@ -1888,7 +3074,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "c30bc211"
+      "dh": "c30bc211",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nPlayerCount",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_RecalculateCombatStats",
@@ -1927,7 +3123,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3f475d1b"
+      "dh": "3f475d1b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nDifficultyScaling",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_CalculateHitCheck",
@@ -1949,7 +3155,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4033d043"
+      "dh": "4033d043",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nToHitBonusExtra",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_AttackTarget",
@@ -1974,7 +3202,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "1dbb4c3b"
+      "dh": "1dbb4c3b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_CheckSpecialDeathFlag",
@@ -1994,7 +3232,17 @@
         "D2DamageStrc",
         "D2UnitStrc"
       ],
-      "dh": "086fe212"
+      "dh": "086fe212",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ApplyDamageCritical",
@@ -2017,7 +3265,21 @@
         "D2UnitStrc",
         "uint64_t"
       ],
-      "dh": "dc41d603"
+      "dh": "dc41d603",
+      "paramStorage": [
+        [
+          "pAttacker",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pEvent",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_GetHpPercent128",
@@ -2039,7 +3301,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "c4b634df"
+      "dh": "c4b634df",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

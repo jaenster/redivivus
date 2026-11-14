@@ -21,7 +21,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0160d4ea"
+      "dh": "0160d4ea",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "ESI:4"
+        ],
+        [
+          "nMouseY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "WAYPOINT_GetWaypointIndexFromMouse",
@@ -41,7 +51,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a2a18adb"
+      "dh": "a2a18adb",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "EBX:4"
+        ],
+        [
+          "nMouseY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0049c560",
@@ -176,7 +196,13 @@
         "eD2Quests",
         "int32_t"
       ],
-      "dh": "e64c3b65"
+      "dh": "e64c3b65",
+      "paramStorage": [
+        [
+          "nAct",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "WAYPOINT_PopulateList",
@@ -301,7 +327,13 @@
         "D2UIMouseMsgStrc",
         "D2UnitStrc"
       ],
-      "dh": "5dbd560d"
+      "dh": "5dbd560d",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WAYPOINT_SendOpenPacket",
@@ -354,7 +386,13 @@
         "eD2LevelId",
         "uint8_t"
       ],
-      "dh": "789b011b"
+      "dh": "789b011b",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_WaypointMouseUp",
@@ -381,7 +419,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e972a4e2"
+      "dh": "e972a4e2",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_WaypointMouseDown",
@@ -413,7 +457,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ff524706"
+      "dh": "ff524706",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

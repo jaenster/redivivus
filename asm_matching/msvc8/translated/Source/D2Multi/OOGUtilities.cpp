@@ -1107,9 +1107,8 @@ void __fastcall OOGMENU_DisplayGameDetails(D2McpGameInfoStrc * pGameInfo) {
     }
 
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpOogGameListDetailsPanelControl);
-    char* pszCurPlayerName = pGameInfo->szGameDescription;
-    pszCurPlayerName = pszCurPlayerName + strlen(pszCurPlayerName) + 1;
-    if (pszCurPlayerName != pGameInfo->szGameDescription + 1) {
+    char* pszCurPlayerName;
+    if (strlen(pGameInfo->szGameDescription) != 0) {
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, pGameInfo->szGameDescription);
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, "");
     }
@@ -1412,7 +1411,9 @@ void __stdcall OOGUTIL_RefreshGameList() {
     pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpOogGameNameEditControl->sControl);
     if (pwszValue) {
       D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szValue, (uint16_t*)pwszValue, 0x10);
-      if (szValue[0] != ' ' && (int)strlen(szValue) >= 1 && szValue[(int)strlen(szValue) - 1] != ' ') {
+      pszScan = szValue;
+      pszScan = pszScan + strlen(pszScan) + 1;
+      if (szValue[0] != ' ' && (intptr_t)pszScan - (intptr_t)(szValue + 1) >= 1 && szValue[(intptr_t)pszScan - (intptr_t)(szValue + 1) - 1] != ' ') {
         bNameValid = true;
       }
     }
@@ -1455,7 +1456,9 @@ void __stdcall OOGUTIL_RefreshGameList() {
     if (bLevelRestrictionChecked) {
       pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUILevelRestrictionEditBox->sControl);
       D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szValue, (uint16_t*)pwszValue, 3);
-      if (strlen(szValue) == 0 || (nClampedCount = atoi(szValue) , nClampedCount < 0)) {
+      pszScan = szValue;
+      pszScan = pszScan + strlen(pszScan) + 1;
+      if (pszScan == szValue + 1 || (nClampedCount = atoi(szValue) , nClampedCount < 0)) {
         goto update_create_button;
       }
     }

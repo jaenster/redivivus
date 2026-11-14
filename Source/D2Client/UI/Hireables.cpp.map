@@ -83,7 +83,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e71f1eaa"
+      "dh": "e71f1eaa",
+      "paramStorage": [
+        [
+          "nForce",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UnsetHealthBarInitialize",
@@ -120,7 +126,25 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "63efd3f9"
+      "dh": "63efd3f9",
+      "paramStorage": [
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "lwMessage",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GetAndDrawHirelingName",
@@ -144,7 +168,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "03378369"
+      "dh": "03378369",
+      "paramStorage": [
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPetType",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawHirelingNameFromString",
@@ -165,7 +203,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "93e65968"
+      "dh": "93e65968",
+      "paramStorage": [
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawSummonCount",
@@ -192,7 +244,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "70647d49"
+      "dh": "70647d49",
+      "paramStorage": [
+        [
+          "nSummonCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDrawPositionX",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterIcon",
@@ -220,7 +282,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "efb3d0d6"
+      "dh": "efb3d0d6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nSkillId",
+          "EDX:4"
+        ],
+        [
+          "pRosterGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pFlagOut",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_Overlay_PetsAndPartyMembers",
@@ -272,7 +352,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "3d60d119"
+      "dh": "3d60d119",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004934b0",
@@ -324,7 +410,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "99720b97"
+      "dh": "99720b97",
+      "paramStorage": [
+        [
+          "bPlaySound",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HireableHireClick",
@@ -349,7 +441,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "ea25d0fc"
+      "dh": "ea25d0fc",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_HandleHirelingTooltipHoverTimer",
@@ -377,7 +475,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "98b98a29"
+      "dh": "98b98a29",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_ToggleHirelingIconsVisibility",
@@ -426,7 +530,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "f559a51c"
+      "dh": "f559a51c",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_InitializeHirelingIconsUI",
@@ -470,7 +580,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7e4fd036"
+      "dh": "7e4fd036",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ],
+        [
+          "nPetType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawHirelingNameFromUnit",
@@ -494,7 +618,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "444dc999"
+      "dh": "444dc999",
+      "paramStorage": [
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawPartyMembersHirelingIcons",
@@ -528,7 +666,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "415c6358"
+      "dh": "415c6358",
+      "paramStorage": [
+        [
+          "pnY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnYOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnX",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "HIRELING_DrawPortraitIcon",
@@ -554,7 +710,25 @@
         "D2GfxDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "0415e504"
+      "dh": "0415e504",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnYToggle",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnY",
+          "ESI:4"
+        ],
+        [
+          "pnX",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "HIRELING_DrawPetIcon",
@@ -579,7 +753,29 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "524164b7"
+      "dh": "524164b7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnYToggle",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nPetType",
+          "EBX:4"
+        ],
+        [
+          "nY",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "HIRELING_DrawSummonIcon",
@@ -608,7 +804,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5d0cea2d"
+      "dh": "5d0cea2d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnYToggle",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillId",
+          "ESI:4"
+        ],
+        [
+          "nX",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "HIRELING_DrawGenericPetIcon",
@@ -633,7 +851,29 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "f0554608"
+      "dh": "f0554608",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnYToggle",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nPetType",
+          "EBX:4"
+        ],
+        [
+          "pnY",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawHireableIcons",

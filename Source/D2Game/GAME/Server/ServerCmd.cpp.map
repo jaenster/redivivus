@@ -21,7 +21,17 @@
         "D2BitBufferStrc",
         "uint32_t"
       ],
-      "dh": "581e8f29"
+      "dh": "581e8f29",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0053b140",
@@ -41,7 +51,17 @@
         "D2BitBufferStrc",
         "uint16_t"
       ],
-      "dh": "6371643b"
+      "dh": "6371643b",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0053b180",
@@ -59,7 +79,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "3cced4d7"
+      "dh": "3cced4d7",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_NET_D2GS_SERVER_SendPacketToClient",
@@ -78,7 +104,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0f803b95"
+      "dh": "0f803b95",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SERVERCMD_SendBufferToClient",
@@ -101,7 +137,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "b1e49913"
+      "dh": "b1e49913",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ],
+        [
+          "wGuildFlags",
+          "DX:2"
+        ],
+        [
+          "wUniqueCode",
+          "Stack[0x4]:2"
+        ],
+        [
+          "szPlayerName",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xB0_ConnectionTerminated",
@@ -121,7 +175,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "f091a810"
+      "dh": "f091a810",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SERVERCMD_SendSingleBytePacket",
@@ -141,7 +201,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "53255d81"
+      "dh": "53255d81",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xB4_ConnectionRefused",
@@ -161,7 +227,17 @@
         "D2GSPacketSrv0xB",
         "int32_t"
       ],
-      "dh": "75dad760"
+      "dh": "75dad760",
+      "paramStorage": [
+        [
+          "nClientId",
+          "ECX:4"
+        ],
+        [
+          "nReason",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

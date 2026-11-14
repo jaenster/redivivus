@@ -20,7 +20,17 @@
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "bb83a55d"
+      "dh": "bb83a55d",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor",
@@ -38,7 +48,13 @@
       "usedTypes": [
         "ButtonImplementation"
       ],
-      "dh": "44c8dd3f"
+      "dh": "44c8dd3f",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "IsMouseInBounds",
@@ -58,7 +74,17 @@
         "D2UIMouseMsgStrc",
         "uint32_t"
       ],
-      "dh": "1af4815b"
+      "dh": "1af4815b",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetValue",
@@ -76,7 +102,13 @@
       "usedTypes": [
         "ButtonImplementation"
       ],
-      "dh": "20966761"
+      "dh": "20966761",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "SetAccelerator",
@@ -94,7 +126,17 @@
       "usedTypes": [
         "ButtonImplementation"
       ],
-      "dh": "742fd296"
+      "dh": "742fd296",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "bEnable",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseDown",
@@ -115,7 +157,17 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "aa93fc4d"
+      "dh": "aa93fc4d",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseUp",
@@ -135,7 +187,17 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "402a1087"
+      "dh": "402a1087",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnChar",
@@ -154,7 +216,17 @@
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "b66af4a1"
+      "dh": "b66af4a1",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseMove",
@@ -173,7 +245,17 @@
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "86ed40c0"
+      "dh": "86ed40c0",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnUpArrow",
@@ -192,7 +274,17 @@
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "58c1ebe8"
+      "dh": "58c1ebe8",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnDownArrow",
@@ -211,7 +303,17 @@
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "0d77ab27"
+      "dh": "0d77ab27",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnRightArrow",
@@ -230,7 +332,17 @@
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "8b8970dd"
+      "dh": "8b8970dd",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnLeftArrow",
@@ -249,7 +361,17 @@
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "f0fce154"
+      "dh": "f0fce154",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseWheel",
@@ -268,7 +390,17 @@
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "d64769bc"
+      "dh": "d64769bc",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Constructor",
@@ -297,7 +429,29 @@
         "pfnEHHandlerRoutine",
         "uint16_t"
       ],
-      "dh": "8f630337"
+      "dh": "8f630337",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nButtonKind",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnOnActivate",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -318,7 +472,17 @@
         "ButtonImplementation",
         "uint32_t"
       ],
-      "dh": "b15ca7aa"
+      "dh": "b15ca7aa",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -349,7 +513,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8429a119"
+      "dh": "8429a119",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     }
   ]
 }

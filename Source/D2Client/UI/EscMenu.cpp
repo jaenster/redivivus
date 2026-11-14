@@ -58572,7 +58572,7 @@ static int __stdcall UI_SLIDER_GetValueFromPosition(int32_t nCurrentPos, int32_t
       fOffset += 4294967296.0;
     }
 
-    int32_t nResultValue = (int32_t)(int64_t)std::nearbyint(fRange * fStepCount / fOffset);
+    int32_t nResultValue = (int32_t)(int64_t)(fRange * fStepCount / fOffset);
     return nResultValue;
 }
 
@@ -58598,7 +58598,7 @@ static int __fastcall UI_SLIDER_GetPositionFromValue(int32_t nMinPos, D2EscMenuI
       fBasePos += 4294967296.0;
     }
 
-    int32_t nResultPos = (int32_t)(int64_t)std::nearbyint(fBasePos + fCurrentValue * (fRange / fStepCount));
+    int32_t nResultPos = (int32_t)(int64_t)(fBasePos + fCurrentValue * (fRange / fStepCount));
     return nResultPos;
 }
 

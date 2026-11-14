@@ -22,7 +22,13 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "474698a5"
+      "dh": "474698a5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q23_CheckDuranceOfHateLevel2",
@@ -48,7 +54,17 @@
         "eD2LevelId",
         "uint32_t"
       ],
-      "dh": "7484d010"
+      "dh": "7484d010",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q23_ActiveFilter",
@@ -70,7 +86,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ff84547f"
+      "dh": "ff84547f",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q23_PlayerUpdateGuardianSteps",
@@ -96,7 +134,21 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "59e42c76"
+      "dh": "59e42c76",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q23_SetGuardianQuestComplete",
@@ -119,7 +171,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "9699fcb4"
+      "dh": "9699fcb4",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBitBuffer",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Q23_PlayerCheckDuranceLevel3Complete",
@@ -148,7 +214,21 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "c764f4ce"
+      "dh": "c764f4ce",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q23_PlayerNotifyCompleted",
@@ -171,7 +251,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "17b23d71"
+      "dh": "17b23d71",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q23_Callback00_NpcActivate",
@@ -199,7 +293,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8d8c9769"
+      "dh": "8d8c9769",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q23_Callback02_NpcDeactivate",
@@ -220,7 +324,17 @@
         "D2QuestDataA3Q6Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "cac3aeb2"
+      "dh": "cac3aeb2",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q23_Callback03_ChangedLevel",
@@ -250,7 +364,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "877f6b01"
+      "dh": "877f6b01",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q23_Callback11_ScrollMessage",
@@ -281,7 +405,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "55893dd1"
+      "dh": "55893dd1",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q23_Callback10_PlayerLeavesGame",
@@ -294,6 +428,16 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
+      ],
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
       ]
     },
     {
@@ -316,7 +460,17 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "ed1a9108"
+      "dh": "ed1a9108",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pQuestData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q23_PartyMember_SetCompleted",
@@ -346,7 +500,21 @@
         "eAct",
         "int32_t"
       ],
-      "dh": "9764bbc9"
+      "dh": "9764bbc9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q23_PropagateCompletionToParty",
@@ -370,7 +538,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "4f428708"
+      "dh": "4f428708",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q23_PartyMember_SetCannotComplete",
@@ -394,7 +576,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "42db264d"
+      "dh": "42db264d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q23_PartyMember_PlayCompleteSound",
@@ -417,7 +613,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2a2b3b0e"
+      "dh": "2a2b3b0e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q23_Callback08_MonsterKilled",
@@ -459,7 +669,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "a69938d0"
+      "dh": "a69938d0",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q23_TimerCallback_MephistoApproach",
@@ -487,7 +707,17 @@
         "eD2MonsterAnimMode",
         "uint32_t"
       ],
-      "dh": "e372a1ec"
+      "dh": "e372a1ec",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn45_MephistoBridge",
@@ -509,7 +739,13 @@
         "D2ObjectInitFnArg",
         "int32_t"
       ],
-      "dh": "a84b82e3"
+      "dh": "a84b82e3",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn44_HellGatePortal",
@@ -531,7 +767,13 @@
         "D2ObjectInitFnArg",
         "eD2LevelId"
       ],
-      "dh": "987b2046"
+      "dh": "987b2046",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q23_SequenceFilter",
@@ -549,7 +791,13 @@
       "usedTypes": [
         "D2QuestDataStrc"
       ],
-      "dh": "21efb2c6"
+      "dh": "21efb2c6",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q23_Callback13_PlayerStartedGame",
@@ -573,7 +821,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "e65497db"
+      "dh": "e65497db",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q23_InitData",
@@ -595,7 +853,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "72da709f"
+      "dh": "72da709f",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

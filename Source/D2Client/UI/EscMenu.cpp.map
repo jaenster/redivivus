@@ -20,7 +20,25 @@
         "D2EscMenuItemStrc",
         "int32_t"
       ],
-      "dh": "70fac574"
+      "dh": "70fac574",
+      "paramStorage": [
+        [
+          "nCurrentPos",
+          "ECX:4"
+        ],
+        [
+          "nMinPos",
+          "EDX:4"
+        ],
+        [
+          "pSliderItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxPos",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_GetPositionFromValue",
@@ -39,7 +57,21 @@
         "D2EscMenuItemStrc",
         "int32_t"
       ],
-      "dh": "a8022505"
+      "dh": "a8022505",
+      "paramStorage": [
+        [
+          "nMinPos",
+          "ECX:4"
+        ],
+        [
+          "pSliderItem",
+          "EDX:4"
+        ],
+        [
+          "nMaxPos",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyMasterVolumeFromSlider",
@@ -60,7 +92,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "8ae11678"
+      "dh": "8ae11678",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyMasterVolume",
@@ -82,7 +124,17 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "7d0432e5"
+      "dh": "7d0432e5",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyMusicVolumeFromSlider",
@@ -103,7 +155,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "0aacaa2b"
+      "dh": "0aacaa2b",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyMusicVolume",
@@ -125,7 +187,17 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "e42114b9"
+      "dh": "e42114b9",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_Init3DSoundItem",
@@ -145,7 +217,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "08cd6ce4"
+      "dh": "08cd6ce4",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyPositionalBiasFromSlider",
@@ -166,7 +248,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "f461c67e"
+      "dh": "f461c67e",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyPositionalBias",
@@ -188,7 +280,17 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "c39d66f8"
+      "dh": "c39d66f8",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_InitEaxSoundItem",
@@ -209,7 +311,17 @@
         "D2UIMouseMsgStrc",
         "uint32_t"
       ],
-      "dh": "42d51a7f"
+      "dh": "42d51a7f",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyNpcSpeech",
@@ -231,7 +343,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "c832de68"
+      "dh": "c832de68",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_LoadAndApplyNpcSpeech",
@@ -253,7 +375,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "54821210"
+      "dh": "54821210",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyLightQuality",
@@ -275,7 +407,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "0e51850c"
+      "dh": "0e51850c",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_InitLightQuality",
@@ -297,7 +439,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "c1728086"
+      "dh": "c1728086",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyBlendedShadows",
@@ -318,7 +470,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "45e3977b"
+      "dh": "45e3977b",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_InitBlendedShadows",
@@ -339,7 +501,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "fee9ca47"
+      "dh": "fee9ca47",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyResolution",
@@ -360,7 +532,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "60d38276"
+      "dh": "60d38276",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_LoadAndApplyResolution",
@@ -381,7 +563,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "f1e10872"
+      "dh": "f1e10872",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyPerspective",
@@ -403,7 +595,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "573f965b"
+      "dh": "573f965b",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_LoadAndApplyPerspective",
@@ -427,7 +629,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "163ef801"
+      "dh": "163ef801",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StoreGamma",
@@ -449,7 +661,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "0dcd2aed"
+      "dh": "0dcd2aed",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_InitGamma",
@@ -475,7 +697,17 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "46359ca8"
+      "dh": "46359ca8",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyContrast",
@@ -498,7 +730,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "6605d1ab"
+      "dh": "6605d1ab",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_InitContrast",
@@ -526,7 +768,17 @@
         "eD2RendererMode",
         "int32_t"
       ],
-      "dh": "90a0d931"
+      "dh": "90a0d931",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyAutomapMode",
@@ -547,7 +799,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "3675e62f"
+      "dh": "3675e62f",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_InitAutomapMode",
@@ -570,7 +832,17 @@
         "D2UIMouseMsgStrc",
         "uint32_t"
       ],
-      "dh": "05baf86b"
+      "dh": "05baf86b",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyAutomapFade",
@@ -591,7 +863,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "5509c89c"
+      "dh": "5509c89c",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_InitAutomapFade",
@@ -615,7 +897,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7ce153a3"
+      "dh": "7ce153a3",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyAutomapCenters",
@@ -635,7 +927,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "d45ed67e"
+      "dh": "d45ed67e",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_InitAutomapCenterItem",
@@ -656,7 +958,17 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "87ec0655"
+      "dh": "87ec0655",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_ApplyAutomapParty",
@@ -676,7 +988,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "c5da0e49"
+      "dh": "c5da0e49",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_InitAutomapPartyItem",
@@ -696,7 +1018,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "dbd43e2d"
+      "dh": "dbd43e2d",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SLIDER_InitAutomapParty",
@@ -718,7 +1050,17 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "2d005036"
+      "dh": "2d005036",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_GetItemIndexFromMouseY",
@@ -737,7 +1079,13 @@
         "int32_t",
         "pfnEscMenuItemVisible"
       ],
-      "dh": "8495e1c0"
+      "dh": "8495e1c0",
+      "paramStorage": [
+        [
+          "nParam",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0047d5b0",
@@ -756,7 +1104,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "61946e73"
+      "dh": "61946e73",
+      "paramStorage": [
+        [
+          "nMouseY",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_ClickMenuItem",
@@ -776,7 +1130,13 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "56c02a7b"
+      "dh": "56c02a7b",
+      "paramStorage": [
+        [
+          "pMsg",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_HandleSliderDrag",
@@ -797,7 +1157,17 @@
         "int32_t",
         "pfnEscMenuItemAction"
       ],
-      "dh": "f0a8b0d8"
+      "dh": "f0a8b0d8",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "EAX:4"
+        ],
+        [
+          "nMouseY",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_EscMenuMouseDown",
@@ -820,7 +1190,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e25fbd3d"
+      "dh": "e25fbd3d",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_EscMenuMouseUp",
@@ -843,7 +1219,13 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "493951c8"
+      "dh": "493951c8",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_EscMenuNavigateNext",
@@ -864,7 +1246,13 @@
         "D2UIMouseMsgStrc",
         "pfnEscMenuItemVisible"
       ],
-      "dh": "890c7ace"
+      "dh": "890c7ace",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_EscMenuNavigatePrev",
@@ -885,7 +1273,13 @@
         "D2UIMouseMsgStrc",
         "pfnEscMenuItemVisible"
       ],
-      "dh": "70382735"
+      "dh": "70382735",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_EscMenuOptionDecrease",
@@ -907,7 +1301,13 @@
         "D2UIMouseMsgStrc",
         "uint32_t"
       ],
-      "dh": "8905a7c9"
+      "dh": "8905a7c9",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_EscMenuOptionIncrease",
@@ -929,7 +1329,13 @@
         "D2UIMouseMsgStrc",
         "uint32_t"
       ],
-      "dh": "62f2fa61"
+      "dh": "62f2fa61",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_EscMenuExecuteSelection",
@@ -949,7 +1355,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "2798b4ce"
+      "dh": "2798b4ce",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_LoadLocalizedImages",
@@ -978,7 +1390,17 @@
         "DC6",
         "uint32_t"
       ],
-      "dh": "1ba0d01f"
+      "dh": "1ba0d01f",
+      "paramStorage": [
+        [
+          "pMenuHeader",
+          "ECX:4"
+        ],
+        [
+          "pMenuTable",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_LoadLocalizedImages_HaltTail",
@@ -996,7 +1418,13 @@
         "GetInstructionPointer",
         "exit"
       ],
-      "dh": "c21d85b7"
+      "dh": "c21d85b7",
+      "paramStorage": [
+        [
+          "nLine",
+          "Stack[0x0]:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_Initialize",
@@ -1053,7 +1481,17 @@
         "DC6 *",
         "uint32_t"
       ],
-      "dh": "06ebfd4a"
+      "dh": "06ebfd4a",
+      "paramStorage": [
+        [
+          "pnItemCount",
+          "ECX:4"
+        ],
+        [
+          "pMenuTable",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_FreeLoadedImages_HaltTail",
@@ -1071,7 +1509,13 @@
         "GetInstructionPointer",
         "exit"
       ],
-      "dh": "ac004e06"
+      "dh": "ac004e06",
+      "paramStorage": [
+        [
+          "nLine",
+          "Stack[0x0]:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_Shutdown",
@@ -1116,7 +1560,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "12c39d90"
+      "dh": "12c39d90",
+      "paramStorage": [
+        [
+          "bHideUI",
+          "ECX:4"
+        ],
+        [
+          "nMenuIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_RestoreUIState",
@@ -1138,7 +1592,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dfee2f0a"
+      "dh": "dfee2f0a",
+      "paramStorage": [
+        [
+          "bRestoreFlags",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_DrawProgressBar",
@@ -1164,7 +1624,25 @@
         "DRAWMODE",
         "int32_t"
       ],
-      "dh": "53ab0270"
+      "dh": "53ab0270",
+      "paramStorage": [
+        [
+          "pMenuItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBaseY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bIsOptionsMenu",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_EscMenu",
@@ -1221,7 +1699,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "e4827636"
+      "dh": "e4827636",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_CloseWindowAndRestoreUI",
@@ -1243,7 +1731,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "0ce8c4b8"
+      "dh": "0ce8c4b8",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_BackToGame",
@@ -1263,7 +1761,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "2704f29d"
+      "dh": "2704f29d",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_SwitchToSaveExitMenu",
@@ -1283,7 +1791,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "336f1667"
+      "dh": "336f1667",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_SwitchToDeleteCharMenu",
@@ -1304,7 +1822,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "d4c7ecad"
+      "dh": "d4c7ecad",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_SwitchToExpansionSaveExitMenu",
@@ -1325,7 +1853,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "5e6b5a6a"
+      "dh": "5e6b5a6a",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_ShowControlConfig",
@@ -1346,7 +1884,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "82cf7e57"
+      "dh": "82cf7e57",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_SwitchToMainMenu_alt",
@@ -1366,7 +1914,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "119e8ea3"
+      "dh": "119e8ea3",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ESCMENU_SwitchToOptionsMenu",
@@ -1386,7 +1944,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "ec8b1fe1"
+      "dh": "ec8b1fe1",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

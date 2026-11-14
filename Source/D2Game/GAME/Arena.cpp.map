@@ -24,7 +24,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dd1647da"
+      "dh": "dd1647da",
+      "paramStorage": [
+        [
+          "pGame",
+          "EAX:4"
+        ],
+        [
+          "dwFlagMask",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AllocArenaControl",
@@ -47,7 +57,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6d93a154"
+      "dh": "6d93a154",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nArena",
+          "EDX:4"
+        ],
+        [
+          "eArenaFlags",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTemplate",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "FreeArenaControl",
@@ -66,7 +94,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "2da4dc61"
+      "dh": "2da4dc61",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AllocPlayerArena",
@@ -93,7 +127,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "3966adb3"
+      "dh": "3966adb3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FreePlayerArena",
@@ -119,7 +163,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "161c87f3"
+      "dh": "161c87f3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetTownLevelFromArenaCtrl",
@@ -142,7 +196,13 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "e4ef7c2b"
+      "dh": "e4ef7c2b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_GetArenaTxtRecord",
@@ -163,7 +223,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "e25e19eb"
+      "dh": "e25e19eb",
+      "paramStorage": [
+        [
+          "pGame",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_ApplyScoreModifier",
@@ -193,7 +259,29 @@
         "eD2ArenaFlags",
         "int32_t"
       ],
-      "dh": "c599ef73"
+      "dh": "c599ef73",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ],
+        [
+          "nScoreType",
+          "EBX:4"
+        ],
+        [
+          "dwParam",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_ARENA_KillHandler",
@@ -225,7 +313,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "58881158"
+      "dh": "58881158",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pVictim",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_ClearScoreDirty",
@@ -250,7 +352,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "b53004ef"
+      "dh": "b53004ef",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_ClearUpdateFlag",
@@ -268,7 +380,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "97ca9700"
+      "dh": "97ca9700",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_IsScoreDirty",
@@ -292,7 +410,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b259b01b"
+      "dh": "b259b01b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UpdatePlayerKillCount",
@@ -319,7 +443,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "0ad306fe"
+      "dh": "0ad306fe",
+      "paramStorage": [
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_BroadcastKillToPlayers",
@@ -347,7 +481,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "929e4bec"
+      "dh": "929e4bec",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBroadcastMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pClient",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_UpdatePlayerKillState",
@@ -372,7 +520,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "bfcc3cca"
+      "dh": "bfcc3cca",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_BroadcastScoreOnJoin",
@@ -395,7 +553,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "743ae118"
+      "dh": "743ae118",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_GetClientUpdateFlag",
@@ -418,7 +586,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b79cbec4"
+      "dh": "b79cbec4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_IsArenaLevel",
@@ -441,7 +615,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4cd752b5"
+      "dh": "4cd752b5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_IsNoCubeRecipes",
@@ -464,7 +644,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "750b1753"
+      "dh": "750b1753",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_GetFlags",
@@ -487,7 +673,13 @@
         "eD2ArenaFlags",
         "int32_t"
       ],
-      "dh": "c6bdddd1"
+      "dh": "c6bdddd1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_TestFlags",
@@ -509,7 +701,17 @@
         "SGAMEDATA",
         "eD2ArenaFlags"
       ],
-      "dh": "9ae2b769"
+      "dh": "9ae2b769",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eMask",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_SetOrClearFlags",
@@ -533,7 +735,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f3e23eca"
+      "dh": "f3e23eca",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "value",
+          "EDX:4"
+        ],
+        [
+          "isOr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NullSub",
@@ -569,7 +785,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "033bc5cf"
+      "dh": "033bc5cf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_IsFlag0x80Set",
@@ -590,7 +812,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "f20e8455"
+      "dh": "f20e8455",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_IsArenaMode",
@@ -613,7 +841,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9d92122b"
+      "dh": "9d92122b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_GetTemplate",
@@ -636,7 +870,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b2ed6add"
+      "dh": "b2ed6add",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ARENA_IsFlag0x200Set",
@@ -657,7 +897,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "b93f18ee"
+      "dh": "b93f18ee",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

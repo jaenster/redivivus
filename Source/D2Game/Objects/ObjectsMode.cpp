@@ -2738,7 +2738,7 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
         if (pPortalOwner) {
           nPortalOwnerPartyId = UNIT::SUnit::GetPartyId(pPortalOwner);
           nOwnerPartyId = UNIT::SUnit::GetPartyId(pUnit);
-          if (nOwnerPartyId != nPortalOwnerPartyId) {
+          if ((uint16_t)nOwnerPartyId != nPortalOwnerPartyId) {
             goto refuse_portal;
           }
         }

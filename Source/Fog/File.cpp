@@ -487,7 +487,8 @@ bool __fastcall FILETOOLS_StartApplicationWithCommandLine_UTF8(LPCSTR lpApplicat
 
     startupInfo.cb = 0x44;
     memset(&startupInfo.lpReserved, 0, 0x40);
-    _PROCESS_INFORMATION processInfo = {0};
+    _PROCESS_INFORMATION processInfo;
+    memset(&processInfo, 0, sizeof(processInfo));
     BOOL bCreated = CreateProcessW(lpApplicationName ? (LPCWSTR)wszAppName : nullptr, szCommandLine ? (LPWSTR)wszCommandLine : nullptr, (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPVOID)0x0, (LPCWSTR)0x0, &startupInfo, &processInfo);
     if (bCreated) {
       /* HANDLE hObject for CloseHandle */ CloseHandle(processInfo.hProcess);

@@ -23,7 +23,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0bcc20db"
+      "dh": "0bcc20db",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "portal",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "RiskAssignmentBaal",
@@ -56,7 +74,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "462daf7f"
+      "dh": "462daf7f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "ECX:4"
+        ],
+        [
+          "pAnchorData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SelectTargetBaal",
@@ -94,7 +126,33 @@
         "fpAiTargetPredicate",
         "int32_t"
       ],
-      "dh": "980727d9"
+      "dh": "980727d9",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBestScore",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCandidateCount",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pAnchorData",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pUnit2",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "AI_BAAL_IsUnitInRange",
@@ -120,7 +178,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "94bb554d"
+      "dh": "94bb554d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pCandidate",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_BAAL_IsSkillPowerful",
@@ -142,7 +210,17 @@
         "D2UnitStrc",
         "eD2Skills"
       ],
-      "dh": "c48d8340"
+      "dh": "c48d8340",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pSkill",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "AI_BAAL_HasPowerfulSkill",
@@ -167,7 +245,13 @@
         "D2UnitStrc",
         "eD2Skills"
       ],
-      "dh": "bcc605fd"
+      "dh": "bcc605fd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "AI_BAAL_SelectWeightedAction",
@@ -189,7 +273,21 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "08333538"
+      "dh": "08333538",
+      "paramStorage": [
+        [
+          "pnWeights",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWeightCount",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "AI_BAAL_CloneChooseAction",
@@ -214,7 +312,25 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "3c249206"
+      "dh": "3c249206",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bCollisionWithWall",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "AI_BAAL_ThroneRoomChooseAction",
@@ -239,7 +355,33 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "1055e04f"
+      "dh": "1055e04f",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCandidateCount",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bVeryFarFromAnchor",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bBeyondAnchorLimit",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "AI_Baal_SelectActionWeighted",
@@ -270,7 +412,45 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "d46ac4ac"
+      "dh": "d46ac4ac",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCandidateCount",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bVeryFarFromAnchor",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bBeyondAnchorLimit",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nParam5",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nBestScore",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "AI_BaalEvaluateCombatAction",
@@ -313,7 +493,37 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "f17d19ac"
+      "dh": "f17d19ac",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pAiGeneral",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBestScore",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCandidateCount",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pAnchorAiCmd",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "AI_BAAL_CountPowerfulSkills",
@@ -332,7 +542,21 @@
         "D2UnitStrc",
         "D2UnitStrc *"
       ],
-      "dh": "a5b037e8"
+      "dh": "a5b037e8",
+      "paramStorage": [
+        [
+          "nSkillNode",
+          "ECX:4"
+        ],
+        [
+          "pnSelfSkillNode",
+          "EDX:4"
+        ],
+        [
+          "pnPowerfulSkillCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Baal_SpawnClone",
@@ -379,7 +603,21 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "3205b688"
+      "dh": "3205b688",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "AI_Baal_ExecuteAction",
@@ -420,7 +658,33 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "ab6881d3"
+      "dh": "ab6881d3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAction",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pClientSideData",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "BaalCrabAi_ResetInfernoAndReattach",
@@ -449,7 +713,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "19cbbf39"
+      "dh": "19cbbf39",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_BaalCrab",
@@ -482,7 +760,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "af322b23"
+      "dh": "af322b23",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Baal_SpawnTentacle",
@@ -514,7 +806,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f9b5d5fd"
+      "dh": "f9b5d5fd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_UberBaal",
@@ -534,7 +836,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2c2bacf1"
+      "dh": "2c2bacf1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AI_Fn1_BaalCrabClone",
@@ -569,7 +885,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "808272e9"
+      "dh": "808272e9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAiParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

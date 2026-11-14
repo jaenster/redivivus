@@ -26,7 +26,21 @@
         "D2PacketListStrc",
         "uint8_t"
       ],
-      "dh": "50615854"
+      "dh": "50615854",
+      "paramStorage": [
+        [
+          "pClient",
+          "EDI:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_SendStateCommand",
@@ -46,7 +60,17 @@
         "D2ClientStrc",
         "uint8_t"
       ],
-      "dh": "b5805fa8"
+      "dh": "b5805fa8",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x01_NEWGAME",
@@ -69,7 +93,21 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "02f7f68a"
+      "dh": "02f7f68a",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x03_NEWACT",
@@ -92,7 +130,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ed5c4857"
+      "dh": "ed5c4857",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nAct",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nMapSeed",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAutomap",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nArea",
+          "Stack[0x10]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_CMD_BYTE_INT",
@@ -114,7 +178,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "19454450"
+      "dh": "19454450",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x5F_PortalFlags",
@@ -136,7 +218,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c1cd7033"
+      "dh": "c1cd7033",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "dwPortalFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x0C_UNITCHANGE",
@@ -158,7 +254,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "065c0f87"
+      "dh": "065c0f87",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nUnitType",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMessageType",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nHitClass",
+          "Stack[0x10]:1"
+        ],
+        [
+          "nHpPercent",
+          "Stack[0x14]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x0E_UNITCHANGE_ID",
@@ -180,7 +306,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0ec05a2a"
+      "dh": "0ec05a2a",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nObjectType",
+          "Stack[0x4]:1"
+        ],
+        [
+          "dwUnitGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMessageType",
+          "Stack[0xc]:1"
+        ],
+        [
+          "bIsTargetable",
+          "Stack[0x10]:1"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY",
@@ -207,7 +363,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2310bb5f"
+      "dh": "2310bb5f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nUnitType",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMessageType",
+          "Stack[0xc]:1"
+        ],
+        [
+          "wX",
+          "Stack[0x10]:2"
+        ],
+        [
+          "wY",
+          "Stack[0x14]:2"
+        ],
+        [
+          "nHitClass",
+          "Stack[0x18]:1"
+        ],
+        [
+          "nHpPercent",
+          "Stack[0x1c]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x10_UNITCHANGE_IDPOS",
@@ -230,7 +424,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "813ff590"
+      "dh": "813ff590",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nUnitType",
+          "Stack[0x4]:1"
+        ],
+        [
+          "dwGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMessageType",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nTargetType",
+          "Stack[0x10]:1"
+        ],
+        [
+          "dwTargetGUID",
+          "Stack[0x14]:4"
+        ],
+        [
+          "wX",
+          "Stack[0x18]:2"
+        ],
+        [
+          "wY",
+          "Stack[0x1c]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS",
@@ -257,7 +489,49 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1a7aeb42"
+      "dh": "1a7aeb42",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nUnitType",
+          "Stack[0x4]:1"
+        ],
+        [
+          "dwGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMessageType",
+          "Stack[0xc]:1"
+        ],
+        [
+          "wX",
+          "Stack[0x10]:2"
+        ],
+        [
+          "wY",
+          "Stack[0x14]:2"
+        ],
+        [
+          "nHitClass",
+          "Stack[0x18]:1"
+        ],
+        [
+          "wX2",
+          "Stack[0x1c]:2"
+        ],
+        [
+          "wY2",
+          "Stack[0x20]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH",
@@ -291,7 +565,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0a6f3b43"
+      "dh": "0a6f3b43",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nMonsterGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nTargetUnitType",
+          "Stack[0xc]:1"
+        ],
+        [
+          "dwTargetGUID",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nStepNum",
+          "Stack[0x14]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH",
@@ -325,7 +629,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7298e0be"
+      "dh": "7298e0be",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nMonsterGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMoveType",
+          "Stack[0x8]:1"
+        ],
+        [
+          "wX",
+          "Stack[0xc]:2"
+        ],
+        [
+          "wY",
+          "Stack[0x10]:2"
+        ],
+        [
+          "nStepNum",
+          "Stack[0x14]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH_Ex",
@@ -358,7 +692,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f2ea12db"
+      "dh": "f2ea12db",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nMonsterGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nTargetUnitType",
+          "Stack[0xc]:1"
+        ],
+        [
+          "dwTargetGUID",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nDistance",
+          "Stack[0x14]:1"
+        ],
+        [
+          "nHpPercent",
+          "Stack[0x18]:1"
+        ],
+        [
+          "nHitClass",
+          "Stack[0x1c]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH_Ex",
@@ -391,7 +763,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b51f9b55"
+      "dh": "b51f9b55",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nMonsterGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMoveType",
+          "Stack[0x8]:1"
+        ],
+        [
+          "wDestXParam",
+          "Stack[0xc]:2"
+        ],
+        [
+          "wDestY",
+          "Stack[0x10]:2"
+        ],
+        [
+          "nDistance",
+          "Stack[0x14]:1"
+        ],
+        [
+          "nHpPercent",
+          "Stack[0x18]:1"
+        ],
+        [
+          "nHitClass",
+          "Stack[0x1c]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x6A_UNITCHANGE_MONSTERIDNOPATH",
@@ -413,7 +823,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "351a4d0d"
+      "dh": "351a4d0d",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nAnimMode",
+          "DL:1"
+        ],
+        [
+          "dwNpcGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraData",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nTargetUnitType",
+          "Stack[0xc]:1"
+        ],
+        [
+          "dwTargetGUID",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nHpPercent",
+          "Stack[0x14]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x69_UNITCHANGE_MONSTERXYNOPATH",
@@ -436,7 +876,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "32b42a55"
+      "dh": "32b42a55",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "dwMonsterGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nState",
+          "Stack[0x8]:1"
+        ],
+        [
+          "wStateParam1",
+          "Stack[0xc]:2"
+        ],
+        [
+          "wStateParam2",
+          "Stack[0x10]:2"
+        ],
+        [
+          "bParam1",
+          "Stack[0x14]:1"
+        ],
+        [
+          "nHitClass",
+          "Stack[0x18]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x6C_UNITCHANGE_MONSTERIDPOSITION",
@@ -459,7 +933,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a77cc5e4"
+      "dh": "a77cc5e4",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "dwMonsterGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAttackType",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nTargetUnitType",
+          "Stack[0xc]:1"
+        ],
+        [
+          "dwTarget",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bParam2",
+          "Stack[0x14]:1"
+        ],
+        [
+          "wX",
+          "Stack[0x18]:2"
+        ],
+        [
+          "wY",
+          "Stack[0x1c]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x6B_UNITCHANGE_MONSTERXYPOSITION",
@@ -482,7 +994,49 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4a4017f4"
+      "dh": "4a4017f4",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "dwMonsterGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAction",
+          "Stack[0x8]:1"
+        ],
+        [
+          "wX",
+          "Stack[0xc]:2"
+        ],
+        [
+          "wY",
+          "Stack[0x10]:2"
+        ],
+        [
+          "bParam1",
+          "Stack[0x14]:1"
+        ],
+        [
+          "nHitClass",
+          "Stack[0x18]:1"
+        ],
+        [
+          "wX2",
+          "Stack[0x1c]:2"
+        ],
+        [
+          "wY2",
+          "Stack[0x20]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x6D_UNITCHANGE_MONSTERNEUTRAL",
@@ -505,7 +1059,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2a258cd1"
+      "dh": "2a258cd1",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "dwMonsterGUID",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nHpPercent128",
+          "Stack[0xc]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x15_WarpXY",
@@ -528,7 +1104,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "80afed0e"
+      "dh": "80afed0e",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wX",
+          "Stack[0xc]:2"
+        ],
+        [
+          "wY",
+          "Stack[0x10]:2"
+        ],
+        [
+          "bWarpFade",
+          "Stack[0x14]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x07_MapReveal",
@@ -549,7 +1155,25 @@
         "D2GSPacketSrv0x",
         "uint16_t"
       ],
-      "dh": "adc1993d"
+      "dh": "adc1993d",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nAreaId",
+          "EDX:4"
+        ],
+        [
+          "nTileX",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nTileY",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x08_REMOVEROOM",
@@ -570,7 +1194,25 @@
         "D2GSPacketSrv0x",
         "uint16_t"
       ],
-      "dh": "602f763b"
+      "dh": "602f763b",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nLevelId",
+          "EDX:4"
+        ],
+        [
+          "nTileX",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nTileY",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x09_NEWUNIT",
@@ -593,7 +1235,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9d04c1e8"
+      "dh": "9d04c1e8",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nUnitType",
+          "Stack[0x4]:1"
+        ],
+        [
+          "dwGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0xc]:1"
+        ],
+        [
+          "wX",
+          "Stack[0x10]:2"
+        ],
+        [
+          "wY",
+          "Stack[0x14]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x51_NEWOBJECT",
@@ -624,7 +1296,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0c03f4ed"
+      "dh": "0c03f4ed",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nObjectType",
+          "Stack[0x4]:1"
+        ],
+        [
+          "dwObjectGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wClassId",
+          "Stack[0xc]:2"
+        ],
+        [
+          "wX",
+          "Stack[0x10]:2"
+        ],
+        [
+          "wY",
+          "Stack[0x14]:2"
+        ],
+        [
+          "nState",
+          "Stack[0x18]:1"
+        ],
+        [
+          "nInteraction",
+          "Stack[0x1c]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x0A_REMOVEUNIT",
@@ -647,7 +1357,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c8641cfc"
+      "dh": "c8641cfc",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnitGUID",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x1A_0x1B_0x1C_Experience",
@@ -668,7 +1396,21 @@
         "D2GSPacketSrv0x1C",
         "uint32_t"
       ],
-      "dh": "dabef1d2"
+      "dh": "dabef1d2",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nCurrentExp",
+          "EDX:4"
+        ],
+        [
+          "nPreviousExp",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x1D_0x1E_0x1F_SetAttribute",
@@ -694,7 +1436,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "b7246590"
+      "dh": "b7246590",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nAttributeId",
+          "DX:2"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x9E_0x9F_0xA0_MercAttribute",
@@ -721,7 +1477,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "40ca21c4"
+      "dh": "40ca21c4",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:2"
+        ],
+        [
+          "dwMercGUID",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xA1_0xA2_0xA0_MercExperience",
@@ -748,7 +1522,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "0c58faac"
+      "dh": "0c58faac",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nExp",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nMercGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxExp",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xA3_PROGRESSIVE_SKILL",
@@ -771,7 +1567,49 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3272445f"
+      "dh": "3272445f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "bParam1",
+          "DL:1"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nCasterType",
+          "Stack[0xc]:1"
+        ],
+        [
+          "dwValue1",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nTargetType",
+          "Stack[0x14]:1"
+        ],
+        [
+          "dwValue2",
+          "Stack[0x18]:4"
+        ],
+        [
+          "dwValue3",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "dwValue4",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xAB_HEALTH_UPDATE",
@@ -793,7 +1631,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2d593aea"
+      "dh": "2d593aea",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nUnitType",
+          "DL:1"
+        ],
+        [
+          "dwUnitGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHpPercent128",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xA5_FORCESTOPSKILL",
@@ -816,7 +1672,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e10c6d9f"
+      "dh": "e10c6d9f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nUnitType",
+          "DL:1"
+        ],
+        [
+          "dwUnitGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x20_STATCHANGE_PLAYER",
@@ -843,7 +1717,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "70b8fc8f"
+      "dh": "70b8fc8f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAttributeId",
+          "Stack[0x8]:2"
+        ],
+        [
+          "dwValue",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x18_PLAYERCOMMONSTATCHANGE_BIG",
@@ -870,7 +1766,49 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "687bff5a"
+      "dh": "687bff5a",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nLife",
+          "DX:2"
+        ],
+        [
+          "nMana",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nStamina",
+          "Stack[0x8]:2"
+        ],
+        [
+          "bLifePercent",
+          "Stack[0xc]:1"
+        ],
+        [
+          "bManaPercent",
+          "Stack[0x10]:1"
+        ],
+        [
+          "nMaxLife",
+          "Stack[0x14]:2"
+        ],
+        [
+          "nMaxMana",
+          "Stack[0x18]:2"
+        ],
+        [
+          "bMaxLifePercent",
+          "Stack[0x1c]:1"
+        ],
+        [
+          "bMaxManaPercent",
+          "Stack[0x20]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x95_PLAYERCOMMONSTATCHANGE_MEDIUM",
@@ -897,7 +1835,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d4b8d3c8"
+      "dh": "d4b8d3c8",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nLife",
+          "DX:2"
+        ],
+        [
+          "nMana",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nStamina",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:2"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:2"
+        ],
+        [
+          "nDeltaX",
+          "Stack[0x14]:1"
+        ],
+        [
+          "nDeltaY",
+          "Stack[0x18]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x96_PLAYERCOMMONSTATCHANGE_SMALL",
@@ -924,7 +1896,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3165595a"
+      "dh": "3165595a",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nStamina",
+          "DX:2"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nDeltaX",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nDeltaY",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL",
@@ -951,7 +1949,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "ac5f8140"
+      "dh": "ac5f8140",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBaseAmount",
+          "Stack[0x8]:1"
+        ],
+        [
+          "bRemove",
+          "Stack[0xc]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x22_UpdateItemSkill",
@@ -979,7 +1999,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "5519dee2"
+      "dh": "5519dee2",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "eUnitType",
+          "DL:1"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNewQuantity",
+          "Stack[0xc]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x23_SetSkill",
@@ -1002,7 +2044,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c274ca7a"
+      "dh": "c274ca7a",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nUnitType",
+          "DL:1"
+        ],
+        [
+          "dwUnitGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillSlot",
+          "Stack[0x8]:1"
+        ],
+        [
+          "wSkill",
+          "Stack[0xc]:2"
+        ],
+        [
+          "dwReserved",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x94_SETALLSKILLS",
@@ -1038,7 +2106,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6b744b70"
+      "dh": "6b744b70",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_SendSkillTabBonusDelta",
@@ -1062,7 +2140,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "063c765e"
+      "dh": "063c765e",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "dwPlayerGUID",
+          "EDX:4"
+        ],
+        [
+          "nBonusDelta",
+          "Stack[0x4]:1"
+        ],
+        [
+          "neSkillEType",
+          "Stack[0x8]:1"
+        ],
+        [
+          "bAllPages",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillPage",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x26_CHATSTART",
@@ -1090,7 +2194,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2d4e0f4b"
+      "dh": "2d4e0f4b",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG",
@@ -1117,7 +2231,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "36ff56cc"
+      "dh": "36ff56cc",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pEventPacket",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x27_NpcInfo",
@@ -1138,7 +2262,17 @@
         "D2GSPacketSrv0x",
         "D2GSPacketSrv0x27"
       ],
-      "dh": "5fe913b3"
+      "dh": "5fe913b3",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x53_ACTTIMEOFDAY",
@@ -1159,7 +2293,17 @@
         "D2GSPacketSrv0x",
         "D2GSPacketSrv0x53"
       ],
-      "dh": "1d260e8c"
+      "dh": "1d260e8c",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacketData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_QueueThreeBytePacket",
@@ -1179,7 +2323,17 @@
         "D2ClientStrc",
         "uint8_t"
       ],
-      "dh": "f68102c5"
+      "dh": "f68102c5",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x5B_PlayerJoin",
@@ -1211,7 +2365,21 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc"
       ],
-      "dh": "d29b1f27"
+      "dh": "d29b1f27",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOtherClient",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x5C_REMOVECLIENT",
@@ -1232,7 +2400,17 @@
         "D2GSPacketSrv0x5C",
         "uint32_t"
       ],
-      "dh": "dcdeaaba"
+      "dh": "dcdeaaba",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "dwLeavingPlayerGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
@@ -1253,7 +2431,17 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "76054ec8"
+      "dh": "76054ec8",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "byTradeAction",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x78_TRADENAME",
@@ -1275,7 +2463,17 @@
         "D2GSPacketSrv0x78",
         "uint8_t"
       ],
-      "dh": "721b5368"
+      "dh": "721b5368",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacketData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x7A_UPDATEPET",
@@ -1298,7 +2496,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "83147399"
+      "dh": "83147399",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nAction",
+          "DL:1"
+        ],
+        [
+          "nPetType",
+          "Stack[0x4]:1"
+        ],
+        [
+          "dwGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwMercGUID",
+          "Stack[0xc]:4"
+        ],
+        [
+          "wClassId",
+          "Stack[0x10]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS",
@@ -1321,7 +2545,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6573bdf9"
+      "dh": "6573bdf9",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "bUnused",
+          "DL:1"
+        ],
+        [
+          "byAction",
+          "Stack[0x4]:1"
+        ],
+        [
+          "dwPetGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwMercUnitGUID",
+          "Stack[0xc]:4"
+        ],
+        [
+          "wMercType",
+          "Stack[0x10]:2"
+        ],
+        [
+          "dwOwnerUnitGUID",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwMercExperience",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x79_TRADEGOLD",
@@ -1343,7 +2601,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "40bf5001"
+      "dh": "40bf5001",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "dwGold",
+          "EDX:4"
+        ],
+        [
+          "nTradeId",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "SCMD_DetectPositionDesync",
@@ -1362,7 +2634,17 @@
         "D2PartyDataStrc",
         "int32_t"
       ],
-      "dh": "a22dba5b"
+      "dh": "a22dba5b",
+      "paramStorage": [
+        [
+          "pState",
+          "EAX:4"
+        ],
+        [
+          "nNewPos",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_CheckMonsterPositionDesync",
@@ -1383,7 +2665,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "cfade3f7"
+      "dh": "cfade3f7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ],
+        [
+          "nNewPos",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERDATA_AllocPartyData",
@@ -1412,7 +2708,25 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "60a525e9"
+      "dh": "60a525e9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnitLife",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_DispatchUnitPartyData",
@@ -1437,7 +2751,25 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "13c6ee58"
+      "dh": "13c6ee58",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nUnitLife",
+          "EDX:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x7F_AllyPartyInfo_0x90_PartyAutoMapInfo",
@@ -1473,7 +2805,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d71e3fca"
+      "dh": "d71e3fca",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x9D_ITEMUNITEX",
@@ -1507,7 +2849,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "822ac473"
+      "dh": "822ac473",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byActionArg",
+          "Stack[0x8]:1"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bSerializeFull",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9DRemoveItemFromContainer",
@@ -1537,7 +2905,25 @@
         "eInventoryPage",
         "int32_t"
       ],
-      "dh": "025db5fc"
+      "dh": "025db5fc",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9DItemEquip",
@@ -1558,7 +2944,25 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "60fda6d5"
+      "dh": "60fda6d5",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9DIndirectSwapBodyItem",
@@ -1579,7 +2983,25 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "35f01185"
+      "dh": "35f01185",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9DItemUnequip",
@@ -1600,7 +3022,25 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "725376c7"
+      "dh": "725376c7",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9DItemSwapBodyItem",
@@ -1621,7 +3061,25 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "2535424d"
+      "dh": "2535424d",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9DItemWeaponSwitch",
@@ -1642,7 +3100,25 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "ada47f91"
+      "dh": "ada47f91",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
@@ -1672,7 +3148,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7a55d5bc"
+      "dh": "7a55d5bc",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "bIsEquipped",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nStatId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nStatValue",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatLayerOrCount",
+          "Stack[0x10]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x3F_SETSPELLICON",
@@ -1697,7 +3199,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5bb6aa5c"
+      "dh": "5bb6aa5c",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nItemSlot",
+          "Stack[0x4]:1"
+        ],
+        [
+          "bUseUnitGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x10]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x40_ITEMSETFLAG",
@@ -1719,7 +3247,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3b620646"
+      "dh": "3b620646",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ],
+        [
+          "dwSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwSkillLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9DItemAutoUnequip",
@@ -1740,7 +3286,25 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "1d2c582a"
+      "dh": "1d2c582a",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x42_DESTROYHANDITEM",
@@ -1762,7 +3326,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "699bfd6d"
+      "dh": "699bfd6d",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9DItemInSocket",
@@ -1783,7 +3357,25 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "04116683"
+      "dh": "04116683",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9DItemMoveToBodyLoc",
@@ -1804,7 +3396,25 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "d157f691"
+      "dh": "d157f691",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x47_ITEMUPDATEMODIFIERS",
@@ -1825,7 +3435,17 @@
         "D2GSPacketSrv0x",
         "D2UnitStrc"
       ],
-      "dh": "74fcd8e6"
+      "dh": "74fcd8e6",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x48_ITEMUPDATEREQUIREMENTSMET",
@@ -1847,7 +3467,21 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "42a73a1a"
+      "dh": "42a73a1a",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "byActionByte",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "SendUpdateItemPacket",
@@ -1868,7 +3502,25 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "0354e854"
+      "dh": "0354e854",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x7D_SETITEMBROKEN",
@@ -1890,7 +3542,29 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "03259d9e"
+      "dh": "03259d9e",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwBrokenFlag",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9DItemCopyToCursor",
@@ -1911,7 +3585,25 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "f48ec781"
+      "dh": "f48ec781",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x4D_SKILL_XY",
@@ -1935,7 +3627,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "89bd7a89"
+      "dh": "89bd7a89",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "attackerType",
+          "DL:1"
+        ],
+        [
+          "attackerGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "targetX",
+          "Stack[0x8]:2"
+        ],
+        [
+          "targetY",
+          "Stack[0xc]:2"
+        ],
+        [
+          "skillID",
+          "Stack[0x10]:4"
+        ],
+        [
+          "unused",
+          "Stack[0x14]:2"
+        ],
+        [
+          "skillLevel",
+          "Stack[0x18]:1"
+        ],
+        [
+          "packetIdModifier",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x4C_UnitCastSkill_Target_0x4D_UnitCastSkill_XY",
@@ -1970,7 +3700,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "25cb5966"
+      "dh": "25cb5966",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nUnitType",
+          "DL:1"
+        ],
+        [
+          "dwAttackerGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byAttackerType2",
+          "Stack[0x8]:1"
+        ],
+        [
+          "dwSkillID",
+          "Stack[0xc]:4"
+        ],
+        [
+          "wUnused",
+          "Stack[0x10]:2"
+        ],
+        [
+          "wSkillLevel",
+          "Stack[0x14]:2"
+        ],
+        [
+          "bUseXY",
+          "Stack[0x18]:1"
+        ],
+        [
+          "nPacketIdModifier",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo",
@@ -1995,7 +3763,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "61474706"
+      "dh": "61474706",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "nUpdateType",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nActionType",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP",
@@ -2017,7 +3811,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "915403c4"
+      "dh": "915403c4",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketId",
+          "DL:1"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nMonsterGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam5",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x29_GAMEQUESTRECORD",
@@ -2037,7 +3853,17 @@
         "D2ClientStrc",
         "uint8_t"
       ],
-      "dh": "0bd9212d"
+      "dh": "0bd9212d",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x5D_QuestState",
@@ -2057,7 +3883,17 @@
         "D2ClientStrc",
         "D2GSPacketSrv0x5D"
       ],
-      "dh": "072c2e0c"
+      "dh": "072c2e0c",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x2A_NpcTransaction",
@@ -2079,7 +3915,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "169eee19"
+      "dh": "169eee19",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nPacketid",
+          "DL:1"
+        ],
+        [
+          "nResult",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nGold",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTradeType",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x2C_PlaySound",
@@ -2099,7 +3961,17 @@
         "D2ClientStrc",
         "D2GSPacketSrv0x2C"
       ],
-      "dh": "c43e279f"
+      "dh": "c43e279f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x4E_ADDTOMERCENARYLIST",
@@ -2119,7 +3991,17 @@
         "D2ClientStrc",
         "D2GSPacketSrv0x4E"
       ],
-      "dh": "3cc54b5f"
+      "dh": "3cc54b5f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x50_QuestSpecial",
@@ -2142,7 +4024,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8113e1d9"
+      "dh": "8113e1d9",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x5E_QUESTPICKS",
@@ -2162,7 +4054,17 @@
         "D2ClientStrc",
         "D2GSPacketSrv0x5E"
       ],
-      "dh": "02431068"
+      "dh": "02431068",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket0x5E",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x52_PlayerQuestLog",
@@ -2182,7 +4084,17 @@
         "D2ClientStrc",
         "uint8_t"
       ],
-      "dh": "124296f8"
+      "dh": "124296f8",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x11_UnitDoOverlay",
@@ -2206,7 +4118,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8a699661"
+      "dh": "8a699661",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "byKillFlags",
+          "DL:1"
+        ],
+        [
+          "dwKilledUnitGUID_in",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wKillParam",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x57_CHANGEMONSTERUNIT",
@@ -2229,7 +4159,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cbd09511"
+      "dh": "cbd09511",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "dwUnitGUID",
+          "EDX:4"
+        ],
+        [
+          "byNpcClassOrType",
+          "Stack[0x4]:1"
+        ],
+        [
+          "wNpcCodeParam",
+          "Stack[0x8]:2"
+        ],
+        [
+          "wUMods01",
+          "Stack[0xc]:2"
+        ],
+        [
+          "wUMod2",
+          "Stack[0x10]:2"
+        ],
+        [
+          "wIsChampion",
+          "Stack[0x14]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x58_ITEMACCEPT",
@@ -2250,7 +4210,17 @@
         "D2GSPacketSrv0x",
         "D2GSPacketSrv0x58"
       ],
-      "dh": "cc5d2990"
+      "dh": "cc5d2990",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x60_SETWARPDEST",
@@ -2272,7 +4242,17 @@
         "D2GSPacketSrv0x",
         "D2UnitStrc"
       ],
-      "dh": "d3375885"
+      "dh": "d3375885",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x61_CanGoToAct",
@@ -2293,7 +4273,17 @@
         "D2GSPacketSrv0x",
         "uint8_t"
       ],
-      "dh": "f24d3cad"
+      "dh": "f24d3cad",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nAct",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x63_WAYPOINTLIST",
@@ -2315,7 +4305,17 @@
         "D2GSPacketSrv0x63",
         "uint8_t"
       ],
-      "dh": "2e4d6d84"
+      "dh": "2e4d6d84",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pWaypointData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x65_SCORE_UPDATE",
@@ -2337,7 +4337,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "d40e9ffc"
+      "dh": "d40e9ffc",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nUnitGUID",
+          "EDX:4"
+        ],
+        [
+          "wKillCountArg",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "SCMD_Unused_HaltLine2740",
@@ -2376,7 +4390,17 @@
         "D2GSPacketSrv0x",
         "D2GSPacketSrv0x73"
       ],
-      "dh": "3f951078"
+      "dh": "3f951078",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pMissileData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x74_SYNCHDEADBODY",
@@ -2398,7 +4422,25 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "3450721f"
+      "dh": "3450721f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pOwnerUnit",
+          "EDX:4"
+        ],
+        [
+          "pCorpseUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byCorpseFlagArg",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x75_UPDATEROSTER",
@@ -2426,7 +4468,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "0153a085"
+      "dh": "0153a085",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x7B_SYNCHOTKEYS",
@@ -2449,7 +4501,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2503f07b"
+      "dh": "2503f07b",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nHotkeySlot",
+          "DL:1"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bIsLeftSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwHotkeyArg",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x7E_LoadMonsterCof",
@@ -2469,7 +4543,13 @@
         "D2ClientStrc",
         "D2GSPacketSrv0x7E"
       ],
-      "dh": "9d7d66b1"
+      "dh": "9d7d66b1",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x82_PortalOwnership",
@@ -2499,7 +4579,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f76afd34"
+      "dh": "f76afd34",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ],
+        [
+          "dwPortalObjGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwPortalGUIDArg",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x83_Unused",
@@ -2522,7 +4620,33 @@
         "D2GSPacketSrvTextData",
         "uint16_t"
       ],
-      "dh": "9dccba88"
+      "dh": "9dccba88",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "wDataLen",
+          "Stack[0x4]:2"
+        ],
+        [
+          "wExtraFlag",
+          "Stack[0x8]:2"
+        ],
+        [
+          "wParam",
+          "Stack[0xc]:2"
+        ],
+        [
+          "pData",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x84_Unused",
@@ -2546,7 +4670,25 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "57ee9246"
+      "dh": "57ee9246",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "byFlag",
+          "DL:1"
+        ],
+        [
+          "wDataLen",
+          "Stack[0x4]:2"
+        ],
+        [
+          "pData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x88_Unused",
@@ -2569,7 +4711,33 @@
         "D2GSPacketSrvTextData",
         "uint16_t"
       ],
-      "dh": "4e51859f"
+      "dh": "4e51859f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "wDataLen",
+          "Stack[0x4]:2"
+        ],
+        [
+          "wExtraFlag",
+          "Stack[0x8]:2"
+        ],
+        [
+          "wParam",
+          "Stack[0xc]:2"
+        ],
+        [
+          "pData",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x8B_PlayerRelationship",
@@ -2590,7 +4758,21 @@
         "D2GSPacketSrv0x8B",
         "uint32_t"
       ],
-      "dh": "74384a17"
+      "dh": "74384a17",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "dwTargetArg",
+          "EDX:4"
+        ],
+        [
+          "byTypeArg",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x8C_PLAYERFLAGS_Argument",
@@ -2613,7 +4795,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "d1e1b06c"
+      "dh": "d1e1b06c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x8C_RelationshipUpdate_Sender",
@@ -2635,7 +4831,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "faa8f3bd"
+      "dh": "faa8f3bd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitGUID",
+          "EDX:4"
+        ],
+        [
+          "nOtherUnitGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wRelationFlags",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x8C_PLAYERFLAGS",
@@ -2659,7 +4873,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "2eda3333"
+      "dh": "2eda3333",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nUnitGUID",
+          "EDX:4"
+        ],
+        [
+          "nOtherUnitGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wRelationFlags",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x8D_PLAYERPARTY_Argument",
@@ -2682,7 +4914,21 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "80e19195"
+      "dh": "80e19195",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacketBuf",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x8D_AssignPlayerToParty_Sender",
@@ -2704,7 +4950,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a6e8caba"
+      "dh": "a6e8caba",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x8D_PLAYERPARTY",
@@ -2727,7 +4983,17 @@
         "D2GSPacketSrv0x8D",
         "D2UnitStrc"
       ],
-      "dh": "f975f373"
+      "dh": "f975f373",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x8E_LINKDEADBODY_Argument",
@@ -2750,7 +5016,21 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "b0ea417c"
+      "dh": "b0ea417c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPacketBuf",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender",
@@ -2771,7 +5051,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "1798f3af"
+      "dh": "1798f3af",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitGUID",
+          "EDX:4"
+        ],
+        [
+          "nCorpseGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byCorpseFlagArg",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x8E_CorpseAssign",
@@ -2792,7 +5090,25 @@
         "D2GSPacketSrv0x8E",
         "uint32_t"
       ],
-      "dh": "e41eed46"
+      "dh": "e41eed46",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "dwUnitGUID_param",
+          "EDX:4"
+        ],
+        [
+          "dwCorpseGUIDArg",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byCorpseFlagArg",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x89_QUESTEVENTTRIGGER",
@@ -2812,7 +5128,17 @@
         "D2ClientStrc",
         "D2GSPacketClt0x89"
       ],
-      "dh": "a2382d5e"
+      "dh": "a2382d5e",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket0x89",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x8A_NpcWantsInteract",
@@ -2832,7 +5158,17 @@
         "D2ClientStrc",
         "D2GSPacketSrv0x8A"
       ],
-      "dh": "8015315b"
+      "dh": "8015315b",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING",
@@ -2852,7 +5188,13 @@
         "D2ClientStrc",
         "D2GSPacketSrv0x8F"
       ],
-      "dh": "5312adf9"
+      "dh": "5312adf9",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x91_WELCOME_BACK",
@@ -2876,7 +5218,17 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "e0afc17f"
+      "dh": "e0afc17f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pD2GSPacketSrv0x91",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x98_SETSPAWNERMONSTER",
@@ -2898,7 +5250,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "0149d1f9"
+      "dh": "0149d1f9",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nUnitGUID",
+          "EDX:4"
+        ],
+        [
+          "wWaypointData",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x9B_MercReviveCost",
@@ -2920,7 +5286,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "c6644939"
+      "dh": "c6644939",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "wMercNameId",
+          "DX:2"
+        ],
+        [
+          "dwReviveCost",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x97_WeaponSwitch",
@@ -2940,7 +5320,13 @@
         "D2ClientStrc",
         "uint8_t"
       ],
-      "dh": "eeebd8d0"
+      "dh": "eeebd8d0",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAME_SendNearbyUnitPositionPacket",
@@ -2963,7 +5349,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "34e64370"
+      "dh": "34e64370",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xA4_PRELOAD_MONSTER",
@@ -2984,7 +5376,17 @@
         "int16_t",
         "uint32_t"
       ],
-      "dh": "b7ae0a1d"
+      "dh": "b7ae0a1d",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nClassId",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xA6_DATATABLEUPDATE",
@@ -3010,7 +5412,29 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "cdb8dfb1"
+      "dh": "cdb8dfb1",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "bUnknown",
+          "DL:1"
+        ],
+        [
+          "nTxtRunesSize",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nStreamSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nStream",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xA7_UNITSTATE_ON_EX",
@@ -3032,7 +5456,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d1955921"
+      "dh": "d1955921",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "byUnitType",
+          "DL:1"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwStateId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xA9_UNITSTATE_OFF_EX",
@@ -3054,7 +5496,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "aa957321"
+      "dh": "aa957321",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "byUnitType",
+          "DL:1"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwStateId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_WriteBooleanToBitBuffer",
@@ -3073,7 +5533,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4d719afe"
+      "dh": "4d719afe",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nBoolValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xAC_AddMonster",
@@ -3123,7 +5593,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8b06cf3e"
+      "dh": "8b06cf3e",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xAE_WARDENDATA",
@@ -3150,7 +5630,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5eac648f"
+      "dh": "5eac648f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pData",
+          "EDX:4"
+        ],
+        [
+          "nDataSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xAA_AddUnit_0xA8_SetState",
@@ -3170,7 +5664,21 @@
         "D2ClientStrc",
         "uint8_t"
       ],
-      "dh": "ff301000"
+      "dh": "ff301000",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPacket",
+          "EDX:4"
+        ],
+        [
+          "nPacketSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x59_AssignPlayer",
@@ -3200,7 +5708,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ea77119d"
+      "dh": "ea77119d",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nUnitGUID",
+          "EDX:4"
+        ],
+        [
+          "byCharClass2",
+          "Stack[0x4]:1"
+        ],
+        [
+          "szCharNameSrc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wSrcPosX",
+          "Stack[0xc]:2"
+        ],
+        [
+          "wSrcPosY",
+          "Stack[0x10]:2"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA",
@@ -3221,7 +5755,21 @@
         "D2GSPacketSrv0x1F",
         "uint32_t"
       ],
-      "dh": "8c97d2f8"
+      "dh": "8c97d2f8",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nNewValue",
+          "EDX:4"
+        ],
+        [
+          "nCurrentValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9DAllSocketedItems",
@@ -3248,7 +5796,21 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "bfd8a295"
+      "dh": "bfd8a295",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eItemFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x9C_ITEMEX",
@@ -3284,7 +5846,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "033675d8"
+      "dh": "033675d8",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nItemAction",
+          "Stack[0x4]:1"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIsCrude",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9CItemAddToGround",
@@ -3305,7 +5889,21 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "4d9e1abd"
+      "dh": "4d9e1abd",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9CItemPickedFromGround",
@@ -3333,7 +5931,25 @@
         "eD2ItemFlag",
         "int32_t"
       ],
-      "dh": "f03a99c2"
+      "dh": "f03a99c2",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9CItemDroppedToGround",
@@ -3359,7 +5975,25 @@
         "eD2ItemFlag",
         "int32_t"
       ],
-      "dh": "5189eaad"
+      "dh": "5189eaad",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9CItemOnGround",
@@ -3385,7 +6019,25 @@
         "eD2ItemFlag",
         "int32_t"
       ],
-      "dh": "de964d1a"
+      "dh": "de964d1a",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9CItemPutInContainer",
@@ -3411,7 +6063,25 @@
         "eD2ItemFlag",
         "int32_t"
       ],
-      "dh": "eab5749b"
+      "dh": "eab5749b",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9CItemAddQuantity",
@@ -3437,7 +6107,25 @@
         "eD2ItemFlag",
         "int32_t"
       ],
-      "dh": "3041a674"
+      "dh": "3041a674",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9CItemSwapInContainer",
@@ -3463,7 +6151,25 @@
         "eD2ItemFlag",
         "int32_t"
       ],
-      "dh": "cb50ee1a"
+      "dh": "cb50ee1a",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9CItemPutInBelt",
@@ -3489,7 +6195,25 @@
         "eD2ItemFlag",
         "int32_t"
       ],
-      "dh": "dec79a96"
+      "dh": "dec79a96",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9CItemRemoveFromBelt",
@@ -3510,7 +6234,25 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "75589a52"
+      "dh": "75589a52",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9CItemSwapInBelt",
@@ -3531,7 +6273,25 @@
         "D2UnitStrc",
         "eD2ItemFlag"
       ],
-      "dh": "e13eee3f"
+      "dh": "e13eee3f",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9CItemToCursor",
@@ -3551,7 +6311,21 @@
         "D2ClientStrc",
         "D2UnitStrc"
       ],
-      "dh": "f567bdfe"
+      "dh": "f567bdfe",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Send0x9CItemHandleInShop",
@@ -3579,7 +6353,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cf993cb6"
+      "dh": "cf993cb6",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "cParam",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "STRING_CheckIfStringLengthDoNotExceedSize",
@@ -3597,7 +6389,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "29dfb065"
+      "dh": "29dfb065",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nMaxLength",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_NET_D2GS_SERVER_Send_0x5A_EventMessages",
@@ -3610,6 +6412,16 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2Packet0x5aEventStructure"
+      ],
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pEventPacket",
+          "EDX:4"
+        ]
       ]
     }
   ]

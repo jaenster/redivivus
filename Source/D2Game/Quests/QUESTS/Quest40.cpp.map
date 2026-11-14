@@ -19,7 +19,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "1e616ac1"
+      "dh": "1e616ac1",
+      "paramStorage": [
+        [
+          "nHardcodedIndex",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q40_Callback00_NpcActivate",
@@ -42,7 +48,17 @@
         "D2UnitStrc",
         "eD2MonsterClassId"
       ],
-      "dh": "722895c5"
+      "dh": "722895c5",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q40_StatusFilter",
@@ -62,7 +78,29 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "6916bcee"
+      "dh": "6916bcee",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBufferEx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbyStatusCode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q40_ActiveFilter",
@@ -84,7 +122,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "17c6887d"
+      "dh": "17c6887d",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q40_Callback11_ScrollMessage",
@@ -107,7 +167,17 @@
         "eD2MonsterClassId",
         "uint16_t"
       ],
-      "dh": "181084c8"
+      "dh": "181084c8",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q40_InitData",
@@ -126,7 +196,13 @@
       "usedTypes": [
         "D2QuestDataStrc"
       ],
-      "dh": "0a7d47d0"
+      "dh": "0a7d47d0",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn66_DrehyaStartInTown",
@@ -157,7 +233,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "e9d0513b"
+      "dh": "e9d0513b",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

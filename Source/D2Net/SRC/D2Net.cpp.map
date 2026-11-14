@@ -21,7 +21,13 @@
       "usedTypes": [
         "sockaddr_in"
       ],
-      "dh": "2bd40388"
+      "dh": "2bd40388",
+      "paramStorage": [
+        [
+          "szIpAddressOut",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_ExtractPacketSize",
@@ -44,7 +50,25 @@
         "D2OnePacketClientStrc *",
         "LPCRITICAL_SECTION"
       ],
-      "dh": "0e9d2e51"
+      "dh": "0e9d2e51",
+      "paramStorage": [
+        [
+          "lpCriticalSection",
+          "ECX:4"
+        ],
+        [
+          "pD2OnePacketClient",
+          "EDX:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_FreeAllClientD2Packets",
@@ -65,7 +89,17 @@
         "D2OnePacketClientStrc *",
         "LPCRITICAL_SECTION"
       ],
-      "dh": "4880c5b6"
+      "dh": "4880c5b6",
+      "paramStorage": [
+        [
+          "lpCriticalSection",
+          "ECX:4"
+        ],
+        [
+          "pD2PacketClient",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

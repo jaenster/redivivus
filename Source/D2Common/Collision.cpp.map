@@ -23,7 +23,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9709a17e"
+      "dh": "9709a17e",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetDistanceBetweenUnits",
@@ -47,7 +61,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8f0fc7e3"
+      "dh": "8f0fc7e3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetCollisionDistance",
@@ -70,7 +94,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "37587cd0"
+      "dh": "37587cd0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetDistanceToXY",
@@ -92,7 +126,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "4698f3a3"
+      "dh": "4698f3a3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "COLLISION_IsUnitInRange",
@@ -115,7 +163,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d15da881"
+      "dh": "d15da881",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnPosition",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nRange",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "CoordIsInRoom",
@@ -136,7 +198,25 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "e398c4a6"
+      "dh": "e398c4a6",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nSize",
+          "EDI:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "COLLISION_FindNearbyUnitByCallback",
@@ -167,7 +247,21 @@
         "int32_t",
         "pfnUnitProximityTest"
       ],
-      "dh": "5244ef34"
+      "dh": "5244ef34",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCallbackParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "CallCollisionFunction",
@@ -194,7 +288,33 @@
         "fpMissileSrvDoFuncData",
         "int32_t"
       ],
-      "dh": "a8d00fcd"
+      "dh": "a8d00fcd",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnFilter",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "TileLibrary_AddCollision",
@@ -217,7 +337,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "4d6301ee"
+      "dh": "4d6301ee",
+      "paramStorage": [
+        [
+          "nY",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "pTileLibraryEntry",
+          "EAX:4"
+        ],
+        [
+          "pCollisionMap",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TileLibrary_RemoveCollision",
@@ -240,7 +378,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "5718b33f"
+      "dh": "5718b33f",
+      "paramStorage": [
+        [
+          "nY",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "pTileLibraryEntry",
+          "EAX:4"
+        ],
+        [
+          "pCollisionMap",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TileLibrary_SetCollision",
@@ -263,7 +419,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d3dd99da"
+      "dh": "d3dd99da",
+      "paramStorage": [
+        [
+          "pTileLibraryEntry",
+          "EAX:4"
+        ],
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ],
+        [
+          "pCollisionMap",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AddCollisionFlagToCoords",
@@ -284,7 +458,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "40f09e4e"
+      "dh": "40f09e4e",
+      "paramStorage": [
+        [
+          "nY",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "pCollisionMap",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "TileLibrary_SetupCollision",
@@ -311,7 +503,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a6e45d6a"
+      "dh": "a6e45d6a",
+      "paramStorage": [
+        [
+          "pTileData",
+          "ECX:4"
+        ],
+        [
+          "nTilesSize",
+          "EAX:4"
+        ],
+        [
+          "pCollisionMap",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCollisionMapCurrent",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bReplace",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TileLibrary_UpdateCollision",
@@ -339,7 +553,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d2cf5ea0"
+      "dh": "d2cf5ea0",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "pTileData",
+          "EDX:4"
+        ],
+        [
+          "pTileLibraryEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AllocRoomCollisionGrid",
@@ -373,7 +601,17 @@
         "D2RoomStrc *",
         "int32_t"
       ],
-      "dh": "d1ab081e"
+      "dh": "d1ab081e",
+      "paramStorage": [
+        [
+          "pMemPool",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FreeRoomCollisionGrid",
@@ -396,7 +634,17 @@
         "D2RoomCollisionGridStrc",
         "D2RoomStrc"
       ],
-      "dh": "41dded66"
+      "dh": "41dded66",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "COLLISN_CheckCellMask_RegArgs",
@@ -419,7 +667,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "7bfebe4c"
+      "dh": "7bfebe4c",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDI:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveCollision_Vector1",
@@ -442,7 +708,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "684f4992"
+      "dh": "684f4992",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EBX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "AX:2"
+        ]
+      ]
     },
     {
       "name": "AddCollision_Vector1",
@@ -465,7 +749,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "ca276d6a"
+      "dh": "ca276d6a",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDI:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "CheckCollision_BlockPlayerMissile",
@@ -488,7 +790,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "886a083e"
+      "dh": "886a083e",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x10]:2"
+        ]
+      ]
     },
     {
       "name": "AddCollision",
@@ -511,7 +831,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "50975a35"
+      "dh": "50975a35",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x10]:2"
+        ]
+      ]
     },
     {
       "name": "RemoveCollision",
@@ -534,7 +872,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "f1fe6d20"
+      "dh": "f1fe6d20",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CollisionGrid_CheckCollision_BoundingBox",
@@ -554,7 +910,21 @@
         "D2RoomCollisionGridStrc",
         "eCollisionFlags"
       ],
-      "dh": "48aded81"
+      "dh": "48aded81",
+      "paramStorage": [
+        [
+          "pCollisionMap",
+          "EAX:4"
+        ],
+        [
+          "pBoundingBox",
+          "EDX:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "CollisionGrid_RemoveCollision_BoundingBox",
@@ -575,7 +945,21 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "2dd67b67"
+      "dh": "2dd67b67",
+      "paramStorage": [
+        [
+          "pCollisionMap",
+          "EAX:4"
+        ],
+        [
+          "pBoundingBox",
+          "ECX:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CollisionGrid_AddCollision_BoundingBox",
@@ -596,7 +980,21 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "c4d32083"
+      "dh": "c4d32083",
+      "paramStorage": [
+        [
+          "pCollisionMap",
+          "EAX:4"
+        ],
+        [
+          "pBoundingBox",
+          "ECX:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BoundnigBox_AdaptBoundingBoxToGrid",
@@ -618,7 +1016,21 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "d0cb22e5"
+      "dh": "d0cb22e5",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBoundingBox",
+          "ESI:4"
+        ],
+        [
+          "pBoundingBoxes",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CheckCollision_BoundingBox",
@@ -645,7 +1057,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "e16b4f93"
+      "dh": "e16b4f93",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "pBoundingBox",
+          "EDX:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CheckCollision_BlockPlayer_BoundingBox",
@@ -671,7 +1097,21 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "32203cf6"
+      "dh": "32203cf6",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "pBoundingBox",
+          "EDX:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveCollision_BoundingBox",
@@ -696,7 +1136,21 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "68420bf1"
+      "dh": "68420bf1",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "pBoundingBox",
+          "EDX:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AddCollision_BoundingBox",
@@ -721,7 +1175,21 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "354d80a7"
+      "dh": "354d80a7",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "pBoundingBox",
+          "EDX:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BoundingBox",
@@ -741,7 +1209,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7c8f7e0a"
+      "dh": "7c8f7e0a",
+      "paramStorage": [
+        [
+          "pBox",
+          "EAX:4"
+        ],
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nVectorY",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nVectorX",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CheckCollision_Cross",
@@ -766,7 +1256,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "4f3ec065"
+      "dh": "4f3ec065",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "COLLISN_CheckCellMaskOrBlocked",
@@ -789,7 +1297,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "07ae1491"
+      "dh": "07ae1491",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDI:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "CheckCollision_BoundingBox1",
@@ -811,7 +1337,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "89ed23ce"
+      "dh": "89ed23ce",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CheckCollision_BlockPlayer_Cross",
@@ -835,7 +1379,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "f486cba8"
+      "dh": "f486cba8",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CheckCollision_BlockPlayer_BoundingBox1",
@@ -856,7 +1418,25 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "b455d984"
+      "dh": "b455d984",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CheckCollision_Vector",
@@ -880,7 +1460,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "41941ecf"
+      "dh": "41941ecf",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nVectorX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVectorY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "CheckCollision_BlockAll_Type",
@@ -904,7 +1510,29 @@
         "eD2CollisionShapeType",
         "int32_t"
       ],
-      "dh": "24ca80f0"
+      "dh": "24ca80f0",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nType",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "CheckCollision_BlockPlayer_Type",
@@ -929,7 +1557,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "519c887c"
+      "dh": "519c887c",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nType",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "CheckCollision_BlockAll_Width",
@@ -953,7 +1603,29 @@
         "eD2CollisionUnitSize",
         "int32_t"
       ],
-      "dh": "0b627310"
+      "dh": "0b627310",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveCollision_Cross",
@@ -977,7 +1649,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "1a77a241"
+      "dh": "1a77a241",
+      "paramStorage": [
+        [
+          "pRoom1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "EBX:4"
+        ],
+        [
+          "nY",
+          "EDI:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COLLISN_ClearCellMask",
@@ -1000,7 +1690,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "632ce91d"
+      "dh": "632ce91d",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EBX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "AX:2"
+        ]
+      ]
     },
     {
       "name": "RemoveCollision_BoundingBox1",
@@ -1022,7 +1730,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "0c8ce156"
+      "dh": "0c8ce156",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveCollision_Vector",
@@ -1045,7 +1771,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3e2a8c48"
+      "dh": "3e2a8c48",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nVectorX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVectorY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "AddCollision_Cross",
@@ -1068,7 +1820,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "5caee2c4"
+      "dh": "5caee2c4",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "EBX:4"
+        ],
+        [
+          "nY",
+          "EDI:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "COLLISN_SetCellMask",
@@ -1091,7 +1861,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "11c49b95"
+      "dh": "11c49b95",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDI:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "AddCollision_BoundingBox1",
@@ -1112,7 +1900,25 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "b59f45fc"
+      "dh": "b59f45fc",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AddCollision_Vector",
@@ -1135,7 +1941,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6f7e34fb"
+      "dh": "6f7e34fb",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nVectorX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nVectorY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "GetFreeCoordinates",
@@ -1166,7 +1998,45 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "dfd5db9f"
+      "dh": "dfd5db9f",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPoint",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pFieldCoords",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nUnitSize",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eCollisionFlagField",
+          "Stack[0x18]:4"
+        ],
+        [
+          "bAllowNeighboorRooms",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nMaxDistance",
+          "Stack[0x20]:4"
+        ],
+        [
+          "nPosIncrementValue",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "TestCollision",
@@ -1190,7 +2060,25 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "d5b65f68"
+      "dh": "d5b65f68",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIterY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPoint2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GetFreeCoordinates_WithMaxDistance",
@@ -1211,7 +2099,33 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "1f5b596a"
+      "dh": "1f5b596a",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPoint",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnitSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bAllowNeighboorRooms",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nMaxDistance",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "GetFreeCoordinates_WithNeighboorRooms",
@@ -1232,7 +2146,29 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "6105225f"
+      "dh": "6105225f",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPoint",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnitSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bAllowNeighboorRooms",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "GetFreeCoordinates_WithIncrementValue",
@@ -1253,7 +2189,29 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "24e895b8"
+      "dh": "24e895b8",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPoint",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnitSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nPosIncrementValue",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "GetFreeCoordinates_WithFieldCoords",
@@ -1274,7 +2232,37 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "d18998b2"
+      "dh": "d18998b2",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPoint",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pFieldCoords",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nUnitSize",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eCollisionFlagField",
+          "Stack[0x18]:4"
+        ],
+        [
+          "bAllowNeighboorRooms",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "COLLISION_FindFreeCoordSpiral",
@@ -1304,7 +2292,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3e523dc2"
+      "dh": "3e523dc2",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "pPoint",
+          "EDX:4"
+        ],
+        [
+          "nUnitSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppRoom",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "AddCollision_Width",
@@ -1328,7 +2338,29 @@
         "eD2CollisionUnitSize",
         "int32_t"
       ],
-      "dh": "d98a97f8"
+      "dh": "d98a97f8",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "AddCollision_Type",
@@ -1351,7 +2383,29 @@
         "eD2CollisionShapeType",
         "int32_t"
       ],
-      "dh": "6e69dee1"
+      "dh": "6e69dee1",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nType",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveCollision_Width",
@@ -1374,7 +2428,29 @@
         "eD2CollisionUnitSize",
         "int32_t"
       ],
-      "dh": "fc66ad03"
+      "dh": "fc66ad03",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveCollision_Type",
@@ -1397,7 +2473,29 @@
         "eD2CollisionShapeType",
         "int32_t"
       ],
-      "dh": "085f52cb"
+      "dh": "085f52cb",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nType",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveGetCollision_Width",
@@ -1421,7 +2519,41 @@
         "eD2CollisionUnitSize",
         "int32_t"
       ],
-      "dh": "b0cc257d"
+      "dh": "b0cc257d",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nOldX",
+          "EDX:4"
+        ],
+        [
+          "nOldY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNewX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNewY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eCollFlags",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveGetCollision_Type",
@@ -1444,7 +2576,41 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "4f3474ee"
+      "dh": "4f3474ee",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCheckX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCheckY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nType",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eCheckCollisionFlag",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateGetCollision_Unused",
@@ -1467,7 +2633,41 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "b6f0e370"
+      "dh": "b6f0e370",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCheckX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nCheckY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nType",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eCheckCollisionFlags",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateGetCollision_Width",
@@ -1491,7 +2691,45 @@
         "eD2CollisionUnitSize",
         "int32_t"
       ],
-      "dh": "011b790e"
+      "dh": "011b790e",
+      "paramStorage": [
+        [
+          "pOldRoom",
+          "ECX:4"
+        ],
+        [
+          "nOldX",
+          "EDX:4"
+        ],
+        [
+          "nOldY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x18]:4"
+        ],
+        [
+          "eCollisionFlagCheck",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateCollision_Width",
@@ -1514,7 +2752,41 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "ceabdd23"
+      "dh": "ceabdd23",
+      "paramStorage": [
+        [
+          "pOldRoom",
+          "ECX:4"
+        ],
+        [
+          "nOldX",
+          "EDX:4"
+        ],
+        [
+          "nOldY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateGetCollision_Type",
@@ -1537,7 +2809,45 @@
         "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "87cce8dc"
+      "dh": "87cce8dc",
+      "paramStorage": [
+        [
+          "pOldRoom",
+          "ECX:4"
+        ],
+        [
+          "nOldX",
+          "EDX:4"
+        ],
+        [
+          "nOldY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nType",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x18]:4"
+        ],
+        [
+          "eCollFlags",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateCollision_Type",
@@ -1558,7 +2868,41 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "4fbea2f3"
+      "dh": "4fbea2f3",
+      "paramStorage": [
+        [
+          "pOldRoom",
+          "ECX:4"
+        ],
+        [
+          "nOldX",
+          "EDX:4"
+        ],
+        [
+          "nOldY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nType",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x18]:4"
+        ]
+      ]
     }
   ]
 }

@@ -27,7 +27,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8e3cb742"
+      "dh": "8e3cb742",
+      "paramStorage": [
+        [
+          "pfnRead",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnWrite",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pWorkBuf",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUserData",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Expand",
@@ -50,7 +68,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a3d592b1"
+      "dh": "a3d592b1",
+      "paramStorage": [
+        [
+          "pItemData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DecodeLit",
@@ -71,7 +95,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "656f8bf7"
+      "dh": "656f8bf7",
+      "paramStorage": [
+        [
+          "pDcmp",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DecodeDist",
@@ -91,7 +121,17 @@
         "TDcmpStruct",
         "uint32_t"
       ],
-      "dh": "fe66e59c"
+      "dh": "fe66e59c",
+      "paramStorage": [
+        [
+          "pClientSideData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMatchLength",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "WasteBits",
@@ -111,7 +151,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8d3fedf8"
+      "dh": "8d3fedf8",
+      "paramStorage": [
+        [
+          "pClientSideData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBitCount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GenDecodeTabs",
@@ -130,7 +180,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "37181eec"
+      "dh": "37181eec",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitsTable",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBaseTable",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pOutTable",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GenAscTabs",
@@ -151,7 +219,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7c7f0b52"
+      "dh": "7c7f0b52",
+      "paramStorage": [
+        [
+          "pState",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "lmemcpy",
@@ -169,7 +243,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "ccab08b7"
+      "dh": "ccab08b7",
+      "paramStorage": [
+        [
+          "pDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

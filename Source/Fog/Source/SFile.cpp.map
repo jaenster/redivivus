@@ -24,7 +24,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "2917e559"
+      "dh": "2917e559",
+      "paramStorage": [
+        [
+          "bResult",
+          "ECX:4"
+        ],
+        [
+          "bSeekOptimization",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ARCHIVE_OpenD2FileWrap",
@@ -44,7 +54,17 @@
         "D2MPQFileStrc *",
         "int32_t"
       ],
-      "dh": "98113b31"
+      "dh": "98113b31",
+      "paramStorage": [
+        [
+          "szFilename",
+          "ECX:4"
+        ],
+        [
+          "ppFile",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ERRORMANAGER_FCloseFile",
@@ -63,7 +83,13 @@
       "usedTypes": [
         "D2MPQFileStrc"
       ],
-      "dh": "27952375"
+      "dh": "27952375",
+      "paramStorage": [
+        [
+          "pMPQFile",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ERRORMANAGER_FReadFile",
@@ -85,7 +111,37 @@
         "LPOVERLAPPED",
         "uint32_t"
       ],
-      "dh": "5e1d6bf7"
+      "dh": "5e1d6bf7",
+      "paramStorage": [
+        [
+          "pFileHandle",
+          "ECX:4"
+        ],
+        [
+          "pOutputBuffer",
+          "EDX:4"
+        ],
+        [
+          "nBytesToRead",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBytesRead",
+          "Stack[0x8]:4"
+        ],
+        [
+          "lpOverlapped",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pCompletion",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwReadFlags",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ERRORMANAGER_FGetFileSize",
@@ -105,7 +161,17 @@
         "D2MPQFileStrc",
         "LPDWORD"
       ],
-      "dh": "da86ead9"
+      "dh": "da86ead9",
+      "paramStorage": [
+        [
+          "pFileHandle",
+          "ECX:4"
+        ],
+        [
+          "pdwFileSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_SetFilePointerThunk",
@@ -126,7 +192,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "92aa9f27"
+      "dh": "92aa9f27",
+      "paramStorage": [
+        [
+          "pFileHandle",
+          "ECX:4"
+        ],
+        [
+          "nOffset",
+          "EDX:4"
+        ],
+        [
+          "pnOffsetHigh",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwMoveMethod",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_CreateFileA",
@@ -144,7 +228,37 @@
       "usedTypes": [
         "LPSECURITY_ATTRIBUTES"
       ],
-      "dh": "143b6b5c"
+      "dh": "143b6b5c",
+      "paramStorage": [
+        [
+          "lpFileName",
+          "ECX:4"
+        ],
+        [
+          "dwDesiredAccess",
+          "EDX:4"
+        ],
+        [
+          "dwShareMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "lpSecurityAttributes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwCreationDisposition",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwFlagsAndAttributes",
+          "Stack[0x10]:4"
+        ],
+        [
+          "hTemplateFile",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_DeleteFileA",
@@ -159,7 +273,13 @@
       "calledFunctions": [
         "thunk_DeleteFileA"
       ],
-      "dh": "9207da53"
+      "dh": "9207da53",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_Win32CloseHandle",
@@ -174,7 +294,13 @@
       "calledFunctions": [
         "SFILE_Win32CloseHandle"
       ],
-      "dh": "c7439be0"
+      "dh": "c7439be0",
+      "paramStorage": [
+        [
+          "hObject",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_ReadFile",
@@ -193,7 +319,29 @@
         "LPDWORD",
         "LPOVERLAPPED"
       ],
-      "dh": "cd654647"
+      "dh": "cd654647",
+      "paramStorage": [
+        [
+          "hFile",
+          "ECX:4"
+        ],
+        [
+          "lpBuffer",
+          "EDX:4"
+        ],
+        [
+          "nNumberOfBytesToRead",
+          "Stack[0x4]:4"
+        ],
+        [
+          "lpNumberOfBytesRead",
+          "Stack[0x8]:4"
+        ],
+        [
+          "lpOverlapped",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_WriteFile",
@@ -212,7 +360,29 @@
         "LPDWORD",
         "LPOVERLAPPED"
       ],
-      "dh": "802262e8"
+      "dh": "802262e8",
+      "paramStorage": [
+        [
+          "hFile",
+          "ECX:4"
+        ],
+        [
+          "lpBuffer",
+          "EDX:4"
+        ],
+        [
+          "nNumberOfBytesToWrite",
+          "Stack[0x4]:4"
+        ],
+        [
+          "lpNumberOfBytesWritten",
+          "Stack[0x8]:4"
+        ],
+        [
+          "lpOverlapped",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_Win32SetFilePointer",
@@ -230,7 +400,25 @@
       "usedTypes": [
         "PLONG"
       ],
-      "dh": "eeb92c0c"
+      "dh": "eeb92c0c",
+      "paramStorage": [
+        [
+          "hFile",
+          "ECX:4"
+        ],
+        [
+          "lDistanceToMove",
+          "EDX:4"
+        ],
+        [
+          "lpDistanceToMoveHigh",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwMoveMethod",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SafeCreateDirectoryTree",
@@ -251,7 +439,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "70036178"
+      "dh": "70036178",
+      "paramStorage": [
+        [
+          "szPath",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_EnsurePathEndsWithBackslash",
@@ -270,7 +464,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "de99b0c9"
+      "dh": "de99b0c9",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "nMaxLen",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_GetExecutableDirectory",
@@ -286,7 +490,17 @@
         "SFILE_GetExecutableDirectory",
         "SStrChrR"
       ],
-      "dh": "20e55b9a"
+      "dh": "20e55b9a",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_GetInstallPath",
@@ -309,7 +523,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "36af7adb"
+      "dh": "36af7adb",
+      "paramStorage": [
+        [
+          "lpFilename",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_GetBlizzardAppDataPath",
@@ -332,7 +556,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "be31726e"
+      "dh": "be31726e",
+      "paramStorage": [
+        [
+          "szOutPath",
+          "ECX:4"
+        ],
+        [
+          "nMaxLen",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetUseDirectCommand",
@@ -373,7 +607,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8a093ac4"
+      "dh": "8a093ac4",
+      "paramStorage": [
+        [
+          "szOutPath",
+          "ESI:4"
+        ],
+        [
+          "nMaxLen",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_MoveDirectoryRecursive",
@@ -398,7 +642,17 @@
         "_WIN32_FIND_DATAA",
         "uint32_t"
       ],
-      "dh": "d616119f"
+      "dh": "d616119f",
+      "paramStorage": [
+        [
+          "szSrcRoot",
+          "ECX:4"
+        ],
+        [
+          "szDstRoot",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetAndCreateSavePath",
@@ -425,7 +679,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "86d7faec"
+      "dh": "86d7faec",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00407260",
@@ -443,7 +707,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "e1198ab1"
+      "dh": "e1198ab1",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00407280",
@@ -458,7 +728,13 @@
       "calledFunctions": [
         "Unreferenced_00407280"
       ],
-      "dh": "bfec597a"
+      "dh": "bfec597a",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00407290",
@@ -473,7 +749,13 @@
       "calledFunctions": [
         "Unreferenced_00407290"
       ],
-      "dh": "cc07008c"
+      "dh": "cc07008c",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CalculateBufferOffset",
@@ -491,7 +773,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "72e1a0a2"
+      "dh": "72e1a0a2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nBufferOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ERRORMANAGER_SprintfToBuffer",
@@ -560,7 +852,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "946f5b37"
+      "dh": "946f5b37",
+      "paramStorage": [
+        [
+          "nYear",
+          "ECX:4"
+        ],
+        [
+          "nMonth",
+          "EDX:4"
+        ],
+        [
+          "nDay",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_GregorianCalendarFromJulian",
@@ -578,7 +884,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d121ebfe"
+      "dh": "d121ebfe",
+      "paramStorage": [
+        [
+          "nJulianDay",
+          "ECX:4"
+        ],
+        [
+          "pYear",
+          "EDX:4"
+        ],
+        [
+          "pMonth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDay",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_DeleteOldLogFiles",
@@ -605,7 +929,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ed4bac10"
+      "dh": "ed4bac10",
+      "paramStorage": [
+        [
+          "szLogPrefix",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LOGFILE_StoreGameStartupInfo",
@@ -638,6 +968,12 @@
       "namespace": "Fog::Source::SFile",
       "calledFunctions": [
         "FILETOOLS_SetLogFilePathWithoutDateAndExtension2"
+      ],
+      "paramStorage": [
+        [
+          "szSuffix",
+          "ECX:4"
+        ]
       ]
     }
   ]

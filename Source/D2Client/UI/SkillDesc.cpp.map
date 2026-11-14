@@ -20,7 +20,13 @@
       "usedTypes": [
         "D2QuestLogStrc"
       ],
-      "dh": "37777740"
+      "dh": "37777740",
+      "paramStorage": [
+        [
+          "pQuestLog",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetMonTypeLine",
@@ -39,7 +45,13 @@
         "D2MonTypeTxt",
         "int32_t"
       ],
-      "dh": "eaa4d28c"
+      "dh": "eaa4d28c",
+      "paramStorage": [
+        [
+          "nMonType",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatItemStatLine",
@@ -70,7 +82,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a4ebace1"
+      "dh": "a4ebace1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "EDX:4"
+        ],
+        [
+          "nMaxBufferSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStatListFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DamageToUndeadText",
@@ -95,7 +129,21 @@
         "int32_t",
         "wchar_t"
       ],
-      "dh": "7b86b5d4"
+      "dh": "7b86b5d4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pwszOutputBuffer",
+          "EDX:4"
+        ],
+        [
+          "nMaxBufferSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_BuildStatListDesc",
@@ -118,7 +166,21 @@
         "D2UnitStrc",
         "eD2UnitStat"
       ],
-      "dh": "e9dd6c0a"
+      "dh": "e9dd6c0a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatList",
+          "EDI:4"
+        ],
+        [
+          "pnStatValues",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcStatGroupValue",
@@ -144,7 +206,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "68147c1b"
+      "dh": "68147c1b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nStatValue",
+          "EAX:4"
+        ],
+        [
+          "pItemStatCostTxt",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcStatGroupMinMax",
@@ -169,7 +249,33 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "bc89d1cc"
+      "dh": "bc89d1cc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatList",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGroupValue",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pItemStatCostTxt",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pbIsFirstInGroup",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "ItemStatCost_DescFunc_DGrpFunc",
@@ -216,7 +322,33 @@
         "uint8_t",
         "wchar_t"
       ],
-      "dh": "5eaf0ec5"
+      "dh": "5eaf0ec5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatList",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatParam",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nStatValue",
+          "Stack[0x14]:4"
+        ],
+        [
+          "wszOutputBuffer",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_BuildStatDescription",
@@ -244,7 +376,21 @@
         "eD2UnitStat",
         "wchar_t"
       ],
-      "dh": "dc81d2dd"
+      "dh": "dc81d2dd",
+      "paramStorage": [
+        [
+          "eUnitStat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszOutputBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "apnStatValues",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_BuildChargeSkillDesc",
@@ -278,7 +424,21 @@
         "uint32_t",
         "wchar_t"
       ],
-      "dh": "67c6cd3d"
+      "dh": "67c6cd3d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszOutputBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnStatData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_BuildStatBuffDesc",
@@ -332,7 +492,41 @@
         "uint32_t",
         "wchar_t"
       ],
-      "dh": "44e06979"
+      "dh": "44e06979",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "wszOutputBuffer",
+          "EDX:4"
+        ],
+        [
+          "nMaxBufferSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bIncludeUndeadDamage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eState",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eState2",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eStatListFlags",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bAppendNewline",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_AppendStatBuffText",
@@ -357,7 +551,29 @@
         "int32_t",
         "wchar_t"
       ],
-      "dh": "19d1964d"
+      "dh": "19d1964d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "wszOutputBuffer",
+          "EDX:4"
+        ],
+        [
+          "nMaxBufferSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAppendNewline",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wszPrefixText",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_AppendItemBuffText",
@@ -384,7 +600,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8e162ea9"
+      "dh": "8e162ea9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pItem",
+          "EDX:4"
+        ],
+        [
+          "wszOutputBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxBufferSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_AppendSetBonusTextByStateValue",
@@ -411,7 +645,25 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "56f0f870"
+      "dh": "56f0f870",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "wszOutputBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxBufferSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatMagicPrefixDesc",
@@ -441,7 +693,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1b87bc6d"
+      "dh": "1b87bc6d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pD2MagicAffixTxt",
+          "EDX:4"
+        ],
+        [
+          "nMagicAffixId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxBufferSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "wszText2",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatMagicSuffixDesc",
@@ -470,7 +748,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0acd011b"
+      "dh": "0acd011b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pD2MagicAffixTxt",
+          "EDX:4"
+        ],
+        [
+          "nMagicAffixId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxBufferSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "wszText2",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_BuildMagicAffixDesc",
@@ -503,7 +807,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "546f1a1e"
+      "dh": "546f1a1e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "EDX:4"
+        ],
+        [
+          "nMaxBufferSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_GetStatNameString",
@@ -522,7 +840,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "5ded5ce6"
+      "dh": "5ded5ce6",
+      "paramStorage": [
+        [
+          "nSkillId",
+          "ECX:4"
+        ],
+        [
+          "nStatOffset",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillLongDescription",
@@ -541,7 +869,13 @@
         "eD2Skills",
         "int16_t"
       ],
-      "dh": "8665560e"
+      "dh": "8665560e",
+      "paramStorage": [
+        [
+          "eSkill",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GetAltSkillDescription",
@@ -560,7 +894,13 @@
         "eD2Skills",
         "int16_t"
       ],
-      "dh": "0a3c0385"
+      "dh": "0a3c0385",
+      "paramStorage": [
+        [
+          "eSkillId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ApplyPassiveFireMasteryDamage",
@@ -583,7 +923,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ecaec72d"
+      "dh": "ecaec72d",
+      "paramStorage": [
+        [
+          "pSkillsTxt",
+          "EAX:4"
+        ],
+        [
+          "nMinElemDamage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxElemDamage",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "ApplyPassiveLightningMasteryDamage",
@@ -606,7 +960,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "395f75cb"
+      "dh": "395f75cb",
+      "paramStorage": [
+        [
+          "pSkillsTxt",
+          "EAX:4"
+        ],
+        [
+          "nMinElemDamage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxElemDamage",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "GetDamageTypeLocale",
@@ -625,7 +993,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "e901af74"
+      "dh": "e901af74",
+      "paramStorage": [
+        [
+          "nElemType",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_ElemTypeToColorIndex",
@@ -644,7 +1018,13 @@
         "eD2ElementalDamageTypeDWORD",
         "uint32_t"
       ],
-      "dh": "784f3052"
+      "dh": "784f3052",
+      "paramStorage": [
+        [
+          "nElemType",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_GetAuraBonusDamage",
@@ -705,7 +1085,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "36402b80"
+      "dh": "36402b80",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnMinDmgAcc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnMaxDmgAcc",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pdwElemColorOut",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcSkillElemDamage",
@@ -728,7 +1126,33 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a1090d72"
+      "dh": "a1090d72",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnMinDmgAcc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnMaxDmgAcc",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pdwColorIdx",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pSkillDescTxt",
+          "EDI:4"
+        ],
+        [
+          "nSkillLevel",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatIntValue",
@@ -748,7 +1172,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "eca82022"
+      "dh": "eca82022",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValue",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatDecimalValue",
@@ -768,7 +1206,25 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "3e622d54"
+      "dh": "3e622d54",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValue",
+          "EAX:4"
+        ],
+        [
+          "nFraction",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatDamageRange",
@@ -788,7 +1244,29 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "06b23548"
+      "dh": "06b23548",
+      "paramStorage": [
+        [
+          "bPrefixSign",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bUseFormat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMinDamage",
+          "ESI:4"
+        ],
+        [
+          "nMaxDamage",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatDamageRangeWithCalc",
@@ -809,7 +1287,25 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "a7341f57"
+      "dh": "a7341f57",
+      "paramStorage": [
+        [
+          "bPrefixSign",
+          "ECX:4"
+        ],
+        [
+          "nMinVal",
+          "EDX:4"
+        ],
+        [
+          "nMaxVal",
+          "EAX:4"
+        ],
+        [
+          "wszText",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatDecimalRange",
@@ -829,7 +1325,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "b1ec7449"
+      "dh": "b1ec7449",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatRangeWithStrings",
@@ -852,7 +1358,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "a293d9ff"
+      "dh": "a293d9ff",
+      "paramStorage": [
+        [
+          "nBonusRatio",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStatNameId",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nBonusValue",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatRangeDivided",
@@ -876,7 +1400,33 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "1bcbdbae"
+      "dh": "1bcbdbae",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMinLabel",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nMaxLabel",
+          "Stack[0xc]:2"
+        ],
+        [
+          "nMinValue",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nMaxValue",
+          "EAX:4"
+        ],
+        [
+          "nDivisor",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatStringWithCalc",
@@ -899,7 +1449,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "4363b62b"
+      "dh": "4363b62b",
+      "paramStorage": [
+        [
+          "dwSkillCalcCtx",
+          "ECX:4"
+        ],
+        [
+          "nFormatStringId",
+          "DX:2"
+        ],
+        [
+          "pStatValues",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatSignedValue",
@@ -922,7 +1490,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "b0468abe"
+      "dh": "b0468abe",
+      "paramStorage": [
+        [
+          "nSignedValue",
+          "ECX:4"
+        ],
+        [
+          "nStatLabelId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nValue",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatDecimalWithStrings",
@@ -947,7 +1533,33 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "7b1c6687"
+      "dh": "7b1c6687",
+      "paramStorage": [
+        [
+          "nPrefixLabelId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nSuffixLabelId",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nDivisor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nRawValue",
+          "ESI:4"
+        ],
+        [
+          "wszText",
+          "EBX:4"
+        ],
+        [
+          "bPrefixSign",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatDecimalWithLabel",
@@ -971,7 +1583,29 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "d7a30b1d"
+      "dh": "d7a30b1d",
+      "paramStorage": [
+        [
+          "nDecimalPart",
+          "ECX:4"
+        ],
+        [
+          "nLabelId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nIntPart",
+          "EAX:4"
+        ],
+        [
+          "bPrefixSign",
+          "ESI:4"
+        ],
+        [
+          "wszText",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatValuePercentage",
@@ -994,7 +1628,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "cd4f0e3d"
+      "dh": "cd4f0e3d",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ],
+        [
+          "nSuffixLabelId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatValueTwoStrings",
@@ -1017,7 +1669,29 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "2de5f935"
+      "dh": "2de5f935",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ],
+        [
+          "nLabel1Id",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nLabel2Id",
+          "Stack[0x8]:2"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0xc]:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatTwoValuesSigned",
@@ -1040,7 +1714,29 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "201cd712"
+      "dh": "201cd712",
+      "paramStorage": [
+        [
+          "nSingularLabelId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nPluralLabelId",
+          "Stack[0x8]:2"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nValue",
+          "ESI:4"
+        ],
+        [
+          "wszText",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatSignedRangeOrValue",
@@ -1063,7 +1759,29 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "2570b104"
+      "dh": "2570b104",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ],
+        [
+          "nPrefixLabelId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nSuffixLabelId",
+          "Stack[0x8]:2"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0xc]:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatMinMaxRange",
@@ -1087,7 +1805,33 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "a57500db"
+      "dh": "a57500db",
+      "paramStorage": [
+        [
+          "nMinVal",
+          "ECX:4"
+        ],
+        [
+          "nMaxVal",
+          "EDX:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPrefixLabelId",
+          "DI:2"
+        ],
+        [
+          "nSuffixLabelId",
+          "BX:2"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatMinMaxRangeLabelsFirst",
@@ -1111,7 +1855,33 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "7d235082"
+      "dh": "7d235082",
+      "paramStorage": [
+        [
+          "nMinVal",
+          "ECX:4"
+        ],
+        [
+          "nMaxVal",
+          "EDX:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSuffixLabelId",
+          "DI:2"
+        ],
+        [
+          "nPrefixLabelId",
+          "BX:2"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatDamageMinMax",
@@ -1135,7 +1905,33 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "451ca827"
+      "dh": "451ca827",
+      "paramStorage": [
+        [
+          "nMinDmg",
+          "ECX:4"
+        ],
+        [
+          "nMaxDmg",
+          "EDX:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bShowLabel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLabelId",
+          "BX:2"
+        ],
+        [
+          "bPrefixSign",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatThreeValues",
@@ -1158,7 +1954,33 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "2731699f"
+      "dh": "2731699f",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nLabel1Id",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nLabel2Id",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nLabel3Id",
+          "Stack[0xc]:2"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0x10]:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatDecimalSigned",
@@ -1181,7 +2003,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "8afcb29b"
+      "dh": "8afcb29b",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ],
+        [
+          "nLabelId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "wszText",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DistanceToYardsText",
@@ -1204,7 +2040,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "e7643bf8"
+      "dh": "e7643bf8",
+      "paramStorage": [
+        [
+          "nLabelId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "wszText",
+          "EDI:4"
+        ],
+        [
+          "nDistance",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatSkillCalcValue",
@@ -1226,7 +2076,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "30338e47"
+      "dh": "30338e47",
+      "paramStorage": [
+        [
+          "nCalcValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine1_SkillParams",
@@ -1255,7 +2115,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5b70248e"
+      "dh": "5b70248e",
+      "paramStorage": [
+        [
+          "pSkillsTxt",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCalcA",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nCalcValue",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcWeaponDamageRange",
@@ -1292,7 +2178,49 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "49c2ad37"
+      "dh": "49c2ad37",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pnMinDamage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnMaxDamage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nFlatDamageBonus",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nSrcDamage",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "bUseWeaponStatList",
+          "Stack[0x20]:4"
+        ],
+        [
+          "nDamagePctBonus",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcElemDamageRange",
@@ -1320,7 +2248,29 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "2e7d2796"
+      "dh": "2e7d2796",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnMinDamage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnMaxDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnColor",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "AdjustDamageByType",
@@ -1341,7 +2291,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "d1e22337"
+      "dh": "d1e22337",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pMinDamage",
+          "EBX:4"
+        ],
+        [
+          "pMaxDamage",
+          "EDI:4"
+        ],
+        [
+          "nDamageType",
+          "AL:1"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcAttackRateBonus",
@@ -1374,7 +2342,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "29aaf91f"
+      "dh": "29aaf91f",
+      "paramStorage": [
+        [
+          "pnAttackRate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnColor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcAttackRateForWeapon",
@@ -1395,7 +2389,45 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e73779be"
+      "dh": "e73779be",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pnAttackRate",
+          "EDX:4"
+        ],
+        [
+          "pnColor",
+          "Stack[0x4]:4"
+        ],
+        [
+          "param_1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcEquippedAttackRate",
@@ -1418,7 +2450,41 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "430cb636"
+      "dh": "430cb636",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnMinDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnMinColor",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnMaxDamage",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnMaxColor",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcCompareAttackRate",
@@ -1450,7 +2516,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7830f858"
+      "dh": "7830f858",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnMinDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnMinColor",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnMaxDamage",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnMaxColor",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcAttackRateWithState",
@@ -1483,7 +2583,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bfa42067"
+      "dh": "bfa42067",
+      "paramStorage": [
+        [
+          "pnAttackRate",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnColor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_GetPrimaryWeapon",
@@ -1512,7 +2638,13 @@
         "eD2BodyLoc",
         "uint32_t"
       ],
-      "dh": "01708855"
+      "dh": "01708855",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_GetSecondaryWeapon",
@@ -1540,7 +2672,13 @@
         "eD2BodyLoc",
         "uint32_t"
       ],
-      "dh": "b6acbf92"
+      "dh": "b6acbf92",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcDualWieldDamage",
@@ -1571,7 +2709,53 @@
         "pfnSkillDescWeaponDmgCalc",
         "uint32_t"
       ],
-      "dh": "a1eef615"
+      "dh": "a1eef615",
+      "paramStorage": [
+        [
+          "pUnit2",
+          "EAX:4"
+        ],
+        [
+          "pdwParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pdwParam2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pdwParam3",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pdwParam4",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pfnCalcWeaponDmg",
+          "Stack[0x20]:4"
+        ],
+        [
+          "dwParam3",
+          "Stack[0x24]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x28]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcDualWieldDmg",
@@ -1592,7 +2776,37 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "429eca44"
+      "dh": "429eca44",
+      "paramStorage": [
+        [
+          "pSkill",
+          "ECX:4"
+        ],
+        [
+          "param_1",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pdwParam1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pdwParam2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pdwParam3",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcDualWieldWithAR",
@@ -1617,7 +2831,41 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "57de9bf8"
+      "dh": "57de9bf8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnMinDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnMinColor",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnMaxDamage",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnMaxColor",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcDualWieldWithARState",
@@ -1639,7 +2887,41 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c83e909a"
+      "dh": "c83e909a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnMinDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnMinColor",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnMaxDamage",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnMaxColor",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcDualWieldSimple",
@@ -1661,7 +2943,41 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e3cdafe6"
+      "dh": "e3cdafe6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnMinDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnMinColor",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnMaxDamage",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnMaxColor",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawDamageWithRange",
@@ -1684,7 +3000,45 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f4a9a671"
+      "dh": "f4a9a671",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pnMinDamage",
+          "EDX:4"
+        ],
+        [
+          "pnMaxDamage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnColor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDamagePctBonus",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nFlatDamageBonus",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nSrcDamage",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawElemDamageWithRange",
@@ -1706,7 +3060,37 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "3f45af25"
+      "dh": "3f45af25",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnMinDamage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnMaxDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnColor",
+          "EBX:4"
+        ],
+        [
+          "pUnit2",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDI:4"
+        ],
+        [
+          "nSrcDamage",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawDamageNumbers",
@@ -1729,7 +3113,33 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "347df5aa"
+      "dh": "347df5aa",
+      "paramStorage": [
+        [
+          "nMinDamage",
+          "ECX:4"
+        ],
+        [
+          "nMaxDamage",
+          "EDX:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nXStart",
+          "EDI:4"
+        ],
+        [
+          "nYOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXEnd",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawTwoLineText",
@@ -1752,7 +3162,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "09d30ccc"
+      "dh": "09d30ccc",
+      "paramStorage": [
+        [
+          "wszText1",
+          "ECX:4"
+        ],
+        [
+          "wszText2",
+          "EDX:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwColor1",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwColor2",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSingleNumber",
@@ -1774,7 +3214,29 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "9140c304"
+      "dh": "9140c304",
+      "paramStorage": [
+        [
+          "nColorIdx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenZ",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nValue",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgPhysical",
@@ -1804,7 +3266,53 @@
         "pfnSkillDescWeaponDmgCalc",
         "uint32_t"
       ],
-      "dh": "1772d790"
+      "dh": "1772d790",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkillRecord",
+          "ECX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "EAX:4"
+        ],
+        [
+          "nItemClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pfnCalcWeaponDmg",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nExtraFlags",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pCompareUnit",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nScreenZ",
+          "Stack[0x20]:4"
+        ],
+        [
+          "nElemDmg",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgElemental",
@@ -1838,7 +3346,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0793c31b"
+      "dh": "0793c31b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgWithElem",
@@ -1874,7 +3412,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3b1f1776"
+      "dh": "3b1f1776",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgType1",
@@ -1904,7 +3472,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a9f46f22"
+      "dh": "a9f46f22",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgType2",
@@ -1934,7 +3532,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "95b44f13"
+      "dh": "95b44f13",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgType3",
@@ -1965,7 +3593,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d3448606"
+      "dh": "d3448606",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgBasic",
@@ -1988,7 +3646,37 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "eaca74ab"
+      "dh": "eaca74ab",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_CalcAuraDamageRange",
@@ -2028,7 +3716,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "59bc2f1e"
+      "dh": "59bc2f1e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pnMinDamage",
+          "EDX:4"
+        ],
+        [
+          "pnMaxDamage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pElemType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAuraBonusPct",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwParam1",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgAura",
@@ -2062,7 +3788,37 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "5d387e73"
+      "dh": "5d387e73",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgAuraElem",
@@ -2087,7 +3843,37 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "23bff141"
+      "dh": "23bff141",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgDualWield",
@@ -2112,7 +3898,37 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8b520ac2"
+      "dh": "8b520ac2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgComplex",
@@ -2142,7 +3958,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "089f9bff"
+      "dh": "089f9bff",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgElem2H",
@@ -2172,7 +4018,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "55b94a7a"
+      "dh": "55b94a7a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgElem2HAlt",
@@ -2203,7 +4079,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e109f120"
+      "dh": "e109f120",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgRanged",
@@ -2232,7 +4138,37 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "606f0fb4"
+      "dh": "606f0fb4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgSimple",
@@ -2255,7 +4191,37 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bbe66700"
+      "dh": "bbe66700",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgPoisonRange",
@@ -2286,7 +4252,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "97670ae0"
+      "dh": "97670ae0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgBow",
@@ -2313,7 +4309,37 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "cea0c4d2"
+      "dh": "cea0c4d2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgThrow",
@@ -2351,7 +4377,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bceb112d"
+      "dh": "bceb112d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgKick",
@@ -2382,7 +4438,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a7e284da"
+      "dh": "a7e284da",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgFist",
@@ -2408,7 +4494,37 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "89e61097"
+      "dh": "89e61097",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgTrap",
@@ -2434,7 +4550,37 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "2049a458"
+      "dh": "2049a458",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgConversion",
@@ -2464,7 +4610,37 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "8fa8d30d"
+      "dh": "8fa8d30d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgSummon",
@@ -2505,7 +4681,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4a0e6d83"
+      "dh": "4a0e6d83",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgProgressive",
@@ -2539,7 +4745,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c22b3721"
+      "dh": "c22b3721",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillDmgProgElem",
@@ -2563,7 +4799,37 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d47ff2ac"
+      "dh": "d47ff2ac",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXLeft",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nXRight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLineD_AppendDuration",
@@ -2590,7 +4856,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "efbe6543"
+      "dh": "efbe6543",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLifePercent",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLifeBonus",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMonStatsId",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DamgeTypeToText",
@@ -2614,7 +4898,29 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "81500f55"
+      "dh": "81500f55",
+      "paramStorage": [
+        [
+          "eDamageType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wDmgTypeStringId",
+          "AX:2"
+        ],
+        [
+          "nMinDamage",
+          "ECX:4"
+        ],
+        [
+          "nMaxDamage",
+          "EDX:4"
+        ],
+        [
+          "wszText",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLineA_AppendDamageType",
@@ -2639,7 +4945,33 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "a648b442"
+      "dh": "a648b442",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLevel",
+          "EAX:4"
+        ],
+        [
+          "nSkillId",
+          "EBX:4"
+        ],
+        [
+          "wDmgTypeLocaleId",
+          "Stack[0x10]:2"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine32_MissileDamage",
@@ -2665,7 +4997,29 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "205b8ea1"
+      "dh": "205b8ea1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLevel",
+          "EAX:4"
+        ],
+        [
+          "nMissileId",
+          "EBX:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wDmgTypeLocaleId",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine9_ElemDamage",
@@ -2693,7 +5047,33 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "7ae2dee6"
+      "dh": "7ae2dee6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nFlatBonus",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLevel",
+          "EAX:4"
+        ],
+        [
+          "nPercentBonus",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine8_AppendToHit",
@@ -2716,7 +5096,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "176797ac"
+      "dh": "176797ac",
+      "paramStorage": [
+        [
+          "eSkill",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ],
+        [
+          "nSkillLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatMissileDamage",
@@ -2739,7 +5137,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "a22c6069"
+      "dh": "a22c6069",
+      "paramStorage": [
+        [
+          "nMinDamage",
+          "ECX:4"
+        ],
+        [
+          "nMaxDamage",
+          "EDX:4"
+        ],
+        [
+          "wDmgTypeStringId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine16_MissileDamage",
@@ -2768,7 +5184,29 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "e3bf773d"
+      "dh": "e3bf773d",
+      "paramStorage": [
+        [
+          "nMissileId",
+          "ECX:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLevel",
+          "EAX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "EDX:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine1B_AppendDamage",
@@ -2791,7 +5229,25 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "fc4c6950"
+      "dh": "fc4c6950",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "EDI:4"
+        ],
+        [
+          "eSkillId",
+          "EBX:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine1A_SkillDamage",
@@ -2816,7 +5272,29 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "e3d4273b"
+      "dh": "e3d4273b",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "EAX:4"
+        ],
+        [
+          "eSkillId",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine3F_SignedPctRange",
@@ -2839,7 +5317,33 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "a368fcb3"
+      "dh": "a368fcb3",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ],
+        [
+          "wStatStringId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bAppendPercent",
+          "Stack[0xc]:4"
+        ],
+        [
+          "wLabelStringId",
+          "DI:2"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine2A_DecimalRange",
@@ -2862,7 +5366,37 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "dbe675c9"
+      "dh": "dbe675c9",
+      "paramStorage": [
+        [
+          "nValueMax",
+          "ECX:4"
+        ],
+        [
+          "wSuffixStringId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bAppendPercent",
+          "Stack[0xc]:4"
+        ],
+        [
+          "wLabelStringId",
+          "DI:2"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ],
+        [
+          "nCalcA",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine40_DecimalLabel",
@@ -2887,7 +5421,33 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "77bea974"
+      "dh": "77bea974",
+      "paramStorage": [
+        [
+          "wSuffixStringId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nCalcA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0xc]:4"
+        ],
+        [
+          "wLabelStringId",
+          "DI:2"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ],
+        [
+          "nSecondValue",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine41_AppendStrings",
@@ -2908,7 +5468,21 @@
         "WCHAR",
         "uint16_t"
       ],
-      "dh": "97c460d6"
+      "dh": "97c460d6",
+      "paramStorage": [
+        [
+          "wDescTextA",
+          "CX:2"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ],
+        [
+          "wDescTextB",
+          "DI:2"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine45_DecimalLabel",
@@ -2931,7 +5505,33 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "3b7b9fbf"
+      "dh": "3b7b9fbf",
+      "paramStorage": [
+        [
+          "wValuePrefixStringId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bAppendPercent",
+          "Stack[0xc]:4"
+        ],
+        [
+          "wLabelStringId",
+          "DI:2"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ],
+        [
+          "nCalcA",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine42_CalcByIndex",
@@ -2954,7 +5554,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "e4927ec8"
+      "dh": "e4927ec8",
+      "paramStorage": [
+        [
+          "nCalcResult",
+          "ECX:4"
+        ],
+        [
+          "wFormatStringId",
+          "DX:2"
+        ],
+        [
+          "pSkillDescShort",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine27_SkillElemCalc",
@@ -2987,7 +5605,29 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "29bf61fa"
+      "dh": "29bf61fa",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCalcInputA",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pSkillsTxt",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine29_FormatMonster",
@@ -3018,7 +5658,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "859f3f88"
+      "dh": "859f3f88",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMaxDmgBonus",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine2D_SkillPassive",
@@ -3041,7 +5699,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "b4b24a27"
+      "dh": "b4b24a27",
+      "paramStorage": [
+        [
+          "nSkillLevel",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "EDX:4"
+        ],
+        [
+          "nSkillId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine22_SkillSynergies",
@@ -3073,7 +5745,29 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "7262fc0e"
+      "dh": "7262fc0e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine35_BonusList",
@@ -3096,7 +5790,17 @@
         "WCHAR",
         "uint16_t"
       ],
-      "dh": "bbd6d171"
+      "dh": "bbd6d171",
+      "paramStorage": [
+        [
+          "pSkillArgs",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wLabelStringId",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_HasAnyClassSkill",
@@ -3122,7 +5826,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "ac205be0"
+      "dh": "ac205be0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DrawSkillInfo",
@@ -3164,7 +5874,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "597b8735"
+      "dh": "597b8735",
+      "paramStorage": [
+        [
+          "pPlayerUnit",
+          "ECX:4"
+        ],
+        [
+          "pActiveSkill",
+          "EDX:4"
+        ],
+        [
+          "nLayoutIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UI_STAT_Damage",
@@ -3188,7 +5912,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "7eda12c1"
+      "dh": "7eda12c1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_GetSkillBonusText",
@@ -3215,7 +5945,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "2831da48"
+      "dh": "2831da48",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bLeftSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_FormatValueWithSign",
@@ -3239,7 +5979,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "1705440f"
+      "dh": "1705440f",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "wStrId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "bPrefixSign",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wszText",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLineB_SignedFormat",
@@ -3262,7 +6020,29 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "62527b5e"
+      "dh": "62527b5e",
+      "paramStorage": [
+        [
+          "nSkillLevel",
+          "EAX:4"
+        ],
+        [
+          "nSkillId",
+          "ECX:4"
+        ],
+        [
+          "pUnitStrc",
+          "EDX:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLineE_PerLevelBonus",
@@ -3291,7 +6071,29 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "8964ebbe"
+      "dh": "8964ebbe",
+      "paramStorage": [
+        [
+          "nSkillId",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "EAX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_DescLine30_DamageMinMax",
@@ -3321,7 +6123,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "064898b3"
+      "dh": "064898b3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_ProcessDescLine",
@@ -3406,7 +6230,41 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "53f6bb38"
+      "dh": "53f6bb38",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pwszOutput",
+          "EDX:4"
+        ],
+        [
+          "pSkillsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCalcIndex",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nDescLineIndex",
+          "Stack[0x14]:4"
+        ],
+        [
+          "cCharClass",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_BuildSkillTooltip",
@@ -3442,7 +6300,33 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "9186ef82"
+      "dh": "9186ef82",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCalcIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_BuildSkillTooltip_NoMaxLevelCheck",
@@ -3477,7 +6361,33 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "24de74dd"
+      "dh": "24de74dd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCalcIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_BuildSkillShortTooltip",
@@ -3507,7 +6417,37 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "61a9ae44"
+      "dh": "61a9ae44",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCalcIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x14]:4"
+        ]
+      ]
     }
   ]
 }

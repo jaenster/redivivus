@@ -23,7 +23,25 @@
         "GlTextureCacheStrc",
         "uint32_t"
       ],
-      "dh": "80e8194e"
+      "dh": "80e8194e",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nVramStart",
+          "EDX:4"
+        ],
+        [
+          "nVramEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwTextureSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GLTEXCACHE_AppendNodeToTail",
@@ -42,7 +60,17 @@
         "GlTextureCacheNodeStrc",
         "GlTextureCacheStrc"
       ],
-      "dh": "af89d41b"
+      "dh": "af89d41b",
+      "paramStorage": [
+        [
+          "pCache",
+          "EAX:4"
+        ],
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GLTEXCACHE_RemoveNodeByIndex",
@@ -61,7 +89,17 @@
         "GlTextureCacheNodeStrc",
         "GlTextureCacheStrc"
       ],
-      "dh": "ce88c14e"
+      "dh": "ce88c14e",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nNodeIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GLTEXCACHE_AllocateNode",
@@ -84,7 +122,13 @@
         "GlTextureCacheStrc",
         "int32_t"
       ],
-      "dh": "34e6a768"
+      "dh": "34e6a768",
+      "paramStorage": [
+        [
+          "pCache",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GLTEXCACHE_PromoteNodeToMRU",
@@ -108,7 +152,17 @@
         "GlTextureCacheStrc",
         "int32_t"
       ],
-      "dh": "f8ef0f00"
+      "dh": "f8ef0f00",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nNodeIndex1Based",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GLTEXCACHE_EvictLRU",
@@ -127,7 +181,13 @@
         "GlTextureCacheNodeStrc",
         "GlTextureCacheStrc"
       ],
-      "dh": "dc9aefce"
+      "dh": "dc9aefce",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GLTEXCACHE_Destroy",
@@ -148,7 +208,17 @@
         "GlTextureCacheStrc",
         "uint32_t"
       ],
-      "dh": "f8407783"
+      "dh": "f8407783",
+      "paramStorage": [
+        [
+          "pCacheData",
+          "ECX:4"
+        ],
+        [
+          "pCache",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GLTEXCACHE_EnsureCapacity",
@@ -168,7 +238,13 @@
         "GlTextureCacheNodeStrc",
         "GlTextureCacheStrc"
       ],
-      "dh": "ee0f848b"
+      "dh": "ee0f848b",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

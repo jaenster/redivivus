@@ -26,7 +26,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "ff939e66"
+      "dh": "ff939e66",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q30_StatusFilter",
@@ -46,7 +56,29 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "44042240"
+      "dh": "44042240",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBufferEx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbyStatusCode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q30_ActiveFilter",
@@ -71,7 +103,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "2fd23ca4"
+      "dh": "2fd23ca4",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q30_InitData",
@@ -90,7 +144,13 @@
       "usedTypes": [
         "D2QuestDataStrc"
       ],
-      "dh": "54d06ce9"
+      "dh": "54d06ce9",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

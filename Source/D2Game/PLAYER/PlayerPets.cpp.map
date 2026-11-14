@@ -20,7 +20,13 @@
         "D2PetTypeTxt",
         "int32_t"
       ],
-      "dh": "f7073989"
+      "dh": "f7073989",
+      "paramStorage": [
+        [
+          "nPetId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Send0x7aSummonLog",
@@ -46,7 +52,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9eda8d38"
+      "dh": "9eda8d38",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPetArgs",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "KillHandlerPet",
@@ -77,7 +97,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "161ff00f"
+      "dh": "161ff00f",
+      "paramStorage": [
+        [
+          "nUid",
+          "EBX:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "GetPetListFromId",
@@ -97,7 +127,17 @@
         "D2UnitDataPlayerPetsStrc",
         "int32_t"
       ],
-      "dh": "7c378755"
+      "dh": "7c378755",
+      "paramStorage": [
+        [
+          "pPet",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMinionId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PETS_FreeOrKillPetList",
@@ -138,7 +178,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "93551ee2"
+      "dh": "93551ee2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPetList",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIsHireable",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bKillForRevive",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pGame",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "FreePets",
@@ -167,7 +229,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "f5050c46"
+      "dh": "f5050c46",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetPetUidByIndex",
@@ -192,7 +264,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b4c0c437"
+      "dh": "b4c0c437",
+      "paramStorage": [
+        [
+          "nIndex",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00574810",
@@ -211,7 +293,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "7f8b02ee"
+      "dh": "7f8b02ee",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "KillingPets",
@@ -241,7 +333,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "96249ea3"
+      "dh": "96249ea3",
+      "paramStorage": [
+        [
+          "nTargetGUID",
+          "ECX:4"
+        ],
+        [
+          "pPetList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bKill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pGame",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SummonAndAssign",
@@ -268,7 +378,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "547c0636"
+      "dh": "547c0636",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSummonArgs",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PETS_UpdatePetData",
@@ -292,7 +416,25 @@
         "ePetType",
         "int32_t"
       ],
-      "dh": "d69a4cfa"
+      "dh": "d69a4cfa",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nPetType",
+          "EDX:4"
+        ],
+        [
+          "nTargetPetGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pNewPetData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetOwnersPetType",
@@ -317,7 +459,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8dfd23ad"
+      "dh": "8dfd23ad",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nUnitGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PETS_ResummonPetByUnit",
@@ -347,7 +499,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "33f2f976"
+      "dh": "33f2f976",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPetUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetPlayersPetData",
@@ -374,7 +540,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "4c425eee"
+      "dh": "4c425eee",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nPetGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERPETS_FreeAllPetsInList",
@@ -396,7 +572,17 @@
         "D2PetStrc",
         "SGAMEDATA"
       ],
-      "dh": "014c6105"
+      "dh": "014c6105",
+      "paramStorage": [
+        [
+          "pPetList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGame",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PETS_TeleportToRoom",
@@ -429,7 +615,29 @@
         "eD2LevelId",
         "uint16_t"
       ],
-      "dh": "aac5ada2"
+      "dh": "aac5ada2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wPosX",
+          "Stack[0x8]:2"
+        ],
+        [
+          "wPosY",
+          "Stack[0xc]:2"
+        ],
+        [
+          "pRoom",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ROOM_SpawnPetsFromSaveData",
@@ -454,7 +662,29 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "7865f144"
+      "dh": "7865f144",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wPosX",
+          "Stack[0x8]:2"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "ppPetListHead",
+          "EAX:4"
+        ],
+        [
+          "wPosY",
+          "BX:2"
+        ]
+      ]
     },
     {
       "name": "PetsForEach",
@@ -484,7 +714,25 @@
         "int32_t",
         "pfnPetForEachCallback"
       ],
-      "dh": "7c9da546"
+      "dh": "7c9da546",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCallbackArg",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_GetUnitPetByTypeId",
@@ -509,7 +757,25 @@
         "ePetType",
         "int32_t"
       ],
-      "dh": "0587b8fb"
+      "dh": "0587b8fb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nePetType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bIncludeDead",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PETS_GetTotalPetCount",
@@ -530,7 +796,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "354dbf8f"
+      "dh": "354dbf8f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERPETS_SendPetListToClient",
@@ -559,7 +831,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "231f5b41"
+      "dh": "231f5b41",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PETS_HasMercenary",
@@ -585,7 +867,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "879340c0"
+      "dh": "879340c0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RemovePetByGuidAndNotify",
@@ -615,7 +907,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "3485fe54"
+      "dh": "3485fe54",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "nPetGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bKillHandler",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SERVERUNIT_RemovePetFromUnit",
@@ -650,7 +960,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a15d9ed6"
+      "dh": "a15d9ed6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPet",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PETS_HandleDeadPet",
@@ -681,7 +1005,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "b3e7b3af"
+      "dh": "b3e7b3af",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pKillData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PETS_RemoveDistantPets",
@@ -709,7 +1047,25 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "fdbfd78d"
+      "dh": "fdbfd78d",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxDistanceSq",
+          "Stack[0xc]:4"
+        ],
+        [
+          "ppPetListHead",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PETS_ManagePetsByType",
@@ -738,7 +1094,25 @@
         "SGAMEDATA",
         "uint16_t"
       ],
-      "dh": "bf5617c7"
+      "dh": "bf5617c7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "wPosX",
+          "Stack[0x4]:2"
+        ],
+        [
+          "wPosY",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "PETS_RemoveDeadPets",
@@ -764,7 +1138,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "fd48e8ce"
+      "dh": "fd48e8ce",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnitDataPlayerPets",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SendAllyInfo",
@@ -794,7 +1182,17 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "69194d37"
+      "dh": "69194d37",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERPETS_RemoveConflictingPetsByGroup",
@@ -823,7 +1221,21 @@
         "ePetType",
         "int32_t"
       ],
-      "dh": "6b4fb224"
+      "dh": "6b4fb224",
+      "paramStorage": [
+        [
+          "nPetType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "PETS_SetMaxAndTrimExcess",
@@ -850,7 +1262,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "5ffefaa3"
+      "dh": "5ffefaa3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBaseMax",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PETS_RecalculateAllPetLimits",
@@ -885,7 +1315,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "132daf04"
+      "dh": "132daf04",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PETS_ResetAllPetLimitsToBase",
@@ -907,7 +1347,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "51c8c79f"
+      "dh": "51c8c79f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AllocPets",
@@ -938,7 +1388,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "35780e4c"
+      "dh": "35780e4c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PETS_FreeAllPetsByType",
@@ -967,7 +1427,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "65bc9c85"
+      "dh": "65bc9c85",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "KillPetOnRecast",
@@ -997,7 +1467,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "91af925c"
+      "dh": "91af925c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMinion",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPetArgs",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPetList",
+          "ESI:4"
+        ],
+        [
+          "pGame",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_ResummonPet",
@@ -1027,7 +1519,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "82e688d2"
+      "dh": "82e688d2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pOwner",
+          "EDX:4"
+        ],
+        [
+          "pPet",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPetTypeId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillCalc",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "RecastPetAndAssign",
@@ -1056,7 +1570,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "543c834a"
+      "dh": "543c834a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "pPet",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPetType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPetArgs",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetCarry1FlagOfitem",
@@ -1079,7 +1615,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "57e7db25"
+      "dh": "57e7db25",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetHirelingNamesAndSize",
@@ -1104,7 +1646,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "15914f0a"
+      "dh": "15914f0a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nNcpClassId",
+          "EDX:4"
+        ],
+        [
+          "pNameFirst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pNameLast",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pClassId",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

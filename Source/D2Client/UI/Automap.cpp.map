@@ -19,7 +19,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "5c85513e"
+      "dh": "5c85513e",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MoveY16Minus",
@@ -37,7 +43,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "eaa6ba20"
+      "dh": "eaa6ba20",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MoveX16Plus",
@@ -55,7 +67,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "3550d41d"
+      "dh": "3550d41d",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MoveX16Minus",
@@ -73,7 +91,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "86496946"
+      "dh": "86496946",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_OnKeyDownEnd_NoOp",
@@ -91,7 +115,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "abd23d5e"
+      "dh": "abd23d5e",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_SetupPosition",
@@ -130,7 +160,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "806b4c60"
+      "dh": "806b4c60",
+      "paramStorage": [
+        [
+          "bForceCenter",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_GetFade",
@@ -167,7 +203,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9f860635"
+      "dh": "9f860635",
+      "paramStorage": [
+        [
+          "nAutomapFade",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_GetCenters",
@@ -204,7 +246,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d871618f"
+      "dh": "d871618f",
+      "paramStorage": [
+        [
+          "nAutoMapCenters",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_GetLeft",
@@ -241,7 +289,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "cc875a72"
+      "dh": "cc875a72",
+      "paramStorage": [
+        [
+          "nAutoMapLeft",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_GetParty",
@@ -275,7 +329,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2aaa952a"
+      "dh": "2aaa952a",
+      "paramStorage": [
+        [
+          "nAutoMapParty",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_GetPartyNames",
@@ -312,7 +372,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "56749a45"
+      "dh": "56749a45",
+      "paramStorage": [
+        [
+          "nAutoMapPartyNames",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_RotateCellRight",
@@ -335,7 +401,17 @@
         "D2AutomapCellStrc *",
         "int32_t"
       ],
-      "dh": "b204969d"
+      "dh": "b204969d",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "ppRootNode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_RotateCellLeft",
@@ -358,7 +434,17 @@
         "D2AutomapCellStrc *",
         "int32_t"
       ],
-      "dh": "dbb065c3"
+      "dh": "dbb065c3",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "ppRootNode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_RebalanceTreeRight",
@@ -382,7 +468,13 @@
         "D2AutomapCellStrc *",
         "int32_t"
       ],
-      "dh": "3db965ac"
+      "dh": "3db965ac",
+      "paramStorage": [
+        [
+          "ppRootNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_RebalanceTreeLeft",
@@ -406,7 +498,13 @@
         "D2AutomapCellStrc *",
         "int32_t"
       ],
-      "dh": "1f4434fb"
+      "dh": "1f4434fb",
+      "paramStorage": [
+        [
+          "ppCell",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00457ac0",
@@ -424,7 +522,17 @@
       "usedTypes": [
         "D2AutomapCellStrc"
       ],
-      "dh": "c6989a80"
+      "dh": "c6989a80",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_InsertCellIntoTree",
@@ -446,7 +554,17 @@
         "D2AutomapCellStrc *",
         "int32_t"
       ],
-      "dh": "76525279"
+      "dh": "76525279",
+      "paramStorage": [
+        [
+          "pAutomapCell1",
+          "ECX:4"
+        ],
+        [
+          "pAutomapCell2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_AllocCell",
@@ -502,7 +620,21 @@
         "D2RoomExStrc",
         "int32_t"
       ],
-      "dh": "0d1a92cc"
+      "dh": "0d1a92cc",
+      "paramStorage": [
+        [
+          "pTileData",
+          "ESI:4"
+        ],
+        [
+          "pRoomEx",
+          "EDI:4"
+        ],
+        [
+          "pAutomapCell",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_AddCellByCoords",
@@ -524,7 +656,29 @@
         "D2AutomapCellStrc *",
         "int16_t"
       ],
-      "dh": "7360eded"
+      "dh": "7360eded",
+      "paramStorage": [
+        [
+          "nCellNo",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nPixelX",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nPixelY",
+          "Stack[0xc]:2"
+        ],
+        [
+          "pAutomapCell1",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pAutomapCell2",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_AddCellForUnit",
@@ -553,7 +707,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "abe875bd"
+      "dh": "abe875bd",
+      "paramStorage": [
+        [
+          "nCellNo",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pAutomapCell",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_GetMapFileHandle",
@@ -608,7 +776,13 @@
       "usedTypes": [
         "D2AutomapFileEntryStrc"
       ],
-      "dh": "d7e8ff99"
+      "dh": "d7e8ff99",
+      "paramStorage": [
+        [
+          "pEntry",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_CalcCellTreeSize",
@@ -627,7 +801,17 @@
         "D2AutomapCellStrc",
         "uint32_t"
       ],
-      "dh": "c7c78646"
+      "dh": "c7c78646",
+      "paramStorage": [
+        [
+          "pAutomapCell",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_SerializeCellTree",
@@ -645,7 +829,13 @@
       "usedTypes": [
         "D2AutomapCellStrc"
       ],
-      "dh": "e5ab8028"
+      "dh": "e5ab8028",
+      "paramStorage": [
+        [
+          "pAutomapCell",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_SaveCurrentLayer",
@@ -710,7 +900,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "872fad33"
+      "dh": "872fad33",
+      "paramStorage": [
+        [
+          "nEntryOffset",
+          "Stack[0x4]:4"
+        ],
+        [
+          "hFile",
+          "ESI:4"
+        ],
+        [
+          "pLayerOffsets",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_LoadLayerFromFile",
@@ -766,7 +970,13 @@
       "usedTypes": [
         "D2AutomapLayerStrc"
       ],
-      "dh": "95ce2ebd"
+      "dh": "95ce2ebd",
+      "paramStorage": [
+        [
+          "pAutomapLayer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_AllocLayer",
@@ -786,7 +996,13 @@
         "D2AutomapLayerStrc",
         "int32_t"
       ],
-      "dh": "b614334b"
+      "dh": "b614334b",
+      "paramStorage": [
+        [
+          "nLayer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_AddLayer",
@@ -809,7 +1025,13 @@
         "D2AutomapLayerStrc",
         "int32_t"
       ],
-      "dh": "a0da2161"
+      "dh": "a0da2161",
+      "paramStorage": [
+        [
+          "nLayer",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_RevealUnitsInRoom",
@@ -836,7 +1058,17 @@
         "eAct",
         "eD2LevelId"
       ],
-      "dh": "f2778869"
+      "dh": "f2778869",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pAutomapCell",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_RevealRoom",
@@ -864,7 +1096,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e7f5f6bb"
+      "dh": "e7f5f6bb",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bForceReveal",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pAutomapLayer",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_Update",
@@ -940,7 +1186,13 @@
         "D2LevelDefsTxt",
         "D2RoomStrc"
       ],
-      "dh": "9fdc0306"
+      "dh": "9fdc0306",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_RevealTownCallback",
@@ -971,7 +1223,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "14703346"
+      "dh": "14703346",
+      "paramStorage": [
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCellNo",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_DrawCellTree",
@@ -1001,7 +1271,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1e027fc0"
+      "dh": "1e027fc0",
+      "paramStorage": [
+        [
+          "pCell",
+          "ECX:4"
+        ],
+        [
+          "apDC6Layers",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_DrawMap",
@@ -1061,7 +1341,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f2d66a15"
+      "dh": "f2d66a15",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pbColorOut",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_DrawGamePassword",
@@ -1350,7 +1640,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "906ec3e1"
+      "dh": "906ec3e1",
+      "paramStorage": [
+        [
+          "nMiniMapType",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_DrawTextCentered",
@@ -1376,7 +1672,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "92f6e9ae"
+      "dh": "92f6e9ae",
+      "paramStorage": [
+        [
+          "nCenterX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBaseY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "byColor",
+          "AL:1"
+        ],
+        [
+          "szText",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_DrawXMarker",
@@ -1396,7 +1710,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b1fa44aa"
+      "dh": "b1fa44aa",
+      "paramStorage": [
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_DrawUnitMarker",
@@ -1441,7 +1769,13 @@
         "uint32_t",
         "wchar_t"
       ],
-      "dh": "644ac315"
+      "dh": "644ac315",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_DrawPartyMember",
@@ -1474,7 +1808,13 @@
         "eD2LevelId",
         "uint32_t"
       ],
-      "dh": "3659fe64"
+      "dh": "3659fe64",
+      "paramStorage": [
+        [
+          "pRoster",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_DrawPlayersAndParty",

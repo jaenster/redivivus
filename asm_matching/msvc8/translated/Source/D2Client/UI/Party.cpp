@@ -641,11 +641,7 @@ void __stdcall DRAW_UI_PartyWindow_II() {
       if (nTmp >= Inv::gnPanelOffsetX + 0xe3 && nTmp <= Inv::gnPanelOffsetX + 0x118 && nTmpX >= 0x18 - Inv::gnPanelOffsetY && nTmpX <= 0x23 - Inv::gnPanelOffsetY) {
         ShowToolTipOnPartyButtons(0x1018, 0, 0xd5, 0);
         iVar1 = UI_CalculateCenteredTextXPosition(0x1018, 0xd5);
-        bCenter = 0;
-        nTmpX = 0x37 - Inv::gnPanelOffsetY;
-        nColorArg = 0;
-        nTmp = Inv::gnPanelOffsetX + iVar1;
-        D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1018), nTmp, nTmpX, nColorArg, bCenter);
+        D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1018), Inv::gnPanelOffsetX + iVar1, 0x37 - Inv::gnPanelOffsetY, 0, 0);
       }
     }
 
@@ -697,34 +693,18 @@ void __stdcall DRAW_UI_PartyWindow_II() {
               {
                 ShowToolTipOnPartyButtons(0x1006, 0x1007, 0xda, 1);
                 iVar1 = UI_CalculateCenteredTextXPosition(0x1006, 0xda);
-                bCenter = 0;
-                nTmpX = 0x32 - Inv::gnPanelOffsetY;
-                nColorArg = 0;
-                nTmp = Inv::gnPanelOffsetX + iVar1;
-                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1006), nTmp, nTmpX, nColorArg, bCenter);
+                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1006), Inv::gnPanelOffsetX + iVar1, 0x32 - Inv::gnPanelOffsetY, 0, 0);
                 iVar1 = UI_CalculateCenteredTextXPosition(0x1007, 0xda);
-                bCenter = 0;
-                nTmpX = 0x41 - Inv::gnPanelOffsetY;
-                nColorArg = 0;
-                nTmp = Inv::gnPanelOffsetX + iVar1;
-                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1007), nTmp, nTmpX, nColorArg, bCenter);
+                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1007), Inv::gnPanelOffsetX + iVar1, 0x41 - Inv::gnPanelOffsetY, 0, 0);
                 break;
               }
             case 4:
               {
                 ShowToolTipOnPartyButtons(0x1008, 0x1009, 0xda, 1);
                 iVar1 = UI_CalculateCenteredTextXPosition(0x1008, 0xda);
-                bCenter = 0;
-                nTmpX = 0x32 - Inv::gnPanelOffsetY;
-                nColorArg = 0;
-                nTmp = Inv::gnPanelOffsetX + iVar1;
-                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1008), nTmp, nTmpX, nColorArg, bCenter);
+                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1008), Inv::gnPanelOffsetX + iVar1, 0x32 - Inv::gnPanelOffsetY, 0, 0);
                 iVar1 = UI_CalculateCenteredTextXPosition(0x1009, 0xda);
-                bCenter = 0;
-                nTmpX = 0x41 - Inv::gnPanelOffsetY;
-                nColorArg = 0;
-                nTmp = Inv::gnPanelOffsetX + iVar1;
-                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1009), nTmp, nTmpX, nColorArg, bCenter);
+                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1009), Inv::gnPanelOffsetX + iVar1, 0x41 - Inv::gnPanelOffsetY, 0, 0);
                 break;
               }
           }
@@ -743,31 +723,22 @@ void __stdcall DRAW_UI_PartyWindow_II() {
 
 static void __stdcall UI_DrawPartyButtonTextWithTooltip(uint16_t nLocaleId1, uint16_t nLocaleId2, uint32_t dwUnused, int32_t nLine2Y, int32_t nColor, int32_t nOffsetX, int32_t nLine1Y) {
     int32_t nCenterX;
-    int nX2;
-    BOOL bCenter;
-    int nX;
     if (!nLocaleId2) {
       ShowToolTipOnPartyButtons(nLocaleId1, 0, nOffsetX, 0);
       nCenterX = UI_CalculateCenteredTextXPosition(nLocaleId1, nOffsetX);
-      nX2 = nLine1Y - Inv::gnPanelOffsetY;
-      bCenter = 0;
-      nX = Inv::gnPanelOffsetX + nCenterX;
-      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId1), nX, nX2, nColor, bCenter);
+      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId1), Inv::gnPanelOffsetX + nCenterX, nLine1Y - Inv::gnPanelOffsetY, nColor, 0);
       return;
     }
 
     ShowToolTipOnPartyButtons(nLocaleId1, nLocaleId2, nOffsetX, 1);
     nCenterX = UI_CalculateCenteredTextXPosition(nLocaleId1, nOffsetX);
-    nX2 = nLine1Y - Inv::gnPanelOffsetY;
-    bCenter = 0;
-    nX = Inv::gnPanelOffsetX + nCenterX;
+    int nX2 = nLine1Y - Inv::gnPanelOffsetY;
+    BOOL bCenter = 0;
+    int nX = Inv::gnPanelOffsetX + nCenterX;
     nCenterX = nColor;
     D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId1), nX, nX2, nCenterX, bCenter);
     nCenterX = UI_CalculateCenteredTextXPosition(nLocaleId2, nOffsetX);
-    bCenter = 0;
-    nX2 = nLine2Y - Inv::gnPanelOffsetY;
-    nX = Inv::gnPanelOffsetX + nCenterX;
-    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId2), nX, nX2, nColor, bCenter);
+    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId2), Inv::gnPanelOffsetX + nCenterX, nLine2Y - Inv::gnPanelOffsetY, nColor, 0);
 }
 
 static void ROSTER_DrawPlayerTooltip(D2RosterStrc * pRoster) {
@@ -965,11 +936,7 @@ void __stdcall UI_HandlePartyButtonTooltips() {
                     } else {
                       ShowToolTipOnPartyButtons(0x101a, 0x101b, 0xa0, 1);
                       iVar1 = UI_CalculateCenteredTextXPosition(0x101a, 0xa0);
-                      bResult = 0;
-                      nTmpX = 0x32 - Inv::gnPanelOffsetY;
-                      nTmp3 = 0;
-                      nTmp = Inv::gnPanelOffsetX + iVar1;
-                      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x101a), nTmp, nTmpX, nTmp3, bResult);
+                      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x101a), Inv::gnPanelOffsetX + iVar1, 0x32 - Inv::gnPanelOffsetY, 0, 0);
                       iVar1 = UI_CalculateCenteredTextXPosition(0x101b, 0xa0);
                       nTmpX = 0x41 - Inv::gnPanelOffsetY;
                       nTmp3 = 0;
@@ -1039,11 +1006,7 @@ void __stdcall UI_HandlePartyButtonTooltips() {
                         if (nFlag) {
                           ShowToolTipOnPartyButtons(0x1012, 0x1013, 0x114, 1);
                           iVar1 = UI_CalculateCenteredTextXPosition(0x1012, 0x114);
-                          bResult = 0;
-                          nTmpX = 0x32 - Inv::gnPanelOffsetY;
-                          nTmp3 = 0;
-                          nTmp = Inv::gnPanelOffsetX + iVar1;
-                          D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1012), nTmp, nTmpX, nTmp3, bResult);
+                          D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1012), Inv::gnPanelOffsetX + iVar1, 0x32 - Inv::gnPanelOffsetY, 0, 0);
                           iVar1 = UI_CalculateCenteredTextXPosition(0x1013, 0x114);
                           nTmpX = 0x41 - Inv::gnPanelOffsetY;
                           nTmp3 = 0;
@@ -1052,11 +1015,7 @@ void __stdcall UI_HandlePartyButtonTooltips() {
                         } else {
                           ShowToolTipOnPartyButtons(0x1014, 0x1015, 0x114, 1);
                           iVar1 = UI_CalculateCenteredTextXPosition(0x1014, 0x114);
-                          bResult = 0;
-                          nTmpX = 0x32 - Inv::gnPanelOffsetY;
-                          nTmp3 = 0;
-                          nTmp = Inv::gnPanelOffsetX + iVar1;
-                          D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1014), nTmp, nTmpX, nTmp3, bResult);
+                          D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1014), Inv::gnPanelOffsetX + iVar1, 0x32 - Inv::gnPanelOffsetY, 0, 0);
                           iVar1 = UI_CalculateCenteredTextXPosition(0x1015, 0x114);
                           nTmpX = 0x41 - Inv::gnPanelOffsetY;
                           nTmp3 = 0;
@@ -1078,11 +1037,7 @@ void __stdcall UI_HandlePartyButtonTooltips() {
                     if (nFlag) {
                       ShowToolTipOnPartyButtons(0x1010, 0x1011, 0xff, 1);
                       iVar1 = UI_CalculateCenteredTextXPosition(0x1010, 0xff);
-                      bResult = 0;
-                      nTmpX = 0x32 - Inv::gnPanelOffsetY;
-                      nTmp3 = 0;
-                      nTmp = Inv::gnPanelOffsetX + iVar1;
-                      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1010), nTmp, nTmpX, nTmp3, bResult);
+                      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1010), Inv::gnPanelOffsetX + iVar1, 0x32 - Inv::gnPanelOffsetY, 0, 0);
                       iVar1 = UI_CalculateCenteredTextXPosition(0x1011, 0xff);
                       nTmpX = 0x41 - Inv::gnPanelOffsetY;
                       nTmp3 = 0;
@@ -1091,11 +1046,7 @@ void __stdcall UI_HandlePartyButtonTooltips() {
                     } else {
                       ShowToolTipOnPartyButtons(0x100e, 0x100f, 0xff, 1);
                       iVar1 = UI_CalculateCenteredTextXPosition(0x100e, 0xff);
-                      bResult = 0;
-                      nTmpX = 0x32 - Inv::gnPanelOffsetY;
-                      nTmp3 = 0;
-                      nTmp = Inv::gnPanelOffsetX + iVar1;
-                      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x100e), nTmp, nTmpX, nTmp3, bResult);
+                      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x100e), Inv::gnPanelOffsetX + iVar1, 0x32 - Inv::gnPanelOffsetY, 0, 0);
                       iVar1 = UI_CalculateCenteredTextXPosition(0x100f, 0xff);
                       nTmpX = 0x41 - Inv::gnPanelOffsetY;
                       nTmp3 = 0;

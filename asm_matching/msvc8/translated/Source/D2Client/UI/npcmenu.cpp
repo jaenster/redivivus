@@ -3799,7 +3799,7 @@ uint16_t __fastcall NPCMENU_FindNextUnhandledMessage(int16_t nMsgTypeToFind) {
     int nScrollQueueIdx;
     int nIndex;
     for (nIndex = 0; nIndex < gnNpcDialogOptionData_725c04; nIndex++) {
-      if (gNPCMenuMouseWheelOffsetY[nIndex * 4] == nMsgTypeToFind) {
+      if (gNPCMenuMouseWheelOffsetY[nIndex * 4] == (uint16_t)nMsgTypeToFind) {
         return gNPCMenuMouseWheelOffsetY[nIndex * 4 + 1];
       }
     }
@@ -3811,13 +3811,13 @@ uint16_t __fastcall NPCMENU_FindNextUnhandledMessage(int16_t nMsgTypeToFind) {
       if (uVar1 == 0xffff) {
         return 0xffff;
       }
-      if (uVar1 != nMsgTypeToFind) {
+      if (uVar1 != (uint16_t)nMsgTypeToFind) {
         nScrollQueueIdx = 0;
         if (!gnNpcMenuScrollMessageHead) {
           return uVar1;
         }
 
-        while (gaNpcMenuHandledMessageIds[nScrollQueueIdx] != uVar1) {
+        while ((uint16_t)gaNpcMenuHandledMessageIds[nScrollQueueIdx] != uVar1) {
           nScrollQueueIdx++;
           if (nScrollQueueIdx >= (int)(uint32_t)gnNpcMenuScrollMessageHead) {
             return uVar1;
@@ -4969,6 +4969,7 @@ int __stdcall NPCMENU_ConfirmTransactionReturn() {
 void __stdcall NPCMENU_ShowTransactionConfirmDialog() {
     uint16_t* pszDialogStr;
     uint16_t nStrId;
+    int nErrorAddr;
     uint16_t aItemNameBuf[192];
     uint16_t aCostBuf[10];
     char szCostBuf[12];
@@ -5002,11 +5003,7 @@ void __stdcall NPCMENU_ShowTransactionConfirmDialog() {
     fpDialogFunc pfnCallback;
     pfnCallback = NPCMENU_ConfirmTransactionReturn;
     _Interaction::geNpcUiState = NPCUI_CONFIRM_TRANSACTION;
-    int nErrorAddr;
-    nErrorAddr = Cursor::GetMouseY();
-    int nMouseX;
-    nMouseX = Cursor::GetMouseX();
-    Dialog::gpNpcTransactionConfirmDialog = Dialog::AllocDialogStrc(nMouseX, nErrorAddr, pfnCallback, nStringCallbackId, dwDialogArg0, dwDialogArg1, dwDialogArg4, dwDialogArg5, dwDialogArg6, dwDialogArg7, dwDialogArg8);
+    Dialog::gpNpcTransactionConfirmDialog = Dialog::AllocDialogStrc(Cursor::GetMouseX(), Cursor::GetMouseY(), pfnCallback, nStringCallbackId, dwDialogArg0, dwDialogArg1, dwDialogArg4, dwDialogArg5, dwDialogArg6, dwDialogArg7, dwDialogArg8);
     Dialog::DIALOG_SetHighlightStyle(Dialog::gpNpcTransactionConfirmDialog, 1);
     switch (gnNpcMenuTransactionType) {
       case 1:
@@ -6009,7 +6006,6 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
     int nOptionLoopIdx;
     int32_t bOptionEnabled;
     D2NpcMenuOptionFunc* ppCurCallback;
-    int nMercReviveCostArg;
     int nClearDwords;
     int nPlayerHitpoints;
     fpDialogFunc pfnGambleOnClick;
@@ -6104,8 +6100,7 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
               pnOptionCallback = D2Lang::StrTable::strtable::GetLocaleString((uint16_t)nMercNameId);
             }
 
-            nMercReviveCostArg = D2Client::Merc::nMercReviveCost;
-            D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x200, wszOptionText, D2Lang::StrTable::strtable::GetLocaleString(0x58a8), pnOptionCallback, nMercReviveCostArg);
+            D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x200, wszOptionText, D2Lang::StrTable::strtable::GetLocaleString(0x58a8), pnOptionCallback, D2Client::Merc::nMercReviveCost);
             add_cost_option:
             Dialog::AddStringData(Dialog::gpNpcInteractionDialog, wszOptionText, 0xf, 0, 0, 1, (fpDialogFunc)*ppCurCallback, bOptionEnabled);
           } else {
@@ -6881,7 +6876,6 @@ int __stdcall NPCMENU_MercListDrawCallback() {
 
 int __stdcall NPCMENU_BuildMercHireMenu() {
     uint8_t bVar1;
-    D2UnitStrc* pPlayerUnit_lcl;
     BOOL bIsExpansion;
     uint32_t nDifficulty;
     int nLoopCounter;
@@ -6981,10 +6975,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
         nMercActRolled = pMercForHire->nSeed;
         nDifficulty = (uint32_t)bVar1;
         pHireData = &mercHireData;
-        nMercSeed = nMercAct;
-        pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-        bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-        bIsExpansion = D2Common::Merc::RollMercStats(bIsExpansion, pPlayerUnit_lcl, nMercActRolled, nMercSeed, nDifficulty, pHireData);
+        bIsExpansion = D2Common::Merc::RollMercStats(GAME::Game::CLIENT_CheckExpansion(), UNIT::Player::GetPlayerUnit_UI(), nMercActRolled, nMercAct, nDifficulty, pHireData);
         nMercTypeDescIdx = mercHireData.nHireDescription;
         nDialogY = mercHireData.nDefense;
         nMercSeed = mercHireData.nHp;

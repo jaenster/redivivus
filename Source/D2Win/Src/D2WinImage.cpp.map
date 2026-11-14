@@ -21,7 +21,17 @@
         "D2WinTextBox",
         "WCHAR"
       ],
-      "dh": "0d37331b"
+      "dh": "0d37331b",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINIMAGE_SetCellFileAndHitAreas",
@@ -45,7 +55,21 @@
         "DC6",
         "int32_t"
       ],
-      "dh": "7c626ef0"
+      "dh": "7c626ef0",
+      "paramStorage": [
+        [
+          "pImage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDC6",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pHitAreas",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINIMAGE_SetPosition",
@@ -67,7 +91,21 @@
         "D2WinImage",
         "int32_t"
       ],
-      "dh": "0d88f03e"
+      "dh": "0d88f03e",
+      "paramStorage": [
+        [
+          "pImage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FORMS_DestroyD2WinImage",
@@ -86,7 +124,13 @@
       "usedTypes": [
         "D2WinImage"
       ],
-      "dh": "1210cdd3"
+      "dh": "1210cdd3",
+      "paramStorage": [
+        [
+          "pWinImage",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FORMS_DestroyD2WinImageEx",
@@ -105,7 +149,13 @@
       "usedTypes": [
         "D2WinImageEx"
       ],
-      "dh": "6edc5259"
+      "dh": "6edc5259",
+      "paramStorage": [
+        [
+          "pWinImageEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINIMAGE_SetFrame",
@@ -128,7 +178,17 @@
         "D2WinImage",
         "int32_t"
       ],
-      "dh": "435d1fcd"
+      "dh": "435d1fcd",
+      "paramStorage": [
+        [
+          "pImage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFrame",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINIMAGE_SetDrawModeSolid",
@@ -151,7 +211,17 @@
         "DRAWMODE",
         "int32_t"
       ],
-      "dh": "2577dad5"
+      "dh": "2577dad5",
+      "paramStorage": [
+        [
+          "pImage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eDrawModeIgnored",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINIMAGE_StopAnimation",
@@ -174,7 +244,13 @@
         "D2WinImage",
         "int32_t"
       ],
-      "dh": "9db3cccc"
+      "dh": "9db3cccc",
+      "paramStorage": [
+        [
+          "pImage",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -198,7 +274,13 @@
         "D2GfxDataStrc",
         "D2WinImage"
       ],
-      "dh": "b0c151d8"
+      "dh": "b0c151d8",
+      "paramStorage": [
+        [
+          "pImage",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WinImage_Draw",
@@ -218,7 +300,21 @@
         "D2GfxDataStrc",
         "D2GfxTileRectStrc"
       ],
-      "dh": "3dc3e511"
+      "dh": "3dc3e511",
+      "paramStorage": [
+        [
+          "pScreenRect",
+          "ESI:4"
+        ],
+        [
+          "pDstRect",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGfxData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -245,7 +341,13 @@
         "D2WinImageEx",
         "int32_t"
       ],
-      "dh": "e82c4586"
+      "dh": "e82c4586",
+      "paramStorage": [
+        [
+          "pImageEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Push",
@@ -272,7 +374,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3cf0406a"
+      "dh": "3cf0406a",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WinImage",
@@ -299,7 +407,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f4c70798"
+      "dh": "f4c70798",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nSizeX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDC6",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnOnPress",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pHitAreas",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pKey",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINIMAGE_CreateImageEx",
@@ -322,7 +464,37 @@
         "DC6",
         "int32_t"
       ],
-      "dh": "7b4055f6"
+      "dh": "7b4055f6",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nSizeX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDC6",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBorderX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nBorderY",
+          "Stack[0x14]:4"
+        ]
+      ]
     }
   ]
 }

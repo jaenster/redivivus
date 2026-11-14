@@ -21,7 +21,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "1dfe0313"
+      "dh": "1dfe0313",
+      "paramStorage": [
+        [
+          "nShutdownCode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SSYSTEM_Initialize",
@@ -73,7 +79,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "10974e39"
+      "dh": "10974e39",
+      "paramStorage": [
+        [
+          "nOptionId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutValue",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnBufferSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SSYSTEM_SetSystemOption",
@@ -93,7 +113,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "25c84877"
+      "dh": "25c84877",
+      "paramStorage": [
+        [
+          "nOptionId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pValue",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValueSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SSYSTEM_InitializeAndReturn",
@@ -109,7 +143,13 @@
         "SSYSTEM_InitializeAndReturn",
         "SSYSTEM_Initialize"
       ],
-      "dh": "6e69d4f3"
+      "dh": "6e69d4f3",
+      "paramStorage": [
+        [
+          "nFlags",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ILT_strpbrk",
@@ -125,7 +165,17 @@
         "ILT_strpbrk",
         "strpbrk"
       ],
-      "dh": "0dee6ea3"
+      "dh": "0dee6ea3",
+      "paramStorage": [
+        [
+          "_Str",
+          "Stack[0x4]:4"
+        ],
+        [
+          "_Control",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "__break",
@@ -155,7 +205,13 @@
       "calledFunctions": [
         "SSYSTEM_SetShutdownFlag"
       ],
-      "dh": "83f32a26"
+      "dh": "83f32a26",
+      "paramStorage": [
+        [
+          "bShutdown",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSFixedArray_Ui_Constructor",
@@ -170,7 +226,13 @@
       "calledFunctions": [
         "TSFixedArray_Ui_Constructor"
       ],
-      "dh": "57c9abc1"
+      "dh": "57c9abc1",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_6ca890",

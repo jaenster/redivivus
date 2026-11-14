@@ -26,7 +26,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e553b7a7"
+      "dh": "e553b7a7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FindUnitInNeighboredRooms",
@@ -52,7 +62,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "bcd67080"
+      "dh": "bcd67080",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "CheckRoomIfNotInRange",
@@ -73,7 +97,25 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "68d47cb2"
+      "dh": "68d47cb2",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ],
+        [
+          "nDistance",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CheckRoomIfInRange",
@@ -94,7 +136,25 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "90ff2df6"
+      "dh": "90ff2df6",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "EAX:4"
+        ],
+        [
+          "nDistance",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "GetTestedUnitsFromRoom",
@@ -120,7 +180,25 @@
         "UNITFINDTEST",
         "int32_t"
       ],
-      "dh": "52dee52e"
+      "dh": "52dee52e",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppUnitList",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nfpUnitTest",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnitFindArg",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GetNearestTestedUnit",
@@ -149,7 +227,29 @@
         "fpUnitTest",
         "int32_t"
       ],
-      "dh": "9eee724e"
+      "dh": "9eee724e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nRoomIdx",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nfpUnitTest",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ExpandUnitFinds",
@@ -174,7 +274,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d0a8b5a8"
+      "dh": "d0a8b5a8",
+      "paramStorage": [
+        [
+          "pUnitFindData",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "InitializeUnitFindData",
@@ -203,7 +313,41 @@
         "UNITFINDTEST",
         "int32_t"
       ],
-      "dh": "8f36eea5"
+      "dh": "8f36eea5",
+      "paramStorage": [
+        [
+          "pMemPool",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnitFindData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nDistance",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nfpUnitTest",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pUnitFindArg",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "FreeUnitFindData",
@@ -222,7 +366,13 @@
       "usedTypes": [
         "D2UnitFindDataStrc"
       ],
-      "dh": "f5b78670"
+      "dh": "f5b78670",
+      "paramStorage": [
+        [
+          "pUnitFindData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TestUnit",
@@ -257,7 +407,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a1d9fd85"
+      "dh": "a1d9fd85",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnitFindArg",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UNITFINDS_FindCullRange",
@@ -288,7 +448,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6293bc18"
+      "dh": "6293bc18",
+      "paramStorage": [
+        [
+          "pUnitFindData",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

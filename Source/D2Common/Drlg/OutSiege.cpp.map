@@ -23,7 +23,13 @@
         "D2DrlgLevelStrc",
         "int32_t"
       ],
-      "dh": "11e58a7d"
+      "dh": "11e58a7d",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_SpawnPresetIfGridFlagged",
@@ -45,7 +51,29 @@
         "D2DrlgLevelStrc",
         "uint32_t"
       ],
-      "dh": "3756d8d1"
+      "dh": "3756d8d1",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EBX:4"
+        ],
+        [
+          "pWildData",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDI:4"
+        ],
+        [
+          "nY",
+          "ESI:4"
+        ],
+        [
+          "nPresetId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_PlaceAct5BorderPresets",
@@ -67,7 +95,13 @@
         "D2DrlgLevelStrc",
         "uint32_t"
       ],
-      "dh": "0d737e48"
+      "dh": "0d737e48",
+      "paramStorage": [
+        [
+          "pLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_GetGridDivisionSize",
@@ -86,7 +120,13 @@
         "D2DrlgLevelStrc",
         "int32_t"
       ],
-      "dh": "412d3743"
+      "dh": "412d3743",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_PlaceAct5RoadPath",
@@ -114,7 +154,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "54d78ef0"
+      "dh": "54d78ef0",
+      "paramStorage": [
+        [
+          "pLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_PlaceAct5OuterWalls",
@@ -135,7 +181,13 @@
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc"
       ],
-      "dh": "0da070d1"
+      "dh": "0da070d1",
+      "paramStorage": [
+        [
+          "pLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTDOOR_GetSecondaryBorderPresetFromLvlSub",
@@ -158,7 +210,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "06470562"
+      "dh": "06470562",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ],
+        [
+          "nBorderType",
+          "EDX:4"
+        ],
+        [
+          "nPresetIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTDOOR_ValidateSecondaryBorderCell",
@@ -180,7 +246,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4ed695f3"
+      "dh": "4ed695f3",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExpectedPreset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGridFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_PlaceAct5SecondaryBorder",
@@ -202,7 +294,13 @@
         "D2DrlgLevelStrc",
         "D2UnkOutdoorStrc"
       ],
-      "dh": "9be3dd74"
+      "dh": "9be3dd74",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_PlaceAct5SceneryPresets",
@@ -225,7 +323,13 @@
         "D2DrlgLevelStrc",
         "int32_t"
       ],
-      "dh": "34261ea6"
+      "dh": "34261ea6",
+      "paramStorage": [
+        [
+          "pLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets",
@@ -253,7 +357,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e237f0e4"
+      "dh": "e237f0e4",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTPLACE_PlaceAct5SiegePresets",
@@ -279,7 +389,13 @@
         "D2LvlPrestTxt",
         "int32_t"
       ],
-      "dh": "3d160ab0"
+      "dh": "3d160ab0",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTPLACE_PlaceAct5WallPresets",
@@ -305,7 +421,13 @@
         "D2LvlPrestTxt",
         "int32_t"
       ],
-      "dh": "dce9bafe"
+      "dh": "dce9bafe",
+      "paramStorage": [
+        [
+          "pLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "InitAct5OutdoorLevel",
@@ -333,7 +455,13 @@
       "usedTypes": [
         "D2DrlgLevelStrc"
       ],
-      "dh": "49d03bce"
+      "dh": "49d03bce",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

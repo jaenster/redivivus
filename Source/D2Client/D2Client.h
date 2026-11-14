@@ -3778,6 +3778,9 @@ struct WardenClientVtable {
 namespace D2Client::_Message {
 LRESULT __stdcall WndProcB(HWND hWnd, uint32_t uMsg, WPARAM wParam, LPARAM lParam);
 } // namespace D2Client::_Message
+namespace D2Client::Archive {
+__attribute__((noinline)) inline void __fastcall ARCHIVE_ClearList(struct StormLinkedListStrc * nList);
+} // namespace D2Client::Archive
 namespace D2Client::ClientModeInGame {
 fnAppModeRun * __fastcall AppModeClientInit(HMODULE hModule);
 // Client app mode shutdown: close server/profiler logging.
@@ -4002,3 +4005,30 @@ extern D2UnitStrc * pPlayerUnit;
 namespace D2Client::Waypoint {
 extern D2WaypointStrc * pWaypoint;
 } // namespace D2Client::Waypoint
+
+// Inline functions: the module compiled these into each caller
+namespace D2Client::Archive {
+#ifndef D2_DEFINED_INLINE_0045bd00
+#define D2_DEFINED_INLINE_0045bd00
+__attribute__((noinline)) inline void __fastcall ARCHIVE_ClearList(StormLinkedListStrc * nList) {
+    StormLinkStrc** pPrevLink;
+    StormLinkStrc* pNode;
+    while (true) {
+      StormLinkStrc* pNext;
+      pNode = (intptr_t)(StormLinkStrc*)nList->head.pNext > 0 ? (StormLinkStrc*)nList->head.pNext : 0;
+      if (!pNode) {
+        break;
+      }
+
+      pNext = pNode->pPrevLink;
+      if (pNext) {
+        pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+        *pPrevLink = pNext;
+        pNode->pPrevLink->pNext = pNode->pNext;
+        pNode->pPrevLink = 0;
+        pNode->pNext = 0;
+      }
+    }
+}
+#endif // D2_DEFINED_INLINE_0045bd00
+} // namespace D2Client::Archive

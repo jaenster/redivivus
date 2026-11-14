@@ -27,7 +27,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "50cc3a2d"
+      "dh": "50cc3a2d",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ESI:4"
+        ],
+        [
+          "nWorldY",
+          "EAX:4"
+        ],
+        [
+          "nPresetId",
+          "EDX:4"
+        ],
+        [
+          "pPresetUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWorldX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTileType",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_SetWallTileFlags",
@@ -49,7 +75,33 @@
         "D2RoomExStrc",
         "uint32_t"
       ],
-      "dh": "e5e2aae9"
+      "dh": "e5e2aae9",
+      "paramStorage": [
+        [
+          "pTileData",
+          "EDI:4"
+        ],
+        [
+          "nTileType",
+          "EBX:4"
+        ],
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "nWorldX",
+          "EAX:4"
+        ],
+        [
+          "nRawTileFlags",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWorldY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_WorldToTileScreenPos",
@@ -68,7 +120,25 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "1eddd4d4"
+      "dh": "1eddd4d4",
+      "paramStorage": [
+        [
+          "pOutCoords",
+          "ESI:4"
+        ],
+        [
+          "pRoomEx",
+          "EDX:4"
+        ],
+        [
+          "nWorldX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWorldY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_CreateWallTileData",
@@ -95,7 +165,37 @@
         "D2TileLibraryEntryStrc",
         "uint32_t"
       ],
-      "dh": "42ebb1e4"
+      "dh": "42ebb1e4",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "ppTileHead",
+          "EDX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nGridFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pTileLibEntry",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nTileType",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_FillTileData",
@@ -118,7 +218,33 @@
         "D2TileLibraryEntryStrc",
         "uint32_t"
       ],
-      "dh": "42ccf90b"
+      "dh": "42ccf90b",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "pTileData",
+          "EDX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nGridFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pTileLibEntry",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_CreateFloorTileData",
@@ -142,7 +268,33 @@
         "D2TileLibraryEntryStrc",
         "uint32_t"
       ],
-      "dh": "9ca1ce0d"
+      "dh": "9ca1ce0d",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "ppTileHead",
+          "EDX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nGridFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pTileLibEntry",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_CreateShadowTileData",
@@ -167,7 +319,33 @@
         "D2TileLibraryEntryStrc",
         "uint32_t"
       ],
-      "dh": "cd169a20"
+      "dh": "cd169a20",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "ppTileHead",
+          "EDX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nGridFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pTileLibEntry",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_CreateShadowTileFromGrid",
@@ -189,7 +367,25 @@
         "D2TileLibraryEntryStrc",
         "uint32_t"
       ],
-      "dh": "b8212661"
+      "dh": "b8212661",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGridFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_CompactTileDataArray",
@@ -212,7 +408,13 @@
         "D2PoolManagerStrc",
         "D2RoomExStrc"
       ],
-      "dh": "94063ac5"
+      "dh": "94063ac5",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_GetWarpDirectionByte",
@@ -227,7 +429,13 @@
       "calledFunctions": [
         "DRLGROOMTILE_GetWarpDirectionByte"
       ],
-      "dh": "daa047a0"
+      "dh": "daa047a0",
+      "paramStorage": [
+        [
+          "nTileType",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_SetWarpTileDirection",
@@ -252,7 +460,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9ce3b64d"
+      "dh": "9ce3b64d",
+      "paramStorage": [
+        [
+          "pTileLink",
+          "ESI:4"
+        ],
+        [
+          "nTileType",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_CreateExitWarp",
@@ -276,7 +494,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3ba6d095"
+      "dh": "3ba6d095",
+      "paramStorage": [
+        [
+          "nTileFlags",
+          "EDX:4"
+        ],
+        [
+          "nXTileId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nYTileId",
+          "EAX:4"
+        ],
+        [
+          "pRoomEx",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_SetupWarpTile",
@@ -305,7 +545,25 @@
         "D2RoomExStrc",
         "uint32_t"
       ],
-      "dh": "6483fb0c"
+      "dh": "6483fb0c",
+      "paramStorage": [
+        [
+          "pRoomExStrc",
+          "EDI:4"
+        ],
+        [
+          "pTileData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGridInfo",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTileType",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_InitWarpCacheTiles",
@@ -335,7 +593,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7c23b2f4"
+      "dh": "7c23b2f4",
+      "paramStorage": [
+        [
+          "nPackedTileFlags",
+          "EAX:4"
+        ],
+        [
+          "pRoomEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTileType",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_FindTileAtPosition",
@@ -358,7 +638,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d5b42e78"
+      "dh": "d5b42e78",
+      "paramStorage": [
+        [
+          "nFlags",
+          "ESI:4"
+        ],
+        [
+          "pRoomEx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bFloor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_FindTileInNearRooms",
@@ -380,7 +682,33 @@
         "D2RoomExStrc *",
         "int32_t"
       ],
-      "dh": "5d3d1d06"
+      "dh": "5d3d1d06",
+      "paramStorage": [
+        [
+          "nFlags",
+          "EAX:4"
+        ],
+        [
+          "pRoomEx",
+          "EBX:4"
+        ],
+        [
+          "bFloor",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "ppFoundRoomEx",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_AllocTileLink",
@@ -401,7 +729,21 @@
         "D2PoolManagerStrc",
         "D2RoomExStrc"
       ],
-      "dh": "f8bc56e0"
+      "dh": "f8bc56e0",
+      "paramStorage": [
+        [
+          "pPoolManager",
+          "ECX:4"
+        ],
+        [
+          "pRoomEx",
+          "ESI:4"
+        ],
+        [
+          "nTileId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_AddTileData",
@@ -432,7 +774,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8068e882"
+      "dh": "8068e882",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "EAX:4"
+        ],
+        [
+          "nTileType",
+          "EBX:4"
+        ],
+        [
+          "pPoolManager",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGridInfo",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_UpdateTileType",
@@ -463,7 +831,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e5b11578"
+      "dh": "e5b11578",
+      "paramStorage": [
+        [
+          "pTileData",
+          "EAX:4"
+        ],
+        [
+          "pRoomExStrc",
+          "ESI:4"
+        ],
+        [
+          "pPoolManager",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pNeighborRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTileLayer",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGridFlags",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_UpdateOrAddTile",
@@ -488,7 +890,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "74ed71aa"
+      "dh": "74ed71aa",
+      "paramStorage": [
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "EDI:4"
+        ],
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoomEx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTileType",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGridInfo",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_ProcessTile",
@@ -524,7 +952,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "00b05298"
+      "dh": "00b05298",
+      "paramStorage": [
+        [
+          "nFlags",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSizeMaybe",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bFillBlankFloor",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nOtherFlags",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "InitRoomTiles",
@@ -548,7 +1006,33 @@
         "eD2GridCellFlags",
         "int32_t"
       ],
-      "dh": "57369342"
+      "dh": "57369342",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "pGrid",
+          "EDX:4"
+        ],
+        [
+          "pOtherGrid",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTileParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSizeMaybe",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_CountTilesFromGrid",
@@ -572,7 +1056,29 @@
         "eD2GridCellFlags",
         "uint32_t"
       ],
-      "dh": "eb85ba80"
+      "dh": "eb85ba80",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "pGrid",
+          "EDX:4"
+        ],
+        [
+          "bCountFloors",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bKillEdgeX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bKillEdgeY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_CountWallTilesFromGrid",
@@ -593,7 +1099,29 @@
         "D2DrlgTileGridStrc",
         "D2RoomExStrc"
       ],
-      "dh": "1d6d58cf"
+      "dh": "1d6d58cf",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "pFloorGrid",
+          "EDX:4"
+        ],
+        [
+          "pOrientGrid",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bKillEdgeX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bKillEdgeY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "InitGridCells",
@@ -614,7 +1142,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "284e93e0"
+      "dh": "284e93e0",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "InitializorForDrlgType",
@@ -634,7 +1168,13 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "fb7b46b1"
+      "dh": "fb7b46b1",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_AllocRoomTileGrid",
@@ -655,7 +1195,13 @@
         "D2DrlgTileGridStrc",
         "D2RoomExStrc"
       ],
-      "dh": "90a68a5d"
+      "dh": "90a68a5d",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_AllocTileDataArrays",
@@ -678,7 +1224,13 @@
         "D2PoolManagerStrc",
         "D2RoomExStrc"
       ],
-      "dh": "440d813a"
+      "dh": "440d813a",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_GrowTileDataArray",
@@ -699,7 +1251,21 @@
         "D2DrlgTileGridStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "b5ee77d8"
+      "dh": "b5ee77d8",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pTileGrid",
+          "EDX:4"
+        ],
+        [
+          "nAdditionalTiles",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0066f030",
@@ -718,7 +1284,13 @@
       "usedTypes": [
         "D2RoomStrc"
       ],
-      "dh": "74b54abe"
+      "dh": "74b54abe",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_FreeTileArrays",
@@ -740,7 +1312,17 @@
         "D2PoolManagerStrc",
         "D2RoomExStrc"
       ],
-      "dh": "c1736bb6"
+      "dh": "c1736bb6",
+      "paramStorage": [
+        [
+          "pLevelCtx",
+          "EAX:4"
+        ],
+        [
+          "pPoolManagerStrc",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGROOMTILE_FreeRoomTilesAll",
@@ -764,7 +1346,13 @@
         "D2PoolManagerStrc",
         "D2RoomExStrc"
       ],
-      "dh": "1b1c0018"
+      "dh": "1b1c0018",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

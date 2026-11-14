@@ -19,7 +19,17 @@
       "usedTypes": [
         "pfnTextScrollComplete"
       ],
-      "dh": "cccf23e7"
+      "dh": "cccf23e7",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "ECX:4"
+        ],
+        [
+          "pUserParam",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_TEXT_ClearChatMessages",
@@ -46,7 +56,17 @@
       "usedTypes": [
         "pfnTextScrollComplete"
       ],
-      "dh": "ce2c7d3f"
+      "dh": "ce2c7d3f",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "ECX:4"
+        ],
+        [
+          "pUserParam",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_OnPanelUnregister_NoOp_Unref_004967e0",
@@ -113,7 +133,13 @@
       "usedTypes": [
         "D2TextLineStrc"
       ],
-      "dh": "93319313"
+      "dh": "93319313",
+      "paramStorage": [
+        [
+          "pLine",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_RecalcTextBoxDimensions",
@@ -133,7 +159,13 @@
         "D2TextBoxStrc",
         "int32_t"
       ],
-      "dh": "1c577084"
+      "dh": "1c577084",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_FreeTextBox",
@@ -153,7 +185,13 @@
       "usedTypes": [
         "D2TextBoxStrc"
       ],
-      "dh": "750ccb01"
+      "dh": "750ccb01",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_InitTextDisplaySettings",
@@ -192,7 +230,13 @@
       "usedTypes": [
         "ScreenMessage_t"
       ],
-      "dh": "1a92e2f5"
+      "dh": "1a92e2f5",
+      "paramStorage": [
+        [
+          "pMessage",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_FreeAllScreenMessages",
@@ -217,7 +261,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "22a390d9"
+      "dh": "22a390d9",
+      "paramStorage": [
+        [
+          "pList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_SetTextDisplayMode",
@@ -236,7 +286,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "662f540d"
+      "dh": "662f540d",
+      "paramStorage": [
+        [
+          "nDisplayMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0049d590",
@@ -251,7 +307,13 @@
       "calledFunctions": [
         "Unreferenced_0049d590"
       ],
-      "dh": "cd1aa2ab"
+      "dh": "cd1aa2ab",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_DrawScrollingTextBox",
@@ -283,7 +345,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9cda8277"
+      "dh": "9cda8277",
+      "paramStorage": [
+        [
+          "ppwszText",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_DrawTextBoxAtPosition",
@@ -306,7 +374,21 @@
         "D2TextLineStrc",
         "int32_t"
       ],
-      "dh": "4b2f254e"
+      "dh": "4b2f254e",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ECX:4"
+        ],
+        [
+          "nScreenX",
+          "EDX:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_DrawTextBoxWithBorderCheck",
@@ -327,7 +409,17 @@
         "D2TextBoxStrc",
         "uint32_t"
       ],
-      "dh": "2f17e997"
+      "dh": "2f17e997",
+      "paramStorage": [
+        [
+          "pTextBox",
+          "ESI:4"
+        ],
+        [
+          "pnPosition",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_OnClickCloseNpcDialog",
@@ -346,7 +438,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "635205b4"
+      "dh": "635205b4",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_SetNpcMenuSelection",
@@ -364,7 +462,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "21040835"
+      "dh": "21040835",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_ClearNpcMenuSelection",
@@ -398,7 +502,13 @@
         "GetTickCount",
         "MESSAGE_RegisterEventHandlerBatch"
       ],
-      "dh": "8e7f9e93"
+      "dh": "8e7f9e93",
+      "paramStorage": [
+        [
+          "bRegister",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0049dac0",
@@ -416,7 +526,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "a07ae690"
+      "dh": "a07ae690",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0049dae0",
@@ -435,7 +551,17 @@
         "D2CoordStrc",
         "D2TextBoxStrc"
       ],
-      "dh": "9581b5ee"
+      "dh": "9581b5ee",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_AllocScreenMessage",
@@ -458,7 +584,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "85494157"
+      "dh": "85494157",
+      "paramStorage": [
+        [
+          "ppwszText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_InsertScreenMessage",
@@ -478,7 +610,13 @@
       "usedTypes": [
         "ScreenMessage_t"
       ],
-      "dh": "29be8e22"
+      "dh": "29be8e22",
+      "paramStorage": [
+        [
+          "ppwszText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_DrawChatMessages",
@@ -562,7 +700,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6a81e762"
+      "dh": "6a81e762",
+      "paramStorage": [
+        [
+          "nExistingRectCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRect",
+          "ESI:4"
+        ],
+        [
+          "nDefaultResult",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_ConvertCharToWideWithLanguage",
@@ -584,7 +736,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "87f359be"
+      "dh": "87f359be",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "nLanguage",
+          "EDI:4"
+        ],
+        [
+          "pwszDest",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_FreeStaticTextBox",
@@ -680,7 +850,17 @@
         "uint8_t",
         "wchar_t"
       ],
-      "dh": "a268f1ac"
+      "dh": "a268f1ac",
+      "paramStorage": [
+        [
+          "wMessage",
+          "ECX:4"
+        ],
+        [
+          "nColor",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "TEXT_PrintPartyMessage",
@@ -721,7 +901,17 @@
         "uint8_t",
         "wchar_t"
       ],
-      "dh": "7114dfb9"
+      "dh": "7114dfb9",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "byColor",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "TEXT_SetScrollCompleteCallback",
@@ -739,7 +929,17 @@
       "usedTypes": [
         "pfnTextScrollComplete"
       ],
-      "dh": "9d26156a"
+      "dh": "9d26156a",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "ECX:4"
+        ],
+        [
+          "pUserParam",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_OnPanelUnregister_NoOp_Unref_0049e7f0",
@@ -878,7 +1078,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "33bf965d"
+      "dh": "33bf965d",
+      "paramStorage": [
+        [
+          "pEventData",
+          "EBX:4"
+        ],
+        [
+          "wszText",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_HandleEventMessagePacket",
@@ -928,7 +1138,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2ce286a9"
+      "dh": "2ce286a9",
+      "paramStorage": [
+        [
+          "pMessageCtx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_FreeHoverText",
@@ -952,7 +1168,13 @@
         "D2HoverTextStrc",
         "D2TextLineStrc *"
       ],
-      "dh": "fb19fa19"
+      "dh": "fb19fa19",
+      "paramStorage": [
+        [
+          "pHover",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_SetUnitHoverText",
@@ -976,7 +1198,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "edb5d351"
+      "dh": "edb5d351",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "nLanguageCode",
+          "Stack[0x4]:1"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_ProcessChatMessage",
@@ -1018,7 +1258,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "41d5e250"
+      "dh": "41d5e250",
+      "paramStorage": [
+        [
+          "pMessage",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_ClearUnitHoverText",
@@ -1039,7 +1285,13 @@
         "D2GSPacketSrv0x76",
         "D2UnitStrc"
       ],
-      "dh": "8d4ddb9d"
+      "dh": "8d4ddb9d",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_GetOverheadGlobalPointer",
@@ -1077,7 +1329,13 @@
         "WCHAR",
         "uint16_t"
       ],
-      "dh": "5874e5b4"
+      "dh": "5874e5b4",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "TEXT_CloseScrollingText",
@@ -1163,7 +1421,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "da2cc2de"
+      "dh": "da2cc2de",
+      "paramStorage": [
+        [
+          "bDraw",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_FreeScrollDC6Images",
@@ -1200,7 +1464,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "0b8daf29"
+      "dh": "0b8daf29",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_OnClickCloseQuestScroll",
@@ -1222,7 +1492,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "8b6c779b"
+      "dh": "8b6c779b",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_OnPanelUnregister_NoOp",
@@ -1272,7 +1548,13 @@
       "usedTypes": [
         "D2GSPacketSrv0x50"
       ],
-      "dh": "2838e37f"
+      "dh": "2838e37f",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_OpenQuestScroll",
@@ -1294,7 +1576,17 @@
         "D2ItemsTxt",
         "D2UnitStrc"
       ],
-      "dh": "b7fe7dbb"
+      "dh": "b7fe7dbb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTextBlock",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_IsScrollingTextActive",
@@ -1429,7 +1721,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "e2ecefaa"
+      "dh": "e2ecefaa",
+      "paramStorage": [
+        [
+          "pUnitAnim",
+          "ECX:4"
+        ],
+        [
+          "nSoundId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_CloseMessageUI",
@@ -1472,7 +1774,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "400a14f3"
+      "dh": "400a14f3",
+      "paramStorage": [
+        [
+          "pwszInput",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnLineCount",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnScrollRate",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_AllocTextBox",
@@ -1498,7 +1814,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "c1f9f292"
+      "dh": "c1f9f292",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nWrapMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_FreeEverything",
@@ -1552,7 +1878,17 @@
         "D2TextBoxStrc",
         "int32_t"
       ],
-      "dh": "0250d102"
+      "dh": "0250d102",
+      "paramStorage": [
+        [
+          "bClose",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTextBox",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_CloseNpcInteraction",
@@ -1634,7 +1970,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "79d37adc"
+      "dh": "79d37adc",
+      "paramStorage": [
+        [
+          "pHoverText",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScreenPos",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_DrawMonsterHoverText",
@@ -1667,7 +2021,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7fe5c4df"
+      "dh": "7fe5c4df",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_DrawObjectHoverText",
@@ -1698,7 +2058,13 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "eb33833c"
+      "dh": "eb33833c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_DrawMessageLogAndOverhead",
@@ -1742,7 +2108,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "182bb540"
+      "dh": "182bb540",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_ShowNpcDialog",
@@ -1790,7 +2162,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "fb5cefbb"
+      "dh": "fb5cefbb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "wDialogStringId",
+          "DX:2"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_ShowScrollingText",
@@ -1830,7 +2216,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "0dafbf35"
+      "dh": "0dafbf35",
+      "paramStorage": [
+        [
+          "wDialogStringId",
+          "CX:2"
+        ],
+        [
+          "bAlignToPanel",
+          "EDX:4"
+        ],
+        [
+          "bShowImage",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_ShowStaticTextPopup",
@@ -1861,7 +2261,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "42a92d1c"
+      "dh": "42a92d1c",
+      "paramStorage": [
+        [
+          "wStringId",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "TEXT_HandleOverheadTextPacket",
@@ -1891,7 +2297,13 @@
         "D2HoverTextStrc",
         "D2UnitStrc"
       ],
-      "dh": "8658d31a"
+      "dh": "8658d31a",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_CloseNpcDialog",
@@ -1938,7 +2350,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "c77a1deb"
+      "dh": "c77a1deb",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_TextClickHandler",
@@ -1961,7 +2379,13 @@
         "D2UIMouseMsgStrc",
         "D2UnitStrc"
       ],
-      "dh": "c568dea2"
+      "dh": "c568dea2",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_TextKeyHandler",
@@ -1984,7 +2408,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "536183ae"
+      "dh": "536183ae",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_TextKeyFilter",
@@ -2003,7 +2433,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "6756e09d"
+      "dh": "6756e09d",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca07b",
@@ -2024,7 +2460,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "e09f8268"
+      "dh": "e09f8268",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gnTextBoxExclusionX",

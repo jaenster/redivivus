@@ -19,7 +19,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2de7200c"
+      "dh": "2de7200c",
+      "paramStorage": [
+        [
+          "nY1",
+          "ECX:4"
+        ],
+        [
+          "nY2",
+          "EDX:4"
+        ],
+        [
+          "nX2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX1",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetApproxDistancePacked",
@@ -38,7 +56,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b0d1e01c"
+      "dh": "b0d1e01c",
+      "paramStorage": [
+        [
+          "nPackedCoord1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedCoord2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetDirectionIndex",
@@ -57,7 +85,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "957cfeab"
+      "dh": "957cfeab",
+      "paramStorage": [
+        [
+          "nY2",
+          "ECX:4"
+        ],
+        [
+          "nY1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX1",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetDirectionIndexPacked",
@@ -76,7 +122,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d241d413"
+      "dh": "d241d413",
+      "paramStorage": [
+        [
+          "nPackedFrom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedTo",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetDirection",
@@ -96,7 +152,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f3e65e1a"
+      "dh": "f3e65e1a",
+      "paramStorage": [
+        [
+          "nY1",
+          "ECX:4"
+        ],
+        [
+          "nX2",
+          "EDX:4"
+        ],
+        [
+          "nX1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetDirectionPacked",
@@ -116,7 +190,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "35ca630d"
+      "dh": "35ca630d",
+      "paramStorage": [
+        [
+          "nPackedFrom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedTo",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetPathDirection",
@@ -135,7 +219,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "fc79e8c9"
+      "dh": "fc79e8c9",
+      "paramStorage": [
+        [
+          "nY1",
+          "ECX:4"
+        ],
+        [
+          "nX2",
+          "EDX:4"
+        ],
+        [
+          "nX1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetPathDirectionPacked",
@@ -155,7 +257,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a30eef50"
+      "dh": "a30eef50",
+      "paramStorage": [
+        [
+          "nPackedFrom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedTo",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetPathDirectionTriplet",
@@ -174,7 +286,29 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "3f109410"
+      "dh": "3f109410",
+      "paramStorage": [
+        [
+          "nParam1",
+          "ECX:4"
+        ],
+        [
+          "nParam2",
+          "EDX:4"
+        ],
+        [
+          "nY1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "paDirOut",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetPathDirectionTripletPacked",
@@ -194,7 +328,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b4abd7af"
+      "dh": "b4abd7af",
+      "paramStorage": [
+        [
+          "paDirOut",
+          "ECX:4"
+        ],
+        [
+          "nPackedSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedDst",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetDirectionTriplet",
@@ -214,7 +362,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "06b8c4cf"
+      "dh": "06b8c4cf",
+      "paramStorage": [
+        [
+          "nParam1",
+          "ECX:4"
+        ],
+        [
+          "nParam2",
+          "EDX:4"
+        ],
+        [
+          "nY1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnDirOut",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetDirectionTripletPacked",
@@ -234,7 +404,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e9308a9b"
+      "dh": "e9308a9b",
+      "paramStorage": [
+        [
+          "pnDirOut",
+          "ECX:4"
+        ],
+        [
+          "nPackedSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedDst",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_UpdatePathVelocityAndDirection",
@@ -253,7 +437,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "3fb7409e"
+      "dh": "3fb7409e",
+      "paramStorage": [
+        [
+          "pPathData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_NormalizeFixedPointPair",
@@ -268,7 +458,17 @@
       "calledFunctions": [
         "DRLGPATH_NormalizeFixedPointPair"
       ],
-      "dh": "36333d35"
+      "dh": "36333d35",
+      "paramStorage": [
+        [
+          "pnStepX",
+          "ECX:4"
+        ],
+        [
+          "pnStepY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_StepPathWithCollisionCheck",
@@ -296,7 +496,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4c1532ed"
+      "dh": "4c1532ed",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "ECX:4"
+        ],
+        [
+          "pPathData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_ApplyMissileOffset",
@@ -323,7 +533,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e4e73cbc"
+      "dh": "e4e73cbc",
+      "paramStorage": [
+        [
+          "pMissileStrc",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetMissileTargetPosition",
@@ -353,7 +569,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2506de28"
+      "dh": "2506de28",
+      "paramStorage": [
+        [
+          "pOutPos",
+          "ECX:4"
+        ],
+        [
+          "pMissileStrc",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetWeightedDistancePacked",
@@ -372,7 +598,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "005b10e8"
+      "dh": "005b10e8",
+      "paramStorage": [
+        [
+          "nPackedPos1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedPos2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_FindNonBlockedDirectionFromTriplet",
@@ -398,7 +634,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "35059b2c"
+      "dh": "35059b2c",
+      "paramStorage": [
+        [
+          "nPackedPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnDirTriplet",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnChosenDir",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pPathTypeArg",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_RaycastCollisionLine",
@@ -426,7 +680,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fad7094c"
+      "dh": "fad7094c",
+      "paramStorage": [
+        [
+          "pVelocity",
+          "ECX:4"
+        ],
+        [
+          "nPackedStart",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnPackedDst",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPathArg",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_RaycastBresenhamLine",
@@ -451,7 +723,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "4516bf87"
+      "dh": "4516bf87",
+      "paramStorage": [
+        [
+          "nPackedSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnPackedDst",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPathArg",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_CheckTargetReachable",
@@ -477,7 +763,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "adb7f43b"
+      "dh": "adb7f43b",
+      "paramStorage": [
+        [
+          "pTargetPos",
+          "EDI:4"
+        ],
+        [
+          "pDynamicPath",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_SmoothPathPoints",
@@ -501,7 +797,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "16572b20"
+      "dh": "16572b20",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PATH_FindPathToward",
@@ -529,7 +831,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "8069cf38"
+      "dh": "8069cf38",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PATH_FindPathTowardFromStart",
@@ -549,7 +857,13 @@
         "D2PathTypeArg",
         "int32_t"
       ],
-      "dh": "39e66f23"
+      "dh": "39e66f23",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PATH_FindPathSmoothed",
@@ -570,7 +884,13 @@
         "D2PathTypeArg",
         "int32_t"
       ],
-      "dh": "e1eb1042"
+      "dh": "e1eb1042",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PATH_FindPathTowardWithAStarFallback",
@@ -595,7 +915,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "43ade82c"
+      "dh": "43ade82c",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PATH_FindPathSingleStep",
@@ -617,7 +943,13 @@
         "D2PathTypeArg",
         "int32_t"
       ],
-      "dh": "0cf03f47"
+      "dh": "0cf03f47",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PATH_FindPathForceMove",
@@ -638,7 +970,13 @@
         "D2PathTypeArg",
         "int32_t"
       ],
-      "dh": "ea2e0ac4"
+      "dh": "ea2e0ac4",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PATH_FindPathKnockback",
@@ -666,7 +1004,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "2de9078b"
+      "dh": "2de9078b",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_BuildCircularPathPoints",
@@ -689,7 +1033,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "56715c56"
+      "dh": "56715c56",
+      "paramStorage": [
+        [
+          "pStaticPath",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_BuildRandomizedPathPoints",
@@ -711,7 +1061,17 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "8685c4bc"
+      "dh": "8685c4bc",
+      "paramStorage": [
+        [
+          "pPathStrc",
+          "ECX:4"
+        ],
+        [
+          "pDynamicPath",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_ScaleVelocityVector",
@@ -735,7 +1095,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "99e10d03"
+      "dh": "99e10d03",
+      "paramStorage": [
+        [
+          "nVelocityScale",
+          "ECX:4"
+        ],
+        [
+          "pPoint",
+          "EDX:4"
+        ],
+        [
+          "nPackedSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedDst",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_CheckRayCollisionToTarget",
@@ -762,7 +1140,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d9588b64"
+      "dh": "d9588b64",
+      "paramStorage": [
+        [
+          "nPackedSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedDst",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDynamicPath",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_ValidateFullPath",
@@ -786,7 +1178,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "c42b8906"
+      "dh": "c42b8906",
+      "paramStorage": [
+        [
+          "pPathTypeArgs",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetSimpleDistancePacked",
@@ -805,7 +1203,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fb80e18d"
+      "dh": "fb80e18d",
+      "paramStorage": [
+        [
+          "nPackedPosA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedPosB",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetDirectionDeltaTable",
@@ -823,7 +1231,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "970186c2"
+      "dh": "970186c2",
+      "paramStorage": [
+        [
+          "nDirFrom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDirTo",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_IsPositionInBounds",
@@ -843,7 +1261,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "bd65e053"
+      "dh": "bd65e053",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nPackedPos",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_AdvanceNodeDirection",
@@ -863,7 +1291,17 @@
         "D2DrlgRoomAStarNodeStrc",
         "D2SeedStrc"
       ],
-      "dh": "e89d190e"
+      "dh": "e89d190e",
+      "paramStorage": [
+        [
+          "pNode",
+          "ESI:4"
+        ],
+        [
+          "pAStarCtx",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_AdvancePathNodeChain",
@@ -884,7 +1322,17 @@
         "D2DrlgRoomAStarNodeStrc",
         "D2SeedStrc"
       ],
-      "dh": "8295cd62"
+      "dh": "8295cd62",
+      "paramStorage": [
+        [
+          "pAStarCtx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pNode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_AStarExpandNode",
@@ -912,7 +1360,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "eaeb2485"
+      "dh": "eaeb2485",
+      "paramStorage": [
+        [
+          "nMaxCost",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPathTypeArg",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pAStarCtx",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_ExtractPathFromResult",
@@ -935,7 +1397,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "02aa2fec"
+      "dh": "02aa2fec",
+      "paramStorage": [
+        [
+          "nPathCtx",
+          "ECX:4"
+        ],
+        [
+          "nCurNode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_FindPathAStar",
@@ -966,7 +1438,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "33be2c1b"
+      "dh": "33be2c1b",
+      "paramStorage": [
+        [
+          "pRoomCoords",
+          "ECX:4"
+        ],
+        [
+          "pPathTypeArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PATH_FindPathAStar",
@@ -989,7 +1471,13 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "03beb451"
+      "dh": "03beb451",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetSimpleDistancePacked2",
@@ -1008,7 +1496,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0be4b133"
+      "dh": "0be4b133",
+      "paramStorage": [
+        [
+          "nPackedPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedTarget",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_FindNodeInOpenList",
@@ -1028,7 +1526,17 @@
         "D2DrlgPathNodeStrc",
         "D2DrlgPathSearchCtxStrc"
       ],
-      "dh": "5ac92be8"
+      "dh": "5ac92be8",
+      "paramStorage": [
+        [
+          "nOpenListBase",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedPos",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_FindNodeInClosedList",
@@ -1048,7 +1556,17 @@
         "D2DrlgPathNodeStrc",
         "D2DrlgPathSearchCtxStrc"
       ],
-      "dh": "3de0a487"
+      "dh": "3de0a487",
+      "paramStorage": [
+        [
+          "nOpenListBase",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedPos",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_InsertNodeSorted",
@@ -1068,7 +1586,17 @@
         "D2DrlgPathSearchCtxStrc",
         "uint32_t"
       ],
-      "dh": "68d7b179"
+      "dh": "68d7b179",
+      "paramStorage": [
+        [
+          "pSearchCtx",
+          "EDI:4"
+        ],
+        [
+          "pNode",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_PopBestNodeFromOpenList",
@@ -1089,7 +1617,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "527dc5ba"
+      "dh": "527dc5ba",
+      "paramStorage": [
+        [
+          "nOpenListBase",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_PropagateNodeCosts",
@@ -1110,7 +1644,17 @@
         "D2DrlgPathSearchCtxStrc",
         "int32_t"
       ],
-      "dh": "078efa21"
+      "dh": "078efa21",
+      "paramStorage": [
+        [
+          "pStartNode",
+          "EDX:4"
+        ],
+        [
+          "pSearchCtx",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_AllocPathNode",
@@ -1130,7 +1674,13 @@
         "D2DrlgPathNodeStrc",
         "D2DrlgPathSearchCtxStrc"
       ],
-      "dh": "381f5fc5"
+      "dh": "381f5fc5",
+      "paramStorage": [
+        [
+          "nPathCtx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_TryExpandNeighborNode",
@@ -1157,7 +1707,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ab762d80"
+      "dh": "ab762d80",
+      "paramStorage": [
+        [
+          "nOpenList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedNeighbor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPackedTarget",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pParentNode",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_ExpandAllNeighbors",
@@ -1183,7 +1751,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "731f9255"
+      "dh": "731f9255",
+      "paramStorage": [
+        [
+          "pCurNodeCoords",
+          "ECX:4"
+        ],
+        [
+          "nOpenList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPathTypeArg",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_ExtractPathFromResult2",
@@ -1205,7 +1791,17 @@
         "D2PathTypeArg",
         "int32_t"
       ],
-      "dh": "083ae98e"
+      "dh": "083ae98e",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "ECX:4"
+        ],
+        [
+          "pCurNode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_CheckSurroundingCollisions",
@@ -1228,7 +1824,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "deea813e"
+      "dh": "deea813e",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PATH_FindPathAStarLocalPool",
@@ -1256,7 +1858,13 @@
         "D2PathTypeArg",
         "int32_t"
       ],
-      "dh": "86aa3386"
+      "dh": "86aa3386",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetSquaredDistancePacked",
@@ -1275,7 +1883,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d0b8261e"
+      "dh": "d0b8261e",
+      "paramStorage": [
+        [
+          "nPackedA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPackedB",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_BuildBresenhamPointList",
@@ -1295,7 +1913,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "73c3b88a"
+      "dh": "73c3b88a",
+      "paramStorage": [
+        [
+          "nSrcPacked",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstPacked",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxSteps",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnInitDir",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pwPointsBuf",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_GetDirectionLookupFromPacked",
@@ -1313,7 +1953,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "b10492fa"
+      "dh": "b10492fa",
+      "paramStorage": [
+        [
+          "nSrcPacked",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstPacked",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_TryStepWithFallbackDirections",
@@ -1340,7 +1990,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "2358f86e"
+      "dh": "2358f86e",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "EAX:4"
+        ],
+        [
+          "pScannerState",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_InsertWaypointsIntoBuffer",
@@ -1362,7 +2022,29 @@
         "D2PathPointStrc",
         "int32_t"
       ],
-      "dh": "224e7163"
+      "dh": "224e7163",
+      "paramStorage": [
+        [
+          "pScanNode",
+          "ECX:4"
+        ],
+        [
+          "nWaypointBuf",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInsertIdx",
+          "EAX:4"
+        ],
+        [
+          "pnCurIndex",
+          "EBX:4"
+        ],
+        [
+          "pnPointCount",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_FindPathDualScan",
@@ -1390,7 +2072,37 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "2dc0ba98"
+      "dh": "2dc0ba98",
+      "paramStorage": [
+        [
+          "pPathGrid",
+          "ECX:4"
+        ],
+        [
+          "nGridSize",
+          "EDX:4"
+        ],
+        [
+          "nStartPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStartX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pStartY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nEndX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nEndY",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGPATH_SimplifyCollinearWaypoints",
@@ -1410,7 +2122,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6e890194"
+      "dh": "6e890194",
+      "paramStorage": [
+        [
+          "pDstPoints",
+          "ECX:4"
+        ],
+        [
+          "pSrcPoints",
+          "EDX:4"
+        ],
+        [
+          "nStartPacked",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPointCount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PATH_FindPathTowardFallback",
@@ -1441,7 +2171,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "76fde0fa"
+      "dh": "76fde0fa",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

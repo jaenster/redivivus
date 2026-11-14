@@ -64,7 +64,21 @@
         "BnMessQueue",
         "int32_t"
       ],
-      "dh": "06f5f32a"
+      "dh": "06f5f32a",
+      "paramStorage": [
+        [
+          "nEventType",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BNMESSQUEUE_EnqueueString",
@@ -88,7 +102,17 @@
         "BnMessQueue",
         "int32_t"
       ],
-      "dh": "e2d4f7df"
+      "dh": "e2d4f7df",
+      "paramStorage": [
+        [
+          "nEventType",
+          "ECX:4"
+        ],
+        [
+          "szMessage",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNMESSQUEUE_DequeueMessage",
@@ -108,7 +132,17 @@
       "usedTypes": [
         "BnMessQueue"
       ],
-      "dh": "cea07062"
+      "dh": "cea07062",
+      "paramStorage": [
+        [
+          "pMessageTypeOut",
+          "ECX:4"
+        ],
+        [
+          "pBufferOut",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNMESSQUEUE_ClearAll",
@@ -145,7 +179,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2cbf6f5f"
+      "dh": "2cbf6f5f",
+      "paramStorage": [
+        [
+          "nState",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNMESSQUEUE_SetStateWithString",
@@ -164,7 +204,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "14695847"
+      "dh": "14695847",
+      "paramStorage": [
+        [
+          "nState",
+          "ECX:4"
+        ],
+        [
+          "szMessage",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SID_SetStateFlag1",
@@ -179,7 +229,13 @@
       "calledFunctions": [
         "SID_SetStateFlag1"
       ],
-      "dh": "a1d7190f"
+      "dh": "a1d7190f",
+      "paramStorage": [
+        [
+          "nState",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SID_SetStateFlag2",
@@ -194,7 +250,13 @@
       "calledFunctions": [
         "SID_SetStateFlag2"
       ],
-      "dh": "6dfaba92"
+      "dh": "6dfaba92",
+      "paramStorage": [
+        [
+          "nData",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

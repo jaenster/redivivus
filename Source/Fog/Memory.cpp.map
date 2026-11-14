@@ -43,7 +43,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9c36d98d"
+      "dh": "9c36d98d",
+      "paramStorage": [
+        [
+          "nSize",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "FindFirstFreeBit",
@@ -62,7 +68,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2268f336"
+      "dh": "2268f336",
+      "paramStorage": [
+        [
+          "dwBits",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FindFreeSlotInBitmap",
@@ -82,7 +94,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ea709b91"
+      "dh": "ea709b91",
+      "paramStorage": [
+        [
+          "pnBitmap",
+          "ECX:4"
+        ],
+        [
+          "nTotalBits",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "InsertBlockIntoSortedArray",
@@ -109,7 +131,17 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "fa4c6847"
+      "dh": "fa4c6847",
+      "paramStorage": [
+        [
+          "pBlock",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nManager",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "RemoveBlockFromSortedArray",
@@ -137,7 +169,17 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "5ff65724"
+      "dh": "5ff65724",
+      "paramStorage": [
+        [
+          "pBlock",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nManager",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "AllocatePoolBlock",
@@ -167,7 +209,17 @@
         "D2PoolStrc",
         "int32_t"
       ],
-      "dh": "22be70d1"
+      "dh": "22be70d1",
+      "paramStorage": [
+        [
+          "pPool",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nManager",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "FindOrCreateBlockWithFreeSlots",
@@ -191,7 +243,21 @@
         "D2PoolStrc",
         "int32_t"
       ],
-      "dh": "5667f7c0"
+      "dh": "5667f7c0",
+      "paramStorage": [
+        [
+          "ppOutBlock",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nManager",
+          "EBX:4"
+        ],
+        [
+          "pPool",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "POOL_AllocOverflowBlock",
@@ -215,7 +281,25 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "a8eb0f36"
+      "dh": "a8eb0f36",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFileLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FreeTrackedAllocation",
@@ -235,7 +319,25 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "1abf68d3"
+      "dh": "1abf68d3",
+      "paramStorage": [
+        [
+          "nManager",
+          "ECX:4"
+        ],
+        [
+          "nUserPtr",
+          "EDX:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ReallocTrackedAllocation",
@@ -260,7 +362,29 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "76e4bc73"
+      "dh": "76e4bc73",
+      "paramStorage": [
+        [
+          "pManager",
+          "ECX:4"
+        ],
+        [
+          "pUserPtr",
+          "EDX:4"
+        ],
+        [
+          "nNewSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FindBlockContainingAddress",
@@ -281,7 +405,17 @@
         "D2PoolBlockStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "e65c7869"
+      "dh": "e65c7869",
+      "paramStorage": [
+        [
+          "nAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nManager",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PromoteBlockToFreeListHead",
@@ -300,7 +434,17 @@
         "D2PoolBlockStrc",
         "D2PoolStrc"
       ],
-      "dh": "0d486c94"
+      "dh": "0d486c94",
+      "paramStorage": [
+        [
+          "pPool",
+          "EDX:4"
+        ],
+        [
+          "pBlock",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Free",
@@ -326,7 +470,25 @@
         "uint32_t",
         "void *"
       ],
-      "dh": "c17f3319"
+      "dh": "c17f3319",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pStruct",
+          "EDX:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "Line0",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "InitializeMemoryManagers",
@@ -348,7 +510,13 @@
         "D2PoolManagerStrc",
         "D2PoolStrc"
       ],
-      "dh": "92723895"
+      "dh": "92723895",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreeMemoryPool",
@@ -371,7 +539,13 @@
         "D2PoolManagerStrc",
         "D2PoolStrc"
       ],
-      "dh": "3a76e051"
+      "dh": "3a76e051",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "InitializePoolSystem",
@@ -400,7 +574,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "410e9abf"
+      "dh": "410e9abf",
+      "paramStorage": [
+        [
+          "pPoolManager",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxBlockSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SetPoolIdForMemoryManager",
@@ -419,7 +611,17 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "1dc48c14"
+      "dh": "1dc48c14",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPoolId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "getDwMemory",
@@ -437,7 +639,13 @@
       "usedTypes": [
         "D2PoolManagerStrc"
       ],
-      "dh": "26edf898"
+      "dh": "26edf898",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Alloc",
@@ -466,7 +674,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "57b4d603"
+      "dh": "57b4d603",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "MemSize",
+          "EDX:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "Line",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ReAlloc",
@@ -495,7 +721,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "37d81499"
+      "dh": "37d81499",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pMemoryToRealloc",
+          "EDX:4"
+        ],
+        [
+          "nAllocSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SErrSetBlizzardErrorFunction_Unref_0040b370",
@@ -513,7 +761,13 @@
       "usedTypes": [
         "pfnBlizzardError"
       ],
-      "dh": "a3d5b367"
+      "dh": "a3d5b367",
+      "paramStorage": [
+        [
+          "pfnFunc",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AllocClientMemory",
@@ -533,7 +787,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0d1e982d"
+      "dh": "0d1e982d",
+      "paramStorage": [
+        [
+          "nAllocSize",
+          "ECX:4"
+        ],
+        [
+          "szFile",
+          "EDX:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNull",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FreeClientMemory",
@@ -552,7 +824,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "84bb7d3c"
+      "dh": "84bb7d3c",
+      "paramStorage": [
+        [
+          "pMemoryToFree",
+          "ECX:4"
+        ],
+        [
+          "szFile",
+          "EDX:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNull",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ReAllocClientMemory",
@@ -569,7 +859,29 @@
         "ReAlloc",
         "FOG_ErrorHandler"
       ],
-      "dh": "847026d1"
+      "dh": "847026d1",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "AllocServerMemory",
@@ -590,7 +902,29 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "ccd885fb"
+      "dh": "ccd885fb",
+      "paramStorage": [
+        [
+          "pPoolManagerStrc",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNull",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FreeServerMemory",
@@ -610,7 +944,29 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "5a379747"
+      "dh": "5a379747",
+      "paramStorage": [
+        [
+          "pPoolManagerStrc",
+          "ECX:4"
+        ],
+        [
+          "pMemoryToFree",
+          "EDX:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNull",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ReAllocServerMemory",
@@ -630,7 +986,33 @@
       "usedTypes": [
         "D2PoolManagerStrc"
       ],
-      "dh": "3fbcaa22"
+      "dh": "3fbcaa22",
+      "paramStorage": [
+        [
+          "pPoolManagerStrc",
+          "ECX:4"
+        ],
+        [
+          "pMemory",
+          "EDX:4"
+        ],
+        [
+          "nNewSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

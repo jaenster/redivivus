@@ -34,7 +34,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "31f4d202"
+      "dh": "31f4d202",
+      "paramStorage": [
+        [
+          "nMagic",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_ParsePEDebugDirectory",
@@ -52,7 +58,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "40ea72dd"
+      "dh": "40ea72dd",
+      "paramStorage": [
+        [
+          "pnSize",
+          "EDX:4"
+        ],
+        [
+          "pnRVA",
+          "ESI:4"
+        ],
+        [
+          "pOptHeader",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_IsValidDebugDirectorySize",
@@ -70,7 +90,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "fa654950"
+      "dh": "fa654950",
+      "paramStorage": [
+        [
+          "nDirSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_ParseDebugInfoFromMemory",
@@ -91,7 +117,21 @@
         "D2FogDebugModuleEntryStrc",
         "uint32_t"
       ],
-      "dh": "99f97924"
+      "dh": "99f97924",
+      "paramStorage": [
+        [
+          "nDataSize",
+          "EAX:4"
+        ],
+        [
+          "pDebugData",
+          "EDX:4"
+        ],
+        [
+          "pModuleInfoOut",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_ParseDebugDataDirectory",
@@ -114,7 +154,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2711e7f9"
+      "dh": "2711e7f9",
+      "paramStorage": [
+        [
+          "nCount",
+          "ECX:4"
+        ],
+        [
+          "nBaseAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDirEntries",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOutput",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_ParseModuleHeaders",
@@ -137,7 +195,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d7a58d35"
+      "dh": "d7a58d35",
+      "paramStorage": [
+        [
+          "ppModuleBase",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pModuleBase",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_AddModuleToList",
@@ -160,7 +228,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "96ef6c3d"
+      "dh": "96ef6c3d",
+      "paramStorage": [
+        [
+          "pModuleList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szModulePath",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPathLength",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pModuleBase",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_EnumerateModulesViaPsapi",
@@ -184,7 +270,13 @@
         "pfnGetModuleInformation",
         "uint32_t"
       ],
-      "dh": "42d74364"
+      "dh": "42d74364",
+      "paramStorage": [
+        [
+          "pModuleList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_EnumerateModulesViaToolhelp32",
@@ -204,7 +296,13 @@
       "usedTypes": [
         "MODULEENTRY32W"
       ],
-      "dh": "12231ce6"
+      "dh": "12231ce6",
+      "paramStorage": [
+        [
+          "pModuleList",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_EnumerateModulesViaPEB",
@@ -223,7 +321,13 @@
       "usedTypes": [
         "EH4_EXCEPTION_REGISTRATION"
       ],
-      "dh": "d25c2857"
+      "dh": "d25c2857",
+      "paramStorage": [
+        [
+          "pModuleList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_EnumerateModules",
@@ -241,7 +345,13 @@
         "DEBUG_EnumerateModulesViaToolhelp32",
         "DEBUG_EnumerateModulesViaPEB"
       ],
-      "dh": "8a7aa04e"
+      "dh": "8a7aa04e",
+      "paramStorage": [
+        [
+          "pModuleList",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_ExtractDebugDirectory64",
@@ -260,7 +370,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e99bc65a"
+      "dh": "e99bc65a",
+      "paramStorage": [
+        [
+          "dwParam",
+          "ECX:4"
+        ],
+        [
+          "pnRVA",
+          "EDX:4"
+        ],
+        [
+          "pnSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOptHeader",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_ExtractDebugDirectory32",
@@ -279,7 +407,25 @@
         "IMAGE_OPTIONAL_HEADER32",
         "uint32_t"
       ],
-      "dh": "c93f1949"
+      "dh": "c93f1949",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "pnRVA",
+          "EDX:4"
+        ],
+        [
+          "pnSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOptHeader",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_ParseNB01DebugInfo",
@@ -300,7 +446,17 @@
         "D2FogDebugModuleEntryStrc",
         "uint32_t"
       ],
-      "dh": "e14a7d02"
+      "dh": "e14a7d02",
+      "paramStorage": [
+        [
+          "pDebugRecord",
+          "EDI:4"
+        ],
+        [
+          "pModuleInfo",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_ParseRSDSDebugInfo",
@@ -321,7 +477,17 @@
         "D2FogDebugModuleEntryStrc",
         "uint8_t"
       ],
-      "dh": "5d5585ef"
+      "dh": "5d5585ef",
+      "paramStorage": [
+        [
+          "pDebugRecord",
+          "EDI:4"
+        ],
+        [
+          "pModuleInfo",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_UnwindStackFrames",
@@ -344,7 +510,25 @@
         "EH4_EXCEPTION_REGISTRATION",
         "uint32_t"
       ],
-      "dh": "ac2432e9"
+      "dh": "ac2432e9",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "dwThreadId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pFrameArray",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkipFrames",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_FormatAddressInfo",
@@ -368,7 +552,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "84f1360b"
+      "dh": "84f1360b",
+      "paramStorage": [
+        [
+          "nAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutput",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004067c0",
@@ -404,7 +598,17 @@
         "pfnSHGetKnownFolderPath",
         "uint32_t"
       ],
-      "dh": "6edfd181"
+      "dh": "6edfd181",
+      "paramStorage": [
+        [
+          "szOutPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

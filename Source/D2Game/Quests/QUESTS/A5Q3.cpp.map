@@ -25,7 +25,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "01146e68"
+      "dh": "01146e68",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q33_UpdateQuestStep",
@@ -50,7 +64,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2a56d4a5"
+      "dh": "2a56d4a5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q33_Callback02_NpcDeactivate",
@@ -71,7 +99,17 @@
         "D2QuestDataA5Q3Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "f73a2c0b"
+      "dh": "f73a2c0b",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_SendQuestStatePacket",
@@ -93,7 +131,13 @@
         "D2GSPacketSrv0x5D",
         "D2UnitStrc"
       ],
-      "dh": "e44309b1"
+      "dh": "e44309b1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_OnFrozenAnyaKilled",
@@ -120,7 +164,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2c31bfa0"
+      "dh": "2c31bfa0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q33_SequenceFilter",
@@ -143,7 +201,13 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "e4509f87"
+      "dh": "e4509f87",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_SpawnAnyaAndPortal",
@@ -179,7 +243,17 @@
         "POINT",
         "eD2UnitType"
       ],
-      "dh": "8719c463"
+      "dh": "8719c463",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pA5Q3",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "A5Q3_KillMonsterInstantly",
@@ -208,7 +282,17 @@
         "D2UnitStrc",
         "SGAMEDATA *"
       ],
-      "dh": "4398083e"
+      "dh": "4398083e",
+      "paramStorage": [
+        [
+          "pUnitStrc",
+          "ESI:4"
+        ],
+        [
+          "pGameStrc",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "Q33_CleanupQuestMonsters",
@@ -245,7 +329,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "e0af3dac"
+      "dh": "e0af3dac",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_KillAnyaMonsterTimer",
@@ -268,7 +358,13 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "ebd24d60"
+      "dh": "ebd24d60",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_Callback11_ScrollMessage",
@@ -320,7 +416,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "16829344"
+      "dh": "16829344",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_PropagateCompleteToParty",
@@ -344,7 +450,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "9d6eb5a5"
+      "dh": "9d6eb5a5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q33_SetCannotComplete",
@@ -368,7 +488,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "0e006a5d"
+      "dh": "0e006a5d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q33_Callback00_NpcActivate",
@@ -403,7 +537,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3613f33a"
+      "dh": "3613f33a",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_Callback10_PlayerLeavesGame",
@@ -427,7 +571,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9632890f"
+      "dh": "9632890f",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_Callback03_ChangedLevel",
@@ -458,7 +612,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "856082cd"
+      "dh": "856082cd",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_ActiveFilter",
@@ -481,7 +645,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "cb556e16"
+      "dh": "cb556e16",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "AddBonusResistances",
@@ -508,7 +694,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3932272c"
+      "dh": "3932272c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nBonusValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CalculateBonusResistances",
@@ -534,7 +734,17 @@
         "eD2Quests",
         "uint32_t"
       ],
-      "dh": "5c407eea"
+      "dh": "5c407eea",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_Callback13_PlayerStartedGame",
@@ -561,7 +771,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "8ec0326b"
+      "dh": "8ec0326b",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_Callback14_PlayerJoinedGame",
@@ -590,7 +810,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8c052df5"
+      "dh": "8c052df5",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_CheckPlayerHasScrollOfResistance",
@@ -612,7 +842,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "d2fd9451"
+      "dh": "d2fd9451",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q33_CheckPartyHasScrollOfResistance",
@@ -637,7 +881,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "b042f3f8"
+      "dh": "b042f3f8",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_StatusFilter",
@@ -660,7 +914,29 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "0532a331"
+      "dh": "0532a331",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBufferEx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbyStatusCode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q33_InitData",
@@ -683,7 +959,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "af240db1"
+      "dh": "af240db1",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SpawnFrozenAnya",
@@ -713,7 +995,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7ece9778"
+      "dh": "7ece9778",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn67_DrehyaStartOutsideTown",
@@ -736,7 +1028,13 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "c9db4adc"
+      "dh": "c9db4adc",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn68_NihlathakStartInTown",
@@ -763,7 +1061,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "67106b1b"
+      "dh": "67106b1b",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn69_SpawnFrozenstein",
@@ -788,7 +1092,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "516ed372"
+      "dh": "516ed372",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_AnyaTimerCallback",
@@ -815,7 +1125,17 @@
         "eD2LevelId",
         "eD2MonsterAnimMode"
       ],
-      "dh": "255c0b9b"
+      "dh": "255c0b9b",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_GetAnyaCoordinates",
@@ -836,7 +1156,17 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "d8cb4e2d"
+      "dh": "d8cb4e2d",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pOutCoords",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q33_SpawnPortalNearAnya",
@@ -862,7 +1192,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "db6abb53"
+      "dh": "db6abb53",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_GetAnyaOrPortalCoords",
@@ -886,7 +1226,21 @@
         "POINT",
         "SGAMEDATA"
       ],
-      "dh": "be693593"
+      "dh": "be693593",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPoint",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q33_StoreAnyaPosition",
@@ -909,7 +1263,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2d61f4a5"
+      "dh": "2d61f4a5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_StartAnyaRescuePhase",
@@ -932,7 +1296,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "4fe9a023"
+      "dh": "4fe9a023",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_SetAnyaCanRun",
@@ -952,7 +1326,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "d70af9f5"
+      "dh": "d70af9f5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_IsAnyaInTown",
@@ -972,7 +1352,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "c2b57783"
+      "dh": "c2b57783",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_IsFrozenAnyaAlive",
@@ -993,7 +1379,13 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "8af92a07"
+      "dh": "8af92a07",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_OnNpcNotifyPlayers",
@@ -1014,7 +1406,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "089c618a"
+      "dh": "089c618a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn74_FrozenAnya",
@@ -1036,7 +1434,13 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "f49c770a"
+      "dh": "f49c770a",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_TransformFrozenAnya",
@@ -1073,7 +1477,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fbf9c04f"
+      "dh": "fbf9c04f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pQuestData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_A5Q3_RescueAnyaFromPortal",
@@ -1115,7 +1529,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "b3c3ecaf"
+      "dh": "b3c3ecaf",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_OnPresetObjectLoad1",
@@ -1142,7 +1562,17 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "55f11f51"
+      "dh": "55f11f51",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMapAI",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q33_OnPresetObjectLoad2",
@@ -1169,7 +1599,17 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "cfb00aaa"
+      "dh": "cfb00aaa",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMapAI",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

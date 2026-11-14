@@ -22,7 +22,17 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "296fdcec"
+      "dh": "296fdcec",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_HashTextureName",
@@ -45,7 +55,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d36939d1"
+      "dh": "d36939d1",
+      "paramStorage": [
+        [
+          "pArchive",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GFX_ExtractFilenameFromPath",
@@ -61,7 +77,17 @@
         "GFX_ExtractFilenameFromPath",
         "strncpy"
       ],
-      "dh": "3c2aae26"
+      "dh": "3c2aae26",
+      "paramStorage": [
+        [
+          "szPath",
+          "EDX:4"
+        ],
+        [
+          "szOutFilename",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "GFX_FindTextureInCache",
@@ -85,7 +111,17 @@
         "D2CofTextureCacheEntryStrc",
         "uint32_t"
       ],
-      "dh": "7f50b479"
+      "dh": "7f50b479",
+      "paramStorage": [
+        [
+          "pTextureCache",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szPath",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_LoadCofFile",
@@ -119,7 +155,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "541ed0de"
+      "dh": "541ed0de",
+      "paramStorage": [
+        [
+          "pTextureCache",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szPath",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_LoadAndHashCofArchive",
@@ -147,7 +193,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "57de7c87"
+      "dh": "57de7c87",
+      "paramStorage": [
+        [
+          "szPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCache",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_SyncStateOverlayPriority",
@@ -166,7 +222,17 @@
         "D2GfxInfoStrc",
         "D2GfxUnknown_0xa8"
       ],
-      "dh": "4c5c1968"
+      "dh": "4c5c1968",
+      "paramStorage": [
+        [
+          "pOverlay",
+          "ECX:4"
+        ],
+        [
+          "pGfxInfo",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_RemoveStateOverlayAndReprioritize",
@@ -192,7 +258,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "17bd58e1"
+      "dh": "17bd58e1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGfxInfo",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOverlay",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_RemoveOverlayFromUnit",
@@ -220,7 +300,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "40f449f9"
+      "dh": "40f449f9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOverlay",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_HasOverlayOfType",
@@ -245,7 +335,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c5835461"
+      "dh": "c5835461",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nOverlayType",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_SetOverlayFrame",
@@ -270,7 +370,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "3ad408fe"
+      "dh": "3ad408fe",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nOverlayId",
+          "EDX:4"
+        ],
+        [
+          "nFrame",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_DrawOverlayOnUnit",
@@ -300,7 +414,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "3f2b1301"
+      "dh": "3f2b1301",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nOverlayId",
+          "EDX:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UNIT_States",
@@ -350,7 +482,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1d467010"
+      "dh": "1d467010",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBlendMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bSecondPass",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bRaiseY",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UNIT_States_HaltTail",
@@ -368,7 +526,13 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
       ],
-      "dh": "562891c0"
+      "dh": "562891c0",
+      "paramStorage": [
+        [
+          "nLine",
+          "Stack[0x0]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_GetGfxInfoCofData",
@@ -391,7 +555,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "62635c0a"
+      "dh": "62635c0a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pAnimMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_FindGfxInfoByModeAndWeapon",
@@ -417,7 +591,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d83919a5"
+      "dh": "d83919a5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nWeaponParam",
+          "EDX:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_FreeGfxInfoEntry",
@@ -443,7 +631,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ba5b1d74"
+      "dh": "ba5b1d74",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGfxInfoUnk",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_FindOrEvictGfxInfoEntry",
@@ -474,7 +672,29 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "2e032dd4"
+      "dh": "2e032dd4",
+      "paramStorage": [
+        [
+          "nWeaponParam",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppGfxInfoUnk",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnOutCofData",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "nAnimMode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_LoadCompositCof",
@@ -516,7 +736,21 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "885a5338"
+      "dh": "885a5338",
+      "paramStorage": [
+        [
+          "pnOutCofData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_LoadMonsterModeCof",
@@ -547,7 +781,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "205aa8fd"
+      "dh": "205aa8fd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nComponent",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "GFX_LoadObjectModeCof",
@@ -579,7 +823,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "77a2e31b"
+      "dh": "77a2e31b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nComponent",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "GFX_LoadGenericModeCof",
@@ -601,7 +855,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "080a7191"
+      "dh": "080a7191",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "nComponent",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GFX_FreeAllGfxInfoEntries",
@@ -628,7 +892,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d028ff84"
+      "dh": "d028ff84",
+      "paramStorage": [
+        [
+          "nComponentCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_FreeOverlayList",
@@ -649,7 +923,13 @@
         "D2GfxInfoStrc",
         "D2GfxUnknown_0xa8"
       ],
-      "dh": "77733972"
+      "dh": "77733972",
+      "paramStorage": [
+        [
+          "pGfxInfo",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "AllocGfxInfo",
@@ -700,7 +980,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6d018fcd"
+      "dh": "6d018fcd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_FreeUnitGfxInfoList",
@@ -726,7 +1012,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "dd122771"
+      "dh": "dd122771",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_FreeNonBaseGfxInfoEntries",
@@ -752,7 +1044,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ed5217dc"
+      "dh": "ed5217dc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_GetUnitHealthBarColor",
@@ -779,7 +1077,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "af1027fb"
+      "dh": "af1027fb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DrawItemGfx",
@@ -815,7 +1119,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "98bdcb8b"
+      "dh": "98bdcb8b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_DrawSolidRectExBySize",
@@ -835,7 +1153,33 @@
         "DRAWMODE",
         "int32_t"
       ],
-      "dh": "8925abe4"
+      "dh": "8925abe4",
+      "paramStorage": [
+        [
+          "nStartX",
+          "ECX:4"
+        ],
+        [
+          "nStartY",
+          "EDX:4"
+        ],
+        [
+          "nSizeX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_FreeAllModesGfxInfo",
@@ -854,7 +1198,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "c55b8bfe"
+      "dh": "c55b8bfe",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_SetAllGfxInfoFlags",
@@ -879,7 +1229,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1aa35081"
+      "dh": "1aa35081",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "byFlag",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "GetParticleFromUnit",
@@ -900,7 +1260,13 @@
         "D2ParticleStrc",
         "D2UnitStrc"
       ],
-      "dh": "c540247a"
+      "dh": "c540247a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetParticle",
@@ -921,7 +1287,17 @@
         "D2ParticleStrc",
         "D2UnitStrc"
       ],
-      "dh": "980fb084"
+      "dh": "980fb084",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pParticle",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_RemoveOverlayById",
@@ -948,7 +1324,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6f6629c3"
+      "dh": "6f6629c3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nPreDraw",
+          "EDX:4"
+        ],
+        [
+          "nOverlayId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_RemoveAllOverlays",
@@ -974,7 +1364,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "34bd392d"
+      "dh": "34bd392d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_SetCofDataFlags",
@@ -995,7 +1391,17 @@
       "usedTypes": [
         "D2GfxInfoStrc"
       ],
-      "dh": "44590830"
+      "dh": "44590830",
+      "paramStorage": [
+        [
+          "pGfxInfo",
+          "ECX:4"
+        ],
+        [
+          "dwCofDataFlags",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_GetCofDataFlags",
@@ -1017,7 +1423,13 @@
         "D2GfxInfoStrc",
         "int32_t"
       ],
-      "dh": "711bef38"
+      "dh": "711bef38",
+      "paramStorage": [
+        [
+          "pGfxInfo",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_SetPalShiftIndex",
@@ -1039,7 +1451,17 @@
         "D2GfxInfoStrc",
         "int32_t"
       ],
-      "dh": "9dced6d3"
+      "dh": "9dced6d3",
+      "paramStorage": [
+        [
+          "pGfxInfo",
+          "ECX:4"
+        ],
+        [
+          "nPalShiftIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_GetPalShiftIndex",
@@ -1061,7 +1483,13 @@
         "D2GfxInfoStrc",
         "int32_t"
       ],
-      "dh": "c2dbe409"
+      "dh": "c2dbe409",
+      "paramStorage": [
+        [
+          "pGfxInfo",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_ClearAllModeFlags",
@@ -1087,7 +1515,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "21640cce"
+      "dh": "21640cce",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMaxMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_LoadMonsterCofArchive",
@@ -1106,7 +1544,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "cb478d6d"
+      "dh": "cb478d6d",
+      "paramStorage": [
+        [
+          "nCofNameIndex",
+          "CL:1"
+        ]
+      ]
     },
     {
       "name": "GFX_FreeUnusedCofEntries",
@@ -1127,7 +1571,13 @@
         "D2CofTextureCacheEntryStrc",
         "D2CofTextureCacheEntryStrc *"
       ],
-      "dh": "9280135d"
+      "dh": "9280135d",
+      "paramStorage": [
+        [
+          "pCacheTable",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_FreePlayerCofCache",
@@ -1148,7 +1598,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2742ee9d"
+      "dh": "2742ee9d",
+      "paramStorage": [
+        [
+          "nParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_FreeMonsterCofCache",
@@ -1193,7 +1649,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4ef7ba92"
+      "dh": "4ef7ba92",
+      "paramStorage": [
+        [
+          "nModeId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szOutputPath",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnComponentCode",
+          "ESI:4"
+        ],
+        [
+          "nMonsterClassId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_PrecacheMonsterCofSprites",
@@ -1228,7 +1702,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5dbe38d0"
+      "dh": "5dbe38d0",
+      "paramStorage": [
+        [
+          "pMonStatsTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nModeId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bSync",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pComponentTable",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_PrecacheMonsterAllModes",
@@ -1251,7 +1743,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5265bdc6"
+      "dh": "5265bdc6",
+      "paramStorage": [
+        [
+          "nMonsterClassId",
+          "ECX:4"
+        ],
+        [
+          "nFlags",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_GetCofCacheFlags",
@@ -1315,7 +1817,13 @@
         "D2MonsterCofStatusEntryStrc",
         "int32_t"
       ],
-      "dh": "4a268e1b"
+      "dh": "4a268e1b",
+      "paramStorage": [
+        [
+          "nClassId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_LoadMonsterModeCofByState",
@@ -1341,7 +1849,17 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "773d825c"
+      "dh": "773d825c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nAnimMode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_EnsureUnitCofLoaded",
@@ -1371,7 +1889,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2d36e2ff"
+      "dh": "2d36e2ff",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nAnimMode",
+          "EDX:4"
+        ],
+        [
+          "nWeaponClass",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_AsyncLoadUnitSprites",
@@ -1417,7 +1949,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "065ae393"
+      "dh": "065ae393",
+      "paramStorage": [
+        [
+          "nAsyncBlockId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "nAnimMode",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_AsyncLoadMonsterSprites",
@@ -1442,7 +1988,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "d5cd0e99"
+      "dh": "d5cd0e99",
+      "paramStorage": [
+        [
+          "nAsyncBlockId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nModeIndex",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GFX_PrecacheMonsterModeSprites",
@@ -1465,7 +2025,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c8f1a8a7"
+      "dh": "c8f1a8a7",
+      "paramStorage": [
+        [
+          "nAsyncBlockId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_AsyncLoadPlayerSprites",
@@ -1490,7 +2060,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "f0aea1b2"
+      "dh": "f0aea1b2",
+      "paramStorage": [
+        [
+          "nAsyncBlockId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nModeIndex",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Gfx_UpdateNearbyUnitGfx",
@@ -1522,7 +2106,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "196b52bd"
+      "dh": "196b52bd",
+      "paramStorage": [
+        [
+          "bShowLoadingUi",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_InitCofSystem",
@@ -1541,7 +2131,13 @@
         "D2WINARCHIVE_GetArchiveHandle",
         "InitializeModeTokens"
       ],
-      "dh": "90c66526"
+      "dh": "90c66526",
+      "paramStorage": [
+        [
+          "nSystemFlags",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_ShutdownCofSystem",
@@ -1581,7 +2177,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "df2da2db"
+      "dh": "df2da2db",
+      "paramStorage": [
+        [
+          "bShowLoadingUi",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_AddOverlayToUnit",
@@ -1623,7 +2225,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "48a31881"
+      "dh": "48a31881",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eOverlay",
+          "EDX:4"
+        ],
+        [
+          "nOverlayType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nColorScale",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nValue0",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nValue1",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nValue2",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRandomMod",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_LoadUnitModeCof",
@@ -1654,7 +2290,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ffb5ddf7"
+      "dh": "ffb5ddf7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nUnused",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_GetUnitSpriteOffset",
@@ -1698,7 +2344,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5e16b050"
+      "dh": "5e16b050",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "byComponent",
+          "EDX:4"
+        ],
+        [
+          "pOffsetX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOffsetY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_IsUnitInsideBounds",
@@ -1734,7 +2398,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2f548ea4"
+      "dh": "2f548ea4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nOriginX",
+          "EDX:4"
+        ],
+        [
+          "nOriginY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTestX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTestY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_IsUnitOnScreen",
@@ -1770,7 +2456,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "25ac687b"
+      "dh": "25ac687b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nOriginX",
+          "EDX:4"
+        ],
+        [
+          "nOriginY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bCenterAdjust",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_UpdateGfxThrottled",
@@ -1790,7 +2498,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "8e0186a5"
+      "dh": "8e0186a5",
+      "paramStorage": [
+        [
+          "nAct",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ANIM_ResetMonsterFrameCache",
@@ -1818,7 +2532,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "4ad58c12"
+      "dh": "4ad58c12",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_UpdateOverlayAnimations",
@@ -1852,7 +2572,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "442b051c"
+      "dh": "442b051c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_DrawUnitComponents",
@@ -1929,7 +2655,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8519eb58"
+      "dh": "8519eb58",
+      "paramStorage": [
+        [
+          "nWorldX",
+          "ECX:4"
+        ],
+        [
+          "nLightColor",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bTransparent",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bDrawStates",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nWorldY",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GFX_DrawUnitShadow",
@@ -1974,7 +2726,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8317aee8"
+      "dh": "8317aee8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DrawUnitShadows",
@@ -2043,7 +2801,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2121eed3"
+      "dh": "2121eed3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_DrawUnitColoredShape",
@@ -2086,7 +2850,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ebbe29c2"
+      "dh": "ebbe29c2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_DrawUnitSelectionShape",
@@ -2146,7 +2916,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1f7309cc"
+      "dh": "1f7309cc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_WORLD_Unit_1",
@@ -2208,7 +2984,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "80113d4e"
+      "dh": "80113d4e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nGamma",
+          "EDX:4"
+        ],
+        [
+          "bIsSelected",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPalShift",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bDrawStates",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_GetGfxSystemFlags_Unref_004723f0",

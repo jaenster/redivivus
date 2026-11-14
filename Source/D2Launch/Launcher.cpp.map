@@ -22,7 +22,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "f758e2a6"
+      "dh": "f758e2a6",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CHARSEL_HandleRealmChange",
@@ -48,7 +54,13 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "c850e0f8"
+      "dh": "c850e0f8",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HandleUpdateToExpansion",
@@ -85,7 +97,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a33c43e5"
+      "dh": "a33c43e5",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LAUNCHER_StartGameWithSelectedCharacter",
@@ -111,7 +129,13 @@
         "WCHAR",
         "uint8_t"
       ],
-      "dh": "f28ea2f0"
+      "dh": "f28ea2f0",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LAUNCHER_InitNetworkLobbyQueue",
@@ -134,7 +158,13 @@
         "D2IniConfigStrc",
         "int32_t"
       ],
-      "dh": "f4cca55d"
+      "dh": "f4cca55d",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BeginCutSceneAtResolutionMode0_Unref_0043b800",
@@ -228,7 +258,13 @@
         "MAINMENU_UpdateProgressBar",
         "D2WINMAIN_ClearMessageLoopFlag"
       ],
-      "dh": "1a6e1bde"
+      "dh": "1a6e1bde",
+      "paramStorage": [
+        [
+          "nFrameIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LAUNCHER_HandleBnetConnect_1",
@@ -248,7 +284,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "99bc0580"
+      "dh": "99bc0580",
+      "paramStorage": [
+        [
+          "nFrameIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LAUNCHER_PumpChangePasswordResponse",
@@ -268,7 +310,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "154a8be1"
+      "dh": "154a8be1",
+      "paramStorage": [
+        [
+          "nFrameIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LAUNCHER_DisconnectFromBnet",
@@ -323,7 +371,13 @@
         "pfnUIMenuInstance",
         "uint16_t"
       ],
-      "dh": "c001294b"
+      "dh": "c001294b",
+      "paramStorage": [
+        [
+          "pErrorData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LAUNCHER_ShowOogErrorDialog_ForEnterEmail",
@@ -343,7 +397,17 @@
         "D2OogErrorDataStrc",
         "eOogErrorCode"
       ],
-      "dh": "30f2daf1"
+      "dh": "30f2daf1",
+      "paramStorage": [
+        [
+          "eErrorCode",
+          "EAX:4"
+        ],
+        [
+          "pCustomData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_ConnectToBattleNet",
@@ -412,7 +476,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "b4280277"
+      "dh": "b4280277",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ],
+        [
+          "bCreateAccount",
+          "EDX:4"
+        ],
+        [
+          "nResponseCode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
@@ -450,7 +528,13 @@
       "usedTypes": [
         "__time32_t"
       ],
-      "dh": "622be803"
+      "dh": "622be803",
+      "paramStorage": [
+        [
+          "pTime",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "LAUNCHER_InitNewCharacterSaveFile",
@@ -474,7 +558,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6cd74647"
+      "dh": "6cd74647",
+      "paramStorage": [
+        [
+          "szCharacterName",
+          "ECX:4"
+        ],
+        [
+          "nCharacterClass",
+          "DL:1"
+        ],
+        [
+          "pAppearanceBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wStatusFlags",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "LAUNCHER_MarkCharacterHardcore",
@@ -492,7 +594,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "19e21f94"
+      "dh": "19e21f94",
+      "paramStorage": [
+        [
+          "bHardcore",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LAUNCHER_WriteSaveFileToD2s",
@@ -516,7 +624,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "fd60309b"
+      "dh": "fd60309b",
+      "paramStorage": [
+        [
+          "szCharacterName",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LAUNCHER_DeleteCharacterFiles",
@@ -544,7 +658,17 @@
         "_WIN32_FIND_DATAA",
         "int32_t"
       ],
-      "dh": "d46f1824"
+      "dh": "d46f1824",
+      "paramStorage": [
+        [
+          "pCharSel",
+          "ECX:4"
+        ],
+        [
+          "szSubdirectory",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "LAUNCHER_LoadCharacterAppearanceFromD2s",
@@ -575,7 +699,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "370c564f"
+      "dh": "370c564f",
+      "paramStorage": [
+        [
+          "szCharacterName",
+          "ECX:4"
+        ],
+        [
+          "pOutputBuffer",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UpdateSaveFileToExpansion",
@@ -602,7 +736,13 @@
         "D2SaveFileBufferStrc",
         "uint32_t"
       ],
-      "dh": "387d1270"
+      "dh": "387d1270",
+      "paramStorage": [
+        [
+          "szCharname",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

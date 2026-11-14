@@ -23,7 +23,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f6ad2ed3"
+      "dh": "f6ad2ed3",
+      "paramStorage": [
+        [
+          "nIndex",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_IsAmbientStreaming",
@@ -83,7 +89,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "c38b4bf6"
+      "dh": "c38b4bf6",
+      "paramStorage": [
+        [
+          "nEnabled",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetMusicEnabled",
@@ -225,7 +237,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d15d220c"
+      "dh": "d15d220c",
+      "paramStorage": [
+        [
+          "nMixerType",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetMasterVolume",
@@ -259,7 +277,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "3c2e7da4"
+      "dh": "3c2e7da4",
+      "paramStorage": [
+        [
+          "nVolume",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetMusicVolume",
@@ -293,7 +317,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "267bea39"
+      "dh": "267bea39",
+      "paramStorage": [
+        [
+          "nVolume",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetPositionalBias",
@@ -327,7 +357,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "19933adc"
+      "dh": "19933adc",
+      "paramStorage": [
+        [
+          "nBias",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetNpcSpeech",
@@ -361,7 +397,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "26ff4361"
+      "dh": "26ff4361",
+      "paramStorage": [
+        [
+          "nNpcSpeech",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetOptionsMusic",
@@ -395,7 +437,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6862ea5e"
+      "dh": "6862ea5e",
+      "paramStorage": [
+        [
+          "nOptionsMusic",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_InitSoundEffectBuffers",
@@ -439,7 +487,13 @@
         "WAVEFORMATEX",
         "uint32_t"
       ],
-      "dh": "109631fc"
+      "dh": "109631fc",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_PlaySoundEffect",
@@ -465,7 +519,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "59ae8921"
+      "dh": "59ae8921",
+      "paramStorage": [
+        [
+          "szSoundFile",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_IsAnySoundEffectPlaying",

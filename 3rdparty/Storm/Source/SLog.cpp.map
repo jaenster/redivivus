@@ -19,7 +19,13 @@
       "usedTypes": [
         "D2SLogStrc"
       ],
-      "dh": "7fc784e6"
+      "dh": "7fc784e6",
+      "paramStorage": [
+        [
+          "pLog",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SLOG_LockLog",
@@ -41,7 +47,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d7e36fb7"
+      "dh": "d7e36fb7",
+      "paramStorage": [
+        [
+          "pnSlotOut",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAllocate",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nHandle",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SLOG_OutputIndent",
@@ -60,7 +80,13 @@
       "usedTypes": [
         "D2SLogStrc"
       ],
-      "dh": "886f1cff"
+      "dh": "886f1cff",
+      "paramStorage": [
+        [
+          "pLog",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SLOG_OutputReturn",
@@ -79,7 +105,13 @@
       "usedTypes": [
         "D2SLogStrc"
       ],
-      "dh": "9a6e881d"
+      "dh": "9a6e881d",
+      "paramStorage": [
+        [
+          "pLog",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SLOG_OutputTime",
@@ -105,7 +137,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c51fcc87"
+      "dh": "c51fcc87",
+      "paramStorage": [
+        [
+          "bHasData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLog",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SLOG_UnlockDeleteLog",
@@ -125,7 +167,17 @@
         "D2SLogStrc *",
         "int32_t"
       ],
-      "dh": "a3667940"
+      "dh": "a3667940",
+      "paramStorage": [
+        [
+          "pTarget",
+          "EDX:4"
+        ],
+        [
+          "nSlot",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SLOG_UnlockLog",
@@ -143,7 +195,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6e9c5b6e"
+      "dh": "6e9c5b6e",
+      "paramStorage": [
+        [
+          "nSlot",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SLogClose",
@@ -165,7 +223,13 @@
         "D2SLogStrc",
         "uint32_t"
       ],
-      "dh": "1781376b"
+      "dh": "1781376b",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SLogCreate",
@@ -187,7 +251,21 @@
         "D2SLogStrc",
         "uint32_t"
       ],
-      "dh": "7ee336e2"
+      "dh": "7ee336e2",
+      "paramStorage": [
+        [
+          "szFileName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnHandleOut",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SLogDump",
@@ -214,7 +292,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c0a47d39"
+      "dh": "c0a47d39",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLength",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SLogFlush",
@@ -236,7 +328,13 @@
         "D2SLogStrc",
         "uint32_t"
       ],
-      "dh": "b8f0dc6f"
+      "dh": "b8f0dc6f",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SLogFlushAll",
@@ -322,7 +420,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6e0dfdb6"
+      "dh": "6e0dfdb6",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIndent",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SLogSetIndent",
@@ -344,7 +452,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6740890a"
+      "dh": "6740890a",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDelta",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SLogSetTimestamp",
@@ -365,7 +483,17 @@
         "D2SLogStrc",
         "uint32_t"
       ],
-      "dh": "f3151583"
+      "dh": "f3151583",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bTimestamps",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SLogWrite",

@@ -3593,9 +3593,7 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
       nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszLocale);
       if (nLine < 0x104) {
         D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
-        pszName = pMessageCtx->szName2;
-        pszName = pszName + strlen(pszName) + 1;
-        if (pszName != pMessageCtx->szName2 + 1) {
+        if (strlen(pMessageCtx->szName2) != 0) {
           Fog::File::CONTAINER_InitializeBuffer(awszName2, 2, 0x10, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName2, pMessageCtx->szName2, 0x10);
           D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe3b), awszName, awszName2);
@@ -3615,9 +3613,7 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
       nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszLocale);
       if (nLine < 0x104) {
         D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
-        pszName = pMessageCtx->szName2;
-        pszName = pszName + strlen(pszName) + 1;
-        if (pszName != pMessageCtx->szName2 + 1) {
+        if (strlen(pMessageCtx->szName2) != 0) {
           Fog::File::CONTAINER_InitializeBuffer(awszName2, 2, 0x10, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName2, pMessageCtx->szName2, 0x10);
           D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe3c), awszName, awszName2);
@@ -3717,9 +3713,7 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
 
         pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(nNameStrId);
       } else {
-        pszName = pMessageCtx->szName2;
-        pszName = pszName + strlen(pszName) + 1;
-        if (pszName == pMessageCtx->szName2 + 1) {
+        if (strlen(pMessageCtx->szName2) == 0) {
           goto print_without_killer;
         }
 
@@ -6423,11 +6417,7 @@ int __stdcall TEXT_CloseMessageLogDialog() {
 
 void __stdcall TEXT_OpenMessageLogDialog() {
     fpDialogFunc pfnCloseCallback;
-    uint32_t nEnabled;
     int32_t nEntryIdx;
-    int32_t nField;
-    uint32_t nPosX;
-    uint32_t nPosY;
     uint32_t nSehTryLevel = -1;
     pfnEHHandlerRoutine puStack12 = __GSHandlerCheck_EH_6ca07b;
     void* pSavedExceptionList = ExceptionList;
@@ -6439,11 +6429,7 @@ void __stdcall TEXT_OpenMessageLogDialog() {
       Dialog::AddStringData(Dialog::DialogHandle, D2Lang::StrTable::strtable::GetLocaleString(0xfc3), 0x15, 0, 4, 1, 0, 0);
       nEntryIdx = 1;
       pfnCloseCallback = TEXT_CloseMessageLogDialog;
-      nEnabled = 1;
-      nField = 0;
-      nPosY = 0;
-      nPosX = Inv::ScreenSizeY - 0xa5;
-      Dialog::AddStringData(Dialog::DialogHandle, D2Lang::StrTable::strtable::GetLocaleString(0x1030), nPosX, nPosY, nField, nEnabled, pfnCloseCallback, nEntryIdx);
+      Dialog::AddStringData(Dialog::DialogHandle, D2Lang::StrTable::strtable::GetLocaleString(0x1030), Inv::ScreenSizeY - 0xa5, 0, 0, 1, pfnCloseCallback, nEntryIdx);
       pLogListAlloc = (::ListBoxWrapper*)Storm::Source::SMem::SMemAlloc(0xc, "new", -1, 0);
       nSehTryLevel = 0;
       if (pLogListAlloc) {

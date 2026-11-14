@@ -29,7 +29,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "1f8cb6fd"
+      "dh": "1f8cb6fd",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Levels_GetLine",
@@ -48,7 +54,13 @@
         "D2LevelsTxt",
         "eD2LevelId"
       ],
-      "dh": "81827c80"
+      "dh": "81827c80",
+      "paramStorage": [
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LEVEL_CanHaveRain",
@@ -67,7 +79,13 @@
         "eD2LevelId",
         "uint8_t"
       ],
-      "dh": "71c17774"
+      "dh": "71c17774",
+      "paramStorage": [
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LVLTBLS_GetNoPer",
@@ -86,7 +104,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "21207500"
+      "dh": "21207500",
+      "paramStorage": [
+        [
+          "nLevelId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LEVEL_CanHaveMud",
@@ -105,7 +129,13 @@
         "eD2LevelId",
         "uint8_t"
       ],
-      "dh": "ee8686da"
+      "dh": "ee8686da",
+      "paramStorage": [
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LVLTBLS_FreeLevelsTxt",
@@ -142,7 +172,21 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "6b7ed1fb"
+      "dh": "6b7ed1fb",
+      "paramStorage": [
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDifficulty",
+          "Stack[0x8]:1"
+        ],
+        [
+          "bIsExpansion",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "LVLTBLS_BuildPortalLevelArray",
@@ -167,7 +211,13 @@
         "eD2LevelId",
         "uint32_t"
       ],
-      "dh": "cea3bd78"
+      "dh": "cea3bd78",
+      "paramStorage": [
+        [
+          "pTxtLevelDefs",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "GetPortalLevelArrayFromPortalFlags",
@@ -185,7 +235,13 @@
       "usedTypes": [
         "eD2LevelId"
       ],
-      "dh": "041b4d11"
+      "dh": "041b4d11",
+      "paramStorage": [
+        [
+          "pnPortalLevelCount",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_leveldefs",
@@ -206,7 +262,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "b42c237b"
+      "dh": "b42c237b",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LVLTBLS_FreeLevelDefsTxt",
@@ -242,7 +304,13 @@
         "D2LevelDefsTxt",
         "eD2LevelId"
       ],
-      "dh": "5042996d"
+      "dh": "5042996d",
+      "paramStorage": [
+        [
+          "eLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LVLTBLS_FixPathSlashes",
@@ -261,7 +329,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "1cd463ab"
+      "dh": "1cd463ab",
+      "paramStorage": [
+        [
+          "szPathPrefix",
+          "EDI:4"
+        ],
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_lvltypes",
@@ -283,7 +361,13 @@
         "D2LvlTypesTxt",
         "D2PoolManagerStrc"
       ],
-      "dh": "d7190ce1"
+      "dh": "d7190ce1",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_UnloadBin_DataTbls",
@@ -321,7 +405,13 @@
         "D2LvlTypesTxt",
         "int32_t"
       ],
-      "dh": "3e2809da"
+      "dh": "3e2809da",
+      "paramStorage": [
+        [
+          "nLvlTypeId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_LvlTypes_CheckIfTypeIsAssignedToAct",
@@ -342,7 +432,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b31f1b81"
+      "dh": "b31f1b81",
+      "paramStorage": [
+        [
+          "nLvlTypeId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAct",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "LVLTBLS_GetLvlTypeFilename",
@@ -365,7 +465,21 @@
         "char[60]",
         "int32_t"
       ],
-      "dh": "714267fd"
+      "dh": "714267fd",
+      "paramStorage": [
+        [
+          "nLvlType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFileIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szFilename",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_lvlprest",
@@ -394,7 +508,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "908bea6f"
+      "dh": "908bea6f",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "bLoadDrlgFiles",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_LvlTbls_Free",
@@ -434,7 +558,13 @@
         "D2LvlPrestTxt",
         "int32_t"
       ],
-      "dh": "8f8bdb0d"
+      "dh": "8f8bdb0d",
+      "paramStorage": [
+        [
+          "nLvlPrestId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_LvlPrest_FindLineByLevelId",
@@ -453,7 +583,13 @@
         "D2LvlPrestTxt",
         "eD2LevelId"
       ],
-      "dh": "94ae28e7"
+      "dh": "94ae28e7",
+      "paramStorage": [
+        [
+          "eLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_lvlwarp",
@@ -473,7 +609,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "2dd34466"
+      "dh": "2dd34466",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_LvlWarp_Free",
@@ -512,7 +654,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "4ec3ed25"
+      "dh": "4ec3ed25",
+      "paramStorage": [
+        [
+          "nWarpId",
+          "ECX:4"
+        ],
+        [
+          "nDirection",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_lvlmaze",
@@ -532,7 +684,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "21cab9ec"
+      "dh": "21cab9ec",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_FreeTxt_LvlMaze",
@@ -570,7 +728,13 @@
         "D2LvlMazeTxt",
         "int32_t"
       ],
-      "dh": "92a2f8ea"
+      "dh": "92a2f8ea",
+      "paramStorage": [
+        [
+          "nLevelId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_lvlsub",
@@ -601,7 +765,21 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "887055db"
+      "dh": "887055db",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "nParam",
+          "EDX:4"
+        ],
+        [
+          "bGametypeIsOBNetHost",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TXT_FreeTxt_LvlSub",
@@ -646,7 +824,13 @@
         "D2LvlSubTxt",
         "int32_t"
       ],
-      "dh": "4bf95abc"
+      "dh": "4bf95abc",
+      "paramStorage": [
+        [
+          "nSubType",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_LoadExpansionLvlTbls",
@@ -673,7 +857,13 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "1ffbd500"
+      "dh": "1ffbd500",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_FreeExpansionLvlTbls",
@@ -712,7 +902,13 @@
         "uint8_t",
         "uint8_t[16]"
       ],
-      "dh": "ae0aaec0"
+      "dh": "ae0aaec0",
+      "paramStorage": [
+        [
+          "szLevelName",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "LVLTBLS_GetAutomapTileId",
@@ -735,7 +931,13 @@
         "uint8_t",
         "uint8_t[8]"
       ],
-      "dh": "655e5dbb"
+      "dh": "655e5dbb",
+      "paramStorage": [
+        [
+          "szTileName",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_automap",
@@ -769,7 +971,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "142fcfe5"
+      "dh": "142fcfe5",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRandomCellNo",
@@ -793,7 +1001,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4d7fe6f5"
+      "dh": "4d7fe6f5",
+      "paramStorage": [
+        [
+          "nLevelType",
+          "ECX:4"
+        ],
+        [
+          "nOrientation",
+          "EDX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSubIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FreeAutoMapLvlTbls",

@@ -207,6 +207,14 @@ void __fastcall MONSTER_ClearTargetIfMatch(::SGAMEDATA * pGame, D2UnitStrc * pUn
     D2Common::PATH::DynamicPath::SetTarget(pUnit->pPath.pDynamicPath, nullptr);
 }
 
+// dummy_ClampIndex: the index check ahead of dummy's switch, an inline function with two returns as the original inlined it.
+static inline int dummy_ClampIndex(int nIndex) {
+    if (nIndex < 0 || nIndex >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+        return ~MonsterUnitSkeleton1;
+    }
+    return nIndex;
+}
+
 void __fastcall MONSTERAI_TriggerMageThink(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
     if (!pUnit) {
@@ -227,11 +235,7 @@ void __fastcall MONSTERAI_TriggerMageThink(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 
     eD2MonsterClassId nMonBaseId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
-    if ((int)nMonBaseId < 0 || (int)nMonBaseId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
-      nMonBaseId = ~MonsterUnitSkeleton1;
-    }
-
-    switch (nMonBaseId) {
+    switch (dummy_ClampIndex(nMonBaseId)) {
       case MonsterUnitCarrionBird1:
 
       case MonsterUnitGloam1:

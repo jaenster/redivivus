@@ -1385,7 +1385,8 @@ static void __stdcall CLIENT_SendMonsterMoveToTargetMessage(int32_t nTargetX, in
 }
 
 static void CLIENT_SendMonsterAttackMessage(D2UnitStrc * pUnit) {
-    D2ServerMessageHandleStrc sMsg = {0};
+    D2ServerMessageHandleStrc sMsg;
+    memset(&sMsg, 0, sizeof(sMsg));
     eD2UnitType eUnitType = pUnit->eUnitType;
     uint32_t nSkillIdValue;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -1412,7 +1413,8 @@ static void CLIENT_SendMonsterAttackMessage(D2UnitStrc * pUnit) {
 }
 
 static void CLIENT_SendMonsterWanderMessage(D2UnitStrc * pUnit) {
-    D2ServerMessageHandleStrc sMsg = {0};
+    D2ServerMessageHandleStrc sMsg;
+    memset(&sMsg, 0, sizeof(sMsg));
     eD2UnitType eUnitType = pUnit->eUnitType;
     uint32_t nSkillIdValue;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {

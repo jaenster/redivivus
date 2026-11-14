@@ -21,7 +21,17 @@
         "D2DrlgLevelStrc",
         "uint8_t"
       ],
-      "dh": "3ecfb948"
+      "dh": "3ecfb948",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ],
+        [
+          "nWarpIndex",
+          "DL:1"
+        ]
+      ]
     }
   ]
 }

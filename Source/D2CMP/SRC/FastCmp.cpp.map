@@ -25,7 +25,33 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "ab8840c3"
+      "dh": "ab8840c3",
+      "paramStorage": [
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLineCount",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "ppRLEBuffer",
+          "Stack[0x10]:4"
+        ],
+        [
+          "ppRLEEnd",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pBaseData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_RemapFramePaletteIndices",
@@ -44,7 +70,17 @@
         "DC6Block",
         "uint8_t"
       ],
-      "dh": "c26f01c8"
+      "dh": "c26f01c8",
+      "paramStorage": [
+        [
+          "pFrame",
+          "ECX:4"
+        ],
+        [
+          "pPaletteRemap",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_ConvertDCCWithPaletteRemap",
@@ -73,7 +109,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3dad5be1"
+      "dh": "3dad5be1",
+      "paramStorage": [
+        [
+          "pDCC",
+          "ECX:4"
+        ],
+        [
+          "pDCCDest",
+          "EDX:4"
+        ],
+        [
+          "pfnPaletteRemap",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwColorKey",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_SkipRLERows",
@@ -92,7 +146,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "7c45ebc2"
+      "dh": "7c45ebc2",
+      "paramStorage": [
+        [
+          "pbRLEData",
+          "ECX:4"
+        ],
+        [
+          "nRowsToSkip",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLE",
@@ -112,7 +176,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "d18901e9"
+      "dh": "d18901e9",
+      "paramStorage": [
+        [
+          "pImageHeader",
+          "ECX:4"
+        ],
+        [
+          "pbDstBuffer",
+          "EDX:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstPitch",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithClip",
@@ -132,7 +214,37 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "0d260d4c"
+      "dh": "0d260d4c",
+      "paramStorage": [
+        [
+          "pImageHeader",
+          "ECX:4"
+        ],
+        [
+          "nDstPitch",
+          "EDX:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbDstBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawStartX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDrawEndX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nImageWidth",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithBlend",
@@ -152,7 +264,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "53b74f69"
+      "dh": "53b74f69",
+      "paramStorage": [
+        [
+          "pbSrcStream",
+          "ECX:4"
+        ],
+        [
+          "pbDst",
+          "EDX:4"
+        ],
+        [
+          "nRows",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStride",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBlendTableBase",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBlendTableOffset",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithBlendAndClip",
@@ -172,7 +310,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "36a53f22"
+      "dh": "36a53f22",
+      "paramStorage": [
+        [
+          "pRLEData",
+          "ECX:4"
+        ],
+        [
+          "nDstBase",
+          "EDX:4"
+        ],
+        [
+          "nRows",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStride",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClipStartX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDrawStartX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nDrawEndX",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pPaletteTrans",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nBlendTableOffset",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithLookup2",
@@ -192,7 +368,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a2facf84"
+      "dh": "a2facf84",
+      "paramStorage": [
+        [
+          "pbSrcStream",
+          "ECX:4"
+        ],
+        [
+          "pDst",
+          "EDX:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstPitch",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pLookupTable1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pLookupTable2",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithLookup2AndClip",
@@ -212,7 +414,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ade45883"
+      "dh": "ade45883",
+      "paramStorage": [
+        [
+          "pbSrcStream",
+          "ECX:4"
+        ],
+        [
+          "pDstBuffer",
+          "EDX:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstPitch",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nClipLeft",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nClipRight",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pLookupTable1",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pLookupTable2",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithLookup1",
@@ -232,7 +472,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d1c5e6f5"
+      "dh": "d1c5e6f5",
+      "paramStorage": [
+        [
+          "pbSrcStream",
+          "ECX:4"
+        ],
+        [
+          "pDst",
+          "EDX:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstPitch",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pLookupTable",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithLookup1AndClip",
@@ -252,7 +514,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "50095ed5"
+      "dh": "50095ed5",
+      "paramStorage": [
+        [
+          "pbSrcStream",
+          "ECX:4"
+        ],
+        [
+          "pDstBuffer",
+          "EDX:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstPitch",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nClipLeft",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nClipRight",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pLookupTable",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithBlend2",
@@ -272,7 +568,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e3183c46"
+      "dh": "e3183c46",
+      "paramStorage": [
+        [
+          "pbSrcStream",
+          "ECX:4"
+        ],
+        [
+          "pbDst",
+          "EDX:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstPitch",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pLookupTable",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pBlendTable",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithBlend2AndClip",
@@ -292,7 +614,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "027d8603"
+      "dh": "027d8603",
+      "paramStorage": [
+        [
+          "pbSrcStream",
+          "ECX:4"
+        ],
+        [
+          "pDstBuffer",
+          "EDX:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstPitch",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nClipLeft",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nClipRight",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pLookupTable",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pBlendTable",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithLookup1_v2",
@@ -312,7 +672,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cd2a538b"
+      "dh": "cd2a538b",
+      "paramStorage": [
+        [
+          "pbSrcStream",
+          "ECX:4"
+        ],
+        [
+          "pDst",
+          "EDX:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstPitch",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pLookupTable",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithLookup1AndClip_v2",
@@ -332,7 +714,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0a4f09d9"
+      "dh": "0a4f09d9",
+      "paramStorage": [
+        [
+          "pbSrcStream",
+          "ECX:4"
+        ],
+        [
+          "pDstBuffer",
+          "EDX:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstPitch",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nClipLeft",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nClipRight",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pLookupTable",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithBlend3",
@@ -352,7 +768,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3454df96"
+      "dh": "3454df96",
+      "paramStorage": [
+        [
+          "pbSrcStream",
+          "ECX:4"
+        ],
+        [
+          "pbDst",
+          "EDX:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstPitch",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBlendTable",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithBlend3AndClip",
@@ -372,7 +810,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5b08ee58"
+      "dh": "5b08ee58",
+      "paramStorage": [
+        [
+          "pbSrcStream",
+          "ECX:4"
+        ],
+        [
+          "pDstBuffer",
+          "EDX:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDstPitch",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nClipLeft",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nClipRight",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pBlendTable",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_ToggleLowQuality_Unref_00608520",
@@ -425,7 +897,53 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "caa4f647"
+      "dh": "caa4f647",
+      "paramStorage": [
+        [
+          "pImageHeader",
+          "ECX:4"
+        ],
+        [
+          "pbDecompressedOutput",
+          "EDX:4"
+        ],
+        [
+          "nDrawX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClipLeft",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClipRight",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDstPitch",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nStartRow",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pLookupTable1",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pBlendTable",
+          "Stack[0x20]:4"
+        ],
+        [
+          "pLookupTable2",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithEffect",
@@ -445,7 +963,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "60ed1b3f"
+      "dh": "60ed1b3f",
+      "paramStorage": [
+        [
+          "nStride",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_DebugFillRect",
@@ -465,7 +989,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d87b5a8c"
+      "dh": "d87b5a8c",
+      "paramStorage": [
+        [
+          "nRowStart",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRowStride",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithAlpha",
@@ -490,7 +1024,49 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "90952aa4"
+      "dh": "90952aa4",
+      "paramStorage": [
+        [
+          "pFrameBlock",
+          "ECX:4"
+        ],
+        [
+          "pDst",
+          "EDX:4"
+        ],
+        [
+          "nDrawX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClipLeft",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClipRight",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDstPitch",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkipRows",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRowCount",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pBlendTable",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "byBlendColor",
+          "Stack[0x20]:1"
+        ]
+      ]
     },
     {
       "name": "FASTCMP_DecompressRLEWithPaletteConversion",
@@ -521,7 +1097,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "402434b4"
+      "dh": "402434b4",
+      "paramStorage": [
+        [
+          "pDCCSrc",
+          "ECX:4"
+        ],
+        [
+          "pDCCDest",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

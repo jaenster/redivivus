@@ -19,7 +19,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "20c4b212"
+      "dh": "20c4b212",
+      "paramStorage": [
+        [
+          "blockWords",
+          "EAX:4"
+        ],
+        [
+          "stateWords",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_Init",
@@ -37,7 +47,13 @@
       "usedTypes": [
         "D2BnSha1ContextStrc"
       ],
-      "dh": "3e0b0b7f"
+      "dh": "3e0b0b7f",
+      "paramStorage": [
+        [
+          "pState",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_Update",
@@ -58,7 +74,21 @@
         "D2BnSha1ContextStrc",
         "uint32_t"
       ],
-      "dh": "c65c44f6"
+      "dh": "c65c44f6",
+      "paramStorage": [
+        [
+          "pShaCtx",
+          "ECX:4"
+        ],
+        [
+          "pData",
+          "EDX:4"
+        ],
+        [
+          "nByteLen",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_Final",
@@ -80,7 +110,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cc1e2446"
+      "dh": "cc1e2446",
+      "paramStorage": [
+        [
+          "pHashOut",
+          "ECX:4"
+        ],
+        [
+          "pShaCtx",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

@@ -19,7 +19,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "4fbe0483"
+      "dh": "4fbe0483",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MESSAGE_OnActivate",
@@ -37,7 +43,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "5ce5a2bf"
+      "dh": "5ce5a2bf",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WndProcD",
@@ -56,7 +68,13 @@
         "D2UIMouseMsgStrc",
         "uint32_t"
       ],
-      "dh": "a1816a6f"
+      "dh": "a1816a6f",
+      "paramStorage": [
+        [
+          "phWnd",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MESSAGE_OnClose",
@@ -71,7 +89,13 @@
       "calledFunctions": [
         "MESSAGE_OnClose"
       ],
-      "dh": "fd1fdc24"
+      "dh": "fd1fdc24",
+      "paramStorage": [
+        [
+          "phWnd",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WndProcB",
@@ -92,7 +116,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "d926bef8"
+      "dh": "d926bef8",
+      "paramStorage": [
+        [
+          "hWnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "uMsg",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wParam",
+          "Stack[0xc]:4"
+        ],
+        [
+          "lParam",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MessageGameLoop",
@@ -115,7 +157,13 @@
         "tagMSG",
         "uint32_t"
       ],
-      "dh": "1421d93a"
+      "dh": "1421d93a",
+      "paramStorage": [
+        [
+          "nfpGameLoopFunction",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MESSAGE_RegisterEventHandler",
@@ -140,7 +188,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "52c462d6"
+      "dh": "52c462d6",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "eEventType",
+          "EDX:4"
+        ],
+        [
+          "nMessageOrKeyCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfHandler",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MESSAGE_UnregisterEventHandler",
@@ -165,7 +231,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b9ac3cf6"
+      "dh": "b9ac3cf6",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "eEventType",
+          "EDX:4"
+        ],
+        [
+          "nMessageOrKeyCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfHandler",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MESSAGE_RegisterEventHandlerBatch",
@@ -188,7 +272,21 @@
         "D2UIFlagInitStrc",
         "int32_t"
       ],
-      "dh": "ddaa09d2"
+      "dh": "ddaa09d2",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "pEventHandlers",
+          "EDX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MESSAGE_UnregisterEventHandlerBatch",
@@ -211,7 +309,21 @@
         "D2UIFlagInitStrc",
         "int32_t"
       ],
-      "dh": "88f19d9e"
+      "dh": "88f19d9e",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "pEventHandlers",
+          "EDX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MESSAGE_RegisterWindowMessageHandlers",
@@ -234,7 +346,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "fcbc6f7b"
+      "dh": "fcbc6f7b",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MESSAGE_UnregisterWindowMessageHandlers",
@@ -258,7 +376,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4eb9189e"
+      "dh": "4eb9189e",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MESSAGE_SnapshotEventHandlers",

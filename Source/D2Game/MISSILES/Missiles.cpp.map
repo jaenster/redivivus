@@ -23,7 +23,13 @@
         "D2UnitStrc *",
         "SGAMEDATA"
       ],
-      "dh": "19bfa75e"
+      "dh": "19bfa75e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_FillDataMissile",
@@ -46,7 +52,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "d45b086a"
+      "dh": "d45b086a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnitGUID",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ClearMissileUnitData",
@@ -67,7 +87,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "cf48c7dd"
+      "dh": "cf48c7dd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILES_EvalDamageAndSetStats",
@@ -91,7 +121,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "08a15d86"
+      "dh": "08a15d86",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit1",
+          "ESI:4"
+        ],
+        [
+          "pUnit2",
+          "EBX:4"
+        ],
+        [
+          "nLevel",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CalculatePierce",
@@ -118,7 +166,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bcf4ac18"
+      "dh": "bcf4ac18",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CreatingMissile",
@@ -178,7 +236,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "39d033e6"
+      "dh": "39d033e6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILES_SendMissilePacket",
@@ -210,7 +278,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "1bd56a62"
+      "dh": "1bd56a62",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nVelocity",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

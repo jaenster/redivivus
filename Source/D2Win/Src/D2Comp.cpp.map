@@ -16,7 +16,17 @@
       "calledFunctions": [
         "D2COMP_PadStringTo4Chars"
       ],
-      "dh": "2f87ea43"
+      "dh": "2f87ea43",
+      "paramStorage": [
+        [
+          "szInput",
+          "EDX:4"
+        ],
+        [
+          "szOutput",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_AssertNotNull",
@@ -37,7 +47,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "7b8384dd"
+      "dh": "7b8384dd",
+      "paramStorage": [
+        [
+          "pValue",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_LoadAndValidateCOFFile",
@@ -63,7 +79,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b89ae976"
+      "dh": "b89ae976",
+      "paramStorage": [
+        [
+          "szCOFFilePath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnSize",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_ValidateCOFLayerData",
@@ -85,7 +111,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "e7295ac7"
+      "dh": "e7295ac7",
+      "paramStorage": [
+        [
+          "nLayerIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFrameIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbyCofData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_FindOrAllocCOFCacheEntry",
@@ -111,7 +151,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3f8afe8b"
+      "dh": "3f8afe8b",
+      "paramStorage": [
+        [
+          "nPlayerClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwWeaponClassToken",
+          "EDI:4"
+        ],
+        [
+          "nAnimMode",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_ReleaseCOFCacheEntry",
@@ -134,7 +192,17 @@
         "D2CompCofCacheEntryStrc",
         "int32_t"
       ],
-      "dh": "117efec9"
+      "dh": "117efec9",
+      "paramStorage": [
+        [
+          "bFreeData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCacheEntry",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_BuildCOFFilePath",
@@ -159,7 +227,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "581301d7"
+      "dh": "581301d7",
+      "paramStorage": [
+        [
+          "nAnimMode",
+          "ECX:4"
+        ],
+        [
+          "dwWeaponClassToken",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pszDestPath",
+          "EDI:4"
+        ],
+        [
+          "nPlayerClassId",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_FindCOFEntryByModeAndWeapon",
@@ -183,7 +269,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c3397ad3"
+      "dh": "c3397ad3",
+      "paramStorage": [
+        [
+          "ppCOFList",
+          "EAX:4"
+        ],
+        [
+          "nAnimMode",
+          "EDX:4"
+        ],
+        [
+          "dwWeaponClassToken",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_GetOrLoadCOF",
@@ -214,7 +314,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "dbb3c90a"
+      "dh": "dbb3c90a",
+      "paramStorage": [
+        [
+          "ppCOFList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPlayerClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwWeaponClassToken",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_PopulateComponentFromCOF",
@@ -241,7 +359,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "25eb6887"
+      "dh": "25eb6887",
+      "paramStorage": [
+        [
+          "pCOFData",
+          "ECX:4"
+        ],
+        [
+          "pGfxData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_InitComponentEntry",
@@ -264,7 +392,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a77771be"
+      "dh": "a77771be",
+      "paramStorage": [
+        [
+          "nAnimMode",
+          "ECX:4"
+        ],
+        [
+          "nWeaponClass",
+          "EDX:4"
+        ],
+        [
+          "nCOFContext",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bComponentType",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nCOFData",
+          "EAX:4"
+        ],
+        [
+          "pGfxData",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_GetPaletteTransformTable",
@@ -283,7 +437,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "27fd1d8f"
+      "dh": "27fd1d8f",
+      "paramStorage": [
+        [
+          "nPaletteShift",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_ValidateComponentType",
@@ -307,7 +467,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e1b048fc"
+      "dh": "e1b048fc",
+      "paramStorage": [
+        [
+          "dwComponentMask",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bComponentType",
+          "BL:1"
+        ]
+      ]
     },
     {
       "name": "D2COMP_LoadLayerSpritesAndCalcHeight",
@@ -336,7 +506,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5f2f60d1"
+      "dh": "5f2f60d1",
+      "paramStorage": [
+        [
+          "pbLayerCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLayerTypeArray",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnMaxHeight",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bPaletteShift",
+          "Stack[0x10]:1"
+        ],
+        [
+          "nFrameNumber",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nCOFContext",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_DrawUnitShadow",
@@ -369,7 +565,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8179fc8d"
+      "dh": "8179fc8d",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_DrawCompositeUnit",
@@ -407,7 +609,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e91c4978"
+      "dh": "e91c4978",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "ECX:4"
+        ],
+        [
+          "nDrawColor",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_TruncateStringToFitWidth",
@@ -429,7 +641,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "cf777ca5"
+      "dh": "cf777ca5",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxWidth",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_AddTextLineToLayout",
@@ -454,7 +676,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "d94aa9f2"
+      "dh": "d94aa9f2",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLayoutBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnLineCount",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnMaxWidth",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnTotalHeight",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_ZeroBuffer512",
@@ -473,7 +717,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "45057869"
+      "dh": "45057869",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_ValidateAndLoadCOFForUnit",
@@ -497,7 +747,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1e3499dc"
+      "dh": "1e3499dc",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_UnlinkCompositeUnit",
@@ -517,7 +773,13 @@
         "D2CharSelCompStrc",
         "D2CharSelStrc"
       ],
-      "dh": "a81177b9"
+      "dh": "a81177b9",
+      "paramStorage": [
+        [
+          "pCharSel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_AllocSmallClientBlock",
@@ -567,7 +829,17 @@
         "D2CompCofListNodeStrc *",
         "int32_t"
       ],
-      "dh": "b33935db"
+      "dh": "b33935db",
+      "paramStorage": [
+        [
+          "pCharSel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bUnlink",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_SetUnitDisplayStrings",
@@ -591,7 +863,37 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "2db09446"
+      "dh": "2db09446",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszText1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "wszText2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "wszText3",
+          "Stack[0x10]:4"
+        ],
+        [
+          "wszText4",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nDisplayFlags",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nExtraData",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_SetAnimationMode",
@@ -615,7 +917,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "50fe4b77"
+      "dh": "50fe4b77",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "ECX:4"
+        ],
+        [
+          "nAnimMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_GetWeaponClassCodeIndex",
@@ -634,7 +946,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ad52f7ff"
+      "dh": "ad52f7ff",
+      "paramStorage": [
+        [
+          "nWeaponClassCode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_FreeServerMemory",
@@ -650,7 +968,13 @@
         "D2COMP_FreeServerMemory",
         "FreeServerMemory"
       ],
-      "dh": "a77a810f"
+      "dh": "a77a810f",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_LoadExcelTxtFile",
@@ -670,7 +994,25 @@
         "D2PoolManagerStrc",
         "uint32_t"
       ],
-      "dh": "574026fd"
+      "dh": "574026fd",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFileBaseName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szFileExt",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnSize",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "LoadTxt",
@@ -704,7 +1046,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d84f9dbe"
+      "dh": "d84f9dbe",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szTxtName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBinFields",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pSize",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nLineLength",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_AllocTxt_Items",
@@ -731,7 +1095,13 @@
         "D2ItemsTxt",
         "D2PoolManagerStrc"
       ],
-      "dh": "dc121dc1"
+      "dh": "dc121dc1",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_LoadItemTypesTxt",
@@ -752,7 +1122,13 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "f8d92507"
+      "dh": "f8d92507",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_005049d0",
@@ -789,7 +1165,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b8580e31"
+      "dh": "b8580e31",
+      "paramStorage": [
+        [
+          "nItemType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAncestorType",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_ResolveWeaponClass",
@@ -809,7 +1195,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "c9671c52"
+      "dh": "c9671c52",
+      "paramStorage": [
+        [
+          "nPlayerClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEquipData",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_SetSelectionAndAuraImages",
@@ -828,7 +1224,17 @@
       "usedTypes": [
         "DC6"
       ],
-      "dh": "e0c9af38"
+      "dh": "e0c9af38",
+      "paramStorage": [
+        [
+          "pDC6",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDC62",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_ValidateEquippedItemForClass",
@@ -849,7 +1255,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "21c13ced"
+      "dh": "21c13ced",
+      "paramStorage": [
+        [
+          "nEquipSlot",
+          "EBX:4"
+        ],
+        [
+          "pbyItemIndex",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_CreateCompositeUnit",
@@ -878,7 +1294,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "712f6b02"
+      "dh": "712f6b02",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPlayerClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pbyEquipSlots",
+          "Stack[0x10]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_FreeAllCompositeUnits",
@@ -935,7 +1373,13 @@
         "D2CharSelCompStrc",
         "int32_t"
       ],
-      "dh": "06e4f08f"
+      "dh": "06e4f08f",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_SetAnimationSpeed",
@@ -958,7 +1402,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "d3cc12ed"
+      "dh": "d3cc12ed",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bySpeed",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "D2COMP_GetNumDirections",
@@ -981,7 +1435,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "51996b7c"
+      "dh": "51996b7c",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_GetNumFrames",
@@ -1003,7 +1463,13 @@
         "D2CharSelCompStrc",
         "int32_t"
       ],
-      "dh": "53032aff"
+      "dh": "53032aff",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_SetCurrentFrame",
@@ -1026,7 +1492,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0e5dfa18"
+      "dh": "0e5dfa18",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetFrame",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_SetScreenX",
@@ -1048,7 +1524,17 @@
         "D2CharSelCompStrc",
         "int32_t"
       ],
-      "dh": "80a8be5f"
+      "dh": "80a8be5f",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_SetScreenY",
@@ -1070,7 +1556,17 @@
         "D2CharSelCompStrc",
         "int32_t"
       ],
-      "dh": "c4ad9d18"
+      "dh": "c4ad9d18",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_GetFlags",
@@ -1093,7 +1589,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e9016c6d"
+      "dh": "e9016c6d",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_SetFlags",
@@ -1116,7 +1618,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f5ea5943"
+      "dh": "f5ea5943",
+      "paramStorage": [
+        [
+          "pCharSel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_LoadGuildEmblemIcon",
@@ -1141,7 +1653,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "05dd81ca"
+      "dh": "05dd81ca",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byEmblemIcon",
+          "Stack[0x8]:1"
+        ],
+        [
+          "byPrimaryColor",
+          "Stack[0xc]:1"
+        ],
+        [
+          "bySecondaryColor",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "D2COMP_LoadItemPaletteFile",
@@ -1167,7 +1697,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6918b62e"
+      "dh": "6918b62e",
+      "paramStorage": [
+        [
+          "nPaletteSlot",
+          "ECX:4"
+        ],
+        [
+          "szPaletteFilename",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_LoadAllItemPalettes",
@@ -1221,7 +1761,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "49d977db"
+      "dh": "49d977db",
+      "paramStorage": [
+        [
+          "nCharClass",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTitleRank",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bExpansion",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_DrawUnitNameAndTitle",
@@ -1256,7 +1810,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f6698795"
+      "dh": "f6698795",
+      "paramStorage": [
+        [
+          "pCompUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_OOG_ChannelPlayers",
@@ -1294,7 +1854,13 @@
         "uint8_t",
         "uint8_t[520]"
       ],
-      "dh": "78cf2756"
+      "dh": "78cf2756",
+      "paramStorage": [
+        [
+          "pA3Q6Data",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2COMP_AllocTxt_EverythingItems",
@@ -1354,7 +1920,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f63b5b46"
+      "dh": "f63b5b46",
+      "paramStorage": [
+        [
+          "nPlayerClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClassicExpansion",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbyEquipSlots",
+          "Stack[0xc]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

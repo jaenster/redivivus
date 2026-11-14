@@ -20,7 +20,17 @@
       "usedTypes": [
         "HASHKEY_STRI"
       ],
-      "dh": "148ba4d2"
+      "dh": "148ba4d2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "szKey",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor_Unref_0060dc90",
@@ -59,7 +69,17 @@
       "usedTypes": [
         "HASHKEY_STRI"
       ],
-      "dh": "02af3da7"
+      "dh": "02af3da7",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Constructor",
@@ -78,7 +98,13 @@
       "usedTypes": [
         "HASHKEY_STRI"
       ],
-      "dh": "deb3394d"
+      "dh": "deb3394d",
+      "paramStorage": [
+        [
+          "szKey",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Equals",
@@ -98,7 +124,13 @@
         "HASHKEY_STRI",
         "int32_t"
       ],
-      "dh": "7fa6bdb9"
+      "dh": "7fa6bdb9",
+      "paramStorage": [
+        [
+          "pOther",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

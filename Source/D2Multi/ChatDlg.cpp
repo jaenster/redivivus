@@ -3018,21 +3018,21 @@ void __stdcall CHATDLG_ClearLadderBoard() {
 // Returns the ladder filter id for class tab nLadderTab (0 Overall .. 7 Assassin) in the same group as nCurrentFilterMode: groups start at 0, 9, 0x13 and 0x1b and hold 8 ids each; any other nCurrentFilterMode halts at line 0x1a23. The eight CHATDLG_OnPressLadder* tab handlers pass their tab and g_nLadderFilterMode and store the result back into it.
 // Provenance: asm 0043f150..0043f1c3 (tab on the stack, filter in EAX).
 static int32_t __stdcall CHATDLG_GetLadderFilterForTab(int32_t nLadderTab, uint32_t nCurrentFilterMode) {
+    int32_t nBase;
     if (nCurrentFilterMode >= 0x9 && nCurrentFilterMode <= 0x10) {
-      return nLadderTab + 9;
-    }
-    if (nCurrentFilterMode <= 7) {
-      return nLadderTab;
-    }
-    if (nCurrentFilterMode >= 0x13 && nCurrentFilterMode <= 0x1a) {
-      return nLadderTab + 0x13;
-    }
-    if (nCurrentFilterMode >= 0x1b && nCurrentFilterMode <= 0x22) {
-      return nLadderTab + 0x1b;
+      nBase = 9;
+    } else if (nCurrentFilterMode <= 7) {
+      nBase = 0;
+    } else if (nCurrentFilterMode >= 0x13 && nCurrentFilterMode <= 0x1a) {
+      nBase = 0x13;
+    } else if (nCurrentFilterMode >= 0x1b && nCurrentFilterMode <= 0x22) {
+      nBase = 0x1b;
+    } else {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a23);
+      exit(-1);
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a23);
-    exit(-1);
+    return nBase + nLadderTab;
 }
 
 // OnPress handler of the ladder board's overall (all classes) tab: disables the ladder buttons, highlights gpCtlLadderBtnOverall, and unless the filter byte 0070cd62 already shows tab 0 (value 0 or 9), sets gnLadderListRowCount to 1000 (0x3e8), clears the board, recomputes the filter via CHATDLG_GetLadderFilterForTab(0, g_nLadderFilterMode), resets the selected rank (0070cd7c) and flags a reload; returns 1.
@@ -3825,7 +3825,7 @@ void __fastcall CHATDLG_HandleChatListClick(int32_t nStartRank, int32_t nRankCou
       UIMENU_DrawSpecificJoinGameError(sRowBuf.wszCell, nullptr);
       return;
     }
-    if (nFilterMode != g_nLadderFilterMode) {
+    if ((uint8_t)nFilterMode != g_nLadderFilterMode) {
       return;
     }
     if (gnLadderBoardSelectedRank == -1) {

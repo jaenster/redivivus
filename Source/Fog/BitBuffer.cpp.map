@@ -19,7 +19,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "09eca77b"
+      "dh": "09eca77b",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CheckBitAtOffset",
@@ -37,7 +47,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d118f92d"
+      "dh": "d118f92d",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UnsetBitAtOffset",
@@ -57,7 +77,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bfda43ff"
+      "dh": "bfda43ff",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "XorBitAtOffset",
@@ -75,7 +105,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4de0f50e"
+      "dh": "4de0f50e",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BITBUF_AndBuffers",
@@ -94,7 +134,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b99b1b3a"
+      "dh": "b99b1b3a",
+      "paramStorage": [
+        [
+          "pBufferA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBufferB",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDest",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBitCount",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "BITBUF_OrBuffers",
@@ -114,7 +172,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "19a6e8ef"
+      "dh": "19a6e8ef",
+      "paramStorage": [
+        [
+          "pBufferA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBufferB",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDest",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBitCount",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "BITBUF_NotBuffer",
@@ -134,7 +210,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6f1b1bdc"
+      "dh": "6f1b1bdc",
+      "paramStorage": [
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDest",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBitCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "BITBUF_XorBuffers",
@@ -154,7 +244,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f5d91d4c"
+      "dh": "f5d91d4c",
+      "paramStorage": [
+        [
+          "pBufferA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBufferB",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDest",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBitCount",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "InitBitBuffer",
@@ -177,7 +285,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a0402d46"
+      "dh": "a0402d46",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetNextPositon",
@@ -196,7 +318,13 @@
         "D2BitBufferStrc",
         "int32_t"
       ],
-      "dh": "59e07488"
+      "dh": "59e07488",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WriteValueToBitBuffer",
@@ -215,7 +343,21 @@
         "D2BitBufferStrc",
         "int32_t"
       ],
-      "dh": "12d5ffd8"
+      "dh": "12d5ffd8",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSizeInBits",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Read",
@@ -236,7 +378,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "22c75d75"
+      "dh": "22c75d75",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ReadUnsigned",
@@ -257,7 +409,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8c5fc620"
+      "dh": "8c5fc620",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ReadSigned",
@@ -278,7 +440,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7a5d6f84"
+      "dh": "7a5d6f84",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BitBufferEndCurrentByte",
@@ -296,7 +468,13 @@
       "usedTypes": [
         "D2BitBufferStrc"
       ],
-      "dh": "4d3281ba"
+      "dh": "4d3281ba",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BITBUFFER_WriteDwordPair",
@@ -316,7 +494,21 @@
         "D2BitBufferStrc",
         "int32_t"
       ],
-      "dh": "659dbe68"
+      "dh": "659dbe68",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "BITBUFFER_ReadHuffmanValue",
@@ -336,7 +528,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ab1c0906"
+      "dh": "ab1c0906",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pHuffmanTree",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

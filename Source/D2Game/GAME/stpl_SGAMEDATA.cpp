@@ -114,7 +114,7 @@ template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::DeleteNode(::SGA
 }
 
 // Register arguments: only this (ECX, the hash table); EDX is first written at 0052e653 from [ECX+0x1c] (1.14d asm).
-template<> ::SGAMEDATA * TSHashTable<SGAMEDATA, HASHKEY_NONE>::Ptr(uint32_t dwHashVal, HASHKEY_NONE * pKey) {
+template<> __attribute__((noinline)) inline ::SGAMEDATA * TSHashTable<SGAMEDATA, HASHKEY_NONE>::Ptr(uint32_t dwHashVal, HASHKEY_NONE * pKey) {
     ::SGAMEDATA* pBucketHead = (::SGAMEDATA*)this->tSlotListArray.m_data[dwHashVal & this->nSlotMask].m_terminator.m_next;
     ::SGAMEDATA* pGame = (intptr_t)pBucketHead <= 0 ? nullptr : pBucketHead;
     while (true) {
@@ -138,7 +138,7 @@ template<> ::SGAMEDATA * TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::Ptr(u
 }
 
 // Generates a unique 32-bit game token by incrementing nNextGameToken monotonic counter. If counter wraps to zero, sets nTokenCounterWrapped flag and validates uniqueness via hash-map lookup. Returns token only when confirmed not to collide with any existing game in the hash map.
-template<> uint32_t TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::GenerateUniqueHandle() {
+template<> __attribute__((noinline)) inline uint32_t TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::GenerateUniqueHandle() {
     uint32_t nGeneratedToken;
     uint32_t* pNextToken;
     while (true) {
@@ -346,7 +346,7 @@ template<> __attribute__((noinline)) inline int32_t TSHashTable<SGAMEDATA, HASHK
 }
 
 // Allocates a new SGAMEDATA in the QServer hash map using nHashVal as key. Rehashes the bucket array if overloaded, then calls the vtable CreateGame factory, splices the new game into the active-game doubly-linked list, and sets pGame->nToken. Returns the new game or NULL on allocation failure.
-template<> ::SGAMEDATA * TSHashTable<SGAMEDATA, HASHKEY_NONE>::New(uint32_t dwHashVal, HASHKEY_NONE * pKey, uint32_t nExtraBytes, uint32_t dwFlags) {
+template<> __attribute__((noinline)) inline ::SGAMEDATA * TSHashTable<SGAMEDATA, HASHKEY_NONE>::New(uint32_t dwHashVal, HASHKEY_NONE * pKey, uint32_t nExtraBytes, uint32_t dwFlags) {
     TSLink<::SGAMEDATA>* ppActiveListLink;
     uint32_t nIdInBucket = dwHashVal & this->nSlotMask;
     int32_t bRehashed = this->MonitorFullness(nIdInBucket);

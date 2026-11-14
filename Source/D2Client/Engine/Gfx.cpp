@@ -243,7 +243,10 @@ static void __stdcall GFX_LoadAndHashCofArchive(char * szPath, D2CofCacheStrc * 
 
     int nRemaining = pCache->nCacheEntryCount;
     gbCofCacheLRUEnabled += nRemaining;
+    unsigned char* pRecordCursor;
+    pRecordCursor = (unsigned char*)pEntry;
     for (; nRemaining; nRemaining += -0x18 - *puVar1) {
+      pEntry = (D2CofTextureCacheEntryStrc*)pRecordCursor;
       uint32_t nHash;
       if (pEntry->dwFlags) {
         pEntry->dwFlags = 0;
@@ -253,10 +256,9 @@ static void __stdcall GFX_LoadAndHashCofArchive(char * szPath, D2CofCacheStrc * 
         exit(-1);
       }
 
-      pEntry->pFileData = (uint8_t*)&pEntry->field_0x18;
-      pNameEnd = pEntry->szName;
-      pNameEnd = pNameEnd + strlen(pNameEnd) + 1;
-      if ((uint32_t)((intptr_t)pNameEnd - (intptr_t)(pEntry->szName + 1)) >= 8) {
+      pRecordCursor = (uint8_t*)&pEntry->field_0x18;
+      pEntry->pFileData = pRecordCursor;
+      if ((uint32_t)(int)strlen(pEntry->szName) >= 8) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x79);
         exit(-1);
       }
@@ -266,7 +268,7 @@ static void __stdcall GFX_LoadAndHashCofArchive(char * szPath, D2CofCacheStrc * 
       pEntry->pNext = pCache->apBuckets[nBucket];
       pCache->apBuckets[nBucket] = pEntry;
       puVar1 = &pEntry->nFileSize;
-      pEntry = (D2CofTextureCacheEntryStrc*)(&pEntry->field_0x18 + *puVar1);
+      pRecordCursor += *puVar1;
     }
 
     pCache->nFrameCount = 1;

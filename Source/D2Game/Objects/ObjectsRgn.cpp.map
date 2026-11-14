@@ -38,7 +38,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "3557f7aa"
+      "dh": "3557f7aa",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FreeObjectControl",
@@ -64,7 +70,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "1459656b"
+      "dh": "1459656b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetObjectLevelRng",
@@ -84,7 +96,17 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "7bde42b7"
+      "dh": "7bde42b7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eLevelId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetObjectControlSeed",
@@ -104,7 +126,17 @@
         "D2SeedStrc",
         "SGAMEDATA"
       ],
-      "dh": "d497f0da"
+      "dh": "d497f0da",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetShrinesRng",
@@ -123,7 +155,13 @@
         "D2ObjectRngShrines",
         "SGAMEDATA"
       ],
-      "dh": "e4ff5872"
+      "dh": "e4ff5872",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IncrementObjectTypeCount",
@@ -141,7 +179,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "26c12b21"
+      "dh": "26c12b21",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nObjectType",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Send_0x26_Chat",
@@ -161,7 +209,17 @@
         "D2ClientStrc",
         "char *"
       ],
-      "dh": "bb779a05"
+      "dh": "bb779a05",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "ppMessage",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SendDebugMessageToEveryone",
@@ -183,7 +241,17 @@
         "D2GSPacketSrv0x26",
         "SGAMEDATA"
       ],
-      "dh": "5e44ce06"
+      "dh": "5e44ce06",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pMessage",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Debug",
@@ -205,7 +273,13 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "c024dece"
+      "dh": "c024dece",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AllocObjectControlSub0x1110",
@@ -232,7 +306,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "3e339757"
+      "dh": "3e339757",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn17_Waypoint",
@@ -261,7 +349,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8f4973f3"
+      "dh": "8f4973f3",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QUEST_GetLevelQuestStatus",
@@ -280,7 +374,17 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "3f0054db"
+      "dh": "3f0054db",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eLevel",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJECTRGN_CheckDensityThreshold",
@@ -301,7 +405,17 @@
         "eD2LevelId",
         "uint8_t"
       ],
-      "dh": "07674ae9"
+      "dh": "07674ae9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eLevel",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJECTRGN_CheckPointsCapacity",
@@ -320,7 +434,17 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "d163bbf9"
+      "dh": "d163bbf9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eLevel",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_IncrementLevelSpawnCount",
@@ -339,7 +463,17 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "6b05e010"
+      "dh": "6b05e010",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eLevel",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_IsPositionNearSpawnPoint2",
@@ -359,7 +493,25 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "6209c354"
+      "dh": "6209c354",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eLevel",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AddPointsToLevelRngPoints2",
@@ -380,7 +532,25 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "84513b9d"
+      "dh": "84513b9d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eLevel",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_IsPositionNearSpawnPoint1",
@@ -400,7 +570,25 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "c0118b5b"
+      "dh": "c0118b5b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eLevel",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AddPointsToLevelRngPoints1",
@@ -421,7 +609,25 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "5584fafc"
+      "dh": "5584fafc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eLevel",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_HandleObjectMode",
@@ -450,7 +656,13 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "a7cc6689"
+      "dh": "a7cc6689",
+      "paramStorage": [
+        [
+          "pObjectModeArg",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

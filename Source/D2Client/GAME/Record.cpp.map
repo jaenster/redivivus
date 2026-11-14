@@ -42,7 +42,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c281896b"
+      "dh": "c281896b",
+      "paramStorage": [
+        [
+          "uMsg",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "lParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "HandleWinProcMsg",
@@ -61,7 +75,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "d111f0db"
+      "dh": "d111f0db",
+      "paramStorage": [
+        [
+          "uMsg",
+          "ECX:4"
+        ],
+        [
+          "wParam",
+          "EDX:4"
+        ],
+        [
+          "lParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SaveGameRecordToFile",
@@ -151,7 +179,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ff0dfe2b"
+      "dh": "ff0dfe2b",
+      "paramStorage": [
+        [
+          "pIndex",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetupRecording",
@@ -199,7 +233,21 @@
         "CallCloseRecordingFunction",
         "SaveGameRecordToFile"
       ],
-      "dh": "4d6ebbde"
+      "dh": "4d6ebbde",
+      "paramStorage": [
+        [
+          "uMsg",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "lParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetCleanupFunction",

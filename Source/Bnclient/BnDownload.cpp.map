@@ -22,7 +22,25 @@
       "usedTypes": [
         "FILETIME"
       ],
-      "dh": "ff51775a"
+      "dh": "ff51775a",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNumberOfBytesToWrite",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pFileTime",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "NET_CopyDllFromArchive",
@@ -53,7 +71,21 @@
         "D2ArchiveStrc",
         "D2MPQFileStrc"
       ],
-      "dh": "91ea0efd"
+      "dh": "91ea0efd",
+      "paramStorage": [
+        [
+          "pArchive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pszSrcFileName",
+          "EAX:4"
+        ],
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNDOWNLOAD_SetCancelFlag",
@@ -105,7 +137,21 @@
         "SOCKET",
         "uint32_t"
       ],
-      "dh": "af1fdd1e"
+      "dh": "af1fdd1e",
+      "paramStorage": [
+        [
+          "hSocket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBuffer",
+          "EBX:4"
+        ],
+        [
+          "nLen",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "BNDOWNLOAD_GetCachedFileSize",
@@ -127,7 +173,17 @@
         "_FILETIME",
         "uint32_t"
       ],
-      "dh": "90120d3e"
+      "dh": "90120d3e",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "pftCompare",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "BNDOWNLOAD_PerformCheckRevision",
@@ -157,7 +213,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5dbe8c92"
+      "dh": "5dbe8c92",
+      "paramStorage": [
+        [
+          "pdwVersionOut",
+          "ECX:4"
+        ],
+        [
+          "pdwChecksumOut",
+          "EDX:4"
+        ],
+        [
+          "pbResultOut",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BNDOWNLOAD_ExtractFileFromArchive",
@@ -185,7 +255,21 @@
         "D2ArchiveStrc",
         "D2MPQFileStrc"
       ],
-      "dh": "94ca02d4"
+      "dh": "94ca02d4",
+      "paramStorage": [
+        [
+          "szFileName",
+          "ECX:4"
+        ],
+        [
+          "pArchive",
+          "EDX:4"
+        ],
+        [
+          "szFilePath",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BNDOWNLOAD_LaunchVerifiedExecutables",
@@ -205,7 +289,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "f5582a45"
+      "dh": "f5582a45",
+      "paramStorage": [
+        [
+          "szText1",
+          "EBX:4"
+        ],
+        [
+          "szText2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "BNDOWNLOAD_UpdateProgressPercent",
@@ -224,7 +318,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "833991b0"
+      "dh": "833991b0",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "nBytesDone",
+          "EDX:4"
+        ],
+        [
+          "nTotalSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BNDOWNLOAD_ResetState",
@@ -242,7 +350,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "39a53e89"
+      "dh": "39a53e89",
+      "paramStorage": [
+        [
+          "nResetValue",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNDOWNLOAD_GetProgress",
@@ -273,7 +387,13 @@
         "BNDOWNLOAD_SetPatchFilename",
         "SStrCopy"
       ],
-      "dh": "6e996f7f"
+      "dh": "6e996f7f",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNDOWNLOAD_HasPatchFilename",
@@ -319,7 +439,37 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "bd246185"
+      "dh": "bd246185",
+      "paramStorage": [
+        [
+          "hSocket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTimestamp",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nProgressMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bWriteFlags",
+          "Stack[0x14]:1"
+        ],
+        [
+          "ppOutBuffer",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nFileSize",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "BNDOWNLOAD_RecvFileFromSocket",
@@ -345,7 +495,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a4a0cb1b"
+      "dh": "a4a0cb1b",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "hSocket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTotalSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nProgressMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pFileTime",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "BNDOWNLOAD_ProcessPrepatchList",
@@ -391,7 +567,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f79339e4"
+      "dh": "f79339e4",
+      "paramStorage": [
+        [
+          "pResultOut",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNDOWNLOAD_ApplyPrepatch",
@@ -407,7 +589,13 @@
         "BNDOWNLOAD_ApplyPrepatch",
         "BNDOWNLOAD_ProcessPrepatchList"
       ],
-      "dh": "f1664c72"
+      "dh": "f1664c72",
+      "paramStorage": [
+        [
+          "pbPatcherLaunched",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BnetDownloadFile_II",
@@ -449,7 +637,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ec991c7c"
+      "dh": "ec991c7c",
+      "paramStorage": [
+        [
+          "lpThreadParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BNDOWNLOAD_InitiateFileDownload",
@@ -477,7 +671,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "40f91d64"
+      "dh": "40f91d64",
+      "paramStorage": [
+        [
+          "pDownloadCtx",
+          "ECX:4"
+        ],
+        [
+          "dwDownloadFlags",
+          "EDX:4"
+        ],
+        [
+          "eFileType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOpcode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pFileTime",
+          "Stack[0xc]:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x10]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "NET_BNFTP_CLIENT_ProcessFile",
@@ -527,7 +751,49 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c04b38c0"
+      "dh": "c04b38c0",
+      "paramStorage": [
+        [
+          "nOpcode",
+          "ECX:4"
+        ],
+        [
+          "nDownloadFlags",
+          "EDX:4"
+        ],
+        [
+          "eFileType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pModTime",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szSourcePath",
+          "Stack[0xc]:4"
+        ],
+        [
+          "szDestPath",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pPoolMgr",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x18]:4"
+        ],
+        [
+          "bDeleteSource",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "bIsExtraWork",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "BNDOWNLOAD_InitiatePatchDownload",
@@ -559,7 +825,17 @@
         "uint32_t",
         "uintptr_t"
       ],
-      "dh": "1ed96690"
+      "dh": "1ed96690",
+      "paramStorage": [
+        [
+          "pPatchList",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_CriticalSection_00881f64",

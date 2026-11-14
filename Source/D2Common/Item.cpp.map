@@ -28,7 +28,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ac2d59ad"
+      "dh": "ac2d59ad",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nEquippedMask",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ManageSetBonusStatList",
@@ -64,7 +74,21 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "80091d13"
+      "dh": "80091d13",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ProcessSetItemEquip",
@@ -89,7 +113,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c2996483"
+      "dh": "c2996483",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nEquipMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bUpdateStates",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

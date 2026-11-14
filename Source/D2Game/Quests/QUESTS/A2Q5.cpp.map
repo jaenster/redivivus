@@ -23,7 +23,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b9a228d4"
+      "dh": "b9a228d4",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q13_Callback00_NpcActivate",
@@ -49,7 +71,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "fb4143a3"
+      "dh": "fb4143a3",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q13_NotifySummonerComplete",
@@ -71,7 +103,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a08497df"
+      "dh": "a08497df",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q13_UpdateQuestRecord",
@@ -96,7 +142,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "1bb20555"
+      "dh": "1bb20555",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q13_Callback11_ScrollMessage",
@@ -127,7 +187,17 @@
         "SGAMEDATA",
         "uint16_t"
       ],
-      "dh": "7a021b3b"
+      "dh": "7a021b3b",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q13_CheckSummonerKillAndReward",
@@ -158,7 +228,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f96f0f62"
+      "dh": "f96f0f62",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q13_Callback10_PlayerLeavesGame",
@@ -171,6 +255,16 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
+      ],
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
       ]
     },
     {
@@ -198,7 +292,21 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "f93b0d4f"
+      "dh": "f93b0d4f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q13_OnEndCallbackAndNotify",
@@ -222,7 +330,17 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "8b4d6b3e"
+      "dh": "8b4d6b3e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pQuestData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q13_SetSummonerRewardOnPartyMember",
@@ -251,7 +369,21 @@
         "SGAMEDATA",
         "eAct"
       ],
-      "dh": "99e24741"
+      "dh": "99e24741",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q13_PropagateRewardToParty",
@@ -274,7 +406,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "afd90bb5"
+      "dh": "afd90bb5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q13_SetCannotComplete",
@@ -297,7 +443,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "1cc16346"
+      "dh": "1cc16346",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q13_Callback08_MonsterKilled",
@@ -325,7 +485,17 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "78f14892"
+      "dh": "78f14892",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q13_Callback03_ChangedLevel",
@@ -345,7 +515,17 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "e80b97cc"
+      "dh": "e80b97cc",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q13_Callback13_PlayerStartedGame",
@@ -368,7 +548,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "f58e6ff6"
+      "dh": "f58e6ff6",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q13_InitData",
@@ -389,7 +579,13 @@
         "D2QuestDataA2Q5Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "dff86941"
+      "dh": "dff86941",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

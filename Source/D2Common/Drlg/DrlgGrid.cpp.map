@@ -19,7 +19,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "68cb1445"
+      "dh": "68cb1445",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_00416810",
@@ -37,7 +43,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "b6d65036"
+      "dh": "b6d65036",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_00416890",
@@ -55,7 +67,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "c2e47ab6"
+      "dh": "c2e47ab6",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_004168b0",
@@ -73,7 +91,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "e182b6ee"
+      "dh": "e182b6ee",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_00416960",
@@ -91,7 +115,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "e42d39cf"
+      "dh": "e42d39cf",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_004169a0",
@@ -109,7 +139,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "b56482d7"
+      "dh": "b56482d7",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_0041c390",
@@ -127,7 +163,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "e445753a"
+      "dh": "e445753a",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_004203e0",
@@ -145,7 +187,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "55804a0d"
+      "dh": "55804a0d",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_0044be20",
@@ -163,7 +211,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "e67a7b87"
+      "dh": "e67a7b87",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_0044de50",
@@ -181,7 +235,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "0ebeab69"
+      "dh": "0ebeab69",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_0044dee0",
@@ -199,7 +259,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "f977784b"
+      "dh": "f977784b",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_0045ba70",
@@ -217,7 +283,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "f9f5555f"
+      "dh": "f9f5555f",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_00601bb0",
@@ -235,7 +307,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "b1b0c97f"
+      "dh": "b1b0c97f",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_00601d20",
@@ -253,7 +331,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "37f3be85"
+      "dh": "37f3be85",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_00601db0",
@@ -271,7 +355,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "b6c94a97"
+      "dh": "b6c94a97",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_0060e290",
@@ -289,7 +379,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "d5fbe6ed"
+      "dh": "d5fbe6ed",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGGRID_FloodFillGridCoords",
@@ -313,7 +409,25 @@
         "D2DrlgCoordsStrc",
         "uint32_t"
       ],
-      "dh": "ff01078b"
+      "dh": "ff01078b",
+      "paramStorage": [
+        [
+          "pFloodFillContext",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDirection",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "OverwriteFlag",
@@ -331,7 +445,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a3aefb54"
+      "dh": "a3aefb54",
+      "paramStorage": [
+        [
+          "pFlag",
+          "ECX:4"
+        ],
+        [
+          "nFlag",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OrFlag",
@@ -349,7 +473,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "1c450964"
+      "dh": "1c450964",
+      "paramStorage": [
+        [
+          "pFlag",
+          "ECX:4"
+        ],
+        [
+          "nFlag",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AndFlag",
@@ -367,7 +501,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0013d3a5"
+      "dh": "0013d3a5",
+      "paramStorage": [
+        [
+          "pFlag",
+          "ECX:4"
+        ],
+        [
+          "nFlag",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "XorFlag",
@@ -385,7 +529,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2594d812"
+      "dh": "2594d812",
+      "paramStorage": [
+        [
+          "pFlag",
+          "ECX:4"
+        ],
+        [
+          "nFlag",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OverwriteFlagIfZero",
@@ -403,7 +557,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a68bd63f"
+      "dh": "a68bd63f",
+      "paramStorage": [
+        [
+          "pFlag",
+          "ECX:4"
+        ],
+        [
+          "nFlag",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AndNegatedFlag",
@@ -421,7 +585,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "58a9f38b"
+      "dh": "58a9f38b",
+      "paramStorage": [
+        [
+          "pFlag",
+          "ECX:4"
+        ],
+        [
+          "nFlag",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGGRID_IsGridValid",
@@ -439,7 +613,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "e4bd4ad2"
+      "dh": "e4bd4ad2",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IsPointInsideGridArea",
@@ -458,7 +638,21 @@
         "D2DrlgGridStrc",
         "int32_t"
       ],
-      "dh": "24541640"
+      "dh": "24541640",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGGRID_GetCellAddress",
@@ -477,7 +671,21 @@
         "D2DrlgGridStrc",
         "eD2GridCellFlags"
       ],
-      "dh": "36aefc14"
+      "dh": "36aefc14",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AlterGridFlag",
@@ -496,7 +704,29 @@
         "D2DrlgGridStrc",
         "int32_t"
       ],
-      "dh": "1734537d"
+      "dh": "1734537d",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlag",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eOperation",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGGRID_ApplyFlagOperation",
@@ -515,7 +745,25 @@
         "D2DrlgCoordStrc",
         "D2DrlgGridStrc"
       ],
-      "dh": "dba0f179"
+      "dh": "dba0f179",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ],
+        [
+          "pCoord",
+          "EDX:4"
+        ],
+        [
+          "nFlag",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eOperation",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetOffset",
@@ -536,7 +784,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2f9135fe"
+      "dh": "2f9135fe",
+      "paramStorage": [
+        [
+          "pGrid1",
+          "ECX:4"
+        ],
+        [
+          "nOffsetx",
+          "EDX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetGridFlags",
@@ -554,7 +816,21 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "8673dd92"
+      "dh": "8673dd92",
+      "paramStorage": [
+        [
+          "pGrid",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AlterAllGridFlags",
@@ -574,7 +850,21 @@
         "eD2GridCellFlags",
         "int32_t"
       ],
-      "dh": "0a844245"
+      "dh": "0a844245",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ],
+        [
+          "nFlag",
+          "EDX:4"
+        ],
+        [
+          "eOperation",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FlagOperations",
@@ -594,7 +884,21 @@
         "eD2GridCellFlags",
         "int32_t"
       ],
-      "dh": "e2d8bb9d"
+      "dh": "e2d8bb9d",
+      "paramStorage": [
+        [
+          "pGrid",
+          "ECX:4"
+        ],
+        [
+          "nOpIndex",
+          "EDX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGGRID_ApplyFlagToBorderCells",
@@ -613,7 +917,21 @@
         "D2DrlgGridStrc",
         "eD2GridCellFlags"
       ],
-      "dh": "6c0e69a2"
+      "dh": "6c0e69a2",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ],
+        [
+          "nFlag",
+          "EDX:4"
+        ],
+        [
+          "eOperation",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGGRID_SetEdgeGridFlags",
@@ -632,7 +950,29 @@
         "D2DrlgGridStrc",
         "D2DrlgVertexStrc"
       ],
-      "dh": "6d37fba0"
+      "dh": "6d37fba0",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ],
+        [
+          "pEdge",
+          "EDX:4"
+        ],
+        [
+          "nFlag",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eOperation",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIncludeEndpoints",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGGRID_SetLineFlagsWithWidth",
@@ -653,7 +993,33 @@
         "D2DrlgGridStrc",
         "D2DrlgVertexStrc"
       ],
-      "dh": "9087ca50"
+      "dh": "9087ca50",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ],
+        [
+          "pEdge",
+          "EDX:4"
+        ],
+        [
+          "pDrlgCoords",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlag",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eOperation",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLineWidth",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0067cb60",
@@ -672,7 +1038,17 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "e473cae4"
+      "dh": "e473cae4",
+      "paramStorage": [
+        [
+          "pDstGrid",
+          "ECX:4"
+        ],
+        [
+          "pSrcGrid",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGGRID_InitGridCells",
@@ -694,7 +1070,25 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "f4d22a45"
+      "dh": "f4d22a45",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pDrlgGrid",
+          "EDX:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FillGrid",
@@ -714,7 +1108,29 @@
         "D2DrlgGridStrc",
         "int32_t"
       ],
-      "dh": "afff706a"
+      "dh": "afff706a",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ],
+        [
+          "nWidth",
+          "EDX:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCellPos",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCellRowOffsets",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGGRID_AllocGrid",
@@ -735,7 +1151,29 @@
         "D2PoolManagerStrc",
         "eD2GridCellFlags"
       ],
-      "dh": "7ccef0c3"
+      "dh": "7ccef0c3",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pDrlgGrid",
+          "EDX:4"
+        ],
+        [
+          "pCellsFlags",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGGRID_InitGridFromTileData",
@@ -757,7 +1195,29 @@
         "D2PoolManagerStrc",
         "eD2GridCellFlags"
       ],
-      "dh": "272fa651"
+      "dh": "272fa651",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pGrid",
+          "EDX:4"
+        ],
+        [
+          "pParentCells",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTileData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParentRowStride",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FillExternalCellFlags",
@@ -778,7 +1238,29 @@
         "D2DrlgMapStrc",
         "int32_t"
       ],
-      "dh": "057c5780"
+      "dh": "057c5780",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ],
+        [
+          "pCellPos",
+          "EDX:4"
+        ],
+        [
+          "pDrlgCoord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCellFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGGRID_FreeGrid",
@@ -798,7 +1280,17 @@
         "D2DrlgGridStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "8d92d4a7"
+      "dh": "8d92d4a7",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pGrid",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid",
@@ -816,7 +1308,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "eb6981bf"
+      "dh": "eb6981bf",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ResetGrid_Unref_006c4030",
@@ -834,7 +1332,13 @@
       "usedTypes": [
         "D2DrlgGridStrc"
       ],
-      "dh": "4454b08e"
+      "dh": "4454b08e",
+      "paramStorage": [
+        [
+          "pDrlgGrid",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

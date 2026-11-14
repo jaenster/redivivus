@@ -22,7 +22,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "46379256"
+      "dh": "46379256",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CopyConstructor",
@@ -45,7 +55,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8fdc3d84"
+      "dh": "8fdc3d84",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

@@ -22,7 +22,17 @@
         "D2DrlgLevelStrc",
         "uint32_t"
       ],
-      "dh": "b39a17f0"
+      "dh": "b39a17f0",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EAX:4"
+        ],
+        [
+          "nX",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_GetPresetVariantFromGridCell",
@@ -40,7 +50,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "95979f8a"
+      "dh": "95979f8a",
+      "paramStorage": [
+        [
+          "nGridFlags",
+          "EAX:4"
+        ],
+        [
+          "nPresetType",
+          "ECX:4"
+        ],
+        [
+          "bReturnPresetId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_PlaceRiverCrossingPreset",
@@ -63,7 +87,17 @@
         "D2DrlgLevelStrc",
         "uint32_t"
       ],
-      "dh": "b8a4c4df"
+      "dh": "b8a4c4df",
+      "paramStorage": [
+        [
+          "pDrlgLevelStrc",
+          "EDI:4"
+        ],
+        [
+          "nCrossingX",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_SpawnVerticalBorderPresets",
@@ -87,7 +121,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0ece7c7a"
+      "dh": "0ece7c7a",
+      "paramStorage": [
+        [
+          "pLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nColumn",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_MarkBorderJunctions",
@@ -107,7 +151,13 @@
         "D2DrlgLevelStrc",
         "D2DrlgVertexStrc"
       ],
-      "dh": "c2020c11"
+      "dh": "c2020c11",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_SpawnCornerFillPreset",
@@ -128,7 +178,21 @@
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc"
       ],
-      "dh": "6c3ed7d1"
+      "dh": "6c3ed7d1",
+      "paramStorage": [
+        [
+          "nY",
+          "EDI:4"
+        ],
+        [
+          "nX",
+          "EBX:4"
+        ],
+        [
+          "pLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_006801f0",
@@ -146,7 +210,13 @@
       "usedTypes": [
         "D2DrlgLevelStrc"
       ],
-      "dh": "cad25f5f"
+      "dh": "cad25f5f",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_FillBorderCornersAndPresets",
@@ -174,7 +244,13 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "005402f8"
+      "dh": "005402f8",
+      "paramStorage": [
+        [
+          "pLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SpawnTownTransitionsAndCaves",
@@ -202,7 +278,13 @@
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc"
       ],
-      "dh": "72cdd21e"
+      "dh": "72cdd21e",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_SpawnRandomOutdoorDecorations",
@@ -223,7 +305,21 @@
         "D2SeedStrc",
         "int32_t"
       ],
-      "dh": "91157535"
+      "dh": "91157535",
+      "paramStorage": [
+        [
+          "nPresetType",
+          "EAX:4"
+        ],
+        [
+          "pDrlgLevelStrc",
+          "ESI:4"
+        ],
+        [
+          "bAllowDouble",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_SpawnAct1LevelPresets",
@@ -246,7 +342,13 @@
         "D2DrlgLevelStrc",
         "int32_t"
       ],
-      "dh": "22fbcdf0"
+      "dh": "22fbcdf0",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "InitAct1OutdoorLevel",
@@ -274,7 +376,13 @@
       "usedTypes": [
         "D2DrlgLevelStrc"
       ],
-      "dh": "3078eb32"
+      "dh": "3078eb32",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

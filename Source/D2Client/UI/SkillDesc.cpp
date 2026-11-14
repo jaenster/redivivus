@@ -3460,13 +3460,13 @@ static void __stdcall SKILLDESC_CalcWeaponDamageRange(D2UnitStrc * pUnit, int * 
 
     nMinDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_damagepercent, 0);
     int32_t nItemBonusMin = D2Common::Skills::SKILLS_GetItemBonusDamage(pUnit, pUnit2, pSkill, 1);
-    int nTotalDmgBonus = nDamagePctBonus + nMinDmg + nItemBonusMin;
+    nDamagePctBonus = nDamagePctBonus + nMinDmg + nItemBonusMin;
     nMinDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_mindamage_percent, 0);
     nMaxDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_maxdamage_percent, 0);
     if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       nItemBonusMin = SKILLDESC_GetAuraBonusDamage();
       if (nItemBonusMin) {
-        nTotalDmgBonus += nItemBonusMin;
+        nDamagePctBonus += nItemBonusMin;
         *pnColor = 3;
       }
     }
@@ -3477,19 +3477,19 @@ static void __stdcall SKILLDESC_CalcWeaponDamageRange(D2UnitStrc * pUnit, int * 
       sAttrBonus = D2Common::ITEMS::Items::ITEM_GetItemsTxt_wStrBonus(pUnit2);
       if (sAttrBonus) {
         nAttrStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_strength, 0);
-        nTotalDmgBonus += nAttrStat * sAttrBonus / 100;
+        nDamagePctBonus += nAttrStat * sAttrBonus / 100;
       }
 
       sAttrBonus = D2Common::ITEMS::Items::ITEM_GetItemsTxt_wDexBonus(pUnit2);
       if (sAttrBonus) {
         nAttrStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_dexterity, 0);
-        nTotalDmgBonus += nAttrStat * sAttrBonus / 100;
+        nDamagePctBonus += nAttrStat * sAttrBonus / 100;
       }
 
       nItemBonusMin = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit2, UNITSTAT_item_normaldamage, 0);
     } else {
       nAttrStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_strength, 0);
-      nTotalDmgBonus += nAttrStat;
+      nDamagePctBonus += nAttrStat;
     }
 
     BOOL bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasAttackSpeedState(pUnit);
@@ -3501,12 +3501,12 @@ static void __stdcall SKILLDESC_CalcWeaponDamageRange(D2UnitStrc * pUnit, int * 
     if (bHasAttackSpeedState) {
       *pnColor = 1;
     }
-    if (nTotalDmgBonus <= -0x5a) {
-      nTotalDmgBonus = -0x5a;
+    if (nDamagePctBonus <= -0x5a) {
+      nDamagePctBonus = -0x5a;
     }
 
-    *pnMinDamage = (nMinDmg + 100 + nTotalDmgBonus) * *pnMinDamage / 100 + nItemBonusMin + nFlatDamageBonus;
-    *pnMaxDamage = (nMaxDmg + 100 + nTotalDmgBonus) * *pnMaxDamage / 100 + nItemBonusMin + nFlatDamageBonus;
+    *pnMinDamage = (nMinDmg + 100 + nDamagePctBonus) * *pnMinDamage / 100 + nItemBonusMin + nFlatDamageBonus;
+    *pnMaxDamage = (nMaxDmg + 100 + nDamagePctBonus) * *pnMaxDamage / 100 + nItemBonusMin + nFlatDamageBonus;
 }
 
 int __stdcall SKILLDESC_CalcElemDamageRange(D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, uint32_t * pnColor, D2SkillStrc * pSkill) {

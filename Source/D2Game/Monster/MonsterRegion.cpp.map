@@ -28,7 +28,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "cf5f68ad"
+      "dh": "cf5f68ad",
+      "paramStorage": [
+        [
+          "bIsNotNormalDifficulty",
+          "ECX:4"
+        ],
+        [
+          "pMonsterRegion",
+          "EDX:4"
+        ],
+        [
+          "pTxtLevels",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSeed",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "AllocMonsterRegion",
@@ -64,7 +82,33 @@
         "eD2Difficulty",
         "int32_t"
       ],
-      "dh": "66b141b0"
+      "dh": "66b141b0",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pMonsterRegionList",
+          "EDX:4"
+        ],
+        [
+          "pSeed",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSeedLow",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDifficulty",
+          "Stack[0xc]:1"
+        ],
+        [
+          "bExpansion",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "FreeMonsterRegion",
@@ -84,7 +128,17 @@
         "D2MonsterRegionStrc *",
         "D2PoolManagerStrc"
       ],
-      "dh": "b13a852d"
+      "dh": "b13a852d",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "ppMonsterRegion",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ReturnMonsterRegionEntryForLevel",
@@ -104,7 +158,17 @@
         "D2MonsterRegionStrc *",
         "eD2LevelId"
       ],
-      "dh": "bd1255ae"
+      "dh": "bd1255ae",
+      "paramStorage": [
+        [
+          "ppMonsterRegion",
+          "ECX:4"
+        ],
+        [
+          "eLevel",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "InitializeSpawnCount",
@@ -130,7 +194,21 @@
         "eD2LevelId",
         "uint16_t"
       ],
-      "dh": "cd7565f0"
+      "dh": "cd7565f0",
+      "paramStorage": [
+        [
+          "ppMonsterRegion",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AllocMonsterRegionForGame",
@@ -152,7 +230,13 @@
         "D2SeedStrc",
         "SGAMEDATA"
       ],
-      "dh": "41178dfd"
+      "dh": "41178dfd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IncreaseMonsterSpawnCount",
@@ -176,7 +260,25 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "cd9d1e7b"
+      "dh": "cd9d1e7b",
+      "paramStorage": [
+        [
+          "ppMonsterRegion",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bIsSummoner",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DecreaseMonsterSpawnCount",
@@ -202,7 +304,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d8acfa29"
+      "dh": "d8acfa29",
+      "paramStorage": [
+        [
+          "ppMonsterRegion",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nPrevMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCurrMode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "IncreaseMonKillCount",
@@ -228,7 +348,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d106e935"
+      "dh": "d106e935",
+      "paramStorage": [
+        [
+          "ppMonsterRegion",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DecreaseMonKillCount",
@@ -254,7 +384,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "07440b16"
+      "dh": "07440b16",
+      "paramStorage": [
+        [
+          "ppMonsterRegion",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UpdateMonsterRegion",
@@ -280,7 +420,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e16e1dbd"
+      "dh": "e16e1dbd",
+      "paramStorage": [
+        [
+          "ppMonsterRegion",
+          "ECX:4"
+        ],
+        [
+          "eLevel",
+          "EDX:4"
+        ],
+        [
+          "eLevel2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMonFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIsDead",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x14]:4"
+        ]
+      ]
     }
   ]
 }

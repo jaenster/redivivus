@@ -28,7 +28,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8d9acc62"
+      "dh": "8d9acc62",
+      "paramStorage": [
+        [
+          "pHashOut",
+          "ECX:4"
+        ],
+        [
+          "pWideStr",
+          "EDX:4"
+        ],
+        [
+          "nLength",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntFromUnsigned",
@@ -49,7 +63,13 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "e6d10b19"
+      "dh": "e6d10b19",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_FromBigIntBytes",
@@ -70,7 +90,17 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "979ea84c"
+      "dh": "979ea84c",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nByteCount",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_ToBigIntBytes",
@@ -92,7 +122,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6c4a00e6"
+      "dh": "6c4a00e6",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "ECX:4"
+        ],
+        [
+          "pOutBuf",
+          "EDX:4"
+        ],
+        [
+          "nBufSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_CompareBigInt",
@@ -112,7 +156,17 @@
         "BigData",
         "int32_t"
       ],
-      "dh": "eb2f619f"
+      "dh": "eb2f619f",
+      "paramStorage": [
+        [
+          "pBigA",
+          "ECX:4"
+        ],
+        [
+          "pBigB",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntCompareValue",
@@ -136,7 +190,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bcec9da7"
+      "dh": "bcec9da7",
+      "paramStorage": [
+        [
+          "pBigInt",
+          "ECX:4"
+        ],
+        [
+          "dwValue",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntShl",
@@ -156,7 +220,21 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "0d7ad03d"
+      "dh": "0d7ad03d",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigSrc",
+          "EDX:4"
+        ],
+        [
+          "nShiftBits",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntAdd",
@@ -175,7 +253,21 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "3d1aca0e"
+      "dh": "3d1aca0e",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntAddValue",
@@ -198,7 +290,21 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "6be75f98"
+      "dh": "6be75f98",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "dwValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntSub",
@@ -217,7 +323,21 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "ca5148ac"
+      "dh": "ca5148ac",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigIntA",
+          "EDX:4"
+        ],
+        [
+          "pBigIntB",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntSubValue",
@@ -240,7 +360,21 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "8dd5e20a"
+      "dh": "8dd5e20a",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "dwValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntMul",
@@ -259,7 +393,21 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "f64cfe93"
+      "dh": "f64cfe93",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntMulValue",
@@ -282,7 +430,21 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "7e6da243"
+      "dh": "7e6da243",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "dwValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntDivValue",
@@ -305,7 +467,21 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "81cbfc15"
+      "dh": "81cbfc15",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "dwDivisor",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntMod",
@@ -324,7 +500,21 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "296a2abb"
+      "dh": "296a2abb",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntModToInt",
@@ -348,7 +538,17 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "4fca5dd8"
+      "dh": "4fca5dd8",
+      "paramStorage": [
+        [
+          "pBigInt",
+          "ECX:4"
+        ],
+        [
+          "dwModulus",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntMulMod",
@@ -368,7 +568,25 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "577f5084"
+      "dh": "577f5084",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntPowMod",
@@ -387,7 +605,25 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "396069a2"
+      "dh": "396069a2",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBase",
+          "EDX:4"
+        ],
+        [
+          "pExponent",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntPowModValue",
@@ -410,7 +646,25 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "e05c5547"
+      "dh": "e05c5547",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBase",
+          "EDX:4"
+        ],
+        [
+          "dwExponent",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntFree",
@@ -429,7 +683,13 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "560d295c"
+      "dh": "560d295c",
+      "paramStorage": [
+        [
+          "pBigData",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

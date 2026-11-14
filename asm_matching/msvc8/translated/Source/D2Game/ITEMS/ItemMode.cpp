@@ -3565,8 +3565,8 @@ void __fastcall ITEMMODE_SetItemFlags(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
       nOwnerGUID = -1;
       byUnitType = 6;
     } else {
-      byUnitType = pUnit->eUnitType;
       nOwnerGUID = pUnit->nUnitGUID;
+      byUnitType = pUnit->eUnitType;
     }
 
     GAME::SCmd::NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1962), (uint8_t)byUnitType, nOwnerGUID, eSkill, '\0');

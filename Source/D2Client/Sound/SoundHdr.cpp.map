@@ -26,7 +26,13 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "bdf71010"
+      "dh": "bdf71010",
+      "paramStorage": [
+        [
+          "pSoundHdr",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetCurrentLevelId",
@@ -197,7 +203,13 @@
       "calledFunctions": [
         "SOUNDHDR_SetGlobal4"
       ],
-      "dh": "7c48496f"
+      "dh": "7c48496f",
+      "paramStorage": [
+        [
+          "nMaxBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_Nop",
@@ -231,7 +243,13 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "58c29cd7"
+      "dh": "58c29cd7",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_GetSoundField0x60",
@@ -249,7 +267,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "8b506be9"
+      "dh": "8b506be9",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_GetSoundGroupSize",
@@ -268,7 +292,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "31bb15b9"
+      "dh": "31bb15b9",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_GetSoundLoopFlag",
@@ -287,7 +317,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "52949686"
+      "dh": "52949686",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSoundEnvironLine",
@@ -306,7 +342,13 @@
         "D2SoundEnvironTxt",
         "int32_t"
       ],
-      "dh": "930d77c8"
+      "dh": "930d77c8",
+      "paramStorage": [
+        [
+          "nSoundEnviron",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_sounds_soundenviron",
@@ -367,7 +409,13 @@
       "usedTypes": [
         "IDirectSound"
       ],
-      "dh": "2408c3fe"
+      "dh": "2408c3fe",
+      "paramStorage": [
+        [
+          "bBackgroundActive",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_AdjustReferenceCount",
@@ -389,7 +437,17 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "eaa0fda1"
+      "dh": "eaa0fda1",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ],
+        [
+          "nDelta",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_ClearReferenceCounts",
@@ -408,7 +466,13 @@
         "D2SoundsTxt",
         "eD2Sounds"
       ],
-      "dh": "832104b6"
+      "dh": "832104b6",
+      "paramStorage": [
+        [
+          "eSound",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_FreeSoundBuffer",
@@ -435,7 +499,13 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "07b79640"
+      "dh": "07b79640",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_EvictLeastRecentlyUsed",
@@ -458,7 +528,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b9851d62"
+      "dh": "b9851d62",
+      "paramStorage": [
+        [
+          "nBytesNeeded",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bMultiPass",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bRespectRecency",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_GetFalloffMin",
@@ -477,7 +561,13 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "90889904"
+      "dh": "90889904",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_GetFalloffMax",
@@ -496,7 +586,13 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "9a61f591"
+      "dh": "9a61f591",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_RandomizeSoundFromGroup",
@@ -517,7 +613,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6e590001"
+      "dh": "6e590001",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_BuildSoundPath",
@@ -540,7 +642,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9352b600"
+      "dh": "9352b600",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ],
+        [
+          "pszOutPath",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_UpdateLRUTimestamp",
@@ -561,7 +673,13 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "286dcddb"
+      "dh": "286dcddb",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_Shutdown",
@@ -639,7 +757,21 @@
         "D2SoundsTxt",
         "int32_t"
       ],
-      "dh": "4bc204d1"
+      "dh": "4bc204d1",
+      "paramStorage": [
+        [
+          "nSoundId",
+          "ECX:4"
+        ],
+        [
+          "bForceSync",
+          "EDX:4"
+        ],
+        [
+          "bRespectRecency",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SOUNDHDR_ProcessAsyncLoads",
@@ -662,7 +794,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3fe219d7"
+      "dh": "3fe219d7",
+      "paramStorage": [
+        [
+          "dwTick",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_AfterDraw",
@@ -707,7 +845,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fa8ff635"
+      "dh": "fa8ff635",
+      "paramStorage": [
+        [
+          "nSoundHeaderIndex",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Cleanup_Unref_00522c20",

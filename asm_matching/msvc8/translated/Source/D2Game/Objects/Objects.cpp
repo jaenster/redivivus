@@ -412,7 +412,7 @@ D2UnitStrc * __fastcall SERVER_InitUnitObject(::SGAMEDATA * pGame, D2RoomStrc * 
 // @sourcefile .\OBJECTS\Objects.cpp
 D2TimerArgStrc * __fastcall AllocTimer(::SGAMEDATA * pGame) {
     D2TimerArgStrc* pTimerNode = D2_NEW_POOL_AT(pGame->pMemoryPool, D2TimerArgStrc, ".\\OBJECTS\\Objects.cpp", 0x1b8);
-    pTimerNode->pTimerList = 0;
+    memset(pTimerNode, 0, sizeof(*pTimerNode));
     pTimerNode->nUnitGUID = -1;
     uint32_t* pTimerSentinel = (uint32_t*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, 8, ".\\OBJECTS\\Objects.cpp", 0x1bc);
     *pTimerSentinel = -1;

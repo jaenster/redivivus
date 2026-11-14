@@ -23,7 +23,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f221a63f"
+      "dh": "f221a63f",
+      "paramStorage": [
+        [
+          "pnX",
+          "ECX:4"
+        ],
+        [
+          "pnY",
+          "EDX:4"
+        ],
+        [
+          "pnRight",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBottom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPlacementMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMaxX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nMinX",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_AltItems",

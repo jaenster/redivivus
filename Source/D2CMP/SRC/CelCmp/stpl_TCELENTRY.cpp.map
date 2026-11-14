@@ -47,7 +47,13 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "0b5af484"
+      "dh": "0b5af484",
+      "paramStorage": [
+        [
+          "ptr",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

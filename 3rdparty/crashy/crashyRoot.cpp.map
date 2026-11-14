@@ -20,7 +20,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "7fb36cd0"
+      "dh": "7fb36cd0",
+      "paramStorage": [
+        [
+          "pLocalTime",
+          "ECX:4"
+        ],
+        [
+          "pTime",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "FILETOOLS_GetTempPath_UTF8",
@@ -35,7 +45,13 @@
       "calledFunctions": [
         "FILETOOLS_GetTempPath_UTF8"
       ],
-      "dh": "1b89d9ef"
+      "dh": "1b89d9ef",
+      "paramStorage": [
+        [
+          "pSrc",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "isDebuggerPresent",
@@ -71,7 +87,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "ee9d5cc0"
+      "dh": "ee9d5cc0",
+      "paramStorage": [
+        [
+          "uExitCode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SYSTEM_GetCurrentProcessThreadCount",
@@ -110,7 +132,21 @@
         "_MEMORY_BASIC_INFORMATION",
         "uint8_t"
       ],
-      "dh": "dd4670a6"
+      "dh": "dd4670a6",
+      "paramStorage": [
+        [
+          "ppStackBase",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pAddress",
+          "EAX:4"
+        ],
+        [
+          "ppStackTop",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SYSTEM_CaptureThreadContext",
@@ -131,7 +167,25 @@
         "CONTEXT",
         "uint32_t"
       ],
-      "dh": "58a47ee0"
+      "dh": "58a47ee0",
+      "paramStorage": [
+        [
+          "pnStackTop",
+          "ECX:4"
+        ],
+        [
+          "dwThreadId",
+          "EDX:4"
+        ],
+        [
+          "pStackSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppEsp",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SYSTEM_GetThreadName",
@@ -150,7 +204,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2d996b15"
+      "dh": "2d996b15",
+      "paramStorage": [
+        [
+          "wThreadId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBuffer",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ILT_GetCurrentThreadId",
@@ -202,7 +266,13 @@
       "calledFunctions": [
         "SYSTEM_SetGlobalString"
       ],
-      "dh": "60c616c2"
+      "dh": "60c616c2",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ErrorReportingLaunch",
@@ -227,7 +297,17 @@
         "char *",
         "uint32_t"
       ],
-      "dh": "532a0ea6"
+      "dh": "532a0ea6",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "pArg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ILT_strrchr",
@@ -246,7 +326,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b91cfdfb"
+      "dh": "b91cfdfb",
+      "paramStorage": [
+        [
+          "_Str",
+          "Stack[0x4]:4"
+        ],
+        [
+          "_Ch",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SYSTEM_EnterCriticalSection",
@@ -264,7 +354,13 @@
       "usedTypes": [
         "LPCRITICAL_SECTION"
       ],
-      "dh": "0a8db65c"
+      "dh": "0a8db65c",
+      "paramStorage": [
+        [
+          "lpCriticalSection",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LeaveCriticalSection_System",

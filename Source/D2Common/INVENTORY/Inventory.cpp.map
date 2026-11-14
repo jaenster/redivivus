@@ -19,7 +19,13 @@
       "usedTypes": [
         "D2InventoryStrc"
       ],
-      "dh": "1c744d5f"
+      "dh": "1c744d5f",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NullSub_Unref_00611640",
@@ -37,7 +43,13 @@
       "usedTypes": [
         "D2InventoryStrc"
       ],
-      "dh": "7dd457a9"
+      "dh": "7dd457a9",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetItemInventoryNode",
@@ -56,7 +68,13 @@
         "D2ItemInventoryNodeStrc",
         "D2UnitStrc"
       ],
-      "dh": "c1807db2"
+      "dh": "c1807db2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_UnlinkItemFromList",
@@ -76,7 +94,17 @@
         "D2UnitStrc",
         "D2UnitStrc *"
       ],
-      "dh": "6ede7056"
+      "dh": "6ede7056",
+      "paramStorage": [
+        [
+          "pItemListHead",
+          "ESI:4"
+        ],
+        [
+          "pItem",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_IsGridRectEmpty",
@@ -98,7 +126,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d41bc646"
+      "dh": "d41bc646",
+      "paramStorage": [
+        [
+          "nRow",
+          "ECX:4"
+        ],
+        [
+          "nCol",
+          "EDX:4"
+        ],
+        [
+          "nStartCol",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byHeight",
+          "Stack[0x8]:1"
+        ],
+        [
+          "pGridInfo",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FillGridRect",
@@ -120,7 +170,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "df7b8078"
+      "dh": "df7b8078",
+      "paramStorage": [
+        [
+          "nWidth",
+          "CL:1"
+        ],
+        [
+          "nStartCol",
+          "EDX:4"
+        ],
+        [
+          "pGridInfo",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byHeight",
+          "Stack[0x8]:1"
+        ],
+        [
+          "pFillItem",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStartRow",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_RemoveItemFromGrid",
@@ -146,7 +222,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "d6e0897f"
+      "dh": "d6e0897f",
+      "paramStorage": [
+        [
+          "pItem",
+          "EAX:4"
+        ],
+        [
+          "pPageList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bUseWidthHeight",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0063aad0",
@@ -164,7 +254,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "260dd0bb"
+      "dh": "260dd0bb",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_RemoveItemFromInventory",
@@ -190,7 +286,13 @@
         "D2UnitStrc",
         "eD2InventoryGrid"
       ],
-      "dh": "847b3785"
+      "dh": "847b3785",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_CreatePlayerInventory",
@@ -212,7 +314,17 @@
         "D2PoolManagerStrc",
         "D2UnitStrc"
       ],
-      "dh": "ec4fe2fc"
+      "dh": "ec4fe2fc",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_FreeInventory",
@@ -236,7 +348,13 @@
         "D2InventoryToBeUpdatedStrc",
         "D2UnitStrc"
       ],
-      "dh": "265589ea"
+      "dh": "265589ea",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CheckDoItemBelongToInventory",
@@ -256,7 +374,17 @@
         "D2ItemInventoryNodeStrc",
         "D2UnitStrc"
       ],
-      "dh": "83081cb0"
+      "dh": "83081cb0",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ItemBelongsToInventoryOfPlayer",
@@ -277,7 +405,17 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "4cf07dd7"
+      "dh": "4cf07dd7",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ReinitializeInventoryGrid",
@@ -303,7 +441,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "15af4d74"
+      "dh": "15af4d74",
+      "paramStorage": [
+        [
+          "nNewGridSize",
+          "EAX:4"
+        ],
+        [
+          "pInventorySize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInventory",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_AppendItemToList",
@@ -323,7 +475,17 @@
         "D2UnitDataItemStrc",
         "D2UnitStrc"
       ],
-      "dh": "2643b5b3"
+      "dh": "2643b5b3",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pInventoryStrc",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_InsertItemInPageList",
@@ -344,7 +506,21 @@
         "D2UnitDataItemStrc",
         "D2UnitStrc"
       ],
-      "dh": "696e2412"
+      "dh": "696e2412",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pGridInfo",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_PlaceItemInGrid",
@@ -388,7 +564,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "70077721"
+      "dh": "70077721",
+      "paramStorage": [
+        [
+          "nnX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nnY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nInventoryGrid",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nInventoryPage",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "pInventory",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PutItemInInventory",
@@ -413,7 +615,21 @@
         "D2ItemInventoryNodeStrc",
         "D2UnitStrc"
       ],
-      "dh": "1cd08d71"
+      "dh": "1cd08d71",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetFirstItem",
@@ -432,7 +648,13 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "17cb4801"
+      "dh": "17cb4801",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetLastItem",
@@ -451,7 +673,13 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "5370b393"
+      "dh": "5370b393",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CheckItemFitsInGrid",
@@ -473,7 +701,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "54fc5053"
+      "dh": "54fc5053",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "nGridCol",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "ESI:4"
+        ],
+        [
+          "byItemHeight",
+          "BL:1"
+        ],
+        [
+          "pGridInfo",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CalcGridPlacementScore",
@@ -495,7 +749,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "42a664e7"
+      "dh": "42a664e7",
+      "paramStorage": [
+        [
+          "byItemHeight",
+          "CL:1"
+        ],
+        [
+          "pGridInfo",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStartCol",
+          "Stack[0x8]:4"
+        ],
+        [
+          "byItemWidth",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nStartRow",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindBestPlacementWithScore",
@@ -519,7 +795,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "037e232e"
+      "dh": "037e232e",
+      "paramStorage": [
+        [
+          "ppnOutX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnOutY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "byItemWidth",
+          "Stack[0xc]:1"
+        ],
+        [
+          "byItemHeight",
+          "Stack[0x10]:1"
+        ],
+        [
+          "pGridInfo",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindFirstEmptySlot",
@@ -541,7 +839,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "41b7b8fb"
+      "dh": "41b7b8fb",
+      "paramStorage": [
+        [
+          "pnOutX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnOutY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "byItemWidth",
+          "Stack[0xc]:1"
+        ],
+        [
+          "byItemHeight",
+          "Stack[0x10]:1"
+        ],
+        [
+          "pGridInfo",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindPlacementSlot",
@@ -565,7 +885,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ef677887"
+      "dh": "ef677887",
+      "paramStorage": [
+        [
+          "byItemHeight",
+          "CL:1"
+        ],
+        [
+          "byItemWidth",
+          "DL:1"
+        ],
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnOutY",
+          "ESI:4"
+        ],
+        [
+          "ppnOutX",
+          "EDI:4"
+        ],
+        [
+          "pGridInfo",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindBestGridPosition",
@@ -587,7 +933,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6febbf34"
+      "dh": "6febbf34",
+      "paramStorage": [
+        [
+          "ppnOutX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnOutY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "byItemWidth",
+          "Stack[0xc]:1"
+        ],
+        [
+          "byItemHeight",
+          "Stack[0x10]:1"
+        ],
+        [
+          "pGridInfo",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindBestGridPositionNonPlayer",
@@ -609,7 +977,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "27b14707"
+      "dh": "27b14707",
+      "paramStorage": [
+        [
+          "pnOutX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnOutY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "byItemWidth",
+          "Stack[0xc]:1"
+        ],
+        [
+          "byItemHeight",
+          "Stack[0x10]:1"
+        ],
+        [
+          "pGridInfo",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindGridPositionByOwner",
@@ -633,7 +1023,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "93aa7d31"
+      "dh": "93aa7d31",
+      "paramStorage": [
+        [
+          "byItemHeight",
+          "CL:1"
+        ],
+        [
+          "byItemWidth",
+          "DL:1"
+        ],
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnOutY",
+          "ESI:4"
+        ],
+        [
+          "ppnOutX",
+          "EDI:4"
+        ],
+        [
+          "pGridInfo",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindGridPositionByOwner2",
@@ -657,7 +1073,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6fa20cf6"
+      "dh": "6fa20cf6",
+      "paramStorage": [
+        [
+          "byItemHeight",
+          "CL:1"
+        ],
+        [
+          "byItemWidth",
+          "DL:1"
+        ],
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnOutY",
+          "ESI:4"
+        ],
+        [
+          "ppnOutX",
+          "EDI:4"
+        ],
+        [
+          "pGridInfo",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindGridPositionByOwner3",
@@ -681,7 +1123,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ede7ff5a"
+      "dh": "ede7ff5a",
+      "paramStorage": [
+        [
+          "byItemHeight",
+          "CL:1"
+        ],
+        [
+          "byItemWidth",
+          "DL:1"
+        ],
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppnOutX",
+          "EDI:4"
+        ],
+        [
+          "pnOutY",
+          "ESI:4"
+        ],
+        [
+          "pGridInfo",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindItemGridPosition",
@@ -711,7 +1179,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "50aee4aa"
+      "dh": "50aee4aa",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eInvPage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "ppnOutX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnOutY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "byPage",
+          "Stack[0x18]:1"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_AutoPlaceItemInGrid",
@@ -734,7 +1228,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "68760f66"
+      "dh": "68760f66",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eInvPage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGridX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nPage",
+          "Stack[0x14]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CheckGridCollisions",
@@ -761,7 +1285,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "286aabe5"
+      "dh": "286aabe5",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nGridX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGridY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eInvPage",
+          "Stack[0x14]:4"
+        ],
+        [
+          "ppCollidedItemOut",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pnCollidingItemCount",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nPage",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CheckGridOccupancy",
@@ -789,7 +1347,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a9acd17e"
+      "dh": "a9acd17e",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nGridX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGridY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eInvPage",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnOutItem",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nPageByte",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "bCheckBox",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0063bcb0",
@@ -804,7 +1396,25 @@
       "calledFunctions": [
         "Unreferenced_0063bcb0"
       ],
-      "dh": "d6e5416b"
+      "dh": "d6e5416b",
+      "paramStorage": [
+        [
+          "param_1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "param_2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "param_3",
+          "Stack[0xc]:4"
+        ],
+        [
+          "param_4",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_PlaceItemAtCoords",
@@ -826,7 +1436,37 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1255791c"
+      "dh": "1255791c",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nGridX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGridY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eInvPage",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x18]:4"
+        ],
+        [
+          "bGridIndex",
+          "Stack[0x1c]:1"
+        ]
+      ]
     },
     {
       "name": "UnusedDebug",
@@ -847,7 +1487,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "aec0d719"
+      "dh": "aec0d719",
+      "paramStorage": [
+        [
+          "szFilename",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pInventory",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "neInventoryPage",
+          "Stack[0x18]:1"
+        ],
+        [
+          "dwParam",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nInvPage",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "NullSub",
@@ -865,7 +1539,13 @@
       "usedTypes": [
         "D2InventoryStrc"
       ],
-      "dh": "ada99deb"
+      "dh": "ada99deb",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetUnitAndXAndY",
@@ -892,7 +1572,37 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "fe4501a1"
+      "dh": "fe4501a1",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGridX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nGridY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnOutX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnOutY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eInvPage",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nGridSize",
+          "Stack[0x1c]:1"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetItemAtBodyLoc",
@@ -913,7 +1623,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b256dcd1"
+      "dh": "b256dcd1",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eBodyLoc",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetItemByGridOffset",
@@ -936,7 +1660,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "031897a1"
+      "dh": "031897a1",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGridOffset",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NullSub_2Arg",
@@ -954,7 +1688,17 @@
       "usedTypes": [
         "D2InventoryStrc"
       ],
-      "dh": "2115b096"
+      "dh": "2115b096",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_HasEquippedWeaponClass",
@@ -978,7 +1722,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "3c9ad244"
+      "dh": "3c9ad244",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ConfirmWClass",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetEquipedWeapon",
@@ -1001,7 +1755,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "79108c22"
+      "dh": "79108c22",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetPrimaryWeapon",
@@ -1024,7 +1784,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "9ce4dbac"
+      "dh": "9ce4dbac",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindWornItemByType",
@@ -1051,7 +1817,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "589ccba8"
+      "dh": "589ccba8",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemType",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_IsItemLocationValid",
@@ -1072,7 +1848,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "ed759708"
+      "dh": "ed759708",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetItemXPosition",
@@ -1093,7 +1879,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1de0b0ba"
+      "dh": "1de0b0ba",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CopyInventoryOfPlayerOrFree",
@@ -1114,7 +1910,17 @@
         "D2ItemInventoryNodeStrc",
         "D2UnitStrc"
       ],
-      "dh": "3d86e5e8"
+      "dh": "3d86e5e8",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetHandItem",
@@ -1133,7 +1939,13 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "adee7e88"
+      "dh": "adee7e88",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindSocketableItemInStash",
@@ -1162,7 +1974,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e9dedf44"
+      "dh": "e9dedf44",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindSocketableItemInMain",
@@ -1188,7 +2014,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "0054976d"
+      "dh": "0054976d",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindMatchingScrollBook",
@@ -1219,7 +2059,21 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "8d94af92"
+      "dh": "8d94af92",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pScrollItem",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pStartAfterItem",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_PlaceItemInBeltSlot",
@@ -1239,7 +2093,21 @@
         "D2InventoryStrc",
         "uint32_t"
       ],
-      "dh": "17cc1456"
+      "dh": "17cc1456",
+      "paramStorage": [
+        [
+          "pnBeltType",
+          "EAX:4"
+        ],
+        [
+          "pInventory",
+          "EDX:4"
+        ],
+        [
+          "nBeltSlot",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CanPlaceItemInBelt",
@@ -1262,7 +2130,21 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "c4d9b4ac"
+      "dh": "c4d9b4ac",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBeltSlot",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_OnBeltChanged_NoOp",
@@ -1280,7 +2162,17 @@
       "usedTypes": [
         "D2InventoryStrc"
       ],
-      "dh": "c478e85b"
+      "dh": "c478e85b",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CanAutoBeltItem",
@@ -1305,7 +2197,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8ccae788"
+      "dh": "8ccae788",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindBeltSlotForPotion",
@@ -1339,7 +2241,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4bb14355"
+      "dh": "4bb14355",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnOutSlotIndex",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_PlacePotionInBelt",
@@ -1361,7 +2277,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d53303b7"
+      "dh": "d53303b7",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetItemInBeltSlot",
@@ -1383,7 +2309,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "cffc078e"
+      "dh": "cffc078e",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBeltSlot",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CheckBeltSlotAndGetItem",
@@ -1411,7 +2347,25 @@
         "D2UnitStrc *",
         "uint32_t"
       ],
-      "dh": "e774a731"
+      "dh": "e774a731",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBeltSlot",
+          "Stack[0xc]:4"
+        ],
+        [
+          "ppOutItem",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetEquippedShield",
@@ -1435,7 +2389,17 @@
         "D2UnitStrc",
         "D2UnitStrc *"
       ],
-      "dh": "21b4e0f1"
+      "dh": "21b4e0f1",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetEquippedWeaponInfo",
@@ -1462,7 +2426,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a272abb9"
+      "dh": "a272abb9",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eBodyLoc",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bResult",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CheckHasArmorEquipped",
@@ -1484,7 +2466,13 @@
         "D2InventoryStrc",
         "uint32_t"
       ],
-      "dh": "b9fb85dc"
+      "dh": "b9fb85dc",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CanMoveEquippedToPage",
@@ -1508,7 +2496,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "013426ba"
+      "dh": "013426ba",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPlayer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBodyLoc",
+          "Stack[0xc]:4"
+        ],
+        [
+          "ePage",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_RemoveAllItems",
@@ -1528,7 +2534,13 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "75d782c1"
+      "dh": "75d782c1",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetUpdates",
@@ -1547,7 +2559,13 @@
         "D2InventoryStrc",
         "D2InventoryToBeUpdatedStrc"
       ],
-      "dh": "024170f8"
+      "dh": "024170f8",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreeUpdatesFromInventory",
@@ -1567,7 +2585,13 @@
         "D2InventoryStrc",
         "D2InventoryToBeUpdatedStrc"
       ],
-      "dh": "631c91f5"
+      "dh": "631c91f5",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_IsInToBeUpdatedList",
@@ -1587,7 +2611,17 @@
         "D2InventoryToBeUpdatedStrc",
         "int32_t"
       ],
-      "dh": "ec51ce93"
+      "dh": "ec51ce93",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnitGuid",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UpsertToUpdateList",
@@ -1613,7 +2647,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9a4e7079"
+      "dh": "9a4e7079",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetNextUpdate",
@@ -1631,7 +2675,13 @@
       "usedTypes": [
         "D2InventoryToBeUpdatedStrc"
       ],
-      "dh": "b5a2a490"
+      "dh": "b5a2a490",
+      "paramStorage": [
+        [
+          "pUpdate",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetUpdatesUUid",
@@ -1650,7 +2700,13 @@
         "D2InventoryToBeUpdatedStrc",
         "uint32_t"
       ],
-      "dh": "1c9a68e6"
+      "dh": "1c9a68e6",
+      "paramStorage": [
+        [
+          "pInventoryToBeUpdated",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ItemsInItem",
@@ -1669,7 +2725,13 @@
         "D2InventoryStrc",
         "int32_t"
       ],
-      "dh": "8468accf"
+      "dh": "8468accf",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindItemByType",
@@ -1699,7 +2761,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5c7ab3b4"
+      "dh": "5c7ab3b4",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pAfterItem",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindItemOfTypeInMain",
@@ -1726,7 +2802,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "9e5f5add"
+      "dh": "9e5f5add",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemTypeToFind",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pAfterItem",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindItemByCodeInMain",
@@ -1752,7 +2842,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "ff1d06e7"
+      "dh": "ff1d06e7",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemCode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pAfterItem",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FindItemByCodeInStash",
@@ -1778,7 +2882,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "c6f15d73"
+      "dh": "c6f15d73",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemCode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pAfterItem",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CountSetItemsInMain",
@@ -1805,7 +2923,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cab1997d"
+      "dh": "cab1997d",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSetIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_SetOrClearCursorItem",
@@ -1824,7 +2952,21 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "5974a74b"
+      "dh": "5974a74b",
+      "paramStorage": [
+        [
+          "pInventory",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "bSet",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_UpdatePrimaryWeapon",
@@ -1849,7 +2991,17 @@
         "eD2BodyLoc",
         "uint32_t"
       ],
-      "dh": "a848fa96"
+      "dh": "a848fa96",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_SwapPrimaryWeaponOnRemoval",
@@ -1874,7 +3026,17 @@
         "eD2BodyLoc",
         "uint32_t"
       ],
-      "dh": "82f9e92d"
+      "dh": "82f9e92d",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetWeaponHandedness",
@@ -1897,7 +3059,17 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "3fcf2dbe"
+      "dh": "3fcf2dbe",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInventory",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_SetOwnerGUID",
@@ -1916,7 +3088,17 @@
         "D2InventoryStrc",
         "int32_t"
       ],
-      "dh": "325f55de"
+      "dh": "325f55de",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetCursorItemGUID",
@@ -1935,7 +3117,13 @@
         "D2InventoryStrc",
         "int32_t"
       ],
-      "dh": "0ef0aad7"
+      "dh": "0ef0aad7",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_AddCorpse",
@@ -1958,7 +3146,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1f08d4c0"
+      "dh": "1f08d4c0",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_RemoveCorpse",
@@ -1979,7 +3185,21 @@
         "D2InventoryStrc",
         "int32_t"
       ],
-      "dh": "7678c6ce"
+      "dh": "7678c6ce",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetCorpse",
@@ -1998,7 +3218,13 @@
         "D2CorpseStrc",
         "D2InventoryStrc"
       ],
-      "dh": "c6630b2a"
+      "dh": "c6630b2a",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_FreeNotifications",
@@ -2018,7 +3244,13 @@
         "D2CorpseStrc",
         "D2InventoryStrc"
       ],
-      "dh": "1b1c4a1f"
+      "dh": "1b1c4a1f",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetCorpseCount",
@@ -2037,7 +3269,13 @@
         "D2InventoryStrc",
         "int32_t"
       ],
-      "dh": "69992b6b"
+      "dh": "69992b6b",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetNextCorpse",
@@ -2055,7 +3293,13 @@
       "usedTypes": [
         "D2CorpseStrc"
       ],
-      "dh": "cac36fd7"
+      "dh": "cac36fd7",
+      "paramStorage": [
+        [
+          "pCorpse",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ROOMCORPSE_GetGUID",
@@ -2074,7 +3318,13 @@
         "D2CorpseStrc",
         "int32_t"
       ],
-      "dh": "9b0278a0"
+      "dh": "9b0278a0",
+      "paramStorage": [
+        [
+          "pCorpse",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CORPSE_GetMercClassId",
@@ -2093,7 +3343,13 @@
         "D2CorpseStrc",
         "int32_t"
       ],
-      "dh": "c72cb84d"
+      "dh": "c72cb84d",
+      "paramStorage": [
+        [
+          "pCorpse",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CORPSE_GetData",
@@ -2112,7 +3368,13 @@
         "D2CorpseStrc",
         "eD2UnitType"
       ],
-      "dh": "0d221e0e"
+      "dh": "0d221e0e",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetBodyComponents",
@@ -2137,7 +3399,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "52532060"
+      "dh": "52532060",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pComponents",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_InitializeItemTypeTable",
@@ -2179,7 +3451,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "81bd7926"
+      "dh": "81bd7926",
+      "paramStorage": [
+        [
+          "dwItemCode",
+          "EDI:4"
+        ],
+        [
+          "dwAltGfxCode",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_UpdateCompositeWeaponGfx",
@@ -2212,7 +3494,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "260b4507"
+      "dh": "260b4507",
+      "paramStorage": [
+        [
+          "pComponentGfx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pComponentColors",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pUnit2",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_SetEquippedItemAppearance",
@@ -2244,7 +3544,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "601eef3e"
+      "dh": "601eef3e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pItem",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CalculateSwapActionCode",
@@ -2262,7 +3580,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "80a30106"
+      "dh": "80a30106",
+      "paramStorage": [
+        [
+          "nParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CanDualWieldItems",
@@ -2289,7 +3617,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5ae7c6ec"
+      "dh": "5ae7c6ec",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pItem1",
+          "ESI:4"
+        ],
+        [
+          "pCharUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetEquipSwapAction",
@@ -2315,7 +3657,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "121638c8"
+      "dh": "121638c8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pNewItem",
+          "EDX:4"
+        ],
+        [
+          "pUnit1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPairedBodyLoc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetEquipActionForBodySlot",
@@ -2342,7 +3706,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d8c208cd"
+      "dh": "d8c208cd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBodyLoc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bSkipRequirementsCheck",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_GetNextItem",
@@ -2361,7 +3743,13 @@
         "D2UnitDataItemStrc",
         "D2UnitStrc"
       ],
-      "dh": "59cecede"
+      "dh": "59cecede",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetCarriedItem",
@@ -2379,7 +3767,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "3969c86a"
+      "dh": "3969c86a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetGUID",
@@ -2398,7 +3792,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "2ffd0dbd"
+      "dh": "2ffd0dbd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemData_eD2InventoryGridType",
@@ -2418,7 +3818,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "fc8b5ff7"
+      "dh": "fc8b5ff7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_IsItemOwnedBy",
@@ -2438,7 +3844,17 @@
         "D2ItemInventoryNodeStrc",
         "D2UnitStrc"
       ],
-      "dh": "4b64e5c8"
+      "dh": "4b64e5c8",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FreeRecursiveInventorysWithChilds",
@@ -2458,7 +3874,13 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "a35aad36"
+      "dh": "a35aad36",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CopyInventory",
@@ -2484,7 +3906,17 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "bfccddb6"
+      "dh": "bfccddb6",
+      "paramStorage": [
+        [
+          "pInventory",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_ReserveGridCells",
@@ -2512,7 +3944,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "026bfe8d"
+      "dh": "026bfe8d",
+      "paramStorage": [
+        [
+          "pInventory",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_CanTransferMercItems",
@@ -2536,7 +3982,21 @@
         "eInventoryPage",
         "int32_t"
       ],
-      "dh": "c520dc37"
+      "dh": "c520dc37",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInventory",
+          "EBX:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CreateCopyOfInventoryForTrading",
@@ -2561,7 +4021,25 @@
         "D2PoolManagerStrc",
         "D2UnitStrc"
       ],
-      "dh": "d4cd56e9"
+      "dh": "d4cd56e9",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pbMercIsBuyer",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "GetCurrentItemOnBodyLocation",
@@ -2584,7 +4062,25 @@
         "D2UnitStrc *",
         "uint32_t"
       ],
-      "dh": "e0bc3b11"
+      "dh": "e0bc3b11",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInventory",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppUnit",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bodyLoc",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SaveCharAppearance",
@@ -2624,7 +4120,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b2ade1f7"
+      "dh": "b2ade1f7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pArray1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pArray2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "NullSub_Unref_00643610",
@@ -2642,7 +4152,13 @@
       "usedTypes": [
         "D2InventoryStrc"
       ],
-      "dh": "c1d40d8d"
+      "dh": "c1d40d8d",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NullSub_Unref_006460c0",
@@ -2660,7 +4176,13 @@
       "usedTypes": [
         "D2InventoryStrc"
       ],
-      "dh": "07f35cc8"
+      "dh": "07f35cc8",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NullSub_Unref_006460e0",
@@ -2678,7 +4200,13 @@
       "usedTypes": [
         "D2InventoryStrc"
       ],
-      "dh": "6507a61d"
+      "dh": "6507a61d",
+      "paramStorage": [
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

@@ -64,7 +64,13 @@
         "eD2GSGameType",
         "int32_t"
       ],
-      "dh": "9c4118fe"
+      "dh": "9c4118fe",
+      "paramStorage": [
+        [
+          "bAdvanceFrame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_ToggleMiniPanel",
@@ -309,7 +315,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f009a5d6"
+      "dh": "f009a5d6",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_AdjustMemoryBudget",
@@ -339,7 +351,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "93081db7"
+      "dh": "93081db7",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "bInitSpriteCache",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_ShutdownSpriteCacheAndCofSystem",
@@ -360,7 +382,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f42f832d"
+      "dh": "f42f832d",
+      "paramStorage": [
+        [
+          "nMemoryPoolHandle",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_NoOp",
@@ -394,7 +422,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "6941f2b9"
+      "dh": "6941f2b9",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

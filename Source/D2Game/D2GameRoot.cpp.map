@@ -22,7 +22,17 @@
         "D2ClientStrc *",
         "uint32_t"
       ],
-      "dh": "ca336454"
+      "dh": "ca336454",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pdwClientOut",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetFirstActiveClient",
@@ -37,7 +47,17 @@
       "calledFunctions": [
         "CLIENT_GetFirstActiveClient"
       ],
-      "dh": "96e90e52"
+      "dh": "96e90e52",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "ppActiveClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_QSERVER_CountClientsWithStatusFlag0x20",
@@ -61,7 +81,13 @@
       "calledFunctions": [
         "GAME_SetNoSaveFlag"
       ],
-      "dh": "a76905f3"
+      "dh": "a76905f3",
+      "paramStorage": [
+        [
+          "bResult",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_FindUnitInFirstActiveGame",
@@ -84,7 +110,17 @@
         "SGAMEDATA",
         "eD2UnitType"
       ],
-      "dh": "3864a2fc"
+      "dh": "3864a2fc",
+      "paramStorage": [
+        [
+          "eUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnitId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetActFromFirstActiveGame",
@@ -109,7 +145,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "af4750eb"
+      "dh": "af4750eb",
+      "paramStorage": [
+        [
+          "nActIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_CountMonstersInFirstActiveGame",
@@ -160,7 +202,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "9f1b2c83"
+      "dh": "9f1b2c83",
+      "paramStorage": [
+        [
+          "byActIndex",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nSubtileX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSubtileY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_QSERVER_CountClientsWithStatusFlag0x20_Unref_00534790",
@@ -194,7 +250,21 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "191d39ee"
+      "dh": "191d39ee",
+      "paramStorage": [
+        [
+          "dwUnused1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnused3",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SUNITDMG_DebugTraceAvoidRoll",
@@ -213,7 +283,33 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a882412f"
+      "dh": "a882412f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam3",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwParam4",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "nullsub_7Arg",
@@ -231,7 +327,37 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "fb799a92"
+      "dh": "fb799a92",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam3",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwParam4",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwParam5",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwParam6",
+          "Stack[0x18]:4"
+        ],
+        [
+          "dwParam7",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "nullsub_B",
@@ -249,7 +375,21 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "814c4c3e"
+      "dh": "814c4c3e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam3",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_CountClientsWithStatusFlag0x20",
@@ -283,7 +423,13 @@
       "calledFunctions": [
         "GAME_SetNoSaveFlag_Unref_00544090"
       ],
-      "dh": "3f5b7eeb"
+      "dh": "3f5b7eeb",
+      "paramStorage": [
+        [
+          "bResult",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAME_ClearGlobalFlag",
@@ -337,7 +483,13 @@
         "PD2TaskNodeLink",
         "uint32_t"
       ],
-      "dh": "03ae9e6d"
+      "dh": "03ae9e6d",
+      "paramStorage": [
+        [
+          "nQueueSlot",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q33_SetCompleteForPartyMember",
@@ -364,7 +516,21 @@
         "SGAMEDATA",
         "eAct"
       ],
-      "dh": "66844e79"
+      "dh": "66844e79",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q03_AutoCompleteIfHighLevel",
@@ -389,7 +555,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "c2b492d2"
+      "dh": "c2b492d2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q11_SetTaintedSunRewardOnPartyMember",
@@ -416,7 +596,21 @@
         "SGAMEDATA",
         "eAct"
       ],
-      "dh": "411984d3"
+      "dh": "411984d3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q11_OnEndCallback",
@@ -437,7 +631,17 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "e8360ada"
+      "dh": "e8360ada",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pQuestData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q12_SetArcaneCompleteOnPartyMember",
@@ -465,7 +669,21 @@
         "SGAMEDATA",
         "eAct"
       ],
-      "dh": "57a9212f"
+      "dh": "57a9212f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_ScheduleDeathIfRunningOrDead",
@@ -487,7 +705,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6b5bebc2"
+      "dh": "6b5bebc2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Q24_PartyMember_SetAbleGoToAct4",
@@ -515,7 +751,21 @@
         "SGAMEDATA",
         "eAct"
       ],
-      "dh": "9a589a26"
+      "dh": "9a589a26",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSSOR_StatExpireCallback_ClearStateSetFlag",
@@ -536,7 +786,21 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "95850bdb"
+      "dh": "95850bdb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSASS_StatExpireCallback_ClearState2",
@@ -557,7 +821,21 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "6f055776"
+      "dh": "6f055776",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_FlagIfDeadOrNull",
@@ -576,7 +854,21 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "c69324a3"
+      "dh": "c69324a3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pdwDeadFlag",
+          "EDX:4"
+        ],
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

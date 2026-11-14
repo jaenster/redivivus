@@ -39,7 +39,17 @@
         "D2DialogStrc",
         "int32_t"
       ],
-      "dh": "3a8ad79e"
+      "dh": "3a8ad79e",
+      "paramStorage": [
+        [
+          "nScrollDelta",
+          "ECX:4"
+        ],
+        [
+          "pDialog",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DIALOG_HandleMouseUpEvent",
@@ -60,7 +70,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "151ea61d"
+      "dh": "151ea61d",
+      "paramStorage": [
+        [
+          "pDialog",
+          "EDI:4"
+        ],
+        [
+          "pMsg",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DIALOG_HandleMouseDownEvent",
@@ -85,7 +105,17 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "0bddee8f"
+      "dh": "0bddee8f",
+      "paramStorage": [
+        [
+          "pDialog",
+          "EAX:4"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_DialogClickHandler",
@@ -106,7 +136,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "ceeb16c7"
+      "dh": "ceeb16c7",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_DialogMouseUp",
@@ -137,7 +173,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "4cda3204"
+      "dh": "4cda3204",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_DialogMouseDown",
@@ -168,7 +210,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c840f98e"
+      "dh": "c840f98e",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DIALOG_HandleEscapeKeyEvent",
@@ -192,7 +240,17 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "d08b8bd2"
+      "dh": "d08b8bd2",
+      "paramStorage": [
+        [
+          "bInvokeDialogFunc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMsg",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_DialogEscapeKey",
@@ -213,7 +271,13 @@
         "D2DialogStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "824ded3f"
+      "dh": "824ded3f",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_DialogMouseWheel",
@@ -239,7 +303,13 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "64cb0223"
+      "dh": "64cb0223",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_DialogConfirm",
@@ -265,7 +335,13 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "d2e9d23c"
+      "dh": "d2e9d23c",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_DialogNavigateUp",
@@ -291,7 +367,13 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "71911b65"
+      "dh": "71911b65",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_DialogNavigateDown",
@@ -317,7 +399,13 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "30cdcc60"
+      "dh": "30cdcc60",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_DialogPageUp",
@@ -343,7 +431,13 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "03cb02bb"
+      "dh": "03cb02bb",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_DialogPageDown",
@@ -369,7 +463,13 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "7a316880"
+      "dh": "7a316880",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DIALOG_HandleEnterKeyEvent",
@@ -390,7 +490,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "982f2b6e"
+      "dh": "982f2b6e",
+      "paramStorage": [
+        [
+          "pDialog",
+          "EAX:4"
+        ],
+        [
+          "nKeyCode",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_DialogEnterKey",
@@ -417,7 +527,13 @@
         "fpDialogFunc",
         "int32_t"
       ],
-      "dh": "3f98d9e0"
+      "dh": "3f98d9e0",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_DialogKeyHandler",
@@ -444,7 +560,13 @@
         "D2UIMouseMsgStrc",
         "int32_t"
       ],
-      "dh": "fc37c646"
+      "dh": "fc37c646",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DIALOG_InitializeSystem",
@@ -500,7 +622,13 @@
       "usedTypes": [
         "D2DialogStrc"
       ],
-      "dh": "a45fc729"
+      "dh": "a45fc729",
+      "paramStorage": [
+        [
+          "pDialog",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "AllocDialogSub",
@@ -524,7 +652,25 @@
         "D2DialogSubStrc",
         "int32_t"
       ],
-      "dh": "ca370ac6"
+      "dh": "ca370ac6",
+      "paramStorage": [
+        [
+          "pDialog",
+          "ECX:4"
+        ],
+        [
+          "pVtable",
+          "EDX:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam3",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DIALOG_RegisterHandler",
@@ -584,7 +730,33 @@
         "fpDialogFunc",
         "int32_t"
       ],
-      "dh": "980fe714"
+      "dh": "980fe714",
+      "paramStorage": [
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ],
+        [
+          "nfpDialogFunc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "fpDialogFunc2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBackgroundId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nExtraParam",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "AllocDialogStrc",
@@ -616,7 +788,53 @@
         "fpDialogFunc",
         "int32_t"
       ],
-      "dh": "e3da2686"
+      "dh": "e3da2686",
+      "paramStorage": [
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ],
+        [
+          "fpDialogFunc1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "fpDialogFunc2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nExtraParam1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLayoutMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nAutoLayout",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nExtraParam2",
+          "Stack[0x20]:4"
+        ],
+        [
+          "nExtraParam3",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "FreeDialogStrc",
@@ -646,7 +864,13 @@
         "D2DialogSubStrc",
         "int32_t"
       ],
-      "dh": "71a9cdbb"
+      "dh": "71a9cdbb",
+      "paramStorage": [
+        [
+          "pDialog",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DIALOG_DrawBackground",
@@ -678,7 +902,13 @@
         "RECT",
         "int32_t"
       ],
-      "dh": "ab29d28b"
+      "dh": "ab29d28b",
+      "paramStorage": [
+        [
+          "pDialog",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DIALOG_SetSelectedLine",
@@ -700,7 +930,17 @@
         "D2DialogStrc",
         "int32_t"
       ],
-      "dh": "b76552f8"
+      "dh": "b76552f8",
+      "paramStorage": [
+        [
+          "pDialog",
+          "ECX:4"
+        ],
+        [
+          "nSubIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DIALOG_SetHighlightStyle",
@@ -722,7 +962,17 @@
         "D2DialogStrc",
         "int32_t"
       ],
-      "dh": "59a5b7c6"
+      "dh": "59a5b7c6",
+      "paramStorage": [
+        [
+          "pDialog",
+          "ECX:4"
+        ],
+        [
+          "nStyle",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DIALOG_CenterStringLine",
@@ -743,7 +993,17 @@
         "D2DialogStrc",
         "int32_t"
       ],
-      "dh": "05b9802d"
+      "dh": "05b9802d",
+      "paramStorage": [
+        [
+          "pDialog",
+          "EDI:4"
+        ],
+        [
+          "nIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DIALOG_RecalculateLayout",
@@ -768,7 +1028,13 @@
         "D2DialogStrc",
         "int32_t"
       ],
-      "dh": "3777af5b"
+      "dh": "3777af5b",
+      "paramStorage": [
+        [
+          "pDialog",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DIALOG_GetSelectedIndex",
@@ -787,7 +1053,13 @@
         "D2DialogStrc",
         "int32_t"
       ],
-      "dh": "81c743e8"
+      "dh": "81c743e8",
+      "paramStorage": [
+        [
+          "pDialog",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004b8590",
@@ -806,7 +1078,17 @@
         "D2DialogStrc",
         "D2DialogStringData"
       ],
-      "dh": "4a98970f"
+      "dh": "4a98970f",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004b85b0",
@@ -825,7 +1107,17 @@
         "D2DialogStrc",
         "RECT"
       ],
-      "dh": "05749429"
+      "dh": "05749429",
+      "paramStorage": [
+        [
+          "pDialog",
+          "ECX:4"
+        ],
+        [
+          "pRect",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetDialogCounter",
@@ -872,7 +1164,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "651b8c8a"
+      "dh": "651b8c8a",
+      "paramStorage": [
+        [
+          "pDialog",
+          "ECX:4"
+        ],
+        [
+          "szString",
+          "EDX:4"
+        ],
+        [
+          "nYPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLineType",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nFont",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pfnOnClick",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nCallbackParam",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "DIALOG_InitializeSystem_Unref_004b9200",

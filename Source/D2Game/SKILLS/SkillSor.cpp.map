@@ -19,7 +19,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f34a9031"
+      "dh": "f34a9031",
+      "paramStorage": [
+        [
+          "nSkillId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSOR_OnInfernoExpire",
@@ -42,7 +48,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "307103cf"
+      "dh": "307103cf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "INFERNO_CastInfernoTick",
@@ -81,7 +97,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0432b566"
+      "dh": "0432b566",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eMissileId",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "INFERNO_BeginOrContinueChannel",
@@ -118,7 +156,29 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "fbd7de60"
+      "dh": "fbd7de60",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eMissileId",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSOR_SrvStFn11_InfernoChannel",
@@ -144,7 +204,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "0f0acdee"
+      "dh": "0f0acdee",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSOR_SrvStFn12_TargetInAuraRange",
@@ -175,7 +253,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "7633e52b"
+      "dh": "7633e52b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSOR_SrvStFn13_ThunderStorm",
@@ -199,7 +295,25 @@
         "SGAMEDATA",
         "eD2Skills"
       ],
-      "dh": "e1b86e9e"
+      "dh": "e1b86e9e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pAttacker",
+          "EDX:4"
+        ],
+        [
+          "eD2Skill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSOR_SrvStFn14_Hydra",
@@ -226,7 +340,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fa4cd023"
+      "dh": "fa4cd023",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_InitChargedBoltPath",
@@ -256,7 +388,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "58ee0d11"
+      "dh": "58ee0d11",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMissileIdx",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_017_ChargedBolt",
@@ -287,7 +429,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "1b1bb569"
+      "dh": "1b1bb569",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetFrozenArmorState",
@@ -317,7 +477,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9f162d49"
+      "dh": "9f162d49",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_018_Armor",
@@ -350,7 +524,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "2151fc7f"
+      "dh": "2151fc7f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_019_Inferno",
@@ -373,7 +565,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "df59b172"
+      "dh": "df59b172",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSOR_ApplyStaticFieldToUnit",
@@ -405,7 +615,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fd633071"
+      "dh": "fd633071",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_020_Static",
@@ -433,7 +653,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "c9d1ec81"
+      "dh": "c9d1ec81",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_021_Telekenis",
@@ -474,7 +712,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e10606a7"
+      "dh": "e10606a7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_022_Nova_FrostNova",
@@ -501,7 +757,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "bf3cbc43"
+      "dh": "bf3cbc43",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_023_Blaze_EnergyShield",
@@ -531,7 +805,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "ea637c76"
+      "dh": "ea637c76",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BlazePath",
@@ -569,7 +861,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "27f5534e"
+      "dh": "27f5534e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_024_FireWall",
@@ -606,7 +908,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "446ac9e2"
+      "dh": "446ac9e2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_025_Enchant",
@@ -637,7 +957,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "23612292"
+      "dh": "23612292",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_026_ChainLighting",
@@ -663,7 +1001,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "736a55d3"
+      "dh": "736a55d3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_151_FireDirectionalMissile",
@@ -692,7 +1048,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "70e059d6"
+      "dh": "70e059d6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_027_Teleport",
@@ -723,7 +1097,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "28397041"
+      "dh": "28397041",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_028_Meteor_Blizzard",
@@ -747,7 +1139,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "dc447e31"
+      "dh": "dc447e31",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSOR_CreateMissileAtTarget",
@@ -776,7 +1186,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b8247581"
+      "dh": "b8247581",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eMissileId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pUnit2",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_029_ThunderStorm",
@@ -818,7 +1254,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6331a726"
+      "dh": "6331a726",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_SorAuraManaAbsorb",
@@ -857,7 +1311,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0695132a"
+      "dh": "0695132a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_144_Hydra",
@@ -901,7 +1385,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b9b840bf"
+      "dh": "b9b840bf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "iHydraIdx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

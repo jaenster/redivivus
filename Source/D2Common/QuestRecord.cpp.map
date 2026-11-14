@@ -26,7 +26,21 @@
         "eD2Quests",
         "int32_t"
       ],
-      "dh": "d7ab6c43"
+      "dh": "d7ab6c43",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nQuestId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eQuestState",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetQuestState",
@@ -51,7 +65,21 @@
         "eD2Quests",
         "int32_t"
       ],
-      "dh": "15b3d6cf"
+      "dh": "15b3d6cf",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nQuestId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eQuestState",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UnsetQuestState",
@@ -76,7 +104,21 @@
         "eD2Quests",
         "int32_t"
       ],
-      "dh": "14b3bd34"
+      "dh": "14b3bd34",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nQuestId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eQuestState",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UnsetQuestStepStates",
@@ -100,7 +142,17 @@
         "eD2Quests",
         "int32_t"
       ],
-      "dh": "60ef1779"
+      "dh": "60ef1779",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nQuestId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CreateBitBuffer",
@@ -123,7 +175,13 @@
         "D2PoolManagerStrc",
         "uint8_t"
       ],
-      "dh": "403b36c4"
+      "dh": "403b36c4",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreeQuestRecordPool",
@@ -143,7 +201,17 @@
         "D2BitBufferStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "d13c2735"
+      "dh": "d13c2735",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ReadQuestRecordFromBuffer",
@@ -170,7 +238,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "c11947c7"
+      "dh": "c11947c7",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:2"
+        ],
+        [
+          "bResetQuestFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CopyQuestBitBuffer",
@@ -195,7 +281,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ac258977"
+      "dh": "ac258977",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutputBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLength",
+          "Stack[0xc]:2"
+        ],
+        [
+          "dwParam",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

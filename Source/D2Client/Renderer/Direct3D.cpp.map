@@ -20,7 +20,33 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "9a87a23d"
+      "dh": "9a87a23d",
+      "paramStorage": [
+        [
+          "pSrc",
+          "ECX:4"
+        ],
+        [
+          "pDest",
+          "EDX:4"
+        ],
+        [
+          "nWidthBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDestPitch",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwParam6",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_D3D_CloseRegistryKey",
@@ -38,7 +64,13 @@
       "usedTypes": [
         "HKEY"
       ],
-      "dh": "f13dc759"
+      "dh": "f13dc759",
+      "paramStorage": [
+        [
+          "phKey",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

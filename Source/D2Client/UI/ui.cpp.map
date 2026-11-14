@@ -16,7 +16,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_0040f590"
       ],
-      "dh": "2b551727"
+      "dh": "2b551727",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_004168a0",
@@ -31,7 +37,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_004168a0"
       ],
-      "dh": "b535054d"
+      "dh": "b535054d",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_004169e0",
@@ -46,7 +58,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_004169e0"
       ],
-      "dh": "412bec17"
+      "dh": "412bec17",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_00416a40",
@@ -61,7 +79,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00416a40"
       ],
-      "dh": "62e274a3"
+      "dh": "62e274a3",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_00416a50",
@@ -76,7 +100,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00416a50"
       ],
-      "dh": "c4b1b8e6"
+      "dh": "c4b1b8e6",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_00416a60",
@@ -91,7 +121,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00416a60"
       ],
-      "dh": "236aede2"
+      "dh": "236aede2",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_00416a70",
@@ -106,7 +142,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00416a70"
       ],
-      "dh": "09e0d3b8"
+      "dh": "09e0d3b8",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_00416a80",
@@ -121,7 +163,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00416a80"
       ],
-      "dh": "aa95334c"
+      "dh": "aa95334c",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_0041c420",
@@ -136,7 +184,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_0041c420"
       ],
-      "dh": "d1ae2702"
+      "dh": "d1ae2702",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_0041e9c0",
@@ -151,7 +205,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_0041e9c0"
       ],
-      "dh": "879adead"
+      "dh": "879adead",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_00420420",
@@ -166,7 +226,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00420420"
       ],
-      "dh": "c2814529"
+      "dh": "c2814529",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_00420480",
@@ -181,7 +247,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00420480"
       ],
-      "dh": "d1bed94e"
+      "dh": "d1bed94e",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_00420e40",
@@ -196,7 +268,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00420e40"
       ],
-      "dh": "68a21d35"
+      "dh": "68a21d35",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_00420e50",
@@ -211,7 +289,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00420e50"
       ],
-      "dh": "cd7b439c"
+      "dh": "cd7b439c",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_00421100",
@@ -226,7 +310,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00421100"
       ],
-      "dh": "719af550"
+      "dh": "719af550",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_004269b0",
@@ -241,7 +331,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_004269b0"
       ],
-      "dh": "5d782ce6"
+      "dh": "5d782ce6",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_GoldInputCallback_ReturnZero_Unref_00437d10",
@@ -276,7 +372,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "80a15605"
+      "dh": "80a15605",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ARCHIVE_LoadOverlayImageUsedInGame",
@@ -297,7 +399,13 @@
         "DC6",
         "uint32_t"
       ],
-      "dh": "9f39d13a"
+      "dh": "9f39d13a",
+      "paramStorage": [
+        [
+          "pFilename",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "InitializeGlobalsWithColors",
@@ -335,7 +443,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX"
       ],
-      "dh": "9ca22b6e"
+      "dh": "9ca22b6e",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_TranslateWideCharacterLookup",
@@ -355,7 +469,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "211b0b08"
+      "dh": "211b0b08",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "AppendAsWideChar",
@@ -377,7 +497,17 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "ce31204e"
+      "dh": "ce31204e",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nColor",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_AppendColorCodeToString",
@@ -403,7 +533,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "3dcf1aca"
+      "dh": "3dcf1aca",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "byColor",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "UI_RemoveColorCodesFromString",
@@ -429,7 +569,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "b91c0ec9"
+      "dh": "b91c0ec9",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_WrapStringWithColorCodes",
@@ -456,7 +602,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "3569053d"
+      "dh": "3569053d",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "cStartColor",
+          "DL:1"
+        ],
+        [
+          "cEndColor",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "UI_StoreGlobalTooltipText",
@@ -476,7 +636,25 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "dfbc3c21"
+      "dh": "dfbc3c21",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nScreenX",
+          "EDX:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHpBarValue",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UI_SetTooltipAttributesWithCustomField",
@@ -496,7 +674,33 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "770aac66"
+      "dh": "770aac66",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "nFontId",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAlignment",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCustomField",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "UI_StoreGlobalUIText",
@@ -515,7 +719,17 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "86f92d54"
+      "dh": "86f92d54",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "dwTextColor",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_StoreGlobalUIText_Unref_00452550",
@@ -534,7 +748,17 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "f540899f"
+      "dh": "f540899f",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "dwTextColor",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_GetUniqueMonsterName",
@@ -559,7 +783,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "af36021b"
+      "dh": "af36021b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nNameMode",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "UI_GetMonsterHpBarValue",
@@ -585,7 +819,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b982abec"
+      "dh": "b982abec",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_BuildUberBossImmunityString",
@@ -610,7 +850,13 @@
         "WCHAR",
         "uint16_t"
       ],
-      "dh": "a261bb36"
+      "dh": "a261bb36",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "UI_FormatItemNameWithQuality",
@@ -653,7 +899,21 @@
         "uint32_t",
         "wchar_t"
       ],
-      "dh": "9dae77c2"
+      "dh": "9dae77c2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "EDX:4"
+        ],
+        [
+          "nMaxLength",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_FormatPlayerNameAndStatus",
@@ -682,7 +942,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dc6696ed"
+      "dh": "dc6696ed",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFormatMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbIsPartied",
+          "EBX:4"
+        ],
+        [
+          "pnHpBarValue",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_ShowMonsterNameBar",
@@ -707,7 +989,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "21922407"
+      "dh": "21922407",
+      "paramStorage": [
+        [
+          "bStoreMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "UI_GetRosterPlayerInfoForDisplay",
@@ -734,7 +1026,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "25bb9fdc"
+      "dh": "25bb9fdc",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnHpBarValue",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbIsPartied",
+          "EBX:4"
+        ],
+        [
+          "pPetEntry",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawMercenaryHealthBar",
@@ -791,7 +1101,13 @@
         "D2GfxDataStrc",
         "RECT"
       ],
-      "dh": "49f60bff"
+      "dh": "49f60bff",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawStoredTooltip",
@@ -881,7 +1197,13 @@
         "tagRECT",
         "uint32_t"
       ],
-      "dh": "8b8e5eab"
+      "dh": "8b8e5eab",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawPlayerStateOverlays",
@@ -952,7 +1274,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "5c4203a4"
+      "dh": "5c4203a4",
+      "paramStorage": [
+        [
+          "pButtonContainer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDefaultKey",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nCommandId",
+          "EDI:4"
+        ],
+        [
+          "nButtonIndex",
+          "ESI:4"
+        ],
+        [
+          "nCmdCategory",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "UI_SetMultipleButtonKeyBindings",
@@ -975,7 +1319,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "532b41ca"
+      "dh": "532b41ca",
+      "paramStorage": [
+        [
+          "pnButtonIndices",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GetUIFlag",
@@ -997,7 +1347,13 @@
         "eD2UIvars",
         "int32_t"
       ],
-      "dh": "a810b3bf"
+      "dh": "a810b3bf",
+      "paramStorage": [
+        [
+          "eUI",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00453900",
@@ -1051,7 +1407,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c100e286"
+      "dh": "c100e286",
+      "paramStorage": [
+        [
+          "nKeyAction",
+          "EAX:4"
+        ],
+        [
+          "nUIFlagToCheck",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "UI_GetFlag",
@@ -1069,7 +1435,13 @@
       "usedTypes": [
         "eD2UIvars"
       ],
-      "dh": "b7c813e4"
+      "dh": "b7c813e4",
+      "paramStorage": [
+        [
+          "eUI",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_GetCursorIconIndex",
@@ -1311,7 +1683,13 @@
         "eD2LevelId",
         "uint32_t"
       ],
-      "dh": "47feef3a"
+      "dh": "47feef3a",
+      "paramStorage": [
+        [
+          "eLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_DropCursorItemOnGround",
@@ -1489,7 +1867,13 @@
         "pfnEHHandlerRoutine",
         "uint16_t"
       ],
-      "dh": "67f4ef3a"
+      "dh": "67f4ef3a",
+      "paramStorage": [
+        [
+          "nTransactionType",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00454570",
@@ -1541,7 +1925,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "fdbfc45f"
+      "dh": "fdbfc45f",
+      "paramStorage": [
+        [
+          "bRegister",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetBuySellBtnDC6",
@@ -1581,7 +1971,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "65e1ed58"
+      "dh": "65e1ed58",
+      "paramStorage": [
+        [
+          "szFilename",
+          "ECX:4"
+        ],
+        [
+          "pSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PALETTE_LoadLoadingScreenPalette",
@@ -1616,7 +2016,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "eb3bcbfd"
+      "dh": "eb3bcbfd",
+      "paramStorage": [
+        [
+          "nActNo",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_GetLastPanelId_Unref_004547a0",
@@ -1715,7 +2121,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "9dc17e55"
+      "dh": "9dc17e55",
+      "paramStorage": [
+        [
+          "pnBounds",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_GetBottomPanelY",
@@ -1806,7 +2218,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "8bbe4000"
+      "dh": "8bbe4000",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_CenteredText",
@@ -1831,7 +2249,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ada7cc0a"
+      "dh": "ada7cc0a",
+      "paramStorage": [
+        [
+          "nFontId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "wszText",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_MonsterUnderCursorImmunites",
@@ -1905,7 +2341,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "3abb95da"
+      "dh": "3abb95da",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UnitUnderMouse",
@@ -1978,7 +2420,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e601e967"
+      "dh": "e601e967",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UnitUModsUnderCursor",
@@ -2076,7 +2524,13 @@
         "eD2UIvars",
         "int32_t"
       ],
-      "dh": "bb342f1b"
+      "dh": "bb342f1b",
+      "paramStorage": [
+        [
+          "eUIVar",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_UnregisterHandlersForPanel",
@@ -2121,7 +2575,13 @@
         "eD2UIvars",
         "int32_t"
       ],
-      "dh": "331ae33b"
+      "dh": "331ae33b",
+      "paramStorage": [
+        [
+          "ePanel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetUIFlag",
@@ -2160,7 +2620,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "be79e000"
+      "dh": "be79e000",
+      "paramStorage": [
+        [
+          "eUI",
+          "ECX:4"
+        ],
+        [
+          "neD2UIvarsSetType",
+          "EDX:4"
+        ],
+        [
+          "bAdjustMouse",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_CloseActivePanels",
@@ -2194,7 +2668,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "35b51844"
+      "dh": "35b51844",
+      "paramStorage": [
+        [
+          "bForceAutomap",
+          "ECX:4"
+        ],
+        [
+          "bAdjustMouse",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MoveArgumentToEAX_Unref_0045ba90",
@@ -2209,7 +2693,13 @@
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_0045ba90"
       ],
-      "dh": "0755d1b6"
+      "dh": "0755d1b6",
+      "paramStorage": [
+        [
+          "pParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_IsDialogActive_Unref_0045fdd0",
@@ -2366,7 +2856,21 @@
         "int32_t",
         "short *"
       ],
-      "dh": "b459e996"
+      "dh": "b459e996",
+      "paramStorage": [
+        [
+          "pnDest",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxChars",
+          "EBX:4"
+        ],
+        [
+          "ppnShort",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "UI_InitializeStatDescriptionPointers",
@@ -2421,7 +2925,13 @@
         "int32_t",
         "int64_t"
       ],
-      "dh": "63de9e58"
+      "dh": "63de9e58",
+      "paramStorage": [
+        [
+          "nSteps",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_ScrollConfigListHorizontal",
@@ -2441,7 +2951,13 @@
         "int32_t",
         "int64_t"
       ],
-      "dh": "1dedd848"
+      "dh": "1dedd848",
+      "paramStorage": [
+        [
+          "nSteps",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_GetControlConfigRowAtY",
@@ -2459,7 +2975,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0370cad4"
+      "dh": "0370cad4",
+      "paramStorage": [
+        [
+          "nMouseY",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "UI_IsMouseInRightColumn",
@@ -2478,7 +3000,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d18673ad"
+      "dh": "d18673ad",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_GetControlConfigTabIndex",
@@ -2497,7 +3025,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e5eb5856"
+      "dh": "e5eb5856",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "ESI:4"
+        ],
+        [
+          "nMouseY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_IsMouseInControlConfigArea",
@@ -2515,7 +3053,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "7ee66892"
+      "dh": "7ee66892",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "EDI:4"
+        ],
+        [
+          "nMouseY",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "UI_IsMouseOnUpArrow",
@@ -2533,7 +3081,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6eddd1ee"
+      "dh": "6eddd1ee",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "ESI:4"
+        ],
+        [
+          "nMouseY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "UI_IsMouseOnDownArrow",
@@ -2551,7 +3109,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4f7c9b2c"
+      "dh": "4f7c9b2c",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "ESI:4"
+        ],
+        [
+          "nMouseY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "UI_IsMouseOnScrollBar",
@@ -2569,7 +3137,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "c7437973"
+      "dh": "c7437973",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "ESI:4"
+        ],
+        [
+          "nMouseY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "UI_IsMouseOnScrollThumb",
@@ -2587,7 +3165,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "220df8da"
+      "dh": "220df8da",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "ESI:4"
+        ],
+        [
+          "nMouseY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "UI_IsMouseBelowScrollThumb",
@@ -2605,7 +3193,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "c5cfd768"
+      "dh": "c5cfd768",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "ESI:4"
+        ],
+        [
+          "nMouseY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "UI_IsMouseOverControlConfigTab",
@@ -2624,7 +3222,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a66ad10d"
+      "dh": "a66ad10d",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "ESI:4"
+        ],
+        [
+          "nMouseY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_IsControlConfigCellClickable",
@@ -2645,7 +3253,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c04dacfb"
+      "dh": "c04dacfb",
+      "paramStorage": [
+        [
+          "nMousePosX",
+          "ECX:4"
+        ],
+        [
+          "nMousePosY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_IsMouseOverActiveControlConfigButton",
@@ -2664,7 +3282,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "054f43e9"
+      "dh": "054f43e9",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "ESI:4"
+        ],
+        [
+          "nMouseY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_UpdateConfigControlsState",
@@ -2697,7 +3325,17 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "dfa7ec04"
+      "dh": "dfa7ec04",
+      "paramStorage": [
+        [
+          "nMouseXStack",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMouseYStack",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UI_GetConfigControlTextColor",
@@ -2717,7 +3355,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9df3aa51"
+      "dh": "9df3aa51",
+      "paramStorage": [
+        [
+          "nColumn",
+          "EDI:4"
+        ],
+        [
+          "nRow",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UIAction_ResetKeyBindingsToDefaults",
@@ -2853,7 +3501,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0726d6c5"
+      "dh": "0726d6c5",
+      "paramStorage": [
+        [
+          "bClose",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_ConfigControlsMenu",
@@ -2912,7 +3566,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "29c4759b"
+      "dh": "29c4759b",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_SkillTreeScroll",
@@ -2934,7 +3594,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "cbd440f9"
+      "dh": "cbd440f9",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_SkillTreeNavigateUp",
@@ -2957,7 +3623,13 @@
         "D2ConfigControlDescStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "593dfb55"
+      "dh": "593dfb55",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_SkillTreeNavigateDown",
@@ -2980,7 +3652,13 @@
         "D2ConfigControlDescStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "b9dc68d6"
+      "dh": "b9dc68d6",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_ConfigToggleLeft",
@@ -3001,7 +3679,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "f49c9652"
+      "dh": "f49c9652",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_ConfigToggleRight",
@@ -3022,7 +3706,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "d97dfc71"
+      "dh": "d97dfc71",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_ConfigAcceptBinding",
@@ -3044,7 +3734,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "cd85f9d7"
+      "dh": "cd85f9d7",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_ConfigCancel",
@@ -3068,7 +3764,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "808f6a14"
+      "dh": "808f6a14",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_ConfigKeyBindModeEnable",
@@ -3110,7 +3812,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b3ef5686"
+      "dh": "b3ef5686",
+      "paramStorage": [
+        [
+          "bRestoreDrawHandlers",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_ConfigKeyBindModeCancelAndRevert",
@@ -3157,7 +3865,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "97fd78e8"
+      "dh": "97fd78e8",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "EBX:4"
+        ],
+        [
+          "nMouseY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_ConfigMouseDown",
@@ -3180,7 +3898,13 @@
         "D2UIMouseMsgStrc",
         "uint32_t"
       ],
-      "dh": "b12d97d0"
+      "dh": "b12d97d0",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_ConfigConfirmEntry",
@@ -3202,7 +3926,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "fa40be4f"
+      "dh": "fa40be4f",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_ConfigScreenOpen",
@@ -3228,7 +3958,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "cc198b18"
+      "dh": "cc198b18",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_ConfigKeyBind",
@@ -3252,7 +3988,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "5fc2f7cb"
+      "dh": "5fc2f7cb",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_ConfigKeyBindAlternate",
@@ -3276,7 +4018,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "923b60bb"
+      "dh": "923b60bb",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_ConfigSetKeyBinding",
@@ -3300,7 +4048,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "ff27c652"
+      "dh": "ff27c652",
+      "paramStorage": [
+        [
+          "wKeyCode",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "INPUT_ConfigMouseClick",
@@ -3321,7 +4075,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "4fd75f2e"
+      "dh": "4fd75f2e",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_ConfigMouseButtonHandler",
@@ -3343,7 +4103,13 @@
         "D2UIMouseMsgStrc",
         "uint16_t"
       ],
-      "dh": "224beb82"
+      "dh": "224beb82",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_ConfigMouseWheelScroll",
@@ -3366,7 +4132,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "4291f33e"
+      "dh": "4291f33e",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_LoadLevelUpPanelImages",
@@ -3440,7 +4212,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e98eef97"
+      "dh": "e98eef97",
+      "paramStorage": [
+        [
+          "nPanelMode",
+          "ECX:4"
+        ],
+        [
+          "nMouseX",
+          "EDX:4"
+        ],
+        [
+          "nMouseY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_GetNewStatPointsCount",
@@ -3475,7 +4261,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4cee8db0"
+      "dh": "4cee8db0",
+      "paramStorage": [
+        [
+          "nPanelMode",
+          "ECX:4"
+        ],
+        [
+          "nMouseX",
+          "EDX:4"
+        ],
+        [
+          "nMouseY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_GetNewSkillPointsCount",
@@ -3521,7 +4321,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "408cf798"
+      "dh": "408cf798",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_SkillTreeButtonDown",
@@ -3550,7 +4356,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "7dfa3359"
+      "dh": "7dfa3359",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_StatScreenButtonUp",
@@ -3577,7 +4389,13 @@
         "D2UIMouseMsgStrc",
         "uint32_t"
       ],
-      "dh": "8374a520"
+      "dh": "8374a520",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_SkillTreeButtonUp",
@@ -3605,7 +4423,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "b7737e4a"
+      "dh": "b7737e4a",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_CanAllocateStatPoint",
@@ -3624,7 +4448,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "558b08ae"
+      "dh": "558b08ae",
+      "paramStorage": [
+        [
+          "nBorderType",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawLevelUpButtonLeft",
@@ -3708,7 +4538,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "71eacde4"
+      "dh": "71eacde4",
+      "paramStorage": [
+        [
+          "nCharClass",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_DrawLevelUpButtonRight",
@@ -3794,7 +4630,29 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "946acc3e"
+      "dh": "946acc3e",
+      "paramStorage": [
+        [
+          "nPositionXStart",
+          "ECX:4"
+        ],
+        [
+          "nPositionY",
+          "EDX:4"
+        ],
+        [
+          "nPositionXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wszMessage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UI_GetStatDescriptionStringId",
@@ -3820,7 +4678,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8cd8dd65"
+      "dh": "8cd8dd65",
+      "paramStorage": [
+        [
+          "nUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UI_StatWindow_III",
@@ -3854,7 +4718,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "6e77ea4e"
+      "dh": "6e77ea4e",
+      "paramStorage": [
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ],
+        [
+          "nValue",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CHAR_AddClassToHitFactor",
@@ -3873,7 +4751,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "57cb442e"
+      "dh": "57cb442e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UI_GetStatValueForDisplay",
@@ -3908,7 +4796,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2dab3452"
+      "dh": "2dab3452",
+      "paramStorage": [
+        [
+          "nUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_BuildStatWindowDescriptions",
@@ -3964,7 +4858,17 @@
         "WCHAR *",
         "int32_t"
       ],
-      "dh": "aa7ea387"
+      "dh": "aa7ea387",
+      "paramStorage": [
+        [
+          "pWszString",
+          "ECX:4"
+        ],
+        [
+          "pNextLineOut",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HighResLeftPanelClick",
@@ -3987,7 +4891,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "ecf144f3"
+      "dh": "ecf144f3",
+      "paramStorage": [
+        [
+          "pMsg",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_StatScreenMouseDown",
@@ -4014,7 +4924,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "114a2e59"
+      "dh": "114a2e59",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_StatScreenMouseUp",
@@ -4044,7 +4960,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c97e5a2b"
+      "dh": "c97e5a2b",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_ClearGoldStashMode",
@@ -4139,7 +5061,25 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "fc085ae7"
+      "dh": "fc085ae7",
+      "paramStorage": [
+        [
+          "bUpperEnabled",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bLowerEnabled",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMouseX",
+          "ECX:4"
+        ],
+        [
+          "nMouseY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UI_StatWindow_I",
@@ -4323,7 +5263,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a801cd93"
+      "dh": "a801cd93",
+      "paramStorage": [
+        [
+          "bToggleInventory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004b8a00",
@@ -4426,7 +5372,13 @@
         "D2UIMouseMsgStrc",
         "D2UnitStrc"
       ],
-      "dh": "5cddf188"
+      "dh": "5cddf188",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UI_CASH",
@@ -4548,7 +5500,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "3ea52945"
+      "dh": "3ea52945",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "EBX:4"
+        ],
+        [
+          "nMouseY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_GambleRepairClick",
@@ -4572,7 +5534,13 @@
         "D2UIMouseMsgStrc",
         "uint32_t"
       ],
-      "dh": "8e0698b3"
+      "dh": "8e0698b3",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UI_HandleHoradricCubePacket",
@@ -4603,7 +5571,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6d54039a"
+      "dh": "6d54039a",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_OpenHoradricCubeWithNpcInteraction",
@@ -4619,7 +5593,13 @@
         "UI_OpenHoradricCubeWithNpcInteraction",
         "UI_ShowHoradricCubeTransmuteDialog"
       ],
-      "dh": "82c6dc05"
+      "dh": "82c6dc05",
+      "paramStorage": [
+        [
+          "nNpcShopTab",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca05c",
@@ -4640,7 +5620,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "c6ae1936"
+      "dh": "c6ae1936",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_6caa10",

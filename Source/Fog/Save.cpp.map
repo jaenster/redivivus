@@ -20,7 +20,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "2b414aed"
+      "dh": "2b414aed",
+      "paramStorage": [
+        [
+          "pSaveFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SAVE_CalculateChecksum",
@@ -39,7 +49,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "7b374e0d"
+      "dh": "7b374e0d",
+      "paramStorage": [
+        [
+          "pbData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SAVEFILE_ReadEncodedInt14Bit",
@@ -57,7 +77,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "73260793"
+      "dh": "73260793",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SAVEFILE_WriteEncodedInt14Bit",
@@ -76,7 +102,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9c4315f8"
+      "dh": "9c4315f8",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SAVEFILE_ReadEncodedInt32Bit",
@@ -94,7 +130,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "00a989bf"
+      "dh": "00a989bf",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FOG_ParseStringValue",
@@ -112,7 +154,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "d49bef52"
+      "dh": "d49bef52",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNumber",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

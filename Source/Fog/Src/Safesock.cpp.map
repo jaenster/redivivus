@@ -19,7 +19,13 @@
       "usedTypes": [
         "SOCKET"
       ],
-      "dh": "153ef375"
+      "dh": "153ef375",
+      "paramStorage": [
+        [
+          "hSocket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "StartUp",
@@ -76,7 +82,33 @@
         "u_short",
         "uint32_t"
       ],
-      "dh": "37e829ff"
+      "dh": "37e829ff",
+      "paramStorage": [
+        [
+          "szHostName",
+          "ECX:4"
+        ],
+        [
+          "nPort",
+          "DX:2"
+        ],
+        [
+          "pThreadProc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pThreadParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szConnectionAlias",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Free",
@@ -98,7 +130,13 @@
         "D2NetDataStrc",
         "SOCKET"
       ],
-      "dh": "bb473a1d"
+      "dh": "bb473a1d",
+      "paramStorage": [
+        [
+          "pNetData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WSASocket2_Read",
@@ -118,7 +156,21 @@
         "D2NetDataStrc",
         "int32_t"
       ],
-      "dh": "ce5b3db8"
+      "dh": "ce5b3db8",
+      "paramStorage": [
+        [
+          "pNetData",
+          "ECX:4"
+        ],
+        [
+          "pBuffer",
+          "EDX:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WSASocket2_Send",
@@ -139,7 +191,21 @@
         "D2NetDataStrc",
         "int32_t"
       ],
-      "dh": "e6eb2498"
+      "dh": "e6eb2498",
+      "paramStorage": [
+        [
+          "pNetData",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WSASocket2_SendOrCloseOnTimeout",
@@ -160,7 +226,21 @@
         "D2NetDataStrc",
         "int32_t"
       ],
-      "dh": "ffa6c750"
+      "dh": "ffa6c750",
+      "paramStorage": [
+        [
+          "pNetData",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SAFESOCK_EnterCriticalSection",
@@ -178,7 +258,13 @@
       "usedTypes": [
         "D2NetDataStrc"
       ],
-      "dh": "bf4b760a"
+      "dh": "bf4b760a",
+      "paramStorage": [
+        [
+          "pNetData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LeaveCriticalSection_Safesock",
@@ -196,7 +282,13 @@
       "usedTypes": [
         "D2NetDataStrc"
       ],
-      "dh": "d7b1bb19"
+      "dh": "d7b1bb19",
+      "paramStorage": [
+        [
+          "pSafesockStrc",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Safesock_PollReadReady",
@@ -221,7 +313,13 @@
         "int32_t",
         "timeval"
       ],
-      "dh": "b441e1e8"
+      "dh": "b441e1e8",
+      "paramStorage": [
+        [
+          "pNetData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetPeerNameDoesReturn",
@@ -241,7 +339,21 @@
         "int32_t",
         "sockaddr"
       ],
-      "dh": "27ddbace"
+      "dh": "27ddbace",
+      "paramStorage": [
+        [
+          "pNetData",
+          "ECX:4"
+        ],
+        [
+          "pName",
+          "EDX:4"
+        ],
+        [
+          "pNameLen",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetSockNameDoesReturn",
@@ -261,7 +373,21 @@
         "sockaddr",
         "uint32_t"
       ],
-      "dh": "af799f8b"
+      "dh": "af799f8b",
+      "paramStorage": [
+        [
+          "pNetData",
+          "ECX:4"
+        ],
+        [
+          "pName",
+          "EDX:4"
+        ],
+        [
+          "pNameLen",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_GetLocalIp",
@@ -304,7 +430,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "c582ac83"
+      "dh": "c582ac83",
+      "paramStorage": [
+        [
+          "sAddr",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSocketStatusAndWsaResultToArguments",
@@ -322,7 +454,21 @@
       "usedTypes": [
         "D2NetDataStrc"
       ],
-      "dh": "bc40aea8"
+      "dh": "bc40aea8",
+      "paramStorage": [
+        [
+          "pNetData",
+          "ECX:4"
+        ],
+        [
+          "dwSocketStatus",
+          "EDX:4"
+        ],
+        [
+          "dwWSAResult",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "inet_nameToIp",
@@ -344,7 +490,13 @@
       "usedTypes": [
         "hostent"
       ],
-      "dh": "f07d53f2"
+      "dh": "f07d53f2",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SAFESOCK_SetSocketNonBlocking",
@@ -363,7 +515,17 @@
         "D2NetDataStrc",
         "u_long"
       ],
-      "dh": "0211436e"
+      "dh": "0211436e",
+      "paramStorage": [
+        [
+          "pNetData",
+          "ECX:4"
+        ],
+        [
+          "bNonBlocking",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SAFESOCK_EnableNonBlocking",
@@ -382,7 +544,13 @@
         "D2NetDataStrc",
         "u_long"
       ],
-      "dh": "217442ce"
+      "dh": "217442ce",
+      "paramStorage": [
+        [
+          "pNetData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SAFESOCK_DisableNonBlocking",
@@ -401,7 +569,13 @@
         "D2NetDataStrc",
         "u_long"
       ],
-      "dh": "a2b80a75"
+      "dh": "a2b80a75",
+      "paramStorage": [
+        [
+          "pNetData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SAFESOCK_CreateBlocking",
@@ -421,7 +595,29 @@
         "D2NetDataStrc",
         "LPTHREAD_START_ROUTINE"
       ],
-      "dh": "a6fb1a2d"
+      "dh": "a6fb1a2d",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "nPort",
+          "EDX:4"
+        ],
+        [
+          "pThreadProc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pThreadParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

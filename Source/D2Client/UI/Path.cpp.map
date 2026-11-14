@@ -76,7 +76,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "91c33869"
+      "dh": "91c33869",
+      "paramStorage": [
+        [
+          "eBorderType",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetMouseXOffset",
@@ -162,7 +168,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "a27a9a92"
+      "dh": "a27a9a92",
+      "paramStorage": [
+        [
+          "pX",
+          "ECX:4"
+        ],
+        [
+          "pY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_DrawRoomUnits",
@@ -190,7 +206,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3f2a0d12"
+      "dh": "3f2a0d12",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_DrawRoomBoundsRect",
@@ -210,7 +232,21 @@
         "RECT",
         "int32_t"
       ],
-      "dh": "0d6d51cb"
+      "dh": "0d6d51cb",
+      "paramStorage": [
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ],
+        [
+          "bColor",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "DEBUG_DrawUnitShadowBounds",
@@ -240,7 +276,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "7dc3b827"
+      "dh": "7dc3b827",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_DrawWarpUnitBounds",
@@ -313,7 +355,13 @@
         "RECT",
         "int32_t"
       ],
-      "dh": "4a87d62f"
+      "dh": "4a87d62f",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_DrawRoomWallTiles",
@@ -349,7 +397,13 @@
         "RECT",
         "uint32_t"
       ],
-      "dh": "2dda5415"
+      "dh": "2dda5415",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DEBUG_DrawLogicalRoomOverlay",

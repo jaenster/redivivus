@@ -22,7 +22,17 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "735987f3"
+      "dh": "735987f3",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ],
+        [
+          "nModulo",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RANDOM_RandomNumberSelector",
@@ -42,7 +52,17 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "f47c15ca"
+      "dh": "f47c15ca",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ],
+        [
+          "nModulo",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RNG_GetRandomInRange",
@@ -62,7 +82,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "30aeba31"
+      "dh": "30aeba31",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ],
+        [
+          "nMax",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetSeed_nSeedLow_Unref_0060dcf0",
@@ -81,7 +111,13 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "371705b5"
+      "dh": "371705b5",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SEED_GetTime32",
@@ -100,7 +136,13 @@
       "usedTypes": [
         "__time32_t"
       ],
-      "dh": "81d50949"
+      "dh": "81d50949",
+      "paramStorage": [
+        [
+          "pTime",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SEED_GenerateRandomSeed",
@@ -121,7 +163,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2c487c08"
+      "dh": "2c487c08",
+      "paramStorage": [
+        [
+          "nSeedOffset",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SEED_InitDefault",
@@ -139,7 +187,13 @@
       "usedTypes": [
         "D2SeedStrc"
       ],
-      "dh": "54804edd"
+      "dh": "54804edd",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "InitSeed_Param_666",
@@ -158,7 +212,17 @@
         "D2SeedStrc",
         "int32_t"
       ],
-      "dh": "eb2111b9"
+      "dh": "eb2111b9",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ],
+        [
+          "nInitSeed",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetSeed_nSeedLow",
@@ -177,7 +241,13 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "4ee7f939"
+      "dh": "4ee7f939",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetSeed",
@@ -196,7 +266,21 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "12937814"
+      "dh": "12937814",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ],
+        [
+          "nSeedLow",
+          "EDX:4"
+        ],
+        [
+          "nSeedHigh",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetSeed",
@@ -215,7 +299,21 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "3a35faf0"
+      "dh": "3a35faf0",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ],
+        [
+          "nSeedLow",
+          "EDX:4"
+        ],
+        [
+          "nSeedHigh",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

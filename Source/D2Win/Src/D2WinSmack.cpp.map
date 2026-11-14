@@ -21,7 +21,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "378fd39f"
+      "dh": "378fd39f",
+      "paramStorage": [
+        [
+          "pUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClass",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bHasModifier",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bIsExpansion",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINSMACK_LoadAndDecodeSmacker",
@@ -46,7 +64,21 @@
         "D2WinSmack",
         "int32_t"
       ],
-      "dh": "fe7594ec"
+      "dh": "fe7594ec",
+      "paramStorage": [
+        [
+          "pSmack",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFilePath",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINSMACK_CloseAndDeleteFile",
@@ -69,7 +101,13 @@
         "D2WinSmack",
         "int32_t"
       ],
-      "dh": "e277abfb"
+      "dh": "e277abfb",
+      "paramStorage": [
+        [
+          "pSmack",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINSMACK_SetPosition",
@@ -91,7 +129,21 @@
         "D2WinSmack",
         "int32_t"
       ],
-      "dh": "14270477"
+      "dh": "14270477",
+      "paramStorage": [
+        [
+          "pSmack",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FORMS_DestroyD2WinSmack",
@@ -115,7 +167,13 @@
         "D2WinSmack",
         "int32_t"
       ],
-      "dh": "0d142e9b"
+      "dh": "0d142e9b",
+      "paramStorage": [
+        [
+          "pSmack",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_EnableVSync_Unref_00506a80",
@@ -154,7 +212,13 @@
         "D2WinSmack",
         "int32_t"
       ],
-      "dh": "e364b480"
+      "dh": "e364b480",
+      "paramStorage": [
+        [
+          "pSmack",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Push",
@@ -178,7 +242,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e96eb7d2"
+      "dh": "e96eb7d2",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WinSmack",
@@ -202,7 +272,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b2e582d7"
+      "dh": "b2e582d7",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pfnOnPress",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

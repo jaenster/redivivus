@@ -22,7 +22,21 @@
         "D2CelDataHashTableStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "84597f9d"
+      "dh": "84597f9d",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ],
+        [
+          "pEntry",
+          "EDX:4"
+        ],
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CELDATAHASH_InitHashTable",
@@ -38,7 +52,13 @@
         "CELDATAHASH_InitHashTable",
         "memset"
       ],
-      "dh": "19c5730d"
+      "dh": "19c5730d",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_FreeAllCacheEntries",
@@ -64,7 +84,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "94e2c907"
+      "dh": "94e2c907",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pHashTable",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CELDATAHASH_FindByFilename",
@@ -86,7 +116,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3fbafc28"
+      "dh": "3fbafc28",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ],
+        [
+          "szFileName",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CELDATAHASH_AllocEntry",
@@ -109,7 +149,25 @@
         "D2PoolManagerStrc",
         "uint32_t"
       ],
-      "dh": "526b1f96"
+      "dh": "526b1f96",
+      "paramStorage": [
+        [
+          "pPoolManager",
+          "ECX:4"
+        ],
+        [
+          "pHashTable",
+          "EDX:4"
+        ],
+        [
+          "nRefCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFileName",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_RemoveCacheEntry",
@@ -134,7 +192,21 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "d72bff2f"
+      "dh": "d72bff2f",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pHashTable",
+          "EDX:4"
+        ],
+        [
+          "pEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IGNORELIST_Initialize_Unref_0060b130",

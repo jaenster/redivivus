@@ -22,7 +22,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "78171a1e"
+      "dh": "78171a1e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pNext",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetNextUnit",
@@ -44,7 +54,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ad99944e"
+      "dh": "ad99944e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetSeed",
@@ -71,7 +87,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "eb44d3dd"
+      "dh": "eb44d3dd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSeed",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetItemSeeds",
@@ -96,7 +122,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7b80d3e6"
+      "dh": "7b80d3e6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSeed",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_IncrementUnitGUIDCounter",
@@ -120,7 +156,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c68313e8"
+      "dh": "c68313e8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eUnitType",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_GetHashTableSlot",
@@ -141,7 +187,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "392649cb"
+      "dh": "392649cb",
+      "paramStorage": [
+        [
+          "eUnitType",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnitGUID",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "FindUnitFromTable",
@@ -167,7 +227,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e6b0fea1"
+      "dh": "e6b0fea1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eUnitType",
+          "EDX:4"
+        ],
+        [
+          "nUnitGUID",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetOwnerUnit",
@@ -187,7 +261,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e28db69a"
+      "dh": "e28db69a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetKillerUnit",
@@ -211,7 +295,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "addecd06"
+      "dh": "addecd06",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_InsertUnitIntoHashTable",
@@ -236,7 +330,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "ccda753a"
+      "dh": "ccda753a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_NotifyClientsUnitRemoved",
@@ -257,7 +361,17 @@
         "SGAMEDATA",
         "eD2UnitType"
       ],
-      "dh": "3696138b"
+      "dh": "3696138b",
+      "paramStorage": [
+        [
+          "pGame",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "IsRoomOccupied",
@@ -278,7 +392,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ec2e0698"
+      "dh": "ec2e0698",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SetClient",
@@ -303,7 +423,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a672bb6a"
+      "dh": "a672bb6a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SUNIT_GetClient",
@@ -325,7 +455,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7bd8a0ca"
+      "dh": "7bd8a0ca",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "szFile",
+          "EDX:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_SendUnitUpdateToClient",
@@ -346,7 +490,17 @@
         "D2ClientStrc",
         "D2UnitStrc"
       ],
-      "dh": "87b5d983"
+      "dh": "87b5d983",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_ResetUnitForReuse",
@@ -381,7 +535,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7d543b1c"
+      "dh": "7d543b1c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetupUpdateEvent_AttachEventSound",
@@ -405,7 +569,21 @@
         "eD2TimerTypeDWORD",
         "int32_t"
       ],
-      "dh": "b99dc110"
+      "dh": "b99dc110",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nUpdateType",
+          "EDX:4"
+        ],
+        [
+          "pUpdateUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "InitAnimFrame",
@@ -432,7 +610,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c17dbef9"
+      "dh": "c17dbef9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetTarget",
@@ -462,7 +646,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8e2d83b4"
+      "dh": "8e2d83b4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetTargetEx",
@@ -483,7 +677,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c4fe81ee"
+      "dh": "c4fe81ee",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FreeCombatAndChangeAnimMode",
@@ -504,7 +708,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "ed322d0c"
+      "dh": "ed322d0c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwMode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LinkPortalCoords",
@@ -533,7 +751,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "d2191710"
+      "dh": "d2191710",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_SetStaticPathRoomCoords",
@@ -555,7 +783,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "75b8e891"
+      "dh": "75b8e891",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_FindPortalOwnerUnit",
@@ -585,7 +831,17 @@
         "eAct",
         "int32_t"
       ],
-      "dh": "20847298"
+      "dh": "20847298",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "IteratePlayerOrMonsterUnits",
@@ -611,7 +867,25 @@
         "fpExecuteOnUnitFunction",
         "int32_t"
       ],
-      "dh": "349a19fb"
+      "dh": "349a19fb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eUnitType",
+          "EDX:4"
+        ],
+        [
+          "pCallbackArg",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "IterateAllUnits",
@@ -637,7 +911,21 @@
         "fpSUnitIterateCallback",
         "int32_t"
       ],
-      "dh": "94789710"
+      "dh": "94789710",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "fpFunction",
+          "EDX:4"
+        ],
+        [
+          "pArgs",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetTimerListIfUnitExists",
@@ -656,7 +944,17 @@
         "D2TimerStrc",
         "D2UnitStrc"
       ],
-      "dh": "935fd57e"
+      "dh": "935fd57e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTimer",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetTimerList",
@@ -675,7 +973,13 @@
         "D2TimerStrc",
         "D2UnitStrc"
       ],
-      "dh": "bf9f28c0"
+      "dh": "bf9f28c0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_ClearAnimTimerEvents",
@@ -695,7 +999,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2fe315b6"
+      "dh": "2fe315b6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_SetupAnimTimerEvents",
@@ -719,7 +1033,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "12199629"
+      "dh": "12199629",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_SetupAnimTimerEventsFromPercent",
@@ -744,7 +1068,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f848f343"
+      "dh": "f848f343",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nPercent",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_SetupAnimTimerEventsWithDelay",
@@ -769,7 +1107,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a4e4c506"
+      "dh": "a4e4c506",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nDelay",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_SetupAnimTimerEventsFromFrame",
@@ -794,7 +1146,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d0c64487"
+      "dh": "d0c64487",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nFrame",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_ClearAnimAndTriggerEndAnim",
@@ -815,7 +1181,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "5824a970"
+      "dh": "5824a970",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetTypeAndMode",
@@ -844,7 +1220,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ac33a39f"
+      "dh": "ac33a39f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pOutRecord",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetGamePointer",
@@ -867,7 +1253,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "e25468f3"
+      "dh": "e25468f3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetNecroPet",
@@ -890,7 +1282,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3d1af8cc"
+      "dh": "3d1af8cc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nNecroPetGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetNecroPet",
@@ -912,7 +1314,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ed755349"
+      "dh": "ed755349",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetSparklyChestFlag",
@@ -935,7 +1343,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "b62df0a6"
+      "dh": "b62df0a6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bIsSparklyChest",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "GetSparklyChestFlag",
@@ -958,7 +1376,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "4cef52b1"
+      "dh": "4cef52b1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetInteractInfo",
@@ -978,7 +1402,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "a92db8cc"
+      "dh": "a92db8cc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "peUnitType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnUnitGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetInteractInfo",
@@ -1002,7 +1440,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "87a38cc4"
+      "dh": "87a38cc4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eInteractUnitType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwInteractGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ClearInteractInfo",
@@ -1020,7 +1472,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "722f7631"
+      "dh": "722f7631",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CheckForModeZeroDeath",
@@ -1038,7 +1496,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "23c25209"
+      "dh": "23c25209",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_CheckIfCanAttackTarget",
@@ -1062,7 +1526,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "31e72cf9"
+      "dh": "31e72cf9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAttacker",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_CheckSkillTargetAlignment",
@@ -1083,7 +1561,25 @@
         "SGAMEDATA",
         "eD2Skills"
       ],
-      "dh": "bab34a79"
+      "dh": "bab34a79",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_OnAlignmentChanged",
@@ -1110,7 +1606,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "fe319ca6"
+      "dh": "fe319ca6",
+      "paramStorage": [
+        [
+          "bDecreaseSpawnCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStatEx",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nStatValue",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SetAlignment",
@@ -1144,7 +1658,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "02f85576"
+      "dh": "02f85576",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nAlignment",
+          "DL:1"
+        ],
+        [
+          "nOldAlignment",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetUninterruptableState",
@@ -1176,7 +1704,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5ce3fbf4"
+      "dh": "5ce3fbf4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bSet",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CancelMapReveal",
@@ -1200,7 +1738,29 @@
         "eD2TimerTypeDWORD",
         "int32_t"
       ],
-      "dh": "7eae009c"
+      "dh": "7eae009c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eTimerType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnused3",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_GetTargetRoom",
@@ -1229,7 +1789,17 @@
         "eAct",
         "eD2LevelId"
       ],
-      "dh": "2f0877d3"
+      "dh": "2f0877d3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetPartyId",
@@ -1249,7 +1819,13 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "49d65643"
+      "dh": "49d65643",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetDamageHitClass",
@@ -1268,7 +1844,17 @@
         "D2DamageStrc",
         "uint32_t"
       ],
-      "dh": "0e36612f"
+      "dh": "0e36612f",
+      "paramStorage": [
+        [
+          "pEvent",
+          "ECX:4"
+        ],
+        [
+          "dwHitClass",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_UpdateRoomClientVisibility",
@@ -1301,7 +1887,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "8072fad5"
+      "dh": "8072fad5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_PlaceUnitInRoom",
@@ -1346,7 +1946,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "758876da"
+      "dh": "758876da",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nInitMode",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_RelocateUnitToRoom",
@@ -1396,7 +2022,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "87b452e5"
+      "dh": "87b452e5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_ProcessUnitMovement",
@@ -1424,7 +2072,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7854f203"
+      "dh": "7854f203",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetInteractedNpc",
@@ -1444,7 +2102,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "cddc15df"
+      "dh": "cddc15df",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_CanUseSkillOnTarget",
@@ -1472,7 +2140,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a6d67c09"
+      "dh": "a6d67c09",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CanUnitTargetAlly",
@@ -1495,7 +2181,21 @@
         "SGAMEDATA",
         "int16_t"
       ],
-      "dh": "24a77fec"
+      "dh": "24a77fec",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOther",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNIT_RelocateUnit",
@@ -1543,7 +2243,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "309b6c47"
+      "dh": "309b6c47",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bFindFreeSpace",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nRelocMode",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "TakeStairs",
@@ -1584,7 +2314,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4417840c"
+      "dh": "4417840c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pObject",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CreateUnit",
@@ -1634,7 +2378,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a42f530e"
+      "dh": "a42f530e",
+      "paramStorage": [
+        [
+          "eUnitType",
+          "ECX:4"
+        ],
+        [
+          "nClassId",
+          "EDX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pGame",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bPlaceInRoom",
+          "Stack[0x14]:1"
+        ],
+        [
+          "nInitialMode",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pMonsterData",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "ClearInteractOnFreePlayer",
@@ -1658,7 +2440,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c82cc3f7"
+      "dh": "c82cc3f7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_UnlinkUnitFromRoom",
@@ -1685,7 +2477,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "22d164aa"
+      "dh": "22d164aa",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ],
+        [
+          "bDisallowNotify",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreeServerUnit",
@@ -1726,7 +2532,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "42c0c06a"
+      "dh": "42c0c06a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FreeWarpUnits",
@@ -1750,7 +2566,13 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "33401516"
+      "dh": "33401516",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SpawnUnitByType",
@@ -1782,7 +2604,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0dfa983e"
+      "dh": "0dfa983e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bInitItem",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwParam8",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SUNIT_SpawnPresetUnit",
@@ -1810,7 +2666,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f38c4aa3"
+      "dh": "f38c4aa3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pPresetUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUNIT_SpawnPresetUnitsForRoom",
@@ -1836,7 +2706,17 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "45dd770c"
+      "dh": "45dd770c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_FreeInventoryItems",
@@ -1880,7 +2760,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bddbf90b"
+      "dh": "bddbf90b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Clear_Unref_005de320",
@@ -1900,7 +2790,17 @@
         "D2UnitStrc",
         "eD2TimerTypeDWORD"
       ],
-      "dh": "96ee8e5b"
+      "dh": "96ee8e5b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nUpdateType",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gnSeedCounter",

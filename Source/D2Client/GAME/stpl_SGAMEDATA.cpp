@@ -168,7 +168,7 @@ template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -5
     return this;
 }
 
-template<> void TSHashObject<SGAMEDATA, HASHKEY_NONE>::Destructor() {
+template<> __attribute__((noinline)) inline void TSHashObject<SGAMEDATA, HASHKEY_NONE>::Destructor() {
     TSLink<::SGAMEDATA>** pPrevLink2;
     TSLink<::SGAMEDATA>* pTVar1 = &this->m_linktofull;
     TSLink<::SGAMEDATA>* pNextNode = pTVar1->m_prevlink;
@@ -218,7 +218,7 @@ void __thiscall UnlinkNode_Unreferenced(TSExplicitList<::SGAMEDATA, -572662307>*
     pNodeLink->m_next = 0;
 }
 
-template<> void TSExplicitList<SGAMEDATA, -572662307>::UnlinkAll() {
+template<> __attribute__((noinline)) inline void TSExplicitList<SGAMEDATA, -572662307>::UnlinkAll() {
     TSLink<::SGAMEDATA>** pPrevLink;
     intptr_t nHeadOffset;
     TSLink<::SGAMEDATA>* pNext;
@@ -236,7 +236,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::UnlinkAll() {
     }
 }
 
-template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::UnlinkAll() {
+template<> __attribute__((noinline)) inline void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::UnlinkAll() {
     TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>** pPrevLink;
     TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pNext;
     intptr_t nHeadOffset;
@@ -268,7 +268,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::ChangeLinkOffset(int32_t 
     this->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }
 
-template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalClear(int32_t bUnlinkOnly) {
+template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalClear(int32_t bUnlinkOnly) {
     TSExplicitList<::SGAMEDATA, -572662307>* pTVar1;
     ::SGAMEDATA* pGame;
     TSLink<::SGAMEDATA>* pNode;
@@ -568,7 +568,7 @@ template<> TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* __thiscall TSHashTabl
     return pThis;
 }
 
-template<> TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Constructor() {
+template<> __attribute__((noinline)) inline TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Constructor() {
     this->TSHashTable<::SGAMEDATA, HASHKEY_NONE>::Constructor();
     this->pVtable = (TSHashTable<::SGAMEDATA, HASHKEY_NONE>::Vtable*)(void*)TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>::vftable;
     TSExplicitList<::SGAMEDATA, -572662307>* pReuseList = &this->tReuseList;

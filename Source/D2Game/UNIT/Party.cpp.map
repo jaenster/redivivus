@@ -27,7 +27,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ddeab41a"
+      "dh": "ddeab41a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eUnitStat",
+          "EDX:4"
+        ],
+        [
+          "nGoldDifference",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AllocPartyControl",
@@ -51,7 +65,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "28382181"
+      "dh": "28382181",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FreePartyControl",
@@ -77,7 +97,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8ebb48a0"
+      "dh": "8ebb48a0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PARTY_UpdateNextPartyId",
@@ -98,7 +124,13 @@
         "SGAMEDATA",
         "uint16_t"
       ],
-      "dh": "18b1c396"
+      "dh": "18b1c396",
+      "paramStorage": [
+        [
+          "pGame",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PARTY_CreateParty",
@@ -126,7 +158,13 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "93274efb"
+      "dh": "93274efb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PARTY_FreePartyMembers",
@@ -155,7 +193,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "20c4166e"
+      "dh": "20c4166e",
+      "paramStorage": [
+        [
+          "pPartyControlSub",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PARTY_DisbandParty",
@@ -181,7 +229,17 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "cca53af6"
+      "dh": "cca53af6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nPartyId",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "FindPartyControlSub",
@@ -204,7 +262,17 @@
         "SGAMEDATA",
         "int16_t"
       ],
-      "dh": "907f377e"
+      "dh": "907f377e",
+      "paramStorage": [
+        [
+          "pGame",
+          "EAX:4"
+        ],
+        [
+          "nPartyId",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "CheckUnitGUIDInAllPartyControlSubs",
@@ -227,7 +295,17 @@
         "D2UnitPartyControlSubSub",
         "int32_t"
       ],
-      "dh": "78c39670"
+      "dh": "78c39670",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "ppPartyControlSub",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PARTY_AddUnitToParty",
@@ -258,7 +336,21 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "2316f732"
+      "dh": "2316f732",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nPartyId",
+          "DX:2"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CountPartyControlSubSize",
@@ -283,7 +375,17 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "1bc51bcf"
+      "dh": "1bc51bcf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nPartyId",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "CountAliveUnitsLevelSum",
@@ -304,7 +406,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "cc7d6107"
+      "dh": "cc7d6107",
+      "paramStorage": [
+        [
+          "nContext",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pLevelSum",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CountModeZero",
@@ -324,7 +440,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a93d111b"
+      "dh": "a93d111b",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ExecuteFunctionForEveryPartyMember",
@@ -352,7 +482,25 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "c92298b6"
+      "dh": "c92298b6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nPartyId",
+          "DX:2"
+        ],
+        [
+          "fpFunction",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bExecute",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FindUnitWithFilter",
@@ -382,7 +530,25 @@
         "pfnPartyMemberFilter",
         "uint16_t"
       ],
-      "dh": "1f22157f"
+      "dh": "1f22157f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "fpFilter",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDataForFunction",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GoldCalculations",
@@ -404,7 +570,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a9e0e655"
+      "dh": "a9e0e655",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pnGoldAccepted",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnGoldOverflow",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nGoldAmount",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "BroadcastAutomapAllyPartyInfo",
@@ -432,7 +616,17 @@
         "SGAMEDATA",
         "uint16_t"
       ],
-      "dh": "5953d54d"
+      "dh": "5953d54d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetPartyIdFromUnit",
@@ -460,7 +654,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "16592328"
+      "dh": "16592328",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PARTY_RemoveUnitFromParty",
@@ -494,7 +698,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "575c1638"
+      "dh": "575c1638",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetPartiedUnitsLevelSum",
@@ -518,7 +732,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "0bab7e13"
+      "dh": "0bab7e13",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CountDeadPartyMembers",
@@ -539,7 +763,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "e0b343a5"
+      "dh": "e0b343a5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PARTY_SplitGoldToPartyMembers",
@@ -579,7 +813,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "b079022a"
+      "dh": "b079022a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nAmount",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

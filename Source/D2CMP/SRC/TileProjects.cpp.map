@@ -41,7 +41,13 @@
         "D2TileProjectStrc",
         "uint8_t"
       ],
-      "dh": "71d6b9b7"
+      "dh": "71d6b9b7",
+      "paramStorage": [
+        [
+          "szFilename",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "TILEPROJECT_GetProjectId",
@@ -60,7 +66,13 @@
       "usedTypes": [
         "D2TileProjectStrc"
       ],
-      "dh": "a8c7840b"
+      "dh": "a8c7840b",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Alloc",
@@ -95,7 +107,17 @@
         "D2TileProjectStrc",
         "int32_t"
       ],
-      "dh": "cc18d3f5"
+      "dh": "cc18d3f5",
+      "paramStorage": [
+        [
+          "ppHash",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFilename",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

@@ -21,7 +21,13 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "87769332"
+      "dh": "87769332",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetPlayerRoster",
@@ -66,7 +72,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "738334a4"
+      "dh": "738334a4",
+      "paramStorage": [
+        [
+          "szPlayerName",
+          "ESI:4"
+        ],
+        [
+          "nRosterGUID",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_InitializeFields",
@@ -87,7 +103,49 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "b7536398"
+      "dh": "b7536398",
+      "paramStorage": [
+        [
+          "pRoster",
+          "EAX:4"
+        ],
+        [
+          "szPlayerName",
+          "EDI:4"
+        ],
+        [
+          "szClanTag",
+          "EBX:4"
+        ],
+        [
+          "nRosterGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCharType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnitLevel",
+          "Stack[0xc]:2"
+        ],
+        [
+          "nPartyId",
+          "Stack[0x10]:2"
+        ],
+        [
+          "bInParty",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nGuildFlags",
+          "Stack[0x18]:2"
+        ],
+        [
+          "szGuildTag",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "FreeRosterLinkList",
@@ -107,7 +165,13 @@
         "D2RosterLinkListStrc",
         "D2RosterStrc"
       ],
-      "dh": "6994d346"
+      "dh": "6994d346",
+      "paramStorage": [
+        [
+          "pRoster",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ClearBothRosterLists",
@@ -146,7 +210,13 @@
       "usedTypes": [
         "D2RosterStrc"
       ],
-      "dh": "f86b9388"
+      "dh": "f86b9388",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterName",
@@ -168,7 +238,13 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "c8d29785"
+      "dh": "c8d29785",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_SortByName",
@@ -187,7 +263,13 @@
         "D2RosterStrc",
         "uint8_t"
       ],
-      "dh": "e9c52a11"
+      "dh": "e9c52a11",
+      "paramStorage": [
+        [
+          "pRoster",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004796b0",
@@ -225,7 +307,13 @@
         "D2RosterStrc",
         "D2RosterStrc *"
       ],
-      "dh": "9b7abb5a"
+      "dh": "9b7abb5a",
+      "paramStorage": [
+        [
+          "pRoster",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00479740",
@@ -264,7 +352,13 @@
         "D2RosterPartyListStrc",
         "uint16_t"
       ],
-      "dh": "1ac51124"
+      "dh": "1ac51124",
+      "paramStorage": [
+        [
+          "nPartyId",
+          "SI:2"
+        ]
+      ]
     },
     {
       "name": "FreeRosterPartyList",
@@ -303,7 +397,13 @@
         "D2RosterStrc",
         "D2RosterStrc *"
       ],
-      "dh": "d88fe6d2"
+      "dh": "d88fe6d2",
+      "paramStorage": [
+        [
+          "pRosterPartyList",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_SortPartyListsByPartyId",
@@ -342,7 +442,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "df46976f"
+      "dh": "df46976f",
+      "paramStorage": [
+        [
+          "nPartyId",
+          "DX:2"
+        ],
+        [
+          "nRosterGUID",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_GroupPlayersIntoParties",
@@ -425,7 +535,13 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "a6d37979"
+      "dh": "a6d37979",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_RebuildPlayerParty",
@@ -476,7 +592,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "450ebac1"
+      "dh": "450ebac1",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ],
+        [
+          "nArenaScore",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00479b60",
@@ -491,7 +617,13 @@
       "calledFunctions": [
         "Unreferenced_00479b60"
       ],
-      "dh": "dba5f60e"
+      "dh": "dba5f60e",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00479b70",
@@ -506,7 +638,13 @@
       "calledFunctions": [
         "Unreferenced_00479b70"
       ],
-      "dh": "9e4f2d10"
+      "dh": "9e4f2d10",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_GetArenaScore",
@@ -525,7 +663,13 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "449f1687"
+      "dh": "449f1687",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterLevel",
@@ -544,7 +688,13 @@
         "D2RosterStrc",
         "uint32_t"
       ],
-      "dh": "07b8831d"
+      "dh": "07b8831d",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterCharType",
@@ -563,7 +713,13 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "2dce955d"
+      "dh": "2dce955d",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterByGUID",
@@ -583,7 +739,13 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "8c568439"
+      "dh": "8c568439",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterPartyId",
@@ -602,7 +764,13 @@
         "D2RosterStrc",
         "uint16_t"
       ],
-      "dh": "4f00179a"
+      "dh": "4f00179a",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetUnitPartyId",
@@ -623,7 +791,13 @@
         "D2UnitStrc",
         "int16_t"
       ],
-      "dh": "8964baf0"
+      "dh": "8964baf0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_GetLootFlag",
@@ -645,7 +819,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "dbb00964"
+      "dh": "dbb00964",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_GetListenFlag",
@@ -667,7 +847,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "57d24380"
+      "dh": "57d24380",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_GetMuteFlag",
@@ -689,7 +875,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "22dcafd4"
+      "dh": "22dcafd4",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_GetHostileFlag",
@@ -711,7 +903,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "c605dbcb"
+      "dh": "c605dbcb",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterInPartyBool",
@@ -729,7 +927,13 @@
       "usedTypes": [
         "D2RosterStrc"
       ],
-      "dh": "bdd52831"
+      "dh": "bdd52831",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_TogglePlayerFlag",
@@ -758,7 +962,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cc6cbcf2"
+      "dh": "cc6cbcf2",
+      "paramStorage": [
+        [
+          "pRoster",
+          "EBX:4"
+        ],
+        [
+          "nFlags",
+          "DI:2"
+        ]
+      ]
     },
     {
       "name": "ROSTER_ToggleLootAndSend",
@@ -782,7 +996,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "0d64faeb"
+      "dh": "0d64faeb",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_ToggleListenAndSend",
@@ -806,7 +1026,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "97e4ba3d"
+      "dh": "97e4ba3d",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_ToggleMuteAndSend",
@@ -832,7 +1058,13 @@
         "IgnoreList",
         "uint32_t"
       ],
-      "dh": "86214a61"
+      "dh": "86214a61",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClickParty_i",
@@ -857,7 +1089,13 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "192a526d"
+      "dh": "192a526d",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_LeaveParty",
@@ -930,7 +1168,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "cc84db6d"
+      "dh": "cc84db6d",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CheckRostersArePartied",
@@ -952,7 +1196,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "74cdbf64"
+      "dh": "74cdbf64",
+      "paramStorage": [
+        [
+          "nRoster1GUID",
+          "ECX:4"
+        ],
+        [
+          "nRoster2GUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterGUID",
@@ -971,7 +1225,13 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "b073a4ac"
+      "dh": "b073a4ac",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetRosterHpAndArea",
@@ -994,7 +1254,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "e38335e9"
+      "dh": "e38335e9",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ],
+        [
+          "nHpPercent",
+          "EDX:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "SetRosterPosition",
@@ -1014,7 +1288,21 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "e1d158c2"
+      "dh": "e1d158c2",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_CheckPlayerInSameParty",
@@ -1036,7 +1324,13 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "675149b2"
+      "dh": "675149b2",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterHP",
@@ -1056,7 +1350,13 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "ef431f34"
+      "dh": "ef431f34",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_CheckPlayerNotHostile",
@@ -1080,7 +1380,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d42dc7bf"
+      "dh": "d42dc7bf",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterPosition",
@@ -1098,7 +1404,21 @@
       "usedTypes": [
         "D2RosterStrc"
       ],
-      "dh": "2261eb2e"
+      "dh": "2261eb2e",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ],
+        [
+          "pX",
+          "EDX:4"
+        ],
+        [
+          "pY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterArea",
@@ -1117,7 +1437,13 @@
         "D2RosterStrc",
         "eD2LevelId"
       ],
-      "dh": "6f3275e4"
+      "dh": "6f3275e4",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterNameByGUID",
@@ -1137,7 +1463,13 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "dcfb7028"
+      "dh": "dcfb7028",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetPlayerRosterName",
@@ -1163,7 +1495,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c329b9b3"
+      "dh": "c329b9b3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetRosterPortalGuidAndDestArea",
@@ -1183,7 +1521,21 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "13c9f52b"
+      "dh": "13c9f52b",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ],
+        [
+          "nPortalGUID1",
+          "EDX:4"
+        ],
+        [
+          "nPortalGUID2",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetPortalOwnerName",
@@ -1202,7 +1554,13 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "61ce9588"
+      "dh": "61ce9588",
+      "paramStorage": [
+        [
+          "nPortalGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CheckIfUnitHasPartiedRosters",
@@ -1223,7 +1581,13 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "b6de825f"
+      "dh": "b6de825f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetPlayerList",
@@ -1244,7 +1608,13 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "b88d71de"
+      "dh": "b88d71de",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetRosterPartyId",
@@ -1267,7 +1637,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "c863e55e"
+      "dh": "c863e55e",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ],
+        [
+          "nPartyId",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "SetRosterInParty",
@@ -1288,7 +1668,17 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "580a10a0"
+      "dh": "580a10a0",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ],
+        [
+          "bInParty",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "ROSTER_SetPlayerHostileFlag",
@@ -1315,7 +1705,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "7046214b"
+      "dh": "7046214b",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "nRosterGUID",
+          "EDX:4"
+        ],
+        [
+          "nFlag",
+          "Stack[0x4]:2"
+        ]
+      ]
     },
     {
       "name": "AllocRosterOther",
@@ -1341,7 +1745,17 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "42a4565b"
+      "dh": "42a4565b",
+      "paramStorage": [
+        [
+          "nOwnerGUID",
+          "ECX:4"
+        ],
+        [
+          "nRosterGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FreeAllRosterPlayer",
@@ -1363,7 +1777,17 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "43b571ae"
+      "dh": "43b571ae",
+      "paramStorage": [
+        [
+          "nOwnerGUID",
+          "ECX:4"
+        ],
+        [
+          "nRosterGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_CheckPlayerCanLoot",
@@ -1385,7 +1809,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4d592917"
+      "dh": "4d592917",
+      "paramStorage": [
+        [
+          "nLooterGUID",
+          "ECX:4"
+        ],
+        [
+          "nOwnerGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_CheckPlayersInSameParty",
@@ -1405,7 +1839,17 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "c560ac21"
+      "dh": "c560ac21",
+      "paramStorage": [
+        [
+          "nRoster1GUID",
+          "ECX:4"
+        ],
+        [
+          "nRoster2GUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_CheckAnyPlayerHostileToMe",
@@ -1448,7 +1892,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "e8a4d430"
+      "dh": "e8a4d430",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_HasOutgoingHostile",
@@ -1470,7 +1920,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "6d10a7bc"
+      "dh": "6d10a7bc",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_HasIncomingLoot",
@@ -1492,7 +1948,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "546efc2e"
+      "dh": "546efc2e",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_HasOutgoingLoot",
@@ -1514,7 +1976,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "6f973641"
+      "dh": "6f973641",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RosterIsFemale",
@@ -1532,7 +2000,13 @@
       "usedTypes": [
         "D2RosterStrc"
       ],
-      "dh": "5c53b2dd"
+      "dh": "5c53b2dd",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetRosterPlayerHpPercent",
@@ -1553,7 +2027,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "0cb5e667"
+      "dh": "0cb5e667",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ],
+        [
+          "nHpPercent",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "GetRosterPlayerHpPercent",
@@ -1575,7 +2059,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c6b81e0d"
+      "dh": "c6b81e0d",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_AllocOrUpdatePlayer",
@@ -1605,7 +2095,49 @@
         "D2RosterStrc",
         "int32_t"
       ],
-      "dh": "691f4a81"
+      "dh": "691f4a81",
+      "paramStorage": [
+        [
+          "nPlayerGUID",
+          "ECX:4"
+        ],
+        [
+          "nCharType",
+          "EDX:4"
+        ],
+        [
+          "szPlayerName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnitLevel",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nPartyId",
+          "Stack[0xc]:2"
+        ],
+        [
+          "nUnk1",
+          "Stack[0x10]:2"
+        ],
+        [
+          "bInParty",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nGuildFlags",
+          "Stack[0x18]:2"
+        ],
+        [
+          "szGuildTag",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "szGuildName",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_UpdatePlayerPartyInfo",
@@ -1630,7 +2162,29 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "dc2835a0"
+      "dh": "dc2835a0",
+      "paramStorage": [
+        [
+          "nUnitGuid",
+          "ECX:4"
+        ],
+        [
+          "nPartyId",
+          "DX:2"
+        ],
+        [
+          "nUnitLevel",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nRelationship",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bInParty",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PlayerLeft",
@@ -1658,7 +2212,13 @@
         "D2RosterStrc *",
         "int32_t"
       ],
-      "dh": "7644fc13"
+      "dh": "7644fc13",
+      "paramStorage": [
+        [
+          "nPlayerUid",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

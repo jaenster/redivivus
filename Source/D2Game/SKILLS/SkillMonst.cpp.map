@@ -32,7 +32,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "41f89865"
+      "dh": "41f89865",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_083_MonsterMeleeAttack",
@@ -57,7 +75,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "4115da77"
+      "dh": "4115da77",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvStFn43_MaggotEgg",
@@ -79,7 +115,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "ac794fd2"
+      "dh": "ac794fd2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_084_SpawnMinionsAndSuicide",
@@ -109,7 +163,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "13516156"
+      "dh": "13516156",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_085_FireUpgradedMissile",
@@ -133,7 +205,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "0e4d1d2f"
+      "dh": "0e4d1d2f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvStFn44_MaggotUp",
@@ -163,7 +253,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "87f3d470"
+      "dh": "87f3d470",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvStFn45_MaggotDown",
@@ -192,7 +300,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "532e4446"
+      "dh": "532e4446",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_086_SelfHeal",
@@ -220,7 +346,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "afb43e7b"
+      "dh": "afb43e7b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_087_SpawnBehindTarget",
@@ -253,7 +397,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d9e1bb8e"
+      "dh": "d9e1bb8e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvStFn46_AndrialSpray",
@@ -282,7 +444,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "8d87f425"
+      "dh": "8d87f425",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_088_FireMissileFromBodyPart",
@@ -320,7 +500,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a92c0c32"
+      "dh": "a92c0c32",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvStFn47_Jump",
@@ -369,7 +567,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "abe0487c"
+      "dh": "abe0487c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_089_ChargeLeapAttack",
@@ -427,7 +643,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "28cd96dd"
+      "dh": "28cd96dd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvStFn48_SwarmMove",
@@ -457,7 +691,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "372c41ec"
+      "dh": "372c41ec",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_090_SetAnimFrameFromCalc",
@@ -486,7 +738,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3b70b66f"
+      "dh": "3b70b66f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvStFn49_NestSpawn",
@@ -521,7 +791,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "c93fc8e9"
+      "dh": "c93fc8e9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_091_SpawnMinionAtCoords",
@@ -559,7 +847,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1e7ccabf"
+      "dh": "1e7ccabf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvStFn50_QuickStrike",
@@ -584,7 +890,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "b8540123"
+      "dh": "b8540123",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvDoFunc092_MeleeHitThenMissile",
@@ -610,7 +934,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "0b110e9e"
+      "dh": "0b110e9e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_093_FireLeadingMissile",
@@ -638,7 +980,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "81afe215"
+      "dh": "81afe215",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvStFn51_Submerge",
@@ -659,7 +1019,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "e3d0ece0"
+      "dh": "e3d0ece0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_094_ResetAnimFrame",
@@ -681,7 +1059,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "a7ba879e"
+      "dh": "a7ba879e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvStFn52_Emerge",
@@ -702,7 +1098,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "94c2508b"
+      "dh": "94c2508b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvStFn53_MonInferno",
@@ -730,7 +1144,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "ba68e6d5"
+      "dh": "ba68e6d5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASSN_GetTrapHealthBonus",
@@ -756,7 +1188,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "ba5a8547"
+      "dh": "ba5a8547",
+      "paramStorage": [
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pMissileUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_TriggerModeChange",
@@ -778,7 +1228,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "dcb9749c"
+      "dh": "dcb9749c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLASSN_GetShadowHealthBonus",
@@ -799,7 +1259,17 @@
         "D2SkillsTxt",
         "D2UnitStrc"
       ],
-      "dh": "c832dffa"
+      "dh": "c832dffa",
+      "paramStorage": [
+        [
+          "pSkillsTxt",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_095_SpawnTrapMissile",
@@ -838,7 +1308,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "62a5a2bd"
+      "dh": "62a5a2bd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_152_SpawnTrapMissileVariant",
@@ -877,7 +1365,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "ea3342c4"
+      "dh": "ea3342c4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_096_HealTarget",
@@ -907,7 +1413,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7bde366a"
+      "dh": "7bde366a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_ResurrectUnit",
@@ -942,7 +1466,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "a4790a3c"
+      "dh": "a4790a3c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_097_ResurrectDeadMonster",
@@ -984,7 +1518,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "a66f7bad"
+      "dh": "a66f7bad",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_098_TeleportToStoredPosition",
@@ -1014,7 +1566,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2bab2dd2"
+      "dh": "2bab2dd2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_099_FireMissileRing8Dir",
@@ -1044,7 +1614,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "64b2476b"
+      "dh": "64b2476b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_100_FreezingMeleeAttack",
@@ -1075,7 +1663,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "cdd1eaf3"
+      "dh": "cdd1eaf3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_101_FireDirectionalMissile",
@@ -1109,7 +1715,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3d427a97"
+      "dh": "3d427a97",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_RandomizeMissilePath",
@@ -1140,7 +1764,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "a0974a19"
+      "dh": "a0974a19",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMissileIdx",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_102_FireRandomMultiMissile",
@@ -1169,7 +1803,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "80bde6d7"
+      "dh": "80bde6d7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvStFn54_DiabRun",
@@ -1201,7 +1853,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "30b264b7"
+      "dh": "30b264b7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_103_ChargeAndMeleeStrike",
@@ -1249,7 +1919,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3db388e7"
+      "dh": "3db388e7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_104_SpawnPredefinedAtTarget",
@@ -1281,7 +1969,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fdb01c94"
+      "dh": "fdb01c94",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_105_FireParallelMissileVolley",
@@ -1312,7 +2018,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5a6d348c"
+      "dh": "5a6d348c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_106_FireMissileRingOnTarget",
@@ -1337,7 +2061,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "9255a231"
+      "dh": "9255a231",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvStFn55_Mosquito",
@@ -1371,7 +2113,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ced79bbc"
+      "dh": "ced79bbc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_107_LeechMeleeMultiHit",
@@ -1419,7 +2179,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "44a70d06"
+      "dh": "44a70d06",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_108_DevourMinionForHP",
@@ -1454,7 +2232,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "262d041a"
+      "dh": "262d041a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLPAL_GetHolyBoltTargetCount",
@@ -1479,7 +2275,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8f7f25c7"
+      "dh": "8f7f25c7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SingleTargetSkillAttack",
@@ -1514,7 +2316,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fa550bea"
+      "dh": "fa550bea",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SrvStFn64_MonFrenzy",
@@ -1536,7 +2360,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "b449d6e4"
+      "dh": "b449d6e4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_109_MonsterFrenzyAttack",
@@ -1567,7 +2409,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6a8beb27"
+      "dh": "6a8beb27",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_148_FireMissileBodyPart10",
@@ -1596,7 +2456,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "752c0814"
+      "dh": "752c0814",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_149_FireMissileBodyPart11",
@@ -1625,7 +2503,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "46764240"
+      "dh": "46764240",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_110_FireArrowModMissile",
@@ -1654,7 +2550,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "054f32c2"
+      "dh": "054f32c2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_112_RandomCurse",
@@ -1683,7 +2597,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "59c33c6a"
+      "dh": "59c33c6a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLMONST_SpiderLayTrail",
@@ -1722,7 +2654,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b39da4e5"
+      "dh": "b39da4e5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_111_ApplyFetishAura",
@@ -1752,7 +2694,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d2e6833b"
+      "dh": "d2e6833b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

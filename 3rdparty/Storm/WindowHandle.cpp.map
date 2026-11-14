@@ -53,7 +53,17 @@
         "pfnStormMsgIdleCallback",
         "tagMSG"
       ],
-      "dh": "682366c0"
+      "dh": "682366c0",
+      "paramStorage": [
+        [
+          "pfnIdleCallback",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "WND_GetActiveWindow",
@@ -84,7 +94,13 @@
         "SMsgPopRegisterState",
         "SEvtPopState"
       ],
-      "dh": "1dfc6d8e"
+      "dh": "1dfc6d8e",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SMsgPushRegisterState",
@@ -100,7 +116,13 @@
         "SMsgPushRegisterState",
         "SEvtPushState"
       ],
-      "dh": "5e3e76cb"
+      "dh": "5e3e76cb",
+      "paramStorage": [
+        [
+          "nSubId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WND_SetActiveWindow",
@@ -115,7 +137,13 @@
       "calledFunctions": [
         "WND_SetActiveWindow"
       ],
-      "dh": "1e84f3d7"
+      "dh": "1e84f3d7",
+      "paramStorage": [
+        [
+          "pWindow",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004203c0",
@@ -133,7 +161,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "0e6aa392"
+      "dh": "0e6aa392",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WND_ResolveListOffset",
@@ -153,7 +187,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "3d3da26f"
+      "dh": "3d3da26f",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ],
+        [
+          "pBase",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00420470",
@@ -171,7 +215,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "93e373d5"
+      "dh": "93e373d5",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004204f0",
@@ -189,7 +239,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "8d4828da"
+      "dh": "8d4828da",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WND_GetNodeOrDefault",
@@ -207,7 +263,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "221b9f0c"
+      "dh": "221b9f0c",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WND_InsertListNode",
@@ -229,7 +295,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "79f5674b"
+      "dh": "79f5674b",
+      "paramStorage": [
+        [
+          "ppList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppAnchor",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "WND_GetNodeMaskedOffset",
@@ -249,7 +333,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "7e5d8740"
+      "dh": "7e5d8740",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WND_UnlinkListNode",
@@ -270,7 +364,17 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "e324a889"
+      "dh": "e324a889",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004206a0",
@@ -288,7 +392,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "a6062aaf"
+      "dh": "a6062aaf",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WND_GetNodeData",
@@ -308,7 +418,17 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "5566daa1"
+      "dh": "5566daa1",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkAll",
@@ -351,7 +471,13 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "ca880893"
+      "dh": "ca880893",
+      "paramStorage": [
+        [
+          "pWindow",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004207d0",
@@ -369,7 +495,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "a97c18f7"
+      "dh": "a97c18f7",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WND_AllocRecord",
@@ -391,7 +523,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "925326f2"
+      "dh": "925326f2",
+      "paramStorage": [
+        [
+          "ppList",
+          "ECX:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "WND_UnlinkAndFreeRecord",
@@ -411,7 +561,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8acf9654"
+      "dh": "8acf9654",
+      "paramStorage": [
+        [
+          "pRecord",
+          "ECX:4"
+        ],
+        [
+          "byFreeFlags",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "SMSG_AddWindow",
@@ -433,7 +593,13 @@
         "StormWndRecStrc",
         "uint32_t"
       ],
-      "dh": "4a4a854a"
+      "dh": "4a4a854a",
+      "paramStorage": [
+        [
+          "hWnd",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WND_RemoveAndFreeRecord",
@@ -456,7 +622,17 @@
         "StormWndRecStrc",
         "uint32_t"
       ],
-      "dh": "5239f0c7"
+      "dh": "5239f0c7",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ],
+        [
+          "pRecord",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SMSG_FindWindow",
@@ -474,7 +650,13 @@
       "usedTypes": [
         "StormWndRecStrc"
       ],
-      "dh": "5b2be9b1"
+      "dh": "5b2be9b1",
+      "paramStorage": [
+        [
+          "nHandle",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SMSG_DeleteWindow",
@@ -495,7 +677,13 @@
       "usedTypes": [
         "StormWndRecStrc"
       ],
-      "dh": "c6fc5018"
+      "dh": "c6fc5018",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SMSG_InternalRegister",
@@ -519,7 +707,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "743e345c"
+      "dh": "743e345c",
+      "paramStorage": [
+        [
+          "hWnd",
+          "EDI:4"
+        ],
+        [
+          "pCallback",
+          "ESI:4"
+        ],
+        [
+          "dwEventTag",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwContext",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SMSG_InternalUnregister",
@@ -541,7 +747,25 @@
         "StormWndRecStrc",
         "uint32_t"
       ],
-      "dh": "7d976d50"
+      "dh": "7d976d50",
+      "paramStorage": [
+        [
+          "nEventId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "hWnd",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00420ae0",
@@ -578,7 +802,33 @@
         "D2UIMouseMsgStrc",
         "uint32_t"
       ],
-      "dh": "957ce643"
+      "dh": "957ce643",
+      "paramStorage": [
+        [
+          "handle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "uMsg",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nWParam",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwLParam",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pbHandled",
+          "Stack[0x14]:4"
+        ],
+        [
+          "plResult",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SMsgRegisterCommand",
@@ -598,7 +848,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0d52227e"
+      "dh": "0d52227e",
+      "paramStorage": [
+        [
+          "hWnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwContext",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCallback",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMsgRegisterKeyDown",
@@ -618,7 +882,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0d902521"
+      "dh": "0d902521",
+      "paramStorage": [
+        [
+          "hWnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwContext",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCallback",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMsgRegisterKeyUp",
@@ -638,7 +916,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "79576fc1"
+      "dh": "79576fc1",
+      "paramStorage": [
+        [
+          "hWnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwContext",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCallback",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMsgRegisterMessage",
@@ -658,7 +950,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "95e48869"
+      "dh": "95e48869",
+      "paramStorage": [
+        [
+          "hWnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwContext",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCallback",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMsgUnregisterCommand",
@@ -677,7 +983,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "2a81781b"
+      "dh": "2a81781b",
+      "paramStorage": [
+        [
+          "hWnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMsgUnregisterKeyDown",
@@ -696,7 +1016,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "4f20ecfe"
+      "dh": "4f20ecfe",
+      "paramStorage": [
+        [
+          "hWnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMsgUnregisterKeyUp",
@@ -715,7 +1049,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "344f720e"
+      "dh": "344f720e",
+      "paramStorage": [
+        [
+          "hWnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMsgUnregisterMessage",
@@ -734,7 +1082,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "3c531806"
+      "dh": "3c531806",
+      "paramStorage": [
+        [
+          "hWnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GenericWndProc",
@@ -753,7 +1115,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "11d0d070"
+      "dh": "11d0d070",
+      "paramStorage": [
+        [
+          "hWnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMsg",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nWParam",
+          "Stack[0xc]:4"
+        ],
+        [
+          "lParam",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "WND_GetWndProc",
@@ -772,7 +1152,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ea714f86"
+      "dh": "ea714f86",
+      "paramStorage": [
+        [
+          "nResourceId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00420d80",
@@ -790,7 +1176,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "ed662ec3"
+      "dh": "ed662ec3",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00420da0",
@@ -808,7 +1200,13 @@
       "usedTypes": [
         "BigBuffer"
       ],
-      "dh": "24997a2a"
+      "dh": "24997a2a",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WND_ByteBuffer_HasRoom",
@@ -828,7 +1226,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "38b62fc4"
+      "dh": "38b62fc4",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nAddBytes",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WND_EntryArray_AllocNext",
@@ -847,7 +1255,17 @@
         "BigBuffer",
         "BigStack"
       ],
-      "dh": "17bbd4f9"
+      "dh": "17bbd4f9",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pnCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WND_EntryArray_FreeEntries",
@@ -866,7 +1284,17 @@
         "BigStack",
         "int32_t"
       ],
-      "dh": "57ac8620"
+      "dh": "57ac8620",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nFreeCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WND_EntryArray_AllocOrReuse",
@@ -886,7 +1314,21 @@
         "BigStack",
         "int32_t"
       ],
-      "dh": "8270797b"
+      "dh": "8270797b",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pReuseEntry",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAllocNew",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gWndTrackingList",

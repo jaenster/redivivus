@@ -18,7 +18,13 @@
         "MISC_OperatorDeleteShim",
         "SMemFree"
       ],
-      "dh": "89f80f78"
+      "dh": "89f80f78",
+      "paramStorage": [
+        [
+          "p",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_FatalError",
@@ -38,7 +44,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "053e7724"
+      "dh": "053e7724",
+      "paramStorage": [
+        [
+          "pnName",
+          "ECX:4"
+        ],
+        [
+          "nErrorCode",
+          "EDX:4"
+        ],
+        [
+          "nSourceLine",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_GetHandleByCaller",
@@ -57,7 +77,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "41652773"
+      "dh": "41652773",
+      "paramStorage": [
+        [
+          "pnName",
+          "ESI:4"
+        ],
+        [
+          "nNameLen",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004116e0",
@@ -75,7 +105,13 @@
       "usedTypes": [
         "D2FogHeapBlockHdrStrc"
       ],
-      "dh": "3571fcf5"
+      "dh": "3571fcf5",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SMemExtractBucketIndex",
@@ -93,7 +129,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "f2f11b07"
+      "dh": "f2f11b07",
+      "paramStorage": [
+        [
+          "nHeapId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_LockHeapByBlockPtr",
@@ -113,7 +155,17 @@
         "D2FogHeapDescStrc",
         "uint32_t"
       ],
-      "dh": "640fd41b"
+      "dh": "640fd41b",
+      "paramStorage": [
+        [
+          "pnOutBucket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBlockHdr",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SMemFindHeapByHash",
@@ -133,7 +185,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "de554715"
+      "dh": "de554715",
+      "paramStorage": [
+        [
+          "pnOutBucket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nHash",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_Warning",
@@ -154,7 +220,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b8568ea8"
+      "dh": "b8568ea8",
+      "paramStorage": [
+        [
+          "pnName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSourceLine",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwErrorCode",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_UnlockHeap",
@@ -169,7 +249,13 @@
       "calledFunctions": [
         "SMEM_UnlockHeap"
       ],
-      "dh": "d5589b8b"
+      "dh": "d5589b8b",
+      "paramStorage": [
+        [
+          "pnBucketIndex",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_AllocateHeap",
@@ -192,7 +278,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "91bba2c1"
+      "dh": "91bba2c1",
+      "paramStorage": [
+        [
+          "nSourceLine",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwHash",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBucketIndex",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwPageAlignMask",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nCommitSize",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nReserveSize",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pnName",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_CheckValidBlock",
@@ -213,7 +329,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9d6cd0d9"
+      "dh": "9d6cd0d9",
+      "paramStorage": [
+        [
+          "nSourceLine",
+          "ECX:4"
+        ],
+        [
+          "bReportError",
+          "EDX:4"
+        ],
+        [
+          "pnName",
+          "EDI:4"
+        ],
+        [
+          "pBlock",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SMemCalculateAllocationLayout",
@@ -231,7 +365,29 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "92f2beb0"
+      "dh": "92f2beb0",
+      "paramStorage": [
+        [
+          "nSize",
+          "ECX:4"
+        ],
+        [
+          "pnOutProtected",
+          "EDX:4"
+        ],
+        [
+          "pnOutTotalSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnOutPadding",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnOutDebug",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_ComputePageSize",
@@ -271,7 +427,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "d22db92e"
+      "dh": "d22db92e",
+      "paramStorage": [
+        [
+          "byFlags",
+          "CL:1"
+        ],
+        [
+          "nExtraBytes",
+          "EDX:4"
+        ],
+        [
+          "nHeap",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBlockSize",
+          "ESI:4"
+        ],
+        [
+          "pwHeader",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_FreeHeap",
@@ -286,7 +464,13 @@
       "calledFunctions": [
         "SMEM_FreeHeap"
       ],
-      "dh": "46756a32"
+      "dh": "46756a32",
+      "paramStorage": [
+        [
+          "ppListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_FreeHeapBlock",
@@ -307,7 +491,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "5541a56d"
+      "dh": "5541a56d",
+      "paramStorage": [
+        [
+          "pwBlock",
+          "EDI:4"
+        ],
+        [
+          "nHeap",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SMemGetBlockDataAndSize",
@@ -326,7 +520,25 @@
         "D2FogHeapBlockHdrStrc",
         "uint8_t"
       ],
-      "dh": "fc799b6f"
+      "dh": "fc799b6f",
+      "paramStorage": [
+        [
+          "pnOutHeaderSize",
+          "ECX:4"
+        ],
+        [
+          "nBlockAddr",
+          "EDX:4"
+        ],
+        [
+          "pnOutDataSize",
+          "ESI:4"
+        ],
+        [
+          "pwBlockHdr",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SMemCommitMorePages",
@@ -346,7 +558,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e984c53c"
+      "dh": "e984c53c",
+      "paramStorage": [
+        [
+          "nTargetOffset",
+          "EAX:4"
+        ],
+        [
+          "pHeap",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_SatisfyFreeRequest",
@@ -367,7 +589,21 @@
         "D2FogHeapBlockHdrStrc",
         "D2FogHeapDescStrc"
       ],
-      "dh": "3c7fa082"
+      "dh": "3c7fa082",
+      "paramStorage": [
+        [
+          "pObject",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pHeap",
+          "ESI:4"
+        ],
+        [
+          "pBlock",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SMemCoalesceFreeBlocks",
@@ -387,7 +623,25 @@
         "D2FogHeapDescStrc",
         "uint32_t"
       ],
-      "dh": "33b78281"
+      "dh": "33b78281",
+      "paramStorage": [
+        [
+          "pnFreeTotal",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBlock",
+          "ECX:4"
+        ],
+        [
+          "pnUsedSize",
+          "EDI:4"
+        ],
+        [
+          "pHeap",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SMemInitialize",
@@ -425,7 +679,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "248f5470"
+      "dh": "248f5470",
+      "paramStorage": [
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byMask",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00411da0",
@@ -462,7 +726,13 @@
         "uint32_t",
         "void *"
       ],
-      "dh": "3c033208"
+      "dh": "3c033208",
+      "paramStorage": [
+        [
+          "pHeap",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_DestroyHeap",
@@ -487,7 +757,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d836839e"
+      "dh": "d836839e",
+      "paramStorage": [
+        [
+          "ppHeap",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_FreeEmptyHeaps",
@@ -533,7 +809,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b30fde5e"
+      "dh": "b30fde5e",
+      "paramStorage": [
+        [
+          "pBlock",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOldSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNewSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pHeap",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SMemShrinkBlock",
@@ -558,7 +852,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6797c48e"
+      "dh": "6797c48e",
+      "paramStorage": [
+        [
+          "pBlock",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOldSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNewSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pHeap",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SMemDestroy",
@@ -609,7 +921,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "67060657"
+      "dh": "67060657",
+      "paramStorage": [
+        [
+          "nHeapId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPrevBlock",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppOutBlock",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnInfo",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SMemFindNextHeap",
@@ -635,7 +965,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c73a03d8"
+      "dh": "c73a03d8",
+      "paramStorage": [
+        [
+          "nCurHeapId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnNextHeapId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pHeapDetails",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMemFree",
@@ -659,7 +1003,25 @@
         "D2FogHeapDescStrc",
         "int32_t"
       ],
-      "dh": "c7ac3994"
+      "dh": "c7ac3994",
+      "paramStorage": [
+        [
+          "pObject",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SMemGetHeapByCaller",
@@ -680,7 +1042,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "a12ca5e6"
+      "dh": "a12ca5e6",
+      "paramStorage": [
+        [
+          "pszName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SMemGetHeapByPtr",
@@ -702,7 +1074,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5a9601b4"
+      "dh": "5a9601b4",
+      "paramStorage": [
+        [
+          "pObject",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SMemGetSize",
@@ -726,7 +1104,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0baaab38"
+      "dh": "0baaab38",
+      "paramStorage": [
+        [
+          "pObject",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnFile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMemHeapCreate",
@@ -749,7 +1141,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f30a9929"
+      "dh": "f30a9929",
+      "paramStorage": [
+        [
+          "nReserved",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMemHeapDestroy",
@@ -772,7 +1178,13 @@
         "uint32_t",
         "void *"
       ],
-      "dh": "3e654d44"
+      "dh": "3e654d44",
+      "paramStorage": [
+        [
+          "nHeapId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SMemHeapFree",
@@ -797,7 +1209,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "51a6ad39"
+      "dh": "51a6ad39",
+      "paramStorage": [
+        [
+          "nHeapId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pObject",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMemHeapSize",
@@ -820,7 +1246,21 @@
         "D2FogHeapBlockHdrStrc",
         "int32_t"
       ],
-      "dh": "5bd35813"
+      "dh": "5bd35813",
+      "paramStorage": [
+        [
+          "nHeapId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pObject",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_AllocateHeapBlock",
@@ -853,7 +1293,21 @@
         "uint8_t",
         "void *"
       ],
-      "dh": "2c777734"
+      "dh": "2c777734",
+      "paramStorage": [
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byFlags",
+          "Stack[0x8]:1"
+        ],
+        [
+          "pHeap",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SMEM_SatisfyAllocRequest",
@@ -878,7 +1332,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f1764ba8"
+      "dh": "f1764ba8",
+      "paramStorage": [
+        [
+          "pHeap",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "EDI:4"
+        ],
+        [
+          "pnLockIndex",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SMemReallocCore",
@@ -907,7 +1379,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ec906073"
+      "dh": "ec906073",
+      "paramStorage": [
+        [
+          "pnLockIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pHeap",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOldObject",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pBlock",
+          "Stack[0x10]:4"
+        ],
+        [
+          "byFlags",
+          "Stack[0x14]:1"
+        ],
+        [
+          "nNewSize",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SMemAlloc",
@@ -932,7 +1430,25 @@
         "D2FogHeapDescStrc",
         "uint32_t"
       ],
-      "dh": "58e0a4fe"
+      "dh": "58e0a4fe",
+      "paramStorage": [
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SMemDumpState",
@@ -957,7 +1473,17 @@
         "pfnSMemDumpCallback",
         "uint32_t"
       ],
-      "dh": "28d9b70b"
+      "dh": "28d9b70b",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwCallbackArg",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SMemHeapAlloc",
@@ -980,7 +1506,21 @@
         "D2FogHeapDescStrc",
         "uint32_t"
       ],
-      "dh": "8c332888"
+      "dh": "8c332888",
+      "paramStorage": [
+        [
+          "nHeapId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMemHeapReAlloc",
@@ -1007,7 +1547,25 @@
         "D2FogHeapDescStrc",
         "uint32_t"
       ],
-      "dh": "3799b349"
+      "dh": "3799b349",
+      "paramStorage": [
+        [
+          "nHeapId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBlock",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SMemReAlloc",
@@ -1033,7 +1591,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "65284bc2"
+      "dh": "65284bc2",
+      "paramStorage": [
+        [
+          "pBlock",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szSourceFile",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSourceLine",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SMemCmp",
@@ -1052,7 +1632,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "281705d4"
+      "dh": "281705d4",
+      "paramStorage": [
+        [
+          "pLeft",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLength",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMemCopy",
@@ -1068,7 +1662,21 @@
         "SMemCopy",
         "memcpy"
       ],
-      "dh": "eed7332d"
+      "dh": "eed7332d",
+      "paramStorage": [
+        [
+          "_Dst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "_Src",
+          "Stack[0x8]:4"
+        ],
+        [
+          "_Size",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMemFill",
@@ -1087,7 +1695,21 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "070a07f0"
+      "dh": "070a07f0",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bValue",
+          "Stack[0xc]:1"
+        ]
+      ]
     },
     {
       "name": "SMemMove",
@@ -1103,7 +1725,21 @@
         "SMemMove",
         "memmove"
       ],
-      "dh": "293531d9"
+      "dh": "293531d9",
+      "paramStorage": [
+        [
+          "pDest",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SMemZero",
@@ -1119,7 +1755,17 @@
         "SMemZero",
         "memset"
       ],
-      "dh": "c44eb7f3"
+      "dh": "c44eb7f3",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

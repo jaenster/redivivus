@@ -27,7 +27,17 @@
         "SGAMEDATA",
         "uint16_t"
       ],
-      "dh": "1349d057"
+      "dh": "1349d057",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q08_Callback00_NpcActivate",
@@ -55,7 +65,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "ce024910"
+      "dh": "ce024910",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q08_StatusFilter",
@@ -75,7 +95,29 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "d86a29a4"
+      "dh": "d86a29a4",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBufferEx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbyStatusCode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q08_ActiveFilter",
@@ -97,7 +139,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f7d7f054"
+      "dh": "f7d7f054",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q08_Callback10_PlayerLeavesGame",
@@ -117,7 +181,17 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "fc8c220e"
+      "dh": "fc8c220e",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q08_Callback13_PlayerStartedGame",
@@ -141,7 +215,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "82976142"
+      "dh": "82976142",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q08_InitData",
@@ -163,7 +247,13 @@
         "D2QuestDataA2Q0Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "063135c6"
+      "dh": "063135c6",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

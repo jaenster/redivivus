@@ -25,7 +25,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d19c2027"
+      "dh": "d19c2027",
+      "paramStorage": [
+        [
+          "dwErrorCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwBufferSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_LoadLNG",

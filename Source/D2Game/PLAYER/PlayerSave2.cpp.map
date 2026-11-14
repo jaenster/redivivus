@@ -20,7 +20,13 @@
       "usedTypes": [
         "__time32_t"
       ],
-      "dh": "d021af23"
+      "dh": "d021af23",
+      "paramStorage": [
+        [
+          "pTime",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00568d70",
@@ -53,7 +59,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "90d014cb"
+      "dh": "90d014cb",
+      "paramStorage": [
+        [
+          "szString",
+          "ECX:4"
+        ],
+        [
+          "nMaxSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERSAVE2_LoadOldSavegame_ReturnZero",
@@ -95,7 +111,21 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "f98cc5c2"
+      "dh": "f98cc5c2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nItemGUID",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SaveMercData",
@@ -124,7 +154,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "cc487e59"
+      "dh": "cc487e59",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSaveHeader",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SaveHeader",
@@ -179,7 +223,25 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "e987bef9"
+      "dh": "e987bef9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pStartAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndAddress",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SaveQuests",
@@ -208,7 +270,25 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "ad612697"
+      "dh": "ad612697",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pStartAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndAddress",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SaveWaypoints",
@@ -238,7 +318,25 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "01cae5ac"
+      "dh": "01cae5ac",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pStartAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndAddress",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SaveNPC",
@@ -269,7 +367,25 @@
         "uint8_t *",
         "uint8_t[8]"
       ],
-      "dh": "cf214ddf"
+      "dh": "cf214ddf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pStartAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndAddress",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SaveStats",
@@ -301,7 +417,25 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "c5c1ee06"
+      "dh": "c5c1ee06",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pStartAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndAddress",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SaveSkills",
@@ -333,7 +467,25 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "a9468b91"
+      "dh": "a9468b91",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pStartAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndAddress",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SaveItems",
@@ -357,7 +509,37 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "801c0407"
+      "dh": "801c0407",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pnOffset",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byPage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bParam1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bParam2",
+          "Stack[0x10]:4"
+        ],
+        [
+          "param_1",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SaveCorpseItems",
@@ -398,7 +580,33 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "874939dc"
+      "dh": "874939dc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppWritePos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndAddress",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bPage1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bPage2",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SaveMercItems",
@@ -422,7 +630,33 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "f6404293"
+      "dh": "f6404293",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppWritePos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nEndOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bUnk1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bUnk2",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SaveGolemItems",
@@ -451,7 +685,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "eb47aab6"
+      "dh": "eb47aab6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppWritePos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nEndOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bPage1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bPage2",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MakeSaveFile",
@@ -485,7 +745,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a14bd18b"
+      "dh": "a14bd18b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSaveBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStartOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bUnk1",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bUnk2",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "CalculateGetFlags",
@@ -509,7 +799,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "8654c01c"
+      "dh": "8654c01c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "dwCharacterStatus",
+          "DX:2"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetHotkey",
@@ -529,7 +833,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "ad71bf84"
+      "dh": "ad71bf84",
+      "paramStorage": [
+        [
+          "pSaveHotKey",
+          "ECX:4"
+        ],
+        [
+          "pnSkillId",
+          "EDX:4"
+        ],
+        [
+          "pnHand",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERSAVE_LinkPlayerToUnit",
@@ -557,7 +879,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "fe50d006"
+      "dh": "fe50d006",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERSAVE_CreateNewCharacter",
@@ -596,7 +932,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6f9472ce"
+      "dh": "6f9472ce",
+      "paramStorage": [
+        [
+          "pSaveContext",
+          "EAX:4"
+        ],
+        [
+          "pGameStrc",
+          "EBX:4"
+        ],
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERSAVE_ParseHeaderAndCreateUnit",
@@ -642,7 +992,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d5a1677d"
+      "dh": "d5a1677d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ],
+        [
+          "ppSaveFileHeader",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pHeader",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOutUnit",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PLRSAVE_ReadQuestsFromBuffer",
@@ -666,7 +1038,29 @@
         "int *",
         "uint32_t"
       ],
-      "dh": "8ebf39d1"
+      "dh": "8ebf39d1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppQuestBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBytesRead",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ReadWaypoints",
@@ -692,7 +1086,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f18d0d49"
+      "dh": "f18d0d49",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppReadPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "LoadPlayerIntro",
@@ -718,7 +1134,29 @@
         "short *",
         "uint32_t"
       ],
-      "dh": "22ad9c23"
+      "dh": "22ad9c23",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppReadPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ReadStatsLong",
@@ -748,7 +1186,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6573cf32"
+      "dh": "6573cf32",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppReadPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFileVersion",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ReadStats",
@@ -775,7 +1231,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "caa8e94d"
+      "dh": "caa8e94d",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppReadPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFormat",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatCount",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "PLRSAVE_SetSkillIfNonZero",
@@ -796,7 +1278,25 @@
         "eD2Skills",
         "uint8_t"
       ],
-      "dh": "0d4c95bd"
+      "dh": "0d4c95bd",
+      "paramStorage": [
+        [
+          "dwParam",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "LoadHardSkills",
@@ -827,7 +1327,33 @@
         "short *",
         "uint32_t"
       ],
-      "dh": "32ee8f3f"
+      "dh": "32ee8f3f",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppReadPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFileVersion",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillCount",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "PLRSAVE_LoadItemsFromBuffer",
@@ -851,7 +1377,37 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "4f67eed2"
+      "dh": "4f67eed2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppItemList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFormat",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnLoadResult",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "PLRSAVE_LoadCorpseFromBuffer",
@@ -890,7 +1446,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "51fc46c6"
+      "dh": "51fc46c6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppCorpseList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwnerUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFileVersion",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnErrorCode",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "LoadMerc",
@@ -928,7 +1510,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a9ab7bd4"
+      "dh": "a9ab7bd4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMercSaveData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwFileVersion",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "LoadMerc2",
@@ -955,7 +1555,37 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "2e2646fb"
+      "dh": "2e2646fb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwFileVersion",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnErrorCode",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "CreateItemIronGolemItem",
@@ -993,7 +1623,33 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "071f49a8"
+      "dh": "071f49a8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppGolemItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppReadPos",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nEndOffset",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nVersion",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "LoadGolem",
@@ -1023,7 +1679,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "54016e61"
+      "dh": "54016e61",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppReadPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nVersion",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "HOTKEY_GetAssignedItemGUID",
@@ -1046,7 +1724,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "d4213222"
+      "dh": "d4213222",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nHotkeyIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetStatsAndHotkeys",
@@ -1084,7 +1776,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4d5b23b2"
+      "dh": "4d5b23b2",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nHitpoints",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMana",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERSAVE_LoadModernFormat",
@@ -1129,7 +1839,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4300a676"
+      "dh": "4300a676",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ],
+        [
+          "pSaveHeader",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSaveDataOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppUnit",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwParam6",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwParam7",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwParam8",
+          "Stack[0x18]:4"
+        ]
+      ]
     }
   ]
 }

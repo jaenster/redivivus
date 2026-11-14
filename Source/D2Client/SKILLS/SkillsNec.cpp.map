@@ -23,7 +23,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "c9a4a416"
+      "dh": "c9a4a416",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Nec_CurseCenter_StreamMissile",
@@ -55,7 +69,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "47e5a850"
+      "dh": "47e5a850",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSNEC_CltSetBoneWallGfx",
@@ -87,7 +115,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "70a89b48"
+      "dh": "70a89b48",
+      "paramStorage": [
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eMissileId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_SpawnCltMissileCTowardTarget",
@@ -110,7 +156,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f913de1f"
+      "dh": "f913de1f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_CheckCorpseSetPositionParams",
@@ -139,7 +199,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2a7f28a0"
+      "dh": "2a7f28a0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Nec_TargetedMissileAtParam",
@@ -170,7 +244,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "1c23c274"
+      "dh": "1c23c274",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_CheckSelectableCorpseSetParams",
@@ -201,7 +289,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "8e340fdb"
+      "dh": "8e340fdb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSNEC_CltCreateTeethMissiles",
@@ -235,7 +337,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fed1e779"
+      "dh": "fed1e779",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTargetClassId",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Nec_CorpseExplosion",
@@ -261,7 +389,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "f95a27d8"
+      "dh": "f95a27d8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSNEC_CltCreateBoneSpearMissile",
@@ -289,7 +431,33 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "87c61506"
+      "dh": "87c61506",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTargetClassId",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Nec_PoisonExplosion",
@@ -315,7 +483,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "2eef316c"
+      "dh": "2eef316c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_CheckCasterRoomNotInTownNec",
@@ -341,7 +523,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "03fe74c8"
+      "dh": "03fe74c8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_CheckTargetIsUnclaimedGroundItem",
@@ -368,7 +564,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7ada6182"
+      "dh": "7ada6182",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004f3fb0",
@@ -390,7 +600,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "b5abe291"
+      "dh": "b5abe291",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_SelectReviveMissileByMonsterSize",
@@ -422,7 +638,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b80e6444"
+      "dh": "b80e6444",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

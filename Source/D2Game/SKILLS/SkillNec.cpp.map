@@ -27,7 +27,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0f2f717e"
+      "dh": "0f2f717e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvStFunc_15_IsConsumableCorpseOutsideTown",
@@ -54,7 +72,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ef9b6ba9"
+      "dh": "ef9b6ba9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvStFunc_16_ApplyHitAndDamage",
@@ -88,7 +124,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f1a1899d"
+      "dh": "f1a1899d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvStFunc_17_IsSelectableCorpseOutsideTown",
@@ -114,7 +168,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "b07f6bef"
+      "dh": "b07f6bef",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_ValidateCorpseTarget",
@@ -142,7 +214,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ec0ae4dc"
+      "dh": "ec0ae4dc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCorpse",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvStFunc_18_AlwaysAllow",
@@ -162,7 +248,25 @@
         "SGAMEDATA",
         "eD2Skills"
       ],
-      "dh": "cd9238f1"
+      "dh": "cd9238f1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pAttacker",
+          "EDX:4"
+        ],
+        [
+          "eD2Skill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvStFunc_19_IsTargetOutsideTown",
@@ -187,7 +291,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "df161feb"
+      "dh": "df161feb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvStFunc_20_IsGroundItemForIronGolem",
@@ -213,7 +335,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3b3f7d8c"
+      "dh": "3b3f7d8c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CorpseConsumedCheck",
@@ -236,7 +376,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "9b2c2bde"
+      "dh": "9b2c2bde",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvStFunc_21_IsRevivableCorpse",
@@ -259,7 +405,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "99187fb1"
+      "dh": "99187fb1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_OnCurseExpire",
@@ -286,7 +450,21 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "649d60ab"
+      "dh": "649d60ab",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_005c33d0",
@@ -301,7 +479,13 @@
       "calledFunctions": [
         "Unreferenced_005c33d0"
       ],
-      "dh": "74ef8cb2"
+      "dh": "74ef8cb2",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_IsReviveOrRaiseSkeleton",
@@ -320,7 +504,13 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "3d35d209"
+      "dh": "3d35d209",
+      "paramStorage": [
+        [
+          "eSkill",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_ValidateAttackableTarget",
@@ -345,7 +535,21 @@
         "eD2UnitFlags",
         "uint32_t"
       ],
-      "dh": "6b7829fa"
+      "dh": "6b7829fa",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_AssignCurseAiBehavior",
@@ -367,7 +571,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "553d7279"
+      "dh": "553d7279",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pNecroSkillArg",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_ClampResistPenalty",
@@ -390,7 +612,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "684c2bc3"
+      "dh": "684c2bc3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eUnitStat",
+          "EDX:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_ApplyCurseToUnit",
@@ -425,7 +661,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "93a31548"
+      "dh": "93a31548",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pNecroSkillArg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_ApplyCurseDifficultyDivisor",
@@ -446,7 +692,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "d1f91ca0"
+      "dh": "d1f91ca0",
+      "paramStorage": [
+        [
+          "nDifficulty",
+          "AL:1"
+        ],
+        [
+          "nCurseValue",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_030_CastCurseAoE",
@@ -478,7 +734,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b598cd67"
+      "dh": "b598cd67",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_ApplyDimVision",
@@ -506,7 +780,25 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "8501e8c6"
+      "dh": "8501e8c6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_NecroShredAlignmentCallback",
@@ -532,7 +824,21 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "9475a059"
+      "dh": "9475a059",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eAlignmentState",
+          "EDX:4"
+        ],
+        [
+          "pStatListEx",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_CorpseTarget_ValidateAndScheduleEvent",
@@ -554,7 +860,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "0ee0e2a7"
+      "dh": "0ee0e2a7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkillData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_059_CastCorpseSkill",
@@ -588,7 +904,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8cb16e2a"
+      "dh": "8cb16e2a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_ValidateReviveTarget",
@@ -613,7 +947,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c4e049ac"
+      "dh": "c4e049ac",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCorpse",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_OnConvertExpire",
@@ -637,7 +985,21 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "903bbf32"
+      "dh": "903bbf32",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_ApplyConvertToUnit",
@@ -670,7 +1032,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2e97ba18"
+      "dh": "2e97ba18",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pCtx",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_061_CastConvertAoE",
@@ -700,7 +1072,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4ef83875"
+      "dh": "4ef83875",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_ApplySummonResistPassive",
@@ -725,7 +1115,17 @@
         "D2UnitStrc",
         "eD2UnitType"
       ],
-      "dh": "dcb79678"
+      "dh": "dcb79678",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSummon",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_SetSkeletonComponentsByMasteryLvl",
@@ -747,7 +1147,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "e788be06"
+      "dh": "e788be06",
+      "paramStorage": [
+        [
+          "pSkeletonUnit",
+          "ECX:4"
+        ],
+        [
+          "bHasExtraVariant",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bRollComponents",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSeedUnit",
+          "EDI:4"
+        ],
+        [
+          "nMasteryLvl",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_RollSkeletonMastery",
@@ -773,7 +1195,25 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "d50a657c"
+      "dh": "d50a657c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSummon",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkillMastery",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_SpawnSkeletonsForRevive",
@@ -796,7 +1236,17 @@
         "D2StatListExStrc",
         "D2UnitStrc"
       ],
-      "dh": "5e02933a"
+      "dh": "5e02933a",
+      "paramStorage": [
+        [
+          "pSummon",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_DispatchSummonMastery",
@@ -817,7 +1267,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "4ce84443"
+      "dh": "4ce84443",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSummon",
+          "EDX:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_ApplySummonBuffs",
@@ -866,7 +1334,33 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "6f19a370"
+      "dh": "6f19a370",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSummonStatList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nItemLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_ReviveCorpseAsMinion",
@@ -891,7 +1385,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1e9d85ce"
+      "dh": "1e9d85ce",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCorpseUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLevelOffset",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse",
@@ -933,7 +1449,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2eab8441"
+      "dh": "2eab8441",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_032_ApplyDirectDamage",
@@ -956,7 +1490,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "6f0344e2"
+      "dh": "6f0344e2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_ApplyCorpseExplosionToUnit",
@@ -986,7 +1538,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "74f4434b"
+      "dh": "74f4434b",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_055_CorpseExplosion",
@@ -1028,7 +1590,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9a7ad865"
+      "dh": "9a7ad865",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_CorpseExplosionDispatch",
@@ -1043,6 +1623,24 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
+      ],
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
       ]
     },
     {
@@ -1067,7 +1665,29 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "b6858071"
+      "dh": "b6858071",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSummon",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_056_SummonGolem",
@@ -1098,7 +1718,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a64ec64d"
+      "dh": "a64ec64d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_057_IronGolem",
@@ -1143,7 +1781,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "fa02de11"
+      "dh": "fa02de11",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_ReviveCorpse",
@@ -1184,7 +1840,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "3217ad64"
+      "dh": "3217ad64",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_ApplyReviveToCorpse",
@@ -1216,7 +1882,29 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "3c21351a"
+      "dh": "3c21351a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_058_ReviveCorpseCheck",
@@ -1256,7 +1944,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a2082efc"
+      "dh": "a2082efc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_060_SummonBoneWall",
@@ -1301,7 +2007,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "992e196c"
+      "dh": "992e196c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_CreateSummonAtPosition",
@@ -1335,7 +2059,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "5dc50185"
+      "dh": "5dc50185",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSpawnX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSpawnY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_062_BonePrison",
@@ -1369,7 +2119,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9b769842"
+      "dh": "9b769842",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_063_PoisonExplosion",
@@ -1396,7 +2164,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "5219856b"
+      "dh": "5219856b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLNEC_AddHitpoints",
@@ -1418,7 +2204,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5847eaa1"
+      "dh": "5847eaa1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "nHpAmount",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_AuraThornsWithLifeSteal",
@@ -1464,7 +2260,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1febdea4"
+      "dh": "1febdea4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_AuraHealTarget",
@@ -1503,7 +2329,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "05e7e6c8"
+      "dh": "05e7e6c8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkillLvlCast",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_NecroAuraStatDrain",
@@ -1537,7 +2393,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c373d12c"
+      "dh": "c373d12c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_LifeTap",
@@ -1573,7 +2459,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1a84cc8a"
+      "dh": "1a84cc8a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_NecroReviveLeech",
@@ -1604,7 +2520,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f38ee74e"
+      "dh": "f38ee74e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_ItemSlowTarget",
@@ -1634,7 +2580,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f4908a9b"
+      "dh": "f4908a9b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "BloodGolemLifeLeech",
@@ -1661,7 +2637,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "daa4e238"
+      "dh": "daa4e238",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nHealAmount",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

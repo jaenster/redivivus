@@ -21,7 +21,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "4e684d59"
+      "dh": "4e684d59",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_HasAnimEventLastOrComing5Frames",
@@ -42,7 +60,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "5b5847a7"
+      "dh": "5b5847a7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_HasEndAnimEventAndSeqInput",
@@ -66,7 +94,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "493fc453"
+      "dh": "493fc453",
+      "paramStorage": [
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_CanInterruptCurrentMode",
@@ -89,7 +127,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "170a2fe4"
+      "dh": "170a2fe4",
+      "paramStorage": [
+        [
+          "nNewMode",
+          "EBX:4"
+        ],
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_TryCancelModeAndMoveToLocation",
@@ -123,7 +175,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "51a61b3d"
+      "dh": "51a61b3d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nModeIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bCheckInterrupt",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_SetIdleMode",
@@ -149,7 +223,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "84fe9d27"
+      "dh": "84fe9d27",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_ModeCallback_DeathDead",
@@ -169,7 +265,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8f31d5df"
+      "dh": "8f31d5df",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_ModeCallback_Neutral",
@@ -189,7 +303,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "5e097c70"
+      "dh": "5e097c70",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_StartPathAndChangeMode",
@@ -228,7 +360,21 @@
         "eD2PlayerAnimMode",
         "int32_t"
       ],
-      "dh": "a2a8b014"
+      "dh": "a2a8b014",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eAnimMode",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_SetTargetAndStartPath",
@@ -253,7 +399,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "f129ad43"
+      "dh": "f129ad43",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nModeIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_SetMoveTargetPosition",
@@ -278,7 +442,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "5456491e"
+      "dh": "5456491e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_DrainStamina",
@@ -307,7 +493,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5a363090"
+      "dh": "5a363090",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_ClearModeAndSetDead",
@@ -335,7 +527,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "11a88726"
+      "dh": "11a88726",
+      "paramStorage": [
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SERVERUNIT_GoldAmmountForDeadBody",
@@ -364,7 +566,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d4ac7a61"
+      "dh": "d4ac7a61",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pDeadBody",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGoldAmmount",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nGoldPileCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_UnequipAndPrepareItemForDrop",
@@ -402,7 +626,25 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "5360cc55"
+      "dh": "5360cc55",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ],
+        [
+          "nBodyLoc",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_ClearCursorAndDeleteItem",
@@ -428,7 +670,17 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "8832c833"
+      "dh": "8832c833",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pUnit2",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_DropAllEquipmentAndGold",
@@ -475,7 +727,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "677e1761"
+      "dh": "677e1761",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_CleanupInvalidCorpses",
@@ -503,7 +765,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fefcee24"
+      "dh": "fefcee24",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnitRaw",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_CreateDeadBody",
@@ -572,7 +844,29 @@
         "int32_t",
         "int64_t"
       ],
-      "dh": "9937bb89"
+      "dh": "9937bb89",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_IsCorpseOwnedByPlayer",
@@ -599,7 +893,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "12791a9c"
+      "dh": "12791a9c",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCorpseUnitRaw",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_PickupCorpse",
@@ -636,7 +944,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7d23d836"
+      "dh": "7d23d836",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pCorpseUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_HandlePlayerDeath",
@@ -673,7 +995,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d62e3e90"
+      "dh": "d62e3e90",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nModeIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam3",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_StartModeWithTarget",
@@ -701,7 +1045,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8c9835a6"
+      "dh": "8c9835a6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_ModeCallback_GetHitCast",
@@ -721,7 +1087,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "154a40dc"
+      "dh": "154a40dc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_ChangeAnimModeAndResetSkill",
@@ -749,7 +1133,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "00e90a6d"
+      "dh": "00e90a6d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_StartCastAtPosition",
@@ -776,7 +1182,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "9d241b4a"
+      "dh": "9d241b4a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_StartCastAtEntity",
@@ -805,7 +1233,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "6ad6043b"
+      "dh": "6ad6043b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_ReequipWeaponAfterThrow",
@@ -839,7 +1285,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8f4be718"
+      "dh": "8f4be718",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBodyLocFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_HandleDepletedAmmoOrThrowable",
@@ -883,7 +1343,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ce7ae4db"
+      "dh": "ce7ae4db",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pWeaponOwner",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_CheckSwapWeaponSkill",
@@ -907,7 +1381,17 @@
         "D2UnitStrc",
         "eD2Skills"
       ],
-      "dh": "d247358c"
+      "dh": "d247358c",
+      "paramStorage": [
+        [
+          "peSkillId",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_RestoreSwappedSkill",
@@ -933,7 +1417,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "8d2680b5"
+      "dh": "8d2680b5",
+      "paramStorage": [
+        [
+          "peSkillId",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_CheckWeaponQuantityAndDurability",
@@ -957,7 +1451,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "792ba067"
+      "dh": "792ba067",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_BreakZeroDurabilityWeapons",
@@ -987,7 +1491,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "38f49684"
+      "dh": "38f49684",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_ModeCallback_AttackSkill",
@@ -1017,7 +1531,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a6056333"
+      "dh": "a6056333",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nModeArg",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSeqFrame",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_RecoverStamina",
@@ -1041,7 +1573,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2e09b03b"
+      "dh": "2e09b03b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_GetHpPercent128",
@@ -1063,7 +1601,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "4013b9d5"
+      "dh": "4013b9d5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_RegenHp",
@@ -1091,7 +1635,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1e4050c9"
+      "dh": "1e4050c9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_RegenMana",
@@ -1119,7 +1669,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "374e1d98"
+      "dh": "374e1d98",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_RemoveExpiredStatLists",
@@ -1140,7 +1696,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "4c548f34"
+      "dh": "4c548f34",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_PeriodicStatRegen",
@@ -1165,7 +1739,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "5a3c1e59"
+      "dh": "5a3c1e59",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PacketUpdateForClient",
@@ -1202,7 +1794,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "55e9be20"
+      "dh": "55e9be20",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSendItems",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_MoveToLocation",
@@ -1229,7 +1839,37 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "255ede6c"
+      "dh": "255ede6c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bSkipCancelAttempt",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_StartModeID",
@@ -1259,7 +1899,37 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "8ad357e4"
+      "dh": "8ad357e4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nModeIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nUid",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bSkipCancelAttempt",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "HoverTextEvent",
@@ -1285,7 +1955,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "12654f22"
+      "dh": "12654f22",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_BroadcastAllyAndPartyInfo",
@@ -1308,7 +1996,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8c1088c3"
+      "dh": "8c1088c3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_ModeCallback_WalkRunBlock",
@@ -1349,7 +2055,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "90f93b98"
+      "dh": "90f93b98",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_Death",
@@ -1390,7 +2114,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "2a7f2800"
+      "dh": "2a7f2800",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nModeIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_OnModeComplete",
@@ -1427,7 +2169,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "5c8c2fdb"
+      "dh": "5c8c2fdb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLRMODES_ProcessPlayerMode",
@@ -1448,7 +2208,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "adceb7ce"
+      "dh": "adceb7ce",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYEREVENT_DefaultCallback",
@@ -1469,7 +2247,29 @@
         "eD2TimerTypeDWORD",
         "int32_t"
       ],
-      "dh": "06b6d4d3"
+      "dh": "06b6d4d3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eTimerType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

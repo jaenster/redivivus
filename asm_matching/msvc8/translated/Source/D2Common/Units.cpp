@@ -2629,6 +2629,14 @@ BOOL __stdcall IsInMeleeRange(D2UnitStrc * pUnit, D2UnitStrc * pTarget, int32_t 
     return (uint32_t)!bLOSBlocked;
 }
 
+// GetAnimMode as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2PlayerAnimMode GetAnimModeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eAnimMode.ePlayerMode;
+    }
+    return (eD2PlayerAnimMode)0;
+}
+
 // Returns TRUE if the unit is currently in a movement animation mode. For players, checks GetAnimOrSeqMode result: modes 2, 3, or 6. For monsters, checks for Walk or Skill3 mode, plus special-cases base ID 0x6E (Oblivion Knight with Decrepify walk). Returns FALSE for missiles (halts) and all other types.
 BOOL __stdcall IsInMovingMode(D2UnitStrc * pUnit) {
     uint32_t nAnimMode;
@@ -2650,7 +2658,7 @@ BOOL __stdcall IsInMovingMode(D2UnitStrc * pUnit) {
         }
       case UNIT_MONSTER:
         {
-          switch (pUnit->eAnimMode.ePlayerMode) {
+          switch (GetAnimModeInline(pUnit)) {
             case Walk:
 
             case eD2PlayerAnimMode_ns::Skill3:
@@ -3026,17 +3034,7 @@ void __stdcall AllocStaticPath(D2UnitStrc * pUnit) {
 
     D2StaticPathStrc* pPathStrc = D2_NEW_POOL_AT(pUnit->pMemory, D2StaticPathStrc, ".\\UNITS\\Units.cpp", 0x151e);
     pUnit->pPath.pStaticPath = pPathStrc;
-    pPathStrc->pRoom = 0;
-    pPathStrc->nScreenX = 0;
-    pPathStrc->nScreenY = 0;
-    pPathStrc->nPosX = 0;
-    pPathStrc->nPosY = 0;
-    pPathStrc->nUnkX = 0;
-    pPathStrc->nUnkY = 0;
-    pPathStrc->nDirection = 0;
-    pPathStrc->bRoomNeedsUpdate = 0;
-    pPathStrc->field_0x1E = 0;
-    pPathStrc->field_0x1F = 0;
+    memset(pPathStrc, 0, sizeof(*pPathStrc));
 }
 
 // @sourcefile .\UNITS\Units.cpp

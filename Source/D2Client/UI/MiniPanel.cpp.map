@@ -58,7 +58,13 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "43b68f0e"
+      "dh": "43b68f0e",
+      "paramStorage": [
+        [
+          "nPanelSection",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MINIPANEL_DrawButton",
@@ -79,7 +85,21 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "550740aa"
+      "dh": "550740aa",
+      "paramStorage": [
+        [
+          "nFrameNumber",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPositionX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPositionY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MINIPANEL_CalculateButtonPositions",
@@ -98,7 +118,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5e2485db"
+      "dh": "5e2485db",
+      "paramStorage": [
+        [
+          "bIsExpansion",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MINIPANEL_DrawAllButtons",
@@ -119,7 +145,13 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "2d45f09d"
+      "dh": "2d45f09d",
+      "paramStorage": [
+        [
+          "bVisible",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsLeftScreenOpen",
@@ -172,7 +204,13 @@
         "Unreferenced_0047ec20",
         "GetUIFlag"
       ],
-      "dh": "ba623fbb"
+      "dh": "ba623fbb",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MINIPANEL_HandleButtonClick",
@@ -201,7 +239,13 @@
         "eD2UIvars",
         "int32_t"
       ],
-      "dh": "98d1eae7"
+      "dh": "98d1eae7",
+      "paramStorage": [
+        [
+          "nButtonId",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_MiniPanelMouseUp",
@@ -236,7 +280,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1bcc34be"
+      "dh": "1bcc34be",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_MiniPanelMouseDown",
@@ -266,7 +316,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0930d37e"
+      "dh": "0930d37e",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MINIPANEL_Init",
@@ -322,7 +378,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2ac113b3"
+      "dh": "2ac113b3",
+      "paramStorage": [
+        [
+          "nMouseX",
+          "ECX:4"
+        ],
+        [
+          "nMouseY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetupMiniPanel",
@@ -389,7 +455,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "f6d72ef4"
+      "dh": "f6d72ef4",
+      "paramStorage": [
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nButtonFrame",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MINIPANEL_HandleMouseHover",
@@ -410,7 +490,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ea64e8cd"
+      "dh": "ea64e8cd",
+      "paramStorage": [
+        [
+          "nLayout",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UI_MiniPanel",

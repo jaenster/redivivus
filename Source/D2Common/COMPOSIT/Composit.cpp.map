@@ -20,7 +20,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b9240912"
+      "dh": "b9240912",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nBodyIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMPOSIT_GetItemTypeIndex",
@@ -38,7 +48,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "47233697"
+      "dh": "47233697",
+      "paramStorage": [
+        [
+          "iItemType",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMPOSIT_ResolveWeaponClass",
@@ -75,7 +91,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0e97fbbe"
+      "dh": "0e97fbbe",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnitType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClassIndex",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pInventory",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnWeaponClassIndex",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "COMPOSIT_GetWeaponClassWithTransform",
@@ -100,7 +142,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f9c10848"
+      "dh": "f9c10848",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInventory",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnWeaponClassIndex",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bIgnoreTransform",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "DoesBodyHaveAppearanceColors",
@@ -118,7 +182,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d879e7b0"
+      "dh": "d879e7b0",
+      "paramStorage": [
+        [
+          "nBodyIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMPOSIT_HasWeaponDrawn",
@@ -142,7 +212,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "7f773e57"
+      "dh": "7f773e57",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMPOSIT_GetBodyPartTransform",
@@ -166,7 +242,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "38e49b27"
+      "dh": "38e49b27",
+      "paramStorage": [
+        [
+          "nBodyIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbyTransforms",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMPOSIT_BuildCofPath",
@@ -196,7 +282,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "dd86a03b"
+      "dh": "dd86a03b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPlrClass",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nItemCode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nCompType",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pInventory",
+          "Stack[0x14]:4"
+        ],
+        [
+          "szOutCofPath",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pOutWeaponClass",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "bBuildFullPath",
+          "Stack[0x20]:4"
+        ],
+        [
+          "bSpecialHandling",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "COMPOSIT_GetCofPathWithTransform",
@@ -224,7 +348,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b9f02016"
+      "dh": "b9f02016",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnWeaponClass",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bBuildFullPath",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bSpecialHandling",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pInventory",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nModeOverride",
+          "Stack[0x1c]:4"
+        ]
+      ]
     }
   ]
 }

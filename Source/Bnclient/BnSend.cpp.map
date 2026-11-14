@@ -38,7 +38,13 @@
       "calledFunctions": [
         "BNSEND_SetServerToken"
       ],
-      "dh": "a4a8605b"
+      "dh": "a4a8605b",
+      "paramStorage": [
+        [
+          "nServerToken",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_GetServerToken",
@@ -71,7 +77,13 @@
       "calledFunctions": [
         "BNSEND_SetClientToken"
       ],
-      "dh": "68046ec3"
+      "dh": "68046ec3",
+      "paramStorage": [
+        [
+          "nClientToken",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNCLIENT_GetBNetClientToken",
@@ -113,7 +125,17 @@
         "SID_C2S_LogonResponse",
         "uint32_t"
       ],
-      "dh": "64d839bf"
+      "dh": "64d839bf",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x3A_LogonResponse2",
@@ -140,7 +162,17 @@
         "SID_C2S_LogonResponse",
         "uint32_t"
       ],
-      "dh": "2cc09975"
+      "dh": "2cc09975",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x3D_CreateAccount2",
@@ -164,7 +196,17 @@
         "D2XSHA1Strc",
         "uint32_t"
       ],
-      "dh": "1982f71f"
+      "dh": "1982f71f",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x31_ChangePassword",
@@ -190,7 +232,21 @@
         "D2XSHA1Strc",
         "uint32_t"
       ],
-      "dh": "a19610d2"
+      "dh": "a19610d2",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EDX:4"
+        ],
+        [
+          "szNewPassword",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x07_ReportVersion",
@@ -214,7 +270,21 @@
         "SID_C2S_ReportVersion",
         "uint32_t"
       ],
-      "dh": "8ace3870"
+      "dh": "8ace3870",
+      "paramStorage": [
+        [
+          "dwExeHash",
+          "ECX:4"
+        ],
+        [
+          "dwExeChecksum",
+          "EDX:4"
+        ],
+        [
+          "szExeInfoStr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x06_StartVersioning",
@@ -268,7 +338,17 @@
         "SMemAlloc",
         "memcpy"
       ],
-      "dh": "1c82ab8c"
+      "dh": "1c82ab8c",
+      "paramStorage": [
+        [
+          "pKeyHashData",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_FreeRealmQueryData",
@@ -306,7 +386,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7540c331"
+      "dh": "7540c331",
+      "paramStorage": [
+        [
+          "dwAdId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x40_QueryRealms2",
@@ -366,7 +452,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "27a09efc"
+      "dh": "27a09efc",
+      "paramStorage": [
+        [
+          "bIsExpansionChar",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x0C_JoinChannel",
@@ -390,7 +482,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "76739007"
+      "dh": "76739007",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "bForceJoin",
+          "EDX:4"
+        ],
+        [
+          "nJoinType",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_EncodePacketEscape",
@@ -409,7 +515,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "0901fb96"
+      "dh": "0901fb96",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nByteCount",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat",
@@ -432,7 +548,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "ce4342a3"
+      "dh": "ce4342a3",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EDX:4"
+        ],
+        [
+          "dwProductCode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x10_LeaveChat",
@@ -476,7 +606,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "62700c88"
+      "dh": "62700c88",
+      "paramStorage": [
+        [
+          "szChatText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x15_CheckAd",
@@ -519,7 +655,17 @@
         "SID_C2S_DisplayAd",
         "uint32_t"
       ],
-      "dh": "2da0705c"
+      "dh": "2da0705c",
+      "paramStorage": [
+        [
+          "szDestPath",
+          "ECX:4"
+        ],
+        [
+          "pPoolMgr",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x1C_StartAdVex3",
@@ -542,7 +688,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bca5843d"
+      "dh": "bca5843d",
+      "paramStorage": [
+        [
+          "szGameName",
+          "ECX:4"
+        ],
+        [
+          "szGamePassword",
+          "EDX:4"
+        ],
+        [
+          "szGameDescription",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BNCLIENT_SendKeepAlive",
@@ -577,7 +741,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "9d3aa98e"
+      "dh": "9d3aa98e",
+      "paramStorage": [
+        [
+          "nPacketId",
+          "CL:1"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x1F_LeaveGame",
@@ -617,7 +791,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "f61e697f"
+      "dh": "f61e697f",
+      "paramStorage": [
+        [
+          "pOutFlags",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_FreeGameListData",
@@ -657,7 +837,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8c26c71e"
+      "dh": "8c26c71e",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EDX:4"
+        ],
+        [
+          "dwParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x22_NotifyJoin",
@@ -679,7 +877,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "ef362249"
+      "dh": "ef362249",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_StoreUserProfileData",
@@ -702,7 +910,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9ac35b12"
+      "dh": "9ac35b12",
+      "paramStorage": [
+        [
+          "pbProfileData",
+          "ECX:4"
+        ],
+        [
+          "nDataSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x3E_LogonRealmEx",
@@ -726,7 +944,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9ab69275"
+      "dh": "9ab69275",
+      "paramStorage": [
+        [
+          "szRealmName",
+          "ECX:4"
+        ],
+        [
+          "szPassword",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x12_LocaleInfo",
@@ -771,7 +999,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4681e65e"
+      "dh": "4681e65e",
+      "paramStorage": [
+        [
+          "dwAdId",
+          "ECX:4"
+        ],
+        [
+          "bRequestType",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x27_WriteUserData",
@@ -797,7 +1035,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "510d744f"
+      "dh": "510d744f",
+      "paramStorage": [
+        [
+          "szAccount",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "EDX:4"
+        ],
+        [
+          "pszKeys",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pszValues",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_StoreReadUserData",
@@ -818,7 +1074,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "d230925b"
+      "dh": "d230925b",
+      "paramStorage": [
+        [
+          "pbReadData",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x26_ReadUserData",
@@ -844,7 +1110,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "85d15411"
+      "dh": "85d15411",
+      "paramStorage": [
+        [
+          "szAccount",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "EDX:4"
+        ],
+        [
+          "nRequestId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pszKeys",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_GetStoredReadUserData",
@@ -868,7 +1152,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "90bb0157"
+      "dh": "90bb0157",
+      "paramStorage": [
+        [
+          "nKeyCount",
+          "ECX:4"
+        ],
+        [
+          "nRequestId",
+          "EDX:4"
+        ],
+        [
+          "ppszOutBufs",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnMaxLens",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x59_SetEmail",
@@ -894,7 +1196,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e163ad96"
+      "dh": "e163ad96",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x5A_ResetPassword",
@@ -920,7 +1228,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3375d265"
+      "dh": "3375d265",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x5B_ChangeEmail",
@@ -946,7 +1264,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c19ef704"
+      "dh": "c19ef704",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EDX:4"
+        ],
+        [
+          "szNewEmail",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x5D_ReportCrash",
@@ -989,7 +1321,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "c1d65d69"
+      "dh": "c1d65d69",
+      "paramStorage": [
+        [
+          "pbRealmData",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_StoreChannelListData",
@@ -1010,7 +1352,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "3933bf3d"
+      "dh": "3933bf3d",
+      "paramStorage": [
+        [
+          "pbChannelData",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_StoreGameListData",
@@ -1031,7 +1383,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "d721755e"
+      "dh": "d721755e",
+      "paramStorage": [
+        [
+          "pbGameData",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNCLIENT_InterlockedCompareExchange",
@@ -1046,7 +1408,21 @@
       "calledFunctions": [
         "BNCLIENT_InterlockedCompareExchange"
       ],
-      "dh": "70f7855c"
+      "dh": "70f7855c",
+      "paramStorage": [
+        [
+          "pDestination",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExchange",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nComperand",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0051bea0",
@@ -1085,7 +1461,13 @@
       "calledFunctions": [
         "Unreferenced_0051bed0"
       ],
-      "dh": "5b92844b"
+      "dh": "5b92844b",
+      "paramStorage": [
+        [
+          "nConnectionState",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetDnsResults",
@@ -1118,7 +1500,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6ad3de1b"
+      "dh": "6ad3de1b",
+      "paramStorage": [
+        [
+          "lpThreadParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetDnsRecordSync",
@@ -1136,7 +1524,17 @@
       "usedTypes": [
         "char *"
       ],
-      "dh": "9fb8853e"
+      "dh": "9fb8853e",
+      "paramStorage": [
+        [
+          "ppszDnsOutput",
+          "ECX:4"
+        ],
+        [
+          "nDnsThreadParam2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0051c170",
@@ -1195,7 +1593,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a3bd0db0"
+      "dh": "a3bd0db0",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nBufferOutputLength",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_GetConnectionState",
@@ -1217,7 +1625,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cda5e862"
+      "dh": "cda5e862",
+      "paramStorage": [
+        [
+          "pdwOutState",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNCLIENT_SendLogonRequest",
@@ -1236,7 +1650,17 @@
         "NET_SID_CLIENT_Send_0x3A_LogonResponse2",
         "NET_SID_CLIENT_Send_0x53_AuthAccountLogon"
       ],
-      "dh": "3c4894dc"
+      "dh": "3c4894dc",
+      "paramStorage": [
+        [
+          "szUsername",
+          "ECX:4"
+        ],
+        [
+          "szPassword",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNCLIENT_WaitForLogonResponse",
@@ -1274,7 +1698,17 @@
         "NET_SID_CLIENT_Send_0x3D_CreateAccount2",
         "NET_SID_CLIENT_Send_0x52_AuthAccountCreate"
       ],
-      "dh": "4efc589d"
+      "dh": "4efc589d",
+      "paramStorage": [
+        [
+          "szUsername",
+          "ECX:4"
+        ],
+        [
+          "szPassword",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNCLIENT_WaitForCreateAccountResponse",
@@ -1295,7 +1729,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "91f903fc"
+      "dh": "91f903fc",
+      "paramStorage": [
+        [
+          "pOutResponseCount",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNCLIENT_SendChangePasswordRequest",
@@ -1314,7 +1754,21 @@
         "NET_SID_CLIENT_Send_0x31_ChangePassword",
         "NET_SID_CLIENT_Send_0x55_AuthAccountChange"
       ],
-      "dh": "017468f8"
+      "dh": "017468f8",
+      "paramStorage": [
+        [
+          "szUsername",
+          "ECX:4"
+        ],
+        [
+          "szOldPassword",
+          "EDX:4"
+        ],
+        [
+          "szNewPassword",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BNCLIENT_WaitForChangePasswordResponse",
@@ -1335,7 +1789,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "1c12816e"
+      "dh": "1c12816e",
+      "paramStorage": [
+        [
+          "pOutResponseCount",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNCLIENT_EnterChatAndJoinChannel",
@@ -1361,7 +1821,29 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "97c84a97"
+      "dh": "97c84a97",
+      "paramStorage": [
+        [
+          "szUsername",
+          "ECX:4"
+        ],
+        [
+          "szStatstring",
+          "EDX:4"
+        ],
+        [
+          "szAccountName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szChannelName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_NET_SID_CLIENT_Send_0x10_LeaveChat",
@@ -1421,7 +1903,13 @@
         "Unreferenced_0051c570",
         "WSASocket2_Send"
       ],
-      "dh": "562fbaad"
+      "dh": "562fbaad",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send",
@@ -1446,7 +1934,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8ab3a50b"
+      "dh": "8ab3a50b",
+      "paramStorage": [
+        [
+          "nPacketId",
+          "CL:1"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ],
+        [
+          "nSizeNoHeader",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0051c6b0",
@@ -1462,7 +1964,13 @@
         "Unreferenced_0051c6b0",
         "BNMESSQUEUE_EnqueueString"
       ],
-      "dh": "5a60d772"
+      "dh": "5a60d772",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNCLIENT_ParseAndEnqueueChatMessages",
@@ -1484,7 +1992,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "c7963771"
+      "dh": "c7963771",
+      "paramStorage": [
+        [
+          "szMessageText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_IncomingPacketHandlerLoop",
@@ -1504,7 +2018,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "2e87c70c"
+      "dh": "2e87c70c",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BnetReadFunction",
@@ -1531,7 +2055,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "853c3b18"
+      "dh": "853c3b18",
+      "paramStorage": [
+        [
+          "dwThreadParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BNCLIENT_GetSocketPeerName",
@@ -1552,7 +2082,17 @@
         "sockaddr",
         "uint32_t"
       ],
-      "dh": "0596a496"
+      "dh": "0596a496",
+      "paramStorage": [
+        [
+          "pSockAddr",
+          "ECX:4"
+        ],
+        [
+          "pAddrLen",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_GetSocketAddress",
@@ -1573,7 +2113,17 @@
         "sockaddr",
         "uint32_t"
       ],
-      "dh": "a506e9b1"
+      "dh": "a506e9b1",
+      "paramStorage": [
+        [
+          "pOutAddr",
+          "ECX:4"
+        ],
+        [
+          "pOutAddrLen",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GET_GameVersion",
@@ -1653,7 +2203,13 @@
       "calledFunctions": [
         "BNSEND_SetGlobalFlag"
       ],
-      "dh": "52e3acce"
+      "dh": "52e3acce",
+      "paramStorage": [
+        [
+          "dwThreadInitFlag",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_LogonSequence",
@@ -1701,7 +2257,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "39342e2f"
+      "dh": "39342e2f",
+      "paramStorage": [
+        [
+          "szServerList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BattleConnectFastest",
@@ -1767,7 +2329,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a9fbfd7d"
+      "dh": "a9fbfd7d",
+      "paramStorage": [
+        [
+          "bIsClassic",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNNEWS_GetNewsEntryByIndex",
@@ -1782,7 +2350,17 @@
       "calledFunctions": [
         "BNNEWS_GetNewsEntryByIndex"
       ],
-      "dh": "1ff49d17"
+      "dh": "1ff49d17",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BNNEWS_RoundToPowerOfTwo",
@@ -1801,7 +2379,17 @@
         "D2BnNewsTableStrc",
         "uint32_t"
       ],
-      "dh": "5a36e270"
+      "dh": "5a36e270",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ],
+        [
+          "dwSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BNNEWS_RoundUpToMultiple",
@@ -1816,7 +2404,17 @@
       "calledFunctions": [
         "BNNEWS_RoundUpToMultiple"
       ],
-      "dh": "b53e891a"
+      "dh": "b53e891a",
+      "paramStorage": [
+        [
+          "dwValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwMultiple",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0051d350",
@@ -1834,7 +2432,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "8e472cb6"
+      "dh": "8e472cb6",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNNEWS_SaveToCache",
@@ -1892,7 +2500,13 @@
         "TSFixedArray_Ui_Destructor_Unref_0051d570",
         "SMemFree"
       ],
-      "dh": "ef0f2622"
+      "dh": "ef0f2622",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNNEWS_DestroyNewsTable",
@@ -1912,7 +2526,17 @@
         "D2BnNewsTableStrc",
         "uint8_t"
       ],
-      "dh": "8fbf10ae"
+      "dh": "8fbf10ae",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ],
+        [
+          "bFreeMemory",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "BNNEWS_ReallocateNewsTable",
@@ -1935,7 +2559,17 @@
         "D2BnNewsTableStrc",
         "uint32_t"
       ],
-      "dh": "6d18c57e"
+      "dh": "6d18c57e",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ],
+        [
+          "dwNewCapacity",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSFixedArray_Ui_Destructor_Unref_0051d670",
@@ -1951,7 +2585,13 @@
         "TSFixedArray_Ui_Destructor_Unref_0051d670",
         "SMemFree"
       ],
-      "dh": "0b70a21b"
+      "dh": "0b70a21b",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0051d690",
@@ -1969,7 +2609,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "9f3283aa"
+      "dh": "9f3283aa",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNNEWS_ClearNewsTable",
@@ -1988,7 +2634,13 @@
       "usedTypes": [
         "D2BnNewsTableStrc"
       ],
-      "dh": "fa4077f0"
+      "dh": "fa4077f0",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNNEWS_EnsureCapacityWithGrowth",
@@ -2008,7 +2660,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "60311edf"
+      "dh": "60311edf",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ],
+        [
+          "dwAdditionalCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bGrow",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0051d720",
@@ -2026,7 +2692,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "a85c7cb6"
+      "dh": "a85c7cb6",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNNEWS_Shutdown",
@@ -2062,7 +2734,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "2244413d"
+      "dh": "2244413d",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "BNNEWS_EnsureCapacity",
@@ -2082,7 +2760,17 @@
         "D2BnNewsTableStrc",
         "uint32_t"
       ],
-      "dh": "b9240856"
+      "dh": "b9240856",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ],
+        [
+          "dwAdditionalCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BNNEWS_SetNewsEntryCount",
@@ -2103,7 +2791,17 @@
         "D2BnNewsTableStrc",
         "uint32_t"
       ],
-      "dh": "f608de4e"
+      "dh": "f608de4e",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ],
+        [
+          "dwNewCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Incoming0x46",
@@ -2129,7 +2827,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f7b5ea6f"
+      "dh": "f7b5ea6f",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNNEWS_LoadCachedNews",
@@ -2177,7 +2885,17 @@
         "pfnVoidNoArgCallback",
         "uint32_t"
       ],
-      "dh": "46a05df5"
+      "dh": "46a05df5",
+      "paramStorage": [
+        [
+          "pfnMotdCallback",
+          "ECX:4"
+        ],
+        [
+          "pfnNewsCallback",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_GetTime32",
@@ -2196,7 +2914,13 @@
       "usedTypes": [
         "__time32_t"
       ],
-      "dh": "9302d741"
+      "dh": "9302d741",
+      "paramStorage": [
+        [
+          "pTime",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_HashCDKeyData",
@@ -2219,7 +2943,21 @@
         "D2Sha1ContextStrc",
         "uint32_t"
       ],
-      "dh": "ed6ba967"
+      "dh": "ed6ba967",
+      "paramStorage": [
+        [
+          "pOutHash",
+          "ECX:4"
+        ],
+        [
+          "pTokenData",
+          "EDX:4"
+        ],
+        [
+          "nDataLength",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BNNEWS_TransformCDKeyCharacter",
@@ -2239,7 +2977,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "79b3cbd5"
+      "dh": "79b3cbd5",
+      "paramStorage": [
+        [
+          "bKeyChar",
+          "Stack[0x4]:1"
+        ],
+        [
+          "pValue",
+          "EDI:4"
+        ],
+        [
+          "pOutChar",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_CalculateCDKeyChecksum",
@@ -2258,7 +3010,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "575bd139"
+      "dh": "575bd139",
+      "paramStorage": [
+        [
+          "szCDKey",
+          "EDX:4"
+        ],
+        [
+          "pOutChecksum",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_DecodeCDKeyString",
@@ -2283,7 +3045,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "35edad14"
+      "dh": "35edad14",
+      "paramStorage": [
+        [
+          "pOutProduct",
+          "ECX:4"
+        ],
+        [
+          "pOutPublic",
+          "EDX:4"
+        ],
+        [
+          "szCDKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutPrivate",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BNNEWS_DecodeCDKey26Char",
@@ -2303,7 +3083,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "68c75678"
+      "dh": "68c75678",
+      "paramStorage": [
+        [
+          "szCDKey",
+          "ECX:4"
+        ],
+        [
+          "pOutValue1",
+          "EDX:4"
+        ],
+        [
+          "pOutValue2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutValue3",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_PrepareCDKeyHash",
@@ -2330,7 +3128,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "57425685"
+      "dh": "57425685",
+      "paramStorage": [
+        [
+          "nToken",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nServerToken",
+          "EBX:4"
+        ],
+        [
+          "szCDKey",
+          "EDI:4"
+        ],
+        [
+          "pOutHash",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x42_CDKey3",
@@ -2430,7 +3246,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c6008856"
+      "dh": "c6008856",
+      "paramStorage": [
+        [
+          "pOutHash",
+          "ECX:4"
+        ],
+        [
+          "nToken",
+          "EDX:4"
+        ],
+        [
+          "nCDKeyType",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_SendRawBytes",
@@ -2446,7 +3276,17 @@
         "BNSEND_SendRawBytes",
         "SMemCopy"
       ],
-      "dh": "821e0639"
+      "dh": "821e0639",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "BNSEND_SendString",
@@ -2462,7 +3302,13 @@
         "BNSEND_SendString",
         "SStrCopy"
       ],
-      "dh": "b5d376e9"
+      "dh": "b5d376e9",
+      "paramStorage": [
+        [
+          "szString",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_SID_CLIENT_Send_0x33_GetFileTime",
@@ -2484,7 +3330,17 @@
         "SID_C2S_GetFileTime",
         "uint32_t"
       ],
-      "dh": "6c959c92"
+      "dh": "6c959c92",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "dwRequestId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gpBNetNewsCache",

@@ -116,7 +116,7 @@ template<> CMDDEF * TSList<CMDDEF, TSGetLink<CMDDEF>>::RawNext(CMDDEF * ptr) {
     return (CMDDEF*)this->m_terminator.m_next;
 }
 
-template<> void TSList<CMDDEF, TSGetLink<CMDDEF>>::UnlinkAll() {
+template<> __attribute__((noinline)) inline void TSList<CMDDEF, TSGetLink<CMDDEF>>::UnlinkAll() {
     TSLink<CMDDEF>** piPrevLink;
     TSLink<CMDDEF>* piNode;
     while (true) {

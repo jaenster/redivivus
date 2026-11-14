@@ -20,7 +20,13 @@
       "usedTypes": [
         "__time32_t"
       ],
-      "dh": "432af834"
+      "dh": "432af834",
+      "paramStorage": [
+        [
+          "pTime",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ConstructContext",
@@ -38,7 +44,13 @@
       "usedTypes": [
         "D2Srp"
       ],
-      "dh": "22d7037e"
+      "dh": "22d7037e",
+      "paramStorage": [
+        [
+          "pSrp",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SRP_InitializeRandomState",
@@ -66,7 +78,17 @@
         "D2SrpSeedEntropyStrc",
         "uint32_t"
       ],
-      "dh": "1d1c3400"
+      "dh": "1d1c3400",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "dwSeed",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ExtractSessionKeyBytes",
@@ -92,7 +114,21 @@
         "D2Srp *",
         "uint32_t"
       ],
-      "dh": "c63b90f7"
+      "dh": "c63b90f7",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBytes",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ComputePasswordHash",
@@ -121,7 +157,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "494772c3"
+      "dh": "494772c3",
+      "paramStorage": [
+        [
+          "pSrp",
+          "ECX:4"
+        ],
+        [
+          "pSalt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "ppPasswordHash",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ComputeScramblingParam",
@@ -141,7 +199,21 @@
         "BigData *",
         "D2Srp"
       ],
-      "dh": "1768ae49"
+      "dh": "1768ae49",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "ppBase",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppResult",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_HashBigNumToU32",
@@ -168,7 +240,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2cf93c82"
+      "dh": "2cf93c82",
+      "paramStorage": [
+        [
+          "pSrp",
+          "ECX:4"
+        ],
+        [
+          "ppBigNum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pdwOut",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ClientComputeSharedSecret",
@@ -200,7 +286,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "70f622e4"
+      "dh": "70f622e4",
+      "paramStorage": [
+        [
+          "pSrp",
+          "ECX:4"
+        ],
+        [
+          "pPrivateKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppServerPublic",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppPasswordHash",
+          "Stack[0xc]:4"
+        ],
+        [
+          "ppSharedSecret",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ServerComputeSharedSecret",
@@ -230,7 +338,33 @@
         "D2Srp",
         "int32_t"
       ],
-      "dh": "4493a1bd"
+      "dh": "4493a1bd",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "ppClientPublic",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppServerPublic",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppPrivateKey",
+          "Stack[0xc]:4"
+        ],
+        [
+          "ppVerifier",
+          "Stack[0x10]:4"
+        ],
+        [
+          "ppSharedSecret",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ComputeClientProof",
@@ -257,7 +391,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "264f04a9"
+      "dh": "264f04a9",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "szUsername",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSalt",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pClientPublic",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pServerPublic",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pSessionKey",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pClientProofOut",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ComputeServerProof",
@@ -281,7 +445,29 @@
         "D2Srp",
         "uint8_t"
       ],
-      "dh": "341e6bcf"
+      "dh": "341e6bcf",
+      "paramStorage": [
+        [
+          "pSrp",
+          "ECX:4"
+        ],
+        [
+          "pClientPublic",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pClientProof",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSessionKey",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pHashOut",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_IsContextInitialized",
@@ -299,7 +485,13 @@
       "usedTypes": [
         "D2Srp"
       ],
-      "dh": "dcd074e2"
+      "dh": "dcd074e2",
+      "paramStorage": [
+        [
+          "pSrp",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SRP_CreateContext",
@@ -320,7 +512,13 @@
         "D2Srp",
         "D2Srp *"
       ],
-      "dh": "52b45a8b"
+      "dh": "52b45a8b",
+      "paramStorage": [
+        [
+          "ppSrp",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ExportPublicValues",
@@ -340,7 +538,29 @@
         "D2Srp *",
         "uint32_t"
       ],
-      "dh": "d5d3568b"
+      "dh": "d5d3568b",
+      "paramStorage": [
+        [
+          "ppSrp",
+          "ECX:4"
+        ],
+        [
+          "pnGeneratorLen",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGeneratorOut",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnModulusLen",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pModulusOut",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_SetParameters",
@@ -364,7 +584,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cee8b1b2"
+      "dh": "cee8b1b2",
+      "paramStorage": [
+        [
+          "ppSrp",
+          "ECX:4"
+        ],
+        [
+          "nGeneratorLen",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGeneratorBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nModulusLen",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pModulusBytes",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_SeedRandom",
@@ -384,7 +626,17 @@
         "D2Srp *",
         "uint32_t"
       ],
-      "dh": "6beddd83"
+      "dh": "6beddd83",
+      "paramStorage": [
+        [
+          "ppSrp",
+          "ECX:4"
+        ],
+        [
+          "dwSeed",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_FreeParameters",
@@ -403,7 +655,13 @@
       "usedTypes": [
         "D2Srp *"
       ],
-      "dh": "5ac0f831"
+      "dh": "5ac0f831",
+      "paramStorage": [
+        [
+          "ppSrp",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ClientGenerateVerifier",
@@ -428,7 +686,29 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "2e0833f9"
+      "dh": "2e0833f9",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "szUsername",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szPassword",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSaltOut",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pVerifierOut",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_GenerateAccountCredentials",
@@ -454,7 +734,25 @@
         "BigData",
         "D2Srp *"
       ],
-      "dh": "a86c1198"
+      "dh": "a86c1198",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pCredsBuf",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szUsername",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szPassword",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ClientKeyExchange",
@@ -487,7 +785,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "dc8ed7ba"
+      "dh": "dc8ed7ba",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pContext",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSaltBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pServerPublicBytes",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ClientVerifyServerProof",
@@ -509,7 +825,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0fea1361"
+      "dh": "0fea1361",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pSrpContext",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pServerProof",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ParseChallenge",
@@ -533,7 +863,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0883c295"
+      "dh": "0883c295",
+      "paramStorage": [
+        [
+          "pContext",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pModulusN",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pGenerator",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pServerPublicBBytes",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ServerComputePublicB",
@@ -562,7 +914,17 @@
         "D2Srp *",
         "uint8_t"
       ],
-      "dh": "f80318a6"
+      "dh": "f80318a6",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nContextBase",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ClientVerifyAndComputeKey",
@@ -590,7 +952,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2a7f1ed2"
+      "dh": "2a7f1ed2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pContext",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pServerProof",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_ComputeFinalProof",
@@ -610,7 +986,17 @@
         "D2Srp *",
         "uint8_t"
       ],
-      "dh": "bda4b34c"
+      "dh": "bda4b34c",
+      "paramStorage": [
+        [
+          "ppSrp",
+          "ECX:4"
+        ],
+        [
+          "nContextBase",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SRP_GlobalInit",

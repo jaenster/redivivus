@@ -20,7 +20,13 @@
       "usedTypes": [
         "D2WinScrollbar"
       ],
-      "dh": "b7cf0c9e"
+      "dh": "b7cf0c9e",
+      "paramStorage": [
+        [
+          "pScrollbar",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINSCROLLBAR_GetMaxValue",
@@ -42,7 +48,13 @@
         "D2WinScrollbar",
         "int32_t"
       ],
-      "dh": "9f49fbfb"
+      "dh": "9f49fbfb",
+      "paramStorage": [
+        [
+          "pScrollbar",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINSCROLLBAR_SetMaxValue",
@@ -65,7 +77,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "de33d103"
+      "dh": "de33d103",
+      "paramStorage": [
+        [
+          "pScrollbar",
+          "ECX:4"
+        ],
+        [
+          "nMaxValue",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINSCROLLBAR_SetPosition",
@@ -87,7 +109,17 @@
         "D2WinScrollbar",
         "int32_t"
       ],
-      "dh": "e5d83180"
+      "dh": "e5d83180",
+      "paramStorage": [
+        [
+          "pScrollbar",
+          "ECX:4"
+        ],
+        [
+          "nPosition",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINSCROLLBAR_GetPosition",
@@ -109,7 +141,13 @@
         "D2WinScrollbar",
         "int32_t"
       ],
-      "dh": "5606c6d4"
+      "dh": "5606c6d4",
+      "paramStorage": [
+        [
+          "pScrollbar",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINSCROLLBAR_SetLinkedTextBox",
@@ -132,7 +170,17 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "42161fdf"
+      "dh": "42161fdf",
+      "paramStorage": [
+        [
+          "pScrollbar",
+          "ECX:4"
+        ],
+        [
+          "pTextBox",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINSCROLLBAR_SetChangeCallback",
@@ -155,7 +203,17 @@
         "fpD2WinScrollbarOnChange",
         "int32_t"
       ],
-      "dh": "bdbbd25e"
+      "dh": "bdbbd25e",
+      "paramStorage": [
+        [
+          "pScrollbar",
+          "ECX:4"
+        ],
+        [
+          "pCallback",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINSCROLLBAR_HandleMouseWheel",
@@ -179,7 +237,21 @@
         "D2WinScrollbar",
         "int32_t"
       ],
-      "dh": "d35d2238"
+      "dh": "d35d2238",
+      "paramStorage": [
+        [
+          "pMsg",
+          "ECX:4"
+        ],
+        [
+          "pScrollbar",
+          "EDX:4"
+        ],
+        [
+          "nWheelDelta",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINSCROLLBAR_SetStyle",
@@ -201,7 +273,17 @@
         "D2WinScrollbar",
         "int32_t"
       ],
-      "dh": "f7c47a20"
+      "dh": "f7c47a20",
+      "paramStorage": [
+        [
+          "pScrollbar",
+          "ECX:4"
+        ],
+        [
+          "nStyle",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINSCROLLBAR_GetStyle",
@@ -223,7 +305,13 @@
         "D2WinScrollbar",
         "int32_t"
       ],
-      "dh": "9471edc0"
+      "dh": "9471edc0",
+      "paramStorage": [
+        [
+          "pScrollbar",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Push",
@@ -248,7 +336,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2fb7bffd"
+      "dh": "2fb7bffd",
+      "paramStorage": [
+        [
+          "pScrollbar",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Mouse",
@@ -270,7 +364,13 @@
         "D2ControlMsg",
         "int32_t"
       ],
-      "dh": "e39f8255"
+      "dh": "e39f8255",
+      "paramStorage": [
+        [
+          "pScrollbar",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -300,7 +400,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2b68d05c"
+      "dh": "2b68d05c",
+      "paramStorage": [
+        [
+          "pScrollbar",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WinScrollbar",
@@ -324,7 +430,33 @@
         "OnPress",
         "int32_t"
       ],
-      "dh": "ebd72882"
+      "dh": "ebd72882",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nSizeX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDC6",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnOnPress",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

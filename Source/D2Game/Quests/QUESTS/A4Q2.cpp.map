@@ -21,7 +21,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "a24ef088"
+      "dh": "a24ef088",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q26_CheckIzualProximity",
@@ -43,7 +49,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "b65dab95"
+      "dh": "b65dab95",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pQuestSpecificData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q26_CheckIzualNearPlayer",
@@ -66,7 +86,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "86318976"
+      "dh": "86318976",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q26_PlayIzualCompleteSoundToAll",
@@ -85,7 +115,13 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "0c35fe85"
+      "dh": "0c35fe85",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q27_ActiveFilter",
@@ -107,7 +143,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1bd33971"
+      "dh": "1bd33971",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q27_SequenceFilter",
@@ -126,7 +184,13 @@
       "usedTypes": [
         "D2QuestDataStrc"
       ],
-      "dh": "eaa54203"
+      "dh": "eaa54203",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q27_PlayerUpdateTerrorsEndState",
@@ -149,7 +213,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "0f27a4d8"
+      "dh": "0f27a4d8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q27_SpawnDiabloPortal",
@@ -176,7 +254,17 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "0316057c"
+      "dh": "0316057c",
+      "paramStorage": [
+        [
+          "pQuestArgs",
+          "ESI:4"
+        ],
+        [
+          "pQuestSpecificData",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "Q27_Callback11_ScrollMessage",
@@ -206,7 +294,17 @@
         "SGAMEDATA",
         "uint16_t"
       ],
-      "dh": "f3e4f835"
+      "dh": "f3e4f835",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q27_Callback00_NpcActivate",
@@ -233,7 +331,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "77d00358"
+      "dh": "77d00358",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q27_PartyMember_SetCannotComplete",
@@ -256,7 +364,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e1a5534a"
+      "dh": "e1a5534a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q27_PlayerCheckCompletionSendState",
@@ -282,7 +404,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "788577cf"
+      "dh": "788577cf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q27_InitPandemoniumAndSendState",
@@ -305,7 +441,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "1e4ef288"
+      "dh": "1e4ef288",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Q27_PlayerEnterGame",
@@ -338,7 +484,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "06406dfa"
+      "dh": "06406dfa",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q27_SpawnDiablo",
@@ -360,7 +520,29 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "80dc4229"
+      "dh": "80dc4229",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pQuestData",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "QuitGameAfterDia",
@@ -390,7 +572,17 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "b5dad755"
+      "dh": "b5dad755",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pQuestData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q27_SetTerrorsEndCompleted",
@@ -416,7 +608,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "346c4e18"
+      "dh": "346c4e18",
+      "paramStorage": [
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Q27_PartyMember_SetCompleted",
@@ -443,7 +649,21 @@
         "SGAMEDATA",
         "eAct"
       ],
-      "dh": "02ae6e94"
+      "dh": "02ae6e94",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q27_PropagateCompletionToParty",
@@ -466,7 +686,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "4054a514"
+      "dh": "4054a514",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q27_PlayerNotifyCompleted",
@@ -488,7 +722,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e4ea441e"
+      "dh": "e4ea441e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q27_Callback03_ChangedLevel",
@@ -512,7 +760,17 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "6eca63c9"
+      "dh": "6eca63c9",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q27_Callback02_NpcDeactivate",
@@ -533,7 +791,17 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "70b7eaab"
+      "dh": "70b7eaab",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q23_UnlockHarrogathWaypoint",
@@ -556,7 +824,17 @@
         "SGAMEDATA",
         "int16_t"
       ],
-      "dh": "98efba61"
+      "dh": "98efba61",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Q27_Callback14_PlayerJoinedGame",
@@ -580,7 +858,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "db437781"
+      "dh": "db437781",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q27_Callback13_PlayerStartedGame",
@@ -604,7 +892,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "88569b2e"
+      "dh": "88569b2e",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q27_PlayerCheckNearDiablo",
@@ -632,7 +930,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "bb98cb1b"
+      "dh": "bb98cb1b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q27_GetAllSealsActivated",
@@ -652,7 +964,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "f641cb0c"
+      "dh": "f641cb0c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q27_ActivateAllSealsKillChaos",
@@ -682,7 +1000,17 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "93de8d10"
+      "dh": "93de8d10",
+      "paramStorage": [
+        [
+          "pQuestSpecificData",
+          "EAX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q27_Callback_08_KillHandler",
@@ -715,7 +1043,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "0b073601"
+      "dh": "0b073601",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q27_InitData",
@@ -736,7 +1074,13 @@
         "D2QuestDataA4Q2Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "9958a024"
+      "dh": "9958a024",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn55_DiabloStartPoint",
@@ -757,7 +1101,13 @@
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "70c75e50"
+      "dh": "70c75e50",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_InitFn56_Seal",
@@ -775,7 +1125,13 @@
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "cf1a154e"
+      "dh": "cf1a154e",
+      "paramStorage": [
+        [
+          "pInitArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_A4Q2_DiabloSealActivateKillChaos",
@@ -801,7 +1157,13 @@
         "D2ObjectsTxt",
         "D2UnitStrc"
       ],
-      "dh": "a8add388"
+      "dh": "a8add388",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q27_IsDiabloSpawned",
@@ -821,7 +1183,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "3b23f78b"
+      "dh": "3b23f78b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_A4Q2_PandemoniumFortressGate",
@@ -863,7 +1231,13 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "9bb70f37"
+      "dh": "9bb70f37",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

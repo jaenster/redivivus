@@ -23,7 +23,17 @@
         "TSLink<TCELENTRY> *",
         "uint32_t"
       ],
-      "dh": "9550abf3"
+      "dh": "9550abf3",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

@@ -23,7 +23,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8d849ed8"
+      "dh": "8d849ed8",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit1",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_RollElementalDamage",
@@ -47,7 +61,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c2100acf"
+      "dh": "c2100acf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eUnitStatEx",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eStat",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_SetDamage",
@@ -79,7 +111,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "781cde32"
+      "dh": "781cde32",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pOwner",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILES_CalculateElementalDamage",
@@ -107,7 +161,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "053ae670"
+      "dh": "053ae670",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILES_SetDamageByElementType",
@@ -129,7 +201,29 @@
         "SGAMEDATA",
         "eD2ElementalDamageType"
       ],
-      "dh": "76fdfec1"
+      "dh": "76fdfec1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMissile",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamageStruct",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDuration",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SetElementalDamageField",
@@ -151,7 +245,29 @@
         "eD2ElementalDamageType",
         "int32_t"
       ],
-      "dh": "465be3d3"
+      "dh": "465be3d3",
+      "paramStorage": [
+        [
+          "nMissileUnit",
+          "ECX:4"
+        ],
+        [
+          "pMissile",
+          "EDX:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamageStruct",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDamage",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_GetElementalDamageField",
@@ -173,7 +289,29 @@
         "eD2ElementalDamageType",
         "int32_t"
       ],
-      "dh": "63e03c0b"
+      "dh": "63e03c0b",
+      "paramStorage": [
+        [
+          "nUnused1",
+          "ECX:4"
+        ],
+        [
+          "pMissile",
+          "EDX:4"
+        ],
+        [
+          "nUnused2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamageStruct",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnused3",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILES_ClearDamageStruct",
@@ -195,7 +333,21 @@
         "SGAMEDATA",
         "eD2ElementalDamageType"
       ],
-      "dh": "a75c693b"
+      "dh": "a75c693b",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "nMissileId",
+          "EDX:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILES_AddElementalDamageBonus",
@@ -218,7 +370,29 @@
         "eD2ElementalDamageType",
         "int32_t"
       ],
-      "dh": "adaebf25"
+      "dh": "adaebf25",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBonusDamage",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILES_SpawnRadialPattern",
@@ -246,7 +420,45 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "5ac6ef43"
+      "dh": "5ac6ef43",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nRing2Step",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nRing1Step",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nSubLoopMult",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_CheckCollisionAtOffset",
@@ -267,7 +479,33 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "f2a02cb1"
+      "dh": "f2a02cb1",
+      "paramStorage": [
+        [
+          "nDistance",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nMaxDistSquared",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFromX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFromY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nOffsetY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILES_SpawnAreaPattern",
@@ -304,7 +542,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "38f2e6c6"
+      "dh": "38f2e6c6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nRadiusParam",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMissileId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTotalFrames",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILES_SpawnSubMissileAlongPath",
@@ -336,7 +596,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c8796dd7"
+      "dh": "c8796dd7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eMissileId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTotalFrames",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSubLoopMult",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILES_SpawnPeriodicRandom",
@@ -374,7 +656,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d61ccf96"
+      "dh": "d61ccf96",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eMissileId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nPeriod",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SpawnPortal",
@@ -405,7 +713,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "1682a9f8"
+      "dh": "1682a9f8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILES_UpdatePathToOwner",
@@ -434,7 +756,17 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "3b32d25e"
+      "dh": "3b32d25e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_AreaElementalDamageExplosion",
@@ -467,7 +799,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "fbd1b283"
+      "dh": "fbd1b283",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_AreaPhysicalDamageExplosion",
@@ -500,7 +846,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "556663e4"
+      "dh": "556663e4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnRadialSubMissiles",
@@ -527,7 +887,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "eb720df7"
+      "dh": "eb720df7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_AreaSplashDamage",
@@ -560,7 +934,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "6b3888ae"
+      "dh": "6b3888ae",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_WallHitDelegateToAreaDamage",
@@ -580,7 +968,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "435b59a5"
+      "dh": "435b59a5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_HealTarget",
@@ -619,7 +1021,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ae024b4b"
+      "dh": "ae024b4b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_BlockSelfHitByState",
@@ -640,7 +1056,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "1406972b"
+      "dh": "1406972b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnMonsterAtHit",
@@ -666,7 +1096,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "f376ddb6"
+      "dh": "f376ddb6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_AreaDamageWithSpawnPattern",
@@ -704,7 +1148,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f6a5275c"
+      "dh": "f6a5275c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_SetupTargetAndRange",
@@ -739,7 +1197,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "fdc7c5cb"
+      "dh": "fdc7c5cb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MISSILES_ApplyAreaHitEffect",
@@ -766,7 +1234,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bdc23d5e"
+      "dh": "bdc23d5e",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_PierceOrExplodeOnWall",
@@ -796,7 +1274,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "17b4e5a4"
+      "dh": "17b4e5a4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_ChainPierceWithBounce",
@@ -832,7 +1324,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "8f636185"
+      "dh": "8f636185",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_AreaDamageWithDurationMod",
@@ -867,7 +1373,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "2aa27722"
+      "dh": "2aa27722",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILES_SpawnRadialPattern18",
@@ -898,7 +1418,29 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "0ec1e557"
+      "dh": "0ec1e557",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eMissileId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLifetime",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStride",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_AreaDamageAndRadialBurst",
@@ -933,7 +1475,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "650ba894"
+      "dh": "650ba894",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnStationarySubMissile",
@@ -961,7 +1517,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c8be151c"
+      "dh": "c8be151c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_ApplyAuraStateToTarget",
@@ -997,7 +1567,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "0225b19c"
+      "dh": "0225b19c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_ApplyTerrorToMonster",
@@ -1029,7 +1613,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1314e83d"
+      "dh": "1314e83d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_ApplyWarCryBuff",
@@ -1055,7 +1653,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "fc60fc49"
+      "dh": "fc60fc49",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_ApplyTimedAuraState",
@@ -1092,7 +1704,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "432cc5c5"
+      "dh": "432cc5c5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_CreateSubMissileAtFrame",
@@ -1119,7 +1745,17 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "c94c48a1"
+      "dh": "c94c48a1",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnSubMissileAtFrameInArea",
@@ -1151,7 +1787,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2638e20a"
+      "dh": "2638e20a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_ApplyTimedAuraStateFiltered",
@@ -1183,7 +1833,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "edc1f117"
+      "dh": "edc1f117",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_CreateSubMissileInvertFrame",
@@ -1210,7 +1874,17 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "65c418ca"
+      "dh": "65c418ca",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_CreateDirectionalMissiles",
@@ -1239,7 +1913,37 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "5e6c2644"
+      "dh": "5e6c2644",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eMissileId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nStride",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnDirectionalSubMissiles",
@@ -1265,7 +1969,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "329c01e0"
+      "dh": "329c01e0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnStationarySubMissileAtPos",
@@ -1295,7 +2013,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "fbeea205"
+      "dh": "fbeea205",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_NoOp",
@@ -1314,7 +2046,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "19902b8b"
+      "dh": "19902b8b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMissile",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_ApplyTerrorNearMinion",
@@ -1348,7 +2094,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4be66779"
+      "dh": "4be66779",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnSpreadSubMissilesOnFirstFrame",
@@ -1378,7 +2138,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "12c07448"
+      "dh": "12c07448",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnSpreadSubMissiles",
@@ -1406,7 +2180,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a393dc47"
+      "dh": "a393dc47",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_LeechHpToOwner",
@@ -1434,7 +2222,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7c269811"
+      "dh": "7c269811",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnPortalOnWallHit",
@@ -1457,7 +2259,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "5c5d89f3"
+      "dh": "5c5d89f3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SetRoomPortalFlag",
@@ -1479,7 +2295,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "54578a48"
+      "dh": "54578a48",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_ActivateObjectOnWallHit",
@@ -1508,7 +2338,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "5ce0284c"
+      "dh": "5ce0284c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnSubMissileAtWallHit",
@@ -1540,7 +2384,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0a1f587d"
+      "dh": "0a1f587d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_AlwaysPierce",
@@ -1560,7 +2418,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "dd518c9f"
+      "dh": "dd518c9f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMissile",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILES_SetPathFromTotalFramesCallback",
@@ -1587,7 +2459,17 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "8c38a2b9"
+      "dh": "8c38a2b9",
+      "paramStorage": [
+        [
+          "pMissile",
+          "ECX:4"
+        ],
+        [
+          "nParam",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnMissileStarPattern",
@@ -1620,7 +2502,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "20ceabce"
+      "dh": "20ceabce",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnRandomMonsterAtHit",
@@ -1646,7 +2542,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "d4c7ef3d"
+      "dh": "d4c7ef3d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_CastScatterMissiles",
@@ -1676,7 +2586,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "07f77a41"
+      "dh": "07f77a41",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_HealTargetRandom",
@@ -1709,7 +2633,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8cf42d8a"
+      "dh": "8cf42d8a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnFixedMissileStar",
@@ -1737,7 +2675,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "7e43ef07"
+      "dh": "7e43ef07",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_AreaDamageLargeMonstersAndRadialBurst",
@@ -1772,7 +2724,21 @@
         "SGAMEDATA",
         "eD2Skills"
       ],
-      "dh": "fe560aec"
+      "dh": "fe560aec",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnSubMissileAtDirectionPoint",
@@ -1804,7 +2770,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "b359f27a"
+      "dh": "b359f27a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_BlockHitUntilFrame",
@@ -1827,7 +2807,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "669f4632"
+      "dh": "669f4632",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnUpToThreeSubMissiles",
@@ -1853,7 +2847,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "8f3ebe7d"
+      "dh": "8f3ebe7d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnEightDirectionSubMissiles",
@@ -1881,7 +2889,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e957f791"
+      "dh": "e957f791",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_ApplyDruidAuraWithMissile",
@@ -1908,7 +2930,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "5f287993"
+      "dh": "5f287993",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnMonsterFromSkillParam",
@@ -1939,7 +2975,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "59380b72"
+      "dh": "59380b72",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_DrainTargetManaPercent",
@@ -1963,7 +3013,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "daad44b7"
+      "dh": "daad44b7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_AreaDamageAndSpawnSubMissile",
@@ -1996,7 +3060,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "a7fa0236"
+      "dh": "a7fa0236",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnRandomOffsetSubMissile",
@@ -2028,7 +3106,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "aa2eed0f"
+      "dh": "aa2eed0f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnDualRadialSubMissiles",
@@ -2054,7 +3146,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "5f9ede4d"
+      "dh": "5f9ede4d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_DispatchSrvDoFunc",
@@ -2081,7 +3187,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "3d500e3b"
+      "dh": "3d500e3b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDmgFunc_PhysToElementalByCalc1",
@@ -2107,7 +3227,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "97ce5664"
+      "dh": "97ce5664",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDmgFunc_RecalcElementalWithClear",
@@ -2135,7 +3273,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ea46dec9"
+      "dh": "ea46dec9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDmgFunc_FreezeLengthFromColdLengthPct",
@@ -2160,7 +3316,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c1466b52"
+      "dh": "c1466b52",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDmgFunc_RollChanceFlagBlessedAim",
@@ -2182,7 +3356,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "d3508f25"
+      "dh": "d3508f25",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDmgFunc_ConvertColdLengthToFreezeLength",
@@ -2202,7 +3394,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "68dea550"
+      "dh": "68dea550",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMissile",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDmgFunc_CopyColdLengthToFreezeLength",
@@ -2222,7 +3432,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "4f8e86ca"
+      "dh": "4f8e86ca",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDmgFunc_ElementalBonusVsUndeadDemon",
@@ -2249,7 +3477,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "c33bbc05"
+      "dh": "c33bbc05",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDmgFunc_SetTargetNotControlled",
@@ -2270,7 +3516,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "4473b2b2"
+      "dh": "4473b2b2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDmgFunc_SetStunLengthFromParam1",
@@ -2296,7 +3560,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "3302175f"
+      "dh": "3302175f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDmgFunc_ApplyProgOverlayToTarget",
@@ -2317,7 +3599,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "8b011ea6"
+      "dh": "8b011ea6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDmgFunc_SetStunLengthFromSkillParam",
@@ -2340,7 +3640,25 @@
         "SGAMEDATA",
         "eD2Skills"
       ],
-      "dh": "292738e5"
+      "dh": "292738e5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDmgFunc_SynergyCappedPoisonLength",
@@ -2367,7 +3685,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "218a2a94"
+      "dh": "218a2a94",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDmgFunc_ScaleByDamagePctThenElemBonus",
@@ -2390,7 +3726,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "d6e4196c"
+      "dh": "d6e4196c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvDmgFunc_RollMonsterSizeKnockbackChance",
@@ -2415,7 +3769,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cf1b8556"
+      "dh": "cf1b8556",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_ApplyMissileHitDamage",
@@ -2447,7 +3819,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "56a2bd58"
+      "dh": "56a2bd58",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEvent",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_RedemptionHitNoMana",
@@ -2468,7 +3858,29 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "702af86b"
+      "dh": "702af86b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nEvent",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwReserved",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_RedemptionHitWithMana",
@@ -2489,7 +3901,29 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "bbc47046"
+      "dh": "bbc47046",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nEvent",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwReserved",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_PortalArrival",
@@ -2514,7 +3948,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "7f299688"
+      "dh": "7f299688",
+      "paramStorage": [
+        [
+          "pGame",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnTyraelAndOpenPortal",
@@ -2541,7 +3985,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "bffe989e"
+      "dh": "bffe989e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_ExpireAndFree",
@@ -2563,7 +4021,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "95d87efa"
+      "dh": "95d87efa",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "bOnExpire",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_CheckCollisionMode",
@@ -2582,7 +4054,17 @@
         "D2UnitStrc",
         "eD2UnitType"
       ],
-      "dh": "5e83606f"
+      "dh": "5e83606f",
+      "paramStorage": [
+        [
+          "nCollisionMode",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "getDamageTarget",
@@ -2603,7 +4085,13 @@
         "D2MissilesTxt",
         "D2UnitStrc"
       ],
-      "dh": "c65b203e"
+      "dh": "c65b203e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_StatExpireCallback_ClearState",
@@ -2624,7 +4112,21 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "f0b20220"
+      "dh": "f0b20220",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_ApplyNextHitState",
@@ -2652,7 +4154,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "6e320211"
+      "dh": "6e320211",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "MissileSrvDo",
@@ -2681,7 +4193,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "32d31a91"
+      "dh": "32d31a91",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "MISSILEEVENT_DefaultCallback",
@@ -2702,7 +4224,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "de1b407b"
+      "dh": "de1b407b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_HitWithArmorReduction",
@@ -2727,7 +4263,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "bbc19441"
+      "dh": "bbc19441",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "ESI:4"
+        ],
+        [
+          "pDamage",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnSubMissileInvertFrameInArea",
@@ -2766,7 +4320,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "abcda1a6"
+      "dh": "abcda1a6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Hits",
@@ -2809,7 +4377,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f69a710a"
+      "dh": "f69a710a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bForceHit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn01_BasicMissile",
@@ -2850,7 +4436,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "607f59ac"
+      "dh": "607f59ac",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn02_PoisonTrail",
@@ -2877,7 +4473,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "293dcae9"
+      "dh": "293dcae9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn03_StationaryCloud",
@@ -2906,7 +4512,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "2a8abc12"
+      "dh": "2a8abc12",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn05_FireWall",
@@ -2939,7 +4555,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9509778e"
+      "dh": "9509778e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn06_FireWallMaker",
@@ -2971,7 +4597,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "22b6d43f"
+      "dh": "22b6d43f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn07_GuidedMissile",
@@ -3007,7 +4643,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "532e0d06"
+      "dh": "532e0d06",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn08_MonBlizzCenter",
@@ -3031,7 +4677,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "c3a6c375"
+      "dh": "c3a6c375",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn09_BatLightningBolt",
@@ -3064,7 +4720,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d5980cd4"
+      "dh": "d5980cd4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn10_BlizzardCenter",
@@ -3093,7 +4759,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "28fd1260"
+      "dh": "28fd1260",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn11_FingerMageSpider",
@@ -3123,7 +4799,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "134cf5a7"
+      "dh": "134cf5a7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn12_DiabWallMaker",
@@ -3155,7 +4841,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7ccc196f"
+      "dh": "7ccc196f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn13_BoneWallMaker",
@@ -3200,7 +4896,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f919756d"
+      "dh": "f919756d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn14_GrimWard",
@@ -3227,7 +4933,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "c185038a"
+      "dh": "c185038a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn15_FrozenOrb",
@@ -3259,7 +4975,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c4a320a5"
+      "dh": "c4a320a5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn16_FrozenOrbNova",
@@ -3290,7 +5016,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "f931f00b"
+      "dh": "f931f00b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn17_CairnStones",
@@ -3316,7 +5052,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "4418a766"
+      "dh": "4418a766",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSMODE_SrvDoFn18_TowerChestSpawner",
@@ -3362,7 +5108,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8f949378"
+      "dh": "8f949378",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn20_BladeCreeper",
@@ -3387,7 +5143,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "acfc79bd"
+      "dh": "acfc79bd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn21_Distraction",
@@ -3419,7 +5185,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c44eca95"
+      "dh": "c44eca95",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn22_LightningTrailingJavelin",
@@ -3459,7 +5235,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1594bac0"
+      "dh": "1594bac0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn23_SubMissileTrail",
@@ -3490,7 +5276,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "25f4bccf"
+      "dh": "25f4bccf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn25_EruptionCenter",
@@ -3519,7 +5315,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "8c753bb3"
+      "dh": "8c753bb3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn26_Vines",
@@ -3551,7 +5357,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f8aacb0b"
+      "dh": "f8aacb0b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn27_Tornado",
@@ -3583,7 +5399,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "c522a098"
+      "dh": "c522a098",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn28_Volcano",
@@ -3624,7 +5450,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "94302577"
+      "dh": "94302577",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn29_RecyclerDelay",
@@ -3659,7 +5495,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "537ac233"
+      "dh": "537ac233",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn33_VineRecyclerDelay",
@@ -3694,7 +5540,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "44d4365c"
+      "dh": "44d4365c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn30_RabiesPlague",
@@ -3739,7 +5595,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7c512a6a"
+      "dh": "7c512a6a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn31_TwinWaveMaker",
@@ -3780,7 +5646,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c0452e4c"
+      "dh": "c0452e4c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn32_TigerFury",
@@ -3809,7 +5685,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "7e8b810d"
+      "dh": "7e8b810d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn34_BaalTauntControl",
@@ -3845,7 +5731,17 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "33125fc9"
+      "dh": "33125fc9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn35_RoyalStrikeChaosIce",
@@ -3879,7 +5775,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "76f70ea4"
+      "dh": "76f70ea4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnHitSubMissilesAndHit",
@@ -3906,7 +5812,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2b280ac7"
+      "dh": "2b280ac7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnHitSubMissiles",
@@ -3933,7 +5853,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e78b0107"
+      "dh": "e78b0107",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn19_RadamentDeath",
@@ -3960,7 +5894,17 @@
         "fpBaalWaveFunction",
         "int32_t"
       ],
-      "dh": "0c1505a5"
+      "dh": "0c1505a5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn36_BaalFxControl",
@@ -3990,7 +5934,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9e823fc8"
+      "dh": "9e823fc8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILESMODE_SrvDoFn37_Unused",
@@ -4022,7 +5976,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d144a1fd"
+      "dh": "d144a1fd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_MISSILESMODE_SrvDoFn01_BasicMissile",
@@ -4035,6 +5999,16 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
+      ],
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
       ]
     },
     {
@@ -4054,7 +6028,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "b44cfff6"
+      "dh": "b44cfff6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMissile",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_NoOp_Unref_00646260",
@@ -4073,7 +6061,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c26a110e"
+      "dh": "c26a110e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMissile",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Missiles_SrvHitFunc_NoOp_Unref_00646270",
@@ -4092,7 +6094,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "ac713d75"
+      "dh": "ac713d75",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMissile",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

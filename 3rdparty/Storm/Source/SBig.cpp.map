@@ -22,7 +22,17 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "12114813"
+      "dh": "12114813",
+      "paramStorage": [
+        [
+          "ullAddend",
+          "Stack[0x4]:8"
+        ],
+        [
+          "pnAccum",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_Accumulator_MulAndAdd",
@@ -42,7 +52,17 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "83de9fc3"
+      "dh": "83de9fc3",
+      "paramStorage": [
+        [
+          "pnAccumulator",
+          "ESI:4"
+        ],
+        [
+          "nAddend",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_Accumulator_ComputeOffset",
@@ -62,7 +82,17 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "f4d51472"
+      "dh": "f4d51472",
+      "paramStorage": [
+        [
+          "nMultiplicand",
+          "EAX:4"
+        ],
+        [
+          "nAddend",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_DecodeDataBytes",
@@ -81,7 +111,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "49eb1688"
+      "dh": "49eb1688",
+      "paramStorage": [
+        [
+          "nBufferLen",
+          "EDI:4"
+        ],
+        [
+          "pnReadPos",
+          "EAX:4"
+        ],
+        [
+          "pnValue",
+          "ESI:4"
+        ],
+        [
+          "pBuffer",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_Ui_Subscript",
@@ -101,7 +149,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c7c1fb1d"
+      "dh": "c7c1fb1d",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_Ui_Top",
@@ -120,7 +178,13 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "82ce037d"
+      "dh": "82ce037d",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_Uc_Subscript",
@@ -140,7 +204,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "3af2c13e"
+      "dh": "3af2c13e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_BigBuffer_GetDataPtr",
@@ -159,7 +233,13 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "e7add616"
+      "dh": "e7add616",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_Uc_Constructor",
@@ -177,7 +257,13 @@
       "usedTypes": [
         "BigBuffer"
       ],
-      "dh": "e1ae9695"
+      "dh": "e1ae9695",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor",
@@ -195,7 +281,13 @@
       "usedTypes": [
         "BigBuffer"
       ],
-      "dh": "86e5ddb5"
+      "dh": "86e5ddb5",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00421050",
@@ -213,7 +305,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "fd3a63db"
+      "dh": "fd3a63db",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pSrc",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00421090",
@@ -231,7 +333,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "4d1462a9"
+      "dh": "4d1462a9",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pSrc",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TSGrowableArray_Ui_CalcChunkSize",
@@ -250,7 +362,17 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "91dc43b4"
+      "dh": "91dc43b4",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSGrowableArray_Ui_RoundToChunk",
@@ -268,7 +390,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "c4cf8e38"
+      "dh": "c4cf8e38",
+      "paramStorage": [
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMultiple",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_DynArray_Resize",
@@ -289,7 +421,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "712ddab6"
+      "dh": "712ddab6",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nNewCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_BigBuffer_GetDataPtr_Unref_00421150",
@@ -308,7 +450,13 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "b7987f4d"
+      "dh": "b7987f4d",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSGrowableArray_Uc_CalcChunkSize",
@@ -327,7 +475,17 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "2bb445b2"
+      "dh": "2bb445b2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSGrowableArray_Uc_RoundToChunk",
@@ -345,7 +503,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "775b4c96"
+      "dh": "775b4c96",
+      "paramStorage": [
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMultiple",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TSFixedArray_Uc_ReallocData",
@@ -368,7 +536,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "52db83ea"
+      "dh": "52db83ea",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "ECX:4"
+        ],
+        [
+          "nNewSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSGrowableArray_UcAlt_CalcChunkSize",
@@ -387,7 +565,17 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "67ba3513"
+      "dh": "67ba3513",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSGrowableArray_UcAlt_RoundToChunk",
@@ -405,7 +593,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "935288ec"
+      "dh": "935288ec",
+      "paramStorage": [
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMultiple",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004212a0",
@@ -423,7 +621,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "30f1c0ad"
+      "dh": "30f1c0ad",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pSrc",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004212c0",
@@ -441,7 +649,17 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "4534e037"
+      "dh": "4534e037",
+      "paramStorage": [
+        [
+          "pA",
+          "ECX:4"
+        ],
+        [
+          "pB",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_BigBuffer_GetWord",
@@ -461,7 +679,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "303dc2e1"
+      "dh": "303dc2e1",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Compare",
@@ -481,7 +709,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ae7ea441"
+      "dh": "ae7ea441",
+      "paramStorage": [
+        [
+          "pBitSetA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitSetB",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_BigBuffer_FindHighestBit",
@@ -502,7 +740,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5f7abe69"
+      "dh": "5f7abe69",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_BigBuffer_IsLowestBitClear",
@@ -521,7 +765,13 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "43a6a14a"
+      "dh": "43a6a14a",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_BigBuffer_FindLowestBit",
@@ -542,7 +792,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "14a2b0c1"
+      "dh": "14a2b0c1",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_BigBuffer_GetFirstWord",
@@ -561,7 +817,17 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "475ad120"
+      "dh": "475ad120",
+      "paramStorage": [
+        [
+          "pOutWord",
+          "EDX:4"
+        ],
+        [
+          "pBitSet",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_CompareBigBuffers_ForSha1",
@@ -581,7 +847,17 @@
         "BigData",
         "int32_t"
       ],
-      "dh": "53046906"
+      "dh": "53046906",
+      "paramStorage": [
+        [
+          "pBigA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_BigBuffer_IsLowestBitClearWrapper",
@@ -601,7 +877,17 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "d8b405f2"
+      "dh": "d8b405f2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pBigNum",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_ArrayDwordReadAtCursor",
@@ -621,7 +907,21 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "ff55f123"
+      "dh": "ff55f123",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "pBigNum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutWord",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TSFixedArray_Ui_Destructor_Unref_00421570",
@@ -640,7 +940,13 @@
       "usedTypes": [
         "TSGrowableArray_Ui"
       ],
-      "dh": "f4677af2"
+      "dh": "f4677af2",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSFixedArray_Ui_Destructor_Unref_00421590",
@@ -659,7 +965,13 @@
       "usedTypes": [
         "TSGrowableArray_Ui"
       ],
-      "dh": "7557f21b"
+      "dh": "7557f21b",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_BigBuffer_GetDataPtr_Unref_004215b0",
@@ -678,7 +990,13 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "04775877"
+      "dh": "04775877",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_Ui_Copy",
@@ -698,7 +1016,21 @@
         "TSGrowableArray_Ui",
         "uint32_t"
       ],
-      "dh": "866f4e23"
+      "dh": "866f4e23",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TSGrowableArray_Uc_Reserve",
@@ -719,7 +1051,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b519c014"
+      "dh": "b519c014",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nAdditional",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAlignToGranularity",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_ArrayByteSetCapacity",
@@ -740,7 +1086,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "21c14635"
+      "dh": "21c14635",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCapacity",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_ArrayByteAltSetCapacity",
@@ -761,7 +1117,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6b140ce2"
+      "dh": "6b140ce2",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCapacity",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSFixedArray_Ui_ReallocData",
@@ -783,7 +1149,17 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "5e77459e"
+      "dh": "5e77459e",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCapacity",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSFixedArray_UcAlt_ReallocData",
@@ -806,7 +1182,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "576a3a6a"
+      "dh": "576a3a6a",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCapacity",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSFixedArray_Ui_Destructor_Unref_004217f0",
@@ -825,7 +1211,13 @@
       "usedTypes": [
         "TSGrowableArray_Ui"
       ],
-      "dh": "34c36343"
+      "dh": "34c36343",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSFixedArray_Ui_Destructor",
@@ -841,7 +1233,13 @@
         "TSFixedArray_Ui_Destructor",
         "SMemFree"
       ],
-      "dh": "f4387462"
+      "dh": "f4387462",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00421830",
@@ -856,7 +1254,13 @@
       "calledFunctions": [
         "Unreferenced_00421830"
       ],
-      "dh": "b0ddd7cb"
+      "dh": "b0ddd7cb",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00421860",
@@ -874,7 +1278,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "4ff6d0a9"
+      "dh": "4ff6d0a9",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSFixedArray_Ui_Assign",
@@ -893,7 +1303,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "82aac283"
+      "dh": "82aac283",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "pSrcArray",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004218a0",
@@ -908,7 +1328,13 @@
       "calledFunctions": [
         "Unreferenced_004218a0"
       ],
-      "dh": "0e4a5543"
+      "dh": "0e4a5543",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_ArrayByteAppendData",
@@ -931,7 +1357,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ffe28eb3"
+      "dh": "ffe28eb3",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TSGrowableArray_Uc_New",
@@ -953,7 +1393,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9f929d7c"
+      "dh": "9f929d7c",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSGrowableArray_Uc_SetCount",
@@ -973,7 +1419,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "ba0277e3"
+      "dh": "ba0277e3",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nNewCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_ArrayByteAppendByte",
@@ -993,7 +1449,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8ceb2ee7"
+      "dh": "8ceb2ee7",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "pByte",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_Uc_Copy",
@@ -1014,7 +1480,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4de27727"
+      "dh": "4de27727",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_UcAlt_Copy",
@@ -1035,7 +1515,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bf921ced"
+      "dh": "bf921ced",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TSGrowableArray_Ui_Reserve",
@@ -1056,7 +1550,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7c0a5ba9"
+      "dh": "7c0a5ba9",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nAdditional",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAlignToGranularity",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TSGrowableArray_UcAlt_Reserve",
@@ -1078,7 +1586,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ad0bb211"
+      "dh": "ad0bb211",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nAdditional",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAlignToGranularity",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TSGrowableArray_Ui_Assign",
@@ -1098,7 +1620,17 @@
         "TSGrowableArray_Ui",
         "uint32_t"
       ],
-      "dh": "6c771d17"
+      "dh": "6c771d17",
+      "paramStorage": [
+        [
+          "pDest",
+          "ECX:4"
+        ],
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_EncodeDataBytes",
@@ -1124,7 +1656,17 @@
         "TSGrowableArray_Uc",
         "uint32_t"
       ],
-      "dh": "20dad709"
+      "dh": "20dad709",
+      "paramStorage": [
+        [
+          "nValue",
+          "EAX:4"
+        ],
+        [
+          "pByteBuffer",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_ToBinaryAppend",
@@ -1152,7 +1694,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b1933e05"
+      "dh": "b1933e05",
+      "paramStorage": [
+        [
+          "pByteBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBignum",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BigData_Destructor",
@@ -1172,7 +1724,13 @@
         "BigData",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "1db94b19"
+      "dh": "1db94b19",
+      "paramStorage": [
+        [
+          "pBigData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_Constructor",
@@ -1191,7 +1749,13 @@
         "BigData",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "3d16f6b1"
+      "dh": "3d16f6b1",
+      "paramStorage": [
+        [
+          "pBigData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_EnsureCapacity",
@@ -1214,7 +1778,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5bbe56ae"
+      "dh": "5bbe56ae",
+      "paramStorage": [
+        [
+          "pDwordArray",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bZeroFill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TSGrowableArray_Ui_SetCount",
@@ -1235,7 +1813,17 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "e9e037c3"
+      "dh": "e9e037c3",
+      "paramStorage": [
+        [
+          "pDwordArray",
+          "ECX:4"
+        ],
+        [
+          "nNewLen",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_AppendBytes",
@@ -1258,7 +1846,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7715cedd"
+      "dh": "7715cedd",
+      "paramStorage": [
+        [
+          "pByteArray",
+          "ECX:4"
+        ],
+        [
+          "nByteCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcBytes",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_GrowToIndex",
@@ -1281,7 +1883,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7a0dc45c"
+      "dh": "7a0dc45c",
+      "paramStorage": [
+        [
+          "pDwordArray",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_GetPtrAtOffset",
@@ -1302,7 +1914,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1fbd8dbc"
+      "dh": "1fbd8dbc",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_TrimToOffset",
@@ -1323,7 +1945,13 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "6b9c7a12"
+      "dh": "6b9c7a12",
+      "paramStorage": [
+        [
+          "pDwordArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_GrowToIndexNoZero",
@@ -1345,7 +1973,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "218ad9b0"
+      "dh": "218ad9b0",
+      "paramStorage": [
+        [
+          "pDwordArray",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_SetOffset",
@@ -1365,7 +2003,17 @@
         "BigBuffer",
         "int32_t"
       ],
-      "dh": "ee1a3635"
+      "dh": "ee1a3635",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "ECX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_TrimLeadingZeros",
@@ -1387,7 +2035,13 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "3ca26ae1"
+      "dh": "3ca26ae1",
+      "paramStorage": [
+        [
+          "pDwordArray",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_CopyAssign",
@@ -1407,7 +2061,17 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "7fec5065"
+      "dh": "7fec5065",
+      "paramStorage": [
+        [
+          "pDest",
+          "ECX:4"
+        ],
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Add_Ui",
@@ -1429,7 +2093,21 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "4c7ec2a8"
+      "dh": "4c7ec2a8",
+      "paramStorage": [
+        [
+          "nCarry",
+          "ECX:4"
+        ],
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDest",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Add",
@@ -1451,7 +2129,21 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "eceb54f7"
+      "dh": "eceb54f7",
+      "paramStorage": [
+        [
+          "pSourceA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSourceB",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDest",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_And",
@@ -1473,7 +2165,21 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "725b6a4b"
+      "dh": "725b6a4b",
+      "paramStorage": [
+        [
+          "pSourceA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSourceB",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDest",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Compare_Ui",
@@ -1494,7 +2200,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7a5ad490"
+      "dh": "7a5ad490",
+      "paramStorage": [
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigIntArray",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Div_Ux",
@@ -1520,7 +2236,29 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "34c597b7"
+      "dh": "34c597b7",
+      "paramStorage": [
+        [
+          "pRemainderOut",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDividend",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDivisorLo",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDivisorHi",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pQuotient",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_IsOdd",
@@ -1540,7 +2278,13 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "78dc4a8e"
+      "dh": "78dc4a8e",
+      "paramStorage": [
+        [
+          "pBignum",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_IsOne",
@@ -1560,7 +2304,13 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "f9e3ebeb"
+      "dh": "f9e3ebeb",
+      "paramStorage": [
+        [
+          "pBignum",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_IsZero",
@@ -1580,7 +2330,13 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "fe0d8066"
+      "dh": "fe0d8066",
+      "paramStorage": [
+        [
+          "pBignum",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Mul_Ux",
@@ -1605,7 +2361,25 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "acc53731"
+      "dh": "acc53731",
+      "paramStorage": [
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMultiplierLo",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMultiplierHi",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDest",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Not",
@@ -1627,7 +2401,17 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "5bdd3630"
+      "dh": "5bdd3630",
+      "paramStorage": [
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDest",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Or",
@@ -1649,7 +2433,21 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "420b4636"
+      "dh": "420b4636",
+      "paramStorage": [
+        [
+          "pLhs",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRhs",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Set2Exp",
@@ -1671,7 +2469,17 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "ef977958"
+      "dh": "ef977958",
+      "paramStorage": [
+        [
+          "nBitPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_SetOne",
@@ -1693,7 +2501,13 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "d97d50b0"
+      "dh": "d97d50b0",
+      "paramStorage": [
+        [
+          "pResult",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_SetZero",
@@ -1715,7 +2529,13 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "0bed27e1"
+      "dh": "0bed27e1",
+      "paramStorage": [
+        [
+          "pResult",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Shl",
@@ -1739,7 +2559,21 @@
         "int8_t",
         "uint32_t"
       ],
-      "dh": "6767589e"
+      "dh": "6767589e",
+      "paramStorage": [
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pResult",
+          "EDI:4"
+        ],
+        [
+          "nShiftBits",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Shr",
@@ -1762,7 +2596,21 @@
         "int8_t",
         "uint32_t"
       ],
-      "dh": "9833f061"
+      "dh": "9833f061",
+      "paramStorage": [
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ],
+        [
+          "nShiftBits",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Sub_Ui",
@@ -1784,7 +2632,21 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "3f6c1a14"
+      "dh": "3f6c1a14",
+      "paramStorage": [
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ],
+        [
+          "nSubtrahend",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Sub",
@@ -1806,7 +2668,21 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "e3b7cdad"
+      "dh": "e3b7cdad",
+      "paramStorage": [
+        [
+          "pLhs",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRhs",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Xor",
@@ -1828,7 +2704,21 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "4f22812f"
+      "dh": "4f22812f",
+      "paramStorage": [
+        [
+          "pLhs",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRhs",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_FromBinary",
@@ -1852,7 +2742,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7b5b11d0"
+      "dh": "7b5b11d0",
+      "paramStorage": [
+        [
+          "pSrcBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nByteCount",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_FromStr",
@@ -1873,7 +2777,17 @@
       "usedTypes": [
         "BigBuffer"
       ],
-      "dh": "84a9072f"
+      "dh": "84a9072f",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_FromStream",
@@ -1895,7 +2809,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "99a90260"
+      "dh": "99a90260",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBytesRead",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxLen",
+          "ECX:4"
+        ],
+        [
+          "pSrc",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_FromUnsigned",
@@ -1917,7 +2849,17 @@
         "BigBuffer",
         "uint32_t"
       ],
-      "dh": "03799e88"
+      "dh": "03799e88",
+      "paramStorage": [
+        [
+          "dwValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_ToBinary",
@@ -1937,7 +2879,17 @@
         "BigBuffer",
         "TSGrowableArray_Uc"
       ],
-      "dh": "b1586918"
+      "dh": "b1586918",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "ECX:4"
+        ],
+        [
+          "pOutBuffer",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_ToStr",
@@ -1965,7 +2917,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "febaec02"
+      "dh": "febaec02",
+      "paramStorage": [
+        [
+          "pStack",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pValue",
+          "EAX:4"
+        ],
+        [
+          "pOutBuffer",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_ToStream",
@@ -1987,7 +2953,17 @@
         "BigBuffer",
         "TSGrowableArray_Uc"
       ],
-      "dh": "566fc1ab"
+      "dh": "566fc1ab",
+      "paramStorage": [
+        [
+          "pOutBuffer",
+          "EAX:4"
+        ],
+        [
+          "pSrcBignum",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SBigAdd",
@@ -2006,7 +2982,21 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "57fc947d"
+      "dh": "57fc947d",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigAnd",
@@ -2025,7 +3015,21 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "6e39dec3"
+      "dh": "6e39dec3",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigCopy",
@@ -2045,7 +3049,17 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "27ba7b4b"
+      "dh": "27ba7b4b",
+      "paramStorage": [
+        [
+          "pDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SBigDec",
@@ -2064,7 +3078,17 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "62e89266"
+      "dh": "62e89266",
+      "paramStorage": [
+        [
+          "pDstBignum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcBignum",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_Destructor",
@@ -2085,7 +3109,17 @@
         "BigData",
         "uint8_t"
       ],
-      "dh": "05bd180d"
+      "dh": "05bd180d",
+      "paramStorage": [
+        [
+          "pBigData",
+          "ECX:4"
+        ],
+        [
+          "byDeleteFlags",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "SBigFromBinary",
@@ -2105,7 +3139,21 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "257daaf4"
+      "dh": "257daaf4",
+      "paramStorage": [
+        [
+          "pDstBignum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nByteCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigFromStr",
@@ -2124,7 +3172,17 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "d6e7e8a2"
+      "dh": "d6e7e8a2",
+      "paramStorage": [
+        [
+          "pDstBignum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SBigFromStream",
@@ -2145,7 +3203,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "745b3072"
+      "dh": "745b3072",
+      "paramStorage": [
+        [
+          "pDstBignum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxLen",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnBytesRead",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SBigFromUnsigned",
@@ -2165,7 +3241,17 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "09ddf4c4"
+      "dh": "09ddf4c4",
+      "paramStorage": [
+        [
+          "pDstBignum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwValue",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SBigInc",
@@ -2184,7 +3270,17 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "29e9eb22"
+      "dh": "29e9eb22",
+      "paramStorage": [
+        [
+          "pDstBignum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcBignum",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SBigIsOdd",
@@ -2203,7 +3299,13 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "c7605b99"
+      "dh": "c7605b99",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBigIsOne",
@@ -2222,7 +3324,13 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "1939b89e"
+      "dh": "1939b89e",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBigIsZero",
@@ -2241,7 +3349,13 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "c0e3ff14"
+      "dh": "c0e3ff14",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBigNew",
@@ -2263,7 +3377,13 @@
         "BigData *",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "0a4ff6ad"
+      "dh": "0a4ff6ad",
+      "paramStorage": [
+        [
+          "ppBigData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBigNot",
@@ -2282,7 +3402,17 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "21097589"
+      "dh": "21097589",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SBigOr",
@@ -2301,7 +3431,21 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "b1eb07bf"
+      "dh": "b1eb07bf",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigSet2Exp",
@@ -2321,7 +3465,17 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "3096bdc4"
+      "dh": "3096bdc4",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBitIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SBigSetOne",
@@ -2340,7 +3494,13 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "ea378b48"
+      "dh": "ea378b48",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBigSetZero",
@@ -2360,7 +3520,13 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "ba329545"
+      "dh": "ba329545",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBigShl",
@@ -2380,7 +3546,21 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "d1094175"
+      "dh": "d1094175",
+      "paramStorage": [
+        [
+          "pnDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnSrc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nShift",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigShr",
@@ -2400,7 +3580,21 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "9a932519"
+      "dh": "9a932519",
+      "paramStorage": [
+        [
+          "pnDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnSrc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nShift",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigSub",
@@ -2419,7 +3613,21 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "353d644e"
+      "dh": "353d644e",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigToBinaryArray",
@@ -2442,7 +3650,21 @@
         "BigData",
         "int32_t"
       ],
-      "dh": "3847b5e5"
+      "dh": "3847b5e5",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDestArray",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bAppend",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigToBinaryBuffer",
@@ -2463,7 +3685,25 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "df2a3f66"
+      "dh": "df2a3f66",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDest",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxBytes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnSize",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SBigToBinaryPtr",
@@ -2484,7 +3724,21 @@
         "uint32_t",
         "uint8_t *"
       ],
-      "dh": "15060983"
+      "dh": "15060983",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppBufferOut",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnSizeOut",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigToStrArray",
@@ -2506,7 +3760,21 @@
         "BigData",
         "int32_t"
       ],
-      "dh": "37eed830"
+      "dh": "37eed830",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDestArray",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bAppend",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigToStrBuffer",
@@ -2527,7 +3795,21 @@
         "BigData",
         "int32_t"
       ],
-      "dh": "bf834ff7"
+      "dh": "bf834ff7",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDestLen",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigToStrPtr",
@@ -2547,7 +3829,17 @@
         "BigData",
         "uint8_t *"
       ],
-      "dh": "26428946"
+      "dh": "26428946",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppStringOut",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SBigToStreamArray",
@@ -2569,7 +3861,21 @@
         "BigData",
         "int32_t"
       ],
-      "dh": "7501bf39"
+      "dh": "7501bf39",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDestArray",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bAppend",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigToStreamBuffer",
@@ -2590,7 +3896,25 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "c0caeed0"
+      "dh": "c0caeed0",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDest",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxBytes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnSize",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SBigToStreamPtr",
@@ -2611,7 +3935,21 @@
         "uint32_t",
         "uint8_t *"
       ],
-      "dh": "521cf27a"
+      "dh": "521cf27a",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppBufferOut",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnSizeOut",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigXor",
@@ -2630,7 +3968,21 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "4e6e72e2"
+      "dh": "4e6e72e2",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBIG_CopyBigNumToTemp",
@@ -2650,7 +4002,21 @@
         "BigBuffer",
         "BigStack"
       ],
-      "dh": "fa8c1614"
+      "dh": "fa8c1614",
+      "paramStorage": [
+        [
+          "pStack",
+          "ECX:4"
+        ],
+        [
+          "pDest",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Div",
@@ -2689,7 +4055,29 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "b4fbef1a"
+      "dh": "b4fbef1a",
+      "paramStorage": [
+        [
+          "pQuotient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRemainder",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDivisor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStack",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pDividend",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Gcd",
@@ -2714,7 +4102,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "576048be"
+      "dh": "576048be",
+      "paramStorage": [
+        [
+          "pnA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStack",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnB",
+          "EAX:4"
+        ],
+        [
+          "pnResult",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Mul",
@@ -2741,7 +4147,25 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "a8c4b09f"
+      "dh": "a8c4b09f",
+      "paramStorage": [
+        [
+          "pnResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnB",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStack",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_MulMod",
@@ -2763,7 +4187,29 @@
         "BigStack",
         "uint32_t"
       ],
-      "dh": "e5717dcf"
+      "dh": "e5717dcf",
+      "paramStorage": [
+        [
+          "pnB",
+          "EDX:4"
+        ],
+        [
+          "pnResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnModulus",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStack",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Pow",
@@ -2785,7 +4231,25 @@
         "BigStack",
         "uint32_t"
       ],
-      "dh": "ad28bcbf"
+      "dh": "ad28bcbf",
+      "paramStorage": [
+        [
+          "pnResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nExponent",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStack",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Rand",
@@ -2817,7 +4281,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f8cca981"
+      "dh": "f8cca981",
+      "paramStorage": [
+        [
+          "pnResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnModulus",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnInput",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStack",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_Square",
@@ -2844,7 +4326,21 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "762f2111"
+      "dh": "762f2111",
+      "paramStorage": [
+        [
+          "pnResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnInput",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pStack",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigDel",
@@ -2864,7 +4360,13 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "c9f65c88"
+      "dh": "c9f65c88",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SBigDiv",
@@ -2884,7 +4386,21 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "234b63aa"
+      "dh": "234b63aa",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigGcd",
@@ -2903,7 +4419,21 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "943695ff"
+      "dh": "943695ff",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigMod",
@@ -2923,7 +4453,21 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "b9b42925"
+      "dh": "b9b42925",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigMul",
@@ -2942,7 +4486,21 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "c6a2792b"
+      "dh": "c6a2792b",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigMulMod",
@@ -2961,7 +4519,25 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "020e6423"
+      "dh": "020e6423",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SBigPow",
@@ -2981,7 +4557,21 @@
         "BigData",
         "uint32_t"
       ],
-      "dh": "3970d11a"
+      "dh": "3970d11a",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nExponent",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigRand",
@@ -3000,7 +4590,21 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "a4e4eda5"
+      "dh": "a4e4eda5",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pInput",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigSquare",
@@ -3019,7 +4623,17 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "ca3de515"
+      "dh": "ca3de515",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_InvMod",
@@ -3047,7 +4661,25 @@
         "BigStack",
         "uint32_t"
       ],
-      "dh": "8fb3df24"
+      "dh": "8fb3df24",
+      "paramStorage": [
+        [
+          "pnResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnModulus",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pStack",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnInput",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_PowMod",
@@ -3073,7 +4705,29 @@
         "BigStack",
         "uint32_t"
       ],
-      "dh": "1fe16312"
+      "dh": "1fe16312",
+      "paramStorage": [
+        [
+          "pnResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnExponent",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnModulus",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pStack",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SBigInvMod",
@@ -3092,7 +4746,21 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "c21dfb1c"
+      "dh": "c21dfb1c",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInput",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SBigPowMod",
@@ -3111,7 +4779,25 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "1cf774d5"
+      "dh": "1cf774d5",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pExponent",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_IsPrime",
@@ -3145,7 +4831,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9cf0cd6a"
+      "dh": "9cf0cd6a",
+      "paramStorage": [
+        [
+          "pStack",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnCandidate",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SBigIsPrime",
@@ -3164,7 +4860,13 @@
       "usedTypes": [
         "BigData"
       ],
-      "dh": "30408539"
+      "dh": "30408539",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BigBuffer_FindPrime",
@@ -3196,7 +4898,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "93206262"
+      "dh": "93206262",
+      "paramStorage": [
+        [
+          "nBitLength",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnLowerBound",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnCoprimeWith",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStack",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnPrime",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SBigFindPrime",
@@ -3216,7 +4940,25 @@
         "BigData",
         "int32_t"
       ],
-      "dh": "4faedebc"
+      "dh": "4faedebc",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBitLength",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pLowerBound",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pCoprimeWith",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_0044df10",
@@ -3234,7 +4976,13 @@
       "usedTypes": [
         "BigBuffer"
       ],
-      "dh": "acd1e957"
+      "dh": "acd1e957",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_00450870",
@@ -3252,7 +5000,13 @@
       "usedTypes": [
         "BigBuffer"
       ],
-      "dh": "30eb7324"
+      "dh": "30eb7324",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_0047f930",
@@ -3270,7 +5024,13 @@
       "usedTypes": [
         "BigBuffer"
       ],
-      "dh": "df76b801"
+      "dh": "df76b801",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_0051d2c0",
@@ -3288,7 +5048,13 @@
       "usedTypes": [
         "BigBuffer"
       ],
-      "dh": "e6cf56d5"
+      "dh": "e6cf56d5",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_00601e00",
@@ -3306,7 +5072,13 @@
       "usedTypes": [
         "BigBuffer"
       ],
-      "dh": "e3d0fb51"
+      "dh": "e3d0fb51",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_00603f40",
@@ -3324,7 +5096,13 @@
       "usedTypes": [
         "BigBuffer"
       ],
-      "dh": "27312d9a"
+      "dh": "27312d9a",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_0060e200",
@@ -3342,7 +5120,13 @@
       "usedTypes": [
         "BigBuffer"
       ],
-      "dh": "e30b442f"
+      "dh": "e30b442f",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_0060e220",
@@ -3360,7 +5144,13 @@
       "usedTypes": [
         "BigBuffer"
       ],
-      "dh": "1c154516"
+      "dh": "1c154516",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6c9f58",
@@ -3382,7 +5172,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "894b54a7"
+      "dh": "894b54a7",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6c9f88",
@@ -3404,7 +5212,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "90c42eb7"
+      "dh": "90c42eb7",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6c9fc1",
@@ -3426,7 +5252,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "dca38cd7"
+      "dh": "dca38cd7",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6c9ff0",
@@ -3448,7 +5292,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "f1134e59"
+      "dh": "f1134e59",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

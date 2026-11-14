@@ -37,7 +37,13 @@
         "D2FloatIntUnion",
         "D2SoundEaxEnvironStrc"
       ],
-      "dh": "1d650014"
+      "dh": "1d650014",
+      "paramStorage": [
+        [
+          "pEnviron",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_ShutdownDirectSound",
@@ -115,7 +121,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "5a59a2fa"
+      "dh": "5a59a2fa",
+      "paramStorage": [
+        [
+          "dwLanguageCode",
+          "ECX:4"
+        ],
+        [
+          "bSoundInBackground",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_InitMusicBuffer",
@@ -136,7 +152,13 @@
       "usedTypes": [
         "IDirectSound"
       ],
-      "dh": "937d8de3"
+      "dh": "937d8de3",
+      "paramStorage": [
+        [
+          "bSoundInBackground",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_FreeMusicBuffer",

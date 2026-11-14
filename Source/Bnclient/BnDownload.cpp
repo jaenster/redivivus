@@ -47,8 +47,9 @@ static BOOL __stdcall NET_CopyDllFromArchive(D2ArchiveStrc * pArchive, char * ps
     char cTmp2;
     D2MPQFileStrc* pMpqFile = 0;
     D2MPQFileStrc* pMpqFileLocal = 0;
-    char* pExtDot;
-    DWORD dwFileSize = GetTempPathA(0x104 - (int)strlen(pszSrcFileName), szText);
+    char* pExtDot = pszSrcFileName;
+    pExtDot = pExtDot + strlen(pExtDot) + 1;
+    DWORD dwFileSize = GetTempPathA(0x104 - ((intptr_t)pExtDot - (intptr_t)(pszSrcFileName + 1)), szText);
     if (!dwFileSize) {
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("Failed to create temp file!");
     } else {
@@ -235,7 +236,7 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
 }
 
 void __fastcall BNDOWNLOAD_ExtractFileFromArchive(char * szFileName, D2ArchiveStrc * pArchive, LPCSTR szFilePath) {
-    D2MPQFileStrc* pMpqFile = (D2MPQFileStrc*)szFileName;
+    D2MPQFileStrc* pMpqFile;
     int bOpened = Storm::Source::SFile::SFileOpenFileEx(pArchive, szFileName, 0, (void**)&pMpqFile);
     if (!bOpened) {
       return;

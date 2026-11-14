@@ -20,7 +20,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "beab67a5"
+      "dh": "beab67a5",
+      "paramStorage": [
+        [
+          "nTimeoutMs",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_CLIENT_GetConnectionTimeout",
@@ -59,7 +65,13 @@
       "usedTypes": [
         "u_short"
       ],
-      "dh": "6faba86f"
+      "dh": "6faba86f",
+      "paramStorage": [
+        [
+          "lpThreadParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_CLIENT_CreateServerConnectionThread",
@@ -74,7 +86,13 @@
       "calledFunctions": [
         "NET_CLIENT_CreateServerConnectionThread"
       ],
-      "dh": "5029a8c2"
+      "dh": "5029a8c2",
+      "paramStorage": [
+        [
+          "pThreadParam",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_ConnectToServer",
@@ -97,7 +115,17 @@
       "usedTypes": [
         "eD2GSConnectionType"
       ],
-      "dh": "6796895f"
+      "dh": "6796895f",
+      "paramStorage": [
+        [
+          "neD2GSConnectionType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szIpAddress",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_CLIENT_ShutdownConnection",
@@ -133,7 +161,17 @@
         "NET_D2GS_CLIENT_ExtractPacketSize_to0xAE",
         "NET_D2GS_CLIENT_ExtractPacketSize"
       ],
-      "dh": "3325d8e1"
+      "dh": "3325d8e1",
+      "paramStorage": [
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_ExtractPacketSize_from0xAE",
@@ -149,7 +187,17 @@
         "NET_D2GS_CLIENT_ExtractPacketSize_from0xAE",
         "NET_D2GS_CLIENT_ExtractPacketSize"
       ],
-      "dh": "67af3ecf"
+      "dh": "67af3ecf",
+      "paramStorage": [
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues",
@@ -243,7 +291,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bf49af15"
+      "dh": "bf49af15",
+      "paramStorage": [
+        [
+          "lpThreadParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_CLIENT_SendPacketToServer",
@@ -266,7 +320,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "914efb28"
+      "dh": "914efb28",
+      "paramStorage": [
+        [
+          "pUnused",
+          "ECX:4"
+        ],
+        [
+          "nPacketSize",
+          "DX:2"
+        ],
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SendPacketToD2GSOnline",
@@ -286,7 +354,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d696f6ed"
+      "dh": "d696f6ed",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_SendPacketAfterChecks",
@@ -311,7 +389,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ec75849c"
+      "dh": "ec75849c",
+      "paramStorage": [
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "Unused",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket",
@@ -337,7 +429,17 @@
         "D2OnePacketClientStrc",
         "uint8_t"
       ],
-      "dh": "b589d375"
+      "dh": "b589d375",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "pBytesSize",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

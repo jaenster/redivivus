@@ -21,7 +21,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bf1ec585"
+      "dh": "bf1ec585",
+      "paramStorage": [
+        [
+          "pbHexChar",
+          "ECX:4"
+        ],
+        [
+          "byKeyByte",
+          "EDX:4"
+        ],
+        [
+          "pdwShiftReg",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

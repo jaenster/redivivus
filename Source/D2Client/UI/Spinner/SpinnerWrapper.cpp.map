@@ -20,7 +20,13 @@
         "SpinnerWrapper",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "5c7315dd"
+      "dh": "5c7315dd",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -41,7 +47,17 @@
         "SpinnerWrapper",
         "uint32_t"
       ],
-      "dh": "fc2f3320"
+      "dh": "fc2f3320",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseWheel",
@@ -60,7 +76,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
       ],
-      "dh": "86027539"
+      "dh": "86027539",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseDown",
@@ -79,7 +105,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
       ],
-      "dh": "4e91e70a"
+      "dh": "4e91e70a",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseUp",
@@ -98,7 +134,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
       ],
-      "dh": "273721c4"
+      "dh": "273721c4",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnMouseMove",
@@ -117,7 +163,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
       ],
-      "dh": "183052f6"
+      "dh": "183052f6",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -135,7 +191,13 @@
       "usedTypes": [
         "SpinnerWrapper"
       ],
-      "dh": "a083b1d2"
+      "dh": "a083b1d2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "OnChar",
@@ -154,7 +216,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
       ],
-      "dh": "3cea8689"
+      "dh": "3cea8689",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnDownArrow",
@@ -173,7 +245,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
       ],
-      "dh": "9ef8b484"
+      "dh": "9ef8b484",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnUpArrow",
@@ -192,7 +274,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
       ],
-      "dh": "36e8db42"
+      "dh": "36e8db42",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnRightArrow",
@@ -211,7 +303,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
       ],
-      "dh": "c434c98a"
+      "dh": "c434c98a",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OnLeftArrow",
@@ -230,7 +332,17 @@
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
       ],
-      "dh": "1a7b1884"
+      "dh": "1a7b1884",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetValue",
@@ -248,7 +360,13 @@
       "usedTypes": [
         "SpinnerWrapper"
       ],
-      "dh": "9faed513"
+      "dh": "9faed513",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "GetRepeatDelta",
@@ -266,7 +384,17 @@
       "usedTypes": [
         "SpinnerWrapper"
       ],
-      "dh": "cd7d3470"
+      "dh": "cd7d3470",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Constructor",
@@ -288,7 +416,29 @@
         "fpSpinnerRepeatAction",
         "pfnEHHandlerRoutine"
       ],
-      "dh": "d18e35fb"
+      "dh": "d18e35fb",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bHorizontal",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnRepeatAction",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

@@ -22,7 +22,21 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "9ad887c7"
+      "dh": "9ad887c7",
+      "paramStorage": [
+        [
+          "nAct",
+          "AL:1"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_InitBaseStats",
@@ -47,7 +61,21 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "a67df8ac"
+      "dh": "a67df8ac",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nAct",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "thunk_NET_D2GS_SERVER_Send_0x75_PlayerPartyInfo",
@@ -67,7 +95,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f1b08943"
+      "dh": "f1b08943",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOtherUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateGameInfo",
@@ -106,7 +148,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "928038f4"
+      "dh": "928038f4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_AddEnergyStatPoints",
@@ -129,7 +181,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9ecb91fd"
+      "dh": "9ecb91fd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nPoints",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_AddVitalityStatPoints",
@@ -152,7 +214,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "549e166a"
+      "dh": "549e166a",
+      "paramStorage": [
+        [
+          "nPoints",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ClearStats",
@@ -178,7 +250,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "b462c1e3"
+      "dh": "b462c1e3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_AssignStatPoint",
@@ -202,7 +284,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "ce63de91"
+      "dh": "ce63de91",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eStatType",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_SendStateListToClient",
@@ -241,7 +333,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e3c0ac2a"
+      "dh": "e3c0ac2a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_SendStateDeltaToClient",
@@ -284,7 +386,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "53bd2265"
+      "dh": "53bd2265",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_SendStateUpdate",
@@ -306,7 +418,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f914471a"
+      "dh": "f914471a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ],
+        [
+          "nStateUpdateType",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_SendOverlayToClient",
@@ -330,7 +456,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "151e1c22"
+      "dh": "151e1c22",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SendRemoveObject",
@@ -350,7 +486,17 @@
         "D2ClientStrc",
         "D2UnitStrc"
       ],
-      "dh": "64bda70d"
+      "dh": "64bda70d",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_SendHoverTextToClient",
@@ -383,7 +529,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9305d44d"
+      "dh": "9305d44d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITMSG_SendSoundPacketToClient",
@@ -405,7 +561,17 @@
         "D2GSPacketSrv0x2C",
         "D2UnitStrc"
       ],
-      "dh": "73236ad6"
+      "dh": "73236ad6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UnitQueuePacket0x99",
@@ -431,7 +597,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0a0c56fb"
+      "dh": "0a0c56fb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "wSkillId",
+          "DX:2"
+        ],
+        [
+          "byArg1",
+          "Stack[0x4]:1"
+        ],
+        [
+          "byArg2",
+          "Stack[0x8]:1"
+        ],
+        [
+          "dwTargetGUID",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bParam",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "UnitQueuePacket0x9A",
@@ -456,7 +648,33 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "17bee64f"
+      "dh": "17bee64f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "wSkillId",
+          "DX:2"
+        ],
+        [
+          "byArg1",
+          "Stack[0x4]:1"
+        ],
+        [
+          "wArg2",
+          "Stack[0x8]:2"
+        ],
+        [
+          "wTargetY",
+          "Stack[0xc]:2"
+        ],
+        [
+          "bParam",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "UnitQueuePacket0x9E",
@@ -484,7 +702,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "ff5dafbc"
+      "dh": "ff5dafbc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eUnitStat",
+          "DX:2"
+        ],
+        [
+          "dwStatValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnitQueuePacket0xA1",
@@ -511,7 +743,25 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "2a05157a"
+      "dh": "2a05157a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nStatId",
+          "DX:2"
+        ],
+        [
+          "nOldValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNewValue",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UnitQueuePacket0xAB",
@@ -535,7 +785,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a3c84290"
+      "dh": "a3c84290",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nHpPercent128",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "SERVER_SendUnitMessagePacket",
@@ -562,7 +822,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9575f8ec"
+      "dh": "9575f8ec",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTarget",
+          "EDX:4"
+        ],
+        [
+          "wArg1",
+          "Stack[0x4]:2"
+        ],
+        [
+          "wArg2",
+          "Stack[0x8]:2"
+        ],
+        [
+          "dwParam1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x10]:4"
+        ],
+        [
+          "byParam",
+          "Stack[0x14]:1"
+        ]
+      ]
     },
     {
       "name": "UnitQueuePacket0xA5",
@@ -587,7 +877,17 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "f7c4f89a"
+      "dh": "f7c4f89a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "wSkillId",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "SERVER_UnitQueuePacket0xA4",
@@ -610,7 +910,17 @@
         "D2UnitStrc",
         "int16_t"
       ],
-      "dh": "9680a00a"
+      "dh": "9680a00a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nClassId",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "SERVER_SendPacket0x23",
@@ -634,7 +944,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "33315b26"
+      "dh": "33315b26",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "byTypeId",
+          "EDX:4"
+        ],
+        [
+          "wCoords",
+          "Stack[0x4]:2"
+        ],
+        [
+          "dwData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_UnitQueuePacketSend",
@@ -675,7 +1003,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c20f2295"
+      "dh": "c20f2295",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_UnitQueuePacketFree",
@@ -698,7 +1036,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "75b1d1c1"
+      "dh": "75b1d1c1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_SendInitUnitPacket",
@@ -764,7 +1108,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2cb012bc"
+      "dh": "2cb012bc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

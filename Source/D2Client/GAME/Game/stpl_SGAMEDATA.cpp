@@ -52,7 +52,7 @@ void __thiscall Destructor_Unreferenced(TSExplicitList<TSHashObjectChunk<::SGAME
     pTVar1->m_next = 0;
 }
 
-template<> void TSExplicitList<SGAMEDATA, -572662307>::Clear() {
+template<> __attribute__((noinline)) inline void TSExplicitList<SGAMEDATA, -572662307>::Clear() {
     TSLink<::SGAMEDATA>* pTVar2;
     intptr_t uVar3;
     TSLink<::SGAMEDATA>** pPrevLink;
@@ -127,8 +127,8 @@ template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -5
 
 template<> __attribute__((noinline)) inline void TSGrowableArray<SGAMEDATA>::Destructor() {
     uint32_t nIndex;
+    nIndex = 0;
     if (this->m_count > 0) {
-      nIndex = 0;
       do {
         this->m_data[nIndex].Destructor();
         nIndex++;
@@ -338,7 +338,7 @@ template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSHashObjectChunk<SGAME
     return this;
 }
 
-template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::SetCount(uint32_t nCount) {
+template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::SetCount(uint32_t nCount) {
     TSLink<::SGAMEDATA>* pTVar1;
     uint32_t uVar2;
     TSLink<::SGAMEDATA>* pTVar3;
@@ -598,7 +598,7 @@ template<> TSHashTable<::SGAMEDATA, HASHKEY_NONE>* __thiscall TSHashTable<SGAMED
     return pThis;
 }
 
-template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::Clear() {
+template<> __attribute__((noinline)) inline void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::Clear() {
     char* pcVar2;
     TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>** pPrevLink;
     TSLink<::SGAMEDATA>** pSlotBackLink;

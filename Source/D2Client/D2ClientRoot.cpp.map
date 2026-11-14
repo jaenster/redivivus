@@ -38,7 +38,17 @@
         "CMDPARAMS",
         "uint8_t"
       ],
-      "dh": "52668dd0"
+      "dh": "52668dd0",
+      "paramStorage": [
+        [
+          "pParams",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szCmdLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TriggerEndGameCongratsExit",
@@ -102,7 +112,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "a40b235f"
+      "dh": "a40b235f",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_SelectProc_IsSelectableCorpse2",
@@ -121,7 +137,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "b26b5dd6"
+      "dh": "b26b5dd6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_SelectProc_IsCorpseConsumableBasic",
@@ -141,7 +167,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "4fe8c752"
+      "dh": "4fe8c752",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_SelectProc_IsConvertibleCorpse",
@@ -164,7 +200,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7e1614c2"
+      "dh": "7e1614c2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_SelectProc_IsCorpseValidForRevive",
@@ -184,7 +230,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "828dbd82"
+      "dh": "828dbd82",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_SelectProc_CanReviveMonster",
@@ -204,7 +260,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "5b8f084b"
+      "dh": "5b8f084b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_SelectProc_IsSelectableCorpse",
@@ -223,7 +289,17 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "ce5094d7"
+      "dh": "ce5094d7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_IsQuestItem",
@@ -244,7 +320,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "81e5099d"
+      "dh": "81e5099d",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pUnitFindArg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CMD_ToggleCharScreen",
@@ -521,7 +607,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "f453e90c"
+      "dh": "f453e90c",
+      "paramStorage": [
+        [
+          "nSlot",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CMD_ActivateSkillSlot_F1",
@@ -1123,7 +1215,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "4ccb8eac"
+      "dh": "4ccb8eac",
+      "paramStorage": [
+        [
+          "pSeed",
+          "ECX:4"
+        ],
+        [
+          "nMin",
+          "EDX:4"
+        ],
+        [
+          "nRange",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_IsArenaLevel",
@@ -1177,7 +1283,13 @@
       "usedTypes": [
         "eD2ArenaFlags"
       ],
-      "dh": "08aac515"
+      "dh": "08aac515",
+      "paramStorage": [
+        [
+          "eArenaFlags",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_ToggleDefaultActiveFlag",
@@ -1195,7 +1307,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0f822969"
+      "dh": "0f822969",
+      "paramStorage": [
+        [
+          "bSet",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ROSTER_GetArenaKillCountGlobal",
@@ -1273,7 +1391,13 @@
       "usedTypes": [
         "eD2PlayerClassIDDWORD"
       ],
-      "dh": "71788bb4"
+      "dh": "71788bb4",
+      "paramStorage": [
+        [
+          "dwValue",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_GetDefaultCharClass",
@@ -1328,7 +1452,13 @@
       "usedTypes": [
         "uint16_t"
       ],
-      "dh": "ab28986a"
+      "dh": "ab28986a",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleIMEComposition",
@@ -1358,7 +1488,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f56ca955"
+      "dh": "f56ca955",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleIMEStartComposition",
@@ -1377,7 +1513,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "0b7e684b"
+      "dh": "0b7e684b",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleIMEEndComposition",
@@ -1396,7 +1538,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "0e391fec"
+      "dh": "0e391fec",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AUTOMAP_UpdatePartyNamesCallback",
@@ -1416,7 +1564,17 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "3c69037e"
+      "dh": "3c69037e",
+      "paramStorage": [
+        [
+          "pItem",
+          "ECX:4"
+        ],
+        [
+          "pMsg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_LocalizeSoundPath",
@@ -1440,7 +1598,21 @@
         "D2MPQFileStrc",
         "uint32_t"
       ],
-      "dh": "dc1953a2"
+      "dh": "dc1953a2",
+      "paramStorage": [
+        [
+          "szFormat",
+          "EBX:4"
+        ],
+        [
+          "pszOutPath",
+          "ESI:4"
+        ],
+        [
+          "pTmp",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ExitGamePlayCutScene",
@@ -1484,7 +1656,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6f2e8827"
+      "dh": "6f2e8827",
+      "paramStorage": [
+        [
+          "nCutsceneId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INV_SetItemDescFlag",
@@ -1567,7 +1745,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "03c5ad47"
+      "dh": "03c5ad47",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eModifier",
+          "EDX:4"
+        ],
+        [
+          "bApply",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONUNIQUE_DispatchDeathEffect",
@@ -1600,7 +1792,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a6d6b447"
+      "dh": "a6d6b447",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nUMod",
+          "EDX:4"
+        ],
+        [
+          "bIsChampion",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONUNIQUE_Clt_SpawnPainWormDeathExplosion",
@@ -1620,7 +1826,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "367d28ae"
+      "dh": "367d28ae",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nUMod",
+          "EDX:4"
+        ],
+        [
+          "bIsChampion",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_FreeMonsterPath",
@@ -1640,7 +1860,13 @@
         "D2UnitDataMonsterStrc",
         "D2UnitStrc"
       ],
-      "dh": "952c737f"
+      "dh": "952c737f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NPCMENU_GetCurrentMenuId",
@@ -1683,7 +1909,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2c4ebedf"
+      "dh": "2c4ebedf",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ],
+        [
+          "bIsGoldAmount",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "D2CLIENT_GetTradeAcceptedFlags",
@@ -1737,7 +1973,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "1a120682"
+      "dh": "1a120682",
+      "paramStorage": [
+        [
+          "nGoldAmount",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TRADE_IsTradeThrottled",
@@ -1802,7 +2044,13 @@
       "usedTypes": [
         "D2GSPacketSrv0x50"
       ],
-      "dh": "a10bb611"
+      "dh": "a10bb611",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x5E_QUESTPICKS",
@@ -1820,7 +2068,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "a004752d"
+      "dh": "a004752d",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004b92d0",
@@ -1835,7 +2089,13 @@
       "calledFunctions": [
         "Unreferenced_004b92d0"
       ],
-      "dh": "b4891cba"
+      "dh": "b4891cba",
+      "paramStorage": [
+        [
+          "param_1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetQuestAvailabilityByIndex",
@@ -1857,7 +2117,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9a564c0c"
+      "dh": "9a564c0c",
+      "paramStorage": [
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nQuestIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_ExitGamePlayCutScene",
@@ -1876,7 +2146,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "207f0c39"
+      "dh": "207f0c39",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x89_QUESTEVENTTRIGGER",
@@ -1892,7 +2168,13 @@
         "NET_D2GS_CLIENT_Incoming0x89_QUESTEVENTTRIGGER",
         "HandleIncoming0x89"
       ],
-      "dh": "17cccfb1"
+      "dh": "17cccfb1",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_EmptyCallback",
@@ -1947,7 +2229,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "53e64966"
+      "dh": "53e64966",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TEXT_EmptyCallback_Unref_004c2530",
@@ -1999,7 +2287,21 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "591755ce"
+      "dh": "591755ce",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_WORLD_SetWarpFadeTimer",
@@ -2072,7 +2374,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1f8c7b1e"
+      "dh": "1f8c7b1e",
+      "paramStorage": [
+        [
+          "nClientEvent",
+          "ECX:4"
+        ],
+        [
+          "pOwnerUnit",
+          "EDX:4"
+        ],
+        [
+          "pMissile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam4",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_ShouldDrawEdges",
@@ -2097,7 +2417,13 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "483d3f52"
+      "dh": "483d3f52",
+      "paramStorage": [
+        [
+          "nParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DFLOOR_IsPointInRect",
@@ -2118,7 +2444,21 @@
       "usedTypes": [
         "RECT"
       ],
-      "dh": "dfb2cd54"
+      "dh": "dfb2cd54",
+      "paramStorage": [
+        [
+          "pRect",
+          "EAX:4"
+        ],
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_GetDialogLineCount",
@@ -2138,7 +2478,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ad4181f1"
+      "dh": "ad4181f1",
+      "paramStorage": [
+        [
+          "nDialogId",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "WARDEN_DecryptBuffer",
@@ -2159,7 +2505,17 @@
         "pfnWardenCreateInterface",
         "uint8_t"
       ],
-      "dh": "0a514405"
+      "dh": "0a514405",
+      "paramStorage": [
+        [
+          "ppModule",
+          "ECX:4"
+        ],
+        [
+          "nOrdinal",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_DecryptModule",
@@ -2183,7 +2539,25 @@
         "uint32_t *",
         "uint8_t"
       ],
-      "dh": "ca927cd1"
+      "dh": "ca927cd1",
+      "paramStorage": [
+        [
+          "ppInput",
+          "ECX:4"
+        ],
+        [
+          "nInputSize",
+          "EDX:4"
+        ],
+        [
+          "ppOutput",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOutputSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "WARDEN_RC4Init",
@@ -2203,7 +2577,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b5e2608e"
+      "dh": "b5e2608e",
+      "paramStorage": [
+        [
+          "pRc4State",
+          "ECX:4"
+        ],
+        [
+          "pKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nKeyLength",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSSOR_StatExpireCallback_ClearState",
@@ -2224,7 +2612,21 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "0879bf7b"
+      "dh": "0879bf7b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "pStatListEx",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSCLT_CheckSkillIsValid",
@@ -2243,7 +2645,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f78d30f0"
+      "dh": "f78d30f0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSASS_StatExpireCallback_ClearState",
@@ -2264,7 +2676,21 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "1261b52f"
+      "dh": "1261b52f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SehHandler_6ca218",
@@ -2285,7 +2711,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "7e8015a7"
+      "dh": "7e8015a7",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SehHandler_6ca238",
@@ -2306,7 +2750,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "c231af90"
+      "dh": "c231af90",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

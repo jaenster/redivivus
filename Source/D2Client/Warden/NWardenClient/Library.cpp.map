@@ -19,7 +19,13 @@
       "usedTypes": [
         "Library"
       ],
-      "dh": "08832d5e"
+      "dh": "08832d5e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     }
   ]
 }

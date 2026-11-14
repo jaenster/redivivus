@@ -22,7 +22,13 @@
       "usedTypes": [
         "D2LRUCacheNodeStrc"
       ],
-      "dh": "f9dc009c"
+      "dh": "f9dc009c",
+      "paramStorage": [
+        [
+          "pEntry",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_LRU_RemoveCacheEntryCallback",
@@ -41,7 +47,13 @@
       "usedTypes": [
         "D2LRUCacheNodeStrc"
       ],
-      "dh": "c25deb3f"
+      "dh": "c25deb3f",
+      "paramStorage": [
+        [
+          "pEntry",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CELCMP_AllocateCelListKey",
@@ -67,7 +79,25 @@
         "uint32_t",
         "void *"
       ],
-      "dh": "9fd2ab80"
+      "dh": "9fd2ab80",
+      "paramStorage": [
+        [
+          "nFormat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwNumDirections",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppRawData",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bRawData",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "TILEPROJECT_GetSoundIndexIndex",
@@ -89,7 +119,13 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "5e188252"
+      "dh": "5e188252",
+      "paramStorage": [
+        [
+          "pComp8",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TILEPROJECT_GetMainIndex",
@@ -112,7 +148,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d7582fc6"
+      "dh": "d7582fc6",
+      "paramStorage": [
+        [
+          "pComp24",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TILEPROJECT_GetAnimatedSubstDataPtr",
@@ -134,7 +176,13 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "2158af92"
+      "dh": "2158af92",
+      "paramStorage": [
+        [
+          "pComp24",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2CMP_MinDouble",
@@ -149,7 +197,17 @@
       "calledFunctions": [
         "D2CMP_MinDouble"
       ],
-      "dh": "2e0a176c"
+      "dh": "2e0a176c",
+      "paramStorage": [
+        [
+          "fParam1",
+          "Stack[0x4]:8"
+        ],
+        [
+          "fParam2",
+          "Stack[0xc]:8"
+        ]
+      ]
     },
     {
       "name": "D2CMP_MaxDouble",
@@ -164,7 +222,17 @@
       "calledFunctions": [
         "D2CMP_MaxDouble"
       ],
-      "dh": "c7a9c4b4"
+      "dh": "c7a9c4b4",
+      "paramStorage": [
+        [
+          "fParam1",
+          "Stack[0x4]:8"
+        ],
+        [
+          "fParam2",
+          "Stack[0xc]:8"
+        ]
+      ]
     },
     {
       "name": "SUBTILE_CountRunLength",
@@ -186,7 +254,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "101e9831"
+      "dh": "101e9831",
+      "paramStorage": [
+        [
+          "pDataStart",
+          "ECX:4"
+        ],
+        [
+          "pDataEnd",
+          "EDX:4"
+        ],
+        [
+          "nMaxRunLength",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pIsAtEndFlag",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pIsExactMatchFlag",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SUBTILE_CountRunLengthForByte",
@@ -208,7 +298,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "331351a8"
+      "dh": "331351a8",
+      "paramStorage": [
+        [
+          "pCur",
+          "ECX:4"
+        ],
+        [
+          "pEnd",
+          "EDX:4"
+        ],
+        [
+          "cSkipByte",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nMaxRunLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbAtEnd",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pbExactMatch",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

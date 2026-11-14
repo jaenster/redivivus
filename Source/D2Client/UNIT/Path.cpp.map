@@ -29,7 +29,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "ebffb705"
+      "dh": "ebffb705",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_PATH_SnapPositionToTile",
@@ -48,7 +54,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "6f74fbf2"
+      "dh": "6f74fbf2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PATH_SetTargetAndCalculate",
@@ -70,7 +82,21 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "7196ee80"
+      "dh": "7196ee80",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nTargetX",
+          "EDX:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004804d0",
@@ -125,7 +151,33 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "60413702"
+      "dh": "60413702",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "DX:2"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eMoveType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPrevTargetX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nPrevTargetY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "PATH_SetTargetUnitAndCalculate",
@@ -150,7 +202,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4aa4a18e"
+      "dh": "4aa4a18e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eUnitType",
+          "EDX:4"
+        ],
+        [
+          "nTargetUnitId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PATH_StepAndCreateTrailEffects",
@@ -176,7 +242,13 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "bc6910d5"
+      "dh": "bc6910d5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_UpdateUnitFrame",
@@ -211,7 +283,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "041b6eab"
+      "dh": "041b6eab",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

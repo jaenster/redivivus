@@ -31,7 +31,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f3defa41"
+      "dh": "f3defa41",
+      "paramStorage": [
+        [
+          "pSeed",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMonData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNumChampions",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONREGION_RollRandomMonsterType",
@@ -62,7 +76,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f2332eee"
+      "dh": "f2332eee",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterRegion",
+          "EDX:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppMonStatLine",
+          "Stack[0x8]:4"
+        ],
+        [
+          "byBaseClassChance",
+          "Stack[0xc]:1"
+        ],
+        [
+          "bUseUMon",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "RollRoomSeed",
@@ -81,7 +121,13 @@
         "D2RoomStrc",
         "D2SeedStrc"
       ],
-      "dh": "b07f7a89"
+      "dh": "b07f7a89",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERREGION_CheckSpawnDensity",
@@ -103,7 +149,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "29eae192"
+      "dh": "29eae192",
+      "paramStorage": [
+        [
+          "pMonterRegion",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLITEM_ItemSpellInit_UseStackable",
@@ -128,7 +184,37 @@
         "SGAMEDATA",
         "eD2Skills"
       ],
-      "dh": "99389466"
+      "dh": "99389466",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLITEM_FindItemInInventory",
@@ -150,7 +236,17 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "879e1ba8"
+      "dh": "879e1ba8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pOwner",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLITEM_ClearCursorFlagAndNotifyClient",
@@ -176,7 +272,13 @@
         "D2ClientStrc",
         "D2UnitStrc"
       ],
-      "dh": "e9f14d09"
+      "dh": "e9f14d09",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLITEM_IdentifyScrollSpell",
@@ -201,7 +303,37 @@
         "SGAMEDATA",
         "eD2Skills"
       ],
-      "dh": "be69e34c"
+      "dh": "be69e34c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLITEM_TownPortalScrollSpell",
@@ -244,7 +376,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f3ad3942"
+      "dh": "f3ad3942",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ApplyConsumableEffects",
@@ -297,7 +459,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6bfaba92"
+      "dh": "6bfaba92",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ApplyConsumableEffectsSimple",
@@ -346,7 +538,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "78a97248"
+      "dh": "78a97248",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ApplyPercentRestoration",
@@ -396,7 +618,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e927ee70"
+      "dh": "e927ee70",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ApplyTimedBuffStats",
@@ -439,7 +691,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "85e34390"
+      "dh": "85e34390",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RefreshBuffStates",
@@ -470,7 +752,37 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "d7d6ba0f"
+      "dh": "d7d6ba0f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLITEM_ApplyRejuvenationPotionEffect",
@@ -494,7 +806,37 @@
         "eD2Skills",
         "eD2UnitStat"
       ],
-      "dh": "0267beca"
+      "dh": "0267beca",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLITEM_PersonalizeItemSpell",
@@ -523,7 +865,37 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "cf7e1f30"
+      "dh": "cf7e1f30",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CastFireballOnTarget",
@@ -552,7 +924,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a2b80e4e"
+      "dh": "a2b80e4e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLITEM_CastExplosivePotionSkill",
@@ -576,7 +978,37 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "078a29b9"
+      "dh": "078a29b9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLITEM_DispatchItemSpell",
@@ -607,7 +1039,33 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "cccdbe35"
+      "dh": "cccdbe35",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_113_UseScrollOrBook",
@@ -643,7 +1101,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "c1a51c60"
+      "dh": "c1a51c60",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_ProcessPeriodicAuraTick",
@@ -669,7 +1145,29 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "bbd84458"
+      "dh": "bbd84458",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nOwnerGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_DeactivateAura",
@@ -697,7 +1195,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "c5de7539"
+      "dh": "c5de7539",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nOwnerGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_PhysDamageOnAttacked",
@@ -723,7 +1239,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0a8a64fc"
+      "dh": "0a8a64fc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_LightningDamageOnAttacked",
@@ -749,7 +1295,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "188c2c9e"
+      "dh": "188c2c9e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_FireDamageOnAttacked",
@@ -775,7 +1351,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4b36a009"
+      "dh": "4b36a009",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_ColdDamageWithFreezeLength",
@@ -802,7 +1408,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e009f86d"
+      "dh": "e009f86d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_CrushingBlowChance",
@@ -828,7 +1464,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "38c237da"
+      "dh": "38c237da",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_ChanceToFear",
@@ -854,7 +1520,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "262c8e32"
+      "dh": "262c8e32",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_ChanceToDimVision",
@@ -880,7 +1576,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9de3b922"
+      "dh": "9de3b922",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_ReplenishManaOnKill",
@@ -908,7 +1634,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ed4659f9"
+      "dh": "ed4659f9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_FreezeTarget",
@@ -934,7 +1690,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1b2470a6"
+      "dh": "1b2470a6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLITEM_CalculateStaminaPotionValue",
@@ -952,7 +1738,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a5475348"
+      "dh": "a5475348",
+      "paramStorage": [
+        [
+          "nLevel",
+          "ECX:4"
+        ],
+        [
+          "pnBracketRates",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_OpenWounds",
@@ -980,7 +1776,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c050de95"
+      "dh": "c050de95",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_CrushingBlow",
@@ -1011,7 +1837,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7e77acd4"
+      "dh": "7e77acd4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_ReplenishManaFlat",
@@ -1038,7 +1894,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9f908c16"
+      "dh": "9f908c16",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_ReplenishLifeFlat",
@@ -1065,7 +1951,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "70ee77c1"
+      "dh": "70ee77c1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_LifeDrainDemon",
@@ -1093,7 +2009,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8ef5ec5c"
+      "dh": "8ef5ec5c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_SlowTarget",
@@ -1124,7 +2070,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f489b413"
+      "dh": "f489b413",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_CastOnAttack",
@@ -1154,7 +2130,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "22eaa3e6"
+      "dh": "22eaa3e6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_CastOnStriking",
@@ -1185,7 +2191,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ef4a09e0"
+      "dh": "ef4a09e0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_CastOnDeath",
@@ -1213,7 +2249,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ddfbb269"
+      "dh": "ddfbb269",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_SetRestInPeace",
@@ -1237,7 +2303,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f9142fe7"
+      "dh": "f9142fe7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_ReviveMonsterFromCorpse",
@@ -1291,7 +2387,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1075425f"
+      "dh": "1075425f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pAttacker",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_ReviveMonster",
@@ -1318,7 +2444,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0623db45"
+      "dh": "0623db45",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_LaunchMissileOnOwner",
@@ -1353,7 +2509,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "66b9882a"
+      "dh": "66b9882a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_ApplyFreezeDamage",
@@ -1381,7 +2567,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7de1940b"
+      "dh": "7de1940b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMEVENT_ApplyHitDamage",
@@ -1410,7 +2626,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c09639d8"
+      "dh": "c09639d8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
     }
   ]
 }

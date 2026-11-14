@@ -23,7 +23,13 @@
         "D2PoolManagerStrc",
         "D2RoomExStrc"
       ],
-      "dh": "c947cfec"
+      "dh": "c947cfec",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_FreeOutRoomEx",
@@ -45,7 +51,13 @@
         "D2PoolManagerStrc",
         "D2RoomExStrc"
       ],
-      "dh": "8902e9f0"
+      "dh": "8902e9f0",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTROOM_AllocOutdoorRoomData",
@@ -66,7 +78,13 @@
         "D2DrlgOutdoorRoomStrc",
         "D2RoomExStrc"
       ],
-      "dh": "7cc4a040"
+      "dh": "7cc4a040",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

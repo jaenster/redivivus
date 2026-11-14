@@ -28,7 +28,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "83574293"
+      "dh": "83574293",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SpawnRandomPreset",
@@ -56,7 +62,25 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "45eefdb8"
+      "dh": "45eefdb8",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ],
+        [
+          "nLevelPrestId1",
+          "EDX:4"
+        ],
+        [
+          "nLevelPrestId2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "a4",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

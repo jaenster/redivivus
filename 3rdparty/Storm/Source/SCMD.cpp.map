@@ -20,7 +20,21 @@
         "CMDDEF",
         "uint32_t"
       ],
-      "dh": "a39f7865"
+      "dh": "a39f7865",
+      "paramStorage": [
+        [
+          "cmdDef",
+          "EAX:4"
+        ],
+        [
+          "str",
+          "ECX:4"
+        ],
+        [
+          "outConsumed",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_ConvertNumber",
@@ -43,7 +57,21 @@
         "CMDDEF",
         "uint32_t"
       ],
-      "dh": "14c38467"
+      "dh": "14c38467",
+      "paramStorage": [
+        [
+          "cmdDef",
+          "EAX:4"
+        ],
+        [
+          "str",
+          "EDI:4"
+        ],
+        [
+          "outConsumed",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_ConvertString",
@@ -66,7 +94,21 @@
         "CMDDEF",
         "uint32_t"
       ],
-      "dh": "0c19c1b3"
+      "dh": "0c19c1b3",
+      "paramStorage": [
+        [
+          "cmdDef",
+          "EDI:4"
+        ],
+        [
+          "str",
+          "ESI:4"
+        ],
+        [
+          "outConsumed",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_GenerateError",
@@ -92,7 +134,21 @@
         "pfnSCmdErrorCallback",
         "uint32_t"
       ],
-      "dh": "8cef338e"
+      "dh": "8cef338e",
+      "paramStorage": [
+        [
+          "errorCode",
+          "EDI:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szItem",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_ProcessFile",
@@ -117,7 +173,29 @@
         "pfnSCmdErrorCallback",
         "pfnSCmdUnknownArgCallback"
       ],
-      "dh": "c05abf50"
+      "dh": "c05abf50",
+      "paramStorage": [
+        [
+          "filename",
+          "EAX:4"
+        ],
+        [
+          "pProcessing",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwCmdList",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnErrorCallback",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_006c4010",
@@ -135,7 +213,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "57016e69"
+      "dh": "57016e69",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_006c40b0",
@@ -154,7 +238,13 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "1341e202"
+      "dh": "1341e202",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_006c40d0",
@@ -172,7 +262,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "53b49896"
+      "dh": "53b49896",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_FindFlagDef",
@@ -194,7 +290,21 @@
         "CMDDEF",
         "uint32_t"
       ],
-      "dh": "e0c59a27"
+      "dh": "e0c59a27",
+      "paramStorage": [
+        [
+          "cmdList",
+          "EAX:4"
+        ],
+        [
+          "str",
+          "EDI:4"
+        ],
+        [
+          "minLen",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_006c4360",
@@ -212,7 +322,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "e9aa6b8b"
+      "dh": "e9aa6b8b",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_006c4470",
@@ -230,7 +346,13 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "f2eb8c0b"
+      "dh": "f2eb8c0b",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_FreeNode",
@@ -252,7 +374,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "15756d3e"
+      "dh": "15756d3e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "bFreeMemory",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "SCmdRegisterArgument",
@@ -278,7 +410,41 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "43f91fb1"
+      "dh": "43f91fb1",
+      "paramStorage": [
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pVariable",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwVariableBytes",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwSetValue",
+          "Stack[0x18]:4"
+        ],
+        [
+          "dwSetMask",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_PerformConversion",
@@ -306,7 +472,21 @@
         "StormLinkedListStrc",
         "uint32_t"
       ],
-      "dh": "698f88ed"
+      "dh": "698f88ed",
+      "paramStorage": [
+        [
+          "str",
+          "EAX:4"
+        ],
+        [
+          "cmdDef",
+          "EBX:4"
+        ],
+        [
+          "outConsumed",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_ProcessCurrentFlag",
@@ -327,7 +507,21 @@
         "CMDDEF",
         "StormCmdProcessingStrc"
       ],
-      "dh": "d7966c43"
+      "dh": "d7966c43",
+      "paramStorage": [
+        [
+          "pProcessing",
+          "ESI:4"
+        ],
+        [
+          "szArgLine",
+          "Stack[0x4]:4"
+        ],
+        [
+          "outConsumed",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_ProcessFlags",
@@ -355,7 +549,21 @@
         "pfnSCmdErrorCallback",
         "uint32_t"
       ],
-      "dh": "40256ae4"
+      "dh": "40256ae4",
+      "paramStorage": [
+        [
+          "pfnErrorCallback",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "pProcessing",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_ProcessToken",
@@ -382,7 +590,33 @@
         "pfnSCmdErrorCallback",
         "pfnSCmdUnknownArgCallback"
       ],
-      "dh": "50a466be"
+      "dh": "50a466be",
+      "paramStorage": [
+        [
+          "cmdDefPtr",
+          "EAX:4"
+        ],
+        [
+          "str",
+          "EDX:4"
+        ],
+        [
+          "pProcessing",
+          "ECX:4"
+        ],
+        [
+          "noFileExpand",
+          "Stack[0x4]:4"
+        ],
+        [
+          "unknownCb",
+          "Stack[0x8]:4"
+        ],
+        [
+          "errorCb",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SCmdCheckId",
@@ -401,7 +635,13 @@
         "CMDDEF",
         "StormLinkedListStrc"
       ],
-      "dh": "c4aef211"
+      "dh": "c4aef211",
+      "paramStorage": [
+        [
+          "nCmdId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SCmdDestroy",
@@ -441,7 +681,13 @@
         "CMDDEF",
         "StormLinkedListStrc"
       ],
-      "dh": "a99a2578"
+      "dh": "a99a2578",
+      "paramStorage": [
+        [
+          "nCmdId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SCmdGetString",
@@ -462,7 +708,21 @@
         "CMDDEF",
         "StormLinkedListStrc"
       ],
-      "dh": "2068de0c"
+      "dh": "2068de0c",
+      "paramStorage": [
+        [
+          "dwCmdId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwBufferSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SCmdRegisterArgList",
@@ -483,7 +743,17 @@
         "ARGLIST",
         "uint32_t"
       ],
-      "dh": "e9e9f602"
+      "dh": "e9e9f602",
+      "paramStorage": [
+        [
+          "pArgList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SCMD_ProcessString",
@@ -509,7 +779,29 @@
         "pfnSCmdUnknownArgCallback",
         "uint32_t"
       ],
-      "dh": "b110fa79"
+      "dh": "b110fa79",
+      "paramStorage": [
+        [
+          "ppszCursor",
+          "ECX:4"
+        ],
+        [
+          "pProcessing",
+          "EDX:4"
+        ],
+        [
+          "pCmdList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnUnknownCallback",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pfnErrorCallback",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SCmdGetBool",
@@ -525,7 +817,13 @@
         "SCmdGetBool",
         "SCmdGetNum"
       ],
-      "dh": "9709e1a8"
+      "dh": "9709e1a8",
+      "paramStorage": [
+        [
+          "nCmdId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SCmdProcess",
@@ -552,7 +850,25 @@
         "pfnSCmdErrorCallback",
         "pfnSCmdUnknownArgCallback"
       ],
-      "dh": "fab7a255"
+      "dh": "fab7a255",
+      "paramStorage": [
+        [
+          "szCommandLine",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSkipFirstToken",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pfnUnknownCallback",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnErrorCallback",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SCmdProcessCommandLine",
@@ -572,7 +888,17 @@
         "pfnSCmdErrorCallback",
         "pfnSCmdUnknownArgCallback"
       ],
-      "dh": "50c79cba"
+      "dh": "50c79cba",
+      "paramStorage": [
+        [
+          "pfnUnknownCallback",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnErrorCallback",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gStormCmdListBackslash",

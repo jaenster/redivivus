@@ -26,7 +26,29 @@
         "pfnLruFreeEntry",
         "uint32_t"
       ],
-      "dh": "7b660802"
+      "dh": "7b660802",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "pMemory",
+          "EDX:4"
+        ],
+        [
+          "dwBufSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnFreeEntry",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "LRUCACHE_PopOldest",
@@ -45,7 +67,13 @@
         "D2LRUCacheNodeStrc",
         "D2LRUCacheStrc"
       ],
-      "dh": "91514006"
+      "dh": "91514006",
+      "paramStorage": [
+        [
+          "pCache",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "LRUCACHE_Unlink",
@@ -69,7 +97,17 @@
         "D2LRUCacheStrc",
         "int32_t"
       ],
-      "dh": "f7e1ec36"
+      "dh": "f7e1ec36",
+      "paramStorage": [
+        [
+          "pNode",
+          "EAX:4"
+        ],
+        [
+          "pCache",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "LRUCACHE_ForEach",
@@ -93,7 +131,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4a0728d3"
+      "dh": "4a0728d3",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "pfnCallback",
+          "EDX:4"
+        ],
+        [
+          "dwCallbackData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LRUCACHE_AllocEntry",
@@ -116,7 +168,17 @@
         "D2LRUCacheStrc",
         "int32_t"
       ],
-      "dh": "f42dc9cf"
+      "dh": "f42dc9cf",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nEntrySize",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "LRUCACHE_FreeEntry",
@@ -137,7 +199,17 @@
         "D2LRUCacheNodeStrc",
         "D2LRUCacheStrc"
       ],
-      "dh": "c7577652"
+      "dh": "c7577652",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "LRUCACHE_MoveToFront",
@@ -161,7 +233,17 @@
         "D2LRUCacheStrc",
         "int32_t"
       ],
-      "dh": "326a0e5f"
+      "dh": "326a0e5f",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "LRUCACHE_FreeAll",
@@ -181,7 +263,13 @@
       "usedTypes": [
         "D2LRUCacheStrc"
       ],
-      "dh": "714a8b93"
+      "dh": "714a8b93",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LRUCACHE_GetOrAlloc",
@@ -207,7 +295,21 @@
         "D2LRUCacheStrc",
         "uint32_t"
       ],
-      "dh": "001e4548"
+      "dh": "001e4548",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "nEntrySize",
+          "EDX:4"
+        ],
+        [
+          "pUserData",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

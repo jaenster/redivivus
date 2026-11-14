@@ -29,7 +29,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "c50b5fbc"
+      "dh": "c50b5fbc",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GOLD_HandleStashGoldTransaction",
@@ -65,7 +71,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a3c85bcc"
+      "dh": "a3c85bcc",
+      "paramStorage": [
+        [
+          "nGoldAmount",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStashAction",
+          "Stack[0x8]:2"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nUnitGUID",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERTRADE_CompareUint32",
@@ -83,7 +111,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "0974267b"
+      "dh": "0974267b",
+      "paramStorage": [
+        [
+          "pnLeft",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnRight",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_RemoveAllCubeItems",
@@ -114,7 +152,21 @@
         "eInventoryPage",
         "int32_t"
       ],
-      "dh": "17b69dd7"
+      "dh": "17b69dd7",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_CountCubeItems",
@@ -139,7 +191,13 @@
         "eInventoryPage",
         "int32_t"
       ],
-      "dh": "6741a3b5"
+      "dh": "6741a3b5",
+      "paramStorage": [
+        [
+          "pInventory",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_MatchInputDescriptorToCubeItems",
@@ -193,7 +251,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0bfa3c6f"
+      "dh": "0bfa3c6f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pInventory",
+          "EDX:4"
+        ],
+        [
+          "pRecipe",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInputSlotIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pMatchedItems",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pItemUsedFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_ValidateRecipeInputs",
@@ -216,7 +300,25 @@
         "D2InventoryStrc",
         "SGAMEDATA"
       ],
-      "dh": "c368468a"
+      "dh": "c368468a",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMatchedItems",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRecipe",
+          "EBX:4"
+        ],
+        [
+          "pInventory",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SelectRandomItemClassByType",
@@ -246,7 +348,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "ec60437d"
+      "dh": "ec60437d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nItemLevel",
+          "EDX:4"
+        ],
+        [
+          "eItemType",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_SpecialOutput_CowPortalRecipe",
@@ -259,6 +375,16 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
+      ],
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ]
       ]
     },
     {
@@ -272,6 +398,16 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
+      ],
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
       ]
     },
     {
@@ -285,6 +421,16 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
+      ],
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
       ]
     },
     {
@@ -362,7 +508,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7a632520"
+      "dh": "7a632520",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pRecipe",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMatchedItems",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetDateUnused",
@@ -380,7 +548,13 @@
       "usedTypes": [
         "_SYSTEMTIME"
       ],
-      "dh": "76e052db"
+      "dh": "76e052db",
+      "paramStorage": [
+        [
+          "pnDate",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_MatchAndExecuteRecipe",
@@ -417,7 +591,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ede19d8c"
+      "dh": "ede19d8c",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPlayer",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_HandleTransmuteButtonClick",
@@ -443,7 +627,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "02a50601"
+      "dh": "02a50601",
+      "paramStorage": [
+        [
+          "pPlayer",
+          "ECX:4"
+        ],
+        [
+          "nButtonId",
+          "AX:2"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "InitCopyInventoryForTrade",
@@ -473,7 +671,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "75cfc5c5"
+      "dh": "75cfc5c5",
+      "paramStorage": [
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "pUnitStrc",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PLRTRADE_FreeTradeCopyInventory",
@@ -497,7 +705,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "43f8f984"
+      "dh": "43f8f984",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SendRemoveItemDisplayPacket0x92",
@@ -521,7 +739,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a2bb7d74"
+      "dh": "a2bb7d74",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOtherUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TRADE_RestoreInventoryFromBackup",
@@ -553,7 +785,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "96bbad9a"
+      "dh": "96bbad9a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SendEventMsg",
@@ -578,7 +820,21 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "72c80a20"
+      "dh": "72c80a20",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMessageType",
+          "DL:1"
+        ],
+        [
+          "szName",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_HasAnyItemsInCube",
@@ -601,7 +857,13 @@
         "D2UnitStrc",
         "eInventoryPage"
       ],
-      "dh": "aa34a61a"
+      "dh": "aa34a61a",
+      "paramStorage": [
+        [
+          "pPlayer",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CheckIfCanStartTradeWithPlayer",
@@ -638,7 +900,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "db33d0e8"
+      "dh": "db33d0e8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pOtherUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "TRADE_SendTradeCompleteToPlayers",
@@ -660,7 +936,25 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc"
       ],
-      "dh": "3bf7c00a"
+      "dh": "3bf7c00a",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDataOther",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetStatsOnEar",
@@ -687,7 +981,21 @@
         "eD2ItemTypes",
         "uint8_t"
       ],
-      "dh": "5e1d733c"
+      "dh": "5e1d733c",
+      "paramStorage": [
+        [
+          "bHardcore",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pOther",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "LoopsOverAllItemsAndPutInInventory",
@@ -729,7 +1037,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1738ffce"
+      "dh": "1738ffce",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "HasMercItems",
@@ -754,7 +1076,21 @@
         "SGAMEDATA",
         "eInventoryPage"
       ],
-      "dh": "0029a91e"
+      "dh": "0029a91e",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "CUBE_OnCubeInteractionEnd",
@@ -775,7 +1111,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "249d71af"
+      "dh": "249d71af",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CreateStructure0xc",
@@ -800,7 +1146,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "f089d247"
+      "dh": "f089d247",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUIDOther",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SetUidOther",
@@ -821,7 +1185,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "af905e57"
+      "dh": "af905e57",
+      "paramStorage": [
+        [
+          "pnUIDOther",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_TradeTransferItemToCursor",
@@ -857,7 +1235,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9bf810ae"
+      "dh": "9bf810ae",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPlayerData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CopyInventory",
@@ -881,7 +1273,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "cecf905f"
+      "dh": "cecf905f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "nBufSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLRTRADE_ValidateAndInitiateTrade",
@@ -923,7 +1329,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e6940336"
+      "dh": "e6940336",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItemUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERTRADE_CheckNoEquippedTradeItems",
@@ -948,7 +1368,17 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "4f2d854e"
+      "dh": "4f2d854e",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "IsInteractingWithPlayer",
@@ -971,7 +1401,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "ff08c7e9"
+      "dh": "ff08c7e9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RemoveTradeItemMabye",
@@ -1007,7 +1451,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a10d6e84"
+      "dh": "a10d6e84",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLRTRADE_CancelTradeAndCleanup",
@@ -1038,7 +1496,33 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "c3a1d401"
+      "dh": "c3a1d401",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPlayerData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPlayerData2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwTradeStateForUnit",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "PLRTRADE_ResetTradeState",
@@ -1067,7 +1551,29 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "bf341983"
+      "dh": "bf341983",
+      "paramStorage": [
+        [
+          "pPlayerData1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPlayerData2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "pUnit2",
+          "EDI:4"
+        ],
+        [
+          "pGame",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PLRTRADE_ExecuteTrade",
@@ -1105,7 +1611,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7542864b"
+      "dh": "7542864b",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPlayerData1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pPlayerData2",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ClickButton",
@@ -1154,7 +1682,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8f9a8721"
+      "dh": "8f9a8721",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nButtonId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nGoldAmount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TRADE_CompleteTrade",
@@ -1186,7 +1732,17 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "7bc36ba4"
+      "dh": "7bc36ba4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_TRADE_CompleteTrade",
@@ -1199,6 +1755,16 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
+      ],
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
       ]
     },
     {
@@ -1242,7 +1808,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "13df0b02"
+      "dh": "13df0b02",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLRTRADE_ProcessTradeStateTick",
@@ -1275,7 +1855,25 @@
         "eD2TradeState",
         "eD2UnitType"
       ],
-      "dh": "8d1ad09a"
+      "dh": "8d1ad09a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPlayerData1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPlayerData2",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

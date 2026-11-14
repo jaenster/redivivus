@@ -29,7 +29,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d01b6ae3"
+      "dh": "d01b6ae3",
+      "paramStorage": [
+        [
+          "nMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClientVersion",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szCharName",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_ProcessClientMessage_GameSetup",
@@ -75,7 +89,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "69831265"
+      "dh": "69831265",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ],
+        [
+          "nPacketSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_ProcessClientMessage_InGame",
@@ -106,7 +130,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "1e4ac06f"
+      "dh": "1e4ac06f",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

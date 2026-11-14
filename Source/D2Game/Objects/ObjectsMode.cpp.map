@@ -31,7 +31,17 @@
         "eD2ObjectAnimMode",
         "int32_t"
       ],
-      "dh": "2c18d98c"
+      "dh": "2c18d98c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_CreateRedPortal",
@@ -59,7 +69,17 @@
         "eD2LevelId",
         "uint8_t"
       ],
-      "dh": "603ebdae"
+      "dh": "603ebdae",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_OpenObject",
@@ -81,7 +101,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "d0eea152"
+      "dh": "d0eea152",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_DeactivateShrine",
@@ -103,7 +133,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "7159df00"
+      "dh": "7159df00",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_UpdateFillProgress",
@@ -134,7 +174,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f6aa2c04"
+      "dh": "f6aa2c04",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_UpdateHoverTextExpiry",
@@ -159,7 +209,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "91e3b2ff"
+      "dh": "91e3b2ff",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_TriggerProximityEffect",
@@ -187,7 +247,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "837e783a"
+      "dh": "837e783a",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_UpdateTrapObject",
@@ -212,7 +282,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "ab5aa824"
+      "dh": "ab5aa824",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_DispatchChestType",
@@ -241,7 +321,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5734080b"
+      "dh": "5734080b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_UpdateProximityStateMachine",
@@ -275,7 +365,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b737935e"
+      "dh": "b737935e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "QUEST_DispatchObjectActivation",
@@ -288,6 +388,16 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
+      ],
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
       ]
     },
     {
@@ -316,7 +426,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9e665bc3"
+      "dh": "9e665bc3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PacketUpdateForClient",
@@ -341,7 +461,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c3758e67"
+      "dh": "c3758e67",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_WarpPlayerToObject",
@@ -375,7 +509,21 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "74c7d0b7"
+      "dh": "74c7d0b7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ],
+        [
+          "pRoom",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_UseTeleportPad",
@@ -400,7 +548,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "b8a9a874"
+      "dh": "b8a9a874",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_ExplodingTrap",
@@ -424,7 +578,13 @@
         "D2ObjectsTxt",
         "D2UnitStrc"
       ],
-      "dh": "d45e812c"
+      "dh": "d45e812c",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_ToggleDoor",
@@ -460,7 +620,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7be0f654"
+      "dh": "7be0f654",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_UseStairway",
@@ -492,7 +658,13 @@
         "eD2ObjectAnimMode",
         "int32_t"
       ],
-      "dh": "eaa698ae"
+      "dh": "eaa698ae",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_UseWaygate",
@@ -526,7 +698,13 @@
         "eD2ObjectAnimMode",
         "uint32_t"
       ],
-      "dh": "4f7128be"
+      "dh": "4f7128be",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_OpenTimedDoor",
@@ -559,7 +737,13 @@
         "POINT",
         "eD2ObjectAnimMode"
       ],
-      "dh": "cb431cfb"
+      "dh": "cb431cfb",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_UseStairAlias",
@@ -580,7 +764,13 @@
         "D2UnitStrc",
         "eCollisionFlags"
       ],
-      "dh": "a3a82960"
+      "dh": "a3a82960",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_OpenBreakableContainer",
@@ -607,7 +797,13 @@
         "eD2ObjectAnimMode",
         "int32_t"
       ],
-      "dh": "dbb24699"
+      "dh": "dbb24699",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_CheckSpawnMonsterFromSkeletonActRestriction",
@@ -629,7 +825,17 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "56874c3f"
+      "dh": "56874c3f",
+      "paramStorage": [
+        [
+          "nMonClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_SpawnMonsterFromObject",
@@ -656,7 +862,21 @@
         "eD2MonsterAnimMode",
         "int32_t"
       ],
-      "dh": "63e6f24c"
+      "dh": "63e6f24c",
+      "paramStorage": [
+        [
+          "pObjectModeArg",
+          "ESI:4"
+        ],
+        [
+          "nMonsterId",
+          "EDI:4"
+        ],
+        [
+          "eMonsterAnimMode",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_SpawnRandomMonsters",
@@ -682,7 +902,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "39304816"
+      "dh": "39304816",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_SpawnCompanionChests",
@@ -712,7 +942,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "99651fd7"
+      "dh": "99651fd7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_SpawnMonsterAtObject",
@@ -743,7 +983,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f66bc2ca"
+      "dh": "f66bc2ca",
+      "paramStorage": [
+        [
+          "pGame",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nClassId",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_SpawnSiegeMonsterA",
@@ -763,7 +1017,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "de9bec46"
+      "dh": "de9bec46",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_SpawnSiegeMonsterB",
@@ -783,7 +1047,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a2bad677"
+      "dh": "a2bad677",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_SpawnSiegeMonsterC",
@@ -803,7 +1077,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "ee98a23d"
+      "dh": "ee98a23d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_SpawnSiegeMonsterD",
@@ -823,7 +1107,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "bbc79369"
+      "dh": "bbc79369",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_DispatchOperateCallback",
@@ -853,7 +1147,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a8056767"
+      "dh": "a8056767",
+      "paramStorage": [
+        [
+          "pOperation",
+          "EDI:4"
+        ],
+        [
+          "nFunctionId",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_CheckInventoryHasItemType",
@@ -881,7 +1185,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "11a8ee1d"
+      "dh": "11a8ee1d",
+      "paramStorage": [
+        [
+          "eItemType",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_UseObelisk",
@@ -913,7 +1227,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a0b2dfce"
+      "dh": "a0b2dfce",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UNIT_IsAlive",
@@ -934,7 +1254,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "1122b73f"
+      "dh": "1122b73f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnitFindArg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_CanTargetMonster",
@@ -965,7 +1295,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "53e580cd"
+      "dh": "53e580cd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ApplyShrineBonus",
@@ -991,7 +1331,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0003e050"
+      "dh": "0003e050",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pAttacker",
+          "EDX:4"
+        ],
+        [
+          "nDurationInFrames",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillCalc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eStat",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eAuraState",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pFunction",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_HealthBoostFunction",
@@ -1014,7 +1384,17 @@
         "D2ShrinesTxt",
         "int32_t"
       ],
-      "dh": "8c51953b"
+      "dh": "8c51953b",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_ManaBoostFunction",
@@ -1037,7 +1417,17 @@
         "D2ShrinesTxt",
         "int32_t"
       ],
-      "dh": "fc6a1103"
+      "dh": "fc6a1103",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_RefillFunction",
@@ -1061,7 +1451,17 @@
         "D2ShrinesTxt",
         "int32_t"
       ],
-      "dh": "dcecb6a0"
+      "dh": "dcecb6a0",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_HealthExchangeFunction",
@@ -1083,7 +1483,17 @@
         "D2ShrinesTxt",
         "uint32_t"
       ],
-      "dh": "376523e2"
+      "dh": "376523e2",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_ManaExchangeFunction",
@@ -1105,7 +1515,17 @@
         "D2ShrinesTxt",
         "uint32_t"
       ],
-      "dh": "8e6e4c58"
+      "dh": "8e6e4c58",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_ShrineOfEnirhsFunction",
@@ -1128,7 +1548,17 @@
         "D2ShrinesTxt",
         "D2UnitDataPlayerStrc"
       ],
-      "dh": "9e7eb29e"
+      "dh": "9e7eb29e",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_PortalShrineFunction",
@@ -1159,7 +1589,17 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "d4fe9509"
+      "dh": "d4fe9509",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_GemShrine_SpawnGem",
@@ -1201,7 +1641,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f4c5273a"
+      "dh": "f4c5273a",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_GemShrineFunction",
@@ -1233,7 +1691,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "84f741f5"
+      "dh": "84f741f5",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_StormShrineFunction",
@@ -1272,7 +1740,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4ee34480"
+      "dh": "4ee34480",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_WarpingShrineFunction",
@@ -1298,7 +1776,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "9ad29ee1"
+      "dh": "9ad29ee1",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_ExplodingShrineFunction",
@@ -1344,7 +1832,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9d4222a1"
+      "dh": "9d4222a1",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_PoisonShrineFunction",
@@ -1390,7 +1888,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "992f6479"
+      "dh": "992f6479",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetAttackRateForWeapon",
@@ -1421,7 +1929,29 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "215d07ef"
+      "dh": "215d07ef",
+      "paramStorage": [
+        [
+          "pSkill",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pnToHit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_GetModifiedStatValueFromShrine",
@@ -1448,7 +1978,21 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "9263df3c"
+      "dh": "9263df3c",
+      "paramStorage": [
+        [
+          "eUnitStat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBoostValue",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_CombatBoostFunction",
@@ -1476,7 +2020,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "8129792b"
+      "dh": "8129792b",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SHRINE_OnStaminaExpire",
@@ -1500,7 +2054,21 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "7fa1ba56"
+      "dh": "7fa1ba56",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_StaminaBoostFunction",
@@ -1530,7 +2098,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fd51fa93"
+      "dh": "fd51fa93",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_StatBoostFunction",
@@ -1556,7 +2134,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1d0201cf"
+      "dh": "1d0201cf",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "QUEST_DispatchObjectActivation_Unref_00583bc0",
@@ -1576,7 +2164,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2d6f2adf"
+      "dh": "2d6f2adf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SHRINE_OnSkillExpire",
@@ -1598,7 +2196,21 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "9ed30828"
+      "dh": "9ed30828",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Shrines_SkillBoostFunction",
@@ -1620,7 +2232,17 @@
         "D2ShrinesTxt",
         "D2StateExArgStrc"
       ],
-      "dh": "a7e92bf5"
+      "dh": "a7e92bf5",
+      "paramStorage": [
+        [
+          "pArguments",
+          "ECX:4"
+        ],
+        [
+          "pTxtShrines",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_ActivateShrine",
@@ -1659,7 +2281,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "59ad149b"
+      "dh": "59ad149b",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_SpawnRewardItem",
@@ -1684,7 +2312,13 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "3a8d95b3"
+      "dh": "3a8d95b3",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_TimedDestructible",
@@ -1712,7 +2346,13 @@
         "SGAMEDATA",
         "eD2UnitFlags"
       ],
-      "dh": "59439f26"
+      "dh": "59439f26",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_DestroyDestructible",
@@ -1737,7 +2377,13 @@
         "D2UnitStrc",
         "eD2UnitFlags"
       ],
-      "dh": "c8e91c37"
+      "dh": "c8e91c37",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_SpawnQuestItemReward",
@@ -1763,7 +2409,13 @@
         "eD2UnitFlags",
         "int32_t"
       ],
-      "dh": "bb56937f"
+      "dh": "bb56937f",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_SpawnExceptionalItemDrop",
@@ -1790,7 +2442,13 @@
         "eD2UnitFlags",
         "int32_t"
       ],
-      "dh": "1b9b53f8"
+      "dh": "1b9b53f8",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_SpawnNormalItemDrop",
@@ -1816,7 +2474,13 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "1fa0fc95"
+      "dh": "1fa0fc95",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_ApplyCounterAttackToNearbyUnits",
@@ -1845,7 +2509,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "5eda1513"
+      "dh": "5eda1513",
+      "paramStorage": [
+        [
+          "ppGame",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_DetonateExplosiveBarrel",
@@ -1870,7 +2540,13 @@
         "D2ObjectsTxt",
         "D2UnitStrc"
       ],
-      "dh": "a7c79907"
+      "dh": "a7c79907",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_ActivateSimple",
@@ -1891,7 +2567,13 @@
         "D2UnitStrc",
         "eD2ObjectAnimMode"
       ],
-      "dh": "eac811ba"
+      "dh": "eac811ba",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_ActivateNoOp",
@@ -1911,7 +2593,13 @@
         "D2ObjectOperateFnArg",
         "D2UnitStrc"
       ],
-      "dh": "ee1308a5"
+      "dh": "ee1308a5",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "InteractWithObject",
@@ -1946,7 +2634,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9828904a"
+      "dh": "9828904a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nUnitId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTxt",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Interact",
@@ -1971,7 +2681,25 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "55f4658a"
+      "dh": "55f4658a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nObjectType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGid",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_UpdateCollisionOnModeChange",
@@ -2006,7 +2734,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8d0d291d"
+      "dh": "8d0d291d",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nGid",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_A2Q2_ArcaneGateLevelTransition",
@@ -2035,7 +2773,13 @@
         "D2UnitStrc",
         "eD2LevelId"
       ],
-      "dh": "c599ba03"
+      "dh": "c599ba03",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Objects_OperateFn46_PortalToAct4",
@@ -2068,7 +2812,13 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "29f4148f"
+      "dh": "29f4148f",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_ClearObjectUnitLink",
@@ -2091,7 +2841,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "3f71d4e4"
+      "dh": "3f71d4e4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pObject",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Objects_OperateFn15_Portal",
@@ -2173,7 +2937,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fd463a39"
+      "dh": "fd463a39",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_ActivatePortalObject",
@@ -2210,7 +2980,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1d1ba105"
+      "dh": "1d1ba105",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_ActivateWaypoint",
@@ -2253,7 +3029,13 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "04bed238"
+      "dh": "04bed238",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TakeWaypoint",
@@ -2298,7 +3080,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "28c64daa"
+      "dh": "28c64daa",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nwpId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWaypointMasks",
+          "Stack[0x8]:2"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_ShrineManaRefill",
@@ -2321,7 +3121,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6afc19ee"
+      "dh": "6afc19ee",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nBoostAmount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_ShrineEnergyBoost",
@@ -2343,7 +3157,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "13493722"
+      "dh": "13493722",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nBoostAmount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_ShrineDexterityBoost",
@@ -2365,7 +3193,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "effaa50e"
+      "dh": "effaa50e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nBoostAmount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_ShrineVitalityBoost",
@@ -2387,7 +3229,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "34f81b61"
+      "dh": "34f81b61",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nBoostAmount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_ShrineStrengthBoost",
@@ -2409,7 +3265,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "afdf5a6e"
+      "dh": "afdf5a6e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nBoostAmount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_ShrineHealthRefill",
@@ -2432,7 +3302,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "43125eca"
+      "dh": "43125eca",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nBoostAmount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_ShrineSkillPointBoost",
@@ -2454,7 +3338,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f2ce5a40"
+      "dh": "f2ce5a40",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nBoostAmount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_DispatchOperateFunction",
@@ -2480,7 +3378,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5d1d5099"
+      "dh": "5d1d5099",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byFuncIndex",
+          "Stack[0x8]:1"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "0x44PacketHandler",
@@ -2519,7 +3431,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "33de659c"
+      "dh": "33de659c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "dwPlayerGUID",
+          "EDX:4"
+        ],
+        [
+          "dwObjectGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwItemGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_HandleObjectDeactivation",
@@ -2541,7 +3475,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c3f356cf"
+      "dh": "c3f356cf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pObject",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_OnWaypointFinish",
@@ -2563,7 +3511,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "5af36890"
+      "dh": "5af36890",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_FinalizePortalLink",
@@ -2601,7 +3559,25 @@
         "eD2UnitType",
         "uint8_t"
       ],
-      "dh": "c9702d01"
+      "dh": "c9702d01",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pOwner",
+          "EDX:4"
+        ],
+        [
+          "dwBluePortalGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_FinalizePortalLink_HaltTail",
@@ -2619,7 +3595,13 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
       ],
-      "dh": "f6cdd7ed"
+      "dh": "f6cdd7ed",
+      "paramStorage": [
+        [
+          "nLine",
+          "Stack[0x0]:4"
+        ]
+      ]
     },
     {
       "name": "OBJECT_HandleUnitRevival",
@@ -2646,7 +3628,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b5990ee2"
+      "dh": "b5990ee2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbRevived",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_ApplyWellHealing",
@@ -2679,7 +3671,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "07d0728a"
+      "dh": "07d0728a",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTxtObjects",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_ActivateHealingWell",
@@ -2707,7 +3713,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "ec77af94"
+      "dh": "ec77af94",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SpawnDrop",
@@ -2741,7 +3753,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "37b64073"
+      "dh": "37b64073",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "sCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemQuality",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_DropItemAtPosition",
@@ -2774,7 +3804,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "686d2730"
+      "dh": "686d2730",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nItemClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemType",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "RollChestDrops",
@@ -2813,7 +3861,17 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "05c243ee"
+      "dh": "05c243ee",
+      "paramStorage": [
+        [
+          "pUnitKill",
+          "ECX:4"
+        ],
+        [
+          "eItemType",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "KillUnit",
@@ -2845,7 +3903,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "aa568a26"
+      "dh": "aa568a26",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_MissleKilled",
@@ -2880,7 +3948,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f92fdbef"
+      "dh": "f92fdbef",
+      "paramStorage": [
+        [
+          "pKill",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_OpenSparklyChest",
@@ -2925,7 +3999,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "22844891"
+      "dh": "22844891",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_OpenChestSpawnMonster",
@@ -2959,7 +4039,13 @@
         "eD2UnitFlags",
         "int32_t"
       ],
-      "dh": "9d405e5a"
+      "dh": "9d405e5a",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_OpenBossChestSpawnUniques",
@@ -3001,7 +4087,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c94d5aeb"
+      "dh": "c94d5aeb",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_RollChestDrops",
@@ -3023,7 +4115,13 @@
         "D2UnitStrc",
         "D2UnitStrc *"
       ],
-      "dh": "6761af5d"
+      "dh": "6761af5d",
+      "paramStorage": [
+        [
+          "pOperateArg",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_OpenChestNoMonster",
@@ -3054,7 +4152,13 @@
         "D2UnitStrc",
         "eD2UnitFlags"
       ],
-      "dh": "26805d77"
+      "dh": "26805d77",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_OpenLockedChest",
@@ -3084,7 +4188,13 @@
         "D2UnitStrc",
         "eD2UnitFlags"
       ],
-      "dh": "7145a2eb"
+      "dh": "7145a2eb",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJMODE_RollChestLoot",
@@ -3110,7 +4220,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "88cc3631"
+      "dh": "88cc3631",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_OpenTrapChestSkillTrigger",
@@ -3149,7 +4269,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "06357427"
+      "dh": "06357427",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_OpenUnlockedChest",
@@ -3177,7 +4303,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "18cd62a3"
+      "dh": "18cd62a3",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OBJECTEVENT_DefaultCallback",
@@ -3201,7 +4333,21 @@
         "eD2TimerTypeDWORD",
         "int32_t"
       ],
-      "dh": "2ecb4b47"
+      "dh": "2ecb4b47",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eTimerType",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

@@ -20,7 +20,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "85882b11"
+      "dh": "85882b11",
+      "paramStorage": [
+        [
+          "nMonTypeA",
+          "ECX:4"
+        ],
+        [
+          "nMonTypeB",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_RollPhysicalDamageRange",
@@ -42,7 +52,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "457952b5"
+      "dh": "457952b5",
+      "paramStorage": [
+        [
+          "nDamageRange",
+          "ECX:4"
+        ],
+        [
+          "nMinPctBonus",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDamageMin",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nRangePctBonus",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDamageAccum",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_RollElementalDamageWithBonus",
@@ -65,7 +101,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a8fb69ed"
+      "dh": "a8fb69ed",
+      "paramStorage": [
+        [
+          "eUnitStat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eStat1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMinPctBonus",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nRangePctBonus",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nDamageAccum",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "eStat2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyHealingToUnit",
@@ -89,7 +155,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9d7dec83"
+      "dh": "9d7dec83",
+      "paramStorage": [
+        [
+          "nHealAmount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyManaToUnit",
@@ -111,7 +187,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "3fd3143c"
+      "dh": "3fd3143c",
+      "paramStorage": [
+        [
+          "nManaAmount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_DrainManaFromUnit",
@@ -132,7 +218,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "ac1f6110"
+      "dh": "ac1f6110",
+      "paramStorage": [
+        [
+          "nManaDrain",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_DrainStaminaFromUnit",
@@ -153,7 +249,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "d504f4ee"
+      "dh": "d504f4ee",
+      "paramStorage": [
+        [
+          "nStaminaDrain",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyStun",
@@ -190,7 +296,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7de0d886"
+      "dh": "7de0d886",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStunFrames",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyPoison",
@@ -224,7 +344,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "60ffe3dc"
+      "dh": "60ffe3dc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPoisonRate",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPoisonFrames",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_OnColdExpire",
@@ -249,7 +387,21 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "0a637402"
+      "dh": "0a637402",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyBurning",
@@ -283,7 +435,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "d4704f1e"
+      "dh": "d4704f1e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBurnRate",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBurnFrames",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_GetMonsterDelayByDifficulty",
@@ -303,7 +473,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8bbf5c45"
+      "dh": "8bbf5c45",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonster",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyCold",
@@ -340,7 +520,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "b87fed12"
+      "dh": "b87fed12",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nColdLength",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SUNITDMG_StatExpireCallback_ResumeAI",
@@ -371,7 +565,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1e89ecd1"
+      "dh": "1e89ecd1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "pStatList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyFreeze",
@@ -418,7 +626,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "31e95c0c"
+      "dh": "31e95c0c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFreezeFrames",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_CalculatePhysicalDamage",
@@ -449,7 +671,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f148ab8d"
+      "dh": "f148ab8d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bUseWeaponStats",
+          "EDX:4"
+        ],
+        [
+          "pWeapon",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMinDmg",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxDmg",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nBonusPercent",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nFlatDamage",
+          "Stack[0x14]:4"
+        ],
+        [
+          "byScale",
+          "Stack[0x18]:1"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyDemonBonus",
@@ -472,7 +728,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2af74858"
+      "dh": "2af74858",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ],
+        [
+          "pDamage",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyUndeadBonusDamage",
@@ -497,7 +767,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "26ac5a6c"
+      "dh": "26ac5a6c",
+      "paramStorage": [
+        [
+          "pDamage",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyMonsterTypeBonusDamage",
@@ -521,7 +805,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "08db6687"
+      "dh": "08db6687",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTarget",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_CalculateOffensiveDamage",
@@ -567,7 +865,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "94c3a04d"
+      "dh": "94c3a04d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDmgStrc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bResetWeaponStats",
+          "Stack[0xc]:4"
+        ],
+        [
+          "byScale",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_CalculateResistance",
@@ -590,7 +914,17 @@
         "D2ResistTableEntry",
         "int32_t"
       ],
-      "dh": "88b6f03b"
+      "dh": "88b6f03b",
+      "paramStorage": [
+        [
+          "pEntry",
+          "EBX:4"
+        ],
+        [
+          "pCtx",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_AbsorbDamageByPercent",
@@ -612,7 +946,21 @@
         "D2ResistTableEntry",
         "int32_t"
       ],
-      "dh": "65215ff3"
+      "dh": "65215ff3",
+      "paramStorage": [
+        [
+          "pCtx",
+          "ECX:4"
+        ],
+        [
+          "pEntry",
+          "EBX:4"
+        ],
+        [
+          "nDamage",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyElementalDamageWithResist",
@@ -637,7 +985,21 @@
         "D2ResistTableEntry",
         "int32_t"
       ],
-      "dh": "9911e174"
+      "dh": "9911e174",
+      "paramStorage": [
+        [
+          "pCtx",
+          "ECX:4"
+        ],
+        [
+          "bBypass",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEntry",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_CalculateExperienceMultiplier",
@@ -662,7 +1024,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9cefbff4"
+      "dh": "9cefbff4",
+      "paramStorage": [
+        [
+          "pCtx",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ProcessFreezeAndPoisonImmunity",
@@ -683,7 +1051,13 @@
         "D2DamageContext",
         "int32_t"
       ],
-      "dh": "94a4fb21"
+      "dh": "94a4fb21",
+      "paramStorage": [
+        [
+          "pCtx",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyDefensiveReduction",
@@ -716,7 +1090,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c4652e8c"
+      "dh": "c4652e8c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBypassFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_GetMonsterDrainEffectiveness",
@@ -737,7 +1129,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "df76fce6"
+      "dh": "df76fce6",
+      "paramStorage": [
+        [
+          "pMonster",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyLifeAndManaLeech",
@@ -775,7 +1177,25 @@
         "uD2UnitMode",
         "uint32_t"
       ],
-      "dh": "bb8ac72e"
+      "dh": "bb8ac72e",
+      "paramStorage": [
+        [
+          "pGame",
+          "EDX:4"
+        ],
+        [
+          "pDefender",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pAttacker",
+          "EBX:4"
+        ],
+        [
+          "pDmgStrc",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyDamageToUnit",
@@ -824,7 +1244,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3f976c83"
+      "dh": "3f976c83",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pVictim",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bApplyDefenseReduction",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FreeCombat",
@@ -845,7 +1287,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "62d88206"
+      "dh": "62d88206",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_RemoveDamageListEntry",
@@ -866,7 +1318,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "fcb3663c"
+      "dh": "fcb3663c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pAttacker",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_AddDamageListEntry",
@@ -888,7 +1354,25 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "3f3e58f6"
+      "dh": "3f3e58f6",
+      "paramStorage": [
+        [
+          "nGamePtr",
+          "ECX:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pAttacker",
+          "EBX:4"
+        ],
+        [
+          "pDefender",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_CheckKnockbackThreshold",
@@ -914,7 +1398,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "de492b4b"
+      "dh": "de492b4b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage2",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_RemoveObjectAtSameCoords",
@@ -939,7 +1437,17 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "d36e0355"
+      "dh": "d36e0355",
+      "paramStorage": [
+        [
+          "nClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_KillMonster",
@@ -976,7 +1484,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "814a8f20"
+      "dh": "814a8f20",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAttacker",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bRemoveFromOwner",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_GetElementalDamageTypeFlags",
@@ -995,7 +1521,17 @@
         "D2DamageStrc",
         "uint32_t"
       ],
-      "dh": "6f45feb8"
+      "dh": "6f45feb8",
+      "paramStorage": [
+        [
+          "dwHitClass",
+          "EAX:4"
+        ],
+        [
+          "pDamage",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_GetHitCalculation",
@@ -1054,7 +1590,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "0628ad52"
+      "dh": "0628ad52",
+      "paramStorage": [
+        [
+          "pGameIn",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pVictim",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ReduceEquipmentDurability",
@@ -1080,7 +1634,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "126d72b3"
+      "dh": "126d72b3",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pVictim",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ProcessCombatQueueEntry",
@@ -1115,7 +1683,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "89aa85fb"
+      "dh": "89aa85fb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pVictim",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_FindCombatEntry",
@@ -1139,7 +1725,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "87e3b4be"
+      "dh": "87e3b4be",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_RollMinMaxDamageRange",
@@ -1159,7 +1755,21 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "db714db1"
+      "dh": "db714db1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnMinDamage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnMaxDamage",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_CheckPreventHealAndSetState",
@@ -1181,7 +1791,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "0c42d497"
+      "dh": "0c42d497",
+      "paramStorage": [
+        [
+          "pDefender",
+          "ESI:4"
+        ],
+        [
+          "pAttacker",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyIgnoreAndFractionalAC",
@@ -1208,7 +1828,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8103512e"
+      "dh": "8103512e",
+      "paramStorage": [
+        [
+          "pnHitChance",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnArmorClass",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "pUnit2",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_RollAttackHit",
@@ -1246,7 +1884,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9a0981b6"
+      "dh": "9a0981b6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "nToHitBonusExtra",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bIsRangedAttack",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_CalculateAndApplyDamage",
@@ -1273,7 +1929,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5f009852"
+      "dh": "5f009852",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pVictim",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "byScale",
+          "Stack[0xc]:1"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_GetSkillDamageBonus",
@@ -1299,7 +1977,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7bb76f2a"
+      "dh": "7bb76f2a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_CheckDefenseEvasion",
@@ -1326,7 +2010,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dd2440da"
+      "dh": "dd2440da",
+      "paramStorage": [
+        [
+          "bIsMissile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pUnit2",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_CheckBlockAndEvasion",
@@ -1352,7 +2050,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5387ab01"
+      "dh": "5387ab01",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pDefUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bIsMissile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bRollBlock",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_ApplyAreaOfEffectDamage",
@@ -1391,7 +2111,49 @@
         "pfnAoEDamageFilter",
         "uint32_t"
       ],
-      "dh": "fd74ee12"
+      "dh": "fd74ee12",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nCenterX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCenterY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nRadius",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bHitOwner",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bHitOwnerOwner",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pfnProc",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nUnitFlags",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_AddSkillBonusDamage",
@@ -1414,7 +2176,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "f5221f15"
+      "dh": "f5221f15",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CalculateDamageForEvent",
@@ -1441,7 +2221,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7deb1905"
+      "dh": "7deb1905",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "EXPERIENCE_ApplyLevelDiffPenaulty",
@@ -1460,7 +2266,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "3278aaca"
+      "dh": "3278aaca",
+      "paramStorage": [
+        [
+          "nExperience",
+          "ECX:4"
+        ],
+        [
+          "nDefenderLevel",
+          "EDX:4"
+        ],
+        [
+          "nAttackerLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_SafeShiftMultiply",
@@ -1479,7 +2299,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "c92f4517"
+      "dh": "c92f4517",
+      "paramStorage": [
+        [
+          "nMultiplicand",
+          "ECX:4"
+        ],
+        [
+          "nMultiplier",
+          "EDX:4"
+        ],
+        [
+          "nShiftBits",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "XP_ApplyLevelExpRatio",
@@ -1499,7 +2333,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "b2682dc8"
+      "dh": "b2682dc8",
+      "paramStorage": [
+        [
+          "nLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExperience",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CALC_Experience",
@@ -1526,7 +2370,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "74973252"
+      "dh": "74973252",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBaseXp",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMercLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_CalculateExperienceForUnit",
@@ -1554,7 +2416,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "693bc68a"
+      "dh": "693bc68a",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nKillerLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "baseExperience",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "nPlayerLevel",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_PlayerUpdateExperience",
@@ -1583,7 +2467,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2f05396f"
+      "dh": "2f05396f",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPrevLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nXpGain",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ExperienceLoopOverPlayers",
@@ -1613,7 +2515,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "09d6b49a"
+      "dh": "09d6b49a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pPartyExp",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_PartyShareExperience",
@@ -1640,7 +2556,33 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "9e203baf"
+      "dh": "9e203baf",
+      "paramStorage": [
+        [
+          "nBaseExperience",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pVictim",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAttackerLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nVictimLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_GetOwnerFromMonsterUnit",
@@ -1668,7 +2610,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "aaa7d218"
+      "dh": "aaa7d218",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pVictim",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pAttacker",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_SEND_MercExperience",
@@ -1706,7 +2662,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "825082db"
+      "dh": "825082db",
+      "paramStorage": [
+        [
+          "nExperience",
+          "EAX:4"
+        ],
+        [
+          "pUnit2",
+          "EDI:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMercLevel",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_KillExperience",
@@ -1735,7 +2713,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "a7edd0f9"
+      "dh": "a7edd0f9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pVictim",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_AwardKillExperience",
@@ -1759,7 +2751,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "193a9b8d"
+      "dh": "193a9b8d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nXpGain",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_SetUnitToLevel",
@@ -1791,7 +2797,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c862787a"
+      "dh": "c862787a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nTargetLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DAMAGE_CalculateHitCheck",
@@ -1819,7 +2839,29 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "6b68a517"
+      "dh": "6b68a517",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nToHitBonusExtra",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nExtraRange",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

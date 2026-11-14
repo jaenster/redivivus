@@ -19,7 +19,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "85c76a93"
+      "dh": "85c76a93",
+      "paramStorage": [
+        [
+          "dwThreadId",
+          "ECX:4"
+        ],
+        [
+          "hThread",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FOG_ReturnZeroCallback",
@@ -34,7 +44,17 @@
       "calledFunctions": [
         "FOG_ReturnZeroCallback"
       ],
-      "dh": "bf7234d0"
+      "dh": "bf7234d0",
+      "paramStorage": [
+        [
+          "szFileName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "StubHook1_Unref_00403f50",
@@ -52,7 +72,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "92262f84"
+      "dh": "92262f84",
+      "paramStorage": [
+        [
+          "dwThreadId",
+          "ECX:4"
+        ],
+        [
+          "hThread",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StubHook1_Unref_00405a50",
@@ -70,7 +100,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "42ac23a2"
+      "dh": "42ac23a2",
+      "paramStorage": [
+        [
+          "dwThreadId",
+          "ECX:4"
+        ],
+        [
+          "hThread",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StubHook1_Unref_00405a60",
@@ -88,7 +128,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "3330e360"
+      "dh": "3330e360",
+      "paramStorage": [
+        [
+          "dwThreadId",
+          "ECX:4"
+        ],
+        [
+          "hThread",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StubHook1_Unref_004072c0",
@@ -106,7 +156,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "2c06c44f"
+      "dh": "2c06c44f",
+      "paramStorage": [
+        [
+          "dwThreadId",
+          "ECX:4"
+        ],
+        [
+          "hThread",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StubHook1_Unref_004072d0",
@@ -124,7 +184,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "4ca6b15f"
+      "dh": "4ca6b15f",
+      "paramStorage": [
+        [
+          "dwThreadId",
+          "ECX:4"
+        ],
+        [
+          "hThread",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StubHook1_Unref_004072e0",
@@ -142,7 +212,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "474b1b31"
+      "dh": "474b1b31",
+      "paramStorage": [
+        [
+          "dwThreadId",
+          "ECX:4"
+        ],
+        [
+          "hThread",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StubHook1_Unref_004072f0",
@@ -160,7 +240,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "562989a5"
+      "dh": "562989a5",
+      "paramStorage": [
+        [
+          "dwThreadId",
+          "ECX:4"
+        ],
+        [
+          "hThread",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StubHook1_Unref_00407300",
@@ -178,7 +268,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "ee9572f2"
+      "dh": "ee9572f2",
+      "paramStorage": [
+        [
+          "dwThreadId",
+          "ECX:4"
+        ],
+        [
+          "hThread",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CrashGame",
@@ -212,7 +312,17 @@
       "usedTypes": [
         "Report"
       ],
-      "dh": "a58a7636"
+      "dh": "a58a7636",
+      "paramStorage": [
+        [
+          "pReport",
+          "ECX:4"
+        ],
+        [
+          "szString",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetParentProcessId",
@@ -232,7 +342,13 @@
         "PROCESSENTRY",
         "int32_t"
       ],
-      "dh": "22e60e36"
+      "dh": "22e60e36",
+      "paramStorage": [
+        [
+          "nProcessId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetModuleFileNameForProcess",
@@ -250,7 +366,21 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "43ffc12e"
+      "dh": "43ffc12e",
+      "paramStorage": [
+        [
+          "nProcessId",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WriteCrashReportProcessInfo",
@@ -283,7 +413,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "10b732b0"
+      "dh": "10b732b0",
+      "paramStorage": [
+        [
+          "pReport",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00407dd0",
@@ -361,7 +497,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "1b9d3103"
+      "dh": "1b9d3103",
+      "paramStorage": [
+        [
+          "dwThreadId",
+          "ECX:4"
+        ],
+        [
+          "hThread",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "StubHook2",
@@ -379,7 +525,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e4551768"
+      "dh": "e4551768",
+      "paramStorage": [
+        [
+          "nReserved",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "StubHook2_Unref_00407fa0",
@@ -397,7 +549,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a2857e89"
+      "dh": "a2857e89",
+      "paramStorage": [
+        [
+          "nReserved",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "StubHook2_Unref_00407fb0",
@@ -415,7 +573,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6461cbb3"
+      "dh": "6461cbb3",
+      "paramStorage": [
+        [
+          "nReserved",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LogStringConditional",
@@ -435,7 +599,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2ac4d77f"
+      "dh": "2ac4d77f",
+      "paramStorage": [
+        [
+          "nLogLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetErrorState",
@@ -472,7 +646,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "37f5a54a"
+      "dh": "37f5a54a",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "StubHook2_Unref_00408050",
@@ -490,7 +670,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "5ec02026"
+      "dh": "5ec02026",
+      "paramStorage": [
+        [
+          "nReserved",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "StubHook2_Unref_00408060",
@@ -508,7 +694,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "3511c6a7"
+      "dh": "3511c6a7",
+      "paramStorage": [
+        [
+          "nReserved",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "StubHook2_Unref_00408070",
@@ -526,7 +718,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "25c9f322"
+      "dh": "25c9f322",
+      "paramStorage": [
+        [
+          "nReserved",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "StubHook2_Unref_00408080",
@@ -544,7 +742,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0e7b44e5"
+      "dh": "0e7b44e5",
+      "paramStorage": [
+        [
+          "nReserved",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetInstructionPointer",
@@ -583,7 +787,21 @@
         "uint8_t",
         "va_list"
       ],
-      "dh": "4ab4bd9a"
+      "dh": "4ab4bd9a",
+      "paramStorage": [
+        [
+          "bFlags",
+          "Stack[0x4]:1"
+        ],
+        [
+          "vaArgs",
+          "EDI:4"
+        ],
+        [
+          "szText",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "OutputDebugStringSimple",
@@ -639,7 +857,21 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "e2863e0f"
+      "dh": "e2863e0f",
+      "paramStorage": [
+        [
+          "bFlags",
+          "Stack[0x4]:1"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "firstArg",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FormatDebugOutputLogOnly",
@@ -698,7 +930,17 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "7234311d"
+      "dh": "7234311d",
+      "paramStorage": [
+        [
+          "pCrashInfo",
+          "ECX:4"
+        ],
+        [
+          "pUserContext",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CRASH_FillupCrashTxt",
@@ -734,7 +976,33 @@
         "char[1024]",
         "uint32_t"
       ],
-      "dh": "b04be6fe"
+      "dh": "b04be6fe",
+      "paramStorage": [
+        [
+          "szSummary",
+          "ECX:4"
+        ],
+        [
+          "szReason",
+          "EDX:4"
+        ],
+        [
+          "ppszAttachPaths",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAttachPathCount",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLineNumber",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bSilentFlag",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "CheckErrorDuringError",
@@ -754,7 +1022,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "bb51672c"
+      "dh": "bb51672c",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nLine",
+          "EDX:4"
+        ],
+        [
+          "szReason",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FOG_ErrorHandler",
@@ -803,7 +1085,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6166ce02"
+      "dh": "6166ce02",
+      "paramStorage": [
+        [
+          "szUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAddress",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ERROR_UnrecoverableInternalError_Halt",
@@ -826,7 +1122,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b6fd25f2"
+      "dh": "b6fd25f2",
+      "paramStorage": [
+        [
+          "szMessage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAddress",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ERROR_UnrecoverableInternalError_Warning",
@@ -847,7 +1157,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b4759388"
+      "dh": "b4759388",
+      "paramStorage": [
+        [
+          "szUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAddress",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ERROR_DeadlockedThread",
@@ -868,7 +1192,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9dac70c5"
+      "dh": "9dac70c5",
+      "paramStorage": [
+        [
+          "pThread",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTicks",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ERROR_UnrecoverableInternalError_Any",
@@ -890,7 +1224,25 @@
         "eFOG_ErrorType",
         "int32_t"
       ],
-      "dh": "01508232"
+      "dh": "01508232",
+      "paramStorage": [
+        [
+          "eErrorType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAddress",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ShowUnrecoverableErrorDialog",
@@ -920,7 +1272,29 @@
         "int32_t",
         "va_list"
       ],
-      "dh": "a8d187d3"
+      "dh": "a8d187d3",
+      "paramStorage": [
+        [
+          "eErrorType",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szSourceFile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "vaArgs",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ERRORMANAGER_InitErrorManager",
@@ -962,7 +1336,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fc874adb"
+      "dh": "fc874adb",
+      "paramStorage": [
+        [
+          "dwUnused1",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "bLogGameStrartupInfo",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "StubHook2_Unref_004095d0",
@@ -980,7 +1368,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "7949afb5"
+      "dh": "7949afb5",
+      "paramStorage": [
+        [
+          "nReserved",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6c9bfb",
@@ -1002,7 +1396,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "3c9b6ebe"
+      "dh": "3c9b6ebe",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

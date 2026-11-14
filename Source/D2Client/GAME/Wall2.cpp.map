@@ -26,7 +26,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "40867bce"
+      "dh": "40867bce",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_DrawDebugUnitDiamond",
@@ -56,7 +62,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0a18bb04"
+      "dh": "0a18bb04",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_WORLD_IsUnitInLineOfSight",
@@ -83,7 +95,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "782caae4"
+      "dh": "782caae4",
+      "paramStorage": [
+        [
+          "pOtherUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_WORLD_Unit",
@@ -128,7 +146,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5a420b4f"
+      "dh": "5a420b4f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nGamma",
+          "EDX:4"
+        ],
+        [
+          "nDrawLayer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_ResetAmbientSound",
@@ -189,7 +221,13 @@
         "eD2LevelId",
         "uint32_t"
       ],
-      "dh": "de99c042"
+      "dh": "de99c042",
+      "paramStorage": [
+        [
+          "nTickCount",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_ScheduleSoundSequence",
@@ -217,7 +255,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bc420455"
+      "dh": "bc420455",
+      "paramStorage": [
+        [
+          "dwSoundId",
+          "ECX:4"
+        ],
+        [
+          "nResumeOffset",
+          "EDX:4"
+        ],
+        [
+          "nSequenceDuration",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBlockIdx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwDelayedSoundId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDelayedSoundOffset",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bPlayDelayed",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_UpdateScheduledSound",
@@ -236,7 +304,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "45de6620"
+      "dh": "45de6620",
+      "paramStorage": [
+        [
+          "nDelayedSoundOffset",
+          "ECX:4"
+        ],
+        [
+          "bPlayDelayed",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_AllocDrawList",
@@ -257,7 +335,13 @@
         "D2GameViewStrc",
         "D2Wall2CellStrc"
       ],
-      "dh": "81a63806"
+      "dh": "81a63806",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ResetWall2Data",
@@ -275,7 +359,13 @@
       "usedTypes": [
         "D2GameViewStrc"
       ],
-      "dh": "b3e7ee71"
+      "dh": "b3e7ee71",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "FreeWall2",
@@ -294,7 +384,13 @@
       "usedTypes": [
         "D2GameViewStrc"
       ],
-      "dh": "c0f73bb8"
+      "dh": "c0f73bb8",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_IsInDrawGrid",
@@ -312,7 +408,21 @@
       "usedTypes": [
         "D2Wall2DrawListStrc"
       ],
-      "dh": "fe7c23e1"
+      "dh": "fe7c23e1",
+      "paramStorage": [
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "ECX:4"
+        ],
+        [
+          "pDrawList",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_InsertUnitDrawBelow",
@@ -337,7 +447,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "496b7a59"
+      "dh": "496b7a59",
+      "paramStorage": [
+        [
+          "pDrawList",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pWall2Cell",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_IsTileOccludingPlayer",
@@ -359,7 +483,17 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "0211d85c"
+      "dh": "0211d85c",
+      "paramStorage": [
+        [
+          "pTileData",
+          "EAX:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_AddWallTile",
@@ -386,7 +520,25 @@
         "D2Wall2DrawListStrc",
         "uint32_t"
       ],
-      "dh": "85c7d3ad"
+      "dh": "85c7d3ad",
+      "paramStorage": [
+        [
+          "pDrawList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pWall2Cell",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pTileData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_AddLowerWallTile",
@@ -411,7 +563,25 @@
         "D2Wall2DrawListStrc",
         "uint32_t"
       ],
-      "dh": "ffd9e8d4"
+      "dh": "ffd9e8d4",
+      "paramStorage": [
+        [
+          "pDrawList",
+          "ECX:4"
+        ],
+        [
+          "pWall2Cell",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTileData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_AddRoofTile",
@@ -436,7 +606,25 @@
         "D2Wall2DrawListStrc",
         "uint32_t"
       ],
-      "dh": "b717fb3b"
+      "dh": "b717fb3b",
+      "paramStorage": [
+        [
+          "pDrawList",
+          "ECX:4"
+        ],
+        [
+          "pWall2Cell",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTileData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_AddShadowPassTile",
@@ -461,7 +649,25 @@
         "D2Wall2DrawListStrc",
         "uint32_t"
       ],
-      "dh": "64425c70"
+      "dh": "64425c70",
+      "paramStorage": [
+        [
+          "pWall2Cell",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTileData",
+          "EBX:4"
+        ],
+        [
+          "pDrawList",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_InsertUnitDraw",
@@ -486,7 +692,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "ac34eec1"
+      "dh": "ac34eec1",
+      "paramStorage": [
+        [
+          "pWall2Cell",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pDrawList",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_InsertUnitShadowDraw",
@@ -511,7 +731,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "beae5355"
+      "dh": "beae5355",
+      "paramStorage": [
+        [
+          "pWall2Cell",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pDrawList",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_CollectRoomTilesAndUnits",
@@ -559,7 +793,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "870186b7"
+      "dh": "870186b7",
+      "paramStorage": [
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDrawContext",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_BuildSceneDrawList",
@@ -598,7 +842,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6d19ae9b"
+      "dh": "6d19ae9b",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ],
+        [
+          "nTickCount",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004dddd0",
@@ -613,7 +867,13 @@
       "calledFunctions": [
         "Unreferenced_004dddd0"
       ],
-      "dh": "470a88d9"
+      "dh": "470a88d9",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_OnAllocGameView_NoOp_Unref_004ddde0",

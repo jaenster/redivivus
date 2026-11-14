@@ -24,7 +24,13 @@
         "D2PoolManagerStrc",
         "D2UnitStrc"
       ],
-      "dh": "b190069a"
+      "dh": "b190069a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FreeMissileStream",
@@ -46,7 +52,13 @@
         "D2PoolManagerStrc",
         "D2UnitStrc"
       ],
-      "dh": "2d14b545"
+      "dh": "2d14b545",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Return1",
@@ -65,7 +77,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "24d27b85"
+      "dh": "24d27b85",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ExecuteHit",
@@ -100,7 +122,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "d520a2fe"
+      "dh": "d520a2fe",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nfpHit",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Update",
@@ -137,7 +177,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4973fac8"
+      "dh": "4973fac8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMissile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nfpCreate",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nfpUnknown",
+          "Stack[0x18]:4"
+        ]
+      ]
     }
   ]
 }

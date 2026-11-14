@@ -253,6 +253,10 @@ jobs:
             Write-Host "::error::nothing compiled at all, which means the toolchain or the flags are wrong rather than the source"
             exit 1
           }
+          if ($fail -gt 0) {
+            Write-Host "::error::$fail translation units failed to compile"
+            exit 1
+          }
 
       - name: Keep the objects for inspection
         if: always()

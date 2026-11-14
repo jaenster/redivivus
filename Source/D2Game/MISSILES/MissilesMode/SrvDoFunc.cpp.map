@@ -25,7 +25,29 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "013aab9a"
+      "dh": "013aab9a",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit1",
+          "EDI:4"
+        ],
+        [
+          "pMissileTxt",
+          "EBX:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "fpMissileSrvDoFuncData_MonsterOnly",
@@ -46,7 +68,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "beb3c0ff"
+      "dh": "beb3c0ff",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pCtx",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "fpMissileSrvDoFuncData_PlayerOrAllyMonster",
@@ -69,7 +101,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "d2db5e2f"
+      "dh": "d2db5e2f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pCtx",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "fpMissileSrvDoFuncData_PlayerOrMonster",
@@ -90,7 +132,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "40648e60"
+      "dh": "40648e60",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pCtx",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "fpMissileSrvDoFuncData_MissileFlagCheck",
@@ -110,7 +162,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5e137807"
+      "dh": "5e137807",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pCtx",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

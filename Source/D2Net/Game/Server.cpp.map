@@ -37,7 +37,21 @@
         "D2QServerStrc",
         "int32_t"
       ],
-      "dh": "059c26c8"
+      "dh": "059c26c8",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect",
@@ -59,7 +73,45 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "35333b5c"
+      "dh": "35333b5c",
+      "paramStorage": [
+        [
+          "pbPacket",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ],
+        [
+          "pnPacketSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnUnknown",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnPacketClass",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnTimeoutMs",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwArg1",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x18]:4"
+        ],
+        [
+          "dwClientIpAddress",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "WaitForEmptyEvent",
@@ -74,7 +126,13 @@
       "calledFunctions": [
         "WaitForEmptyEvent"
       ],
-      "dh": "b8ee0003"
+      "dh": "b8ee0003",
+      "paramStorage": [
+        [
+          "dwTimeout",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_Thunk_QServerSwapWorkerSlotValue",
@@ -90,7 +148,17 @@
         "NET_Thunk_QServerSwapWorkerSlotValue",
         "SwapWorkerSlotValue"
       ],
-      "dh": "27e7bda7"
+      "dh": "27e7bda7",
+      "paramStorage": [
+        [
+          "nWorkerIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNewSlotValueOrZero",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_Thunk_QServerAddGameTokenFilter",
@@ -109,7 +177,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "0ec29f40"
+      "dh": "0ec29f40",
+      "paramStorage": [
+        [
+          "nExpectedMaskedToken",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaskTableIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SetPlayersCount",
@@ -128,7 +206,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "99a74e9e"
+      "dh": "99a74e9e",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "_NullSub_Unref_0052b270",
@@ -160,7 +244,13 @@
         "NET_HACK_SetUseQServerHack",
         "SetHackMode"
       ],
-      "dh": "844ffb2b"
+      "dh": "844ffb2b",
+      "paramStorage": [
+        [
+          "bResult",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_QServer_FreeAndSend0xB0ToEveryone",
@@ -195,7 +285,17 @@
         "NET_D2GS_SERVER_DequeueModePacket_Mode1",
         "DequeueModePacket"
       ],
-      "dh": "f4ffa37c"
+      "dh": "f4ffa37c",
+      "paramStorage": [
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_DequeueModePacket_Mode0",
@@ -214,7 +314,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a9f69d2e"
+      "dh": "a9f69d2e",
+      "paramStorage": [
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_DequeueModePacket_Mode2",
@@ -230,7 +340,17 @@
         "NET_D2GS_SERVER_DequeueModePacket_Mode2",
         "DequeueModePacket"
       ],
-      "dh": "d9d1abfb"
+      "dh": "d9d1abfb",
+      "paramStorage": [
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_SendPacketToClient",
@@ -258,7 +378,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "fd865fc5"
+      "dh": "fd865fc5",
+      "paramStorage": [
+        [
+          "nMode",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nClientId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "NET_QServer_FindIpAddressByClientIdForQServer",
@@ -277,7 +415,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f9bdeb2d"
+      "dh": "f9bdeb2d",
+      "paramStorage": [
+        [
+          "nClientId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szIpAddress",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetIpFromToken",
@@ -296,7 +448,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "d4be57a6"
+      "dh": "d4be57a6",
+      "paramStorage": [
+        [
+          "nToken",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_GetClientSocketByToken",
@@ -315,7 +473,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "1650c6bb"
+      "dh": "1650c6bb",
+      "paramStorage": [
+        [
+          "nToken",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_HACK_AddClientToHackList",
@@ -334,7 +498,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4f5a903c"
+      "dh": "4f5a903c",
+      "paramStorage": [
+        [
+          "nClientId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBanFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "NET_HACK_CloseAndBanHackerIP",
@@ -354,7 +532,21 @@
         "in_addr",
         "int32_t"
       ],
-      "dh": "24716a98"
+      "dh": "24716a98",
+      "paramStorage": [
+        [
+          "addr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "NET_HACK_UnlistIP",
@@ -374,7 +566,21 @@
         "in_addr",
         "uint32_t"
       ],
-      "dh": "2cac53ff"
+      "dh": "2cac53ff",
+      "paramStorage": [
+        [
+          "addr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwDuration",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "NET_DisconnectIP",
@@ -394,7 +600,21 @@
         "in_addr",
         "int32_t"
       ],
-      "dh": "fe1870d4"
+      "dh": "fe1870d4",
+      "paramStorage": [
+        [
+          "addr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_KillConnection",
@@ -413,7 +633,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a68b3cc0"
+      "dh": "a68b3cc0",
+      "paramStorage": [
+        [
+          "nClientId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_Thunk_QServerSetHacklistAddLineHook",
@@ -432,7 +658,13 @@
       "usedTypes": [
         "fpD2QServerLineHook"
       ],
-      "dh": "cfa612df"
+      "dh": "cfa612df",
+      "paramStorage": [
+        [
+          "pfnHook",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SetQServerCallbackFunction",
@@ -448,7 +680,13 @@
         "NET_SetQServerCallbackFunction",
         "SetReservedHook"
       ],
-      "dh": "a7f0c5df"
+      "dh": "a7f0c5df",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AssignClientToToken",
@@ -467,7 +705,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "c2f2e248"
+      "dh": "c2f2e248",
+      "paramStorage": [
+        [
+          "nClientId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nToken",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetClientGameToken",
@@ -486,7 +734,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "24cedb86"
+      "dh": "24cedb86",
+      "paramStorage": [
+        [
+          "nClientId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SendPacketWithFlags",
@@ -509,7 +763,21 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "88cecca6"
+      "dh": "88cecca6",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "DX:2"
+        ],
+        [
+          "nFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_SendPacketToClient",
@@ -533,7 +801,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "21eaca91"
+      "dh": "21eaca91",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "NET_WaitForEmptyEvent",
@@ -549,7 +827,13 @@
         "NET_WaitForEmptyEvent",
         "WaitForEmptyEventOrPumpIo"
       ],
-      "dh": "86a63b6e"
+      "dh": "86a63b6e",
+      "paramStorage": [
+        [
+          "dwTimeout",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "_NullSub",
@@ -581,7 +865,13 @@
         "_NullSubRet8",
         "_NullSubRet4"
       ],
-      "dh": "6ede9989"
+      "dh": "6ede9989",
+      "paramStorage": [
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xAF01",
@@ -603,7 +893,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "84653163"
+      "dh": "84653163",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nClientId",
+          "EDX:4"
+        ],
+        [
+          "pszSourceFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x70",
@@ -625,7 +933,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1a584ae8"
+      "dh": "1a584ae8",
+      "paramStorage": [
+        [
+          "pQServer",
+          "ECX:4"
+        ],
+        [
+          "nClientId",
+          "EDX:4"
+        ],
+        [
+          "pszSourceFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xAF00",
@@ -664,7 +990,17 @@
         "eD2GSConnectionType",
         "eD2GSGameType"
       ],
-      "dh": "fd4a4294"
+      "dh": "fd4a4294",
+      "paramStorage": [
+        [
+          "neD2GSConnectionType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eD2GameType",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer",
@@ -712,7 +1048,13 @@
       "usedTypes": [
         "eD2GSConnectionType"
       ],
-      "dh": "7dc26c20"
+      "dh": "7dc26c20",
+      "paramStorage": [
+        [
+          "neD2GSConnectionType",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WSAGetLastError",
@@ -739,7 +1081,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "97f64363"
+      "dh": "97f64363",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "pBytesSize",
+          "EDX:4"
+        ],
+        [
+          "pExpectedSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_GetOutgoingPacketSizeFromTableAndVariableSize",
@@ -761,7 +1117,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ebd8d00f"
+      "dh": "ebd8d00f",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ],
+        [
+          "pSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

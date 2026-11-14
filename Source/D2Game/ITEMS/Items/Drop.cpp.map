@@ -35,7 +35,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "1c98409b"
+      "dh": "1c98409b",
+      "paramStorage": [
+        [
+          "pnDropCount",
+          "ECX:4"
+        ],
+        [
+          "pDropListArr",
+          "EDX:4"
+        ],
+        [
+          "dwItemTxtEntry",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwWeightOffset",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMDROP_GetDropListEntry",
@@ -53,7 +71,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4289207b"
+      "dh": "4289207b",
+      "paramStorage": [
+        [
+          "pDropListBase",
+          "ECX:4"
+        ],
+        [
+          "nEntryIdx",
+          "EAX:4"
+        ],
+        [
+          "nMaxEntries",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_InitializeDroppedItem",
@@ -81,7 +113,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f6856a1e"
+      "dh": "f6856a1e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ],
+        [
+          "dwUnitGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FindBestSpotToSpawnItem",
@@ -104,7 +154,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4c2d3be0"
+      "dh": "4c2d3be0",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ],
+        [
+          "pPoint",
+          "EDX:4"
+        ],
+        [
+          "pNewPosition",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCollisionMask",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxSearchRadius",
+          "Stack[0xc]:1"
+        ]
+      ]
     },
     {
       "name": "ITEMDROP_IsItemClassEligible",
@@ -129,7 +201,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d7055df9"
+      "dh": "d7055df9",
+      "paramStorage": [
+        [
+          "pSeed",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSkipRarityRoll",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eLevel",
+          "EAX:4"
+        ],
+        [
+          "pItemsTxt",
+          "ESI:4"
+        ],
+        [
+          "nItemTypeFilter",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ITEMDROP_RollExceptionalItemClass",
@@ -155,7 +249,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a1a2402c"
+      "dh": "a1a2402c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pSeed",
+          "EDX:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTCFilter",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMonsterLevel",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMDROP_RollNormalItemClass",
@@ -180,7 +296,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "38b298d9"
+      "dh": "38b298d9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pSeed",
+          "EDX:4"
+        ],
+        [
+          "nMonsterLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTCFilter",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLevelFilter",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMDROP_RollEliteItemClass",
@@ -207,7 +345,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b1d5aae1"
+      "dh": "b1d5aae1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pSeed",
+          "EDX:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTCFilter",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMonsterLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bIsMonsterDrop",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMDROP_RollItemClassByLevel",
@@ -236,7 +400,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "34913681"
+      "dh": "34913681",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSeed",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTCFilter",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMonsterLevel",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bIsMonsterDrop",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nLevel",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RollBaseArmorClass",
@@ -263,7 +453,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2f7bd174"
+      "dh": "2f7bd174",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetBaseDamageStats",
@@ -289,7 +485,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e86c29e1"
+      "dh": "e86c29e1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CheckUniqueBitmask",
@@ -308,7 +510,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "3290f602"
+      "dh": "3290f602",
+      "paramStorage": [
+        [
+          "nUniqueFileIndex",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_IsUniqueAlreadyDropped",
@@ -330,7 +542,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "1148401d"
+      "dh": "1148401d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_MarkUniqueAsDropped",
@@ -354,7 +576,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "40b7eea6"
+      "dh": "40b7eea6",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RollMagicPrefixSuffix",
@@ -379,7 +611,17 @@
         "D2UnitStrc *",
         "int16_t"
       ],
-      "dh": "a0fb69cc"
+      "dh": "a0fb69cc",
+      "paramStorage": [
+        [
+          "pItemGenCtx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RollUniqueItem",
@@ -422,7 +664,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7d5b1248"
+      "dh": "7d5b1248",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pItemGenContext",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RollForcedMagicAffix",
@@ -451,7 +707,17 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "836c4053"
+      "dh": "836c4053",
+      "paramStorage": [
+        [
+          "pItemGenCtx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RollSocketCount",
@@ -487,7 +753,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "eac0928a"
+      "dh": "eac0928a",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pItemGenContext",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ApplyEthereal",
@@ -519,7 +799,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dd6e0255"
+      "dh": "dd6e0255",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pItemGenContext",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ApplySpecialTypeProperties",
@@ -550,7 +840,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "98f93ff9"
+      "dh": "98f93ff9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemGenContext",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ApplySpecialTypePropertiesExp",
@@ -578,7 +882,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c5c7c8ef"
+      "dh": "c5c7c8ef",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pItemGenContext",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ApplyNormalTypeProperties",
@@ -602,7 +916,21 @@
         "SGAMEDATA",
         "uint16_t"
       ],
-      "dh": "ac82b234"
+      "dh": "ac82b234",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pItemGenContext",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RollItemQuality",
@@ -639,7 +967,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "afb275ce"
+      "dh": "afb275ce",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemGenContext",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ClearAllMagicAffixes",
@@ -662,7 +1000,13 @@
       "usedTypes": [
         "D2UnitStrc *"
       ],
-      "dh": "0b2170a0"
+      "dh": "0b2170a0",
+      "paramStorage": [
+        [
+          "ppUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_FallbackToNormalQuality",
@@ -695,7 +1039,25 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "911b6cdb"
+      "dh": "911b6cdb",
+      "paramStorage": [
+        [
+          "ppUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemGenContext",
+          "ESI:4"
+        ],
+        [
+          "nModSeedVal",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_FallbackToSuperiorQuality",
@@ -724,7 +1086,21 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "233c8897"
+      "dh": "233c8897",
+      "paramStorage": [
+        [
+          "pItemGenContext",
+          "EBX:4"
+        ],
+        [
+          "ppUnit",
+          "EAX:4"
+        ],
+        [
+          "pnSeed",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_FallbackToMagicQuality",
@@ -753,7 +1129,21 @@
         "D2UnitStrc *",
         "uint32_t"
       ],
-      "dh": "d227e442"
+      "dh": "d227e442",
+      "paramStorage": [
+        [
+          "pItemGenContext",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnSeed",
+          "EBX:4"
+        ],
+        [
+          "ppUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_FallbackToRareQuality",
@@ -782,7 +1172,21 @@
         "D2UnitStrc *",
         "uint32_t"
       ],
-      "dh": "0795c2e7"
+      "dh": "0795c2e7",
+      "paramStorage": [
+        [
+          "pItemGenContext",
+          "EBX:4"
+        ],
+        [
+          "pnSeed",
+          "ESI:4"
+        ],
+        [
+          "ppUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ApplyQualityAndAffixes",
@@ -850,7 +1254,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "e6152ef8"
+      "dh": "e6152ef8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "ppItem",
+          "EDX:4"
+        ],
+        [
+          "pItemGenContext",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RollVariantGraphic",
@@ -873,7 +1291,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "20cfe21c"
+      "dh": "20cfe21c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_InitItemBaseStats",
@@ -929,7 +1353,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2e8f2299"
+      "dh": "2e8f2299",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "ppItem",
+          "EDX:4"
+        ],
+        [
+          "pItemGenCtx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bApplyQuality",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_FreeItemInventoryAndTimers",
@@ -952,7 +1394,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "fc7b3fcb"
+      "dh": "fc7b3fcb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "INVENTORY_RemoveItemFromOwner",
@@ -977,7 +1429,17 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "65fdc6e8"
+      "dh": "65fdc6e8",
+      "paramStorage": [
+        [
+          "pInventory",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RemoveFromOwnerInventory",
@@ -997,7 +1459,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c8938df4"
+      "dh": "c8938df4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_IterateAllUnits",
@@ -1017,7 +1493,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "0f8d6c8b"
+      "dh": "0f8d6c8b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pArgs",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_DeleteItemAndFreeUnit",
@@ -1038,7 +1524,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "98f39959"
+      "dh": "98f39959",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AlreadyHoldingItem",
@@ -1065,7 +1561,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "fe1d1194"
+      "dh": "fe1d1194",
+      "paramStorage": [
+        [
+          "punit",
+          "ECX:4"
+        ],
+        [
+          "pItem",
+          "EDX:4"
+        ],
+        [
+          "pInventory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HasQuestItem",
@@ -1096,7 +1606,21 @@
         "eInventoryPage",
         "uint32_t"
       ],
-      "dh": "ffe8fa12"
+      "dh": "ffe8fa12",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwItemCode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetLevel",
@@ -1124,7 +1648,17 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "19730384"
+      "dh": "19730384",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eLevel",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_FillItemGenerationData",
@@ -1171,7 +1705,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "433ef589"
+      "dh": "433ef589",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pItemGenCtx",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNIT_GetMaxAvailableHPCharCode",
@@ -1202,7 +1750,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "72f2094e"
+      "dh": "72f2094e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UNIT_GetMaxAvailableMPCharCode",
@@ -1233,7 +1787,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "91ab8c07"
+      "dh": "91ab8c07",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RefreshDurability",
@@ -1255,7 +1815,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "ecff7fa4"
+      "dh": "ecff7fa4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RefreshQuantity",
@@ -1277,7 +1847,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "46a4d0ac"
+      "dh": "46a4d0ac",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetTotalMagicFind",
@@ -1298,7 +1878,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "75f58982"
+      "dh": "75f58982",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEMDROP_AdjustDrop",
@@ -1316,7 +1902,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "5c5b84d2"
+      "dh": "5c5b84d2",
+      "paramStorage": [
+        [
+          "nMagicFind",
+          "ECX:4"
+        ],
+        [
+          "nDiminishFactor",
+          "EDX:4"
+        ],
+        [
+          "nMFAdjusted",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GAME_GetItemQuality",
@@ -1351,7 +1951,33 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "93fe9900"
+      "dh": "93fe9900",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "EAX:4"
+        ],
+        [
+          "nVictimLevel",
+          "ECX:4"
+        ],
+        [
+          "pAttacker",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pVictim",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pMagicFindUnit",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ApplyGoldBonus",
@@ -1376,7 +2002,17 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "0a45fce3"
+      "dh": "0a45fce3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CalculateDespawnTimer",
@@ -1402,7 +2038,17 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "807e2ba7"
+      "dh": "807e2ba7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DropItem",
@@ -1430,7 +2076,33 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "f0efea47"
+      "dh": "f0efea47",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pSourceUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "x",
+          "Stack[0xc]:4"
+        ],
+        [
+          "y",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "FreeUnusedItems",
@@ -1458,7 +2130,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "b3ef53e6"
+      "dh": "b3ef53e6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nAct",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RemoveRuneword",
@@ -1485,7 +2167,17 @@
         "SGAMEDATA",
         "eD2ItemFlag"
       ],
-      "dh": "499f1dd5"
+      "dh": "499f1dd5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CreateFromSaveData",
@@ -1517,7 +2209,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "570edfb7"
+      "dh": "570edfb7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pSaveData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSaveDataSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bCheckItemHeader",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnitDataItemDetails",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnBytesConsumed",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nVersion",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CreateItemInstance",
@@ -1581,7 +2307,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4ea0e495"
+      "dh": "4ea0e495",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pItemGenCtx",
+          "EDX:4"
+        ],
+        [
+          "bFromCustomData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DROP_SpawnRandomItemInRoom",
@@ -1615,7 +2355,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a632455f"
+      "dh": "a632455f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pCoords",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppUnitTable",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DROP_SpawnGoldInRoom",
@@ -1649,7 +2407,21 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "7c669ea4"
+      "dh": "7c669ea4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pCoords",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DROP_SpawnExceptionalItem",
@@ -1681,7 +2453,33 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "ac7f7c4d"
+      "dh": "ac7f7c4d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pCoords",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTCFilter",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMonsterLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DROP_SpawnNormalItem",
@@ -1716,7 +2514,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a7fc9ce8"
+      "dh": "a7fc9ce8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pCoords",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTCFilter",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMonsterLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DROP_SpawnEliteItem",
@@ -1750,7 +2574,33 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "565e5602"
+      "dh": "565e5602",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "pCoords",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTCFilter",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMonsterLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RewardItemToDrop",
@@ -1796,7 +2646,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3020aa03"
+      "dh": "3020aa03",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eItemType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnItemLevel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppUnit",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTCFilter",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CreateFromTemplate",
@@ -1830,7 +2710,53 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "302f172e"
+      "dh": "302f172e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nItemClassId",
+          "EDX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eQuality",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bIgnoreFlag",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bBoughtFlag",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nItemLevel",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nCreateParam",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nInitSeed",
+          "Stack[0x20]:4"
+        ],
+        [
+          "nModSeed",
+          "Stack[0x24]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMS_ReduceDurability",
@@ -1868,7 +2794,21 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "93f66e88"
+      "dh": "93f66e88",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DROP_SpawnGoldPiles",
@@ -1902,7 +2842,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d2ac11c6"
+      "dh": "d2ac11c6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nGoldAmount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnitTable",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnUnitCount",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMaxPiles",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_DropEarOnPvpDeath",
@@ -1933,7 +2899,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9a806b6a"
+      "dh": "9a806b6a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CloneFromSerializedData",
@@ -1974,7 +2950,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5f1deabf"
+      "dh": "5f1deabf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSourceItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bCloneSockets",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEMGEN_CreateItemFromClassIdAndQuality",
@@ -2011,7 +3005,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e0b55b26"
+      "dh": "e0b55b26",
+      "paramStorage": [
+        [
+          "nItemClassId",
+          "ECX:4"
+        ],
+        [
+          "eD2ItemType",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eItemType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFileIndex",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_ITEM_RollItemToDrop",
@@ -2062,7 +3086,49 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "88b77b7b"
+      "dh": "88b77b7b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAttacker",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTreasure",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eItemType",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nVictimLevel",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bIsItemFindDrop",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pUnitTable",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pUnitIndex",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nItemsCountToGenerate",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_ITEM_RollItemAndGetTreasureClass",
@@ -2091,7 +3157,49 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "ea9fad1d"
+      "dh": "ea9fad1d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pAttacker",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSelectedTC",
+          "Stack[0x8]:2"
+        ],
+        [
+          "eItemType",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nVictimLevel",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bIsItemFindDrop",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pUnitTable",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pUnitIndex",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "nItemsCountToGenerate",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "DROP_SpawnGoldOnGround",
@@ -2112,7 +3220,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "99cfc082"
+      "dh": "99cfc082",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nGoldAmount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GiveGoldOrDrop",
@@ -2137,7 +3259,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ff6172c2"
+      "dh": "ff6172c2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nGoldAmount",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

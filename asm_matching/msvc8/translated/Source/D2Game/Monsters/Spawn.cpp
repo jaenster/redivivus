@@ -399,12 +399,16 @@ static int32_t MONSTER_ValidateSpawnForLevel(int32_t nClassId, eD2LevelId eLevel
     return nClassId;
 }
 
-static BOOL SPAWN_IsExcludedMonsterClass(int32_t nClassId) {
-    if (nClassId < 0 || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
-      nClassId = -1;
+// dummy_ClampIndex: the index check ahead of dummy's switch, an inline function with two returns as the original inlined it.
+static inline int dummy_ClampIndex(int nIndex) {
+    if (nIndex < 0 || nIndex >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+        return -1;
     }
+    return nIndex;
+}
 
-    switch (nClassId) {
+static BOOL SPAWN_IsExcludedMonsterClass(int32_t nClassId) {
+    switch (dummy_ClampIndex(nClassId)) {
       case 0xe5:
 
       case 0x11c:

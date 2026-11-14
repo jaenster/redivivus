@@ -24,7 +24,25 @@
         "D2LvlPrestTxt",
         "uint32_t"
       ],
-      "dh": "4f070b26"
+      "dh": "4f070b26",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EBX:4"
+        ],
+        [
+          "pLevelPrestIds",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nVariants",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIterateFiles",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTPLACE_PlaceAct2CanyonExitPresets",
@@ -45,7 +63,13 @@
         "D2DrlgLevelStrc",
         "D2DrlgOrthStrc"
       ],
-      "dh": "d920e67c"
+      "dh": "d920e67c",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PlaceCliffs",
@@ -66,7 +90,13 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "30844a8d"
+      "dh": "30844a8d",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "AddAct124SecondaryBorderSubId213",
@@ -85,7 +115,13 @@
       "usedTypes": [
         "D2DrlgLevelStrc"
       ],
-      "dh": "6f9784bd"
+      "dh": "6f9784bd",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "AddExits",
@@ -108,7 +144,13 @@
         "D2DrlgLevelStrc",
         "int32_t"
       ],
-      "dh": "f45f58de"
+      "dh": "f45f58de",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PlaceFillsInRockyWaste",
@@ -128,7 +170,13 @@
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
       ],
-      "dh": "610eeebd"
+      "dh": "610eeebd",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PlaceFillsInDryHills",
@@ -148,7 +196,13 @@
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
       ],
-      "dh": "24695813"
+      "dh": "24695813",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGOUTPLACE_PlaceAct2DesertVariants",
@@ -168,7 +222,13 @@
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
       ],
-      "dh": "e0f3bd7d"
+      "dh": "e0f3bd7d",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PlaceFillsInFarOasis",
@@ -188,7 +248,13 @@
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
       ],
-      "dh": "5b5990f4"
+      "dh": "5b5990f4",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PlaceRuinsInLostCity",
@@ -208,7 +274,13 @@
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
       ],
-      "dh": "82a90edd"
+      "dh": "82a90edd",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PlaceFillsInLostCity",
@@ -228,7 +300,13 @@
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
       ],
-      "dh": "58def09b"
+      "dh": "58def09b",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PlaceTombEntriesInCanyon",
@@ -248,7 +326,13 @@
         "D2DrlgLevelStrc",
         "uint32_t"
       ],
-      "dh": "c6910f94"
+      "dh": "c6910f94",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "PlaceFillsInCanyon",
@@ -268,7 +352,13 @@
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
       ],
-      "dh": "82c54659"
+      "dh": "82c54659",
+      "paramStorage": [
+        [
+          "pLevel",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "InitAct2OutdoorLevel",
@@ -304,7 +394,13 @@
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
       ],
-      "dh": "d9731b1c"
+      "dh": "d9731b1c",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

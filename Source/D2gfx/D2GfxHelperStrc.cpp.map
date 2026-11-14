@@ -44,7 +44,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "224e679b"
+      "dh": "224e679b",
+      "paramStorage": [
+        [
+          "pbTileData",
+          "ECX:4"
+        ],
+        [
+          "nScreenX",
+          "EDX:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_DrawWallTileWithLighting",
@@ -69,7 +83,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "95de63dd"
+      "dh": "95de63dd",
+      "paramStorage": [
+        [
+          "nTileDataPtr",
+          "ECX:4"
+        ],
+        [
+          "nScreenX",
+          "EDX:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLightLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "fpDrawWallTile",
@@ -96,7 +128,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "67fb9d15"
+      "dh": "67fb9d15",
+      "paramStorage": [
+        [
+          "pTileData",
+          "ECX:4"
+        ],
+        [
+          "nScreenX",
+          "EDX:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCoords",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "fpDrawBlendedVisTile",
@@ -119,7 +169,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "690c0b18"
+      "dh": "690c0b18",
+      "paramStorage": [
+        [
+          "pTileData",
+          "ECX:4"
+        ],
+        [
+          "nScreenX",
+          "EDX:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLightVal",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "fpDrawRoofTile",
@@ -143,7 +211,29 @@
         "uint8_t",
         "uint8_t[32]"
       ],
-      "dh": "f621e624"
+      "dh": "f621e624",
+      "paramStorage": [
+        [
+          "pTileData",
+          "ECX:4"
+        ],
+        [
+          "nScreenX",
+          "EDX:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCoords",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLightVal",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFXHELPER_DrawGroundTileDispatch1",
@@ -164,7 +254,21 @@
         "D2GroundSubTileStrc",
         "uint8_t"
       ],
-      "dh": "eac6f87e"
+      "dh": "eac6f87e",
+      "paramStorage": [
+        [
+          "pSubTile",
+          "ECX:4"
+        ],
+        [
+          "pDst",
+          "EDX:4"
+        ],
+        [
+          "byLightVal",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "D2GFXHELPER_DrawGroundTileDispatch2",
@@ -185,7 +289,21 @@
         "D2GroundSubTileStrc",
         "uint8_t"
       ],
-      "dh": "56d327ef"
+      "dh": "56d327ef",
+      "paramStorage": [
+        [
+          "nSubTilePtr",
+          "ECX:4"
+        ],
+        [
+          "pDst",
+          "EDX:4"
+        ],
+        [
+          "pLightCorners",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFXHELPER_DrawGroundTileWithLight",
@@ -207,7 +325,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3f8e66c7"
+      "dh": "3f8e66c7",
+      "paramStorage": [
+        [
+          "pSubTile",
+          "ECX:4"
+        ],
+        [
+          "nScreenX",
+          "EDX:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDstBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLightVal",
+          "Stack[0xc]:1"
+        ]
+      ]
     },
     {
       "name": "D2GFXHELPER_DrawGroundTileWithPerspectiveLight",
@@ -229,7 +369,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7d61a3df"
+      "dh": "7d61a3df",
+      "paramStorage": [
+        [
+          "pSubTile",
+          "ECX:4"
+        ],
+        [
+          "nScreenX",
+          "EDX:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDstBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pLightCorners",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "fpDrawGroundTile",
@@ -256,7 +418,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8a070412"
+      "dh": "8a070412",
+      "paramStorage": [
+        [
+          "nTileBlockPtr",
+          "ECX:4"
+        ],
+        [
+          "nScreenX",
+          "EDX:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLightTablePtr",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2GFX_SetupRenderFunctions",
@@ -292,7 +472,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "11233409"
+      "dh": "11233409",
+      "paramStorage": [
+        [
+          "ppvBits",
+          "ECX:4"
+        ],
+        [
+          "nWidth",
+          "EDX:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x4]:4"
+        ],
+        [
+          "a4",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

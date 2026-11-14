@@ -20,7 +20,13 @@
       "usedTypes": [
         "D2WinProgressBar"
       ],
-      "dh": "10fa56d8"
+      "dh": "10fa56d8",
+      "paramStorage": [
+        [
+          "pProgressBar",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -44,7 +50,13 @@
         "D2WinProgressBar",
         "int32_t"
       ],
-      "dh": "fa991b58"
+      "dh": "fa991b58",
+      "paramStorage": [
+        [
+          "pProgressBar",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WinProgressBar",
@@ -66,7 +78,25 @@
         "D2WinProgressBar",
         "int32_t"
       ],
-      "dh": "38178f94"
+      "dh": "38178f94",
+      "paramStorage": [
+        [
+          "dwPosX",
+          "ECX:4"
+        ],
+        [
+          "dwPosY",
+          "EDX:4"
+        ],
+        [
+          "dwSizeX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwSizeY",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

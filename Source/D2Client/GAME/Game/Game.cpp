@@ -2409,9 +2409,7 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
         nFrameOffset = 2;
       }
 
-      bDrawFlag = 0;
-      nY = UI::Inv::ScreenSizeY - 0x58 + nFrameOffset;
-      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x13ee), nQueryResult - nFrameOffset, nY, 0, bDrawFlag);
+      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x13ee), nQueryResult - nFrameOffset, UI::Inv::ScreenSizeY - 0x58 + nFrameOffset, 0, 0);
       Cursor::DrawCursor();
       D2gfx::D2GFX::D2GFX_EndScene();
     }

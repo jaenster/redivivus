@@ -38,7 +38,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bb7077dd"
+      "dh": "bb7077dd",
+      "paramStorage": [
+        [
+          "pbBuf",
+          "ECX:4"
+        ],
+        [
+          "nLen",
+          "EDX:4"
+        ],
+        [
+          "nCrc",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "crc32_big",
@@ -58,7 +72,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f2d9a240"
+      "dh": "f2d9a240",
+      "paramStorage": [
+        [
+          "nLength",
+          "ECX:4"
+        ],
+        [
+          "dwInitialCrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "gf2_matrix_times",
@@ -76,7 +104,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "28d973fd"
+      "dh": "28d973fd",
+      "paramStorage": [
+        [
+          "dwVec",
+          "ECX:4"
+        ],
+        [
+          "pdwMat",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "gf2_matrix_square",
@@ -94,7 +132,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "25f9f54a"
+      "dh": "25f9f54a",
+      "paramStorage": [
+        [
+          "pdwMatA",
+          "EAX:4"
+        ],
+        [
+          "pdwMatB",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "crc32_combine_",
@@ -116,7 +164,21 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "c828fc5f"
+      "dh": "c828fc5f",
+      "paramStorage": [
+        [
+          "dwCrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwFinalXor",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLength",
+          "Stack[0xc]:8"
+        ]
+      ]
     },
     {
       "name": "crc32_combine",
@@ -136,7 +198,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c6b3f7b7"
+      "dh": "c6b3f7b7",
+      "paramStorage": [
+        [
+          "dwCrc",
+          "ECX:4"
+        ],
+        [
+          "dwFinalXor",
+          "EDX:4"
+        ],
+        [
+          "nExp",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "crc32_combine64",
@@ -156,7 +232,21 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "a3101a30"
+      "dh": "a3101a30",
+      "paramStorage": [
+        [
+          "dwCrc",
+          "ECX:4"
+        ],
+        [
+          "dwFinalXor",
+          "EDX:4"
+        ],
+        [
+          "nLength",
+          "Stack[0x4]:8"
+        ]
+      ]
     },
     {
       "name": "crc32",
@@ -176,7 +266,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a7f1e39a"
+      "dh": "a7f1e39a",
+      "paramStorage": [
+        [
+          "dwCrcSeed",
+          "ECX:4"
+        ],
+        [
+          "pBuffer",
+          "EDX:4"
+        ],
+        [
+          "nLength",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

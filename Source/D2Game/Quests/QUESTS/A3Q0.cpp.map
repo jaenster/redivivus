@@ -26,7 +26,17 @@
         "SGAMEDATA",
         "uint16_t"
       ],
-      "dh": "d628d44e"
+      "dh": "d628d44e",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q17_Callback00_NpcActivate",
@@ -50,7 +60,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "2fbda328"
+      "dh": "2fbda328",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q17_StatusFilter",
@@ -70,7 +90,29 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "a8f06920"
+      "dh": "a8f06920",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBufferEx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbyStatusCode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q17_ActiveFilter",
@@ -92,7 +134,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "35963334"
+      "dh": "35963334",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q17_Callback13_PlayerStartedGame",
@@ -116,7 +180,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "f96936f8"
+      "dh": "f96936f8",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q17_InitData",
@@ -138,7 +212,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "fe836bd0"
+      "dh": "fe836bd0",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

@@ -41,7 +41,17 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "55aabbf7"
+      "dh": "55aabbf7",
+      "paramStorage": [
+        [
+          "eUnitType",
+          "CX:2"
+        ],
+        [
+          "nUnitGUID",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ClickWithSkillOnUnitOrCoord",
@@ -64,7 +74,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a54daf9d"
+      "dh": "a54daf9d",
+      "paramStorage": [
+        [
+          "eModeAction",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nTargetOrX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnitGUIDOrY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UNITMODE_CanInterruptSkill",
@@ -87,7 +119,13 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "13d21bf5"
+      "dh": "13d21bf5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "HandleMessage",
@@ -111,7 +149,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d88b95d4"
+      "dh": "d88b95d4",
+      "paramStorage": [
+        [
+          "nMessageType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMessage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eNeutralMode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UNITMODE_IsTargetInActionRange",
@@ -141,7 +197,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "56d5df52"
+      "dh": "56d5df52",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "EBX:4"
+        ],
+        [
+          "nActionType",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UNITMODE_ShowElementalHitOverlay",
@@ -162,7 +232,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "28231a07"
+      "dh": "28231a07",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nAnimMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITMODE_SetModeAndLoadCof",
@@ -184,7 +264,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "dbed2698"
+      "dh": "dbed2698",
+      "paramStorage": [
+        [
+          "nAnimMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "UNITMODE_SetAnimMode",
@@ -208,7 +298,17 @@
         "D2UnitStrc",
         "eD2PlayerAnimMode"
       ],
-      "dh": "d6f09557"
+      "dh": "d6f09557",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nAnimMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITMODE_SetAnimModeSilent",
@@ -230,7 +330,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b6815421"
+      "dh": "b6815421",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nAnimMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UNITMODE_SendWalkToPosition",
@@ -259,7 +369,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6a71d249"
+      "dh": "6a71d249",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nTargetX",
+          "EDX:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bUsePathMove",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UNITMODE_ExecuteSkillAction",
@@ -296,7 +424,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "80edb8bb"
+      "dh": "80edb8bb",
+      "paramStorage": [
+        [
+          "nActionType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nTargetOrX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetGUIDOrY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UNITMODE_HandleMoveAction",
@@ -321,7 +471,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e411e544"
+      "dh": "e411e544",
+      "paramStorage": [
+        [
+          "nActionType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eTargetType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTargetGUID",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UNITMODE_HandleItemOrObjectInteraction",
@@ -347,7 +515,29 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "11738de1"
+      "dh": "11738de1",
+      "paramStorage": [
+        [
+          "nActionType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eTargetType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTargetGUID",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pTargetUnit",
+          "EAX:4"
+        ],
+        [
+          "pPlayerUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "UNITMODE_HandleSkillTargetInteraction",
@@ -377,7 +567,29 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "1b60631a"
+      "dh": "1b60631a",
+      "paramStorage": [
+        [
+          "nActionType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eTargetType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pPlayerUnit",
+          "ESI:4"
+        ],
+        [
+          "pTargetUnit",
+          "EAX:4"
+        ],
+        [
+          "nTargetGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UNITMODE_TryInteractWithObject",
@@ -400,7 +612,29 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "b4b360f9"
+      "dh": "b4b360f9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eTargetType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nActionType",
+          "ESI:4"
+        ],
+        [
+          "pTargetUnit",
+          "EAX:4"
+        ],
+        [
+          "nTargetGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UNITMODE_ExecuteDeferredAction",
@@ -431,7 +665,13 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "45b47c56"
+      "dh": "45b47c56",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

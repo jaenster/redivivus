@@ -25,7 +25,33 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a8d6484c"
+      "dh": "a8d6484c",
+      "paramStorage": [
+        [
+          "pfnRead",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnWrite",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pWorkBuf",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUserData",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnType",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pnDictSize",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "WriteCmpData",
@@ -51,7 +77,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cc149c4a"
+      "dh": "cc149c4a",
+      "paramStorage": [
+        [
+          "pCmp",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "FindRep",
@@ -72,7 +104,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "adf1b015"
+      "dh": "adf1b015",
+      "paramStorage": [
+        [
+          "pCmpState",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbSrcPos",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "OutputBits",
@@ -93,7 +135,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f5acd34b"
+      "dh": "f5acd34b",
+      "paramStorage": [
+        [
+          "pCmp",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBitCount",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBitValue",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "lmemcpy",
@@ -111,7 +167,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "fb7c8ab7"
+      "dh": "fb7c8ab7",
+      "paramStorage": [
+        [
+          "pDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "lmemset",
@@ -130,7 +200,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d078d6dd"
+      "dh": "d078d6dd",
+      "paramStorage": [
+        [
+          "pDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byFill",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "FlushBuf",
@@ -151,7 +235,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "faf81ac5"
+      "dh": "faf81ac5",
+      "paramStorage": [
+        [
+          "pCmp",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SortBuffer",
@@ -172,7 +262,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0e421f5f"
+      "dh": "0e421f5f",
+      "paramStorage": [
+        [
+          "pCmp",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbStart",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbEnd",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

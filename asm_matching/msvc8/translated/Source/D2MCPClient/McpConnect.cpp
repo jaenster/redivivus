@@ -9,6 +9,7 @@
 #include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2MCPClient/McpConnect.data.h"
+#include "Source/D2MCPClient/McpConnect.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -156,10 +157,6 @@ int16_t __stdcall GetD2GSRequestId() {
 
 int32_t __stdcall GetD2GSGameToken() {
     return D2GSGameToken;
-}
-
-void __stdcall SetD2GSJoinResult(int32_t nResult) {
-    D2GSJoinResult = nResult;
 }
 
 int32_t __stdcall GetD2GSJoinResult() {
@@ -810,7 +807,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x03(char * pBytes, size_t nSize) {
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x04(MCPPacketSrv0x04 * pBytes, size_t nSize) {
     int nGameTokenUnused = pBytes->nGameToken;
     int nGameHashValue = pBytes->nGameHash;
-    if (pBytes->nRequestId != nMcpPacketSequence) {
+    if ((uint16_t)pBytes->nRequestId != nMcpPacketSequence) {
       return 1;
     }
 
@@ -953,8 +950,8 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x0F(char * pBytes, size_t nSize) {
 }
 
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x10(char * pBytes, size_t nSize) {
-    uint32_t dwGameHash = *(uint32_t*)(pBytes + 5);
     uint32_t dwGameToken = *(uint32_t*)(pBytes + 1);
+    uint32_t dwGameHash = *(uint32_t*)(pBytes + 5);
     int nResult = *(int*)(pBytes + 0xd);
     uint32_t sAddr = *(uint32_t*)(pBytes + 9);
     SetD2GSJoinResult(nResult);

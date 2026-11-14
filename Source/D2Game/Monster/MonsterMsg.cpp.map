@@ -34,7 +34,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3bb6d236"
+      "dh": "3bb6d236",
+      "paramStorage": [
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "EBX:4"
+        ],
+        [
+          "pMonster",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SendUpdateToClient",
@@ -91,7 +105,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "16454e3c"
+      "dh": "16454e3c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClientSide",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

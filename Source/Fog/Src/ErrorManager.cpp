@@ -106,7 +106,8 @@ void __fastcall StubHook1_Unref_00407300(uint32_t dwThreadId, HANDLE hThread) {
 }
 
 void __stdcall CrashGame() {
-    *(volatile uint8_t*)0x0 = 0;
+    volatile uint32_t* pNull = 0;
+    *pNull = (uint32_t)(uintptr_t)pNull;
 }
 
 void __fastcall FILETOOLS_WriteOneStringToFile(::Report * pReport, char * szString) {

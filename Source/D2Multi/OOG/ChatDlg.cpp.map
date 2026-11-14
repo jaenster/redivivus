@@ -34,7 +34,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "45d1321b"
+      "dh": "45d1321b",
+      "paramStorage": [
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

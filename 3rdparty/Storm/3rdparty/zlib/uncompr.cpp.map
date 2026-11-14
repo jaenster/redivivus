@@ -24,7 +24,25 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "a40909d5"
+      "dh": "a40909d5",
+      "paramStorage": [
+        [
+          "dest",
+          "ECX:4"
+        ],
+        [
+          "destLen",
+          "EDX:4"
+        ],
+        [
+          "source",
+          "Stack[0x4]:4"
+        ],
+        [
+          "sourceLen",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

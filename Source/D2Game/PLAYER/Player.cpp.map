@@ -25,7 +25,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a24dfd8b"
+      "dh": "a24dfd8b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FreePartyData",
@@ -46,7 +56,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "43ff335e"
+      "dh": "43ff335e",
+      "paramStorage": [
+        [
+          "pGame",
+          "EDI:4"
+        ],
+        [
+          "pPlayerData",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYERDATA_FreeInteractions",
@@ -70,7 +90,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "7073507c"
+      "dh": "7073507c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_FillPlayerUnit",
@@ -105,7 +135,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "b463aadd"
+      "dh": "b463aadd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnitGUID",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_FreeAllCorpseUnits",
@@ -134,7 +178,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "93718df3"
+      "dh": "93718df3",
+      "paramStorage": [
+        [
+          "pPlayer",
+          "EAX:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_FreeAllResources",
@@ -165,7 +219,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "0d15b88d"
+      "dh": "0d15b88d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "FreePlayers",
@@ -187,7 +251,13 @@
         "D2UnitStrc *",
         "SGAMEDATA"
       ],
-      "dh": "73dad420"
+      "dh": "73dad420",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_ClearTargetIfMatch",
@@ -208,7 +278,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "6649f3db"
+      "dh": "6649f3db",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_MoveToLocationWithTimeout",
@@ -230,7 +314,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "7661c5ff"
+      "dh": "7661c5ff",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_PlaceItemInInventory",
@@ -259,7 +361,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "393c7b08"
+      "dh": "393c7b08",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_EquipItemToBodyLoc",
@@ -286,7 +406,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "763f947b"
+      "dh": "763f947b",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_PlaceItemInBelt",
@@ -312,7 +446,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c15fc9e3"
+      "dh": "c15fc9e3",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAutoPlace",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CreateRewardItemFromTemplate",
@@ -345,7 +497,29 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8b266ae2"
+      "dh": "8b266ae2",
+      "paramStorage": [
+        [
+          "nGamePtr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bNoSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nItemClassId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pTemplateTxt",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CreateStarterItems",
@@ -387,7 +561,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "7cf6c13f"
+      "dh": "7cf6c13f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDifficulty",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCharItem",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CreateAllStarterItems",
@@ -410,7 +606,21 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "0ddf2c1a"
+      "dh": "0ddf2c1a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ],
+        [
+          "byAct",
+          "Stack[0x4]:1"
+        ]
+      ]
     },
     {
       "name": "PLAYER_SendAllItemsToClient",
@@ -441,7 +651,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f52ee4c9"
+      "dh": "f52ee4c9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetPlayerTradeTickOrBusy",
@@ -466,7 +686,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9af531f1"
+      "dh": "9af531f1",
+      "paramStorage": [
+        [
+          "pPlayer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_ClearCutsceneFlag",
@@ -490,7 +716,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "88ca4f67"
+      "dh": "88ca4f67",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_EndInteraction",
@@ -520,7 +752,17 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "a0bb6f8f"
+      "dh": "a0bb6f8f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CancelInteraction",
@@ -553,7 +795,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d022b8f2"
+      "dh": "d022b8f2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_PlaceCorpse",
@@ -586,7 +838,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "86e4b5f5"
+      "dh": "86e4b5f5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "dwPlayerId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPoint",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_SetUniqueId",
@@ -611,7 +881,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2dc6bdc7"
+      "dh": "2dc6bdc7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "dwUniqueId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetPlayerUniqueId",
@@ -636,7 +916,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2a78d497"
+      "dh": "2a78d497",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_DestroyPortalPair",
@@ -669,7 +955,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "91156276"
+      "dh": "91156276",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GOLD_DropGoldFromInventory",
@@ -699,7 +995,25 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "19f58ded"
+      "dh": "19f58ded",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwRequesterId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGoldAmount",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CheckItemMovePermission",
@@ -727,7 +1041,21 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "36d0e73f"
+      "dh": "36d0e73f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetHotkey",
@@ -753,7 +1081,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7c749379"
+      "dh": "7c749379",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nHotkey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "wSkillId",
+          "Stack[0x8]:2"
+        ],
+        [
+          "byHand",
+          "Stack[0xc]:1"
+        ],
+        [
+          "dwSkillTxt",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CountLivingPlayerInLevelCallback",
@@ -777,7 +1131,21 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "cbf0a5a2"
+      "dh": "cbf0a5a2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArgs",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CountLivingPlayersInLevel",
@@ -799,7 +1167,17 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "5af4f5bd"
+      "dh": "5af4f5bd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "eLevelId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CountModeZeroDeath",
@@ -819,7 +1197,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "4a45b58f"
+      "dh": "4a45b58f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pnAlivePlayerCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMMAND_playersX",
@@ -834,7 +1226,13 @@
       "calledFunctions": [
         "COMMAND_playersX"
       ],
-      "dh": "24d1587e"
+      "dh": "24d1587e",
+      "paramStorage": [
+        [
+          "count",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_GAME_CountPlayers",
@@ -854,7 +1252,13 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "29411457"
+      "dh": "29411457",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_ApplyGoldPenaltyOnDeath",
@@ -880,7 +1284,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "807aa933"
+      "dh": "807aa933",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "EXP_ApplyDeathExpPenalty",
@@ -908,7 +1326,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f6daffc4"
+      "dh": "f6daffc4",
+      "paramStorage": [
+        [
+          "pGame",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_HandleDeathPenalties",
@@ -930,7 +1358,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c9a007f4"
+      "dh": "c9a007f4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pKillerUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CheckIsHostileToPlayer",
@@ -952,7 +1394,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "d9e90a68"
+      "dh": "d9e90a68",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pbHostile",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CountPlayersWithFilter",
@@ -973,7 +1429,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "9b01ed24"
+      "dh": "9b01ed24",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pnFilter",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CheckPlayerIsHostileToThis",
@@ -995,7 +1461,21 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "3dbfb81f"
+      "dh": "3dbfb81f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pbHostile",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_CountPlayersWithFilter2",
@@ -1016,7 +1496,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "70638ac8"
+      "dh": "70638ac8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pnFilter",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PLAYER_GetActiveWeaponForSkill",
@@ -1047,7 +1537,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5b398a95"
+      "dh": "5b398a95",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "EQUIPMENT_RecalcDualWieldWeaponStats",
@@ -1072,7 +1568,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8bf4414c"
+      "dh": "8bf4414c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bResetWeaponStats",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "WEAPON_ApplyEquippedWeaponStats",
@@ -1095,7 +1601,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d83fa3a5"
+      "dh": "d83fa3a5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bResetWeaponStats",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

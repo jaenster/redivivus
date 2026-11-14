@@ -31,7 +31,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "1b54aa25"
+      "dh": "1b54aa25",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_ApplyInfernoState",
@@ -64,7 +78,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "c36e1597"
+      "dh": "c36e1597",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSSOR_SetInfernoFrames",
@@ -84,7 +112,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "68a78987"
+      "dh": "68a78987",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nTotalFrames",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSSOR_CltCreateInfernoMissile",
@@ -116,7 +154,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "48168c96"
+      "dh": "48168c96",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Sor_Inferno",
@@ -137,7 +189,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "860e1d6b"
+      "dh": "860e1d6b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_CheckTargetInAuraRange",
@@ -169,7 +235,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4adf3e3a"
+      "dh": "4adf3e3a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Sor_HomingMissileVelocity",
@@ -195,7 +275,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "a9e60116"
+      "dh": "a9e60116",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Sor_FireWall",
@@ -229,7 +323,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2a6bc22a"
+      "dh": "2a6bc22a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Sor_MissileWithChargeCount",
@@ -255,7 +363,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "0b05f2c7"
+      "dh": "0b05f2c7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Sor_OffsetMissileCount",
@@ -287,7 +409,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "3256afd4"
+      "dh": "3256afd4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Sor_CollisionCheckedMissile",
@@ -312,7 +448,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0d1cd2fb"
+      "dh": "0d1cd2fb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltStFunc_CheckCasterHasRoomNotInTown",
@@ -337,7 +487,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "ad09032e"
+      "dh": "ad09032e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Sor_SimpleMakeMissile",
@@ -360,7 +524,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "50368862"
+      "dh": "50368862",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSSOR_CltCreateBlazeMissile",
@@ -396,7 +574,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cf9ecb30"
+      "dh": "cf9ecb30",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Sor_ThunderStormBolt",
@@ -428,7 +612,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "827ee827"
+      "dh": "827ee827",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLSSOR_StateCltEventFn01_ChillingArmor",
@@ -462,7 +660,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c4b958df"
+      "dh": "c4b958df",
+      "paramStorage": [
+        [
+          "nParam1",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMissile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_CltDoFunc_Sor_RandomRadiusMissile",
@@ -495,7 +719,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "29f0fca7"
+      "dh": "29f0fca7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

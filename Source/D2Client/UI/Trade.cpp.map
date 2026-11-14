@@ -169,7 +169,13 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "21f4e99c"
+      "dh": "21f4e99c",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TRADE_HandleTradeGoldUpdate",
@@ -188,7 +194,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "f0d7720e"
+      "dh": "f0d7720e",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TRADE_GetTradeWindowPtr",

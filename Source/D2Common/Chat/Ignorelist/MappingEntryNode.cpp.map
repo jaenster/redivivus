@@ -20,7 +20,13 @@
       "usedTypes": [
         "MappingEntryNode"
       ],
-      "dh": "39b5c893"
+      "dh": "39b5c893",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -41,7 +47,17 @@
         "MappingEntryNode",
         "uint32_t"
       ],
-      "dh": "2498ef7d"
+      "dh": "2498ef7d",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Constructor",
@@ -59,7 +75,17 @@
       "usedTypes": [
         "MappingEntryNode"
       ],
-      "dh": "0fe7576b"
+      "dh": "0fe7576b",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "szMappedValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

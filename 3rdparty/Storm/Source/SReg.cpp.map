@@ -22,7 +22,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "627a2b81"
+      "dh": "627a2b81",
+      "paramStorage": [
+        [
+          "byFlags",
+          "Stack[0x4]:1"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufSize",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SREG_InternalDeleteEntry",
@@ -44,7 +58,21 @@
         "HKEY",
         "uint32_t"
       ],
-      "dh": "ae90ea05"
+      "dh": "ae90ea05",
+      "paramStorage": [
+        [
+          "byFlags",
+          "ECX:4"
+        ],
+        [
+          "pszSubKey",
+          "EDX:4"
+        ],
+        [
+          "szValueName",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SREG_InternalLoadEntry",
@@ -69,7 +97,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9337db14"
+      "dh": "9337db14",
+      "paramStorage": [
+        [
+          "pdwType",
+          "ECX:4"
+        ],
+        [
+          "pbData",
+          "EDX:4"
+        ],
+        [
+          "pszSubKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byFlags",
+          "Stack[0x8]:1"
+        ],
+        [
+          "dwBufSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "szValueName",
+          "EBX:4"
+        ],
+        [
+          "pdwDataLen",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SREG_InternalSaveEntry",
@@ -92,7 +150,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e84363e7"
+      "dh": "e84363e7",
+      "paramStorage": [
+        [
+          "pszSubKey",
+          "ECX:4"
+        ],
+        [
+          "szValueName",
+          "EDX:4"
+        ],
+        [
+          "dwType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwDataLen",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwFlags",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SRegDeleteValue",
@@ -112,7 +196,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0bf2b85a"
+      "dh": "0bf2b85a",
+      "paramStorage": [
+        [
+          "pszSubKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szValueName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "byFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SRegLoadData",
@@ -135,7 +233,33 @@
         "uint32_t",
         "uint32_t *"
       ],
-      "dh": "66adae6d"
+      "dh": "66adae6d",
+      "paramStorage": [
+        [
+          "pszSubKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szValueName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pbData",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwBufSize",
+          "Stack[0x14]:4"
+        ],
+        [
+          "ppdwDataLen",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SRegLoadString",
@@ -155,7 +279,29 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a90b276f"
+      "dh": "a90b276f",
+      "paramStorage": [
+        [
+          "szSubKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szValueName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "szOutBuf",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwOutBufSize",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SRegLoadValue",
@@ -179,7 +325,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "752bd707"
+      "dh": "752bd707",
+      "paramStorage": [
+        [
+          "pTree",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pKey",
+          "Stack[0x8]:4"
+        ],
+        [
+          "byFlags",
+          "Stack[0xc]:1"
+        ],
+        [
+          "pnOut",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SRegSaveData",
@@ -202,7 +366,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9294250b"
+      "dh": "9294250b",
+      "paramStorage": [
+        [
+          "pszSubKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szValueName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pbData",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwDataLen",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SRegSaveString",
@@ -225,7 +411,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "34af0cb7"
+      "dh": "34af0cb7",
+      "paramStorage": [
+        [
+          "pszSubKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szValueName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pszValue",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SRegSaveValue",
@@ -245,7 +449,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e0b4ee31"
+      "dh": "e0b4ee31",
+      "paramStorage": [
+        [
+          "szRegistry",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szRegistryKey",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

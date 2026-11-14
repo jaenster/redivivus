@@ -461,9 +461,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
           }
 
           strcat(szNameBuf, pCharSel->szCharname);
-          pcSrc = pCharSel->szGuildTag;
-          pcSrc = pcSrc + strlen(pcSrc) + 1;
-          if (pcSrc != pCharSel->szGuildTag + 1) {
+          if (strlen(pCharSel->szGuildTag) != 0) {
             pcSrc = szNameBuf;
             pcDst = pcSrc + strlen(pcSrc);
             pcSrc = pcDst + 1;
@@ -698,9 +696,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
               pcSrc++;
             }
 
-            pcSrc = pCharSelIter->szGuildTag;
-            pcSrc = pcSrc + strlen(pcSrc) + 1;
-            if (pcSrc != pCharSelIter->szGuildTag + 1) {
+            if (strlen(pCharSelIter->szGuildTag) != 0) {
               pcSrc = sLineBuf.szNameBuf;
               pcCopySrc = pcSrc + strlen(pcSrc);
               pcSrc = pcCopySrc + 1;

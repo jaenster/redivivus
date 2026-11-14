@@ -4969,7 +4969,7 @@ void __stdcall UIMENU_MainScreenBeforeMenu() {
 }
 
 uint32_t __fastcall MAINMENU_CheckFileExists(char * szFileName) {
-    D2MPQFileStrc* pFileHandle = (D2MPQFileStrc*)szFileName;
+    D2MPQFileStrc* pFileHandle;
     int bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, szFileName, 0, (void**)&pFileHandle);
     if (!bOpened) {
       return 0;
@@ -9455,8 +9455,6 @@ BOOL __stdcall MAINMENU_OnPressSubmitEmailAddress(D2ControlMsg * pControlMsg) {
     int32_t nMsgBoxArg7;
     int32_t nMsgBoxArg8;
     OnPress pAccountResult;
-    OnPress pfnBtn2Press;
-    OnPress pfnBtn3Press;
     uint16_t* pwszEmail1 = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpnEmailBuffer->sControl);
     uint16_t* pwszEmail2 = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpCtlEnterEmailInput->sControl);
     int32_t nEmailCmp = D2Lang::Unicode::UNISYS::STRING_CompareWideStrings(pwszEmail1, pwszEmail2);
@@ -9468,11 +9466,7 @@ BOOL __stdcall MAINMENU_OnPressSubmitEmailAddress(D2ControlMsg * pControlMsg) {
         nMsgBoxArg5 = 1;
         nEmailCmp = 0x13ee;
         pfnBtn1Press = (OnPress)MAINMENU_DismissPopup;
-        pfnBtn2Press = pAccountResult;
-        pfnBtn3Press = pAccountResult;
-        pwszEmail1 = D2Lang::StrTable::strtable::GetLocaleString(0x2b5d);
-        pwszEmail2 = D2Lang::StrTable::strtable::GetLocaleString(0x2b5c);
-        MAINMENU_CreateMessageBox(pwszEmail2, pwszEmail1, nEmailCmp, (int32_t)pAccountResult, pfnBtn1Press, pfnBtn2Press, nMsgBoxArg5, (int32_t)pfnBtn3Press);
+        MAINMENU_CreateMessageBox(D2Lang::StrTable::strtable::GetLocaleString(0x2b5c), D2Lang::StrTable::strtable::GetLocaleString(0x2b5d), nEmailCmp, (int32_t)pAccountResult, pfnBtn1Press, pAccountResult, nMsgBoxArg5, (int32_t)pAccountResult);
         return 1;
       }
 

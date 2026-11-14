@@ -62,7 +62,13 @@
         "UTILS_SqrtFloat",
         "__CIsqrt"
       ],
-      "dh": "046ae60b"
+      "dh": "046ae60b",
+      "paramStorage": [
+        [
+          "fInput",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "thunk___CIsqrt",
@@ -78,7 +84,13 @@
         "thunk___CIsqrt",
         "__CIsqrt"
       ],
-      "dh": "be575dcd"
+      "dh": "be575dcd",
+      "paramStorage": [
+        [
+          "fValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RollRandomNumerUpToArgument",
@@ -100,7 +112,13 @@
         "int32_t",
         "uint64_t"
       ],
-      "dh": "e8468dde"
+      "dh": "e8468dde",
+      "paramStorage": [
+        [
+          "nNumber",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RollRandomNumber",
@@ -119,7 +137,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f3c18efe"
+      "dh": "f3c18efe",
+      "paramStorage": [
+        [
+          "nMin",
+          "ECX:4"
+        ],
+        [
+          "nMax",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RollRandomNumberTimesTwo",
@@ -138,7 +166,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "bef19327"
+      "dh": "bef19327",
+      "paramStorage": [
+        [
+          "nRange",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CalculateHypotenuse",
@@ -154,7 +188,17 @@
         "CalculateHypotenuse",
         "__CIsqrt"
       ],
-      "dh": "f81a5a00"
+      "dh": "f81a5a00",
+      "paramStorage": [
+        [
+          "a",
+          "Stack[0x4]:4"
+        ],
+        [
+          "b",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "CalculateHypotenusePowered",
@@ -169,7 +213,17 @@
       "calledFunctions": [
         "CalculateHypotenusePowered"
       ],
-      "dh": "6d1e53bc"
+      "dh": "6d1e53bc",
+      "paramStorage": [
+        [
+          "fX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "fY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ANIM_OnSkillCastStub_Unref_004f52c0",

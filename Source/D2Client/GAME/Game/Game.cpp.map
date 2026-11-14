@@ -37,7 +37,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "b3a82249"
+      "dh": "b3a82249",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSIntrusiveList_Clear_Unref_004179f0",
@@ -55,7 +61,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "99d045d6"
+      "dh": "99d045d6",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSIntrusiveList_Clear_Unref_00417a30",
@@ -73,7 +85,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "4c705b55"
+      "dh": "4c705b55",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSIntrusiveList_Clear_Unref_00417c30",
@@ -91,7 +109,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "e03665ed"
+      "dh": "e03665ed",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSIntrusiveList_Clear_Unref_0041c540",
@@ -109,7 +133,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "bb89f9a2"
+      "dh": "bb89f9a2",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSIntrusiveList_Clear_Unref_0041eb20",
@@ -127,7 +157,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "8ac0dd18"
+      "dh": "8ac0dd18",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSIntrusiveList_Clear_Unref_00426ac0",
@@ -145,7 +181,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "0d74717c"
+      "dh": "0d74717c",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAME_SetMouseButtonEventPending_Unref_0044b870",
@@ -179,7 +221,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "82a80c1a"
+      "dh": "82a80c1a",
+      "paramStorage": [
+        [
+          "pTimerStruct",
+          "ECX:4"
+        ],
+        [
+          "dwDurationMs",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0044be10",
@@ -194,7 +246,13 @@
       "calledFunctions": [
         "Unreferenced_0044be10"
       ],
-      "dh": "99772ec3"
+      "dh": "99772ec3",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_SetByteInUshort",
@@ -213,7 +271,17 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "abf15592"
+      "dh": "abf15592",
+      "paramStorage": [
+        [
+          "pWord",
+          "ECX:4"
+        ],
+        [
+          "byteValue",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "SetRunKeyDown",
@@ -228,7 +296,13 @@
       "calledFunctions": [
         "SetRunKeyDown"
       ],
-      "dh": "2a21e667"
+      "dh": "2a21e667",
+      "paramStorage": [
+        [
+          "bRunKeyDown",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetGlobalAlwaysRun_Unref_0044be70",
@@ -261,7 +335,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "882bcf99"
+      "dh": "882bcf99",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetGlobalAlwaysRun",
@@ -294,7 +374,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9a0610bf"
+      "dh": "9a0610bf",
+      "paramStorage": [
+        [
+          "bModifierDown",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetGlobalAlwaysRun_Unref_0044beb0",
@@ -429,7 +515,13 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "13349ae7"
+      "dh": "13349ae7",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GAME_HasQueuedPrimaryClick",
@@ -532,7 +624,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "362dfaa2"
+      "dh": "362dfaa2",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleRightClick",
@@ -558,7 +656,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2bacf9c5"
+      "dh": "2bacf9c5",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ProcessQueuedSecondaryClick",
@@ -620,7 +724,13 @@
         "D2UIMouseMsgStrc",
         "D2UnitStrc"
       ],
-      "dh": "3d18e572"
+      "dh": "3d18e572",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleMouseWheel",
@@ -640,7 +750,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "f06d91c1"
+      "dh": "f06d91c1",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleScrollDown",
@@ -660,7 +776,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "405e5085"
+      "dh": "405e5085",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleScrollUp",
@@ -680,7 +802,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "78bee9d3"
+      "dh": "78bee9d3",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandlePageUpDown",
@@ -701,7 +829,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "35ea700e"
+      "dh": "35ea700e",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleScrollToEnd",
@@ -722,7 +856,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "4cc4eef4"
+      "dh": "4cc4eef4",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleSysCommand",
@@ -744,7 +884,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "539a6e72"
+      "dh": "539a6e72",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandlePassthrough",
@@ -763,7 +909,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "5eb71c21"
+      "dh": "5eb71c21",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HandleMouseButtonEvent",
@@ -790,7 +942,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "3fb14f46"
+      "dh": "3fb14f46",
+      "paramStorage": [
+        [
+          "pMouseEvent",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop04_Unref_0044c6a0",
@@ -808,7 +966,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "1289da52"
+      "dh": "1289da52",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_CheckAutomapCenterOnLoad",
@@ -939,7 +1103,21 @@
         "D2GFX_DestroyWindow",
         "D2GFX_Release"
       ],
-      "dh": "1e0f517d"
+      "dh": "1e0f517d",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwArg2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwArg3",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "D2CLIENT_SetExitVar2",
@@ -954,7 +1132,13 @@
       "calledFunctions": [
         "D2CLIENT_SetExitVar2"
       ],
-      "dh": "5dec354f"
+      "dh": "5dec354f",
+      "paramStorage": [
+        [
+          "bResult",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_GetExitFlag2",
@@ -1026,7 +1210,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f65137d5"
+      "dh": "f65137d5",
+      "paramStorage": [
+        [
+          "nDrawMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_GetCurrentLevelBlankScreen",
@@ -1101,7 +1291,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8bf9506c"
+      "dh": "8bf9506c",
+      "paramStorage": [
+        [
+          "bSkipCursor",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DrawLoadingMessage",
@@ -1154,7 +1350,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dc80da5b"
+      "dh": "dc80da5b",
+      "paramStorage": [
+        [
+          "nElapsedTicks",
+          "ECX:4"
+        ],
+        [
+          "nFpsDrawn",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateFrameStats",
@@ -1217,7 +1423,13 @@
         "NET_D2GS_CLIENT_Incoming0x8F_HEARTBEAT_PING",
         "GetTickCount"
       ],
-      "dh": "a9775634"
+      "dh": "a9775634",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAME_SetSkillDelayEndFrame",
@@ -1235,7 +1447,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4b307583"
+      "dh": "4b307583",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAME_GetSkillDelayEndFrame",
@@ -1363,7 +1581,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "9c6611a0"
+      "dh": "9c6611a0",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "BetaScreen_NextPageIfVisible",
@@ -1382,7 +1606,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "df7e5e3f"
+      "dh": "df7e5e3f",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DrawBetaScreen",
@@ -1414,7 +1644,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7d4445ea"
+      "dh": "7d4445ea",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_IsMouseInRect",
@@ -1434,7 +1670,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6eefcad4"
+      "dh": "6eefcad4",
+      "paramStorage": [
+        [
+          "width",
+          "Stack[0x4]:4"
+        ],
+        [
+          "height",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bottomY",
+          "EBX:4"
+        ],
+        [
+          "leftX",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Congratz_SetOkClicked",
@@ -1453,7 +1707,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "4dffadf8"
+      "dh": "4dffadf8",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_GetCenteredTextX",
@@ -1476,7 +1736,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "e0d48277"
+      "dh": "e0d48277",
+      "paramStorage": [
+        [
+          "nStringId",
+          "CX:2"
+        ],
+        [
+          "nCenterX",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_DrawLoadingScreenText",
@@ -1548,7 +1818,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "27dd34a0"
+      "dh": "27dd34a0",
+      "paramStorage": [
+        [
+          "nCutsceneId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetGameVersionInfo",
@@ -1609,7 +1885,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "21507610"
+      "dh": "21507610",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_StartingAct",
@@ -1631,7 +1913,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "fc6f8792"
+      "dh": "fc6f8792",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_JoinTcpIpServer",
@@ -1650,7 +1938,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "438e09f2"
+      "dh": "438e09f2",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_JoinBNetServer",
@@ -1669,7 +1963,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "adf85d28"
+      "dh": "adf85d28",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_JoinMcpServer",
@@ -1688,7 +1988,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "d8f6bf0b"
+      "dh": "d8f6bf0b",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_PlayerClass",
@@ -1706,7 +2012,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "73c880b5"
+      "dh": "73c880b5",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop04",
@@ -1724,7 +2036,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "32caf1cc"
+      "dh": "32caf1cc",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop05",
@@ -1742,7 +2060,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "112eab36"
+      "dh": "112eab36",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop03",
@@ -1760,7 +2084,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "7150e00c"
+      "dh": "7150e00c",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Fullscreen",
@@ -1779,7 +2109,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "5d97abdf"
+      "dh": "5d97abdf",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_AspectRatio",
@@ -1798,7 +2134,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "4db8fd24"
+      "dh": "4db8fd24",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Renderer_3DFX",
@@ -1817,7 +2159,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "f4a70da5"
+      "dh": "f4a70da5",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Renderer_OpenGL",
@@ -1836,7 +2184,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "93c0f912"
+      "dh": "93c0f912",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Renderer_D3D",
@@ -1855,7 +2209,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "a4dbecbb"
+      "dh": "a4dbecbb",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Renderer_Rave",
@@ -1874,7 +2234,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "8f2e5b32"
+      "dh": "8f2e5b32",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop01",
@@ -1892,7 +2258,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "45979f8c"
+      "dh": "45979f8c",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Gamma",
@@ -1911,7 +2283,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "d696ba44"
+      "dh": "d696ba44",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Vsync",
@@ -1930,7 +2308,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "8bcd4f46"
+      "dh": "8bcd4f46",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop06",
@@ -1948,7 +2332,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "2eee8219"
+      "dh": "2eee8219",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop12",
@@ -1966,7 +2356,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "ccf8a752"
+      "dh": "ccf8a752",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop02",
@@ -1984,7 +2380,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "e0f18b5e"
+      "dh": "e0f18b5e",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop07",
@@ -2002,7 +2404,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "c6bff51a"
+      "dh": "c6bff51a",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop08",
@@ -2020,7 +2428,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "f854745d"
+      "dh": "f854745d",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Log",
@@ -2039,7 +2453,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "6193e914"
+      "dh": "6193e914",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_CustomSeed",
@@ -2058,7 +2478,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "46430cb9"
+      "dh": "46430cb9",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop09",
@@ -2076,7 +2502,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "4d17c4b4"
+      "dh": "4d17c4b4",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_CharName",
@@ -2095,7 +2527,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "cb3b81f0"
+      "dh": "cb3b81f0",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Realm",
@@ -2114,7 +2552,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "c265bcc9"
+      "dh": "c265bcc9",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_ArenaFlags",
@@ -2133,7 +2577,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "24a72bf4"
+      "dh": "24a72bf4",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop10",
@@ -2151,7 +2601,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "8de77050"
+      "dh": "8de77050",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop11",
@@ -2169,7 +2625,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "d7750e45"
+      "dh": "d7750e45",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop15",
@@ -2187,7 +2649,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "dba4f453"
+      "dh": "dba4f453",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_PlayerClassId",
@@ -2206,7 +2674,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "59edbf94"
+      "dh": "59edbf94",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GLOBAL_SetGameVersionInfo",
@@ -2224,7 +2698,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "2ccd2e0f"
+      "dh": "2ccd2e0f",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop13",
@@ -2242,7 +2722,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "93a508b9"
+      "dh": "93a508b9",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop14",
@@ -2260,7 +2746,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "8f62843a"
+      "dh": "8f62843a",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_NoCompression",
@@ -2279,7 +2771,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "f5ce3ef8"
+      "dh": "f5ce3ef8",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_UseTxt",
@@ -2298,7 +2796,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "b6c14c8a"
+      "dh": "b6c14c8a",
+      "paramStorage": [
+        [
+          "pIniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClientInit_Noop16",
@@ -2316,7 +2820,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "28dcf5a9"
+      "dh": "28dcf5a9",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LoadDataForGame",
@@ -2335,7 +2845,13 @@
         "D2IniConfigStrc",
         "uint32_t"
       ],
-      "dh": "4b6bb1c0"
+      "dh": "4b6bb1c0",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_GetExitFlag3",
@@ -2471,7 +2987,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "f5f1ab15"
+      "dh": "f5f1ab15",
+      "paramStorage": [
+        [
+          "dwTickCount",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_GetFpsDrawn",
@@ -2598,7 +3120,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "23115ec5"
+      "dh": "23115ec5",
+      "paramStorage": [
+        [
+          "nDelayMs",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_LoadActTiles",
@@ -2619,7 +3147,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "6519eadc"
+      "dh": "6519eadc",
+      "paramStorage": [
+        [
+          "nAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_CheckColorTxtOverride",
@@ -2685,7 +3219,13 @@
       "calledFunctions": [
         "CLIENT_SetDifficulty"
       ],
-      "dh": "0f7714e7"
+      "dh": "0f7714e7",
+      "paramStorage": [
+        [
+          "nDifficulty",
+          "CL:1"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SetExpansion",
@@ -2700,7 +3240,13 @@
       "calledFunctions": [
         "CLIENT_SetExpansion"
       ],
-      "dh": "fd62706f"
+      "dh": "fd62706f",
+      "paramStorage": [
+        [
+          "bExpansion",
+          "CL:1"
+        ]
+      ]
     },
     {
       "name": "CLIENT_SetLadder",
@@ -2715,7 +3261,13 @@
       "calledFunctions": [
         "CLIENT_SetLadder"
       ],
-      "dh": "443e5f4d"
+      "dh": "443e5f4d",
+      "paramStorage": [
+        [
+          "bLadder",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_GetLadderOrGameType",
@@ -2826,7 +3378,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a9480280"
+      "dh": "a9480280",
+      "paramStorage": [
+        [
+          "nParam",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_TimerGetRemaining",
@@ -2845,7 +3403,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "68231685"
+      "dh": "68231685",
+      "paramStorage": [
+        [
+          "pTimerStruct",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_CheckTimerExpired",
@@ -2865,7 +3429,13 @@
         "D2ClientTimerStrc",
         "uint32_t"
       ],
-      "dh": "13e7078f"
+      "dh": "13e7078f",
+      "paramStorage": [
+        [
+          "pTimer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Timer_IsActiveAndUpdate",
@@ -2885,7 +3455,13 @@
         "D2ClientTimerStrc",
         "uint32_t"
       ],
-      "dh": "53120e3c"
+      "dh": "53120e3c",
+      "paramStorage": [
+        [
+          "pTimer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SendExitGameRequest",
@@ -2906,7 +3482,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "aaebe4c9"
+      "dh": "aaebe4c9",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CLIENT_AllocAct",
@@ -2940,7 +3522,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1d330f52"
+      "dh": "1d330f52",
+      "paramStorage": [
+        [
+          "nActNo",
+          "CL:1"
+        ],
+        [
+          "nMapSeed",
+          "EDX:4"
+        ],
+        [
+          "nAutomap",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GAME_InitClientSide",
@@ -3003,7 +3603,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "efe3bc63"
+      "dh": "efe3bc63",
+      "paramStorage": [
+        [
+          "nReason",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LoadingScreen_TickOrCleanup",
@@ -3024,7 +3630,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "14da5b2e"
+      "dh": "14da5b2e",
+      "paramStorage": [
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HandleMinimapClick",
@@ -3045,7 +3657,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "2e26d5e1"
+      "dh": "2e26d5e1",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Congratz_HandleOkButton",
@@ -3066,7 +3684,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "ae048183"
+      "dh": "ae048183",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_DrawCharacterPortrait",
@@ -3133,7 +3757,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d6deef78"
+      "dh": "d6deef78",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GAMEDATA_ShowEndGameCutscene",
@@ -3166,7 +3796,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "5f096a0d"
+      "dh": "5f096a0d",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced",
@@ -3184,7 +3820,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "55d12037"
+      "dh": "55d12037",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Client_CheckConnectionTimeouts",
@@ -3259,7 +3901,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e5740436"
+      "dh": "e5740436",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "pfModes_EnterGame",
@@ -3334,7 +3982,17 @@
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "3ee5e44f"
+      "dh": "3ee5e44f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pGame2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RegisterCmdLineLngOption",
@@ -3383,7 +4041,13 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "3452661c"
+      "dh": "3452661c",
+      "paramStorage": [
+        [
+          "pIni",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced_Unref_0045bb10",
@@ -3401,7 +4065,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "7e6cddd6"
+      "dh": "7e6cddd6",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_GAMEDATA_CheckAutomapCenterOnLoad",
@@ -3425,7 +4095,13 @@
       "calledFunctions": [
         "CLIENT_SetDifficulty_Unref_00552830"
       ],
-      "dh": "1ada3384"
+      "dh": "1ada3384",
+      "paramStorage": [
+        [
+          "nDifficulty",
+          "CL:1"
+        ]
+      ]
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced_Unref_00602370",
@@ -3443,7 +4119,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "01617e40"
+      "dh": "01617e40",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced_Unref_00602390",
@@ -3461,7 +4143,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "be1a97b8"
+      "dh": "be1a97b8",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced_Unref_00603510",
@@ -3479,7 +4167,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "c2d4eb53"
+      "dh": "c2d4eb53",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced_Unref_0060e610",
@@ -3497,7 +4191,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "43187ca6"
+      "dh": "43187ca6",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced_Unref_006c4140",
@@ -3515,7 +4215,13 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "1bb9d66f"
+      "dh": "1bb9d66f",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "__GSHandlerCheck_EH_6ca026",
@@ -3536,7 +4242,25 @@
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
       ],
-      "dh": "643fcb5d"
+      "dh": "643fcb5d",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

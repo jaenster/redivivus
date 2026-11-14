@@ -25,7 +25,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b9c7e7ed"
+      "dh": "b9c7e7ed",
+      "paramStorage": [
+        [
+          "pGatewayAccess",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SaveAndUnload",
@@ -52,7 +58,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0d593767"
+      "dh": "0d593767",
+      "paramStorage": [
+        [
+          "pGatewayAccess",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Nth",
@@ -71,7 +83,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "2b648984"
+      "dh": "2b648984",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DNS",
@@ -90,7 +112,17 @@
       "usedTypes": [
         "D2BNetGatewayAccessStr"
       ],
-      "dh": "2d91bc43"
+      "dh": "2d91bc43",
+      "paramStorage": [
+        [
+          "pGatewayAccess",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GMT",
@@ -113,7 +145,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "43d48684"
+      "dh": "43d48684",
+      "paramStorage": [
+        [
+          "pGatewayAccess",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Name",
@@ -134,7 +176,17 @@
         "D2BNetGatewayAccessStr",
         "uint32_t"
       ],
-      "dh": "2000e1e2"
+      "dh": "2000e1e2",
+      "paramStorage": [
+        [
+          "pGatewayAccess",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Realm",
@@ -157,7 +209,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1f02bd2f"
+      "dh": "1f02bd2f",
+      "paramStorage": [
+        [
+          "pGatewayAccess",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetCurGateway",
@@ -176,7 +238,17 @@
         "D2BNetGatewayAccessStr",
         "int32_t"
       ],
-      "dh": "b71f2f05"
+      "dh": "b71f2f05",
+      "paramStorage": [
+        [
+          "pGatewayAccess",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGatewayIdx",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetGatewayList",
@@ -203,7 +275,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "30bf2cd1"
+      "dh": "30bf2cd1",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetBattlenetGatewayList",
@@ -222,7 +304,13 @@
       "usedTypes": [
         "D2BNetGatewayAccessStr"
       ],
-      "dh": "dfb1a93f"
+      "dh": "dfb1a93f",
+      "paramStorage": [
+        [
+          "nGatewayAccess",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetBattlenetRealmsList",
@@ -245,7 +333,13 @@
         "D2BNetGatewayAccessStr",
         "int32_t"
       ],
-      "dh": "1320b454"
+      "dh": "1320b454",
+      "paramStorage": [
+        [
+          "nGatewayAccess",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WritingDefaultGatewayList",
@@ -268,7 +362,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7310b4b4"
+      "dh": "7310b4b4",
+      "paramStorage": [
+        [
+          "pdwFileSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WriteDefaultGatewayList",
@@ -289,7 +389,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "3c693642"
+      "dh": "3c693642",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SkipToEOL",
@@ -307,7 +413,21 @@
       "usedTypes": [
         "D2BNetGatewayAccessStr"
       ],
-      "dh": "51f227d4"
+      "dh": "51f227d4",
+      "paramStorage": [
+        [
+          "pGatewayAccess",
+          "ECX:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SkipEOL",
@@ -325,7 +445,21 @@
       "usedTypes": [
         "D2BNetGatewayAccessStr"
       ],
-      "dh": "24028d0a"
+      "dh": "24028d0a",
+      "paramStorage": [
+        [
+          "pGatewayAccess",
+          "ECX:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FindSection",
@@ -350,7 +484,21 @@
         "D2BNetGatewayAccessStr",
         "int32_t"
       ],
-      "dh": "65c3091b"
+      "dh": "65c3091b",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "FindKey",
@@ -369,7 +517,21 @@
       "usedTypes": [
         "D2BNetGatewayAccessStr"
       ],
-      "dh": "d3aaefb3"
+      "dh": "d3aaefb3",
+      "paramStorage": [
+        [
+          "pGatewayAccess",
+          "ECX:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "PickClosestZone",
@@ -393,7 +555,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b9a7e553"
+      "dh": "b9a7e553",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nGmtMinutes",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Load",
@@ -427,7 +599,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e028b85b"
+      "dh": "e028b85b",
+      "paramStorage": [
+        [
+          "pGatewayAccess",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UpdateGatewaysFromIni",
@@ -466,7 +644,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "840ac637"
+      "dh": "840ac637",
+      "paramStorage": [
+        [
+          "pClientSideData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

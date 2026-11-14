@@ -23,7 +23,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "d4672a73"
+      "dh": "d4672a73",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q11_Callback10_PlayerLeavesGame",
@@ -44,7 +58,17 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "9a38eee8"
+      "dh": "9a38eee8",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q11_SetCannotComplete",
@@ -68,7 +92,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "22e1db28"
+      "dh": "22e1db28",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q11_PropagateRewardToParty",
@@ -91,7 +129,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "8b1599bd"
+      "dh": "8b1599bd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q11_SendDarknessPacket",
@@ -116,7 +168,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "87c5ace1"
+      "dh": "87c5ace1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q11_SendSunRestoredPacket",
@@ -140,7 +206,21 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "dcd884cc"
+      "dh": "dcd884cc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q11_ActiveFilter",
@@ -162,7 +242,29 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "06534c5f"
+      "dh": "06534c5f",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Q11_Callback00_NpcActivate",
@@ -188,7 +290,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "4a2152f2"
+      "dh": "4a2152f2",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q11_BeginTaintedSun",
@@ -211,7 +323,13 @@
         "D2QuestDataStrc",
         "uint8_t"
       ],
-      "dh": "5701e0ef"
+      "dh": "5701e0ef",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Q11_EndTaintedSun",
@@ -232,7 +350,17 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "facdd7e8"
+      "dh": "facdd7e8",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "EAX:4"
+        ],
+        [
+          "pGame",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Q11_OnViperAmuletInit",
@@ -256,7 +384,17 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "85554e54"
+      "dh": "85554e54",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pInitArg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q11_SequenceFilter",
@@ -278,7 +416,13 @@
       "usedTypes": [
         "D2QuestDataStrc"
       ],
-      "dh": "a7cc18e8"
+      "dh": "a7cc18e8",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q11_UpdateQuestRecord",
@@ -301,7 +445,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a5197573"
+      "dh": "a5197573",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q11_OnPlayerInteract",
@@ -325,7 +483,17 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "c61a9133"
+      "dh": "c61a9133",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q11_Callback13_PlayerStartedGame",
@@ -350,7 +518,17 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "d3888197"
+      "dh": "d3888197",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q11_CheckViperAmuletRoomComplete",
@@ -379,7 +557,21 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "d6567aac"
+      "dh": "d6567aac",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q11_PlayCompletionSound",
@@ -401,7 +593,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "cf4b688e"
+      "dh": "cf4b688e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Q11_OnStaffViperPickup",
@@ -427,7 +633,21 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "f1aa164d"
+      "dh": "f1aa164d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OBJOP_A2Q3_ActivateTaintedSunAltar",
@@ -475,7 +695,13 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "966fdad7"
+      "dh": "966fdad7",
+      "paramStorage": [
+        [
+          "pOperation",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q11_IsTaintedSunComplete",
@@ -495,7 +721,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "873e6a76"
+      "dh": "873e6a76",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q11_InitTaintedSunForAct",
@@ -517,7 +749,17 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "33ff2630"
+      "dh": "33ff2630",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nActNo",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "Q11_GetTaintedSunFlag",
@@ -537,7 +779,13 @@
         "D2QuestDataStrc",
         "uint8_t"
       ],
-      "dh": "dbc8b70d"
+      "dh": "dbc8b70d",
+      "paramStorage": [
+        [
+          "pCallerQuestData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Q11_Callback11_ScrollMessage",
@@ -572,7 +820,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "75cf90eb"
+      "dh": "75cf90eb",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q11_TimerCheckDarkness",
@@ -595,7 +853,17 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "3be62879"
+      "dh": "3be62879",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pQuestData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q11_StartDarknessTimer",
@@ -617,7 +885,13 @@
         "D2QuestDataA2Q3Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "6b3f8afe"
+      "dh": "6b3f8afe",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Q11_Callback03_ChangedLevel",
@@ -643,7 +917,17 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "5fe0c72e"
+      "dh": "5fe0c72e",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q11_InitData",
@@ -666,7 +950,13 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "d979bb0c"
+      "dh": "d979bb0c",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

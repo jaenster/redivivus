@@ -20,7 +20,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "871476a3"
+      "dh": "871476a3",
+      "paramStorage": [
+        [
+          "nAdler",
+          "ECX:4"
+        ],
+        [
+          "pbData",
+          "EDX:4"
+        ],
+        [
+          "nLen",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ZLIB_Adler32Combine",
@@ -40,7 +54,25 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "eaa44abf"
+      "dh": "eaa44abf",
+      "paramStorage": [
+        [
+          "nAdler1",
+          "ECX:4"
+        ],
+        [
+          "nLen2Lo",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLen2Hi",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAdler2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ZLIB_Adler32Combine32",
@@ -59,7 +91,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "a6758abc"
+      "dh": "a6758abc",
+      "paramStorage": [
+        [
+          "nAdler1",
+          "ECX:4"
+        ],
+        [
+          "nAdler2",
+          "EDX:4"
+        ],
+        [
+          "nLen2",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ZLIB_Adler32Combine64",
@@ -78,7 +124,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "183bddb7"
+      "dh": "183bddb7",
+      "paramStorage": [
+        [
+          "nAdler1",
+          "ECX:4"
+        ],
+        [
+          "nAdler2",
+          "EDX:4"
+        ],
+        [
+          "nLen2Lo",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLen2Hi",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

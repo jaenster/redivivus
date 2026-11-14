@@ -25,7 +25,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "3e46f76a"
+      "dh": "3e46f76a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLAMA_SrvStFn05_Jab",
@@ -47,7 +65,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "8569407a"
+      "dh": "8569407a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLAMA_SrvStFn06_PowerStrike",
@@ -76,7 +112,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "67a39eb9"
+      "dh": "67a39eb9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UseQuanityAndDurability",
@@ -109,7 +163,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "6cdcd9ee"
+      "dh": "6cdcd9ee",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nChancePct",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDurabilityLoss",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pUnit2",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLAMA_SrvStFn07_Impale",
@@ -145,7 +221,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d4e735e6"
+      "dh": "d4e735e6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLAMA_SrvStFn08_Strafe",
@@ -180,7 +274,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "e632f766"
+      "dh": "e632f766",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLAMA_SrvStFn09_Fend",
@@ -212,7 +324,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "feb26675"
+      "dh": "feb26675",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLAMA_SrvStFn37_MultiStrike",
@@ -244,7 +374,25 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "19de1988"
+      "dh": "19de1988",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLAMA_SrvStFn10_LightningStrike",
@@ -278,7 +426,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "88e35983"
+      "dh": "88e35983",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetPhoenixBoltCount",
@@ -301,7 +467,17 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "0bae5ff3"
+      "dh": "0bae5ff3",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_006_PhoenixStrikeAreaBolt",
@@ -326,7 +502,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "18b754ed"
+      "dh": "18b754ed",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_007_Jab",
@@ -358,7 +552,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "52a4737d"
+      "dh": "52a4737d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_008_MultipleShot",
@@ -393,7 +605,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e0e70d6f"
+      "dh": "e0e70d6f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_AmazonDamagePercentCallback",
@@ -414,7 +644,17 @@
         "D2UnitStrc",
         "intptr_t"
       ],
-      "dh": "e0be1101"
+      "dh": "e0be1101",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nDamagePercent",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_010_GuidedArrowLaunch",
@@ -449,7 +689,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ff4de3fd"
+      "dh": "ff4de3fd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_011_ChargedStrike",
@@ -482,7 +740,25 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "5f56084e"
+      "dh": "5f56084e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_012_StrafeContinue",
@@ -528,7 +804,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f1832b55"
+      "dh": "f1832b55",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_013_MultiHitAttack",
@@ -574,7 +868,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "31f6a9a9"
+      "dh": "31f6a9a9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_014_LightningStrike",
@@ -612,7 +924,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "21972547"
+      "dh": "21972547",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_015_SummonDecoy",
@@ -650,7 +980,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "b803fa3b"
+      "dh": "b803fa3b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Skills_SrvDoFunc_016_SummonValkyrie",
@@ -684,7 +1032,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "74f7ac61"
+      "dh": "74f7ac61",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

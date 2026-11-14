@@ -35,7 +35,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ee3272c7"
+      "dh": "ee3272c7",
+      "paramStorage": [
+        [
+          "nQuestId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_PopulateQuestEntry",
@@ -75,7 +81,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6dadbe17"
+      "dh": "6dadbe17",
+      "paramStorage": [
+        [
+          "pEntry",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_SetActiveAct",
@@ -98,7 +110,13 @@
         "eD2Quests",
         "int32_t"
       ],
-      "dh": "00b6fdd8"
+      "dh": "00b6fdd8",
+      "paramStorage": [
+        [
+          "nActIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_SetActiveActFromPlayerRoom",
@@ -207,7 +225,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e0fbb22e"
+      "dh": "e0fbb22e",
+      "paramStorage": [
+        [
+          "nPanelY",
+          "ECX:4"
+        ],
+        [
+          "nPanelX",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_HitTestQuestIcon",
@@ -228,7 +256,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4c65cad9"
+      "dh": "4c65cad9",
+      "paramStorage": [
+        [
+          "nY",
+          "EBX:4"
+        ],
+        [
+          "nX",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_HitTestOpenButton",
@@ -246,7 +284,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "87c055c1"
+      "dh": "87c055c1",
+      "paramStorage": [
+        [
+          "nPanelY",
+          "ECX:4"
+        ],
+        [
+          "nPanelX",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "CloseQuestLogWeird",
@@ -263,7 +311,13 @@
         "FreeQuestImages",
         "SetUIFlag"
       ],
-      "dh": "e000b1fa"
+      "dh": "e000b1fa",
+      "paramStorage": [
+        [
+          "bAdjustMouse",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_HitTestActTab",
@@ -284,7 +338,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7c680cde"
+      "dh": "7c680cde",
+      "paramStorage": [
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_AcknowledgeNewQuests",
@@ -306,7 +370,13 @@
         "D2BitBufferStrc",
         "int32_t"
       ],
-      "dh": "ca27c141"
+      "dh": "ca27c141",
+      "paramStorage": [
+        [
+          "nAct",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_ScrollCompleteCallback_ClearButton",
@@ -325,7 +395,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "4ecf1568"
+      "dh": "4ecf1568",
+      "paramStorage": [
+        [
+          "pUserParam",
+          "ECX:4"
+        ],
+        [
+          "nReason",
+          "EDX:4"
+        ],
+        [
+          "bDismissed",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_ShowQuestDescription",
@@ -347,7 +431,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "875e03c0"
+      "dh": "875e03c0",
+      "paramStorage": [
+        [
+          "nActIndex",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_OnCloseClick",
@@ -369,7 +459,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "ce43984c"
+      "dh": "ce43984c",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_HandleSpecialPacket",
@@ -387,7 +483,13 @@
       "usedTypes": [
         "D2GSPacketSrv0x50"
       ],
-      "dh": "22e6b5da"
+      "dh": "22e6b5da",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_CloseAndFreeImages",
@@ -425,7 +527,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "555622cf"
+      "dh": "555622cf",
+      "paramStorage": [
+        [
+          "nBorderType",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_IsPointInQuestLog",
@@ -446,7 +554,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cd66e362"
+      "dh": "cd66e362",
+      "paramStorage": [
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_OnQuestLogMouseDown",
@@ -467,7 +585,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "2d480bba"
+      "dh": "2d480bba",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_DrawQuestLogButton",
@@ -523,7 +647,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c59becc3"
+      "dh": "c59becc3",
+      "paramStorage": [
+        [
+          "nQuestId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_ClearMissileFlagCb_Missile146",
@@ -538,7 +668,13 @@
       "calledFunctions": [
         "QUESTLOG_ClearMissileFlagCb_Missile146"
       ],
-      "dh": "7e1129ca"
+      "dh": "7e1129ca",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_ClearMissileFlagCb_Missile527",
@@ -556,7 +692,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "d15c3faf"
+      "dh": "d15c3faf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_HandleQuestStatePacket",
@@ -598,7 +740,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "79d2c0e2"
+      "dh": "79d2c0e2",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "pPacket",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_ResetNpcDialogState",
@@ -690,7 +842,13 @@
       "calledFunctions": [
         "QUESTLOG_SetZooSpawnFlag"
       ],
-      "dh": "f7923261"
+      "dh": "f7923261",
+      "paramStorage": [
+        [
+          "nZooSpawnCounter",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_GetZooSpawnFlag",
@@ -750,7 +908,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b032dfcd"
+      "dh": "b032dfcd",
+      "paramStorage": [
+        [
+          "nSpawnX",
+          "ECX:4"
+        ],
+        [
+          "nSpawnY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004a3200",
@@ -768,7 +936,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "939527ec"
+      "dh": "939527ec",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_LoadQuestIconsForAct",
@@ -795,7 +969,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a95d0ea5"
+      "dh": "a95d0ea5",
+      "paramStorage": [
+        [
+          "nActIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bResetSelection",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GameOverWtf",
@@ -902,7 +1086,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0d722486"
+      "dh": "0d722486",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_ToggleQuestScreen",
@@ -931,7 +1121,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7e085ee8"
+      "dh": "7e085ee8",
+      "paramStorage": [
+        [
+          "bAdjustMouse",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x52_QUESTSTATUS",
@@ -952,7 +1148,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "a1337986"
+      "dh": "a1337986",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_OnButtonMouseUp",
@@ -974,7 +1176,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "3e51fb6c"
+      "dh": "3e51fb6c",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_IsQuestAvailableForInteraction",
@@ -1003,7 +1211,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "6df6bcd2"
+      "dh": "6df6bcd2",
+      "paramStorage": [
+        [
+          "nQuestIconIndex",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QUESTLOG_OnMouseUp",
@@ -1028,7 +1242,13 @@
         "D2UIMouseMsgStrc",
         "uint32_t"
       ],
-      "dh": "34818458"
+      "dh": "34818458",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gaQuestLogPanelRects",

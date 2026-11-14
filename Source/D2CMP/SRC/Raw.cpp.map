@@ -26,7 +26,17 @@
         "TCELENTRY",
         "uint32_t"
       ],
-      "dh": "b3f69e54"
+      "dh": "b3f69e54",
+      "paramStorage": [
+        [
+          "pRawFile",
+          "ECX:4"
+        ],
+        [
+          "pCelFile",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

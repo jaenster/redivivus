@@ -19,7 +19,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "522820e4"
+      "dh": "522820e4",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_DrawCallback_SetModeAndClearMsgLoop",
@@ -38,7 +44,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "a33fb715"
+      "dh": "a33fb715",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

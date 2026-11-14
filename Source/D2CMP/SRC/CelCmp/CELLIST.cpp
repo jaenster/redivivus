@@ -10,8 +10,9 @@
 namespace D2CMP::SRC::CelCmp::CELLIST {
 
 void __thiscall Destructor(::CELLIST * pThis) {
-    pThis->m_frames.UnlinkAll();
-    TSLink<::TCELENTRY>* pTVar1 = &pThis->m_frames.m_terminator;
+    TSList<TCELENTRY, TSGetLink<TCELENTRY>>* pList = &pThis->m_frames;
+    pList->UnlinkAll();
+    TSLink<::TCELENTRY>* pTVar1 = &pList->m_terminator;
     TSLink<::TCELENTRY>* nNext = pTVar1->m_prevlink;
     if (nNext) {
       TSLink<::TCELENTRY>** pBackLink;
@@ -26,8 +27,9 @@ void __thiscall Destructor(::CELLIST * pThis) {
 }
 
 ::CELLIST * __thiscall ScalarDeletingDestructor(::CELLIST * pThis, uint32_t dwFlags) {
-    pThis->m_frames.UnlinkAll();
-    TSLink<::TCELENTRY>* pTVar1 = &pThis->m_frames.m_terminator;
+    TSList<TCELENTRY, TSGetLink<TCELENTRY>>* pList = &pThis->m_frames;
+    pList->UnlinkAll();
+    TSLink<::TCELENTRY>* pTVar1 = &pList->m_terminator;
     TSLink<::TCELENTRY>* nNext = pTVar1->m_prevlink;
     if (nNext) {
       TSLink<::TCELENTRY>** pBackLink;

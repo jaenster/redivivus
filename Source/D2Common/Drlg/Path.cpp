@@ -1029,10 +1029,10 @@ void __fastcall DRLGPATH_ApplyMissileOffset(D2UnitStrc * pMissileStrc) {
       fOffsetRadius = (float)findex;
       findex = (uint32_t)byDirection * 8 + findex * -0x100 & 0x1ff;
       fVar1 = Fog::MATH_sinTable_f32_LookupOffset(findex);
-      nOffsetRadius = (short int)(int)std::nearbyint(fVar1 * fOffsetRadius);
+      nOffsetRadius = (short int)(int)(fVar1 * fOffsetRadius);
       pMissileStrc->eAnimMode.eMissileCollision += nOffsetRadius;
       fVar1 = Fog::MATH_sinTable_f32_Lookup(findex);
-      nOffsetRadius = (short int)(int)std::nearbyint(fVar1 * fOffsetRadius);
+      nOffsetRadius = (short int)(int)(fVar1 * fOffsetRadius);
       pwMissilePosY = (short int*)((intptr_t)&pMissileStrc->eAnimMode + 2);
       *pwMissilePosY += nOffsetRadius;
       return;
@@ -1094,10 +1094,10 @@ void __fastcall DRLGPATH_GetMissileTargetPosition(short * pOutPos, D2UnitStrc * 
       fSpiralRadius = (float)findex;
       findex = (uint32_t)byDirection * 8 + findex * -0x100 & 0x1ff;
       fVar3 = Fog::MATH_sinTable_f32_LookupOffset(findex);
-      nOffsetRadius = (short int)(int)std::nearbyint(fVar3 * fSpiralRadius);
+      nOffsetRadius = (short int)(int)(fVar3 * fSpiralRadius);
       *pOutPos += nOffsetRadius;
       fVar3 = Fog::MATH_sinTable_f32_Lookup(findex);
-      nOffsetRadius = (short int)(int)std::nearbyint(fVar3 * fSpiralRadius);
+      nOffsetRadius = (short int)(int)(fVar3 * fSpiralRadius);
       pOutPos[1] += nOffsetRadius;
       return;
     }
@@ -1305,7 +1305,7 @@ static BOOL __stdcall DRLGPATH_RaycastCollisionLine(int * pVelocity, uint32_t nP
     } else {
       short int nCurY;
       nCurY = (short int)(nPackedStart >> 0x10);
-      if (nCurY != (uint16_t)((uint32_t)nPackedDst >> 16)) {
+      if ((uint16_t)nCurY != (uint16_t)((uint32_t)nPackedDst >> 16)) {
         do {
           nPackedPrevPos = nPackedSrc;
           nFpIterX += nVelX;
@@ -1322,7 +1322,7 @@ static BOOL __stdcall DRLGPATH_RaycastCollisionLine(int * pVelocity, uint32_t nP
           }
 
           nPackedSrc = nPackedStart;
-        } while (nIterCoord != (uint16_t)((uint32_t)nPackedDst >> 16));
+        } while ((uint16_t)nIterCoord != (uint16_t)((uint32_t)nPackedDst >> 16));
       }
     }
     if (!(short int)nPackedDst) {
@@ -1921,10 +1921,10 @@ int32_t __fastcall DRLGPATH_BuildCircularPathPoints(D2DynamicPathStrc * pStaticP
       nRadius += 0x2580;
       nAngleIdx += 0x10;
       fVar1 = Fog::MATH_sinTable_f32_LookupOffset(nAngleIdx);
-      nSinOffset = (int)(int64_t)std::nearbyint(fVar1 * (float)nRadius);
+      nSinOffset = (int)(int64_t)(fVar1 * (float)nRadius);
       nPackedCurX = nSinOffset + nBaseX;
       fVar1 = Fog::MATH_sinTable_f32_Lookup(nAngleIdx);
-      nSinOffset = (int)(int64_t)std::nearbyint(fVar1 * (float)nRadius);
+      nSinOffset = (int)(int64_t)(fVar1 * (float)nRadius);
       nNewY = nSinOffset + nOriginY;
       nNewX = (uint16_t)(nPackedCurX >> 0x10);
       if (nNewX != (uint16_t)(nPackedLastX >> 0x10) || nNewY >> 0x10 != nPrevY >> 0x10) {
@@ -2243,7 +2243,7 @@ static D2DrlgRoomAStarNodeStrc * __stdcall DRLGPATH_AStarExpandNode(int32_t nMax
       while (true) {
         sTarget.nX = nPackedTo.nX;
         sTarget.nY = nPackedTo.nY;
-        if (pCurNode->nX == sTarget.nX && pCurNode->nY == sTarget.nY) {
+        if ((uint16_t)pCurNode->nX == sTarget.nX && (uint16_t)pCurNode->nY == sTarget.nY) {
           return pCurNode;
         }
 
@@ -2291,7 +2291,7 @@ static D2DrlgRoomAStarNodeStrc * __stdcall DRLGPATH_AStarExpandNode(int32_t nMax
         }
       }
 
-      if (pCurNode->nX == nNeighborXw || (nGCost = 3 , pCurNode->nY == nNeighborY)) {
+      if ((uint16_t)pCurNode->nX == nNeighborXw || (nGCost = 3 , (uint16_t)pCurNode->nY == nNeighborY)) {
         nGCost = 2;
       }
 

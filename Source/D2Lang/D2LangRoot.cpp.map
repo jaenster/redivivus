@@ -28,7 +28,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "34d04455"
+      "dh": "34d04455",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNumber",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxLen",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UTF8_DecodeNextChar",
@@ -50,7 +64,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "29056967"
+      "dh": "29056967",
+      "paramStorage": [
+        [
+          "pUtf8",
+          "EAX:4"
+        ],
+        [
+          "pwCharOut",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxBytes",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "EncodeUTF8CodePoint",
@@ -72,7 +100,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ebf19c9c"
+      "dh": "ebf19c9c",
+      "paramStorage": [
+        [
+          "wCodePoint",
+          "Stack[0x4]:2"
+        ],
+        [
+          "pbyUtf8Out",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UTF8_GetNextCharWidth",
@@ -94,7 +132,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f5edc2e8"
+      "dh": "f5edc2e8",
+      "paramStorage": [
+        [
+          "pUtf8",
+          "EAX:4"
+        ],
+        [
+          "nMaxBytes",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UTF8_GetStringLength",
@@ -114,7 +162,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "10344b7d"
+      "dh": "10344b7d",
+      "paramStorage": [
+        [
+          "szUtf8",
+          "ECX:4"
+        ],
+        [
+          "nMaxBytes",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UTF8_EncodeCodePoint",
@@ -136,7 +194,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "60663106"
+      "dh": "60663106",
+      "paramStorage": [
+        [
+          "pCodePoint",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UTF8_ConvertToWideChar",
@@ -156,7 +220,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "dc1df59a"
+      "dh": "dc1df59a",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "nMaxWideChars",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "WideCharToUTF8",
@@ -176,7 +254,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "a8c312c7"
+      "dh": "a8c312c7",
+      "paramStorage": [
+        [
+          "pDest",
+          "ECX:4"
+        ],
+        [
+          "pSrc",
+          "EDX:4"
+        ],
+        [
+          "nMaxBytes",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UTF8_GetEncodedLength",
@@ -199,7 +291,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "937fbfab"
+      "dh": "937fbfab",
+      "paramStorage": [
+        [
+          "pwszStr",
+          "ECX:4"
+        ],
+        [
+          "nMaxChars",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UI_CompareCharsUsingLookupTable",
@@ -217,7 +319,17 @@
       "usedTypes": [
         "uint16_t"
       ],
-      "dh": "7aa76d8b"
+      "dh": "7aa76d8b",
+      "paramStorage": [
+        [
+          "wChar1",
+          "Stack[0x4]:2"
+        ],
+        [
+          "wChar2",
+          "Stack[0x8]:2"
+        ]
+      ]
     }
   ]
 }

@@ -38,7 +38,13 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
       ],
-      "dh": "07d15a8e"
+      "dh": "07d15a8e",
+      "paramStorage": [
+        [
+          "nLine",
+          "Stack[0x0]:4"
+        ]
+      ]
     },
     {
       "name": "Initialize",
@@ -54,7 +60,13 @@
         "Initialize",
         "RENDERER_GLIDE_LoadLibrarySymbols"
       ],
-      "dh": "d7c68735"
+      "dh": "d7c68735",
+      "paramStorage": [
+        [
+          "hInstance",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ClearCaches",
@@ -109,7 +121,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2f25763a"
+      "dh": "2f25763a",
+      "paramStorage": [
+        [
+          "bClear",
+          "ECX:4"
+        ],
+        [
+          "nRed",
+          "DL:1"
+        ],
+        [
+          "nGreen",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nBlue",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "UpdateScaleFactor",
@@ -127,7 +157,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "5104fcf4"
+      "dh": "5104fcf4",
+      "paramStorage": [
+        [
+          "nScaleFactor",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetGamma",
@@ -151,7 +187,13 @@
         "FxU32",
         "int32_t"
       ],
-      "dh": "9fecc27f"
+      "dh": "9fecc27f",
+      "paramStorage": [
+        [
+          "nGamma",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CheckGamma",
@@ -226,7 +268,13 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "03719099"
+      "dh": "03719099",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetScreenSize",
@@ -244,7 +292,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6222fe47"
+      "dh": "6222fe47",
+      "paramStorage": [
+        [
+          "pWidth",
+          "ECX:4"
+        ],
+        [
+          "pHeight",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SetPalette",
@@ -263,7 +321,13 @@
         "LPPALETTEENTRY",
         "uint32_t"
       ],
-      "dh": "28ad8a13"
+      "dh": "28ad8a13",
+      "paramStorage": [
+        [
+          "pPalette",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_ScalePaletteValue",
@@ -281,7 +345,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "15e6d010"
+      "dh": "15e6d010",
+      "paramStorage": [
+        [
+          "nPaletteIndex",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetPaletteTable",
@@ -299,7 +369,13 @@
       "usedTypes": [
         "BYTE *"
       ],
-      "dh": "bf714bf4"
+      "dh": "bf714bf4",
+      "paramStorage": [
+        [
+          "ppPaletteTable",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ActivateWindow",
@@ -332,7 +408,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e638bd2c"
+      "dh": "e638bd2c",
+      "paramStorage": [
+        [
+          "nOption",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_SetTextureMode",
@@ -350,7 +436,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b27ca819"
+      "dh": "b27ca819",
+      "paramStorage": [
+        [
+          "nTextureMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_SetColorCombine",
@@ -368,7 +460,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2f5d33a4"
+      "dh": "2f5d33a4",
+      "paramStorage": [
+        [
+          "nCombineMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_SetAlphaBlendMode",
@@ -386,7 +484,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "37510658"
+      "dh": "37510658",
+      "paramStorage": [
+        [
+          "nAlphaBlendMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_SetTextureFiltering",
@@ -404,7 +508,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9608618a"
+      "dh": "9608618a",
+      "paramStorage": [
+        [
+          "nFilteringMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRenderStatistics",
@@ -449,7 +559,13 @@
       "calledFunctions": [
         "D2WINPAL_SetGammaRamp_Unref_00509660"
       ],
-      "dh": "a94a99ef"
+      "dh": "a94a99ef",
+      "paramStorage": [
+        [
+          "bCompactLineSpacingMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_InitTextureMemory",
@@ -535,7 +651,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "8d3f2b92"
+      "dh": "8d3f2b92",
+      "paramStorage": [
+        [
+          "szFile",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ],
+        [
+          "fpFrame",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_InitWindow",
@@ -563,7 +693,17 @@
         "GrScreenResolution_t",
         "int32_t"
       ],
-      "dh": "4aad1bf6"
+      "dh": "4aad1bf6",
+      "paramStorage": [
+        [
+          "nParam",
+          "EAX:4"
+        ],
+        [
+          "dwWindowHandle",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "Release",
@@ -603,7 +743,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e712b639"
+      "dh": "e712b639",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "EndCutScene",
@@ -626,7 +776,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "dc415825"
+      "dh": "dc415825",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ],
+        [
+          "nWindowState",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ResizeWindow",
@@ -643,7 +807,17 @@
         "RENDERER_GLIDE_DestroyWindow",
         "RENDERER_GLIDE_InitWindow"
       ],
-      "dh": "a984f0f7"
+      "dh": "a984f0f7",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "bForceResize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_Release",
@@ -702,7 +876,17 @@
         "D2GfxSettingsStrc",
         "int32_t"
       ],
-      "dh": "30840a11"
+      "dh": "30840a11",
+      "paramStorage": [
+        [
+          "pSettings",
+          "ECX:4"
+        ],
+        [
+          "pHelpers",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_FreeSpriteBuffers",
@@ -733,7 +917,13 @@
       "calledFunctions": [
         "GLIDE_PixelDataFreeCallback_ClearCacheNodes"
       ],
-      "dh": "7ea1ea29"
+      "dh": "7ea1ea29",
+      "paramStorage": [
+        [
+          "pCacheIndices",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_GetSpriteMetadata",
@@ -761,7 +951,17 @@
         "GlideTexInfoStrc",
         "int32_t"
       ],
-      "dh": "bc2c1edc"
+      "dh": "bc2c1edc",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "ESI:4"
+        ],
+        [
+          "ppMetadata",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_CalculateTextureSize",
@@ -781,7 +981,13 @@
         "GlideTexInfoStrc",
         "uint32_t"
       ],
-      "dh": "f6fda6ac"
+      "dh": "f6fda6ac",
+      "paramStorage": [
+        [
+          "pTexInfo",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_UploadTextureToCache",
@@ -811,7 +1017,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "80572d06"
+      "dh": "80572d06",
+      "paramStorage": [
+        [
+          "pTexInfo",
+          "ESI:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOutlineColor",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nMode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_DrawShadowQuad",
@@ -831,7 +1055,21 @@
         "GlideTexInfoStrc",
         "int32_t"
       ],
-      "dh": "2aedee9a"
+      "dh": "2aedee9a",
+      "paramStorage": [
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTexInfo",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_DrawPalettedQuad",
@@ -856,7 +1094,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fb78862a"
+      "dh": "fb78862a",
+      "paramStorage": [
+        [
+          "pGlideQuad",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nParam3",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_SetDrawMode",
@@ -875,7 +1139,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "71cfcac6"
+      "dh": "71cfcac6",
+      "paramStorage": [
+        [
+          "nDrawMode",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "DrawPerspectiveImage",
@@ -904,7 +1174,37 @@
         "GlideTexInfoStrc",
         "int32_t"
       ],
-      "dh": "4d5a38ba"
+      "dh": "4d5a38ba",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "DrawImage",
@@ -929,7 +1229,33 @@
         "GlideTexInfoStrc",
         "int32_t"
       ],
-      "dh": "766c31f8"
+      "dh": "766c31f8",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawShiftedImage",
@@ -954,7 +1280,33 @@
         "GlideTexInfoStrc",
         "int32_t"
       ],
-      "dh": "803c1615"
+      "dh": "803c1615",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGlobalPaletteShift",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawVerticalCropImage",
@@ -980,7 +1332,33 @@
         "GlideTexInfoStrc",
         "int32_t"
       ],
-      "dh": "f93a2e8a"
+      "dh": "f93a2e8a",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkipLines",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawLines",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_CalculateClipRect",
@@ -1004,7 +1382,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d448a9a0"
+      "dh": "d448a9a0",
+      "paramStorage": [
+        [
+          "nScreenX",
+          "ECX:4"
+        ],
+        [
+          "nScreenY",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnClipBounds",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnOutRect",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DrawClippedImage",
@@ -1032,7 +1432,29 @@
         "GlideTexInfoStrc",
         "int32_t"
       ],
-      "dh": "f315a6f4"
+      "dh": "f315a6f4",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCropRect",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DrawShadow",
@@ -1060,7 +1482,21 @@
         "GlideTexInfoStrc",
         "int32_t"
       ],
-      "dh": "eb3f2f7e"
+      "dh": "eb3f2f7e",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "DrawImageFast",
@@ -1085,7 +1521,25 @@
         "GlideTexInfoStrc",
         "int32_t"
       ],
-      "dh": "de7fbf0b"
+      "dh": "de7fbf0b",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "DebugFillBackBuffer",
@@ -1103,7 +1557,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "35ac9aba"
+      "dh": "35ac9aba",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_InitSpriteCache",
@@ -1150,7 +1614,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ba934e62"
+      "dh": "ba934e62",
+      "paramStorage": [
+        [
+          "dwTexMemStart",
+          "ECX:4"
+        ],
+        [
+          "nTexMemAlignment",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_GenerateDebugFont",
@@ -1212,7 +1686,21 @@
         "LPINT",
         "int32_t"
       ],
-      "dh": "7de072b4"
+      "dh": "7de072b4",
+      "paramStorage": [
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "byChar",
+          "AL:1"
+        ]
+      ]
     },
     {
       "name": "DrawString",
@@ -1237,7 +1725,25 @@
         "int32_t",
         "va_list"
       ],
-      "dh": "230f2c29"
+      "dh": "230f2c29",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "szFormat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "va",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_DrawLightRadialPoints",
@@ -1257,7 +1763,21 @@
         "GrColor_t",
         "int32_t"
       ],
-      "dh": "6bdad0e1"
+      "dh": "6bdad0e1",
+      "paramStorage": [
+        [
+          "nPosX",
+          "EBX:4"
+        ],
+        [
+          "nColor",
+          "EAX:4"
+        ],
+        [
+          "nPosY",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_DrawLightGradient",
@@ -1316,7 +1836,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d5717bcc"
+      "dh": "d5717bcc",
+      "paramStorage": [
+        [
+          "pLight",
+          "ECX:4"
+        ],
+        [
+          "pPlayerLight",
+          "EDX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_AreBlendedShadowsEnabled",
@@ -1358,7 +1896,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "892095b5"
+      "dh": "892095b5",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawSolidRectAlpha",
@@ -1384,7 +1948,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "203b97fe"
+      "dh": "203b97fe",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "DrawLine",
@@ -1407,7 +1997,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "945a861e"
+      "dh": "945a861e",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x10]:1"
+        ]
+      ]
     },
     {
       "name": "DrawRect",
@@ -1431,7 +2047,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e3fe9c0e"
+      "dh": "e3fe9c0e",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DrawRectEx",
@@ -1455,7 +2081,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "849c9bd1"
+      "dh": "849c9bd1",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DrawSolidRect",
@@ -1478,7 +2114,17 @@
         "RECT",
         "int32_t"
       ],
-      "dh": "369aec90"
+      "dh": "369aec90",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "DrawSolidSquare",
@@ -1500,7 +2146,21 @@
         "tagRECT",
         "uint32_t"
       ],
-      "dh": "b2b76916"
+      "dh": "b2b76916",
+      "paramStorage": [
+        [
+          "pPoint",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "DL:1"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ClearScreen",
@@ -1515,7 +2175,13 @@
       "calledFunctions": [
         "ClearScreen"
       ],
-      "dh": "2c3f4984"
+      "dh": "2c3f4984",
+      "paramStorage": [
+        [
+          "bPartial",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_CalculateScreenBounds",
@@ -1537,7 +2203,25 @@
         "RECT",
         "int32_t"
       ],
-      "dh": "b846c735"
+      "dh": "b846c735",
+      "paramStorage": [
+        [
+          "nViewportMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBounds",
+          "ECX:4"
+        ],
+        [
+          "nScreenPanels",
+          "ESI:4"
+        ],
+        [
+          "pnXOffset",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_InitPerspectiveTables",
@@ -1578,7 +2262,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5a730b9a"
+      "dh": "5a730b9a",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nSubtileIdx",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_DrawShadowTilePerspective",
@@ -1604,7 +2310,29 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "72b5dc94"
+      "dh": "72b5dc94",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "DrawShadowTile",
@@ -1631,7 +2359,29 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "8507282d"
+      "dh": "8507282d",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_DrawWallTileSimple",
@@ -1653,7 +2403,29 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "3eb4750c"
+      "dh": "3eb4750c",
+      "paramStorage": [
+        [
+          "nScreenPanels",
+          "ECX:4"
+        ],
+        [
+          "pTile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pColorTable",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_DrawWallTilePerspective",
@@ -1684,7 +2456,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e4ef8699"
+      "dh": "e4ef8699",
+      "paramStorage": [
+        [
+          "nScreenPanels",
+          "EAX:4"
+        ],
+        [
+          "pTile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pColorTable",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_DrawTransparentWallTile",
@@ -1712,7 +2506,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "8338b630"
+      "dh": "8338b630",
+      "paramStorage": [
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pLight",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x10]:1"
+        ],
+        [
+          "pTileLibraryEntry",
+          "ESI:4"
+        ],
+        [
+          "nScreenPanels",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "DrawTransWallTile",
@@ -1733,7 +2553,33 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "3493ceb6"
+      "dh": "3493ceb6",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawWallTile",
@@ -1760,7 +2606,29 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "13d742ca"
+      "dh": "13d742ca",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_InitGroundTileVertices",
@@ -1807,7 +2675,45 @@
         "uint8_t",
         "void *"
       ],
-      "dh": "038e524f"
+      "dh": "038e524f",
+      "paramStorage": [
+        [
+          "pTile",
+          "ECX:4"
+        ],
+        [
+          "pLight",
+          "EDX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nWorldXpos",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nWorldYpos",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x14]:1"
+        ],
+        [
+          "nScreenPanels",
+          "Stack[0x18]:4"
+        ],
+        [
+          "pTileData",
+          "Stack[0x1c]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_AllocLightingTable",
@@ -1869,7 +2775,21 @@
       "calledFunctions": [
         "SetGlobalLight"
       ],
-      "dh": "4f745233"
+      "dh": "4f745233",
+      "paramStorage": [
+        [
+          "nRed",
+          "ECX:4"
+        ],
+        [
+          "nGreen",
+          "EDX:4"
+        ],
+        [
+          "nBlue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_ApplyShadowLighting",
@@ -1888,7 +2808,17 @@
         "D2GlideVertexStrc",
         "uint8_t"
       ],
-      "dh": "fa946143"
+      "dh": "fa946143",
+      "paramStorage": [
+        [
+          "pVertex",
+          "ECX:4"
+        ],
+        [
+          "nIntensity",
+          "DL:1"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_ApplyColorLighting",
@@ -1907,7 +2837,17 @@
         "D2GlideVertexStrc",
         "uint32_t"
       ],
-      "dh": "d55ba618"
+      "dh": "d55ba618",
+      "paramStorage": [
+        [
+          "pVertex",
+          "ECX:4"
+        ],
+        [
+          "dwPackedColor",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_AllocPerspectiveLUT",
@@ -1990,7 +2930,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "029d0a6f"
+      "dh": "029d0a6f",
+      "paramStorage": [
+        [
+          "nScaleX",
+          "ECX:4"
+        ],
+        [
+          "nScaleY",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "AdjustPerspectivePosition",
@@ -2008,7 +2958,29 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "fa91c2cc"
+      "dh": "fa91c2cc",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nBais",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pXAdjust",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pYAdjust",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "PerspectiveScalePosition",
@@ -2026,7 +2998,33 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9a561afc"
+      "dh": "9a561afc",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nAngle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pXAdjust",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pYAdjust",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bOrder",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SetDefaultPerspectiveFactor",
@@ -2092,7 +3090,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ba5e27e4"
+      "dh": "ba5e27e4",
+      "paramStorage": [
+        [
+          "dwBaseAddr",
+          "ECX:4"
+        ],
+        [
+          "dwTexSize",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GLSMACK_DestroyNoop",
@@ -2125,7 +3133,13 @@
       "usedTypes": [
         "D2SmackerContextStrc"
       ],
-      "dh": "705219f6"
+      "dh": "705219f6",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GLSMACK_ConvertPaletteToRGB565",
@@ -2143,7 +3157,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "2d5e0e01"
+      "dh": "2d5e0e01",
+      "paramStorage": [
+        [
+          "pRgbPalette",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GLSMACK_UploadTextures",
@@ -2181,7 +3201,21 @@
         "D2SmackerContextStrc",
         "int32_t"
       ],
-      "dh": "0c648d90"
+      "dh": "0c648d90",
+      "paramStorage": [
+        [
+          "pSmackerData",
+          "ECX:4"
+        ],
+        [
+          "nOffsetY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAlpha",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DecodeSmacker",
@@ -2212,7 +3246,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "221c6a0b"
+      "dh": "221c6a0b",
+      "paramStorage": [
+        [
+          "szSmacker",
+          "ECX:4"
+        ],
+        [
+          "pBuffer",
+          "EDX:4"
+        ],
+        [
+          "nVersion",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PlayerSmacker",
@@ -2234,7 +3282,13 @@
       "usedTypes": [
         "D2SmackerContextStrc"
       ],
-      "dh": "eea75d39"
+      "dh": "eea75d39",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

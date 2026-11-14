@@ -21,7 +21,13 @@
         "D2SkillsTxt",
         "eD2Skills"
       ],
-      "dh": "62d0d68b"
+      "dh": "62d0d68b",
+      "paramStorage": [
+        [
+          "eSkill",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "StoreLastSkillHit",
@@ -43,7 +49,25 @@
         "eSkillEType",
         "uint32_t"
       ],
-      "dh": "4b5db701"
+      "dh": "4b5db701",
+      "paramStorage": [
+        [
+          "pSkill",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUid",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillDescription",
@@ -63,7 +87,13 @@
         "D2SkillDescTxt",
         "eD2Skills"
       ],
-      "dh": "31790d46"
+      "dh": "31790d46",
+      "paramStorage": [
+        [
+          "eSkillId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetMaxLevelForSkill",
@@ -82,7 +112,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f781668b"
+      "dh": "f781668b",
+      "paramStorage": [
+        [
+          "skillId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetManaCostMultiplier",
@@ -101,7 +137,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4e6939ad"
+      "dh": "4e6939ad",
+      "paramStorage": [
+        [
+          "nSkillId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_GetBoltSpeed",
@@ -121,7 +163,17 @@
         "D2SkillsTxt",
         "int32_t"
       ],
-      "dh": "25f11cda"
+      "dh": "25f11cda",
+      "paramStorage": [
+        [
+          "nSkillId",
+          "ECX:4"
+        ],
+        [
+          "nSkillLevel",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Skills_GetSkillRange",
@@ -142,7 +194,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "a2be287e"
+      "dh": "a2be287e",
+      "paramStorage": [
+        [
+          "eSkill",
+          "ECX:4"
+        ],
+        [
+          "pnSkillLevel",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetSkilParam1",
@@ -162,7 +224,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "8964510a"
+      "dh": "8964510a",
+      "paramStorage": [
+        [
+          "eSkill",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSkilParam2",
@@ -182,7 +250,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "eda3efd4"
+      "dh": "eda3efd4",
+      "paramStorage": [
+        [
+          "eSkill",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSkilParam3",
@@ -202,7 +276,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "9014e013"
+      "dh": "9014e013",
+      "paramStorage": [
+        [
+          "eSkill",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillParam4",
@@ -222,7 +302,17 @@
         "D2SkillsTxt",
         "int32_t"
       ],
-      "dh": "935cf37d"
+      "dh": "935cf37d",
+      "paramStorage": [
+        [
+          "nSkillId",
+          "ECX:4"
+        ],
+        [
+          "nSkillLevel",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetTxtSkillParam5",
@@ -241,7 +331,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "67fa889c"
+      "dh": "67fa889c",
+      "paramStorage": [
+        [
+          "nSkillId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CalcSkillParam",
@@ -261,7 +357,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "0361a519"
+      "dh": "0361a519",
+      "paramStorage": [
+        [
+          "eSkill",
+          "ECX:4"
+        ],
+        [
+          "nSkillLevel",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_006435c0",
@@ -291,7 +397,13 @@
       "calledFunctions": [
         "Unreferenced_006435d0"
       ],
-      "dh": "00500174"
+      "dh": "00500174",
+      "paramStorage": [
+        [
+          "nIndex",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetOrAllocStateStatList",
@@ -319,7 +431,21 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "c4e8d318"
+      "dh": "c4e8d318",
+      "paramStorage": [
+        [
+          "bAlloc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "eState",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Skills_GetPassiveState",
@@ -334,7 +460,13 @@
       "calledFunctions": [
         "TXT_Skills_GetPassiveState"
       ],
-      "dh": "c1965fa3"
+      "dh": "c1965fa3",
+      "paramStorage": [
+        [
+          "nSkillId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_Min",
@@ -349,7 +481,25 @@
       "calledFunctions": [
         "SKILLS_Min"
       ],
-      "dh": "eca8d500"
+      "dh": "eca8d500",
+      "paramStorage": [
+        [
+          "nLeft",
+          "ECX:4"
+        ],
+        [
+          "nRight",
+          "EDX:4"
+        ],
+        [
+          "dwParam3",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam4",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_Max",
@@ -364,7 +514,25 @@
       "calledFunctions": [
         "SKILLS_Max"
       ],
-      "dh": "e7df9178"
+      "dh": "e7df9178",
+      "paramStorage": [
+        [
+          "nLeft",
+          "ECX:4"
+        ],
+        [
+          "nRight",
+          "EDX:4"
+        ],
+        [
+          "nOperand3",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_RandomRange",
@@ -385,7 +553,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2f381b2d"
+      "dh": "2f381b2d",
+      "paramStorage": [
+        [
+          "pnMinVal",
+          "ECX:4"
+        ],
+        [
+          "nRange",
+          "EDX:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnSeed",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetMissileSpecialParam",
@@ -407,7 +593,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ae5777ff"
+      "dh": "ae5777ff",
+      "paramStorage": [
+        [
+          "nParamIndex",
+          "ECX:4"
+        ],
+        [
+          "bParamType",
+          "DL:1"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppContext",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetUnitStatValue",
@@ -433,7 +637,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "71a890c3"
+      "dh": "71a890c3",
+      "paramStorage": [
+        [
+          "eUnitStat",
+          "ECX:4"
+        ],
+        [
+          "nShiftCount",
+          "EDX:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppContext",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetSkill",
@@ -453,7 +675,17 @@
         "D2UnitStrc",
         "eD2Skills"
       ],
-      "dh": "0521052a"
+      "dh": "0521052a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "eSkill",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillMode",
@@ -472,7 +704,17 @@
         "D2SkillStrc",
         "D2UnitStrc"
       ],
-      "dh": "b3172d3d"
+      "dh": "b3172d3d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetSkillsTxtField0x14",
@@ -491,7 +733,13 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "a6b65957"
+      "dh": "a6b65957",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_CreateSkillsList",
@@ -511,7 +759,13 @@
         "D2PoolManagerStrc",
         "D2SkillListStrc"
       ],
-      "dh": "5c8fdde2"
+      "dh": "5c8fdde2",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetNext",
@@ -529,7 +783,13 @@
       "usedTypes": [
         "D2SkillStrc"
       ],
-      "dh": "12647f0b"
+      "dh": "12647f0b",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetFirstSkill",
@@ -548,7 +808,13 @@
         "D2SkillListStrc",
         "D2SkillStrc"
       ],
-      "dh": "20255c16"
+      "dh": "20255c16",
+      "paramStorage": [
+        [
+          "pSkillsList",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetLeftSkill",
@@ -571,7 +837,13 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "e2aed204"
+      "dh": "e2aed204",
+      "paramStorage": [
+        [
+          "pSkillsList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRightSkill",
@@ -594,7 +866,13 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "e1a296ec"
+      "dh": "e1a296ec",
+      "paramStorage": [
+        [
+          "pSkillsList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetCurrentSkill",
@@ -613,7 +891,17 @@
         "D2SkillListStrc",
         "D2SkillStrc"
       ],
-      "dh": "f3ab9707"
+      "dh": "f3ab9707",
+      "paramStorage": [
+        [
+          "pPlayerSkills",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetCurrentSkill",
@@ -632,7 +920,13 @@
         "D2SkillListStrc",
         "D2SkillStrc"
       ],
-      "dh": "4e8da5c2"
+      "dh": "4e8da5c2",
+      "paramStorage": [
+        [
+          "pSkillsList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillByIdAndOwner",
@@ -653,7 +947,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "2c3807bd"
+      "dh": "2c3807bd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nOwnerGUID",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetSkillByEnum",
@@ -674,7 +982,17 @@
         "D2UnitStrc",
         "eD2Skills"
       ],
-      "dh": "dd42dd49"
+      "dh": "dd42dd49",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SwapLightMap",
@@ -694,7 +1012,17 @@
         "D2SkillListStrc",
         "D2UnitStrc"
       ],
-      "dh": "cbc39711"
+      "dh": "cbc39711",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLight",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetUnitField0xa8_0x14",
@@ -713,7 +1041,13 @@
         "D2LightMapStrc",
         "D2UnitStrc"
       ],
-      "dh": "7f542f72"
+      "dh": "7f542f72",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_FreeSkillList",
@@ -737,7 +1071,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "62c4acb8"
+      "dh": "62c4acb8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "GetOwnerGUID",
@@ -759,7 +1099,13 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "7bc65179"
+      "dh": "7bc65179",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetSkillData",
@@ -782,7 +1128,29 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "fc87a14d"
+      "dh": "fc87a14d",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwnerGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSkillId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pLevel",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pCharges",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SetTimerFlag",
@@ -804,7 +1172,17 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "7d6042d2"
+      "dh": "7d6042d2",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTimerValue",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SelectSkillLeft",
@@ -830,7 +1208,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "86e72908"
+      "dh": "86e72908",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SelectSkillRight",
@@ -855,7 +1247,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "269b7cb8"
+      "dh": "269b7cb8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillId",
@@ -875,7 +1281,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "efc7ec90"
+      "dh": "efc7ec90",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szName",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetSequenceId",
@@ -897,7 +1317,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "6d3c1609"
+      "dh": "6d3c1609",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetWeaponByHand",
@@ -918,7 +1348,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a356c1f8"
+      "dh": "a356c1f8",
+      "paramStorage": [
+        [
+          "nBodyLoc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInventory",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CheckItemTypeRequirement",
@@ -945,7 +1385,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "70b42ad8"
+      "dh": "70b42ad8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "psSkillFields",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nHandIdx",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CheckWeaponRequirements",
@@ -968,7 +1426,17 @@
         "D2SkillStrc",
         "D2UnitStrc"
       ],
-      "dh": "3c864567"
+      "dh": "3c864567",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkill",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CheckRestriction",
@@ -991,7 +1459,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "89a6557f"
+      "dh": "89a6557f",
+      "paramStorage": [
+        [
+          "pSkillTxt",
+          "EAX:4"
+        ],
+        [
+          "pUnitStrc",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CheckStartMana",
@@ -1013,7 +1491,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "72e9a584"
+      "dh": "72e9a584",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pSkill",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillsTxt",
@@ -1032,7 +1520,13 @@
         "D2SkillStrc",
         "D2SkillsTxt"
       ],
-      "dh": "bcdd6d10"
+      "dh": "bcdd6d10",
+      "paramStorage": [
+        [
+          "pSkill",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetShrineBonus",
@@ -1052,7 +1546,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5679ec17"
+      "dh": "5679ec17",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetLevelBonus",
@@ -1079,7 +1579,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "005947a3"
+      "dh": "005947a3",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillLevel",
@@ -1102,7 +1612,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6c0bd6dd"
+      "dh": "6c0bd6dd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bApplyBonus",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillBonus",
@@ -1125,7 +1649,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "0c3cc916"
+      "dh": "0c3cc916",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SetSkillMode",
@@ -1144,7 +1678,17 @@
         "D2SkillStrc",
         "uint32_t"
       ],
-      "dh": "90f5cec5"
+      "dh": "90f5cec5",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetMode",
@@ -1163,7 +1707,13 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "058932a2"
+      "dh": "058932a2",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetField0x10",
@@ -1185,7 +1735,13 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "14f39ab9"
+      "dh": "14f39ab9",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SetField0x10",
@@ -1207,7 +1763,17 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "77bb9803"
+      "dh": "77bb9803",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetInfo",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetField0x14",
@@ -1229,7 +1795,13 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "c7e76d15"
+      "dh": "c7e76d15",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SetField0x14",
@@ -1251,7 +1823,17 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "60fe40b5"
+      "dh": "60fe40b5",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetType",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ClearFields0x10_0x14",
@@ -1273,7 +1855,13 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "33336ae2"
+      "dh": "33336ae2",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetParam1",
@@ -1295,7 +1883,13 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "b9420f98"
+      "dh": "b9420f98",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetParam2",
@@ -1317,7 +1911,13 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "df158ba4"
+      "dh": "df158ba4",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetParam3",
@@ -1339,7 +1939,13 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "5bf6b166"
+      "dh": "5bf6b166",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetParam4",
@@ -1361,7 +1967,13 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "e11b0316"
+      "dh": "e11b0316",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_SetParam1",
@@ -1383,7 +1995,17 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "2a020d2e"
+      "dh": "2a020d2e",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPar1",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_SetParam2",
@@ -1405,7 +2027,17 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "5f3553d0"
+      "dh": "5f3553d0",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPar2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_SetParam3",
@@ -1427,7 +2059,17 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "cf1fcf72"
+      "dh": "cf1fcf72",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPar3",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_SetParam4",
@@ -1449,7 +2091,17 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "b39e572b"
+      "dh": "b39e572b",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPar4",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_SetFlags",
@@ -1471,7 +2123,17 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "c810f024"
+      "dh": "c810f024",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetFlags",
@@ -1490,7 +2152,13 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "1f212926"
+      "dh": "1f212926",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UNIT_GetSkillBySkillId",
@@ -1515,7 +2183,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "3a329148"
+      "dh": "3a329148",
+      "paramStorage": [
+        [
+          "pSkillsTxt",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_Skills_GetReqLevel",
@@ -1534,7 +2212,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "c2a0e24e"
+      "dh": "c2a0e24e",
+      "paramStorage": [
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetRequiredLevel",
@@ -1556,7 +2240,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "0df11ef3"
+      "dh": "0df11ef3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GetSkillLevelById",
@@ -1578,7 +2272,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "2e11ea87"
+      "dh": "2e11ea87",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SkillCalculateIfWeCanSkillThisSkill",
@@ -1606,7 +2310,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "a1a8d9c5"
+      "dh": "a1a8d9c5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SpendSkillPointOnSkill",
@@ -1630,7 +2344,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3edd5816"
+      "dh": "3edd5816",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CalcToHit",
@@ -1654,7 +2378,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3421b4ff"
+      "dh": "3421b4ff",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetTotalSkillLevel",
@@ -1679,7 +2417,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5f7d8215"
+      "dh": "5f7d8215",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CalculateManaCost",
@@ -1699,7 +2447,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "c98126de"
+      "dh": "c98126de",
+      "paramStorage": [
+        [
+          "eSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetValueByLevelBreakpoints",
@@ -1717,7 +2475,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "79bcf3a8"
+      "dh": "79bcf3a8",
+      "paramStorage": [
+        [
+          "nLevel",
+          "ECX:4"
+        ],
+        [
+          "pLevelArray",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CalculateBaseDamageFromStats",
@@ -1737,7 +2505,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ccbdf7ca"
+      "dh": "ccbdf7ca",
+      "paramStorage": [
+        [
+          "nType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ApplyElementalMasteryBonus",
@@ -1759,7 +2537,21 @@
         "eD2ElementalDamageTypeDWORD",
         "int32_t"
       ],
-      "dh": "b958968d"
+      "dh": "b958968d",
+      "paramStorage": [
+        [
+          "eElementType",
+          "ECX:4"
+        ],
+        [
+          "nBaseDamage",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_MinDamage",
@@ -1786,7 +2578,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "26317225"
+      "dh": "26317225",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bApplyMastery",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_MaxDamage",
@@ -1813,7 +2623,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "40c76ceb"
+      "dh": "40c76ceb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bApplyElemBonus",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetElementalLength",
@@ -1837,7 +2665,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6536d2b5"
+      "dh": "6536d2b5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetCharClassFromSkillId",
@@ -1855,7 +2701,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "db6f7288"
+      "dh": "db6f7288",
+      "paramStorage": [
+        [
+          "eSkillId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetCharClassFromSkillId_Validated",
@@ -1877,7 +2729,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e1acaccd"
+      "dh": "e1acaccd",
+      "paramStorage": [
+        [
+          "eSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutCharClass",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetQuantity",
@@ -1899,7 +2761,13 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "f3de0d98"
+      "dh": "f3de0d98",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_SetQuantity",
@@ -1921,7 +2789,17 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "2c2f087a"
+      "dh": "2c2f087a",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nQuantity",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetAnimModeIndex",
@@ -1939,7 +2817,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d2e4624e"
+      "dh": "d2e4624e",
+      "paramStorage": [
+        [
+          "nPlayerClass",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMonMode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_ValidateAnimModeForMonster",
@@ -1958,7 +2846,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5a46e2c9"
+      "dh": "5a46e2c9",
+      "paramStorage": [
+        [
+          "eAnimMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMonId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetStateTransformGfx",
@@ -1981,7 +2879,33 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "ba9e6d41"
+      "dh": "ba9e6d41",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnitType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pGfxClass",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pAnimMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_InitSkillSequence",
@@ -2008,7 +2932,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1c3f436f"
+      "dh": "1c3f436f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bIsPlayerUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSeqId",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetSkillWeaponClass",
@@ -2030,7 +2968,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "09823811"
+      "dh": "09823811",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CheckMonsterCorpseSelectable",
@@ -2052,7 +3000,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "97961f7f"
+      "dh": "97961f7f",
+      "paramStorage": [
+        [
+          "bCheckDead",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "D2CheckIfCorpseIsConsumable",
@@ -2074,7 +3032,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f304d18f"
+      "dh": "f304d18f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bCheckDead",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_IsCorpseValidForRevive",
@@ -2096,7 +3064,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "6cf372d7"
+      "dh": "6cf372d7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_IsSelectableCorpse",
@@ -2116,7 +3090,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "53694dc6"
+      "dh": "53694dc6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CanReviveMonster",
@@ -2138,7 +3118,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "17abb4fb"
+      "dh": "17abb4fb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_IsSelectableCorpse2",
@@ -2158,7 +3144,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "20745c6e"
+      "dh": "20745c6e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_IsSelectableCorpse3",
@@ -2178,7 +3170,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "9d7c675d"
+      "dh": "9d7c675d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetThrownWeaponBonus",
@@ -2206,7 +3204,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2c0fce21"
+      "dh": "2c0fce21",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nThrowBonusType",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetItemBonusDamage",
@@ -2232,7 +3252,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "82177241"
+      "dh": "82177241",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDamageType",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_HasLineOfSight",
@@ -2254,7 +3292,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bc931963"
+      "dh": "bc931963",
+      "paramStorage": [
+        [
+          "nSrcX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSrcY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDestX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDestY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x14]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_HasLineOfSightToUnit",
@@ -2281,7 +3345,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b5995042"
+      "dh": "b5995042",
+      "paramStorage": [
+        [
+          "nSrcX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSrcY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CalculateManaCostShifted",
@@ -2303,7 +3385,17 @@
         "D2SkillsTxt",
         "int32_t"
       ],
-      "dh": "09318f62"
+      "dh": "09318f62",
+      "paramStorage": [
+        [
+          "eSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CalculateDamageReduction",
@@ -2321,7 +3413,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "c8f9b497"
+      "dh": "c8f9b497",
+      "paramStorage": [
+        [
+          "nParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CalculateSynergyValue_Recursive",
@@ -2339,7 +3437,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "1a04ec85"
+      "dh": "1a04ec85",
+      "paramStorage": [
+        [
+          "nLevel",
+          "ECX:4"
+        ],
+        [
+          "nMinVal",
+          "EDX:4"
+        ],
+        [
+          "nMaxVal",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CalcDiminishingReturns",
@@ -2357,7 +3469,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a6db7457"
+      "dh": "a6db7457",
+      "paramStorage": [
+        [
+          "nLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMinVal",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxVal",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetParam01WithDiminishing",
@@ -2377,7 +3503,17 @@
         "D2SkillsTxt",
         "int32_t"
       ],
-      "dh": "33ba6d43"
+      "dh": "33ba6d43",
+      "paramStorage": [
+        [
+          "nLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetParam23WithDiminishing",
@@ -2397,7 +3533,17 @@
         "D2SkillsTxt",
         "int32_t"
       ],
-      "dh": "4ecfd349"
+      "dh": "4ecfd349",
+      "paramStorage": [
+        [
+          "nLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetParam45WithDiminishing",
@@ -2417,7 +3563,17 @@
         "D2SkillsTxt",
         "int32_t"
       ],
-      "dh": "982237cd"
+      "dh": "982237cd",
+      "paramStorage": [
+        [
+          "nLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_IsCoordInTown",
@@ -2440,7 +3596,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "11ee22fa"
+      "dh": "11ee22fa",
+      "paramStorage": [
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_FindTeleportPosition",
@@ -2478,7 +3648,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8d8c9d52"
+      "dh": "8d8c9d52",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnDestX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnDestY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetArrowModifierSkill",
@@ -2500,7 +3688,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "25117552"
+      "dh": "25117552",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnStatLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CheckSkillFlagBit1",
@@ -2519,7 +3717,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "64e71dc7"
+      "dh": "64e71dc7",
+      "paramStorage": [
+        [
+          "nSkillId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "STATES_RemoveAllProgressiveStates",
@@ -2547,7 +3751,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a3193aff"
+      "dh": "a3193aff",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_GetClassSkillByIndex",
@@ -2567,7 +3777,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fa6728c2"
+      "dh": "fa6728c2",
+      "paramStorage": [
+        [
+          "nClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AmountOfSkillsByClassId",
@@ -2586,7 +3806,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "83fa071a"
+      "dh": "83fa071a",
+      "paramStorage": [
+        [
+          "nClassId",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CalcAttackFrames",
@@ -2608,7 +3834,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6550d44b"
+      "dh": "6550d44b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetConcentrationDamageBonus",
@@ -2631,7 +3863,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6307c2f3"
+      "dh": "6307c2f3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CalcKickDamage",
@@ -2668,7 +3910,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6111143c"
+      "dh": "6111143c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnMinDamage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnMaxDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnDamagePercent",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_EvalDescCalcValue",
@@ -2722,7 +3982,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4606eae9"
+      "dh": "4606eae9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byCalcType",
+          "Stack[0x8]:1"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_DescCalcCallback_Eval",
@@ -2743,7 +4021,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2bdc23b8"
+      "dh": "2bdc23b8",
+      "paramStorage": [
+        [
+          "nCalcCode",
+          "CL:1"
+        ],
+        [
+          "pCalcCtx",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_EvalSkillDescCalc_CurrentLevel",
@@ -2769,7 +4057,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "02c94a57"
+      "dh": "02c94a57",
+      "paramStorage": [
+        [
+          "eSkill",
+          "ECX:4"
+        ],
+        [
+          "byCalcType",
+          "DL:1"
+        ],
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_EvalSkillDescCalc_Chained",
@@ -2791,7 +4097,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b89c840b"
+      "dh": "b89c840b",
+      "paramStorage": [
+        [
+          "eSkill",
+          "ECX:4"
+        ],
+        [
+          "byInnerCalcType",
+          "DL:1"
+        ],
+        [
+          "bCalcIndex",
+          "Stack[0x4]:1"
+        ],
+        [
+          "ppUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2GetSkillCalc",
@@ -2814,7 +4138,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c712c209"
+      "dh": "c712c209",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "calc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_EvalDescCalcBytecode",
@@ -2837,7 +4179,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "039ab152"
+      "dh": "039ab152",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCalcOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkillId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_UpdatePassiveSkillStats",
@@ -2873,7 +4233,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bda63477"
+      "dh": "bda63477",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_UpdateAllPassiveSkills",
@@ -2898,7 +4268,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "03b77c6e"
+      "dh": "03b77c6e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_RemoveSkill",
@@ -2926,7 +4302,21 @@
         "eD2Skills",
         "eD2States"
       ],
-      "dh": "e2f46af8"
+      "dh": "e2f46af8",
+      "paramStorage": [
+        [
+          "pUnitStrc",
+          "EBX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bDecrementLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_RemoveSkillCallback",
@@ -2947,7 +4337,25 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "bc7fd7ab"
+      "dh": "bc7fd7ab",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szSourceFile",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "AllocSkill",
@@ -2978,7 +4386,17 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "74e38215"
+      "dh": "74e38215",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AddSkill",
@@ -3003,7 +4421,33 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "d2830efb"
+      "dh": "d2830efb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bRemoveAtZero",
+          "Stack[0x10]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_AddOrRemoveItemSkill",
@@ -3031,7 +4475,33 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "19941b04"
+      "dh": "19941b04",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOwnerGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nCharges",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bRemove",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_SKILLS_AddOrRemoveItemSkill",
@@ -3051,7 +4521,33 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9dc00faf"
+      "dh": "9dc00faf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOwnerGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nCharges",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bRemove",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_HasEnoughManaForSkill",
@@ -3083,7 +4579,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e3355f8e"
+      "dh": "e3355f8e",
+      "paramStorage": [
+        [
+          "pSkillStrc",
+          "EAX:4"
+        ],
+        [
+          "pUnitStrc",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_HasRequiredWeaponOrQuantity",
@@ -3111,7 +4617,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "79a049d2"
+      "dh": "79a049d2",
+      "paramStorage": [
+        [
+          "pSkill",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CheckItemChargesRemaining",
@@ -3137,7 +4653,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "08598594"
+      "dh": "08598594",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pSkillStrc",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_IsDelayExpired",
@@ -3162,7 +4688,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "07bf889c"
+      "dh": "07bf889c",
+      "paramStorage": [
+        [
+          "pSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_CanUseSkill",
@@ -3194,7 +4730,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9971604f"
+      "dh": "9971604f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLS_SetSkillLevelBonus",
@@ -3218,7 +4764,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "bdcd50bc"
+      "dh": "bdcd50bc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLevelBonus",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_AdjustSkillLevelBonus",
@@ -3242,7 +4802,21 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "88461583"
+      "dh": "88461583",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDelta",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CalcMinDamage",
@@ -3269,7 +4843,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b7be5f65"
+      "dh": "b7be5f65",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bUseWeaponDamage",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_CalcMaxDamage",
@@ -3297,7 +4889,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d986be30"
+      "dh": "d986be30",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bUseWeaponDamage",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SKILL_GetPassiveElementCalc",
@@ -3320,7 +4930,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ea36815b"
+      "dh": "ea36815b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nElementType",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "STRUCT_FillSkillsList",
@@ -3345,7 +4973,13 @@
         "D2SkillStrc",
         "D2UnitStrc"
       ],
-      "dh": "84f86a10"
+      "dh": "84f86a10",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

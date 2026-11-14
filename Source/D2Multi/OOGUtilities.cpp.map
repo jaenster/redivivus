@@ -23,7 +23,29 @@
         "LSTATUS",
         "uint32_t"
       ],
-      "dh": "71a7ae49"
+      "dh": "71a7ae49",
+      "paramStorage": [
+        [
+          "szSubKey",
+          "ECX:4"
+        ],
+        [
+          "szValueName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwDataSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pdwDataSize",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "OOG_DisableControlCallback",
@@ -42,7 +64,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "3b6d0f43"
+      "dh": "3b6d0f43",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine",
@@ -61,7 +89,21 @@
       "usedTypes": [
         "D2WinEditBox"
       ],
-      "dh": "b4fe30d1"
+      "dh": "b4fe30d1",
+      "paramStorage": [
+        [
+          "pEditBox",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTextLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pKeyChar",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "OOG_WaitMCPThreadDonePump",
@@ -78,7 +120,13 @@
         "GetMCPThread",
         "D2WINMAIN_ClearMessageLoopFlag"
       ],
-      "dh": "64304652"
+      "dh": "64304652",
+      "paramStorage": [
+        [
+          "nFrameIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOG_PollMCPCharLogonPump",
@@ -101,7 +149,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b2867699"
+      "dh": "b2867699",
+      "paramStorage": [
+        [
+          "nFrameIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_OpenBrowserWithURL",
@@ -130,7 +184,13 @@
         "_STARTUPINFOA",
         "uint32_t"
       ],
-      "dh": "3fb5ef6c"
+      "dh": "3fb5ef6c",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_OpenChannelDialog",
@@ -180,7 +240,13 @@
         "CHATDLG_DestroyAllForms",
         "D2WINBUTTON_SetPressed"
       ],
-      "dh": "3327698f"
+      "dh": "3327698f",
+      "paramStorage": [
+        [
+          "szChannelName",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_JoinChannelFromInput",
@@ -203,7 +269,13 @@
         "D2ControlStrc",
         "WCHAR"
       ],
-      "dh": "de1318f9"
+      "dh": "de1318f9",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_JoinDefaultChannel",
@@ -229,7 +301,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "a59eb24c"
+      "dh": "a59eb24c",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_HandleChannelListDoubleClick",
@@ -258,7 +336,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f1ee13c0"
+      "dh": "f1ee13c0",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "AbleToJoinGameOrBanned",
@@ -284,7 +368,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "519139d8"
+      "dh": "519139d8",
+      "paramStorage": [
+        [
+          "bBanned",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004414c0",
@@ -351,7 +441,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "6f3d5301"
+      "dh": "6f3d5301",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGMENU_RestoreMCPConnection",
@@ -402,7 +498,13 @@
         "D2IniConfigStrc",
         "int32_t"
       ],
-      "dh": "1315bcc3"
+      "dh": "1315bcc3",
+      "paramStorage": [
+        [
+          "pD2IniConfig",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CHAT_SendOutOfGameMessage",
@@ -449,7 +551,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "22e169d0"
+      "dh": "22e169d0",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_SendChatMessageWide",
@@ -476,7 +584,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "d76e5e93"
+      "dh": "d76e5e93",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00442a70",
@@ -494,7 +608,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "e090a483"
+      "dh": "e090a483",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_GetStringEnd",
@@ -515,7 +639,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d3384b76"
+      "dh": "d3384b76",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_CheckCharacterLevel",
@@ -534,7 +664,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5312f3a3"
+      "dh": "5312f3a3",
+      "paramStorage": [
+        [
+          "pszLevelChars",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OOGMENU_AddGameToCache",
@@ -553,7 +689,13 @@
         "D2McpGameInfoStrc",
         "uint16_t"
       ],
-      "dh": "923a8c3f"
+      "dh": "923a8c3f",
+      "paramStorage": [
+        [
+          "pGameInfo",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OOGMENU_RefreshGameListDisplay",
@@ -606,7 +748,17 @@
       "usedTypes": [
         "uint16_t"
       ],
-      "dh": "d0cdcb1e"
+      "dh": "d0cdcb1e",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "wRequestId",
+          "DX:2"
+        ]
+      ]
     },
     {
       "name": "OOGMENU_RequestGameInfo",
@@ -645,7 +797,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "c97a91e1"
+      "dh": "c97a91e1",
+      "paramStorage": [
+        [
+          "nEntryIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "OOGMENU_DisplayGameDetails",
@@ -671,7 +829,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5f2ba7e5"
+      "dh": "5f2ba7e5",
+      "paramStorage": [
+        [
+          "pGameInfo",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UIMENU_DestroyLobbyAndJoinGameForms",
@@ -791,7 +955,13 @@
         "D2ControlMsg",
         "WCHAR"
       ],
-      "dh": "89aab5a7"
+      "dh": "89aab5a7",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_OnPressMaxPlayersDown",
@@ -814,7 +984,13 @@
         "D2ControlMsg",
         "WCHAR"
       ],
-      "dh": "cbc22198"
+      "dh": "cbc22198",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_OnPressLevelRestrictionUp",
@@ -837,7 +1013,13 @@
         "D2ControlMsg",
         "WCHAR"
       ],
-      "dh": "4a6ab9ca"
+      "dh": "4a6ab9ca",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_OnPressLevelRestrictionDown",
@@ -860,7 +1042,13 @@
         "D2ControlMsg",
         "WCHAR"
       ],
-      "dh": "e91a1544"
+      "dh": "e91a1544",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_SendPasswordPacket",
@@ -875,7 +1063,21 @@
       "calledFunctions": [
         "OOGUTIL_SendPasswordPacket"
       ],
-      "dh": "26b50993"
+      "dh": "26b50993",
+      "paramStorage": [
+        [
+          "dwParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_IsFirstCharPrintableAscii",
@@ -890,7 +1092,21 @@
       "calledFunctions": [
         "OOGUTIL_IsFirstCharPrintableAscii"
       ],
-      "dh": "a7ed68db"
+      "dh": "a7ed68db",
+      "paramStorage": [
+        [
+          "dwParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_FilterPrintableAsciiChar",
@@ -905,7 +1121,21 @@
       "calledFunctions": [
         "OOGUTIL_FilterPrintableAsciiChar"
       ],
-      "dh": "ddff253d"
+      "dh": "ddff253d",
+      "paramStorage": [
+        [
+          "dwParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_RefreshGameList",
@@ -971,7 +1201,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "5774b0c2"
+      "dh": "5774b0c2",
+      "paramStorage": [
+        [
+          "nFrameIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UIMENU_TitleClickCallback",
@@ -986,7 +1222,13 @@
       "calledFunctions": [
         "UIMENU_TitleClickCallback"
       ],
-      "dh": "3af643e6"
+      "dh": "3af643e6",
+      "paramStorage": [
+        [
+          "pUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOG_PollMCPJoinD2GSPump",
@@ -1009,7 +1251,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d4cf1408"
+      "dh": "d4cf1408",
+      "paramStorage": [
+        [
+          "nFrameIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_OnPressWaitInLineCancel",
@@ -1030,7 +1278,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "292d550a"
+      "dh": "292d550a",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_HandleGameListEntry",
@@ -1054,7 +1308,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0c09588e"
+      "dh": "0c09588e",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EDX:4"
+        ],
+        [
+          "pEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_ProcessGameListEntry",
@@ -1088,7 +1356,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "fbc23378"
+      "dh": "fbc23378",
+      "paramStorage": [
+        [
+          "pControl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_OnPressNoAction",
@@ -1106,7 +1380,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "12c2c818"
+      "dh": "12c2c818",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_OnPressDifficultyNormal",
@@ -1125,7 +1405,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "8828bdc1"
+      "dh": "8828bdc1",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_OnPressDifficultyNightmare",
@@ -1144,7 +1430,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "b9ad1bab"
+      "dh": "b9ad1bab",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_OnPressDifficultyHell",
@@ -1163,7 +1455,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "f502f2a3"
+      "dh": "f502f2a3",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_SetProfileUser",
@@ -1179,7 +1477,21 @@
         "OOGUTIL_OnPressProfileLadder",
         "OOGUTIL_SetProfileUser"
       ],
-      "dh": "11f48e0f"
+      "dh": "11f48e0f",
+      "paramStorage": [
+        [
+          "nHardcoreFlag",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExpansionFlag",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szCharacterName",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "UIMENU_PlayerProfileLabels",
@@ -1245,7 +1557,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "11142629"
+      "dh": "11142629",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_GetProfileCharacterName",
@@ -1261,7 +1579,13 @@
         "OOGUTIL_GetProfileCharacterName",
         "SStrCopy"
       ],
-      "dh": "e8a4e376"
+      "dh": "e8a4e376",
+      "paramStorage": [
+        [
+          "szDest",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_OnPressProfileClose",
@@ -1280,7 +1604,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "6352722e"
+      "dh": "6352722e",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_OnPressProfileOK",
@@ -1304,7 +1634,13 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "ab3cd70f"
+      "dh": "ab3cd70f",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UIMENU_DialogWindowChatCommands",
@@ -1413,7 +1749,21 @@
         "D2WINTEXTBOX_SetSelectedLine",
         "OOGUTIL_SendPasswordPacket"
       ],
-      "dh": "34f001a4"
+      "dh": "34f001a4",
+      "paramStorage": [
+        [
+          "dwParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "EDITBOX_Cb_OOGUTIL_SetJoinGameError",
@@ -1429,7 +1779,13 @@
         "EDITBOX_Cb_OOGUTIL_SetJoinGameError",
         "OOGUTIL_SetJoinGameError"
       ],
-      "dh": "3e514bba"
+      "dh": "3e514bba",
+      "paramStorage": [
+        [
+          "pUnknown",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_HandleGameCreation",
@@ -1461,7 +1817,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "04a11dd7"
+      "dh": "04a11dd7",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_UpdateLevelRestrictionControls",
@@ -1559,7 +1921,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "f419ad2c"
+      "dh": "f419ad2c",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_OnPressLevelRestrictionCheckbox",
@@ -1586,7 +1954,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "0fa042fe"
+      "dh": "0fa042fe",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "EDITBOX_Cb_OOGUTIL_RefreshGameList",
@@ -1602,7 +1976,13 @@
         "EDITBOX_Cb_OOGUTIL_RefreshGameList",
         "OOGUTIL_RefreshGameList"
       ],
-      "dh": "e71d24b6"
+      "dh": "e71d24b6",
+      "paramStorage": [
+        [
+          "pUnknown",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTILITIES_EditBoxInput_RefreshGameList_ForMaxPlayers",
@@ -1618,7 +1998,13 @@
         "OOGUTILITIES_EditBoxInput_RefreshGameList_ForMaxPlayers",
         "OOGUTIL_RefreshGameList"
       ],
-      "dh": "b6f04b29"
+      "dh": "b6f04b29",
+      "paramStorage": [
+        [
+          "pUnknown",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTILITIES_EditBoxInput_RefreshGameList_ForLevelRestriction",
@@ -1634,7 +2020,13 @@
         "OOGUTILITIES_EditBoxInput_RefreshGameList_ForLevelRestriction",
         "OOGUTIL_RefreshGameList"
       ],
-      "dh": "7ea1b11c"
+      "dh": "7ea1b11c",
+      "paramStorage": [
+        [
+          "pUnknown",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NET_MCP_CLIENT_PrepareGameCreatePacket",
@@ -1675,7 +2067,13 @@
         "int32_t",
         "mcp0x03data"
       ],
-      "dh": "f6775466"
+      "dh": "f6775466",
+      "paramStorage": [
+        [
+          "pControl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_CreateEditProfileDialog",
@@ -1707,7 +2105,21 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "cb6eeab7"
+      "dh": "cb6eeab7",
+      "paramStorage": [
+        [
+          "szCharacterName",
+          "ECX:4"
+        ],
+        [
+          "nHardcoreFlag",
+          "EDX:4"
+        ],
+        [
+          "nExpansionFlag",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_CreateViewProfileDialog",
@@ -1739,7 +2151,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "73003460"
+      "dh": "73003460",
+      "paramStorage": [
+        [
+          "szUserName",
+          "ECX:4"
+        ],
+        [
+          "szCharacterName",
+          "EDX:4"
+        ],
+        [
+          "nHardcoreFlag",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExpansionFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UIMENU_JoinGame",
@@ -1842,7 +2272,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "b162ba96"
+      "dh": "b162ba96",
+      "paramStorage": [
+        [
+          "szString",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nChar",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_GetAccountName",
@@ -1858,7 +2298,13 @@
         "SStrChr",
         "OOGUTIL_GetAccountName"
       ],
-      "dh": "a7f44f9b"
+      "dh": "a7f44f9b",
+      "paramStorage": [
+        [
+          "szUserName",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_CopyChannelName",
@@ -1876,7 +2322,17 @@
         "memcpy",
         "SStrCopy"
       ],
-      "dh": "3d72ef68"
+      "dh": "3d72ef68",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_ValidateUsername1",
@@ -1900,7 +2356,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "450deb0c"
+      "dh": "450deb0c",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_ValidateUsername2",
@@ -1924,7 +2386,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "48110495"
+      "dh": "48110495",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_ValidateUsername3",
@@ -1950,7 +2418,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "d8a1be87"
+      "dh": "d8a1be87",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_ValidateUsername4",
@@ -1974,7 +2448,13 @@
         "WCHAR",
         "uint8_t"
       ],
-      "dh": "026a5b2f"
+      "dh": "026a5b2f",
+      "paramStorage": [
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_AppendChatText",
@@ -2000,7 +2480,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "86b10ede"
+      "dh": "86b10ede",
+      "paramStorage": [
+        [
+          "wszText",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OOGUTIL_ValidateStringFilter",
@@ -2020,7 +2506,17 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "53035efe"
+      "dh": "53035efe",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

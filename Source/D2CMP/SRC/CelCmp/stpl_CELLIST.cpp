@@ -66,7 +66,7 @@ template<> TSExplicitList<::CELLIST, -572662307>* TSExplicitList<CELLIST, -57266
     return this;
 }
 
-template<> void TSExplicitList<CELLIST, -572662307>::Clear() {
+template<> __attribute__((noinline)) inline void TSExplicitList<CELLIST, -572662307>::Clear() {
     TSLink<::CELLIST>* pTVar2;
     TSLink<::CELLIST>* pTVar3;
     uint32_t* pBackLink;
@@ -173,8 +173,9 @@ template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::DeleteNode(::CELLIST
 
 // stpl-orphan: a COMDAT copy in D2CMP::SRC::CelCmp::CELLIST that no member owns
 void __thiscall Destructor_Unreferenced(::CELLIST * pThis) {
-    pThis->m_frames.UnlinkAll();
-    TSLink<::TCELENTRY>* pTVar1 = &pThis->m_frames.m_terminator;
+    TSList<TCELENTRY, TSGetLink<TCELENTRY>>* pList = &pThis->m_frames;
+    pList->UnlinkAll();
+    TSLink<::TCELENTRY>* pTVar1 = &pList->m_terminator;
     TSLink<::TCELENTRY>* nNext = pTVar1->m_prevlink;
     if (nNext) {
       TSLink<::TCELENTRY>** pBackLink;
@@ -301,7 +302,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
     Storm::Source::SMem::SMemFree(this->m_data, D2CMP::s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
 }
 
-template<> ::CELLIST * TSHashTable<CELLIST, HASHKEY_NONE>::Ptr(uint32_t dwHashVal, HASHKEY_NONE * pKey) {
+template<> __attribute__((noinline)) inline ::CELLIST * TSHashTable<CELLIST, HASHKEY_NONE>::Ptr(uint32_t dwHashVal, HASHKEY_NONE * pKey) {
     intptr_t uBucketHead = this->tSlotListArray.m_data[dwHashVal & this->nSlotMask].m_terminator.m_next;
     ::CELLIST* pEntry = (::CELLIST*)(uBucketHead <= 0 ? 0 : uBucketHead);
     while (true) {
@@ -318,7 +319,7 @@ template<> ::CELLIST * TSHashTable<CELLIST, HASHKEY_NONE>::Ptr(uint32_t dwHashVa
     return pEntry;
 }
 
-template<> void TSGrowableArray<CELLIST>::Destructor() {
+template<> __attribute__((noinline)) inline void TSGrowableArray<CELLIST>::Destructor() {
     ::CELLIST* nEntryAddr;
     TSLink<::TCELENTRY>** pBackLink;
     TSLink<::TCELENTRY>* nNext;
@@ -410,7 +411,7 @@ template<> __attribute__((noinline)) inline uint32_t TSExportTableSimple<CELLIST
     return this->nSequence;
 }
 
-template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::SetCount(uint32_t nCount) {
+template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::SetCount(uint32_t nCount) {
     TSLink<::CELLIST>* pTVar1;
     uint32_t uVar2;
     TSLink<::CELLIST>* pTVar3;
@@ -972,7 +973,7 @@ template<> __attribute__((noinline)) inline int32_t TSHashTable<CELLIST, HASHKEY
 }
 
 // Destructor: free all chunk lists and pool nodes, unlink free lists, call base hash table dtor
-template<> void TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::Destructor() {
+template<> __attribute__((noinline)) inline void TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::Destructor() {
     TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>** pBackLink;
     this->pVtable = (TSHashTable<::CELLIST, HASHKEY_NONE>::Vtable*)(void*)TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>::vftable;
     this->tChunkList.Clear();

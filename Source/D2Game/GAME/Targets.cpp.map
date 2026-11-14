@@ -24,7 +24,21 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c013ead0"
+      "dh": "c013ead0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pNodeUnknown",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CreateUnitNode",
@@ -47,7 +61,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "dad77eb5"
+      "dh": "dad77eb5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnknown",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTableIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "AddNodeToTable",
@@ -70,7 +102,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "62c12d5e"
+      "dh": "62c12d5e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pNodeUnknown",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNodeTableIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "UNIT_FreeUnitNodes",
@@ -91,7 +141,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "60cc7168"
+      "dh": "60cc7168",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_FreeUnitNodes",
@@ -112,7 +172,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "8926bf73"
+      "dh": "8926bf73",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "TARGETS_FreeAllUnitNodes",
@@ -133,7 +203,13 @@
         "D2UnitNodeStrc *",
         "SGAMEDATA"
       ],
-      "dh": "a13f2efc"
+      "dh": "a13f2efc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

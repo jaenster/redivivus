@@ -18,7 +18,7 @@
 typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext);
 #endif
 
-template<> void TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalClear(int32_t bUnlinkOnly) {
+template<> __attribute__((noinline)) inline void TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalClear(int32_t bUnlinkOnly) {
     TSExplicitList<::MappingEntryNode, -572662307>* pTVar1;
     ::MappingEntryNode* pNode;
     TSLink<::MappingEntryNode>* pSlot;
@@ -437,7 +437,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
     this->m_count = nCount;
 }
 
-template<> void TSHashTable<MappingEntryNode, HASHKEY_STRI>::Destructor() {
+template<> __attribute__((noinline)) inline void TSHashTable<MappingEntryNode, HASHKEY_STRI>::Destructor() {
     pfnEHHandlerRoutine pExHandler = D2Common::Chat::__GSHandlerCheck_EH_6ca366;
     void* pExSave = ExceptionList;
     ExceptionList = &pExSave;

@@ -19,7 +19,13 @@
         "memset",
         "Free"
       ],
-      "dh": "cdb9c910"
+      "dh": "cdb9c910",
+      "paramStorage": [
+        [
+          "bFreeAll",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_AllocEntry",
@@ -48,7 +54,21 @@
         "D2TileLibraryEntryStrc",
         "uint32_t"
       ],
-      "dh": "b8bdba34"
+      "dh": "b8bdba34",
+      "paramStorage": [
+        [
+          "pTile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwReserved",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_FreeEntry",
@@ -67,7 +87,13 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc"
       ],
-      "dh": "82523d51"
+      "dh": "82523d51",
+      "paramStorage": [
+        [
+          "pTile",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_LoadFromFile",
@@ -89,7 +115,13 @@
       "usedTypes": [
         "D2MPQFileStrc"
       ],
-      "dh": "00698595"
+      "dh": "00698595",
+      "paramStorage": [
+        [
+          "szFilename",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_SetMaxSize",
@@ -104,7 +136,13 @@
       "calledFunctions": [
         "SPRITECACHE_SetMaxSize"
       ],
-      "dh": "f409cf0f"
+      "dh": "f409cf0f",
+      "paramStorage": [
+        [
+          "nSize",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_GetStats",
@@ -123,7 +161,25 @@
         "ULONG_PTR",
         "uint32_t"
       ],
-      "dh": "6c38262c"
+      "dh": "6c38262c",
+      "paramStorage": [
+        [
+          "pnSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "phHandle",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnHitCount",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnUsedPercent",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_Lock",
@@ -173,7 +229,13 @@
       "usedTypes": [
         "D2TileLibraryHeaderStrc"
       ],
-      "dh": "87b84c77"
+      "dh": "87b84c77",
+      "paramStorage": [
+        [
+          "pTileLibrary",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_InitLRUCache",
@@ -194,7 +256,17 @@
         "D2PoolManagerStrc",
         "uint32_t"
       ],
-      "dh": "b6739c73"
+      "dh": "b6739c73",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPoolManager",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_ReleaseHashEntry",
@@ -217,7 +289,13 @@
         "D2GfxHashEntryStrc",
         "int32_t"
       ],
-      "dh": "41d40ae0"
+      "dh": "41d40ae0",
+      "paramStorage": [
+        [
+          "pHashEntry",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IMAGE_ReturnImageExtension",
@@ -235,7 +313,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "748c8260"
+      "dh": "748c8260",
+      "paramStorage": [
+        [
+          "bUseDcc",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_BuildPath",
@@ -256,7 +340,25 @@
         "uint32_t",
         "va_list"
       ],
-      "dh": "0754ae9e"
+      "dh": "0754ae9e",
+      "paramStorage": [
+        [
+          "szText1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bUseDcc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "vaArgs",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SetCompressedDataGlobalAndSaveItToRegistry",
@@ -272,7 +374,13 @@
         "SetCompressedDataGlobalAndSaveItToRegistry",
         "SRegLoadValue"
       ],
-      "dh": "cf71d29f"
+      "dh": "cf71d29f",
+      "paramStorage": [
+        [
+          "bUseCompressedData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_FindOrLoad",
@@ -290,7 +398,17 @@
       "usedTypes": [
         "D2GfxDataStrc"
       ],
-      "dh": "89f747f6"
+      "dh": "89f747f6",
+      "paramStorage": [
+        [
+          "szText",
+          "EAX:4"
+        ],
+        [
+          "pGfxData",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_LoadDC6",
@@ -312,7 +430,21 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "5811de60"
+      "dh": "5811de60",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGfxData",
+          "ESI:4"
+        ],
+        [
+          "szText2",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_LoadDCC",
@@ -350,7 +482,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "137d8611"
+      "dh": "137d8611",
+      "paramStorage": [
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szCelName",
+          "EDI:4"
+        ],
+        [
+          "pGfxData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_FindFrameBlock",
@@ -374,7 +520,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9e037a34"
+      "dh": "9e037a34",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "ECX:4"
+        ],
+        [
+          "pFrameData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDecodeState",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_GetFrameBlock",
@@ -397,7 +557,17 @@
         "DC6Block",
         "uint8_t"
       ],
-      "dh": "91863b5a"
+      "dh": "91863b5a",
+      "paramStorage": [
+        [
+          "pCacheBlock",
+          "EAX:4"
+        ],
+        [
+          "pGfxData",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_LoadAndCacheDC6",
@@ -429,7 +599,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "55eccc6b"
+      "dh": "55eccc6b",
+      "paramStorage": [
+        [
+          "pCelEntry",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGfxData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCacheBlock",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_Unlock_Unref_005fee00",
@@ -545,7 +729,13 @@
       "calledFunctions": [
         "Unreferenced_005fee80"
       ],
-      "dh": "c3f0f361"
+      "dh": "c3f0f361",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFX_AllocSpriteCache",
@@ -569,7 +759,25 @@
         "fnSpriteCacheEntryRelease",
         "uint32_t"
       ],
-      "dh": "a9e6341e"
+      "dh": "a9e6341e",
+      "paramStorage": [
+        [
+          "pGfxMemory",
+          "ECX:4"
+        ],
+        [
+          "pMemory",
+          "EDX:4"
+        ],
+        [
+          "pMaxMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnReleaseEntry",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_EvictOldest",
@@ -590,7 +798,21 @@
         "D2SpriteCacheEntryStrc",
         "int32_t"
       ],
-      "dh": "24285708"
+      "dh": "24285708",
+      "paramStorage": [
+        [
+          "bPriority",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGfxMemory",
+          "EAX:4"
+        ],
+        [
+          "pEntry",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_AddToLRU",
@@ -611,7 +833,17 @@
         "D2SpriteCacheEntryStrc *",
         "int32_t"
       ],
-      "dh": "04b32f80"
+      "dh": "04b32f80",
+      "paramStorage": [
+        [
+          "pGfxMemory",
+          "EDX:4"
+        ],
+        [
+          "bPriority",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_RemoveFromLRU",
@@ -634,7 +866,17 @@
         "D2SpriteCacheEntryStrc",
         "int32_t"
       ],
-      "dh": "d9275f37"
+      "dh": "d9275f37",
+      "paramStorage": [
+        [
+          "pGfxMemory",
+          "ECX:4"
+        ],
+        [
+          "pEntry",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_CountPendingLoads",
@@ -684,7 +926,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3012fbb1"
+      "dh": "3012fbb1",
+      "paramStorage": [
+        [
+          "eUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_CancelPendingLoads",
@@ -730,7 +986,21 @@
         "D2SpriteCacheEntryStrc",
         "int32_t"
       ],
-      "dh": "a9896b7e"
+      "dh": "a9896b7e",
+      "paramStorage": [
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bPriority",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pGfxMemory",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_EvictEntry",
@@ -753,7 +1023,21 @@
         "D2SpriteCacheEntryStrc",
         "uint32_t"
       ],
-      "dh": "cef0f88a"
+      "dh": "cef0f88a",
+      "paramStorage": [
+        [
+          "pGfxMemory",
+          "ECX:4"
+        ],
+        [
+          "pCandidate",
+          "EDX:4"
+        ],
+        [
+          "bPreferOld",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_AllocateMemory",
@@ -778,7 +1062,17 @@
         "D2SpriteCacheEntryStrc",
         "int32_t"
       ],
-      "dh": "5cb9c65c"
+      "dh": "5cb9c65c",
+      "paramStorage": [
+        [
+          "pCache",
+          "ECX:4"
+        ],
+        [
+          "pEntry",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_FreeMemory",
@@ -804,7 +1098,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "97a91b91"
+      "dh": "97a91b91",
+      "paramStorage": [
+        [
+          "pGfxMemory",
+          "ECX:4"
+        ],
+        [
+          "pCacheEntry",
+          "EDX:4"
+        ],
+        [
+          "nFreedSize",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bEvictPriority",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_DecodeFrameByIndex",
@@ -827,7 +1139,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "689a4f1f"
+      "dh": "689a4f1f",
+      "paramStorage": [
+        [
+          "pReadBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nReadSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRequest",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_LoadCelFileAndCache",
@@ -861,7 +1187,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "213431fa"
+      "dh": "213431fa",
+      "paramStorage": [
+        [
+          "szCelPath",
+          "ECX:4"
+        ],
+        [
+          "pCelEntry",
+          "EDX:4"
+        ],
+        [
+          "pCacheEntry",
+          "EDI:4"
+        ],
+        [
+          "pGfxData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDirection",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFrameCount",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_LoadFromArchive",
@@ -889,7 +1241,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dd0d09bf"
+      "dh": "dd0d09bf",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "EAX:4"
+        ],
+        [
+          "nFrameStep",
+          "EDX:4"
+        ],
+        [
+          "pCacheEntry",
+          "ESI:4"
+        ],
+        [
+          "pCelEntry",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFrameGroupIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szFileName",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_ReleaseMemory",
@@ -910,7 +1288,13 @@
         "D2GfxMemoryStrc",
         "D2SpriteCacheEntryStrc"
       ],
-      "dh": "0ee68b35"
+      "dh": "0ee68b35",
+      "paramStorage": [
+        [
+          "pGfxMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_AllocEntry2",
@@ -939,7 +1323,25 @@
         "uint32_t",
         "void *"
       ],
-      "dh": "0241e118"
+      "dh": "0241e118",
+      "paramStorage": [
+        [
+          "pGfxMemory",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ],
+        [
+          "pInitData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bPriority",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "GFX_InitCelDataCache",
@@ -972,7 +1374,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7a33e03d"
+      "dh": "7a33e03d",
+      "paramStorage": [
+        [
+          "nFlags",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwCacheBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnitCacheBytes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwAvailMemOverride",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_Shutdown",
@@ -994,7 +1414,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4c0ce220"
+      "dh": "4c0ce220",
+      "paramStorage": [
+        [
+          "bReleaseMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_LoadDCCAndCache",
@@ -1028,7 +1454,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1affd803"
+      "dh": "1affd803",
+      "paramStorage": [
+        [
+          "pCelEntry",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFrameGroupIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFrameStep",
+          "Stack[0xc]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pGfxData",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_LoadCelAndCache",
@@ -1061,7 +1509,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b7a23f1d"
+      "dh": "b7a23f1d",
+      "paramStorage": [
+        [
+          "pCelEntry",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFrameGroupIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFrameStep",
+          "Stack[0xc]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pGfxData",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_LoadSpriteWithConversion",
@@ -1092,7 +1562,37 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c4012fbf"
+      "dh": "c4012fbf",
+      "paramStorage": [
+        [
+          "pCelEntry",
+          "ECX:4"
+        ],
+        [
+          "pGfxData",
+          "EDX:4"
+        ],
+        [
+          "nFrameGroupIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFrameStep",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bLoadAsCel",
+          "Stack[0x10]:4"
+        ],
+        [
+          "szText2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_GetOrLoadSprite",
@@ -1129,7 +1629,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2002d513"
+      "dh": "2002d513",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bCheckOnly",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bLoadAsCel",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SPRITECACHE_PrecacheSpriteSync",
@@ -1162,7 +1676,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6b4136e1"
+      "dh": "6b4136e1",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

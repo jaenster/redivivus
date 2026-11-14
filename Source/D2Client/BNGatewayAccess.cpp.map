@@ -20,7 +20,13 @@
         "D2BNetGatewayAccessStr",
         "int32_t"
       ],
-      "dh": "379c3312"
+      "dh": "379c3312",
+      "paramStorage": [
+        [
+          "pGatewayAccess",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CurGateway",
@@ -39,7 +45,13 @@
         "D2BNetGatewayAccessStr",
         "int32_t"
       ],
-      "dh": "e9d67d55"
+      "dh": "e9d67d55",
+      "paramStorage": [
+        [
+          "pGatewayAccess",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "operator=",
@@ -54,7 +66,17 @@
       "usedTypes": [
         "D2BNetGatewayAccessStr"
       ],
-      "dh": "08a97868"
+      "dh": "08a97868",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

@@ -19,7 +19,13 @@
       "usedTypes": [
         "Report"
       ],
-      "dh": "dbeb0f8e"
+      "dh": "dbeb0f8e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -40,7 +46,17 @@
         "Report",
         "uint32_t"
       ],
-      "dh": "b7737b2f"
+      "dh": "b7737b2f",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor",
@@ -59,7 +75,13 @@
       "usedTypes": [
         "Report"
       ],
-      "dh": "a2503255"
+      "dh": "a2503255",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "Open",
@@ -87,7 +109,17 @@
         "__time64_t",
         "int8_t"
       ],
-      "dh": "ffcfc44c"
+      "dh": "ffcfc44c",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "szFileName",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Close",
@@ -107,7 +139,13 @@
         "Report",
         "int8_t"
       ],
-      "dh": "d6c55b8c"
+      "dh": "d6c55b8c",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "IsOpen",
@@ -125,7 +163,13 @@
       "usedTypes": [
         "Report"
       ],
-      "dh": "610c43b5"
+      "dh": "610c43b5",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "AddAttachment",
@@ -149,7 +193,21 @@
         "int8_t",
         "uint32_t"
       ],
-      "dh": "f2e3562a"
+      "dh": "f2e3562a",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "szPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bCopyToReportDir",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "Printf",

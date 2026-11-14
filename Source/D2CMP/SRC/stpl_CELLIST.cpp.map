@@ -20,7 +20,17 @@
         "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
         "int32_t"
       ],
-      "dh": "f4cb3f24"
+      "dh": "f4cb3f24",
+      "paramStorage": [
+        [
+          "pLockedHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bForWriting",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "NextLink",
@@ -39,7 +49,13 @@
         "TSLink<CELLIST>",
         "intptr_t"
       ],
-      "dh": "d4c12c49"
+      "dh": "d4c12c49",
+      "paramStorage": [
+        [
+          "nLinkOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NextLink_Unreferenced",
@@ -58,7 +74,17 @@
         "TSLink<CELLIST>",
         "intptr_t"
       ],
-      "dh": "ac413fac"
+      "dh": "ac413fac",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nLinkOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "IsForWriting",
@@ -77,7 +103,13 @@
         "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
         "int32_t"
       ],
-      "dh": "ffec2456"
+      "dh": "ffec2456",
+      "paramStorage": [
+        [
+          "nLockedHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "OperatorIndex",
@@ -97,7 +129,13 @@
         "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
         "uint32_t"
       ],
-      "dh": "8d15a042"
+      "dh": "8d15a042",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ComputeSlot",
@@ -116,7 +154,13 @@
         "TSHashTable<CELLIST, HASHKEY_NONE>",
         "uint32_t"
       ],
-      "dh": "0530aec0"
+      "dh": "0530aec0",
+      "paramStorage": [
+        [
+          "dwHashVal",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NextLink_Unreferenced2",
@@ -135,7 +179,17 @@
         "TSLink<CELLIST>",
         "intptr_t"
       ],
-      "dh": "997fcf5c"
+      "dh": "997fcf5c",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nLinkOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CalcChunkSize",
@@ -154,7 +208,13 @@
         "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
         "uint32_t"
       ],
-      "dh": "da0c8ed1"
+      "dh": "da0c8ed1",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Assign",
@@ -173,7 +233,13 @@
         "TSExplicitList<CELLIST, -572662307>",
         "TSLink<CELLIST>"
       ],
-      "dh": "6082938a"
+      "dh": "6082938a",
+      "paramStorage": [
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unlock",
@@ -192,7 +258,13 @@
         "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
         "int32_t"
       ],
-      "dh": "e3e23a44"
+      "dh": "e3e23a44",
+      "paramStorage": [
+        [
+          "nLockedHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Link",
@@ -212,7 +284,13 @@
         "TSExplicitList<CELLIST, -572662307>",
         "TSLink<CELLIST>"
       ],
-      "dh": "96910026"
+      "dh": "96910026",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unlink",
@@ -234,7 +312,13 @@
         "TSLink<CELLIST> *",
         "intptr_t"
       ],
-      "dh": "0cbb5d88"
+      "dh": "0cbb5d88",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RawNext",
@@ -253,7 +337,13 @@
         "CELLIST",
         "TSExplicitList<CELLIST, -572662307>"
       ],
-      "dh": "dd058652"
+      "dh": "dd058652",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Link_Unreferenced",
@@ -273,7 +363,17 @@
         "TSExplicitList<CELLIST, -572662307>",
         "TSLink<CELLIST>"
       ],
-      "dh": "6c2135b2"
+      "dh": "6c2135b2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "ptr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkNode",
@@ -295,7 +395,13 @@
         "TSLink<CELLIST> *",
         "uint32_t"
       ],
-      "dh": "297f5a72"
+      "dh": "297f5a72",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetLinkOffset",
@@ -315,7 +421,13 @@
         "TSLink<CELLIST>",
         "int32_t"
       ],
-      "dh": "656f7b1e"
+      "dh": "656f7b1e",
+      "paramStorage": [
+        [
+          "nLinkOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Next",
@@ -335,7 +447,13 @@
         "TSExplicitList<CELLIST, -572662307>",
         "uint32_t"
       ],
-      "dh": "192072db"
+      "dh": "192072db",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetLinkOffset_Unreferenced",
@@ -355,7 +473,17 @@
         "TSLink<CELLIST>",
         "int32_t"
       ],
-      "dh": "cc5e8c04"
+      "dh": "cc5e8c04",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nLinkOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CopyConstructor",
@@ -374,7 +502,13 @@
         "TSExplicitList<CELLIST, -572662307>",
         "TSLink<CELLIST>"
       ],
-      "dh": "61b4988b"
+      "dh": "61b4988b",
+      "paramStorage": [
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SyncLeaveLock",
@@ -393,7 +527,13 @@
         "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
         "int32_t"
       ],
-      "dh": "a873df1c"
+      "dh": "a873df1c",
+      "paramStorage": [
+        [
+          "nLockedHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor",
@@ -437,7 +577,21 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "de68d95b"
+      "dh": "de68d95b",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLinkType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pExisting",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkNode_Unreferenced",
@@ -459,7 +613,17 @@
         "TSLink<CELLIST> *",
         "uint32_t"
       ],
-      "dh": "0b160698"
+      "dh": "0b160698",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "ptr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Delete",
@@ -479,7 +643,13 @@
         "CELLIST",
         "TSHashTable<CELLIST, HASHKEY_NONE>"
       ],
-      "dh": "49982347"
+      "dh": "49982347",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkAll",
@@ -541,7 +711,13 @@
         "TSExplicitList<CELLIST, -572662307>",
         "int32_t"
       ],
-      "dh": "730d0604"
+      "dh": "730d0604",
+      "paramStorage": [
+        [
+          "nLinkOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Delete",
@@ -561,7 +737,13 @@
         "CELLIST",
         "TSExportTableSimple<CELLIST, HCELLIST__*, 0>"
       ],
-      "dh": "1f95531c"
+      "dh": "1f95531c",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "InternalClear",
@@ -585,7 +767,13 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "cd467cdf"
+      "dh": "cd467cdf",
+      "paramStorage": [
+        [
+          "bUnlinkOnly",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Destructor_Unreferenced",
@@ -607,7 +795,13 @@
         "TSLink<CELLIST> *",
         "uint32_t"
       ],
-      "dh": "f133238d"
+      "dh": "f133238d",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Destructor",
@@ -650,7 +844,17 @@
         "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
         "int32_t"
       ],
-      "dh": "2bc9f2cd"
+      "dh": "2bc9f2cd",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLockedHandle",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Clear",
@@ -778,7 +982,13 @@
         "TSGrowableArray<CELLIST>",
         "uint32_t"
       ],
-      "dh": "3103b879"
+      "dh": "3103b879",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Assign",
@@ -796,7 +1006,13 @@
       "usedTypes": [
         "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>"
       ],
-      "dh": "deabba2a"
+      "dh": "deabba2a",
+      "paramStorage": [
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00603f70",
@@ -811,7 +1027,21 @@
       "calledFunctions": [
         "Unreferenced_00603f70"
       ],
-      "dh": "ccd222df"
+      "dh": "ccd222df",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ],
+        [
+          "param_2",
+          "EDX:4"
+        ],
+        [
+          "param_3",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CopyConstructor",
@@ -829,7 +1059,13 @@
       "usedTypes": [
         "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>"
       ],
-      "dh": "7238d67c"
+      "dh": "7238d67c",
+      "paramStorage": [
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LinkNode",
@@ -852,7 +1088,21 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "8c0b5c6b"
+      "dh": "8c0b5c6b",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLinkType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pExisting",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

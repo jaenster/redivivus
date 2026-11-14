@@ -21,7 +21,13 @@
         "TSLink<TCELENTRY>",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>"
       ],
-      "dh": "28768894"
+      "dh": "28768894",
+      "paramStorage": [
+        [
+          "ptr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "LinkNode",
@@ -44,7 +50,21 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "dfc87226"
+      "dh": "dfc87226",
+      "paramStorage": [
+        [
+          "ptr",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLinkType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pExisting",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Next",
@@ -64,7 +84,13 @@
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
         "intptr_t"
       ],
-      "dh": "930507e8"
+      "dh": "930507e8",
+      "paramStorage": [
+        [
+          "ptr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkNode",
@@ -86,7 +112,13 @@
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
         "uint32_t"
       ],
-      "dh": "ce8e6d6b"
+      "dh": "ce8e6d6b",
+      "paramStorage": [
+        [
+          "ptr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "RawNext",
@@ -105,7 +137,13 @@
         "TCELENTRY",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>"
       ],
-      "dh": "e3f20820"
+      "dh": "e3f20820",
+      "paramStorage": [
+        [
+          "ptr",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "UnlinkAll",
@@ -166,7 +204,13 @@
       "usedTypes": [
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>"
       ],
-      "dh": "7b4c0d11"
+      "dh": "7b4c0d11",
+      "paramStorage": [
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "NewNode",
@@ -188,7 +232,21 @@
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
         "uint32_t"
       ],
-      "dh": "a68dee2e"
+      "dh": "a68dee2e",
+      "paramStorage": [
+        [
+          "nLinkType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

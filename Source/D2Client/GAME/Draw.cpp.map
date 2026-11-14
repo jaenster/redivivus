@@ -21,7 +21,25 @@
         "D2DrlgTileDataStrc",
         "int32_t"
       ],
-      "dh": "04ec406d"
+      "dh": "04ec406d",
+      "paramStorage": [
+        [
+          "pDrawFloor",
+          "ECX:4"
+        ],
+        [
+          "pActSub18",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWorldX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nWorldY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "GetIntensityFlagsForTile",
@@ -43,7 +61,25 @@
         "D2GfxLightExStrc",
         "int32_t"
       ],
-      "dh": "18df2ba3"
+      "dh": "18df2ba3",
+      "paramStorage": [
+        [
+          "nTileX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTileY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nIndoorFlag",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pLightGrid",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_CalcRoofLightGridOrtho",
@@ -62,7 +98,29 @@
         "D2GfxLightExStrc",
         "int32_t"
       ],
-      "dh": "5d450c9b"
+      "dh": "5d450c9b",
+      "paramStorage": [
+        [
+          "pLightEntry",
+          "ECX:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bBorderOnly",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSplitSide",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_CalcRoofLightOrtho",
@@ -84,7 +142,41 @@
         "D2GfxLightExStrc",
         "int32_t"
       ],
-      "dh": "0af2d9eb"
+      "dh": "0af2d9eb",
+      "paramStorage": [
+        [
+          "pLightGrid",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTileX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nTileY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nIndoorFlag",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nSplitSide",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "bBorderOnly",
+          "Stack[0x20]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_CalcRoofLightGridPerspective",
@@ -104,7 +196,33 @@
         "D2GfxLightExStrc",
         "int32_t"
       ],
-      "dh": "2601918e"
+      "dh": "2601918e",
+      "paramStorage": [
+        [
+          "pLightEntry",
+          "ECX:4"
+        ],
+        [
+          "nTileX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTileY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDepth",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bBorderOnly",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSplitSide",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_CalcRoofLightPerspective",
@@ -128,7 +246,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "182c2cd3"
+      "dh": "182c2cd3",
+      "paramStorage": [
+        [
+          "nRow",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTileX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTileY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDepth",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSplitSide",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bBorderOnly",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "DrawFloorTile",
@@ -165,7 +309,37 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "987fae72"
+      "dh": "987fae72",
+      "paramStorage": [
+        [
+          "pFloor",
+          "ECX:4"
+        ],
+        [
+          "pTileData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nWorldX",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nWorldY",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_DrawEdgeFloorTile",
@@ -191,7 +365,21 @@
         "D2DrlgTileDataStrc",
         "int32_t"
       ],
-      "dh": "1506cc21"
+      "dh": "1506cc21",
+      "paramStorage": [
+        [
+          "pDrawFloor",
+          "ECX:4"
+        ],
+        [
+          "nWorldX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DrawSubTile",
@@ -211,7 +399,29 @@
         "D2DrawFloorStrc",
         "int32_t"
       ],
-      "dh": "9f0ee186"
+      "dh": "9f0ee186",
+      "paramStorage": [
+        [
+          "pDrawFloor",
+          "ECX:4"
+        ],
+        [
+          "nTileX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTileY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nStepX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStepY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DrawFloorByViewAndFloor",
@@ -261,7 +471,17 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "999a5a53"
+      "dh": "999a5a53",
+      "paramStorage": [
+        [
+          "pDrawFloor",
+          "ECX:4"
+        ],
+        [
+          "pGameView",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "dRoofDraw",
@@ -298,7 +518,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4c2ed4c3"
+      "dh": "4c2ed4c3",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "dFloorDraw",
@@ -317,7 +543,13 @@
       "usedTypes": [
         "D2GameViewStrc"
       ],
-      "dh": "cee84415"
+      "dh": "cee84415",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "dInitWallDraw",
@@ -361,7 +593,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "74de10e3"
+      "dh": "74de10e3",
+      "paramStorage": [
+        [
+          "pnTableMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bPerspective",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnIntensityMode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_DrawUnderFloorTiles",
@@ -392,7 +638,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bd487ce4"
+      "dh": "bd487ce4",
+      "paramStorage": [
+        [
+          "pViewData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pWall2Cell",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "WALL2_DrawWallTilesWithAlpha",
@@ -427,7 +683,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "83c98b23"
+      "dh": "83c98b23",
+      "paramStorage": [
+        [
+          "pWall2Cell",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eRenderPass",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCameraView",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "dWallPass",
@@ -463,7 +733,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8b0e979c"
+      "dh": "8b0e979c",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_WORLD_UnderFloor",
@@ -483,7 +759,13 @@
         "D2GameViewStrc",
         "D2Wall2CellStrc"
       ],
-      "dh": "5ffffc75"
+      "dh": "5ffffc75",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "dShadowPass",
@@ -513,7 +795,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f125cf97"
+      "dh": "f125cf97",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

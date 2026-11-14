@@ -20,7 +20,13 @@
       "usedTypes": [
         "D2WinTimer"
       ],
-      "dh": "21a4c77d"
+      "dh": "21a4c77d",
+      "paramStorage": [
+        [
+          "pTimer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTIMER_Start",
@@ -41,7 +47,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "dbf04672"
+      "dh": "dbf04672",
+      "paramStorage": [
+        [
+          "pTimer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DrawEx",
@@ -66,7 +78,13 @@
         "OnPress",
         "int32_t"
       ],
-      "dh": "d809d849"
+      "dh": "d809d849",
+      "paramStorage": [
+        [
+          "pTimer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTIMER_GetElapsed",
@@ -91,7 +109,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1ce629f2"
+      "dh": "1ce629f2",
+      "paramStorage": [
+        [
+          "pTimer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Key",
@@ -115,7 +139,13 @@
         "OnPress",
         "int32_t"
       ],
-      "dh": "7d9d9f93"
+      "dh": "7d9d9f93",
+      "paramStorage": [
+        [
+          "pTimer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WinTimer",
@@ -139,7 +169,17 @@
         "OnPress",
         "int32_t"
       ],
-      "dh": "a4341543"
+      "dh": "a4341543",
+      "paramStorage": [
+        [
+          "nTimeoutInSeconds",
+          "ECX:4"
+        ],
+        [
+          "pfnOnPress",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINTIMER_SetRepeating",
@@ -161,7 +201,13 @@
         "D2WinTimer",
         "int32_t"
       ],
-      "dh": "09eda102"
+      "dh": "09eda102",
+      "paramStorage": [
+        [
+          "pTimer",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

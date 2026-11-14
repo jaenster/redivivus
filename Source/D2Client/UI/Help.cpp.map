@@ -36,7 +36,13 @@
         "SetSeenHelpMenu",
         "SRegSaveValue"
       ],
-      "dh": "fbef6b08"
+      "dh": "fbef6b08",
+      "paramStorage": [
+        [
+          "bSeenHelpMenu",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "LoadBorder",
@@ -251,7 +257,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "b320e761"
+      "dh": "b320e761",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HELP_MiniPanelKeyNoOp",
@@ -269,7 +281,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "4c94970d"
+      "dh": "4c94970d",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HELP_HideMiniPanel",
@@ -305,7 +323,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "61e62b51"
+      "dh": "61e62b51",
+      "paramStorage": [
+        [
+          "nSizeX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "EAX:4"
+        ],
+        [
+          "nY",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "HELP_DrawHelpButtonTooltip",
@@ -379,7 +415,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "78881d33"
+      "dh": "78881d33",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_HelpScrollButtonUp",
@@ -402,7 +444,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "3aafd756"
+      "dh": "3aafd756",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HELP_CenterTextAndGetX",
@@ -425,7 +473,17 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "507d0cea"
+      "dh": "507d0cea",
+      "paramStorage": [
+        [
+          "nStringId",
+          "CX:2"
+        ],
+        [
+          "nCenterX",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UI_HelpXpac",
@@ -528,7 +586,13 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "c1a6ab4d"
+      "dh": "c1a6ab4d",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HELP_OnEscapeOrSpace",
@@ -547,7 +611,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "2144e3aa"
+      "dh": "2144e3aa",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HELP_SetUIVarW",
@@ -567,7 +637,21 @@
         "eD2UIvars",
         "eD2UIvarsSetType"
       ],
-      "dh": "fdd403f4"
+      "dh": "fdd403f4",
+      "paramStorage": [
+        [
+          "eUIVar",
+          "ECX:4"
+        ],
+        [
+          "eUIVarSetType",
+          "EDX:4"
+        ],
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "HELP_MiniPanelKeyNoOp_Unref_004e4040",
@@ -585,7 +669,13 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "9da3a6df"
+      "dh": "9da3a6df",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

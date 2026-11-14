@@ -36,7 +36,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5a9bd156"
+      "dh": "5a9bd156",
+      "paramStorage": [
+        [
+          "bForceActive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RemoveItemStatsFromOwner",
@@ -59,7 +73,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8f596c04"
+      "dh": "8f596c04",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "bRecalc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bUpdateResources",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CreateItemFromGroundPacket",
@@ -90,7 +122,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e55fe114"
+      "dh": "e55fe114",
+      "paramStorage": [
+        [
+          "nItemX",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nItemY",
+          "Stack[0x8]:2"
+        ],
+        [
+          "bSendIdentRequest",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pPacketData",
+          "EBX:4"
+        ],
+        [
+          "pUnitDataItemDetails",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CreateItemFromBodyPacket",
@@ -121,7 +175,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2c15607f"
+      "dh": "2c15607f",
+      "paramStorage": [
+        [
+          "nItemX",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nItemY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bSendIdentRequest",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pPacketData",
+          "EBX:4"
+        ],
+        [
+          "pUnitDataItemDetails",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004c10c0",
@@ -141,7 +217,17 @@
         "D2SkillStrc",
         "D2UnitStrc"
       ],
-      "dh": "5dd7efa8"
+      "dh": "5dd7efa8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CheckItemEquipRequirements",
@@ -167,7 +253,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5bf193ea"
+      "dh": "5bf193ea",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SaveSkillSelections",
@@ -193,7 +289,17 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "3584c19d"
+      "dh": "3584c19d",
+      "paramStorage": [
+        [
+          "pnSavedState",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RestoreSkillSelections",
@@ -219,7 +325,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "319ce697"
+      "dh": "319ce697",
+      "paramStorage": [
+        [
+          "pSkillSaveState",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RemoveItemFromBodyAndRecalc",
@@ -243,7 +359,21 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "fcf0f2ac"
+      "dh": "fcf0f2ac",
+      "paramStorage": [
+        [
+          "nGfxComponent",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ReequipItemOnBody",
@@ -270,7 +400,25 @@
         "eD2BodyLoc",
         "int32_t"
       ],
-      "dh": "d2cabc10"
+      "dh": "d2cabc10",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bApplyEquipStats",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGfxComponent",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RecalcAllEquippedItems_EBX",
@@ -318,7 +466,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1249daa8"
+      "dh": "1249daa8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0",
@@ -337,7 +491,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "98e25953"
+      "dh": "98e25953",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemDropSound",
@@ -363,7 +523,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "63e7c2df"
+      "dh": "63e7c2df",
+      "paramStorage": [
+        [
+          "pnDropSfxFrame",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_GetItemUseSound",
@@ -389,7 +559,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "31125716"
+      "dh": "31125716",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_PlayItemDropSound",
@@ -412,7 +588,13 @@
         "eD2Sounds",
         "uint32_t"
       ],
-      "dh": "4e936ba6"
+      "dh": "4e936ba6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetAnimModeAndPlace",
@@ -447,7 +629,33 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b155d6dd"
+      "dh": "b155d6dd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bInitItemData",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_FreeItemUnit",
@@ -474,7 +682,13 @@
         "D2RoomStrc",
         "D2UnitStrc"
       ],
-      "dh": "1a8c61ec"
+      "dh": "1a8c61ec",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_UpdateItemAnimation",
@@ -501,7 +715,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "916e6f49"
+      "dh": "916e6f49",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ItemMessage",
@@ -521,7 +741,25 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bcdd4c22"
+      "dh": "bcdd4c22",
+      "paramStorage": [
+        [
+          "eMessageType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMessage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUpdateFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CltRecalcAllEquippedItems",
@@ -543,7 +781,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "33ddbeea"
+      "dh": "33ddbeea",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "bFromNetwork",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0",
@@ -562,7 +810,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "31e045eb"
+      "dh": "31e045eb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_CltRecalcAllEquippedItems2",
@@ -584,7 +838,13 @@
         "D2GSPacketSrv0x48",
         "D2UnitStrc"
       ],
-      "dh": "b4141944"
+      "dh": "b4141944",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RecalcAllEquippedItems_ECX",
@@ -603,7 +863,13 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "81507c07"
+      "dh": "81507c07",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SaveWeaponHandClassId",
@@ -623,7 +889,17 @@
         "D2UnitStrc",
         "int16_t"
       ],
-      "dh": "8694873f"
+      "dh": "8694873f",
+      "paramStorage": [
+        [
+          "eBodyLoc",
+          "BL:1"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_SetItemInBodyLocation",
@@ -646,7 +922,21 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "be243eda"
+      "dh": "be243eda",
+      "paramStorage": [
+        [
+          "pInventory",
+          "ECX:4"
+        ],
+        [
+          "pItem",
+          "EDX:4"
+        ],
+        [
+          "eBodyLoc",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RemoveEquippedItemForSwap",
@@ -678,7 +968,17 @@
         "eD2BodyLoc",
         "uint32_t"
       ],
-      "dh": "7837882a"
+      "dh": "7837882a",
+      "paramStorage": [
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwner",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SOUND_GetIdFromUnit",
@@ -702,7 +1002,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d6aba4d9"
+      "dh": "d6aba4d9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_PlayItemUseSound",
@@ -722,7 +1028,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bb794d2a"
+      "dh": "bb794d2a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ResetWeaponHandClassIds",
@@ -765,7 +1077,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "aa482686"
+      "dh": "aa482686",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nSkillId",
+          "EDX:4"
+        ],
+        [
+          "nStatLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxCharge",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleStatUpdatePacket",
@@ -793,7 +1123,29 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "1a4beea5"
+      "dh": "1a4beea5",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "bSetStat",
+          "DL:1"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nStatParam",
+          "Stack[0xc]:2"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleItemFlagEditPacket",
@@ -814,7 +1166,13 @@
         "D2GSPacketSrv0x40",
         "D2UnitStrc"
       ],
-      "dh": "d9bcaca4"
+      "dh": "d9bcaca4",
+      "paramStorage": [
+        [
+          "pbPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleCursorItemRemoval",
@@ -841,7 +1199,13 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "130addc7"
+      "dh": "130addc7",
+      "paramStorage": [
+        [
+          "pbPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemToCursor",
@@ -874,7 +1238,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "07681ebd"
+      "dh": "07681ebd",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004c2150",
@@ -889,7 +1259,13 @@
       "calledFunctions": [
         "Unreferenced_004c2150"
       ],
-      "dh": "e1ab43dc"
+      "dh": "e1ab43dc",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RemoveUninterruptableState",
@@ -917,7 +1293,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "aeca6965"
+      "dh": "aeca6965",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_ClearUnitState",
@@ -938,7 +1320,21 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "60d60584"
+      "dh": "60d60584",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_RemoveClientSide",
@@ -963,7 +1359,13 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "eaa29e45"
+      "dh": "eaa29e45",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PlayerIsUnInterruptable",
@@ -985,7 +1387,13 @@
         "D2StatListExStrc",
         "D2UnitStrc"
       ],
-      "dh": "3ef8595e"
+      "dh": "3ef8595e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleItemRepairBreak",
@@ -1015,7 +1423,13 @@
         "eD2PlayerAnimMode",
         "uint32_t"
       ],
-      "dh": "85e19010"
+      "dh": "85e19010",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleItemCopyToCursor",
@@ -1048,7 +1462,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a2a61d88"
+      "dh": "a2a61d88",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleUnsocketItems",
@@ -1089,7 +1509,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "87df4854"
+      "dh": "87df4854",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_DropItemToGroundWithMode",
@@ -1117,7 +1543,33 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "b29269ed"
+      "dh": "b29269ed",
+      "paramStorage": [
+        [
+          "nAnimMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bFindRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eInvPage",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nX",
+          "BX:2"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nY",
+          "DI:2"
+        ]
+      ]
     },
     {
       "name": "HandleItemAddToGround",
@@ -1147,7 +1599,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "b2eb8cbe"
+      "dh": "b2eb8cbe",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemPickedFromGround",
@@ -1180,7 +1638,13 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "91010cd4"
+      "dh": "91010cd4",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemDroppedToGround",
@@ -1220,7 +1684,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "026ba910"
+      "dh": "026ba910",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemOnGround",
@@ -1266,7 +1736,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d991d7f7"
+      "dh": "d991d7f7",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_PlaceItemInContainer",
@@ -1309,7 +1785,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9471687b"
+      "dh": "9471687b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nYPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInvPage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nItemX",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemPutInContainer",
@@ -1358,7 +1856,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2c599aab"
+      "dh": "2c599aab",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemRemoveFromContainer",
@@ -1408,7 +1912,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1b1edf81"
+      "dh": "1b1edf81",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemEquip",
@@ -1455,7 +1965,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f3240cb0"
+      "dh": "f3240cb0",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemIndirectSwapBodyItem",
@@ -1517,7 +2033,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a55ac605"
+      "dh": "a55ac605",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemUnequip",
@@ -1571,7 +2093,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b4ccb891"
+      "dh": "b4ccb891",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleSwapBodyEquipItem",
@@ -1616,7 +2144,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "88a38906"
+      "dh": "88a38906",
+      "paramStorage": [
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemDetails",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleSwapBodyUnequipItem",
@@ -1665,7 +2203,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cc935412"
+      "dh": "cc935412",
+      "paramStorage": [
+        [
+          "pPacketData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnitDataItemDetails",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemSwapBodyItem",
@@ -1689,7 +2237,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "345fc8ff"
+      "dh": "345fc8ff",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleWeaponSwitchItems",
@@ -1732,7 +2286,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1b1aa2f6"
+      "dh": "1b1aa2f6",
+      "paramStorage": [
+        [
+          "pUnitDataItemDetails",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPacketData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemWeaponSwitch",
@@ -1753,7 +2317,13 @@
         "D2UnitDataItemDetailsStrc",
         "uint8_t"
       ],
-      "dh": "7009f4f8"
+      "dh": "7009f4f8",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "NET_D2GS_CLIENT_HandleItemAddQuantity",
@@ -1789,7 +2359,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "80ad006f"
+      "dh": "80ad006f",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemInShop",
@@ -1835,7 +2411,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ead7015c"
+      "dh": "ead7015c",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleSwapContainerNewItem",
@@ -1882,7 +2464,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "959d4859"
+      "dh": "959d4859",
+      "paramStorage": [
+        [
+          "pPacketData",
+          "ECX:4"
+        ],
+        [
+          "pUnitDataItemDetails",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleSwapContainerOldItem",
@@ -1928,7 +2520,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bc31d7d6"
+      "dh": "bc31d7d6",
+      "paramStorage": [
+        [
+          "pPacketData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnitDataItemDetails",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemSwapInContainer",
@@ -1952,7 +2554,13 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "ba163933"
+      "dh": "ba163933",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemPutInBelt",
@@ -2001,7 +2609,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0a8d8c04"
+      "dh": "0a8d8c04",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemRemoveFromBelt",
@@ -2044,7 +2658,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fd03591d"
+      "dh": "fd03591d",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleSwapBeltNewItem",
@@ -2084,7 +2704,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7a2e0685"
+      "dh": "7a2e0685",
+      "paramStorage": [
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemDetails",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleSwapBeltOldItem",
@@ -2121,7 +2751,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "48a30fe3"
+      "dh": "48a30fe3",
+      "paramStorage": [
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "itemDetails",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemSwapInBelt",
@@ -2145,7 +2785,13 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "d68c8874"
+      "dh": "d68c8874",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleItemCursorAssign",
@@ -2172,7 +2818,13 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "5bfa5a8b"
+      "dh": "5bfa5a8b",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemAutoUnequip",
@@ -2229,7 +2881,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "94644d05"
+      "dh": "94644d05",
+      "paramStorage": [
+        [
+          "pPacketData",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemInSocket",
@@ -2268,7 +2926,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c204ca96"
+      "dh": "c204ca96",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleItemMoveToBodyLoc",
@@ -2319,7 +2983,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0fb0270e"
+      "dh": "0fb0270e",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "HandleItemUpdateStats",
@@ -2397,7 +3067,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f5f9f68a"
+      "dh": "f5f9f68a",
+      "paramStorage": [
+        [
+          "pbPacket",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "ITEM_HandleServerItemAction",
@@ -2418,7 +3094,13 @@
         "D2GSPacketSrv0x7C",
         "D2UnitStrc"
       ],
-      "dh": "83987508"
+      "dh": "83987508",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

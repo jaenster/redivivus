@@ -17,7 +17,13 @@
         "EDITBOX_Cb_COMCALLBACK_ClearChannelUserList",
         "COMCALLBACK_ClearChannelUserList"
       ],
-      "dh": "17fdd0ab"
+      "dh": "17fdd0ab",
+      "paramStorage": [
+        [
+          "pUnused",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_HandleBannerAdFile",
@@ -43,7 +49,13 @@
       "usedTypes": [
         "D2BnBannerAdMsgStrc"
       ],
-      "dh": "6c945326"
+      "dh": "6c945326",
+      "paramStorage": [
+        [
+          "pBannerAdData",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00446ca0",
@@ -94,7 +106,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "635f71ac"
+      "dh": "635f71ac",
+      "paramStorage": [
+        [
+          "dwCbArg1",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_CreateChannelUser",
@@ -120,7 +150,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "40e48cb8"
+      "dh": "40e48cb8",
+      "paramStorage": [
+        [
+          "pbRawData",
+          "EAX:4"
+        ],
+        [
+          "nStatusFlags",
+          "EDX:4"
+        ],
+        [
+          "pUser",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_FormatChannelUserData",
@@ -147,7 +191,13 @@
         "WCHAR",
         "uint16_t"
       ],
-      "dh": "256873c0"
+      "dh": "256873c0",
+      "paramStorage": [
+        [
+          "pChannelUser",
+          "EBX:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_AddOrUpdateChannelUser",
@@ -169,7 +219,17 @@
         "D2ChannelUserNameNodeStrc",
         "uint8_t"
       ],
-      "dh": "6f5994e1"
+      "dh": "6f5994e1",
+      "paramStorage": [
+        [
+          "szUsername",
+          "ECX:4"
+        ],
+        [
+          "pbRawData",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_FormatChatMessage",
@@ -195,7 +255,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "585d443e"
+      "dh": "585d443e",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EDX:4"
+        ],
+        [
+          "szFormattedOutput",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_HandleGameListError",
@@ -214,7 +288,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "3c4b126f"
+      "dh": "3c4b126f",
+      "paramStorage": [
+        [
+          "dwCbArg1",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "dwParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szChannelName",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_ReturnFalse",
@@ -232,7 +324,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "0da61688"
+      "dh": "0da61688",
+      "paramStorage": [
+        [
+          "dwCbArg1",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "szText1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_CheckUserListFlags",
@@ -251,7 +361,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7be83b87"
+      "dh": "7be83b87",
+      "paramStorage": [
+        [
+          "pnEventData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_ClearChannelUserList",
@@ -302,7 +418,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "819ff60f"
+      "dh": "819ff60f",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "szSenderName",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_FormatWhisperTo",
@@ -329,7 +455,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "d2157f3f"
+      "dh": "d2157f3f",
+      "paramStorage": [
+        [
+          "wszText",
+          "ECX:4"
+        ],
+        [
+          "szTargetName",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_ValidateGameJoinability",
@@ -370,7 +506,13 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "269f5a37"
+      "dh": "269f5a37",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PrintChannelText",
@@ -392,7 +534,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "1c19e55b"
+      "dh": "1c19e55b",
+      "paramStorage": [
+        [
+          "szText",
+          "EDX:4"
+        ],
+        [
+          "nColor",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_AppendChatWithUser",
@@ -418,7 +570,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "919f2f6b"
+      "dh": "919f2f6b",
+      "paramStorage": [
+        [
+          "dwParam",
+          "ECX:4"
+        ],
+        [
+          "szUsername",
+          "EDX:4"
+        ],
+        [
+          "szMessage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwToTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nColor",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_UpdateChannelUserList",
@@ -470,7 +644,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9a43406b"
+      "dh": "9a43406b",
+      "paramStorage": [
+        [
+          "pChannelUser",
+          "ECX:4"
+        ],
+        [
+          "nStatusFlags",
+          "EDX:4"
+        ],
+        [
+          "szUsername",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbRawData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_ClearChannelListView",
@@ -516,7 +708,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7c8d2a97"
+      "dh": "7c8d2a97",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "szUsername",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pbRawData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_AppendServerMessage",
@@ -537,7 +747,17 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "3d1f4d7f"
+      "dh": "3d1f4d7f",
+      "paramStorage": [
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_AppendChatWithColor",
@@ -557,7 +777,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "bdc2b195"
+      "dh": "bdc2b195",
+      "paramStorage": [
+        [
+          "szUsername",
+          "EAX:4"
+        ],
+        [
+          "nColor",
+          "ESI:4"
+        ],
+        [
+          "szMessage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_BroadcastChatMessage",
@@ -583,7 +821,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ae833962"
+      "dh": "ae833962",
+      "paramStorage": [
+        [
+          "szMessageBody",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_HandleWhisperMessage",
@@ -609,7 +853,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0cb8c3f8"
+      "dh": "0cb8c3f8",
+      "paramStorage": [
+        [
+          "dwCbArg1",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "szUsername",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_AppendErrorMessage",
@@ -631,7 +893,25 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "6fa920fd"
+      "dh": "6fa920fd",
+      "paramStorage": [
+        [
+          "dwCbArg1",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_AppendInfoMessage",
@@ -653,7 +933,25 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "7cf8be8b"
+      "dh": "7cf8be8b",
+      "paramStorage": [
+        [
+          "dwCbArg1",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_HandleInfoRequest1",
@@ -676,7 +974,25 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "1ab13071"
+      "dh": "1ab13071",
+      "paramStorage": [
+        [
+          "dwCbArg1",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "dwParam1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szInfoArg",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_HandleInfoRequest2",
@@ -699,7 +1015,25 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "3108a57f"
+      "dh": "3108a57f",
+      "paramStorage": [
+        [
+          "dwCbArg1",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "szUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szInfoArg",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_ValidateWhisperTarget",
@@ -721,7 +1055,17 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "a3e87cd6"
+      "dh": "a3e87cd6",
+      "paramStorage": [
+        [
+          "szUsername",
+          "ECX:4"
+        ],
+        [
+          "szMessage",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_ProcessWhisperCommand",
@@ -744,7 +1088,25 @@
         "IgnoreList",
         "uint32_t"
       ],
-      "dh": "2ad69ed4"
+      "dh": "2ad69ed4",
+      "paramStorage": [
+        [
+          "dwCbArg1",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "szRawText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szWhisperText",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_FormatWhisperReply",
@@ -768,7 +1130,21 @@
         "WCHAR",
         "uint8_t"
       ],
-      "dh": "6df49dba"
+      "dh": "6df49dba",
+      "paramStorage": [
+        [
+          "pbReplyText",
+          "EBX:4"
+        ],
+        [
+          "pbSenderName",
+          "EAX:4"
+        ],
+        [
+          "szReplyArg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_HandleWhisperReply",
@@ -793,7 +1169,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3ad6a77c"
+      "dh": "3ad6a77c",
+      "paramStorage": [
+        [
+          "dwCbArg1",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szAccountName",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_ValidateEmoteTarget",
@@ -815,7 +1209,17 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "6796e2e9"
+      "dh": "6796e2e9",
+      "paramStorage": [
+        [
+          "szPlayerName",
+          "ECX:4"
+        ],
+        [
+          "szEmoteText",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_ProcessEmoteCommand",
@@ -837,7 +1241,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "5c150216"
+      "dh": "5c150216",
+      "paramStorage": [
+        [
+          "dwCbArg1",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "szText",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szEmoteArg",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_ScrollChannelUserList",
@@ -858,7 +1280,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a721bbc7"
+      "dh": "a721bbc7",
+      "paramStorage": [
+        [
+          "nScrollDelta",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_HandleUserListClick",
@@ -892,7 +1320,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1bc188de"
+      "dh": "1bc188de",
+      "paramStorage": [
+        [
+          "pnClickMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_HandleGameListError1",
@@ -922,7 +1356,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "30d6c993"
+      "dh": "30d6c993",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_HandleGameListError2",
@@ -951,7 +1391,13 @@
         "WCHAR",
         "uint8_t"
       ],
-      "dh": "78145742"
+      "dh": "78145742",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_CreateChannelUserEntry",
@@ -999,7 +1445,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4a048bae"
+      "dh": "4a048bae",
+      "paramStorage": [
+        [
+          "szUsername",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCharDataAndItems",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwStatusFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_AddChannelUser",
@@ -1018,7 +1478,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "9be44986"
+      "dh": "9be44986",
+      "paramStorage": [
+        [
+          "dwStatusFlags",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "pszUsername",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCharData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_OnChannelUserJoined",
@@ -1040,7 +1518,21 @@
         "D2ChannelUserStrc",
         "uint32_t"
       ],
-      "dh": "6c3fc5fa"
+      "dh": "6c3fc5fa",
+      "paramStorage": [
+        [
+          "pCharData",
+          "ECX:4"
+        ],
+        [
+          "dwStatusFlags",
+          "EAX:4"
+        ],
+        [
+          "pszUsername",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_Unused3",
@@ -1059,7 +1551,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "e7538e96"
+      "dh": "e7538e96",
+      "paramStorage": [
+        [
+          "dwStatusFlags",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "pCharData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pszUsername",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_RemoveChannelUser",
@@ -1090,7 +1600,13 @@
         "WCHAR",
         "uint8_t"
       ],
-      "dh": "ca9e77f8"
+      "dh": "ca9e77f8",
+      "paramStorage": [
+        [
+          "szUsername",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_ClearAllChannelUsers",
@@ -1136,7 +1652,25 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "ff9b17b1"
+      "dh": "ff9b17b1",
+      "paramStorage": [
+        [
+          "dwCbArg1",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "pUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_HandleJoinedChannel",
@@ -1164,7 +1698,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7c020d2e"
+      "dh": "7c020d2e",
+      "paramStorage": [
+        [
+          "dwCbArg1",
+          "ECX:4"
+        ],
+        [
+          "dwCbArg2",
+          "EDX:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szChannelName",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_RemoveUserFromList",
@@ -1183,7 +1735,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4a3dd998"
+      "dh": "4a3dd998",
+      "paramStorage": [
+        [
+          "nStrBase",
+          "ECX:4"
+        ],
+        [
+          "pnCarryMask",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "COMCALLBACK_DetectCDKeyInMessage",
@@ -1207,7 +1769,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bb4ba0ab"
+      "dh": "bb4ba0ab",
+      "paramStorage": [
+        [
+          "szChatText",
+          "ECX:4"
+        ],
+        [
+          "pnKeyHi",
+          "EDX:4"
+        ],
+        [
+          "pnKeyLo",
+          "Stack[0x4]:4"
+        ]
+      ]
     }
   ]
 }

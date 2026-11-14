@@ -21,7 +21,13 @@
         "D2MissilesTxt",
         "int32_t"
       ],
-      "dh": "237099b0"
+      "dh": "237099b0",
+      "paramStorage": [
+        [
+          "nMissileId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILETBLS_PadCodeTo4Chars",
@@ -36,7 +42,17 @@
       "calledFunctions": [
         "MISSILETBLS_PadCodeTo4Chars"
       ],
-      "dh": "beb5a0fa"
+      "dh": "beb5a0fa",
+      "paramStorage": [
+        [
+          "szText1",
+          "ECX:4"
+        ],
+        [
+          "szText2",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MapMissilesTxtKeywordToNumber",
@@ -55,7 +71,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b75214c9"
+      "dh": "b75214c9",
+      "paramStorage": [
+        [
+          "szKey",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILETBLS_ValidateCalcCode",
@@ -76,7 +98,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "af177ac7"
+      "dh": "af177ac7",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "pOutHasResolvedToConstant",
+          "EDX:4"
+        ],
+        [
+          "nAST",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nKeywordNumber",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MissileCalcLinker",
@@ -99,7 +139,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9b563347"
+      "dh": "9b563347",
+      "paramStorage": [
+        [
+          "pSrc",
+          "ECX:4"
+        ],
+        [
+          "pRecord",
+          "EDX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTxtRow",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTxtColumn",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "MISSILETBLS_ValidateAndClampField",
@@ -121,7 +187,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1a426ba8"
+      "dh": "1a426ba8",
+      "paramStorage": [
+        [
+          "eFieldType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMinVal",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxVal",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nFieldOffset",
+          "EDI:4"
+        ],
+        [
+          "pFieldDescArray",
+          "EBX:4"
+        ],
+        [
+          "nMissileIdx",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TXT_AllocTxt_missiles",
@@ -146,7 +238,13 @@
         "D2PoolManagerStrc",
         "uint8_t"
       ],
-      "dh": "3dd141ed"
+      "dh": "3dd141ed",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILETBLS_FreeTxt",
@@ -183,7 +281,17 @@
         "D2MissilesTxt",
         "int32_t"
       ],
-      "dh": "7ffce72c"
+      "dh": "7ffce72c",
+      "paramStorage": [
+        [
+          "nMissileId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLevel",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

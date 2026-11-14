@@ -23,7 +23,13 @@
         "D2UnitStrc *",
         "SGAMEDATA"
       ],
-      "dh": "bfa89fd0"
+      "dh": "bfa89fd0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

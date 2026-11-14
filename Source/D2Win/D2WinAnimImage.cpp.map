@@ -20,7 +20,13 @@
       "usedTypes": [
         "D2WinAnimImage"
       ],
-      "dh": "6a194936"
+      "dh": "6a194936",
+      "paramStorage": [
+        [
+          "pWinAnimImage",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINANIMIMAGE_GetCurrentState",
@@ -42,7 +48,13 @@
         "D2WinAnimImage",
         "int32_t"
       ],
-      "dh": "f93c936f"
+      "dh": "f93c936f",
+      "paramStorage": [
+        [
+          "pAnimImage",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINANIMIMAGE_TryAdvanceToPlaying",
@@ -65,7 +77,13 @@
         "D2WinAnimImage",
         "int32_t"
       ],
-      "dh": "9465696e"
+      "dh": "9465696e",
+      "paramStorage": [
+        [
+          "pAnimImage",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DrawAnim",
@@ -97,7 +115,13 @@
         "DC6Block",
         "int32_t"
       ],
-      "dh": "63c5997c"
+      "dh": "63c5997c",
+      "paramStorage": [
+        [
+          "pAnimImage",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WINANIMIMAGE_UpdateFrame",
@@ -126,7 +150,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3a065e0d"
+      "dh": "3a065e0d",
+      "paramStorage": [
+        [
+          "pAnimImage",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "Draw",
@@ -163,7 +193,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "540837a9"
+      "dh": "540837a9",
+      "paramStorage": [
+        [
+          "pAnimImage",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Push",
@@ -187,7 +223,13 @@
         "D2WinAnimImage",
         "int32_t"
       ],
-      "dh": "1aab8bdb"
+      "dh": "1aab8bdb",
+      "paramStorage": [
+        [
+          "pControlMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "D2WINANIMIMAGE_SetAnimate",
@@ -209,7 +251,17 @@
         "D2WinAnimImage",
         "int32_t"
       ],
-      "dh": "24ced3f1"
+      "dh": "24ced3f1",
+      "paramStorage": [
+        [
+          "pAnimImage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAnimate",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "D2WinAnimImage",
@@ -238,7 +290,49 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "84217060"
+      "dh": "84217060",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "nSizeX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDC6",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStaticFrameDelay",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pfnOnPress",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pAnimFrames",
+          "Stack[0x18]:4"
+        ],
+        [
+          "eDrawMode",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "pfnOnStateChange",
+          "Stack[0x20]:4"
+        ]
+      ]
     }
   ]
 }

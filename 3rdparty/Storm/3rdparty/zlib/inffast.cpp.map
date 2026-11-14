@@ -24,7 +24,17 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "c29ef53c"
+      "dh": "c29ef53c",
+      "paramStorage": [
+        [
+          "pInflateState",
+          "ECX:4"
+        ],
+        [
+          "nEndPos",
+          "EDX:4"
+        ]
+      ]
     }
   ]
 }

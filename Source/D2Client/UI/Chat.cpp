@@ -605,7 +605,6 @@ void __stdcall DRAW_UI_ChatInput() {
     D2TextLineStrc* pWrapList;
     uint16_t wszModeLabel[20];
     int nLineIdx;
-    int nPosY;
     D2TextLineStrc* pWrapNext;
     int32_t nPrevFont;
     nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);
@@ -685,8 +684,7 @@ void __stdcall DRAW_UI_ChatInput() {
 
           pWrapNext = pWrapLine->pNext;
           if (!pWrapNext && gbChatInputEnabled && gaChatInputBuffer != '\0') {
-            nPosY = i - 0x58 + Inv::ScreenSizeY;
-            CHAT_DrawIMEComposition(D2Win::Src::D2WinFont::DRAW_text0(pWrapLine->wszLine) + 0x83, nPosY);
+            CHAT_DrawIMEComposition(D2Win::Src::D2WinFont::DRAW_text0(pWrapLine->wszLine) + 0x83, i - 0x58 + Inv::ScreenSizeY);
           }
 
           nLineIdx++;

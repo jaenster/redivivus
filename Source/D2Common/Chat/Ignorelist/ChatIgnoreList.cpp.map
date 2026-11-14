@@ -19,7 +19,13 @@
       "usedTypes": [
         "ChatIgnoreList"
       ],
-      "dh": "62007599"
+      "dh": "62007599",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -39,7 +45,17 @@
         "ChatIgnoreList",
         "uint32_t"
       ],
-      "dh": "43981e08"
+      "dh": "43981e08",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "nFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Constructor",
@@ -57,7 +73,13 @@
       "usedTypes": [
         "ChatIgnoreList"
       ],
-      "dh": "c7b1f6bd"
+      "dh": "c7b1f6bd",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
     }
   ]
 }

@@ -61,7 +61,13 @@
         "DC6",
         "uint32_t"
       ],
-      "dh": "2470464a"
+      "dh": "2470464a",
+      "paramStorage": [
+        [
+          "pSkillId",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_SetMouseHandFlag",
@@ -79,7 +85,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "2a6a064d"
+      "dh": "2a6a064d",
+      "paramStorage": [
+        [
+          "bLeftHand",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_IsMouseInRect",
@@ -99,7 +111,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "bc8f7a70"
+      "dh": "c8bcf604",
+      "paramStorage": [
+        [
+          "nRectX",
+          "EAX:4"
+        ],
+        [
+          "nRectY",
+          "EBX:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_GetSkillPalette",
@@ -120,7 +150,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "ffbe1a06"
+      "dh": "ffbe1a06",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_DrawSkillTooltip",
@@ -143,7 +183,33 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bc3b6684"
+      "dh": "bc3b6684",
+      "paramStorage": [
+        [
+          "pSkillId",
+          "ECX:4"
+        ],
+        [
+          "bShowExpanded",
+          "EDX:4"
+        ],
+        [
+          "nSkillDescId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStatId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nIconX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nIconY",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_DrawKeyBindingText",
@@ -168,7 +234,25 @@
         "int32_t",
         "wchar_t"
       ],
-      "dh": "36998a56"
+      "dh": "36998a56",
+      "paramStorage": [
+        [
+          "nCmdIndex",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_DrawKeyBindingsForLeftHand",
@@ -187,7 +271,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b1d02926"
+      "dh": "b1d02926",
+      "paramStorage": [
+        [
+          "nSlotIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkillId",
+          "EBX:4"
+        ],
+        [
+          "nIconX",
+          "EDI:4"
+        ],
+        [
+          "nIconY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_DrawSkillLevel",
@@ -211,7 +313,21 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "5145ba0e"
+      "dh": "5145ba0e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIconY",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_DrawKeyBindingsForRightHand",
@@ -230,7 +346,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ed75a725"
+      "dh": "ed75a725",
+      "paramStorage": [
+        [
+          "nSlotIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkillId",
+          "EBX:4"
+        ],
+        [
+          "nIconX",
+          "EDI:4"
+        ],
+        [
+          "nIconY",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_DrawSkillIconWithQuantity",
@@ -269,7 +403,41 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1f324eea"
+      "dh": "1f324eea",
+      "paramStorage": [
+        [
+          "pDC6",
+          "ECX:4"
+        ],
+        [
+          "pSkillId",
+          "EDX:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nQuantity",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nGlobalPaletteShift",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillIdSlot",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nIconX",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bIsLeftHand",
+          "Stack[0x18]:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_DrawSkillIcon",
@@ -301,7 +469,37 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bf10ef6e"
+      "dh": "bf10ef6e",
+      "paramStorage": [
+        [
+          "pSkillId",
+          "ECX:4"
+        ],
+        [
+          "nSlotIndex",
+          "EDX:4"
+        ],
+        [
+          "nSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGlobalPaletteShift",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nIconX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nIconY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bIsLeftHand",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_RegisterSkillSlot",
@@ -323,7 +521,33 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "560addbf"
+      "dh": "560addbf",
+      "paramStorage": [
+        [
+          "nGridX",
+          "ECX:4"
+        ],
+        [
+          "nSlotIndex",
+          "EDX:4"
+        ],
+        [
+          "bLeftHand",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGridY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pSkill",
+          "ESI:4"
+        ],
+        [
+          "nSlotX",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_FindChargedSkill1",
@@ -348,7 +572,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "47880f6b"
+      "dh": "47880f6b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nTargetSkillId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_FindChargedSkill2",
@@ -373,7 +607,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a713b39b"
+      "dh": "a713b39b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nTargetSkillId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_FindChargedSkill3",
@@ -398,7 +642,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "957944d5"
+      "dh": "957944d5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nTargetSkillId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_FindChargedSkill4",
@@ -423,7 +677,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c232201b"
+      "dh": "c232201b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nTargetSkillId",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "INPUT_SpellSelectClick",
@@ -458,7 +722,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "3e217040"
+      "dh": "3e217040",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_ClearSkillBinding",
@@ -477,7 +747,17 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d34bd2c4"
+      "dh": "d34bd2c4",
+      "paramStorage": [
+        [
+          "pSkillId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nChargesLeft",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_ClearChargedSkillBindings",
@@ -529,7 +809,13 @@
         "D2SpellSelGridRegionStrc",
         "int32_t"
       ],
-      "dh": "0a6984a8"
+      "dh": "0a6984a8",
+      "paramStorage": [
+        [
+          "nSlotIndex",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_IsSkillSlotValid",
@@ -553,7 +839,13 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bcb913cb"
+      "dh": "bcb913cb",
+      "paramStorage": [
+        [
+          "nSlot",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_ActivateSkillSlot",
@@ -578,7 +870,13 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "7bf49715"
+      "dh": "7bf49715",
+      "paramStorage": [
+        [
+          "nSlot",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_SetSkillSlot",
@@ -596,7 +894,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "7b2159a6"
+      "dh": "7b2159a6",
+      "paramStorage": [
+        [
+          "nSlotIndex",
+          "ECX:4"
+        ],
+        [
+          "nSkillId",
+          "EDX:4"
+        ],
+        [
+          "nRightHandBinding",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOwnerGUID",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_AssignSkillToSlot",
@@ -615,7 +931,21 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d16d2ded"
+      "dh": "d16d2ded",
+      "paramStorage": [
+        [
+          "nSlotIndex",
+          "ECX:4"
+        ],
+        [
+          "nFreeSlot",
+          "EDX:4"
+        ],
+        [
+          "nGridIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_AutoBindNonChargedSkills",
@@ -672,7 +1002,29 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "0d31b0ae"
+      "dh": "0d31b0ae",
+      "paramStorage": [
+        [
+          "pwSkillId",
+          "ECX:4"
+        ],
+        [
+          "bMouseOverIn",
+          "EDX:4"
+        ],
+        [
+          "nChargeCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBoxBottomY",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_DrawSkillGrid",
@@ -709,7 +1061,29 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0e89932a"
+      "dh": "0e89932a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nGridStartX",
+          "EDX:4"
+        ],
+        [
+          "bWeaponSwap",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bShowTooltips",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bChargedOnly",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004aa6b0",
@@ -726,7 +1100,13 @@
         "GetPlayerUnit_UI",
         "SPELLSEL_DrawSkillGrid"
       ],
-      "dh": "39e4b3e0"
+      "dh": "39e4b3e0",
+      "paramStorage": [
+        [
+          "bChargedOnly",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_004aa6e0",
@@ -782,7 +1162,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0d1c7d25"
+      "dh": "0d1c7d25",
+      "paramStorage": [
+        [
+          "nSteps",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_RenderAllSkillGrids",
@@ -911,7 +1297,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "4890f4c6"
+      "dh": "4890f4c6",
+      "paramStorage": [
+        [
+          "cSkillRow",
+          "AL:1"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_GetSkillTreeColumnOffset",
@@ -929,7 +1321,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "1c2d3588"
+      "dh": "1c2d3588",
+      "paramStorage": [
+        [
+          "cSkillColumn",
+          "AL:1"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_DrawTabHeader",
@@ -949,7 +1347,17 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "b2e5ddd5"
+      "dh": "b2e5ddd5",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nYOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SPELLSEL_DrawSkilltreeBackground",
@@ -971,7 +1379,17 @@
         "DC6",
         "int32_t"
       ],
-      "dh": "cb769cbb"
+      "dh": "cb769cbb",
+      "paramStorage": [
+        [
+          "pDC6",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillTreeTab",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UI_SkillsWindow_II",
@@ -1035,7 +1453,13 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "310696d4"
+      "dh": "310696d4",
+      "paramStorage": [
+        [
+          "nCurrentTab",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLTREE_DrawBackground",
@@ -1076,7 +1500,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d5cc37a0"
+      "dh": "d5cc37a0",
+      "paramStorage": [
+        [
+          "nNodeScreenX",
+          "EAX:4"
+        ],
+        [
+          "nNodeScreenY",
+          "EBX:4"
+        ],
+        [
+          "nHitWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHitHeight",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLTREE_RenderSkillTree",
@@ -1156,7 +1598,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "34184310"
+      "dh": "34184310",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ClickOnScreenSkillWindow",
@@ -1201,7 +1649,13 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "eecf23f9"
+      "dh": "eecf23f9",
+      "paramStorage": [
+        [
+          "pMsg",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SKILLTREE_FreeResources",
@@ -1268,7 +1722,29 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b1b6b547"
+      "dh": "b1b6b547",
+      "paramStorage": [
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkillTxt",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDisplayLevel",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillIconState",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nGlobalPaletteShift",
+          "Stack[0x14]:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_UI_SkillSkillsWithAvailableSkills",

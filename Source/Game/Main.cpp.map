@@ -20,7 +20,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "30f13041"
+      "dh": "30f13041",
+      "paramStorage": [
+        [
+          "nSize",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISC_GetValueFromD2Ini",
@@ -43,7 +49,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "644b3b74"
+      "dh": "644b3b74",
+      "paramStorage": [
+        [
+          "pD2IniData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INI_FindConfigValueIndex",
@@ -63,7 +75,13 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cdbcccaf"
+      "dh": "cdbcccaf",
+      "paramStorage": [
+        [
+          "pbArgName",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "INI_IsDelimiterChar",
@@ -78,7 +96,13 @@
       "calledFunctions": [
         "INI_IsDelimiterChar"
       ],
-      "dh": "d24c02d2"
+      "dh": "d24c02d2",
+      "paramStorage": [
+        [
+          "cChar",
+          "CL:1"
+        ]
+      ]
     },
     {
       "name": "INI_StripDelimiters",
@@ -97,7 +121,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "461273f5"
+      "dh": "461273f5",
+      "paramStorage": [
+        [
+          "szText",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "INI_ParseCommandLineArg",
@@ -123,7 +153,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "00051c58"
+      "dh": "00051c58",
+      "paramStorage": [
+        [
+          "pbArgName",
+          "ECX:4"
+        ],
+        [
+          "szCmdLine",
+          "EDX:4"
+        ],
+        [
+          "pOutValue",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "CloseDiablo",
@@ -161,7 +205,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fd69b318"
+      "dh": "fd69b318",
+      "paramStorage": [
+        [
+          "szText",
+          "ECX:4"
+        ],
+        [
+          "pD2IniData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "MISC_InitD2IniAndIgnorelist",
@@ -183,7 +237,17 @@
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "d328e2b3"
+      "dh": "d328e2b3",
+      "paramStorage": [
+        [
+          "D2IniData",
+          "ECX:4"
+        ],
+        [
+          "szCommandLine",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ApplicationRunCurrentMode",
@@ -205,7 +269,13 @@
         "D2IniConfigStrc",
         "int32_t"
       ],
-      "dh": "d637fcaa"
+      "dh": "d637fcaa",
+      "paramStorage": [
+        [
+          "pD2IniData",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SystemSurvey_WriteProductLanugageToLocaleFile",
@@ -290,7 +360,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "375c0e59"
+      "dh": "375c0e59",
+      "paramStorage": [
+        [
+          "hInstance",
+          "ECX:4"
+        ],
+        [
+          "pD2IniData",
+          "EDX:4"
+        ],
+        [
+          "eD2ApplicationModeAndRenderer",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "ReturnTrue",
@@ -330,7 +414,13 @@
         "char *",
         "int32_t"
       ],
-      "dh": "36e9acf0"
+      "dh": "36e9acf0",
+      "paramStorage": [
+        [
+          "ppszText",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CreateRegedit",
@@ -370,7 +460,21 @@
       "usedTypes": [
         "FARPROC"
       ],
-      "dh": "b13f1639"
+      "dh": "b13f1639",
+      "paramStorage": [
+        [
+          "hModule",
+          "ECX:4"
+        ],
+        [
+          "ppfnProc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "LIB_LoadAdvapi32",
@@ -418,7 +522,17 @@
       "usedTypes": [
         "eD2ApplicationMode"
       ],
-      "dh": "a06a98b0"
+      "dh": "a06a98b0",
+      "paramStorage": [
+        [
+          "eAppMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ERRORMANAGER_ServiceControlHandler",
@@ -436,7 +550,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "84f5e938"
+      "dh": "84f5e938",
+      "paramStorage": [
+        [
+          "nServiceControl",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00406470",
@@ -454,7 +574,17 @@
       "usedTypes": [
         "SC_HANDLE"
       ],
-      "dh": "daa19a9c"
+      "dh": "daa19a9c",
+      "paramStorage": [
+        [
+          "phSCManager",
+          "ESI:4"
+        ],
+        [
+          "phService",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "PreInitApplication",
@@ -486,7 +616,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9ab43a8d"
+      "dh": "9ab43a8d",
+      "paramStorage": [
+        [
+          "argc",
+          "ECX:4"
+        ],
+        [
+          "argv",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "main",
@@ -502,7 +642,17 @@
         "PreInitApplication",
         "main"
       ],
-      "dh": "945acd54"
+      "dh": "945acd54",
+      "paramStorage": [
+        [
+          "dwNumServicesArgs",
+          "Stack[0x4]:4"
+        ],
+        [
+          "lpServiceArgVectors",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "StartDiablo2ServerAsService",
@@ -542,7 +692,25 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9095742d"
+      "dh": "9095742d",
+      "paramStorage": [
+        [
+          "hInstance",
+          "Stack[0x4]:4"
+        ],
+        [
+          "hPrevInstance",
+          "Stack[0x8]:4"
+        ],
+        [
+          "lpCmdLine",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nShowCmd",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

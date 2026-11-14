@@ -281,7 +281,7 @@ void __stdcall TILECMP_CacheTileData(D2TileCmpTileSetStrc * pTileMeasures, uint3
 
 static BOOL __stdcall TILECMP_CheckTilePatternRLE(uint32_t dwColorKey, char * pPixelBuf) {
     int nCount = 0;
-    while (*pPixelBuf == (char)dwColorKey && pPixelBuf[1] == (char)(dwColorKey >> 8) && pPixelBuf[2] == *(uint8_t*)((char*)&dwColorKey + 2)) {
+    while (*pPixelBuf == (char)dwColorKey && pPixelBuf[1] == (char)(dwColorKey >> 8) && (uint8_t)pPixelBuf[2] == *(uint8_t*)((char*)&dwColorKey + 2)) {
       nCount++;
       pPixelBuf += 3;
       if (nCount >= 0x200) {

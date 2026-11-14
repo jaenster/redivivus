@@ -22,7 +22,17 @@
         "int32_t",
         "pfnTileEntryEnum"
       ],
-      "dh": "8bed9af7"
+      "dh": "8bed9af7",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "TILEPROJECT_FindLibraryOfTile",
@@ -42,7 +52,13 @@
         "D2TileLibraryHeaderStrc",
         "D2TileProjectStrc"
       ],
-      "dh": "f9bac078"
+      "dh": "f9bac078",
+      "paramStorage": [
+        [
+          "pTargetEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PALETTE_LoadFromFile",
@@ -70,7 +86,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "91d55974"
+      "dh": "91d55974",
+      "paramStorage": [
+        [
+          "szPaletteName",
+          "ECX:4"
+        ],
+        [
+          "nPaletteSet",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PALETTE_InitItemPalettes",
@@ -104,7 +130,13 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "5cc61ddb"
+      "dh": "5cc61ddb",
+      "paramStorage": [
+        [
+          "nAct",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "PALETTE_GetItemPalette",
@@ -123,7 +155,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "f792aa5f"
+      "dh": "f792aa5f",
+      "paramStorage": [
+        [
+          "nPaletteSet",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRow",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00600c60",
@@ -139,7 +181,13 @@
         "Unreferenced_00600c60",
         "D2MEM_FindLowestSetBit"
       ],
-      "dh": "1a1cbc3d"
+      "dh": "1a1cbc3d",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "PALETTE_GetColorShiftIndex",
@@ -159,7 +207,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "35640398"
+      "dh": "35640398",
+      "paramStorage": [
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwMask",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

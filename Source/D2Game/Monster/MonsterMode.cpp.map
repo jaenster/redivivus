@@ -20,7 +20,13 @@
         "D2MonsterPathParamStrc",
         "D2UnitStrc"
       ],
-      "dh": "703a0f0a"
+      "dh": "703a0f0a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERMODE_ConsumeStoredPosition",
@@ -38,7 +44,25 @@
       "usedTypes": [
         "D2MonsterPathParamStrc"
       ],
-      "dh": "e3dcc5bc"
+      "dh": "e3dcc5bc",
+      "paramStorage": [
+        [
+          "pX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "szText",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pMonData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ResetEngagedCombatAndStats",
@@ -57,7 +81,13 @@
         "D2MonsterPathParamStrc",
         "D2UnitStrc"
       ],
-      "dh": "df14f6cd"
+      "dh": "df14f6cd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERMODE_GetStoredPosition",
@@ -77,7 +107,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "c289a9a6"
+      "dh": "c289a9a6",
+      "paramStorage": [
+        [
+          "pMonData",
+          "ECX:4"
+        ],
+        [
+          "pOutStoredX",
+          "EDX:4"
+        ],
+        [
+          "pOutStoredY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutStoredFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_005a6250",
@@ -92,7 +140,13 @@
       "calledFunctions": [
         "Unreferenced_005a6250"
       ],
-      "dh": "99a6da47"
+      "dh": "99a6da47",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SetCombatAndMonStats",
@@ -112,7 +166,25 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6bebc4ee"
+      "dh": "6bebc4ee",
+      "paramStorage": [
+        [
+          "pPathParam",
+          "ECX:4"
+        ],
+        [
+          "nPathType",
+          "EDX:4"
+        ],
+        [
+          "nVelocity",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSteps",
+          "Stack[0x8]:1"
+        ]
+      ]
     },
     {
       "name": "GetPathCount",
@@ -144,7 +216,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ed06d1a3"
+      "dh": "ed06d1a3",
+      "paramStorage": [
+        [
+          "ePathType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDistance",
+          "AL:1"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "pPathParam",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_SetVelocityPercent",
@@ -170,7 +260,17 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "13304cb2"
+      "dh": "13304cb2",
+      "paramStorage": [
+        [
+          "pPathParam",
+          "EAX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "AddGamePathCount",
@@ -196,7 +296,33 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "c732ec26"
+      "dh": "c732ec26",
+      "paramStorage": [
+        [
+          "pPathParam",
+          "ECX:4"
+        ],
+        [
+          "ePathTypeOrEngaged",
+          "EDX:4"
+        ],
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMonStatOrVelocity",
+          "Stack[0xc]:4"
+        ],
+        [
+          "byMonStat2OrDist",
+          "AL:1"
+        ]
+      ]
     },
     {
       "name": "AllocAiParam",
@@ -216,7 +342,13 @@
         "D2MonsterPathParamStrc",
         "SGAMEDATA"
       ],
-      "dh": "9ea23ed9"
+      "dh": "9ea23ed9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERDATA_FreeMonsterMode",
@@ -236,7 +368,17 @@
         "D2MonsterPathParamStrc",
         "SGAMEDATA"
       ],
-      "dh": "ec095a6b"
+      "dh": "ec095a6b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPathParam",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERMODE_OnDeath",
@@ -271,7 +413,21 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ed44a855"
+      "dh": "ed44a855",
+      "paramStorage": [
+        [
+          "nDirection",
+          "Stack[0x4]:1"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "SERVER_ITEM_DecideDrops",
@@ -320,7 +476,25 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "945a6b92"
+      "dh": "945a6b92",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIsItemFindDrop",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pUnitKill",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "DropItemForVictim_Unused",
@@ -354,7 +528,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "76823417"
+      "dh": "76823417",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnitKill",
+          "EDX:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SetAiState",
@@ -374,7 +562,17 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "f51067c4"
+      "dh": "f51067c4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "nNewAiState",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "RegenAndPsnDecreaser",
@@ -419,7 +617,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d3cd32e1"
+      "dh": "d3cd32e1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_HasAnimModeSequence",
@@ -441,7 +657,17 @@
         "eD2MonsterAnimMode",
         "uint32_t"
       ],
-      "dh": "ba6a45e5"
+      "dh": "ba6a45e5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eAnimMode",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "MISSILE_SpawnFromMaggot",
@@ -477,7 +703,21 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "ecc25f1a"
+      "dh": "ecc25f1a",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eMissileId",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_FireSpecialMissile",
@@ -504,7 +744,21 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "927961fc"
+      "dh": "927961fc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "thunk_ExecuteTimerTrigger",
@@ -524,7 +778,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a9c02ae5"
+      "dh": "a9c02ae5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "CalculateCollisionDamage_Unused",
@@ -555,7 +819,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "9dbb3b49"
+      "dh": "9dbb3b49",
+      "paramStorage": [
+        [
+          "pGame",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
     },
     {
       "name": "MONMODE_OwnerCastOrDie",
@@ -590,7 +864,17 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "4a825c83"
+      "dh": "4a825c83",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_OnDeathDispatch",
@@ -639,7 +923,17 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "9c3db11c"
+      "dh": "9c3db11c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterKill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONMODE_HandleSpecialEndDeath",
@@ -665,7 +959,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "57b440f1"
+      "dh": "57b440f1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONMODE_ProcessBlockAnimation",
@@ -690,7 +994,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "5b5c0edf"
+      "dh": "5b5c0edf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONMODE_CompleteCastAndReset",
@@ -712,7 +1026,17 @@
         "D2MonsterKillStrc",
         "SGAMEDATA"
       ],
-      "dh": "ef3c1295"
+      "dh": "ef3c1295",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterKill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "PlanExecutionOfMonster",
@@ -739,7 +1063,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d3b1a7d8"
+      "dh": "d3b1a7d8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterKill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_FreeCombatAndChangeAnimMode_A",
@@ -759,7 +1093,17 @@
         "D2MonsterKillStrc",
         "SGAMEDATA"
       ],
-      "dh": "0efe0f70"
+      "dh": "0efe0f70",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterKill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONMODE_RecoverToNeutral",
@@ -783,7 +1127,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "89d9ee8c"
+      "dh": "89d9ee8c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERMODE_Mode10_OnEndFrame_NoOp",
@@ -802,7 +1156,17 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "abaa536e"
+      "dh": "abaa536e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONMODE_ResetToNeutralWithDelay",
@@ -823,7 +1187,17 @@
         "D2MonsterKillStrc",
         "SGAMEDATA"
       ],
-      "dh": "7127e1ee"
+      "dh": "7127e1ee",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterKill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONMODE_StartWalking",
@@ -845,7 +1219,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "a9a33844"
+      "dh": "a9a33844",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterKill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONMODE_StartRunning",
@@ -867,7 +1251,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "c7603d94"
+      "dh": "c7603d94",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterKill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONMODE_StartOtherAttack",
@@ -889,7 +1283,17 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "a747a9fb"
+      "dh": "a747a9fb",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterKill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DropHandlerGeneric",
@@ -918,7 +1322,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8251d9c9"
+      "dh": "8251d9c9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterKill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONMODE_ProcessSkillCast",
@@ -953,7 +1367,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1f5c99a8"
+      "dh": "1f5c99a8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "thunk_FreeCombatAndChangeAnimMode_B",
@@ -973,7 +1397,17 @@
         "D2MonsterKillStrc",
         "SGAMEDATA"
       ],
-      "dh": "1ac59d70"
+      "dh": "1ac59d70",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterKill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONMODE_TryFleeFromTarget",
@@ -1000,7 +1434,17 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d1cda4e4"
+      "dh": "d1cda4e4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterKill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONMODE_CompleteSkillSequence",
@@ -1022,7 +1466,17 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "61cffc5a"
+      "dh": "61cffc5a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterKill",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "GetDropHandler",
@@ -1043,7 +1497,17 @@
         "eD2MonsterClassId",
         "uint32_t"
       ],
-      "dh": "99787b35"
+      "dh": "99787b35",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nAnimMode",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "MONSTER_InitiateDefaultDeath",
@@ -1067,7 +1531,21 @@
         "SGAMEDATA",
         "eD2MonsterAnimMode"
       ],
-      "dh": "d128d86e"
+      "dh": "d128d86e",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eAnimMode",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
     },
     {
       "name": "MONMODE_DispatchDeathDrop",
@@ -1090,7 +1568,25 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "e5bf9c8f"
+      "dh": "e5bf9c8f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "ExecuteDropHandlerFn3",
@@ -1114,7 +1610,25 @@
         "eD2MonsterAnimMode",
         "int32_t"
       ],
-      "dh": "2fc154b2"
+      "dh": "2fc154b2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "MONSTERAI_ExecuteLifecycleTransition",
@@ -1167,7 +1681,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2002860a"
+      "dh": "2002860a",
+      "paramStorage": [
+        [
+          "pGame",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMonsterKill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bResetSkillOnSameMode",
+          "Stack[0xc]:4"
+        ]
+      ]
     },
     {
       "name": "SetCurrentSkill",
@@ -1193,7 +1721,21 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "de58d001"
+      "dh": "de58d001",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnitMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pMonsterKill",
+          "Stack[0xc]:4"
+        ]
+      ]
     }
   ]
 }

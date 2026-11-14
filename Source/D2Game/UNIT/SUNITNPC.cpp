@@ -956,7 +956,7 @@ void __fastcall NPC_ProcessMercHire(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
         nLineNum = 0x685;
       } else {
         pHireSlot = (D2MercForHire*)((nNameId - nNameFirst) * 0x10 + *(int*)((char*)pGameNpc2 + 0x10));
-        if (pHireSlot->nNameStringId != nMarcNameId) {
+        if ((uint16_t)pHireSlot->nNameStringId != nMarcNameId) {
           nTradeType_00 = 0;
           nUnitGUID = -1;
           nPlayerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);

@@ -23,7 +23,33 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5e7fe0c5"
+      "dh": "5e7fe0c5",
+      "paramStorage": [
+        [
+          "byRunValue",
+          "CL:1"
+        ],
+        [
+          "pCur",
+          "EDX:4"
+        ],
+        [
+          "pEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxRunLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbAtEnd",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pbExactMatch",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "SUBTILE_CompressToRLE",
@@ -44,7 +70,17 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "81390fa7"
+      "dh": "81390fa7",
+      "paramStorage": [
+        [
+          "pDataStart",
+          "ECX:4"
+        ],
+        [
+          "ppCompressedEnd",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SUBTILE_AllocAndCompress",
@@ -69,7 +105,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "b40cdf18"
+      "dh": "b40cdf18",
+      "paramStorage": [
+        [
+          "pRawData",
+          "ECX:4"
+        ],
+        [
+          "bIsRaw",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "SUBTILE_ConvertToIndexed",
@@ -96,7 +142,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2aa22978"
+      "dh": "2aa22978",
+      "paramStorage": [
+        [
+          "pDstFrame",
+          "ECX:4"
+        ],
+        [
+          "pSrcFrame",
+          "EDX:4"
+        ],
+        [
+          "dwColorKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnGetPaletteIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SUBTILE_ConvertRGBToIndexed",
@@ -122,7 +186,25 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3d40a7cc"
+      "dh": "3d40a7cc",
+      "paramStorage": [
+        [
+          "pSrcRGBData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRGBDataSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColorKey",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnGetPaletteIndex",
+          "Stack[0x10]:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0060d7c0",
@@ -140,7 +222,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "672f0536"
+      "dh": "672f0536",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SUBTILE_CheckIfIsometricEmpty",
@@ -158,7 +246,13 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "72f03827"
+      "dh": "72f03827",
+      "paramStorage": [
+        [
+          "pSubTileData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SUBTILE_CompressIsometricShape",
@@ -188,7 +282,17 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d32a3fb2"
+      "dh": "d32a3fb2",
+      "paramStorage": [
+        [
+          "pSubTileEntry",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPixelData",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SUBTILE_ExtractIsometricPixels",
@@ -214,7 +318,17 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "7eb9e38a"
+      "dh": "7eb9e38a",
+      "paramStorage": [
+        [
+          "pSubTileEntry",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcPixelData",
+          "Stack[0x8]:4"
+        ]
+      ]
     },
     {
       "name": "SUBTILE_CompressWithColorKey",
@@ -239,7 +353,25 @@
         "pfnRGBToPaletteIndex",
         "uint32_t"
       ],
-      "dh": "ff914834"
+      "dh": "ff914834",
+      "paramStorage": [
+        [
+          "pfnGetPaletteIndex",
+          "ECX:4"
+        ],
+        [
+          "pSrcSubTile",
+          "EAX:4"
+        ],
+        [
+          "pDstSubTile",
+          "EDI:4"
+        ],
+        [
+          "dwColorKey",
+          "Stack[0x4]:4"
+        ]
+      ]
     },
     {
       "name": "SUBTILE_RecompressExisting",
@@ -262,7 +394,13 @@
         "D2GroundSubTileStrc",
         "uint8_t"
       ],
-      "dh": "ef64daca"
+      "dh": "ef64daca",
+      "paramStorage": [
+        [
+          "pSubTileEntry",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "CELCMP_CompressAllFramesWithColorKey",
@@ -287,7 +425,25 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "33b1b023"
+      "dh": "33b1b023",
+      "paramStorage": [
+        [
+          "pSrcCelFile",
+          "ECX:4"
+        ],
+        [
+          "pDstCelFile",
+          "EDX:4"
+        ],
+        [
+          "dwColorKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnGetPaletteIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
     }
   ]
 }

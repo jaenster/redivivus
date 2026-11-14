@@ -25,7 +25,33 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e371aef8"
+      "dh": "e371aef8",
+      "paramStorage": [
+        [
+          "nTableType",
+          "ECX:4"
+        ],
+        [
+          "pBitLengths",
+          "EDX:4"
+        ],
+        [
+          "nNumCodes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppOutTable",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pMaxBits",
+          "Stack[0xc]:4"
+        ],
+        [
+          "aOutCodes",
+          "Stack[0x10]:4"
+        ]
+      ]
     }
   ]
 }

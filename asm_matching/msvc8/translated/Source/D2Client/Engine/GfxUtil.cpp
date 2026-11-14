@@ -165,7 +165,7 @@ void __fastcall AllocGfxUtil(void * * ppListHead, uint32_t dwParam, uint32_t dwV
     }
 
     *pnBytesAllocated += 0x10;
-    pNode[3] = 0;
+    memset(pNode, 0, 0x10);
     *pNode = dwParam;
     pNode[1] = dwValue1;
     pNode[2] = dwValue2;

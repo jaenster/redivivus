@@ -3,6 +3,7 @@
 #include "Source/D2Client/Archive.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Client/Archive.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -171,27 +172,6 @@ int __fastcall Unreferenced_0045bcb0(int param_1) {
     *(uint32_t*)param_1 = 0;
     *(uint32_t*)(param_1 + 4) = 0;
     return param_1;
-}
-
-void __fastcall ARCHIVE_ClearList(StormLinkedListStrc * nList) {
-    StormLinkStrc** pPrevLink;
-    StormLinkStrc* pNode;
-    while (true) {
-      StormLinkStrc* pNext;
-      pNode = (intptr_t)(StormLinkStrc*)nList->head.pNext > 0 ? (StormLinkStrc*)nList->head.pNext : 0;
-      if (!pNode) {
-        break;
-      }
-
-      pNext = pNode->pPrevLink;
-      if (pNext) {
-        pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
-        *pPrevLink = pNext;
-        pNode->pPrevLink->pNext = pNode->pNext;
-        pNode->pPrevLink = 0;
-        pNode->pNext = 0;
-      }
-    }
 }
 
 void __fastcall ARCHIVE_ClearAndFreeHead(StormLinkedListStrc * nList) {

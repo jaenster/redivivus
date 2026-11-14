@@ -270,7 +270,7 @@ void __fastcall SPELLSEL_SetMouseHandFlag(uint32_t bLeftHand) {
     gbSpellSelMouseHandFlag = bLeftHand;
 }
 
-static uint32_t __stdcall SPELLSEL_IsMouseInRect(int32_t nWidth, int32_t nHeight, int32_t nRectX, int32_t nRectY) {
+static uint32_t __stdcall SPELLSEL_IsMouseInRect(int32_t nRectX, int32_t nRectY, int32_t nWidth, int32_t nHeight) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nRectX && nMouseX <= nRectX + nWidth && nMouseY >= nRectY - nHeight && nMouseY <= nRectY) {
@@ -960,13 +960,12 @@ void __fastcall SPELLSEL_DrawSkillRequirementTooltip(short * pwSkillId, int32_t 
     char szNumBuf[12];
     uint16_t wszNumBuf[10];
     short int* pSkillId = pwSkillId;
-    int bMouseOver = bMouseOverIn;
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (nMouseX < nScreenX || nMouseX > nScreenX + 0x30 || nMouseY < nBoxBottomY - 0x30 || nMouseY > nBoxBottomY) {
-      bMouseOver = 1;
-    } else if (bMouseOver != 1) {
-      bMouseOver = 0;
+      bMouseOverIn = 1;
+    } else if (bMouseOverIn != 1) {
+      bMouseOverIn = 0;
     }
 
     nMouseX = Cursor::GetMouseX();
@@ -1005,7 +1004,7 @@ void __fastcall SPELLSEL_DrawSkillRequirementTooltip(short * pwSkillId, int32_t 
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, pWszSep);
     pWszStr = D2Lang::StrTable::strtable::GetLocaleString(wStatName2Idx);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, pWszStr);
-    D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltip, nScreenX, nBoxBottomY - 0x32, bMouseOver, 1);
+    D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltip, nScreenX, nBoxBottomY - 0x32, bMouseOverIn, 1);
 }
 
 void __fastcall SPELLSEL_DrawSkillGrid(D2UnitStrc * pUnit, int32_t nGridStartX, BOOL bWeaponSwap, BOOL bShowTooltips, BOOL bChargedOnly) {

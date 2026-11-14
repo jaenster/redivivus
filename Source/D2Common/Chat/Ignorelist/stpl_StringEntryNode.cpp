@@ -348,7 +348,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
     this->m_count = nCount;
 }
 
-template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Destructor() {
+template<> __attribute__((noinline)) inline void TSHashTable<StringEntryNode, HASHKEY_STRI>::Destructor() {
     pfnEHHandlerRoutine pExHandler = D2Common::Chat::__GSHandlerCheck_EH_6ca326;
     void* pExSave = ExceptionList;
     ExceptionList = &pExSave;
