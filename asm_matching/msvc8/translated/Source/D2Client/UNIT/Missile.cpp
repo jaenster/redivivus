@@ -1975,12 +1975,13 @@ void __fastcall MISSILE_CreateRadialBurst(D2UnitStrc * pUnit, eMissilesId nMissi
       nStep = 1;
     }
 
+    const uint32_t nByteStride = (uint32_t)nStep * 4;
     int iSpreadIdx = 0;
     do {
       sSkillArg.nUnitX = *(int*)((char*)gaRadialBurstMissileSpreadY + iSpreadIdx);
       sSkillArg.nUnitY = *(int*)((char*)gaRadialBurstMissileSpreadConst2 + iSpreadIdx);
       Missile::MakeMissile(&sSkillArg);
-      iSpreadIdx += nStep * 4;
+      iSpreadIdx += nByteStride;
     } while (iSpreadIdx < 0x40);
 
     if (nSecondaryCount <= 0) {
@@ -1988,12 +1989,13 @@ void __fastcall MISSILE_CreateRadialBurst(D2UnitStrc * pUnit, eMissilesId nMissi
     }
 
     sSkillArg.nVelocityOverride = pMissileTxt->Param2 << 7;
+    const uint32_t nByteStride2 = (uint32_t)nSecondaryCount * 4;
     iSpreadIdx = 0;
     do {
       sSkillArg.nUnitX = *(int*)((char*)gaRadialBurstMissileSpreadY + iSpreadIdx + 4);
       sSkillArg.nUnitY = *(int*)((char*)gaRadialBurstMissileSpreadConst2 + iSpreadIdx + 4);
       Missile::MakeMissile(&sSkillArg);
-      iSpreadIdx += nSecondaryCount * 4;
+      iSpreadIdx += nByteStride2;
     } while (iSpreadIdx < 0x3c);
 }
 
@@ -2026,6 +2028,7 @@ int32_t __fastcall MISSILE_CltHitFn64_Unused(D2UnitStrc * pUnit, D2UnitStrc * pT
       nClassId = 1;
     }
 
+    const uint32_t nByteStride = (uint32_t)nClassId * 4;
     int iSpreadIdx = 0;
     do {
       D2UnitStrc* pSubMissile;
@@ -2037,7 +2040,7 @@ int32_t __fastcall MISSILE_CltHitFn64_Unused(D2UnitStrc * pUnit, D2UnitStrc * pT
         D2Common::Units::Missile::SetTargetY(pSubMissile, *(int32_t*)((char*)gaSubMissileSpread_Clt064 + iSpreadIdx));
       }
 
-      iSpreadIdx += nClassId * 4;
+      iSpreadIdx += nByteStride;
     } while (iSpreadIdx < 0x20);
 
     return 1;
@@ -2830,12 +2833,13 @@ uint32_t __fastcall MISSILE_Create8DirectionalClient(D2UnitStrc * pUnit, D2UnitS
     sSkillArg.nSubLoopMult = nSkillLevel - 1;
     sSkillArg.nVelocityOverride = pMissileTxtTable->Param1 << 7;
     sSkillArg.eSkillNo = eSkill;
+    const uint32_t nByteStride = (uint32_t)nStep * 4;
     int iSpreadIdx = 0;
     do {
       sSkillArg.nUnitY = *(int*)((char*)ga8DirectionalMissileSpreadX + iSpreadIdx);
       sSkillArg.nUnitX = *(int*)((char*)ga8DirectionalMissileSpreadY + iSpreadIdx);
       Missile::MakeMissile(&sSkillArg);
-      iSpreadIdx += nStep * 4;
+      iSpreadIdx += nByteStride;
     } while (iSpreadIdx < 0x20);
 
     return 1;
@@ -3085,6 +3089,7 @@ int32_t __fastcall MISSILE_CltHitFn30_FrozenOrb(D2UnitStrc * pUnit, D2UnitStrc *
           nClassId = 1;
         }
 
+        const uint32_t nByteStride = (uint32_t)nClassId * 4;
         nSpreadOffset = 0;
         do {
           sSkillArg.nUnitX = *(int*)((char*)gaSubMissileSpreadX_Clt030 + nSpreadOffset);
@@ -3095,7 +3100,7 @@ int32_t __fastcall MISSILE_CltHitFn30_FrozenOrb(D2UnitStrc * pUnit, D2UnitStrc *
             D2Common::Units::Missile::SetTargetY(pSubMissile, *(int32_t*)((char*)gaSubMissileSpreadY_Clt030 + nSpreadOffset));
           }
 
-          nSpreadOffset += nClassId * 4;
+          nSpreadOffset += nByteStride;
         } while (nSpreadOffset < 0x100);
 
         return 1;
@@ -3268,6 +3273,7 @@ int32_t __fastcall MISSILE_CltHitFn04_Unused(D2UnitStrc * pUnit, D2UnitStrc * pT
           nClassId = 1;
         }
 
+        const uint32_t nByteStride = (uint32_t)nClassId * 4;
         nSpreadOffset = 0;
         do {
           sSkillArg.nUnitX = *(int*)((char*)gaSubMissileSpreadX_Clt004 + nSpreadOffset);
@@ -3278,7 +3284,7 @@ int32_t __fastcall MISSILE_CltHitFn04_Unused(D2UnitStrc * pUnit, D2UnitStrc * pT
             D2Common::Units::Missile::SetTargetY(pSubMissile, *(int32_t*)((char*)gaSubMissileSpreadY_Clt004 + nSpreadOffset));
           }
 
-          nSpreadOffset += nClassId * 4;
+          nSpreadOffset += nByteStride;
         } while (nSpreadOffset < 0x100);
 
         return 1;

@@ -46,15 +46,21 @@ int32_t __fastcall STRING_CompareWideStrings(uint16_t * wszText1, uint16_t * wsz
 int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * wszFirst, uint16_t * wszSecond, int32_t nMaxChars) {
     uint16_t wChar2;
     uint16_t wChar1 = *wszFirst;
-    while (wChar1 && (wChar2 = *wszSecond) && nMaxChars) {
-      wszFirst++;
-      wszSecond++;
-      if (wChar1 != wChar2) {
-        return wChar1 < wChar2 ? -1 : 1;
-      }
+    if (wChar1) {
+      unsigned int nRemaining = (unsigned int)nMaxChars;
+      do {
+        if (!(wChar2 = *wszSecond) || !nRemaining--) {
+          break;
+        }
 
-      wChar1 = *wszFirst;
-      nMaxChars--;
+        wszFirst++;
+        wszSecond++;
+        if (wChar1 != wChar2) {
+          return wChar1 < wChar2 ? -1 : 1;
+        }
+
+        wChar1 = *wszFirst;
+      } while (wChar1);
     }
 
     return 0;

@@ -908,12 +908,13 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RingMissileSpray(D2UnitStrc * pUnit, eD2Ski
         return 1;
       }
 
+      const uint32_t nByteStride = (uint32_t)nNumRings * 4;
       nSpreadOffset = 0;
       do {
         sSkillArg.nUnitX = *(int*)((char*)gaSkillRingMissileSpreadConstY + nSpreadOffset + 4);
         sSkillArg.nUnitY = *(int*)((char*)gaSkillRingMissileSpreadConstZ + nSpreadOffset + 4);
         UNIT::Missile::MakeMissile(&sSkillArg);
-        nSpreadOffset += nNumRings * 4;
+        nSpreadOffset += nByteStride;
       } while (nSpreadOffset < 0x3c);
 
       return 1;

@@ -751,12 +751,13 @@ void __fastcall MISSILES_SpawnRadialPattern(::SGAMEDATA * pGame, D2UnitStrc * pU
       nRing1Step = 1;
     }
 
+    const uint32_t nByteStride = (uint32_t)nRing1Step * 4;
     int nTableOffset = 0;
     do {
       sSkillArg.nUnitX = *(int*)((char*)gnSubMissileCount_RadialPattern1 + nTableOffset);
       sSkillArg.nUnitY = *(int*)((char*)gnSubMissileCount_RadialPattern2 + nTableOffset);
       Missiles::CreatingMissile(pGame, &sSkillArg);
-      nTableOffset += nRing1Step * 4;
+      nTableOffset += nByteStride;
     } while (nTableOffset < 0x40);
 
     if (!nRing2Step) {
@@ -764,12 +765,13 @@ void __fastcall MISSILES_SpawnRadialPattern(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     sSkillArg.nVelocityOverride = pMissileTxt->Param2 << 7;
+    const uint32_t nByteStride2 = (uint32_t)nRing2Step * 4;
     nTableOffset = 0;
     do {
       sSkillArg.nUnitX = *(int*)((char*)gnSubMissileCount_RadialPattern1 + nTableOffset + 4);
       sSkillArg.nUnitY = *(int*)((char*)gnSubMissileCount_RadialPattern2 + nTableOffset + 4);
       Missiles::CreatingMissile(pGame, &sSkillArg);
-      nTableOffset += nRing2Step * 4;
+      nTableOffset += nByteStride2;
     } while (nTableOffset < 0x3c);
 }
 
@@ -2280,12 +2282,13 @@ void __fastcall MISSMODE_CreateDirectionalMissiles(::SGAMEDATA * pGame, D2UnitSt
     sSkillArg.nSkillLevel = nSkillLevel;
     sSkillArg.nSubLoopMult = nSkillLevel - 1;
     sSkillArg.nVelocityOverride = pMissileTxt->Param1 << 7;
+    const uint32_t nByteStride = (uint32_t)nStride * 4;
     int nLoopOffset = 0;
     do {
       sSkillArg.nUnitX = *(int*)((char*)gaMissileSpreadOffsets_DirectionalMissiles + nLoopOffset);
       sSkillArg.nUnitY = *(int*)((char*)gnSubMissileCount_DirectionalMissiles + nLoopOffset);
       Missiles::CreatingMissile(pGame, &sSkillArg);
-      nLoopOffset += nStride * 4;
+      nLoopOffset += nByteStride;
     } while (nLoopOffset < 0x20);
 }
 
@@ -2553,6 +2556,7 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnSpreadSubMissilesOnFirstFrame(::SGAMEDA
         nClassId = 1;
       }
 
+      const uint32_t nByteStride = (uint32_t)nClassId * 4;
       nLoopOffset = 0;
       do {
         sSkillArg.nUnitX = *(int*)((char*)gaSubMissileSpreadX_Srv029 + nLoopOffset);
@@ -2563,7 +2567,7 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnSpreadSubMissilesOnFirstFrame(::SGAMEDA
           D2Common::Units::Missile::SetTargetY(pUnit_00, *(int32_t*)((char*)gaSubMissileSpreadY_Srv029 + nLoopOffset));
         }
 
-        nLoopOffset += nClassId * 4;
+        nLoopOffset += nByteStride;
       } while (nLoopOffset < 0x100);
 
       return 3;
@@ -2735,6 +2739,7 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnSpreadSubMissiles(::SGAMEDATA * pGame, 
           nClassId = 1;
         }
 
+        const uint32_t nByteStride = (uint32_t)nClassId * 4;
         nLoopOffset = 0;
         do {
           sSkillArg.nUnitX = *(int*)((char*)gaSubMissileSpreadX_Srv005 + nLoopOffset);
@@ -2745,7 +2750,7 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnSpreadSubMissiles(::SGAMEDATA * pGame, 
             D2Common::Units::Missile::SetTargetY(pUnit_00, *(int32_t*)((char*)gaSubMissileSpreadY_Srv005 + nLoopOffset));
           }
 
-          nLoopOffset += nClassId * 4;
+          nLoopOffset += nByteStride;
         } while (nLoopOffset < 0x100);
 
         return 3;
@@ -3268,6 +3273,7 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnEightDirectionSubMissiles(::SGAMEDATA *
           nClassId = 1;
         }
 
+        const uint32_t nByteStride = (uint32_t)nClassId * 4;
         nLoopOffset = 0;
         do {
           sSkillArg.nUnitX = *(int*)((char*)gnMissileSrvSpread8DirTableX + nLoopOffset);
@@ -3278,7 +3284,7 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnEightDirectionSubMissiles(::SGAMEDATA *
             D2Common::Units::Missile::SetTargetY(pUnit_00, *(int32_t*)((char*)gnMissileSrvSpread8DirTableY + nLoopOffset));
           }
 
-          nLoopOffset += nClassId * 4;
+          nLoopOffset += nByteStride;
         } while (nLoopOffset < 0x20);
 
         return 1;

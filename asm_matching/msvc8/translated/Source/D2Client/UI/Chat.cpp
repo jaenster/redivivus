@@ -451,6 +451,7 @@ static int32_t __stdcall CHAT_CompareCaseInsensitive(char * szText1, char * szTe
     }
 
     int nRemaining = (int)strlen(szText2);
+    int nComparison;
     while (true) {
       if (!nRemaining) {
         return 0;
@@ -459,7 +460,8 @@ static int32_t __stdcall CHAT_CompareCaseInsensitive(char * szText1, char * szTe
       nRemaining--;
       nUpper1 = toupper((int)*szText1);
       nUpper2 = toupper((int)*szText2);
-      if (nUpper1 != nUpper2) {
+      nComparison = nUpper1 - nUpper2;
+      if (nComparison != 0) {
         break;
       }
 
@@ -467,7 +469,7 @@ static int32_t __stdcall CHAT_CompareCaseInsensitive(char * szText1, char * szTe
       szText2++;
     }
 
-    return (uint32_t)(nUpper1 != nUpper2 && -1 < nUpper1 - nUpper2) * 2 - 1;
+    return (uint32_t)(nComparison > 0) * 2 - 1;
 }
 
 static void CHAT_DrawCursor(int32_t nPosY, int32_t nPosX, int32_t nColor) {

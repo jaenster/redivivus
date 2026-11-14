@@ -885,6 +885,7 @@ void __fastcall SKILLASS_SpawnMissileRing(uint32_t dwUnused, int32_t pUnit, ::SG
     anXYOffsetTable[0x7d] = -8;
     anXYOffsetTable[0x7e] = -5;
     anXYOffsetTable[0x7f] = -2;
+    const uint32_t nByteStride = (uint32_t)nMissileStride * 4;
     int nByteOffset = 0;
     do {
       D2UnitStrc* pMissile;
@@ -896,7 +897,7 @@ void __fastcall SKILLASS_SpawnMissileRing(uint32_t dwUnused, int32_t pUnit, ::SG
       nRoyalStrikeParam = D2Common::Skills::GetSkilParam1(SKILL_RoyalStrike);
       nRoyalStrikeParam += 1;
       D2Common::Units::Missile::SetTargetX(pMissile, nRoyalStrikeParam);
-      nByteOffset += nMissileStride * 4;
+      nByteOffset += nByteStride;
     } while (nByteOffset < 0x100);
 }
 
@@ -1122,6 +1123,7 @@ void __fastcall SKILLASS_SpawnSpiralMissileRing(uint32_t dwParam, int32_t pUnit,
     anXYOffsetTable[0x7d] = -8;
     anXYOffsetTable[0x7e] = -5;
     anXYOffsetTable[0x7f] = -2;
+    const uint32_t nByteStride = (uint32_t)nMissileStride * 4;
     int nByteOffset = 0;
     do {
       D2UnitStrc* pMissile;
@@ -1136,7 +1138,7 @@ void __fastcall SKILLASS_SpawnSpiralMissileRing(uint32_t dwParam, int32_t pUnit,
         D2Common::Units::Missile::SetTargetX(pMissile, nRoyalStrikeParam);
       }
 
-      nByteOffset += nMissileStride * 4;
+      nByteOffset += nByteStride;
     } while (nByteOffset < 0x100);
 }
 

@@ -439,6 +439,10 @@ static void __stdcall ITEMMOD_ScaleValueForStatType(int * pnValue, eD2UnitStat e
 
       case UNITSTAT_item_mana_perlevel:
         *pnValue <<= 8;
+      case 57:
+
+      case 58:
+        return;
     }
 }
 

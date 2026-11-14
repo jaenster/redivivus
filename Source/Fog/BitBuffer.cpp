@@ -346,7 +346,7 @@ uint32_t __stdcall ReadUnsigned(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
 
 int32_t __stdcall ReadSigned(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
     uint32_t dwValue = Read(pBitBuffer, nSize);
-    if (nSize < 0x20 && dwValue & 1 << D2_SHIFT_COUNT(nSize - 1)) {
+    if (nSize < 0x20 && dwValue & 1 << D2_SHIFT_COUNT((uint32_t)nSize - 1)) {
       dwValue |= ~((1 << D2_SHIFT_COUNT(nSize)) - 1U);
     }
 

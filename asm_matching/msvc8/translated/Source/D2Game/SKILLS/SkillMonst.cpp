@@ -1497,12 +1497,13 @@ BOOL __fastcall Skills_SrvDoFunc_099_FireMissileRing8Dir(::SGAMEDATA * pGame, D2
         return 1;
       }
 
+      const uint32_t nByteStride = (uint32_t)nMissileCount * 4;
       nDirIndex = 0;
       do {
         sSkillArg.nUnitX = *(int*)((char*)gnSkillMissileCount_FireRing + nDirIndex + 4);
         sSkillArg.nUnitY = *(int*)((char*)gnSkillMissileCount_FireOrb + nDirIndex + 4);
         MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-        nDirIndex += nMissileCount * 4;
+        nDirIndex += nByteStride;
       } while (nDirIndex < 0x3c);
 
       return 1;
