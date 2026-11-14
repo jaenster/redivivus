@@ -12,6 +12,7 @@
 //! compiles exactly what the translator wrote. A shipped tree can blank no function: a TU
 //! VC8 cannot compile there fails instead of being quarantined.
 const std = @import("std");
+const builtin = @import("builtin");
 const util = @import("util.zig");
 const proc = @import("proc.zig");
 const objcache = @import("objcache.zig");
@@ -177,7 +178,12 @@ pub const Translator = struct {
     pub fn mirror(t: *Translator, out: []const u8, quarantine_tsv: []const u8) ![2]u64 {
         if (t.shipped) |d| return copyShipped(d, out);
         var args: std.ArrayList([]const u8) = .empty;
-        try args.appendSlice(gpa, &.{ "pnpm", "--silent", "--dir", t.gr, "exec", "tsx", CLI, t.repo, out, "--serve" });
+        if (builtin.os.tag == .windows) {
+            // CreateProcess does not execute pnpm.cmd; invoke tsx's JS entry directly.
+            try args.appendSlice(gpa, &.{ "node", try util.join(t.gr, "node_modules/tsx/dist/cli.mjs"), try util.join(t.gr, CLI), t.repo, out, "--serve" });
+        } else {
+            try args.appendSlice(gpa, &.{ "pnpm", "--silent", "--dir", t.gr, "exec", "tsx", CLI, t.repo, out, "--serve" });
+        }
         if (util.exists(quarantine_tsv)) try args.appendSlice(gpa, &.{ "--quarantine", quarantine_tsv });
         t.pipe = try proc.Pipe.spawn(args.items);
         const line = try t.pipe.?.readLine();

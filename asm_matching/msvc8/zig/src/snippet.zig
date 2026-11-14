@@ -15,6 +15,7 @@
 //! module's own flags (flags.tsv) are those of the TU the function map files the function
 //! under, or of --tu. --cflags adds flags after those (an experiment: not evidence).
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
 const audit = @import("audit.zig");
 const cli = @import("cli.zig");
@@ -46,6 +47,12 @@ fn mtimeNs(path: []const u8) ?i128 {
 
 /// shutil.copy2: the bytes, then the source's times.
 fn copy2(src: []const u8, dst: []const u8) !void {
+    if (builtin.os.tag == .windows) {
+        const from = try std.unicode.wtf8ToWtf16LeAllocZ(gpa, src);
+        const to = try std.unicode.wtf8ToWtf16LeAllocZ(gpa, dst);
+        if (c.CopyFileW(from.ptr, to.ptr, 0) == 0) return error.Copy;
+        return;
+    }
     try util.writeFile(dst, try util.readFile(src));
     const sz = try util.z(src);
     var st: c.struct_stat = undefined;
@@ -70,7 +77,11 @@ fn pchCopy(scratch: []const u8) ![]const u8 {
             try proc.rename(tmp, copy);
             break;
         }
-        _ = c.sleep(5);
+        if (builtin.os.tag == .windows) {
+            c.Sleep(5000);
+        } else {
+            _ = c.sleep(5);
+        }
     }
     return copy;
 }
@@ -86,7 +97,12 @@ fn compileFile(path: []const u8, cflags: []const u8) !struct { ?[]const u8, []co
     const rsp = try util.join(compile.BUILD, "cl.rsp");
     if (!util.exists(rsp)) cli.exitMsg("no {s} - run `oracle build` once first", .{rsp});
     var cmd: std.ArrayList([]const u8) = .empty;
-    try cmd.appendSlice(gpa, &.{ try util.join(compile.HERE, "vc8.sh"), "cl", try std.mem.concat(gpa, u8, &.{ "@", try compile.win(rsp) }) });
+    if (builtin.os.tag == .windows) {
+        try cmd.append(gpa, try compile.nativeCl());
+    } else {
+        try cmd.appendSlice(gpa, &.{ try util.join(compile.HERE, "vc8.sh"), "cl" });
+    }
+    try cmd.append(gpa, try std.mem.concat(gpa, u8, &.{ "@", try compile.win(rsp) }));
     if (compile.USE_PCH) {
         const copy = try pchCopy(scratch);
         try cmd.appendSlice(gpa, &.{ "/Yu" ++ compile.PCH_HEADER, try std.mem.concat(gpa, u8, &.{ "/Fp", try compile.win(copy) }) });
@@ -119,6 +135,7 @@ fn parseHex(s: []const u8) ?u32 {
 }
 
 fn absPath(p: []const u8) ![]const u8 {
+    if (builtin.os.tag == .windows) return proc.realpath(p);
     if (p.len > 0 and p[0] == '/') return proc.normpath(p);
     var buf: [4096]u8 = undefined;
     const cwd = std.mem.sliceTo(c.getcwd(&buf, buf.len) orelse return error.Cwd, 0);

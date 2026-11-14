@@ -15,9 +15,11 @@
 //! compiled, every object decoded, every function judged), and diffs the two runs' funcmap,
 //! libmap, audit and datamap. Exit status 1 if they differ.
 const std = @import("std");
+const builtin = @import("builtin");
 const audit = @import("audit.zig");
 const cli = @import("cli.zig");
 const proc = @import("proc.zig");
+const refimage = @import("refimage.zig");
 const util = @import("util.zig");
 
 const gpa = util.gpa;
@@ -33,12 +35,12 @@ const USAGE =
     \\
 ;
 
-const Run = struct { rc: i32, text: []const u8, secs: f64 };
+const Run = struct { rc: i32, timed_out: bool, text: []const u8, secs: f64 };
 
 fn run(argv: []const []const u8, env: []const []const u8) !Run {
     const t0 = proc.now();
     const p = try proc.run(argv, .{ .merge_stderr = true, .env_set = env });
-    return .{ .rc = p.status, .text = try proc.universalNewlines(p.out), .secs = proc.now() - t0 };
+    return .{ .rc = p.status, .timed_out = p.timed_out, .text = try proc.universalNewlines(p.out), .secs = proc.now() - t0 };
 }
 
 fn secs(out: *cli.Out, comptime fmt: [:0]const u8, v: f64) !void {
@@ -52,7 +54,11 @@ fn pipeline(out: *cli.Out, root: []const u8, dir: []const u8, jobs: []const u8, 
     const lm = try util.join(dir, "libmap.tsv");
     const au = try util.join(dir, "audit.tsv");
     var build: std.ArrayList([]const u8) = .empty;
-    try build.appendSlice(gpa, &.{ try util.join(root, "oracle"), "build", "-j", jobs });
+    if (builtin.os.tag == .windows) {
+        try build.appendSlice(gpa, &.{ self, "build", "--root", root, "-j", jobs });
+    } else {
+        try build.appendSlice(gpa, &.{ try util.join(root, "oracle"), "build", "-j", jobs });
+    }
     if (force) try build.append(gpa, "--force");
     var libmap: std.ArrayList([]const u8) = .empty;
     try libmap.appendSlice(gpa, &.{ self, "libmap", "--root", root, "--funcmap", fm, "--out", lm });
@@ -90,6 +96,10 @@ fn pipeline(out: *cli.Out, root: []const u8, dir: []const u8, jobs: []const u8, 
             try out.raw("s\n");
         }
         try out.flush();
+        if (r.timed_out) {
+            util.say(r.text);
+            cli.exitMsg("{s} timed out; output may be incomplete", .{st.name});
+        }
         if (r.rc != 0) {
             if (std.mem.eql(u8, st.name, "build") and std.mem.indexOf(u8, r.text, "TUs OK") != null) {
                 try out.raw("  (some TUs failed to compile: build/compile_status.tsv)\n");
@@ -151,6 +161,7 @@ pub fn main(args: []const []const u8) !void {
     const root = try cli.root(p.get("--root"));
     const cfg = try audit.Config.init(root);
     if (cfg.experiment) cli.exitMsg("quick: the baseline only (it writes evidence/)", .{});
+    if (builtin.os.tag == .windows) try refimage.ensureFunctions(root);
     const jobs = try std.fmt.allocPrint(gpa, "{d}", .{p.int("--jobs", @intCast(proc.cpuCount()))});
     const exe_map = p.get("--exe-map");
     const evidence = try util.join(root, "evidence");
@@ -187,10 +198,26 @@ pub fn main(args: []const []const u8) !void {
     for (OUTPUTS) |n| {
         const a = try util.join(incr, n);
         const b = try util.join(full, n);
-        if (!std.mem.eql(u8, try util.readFile(a), try util.readFile(b))) {
+        const incremental = try util.readFile(a);
+        const complete = try util.readFile(b);
+        if (!std.mem.eql(u8, incremental, complete)) {
             try differ.append(gpa, n);
-            const d = try proc.run(&.{ "diff", a, b }, .{});
-            util.say(d.out);
+            if (builtin.os.tag == .windows) {
+                var first: usize = 0;
+                while (first < @min(incremental.len, complete.len) and incremental[first] == complete[first]) first += 1;
+                const old_byte: []const u8 = if (first < incremental.len)
+                    try std.fmt.allocPrint(gpa, "0x{x:0>2}", .{incremental[first]})
+                else "EOF";
+                const new_byte: []const u8 = if (first < complete.len)
+                    try std.fmt.allocPrint(gpa, "0x{x:0>2}", .{complete[first]})
+                else "EOF";
+                util.say(try std.fmt.allocPrint(gpa,
+                    "{s}: first difference at byte {d}: incremental {s}, full {s} ({d} vs {d} bytes)\n",
+                    .{ n, first, old_byte, new_byte, incremental.len, complete.len }));
+            } else {
+                const d = try proc.run(&.{ "diff", a, b }, .{});
+                util.say(d.out);
+            }
         }
     }
     if (differ.items.len > 0) {

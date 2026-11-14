@@ -1,10 +1,12 @@
 //! Every function in the compiled objects, with what it refers to (ours.py). Decoding here
 //! takes about as long as reading a cached pickle did, so nothing is cached.
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
 const objfuncs = @import("objfuncs.zig");
 const dec = @import("decode.zig");
 const util = @import("util.zig");
+const proc = @import("proc.zig");
 
 const gpa = util.gpa;
 
@@ -50,23 +52,32 @@ pub fn completedObjects(objdir: []const u8) ![][]const u8 {
 
 fn walk(root: []const u8, rel: []const u8, out: *std.ArrayList([]const u8)) !void {
     const dir_path = if (rel.len == 0) root else try util.join(root, rel);
-    const dz = try util.z(dir_path);
-    const dp = c.opendir(dz.ptr) orelse return;
     var files: std.ArrayList([]const u8) = .empty;
     var dirs: std.ArrayList([]const u8) = .empty;
-    while (c.readdir(dp)) |ent| {
-        const name = std.mem.sliceTo(@as([*:0]const u8, @ptrCast(&ent.*.d_name)), 0);
-        if (std.mem.eql(u8, name, ".") or std.mem.eql(u8, name, "..")) continue;
-        const nm = try gpa.dupe(u8, name);
-        var is_dir = ent.*.d_type == c.DT_DIR;
-        if (ent.*.d_type == c.DT_UNKNOWN) {
-            var st: c.struct_stat = undefined;
-            const full = try util.z(try util.join(dir_path, nm));
-            is_dir = c.lstat(full.ptr, &st) == 0 and (st.st_mode & c.S_IFMT) == c.S_IFDIR;
+    if (builtin.os.tag == .windows) {
+        for (try proc.listDir(dir_path)) |name| {
+            const full = try util.join(dir_path, name);
+            if (proc.isDir(full)) {
+                if (!proc.isLink(full)) try dirs.append(gpa, name);
+            } else try files.append(gpa, name);
         }
-        if (is_dir) try dirs.append(gpa, nm) else try files.append(gpa, nm);
+    } else {
+        const dz = try util.z(dir_path);
+        const dp = c.opendir(dz.ptr) orelse return;
+        while (c.readdir(dp)) |ent| {
+            const name = std.mem.sliceTo(@as([*:0]const u8, @ptrCast(&ent.*.d_name)), 0);
+            if (std.mem.eql(u8, name, ".") or std.mem.eql(u8, name, "..")) continue;
+            const nm = try gpa.dupe(u8, name);
+            var is_dir = ent.*.d_type == c.DT_DIR;
+            if (ent.*.d_type == c.DT_UNKNOWN) {
+                var st: c.struct_stat = undefined;
+                const full = try util.z(try util.join(dir_path, nm));
+                is_dir = c.lstat(full.ptr, &st) == 0 and (st.st_mode & c.S_IFMT) == c.S_IFDIR;
+            }
+            if (is_dir) try dirs.append(gpa, nm) else try files.append(gpa, nm);
+        }
+        _ = c.closedir(dp);
     }
-    _ = c.closedir(dp);
     std.mem.sort([]const u8, files.items, {}, lessStr);
     std.mem.sort([]const u8, dirs.items, {}, lessStr);
     var have: std.StringHashMapUnmanaged(void) = .empty;

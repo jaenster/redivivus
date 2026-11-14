@@ -8,6 +8,7 @@
 //! fingerprint of the toolchain that built an image. The build number cannot tell service
 //! packs apart that share one (VS2005 RTM .42 and SP1 .762 both stamp 50727).
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
 const cli = @import("cli.zig");
 const coff = @import("coff.zig");
@@ -72,7 +73,11 @@ pub fn richMain(args: []const []const u8) !void {
     try out.print("{s}\n", .{path});
     var t: c.time_t = @intCast(stamp);
     var tm: c.struct_tm = undefined;
-    _ = c.gmtime_r(&t, &tm);
+    if (builtin.os.tag == .windows) {
+        _ = c._gmtime64_s(&tm, &t);
+    } else {
+        _ = c.gmtime_r(&t, &tm);
+    }
     var buf: [64]u8 = undefined;
     const n = c.strftime(&buf, buf.len, "%Y-%m-%d %H:%M:%S", &tm);
     try out.print("  TimeDateStamp  0x{x:0>8}  {s} UTC\n", .{ stamp, buf[0..n] });

@@ -14,6 +14,7 @@
 //! blanks nothing, so there such a TU fails. Outputs, keys and cache entries are build.py's
 //! (the Python driver this replaced), file for file; `--decode-jobs` is accepted and ignored.
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
 const util = @import("util.zig");
 const proc = @import("proc.zig");
@@ -67,7 +68,7 @@ var out_lock: proc.Mutex = .{};
 var QUARANTINE: std.StringHashMapUnmanaged([]u32) = .empty;
 
 pub fn configure(root_arg: []const u8) !void {
-    ORACLE = if (root_arg.len > 0 and root_arg[0] == '/') try proc.normpath(root_arg) else blk: {
+    ORACLE = if (isAbsolute(root_arg)) try proc.normpath(root_arg) else blk: {
         var buf: [4096]u8 = undefined;
         const cwd = std.mem.sliceTo(c.getcwd(&buf, buf.len) orelse return error.Cwd, 0);
         break :blk try proc.joinNorm(cwd, root_arg);
@@ -102,6 +103,13 @@ pub fn configure(root_arg: []const u8) !void {
     const d = util.getenv("ORACLE_DRIVE") orelse "r";
     DRIVE = try std.fmt.allocPrint(gpa, "{s}:", .{try std.ascii.allocUpperString(gpa, d)});
     FLAGS_TABLE = try loadFlagsTable(try util.join(ORACLE, "flags.tsv"));
+}
+
+fn isAbsolute(path: []const u8) bool {
+    if (path.len > 0 and path[0] == '/') return true;
+    return builtin.os.tag == .windows and
+        ((path.len >= 3 and std.ascii.isAlphabetic(path[0]) and path[1] == ':' and (path[2] == '\\' or path[2] == '/')) or
+        (path.len >= 2 and path[0] == '\\' and path[1] == '\\'));
 }
 
 fn loadFlagsTable(path: []const u8) ![]FlagRow {
@@ -153,13 +161,25 @@ pub fn win(path: []const u8) ![]const u8 {
         std.debug.print("{s} is outside the repository\n", .{path});
         return error.OutsideRepo;
     }
-    const out = try std.mem.concat(gpa, u8, &.{ DRIVE, "\\", rel });
+    const out = if (builtin.os.tag == .windows)
+        try gpa.dupe(u8, try proc.realpath(path))
+    else
+        try std.mem.concat(gpa, u8, &.{ DRIVE, "\\", rel });
     std.mem.replaceScalar(u8, out, '/', '\\');
     return out;
 }
 
 /// A path from /showIncludes or a message back to the host; only repository paths matter.
 fn linux(winpath: []const u8) !?[]const u8 {
+    if (builtin.os.tag == .windows) {
+        const norm = try gpa.dupe(u8, winpath);
+        std.mem.replaceScalar(u8, norm, '\\', '/');
+        const repo = try gpa.dupe(u8, REPO_REAL);
+        std.mem.replaceScalar(u8, repo, '\\', '/');
+        if (norm.len <= repo.len or norm[repo.len] != '/' or
+            !std.ascii.eqlIgnoreCase(norm[0..repo.len], repo)) return null;
+        return try proc.joinNorm(REPO, norm[repo.len + 1 ..]);
+    }
     const p = try gpa.dupe(u8, winpath);
     std.mem.replaceScalar(u8, p, '\\', '/');
     if (p.len < 2) return null;
@@ -424,6 +444,21 @@ var compat_id_v: ?[]const u8 = null;
 /// Hash of the compiler's own binaries: a service pack or a patched c2.dll is another compiler.
 fn compilerId() ![]const u8 {
     if (compiler_id_v) |v| return v;
+    if (builtin.os.tag == .windows) {
+        const cl = try nativeCl();
+        const bindir = util.dirname(cl);
+        var names: std.ArrayList([]const u8) = .empty;
+        for (try proc.listDir(bindir)) |n| {
+            const l = try std.ascii.allocLowerString(gpa, n);
+            if (std.mem.endsWith(u8, l, ".exe") or std.mem.endsWith(u8, l, ".dll")) try names.append(gpa, n);
+        }
+        proc.sortStrings(names.items);
+        var parts: std.ArrayList([]const u8) = .empty;
+        try parts.appendSlice(gpa, &.{ "native-vc8", VC, cl, util.getenv("INCLUDE") orelse "", util.getenv("LIB") orelse "" });
+        for (names.items) |n| try parts.append(gpa, try std.mem.concat(gpa, u8, &.{ n, try objcache.shaFile(try util.join(bindir, n)) }));
+        compiler_id_v = try objcache.shaBytes(parts.items);
+        return compiler_id_v.?;
+    }
     const wp = util.getenv("WINEPREFIX");
     const prefix = if (wp != null and wp.?.len > 0) wp.? else (util.getenv("VC8_WINEPREFIX") orelse "");
     const bindir = try std.fmt.allocPrint(gpa, "{s}/drive_c/vc8/{s}/bin", .{ prefix, VC });
@@ -438,6 +473,15 @@ fn compilerId() ![]const u8 {
     for (names.items) |n| try parts.append(gpa, try std.mem.concat(gpa, u8, &.{ n, try objcache.shaFile(try util.join(bindir, n)) }));
     compiler_id_v = try objcache.shaBytes(parts.items);
     return compiler_id_v.?;
+}
+
+pub fn nativeCl() ![]const u8 {
+    const path = util.getenv("VC8_NATIVE_CL") orelse {
+        std.debug.print("Windows oracle build requires VC8_NATIVE_CL (absolute path to VC8 cl.exe)\n", .{});
+        return error.NativeCompilerPathRequired;
+    };
+    if (!isAbsolute(path) or !proc.isFile(path)) return error.NativeCompilerPathInvalid;
+    return proc.realpath(path);
 }
 
 fn compatId() ![]const u8 {
@@ -646,7 +690,12 @@ fn finish(t: *TU, out: []const u8, returncode: i32, secs: f64) !Result {
 
 pub fn clCommand(rsp: []const u8, tu: []const u8, out: []const u8, srcs: []const []const u8) ![]const []const u8 {
     var cmd: std.ArrayList([]const u8) = .empty;
-    try cmd.appendSlice(gpa, &.{ try util.join(HERE, "vc8.sh"), "cl", try std.mem.concat(gpa, u8, &.{ "@", try win(rsp) }), "/showIncludes" });
+    if (builtin.os.tag == .windows) {
+        try cmd.append(gpa, try nativeCl());
+    } else {
+        try cmd.appendSlice(gpa, &.{ try util.join(HERE, "vc8.sh"), "cl" });
+    }
+    try cmd.appendSlice(gpa, &.{ try std.mem.concat(gpa, u8, &.{ "@", try win(rsp) }), "/showIncludes" });
     var it = std.mem.tokenizeAny(u8, extraFlags(tu), " \t\n\r\x0b\x0c");
     while (it.next()) |f| try cmd.append(gpa, f);
     if (USE_PCH) try cmd.append(gpa, "/Yu" ++ PCH_HEADER);
@@ -860,6 +909,14 @@ fn rspVisit(ctx: RspCtx, w: *proc.WalkDir) !void {
     };
 }
 
+fn rspPath(flag: []const u8, path: []const u8) ![]const u8 {
+    const p = try win(path);
+    if (builtin.os.tag == .windows and
+        (std.mem.indexOfScalar(u8, p, ' ') != null or std.mem.indexOfScalar(u8, p, '\t') != null))
+        return std.fmt.allocPrint(gpa, "{s}\"{s}\"", .{ flag, p });
+    return std.mem.concat(gpa, u8, &.{ flag, p });
+}
+
 fn writeRsp() ![]const u8 {
     var dirs: std.ArrayList([]const u8) = .empty;
     try proc.walk(SRC, RspCtx{ .dirs = &dirs }, rspVisit);
@@ -867,22 +924,22 @@ fn writeRsp() ![]const u8 {
     var lines: std.ArrayList([]const u8) = .empty;
     try lines.append(gpa, "/nologo /c " ++ "");
     lines.items[0] = try std.fmt.allocPrint(gpa, "/nologo /c {s} {s}", .{ CFLAGS, TOOL_CFLAGS });
-    try lines.append(gpa, try std.mem.concat(gpa, u8, &.{ "/FI", try win(try util.join(ORACLE, "vc8_compat.h")) }));
+    try lines.append(gpa, try rspPath("/FI", try util.join(ORACLE, "vc8_compat.h")));
     if (USE_PCH) {
         try writeIfChanged(try util.join(PCHDIR, PCH_HEADER), "// The prefix every TU parses, precompiled once (build.py, ORACLE_PCH=1).\n#include \"" ++ PLATFORM_H ++ "\"\n#include \"Source/globals/globals.h\"\n");
         try writeIfChanged(try util.join(PCHDIR, "oracle_pch.cpp"), "// precompiled-header creation unit\n");
         try lines.append(gpa, "/FI" ++ PCH_HEADER);
-        try lines.append(gpa, try std.mem.concat(gpa, u8, &.{ "/I", try win(PCHDIR) }));
-        try lines.append(gpa, try std.mem.concat(gpa, u8, &.{ "/Fp", try win(PCH_FILE) }));
-    } else try lines.append(gpa, try std.mem.concat(gpa, u8, &.{ "/FI", try win(try util.join(SRC, PLATFORM_H)) }));
-    try lines.append(gpa, try std.mem.concat(gpa, u8, &.{ "/I", try win(try util.join(ORACLE, "shim_include")) }));
-    try lines.append(gpa, try std.mem.concat(gpa, u8, &.{ "/I", try win(SRC) }));
+        try lines.append(gpa, try rspPath("/I", PCHDIR));
+        try lines.append(gpa, try rspPath("/Fp", PCH_FILE));
+    } else try lines.append(gpa, try rspPath("/FI", try util.join(SRC, PLATFORM_H)));
+    try lines.append(gpa, try rspPath("/I", try util.join(ORACLE, "shim_include")));
+    try lines.append(gpa, try rspPath("/I", SRC));
     var prev: ?[]const u8 = null;
     for (dirs.items) |d| {
         if (std.mem.eql(u8, d, SRC)) continue;
         if (prev != null and std.mem.eql(u8, prev.?, d)) continue;
         prev = d;
-        try lines.append(gpa, try std.mem.concat(gpa, u8, &.{ "/I", try win(d) }));
+        try lines.append(gpa, try rspPath("/I", d));
     }
     const rsp = try util.join(BUILD, "cl.rsp");
     try writeIfChanged(rsp, try joinLines(lines.items));
@@ -895,6 +952,10 @@ var wine_up = false;
 /// process spawns wine's services, which inherit its stdout and stderr, and a compile captured
 /// through pipes would then wait for an end of file that comes only when they exit.
 fn startWine() !void {
+    if (builtin.os.tag == .windows) {
+        _ = try nativeCl();
+        return;
+    }
     if (wine_up) return;
     const vp = util.getenv("VC8_WINEPREFIX");
     const prefix = if (vp) |v| v else try std.fmt.allocPrint(gpa, "{s}/q2-dev/asm-matching-toolchain/wine-vc8", .{util.getenv("HOME") orelse ""});
@@ -923,7 +984,14 @@ fn buildPch(rsp: []const u8) !PchResult {
     }
     for ([_][]const u8{ PCH_FILE, dep, sidecar }) |f| if (util.exists(f)) proc.remove(f);
     try startWine();
-    const p = try proc.run(&.{ try util.join(HERE, "vc8.sh"), "cl", try std.mem.concat(gpa, u8, &.{ "@", try win(rsp) }), "/showIncludes", "/Yc" ++ PCH_HEADER, try std.mem.concat(gpa, u8, &.{ "/Fo", try win(pobj) }), try win(try util.join(PCHDIR, "oracle_pch.cpp")) }, .{});
+    var cmd: std.ArrayList([]const u8) = .empty;
+    if (builtin.os.tag == .windows) {
+        try cmd.append(gpa, try nativeCl());
+    } else {
+        try cmd.appendSlice(gpa, &.{ try util.join(HERE, "vc8.sh"), "cl" });
+    }
+    try cmd.appendSlice(gpa, &.{ try std.mem.concat(gpa, u8, &.{ "@", try win(rsp) }), "/showIncludes", "/Yc" ++ PCH_HEADER, try std.mem.concat(gpa, u8, &.{ "/Fo", try win(pobj) }), try win(try util.join(PCHDIR, "oracle_pch.cpp")) });
+    const p = try proc.run(cmd.items, .{});
     const lines = try proc.splitlines(try concatOutput(p));
     var deps: std.ArrayList([]const u8) = .empty;
     var first_err: ?[]const u8 = null;

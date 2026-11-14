@@ -23,6 +23,7 @@
 //!       {"bh": [[start, size], ...]}  ->  {"bh": ["size-sha256[:8]", ...]}: the original's
 //!            bytes with every reference masked, as a vc8form tag's bh records them
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
 const util = @import("util.zig");
 const proc = @import("proc.zig");
@@ -121,6 +122,23 @@ fn worker(r: *Round) void {
     }
 }
 
+fn trialOutputDir(scratch: []const u8) ![]u8 {
+    const path = if (builtin.os.tag == .windows)
+        try std.mem.concat(gpa, u8, &.{ scratch, "/" })
+    else
+        try std.mem.concat(gpa, u8, &.{ "Z:", scratch, "/" });
+    std.mem.replaceScalar(u8, path, '/', '\\');
+    return path;
+}
+
+test "trial output directory uses host path on Windows" {
+    const path = try trialOutputDir("C:/scratch");
+    if (builtin.os.tag == .windows)
+        try std.testing.expectEqualStrings("C:\\scratch\\", path)
+    else
+        try std.testing.expectEqualStrings("Z:C:\\scratch\\", path);
+}
+
 fn trialMain(args: []const []const u8) !void {
     var root: ?[]const u8 = null;
     var out_dir: ?[]const u8 = null;
@@ -173,8 +191,7 @@ fn trialMain(args: []const []const u8) !void {
             try work.append(gpa, .{ .ks = part, .tu = tus.items[part[0]] });
         }
     }
-    const out_win = try std.mem.concat(gpa, u8, &.{ "Z:", scratch, "/" });
-    std.mem.replaceScalar(u8, out_win, '/', '\\');
+    const out_win = try trialOutputDir(scratch);
     var round = Round{ .work = work.items, .srcs = srcs.items, .rsp = try util.join(compile.BUILD, "cl.rsp"), .out_win = out_win, .scratch = scratch };
     round.lock.init();
     {
