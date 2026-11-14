@@ -3039,7 +3039,6 @@ void __fastcall NET_SID_CLIENT_IDEAInvertKey(uint16_t * pEncryptKey, uint16_t * 
 void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphertext, uint16_t * pSubkeys) {
     short int* pOut3;
     short int finalMult0;
-    uint16_t* pRoundKey;
     uint32_t tempMult1;
     uint32_t tempMult2;
     uint32_t tempMult3;
@@ -3052,8 +3051,7 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
     int roundCounter = 8;
     do {
       int roundMult1;
-      pRoundKey = pSubkeys;
-      tempMult1 = (uint32_t)*pRoundKey;
+      tempMult1 = (uint32_t)*pSubkeys;
       x1 &= 0xffff;
       if (x1) {
         if (tempMult1) {
@@ -3067,8 +3065,8 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
         tempMult2 = 1 - tempMult1;
       }
 
-      tempMult1 = x2 + pRoundKey[1];
-      x1 = (uint32_t)pRoundKey[3];
+      tempMult1 = x2 + pSubkeys[1];
+      x1 = (uint32_t)pSubkeys[3];
       x4 &= 0xffff;
       if (x4) {
         if (x1) {
@@ -3082,8 +3080,8 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
         tempMult3 = 1 - x1;
       }
 
-      x4 = (uint32_t)pRoundKey[4];
-      x1 = (x3 + pRoundKey[2] ^ tempMult2) & 0xffff;
+      x4 = (uint32_t)pSubkeys[4];
+      x1 = (x3 + pSubkeys[2] ^ tempMult2) & 0xffff;
       if (x1) {
         if (x4) {
           tempResult = (uint16_t)(x1 * x4);
@@ -3098,7 +3096,7 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
 
       x1 = (tempMult3 ^ tempMult1) + roundMult1 & 0xffff;
       if (x1) {
-        x4 = (uint32_t)pRoundKey[5];
+        x4 = (uint32_t)pSubkeys[5];
         if (x4) {
           x1 *= x4;
           tempResult = (uint16_t)x1;
@@ -3108,18 +3106,18 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
           tempResult = 1 - x1;
         }
       } else {
-        x1 = (uint32_t)pRoundKey[5];
+        x1 = (uint32_t)pSubkeys[5];
         tempResult = 1 - x1;
       }
 
       x1 = tempMult2 ^ tempResult;
-      x2 = tempResult ^ x3 + pRoundKey[2];
+      x2 = tempResult ^ x3 + pSubkeys[2];
       x4 = tempMult3 ^ roundMult1 + tempResult;
       x3 = roundMult1 + tempResult ^ tempMult1;
       roundCounter--;
-      pSubkeys = pRoundKey + 6;
+      pSubkeys = pSubkeys + 6;
       if (!roundCounter) {
-        finalKey0 = pRoundKey[6];
+        finalKey0 = pSubkeys[0];
         if ((uint16_t)x1) {
           if (finalKey0) {
             x1 = (uint16_t)x1 * (uint32_t)finalKey0;
@@ -3132,9 +3130,9 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
         }
 
         *pCiphertext = finalMult0;
-        pCiphertext[1] = pRoundKey[7] + (short int)x3;
-        pCiphertext[2] = pRoundKey[8] + (short int)x2;
-        finalKey0 = pRoundKey[9];
+        pCiphertext[1] = pSubkeys[1] + (short int)x3;
+        pCiphertext[2] = pSubkeys[2] + (short int)x2;
+        finalKey0 = pSubkeys[3];
         pOut3 = pCiphertext + 3;
         if (!(uint16_t)x4) {
           *pOut3 = 1 - finalKey0;

@@ -77,7 +77,6 @@ void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, size_t nSize) {
 
 size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferSize, char * pBytes, size_t nBytesSize) {
     uint32_t nNumBits;
-    size_t nRemaining;
     uint8_t* pOutCur;
     uint8_t byPending = 0;
     int nBitsFree = 8;
@@ -98,7 +97,6 @@ size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferS
       if ((int)nNumBits >= nBitsFree) {
         do {
           nNumBits -= nBitsFree;
-          nRemaining = nBufferLeft - 1;
           if (!nBufferLeft) {
             return 0;
           }
@@ -108,7 +106,7 @@ size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferS
           *pOutCur = bVar1 >> D2_SHIFT_COUNT(nNumBits) | byPending;
           byPending = 0;
           pOutCur = pOut;
-          nBufferLeft = nRemaining;
+          nBufferLeft = nBufferLeft - 1;
         } while (7 < (int)nNumBits);
       }
       if (nNumBits) {

@@ -950,7 +950,7 @@ void __stdcall CHAT_ClearInput() {
 }
 
 // Routes incoming BNet chat packet by type - handles whispers, emotes, broadcasts, system messages
-void __stdcall CHAT_ProcessBattleNetMessage() {
+BOOL __stdcall CHAT_ProcessBattleNetMessage() {
     uint8_t* pbyWhisperTarget;
     uint8_t* pbyPrefixScan;
     char* szWhisperTarget;
@@ -969,16 +969,16 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
     D2BNetClientCallbacksStrc* pCallbacks;
     pCallbacks = ClientModeInGame::CLIENT_GetBNetClientCallbacks();
     if (!pCallbacks) {
-      return;
+      return 0;
     }
 
     int nResult;
     nResult = pCallbacks->pfnDequeueMessage(&nMessageType, &sChatEvent);
     if (!nResult) {
-      return;
+      return 0;
     }
     if (nMessageType) {
-      return;
+      return 1;
     }
 
     Fog::File::CONTAINER_InitializeBuffer(wszPrefixW, 2, 0x154, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
@@ -992,35 +992,17 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
     int bIgnored1;
     bIgnored1 = pIgnoreList->_vfptr->CheckIgnored(pIgnoreList, sChatEvent.szUserAndText);
     if (bIgnored1) {
-      return;
+      return 1;
     }
 
     pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
     int bIgnored2;
     bIgnored2 = pIgnoreList->_vfptr->CheckAccountNameIgnored(pIgnoreList, pszMessageText);
     if (bIgnored2) {
-      return;
+      return 1;
     }
 
     switch (sChatEvent.nEventId) {
-      case 1:
-
-      case 2:
-
-      case 3:
-
-      case 5:
-
-      case 7:
-
-      case 9:
-
-      case 0x15:
-
-      case 0x16:
-
-      case 0x17:
-        return;
       case 4:
 
       case 6:
@@ -1055,10 +1037,28 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
           D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x153, wszFormatted, pwszFormat, pwszSenderLine, pWVar1);
           wszFormatted[0x153] = L'\0';
           Text::TEXT_PrintGameString(wszFormatted, 2);
-          return;
+          return 1;
         }
       default:
         break;
+      case 1:
+
+      case 2:
+
+      case 3:
+
+      case 5:
+
+      case 7:
+
+      case 9:
+
+      case 0x15:
+
+      case 0x16:
+
+      case 0x17:
+        return 1;
     }
 
     memcpy(aHeaderBuffer, "<BattleNet>: ", 0xe);
@@ -1080,6 +1080,7 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszPrefixW, wszMessageW);
     wszPrefixW[0x153] = L'\0';
     Text::TEXT_PrintGameString(wszPrefixW, 3);
+    return 1;
 }
 
 static BOOL CHAT_HandleResignCommand(char * szCommandName, char * szInput) {

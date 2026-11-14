@@ -888,14 +888,7 @@ void __stdcall D2WIN_HandleSystemCommand(D2UIMouseMsgStrc * pMsg) {
     int nMonWorkWidth;
     tagRECT rcClient;
     int nMonWorkHeight;
-    int nMonWorkLeft;
-    int nMonWorkTop;
-    int nMonWorkRight;
-    int nMonWorkBottom;
-    int nWndPosX;
-    int nWndPosY;
-    int nTargetWidth;
-    int nTargetHeight;
+    tagRECT rcWork;
     tagRECT* pRcDesktop;
     uint16_t uSysCmd = (uint16_t)pMsg->nWParam & 0xfff0;
     if (uSysCmd != 0xf130 && uSysCmd != 0xf100) {
@@ -919,24 +912,21 @@ void __stdcall D2WIN_HandleSystemCommand(D2UIMouseMsgStrc * pMsg) {
         GetClientRect(hGameWnd, &rcClient);
         nClientWidth = rcClient.right - rcClient.left;
         nClientHeight = rcClient.bottom - rcClient.top;
-        nMonWorkLeft = sMonitorInfo.rcWork.left;
-        nMonWorkTop = sMonitorInfo.rcWork.top;
-        nMonWorkRight = sMonitorInfo.rcWork.right;
+        rcWork.left = sMonitorInfo.rcWork.left;
+        rcWork.top = sMonitorInfo.rcWork.top;
+        rcWork.right = sMonitorInfo.rcWork.right;
         nMonWorkWidth = sMonitorInfo.rcWork.right - sMonitorInfo.rcWork.left;
-        nMonWorkBottom = sMonitorInfo.rcWork.bottom;
+        rcWork.bottom = sMonitorInfo.rcWork.bottom;
         nMonWorkHeight = sMonitorInfo.rcWork.bottom - sMonitorInfo.rcWork.top;
-        nWndPosX = 0;
-        nWndPosY = 0;
-        nTargetWidth = 0;
-        nTargetHeight = 0;
+        tagRECT rcTarget = {0};
         dwResolutionMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
-        D2gfx::D2GFX::D2GFX_GetWindowSizeByResolutionMode(dwResolutionMode, &nTargetWidth, &nTargetHeight);
+        D2gfx::D2GFX::D2GFX_GetWindowSizeByResolutionMode(dwResolutionMode, (int*)&rcTarget.right, (int*)&rcTarget.bottom);
         pRcDesktop = &rcDesktop;
         /* LPRECT lpRect for GetClientRect */ hDesktopWnd = GetDesktopWindow();
         /* HWND hWnd for GetClientRect */ GetClientRect(hDesktopWnd, pRcDesktop);
-        if (nClientWidth == nTargetWidth && nClientHeight == nTargetHeight && rcDesktop.right - rcDesktop.left > nTargetWidth && rcDesktop.bottom - rcDesktop.top > nTargetHeight) {
-          nWndPosX = nMonWorkLeft;
-          nWndPosY = nMonWorkTop;
+        if (nClientWidth == rcTarget.right && nClientHeight == rcTarget.bottom && rcDesktop.right - rcDesktop.left > rcTarget.right && rcDesktop.bottom - rcDesktop.top > rcTarget.bottom) {
+          rcTarget.left = rcWork.left;
+          rcTarget.top = rcWork.top;
           bFixAspect = D2gfx::D2GFX::D2GFX_GetFixAspect();
           if (!bFixAspect) {
             return;
@@ -944,35 +934,35 @@ void __stdcall D2WIN_HandleSystemCommand(D2UIMouseMsgStrc * pMsg) {
 
           /* WINDOWPLACEMENT * lpwndpl for GetWindowPlacement */ /* HWND hWnd for GetWindowPlacement */ GetWindowPlacement(hGameWnd, &sWndPlacement);
           if (sWndPlacement.showCmd != 3) {
-            for (; nTargetWidth < nMonWorkWidth && nTargetHeight < nMonWorkHeight; nTargetHeight += 3) {
-              nTargetWidth += 4;
+            for (; rcTarget.right < nMonWorkWidth && rcTarget.bottom < nMonWorkHeight; rcTarget.bottom += 3) {
+              rcTarget.right += 4;
             }
 
-            nTargetWidth += -0xc;
-            nTargetHeight += -9;
-            nWndPosX = (nMonWorkWidth - nTargetWidth) / 2 + nMonWorkLeft;
-            nWndPosY = (nMonWorkHeight - nTargetHeight) / 2 + nMonWorkTop;
-            if (nWndPosY < 0) {
-              nWndPosY = 0;
+            rcTarget.right += -0xc;
+            rcTarget.bottom += -9;
+            rcTarget.left = (nMonWorkWidth - rcTarget.right) / 2 + rcWork.left;
+            rcTarget.top = (nMonWorkHeight - rcTarget.bottom) / 2 + rcWork.top;
+            if (rcTarget.top < 0) {
+              rcTarget.top = 0;
             }
-            if (nWndPosX < 0) {
-              nWndPosX = 0;
+            if (rcTarget.left < 0) {
+              rcTarget.left = 0;
             }
 
             /* UINT uFlags for SetWindowPos */ /* int cy for SetWindowPos */ /* int cx for SetWindowPos */ rInitialWindowRect.left = sWndPlacement.rcNormalPosition.left;
             /* int Y for SetWindowPos */ rInitialWindowRect.top = sWndPlacement.rcNormalPosition.top;
             /* int X for SetWindowPos */ rInitialWindowRect.right = sWndPlacement.rcNormalPosition.right;
             /* HWND hWndInsertAfter for SetWindowPos */ /* HWND hWnd for SetWindowPos */ rInitialWindowRect.bottom = sWndPlacement.rcNormalPosition.bottom;
-            SetWindowPos(hGameWnd, HWND_NOTOPMOST, nWndPosX, nWndPosY, nTargetWidth, nTargetHeight, 0x14);
+            SetWindowPos(hGameWnd, HWND_NOTOPMOST, rcTarget.left, rcTarget.top, rcTarget.right, rcTarget.bottom, 0x14);
           }
-        } else if (nTargetHeight < nMonWorkBottom && nTargetWidth < nMonWorkRight) {
-          nMonWorkLeft = 0;
-          nMonWorkTop = 0;
-          nMonWorkRight = 0;
-          nMonWorkBottom = 0;
+        } else if (rcTarget.bottom < rcWork.bottom && rcTarget.right < rcWork.right) {
+          rcWork.left = 0;
+          rcWork.top = 0;
+          rcWork.right = 0;
+          rcWork.bottom = 0;
           dwResolutionMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
-          D2gfx::D2GFX::D2GFX_GetWindowSizeByResolutionMode(dwResolutionMode, &nMonWorkRight, &nMonWorkBottom);
-          /* UINT uFlags for SetWindowPos */ /* int cy for SetWindowPos */ /* int cx for SetWindowPos */ /* int Y for SetWindowPos */ /* int X for SetWindowPos */ /* HWND hWndInsertAfter for SetWindowPos */ /* HWND hWnd for SetWindowPos */ SetWindowPos(hGameWnd, HWND_NOTOPMOST, 0, 0, nMonWorkRight, nMonWorkBottom, 0x14);
+          D2gfx::D2GFX::D2GFX_GetWindowSizeByResolutionMode(dwResolutionMode, (int*)&rcWork.right, (int*)&rcWork.bottom);
+          /* UINT uFlags for SetWindowPos */ /* int cy for SetWindowPos */ /* int cx for SetWindowPos */ /* int Y for SetWindowPos */ /* int X for SetWindowPos */ /* HWND hWndInsertAfter for SetWindowPos */ /* HWND hWnd for SetWindowPos */ SetWindowPos(hGameWnd, HWND_NOTOPMOST, 0, 0, rcWork.right, rcWork.bottom, 0x14);
           D2gfx::D2GFX::D2GFX_UpdateWindowSize(dwResolutionMode);
         }
 

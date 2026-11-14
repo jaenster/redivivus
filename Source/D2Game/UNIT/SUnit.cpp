@@ -2409,7 +2409,6 @@ void __fastcall UNITS_FreeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     int32_t nInvLocYB;
     int32_t nInvLocXB;
     int32_t nInvLocX;
-    int32_t nInvLocPackedXY;
     uint32_t dwStackCookie2;
     uint32_t dwStackCookie;
     uint32_t nInvValidResult;
@@ -2417,7 +2416,6 @@ void __fastcall UNITS_FreeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     int32_t iVar1;
     uint32_t bIsActiveCharmResult;
     eD2UnitType eCarriedUnitType;
-    uint32_t nInvLocY;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9d6);
       exit(-1);
@@ -2447,8 +2445,6 @@ void __fastcall UNITS_FreeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit
           bIsActiveCharmResult = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pCarriedItem, pUnit);
           if (bIsActiveCharmResult) {
             eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pCarriedItem);
-            nInvLocY = (uint32_t)nInvLocPackedXY >> 8;
-            nInvLocPackedXY = (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)nInvLocY << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eInvPage);
             iVar1 = D2Common::Units::UNITS_GetInventoryRecordId(pUnit, eInvPage, pGame->bExpansion);
             eItemUnitType = pCarriedItem->eUnitType;
             if (eItemUnitType == UNIT_OBJECT || (int)eItemUnitType > 3 && (int)eItemUnitType <= 5) {
@@ -2468,7 +2464,7 @@ void __fastcall UNITS_FreeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit
               nItemPosX = 0;
             }
 
-            D2Common::INVENTORY::Inventory::UnusedDebug(".\\UNIT\\SUnit.cpp", 0xa03, pInventory, nItemPosX, nItemPosY, (eInventoryPage)iVar1, 0, nInvLocPackedXY);
+            D2Common::INVENTORY::Inventory::UnusedDebug(".\\UNIT\\SUnit.cpp", 0xa03, pInventory, nItemPosX, nItemPosY, (eInventoryPage)iVar1, 0, eInvPage);
           }
         }
       }

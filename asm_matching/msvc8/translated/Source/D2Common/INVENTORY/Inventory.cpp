@@ -1331,7 +1331,7 @@ BOOL __stdcall INVENTORY_PlaceItemAtCoords(D2InventoryStrc * pInventory, D2UnitS
     return BVar1;
 }
 
-void __stdcall UnusedDebug(char * szFilename, uint32_t nLine, D2InventoryStrc * pInventory, int32_t nX, int32_t nY, eInventoryPage neInventoryPage, uint32_t dwParam, int32_t nInvPage) {
+void __stdcall UnusedDebug(char * szFilename, uint32_t nLine, D2InventoryStrc * pInventory, int32_t nX, int32_t nY, eInventoryPage eDebugPage, uint32_t dwParam, uint8_t nInvPage) {
 
 }
 

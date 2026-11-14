@@ -1352,10 +1352,9 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
         gpStringIndexBase[nEntryIdx] = k;
         pEntryData = (char*)((intptr_t)&gpStringTableBase->wCRC + *(int*)((uint16_t*)nJ3 - 2));
         pszUtf8Chars = Unicode::UNISYS::UNICODE_GetWideCharCount(pEntryData, (uint32_t)*(uint16_t*)nJ3);
-        i = nEntryIdx;
         UTF8_ConvertToWideChar(gpStringIndexBase[nEntryIdx], pEntryData, pszUtf8Chars + 1);
         nJ3 += 0x11;
-        nEntryIdx = i + 1;
+        nEntryIdx = nEntryIdx + 1;
         k = k + pszUtf8Chars + 1;
       } while (nEntryIdx < *pnEntryCount);
     }

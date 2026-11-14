@@ -1796,7 +1796,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a2f7797c",
+      "dh": "37d8c462",
       "paramStorage": [
         [
           "pGame",
@@ -3811,7 +3811,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c8f58e08",
+      "dh": "d59cddcc",
       "paramStorage": [
         [
           "pGame",
@@ -4374,7 +4374,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bfd55c79",
+      "dh": "efa71ab7",
       "paramStorage": [
         [
           "pGame",
@@ -4881,7 +4881,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "04c58ed6",
+      "dh": "f940586b",
       "paramStorage": [
         [
           "pGame",
@@ -5408,7 +5408,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bd4b78c5",
+      "dh": "d5af63a7",
       "paramStorage": [
         [
           "pGame",

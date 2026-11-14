@@ -4840,9 +4840,12 @@ eD2ServerIncomingStatus __fastcall SCMD_0x63_ItemToBeltAuto(::SGAMEDATA * pGame,
     BOOL bFoundSlot;
     D2UnitStrc* pItemInInv;
     int32_t nItemPosY;
+    
+    
     uint32_t nGridIndex;
-    int32_t nPrevInvPage;
+    uint32_t nPrevInvPage;
     int32_t nDbgParam;
+    uint32_t uVar1;
     eD2ItemFlag itemFlagMask;
     D2InventoryStrc* pInventory;
     if (nSize != 5) {
@@ -4903,8 +4906,11 @@ eD2ServerIncomingStatus __fastcall SCMD_0x63_ItemToBeltAuto(::SGAMEDATA * pGame,
               nItemPosY = D2Common::Units::UNITS_GetInventoryRecordId(pUnit, invPage, pGame->bExpansion);
               invPage = (eInventoryPage)nItemPosY;
               nDbgParam = 0;
-              nItemPosY = nPrevInvPage;
-              D2Common::INVENTORY::Inventory::UnusedDebug(".\\PLAYER\\PlrMsg.cpp", 0x1830, pInventory, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), invPage, nDbgParam, nItemPosY);
+              uVar1 = nPrevInvPage;
+              nItemPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pItem);
+              
+              
+              D2Common::INVENTORY::Inventory::UnusedDebug(".\\PLAYER\\PlrMsg.cpp", 0x1830, pInventory, (int32_t)(D2Common::Units::GetXPosFromDynamicPathUnit(pItem)), nItemPosY, invPage, nDbgParam, (uint8_t)((uint8_t)uVar1));
               D2Common::ITEMS::Items::ITEM_SetItemData_ePreviousPage(pItem, (uint8_t)nPrevInvPage);
               D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, INVPAGE_None);
               itemFlagMask = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);

@@ -93,38 +93,32 @@ BOOL __fastcall Skills_CltDoFunc_Nec_CurseCenter_StreamMissile(D2UnitStrc * pUni
 
 // Client-side: spawns a single Bone Wall/Prison missile segment at the correct orientation. Gets target coords via GetCooordinates, computes delta from caster to target and distance, calculates a normalized direction for the wall segment. Fills D2SkillArgStrc with the given eMissileId, eSkill, nParam (as nToHit), nFlags=3, and perpendicular velocity components. After MakeMissile, sets the missile's facing via PATH_SetNewDirection to point toward the target. Returns 1 on success, 0 if coords unavailable or missile allocation failed.
 static uint32_t __stdcall SKILLSNEC_CltSetBoneWallGfx(eD2Skills eSkill, int32_t nSkillLevel, eMissilesId eMissileId, D2UnitStrc * pUnit) {
-    int nDeltaX;
-    int nNormDeltaX;
-    int nDeltaY;
     D2SkillArgStrc sSkillArg;
     int nTargetY;
     int nTargetX;
-    int32_t nUnitPosY;
-    BOOL bGotCoords = Skills::GetCooordinates(pUnit, &nTargetX, &nTargetY);
-    if (!bGotCoords) {
+    int nPos;
+    if (!Skills::GetCooordinates(pUnit, &nTargetX, &nTargetY)) {
       return 0;
     }
 
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nDeltaX = pUnit->pPath.pStaticPath->nPosX;
+      nPos = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
-      nDeltaX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      nPos = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
     } else {
-      nDeltaX = 0;
+      nPos = 0;
     }
-
-    nDeltaX = nTargetX - nDeltaX;
+    int nDeltaX = nTargetX - nPos;
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nNormDeltaX = pUnit->pPath.pStaticPath->nPosY;
+      nPos = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
-      nNormDeltaX = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+      nPos = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
     } else {
-      nNormDeltaX = 0;
+      nPos = 0;
     }
-
-    nNormDeltaX = nTargetY - nNormDeltaX;
+    int nDeltaY = nTargetY - nPos;
     int32_t nDist = D2Common::Collision::GetDistanceToXY(pUnit, nTargetX, nTargetY);
     if (nDist <= 1) {
       nDist = 1;
@@ -132,15 +126,15 @@ static uint32_t __stdcall SKILLSNEC_CltSetBoneWallGfx(eD2Skills eSkill, int32_t 
 
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nDeltaY = pUnit->pPath.pStaticPath->nPosX;
+      nPos = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
-      nDeltaY = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      nPos = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
     } else {
-      nDeltaY = 0;
+      nPos = 0;
     }
-
-    int nDirection = nDeltaX * 2 / nDist;
+    int nX = nDeltaX * 2 / nDist + nPos;
     eUnitType = pUnit->eUnitType;
+    int nUnitPosY;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nUnitPosY = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
@@ -150,22 +144,21 @@ static uint32_t __stdcall SKILLSNEC_CltSetBoneWallGfx(eD2Skills eSkill, int32_t 
     }
 
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.eSkillNo = eSkill;
     sSkillArg.nMissileTxtNo = eMissileId;
+    sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLevel;
     sSkillArg.nFlags = 3;
     sSkillArg.pOwner = pUnit;
-    sSkillArg.nX = nDirection + nDeltaY;
-    sSkillArg.nY = nNormDeltaX * 2 / nDist + nUnitPosY;
+    sSkillArg.nX = nX;
+    sSkillArg.nY = nDeltaY * 2 / nDist + nUnitPosY;
     sSkillArg.nUnitX = nDeltaX * 5;
-    sSkillArg.nUnitY = nNormDeltaX * 5;
+    sSkillArg.nUnitY = nDeltaY * 5;
     D2UnitStrc* pMissileUnit = UNIT::Missile::MakeMissile(&sSkillArg);
     if (!pMissileUnit) {
       return 0;
     }
 
-    nDeltaX = D2Common::Units::GetDirectionToCoords(pUnit, nTargetX, nTargetY);
-    D2Common::PATH::DynamicPath::PATH_SetNewDirection(pMissileUnit->pPath.pDynamicPath, (uint8_t)nDeltaX);
+    D2Common::PATH::DynamicPath::PATH_SetNewDirection(pMissileUnit->pPath.pDynamicPath, (uint8_t)D2Common::Units::GetDirectionToCoords(pUnit, nTargetX, nTargetY));
     return 1;
 }
 
@@ -409,20 +402,12 @@ int __fastcall SKILLSNEC_CltCreateBoneSpearMissile(D2UnitStrc * pUnit, eD2Skills
       return 0;
     }
 
-    eMissilesId eMissileId = (eMissilesId)pSkillTxt->cltmissile[1];
-    if ((int)eMissileId < 0) {
+    int nMissile = pSkillTxt->cltmissile[1];
+    if (nMissile < 0 || nMissile >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
-    if (!((int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
-      return 0;
-    }
-    if (nTargetClassId < 0) {
-      return 0;
-    }
-    if (!(nTargetClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
-      return 0;
-    }
-    if (!(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nTargetClassId)) {
+    D2MonStatsTxt* pMonStatsTxt = nTargetClassId >= 0 && nTargetClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nTargetClassId : nullptr;
+    if (!pMonStatsTxt) {
       return 0;
     }
     if (nTargetX && nTargetY) {
@@ -432,25 +417,25 @@ int __fastcall SKILLSNEC_CltCreateBoneSpearMissile(D2UnitStrc * pUnit, eD2Skills
       }
 
       memset(&sSkillArg, 0, 0x5c);
-      sSkillArg.pOwner = pUnit;
-      sSkillArg.nMissileTxtNo = eMissileId;
       sSkillArg.nFlags = 0x2001;
+      sSkillArg.pOwner = pUnit;
       sSkillArg.nX = nTargetX;
       sSkillArg.nY = nTargetY;
       sSkillArg.eSkillNo = eSkill;
       sSkillArg.nSkillLevel = nSkillLvl;
+      sSkillArg.nMissileTxtNo = (eMissilesId)nMissile;
       pMissileUnit = UNIT::Missile::MakeMissile(&sSkillArg);
-      eMissileId = (eMissilesId)pSkillTxt->cltmissile[3];
-      if ((int)eMissileId > 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+      int nTrailMissile = pSkillTxt->cltmissile[3];
+      if (nTrailMissile > 0 && nTrailMissile < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
         sSkillArg.nSkillLevel = 2;
-        sSkillArg.nMissileTxtNo = eMissileId;
+        sSkillArg.nMissileTxtNo = (eMissilesId)nTrailMissile;
         UNIT::Missile::MakeMissile(&sSkillArg);
       }
 
-      eMissileId = (eMissilesId)pSkillTxt->cltmissile[2];
+      int nBurstMissile = pSkillTxt->cltmissile[2];
       if (pMissileUnit) {
-        if ((int)eMissileId > 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-          UNIT::Missile::MISSILE_CreateRadialBurst(pMissileUnit, eMissileId, 0, 2, 0);
+        if (nBurstMissile > 0 && nBurstMissile < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+          UNIT::Missile::MISSILE_CreateRadialBurst(pMissileUnit, (eMissilesId)nBurstMissile, 0, 2, 0);
         }
 
         pConfirmedTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);

@@ -135,7 +135,7 @@ int32_t __fastcall CHAT_IsWideStringASCII(uint16_t * wszText);
 void __stdcall CHAT_InitHistoryIndices();
 void __stdcall CHAT_ClearInput();
 // Routes incoming BNet chat packet by type - handles whispers, emotes, broadcasts, system messages
-void __stdcall CHAT_ProcessBattleNetMessage();
+BOOL __stdcall CHAT_ProcessBattleNetMessage();
 void __stdcall INPUT_HandleChatCharInput(struct D2UIMouseMsgStrc * pMsg);
 void StaticInit_gwszChatInputText();
 void StaticInit_gaChatHistoryBuffer();

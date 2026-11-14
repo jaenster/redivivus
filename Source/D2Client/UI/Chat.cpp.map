@@ -655,7 +655,7 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "c0e70a67"
+      "dh": "69cc7cbf"
     },
     {
       "name": "CHAT_HandleResignCommand",

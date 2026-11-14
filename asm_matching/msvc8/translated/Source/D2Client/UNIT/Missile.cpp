@@ -1160,7 +1160,6 @@ void __fastcall MISSILE_SpawnAreaOfEffect(D2UnitStrc * pUnit, int32_t * pMissile
     POINT sSourcePos;
     int nTileX;
     int32_t nCenterX;
-    int iOffsetYOuter;
     int32_t nCenterY;
     uint32_t sRolledSeed;
     int32_t* pMissileIdArray = pMissileIds;
@@ -1213,12 +1212,11 @@ void __fastcall MISSILE_SpawnAreaOfEffect(D2UnitStrc * pUnit, int32_t * pMissile
         nTileX = nCenterX + iOffsetX;
         nTileY = nCenterY + iOffsetYInner;
         do {
-          iOffsetYOuter = iOffsetYInner;
           pRoom = D2Common::Units::UNITS_GetRoom(pUnitOrig);
           iOffsetXInner = nTileX;
           if (pRoom && iOffsetYInner * iOffsetYInner + iOffsetX * iOffsetX <= nRadiusSq) {
             sTargetPos.x = nTileX + iOffsetX;
-            sTargetPos.y = nTileY + iOffsetYOuter;
+            sTargetPos.y = nTileY + iOffsetYInner;
             sSourcePos.x = nTileX;
             sSourcePos.y = nTileY;
             bCollides = D2Common::Collision::TestCollision(pRoom, &sSourcePos, &sTargetPos, 4);
@@ -1246,7 +1244,7 @@ void __fastcall MISSILE_SpawnAreaOfEffect(D2UnitStrc * pUnit, int32_t * pMissile
             }
           }
 
-          iOffsetYInner = iOffsetYOuter + 1;
+          iOffsetYInner = iOffsetYInner + 1;
           nTileY++;
           iOffsetXInner = iOffsetY;
         } while (iOffsetYInner <= nRadius);

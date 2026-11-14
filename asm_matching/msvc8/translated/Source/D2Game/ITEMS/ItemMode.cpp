@@ -2220,8 +2220,6 @@ void __fastcall ITEMMODE_DeleteItemFromInventory(::SGAMEDATA * pGame, D2UnitStrc
     D2ClientStrc* pClient;
     int32_t nPageResult;
     D2InventoryStrc* pInventory;
-    int32_t nItem;
-    D2UnitStrc* pItemSaved = pItem;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf6f);
       exit(-1);
@@ -2248,17 +2246,16 @@ void __fastcall ITEMMODE_DeleteItemFromInventory(::SGAMEDATA * pGame, D2UnitStrc
       }
 
       eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem);
-      nItem = (int32_t)(uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&pItem + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eInvPage);
       nPageResult = D2Common::Units::UNITS_GetInventoryRecordId(pUnit, eInvPage, pGame->bExpansion);
       eDestPage = (eInventoryPage)nPageResult;
-      D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0xf7b, pInventory, D2Common::Units::GetXPosFromDynamicPathUnit(pItemSaved), D2Common::Units::GetYPosFromDynamicPathUnit(pItemSaved), eDestPage, 0, nItem);
-      D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItemSaved, INVPAGE_None);
+      D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0xf7b, pInventory, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), eDestPage, 0, eInvPage);
+      D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, INVPAGE_None);
       if (bSendRemovePacket) {
         pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0xf7e);
-        UNIT::SUnitMsg::SendRemoveObject(pItemSaved, pClient);
+        UNIT::SUnitMsg::SendRemoveObject(pItem, pClient);
       }
 
-      Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame, pItemSaved);
+      Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame, pItem);
       return;
     }
 }
@@ -4088,7 +4085,6 @@ BOOL __fastcall SERVER_TakeItemToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     BOOL bItemDisabled;
     bool bCopyInv;
     bool bIsMercPage;
-    int32_t nInventory;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x906);
       exit(-1);
@@ -4158,7 +4154,6 @@ BOOL __fastcall SERVER_TakeItemToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
       ITEMMODE_RemoveItemStates(pUnit, pItem);
       eSrcPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem);
-      nInventory = (int32_t)(uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&pInventory + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eSrcPage);
       nPageResult = D2Common::Units::UNITS_GetInventoryRecordId(pUnit, eSrcPage, pGame->bExpansion);
       eDestPage = (eInventoryPage)nPageResult;
       bIsMercPage = false;
@@ -4175,7 +4170,7 @@ BOOL __fastcall SERVER_TakeItemToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
         bCopyInv = false;
       }
 
-      D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0x965, pTargetInventory, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), eDestPage, 0, nInventory);
+      D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0x965, pTargetInventory, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), eDestPage, 0, eSrcPage);
       D2Common::ITEMS::Items::ITEM_SetItemData_ePreviousPage(pItem, eSrcPage);
       D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, INVPAGE_None);
       if (bCopyInv) {
@@ -5110,7 +5105,7 @@ int __fastcall ITEMMODE_ExchangeInventoryItem(::SGAMEDATA * pGame, D2UnitStrc * 
     bool bIsDisabled;
     BOOL nPlaceResult;
     uint32_t bIsActiveCharm;
-    uint32_t nInvPage;
+    eInventoryPage eVar1;
     uint32_t bCharmActive;
     uint32_t nPlaceFlags;
     int32_t nErrorLine;
@@ -5138,7 +5133,6 @@ int __fastcall ITEMMODE_ExchangeInventoryItem(::SGAMEDATA * pGame, D2UnitStrc * 
       }
 
       eSrcInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pDestItem);
-      nGridItemGUID = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nGridItemGUID + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eSrcInvPage);
       if (eSrcInvPage == INVPAGE_CUBE) {
         if (gbBoxItemClassIdCached == '\0') {
           pCubeTxtLine = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(0x20786f62, (int*)&gnBoxItemClassId);
@@ -5167,12 +5161,12 @@ int __fastcall ITEMMODE_ExchangeInventoryItem(::SGAMEDATA * pGame, D2UnitStrc * 
         if (pDestItem == pInvVerifiedItem) {
           ITEMMODE_UnequipItemStats(pGame, pDestItem, pUnit, 0, 1);
           nPlaceFlags = 0;
-          nInvPage = nGridItemGUID;
+          eVar1 = eSrcInvPage;
           nErrorLine = D2Common::Units::UNITS_GetInventoryRecordId(pUnit, eSrcInvPage, pGame->bExpansion);
           eInvPage2 = (eInventoryPage)nErrorLine;
           nErrorLine = D2Common::Units::GetYPosFromDynamicPathUnit(pDestItem);
           nItemX = D2Common::Units::GetXPosFromDynamicPathUnit(pDestItem);
-          D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0xf15, pInventory, nItemX, nErrorLine, eInvPage2, nPlaceFlags, nInvPage);
+          D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0xf15, pInventory, nItemX, nErrorLine, eInvPage2, nPlaceFlags, eVar1);
           D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pDestItem, INVPAGE_None);
           D2Common::INVENTORY::Inventory::INVENTORY_SetCursorItem(pInventory, pDestItem);
           ITEMMODE_RemoveItemStates(pUnit, pDestItem);
@@ -5191,7 +5185,7 @@ int __fastcall ITEMMODE_ExchangeInventoryItem(::SGAMEDATA * pGame, D2UnitStrc * 
           }
 
           D2Common::INVENTORY::Inventory::UpsertToUpdateList(pInventory, pDestItem);
-          nPlaceResult = D2Common::INVENTORY::Inventory::INVENTORY_PlaceItemAtCoords(pInventory, pSrcItem, nDestX, nDestY, D2Common::Units::UNITS_GetInventoryRecordId(pUnit, eSrcInvPage, pGame->bExpansion), 0, (uint8_t)nGridItemGUID);
+          nPlaceResult = D2Common::INVENTORY::Inventory::INVENTORY_PlaceItemAtCoords(pInventory, pSrcItem, nDestX, nDestY, D2Common::Units::UNITS_GetInventoryRecordId(pUnit, eSrcInvPage, pGame->bExpansion), 0, eSrcInvPage);
           if (nPlaceResult) {
             D2Common::ITEMS::Items::ITEM_SetItemData_eExchangePage(pSrcItem, 0);
             D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pSrcItem, eSrcInvPage);
@@ -5874,7 +5868,7 @@ BOOL __fastcall ITEMMODE_EquipStoredItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       exit(-1);
     } else {
       nPageResult = D2Common::Units::UNITS_GetInventoryRecordId(pUnit, '\0', pGame->bExpansion);
-      D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0x1515, pInventory, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), (eInventoryPage)nPageResult, 0, 0);
+      D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0x1515, pInventory, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), (eInventoryPage)nPageResult, 0, '\0');
       D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, INVPAGE_None);
       nEquipResult = D2Common::INVENTORY::Inventory::INVENTORY_GetItemAtBodyLoc(pInventory, pItem, (uint32_t)eBodyLoc);
       if (nEquipResult) {
@@ -6534,7 +6528,7 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
     D2UnitStrc* pNextItem;
     int32_t bInTrade;
     int bRefreshInv;
-    int32_t nSrcInvPage;
+    uint32_t nSrcInvPage;
     eD2ItemFlag eItemFlagMask;
     D2UnitStrc* pSavedCubeItem;
     uint32_t nSrcPage;
@@ -6607,7 +6601,7 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
           nPutResult = 0;
         }
 
-        D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0x813, pCubeInventory, nPutResult, nPlayerInventory, (eInventoryPage)bInTrade, 0, nSrcInvPage);
+        D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0x813, pCubeInventory, nPutResult, nPlayerInventory, (eInventoryPage)bInTrade, 0, (uint8_t)nSrcInvPage);
         D2Common::Units::ChangeAnimMode(pCubeItem, 4);
         D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pCarriedItem, INVPAGE_INVENTORY);
         dwCarriedGUID = pCarriedItem->nUnitGUID;

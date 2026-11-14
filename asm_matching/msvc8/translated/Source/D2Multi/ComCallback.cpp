@@ -1558,7 +1558,7 @@ void __fastcall COMCALLBACK_BroadcastChatMessage(char * szMessageBody) {
 BOOL __fastcall COMCALLBACK_HandleWhisperMessage(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szUsername, char * szText) {
     int nCmpResult;
     char szClanTag[256];
-    char szFormattedSender[260];
+    char szFormattedSender[256];
     char cScan;
     uint32_t dwStatusFlags;
     D2ChannelUserStrc* pCurUser;

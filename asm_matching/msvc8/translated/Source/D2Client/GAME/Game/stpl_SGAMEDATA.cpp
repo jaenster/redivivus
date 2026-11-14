@@ -599,69 +599,36 @@ template<> TSHashTable<::SGAMEDATA, HASHKEY_NONE>* __fastcall TSHashTable<SGAMED
 }
 
 template<> __declspec(noinline) inline void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::Clear() {
-    char* pcVar2;
-    TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>** pPrevLink;
-    TSLink<::SGAMEDATA>** pSlotBackLink;
-    TSLink<::SGAMEDATA>** pLinkSlot;
-    uint32_t nIndex;
-    ::SGAMEDATA* pEntryBase;
-    TSLink<::SGAMEDATA>* pSlotPrev;
-    TSLink<::SGAMEDATA>* pNodeLink;
     TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pChunk;
-    uint32_t dwLinkOffset;
-    TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pEntries;
-    char* pSlot;
-    while (true) {
-      TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pTVar1;
-      pChunk = (TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>*)this->m_terminator.m_next;
-      if ((intptr_t)pChunk <= 0) {
-        break;
+    while ((pChunk = (intptr_t)this->m_terminator.m_next > 0 ? (TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>*)this->m_terminator.m_next : 0) != 0) {
+
+      TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pLink = &pChunk->m_link;
+      if (pLink->m_prevlink) {
+        *(TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)D2_StormNextLink(pLink, -1) = pLink->m_prevlink;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
       }
 
-      pEntries = pChunk->m_link.m_prevlink;
-      pTVar1 = &pChunk->m_link;
-      if (pEntries) {
-        dwLinkOffset = pTVar1->m_next;
-        pPrevLink = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)D2_StormNextLink(pTVar1, -1);
-        *pPrevLink = pEntries;
-        pTVar1->m_prevlink->m_next = pTVar1->m_next;
-        pTVar1->m_prevlink = 0;
-        pTVar1->m_next = 0;
+      for (uint32_t nIndex = 0; nIndex < pChunk->nArrayCount; nIndex++) {
+        ::SGAMEDATA* pEntry = &pChunk->pArray[nIndex];
+        TSLink<::SGAMEDATA>* pEntryLink = &pEntry->m_linktofull;
+        if (pEntryLink->m_prevlink) {
+          *(TSLink<::SGAMEDATA>**)D2_StormNextLink(pEntryLink, -1) = pEntryLink->m_prevlink;
+          pEntryLink->m_prevlink->m_next = pEntryLink->m_next;
+          pEntryLink->m_prevlink = 0;
+          pEntryLink->m_next = 0;
+        }
+
+        pEntryLink = &pEntry->m_linktoslot;
+        if (pEntryLink->m_prevlink) {
+          *(TSLink<::SGAMEDATA>**)D2_StormNextLink(pEntryLink, -1) = pEntryLink->m_prevlink;
+          pEntryLink->m_prevlink->m_next = pEntryLink->m_next;
+          pEntryLink->m_prevlink = 0;
+          pEntryLink->m_next = 0;
+        }
       }
 
-      nIndex = 0;
-      if (pChunk->nArrayCount > 0) {
-        pEntryBase = 0;
-        do {
-          pcVar2 = pChunk->pArray->szGameName;
-          pNodeLink = *(TSLink<::SGAMEDATA>**)(pEntryBase->szGameName + (intptr_t)pcVar2 - 0x48);
-          pSlot = pEntryBase->szGameName + (intptr_t)pcVar2 - 0x48;
-          if (pNodeLink) {
-            dwLinkOffset = *(uint32_t*)(pEntryBase->szGameName + (intptr_t)pcVar2 - 0x44);
-            pLinkSlot = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pSlot, -1);
-            *pLinkSlot = pNodeLink;
-            *(uint32_t*)(*(int*)pSlot + 4) = *(uint32_t*)(pEntryBase->szGameName + (intptr_t)pcVar2 - 0x44);
-            *(uint32_t*)pSlot = 0;
-            pSlot = pEntryBase->szGameName + (intptr_t)pcVar2 - 0x44;
-            *(uint32_t*)pSlot = 0;
-          }
-
-          pSlotPrev = *(TSLink<::SGAMEDATA>**)(pEntryBase->szGameName + (intptr_t)pcVar2 - 0x50);
-          pSlot = pEntryBase->szGameName + (intptr_t)pcVar2 - 0x50;
-          if (pSlotPrev) {
-            dwLinkOffset = *(uint32_t*)(pEntryBase->szGameName + (intptr_t)pcVar2 - 0x4c);
-            pSlotBackLink = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pSlot, -1);
-            *pSlotBackLink = pSlotPrev;
-            *(uint32_t*)(*(int*)pSlot + 4) = *(uint32_t*)(pEntryBase->szGameName + (intptr_t)pcVar2 - 0x4c);
-            *(uint32_t*)pSlot = 0;
-            pSlot = pEntryBase->szGameName + (intptr_t)pcVar2 - 0x4c;
-            *(uint32_t*)pSlot = 0;
-          }
-
-          pEntryBase++;
-          nIndex++;
-        } while (nIndex < pChunk->nArrayCount);
-      }
       if (pChunk->pArray) {
         Storm::Source::SMem::SMemFree(pChunk->pArray, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
       }

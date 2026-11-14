@@ -1020,8 +1020,8 @@ void __stdcall D2GFX_DrawShadow(D2GfxDataStrc * pDC6Context, int32_t nPositionX,
     RENDERER_CurrentRenderedFunctions->nfpDrawShadow(pDC6Context, nPositionX + 2, nPositionY);
 }
 
-void __stdcall D2GFX_DrawImageColoredShape(D2GfxDataStrc * pDC6Context, int32_t nPositionX, int32_t nPositionY, int32_t nPaletteIndex) {
-    RENDERER_CurrentRenderedFunctions->nfpDrawImageFast(pDC6Context, nPositionX, nPositionY, (uint8_t)nPaletteIndex);
+void __stdcall D2GFX_DrawImageColoredShape(D2GfxDataStrc * pDC6Context, int32_t nPositionX, int32_t nPositionY, BYTE nPaletteIndex) {
+    RENDERER_CurrentRenderedFunctions->nfpDrawImageFast(pDC6Context, nPositionX, nPositionY, nPaletteIndex);
 }
 
 void __stdcall D2GFX_DebugFillBackBuffer(int32_t nXpos, int32_t nYpos) {

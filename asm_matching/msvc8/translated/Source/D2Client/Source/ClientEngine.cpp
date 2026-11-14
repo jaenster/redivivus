@@ -1081,8 +1081,7 @@ void __fastcall DRLGROOM_SpawnRandomMonsters(D2RoomStrc * pRoom) {
           pMonStats = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nSpawnCount;
         }
 
-        nGroupSize = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, (uint32_t)(uint8_t)pMonStats->MaxGrp - (uint32_t)pMonStats->MinGrp);
-        nSpawnCount = nGroupSize + pMonStats->MinGrp;
+        nSpawnCount = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, (uint32_t)(uint8_t)pMonStats->MaxGrp - (uint32_t)pMonStats->MinGrp) + pMonStats->MinGrp;
         if (pMonsterPtr[8]) {
           nSpawnCount *= pMonsterPtr[8];
         }

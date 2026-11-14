@@ -163,7 +163,7 @@ void __fastcall SKILLDESC_DrawSkillDmgSummon(struct D2UnitStrc * pUnit, struct D
 void __fastcall SKILLDESC_DrawSkillDmgProgressive(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight);
 void __fastcall SKILLDESC_DrawSkillDmgProgElem(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight);
 void __stdcall SKILLDESC_DescLine29_FormatMonster(uint16_t * wszText, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nMaxDmgBonus);
-void __stdcall SKILLDESC_DescLine22_SkillSynergies(struct D2UnitStrc * pUnit, uint16_t * wszText, eD2Skills eSkill, short * pSkillsTxt, int32_t nSkillLevel);
+BOOL __stdcall SKILLDESC_DescLine22_SkillSynergies(struct D2UnitStrc * pUnit, uint16_t * wszText, eD2Skills eSkill, short * pSkillsTxt, int32_t nSkillLevel);
 void __stdcall SKILLDESC_DescLine35_BonusList(short * pSkillArgs, uint16_t wLabelStringId);
 int __stdcall SKILLDESC_HasAnyClassSkill(struct D2UnitStrc * pUnit);
 // Draws skill tooltip info panel with 3 sections: skill name, damage description (via gSkillDamageDescFuncTable dispatch), and attack rating text (via gpSkillDescAttackFuncTable dispatch). Layout positions from int32_t_ARRAY_ARRAY_0072d840. Validates descdam/descatt indices (<144/<72) and checks CanUseSkill result (0/1/6/8) to enable/disable sections.

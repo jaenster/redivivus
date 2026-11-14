@@ -3688,7 +3688,6 @@ BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, int3
 
 void RENDERER_GLIDE_InitGroundTileVertices() {
     int nRowEdgeAdjust;
-    D2GlideVertexStrc* pNextVertex;
     int nEdgeAdjust;
     int nRowColSum;
     int nRow = 0;
@@ -3717,9 +3716,8 @@ void RENDERER_GLIDE_InitGroundTileVertices() {
         nRowColSum = nCol + nRow;
         pVertex->fS = (float)(int)(((float)(nCol - nRow) * 0.0625 + (float)(nRowEdgeAdjust + 0x50) * 0.00390625) * 256.0);
         nCol++;
-        pNextVertex = pVertex + 1;
         pVertex->fT = (float)(int)(((float)nRowColSum * 0.0625 + (float)nEdgeAdjust * 0.0078125) * 128.0);
-        pVertex = pNextVertex;
+        pVertex = pVertex + 1;
       } while (nCol < 6);
 
       nRow++;

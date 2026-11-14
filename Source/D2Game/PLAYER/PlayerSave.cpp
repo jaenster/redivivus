@@ -1289,17 +1289,10 @@ int __fastcall _oldSaveGameLoadingPart(::SGAMEDATA * pGame, D2ClientStrc * pClie
 }
 
 int __fastcall _oldSaveGameLoadingPart2(D2UnitStrc * pUnit, int * pnSaveData, uint32_t dwUnused, uint32_t * pnBytesConsumed) {
-    int nCopyCount;
     D2SaveFileQuestsStrc questDataBuf;
     *pnBytesConsumed = 0;
     D2SaveFileQuestsStrc* pDstCopyPos = &questDataBuf;
-    for (nCopyCount = 0x4a; nCopyCount; nCopyCount--) {
-      pDstCopyPos->nMagic = *pnSaveData;
-      pnSaveData++;
-      pDstCopyPos = (D2SaveFileQuestsStrc*)&pDstCopyPos->nVersion;
-    }
-
-    *(short int*)&pDstCopyPos->nMagic = (short int)*pnSaveData;
+    memcpy(pDstCopyPos, pnSaveData, 0x12a);
     if (questDataBuf.nMagic != 0x216f6f57) {
       return 2;
     }
@@ -1310,7 +1303,7 @@ int __fastcall _oldSaveGameLoadingPart2(D2UnitStrc * pUnit, int * pnSaveData, ui
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc** ppDVar1 = pPlayerData->pQuestRecord;
     char (*pQuestBufPos)[96] = questDataBuf.pActQuests;
-    nCopyCount = 3;
+    int nCopyCount = 3;
     do {
       D2Common::QuestRecord::ReadQuestRecordFromBuffer(*ppDVar1, *pQuestBufPos, 0x60, 1);
       ppDVar1++;

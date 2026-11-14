@@ -354,13 +354,7 @@ int32_t __fastcall SaveQuests(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t *
     } while (i);
 
     D2SaveFileQuestsStrc* pSrc = &pSaveQuests;
-    /* Safety check */ for (i = 0x4a; i; i--) {
-      *(int*)pDst = pSrc->nMagic;
-      pSrc = (D2SaveFileQuestsStrc*)&pSrc->nVersion;
-      pDst += 4;
-    }
-
-    /* Adjust start address */ *(short int*)pDst = (short int)pSrc->nMagic;
+    /* Safety check */ memcpy(pDst, pSrc, 0x12a);
     *pStartAddress = pEnd;
     return 0;
 }
@@ -395,12 +389,7 @@ int32_t __fastcall SaveWaypoints(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_
     } while (i);
 
     D2SaveFileWaypointsStrc* pSrc = &pSaveWaypoints;
-    /* Safety checks */ for (j = 0x14; j; j--) {
-      *(uint32_t*)pDst = *(uint32_t*)pSrc;
-      pSrc = (D2SaveFileWaypointsStrc*)((intptr_t)&pSrc->nVersion + 2);
-      pDst += 4;
-    }
-
+    /* Safety checks */ memcpy(pDst, pSrc, 0x50);
     *pStartAddress = (uint8_t*)pEnd;
     return 0;
 }

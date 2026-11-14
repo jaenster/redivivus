@@ -4035,18 +4035,15 @@ int32_t __fastcall StartMonsterMove(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
         SetUnsetAiFlag(pAiGeneral, 0x40, 1);
       }
     }
-    if (!(nFlags & 2)) {
-      return nTransResult;
+    if (nFlags & 2) {
+      nTransResult = 1;
+      uint32_t sSeedNext = D2_SeedRoll(&pUnit->sSeed);
+      if ((int)(sSeedNext % 100) < 0x46) {
+        WalkRandomOffset(pGameLocal, pUnit, 4);
+      } else {
+        PlanNextAiMove(pGameLocal, pUnit, 10);
+      }
     }
-
-    uint32_t sSeedNext = D2_SeedRoll(&pUnit->sSeed);
-    nTransResult = 1;
-    if ((int)(sSeedNext % 100) < 0x46) {
-      WalkRandomOffset(pGameLocal, pUnit, 4);
-      return 1;
-    }
-
-    PlanNextAiMove(pGameLocal, pUnit, 10);
     return nTransResult;
 }
 
@@ -9298,33 +9295,30 @@ bool __fastcall AI_Monster_ExecuteMapAiBehavior(::SGAMEDATA * pGame, D2UnitStrc 
     // Static local variables (originally global data)
     static pfnAiMapDirectionHandler gaMapAiDirectionHandlers[7] = { nullptr, (pfnAiMapDirectionHandler)&D2Game::Monster::AI::AI_Monster_WalkToStoredPosition, (pfnAiMapDirectionHandler)&D2Game::Monster::AI::AI_Monster_WalkToStoredPositionSlow, (pfnAiMapDirectionHandler)&D2Game::Monster::AI::AITHINK4_MapAiHandler3_WalkToStoredPosition, (pfnAiMapDirectionHandler)&D2Game::Monster::AI::AI_Monster_WalkToPositionAndFace, (pfnAiMapDirectionHandler)&D2Game::Monster::AI::AITHINK4_WalkToPositionAndFace_MonStatFlag9, nullptr }; D2_STATIC_GUARD(gaMapAiDirectionHandlers, "D2Game::Monster::AI::AI_Monster_ExecuteMapAiBehavior::gaMapAiDirectionHandlers");
 
+    bool bResult = false;
     D2MapAIStrc* pMapAi = pAiParam->pMonsterAiGeneral->pMapAi;
-    if (!pMapAi) {
-      return false;
+    if (pMapAi) {
+      uint32_t sSeedNext = D2_SeedRoll(&pUnit->sSeed);
+      if ((int)(sSeedNext % 100) < 0x42) {
+        if (!pMapAi->nSize) {
+          return false;
+        }
+
+        uint32_t nMapAiHandlerResult = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, pMapAi->nSize);
+        int nMapAiDirection = pMapAi->pPosition[nMapAiHandlerResult].nDirection;
+        if (nMapAiDirection < 0) {
+          return false;
+        }
+        if (nMapAiDirection >= 7) {
+          return false;
+        }
+        if (gaMapAiDirectionHandlers[nMapAiDirection]) {
+          bResult = (*gaMapAiDirectionHandlers[nMapAiDirection])(pGame, pUnit, pAiParam, pMapAi->pPosition + nMapAiHandlerResult);
+        }
+      }
     }
 
-    uint32_t sSeedNext = D2_SeedRoll(&pUnit->sSeed);
-    if ((int)(sSeedNext % 100) >= 0x42) {
-      return false;
-    }
-    if (!pMapAi->nSize) {
-      return false;
-    }
-
-    uint32_t nMapAiHandlerResult = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, pMapAi->nSize);
-    int nMapAiDirection = pMapAi->pPosition[nMapAiHandlerResult].nDirection;
-    if (nMapAiDirection < 0) {
-      return false;
-    }
-    if (nMapAiDirection >= 7) {
-      return false;
-    }
-    if (gaMapAiDirectionHandlers[nMapAiDirection]) {
-      bool bResult = (*gaMapAiDirectionHandlers[nMapAiDirection])(pGame, pUnit, pAiParam, pMapAi->pPosition + nMapAiHandlerResult);
-      return bResult;
-    }
-
-    return false;
+    return bResult;
 }
 
 // Per-tick AI handler for friendly town/quest NPC monsters (fastcall pGame,pUnit,pAiParam). First tries AI_Monster_InitializeHomePosition; returns early if it took over. Then branches on the unit's nClassId for quest-specific scripted behavior: Cain portal walk (A1Q4 0x109), Act5 portal spawn (0x200), Mephisto/serpent (A3Q3 0xff), Jerhyn gateway logic (0xc9: QUEST_ShouldBlockJerhyn / Q12 gate, sets path target +9 X), and golden-bird quest (A3Q5 0xfe) — walking toward quest coords or casting skill 8 when in range. Falls through to _PlayerNpcInteraction, then AI command/map-behavior execution, finally PlanNextAiMove(8) idle reschedule if nothing else fired. No return value.

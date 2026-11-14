@@ -1484,9 +1484,10 @@
         "D2InventoryStrc",
         "eInventoryPage",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ],
-      "dh": "aec0d719",
+      "dh": "6a753a70",
       "paramStorage": [
         [
           "szFilename",
@@ -1509,7 +1510,7 @@
           "Stack[0x14]:4"
         ],
         [
-          "neInventoryPage",
+          "eDebugPage",
           "Stack[0x18]:1"
         ],
         [
@@ -1518,7 +1519,7 @@
         ],
         [
           "nInvPage",
-          "Stack[0x20]:4"
+          "Stack[0x20]:1"
         ]
       ]
     },

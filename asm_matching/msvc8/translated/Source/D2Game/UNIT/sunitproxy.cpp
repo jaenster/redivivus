@@ -1123,7 +1123,6 @@ void __stdcall SUNITPROXY_BuildNpcItemTables(int32_t nNpcIndex) {
       pItemRow = &pItemTblSize->pItems->bAkaraMagicMax + nNpcIndex;
       nRowsLeft = pItemTblSize->nSize;
       do {
-        nTradeCountTmp = nRowsLeft;
         if (pItemRow[-0x46 - nNpcIndex] != '\0' && (pItemRow[-0x22] != '\0' || *pItemRow != '\0')) {
           if (pItemRow[0x2b - nNpcIndex] == '\0') {
             nTradeCount++;
@@ -1133,7 +1132,7 @@ void __stdcall SUNITPROXY_BuildNpcItemTables(int32_t nNpcIndex) {
         }
 
         pItemRow += 0x1a8;
-        nRowsLeft = nTradeCountTmp - 1;
+        nRowsLeft = nRowsLeft - 1;
         nTradeCountTmp = nTradeCount;
       } while (nRowsLeft);
     }

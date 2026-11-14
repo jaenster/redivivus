@@ -231,48 +231,31 @@ char * __fastcall GetRosterName(D2RosterStrc * pRoster) {
 
 // Insertion-sorts a singly-linked D2RosterStrc list ascending by szRosterName (lexicographic). Builds a new sorted list by walking the original and inserting each node at its comparison position. Returns the sorted head, or NULL on NULL input.
 D2RosterStrc * __stdcall ROSTER_SortByName(D2RosterStrc * pRoster) {
-    D2RosterStrc* pCmpA;
-    int nCmp;
-    D2RosterStrc* pCmpB;
     D2RosterStrc* pCur;
     D2RosterStrc* pPrev;
-    D2RosterStrc* pNext;
+    D2RosterStrc** ppLink;
     D2RosterStrc* pSortedHead;
     pSortedHead = 0;
-    if (!pRoster) {
-      return nullptr;
-    }
-
-    while (true) {
-      pNext = pRoster->pNext;
-      if (pSortedHead) {
-        pCmpA = pRoster;
-        pCmpB = pSortedHead;
-        pPrev = 0;
-        pCur = pSortedHead;
-        do {
-          nCmp = strcmp(pCmpA->szRosterName, pCmpB->szRosterName);
-          if (nCmp < 0 || (pCmpB = pCur->pNext , pCmpA = pRoster , pPrev = pCur , pCur = pCmpB , !pCmpB)) {
-            goto insert_at_position;
-          }
-        } while (true);
+    for (pCur = pRoster; pCur; pCur = pRoster) {
+      ppLink = &pRoster->pNext;
+      pRoster = pRoster->pNext;
+      pPrev = 0;
+      D2RosterStrc* pIt;
+      for (pIt = pSortedHead; pIt; pIt = pIt->pNext) {
+        if (strcmp(pCur->szRosterName, pIt->szRosterName) < 0) {
+          break;
+        }
+        pPrev = pIt;
       }
-
-      goto insert_at_head;
-      insert_at_position:
-      if (!pPrev) {
-        insert_at_head:
-        pRoster->pNext = pSortedHead;
-        pSortedHead = pRoster;
+      if (pPrev) {
+        *ppLink = pPrev->pNext;
+        pPrev->pNext = pCur;
       } else {
-        pRoster->pNext = pPrev->pNext;
-        pPrev->pNext = pRoster;
-      }
-      pRoster = pNext;
-      if (!pNext) {
-        return pSortedHead;
+        *ppLink = pSortedHead;
+        pSortedHead = pCur;
       }
     }
+    return pSortedHead;
 }
 
 D2RosterStrc * Unreferenced_004796b0() {

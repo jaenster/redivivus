@@ -213,7 +213,7 @@ void __stdcall D2GFX_DrawShiftedImage(struct D2GfxDataStrc * pDC6Context, int32_
 void __stdcall D2GFX_DrawVerticalCropImage(struct D2GfxDataStrc * pDC6Context, int32_t nPositionX, int32_t nPositionY, int32_t nPercentHideFromBottom, int32_t nPercentShowFromBottom, DRAWMODE nDrawMode);
 void __stdcall D2GFX_DrawSprite6(struct D2GfxDataStrc * pDC6Context, int32_t nPosX, int32_t nPosY, struct D2GfxTileRectStrc * pClipRect, int32_t nDrawMode);
 void __stdcall D2GFX_DrawShadow(struct D2GfxDataStrc * pDC6Context, int32_t nPositionX, int32_t nPositionY);
-void __stdcall D2GFX_DrawImageColoredShape(struct D2GfxDataStrc * pDC6Context, int32_t nPositionX, int32_t nPositionY, int32_t nPaletteIndex);
+void __stdcall D2GFX_DrawImageColoredShape(struct D2GfxDataStrc * pDC6Context, int32_t nPositionX, int32_t nPositionY, BYTE nPaletteIndex);
 void __stdcall D2GFX_UpdateScaleFactor();
 int32_t __stdcall D2GFX_GetScaleFactor();
 void __stdcall D2GFX_SetDefaultScaleFactor();

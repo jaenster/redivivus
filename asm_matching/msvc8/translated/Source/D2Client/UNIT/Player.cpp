@@ -2744,47 +2744,36 @@ void __stdcall CLIENT_ClearServerAndClientUnitLists() {
 
 // Iterates all 128 buckets of the server-side unit hash table. For each unit calls CLIENT_UpdateUnitFrame, then looks up the matching entry in the client-side hash table and dispatches CLIENT_DispatchMonsterAiBehavior (monsters) or OBJECT_ExecuteClientFunction (objects). Halts fatally on unit-type mismatch.
 void __stdcall CUNIT_UpdateClientFramesAndAI(D2UnitStrc * * pUnitHashTable) {
-    uint32_t nUnitGUID;
-    D2UnitStrc* pNextUnit;
-    D2UnitStrc* pCurUnit;
-    eD2UnitType eCurUnitType;
-    eD2UnitType eMatchedUnitType;
-    D2UnitStrc* pCurPath;
-    D2UnitStrc* pUnit;
-    int nBucketIdx;
-    nBucketIdx = 0;
-    do {
-      pCurPath = pUnitHashTable[nBucketIdx];
-      next_unit_in_bucket:
-      if (pCurPath) {
-        pNextUnit = pCurPath->pListNext;
-        nUnitGUID = pCurPath->nUnitGUID;
-        eCurUnitType = pCurPath->eUnitType;
-        Path::CLIENT_UpdateUnitFrame(pCurPath);
-        for (pUnit = CUnit::ClientSideUnitHashTables[eCurUnitType][nUnitGUID & 0x7f]; pCurPath = pNextUnit , pUnit != 0; pUnit = pUnit->pListNext) {
+    for (int nBucketIdx = 0; nBucketIdx < 0x80; nBucketIdx++) {
+      D2UnitStrc* pCurUnit = pUnitHashTable[nBucketIdx];
+      while (pCurUnit) {
+        D2UnitStrc* pNextUnit = pCurUnit->pListNext;
+        uint32_t nUnitGUID = pCurUnit->nUnitGUID;
+        eD2UnitType eCurUnitType = pCurUnit->eUnitType;
+        Path::CLIENT_UpdateUnitFrame(pCurUnit);
+        D2UnitStrc* pUnit;
+        for (pUnit = CUnit::ClientSideUnitHashTables[eCurUnitType][nUnitGUID & 0x7f]; pUnit; pUnit = pUnit->pListNext) {
           if (pUnit->nUnitGUID == nUnitGUID) {
-            eMatchedUnitType = pUnit->eUnitType;
-            if (eMatchedUnitType != eCurUnitType) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a);
-              exit(-1);
-            }
-            if (eMatchedUnitType == UNIT_MONSTER) {
-              Source::ClientEngine::CLIENT_DispatchMonsterAiBehavior(pUnit);
-            } else if (eMatchedUnitType == UNIT_OBJECT) {
-              Object::OBJECT_ExecuteClientFunction(pUnit);
-            }
-
             break;
           }
         }
 
-        goto next_unit_in_bucket;
+        if (pUnit) {
+          eD2UnitType eMatchedUnitType = pUnit->eUnitType;
+          if (eMatchedUnitType != eCurUnitType) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a);
+            exit(-1);
+          }
+          if (eMatchedUnitType == UNIT_MONSTER) {
+            Source::ClientEngine::CLIENT_DispatchMonsterAiBehavior(pUnit);
+          } else if (eMatchedUnitType == UNIT_OBJECT) {
+            Object::OBJECT_ExecuteClientFunction(pUnit);
+          }
+        }
+
+        pCurUnit = pNextUnit;
       }
-      nBucketIdx++;
-      if (nBucketIdx >= 0x80) {
-        return;
-      }
-    } while (true);
+    }
 }
 
 void __fastcall HANDSHAKE_SetClientPlayerUnit(D2UnitStrc * pUnit) {

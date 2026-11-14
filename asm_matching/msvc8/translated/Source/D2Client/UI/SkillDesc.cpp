@@ -6170,13 +6170,13 @@ static int SKILLDESC_DescLine2D_SkillPassive(int32_t nSkillLevel, uint16_t * wsz
     return 1;
 }
 
-void __stdcall SKILLDESC_DescLine22_SkillSynergies(D2UnitStrc * pUnit, uint16_t * wszText, eD2Skills eSkill, short * pSkillsTxt, int32_t nSkillLevel) {
+BOOL __stdcall SKILLDESC_DescLine22_SkillSynergies(D2UnitStrc * pUnit, uint16_t * wszText, eD2Skills eSkill, short * pSkillsTxt, int32_t nSkillLevel) {
     int32_t nCalcValue;
     D2MonStatsInitStrc sMonStats;
     int nMonStatIdx = (int)pSkillsTxt[0x5e];
     D2MonStatsTxt* pMonStatsTxt = nMonStatIdx >= 0 && nMonStatIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr;
     if (!pMonStatsTxt) {
-      return;
+      return 0;
     }
 
     memset(&sMonStats, 0, 0x38);
@@ -6279,6 +6279,7 @@ void __stdcall SKILLDESC_DescLine22_SkillSynergies(D2UnitStrc * pUnit, uint16_t 
     }
 
     DamgeTypeToText(0, 0x10a0, nMinDamage, nMinDmgFinal, wszText);
+    return 1;
 }
 
 void __stdcall SKILLDESC_DescLine35_BonusList(short * pSkillArgs, uint16_t wLabelStringId) {

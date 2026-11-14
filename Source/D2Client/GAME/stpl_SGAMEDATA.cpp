@@ -367,51 +367,32 @@ template<> void __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Interna
 }
 
 template<> __attribute__((noinline)) inline void TSGrowableArray<SGAMEDATA>::ReallocData(uint32_t nAlloc) {
-    ::SGAMEDATA* pGameEntry;
-    int nByteOffset;
-    uint32_t nCapacity = nAlloc;
     ::SGAMEDATA* pOldBuffer = this->m_data;
-    if (nAlloc < this->m_count) {
-      pGameEntry = pOldBuffer + nAlloc;
-      do {
-        pGameEntry->Destructor();
-        nAlloc++;
-        pGameEntry++;
-      } while (nAlloc < this->m_count);
+    for (uint32_t i = nAlloc; i < this->m_count; i++) {
+      pOldBuffer[i].Destructor();
     }
 
-    this->m_alloc = nCapacity;
-    pGameEntry = (::SGAMEDATA*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pOldBuffer, nCapacity * 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0x10);
-    this->m_data = pGameEntry;
-    if (pGameEntry) {
+    this->m_alloc = nAlloc;
+    this->m_data = (::SGAMEDATA*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pOldBuffer, nAlloc * 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0x10);
+    if (this->m_data) {
       return;
     }
 
-    pGameEntry = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nCapacity * 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
-    this->m_data = pGameEntry;
+    this->m_data = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nAlloc * 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
     if (!pOldBuffer) {
       return;
     }
 
-    nAlloc = this->m_count;
-    if (nCapacity < this->m_count) {
-      nAlloc = nCapacity;
+    uint32_t nCount = this->m_count;
+    if (nAlloc < nCount) {
+      nCount = nAlloc;
     }
-    if (nAlloc > 0) {
-      ::SGAMEDATA* this_00;
-      nByteOffset = 0;
-      pGameEntry = pOldBuffer;
-      do {
-        this_00 = &this->m_data[nByteOffset];
-        if (this_00) {
-          D2Client::GAME::Game::CopyConstructor(this_00, pGameEntry);
-        }
-
-        pGameEntry->Destructor();
-        nByteOffset++;
-        pGameEntry++;
-        nAlloc--;
-      } while (nAlloc);
+    for (uint32_t j = 0; j < nCount; j++) {
+      ::SGAMEDATA* pNew = &this->m_data[j];
+      if (pNew) {
+        D2Client::GAME::Game::CopyConstructor(pNew, &pOldBuffer[j]);
+      }
+      pOldBuffer[j].Destructor();
     }
 
     Storm::Source::SMem::SMemFree(pOldBuffer, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);

@@ -1921,7 +1921,7 @@
         "D2GfxDataStrc",
         "int32_t"
       ],
-      "dh": "d2232469",
+      "dh": "cf102f5e",
       "paramStorage": [
         [
           "pDC6Context",
@@ -1937,7 +1937,7 @@
         ],
         [
           "nPaletteIndex",
-          "Stack[0x10]:4"
+          "Stack[0x10]:1"
         ]
       ]
     },

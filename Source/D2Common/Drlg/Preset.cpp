@@ -2235,7 +2235,6 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
         if (pDrlgFile->nWallLayers > 0) {
           pLayerEntry = pDrlgFile->pWallLayer;
           do {
-            pLayerPtr = pLayerEntry;
             DrlgGrid::FillExternalCellFlags(&wallGrid, (D2DrlgMapStrc*)pLayerEntry[-4], &fileCoords, pDrlgFile->nWidth + 1, aWallFlagsBuf);
             DrlgGrid::FillExternalCellFlags(&tileGrid, (D2DrlgMapStrc*)*pLayerEntry, &fileCoords, pDrlgFile->nWidth + 1, aTileFlagsBuf);
             nFlags = 0;
@@ -2319,7 +2318,7 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
 
             DrlgGrid::ResetGrid(&tileGrid);
             DrlgGrid::ResetGrid(&wallGrid);
-            pLayerEntry = pLayerPtr + 1;
+            pLayerEntry = pLayerEntry + 1;
             uSlot10.nWallLayerIndex++;
             nPopsCount = nPopsConfig;
             pLayerPtr = pLayerEntry;

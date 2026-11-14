@@ -3412,7 +3412,7 @@ BOOL __fastcall GFX_DrawUnitColoredShape(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    D2gfx::D2GFX::D2GFX_DrawImageColoredShape(&sGfxData, nDrawX, nDrawY, nPerspActive);
+    D2gfx::D2GFX::D2GFX_DrawImageColoredShape(&sGfxData, nDrawX, nDrawY, (uint8_t)nPerspActive);
     return 1;
 }
 
@@ -3426,6 +3426,7 @@ BOOL __fastcall GFX_DrawUnitSelectionShape(D2UnitStrc * pUnit) {
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
+    uint32_t _nHealthBarColor;
     uint8_t byHealthBarColor;
     uint8_t byLayerComponent;
     int32_t nCoord;
@@ -3443,7 +3444,8 @@ BOOL __fastcall GFX_DrawUnitSelectionShape(D2UnitStrc * pUnit) {
     int nFrameResult;
     int nFrameCount;
     int32_t nTransformGfx;
-    int32_t nHealthBarColor;
+    uint8_t nHealthBarColor;
+    uint32_t uStack_33;
     int nMaxSpriteHeight;
     uint32_t nFrame;
     int nClassId;
@@ -3507,7 +3509,7 @@ BOOL __fastcall GFX_DrawUnitSelectionShape(D2UnitStrc * pUnit) {
     byHealthBarColor = GFX_GetUnitHealthBarColor(pUnit);
     eUnitType = pUnit->eUnitType;
     nClassId = pUnit->nClassId;
-    nHealthBarColor = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nHealthBarColor + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byHealthBarColor);
+    _nHealthBarColor = (uint32_t)((uint32_t)((uint32_t)uStack_33 & 0xffffffu) << 8 | (uint32_t)(uint8_t)byHealthBarColor);
     nSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nSeqMode, ".\\ENGINE\\Gfx.cpp", 0xa2f);
     byLayerComponent = D2Common::Units::GetDirection(pUnit);
@@ -3555,7 +3557,7 @@ BOOL __fastcall GFX_DrawUnitSelectionShape(D2UnitStrc * pUnit) {
           memset(&sGfxData, 0, 0x48);
           nCoord = GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, nDirection, nFrameMetricX, &nFrameResult, byLayerComponent, -1);
           if (nCoord) {
-            D2gfx::D2GFX::D2GFX_DrawImageColoredShape(&sGfxData, __frame0.nScreenX, __frame0.nScreenY, nHealthBarColor);
+            D2gfx::D2GFX::D2GFX_DrawImageColoredShape(&sGfxData, __frame0.nScreenX, __frame0.nScreenY, (uint8_t)_nHealthBarColor);
           }
         }
 
