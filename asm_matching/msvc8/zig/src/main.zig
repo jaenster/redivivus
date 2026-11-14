@@ -142,6 +142,7 @@ pub fn main(init: std.process.Init.Minimal) !void {
 }
 
 test {
+    _ = @import("carve_seed.zig");
     _ = datamatch;
     _ = classify;
     _ = permodule;
