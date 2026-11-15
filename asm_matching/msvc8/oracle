@@ -81,7 +81,7 @@ carve() {
     have_zig || need_zig carve
     local ref="$ORACLE_ROOT/build/ref"
     mkdir -p "$ref"
-    oracle_zig carve "$REFERENCE_EXE" "$ref/functions.tsv.new"
+    oracle_zig carve "$REFERENCE_EXE" "$ref/functions.tsv.new" "$ORACLE_ROOT/evidence/confirmed-starts.tsv"
     mv "$ref/functions.tsv.new" "$ref/functions.tsv"
 }
 
@@ -95,7 +95,7 @@ build() {
 
 ensure_ref() {
     [ -f "$REFERENCE_EXE" ] || "$SCRIPTS/fetch_reference.sh"
-    [ -f "$ORACLE_ROOT/build/ref/functions.tsv" ] || carve
+    [ -f "$ORACLE_ROOT/build/ref/functions.tsv" ] && [ -f "$ORACLE_ROOT/evidence/confirmed-starts.tsv" ] && [ ! "$ORACLE_ROOT/evidence/confirmed-starts.tsv" -nt "$ORACLE_ROOT/build/ref/functions.tsv" ] || carve
 }
 
 is_experiment() { [ "$ORACLE_VC" != sp1 ] || [ -n "${ORACLE_CFLAGS:-}" ]; }

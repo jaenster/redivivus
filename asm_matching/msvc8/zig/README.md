@@ -9,7 +9,7 @@ Python fixers are retired: their rules are ghidra-reconstruct's.
 
 ```sh
 zig build --release=fast                   # zig-out/bin/oracle-zig (capstone 5.0.7 from source)
-oracle-zig carve [Game.exe] [functions.tsv]
+oracle-zig carve [Game.exe] [functions.tsv] [confirmed-starts.tsv]
 oracle-zig audit --root <asm_matching/msvc8> [--funcmap F] [--libmap L] [--out O]
 oracle-zig crt --root <asm_matching/msvc8> [--out F]
 oracle-zig map --root <asm_matching/msvc8> [--out F]
@@ -28,6 +28,13 @@ oracle-zig tucache lookup|store|prune [...]   # recon/runs/link.sh and measure.s
 oracle-zig trial --root <asm_matching/msvc8> --state | --out DIR [-j N] [--batch N] [--expect KEY] < trials
 oracle-zig judge --root <asm_matching/msvc8> < requests
 ```
+
+`carve` reads `evidence/confirmed-starts.tsv`: address, image SHA-256 and a one-line
+reason for each independently confirmed boundary. Only rows for the exact input image
+apply. Malformed rows, duplicate active addresses and starts outside `.text` stop the
+carve. There are no image-specific addresses in the Zig implementation. The `oracle`
+wrapper supplies the evidence path and refreshes a carve older than that file; direct
+calls default to `../evidence/confirmed-starts.tsv` from `zig/`, or take the third argument.
 
 The inspection tools and helpers keep their scripts' command lines; `--root` defaults to
 `$ORACLE_ROOT`, else the oracle this executable was built in (`zig/zig-out/bin/..`):

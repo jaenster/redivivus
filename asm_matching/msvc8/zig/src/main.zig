@@ -1,6 +1,6 @@
 //! oracle-zig: the msvc8 oracle's core in Zig, one executable with a subcommand each.
 //!
-//!   oracle-zig carve [Game.exe] [functions.tsv]   carve the original into functions (refimage.py)
+//!   oracle-zig carve [Game.exe] [functions.tsv] [confirmed-starts.tsv]   carve the original into functions (refimage.py)
 //!   oracle-zig audit --root <dir> [--funcmap F] [--libmap L] [--out O]
 //!                                                 compare every mapped function (audit.py)
 //!   oracle-zig crt --root <dir> [--out F]         the linked CRT, by bytes (crtmap.py)
@@ -61,7 +61,7 @@ const commit = @import("commit.zig");
 const x64 = @import("x64.zig");
 
 const USAGE =
-    \\usage: oracle-zig carve [Game.exe] [functions.tsv]
+    \\usage: oracle-zig carve [Game.exe] [functions.tsv] [confirmed-starts.tsv]
     \\       oracle-zig audit --root <asm_matching/msvc8> [--funcmap F] [--libmap L] [--out O]
     \\       oracle-zig crt --root <asm_matching/msvc8> [--out F]
     \\       oracle-zig map --root <asm_matching/msvc8> [--out F]
@@ -151,7 +151,7 @@ pub fn main(init: std.process.Init.Minimal) !void {
 }
 
 test {
-    _ = @import("carve_seed.zig");
+    _ = @import("confirmed_starts.zig");
     _ = datamatch;
     _ = classify;
     _ = permodule;
