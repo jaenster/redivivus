@@ -88,7 +88,7 @@ BOOL __fastcall SKILLBAR_SrvStFn32_StrikeWithAuraState(::SGAMEDATA * pGame, D2Un
     D2DamageStrc* pCombatQueueEntry = UNIT::SUnitDmg::DAMAGE_FindCombatEntry(pUnit, pTarget);
     if (pCombatQueueEntry) {
       nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl);
-      pCombatQueueEntry->dwPhysDamage += nCalcVal * 0x100;
+      pCombatQueueEntry->dwPhysDamage += nCalcVal << 8;
     }
 
     short int eAuraState = pSkillsTxt->aurastate;

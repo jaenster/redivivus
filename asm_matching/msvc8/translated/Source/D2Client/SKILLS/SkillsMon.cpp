@@ -912,8 +912,8 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RingMissileSpray(D2UnitStrc * pUnit, eD2Ski
       const uint32_t nByteStride = (uint32_t)nNumRings * 4;
       nSpreadOffset = 0;
       do {
-        sSkillArg.nUnitX = *(int*)((char*)gaSkillRingMissileSpreadConstY + nSpreadOffset + 4);
-        sSkillArg.nUnitY = *(int*)((char*)gaSkillRingMissileSpreadConstZ + nSpreadOffset + 4);
+        sSkillArg.nUnitX = *(int*)((char*)gaSkillRingMissileSpreadConstY + (nSpreadOffset + 4));
+        sSkillArg.nUnitY = *(int*)((char*)gaSkillRingMissileSpreadConstZ + (nSpreadOffset + 4));
         UNIT::Missile::MakeMissile(&sSkillArg);
         nSpreadOffset += nByteStride;
       } while (nSpreadOffset < 0x3c);
@@ -1517,15 +1517,15 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RadialMissileExplosion(D2UnitStrc * pUnit, 
       sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
       sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
       sSkillArg.nFlags |= 4;
+      sSkillArg.nMissileTxtNo = eMissileId;
       sSkillArg.nSkillLevel = nSkillLvl;
       nSpreadOffset = 0;
-      sSkillArg.nMissileTxtNo = eMissileId;
       sSkillArg.pOwner = pUnit;
       sSkillArg.eSkillNo = eSkill;
       sSkillArg.nVelocityOverride = nVelocity;
       do {
-        sSkillArg.nUnitY = gnSkillDoFuncSpreadTableY[nSpreadOffset];
         sSkillArg.nUnitX = gnSkillDoFuncSpreadTableX[nSpreadOffset];
+        sSkillArg.nUnitY = gnSkillDoFuncSpreadTableY[nSpreadOffset];
         pTargetUnit = UNIT::Missile::MakeMissile(&sSkillArg);
         if (pTargetUnit) {
           Engine::Particle::PARTICLE_SetStoppedWithFade(pTargetUnit);

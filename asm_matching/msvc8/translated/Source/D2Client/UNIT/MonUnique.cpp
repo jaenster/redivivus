@@ -356,7 +356,10 @@ void __fastcall SetResistances(D2UnitStrc * pUnit, int32_t eModifier, int32_t bA
     int nPoisonRes = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_poisonresist, 0);
     int nDmgRes = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_damageresist, 0);
     int nCurMagicRes = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_magicresist, 0);
-    bApply = (int32_t)(99 < nFireRes);
+    bApply = 0;
+    if (99 < nFireRes) {
+      bApply = 1;
+    }
     if (99 < nLightRes) {
       bApply++;
     }

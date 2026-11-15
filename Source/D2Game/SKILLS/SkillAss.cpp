@@ -890,7 +890,7 @@ void __fastcall SKILLASS_SpawnMissileRing(uint32_t dwUnused, int32_t pUnit, ::SG
     do {
       D2UnitStrc* pMissile;
       sSkillArg.nUnitX = *(int*)((char*)anXYOffsetTable + nByteOffset);
-      sSkillArg.nUnitY = *(int*)((char*)anXYOffsetTable + nByteOffset + 0x100);
+      sSkillArg.nUnitY = *(int*)((char*)anXYOffsetTable + (nByteOffset + 0x100));
       qwSeedState = (qwSeedState & 0xffffffff) * 0x6ac690c5 + (qwSeedState >> 0x20);
       sSkillArg.nFunctionParam = (intptr_t)qwSeedState;
       pMissile = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
@@ -1128,7 +1128,7 @@ void __fastcall SKILLASS_SpawnSpiralMissileRing(uint32_t dwParam, int32_t pUnit,
     do {
       D2UnitStrc* pMissile;
       sSkillArg.nUnitX = *(int*)((char*)anXYOffsetTable + nByteOffset);
-      sSkillArg.nUnitY = *(int*)((char*)anXYOffsetTable + nByteOffset + 0x100);
+      sSkillArg.nUnitY = *(int*)((char*)anXYOffsetTable + (nByteOffset + 0x100));
       qwSeedState = (qwSeedState & 0xffffffff) * 0x6ac690c5 + (qwSeedState >> 0x20);
       sSkillArg.nFunctionParam = (intptr_t)qwSeedState;
       pMissile = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
@@ -1510,8 +1510,8 @@ static void __stdcall SKILLASS_FillKickDamage(::SGAMEDATA * pGame, D2DamageStrc 
     nEnhDmgPct = nEnhDmgPctWork;
     D2Common::Skills::SKILL_CalcKickDamage(pUnit2, &nMinDmgKick, &nMaxDmgKick, (int*)&nEnhDmgPct);
     nEnhDmgPctWork = nEnhDmgPct;
-    nMinDmgKick *= 0x100;
-    nEnhMaxDmg = nMaxDmgKick * 0x100;
+    nMinDmgKick = nMinDmgKick << 8;
+    nEnhMaxDmg = nMaxDmgKick << 8;
     if (nMinDmgKick > 0x100000) {
       if (nMinDmgKick < 0x640) {
         nScaledDamage64 = (int64_t)(int)nEnhDmgPct * (int64_t)nMinDmgKick / 100;
@@ -1552,11 +1552,11 @@ static void __stdcall SKILLASS_FillKickDamage(::SGAMEDATA * pGame, D2DamageStrc 
     nScaledDamage64 = (int64_t)(int)nEnhDmgPctWork * (int64_t)nEnhMaxDmg / 100;
     nEnhKickDmg = (int)nScaledDamage64;
     roll_and_apply_damage:
-    nMinDmgKick = nMinDmgKick + nMinDmg + (int)nDivResult;
-    nMaxDmgKick = nEnhMaxDmg + nEnhKickDmg + nMaxDmg;
+    nMinDmgKick += nMinDmg + (int)nDivResult;
+    nMaxDmgKick = nEnhMaxDmg + (nEnhKickDmg + nMaxDmg);
     nEnhDmgPctWork = nMaxDmgKick - nMinDmgKick;
     nEnhDmgPctWork = D2_SeedRollLimited(&pUnit2->sSeed, nEnhDmgPctWork);
-    pDamage->dwPhysDamage = pDamage->dwPhysDamage + nEnhDmgPctWork + nMinDmgKick;
+    pDamage->dwPhysDamage += nEnhDmgPctWork + nMinDmgKick;
     SkillsServer::SetDamageOnEvent(pUnit2, pDamage, eSkill, pUnit1);
     pInventory = pUnit2->pInventory;
     if (!pInventory) {
@@ -1916,6 +1916,7 @@ D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * 
           D2MonsterCastPetHeadStrc sSummonArgs;
           memset(&sSummonArgs, 0, sizeof(sSummonArgs));
           sSummonArgs.nMode = eAnimMode;
+          sSummonArgs.nFunctionId = 0;
           sSummonArgs.nX = nX;
           sSummonArgs.nY2 = nSpawnY;
           sSummonArgs.nFlags = 1;
@@ -2385,7 +2386,7 @@ BOOL __fastcall SKILLASS_SrvStFn26_BladeFury(::SGAMEDATA * pGame, D2UnitStrc * p
       if (pSkillTxt->startmana > 0) {
         int32_t nCurMana;
         nCurMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
-        if (nCurMana < pSkillTxt->startmana * 0x100) {
+        if (nCurMana < pSkillTxt->startmana << 8) {
           return 0;
         }
       }

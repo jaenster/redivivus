@@ -334,12 +334,12 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer) {
     do {
       uint8_t byMsgByte0e;
       nIndex2 = nIndex + 4;
-      aMsgSchedule[nIndex + 0xe] = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)*pBuffer << 8 | (uint16_t)(uint8_t)pBuffer[1]) << 8 | (uint32_t)(uint8_t)pBuffer[2]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pBuffer[3]);
+      aMsgSchedule[nIndex + 0xe] = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)*pBuffer << 8 | (uint16_t)(uint8_t)pBuffer[1]) << 8 | (uint32_t)(uint8_t)pBuffer[2]) << 8 | (uint32_t)(uint8_t)pBuffer[3]);
       byMsgByte10 = pBuffer[10];
-      aMsgSchedule[nIndex + 0xf] = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)pBuffer[4] << 8 | (uint16_t)(uint8_t)pBuffer[5]) << 8 | (uint32_t)(uint8_t)pBuffer[6]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pBuffer[7]);
+      aMsgSchedule[nIndex + 0xf] = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)pBuffer[4] << 8 | (uint16_t)(uint8_t)pBuffer[5]) << 8 | (uint32_t)(uint8_t)pBuffer[6]) << 8 | (uint32_t)(uint8_t)pBuffer[7]);
       byMsgByte0e = pBuffer[0xe];
-      aMsgSchedule[nIndex + 0x10] = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)pBuffer[8] << 8 | (uint16_t)(uint8_t)pBuffer[9]) << 8 | (uint32_t)(uint8_t)byMsgByte10) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pBuffer[0xb]);
-      aMsgSchedule[nIndex + 0x11] = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)pBuffer[0xc] << 8 | (uint16_t)(uint8_t)pBuffer[0xd]) << 8 | (uint32_t)(uint8_t)byMsgByte0e) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pBuffer[0xf]);
+      aMsgSchedule[nIndex + 0x10] = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)pBuffer[8] << 8 | (uint16_t)(uint8_t)pBuffer[9]) << 8 | (uint32_t)(uint8_t)byMsgByte10) << 8 | (uint32_t)(uint8_t)pBuffer[0xb]);
+      aMsgSchedule[nIndex + 0x11] = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)pBuffer[0xc] << 8 | (uint16_t)(uint8_t)pBuffer[0xd]) << 8 | (uint32_t)(uint8_t)byMsgByte0e) << 8 | (uint32_t)(uint8_t)pBuffer[0xf]);
       nIndex = nIndex2;
       pBuffer += 0x10;
     } while (nIndex2 < 0x10);

@@ -69,8 +69,8 @@ int __fastcall GLFLOOR_Initialize(GlFloorCacheStrc * pCache, int nVramStart, int
         pVramAddr = &pNodes[1].dwAddress;
         do {
           if (*pVramAddr < 0x200000 && pCache->dwEntrySize + *pVramAddr > 0x200000) {
-            pNodes[nVramAddr - 1].pNext = pNodes + nVramAddr + 1;
-            pCache->pNodes[nVramAddr + 1].pPrev = pCache->pNodes + nVramAddr - 1;
+            pNodes[nVramAddr - 1].pNext = pNodes + (nVramAddr + 1);
+            pCache->pNodes[nVramAddr + 1].pPrev = pCache->pNodes + (nVramAddr - 1);
             pCache->pNodes[nVramAddr].pPrev = 0;
             pCache->pNodes[nVramAddr].pNext = 0;
             pCache->nUsedCount++;

@@ -2,6 +2,8 @@
 
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/Cursor.h"
+#include "Source/D2Client/D2ClientStrc.h"
+#include "Source/D2Client/D2LightMapStrc.h"
 #include "Source/D2Client/D2UnderMouseStrc.h"
 #include "Source/D2Client/Draw/LightMap.h"
 #include "Source/D2Client/Draw/Weather.h"
@@ -20,20 +22,180 @@
 #include "Source/D2Client/UI/ui.h"
 #include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Client/UNIT/Item.h"
+#include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Client/UNIT/Object.h"
 #include "Source/D2Client/UNIT/Path.h"
 #include "Source/D2Client/UNIT/PlrSkills.h"
 #include "Source/D2Client/UNIT/UnitMode.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
 #include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/COMPOSIT/Composit.h"
+#include "Source/D2Common/Collision.h"
+#include "Source/D2Common/D2BitBufferStrc.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
+#include "Source/D2Common/D2DynamicPathStrc.h"
+#include "Source/D2Common/D2InventoryStrc.h"
+#include "Source/D2Common/D2MissilesTxt.h"
+#include "Source/D2Common/D2MonStatsTxt.h"
+#include "Source/D2Common/D2RoomExStrc.h"
+#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/D2SkillStrc.h"
+#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2StatListExStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
+#include "Source/D2Common/D2WaypointStrc.h"
+#include "Source/D2Common/DATATBLS/AnimTbls.h"
+#include "Source/D2Common/DATATBLS/ItemStats.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DATATBLS/ObjectTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgActStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgDeleteStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgStrc.h"
+#include "Source/D2Common/Drlg/Preset.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/PATH/DynamicPath.h"
+#include "Source/D2Common/PATH/Path.h"
+#include "Source/D2Common/Seed.h"
+#include "Source/D2Common/Stats/StatsEx.h"
+#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
+#include "Source/D2Common/Units.h"
+#include "Source/D2Game/D2Game.h"
+#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Game/GAME/Event.h"
+#include "Source/D2Game/Objects/Objects.h"
+#include "Source/D2Game/PLAYER/Player.h"
+#include "Source/D2Game/PLAYER/PlayerTrade.h"
+#include "Source/D2Game/UNIT/PlayerList.h"
+#include "Source/D2Game/UNIT/SUnitDmg.h"
+#include "Source/D2Game/UNIT/SUnitMsg.h"
+#include "Source/Fog/Fog.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Bnclient/BnSend.h"
+#include "Source/Bnclient/SRP.h"
+#include "Source/Bnclient/net_sid.h"
+#include "Source/D2CMP/D2CMP.h"
+#include "Source/D2CMP/Draw.h"
+#include "Source/D2CMP/SRC/Codec.h"
+#include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2Client/ClientModeInGame.h"
+#include "Source/D2Client/Cursor.h"
+#include "Source/D2Client/D2BNetGatewayAccessStr.h"
 #include "Source/D2Client/D2Client.globals.h"
+#include "Source/D2Client/D2GSPacketSrv0x2A.h"
+#include "Source/D2Client/D2GfxMemoryStrc.h"
+#include "Source/D2Client/D2GfxSettingsStrc.h"
+#include "Source/D2Client/D2IniConfigStrc.h"
+#include "Source/D2Client/Draw/LightMap.h"
+#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Engine/Gfx.h"
+#include "Source/D2Client/GAME/Draw.h"
+#include "Source/D2Client/GAME/Game/Game.h"
+#include "Source/D2Client/GAME/Record.h"
+#include "Source/D2Client/GAME/SCmd.h"
+#include "Source/D2Client/GAME/Sound.h"
+#include "Source/D2Client/Sound/Sound.h"
+#include "Source/D2Client/UI/Automap.h"
+#include "Source/D2Client/UI/Chat.h"
+#include "Source/D2Client/UI/CmdTbl.h"
+#include "Source/D2Client/UI/EscMenu.h"
+#include "Source/D2Client/UI/Inv.h"
+#include "Source/D2Client/UI/Panel.h"
+#include "Source/D2Client/UI/Path.h"
+#include "Source/D2Client/UI/QuestLog.h"
+#include "Source/D2Client/UI/ShowItems.h"
+#include "Source/D2Client/UI/SkillDesc.h"
+#include "Source/D2Client/UI/SpellSel.h"
+#include "Source/D2Client/UI/Text.h"
+#include "Source/D2Client/UI/UseItem.h"
+#include "Source/D2Client/UI/Waypoint.h"
+#include "Source/D2Client/UI/npcmenu.h"
+#include "Source/D2Client/UI/npcmenu/Merc.h"
+#include "Source/D2Client/UI/ui.h"
+#include "Source/D2Client/UNIT/Item.h"
+#include "Source/D2Client/UNIT/Missile.h"
+#include "Source/D2Client/UNIT/Monster.h"
+#include "Source/D2Client/UNIT/Object.h"
+#include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Client/UNIT/PlrSkills.h"
+#include "Source/D2Client/UNIT/UnitSnd.h"
+#include "Source/D2Client/Warden/WardenClient.h"
+#include "Source/D2Common/COMPOSIT/Composit.h"
+#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/DATATBLS/ItemTbls.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
+#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2Common/Drlg/OutSiege.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/ItemMods.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Logging/ProfCore.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Unit.h"
+#include "Source/D2Game/D2QuestDataStrc.h"
+#include "Source/D2Game/GAME/Arena.h"
+#include "Source/D2Game/GAME/Task.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Game/Monster/AI/Baal.h"
+#include "Source/D2Game/Monster/MonsterMode.h"
+#include "Source/D2Game/Objects/Objects.h"
+#include "Source/D2Game/PLAYER/PlayerMsg.h"
+#include "Source/D2Game/Quests/QUESTS.h"
+#include "Source/D2Game/SKILLS/Items.h"
+#include "Source/D2Game/SKILLS/SkillAss.h"
+#include "Source/D2Game/UNIT/SUnitDmg.h"
+#include "Source/D2Game/UNIT/sunitproxy.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Lang/D2LangRoot.h"
+#include "Source/D2Lang/StrTable/strtable.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2Win/D2Win.globals.h"
+#include "Source/D2Win/Src/D2Comp.h"
+#include "Source/D2Win/Src/D2WinFont.h"
+#include "Source/D2gfx/D2gfx.public.h"
+#include "Source/D2gfx/D2GFX.h"
+#include "Source/Fog/D2MemoryManagerStrc.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/D2QServerStrc.h"
+#include "Source/Fog/Fog.globals.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Save.h"
+#include "Source/Fog/Source/SFile.h"
+#include "Source/Fog/Source/SSComp.h"
+#include "Source/Fog/Src/LogManager.h"
+#include "3rdparty/Storm/Storm.h"
+#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
+#include "3rdparty/Storm/H/stpl.h"
+#include "3rdparty/Storm/Source/SCMD.h"
+#include "3rdparty/Storm/Source/SComp.h"
+#include "3rdparty/Storm/Source/SErr.h"
+#include "3rdparty/Storm/Source/SFile.h"
+#include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
+#include "Source/D2Client/UI/Automap.h"
+#include "Source/D2Common/D2UnitDataItemStrc.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
+#include "Source/D2Common/ITEMS/ItemMods.h"
 #include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Game/Ai/D2AiGeneralStrc.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Game/Monster/Monsters.h"
+#include "Source/D2Game/SKILLS/SkillAss.h"
+#include "Source/D2Launch/CharSel.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -669,7 +831,7 @@ uint32_t __stdcall PLAYER_ValidateSkillMessage_Extern(int * pnUsabilityCode, D2U
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_6(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_6(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }
@@ -1119,39 +1281,41 @@ static int PLAYER_ExecuteSkillWithAura(int32_t nTargetGUID, eD2UnitType eTargetU
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x530);
         exit(-1);
       }
-      if (!(*(uint8_t*)&pUnderMouse->flags & 0x20)) {
-        bOutOfRange = SKILL_CheckAuraRange(pUnderMouse->pSkill, pUnderMouse->pTarget, &nCurDist, &nTotalDist);
-        if (!bOutOfRange) {
-          if (*(uint8_t*)&pUnderMouse->flags & 1) {
-            D2Common::Skills::StoreLastSkillHit(unk1, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
-          }
-          if (*(uint8_t*)&pUnderMouse->flags & 2) {
-            D2Common::Skills::StoreLastSkillHit(unk3 | Poison, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
-          }
-
-          nStepsRemaining = nTotalDist - nCurDist;
-          if (nStepsRemaining <= 0) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x548);
-            exit(-1);
-          } else {
-            if (!nTotalDist) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x549);
-              exit(-1);
-            }
-
-            nSrcXPos = D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pPlayer);
-            nCurDist = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pPlayer);
-            nDstX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget);
-            nDstY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pTarget);
-            nCurDist = (nDstY - nCurDist) * nStepsRemaining / nTotalDist + nCurDist;
-            CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, (short int)((nDstX - nSrcXPos) * nStepsRemaining / nTotalDist) + (short int)nSrcXPos, (int16_t)nCurDist, pUnderMouse->nMoveActionType);
-            return 1;
-          }
-        }
+      if (*(uint8_t*)&pUnderMouse->flags & 0x20) {
+        PLAYER_ExecuteModeBasedAction(1, pUnderMouse);
+        return 1;
       }
 
-      PLAYER_ExecuteModeBasedAction(1, pUnderMouse);
-      return 1;
+      bOutOfRange = SKILL_CheckAuraRange(pUnderMouse->pSkill, pUnderMouse->pTarget, &nCurDist, &nTotalDist);
+      if (bOutOfRange) {
+        PLAYER_ExecuteModeBasedAction(1, pUnderMouse);
+        return 1;
+      }
+      if (*(uint8_t*)&pUnderMouse->flags & 1) {
+        D2Common::Skills::StoreLastSkillHit(unk1, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+      }
+      if (*(uint8_t*)&pUnderMouse->flags & 2) {
+        D2Common::Skills::StoreLastSkillHit(unk3 | Poison, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+      }
+
+      nStepsRemaining = nTotalDist - nCurDist;
+      if (nStepsRemaining <= 0) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x548);
+        exit(-1);
+      } else {
+        if (!nTotalDist) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x549);
+          exit(-1);
+        }
+
+        nSrcXPos = D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pPlayer);
+        nCurDist = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pPlayer);
+        nDstX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget);
+        nDstY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pTarget);
+        nCurDist = (nDstY - nCurDist) * nStepsRemaining / nTotalDist + nCurDist;
+        CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, (short int)((nDstX - nSrcXPos) * nStepsRemaining / nTotalDist) + (short int)nSrcXPos, (int16_t)nCurDist, pUnderMouse->nMoveActionType);
+        return 1;
+      }
     }
 }
 
@@ -2407,7 +2571,7 @@ static void CLIENT_CancelRunAndWalk(D2UnitStrc * pUnit) {
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_14(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_14(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }

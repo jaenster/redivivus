@@ -66,8 +66,8 @@ int __fastcall GLTEXCACHE_Initialize(GlTextureCacheStrc * pCache, int nVramStart
         pDebugScan = &pNodeArray[1].dwAddress;
         do {
           if (*pDebugScan < 0x200000 && pCache->dwEntrySize + *pDebugScan > 0x200000) {
-            pNodeArray[iNode - 1].pNext = pNodeArray + iNode + 1;
-            pCache->pNodes[iNode + 1].pPrev = pCache->pNodes + iNode - 1;
+            pNodeArray[iNode - 1].pNext = pNodeArray + (iNode + 1);
+            pCache->pNodes[iNode + 1].pPrev = pCache->pNodes + (iNode - 1);
             pCache->pNodes[iNode].pPrev = 0;
             pCache->pNodes[iNode].pNext = 0;
             pCache->nUsedCount++;
@@ -219,7 +219,7 @@ void __fastcall GLTEXCACHE_EvictLRU(GlTextureCacheStrc * pCache) {
       pEvictNode->pPrev = 0;
       if (pEvictNode->pHashTable) {
         *(uint32_t*)((char*)pEvictNode->pHashTable + pEvictNode->nHashIndex * 8) = 0;
-        *(uint32_t*)((char*)pEvictNode->pHashTable + pEvictNode->nHashIndex * 8 + 4) = 0;
+        *(uint32_t*)((char*)pEvictNode->pHashTable + (pEvictNode->nHashIndex * 8 + 4)) = 0;
         pEvictNode->pHashTable = 0;
       }
       if (!pCache->pFreeHead) {
@@ -277,7 +277,7 @@ int __fastcall GLTEXCACHE_EnsureCapacity(GlTextureCacheStrc * pCache) {
           pEvictNode->pPrev = 0;
           if (pEvictNode->pHashTable) {
             *(uint32_t*)((char*)pEvictNode->pHashTable + pEvictNode->nHashIndex * 8) = 0;
-            *(uint32_t*)((char*)pEvictNode->pHashTable + pEvictNode->nHashIndex * 8 + 4) = 0;
+            *(uint32_t*)((char*)pEvictNode->pHashTable + (pEvictNode->nHashIndex * 8 + 4)) = 0;
             pEvictNode->pHashTable = 0;
           }
           if (!pCache->pFreeHead) {

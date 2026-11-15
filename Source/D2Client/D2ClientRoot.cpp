@@ -942,7 +942,7 @@ void __stdcall ClientLight_UpdateRoomLightPulse() {
         gRoomLightPulse.nFadeOutDuration = 0x19;
       }
 
-      gRoomLightPulse.nSinOffset = 0x80 - (int)((nFadeOutBase + gRoomLightPulse.nCurrentTick) * 0x80) / (int)gRoomLightPulse.nFadeOutDuration;
+      gRoomLightPulse.nSinOffset = 0x80 - (int)(nFadeOutBase + gRoomLightPulse.nCurrentTick << 7) / (int)gRoomLightPulse.nFadeOutDuration;
     } else {
       gRoomLightPulse.nLightPulseIntensity = 0;
     }
@@ -3665,7 +3665,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
           nHeaderSize = *ppFVar7;
           bCopyPass = true;
           ppuVar1 = ppInputSaved;
-          ppSectionEntry = ppOutput + ppFVar7[9] * 3 + 10;
+          ppSectionEntry = ppOutput + (ppFVar7[9] * 3 + 10);
           while (true) {
             pCopyDst = pImageWritePtr;
             if (pImageWritePtr >= (void*)(nHeaderSize + (char*)ppFVar7)) {
@@ -3707,7 +3707,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
               *(int*)((char*)pModuleBase + nRelOffset) += (int)pModuleBase;
               nRelocationCount++;
             } else {
-              nRelOffset = (uint32_t)pRelocationEntry[1] + nRelOffset + (uint32_t)nRelocEntryByte * 0x100;
+              nRelOffset = (uint32_t)pRelocationEntry[1] + nRelOffset + ((uint32_t)nRelocEntryByte << 8);
               pRelocationEntry += 2;
               *(int*)((char*)pModuleBase + nRelOffset) += (int)pModuleBase;
               nRelocationCount++;
@@ -3751,7 +3751,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
               break;
             }
 
-            ppuVar1 = ppOutput + nHeaderSize * 3 + 10;
+            ppuVar1 = ppOutput + (nHeaderSize * 3 + 10);
             lpAddress = (LPVOID)((intptr_t)*ppuVar1 + (intptr_t)ppFVar7);
             pModuleBase = ppuVar1[1];
             /* PDWORD lpflOldProtect for VirtualProtect */ /* DWORD flNewProtect for VirtualProtect */ /* SIZE_T dwSize for VirtualProtect */ /* LPVOID lpAddress for VirtualProtect */ VirtualProtect(lpAddress, (SIZE_T)pModuleBase, (DWORD)ppuVar1[2], &dwOldProtect);
@@ -3809,7 +3809,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
           nHeaderSize = *ppFVar7;
           bCopyPass = true;
           ppuVar1 = ppInputSaved;
-          ppSectionEntry = ppOutput + ppFVar7[9] * 3 + 10;
+          ppSectionEntry = ppOutput + (ppFVar7[9] * 3 + 10);
           while (true) {
             pCopyDst = pImageWritePtr;
             if (pImageWritePtr >= (void*)(nHeaderSize + (char*)ppFVar7)) {
@@ -3855,7 +3855,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
               D2_SEH_FENCE();
               nRelocationCount++;
             } else {
-              nRelOffset = (uint32_t)pRelocationEntry[1] + nRelOffset + (uint32_t)nRelocEntryByte * 0x100;
+              nRelOffset = (uint32_t)pRelocationEntry[1] + nRelOffset + ((uint32_t)nRelocEntryByte << 8);
               pRelocationEntry += 2;
               D2_SEH_FENCE();
               *(int*)((char*)pModuleBase + nRelOffset) += (int)pModuleBase;
@@ -3907,7 +3907,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
               break;
             }
 
-            ppuVar1 = ppOutput + nHeaderSize * 3 + 10;
+            ppuVar1 = ppOutput + (nHeaderSize * 3 + 10);
             lpAddress = (LPVOID)((intptr_t)*ppuVar1 + (intptr_t)ppFVar7);
             pModuleBase = ppuVar1[1];
             /* PDWORD lpflOldProtect for VirtualProtect */ /* DWORD flNewProtect for VirtualProtect */ /* SIZE_T dwSize for VirtualProtect */ /* LPVOID lpAddress for VirtualProtect */ VirtualProtect(lpAddress, (SIZE_T)pModuleBase, (DWORD)ppuVar1[2], &dwOldProtect);

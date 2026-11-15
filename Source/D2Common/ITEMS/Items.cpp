@@ -2,21 +2,116 @@
 
 #include "Source/D2Common/ITEMS/Items.h"
 #include "Source/D2CMP/D2CMP.h"
+#include "Source/D2CMP/Pallete.h"
+#include "Source/D2Client/D2ClientStrc.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Item.h"
+#include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Common/COMPOSIT/Composit.h"
+#include "Source/D2Common/D2BitBufferStrc.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
+#include "Source/D2Common/D2InventoryStrc.h"
+#include "Source/D2Common/D2MagicAffixTxt.h"
+#include "Source/D2Common/D2MissilesTxt.h"
+#include "Source/D2Common/D2MonStatsTxt.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2StatInfoStrc.h"
+#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/DATATBLS/AnimTbls.h"
 #include "Source/D2Common/DATATBLS/DataTbls.h"
+#include "Source/D2Common/DATATBLS/ItemStats.h"
 #include "Source/D2Common/DATATBLS/ItemTbls.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/Drlg/D2DrlgActStrc.h"
+#include "Source/D2Common/Drlg/Preset.h"
 #include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/ItemMods.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/PATH/DynamicPath.h"
+#include "Source/D2Common/QuestRecord.h"
+#include "Source/D2Common/Seed.h"
 #include "Source/D2Common/Stats/StatsEx.h"
+#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Unit.h"
 #include "Source/D2Common/Units.h"
+#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Game/GAME/Event.h"
+#include "Source/D2Game/GAME/Targets.h"
+#include "Source/D2Game/UNIT/SUnitDmg.h"
+#include "Source/D2Game/UNIT/SUnitInactive.h"
+#include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/Fog/Fog.h"
+#include "Source/Fog/BitBuffer.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Skills.h"
+#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/globals/globals.h"
+#include "Source/D2CMP/Draw.h"
+#include "Source/D2CMP/SRC/Codec.h"
+#include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2Client/UI/Automap.h"
+#include "Source/D2Client/UI/Inv.h"
 #include "Source/D2Client/UI/SkillDesc.h"
+#include "Source/D2Client/UNIT/Item.h"
+#include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Client/UNIT/PlrSkills.h"
+#include "Source/D2Common/COMPOSIT/Composit.h"
+#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/DATATBLS/ItemTbls.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
+#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2Common/Drlg/OutSiege.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/ItemMods.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Logging/ProfCore.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Unit.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Lang/D2LangRoot.h"
+#include "Source/D2Lang/StrTable/strtable.h"
+#include "Source/D2Win/D2Win.globals.h"
+#include "Source/Fog/D2MemoryManagerStrc.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/D2QServerStrc.h"
+#include "Source/Fog/Fog.globals.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Save.h"
+#include "Source/Fog/Source/SFile.h"
+#include "Source/Fog/Source/SSComp.h"
+#include "Source/Fog/Src/LogManager.h"
+#include "3rdparty/Storm/Storm.h"
+#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
+#include "3rdparty/Storm/H/stpl.h"
+#include "3rdparty/Storm/Source/SCMD.h"
+#include "3rdparty/Storm/Source/SComp.h"
+#include "3rdparty/Storm/Source/SErr.h"
+#include "3rdparty/Storm/Source/SFile.h"
+#include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Client/UI/Automap.h"
+#include "Source/D2Client/UI/Inv.h"
+#include "Source/D2Client/UI/SkillDesc.h"
+#include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Client/UNIT/PlrSkills.h"
+#include "Source/D2Common/D2UnitDataItemStrc.h"
 #include "Source/D2Common/DATATBLS/DataTbls.inline.h"
+#include "Source/D2Common/DATATBLS/ItemStats.inline.h"
+#include "Source/D2Common/DATATBLS/ItemTbls.inline.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Game/GAME/SCmd.h"
+#include "Source/D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -1077,7 +1172,7 @@ void __fastcall ITEM_AddStatCostsToPrices(D2UnitStrc * pItem, int * pnSellPrice,
             nRepairCostTmp = *pnBuyPrice * nCostTmp * nAvgDmgCost;
             nRepairCostTmp = nRepairCostTmp / 4096;
             add_costs_multiply_first:
-            nBuyCostSum = nBuyCostSum + nRepairCostTmp + nCostAdd;
+            nBuyCostSum += nRepairCostTmp + nCostAdd;
             nCostTmp = *pnRepairPrice * nCostTmp * nAvgDmgCost;
             nSellCostSum += nCostResult;
             nRepairCostTmp = nCostTmp / 1024;
@@ -1102,7 +1197,7 @@ void __fastcall ITEM_AddStatCostsToPrices(D2UnitStrc * pItem, int * pnSellPrice,
             nCostResult = (int)(*pnBuyPrice * nAvgDmgCost) / 1024;
             add_costs_divide_first:
             nSellCostSum += nCostTmp;
-            nBuyCostSum = nBuyCostSum + nCostResult * nRepairCostTmp + nCostAdd;
+            nBuyCostSum += nCostResult * nRepairCostTmp + nCostAdd;
             nRepairCostTmp = (int)(*pnRepairPrice * nAvgDmgCost) / 1024 * nRepairCostTmp;
             break;
             default:
@@ -3073,14 +3168,14 @@ uint32_t __fastcall ITEM_CalcRequiredLevel(D2UnitStrc * pUnit, D2UnitStrc * pUni
         if (!pUnit || pUnit->eUnitType != UNIT_ITEM || !pUnit->pUnitData.pUnitDataItem) {
           uAffixIdx = 0;
         } else {
-          uAffixIdx = (uint32_t)*(uint16_t*)((char*)pUnit->pUnitData.pUnitDataItem->wMagicPrefix + nIdx - 0x3e);
+          uAffixIdx = (uint32_t)*(uint16_t*)((char*)pUnit->pUnitData.pUnitDataItem->wMagicPrefix + (nIdx - 0x3e));
         }
 
         pPrefixTxt = DATATBLS::ItemTbls::TXT_magicaffixes_GetLine(uAffixIdx);
         if (!pUnit || pUnit->eUnitType != UNIT_ITEM || !pUnit->pUnitData.pUnitDataItem) {
           uAffixIdx = 0;
         } else {
-          uAffixIdx = (uint32_t)*(uint16_t*)((char*)pUnit->pUnitData.pUnitDataItem->wMagicPrefix + nIdx - 0x38);
+          uAffixIdx = (uint32_t)*(uint16_t*)((char*)pUnit->pUnitData.pUnitDataItem->wMagicPrefix + (nIdx - 0x38));
         }
 
         pSuffixTxt = DATATBLS::ItemTbls::TXT_magicaffixes_GetLine(uAffixIdx);
@@ -3875,7 +3970,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_25(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_25(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }
@@ -4515,11 +4610,11 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
             wAffixIdx += (short int)bIsExtended;
           }
           if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
-            *(short int*)((char*)pUnit->pUnitData.pUnitDataItem->wMagicPrefix + nStatVal - 0x3e) = wAffixIdx;
+            *(short int*)((char*)pUnit->pUnitData.pUnitDataItem->wMagicPrefix + (nStatVal - 0x3e)) = wAffixIdx;
           }
         } else {
           if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
-            *(uint16_t*)((char*)pUnit->pUnitData.pUnitDataItem->wMagicPrefix + nStatVal - 0x3e) = 0;
+            *(uint16_t*)((char*)pUnit->pUnitData.pUnitDataItem->wMagicPrefix + (nStatVal - 0x3e)) = 0;
           }
         }
 
@@ -4531,11 +4626,11 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
             wAffixIdx++;
           }
           if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
-            *(short int*)((char*)pUnit->pUnitData.pUnitDataItem->wMagicPrefix + nStatVal - 0x38) = wAffixIdx;
+            *(short int*)((char*)pUnit->pUnitData.pUnitDataItem->wMagicPrefix + (nStatVal - 0x38)) = wAffixIdx;
           }
         } else {
           if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
-            *(uint16_t*)((char*)pUnit->pUnitData.pUnitDataItem->wMagicPrefix + nStatVal - 0x38) = 0;
+            *(uint16_t*)((char*)pUnit->pUnitData.pUnitDataItem->wMagicPrefix + (nStatVal - 0x38)) = 0;
           }
         }
 
@@ -4701,7 +4796,11 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
     }
 
     uint32_t nStatIndex;
-    nStatIndex = (uint32_t)(nFileVersion < 0x5d);
+    nStatIndex = 0;
+    if (nFileVersion < 0x5d) {
+      nStatIndex = 1;
+    }
+
     nBitVal = ITEMS_IsA(pUnit, ITEMTYPE_AnyArmor);
     if (nBitVal) {
       if (sgptDataTable->nTxtItemStatCostSize <= 0x1f) {
@@ -4986,7 +5085,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
                 }
 
                 nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, (uint32_t)pStatCostTxt->saveBits[nStatIndex]);
-                Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_maxhp, (nBitVal - pStatCostTxt->saveAdd[nStatIndex]) * 0x100, 0);
+                Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_maxhp, nBitVal - pStatCostTxt->saveAdd[nStatIndex] << 8, 0);
               }
 
               break;
@@ -5268,7 +5367,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
                 }
               nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0x15);
               ItemMods::ITEMMODS_UnpackSkillLevelChance(nBitVal, &nOnAttackChance, (uint32_t*)nOnAttackSkillBuf, &nOnAttackSkillLevel);
-              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillonattack, nOnAttackSkillLevel, (nOnAttackSkillBuf[0] & 0x3f) + (short int)nOnAttackChance * 0x40);
+              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillonattack, nOnAttackSkillLevel, (nOnAttackSkillBuf[0] & 0x3f) + ((short int)nOnAttackChance << 6));
               break;
               case UNITSTAT_item_skillonhit:
 
@@ -5280,7 +5379,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
                 }
               nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0x15);
               ItemMods::ITEMMODS_UnpackSkillLevelChance(nBitVal, &nOnHitChance, (uint32_t*)nOnHitSkillBuf, &nOnHitSkillLevel);
-              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillonhit, nOnHitSkillLevel, (nOnHitSkillBuf[0] & 0x3f) + (short int)nOnHitChance * 0x40);
+              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillonhit, nOnHitSkillLevel, (nOnHitSkillBuf[0] & 0x3f) + ((short int)nOnHitChance << 6));
               break;
               case UNITSTAT_item_skillongethit:
 
@@ -5292,7 +5391,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
                 }
               nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0x15);
               ItemMods::ITEMMODS_UnpackSkillLevelChance(nBitVal, &nOnGetHitChance, (uint32_t*)nOnGetHitSkillBuf, &nOnGetHitSkillLevel);
-              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillongethit, nOnGetHitSkillLevel, (nOnGetHitSkillBuf[0] & 0x3f) + (short int)nOnGetHitChance * 0x40);
+              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillongethit, nOnGetHitSkillLevel, (nOnGetHitSkillBuf[0] & 0x3f) + ((short int)nOnGetHitChance << 6));
               break;
               case UNITSTAT_item_charged_skill:
 
@@ -5325,7 +5424,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
               }
 
               ItemMods::ITEMMODS_UnpackChargedSkill(nBitVal, &nChargeMax, (uint32_t*)nChargeBuf, &nChargeSkillLevel, &nChargeSkillId);
-              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_charged_skill, (nChargeSkillLevel & 0xff) + nChargeSkillId * 0x100, (short int)(nChargeMax << D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits)) + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & nChargeBuf[0]));
+              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_charged_skill, (nChargeSkillLevel & 0xff) + (nChargeSkillId << 8), (short int)(nChargeMax << D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits)) + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & nChargeBuf[0]));
               break;
               default:
                 deserialize_single_stat:
@@ -6200,8 +6299,8 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
               } else {
                 nAffixRepairDelta = pUniqueItemsTxt->costAdd;
                 iVar1 = pUniqueItemsTxt->costMult;
-                iVar4 = iVar4 + ((int)(nPrice + (uVar2 & 0x3ff)) >> 10) * iVar1 + nAffixRepairDelta;
-                iVar3 = iVar3 + __frame0.nBuyPrice / 1024 * iVar1 + nAffixRepairDelta;
+                iVar4 += ((int)(nPrice + (uVar2 & 0x3ff)) >> 10) * iVar1 + nAffixRepairDelta;
+                iVar3 += __frame0.nBuyPrice / 1024 * iVar1 + nAffixRepairDelta;
                 __frame0.nQualityMod = __frame0.nQualityMod + __frame0.nRepairPrice / 1024 * iVar1 + nAffixRepairDelta;
               }
 
@@ -6251,7 +6350,7 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
 
             iVar4 += nAffixSellDelta;
             iVar3 += nAffixBuyDelta;
-            __frame0.nQualityMod = __frame0.nQualityMod + nRepairScaled + nAffixRepairDelta;
+            __frame0.nQualityMod += nRepairScaled + nAffixRepairDelta;
           }
 
           goto add_stat_costs;
@@ -6268,8 +6367,8 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
             } else {
               nAffixRepairDelta = pSetItemsTxt->costAdd;
               iVar1 = pSetItemsTxt->costMult;
-              iVar4 = iVar4 + ((int)(nPrice + (uVar2 & 0x3ff)) >> 10) * iVar1 + nAffixRepairDelta;
-              iVar3 = iVar3 + __frame0.nBuyPrice / 1024 * iVar1 + nAffixRepairDelta;
+              iVar4 += ((int)(nPrice + (uVar2 & 0x3ff)) >> 10) * iVar1 + nAffixRepairDelta;
+              iVar3 += __frame0.nBuyPrice / 1024 * iVar1 + nAffixRepairDelta;
               __frame0.nQualityMod = __frame0.nQualityMod + __frame0.nRepairPrice / 1024 * iVar1 + nAffixRepairDelta;
             }
           }
@@ -6973,7 +7072,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
         }
 
         Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, nErrLine);
-        if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem && (wAutoMagic = *(uint16_t*)((char*)pItemUnit->pUnitData.pUnitDataItem->wMagicPrefix + iVar3 - 0x38) , wAutoMagic != 0)) {
+        if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem && (wAutoMagic = *(uint16_t*)((char*)pItemUnit->pUnitData.pUnitDataItem->wMagicPrefix + (iVar3 - 0x38)) , wAutoMagic != 0)) {
           Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 1, 1);
           nBitValue = wAutoMagic ? (uint32_t)wAutoMagic : 0;
           if (nBitValue >= 0x7ff) {

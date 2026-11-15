@@ -2729,7 +2729,10 @@ BOOL __stdcall NET_MCP_CLIENT_PrepareGameCreatePacket(D2ControlStrc * pControl) 
 
           szDifficultyAndDescription[0] = (ePlayerStatus & PLAYERSTATUS_Hardcore ? 3U : 0) + (char)CreateGameDifflevel + '1';
           Storm::Source::SSTR::SStrCopy(szDifficultyAndDescription + 1, sGameCreatePacket.szGameDescription, 0x7fffffff);
-          nFlags = (uint32_t)(D2IniData_multiplayer->nDifficulty == 1);
+          nFlags = 0;
+          if (D2IniData_multiplayer->nDifficulty == 1) {
+            nFlags = 1;
+          }
           if (D2IniData_multiplayer->nDifficulty == 2) {
             nFlags = 2;
           }

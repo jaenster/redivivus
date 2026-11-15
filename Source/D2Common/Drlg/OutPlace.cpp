@@ -823,11 +823,12 @@ namespace D2Common::Drlg::OutPlace {
 
 // Looks up road preset ID from direction data tables.
 int32_t __fastcall DRLGOUTPLACE_GetRoadPresetId(int32_t nDirX, int32_t nDirY, int32_t nRoadType) {
+    int32_t nDirection = gaRoadPresetDirectionLookup[nDirX + nDirY * 3 + 4];
     if (nRoadType >= 4) {
-      return gRoadPresetIdLookupTable[nRoadType - 4 + gaRoadPresetDirectionLookup[nDirX + nDirY * 3 + 4] * 2];
+      return gRoadPresetIdLookupTable[nRoadType - 4 + nDirection * 2];
     }
 
-    return gnOutdoorsGridWidthByLevel[nRoadType + gaRoadPresetDirectionLookup[nDirX + nDirY * 3 + 4] * 4 + 5];
+    return gnOutdoorsGridWidthByLevel[nRoadType + nDirection * 4 + 5];
 }
 
 // Extended road preset lookup with directional offsets.
@@ -1032,9 +1033,9 @@ void __fastcall PlaceAct1245OutdoorBorders(D2DrlgLevelStrc * pLevel) {
       }
 
       if ((int)nRoadType >= 4) {
-        nPresetId = gRoadPresetIdLookupTable[nRoadType - 4 + gaRoadPresetDirectionLookup[nDy * 3 + nDx + 4] * 2];
+        nPresetId = gRoadPresetIdLookupTable[nRoadType - 4 + gaRoadPresetDirectionLookup[nDy * 3 + (nDx + 4)] * 2];
       } else {
-        nPresetId = gnOutdoorsGridWidthByLevel[nRoadType + gaRoadPresetDirectionLookup[nDy * 3 + nDx + 4] * 4 + 5];
+        nPresetId = gnOutdoorsGridWidthByLevel[nRoadType + gaRoadPresetDirectionLookup[nDy * 3 + (nDx + 4)] * 4 + 5];
       }
       if (!(pCurVertex->dwFlags & 2)) {
         while (nCornerPresetId != nX || nCurY != nY) {
@@ -1560,7 +1561,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
           nFlipState = nConnFlags;
           do {
             if (iVar2 > 0) {
-              pExitCount.pExitCount2 = (D2DrlgSubLevelPlaceStrc**)(pDistWorkMap + bNoOverlap * nWidth + nGridY);
+              pExitCount.pExitCount2 = (D2DrlgSubLevelPlaceStrc**)(pDistWorkMap + (bNoOverlap * nWidth + nGridY));
               nSubOffset = iVar2;
               do {
                 if (iVar1 > 0) {
@@ -1702,8 +1703,8 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
           if (nWidth > 0) {
             nGridY = nWidth * nRowIter;
             pSubLevelRowPtr = pSubLevelMap + nGridY;
-            nSubIdx.pSubIdx = pDistWorkMap + nGridY + 1;
-            pFlagsRow = (uint32_t*)(pSubLevelDistMap + nGridY - 1);
+            nSubIdx.pSubIdx = pDistWorkMap + (nGridY + 1);
+            pFlagsRow = (uint32_t*)(pSubLevelDistMap + (nGridY - 1));
             do {
               nGridY = *pSubLevelRowPtr;
               nCellPtr = 0x0;
@@ -1859,13 +1860,13 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
 
                     break;
                     case 2:
-                      if (*(int*)((char*)pAdjPtr + nGridX + 4) == bNoOverlap && pConnFlags[1] && (int)pConnFlags[1] < 0xf) {
+                      if (*(int*)((char*)pAdjPtr + (nGridX + 4)) == bNoOverlap && pConnFlags[1] && (int)pConnFlags[1] < 0xf) {
                         nConnFlags |= 0x20;
                         goto stop_same_region_search;
                       }
                     break;
                     case 3:
-                      if (*(int*)((char*)pAdjPtr + nGridX - 4) == bNoOverlap && pConnFlags[-1] && (int)pConnFlags[-1] < 0xf) {
+                      if (*(int*)((char*)pAdjPtr + (nGridX - 4)) == bNoOverlap && pConnFlags[-1] && (int)pConnFlags[-1] < 0xf) {
                         nConnFlags |= 0x10;
                         goto stop_same_region_search;
                       }
@@ -1909,13 +1910,13 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
 
                       break;
                       case 2:
-                        if (*(int*)((char*)pAdjPtr + nGridX + 4) != bNoOverlap && pAdjPtr[1] == 2) {
+                        if (*(int*)((char*)pAdjPtr + (nGridX + 4)) != bNoOverlap && pAdjPtr[1] == 2) {
                           nConnFlags |= 0x20;
                           goto stop_other_region_search;
                         }
                       break;
                       case 3:
-                        if (*(int*)((char*)pAdjPtr + nGridX - 4) != bNoOverlap && pAdjPtr[-1] == 2) {
+                        if (*(int*)((char*)pAdjPtr + (nGridX - 4)) != bNoOverlap && pAdjPtr[-1] == 2) {
                           nConnFlags |= 0x10;
                           goto stop_other_region_search;
                         }
@@ -2055,12 +2056,12 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
           for (nGridY = 0; nGridY < iVar2; nGridY++) {
             nGridX = 0;
             if (iVar1 > 0) {
-              bNoOverlap = *(int*)((char*)aSubLevelRecords[0].apLinks + nSubOffset + 0x14);
+              bNoOverlap = *(int*)((char*)aSubLevelRecords[0].apLinks + (nSubOffset + 0x14));
               do {
-                *(int32_t*)(bNoOverlap + iVar3 * 4) = pSubLevelDistMap[(*(int*)((char*)aSubLevelRecords[0].apLinks + nSubOffset + 0x10) + nGridY) * nWidth + nGridX + *(int*)((char*)aSubLevelRecords[0].apLinks + nSubOffset + 0xc)];
-                bNoOverlap = *(int*)((char*)aSubLevelRecords[0].apLinks + nSubOffset + 0x14);
+                *(int32_t*)(bNoOverlap + iVar3 * 4) = pSubLevelDistMap[(*(int*)((char*)aSubLevelRecords[0].apLinks + nSubOffset + 0x10) + nGridY) * nWidth + nGridX + *(int*)((char*)aSubLevelRecords[0].apLinks + (nSubOffset + 0xc))];
+                bNoOverlap = *(int*)((char*)aSubLevelRecords[0].apLinks + (nSubOffset + 0x14));
                 if (*(int*)(bNoOverlap + iVar3 * 4) > 0x23e) {
-                  pAdjPtr = (int*)((char*)aSubLevelRecords[0].apLinks + nSubOffset + 0x18);
+                  pAdjPtr = (int*)((char*)aSubLevelRecords[0].apLinks + (nSubOffset + 0x18));
                   (*pAdjPtr)++;
                 }
 

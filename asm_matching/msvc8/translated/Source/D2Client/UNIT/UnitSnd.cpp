@@ -2638,7 +2638,7 @@ uint32_t __fastcall UNITSND_GetSkillStartSound(D2UnitStrc * pUnit, uint32_t nAni
           nAnimFrames = 1;
         }
 
-        return (gaUnitSoundTable[(nAnimMode & 0xf) * 2 + 1] * 0x100 + 0x80U) / nAnimFrames;
+        return ((gaUnitSoundTable[(nAnimMode & 0xf) * 2 + 1] << 8) + 0x80U) / nAnimFrames;
       }
 
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb6f);
@@ -3733,7 +3733,7 @@ void __fastcall UNITSND_PlayAttackSound(D2UnitStrc * pUnit, int32_t nAttackMode,
       nWeaponVolume = pMonSoundsLine->Wea2Vol;
     }
 
-    nWeaponDelay = Sound::SOUND_PlaySound(eAttackSound, pUnit, (nWeaponDelay * 0x100 + 0x80U) / nAnimSpeedClamped, 0, 0);
+    nWeaponDelay = Sound::SOUND_PlaySound(eAttackSound, pUnit, ((nWeaponDelay << 8) + 0x80U) / nAnimSpeedClamped, 0, 0);
     if (!nWeaponDelay) {
       return;
     }

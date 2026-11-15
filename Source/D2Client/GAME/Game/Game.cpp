@@ -1012,7 +1012,10 @@ void __stdcall DrawLoadingMessage() {
 
 // Compute frame-skip level based on elapsed ticks and fps_drawn.
 uint32_t __thiscall ComputeFrameSkipLevel(int32_t nElapsedTicks, int32_t nFpsDrawn) {
-    uint32_t nSkipLevel = (uint32_t)(nFpsDrawn < 7);
+    uint32_t nSkipLevel = 0;
+    if (nFpsDrawn < 7) {
+      nSkipLevel = 1;
+    }
     if (nElapsedTicks > 1) {
       nSkipLevel++;
     }
@@ -1071,15 +1074,14 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x8F_HEARTBEAT_PING(char * pBytes) {
     gClientGameData.gnWardenChecksumAddr2 = *(uint32_t*)(pBytes + 0x19);
     gClientGameData.gnWardenChecksumModuleOffset = *(uint32_t*)(pBytes + 0x1d);
     gClientGameData.gdwWardenResponseTick = GetTickCount();
-    DWORD dwNowTick = GetTickCount();
-    gClientGameData.ping = dwNowTick - gClientGameData.dwGlobalTickCountD;
+    gClientGameData.ping = GetTickCount() - gClientGameData.dwGlobalTickCountD;
     if (gClientGameData.gnPingSampleCount >= 10) {
       return;
     }
 
     int nPingSum = gClientGameData.gnAveragePing * gClientGameData.gnPingSampleCount;
     gClientGameData.gnPingSampleCount++;
-    gClientGameData.gnAveragePing = (dwNowTick - gClientGameData.dwGlobalTickCountD + nPingSum) / gClientGameData.gnPingSampleCount;
+    gClientGameData.gnAveragePing = (gClientGameData.ping + nPingSum) / gClientGameData.gnPingSampleCount;
 }
 
 void __fastcall GAME_SetSkillDelayEndFrame(int32_t nValue) {
@@ -2431,7 +2433,7 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
 
 void __stdcall GAMEDATA_ShowEndGameCutscene() {
     gEndGameUiState.showCutscene = 1;
-    ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus = (CLIENT_nDifficulty + 1) * 0x400 | ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus & 0xe0ff;
+    ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus = CLIENT_nDifficulty + 1 << 0xa | ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus & 0xe0ff;
 }
 
 void __fastcall TSIntrusiveList_Clear(StormLinkedListStrc * pListHead) {
@@ -2944,7 +2946,7 @@ static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D
         }
       }
 
-      ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus = (uint16_t)CLIENT_nDifficulty * 0x400 + 0x500 | ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus & 0xe0ff;
+      ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus = ((uint16_t)CLIENT_nDifficulty << 0xa) + 0x500 | ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus & 0xe0ff;
       if (bPlayCongrats) {
         _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsGameDataFlagInit, 10);
         ClearInGameUIFlags();

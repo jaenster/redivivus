@@ -908,17 +908,17 @@ static void __stdcall SPRITECACHE_LoadAndCacheDC6(D2CelFileCacheEntryStrc * pCel
     nFrameIdx = 0;
     if ((uint32_t)((uint32_t)pCacheBlock->tDecode.nFramesPerDir * (uint32_t)pCacheBlock->tDecode.nDirCount) > 0) {
       do {
-        if (*(int*)(pFrameDataBase + nFrameDataOffset) || 0x100 < *(uint32_t*)(pFrameDataBase + nFrameDataOffset + 4) || 0x100 < *(uint32_t*)(pFrameDataBase + nFrameDataOffset + 8)) {
+        if (*(int*)(pFrameDataBase + nFrameDataOffset) || 0x100 < *(uint32_t*)(pFrameDataBase + (nFrameDataOffset + 4)) || 0x100 < *(uint32_t*)(pFrameDataBase + (nFrameDataOffset + 8))) {
           SPRITECACHE_FindOrLoad(szDC6Path, pGfxData);
           SPRITECACHE_LoadDC6(szDC6Path, pGfxData, szFilePath);
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (uint8_t*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x58c);
           exit(-1);
         }
 
-        *(void**)(pFrameDataBase + nFrameDataOffset + 0x18) = (void*)pFrameSlot;
+        *(void**)(pFrameDataBase + (nFrameDataOffset + 0x18)) = (void*)pFrameSlot;
         pFrameSlot = (void*)((char*)pFrameSlot + 0x2c);
         nFrameIdx++;
-        nFrameDataOffset = nFrameDataOffset + 0x23 + *(int*)(pFrameDataBase + nFrameDataOffset + 0x1c) + *(int*)(pFrameDataBase + nFrameDataOffset + 0x14);
+        nFrameDataOffset = nFrameDataOffset + 0x23 + *(int*)(pFrameDataBase + nFrameDataOffset + 0x1c) + *(int*)(pFrameDataBase + (nFrameDataOffset + 0x14));
       } while (nFrameIdx < (uint32_t)pCacheBlock->tDecode.nFramesPerDir * (uint32_t)pCacheBlock->tDecode.nDirCount);
     }
 
@@ -985,15 +985,15 @@ void __fastcall GFX_AllocSpriteCache(D2GfxMemoryStrc * pGfxMemory, D2PoolManager
       pCacheSlot[2] = 0;
       pCurSpriteCache = pGfxMemory->pSpriteCache;
       if (nSlotIndex - 1 < 0x13ff) {
-        *(int*)((char*)pCurSpriteCache->aEntries + nOffset - 8) = (intptr_t)&pCurSpriteCache->aEntries[0].pData + nOffset;
+        *(int*)((char*)pCurSpriteCache->aEntries + (nOffset - 8)) = (intptr_t)&pCurSpriteCache->aEntries[0].pData + nOffset;
       }
       if (nSlotIndex - 1 > 0) {
-        *(int*)((char*)pCurSpriteCache->aEntries + nOffset - 4) = (int)(pGfxMemory->pSpriteCache->aEntries - 2) + nOffset;
+        *(int*)((char*)pCurSpriteCache->aEntries + (nOffset - 4)) = (int)(pGfxMemory->pSpriteCache->aEntries - 2) + nOffset;
       }
 
       *(uint32_t*)((char*)(pCurSpriteCache->aEntries - 1) + nOffset) = 0;
-      *(uint32_t*)((char*)pCurSpriteCache->aEntries + nOffset - 0x18) = 0;
-      *(uint32_t*)((char*)pCurSpriteCache->aEntries + nOffset - 0x14) = 0;
+      *(uint32_t*)((char*)pCurSpriteCache->aEntries + (nOffset - 0x18)) = 0;
+      *(uint32_t*)((char*)pCurSpriteCache->aEntries + (nOffset - 0x14)) = 0;
       pCurSpriteCache = pGfxMemory->pSpriteCache;
       if (nSlotIndex < 0x13ff) {
         *(int*)((intptr_t)&pCurSpriteCache->aEntries[0].pNext + nOffset) = (intptr_t)&pCurSpriteCache->aEntries[1].pData + nOffset;

@@ -658,7 +658,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthInfo(SID_S2C_AuthInfo * pPacketData,
     uint32_t dwServerToken = pPacketData->dwServerToken;
     char* szText = &pPacketData->szArchiveFilename;
     uint32_t pArchiveNameEnd = Storm::Source::SSTR::SStrLen(szText);
-    char* szCheckRevisionFormula = szText + pArchiveNameEnd + 1;
+    char* szCheckRevisionFormula = szText + (pArchiveNameEnd + 1);
     BnSend::BNSEND_SetServerToken(dwClientToken);
     BnSend::BNSEND_SetClientToken(dwServerToken);
     BnSend::BNSEND_SendString(szCheckRevisionFormula);
@@ -1421,6 +1421,8 @@ int32_t __stdcall NET_SID_CLIENT_Send_0x51_AuthCheck() {
     // Static local variables (originally global data)
     static uint32_t g_dwCdKeyClientToken; D2_STATIC_GUARD_BSS(g_dwCdKeyClientToken, "Bnclient::_net_sid::NET_SID_CLIENT_Send_0x51_AuthCheck::g_dwCdKeyClientToken");
 
+    uint32_t bHasPatchFile;
+    int32_t bCheckRevResult;
     BOOL bIsExpansion;
     char* pPacketEnd;
     int pKeyOwnerStr;
@@ -1430,9 +1432,9 @@ int32_t __stdcall NET_SID_CLIENT_Send_0x51_AuthCheck() {
     memset(&dwClientToken, 0, 0x25c);
     __time32_t _Var1 = _time32(nullptr);
     DWORD dwTickCount = GetTickCount();
-    g_dwCdKeyClientToken = g_dwCdKeyClientToken + dwTickCount + _Var1;
+    g_dwCdKeyClientToken += dwTickCount + _Var1;
     dwClientToken.dwClientToken = g_dwCdKeyClientToken;
-    uint32_t bHasPatchFile = BnDownload::BNDOWNLOAD_HasPatchFilename();
+    bHasPatchFile = BnDownload::BNDOWNLOAD_HasPatchFilename();
     while (!bHasPatchFile) {
       bIsExpansion = SID_GetReadyFlag();
       if (bIsExpansion) {
@@ -1443,7 +1445,7 @@ int32_t __stdcall NET_SID_CLIENT_Send_0x51_AuthCheck() {
       bHasPatchFile = BnDownload::BNDOWNLOAD_HasPatchFilename();
     }
 
-    int32_t bCheckRevResult = BnDownload::BNDOWNLOAD_PerformCheckRevision(&dwClientToken.dwExeVersion, &dwClientToken.dwExeHash, szExeInfoClassic);
+    bCheckRevResult = BnDownload::BNDOWNLOAD_PerformCheckRevision(&dwClientToken.dwExeVersion, &dwClientToken.dwExeHash, szExeInfoClassic);
     if (!bCheckRevResult) {
       BNMESSQUEUE_SetStateIfZero(1);
       return 0;
@@ -1454,7 +1456,7 @@ int32_t __stdcall NET_SID_CLIENT_Send_0x51_AuthCheck() {
     bIsExpansion = BnSend::D2CheckExpansionGame();
     if (bIsExpansion) {
       bHasPatchFile = Storm::Source::SSTR::SStrCopy(dwClientToken.szTail, (char*)szExeInfoClassic, 0x200);
-      szBufferOutput = (uint8_t*)(dwClientToken.szTail + bHasPatchFile + 1);
+      szBufferOutput = (uint8_t*)(dwClientToken.szTail + (bHasPatchFile + 1));
       dwClientToken.dwKeyCount = 2;
       BnSend::BNSEND_HashCDKeyByType(&dwClientToken.sClassicKeyHash, g_dwCdKeyClientToken, 0);
       BnSend::BNSEND_HashCDKeyByType(&dwClientToken.sExpansionKeyHash, g_dwCdKeyClientToken, 1);
@@ -2521,7 +2523,7 @@ void __stdcall DecodeAndLoadKeys() {
         nXorByteIdx = nPermuteOffset;
         nPermuteOffset = (int)(char)byXorStep;
         byXorStep = abPermuteIdx[nXorByteIdx + 1];
-        szFileName[nXorByteIdx] = *(char*)((char*)aKeyPathTable + nPermuteOffset + 4);
+        szFileName[nXorByteIdx] = *(char*)((char*)aKeyPathTable + (nPermuteOffset + 4));
         nPermuteOffset = nXorByteIdx + 1;
       } while ((char)byXorStep < '\x13');
 
@@ -2574,7 +2576,7 @@ void __stdcall DecodeAndLoadKeys() {
         nXorByteIdx = nPermuteOffset;
         nPermuteOffset = (int)(char)byXorStep;
         byXorStep = abPermuteIdx[nXorByteIdx + 1];
-        szFileName[nXorByteIdx] = *(char*)((char*)aKeyPathTable + nPermuteOffset + 4);
+        szFileName[nXorByteIdx] = *(char*)((char*)aKeyPathTable + (nPermuteOffset + 4));
         nPermuteOffset = nXorByteIdx + 1;
       } while ((char)byXorStep < '\x13');
 
@@ -2734,24 +2736,24 @@ void __stdcall SHA0_Transform(uint32_t * pShaCtx) {
       nExpandIdx = uC;
       uD = uTmp;
       uPrev = uC;
-      uE = (~uA & uC | uB & uA) + ((int)uTmp >> 0x1b | uTmp * 0x20) + W[uXorTmp + 1] + 0x5a827999 + uE;
+      uE = (~uA & uC | uB & uA) + ((int)uTmp >> 0x1b | uTmp << 5) + W[uXorTmp + 1] + 0x5a827999 + uE;
       uA = uA << 0x1e | (int)uA >> 2;
       nExpandIdx = uB;
       uD = uE;
-      uC = (~uTmp & uB | uA & uTmp) + ((int)uE >> 0x1b | uE * 0x20) + W[uXorTmp + 2] + 0x5a827999 + uC;
+      uC = (~uTmp & uB | uA & uTmp) + ((int)uE >> 0x1b | uE << 5) + W[uXorTmp + 2] + 0x5a827999 + uC;
       uPrev = uB;
-      uTmp = uTmp * 0x40000000 | (int)uTmp >> 2;
+      uTmp = uTmp << 0x1e | (int)uTmp >> 2;
       nExpandIdx = uA;
       uD = uC;
-      uB = (~uE & uA | uTmp & uE) + ((int)uC >> 0x1b | uC * 0x20) + W[uXorTmp + 3] + 0x5a827999 + uB;
+      uB = (~uE & uA | uTmp & uE) + ((int)uC >> 0x1b | uC << 5) + W[uXorTmp + 3] + 0x5a827999 + uB;
       uPrev = uA;
-      uE = uE * 0x40000000 | (int)uE >> 2;
+      uE = uE << 0x1e | (int)uE >> 2;
       nExpandIdx = uTmp;
       uD = uB;
       uB = uD;
-      uA = (~uC & uTmp | uE & uC) + ((int)uB >> 0x1b | uB * 0x20) + W[uXorTmp + 4] + 0x5a827999 + uA;
+      uA = (~uC & uTmp | uE & uC) + ((int)uB >> 0x1b | uB << 5) + W[uXorTmp + 4] + 0x5a827999 + uA;
       uPrev = uTmp;
-      uC = (int)uC >> 2 | uC * 0x40000000;
+      uC = (int)uC >> 2 | uC << 0x1e;
       uD = uA;
       nExpandIdx = uXorTmp + 5;
     } while ((int)(uXorTmp + 5) < 0x14);
@@ -2762,23 +2764,23 @@ void __stdcall SHA0_Transform(uint32_t * pShaCtx) {
       uPrev = uE;
       uB = uB << 0x1e | (int)uB >> 2;
       uD = uTmp;
-      uE = ((int)uTmp >> 0x1b | uTmp * 0x20) + (uC ^ uB ^ uA) + W[nRound + 1] + 0x6ed9eba1 + uE;
+      uE = ((int)uTmp >> 0x1b | uTmp << 5) + (uC ^ uB ^ uA) + W[nRound + 1] + 0x6ed9eba1 + uE;
       uPrev = uC;
       uA = uA << 0x1e | (int)uA >> 2;
       uD = uE;
-      uXorTmp = ((int)uE >> 0x1b | uE * 0x20) + (uB ^ uA ^ uTmp) + W[nRound + 2] + 0x6ed9eba1 + uC;
+      uXorTmp = ((int)uE >> 0x1b | uE << 5) + (uB ^ uA ^ uTmp) + W[nRound + 2] + 0x6ed9eba1 + uC;
       uPrev = uB;
-      uTmp = uTmp * 0x40000000 | (int)uTmp >> 2;
+      uTmp = uTmp << 0x1e | (int)uTmp >> 2;
       uD = uXorTmp;
-      uB = ((int)uXorTmp >> 0x1b | uXorTmp * 0x20) + (uA ^ uTmp ^ uE) + W[nRound + 3] + 0x6ed9eba1 + uB;
+      uB = ((int)uXorTmp >> 0x1b | uXorTmp << 5) + (uA ^ uTmp ^ uE) + W[nRound + 3] + 0x6ed9eba1 + uB;
       uPrev = uA;
-      uE = uE * 0x40000000 | (int)uE >> 2;
+      uE = uE << 0x1e | (int)uE >> 2;
       uD = uB;
       nRoundBaseIdx = nRound + 4;
       uPrev = uTmp;
-      uC = uXorTmp * 0x40000000 | (int)uXorTmp >> 2;
+      uC = uXorTmp << 0x1e | (int)uXorTmp >> 2;
       nRound += 5;
-      uA = ((int)uB >> 0x1b | uB * 0x20) + (uTmp ^ uE ^ uXorTmp) + W[nRoundBaseIdx] + 0x6ed9eba1 + uA;
+      uA = ((int)uB >> 0x1b | uB << 5) + (uTmp ^ uE ^ uXorTmp) + W[nRoundBaseIdx] + 0x6ed9eba1 + uA;
       uD = uA;
     } while (nRound < 0x28);
 
@@ -2791,24 +2793,24 @@ void __stdcall SHA0_Transform(uint32_t * pShaCtx) {
       nExpandIdx = uC;
       uB = uB << 0x1e | (int)uB >> 2;
       uD = uTmp;
-      uE = ((uB | uA) & uC | uB & uA) + ((int)uTmp >> 0x1b | uTmp * 0x20) + W[uXorTmp + 1] - 0x70e44324 + uE;
+      uE = ((uB | uA) & uC | uB & uA) + ((int)uTmp >> 0x1b | uTmp << 5) + W[uXorTmp + 1] - 0x70e44324 + uE;
       uPrev = uC;
       uA = uA << 0x1e | (int)uA >> 2;
       nExpandIdx = uB;
       uD = uE;
-      uC = ((uA | uTmp) & uB | uA & uTmp) + ((int)uE >> 0x1b | uE * 0x20) + W[uXorTmp + 2] - 0x70e44324 + uC;
+      uC = ((uA | uTmp) & uB | uA & uTmp) + ((int)uE >> 0x1b | uE << 5) + W[uXorTmp + 2] - 0x70e44324 + uC;
       uPrev = uB;
-      uTmp = uTmp * 0x40000000 | (int)uTmp >> 2;
+      uTmp = uTmp << 0x1e | (int)uTmp >> 2;
       nExpandIdx = uA;
       uD = uC;
-      uB = ((uTmp | uE) & uA | uTmp & uE) + ((int)uC >> 0x1b | uC * 0x20) + W[uXorTmp + 3] - 0x70e44324 + uB;
+      uB = ((uTmp | uE) & uA | uTmp & uE) + ((int)uC >> 0x1b | uC << 5) + W[uXorTmp + 3] - 0x70e44324 + uB;
       uPrev = uA;
-      uE = uE * 0x40000000 | (int)uE >> 2;
+      uE = uE << 0x1e | (int)uE >> 2;
       nExpandIdx = uTmp;
       uD = uB;
-      uA = ((uE | uC) & uTmp | uE & uC) + ((int)uB >> 0x1b | uB * 0x20) + W[uXorTmp + 4] - 0x70e44324 + uA;
+      uA = ((uE | uC) & uTmp | uE & uC) + ((int)uB >> 0x1b | uB << 5) + W[uXorTmp + 4] - 0x70e44324 + uA;
       uPrev = uTmp;
-      uC = (int)uC >> 2 | uC * 0x40000000;
+      uC = (int)uC >> 2 | uC << 0x1e;
       uD = uA;
       nExpandIdx = uXorTmp + 5;
     } while ((int)(uXorTmp + 5) < 0x3c);
@@ -2819,23 +2821,23 @@ void __stdcall SHA0_Transform(uint32_t * pShaCtx) {
       uPrev = uE;
       uB = uB << 0x1e | (int)uB >> 2;
       uD = uTmp;
-      uE = ((int)uTmp >> 0x1b | uTmp * 0x20) + (uC ^ uB ^ uA) + W[nRound + 1] - 0x359d3e2a + uE;
+      uE = ((int)uTmp >> 0x1b | uTmp << 5) + (uC ^ uB ^ uA) + W[nRound + 1] - 0x359d3e2a + uE;
       uPrev = uC;
       uA = uA << 0x1e | (int)uA >> 2;
       uD = uE;
-      uXorTmp = ((int)uE >> 0x1b | uE * 0x20) + (uB ^ uA ^ uTmp) + W[nRound + 2] - 0x359d3e2a + uC;
+      uXorTmp = ((int)uE >> 0x1b | uE << 5) + (uB ^ uA ^ uTmp) + W[nRound + 2] - 0x359d3e2a + uC;
       uPrev = uB;
-      uTmp = uTmp * 0x40000000 | (int)uTmp >> 2;
+      uTmp = uTmp << 0x1e | (int)uTmp >> 2;
       uD = uXorTmp;
-      uB = ((int)uXorTmp >> 0x1b | uXorTmp * 0x20) + (uA ^ uTmp ^ uE) + W[nRound + 3] - 0x359d3e2a + uB;
+      uB = ((int)uXorTmp >> 0x1b | uXorTmp << 5) + (uA ^ uTmp ^ uE) + W[nRound + 3] - 0x359d3e2a + uB;
       uPrev = uA;
-      uE = uE * 0x40000000 | (int)uE >> 2;
+      uE = uE << 0x1e | (int)uE >> 2;
       uD = uB;
       nRoundBaseIdx = nRound + 4;
       uPrev = uTmp;
-      uC = uXorTmp * 0x40000000 | (int)uXorTmp >> 2;
+      uC = uXorTmp << 0x1e | (int)uXorTmp >> 2;
       nRound += 5;
-      uA = ((int)uB >> 0x1b | uB * 0x20) + (uTmp ^ uE ^ uXorTmp) + W[nRoundBaseIdx] - 0x359d3e2a + uA;
+      uA = ((int)uB >> 0x1b | uB << 5) + (uTmp ^ uE ^ uXorTmp) + W[nRoundBaseIdx] - 0x359d3e2a + uA;
       uD = uA;
     } while (nRound < 0x50);
 
@@ -2865,13 +2867,13 @@ void __fastcall NET_SID_CLIENT_GetSHAState(int32_t nCtxIndex, uint32_t * pdwStat
 
 void __fastcall NET_SID_CLIENT_SHA1Compress(int32_t nCtxIndex, uint32_t * pdwBlock, uint32_t * pdwOutHash) {
     int nCtxOffset = nCtxIndex * 0x5c;
-    int nCtxOffset2 = *(int*)(g_SHA1Contexts + nCtxOffset + 0x14) + 0x200;
-    if (nCtxOffset2 < *(int*)(g_SHA1Contexts + nCtxOffset + 0x14)) {
-      (*(int*)(g_SHA1Contexts + nCtxOffset + 0x18))++;
+    int nCtxOffset2 = *(int*)(g_SHA1Contexts + (nCtxOffset + 0x14)) + 0x200;
+    if (nCtxOffset2 < *(int*)(g_SHA1Contexts + (nCtxOffset + 0x14))) {
+      *(int*)(g_SHA1Contexts + nCtxOffset + 0x18) = *(int*)(g_SHA1Contexts + (nCtxOffset + 0x18)) + 1;
     }
 
-    *(int*)(g_SHA1Contexts + nCtxOffset + 0x14) = nCtxOffset2;
-    uint8_t* pCtxBlock = g_SHA1Contexts + nCtxOffset + 0x1c;
+    *(int*)(g_SHA1Contexts + (nCtxOffset + 0x14)) = nCtxOffset2;
+    uint8_t* pCtxBlock = g_SHA1Contexts + (nCtxOffset + 0x1c);
     for (nCtxOffset2 = 0x10; nCtxOffset2; nCtxOffset2--) {
       *(uint32_t*)pCtxBlock = *pdwBlock;
       pdwBlock++;
@@ -2885,10 +2887,10 @@ void __fastcall NET_SID_CLIENT_SHA1Compress(int32_t nCtxIndex, uint32_t * pdwBlo
 
     nCtxOffset2 = nCtxIndex * 0x5c;
     *pdwOutHash = *(uint32_t*)(g_SHA1Contexts + nCtxOffset2);
-    pdwOutHash[1] = *(uint32_t*)(g_SHA1Contexts + nCtxOffset2 + 4);
-    pdwOutHash[2] = *(uint32_t*)(g_SHA1Contexts + nCtxOffset2 + 8);
-    pdwOutHash[3] = *(uint32_t*)(g_SHA1Contexts + nCtxOffset2 + 0xc);
-    pdwOutHash[4] = *(uint32_t*)(g_SHA1Contexts + nCtxOffset2 + 0x10);
+    pdwOutHash[1] = *(uint32_t*)(g_SHA1Contexts + (nCtxOffset2 + 4));
+    pdwOutHash[2] = *(uint32_t*)(g_SHA1Contexts + (nCtxOffset2 + 8));
+    pdwOutHash[3] = *(uint32_t*)(g_SHA1Contexts + (nCtxOffset2 + 0xc));
+    pdwOutHash[4] = *(uint32_t*)(g_SHA1Contexts + (nCtxOffset2 + 0x10));
 }
 
 void __fastcall NET_SID_CLIENT_InitSHAContext(int32_t nCtxIndex) {
@@ -2898,29 +2900,29 @@ void __fastcall NET_SID_CLIENT_InitSHAContext(int32_t nCtxIndex) {
     pSHAContextField[1] = 0x23;
     pSHAContextField[2] = 0x45;
     pSHAContextField[3] = 0x67;
-    pSHAContextField = g_SHA1Contexts + nCtxOffset + 4;
+    pSHAContextField = g_SHA1Contexts + (nCtxOffset + 4);
     pSHAContextField[0] = 0x89;
     pSHAContextField[1] = 0xab;
     pSHAContextField[2] = 0xcd;
     pSHAContextField[3] = 0xef;
-    pSHAContextField = g_SHA1Contexts + nCtxOffset + 8;
+    pSHAContextField = g_SHA1Contexts + (nCtxOffset + 8);
     pSHAContextField[0] = 0xfe;
     pSHAContextField[1] = 0xdc;
     pSHAContextField[2] = 0xba;
     pSHAContextField[3] = 0x98;
-    pSHAContextField = g_SHA1Contexts + nCtxOffset + 0xc;
+    pSHAContextField = g_SHA1Contexts + (nCtxOffset + 0xc);
     pSHAContextField[0] = 0x76;
     pSHAContextField[1] = 0x54;
     pSHAContextField[2] = 0x32;
     pSHAContextField[3] = 0x10;
-    pSHAContextField = g_SHA1Contexts + nCtxOffset + 0x10;
+    pSHAContextField = g_SHA1Contexts + (nCtxOffset + 0x10);
     pSHAContextField[0] = 0xf0;
     pSHAContextField[1] = 0xe1;
     pSHAContextField[2] = 0xd2;
     pSHAContextField[3] = 0xc3;
-    pSHAContextField = g_SHA1Contexts + nCtxOffset + 0x14;
+    pSHAContextField = g_SHA1Contexts + (nCtxOffset + 0x14);
     memset(pSHAContextField, 0, 4 * sizeof(pSHAContextField[0]));
-    pSHAContextField = g_SHA1Contexts + nCtxOffset + 0x18;
+    pSHAContextField = g_SHA1Contexts + (nCtxOffset + 0x18);
     memset(pSHAContextField, 0, 4 * sizeof(pSHAContextField[0]));
 }
 

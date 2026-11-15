@@ -525,7 +525,7 @@ template<> ::SGAMEDATA * __thiscall TSHashTable<SGAMEDATA, HASHKEY_NONE>::Intern
       pNode->m_linktoslot.m_next = 0;
       pNode->m_linktofull.m_prevlink = 0;
       pNode->m_linktofull.m_next = 0;
-      ppSlot = (TSLink<::SGAMEDATA>*)(pNode->szGameName + pList->m_linkoffset - 0x2a);
+      ppSlot = (TSLink<::SGAMEDATA>*)(pNode->szGameName + (pList->m_linkoffset - 0x2a));
     } else {
       pNode = 0;
       ppSlot = &pList->m_terminator;

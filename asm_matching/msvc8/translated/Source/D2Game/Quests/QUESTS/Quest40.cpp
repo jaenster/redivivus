@@ -109,10 +109,18 @@ void __fastcall Q40_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     nMsgIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     switch (nMonStatsId) {
       case MonsterUnitDeckardCain6:
-        bMsgMatched = nMsgIndex == 0x4e23;
+        bMsgMatched = false;
+      if (nMsgIndex == 0x4e23) {
+        bMsgMatched = true;
+      }
+
       break;
       case MonsterUnitDrehya1:
-        bMsgMatched = nMsgIndex == 0x4e2e;
+        bMsgMatched = false;
+      if (nMsgIndex == 0x4e2e) {
+        bMsgMatched = true;
+      }
+
       break;
       case MonsterUnitMalah:
         if (nMsgIndex != 0x4e47 && nMsgIndex != 0x4e46 && nMsgIndex != 0x4e45) {
@@ -134,7 +142,11 @@ void __fastcall Q40_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       return;
       case MonsterUnitTown:
         if (nMsgIndex != 0x4e56 && nMsgIndex != 0x4e55) {
-          bMsgMatched = nMsgIndex == 0x4e57;
+          bMsgMatched = false;
+          if (nMsgIndex == 0x4e57) {
+            bMsgMatched = true;
+          }
+
           break;
         }
       goto mark_spoken;
@@ -142,7 +154,11 @@ void __fastcall Q40_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         if (nMsgIndex == 0x4e63 || nMsgIndex == 0x4e62) {
           goto mark_spoken;
         }
-      bMsgMatched = nMsgIndex == 0x4e61;
+      bMsgMatched = false;
+      if (nMsgIndex == 0x4e61) {
+        bMsgMatched = true;
+      }
+
       break;
       default:
         return;

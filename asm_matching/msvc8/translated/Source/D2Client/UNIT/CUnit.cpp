@@ -2,9 +2,15 @@
 
 #include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2CMP/D2CMP.h"
+#include "Source/D2CMP/Pallete.h"
+#include "Source/D2CMP/SRC/CelCmp.h"
+#include "Source/D2CMP/SRC/SpriteCache.h"
 #include "Source/D2Client/Cursor.h"
 #include "Source/D2Client/D2ClientRoot.h"
+#include "Source/D2Client/D2ClientStrc.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
+#include "Source/D2Client/D2GfxInfoStrc.h"
+#include "Source/D2Client/D2LightMapStrc.h"
 #include "Source/D2Client/Draw/Weather.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Engine/GfxUtil.h"
@@ -33,15 +39,184 @@
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/PlayerList.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/Collision.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
+#include "Source/D2Common/D2DynamicPathStrc.h"
+#include "Source/D2Common/D2InventoryStrc.h"
+#include "Source/D2Common/D2MissilesTxt.h"
+#include "Source/D2Common/D2MonStatsTxt.h"
+#include "Source/D2Common/D2RoomExStrc.h"
+#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/D2SkillStrc.h"
+#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2UnitStrc.h"
+#include "Source/D2Common/DATATBLS/AnimTbls.h"
+#include "Source/D2Common/DATATBLS/ItemStats.h"
+#include "Source/D2Common/DATATBLS/ItemTbls.h"
+#include "Source/D2Common/DATATBLS/LvlTbls.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DATATBLS/ObjectTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgActStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgDeleteStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgStrc.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2Common/Drlg/DrlgRoom.h"
+#include "Source/D2Common/Drlg/Preset.h"
+#include "Source/D2Common/Drlg/Transform.h"
+#include "Source/D2Common/Environment.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/Monsters/MONSTERS.h"
+#include "Source/D2Common/PATH/DynamicPath.h"
+#include "Source/D2Common/PATH/Path.h"
+#include "Source/D2Common/Seed.h"
+#include "Source/D2Common/Stats/StatsEx.h"
+#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Unit.h"
+#include "Source/D2Common/Units.h"
+#include "Source/D2Game/D2Game.h"
+#include "Source/D2Game/Ai/D2AiGeneralStrc.h"
+#include "Source/D2Game/D2CreateMonsterUnitStrc.h"
+#include "Source/D2Game/D2GameRoot.h"
+#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Game/GAME/Event.h"
+#include "Source/D2Game/Monster/Monsters.h"
+#include "Source/D2Game/Objects/Objects.h"
+#include "Source/D2Game/Quests/QUESTS/A5Q3.h"
+#include "Source/D2Game/UNIT/SUnitDmg.h"
+#include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Lang/StrTable/strtable.h"
+#include "Source/D2Lang/Unicode/UNISYS.h"
 #include "Source/D2Win/D2Win.h"
+#include "Source/D2Win/DC6.h"
+#include "Source/D2Win/DC6Block.h"
+#include "Source/D2Win/Src/D2WinPalette.h"
 #include "Source/D2gfx/D2gfx.public.h"
+#include "Source/D2gfx/D2GFX.h"
+#include "Source/Fog/Fog.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Src/ErrorManager.h"
+#include "3rdparty/Storm/Storm.h"
+#include "3rdparty/Storm/Source/SSTR.h"
+#include "Source/globals/globals.h"
+#include "Source/Bnclient/BnSend.h"
+#include "Source/Bnclient/SRP.h"
+#include "Source/Bnclient/net_sid.h"
+#include "Source/D2CMP/Draw.h"
+#include "Source/D2CMP/SRC/Codec.h"
+#include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2Client/ClientModeInGame.h"
+#include "Source/D2Client/Cursor.h"
+#include "Source/D2Client/D2BNetGatewayAccessStr.h"
 #include "Source/D2Client/D2Client.globals.h"
+#include "Source/D2Client/D2GSPacketSrv0x2A.h"
+#include "Source/D2Client/D2GfxMemoryStrc.h"
+#include "Source/D2Client/D2GfxSettingsStrc.h"
+#include "Source/D2Client/D2IniConfigStrc.h"
 #include "Source/D2Client/Draw/LightMap.h"
+#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Engine/Gfx.h"
+#include "Source/D2Client/GAME/Draw.h"
+#include "Source/D2Client/GAME/Game/Game.h"
+#include "Source/D2Client/GAME/Record.h"
+#include "Source/D2Client/GAME/SCmd.h"
+#include "Source/D2Client/GAME/Sound.h"
+#include "Source/D2Client/Sound/Sound.h"
+#include "Source/D2Client/UI/Automap.h"
+#include "Source/D2Client/UI/Chat.h"
+#include "Source/D2Client/UI/CmdTbl.h"
+#include "Source/D2Client/UI/EscMenu.h"
+#include "Source/D2Client/UI/Inv.h"
+#include "Source/D2Client/UI/Panel.h"
+#include "Source/D2Client/UI/Path.h"
+#include "Source/D2Client/UI/QuestLog.h"
+#include "Source/D2Client/UI/ShowItems.h"
+#include "Source/D2Client/UI/SkillDesc.h"
+#include "Source/D2Client/UI/SpellSel.h"
+#include "Source/D2Client/UI/Text.h"
+#include "Source/D2Client/UI/UseItem.h"
+#include "Source/D2Client/UI/Waypoint.h"
+#include "Source/D2Client/UI/npcmenu.h"
+#include "Source/D2Client/UI/npcmenu/Merc.h"
+#include "Source/D2Client/UI/ui.h"
+#include "Source/D2Client/UNIT/Item.h"
+#include "Source/D2Client/UNIT/Missile.h"
+#include "Source/D2Client/UNIT/Monster.h"
+#include "Source/D2Client/UNIT/Object.h"
+#include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Client/UNIT/PlrSkills.h"
+#include "Source/D2Client/UNIT/UnitSnd.h"
+#include "Source/D2Client/Warden/WardenClient.h"
+#include "Source/D2Common/COMPOSIT/Composit.h"
+#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/DATATBLS/ItemTbls.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
+#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2Common/Drlg/OutSiege.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/ItemMods.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Logging/ProfCore.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Unit.h"
+#include "Source/D2Game/D2QuestDataStrc.h"
+#include "Source/D2Game/GAME/Arena.h"
+#include "Source/D2Game/GAME/Task.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Game/Monster/AI/Baal.h"
+#include "Source/D2Game/Monster/MonsterMode.h"
+#include "Source/D2Game/Objects/Objects.h"
+#include "Source/D2Game/PLAYER/PlayerMsg.h"
+#include "Source/D2Game/Quests/QUESTS.h"
+#include "Source/D2Game/SKILLS/Items.h"
+#include "Source/D2Game/SKILLS/SkillAss.h"
+#include "Source/D2Game/UNIT/SUnitDmg.h"
+#include "Source/D2Game/UNIT/sunitproxy.h"
+#include "Source/D2Lang/D2LangRoot.h"
+#include "Source/D2Lang/StrTable/strtable.h"
+#include "Source/D2Win/D2Win.globals.h"
+#include "Source/D2Win/Src/D2Comp.h"
+#include "Source/D2Win/Src/D2WinFont.h"
+#include "Source/D2gfx/D2GFX.h"
+#include "Source/Fog/D2MemoryManagerStrc.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/D2QServerStrc.h"
+#include "Source/Fog/Fog.globals.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Save.h"
+#include "Source/Fog/Source/SFile.h"
+#include "Source/Fog/Source/SSComp.h"
+#include "Source/Fog/Src/LogManager.h"
+#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
+#include "3rdparty/Storm/H/stpl.h"
+#include "3rdparty/Storm/Source/SCMD.h"
+#include "3rdparty/Storm/Source/SComp.h"
+#include "3rdparty/Storm/Source/SErr.h"
+#include "3rdparty/Storm/Source/SFile.h"
+#include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/Bnclient/BNGatewayAccess.h"
+#include "Source/D2Client/Draw/LightMap.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
+#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Game/SKILLS/SkillAss.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -85,7 +260,7 @@ D2UnitStrc * __fastcall UNITS_FindServerSideUnit(int32_t nUnitGUID, eD2UnitType 
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_10(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_10(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }
@@ -117,7 +292,7 @@ D2UnitStrc * __fastcall MISSILE_GetOwnerUnit(D2UnitStrc * pUnit) {
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }
@@ -130,7 +305,7 @@ static uint32_t InsertIntoHashTable(D2UnitStrc * pUnit) {
     uint32_t nHashBucket;
     D2UnitStrc* pCurUnit;
     D2UnitStrc* pNextUnit;
-    if (!pUnit || !(pUnit->eUnitFlags >> 0x15 & 1)) {
+    if (!pUnit || !FlagBit_D2UnitStrc_eUnitFlags_21(pUnit)) {
       pPrevUnit = FindUnit(ServerSideUnitHashTables[pUnit->eUnitType], pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, pUnit->nUnitGUID);
       if (!pPrevUnit) {
         pPrevUnit = FindUnit(ServerSideUnitHashTables[pUnit->eUnitType], pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, pUnit->nUnitGUID);
@@ -150,7 +325,7 @@ static uint32_t InsertIntoHashTable(D2UnitStrc * pUnit) {
           insert_sorted:
           UnitSnd::MuteOrUnmuteUnitSounds(pUnit, 1);
           nHashBucket = pUnit->nUnitGUID & 0x7f;
-          if (pUnit->eUnitFlags >> 0x15 & 1) {
+          if (FlagBit_D2UnitStrc_eUnitFlags_21(pUnit)) {
             papDVar1 = ClientSideUnitHashTables;
           } else {
             papDVar1 = ServerSideUnitHashTables;
@@ -386,8 +561,8 @@ static uint32_t __stdcall CUNIT_CalculateSpriteBounds(uint32_t nFrame, uint32_t 
       }
 
       nOffset = D2CMP::SRC::CelCmp::GetDC6OffsetX(spriteParams.pDC6Block);
-      nOffset += (int32_t)D2Common::Units::GetScreenX(pUnit);
-      *pBoundsRect = nOffset - 0xc;
+      iVar1 = D2Common::Units::GetScreenX(pUnit);
+      *pBoundsRect = iVar1 + (nOffset - 0xc);
       nOffset = D2CMP::SRC::CelCmp::GetDC6Width(spriteParams.pDC6Block);
       pBoundsRect[2] = nOffset + 0x18 + *pBoundsRect;
       nOffset = D2CMP::SRC::CelCmp::GetDC6OffsetY(spriteParams.pDC6Block);
@@ -416,8 +591,8 @@ static uint32_t __stdcall CUNIT_CalculateSpriteBounds(uint32_t nFrame, uint32_t 
       nScreenZ = Engine::Particle::PARTICLE_GetScreenZ(pUnit);
       *pBoundsRect += nOffset;
       pBoundsRect[2] += nOffset;
-      pBoundsRect[1] = pBoundsRect[1] + iVar1 + nScreenZ;
-      pBoundsRect[3] = pBoundsRect[3] + iVar1 + nScreenZ;
+      pBoundsRect[1] += iVar1 + nScreenZ;
+      pBoundsRect[3] += iVar1 + nScreenZ;
       return 1;
     }
 
@@ -1962,7 +2137,10 @@ uint32_t __fastcall CanInteractWith(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
       if (!(pUnit2->eUnitFlags & UNITFLAG_ISDEAD)) {
         eAnimMode2 = pUnit2->eAnimMode.ePlayerMode;
         if (eAnimMode2 != Death) {
-          bIsDead = eAnimMode2 == eD2PlayerAnimMode_ns::Dead;
+          bIsDead = false;
+          if (eAnimMode2 == eD2PlayerAnimMode_ns::Dead) {
+            bIsDead = true;
+          }
           if (!bIsDead) {
             goto check_foreign_pet;
           }
@@ -2033,7 +2211,7 @@ static D2UnitStrc * FinalizeCreation(D2UnitStrc * pUnit) {
       exit(-1);
     }
     if (pExisting) {
-      D2UnitStrc* (*papDVar1)[128] = !(pExisting->eUnitFlags >> 0x15 & 1) ? ServerSideUnitHashTables : ClientSideUnitHashTables;
+      D2UnitStrc* (*papDVar1)[128] = !FlagBit_D2UnitStrc_eUnitFlags_21(pExisting) ? ServerSideUnitHashTables : ClientSideUnitHashTables;
       CUnit::RemoveObject(pExisting->nUnitGUID, pExisting->eUnitType, papDVar1[pExisting->eUnitType], pExisting->nUnitGUID & 0x7f);
       bInserted = InsertIntoHashTable(pUnit);
       if (bInserted) {
@@ -2433,7 +2611,7 @@ void __fastcall CreateUnitsForMissiles(D2RoomStrc * pRoom) {
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_1(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_1(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }
@@ -2441,7 +2619,7 @@ static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_1(D2UnitStrc * p) {
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_7(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_7(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }

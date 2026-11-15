@@ -248,7 +248,7 @@ BOOL __fastcall Draw(::D2WinList * pList) {
       sGfxData.nFrameNumber = pList->sEntriesControl.nCursorFrame;
       sGfxData.nDirection = 0;
       sGfxData.pDC6 = gpPentSpinCursorDC6;
-      for (; pCurrentEntry && pY < pList->sControl.dwPosY; pY = pY + pList->sEntriesControl.nFontHeight + pList->sEntriesControl.nRowPadding * 2) {
+      for (; pCurrentEntry && pY < pList->sControl.dwPosY; pY += pList->sEntriesControl.nFontHeight + pList->sEntriesControl.nRowPadding * 2) {
         nTextWidth = pList->sControl.dwSizeX;
         nPosX = pList->sControl.dwPosX;
         nSizeX = pCurrentEntry->nTextWidth;

@@ -385,8 +385,8 @@ void __stdcall WAYPOINT_PopulateList() {
     int nActOffset = WaypointCurrentSelectedAct * 0xb;
     if (!gaWaypointVisited[nActOffset]) {
       gaWaypointVisited[nActOffset] = 1;
-      eLevel = *(eD2LevelId*)(gaWaypointVisited + nActOffset + 1);
-      if ((int)eLevel <= *(int*)(gaWaypointVisited + nActOffset + 5)) {
+      eLevel = *(eD2LevelId*)(gaWaypointVisited + (nActOffset + 1));
+      if ((int)eLevel <= *(int*)(gaWaypointVisited + (nActOffset + 5))) {
         do {
           bFound = D2Common::Waypoints::FindWaypointIdByLevelId(eLevel, (int16_t*)&nWaypointIdOut);
           nActIdx = WaypointCurrentSelectedAct;
@@ -405,7 +405,7 @@ void __stdcall WAYPOINT_PopulateList() {
           }
 
           eLevel += LEVEL_RogueEncampment;
-        } while ((int)eLevel <= *(int*)(gaWaypointVisited + nActIdx * 0xb + 5));
+        } while ((int)eLevel <= *(int*)(gaWaypointVisited + (nActIdx * 0xb + 5)));
       }
     }
 

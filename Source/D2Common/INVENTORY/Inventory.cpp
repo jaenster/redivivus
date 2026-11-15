@@ -777,7 +777,7 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemHeight,
     uint32_t nScore = 0;
     if (nStartCol > 0) {
       if (nStartRow < (int)((uint32_t)byItemHeight + nStartRow)) {
-        pScanCell = pGridInfo->pGridCells + (uint32_t)pGridInfo->bWidth * nStartRow + nStartCol - 1;
+        pScanCell = pGridInfo->pGridCells + ((uint32_t)pGridInfo->bWidth * nStartRow - 1);
         iVar1 = (uint32_t)byItemHeight + nStartRow - nStartRow;
         do {
           if (*pScanCell) {
@@ -797,7 +797,7 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemHeight,
     iVar1 = (uint32_t)byItemWidth + nStartCol;
     if (iVar1 < (int)nGridWidth) {
       if (nStartRow < (int)(nItemHeight + nStartRow)) {
-        pScanCell = pGridInfo->pGridCells + nGridWidth * nStartRow + iVar1;
+        pScanCell = pGridInfo->pGridCells + (nGridWidth * nStartRow + iVar1);
         nRowCount = nItemHeight + nStartRow - nStartRow;
         do {
           if (*pScanCell) {
@@ -814,7 +814,7 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemHeight,
     if (nStartRow > 0) {
       if (nStartCol < iVar1) {
         nRowCount = iVar1 - nStartCol;
-        pStartCol = (int*)(pGridInfo->pGridCells + nGridWidth * (nStartRow - 1) + nStartCol);
+        pStartCol = (int*)(pGridInfo->pGridCells + (nGridWidth * (nStartRow - 1) + nStartCol));
         do {
           if (*pStartCol) {
             nScore++;
@@ -830,7 +830,7 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemHeight,
     if ((int)(nStartRow + nItemHeight) < (int)(uint32_t)pGridInfo->bHeight) {
       int32_t* pCell;
       if (nSavedStartCol < iVar1) {
-        pCell = (int32_t*)(pGridInfo->pGridCells + nGridWidth * (nStartRow + nItemHeight) + nSavedStartCol);
+        pCell = (int32_t*)(pGridInfo->pGridCells + (nGridWidth * (nStartRow + nItemHeight) + nSavedStartCol));
         iVar1 -= nSavedStartCol;
         do {
           if (*pCell) {
@@ -4972,6 +4972,7 @@ void __stdcall GetCurrentItemOnBodyLocation(D2UnitStrc * pUnit, D2InventoryStrc 
     }
 
     int pHandednessOrItem = INVENTORY_GetWeaponHandedness(pUnit, pInventory);
+    int nTest = pHandednessOrItem == 2;
     if (!(!*ppUnit && bodyLoc <= 0xc)) {
       return;
     }
@@ -4981,11 +4982,11 @@ void __stdcall GetCurrentItemOnBodyLocation(D2UnitStrc * pUnit, D2InventoryStrc 
       return;
     }
     if (bodyLoc == 4) {
-      if (pHandednessOrItem == 2) {
+      if (nTest) {
         *ppUnit = pDVar1->pGridCells[5];
         return;
       }
-    } else if (bodyLoc == 5 && pHandednessOrItem == 2) {
+    } else if (bodyLoc == 5 && nTest) {
       *ppUnit = pDVar1->pGridCells[4];
     }
 }

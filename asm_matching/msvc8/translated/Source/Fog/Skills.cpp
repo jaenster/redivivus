@@ -834,7 +834,7 @@ static uint8_t * __stdcall SKILLS_EmitFormulaBytecode(uint8_t * pWritePtr, uint8
       }
 
       pOperatorStack[*(int*)(pOperatorStack + 0x140)] = bToken;
-      *(uint32_t*)(pOperatorStack + *(int*)(pOperatorStack + 0x140) * 4 + 0x40) = nFunctionArg;
+      *(uint32_t*)(pOperatorStack + (*(int*)(pOperatorStack + 0x140) * 4 + 0x40)) = nFunctionArg;
       (*(int*)(pOperatorStack + 0x140))++;
     }
     if (bToken) {

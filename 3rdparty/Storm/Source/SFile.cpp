@@ -199,7 +199,7 @@ static void SFILE_Decrypt(uint32_t nSeed, uint32_t * pData, uint32_t nByteLen) {
       *pData ^= nKey + uVar1 + nSeed;
       nDecrypted = *pData;
       pData++;
-      nSeed = nSeed >> 0xb | ~nSeed * 0x200000 + 0x11111111;
+      nSeed = nSeed >> 0xb | (~nSeed << 0x15) + 0x11111111;
       nKey = (nKey + uVar1) * 0x21 + 3 + nDecrypted;
     }
 }
@@ -211,7 +211,7 @@ static uint32_t __stdcall SFILE_Hash(int32_t nHashKind, char * szText) {
     for (; szText && *szText != '\0'; szText++) {
       uint32_t nUpper;
       nUpper = toupper((int)*szText);
-      nHash = nHash + nSeed ^ g_pStormMpqCryptTable[nHashKind * 0x100 + (uint32_t)(uint8_t)nUpper];
+      nHash = nHash + nSeed ^ g_pStormMpqCryptTable[(nHashKind << 8) + (uint32_t)(uint8_t)nUpper];
       nSeed = nSeed * 0x21 + (uint32_t)(uint8_t)nUpper + 3 + nHash;
     }
 
@@ -352,7 +352,7 @@ static uint32_t __stdcall SFILE_SearchHashTable(D2ArchiveStrc * pArchive, int16_
 
 void __thiscall SFILE_ShiftSectorTable(D2MPQBlockEntryStrc * pSectorTable, uint32_t nSectorCount) {
     int nSectorsLeft;
-    uint8_t* pSrc = pSectorTable->abMD5 + nSectorCount * 0x10 - 0x2c;
+    uint8_t* pSrc = pSectorTable->abMD5 + ((nSectorCount << 4) - 0x2c);
     D2MPQBlockEntryStrc* pDst = pSectorTable + (nSectorCount - 1);
     if (nSectorCount > 1) {
       uint8_t* pDstExtra;
@@ -929,11 +929,10 @@ uint32_t __stdcall SFILE_ComputeFileHash(LPCSTR szFileName) {
     uint32_t nChunkSize;
     DWORD nBytesRead;
     LPCSTR szFileNameLocal = szFileName;
-    if (*szFileName == '\0' || !szFileName) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szFileName);
+    D2_CHECK(*szFileName != '\0');
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     HANDLE hFileResult = CreateFileA(szFileNameLocal, 0x80000000, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0x8000000, (HANDLE)0x0);
     if (hFileResult == (HANDLE)-1) {
@@ -1004,7 +1003,7 @@ int __stdcall SFILE_SetArchivePriority(D2ArchiveStrc * pArchive, int32_t bDecrem
       return 0;
     }
 
-    pArchive->nPriority = pArchive->nPriority + (uint32_t)!bDecrement * 2 - 1;
+    pArchive->nPriority += (uint32_t)!bDecrement * 2 - 1;
     LeaveCriticalSection(&lpCriticalSection_00779068);
     return 1;
 }
@@ -1336,15 +1335,16 @@ int32_t __stdcall SFileSetBasePath(char * szText) {
 
     uint32_t pStrEnd = SSTR::SStrLen(szText);
     char cLastChar = szText[pStrEnd - 1];
+    int nTest = cLastChar != '\\';
     pStrEnd = SSTR::SStrLen(szText);
-    if (pStrEnd + 1 + (uint32_t)(cLastChar != '\\') > 0x104) {
+    if (pStrEnd + 1 + (uint32_t)nTest > 0x104) {
       SErr::SErrSetLastError(0xa1);
       return 0;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     SSTR::SStrCopy(szSFileBasePath, szText, 0x104);
-    if (cLastChar != '\\') {
+    if (nTest) {
       SSTR::SStrPack(szSFileBasePath, "\\", 0x104);
     }
 
@@ -2672,11 +2672,10 @@ BOOL __stdcall SFileDdaSetVolume(D2MPQFileStrc * hFile, int32_t lVolume, int32_t
 }
 
 int __stdcall SFILE_OpenFileInternal(D2ArchiveStrc * pArchive, char * szFileName, uint8_t bSearchFlags) {
-    if (*szFileName == '\0' || !szFileName) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szFileName);
+    D2_CHECK(*szFileName != '\0');
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     SFILE_EnsureHashSource();
     int nResult = SFILE_SearchFileInArchives(pArchive, nullptr, szFileName, bSearchFlags, nullptr, nullptr);
@@ -3443,7 +3442,7 @@ int __stdcall SFILE_EnumFilesInternal(D2ArchiveStrc * pArchive, char * szText, v
     } else {
       *ppArchive = 0;
     }
-    if (!(dwValidMask & -(uint32_t)(szText != 0) & -(uint32_t)(*szText != '\0'))) {
+    if (!(dwValidMask & (szText != 0 ? (uint32_t)-1 : 0) & (*szText != '\0' ? (uint32_t)-1 : 0))) {
       SErr::SErrSetLastError(0x57);
       return 0;
     }
@@ -3540,7 +3539,7 @@ int __stdcall SFileOpenFileEx(D2ArchiveStrc * pArchive, char * szFileName, uint3
     } else {
       *phFile = 0;
     }
-    if (!(nResult & -(uint32_t)(szFileName != 0) & -(uint32_t)(*szFileName != '\0'))) {
+    if (!(nResult & (szFileName != 0 ? (uint32_t)-1 : 0) & (*szFileName != '\0' ? (uint32_t)-1 : 0))) {
       SErr::SErrSetLastError(0x57);
       return 0;
     }
@@ -4989,7 +4988,7 @@ int __thiscall SFILE_ReadAdditionalAttributes(D2ArchiveStrc * pArchive, D2MPQBlo
             nExpectedSize += nNumEntries * 8;
           }
           if (nAttrFlags & 4) {
-            nExpectedSize += nNumEntries * 0x10;
+            nExpectedSize += nNumEntries << 4;
           }
           if (nAttrFileSize == nExpectedSize) {
             if (nAttrFlags & 1 && (uint32_t)nNumEntries > 0) {
@@ -5404,7 +5403,7 @@ int __stdcall SFileOpenArchive(char * szArchiveName, int * pUserData, uint32_t n
     } else {
       *ppArchive = 0;
     }
-    if (!(bValidArgs & -(uint32_t)(szArchiveName != 0) & -(uint32_t)(*szArchiveName != '\0'))) {
+    if (!(bValidArgs & (szArchiveName != 0 ? (uint32_t)-1 : 0) & (*szArchiveName != '\0' ? (uint32_t)-1 : 0))) {
       SErr::SErrSetLastError(0x57);
       return 0;
     }

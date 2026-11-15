@@ -4,17 +4,79 @@
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Common/D2CharStatsTxt.h"
+#include "Source/D2Common/D2InventoryStrc.h"
+#include "Source/D2Common/D2MissilesTxt.h"
+#include "Source/D2Common/D2MonStatsTxt.h"
+#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2StatListExStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
+#include "Source/D2Common/DATATBLS/AnimTbls.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.h"
 #include "Source/D2Common/DATATBLS/TokTbls.h"
+#include "Source/D2Common/Drlg/D2DrlgActStrc.h"
+#include "Source/D2Common/Drlg/Preset.h"
 #include "Source/D2Common/INVENTORY/Inventory.h"
 #include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Merc.h"
 #include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Units.h"
+#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Game/GAME/Event.h"
+#include "Source/D2Game/UNIT/SUnitDmg.h"
+#include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/Fog/Fog.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
+#include "Source/D2CMP/D2CMP.h"
+#include "Source/D2CMP/Draw.h"
+#include "Source/D2CMP/SRC/Codec.h"
+#include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2Client/Engine/Gfx.h"
+#include "Source/D2Client/UNIT/Monster.h"
+#include "Source/D2Common/COMPOSIT/Composit.h"
+#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/DATATBLS/ItemTbls.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
+#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2Common/Drlg/OutSiege.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/ItemMods.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Logging/ProfCore.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Unit.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Lang/D2LangRoot.h"
+#include "Source/D2Lang/StrTable/strtable.h"
+#include "Source/Fog/D2MemoryManagerStrc.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/D2QServerStrc.h"
+#include "Source/Fog/Fog.globals.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Save.h"
+#include "Source/Fog/Source/SFile.h"
+#include "Source/Fog/Source/SSComp.h"
+#include "Source/Fog/Src/LogManager.h"
+#include "3rdparty/Storm/Storm.h"
+#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
+#include "3rdparty/Storm/H/stpl.h"
+#include "3rdparty/Storm/Source/SCMD.h"
+#include "3rdparty/Storm/Source/SComp.h"
+#include "3rdparty/Storm/Source/SErr.h"
+#include "3rdparty/Storm/Source/SFile.h"
+#include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
+#include "Source/D2Game/ITEMS/ItemMode.h"
+#include "Source/D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -262,7 +324,7 @@ uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnit
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_3(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_3(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }
@@ -489,13 +551,13 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
             }
           }
 
-          nItemCode = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint8_t)(*(uint8_t*)((char*)pOutWeaponClass + 2) == 0x20 ? 0 : *(uint8_t*)((char*)pOutWeaponClass + 2)) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(*(uint8_t*)((char*)pOutWeaponClass + 1) == 0x20 ? 0 : *(uint8_t*)((char*)pOutWeaponClass + 1)) << 8 | (uint16_t)(uint8_t)((uint8_t)*pOutWeaponClass == 0x20 ? 0 : (uint8_t)*pOutWeaponClass))) & 0xffffffu);
+          nItemCode = (uint32_t)((uint32_t)(uint8_t)(*(uint8_t*)((char*)pOutWeaponClass + 2) == 0x20 ? 0 : *(uint8_t*)((char*)pOutWeaponClass + 2)) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(*(uint8_t*)((char*)pOutWeaponClass + 1) == 0x20 ? 0 : *(uint8_t*)((char*)pOutWeaponClass + 1)) << 8 | (uint16_t)(uint8_t)((uint8_t)*pOutWeaponClass == 0x20 ? 0 : (uint8_t)*pOutWeaponClass)));
           byRawTokenChar1 = (uint8_t)((uint32_t)nPlrClassCopy >> 8);
           byRawTokenChar2 = (uint8_t)((uint32_t)nPlrClassCopy >> 0x10);
-          nPlrClass = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint8_t)(byRawTokenChar2 == 0x20 ? 0 : byRawTokenChar2) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(byRawTokenChar1 == 0x20 ? 0 : byRawTokenChar1) << 8 | (uint16_t)(uint8_t)((uint8_t)nPlrClassCopy == 0x20 ? 0 : (uint8_t)nPlrClassCopy))) & 0xffffffu);
+          nPlrClass = (uint32_t)((uint32_t)(uint8_t)(byRawTokenChar2 == 0x20 ? 0 : byRawTokenChar2) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(byRawTokenChar1 == 0x20 ? 0 : byRawTokenChar1) << 8 | (uint16_t)(uint8_t)((uint8_t)nPlrClassCopy == 0x20 ? 0 : (uint8_t)nPlrClassCopy)));
           byRawTokenChar1 = (uint8_t)(dwModeToken >> 8);
           byRawTokenChar2 = (uint8_t)(dwModeToken >> 0x10);
-          bSpecialHandling = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint8_t)(byRawTokenChar2 == 0x20 ? 0 : byRawTokenChar2) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(byRawTokenChar1 == 0x20 ? 0 : byRawTokenChar1) << 8 | (uint16_t)(uint8_t)((uint8_t)dwModeToken == 0x20 ? 0 : (uint8_t)dwModeToken))) & 0xffffffu);
+          bSpecialHandling = (uint32_t)((uint32_t)(uint8_t)(byRawTokenChar2 == 0x20 ? 0 : byRawTokenChar2) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(byRawTokenChar1 == 0x20 ? 0 : byRawTokenChar1) << 8 | (uint16_t)(uint8_t)((uint8_t)dwModeToken == 0x20 ? 0 : (uint8_t)dwModeToken)));
           if (bBuildFullPath) {
             pszWeaponToken = &nItemCode;
             pszModeToken = &bSpecialHandling;
@@ -535,7 +597,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
           szWeaponTokenObj[2] = *(uint8_t*)((char*)pOutWeaponClass + 2) == 0x20 ? 0 : *(uint8_t*)((char*)pOutWeaponClass + 2);
           byRawTokenChar1 = (uint8_t)((uint32_t)nModeOrClass >> 8);
           byRawTokenChar2 = (uint8_t)((uint32_t)nModeOrClass >> 0x10);
-          nCompType = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint8_t)(byRawTokenChar2 == 0x20 ? 0 : byRawTokenChar2) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(byRawTokenChar1 == 0x20 ? 0 : byRawTokenChar1) << 8 | (uint16_t)(uint8_t)(byObjTypeToken0[0] == ' ' ? 0 : byObjTypeToken0[0]))) & 0xffffffu);
+          nCompType = (uint32_t)((uint32_t)(uint8_t)(byRawTokenChar2 == 0x20 ? 0 : byRawTokenChar2) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(byRawTokenChar1 == 0x20 ? 0 : byRawTokenChar1) << 8 | (uint16_t)(uint8_t)(byObjTypeToken0[0] == ' ' ? 0 : byObjTypeToken0[0])));
           szModeTokenObj[0] = szModeToken[0] == ' ' ? 0 : szModeToken[0];
           szModeTokenObj[1] = szModeToken[1] == ' ' ? 0 : szModeToken[1];
           szModeTokenObj[2] = szModeToken[2] == ' ' ? 0 : szModeToken[2];

@@ -69,8 +69,8 @@ int __fastcall GLSUBTILE_Initialize(GlSubtileCacheStrc * pCache, int nVramStart,
         pDebugScan = &pNodesBase[1].dwAddress;
         do {
           if (*pDebugScan < 0x200000 && pCache->dwEntrySize + *pDebugScan > 0x200000) {
-            pNodesBase[nVramAddr - 1].pNext = pNodesBase + nVramAddr + 1;
-            pCache->pNodes[nVramAddr + 1].pPrev = pCache->pNodes + nVramAddr - 1;
+            pNodesBase[nVramAddr - 1].pNext = pNodesBase + (nVramAddr + 1);
+            pCache->pNodes[nVramAddr + 1].pPrev = pCache->pNodes + (nVramAddr - 1);
             pCache->pNodes[nVramAddr].pPrev = 0;
             pCache->pNodes[nVramAddr].pNext = 0;
             pCache->nUsedCount++;

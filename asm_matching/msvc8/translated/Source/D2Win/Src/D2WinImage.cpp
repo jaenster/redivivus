@@ -285,15 +285,15 @@ BOOL __fastcall Draw(D2WinImageEx * pImageEx) {
       nBorderX = 0;
       do {
         sUVRect.nY0 = *(int*)((char*)sNinePatch.nVScale + nBorderX);
-        sUVRect.nY1 = *(int*)((char*)sNinePatch.nVScale + nBorderX + 4);
+        sUVRect.nY1 = *(int*)((char*)sNinePatch.nVScale + (nBorderX + 4));
         nBorderY = 0;
         do {
           sScreenRect.nY0 = *(int*)((char*)sNinePatch.nScreenY + nBorderX);
-          sScreenRect.nX1 = *(int*)((char*)sNinePatch.nScreenX + nBorderY + 4);
+          sScreenRect.nX1 = *(int*)((char*)sNinePatch.nScreenX + (nBorderY + 4));
           sScreenRect.nX0 = *(int*)((char*)sNinePatch.nScreenX + nBorderY);
-          sScreenRect.nY1 = *(int*)((char*)sNinePatch.nScreenY + nBorderX + 4);
+          sScreenRect.nY1 = *(int*)((char*)sNinePatch.nScreenY + (nBorderX + 4));
           sUVRect.nX0 = *(int*)((char*)sNinePatch.nUScale + nBorderY);
-          sUVRect.nX1 = *(int*)((char*)sNinePatch.nUScale + nBorderY + 4);
+          sUVRect.nX1 = *(int*)((char*)sNinePatch.nUScale + (nBorderY + 4));
           D2WinImage_Draw(&sScreenRect, &sUVRect, &sGfxData);
           nBorderY += 4;
         } while (nBorderY < 0xc);

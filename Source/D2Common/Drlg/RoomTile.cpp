@@ -108,7 +108,7 @@ static void __stdcall DRLGROOMTILE_SetWallTileFlags(D2DrlgTileDataStrc * pTileDa
       CreatesPresets(pRoomEx, nWorldY, nRawTileFlags, pTileData, nWorldX, 0);
     }
     if (nTileType != 0xd) {
-      pTileData->nFlags |= (nRawTileFlags >> 0x12 & 3) * 0x4000 + 0x4000;
+      pTileData->nFlags |= ((nRawTileFlags >> 0x12 & 3) << 0xe) + 0x4000;
     }
     if (nTileType == 0xe) {
       pTileData->nFlags |= 4;
@@ -201,7 +201,7 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateWallTileData(D2RoomExStrc * p
 
     D2TileLibraryEntryStrc* nShadowTileLibEntry = DRLG_FindHTile(pRoomEx, 4, nGridFlags);
     D2DrlgTileDataStrc* pShadowTile = DRLGROOMTILE_CreateWallTileData(pRoomEx, ppTileHead, nPosX, nPosY, nGridFlags, nShadowTileLibEntry, 4);
-    pShadowTile->nFlags |= (nGridFlags >> 0x12 & 3) * 0x4000 + 0x4000;
+    pShadowTile->nFlags |= ((nGridFlags >> 0x12 & 3) << 0xe) + 0x4000;
     if (nGridFlags & 0x80) {
       pShadowTile->nFlags |= 1;
     }
@@ -263,7 +263,7 @@ void __fastcall DRLGROOMTILE_FillTileData(D2RoomExStrc * pRoomEx, D2DrlgTileData
       pTileData->nScreenY = (int)pTileLibEntry->abSubTileFlags;
     }
 
-    pTileData->nFlags |= (nGridFlags >> 0x12 & 3) * 0x4000 + 0x4000;
+    pTileData->nFlags |= ((nGridFlags >> 0x12 & 3) << 0xe) + 0x4000;
     if (nGridFlags & 0x80) {
       pTileData->nFlags |= 1;
     }
@@ -591,7 +591,7 @@ static void __stdcall DRLGROOMTILE_InitWarpCacheTiles(uint32_t nPackedTileFlags,
       }
 
       pDVar1->nFloors++;
-      DRLGROOMTILE_FillTileData(pRoomEx, pTileData, nOffsetY + nX - 1, nFloorTileIter + nY - 1, nGridFlags, nTileLibIdx);
+      DRLGROOMTILE_FillTileData(pRoomEx, pTileData, nOffsetY + (nX - 1), nFloorTileIter + (nY - 1), nGridFlags, nTileLibIdx);
       pTileData->nFlags |= 8;
       nWarpSubIdx++;
     } while ((int)nWarpSubIdx < 4);

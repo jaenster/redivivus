@@ -1474,7 +1474,7 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
       nCorpseHpRaw = pCorpseTarget->nClassId;
       pOutStats = &sMonStats;
       D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nCorpseHpRaw, nPhysDmgMinVal, (uint32_t)pGame->nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCorpseTarget, UNITSTAT_level, 0), 1, pOutStats);
-      nCorpseHpRaw = (sMonStats.nMaxHP + sMonStats.nMinHP) * 0x80;
+      nCorpseHpRaw = sMonStats.nMaxHP + sMonStats.nMinHP << 7;
     }
 
     int32_t nX;
@@ -1807,7 +1807,7 @@ BOOL __fastcall Skills_SrvDoFunc_058_ReviveCorpseCheck(::SGAMEDATA * pGame, D2Un
     D2MonStatsInitStrc* pOutStats = &local_4c;
     D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(iVar3, local_14, (uint32_t)pGame->nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_level, 0), 1, pOutStats);
     uint32_t uVar4 = D2Common::Seed::RANDOM_RandomNumberSelector(&pTarget->sSeed, local_4c.nMaxHP - local_4c.nMinHP + 1);
-    int nValue = (uVar4 + local_4c.nMinHP) * 0x100;
+    int nValue = uVar4 + local_4c.nMinHP << 8;
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_maxhp, nValue, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_hitpoints, nValue, 0);
     local_14 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(local_c, UNITSTAT_level, 0);
@@ -2405,7 +2405,6 @@ BOOL __fastcall ITEMEVENT_BoneArmorAbsorb(::SGAMEDATA * pGame, uint32_t nUnitEve
             if (nAbsorbDelta >= 5) {
               D2Common::DATATBLS::ItemStats::D2StatesTogglegfx(pUnit, (int)pSkillTxt->aurastate, 1);
               D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_unsentparam1, nValue, 0);
-              return 1;
             }
           } else {
             D2Common::DATATBLS::ItemStats::SetState(pUnit, (int)pSkillTxt->aurastate, 0);
@@ -2580,11 +2579,12 @@ BOOL __fastcall ITEMEVENT_ItemSlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEven
       }
     }
 
-    nSlowAmount = -nSlowAmount;
     D2StateExArgStrc sStateArg;
     memset(&sStateArg, 0, sizeof(sStateArg));
+    nSlowAmount = -nSlowAmount;
     sStateArg.pUnit = pUnit;
     sStateArg.pTarget = pTarget;
+    sStateArg.eSkill = SKILL_Attack;
     sStateArg.nSkillLvl = 1;
     sStateArg.nDurationInFrames = 0x2ee;
     sStateArg.eStat = UNITSTAT_velocitypercent;

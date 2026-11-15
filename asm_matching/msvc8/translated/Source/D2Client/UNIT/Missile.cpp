@@ -2,10 +2,13 @@
 
 #include "Source/D2Client/UNIT/Missile.h"
 #include "Source/D2Client/D2ClientRoot.h"
+#include "Source/D2Client/D2ClientStrc.h"
+#include "Source/D2Client/D2LightMapStrc.h"
 #include "Source/D2Client/Draw/LightMap.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Engine/Particle.h"
 #include "Source/D2Client/GAME/Game/Game.h"
+#include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/GAME/RosterPets.h"
 #include "Source/D2Client/GAME/View.h"
 #include "Source/D2Client/SKILLS/Skills.h"
@@ -18,14 +21,175 @@
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
 #include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/Collision.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
+#include "Source/D2Common/D2DynamicPathStrc.h"
+#include "Source/D2Common/D2InventoryStrc.h"
+#include "Source/D2Common/D2MissilesTxt.h"
+#include "Source/D2Common/D2MonStatsTxt.h"
+#include "Source/D2Common/D2RoomExStrc.h"
+#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/D2SkillArgStrc.h"
+#include "Source/D2Common/D2SkillStrc.h"
+#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2StatListExStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
+#include "Source/D2Common/D2fpSkillFuncArg.h"
+#include "Source/D2Common/DATATBLS/AnimTbls.h"
+#include "Source/D2Common/DATATBLS/DataTbls.h"
+#include "Source/D2Common/DATATBLS/ItemStats.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgActStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgDeleteStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgStrc.h"
+#include "Source/D2Common/Drlg/Path.h"
+#include "Source/D2Common/Drlg/Preset.h"
+#include "Source/D2Common/Drlg/Transform.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/Monsters/MONSTERS.h"
+#include "Source/D2Common/PATH/DynamicPath.h"
+#include "Source/D2Common/PATH/Path.h"
+#include "Source/D2Common/Seed.h"
+#include "Source/D2Common/Stats/StatsEx.h"
+#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Unit.h"
+#include "Source/D2Common/Units.h"
+#include "Source/D2Common/Units/Missile.h"
+#include "Source/D2Common/Units/MissileStream.h"
+#include "Source/D2Common/Units/UnitFinds.h"
 #include "Source/D2Game/D2Game.h"
+#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Game/GAME/Event.h"
+#include "Source/D2Game/ITEMS/Items/Drop.h"
+#include "Source/D2Game/Monster/AI/Baal.h"
+#include "Source/D2Game/SKILLS/SkillsServer.h"
+#include "Source/D2Game/Seed.h"
+#include "Source/D2Game/UNIT/SUnitDmg.h"
+#include "Source/D2Game/UNIT/SUnitMsg.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2Win/DC6.h"
+#include "Source/D2Win/DC6Block.h"
+#include "Source/Fog/Fog.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
+#include "Source/Bnclient/BnSend.h"
+#include "Source/Bnclient/SRP.h"
+#include "Source/Bnclient/net_sid.h"
+#include "Source/D2CMP/D2CMP.h"
+#include "Source/D2CMP/Draw.h"
+#include "Source/D2CMP/SRC/Codec.h"
+#include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2Client/ClientModeInGame.h"
+#include "Source/D2Client/Cursor.h"
+#include "Source/D2Client/D2BNetGatewayAccessStr.h"
 #include "Source/D2Client/D2Client.globals.h"
+#include "Source/D2Client/D2GSPacketSrv0x2A.h"
+#include "Source/D2Client/D2GfxMemoryStrc.h"
+#include "Source/D2Client/D2GfxSettingsStrc.h"
+#include "Source/D2Client/D2IniConfigStrc.h"
+#include "Source/D2Client/Draw/LightMap.h"
+#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Engine/Gfx.h"
+#include "Source/D2Client/GAME/Draw.h"
+#include "Source/D2Client/GAME/Game/Game.h"
+#include "Source/D2Client/GAME/Record.h"
+#include "Source/D2Client/GAME/SCmd.h"
+#include "Source/D2Client/GAME/Sound.h"
+#include "Source/D2Client/Sound/Sound.h"
+#include "Source/D2Client/UI/Automap.h"
+#include "Source/D2Client/UI/Chat.h"
+#include "Source/D2Client/UI/CmdTbl.h"
+#include "Source/D2Client/UI/EscMenu.h"
+#include "Source/D2Client/UI/Inv.h"
+#include "Source/D2Client/UI/Panel.h"
+#include "Source/D2Client/UI/Path.h"
+#include "Source/D2Client/UI/QuestLog.h"
+#include "Source/D2Client/UI/ShowItems.h"
+#include "Source/D2Client/UI/SkillDesc.h"
+#include "Source/D2Client/UI/SpellSel.h"
+#include "Source/D2Client/UI/Text.h"
+#include "Source/D2Client/UI/UseItem.h"
+#include "Source/D2Client/UI/Waypoint.h"
+#include "Source/D2Client/UI/npcmenu.h"
+#include "Source/D2Client/UI/npcmenu/Merc.h"
+#include "Source/D2Client/UI/ui.h"
+#include "Source/D2Client/UNIT/Item.h"
+#include "Source/D2Client/UNIT/Missile.h"
+#include "Source/D2Client/UNIT/Monster.h"
+#include "Source/D2Client/UNIT/Object.h"
+#include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Client/UNIT/PlrSkills.h"
+#include "Source/D2Client/UNIT/UnitSnd.h"
+#include "Source/D2Client/Warden/WardenClient.h"
+#include "Source/D2Common/COMPOSIT/Composit.h"
+#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/DATATBLS/ItemTbls.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
+#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2Common/Drlg/OutSiege.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/ItemMods.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Logging/ProfCore.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Unit.h"
+#include "Source/D2Game/D2QuestDataStrc.h"
+#include "Source/D2Game/GAME/Arena.h"
+#include "Source/D2Game/GAME/Task.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Game/Monster/AI/Baal.h"
+#include "Source/D2Game/Monster/MonsterMode.h"
+#include "Source/D2Game/Objects/Objects.h"
+#include "Source/D2Game/PLAYER/PlayerMsg.h"
+#include "Source/D2Game/Quests/QUESTS.h"
+#include "Source/D2Game/SKILLS/Items.h"
+#include "Source/D2Game/SKILLS/SkillAss.h"
+#include "Source/D2Game/UNIT/SUnitDmg.h"
+#include "Source/D2Game/UNIT/sunitproxy.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Lang/D2LangRoot.h"
+#include "Source/D2Lang/StrTable/strtable.h"
+#include "Source/D2Win/D2Win.globals.h"
+#include "Source/D2Win/Src/D2Comp.h"
+#include "Source/D2Win/Src/D2WinFont.h"
+#include "Source/D2gfx/D2gfx.public.h"
+#include "Source/D2gfx/D2GFX.h"
+#include "Source/Fog/D2MemoryManagerStrc.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/D2QServerStrc.h"
+#include "Source/Fog/Fog.globals.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Save.h"
+#include "Source/Fog/Source/SFile.h"
+#include "Source/Fog/Source/SSComp.h"
+#include "Source/Fog/Src/LogManager.h"
+#include "3rdparty/Storm/Storm.h"
+#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
+#include "3rdparty/Storm/H/stpl.h"
+#include "3rdparty/Storm/Source/SCMD.h"
+#include "3rdparty/Storm/Source/SComp.h"
+#include "3rdparty/Storm/Source/SErr.h"
+#include "3rdparty/Storm/Source/SFile.h"
+#include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"
+#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
+#include "Source/D2Common/Seed.inline.h"
+#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Game/SKILLS/SkillAss.h"
+#include "Source/D2Game/Seed.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -454,7 +618,7 @@ int __stdcall LIGHTMAP_GetQualityLevel() {
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_3(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_3(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }
@@ -462,7 +626,7 @@ static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_3(D2UnitStrc * p) {
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }
@@ -472,7 +636,7 @@ static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
 static uint32_t __stdcall MISSILE_CanHitTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2MissilesTxt * pMissileTxt, D2UnitStrc * pUnit2) {
     BOOL bIsOwner;
     bool bIsValidTarget;
-    if (!(pUnit1 && pUnit1->eUnitFlags >> 3 & 1 && pUnit1->eUnitFlags >> 2 & 1)) {
+    if (!(pUnit1 && FlagBit_D2UnitStrc_eUnitFlags_3(pUnit1) && FlagBit_D2UnitStrc_eUnitFlags_2(pUnit1))) {
       return 0;
     }
     if (pMissileTxt->NextHit != '\0') {
@@ -668,7 +832,7 @@ static int MISSILE_CheckAndDecrementPierce(D2UnitStrc * pUnit) {
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }
@@ -1392,7 +1556,7 @@ void __fastcall MISSILE_SpawnRandomScatter(D2UnitStrc * pUnit, uint32_t nSpawnIn
         nClampY = -nRadius;
       }
 
-      sSkillArg.nUnitX = nMissileId + (nRandX - nRadius) + nCurFrame;
+      sSkillArg.nUnitX = nMissileId + (nRandX - nRadius + nCurFrame);
       sSkillArg.nUnitY = nClampY + nCenterY + (nRandY - nRadius);
       Missile::MakeMissile(&sSkillArg);
       nCountRemaining--;
@@ -2303,7 +2467,7 @@ int32_t __fastcall MISSILE_CltHitFn14_IceShatter(D2UnitStrc * pUnit, D2UnitStrc 
       return 1;
     }
 
-    uint32_t* pSpread = (uint32_t*)(gaSubMissileSpread_Clt014 + nClassId * 5 + 1);
+    uint32_t* pSpread = (uint32_t*)(gaSubMissileSpread_Clt014 + (nClassId * 5 + 1));
     do {
       D2UnitStrc* pSubMissile;
       nDir = *pSpread + (sSeedTmp & 7) & 7;
@@ -5468,7 +5632,7 @@ void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
             if (pDVar2->LoopAnim == '\0') {
               nClassId = (uint32_t)pDVar2->AnimLen - (uint32_t)pDVar2->CltSrcTown;
               if (nClassId > 0) {
-                pUnit->nGfxCurrentFrame = nClassId * 0x100;
+                pUnit->nGfxCurrentFrame = nClassId << 8;
               }
             }
           }
@@ -5600,7 +5764,7 @@ void __fastcall MISSILE_CltDoFn05_FireWall(D2UnitStrc * pUnit) {
     if (nClassId == pMissileTxt->SubStart - 1) {
       uint32_t nRandSubFrame;
       nRandSubFrame = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, (uint32_t)pMissileTxt->SubStop - (uint32_t)pMissileTxt->SubStart);
-      pUnit->nGfxCurrentFrame = (nRandSubFrame + nClassId) * 0x100;
+      pUnit->nGfxCurrentFrame = nRandSubFrame + nClassId << 8;
     } else {
       uint8_t bySubStart = pMissileTxt->SubStart;
       uint32_t nCurFrameCheck = D2Common::Units::Missile::GetCurrentFrame(pUnit);
@@ -7956,7 +8120,7 @@ void __fastcall MISSILE_CltDoFn58_RoyalStrikeChaosIce(D2UnitStrc * pUnit) {
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pUnit->pPath.pDynamicPath, pUnit, 0);
     uint32_t nTargetX = D2Common::Seed::GetSeed_nSeedLow(pSeed);
     D2Common::Units::Missile::SetTargetX(pUnit, nTargetX);
-    D2Common::Units::Missile::SetTargetY(pUnit, nNewDestYFinal * 0x10000 + (uint32_t)(uint16_t)nNewDestY);
+    D2Common::Units::Missile::SetTargetY(pUnit, (nNewDestYFinal << 0x10) + (uint32_t)(uint16_t)nNewDestY);
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 

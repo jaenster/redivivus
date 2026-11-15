@@ -89,7 +89,7 @@ static uint32_t __stdcall DAMAGE_RollPhysicalDamageRange(int32_t nDamageRange, i
 
 static uint32_t __stdcall DAMAGE_RollElementalDamageWithBonus(eD2UnitStat eUnitStat, eD2UnitStat eStat1, int32_t nMinPctBonus, int32_t nRangePctBonus, uint32_t nDamageAccum, D2UnitStrc * pUnit, eD2UnitStat eStat2) {
     int nDamageBase = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eStat2, 0);
-    if (nDamageBase * 0x100 < 8) {
+    if (nDamageBase << 8 < 8) {
       return (int)nDamageAccum < 0 ? 0 : nDamageAccum;
     }
 
@@ -101,7 +101,7 @@ static uint32_t __stdcall DAMAGE_RollElementalDamageWithBonus(eD2UnitStat eUnitS
       nRangePctBonus += nBonusStat;
     }
 
-    uint32_t nResult = DAMAGE_RollPhysicalDamageRange(nDamageBase * 0x100, nMinPctBonus, pUnit, nMinDamage << 8, nRangePctBonus, nDamageAccum);
+    uint32_t nResult = DAMAGE_RollPhysicalDamageRange(nDamageBase << 8, nMinPctBonus, pUnit, nMinDamage << 8, nRangePctBonus, nDamageAccum);
     return nResult;
 }
 
@@ -628,8 +628,8 @@ uint32_t __fastcall DAMAGE_CalculatePhysicalDamage(D2UnitStrc * pUnit, int32_t b
 
     int32_t nNormDmgBonus;
     nNormDmgBonus = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_normaldamage, 0);
-    nMaxDmg += nNormDmgBonus * 0x100;
-    nMinDmg += nNormDmgBonus * 0x100;
+    nMaxDmg += nNormDmgBonus << 8;
+    nMinDmg += nNormDmgBonus << 8;
     if (nMinDmg < 1) {
       nMinDmg = 0x100;
     }
@@ -719,11 +719,10 @@ static void DAMAGE_ApplyUndeadBonusDamage(D2DamageStrc * pDamage, D2UnitStrc * p
     }
 
     int32_t nUndeadDmgPct = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_undeaddamage_percent, 0);
-    if (!(nBluntBonusPct + nUndeadDmgPct > 0)) {
-      return;
+    nBluntBonusPct += nUndeadDmgPct;
+    if (nBluntBonusPct > 0) {
+      pDamage->dwEnDmgPct += nBluntBonusPct;
     }
-
-    pDamage->dwEnDmgPct = pDamage->dwEnDmgPct + nBluntBonusPct + nUndeadDmgPct;
 }
 
 static void __stdcall DAMAGE_ApplyMonsterTypeBonusDamage(D2UnitStrc * pUnit, D2DamageStrc * pDamage, D2UnitStrc * pTarget) {
@@ -1101,7 +1100,7 @@ static int32_t DAMAGE_AbsorbDamageByPercent(D2DamageContext * pCtx, D2ResistTabl
     nDamage -= nAbsorbPct;
     apply_flat_absorb:
     nFlatAbsorbAmt = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCtx->pDefender, pEntry->eAbsorbFlatStat, 0);
-    nFlatAbsorbAmt *= 0x100;
+    nFlatAbsorbAmt = nFlatAbsorbAmt << 8;
     if (nFlatAbsorbAmt > 0) {
       if (nFlatAbsorbAmt >= nDamage) {
         nFlatAbsorbAmt = nDamage;
@@ -2623,9 +2622,11 @@ static void DAMAGE_CheckPreventHealAndSetState(D2UnitStrc * pDefender, D2UnitStr
     memset(&sStateArg, 0, sizeof(sStateArg));
     sStateArg.pUnit = pAttacker;
     sStateArg.pTarget = pDefender;
+    sStateArg.eSkill = SKILL_Attack;
     sStateArg.nSkillLvl = 1;
     sStateArg.nDurationInFrames = 120000;
     sStateArg.eStat = UNITSTAT_armorclass;
+    sStateArg.nSkillCalc = 0;
     sStateArg.eAuraState = STATE_preventheal;
     SKILLS::SkillsServer::SetStateWithExpiryTime(&sStateArg);
 }
@@ -2755,7 +2756,7 @@ BOOL __fastcall DAMAGE_RollAttackHit(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, in
       }
 
       nAR = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_tohit_percent, 0);
-      nToHitBonus = nToHitBonus + nAR + nToHitBonusExtra;
+      nToHitBonus += nAR + nToHitBonusExtra;
       nAcTotal = nTotalAC;
       nDexBonus = nBaseAR;
       if (pUnit2->eUnitType == UNIT_MONSTER) {
@@ -2789,7 +2790,7 @@ BOOL __fastcall DAMAGE_RollAttackHit(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, in
       nToHitBonusStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_dexterity, 0);
       nToHitBonus = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_tohit_percent, 0);
       nAcTotal = nAR + nAcTotal;
-      nDexBonus = nDexBonus + nToHitBonusExtra + nToHitBonusStat * 5;
+      nDexBonus += nToHitBonusExtra + nToHitBonusStat * 5;
     }
 
     nAR = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDexBonus, nToHitBonus, 100);

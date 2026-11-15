@@ -877,7 +877,7 @@ void __fastcall D2WINFONT_DrawTextWithOffsetBackground(uint16_t * wszText, int32
       nYEnd *= 2;
     }
 
-    D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nTextHeight - 4, (uint32_t)byFontHeight * 4 / 10 - nTextHeightLines + nYEnd, nWidth + nTextHeight - 4, nYEnd, dwBackgroundColor, eDrawMode);
+    D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nTextHeight - 4, (uint32_t)byFontHeight * 4 / 10 - nTextHeightLines + nYEnd, nWidth + (nTextHeight - 4), nYEnd, dwBackgroundColor, eDrawMode);
     D2WINFONT_DrawWideString(wszText, nTextHeight, nYEnd - 2, 0, eGlobalPalette, 0);
 }
 

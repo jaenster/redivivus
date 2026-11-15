@@ -557,7 +557,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
     uint8_t* pOutPixelCursor;
     pOutPixelCursor = *ppOutBuffer;
     int nBitShift;
-    nBitShift = ((intptr_t)pBitOffsets->pCurWord - pBitOffsets->nReserved00 >> 2) * 0x20 + pBitOffsets->nBitOffset;
+    nBitShift = ((intptr_t)pBitOffsets->pCurWord - pBitOffsets->nReserved00 >> 2 << 5) + pBitOffsets->nBitOffset;
     if (nCodecState->nFrameCount) {
       int nIterResult;
       nInitBitPos = nBitShift;
@@ -738,7 +738,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
       }
     }
 
-    *pBitsRead = ((intptr_t)pBitOffsets->pCurWord - pBitOffsets->nReserved00 >> 2) * 0x20 - nBitShift + pBitOffsets->nBitOffset;
+    *pBitsRead = ((intptr_t)pBitOffsets->pCurWord - pBitOffsets->nReserved00 >> 2 << 5) - nBitShift + pBitOffsets->nBitOffset;
     ppOutBuffer[1] = pOutPixelCursor - (intptr_t)*ppOutBuffer;
 }
 
@@ -956,7 +956,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
     uint32_t uVar10 = 0;
     *pnSize = 0;
     if (nStartFrame < __frame0.nEndFrame) {
-      local_318.pLocal_318 = pCelHeader + nStartFrame * 4 + 0x1c;
+      local_318.pLocal_318 = pCelHeader + (nStartFrame * 4 + 0x1c);
       __frame0.uSlot338.pnDirSizeOut = (uint32_t*)((char*)__frame0.local_334.pCelDecodeState + 0xc + nStartFrame * 4);
       local_314 = __frame0.nEndFrame - nStartFrame;
       pbVar7 = local_318.pLocal_318;
@@ -1088,7 +1088,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
           if (iVar6) {
             uVar10 = sBitState.nBitOffset + 7U & 0x18;
             uVar9 = sBitState.nBitOffset + 7U >> 5;
-            uVar3 = (int)sBitState.pCurWord + ((int)(uVar10 + 7) >> 3) + uVar9 * 4;
+            uVar3 = (int)sBitState.pCurWord + (((int)(uVar10 + 7) >> 3) + uVar9 * 4);
             pnDataOffset = &gCodecFrameWorkBuffer[0].nDataOffset;
             local_314 = local_310;
             do {
@@ -1103,7 +1103,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
 
             uVar10 += iVar6 * 8;
             uVar11 = uVar10 & 0x1f;
-            sBitState.pCurWord = sBitState.pCurWord + uVar9 + (int)uVar10 / 32;
+            sBitState.pCurWord += uVar9 + (int)uVar10 / 32;
             local_314 = 0;
           }
         }

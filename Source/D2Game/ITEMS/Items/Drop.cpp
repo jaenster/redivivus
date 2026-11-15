@@ -2188,7 +2188,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     int nBaseRollChance;
     nBaseRollChance = pQualityRatio->Unique - nLevelDiff / pQualityRatio->UniqueDivisor;
     int nScaledRollChance;
-    nScaledRollChance = nBaseRollChance * 0x80;
+    nScaledRollChance = nBaseRollChance << 7;
     if (bHasMF) {
       nAdjustedChance = ITEMDROP_AdjustDrop(nMFWithBase, 0xfa, 0xfa);
       if (nAdjustedChance) {
@@ -2211,7 +2211,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     }
 
     nBaseRollChance = pQualityRatio->Set - nLevelDiff / pQualityRatio->SetDivisor;
-    nScaledRollChance = nBaseRollChance * 0x80;
+    nScaledRollChance = nBaseRollChance << 7;
     if (bHasMF) {
       nAdjustedChance = ITEMDROP_AdjustDrop(nMFWithBase, 500, 500);
       if (nAdjustedChance) {
@@ -2233,7 +2233,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     }
     if (pItemTypeTxt->rare != '\0') {
       nBaseRollChance = pQualityRatio->Rare - nLevelDiff / pQualityRatio->RareDivisor;
-      nScaledRollChance = nBaseRollChance * 0x80;
+      nScaledRollChance = nBaseRollChance << 7;
       if (bHasMF) {
         nAdjustedChance = ITEMDROP_AdjustDrop(nMFWithBase, 600, 600);
         if (nAdjustedChance) {
@@ -2259,7 +2259,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     }
 
     nBaseRollChance = pQualityRatio->Magic - nLevelDiff / pQualityRatio->MagicDivisor;
-    nScaledRollChance = nBaseRollChance * 0x80;
+    nScaledRollChance = nBaseRollChance << 7;
     if (bHasMF) {
       nScaledRollChance = nBaseRollChance * 0x3200 / nMFWithBase;
     }
@@ -2278,7 +2278,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     }
 
     roll_superior:
-    nRoll = (pQualityRatio->HiQuality - nLevelDiff / pQualityRatio->HiQualityDivisor) * 0x80;
+    nRoll = pQualityRatio->HiQuality - nLevelDiff / pQualityRatio->HiQualityDivisor << 7;
     if ((int)nRoll <= 0) {
       return 3;
     }
@@ -2288,7 +2288,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
       return 3;
     }
 
-    nRoll = (pQualityRatio->Normal - nLevelDiff / pQualityRatio->NormalDivisor) * 0x80;
+    nRoll = pQualityRatio->Normal - nLevelDiff / pQualityRatio->NormalDivisor << 7;
     if ((int)nRoll <= 0) {
       return 2;
     }
@@ -3861,16 +3861,16 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
                     }
 
                     nDropFlags = 0;
-                    if ((uint16_t)*(short int*)((char*)pTCStack[0].aQualityRatios + nStackOffset + 8) > 0) {
+                    if ((uint16_t)*(short int*)((char*)pTCStack[0].aQualityRatios + (nStackOffset + 8)) > 0) {
                       sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-                      wTempMod = *(uint16_t*)((char*)pTCStack[0].aQualityRatios + nStackOffset + 8);
+                      wTempMod = *(uint16_t*)((char*)pTCStack[0].aQualityRatios + (nStackOffset + 8));
                       pUnit->sSeed = sNewSeed;
                       if ((sNewSeed.nSeedLow & 0x3ff) < (uint32_t)wTempMod) {
                         nDropFlags = 4;
                       }
                     }
 
-                    wTempMod = *(uint16_t*)((char*)pTCStack[0].aQualityRatios + nStackOffset + 10);
+                    wTempMod = *(uint16_t*)((char*)pTCStack[0].aQualityRatios + (nStackOffset + 10));
                     local_550[1] = (int32_t)wTempMod;
                     if (wTempMod > 0) {
                       sNewSeed = D2_SEED_NEXT(pUnit->sSeed);

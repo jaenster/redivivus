@@ -94,7 +94,7 @@ int __fastcall D3DFLOOR_Initialize(D3DFloorCacheStrc * pCache, int nBaseMemoryUs
     pCache->pUsedHead = 0;
     pCache->pUsedTail = 0;
     pCache->pFreeHead = pCache->pNodeBuffer;
-    pCache->pFreeTail = pCache->pNodeBuffer + pCache->nMaxNodes - 1;
+    pCache->pFreeTail = pCache->pNodeBuffer + (pCache->nMaxNodes - 1);
     return pCache->nMaxNodes * dwTextureSize + nBaseMemoryUsed;
 }
 
@@ -530,7 +530,7 @@ void __stdcall D3D_RenderTileComponentsToPixelBuffer(D2TileLibraryEntryStrc * pT
     do {
       short int* psSubtileEntry;
       psSubtileEntry = &pTileEntry->pSubTiles[nSubtileIndex].nOffsetX;
-      pbyDstTile = pwDstPixels + psSubtileEntry[1] * nPitchPixels + (int)*psSubtileEntry;
+      pbyDstTile = pwDstPixels + (psSubtileEntry[1] * nPitchPixels + (int)*psSubtileEntry);
       if (psSubtileEntry[4] & 1U) {
         if (psSubtileEntry[4] & 4U) {
           pbySrc = *(uint8_t**)(psSubtileEntry + 8);

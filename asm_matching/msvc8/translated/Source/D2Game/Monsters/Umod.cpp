@@ -345,7 +345,10 @@ void __fastcall MagicResist(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     int nPoisonRes = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_poisonresist, 0);
     int nDmgRes = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_damageresist, 0);
     int nMagicRes = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_magicresist, 0);
-    bUnknown = (BOOL)(99 < nFireRes);
+    bUnknown = 0;
+    if (99 < nFireRes) {
+      bUnknown = 1;
+    }
     if (99 < nLightRes) {
       bUnknown++;
     }
@@ -1028,8 +1031,8 @@ void __fastcall ManaBurn(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     }
 
     nMaxDamConst = GetUmodConstant(nLevel);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_manadrainmindam, ((nLevelIdx >> 5) - (nLevelIdx >> 0x1f)) * 0x100, 0);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_manadrainmaxdam, nMaxDamConst * nLvlDamage / 100 * 0x100, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_manadrainmindam, (nLevelIdx >> 5) - (nLevelIdx >> 0x1f) << 8, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_manadrainmaxdam, nMaxDamConst * nLvlDamage / 100 << 8, 0);
     MagicResist(pUnit, nIndex, bUnique);
 }
 

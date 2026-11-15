@@ -186,7 +186,7 @@ void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos) {
           }
         } else if (nWindowWrap < dwCodeEntry) {
           nWrapCopyLen = dwCodeEntry - nWindowWrap;
-          pCopyByte = nCopySrc + (nWindowWrap - dwCodeEntry) + nWriteBase;
+          pCopyByte = nCopySrc + (nWindowWrap - dwCodeEntry + nWriteBase);
           if (nWrapCopyLen < nMatchLen) {
             nMatchLen -= nWrapCopyLen;
             do {

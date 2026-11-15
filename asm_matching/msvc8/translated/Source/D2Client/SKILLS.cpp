@@ -1055,8 +1055,8 @@ BOOL __fastcall Skills_CltDoFunc_AuraState_OverlayOnTarget(D2UnitStrc * pUnit, e
             nAuraStat = 1;
           }
 
-          eOverlay = (int)pSkillTxt->prgoverlay + nAuraStat - 1;
-          nSoundId = (int)pSkillTxt->prgsound + nAuraStat - 1;
+          eOverlay = (int)pSkillTxt->prgoverlay + (nAuraStat - 1);
+          nSoundId = (int)pSkillTxt->prgsound + (nAuraStat - 1);
           goto apply_overlay_and_sound;
         }
       }
@@ -1096,8 +1096,8 @@ BOOL __fastcall Skills_CltDoFunc_AuraState_OverlayOnCaster(D2UnitStrc * pUnit, e
             nAuraStat = 1;
           }
 
-          eOverlay = (int)pSkillTxt->prgoverlay + nAuraStat - 1;
-          nSoundId = (int)pSkillTxt->prgsound + nAuraStat - 1;
+          eOverlay = (int)pSkillTxt->prgoverlay + (nAuraStat - 1);
+          nSoundId = (int)pSkillTxt->prgsound + (nAuraStat - 1);
           goto play_overlay_and_sound;
         }
       }

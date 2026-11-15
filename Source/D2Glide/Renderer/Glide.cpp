@@ -1081,10 +1081,10 @@ void __fastcall SetPalette(LPPALETTEENTRY pPalette) {
     uint32_t* pDst = gGlidePaletteEntry0;
     uint8_t* pSrc = &pPalette->peBlue;
     do {
-      *pDst = ((((tagPALETTEENTRY*)(pSrc - 2))->peRed + 0xff00) * 0x100 + (uint32_t)pSrc[-1]) * 0x100 + (uint32_t)*pSrc;
-      *(uint32_t*)(pSrc + ((intptr_t)((char*)&gGlidePaletteEntry0 + 2) - (intptr_t)pPalette)) = ((pSrc[2] + 0xff00) * 0x100 + (uint32_t)pSrc[3]) * 0x100 + (uint32_t)pSrc[4];
-      *(uint32_t*)(pSrc + ((intptr_t)((char*)&gGlidePaletteEntry0 + 6) - (intptr_t)pPalette)) = ((pSrc[6] + 0xff00) * 0x100 + (uint32_t)pSrc[7]) * 0x100 + (uint32_t)pSrc[8];
-      *(uint32_t*)(pSrc + ((intptr_t)((char*)&gGlidePaletteEntry0 + 10) - (intptr_t)pPalette)) = ((pSrc[10] + 0xff00) * 0x100 + (uint32_t)pSrc[0xb]) * 0x100 + (uint32_t)pSrc[0xc];
+      *pDst = ((((tagPALETTEENTRY*)(pSrc - 2))->peRed + 0xff00 << 8) + (uint32_t)pSrc[-1] << 8) + (uint32_t)*pSrc;
+      *(uint32_t*)(pSrc + ((intptr_t)((char*)&gGlidePaletteEntry0 + 2) - (intptr_t)pPalette)) = ((pSrc[2] + 0xff00 << 8) + (uint32_t)pSrc[3] << 8) + (uint32_t)pSrc[4];
+      *(uint32_t*)(pSrc + ((intptr_t)((char*)&gGlidePaletteEntry0 + 6) - (intptr_t)pPalette)) = ((pSrc[6] + 0xff00 << 8) + (uint32_t)pSrc[7] << 8) + (uint32_t)pSrc[8];
+      *(uint32_t*)(pSrc + ((intptr_t)((char*)&gGlidePaletteEntry0 + 10) - (intptr_t)pPalette)) = ((pSrc[10] + 0xff00 << 8) + (uint32_t)pSrc[0xb] << 8) + (uint32_t)pSrc[0xc];
       pDst += 4;
       pSrc += 0x10;
     } while ((intptr_t)pDst < (intptr_t)((char*)&gGlidePaletteEntry0 + sizeof(gGlidePaletteEntry0)));
@@ -1416,7 +1416,12 @@ void __fastcall PlayCutScene(char * szFile, int32_t nResolutionMode, void * fpFr
     }
 
     (*GLIDEDLL_grBufferClear_12)(0, '\0', 0);
-    (*GLIDEDLL_grBufferSwap_4)((uint32_t)(uint8_t)(pD2GFXRenderedDataStrc->bVSync != 0));
+    if (pD2GFXRenderedDataStrc->bVSync != 0) {
+      (*GLIDEDLL_grBufferSwap_4)(1);
+    } else {
+      (*GLIDEDLL_grBufferSwap_4)(0);
+    }
+
     gbPlayingCutScene = 1;
     glBlocks::GLBLOCKS_PlayBinkVideo(szFile, nResolutionMode, (fnBinkFrameCallback)fpFrame);
     gbPlayingCutScene = 0;
@@ -1884,18 +1889,18 @@ static int32_t __stdcall RENDERER_GLIDE_UploadTextureToCache(GlideTexInfoStrc * 
       gnGlideTMUIndex = (uint32_t)(nCacheBucket == 1);
     }
 
-    int nNewCacheNode = *(int*)((char*)nTexStartAddress + nMode * 8 + 4);
-    int* pnCacheEntryIndex = (int*)((char*)nTexStartAddress + nMode * 8 + 4);
+    int nNewCacheNode = *(int*)((char*)nTexStartAddress + (nMode * 8 + 4));
+    int* pnCacheEntryIndex = (int*)((char*)nTexStartAddress + (nMode * 8 + 4));
     grTexInfo.largeLodLog2 = grTexInfo.smallLodLog2;
     if (nNewCacheNode && (*(uint8_t**)&gGlideVertex0.aTextureCache[nCacheBucket - 1].pNodes[nNewCacheNode - 1].field_0x10 == pPalette || nModeSaved == 4)) {
-      glTextureCache::GLTEXCACHE_PromoteNodeToMRU(gGlideVertex0.aTextureCache + nCacheBucket - 1, *pnCacheEntryIndex);
+      glTextureCache::GLTEXCACHE_PromoteNodeToMRU(gGlideVertex0.aTextureCache + (nCacheBucket - 1), *pnCacheEntryIndex);
       nErrorAddress = (void*)gGlideVertex0.aTextureCache[nCacheBucket - 1].pNodes[*pnCacheEntryIndex - 1].dwAddress;
       (*GLIDEDLL_grTexSource_16)(gnGlideTMUIndex, (FxU32)nErrorAddress, 3, &grTexInfo);
       RENDERER_GLIDE_SetTextureMode(gnGlideTMUIndex);
       return 1;
     }
     if (!*pnCacheEntryIndex) {
-      nNewCacheNode = glTextureCache::GLTEXCACHE_EnsureCapacity(gGlideVertex0.aTextureCache + nCacheBucket - 1);
+      nNewCacheNode = glTextureCache::GLTEXCACHE_EnsureCapacity(gGlideVertex0.aTextureCache + (nCacheBucket - 1));
       *pnCacheEntryIndex = nNewCacheNode;
     }
 
@@ -2167,9 +2172,9 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int32_t nPosX, int32
       textureSize.nTexHeight = textureSize.nHeight;
     }
 
-    int nHalfTexHeightScaled = textureSize.nTexHeight * 0x1000;
-    int nAnchorX = nPosX + textureSize.nTop * 0x1000 + textureSize.nLeft * 0x800;
-    int nAnchorY = nPosY + textureSize.nTop * 0x1000 + textureSize.nLeft * -0x800;
+    int nHalfTexHeightScaled = textureSize.nTexHeight << 0xc;
+    int nAnchorX = nPosX + ((textureSize.nTop << 0xc) + (textureSize.nLeft << 0xb));
+    int nAnchorY = nPosY + ((textureSize.nTop << 0xc) + textureSize.nLeft * -0x800);
     bSpriteResult = nAnchorY + textureSize.nTexHeight * -0x1000;
     Glide::AdjustPerspectivePosition(nAnchorX + textureSize.nTexHeight * -0x1000, bSpriteResult, 0, &nScreenX, &nScreenY);
     gGlideVertex0.aVertex[0].fX = (float)nScreenX;
@@ -2183,13 +2188,13 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int32_t nPosX, int32
     gGlideVertex0.aVertex[1].fOOW = 1.0;
     gGlideVertex0.aVertex[1].fS = fTexS0Scaled;
     gGlideVertex0.aVertex[1].fT = fTexS1Scaled;
-    Glide::AdjustPerspectivePosition(textureSize.nTexWidth * 0x800 + nAnchorX, nAnchorY + textureSize.nTexWidth * -0x800, 0, &nScreenX, &nScreenY);
+    Glide::AdjustPerspectivePosition((textureSize.nTexWidth << 0xb) + nAnchorX, nAnchorY + textureSize.nTexWidth * -0x800, 0, &nScreenX, &nScreenY);
     gGlideVertex0.aVertex[2].fX = (float)nScreenX;
     gGlideVertex0.aVertex[2].fY = (float)nScreenY;
     gGlideVertex0.aVertex[2].fOOW = 1.0;
     gGlideVertex0.aVertex[2].fS = fTexT1Scaled;
     gGlideVertex0.aVertex[2].fT = fTexS1Scaled;
-    Glide::AdjustPerspectivePosition(textureSize.nTexWidth * 0x800 - nHalfTexHeightScaled + nAnchorX, bSpriteResult + textureSize.nTexWidth * -0x800, 0, &nScreenX, &nScreenY);
+    Glide::AdjustPerspectivePosition((textureSize.nTexWidth << 0xb) - nHalfTexHeightScaled + nAnchorX, bSpriteResult + textureSize.nTexWidth * -0x800, 0, &nScreenX, &nScreenY);
     gGlideVertex0.aVertex[3].fX = (float)nScreenX;
     gGlideVertex0.aVertex[3].fY = (float)nScreenY;
     gGlideVertex0.aVertex[3].fOOW = 1.0;
@@ -2242,7 +2247,7 @@ BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, D
     if (texInfo.nLeft + nPosX > RENDERER_nWindowWidth) {
       return 0;
     }
-    if (texInfo.nWidth + texInfo.nLeft + nPosX < 0) {
+    if (texInfo.nWidth + (texInfo.nLeft + nPosX) < 0) {
       return 0;
     }
     if (texInfo.nTop + nPosY < 0) {
@@ -2274,7 +2279,7 @@ void __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t n
     GlideTexInfoStrc texSizeBuf;
     int32_t nPosXSaved = nPosX;
     int nSpriteResult = RENDERER_GLIDE_GetSpriteMetadata(pData, &texSizeBuf);
-    if (!(nSpriteResult && texSizeBuf.nLeft + nPosX <= RENDERER_nWindowWidth && texSizeBuf.nWidth + texSizeBuf.nLeft + nPosX >= 0 && texSizeBuf.nTop + nPosY >= 0 && texSizeBuf.nTop + nPosY - texSizeBuf.nHeight < RENDERER_nWindowHeight)) {
+    if (!(nSpriteResult && texSizeBuf.nLeft + nPosX <= RENDERER_nWindowWidth && texSizeBuf.nWidth + (texSizeBuf.nLeft + nPosX) >= 0 && texSizeBuf.nTop + nPosY >= 0 && texSizeBuf.nTop + nPosY - texSizeBuf.nHeight < RENDERER_nWindowHeight)) {
       return;
     }
 
@@ -3322,7 +3327,7 @@ BOOL __fastcall RENDERER_GLIDE_DrawShadowTileSimple(D2TileLibraryEntryStrc * pTi
       do {
         psSubtile = &pTile->pSubTiles[nSubtileIdx].nOffsetX;
         nSubtileX = *psSubtile + nPosX;
-        nScreenY = (int)psSubtile[1] + nPosY + 0x20;
+        nScreenY = (int)psSubtile[1] + (nPosY + 0x20);
         if (nSubtileX >= nWindowMinX && nSubtileX < nWindowMaxX && nScreenY >= 0 && nScreenY < nWindowMaxY) {
           _bDrawn = 1;
           glBlocks::GLBLOCKS_LoadWallSubtileTexture(&pTile->pSubTiles[nSubtileIdx]);
@@ -3365,7 +3370,7 @@ BOOL __fastcall RENDERER_GLIDE_DrawShadowTilePerspective(D2TileLibraryEntryStrc 
     D2TileLibraryEntryStrc* pTileStrc = pTile;
     RENDERER_GLIDE_CalculateScreenBounds(1, &nScreenXMax, nScreenPanels, &nScreenXOffset);
     int nCornerFixedY = nPosY * 0x2000;
-    int nWorldXFixed = nPosX * 0x2000;
+    int nWorldXFixed = nPosX << 0xd;
     int nSubtileIdx = 0;
     BOOL bDrawn = 0;
     if (pTileStrc->nSubTiles > 0) {
@@ -3375,8 +3380,8 @@ BOOL __fastcall RENDERER_GLIDE_DrawShadowTilePerspective(D2TileLibraryEntryStrc 
         psSubtile = &pTileStrc->pSubTiles[nSubtileIdx].nOffsetX;
         nSubtileRow = psSubtile[1] + 0x60 >> 5;
         nSubtileCol = (int)*psSubtile >> 5;
-        nCornerFixedX = (nSubtileCol + nSubtileRow * 2) * 0x10000 - 0x38000;
-        nSubtileRow = (nSubtileRow * 2 - nSubtileCol) * 0x10000 + 0x18000;
+        nCornerFixedX = (nSubtileCol + nSubtileRow * 2 << 0x10) - 0x38000;
+        nSubtileRow = (nSubtileRow * 2 - nSubtileCol << 0x10) + 0x18000;
         nWorldYFixed = nCornerFixedX + nWorldXFixed;
         Glide::AdjustPerspectivePosition(nWorldYFixed, nCornerFixedY + nSubtileRow, 0, &nAdjX, &nScreenPanels);
         gaGlidePerspectiveVertices[0].fX = (float)nAdjX;
@@ -3475,7 +3480,7 @@ BOOL __thiscall RENDERER_GLIDE_DrawWallTileSimple(int32_t nScreenPanels, D2TileL
       do {
         psSubtile = &pTile->pSubTiles[nSubtileIdx].nOffsetX;
         nSubtileX = (int)*psSubtile;
-        nScreenY = (int)psSubtile[1] + nPosY + 0x20;
+        nScreenY = (int)psSubtile[1] + (nPosY + 0x20);
         nScreenX = nPosX + nSubtileX;
         if (nScreenX >= nWindowMinX && nScreenX < nWindowMaxX && nScreenY >= 0 && nScreenY < nWindowMaxY) {
           nSubtileX >>= 5;
@@ -3558,10 +3563,10 @@ static int32_t __stdcall RENDERER_GLIDE_DrawWallTilePerspective(int32_t nScreenP
           nCornerFixedY = (int)d2_bits_of(fSubtileIndex) + dwTileType * 6;
           nWorldYFixed = gaGlideWallCornerTable[nCornerFixedY].nY + nScreenY * 0x2000;
           nCornerFixedX = gaGlideWallCornerTable[nCornerFixedY].nZ - (int)d2_bits_of(fScreenMinX);
-          nLeftFixedX = gaGlideWallCornerTable[nCornerFixedY + 1].nX + nScreenX * 0x2000;
+          nLeftFixedX = gaGlideWallCornerTable[nCornerFixedY + 1].nX + (nScreenX << 0xd);
           nRightFixedZ = gaGlideWallCornerTable[nCornerFixedY + 1].nZ - (int)d2_bits_of(fScreenMinX);
           nLeftFixedY = gaGlideWallCornerTable[nCornerFixedY + 1].nY + nScreenY * 0x2000;
-          nCornerFixedY = gaGlideWallCornerTable[nCornerFixedY].nX + nScreenX * 0x2000;
+          nCornerFixedY = gaGlideWallCornerTable[nCornerFixedY].nX + (nScreenX << 0xd);
           nScreenXMax = nCornerFixedY;
           nScreenYMin = nWorldYFixed;
           nScreenYMax = nCornerFixedX;
@@ -3776,19 +3781,19 @@ BOOL __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
     RENDERER_GLIDE_SetTextureFiltering(nTexFilterMode);
     if (pD2GFXRenderedDataStrc->bLowQuality) {
       byIntensity = pLight->sLight.nIntensity;
-      gaGlideGroundTileVertices[0].dwColor = ((gpGlideLightingTable[(uint32_t)pLight->sLight.nRed + (uint32_t)byIntensity * 0x100] | -256) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight->sLight.nGreen + (uint32_t)byIntensity * 0x100]) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight->sLight.nBlue + (uint32_t)byIntensity * 0x100];
+      gaGlideGroundTileVertices[0].dwColor = ((gpGlideLightingTable[(uint32_t)pLight->sLight.nRed + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight->sLight.nGreen + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight->sLight.nBlue + ((uint32_t)byIntensity << 8)];
       gaGlideGroundTileVertices[0].fX = (float)pLight->nX;
       gaGlideGroundTileVertices[0].fY = (float)pLight->nY;
       byIntensity = pLight[5].sLight.nIntensity;
-      gaGlideGroundTileVertices[5].dwColor = ((gpGlideLightingTable[(uint32_t)pLight[5].sLight.nRed + (uint32_t)byIntensity * 0x100] | -256) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight[5].sLight.nGreen + (uint32_t)byIntensity * 0x100]) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight[5].sLight.nBlue + (uint32_t)byIntensity * 0x100];
+      gaGlideGroundTileVertices[5].dwColor = ((gpGlideLightingTable[(uint32_t)pLight[5].sLight.nRed + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight[5].sLight.nGreen + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight[5].sLight.nBlue + ((uint32_t)byIntensity << 8)];
       gaGlideGroundTileVertices[5].fX = (float)pLight[5].nX;
       gaGlideGroundTileVertices[5].fY = (float)pLight[5].nY;
       byIntensity = pLight[0x23].sLight.nIntensity;
-      gaGlideGroundTileVertices[0x23].dwColor = ((gpGlideLightingTable[(uint32_t)pLight[0x23].sLight.nRed + (uint32_t)byIntensity * 0x100] | -256) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight[0x23].sLight.nGreen + (uint32_t)byIntensity * 0x100]) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight[0x23].sLight.nBlue + (uint32_t)byIntensity * 0x100];
+      gaGlideGroundTileVertices[0x23].dwColor = ((gpGlideLightingTable[(uint32_t)pLight[0x23].sLight.nRed + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight[0x23].sLight.nGreen + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight[0x23].sLight.nBlue + ((uint32_t)byIntensity << 8)];
       gaGlideGroundTileVertices[0x23].fX = (float)pLight[0x23].nX;
       gaGlideGroundTileVertices[0x23].fY = (float)pLight[0x23].nY;
       byIntensity = pLight[0x1e].sLight.nIntensity;
-      gaGlideGroundTileVertices[0x1e].dwColor = ((gpGlideLightingTable[(uint32_t)pLight[0x1e].sLight.nRed + (uint32_t)byIntensity * 0x100] | -256) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight[0x1e].sLight.nGreen + (uint32_t)byIntensity * 0x100]) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight[0x1e].sLight.nBlue + (uint32_t)byIntensity * 0x100];
+      gaGlideGroundTileVertices[0x1e].dwColor = ((gpGlideLightingTable[(uint32_t)pLight[0x1e].sLight.nRed + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight[0x1e].sLight.nGreen + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)pLight[0x1e].sLight.nBlue + ((uint32_t)byIntensity << 8)];
       gaGlideGroundTileVertices[0x1e].fX = (float)pLight[0x1e].nX;
       gaGlideGroundTileVertices[0x1e].fY = (float)pLight[0x1e].nY;
       bResult = (*GLIDEDLL_grDrawVertexArray_12)(5, 4, gapGlideGroundQuadCornerPtrs);
@@ -3801,39 +3806,39 @@ BOOL __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
     do {
       uint8_t* pLightingTable = gpGlideLightingTable;
       byIntensity = ((D2GfxLightStrc*)(pbLightEntry - 2))->nIntensity;
-      pfVertexSlot->dwColor = ((pLightingTable[(uint32_t)pbLightEntry[-1] + (uint32_t)byIntensity * 0x100] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)*pbLightEntry + (uint32_t)byIntensity * 0x100]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[1] + (uint32_t)byIntensity * 0x100];
+      pfVertexSlot->dwColor = ((pLightingTable[(uint32_t)pbLightEntry[-1] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)*pbLightEntry + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[1] + ((uint32_t)byIntensity << 8)];
       pfVertexSlot[-1].fXNext = (float)*(int*)(pbLightEntry + 2);
       pfVertexSlot->fY = (float)*(int*)(pbLightEntry + 6);
       byIntensity = pbLightEntry[10];
-      pfVertexSlot[1].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0xb] + (uint32_t)byIntensity * 0x100] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0xc] + (uint32_t)byIntensity * 0x100]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0xd] + (uint32_t)byIntensity * 0x100];
+      pfVertexSlot[1].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0xb] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0xc] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0xd] + ((uint32_t)byIntensity << 8)];
       pfVertexSlot->fXNext = (float)*(int*)(pbLightEntry + 0xe);
       pfVertexSlot[1].fY = (float)*(int*)(pbLightEntry + 0x12);
       byIntensity = pbLightEntry[0x16];
-      pfVertexSlot[2].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x17] + (uint32_t)byIntensity * 0x100] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x18] + (uint32_t)byIntensity * 0x100]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x19] + (uint32_t)byIntensity * 0x100];
+      pfVertexSlot[2].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x17] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x18] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x19] + ((uint32_t)byIntensity << 8)];
       pfVertexSlot[1].fXNext = (float)*(int*)(pbLightEntry + 0x1a);
       pfVertexSlot[2].fY = (float)*(int*)(pbLightEntry + 0x1e);
       byIntensity = pbLightEntry[0x22];
-      pfVertexSlot[3].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x23] + (uint32_t)byIntensity * 0x100] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x24] + (uint32_t)byIntensity * 0x100]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x25] + (uint32_t)byIntensity * 0x100];
+      pfVertexSlot[3].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x23] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x24] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x25] + ((uint32_t)byIntensity << 8)];
       pfVertexSlot[2].fXNext = (float)*(int*)(pbLightEntry + 0x26);
       pfVertexSlot[3].fY = (float)*(int*)(pbLightEntry + 0x2a);
       byIntensity = pbLightEntry[0x2e];
-      pfVertexSlot[4].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x2f] + (uint32_t)byIntensity * 0x100] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x30] + (uint32_t)byIntensity * 0x100]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x31] + (uint32_t)byIntensity * 0x100];
+      pfVertexSlot[4].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x2f] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x30] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x31] + ((uint32_t)byIntensity << 8)];
       pfVertexSlot[3].fXNext = (float)*(int*)(pbLightEntry + 0x32);
       pfVertexSlot[4].fY = (float)*(int*)(pbLightEntry + 0x36);
       byIntensity = pbLightEntry[0x3a];
-      pfVertexSlot[5].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x3b] + (uint32_t)byIntensity * 0x100] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x3c] + (uint32_t)byIntensity * 0x100]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x3d] + (uint32_t)byIntensity * 0x100];
+      pfVertexSlot[5].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x3b] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x3c] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x3d] + ((uint32_t)byIntensity << 8)];
       pfVertexSlot[4].fXNext = (float)*(int*)(pbLightEntry + 0x3e);
       pfVertexSlot[5].fY = (float)*(int*)(pbLightEntry + 0x42);
       byIntensity = pbLightEntry[0x46];
-      pfVertexSlot[6].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x47] + (uint32_t)byIntensity * 0x100] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x48] + (uint32_t)byIntensity * 0x100]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x49] + (uint32_t)byIntensity * 0x100];
+      pfVertexSlot[6].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x47] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x48] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x49] + ((uint32_t)byIntensity << 8)];
       pfVertexSlot[5].fXNext = (float)*(int*)(pbLightEntry + 0x4a);
       pfVertexSlot[6].fY = (float)*(int*)(pbLightEntry + 0x4e);
       byIntensity = pbLightEntry[0x52];
-      pfVertexSlot[7].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x53] + (uint32_t)byIntensity * 0x100] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x54] + (uint32_t)byIntensity * 0x100]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x55] + (uint32_t)byIntensity * 0x100];
+      pfVertexSlot[7].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x53] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x54] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x55] + ((uint32_t)byIntensity << 8)];
       pfVertexSlot[6].fXNext = (float)*(int*)(pbLightEntry + 0x56);
       pfVertexSlot[7].fY = (float)*(int*)(pbLightEntry + 0x5a);
       byIntensity = pbLightEntry[0x5e];
-      pfVertexSlot[8].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x5f] + (uint32_t)byIntensity * 0x100] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x60] + (uint32_t)byIntensity * 0x100]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x61] + (uint32_t)byIntensity * 0x100];
+      pfVertexSlot[8].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x5f] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x60] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x61] + ((uint32_t)byIntensity << 8)];
       _nAlpha--;
       pfVertexSlot[7].fXNext = (float)*(int*)(pbLightEntry + 0x62);
       pfVertexSlot[8].fY = (float)*(int*)(pbLightEntry + 0x66);
@@ -3871,7 +3876,7 @@ void __stdcall RENDERER_GLIDE_BuildLightingTable() {
       nColorIdx = 0;
       nAccum = 0;
       do {
-        gpGlideLightingTable[nColorIdx + nIntensity * 0x100] = (char)(nAccum / 0xff);
+        gpGlideLightingTable[nColorIdx + (nIntensity << 8)] = (char)(nAccum / 0xff);
         nColorIdx++;
         nAccum += nIntensity;
       } while (nColorIdx < 0x100);
@@ -3887,12 +3892,12 @@ void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue) {
 }
 
 void __fastcall RENDERER_GLIDE_ApplyShadowLighting(D2GlideVertexStrc * pVertex, uint8_t nIntensity) {
-    pVertex->dwColor = ((gpGlideLightingTable[(uint32_t)gbGlideGlobalLightRed + (uint32_t)nIntensity * 0x100] | -256) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)gbGlideGlobalLightGreen + (uint32_t)nIntensity * 0x100]) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)gbGlideGlobalLightBlue + (uint32_t)nIntensity * 0x100];
+    pVertex->dwColor = ((gpGlideLightingTable[(uint32_t)gbGlideGlobalLightRed + ((uint32_t)nIntensity << 8)] | -256) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)gbGlideGlobalLightGreen + ((uint32_t)nIntensity << 8)]) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)gbGlideGlobalLightBlue + ((uint32_t)nIntensity << 8)];
 }
 
 void __fastcall RENDERER_GLIDE_ApplyColorLighting(D2GlideVertexStrc * pVertex, uint32_t dwPackedColor) {
-    uint32_t uIntensityRow = (uint8_t)dwPackedColor;
-    pVertex->dwColor = ((gpGlideLightingTable[(dwPackedColor >> 8 & 0xff) + uIntensityRow * 0x100] | -256) << 8 | (uint32_t)gpGlideLightingTable[(uint8_t)(dwPackedColor >> 0x10) + uIntensityRow * 0x100]) << 8 | (uint32_t)gpGlideLightingTable[(dwPackedColor >> 0x18) + uIntensityRow * 0x100];
+    uint8_t* pLightingRow = gpGlideLightingTable + (uint8_t)dwPackedColor * 0x100;
+    pVertex->dwColor = ((pLightingRow[(uint8_t)(dwPackedColor >> 8)] | -256) << 8 | (uint32_t)pLightingRow[(uint8_t)(dwPackedColor >> 0x10)]) << 8 | (uint32_t)pLightingRow[dwPackedColor >> 0x18];
 }
 
 // @sourcefile .\Src\glPerspective.cpp

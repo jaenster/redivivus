@@ -500,10 +500,11 @@ D2LevelDefsTxt * __fastcall TXT_LevelDefs_GetLine(eD2LevelId eLevel) {
 static void __fastcall LVLTBLS_FixPathSlashes(char * szPathPrefix, char * szText) {
     int i;
     char szFormatBuf[60];
-    char* pcScan = szText;
-    pcScan = pcScan + strlen(pcScan) + 1;
-    int pcSrc = (intptr_t)pcScan - (intptr_t)(szText + 1);
-    if (pcScan != szText + 1) {
+    char* pcScan;
+    int nStrLen;
+    nStrLen = (int)strlen(szText);
+    int pcSrc = (int)nStrLen;
+    if (nStrLen != 0) {
       i = 0;
       if (pcSrc > 0) {
         do {
@@ -690,7 +691,7 @@ void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t bLoad
             } while (*pScanChar != '\0');
 
             if ((uint32_t)((intptr_t)pFileScan - (intptr_t)(*szFile + 1)) > 1) {
-              Drlg::Preset::AllocDrlgFile(pTxtLvlTbls + nRowByteOffset + nFileIdx, nullptr, *szFile);
+              Drlg::Preset::AllocDrlgFile(pTxtLvlTbls + (nRowByteOffset + nFileIdx), nullptr, *szFile);
             }
           }
 
@@ -1035,7 +1036,7 @@ void __fastcall LVLTBLS_LoadLvlTypeTileLibraries(D2PoolManagerStrc * pMemory) {
         if (bCharsMatch) {
           break;
         }
-        if (bIsExpansion || !*(int*)((int)(pTxtLvlTypes->File + 0x20) + j + 4)) {
+        if (bIsExpansion || !*(int*)((int)(pTxtLvlTypes->File + 0x20) + (j + 4))) {
           D2CMP::DUNGEON::Dungeon::TILEPROJECT_AllocSlot((uint8_t*)pExpLvlTblsRow, szFilename);
         }
 

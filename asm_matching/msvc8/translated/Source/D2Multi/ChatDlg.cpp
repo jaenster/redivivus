@@ -2917,8 +2917,9 @@ void __fastcall CHATDLG_RequestLadderRank(char * szText, int32_t bHardcore, int3
 // Scrolls the ladder board up one page: selected rank (0070cd7c) -= gnLadderScrollPageSize, clamped at 0; restores the filter byte 0070cd62 from 0070cd63; returns 1.
 // Provenance: asm 0043ece0 (RET 4); only pointer is the OnPress field of form 0070e610.
 BOOL __stdcall CHATDLG_OnPressLadderPageUp(D2ControlMsg * pControlMsg) {
+    int nRank = gnLadderBoardSelectedRank - gnLadderScrollPageSize <= 0 ? 0 : gnLadderBoardSelectedRank - gnLadderScrollPageSize;
     g_nLadderFilterMode = gnLadderCurrentFilterMode;
-    gnLadderBoardSelectedRank = gnLadderBoardSelectedRank - gnLadderScrollPageSize <= 0 ? 0 : gnLadderBoardSelectedRank - gnLadderScrollPageSize;
+    gnLadderBoardSelectedRank = nRank;
     return 1;
 }
 

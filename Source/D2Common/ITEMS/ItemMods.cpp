@@ -230,7 +230,7 @@ BOOL __stdcall ITEMMOD_SetChargedSkillCharges(D2UnitStrc * pUnit, int32_t nSkill
           nNewCharges = nMaxCharges;
         }
 
-        Stats::StatsEx::STATLIST_SetStatValueInBaseArraySafe(pStatList, UNITSTAT_item_charged_skill, nMaxCharges * 0x100 + (nNewCharges & 0xff), nStatKey, pUnit);
+        Stats::StatsEx::STATLIST_SetStatValueInBaseArraySafe(pStatList, UNITSTAT_item_charged_skill, (nMaxCharges << 8) + (nNewCharges & 0xff), nStatKey, pUnit);
         return 1;
       }
     }
@@ -1194,7 +1194,7 @@ int32_t __fastcall PropertyFunc_Charges(int32_t nType, D2UnitStrc * pUnit, D2Uni
     uint32_t nRandChargeOffset = Seed::RANDOM_RandomNumberSelector(pSeed, nSkillLevel - nChargesDiv8);
     D2StatListExStrc* pStatsEx = ITEMMOD_GetOrCreateStatList(pItemUnit, nState, dwStatListFlags, pUnit);
     nClampedSkillLevel = eSkill << D2_SHIFT_COUNT(Items::sgptDataTable->nChargedSkillLevelBits);
-    Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, eStatCode, (nRandChargeOffset + 1 + nChargesDiv8 & 0xff) + nSkillLevel * 0x100, (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)nClampedSkillLevel >> 0x10) << 16 | (uint32_t)(uint16_t)((short int)nClampedSkillLevel + ((uint16_t)Items::sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nChargeSkillLevel))));
+    Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, eStatCode, (nRandChargeOffset + 1 + nChargesDiv8 & 0xff) + (nSkillLevel << 8), (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)nClampedSkillLevel >> 0x10) << 16 | (uint32_t)(uint16_t)((short int)nClampedSkillLevel + ((uint16_t)Items::sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nChargeSkillLevel))));
     return 1;
 }
 
@@ -1218,7 +1218,7 @@ int32_t __fastcall PropertyFunc_PackedStat(int32_t nType, D2UnitStrc * pUnit, D2
       } else if (nPackedVal1 <= 3) {
         if (nPackedVal2 <= 0x3ff) {
           if (nPackedVal3 <= 0x3ff) {
-            Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, eStatCode, nPackedVal1 + (nPackedVal3 * 0x400 + nPackedVal2) * 4, 0);
+            Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, eStatCode, nPackedVal1 + ((nPackedVal3 << 0xa) + nPackedVal2) * 4, 0);
             return 1;
           }
 
@@ -1789,7 +1789,7 @@ void __stdcall ITEMMOD_RollGemRuneType(D2UnitStrc * pUnit) {
 
     pSeed = Items::GetItemSeed(pUnit);
     seedAdvanced = D2_SeedRoll(pSeed);
-    Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_value, ((seedAdvanced & 3) + 1) * 0x100, 0);
+    Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_value, (seedAdvanced & 3) + 1 << 8, 0);
 }
 
 D2ItemsTxt * __fastcall Unreferenced_0065e9b0(D2UnitStrc * pUnit, D2UnitStrc * pFallback) {
@@ -2270,7 +2270,7 @@ uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t nType, D2UnitStrc * pUnit,
       nReqLevel = Skills::SKILL_GetMaxLevelForSkill(eSkill);
       if (nProperty >= nReqLevel) {
         nSkillLevel = Skills::SKILL_GetMaxLevelForSkill(eSkill);
-        nPropPtr = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty_00, nSet, (int16_t)nStatId, eSkill * 0x40 + (nSkillLevel & 0x3fU), nMaxCharges, nState);
+        nPropPtr = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty_00, nSet, (int16_t)nStatId, (eSkill << 6) + (nSkillLevel & 0x3fU), nMaxCharges, nState);
         return nPropPtr;
       }
 
@@ -2278,7 +2278,7 @@ uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t nType, D2UnitStrc * pUnit,
     } else {
       int nScaleDivisor;
       if (nSkillLevel >= 0) {
-        nPropPtr = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty_00, nSet, (int16_t)nStatId, eSkill * 0x40 + (nSkillLevel & 0x3fU), nMaxCharges, nState);
+        nPropPtr = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty_00, nSet, (int16_t)nStatId, (eSkill << 6) + (nSkillLevel & 0x3fU), nMaxCharges, nState);
         return nPropPtr;
       }
 
@@ -2302,7 +2302,7 @@ uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t nType, D2UnitStrc * pUnit,
       nSkillLevel = 1;
     }
 
-    nPropPtr = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty_00, nSet, (int16_t)nStatId, eSkill * 0x40 + (nSkillLevel & 0x3fU), nMaxCharges, nState);
+    nPropPtr = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty_00, nSet, (int16_t)nStatId, (eSkill << 6) + (nSkillLevel & 0x3fU), nMaxCharges, nState);
     return nPropPtr;
 }
 
@@ -2458,7 +2458,7 @@ uint32_t __fastcall ITEMPROP_AddSkillCharges(uint32_t nType, D2UnitStrc * pUnit,
     uint32_t nRolledInitCharges = Seed::RANDOM_RandomNumberSelector(pItemSeed, nMaxChargeCount - nSkillLvlClamped);
     D2StatListExStrc* pStatsEx = ITEMMOD_GetOrCreateStatList(pUnit2, nState, dwFlags, pUnit);
     nSkillLevel = eSkill << D2_SHIFT_COUNT(Items::sgptDataTable->nChargedSkillLevelBits);
-    Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, (int)(short int)nStatId, (nRolledInitCharges + 1 + nSkillLvlClamped & 0xff) + nMaxChargeCount * 0x100, (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)nSkillLevel >> 0x10) << 16 | (uint32_t)(uint16_t)((short int)nSkillLevel + ((uint16_t)Items::sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nComputedSkillLevel))));
+    Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, (int)(short int)nStatId, (nRolledInitCharges + 1 + nSkillLvlClamped & 0xff) + (nMaxChargeCount << 8), (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)nSkillLevel >> 0x10) << 16 | (uint32_t)(uint16_t)((short int)nSkillLevel + ((uint16_t)Items::sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nComputedSkillLevel))));
     return nMaxChargeCount;
 }
 

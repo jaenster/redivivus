@@ -337,14 +337,14 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
             if (bLenHeaderByte < 0xf0) {
               pbDecompressResult = (int32_t)bLenHeaderByte;
             } else {
-              pbDecompressResult = (bLenHeaderByte & 0xf) * 0x100 + (uint32_t)aCompressedBuf[pCompressedConsumed + 1];
+              pbDecompressResult = ((bLenHeaderByte & 0xf) << 8) + (uint32_t)aCompressedBuf[pCompressedConsumed + 1];
             }
             if ((uint32_t)pCompressedRead < (uint32_t)pbDecompressResult) {
               break;
             }
 
             nSelectResult = (uint32_t)pbDecompressResult < 0xf0 ? 0x1U : 0x2U;
-            nSelectResult = Fog::Src::D2Net::NET_D2GS_CLIENT_DecompressPacket(pD2PacketsClientBuffer->pBytes + pD2PacketsClientBuffer->nCount, 0x7b8 - pD2PacketsClientBuffer->nCount, (char*)(aCompressedBuf + nSelectResult + pCompressedConsumed), pbDecompressResult - nSelectResult);
+            nSelectResult = Fog::Src::D2Net::NET_D2GS_CLIENT_DecompressPacket(pD2PacketsClientBuffer->pBytes + pD2PacketsClientBuffer->nCount, 0x7b8 - pD2PacketsClientBuffer->nCount, (char*)(aCompressedBuf + (nSelectResult + pCompressedConsumed)), pbDecompressResult - nSelectResult);
             pCompressedEnd -= pbDecompressResult;
             pCompressedConsumed += pbDecompressResult;
             pCompressedRead = pCompressedEnd;

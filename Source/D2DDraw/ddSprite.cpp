@@ -39,7 +39,7 @@ static uint32_t __stdcall RENDERER_DDRAW_IsDC6OffScreen(int32_t nX, int32_t nY, 
     }
 
     int32_t nOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (nX + nOffsetX < RENDERER_nWindowWidth && nWidth + nX + nOffsetX >= 0) {
+    if (nX + nOffsetX < RENDERER_nWindowWidth && nWidth + (nX + nOffsetX) >= 0) {
       nWidth = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
       if (nY + nWidth >= 0 && nY + nWidth - nHeight < RENDERER_nWindowHeight) {
         return 0;
@@ -63,7 +63,7 @@ static BOOL __stdcall RENDERER_DDRAW_ComputeDC6ClipRect(int32_t nY, DC6Block * p
     }
 
     int32_t nOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nX + nOffsetX < nClipRight && nWidth + nX + nOffsetX >= (int)nClipLeft)) {
+    if (!(nX + nOffsetX < nClipRight && nWidth + (nX + nOffsetX) >= (int)nClipLeft)) {
       return 1;
     }
 
@@ -112,7 +112,7 @@ BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, D
     int32_t nWidth = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     int32_t nOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nOffsetX + nPosX < RENDERER_nWindowWidth && nWidth + nOffsetX + nPosX >= 0)) {
+    if (!(nOffsetX + nPosX < RENDERER_nWindowWidth && nWidth + (nOffsetX + nPosX) >= 0)) {
       return 0;
     }
 
@@ -145,7 +145,7 @@ void __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t n
     int32_t nWidth = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     int32_t nOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nOffsetX + nPosX < RENDERER_nWindowWidth && nWidth + nOffsetX + nPosX >= 0)) {
+    if (!(nOffsetX + nPosX < RENDERER_nWindowWidth && nWidth + (nOffsetX + nPosX) >= 0)) {
       return;
     }
 
@@ -182,7 +182,7 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int32_t nPosX, int3
     int32_t nWidth = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     int32_t nOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nOffsetX + nPosX < RENDERER_nWindowWidth && nWidth + nOffsetX + nPosX >= 0)) {
+    if (!(nOffsetX + nPosX < RENDERER_nWindowWidth && nWidth + (nOffsetX + nPosX) >= 0)) {
       return;
     }
 

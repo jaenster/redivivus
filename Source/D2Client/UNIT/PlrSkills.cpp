@@ -939,7 +939,7 @@ void __stdcall STATES_UpdateColorShiftAndLight(D2UnitStrc * pUnit) {
       pDataTable = D2Common::ITEMS::Items::sgptDataTable;
       do {
         if (nStateIdx >= 0 && nStateIdx < nTxtSize) {
-          nStateColorOffset = (int)pDataTable->pTxtStates->overlay + nTxtOffset - 2;
+          nStateColorOffset = (int)pDataTable->pTxtStates->overlay + (nTxtOffset - 2);
           if (nStateColorOffset) {
             eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, nStateIdx);
             pDataTable = D2Common::ITEMS::Items::sgptDataTable;

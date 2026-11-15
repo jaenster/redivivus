@@ -6441,24 +6441,17 @@ void __fastcall NPCMENU_HandleQuestItemPacket(uint8_t byUnitType, int32_t nUnitG
       if ((uint32_t)(_Interaction::geNpcUiState - NPCUI_SHOP) <= 3) {
         NPCMENU_CloseShopUI();
         Inv::INV_ResetShopState();
-        NPCMENU_CloseAllDialogs();
-        _Interaction::geNpcUiState = NPCUI_NONE;
-        return;
-      }
-      if (_Interaction::geNpcUiState == NPCUI_ITEM_SERVICE) {
+      } else if (_Interaction::geNpcUiState == NPCUI_ITEM_SERVICE) {
         ui::thunk_NPCSHOP_IsRepairTabActive();
-        NPCMENU_CloseAllDialogs();
-        _Interaction::geNpcUiState = NPCUI_NONE;
-        return;
+      } else if (gnNpcMenuActiveMode != '\0') {
+        gnNpcMenuActiveMode = '\0';
+        NPCMENU_CloseAndResetAll();
       }
-      if (gnNpcMenuActiveMode == '\0') {
-        goto close_dialogs;
-      }
+    } else {
+      gnNpcMenuActiveMode = '\0';
+      NPCMENU_CloseAndResetAll();
     }
 
-    gnNpcMenuActiveMode = '\0';
-    NPCMENU_CloseAndResetAll();
-    close_dialogs:
     NPCMENU_CloseAllDialogs();
     _Interaction::geNpcUiState = NPCUI_NONE;
 }

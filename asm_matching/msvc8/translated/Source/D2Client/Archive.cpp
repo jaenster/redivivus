@@ -374,7 +374,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
           return;
         }
 
-        *(StormLinkStrc**)(pListTail.head.pNext + (intptr_t)&pListTail + (4 - pListTail.head.pPrevLink->pNext)) = pListTail.head.pPrevLink;
+        *(StormLinkStrc**)(pListTail.head.pNext + ((intptr_t)&pListTail + (4 - pListTail.head.pPrevLink->pNext))) = pListTail.head.pPrevLink;
         pListTail.head.pPrevLink->pNext = pListTail.head.pNext;
         return;
       }

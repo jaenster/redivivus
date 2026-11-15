@@ -118,7 +118,7 @@ void __fastcall SRP_HashBigNumToU32(D2Srp * pSrp, int, BigData * * ppBigNum, uin
     SHA1::SHA1_Init(&sha1Ctx);
     SHA1::SHA1_Update(&sha1Ctx, bigIntBytes, nByteLen);
     SHA1::SHA1_Final(aHash, &sha1Ctx);
-    *pdwOut = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)aHash[0] << 8 | (uint16_t)(uint8_t)aHash[1]) << 8 | (uint32_t)(uint8_t)aHash[2]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)aHash[3]);
+    *pdwOut = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)aHash[0] << 8 | (uint16_t)(uint8_t)aHash[1]) << 8 | (uint32_t)(uint8_t)aHash[2]) << 8 | (uint32_t)(uint8_t)aHash[3]);
 }
 
 int __fastcall SRP_ClientComputeSharedSecret(D2Srp * pSrp, int, BigData * * pPrivateKey, BigData * * ppServerPublic, BigData * * ppPasswordHash, BigData * * ppSharedSecret) {

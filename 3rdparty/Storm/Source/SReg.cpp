@@ -198,11 +198,12 @@ static int __stdcall SREG_InternalSaveEntry(char * pszSubKey, LPCSTR szValueName
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
 int32_t __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, DWORD byFlags) {
-    if (*pszSubKey == '\0' || !pszSubKey || !szValueName || *szValueName == '\0') {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pszSubKey);
+    D2_CHECK(*pszSubKey != '\0');
+    D2_CHECK(szValueName);
+    D2_CHECK(*szValueName != '\0');
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     int nResult = SREG_InternalDeleteEntry(byFlags, pszSubKey, szValueName);
     return nResult;
 }
@@ -214,11 +215,12 @@ int32_t __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, DWORD by
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
 int32_t __stdcall SRegLoadData(uint32_t * pszSubKey, char * szValueName, int32_t nFlags, LPBYTE pbData, DWORD dwBufSize, uint32_t * * ppdwDataLen) {
-    if ((char)*pszSubKey == '\0' || !pszSubKey || !szValueName || *szValueName == '\0') {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pszSubKey);
+    D2_CHECK((char)*pszSubKey != '\0');
+    D2_CHECK(szValueName);
+    D2_CHECK(*szValueName != '\0');
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     uint32_t** ppdwDataLenActual = ppdwDataLen;
     if (!ppdwDataLen) {
       ppdwDataLenActual = &pszSubKey;
@@ -236,28 +238,32 @@ int32_t __stdcall SRegLoadData(uint32_t * pszSubKey, char * szValueName, int32_t
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
 int32_t __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nFlags, LPSTR szOutBuf, DWORD dwOutBufSize) {
     DWORD pTermPos;
-    if (*szSubKey == '\0' || !szSubKey || !szValueName || *szValueName == '\0' || !szOutBuf || !dwOutBufSize) {
-      SErr::SErrSetLastError(0x57);
-    } else {
-      BOOL bReadOk;
-      bReadOk = SREG_InternalLoadEntry((LPDWORD)&szSubKey, (LPBYTE)szOutBuf, szSubKey, (uint8_t)nFlags, dwOutBufSize, szValueName, (LPDWORD)&szValueName);
-      if (bReadOk) {
-        if (szSubKey != (char*)0x1) {
-          if (szSubKey == (char*)(void*)0x4) {
-            /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szOutBuf, "%u", *(uint32_t*)szOutBuf);
-            return 1;
-          }
-        } else {
-          pTermPos = dwOutBufSize - 1;
-          if (pTermPos >= (uintptr_t)szValueName) {
-            pTermPos = (DWORD)szValueName;
-          }
-
-          szOutBuf[pTermPos] = '\0';
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szSubKey);
+    D2_CHECK(*szSubKey != '\0');
+    D2_CHECK(szValueName);
+    D2_CHECK(*szValueName != '\0');
+    D2_CHECK(szOutBuf);
+    D2_CHECK(dwOutBufSize);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
+    BOOL bReadOk;
+    bReadOk = SREG_InternalLoadEntry((LPDWORD)&szSubKey, (LPBYTE)szOutBuf, szSubKey, (uint8_t)nFlags, dwOutBufSize, szValueName, (LPDWORD)&szValueName);
+    if (bReadOk) {
+      if (szSubKey != (char*)0x1) {
+        if (szSubKey == (char*)(void*)0x4) {
+          /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szOutBuf, "%u", *(uint32_t*)szOutBuf);
+          return 1;
+        }
+      } else {
+        pTermPos = dwOutBufSize - 1;
+        if (pTermPos >= (uintptr_t)szValueName) {
+          pTermPos = (DWORD)szValueName;
         }
 
-        return 1;
+        szOutBuf[pTermPos] = '\0';
       }
+
+      return 1;
     }
 
     return 0;
@@ -282,29 +288,32 @@ int __stdcall SRegLoadValue(char * pTree, char * pKey, uint8_t byFlags, int32_t 
     __frame0_t __frame0;
     uint32_t nParsed;
     __frame0.pnOutVal = (uint32_t*)pnOut;
-    if (*pTree == '\0' || !pTree || !pKey || *pKey == '\0' || !pnOut) {
-      SErr::SErrSetLastError(0x57);
-    } else {
-      BOOL bReadOk;
-      *(uint32_t*)(char*)&__frame0.valueBuf &= -256;
-      bReadOk = SREG_InternalLoadEntry(&__frame0.dwType, (LPBYTE)__frame0.valueBuf, pTree, byFlags, 0x100, pKey, &__frame0.dwDataLen);
-      if (bReadOk) {
-        switch (__frame0.dwType) {
-          case 1:
-            {
-              nParsed = strtoul(__frame0.valueBuf, nullptr, 0);
-              *__frame0.pnOutVal = nParsed;
-              break;
-            }
-          case 4:
-            {
-              *__frame0.pnOutVal = *(uint32_t*)(char*)&__frame0.valueBuf;
-              break;
-            }
-        }
-
-        return 1;
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pTree);
+    D2_CHECK(*pTree != '\0');
+    D2_CHECK(pKey);
+    D2_CHECK(*pKey != '\0');
+    D2_CHECK(pnOut);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
+    BOOL bReadOk;
+    *(uint32_t*)(char*)&__frame0.valueBuf &= -256;
+    bReadOk = SREG_InternalLoadEntry(&__frame0.dwType, (LPBYTE)__frame0.valueBuf, pTree, byFlags, 0x100, pKey, &__frame0.dwDataLen);
+    if (bReadOk) {
+      switch (__frame0.dwType) {
+        case 1:
+          {
+            nParsed = strtoul(__frame0.valueBuf, nullptr, 0);
+            *__frame0.pnOutVal = nParsed;
+            break;
+          }
+        case 4:
+          {
+            *__frame0.pnOutVal = *(uint32_t*)(char*)&__frame0.valueBuf;
+            break;
+          }
       }
+
+      return 1;
     }
 
     return 0;
@@ -317,10 +326,12 @@ int __stdcall SRegLoadValue(char * pTree, char * pKey, uint8_t byFlags, int32_t 
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
 int32_t __stdcall SRegSaveData(char * pszSubKey, LPCSTR szValueName, uint32_t nFlags, BYTE * pbData, DWORD dwDataLen) {
-    if (*pszSubKey == '\0' || !pszSubKey || !szValueName || *szValueName == '\0') {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pszSubKey);
+    D2_CHECK(*pszSubKey != '\0');
+    D2_CHECK(szValueName);
+    D2_CHECK(*szValueName != '\0');
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     if (!pbData) {
       pbData = (uint8_t*)"";
     }
@@ -336,11 +347,13 @@ int32_t __stdcall SRegSaveData(char * pszSubKey, LPCSTR szValueName, uint32_t nF
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
 int32_t __stdcall SRegSaveString(char * pszSubKey, LPCSTR szValueName, int32_t nFlags, char * pszValue) {
-    if (*pszSubKey == '\0' || !pszSubKey || !szValueName || *szValueName == '\0' || !pszValue) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pszSubKey);
+    D2_CHECK(*pszSubKey != '\0');
+    D2_CHECK(szValueName);
+    D2_CHECK(*szValueName != '\0');
+    D2_CHECK(pszValue);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     uint32_t pStrEnd = SSTR::SStrLen(pszValue);
     pStrEnd += 1;
     int nResult = SREG_InternalSaveEntry(pszSubKey, szValueName, 1, (uint8_t*)pszValue, pStrEnd, nFlags);
@@ -354,11 +367,12 @@ int32_t __stdcall SRegSaveString(char * pszSubKey, LPCSTR szValueName, int32_t n
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
 BOOL __stdcall SRegSaveValue(char * szRegistry, LPCSTR szRegistryKey, int32_t nFlags, int32_t nValue) {
-    if (*szRegistry == '\0' || !szRegistry || !szRegistryKey || *szRegistryKey == '\0') {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szRegistry);
+    D2_CHECK(*szRegistry != '\0');
+    D2_CHECK(szRegistryKey);
+    D2_CHECK(*szRegistryKey != '\0');
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     int nResult = SREG_InternalSaveEntry(szRegistry, szRegistryKey, 4, (uint8_t*)&nValue, 4, nFlags);
     return nResult;
 }

@@ -329,7 +329,7 @@ uint32_t __fastcall ROSTER_AreUnitsHostile(D2UnitStrc * pUnit, D2UnitStrc * pRos
 
 int32_t __fastcall CountRostersForUnitFilterBySkill(D2UnitStrc * pUnit, int32_t nSkillId) {
     int nUnitGUID;
-    D2RosterPetStrc* pRosterPet;
+    D2RosterPetStrc* pRosterPet = RosterPets::pRosterPet;
     if (!pUnit) {
       nUnitGUID = -1;
     } else {
@@ -337,7 +337,7 @@ int32_t __fastcall CountRostersForUnitFilterBySkill(D2UnitStrc * pUnit, int32_t 
     }
 
     int nCount = 0;
-    for (pRosterPet = RosterPets::pRosterPet; pRosterPet; pRosterPet = pRosterPet->pNext) {
+    for (; pRosterPet; pRosterPet = pRosterPet->pNext) {
       if (pRosterPet->nSkillID == nSkillId && pRosterPet->nOwnerGUID == nUnitGUID) {
         nCount++;
       }

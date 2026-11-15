@@ -176,7 +176,7 @@ static int32_t FindFreeSlotInBitmap(uint32_t * pnBitmap, uint32_t nTotalBits) {
       if (nWordCount <= 8) {
         if (nTotalBits & 0x1f && pnBitmap[nWordCount] != gdwFogMemoryAllocFlags[nTotalBits & 0x1f]) {
           nFreeSlot = FindFirstFreeBit(pnBitmap[nWordCount]);
-          nFreeSlot = nWordCount * 0x20 + nFreeSlot + nBaseOffset;
+          nFreeSlot = (nWordCount << 5) + (nFreeSlot + nBaseOffset);
         }
 
         return nFreeSlot;
@@ -207,22 +207,19 @@ static void __stdcall InsertBlockIntoSortedArray(D2PoolBlockStrc * pBlock, D2Poo
     nManager->dwMemory = nManager->dwMemory + pBlock->pPool->nSize + 0x18 + ((int)(pBlock->pPool->nBlocks + 0x1f) >> 5) * 4;
     nHi = nManager->nBlocks;
     pSortedArray = nManager->pBlocks;
+    BYTE* pCommit = pBlock->pCommit;
     int nLow = 0;
-    if ((int)nHi > 0) {
-      do {
-        nMidIdx = ((int)(nHi - nLow) >> 1) + nLow;
-        if (pBlock->pCommit > (unsigned char*)pSortedArray[nMidIdx].pCommit) {
-          nLow = nMidIdx + 1;
-          nMidIdx = nHi;
-        }
-
+    while (nLow < (int)nHi) {
+      nMidIdx = ((int)(nHi - nLow) >> 1) + nLow;
+      if (pCommit > (unsigned char*)pSortedArray[nMidIdx].pCommit) {
+        nLow = nMidIdx + 1;
+      } else {
         nHi = nMidIdx;
-      } while (nLow < (int)nMidIdx);
-
-      nHi = nManager->nBlocks;
+      }
     }
-    if (nLow < (int)nHi) {
-      memmove(pSortedArray + nLow + 1, pSortedArray + nLow, (nHi - nLow) * 8);
+
+    if (nLow < (int)nManager->nBlocks) {
+      memmove(pSortedArray + nLow + 1, pSortedArray + nLow, (nManager->nBlocks - nLow) * 8);
     }
 
     pSortedArray[nLow].pBlock = pBlock;
@@ -724,9 +721,9 @@ void InitializePoolSystem(D2PoolManagerStrc * * pPoolManager, char * szName, int
         }
 
         pNewManager->pPools[nPoolIndex].nBlockSize = nBlockSize;
-        if ((int)nBlockSize <= 0xf4240 && (int)(nBlockSize * 0x100) < 0x40000) {
+        if ((int)nBlockSize <= 0xf4240 && (int)(nBlockSize << 8) < 0x40000) {
           nBlocksPerRegion = 0x100;
-          if ((int)(nBlockSize * 0x100) < 0x10000) {
+          if ((int)(nBlockSize << 8) < 0x10000) {
             nRegionSize = 0x10000;
             nBlocksPerRegion = (size_t)((int64_t)(uint64_t)nRegionSize / (int64_t)(int)nBlockSize);
           }

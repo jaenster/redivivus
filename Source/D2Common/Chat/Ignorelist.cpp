@@ -159,7 +159,7 @@ void __thiscall AddAccountMapping(::IgnoreList * pThis, char * szRaw, int32_t nR
               Storm::Source::SMem::SMemCopy(szAccountName, szRaw, nOpenParenIdx);
             }
             if (szRaw[nCharIdx + 1] == ')') {
-              Storm::Source::SMem::SMemCopy(szCharName, szRaw + nOpenParenIdx + 1, nCharIdx - nOpenParenIdx);
+              Storm::Source::SMem::SMemCopy(szCharName, szRaw + (nOpenParenIdx + 1), nCharIdx - nOpenParenIdx);
             }
             if (szAccountName[0] != '\0' && szCharName[0] != '\0') {
               break;

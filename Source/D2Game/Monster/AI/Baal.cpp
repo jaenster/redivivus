@@ -191,8 +191,6 @@ static D2UnitStrc * __stdcall SelectTargetBaal(::SGAMEDATA * pGame, int * pBestS
     int nNodeListIdx = 0;
     D2UnitNodeStrc** ppUnitNode = pGame->pUnitNodes;
     do {
-      D2UnitNodeStrc** ppNodeListSaved;
-      ppNodeListSaved = ppUnitNode;
       if (pNode) {
         pTargetUnit = pNode->pUnit;
         if (!pTargetUnit || pTargetUnit->eUnitType != UNIT_PLAYER) {
@@ -226,9 +224,9 @@ static D2UnitStrc * __stdcall SelectTargetBaal(::SGAMEDATA * pGame, int * pBestS
         }
       }
 
-      pNode = ppNodeListSaved[1];
+      pNode = ppUnitNode[1];
       nNodeListIdx++;
-      ppUnitNode = ppNodeListSaved + 1;
+      ppUnitNode = ppUnitNode + 1;
       if (nNodeListIdx >= 8) {
         for (; pNode; pNode = pNode->pPrev) {
           pTargetUnit = pNode->pUnit;
@@ -243,7 +241,7 @@ static D2UnitStrc * __stdcall SelectTargetBaal(::SGAMEDATA * pGame, int * pBestS
           }
         }
 
-        pNode = ppNodeListSaved[2];
+        pNode = ppUnitNode[1];
         pUnit = 0;
         nNodeListSaved = 0x0;
         if (pNode) {
@@ -397,7 +395,6 @@ static int32_t __stdcall AI_BAAL_SelectWeightedAction(int * pnWeights, int32_t n
 // Already-documented — existing description accurately covers Baal Clone's weighted-random action selection. Builds a 16-entry weight table biased by difficulty, Baal Clone's current life percentage, cold state, and whether a sub-unit (pUnit2) is present; rolls against the total weight using pUnit2's seed; returns the chosen action index 0-15.
 static int32_t __stdcall AI_BAAL_CloneChooseAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t bCollisionWithWall, D2UnitStrc * pUnit2) {
     int anWeights[16];
-    D2SeedStrc sNewSeed;
     anWeights[0xb] = 10;
     anWeights[0xc] = 10;
     anWeights[0] = 0;
@@ -444,20 +441,7 @@ static int32_t __stdcall AI_BAAL_CloneChooseAction(::SGAMEDATA * pGame, D2UnitSt
 
     uint32_t nRandRoll = 0;
     if ((int)nTotalWeight > 0) {
-      uint64_t nSeedHigh;
-      nRandRoll = pUnit2->sSeed.nSeedLow;
-      nSeedHigh = (uint64_t)pUnit2->sSeed.nSeedHigh;
-      if (nTotalWeight & nTotalWeight - 1) {
-        sNewSeed = (D2SeedStrc)((uint64_t)nRandRoll * 0x6ac690c5 + nSeedHigh);
-        pUnit2->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-        pUnit2->sSeed.nSeedLow = sNewSeed.nSeedLow;
-        nRandRoll = (uint32_t)(sNewSeed.nSeedLow % nTotalWeight);
-      } else {
-        sNewSeed = (D2SeedStrc)((uint64_t)nRandRoll * 0x6ac690c5 + nSeedHigh);
-        pUnit2->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-        pUnit2->sSeed.nSeedLow = sNewSeed.nSeedLow;
-        nRandRoll = nTotalWeight - 1 & sNewSeed.nSeedLow;
-      }
+      nRandRoll = D2_SeedRollLimited(&pUnit2->sSeed, nTotalWeight);
     }
 
     int nWeightAccum = 0;
@@ -479,9 +463,6 @@ static int32_t __stdcall AI_BAAL_CloneChooseAction(::SGAMEDATA * pGame, D2UnitSt
 // Weighted random action selector for Baal's throne-room fight (custom regs: stack params pGame/pUnit/nParam2..4, ESI=pUnit2=Baal). Builds a 16-entry weight table seeded with base action weights, boosting the "act" entry by (100-Baal's life pct) plus a difficulty-dependent base (125 on Normal else 100), and adjusting entries based on the flags nParam2 (wave count <2), nParam3, AI_BAAL_HasPowerfulSkill, and nParam4. Sums total weight, draws a roll from pUnit2->sSeed (power-of-two fast path uses mask, else modulo), advancing the seed LCG, then walks the table accumulating weights and returns the index of the first bucket exceeding the roll (defaults to 1 if none). Return value is the chosen Baal action/skill index; no other side effects besides advancing Baal's seed.
 static int32_t __stdcall AI_BAAL_ThroneRoomChooseAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nCandidateCount, int32_t bVeryFarFromAnchor, int32_t bBeyondAnchorLimit, D2UnitStrc * pUnit2) {
     int anWeights[17];
-    int64_t nSeedProduct;
-    int64_t lSeedProduct;
-    D2SeedStrc seedNext;
     int nWeightAccum;
     nWeightAccum = 0;
     anWeights[2] = 0x14;
@@ -541,23 +522,7 @@ static int32_t __stdcall AI_BAAL_ThroneRoomChooseAction(::SGAMEDATA * pGame, D2U
 
     uint32_t nRandRoll = 0;
     if ((int)nTotalWeight > 0) {
-      uint32_t dwSeedMulHi;
-      nRandRoll = pUnit2->sSeed.nSeedLow;
-      if (nTotalWeight & nTotalWeight - 1) {
-        nSeedProduct = (uint64_t)nRandRoll * 0x6ac690c5;
-        dwSeedMulHi = (uint32_t)((uint64_t)nSeedProduct >> 0x20);
-        seedNext = (D2SeedStrc)(nSeedProduct + (uint64_t)pUnit2->sSeed.nSeedHigh);
-        pUnit2->sSeed.nSeedHigh = seedNext.nSeedHigh;
-        pUnit2->sSeed.nSeedLow = seedNext.nSeedLow;
-        nRandRoll = seedNext.nSeedLow % nTotalWeight;
-      } else {
-        lSeedProduct = (uint64_t)nRandRoll * 0x6ac690c5;
-        dwSeedMulHi = (uint32_t)((uint64_t)lSeedProduct >> 0x20);
-        seedNext = (D2SeedStrc)(lSeedProduct + (uint64_t)pUnit2->sSeed.nSeedHigh);
-        pUnit2->sSeed.nSeedHigh = seedNext.nSeedHigh;
-        pUnit2->sSeed.nSeedLow = seedNext.nSeedLow;
-        nRandRoll = nTotalWeight - 1 & seedNext.nSeedLow;
-      }
+      nRandRoll = D2_SeedRollLimited(&pUnit2->sSeed, nTotalWeight);
     }
 
     pWeightEntry = anWeights;
@@ -583,7 +548,6 @@ static int32_t __stdcall AI_Baal_SelectActionWeighted(::SGAMEDATA * pGame, D2AiG
     int nWeightAccum;
     int anWeights[16];
     D2MonsterLevelDataStrc levelDiffData;
-    D2SeedStrc sNewSeed;
     anWeights[2] = 5;
     anWeights[3] = 5;
     anWeights[4] = 5;
@@ -677,20 +641,7 @@ static int32_t __stdcall AI_Baal_SelectActionWeighted(::SGAMEDATA * pGame, D2AiG
 
     nRandRoll = 0;
     if ((int)nTotalWeight > 0) {
-      uint64_t nSeedHighExt;
-      nRandRoll = pUnit2->sSeed.nSeedLow;
-      nSeedHighExt = (uint64_t)pUnit2->sSeed.nSeedHigh;
-      if (nTotalWeight & nTotalWeight - 1) {
-        sNewSeed = (D2SeedStrc)((uint64_t)nRandRoll * 0x6ac690c5 + nSeedHighExt);
-        pUnit2->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-        pUnit2->sSeed.nSeedLow = sNewSeed.nSeedLow;
-        nRandRoll = (uint32_t)(sNewSeed.nSeedLow % nTotalWeight);
-      } else {
-        sNewSeed = (D2SeedStrc)((uint64_t)nRandRoll * 0x6ac690c5 + nSeedHighExt);
-        pUnit2->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-        pUnit2->sSeed.nSeedLow = sNewSeed.nSeedLow;
-        nRandRoll = nTotalWeight - 1 & sNewSeed.nSeedLow;
-      }
+      nRandRoll = D2_SeedRollLimited(&pUnit2->sSeed, nTotalWeight);
     }
 
     nWeightAccum = 0;

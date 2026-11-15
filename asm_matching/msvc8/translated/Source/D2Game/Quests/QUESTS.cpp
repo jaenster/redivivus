@@ -685,7 +685,10 @@ void __fastcall QUEST_GetQuestLogDisplayState(D2QuestDataStrc * pQuestData, uint
         return;
       }
 
-      bCainRescued = pQuestData->nStateFlag == 6;
+      bCainRescued = false;
+      if (pQuestData->nStateFlag == 6) {
+        bCainRescued = true;
+      }
     } else {
       if (bCannotComplete) {
         *pQuestData2 = 0xc;
@@ -697,7 +700,10 @@ void __fastcall QUEST_GetQuestLogDisplayState(D2QuestDataStrc * pQuestData, uint
       }
 
       bCannotComplete = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
-      bCainRescued = !bCannotComplete;
+      bCainRescued = false;
+      if (!bCannotComplete) {
+        bCainRescued = true;
+      }
     }
     if (!bCainRescued) {
       *pQuestData2 = pQuestData->nStateFlagPrev;
@@ -805,6 +811,7 @@ void __fastcall QUEST_SendQuestUpdateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * 
     sPacket.nQuestId = (uint8_t)nInternalQuestNo;
     sPacket.nPacketId = ']';
     sPacket.nAlertFlags = pQuestData->nQuestPacketFlags;
+    sPacket.nFilterStatus = '\0';
     D2BitBufferStrc* pBitBufferEx = GetQuestBitBufferInline(pGame, pUnit);
     if (!pQuestData->fpStatusFilter) {
       QUEST_GetQuestLogDisplayState(pQuestData, &sPacket.nFilterStatus, pBitBufferEx);
@@ -1989,6 +1996,7 @@ void __fastcall QUEST_SendQuestStatePacket(D2UnitStrc * pUnit, int bQuestId, uin
     memset(&aPacketBuf, 0, sizeof(aPacketBuf));
     aPacketBuf.nQuestId = (uint8_t)bQuestId;
     aPacketBuf.nPacketId = ']';
+    aPacketBuf.nAlertFlags = '\0';
     aPacketBuf.nFilterStatus = '\f';
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xd82);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &aPacketBuf);
@@ -2178,10 +2186,16 @@ void __fastcall AttachToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2RoomStrc
     }
     if (bExpectedResult) {
       nAttachResult = QUEST_AttachToUnitByQuestId(pGame, pUnit, (eD2QuestsInternal)byQuestId);
-      bAttachFailed = !nAttachResult;
+      bAttachFailed = false;
+      if (!nAttachResult) {
+        bAttachFailed = true;
+      }
     } else {
       nAttachResult = QUEST_AttachToUnitByQuestId(pGame, pUnit, (eD2QuestsInternal)byQuestId);
-      bAttachFailed = nAttachResult == 1;
+      bAttachFailed = false;
+      if (nAttachResult == 1) {
+        bAttachFailed = true;
+      }
     }
     if (!(bAttachFailed && DEBUGPRINT)) {
       return;

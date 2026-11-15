@@ -690,7 +690,7 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
 
     do {
       D2UnitStrc* pSpawnedMinion;
-      pSpawnedMinion = SpawnMonsterAtUnit(pGameInst, pUnit, (int)*(short int*)(pMonStats->Code + nMinionTypeSlot * 2 + 0x16), eD2MonsterAnimMode_ns::Neutral, 4, 0x40);
+      pSpawnedMinion = SpawnMonsterAtUnit(pGameInst, pUnit, (int)*(short int*)(pMonStats->Code + (nMinionTypeSlot * 2 + 0x16)), eD2MonsterAnimMode_ns::Neutral, 4, 0x40);
       if (pSpawnedMinion && *((uint8_t*)pMonStats + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
         bMinionIsLeader = 0;
         nTmp = 0;

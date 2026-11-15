@@ -1167,7 +1167,7 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
         if (nTokenCount == 2) {
           strcpy(szTargetName, pScan);
         } else if (nTokenCount == 3) {
-          pScan = pScan + (intptr_t)&sWhisperPacket + (0x10 - (intptr_t)szInput);
+          pScan += (intptr_t)&sWhisperPacket + (0x10 - (intptr_t)szInput);
           strcpy(szMessageText, pScan);
           goto send_whisper;
         }

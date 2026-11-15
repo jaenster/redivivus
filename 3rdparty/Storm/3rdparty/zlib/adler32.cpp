@@ -37,7 +37,7 @@ uint32_t __fastcall ZLIB_Adler32(uint32_t nAdler, uint8_t * pbData, uint32_t nLe
 
       nSum2 += nSum1;
       if (nSum2 >= 0xfff1) {
-        return (nSum2 - 0xfff1) * 0x10000 | nSum1;
+        return nSum2 - 0xfff1 << 0x10 | nSum1;
       }
     } else {
       int nOuterCount;
@@ -55,7 +55,7 @@ uint32_t __fastcall ZLIB_Adler32(uint32_t nAdler, uint8_t * pbData, uint32_t nLe
           nSum1 -= 0xfff1;
         }
 
-        return (nSum2 / 0xfff1 * 0xf + nSum2) * 0x10000 | nSum1;
+        return nSum2 / 0xfff1 * 0xf + nSum2 << 0x10 | nSum1;
       }
 
       nRemaining = nLen;

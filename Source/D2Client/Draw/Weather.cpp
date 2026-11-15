@@ -510,9 +510,9 @@ void __fastcall WEATHER_SpawnSplash(int nScreenX, int nScreenY, int nWorldX, int
     uint32_t bIsPerspectiveActive = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     if (bIsPerspectiveActive) {
       nRoll = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 5);
-      *(int32_t*)(pSplashArrayData + nSplashSlotIndex * 0x18 + 4) = nRoll * 0x10000 + nWorldX;
+      *(int32_t*)(pSplashArrayData + (nSplashSlotIndex * 0x18 + 4)) = (nRoll << 0x10) + nWorldX;
       nRoll = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 5);
-      *(int32_t*)(pSplashArrayData + nSplashSlotIndex * 0x18 + 8) = nRoll * 0x10000 + nWorldY;
+      *(int32_t*)(pSplashArrayData + (nSplashSlotIndex * 0x18 + 8)) = (nRoll << 0x10) + nWorldY;
     } else {
       int nHalfRange;
       nRoll = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 0x50);
@@ -523,21 +523,21 @@ void __fastcall WEATHER_SpawnSplash(int nScreenX, int nScreenY, int nWorldX, int
 
       nHalfRange = nHalfRange * -2 + 0x50;
       nRange = D2Game::Seed::RollBetweenMinAndMax(pSeed, -nHalfRange, nHalfRange * 2);
-      *(int32_t*)(pSplashArrayData + nSplashSlotIndex * 0x18 + 4) = nRange + nScreenX;
-      *(int32_t*)(pSplashArrayData + nSplashSlotIndex * 0x18 + 8) = nRoll + nScreenY;
+      *(int32_t*)(pSplashArrayData + (nSplashSlotIndex * 0x18 + 4)) = nRange + nScreenX;
+      *(int32_t*)(pSplashArrayData + (nSplashSlotIndex * 0x18 + 8)) = nRoll + nScreenY;
     }
 
     uint32_t sSeedNew = D2_SeedRoll(pSeed);
     nSlot = (sSeedNew & 1) + 2;
-    *(uint32_t*)(pSplashArrayData + nSplashSlotIndex * 0x18 + 0xc) = nSlot;
+    *(uint32_t*)(pSplashArrayData + (nSplashSlotIndex * 0x18 + 0xc)) = nSlot;
     if (false || (int32_t)nSlot >= 4) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ea);
       exit(-1);
     }
 
-    uint8_t* puVar1 = pSplashArrayData + nSplashSlotIndex * 0x18 + 0x10;
+    uint8_t* puVar1 = pSplashArrayData + (nSplashSlotIndex * 0x18 + 0x10);
     *(uint32_t*)puVar1 = 0;
-    pSplashArrayData = pSplashArrayData + nSplashSlotIndex * 0x18 + 0x14;
+    pSplashArrayData += nSplashSlotIndex * 0x18 + 0x14;
     pSplashArrayData[0] = '\x02';
     pSplashArrayData[1] = '\0';
     pSplashArrayData[2] = '\0';
@@ -566,9 +566,9 @@ void __fastcall WEATHER_SpawnBubble(int nScreenX, int nScreenY, int nWorldX, int
     uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     if (bPerspective) {
       nRollResult = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 5);
-      *(int32_t*)(pBubbleData + nBubbleIndex * 0x18 + 4) = (nRollResult - 2) * 0x10000 + nWorldX;
+      *(int32_t*)(pBubbleData + (nBubbleIndex * 0x18 + 4)) = (nRollResult - 2 << 0x10) + nWorldX;
       nRollResult = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 5);
-      nRange = (nRollResult - 2) * 0x10000 + nWorldY;
+      nRange = (nRollResult - 2 << 0x10) + nWorldY;
     } else {
       nRollResult = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 0x50);
       nRange = nRollResult - 0x28;
@@ -578,19 +578,19 @@ void __fastcall WEATHER_SpawnBubble(int nScreenX, int nScreenY, int nWorldX, int
 
       nRange = nRange * -2 + 0x50;
       nRollOffset = D2Game::Seed::RollBetweenMinAndMax(pSeed, -nRange, nRange * 2);
-      *(int32_t*)(pBubbleData + nBubbleIndex * 0x18 + 4) = nRollOffset + nScreenX;
+      *(int32_t*)(pBubbleData + (nBubbleIndex * 0x18 + 4)) = nRollOffset + nScreenX;
       nRange = nRollResult - 0x1e + nScreenY;
     }
 
-    *(int*)(pBubbleData + nBubbleIndex * 0x18 + 8) = nRange;
-    uint8_t* puVar1 = pBubbleData + nBubbleIndex * 0x18 + 0xc;
+    *(int*)(pBubbleData + (nBubbleIndex * 0x18 + 8)) = nRange;
+    uint8_t* puVar1 = pBubbleData + (nBubbleIndex * 0x18 + 0xc);
     puVar1[0] = '\x02';
     puVar1[1] = '\0';
     puVar1[2] = '\0';
     puVar1[3] = '\0';
-    puVar1 = pBubbleData + nBubbleIndex * 0x18 + 0x10;
+    puVar1 = pBubbleData + (nBubbleIndex * 0x18 + 0x10);
     *(uint32_t*)puVar1 = 0;
-    pBubbleData = pBubbleData + nBubbleIndex * 0x18 + 0x14;
+    pBubbleData += nBubbleIndex * 0x18 + 0x14;
     pBubbleData[0] = '\x02';
     pBubbleData[1] = '\0';
     pBubbleData[2] = '\0';

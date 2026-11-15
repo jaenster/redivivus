@@ -181,9 +181,9 @@ void __fastcall MONSTERTBLS_ParseMonStatsField(char * szText, char * pRecord, ui
     }
 
     pRecord[nSkillIdx + 0x180] = '\0';
-    short int nSkillId = *(short int*)(pRecord + nSkillIdx * 2 + 0x170);
-    (pRecord + nSkillIdx * 2 + 0x188)[0] = -1;
-    (pRecord + nSkillIdx * 2 + 0x188)[1] = -1;
+    short int nSkillId = *(short int*)(pRecord + (nSkillIdx * 2 + 0x170));
+    (pRecord + (nSkillIdx * 2 + 0x188))[0] = -1;
+    (pRecord + (nSkillIdx * 2 + 0x188))[1] = -1;
     if (!(nSkillId >= 0 && szText)) {
       return;
     }
@@ -212,7 +212,7 @@ void __fastcall MONSTERTBLS_ParseMonStatsField(char * szText, char * pRecord, ui
 
     pRecord[nSlotIdx + 0x180] = '\x0e';
     nModeId = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtMonSeqLink, szText, 1);
-    *(short int*)(pRecord + nSlotIdx * 2 + 0x188) = (short int)nModeId;
+    *(short int*)(pRecord + (nSlotIdx * 2 + 0x188)) = (short int)nModeId;
 }
 
 // Loads and compiles monstats.txt into the engine's runtime MonStats table. Builds the column schema as a stack D2BinFieldInputStrc array (Id/BaseId/NextInClass/NameStr/DescStr/Code/TransLvl/... with per-field type/offset/linker), wiring the field linkers to sgtDataTable.pTxtMonStatsLink (most fields), pTxtMonSoundsLink (sound fields), and DATATBLS_LookupStringId for the string-key name/desc columns, then hands the schema + pMemory to the standard DATATBLS bin-compile/alloc routine to populate the MonStats table. pMemory passed in ECX (thiscall/fastcall-style); large alloca'd stack frame.
@@ -1662,7 +1662,7 @@ D2HirelingTxt * __stdcall GetHirelingText(int32_t bIsExpansion, int32_t nHirelin
       return pResult;
     }
 
-    int nHirelingLineIdx = sgtDataTable.nTxtHirelingIdLines[(uint32_t)(bIsExpansion != 0) * 0x100 + nHirelingId];
+    int nHirelingLineIdx = sgtDataTable.nTxtHirelingIdLines[((uint32_t)(bIsExpansion != 0) << 8) + nHirelingId];
     if (nHirelingLineIdx < 0) {
       return nullptr;
     }
@@ -1931,7 +1931,7 @@ void __fastcall MONSTERTBLS_ParseMonStats2ComponentVariants(char * szText, char 
     }
 
     pRecord[nComponent + 0x15] = '\0';
-    char* pSeqCodes = pRecord + nComponent * 0xc + 0x26;
+    char* pSeqCodes = pRecord + (nComponent * 0xc + 0x26);
     pSeqCodes[0] = -1;
     pSeqCodes[1] = -1;
     pSeqCodes[2] = -1;
@@ -2272,7 +2272,7 @@ void __fastcall TXT_AllocTxt_montype(D2PoolManagerStrc * pMemory) {
         do {
           bIsSubType = MONSTERTBLS_CheckNestedMonsterTypes(nRowTypeIdx, nBitIdx);
           if (bIsSubType) {
-            *(uint32_t*)(pBitArray + ((int)nBitIdx >> 5) * 4 + nTypeIdx * 4) |= Fog::BitBuffer::gadwBitMasks[nBitIdx & 0x1f];
+            *(uint32_t*)(pBitArray + (((int)nBitIdx >> 5) * 4 + nTypeIdx * 4)) |= Fog::BitBuffer::gadwBitMasks[nBitIdx & 0x1f];
             nMonTypeTotal = sgtDataTable.nTxtMonTypeSize;
           }
 
@@ -2701,8 +2701,8 @@ void __fastcall TXT_AllocTxt_MonEquip(D2PoolManagerStrc * pMemory) {
         nMonStatIdx = 0;
         do {
           pMonStatsCode = sgtDataTable.pTxtMonStats->Code;
-          (pMonStatsCode + nMonStatIdx + 0x1a)[0] = -1;
-          (pMonStatsCode + nMonStatIdx + 0x1a)[1] = -1;
+          (pMonStatsCode + (nMonStatIdx + 0x1a))[0] = -1;
+          (pMonStatsCode + (nMonStatIdx + 0x1a))[1] = -1;
           nMonStatCount++;
           nMonStatIdx += 0x1a8;
         } while (nMonStatCount < ITEMS::Items::sgptDataTable->nTxtMonStatsSize);

@@ -1190,11 +1190,9 @@ void __stdcall D2ddDebugFont_Free() {
 
 // DirectDraw renderer internal helpers for sprite visibility testing, clip rect computation, debug font rendering, shadow quality query, pixel/line drawing primitives, and smacker video frame blitting.
 static LPINT __stdcall RENDERER_DDRAW_DrawDebugFontChar(int32_t nX, char cCharacter, int32_t nY) {
-    uint8_t* pCurPixel;
     uint8_t* pFontData;
     int nRowCount;
     int nColCount;
-    uint8_t cFontByte;
     if (nX > 0x280) {
       return (LPINT)0x0;
     }
@@ -1211,19 +1209,16 @@ static LPINT __stdcall RENDERER_DDRAW_DrawDebugFontChar(int32_t nX, char cCharac
       do {
         nColCount = 8;
         do {
-          pCurPixel = pPixel;
-          cFontByte = *pFontData;
-          pFontData++;
-          if (cFontByte) {
-            *pCurPixel = 0xff;
+          if (*pFontData++) {
+            *pPixel = 0xff;
           }
 
+          pPixel++;
           nColCount--;
-          pPixel = pCurPixel + 1;
         } while (nColCount);
 
         nRowCount--;
-        pPixel = pCurPixel + RENDERER_nWindowWidth - 7;
+        pPixel = pPixel + RENDERER_nWindowWidth - 8;
       } while (nRowCount);
 
       return (LPINT)lpBuffer_00881428[(char)nCharOffset];
@@ -1295,7 +1290,7 @@ void __fastcall DrawSolidRectEx(int32_t nXStart, int32_t nYStart, int32_t nXEnd,
     }
 
     int nColIdx = nClipTop - nClipRightEnd;
-    uint8_t* pScanline = gpRenderBackBufferBits + nClipLeft + RENDERER_nWindowWidth * nClipRightEnd;
+    uint8_t* pScanline = gpRenderBackBufferBits + (nClipLeft + RENDERER_nWindowWidth * nClipRightEnd);
     switch (nDrawMode2) {
       case 1:
         {
@@ -1322,7 +1317,7 @@ void __fastcall DrawSolidRectEx(int32_t nXStart, int32_t nYStart, int32_t nXEnd,
                 nPixelCount = nClipRight - nClipLeft;
                 do {
                   nPixelCount--;
-                  *pRowPixel = pBlendTable[(uint32_t)*pRowPixel * 0x100 + (uint32_t)dwColor];
+                  *pRowPixel = pBlendTable[((uint32_t)*pRowPixel << 8) + (uint32_t)dwColor];
                   pRowPixel++;
                 } while (nPixelCount);
               }
@@ -1467,8 +1462,8 @@ void __fastcall RENDERER_DDRAW_DrawLine(POINT * pStartPoint, POINT * pEndPoint, 
       } while (nAccumulatorX * nAccumulatorX < nAccumulatorY);
     }
 
-    nDeltaX = nDeltaX * 0x10000 / nLineLength;
-    nDeltaY = nDeltaY * 0x10000 / nLineLength;
+    nDeltaX = (nDeltaX << 0x10) / nLineLength;
+    nDeltaY = (nDeltaY << 0x10) / nLineLength;
     nAccumulatorY = 0;
     nAccumulatorX = 0;
     int nPixelsDrawn = 0;
@@ -1496,7 +1491,7 @@ void __fastcall RENDERER_DDRAW_DrawLine(POINT * pStartPoint, POINT * pEndPoint, 
       nPixelsDrawn++;
     }
 
-    uint8_t* pPixelDst = gpRenderBackBufferBits + nCurrentX + RENDERER_nWindowWidth * nStepX;
+    uint8_t* pPixelDst = gpRenderBackBufferBits + (nCurrentX + RENDERER_nWindowWidth * nStepX);
     *pPixelDst = nPaletteIndex;
     nPixelsDrawn++;
     if (nPixelsDrawn >= nLineLength) {
@@ -1649,7 +1644,7 @@ void __fastcall DrawSolidRect(RECT * pRect, BYTE nPaletteIndex) {
           return;
         }
 
-        pRowDst = gpRenderBackBufferBits + pRect->top * RENDERER_nWindowWidth + pRect->left;
+        pRowDst = gpRenderBackBufferBits + (pRect->top * RENDERER_nWindowWidth + pRect->left);
         do {
           nRowCount--;
           if (nFillWidth > 0) {

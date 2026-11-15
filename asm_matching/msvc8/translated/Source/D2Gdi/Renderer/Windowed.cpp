@@ -487,7 +487,7 @@ static void __stdcall RENDERER_WINDOWED_ValidateDC6Visibility(DC6Block * pDC6Blo
     }
 
     int32_t nOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nScreenX + nOffsetX < RENDERER_nWindowWidth && nDC6Width + nScreenX + nOffsetX >= 0)) {
+    if (!(nScreenX + nOffsetX < RENDERER_nWindowWidth && nDC6Width + (nScreenX + nOffsetX) >= 0)) {
       return;
     }
 
@@ -511,7 +511,7 @@ static int __fastcall RENDERER_WINDOWED_CalculateCropRect(uint32_t * pCropRect, 
     }
 
     int32_t nSpriteHeight = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nPosX + nSpriteHeight < nClippedRight && nSpriteWidth + nPosX + nSpriteHeight >= (int)uClampedLeft)) {
+    if (!(nPosX + nSpriteHeight < nClippedRight && nSpriteWidth + (nPosX + nSpriteHeight) >= (int)uClampedLeft)) {
       return 1;
     }
 
@@ -560,7 +560,7 @@ BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwG
     int32_t nDC6Width = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nDC6Height = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     int32_t nDC6OffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nDC6OffsetX + nPosX < RENDERER_nWindowWidth && nDC6Width + nDC6OffsetX + nPosX >= 0)) {
+    if (!(nDC6OffsetX + nPosX < RENDERER_nWindowWidth && nDC6Width + (nDC6OffsetX + nPosX) >= 0)) {
       return 0;
     }
 
@@ -593,7 +593,7 @@ void __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DW
     int32_t nSpriteWidth = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nSpriteHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     int32_t nOffsetXY = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nOffsetXY + nPosX < RENDERER_nWindowWidth && nSpriteWidth + nOffsetXY + nPosX >= 0)) {
+    if (!(nOffsetXY + nPosX < RENDERER_nWindowWidth && nSpriteWidth + (nOffsetXY + nPosX) >= 0)) {
       return;
     }
 
@@ -628,7 +628,7 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int nPosX, int nPos
     int32_t nDC6Width = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nDC6Height = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     int32_t nDC6OffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nDC6OffsetX + nPosX < RENDERER_nWindowWidth && nDC6Width + nDC6OffsetX + nPosX >= 0)) {
+    if (!(nDC6OffsetX + nPosX < RENDERER_nWindowWidth && nDC6Width + (nDC6OffsetX + nPosX) >= 0)) {
       return;
     }
 
@@ -805,7 +805,7 @@ void __fastcall DrawSolidRectEx(int nXStart, int nYStart, int nXEnd, int nYEnd, 
     }
 
     int nWidth = uMaxY - uClampedXStart;
-    uint8_t* pbScanline = gpRenderBackBufferBits + uClampedYStart + RENDERER_nWindowWidth * uClampedXStart;
+    uint8_t* pbScanline = gpRenderBackBufferBits + (uClampedYStart + RENDERER_nWindowWidth * uClampedXStart);
     switch (nBlendMode) {
       case 1:
         {
@@ -832,7 +832,7 @@ void __fastcall DrawSolidRectEx(int nXStart, int nYStart, int nXEnd, int nYEnd, 
                 nRowsLeft = uMaxX - uClampedYStart;
                 do {
                   nRowsLeft--;
-                  *pbPixel = pPaletteTable[(uint32_t)*pbPixel * 0x100 + (uint32_t)dwColor];
+                  *pbPixel = pPaletteTable[((uint32_t)*pbPixel << 8) + (uint32_t)dwColor];
                   pbPixel++;
                 } while (nRowsLeft);
               }
@@ -973,8 +973,8 @@ void __fastcall RENDERER_WINDOWED_DrawLineBresenham(POINT * pnEndPoint, POINT * 
       } while (nSqrtIter * nSqrtIter < nAccumX);
     }
 
-    nDistSq = nDistSq * 0x10000 / nDistance;
-    nStepX = nStepX * 0x10000 / nDistance;
+    nDistSq = (nDistSq << 0x10) / nDistance;
+    nStepX = (nStepX << 0x10) / nDistance;
     nAccumX = 0;
     nSqrtIter = 0;
     int nStepCount = 0;
@@ -1002,7 +1002,7 @@ void __fastcall RENDERER_WINDOWED_DrawLineBresenham(POINT * pnEndPoint, POINT * 
       nStepCount++;
     }
 
-    uint8_t* pbCurrent = gpRenderBackBufferBits + nX + RENDERER_nWindowWidth * nStartY;
+    uint8_t* pbCurrent = gpRenderBackBufferBits + (nX + RENDERER_nWindowWidth * nStartY);
     *pbCurrent = byColorParam;
     nStepCount++;
     if (nStepCount >= nDistance) {
@@ -1158,7 +1158,7 @@ void __fastcall DrawSolidRect(tagRECT * pRect, uint8_t nPaletteIndex) {
       return;
     }
 
-    _Dst = gpRenderBackBufferBits + pRect->top * RENDERER_nWindowWidth + pRect->left;
+    _Dst = gpRenderBackBufferBits + (pRect->top * RENDERER_nWindowWidth + pRect->left);
     do {
       nRight--;
       if (_Size > 0) {

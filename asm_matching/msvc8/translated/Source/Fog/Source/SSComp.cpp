@@ -221,7 +221,7 @@ void __fastcall COMPRESS_BuildHuffmanDecodeTable(uint8_t * pCodeLengths) {
               } while (nIndex);
             }
           } else {
-            pSymbolBase = asSortedSymbols + nLenIndex + 0x1ff;
+            pSymbolBase = asSortedSymbols + (nLenIndex + 0x1ff);
             bySymbol = gabHuffmanNextTable[*pSymbolBase];
             uSlot20C.nSymbolCode = (uint32_t)bySymbol;
             byPrefixIndex = bySymbol >> D2_SHIFT_COUNT(byCodeLen - 8);

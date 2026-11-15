@@ -53,7 +53,7 @@ void __fastcall fpDrawVisTile(uint8_t * pbTileData, int32_t nScreenX, int32_t nS
       exit(-1);
     }
 
-    uint8_t* nDstRowPtr = pRenderSurfaceBuffer + nScreenX + gaYBufferRowOffsets[nScreenY + 0x20];
+    uint8_t* nDstRowPtr = pRenderSurfaceBuffer + (nScreenX + gaYBufferRowOffsets[nScreenY + 0x20]);
     if (nScreenY >= gnTileInnerClipYMinRow && nScreenY < gnTileInnerClipYMax && nScreenX >= gnTileInnerClipXMax_b && nScreenX < gnTileClipXMax) {
       nRowsLeft = 0x20;
       pScreenY = nDstRowPtr;
@@ -104,15 +104,15 @@ void __fastcall fpDrawVisTile(uint8_t * pbTileData, int32_t nScreenX, int32_t nS
             nClipRight = uVar1;
           }
           if ((int)(nClipRight - nClipLeft) > 0) {
-            memcpy(nDstPtr + nClipLeft + nRunLen, pbTileData + nClipLeft, nClipRight - nClipLeft);
+            memcpy(nDstPtr + (nClipLeft + nRunLen), pbTileData + nClipLeft, nClipRight - nClipLeft);
           }
 
           pbTileData += uVar1;
-          nDstPtr = nDstPtr + uVar1 + nRunLen;
+          nDstPtr += uVar1 + nRunLen;
           nDstRowPtr = pScreenY;
           nCurScreenY = nCurRow;
         } else {
-          nDstPtr = nDstPtr + uVar1 + nRunLen;
+          nDstPtr += uVar1 + nRunLen;
           pbTileData += uVar1;
         }
       }
@@ -124,7 +124,7 @@ void __fastcall DRAW_DrawWallTileWithLighting(uint8_t * nTileDataPtr, int32_t nS
       return;
     }
 
-    uint8_t* pDst = pRenderSurfaceBuffer + nScreenX + gaYBufferRowOffsets[nScreenY + 0x20];
+    uint8_t* pDst = pRenderSurfaceBuffer + (nScreenX + gaYBufferRowOffsets[nScreenY + 0x20]);
     if (!pRenderSurfaceBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x373);
       exit(-1);
@@ -180,7 +180,7 @@ void __fastcall fpDrawWallTile(uint8_t * pTileData, int32_t nScreenX, int32_t nS
           exit(-1);
         }
 
-        pDst = pRenderSurfaceBuffer + nScreenX + gaYBufferRowOffsets[nScreenY + 0x20];
+        pDst = pRenderSurfaceBuffer + (nScreenX + gaYBufferRowOffsets[nScreenY + 0x20]);
         if (nScreenY >= gnTileInnerClipYMinRow && nScreenY < gnTileInnerClipYMax && nScreenX >= gnTileInnerClipXMax_b && nScreenX < gnTileClipXMax) {
           D2GFX::D2GFX_DrawWallTileWithPerspective(pTileData, pDst, nLightShifted, nDeltaX1, nLightY << 5, nDeltaY1, 0x20, 8);
           return;
@@ -232,7 +232,7 @@ void __fastcall fpDrawBlendedVisTile(uint8_t * pTileData, int32_t nScreenX, int3
       exit(-1);
     }
 
-    uint8_t* pRowDst = pRenderSurfaceBuffer + nScreenX + gaYBufferRowOffsets[nScreenY + 0x20];
+    uint8_t* pRowDst = pRenderSurfaceBuffer + (nScreenX + gaYBufferRowOffsets[nScreenY + 0x20]);
     if (nScreenY >= gnTileInnerClipYMinRow && nScreenY < gnTileInnerClipYMax && nScreenX >= gnTileInnerClipXMax_b && nScreenX < gnTileClipXMax) {
       nScreenY = 0x20;
       pDst = pRowDst;
@@ -248,7 +248,7 @@ void __fastcall fpDrawBlendedVisTile(uint8_t * pTileData, int32_t nScreenX, int3
           pbRunEnd = pTileData + *pbRunEnd;
           pDst += bySkipCount;
           for (; pTileData < pbRunEnd; pTileData++) {
-            *pDst = nBlendTableBase[(uint32_t)*pTileData + (uint32_t)*pDst * 0x100];
+            *pDst = nBlendTableBase[(uint32_t)*pTileData + ((uint32_t)*pDst << 8)];
             pDst++;
           }
         }
@@ -279,7 +279,7 @@ void __fastcall fpDrawBlendedVisTile(uint8_t * pTileData, int32_t nScreenX, int3
         }
         if (!(nErrorLine < gnMinTileScreenY_b)) {
           pTileData = pbRunEnd + nRunLen;
-          pRowNext = pDst + nRunLen + nSkip;
+          pRowNext = pDst + (nRunLen + nSkip);
           nClipLeft = gnTileClipLeft - (int)(pDst - pRowDst + nScreenX + nSkip);
           nClipLeft = (int)nClipLeft <= 0 ? 0 : nClipLeft;
           nClipRight = -(int)(pDst - pRowDst + nScreenX + nSkip) + gnTileClipRight;
@@ -293,14 +293,14 @@ void __fastcall fpDrawBlendedVisTile(uint8_t * pTileData, int32_t nScreenX, int3
           if ((int)(nClipRight - nClipLeft) > 0) {
             pbRunEnd += nClipLeft;
             pbClipSrc = pbRunEnd + (nClipRight - nClipLeft);
-            pDst = pDst + nClipLeft + nSkip;
+            pDst += nClipLeft + nSkip;
             for (; pbRunEnd < pbClipSrc; pbRunEnd++) {
-              *pDst = nBlendTableBase[(uint32_t)*pbRunEnd + (uint32_t)*pDst * 0x100];
+              *pDst = nBlendTableBase[(uint32_t)*pbRunEnd + ((uint32_t)*pDst << 8)];
               pDst++;
             }
           }
         } else {
-          pRowNext = pDst + nRunLen + nSkip;
+          pRowNext = pDst + (nRunLen + nSkip);
           pTileData = pbRunEnd + nRunLen;
         }
       }
@@ -346,7 +346,7 @@ void __fastcall fpDrawRoofTile(uint8_t * pTileData, int32_t nScreenX, int32_t nS
       exit(-1);
     }
 
-    uint8_t* pRowDst = pRenderSurfaceBuffer + nScreenX + gaYBufferRowOffsets[nScreenY + 0x20];
+    uint8_t* pRowDst = pRenderSurfaceBuffer + (nScreenX + gaYBufferRowOffsets[nScreenY + 0x20]);
     uint8_t (*pbLineEnd)[32] = D2GFX::gpLineBufferTileArray[nLightX >> 8] + (nLightY >> 8);
     int nCoords = nLightX;
     uint8_t* pLightVal = pRowDst;
@@ -371,7 +371,7 @@ void __fastcall fpDrawRoofTile(uint8_t * pTileData, int32_t nScreenX, int32_t nS
           pbLineEnd = (uint8_t (*)[32])(*pbLineEnd + nSkip);
           pbRunEnd = pTileData + *pbRunEnd;
           for (; pTileData < pbRunEnd; pTileData++) {
-            *pDst = nBlendTableBase[(uint32_t)*pDst + (uint32_t)D2GFX::gaPaletteColorLUT[(*pbLineEnd)[0]][*pTileData] * 0x100];
+            *pDst = nBlendTableBase[(uint32_t)*pDst + ((uint32_t)D2GFX::gaPaletteColorLUT[(*pbLineEnd)[0]][*pTileData] << 8)];
             pbLineEnd = (uint8_t (*)[32])(*pbLineEnd + 1);
             pDst++;
             nLightX = nCoords;
@@ -407,7 +407,7 @@ void __fastcall fpDrawRoofTile(uint8_t * pTileData, int32_t nScreenX, int32_t nS
         pbLineBuf = *pbLineEnd + nSkip;
         if (!(nScreenY < gnMinTileScreenY_b)) {
           pTileData = pbRunEnd + nRunLen;
-          pRowNext = pDst + nRunLen + nSkip;
+          pRowNext = pDst + (nRunLen + nSkip);
           pbLineEnd = (uint8_t (*)[32])(pbLineBuf + nRunLen);
           nClipLeft = gnTileClipLeft - (int)(pDst - pRowDst + nScreenX + nSkip);
           nClipLeft = (int)nClipLeft <= 0 ? 0 : nClipLeft;
@@ -421,15 +421,15 @@ void __fastcall fpDrawRoofTile(uint8_t * pTileData, int32_t nScreenX, int32_t nS
           if ((int)(nClipRight - nClipLeft) > 0) {
             pbRunEnd += nClipLeft;
             pbClipEnd = pbRunEnd + (nClipRight - nClipLeft);
-            pDst = pDst + nClipLeft + nSkip;
+            pDst += nClipLeft + nSkip;
             for (; pbRunEnd < pbClipEnd; pbRunEnd++) {
-              *pDst = nBlendTableBase[(uint32_t)*pDst + (uint32_t)D2GFX::gaPaletteColorLUT[*pbLineBuf][*pbRunEnd] * 0x100];
+              *pDst = nBlendTableBase[(uint32_t)*pDst + ((uint32_t)D2GFX::gaPaletteColorLUT[*pbLineBuf][*pbRunEnd] << 8)];
               pbLineBuf++;
               pDst++;
             }
           }
         } else {
-          pRowNext = pDst + nRunLen + nSkip;
+          pRowNext = pDst + (nRunLen + nSkip);
           pbLineEnd = (uint8_t (*)[32])(pbLineBuf + nRunLen);
           pTileData = pbRunEnd + nRunLen;
         }
@@ -494,7 +494,7 @@ void __fastcall D2GFXHELPER_DrawGroundTileWithLight(D2GroundSubTileStrc * pSubTi
       }
       if ((int)(nClipRight - nClipLeft) > 0) {
         pbSrcEnd = pSubTile->pPixelData + nClipLeft + D2GFX::gaGroundTileSrcPointers[nStartRow];
-        pDst = nDstBase + nClipLeft + D2GFX::gaGroundTileRowOffsets[nStartRow];
+        pDst = nDstBase + (nClipLeft + D2GFX::gaGroundTileRowOffsets[nStartRow]);
         pbSrcRunEnd = pbSrcEnd + (nClipRight - nClipLeft);
         for (; pbSrcEnd < pbSrcRunEnd; pbSrcEnd++) {
           *pDst = D2GFX::gaPaletteColorLUT[nLightVal >> 3][*pbSrcEnd];
@@ -543,9 +543,9 @@ void __fastcall D2GFXHELPER_DrawGroundTileWithPerspectiveLight(D2GroundSubTileSt
         nClipRight = D2GFX::gaGroundTileRowWidths[nStartRow];
       }
       if ((int)(nClipRight - nClipLeft) > 0) {
-        pbSrc = pSubTile->pPixelData + nClipLeft + D2GFX::gaGroundTileSrcPointers[nStartRow];
+        pbSrc = pSubTile->pPixelData + (nClipLeft + D2GFX::gaGroundTileSrcPointers[nStartRow]);
         pbSrcEnd = pbSrc + (nClipRight - nClipLeft);
-        pDst = nDstRow + nClipLeft + nRowOffset;
+        pDst = nDstRow + (nClipLeft + nRowOffset);
         for (; pbSrc < pbSrcEnd; pbSrc++) {
           *pDst = D2GFX::gaPaletteColorLUT[*pbLineBuf][*pbSrc];
           pDst++;

@@ -2,35 +2,148 @@
 
 #include "Source/D2Game/PLAYER/PlayerSave.h"
 #include "Source/D2Client/D2BattleNetEventCallbackTable.h"
+#include "Source/D2Client/D2ClientStrc.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Item.h"
+#include "Source/D2Client/UNIT/Monster.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2BitBufferStrc.h"
 #include "Source/D2Common/D2CharStatsTxt.h"
+#include "Source/D2Common/D2InventoryStrc.h"
+#include "Source/D2Common/D2MissilesTxt.h"
+#include "Source/D2Common/D2MonStatsTxt.h"
+#include "Source/D2Common/D2RoomExStrc.h"
+#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/D2SkillStrc.h"
+#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2StatListExStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
+#include "Source/D2Common/D2WaypointStrc.h"
+#include "Source/D2Common/DATATBLS/AnimTbls.h"
+#include "Source/D2Common/DATATBLS/DataTbls.h"
+#include "Source/D2Common/DATATBLS/ItemStats.h"
+#include "Source/D2Common/DATATBLS/ItemTbls.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgActStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgDeleteStrc.h"
+#include "Source/D2Common/Drlg/Preset.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/PATH/DynamicPath.h"
+#include "Source/D2Common/QuestRecord.h"
+#include "Source/D2Common/Seed.h"
+#include "Source/D2Common/Stats/StatsEx.h"
+#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
+#include "Source/D2Common/Units.h"
+#include "Source/D2Common/Waypoints.h"
+#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/D2UnknownItemRelatedStruct.h"
 #include "Source/D2Game/GAME/Arena.h"
 #include "Source/D2Game/GAME/Clients.h"
+#include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/SCmd.h"
+#include "Source/D2Game/GAME/Targets.h"
 #include "Source/D2Game/GAME/Task.h"
 #include "Source/D2Game/ITEMS/ItemMode.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
 #include "Source/D2Game/Monster/Monster.h"
 #include "Source/D2Game/Monster/MonsterAI.h"
+#include "Source/D2Game/PLAYER/Player.h"
 #include "Source/D2Game/PLAYER/PlayerIntro.h"
 #include "Source/D2Game/PLAYER/PlayerPets.h"
 #include "Source/D2Game/PLAYER/PlayerSave2.h"
 #include "Source/D2Game/PLAYER/PlayerTrade.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/SKILLS/SkillsServer.h"
+#include "Source/D2Game/UNIT/PlayerList.h"
 #include "Source/D2Game/UNIT/SUNITNPC.h"
 #include "Source/D2Game/UNIT/SUnit.h"
+#include "Source/D2Game/UNIT/SUnitDmg.h"
+#include "Source/D2Game/UNIT/SUnitInactive.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/D2Hell/D2Hell.h"
+#include "Source/D2Hell/D2HellRoot.h"
+#include "Source/D2Win/DC6.h"
+#include "Source/D2Win/DC6Block.h"
+#include "Source/Fog/Fog.h"
+#include "Source/Fog/BitBuffer.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/Save.h"
+#include "Source/Fog/Source/SFile.h"
+#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Src/LogManager.h"
+#include "Source/D2CMP/D2CMP.h"
+#include "Source/D2CMP/Draw.h"
+#include "Source/D2CMP/SRC/Codec.h"
+#include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2Client/D2Client.globals.h"
+#include "Source/D2Client/UI/Automap.h"
+#include "Source/D2Client/UNIT/Item.h"
+#include "Source/D2Common/COMPOSIT/Composit.h"
+#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/DATATBLS/ItemTbls.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
+#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2Common/Drlg/OutSiege.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/ItemMods.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Logging/ProfCore.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Unit.h"
 #include "Source/D2Game/D2Game.globals.h"
+#include "Source/D2Game/D2QuestDataStrc.h"
+#include "Source/D2Game/GAME/Arena.h"
+#include "Source/D2Game/GAME/Task.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Game/Monster/AI/Baal.h"
+#include "Source/D2Game/Monster/MonsterMode.h"
+#include "Source/D2Game/Objects/Objects.h"
+#include "Source/D2Game/PLAYER/PlayerMsg.h"
+#include "Source/D2Game/Quests/QUESTS.h"
+#include "Source/D2Game/SKILLS/Items.h"
+#include "Source/D2Game/SKILLS/SkillAss.h"
+#include "Source/D2Game/UNIT/SUnitDmg.h"
+#include "Source/D2Game/UNIT/sunitproxy.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Lang/D2LangRoot.h"
+#include "Source/D2Lang/StrTable/strtable.h"
+#include "Source/D2Win/D2Win.globals.h"
+#include "Source/Fog/D2MemoryManagerStrc.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/D2QServerStrc.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Save.h"
+#include "Source/Fog/Source/SFile.h"
+#include "Source/Fog/Source/SSComp.h"
+#include "Source/Fog/Src/LogManager.h"
+#include "3rdparty/Storm/Storm.h"
+#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
+#include "3rdparty/Storm/H/stpl.h"
+#include "3rdparty/Storm/Source/SCMD.h"
+#include "3rdparty/Storm/Source/SComp.h"
+#include "3rdparty/Storm/Source/SErr.h"
+#include "3rdparty/Storm/Source/SFile.h"
+#include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Client/UI/Automap.h"
+#include "Source/D2Common/D2UnitDataItemStrc.h"
+#include "Source/D2Common/ITEMS/ItemMods.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/GAME/Server.data.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Game/SKILLS/SkillAss.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -451,7 +564,7 @@ static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDAT
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_15(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_15(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }
@@ -481,7 +594,11 @@ static uint16_t GetCarriedItemsCount(D2InventoryStrc * pInventory) {
     }
 
     D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-    uint16_t nCount = (uint16_t)(pItem != 0);
+    uint16_t nCount = 0;
+    if (pItem != 0) {
+      nCount = 1;
+    }
+
     pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
     while (pItem) {
       D2UnitStrc* pCarriedItem;
@@ -1397,7 +1514,7 @@ int __fastcall _oldSaveGameLoadingPart5(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       eD2UnitStat eUnitStat = UNITSTAT_strength;
       do {
         if (pwStatData[(eUnitStat >> 3) + 2] & (uint8_t)(1 << ((uint8_t)eUnitStat & 7))) {
-          nStatValue = *(int32_t*)(pwStatData + nStatValueCount * 4 + 5);
+          nStatValue = *(int32_t*)(pwStatData + (nStatValueCount * 4 + 5));
           nStatValueCount++;
         } else {
           nStatValue = 0;

@@ -57,13 +57,19 @@ bool __fastcall Q12_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
     } else {
       bool bStateMatches;
       if (nTargetClassId == 0xb1) {
-        bStateMatches = pQuestData->nStateFlag == 1;
+        bStateMatches = false;
+        if (pQuestData->nStateFlag == 1) {
+          bStateMatches = true;
+        }
       } else {
         if (nTargetClassId != 0xc9) {
           return false;
         }
 
-        bStateMatches = pQuestData->nStateFlag == 2;
+        bStateMatches = false;
+        if (pQuestData->nStateFlag == 2) {
+          bStateMatches = true;
+        }
       }
       if (!bStateMatches) {
         return false;

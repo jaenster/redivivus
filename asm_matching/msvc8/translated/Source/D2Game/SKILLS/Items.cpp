@@ -1264,7 +1264,7 @@ BOOL __fastcall ITEMMOD_RollRareAffixes(D2UnitStrc * pUnit, D2ItemGenContextStrc
       if (nPrefixSlot == 3 || nSuffixSlot != 3 && seedState & 1) {
         nDupRetries = 0;
         do {
-          pExcludeAffixEntry = *(int32_t*)(pItemGenContext->szCustomName + nSuffixSlot * 4 + 0x1c);
+          pExcludeAffixEntry = *(int32_t*)(pItemGenContext->szCustomName + (nSuffixSlot * 4 + 0x1c));
           sVar5 = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
           if (sVar5 >= 1) {
             uVar1 = ITEMMOD_RollMagicAffix(pUnit, 1, 1, 0, 0, pExcludeAffixEntry, 0);
@@ -1301,7 +1301,7 @@ BOOL __fastcall ITEMMOD_RollRareAffixes(D2UnitStrc * pUnit, D2ItemGenContextStrc
       } else {
         nDupRetries = 0;
         do {
-          pExcludeAffixEntry = *(int32_t*)(pItemGenContext->szCustomName + nPrefixSlot * 4 + 0x10);
+          pExcludeAffixEntry = *(int32_t*)(pItemGenContext->szCustomName + (nPrefixSlot * 4 + 0x10));
           sVar5 = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
           if (sVar5 >= 1) {
             uVar1 = ITEMMOD_RollMagicAffix(pUnit, 1, 1, 0, 1, pExcludeAffixEntry, 0);

@@ -292,20 +292,19 @@ int __stdcall LOADING_GetProgressRatio() {
 }
 
 void __fastcall LOADING_AnimateProgressBar(int32_t nCurrentChunk, int32_t nTotalChunks) {
-    int nNumerator = nCurrentChunk << 0xb;
-    int nStepsLeft = 8;
-    do {
-      if (!(nTotalChunks * 8)) {
+    int nStep;
+    nTotalChunks = nTotalChunks * 8;
+    nCurrentChunk = nCurrentChunk * 8;
+    for (nStep = 0; nStep < 8; nStep++) {
+      if (!nTotalChunks) {
         gnLoadingProgressRatio = 0;
       } else {
-        gnLoadingProgressRatio = nNumerator / (nTotalChunks * 8);
+        gnLoadingProgressRatio = ((nCurrentChunk + nStep) << 8) / nTotalChunks;
       }
 
       UI::Draw::Draw_UI_LoadGame(0);
       /* DWORD dwMilliseconds for Sleep */ Sleep(0xfa);
-      nNumerator += 0x100;
-      nStepsLeft--;
-    } while (nStepsLeft);
+    }
 }
 
 // Sends the player's save file to the game server as a stream of 0x6C (ASCII 'l') packets. Reads the entire save buffer via MSG_ReadSaveFileToBuffer, then sends it in 255-byte chunks followed by a final tail packet. Optionally animates a loading progress bar (bAnimate != 0). Updates gnPacketSendCount_0x69 and the network sync flag after each chunk.
@@ -364,7 +363,7 @@ void __fastcall NET_D2GS_CLIENT_Send_0x6C(int32_t bAnimate) {
     }
 
     D2Net::SRC::Client::NET_D2GS_CLIENT_SendPacketAfterChecks(nBytesCopied + 7U, 0, (char*)&sPacket);
-    gnD2GSBytesSentTotal = gnD2GSBytesSentTotal + nBytesCopied + 7U;
+    gnD2GSBytesSentTotal += nBytesCopied + 7U;
     gnD2GSPacketsSentTotal++;
     D2_FREE_AT(pReadPtr, ".\\GAME\\Msg.cpp", 0x262);
     if (!nTotalChunks) {
@@ -539,7 +538,10 @@ void __fastcall NET_D2GS_CLIENT_Send_INT_INT_INT_INT(uint8_t nPacketId, int32_t 
 void __fastcall NET_D2GS_CLIENT_Send_0x5D(int nActionType, uint32_t nPlayerGUID, int32_t bToggle) {
     D2GSPacketClt0x5D sPacket;
     memset(&sPacket, 0, sizeof(sPacket));
-    sPacket.bToggle = bToggle != 0;
+    if (bToggle != 0) {
+      sPacket.bToggle = true;
+    }
+
     sPacket.nId = 0x5d;
     sPacket.nActionType = (uint8_t)nActionType;
     *(uint8_t*)(char*)&sPacket.nPlayerGUID = (uint8_t)nPlayerGUID;
@@ -566,11 +568,11 @@ void __fastcall NET_D2GS_CLIENT_Send_Chat(D2ChatPacketBuildStrc * pChatPacket) {
     uint32_t nMsgLen = Storm::Source::SSTR::SStrCopy(sPacket.abData, pChatPacket->szMsg, 0x100);
     if (pChatPacket->szTarget) {
       uint32_t nTargetLen;
-      nTargetLen = Storm::Source::SSTR::SStrCopy(sPacket.abData + nMsgLen + 1, pChatPacket->szTarget, 0x10);
+      nTargetLen = Storm::Source::SSTR::SStrCopy(sPacket.abData + (nMsgLen + 1), pChatPacket->szTarget, 0x10);
       pTerminator = sPacket.abData + nTargetLen + nMsgLen + 2;
     } else {
       sPacket.abData[nMsgLen + 1] = '\0';
-      pTerminator = sPacket.abData + nMsgLen + 2;
+      pTerminator = sPacket.abData + (nMsgLen + 2);
     }
 
     *pTerminator = '\0';

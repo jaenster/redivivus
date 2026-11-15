@@ -39,6 +39,8 @@ oracle-zig diff [--funcmap F] <name|addr>                 # asmdiff.py
 oracle-zig snippet FILE [--func NAME [--ref ADDR]] [--cflags FLAGS] [--tu TU]   # snippet.py
 oracle-zig objdiff <objdir A> <objdir B> [PATTERN ...]    # objdiff.py
 oracle-zig diffgrams [--top N] [--max-len K] [--examples] # diffgrams.py
+oracle-zig aligndump [--audit A] [--out FILE] [ADDR ...]   # every non-MATCH function aligned, JSON lines
+oracle-zig soleblock [--funcmap F] [--libmap L] [--ratchet DIR --ratchet-report T] align.jsonl OUT   # soleblock.py
 oracle-zig sizetrend [--audit A] [--funcmap F] [--out O] [--label T]   # sizetrend.py
 oracle-zig abcompare <baseline> <experiment> [--depth N] [--list]      # abcompare.py
 oracle-zig tulayout [--tu PATTERN] [--intruders]          # tulayout.py
@@ -141,6 +143,8 @@ camelCase, so a port reads side by side with its original.
 |`asmdiff.zig`|`asmdiff.py`|one function side by side (`compare.sideBySide`, `differingLines`), its source lines|
 |`snippet.zig`|`snippet.py`|compile a variant with the tree's response file and a copy of the precompiled header|
 |`tools.zig`|`objdiff.py`, `diffgrams.py`, `sizetrend.py`, `abcompare.py`, `tulayout.py`|the analyses over the audit|
+|`aligndump.zig`| |the audit's alignment of every function that does not match, as JSON lines|
+|`soleblock.zig`|`soleblock.py`|the sole-blocker index over aligndump's output: causes per hunk, ranked by the functions each alone blocks|
 |`stamps.zig`|`decode_rich_header.py`, `compid.py`|the Rich header and @comp.id stamps|
 |`svg.zig`|`byte_match_svg.py`|the byte kinds bar chart|
 |`commit.zig`|`commit.py`|the branch's commit split|
@@ -169,3 +173,17 @@ camelCase, so a port reads side by side with its original.
 - Python decodes what it reads from a binary as Latin-1 and text files as UTF-8, and prints
   both as UTF-8: `cli.Out.lat` for the first (names and strings from objects, the listings),
   as is for the second.
+
+`aligndump` writes the audit's own alignment of every function that does not match (ours and
+the original, masked bytes, comparable references, our source line or header) plus each unit's
+function definition lines and linkage. `soleblock` reads it and ranks diff causes by how many
+functions each is the only remaining blocker of (the sole-blocker index): index.tsv, callees.tsv,
+functions.tsv, and with `--ratchet` frozen.tsv (ratchet members kept at a body that does not
+match):
+
+```sh
+oracle-zig aligndump --out align.jsonl
+oracle-zig soleblock --funcmap ../evidence/funcmap.tsv --libmap ../evidence/libmap.tsv \
+    [--ratchet <recon/modified/ratchet> --ratchet-report <project>/.ghidra-mcp/ratchet-report.tsv] align.jsonl <outdir>
+```
+

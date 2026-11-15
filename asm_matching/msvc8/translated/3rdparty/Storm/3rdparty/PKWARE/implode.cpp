@@ -841,7 +841,7 @@ void WriteCmpData(TCmpStruct * pCmp) {
     bEndOfInput = false;
     pCmp->out_buff[0] = (uint8_t)pCmp->ctype;
     uint8_t* pbWindowCursor;
-    pbWindowCursor = pCmp->work_buff + pCmp->dsize_bytes + 0x204;
+    pbWindowCursor = pCmp->work_buff + (pCmp->dsize_bytes + 0x204);
     pCmp->out_buff[1] = (uint8_t)pCmp->dsize_bits;
     pCmp->out_bytes = 2;
     lmemset((uint32_t*)(pCmp->out_buff + 2), 0, 0x800);
@@ -872,7 +872,7 @@ void WriteCmpData(TCmpStruct * pCmp) {
       } while (nDictSize);
 
       nDictSizeBytes = pCmp->dsize_bytes;
-      pbWindowEnd = pCmp->work_buff + nDictSizeBytes + nBytesReadTotal;
+      pbWindowEnd = pCmp->work_buff + (nDictSizeBytes + nBytesReadTotal);
       if (bEndOfInput) {
         pbWindowEnd += 0x204;
       }
@@ -969,11 +969,11 @@ int FindRep(TCmpStruct * pCmpState, uint8_t * pbSrcPos) {
     int nBestLen = 1;
     uint32_t nHashIdx = (uint32_t)pCmpState->phash_to_index[(uint32_t)pbSrcPos[1] * 5 + (uint32_t)*pbSrcPos * 4];
     uint16_t* pChainLinkEntry = pCmpState->phash_offs + nHashIdx;
-    if ((uint8_t*)(uint32_t)*pChainLinkEntry < pbSrcPos + (-(intptr_t)pCmpState - pCmpState->dsize_bytes) - 0x27cb) {
+    if ((uint8_t*)(uint32_t)*pChainLinkEntry < pbSrcPos + (-(intptr_t)pCmpState - pCmpState->dsize_bytes - 0x27cb)) {
       do {
         pChainLinkEntry++;
         nHashIdx++;
-      } while ((uint8_t*)(uint32_t)*pChainLinkEntry < pbSrcPos + (-(intptr_t)pCmpState - pCmpState->dsize_bytes) - 0x27cb);
+      } while ((uint8_t*)(uint32_t)*pChainLinkEntry < pbSrcPos + (-(intptr_t)pCmpState - pCmpState->dsize_bytes - 0x27cb));
 
       pCmpState->phash_to_index[(uint32_t)pbSrcPos[1] * 5 + (uint32_t)*pbSrcPos * 4] = (uint16_t)nHashIdx;
     }
@@ -1024,7 +1024,7 @@ int FindRep(TCmpStruct * pCmpState, uint8_t * pbSrcPos) {
               }
             } while (nKmpPos < nCandidateLen);
 
-            pbMatchEnd = pCmpState->work_buff + (uint32_t)pCmpState->phash_offs[nHashIdx] + nCandidateLen;
+            pbMatchEnd = pCmpState->work_buff + ((uint32_t)pCmpState->phash_offs[nHashIdx] + nCandidateLen);
             do {
               nCandidateLen = (int)(short int)pCmpState->offs09BC[nCandidateLen];
               if (nCandidateLen == -1) {
@@ -1050,7 +1050,7 @@ int FindRep(TCmpStruct * pCmpState, uint8_t * pbSrcPos) {
                   pbMatchEnd = pbCandidateMatch;
                 }
               } else {
-                pChainLinkEntry = pCmpState->phash_offs + nHashIdx + 1;
+                pChainLinkEntry = pCmpState->phash_offs + (nHashIdx + 1);
                 nHashIdx = nNextHashIdx;
                 do {
                   pChainLinkEntry++;
@@ -1191,7 +1191,7 @@ void lmemset(uint32_t * pDst, uint8_t byFill, uint32_t nSize) {
     }
 
     for (iVar1 = 0; iVar1; iVar1--) {
-      *pDst = (uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)byFill << 8 | (uint16_t)(uint8_t)byFill) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)byFill << 8 | (uint16_t)(uint8_t)byFill));
+      *pDst = (uint32_t)((uint32_t)((uint16_t)(uint8_t)byFill << 8 | (uint16_t)(uint8_t)byFill) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)byFill << 8 | (uint16_t)(uint8_t)byFill));
       pDst++;
     }
 

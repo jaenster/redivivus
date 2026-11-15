@@ -1250,11 +1250,11 @@ void __stdcall UpdateFrame(D2UnitStrc * pUnit) {
 
 void __stdcall SetFrameNonRate(D2UnitStrc * pUnit, int32_t nRate, int32_t nFailRate) {
     pUnit->nGfxCurrentFrame += (int)pUnit->nAnimSpeed;
-    if (!(pUnit->nGfxCurrentFrame >= nFailRate * 0x100)) {
+    if (!(pUnit->nGfxCurrentFrame >= nFailRate << 8)) {
       return;
     }
 
-    pUnit->nGfxCurrentFrame = nRate * 0x100 + nFailRate * -0x100 + pUnit->nGfxCurrentFrame;
+    pUnit->nGfxCurrentFrame = (nRate << 8) + nFailRate * -0x100 + pUnit->nGfxCurrentFrame;
 }
 
 static int32_t UNITS_GetBaseWalkVelocity(eD2UnitType eUnitType, int32_t nClassId) {
@@ -1948,7 +1948,7 @@ void __stdcall AllocPlayerData(D2UnitStrc * pUnit) {
       do {
         pMemPool = GetMemPool(pUnit);
         pQuestBuf = QuestRecord::CreateBitBuffer(pMemPool);
-        *(D2BitBufferStrc**)(pUnit->pUnitData.pUnitDataPlayer->szCharName + iActIdx - 0xc) = (D2BitBufferStrc*)pQuestBuf;
+        *(D2BitBufferStrc**)(pUnit->pUnitData.pUnitDataPlayer->szCharName + (iActIdx - 0xc)) = (D2BitBufferStrc*)pQuestBuf;
         pMemPool = GetMemPool(pUnit);
         pWaypoint = Waypoints::Alloc(pMemPool);
         *(D2WaypointStrc**)(pUnit->pUnitData.pUnitDataPlayer->szCharName + iActIdx) = (D2WaypointStrc*)pWaypoint;
@@ -3513,7 +3513,7 @@ uint32_t __stdcall UNITS_GetFrameBonus(D2UnitStrc * pUnit) {
         nAnimClassIdx = (uint32_t)wAnimClass;
       }
 
-      return gaClassWeaponFrameBonus[(int)(nUnit + 0x19 + nAnimClassIdx * 7 - 0x19)];
+      return gaClassWeaponFrameBonus[(int)(nUnit + 0x19 + (nAnimClassIdx * 7 - 0x19))];
       case eD2PlayerAnimMode_ns::Skill3:
 
       case eD2PlayerAnimMode_ns::Skill4:
@@ -3526,7 +3526,7 @@ uint32_t __stdcall UNITS_GetFrameBonus(D2UnitStrc * pUnit) {
           nWeaponAnimClass = (uint32_t)wAnimClass;
         }
 
-        return gaClassWeaponFrameBonus[(int)(nUnit + 0x19 + nWeaponAnimClass * 7 - 0x19)];
+        return gaClassWeaponFrameBonus[(int)(nUnit + 0x19 + (nWeaponAnimClass * 7 - 0x19))];
       }
     }
 
@@ -3718,7 +3718,7 @@ void __stdcall AdvanceAnimFrame(D2UnitStrc * pUnit) {
           pUnit->nGfxCurrentFrame -= pUnit->nFrameCount;
           nPrevFrame = 0;
           nSeqMode = UNITS_GetFrameBonus(pUnit);
-          pUnit->nGfxCurrentFrame += nSeqMode * 0x100;
+          pUnit->nGfxCurrentFrame += nSeqMode << 8;
         } while (pUnit->nGfxCurrentFrame >= pUnit->nFrameCount);
       }
 
@@ -4086,7 +4086,7 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
             wAnimSpeed = (short int)((int)nAnimRate / 1024 << 8);
           }
         } else {
-          wAnimSpeed = (short int)((int)(nAnimRate * 0x100) / 1024);
+          wAnimSpeed = (short int)((int)(nAnimRate << 8) / 1024);
         }
 
         pUnit_00->nAnimSpeed = wAnimSpeed;

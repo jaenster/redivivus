@@ -303,7 +303,7 @@ DC6 * __fastcall GetRosterIcon(D2UnitStrc * pUnit, int32_t nSkillId, int32_t * p
     DC6** ppIcon = &gpHireablesList[nSkillIdSaved].pIcon + nIconIndex;
     if (!(&gpHireablesList[nSkillIdSaved].pIcon)[nIconIndex]) {
       char szIconPath[256];
-      sprintf(szIconPath, "hireables\\%s", pPetType->baseicon + nIconIndex * 0x20);
+      sprintf(szIconPath, "hireables\\%s", pPetType->baseicon + (nIconIndex << 5));
       ppIcon = &gpHireablesList[nRosterGUID].pIcon + nIconIndex;
       pIcon = ui::ARCHIVE_LoadOverlayImageUsedInGame(szIconPath);
       *ppIcon = pIcon;

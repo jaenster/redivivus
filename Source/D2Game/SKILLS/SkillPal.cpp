@@ -300,6 +300,7 @@ int __fastcall SKILLPAL_ApplyAuraStateToTarget(D2SkillCallbackContextStrc * pCon
     sAuraArg.nSkillLvl = pAuraArgs->nSkillLvl;
     sAuraArg.nDurationInFrames = pAuraArgs->nDelayFrame;
     sAuraArg.eStat = ~UNITSTAT_strength;
+    sAuraArg.nSkillCalc = 0;
     sAuraArg.eAuraState = pAuraArgs->nAuraState;
     PFN_StatExpireCallback pOnExpire = (PFN_StatExpireCallback)pAuraArgs->pExtra;
     if (!pAuraArgs->pExtra) {
@@ -938,9 +939,6 @@ BOOL __fastcall Skills_SrvDoFunc_067_Charge(::SGAMEDATA * pGame, D2UnitStrc * pU
 static int32_t SKILLPAL_RollRandomDamage(D2UnitStrc * pUnit) {
     int nMinDmg;
     int nMaxDmg;
-    uint32_t nRange;
-    uint64_t nSeedHigh;
-    uint32_t nSeedLowOld;
     D2SeedStrc newSeed;
     D2UnitStrc* pActiveWeapon = PLAYER::Player::PLAYER_GetActiveWeaponForSkill(pUnit);
     if (pActiveWeapon) {
@@ -964,8 +962,8 @@ static int32_t SKILLPAL_RollRandomDamage(D2UnitStrc * pUnit) {
       }
     }
 
-    nMinDmg *= 0x100;
-    nMaxDmg *= 0x100;
+    nMinDmg = nMinDmg << 8;
+    nMaxDmg = nMaxDmg << 8;
     if (nMinDmg < 1) {
       nMinDmg = 0x100;
     }
@@ -973,13 +971,13 @@ static int32_t SKILLPAL_RollRandomDamage(D2UnitStrc * pUnit) {
       nMaxDmg = nMinDmg + 0x100;
     }
 
-    nRange = nMaxDmg - nMinDmg;
+    uint32_t nRange = nMaxDmg - nMinDmg;
     if ((int)nRange <= 0) {
       return nMinDmg;
     }
 
-    nSeedLowOld = pUnit->sSeed.nSeedLow;
-    nSeedHigh = (uint64_t)pUnit->sSeed.nSeedHigh;
+    uint32_t nSeedLowOld = pUnit->sSeed.nSeedLow;
+    uint64_t nSeedHigh = (uint64_t)pUnit->sSeed.nSeedHigh;
     if (nRange & nRange - 1) {
       newSeed = (D2SeedStrc)((uint64_t)nSeedLowOld * 0x6ac690c5 + nSeedHigh);
       pUnit->sSeed.nSeedHigh = newSeed.nSeedHigh;
@@ -1311,9 +1309,9 @@ BOOL __fastcall Skills_SrvDoFunc_079_Conversion(::SGAMEDATA * pGame, D2UnitStrc 
       D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pConvStatList, UNITSTAT_conversion_level, nConvertCheckOrFrame, 0);
       D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pConvStatList, UNITSTAT_conversion_maxhp, nDuration >> 8, 0);
       nHpScaleResult = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nCurHp >> 8, nPercent, nConvertCheckOrFrame);
-      nCurHp = nHpScaleResult * 0x100;
+      nCurHp = nHpScaleResult << 8;
       nDuration = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDuration >> 8, nPercent, nConvertCheckOrFrame);
-      nConvertCheckOrFrame = nDuration * 0x100;
+      nConvertCheckOrFrame = nDuration << 8;
       if (nConvertCheckOrFrame < 1) {
         nConvertCheckOrFrame = 1;
       }
@@ -1430,7 +1428,7 @@ uint32_t __fastcall SKILL_HitTargetApplyDamageAndShatter(D2SkillCallbackContextS
       pSrcCalc = pAuraArgs->anCalcs;
       nAuraArgDelta = (intptr_t)&uScratch + (0x20 - (intptr_t)pAuraArgs);
       do {
-        *(int32_t*)((intptr_t)&uScratch + nIdx * 4 + 0x30) = pSrcCalc[-6];
+        *(int32_t*)((intptr_t)&uScratch + (nIdx * 4 + 0x30)) = pSrcCalc[-6];
         *(int32_t*)(nAuraArgDelta + (char*)pSrcCalc) = *pSrcCalc;
         nIdx++;
         pSrcCalc++;
@@ -1595,7 +1593,7 @@ BOOL __fastcall SKILLPAL_ApplyRedemptionEffect(::SGAMEDATA * pGame, D2UnitStrc *
     nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[1], eSkill, nSkillLvl);
     int32_t nMaxVal = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     nStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    nStatVal += nCalcVal * 0x100;
+    nStatVal += nCalcVal << 8;
     if (nMaxVal < nStatVal) {
       nStatVal = nMaxVal;
     }
@@ -1604,7 +1602,7 @@ BOOL __fastcall SKILLPAL_ApplyRedemptionEffect(::SGAMEDATA * pGame, D2UnitStrc *
     nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[2], eSkill, nSkillLvl);
     nMaxVal = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
     nStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
-    nStatVal += nCalcVal * 0x100;
+    nStatVal += nCalcVal << 8;
     if (nMaxVal < nStatVal) {
       nStatVal = nMaxVal;
     }
@@ -1650,7 +1648,7 @@ uint32_t __fastcall SKILLPAL_AuraCallback_Redemption(D2SkillCallbackContextStrc 
     nCalcVal = D2Common::Skills::D2GetSkillCalc(pCasterUnit, pSkillRecord->calc[1], eSkill, nSkillLvl);
     int32_t nMaxVal = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pCasterUnit);
     nStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCasterUnit, UNITSTAT_hitpoints, 0);
-    nStatVal += nCalcVal * 0x100;
+    nStatVal += nCalcVal << 8;
     if (nMaxVal < nStatVal) {
       nStatVal = nMaxVal;
     }
@@ -1659,7 +1657,7 @@ uint32_t __fastcall SKILLPAL_AuraCallback_Redemption(D2SkillCallbackContextStrc 
     nCalcVal = D2Common::Skills::D2GetSkillCalc(pCasterUnit, pSkillRecord->calc[2], eSkill, nSkillLvl);
     nMaxVal = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pCasterUnit);
     nStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCasterUnit, UNITSTAT_mana, 0);
-    nStatVal += nCalcVal * 0x100;
+    nStatVal += nCalcVal << 8;
     if (nMaxVal < nStatVal) {
       nStatVal = nMaxVal;
     }

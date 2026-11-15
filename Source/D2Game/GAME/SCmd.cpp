@@ -16,29 +16,140 @@
 #include "Source/D2Client/D2GSPacketSrv0x8B.h"
 #include "Source/D2Client/D2GSPacketSrv0x8E.h"
 #include "Source/D2Client/D2GSPacketSrv0x91.h"
+#include "Source/D2Client/D2LightMapStrc.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/GAME/SCmd.h"
 #include "Source/D2Client/UNIT/Item.h"
+#include "Source/D2Client/UNIT/MonUnique.h"
 #include "Source/D2Client/UNIT/Monster.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/Collision.h"
+#include "Source/D2Common/D2BitBufferStrc.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
+#include "Source/D2Common/D2DynamicPathStrc.h"
+#include "Source/D2Common/D2InventoryStrc.h"
+#include "Source/D2Common/D2MissilesTxt.h"
+#include "Source/D2Common/D2MonStatsTxt.h"
+#include "Source/D2Common/D2RoomExStrc.h"
+#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2SkillStrc.h"
+#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2StatInfoStrc.h"
+#include "Source/D2Common/D2StatListExStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
+#include "Source/D2Common/D2WaypointStrc.h"
+#include "Source/D2Common/DATATBLS/AnimTbls.h"
+#include "Source/D2Common/DATATBLS/ItemStats.h"
+#include "Source/D2Common/DATATBLS/OverlayTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgActStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgDeleteStrc.h"
+#include "Source/D2Common/Drlg/Preset.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/PATH/DynamicPath.h"
+#include "Source/D2Common/QuestRecord.h"
+#include "Source/D2Common/Stats/StatsEx.h"
+#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
+#include "Source/D2Common/Units.h"
+#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/GAME/Arena.h"
 #include "Source/D2Game/GAME/Clients.h"
+#include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/Server.h"
 #include "Source/D2Game/GAME/Server/ServerCmd.h"
+#include "Source/D2Game/GAME/Targets.h"
 #include "Source/D2Game/Monster/Monster.h"
 #include "Source/D2Game/Monster/Monsters.h"
+#include "Source/D2Game/Objects/Objects.h"
 #include "Source/D2Game/PLAYER/Player.h"
 #include "Source/D2Game/PLAYER/PlayerMsg.h"
 #include "Source/D2Game/PLAYER/PlayerPets.h"
+#include "Source/D2Game/PLAYER/PlayerTrade.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/Quests/QUESTS/A4Q2.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/PlayerList.h"
 #include "Source/D2Game/UNIT/SUnit.h"
+#include "Source/D2Game/UNIT/SUnitDmg.h"
+#include "Source/D2Game/UNIT/SUnitInactive.h"
+#include "Source/D2Game/UNIT/SUnitMsg.h"
+#include "Source/Fog/Fog.h"
+#include "Source/Fog/BitBuffer.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Save.h"
+#include "Source/Fog/Src/ErrorManager.h"
+#include "3rdparty/Storm/Storm.h"
+#include "3rdparty/Storm/Source/SSTR.h"
+#include "Source/D2CMP/D2CMP.h"
+#include "Source/D2CMP/Draw.h"
+#include "Source/D2CMP/SRC/Codec.h"
+#include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2Client/D2GSPacketSrv0x2A.h"
+#include "Source/D2Client/GAME/SCmd.h"
+#include "Source/D2Client/UNIT/Item.h"
+#include "Source/D2Client/UNIT/Monster.h"
+#include "Source/D2Common/COMPOSIT/Composit.h"
+#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/DATATBLS/ItemTbls.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
+#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2Common/Drlg/OutSiege.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/ItemMods.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Logging/ProfCore.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Unit.h"
+#include "Source/D2Game/D2QuestDataStrc.h"
+#include "Source/D2Game/GAME/Arena.h"
+#include "Source/D2Game/GAME/Task.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Game/Monster/AI/Baal.h"
+#include "Source/D2Game/Monster/MonsterMode.h"
+#include "Source/D2Game/Objects/Objects.h"
+#include "Source/D2Game/PLAYER/PlayerMsg.h"
+#include "Source/D2Game/Quests/QUESTS.h"
+#include "Source/D2Game/SKILLS/Items.h"
+#include "Source/D2Game/SKILLS/SkillAss.h"
+#include "Source/D2Game/UNIT/SUnitDmg.h"
+#include "Source/D2Game/UNIT/sunitproxy.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Lang/D2LangRoot.h"
+#include "Source/D2Lang/StrTable/strtable.h"
+#include "Source/D2Win/D2Win.globals.h"
+#include "Source/Fog/D2MemoryManagerStrc.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/D2QServerStrc.h"
+#include "Source/Fog/Fog.globals.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Save.h"
+#include "Source/Fog/Source/SFile.h"
+#include "Source/Fog/Source/SSComp.h"
+#include "Source/Fog/Src/LogManager.h"
+#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
+#include "3rdparty/Storm/H/stpl.h"
+#include "3rdparty/Storm/Source/SCMD.h"
+#include "3rdparty/Storm/Source/SComp.h"
+#include "3rdparty/Storm/Source/SErr.h"
+#include "3rdparty/Storm/Source/SFile.h"
+#include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Client/UI/Automap.h"
+#include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Game/SKILLS/SkillAss.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -600,7 +711,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x1A_0x1B_0x1C_Experience(D2ClientStrc * pC
     uint32_t nExpDelta = nCurrentExp - nPreviousExp;
     if (nExpDelta <= 0xfffe) {
       if ((int)nExpDelta < 0xff) {
-        nPreviousExp = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&nPreviousExp + 2) << 8 | (uint32_t)(uint8_t)(char)nExpDelta) & 0xffffffu) << 8 | (uint32_t)(uint8_t)0x1a);
+        nPreviousExp = (uint32_t)((uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&nPreviousExp + 2) << 8 | (uint32_t)(uint8_t)(char)nExpDelta) << 8 | (uint32_t)(uint8_t)0x1a);
         SCMD_QueuePacketForClient(pClient, (uint8_t*)&nPreviousExp, 2);
         return;
       }
@@ -631,7 +742,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x1D_0x1E_0x1F_SetAttribute(D2ClientStrc * 
       uint8_t byValue;
       byValue = (uint8_t)nValue;
       *(uint16_t*)(char*)&nValue = (uint16_t)((uint16_t)(uint8_t)aPacket.nStatId << 8 | (uint16_t)(uint8_t)0x1d);
-      nValue = (uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)*(uint8_t*)((char*)&nValue + 3) << 8 | (uint16_t)(uint8_t)byValue) << 16 | (uint32_t)(uint16_t)nValue);
+      nValue = (uint32_t)((uint32_t)((uint16_t)(uint8_t)*(uint8_t*)((char*)&nValue + 3) << 8 | (uint16_t)(uint8_t)byValue) << 16 | (uint32_t)(uint16_t)nValue);
       SCMD_QueuePacketForClient(pClient, (uint8_t*)&nValue, 3);
       return;
     }
@@ -1027,8 +1138,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x26_CHATSTART(D2ClientStrc * pClient, D2GS
     sPacket.nMessageColor = pPacket->nMessageColor;
     sPacket.nColor = pPacket->nColor;
     uint32_t nNameLen = Storm::Source::SSTR::SStrCopy(sPacket.szName, pPacket->szName, 0x10);
-    uint32_t nMsgLen = Storm::Source::SSTR::SStrCopy(sPacket.szName + nNameLen + 1, pPacket->szMessage, 0x100);
-    SCMD_QueuePacketForClient(pClient, &sPacket.nPacketId, (size_t)(sPacket.szName + nNameLen + 1 + (nMsgLen + 1 - (intptr_t)&sPacket)));
+    uint32_t nMsgLen = Storm::Source::SSTR::SStrCopy(sPacket.szName + (nNameLen + 1), pPacket->szMessage, 0x100);
+    SCMD_QueuePacketForClient(pClient, &sPacket.nPacketId, (size_t)(sPacket.szName + (nNameLen + (nMsgLen + 1 - (intptr_t)&sPacket))));
 }
 
 void __fastcall NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG(D2ClientStrc * pClient, D2Packet0x5aEventStructure * pEventPacket) {
@@ -1916,13 +2027,13 @@ void __fastcall NET_D2GS_SERVER_Send_0x75_UPDATEROSTER(D2UnitStrc * pUnit, D2Uni
 void __fastcall NET_D2GS_SERVER_Send_0x7B_SYNCHOTKEYS(D2ClientStrc * pClient, uint8_t nHotkeySlot, int32_t nSkillId, int32_t bIsLeftSkill, uint32_t dwHotkeyArg) {
     D2GSPacketSrv0x7B sPacket;
     sPacket.nPacketId = '{';
+    sPacket.nHotkeySlot = nHotkeySlot;
     sPacket.wSkillId = (uint16_t)nSkillId & 0xfff;
     sPacket.dwHotkeyArg = dwHotkeyArg;
     if (bIsLeftSkill) {
       sPacket.wSkillId |= 0x8000;
     }
 
-    sPacket.nHotkeySlot = nHotkeySlot;
     SCMD_QueuePacketForClient(pClient, &sPacket.nPacketId, 8);
 }
 
@@ -2216,7 +2327,7 @@ void __thiscall SCMD_WriteBooleanToBitBuffer(void * pThis, int32_t nBoolValue) {
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_9(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_9(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }
@@ -2224,7 +2335,7 @@ static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_9(D2UnitStrc * p) {
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_10(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_10(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }

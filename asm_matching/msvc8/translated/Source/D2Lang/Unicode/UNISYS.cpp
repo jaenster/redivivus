@@ -71,13 +71,13 @@ int32_t __fastcall UNICODE_CompareWideStringsNoCase(uint16_t * pwszText1, uint16
     do {
       uint16_t wChar2;
       if (wChar1 == L'\0') {
-        return -(uint32_t)(*pwszText2 != L'\0');
+        return *pwszText2 != L'\0' ? (uint32_t)-1 : 0;
       }
 
       wChar2 = *pwszText2;
       if (wChar2 == L'\0') {
         if (!*pwszText1) {
-          return -(uint32_t)(*pwszText2 != L'\0');
+          return *pwszText2 != L'\0' ? (uint32_t)-1 : 0;
         }
 
         return 1;
@@ -176,20 +176,16 @@ uint16_t * __fastcall UNICODE_FindWideChar(uint16_t * pThis, int, uint16_t wChar
 
 uint16_t * __fastcall AppendToBuffer(uint16_t * wszText1, uint16_t * wszText2) {
     uint16_t* pwszResult = wszText1;
-    uint16_t wCurChar = *wszText1;
-    while (wCurChar != L'\0') {
-      wszText1++;
-      wCurChar = *wszText1;
+    while (*pwszResult != L'\0') {
+      pwszResult++;
     }
 
     do {
-      *wszText1 = *wszText2;
-      wCurChar = *wszText2;
-      wszText1++;
-      wszText2++;
-    } while (wCurChar != L'\0');
+      *pwszResult = *wszText2;
+      pwszResult++;
+    } while (*wszText2++ != L'\0');
 
-    return pwszResult;
+    return wszText1;
 }
 
 uint16_t * __fastcall UNICODE_AppendWideStringN(uint16_t * pwszDst, uint16_t * pwszSrc, int32_t nMaxChars) {
@@ -818,7 +814,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
         wszScratch[2] = L'(';
         nCharIdx = 0;
         do {
-          bTmp = *(uint8_t*)((char*)wszScratch + nCharIdx + 4);
+          bTmp = *(uint8_t*)((char*)wszScratch + (nCharIdx + 4));
           if (!bTmp) {
             break;
           }
@@ -827,7 +823,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
           nCharIdx++;
         } while (nCharIdx < 2);
 
-        if (*(char*)((char*)wszScratch + nCharIdx + 4) != '\0') {
+        if (*(char*)((char*)wszScratch + (nCharIdx + 4)) != '\0') {
           wszScratch[nCharIdx - 1] = L'\0';
         } else {
           wszScratch[nCharIdx] = L'\0';
@@ -838,7 +834,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
         wszScratch[2] = L')';
         nCharIdx = 0;
         do {
-          bTmp = *(uint8_t*)((char*)wszScratch + nCharIdx + 4);
+          bTmp = *(uint8_t*)((char*)wszScratch + (nCharIdx + 4));
           if (!bTmp) {
             break;
           }
@@ -847,7 +843,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
           nCharIdx++;
         } while (nCharIdx < 2);
 
-        if (*(char*)((char*)wszScratch + nCharIdx + 4) != '\0') {
+        if (*(char*)((char*)wszScratch + (nCharIdx + 4)) != '\0') {
           wszScratch[nCharIdx - 1] = L'\0';
         } else {
           wszScratch[nCharIdx] = L'\0';
@@ -857,7 +853,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
         wszScratch[2] = L' ';
         nCharIdx = 0;
         do {
-          bTmp = *(uint8_t*)((char*)wszScratch + nCharIdx + 4);
+          bTmp = *(uint8_t*)((char*)wszScratch + (nCharIdx + 4));
           if (!bTmp) {
             break;
           }
@@ -866,7 +862,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
           nCharIdx++;
         } while (nCharIdx < 2);
 
-        if (*(char*)((char*)wszScratch + nCharIdx + 4) != '\0') {
+        if (*(char*)((char*)wszScratch + (nCharIdx + 4)) != '\0') {
           wszScratch[nCharIdx - 1] = L'\0';
         } else {
           wszScratch[nCharIdx] = L'\0';
@@ -1056,7 +1052,7 @@ BOOL __fastcall UNICODE_LoadKamapFile(D2PoolManagerStrc * pMemory, char * szFile
     strncpy((char*)szVersionBuf, pFileData + 6, nOffset + 1);
     szVersionBuf[nOffset + 1] = 0;
     strtok((char*)szVersionBuf, "\n");
-    uint8_t* pFilePtr = (uint8_t*)(pFileData + nOffset + 0xb);
+    uint8_t* pFilePtr = (uint8_t*)(pFileData + (nOffset + 0xb));
     uint8_t* pGroupCount = pFilePtr + 2;
     if (g_pUnicodeKamapTable) {
       Storm::Source::SMem::SMemFree(g_pUnicodeKamapTable, "delete[]", -1, 0);

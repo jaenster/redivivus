@@ -62,7 +62,7 @@ template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::RawNext(::SGAMEDATA * pNode) {
     if (pNode) {
-      return *(::SGAMEDATA**)(pNode->szGameName + this->m_linkoffset - 0x26);
+      return *(::SGAMEDATA**)(pNode->szGameName + (this->m_linkoffset - 0x26));
     }
 
     return (::SGAMEDATA*)this->m_terminator.m_next;
@@ -103,7 +103,7 @@ template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, C
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::DeleteNode(::SGAMEDATA * pNode) {
-    TSLink<::SGAMEDATA>* pSlotPtr = !pNode ? &this->m_terminator : (TSLink<::SGAMEDATA>*)(pNode->szGameName + this->m_linkoffset - 0x2a);
+    TSLink<::SGAMEDATA>* pSlotPtr = !pNode ? &this->m_terminator : (TSLink<::SGAMEDATA>*)(pNode->szGameName + (this->m_linkoffset - 0x2a));
     intptr_t nSlotValue = pSlotPtr->m_next;
     pNode->Destructor();
     Storm::Source::SMem::SMemFree(pNode, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
@@ -353,7 +353,7 @@ template<> __declspec(noinline) inline ::SGAMEDATA * TSHashTable<SGAMEDATA, HASH
 
     ::SGAMEDATA* pGame = vc8_thiscall(this->pVtable->InternalNew)(this, this->tSlotListArray.m_data + nIdInBucket, nExtraBytes, dwFlags);
     if (pGame) {
-      ppActiveListLink = (TSLink<::SGAMEDATA>*)(pGame->szGameName + this->tFullList.m_linkoffset - 0x2a);
+      ppActiveListLink = (TSLink<::SGAMEDATA>*)(pGame->szGameName + (this->tFullList.m_linkoffset - 0x2a));
     } else {
       ppActiveListLink = &this->tFullList.m_terminator;
     }

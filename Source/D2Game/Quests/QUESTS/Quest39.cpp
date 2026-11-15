@@ -25,17 +25,29 @@ void __fastcall Q39_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         if (nMessageIndex == 0x1f6) {
           goto mark_spoken;
         }
-      bDialogIndexMatch = nMessageIndex == 0x1f5;
+      bDialogIndexMatch = false;
+      if (nMessageIndex == 0x1f5) {
+        bDialogIndexMatch = true;
+      }
+
       break;
       case MonsterUnitMeshif2:
         if (nMessageIndex == 0x1df) {
           goto mark_spoken;
         }
-      bDialogIndexMatch = nMessageIndex == 0x1de;
+      bDialogIndexMatch = false;
+      if (nMessageIndex == 0x1de) {
+        bDialogIndexMatch = true;
+      }
+
       break;
       case MonsterUnitAsheara:
         if (nMessageIndex != 0x1eb) {
-          bDialogIndexMatch = nMessageIndex == 0x1ea;
+          bDialogIndexMatch = false;
+          if (nMessageIndex == 0x1ea) {
+            bDialogIndexMatch = true;
+          }
+
           break;
         }
       goto mark_spoken;
@@ -43,13 +55,25 @@ void __fastcall Q39_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         if (nMessageIndex == 0x203) {
           goto mark_spoken;
         }
-      bDialogIndexMatch = nMessageIndex == 0x202;
+      bDialogIndexMatch = false;
+      if (nMessageIndex == 0x202) {
+        bDialogIndexMatch = true;
+      }
+
       break;
       case MonsterUnitNatalya:
-        bDialogIndexMatch = nMessageIndex == 0x1c5;
+        bDialogIndexMatch = false;
+      if (nMessageIndex == 0x1c5) {
+        bDialogIndexMatch = true;
+      }
+
       break;
       case MonsterUnitDeckardCain3:
-        bDialogIndexMatch = nMessageIndex == 0x1ca;
+        bDialogIndexMatch = false;
+      if (nMessageIndex == 0x1ca) {
+        bDialogIndexMatch = true;
+      }
+
       break;
       default:
         return;

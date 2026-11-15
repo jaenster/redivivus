@@ -1742,8 +1742,6 @@ BOOL __fastcall Skills_SrvDoFunc_103_ChargeAndMeleeStrike(::SGAMEDATA * pGame, D
     D2DamageStrc sDamage;
     int nSeqFrame2;
     int nSeqFrame1;
-    char* pVelFileRef;
-    int32_t nVelLineRef;
     ::SGAMEDATA* pGameApplyDmg;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -1773,14 +1771,14 @@ BOOL __fastcall Skills_SrvDoFunc_103_ChargeAndMeleeStrike(::SGAMEDATA * pGame, D
       }
 
       int32_t nVelocity = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
-      nVelocity *= 0x100;
+      nVelocity = nVelocity << 8;
       if (nVelocity <= 0x100) {
         nVelocity = 0x100;
       }
 
       nCalcOrHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_velocitypercent, 0);
-      nVelLineRef = 0x731;
-      pVelFileRef = ".\\SKILLS\\SkillMonst.cpp";
+      int32_t nVelLineRef = 0x731;
+      char* pVelFileRef = ".\\SKILLS\\SkillMonst.cpp";
       D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, D2Common::DATATBLS::DataTbls::D2ApplyPercent(nVelocity, nCalcOrHp, 100), pVelFileRef, nVelLineRef);
       D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 1);
       D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
@@ -2100,9 +2098,9 @@ BOOL __fastcall Skills_SrvDoFunc_107_LeechMeleeMultiHit(::SGAMEDATA * pGame, D2U
     sDamage.dwPoisDamage = (dwFindGUID + nNewHp) * 2;
     sDamage.dwPoisLength = D2Common::Skills::SKILLS_GetElementalLength(pUnit, eSkill, nSkillLvl, 1);
     dwFindGUID = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nModulo);
-    sDamage.dwManaLeech = (dwFindGUID + nNewHp) * 0x100;
+    sDamage.dwManaLeech = dwFindGUID + nNewHp << 8;
     dwFindGUID = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nModulo);
-    sDamage.dwStamLeech = (dwFindGUID + nNewHp) * 0x100;
+    sDamage.dwStamLeech = dwFindGUID + nNewHp << 8;
     sDamage.wResultFlags = 1;
     nDmgShifted = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxtLeech->calc[2], eSkill, nSkillLvl);
     nDmgShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(sDamage.dwPhysDamage, nDmgShifted, 100);
@@ -2163,13 +2161,14 @@ BOOL __fastcall Skills_SrvDoFunc_108_DevourMinionForHP(::SGAMEDATA * pGame, D2Un
         nNewHpClamped = 1;
       }
       if (nNewHpClamped < nMaxHp) {
-        nMaxHp = nCurHp;
         if (nCurHp <= 1) {
-          nMaxHp = 1;
+          nCurHp = 1;
         }
+      } else {
+        nCurHp = nMaxHp;
       }
 
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nMaxHp, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nCurHp, 0);
     }
 
     return 1;

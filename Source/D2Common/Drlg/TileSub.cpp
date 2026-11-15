@@ -76,8 +76,8 @@ void __fastcall InitializeDrlgFile(D2PoolManagerStrc * pMemory, D2LvlSubTxt * pL
       pDStack_8 = pLvlSubTxtRecord->pTileTypeGrid;
       nWallLayerIdx = 0x1c;
       do {
-        DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, pDStack_8 + 4, *(eD2GridCellFlags**)((char*)pDrlgFile->pTileTypeLayer + nWallLayerIdx - 0xc), &gridInitCtx, nGridWidth);
-        DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, pDStack_8, *(eD2GridCellFlags**)((char*)(*ppDrlgFile)->pTileTypeLayer + nWallLayerIdx - 0x1c), &gridInitCtx, nGridWidth);
+        DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, pDStack_8 + 4, *(eD2GridCellFlags**)((char*)pDrlgFile->pTileTypeLayer + (nWallLayerIdx - 0xc)), &gridInitCtx, nGridWidth);
+        DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, pDStack_8, *(eD2GridCellFlags**)((char*)(*ppDrlgFile)->pTileTypeLayer + (nWallLayerIdx - 0x1c)), &gridInitCtx, nGridWidth);
         pDrlgFile = *ppDrlgFile;
         pDStack_8++;
         nWallLayer++;

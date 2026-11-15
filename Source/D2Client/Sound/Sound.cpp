@@ -588,16 +588,14 @@ void __fastcall Unreferenced_004b9cd0(int nChannelHandle, uint8_t nPriority) {
     }
 
     D2SoundChannelNodeStrc* pDVar2 = gpActiveSoundChannelsHead;
-    while (pDVar2->pChannel->nChannelHandle != nChannelHandle) {
-      D2SoundChannelNodeStrc** ppDVar1;
-      ppDVar1 = &pDVar2->pNext;
-      pDVar2 = *ppDVar1;
-      if (!*ppDVar1) {
+    do {
+      D2SoundChannelStrc* pChannel = pDVar2->pChannel;
+      if (pChannel->nChannelHandle == nChannelHandle) {
+        pChannel->nPriorityByte = nPriority;
         return;
       }
-    }
-
-    pDVar2->pChannel->nPriorityByte = nPriority;
+      pDVar2 = pDVar2->pNext;
+    } while (pDVar2);
 }
 
 void __stdcall SOUND_PauseAll() {

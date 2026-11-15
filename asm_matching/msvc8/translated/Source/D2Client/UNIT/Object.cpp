@@ -1385,7 +1385,7 @@ bool __fastcall OBJECT_ClientFn_ZooKeeper(D2UnitStrc * pUnit) {
 // ClientFn 0x10 handler, slot 16 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). In mode OP at frame Start[1]<<8, switches to mode ON at frame 0 (GFX_LoadUnitModeCof, InitAnimMode).
 // Provenance: 1.14d asm 004bde00.
 bool __fastcall OBJECT_ClientFn_OperateToOpened(D2UnitStrc * pUnit) {
-    if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral && pUnit->nGfxCurrentFrame == (uint32_t)pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Start[1] * 0x100) {
+    if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral && pUnit->nGfxCurrentFrame == (uint32_t)pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Start[1] << 8) {
       pUnit->eAnimMode.ePlayerMode = Walk;
       pUnit->nGfxCurrentFrame = 0;
       Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);

@@ -1033,7 +1033,9 @@ void __fastcall PLAYER_CheckIsHostileToPlayer(::SGAMEDATA * pGame, D2UnitStrc * 
 
 BOOL __fastcall PLAYER_HasHostilePlayer(::SGAMEDATA * pGame, D2UnitStrc * pPlayer) {
     if (pGame && pPlayer && pPlayer->eUnitType == UNIT_PLAYER) {
-      D2PlayerHostileCheckArgStrc sHostileArgs = {0};
+      D2PlayerHostileCheckArgStrc sHostileArgs;
+      memset(&sHostileArgs, 0, sizeof(sHostileArgs));
+      sHostileArgs.bHostile = 0;
       sHostileArgs.pPlayer = pPlayer;
       UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYER_CheckIsHostileToPlayer, &sHostileArgs);
       return sHostileArgs.bHostile;
@@ -1053,7 +1055,9 @@ void __fastcall PLAYER_CheckPlayerIsHostileToThis(::SGAMEDATA * pGame, D2UnitStr
 
 DWORD __fastcall PLAYER_CountPlayersWithFilter2(::SGAMEDATA * pGame, D2UnitStrc * pnFilter) {
     if (pGame && pnFilter && pnFilter->eUnitType == UNIT_PLAYER) {
-      D2PlayerHostileCheckArgStrc sHostileArgs = {0};
+      D2PlayerHostileCheckArgStrc sHostileArgs;
+      memset(&sHostileArgs, 0, sizeof(sHostileArgs));
+      sHostileArgs.bHostile = 0;
       sHostileArgs.pPlayer = pnFilter;
       UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYER_CheckPlayerIsHostileToThis, &sHostileArgs);
       return sHostileArgs.bHostile;

@@ -34,16 +34,22 @@ ORACLE_DRIVE_WIN="$(printf '%s' "$ORACLE_DRIVE" | tr 'a-z' 'A-Z'):"
 # map_drive - make $ORACLE_DRIVE: point at this checkout. A letter already
 # pointing at another checkout is an error, never silently re-pointed: a build
 # racing a re-point compiles the other tree's sources into this tree's objects.
+# Callers run in parallel, so the mapping is one symlink(2): `ln -sn` creates the
+# link or fails because it exists, and never follows an existing link into its
+# target (plain `ln -s` onto a link to a directory makes a link inside that
+# directory). Whichever caller created it, the link is then checked.
 map_drive() {
     local link="$WINEPREFIX/dosdevices/${ORACLE_DRIVE}:"
-    if [ -L "$link" ]; then
-        [ "$(readlink -f "$link")" = "$REPO_ROOT" ] && return 0
-        echo "ERROR: wine drive $ORACLE_DRIVE_WIN maps $(readlink -f "$link"), not $REPO_ROOT." >&2
-        echo "  Use another letter (ORACLE_DRIVE=s), or re-point it if nothing else uses it:" >&2
-        echo "  ln -sfn $REPO_ROOT $link" >&2
+    [ -L "$link" ] || ln -sn "$REPO_ROOT" "$link" 2>/dev/null
+    if [ ! -L "$link" ]; then
+        echo "ERROR: cannot map wine drive $ORACLE_DRIVE_WIN: $link is not a symlink." >&2
         return 1
     fi
-    ln -s "$REPO_ROOT" "$link"
+    [ "$(readlink -f "$link")" = "$REPO_ROOT" ] && return 0
+    echo "ERROR: wine drive $ORACLE_DRIVE_WIN maps $(readlink -f "$link"), not $REPO_ROOT." >&2
+    echo "  Use another letter (ORACLE_DRIVE=s), or re-point it if nothing else uses it:" >&2
+    echo "  ln -sfn $REPO_ROOT $link" >&2
+    return 1
 }
 
 # win_path <path under the repo> - the same path as the compiler sees it.

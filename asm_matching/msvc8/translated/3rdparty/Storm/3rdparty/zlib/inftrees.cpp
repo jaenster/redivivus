@@ -239,7 +239,7 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
     nLoopIdx = 2;
     do {
       nFillIdx = nLoopIdx + 2;
-      *(short int*)((char*)aOffset + nLoopIdx + 2) = *(short int*)((char*)aOffset + nLoopIdx) + *(short int*)((char*)aCount + nLoopIdx);
+      *(short int*)((char*)aOffset + (nLoopIdx + 2)) = *(short int*)((char*)aOffset + nLoopIdx) + *(short int*)((char*)aCount + nLoopIdx);
       nLoopIdx = nFillIdx;
     } while (nFillIdx < 0x1e);
 
@@ -309,7 +309,7 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
         byOpBits = byCurLength - byCurBits;
         wSymbol = *pSortedCode;
         if ((int)(uint32_t)wSymbol < nMatchLimit) {
-          dwTableEntry = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint16_t)wSymbol << 8 | (uint32_t)(uint8_t)byOpBits) & 0xffffffu) << 8;
+          dwTableEntry = (uint32_t)((uint32_t)(uint16_t)wSymbol << 8 | (uint32_t)(uint8_t)byOpBits) << 8;
         } else if (nMatchLimit < (int)(uint32_t)wSymbol) {
           dwTableEntry = (uint32_t)((uint32_t)(uint16_t)pBaseTable[*pSortedCode] << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)byOpBits << 8 | (uint16_t)(uint8_t)(char)pExtraTable[*pSortedCode]));
         } else {
@@ -317,7 +317,7 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
         }
 
         nLeft = 1 << D2_SHIFT_COUNT(byCurLength - byCurBits);
-        pFillEntry = pNextTable + (nHuffCode >> D2_SHIFT_COUNT(byCurBits)) + nTableFill;
+        pFillEntry = pNextTable + ((nHuffCode >> D2_SHIFT_COUNT(byCurBits)) + nTableFill);
         nFillIdx = nTableFill;
         do {
           nFillIdx -= nLeft;
@@ -340,7 +340,7 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
         if (!aCount[nCurLength]) {
           if (nCurLength == nMaxBits) {
             if (nHuffCode) {
-              dwTableEntry = (uint32_t)(uint16_t)((uint16_t)(uint8_t)(byCurLength - byCurBits) << 8 | (uint16_t)(uint8_t)0x40);
+              dwTableEntry = (uint32_t)((uint16_t)(uint8_t)(byCurLength - byCurBits) << 8 | (uint16_t)(uint8_t)0x40);
               pNextTable += nHuffCode;
               pNextTable->op = (uint8_t)dwTableEntry;
               pNextTable->bits = (uint8_t)((uint32_t)dwTableEntry >> 8);

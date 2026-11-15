@@ -3804,25 +3804,14 @@ BOOL __stdcall INV_TrySetRepairMode() {
 }
 
 void __stdcall INV_SelectDefaultNpcButton() {
-    int nButtonIdx = 0;
     gnInvShopButton = -1;
-    int nSelectedButton = gnInvShopButton;
-    if (gaNpcShopButtonTable[0] > 0) {
-      int32_t* pButtonCallback;
-      pButtonCallback = &gaNpcShopButtons[0].nDrawCallback;
-      do {
-        nSelectedButton = nButtonIdx;
-        if (*pButtonCallback) {
-          break;
-        }
-
-        nButtonIdx++;
-        pButtonCallback += 5;
-        nSelectedButton = gnInvShopButton;
-      } while (nButtonIdx < gaNpcShopButtonTable[0]);
+    for (int nButtonIdx = 0; nButtonIdx < gaNpcShopButtonTable[0]; nButtonIdx++) {
+      if (gaNpcShopButtons[nButtonIdx].nDrawCallback) {
+        gnInvShopButton = nButtonIdx;
+        break;
+      }
     }
 
-    gnInvShopButton = nSelectedButton;
     gaNpcShopButtons[0].nDrawCallback = 0;
     gaNpcShopButtons[1].nDrawCallback = 0;
     gaNpcShopButtons[2].nDrawCallback = 0;
@@ -6228,7 +6217,7 @@ static void INV_DrawHirelingStats(D2UnitStrc * pUnit) {
       iLoopCounter = 0;
       D2Win::Src::D2WinFont::TEXT_CalcTextDimensions(wszStatText, &iTextWidth, &iLoopCounter);
       iDamageValue = iStatTableOffset;
-      iStatRaw = *(int*)((char*)gaHirelingStatRows + iStatTableOffset + 0xc);
+      iStatRaw = *(int*)((char*)gaHirelingStatRows + (iStatTableOffset + 0xc));
       iStatCheck = iYCoord;
       if (iStatRaw && iTextWidth > iStatRaw) {
         D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
@@ -6236,7 +6225,7 @@ static void INV_DrawHirelingStats(D2UnitStrc * pUnit) {
       }
       if (!*(int*)((char*)gaHirelingStatRows + iDamageValue)) {
         D2Win::Src::D2WinFont::DRAW_text(wszStatText, iLeftX - D2Win::Src::D2WinFont::DRAW_text0(wszStatText), iStatCheck, nColorCode, 0);
-      } else if (!*(int*)((char*)gaHirelingStatRows + iDamageValue + 4)) {
+      } else if (!*(int*)((char*)gaHirelingStatRows + (iDamageValue + 4))) {
         D2Win::Src::D2WinFont::DRAW_text(wszStatText, iRightX, iStatCheck, nColorCode, 0);
       } else {
         ui::UI_DrawTextCentered(iRightX, iStatCheck, iLeftX, wszStatText, nColorCode);
@@ -6946,7 +6935,7 @@ void wsprintf(uint16_t * wszDest, uint16_t * wszFormat, ...) {
         pwArgDest = wszContainerA;
         if (awszArgs[nArgIdxN * 200] == L'[') {
           D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pwArgDest, awszArgs + nArgIdxN * 200, 4);
-          pwArgSrc = awszArgs + nArgIdxN * 200 + 4;
+          pwArgSrc = awszArgs + (nArgIdxN * 200 + 4);
           pwArgDest = awszArgs + nArgIdxN * 200;
         } else {
           pwArgSrc = wszMsToken;
@@ -6960,7 +6949,7 @@ void wsprintf(uint16_t * wszDest, uint16_t * wszFormat, ...) {
         }
       } else {
         if (nArgIdxN != -1) {
-          D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszArgs + nArgIdxN * 200, awszArgs + nArgIdxN * 200 + 4);
+          D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszArgs + nArgIdxN * 200, awszArgs + (nArgIdxN * 200 + 4));
           wszFormat = pwArgDest + 1;
           goto substitute_args;
         }
@@ -7270,7 +7259,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, int nSize) {
 
           pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
           nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
-          if ((intptr_t)(pwRareNameSuffix + nErrorLine + 3) >= nSize) {
+          if ((intptr_t)(pwRareNameSuffix + (nErrorLine + 3)) >= nSize) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x822);
             exit(-1);
           }
@@ -7439,7 +7428,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, int nSize) {
           pItemsTxt = pItemsTxtSaved;
           pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxtSaved->wNameStr);
           nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
-          if ((intptr_t)(pwRareNameSuffix + nErrorLine + 3) >= nSize) {
+          if ((intptr_t)(pwRareNameSuffix + (nErrorLine + 3)) >= nSize) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8c5);
             exit(-1);
           }

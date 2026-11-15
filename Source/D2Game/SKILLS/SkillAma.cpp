@@ -643,7 +643,7 @@ BOOL __fastcall Skills_SrvDoFunc_010_GuidedArrowLaunch(::SGAMEDATA * pGame, D2Un
 
         nUnitX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
         nUnitY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-        D2Common::Units::Missile::SetTargetY(pDamagePctMissile, (short int)((short int)nCursorY - (short int)nUnitY) * 0x10000 + (int)(short int)((short int)nCursorX - (short int)nUnitX));
+        D2Common::Units::Missile::SetTargetY(pDamagePctMissile, ((short int)((short int)nCursorY - (short int)nUnitY) << 0x10) + (int)(short int)((short int)nCursorX - (short int)nUnitX));
       }
 
       return 1;

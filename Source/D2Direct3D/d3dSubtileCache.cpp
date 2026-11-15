@@ -74,7 +74,7 @@ int __fastcall D3DSUBTILE_Initialize(D3DSubtileCacheStrc * pCache, int nBaseMemo
     pCache->pUsedHead = 0;
     pCache->pUsedTail = 0;
     pCache->pFreeHead = pCache->pNodeBuffer;
-    pCache->pFreeTail = pCache->pNodeBuffer + pCache->nMaxNodes - 1;
+    pCache->pFreeTail = pCache->pNodeBuffer + (pCache->nMaxNodes - 1);
     return pCache->nMaxNodes * dwTextureSize + nBaseMemoryUsed;
 }
 

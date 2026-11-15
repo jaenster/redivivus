@@ -362,20 +362,12 @@ D2DifficultyLevelsTxt * __stdcall GetDifficultyLevels(int32_t nDifficulty) {
 }
 
 void __fastcall DATATBLS_BuildStatesDataBitMask(D2StatesDataTbls * pStatesData, uint32_t nFlagBit) {
-    uint32_t nStateIdx = 0;
-    if (MonsterTbls::sgtDataTable.nTxtStatesSize <= 0) {
-      return;
-    }
-
-    uint8_t* pStateFlagByte = (uint8_t*)((char*)MonsterTbls::sgtDataTable.pTxtStates->overlay + ((int)nFlagBit >> 3) + 0xe);
-    do {
-      if ((uint8_t)Fog::BitBuffer::gadwBitMasks[nFlagBit & 7] & *pStateFlagByte) {
+    D2StatesTxt* pTxtStates = MonsterTbls::sgtDataTable.pTxtStates;
+    for (uint32_t nStateIdx = 0; (int)nStateIdx < MonsterTbls::sgtDataTable.nTxtStatesSize; nStateIdx++) {
+      if ((uint8_t)Fog::BitBuffer::gadwBitMasks[nFlagBit & 7] & *((uint8_t*)pTxtStates[nStateIdx].overlay + ((int)nFlagBit >> 3) + 0xe)) {
         pStatesData->nStateBitmask[(int)nStateIdx >> 5] |= Fog::BitBuffer::gadwBitMasks[nStateIdx & 0x1f];
       }
-
-      nStateIdx++;
-      pStateFlagByte += 0x3c;
-    } while ((int)nStateIdx < MonsterTbls::sgtDataTable.nTxtStatesSize);
+    }
 }
 
 // @sourcefile .\DATATBLS\DataTbls.cpp
@@ -390,7 +382,7 @@ void __fastcall DATATBLS_BuildStatesDataList(D2AllStatesDataTbl * * ppAllStatesD
       return;
     }
 
-    uint8_t* pStateFlagByte = (uint8_t*)((char*)pTxtStates->overlay + ((int)nFlag >> 3) + 0xe);
+    uint8_t* pStateFlagByte = (uint8_t*)((char*)pTxtStates->overlay + (((int)nFlag >> 3) + 0xe));
     do {
       if ((uint8_t)Fog::BitBuffer::gadwBitMasks[nFlag & 7] & *pStateFlagByte) {
         (*ppAllStatesData)[*pCounter].nStateId = (short int)nStateIdx;

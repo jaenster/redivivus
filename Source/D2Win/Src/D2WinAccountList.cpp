@@ -143,14 +143,15 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 
     uint32_t dwState = pAccountList->sControl.dwState;
     if (Fog::BitBuffer::gadwBitMasks[2] & dwState && Fog::BitBuffer::gadwBitMasks[0] & dwState) {
-      pCurEntry = pAccountList->pFirstEntry;
-      if (!pCurEntry) {
+      if (!pAccountList->pFirstEntry) {
         return 0;
       }
 
+      int nClickedIdx = (D2WinMain::nPosX - pAccountList->sControl.dwPosX) / 0x78 + (pAccountList->sControl.dwSizeY - pAccountList->sControl.dwPosY + 4 + D2WinMain::nPosY) / 0x14 * 6;
+      pCurEntry = pAccountList->pFirstEntry;
       nEntryIdx = 0;
       do {
-        if (nEntryIdx == (D2WinMain::nPosX - pAccountList->sControl.dwPosX) / 0x78 + (pAccountList->sControl.dwSizeY - pAccountList->sControl.dwPosY + 4 + D2WinMain::nPosY) / 0x14 * 6) {
+        if (nEntryIdx == nClickedIdx) {
           pAccountList->pSelectedEntry = pCurEntry;
           return 1;
         }

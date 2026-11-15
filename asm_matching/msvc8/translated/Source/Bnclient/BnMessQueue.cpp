@@ -130,9 +130,9 @@ size_t __fastcall BNMESSQUEUE_DequeueMessage(int * pMessageTypeOut, void * pBuff
 
 int __stdcall BNMESSQUEUE_ClearAll() {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
+    ::BnMessQueue* pBVar1 = nLobbyChatCurrentMessage;
     while (nLobbyChatCurrentMessage) {
-      ::BnMessQueue* pBVar1;
-      pBVar1 = nLobbyChatCurrentMessage->pNext;
+      pBVar1 = pBVar1->pNext;
       D2_FREE_AT(nLobbyChatCurrentMessage, ".\\BnMessQueue.cpp", 0x9f);
       nLobbyChatCurrentMessage = pBVar1;
     }

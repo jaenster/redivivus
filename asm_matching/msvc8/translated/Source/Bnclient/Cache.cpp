@@ -313,7 +313,7 @@ static void CACHE_DecryptBlock(uint32_t dwKey, uint32_t * pdwData, uint32_t nByt
       *pdwData ^= nSeed + uVar1 + dwKey;
       dwPlain = *pdwData;
       pdwData++;
-      dwKey = dwKey >> 0xb | ~dwKey * 0x200000 + 0x11111111;
+      dwKey = dwKey >> 0xb | (~dwKey << 0x15) + 0x11111111;
       nSeed = (nSeed + uVar1) * 0x21 + 3 + dwPlain;
     }
 }
@@ -328,7 +328,7 @@ static void CACHE_EncryptBlock(uint32_t dwKey, uint32_t nByteLen, uint32_t * pdw
       uVar1 = pCryptTableBase[(dwKey & 0xff) + 0x400];
       dwPlainDword = *pdwData;
       *pdwData = nEncSeed + uVar1 + dwKey ^ dwPlainDword;
-      dwKey = dwKey >> 0xb | ~dwKey * 0x200000 + 0x11111111;
+      dwKey = dwKey >> 0xb | (~dwKey << 0x15) + 0x11111111;
       pdwData++;
       nEncSeed = (nEncSeed + uVar1) * 0x21 + 3 + dwPlainDword;
     }
@@ -671,7 +671,7 @@ int32_t __stdcall CACHE_Open() {
               nCrc32 = 0x400;
             }
 
-            nTableByteSize = nCrc32 * 0x10;
+            nTableByteSize = nCrc32 << 4;
             if (pHeaderBuf->dwHashTableOffset + nTableByteSize > nFileSize) {
               nErrorCode = 7;
               goto warn_invalid_cache;
@@ -698,7 +698,7 @@ int32_t __stdcall CACHE_Open() {
               nCrc32 = 0x400;
             }
 
-            nTableByteSize = nCrc32 * 0x10;
+            nTableByteSize = nCrc32 << 4;
             if (gpCacheFileHeader->dwBlockTableOffset + nTableByteSize > nFileSize) {
               nErrorCode = 10;
               goto warn_invalid_cache;
@@ -786,7 +786,7 @@ BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * 
       if (nHashSlot == -1) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00881894);
       } else {
-        uVar1 = *(uint32_t*)(gpCacheBufferPoolFirst + nHashSlot * 0x10 + 0xc);
+        uVar1 = *(uint32_t*)(gpCacheBufferPoolFirst + ((nHashSlot << 4) + 0xc));
         if (!(uVar1 < gpCacheFileHeader->nBlockTableSize)) {
           nRebuildReason = 1;
           rebuild_corrupt_cache:
@@ -1026,14 +1026,14 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
       nHash2 = CACHE_HashString(2, szCacheKey);
       nHashCount = gpCacheFileHeader->nHashTableSize - 1;
       nHashSlot = nHashCount & nHashKey;
-      nStrCopyOffset = *(int*)(gpCacheBufferPoolFirst + nHashSlot * 0x10 + 0xc);
+      nStrCopyOffset = *(int*)(gpCacheBufferPoolFirst + ((nHashSlot << 4) + 0xc));
       nProbeSlot = nHashSlot;
       while (nStrCopyOffset != -1 && nStrCopyOffset != -2 && (nProbeSlot = nProbeSlot + 1 & nHashCount) != nHashSlot) {
-        nStrCopyOffset = *(int*)(gpCacheBufferPoolFirst + nProbeSlot * 0x10 + 0xc);
+        nStrCopyOffset = *(int*)(gpCacheBufferPoolFirst + ((nProbeSlot << 4) + 0xc));
       }
 
-      pHashEntry = (DWORD*)(gpCacheBufferPoolFirst + nProbeSlot * 0x10);
-      if (*(int*)(gpCacheBufferPoolFirst + nProbeSlot * 0x10 + 0xc) == -1 || *(int*)(gpCacheBufferPoolFirst + nProbeSlot * 0x10 + 0xc) == -2) {
+      pHashEntry = (DWORD*)(gpCacheBufferPoolFirst + (nProbeSlot << 4));
+      if (*(int*)(gpCacheBufferPoolFirst + ((nProbeSlot << 4) + 0xc)) == -1 || *(int*)(gpCacheBufferPoolFirst + ((nProbeSlot << 4) + 0xc)) == -2) {
         pHashEntry[1] = nHash2;
         *pHashEntry = nBytesReadWrite;
         pNewBlockEntry = gpCacheBlockTable;
@@ -1090,12 +1090,12 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
             }
 
             nHashCount = gpCacheFileHeader->nBlockTableSize;
-            nBlockIdx *= 0x10;
+            nBlockIdx = nBlockIdx << 4;
             if (nHashCount < 0x400) {
               nHashCount = 0x400;
             }
 
-            nHashCount *= 0x10;
+            nHashCount = nHashCount << 4;
             nProbeSlot = nBlockIdx;
             if (nBlockIdx <= nHashCount) {
               nProbeSlot = nHashCount;
@@ -1156,7 +1156,7 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
         pNewBlockEntry = gpCacheBlockTable + nBlockIdx;
         pNewBlockEntry->nFileOffset = pFileHeader->dwFileSize;
         pNewBlockEntry->dwBlockSize = nDataSize + 0x144;
-        pFileHeader->dwFileSize = pFileHeader->dwFileSize + nDataSize + 0x144;
+        pFileHeader->dwFileSize += nDataSize + 0x144;
         pFileHeader->nBlockTableSize = nBlockIdx + 1;
         goto write_cache_entry;
       }

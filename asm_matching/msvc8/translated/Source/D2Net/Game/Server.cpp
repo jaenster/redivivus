@@ -555,7 +555,7 @@ size_t __fastcall NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize(
             nStrLen1 = Storm::Source::SSTR::SStrLen(pcStrBase);
             if ((int)pBytesSize >= (int)(nStrLen1 + 0xb)) {
               nStrLen2 = Storm::Source::SSTR::SStrLen(pcStrBase);
-              nStrLen2 = Storm::Source::SSTR::SStrLen(pcStrBase + nStrLen2 + 1);
+              nStrLen2 = Storm::Source::SSTR::SStrLen(pcStrBase + (nStrLen2 + 1));
               nStrLen2 = nStrLen1 + 0xc + nStrLen2;
               if ((int)pBytesSize >= (int)nStrLen2) {
                 *pExpectedSize = nStrLen2;
@@ -818,7 +818,7 @@ int32_t __fastcall NET_D2GS_CLIENT_GetOutgoingPacketSizeFromTableAndVariableSize
           nStrLen1 = Storm::Source::SSTR::SStrLen(pszStr);
           if ((int)nSize >= (int)(nStrLen1 + 4)) {
             nStrLen2 = Storm::Source::SSTR::SStrLen(pszStr);
-            pszStr = pszStr + nStrLen2 + 1;
+            pszStr += nStrLen2 + 1;
             nStrLen2 = Storm::Source::SSTR::SStrLen(pszStr);
             nTableSize = nStrLen1 + 5 + nStrLen2;
             if ((int)nSize >= nTableSize) {

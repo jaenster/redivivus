@@ -501,7 +501,7 @@ uint32_t __stdcall STRTABLE_HashString(char * szText, uint32_t nBucketCount) {
     char cCurrent = *szText;
     while (cCurrent != '\0') {
       char* pcNext;
-      nHash = nHash * 0x10 + (int)cCurrent;
+      nHash = (nHash << 4) + (int)cCurrent;
       if (nHash & -268435456) {
         nHash = ((nHash & -268435456) >> 0x18 ^ nHash) & 0xfffffff;
       }
@@ -635,7 +635,7 @@ static uint16_t __stdcall STRTABLE_FindStringByKey(uint16_t * * ppHashTable, uin
 
     do {
       char* pcSlot;
-      pcSlot = (char*)((intptr_t)&pStrTable[1].wCRC + nHashIdx * 0x11 + nIndexBytes);
+      pcSlot = (char*)((intptr_t)&pStrTable[1].wCRC + (nHashIdx * 0x11 + nIndexBytes));
       nProbeCount++;
       if (*pcSlot == '\x01') {
         nCmp = strcmp((char*)(uint8_t*)((intptr_t)&pStrTable->wCRC + *(int*)(pcSlot + 7)), (char*)pbKey);
@@ -1247,7 +1247,7 @@ static uint16_t * __fastcall STRTABLE_LoadStringTableFile(char * szFileName) {
     int i = 0;
     if (pArchive->nNodeCount > 0) {
       uint32_t* pdwNodeStringOffset;
-      pdwNodeStringOffset = (uint32_t*)((intptr_t)&pArchive[1].dwDataStartOffset + (uint32_t)pArchive->wIndexCount * 2 + 2);
+      pdwNodeStringOffset = (uint32_t*)((intptr_t)&pArchive[1].dwDataStartOffset + ((uint32_t)pArchive->wIndexCount * 2 + 2));
       do {
         if (pdwNodeStringOffset[-1] >= pArchive->dwFileSize) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe0);
@@ -1355,7 +1355,7 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
         UTF8_ConvertToWideChar(gpStringIndexBase[nEntryIdx], pEntryData, pszUtf8Chars + 1);
         nJ3 += 0x11;
         nEntryIdx = nEntryIdx + 1;
-        k = k + pszUtf8Chars + 1;
+        k += pszUtf8Chars + 1;
       } while (nEntryIdx < *pnEntryCount);
     }
 
@@ -1399,7 +1399,7 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
           UTF8_ConvertToWideChar(gpStringIndexPatchD2[i], pEntryData, pszUtf8Chars + 1);
           nJ2 += 0x11;
           i++;
-          k = k + pszUtf8Chars + 1;
+          k += pszUtf8Chars + 1;
         } while (i < *pEntryIdx2);
       }
       if (isXpac) {
@@ -1442,7 +1442,7 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
             UTF8_ConvertToWideChar(gpStringIndexExpansion[i], pEntryData, pszUtf8Chars + 1);
             nJ += 0x11;
             i++;
-            k = k + pszUtf8Chars + 1;
+            k += pszUtf8Chars + 1;
           } while (i < *pEntryIdx);
         }
       }

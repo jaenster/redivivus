@@ -1981,10 +1981,10 @@ uint8_t * __fastcall D2COMP_GetPaletteTransformTable(uint32_t nPaletteShift) {
       return nullptr;
     }
     if (!nTransformGroup) {
-      return gaItemPaletteTransformData + (nColorIndex + 0x348) * 0x100;
+      return gaItemPaletteTransformData + (nColorIndex + 0x348 << 8);
     }
     if (nTransformGroup >= 0 && nTransformGroup < 9 && (nTransformGroup <= 2 || nTransformGroup > 4)) {
-      return gaItemPaletteTransformData + (nTransformGroup * 0x69 + nColorIndex) * 0x100;
+      return gaItemPaletteTransformData + (nTransformGroup * 0x69 + nColorIndex << 8);
     }
 
     return nullptr;
@@ -3090,7 +3090,7 @@ void __fastcall D2COMP_AllocTxt_Items(D2PoolManagerStrc * pMemory) {
 
     i = 0;
     do {
-      Fog::Src::Excel::FOG_AddTxtLinkRecord(pD2CompItemsLinker, *(uint32_t*)(pD2CompItems->szSetInvFile + i + 0x20));
+      Fog::Src::Excel::FOG_AddTxtLinkRecord(pD2CompItemsLinker, *(uint32_t*)(pD2CompItems->szSetInvFile + (i + 0x20)));
       nItemIdx++;
       i += 0x1a8;
     } while (nItemIdx < nD2CompItemsSize);

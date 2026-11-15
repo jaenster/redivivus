@@ -420,7 +420,7 @@ void __stdcall GetInvDimensions(int32_t neInventoryPage, int32_t nScreenMode, D2
 void __stdcall GetGridDimensions(int32_t neInventoryPage, int32_t nScreenMode, D2GridScreenCoordinates * pOutput) {
     uint8_t byGridRows;
     short int wPad;
-    uint32_t nTxtIndex = nScreenMode * 0x10 + neInventoryPage;
+    uint32_t nTxtIndex = (nScreenMode << 4) + neInventoryPage;
     if (!pTxtInventory) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7f);
       exit(-1);
@@ -454,7 +454,7 @@ void __stdcall GetBodyDimensions(int32_t neInventoryPage, int32_t nScreenMode, D
     D2InventoryEntryStrc* pDVar1;
     uint8_t byHeight;
     uint16_t wPadCopy;
-    uint32_t nTxtIndex = nScreenMode * 0x10 + neInventoryPage;
+    uint32_t nTxtIndex = (nScreenMode << 4) + neInventoryPage;
     if (!pTxtInventory) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7f);
       exit(-1);

@@ -62,7 +62,7 @@ void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputC
         nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "ESI", D2_CONTEXT_FIELD(sContext, Esi));
         nWritten += nChunkLen;
         nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "EDI", D2_CONTEXT_FIELD(sContext, Edi));
-        __snprintf_s(szLineBuffer + nWritten + nChunkLen, 0x400 - (nWritten + nChunkLen), -1, "\n\n");
+        __snprintf_s(szLineBuffer + (nWritten + nChunkLen), 0x400 - (nWritten + nChunkLen), -1, "\n\n");
         (*pOutputCallback)(pReport, szLineBuffer);
       }
       if (sContext.ContextFlags & 0x10001) {
@@ -78,7 +78,7 @@ void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputC
         nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "CS", sContext.SegCs);
         nWritten += nChunkLen;
         nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "SS", sContext.SegSs);
-        __snprintf_s(szLineBuffer + nWritten + nChunkLen, 0x400 - (nWritten + nChunkLen), -1, "\n\n");
+        __snprintf_s(szLineBuffer + (nWritten + nChunkLen), 0x400 - (nWritten + nChunkLen), -1, "\n\n");
         (*pOutputCallback)(pReport, szLineBuffer);
       }
       if (sContext.ContextFlags & 0x10004) {
@@ -88,13 +88,13 @@ void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputC
         nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "FS", sContext.SegFs);
         nWritten += nChunkLen;
         nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "GS", sContext.SegGs);
-        __snprintf_s(szLineBuffer + nWritten + nChunkLen, 0x400 - (nWritten + nChunkLen), -1, "\n\n");
+        __snprintf_s(szLineBuffer + (nWritten + nChunkLen), 0x400 - (nWritten + nChunkLen), -1, "\n\n");
         (*pOutputCallback)(pReport, szLineBuffer);
       }
       if (sContext.ContextFlags & 0x10008) {
         nWritten = __snprintf_s(szLineBuffer, 0x400, -1, "%6s:0x%08x", "CTRL", D2_CONTEXT_FIELD(sContext, FloatSave).ControlWord);
         nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "STAT", D2_CONTEXT_FIELD(sContext, FloatSave).StatusWord);
-        __snprintf_s(szLineBuffer + nWritten + nChunkLen, 0x400 - (nWritten + nChunkLen), -1, "\n");
+        __snprintf_s(szLineBuffer + (nWritten + nChunkLen), 0x400 - (nWritten + nChunkLen), -1, "\n");
         (*pOutputCallback)(pReport, szLineBuffer);
         nFpuErrSelector = D2_CONTEXT_X87_AREA(sContext) + 8;
         nFpuDataOffset = D2_CONTEXT_X87_AREA(sContext) + 4;
@@ -105,7 +105,7 @@ void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputC
           nWritten = __snprintf_s(szLineBuffer, 0x400, -1, "%5s%d:0x%08x 0x%08x 0x%08x", "ST", iReg, *(uint32_t*)pStRegLoWord, *(uint32_t*)nFpuDataOffset, uSlot6E0.nFpuErrOffset);
           *(uint32_t*)(char*)&uSlot6E0.nFpuErrOffset = (uint16_t)*(uint16_t*)(nFpuErrSelector + 10);
           nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%5s%d:0x%08x 0x%08x 0x%08x", "ST", iReg + 1, *(uint32_t*)(pStRegLoWord + 10), *(uint32_t*)(nFpuDataOffset + 10), uSlot6E0.nFpuErrOffset);
-          __snprintf_s(szLineBuffer + nWritten + nChunkLen, 0x400 - (nWritten + nChunkLen), -1, "\n");
+          __snprintf_s(szLineBuffer + (nWritten + nChunkLen), 0x400 - (nWritten + nChunkLen), -1, "\n");
           (*pOutputCallback)(pReport, szLineBuffer);
           nFpuDataOffset += 0x14;
           nFpuErrSelector += 0x14;
@@ -125,7 +125,7 @@ void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputC
         do {
           nWritten = __snprintf_s(szLineBuffer, 0x400, -1, "%5s%d:0x%08x 0x%08x 0x%08x 0x%08x", "XMM", iReg, *(uint32_t*)pStRegLoWord, *(uint32_t*)nFpuErrSelector, *(uint32_t*)uSlot6E0.pXmmLane2, *(uint32_t*)nFpuDataOffset);
           nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%5s%d:0x%08x 0x%08x 0x%08x 0x%08x", "XMM", iReg + 1, *(uint32_t*)(pStRegLoWord + 0x10), *(uint32_t*)(nFpuErrSelector + 0x10), *(uint32_t*)(uSlot6E0.pXmmLane2 + 0x10), *(uint32_t*)(nFpuDataOffset + 0x10));
-          __snprintf_s(szLineBuffer + nWritten + nChunkLen, 0x400 - (nWritten + nChunkLen), -1, "\n");
+          __snprintf_s(szLineBuffer + (nWritten + nChunkLen), 0x400 - (nWritten + nChunkLen), -1, "\n");
           (*pOutputCallback)(pReport, szLineBuffer);
           nFpuErrSelector += 0x20;
           uSlot6E0.pXmmLane2 += 0x20;

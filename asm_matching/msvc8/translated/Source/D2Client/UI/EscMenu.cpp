@@ -59293,7 +59293,7 @@ void __fastcall ESCMENU_LoadLocalizedImages(int * pMenuHeader, D2EscMenuItemStrc
                 pLoadedDC6 = Core::Archive::IMAGE_LoadDC6Ex(szImagePath, 0);
                 nTableOffset = nSubImageOffset + nSubImageIndex;
                 nSubImageIndex++;
-                *(DC6**)(pMenuTable->szLocalizedImagePath + nTableOffset * 4 - 0xc) = (DC6*)pLoadedDC6;
+                *(DC6**)(pMenuTable->szLocalizedImagePath + (nTableOffset * 4 - 0xc)) = (DC6*)pLoadedDC6;
                 pSubImagePath += 0x104;
               } while (nSubImageIndex < (uint32_t)pMenuTable[nItemIndex].nSubImageCount);
             }

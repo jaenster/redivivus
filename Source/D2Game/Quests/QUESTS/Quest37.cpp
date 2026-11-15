@@ -21,7 +21,11 @@ void __fastcall Q37_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     switch (nMonStatsId) {
       case 0x94:
         if (nMessageIndex != 0xb) {
-          bMsgMatch = nMessageIndex == 0xc;
+          bMsgMatch = false;
+          if (nMessageIndex == 0xc) {
+            bMsgMatch = true;
+          }
+
           goto check_msg_matched;
         }
       break;
@@ -29,7 +33,11 @@ void __fastcall Q37_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         return;
       case 0x93:
         if (nMessageIndex != 0x2d) {
-          bMsgMatch = nMessageIndex == 0x2e;
+          bMsgMatch = false;
+          if (nMessageIndex == 0x2e) {
+            bMsgMatch = true;
+          }
+
           check_msg_matched:
           if (!bMsgMatch) {
             return;
@@ -38,13 +46,21 @@ void __fastcall Q37_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       break;
       case 0x9a:
         if (nMessageIndex != 0x24) {
-          bMsgMatch = nMessageIndex == 0x25;
+          bMsgMatch = false;
+          if (nMessageIndex == 0x25) {
+            bMsgMatch = true;
+          }
+
           goto check_msg_matched;
         }
       break;
       case 0x96:
         if (nMessageIndex != 0x18) {
-          bMsgMatch = nMessageIndex == 0x19;
+          bMsgMatch = false;
+          if (nMessageIndex == 0x19) {
+            bMsgMatch = true;
+          }
+
           goto check_msg_matched;
         }
       break;

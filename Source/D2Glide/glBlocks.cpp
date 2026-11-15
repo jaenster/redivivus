@@ -121,7 +121,7 @@ void __stdcall GLBLOCKS_RenderTileSubBlocks(D2TileLibraryEntryStrc * pTileEntry,
     do {
       short int* pSubtile;
       pSubtile = &pTileEntry->pSubTiles[nSubBlockIdx].nOffsetX;
-      pbDstRow = pbDstBuf + (int)*pSubtile + pSubtile[1] * 0x100;
+      pbDstRow = pbDstBuf + ((int)*pSubtile + (pSubtile[1] << 8));
       if (pSubtile[4] & 1U) {
         if (pSubtile[4] & 4U) {
           pbSrc = *(uint8_t**)(pSubtile + 8);

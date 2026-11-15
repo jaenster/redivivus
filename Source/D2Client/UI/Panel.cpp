@@ -1771,7 +1771,7 @@ BOOL __fastcall PANEL_CalculateBeltSlotIndex(D2UIMouseMsgStrc * pMsg) {
     int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
     D2Common::DATATBLS::BeltsTbls::GetBeltsLine(gnBeltPanelState, Inv::nScreenMode, &sBeltsTxt);
     if (gnPanelBeltRowsExpanded) {
-      if (nMouseX >= *(int*)(sBeltsTxt.pad0x01 + (uint32_t)(uint8_t)sBeltsTxt.nBoxes * 0x10 - 0x39) && nMouseX <= sBeltsTxt.beltBoxes[3].nRight && nMouseY >= *(int*)(sBeltsTxt.pad0x01 + (uint32_t)(uint8_t)sBeltsTxt.nBoxes * 0x10 - 0x31) && nMouseY <= sBeltsTxt.beltBoxes[3].nBottom) {
+      if (nMouseX >= *(int*)(sBeltsTxt.pad0x01 + (((uint32_t)(uint8_t)sBeltsTxt.nBoxes << 4) - 0x39)) && nMouseX <= sBeltsTxt.beltBoxes[3].nRight && nMouseY >= *(int*)(sBeltsTxt.pad0x01 + (((uint32_t)(uint8_t)sBeltsTxt.nBoxes << 4) - 0x31)) && nMouseY <= sBeltsTxt.beltBoxes[3].nBottom) {
         return 1;
       }
     } else {

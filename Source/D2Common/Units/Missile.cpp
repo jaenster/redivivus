@@ -819,7 +819,7 @@ int32_t __stdcall GetElementalLength(D2UnitStrc * nUnused, D2UnitStrc * pUnit, i
       nLevLenBonus = (nLevel - 8) * pMissileTxt->ELevLen2;
     }
 
-    return pMissileTxt->ELen + nLevLenBonus + pMissileTxt->ELevLen1 * 7;
+    return pMissileTxt->ELen + (nLevLenBonus + pMissileTxt->ELevLen1 * 7);
 }
 
 // Resolves a numeric parameter from a missile's Missiles.txt row, selected by nParamId. Validates pUnit is a UNIT_MISSILE (or null) and nMissileId is in range, then switch(nParamId) returns either a raw txt column (Param1-5, CltParam1-5, sHitPar/cHitPar 1-3, dParam1-2, level), a computed elemental/physical min/max damage (via GetMin/MaxElemDamage / GetMin/MaxDamage, some >>8 fixed-point), a range (LevRange*level+Range), or a per-level scaling (linear param1+(lvl-1)*param2 or SKILLS_CalcDiminishingReturns). Returns 0 if validation fails or nParamId is unhandled. Used by missile damage/behavior calc.
@@ -1215,7 +1215,7 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
       nLevel = (int)(nLevel * nSourceDamage) / 128;
       nMissileId = (int)(nMissileId * nSourceDamage) / 128;
       nStatVal = Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_damagepercent, 0);
-      nDmgPercentBonus = nDmgPercentBonus + nStatVal + nItemMinDmgBonus;
+      nDmgPercentBonus += nStatVal + nItemMinDmgBonus;
       nItemMinDmgBonus = Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_item_mindamage_percent, 0);
       nItemMaxDmgPercent = Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_item_maxdamage_percent, 0);
       nStatVal = Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_item_demondamage_percent, 0);

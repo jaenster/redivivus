@@ -299,28 +299,13 @@ void __fastcall D2WINTEXTBOX_SetSelectedLine(::D2WinTextBox * pTextBox, int32_t 
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x262);
       exit(-1);
     } else {
-      int nClampedLine;
       if (pTextBox->sControl.neD2FormType != FORM_TextBox) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x263);
         exit(-1);
       }
 
-      nClamped = nLineIndex;
-      if (nLineIndex <= -1) {
-        nClamped = -1;
-      }
-
-      nClampedLine = pTextBox->sListState.nLineCount - 1;
-      if (nClamped < nClampedLine) {
-        if (nLineIndex > -1) {
-          pTextBox->sListState.nSelectedLine = nLineIndex;
-          return;
-        }
-
-        nClampedLine = -1;
-      }
-
-      pTextBox->sListState.nSelectedLine = nClampedLine;
+      nClamped = nLineIndex > -1 ? nLineIndex : -1;
+      pTextBox->sListState.nSelectedLine = nClamped < pTextBox->sListState.nLineCount - 1 ? (nLineIndex > -1 ? nLineIndex : -1) : pTextBox->sListState.nLineCount - 1;
       return;
     }
 }
@@ -869,7 +854,7 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
           }
 
           nLineIndex++;
-          nCurY = nCurY + nLineStride + nTextPixelWidth;
+          nCurY += nLineStride + nTextPixelWidth;
           nRemainingHeight -= nLineStride + nTextPixelWidth;
           pCurLine = pCurLine->pNext;
           if (!pCurLine) {
@@ -1000,7 +985,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
 
         break;
         case 0x22:
-          uPageDownTarget = dwState + nVisibleLines - 1;
+          uPageDownTarget = dwState + (nVisibleLines - 1);
         if ((int)uScrollTop < (int)uPageDownTarget) {
           uCurSel = nLineCount - 1U;
           if ((int)uPageDownTarget < (int)(nLineCount - 1U)) {
@@ -1013,7 +998,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
               uPageDownTarget = uScrollTop;
             }
 
-            dwState = uPageDownTarget + nVisibleLines - 1;
+            dwState = uPageDownTarget + (nVisibleLines - 1);
             uNewScrollTop = uPageDownTarget;
             uCurSel = nLineCount - 1U;
             if ((int)dwState < (int)(nLineCount - 1U)) {
@@ -1038,7 +1023,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
         uNewScrollTop = uCurSel;
         if ((int)uCurSel >= (int)dwState) {
           uNewScrollTop = dwState;
-          if ((int)uCurSel > (int)(dwState + nVisibleLines - 1)) {
+          if ((int)uCurSel > (int)(dwState + (nVisibleLines - 1))) {
             uNewScrollTop = uCurSel + (1 - nVisibleLines);
           }
         }

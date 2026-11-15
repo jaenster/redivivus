@@ -837,7 +837,7 @@ FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotI
     pSearchName = szFileName;
     do {
       byChar = *pSearchName;
-      pSearchName[(int)gLogFileNameArray + (nSlot * 0x10 - (intptr_t)szFileName)] = byChar;
+      pSearchName[(int)gLogFileNameArray + ((nSlot << 4) - (intptr_t)szFileName)] = byChar;
       pSearchName++;
     } while (byChar);
 
@@ -912,13 +912,13 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
 
     szFileName = pLogRecord + 1;
     pData = Storm::Source::SSTR::SStrLen((char*)szFileName);
-    pDumpHeader = (uint8_t*)((intptr_t)&szFileName->tLink.pPrevLink + pData + 1);
+    pDumpHeader = (uint8_t*)((intptr_t)&szFileName->tLink.pPrevLink + (pData + 1));
     __frame0.pDumpHeaderSaved = pDumpHeader;
-    if (*(int*)((intptr_t)&szFileName->nType + pData + 1)) {
+    if (*(int*)((intptr_t)&szFileName->nType + (pData + 1))) {
       __frame0.pDumpData = *(uint8_t**)pDumpHeader;
     } else {
       pData = Storm::Source::SSTR::SStrLen((char*)(pDumpHeader + 0x14));
-      __frame0.pDumpData = pDumpHeader + pData + 0x15;
+      __frame0.pDumpData = pDumpHeader + (pData + 0x15);
     }
 
     __frame0.pLogFile = FindOrOpenLogFileSlot((uint8_t*)szFileName, &__frame0.local_160);
@@ -1528,7 +1528,7 @@ void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDat
     pNode->bTimestamp = 1;
     GetLocalTime(&pNode->tTime);
     nLen1 = Storm::Source::SSTR::SStrCopy((char*)(pNode + 1), szText1, 0x7fffffff);
-    char* pMessageFields = (char*)((intptr_t)&pNode[1].tLink.pPrevLink + nLen1 + 1);
+    char* pMessageFields = (char*)((intptr_t)&pNode[1].tLink.pPrevLink + (nLen1 + 1));
     *(size_t*)(pMessageFields + 4) = nDataLen;
     *(void**)pMessageFields = (void*)pData;
     *(void**)(pMessageFields + 8) = (void*)pCategory;
@@ -1536,7 +1536,7 @@ void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDat
     *(uint32_t*)(pMessageFields + 0x10) = (uint32_t)!nVerbose;
     nLen1 = Storm::Source::SSTR::SStrCopy(pMessageFields + 0x14, szText2, 0x7fffffff);
     if (!bSkipData) {
-      memcpy(pMessageFields + nLen1 + 0x15, pData, nDataLen);
+      memcpy(pMessageFields + (nLen1 + 0x15), pData, nDataLen);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);
@@ -1685,7 +1685,7 @@ void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int
       /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ GetLocalTime(&pNode->tTime);
       Storm::Source::SSTR::SStrCopy((char*)(pNode + 1), szText, nPayloadSize);
       nTextLen = Storm::Source::SSTR::SStrLen((char*)(pNode + 1));
-      Storm::Source::SSTR::SStrCopy((char*)((intptr_t)&pNode[1].tLink.pPrevLink + nTextLen + 1), szFormatted, nPayloadSize);
+      Storm::Source::SSTR::SStrCopy((char*)((intptr_t)&pNode[1].tLink.pPrevLink + (nTextLen + 1)), szFormatted, nPayloadSize);
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);
       pNext = (int*)pNode->tLink.pPrevLink;
       if (pNext) {

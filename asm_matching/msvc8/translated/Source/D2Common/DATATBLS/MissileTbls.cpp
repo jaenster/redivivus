@@ -124,13 +124,13 @@ int __fastcall MISSILETBLS_ValidateCalcCode(char * szText, int * pOutHasResolved
     } else if (szText[1] == '\0') {
       cFourthChar = ' ';
       *(uint16_t*)(char*)&nAST = (uint16_t)((uint16_t)(uint8_t)0x20 << 8 | (uint16_t)(uint8_t)cFirstChar);
-      d2_store24((char*)&nAST, (uint32_t)((uint32_t)((uint32_t)(uint8_t)0x20 << 16 | (uint32_t)(uint16_t)nAST) & 0xffffffu));
+      d2_store24((char*)&nAST, (uint32_t)(uint8_t)0x20 << 16 | (uint32_t)(uint16_t)nAST);
       nAST = (int)((uint32_t)nAST & 0xffffffu);
     } else {
       *(uint16_t*)(char*)&nAST = (uint16_t)((uint16_t)(uint8_t)szText[1] << 8 | (uint16_t)(uint8_t)cFirstChar);
       if (szText[2] == '\0') {
         cFourthChar = ' ';
-        d2_store24((char*)&nAST, (uint32_t)((uint32_t)((uint32_t)(uint8_t)0x20 << 16 | (uint32_t)(uint16_t)nAST) & 0xffffffu));
+        d2_store24((char*)&nAST, (uint32_t)(uint8_t)0x20 << 16 | (uint32_t)(uint16_t)nAST);
         nAST = (int)((uint32_t)nAST & 0xffffffu);
       } else {
         d2_store24((char*)&nAST, (uint32_t)((uint32_t)((uint32_t)(uint8_t)szText[2] << 16 | (uint32_t)(uint16_t)nAST) & 0xffffffu));

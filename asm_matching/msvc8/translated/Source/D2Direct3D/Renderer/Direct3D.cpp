@@ -1194,11 +1194,11 @@ void __stdcall RENDERER_D3D_AllocateTextureCaches() {
       uSubtileCacheAlloc = (uint32_t)((uint64_t)((uSmallCacheAlloc - nSmackerBase) * 0x50) * 0x51eb851f >> 0x20);
     }
 
-    gnTextureMemoryUsageBytes.nGlideSmallTextureCacheMemBytes = nGenericCacheEnd * 0x10000;
+    gnTextureMemoryUsageBytes.nGlideSmallTextureCacheMemBytes = nGenericCacheEnd << 0x10;
     nSmackerBase = d3dTextureCache::RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches + 1, nGenericNodeBytes, (uSubtileCacheAlloc >> 5) + nSmackerBase, 0x80, 0x80);
-    gnTextureMemoryUsageBytes.nGlideMediumTextureCacheMemBytes = gD3DGenericTextureCache.aCaches[1].nMaxNodes * g_nBytesPerPixel * 0x4000;
+    gnTextureMemoryUsageBytes.nGlideMediumTextureCacheMemBytes = gD3DGenericTextureCache.aCaches[1].nMaxNodes << 0xe << 0xe;
     d3dTextureCache::RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches + 2, nSmackerBase, uSmallCacheAlloc, 0x20, 0x20);
-    gnTextureMemoryUsageBytes.nGlideLargeTextureCacheMemBytes = gD3DGenericTextureCache.aCaches[2].nMaxNodes * g_nBytesPerPixel * 0x400;
+    gnTextureMemoryUsageBytes.nGlideLargeTextureCacheMemBytes = gD3DGenericTextureCache.aCaches[2].nMaxNodes << 0xa << 0xa;
     RENDERER_D3D_InitializeTexturePools();
     D2CMP::SRC::CelCmp::GFX_SetSpriteCacheFreeCallback((pfnLruFreeEntry)d3dFloorCache::D3D_InvalidateTileCachesForEntry);
 }
@@ -3226,9 +3226,9 @@ static int32_t __fastcall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
     iMipLevel = *(int*)(pIVar1 + nMipIdx * 8);
     int* pnCacheNodeIdx = (int*)(pIVar1 + 4 + nMipIdx * 8);
     D3DTextureCacheStrc* pCache = (D3DTextureCacheStrc*)(&DAT_00970eac + iMipLevel * 0x1c);
-    if (*pnCacheNodeIdx && (*(uint8_t**)(*pnCacheNodeIdx * 0x20 - 0x14 + (&INT_00970ec4)[iMipLevel * 7]) == pPalette || nMode == 4)) {
+    if (*pnCacheNodeIdx && (*(uint8_t**)((*pnCacheNodeIdx << 5) - 0x14 + (&INT_00970ec4)[iMipLevel * 7]) == pPalette || nMode == 4)) {
       d3dTextureCache::D3DTEXCACHE_InvalidateByIndex(pCache, *pnCacheNodeIdx);
-      dwHResult = g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, *(void**)(*pnCacheNodeIdx * 0x20 + (&INT_00970ec4)[iMipLevel * 7] - 0xc));
+      dwHResult = g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, *(void**)((*pnCacheNodeIdx << 5) + (&INT_00970ec4)[iMipLevel * 7] - 0xc));
       if (!dwHResult) {
         return 1;
       }
@@ -3254,7 +3254,7 @@ static int32_t __fastcall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x165);
       exit(-1);
     } else {
-      iCacheNodeIdx = *pnCacheNodeIdx * 0x20;
+      iCacheNodeIdx = *pnCacheNodeIdx << 5;
       nTmp = *(int*)(iCacheNodeIdx - 0x10 + (&INT_00970ec4)[iMipLevel * 7]);
       pIMipLevel = (char*)(iCacheNodeIdx - 0x20 + (&INT_00970ec4)[iMipLevel * 7]);
       pbPixelData = gpD3DTextureSpritePoolMemory0;
@@ -3482,7 +3482,7 @@ static void __stdcall RENDERER_DIRECT3D_DrawPalettedQuad(D2D3DSpriteInfoStrc * p
     } else {
       uint8_t* pPaletteEntry;
       pPaletteEntry = gpPaletteTable[0x45] + nPaletteIndex * 3;
-      pVertexData->dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)nAlpha << 8 | (uint16_t)(uint8_t)*pPaletteEntry) << 8 | (uint32_t)(uint8_t)gpPaletteTable[0x45][nPaletteIndex * 3 + 1]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pPaletteEntry[2]);
+      pVertexData->dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)nAlpha << 8 | (uint16_t)(uint8_t)*pPaletteEntry) << 8 | (uint32_t)(uint8_t)gpPaletteTable[0x45][nPaletteIndex * 3 + 1]) << 8 | (uint32_t)(uint8_t)pPaletteEntry[2]);
     }
 
     pVertexData[1].dwDiffuse = pVertexData->dwDiffuse;
@@ -3557,6 +3557,9 @@ static uint8_t __stdcall SetDrawModeAndGetAlpha(int nDrawMode) {
 
 // Stack-slot reuse: the nScreenMode slot first holds the clip bottom RENDERER_nWindowHeight - 0x2f (whole dword, 006b694e) that the quad's y coordinates are tested against; then its low byte holds the alpha returned by SetDrawModeAndGetAlpha(nDrawMode) (006b6999).
 void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nScreenMode, BYTE * pPalette) {
+    uint8_t uVar1;
+    int32_t bTextureUploaded;
+    HRESULT HVar2;
     D2D3DVertexStrc* pfDst;
     float* pfSrc;
     D2D3DSpriteInfoStrc spriteInfo;
@@ -3564,6 +3567,7 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int nPosX, int nPosY
     int nAdjPosY;
     int nAdjPosXOut;
     int nCopyCount;
+    int nQuadTopY;
     float fHalfWidth;
     BOOL nBaseX = RENDERER_D3D_ExtractSpriteInfo(pData, &spriteInfo);
     if (!nBaseX) {
@@ -3571,9 +3575,9 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int nPosX, int nPosY
     }
 
     RENDERER_D3D_CalculateTextureSize(&spriteInfo);
-    int nPosX_00 = nPosX + spriteInfo.nOffsetY * 0x1000 + spriteInfo.nOffsetX * 0x800;
-    nPosY = nPosY + spriteInfo.nOffsetY * 0x1000 + spriteInfo.nOffsetX * -0x800;
-    int nQuadTopY = nPosY + spriteInfo.nTexHeight * -0x1000;
+    int nPosX_00 = nPosX + ((spriteInfo.nOffsetY << 0xc) + (spriteInfo.nOffsetX << 0xb));
+    nPosY += (spriteInfo.nOffsetY << 0xc) + spriteInfo.nOffsetX * -0x800;
+    nQuadTopY = nPosY + spriteInfo.nTexHeight * -0x1000;
     Renderer::AdjustPerspectivePosition(nPosX_00 + spriteInfo.nTexHeight * -0x1000, nQuadTopY, 0, &nAdjPosXOut, &nAdjPosY);
     aQuadVertexData[0].fX = (float)nAdjPosXOut;
     aQuadVertexData[0].fY = (float)nAdjPosY;
@@ -3588,14 +3592,14 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int nPosX, int nPosY
     aQuadVertexData[1].fRHW = 1.0;
     aQuadVertexData[1].fU = spriteInfo.fU0;
     aQuadVertexData[1].fV = spriteInfo.fV1;
-    Renderer::AdjustPerspectivePosition(spriteInfo.nTexWidth * 0x800 + nPosX_00, nPosY + spriteInfo.nTexWidth * -0x800, 0, &nAdjPosXOut, &nAdjPosY);
+    Renderer::AdjustPerspectivePosition((spriteInfo.nTexWidth << 0xb) + nPosX_00, nPosY + spriteInfo.nTexWidth * -0x800, 0, &nAdjPosXOut, &nAdjPosY);
     aQuadVertexData[2].fX = (float)nAdjPosXOut;
     aQuadVertexData[2].fY = (float)nAdjPosY;
     aQuadVertexData[2].fZ = 0.5;
     aQuadVertexData[2].fRHW = 1.0;
     aQuadVertexData[2].fU = spriteInfo.fU1;
     aQuadVertexData[2].fV = spriteInfo.fV1;
-    Renderer::AdjustPerspectivePosition(spriteInfo.nTexWidth * 0x800 + spriteInfo.nTexHeight * -0x1000 + nPosX_00, nQuadTopY + spriteInfo.nTexWidth * -0x800, 0, &nAdjPosXOut, &nAdjPosY);
+    Renderer::AdjustPerspectivePosition((spriteInfo.nTexWidth << 0xb) + spriteInfo.nTexHeight * -0x1000 + nPosX_00, nQuadTopY + spriteInfo.nTexWidth * -0x800, 0, &nAdjPosXOut, &nAdjPosY);
     aQuadVertexData[3].fX = (float)nAdjPosXOut;
     aQuadVertexData[3].fY = (float)nAdjPosY;
     aQuadVertexData[3].fZ = 0.5;
@@ -3624,9 +3628,9 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int nPosX, int nPosY
       return;
     }
 
-    uint8_t uVar1 = SetDrawModeAndGetAlpha(nDrawMode);
+    uVar1 = SetDrawModeAndGetAlpha(nDrawMode);
     nScreenMode = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nScreenMode + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)uVar1);
-    int32_t bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&spriteInfo, 0, pPalette, 0, 1);
+    bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&spriteInfo, 0, pPalette, 0, 1);
     if (!bTextureUploaded) {
       return;
     }
@@ -3637,12 +3641,12 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int nPosX, int nPosY
     aQuadVertexData[1].dwDiffuse = aQuadVertexData[0].dwDiffuse;
     aQuadVertexData[2].dwDiffuse = aQuadVertexData[0].dwDiffuse;
     aQuadVertexData[3].dwDiffuse = aQuadVertexData[0].dwDiffuse;
-    HRESULT HVar2 = g_pD3DSpriteQuadVB->lpVtbl->Lock(g_pD3DSpriteQuadVB, 0x21, (void**)&nPosY, nullptr);
+    HVar2 = g_pD3DSpriteQuadVB->lpVtbl->Lock(g_pD3DSpriteQuadVB, 0x21, (void**)&nPosY, nullptr);
     if (HVar2) {
       return;
     }
 
-    nPosY += gd3dVertexBufferOffset * 0x20;
+    nPosY += gd3dVertexBufferOffset << 5;
     pfDst = aQuadVertexData;
     pfSrc = (float*)nPosY;
     memcpy(pfSrc, pfDst, 0x80);
@@ -3659,7 +3663,7 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int nPosX, int nPosY
 BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, BYTE * pPalette) {
     D2D3DSpriteInfoStrc aSpriteInfo;
     BOOL nExtractResult = RENDERER_D3D_ExtractSpriteInfo(pData, &aSpriteInfo);
-    if (!(nExtractResult && aSpriteInfo.nOffsetX + nPosX <= RENDERER_nWindowWidth && aSpriteInfo.nWidth + aSpriteInfo.nOffsetX + nPosX >= 0 && aSpriteInfo.nOffsetY + nPosY >= 0 && aSpriteInfo.nOffsetY + nPosY - aSpriteInfo.nHeight < RENDERER_nWindowHeight)) {
+    if (!(nExtractResult && aSpriteInfo.nOffsetX + nPosX <= RENDERER_nWindowWidth && aSpriteInfo.nWidth + (aSpriteInfo.nOffsetX + nPosX) >= 0 && aSpriteInfo.nOffsetY + nPosY >= 0 && aSpriteInfo.nOffsetY + nPosY - aSpriteInfo.nHeight < RENDERER_nWindowHeight)) {
       return 0;
     }
 
@@ -3681,7 +3685,7 @@ BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwG
 void __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nGlobalPaletteShift) {
     D2D3DSpriteInfoStrc aSpriteInfo;
     BOOL nExtractResult = RENDERER_D3D_ExtractSpriteInfo(pData, &aSpriteInfo);
-    if (!(nExtractResult && aSpriteInfo.nOffsetX + nPosX <= RENDERER_nWindowWidth && aSpriteInfo.nWidth + aSpriteInfo.nOffsetX + nPosX >= 0 && aSpriteInfo.nOffsetY + nPosY >= 0 && aSpriteInfo.nOffsetY + nPosY - aSpriteInfo.nHeight < RENDERER_nWindowHeight)) {
+    if (!(nExtractResult && aSpriteInfo.nOffsetX + nPosX <= RENDERER_nWindowWidth && aSpriteInfo.nWidth + (aSpriteInfo.nOffsetX + nPosX) >= 0 && aSpriteInfo.nOffsetY + nPosY >= 0 && aSpriteInfo.nOffsetY + nPosY - aSpriteInfo.nHeight < RENDERER_nWindowHeight)) {
       return;
     }
 
@@ -4669,7 +4673,7 @@ int32_t __fastcall RENDERER_D3D_BuildShadowTileVertices(D2TileLibraryEntryStrc *
       do {
         pSubtileCoords = &pTileLibraryEntryStrc->pSubTiles[nScreenSplitIndex].nOffsetX;
         nSubtileX = *pSubtileCoords + nTilePosX;
-        nSubtileY = (int)pSubtileCoords[1] + nTilePosY + 0x20;
+        nSubtileY = (int)pSubtileCoords[1] + (nTilePosY + 0x20);
         if (nSubtileX >= nPanelXOffset && nSubtileX < nPanelWidth && nSubtileY >= 0 && nSubtileY < nSubtileIter) {
           _bRendered = 1;
           d3dFloorCache::D3D_RenderSubtileToTexture(&pTileLibraryEntryStrc->pSubTiles[nScreenSplitIndex]);
@@ -4711,7 +4715,7 @@ int __fastcall RENDERER_D3D_RenderShadowTileWithPerspective(D2TileLibraryEntrySt
     D2TileLibraryEntryStrc* pTileLibraryEntryPtr = pTileEntry;
     RENDERER_D3D_CalculateViewportRect(&nViewportLeft, 0, nScreenSplitIndex, &nPanelXOffset, 1);
     int nFixedWorldY = nTilePosY * 0x2000;
-    int nFixedWorldX = nTilePosX * 0x2000;
+    int nFixedWorldX = nTilePosX << 0xd;
     int nSubtileIndex = 0;
     int bRenderedAny = 0;
     if (pTileLibraryEntryPtr->nSubTiles > 0) {
@@ -4721,8 +4725,8 @@ int __fastcall RENDERER_D3D_RenderShadowTileWithPerspective(D2TileLibraryEntrySt
         psSubtileCoords = &pTileLibraryEntryPtr->pSubTiles[nSubtileIndex].nOffsetX;
         bRenderedAny = psSubtileCoords[1] + 0x60 >> 5;
         nSubtileScreenY = (int)*psSubtileCoords >> 5;
-        nVertexIter = (nSubtileScreenY + bRenderedAny * 2) * 0x10000 - 0x38000;
-        bRenderedAny = (bRenderedAny * 2 - nSubtileScreenY) * 0x10000 + 0x18000;
+        nVertexIter = (nSubtileScreenY + bRenderedAny * 2 << 0x10) - 0x38000;
+        bRenderedAny = (bRenderedAny * 2 - nSubtileScreenY << 0x10) + 0x18000;
         nFixedScreenX = nVertexIter + nFixedWorldX;
         Renderer::AdjustPerspectivePosition(nFixedScreenX, nFixedWorldY + bRenderedAny, 0, &nScreenXAdj, &nScreenSplitIndex);
         gaD3DPerspectiveStripVertices[0].fX = (float)nScreenXAdj;
@@ -4836,13 +4840,13 @@ static BOOL __fastcall RENDERER_D3D_BuildWallTileVerticesNoPerspective(int nScre
       do {
         psSubtileCoords = (short int*)((intptr_t)&pTile->pSubTiles->nOffsetX + _nParam4);
         nViewportBottom = (int)*psSubtileCoords;
-        nSubtileScreenX = (int)psSubtileCoords[1] + nPosY + 0x20;
+        nSubtileScreenX = (int)psSubtileCoords[1] + (nPosY + 0x20);
         nSubtileX = nPosX + nViewportBottom;
         if (nSubtileX >= nPanelXOffset && nSubtileX < nPanelWidth && nSubtileScreenX >= 0 && nSubtileScreenX < nSubtileScreenY) {
           nViewportBottom >>= 5;
           pDVar1 = pTexColorTable + nViewportBottom;
           nTexColor0 = (uint32_t)((uint32_t)(uint8_t)pDVar1->nIntensity | (uint32_t)(uint8_t)pDVar1->nRed << 8 | (uint32_t)(uint8_t)pDVar1->nGreen << 16 | (uint32_t)(uint8_t)pDVar1->nBlue << 24);
-          pDVar1 = pTexColorTable + nViewportBottom + 1;
+          pDVar1 = pTexColorTable + (nViewportBottom + 1);
           nTexColor1 = (uint32_t)((uint32_t)(uint8_t)pDVar1->nIntensity | (uint32_t)(uint8_t)pDVar1->nRed << 8 | (uint32_t)(uint8_t)pDVar1->nGreen << 16 | (uint32_t)(uint8_t)pDVar1->nBlue << 24);
           bRendered = 1;
           d3dFloorCache::D3D_RenderSubtileToTexture((D2GroundSubTileStrc*)((intptr_t)&pTile->pSubTiles->nOffsetX + _nParam4));
@@ -4912,10 +4916,10 @@ static BOOL __stdcall RENDERER_D3D_RenderWallTileWithPerspective(int nScreenPane
           nTileTableIdx = uVar3 + uVar1 * 6;
           nFixedY0 = gaD3DWallCornerTable[nTileTableIdx].nY + nPosY * 0x2000;
           nBias = gaD3DWallCornerTable[nTileTableIdx].nZ - (int)d2_bits_of(fLayerIndex);
-          nX1 = gaD3DWallCornerTable[nTileTableIdx + 1].nX + nPosX * 0x2000;
+          nX1 = gaD3DWallCornerTable[nTileTableIdx + 1].nX + (nPosX << 0xd);
           nZ1 = gaD3DWallCornerTable[nTileTableIdx + 1].nZ - (int)d2_bits_of(fLayerIndex);
           nY1 = gaD3DWallCornerTable[nTileTableIdx + 1].nY + nPosY * 0x2000;
-          nTileTableIdx = gaD3DWallCornerTable[nTileTableIdx].nX + nPosX * 0x2000;
+          nTileTableIdx = gaD3DWallCornerTable[nTileTableIdx].nX + (nPosX << 0xd);
           Renderer::AdjustPerspectivePosition(nTileTableIdx, nFixedY0, nBias, &nScreenX, &nScreenY);
           gaD3DPerspectiveStripVertices[0].fX = (float)nScreenX;
           gaD3DPerspectiveStripVertices[0].fY = (float)nScreenY;
@@ -5190,19 +5194,19 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
       }
 
       byLightIntensity = pLight->sLight.nIntensity;
-      *(uint32_t*)((char*)pAlpha2 + 0x10) = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight->sLight.nRed + (uint32_t)byLightIntensity * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight->sLight.nGreen + (uint32_t)byLightIntensity * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight->sLight.nBlue + (uint32_t)byLightIntensity * 0x100]);
+      *(uint32_t*)((char*)pAlpha2 + 0x10) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight->sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight->sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight->sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
       *pAlpha2 = (float)pLight->nX;
       *(float*)((char*)pAlpha2 + 4) = (float)pLight->nY;
       byLightIntensity = pLight[5].sLight.nIntensity;
-      *(uint32_t*)((char*)pAlpha2 + 0xb0) = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[5].sLight.nRed + (uint32_t)byLightIntensity * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[5].sLight.nGreen + (uint32_t)byLightIntensity * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[5].sLight.nBlue + (uint32_t)byLightIntensity * 0x100]);
+      *(uint32_t*)((char*)pAlpha2 + 0xb0) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[5].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[5].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[5].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
       *(float*)((char*)pAlpha2 + 0xa0) = (float)pLight[5].nX;
       *(float*)((char*)pAlpha2 + 0xa4) = (float)pLight[5].nY;
       byLightIntensity = pLight[0x23].sLight.nIntensity;
-      *(uint32_t*)((char*)pAlpha2 + 0x470) = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x23].sLight.nRed + (uint32_t)byLightIntensity * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x23].sLight.nGreen + (uint32_t)byLightIntensity * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x23].sLight.nBlue + (uint32_t)byLightIntensity * 0x100]);
+      *(uint32_t*)((char*)pAlpha2 + 0x470) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x23].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x23].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x23].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
       *(float*)((char*)pAlpha2 + 0x460) = (float)pLight[0x23].nX;
       *(float*)((char*)pAlpha2 + 0x464) = (float)pLight[0x23].nY;
       byLightIntensity = pLight[0x1e].sLight.nIntensity;
-      *(uint32_t*)((char*)pAlpha2 + 0x3d0) = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x1e].sLight.nRed + (uint32_t)byLightIntensity * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x1e].sLight.nGreen + (uint32_t)byLightIntensity * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x1e].sLight.nBlue + (uint32_t)byLightIntensity * 0x100]);
+      *(uint32_t*)((char*)pAlpha2 + 0x3d0) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x1e].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x1e].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x1e].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
       *(float*)((char*)pAlpha2 + 0x3c0) = (float)pLight[0x1e].nX;
       *(float*)((char*)pAlpha2 + 0x3c4) = (float)pLight[0x1e].nY;
       DVar2 = g_pD3DGroundTileVB->lpVtbl->Unlock(g_pD3DGroundTileVB);
@@ -5225,39 +5229,39 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
       pLightCursor = &pLight->sLight.nGreen;
       do {
         byLightIntensity = ((D2GfxLightStrc*)(pLightCursor - 2))->nIntensity;
-        *(uint32_t*)((char*)pAlpha + 0x10) = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[-1] + (uint32_t)byLightIntensity * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)*pLightCursor + (uint32_t)byLightIntensity * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[1] + (uint32_t)byLightIntensity * 0x100]);
+        *(uint32_t*)((char*)pAlpha + 0x10) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[-1] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)*pLightCursor + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[1] + ((uint32_t)byLightIntensity << 8)]);
         *pAlpha = (float)*(int*)(pLightCursor + 2);
         *(float*)((char*)pAlpha + 4) = (float)*(int*)(pLightCursor + 6);
         byLightIntensity = pLightCursor[10];
-        *(uint32_t*)((char*)pAlpha + 0x30) = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0xb] + (uint32_t)byLightIntensity * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0xc] + (uint32_t)byLightIntensity * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0xd] + (uint32_t)byLightIntensity * 0x100]);
+        *(uint32_t*)((char*)pAlpha + 0x30) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0xb] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0xc] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0xd] + ((uint32_t)byLightIntensity << 8)]);
         *(float*)((char*)pAlpha + 0x20) = (float)*(int*)(pLightCursor + 0xe);
         *(float*)((char*)pAlpha + 0x24) = (float)*(int*)(pLightCursor + 0x12);
         byLightIntensity = pLightCursor[0x16];
-        *(uint32_t*)((char*)pAlpha + 0x50) = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x17] + (uint32_t)byLightIntensity * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x18] + (uint32_t)byLightIntensity * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x19] + (uint32_t)byLightIntensity * 0x100]);
+        *(uint32_t*)((char*)pAlpha + 0x50) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x17] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x18] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x19] + ((uint32_t)byLightIntensity << 8)]);
         *(float*)((char*)pAlpha + 0x40) = (float)*(int*)(pLightCursor + 0x1a);
         *(float*)((char*)pAlpha + 0x44) = (float)*(int*)(pLightCursor + 0x1e);
         byLightIntensity = pLightCursor[0x22];
-        *(uint32_t*)((char*)pAlpha + 0x70) = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x23] + (uint32_t)byLightIntensity * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x24] + (uint32_t)byLightIntensity * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x25] + (uint32_t)byLightIntensity * 0x100]);
+        *(uint32_t*)((char*)pAlpha + 0x70) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x23] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x24] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x25] + ((uint32_t)byLightIntensity << 8)]);
         *(float*)((char*)pAlpha + 0x60) = (float)*(int*)(pLightCursor + 0x26);
         *(float*)((char*)pAlpha + 100) = (float)*(int*)(pLightCursor + 0x2a);
         byLightIntensity = pLightCursor[0x2e];
-        *(uint32_t*)((char*)pAlpha + 0x90) = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x2f] + (uint32_t)byLightIntensity * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x30] + (uint32_t)byLightIntensity * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x31] + (uint32_t)byLightIntensity * 0x100]);
+        *(uint32_t*)((char*)pAlpha + 0x90) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x2f] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x30] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x31] + ((uint32_t)byLightIntensity << 8)]);
         *(float*)((char*)pAlpha + 0x80) = (float)*(int*)(pLightCursor + 0x32);
         *(float*)((char*)pAlpha + 0x84) = (float)*(int*)(pLightCursor + 0x36);
         byLightIntensity = pLightCursor[0x3a];
-        *(uint32_t*)((char*)pAlpha + 0xb0) = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x3b] + (uint32_t)byLightIntensity * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x3c] + (uint32_t)byLightIntensity * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x3d] + (uint32_t)byLightIntensity * 0x100]);
+        *(uint32_t*)((char*)pAlpha + 0xb0) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x3b] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x3c] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x3d] + ((uint32_t)byLightIntensity << 8)]);
         *(float*)((char*)pAlpha + 0xa0) = (float)*(int*)(pLightCursor + 0x3e);
         *(float*)((char*)pAlpha + 0xa4) = (float)*(int*)(pLightCursor + 0x42);
         byLightIntensity = pLightCursor[0x46];
-        *(uint32_t*)((char*)pAlpha + 0xd0) = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x47] + (uint32_t)byLightIntensity * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x48] + (uint32_t)byLightIntensity * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x49] + (uint32_t)byLightIntensity * 0x100]);
+        *(uint32_t*)((char*)pAlpha + 0xd0) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x47] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x48] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x49] + ((uint32_t)byLightIntensity << 8)]);
         *(float*)((char*)pAlpha + 0xc0) = (float)*(int*)(pLightCursor + 0x4a);
         *(float*)((char*)pAlpha + 0xc4) = (float)*(int*)(pLightCursor + 0x4e);
         byLightIntensity = pLightCursor[0x52];
-        *(uint32_t*)((char*)pAlpha + 0xf0) = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x53] + (uint32_t)byLightIntensity * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x54] + (uint32_t)byLightIntensity * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x55] + (uint32_t)byLightIntensity * 0x100]);
+        *(uint32_t*)((char*)pAlpha + 0xf0) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x53] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x54] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x55] + ((uint32_t)byLightIntensity << 8)]);
         *(float*)((char*)pAlpha + 0xe0) = (float)*(int*)(pLightCursor + 0x56);
         *(float*)((char*)pAlpha + 0xe4) = (float)*(int*)(pLightCursor + 0x5a);
         byLightIntensity = pLightCursor[0x5e];
-        *(uint32_t*)((char*)pAlpha + 0x110) = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x5f] + (uint32_t)byLightIntensity * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x60] + (uint32_t)byLightIntensity * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x61] + (uint32_t)byLightIntensity * 0x100]);
+        *(uint32_t*)((char*)pAlpha + 0x110) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x5f] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x60] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x61] + ((uint32_t)byLightIntensity << 8)]);
         *(float*)((char*)pAlpha + 0x100) = (float)*(int*)(pLightCursor + 0x62);
         *(float*)((char*)pAlpha + 0x104) = (float)*(int*)(pLightCursor + 0x66);
         pAlpha += 0x48;
@@ -5302,12 +5306,12 @@ void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue) {
 }
 
 void __fastcall RENDERER_D3D_ApplyShadowTextureCoords(D2D3DVertexStrc * pVertex, uint8_t nLightIndex, uint8_t byAlpha) {
-    pVertex->dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)byAlpha << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)GlobalRed + (uint32_t)nLightIndex * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)GlobalGreen + (uint32_t)nLightIndex * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)GlobalBlue + (uint32_t)nLightIndex * 0x100]);
+    pVertex->dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)byAlpha << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)GlobalRed + ((uint32_t)nLightIndex << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)GlobalGreen + ((uint32_t)nLightIndex << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)GlobalBlue + ((uint32_t)nLightIndex << 8)]);
 }
 
 void __fastcall RENDERER_D3D_SetTextureStageColor(D2D3DVertexStrc * pVertex, uint32_t dwGamma, uint8_t byAlpha) {
     uint32_t nLightRow = (uint8_t)dwGamma;
-    pVertex->dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)byAlpha << 8 | (uint16_t)(uint8_t)g_aLightingTable[(dwGamma >> 8 & 0xff) + nLightRow * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint8_t)(dwGamma >> 0x10) + nLightRow * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(dwGamma >> 0x18) + nLightRow * 0x100]);
+    pVertex->dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)byAlpha << 8 | (uint16_t)(uint8_t)g_aLightingTable[(dwGamma >> 8 & 0xff) + (nLightRow << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint8_t)(dwGamma >> 0x10) + (nLightRow << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(dwGamma >> 0x18) + (nLightRow << 8)]);
 }
 
 // Initializes perspective Z-division table at 0x00981748 (8192 entries). For each Z coordinate in range [-4096, 4095], calculates perspective factor as 3059712 / (Z - 3000), clamped to range Z=[-2999, 2999] to prevent divide-by-zero. Used for depth-based vertex scaling in 3D tile rendering.

@@ -520,7 +520,7 @@ BOOL __fastcall SaveStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * p
 int __fastcall SaveSkills(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * pStartAddress, uint8_t * pEndAddress) {
     int nHardPoints;
     uint8_t* pHeader = *pStartAddress;
-    if (pHeader + D2Common::ITEMS::Items::sgptDataTable->nSkillCountMaxPerClass + 2 > pEndAddress) {
+    if (pHeader + (D2Common::ITEMS::Items::sgptDataTable->nSkillCountMaxPerClass + 2) > pEndAddress) {
       return 1;
     }
 
@@ -1200,7 +1200,7 @@ int __fastcall ReadStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * 
 
     uint8_t* pReadCursor = (uint8_t*)*ppReadPos;
     int32_t nBitmaskBytes = (nStatCount + 7) / 8;
-    if (pReadCursor + nBitmaskBytes + 2 > (unsigned char*)pEndBuf) {
+    if (pReadCursor + (nBitmaskBytes + 2) > (unsigned char*)pEndBuf) {
       return 0x12;
     }
 
@@ -1210,7 +1210,7 @@ int __fastcall ReadStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * 
     }
 
     int32_t nPresentStatsCount = Fog::Save::SAVE_CalculateChecksum(pBitmaskBase, nBitmaskBytes);
-    if (pBitmaskBase + nPresentStatsCount * 4 + nBitmaskBytes > (unsigned char*)pEndBuf) {
+    if (pBitmaskBase + (nPresentStatsCount * 4 + nBitmaskBytes) > (unsigned char*)pEndBuf) {
       return 0x12;
     }
 
@@ -1219,7 +1219,7 @@ int __fastcall ReadStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * 
     if (nStatCount > 0) {
       do {
         if ((uint8_t)Fog::BitBuffer::gadwBitMasks[eUnitStat & UNITSTAT_maxhp] & pBitmaskBase[(int)eUnitStat >> 3]) {
-          nValue = *(int32_t*)(pBitmaskBase + nPresentStats * 4 + nBitmaskBytes);
+          nValue = *(int32_t*)(pBitmaskBase + (nPresentStats * 4 + nBitmaskBytes));
           nPresentStats++;
         } else {
           nValue = 0;
@@ -1230,7 +1230,7 @@ int __fastcall ReadStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * 
       } while ((int)eUnitStat < nStatCount);
     }
 
-    *ppReadPos = (short int*)(pBitmaskBase + nPresentStats * 4 + nBitmaskBytes);
+    *ppReadPos = (short int*)(pBitmaskBase + (nPresentStats * 4 + nBitmaskBytes));
     return 0;
 }
 
@@ -1839,7 +1839,7 @@ int32_t __fastcall PLAYERSAVE_LoadModernFormat(::SGAMEDATA * pGame, D2ClientStrc
     D2SaveFileHeaderStrc* pReadPos;
     pReadPos = pSaveHeader;
     D2SaveFileHeaderStrc* pBufEnd;
-    pBufEnd = (D2SaveFileHeaderStrc*)(pSaveHeader->szCharacterName + nSaveDataOffset - 0x14);
+    pBufEnd = (D2SaveFileHeaderStrc*)(pSaveHeader->szCharacterName + (nSaveDataOffset - 0x14));
     D2UnitStrc* pUnit;
     pUnit = 0;
     *ppUnit = 0;

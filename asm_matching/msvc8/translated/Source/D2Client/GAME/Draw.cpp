@@ -374,7 +374,7 @@ static void __stdcall DRAW_CalcRoofLightGridOrtho(D2GfxLightExStrc * pLightEntry
       do {
         if (!bBorderOnly || (!nCol || nCol == 5) && (!nHalfWidthAdj || nHalfWidthAdj == 5)) {
           pLightEntry->sLight.nIntensity = 0xff;
-          pLightEntry->nX = (nCol - nHalfWidthAdj) * 0x10 + nScreenX;
+          pLightEntry->nX = (nCol - nHalfWidthAdj << 4) + nScreenX;
           pLightEntry->nY = nScreenY + (nCol + nHalfWidthAdj) * 8;
           pLightEntry->sLight.nRed = 0xff;
           pLightEntry->sLight.nBlue = 0xff;
@@ -425,7 +425,7 @@ void __stdcall DRAW_CalcRoofLightOrtho(D2GfxLightExStrc * pLightGrid, int32_t nS
       nCol = 0;
       do {
         if (!bBorderOnly || (!nCol || nCol == 5) && (!nHalfWidthAdj || nHalfWidthAdj == 5)) {
-          pCurLight->nX = (nCol - nHalfWidthAdj) * 0x10 + nScreenX;
+          pCurLight->nX = (nCol - nHalfWidthAdj << 4) + nScreenX;
           pCurLight->nY = nScreenY + (nCol + nHalfWidthAdj) * 8;
           if (nIndoorFlag) {
             pCurLight->sLight.nIntensity = *(uint8_t*)((char*)&dwLightColor + 3);
@@ -469,7 +469,7 @@ static void __stdcall DRAW_CalcRoofLightGridPerspective(D2GfxLightExStrc * pLigh
       do {
         if (!bBorderOnly || (!nColX || nColX == 5) && (!nRowY || nRowY == 5)) {
           pXAdjust = &pLightEntry->nX;
-          D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition((nColX + nTileX) * 0x10000, (nRowY + nTileY) * 0x10000, nDepth, pXAdjust, &pLightEntry->nY);
+          D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(nColX + nTileX << 0x10, nRowY + nTileY << 0x10, nDepth, pXAdjust, &pLightEntry->nY);
           *pXAdjust += nScreenHalfAdj;
           pLightEntry->sLight.nIntensity = 0xff;
           pLightEntry->sLight.nRed = 0xff;
@@ -518,7 +518,7 @@ void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * nRow, int32_t nTileX, int
         do {
           if (!bBorderOnly || (!nCol || nCol == 5) && (!nRow || nRow == (uint8_t*)0x5)) {
             pXAdjust = &pLightEntry->nX;
-            D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition((nCol + nTileX) * 0x10000, (int)(nRow + nTileY) * 0x10000, nDepth, pXAdjust, &pLightEntry->nY);
+            D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(nCol + nTileX << 0x10, (intptr_t)(nRow + nTileY) << 0x10, nDepth, pXAdjust, &pLightEntry->nY);
             *pXAdjust += nScreenHalfAdj;
             pLightEntry->sLight.nIntensity = byIntensity;
             pLightEntry->sLight.nRed = byGreen;
@@ -541,7 +541,7 @@ void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * nRow, int32_t nTileX, int
       do {
         if (!bBorderOnly || (!nSplitSide || nSplitSide == 5) && (!nRow || nRow == (uint8_t*)0x5)) {
           pScreenX = (uint8_t*)((char*)pLightEntry + 4);
-          D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition((nSplitSide + nTileX) * 0x10000, (int)(nRow + nTileY) * 0x10000, 0, (int*)pScreenX, (int*)((char*)pLightEntry + 8));
+          D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(nSplitSide + nTileX << 0x10, (intptr_t)(nRow + nTileY) << 0x10, 0, (int*)pScreenX, (int*)((char*)pLightEntry + 8));
           *(int*)pScreenX += nScreenHalfAdj;
           View::DRAW_CoordIsInCoord((nSplitSide + nTileX) * 8, (int)(nRow + nTileY) * 8, (uint8_t*)pLightEntry, (uint8_t*)((char*)pLightEntry + 1), (uint8_t*)((char*)pLightEntry + 2), (uint8_t*)((char*)pLightEntry + 3));
         }
@@ -1318,7 +1318,7 @@ void __fastcall dWallPass(D2GameViewStrc * pGameView) {
 
       for (sLightEntry = pCellEntry[1]; sLightEntry; sLightEntry = sLightEntry->pNext) {
         View::DRAW_CoordIsInCoord(sLightEntry->nX, sLightEntry->nY, &byIntensity, &byRed, &byGreen, &byBlue);
-        Wall2::DRAW_WORLD_Unit((D2UnitStrc*)sLightEntry->pData, (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)byBlue << 8 | (uint16_t)(uint8_t)byGreen) << 8 | (uint32_t)(uint8_t)byRed) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byIntensity), 0);
+        Wall2::DRAW_WORLD_Unit((D2UnitStrc*)sLightEntry->pData, (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)byBlue << 8 | (uint16_t)(uint8_t)byGreen) << 8 | (uint32_t)(uint8_t)byRed) << 8 | (uint32_t)(uint8_t)byIntensity), 0);
       }
 
       pCellEntry += 9;

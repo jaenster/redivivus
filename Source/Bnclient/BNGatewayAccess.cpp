@@ -37,7 +37,7 @@ void __stdcall SaveAndUnload(D2BNetGatewayAccessStr * pGatewayAccess) {
       szSourceFileName = pGatewayAccess->pGatewayData;
       pcCursor = Storm::Source::SSTR::SStrLen(szSourceFileName);
       nCurGatewayIdx = pGatewayAccess->nCurGatewayIdx;
-      szSourceFileName = szSourceFileName + pcCursor + 1;
+      szSourceFileName += pcCursor + 1;
       *szSourceFileName = (char)(nCurGatewayIdx / 10) + '0';
       szSourceFileName[1] = (char)(pGatewayAccess->nCurGatewayIdx % 10) + '0';
       szSourceFileName = "Override Battle.net gateways";
@@ -77,8 +77,8 @@ char * __thiscall Nth(void * pThis, int nIndex) {
       nIndex = 0;
       for (nFieldIdx = 1; nFieldIdx < nTargetField && nIndex < *(int*)((char*)pThis + 0x14); nFieldIdx++) {
         nEntryStrLen = Storm::Source::SSTR::SStrLen(szDataCursor);
-        nIndex = nIndex + nEntryStrLen + 1;
-        szDataCursor = szDataCursor + nEntryStrLen + 1;
+        nIndex += nEntryStrLen + 1;
+        szDataCursor += nEntryStrLen + 1;
       }
 
       if (nIndex < *(int*)((char*)pThis + 0x14) && nFieldIdx <= nTargetField) {
@@ -159,13 +159,13 @@ void __thiscall GetGatewayList(void * pThis, char * szText) {
     bool bRegReadResult;
     DWORD dwRegDataSize;
     int32_t nLine;
-    char* pDataCursor = szText;
+    char* pDataCursor;
     if (*(int*)((char*)pThis + 0x10)) {
-      dwRegDataSize = (DWORD)pThis;
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x146);
       exit(-1);
     }
 
+    pDataCursor = szText;
     dwRegDataSize = 0;
     nLine = Storm::Source::SReg::SRegLoadData((uint32_t*)"Configuration", szText, 0x82, (LPBYTE)0x0, 0, (uint32_t**)&dwRegDataSize);
     if (!(nLine && dwRegDataSize)) {
@@ -182,11 +182,12 @@ void __thiscall GetGatewayList(void * pThis, char * szText) {
       *(uint32_t*)((char*)pThis + 0x14) = 0;
     }
 
-    szText = *(char**)((char*)pThis + 0x10);
     *(uint32_t*)((char*)pThis + 0x18) = 0;
-    if (!szText) {
+    if (!*(char**)((char*)pThis + 0x10)) {
       return;
     }
+
+    szText = *(char**)((char*)pThis + 0x10);
 
     uint32_t nVersion = strtoul(szText, &szText, 10);
     *(uint32_t*)((char*)pThis + 0x18) = nVersion;
@@ -310,7 +311,7 @@ char * __thiscall FindSection(D2BNetGatewayAccessStr * pThis, char * szText1, ch
 
       nCmp = _strnicmp(szText1 + 1, szText2, nSectionNameLen);
       if (!nCmp) {
-        pIniCursor = SkipEOL(pThis, SkipToEOL(pThis, szText1 + nSectionNameLen + 2, szText2_00), szText2_00);
+        pIniCursor = SkipEOL(pThis, SkipToEOL(pThis, szText1 + (nSectionNameLen + 2), szText2_00), szText2_00);
         return pIniCursor;
       }
 
@@ -334,7 +335,7 @@ char * __thiscall FindKey(D2BNetGatewayAccessStr * pGatewayAccess, char * szText
       int nCmp;
       nCmp = _strnicmp(szText1, szText2, (int)nStrLen);
       if (!nCmp) {
-        return szText1 + (int)nStrLen + 1;
+        return szText1 + ((int)nStrLen + 1);
       }
 
       for (; szText1 < pEnd && (cCur = *szText1 , cCur != '\0') && cCur != '\r' && cCur != '\n'; szText1++) {}
@@ -366,7 +367,7 @@ void __thiscall PickClosestZone(void * pThis, int32_t nGmtMinutes) {
         szZoneStr = Nth(pThis, nCurGatewayIdx);
         if (*szZoneStr != '\0') {
           pGatewayEntry = Storm::Source::SSTR::SStrLen(szZoneStr);
-          szZoneStr = szZoneStr + pGatewayEntry + 1;
+          szZoneStr += pGatewayEntry + 1;
         }
 
         nGmtOffset = strtol(szZoneStr, &szStrtolEnd, 10);
@@ -385,7 +386,7 @@ void __thiscall PickClosestZone(void * pThis, int32_t nGmtMinutes) {
     char* szBestEntry = Nth(pThis, nBestGatewayIdx);
     if (*szBestEntry != '\0') {
       pGatewayEntry = Storm::Source::SSTR::SStrLen(szBestEntry);
-      szBestEntry = szBestEntry + pGatewayEntry + 1;
+      szBestEntry += pGatewayEntry + 1;
     }
 
     nGmtOffset = strtol(szBestEntry, &szStrtolEnd, 10);
@@ -463,8 +464,8 @@ void __stdcall Load(D2BNetGatewayAccessStr * pGatewayAccess) {
       if ((int)pGatewayAccess_00->nGatewayDataSize > 0) {
         do {
           pStrLen = Storm::Source::SSTR::SStrLen(pCur);
-          nGatewayAccess = nGatewayAccess + pStrLen + 1;
-          pCur = pCur + pStrLen + 1;
+          nGatewayAccess += pStrLen + 1;
+          pCur += pStrLen + 1;
           nEntryCount++;
         } while (nGatewayAccess < (int)pGatewayAccess_00->nGatewayDataSize);
       }
@@ -474,7 +475,7 @@ void __stdcall Load(D2BNetGatewayAccessStr * pGatewayAccess) {
         pCur = pGatewayAccess_00->pGatewayData;
         pGatewayAccess_00->nGatewayCount = nGatewayCount;
         pStrLen = Storm::Source::SSTR::SStrLen(pCur);
-        nCurGateway = strtoul(pCur + pStrLen + 1, &pEndPtr, 10);
+        nCurGateway = strtoul(pCur + (pStrLen + 1), &pEndPtr, 10);
         pGatewayAccess_00->nCurGatewayIdx = nCurGateway;
         pGatewayAccess_00->bDirty = 0;
         if (!((int)nCurGateway < 1 || (int)nCurGateway > pGatewayAccess_00->nGatewayCount)) {
@@ -555,7 +556,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
         pRegMultiSzBuf = (char*)Storm::Source::SMem::SMemAlloc(nSize, ".\\BNetGW.cpp", 0x297, 0);
         sprintf(pRegMultiSzBuf, "%d", nGatewayIniIdx);
         pSectionGateways = Storm::Source::SSTR::SStrLen(pRegMultiSzBuf);
-        pcVar1 = pRegMultiSzBuf + pSectionGateways + 1;
+        pcVar1 = pRegMultiSzBuf + (pSectionGateways + 1);
         *pcVar1 = '0';
         pcVar1[1] = '0';
         pcVar1[2] = '\0';
@@ -571,7 +572,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
           nTmp3 = pcVar1;
           pZoneVal = FindSection(pClientSideData, szText, pcVar1);
           if (pZoneVal) {
-            uSlot1C.nTmp1 = pcVar1 + uSlot1C.nFieldLen + 1;
+            uSlot1C.nTmp1 = pcVar1 + (uSlot1C.nFieldLen + 1);
             pcVar1 = FindKey(pClientSideData, pZoneVal, "ZONE");
             if (pcVar1) {
               pEnuLineEnd = SkipToEOL(pClientSideData, pcVar1, nTmp2);
@@ -584,7 +585,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
             }
 
             Storm::Source::SSTR::SStrCopy(uSlot1C.nTmp1, pcVar1, nFieldLen);
-            uSlot1C.nTmp1 = uSlot1C.nTmp1 + nZoneLen + 1;
+            uSlot1C.nTmp1 += nZoneLen + 1;
             pcVar1 = FindKey(pClientSideData, pZoneVal, "ENU");
             if (pcVar1) {
               pZoneVal = SkipToEOL(pClientSideData, pcVar1, nTmp2);
@@ -595,7 +596,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
             }
 
             Storm::Source::SSTR::SStrCopy(uSlot1C.nTmp1, pcVar1, nFieldLen + 1);
-            pcVar1 = uSlot1C.nTmp1 + nFieldLen + 1;
+            pcVar1 = uSlot1C.nTmp1 + (nFieldLen + 1);
           }
 
           nGatewayIniIdx++;

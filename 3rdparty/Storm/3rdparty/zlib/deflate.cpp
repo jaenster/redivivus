@@ -587,7 +587,7 @@ static void fill_window(deflate_state * pDeflateState) {
       }
 
       nCurrPos = pZStream->avail_in;
-      pWindowDst = pDeflateState->window + pDeflateState->lookahead + pDeflateState->strstart;
+      pWindowDst = pDeflateState->window + (pDeflateState->lookahead + pDeflateState->strstart);
       nReadLen = nCurrPos;
       if (nCurrPos > nMore) {
         nReadLen = nMore;
@@ -1643,7 +1643,7 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
           nLevelFlag = 0;
         }
 
-        nHeader = (pDeflateState->w_bits - 8) * 0x1000 + 0x800 | nLevelFlag << 6;
+        nHeader = (pDeflateState->w_bits - 8 << 0xc) + 0x800 | nLevelFlag << 6;
         if (pDeflateState->strstart) {
           nHeader |= 0x20;
         }

@@ -2290,7 +2290,7 @@ static void gen_bitlen(tree_desc * pTreeDesc, deflate_state * pDeflateState) {
       return;
     }
 
-    int32_t* pHeapCursor = pDeflateState->heap + pDeflateState->heap_max + 1;
+    int32_t* pHeapCursor = pDeflateState->heap + (pDeflateState->heap_max + 1);
     int nHeapCount = 0x23d - nHeapMaxIdx;
     nHeapMaxIdx += nHeapCount;
     do {
@@ -3206,26 +3206,26 @@ static int32_t build_bl_tree(deflate_state * pDeflateState) {
     int32_t nMaxBlIndex = 0x12;
     do {
       if (pDeflateState->bl_tree[gZlibExtraLBitsBlOrder.bl_order[nMaxBlIndex]].dl) {
-        pDeflateState->opt_len = pDeflateState->opt_len + nMaxBlIndex * 3 + 0x11;
+        pDeflateState->opt_len += nMaxBlIndex * 3 + 0x11;
         return nMaxBlIndex;
       }
-      if (pDeflateState->bl_tree[*(uint8_t*)((char*)gZlibExtraLBitsBlOrder.extra_lbits + nMaxBlIndex + 0x73)].dl) {
-        pDeflateState->opt_len = pDeflateState->opt_len + (nMaxBlIndex - 1) * 3 + 0x11;
+      if (pDeflateState->bl_tree[*(uint8_t*)((char*)gZlibExtraLBitsBlOrder.extra_lbits + (nMaxBlIndex + 0x73))].dl) {
+        pDeflateState->opt_len += (nMaxBlIndex - 1) * 3 + 0x11;
         return nMaxBlIndex - 1;
       }
-      if (pDeflateState->bl_tree[*(uint8_t*)((char*)gZlibExtraLBitsBlOrder.extra_lbits + nMaxBlIndex + 0x72)].dl) {
-        pDeflateState->opt_len = pDeflateState->opt_len + (nMaxBlIndex - 2) * 3 + 0x11;
+      if (pDeflateState->bl_tree[*(uint8_t*)((char*)gZlibExtraLBitsBlOrder.extra_lbits + (nMaxBlIndex + 0x72))].dl) {
+        pDeflateState->opt_len += (nMaxBlIndex - 2) * 3 + 0x11;
         return nMaxBlIndex - 2;
       }
-      if (pDeflateState->bl_tree[*(uint8_t*)((char*)gZlibExtraLBitsBlOrder.extra_lbits + nMaxBlIndex + 0x71)].dl) {
+      if (pDeflateState->bl_tree[*(uint8_t*)((char*)gZlibExtraLBitsBlOrder.extra_lbits + (nMaxBlIndex + 0x71))].dl) {
         nMaxBlIndex += -3;
-        pDeflateState->opt_len = pDeflateState->opt_len + nMaxBlIndex * 3 + 0x11;
+        pDeflateState->opt_len += nMaxBlIndex * 3 + 0x11;
         return nMaxBlIndex;
       }
 
       nMaxBlIndex += -4;
       if (nMaxBlIndex < 3) {
-        pDeflateState->opt_len = pDeflateState->opt_len + nMaxBlIndex * 3 + 0x11;
+        pDeflateState->opt_len += nMaxBlIndex * 3 + 0x11;
         return nMaxBlIndex;
       }
     } while (true);

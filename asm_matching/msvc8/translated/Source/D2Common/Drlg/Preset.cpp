@@ -633,7 +633,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
         do {
           nStrLen = D2Hell::SSTR_StringLength((char*)pMonStatCursor);
           i--;
-          pMonStatCursor = (uint32_t*)((char*)pMonStatCursor + nStrLen + 1);
+          pMonStatCursor = (uint32_t*)((char*)pMonStatCursor + (nStrLen + 1));
         } while (i);
       }
     }
@@ -739,7 +739,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                       case 0:
                         {
                           nClassId = DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
-                          nBuffer = (int)((char*)nBuffer + ITEMS::Items::sgptDataTable->nTxtMonStatsSize + nClassId);
+                          nBuffer += ITEMS::Items::sgptDataTable->nTxtMonStatsSize + nClassId;
                           break;
                         }
                       case 2:
@@ -2277,7 +2277,7 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
                         }
                       }
                       if (nScanMode && nTileType >= 0x1e && nTileType <= 0x21) {
-                        pLevel->aSpawnPoints[pLevel->nSpawnPointCount].nX = (int)pMemoryOrXIndex->pPools + pDrlgMap->nRealOffsetX - 0x20;
+                        pLevel->aSpawnPoints[pLevel->nSpawnPointCount].nX = (int)pMemoryOrXIndex->pPools + (pDrlgMap->nRealOffsetX - 0x20);
                         pLevel->aSpawnPoints[pLevel->nSpawnPointCount].nY = pDrlgMap->nRealOffsetY + nFlags;
                         switch (nTileType) {
                           case 0x1e:

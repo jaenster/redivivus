@@ -363,39 +363,29 @@ void __stdcall QSERVER_PutNewGameOnTokenList(::SGAMEDATA * dwGameServerAddr, uin
 
 // Allocates a 16-bit server token from the global 1024-slot token array. Locks csTokenHash critical section, increments QServerNextToken_Maybe (wraps at 0x400), scans for first unused slot (value == 0), marks it as allocated (0xffffffff), and returns the token. If all slots occupied, returns without allocating (upper 16 bits zero).
 uint16_t __stdcall QSERVER_GenerateToken() {
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
+    EnterCriticalSection(&gQServerGameListCs);
     uint16_t nStartToken = QServerNextToken;
-    uint32_t nCurrentSlot = (uint32_t)QServerNextToken;
+    uint16_t nNextToken = QServerNextToken;
     QServerNextToken++;
     if (QServerNextToken > 0x400) {
       QServerNextToken = 1;
     }
 
-    ::SGAMEDATA* nSlotValue = gaQServerGameByToken[nCurrentSlot];
-    uint16_t nNextToken = QServerNextToken;
-    while (true) {
-      /* if there are no servers hosted yet */ if (!nSlotValue) {
-        QServerNextToken = nNextToken;
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gaQServerGameByToken[nCurrentSlot] = (::SGAMEDATA*)-1;
-        LeaveCriticalSection(&gQServerGameListCs);
-        return (uint16_t)nCurrentSlot;
-      }
-
-      nCurrentSlot = (uint32_t)nNextToken;
-      QServerNextToken = nNextToken + 1;
+    while (gaQServerGameByToken[nNextToken]) {
+      nNextToken = QServerNextToken;
+      QServerNextToken++;
       if (QServerNextToken > 0x400) {
         QServerNextToken = 1;
       }
       if (nNextToken == nStartToken) {
-        break;
+        LeaveCriticalSection(&gQServerGameListCs);
+        return 0;
       }
-
-      nSlotValue = gaQServerGameByToken[nNextToken];
-      nNextToken = QServerNextToken;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerGameListCs);
-    return 0;
+    gaQServerGameByToken[nNextToken] = (::SGAMEDATA*)-1;
+    LeaveCriticalSection(&gQServerGameListCs);
+    return nNextToken;
 }
 
 // Loads DRLG act and transitions client to state 2 (LoadingAct). Ensures act's dungeon generation is initialized, tells client to load act graphics/data, then advances connection state. Called after character validation during join flow.
@@ -3000,7 +2990,7 @@ int32_t __stdcall SrvProcessAllGames(int32_t bLimitFrameSkip) {
           bTickedAnyGame = 1;
           if (!gbQServerFixedStatsTick) {
             if (pGame->bUpdateStatsTick) {
-              nFrameDelta = (updateStatTick - pGame->bUpdateStatsTick) * 0x400 / Frames_TimeBetweenFrames;
+              nFrameDelta = (updateStatTick - pGame->bUpdateStatsTick << 0xa) / Frames_TimeBetweenFrames;
               pGame->dwStatsTick = nFrameDelta;
               if (nFrameDelta < 10) {
                 pGame->dwStatsTick = 10;

@@ -332,7 +332,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_GuidedArrow(D2UnitStrc * pUnit, eD2Skills e
 
         nTargetMode = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
         nUnitPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-        D2Common::Units::Missile::SetTargetY(pMissileUnit, (short int)((short int)nTargetY - (short int)nUnitPosY) * 0x10000 + (int)(short int)((short int)nTargetX - (short int)nTargetMode));
+        D2Common::Units::Missile::SetTargetY(pMissileUnit, ((short int)((short int)nTargetY - (short int)nUnitPosY) << 0x10) + (int)(short int)((short int)nTargetX - (short int)nTargetMode));
       }
 
       return 1;

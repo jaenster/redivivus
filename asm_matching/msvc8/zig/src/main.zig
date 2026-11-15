@@ -16,6 +16,8 @@
 //!                                                 tag why each function differs (classify.py)
 //!   oracle-zig permodule --root <dir> --map M [--audit A] [--data D] [--out O]
 //!                                                 the figures per module (permodule.py)
+//!   oracle-zig soleblock [--funcmap F] [--libmap L] [--ratchet DIR --ratchet-report T] align.jsonl OUT
+//!                                                 rank causes by the functions they alone block (soleblock.py)
 //!   oracle-zig build --root <dir> [-j N] [--force] [--with-data] [PATTERN ...]
 //!                                                 translate + compile the tree under VC8
 //!   oracle-zig translate --repo <tree> <out>      the tree's VC8 translation, as an export ships it
@@ -43,6 +45,8 @@ const permodule = @import("permodule.zig");
 const compile = @import("compile.zig");
 const tucache = @import("tucache.zig");
 const permute = @import("permute.zig");
+const aligndump = @import("aligndump.zig");
+const soleblock = @import("soleblock.zig");
 const asmdiff = @import("asmdiff.zig");
 const check = @import("check.zig");
 const tools = @import("tools.zig");
@@ -80,6 +84,9 @@ const USAGE =
     \\       oracle-zig snippet FILE [--func NAME [--ref ADDR]] [--cflags FLAGS] [--tu TU]
     \\       oracle-zig objdiff <objdir A> <objdir B> [PATTERN ...]
     \\       oracle-zig diffgrams [--top N] [--max-len K] [--examples]
+    \\       oracle-zig aligndump [--audit A] [--out FILE] [ADDR ...]
+    \\       oracle-zig soleblock [--funcmap F] [--libmap L] [--crtmap C] [--ratchet DIR --ratchet-report T]
+    \\                            align.jsonl OUTDIR
     \\       oracle-zig sizetrend [--audit A] [--funcmap F] [--out O] [--label T]
     \\       oracle-zig abcompare <baseline audit.tsv> <experiment audit.tsv> [--depth N] [--list]
     \\       oracle-zig tulayout [--tu PATTERN] [--intruders]
@@ -119,6 +126,8 @@ pub fn main(init: std.process.Init.Minimal) !void {
     if (std.mem.eql(u8, cmd, "tucache")) return tucache.main(rest);
     if (std.mem.eql(u8, cmd, "trial") or std.mem.eql(u8, cmd, "judge")) return permute.main(cmd, rest);
     if (std.mem.eql(u8, cmd, "diff")) return asmdiff.main(rest);
+    if (std.mem.eql(u8, cmd, "aligndump")) return aligndump.main(rest);
+    if (std.mem.eql(u8, cmd, "soleblock")) return soleblock.main(rest);
     if (std.mem.eql(u8, cmd, "check")) return check.main(rest);
     if (std.mem.eql(u8, cmd, "objdiff")) return tools.objdiffMain(rest);
     if (std.mem.eql(u8, cmd, "diffgrams")) return tools.diffgramsMain(rest);
@@ -145,4 +154,5 @@ test {
     _ = datamatch;
     _ = classify;
     _ = permodule;
+    _ = soleblock;
 }

@@ -36,17 +36,15 @@ void __fastcall AddMercForHireToGlobalList(D2GSPacketSrv0x4E * pPacket) {
       return;
     }
 
-    int nMercSlot = 0;
-    while (D2Client::Merc::D2MercForHire[nMercSlot].bActive) {
-      nMercSlot++;
-      if ((intptr_t)&D2Client::Merc::D2MercForHire[nMercSlot].bActive >= (intptr_t)((char*)&D2Client::Merc::D2MercForHire + sizeof(D2Client::Merc::D2MercForHire) + 8)) {
+    for (int nMercSlot = 0; nMercSlot < (int)(sizeof(D2Client::Merc::D2MercForHire) / sizeof(D2Client::Merc::D2MercForHire[0])); nMercSlot++) {
+      if (!D2Client::Merc::D2MercForHire[nMercSlot].bActive) {
+        D2MercForHire* pMercForHire = &D2Client::Merc::D2MercForHire[nMercSlot];
+        pMercForHire->nNameStringId = pPacket->nNameStringID;
+        pMercForHire->nSeed = pPacket->nSeed;
+        pMercForHire->bActive = 1;
         return;
       }
     }
-
-    D2Client::Merc::D2MercForHire[nMercSlot].nNameStringId = pPacket->nNameStringID;
-    D2Client::Merc::D2MercForHire[nMercSlot].nSeed = pPacket->nSeed;
-    D2Client::Merc::D2MercForHire[nMercSlot].bActive = 1;
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x4F_INITMERCENARYLIST(char * pBytes) {

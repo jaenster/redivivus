@@ -1396,7 +1396,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
       nStoneIdx = pRoomListEnd->nUnitGUID;
     }
 
-    *(int32_t*)(pSubData->aStones + (uint32_t)pSubData->nStoneIndex * 2 + 8) = nStoneIdx;
+    *(int32_t*)(pSubData->aStones + ((uint32_t)pSubData->nStoneIndex * 2 + 8)) = nStoneIdx;
     pSubData->nStoneIndex++;
     pRoomListEnd = pOperation->sArg.pVictim;
     if (pRoomListEnd && pRoomListEnd->eAnimMode.ePlayerMode != Death) {

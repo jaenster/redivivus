@@ -861,7 +861,10 @@ bool __fastcall Q14_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId
             return false;
           }
 
-          bNpcActive = !pQuestData->pQuestSpecificData.pA2Q6->bTyraelPortalSpawnLock;
+          bNpcActive = false;
+          if (!pQuestData->pQuestSpecificData.pA2Q6->bTyraelPortalSpawnLock) {
+            bNpcActive = true;
+          }
         } else {
           /* GetQuestState(TheSevenTombs, 0xd=JustCompleted) — post-win NPCs only active
                          after Duriel just-completed */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_JustCompleted);
@@ -871,32 +874,50 @@ bool __fastcall Q14_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId
           if (nTargetClassId == MonsterUnitAtma) {
             /* GetQuestState(TheSevenTombs, 6=Step0x06) — Meshif(0xb0) active only if not
                          yet talked-to */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x06);
-            bNpcActive = !bQuestStateResult;
+            bNpcActive = false;
+            if (!bQuestStateResult) {
+              bNpcActive = true;
+            }
           } else if (nTargetClassId == MonsterUnitWarrivAct2) {
             /* GetQuestState(TheSevenTombs, 7=Step0x07) — Geglash(0xaf) active only if not
                          yet talked-to */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x07);
-            bNpcActive = !bQuestStateResult;
+            bNpcActive = false;
+            if (!bQuestStateResult) {
+              bNpcActive = true;
+            }
           } else {
             switch (nTargetClassId) {
               case MonsterUnitDrognan:
                 {
                   /* GetQuestState(TheSevenTombs, 8=Step0x08) — Tyrael(0xb1) active only if not
                          yet talked-to */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x08);
-                  bNpcActive = !bQuestStateResult;
+                  bNpcActive = false;
+                  if (!bQuestStateResult) {
+                    bNpcActive = true;
+                  }
+
                   break;
                 }
               case MonsterUnitLysander:
                 {
                   /* GetQuestState(TheSevenTombs, 9=Step0x09) — Warriv(0xca) active only if not
                          yet talked-to */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x09);
-                  bNpcActive = !bQuestStateResult;
+                  bNpcActive = false;
+                  if (!bQuestStateResult) {
+                    bNpcActive = true;
+                  }
+
                   break;
                 }
               case MonsterUnitDeckardCain2:
                 {
                   /* GetQuestState(TheSevenTombs, 0xa=Step0x10) — Lysander(0xf4) active only if
                          not yet talked-to */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x10);
-                  bNpcActive = !bQuestStateResult;
+                  bNpcActive = false;
+                  if (!bQuestStateResult) {
+                    bNpcActive = true;
+                  }
+
                   break;
                 }
               default:
@@ -907,7 +928,10 @@ bool __fastcall Q14_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId
 
                   /* GetQuestState(TheSevenTombs, 0xb=Step0x11) — Fara(0xb2) active only if not
                          yet talked-to */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x11);
-                  bNpcActive = !bQuestStateResult;
+                  bNpcActive = false;
+                  if (!bQuestStateResult) {
+                    bNpcActive = true;
+                  }
                 }
             }
           }
@@ -924,7 +948,10 @@ bool __fastcall Q14_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId
                          Active iff set. */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x04);
     }
 
-    bNpcActive = bQuestStateResult == 1;
+    bNpcActive = false;
+    if (bQuestStateResult == 1) {
+      bNpcActive = true;
+    }
     if (bNpcActive) {
       return true;
     }

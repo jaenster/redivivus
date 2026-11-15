@@ -1508,7 +1508,12 @@ void __stdcall UI_DrawPartyMembers() {
       }
 
       D2Win::Src::D2WinFont::SetAndReturnLastFont(0);
-      UI_DrawPartyMemberName(pUiParty->szPlayerName, nY, dwColor, (uint32_t)(nPartyId != 0xffff));
+      if (nPartyId != 0xffff) {
+        UI_DrawPartyMemberName(pUiParty->szPlayerName, nY, dwColor, 1);
+      } else {
+        UI_DrawPartyMemberName(pUiParty->szPlayerName, nY, dwColor, 0);
+      }
+
       UI_DrawPartyMemberClass(nY + 0xc, pUiParty->nCharType, dwColor);
       UI_DrawPartyMemberLevel(pUiParty->nCharLevel, dwColor, nY + 0xc);
       if (bSameParty && pUiParty->eLevelId != LEVEL_None) {
@@ -1516,7 +1521,12 @@ void __stdcall UI_DrawPartyMembers() {
       }
 
       UI_DrawPartyButtons(pUiParty);
-      UI_DrawPartyButtonLabelText(pUiParty->pPartyButtons[0].bIsActive, nY, (uint32_t)(nMyPartyId == nPartyId), nPartyId);
+      if (nMyPartyId == nPartyId) {
+        UI_DrawPartyButtonLabelText(pUiParty->pPartyButtons[0].bIsActive, nY, 1, nPartyId);
+      } else {
+        UI_DrawPartyButtonLabelText(pUiParty->pPartyButtons[0].bIsActive, nY, 0, nPartyId);
+      }
+
       pUiParty = pUiParty->pNext;
       nY += 0x26;
       pRoster = GAME::Roster::GetNextRosterPlayer(pRoster);

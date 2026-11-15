@@ -1033,7 +1033,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           nAffixIdx = 0;
           pAffixPtr = pOutput->wPrefixId;
           do {
-            *(uint32_t*)(sItemGenContext.szCustomName + nAffixIdx * 4 + 0x10) = (uint32_t)*pAffixPtr;
+            *(uint32_t*)(sItemGenContext.szCustomName + (nAffixIdx * 4 + 0x10)) = (uint32_t)*pAffixPtr;
             nAffixIdx++;
             pAffixPtr++;
           } while (nAffixIdx < 3);
@@ -1041,7 +1041,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           nAffixIdx = 0;
           pAffixPtr = pOutput->wSuffixId;
           do {
-            *(uint32_t*)(sItemGenContext.szCustomName + nAffixIdx * 4 + 0x1c) = (uint32_t)*pAffixPtr;
+            *(uint32_t*)(sItemGenContext.szCustomName + (nAffixIdx * 4 + 0x1c)) = (uint32_t)*pAffixPtr;
             nAffixIdx++;
             pAffixPtr++;
           } while (nAffixIdx < 3);
@@ -2113,7 +2113,10 @@ uint32_t __fastcall PLRTRADE_ValidateAndInitiateTrade(::SGAMEDATA * pGame, D2Uni
         exit(-1);
       }
 
-      bTradeAllowed = (uint32_t)(pSelfData->dwTradeState != 4);
+      bTradeAllowed = 1;
+      if (pSelfData->dwTradeState == 4) {
+        bTradeAllowed = 0;
+      }
       if (pItemUnit && pItemUnit->eUnitType == UNIT_ITEM) {
         pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pItemUnit->nClassId);
         if (pItemTxt->bQuest != '\0') {

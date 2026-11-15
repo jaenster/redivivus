@@ -64,7 +64,7 @@ void __fastcall LRUCACHE_Init(D2LRUCacheStrc * pCache, D2PoolManagerStrc * pMemo
     pCache->nMissCount = 0;
     pCache->nHitCount = 0;
     pCache->pFreeHead = pCache->pNodeBuffer;
-    pCache->pFreeTail = pCache->pNodeBuffer + pCache->nMaxCount - 1;
+    pCache->pFreeTail = pCache->pNodeBuffer + (pCache->nMaxCount - 1);
 }
 
 static D2LRUCacheNodeStrc * LRUCACHE_PopOldest(D2LRUCacheStrc * pCache) {

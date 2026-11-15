@@ -551,7 +551,7 @@ void __fastcall NET_SID_CLIENT_Send_0x1C_StartAdVex3(char * szGameName, char * s
 
     adwHeader.dwState = (uint32_t)(*szGamePassword != '\0');
     uint32_t nGameNameLen = Storm::Source::SSTR::SStrCopy(adwHeader.szStrings, szGameName, 0x100);
-    uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy(adwHeader.szStrings + nGameNameLen + 1, szGamePassword, 0x100);
+    uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy(adwHeader.szStrings + (nGameNameLen + 1), szGamePassword, 0x100);
     uint32_t nDescLen = Storm::Source::SSTR::SStrCopy(adwHeader.szStrings + nPasswordLen + nGameNameLen + 2, szGameDescription, 0x100);
     NET_SID_CLIENT_Send(0x1c, (char*)&adwHeader, (size_t)(adwHeader.szStrings + nPasswordLen + nGameNameLen + 2 + (nDescLen + 0x15 - (intptr_t)adwHeader.szStrings)));
 }
@@ -605,7 +605,7 @@ void * __fastcall NET_SID_CLIENT_Send_0x09_GetAdvListEx(char * szText1, char * s
       szText2 = "";
     }
 
-    uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy(aPacketBuf.szData + nGameNameLen + 1, szText2, 0x100);
+    uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy(aPacketBuf.szData + (nGameNameLen + 1), szText2, 0x100);
     uint32_t nDescLen = Storm::Source::SSTR::SStrCopy(aPacketBuf.szData + nPasswordLen + nGameNameLen + 2, "", 0x100);
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(9);
     NET_SID_CLIENT_Send(9, (char*)&aPacketBuf, (size_t)(aPacketBuf.szData + nPasswordLen + nGameNameLen + 2 + (nDescLen + 0x11 - (intptr_t)aPacketBuf.szData)));
@@ -753,15 +753,15 @@ uint32_t __fastcall NET_SID_CLIENT_Send_0x27_WriteUserData(char * szAccount, uin
     pPacketBuf[3] = '\0';
     *(uint32_t*)(pPacketBuf + 4) = nCount;
     nLen = Storm::Source::SSTR::SStrCopy(pPacketBuf + 8, szAccount, 0x7fffffff);
-    char* szBufferOutput = pPacketBuf + nLen + 9;
+    char* szBufferOutput = pPacketBuf + (nLen + 9);
     for (nIdx = 0; nIdx < nCount; nIdx++) {
       nLen = Storm::Source::SSTR::SStrCopy(szBufferOutput, pszKeys[nIdx], 0x7fffffff);
-      szBufferOutput = szBufferOutput + nLen + 1;
+      szBufferOutput += nLen + 1;
     }
 
     for (nIdx = 0; nIdx < nCount; nIdx++) {
       nLen = Storm::Source::SSTR::SStrCopy(szBufferOutput, pszValues[nIdx], 0x7fffffff);
-      szBufferOutput = szBufferOutput + nLen + 1;
+      szBufferOutput += nLen + 1;
     }
 
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x27);
@@ -798,10 +798,10 @@ uint32_t __fastcall NET_SID_CLIENT_Send_0x26_ReadUserData(char * szAccount, uint
     *(uint32_t*)(pPacketBuf + 4) = nCount;
     *(uint32_t*)(pPacketBuf + 8) = nRequestId;
     nLen = Storm::Source::SSTR::SStrCopy(pPacketBuf + 0xc, szAccount, 0x7fffffff);
-    char* szBufferOutput = pPacketBuf + nLen + 0xd;
+    char* szBufferOutput = pPacketBuf + (nLen + 0xd);
     for (nRequestId = 0; nRequestId < nCount; nRequestId++) {
       nLen = Storm::Source::SSTR::SStrCopy(szBufferOutput, pszKeys[nRequestId], 0x7fffffff);
-      szBufferOutput = szBufferOutput + nLen + 1;
+      szBufferOutput += nLen + 1;
     }
 
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x26);
@@ -841,7 +841,7 @@ int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestI
         pNextSrc = Storm::Source::SSTR::SStrLen((char*)pszSrcData);
         ppszOutBuf++;
         nPpszOutBufs--;
-        pszSrcData = (D2BnReadUserDataStrc*)((intptr_t)&pszSrcData->nAccountCount + pNextSrc + 1);
+        pszSrcData = (D2BnReadUserDataStrc*)((intptr_t)&pszSrcData->nAccountCount + (pNextSrc + 1));
       } while (nPpszOutBufs);
 
       return 1;
@@ -906,7 +906,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5A_ResetPassword(char * szText1, char * sz
       exit(-1);
     }
 
-    memcpy(szPacketBuf + nLen1 + 1, szText2, _Size);
+    memcpy(szPacketBuf + (nLen1 + 1), szText2, _Size);
     nSendResult = NET_SID_CLIENT_Send(0x5a, szPacketBuf, _Size + _Size_00);
     return (uint32_t)(nSendResult >= 0);
 }
@@ -947,7 +947,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szTe
       exit(-1);
     }
 
-    memcpy(szPacketBuf + nLen1 + 1, szText2, _Size_00);
+    memcpy(szPacketBuf + (nLen1 + 1), szText2, _Size_00);
     _Size_01 = Storm::Source::SSTR::SStrLen(szNewEmail);
     _Size_01 += 1;
     if (!(_Size_01 <= 0x100)) {
@@ -955,7 +955,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szTe
       exit(-1);
     }
 
-    memcpy(szPacketBuf + nLen1 + 1 + _Size_00, szNewEmail, _Size_01);
+    memcpy(szPacketBuf + (nLen1 + _Size_00), szNewEmail, _Size_01);
     nSendResult = NET_SID_CLIENT_Send(0x5b, szPacketBuf, _Size_01 + _Size_00 + _Size);
     return (uint32_t)(nSendResult >= 0);
 }
@@ -1783,9 +1783,9 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
               /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ if (*(int*)pbVar3) {
                 nFDResult = __WSAFDIsSet(*(SOCKET*)(*(int*)pbVar3 + 8), &fdWriteSet);
                 if (nFDResult) {
-                  /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedResult = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, *(LONG*)(__frame0.aCandidates + nLoopCounter * 0x108 + 0x100), 0);
+                  /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedResult = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, *(LONG*)(__frame0.aCandidates + (nLoopCounter * 0x108 + 0x100)), 0);
                   if (!lInterlockedResult) {
-                    __frame0.pWinnerSocket = *(D2NetDataStrc**)(__frame0.aCandidates + nLoopCounter * 0x108 + 0x100);
+                    __frame0.pWinnerSocket = *(D2NetDataStrc**)(__frame0.aCandidates + (nLoopCounter * 0x108 + 0x100));
                     __frame0.pWinnerSocket->bConnected = 1;
                     __frame0.pWinnerSocket->bInit = 0;
                   }
@@ -2097,10 +2097,10 @@ void __stdcall BNNEWS_SaveToCache() {
       do {
         pDVar1 = g_nNewsMaxCacheSize.pEntries;
         pEntryText = g_nNewsMaxCacheSize.pEntries->szText + nEntryDiff;
-        *pWritePtr = *(uint32_t*)(g_nNewsMaxCacheSize.pEntries->szText + nEntryDiff - 4);
+        *pWritePtr = *(uint32_t*)(g_nNewsMaxCacheSize.pEntries->szText + (nEntryDiff - 4));
         pStrScan = pEntryText;
         pStrScan = pStrScan + strlen(pStrScan) + 1;
-        nTextLen = (intptr_t)pStrScan - (intptr_t)(pDVar1->szText + nEntryDiff + 1);
+        nTextLen = (intptr_t)pStrScan - (intptr_t)(pDVar1->szText + (nEntryDiff + 1));
         nDestOffset = 4 - (intptr_t)pEntryText;
         do {
           cStrChar = *pEntryText;
@@ -2110,7 +2110,7 @@ void __stdcall BNNEWS_SaveToCache() {
 
         nEntryDiff += 0x408;
         nStrScanEnd--;
-        pWritePtr = (uint32_t*)((char*)pWritePtr + nTextLen + 5);
+        pWritePtr = (uint32_t*)((char*)pWritePtr + (nTextLen + 5));
       } while (nStrScanEnd);
 
       pStrScanEnd = 0;
@@ -2524,7 +2524,7 @@ BOOL __stdcall BNNEWS_LoadCachedNews() {
             } while ((char)uVar1 != '\0');
 
             nPageSize = pNewEntry->dwTimestamp;
-            pEntryData = (uint32_t*)((char*)pEntryData + nStrLen + 5);
+            pEntryData = (uint32_t*)((char*)pEntryData + (nStrLen + 5));
             nEntryCount = __frame0.nTotalEntries;
           } while (__frame0.nLastEntryId <= nPageSize && (__frame0.nEntriesRead++ , __frame0.nLastEntryId = nPageSize , __frame0.nEntriesRead < __frame0.nTotalEntries));
         }
@@ -3204,7 +3204,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x33_GetFileTime(char * szText, uint32_t dwR
     dwFileTimeParam.dwRequestId = dwRequestId;
     dwFileTimeParam.dwUnknown = 0;
     uint32_t nTextLen = Storm::Source::SSTR::SStrCopy(dwFileTimeParam.szFilename, szText, 0x104);
-    NET_SID_CLIENT_Send(0x33, (char*)&dwFileTimeParam, (intptr_t)&dwFileTimeParam + (nTextLen - (intptr_t)&dwFileTimeParam) + 9);
+    NET_SID_CLIENT_Send(0x33, (char*)&dwFileTimeParam, (intptr_t)&dwFileTimeParam + (nTextLen - (intptr_t)&dwFileTimeParam + 9));
     return 1;
 }
 

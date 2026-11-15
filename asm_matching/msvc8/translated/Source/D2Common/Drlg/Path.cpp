@@ -832,7 +832,7 @@ uint32_t __fastcall DRLGPATH_UpdatePathVelocityAndDirection(uint32_t * pPathData
       if (nDistY < 0) {
         nDistY = -nDistY;
       }
-      if ((int)nVelX > nDistX * 0x10000 && (int)nVelY > nDistY * 0x10000) {
+      if ((int)nVelX > nDistX << 0x10 && (int)nVelY > nDistY << 0x10) {
         return 0;
       }
     }
@@ -909,13 +909,13 @@ uint32_t __fastcall DRLGPATH_StepPathWithCollisionCheck(D2PathTypeArg * pPathTyp
     }
 
     int nFpSrcX;
-    nFpSrcX = (uint32_t)(uint16_t)pPathData[1] * 0x10000 + 0x8000;
+    nFpSrcX = ((uint32_t)(uint16_t)pPathData[1] << 0x10) + 0x8000;
     int nFpSrcY;
-    nFpSrcY = (uint32_t)*(uint16_t*)((char*)pPathData + 6) * 0x10000 + 0x8000;
+    nFpSrcY = ((uint32_t)*(uint16_t*)((char*)pPathData + 6) << 0x10) + 0x8000;
     int nFpDstX;
-    nFpDstX = (uint32_t)*(uint16_t*)((char*)pPathData + 2) * 0x10000 + 0x8000;
+    nFpDstX = ((uint32_t)*(uint16_t*)((char*)pPathData + 2) << 0x10) + 0x8000;
     int nFpDstY;
-    nFpDstY = (uint32_t)(uint16_t)*pPathData * 0x10000 + 0x8000;
+    nFpDstY = ((uint32_t)(uint16_t)*pPathData << 0x10) + 0x8000;
     int nFpCurY;
     nFpCurY = nFpDstX;
     DRLGPATH_NormalizeFixedPointPair((int*)&nVelX, (int*)&nVelY);
@@ -1243,7 +1243,7 @@ static BOOL __stdcall DRLGPATH_RaycastCollisionLine(int * pVelocity, uint32_t nP
     eD2CollisionShapeType nUnitType = pPathArg->nCollisionPattern;
     int32_t nLine = pPathArg->nMoveTestCollisionMask;
     uint32_t nPackedSrc = nPackedStart;
-    int nFpIterX = nPackedStart * 0x10000 + 0x8000;
+    int nFpIterX = (nPackedStart << 0x10) + 0x8000;
     uint32_t nPackedDst = *pnPackedDst;
     int nAbsDX = (uint16_t)nPackedDst - (nFpIterX >> 0x10 & 0xffffU);
     int nFpIterY = (nPackedStart & -65536) + 0x8000;
@@ -2989,7 +2989,7 @@ static int32_t DRLGPATH_ExtractPathFromResult2(D2PathTypeArg * pPathTypeArg, D2D
     } while ((D2DrlgPathNodeStrc*)sFrame.pParentNode);
 
     if (nWaypointCount >= 0x1 && nWaypointCount <= 0x4d) {
-      memcpy(sFrame.pWaypointDst, (void*)((intptr_t)&sFrame + nWaypointCount * -4 + 0x138), nWaypointCount * 4);
+      memcpy(sFrame.pWaypointDst, (void*)((intptr_t)&sFrame + (nWaypointCount * -4 + 0x138)), nWaypointCount * 4);
       return nWaypointCount;
     }
 

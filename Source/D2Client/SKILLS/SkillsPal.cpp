@@ -577,7 +577,7 @@ BOOL __fastcall Skills_CltDoFunc_Pal_Charge(D2UnitStrc * pUnit, eD2Skills eSkill
       D2Common::Skills::SKILL_SetFlags(pSkill, 0);
       D2Common::Skills::SKILL_SetParam1(pSkill, 0);
       D2Common::Skills::SKILL_SetParam2(pSkill, 0);
-      pUnit->nFrameCount = (nFrameRate - (pUnit->nSeqFrame >> 8)) * 0x100;
+      pUnit->nFrameCount = nFrameRate - (pUnit->nSeqFrame >> 8) << 8;
       if (pCurrentTarget || (pCurrentTarget = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, 3, 3, -1, nullptr) , pCurrentTarget != 0)) {
         D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, D2Common::Units::GetXPosFromDynamicPathUnit(pCurrentTarget), D2Common::Units::GetYPosFromDynamicPathUnit(pCurrentTarget), 0);
         return 1;

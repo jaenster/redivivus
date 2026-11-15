@@ -67,7 +67,10 @@ DWORD __stdcall QSERVER_CooperativeThreadMain(void * lpThreadParam) {
             } else {
               nLastGameCount = nCurrentGameCount;
               if (nCurrentGameCount < _StaticFour) {
-                nFlags = (uint32_t)(ClientModeInGame::D2IniData_client->nDifficulty == 1);
+                nFlags = 0;
+                if (ClientModeInGame::D2IniData_client->nDifficulty == 1) {
+                  nFlags = 1;
+                }
                 if (ClientModeInGame::D2IniData_client->nDifficulty == 2) {
                   nFlags = 2;
                 }

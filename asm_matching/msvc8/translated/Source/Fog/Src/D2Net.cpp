@@ -51,7 +51,7 @@ void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, size_t nSize) {
       pByteCountEntry = gaServerSentPacketByteCounts + nByteValue;
       nOldByteCount = *pByteCountEntry;
       *(uint32_t*)pByteCountEntry = (uint32_t)*pByteCountEntry + 1;
-      pOverflowCount = (int*)((char*)gaServerSentPacketByteCounts + nByteValue * 8 + 4);
+      pOverflowCount = (int*)((char*)gaServerSentPacketByteCounts + (nByteValue * 8 + 4));
       *pOverflowCount += (uint32_t)(-2 < (uint32_t)nOldByteCount);
       nBitCount += (uint32_t)Source::SSComp::gabHuffmanCodeLengths[nByteValue];
     }

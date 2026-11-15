@@ -1164,10 +1164,10 @@ void __stdcall SUNITPROXY_BuildNpcItemTables(int32_t nNpcIndex) {
           gaNpcItemTables[nNpcIndex].pTradeItems[nQuestCount + 2] = (&pItemTblSize->pItems->bAkaraMagicMin)[nTradeCount + nNpcIndex];
           gaNpcItemTables[nNpcIndex].pTradeItems[nQuestCount + 3] = (&pItemTblSize->pItems->bAkaraMagicMax)[nTradeCount + nNpcIndex];
           gaNpcItemTables[nNpcIndex].pTradeItems[nQuestCount + 8] = (&pItemTblSize->pItems->bAkaraMagicLvl)[nTradeCount + nNpcIndex];
-          *(uint32_t*)(gaNpcItemTables[nNpcIndex].pTradeItems + nQuestCount + 4) = *(uint32_t*)(pItemTblSize->pItems->szSetInvFile + nTradeCount + 0x20);
+          *(uint32_t*)(gaNpcItemTables[nNpcIndex].pTradeItems + (nQuestCount + 4)) = *(uint32_t*)(pItemTblSize->pItems->szSetInvFile + (nTradeCount + 0x20));
           nQuestCount += 0xc;
         } else {
-          *(uint32_t*)(nTradeCountTmp + (char*)gaNpcItemTables[nNpcIndex].pQuestItems) = *(uint32_t*)(pDVar1->szSetInvFile + nTradeCount + 0x20);
+          *(uint32_t*)(nTradeCountTmp + (char*)gaNpcItemTables[nNpcIndex].pQuestItems) = *(uint32_t*)(pDVar1->szSetInvFile + (nTradeCount + 0x20));
           nTradeCountTmp += 4;
         }
       }

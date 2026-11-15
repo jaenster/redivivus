@@ -414,7 +414,7 @@ int32_t __stdcall SBIG_BigBuffer_FindHighestBit(BigBuffer * pBitSet) {
           nBit--;
           uWord = vc8_thiscall(SBIG_BigBuffer_GetWord)(pBitSet, nWordIndex);
           if (uMask & uWord) {
-            return nWordIndex * 0x20 + nBit;
+            return (nWordIndex << 5) + nBit;
           }
 
           uMask >>= 1;
@@ -472,7 +472,7 @@ int32_t __stdcall SBIG_BigBuffer_FindLowestBit(BigBuffer * pBitSet) {
         do {
           uWord = vc8_thiscall(SBIG_BigBuffer_GetWord)(pBitSet, nSlot);
           if (uMask & uWord) {
-            return nSlot * 0x20 + nBit;
+            return (nSlot << 5) + nBit;
           }
 
           nBit++;
@@ -763,7 +763,7 @@ int32_t __fastcall SBIG_ArrayByteAppendData(TSGrowableArray_Uc * pArray, int, ui
     uint32_t uVar1 = 0;
     if (nCount > 0) {
       do {
-        if (pArray->pData + pArray->nLen + uVar1) {
+        if (pArray->pData + (pArray->nLen + uVar1)) {
           pArray->pData[pArray->nLen + uVar1] = *pSrc;
         }
 
@@ -1160,7 +1160,7 @@ int32_t __fastcall SBIG_AppendBytes(TSGrowableArray_Uc * pByteArray, int, uint32
     uint32_t uVar1 = 0;
     if (nByteCount > 0) {
       do {
-        if (pByteArray->pData + pByteArray->nLen + uVar1) {
+        if (pByteArray->pData + (pByteArray->nLen + uVar1)) {
           pByteArray->pData[pByteArray->nLen + uVar1] = *pSrcBytes;
         }
 
@@ -3323,7 +3323,7 @@ void __stdcall BigBuffer_Mul(BigBuffer * pnResult, BigBuffer * pnA, BigBuffer * 
         }
 
         dwCarry = (uint32_t)((uint64_t)llProduct >> 0x20);
-        uLen = pnAcc->nStartWord + iInnerNext + iOuter;
+        uLen = pnAcc->nStartWord + (iInnerNext + iOuter);
         if (uLen >= pnAcc->nCount) {
           uGrowStep = uLen + 1;
           if (uGrowStep > pnAcc->nCapacity) {
@@ -3356,7 +3356,7 @@ void __stdcall BigBuffer_Mul(BigBuffer * pnResult, BigBuffer * pnA, BigBuffer * 
           pnAcc->nCount = uGrowStep;
         }
 
-        pnAcc->pData[pnAcc->nStartWord + iInnerNext + iOuter] = dwCarry;
+        pnAcc->pData[pnAcc->nStartWord + (iInnerNext + iOuter)] = dwCarry;
         iOuter++;
       } while (pnA->nStartWord + iOuter < pnA->nCount);
     }
@@ -3438,10 +3438,10 @@ void __stdcall BigBuffer_Rand(BigBuffer * pnResult, BigBuffer * pnModulus, BigBu
     int nByteOffset;
     uint32_t uNeededCount = pStack->nUsed;
     BigBuffer* self = pStack->aBuffers + uNeededCount;
-    BigBuffer* pnShiftTmp = pStack->aBuffers + uNeededCount + 1;
+    BigBuffer* pnShiftTmp = pStack->aBuffers + (uNeededCount + 1);
     pStack->nUsed = uNeededCount + 2;
     if (pnResult == pnModulus || (pnQuotient = pnResult , pnResult == pnInput)) {
-      pnQuotient = pStack->aBuffers + uNeededCount + 2;
+      pnQuotient = pStack->aBuffers + (uNeededCount + 2);
       pStack->nUsed = uNeededCount + 3;
     }
 
@@ -3533,7 +3533,7 @@ void __stdcall BigBuffer_Rand(BigBuffer * pnResult, BigBuffer * pnModulus, BigBu
         self->nCount = uNewLen;
       }
 
-      *(uint8_t*)((char*)self->pData + i + self->nStartWord * 4) = gbSBigMontgomeryConstant2[i];
+      *(uint8_t*)((char*)self->pData + (i + self->nStartWord * 4)) = gbSBigMontgomeryConstant2[i];
       i++;
     } while (i < 8);
 
@@ -3605,7 +3605,7 @@ void __stdcall BigBuffer_Rand(BigBuffer * pnResult, BigBuffer * pnModulus, BigBu
         BigBuffer_Shr(pnWork, pnShiftTmp, 0x20);
         BigBuffer_Add(pnQuotient, pnShiftTmp, pnQuotient);
         i++;
-      } while (i < (pnModulus->nCount - pnModulus->nStartWord) * 0x20 + 0x1f >> 5);
+      } while (i < (pnModulus->nCount - pnModulus->nStartWord << 5) + 0x1f >> 5);
     }
 
     BigBuffer_Div(pnShiftTmp, pnQuotient, pnModulus, pStack, pnQuotient);
@@ -4248,11 +4248,11 @@ static int32_t __stdcall BigBuffer_IsPrime(BigStack * pStack, BigBuffer * pnCand
     BigBuffer* pnNegOne;
     pnNegOne = pStack->aBuffers + dwLowWord;
     BigBuffer* pnOddPart;
-    pnOddPart = pStack->aBuffers + dwLowWord + 1;
+    pnOddPart = pStack->aBuffers + (dwLowWord + 1);
     BigBuffer* pQuotient;
-    pQuotient = pStack->aBuffers + dwLowWord + 2;
+    pQuotient = pStack->aBuffers + (dwLowWord + 2);
     BigBuffer* pnWitness;
-    pnWitness = pStack->aBuffers + dwLowWord + 3;
+    pnWitness = pStack->aBuffers + (dwLowWord + 3);
     pStack->nUsed = dwLowWord + 4;
     int bIsProbablePrime;
     bIsProbablePrime = 1;
@@ -4396,9 +4396,9 @@ void __stdcall SBigIsPrime(BigData * pBigNum) {
 static void __stdcall BigBuffer_FindPrime(int32_t nBitLength, BigBuffer * pnLowerBound, BigBuffer * pnCoprimeWith, BigStack * pStack, BigBuffer * pnPrime) {
     uint32_t nStackBase = pStack->nUsed;
     BigBuffer* pnStep = pStack->aBuffers + nStackBase;
-    BigBuffer* pResult = pStack->aBuffers + nStackBase + 1;
+    BigBuffer* pResult = pStack->aBuffers + (nStackBase + 1);
     pStack->nUsed = nStackBase + 3;
-    BigBuffer* pnGcd = pStack->aBuffers + nStackBase + 2;
+    BigBuffer* pnGcd = pStack->aBuffers + (nStackBase + 2);
     BigBuffer_Set2Exp(nBitLength - 2, pnStep);
     BigBuffer_Set2Exp(nBitLength - 1, pResult);
     BigBuffer_Add(pResult, pnStep, pResult);

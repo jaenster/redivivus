@@ -890,8 +890,8 @@ void __fastcall InitCache(D2DrlgStrc * pDrlg, D2DrlgTileDataStrc * pDrlgActSub18
     } else {
       memset(pDrlgActSub18, 0, 0x30);
       byActNo = pDrlg->nActNo;
-      nTileSubType_00 = 0;
       nTileSubType = 0;
+      nTileSubType_00 = 0;
       switch (byActNo) {
         case 1:
           {
@@ -1972,7 +1972,10 @@ static void __stdcall DRLGOUTPLACE_CalcEdgeBorderCoords(D2DrlgCoordsStrc * pOutC
         return;
       }
 
-      bOffsetVariant = nVariant == 2;
+      bOffsetVariant = false;
+      if (nVariant == 2) {
+        bOffsetVariant = true;
+      }
       if (bOffsetVariant) {
         pOutCoords->WorldPosition.y = nAdjustedPos + 8;
       }
@@ -2000,7 +2003,10 @@ static void __stdcall DRLGOUTPLACE_CalcEdgeBorderCoords(D2DrlgCoordsStrc * pOutC
         return;
       }
 
-      bOffsetVariant = nVariant == 3;
+      bOffsetVariant = false;
+      if (nVariant == 3) {
+        bOffsetVariant = true;
+      }
       if (bOffsetVariant) {
         pOutCoords->WorldPosition.y = nAdjustedPos + 8;
       }
@@ -2034,7 +2040,10 @@ static void __stdcall DRLGOUTPLACE_CalcEdgeBorderCoordsFlipped(D2DrlgCoordsStrc 
         return;
       }
 
-      bOffsetVariant = nVariant == 2;
+      bOffsetVariant = false;
+      if (nVariant == 2) {
+        bOffsetVariant = true;
+      }
       if (bOffsetVariant) {
         pOutCoords->WorldPosition.y = nAdjustedPos - 8;
       }
@@ -2062,7 +2071,10 @@ static void __stdcall DRLGOUTPLACE_CalcEdgeBorderCoordsFlipped(D2DrlgCoordsStrc 
         return;
       }
 
-      bOffsetVariant = nVariant == 3;
+      bOffsetVariant = false;
+      if (nVariant == 3) {
+        bOffsetVariant = true;
+      }
       if (bOffsetVariant) {
         pOutCoords->WorldPosition.y = nAdjustedPos - 8;
       }
@@ -2086,7 +2098,7 @@ static void __stdcall DRLGOUTPLACE_CalcCornerBorderCoords(D2DrlgCoordsStrc * pLe
         pOutCoords->WorldPosition.x = pLevelCoords->WorldPosition.x;
       pOutCoords->WorldPosition.y = pLevelCoords->WorldSize.y + pLevelCoords->WorldPosition.y;
       if (nVariant == 1) {
-        pOutCoords->WorldPosition.x = pOutCoords->WorldPosition.x + pOutCoords->WorldSize.x / 2 + 8;
+        pOutCoords->WorldPosition.x += pOutCoords->WorldSize.x / 2 + 8;
         return;
       }
 
@@ -2124,7 +2136,7 @@ static void __stdcall DRLGOUTPLACE_CalcCornerBorderCoords(D2DrlgCoordsStrc * pLe
         pOutCoords->WorldPosition.x = pLevelCoords->WorldPosition.x;
       pOutCoords->WorldPosition.y = pLevelCoords->WorldPosition.y - pOutCoords->WorldSize.y;
       if (nVariant == 1) {
-        pOutCoords->WorldPosition.x = pOutCoords->WorldPosition.x + pOutCoords->WorldSize.x / 2 + 8;
+        pOutCoords->WorldPosition.x += pOutCoords->WorldSize.x / 2 + 8;
         return;
       }
 
@@ -2241,7 +2253,7 @@ BOOL __fastcall fpLevelDataEntry(D2DrlgLevelPlacementStrc * pLevelUnknown) {
         pLevelUnknown->aCoordsAndSize[nCurrentNode].WorldPosition.x = pPrevCoordsEntry->WorldPosition.x;
       nOffsetX = pLevelUnknown->aCoordsAndSize[nCurrentNode].WorldSize.x;
       pLevelUnknown->aCoordsAndSize[nCurrentNode].WorldPosition.y = pPrevCoordsEntry->WorldSize.y + pPrevCoordsEntry->WorldPosition.y;
-      pLevelUnknown->aCoordsAndSize[nCurrentNode].WorldPosition.x = pLevelUnknown->aCoordsAndSize[nCurrentNode].WorldPosition.x + nOffsetX / 2 + 8;
+      pLevelUnknown->aCoordsAndSize[nCurrentNode].WorldPosition.x += nOffsetX / 2 + 8;
       return 1;
       case 2:
         nOffsetX = pPrevCoordsEntry->WorldPosition.x - pLevelUnknown->aCoordsAndSize[nCurrentNode].WorldSize.x;
@@ -2260,7 +2272,7 @@ BOOL __fastcall fpLevelDataEntry(D2DrlgLevelPlacementStrc * pLevelUnknown) {
         pLevelUnknown->aCoordsAndSize[nCurrentNode].WorldPosition.x = pPrevCoordsEntry->WorldPosition.x;
       nOffsetX = pLevelUnknown->aCoordsAndSize[nCurrentNode].WorldSize.x;
       pLevelUnknown->aCoordsAndSize[nCurrentNode].WorldPosition.y = pPrevCoordsEntry->WorldPosition.y - pLevelUnknown->aCoordsAndSize[nCurrentNode].WorldSize.y;
-      pLevelUnknown->aCoordsAndSize[nCurrentNode].WorldPosition.x = pLevelUnknown->aCoordsAndSize[nCurrentNode].WorldPosition.x + nOffsetX / 2 + 8;
+      pLevelUnknown->aCoordsAndSize[nCurrentNode].WorldPosition.x += nOffsetX / 2 + 8;
       return 1;
       case 6:
         nOffsetX = pPrevCoordsEntry->WorldSize.x + pPrevCoordsEntry->WorldPosition.x;
@@ -3000,7 +3012,7 @@ void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLeve
         pLevelDefs = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(nLevelId);
         nDifficulty = (int)pDrlg->nDifficulty;
         *(int*)((intptr_t)&pLevelUnknown.aCoordsAndSize[0].WorldSize.x + nCoordsOffset) = pLevelDefs->SizeX[nDifficulty];
-        nNodeEntryOffset = nNodeOffset * 0x10;
+        nNodeEntryOffset = nNodeOffset << 4;
         *(int*)((intptr_t)&pLevelUnknown.aCoordsAndSize[0].WorldSize.y + nCoordsOffset) = pLevelDefs->SizeY[nDifficulty];
         nLevelId = pLevelData->aEntry[nNodeOffset + 1].neD2LevelId;
         nNodeOffset++;
@@ -3134,7 +3146,7 @@ void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLeve
                          offset into pLevelUnknown.aCoordsAndSize (stride 16), recomputed every
                          iteration so the aCurrentDir[] read at 0067747d/00677489 cannot leak into it.
                           */ fnPlacementValidator = (fpLevelDataFn1)((uint8_t*)fnPlacementValidator + 1);
-      nNodeOffset = (int)fnPlacementValidator * 0x10;
+      nNodeOffset = (intptr_t)fnPlacementValidator << 4;
       /* Second pass cursor advances by ONE 16-byte entry (EDI = index*0x10 added to
                          pLevelData), not by a whole list. */ pLevelData1 = (D2DrlgLevelDataList*)(pLevelData->aEntry + (intptr_t)fnPlacementValidator);
     } while (((D2DrlgLevelDataEntry*)pLevelData1)->neD2LevelId != LEVEL_None);
@@ -3148,7 +3160,7 @@ void __fastcall DRLGGRID_OrFlagOnCellList(D2DrlgGridStrc * nGridPtr, D2DrlgVerte
       nY = pnCellNode->nPosY;
       pnCellNode = pnCellNode->pNext;
       if (nCellX >= 0 && nCellX < nGridPtr->nWidth && nY >= 0 && nY < nGridPtr->nHeight) {
-        (*DrlgGrid::apFlagOperations[0])((int*)(nGridPtr->pCellsFlags + nGridPtr->pCellsRowOffsets[nY] + nCellX), nFlag);
+        (*DrlgGrid::apFlagOperations[0])((int*)(nGridPtr->pCellsFlags + (nGridPtr->pCellsRowOffsets[nY] + nCellX)), nFlag);
       }
     }
 }
@@ -3768,7 +3780,10 @@ void __stdcall DRLGOUTROOM_BuildExitPointArray(D2DrlgLevelStrc * pLevel) {
                 pExitPoint->eType = 1;
               break;
               case 7:
-                bIsBorderEdge = nOutdoorGridFlags == 3;
+                bIsBorderEdge = false;
+              if (nOutdoorGridFlags == 3) {
+                bIsBorderEdge = true;
+              }
               if (bIsBorderEdge) {
                 pExitPoint->eType = 2;
               }
@@ -3782,7 +3797,10 @@ void __stdcall DRLGOUTROOM_BuildExitPointArray(D2DrlgLevelStrc * pLevel) {
               break;
               case 0x1c:
                 if (nOutdoorGridFlags == 1) {
-                  bIsBorderEdge = nGridX == pWildernessData->nGridCoordsWidth - 2;
+                  bIsBorderEdge = false;
+                  if (nGridX == pWildernessData->nGridCoordsWidth - 2) {
+                    bIsBorderEdge = true;
+                  }
                   if (bIsBorderEdge) {
                     pExitPoint->eType = 2;
                   }

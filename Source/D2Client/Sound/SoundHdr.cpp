@@ -358,7 +358,7 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
           nMatIdx = 0;
           do {
             byMatCount = (uint8_t)nMatIdx;
-            if (*(int*)(pSoundRow + nMatIdx * 4 + 0x17) == -1) {
+            if (*(int*)(pSoundRow + (nMatIdx * 4 + 0x17)) == -1) {
               break;
             }
 
@@ -861,7 +861,7 @@ void __fastcall SOUNDHDR_ProcessAsyncLoads(int32_t dwTick) {
       nRowOffset = 0x8e;
       do {
         pSoundRow = (D2SoundsTxt*)(pTxtSounds->Filename + nRowOffset);
-        if (!*(int*)((char*)pTxtSounds->aRecentSoundHistory + nRowOffset + 0x22) && (pSoundRow->nRefCount || pSoundRow->Cache)) {
+        if (!*(int*)((char*)pTxtSounds->aRecentSoundHistory + (nRowOffset + 0x22)) && (pSoundRow->nRefCount || pSoundRow->Cache)) {
           if (!dwTick || gnSoundAsyncLoadCount < 0xf && (uint32_t)(dwTick - gnSoundEvictedAudioVolume) >= 0xfa) {
             SOUNDHDR_LoadSoundFile(nRowIndex, (uint32_t)!dwTick, 1);
             if (pSoundRow->nLoadState == 1) {

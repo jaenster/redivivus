@@ -146,9 +146,8 @@ static D2MonSeqMonsterTbls * __stdcall GetMonsterSequenceTable(D2UnitStrc * pUni
         exit(-1);
       }
 
-      return pFixedSeqTable + nWeaponClass;
-    }
-    if (eUnitType == UNIT_MONSTER) {
+      pSeqTable = pFixedSeqTable + nWeaponClass;
+    } else if (eUnitType == UNIT_MONSTER) {
       if (!pUnit) {
         nWeaponClass = -1;
       } else {
@@ -669,7 +668,7 @@ BOOL __fastcall RollMercStats(int32_t nVersion, D2UnitStrc * pUnit, int32_t nMer
     D2HirelingTxt* pSelectedHireling = pHirelingList[nHirelingIdx];
     pHireData->nId = pSelectedHireling->id;
     int nMercLevel = Stats::StatsEx::STATSEX_GetCurrentStat(pBuyer, UNITSTAT_level, 0);
-    nMercLevel = (nRollSeed.nSeedLow * 0x6ac690c5 + nRollSeed.nSeedHigh) % 5 + nMercLevel - 5;
+    nMercLevel = (nRollSeed.nSeedLow * 0x6ac690c5 + nRollSeed.nSeedHigh) % 5 + (nMercLevel - 5);
     if (nMercLevel < 2) {
       nMercLevel = 2;
     }

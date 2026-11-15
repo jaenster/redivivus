@@ -5853,7 +5853,7 @@ int __fastcall MAINMENU_DisplayCredits(int32_t nReserved) {
             D2Lang::Unicode::UNISYS::STRING_CopyWideString(awCol1, awLineBuf);
             nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(awLineBuf);
             nRemaining -= nLine + 2;
-            pwCursor = pwCursor + nLine + 2;
+            pwCursor += nLine + 2;
             if (nRemaining && *pwCursor != L'*') {
               bCopied1 = D2Lang::Unicode::UNISYS::STRING_CopyWideString(awLineBuf, pwCursor);
               if (!bCopied1) {
@@ -5862,7 +5862,7 @@ int __fastcall MAINMENU_DisplayCredits(int32_t nReserved) {
                 D2Lang::Unicode::UNISYS::STRING_CopyWideString(awCol2, awLineBuf);
                 nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(awLineBuf);
                 nRemaining -= nLine + 2;
-                pwCursor = pwCursor + nLine + 2;
+                pwCursor += nLine + 2;
               }
             }
           } else {
@@ -6190,7 +6190,11 @@ uint32_t __fastcall MAINMENU_DetectDoubleClick(D2ControlMsg * pMsg) {
     static unsigned int gdwDoubleClickLastTickCount; D2_STATIC_GUARD_BSS(gdwDoubleClickLastTickCount, "D2Launch::MainMenus::MAINMENU_DetectDoubleClick::gdwDoubleClickLastTickCount");
 
     tagPOINT cursorPos;
-    uint32_t bIsDoubleClick = (uint32_t)(pMsg->uMsg == 0x201);
+    uint32_t bIsDoubleClick = 1;
+    if (pMsg->uMsg != 0x201) {
+      bIsDoubleClick = 0;
+    }
+
     uint32_t dwTick = GetTickCount();
     if ((int)(dwTick - gdwDoubleClickLastTickCount) > 300) {
       bIsDoubleClick = 0;

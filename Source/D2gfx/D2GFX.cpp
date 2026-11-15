@@ -506,7 +506,10 @@ BOOL __stdcall D2GFX_DestroyWindow() {
     }
 
     BOOL bResult = RENDERER_CurrentRenderedFunctions->nfpDestroyWindow();
-    uint32_t bSuccess = (uint32_t)(bResult != 0);
+    uint32_t bSuccess = 1;
+    if (bResult == 0) {
+      bSuccess = 0;
+    }
     if (hwndD2GFX_Window) {
       /* HWND hWnd for DestroyWindow */ bResult = DestroyWindow(hwndD2GFX_Window);
       if (!bResult) {
@@ -1538,7 +1541,7 @@ void __fastcall D2GFX_DrawGroundTileBasic(int32_t nClipOriginX, int32_t nScreenY
         }
         if (!(nScreenY < gnMinTileScreenY_b)) {
           pbTileData = pbSrcPixel + nSkipCount;
-          nDstRowPtr = pbDstPixel + nSkipCount + nGapPixels;
+          nDstRowPtr = pbDstPixel + (nSkipCount + nGapPixels);
           nClipLeft = gnTileClipLeft - (int)(pbDstPixel - pRowStart + nClipOriginX + nGapPixels);
           nClipLeft = (int)nClipLeft <= 0 ? 0 : nClipLeft;
           nClipRight = -(int)(pbDstPixel - pRowStart + nClipOriginX + nGapPixels) + gnTileClipRight;
@@ -1549,7 +1552,7 @@ void __fastcall D2GFX_DrawGroundTileBasic(int32_t nClipOriginX, int32_t nScreenY
 
           pRowStart = pbDstRow;
           if ((int)(nClipRight - nClipLeft) > 0) {
-            pbDstPixel = pbDstPixel + nClipLeft + nGapPixels;
+            pbDstPixel += nClipLeft + nGapPixels;
             pbSrcPixel += nClipLeft;
             switch (nClipRight - nClipLeft) {
               case 0x20:
@@ -1619,7 +1622,7 @@ void __fastcall D2GFX_DrawGroundTileBasic(int32_t nClipOriginX, int32_t nScreenY
             }
           }
         } else {
-          nDstRowPtr = pbDstPixel + nSkipCount + nGapPixels;
+          nDstRowPtr = pbDstPixel + (nSkipCount + nGapPixels);
           pbTileData = pbSrcPixel + nSkipCount;
         }
       }
@@ -1667,7 +1670,7 @@ void __fastcall D2GFX_DrawGroundTileWithPerspective(int32_t nClipOriginX, int32_
         pbLightBufPixel = *pbLineBufRowPtr + nClipRight;
         if (!(nScreenY < gnMinTileScreenY_b)) {
           pbTileData = pbSrcPixel + nRunLength;
-          nDstRowPtr = pbDstPixel + nRunLength + nClipRight;
+          nDstRowPtr = pbDstPixel + (nRunLength + nClipRight);
           nClipLeft = gnTileClipLeft - (int)(pbDstPixel - pRowStart + nClipOriginX + nClipRight);
           nClipLeft = (int)nClipLeft <= 0 ? 0 : nClipLeft;
           nClipEnd = -(int)(pbDstPixel - pRowStart + nClipOriginX + nClipRight) + gnTileClipRight;
@@ -1676,7 +1679,7 @@ void __fastcall D2GFX_DrawGroundTileWithPerspective(int32_t nClipOriginX, int32_
             nClipEnd = nRunLength;
           }
           if ((int)(nClipEnd - nClipLeft) > 0) {
-            pbDstPixel = pbDstPixel + nClipLeft + nClipRight;
+            pbDstPixel += nClipLeft + nClipRight;
             pbSrcPixel += nClipLeft;
             switch (nClipEnd - nClipLeft) {
               case 0x20:
@@ -1749,7 +1752,7 @@ void __fastcall D2GFX_DrawGroundTileWithPerspective(int32_t nClipOriginX, int32_
           pbLineBufRowPtr = (uint8_t (*)[32])(pbLightBufPixel + nRunLength);
           pRowStart = nDstRowBase;
         } else {
-          nDstRowPtr = pbDstPixel + nRunLength + nClipRight;
+          nDstRowPtr = pbDstPixel + (nRunLength + nClipRight);
           pbLineBufRowPtr = (uint8_t (*)[32])(pbLightBufPixel + nRunLength);
           pbTileData = pbSrcPixel + nRunLength;
         }

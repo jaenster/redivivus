@@ -551,7 +551,7 @@ BOOL __fastcall SCMD_ProcessFlags(pfnSCmdErrorCallback pfnErrorCallback, char * 
         nMatchLen = nMatchNameLen;
         do {
           uVar2 = nPrefixLen - 1;
-          if ((intptr_t)(szMatchBuf + nMatchNameLen + uVar2) < 0x100) {
+          if ((intptr_t)(szMatchBuf + (nMatchNameLen + uVar2)) < 0x100) {
             SSTR::SStrCopy(szMatchBuf + (nPrefixLen - 1), szText, 0x100);
             pCmdEntry = SCMD_FindFlagDef((CMDDEF*)(gStormCmdListHeadSlash.head.pNext <= 0 ? 0 : gStormCmdListHeadSlash.head.pNext), szMatchBuf, 0);
             nMatchNameLen = nMatchLen;

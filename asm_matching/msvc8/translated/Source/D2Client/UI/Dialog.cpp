@@ -295,13 +295,19 @@ void __stdcall INPUT_DialogMouseUp(D2UIMouseMsgStrc * pMsg) {
       }
 
       nResult = (*pfnOnClick)();
-      bDrawModeWasActive = !nResult;
+      bDrawModeWasActive = false;
+      if (!nResult) {
+        bDrawModeWasActive = true;
+      }
     } else {
       if (!pDialog) {
         return;
       }
 
-      bDrawModeWasActive = pDialog->nDrawMode == 1;
+      bDrawModeWasActive = false;
+      if (pDialog->nDrawMode == 1) {
+        bDrawModeWasActive = true;
+      }
     }
     if (!bDrawModeWasActive) {
       return;

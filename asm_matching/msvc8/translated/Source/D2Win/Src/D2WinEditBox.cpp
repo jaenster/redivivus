@@ -453,7 +453,7 @@ static void __stdcall D2WINEDITBOX_GetCaretPosition(int * pEditBox, int * pX, in
             }
 
             *pX = *pX - pEditBox[3] - 1;
-            *pY = *pY + (pEditBox[6] - pEditBox[4]) - 1;
+            *pY += pEditBox[6] - pEditBox[4] - 1;
             nLineWidth = *pX;
             nPadding = pEditBox[0x10];
             nClampedY = nLineWidth;
@@ -2120,7 +2120,7 @@ BOOL __fastcall DrawFlag0x8(::D2WinEditBox * pEditBox) {
 
         D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(awszPreSelText, awszDisplayText, nSizeMaybe_00);
         D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(awszSelText, awszDisplayText + nSizeMaybe_00, nSizeMaybe);
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszPostSelText, awszDisplayText + nSizeMaybe + nSizeMaybe_00);
+        D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszPostSelText, awszDisplayText + (nSizeMaybe + nSizeMaybe_00));
         D2WinFont::TEXT_CalcTextDimensions(awszPreSelText, &__frame0.local_c, &nTextHeight);
         D2WinFont::TEXT_CalcTextDimensions(awszSelText, &nSelTextWidth, &nTextHeight);
         nCursorPixelOffset = nTextPosY;

@@ -279,7 +279,7 @@ static bool __stdcall DEBUG_AddModuleToList(int * pModuleList, LPCWSTR szModuleP
     }
 
     D2DebugModuleInfo* pSrcInfo = &aModuleInfo;
-    int* pListSlot = pModuleList + *pModuleList * 0x8a + 1;
+    int* pListSlot = pModuleList + (*pModuleList * 0x8a + 1);
     memcpy(pListSlot, pSrcInfo, 0x228);
     (*pModuleList)++;
     nMbLen = *pModuleList;

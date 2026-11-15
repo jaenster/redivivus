@@ -330,7 +330,7 @@ int __fastcall SFILE_MoveDirectoryRecursive(LPCSTR szSrcRoot, LPCSTR szDstRoot) 
             if (!bDotMatch) {
               bDotMatch = !strcmp(findData.cFileName, "..");
               if (!bDotMatch) {
-                Storm::Source::SSTR::SStrCopy(szDstPath + nSrcGlobLen + 0x103, findData.cFileName, 0x104 - (nSrcGlobLen - 1));
+                Storm::Source::SSTR::SStrCopy(szDstPath + (nSrcGlobLen + 0x103), findData.cFileName, 0x104 - (nSrcGlobLen - 1));
                 Storm::Source::SSTR::SStrCopy(szDstPath + nDstDirLen, findData.cFileName, 0x104 - nDstDirLen);
                 nSubDirResult = SFILE_MoveDirectoryRecursive(szSrcPath, szDstPath);
                 nRecursiveResult |= nSubDirResult;

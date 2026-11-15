@@ -135,7 +135,7 @@ void __stdcall GetInvRectFromBeltsTxt(int32_t nIndex, int32_t bHigherRes, int32_
     if (!pTxtBelts) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x79);
       exit(-1);
-    } else if (!(pTxtBelts + bHigherRes * 7 + nIndex)) {
+    } else if (!(pTxtBelts + (bHigherRes * 7 + nIndex))) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x7a);
       exit(-1);
     } else {

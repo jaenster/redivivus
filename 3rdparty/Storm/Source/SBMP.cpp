@@ -40,7 +40,7 @@ static BOOL __thiscall SBMP_DecodeTGAPalette(D2TgaHeaderStrc * pHeader, int nPal
     SMem::SMemZero(pPaletteOut, nFirstEntry * 4);
     if (nFirstEntry < nBytesPerEntry) {
       uint8_t* pDstEntry;
-      pDstEntry = (uint8_t*)((char*)pPaletteOut + nFirstEntry * 4 + 2);
+      pDstEntry = (uint8_t*)((char*)pPaletteOut + (nFirstEntry * 4 + 2));
       nFirstEntry += nEntryCount;
       do {
         pDstEntry[-2] = pPaletteData[2];
@@ -369,7 +369,7 @@ static int __stdcall SBMP_LoadFromMemory(uint8_t * pData, uint32_t dataSize, uin
       *pBpp = (uint32_t)byBpp;
     }
     if (pPaletteOut && pData[1]) {
-      bPaletteDecoded = SBMP_DecodeTGAPalette((D2TgaHeaderStrc*)pData, nColorMapSize, pPaletteOut, pData + *pData + 0x12);
+      bPaletteDecoded = SBMP_DecodeTGAPalette((D2TgaHeaderStrc*)pData, nColorMapSize, pPaletteOut, pData + (*pData + 0x12));
       if (!bPaletteDecoded) {
         return 0;
       }
@@ -768,7 +768,7 @@ static void __fastcall SBMP_UncompressPcxImage(int dstSize, uint8_t * dst, int s
               }
             case 3:
               {
-                if (dst + nPlaneIdx + nRunLen * 3 < pDstEnd) {
+                if (dst + (nPlaneIdx + nRunLen * 3) < pDstEnd) {
                   dst[nPlaneIdx + nRunLen * 3] = byVal;
                 }
 
@@ -776,7 +776,7 @@ static void __fastcall SBMP_UncompressPcxImage(int dstSize, uint8_t * dst, int s
               }
             default:
               {
-                if (dst + nRunLen * bytesPerPixel + nPlaneIdx < pDstEnd) {
+                if (dst + (nRunLen * bytesPerPixel + nPlaneIdx) < pDstEnd) {
                   dst[nRunLen * bytesPerPixel + nPlaneIdx] = byVal;
                 }
               }
@@ -942,7 +942,7 @@ static int __fastcall SBMP_DecodeBmpMem(int * pWidth, int * pHeight, uint32_t * 
         srcStride = rowWidth - (rowWidth & 3) + 4;
       }
 
-      SBMP_FlipImage(*(int*)(pData + 0x16), pixels, pData + (*(int*)(pData + 10) - (bHasPalette ? 0x400 : 0)) - 0x36, dstSize, rowWidth, srcStride);
+      SBMP_FlipImage(*(int*)(pData + 0x16), pixels, pData + (*(int*)(pData + 10) - (bHasPalette ? 0x400 : 0) - 0x36), dstSize, rowWidth, srcStride);
     }
 
     return 1;
@@ -1014,7 +1014,7 @@ static void __stdcall SBMP_CompressGifByte(D2GifLzwEncoderStrc * pState, uint8_t
       return;
     }
 
-    int nHashIndex = nNewCode * 0x10 + pState->nLastCode;
+    int nHashIndex = (nNewCode << 4) + pState->nLastCode;
     if (nHashIndex >= 0x138b) {
       nHashIndex += -0x138b;
     }
@@ -1251,7 +1251,7 @@ static int __thiscall SBMP_DecodePcxMem(uint32_t * pWidth, D2PcxHeaderStrc * gif
       return 1;
     }
 
-    uint8_t* pSrcPalette = (uint8_t*)((char*)gifData + dataSize - 0x2fe);
+    uint8_t* pSrcPalette = (uint8_t*)((char*)gifData + (dataSize - 0x2fe));
     uint8_t* pDstPalette = palette + 2;
     nHeight = 0x100;
     do {
@@ -1288,7 +1288,7 @@ int __stdcall SBmpDecodeImage(int nFormat, void * pData, uint32_t nDataSize, voi
     } else {
       uValidMask = -1;
     }
-    if (!(pData && nDataSize ? uValidMask : 0)) {
+    if (!((pData != 0 ? (int)-1 : 0) & (nDataSize != 0 ? (int)-1 : 0) & uValidMask)) {
       SErr::SErrSetLastError(0x57);
     } else {
       int iResult;
@@ -1342,7 +1342,7 @@ uint32_t __stdcall SBmpLoadImage(char * pszPath, void * pPalette, void * pPixels
     } else {
       uValidMask = -1;
     }
-    if (!(*pszPath != '\0' && pszPath ? uValidMask : 0)) {
+    if (!((*pszPath != '\0' ? (int)-1 : 0) & (pszPath != 0 ? (int)-1 : 0) & uValidMask)) {
       SErr::SErrSetLastError(0x57);
     } else {
       int32_t iOpenResult;
@@ -1393,7 +1393,7 @@ void __stdcall SBmpSaveImageEx(LPCSTR szText, uint8_t * nPalette, uint8_t * pbPi
     int iCmpResult;
     HANDLE hFile;
     uint32_t uValidMask = nBpp == 8 && !nPalette ? 0 : -1;
-    if (!(nHeight <= 0 ? 0 : nWidth <= 0 ? 0 : (*szText != '\0' && szText ? -(uint32_t)(pbPixels != 0) : 0) & uValidMask)) {
+    if (!(nHeight <= 0 ? 0 : nWidth <= 0 ? 0 : (*szText != '\0' ? (int)-1 : 0) & (szText != 0 ? (int)-1 : 0) & (pbPixels != 0 ? (uint32_t)-1 : 0) & uValidMask)) {
       SErr::SErrSetLastError(0x57);
     } else {
       char* szExt;
@@ -1470,54 +1470,56 @@ uint32_t __stdcall SBmpAllocLoadImage(char * szText, void * pPalette, void * * p
     if (pnBpp) {
       *pnBpp = 0;
     }
-    if (*szText == '\0' || !szText || !ppOutputBuf) {
-      SErr::SErrSetLastError(0x57);
-    } else {
-      int32_t iOpenResult;
-      iOpenResult = SFile::SFileOpenFile(szText, &hArchiveFile);
-      if (iOpenResult) {
-        nSize = SFile::SFileGetFileSize(hArchiveFile, (LPDWORD)0x0);
-        pOutputBuffer = SMem::SMemAlloc(nSize, ".\\SOURCE\\SBMP.CPP", 0x5b6, 0);
-        SFile::SFileReadFile(hArchiveFile, pOutputBuffer, nSize, nullptr, (LPOVERLAPPED)0x0);
-        SFile::SFileCloseFile(hArchiveFile);
-        bSuccess = 0;
-        iProbeResult = SBmpDecodeImage(0, pOutputBuffer, nSize, nullptr, nullptr, 0, &nWidth, &nHeight, &nBpp);
-        if (iProbeResult) {
-          if (!nBppOverride) {
-            nBppOverride = nBpp;
-          } else if (nBppOverride != nBpp) {
-            goto cleanup;
-          }
 
-          iProbeResult = nWidth * nHeight * nBppOverride;
-          nSize_00 = iProbeResult / 8;
-          if (pfnAlloc) {
-            pvAllocResult = (*pfnAlloc)(nSize_00);
-            *ppOutputBuf = pvAllocResult;
-          } else {
-            pvAllocResult = SMem::SMemAlloc(nSize_00, szText, -4, 0);
-            *ppOutputBuf = pvAllocResult;
-          }
-          if (*ppOutputBuf) {
-            SBmpDecodeImage(0, pOutputBuffer, nSize, pPalette, (uint8_t*)*ppOutputBuf, nSize_00, nullptr, nullptr, nullptr);
-            if (pnWidth) {
-              *pnWidth = nWidth;
-            }
-            if (pnHeight) {
-              *pnHeight = nHeight;
-            }
-            if (pnBpp) {
-              *pnBpp = nBppOverride;
-            }
-
-            bSuccess = 1;
-          }
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szText);
+    D2_CHECK(*szText != '\0');
+    D2_CHECK(ppOutputBuf);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
+    int32_t iOpenResult;
+    iOpenResult = SFile::SFileOpenFile(szText, &hArchiveFile);
+    if (iOpenResult) {
+      nSize = SFile::SFileGetFileSize(hArchiveFile, (LPDWORD)0x0);
+      pOutputBuffer = SMem::SMemAlloc(nSize, ".\\SOURCE\\SBMP.CPP", 0x5b6, 0);
+      SFile::SFileReadFile(hArchiveFile, pOutputBuffer, nSize, nullptr, (LPOVERLAPPED)0x0);
+      SFile::SFileCloseFile(hArchiveFile);
+      bSuccess = 0;
+      iProbeResult = SBmpDecodeImage(0, pOutputBuffer, nSize, nullptr, nullptr, 0, &nWidth, &nHeight, &nBpp);
+      if (iProbeResult) {
+        if (!nBppOverride) {
+          nBppOverride = nBpp;
+        } else if (nBppOverride != nBpp) {
+          goto cleanup;
         }
 
-        cleanup:
-        SMem::SMemFree(pOutputBuffer, ".\\SOURCE\\SBMP.CPP", 0x5f3, 0);
-        return bSuccess;
+        iProbeResult = nWidth * nHeight * nBppOverride;
+        nSize_00 = iProbeResult / 8;
+        if (pfnAlloc) {
+          pvAllocResult = (*pfnAlloc)(nSize_00);
+          *ppOutputBuf = pvAllocResult;
+        } else {
+          pvAllocResult = SMem::SMemAlloc(nSize_00, szText, -4, 0);
+          *ppOutputBuf = pvAllocResult;
+        }
+        if (*ppOutputBuf) {
+          SBmpDecodeImage(0, pOutputBuffer, nSize, pPalette, (uint8_t*)*ppOutputBuf, nSize_00, nullptr, nullptr, nullptr);
+          if (pnWidth) {
+            *pnWidth = nWidth;
+          }
+          if (pnHeight) {
+            *pnHeight = nHeight;
+          }
+          if (pnBpp) {
+            *pnBpp = nBppOverride;
+          }
+
+          bSuccess = 1;
+        }
       }
+
+      cleanup:
+      SMem::SMemFree(pOutputBuffer, ".\\SOURCE\\SBMP.CPP", 0x5f3, 0);
+      return bSuccess;
     }
 
     return 0;

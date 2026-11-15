@@ -147,32 +147,27 @@ void __fastcall CHARSEL_CacheRealmData(char * szRealmName, void * pData, size_t 
     DWORD dwTick;
     uint32_t nHash = Storm::Source::SSTR::SStrHash(szRealmName, 0, 0);
     D2RealmCharListCacheEntryStrc* pEntry = gpRealmCharListCache;
-    while (true) {
-      if (!pEntry) {
-        pEntry = (D2RealmCharListCacheEntryStrc*)Storm::Source::SMem::SMemAlloc(0x10, ".\\Src\\CharSel.cpp", 0xfa, 0);
-        pEntry->nHash = nHash;
-        pCopy = Storm::Source::SMem::SMemAlloc(nDataSize, ".\\Src\\CharSel.cpp", 0xfc, 0);
+    for (; pEntry; pEntry = pEntry->pNext) {
+      if (pEntry->nHash == nHash) {
+        Storm::Source::SMem::SMemFree(pEntry->pData, ".\\Src\\CharSel.cpp", 0xf1, 0);
+        pCopy = Storm::Source::SMem::SMemAlloc(nDataSize, ".\\Src\\CharSel.cpp", 0xf2, 0);
         pEntry->pData = pCopy;
         memcpy(pCopy, pData, nDataSize);
         dwTick = GetTickCount();
         pEntry->nExpireTick = dwTick + 300000;
-        pEntry->pNext = gpRealmCharListCache;
-        gpRealmCharListCache = pEntry;
         return;
       }
-      if (pEntry->nHash == nHash) {
-        break;
-      }
-
-      pEntry = pEntry->pNext;
     }
 
-    Storm::Source::SMem::SMemFree(pEntry->pData, ".\\Src\\CharSel.cpp", 0xf1, 0);
-    pCopy = Storm::Source::SMem::SMemAlloc(nDataSize, ".\\Src\\CharSel.cpp", 0xf2, 0);
+    pEntry = (D2RealmCharListCacheEntryStrc*)Storm::Source::SMem::SMemAlloc(0x10, ".\\Src\\CharSel.cpp", 0xfa, 0);
+    pEntry->nHash = nHash;
+    pCopy = Storm::Source::SMem::SMemAlloc(nDataSize, ".\\Src\\CharSel.cpp", 0xfc, 0);
     pEntry->pData = pCopy;
     memcpy(pCopy, pData, nDataSize);
     dwTick = GetTickCount();
     pEntry->nExpireTick = dwTick + 300000;
+    pEntry->pNext = gpRealmCharListCache;
+    gpRealmCharListCache = pEntry;
 }
 
 // @sourcefile .\Src\CharSel.cpp
@@ -814,7 +809,7 @@ static BOOL __stdcall SAVEFILE_ParseSaveData(char * szRealmName, char * szCharac
     } while (nEquipIndex < 0xb);
 
     if (nEquipIndex < 0x10) {
-      memset(pNewCharSel->abEquipSlot1 + nEquipIndexPrev + 1, 0xff, 0x10 - nEquipIndex);
+      memset(pNewCharSel->abEquipSlot1 + (nEquipIndexPrev + 1), 0xff, 0x10 - nEquipIndex);
     }
 
     pNewCharSel->ePlayerClassID = pbCur[1] - CLASS_SORCERESS;
@@ -829,7 +824,7 @@ static BOOL __stdcall SAVEFILE_ParseSaveData(char * szRealmName, char * szCharac
     } while (nEquipIndex < 0xb);
 
     if (nEquipIndex < 0x10) {
-      memset(pNewCharSel->abEquipSlot2 + nEquipIndexPrev + 1, 0xff, 0x10 - nEquipIndex);
+      memset(pNewCharSel->abEquipSlot2 + (nEquipIndexPrev + 1), 0xff, 0x10 - nEquipIndex);
     }
 
     pNewCharSel->pNext = 0;
@@ -1162,7 +1157,12 @@ BOOL __stdcall CHARSEL_UpdateSelectedCharDisplay() {
     update_controls_and_details:
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&pCharSelControl->sControl, 0);
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpCtlCharSelOKButton->sControl, (uint32_t)(0 < g_nCharSelNavigationIndex));
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gpCtlCharSelectGameTypeBtn, (uint32_t)(gnCharSelScreenSlotCount + g_nCharSelNavigationIndex < TotalCurrentChars));
+    if (gnCharSelScreenSlotCount + g_nCharSelNavigationIndex < TotalCurrentChars) {
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gpCtlCharSelectGameTypeBtn, 1);
+    } else {
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gpCtlCharSelectGameTypeBtn, 0);
+    }
+
     nSlotIndex = 0;
     D2CharSelStrc* pSelectedChar = D2CharSelStrcFirst;
     if (!D2CharSelStrcFirst) {

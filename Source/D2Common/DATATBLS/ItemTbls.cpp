@@ -336,7 +336,7 @@ void __fastcall TXT_AllocTxt_items(D2PoolManagerStrc * pMemory) {
       if (gsItemsTable.nSize > 0) {
         nTxtByteOffset = 0;
         do {
-          Fog::Src::Excel::FOG_AddTxtLinkRecord(MonsterTbls::sgtDataTable.sTxtItemsLink, *(uint32_t*)(gsItemsTable.pItems->szSetInvFile + nTxtByteOffset + 0x20));
+          Fog::Src::Excel::FOG_AddTxtLinkRecord(MonsterTbls::sgtDataTable.sTxtItemsLink, *(uint32_t*)(gsItemsTable.pItems->szSetInvFile + (nTxtByteOffset + 0x20)));
           i++;
           nTxtByteOffset += 0x1a8;
         } while (i < gsItemsTable.nSize);
@@ -1891,7 +1891,7 @@ void __fastcall TXT_AllocTxt_itemtypes(D2PoolManagerStrc * pMemory) {
         do {
           _bIsSubtype = ITEMTBLS_CheckItemTypeRecursive(nTypeIdx, nCheckTypeId);
           if (_bIsSubtype) {
-            *(uint32_t*)(pBitmap + ((int)nCheckTypeId >> 5) * 4 + nBitIdx * 4) |= Fog::BitBuffer::gadwBitMasks[nCheckTypeId & 0x1f];
+            *(uint32_t*)(pBitmap + (((int)nCheckTypeId >> 5) * 4 + nBitIdx * 4)) |= Fog::BitBuffer::gadwBitMasks[nCheckTypeId & 0x1f];
             nTypeCount = MonsterTbls::sgtDataTable.nTxtItemTypesSize;
           }
 
@@ -2030,7 +2030,7 @@ void __stdcall ITEMTBLS_CopyRunewordRecord(int32_t nRunewordId, char * pSourceRe
     D2RunesTxt* pDstRecord;
     if (nTxtRunesSize.nSize <= nRunewordId) {
       size_t nNewAllocSize;
-      nNewAllocSize = (nRunewordId * 9 + 9) * 0x20;
+      nNewAllocSize = nRunewordId * 9 + 9 << 5;
       pDstRecord = nTxtRunesSize.pTable;
       if (gbTxtAllocCountHeader) {
         pDstRecord = (D2RunesTxt*)&nTxtRunesSize.pTable[-1].t1max7;

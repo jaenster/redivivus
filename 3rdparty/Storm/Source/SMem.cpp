@@ -170,7 +170,7 @@ static D2FogHeapDescStrc * __stdcall SMEM_AllocateHeap(int32_t nSourceLine, uint
 
     pHeapBlock->nHash = dwHash;
     pHeapBlock->pNext = (uint8_t*)g_SMemHeapBuckets[nBucketIndex];
-    void* pDataStart = (void*)((char*)pHeapBlock->aFreeBins + nAlignedHdrSize - 0x38);
+    void* pDataStart = (void*)((char*)pHeapBlock->aFreeBins + (nAlignedHdrSize - 0x38));
     pHeapBlock->pDataStart = pDataStart;
     pHeapBlock->pWriteCursor = pDataStart;
     pHeapBlock->nPageAlignMask = dwPageAlignMask;
@@ -903,8 +903,8 @@ int32_t __stdcall SMemFindNextHeap(uint32_t nCurHeapId, int * pnNextHeapId, SMem
         SSTR::SStrCopy(pOutInfo->szFilename, pHeap->szName, 0x104);
         do {
           if (pHeap->nHash == *pnNextHeapId) {
-            pOutInfo->dwCommittedBytes = pOutInfo->dwCommittedBytes + pHeap->nCommitted + pHeap->nLargeBytes;
-            pOutInfo->dwReservedBytes = pOutInfo->dwReservedBytes + pHeap->nReserved + pHeap->nLargeBytes;
+            pOutInfo->dwCommittedBytes += pHeap->nCommitted + pHeap->nLargeBytes;
+            pOutInfo->dwReservedBytes += pHeap->nReserved + pHeap->nLargeBytes;
             pOutInfo->nAllocatedBlocks += pHeap->nAllocCount;
             pOutInfo->dwAllocatedBytes += pHeap->nBytesInUse;
           }
@@ -944,7 +944,7 @@ int32_t __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD d
       }
     }
 
-    D2FogHeapDescStrc* nHeapBase = (D2FogHeapDescStrc*)((uint32_t)*(uint16_t*)&pBlock->uLink * 0x10000);
+    D2FogHeapDescStrc* nHeapBase = (D2FogHeapDescStrc*)((uint32_t)*(uint16_t*)&pBlock->uLink << 0x10);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + nHeapBase->nBucketIndex);
     int nBucketIndex = nHeapBase->nBucketIndex;
     SMEM_SatisfyFreeRequest(pObject, nHeapBase, pBlock);
@@ -982,7 +982,7 @@ uint32_t __stdcall SMemGetHeapByPtr(uint8_t * pObject) {
       return 0;
     }
     if (!pObject) {
-      return *(uint32_t*)((uint32_t)*(volatile uint8_t*)0x4 * 0x10000 + 4);
+      return *(uint32_t*)(((uint32_t)*(volatile uint8_t*)0x4 << 0x10) + 4);
     }
 
     uint8_t* puVar1 = pObject - 8;
@@ -990,7 +990,7 @@ uint32_t __stdcall SMemGetHeapByPtr(uint8_t * pObject) {
       puVar1 = *(uint8_t**)(pObject - 0xc);
     }
 
-    return *(uint32_t*)((uint32_t)*(uint16_t*)(puVar1 + 4) * 0x10000 + 4);
+    return *(uint32_t*)(((uint32_t)*(uint16_t*)(puVar1 + 4) << 0x10) + 4);
 }
 
 int32_t __stdcall SMemGetSize(void * pObject, uint32_t * pnFile, int32_t nSize) {
@@ -1138,7 +1138,7 @@ uint32_t __stdcall SMemHeapFree(int32_t nHeapId, uint32_t dwFlags, void * pObjec
         pBlock = *(D2FogHeapBlockHdrStrc**)((char*)pObjectSaved - 0xc);
       }
     }
-    if (*(int*)((uint32_t)*(uint16_t*)&pBlock->uLink * 0x10000 + 4) != nHeapId) {
+    if (*(int*)(((uint32_t)*(uint16_t*)&pBlock->uLink << 0x10) + 4) != nHeapId) {
       return 0;
     }
 
@@ -1176,7 +1176,7 @@ int32_t __stdcall SMemHeapSize(int32_t nHeapId, uint32_t dwFlags, void * pObject
         pBlock = *(D2FogHeapBlockHdrStrc**)((char*)nBlockAddr - 0xc);
       }
     }
-    if (*(int*)((uint32_t)*(uint16_t*)&pBlock->uLink * 0x10000 + 4) != nHeapId) {
+    if (*(int*)(((uint32_t)*(uint16_t*)&pBlock->uLink << 0x10) + 4) != nHeapId) {
       return -1;
     }
 
@@ -1544,7 +1544,7 @@ uint32_t * __stdcall SMemHeapReAlloc(uint32_t nHeapId, uint32_t nSize, uint32_t 
         if (*(uint8_t*)((char*)pResult - 5) & 8) {
           pBlockHeader = (D2FogHeapBlockHdrStrc*)pResult[-3];
         }
-        if (*(uint32_t*)((uint32_t)*(uint16_t*)&pBlockHeader->uLink * 0x10000 + 4) != nHeapId) {
+        if (*(uint32_t*)(((uint32_t)*(uint16_t*)&pBlockHeader->uLink << 0x10) + 4) != nHeapId) {
           return nullptr;
         }
 

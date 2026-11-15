@@ -258,7 +258,7 @@ void __stdcall DRLGOUTROOM_PlaceAct5OuterWalls(D2DrlgLevelStrc * pLevel) {
     for (nYCurrent = 0; nXCur || nYCurrent != nY; nYCurrent += gnAct5OuterWallGridOffsetByType[nPresetOffset * 2 + 1] * 2) {
       nPresetOffset = DrlgGrid::GetGridFlags(&pWildData->sGridPreset, nXCur, nYCurrent);
       nPresetOffset -= bIsBloodyFoothills ? 0x3bd : 0x371;
-      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXCur, nYCurrent, nPresetOffset + (bIsBloodyFoothills ? 0x4c : 0) + 0x37d, -1, 0);
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXCur, nYCurrent, nPresetOffset + (bIsBloodyFoothills ? 0x3c9 : 0x37d), -1, 0);
       nXCur += gnAct5OuterWallGridOffsetByType[nPresetOffset * 2] * 2;
     }
 

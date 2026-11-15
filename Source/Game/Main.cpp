@@ -1582,10 +1582,11 @@ static int __stdcall CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgum
     int nStrCmp;
     char cChar;
     char* pszModeStr;
-    char* pszCmdToken = szText;
-    pszCmdToken = pszCmdToken + strlen(pszCmdToken) + 1;
-    char* szCmdLineCopy = (char*)D2_ALLOC_AT((size_t)(pszCmdToken + (1 - (intptr_t)(szText + 1))), ".\\Main.cpp", 0x1ba);
-    Storm::Source::SSTR::SStrCopy(szCmdLineCopy, szText, (int32_t)(pszCmdToken - (szText + 1) + 1));
+    char* pszCmdToken;
+    int nStrLen;
+    nStrLen = (int)strlen(szText);
+    char* szCmdLineCopy = (char*)D2_ALLOC_AT((size_t)(nStrLen + 1), ".\\Main.cpp", 0x1ba);
+    Storm::Source::SSTR::SStrCopy(szCmdLineCopy, szText, (int32_t)(nStrLen + 1));
     pszCmdToken = strtok(szCmdLineCopy, "-");
     while (pszCmdToken) {
       eD2ApplicationMode eMode;

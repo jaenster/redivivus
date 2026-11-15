@@ -2,7 +2,12 @@
 
 #include "Source/D2Client/GAME/Wall2.h"
 #include "Source/D2CMP/D2CMP.h"
+#include "Source/D2CMP/DUNGEON/Dungeon.h"
+#include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/SubTile.h"
+#include "Source/D2Client/D2ClientStrc.h"
 #include "Source/D2Client/D2GameViewStrc.h"
+#include "Source/D2Client/D2GfxInfoStrc.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/GAME/Game/Game.h"
@@ -16,13 +21,149 @@
 #include "Source/D2Client/UNIT/PlrSkills.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
 #include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2InventoryStrc.h"
+#include "Source/D2Common/D2MissilesTxt.h"
+#include "Source/D2Common/D2RoomCoordListStrc.h"
+#include "Source/D2Common/D2RoomExStrc.h"
+#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2TileLibraryEntryStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
+#include "Source/D2Common/DATATBLS/AnimTbls.h"
+#include "Source/D2Common/DATATBLS/ItemStats.h"
+#include "Source/D2Common/DATATBLS/MissileTbls.h"
+#include "Source/D2Common/DATATBLS/ObjectTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgActStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgDeleteStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgTileDataStrc.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2Common/Drlg/Transform.h"
+#include "Source/D2Common/PATH/DynamicPath.h"
+#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2Game.h"
+#include "Source/D2Game/GAME/Event.h"
+#include "Source/D2Game/Objects/Objects.h"
+#include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/D2Sound/D2Sound.h"
+#include "Source/D2Sound/Src/D2SoundFast.h"
 #include "Source/D2gfx/D2gfx.public.h"
+#include "Source/D2gfx/D2GFX.h"
 #include "Source/Fog/Fog.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/SMem.h"
+#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Bnclient/BnSend.h"
+#include "Source/Bnclient/SRP.h"
+#include "Source/Bnclient/net_sid.h"
+#include "Source/D2CMP/Draw.h"
+#include "Source/D2CMP/SRC/Codec.h"
+#include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2Client/ClientModeInGame.h"
+#include "Source/D2Client/Cursor.h"
+#include "Source/D2Client/D2BNetGatewayAccessStr.h"
 #include "Source/D2Client/D2Client.globals.h"
+#include "Source/D2Client/D2GSPacketSrv0x2A.h"
+#include "Source/D2Client/D2GfxMemoryStrc.h"
+#include "Source/D2Client/D2GfxSettingsStrc.h"
+#include "Source/D2Client/D2IniConfigStrc.h"
+#include "Source/D2Client/Draw/LightMap.h"
+#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Engine/Gfx.h"
+#include "Source/D2Client/GAME/Draw.h"
+#include "Source/D2Client/GAME/Game/Game.h"
+#include "Source/D2Client/GAME/Record.h"
+#include "Source/D2Client/GAME/SCmd.h"
+#include "Source/D2Client/GAME/Sound.h"
+#include "Source/D2Client/Sound/Sound.h"
+#include "Source/D2Client/UI/Automap.h"
+#include "Source/D2Client/UI/Chat.h"
+#include "Source/D2Client/UI/CmdTbl.h"
+#include "Source/D2Client/UI/EscMenu.h"
+#include "Source/D2Client/UI/Inv.h"
+#include "Source/D2Client/UI/Panel.h"
+#include "Source/D2Client/UI/Path.h"
+#include "Source/D2Client/UI/QuestLog.h"
+#include "Source/D2Client/UI/ShowItems.h"
+#include "Source/D2Client/UI/SkillDesc.h"
+#include "Source/D2Client/UI/SpellSel.h"
+#include "Source/D2Client/UI/Text.h"
+#include "Source/D2Client/UI/UseItem.h"
+#include "Source/D2Client/UI/Waypoint.h"
+#include "Source/D2Client/UI/npcmenu.h"
+#include "Source/D2Client/UI/npcmenu/Merc.h"
+#include "Source/D2Client/UI/ui.h"
+#include "Source/D2Client/UNIT/Item.h"
+#include "Source/D2Client/UNIT/Missile.h"
+#include "Source/D2Client/UNIT/Monster.h"
+#include "Source/D2Client/UNIT/Object.h"
+#include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Client/UNIT/PlrSkills.h"
+#include "Source/D2Client/UNIT/UnitSnd.h"
+#include "Source/D2Client/Warden/WardenClient.h"
+#include "Source/D2Common/COMPOSIT/Composit.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/DATATBLS/ItemTbls.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
+#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2Common/Drlg/OutSiege.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/ItemMods.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Logging/ProfCore.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Unit.h"
+#include "Source/D2Game/D2QuestDataStrc.h"
+#include "Source/D2Game/GAME/Arena.h"
+#include "Source/D2Game/GAME/Task.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Game/Monster/AI/Baal.h"
+#include "Source/D2Game/Monster/MonsterMode.h"
+#include "Source/D2Game/Objects/Objects.h"
+#include "Source/D2Game/PLAYER/PlayerMsg.h"
+#include "Source/D2Game/Quests/QUESTS.h"
+#include "Source/D2Game/SKILLS/Items.h"
+#include "Source/D2Game/SKILLS/SkillAss.h"
+#include "Source/D2Game/UNIT/SUnitDmg.h"
+#include "Source/D2Game/UNIT/sunitproxy.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Lang/D2LangRoot.h"
+#include "Source/D2Lang/StrTable/strtable.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2Win/D2Win.globals.h"
+#include "Source/D2Win/Src/D2Comp.h"
+#include "Source/D2Win/Src/D2WinFont.h"
+#include "Source/D2gfx/D2GFX.h"
+#include "Source/Fog/D2MemoryManagerStrc.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/D2QServerStrc.h"
+#include "Source/Fog/Fog.globals.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Save.h"
+#include "Source/Fog/Source/SFile.h"
+#include "Source/Fog/Source/SSComp.h"
+#include "Source/Fog/Src/LogManager.h"
+#include "3rdparty/Storm/Storm.h"
+#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
+#include "3rdparty/Storm/H/stpl.h"
+#include "3rdparty/Storm/Source/SCMD.h"
+#include "3rdparty/Storm/Source/SComp.h"
+#include "3rdparty/Storm/Source/SErr.h"
+#include "3rdparty/Storm/Source/SFile.h"
+#include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Client/UI/Automap.h"
+#include "Source/D2Common/DATATBLS/MissileTbls.inline.h"
+#include "Source/D2Common/Unit.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Win/Src/D2WinFont.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -207,7 +348,7 @@ static uint32_t __stdcall DRAW_WORLD_IsUnitInLineOfSight(D2UnitStrc * pOtherUnit
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_18(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_18(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }
@@ -310,7 +451,7 @@ void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t nD
             goto restore_perspective;
           }
 
-          nDrawY = (int)pMissileTxt->yoffset + (int)pMissileTxt->zoffset + nDrawY;
+          nDrawY = (int)pMissileTxt->yoffset + ((int)pMissileTxt->zoffset + nDrawY);
           bInViewBounds = (int)pMissileTxt->xoffset + nDrawLayer;
         }
 
@@ -320,8 +461,13 @@ void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t nD
         }
       } else {
         nPrecisionX = UNIT::Monster::IsMonsterGhostly(pUnit);
+        uint32_t nTest = 0;
+        if (nPrecisionX != 0) {
+          nTest = 1;
+        }
+
         UNIT::PlrSkills::PLRSKILLS_DrawChargeTrailIfPrimary(pUnit, nGamma);
-        bOrder = Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nGamma, nDrawLayer, nDrawX, (uint32_t)(nPrecisionX != 0), 1);
+        bOrder = Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nGamma, nDrawLayer, nDrawX, nTest, 1);
         if (bOrder && pUnit) {
           pUnit->eUnitFlags |= UNITFLAG_AUTOMAP;
         }
@@ -505,8 +651,6 @@ void __fastcall WALL2_UpdateAmbientMusic(uint32_t nTickCount) {
 void __fastcall WALL2_ScheduleSoundSequence(uint32_t dwSoundId, int32_t nResumeOffset, int32_t nSequenceDuration, int32_t nBlockIdx, uint32_t dwDelayedSoundId, int32_t nDelayedSoundOffset, uint32_t bPlayDelayed) {
     int pStopHandle;
     uint32_t nActiveSoundId;
-    int nSoundHdrOffset;
-    int* pSoundHdrTable;
     if (geCutsceneAmbientMusicSoundId) {
       D2SoundsTxt* pSoundTxt;
       pSoundTxt = D2Client::Sound::SoundHdr::TXT_sounds_GetLineBySoundId(geCutsceneAmbientMusicSoundId);
@@ -520,10 +664,7 @@ void __fastcall WALL2_ScheduleSoundSequence(uint32_t dwSoundId, int32_t nResumeO
             pStopHandle = 0;
           }
 
-          nSoundHdrOffset = D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal0();
-          nSoundHdrOffset = geCutsceneAmbientMusicSoundId - nSoundHdrOffset;
-          pSoundHdrTable = D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal2();
-          pSoundHdrTable[nSoundHdrOffset] = pStopHandle;
+          D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal2()[geCutsceneAmbientMusicSoundId - D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal0()] = pStopHandle;
           gdwAmbientMusicChangeTime = D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal3();
         }
       }
@@ -1088,7 +1229,7 @@ static void __stdcall WALL2_InsertUnitShadowDraw(D2Wall2CellStrc * pWall2Cell, D
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_20(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_20(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }
@@ -1096,7 +1237,7 @@ static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_20(D2UnitStrc * p) {
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
-static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_7(D2UnitStrc * p) {
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_7(D2UnitStrc * p) {
     if (!p) {
         return 0;
     }
@@ -1147,7 +1288,7 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
               if (bInDrawGrid) {
                 nIsoY = nRoofHeightIdx - pGameView->sWall2.nWall2GridOriginY;
                 nIsoX -= pGameView->sWall2.nWall2GridOriginX;
-                pGridCellVoid = pGameView->sWall2.pWall2 + pGameView->sWall2.nWall2GridDim * nIsoY + nIsoX;
+                pGridCellVoid = pGameView->sWall2.pWall2 + (pGameView->sWall2.nWall2GridDim * nIsoY + nIsoX);
                 pGridCellVoid->dwFlags = 0;
                 if (!(pTileData->nFlags & 0x1c000U)) {
                   WALL2_AddShadowPassTile(pGridCellVoid, pRoom, pTileData, pAllocBase);
@@ -1184,7 +1325,7 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
             if (bInDrawGrid) {
               nIsoX = nRoofHeightIdx - pGameView->sWall2.nWall2GridOriginY;
               nIsoY -= pGameView->sWall2.nWall2GridOriginX;
-              WALL2_AddShadowPassTile(pGameView->sWall2.pWall2 + pGameView->sWall2.nWall2GridDim * nIsoX + nIsoY, pRoom, pTileData, pAllocBase);
+              WALL2_AddShadowPassTile(pGameView->sWall2.pWall2 + (pGameView->sWall2.nWall2GridDim * nIsoX + nIsoY), pRoom, pTileData, pAllocBase);
             }
           }
 
@@ -1215,7 +1356,7 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
                 exit(-1);
               }
 
-              pGridCellVoid = pGameView->sWall2.pWall2 + nRoofHeightIdx2 * nCellY + nCellX;
+              pGridCellVoid = pGameView->sWall2.pWall2 + (nRoofHeightIdx2 * nCellY + nCellX);
               nLine = UNIT::CUnit::IsAlive(pUnit);
               if (nLine) {
                 WALL2_InsertUnitDraw(pGridCellVoid, pUnit, pAllocBase);

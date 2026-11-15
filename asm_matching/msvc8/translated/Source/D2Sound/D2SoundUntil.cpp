@@ -192,13 +192,13 @@ BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBuffer
                 /* DWORD dwErrCode for SetLastError */ SetLastError(0x714);
               } else {
                 nResourceOffset = pPeHeader[0x2e];
-                nResourceSize = *(uint32_t*)((char*)pView + nResourceOffset + 8);
+                nResourceSize = *(uint32_t*)((char*)pView + (nResourceOffset + 8));
                 if (!pBuffer || *pnBufferSize < nResourceSize) {
                   *pnBufferSize = nResourceSize;
                   /* DWORD dwErrCode for SetLastError */ SetLastError(0x7a);
                 } else {
                   memset(pBuffer, 0, *pnBufferSize);
-                  memcpy(pBuffer, (void*)((char*)pView + nResourceOffset + 0xc), nResourceSize);
+                  memcpy(pBuffer, (void*)((char*)pView + (nResourceOffset + 0xc)), nResourceSize);
                   *pnBufferSize = nResourceSize;
                   /* DWORD dwErrCode for SetLastError */ SetLastError(0);
                   bSuccess = 1;
@@ -264,7 +264,7 @@ BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBuffer
                 /* DWORD dwErrCode for SetLastError */ SetLastError(0x714);
               } else {
                 nResourceOffset = pPeHeader[0x2e];
-                nResourceSize = *(uint32_t*)((char*)pView + nResourceOffset + 8);
+                nResourceSize = *(uint32_t*)((char*)pView + (nResourceOffset + 8));
                 if (!pBuffer || *pnBufferSize < nResourceSize) {
                   D2_SEH_FENCE();
                   *pnBufferSize = nResourceSize;
@@ -274,7 +274,7 @@ BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBuffer
                   D2_SEH_FENCE();
                   memset(pBuffer, 0, *pnBufferSize);
                   D2_SEH_FENCE();
-                  memcpy(pBuffer, (void*)((char*)pView + nResourceOffset + 0xc), nResourceSize);
+                  memcpy(pBuffer, (void*)((char*)pView + (nResourceOffset + 0xc)), nResourceSize);
                   D2_SEH_FENCE();
                   *pnBufferSize = nResourceSize;
                   D2_SEH_FENCE();

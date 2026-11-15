@@ -382,7 +382,7 @@ void __fastcall PARTICLE_InitProjectile(D2UnitStrc * pUnit, int32_t nInitialHeig
     nGravity = pParticle->pOffsets[1].nOffsetZ;
     pParticle->nPosX = 0;
     pParticle->nPosY = 0;
-    pParticle->nPosZ = nInitialHeight * 0x800;
+    pParticle->nPosZ = nInitialHeight << 0xb;
     if (!nGravity) {
       pParticle->pOffsets[1].nOffsetZ = -0x1000;
     }

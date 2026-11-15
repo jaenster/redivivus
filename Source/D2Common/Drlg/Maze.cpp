@@ -3057,7 +3057,6 @@ static void DRLGMAZE_GenerateRiverOfFlames(D2DrlgLevelStrc * pDrlgLevelStrc) {
 }; D2_STATIC_GUARD(gaDrlgRiverOfFlamesReplacements, "D2Common::Drlg::Maze::DRLGMAZE_GenerateRiverOfFlames::gaDrlgRiverOfFlamesReplacements");
 
     D2DrlgPresetRoomStrc* pRoomExDataInner;
-    LONG* pWorldPosY;
     if (pDrlgLevelStrc->pDrlg->nActNo == 4) {
       return;
     }
@@ -3113,9 +3112,8 @@ static void DRLGMAZE_GenerateRiverOfFlames(D2DrlgLevelStrc * pDrlgLevelStrc) {
     ReplaceRoom(gaDrlgRiverOfFlamesReplacements + (DVar2 & 1), pDrlgLevelStrc, nullptr);
     DRLGMAZE_ExpandRoomsWithPresets(pDrlgLevelStrc, 0x344, pNewRoom);
     for (pNewRoom = pDrlgLevelStrc->pRoomExFirst; pNewRoom; pNewRoom = pNewRoom->pRoomExNext) {
-      pNewRoom->sCoords.WorldPosition.x = pNewRoom->sCoords.WorldPosition.x + (nRoomSizeX * 2 - nRoomPosX) + nChaosLevelX;
-      pWorldPosY = &pNewRoom->sCoords.WorldPosition.y;
-      *pWorldPosY = *pWorldPosY + (fReplaceResult - nRoomPosY) + nChaosLevelY;
+      pNewRoom->sCoords.WorldPosition.x += nRoomSizeX * 2 - nRoomPosX + nChaosLevelX;
+      pNewRoom->sCoords.WorldPosition.y += fReplaceResult - nRoomPosY + nChaosLevelY;
     }
 
     int nMinX = 0;

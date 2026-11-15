@@ -473,7 +473,7 @@ static uint32_t __stdcall SCOMP_ADPCMEncode(uint32_t nMaxOutSize, short * pInSam
 
         *pOutCur = bySignBit | (uint8_t)nBitMask;
         pOutCur++;
-        pnStepIndex = aChannelState + nChannel + 2;
+        pnStepIndex = aChannelState + (nChannel + 2);
         *pnStepIndex += gnSSCompDeflateFlags[nBitMask & 0x1f];
         aChannelState[nChannel] = nPredicted;
         if (*pnStepIndex < 0) {
@@ -548,7 +548,7 @@ static uint32_t __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uin
                 }
               case 2:
                 {
-                  pnStepIndex = aChannelState + nChannel + 2;
+                  pnStepIndex = aChannelState + (nChannel + 2);
                   *pnStepIndex += -8;
                   if (*pnStepIndex < 0) {
                     aChannelState[nChannel + 2] = 0;
@@ -614,7 +614,7 @@ static uint32_t __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uin
           nOutSize -= 2;
           *pOut = (short int)aChannelState[nChannel];
           pOut++;
-          pnStepIndex = aChannelState + nChannel + 2;
+          pnStepIndex = aChannelState + (nChannel + 2);
           *pnStepIndex += gnSSCompDeflateFlags[byCode & 0x1f];
           if (*pnStepIndex < 0) {
             aChannelState[nChannel + 2] = 0;
@@ -946,7 +946,7 @@ uint32_t __stdcall SCompCompress(uint8_t * pDst, uint32_t * pnDstLen, uint32_t *
     nSrcLenCur = nSrcLen;
     uint32_t* pSrcCur;
     pSrcCur = pSrc;
-    if (!((pDst && pnDstLen ? (*pnDstLen < nSrcLen) - 1 : 0) & -(uint32_t)(pSrc != 0))) {
+    if (!((pDst && pnDstLen ? (*pnDstLen < nSrcLen) - 1 : 0) & (pSrc != 0 ? (uint32_t)-1 : 0))) {
       SErr::SErrSetLastError(0x57);
     } else {
       uint32_t nMethodBit;
@@ -1055,7 +1055,7 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
     uint32_t dwMethodFlags;
     uint8_t byCompressionMask;
     __frame0.nDestSize = *pnDstSize;
-    if (!(!nSrcSizeIn ? 0 : (pDst ? (__frame0.nDestSize < nSrcSizeIn) - 1 : 0) & -(uint32_t)(pSrc != 0))) {
+    if (!(!nSrcSizeIn ? 0 : (pDst ? (__frame0.nDestSize < nSrcSizeIn) - 1 : 0) & (pSrc != 0 ? (uint32_t)-1 : 0))) {
       SErr::SErrSetLastError(0x57);
       return 0;
     }
@@ -1357,7 +1357,7 @@ int32_t __fastcall HUFFMAN_DecodeSymbol(D2HuffmanContextStrc * pThis, int, D2Bit
 
     nQuickIdx = 0xffffffffU >> D2_SHIFT_COUNT(0x20 - nBitCount) & nQuickIdx & 0x7f;
     int nQuickStep = 1 << D2_SHIFT_COUNT(nBitCount);
-    pQuickFill = pThis->aQuickTable + nQuickIdx * 3 + 2;
+    pQuickFill = pThis->aQuickTable + (nQuickIdx * 3 + 2);
     do {
       pQuickFill[-2] = (uint32_t)pThis->nEpoch;
       pQuickFill[-1] = nBitCount;
@@ -3954,7 +3954,7 @@ void __fastcall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
     } while (nTmp < 0x100);
 
     if (nTmp < 0x102) {
-      pTableSel = (int**)(pEncoder->apSymbolNodes + nSymbol + 1);
+      pTableSel = (int**)(pEncoder->apSymbolNodes + (nSymbol + 1));
       nSymbol = nTmp;
       do {
         pSortedNext = (D2CompressHuffNodeStrc*)pEncoder->ppFreeListTailLink;

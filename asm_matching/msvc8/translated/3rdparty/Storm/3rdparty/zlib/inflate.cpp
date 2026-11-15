@@ -3060,7 +3060,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
               if (pState->head) {
                 pState->head->done = -1;
               }
-              if (!(pState->wrap & 1) || ((uint32_t)(uint8_t)nHold * 0x100 + (nHold >> 8)) % 0x1f) {
+              if (!(pState->wrap & 1) || (((uint32_t)(uint8_t)nHold << 8) + (nHold >> 8)) % 0x1f) {
                 pInflateStream->msg = "incorrect header check";
               } else {
                 if (((uint8_t)nHold & 0xf) == 8) {
@@ -3416,7 +3416,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
             nFrom = 0x100;
           }
 
-          pInflateStream->data_type = (nHeadHave == 0xb ? 0x80 : 0) + (pState->last ? 0x40 : 0) + nFrom + pState->bits;
+          pInflateStream->data_type = (nHeadHave == 0xb ? 0x80 : 0) + ((pState->last ? 0x40 : 0) + pState->bits);
           if ((nInConsumed || nAvailOutStart) && nFlush != 4) {
             return nRet;
           }
@@ -3447,7 +3447,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
             nHold += (uint32_t)bVar2 << (uint8_t)nBits;
             pHere = (inflate_code)nHold;
           }
-        nBits = ((nHold & 0xff00) + nHold * 0x10000) * 0x100 + ((uint32_t)d2_bits_of(pHere) >> 0x10 & 0xff) * 0x100 + (nHold >> 0x18);
+        nBits = ((nHold & 0xff00) + (nHold << 0x10) << 8) + (((uint32_t)d2_bits_of(pHere) >> 0x10 & 0xff) << 8) + (nHold >> 0x18);
         pState->check = nBits;
         pInflateStream->adler = nBits;
         nHold = 0;
@@ -4099,7 +4099,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
             nAvailOutStart = nAvailOut;
             eState = nHold;
             if (!pState->flags) {
-              eState = ((nHold & 0xff00) + nHold * 0x10000) * 0x100 + ((uint32_t)d2_bits_of(pHere) >> 0x10 & 0xff) * 0x100 + (nHold >> 0x18);
+              eState = ((nHold & 0xff00) + (nHold << 0x10) << 8) + (((uint32_t)d2_bits_of(pHere) >> 0x10 & 0xff) << 8) + (nHold >> 0x18);
             }
             if (eState != pState->check) {
               pInflateStream->msg = "incorrect data check";
@@ -4392,10 +4392,10 @@ int32_t __fastcall inflateMark(z_stream * pStream) {
       return -0x10000;
     }
     if (*pState == 0xf) {
-      return pState[0x6f1] * 0x10000 + pState[0x10];
+      return (pState[0x6f1] << 0x10) + pState[0x10];
     }
     if (*pState == 0x18) {
-      return pState[0x6f1] * 0x10000 + (pState[0x6f2] - pState[0x10]);
+      return (pState[0x6f1] << 0x10) + (pState[0x6f2] - pState[0x10]);
     }
 
     return pState[0x6f1] << 0x10;

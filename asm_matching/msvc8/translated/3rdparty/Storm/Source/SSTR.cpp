@@ -1170,7 +1170,7 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
     D2_CHECK(szBufferInput);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     if (nBufferOutputLength) {
-      pDstLast = szBufferOutput + nBufferOutputLength - 1;
+      pDstLast = szBufferOutput + (nBufferOutputLength - 1);
       for (nOffset = (intptr_t)szBufferOutput - (intptr_t)pDstLast; (uintptr_t)szBufferInput & 3 && nOffset; nOffset++) {
         dwWord = *(uint32_t*)szBufferInput;
         szBufferInput = (char*)((char*)szBufferInput + 1);
@@ -1194,7 +1194,7 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
           }
 
           nOffset = nOffsetPrev + 4;
-          *(uint32_t*)(pDstLast + nOffsetPrev - 3) = dwWord;
+          *(uint32_t*)(pDstLast + (nOffsetPrev - 3)) = dwWord;
           if (nOffset >= 0) {
             goto copy_tail_bytes;
           }
@@ -1213,16 +1213,16 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
             return (uint32_t)(pDstLast - szBufferOutput + nOffset - 3);
           }
           if ((char)(dwWord >> 8) == '\0') {
-            *(short int*)(pDstLast + nOffset - 3) = (short int)dwWord;
+            *(short int*)(pDstLast + (nOffset - 3)) = (short int)dwWord;
             return (uint32_t)(pDstLast - szBufferOutput + nOffset - 2);
           }
           if (!(dwWord & 0xff0000)) {
-            *(short int*)(pDstLast + nOffset - 3) = (short int)dwWord;
+            *(short int*)(pDstLast + (nOffset - 3)) = (short int)dwWord;
             pDstLast[nOffset - 1] = '\0';
             return (uint32_t)(pDstLast - szBufferOutput + nOffset - 1);
           }
 
-          *(uint32_t*)(pDstLast + nOffset - 3) = dwWord;
+          *(uint32_t*)(pDstLast + (nOffset - 3)) = dwWord;
           if (!(dwWord & -16777216)) {
             return (uint32_t)(pDstLast - szBufferOutput + nOffset);
           }
@@ -1397,7 +1397,7 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
           }
 
           nOffset = nOffsetPrev + 4;
-          *(uint32_t*)(pDstLast + nOffsetPrev - 3) = dwWord;
+          *(uint32_t*)(pDstLast + (nOffsetPrev - 3)) = dwWord;
           if (nOffset >= 0) {
             goto copy_tail_bytes;
           }
@@ -1416,16 +1416,16 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
             return (uint32_t)(pDstLast - szText + nOffset - 3);
           }
           if ((char)(dwWord >> 8) == '\0') {
-            *(short int*)(pDstLast + nOffset - 3) = (short int)dwWord;
+            *(short int*)(pDstLast + (nOffset - 3)) = (short int)dwWord;
             return (uint32_t)(pDstLast - szText + nOffset - 2);
           }
           if (!(dwWord & 0xff0000)) {
-            *(short int*)(pDstLast + nOffset - 3) = (short int)dwWord;
+            *(short int*)(pDstLast + (nOffset - 3)) = (short int)dwWord;
             pDstLast[nOffset - 1] = '\0';
             return (uint32_t)(pDstLast - szText + nOffset - 1);
           }
 
-          *(uint32_t*)(pDstLast + nOffset - 3) = dwWord;
+          *(uint32_t*)(pDstLast + (nOffset - 3)) = dwWord;
           if (!(dwWord & -16777216)) {
             return (uint32_t)(pDstLast - szText + nOffset);
           }
@@ -1523,7 +1523,8 @@ int32_t __stdcall SStrToInt(char * szText) {
     D2_CHECK(szText);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     char cSign = *szText;
-    if (cSign == '-') {
+    int nTest = cSign == '-';
+    if (nTest) {
       szText++;
     }
 
@@ -1540,7 +1541,7 @@ int32_t __stdcall SStrToInt(char * szText) {
     } else {
       nValue = 0;
     }
-    if (cSign == '-') {
+    if (nTest) {
       nValue = -nValue;
     }
 
@@ -1598,7 +1599,7 @@ void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, uint32_t nMa
     } else {
       dwArgMask = -1;
     }
-    if (!((ppszCursor && *ppszCursor ? -(uint32_t)(szDelimiters != 0) : 0) & dwArgMask)) {
+    if (!((ppszCursor && *ppszCursor ? szDelimiters != 0 ? (uint32_t)-1 : 0 : 0) & dwArgMask)) {
       SErr::SErrSetLastError(0x57);
       return;
     }
@@ -1883,8 +1884,8 @@ uint32_t __fastcall SSTR_bjhash(uint8_t * pData, uint32_t nLength, uint32_t nIni
       int nMix;
       nInitVal = nLength / 0xc;
       do {
-        nMix = pData[4] + nB + (uint32_t)d2_load24((uint8_t*)(pData + 5)) * 0x100;
-        nB = pData[8] + nC2 + (uint32_t)d2_load24((uint8_t*)(pData + 9)) * 0x100;
+        nMix = pData[4] + nB + ((uint32_t)d2_load24((uint8_t*)(pData + 5)) << 8);
+        nB = pData[8] + nC2 + ((uint32_t)d2_load24((uint8_t*)(pData + 9)) << 8);
         nC = *(int*)pData - nB - nMix + nC ^ nB >> 0xd;
         nA = nMix - nB - nC ^ nC << 8;
         nB = nB - nA - nC ^ nA >> 0xd;
@@ -1903,25 +1904,25 @@ uint32_t __fastcall SSTR_bjhash(uint8_t * pData, uint32_t nLength, uint32_t nIni
     nA = nC2 + nLength;
     switch (nRemaining) {
       case 0xb:
-        nA += (uint32_t)pData[10] * 0x1000000;
+        nA += (uint32_t)pData[10] << 0x18;
       case 10:
-        nA += (uint32_t)pData[9] * 0x10000;
+        nA += (uint32_t)pData[9] << 0x10;
       case 9:
-        nA += (uint32_t)pData[8] * 0x100;
+        nA += (uint32_t)pData[8] << 8;
       case 8:
-        nB += (uint32_t)pData[7] * 0x1000000;
+        nB += (uint32_t)pData[7] << 0x18;
       case 7:
-        nB += (uint32_t)pData[6] * 0x10000;
+        nB += (uint32_t)pData[6] << 0x10;
       case 6:
-        nB += (uint32_t)pData[5] * 0x100;
+        nB += (uint32_t)pData[5] << 8;
       case 5:
         nB += pData[4];
       case 4:
-        nC += (uint32_t)pData[3] * 0x1000000;
+        nC += (uint32_t)pData[3] << 0x18;
       case 3:
-        nC += (uint32_t)pData[2] * 0x10000;
+        nC += (uint32_t)pData[2] << 0x10;
       case 2:
-        nC += (uint32_t)pData[1] * 0x100;
+        nC += (uint32_t)pData[1] << 8;
       case 1:
         nC += *pData;
       default:
@@ -2645,7 +2646,7 @@ int __stdcall UTF16_CalculateUTF8Length(uint16_t * pszUTF16, int nMaxChars, int 
             break;
           }
           if ((uint32_t)(*pEnd - 0xdc00) <= 0x3ff) {
-            uCodepoint = (uCodepoint - 0xd7f7) * 0x400 + (uint32_t)*pEnd;
+            uCodepoint = (uCodepoint - 0xd7f7 << 0xa) + (uint32_t)*pEnd;
             pEnd = pCur + 2;
           }
         }
@@ -2719,7 +2720,7 @@ int __stdcall UTF16_ToUTF8(uint8_t * pbUTF8, int nOutMaxChars, uint16_t * pszUTF
 
         uSurrPair = (uint32_t)pInCur[1];
         if (uSurrPair >= 0xdc00 && uSurrPair <= 0xdfff) {
-          uCodepoint = (uCodepoint - 0xd7f7) * 0x400 + uSurrPair;
+          uCodepoint = (uCodepoint - 0xd7f7 << 0xa) + uSurrPair;
           nPszUTF16Out = (int)0x2;
         }
       }
@@ -2840,19 +2841,19 @@ int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnBy
         case 4:
           cByte = *pEndInner;
         pEndInner++;
-        iAccum = (iAccum + cByte) * 0x40;
+        iAccum = iAccum + cByte << 6;
         case 3:
           cByte = *pEndInner;
         pEndInner++;
-        iAccum = (iAccum + cByte) * 0x40;
+        iAccum = iAccum + cByte << 6;
         case 2:
           cByte = *pEndInner;
         pEndInner++;
-        iAccum = (iAccum + cByte) * 0x40;
+        iAccum = iAccum + cByte << 6;
         case 1:
           cByte = *pEndInner;
         pEndInner++;
-        iAccum = (iAccum + cByte) * 0x40;
+        iAccum = iAccum + cByte << 6;
         case 0:
           iAccum += *pEndInner;
         pEndInner++;
@@ -2914,19 +2915,19 @@ int __stdcall UTF8_ToUTF16(short * pszUTF16Out, int nOutMaxChars, uint8_t * pbUT
           case 4:
             pInCur = pOutStart + iResult;
           iResult++;
-          iAccum = (iAccum + (uint32_t)*pInCur) * 0x40;
+          iAccum = iAccum + (uint32_t)*pInCur << 6;
           case 3:
             pInCur = pOutStart + iResult;
           iResult++;
-          iAccum = (iAccum + (uint32_t)*pInCur) * 0x40;
+          iAccum = iAccum + (uint32_t)*pInCur << 6;
           case 2:
             pInCur = pOutStart + iResult;
           iResult++;
-          iAccum = (iAccum + (uint32_t)*pInCur) * 0x40;
+          iAccum = iAccum + (uint32_t)*pInCur << 6;
           case 1:
             pInCur = pOutStart + iResult;
           iResult++;
-          iAccum = (iAccum + (uint32_t)*pInCur) * 0x40;
+          iAccum = iAccum + (uint32_t)*pInCur << 6;
           case 0:
             iAccum += (uint32_t)pOutStart[iResult];
           iResult++;
@@ -3170,11 +3171,10 @@ static int __fastcall TRANSTBL_UnicodeToSingleByte(uint16_t * pThis, int, uint16
         *pOutCur = byMapped;
       }
 
-      pSearchEntry = pThis + 1;
       pThis = pThis + 1;
       pOutCur++;
       nCount--;
-      uCodepoint = *pSearchEntry;
+      uCodepoint = *pThis;
     }
 
     if (nCount) {

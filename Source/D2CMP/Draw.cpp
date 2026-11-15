@@ -246,7 +246,7 @@ int Unreferenced_006052f0() {
 }
 
 void __stdcall DRAW_SetTransparentColorRGB(uint32_t nRGB) {
-    gnDrawTransparentColorRGB = (uint32_t)(uint16_t)((uint16_t)(uint8_t)(char)nRGB << 8 | (uint16_t)(uint8_t)(char)(nRGB >> 8)) << 8 | (uint8_t)(nRGB >> 0x10);
+    gnDrawTransparentColorRGB = (uint32_t)((uint16_t)(uint8_t)(char)nRGB << 8 | (uint16_t)(uint8_t)(char)(nRGB >> 8)) << 8 | (uint8_t)(nRGB >> 0x10);
 }
 
 BOOL __fastcall DRAW_LoadPaletteFromPCX(LPCSTR szFilePath) {
@@ -398,7 +398,7 @@ uint8_t __stdcall DRAW_FindNearestPaletteColor(uint8_t nRed, uint8_t nGreen, uin
 
     do {
       if (!gbPaletteMaskEnabled || gaPaletteMaskData[nCurrentIndex] != '\0') {
-        if (gbTransparentColorEnabled && gnDrawTransparentColorRGB == (uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)nRed << 8 | (uint16_t)(uint8_t)nGreen) << 8 | (uint32_t)(uint8_t)nBlue) & 0xffffffu)) {
+        if (gbTransparentColorEnabled && gnDrawTransparentColorRGB == ((uint32_t)((uint16_t)(uint8_t)nRed << 8 | (uint16_t)(uint8_t)nGreen) << 8 | (uint32_t)(uint8_t)nBlue)) {
           return '\0';
         }
 
@@ -492,7 +492,7 @@ void __stdcall DRAW_BuildAlphaBlendTables(LPPALETTEENTRY pPalette) {
       }
 
       iAlphaFactor = 0xff - nAlphaValue;
-      pDest = pPalette + nAlphaLevel * 0x4000 + 0xd40;
+      pDest = pPalette + (nAlphaLevel * 0x4000 + 0xd40);
       nOuterLoop = 0x100;
       do {
         pInnerDest = pDest;
@@ -932,7 +932,7 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
     } while (nTableIdx < 0x100);
 
     nEntryCount = -(int)pHSLPalette;
-    intptr_t iVar5 = (intptr_t)ahslBuffer + nEntryCount + 0x18;
+    intptr_t iVar5 = (intptr_t)ahslBuffer + (nEntryCount + 0x18);
     int iVar2 = -(int)pHSLPalette;
     intptr_t nHSLEntryBufOffset = (intptr_t)ahslBuffer + iVar2;
     pHSLPalette = (D2HSLColorStrc*)(pPalette + 0x15fc0);
@@ -981,11 +981,11 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
         if (45.0 < pHSLCopySrc->dHue && pHSLCopySrc->dHue < 315.0) {
           dVar1 = (double)(int)nHueShift;
           *(uint32_t*)(nHSLEntryBufOffset + (char*)pHSLCopySrc) = *(uint32_t*)&pHSLCopySrc->dHue;
-          *(uint32_t*)((intptr_t)ahslBuffer + iVar2 + 4 + (intptr_t)pHSLCopySrc) = *(uint32_t*)((intptr_t)&pHSLCopySrc->dHue + 4);
-          *(uint32_t*)((intptr_t)ahslBuffer + iVar2 + 8 + (intptr_t)pHSLCopySrc) = *(uint32_t*)&pHSLCopySrc->dSaturation;
-          *(uint32_t*)((intptr_t)ahslBuffer + iVar2 + 0xc + (intptr_t)pHSLCopySrc) = *(uint32_t*)((intptr_t)&pHSLCopySrc->dSaturation + 4);
-          *(uint32_t*)((intptr_t)ahslBuffer + iVar2 + 0x10 + (intptr_t)pHSLCopySrc) = *(uint32_t*)&pHSLCopySrc->dLightness;
-          *(uint32_t*)((intptr_t)ahslBuffer + iVar2 + 0x14 + (intptr_t)pHSLCopySrc) = *(uint32_t*)((intptr_t)&pHSLCopySrc->dLightness + 4);
+          *(uint32_t*)((intptr_t)ahslBuffer + (iVar2 + (intptr_t)pHSLCopySrc)) = *(uint32_t*)((intptr_t)&pHSLCopySrc->dHue + 4);
+          *(uint32_t*)((intptr_t)ahslBuffer + (iVar2 + (intptr_t)pHSLCopySrc)) = *(uint32_t*)&pHSLCopySrc->dSaturation;
+          *(uint32_t*)((intptr_t)ahslBuffer + (iVar2 + (intptr_t)pHSLCopySrc)) = *(uint32_t*)((intptr_t)&pHSLCopySrc->dSaturation + 4);
+          *(uint32_t*)((intptr_t)ahslBuffer + (iVar2 + (intptr_t)pHSLCopySrc)) = *(uint32_t*)&pHSLCopySrc->dLightness;
+          *(uint32_t*)((intptr_t)ahslBuffer + (iVar2 + (intptr_t)pHSLCopySrc)) = *(uint32_t*)((intptr_t)&pHSLCopySrc->dLightness + 4);
           if ((int)nHueShift < 0) {
             dVar1 += 4294967296.0;
           }
@@ -999,11 +999,11 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
         if (45.0 < pHSLCopySrc[1].dHue && pHSLCopySrc[1].dHue < 315.0) {
           dVar1 = (double)(int)nHueShift;
           *(uint32_t*)(iVar5 + (char*)pHSLCopySrc) = *(uint32_t*)&pHSLCopySrc[1].dHue;
-          *(uint32_t*)((intptr_t)ahslBuffer + nEntryCount + 0x1c + (intptr_t)pHSLCopySrc) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dHue + 4);
-          *(uint32_t*)((intptr_t)ahslBuffer + nEntryCount + 0x20 + (intptr_t)pHSLCopySrc) = *(uint32_t*)&pHSLCopySrc[1].dSaturation;
-          *(uint32_t*)((intptr_t)ahslBuffer + nEntryCount + 0x24 + (intptr_t)pHSLCopySrc) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dSaturation + 4);
-          *(uint32_t*)((intptr_t)ahslBuffer + nEntryCount + 0x28 + (intptr_t)pHSLCopySrc) = *(uint32_t*)&pHSLCopySrc[1].dLightness;
-          *(uint32_t*)((intptr_t)ahslBuffer + nEntryCount + 0x2c + (intptr_t)pHSLCopySrc) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dLightness + 4);
+          *(uint32_t*)((intptr_t)ahslBuffer + (nEntryCount + (intptr_t)pHSLCopySrc)) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dHue + 4);
+          *(uint32_t*)((intptr_t)ahslBuffer + (nEntryCount + (intptr_t)pHSLCopySrc)) = *(uint32_t*)&pHSLCopySrc[1].dSaturation;
+          *(uint32_t*)((intptr_t)ahslBuffer + (nEntryCount + (intptr_t)pHSLCopySrc)) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dSaturation + 4);
+          *(uint32_t*)((intptr_t)ahslBuffer + (nEntryCount + (intptr_t)pHSLCopySrc)) = *(uint32_t*)&pHSLCopySrc[1].dLightness;
+          *(uint32_t*)((intptr_t)ahslBuffer + (nEntryCount + (intptr_t)pHSLCopySrc)) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dLightness + 4);
           if ((int)nHueShift < 0) {
             dVar1 += 4294967296.0;
           }

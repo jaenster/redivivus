@@ -280,7 +280,7 @@ static BOOL BNDOWNLOAD_LaunchVerifiedExecutables(LPCSTR szText1, LPCSTR szText2)
 
       pcFileEnd = Storm::Source::SSTR::SStrLen((char*)szText2);
       cFirstChar = szText2[pcFileEnd + 1];
-      szText2 = szText2 + pcFileEnd + 1;
+      szText2 += pcFileEnd + 1;
     }
 
     return 0;
@@ -560,7 +560,7 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
                   bArchiveOpened = _strnicmp(szLineBuffer, "execute ", 8);
                   if (!bArchiveOpened) {
                     nStrLen = Storm::Source::SSTR::SStrCopy(pVerifySigResult, cDestPathBuf, 0x7fffffff);
-                    pVerifySigResult = pVerifySigResult + nStrLen + 1;
+                    pVerifySigResult += nStrLen + 1;
                   }
                 }
               }
@@ -577,8 +577,9 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
 
       Storm::Source::SFile::SFileCloseArchive(__frame0.pArchiveHandle);
       nStrLen = Storm::Source::SSTR::SStrLen(lpFileName);
-      lpFileName = lpFileName + nStrLen + 1;
-    } while (*lpFileName != '\0');
+      pbArchivePath = lpFileName + (nStrLen + 1);
+      lpFileName += nStrLen + 1;
+    } while (*pbArchivePath != '\0');
 
     pbArchivePath = szRegistryPath;
     __frame0.pVerifySigOut = lpFileName;
@@ -597,7 +598,7 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
     if (szSourceFileName == cArchiveListBuf) {
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szSourceFileName, "%s\\bnupdate.exe", szModulePath);
       nStrLen = Storm::Source::SSTR::SStrLen(szSourceFileName);
-      szSourceFileName = szSourceFileName + nStrLen + 1;
+      szSourceFileName += nStrLen + 1;
       pVerifySigResult = szSourceFileName;
     }
 

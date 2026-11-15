@@ -1074,7 +1074,7 @@ void __fastcall FormatAddressDebugString(D2CrashFrameStrc * pAddrInfo, char * pS
 
     nWritten = __snprintf_s(szOutput + nOffset, 0x400 - nOffset, -1, "%s", szParamDetail);
     if (pSymInfo[0x244] != '\0' || (uint32_t)*(int*)(pSymInfo + 0x344) > 0) {
-      __snprintf_s(szOutput + nOffset + nWritten, 0x400 - (nOffset + nWritten), -1, " (%s,%u)", pSymInfo + 0x244, *(uint32_t*)(pSymInfo + 0x344));
+      __snprintf_s(szOutput + (nOffset + nWritten), 0x400 - (nOffset + nWritten), -1, " (%s,%u)", pSymInfo + 0x244, *(uint32_t*)(pSymInfo + 0x344));
     }
 }
 
@@ -1642,7 +1642,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
       __frame1.szHexLine[__frame1.pBytesToDump + nByteOffset] = '\0';
       Src::LogManager::LogWithCategoryVarArgs("", "%s\n", __frame1.szHexLine);
       if (pEipModule) {
-        pAsciiOut = *(uint8_t**)(pStackPtr + nTmp - 4);
+        pAsciiOut = *(uint8_t**)(pStackPtr + (nTmp - 4));
         pDVar1 = pModuleListIter;
         while (true) {
           if (!pDVar1) {
@@ -2430,7 +2430,7 @@ BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize) 
                 }
               }
 
-              pOutEntry = (short int*)((char*)pOutEntry + nFileSize + 0xf);
+              pOutEntry = (short int*)((char*)pOutEntry + (nFileSize + 0xf));
             }
 
             if (nMatchIndex == nUniqueCount) {
@@ -2445,7 +2445,7 @@ BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize) 
               *(char*)(pOutEntry + 7) = (char)nRecDwordCount;
               Storm::Source::SMem::SMemCopy((void*)((char*)pOutEntry + 0xf), recDataScratch, nFileSize);
               nUniqueCount++;
-              *pnBufferSizeLocal = *pnBufferSizeLocal + nFileSize + 0xf;
+              *pnBufferSizeLocal += nFileSize + 0xf;
             }
           } while (pRecordCur < pRecordEnd);
         }

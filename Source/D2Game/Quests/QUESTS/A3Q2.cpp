@@ -870,7 +870,11 @@ bool __fastcall Q19_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     }
 
     pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20316671);
-    bool bHasFlail = pQuestItem != 0;
+    bool bHasFlail = false;
+    if (pQuestItem != 0) {
+      bHasFlail = true;
+    }
+
     pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20796571);
     char nPartsCount = bHasFlail;
     if (pQuestItem) {

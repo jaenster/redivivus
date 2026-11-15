@@ -189,7 +189,7 @@ static BOOL __stdcall TILECMP_ValidateTilePixels(uint8_t * pTilePixels, int32_t 
         } while (iCol < 0x20);
 
         iRow++;
-        pTilePixels = (uint8_t*)((char*)pTilePixels + nPitch - 0x60);
+        pTilePixels = (uint8_t*)((char*)pTilePixels + (nPitch - 0x60));
       } while (iRow < 0x20);
     }
     if (!(pTile->field_0x51 & 1)) {
@@ -210,7 +210,7 @@ static BOOL __stdcall TILECMP_ValidateTilePixels(uint8_t * pTilePixels, int32_t 
       } while (iCol < 0x20);
 
       iRow++;
-      pTilePixels = (uint8_t*)((char*)pTilePixels + nPitch - 0x20);
+      pTilePixels = (uint8_t*)((char*)pTilePixels + (nPitch - 0x20));
     } while (iRow < 0x20);
 
     return 1;
@@ -858,14 +858,14 @@ void __stdcall TILECMP_FixupPointersInPlace(D2TileLibraryHeaderStrc * pTileCmpHd
         } while (byStrChar != '\0');
       }
 
-      pTileSetData = (uint8_t*)(pTileCmpHdr[1].szLibraryName + pTileCmpHdr->nTiles * 0x60 - 8);
+      pTileSetData = (uint8_t*)(pTileCmpHdr[1].szLibraryName + (pTileCmpHdr->nTiles * 0x60 - 8));
       iTileSet = 0;
       if (pTileCmpHdr->nTiles > 0) {
         szText = 0;
         do {
           pBVar1 = pTileCmpHdr->pTiles->abSubTileFlags;
           *(char**)(szText + (intptr_t)(pBVar1 + 0x30)) = pTileCmpHdr->szLibraryName;
-          *(char**)(szText + (intptr_t)(pBVar1 + 0x2c)) = pTileCmpHdr->szLibraryName + *(int*)(szText + (intptr_t)(pBVar1 + 0x20)) - 8;
+          *(char**)(szText + (intptr_t)(pBVar1 + 0x2c)) = pTileCmpHdr->szLibraryName + (*(int*)(szText + (intptr_t)(pBVar1 + 0x20)) - 8);
           nCurTilePixelTotal = *(int*)(szText + (intptr_t)(pBVar1 + 0x28)) * 0x14;
           nTileSetByteOffset = 0;
           if (*(int*)(szText + (intptr_t)(pBVar1 + 0x28)) > 0) {

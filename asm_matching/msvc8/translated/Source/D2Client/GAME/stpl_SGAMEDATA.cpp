@@ -84,7 +84,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::Assign(TSExplicitList<::S
 // Byte-identical to TSExplicitList<CELLIST,..>::Link 00602110; T not proven (no xrefs), filed with the SGAMEDATA block.
 template<> TSLink<::SGAMEDATA>* TSExplicitList<SGAMEDATA, -572662307>::Link(::SGAMEDATA * pNode) {
     if (pNode) {
-      return (TSLink<::SGAMEDATA>*)(pNode->szGameName + this->m_linkoffset - 0x2a);
+      return (TSLink<::SGAMEDATA>*)(pNode->szGameName + (this->m_linkoffset - 0x2a));
     }
 
     return &this->m_terminator;
@@ -107,7 +107,7 @@ template<> uint32_t * __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unrefere
 // stpl-orphan: a COMDAT copy in TSExplicitList<SGAMEDATA, -572662307> that no member owns
 TSLink<::SGAMEDATA>* __fastcall Link_Unreferenced(TSExplicitList<::SGAMEDATA, -572662307>* pThis, int, ::SGAMEDATA * pNode) {
     if (pNode) {
-      return (TSLink<::SGAMEDATA>*)(pNode->szGameName + pThis->m_linkoffset - 0x2a);
+      return (TSLink<::SGAMEDATA>*)(pNode->szGameName + (pThis->m_linkoffset - 0x2a));
     }
 
     return &pThis->m_terminator;
@@ -291,8 +291,8 @@ template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>
         }
         if (bUnlinkOnly) {
           nChunkBase = pTVar1[pBucketIdx].m_linkoffset;
-          pNext = *(TSLink<::SGAMEDATA>**)(pGame->szGameName + nChunkBase - 0x2a);
-          pNode = (TSLink<::SGAMEDATA>*)(pGame->szGameName + nChunkBase - 0x2a);
+          pNext = *(TSLink<::SGAMEDATA>**)(pGame->szGameName + (nChunkBase - 0x2a));
+          pNode = (TSLink<::SGAMEDATA>*)(pGame->szGameName + (nChunkBase - 0x2a));
           if (pNext) {
             pPrevLink = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pNode, -1);
             *pPrevLink = pNext;
@@ -497,7 +497,7 @@ template<> ::SGAMEDATA * __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>
       pGame->m_linktoslot.m_next = 0;
       pGame->m_linktofull.m_prevlink = 0;
       pGame->m_linktofull.m_next = 0;
-      ppSlot = (TSLink<::SGAMEDATA>*)(pGame->szGameName + pList->m_linkoffset - 0x2a);
+      ppSlot = (TSLink<::SGAMEDATA>*)(pGame->szGameName + (pList->m_linkoffset - 0x2a));
     } else {
       pGame = 0;
       ppSlot = &pList->m_terminator;

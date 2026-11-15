@@ -818,7 +818,7 @@ void __fastcall SPELLSEL_HandleSkillSelection(int32_t nSlotIndex) {
       nMouseY = Cursor::GetMouseY();
       if (nMouseX >= nSlotScreenX && nMouseX <= nSlotScreenX + 0x30 && nMouseY >= nSlotScreenY - 0x30 && nMouseY <= nSlotScreenY) {
         if (gSpellSelectionSkillIDs[nSlotIndex] != -1) {
-          GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x51, nSlotIndex * 0x10000 + 0xffff, -1);
+          GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x51, (nSlotIndex << 0x10) + 0xffff, -1);
         }
 
         bIsRightHand = !gbSpellSelMouseHandFlag;
@@ -832,7 +832,7 @@ void __fastcall SPELLSEL_HandleSkillSelection(int32_t nSlotIndex) {
 
         nSkillSlotValue = pSlotSkillXPtr->aRightHandSlots[0];
         gSpellSelLeftSkillBindings[nSlotIndex] = nSkillSlotValue;
-        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x51, nSlotIndex * 0x10000 + (gSpellSelRightSkillBindings[nSlotIndex] ? 0x8000 : 0) + nSlotScreenY, nSkillSlotValue);
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x51, (nSlotIndex << 0x10) + (gSpellSelRightSkillBindings[nSlotIndex] ? 0x8000 : 0) + nSlotScreenY, nSkillSlotValue);
         nSlotScreenY = 0;
         nSlotScreenX = 0xffff;
         do {
@@ -1201,7 +1201,7 @@ void __fastcall SPELLSEL_CycleRightHandSkills(int32_t nSteps) {
     int nCurSlot = gbSpellSelActiveRightSkillSlot;
     int nStepsLeft = nSteps;
     do {
-      nCurSlot = nCurSlot + (uint32_t)bForward * 2 - 1;
+      nCurSlot += (uint32_t)bForward * 2 - 1;
       if (nCurSlot < 0) {
         nCurSlot = 0xf;
       } else if (nCurSlot >= 0x10) {

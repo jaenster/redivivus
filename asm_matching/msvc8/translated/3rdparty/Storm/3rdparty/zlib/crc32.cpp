@@ -2131,7 +2131,7 @@ static int32_t __stdcall crc32_big(uint32_t nLength, uint32_t dwInitialCrc, uint
 }; D2_STATIC_GUARD(gdwCrc32Table4, "Storm::_3rdparty::zlib::crc32::crc32_big::gdwCrc32Table4");
 
     uint32_t nBlockCount;
-    uint32_t dwCrc = ~(((dwInitialCrc & 0xff00) + dwInitialCrc * 0x10000) * 0x100 + (dwInitialCrc >> 0x10 & 0xff) * 0x100 + (dwInitialCrc >> 0x18));
+    uint32_t dwCrc = ~(((dwInitialCrc & 0xff00) + (dwInitialCrc << 0x10) << 8) + ((dwInitialCrc >> 0x10 & 0xff) << 8) + (dwInitialCrc >> 0x18));
     for (; nLength && (uintptr_t)pbData & 3; pbData++) {
       dwCrc = dwCrc << 8 ^ gdwCrc32TableBase[dwCrc >> 0x18 ^ (uint32_t)*pbData];
       nLength--;
@@ -2173,7 +2173,7 @@ static int32_t __stdcall crc32_big(uint32_t nLength, uint32_t dwInitialCrc, uint
     }
 
     dwCrc = ~dwCrc;
-    return ((dwCrc & 0xff00) + dwCrc * 0x10000) * 0x100 + (dwCrc >> 0x10 & 0xff) * 0x100 + (dwCrc >> 0x18);
+    return ((dwCrc & 0xff00) + (dwCrc << 0x10) << 8) + (dwCrc >> 0x10 & 0xff) * 0x100 + (dwCrc >> 0x18);
 }
 
 uint32_t __fastcall gf2_matrix_times(uint32_t dwVec, uint32_t * pdwMat) {
