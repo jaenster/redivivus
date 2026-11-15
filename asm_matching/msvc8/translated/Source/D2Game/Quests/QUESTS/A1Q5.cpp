@@ -346,8 +346,10 @@ void __fastcall Q05_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 
     ::SGAMEDATA* pGame;
     pGame = pQuestArgs->pGame;
+    D2UnitDataPlayerStrc* pPlayerData;
+    pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
     D2BitBufferStrc* pBitBuffer;
-    pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bCompleted;
     bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ForgottenTower, QUESTSTATE_Completed);
     BOOL bJustCompleted;
@@ -979,7 +981,8 @@ void __fastcall Q05_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 // A1Q5 "Forgotten Tower" — quest callback slot 13 (game-load re-sync). Reads the joining player's persisted quest record; if the quest is already Completed or FinishedInPreviousGame, returns immediately. Otherwise reconstructs the volatile nStateFlag/nStateFlagPrev pair by priority-checking Step0x06, Step0x05, Step0x03, Step0x02 so that the quest controller resumes at the correct sub-step after a game reload. Mirror of Q05_SyncQuestStepToPlayer but sets both state fields.
 void __fastcall Q05_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
-    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
     if (bQuestState) {
       return;

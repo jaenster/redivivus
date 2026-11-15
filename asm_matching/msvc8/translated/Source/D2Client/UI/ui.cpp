@@ -4508,7 +4508,7 @@ void __stdcall UI_CloseCurrentDialog() {
       gpUiGoldDialogCancelButton = 0;
     }
     if (gnGoldDialogTransactionType) {
-      if (!(0 < gnGoldDialogTransactionType && gnGoldDialogTransactionType <= 4)) {
+      if (!(gnGoldDialogTransactionType > 0 && gnGoldDialogTransactionType <= 4)) {
         return;
       }
 

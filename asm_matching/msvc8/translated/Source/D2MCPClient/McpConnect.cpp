@@ -745,14 +745,11 @@ void __stdcall NET_MCP_CLIENT_Send_0x13_CancelGameCreate() {
 
 // Tail-calls NET_MCP_CLIENT_Send and returns that BOOL in EAX; its only caller tests EAX to decide whether the realm character-list request failed. Typed void, that decision came from an uninitialised local.
 int __stdcall NET_MCP_CLIENT_Send_0x19_CharList2() {
-    char szPacketBuf[8];
+    MCPPacketClt0x19 tPacket;
     SetD2GSJoinResult(0);
-    szPacketBuf[0] = '\x19';
-    szPacketBuf[1] = '\b';
-    szPacketBuf[2] = '\0';
-    szPacketBuf[3] = '\0';
-    szPacketBuf[4] = '\0';
-    int32_t nSendResult = Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, szPacketBuf, 5);
+    tPacket.nPacketId = '\x19';
+    tPacket.nRequestedCount = 8;
+    int32_t nSendResult = Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&tPacket, 5);
     return nSendResult;
 }
 

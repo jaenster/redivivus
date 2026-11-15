@@ -347,7 +347,8 @@ void __fastcall Q04_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     }
 
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
-    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     D2QuestDataA1Q4Strc* pA1Q4Data = pQuestData->pQuestSpecificData.pA1Q4;
     if (nTargetClassId == 0x92) {
       AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x92, 9);
@@ -1315,8 +1316,10 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
 
     ::SGAMEDATA* pScrollItem;
     pScrollItem = pOperation->sArg.pGame;
+    D2UnitDataPlayerStrc* pQuestDataA1Q4;
+    pQuestDataA1Q4 = D2Common::Units::GetPlayerData(pOperation->pAttacker);
     D2BitBufferStrc* pBitBuffer_00;
-    pBitBuffer_00 = GetQuestBitBufferInline(pScrollItem, pOperation->pAttacker);
+    pBitBuffer_00 = pQuestDataA1Q4->pQuestRecord[pScrollItem->nDifficulty];
     D2BitBufferStrc* pBitBuffer;
     pBitBuffer = pBitBuffer_00;
     _bQuestStateAlt = D2Common::QuestRecord::GetQuestState(pBitBuffer_00, QUEST_TheSearchForCain, QUESTSTATE_Completed);

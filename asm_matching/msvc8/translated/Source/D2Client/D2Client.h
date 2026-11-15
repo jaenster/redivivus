@@ -77,6 +77,7 @@ struct D2SkillStrc;
 struct D2SoundChannelStrc;
 struct D2SoundListNodeStrc;
 struct D2SoundSmpStrc;
+struct D2SoundsTxt;
 struct D2SpeechBankStrc;
 struct D2SpriteCache;
 struct D2TextLineStrc;
@@ -443,7 +444,7 @@ struct D2BNetClientCallbacksStrc {
     /* 0xAC */ BOOL (__stdcall *pfnNewsShutdown)();
     /* 0xB0 */ char (__stdcall *pfnGetProtocolVersionChar)();
     /* 0xB4 */ DWORD (__stdcall *pfnIsEmailRequested)();
-    /* 0xB8 */ void (__fastcall *pfnSendSetEmail)(char *);
+    /* 0xB8 */ BOOL (__fastcall *pfnSendSetEmail)(char *);
     /* 0xBC */ BOOL (__fastcall *pfnSendResetPassword)(char *, char *);
     /* 0xC0 */ BOOL (__fastcall *pfnSendChangeEmail)(char *, char *, char *);
     /* 0xC4 */ int (__stdcall *pfnSendLeaveGame)();
@@ -3977,6 +3978,7 @@ bool __fastcall GetRC4Data(::WardenClient * pThis, int, void * pDest, uint32_t *
 // Globals
 extern int gnScaleFactor;
 extern RGBQUAD nColor;
+extern D2SoundsTxt * pTxtSounds;
 namespace D2Client { namespace ClientModeInGame {
 // TODO: Register param types uncertain - needs manual analysis: pushort (EAX): ushort*, param_ecx (ECX): undefined4, pbyte (EDX): byte*
 extern char gCmdLineHelpText[154];

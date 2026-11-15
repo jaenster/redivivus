@@ -4,6 +4,7 @@
 #include "Source/Bnclient/Bnet.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/Bnclient/Cache.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -270,10 +271,11 @@ static uint32_t gaBnCacheCrc32Table[256] = {
 }; D2_STATIC_GUARD(gaBnCacheCrc32Table, "gaBnCacheCrc32Table");
 static D2BnCacheFileHeaderStrc * gpCacheFileHeader = 0; D2_STATIC_GUARD(gpCacheFileHeader, "gpCacheFileHeader");
 static D2BnCacheBlockEntryStrc * gpCacheBlockTable = 0; D2_STATIC_GUARD(gpCacheBlockTable, "gpCacheBlockTable");
-static uint32_t * g_pCacheCryptTable = 0; D2_STATIC_GUARD(g_pCacheCryptTable, "g_pCacheCryptTable");
+uint32_t * g_pCacheCryptTable = 0; D2_GLOBAL_GUARD(g_pCacheCryptTable, "g_pCacheCryptTable");
 static uint8_t * gpCacheBufferPoolFirst = 0; D2_STATIC_GUARD(gpCacheBufferPoolFirst, "gpCacheBufferPoolFirst");
 static uint32_t gbCacheIsOpen = 0; D2_STATIC_GUARD(gbCacheIsOpen, "gbCacheIsOpen");
 static _RTL_CRITICAL_SECTION lpCriticalSection_00881894 = {}; D2_STATIC_GUARD(lpCriticalSection_00881894, "lpCriticalSection_00881894");
+FILETIME lpFileTime_008818ac = FILETIME(); D2_GLOBAL_GUARD(lpFileTime_008818ac, "lpFileTime_008818ac");
 
 namespace Bnclient::Cache {
 
@@ -334,7 +336,6 @@ static void CACHE_EncryptBlock(uint32_t dwKey, uint32_t nByteLen, uint32_t * pdw
 
 static LPFILETIME CACHE_GetFileTime(uint32_t nSecondsFromNow) {
     // Static local variables (originally global data)
-    static FILETIME lpFileTime_008818ac = FILETIME(); D2_STATIC_GUARD(lpFileTime_008818ac, "Bnclient::Cache::CACHE_GetFileTime::lpFileTime_008818ac");
     static uint32_t gdwCacheLastTickCount; D2_STATIC_GUARD_BSS(gdwCacheLastTickCount, "Bnclient::Cache::CACHE_GetFileTime::gdwCacheLastTickCount");
     static uint32_t gnCacheLastFileTimeParam; D2_STATIC_GUARD_BSS(gnCacheLastFileTimeParam, "Bnclient::Cache::CACHE_GetFileTime::gnCacheLastFileTimeParam");
 

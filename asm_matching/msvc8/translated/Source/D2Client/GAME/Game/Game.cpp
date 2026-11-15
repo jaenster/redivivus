@@ -165,7 +165,7 @@ static D2UIFlagInitStrc g_UIFlagInitGameDataPanel3[2] = {
     }
 }; D2_STATIC_GUARD(g_UIFlagInitGameDataPanel3, "g_UIFlagInitGameDataPanel3");
 char RealmName[32] = {0}; D2_GLOBAL_GUARD(RealmName, "RealmName");
-static short gnTcpIpJoinId = 0; D2_STATIC_GUARD(gnTcpIpJoinId, "gnTcpIpJoinId");
+short gnTcpIpJoinId = 0; D2_GLOBAL_GUARD(gnTcpIpJoinId, "gnTcpIpJoinId");
 eD2PlayerClassID nD2PlayerClassID = 0; D2_GLOBAL_GUARD(nD2PlayerClassID, "nD2PlayerClassID");
 int gConnectLongTimeoutStartTick = 0; D2_GLOBAL_GUARD(gConnectLongTimeoutStartTick, "gConnectLongTimeoutStartTick");
 static HANDLE HostGameThread = 0; D2_STATIC_GUARD(HostGameThread, "HostGameThread");

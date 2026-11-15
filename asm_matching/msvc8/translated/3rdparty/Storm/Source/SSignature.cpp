@@ -103,7 +103,7 @@ void __fastcall SSignatureVerifyStream_ProvideData(D2SsigContextStrc * pContext,
     pContext->nBytesBuffered += nDataLen;
 }
 
-void __fastcall SSIG_InitRSAPair(BigData * * pRSAPair) {
+BigData * * __fastcall SSIG_InitRSAPair(BigData * * pRSAPair) {
     int dwSEHTryLevel = -1;
     pfnEHHandlerRoutine pfnSEHHandler = __GSHandlerCheck_EH_6c9ef8;
     void* pPrevExceptionList = ExceptionList;
@@ -112,6 +112,7 @@ void __fastcall SSIG_InitRSAPair(BigData * * pRSAPair) {
     dwSEHTryLevel = 0;
     SBig::SBigNew(pRSAPair + 1);
     ExceptionList = pPrevExceptionList;
+    return pRSAPair;
 }
 
 void __fastcall SSIG_FreeRSAPair(BigData * * pRSAPair) {

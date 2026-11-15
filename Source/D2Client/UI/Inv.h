@@ -176,7 +176,6 @@ int Unreferenced_00486d70();
 BOOL __fastcall INV_IsMouseOverCloseButton(int32_t nMouseX, int32_t nMouseY);
 void __stdcall INV_HandleInventoryRightClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INV_HandleMouseMove(struct D2UIMouseMsgStrc * pMsg);
-int32_t __stdcall ClickItemRight(int32_t pItem, int32_t pGridCoords, int32_t nPage, struct D2UnitStrc * pPlayer, struct D2InventoryStrc * pInventory);
 // Resets the shop/inventory panel UI state. Fifty-six bytes whose only writes are stores to globals through EAX, so it preserves ECX. Typed __stdcall, the decompiler treated ECX as killed by the call, and INV_HandleShopLeftClick carries its button-loop stride there across two calls to this function - the stride became an unassigned local and the shop button scan advanced by garbage.
 void __fastcall INV_ResetHoverAndContextState();
 void __fastcall INV_ClearItemDescription(struct D2UnitStrc * pUnit);
@@ -289,7 +288,6 @@ void __fastcall ITEM_BuildSetItemTooltip(struct D2UnitStrc * pUnit);
 void __stdcall INV_ShowTransmogrifyTooltip();
 void __stdcall LoadItemDesc(struct D2UnitStrc * pUnit, int32_t bUsePlayer);
 void __stdcall DRAW_UI_Inventory();
-BOOL __stdcall ClickItemLeft(struct D2UnitStrc * pUnit, struct D2InventoryStrc * pInventory, DWORD x, DWORD y, struct D2UnitStrc * targetItem, struct D2InventoryLayout * pInvLayout, uint32_t nPage);
 uint32_t __fastcall EQUIP_ItemRight(struct D2UnitStrc * pUnit, struct D2InventoryStrc * pInventory, uint32_t nBodySlot);
 // Handles left-click equip action for inventory items. Checks equipment restrictions and sends network packets.
 uint32_t __fastcall EQUIP_ItemLeft(struct D2UnitStrc * pUnit, struct D2InventoryStrc * pInventory, uint32_t nBodySlot);
@@ -310,6 +308,6 @@ void __stdcall INPUT_CubeLeftClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall DrawMercInventory();
 void StaticInit_gpInvRecipeScrollImage();
 #endif // D2_MODULE_D2Client
-// 51 internal functions (defined in .cpp)
+// 53 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::Inv

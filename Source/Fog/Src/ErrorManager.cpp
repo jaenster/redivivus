@@ -141,18 +141,16 @@ DWORD __fastcall GetParentProcessId(int32_t nProcessId) {
 }
 
 uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, DWORD nBufferSize) {
+    uint8_t bResult;
     HANDLE hProcess = OpenProcess(0x410, 0, nProcessId);
-    if (hProcess) {
-      DWORD dwLength;
-      /* DWORD nSize for GetModuleFileNameExA */ /* LPSTR lpFilename for GetModuleFileNameExA */ /* HMODULE hModule for GetModuleFileNameExA */ /* HANDLE hProcess for GetModuleFileNameExA */ dwLength = GetModuleFileNameExA(hProcess, (HMODULE)0x0, szText, nBufferSize);
-      if (dwLength) {
-        /* HANDLE hObject for CloseHandle */ CloseHandle(hProcess);
-        return 1;
-      }
+    if (hProcess && GetModuleFileNameExA(hProcess, (HMODULE)0x0, szText, nBufferSize)) {
+      bResult = 1;
+    } else {
+      bResult = 0;
     }
 
     /* HANDLE hObject for CloseHandle */ CloseHandle(hProcess);
-    return 0;
+    return bResult;
 }
 
 // Writes process metadata to crash report: application name, inspector tags, admin status via AllocateAndInitializeSid (SECURITY_BUILTIN_DOMAIN_RID + DOMAIN_ALIAS_RID_ADMINS), process/parent/grandparent paths, game/system locale from gaLocaleCodeStrings, and attaches log files (21 slots from InitLogFilePathPointers). Locale lookup uses MISC_GetLanguageCode and STRTABLE_GetRegistryLanguage.

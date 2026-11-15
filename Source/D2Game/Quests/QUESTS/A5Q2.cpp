@@ -134,7 +134,8 @@ void __fastcall Q32_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     }
 
     ::SGAMEDATA* pGame = pQuestData->pGame;
-    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     *(uint32_t*)(char*)&pBitBuffer2 = (uint32_t)(uintptr_t)pBitBuffer;
     if (nMsgIndex == 0x4e80) {
       pDVar1->bQuestCompleted = 1;
@@ -273,7 +274,8 @@ void __fastcall Q32_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     int nNPCClassId;
     uint32_t nGossipLineIdx;
     ::SGAMEDATA* pGame = pQuestData->pGame;
-    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
     if (!pQuestArgs->pTarget) {
@@ -580,7 +582,8 @@ void __fastcall Q32_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     }
 
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
-    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
     if (bQuestState == 1) {
       return;

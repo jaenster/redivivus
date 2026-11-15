@@ -453,42 +453,41 @@ static void __stdcall DAMAGE_ApplyCold(D2UnitStrc * pUnit, int32_t nColdLength, 
 void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
     uint8_t byAIDelay;
     BOOL bIsModeZeroDeath = SUnit::CheckForModeZeroDeath(pUnit);
-    if (bIsModeZeroDeath) {
-      uint32_t bStateActive;
-      bStateActive = D2Common::DATATBLS::ItemStats::STATES_DoesStateStayOnDeath(pUnit, eState);
-      if (bStateActive) {
+    uint32_t bStateActive;
+    bStateActive = bIsModeZeroDeath ? D2Common::DATATBLS::ItemStats::STATES_DoesStateStayOnDeath(pUnit, eState) : 0;
+    if (!bStateActive) {
+      D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
+      SUnit::FreeCombatAndChangeAnimMode(SUnit::GetGamePointer(pUnit), pUnit, 1);
+      if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
         return;
       }
-    }
 
-    D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
-    SUnit::FreeCombatAndChangeAnimMode(SUnit::GetGamePointer(pUnit), pUnit, 1);
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+      ::SGAMEDATA* pGame = SUnit::GetGamePointer(pUnit);
+      if (!(pGame && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
+        return;
+      }
+
+      D2MonStatsTxt* pMonStatsTxt = pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt;
+      if (!pMonStatsTxt) {
+        return;
+      }
+      if (pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER) {
+        byAIDelay = pMonStatsTxt->aidel[0];
+      } else {
+        byAIDelay = pMonStatsTxt->aidel[pGame->nDifficulty];
+      }
+
+      uint32_t nAIResumeDelay = (uint32_t)byAIDelay;
+      if (!nAIResumeDelay) {
+        nAIResumeDelay = 0xf;
+      }
+
+      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+      GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + nAIResumeDelay, 0, 0);
       return;
     }
 
-    ::SGAMEDATA* pGame = SUnit::GetGamePointer(pUnit);
-    if (!(pGame && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
-      return;
-    }
-
-    D2MonStatsTxt* pMonStatsTxt = pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt;
-    if (!pMonStatsTxt) {
-      return;
-    }
-    if (pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER) {
-      byAIDelay = pMonStatsTxt->aidel[0];
-    } else {
-      byAIDelay = pMonStatsTxt->aidel[pGame->nDifficulty];
-    }
-
-    uint32_t nAIResumeDelay = (uint32_t)byAIDelay;
-    if (!nAIResumeDelay) {
-      nAIResumeDelay = 0xf;
-    }
-
-    GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
-    GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + nAIResumeDelay, 0, 0);
+    return;
 }
 
 // Server-side application of the Freeze effect to a target (pUnit2) from attacker pUnit for nParam frames. Players and bosses/special/uninterruptable/merc monsters fall back to DAMAGE_ApplyCold instead of being frozen. For eligible monsters: bails if a monster delay-by-difficulty check passes, divides duration by the difficulty's MonsterFreezeDivisor, and computes an expire game-frame. Creates+attaches a STATE_freeze statlist with expire callback SUNITDMG_StatExpireCallback_ResumeAI (or extends an existing freeze's timeout to the later expiry). Fires game events: event 0xc with the expire frame, an AITHINK timer trigger, and event 2 one frame after expiry to resume AI. Halts via Fog::ErrorManager on a zero freeze divisor or a non-monster reaching the event stage.
@@ -1899,12 +1898,7 @@ static void __stdcall DAMAGE_AddDamageListEntry(::SGAMEDATA * nGamePtr, D2Damage
     pNewCombatEntry->eDefenderType = pDefender->eUnitType;
     pNewCombatEntry->nDefenderGUID = pDefender->nUnitGUID;
     D2CombatEntryStrc* pEntryData = (D2CombatEntryStrc*)&pNewCombatEntry->sDamage;
-    for (i = 0x1c; i; i--) {
-      pEntryData->field_0 = pDamage->dwHitFlags;
-      pDamage = (D2DamageStrc*)&pDamage->wResultFlags;
-      pEntryData = (D2CombatEntryStrc*)&pEntryData->eAttackerType;
-    }
-
+    memcpy(pEntryData, pDamage, 0x70);
     pNewCombatEntry->pNext = (D2CombatEntryStrc*)pAttacker->pCombat;
     pAttacker->pCombat = (uint8_t*)pNewCombatEntry;
 }

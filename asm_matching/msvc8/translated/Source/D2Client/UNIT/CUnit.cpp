@@ -662,7 +662,7 @@ BOOL __fastcall PlayerCanBeInterrupted(D2UnitStrc * pUnit, D2SkillStrc * pSkill)
           }
       }
 
-      return 1;
+      break;
     }
 
     return 1;
@@ -2613,45 +2613,36 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
     bool bMultiPiece;
     bMultiPiece = false;
     if (eUnitType != UNIT_PLAYER) {
-      switch (eUnitType) {
-        case UNIT_MONSTER:
-          {
-            pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
-            if (!pMonStats2) {
-              goto test_frame_bounds;
-            }
+      if (eUnitType != UNIT_MONSTER) {
+        if (eUnitType != UNIT_OBJECT) {
+          goto test_frame_bounds;
+        }
+        if (!pObjectsTxt) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x741);
+          exit(-1);
+        }
+        if (pObjectsTxt->IsDoor) {
+          ePlayerAnimMode = pUnit->eAnimMode.ePlayerMode;
+          if (ePlayerAnimMode == Walk || ePlayerAnimMode == eD2PlayerAnimMode_ns::GetHit || ePlayerAnimMode == TownNeutral) {
+            uResult = CUNIT_IsClickInSpriteBounds(nClickY, pUnitSaved, pObjectsTxt, nClickXSaved);
+            return uResult;
+          }
+        } else {
+          if (pObjectsTxt->CollisionSubst) {
+            uResult = CUNIT_IsClickInSpriteBounds(nClickY, pUnitSaved, pObjectsTxt, nClickXSaved);
+            return uResult;
+          }
+        }
 
-            byTotalPieces = pMonStats2->TotalPieces;
-            break;
-          }
-        default:
-          {
-            goto test_frame_bounds;
-          }
-        case UNIT_OBJECT:
-          {
-            if (!pObjectsTxt) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x741);
-              exit(-1);
-            }
-            if (pObjectsTxt->IsDoor) {
-              ePlayerAnimMode = pUnit->eAnimMode.ePlayerMode;
-              if (ePlayerAnimMode == Walk || ePlayerAnimMode == eD2PlayerAnimMode_ns::GetHit || ePlayerAnimMode == TownNeutral) {
-                uResult = CUNIT_IsClickInSpriteBounds(nClickY, pUnitSaved, pObjectsTxt, nClickXSaved);
-                return uResult;
-              }
-            } else {
-              if (pObjectsTxt->CollisionSubst) {
-                uResult = CUNIT_IsClickInSpriteBounds(nClickY, pUnitSaved, pObjectsTxt, nClickXSaved);
-                return uResult;
-              }
-            }
+        byTotalPieces = pObjectsTxt->TotalPieces;
+      } else {
+        pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
+        if (!pMonStats2) {
+          goto test_frame_bounds;
+        }
 
-            byTotalPieces = pObjectsTxt->TotalPieces;
-            break;
-          }
+        byTotalPieces = pMonStats2->TotalPieces;
       }
-
       if (byTotalPieces < 2) {
         goto test_frame_bounds;
       }

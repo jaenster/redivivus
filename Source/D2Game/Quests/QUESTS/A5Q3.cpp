@@ -752,8 +752,10 @@ void __fastcall Q33_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     uint32_t nGossipIndex;
     ::SGAMEDATA* pGame;
     pGame = pQuestData->pGame;
+    D2UnitDataPlayerStrc* pPlayerData;
+    pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
     D2BitBufferStrc* pBitBuffer;
-    pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bIsJustCompleted;
     bIsJustCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
     BOOL bIsCompleted;
@@ -1101,8 +1103,10 @@ void __fastcall Q33_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
     ::SGAMEDATA* pGame;
     pGame = pQuestArgs->pGame;
+    D2UnitDataPlayerStrc* pPlayerData;
+    pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
     D2BitBufferStrc* pBitBuffer;
-    pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestStateResult;
     bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
     if (bQuestStateResult || (bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_FinishedInPreviousGame) , bQuestStateResult != 0)) {

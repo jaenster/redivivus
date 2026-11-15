@@ -66,7 +66,7 @@ void __fastcall SYSTEM_Win32TerminateProcess(uint32_t uExitCode) {
 // (+0x18). Fog::Src::ErrorManager::GetParentProcessId @ 00407990 does read +0x18 and keeps its name.
 // The offset was only readable once the local was widened to the real struct; before that it was
 // six loose dwords with invented names. No callers, so the rename is local.
-void __stdcall SYSTEM_GetCurrentProcessThreadCount() {
+int __stdcall SYSTEM_GetCurrentProcessThreadCount() {
     PROCESSENTRY32W processEntry;
     DWORD dwCurrentPid = GetCurrentProcessId();
     HANDLE hSnapshot = (HANDLE)CreateToolhelp32Snapshot(0xf, 0);
@@ -79,8 +79,10 @@ void __stdcall SYSTEM_GetCurrentProcessThreadCount() {
 
     /* HANDLE hObject for CloseHandle */ CloseHandle(hSnapshot);
     if (bFound) {
-      return;
+      return processEntry.cntThreads;
     }
+
+    return -1;
 }
 
 static uint8_t __stdcall SYSTEM_GetStackRegion(LPCVOID * ppStackBase, LPCVOID pAddress, LPCVOID * ppStackTop) {

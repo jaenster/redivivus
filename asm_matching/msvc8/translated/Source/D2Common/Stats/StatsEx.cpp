@@ -164,9 +164,8 @@ static void __stdcall STATLIST_RemoveStatFromArray(D2PoolManagerStrc * pPoolMana
       return;
     }
 
-    short int nNewCapacity = ppStatArray->wStatCapacity - 4;
-    ppStatArray->wStatCapacity = nNewCapacity;
-    D2StatStrc* pReallocBuf = (D2StatStrc*)D2_REALLOC_POOL_AT(pPoolManager2, ppStatArray->pStatInfo, nNewCapacity * 8, ".\\Stats\\StatsEx.cpp", 0x110);
+    ppStatArray->wStatCapacity = ppStatArray->wStatCapacity - 4;
+    D2StatStrc* pReallocBuf = (D2StatStrc*)D2_REALLOC_POOL_AT(pPoolManager2, ppStatArray->pStatInfo, ppStatArray->wStatCapacity * 8, ".\\Stats\\StatsEx.cpp", 0x110);
     ppStatArray->pStatInfo = pReallocBuf;
 }
 
@@ -605,8 +604,8 @@ int32_t __stdcall STATLIST_GetStatBonusFromLists(D2UnitStrc * pUnit, eD2UnitStat
     }
 
     int32_t nMinShifted = STATLIST_GetStatValueByIdAndLayer(pStatsEx, eUnitStat, (uint16_t)nLayer);
-    int32_t nBaseValue = STATLIST_GetStatFromBaseArray(pStatsEx, eUnitStat, (uint16_t)nLayer);
-    return nMinShifted - nBaseValue;
+    nMinShifted -= STATLIST_GetStatFromBaseArray(pStatsEx, eUnitStat, (uint16_t)nLayer);
+    return nMinShifted;
 }
 
 int32_t __stdcall STATLIST_CalcStatWithPercentBonus(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, eD2UnitStat eStat, int32_t bIncludeBonus) {

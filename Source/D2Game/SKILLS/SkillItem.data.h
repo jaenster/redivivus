@@ -14,3 +14,4 @@
 #include "Source/D2Headers/d2_platform.h"
 
 extern uint8_t gaSkillLevelCaps[60];
+extern void* gapSkillDispatchTableBase;

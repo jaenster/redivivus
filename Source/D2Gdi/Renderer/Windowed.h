@@ -236,7 +236,7 @@ void __fastcall DrawSolidSquare(POINT * pPoint, BYTE nSize, BYTE nPaletteIndex);
 void __stdcall RENDERER_WINDOWED_ClearFramebuffer(int bPartial);
 void __fastcall ClearScreen(BOOL bPartial);
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
-void __thiscall RENDERER_WINDOWED_ClearScreen(int nParam, BYTE dwParam2, BYTE dwParam3);
+void __fastcall RENDERER_WINDOWED_ClearScreen(int nParam, BYTE nRed, BYTE nGreen, BYTE nBlue);
 BOOL __fastcall DrawShadowTile(struct D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, int32_t nDrawMode, int32_t nScreenPanels);
 BOOL __fastcall DrawTransWallTile(struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, struct D2GfxLightStrc * pLight, int nScreenPanels, BYTE nAlpha);
 BOOL __fastcall DrawWallTile(struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, struct D2GfxLightStrc * pLight, int nScreenPanels);

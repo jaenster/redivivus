@@ -241,23 +241,21 @@ int32_t __fastcall ITEM_CheckItemEquipRequirements(D2UnitStrc * pUnit, D2UnitStr
     uint32_t bQuiverTypeMatches;
     D2InventoryStrc* pInventory;
     BOOL bMeetsEquipReq = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pUnit2, pUnit, 0, nullptr, nullptr, nullptr);
-    if (bMeetsEquipReq) {
-      int32_t bRequiresQuiver;
-      bRequiresQuiver = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pUnit2);
-      if (bRequiresQuiver) {
-        pInventory = pUnit->pInventory;
-        pWeaponSlot = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
-        if (pWeaponSlot == pUnit2) {
-          pWeaponSlot = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
-        }
+    int32_t bRequiresQuiver;
+    bRequiresQuiver = bMeetsEquipReq ? D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pUnit2) : 0;
+    if (!bRequiresQuiver) {
+      return bMeetsEquipReq;
+    }
 
-        bQuiverTypeMatches = pWeaponSlot ? (eQuiverType = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pUnit2), D2Common::ITEMS::Items::ITEMS_IsA(pWeaponSlot, eQuiverType)) : 0;
-        if (!bQuiverTypeMatches) {
-          return 0;
-        }
+    pInventory = pUnit->pInventory;
+    pWeaponSlot = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
+    if (pWeaponSlot == pUnit2) {
+      pWeaponSlot = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
+    }
 
-        return bMeetsEquipReq;
-      }
+    bQuiverTypeMatches = pWeaponSlot ? (eQuiverType = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pUnit2), D2Common::ITEMS::Items::ITEMS_IsA(pWeaponSlot, eQuiverType)) : 0;
+    if (!bQuiverTypeMatches) {
+      return 0;
     }
 
     return bMeetsEquipReq;
@@ -3411,11 +3409,7 @@ D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket) {
       pCursorItem_lcl = ITEM_CreateItemFromBodyPacket(0, 0, 0, pbPacketSaved, &stItemDetails);
       D2Common::ITEMS::Items::SetBodyLoc(pCursorItem_lcl, stItemDetails.nBodyLoc);
       bAnyItemChanged = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pCursorItem_lcl, stItemDetails.nBodyLoc == 0xb || stItemDetails.nBodyLoc == 0xc ? 4 : 3);
-      if (!bAnyItemChanged) {
-        return nullptr;
-      }
-
-      bFlag = ITEM_SetItemInBodyLocation(pInventory, pCursorItem_lcl, (uint32_t)stItemDetails.nBodyLoc);
+      bFlag = bAnyItemChanged ? ITEM_SetItemInBodyLocation(pInventory, pCursorItem_lcl, (uint32_t)stItemDetails.nBodyLoc) : 0;
       if (!bFlag) {
         return nullptr;
       }

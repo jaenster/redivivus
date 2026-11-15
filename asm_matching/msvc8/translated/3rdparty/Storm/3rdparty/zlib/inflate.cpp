@@ -2872,29 +2872,26 @@ int __fastcall inflateInit_(z_stream * pStream, char * szVersion, int32_t nStrea
 uint32_t __fastcall inflatePrime(z_stream * pStream, int32_t nBits, uint32_t nValue) {
     uint32_t nOldBits;
     uint32_t nTotalBits;
-    if (pStream) {
-      inflate_state* pState;
-      pState = (inflate_state*)pStream->state;
-      if (pState) {
-        if (nBits < 0) {
-          pState->hold = 0;
-          pState->bits = 0;
-          return 0;
-        }
-        if (nBits > 0x10) {
-          return -2;
-        }
+    inflate_state* pState;
+    pState = pStream ? (inflate_state*)pStream->state : 0;
+    if (!pState) {
+      return -2;
+    }
+    if (nBits < 0) {
+      pState->hold = 0;
+      pState->bits = 0;
+      return 0;
+    }
+    if (nBits > 0x10) {
+      return -2;
+    }
 
-        nOldBits = pState->bits;
-        nTotalBits = nOldBits + nBits;
-        if (nTotalBits <= 0x20) {
-          pState->bits = nTotalBits;
-          pState->hold += ((1 << (uint8_t)nBits) - 1U & nValue) << D2_SHIFT_COUNT(nOldBits);
-          return 0;
-        }
-
-        return -2;
-      }
+    nOldBits = pState->bits;
+    nTotalBits = nOldBits + nBits;
+    if (nTotalBits <= 0x20) {
+      pState->bits = nTotalBits;
+      pState->hold += ((1 << (uint8_t)nBits) - 1U & nValue) << D2_SHIFT_COUNT(nOldBits);
+      return 0;
     }
 
     return -2;
@@ -4261,61 +4258,58 @@ uint32_t __fastcall inflateSync(z_stream * pStream) {
     inflateSync_Slotm8 uSlot8;
     inflate_state* pStateSaved;
     inflate_state* pState;
-    if (pStream) {
-      uint32_t nSyncBytes;
-      pState = (inflate_state*)pStream->state;
-      if (pState) {
-        if (!pStream->avail_in && pState->bits < 8) {
-          return -5;
-        }
-
-        *(uint32_t*)uSlot8.nLife0 = (uint32_t)(uintptr_t)pStream;
-        if (pState->mode != 0x1f) {
-          nPartialBits = pState->bits & 7;
-          pState->hold <<= (int8_t)nPartialBits;
-          nSyncBytes = pState->bits - nPartialBits;
-          nBytesWritten = 0;
-          pState->mode = 0x1f;
-          pState->bits = nSyncBytes;
-          while (7 < nSyncBytes) {
-            nSyncBytes = pState->hold;
-            pState->hold >>= 8;
-            pState->bits -= 8;
-            uSlot8.nLife0[nBytesWritten] = (uint8_t)nSyncBytes;
-            nBytesWritten++;
-            nSyncBytes = pState->bits;
-          }
-
-          pState->have = 0;
-          syncsearch(&pState->have, nBytesWritten, uSlot8.nLife0);
-        }
-
-        nSyncBytes = syncsearch(&pState->have, pStream->avail_in, pStream->next_in);
-        pStream->total_in += nSyncBytes;
-        pStream->avail_in -= nSyncBytes;
-        pStream->next_in += nSyncBytes;
-        uSlot8.nTotalIn = pStream->total_in;
-        if (pState->have != 4) {
-          return -3;
-        }
-
-        pStateSaved = (inflate_state*)pStream->state;
-        nSyncBytes = pStream->total_out;
-        if (pStateSaved) {
-          pStateSaved->wsize = 0;
-          pStateSaved->whave = 0;
-          pStateSaved->wnext = 0;
-          inflateResetKeep(pStream);
-        }
-
-        pStream->total_out = nSyncBytes;
-        pStream->total_in = uSlot8.nTotalIn;
-        pState->mode = 0xb;
-        return 0;
-      }
+    uint32_t nSyncBytes;
+    pState = pStream ? (inflate_state*)pStream->state : 0;
+    if (!pState) {
+      return -2;
+    }
+    if (!pStream->avail_in && pState->bits < 8) {
+      return -5;
     }
 
-    return -2;
+    *(uint32_t*)uSlot8.nLife0 = (uint32_t)(uintptr_t)pStream;
+    if (pState->mode != 0x1f) {
+      nPartialBits = pState->bits & 7;
+      pState->hold <<= (int8_t)nPartialBits;
+      nSyncBytes = pState->bits - nPartialBits;
+      nBytesWritten = 0;
+      pState->mode = 0x1f;
+      pState->bits = nSyncBytes;
+      while (7 < nSyncBytes) {
+        nSyncBytes = pState->hold;
+        pState->hold >>= 8;
+        pState->bits -= 8;
+        uSlot8.nLife0[nBytesWritten] = (uint8_t)nSyncBytes;
+        nBytesWritten++;
+        nSyncBytes = pState->bits;
+      }
+
+      pState->have = 0;
+      syncsearch(&pState->have, nBytesWritten, uSlot8.nLife0);
+    }
+
+    nSyncBytes = syncsearch(&pState->have, pStream->avail_in, pStream->next_in);
+    pStream->total_in += nSyncBytes;
+    pStream->avail_in -= nSyncBytes;
+    pStream->next_in += nSyncBytes;
+    uSlot8.nTotalIn = pStream->total_in;
+    if (pState->have != 4) {
+      return -3;
+    }
+
+    pStateSaved = (inflate_state*)pStream->state;
+    nSyncBytes = pStream->total_out;
+    if (pStateSaved) {
+      pStateSaved->wsize = 0;
+      pStateSaved->whave = 0;
+      pStateSaved->wnext = 0;
+      inflateResetKeep(pStream);
+    }
+
+    pStream->total_out = nSyncBytes;
+    pStream->total_in = uSlot8.nTotalIn;
+    pState->mode = 0xb;
+    return 0;
 }
 
 int __fastcall inflateSyncPoint(z_stream * pStream) {
@@ -4392,22 +4386,19 @@ int __fastcall inflateUndermine(z_stream * pStream, int nSubvert) {
 }
 
 int32_t __fastcall inflateMark(z_stream * pStream) {
-    if (pStream) {
-      int* pState;
-      pState = (int*)pStream->state;
-      if (pState) {
-        if (*pState == 0xf) {
-          return pState[0x6f1] * 0x10000 + pState[0x10];
-        }
-        if (*pState == 0x18) {
-          return pState[0x6f1] * 0x10000 + (pState[0x6f2] - pState[0x10]);
-        }
-
-        return pState[0x6f1] << 0x10;
-      }
+    int* pState;
+    pState = pStream ? (int*)pStream->state : 0;
+    if (!pState) {
+      return -0x10000;
+    }
+    if (*pState == 0xf) {
+      return pState[0x6f1] * 0x10000 + pState[0x10];
+    }
+    if (*pState == 0x18) {
+      return pState[0x6f1] * 0x10000 + (pState[0x6f2] - pState[0x10]);
     }
 
-    return -0x10000;
+    return pState[0x6f1] << 0x10;
 }
 
 static void * keep_00429aa0 = (0 ? (fixedtables(*(inflate_state * *)0), (void *)0) : (void *)0);

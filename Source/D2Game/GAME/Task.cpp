@@ -114,7 +114,7 @@ void __fastcall LINKLIST_AppendToList(D2LinkNodeStrc * * ppList, D2LinkNodeStrc 
     }
 }
 
-void __fastcall TASK_UnlinkTaskFromList(D2LinkNodeStrc * pLink) {
+D2LinkNodeStrc * __fastcall TASK_UnlinkTaskFromList(D2LinkNodeStrc * pLink) {
     if (!pLink) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x87);
       exit(-1);
@@ -122,6 +122,7 @@ void __fastcall TASK_UnlinkTaskFromList(D2LinkNodeStrc * pLink) {
 
     pLink->pNext->pPrev = pLink->pPrev;
     pLink->pPrev->pNext = pLink->pNext;
+    return pLink;
 }
 
 // Returns the current millisecond tick used to timestamp tasks. Wraps GetTickCount; the return is 32 bits in EAX only - EDX is never written before RET, and the sole caller stores four bytes.

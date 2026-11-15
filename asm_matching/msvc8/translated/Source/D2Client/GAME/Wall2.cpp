@@ -997,7 +997,6 @@ static void __stdcall WALL2_AddShadowPassTile(D2Wall2CellStrc * pWall2Cell, D2Ro
 static void __stdcall WALL2_InsertUnitDraw(D2Wall2CellStrc * pWall2Cell, D2UnitStrc * pUnit, D2Wall2DrawListStrc * pDrawList) {
     int nUnitPos;
     D2Wall2DrawEntryStrc* pDVar2;
-    D2Wall2DrawEntryStrc* pNextNode;
     uint32_t nEntryIdx = pDrawList->nWall2EntryCount;
     pDrawList->nWall2EntryCount = nEntryIdx + 1;
     if (nEntryIdx >= 3000) {
@@ -1035,14 +1034,7 @@ static void __stdcall WALL2_InsertUnitDraw(D2Wall2CellStrc * pWall2Cell, D2UnitS
       return;
     }
 
-    do {
-      pNextNode = pDVar2->pNext;
-      if (!pNextNode) {
-        break;
-      }
-
-      pDVar2 = pNextNode;
-    } while (pNextNode);
+    for (; pDVar2 && pDVar2->pNext; pDVar2 = pDVar2->pNext) {}
 
     pDVar2->pNext = pDVar1;
 }

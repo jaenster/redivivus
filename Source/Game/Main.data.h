@@ -14,12 +14,15 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2IniConfigStrc;
 struct D2IniConfigValuesStrc;
+typedef int32_t (__fastcall *fnAppModeRun)(D2IniConfigStrc * pD2IniConfig);
 
 namespace Game::Main {
 extern D2IniConfigValuesStrc D2IniConfigValues[58];
 // lpServiceStatus parameter of SetServiceStatus
 extern _SERVICE_STATUS lpServiceStatus_007065fc;
+extern fnAppModeRun * CurrentApplication;
 extern eD2ApplicationMode geModState;
 extern SERVICE_STATUS_HANDLE ghServiceCtrlHandler;
 extern HINSTANCE WinMain_hInstance;

@@ -13,6 +13,10 @@
 
 #include "Source/D2Headers/d2_platform.h"
 
+extern int gnSelectExclusionRectLeft;
+extern int gnSelectExclusionRectTop;
+extern int gnSelectExclusionRectRight;
+
 namespace D2Client { namespace _Selection {
 extern int nSelectedUnitGUID;
 extern eD2UnitType eSelectedUnitType;

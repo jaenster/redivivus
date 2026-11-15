@@ -1272,7 +1272,7 @@ void __stdcall AUTOMAP_AllocLayer(int32_t nLayer) {
 }
 
 // @sourcefile .\UI\automap.cpp
-D2AutomapLayerStrc * AUTOMAP_AddLayer(int32_t nLayer) {
+static D2AutomapLayerStrc * AUTOMAP_AddLayer(int32_t nLayer) {
     D2AutomapLayerStrc* pLayer;
     D2AutomapLayerStrc* spAutomap;
     for (pLayer = sgpAutomapLayer; pLayer; pLayer = pLayer->pNext) {

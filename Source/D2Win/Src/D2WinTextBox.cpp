@@ -549,7 +549,7 @@ int32_t __fastcall D2WINTEXTBOX_GetLastLineIndex(::D2WinTextBox * pTextBox) {
 
       pCurLineNode = pTextBox->sListState.pLineHead;
       nCount = 0;
-      while (pCurLineNode && (pCurLineNode = pCurLineNode->pNext)) {
+      for (; pCurLineNode && pCurLineNode->pNext; pCurLineNode = pCurLineNode->pNext) {
         nCount++;
       }
 
@@ -1534,8 +1534,8 @@ BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint1
       if (nAlignment == 2) {
         Fog::File::CONTAINER_InitializeBuffer(wszIndentBuf, 2, 6, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         memcpy(wszIndentBuf, L"     ", 0xc);
-        nLine = D2WinFont::DRAW_text0(wszIndentBuf);
-        nMaxPixelWidth = nAvailWidth - nLine;
+        nAvailWidth -= D2WinFont::DRAW_text0(wszIndentBuf);
+        nMaxPixelWidth = nAvailWidth;
       }
 
       pFirstLine = (uint16_t*)Storm::Source::SMem::SMemAlloc(0x800, ".\\Src\\D2WinTextBox.cpp", 0x497, 0);

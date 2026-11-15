@@ -2119,10 +2119,8 @@ void __fastcall SKILLS_SetMissileDirectionCallback(D2UnitStrc * pUnit, intptr_t 
 // Spawns nCount missiles scattered randomly within a square of half-side nRadius around the skill target (pSkillArg->nX/nY). Advances the caster unit's RNG seed to pick a starting quadrant, then for each missile picks independent random X/Y offsets in [0, 2*nRadius), sets nUnitX/nUnitY to a quadrant-biased aim point (±16 tiles), assigns SKILLS_SetMissileDirectionCallback, and calls MakeMissile. Restores nX/nY in pSkillArg after all missiles are created.
 void __fastcall SKILLS_CreateMissileScatter(D2UnitStrc * pUnit, D2SkillArgStrc * pSkillArg, int32_t nRadius, int32_t nCount) {
     int nRandOffsetY;
-    uint32_t nSeedHigh;
     uint32_t nRandRange;
     int nOffsetY;
-    int64_t lSeedNext;
     uint32_t lRngState = D2_SeedRoll(&pUnit->sSeed);
     int nSavedX = pSkillArg->nX;
     int nSavedY = pSkillArg->nY;
@@ -2160,22 +2158,7 @@ void __fastcall SKILLS_CreateMissileScatter(D2UnitStrc * pUnit, D2SkillArgStrc *
 
       nQuadrantTmp = (int)(nQuadrantTmp + 1) % 4;
       if ((int)nRandRange > 0) {
-        nRandOffsetX = pUnit->sSeed.nSeedLow;
-        if (nRandRange & nRandRange - 1) {
-          lSeedNext = (uint64_t)nRandOffsetX * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
-          nRandOffsetX = (uint32_t)lSeedNext;
-          nSeedHigh = (uint32_t)((uint64_t)lSeedNext >> 0x20);
-          pUnit->sSeed.nSeedLow = nRandOffsetX;
-          nRandOffsetX %= nRandRange;
-        } else {
-          lSeedNext = (uint64_t)nRandOffsetX * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
-          nRandOffsetX = (uint32_t)lSeedNext;
-          nSeedHigh = (uint32_t)((uint64_t)lSeedNext >> 0x20);
-          pUnit->sSeed.nSeedLow = nRandOffsetX;
-          nRandOffsetX = nRandRange - 1 & nRandOffsetX;
-        }
-
-        pUnit->sSeed.nSeedHigh = nSeedHigh;
+        nRandOffsetX = D2_SeedRollLimited(&pUnit->sSeed, nRandRange);
       }
 
       pSkillArg->nX = nRandOffsetX - nRadius + nSavedX;

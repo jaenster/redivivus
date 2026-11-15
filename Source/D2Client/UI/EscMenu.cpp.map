@@ -55,17 +55,18 @@
       ],
       "usedTypes": [
         "D2EscMenuItemStrc",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ],
-      "dh": "a8022505",
+      "dh": "08d290f7",
       "paramStorage": [
-        [
-          "nMinPos",
-          "ECX:4"
-        ],
         [
           "pSliderItem",
           "EDX:4"
+        ],
+        [
+          "nMinPos",
+          "ECX:4"
         ],
         [
           "nMaxPos",
@@ -92,7 +93,7 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "8ae11678",
+      "dh": "c1b705eb",
       "paramStorage": [
         [
           "pItem",
@@ -155,7 +156,7 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "0aacaa2b",
+      "dh": "d4270cb8",
       "paramStorage": [
         [
           "pItem",
@@ -248,7 +249,7 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "f461c67e",
+      "dh": "a0c39da5",
       "paramStorage": [
         [
           "pItem",
@@ -659,9 +660,10 @@
       ],
       "usedTypes": [
         "D2EscMenuItemStrc",
-        "D2UIMouseMsgStrc"
+        "D2UIMouseMsgStrc",
+        "uint32_t"
       ],
-      "dh": "0dcd2aed",
+      "dh": "552649d2",
       "paramStorage": [
         [
           "pItem",
@@ -695,9 +697,10 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ],
-      "dh": "46359ca8",
+      "dh": "ea768054",
       "paramStorage": [
         [
           "pItem",
@@ -728,9 +731,10 @@
       ],
       "usedTypes": [
         "D2EscMenuItemStrc",
-        "D2UIMouseMsgStrc"
+        "D2UIMouseMsgStrc",
+        "uint32_t"
       ],
-      "dh": "6605d1ab",
+      "dh": "04841067",
       "paramStorage": [
         [
           "pItem",
@@ -766,9 +770,10 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc",
         "eD2RendererMode",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ],
-      "dh": "90a0d931",
+      "dh": "13339ded",
       "paramStorage": [
         [
           "pItem",

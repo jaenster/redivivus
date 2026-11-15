@@ -206,8 +206,10 @@ void __fastcall Q36_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     uint32_t nGossipMenuIndex;
     ::SGAMEDATA* pGame;
     pGame = pQuestData->pGame;
+    D2UnitDataPlayerStrc* pPlayerData;
+    pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
     D2BitBufferStrc* pBitBuffer;
-    pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     if (!pQuestArgs->pTarget) {
       nTargetClassId = ~MonsterUnitSkeleton1;
     } else {

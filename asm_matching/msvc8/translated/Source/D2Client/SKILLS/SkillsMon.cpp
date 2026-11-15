@@ -1063,18 +1063,18 @@ BOOL __fastcall Skills_CltDoFunc_Mon_DirectionalBeam(D2UnitStrc * pUnit, eD2Skil
       if (pTarget) {
         D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, D2Common::Units::GetXPosFromDynamicPathUnit(pTarget), D2Common::Units::GetYPosFromDynamicPathUnit(pTarget), 0);
         nSrcY = D2Common::Units::GetXPosFromDynamicPathUnit(pTarget);
-        nTargetX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-        sSkillArg.nUnitX = nSrcY - nTargetX;
+        nSrcY -= D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+        sSkillArg.nUnitX = nSrcY;
         nSP1Coord = D2Common::Units::GetYPosFromDynamicPathUnit(pTarget);
       } else {
         nSP1Coord = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
-        nSrcY = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-        sSkillArg.nUnitX = nSP1Coord - nSrcY;
+        nSP1Coord -= D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+        sSkillArg.nUnitX = nSP1Coord;
         nSP1Coord = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
       }
 
-      nSrcY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-      sSkillArg.nUnitY = nSP1Coord - nSrcY;
+      nSP1Coord -= D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+      sSkillArg.nUnitY = nSP1Coord;
       pTarget = UNIT::Missile::MakeMissile(&sSkillArg);
       if (pTarget) {
         D2Common::Units::Missile::SetTargetX(pTarget, nSkillLvl);

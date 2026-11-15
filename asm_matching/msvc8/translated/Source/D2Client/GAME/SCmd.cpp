@@ -1791,7 +1791,8 @@ static void __stdcall SCMD_HandleStatChangeEffect(D2UnitStrc * pUnit, eD2UnitSta
 // Server→client handler for stat-update opcodes 0x9E–0xA2 targeting a monster unit. Decodes the stat id (byte 1) and a value (bytes 6+, width varies by opcode: byte/word/dword). Opcodes 0xA1/0xA2 add to the stat (STATLIST_AddUnitStat); others set it (STATLIST_SetUnitStat). If the stat is UNITSTAT_level, also triggers ITEM_CltRecalcEquippedFromUnit to refresh item-level requirements.
 void __fastcall NET_D2GS_CLIENT_Incoming0x9Eto0xA2(uint8_t * pBytes) {
     uint32_t nValue;
-    bool bIsAdd = false;
+    BOOL bIsAdd;
+    bool bVar1 = false;
     switch (*pBytes) {
       case 0x9e:
         nValue = (uint32_t)pBytes[6];
@@ -1801,10 +1802,10 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x9Eto0xA2(uint8_t * pBytes) {
       break;
       case 0xa1:
         nValue = (uint32_t)pBytes[6];
-      bIsAdd = true;
+      bVar1 = true;
       break;
       case 0xa2:
-        bIsAdd = true;
+        bVar1 = true;
       case 0x9f:
         nValue = (uint32_t)*(uint16_t*)(pBytes + 6);
       break;
@@ -1820,7 +1821,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x9Eto0xA2(uint8_t * pBytes) {
     if (eUnitStat == UNITSTAT_level) {
       ITEM_CltRecalcEquippedFromUnit(pUnit);
     }
-    if (bIsAdd) {
+    if (bVar1) {
       D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, eUnitStat, nValue, 0);
       return;
     }

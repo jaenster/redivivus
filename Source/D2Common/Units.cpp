@@ -1520,7 +1520,7 @@ static int32_t GetDiminishedStat(D2UnitStrc * pUnit, int32_t nIndex) {
 
 void __stdcall SetAnimationSpeed(D2UnitStrc * pUnit, int32_t nSpeed) {
     uint32_t nClampedSpeed = nSpeed <= 0 ? 0 : nSpeed;
-    pUnit->nAnimSpeed = (int)nClampedSpeed < 0x7fff ? (short int)nClampedSpeed : 0x7fff;
+    pUnit->nAnimSpeed = (int)nClampedSpeed < 0x7fff ? nClampedSpeed : 0x7fff;
 }
 
 uint32_t __stdcall IsAtEndOfFrameCycle(D2UnitStrc * pUnit) {
@@ -1593,6 +1593,7 @@ void __stdcall SetAnimActionFrame(D2UnitStrc * pUnit, int32_t nFrame) {
 }
 
 int32_t __stdcall GetEventFrameInfo(D2UnitStrc * pUnit, int32_t nFrame) {
+    D2MonSeqTxt* pSeqTxt;
     uint32_t nSeqCurrentFrame;
     uint32_t nSeqFrameCount;
     int32_t nUnit;
@@ -1606,22 +1607,28 @@ int32_t __stdcall GetEventFrameInfo(D2UnitStrc * pUnit, int32_t nFrame) {
     }
 
     bool bIsSequence = false;
-    if (pUnit->eUnitType != UNIT_PLAYER) {
-      if (pUnit->eUnitType != UNIT_MONSTER) {
-        return (uint32_t)pUnit->pAnimData->pFrameFlags[nFrame];
-      }
-    } else {
-      if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Sequence) {
-        bIsSequence = true;
-      }
-    }
-    if (!(pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Skill2 || bIsSequence)) {
-      return (uint32_t)pUnit->pAnimData->pFrameFlags[nFrame];
-    }
+    switch (pUnit->eUnitType) {
+      case UNIT_PLAYER:
+        {
+          if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Sequence) {
+            bIsSequence = true;
+          }
+        }
+      case UNIT_MONSTER:
+        {
+          if (!(pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Skill2 || bIsSequence)) {
+            return (uint32_t)pUnit->pAnimData->pFrameFlags[nFrame];
+          }
 
-    D2MonSeqTxt* pSeqTxt = Merc::MERC_GetSequenceTxt(pUnit);
-    Merc::ANIM_GetSequenceFrameInfo(pSeqTxt, nLine << 8, nLine << 8, &nSeqCurrentFrame, &nSeqFrameCount, (uint32_t*)&nFrame, (uint32_t*)&nUnit);
-    return nUnit;
+          pSeqTxt = Merc::MERC_GetSequenceTxt(pUnit);
+          Merc::ANIM_GetSequenceFrameInfo(pSeqTxt, nLine << 8, nLine << 8, &nSeqCurrentFrame, &nSeqFrameCount, (uint32_t*)&nFrame, (uint32_t*)&nUnit);
+          return nUnit;
+        }
+      default:
+        {
+          return (uint32_t)pUnit->pAnimData->pFrameFlags[nFrame];
+        }
+    }
 }
 
 BOOL __stdcall HasCollision(D2UnitStrc * pUnit) {

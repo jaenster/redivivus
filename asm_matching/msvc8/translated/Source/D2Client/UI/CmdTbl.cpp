@@ -1108,15 +1108,7 @@ void __stdcall CMD_LoadDefaultKeyBindings(DWORD bUseInstallDir) {
           pKeyData = D2_NEW_POOL_AT(nullptr, D2CmdTbl_Line0x50f, ".\\UI\\CmdTbl.cpp", 0x50f);
           pFileBufCursor = (uint16_t*)aKeyBindFileBuf;
           pDst = pKeyData;
-          for (nCount = 0x11e; nCount; nCount--) {
-            wVersion = pFileBufCursor[1];
-            pDst->wMagic = pFileBufCursor[0];
-            pDst->wVersion = wVersion;
-            pFileBufCursor += 2;
-            pDst = (D2CmdTbl_Line0x50f*)&pDst->wSize;
-          }
-
-          pDst->wMagic = *pFileBufCursor;
+          memcpy(pDst, pFileBufCursor, 0x47a);
           goto apply_key_data;
         }
       }

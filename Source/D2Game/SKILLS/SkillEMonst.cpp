@@ -753,11 +753,7 @@ BOOL __fastcall Skills_SrvDoFunc_133_SetDeathSpawnState(::SGAMEDATA * pGame, D2U
     D2StateExArgStrc sStateArg;
     memset(&sStateArg, 0, sizeof(sStateArg));
     sStateArg.pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    if (!sStateArg.pTarget) {
-      return 0;
-    }
-
-    _bCanSpawn = SKILLMONST_CanImpregnateTarget(pUnit, sStateArg.pTarget);
+    _bCanSpawn = sStateArg.pTarget ? SKILLMONST_CanImpregnateTarget(pUnit, sStateArg.pTarget) : 0;
     if (!_bCanSpawn) {
       return 0;
     }

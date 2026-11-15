@@ -1081,16 +1081,18 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
 static void DRAW_BuildBrightenLightnessTable(D2HSLColorStrc * pHSLPalette, LPPALETTEENTRY pPalette) {
     tagRGBQUAD rgbWorkBuffer[256];
     double dOldLightness;
+    double* pdHSLEntry = &pHSLPalette[0].dLightness;
     int nColorIndex = 0x100;
     do {
-      if (pHSLPalette[-nColorIndex + 256].dLightness != 0.0) {
-        dOldLightness = pHSLPalette[-nColorIndex + 256].dLightness;
-        pHSLPalette[-nColorIndex + 256].dLightness = dOldLightness + 0.20000000298023224;
+      if (*pdHSLEntry != 0.0) {
+        dOldLightness = *pdHSLEntry;
+        *pdHSLEntry = dOldLightness + 0.20000000298023224;
         if (1.0 < dOldLightness + 0.20000000298023224) {
-          pHSLPalette[-nColorIndex + 256].dLightness = 1.0;
+          *pdHSLEntry = 1.0;
         }
       }
 
+      pdHSLEntry += 3;
       nColorIndex--;
     } while (nColorIndex);
 

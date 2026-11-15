@@ -22,6 +22,7 @@ struct D2RendererCoreStrc;
 struct D2RendererFunctionsStrc;
 
 extern D2GfxSettingsStrc D2GFXRenderedData;
+extern BOOL bD2GFX_Windowed;
 extern uint32_t gnD2GFXResolutionMode;
 extern D2RendererFunctionsStrc * RENDERER_CurrentRenderedFunctions;
 extern uint8_t gaDirectDrawDitherPaletteRemap[1024];

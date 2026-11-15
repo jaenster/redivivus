@@ -75,7 +75,8 @@ void __fastcall Q14_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     int nTargetClassId;
     D2GSPacketSrv0x27_TextStrc* pTextControl;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
-    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     if (!pQuestArgs->pTarget) {
       nTargetClassId = -1;
     } else {

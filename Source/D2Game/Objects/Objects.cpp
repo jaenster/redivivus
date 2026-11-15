@@ -75,7 +75,7 @@ static D2ObjectPopulateFnFunc OBJECTSPOPULATEFN[10] = {
     (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn9_TrappedSoul
 }; D2_STATIC_GUARD(OBJECTSPOPULATEFN, "OBJECTSPOPULATEFN");
 static int gaObjectSpawnChanceTbl[5] = { 0x4, 0x9, 0x34, 0x5e, 0x5f }; D2_STATIC_GUARD(gaObjectSpawnChanceTbl, "gaObjectSpawnChanceTbl");
-static uint32_t gnObjectClassIdLight = 0x5; D2_STATIC_GUARD(gnObjectClassIdLight, "gnObjectClassIdLight");
+uint32_t gnObjectClassIdLight = 0x5; D2_GLOBAL_GUARD(gnObjectClassIdLight, "gnObjectClassIdLight");
 int gaObjectSpawnOffsetGroup0[50] = {
     -0x4,
     0x0,
@@ -1217,17 +1217,7 @@ void __fastcall Objects_InitFn46(D2ObjectInitFnArg * pInitArg) {
         try_extend_chain:
         dwTmp = nChainLength >> 1;
         if ((int)dwTmp > 0) {
-          if (dwTmp & dwTmp - 1) {
-            sSeedRoll = D2_SEED_NEXT(*pObjCtrlSeed);
-            pObjCtrlSeed->nSeedHigh = sSeedRoll.nSeedHigh;
-            pObjCtrlSeed->nSeedLow = sSeedRoll.nSeedLow;
-            dwTmp = sSeedRoll.nSeedLow % dwTmp;
-          } else {
-            sSeedRoll = D2_SEED_NEXT(*pObjCtrlSeed);
-            pObjCtrlSeed->nSeedHigh = sSeedRoll.nSeedHigh;
-            pObjCtrlSeed->nSeedLow = sSeedRoll.nSeedLow;
-            dwTmp = dwTmp - 1 & sSeedRoll.nSeedLow;
-          }
+          dwTmp = D2_SeedRollLimited(pObjCtrlSeed, dwTmp);
           if (dwTmp) {
             continue;
           }
@@ -1503,17 +1493,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn1(::SGAMEDATA * pGame, D2RoomStrc * pR
         extend_cluster:
         nRandVal = nChainLen >> 1;
         if ((int)nRandVal > 0) {
-          if (nRandVal & nRandVal - 1) {
-            sNextSeed = D2_SEED_NEXT(*pCtrlSeed);
-            pCtrlSeed->nSeedHigh = sNextSeed.nSeedHigh;
-            pCtrlSeed->nSeedLow = sNextSeed.nSeedLow;
-            nRandVal = (uint32_t)(sNextSeed.nSeedLow % nRandVal);
-          } else {
-            sNextSeed = D2_SEED_NEXT(*pCtrlSeed);
-            pCtrlSeed->nSeedHigh = sNextSeed.nSeedHigh;
-            pCtrlSeed->nSeedLow = sNextSeed.nSeedLow;
-            nRandVal = nRandVal - 1 & sNextSeed.nSeedLow;
-          }
+          nRandVal = D2_SeedRollLimited(pCtrlSeed, nRandVal);
           if (nRandVal) {
             goto next_cluster;
           }
@@ -1967,17 +1947,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn4(::SGAMEDATA * pGame, D2RoomStrc * pR
           extend_cluster:
           nRandVal = _nChancePercent >> 1;
           if ((int)nRandVal > 0) {
-            if (nRandVal & nRandVal - 1) {
-              sSeedRoll = D2_SEED_NEXT(*pCtrlSeed);
-              pCtrlSeed->nSeedHigh = sSeedRoll.nSeedHigh;
-              pCtrlSeed->nSeedLow = sSeedRoll.nSeedLow;
-              nRandVal = sSeedRoll.nSeedLow % nRandVal;
-            } else {
-              sSeedRoll = D2_SEED_NEXT(*pCtrlSeed);
-              pCtrlSeed->nSeedHigh = sSeedRoll.nSeedHigh;
-              pCtrlSeed->nSeedLow = sSeedRoll.nSeedLow;
-              nRandVal = nRandVal - 1 & sSeedRoll.nSeedLow;
-            }
+            nRandVal = D2_SeedRollLimited(pCtrlSeed, nRandVal);
             if (nRandVal) {
               goto next_cluster;
             }
@@ -2036,17 +2006,13 @@ D2UnitStrc * __fastcall Objects_PopulateFn5_Crate(::SGAMEDATA * pGame, D2RoomStr
     BOOL nCollisionResult;
     uint32_t nRandDir;
     uint32_t nChainStopRoll;
-    uint32_t uVar1;
     uint32_t nRandBit;
     BOOL nCollisionSaved;
     D2DrlgRoomCoordsStrc sRoomCoords;
-    uint32_t nSeedHighTmp0;
-    uint32_t nSeedHighTmp1;
     int nCurX;
     int nCurY;
     int nWalkIter;
     int nChainLen;
-    int64_t lNewSeed;
     D2ObjectsTxt* pObjectsTxt;
     pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nObjectClassId);
     if (nDensity > 0x80) {
@@ -2119,25 +2085,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn5_Crate(::SGAMEDATA * pGame, D2RoomStr
           extend_cluster:
           nRandBit = nChainLen >> 1;
           if ((int)nRandBit > 0) {
-            if (nRandBit & nRandBit - 1) {
-              lNewSeed = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-              nSeedHighTmp1 = (uint32_t)((uint64_t)lNewSeed >> 0x20);
-              lNewSeed += (uint64_t)pSeed->nSeedHigh;
-              nChainStopRoll = (uint32_t)lNewSeed;
-              uVar1 = (uint32_t)((uint64_t)lNewSeed >> 0x20);
-              pSeed->nSeedLow = nChainStopRoll;
-              nChainStopRoll %= nRandBit;
-            } else {
-              lNewSeed = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-              nSeedHighTmp0 = (uint32_t)((uint64_t)lNewSeed >> 0x20);
-              lNewSeed += (uint64_t)pSeed->nSeedHigh;
-              nChainStopRoll = (uint32_t)lNewSeed;
-              uVar1 = (uint32_t)((uint64_t)lNewSeed >> 0x20);
-              pSeed->nSeedLow = nChainStopRoll;
-              nChainStopRoll = nRandBit - 1 & nChainStopRoll;
-            }
-
-            pSeed->nSeedHigh = uVar1;
+            nChainStopRoll = D2_SeedRollLimited(pSeed, nRandBit);
             if (nChainStopRoll) {
               goto next_cluster;
             }

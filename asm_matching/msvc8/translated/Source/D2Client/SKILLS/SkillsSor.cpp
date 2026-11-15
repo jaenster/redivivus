@@ -390,11 +390,11 @@ BOOL __fastcall Skills_CltDoFunc_Sor_OffsetMissileCount(D2UnitStrc * pUnit, eD2S
     if (pMissileUnit) {
       int32_t nCasterPosTmp;
       nPosTmp2 = D2Common::Units::GetXPosFromDynamicPathUnit(pMissileUnit);
-      nCasterPosTmp = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-      nOffsetX = nPosTmp2 - nCasterPosTmp;
+      nPosTmp2 -= D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+      nOffsetX = nPosTmp2;
       nPosTmp2 = D2Common::Units::GetYPosFromDynamicPathUnit(pMissileUnit);
-      nCasterPosTmp = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-      nOffsetY = nPosTmp2 - nCasterPosTmp;
+      nPosTmp2 -= D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+      nOffsetY = nPosTmp2;
     }
 
     memset(&sSkillArg, 0, 0x5c);

@@ -16,6 +16,8 @@
 
 // Forward declarations
 struct D2SoundListNodeStrc;
+struct D2SoundsTxt;
 
 extern D2CutsceneDescStrc gdwSoundHeaderCacheIndex[8];
+extern D2SoundsTxt * pTxtSounds;
 extern D2SoundListNodeStrc * gpSoundLRUListHead;

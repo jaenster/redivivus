@@ -62,7 +62,6 @@ void __fastcall SOUND_ApplyEAXEnvironment(D2SoundEaxEnvironStrc * pEnviron) {
       return;
     }
     if (gnSoundQualityMode == 1) {
-      fAttenuation = d2_bits_as<D2FloatIntUnion>(pEnviron);
       fAttenuation.fValue = Src::D2SoundSmp::SOUNDSMP_ClampAttenuation((float)pEnviron->nRoom);
       gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved1, 1, nullptr, 0, pEnviron, 4);
       gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved1, 2, nullptr, 0, &fAttenuation, 4);
@@ -120,7 +119,7 @@ void __stdcall SOUND_InitDirectSound() {
     char* szErrorMsg;
     BOOL BVar2;
     WAVEFORMATEX tSecondaryFormat;
-    uint8_t aEAXSupportCaps[4];
+    ULONG aEAXSupportCaps;
     if (gbDSoundPrimaryBufferMode && gbDirectSoundDelayWorkaround) {
       return;
     }
@@ -210,11 +209,11 @@ void __stdcall SOUND_InitDirectSound() {
       tEaxBufferDesc.dwFlags = 0x12;
       if (!gnSoundQualityMode) {
         hResultDSCall = gpDirectSound->lpVtbl->CreateSoundBuffer(gpDirectSound, &tEaxBufferDesc, (void**)&gpEAXInterface2, nullptr);
-        if (hResultDSCall < 0 || (hResultDSCall = gpEAXInterface2->lpVtbl->QueryInterface(gpEAXInterface2, (GUID*)&gIID_IDirectSound3DBuffer, (void**)&gpEAXInterface1) , hResultDSCall < 0) || (hResultDSCall = gpEAXInterface1->lpVtbl->QueryInterface(gpEAXInterface1, (GUID*)&gIID_IKsPropertySet, (void**)&gpDirectSoundEAXInterface) , hResultDSCall < 0) || (hResultDSCall = gpDirectSoundEAXInterface->lpVtbl->QuerySupport(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved2, 1, (ULONG*)aEAXSupportCaps) , hResultDSCall < 0 || (aEAXSupportCaps[0] & 3) != 3) || (BVar2 = SOUND_ToggleEAXEnvironmentPreset(2) , !BVar2)) {
+        if (hResultDSCall < 0 || (hResultDSCall = gpEAXInterface2->lpVtbl->QueryInterface(gpEAXInterface2, (GUID*)&gIID_IDirectSound3DBuffer, (void**)&gpEAXInterface1) , hResultDSCall < 0) || (hResultDSCall = gpEAXInterface1->lpVtbl->QueryInterface(gpEAXInterface1, (GUID*)&gIID_IKsPropertySet, (void**)&gpDirectSoundEAXInterface) , hResultDSCall < 0) || (hResultDSCall = gpDirectSoundEAXInterface->lpVtbl->QuerySupport(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved2, 1, &aEAXSupportCaps) , hResultDSCall < 0 || ((uint8_t)aEAXSupportCaps & 3) != 3) || (BVar2 = SOUND_ToggleEAXEnvironmentPreset(2) , !BVar2)) {
           SOUND_ReleaseEAXInterfaces();
           if (!gnSoundQualityMode) {
             hResultDSCall = gpDirectSound->lpVtbl->CreateSoundBuffer(gpDirectSound, &tEaxBufferDesc, (void**)&gpEAXInterface2, nullptr);
-            if (hResultDSCall < 0 || (hResultDSCall = gpEAXInterface2->lpVtbl->QueryInterface(gpEAXInterface2, (GUID*)&gIID_IDirectSound3DBuffer, (void**)&gpEAXInterface1) , hResultDSCall < 0) || (hResultDSCall = gpEAXInterface1->lpVtbl->QueryInterface(gpEAXInterface1, (GUID*)&gIID_IKsPropertySet, (void**)&gpDirectSoundEAXInterface) , hResultDSCall < 0 || (hResultDSCall = gpDirectSoundEAXInterface->lpVtbl->QuerySupport(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved1, 0, (ULONG*)aEAXSupportCaps) , hResultDSCall < 0 || (aEAXSupportCaps[0] & 3) != 3) || (BVar2 = SOUND_ToggleEAXEnvironmentPreset(1) , !BVar2))) {
+            if (hResultDSCall < 0 || (hResultDSCall = gpEAXInterface2->lpVtbl->QueryInterface(gpEAXInterface2, (GUID*)&gIID_IDirectSound3DBuffer, (void**)&gpEAXInterface1) , hResultDSCall < 0) || (hResultDSCall = gpEAXInterface1->lpVtbl->QueryInterface(gpEAXInterface1, (GUID*)&gIID_IKsPropertySet, (void**)&gpDirectSoundEAXInterface) , hResultDSCall < 0 || (hResultDSCall = gpDirectSoundEAXInterface->lpVtbl->QuerySupport(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved1, 0, &aEAXSupportCaps) , hResultDSCall < 0 || ((uint8_t)aEAXSupportCaps & 3) != 3) || (BVar2 = SOUND_ToggleEAXEnvironmentPreset(1) , !BVar2))) {
               SOUND_ReleaseEAXInterfaces();
               if (!gnSoundQualityMode) {
                 Fog::Src::LogManager::LOGFILE_WriteStringToFile("........DirectSound progress: Unsupported EAX or EAX emulation");

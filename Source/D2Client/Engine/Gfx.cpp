@@ -1194,11 +1194,7 @@ uint32_t __fastcall DrawItemGfx(D2UnitStrc * pUnit, int32_t nX, int32_t nY) {
     }
 
     int nDrawX = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
-    if (!nDrawX) {
-      return 0;
-    }
-
-    uint32_t bOnScreen = GfxUtil::GFXUTIL_IsDC6BlockOnScreen(sGfxData.pDC6Block, nX, D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block) + nY, 0);
+    uint32_t bOnScreen = nDrawX ? GfxUtil::GFXUTIL_IsDC6BlockOnScreen(sGfxData.pDC6Block, nX, D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block) + nY, 0) : 0;
     if (!bOnScreen) {
       return 0;
     }
@@ -3058,8 +3054,8 @@ BOOL __fastcall GFX_DrawUnitShadow(D2UnitStrc * pUnit) {
     int32_t nTargetX = D2Common::Units::GetScreenX(pUnit);
     int32_t nDrawX = Particle::PARTICLE_GetPosXShifted(pUnit);
     nDrawX = nDrawX + nTargetX + (nOffsetX - nWorldOffsetX);
-    int32_t nWorldOffsetY = UI::Path::DRAW_GetWorldOffsetY();
-    nOffsetX = nOffsetY - nWorldOffsetY;
+    nOffsetY -= UI::Path::DRAW_GetWorldOffsetY();
+    nOffsetX = nOffsetY;
     nOffsetY = D2Common::Units::GetScreenY(pUnit);
     nOffsetY += nOffsetX;
     int32_t nParticleY = Particle::PARTICLE_GetPosYShifted(pUnit);

@@ -69,11 +69,8 @@ template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::RawNext(::SGAMED
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::Next(::SGAMEDATA * pNode) {
-    if (pNode) {
-      return (::SGAMEDATA*)((int)*(uint32_t*)(pNode->szGameName + this->m_linkoffset - 0x26) <= 0 ? 0 : *(uint32_t*)(pNode->szGameName + this->m_linkoffset - 0x26));
-    }
-
-    intptr_t dwNext = this->m_terminator.m_next;
+    TSLink<::SGAMEDATA>* pLink = pNode ? (TSLink<::SGAMEDATA>*)((char*)(pNode->szGameName + this->m_linkoffset - 0x26) - 4) : &this->m_terminator;
+    intptr_t dwNext = pLink->m_next;
     return (::SGAMEDATA*)(dwNext <= 0 ? 0 : dwNext);
 }
 

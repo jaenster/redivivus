@@ -669,22 +669,21 @@ void __fastcall SendUnitCast0x4d(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Clie
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\PLAYER\\PlrMsg.cpp", 0xcf);
     int nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
     uint8_t skillLevel = (uint8_t)nSkillLevel;
-    if (pTarget) {
-      BOOL bIsNearClient;
-      bIsNearClient = GAME::Clients::IsUnitNearClient(pTarget, pClient);
-      if (bIsNearClient) {
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x4C_UnitCastSkill_Target_0x4D_UnitCastSkill_XY(pClient, '\0', dwCasterGUID, (uint8_t)pTarget->eUnitType, pTarget->nUnitGUID, (uint16_t)eSkillId, 0, skillLevel, 0);
-        return;
-      }
+    BOOL bIsNearClient;
+    bIsNearClient = pTarget ? GAME::Clients::IsUnitNearClient(pTarget, pClient) : 0;
+    if (!bIsNearClient) {
+      eSkillId &= 0xffff;
+      nSubType = 0;
+      wPad = 0;
+      dwPathCoord = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
+      wTargetY = (uint16_t)dwPathCoord;
+      dwPathCoord = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x4D_SKILL_XY(pClient, 0, dwCasterGUID, (uint16_t)dwPathCoord, wTargetY, eSkillId, wPad, skillLevel, nSubType);
+      return;
     }
 
-    eSkillId &= 0xffff;
-    nSubType = 0;
-    wPad = 0;
-    dwPathCoord = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
-    wTargetY = (uint16_t)dwPathCoord;
-    dwPathCoord = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x4D_SKILL_XY(pClient, 0, dwCasterGUID, (uint16_t)dwPathCoord, wTargetY, eSkillId, wPad, skillLevel, nSubType);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x4C_UnitCastSkill_Target_0x4D_UnitCastSkill_XY(pClient, '\0', dwCasterGUID, (uint8_t)pTarget->eUnitType, pTarget->nUnitGUID, (uint16_t)eSkillId, 0, skillLevel, 0);
+    return;
 }
 
 // Sends the appropriate movement packet to pClient for pUnit's current move-mode (index nModeIndex into gaPlayerModeNetMsgTable). If pUnit has a target entity visible to the client, sends 0x10 (CharToObj); otherwise sends 0x0F (PlayerMove) with the unit's current tile position and path sub-step target coordinates. Skips self-movement (pUnit == client's own player).
@@ -922,35 +921,36 @@ static uint8_t GetMPRegen(D2UnitStrc * pUnit) {
     int nMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
     int32_t nMaxMana = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
     D2StatListExStrc* pStatListMana = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_manapot);
+    uint8_t byPct;
+    D2CharStatsTxt* pCharStatsTxt = 0;
     if (pStatListMana && nMaxMana && pUnit) {
-      uint8_t byPct;
       nManaRegenBase = pUnit->nClassId;
-      D2CharStatsTxt* pCharStatsTxt = !(nManaRegenBase < 0 || nManaRegenBase >= D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize) ? D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nManaRegenBase : nullptr;
-      if (pCharStatsTxt) {
-        nManaRegenBase = (uint32_t)pCharStatsTxt->ManaRegen * 0x19;
-        if (!nManaRegenBase) {
-          nManaRegenBase = 0x1d4c;
-        }
-
-        nManaRegenDivisor = 1;
-        if (nMaxMana / nManaRegenBase >= 1) {
-          nManaRegenDivisor = nMaxMana / nManaRegenBase;
-        }
-
-        nManaRegenBase = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_manarecoverybonus, 0);
-        nManaRecoveryBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_manarecovery, 0);
-        pGame = UNIT::SUnit::GetGamePointer(pUnit);
-        pManaPotStatList = D2Common::Stats::StatsEx::STATLIST_GetFullListPtr(pStatListMana);
-        byPct = (uint8_t)(((pManaPotStatList - pGame->dwGameFrame) * (nManaRecoveryBonus + (nManaRegenBase + 100) * nManaRegenDivisor / 100) + nMana) * 100 / nMaxMana);
-        if (byPct > 100) {
-          return 100;
-        }
-
-        return byPct;
-      }
+      pCharStatsTxt = !(nManaRegenBase < 0 || nManaRegenBase >= D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize) ? D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nManaRegenBase : nullptr;
+    }
+    if (!pCharStatsTxt) {
+      return 0;
     }
 
-    return 0;
+    nManaRegenBase = (uint32_t)pCharStatsTxt->ManaRegen * 0x19;
+    if (!nManaRegenBase) {
+      nManaRegenBase = 0x1d4c;
+    }
+
+    nManaRegenDivisor = 1;
+    if (nMaxMana / nManaRegenBase >= 1) {
+      nManaRegenDivisor = nMaxMana / nManaRegenBase;
+    }
+
+    nManaRegenBase = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_manarecoverybonus, 0);
+    nManaRecoveryBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_manarecovery, 0);
+    pGame = UNIT::SUnit::GetGamePointer(pUnit);
+    pManaPotStatList = D2Common::Stats::StatsEx::STATLIST_GetFullListPtr(pStatListMana);
+    byPct = (uint8_t)(((pManaPotStatList - pGame->dwGameFrame) * (nManaRecoveryBonus + (nManaRegenBase + 100) * nManaRegenDivisor / 100) + nMana) * 100 / nMaxMana);
+    if (byPct > 100) {
+      return 100;
+    }
+
+    return byPct;
 }
 
 // Server-side per-tick player vitals/position delta sync. For player pUnit observed by pUnit2's client, reads HP/mana/stamina/gold/exp stats and current XY (plus velocity from dynamic path), then sends the cheapest matching update packet vs the cached D2PlayerBasicsData: 0x18 PlayerHPMP if regen changed, else 0x95 LifeManaUpdate if HP/mana changed, else 0x96 WalkVerify for position; suppresses tiny HP changes (<10% delta) unless bForceUpdate; also fires 0x19 gold and 0x1A/1B/1C experience packets on change. Updates the cached basics and SkipTick throttle. Returns 1 if anything updated, 0 if skipped/invalid.
@@ -3711,11 +3711,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3C_SelectSkill(::SGAMEDATA * pGame, D2
     }
 
     D2SkillStrc* pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, dwSkillOwnerId);
-    if (!pSkill) {
-      return SERVERSTATUS_BAD_PARAMS;
-    }
-
-    int nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
+    int nSkillLevel = pSkill ? D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1) : 0;
     if (!nSkillLevel) {
       return SERVERSTATUS_BAD_PARAMS;
     }

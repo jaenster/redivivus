@@ -69,6 +69,7 @@ typedef void (*fpListBoxItemActivated)();
 typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 #endif
 
+uint32_t gNPCMenuSelectionPtrTable = 0x9; D2_GLOBAL_GUARD(gNPCMenuSelectionPtrTable, "gNPCMenuSelectionPtrTable");
 namespace D2Client::UI::npcmenu {
 short nMercNameId = -0x1; D2_GLOBAL_GUARD(nMercNameId, "D2Client::UI::npcmenu::nMercNameId");
 } // namespace D2Client::UI::npcmenu
@@ -4820,7 +4821,7 @@ BOOL __fastcall NPCMENU_CalculateItemTransactionCost(D2UnitStrc * pUnit, int32_t
         }
       }
     } else if (nItemClassId != 0x1ff) {
-      if (nItemClassId < 0x200) {
+      if (nItemClassId <= 0x1ff) {
         return 0;
       }
       if (nItemClassId > 0x202) {
@@ -6208,66 +6209,64 @@ void __stdcall NPCMENU_ShowMainMenuDialog() {
     int32_t bOptionEnabled;
     int32_t nCallbackParam;
     uint32_t seedUpdated;
-    if (_Interaction::bInteractingWithNpc) {
-      D2UnitStrc* pNpcUnit;
-      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-      if (pNpcUnit) {
-        if (Dialog::gpNpcMainMenuDialog) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd69);
-          exit(-1);
-        }
-
-        nDialogPosX.x = 0;
-        nDialogPosX.y = 0;
-        NPCMENU_CalculateDialogPosition(&nDialogPosX);
-        Dialog::gpNpcMainMenuDialog = Dialog::AllocDialogStrc(nDialogPosX.x, nDialogPosX.y, NPCMENU_RepairDrawCallback, NPCMENU_RepairMouseCallback, 0, 0, 1, 0, 0, 0, 1);
-        Dialog::DIALOG_SetHighlightStyle(Dialog::gpNpcMainMenuDialog, 1);
-        for (nCharIdx = 0; nCharIdx < 0x50; nCharIdx++) {
-          wszNpcName[nCharIdx] = L'\0';
-        }
-
-        if (_Interaction::bInteractingWithNpc) {
-          pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-        } else {
-          pNpcUnit = 0;
-        }
-
-        pszDialogPtr = UNIT::CUnit::GetName(pNpcUnit);
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszNpcName, pszDialogPtr);
-        bOptionEnabled = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszNpcName);
-        for (nCharIdx = 0; nCharIdx < bOptionEnabled; nCharIdx++) {
-          wCurChar = wszNpcName[nCharIdx];
-          if ((uint16_t)wCurChar < 0x100) {
-            wCurChar = gnNpcMenuQuestIdTable[(uint16_t)wCurChar];
-          }
-
-          wszNpcName[nCharIdx] = wCurChar;
-        }
-
-        Dialog::AddStringData(Dialog::gpNpcMainMenuDialog, wszNpcName, 0x15, 0, 4, 1, nullptr, 0);
-        _Interaction::geNpcUiState = NPCUI_MENU;
-        nDialogPosY[0] = 0xd3a;
-        nDialogPosY[1] = 0xd3b;
-        nDialogPosY[2] = 0xd3c;
-        nDialogPosY[3] = 0xd3d;
-        nDialogPosY[4] = 0xd3e;
-        pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
-        seedUpdated = D2_SeedRoll(&pNpcUnit->sSeed);
-        nCallbackParam = 1;
-        pfnOptionCallback = NPCMENU_TradeDrawCallback;
-        Dialog::AddStringData(Dialog::gpNpcMainMenuDialog, D2Lang::StrTable::strtable::GetLocaleString(nDialogPosY[(int)(seedUpdated % 5)]), 0xf, 0, 0, 1, pfnOptionCallback, nCallbackParam);
-        nCallbackParam = 1;
-        pfnRepairOnClick = NPCMENU_RepairDrawCallback;
-        Dialog::AddStringData(Dialog::gpNpcMainMenuDialog, D2Lang::StrTable::strtable::GetLocaleString(0x102e), 0xf, 0, 0, 1, pfnRepairOnClick, nCallbackParam);
-        Dialog::DIALOG_SetSelectedLine(Dialog::gpNpcMainMenuDialog, 1);
-        return;
-      }
+    D2UnitStrc* pNpcUnit;
+    pNpcUnit = _Interaction::bInteractingWithNpc ? UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) : 0;
+    if (!pNpcUnit) {
+      _Interaction::geNpcUiState = NPCUI_NONE;
+      Inv::INV_ResetHoverAndContextState();
+      NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+      ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
+      return;
+    }
+    if (Dialog::gpNpcMainMenuDialog) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd69);
+      exit(-1);
     }
 
-    _Interaction::geNpcUiState = NPCUI_NONE;
-    Inv::INV_ResetHoverAndContextState();
-    NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-    ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
+    nDialogPosX.x = 0;
+    nDialogPosX.y = 0;
+    NPCMENU_CalculateDialogPosition(&nDialogPosX);
+    Dialog::gpNpcMainMenuDialog = Dialog::AllocDialogStrc(nDialogPosX.x, nDialogPosX.y, NPCMENU_RepairDrawCallback, NPCMENU_RepairMouseCallback, 0, 0, 1, 0, 0, 0, 1);
+    Dialog::DIALOG_SetHighlightStyle(Dialog::gpNpcMainMenuDialog, 1);
+    for (nCharIdx = 0; nCharIdx < 0x50; nCharIdx++) {
+      wszNpcName[nCharIdx] = L'\0';
+    }
+
+    if (_Interaction::bInteractingWithNpc) {
+      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+    } else {
+      pNpcUnit = 0;
+    }
+
+    pszDialogPtr = UNIT::CUnit::GetName(pNpcUnit);
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszNpcName, pszDialogPtr);
+    bOptionEnabled = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszNpcName);
+    for (nCharIdx = 0; nCharIdx < bOptionEnabled; nCharIdx++) {
+      wCurChar = wszNpcName[nCharIdx];
+      if ((uint16_t)wCurChar < 0x100) {
+        wCurChar = gnNpcMenuQuestIdTable[(uint16_t)wCurChar];
+      }
+
+      wszNpcName[nCharIdx] = wCurChar;
+    }
+
+    Dialog::AddStringData(Dialog::gpNpcMainMenuDialog, wszNpcName, 0x15, 0, 4, 1, nullptr, 0);
+    _Interaction::geNpcUiState = NPCUI_MENU;
+    nDialogPosY[0] = 0xd3a;
+    nDialogPosY[1] = 0xd3b;
+    nDialogPosY[2] = 0xd3c;
+    nDialogPosY[3] = 0xd3d;
+    nDialogPosY[4] = 0xd3e;
+    pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
+    seedUpdated = D2_SeedRoll(&pNpcUnit->sSeed);
+    nCallbackParam = 1;
+    pfnOptionCallback = NPCMENU_TradeDrawCallback;
+    Dialog::AddStringData(Dialog::gpNpcMainMenuDialog, D2Lang::StrTable::strtable::GetLocaleString(nDialogPosY[(int)(seedUpdated % 5)]), 0xf, 0, 0, 1, pfnOptionCallback, nCallbackParam);
+    nCallbackParam = 1;
+    pfnRepairOnClick = NPCMENU_RepairDrawCallback;
+    Dialog::AddStringData(Dialog::gpNpcMainMenuDialog, D2Lang::StrTable::strtable::GetLocaleString(0x102e), 0xf, 0, 0, 1, pfnRepairOnClick, nCallbackParam);
+    Dialog::DIALOG_SetSelectedLine(Dialog::gpNpcMainMenuDialog, 1);
+    return;
 }
 
 void __stdcall NPCMENU_OpenInteraction(D2UnitStrc * pUnit) {
@@ -6941,8 +6940,8 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     nLoopCounter = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eStatId, nNameStringId);
     nNameStringId = 0;
     eStatId = UNITSTAT_gold;
-    int nGoldOnBody = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eStatId, nNameStringId);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(300, wszGoldFmtBuf, D2Lang::StrTable::strtable::GetLocaleString(0xd24), nLoopCounter + nGoldOnBody);
+    nLoopCounter += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eStatId, nNameStringId);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(300, wszGoldFmtBuf, D2Lang::StrTable::strtable::GetLocaleString(0xd24), nLoopCounter);
     Dialog::AddStringData(Dialog::gpNpcMercListDialog, wszGoldFmtBuf, 0x15, 0, 4, 1, nullptr, 0);
     int32_t nMercSeed = 1;
     fpDialogFunc pfnCloseCallback = NPCMENU_MercListDrawCallback;
@@ -7302,7 +7301,6 @@ int __stdcall NPCMENU_EnableTyraelTravelToHarrogathOption() {
 
 static void __stdcall NPCMENU_HandleMenuSelection(int32_t bReopenMenu, D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
-    static uint32_t gNPCMenuSelectionPtrTable = 0x9; D2_STATIC_GUARD(gNPCMenuSelectionPtrTable, "D2Client::UI::npcmenu::NPCMENU_HandleMenuSelection::gNPCMenuSelectionPtrTable");
     static D2NpcQuestCallbackEntry gaNpcMenuQuestCallbackTable[9] = {
     {
         /* .nNpcClassId = */ 0x9b,

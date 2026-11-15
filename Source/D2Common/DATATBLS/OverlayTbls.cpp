@@ -242,11 +242,8 @@ uint32_t __stdcall MONSTER_GetComponentOverlay(D2UnitStrc * pUnit, uint32_t nCom
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
-    if (nComponentIdx >= 0x10) {
-      return 0;
-    }
 
-    D2MonStats2Txt* pMonStats2 = MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
+    D2MonStats2Txt* pMonStats2 = nComponentIdx < 0x10 ? MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId) : 0;
     if (!pMonStats2) {
       return 0;
     }

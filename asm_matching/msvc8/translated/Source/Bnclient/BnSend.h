@@ -127,6 +127,16 @@ struct SID_C2S_DisplayAd {
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
+struct SID_C2S_GetAdvListEx {
+    /* 0x00 */ uint32_t dwCondition1;
+    /* 0x04 */ uint32_t dwCondition2;
+    /* 0x08 */ uint32_t dwCondition3;
+    /* 0x0C */ uint32_t dwMaxGames;
+    /* 0x10 */ char szData[256]; // game name, password, statstring
+};
+
+#endif // D2_MODULE_Bnclient
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 struct SID_C2S_GetFileTime {
     /* 0x00 */ uint32_t dwRequestId;
     /* 0x04 */ uint32_t dwUnknown;
@@ -201,7 +211,7 @@ int __fastcall NET_SID_CLIENT_Send_0x29_LogonResponse(char * szText1, char * szT
 int __fastcall NET_SID_CLIENT_Send_0x3A_LogonResponse2(char * szText1, char * szText2);
 int __fastcall NET_SID_CLIENT_Send_0x3D_CreateAccount2(char * szText1, char * szText2);
 int __fastcall NET_SID_CLIENT_Send_0x31_ChangePassword(char * szText1, char * szText2, char * szNewPassword);
-void __fastcall NET_SID_CLIENT_Send_0x07_ReportVersion(uint32_t dwExeHash, uint32_t dwExeChecksum, char * szExeInfoStr);
+BOOL __fastcall NET_SID_CLIENT_Send_0x07_ReportVersion(uint32_t dwExeHash, uint32_t dwExeChecksum, char * szExeInfoStr);
 int __fastcall NET_SID_CLIENT_Send_0x06_StartVersioning();
 // @sourcefile .\BnSend.cpp
 void __fastcall BNSEND_StoreCDKeyHashData(void * pKeyHashData, size_t nSize);
@@ -215,7 +225,7 @@ void __stdcall BNSEND_FreeChannelListData();
 char * __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t bIsExpansionChar);
 void __fastcall NET_SID_CLIENT_Send_0x0C_JoinChannel(char * szText, int32_t bForceJoin, int32_t nJoinType);
 uint32_t __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount);
-void __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * szText1, char * szText2, char * dwProductCode);
+BOOL __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * szText1, char * szText2, char * dwProductCode);
 uint32_t __fastcall NET_SID_CLIENT_Send_0x10_LeaveChat();
 void __fastcall NET_SID_CLIENT_Send_0x0E_ChatCommand(uint8_t * szChatText);
 int __stdcall NET_SID_CLIENT_Send_0x15_CheckAd();
@@ -244,7 +254,7 @@ void __fastcall BNSEND_StoreReadUserData(uint8_t * pbReadData, size_t nSize);
 uint32_t __fastcall NET_SID_CLIENT_Send_0x26_ReadUserData(char * szAccount, uint32_t nCount, uint32_t nRequestId, char * * pszKeys);
 // Retrieves stored user data from previous SID_READUSERDATA (0x26) response. Copies string array data into output buffers.
 int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestId, char * * ppszOutBufs, int * pnMaxLens);
-void __fastcall NET_SID_CLIENT_Send_0x59_SetEmail(char * szText);
+BOOL __fastcall NET_SID_CLIENT_Send_0x59_SetEmail(char * szText);
 BOOL __fastcall NET_SID_CLIENT_Send_0x5A_ResetPassword(char * szText1, char * szText2);
 BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szText2, char * szNewEmail);
 BOOL __stdcall NET_SID_CLIENT_Send_0x5D_ReportCrash();

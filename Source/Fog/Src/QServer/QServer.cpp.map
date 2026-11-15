@@ -961,10 +961,10 @@
       ],
       "usedTypes": [
         "D2QServerStrc",
-        "sockaddr",
+        "sockaddr_in",
         "uint32_t"
       ],
-      "dh": "52a29aad",
+      "dh": "6c2fd010",
       "paramStorage": [
         [
           "pQServer",

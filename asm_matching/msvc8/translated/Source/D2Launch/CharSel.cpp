@@ -89,7 +89,7 @@ static ::D2WinTextBox * gpCharSelStatusTextBox = 0; D2_STATIC_GUARD(gpCharSelSta
 static ::D2WinTextBox * gnCharSelScrollOffset = 0; D2_STATIC_GUARD(gnCharSelScrollOffset, "gnCharSelScrollOffset");
 uint32_t gnCharSelLoadedCharCount = 0; D2_GLOBAL_GUARD(gnCharSelLoadedCharCount, "gnCharSelLoadedCharCount");
 uint32_t gnCharSelCreateNewButtonClickCount = 0; D2_GLOBAL_GUARD(gnCharSelCreateNewButtonClickCount, "gnCharSelCreateNewButtonClickCount");
-static D2RealmCharListCacheEntryStrc * gpRealmCharListCache = 0; D2_STATIC_GUARD(gpRealmCharListCache, "gpRealmCharListCache");
+D2RealmCharListCacheEntryStrc * gpRealmCharListCache = 0; D2_GLOBAL_GUARD(gpRealmCharListCache, "gpRealmCharListCache");
 static uint16_t pBetaRealmNames[7][256] = {0}; D2_STATIC_GUARD(pBetaRealmNames, "pBetaRealmNames");
 
 namespace D2Launch { namespace CharSel {

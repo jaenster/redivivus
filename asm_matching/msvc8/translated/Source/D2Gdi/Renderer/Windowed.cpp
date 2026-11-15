@@ -183,7 +183,7 @@ BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue) {
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&RENDERER_SelectedRendererCore->sLock);
     if (bClear) {
-      vc8_thiscall(RENDERER_WINDOWED_ClearScreen)(1, nGreen, nBlue);
+      RENDERER_WINDOWED_ClearScreen(1, nRed, nGreen, nBlue);
     }
 
     return 1;
@@ -799,7 +799,7 @@ void __fastcall DrawSolidRectEx(int nXStart, int nYStart, int nXEnd, int nYEnd, 
     if (uMaxY == uClampedXStart) {
       return;
     }
-    if ((int)uMaxY < (int)uClampedXStart) {
+    if ((int)uClampedXStart > (int)uMaxY) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x32);
       exit(-1);
     }
@@ -1202,7 +1202,7 @@ void __fastcall ClearScreen(BOOL bPartial) {
 }
 
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
-void __fastcall RENDERER_WINDOWED_ClearScreen(int nParam, int, BYTE dwParam2, BYTE dwParam3) {
+void __fastcall RENDERER_WINDOWED_ClearScreen(int nParam, BYTE nRed, BYTE nGreen, BYTE nBlue) {
     RENDERER_WINDOWED_ClearFramebuffer(nParam);
 }
 

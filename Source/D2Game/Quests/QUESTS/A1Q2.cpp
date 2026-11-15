@@ -476,8 +476,10 @@ void __fastcall Q02_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 
     ::SGAMEDATA* pGame;
     pGame = pQuestArgs->pGame;
+    D2UnitDataPlayerStrc* pPlayerData;
+    pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
     D2BitBufferStrc* pBitBuffer;
-    pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState;
     bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
     if (bQuestState == 1) {

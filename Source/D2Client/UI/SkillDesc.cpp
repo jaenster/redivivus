@@ -5337,8 +5337,8 @@ void __fastcall SKILLDESC_DrawSkillDmgConversion(D2UnitStrc * pUnit, D2SkillStrc
     pSkillsTxt = (D2SkillsTxt*)(nSkillsTxt + 0x30 + nConvRangeBonus + nKickMinApplied + (nMinDmgShifted >> 8) - 0x30);
     nMinDmgShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nKickMaxDmg, nKickBonusPct, 100);
     int nAuraMaxSaved = nAuraMaxDmg;
-    nKickMinApplied = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nAuraMaxDmg, nConversionBonus, 100);
-    nKickMaxDmg = nKickMaxSaved + nKickMinApplied + nMinDmgShifted + nAuraMaxSaved;
+    nKickMaxSaved += D2Common::DATATBLS::DataTbls::D2ApplyPercent(nAuraMaxDmg, nConversionBonus, 100);
+    nKickMaxDmg = nKickMaxSaved + nMinDmgShifted + nAuraMaxSaved;
     nSkillLevel = 0;
     nAuraMaxDmg = 0;
     SKILLDESC_AccumulateAuraBonusDmg(pUnitSaved, &nSkillLevel, &nAuraMaxDmg, (uint32_t*)&nElemType);

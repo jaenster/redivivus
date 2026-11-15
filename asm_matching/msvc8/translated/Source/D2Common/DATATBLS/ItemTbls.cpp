@@ -40,7 +40,7 @@ static unsigned int gItemCommon_i_ItemTypeId = 0x646461; D2_STATIC_GUARD(gItemCo
 unsigned int gszTxtColName_lvl = 0x6c766c; D2_GLOBAL_GUARD(gszTxtColName_lvl, "gszTxtColName_lvl");
 static D2ItemsTableStrc gsItemsTable = {0}; D2_STATIC_GUARD(gsItemsTable, "gsItemsTable");
 static D2ItemsTableStrc sgpTxtItems = {0}; D2_STATIC_GUARD(sgpTxtItems, "sgpTxtItems");
-static uint16_t * gpItemIndexOldToCurrent = 0; D2_STATIC_GUARD(gpItemIndexOldToCurrent, "gpItemIndexOldToCurrent");
+uint16_t * gpItemIndexOldToCurrent = 0; D2_GLOBAL_GUARD(gpItemIndexOldToCurrent, "gpItemIndexOldToCurrent");
 namespace D2Common { namespace DATATBLS { namespace ItemTbls {
 D2MagicAffixTableStrc gsMagicAffixTable = {0}; D2_GLOBAL_GUARD(gsMagicAffixTable, "D2Common::DATATBLS::ItemTbls::gsMagicAffixTable");
 D2MagicAffixTableStrc pTxtMagicAffixes = {0}; D2_GLOBAL_GUARD(pTxtMagicAffixes, "D2Common::DATATBLS::ItemTbls::pTxtMagicAffixes");

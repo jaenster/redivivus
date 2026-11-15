@@ -16,6 +16,9 @@
 // Forward declarations
 struct DC6;
 
+// Current animation frame index for the cursor sprite. Incremented by animation speed from CursorDataTable, wraps using UI_GetCursorMaxFrames(). Used by MOUSE_DrawCursorSprite to select frame from pCursorsDC6[6].
+extern int32_t gCursorAnimationFrame;
+
 namespace D2Client { namespace Cursor {
 extern DC6 * pCursorsDC6[7];
 extern int nCursorDataIndex;

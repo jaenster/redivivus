@@ -1593,9 +1593,10 @@
         "NET_MCP_CLIENT_Send"
       ],
       "usedTypes": [
+        "MCPPacketClt0x",
         "int32_t"
       ],
-      "dh": "0101f6aa"
+      "dh": "90a18214"
     },
     {
       "name": "NET_MCP_CLIENT_Send_0x16_CharRank",

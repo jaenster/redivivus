@@ -2425,7 +2425,8 @@ D2UnitStrc * __fastcall SKILL_CreateSummon(::SGAMEDATA * pGame, D2MonsterCastPet
 }
 
 // Creates and drops an item of the given 4-char code at the caster's position. Converts szItemCode to an item class ID, finds the best nearby spawn tile via FindBestSpotToSpawnItem, builds a D2ItemGenContextStrc with the caster's level and given quality, and calls ITEM_CreateItemInstance to spawn and place the item in the game world.
-void __fastcall SKILLS_DropItemByCode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t szItemCode, eD2ItemQuality eQuality) {
+D2UnitStrc * __fastcall SKILLS_DropItemByCode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t szItemCode, eD2ItemQuality eQuality) {
+    D2UnitStrc* pDroppedItem;
     POINT ptOrigPos;
     POINT ptSpawnPos;
     D2ItemGenContextStrc sItemGenCtx;
@@ -2454,10 +2455,12 @@ void __fastcall SKILLS_DropItemByCode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
         sItemGenCtx.pGame = pGame;
         sItemGenCtx.pDrlgRoom = pRoom;
         sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
-        ITEMS::Items::Drop::ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
-        return;
+        pDroppedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
+        return pDroppedItem;
       }
     }
+
+    return nullptr;
 }
 
 // Enumerates all units within nDistance of the caster's current target/cursor position and invokes ppfnProc(unit, nSkillLevel) on each. Uses SKILLS_GetTargetOrCursorPos for the origin, finds the best nearby room, runs FindAllMatchingUnitsInNeighboredRooms with nUnitFindFlags, then iterates the result array. Validates ppfnProc with IsBadCodePtr and halts with an unrecoverable error if invalid. Frees the unit-find data after iteration.
@@ -3785,84 +3788,85 @@ BOOL __fastcall SKILLS_SrvStartSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD
     uint32_t nTargetY;
     ::SGAMEDATA* pGameCtx;
     short int nSrvStFuncId;
+    D2RoomStrc* pRoom;
+    pRoom = 0;
     if (pGame && pUnit) {
-      D2RoomStrc* pRoom;
       pGameCtx = pGame;
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      if (pRoom) {
-        pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-        if (!pSkillsTxt || !bSkipManaCost && (bHasMana = SKILL_CheckManaForCast(pUnit) , !bHasMana)) {
+    }
+    if (!pRoom) {
+      return 0;
+    }
+
+    pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt || !bSkipManaCost && (bHasMana = SKILL_CheckManaForCast(pUnit) , !bHasMana)) {
+      return 0;
+    }
+    if (!(*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
+      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+      if (!pRoom || (bHasLOS = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , bHasLOS != 0)) {
+        D2Common::Units::SetCurrentSkill(pUnit, nullptr);
+        if (pUnit->eUnitType != UNIT_PLAYER) {
           return 0;
         }
-        if (!(*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
-          pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          if (!pRoom || (bHasLOS = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , bHasLOS != 0)) {
-            D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-            if (pUnit->eUnitType != UNIT_PLAYER) {
-              return 0;
-            }
 
-            PLAYER::PlayerModes::PLRMODES_MoveToLocation(pGameCtx, pUnit, nullptr, 5, 0, 0, 1);
+        PLAYER::PlayerModes::PLRMODES_MoveToLocation(pGameCtx, pUnit, nullptr, 5, 0, 0, 1);
+        return 0;
+      }
+    }
+    if (pSkillsTxt->lineofsight != '\0') {
+      bHasLOS = SKILLS_GetTargetOrCursorPos(pGameCtx, pUnit, &nTargetX, &nTargetY);
+      if (bHasLOS) {
+        switch (pSkillsTxt->lineofsight) {
+          default:
             return 0;
-          }
-        }
-        if (pSkillsTxt->lineofsight != '\0') {
-          bHasLOS = SKILLS_GetTargetOrCursorPos(pGameCtx, pUnit, &nTargetX, &nTargetY);
-          if (bHasLOS) {
-            switch (pSkillsTxt->lineofsight) {
-              default:
-                return 0;
-              case '\x01':
-                eCollisionFlag = 4;
-              break;
-              case '\x02':
-                eCollisionFlag = 0x1c09;
-              break;
-              case '\x03':
-                eCollisionFlag = 0x180;
-              break;
-              case '\x04':
-                eCollisionFlag = 0x804;
-              break;
-              case '\x05':
-                eCollisionFlag = 0x805;
-              break;
-            }
-
-            bHasMana = D2Common::Skills::SKILLS_HasLineOfSightToUnit(nTargetX, nTargetY, pUnit, eCollisionFlag);
-            if (!bHasMana) {
-              return 0;
-            }
-          }
+          case '\x01':
+            eCollisionFlag = 4;
+          break;
+          case '\x02':
+            eCollisionFlag = 0x1c09;
+          break;
+          case '\x03':
+            eCollisionFlag = 0x180;
+          break;
+          case '\x04':
+            eCollisionFlag = 0x804;
+          break;
+          case '\x05':
+            eCollisionFlag = 0x805;
+          break;
         }
 
-        nSrvStFuncId = pSkillsTxt->srvstfunc;
-        if (nSrvStFuncId < 0) {
+        bHasMana = D2Common::Skills::SKILLS_HasLineOfSightToUnit(nTargetX, nTargetY, pUnit, eCollisionFlag);
+        if (!bHasMana) {
           return 0;
         }
-        if (nSrvStFuncId >= 0x5b) {
-          return 0;
-        }
-        if (!SKILLSRVSTFUNCS[nSrvStFuncId]) {
-          bHasLOS = 1;
-        } else {
-          bHasLOS = (*SKILLSRVSTFUNCS[nSrvStFuncId])(pGameCtx, pUnit, eSkill, nSkillLvl);
-          if (!bHasLOS) {
-            return 0;
-          }
-          if (!(*((uint8_t*)pSkillsTxt + 0x8) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) && !bSkipManaCost) {
-            CalculateManaUse(pGameCtx, pUnit, eSkill, nSkillLvl);
-          }
-        }
-        if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
-          GAME::Event::EVENT_RemoveUnitTimersByType(pGameCtx, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, 0);
-        }
-
-        return bHasLOS;
       }
     }
 
-    return 0;
+    nSrvStFuncId = pSkillsTxt->srvstfunc;
+    if (nSrvStFuncId < 0) {
+      return 0;
+    }
+    if (nSrvStFuncId >= 0x5b) {
+      return 0;
+    }
+    if (!SKILLSRVSTFUNCS[nSrvStFuncId]) {
+      bHasLOS = 1;
+    } else {
+      bHasLOS = (*SKILLSRVSTFUNCS[nSrvStFuncId])(pGameCtx, pUnit, eSkill, nSkillLvl);
+      if (!bHasLOS) {
+        return 0;
+      }
+      if (!(*((uint8_t*)pSkillsTxt + 0x8) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) && !bSkipManaCost) {
+        CalculateManaUse(pGameCtx, pUnit, eSkill, nSkillLvl);
+      }
+    }
+    if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
+      GAME::Event::EVENT_RemoveUnitTimersByType(pGameCtx, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, 0);
+    }
+
+    return bHasLOS;
 }
 
 // Server-side skill cast/execute dispatcher. Validates eSkill against skills.txt and that pUnit is a player or monster. Handles town/no-cast cleanup (cancels the current skill, moves players to location). Re-resolves the active skill and checks the unit has it at level >= 1, and (for players/monsters) verifies mana via SKILL_CheckManaForCast when the skill flags require it. Dispatches the skill's srvdofunc (or ItemEffect override) from the SKILLSRVDOFUNCS table. If the skill has a srvmissile, sets UNITFLAG_SKSRVDOFUNC and creates the missile toward the resolved target/cursor offset via CreatingAMissile or SKILLS_CreateMissileFromUnit (per flags bit 2). When nParam1 set: deducts mana/charges, and for players applies the skill's cast delay (D2GetSkillCalc on .delay) via SetTimeoutEffect. Returns the srvdofunc result / 1 if a missile was created, 0 on any failure. nParam2/nParam3 gate target-position use and ItemEffect selection.

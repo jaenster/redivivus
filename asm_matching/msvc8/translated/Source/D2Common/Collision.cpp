@@ -957,12 +957,7 @@ void __fastcall AllocRoomCollisionGrid(D2PoolManagerStrc * pMemPool, D2RoomStrc 
     D2RoomStrc* pRoomAdj = pRoomSaved;
     D2DrlgRoomCoordsStrc* pCoordsIter = &sRoomCoords;
     int* pCollisionMapWriter = (int*)pCollisionMapNew;
-    for (nRoomsNearIndex = 8; nRoomsNearIndex; nRoomsNearIndex--) {
-      *pCollisionMapWriter = pCoordsIter->dwXStart;
-      pCoordsIter = (D2DrlgRoomCoordsStrc*)&pCoordsIter->dwYStart;
-      pCollisionMapWriter++;
-    }
-
+    memcpy(pCollisionMapWriter, pCoordsIter, 32);
     DUNGEON::Dungeon::DRLGROOM_SetCollisionGridInRoom(pRoomSaved, pCollisionMapNew);
     pCollisionMapNew->pMapStart = pCollisionMapNew->aMap;
     memset(pCollisionMapNew->aMap, 0, nRoomCoordsCount * 2);
@@ -1383,64 +1378,65 @@ static eCollisionFlags __stdcall CheckCollision_Cross(D2RoomStrc * pRoom, int32_
     eCollisionFlags* pCellBase;
     D2RoomStrc* pRoom_00 = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     eCollisionFlags eFlagMask = (eCollisionFlags)eCollisionFlag;
-    if (pRoom_00) {
-      eCollisionFlags eAdjacentResult;
-      pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom_00);
-      if (pCollisionGrid && pCollisionGrid->pMapStart) {
-        nXStart = pCollisionGrid->sCoords.dwXStart;
-        cEdgeCase = nXStart >= nX;
-        if (pCollisionGrid->sCoords.dwYStart >= nY) {
-          cEdgeCase += '\x02';
-        }
+    eCollisionFlags eAdjacentResult;
+    pCollisionGrid = pRoom_00 ? DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom_00) : 0;
+    if (!pCollisionGrid) {
+      return eFlagMask;
+    }
+    if (!pCollisionGrid->pMapStart) {
+      return eFlagMask;
+    }
 
-        nGridStride = pCollisionGrid->sCoords.dwXSize;
-        nXp1 = nX + 1;
-        if (nXStart + nGridStride <= nXp1) {
-          cEdgeCase += '\x04';
-        }
+    nXStart = pCollisionGrid->sCoords.dwXStart;
+    cEdgeCase = nXStart >= nX;
+    if (pCollisionGrid->sCoords.dwYStart >= nY) {
+      cEdgeCase += '\x02';
+    }
 
-        nYStart = pCollisionGrid->sCoords.dwYStart;
-        nYp1 = nY + 1;
-        if (pCollisionGrid->sCoords.dwYSize + nYStart <= nYp1) {
-          cEdgeCase += '\b';
-        }
+    nGridStride = pCollisionGrid->sCoords.dwXSize;
+    nXp1 = nX + 1;
+    if (nXStart + nGridStride <= nXp1) {
+      cEdgeCase += '\x04';
+    }
 
-        pCellBase = pCollisionGrid->pMapStart + ((nY - nYStart) * nGridStride - nXStart) + nX;
-        switch (cEdgeCase) {
-          case '\0':
-            return (pCellBase[nGridStride] | pCellBase[-nGridStride] | pCellBase[-1] | pCellBase[1] | *pCellBase) & eFlagMask;
-          case '\x01':
-            eAdjacentResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX - 1, nY, eCollisionFlag);
-          return eAdjacentResult | (pCellBase[nGridStride] | pCellBase[-nGridStride] | pCellBase[1] | *pCellBase) & eFlagMask;
-          case '\x02':
-            eAdjacentResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX, nY - 1, eCollisionFlag);
-          return eAdjacentResult | (pCellBase[nGridStride] | pCellBase[-1] | pCellBase[1] | *pCellBase) & eFlagMask;
-          case '\x03':
-            eAdjacentResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX, nY - 1, eCollisionFlag);
-          eAdjacentResult2 = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX - 1, nY, eCollisionFlag);
-          return eAdjacentResult2 | (pCellBase[nGridStride] | pCellBase[1] | *pCellBase) & eFlagMask | eAdjacentResult;
-          case '\x04':
-            eAdjacentResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nXp1, nY, eCollisionFlag);
-          return eAdjacentResult | (pCellBase[nGridStride] | pCellBase[-nGridStride] | pCellBase[-1] | *pCellBase) & eFlagMask;
-          case '\x06':
-            eAdjacentResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX, nY - 1, eCollisionFlag);
-          eAdjacentResult2 = COLLISN_CheckCellMask_RegArgs(pRoom_00, nXp1, nY, eCollisionFlag);
-          return eAdjacentResult2 | (pCellBase[nGridStride] | pCellBase[-1] | *pCellBase) & eFlagMask | eAdjacentResult;
-          case '\b':
-            eAdjacentResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX, nYp1, eCollisionFlag);
-          return eAdjacentResult | (pCellBase[-nGridStride] | pCellBase[-1] | pCellBase[1] | *pCellBase) & eFlagMask;
-          case '\t':
-            eAdjacentResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX, nYp1, eCollisionFlag);
-          eAdjacentResult2 = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX - 1, nY, eCollisionFlag);
-          return eAdjacentResult2 | (pCellBase[-nGridStride] | pCellBase[1] | *pCellBase) & eFlagMask | eAdjacentResult;
-          case '\f':
-            eAdjacentFlags1 = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX, nYp1, eCollisionFlag);
-          eAdjacentFlags2 = COLLISN_CheckCellMask_RegArgs(pRoom_00, nXp1, nY, eCollisionFlag);
-          return eAdjacentFlags2 | (pCellBase[-nGridStride] | pCellBase[-1] | *pCellBase) & eFlagMask | eAdjacentFlags1;
-        }
+    nYStart = pCollisionGrid->sCoords.dwYStart;
+    nYp1 = nY + 1;
+    if (pCollisionGrid->sCoords.dwYSize + nYStart <= nYp1) {
+      cEdgeCase += '\b';
+    }
 
-        return eFlagMask;
-      }
+    pCellBase = pCollisionGrid->pMapStart + ((nY - nYStart) * nGridStride - nXStart) + nX;
+    switch (cEdgeCase) {
+      case '\0':
+        return (pCellBase[nGridStride] | pCellBase[-nGridStride] | pCellBase[-1] | pCellBase[1] | *pCellBase) & eFlagMask;
+      case '\x01':
+        eAdjacentResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX - 1, nY, eCollisionFlag);
+      return eAdjacentResult | (pCellBase[nGridStride] | pCellBase[-nGridStride] | pCellBase[1] | *pCellBase) & eFlagMask;
+      case '\x02':
+        eAdjacentResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX, nY - 1, eCollisionFlag);
+      return eAdjacentResult | (pCellBase[nGridStride] | pCellBase[-1] | pCellBase[1] | *pCellBase) & eFlagMask;
+      case '\x03':
+        eAdjacentResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX, nY - 1, eCollisionFlag);
+      eAdjacentResult2 = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX - 1, nY, eCollisionFlag);
+      return eAdjacentResult2 | (pCellBase[nGridStride] | pCellBase[1] | *pCellBase) & eFlagMask | eAdjacentResult;
+      case '\x04':
+        eAdjacentResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nXp1, nY, eCollisionFlag);
+      return eAdjacentResult | (pCellBase[nGridStride] | pCellBase[-nGridStride] | pCellBase[-1] | *pCellBase) & eFlagMask;
+      case '\x06':
+        eAdjacentResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX, nY - 1, eCollisionFlag);
+      eAdjacentResult2 = COLLISN_CheckCellMask_RegArgs(pRoom_00, nXp1, nY, eCollisionFlag);
+      return eAdjacentResult2 | (pCellBase[nGridStride] | pCellBase[-1] | *pCellBase) & eFlagMask | eAdjacentResult;
+      case '\b':
+        eAdjacentResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX, nYp1, eCollisionFlag);
+      return eAdjacentResult | (pCellBase[-nGridStride] | pCellBase[-1] | pCellBase[1] | *pCellBase) & eFlagMask;
+      case '\t':
+        eAdjacentResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX, nYp1, eCollisionFlag);
+      eAdjacentResult2 = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX - 1, nY, eCollisionFlag);
+      return eAdjacentResult2 | (pCellBase[-nGridStride] | pCellBase[1] | *pCellBase) & eFlagMask | eAdjacentResult;
+      case '\f':
+        eAdjacentFlags1 = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX, nYp1, eCollisionFlag);
+      eAdjacentFlags2 = COLLISN_CheckCellMask_RegArgs(pRoom_00, nXp1, nY, eCollisionFlag);
+      return eAdjacentFlags2 | (pCellBase[-nGridStride] | pCellBase[-1] | *pCellBase) & eFlagMask | eAdjacentFlags1;
     }
 
     return eFlagMask;
@@ -2749,10 +2745,10 @@ int32_t __fastcall UpdateGetCollision_Type(D2RoomStrc * pOldRoom, int32_t nOldX,
     _eCheckResult = CheckCollision_BlockPlayer_Type(pRoom, nX, nY, nType, eCollFlags);
     if (!_eCheckResult) {
       AddCollision_Type(pRoom, nX, nY, nType, eCollisionFlag);
-      return 0;
-    }
-    if (pOldRoom) {
-      AddCollision_Type(pOldRoom, nOldX, nOldY, nType, eCollisionFlag);
+    } else {
+      if (pOldRoom) {
+        AddCollision_Type(pOldRoom, nOldX, nOldY, nType, eCollisionFlag);
+      }
     }
 
     return _eCheckResult;

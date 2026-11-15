@@ -1592,18 +1592,18 @@ BOOL __fastcall Skills_SrvDoFunc_101_FireDirectionalMissile(::SGAMEDATA * pGame,
       if (pUnit_00) {
         D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit_00), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit_00), 0);
         nSrcOrDelta = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit_00);
-        nTargetX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-        sSkillArg.nUnitX = nSrcOrDelta - nTargetX;
+        nSrcOrDelta -= D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+        sSkillArg.nUnitX = nSrcOrDelta;
         nTargetY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit_00);
       } else {
         nTargetY = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
-        nSrcOrDelta = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-        sSkillArg.nUnitX = nTargetY - nSrcOrDelta;
+        nTargetY -= D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+        sSkillArg.nUnitX = nTargetY;
         nTargetY = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
       }
 
-      nSrcOrDelta = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-      sSkillArg.nUnitY = nTargetY - nSrcOrDelta;
+      nTargetY -= D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+      sSkillArg.nUnitY = nTargetY;
       MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       return 1;
     }

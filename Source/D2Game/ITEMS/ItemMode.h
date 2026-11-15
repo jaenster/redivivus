@@ -107,7 +107,7 @@ BOOL __fastcall SERVER_BeltSwapItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUn
 void __fastcall ITEMMODE_RemoveInventoryItem(::SGAMEDATA * pGame, struct D2UnitStrc * pOwnerUnit, struct D2UnitStrc * pItem);
 // Compacts a single belt column (0-3) by sliding all items in that column toward the bottom row. For each item that is out of order it repositions it via INVENTORY_CanPlaceItemInBelt, sets ITEMFLAG_SORTED/RELOAD, clears ITEMFLAG_DISABLED, and queues a RefreshInventory + UpsertToUpdateList.
 // @sourcefile .\ITEMS\ItemMode.cpp
-void __fastcall ITEMMODE_SortBeltColumn(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, uint8_t nColumn);
+void __fastcall ITEMMODE_SortBeltColumn(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, int nColumn);
 // @sourcefile .\ITEMS\ItemMode.cpp
 BOOL __fastcall ITEMMODE_RemoveItemIfOnCursor(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pItem);
 // Server-side handler that inserts a single scroll into a matching tome/book, adding one charge. Looks up both units by GUID (nScrollGUID, nBookGUID) in the game unit table, validates the scroll is an ITEMTYPE_Scroll in a usable anim mode and the book is an ITEMTYPE_Book. Requires their magic suffixes (scroll/tome subtype) to match and the book to be below its max stack. Consumes the scroll: pulls it to cursor (ToCursorItem) and, if not held, removes it from its room, clears targetable flag and deletes/frees it. Increments the book's quantity stat by 1, sends a 0x3E item-stat update to the player's client and updates the tome skill quantity. *pdwParam is an out-flag set to 0 on entry and 1 on validation-failure (no-op) paths. Returns 1 on success, 0 on rejection; halts via ErrorManager on null game/unit/inventory.

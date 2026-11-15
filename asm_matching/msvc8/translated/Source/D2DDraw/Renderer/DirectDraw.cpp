@@ -1289,7 +1289,7 @@ void __fastcall DrawSolidRectEx(int32_t nXStart, int32_t nYStart, int32_t nXEnd,
     if (nClipTop == nClipRightEnd) {
       return;
     }
-    if ((int)nClipTop < (int)nClipRightEnd) {
+    if ((int)nClipRightEnd > (int)nClipTop) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x39);
       exit(-1);
     }

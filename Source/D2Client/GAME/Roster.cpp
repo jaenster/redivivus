@@ -344,7 +344,7 @@ void __stdcall FreeRosterPartyList() {
     pRosterPartyList = 0;
 }
 
-static D2RosterStrc * ROSTER_CollectPartiesIntoPartyList(D2RosterPartyListStrc * pRosterPartyList) {
+static void ROSTER_CollectPartiesIntoPartyList(D2RosterPartyListStrc * pRosterPartyList) {
     D2RosterStrc** ppNextLink;
     D2RosterStrc* ppRosterNext;
     D2RosterStrc* pNextRoster = 0;
@@ -369,8 +369,6 @@ static D2RosterStrc * ROSTER_CollectPartiesIntoPartyList(D2RosterPartyListStrc *
         pPrev = pPrev->pNext;
       }
     }
-
-    return nullptr;
 }
 
 // Insertion-sorts the global pRosterPartyList singly-linked list ascending by nPartyId. Rebuilds the list in-place by relinking pNext pointers and reassigns the global head when done. No allocation; operates on the existing D2RosterPartyListStrc chain.

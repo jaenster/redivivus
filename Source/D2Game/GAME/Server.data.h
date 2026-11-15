@@ -17,5 +17,6 @@
 struct D2BattleNetEventCallbackTable;
 
 extern uint32_t GameSeed;
+extern uint32_t dwCycleLastSecond;
 extern D2BattleNetEventCallbackTable * BattleNetServerService;
 extern BOOL IsBattleNetServer;

@@ -587,7 +587,7 @@ int32_t __fastcall DRLGPATH_GetApproxDistance(int32_t nY1, int32_t nY2, int32_t 
     int nMin = nDx;
     if (nDx >= nDy) {
       nMin = nDy;
-      if (nDy < nDx) {
+      if (nDx > nDy) {
         return nDy + nDx * 2;
       }
     }
@@ -2298,7 +2298,7 @@ static D2DrlgRoomAStarNodeStrc * __stdcall DRLGPATH_AStarExpandNode(int32_t nMax
       nMinDelta = nHashIdx;
       if (nHashIdx >= nDirIndex) {
         nMinDelta = nDirIndex;
-        if (nDirIndex < nHashIdx) {
+        if (nHashIdx > nDirIndex) {
           nDirIndex = nHashIdx;
         }
       }

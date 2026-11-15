@@ -92,36 +92,20 @@ static pfnNewsEntryCallback g_pfnMotdCallback = (pfnNewsEntryCallback)0; D2_STAT
 static pfnVoidNoArgCallback g_pfnNewsCallback = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(g_pfnNewsCallback, "g_pfnNewsCallback");
 static D2BnNewsTableStrc g_nNewsMaxCacheSize = {}; D2_STATIC_GUARD(g_nNewsMaxCacheSize, "g_nNewsMaxCacheSize");
 static uint32_t g_nFirstUnreadNewsIndex = 0; D2_STATIC_GUARD(g_nFirstUnreadNewsIndex, "g_nFirstUnreadNewsIndex");
-static uint32_t g_dwNewsTimestamp = 0; D2_STATIC_GUARD(g_dwNewsTimestamp, "g_dwNewsTimestamp");
+uint32_t g_dwNewsTimestamp = 0; D2_GLOBAL_GUARD(g_dwNewsTimestamp, "g_dwNewsTimestamp");
 
 namespace Bnclient::BnSend {
 
 int __stdcall NET_SID_CLIENT_Send_0x1E_ClientId2() {
-    // Frame -1052..-8 is ONE Ghidra variable the decompiler printed as 7 locals.
-    // Separate locals let the compiler reorder them, so the pieces are one struct.
-    struct __frame0_t {
-      char acStack_41c[4];
-      int32_t iStack_418;
-      int32_t iStack_414;
-      int32_t iStack_410;
-      int32_t iStack_40c;
-      uint8_t uStack_408;
-      uint8_t uStack_407;
-      uint8_t __pad22[1022];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1044, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    Storm::Source::SReg::SRegLoadValue("Configuration", "Registration Version", 2, &__frame0.iStack_418);
-    Storm::Source::SReg::SRegLoadValue("Configuration", "Registration Authority", 2, &__frame0.iStack_414);
-    Storm::Source::SReg::SRegLoadValue("Configuration", "Client ID", 2, &__frame0.iStack_410);
-    Storm::Source::SReg::SRegLoadValue("Configuration", "Client Token", 2, &__frame0.iStack_40c);
-    __frame0.acStack_41c[0] = '\x01';
-    __frame0.acStack_41c[1] = '\0';
-    __frame0.acStack_41c[2] = '\0';
-    __frame0.acStack_41c[3] = '\0';
-    __frame0.uStack_408 = 0;
-    __frame0.uStack_407 = 0;
-    NET_SID_CLIENT_Send(0x1e, __frame0.acStack_41c, 0x16);
+    SID_C2S_ClientId2 abPacketBuf;
+    Storm::Source::SReg::SRegLoadValue("Configuration", "Registration Version", 2, (int32_t*)&abPacketBuf.dwRegVersion);
+    Storm::Source::SReg::SRegLoadValue("Configuration", "Registration Authority", 2, (int32_t*)&abPacketBuf.dwRegAuthority);
+    Storm::Source::SReg::SRegLoadValue("Configuration", "Client ID", 2, (int32_t*)&abPacketBuf.dwClientId);
+    Storm::Source::SReg::SRegLoadValue("Configuration", "Client Token", 2, (int32_t*)&abPacketBuf.dwClientToken);
+    abPacketBuf.dwServerVersion = 1;
+    abPacketBuf.szComputerName[0] = '\0';
+    abPacketBuf.szUserName[0] = '\0';
+    NET_SID_CLIENT_Send(0x1e, (char*)&abPacketBuf, 0x16);
     return 1;
 }
 
@@ -229,7 +213,7 @@ int __fastcall NET_SID_CLIENT_Send_0x31_ChangePassword(char * szText1, char * sz
     return 1;
 }
 
-void __fastcall NET_SID_CLIENT_Send_0x07_ReportVersion(uint32_t dwExeHash, uint32_t dwExeChecksum, char * szExeInfoStr) {
+BOOL __fastcall NET_SID_CLIENT_Send_0x07_ReportVersion(uint32_t dwExeHash, uint32_t dwExeChecksum, char * szExeInfoStr) {
     SID_C2S_ReportVersion sPacket;
     char cFilenameCh;
     memset(&sPacket, 0, 0x114);
@@ -242,7 +226,8 @@ void __fastcall NET_SID_CLIENT_Send_0x07_ReportVersion(uint32_t dwExeHash, uint3
     Storm::Source::SSTR::SStrCopy(sPacket.szExeInfo, szExeInfoStr, 0x100);
     char* szFilenameCursor = sPacket.szExeInfo;
     szFilenameCursor = szFilenameCursor + strlen(szFilenameCursor) + 1;
-    NET_SID_CLIENT_Send(7, (char*)&sPacket, (size_t)(szFilenameCursor + (0x15 - (intptr_t)(sPacket.szExeInfo + 1))));
+    int32_t nSendLen = NET_SID_CLIENT_Send(7, (char*)&sPacket, (size_t)(szFilenameCursor + (0x15 - (intptr_t)(sPacket.szExeInfo + 1))));
+    return (uint32_t)(nSendLen >= 0);
 }
 
 int __fastcall NET_SID_CLIENT_Send_0x06_StartVersioning() {
@@ -453,7 +438,7 @@ uint32_t __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount
     return 1;
 }
 
-void __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * szText1, char * szText2, char * dwProductCode) {
+BOOL __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * szText1, char * szText2, char * dwProductCode) {
     // Frame slots -524..-8 are ONE object: &dwProductVersion is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -479,7 +464,8 @@ void __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * sz
     pszCursor = pszCursor + strlen(pszCursor) + 1;
     char* pszScanEnd = __frame0.szPacketBuf + 1 + (int)((char*)pszCursor - (char*)((uint8_t*)&__frame0.szPacketBuf + 520) + 0x207);
     pszScanEnd = pszScanEnd + strlen(pszScanEnd) + 1;
-    NET_SID_CLIENT_Send(10, __frame0.szPacketBuf, (size_t)(pszScanEnd + ((intptr_t)((uint8_t*)&__frame0.szPacketBuf + 520) * -2 - (int)((char*)pszCursor - (char*)((uint8_t*)&__frame0.szPacketBuf + 520) + 0x207)) + (intptr_t)(pszText2End + 0x410)));
+    int32_t nSendResult = NET_SID_CLIENT_Send(10, __frame0.szPacketBuf, (size_t)(pszScanEnd + ((intptr_t)((uint8_t*)&__frame0.szPacketBuf + 520) * -2 - (int)((char*)pszCursor - (char*)((uint8_t*)&__frame0.szPacketBuf + 520) + 0x207)) + (intptr_t)(pszText2End + 0x410)));
+    return (uint32_t)(nSendResult >= 0);
 }
 
 uint32_t __fastcall NET_SID_CLIENT_Send_0x10_LeaveChat() {
@@ -605,25 +591,24 @@ void __stdcall BNSEND_FreeGameListData() {
 }
 
 void * __fastcall NET_SID_CLIENT_Send_0x09_GetAdvListEx(char * szText1, char * szText2, uint32_t dwParam1, uint32_t dwParam2) {
-    uint8_t aPacketBuf[272];
-    memset(aPacketBuf, 0, 12 * sizeof(aPacketBuf[0]));
-    aPacketBuf[0xc] = 0x19;
-    aPacketBuf[0xd] = 0;
-    aPacketBuf[0xe] = 0;
-    aPacketBuf[0xf] = 0;
+    SID_C2S_GetAdvListEx aPacketBuf;
+    aPacketBuf.dwCondition1 = 0;
+    aPacketBuf.dwCondition2 = 0;
+    aPacketBuf.dwCondition3 = 0;
+    aPacketBuf.dwMaxGames = 0x19;
     if (!szText1) {
       szText1 = "";
     }
 
-    uint32_t nGameNameLen = Storm::Source::SSTR::SStrCopy((char*)(aPacketBuf + 0x10), szText1, 0x100);
+    uint32_t nGameNameLen = Storm::Source::SSTR::SStrCopy(aPacketBuf.szData, szText1, 0x100);
     if (!szText2) {
       szText2 = "";
     }
 
-    uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy((char*)(aPacketBuf + nGameNameLen + 0x11), szText2, 0x100);
-    uint32_t nDescLen = Storm::Source::SSTR::SStrCopy((char*)(aPacketBuf + nPasswordLen + nGameNameLen + 0x12), "", 0x100);
+    uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy(aPacketBuf.szData + nGameNameLen + 1, szText2, 0x100);
+    uint32_t nDescLen = Storm::Source::SSTR::SStrCopy(aPacketBuf.szData + nPasswordLen + nGameNameLen + 2, "", 0x100);
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(9);
-    NET_SID_CLIENT_Send(9, (char*)aPacketBuf, (size_t)(aPacketBuf + nPasswordLen + nGameNameLen + 0x12 + (nDescLen + 0x11 - (intptr_t)(aPacketBuf + 0x10))));
+    NET_SID_CLIENT_Send(9, (char*)&aPacketBuf, (size_t)(aPacketBuf.szData + nPasswordLen + nGameNameLen + 2 + (nDescLen + 0x11 - (intptr_t)aPacketBuf.szData)));
     _net_sid::NET_SID_CLIENT_WaitForPacketId(9);
     void* pGameList = g_pBNetGameListData;
     return pGameList;
@@ -865,9 +850,10 @@ int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestI
     return 0;
 }
 
-void __fastcall NET_SID_CLIENT_Send_0x59_SetEmail(char * szText) {
+BOOL __fastcall NET_SID_CLIENT_Send_0x59_SetEmail(char * szText) {
     uint32_t nStrLen;
     char szEmailBuf[256];
+    int32_t nLine;
     if (!szText) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x55d);
       exit(-1);
@@ -880,8 +866,8 @@ void __fastcall NET_SID_CLIENT_Send_0x59_SetEmail(char * szText) {
 
       memcpy(szEmailBuf, szText, nStrLen);
       szEmailBuf[nStrLen] = '\0';
-      NET_SID_CLIENT_Send(0x59, szEmailBuf, nStrLen + 1);
-      return;
+      nLine = NET_SID_CLIENT_Send(0x59, szEmailBuf, nStrLen + 1);
+      return (uint32_t)(nLine >= 0);
     }
 }
 

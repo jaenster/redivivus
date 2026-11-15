@@ -60,7 +60,7 @@ void __fastcall CRT_LocalTime_Thunk(uint8_t * pLocalTime, uint32_t * pTime);
 // (+0x18). Fog::Src::ErrorManager::GetParentProcessId @ 00407990 does read +0x18 and keeps its name.
 // The offset was only readable once the local was widened to the real struct; before that it was
 // six loose dwords with invented names. No callers, so the rename is local.
-void __stdcall SYSTEM_GetCurrentProcessThreadCount();
+int __stdcall SYSTEM_GetCurrentProcessThreadCount();
 bool __stdcall InternalCheckCorp();
 char * ILT_strrchr(char * _Str, int32_t _Ch);
 LPCRITICAL_SECTION __stdcall SYSTEM_EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);

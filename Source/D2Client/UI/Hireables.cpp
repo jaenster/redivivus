@@ -48,7 +48,7 @@ bool HealthBarColorsInitialized = 0; D2_GLOBAL_GUARD(HealthBarColorsInitialized,
 static int gnHireIconDrawX = 0; D2_STATIC_GUARD(gnHireIconDrawX, "gnHireIconDrawX");
 static uint32_t gnHireIconDrawY = 0; D2_STATIC_GUARD(gnHireIconDrawY, "gnHireIconDrawY");
 static uint32_t gnHireIconHoverX = 0; D2_STATIC_GUARD(gnHireIconHoverX, "gnHireIconHoverX");
-static uint32_t gnHireIconHoverY = 0; D2_STATIC_GUARD(gnHireIconHoverY, "gnHireIconHoverY");
+uint32_t gnHireIconHoverY = 0; D2_GLOBAL_GUARD(gnHireIconHoverY, "gnHireIconHoverY");
 static uint8_t gbHireIconsVisible = 0; D2_STATIC_GUARD(gbHireIconsVisible, "gbHireIconsVisible");
 static uint32_t gnHireIconHoverIndex = 0; D2_STATIC_GUARD(gnHireIconHoverIndex, "gnHireIconHoverIndex");
 
@@ -593,44 +593,42 @@ void __stdcall UI_HandleHirelingTooltipHoverTimer(D2UIMouseMsgStrc * pMsg) {
 
 void __stdcall UI_ToggleHirelingIconsVisibility() {
     eD2GSGameType eGameType;
-    if (gnHireDisplayMode) {
-      switch (gnHireDisplayMode) {
-        case 1:
-          {
-            eGameType = GAME::Game::CLIENT_GetD2GSGameType();
-            if (eGameType == GAMETYPE_SINGLEPLAYER) {
-              gnHireDisplayMode = 0;
-              ui::SetUIFlag(UI_HIREICONS, UI_SET, 0);
-              return;
-            }
-
+    switch (gnHireDisplayMode) {
+      case 0:
+        {
+          eGameType = GAME::Game::CLIENT_GetD2GSGameType();
+          if (eGameType == GAMETYPE_SINGLEPLAYER) {
             gnHireDisplayMode = 2;
             gnHireIconHoverIndex = 0;
             ui::SetUIFlag(UI_HIREICONS, UI_RESET, 0);
             return;
           }
-        default:
-          {
+
+          gnHireDisplayMode = 1;
+          ui::SetUIFlag(UI_HIREICONS, UI_SET, 0);
+          return;
+        }
+      case 1:
+        {
+          eGameType = GAME::Game::CLIENT_GetD2GSGameType();
+          if (eGameType == GAMETYPE_SINGLEPLAYER) {
             gnHireDisplayMode = 0;
             ui::SetUIFlag(UI_HIREICONS, UI_SET, 0);
             return;
           }
-      }
 
-      return;
+          gnHireDisplayMode = 2;
+          gnHireIconHoverIndex = 0;
+          ui::SetUIFlag(UI_HIREICONS, UI_RESET, 0);
+          return;
+        }
+      default:
+        {
+          gnHireDisplayMode = 0;
+          ui::SetUIFlag(UI_HIREICONS, UI_SET, 0);
+          return;
+        }
     }
-
-    eGameType = GAME::Game::CLIENT_GetD2GSGameType();
-    if (eGameType == GAMETYPE_SINGLEPLAYER) {
-      gnHireDisplayMode = 2;
-      gnHireIconHoverIndex = 0;
-      ui::SetUIFlag(UI_HIREICONS, UI_RESET, 0);
-      return;
-    }
-
-    gnHireDisplayMode = 1;
-    ui::SetUIFlag(UI_HIREICONS, UI_SET, 0);
-    return;
 }
 
 void __stdcall INPUT_HireableLongPress(D2UIMouseMsgStrc * pMsg) {

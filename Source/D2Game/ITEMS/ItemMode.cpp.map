@@ -2410,10 +2410,9 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ],
-      "dh": "a4cecf0d",
+      "dh": "ec17bd98",
       "paramStorage": [
         [
           "pGameStrc",
@@ -2425,7 +2424,7 @@
         ],
         [
           "nColumn",
-          "Stack[0x4]:1"
+          "Stack[0x4]:4"
         ]
       ]
     },
@@ -4549,7 +4548,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ec884b31",
+      "dh": "41e71c70",
       "paramStorage": [
         [
           "pGame",
@@ -4613,7 +4612,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "7ce7af5a",
+      "dh": "e2b5ec58",
       "paramStorage": [
         [
           "pGame",

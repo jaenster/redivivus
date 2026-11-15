@@ -17,6 +17,7 @@
 #include "Source/globals/globals.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Game/UNIT/sunitproxy.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -46,6 +47,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2NpcPlayerInteractionStrc) == 0xc,
 typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArgs);
 #endif
 
+int gnNpcControlInitCount = 0x2b; D2_GLOBAL_GUARD(gnNpcControlInitCount, "gnNpcControlInitCount");
 static D2NpcItemTablesStrc gaNpcItemTables[17] = {}; D2_STATIC_GUARD(gaNpcItemTables, "gaNpcItemTables");
 static uint8_t gbaNpcItemTableBuilt[17] = {}; D2_STATIC_GUARD(gbaNpcItemTableBuilt, "gbaNpcItemTableBuilt");
 
@@ -137,7 +139,6 @@ static void SUNITPROXY_InitNpcTradeItems(int32_t nNpcTableIdx, ::SGAMEDATA * pGa
 // @sourcefile .\UNIT\sunitproxy.cpp
 void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
     // Static local variables (originally global data)
-    static int gnNpcControlInitCount = 0x2b; D2_STATIC_GUARD(gnNpcControlInitCount, "D2Game::UNIT::sunitproxy::SUNITPROXY_AllocNpcControl::gnNpcControlInitCount");
     static D2NpcControlInitStrc gaNpcControlInitTable[43] = {
     {
         /* .nMonStatsId = */ 0x94,

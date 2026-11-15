@@ -169,8 +169,6 @@ void __stdcall AUTOMAP_LoadLayerFromFile();
 void __stdcall AUTOMAP_SwitchLayer(struct D2AutomapLayerStrc * pAutomapLayer);
 // @sourcefile .\UI\automap.cpp
 void __stdcall AUTOMAP_AllocLayer(int32_t nLayer);
-// @sourcefile .\UI\automap.cpp
-struct D2AutomapLayerStrc * AUTOMAP_AddLayer(int32_t nLayer);
 void __stdcall AUTOMAP_RevealUnitsInRoom(struct D2RoomStrc * pRoom, struct D2AutomapCellStrc * * pAutomapCell);
 // AUTOMAP_RevealRoom - Reveals all tiles and units in a room on the automap.
 // Iterates floor tiles and wall tiles, checking visibility flags (0x20000).
@@ -241,6 +239,6 @@ void __stdcall AUTOMAP_DrawPlayersAndParty();
 void __stdcall AUTOMAP_Draw();
 BOOL __stdcall AUTOMAP_GetParty_ForEscMenuItem();
 #endif // D2_MODULE_D2Client
-// 9 internal functions (defined in .cpp)
+// 10 internal functions (defined in .cpp)
 
 }}} // namespace D2Client::UI::Automap

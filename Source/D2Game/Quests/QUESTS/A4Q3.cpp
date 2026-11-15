@@ -242,7 +242,8 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
     }
 
     ::SGAMEDATA* pGame = pOperation->sArg.pGame;
-    D2BitBufferStrc* pQuestBitBuffer = GetQuestBitBufferInline(pGame, pOperation->pAttacker);
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
+    D2BitBufferStrc* pQuestBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBitBuffer, QUEST_HellsForge, QUESTSTATE_Completed);
     /* GetQuestState(QUEST_HellsForge=0x1b, RewardAwaits=1): reward already pending?
                          bail */ if (bQuestState != 1) {
@@ -458,7 +459,8 @@ void __fastcall Q28_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     }
 
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
-    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
     if (bQuestState == 1) {
       return;

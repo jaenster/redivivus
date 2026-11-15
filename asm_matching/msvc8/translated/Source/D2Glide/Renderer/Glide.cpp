@@ -1301,8 +1301,8 @@ BOOL __stdcall RENDERER_GLIDE_InitTextureMemory() {
         nFloorTexSize = (dwAlignMask | 0x8000) + 1;
       }
 
-      nAllocSize = RENDERER_GLIDE_InitDebugFont(gnGlideTexMemBaseAddress[0], gnGlideTextureMemoryMask);
-      nCacheEnd = nMaskTmp + nAllocSize;
+      nMaskTmp += RENDERER_GLIDE_InitDebugFont(gnGlideTexMemBaseAddress[0], gnGlideTextureMemoryMask);
+      nCacheEnd = nMaskTmp;
       nMaskTmp = gnGlideTextureMemoryMax[0] - nCacheEnd;
       if (gnGlideTextureMemoryUsed >= 2) {
         gnTextureMemoryUsageBytes.nTextureMemoryUsageBytes = nMaskTmp * 3 >> 2;
@@ -1342,8 +1342,8 @@ BOOL __stdcall RENDERER_GLIDE_InitTextureMemory() {
       gnTextureMemoryUsageBytes.nGlideLargeTextureCacheMemBytes = gGlideVertex0.aTextureCache[2].nMaxEntries * nSmallTexSize;
     } else {
       if (RENDERER_nWindowWidth == 800 && RENDERER_nWindowHeight == 600) {
-        nAllocSize = GLSMACK_AllocTextureMemory(gnGlideTexMemBaseAddress[0], gnGlideTextureMemoryMask);
-        nCacheEnd = nMaskTmp + nAllocSize;
+        nMaskTmp += GLSMACK_AllocTextureMemory(gnGlideTexMemBaseAddress[0], gnGlideTextureMemoryMask);
+        nCacheEnd = nMaskTmp;
         nTotalTexMem = gnGlideTextureMemoryMax[0] - nCacheEnd;
         if (gnGlideTextureMemoryUsed > 1) {
           nCacheEnd = glTextureCache::GLTEXCACHE_Initialize(gGlideVertex0.aTextureCache + 1, nCacheEnd, (uint32_t)(nTotalTexMem * 0x32) / 100 + nCacheEnd, nMedTexSize);
@@ -2896,7 +2896,7 @@ void __fastcall DrawSolidRectEx(int32_t nXStart, int32_t nYStart, int32_t nXEnd,
     if (uVar1 == nClampedXEnd) {
       return;
     }
-    if ((int)uVar1 < (int)nClampedXEnd) {
+    if ((int)nClampedXEnd > (int)uVar1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x29);
       exit(-1);
     }
@@ -2984,7 +2984,7 @@ void __fastcall DrawSolidRectAlpha(int32_t nXStart, int32_t nYStart, int32_t nXE
     if (uVar1 == nClampedXEnd) {
       return;
     }
-    if ((int)uVar1 < (int)nClampedXEnd) {
+    if ((int)nClampedXEnd > (int)uVar1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x61);
       exit(-1);
     }
@@ -3144,7 +3144,7 @@ void __fastcall DrawRectEx(RECT * pRect, DWORD nPaletteIndex) {
       if (nClampedYEndTmp == nClampedXStart) {
         return;
       }
-      if ((int)nClampedYEndTmp < (int)nClampedXStart) {
+      if ((int)nClampedXStart > (int)nClampedYEndTmp) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf0);
         exit(-1);
       }

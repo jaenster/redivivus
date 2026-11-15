@@ -22,6 +22,7 @@ struct D2SpeechBankStrc;
 struct DC6;
 struct ListBoxWrapper;
 
+extern uint32_t gNPCMenuSelectionPtrTable;
 extern D2SpeechBankStrc gaNpcSpeechData_725498[12];
 extern D2SpeechBankStrc gaNpcSpeechBank_725550[11];
 extern D2SpeechBankStrc gaNpcDialogOptionData_7255f8[9];

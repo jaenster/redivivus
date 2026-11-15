@@ -492,7 +492,7 @@ uint32_t __stdcall FOG_EvaluateCalcExpression(uint32_t * pFormula, int nFormulaS
     }
 
     return_top_of_stack:
-    if (nArgCount && 0 < nArgCount) {
+    if (nArgCount && nArgCount > 0) {
       aFormulaValueStack[0x40] = nArgCount - 1;
       return aFormulaValueStack[nArgCount - 1];
     }

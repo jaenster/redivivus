@@ -77,7 +77,7 @@ void __fastcall TASK_LinkTaskToList(struct D2LinkNodeStrc * pList, struct D2Link
 // Inserts pNode in front of the head *ppList, which makes it the tail of the circular list (inline LINKLIST_InsertBefore). Halts (Linklist.h lines 127/128) on NULL and (line 108) on an empty list.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void __fastcall LINKLIST_AppendToList(struct D2LinkNodeStrc * * ppList, struct D2LinkNodeStrc * pNode);
-void __fastcall TASK_UnlinkTaskFromList(struct D2LinkNodeStrc * pLink);
+struct D2LinkNodeStrc * __fastcall TASK_UnlinkTaskFromList(struct D2LinkNodeStrc * pLink);
 // Returns the current millisecond tick used to timestamp tasks. Wraps GetTickCount; the return is 32 bits in EAX only - EDX is never written before RET, and the sole caller stores four bytes.
 uint32_t __stdcall TASK_GetTimestamp();
 // Moves queued tasks from the existing slots into pSlot, then appends pSlot to the slot ring. avg = gnTaskQueueTailIndex / gnTaskQueueSlotCounter. For each slot on the gsTaskQueueListHead ring (walked along sSlotLink+4), under aTaskQueueCriticalSections[nSlotIndex] it steps along sTaskList a count derived from the slot's nTaskCount, avg and the remainder gnTaskQueueTailIndex % gnTaskQueueSlotCounter, and cuts the list there; outside the lock the cut-off nodes are merged into pSlot->sTaskList by timestamp. Finally links pSlot->sSlotLink into the ring at gsTaskQueueListHead+4; halts at line 0x78 if that link is NULL. Called by TASK_AllocateTaskQueue (005649e2).

@@ -396,7 +396,7 @@
         "exit",
         "RENDERER_WINDOWED_ClearScreen"
       ],
-      "dh": "6f5e2ec0",
+      "dh": "c737fba9",
       "paramStorage": [
         [
           "bClear",
@@ -1994,18 +1994,22 @@
         "RENDERER_WINDOWED_ClearScreen",
         "RENDERER_WINDOWED_ClearFramebuffer"
       ],
-      "dh": "8c805df2",
+      "dh": "fd028c04",
       "paramStorage": [
         [
           "nParam",
           "ECX:4"
         ],
         [
-          "dwParam2",
+          "nRed",
+          "DL:1"
+        ],
+        [
+          "nGreen",
           "Stack[0x4]:1"
         ],
         [
-          "dwParam3",
+          "nBlue",
           "Stack[0x8]:1"
         ]
       ]

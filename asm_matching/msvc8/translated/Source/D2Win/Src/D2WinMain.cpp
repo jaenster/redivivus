@@ -369,8 +369,7 @@ void __stdcall D2WINMAIN_FreeLeadingFormControls() {
     } while (pDVar1);
 }
 
-void __stdcall FORMS_DestroyControl(D2ControlStrc * pControl) {
-    D2ControlStrc* pCurrent;
+BOOL __stdcall FORMS_DestroyControl(D2ControlStrc * pControl) {
     if (pFormTextAndEditBox == (::D2WinEditBox*)pControl) {
       pFormTextAndEditBox = 0;
     }
@@ -385,30 +384,31 @@ void __stdcall FORMS_DestroyControl(D2ControlStrc * pControl) {
       gpEscapeButton = 0;
     }
     if (!pFormsList) {
-      return;
+      return 0;
     }
     if (pFormsList == pControl) {
       pFormsList = pControl->pNext;
       FORMS_AppendFormToDestroyQueue(pControl);
-      return;
+      return 1;
     }
 
     D2ControlStrc* pIter = pFormsList->pNext;
     D2ControlStrc* pPrev = pFormsList;
-    if (!pFormsList->pNext) {
-      return;
-    }
-
-    while ((pCurrent = pIter) != pControl) {
-      pIter = pCurrent->pNext;
-      pPrev = pCurrent;
-      if (!pCurrent->pNext) {
-        return;
+    if (pFormsList->pNext) {
+      D2ControlStrc* pCurrent;
+      while ((pCurrent = pIter) != pControl) {
+        pIter = pCurrent->pNext;
+        pPrev = pCurrent;
+        if (!pCurrent->pNext) {
+          return 1;
+        }
       }
+
+      pPrev->pNext = pCurrent->pNext;
+      FORMS_AppendFormToDestroyQueue(pControl);
     }
 
-    pPrev->pNext = pCurrent->pNext;
-    FORMS_AppendFormToDestroyQueue(pControl);
+    return 1;
 }
 
 D2ControlStrc * __stdcall FORMS_CreateAnyForm(FORMS_PredefinedFormStrc * pForm) {

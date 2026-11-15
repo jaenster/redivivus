@@ -1122,17 +1122,17 @@ void __fastcall NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(D2ClientStrc * pClient, u
 }
 
 void __fastcall NET_D2GS_SERVER_Send_0x78_TRADENAME(D2ClientStrc * pClient, D2GSPacketSrv0x78 * pPacketData) {
-    uint8_t aPacket[21];
-    aPacket[0] = pPacketData->nPacketId;
-    aPacket[1] = pPacketData->szName[0];
-    aPacket[2] = pPacketData->szName[1];
-    aPacket[3] = pPacketData->szName[2];
-    *(uint32_t*)((char*)&aPacket + 4) = *(uint32_t*)(pPacketData->szName + 3);
-    *(uint32_t*)((char*)&aPacket + 8) = *(uint32_t*)(pPacketData->szName + 7);
-    *(uint32_t*)((char*)&aPacket + 12) = *(uint32_t*)(pPacketData->szName + 0xb);
-    *(uint32_t*)((char*)&aPacket + 16) = *(uint32_t*)(pPacketData->szName + 0xf);
-    aPacket[0x14] = *(uint8_t*)((intptr_t)&pPacketData->nUnitGUID + 3);
-    SCMD_QueuePacketForClient(pClient, aPacket, 0x15);
+    D2GSPacketSrv0x78 tPacket;
+    tPacket.nPacketId = pPacketData->nPacketId;
+    tPacket.szName[0] = pPacketData->szName[0];
+    tPacket.szName[1] = pPacketData->szName[1];
+    tPacket.szName[2] = pPacketData->szName[2];
+    *(uint32_t*)((char*)&tPacket.szName + 3) = *(uint32_t*)(pPacketData->szName + 3);
+    *(uint32_t*)((char*)&tPacket.szName + 7) = *(uint32_t*)(pPacketData->szName + 7);
+    *(uint32_t*)((char*)&tPacket.szName + 11) = *(uint32_t*)(pPacketData->szName + 0xb);
+    *(uint32_t*)((char*)&tPacket + 16) = *(uint32_t*)(pPacketData->szName + 0xf);
+    *(uint8_t*)((char*)&tPacket.nUnitGUID + 3) = *(uint8_t*)((intptr_t)&pPacketData->nUnitGUID + 3);
+    SCMD_QueuePacketForClient(pClient, &tPacket.nPacketId, 0x15);
 }
 
 // Server-to-client summon log update. Opcode 0x7A.

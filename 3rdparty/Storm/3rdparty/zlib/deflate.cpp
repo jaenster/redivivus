@@ -150,33 +150,30 @@ uint32_t __fastcall deflatePending(z_stream * pStream, uint32_t * pPending, uint
 uint32_t __fastcall deflatePrime(z_stream * pStream, int32_t nBits, uint32_t uValue) {
     deflate_state* pDeflateState;
     int nUsedBits;
-    if (pStream) {
-      int nChunkBits;
-      pDeflateState = (deflate_state*)pStream->state;
-      if (pDeflateState) {
-        if (pDeflateState->d_buf < (unsigned short*)(pDeflateState->pending_out + 2)) {
-          return -5;
-        }
-
-        do {
-          nUsedBits = pDeflateState->bi_valid;
-          nChunkBits = 0x10 - nUsedBits;
-          if (0x10 - nUsedBits > nBits) {
-            nChunkBits = nBits;
-          }
-
-          pDeflateState->bi_valid = nUsedBits + nChunkBits;
-          pDeflateState->bi_buf |= (uint16_t)(((1 << D2_SHIFT_COUNT(nChunkBits)) - 1U & uValue) << D2_SHIFT_COUNT(nUsedBits));
-          trees::_tr_flush_bits(pDeflateState);
-          uValue = (int)uValue >> D2_SHIFT_COUNT(nChunkBits);
-          nBits -= nChunkBits;
-        } while (nBits);
-
-        return 0;
-      }
+    int nChunkBits;
+    pDeflateState = pStream ? (deflate_state*)pStream->state : 0;
+    if (!pDeflateState) {
+      return -2;
+    }
+    if (pDeflateState->d_buf < (unsigned short*)(pDeflateState->pending_out + 2)) {
+      return -5;
     }
 
-    return -2;
+    do {
+      nUsedBits = pDeflateState->bi_valid;
+      nChunkBits = 0x10 - nUsedBits;
+      if (0x10 - nUsedBits > nBits) {
+        nChunkBits = nBits;
+      }
+
+      pDeflateState->bi_valid = nUsedBits + nChunkBits;
+      pDeflateState->bi_buf |= (uint16_t)(((1 << D2_SHIFT_COUNT(nChunkBits)) - 1U & uValue) << D2_SHIFT_COUNT(nUsedBits));
+      trees::_tr_flush_bits(pDeflateState);
+      uValue = (int)uValue >> D2_SHIFT_COUNT(nChunkBits);
+      nBits -= nChunkBits;
+    } while (nBits);
+
+    return 0;
 }
 
 uint32_t __fastcall deflateTune(z_stream * pStream, uint32_t nGoodMatch, uint32_t nMaxLazyMatch, int32_t nNiceMatch, uint32_t nMaxChainLen) {
@@ -345,48 +342,46 @@ uint32_t __fastcall deflateCopy(z_stream * pDestStream, z_stream * pSrcStream) {
     int nCopyWords;
     z_stream* pDestCursor;
     deflate_state* pSrcState;
-    if (pSrcStream && pDestStream) {
-      deflate_state* pDestState;
-      pSrcState = (deflate_state*)pSrcStream->state;
-      if (pSrcState) {
-        pDestCursor = pDestStream;
-        *pDestCursor = *pSrcStream;
-        pDestState = (deflate_state*)pDestStream->zalloc(pDestStream->opaque, 1, 0x16c4);
-        if (!pDestState) {
-          return -4;
-        }
-
-        pDestStream->state = pDestState;
-        memcpy(pDestState, pSrcState, 0x16c4);
-        pDestState->strm = pDestStream;
-        pAllocTree = (uint8_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->w_size, 2);
-        pDestState->window = pAllocTree;
-        pHashHead = (uint16_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->w_size, 2);
-        pDestState->prev = pHashHead;
-        pHashHead = (uint16_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->hash_size, 2);
-        pDestState->head = pHashHead;
-        pAllocTree = (uint8_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->lit_bufsize, 4);
-        pDestState->pending_buf = pAllocTree;
-        if (pDestState->window && pDestState->prev && pDestState->head && pAllocTree) {
-          memcpy(pDestState->window, pSrcState->window, pDestState->w_size * 2);
-          memcpy(pDestState->prev, pSrcState->prev, pDestState->w_size * 2);
-          memcpy(pDestState->head, pSrcState->head, pDestState->hash_size * 2);
-          memcpy(pDestState->pending_buf, pSrcState->pending_buf, pDestState->pending_buf_size);
-          pDestState->pending_out = pDestState->pending_buf + ((intptr_t)pSrcState->pending_out - (intptr_t)pSrcState->pending_buf);
-          pDestState->d_buf = (uint16_t*)(pAllocTree + (pDestState->lit_bufsize & -2));
-          pDestState->l_buf = pDestState->pending_buf + pDestState->lit_bufsize * 3;
-          pDestState->d_desc.dyn_tree = pDestState->dyn_dtree;
-          pDestState->l_desc.dyn_tree = pDestState->dyn_ltree;
-          pDestState->bl_desc.dyn_tree = pDestState->bl_tree;
-          return 0;
-        }
-
-        deflateEnd(pDestStream);
-        return -4;
-      }
+    deflate_state* pDestState;
+    pSrcState = pSrcStream && pDestStream ? (deflate_state*)pSrcStream->state : 0;
+    if (!pSrcState) {
+      return -2;
     }
 
-    return -2;
+    pDestCursor = pDestStream;
+    *pDestCursor = *pSrcStream;
+    pDestState = (deflate_state*)pDestStream->zalloc(pDestStream->opaque, 1, 0x16c4);
+    if (!pDestState) {
+      return -4;
+    }
+
+    pDestStream->state = pDestState;
+    memcpy(pDestState, pSrcState, 0x16c4);
+    pDestState->strm = pDestStream;
+    pAllocTree = (uint8_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->w_size, 2);
+    pDestState->window = pAllocTree;
+    pHashHead = (uint16_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->w_size, 2);
+    pDestState->prev = pHashHead;
+    pHashHead = (uint16_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->hash_size, 2);
+    pDestState->head = pHashHead;
+    pAllocTree = (uint8_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->lit_bufsize, 4);
+    pDestState->pending_buf = pAllocTree;
+    if (pDestState->window && pDestState->prev && pDestState->head && pAllocTree) {
+      memcpy(pDestState->window, pSrcState->window, pDestState->w_size * 2);
+      memcpy(pDestState->prev, pSrcState->prev, pDestState->w_size * 2);
+      memcpy(pDestState->head, pSrcState->head, pDestState->hash_size * 2);
+      memcpy(pDestState->pending_buf, pSrcState->pending_buf, pDestState->pending_buf_size);
+      pDestState->pending_out = pDestState->pending_buf + ((intptr_t)pSrcState->pending_out - (intptr_t)pSrcState->pending_buf);
+      pDestState->d_buf = (uint16_t*)(pAllocTree + (pDestState->lit_bufsize & -2));
+      pDestState->l_buf = pDestState->pending_buf + pDestState->lit_bufsize * 3;
+      pDestState->d_desc.dyn_tree = pDestState->dyn_dtree;
+      pDestState->l_desc.dyn_tree = pDestState->dyn_ltree;
+      pDestState->bl_desc.dyn_tree = pDestState->bl_tree;
+      return 0;
+    }
+
+    deflateEnd(pDestStream);
+    return -4;
 }
 
 uint32_t __fastcall read_buf(z_stream * pStream, uint8_t * pBuf, uint32_t nSize) {

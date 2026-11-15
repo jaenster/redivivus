@@ -42,13 +42,14 @@ static ::D2WinPopup * gpD2WinPopupControl = 0; D2_STATIC_GUARD(gpD2WinPopupContr
 namespace D2Win::Src::D2WinPopup {
 
 // Destroys the global popup control if it exists. Calls FORMS_DestroyControl and clears the global pointer.
-void __stdcall D2WINPOPUP_Destroy() {
-    if (!gpD2WinPopupControl) {
-      return;
+BOOL __stdcall D2WINPOPUP_Destroy() {
+    BOOL pDestroyResult = 0;
+    if (gpD2WinPopupControl) {
+      pDestroyResult = D2WinMain::FORMS_DestroyControl(&gpD2WinPopupControl->sControl);
+      gpD2WinPopupControl = 0;
     }
 
-    D2WinMain::FORMS_DestroyControl(&gpD2WinPopupControl->sControl);
-    gpD2WinPopupControl = 0;
+    return pDestroyResult;
 }
 
 // Returns TRUE if the popup control exists, is of type FORM_Popup (0xb), is active (state & 4), and is visible (state & 1). Used to check if popup is ready for interaction.

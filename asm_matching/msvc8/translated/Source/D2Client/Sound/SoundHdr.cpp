@@ -87,7 +87,7 @@ D2CutsceneDescStrc gdwSoundHeaderCacheIndex[8] = {
     }
 }; D2_GLOBAL_GUARD(gdwSoundHeaderCacheIndex, "gdwSoundHeaderCacheIndex");
 static void * pSoundChannelDataArray = 0; D2_STATIC_GUARD(pSoundChannelDataArray, "pSoundChannelDataArray");
-static D2SoundsTxt * pTxtSounds = 0; D2_STATIC_GUARD(pTxtSounds, "pTxtSounds");
+D2SoundsTxt * pTxtSounds = 0; D2_GLOBAL_GUARD(pTxtSounds, "pTxtSounds");
 static int nTxtSoundsSize = 0; D2_STATIC_GUARD(nTxtSoundsSize, "nTxtSoundsSize");
 static D2SoundEnvironTxt * pTxtSoundEnviron = 0; D2_STATIC_GUARD(pTxtSoundEnviron, "pTxtSoundEnviron");
 static int nTxtSoundEnvironSize = 0; D2_STATIC_GUARD(nTxtSoundEnvironSize, "nTxtSoundEnvironSize");

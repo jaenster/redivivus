@@ -229,7 +229,7 @@ static DC6 * gpInvCubeRecipeScrollImage = 0; D2_STATIC_GUARD(gpInvCubeRecipeScro
 static uint32_t gbInvPanelButtonPressed = 0; D2_STATIC_GUARD(gbInvPanelButtonPressed, "gbInvPanelButtonPressed");
 static int gnInvUnusedClearedOnClick = 0; D2_STATIC_GUARD(gnInvUnusedClearedOnClick, "gnInvUnusedClearedOnClick");
 static uint32_t gShopTradeUIState = 0; D2_STATIC_GUARD(gShopTradeUIState, "gShopTradeUIState");
-static uint32_t gnInvMercBodySlot2 = 0; D2_STATIC_GUARD(gnInvMercBodySlot2, "gnInvMercBodySlot2");
+uint32_t gnInvMercBodySlot2 = 0; D2_GLOBAL_GUARD(gnInvMercBodySlot2, "gnInvMercBodySlot2");
 static uint32_t gbInvRecipeScrollOpen = 0; D2_STATIC_GUARD(gbInvRecipeScrollOpen, "gbInvRecipeScrollOpen");
 static uint8_t gpInvRecipeScrollImage[8192] = {}; D2_STATIC_GUARD(gpInvRecipeScrollImage, "gpInvRecipeScrollImage");
 
@@ -1743,12 +1743,11 @@ static void INV_FormatDurabilityText(uint16_t * wszText, D2UnitStrc * pUnit) {
     if (nDurabilityBonus <= 0) {
       return;
     }
-
-    int32_t bHasDurabilityBonus = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pUnit);
-    if (bHasDurabilityBonus) {
+    if (D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pUnit)) {
       return;
     }
 
+    int32_t bHasDurabilityBonus = 0;
     nDurabilityBonus = D2Common::Stats::StatsEx::STATLIST_GetStatBonusFromLists(pUnit, UNITSTAT_item_maxdurability_percent, 0);
     if (nDurabilityBonus) {
       bHasDurabilityBonus = 1;
@@ -1988,8 +1987,8 @@ void __stdcall szPrintfBuffer(D2UnitStrc * pUnit, uint16_t * wszText) {
         break;
       }
 
-      nElemDuration = D2Common::Units::Missile::GetMinDamage(nullptr, pPlayerUnit_lcl, nMinDamage, 1);
-      int nCalcMinDamage = nElemMinDamage + nElemDuration >> 8;
+      nElemMinDamage += D2Common::Units::Missile::GetMinDamage(nullptr, pPlayerUnit_lcl, nMinDamage, 1);
+      int nCalcMinDamage = nElemMinDamage >> 8;
       nElemMinDamage = D2Common::Units::Missile::GetMaxDamage(nullptr, pPlayerUnit_lcl, nMinDamage, 1);
       iDurationFrames = nElemMinDamage + nMaxDamage >> 8;
       if (iDurationFrames <= nCalcMinDamage) {
@@ -3507,7 +3506,7 @@ void __stdcall INV_HandleMouseMove(D2UIMouseMsgStrc * pMsg) {
     CurrentInventoryPage = bySavedPage;
 }
 
-int32_t __stdcall ClickItemRight(int32_t pItem, int32_t pGridCoords, int32_t nPage, D2UnitStrc * pPlayer, D2InventoryStrc * pInventory) {
+static int32_t __stdcall ClickItemRight(int32_t pItem, int32_t pGridCoords, int32_t nPage, D2UnitStrc * pPlayer, D2InventoryStrc * pInventory) {
     uint32_t nCol;
     uint32_t nRowOffset;
     int32_t nPosX;
@@ -3962,7 +3961,7 @@ void __stdcall INV_InitNpcButtonsByClass() {
           gaNpcShopButtons[3].nIconId = 8;
           return;
         }
-        if (nShopModeOrClass < 0x200) {
+        if (nShopModeOrClass <= 0x1ff) {
           gaNpcShopButtonTable[0] = 0;
           return;
         }
@@ -6865,8 +6864,8 @@ void __fastcall INV_ExtractTextBetweenBrackets(uint16_t * wszText, short * wszDe
     uint16_t* pwInnerStart = (uint16_t*)(pwOpenBracket + 4);
     int32_t nInnerLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwInnerStart);
     uint16_t* pwClose = (uint16_t*)D2Lang::Unicode::UNISYS::UNICODE_FindSubstring((uint16_t*)pwInnerStart, wszCloseDelim);
-    int32_t nAfterCloseLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwClose);
-    D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszExtracted, pwInnerStart, nInnerLen - nAfterCloseLen);
+    nInnerLen -= D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwClose);
+    D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszExtracted, pwInnerStart, nInnerLen);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, wszExtracted);
 }
 
@@ -9243,7 +9242,7 @@ void __stdcall DRAW_UI_Inventory() {
     LoadItemDesc(pSlotItem, nDrawTextWidth);
 }
 
-BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, DWORD x, DWORD y, D2UnitStrc * targetItem, D2InventoryLayout * pInvLayout, uint32_t nPage) {
+static BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, DWORD x, DWORD y, D2UnitStrc * targetItem, D2InventoryLayout * pInvLayout, uint32_t nPage) {
     SHORT sCtrlKeyState;
     uint16_t nTargetSuffix;
     uint16_t uVar1;

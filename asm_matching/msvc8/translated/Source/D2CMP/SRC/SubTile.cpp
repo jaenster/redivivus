@@ -128,12 +128,7 @@ void __fastcall SUBTILE_AllocAndCompress(uint32_t * pRawData, int bIsRaw) {
     if (bIsRaw) {
       pCompressedBuf = (uint8_t*)D2_ALLOC_AT(0xc00, ".\\SRC\\SubTile.cpp", 0x66);
       pbVar1 = pCompressedBuf;
-      for (i = 0x300; i; i--) {
-        *(uint32_t*)pbVar1 = *pRawData;
-        pRawData++;
-        pbVar1 += 4;
-      }
-
+      memcpy(pbVar1, pRawData, 0xc00);
       pCompEndPtr = (uint32_t*)0xc00;
     } else {
       pCompressedBuf = (uint8_t*)SUBTILE_CompressToRLE((char*)pRawData, (uint32_t*)&pCompressedEnd);

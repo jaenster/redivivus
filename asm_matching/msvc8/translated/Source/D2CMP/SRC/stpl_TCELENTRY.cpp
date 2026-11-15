@@ -17,8 +17,6 @@ template<> TSLink<::TCELENTRY>* TSList<TCELENTRY, TSGetLink<TCELENTRY>>::Link(::
 }
 
 template<> __declspec(noinline) inline void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::LinkNode(::TCELENTRY * ptr, uint32_t nLinkType, ::TCELENTRY * pExisting) {
-    intptr_t nLinkBase;
-    intptr_t pTmp2;
     ::TCELENTRY* pEntry = ptr;
     if (!ptr) {
       pEntry = (::TCELENTRY*)&this->m_terminator;
@@ -42,18 +40,7 @@ template<> __declspec(noinline) inline void TSList<TCELENTRY, TSGetLink<TCELENTR
         {
           pEntry->m_link.m_prevlink = &pExisting->m_link;
           pEntry->m_link.m_next = pExisting->m_link.m_next;
-          nLinkBase = this->m_linkoffset;
-          pTmp2 = pExisting->m_link.m_next;
-          if (pTmp2 < 0) {
-            *(::TCELENTRY**)~pTmp2 = (::TCELENTRY*)pEntry;
-            pExisting->m_link.m_next = (intptr_t)ptr;
-            return;
-          }
-          if (nLinkBase < 0) {
-            nLinkBase = (intptr_t)pExisting - pExisting->m_link.m_prevlink->m_next;
-          }
-
-          *(::TCELENTRY**)(pTmp2 + nLinkBase) = (::TCELENTRY*)pEntry;
+          *(::TCELENTRY**)D2_StormNextLink(&pExisting->m_link, this->m_linkoffset) = (::TCELENTRY*)pEntry;
           pExisting->m_link.m_next = (intptr_t)ptr;
           return;
         }

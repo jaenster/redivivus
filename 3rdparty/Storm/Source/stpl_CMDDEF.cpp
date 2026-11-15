@@ -31,7 +31,6 @@ template<> TSLink<CMDDEF> * TSList<CMDDEF, TSGetLink<CMDDEF>>::Link(CMDDEF * ptr
 }
 
 template<> __attribute__((noinline)) inline void TSList<CMDDEF, TSGetLink<CMDDEF>>::LinkNode(CMDDEF * ptr, uint32_t nLinkType, CMDDEF * pExisting) {
-    int pListHead;
     CMDDEF* pPrevLink = ptr;
     if (!ptr) {
       pPrevLink = (CMDDEF*)&this->m_terminator;
@@ -55,18 +54,7 @@ template<> __attribute__((noinline)) inline void TSList<CMDDEF, TSGetLink<CMDDEF
         {
           pPrevLink->pPrev = pExisting;
           pPrevLink->pNext = pExisting->pNext;
-          pListHead = this->m_linkoffset;
-          pCVar1 = pExisting->pNext;
-          if ((intptr_t)pCVar1 < 0) {
-            *(CMDDEF**)~(uintptr_t)pCVar1 = (CMDDEF*)pPrevLink;
-            pExisting->pNext = ptr;
-            return;
-          }
-          if (pListHead < 0) {
-            pListHead = (intptr_t)pExisting - (intptr_t)pExisting->pPrev->pNext;
-          }
-
-          *(CMDDEF**)(pCVar1->szName + pListHead - 0x10) = (CMDDEF*)pPrevLink;
+          *(CMDDEF**)D2_StormNextLink(pExisting, this->m_linkoffset) = (CMDDEF*)pPrevLink;
           pExisting->pNext = ptr;
           return;
         }

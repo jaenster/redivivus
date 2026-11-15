@@ -250,20 +250,27 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
       }
     }
 
-    if (nTableType) {
-      if (nTableType != 1) {
-        pBaseTable = gaZlibDistBaseTable;
-        pExtraTable = gaZlibDistExtraBitsTable;
-        nMatchLimit = -1;
-      } else {
-        /* base = lbase - 257 (inftrees.c LENS) */ pBaseTable = (uint16_t*)(gaZlibLengthBaseTable - 257);
-        /* extra = lext - 257 (inftrees.c LENS) */ pExtraTable = (uint16_t*)(gaZlibLengthExtraBitsTable - 257);
-        nMatchLimit = 0x100;
-      }
-    } else {
-      pExtraTable = aOutCodes;
-      pBaseTable = aOutCodes;
-      nMatchLimit = 0x13;
+    switch (nTableType) {
+      case 0:
+        {
+          pExtraTable = aOutCodes;
+          pBaseTable = aOutCodes;
+          nMatchLimit = 0x13;
+          break;
+        }
+      case 1:
+        {
+          /* base = lbase - 257 (inftrees.c LENS) */ pBaseTable = (uint16_t*)(gaZlibLengthBaseTable - 257);
+          /* extra = lext - 257 (inftrees.c LENS) */ pExtraTable = (uint16_t*)(gaZlibLengthExtraBitsTable - 257);
+          nMatchLimit = 0x100;
+          break;
+        }
+      default:
+        {
+          pBaseTable = gaZlibDistBaseTable;
+          pExtraTable = gaZlibDistExtraBitsTable;
+          nMatchLimit = -1;
+        }
     }
 
     inflate_code* pNextTable;

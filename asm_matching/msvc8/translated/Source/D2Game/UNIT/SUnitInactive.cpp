@@ -897,7 +897,7 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
                 pSpawnedMonster->eUnitFlagsEx |= 0x200;
               }
 
-              pSpawnedMonster->eUnitFlags = pSpawnedMonster->eUnitFlags | pInactiveMonRec->eUnitFlags & UNITFLAG_NOTC | UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
+              pSpawnedMonster->eUnitFlags = pSpawnedMonster->eUnitFlags | pInactiveMonRec->eUnitFlags & UNITFLAG_NOTC | (UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT);
             } else {
               Ai::AiGeneral::ClearMinionList(pGame, pInactiveMonRec->pMinionList);
             }

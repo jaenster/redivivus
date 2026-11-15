@@ -201,7 +201,7 @@ typedef BOOL (__fastcall *fnSendResetPassword)(char * szAcct, char * szEmail);
 #endif
 #ifndef RECON_FPTD_fnSendSetEmail
 #define RECON_FPTD_fnSendSetEmail
-typedef void (__fastcall *fnSendSetEmail)(char * szEmail);
+typedef BOOL (__fastcall *fnSendSetEmail)(char * szEmail);
 #endif
 #ifndef RECON_FPTD_fnSendStartAdvEx3
 #define RECON_FPTD_fnSendStartAdvEx3
@@ -286,7 +286,7 @@ struct D2BNetClientCallbacksStrc {
     /* 0xAC */ BOOL (__stdcall *pfnNewsShutdown)();
     /* 0xB0 */ char (__stdcall *pfnGetProtocolVersionChar)();
     /* 0xB4 */ DWORD (__stdcall *pfnIsEmailRequested)();
-    /* 0xB8 */ void (__fastcall *pfnSendSetEmail)(char *);
+    /* 0xB8 */ BOOL (__fastcall *pfnSendSetEmail)(char *);
     /* 0xBC */ BOOL (__fastcall *pfnSendResetPassword)(char *, char *);
     /* 0xC0 */ BOOL (__fastcall *pfnSendChangeEmail)(char *, char *, char *);
     /* 0xC4 */ int (__stdcall *pfnSendLeaveGame)();

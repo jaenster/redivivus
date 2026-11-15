@@ -308,10 +308,8 @@ void __stdcall NET_HACK_SetUseQServerHack(BOOL bResult) {
 }
 
 void NET_QServer_FreeAndSend0xB0ToEveryone() {
-    uint8_t aShutdownFrame[4];
-    aShutdownFrame[3] = 0xb0;
-    d2_store24((char*)&aShutdownFrame, 0);
-    Fog::Src::Shutdown(gpQServer, (char*)(aShutdownFrame + 3), 1);
+    uint8_t nShutdownCmd;
+    Fog::Src::Shutdown(gpQServer, (char*)&nShutdownCmd, 1);
     gpQServer = 0;
 }
 

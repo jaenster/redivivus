@@ -1450,7 +1450,7 @@ static int32_t __stdcall PANEL_GetBeltBoxAtPoint(int32_t nMouseY, int32_t nMouse
     return -1;
 }
 
-void __stdcall ClickBelt(D2InventoryStrc * pInventory, int32_t nMouseX, int32_t nMouseY) {
+static void __stdcall ClickBelt(D2InventoryStrc * pInventory, int32_t nMouseX, int32_t nMouseY) {
     BOOL BVar1;
     uint8_t nPacketId;
     int32_t nSoundArg1;
@@ -1576,7 +1576,7 @@ static BOOL __fastcall PANEL_CheckEquipmentClickable(D2ItemsTxt * pItemTxt, D2Un
     return bClickable;
 }
 
-void __stdcall ClickBeltRight(uint32_t nBeltSlot, D2UnitStrc * pUnit, D2InventoryStrc * pInventory, int32_t bToMercenary) {
+static void __stdcall ClickBeltRight(uint32_t nBeltSlot, D2UnitStrc * pUnit, D2InventoryStrc * pInventory, int32_t bToMercenary) {
     uint32_t bIsPotionType;
     D2GridScreenCoordinates sGridCoords;
     BOOL bClickable = GAME::Game::CLIENT_CheckExpansion();

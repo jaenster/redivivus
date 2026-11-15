@@ -14,6 +14,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2CrashDumpRequestStrc;
 typedef BOOL (__stdcall *pfnSymCleanup)(HANDLE hProcess);
 typedef BOOL (__stdcall *pfnSymGetLineFromAddr)(HANDLE hProcess, DWORD dwAddr, void * pdwDisplacement, void * pLine);
 typedef BOOL (__stdcall *pfnSymGetModuleInfo)(HANDLE hProcess, DWORD dwAddr, void * pModuleInfo);
@@ -26,6 +27,7 @@ typedef DWORD (__stdcall *pfnSymSetOptions)(DWORD SymOptions);
 typedef void * (__stdcall *pfnSymFunctionTableAccess)(HANDLE hProcess, DWORD AddrBase);
 typedef BOOL (__stdcall *pfnStackWalk)(DWORD MachineType, HANDLE hProcess, HANDLE hThread, void * StackFrame, void * ContextRecord, void * ReadMemoryRoutine, pfnSymFunctionTableAccess FunctionTableAccessRoutine, pfnSymGetModuleBase GetModuleBaseRoutine, void * TranslateAddress);
 
+extern D2CrashDumpRequestStrc * pCrashDumpInfo;
 // lpCriticalSection parameter of InitializeCriticalSection
 // lpCriticalSection parameter of LeaveCriticalSection
 // lpCriticalSection parameter of EnterCriticalSection

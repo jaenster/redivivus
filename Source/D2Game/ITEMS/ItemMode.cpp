@@ -2006,23 +2006,21 @@ int32_t __fastcall ITEMMODE_CheckItemRequirements(D2UnitStrc * pUnit, D2UnitStrc
     uint32_t bIsOfType;
     D2InventoryStrc* pInventory;
     BOOL bMeetsEquipReqs = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pUnit2, pUnit, 0, nullptr, nullptr, nullptr);
-    if (bMeetsEquipReqs) {
-      int32_t nQuiverCheck;
-      nQuiverCheck = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pUnit2);
-      if (nQuiverCheck) {
-        pInventory = pUnit->pInventory;
-        pEquippedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
-        if (pEquippedItem == pUnit2) {
-          pEquippedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
-        }
+    int32_t nQuiverCheck;
+    nQuiverCheck = bMeetsEquipReqs ? D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pUnit2) : 0;
+    if (!nQuiverCheck) {
+      return bMeetsEquipReqs;
+    }
 
-        bIsOfType = pEquippedItem ? (eItemType = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pUnit2), D2Common::ITEMS::Items::ITEMS_IsA(pEquippedItem, eItemType)) : 0;
-        if (!bIsOfType) {
-          return 0;
-        }
+    pInventory = pUnit->pInventory;
+    pEquippedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
+    if (pEquippedItem == pUnit2) {
+      pEquippedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
+    }
 
-        return bMeetsEquipReqs;
-      }
+    bIsOfType = pEquippedItem ? (eItemType = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pUnit2), D2Common::ITEMS::Items::ITEMS_IsA(pEquippedItem, eItemType)) : 0;
+    if (!bIsOfType) {
+      return 0;
     }
 
     return bMeetsEquipReqs;
@@ -2920,14 +2918,12 @@ void __fastcall ITEMMODE_RemoveInventoryItem(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Compacts a single belt column (0-3) by sliding all items in that column toward the bottom row. For each item that is out of order it repositions it via INVENTORY_CanPlaceItemInBelt, sets ITEMFLAG_SORTED/RELOAD, clears ITEMFLAG_DISABLED, and queues a RefreshInventory + UpsertToUpdateList.
 // @sourcefile .\ITEMS\ItemMode.cpp
-void __fastcall ITEMMODE_SortBeltColumn(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, uint8_t nColumn) {
-    int _nColumn;
+void __fastcall ITEMMODE_SortBeltColumn(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, int nColumn) {
     BOOL bIsDisabled;
-    uint32_t nCurSlot = (uint32_t)nColumn;
-    uint8_t byColumnMasked = nColumn & 3;
+    uint32_t nCurSlot = nColumn & 3;
     D2InventoryStrc* pInventory = pUnit->pInventory;
-    _nColumn = 0;
-    nCurSlot = !byColumnMasked ? 0 : nCurSlot & 3;
+    nColumn = 0;
+    nCurSlot = !nCurSlot ? 0 : nCurSlot;
     if ((int32_t)nCurSlot >= 3) {
       nCurSlot = 3;
     }
@@ -2938,7 +2934,7 @@ void __fastcall ITEMMODE_SortBeltColumn(::SGAMEDATA * pGameStrc, D2UnitStrc * pU
       D2UnitStrc* pBeltItem;
       pBeltItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemInBeltSlot(pInventory, nCurSlot);
       if (pBeltItem) {
-        if (_nColumn != iRow) {
+        if (nColumn != iRow) {
           D2Common::INVENTORY::Inventory::INVENTORY_CanPlaceItemInBelt(pInventory, pBeltItem, nDestSlot);
           D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pBeltItem, ITEMFLAG_SORTED, 1);
           D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pBeltItem, ITEMFLAG_RELOAD, 1);
@@ -2952,7 +2948,7 @@ void __fastcall ITEMMODE_SortBeltColumn(::SGAMEDATA * pGameStrc, D2UnitStrc * pU
           D2Common::INVENTORY::Inventory::INVENTORY_OnBeltChanged_NoOp(pInventory, nCurSlot);
         }
 
-        _nColumn++;
+        nColumn++;
         nDestSlot += 4;
       }
 
@@ -5486,7 +5482,7 @@ BOOL __fastcall SERVER_BeltTakeItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
         D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pItem, ITEMCMD_BELT_TAKE_ITEM, 1);
         D2Common::Units::RefreshInventory(pUnit, 1);
         D2Common::INVENTORY::Inventory::UpsertToUpdateList(pInventory, pItem);
-        ITEMMODE_SortBeltColumn(pGame, pUnit, (uint8_t)nBeltSlotTmp);
+        ITEMMODE_SortBeltColumn(pGame, pUnit, nBeltSlotTmp);
         return 1;
       }
 
@@ -5602,7 +5598,7 @@ BOOL __fastcall SERVER_UseItemAtCoords(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
           SERVER_ITEM_SendStackableUsagePackets(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1370);
           ITEMMODE_ConsumeItemAndRemove(pGame, pUnit, pItem);
-          ITEMMODE_SortBeltColumn(pGame, pUnit, (uint8_t)nBeltCol);
+          ITEMMODE_SortBeltColumn(pGame, pUnit, nBeltCol);
           return 1;
         }
       }

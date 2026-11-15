@@ -17,7 +17,7 @@
         "D2WINPOPUP_Destroy",
         "FORMS_DestroyControl"
       ],
-      "dh": "7f9cc503"
+      "dh": "77a3230b"
     },
     {
       "name": "D2WINPOPUP_IsActiveAndVisible",

@@ -10,6 +10,7 @@
 #include "Source/D2Hell/D2Hell.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Client/GAME/PalShift.data.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -35,7 +36,7 @@ static D2MonsterPalShiftSlotStrc * gpMonsterPalShiftList = 0; D2_STATIC_GUARD(gp
 static D2PalShiftEntryStrc * gpPalShiftEntryListHead = 0; D2_STATIC_GUARD(gpPalShiftEntryListHead, "gpPalShiftEntryListHead");
 static uint8_t PalShift_RandTransform[7680] = {}; D2_STATIC_GUARD(PalShift_RandTransform, "PalShift_RandTransform");
 static int gbPalShiftRandTransformLoaded = 0; D2_STATIC_GUARD(gbPalShiftRandTransformLoaded, "gbPalShiftRandTransformLoaded");
-static D2GamePalShiftGreenBloodStrc * PalShift_GreenBlood = 0; D2_STATIC_GUARD(PalShift_GreenBlood, "PalShift_GreenBlood");
+D2GamePalShiftGreenBloodStrc * PalShift_GreenBlood = 0; D2_GLOBAL_GUARD(PalShift_GreenBlood, "PalShift_GreenBlood");
 
 namespace D2Client::GAME::PalShift {
 

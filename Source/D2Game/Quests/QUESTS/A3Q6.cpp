@@ -580,6 +580,7 @@ BOOL __fastcall Q23_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, D2UnitStr
 void __fastcall Q23_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL _bQuestState;
     bool bQuestState;
+    D2ObjectsTxt* pBridgeObjectTxt;
     D2UnitStrc* pDroppedUnit;
     int32_t nDroppedItemGUID;
     Q23_Callback08_MonsterKilled_Slotm8 uSlot8;
@@ -592,20 +593,24 @@ void __fastcall Q23_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q23_Callback10_PlayerLeavesGame;
     D2QuestDataA3Q6Strc* pQuestSpecificDataSaved = pQuestSpecificData;
     if (bIsNotIntroduction) {
+      D2UnitDataPlayerStrc* pAttackerPlayerData;
       if (pQuestArgs->pPlayer) {
         /* local8 is D2GameStrc* here */ uSlot8.pGameDifficulty = pQuestData->pGame;
-        _bQuestState = D2Common::QuestRecord::GetQuestState(GetQuestBitBufferInline(uSlot8.pGameDifficulty, pQuestArgs->pPlayer), QUEST_TheGuardian, QUESTSTATE_Completed);
+        pAttackerPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+        _bQuestState = D2Common::QuestRecord::GetQuestState(pAttackerPlayerData->pQuestRecord[uSlot8.pGameDifficulty->nDifficulty], QUEST_TheGuardian, QUESTSTATE_Completed);
         if (!_bQuestState) {
           QUEST_StubEmpty(pQuestData, pQuestArgs, 0x3e);
           pGameInner = pQuestData->pGame;
-          _bQuestState = D2Common::QuestRecord::GetQuestState(GetQuestBitBufferInline(pGameInner, pQuestArgs->pPlayer), QUEST_TheGuardian, QUESTSTATE_Step0x11);
+          pAttackerPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+          _bQuestState = D2Common::QuestRecord::GetQuestState(pAttackerPlayerData->pQuestRecord[pGameInner->nDifficulty], QUEST_TheGuardian, QUESTSTATE_Step0x11);
           if (!_bQuestState) {
             piParticipantCount = &pQuestData->pQuestSpecificData.pA3Q6->nPlayerCount;
             (*piParticipantCount)++;
           }
 
           pGameInner = pQuestData->pGame;
-          Q23_SetGuardianQuestComplete(pQuestArgs->pGame, pQuestArgs->pPlayer, GetQuestBitBufferInline(pGameInner, pQuestArgs->pPlayer));
+          pAttackerPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+          Q23_SetGuardianQuestComplete(pQuestArgs->pGame, pQuestArgs->pPlayer, pAttackerPlayerData->pQuestRecord[pGameInner->nDifficulty]);
           pQuestSpecificData = pQuestSpecificDataSaved;
         }
       }
@@ -622,7 +627,6 @@ void __fastcall Q23_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 
     QUEST_SetQuestRecordState(pQuestArgs->pGame, QUEST_TheGuardian, QUESTSTATE_JustCompleted);
     /* local8 become D2UnitStrc* here */ if (pQuestSpecificData->bBridgeObjectValid) {
-      D2ObjectsTxt* pBridgeObjectTxt;
       uSlot8.pBridgeObject = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pQuestSpecificData->nBridgeObjectGUID);
       if (uSlot8.pBridgeObject) {
         D2Common::Units::ChangeAnimMode(uSlot8.pBridgeObject, 1);

@@ -24,12 +24,12 @@ static uint32_t gnSoundChannelCount = 0; D2_STATIC_GUARD(gnSoundChannelCount, "g
 static uint32_t gpSoundChannelsArray = 0; D2_STATIC_GUARD(gpSoundChannelsArray, "gpSoundChannelsArray");
 static uint32_t gbSoundChaosEnabled = 0; D2_STATIC_GUARD(gbSoundChaosEnabled, "gbSoundChaosEnabled");
 static LONG * lpAddend_007c8a74 = 0; D2_STATIC_GUARD(lpAddend_007c8a74, "lpAddend_007c8a74");
-static int pAudioDeviceContext = 0; D2_STATIC_GUARD(pAudioDeviceContext, "pAudioDeviceContext");
+int pAudioDeviceContext = 0; D2_GLOBAL_GUARD(pAudioDeviceContext, "pAudioDeviceContext");
 static uint32_t gnSoundChannelIndex = 0; D2_STATIC_GUARD(gnSoundChannelIndex, "gnSoundChannelIndex");
 static uint32_t gnSoundChannelPlaybackState = 0; D2_STATIC_GUARD(gnSoundChannelPlaybackState, "gnSoundChannelPlaybackState");
 static int32_t int32_t_007c8c90 = 0; D2_STATIC_GUARD(int32_t_007c8c90, "int32_t_007c8c90");
 static unsigned int UINT_007c8c94 = {0}; D2_STATIC_GUARD(UINT_007c8c94, "UINT_007c8c94");
-static int32_t int32_t_007c8c98 = 0; D2_STATIC_GUARD(int32_t_007c8c98, "int32_t_007c8c98");
+int32_t int32_t_007c8c98 = 0; D2_GLOBAL_GUARD(int32_t_007c8c98, "int32_t_007c8c98");
 
 namespace D2Client { namespace Sound {
 
@@ -856,7 +856,7 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
         if (pDVar1) {
           pTrackedUnit = puSortHead->pChannel;
           nSortDataB = pDVar1->pChannel;
-          if (nSortDataB->nPriorityByte > pTrackedUnit->nPriorityByte || pTrackedUnit->nPriorityByte <= nSortDataB->nPriorityByte && (nSortDataB->fPanResult < pTrackedUnit->fPanResult || nSortDataB->fPanResult <= pTrackedUnit->fPanResult && (nSortDataB->nScheduledTime > pTrackedUnit->nScheduledTime || pTrackedUnit->nScheduledTime <= nSortDataB->nScheduledTime && pTrackedUnit < nSortDataB))) {
+          if (nSortDataB->nPriorityByte > pTrackedUnit->nPriorityByte || nSortDataB->nPriorityByte >= pTrackedUnit->nPriorityByte && (nSortDataB->fPanResult < pTrackedUnit->fPanResult || nSortDataB->fPanResult <= pTrackedUnit->fPanResult && (nSortDataB->nScheduledTime > pTrackedUnit->nScheduledTime || nSortDataB->nScheduledTime >= pTrackedUnit->nScheduledTime && pTrackedUnit < nSortDataB))) {
             puSortHead->pChannel = nSortDataB;
             pDVar1->pChannel = pTrackedUnit;
             __frame0.pSortedFlag = 0;

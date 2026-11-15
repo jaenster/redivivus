@@ -1703,7 +1703,7 @@ void __fastcall InitNearRooms(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomE
         do {
           pDVar1 = pRoomEx->ppDrlgRoomsExNear[nNearIndex];
           InitNearRooms(pMemory, pDVar1, nRecursion + '\x01');
-          if (nDepth <= pDVar1->fRoomStatus) {
+          if (pDVar1->fRoomStatus >= (int32_t)nDepth) {
             nRefSlotIdx = 0;
             pnRefCount = pDVar1->awRoomsInList;
             do {
@@ -1730,7 +1730,7 @@ void __fastcall InitNearRooms(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomE
       nDepth = (uint32_t)nRecursion;
       do {
         pDVar1 = pRoomEx->ppDrlgRoomsExNear[nNearIndex];
-        if (nDepth <= pDVar1->fRoomStatus) {
+        if (pDVar1->fRoomStatus >= (int32_t)nDepth) {
           nRefSlotIdx = 0;
           pnRefCount = pDVar1->awRoomsInList;
           do {

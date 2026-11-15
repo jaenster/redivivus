@@ -1938,7 +1938,7 @@ void __fastcall MONSTER_StealPotionFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
     ITEMS::Items::Drop::DropItem(pGameLocal, pTargetPlayer, pClonedItem, (D2RoomStrc*)pGameTemp, ptDropPos.x, ptDropPos.y);
     nErrorLine = D2Common::Units::GetXPosFromDynamicPathUnit(pBeltItem);
     ITEMS::ItemMode::ITEMMODE_ConsumeItemAndRemove(pGameLocal, pTargetPlayer, pBeltItem);
-    ITEMS::ItemMode::ITEMMODE_SortBeltColumn(pGameLocal, pTargetPlayer, (uint8_t)nErrorLine);
+    ITEMS::ItemMode::ITEMMODE_SortBeltColumn(pGameLocal, pTargetPlayer, nErrorLine);
 }
 
 // Routes a monster's death event to its boss-specific handler based on nClassId. Handles Bloodraven (ranged special), Radament (ring attack), Mephisto (death missile), Izual (melee skill), Andariel (ranged short), Overseer (ranged normal), Uber Mephisto/Baal/Diablo (loot drop check), and no-op uber variants. Only triggers the handler if the unit is actually in Death anim mode (except Overseer/Uber which check null too).

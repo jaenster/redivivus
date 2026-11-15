@@ -153,8 +153,10 @@ static void __fastcall Q19_SendQuestStatePacket(uint8_t bStateByte, D2QuestDataS
 void __fastcall Q19_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame;
     pGame = pQuestArgs->pGame;
+    D2UnitDataPlayerStrc* pPlayerData;
+    pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
     D2BitBufferStrc* pBitBuffer;
-    pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState;
     bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_AbleGoToAct3, QUESTSTATE_Completed);
     /* GetQuestState(KhalimsWill, Completed): bail if Khalim's Will already finished
@@ -279,7 +281,8 @@ void __fastcall Q19_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
 // Q19_Callback_13 (Khalim's Will). Quest-load/refresh handler. If not Completed: if Step0x07 not set but Step0x02 set, sets in-memory StateFlag=2/prev=7 (mid-quest resume). Also resumes StateFlag=2 when the quest GUID player-bitmask is non-empty. Reads QuestRecord; mutates only in-memory StateFlag.
 void __fastcall Q19_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
-    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Completed);
     if (bQuestState) {
       return;
@@ -726,8 +729,10 @@ void __fastcall Q19_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     int32_t nGossipMsgIndex;
     ::SGAMEDATA* pGame;
     pGame = pQuestArgs->pGame;
+    D2UnitDataPlayerStrc* pPlayerData;
+    pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
     D2BitBufferStrc* pQuestRecord;
-    pQuestRecord = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    pQuestRecord = pPlayerData->pQuestRecord[pGame->nDifficulty];
     if (!pQuestArgs->pTarget) {
       return;
     }

@@ -868,16 +868,15 @@ void __stdcall MONMODE_OwnerCastOrDie(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pOwner);
     D2RoomStrc* pFreeRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, pSpawnPoint, nOwnerSizeX, nOwnerAlignment, bAllowNeighboorRooms);
     nOwnerAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
-    if (!nOwnerAlignment && pFreeRoom) {
-      int32_t nCastResult;
-      nCastResult = AI::SERVER_UNIT_CastSkill(pGame, pOwner, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], nullptr, ptSpawn.x, ptSpawn.y);
-      if (nCastResult) {
-        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pOwner, UNITEVENTCALLBACK_AITHINK, 0);
-        return;
-      }
+    int32_t nCastResult;
+    nCastResult = !nOwnerAlignment && pFreeRoom ? AI::SERVER_UNIT_CastSkill(pGame, pOwner, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], nullptr, ptSpawn.x, ptSpawn.y) : 0;
+    if (!nCastResult) {
+      UNIT::SUnitDmg::SERVER_KillMonster(pGame, pOwner, nullptr, 1);
+      return;
     }
 
-    UNIT::SUnitDmg::SERVER_KillMonster(pGame, pOwner, nullptr, 1);
+    GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pOwner, UNITEVENTCALLBACK_AITHINK, 0);
+    return;
 }
 
 // The live monster-death dispatcher.

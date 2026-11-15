@@ -11,6 +11,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/FogRoot.h"
 #include "Source/Fog/QServer.h"
+#include "Source/Fog/Src/QServer/QServer.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -60,7 +61,7 @@ typedef int32_t (__fastcall *fpD2QServerSinglePlayerSendHook)(D2QServerStrc * pQ
 typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext);
 #endif
 
-static uint32_t nTokenBucketMask = 0xf; D2_STATIC_GUARD(nTokenBucketMask, "nTokenBucketMask");
+uint32_t nTokenBucketMask = 0xf; D2_GLOBAL_GUARD(nTokenBucketMask, "nTokenBucketMask");
 static uint32_t gnQServerIpConnCountModulo = 0x11; D2_STATIC_GUARD(gnQServerIpConnCountModulo, "gnQServerIpConnCountModulo");
 static uint32_t gnQServerHacklistBucketCount = 0x1; D2_STATIC_GUARD(gnQServerHacklistBucketCount, "gnQServerHacklistBucketCount");
 static uint32_t gbQServerUseDedicatedIoWorkers = 0; D2_STATIC_GUARD(gbQServerUseDedicatedIoWorkers, "gbQServerUseDedicatedIoWorkers");
@@ -648,8 +649,8 @@ in_addr __stdcall GetClientIpByToken(D2QServerStrc * pQServer, uint32_t nToken) 
     return (in_addr)ipAddrResult;
 }
 
-void __stdcall ProbePeerNameByToken(D2QServerStrc * pQServer, uint32_t nToken) {
-    sockaddr byStackGuard;
+uint32_t __stdcall ProbePeerNameByToken(D2QServerStrc * pQServer, uint32_t nToken) {
+    sockaddr_in sPeerAddr;
     uint32_t nBucketId = pQServer->nClientHashMask & nToken;
     uint32_t nAddrLen = nToken;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(pQServer->pClientBucketLocks + nBucketId);
@@ -657,7 +658,7 @@ void __stdcall ProbePeerNameByToken(D2QServerStrc * pQServer, uint32_t nToken) {
     while (true) {
       if (!pDVar1) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pQServer->pClientBucketLocks + nBucketId);
-        return;
+        return 0;
       }
       if (pDVar1->nClientToken == nAddrLen) {
         break;
@@ -669,7 +670,8 @@ void __stdcall ProbePeerNameByToken(D2QServerStrc * pQServer, uint32_t nToken) {
     SOCKET s = pDVar1->socket;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pQServer->pClientBucketLocks + nBucketId);
     /* int * namelen for getpeername */ /* sockaddr * name for getpeername */ /* SOCKET s for getpeername */ nAddrLen = 0x10;
-    getpeername(s, &byStackGuard, (int*)&nAddrLen);
+    getpeername(s, (sockaddr*)&sPeerAddr, (int*)&nAddrLen);
+    return sPeerAddr.sin_addr;
 }
 
 uint32_t __stdcall GetClientSocketByToken(D2QServerStrc * pQServer, uint32_t nClientToken) {

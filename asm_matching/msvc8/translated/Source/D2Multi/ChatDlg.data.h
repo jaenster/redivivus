@@ -15,6 +15,7 @@
 
 // Forward declarations
 struct D2BNetClientCallbacksStrc;
+struct D2ChatDlgUnknown_0x10;
 struct D2ControlMsg;
 struct D2ControlStrc;
 struct D2LobbyControlsStrc;
@@ -109,6 +110,7 @@ extern ::D2WinTextBox * gpChatMessagesTextBox;
 extern ::D2WinEditBox * gpChatDlgInputEditBox;
 extern ::D2WinTextBox * gpControlJoinGameError;
 extern uint32_t gnOpenBNetMode;
+extern D2ChatDlgUnknown_0x10 * gpChatMessageQueueHead;
 
 namespace D2Multi { namespace OOGUtilities {
 extern int32_t gaMultiFormFontParamsFont4[2];

@@ -2197,10 +2197,9 @@
         "NET_SID_CLIENT_PermuteBitsLFSR"
       ],
       "usedTypes": [
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ],
-      "dh": "70fad0ce",
+      "dh": "2285a1dc",
       "paramStorage": [
         [
           "pToken",

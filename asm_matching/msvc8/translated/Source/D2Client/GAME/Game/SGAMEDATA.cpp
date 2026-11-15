@@ -20,7 +20,6 @@ namespace D2Client { namespace GAME { namespace Game {
 // Implicit copy constructor: clears both hash-object links, copies the remaining fields; returns this.
 // Called from TSGrowableArray<SGAMEDATA>::ReallocData 00450d90; analogue of CELLIST::CopyConstructor 006040b0.
 ::SGAMEDATA * __fastcall CopyConstructor(::SGAMEDATA * pThis, int, ::SGAMEDATA * pSource) {
-    int nWordsLeft;
     pThis->m_linktoslot.m_prevlink = 0;
     pThis->m_linktoslot.m_next = 0;
     pThis->m_linktofull.m_prevlink = 0;
@@ -40,12 +39,7 @@ namespace D2Client { namespace GAME { namespace Game {
     *(uint32_t*)(pThis->szGamePassword + 0xc) = *(uint32_t*)(pSource->szGamePassword + 0xc);
     char* pSrcDesc = pSource->szGameDescription;
     char* pDstDesc = pThis->szGameDescription;
-    for (nWordsLeft = 8; nWordsLeft; nWordsLeft--) {
-      *(uint32_t*)pDstDesc = *(uint32_t*)pSrcDesc;
-      pSrcDesc += 4;
-      pDstDesc += 4;
-    }
-
+    memcpy(pDstDesc, pSrcDesc, 32);
     pThis->nGameType = pSource->nGameType;
     pThis->nTemplateLevel = pSource->nTemplateLevel;
     pThis->nReserved = pSource->nReserved;
@@ -88,13 +82,8 @@ namespace D2Client { namespace GAME { namespace Game {
     pThis->pQuestControl = pSource->pQuestControl;
     D2UnitNodeStrc** ppSrcUnitNode = pSource->pUnitNodes;
     D2UnitNodeStrc** ppDstUnitNode = pThis->pUnitNodes;
-    for (nWordsLeft = 10; nWordsLeft; nWordsLeft--) {
-      *ppDstUnitNode = *ppSrcUnitNode;
-      ppSrcUnitNode++;
-      ppDstUnitNode++;
-    }
-
-    nWordsLeft = 0x80;
+    memcpy(ppDstUnitNode, ppSrcUnitNode, 40);
+    int nWordsLeft = 0x80;
     D2UnitStrc** ppSrcUnit = pSource->pUnitList[0];
     D2UnitStrc** ppDstUnit = pThis->pUnitList[0];
     for (; nWordsLeft; nWordsLeft--) {
@@ -142,31 +131,16 @@ namespace D2Client { namespace GAME { namespace Game {
     pThis->pWarpTileList = pSource->pWarpTileList;
     uint32_t* pSrcArray = pSource->fUniqueSpawn;
     uint32_t* pDstArray = pThis->fUniqueSpawn;
-    for (nWordsLeft = 0x80; nWordsLeft; nWordsLeft--) {
-      *pDstArray = *pSrcArray;
-      pSrcArray++;
-      pDstArray++;
-    }
-
+    memcpy(pDstArray, pSrcArray, 0x200);
     pThis->pNpcControl = pSource->pNpcControl;
     pThis->pArenaCtrl = pSource->pArenaCtrl;
     pThis->pPartyControl = pSource->pPartyControl;
     uint8_t* pSrcBossFlags = pSource->nBossFlagList;
     uint8_t* pDstBossFlags = pThis->nBossFlagList;
-    for (nWordsLeft = 0x10; nWordsLeft; nWordsLeft--) {
-      *(uint32_t*)pDstBossFlags = *(uint32_t*)pSrcBossFlags;
-      pSrcBossFlags += 4;
-      pDstBossFlags += 4;
-    }
-
+    memcpy(pDstBossFlags, pSrcBossFlags, 0x40);
     pSrcArray = pSource->nPathCount;
     pDstArray = pThis->nPathCount;
-    for (nWordsLeft = 0x12; nWordsLeft; nWordsLeft--) {
-      *pDstArray = *pSrcArray;
-      pSrcArray++;
-      pDstArray++;
-    }
-
+    memcpy(pDstArray, pSrcArray, 0x48);
     pThis->bUpdateStatsTick = pSource->bUpdateStatsTick;
     pThis->dwStatsTick = pSource->dwStatsTick;
     pThis->dwLastUpdateTick = pSource->dwLastUpdateTick;

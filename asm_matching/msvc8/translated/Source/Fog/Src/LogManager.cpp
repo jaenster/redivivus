@@ -6,6 +6,7 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Src/ErrorManager.data.h"
+#include "Source/Fog/Src/LogManager.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -319,7 +320,7 @@ static char s___AUMessage_LogManager___00708124[28] = {
     '\x00',
     '\x00'
 }; D2_STATIC_GUARD(s___AUMessage_LogManager___00708124, "s___AUMessage_LogManager___00708124");
-static int gLogMessageQueueCount = 0; D2_STATIC_GUARD(gLogMessageQueueCount, "gLogMessageQueueCount");
+int gLogMessageQueueCount = 0; D2_GLOBAL_GUARD(gLogMessageQueueCount, "gLogMessageQueueCount");
 static int gLogMessageQueueTotalBytes = 0; D2_STATIC_GUARD(gLogMessageQueueTotalBytes, "gLogMessageQueueTotalBytes");
 static char gLogFileNameArray[20][16] = {0}; D2_STATIC_GUARD(gLogFileNameArray, "gLogFileNameArray");
 static char gLogFileNameArray_0__1_[20][16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; D2_STATIC_GUARD(gLogFileNameArray_0__1_, "gLogFileNameArray_0__1_");
@@ -592,105 +593,7 @@ uint32_t __stdcall GetCpuBrandId() {
 }
 
 uint32_t __fastcall DispatchCpuidCall(int32_t nLeaf) {
-    int pCpuidResult;
-    if (!nLeaf) {
-      pCpuidResult = D2_Cpuid(0);
-    } else {
-      switch (nLeaf) {
-        case 1:
-          {
-            pCpuidResult = D2_Cpuid(1);
-            break;
-          }
-        case 2:
-          {
-            pCpuidResult = D2_Cpuid(2);
-            break;
-          }
-        case 3:
-          {
-            pCpuidResult = D2_Cpuid(3);
-            break;
-          }
-        default:
-          switch (nLeaf) {
-            case 4:
-              {
-                pCpuidResult = D2_Cpuid(4);
-                break;
-              }
-            case 5:
-              {
-                pCpuidResult = D2_Cpuid(5);
-                break;
-              }
-            case 6:
-              {
-                pCpuidResult = D2_Cpuid(6);
-                break;
-              }
-            default:
-              switch (nLeaf) {
-                case 7:
-                  {
-                    pCpuidResult = D2_Cpuid(7);
-                    break;
-                  }
-                case 9:
-                  {
-                    pCpuidResult = D2_Cpuid(9);
-                    break;
-                  }
-                case 10:
-                  {
-                    pCpuidResult = D2_Cpuid(10);
-                    break;
-                  }
-                default:
-                  switch (nLeaf) {
-                    case 0xb:
-                      {
-                        pCpuidResult = D2_Cpuid(0xb);
-                        break;
-                      }
-                    case 0xd:
-                      {
-                        pCpuidResult = D2_Cpuid(0xd);
-                        break;
-                      }
-                    case 0xf:
-                      {
-                        pCpuidResult = D2_Cpuid(0xf);
-                        break;
-                      }
-                    default:
-                      switch (nLeaf) {
-                        case -0x7ffffffe:
-                          {
-                            pCpuidResult = D2_Cpuid(0x80000002);
-                            break;
-                          }
-                        case -0x7ffffffd:
-                          {
-                            pCpuidResult = D2_Cpuid(0x80000003);
-                            break;
-                          }
-                        case -0x7ffffffc:
-                          {
-                            pCpuidResult = D2_Cpuid(0x80000004);
-                            break;
-                          }
-                        default:
-                          {
-                            pCpuidResult = D2_Cpuid(nLeaf);
-                          }
-                      }
-                  }
-              }
-          }
-      }
-    }
-
+    int pCpuidResult = D2_Cpuid(nLeaf);
     return *(uint32_t*)(pCpuidResult + 8);
 }
 
@@ -1406,7 +1309,7 @@ void __fastcall InitListHead(StormLinkedListStrc * pListHead) {
 }
 
 void __fastcall InsertListNode(int * * ppListHead, int, int * * pNode, int32_t bInsertAtHead, int * * ppTarget) {
-    int* pBackLink;
+    int** pBackLink;
     int** ppCurNode = pNode;
     if (!pNode) {
       ppCurNode = ppListHead + 1;
@@ -1414,14 +1317,8 @@ void __fastcall InsertListNode(int * * ppListHead, int, int * * pNode, int32_t b
 
     int* pNext = *ppCurNode;
     if (pNext) {
-      pBackLink = ppCurNode[1];
-      if ((intptr_t)pBackLink < 0) {
-        pBackLink = (int*)~(uintptr_t)pBackLink;
-      } else {
-        pBackLink = (int*)((intptr_t)pBackLink + ((intptr_t)ppCurNode - pNext[1]));
-      }
-
-      *pBackLink = (int)pNext;
+      pBackLink = (int**)D2_StormNextLink(ppCurNode, -1);
+      *pBackLink = pNext;
       (*ppCurNode)[1] = (int)ppCurNode[1];
       *ppCurNode = 0;
       ppCurNode[1] = 0;
@@ -1435,18 +1332,7 @@ void __fastcall InsertListNode(int * * ppListHead, int, int * * pNode, int32_t b
         {
           *ppCurNode = (int*)ppTarget;
           ppCurNode[1] = ppTarget[1];
-          pNext = *ppListHead;
-          pBackLink = ppTarget[1];
-          if ((intptr_t)pBackLink < 0) {
-            *(int***)~(uintptr_t)pBackLink = (int**)ppCurNode;
-            ppTarget[1] = (int*)pNode;
-            return;
-          }
-          if ((intptr_t)pNext < 0) {
-            pNext = (int*)((char*)ppTarget - (*ppTarget)[1]);
-          }
-
-          *(int***)((intptr_t)pBackLink + (intptr_t)pNext) = (int**)ppCurNode;
+          *(int***)D2_StormNextLink(ppTarget, (intptr_t)*ppListHead) = (int**)ppCurNode;
           ppTarget[1] = (int*)pNode;
           return;
         }

@@ -195,13 +195,8 @@ template<> void TSExplicitList<CELLIST, -572662307>::SetLinkOffset(int32_t nLink
 }
 
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::Next(::CELLIST * pNode) {
-    intptr_t nOffsetOrRef;
-    if (pNode) {
-      nOffsetOrRef = *(uint32_t*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset);
-    } else {
-      nOffsetOrRef = this->m_terminator.m_next;
-    }
-
+    TSLink<::CELLIST>* pLink = pNode ? (TSLink<::CELLIST>*)((char*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset) - 4) : &this->m_terminator;
+    intptr_t nOffsetOrRef = pLink->m_next;
     return (::CELLIST*)(nOffsetOrRef <= 0 ? 0 : nOffsetOrRef);
 }
 

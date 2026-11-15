@@ -1842,11 +1842,7 @@ uint32_t __stdcall SKILLS_IsCorpseValidForRevive(D2UnitStrc * pUnit) {
     }
 
     int bHasPassiveState = DATATBLS::ItemStats::STATES_HasUdeadFlagState(pUnit);
-    if (bHasPassiveState) {
-      return 0;
-    }
-
-    BOOL bCorpseSelFlag = DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, corpseSel);
+    BOOL bCorpseSelFlag = !bHasPassiveState ? DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, corpseSel) : 0;
     if (!bCorpseSelFlag) {
       return 0;
     }
@@ -1877,11 +1873,7 @@ uint32_t __stdcall SKILL_CanReviveMonster(D2UnitStrc * pUnit) {
     }
 
     int bHasPassiveState = DATATBLS::ItemStats::STATES_HasUdeadFlagState(pUnit);
-    if (bHasPassiveState) {
-      return 0;
-    }
-
-    BOOL bCorpseSelFlag = DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, corpseSel);
+    BOOL bCorpseSelFlag = !bHasPassiveState ? DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, corpseSel) : 0;
     if (!bCorpseSelFlag) {
       return 0;
     }
@@ -3427,8 +3419,8 @@ static BOOL SKILLS_HasEnoughManaForSkill(D2SkillStrc * pSkillStrc, D2UnitStrc * 
         pSkillTxt2 = pSkillStrc->pRecord;
         if (pUnitStrc) {
           iVar1 = pSkillStrc->nLevel;
-          nLevelBonusCalc = SKILL_GetLevelBonus(pSkillStrc, pUnitStrc);
-          nEffectiveLevel = iVar1 + nLevelBonusCalc;
+          iVar1 += SKILL_GetLevelBonus(pSkillStrc, pUnitStrc);
+          nEffectiveLevel = iVar1;
           pMaxLevelEntry = (int)nEffectiveLevel <= 0 ? 0 : nEffectiveLevel;
           pSkillTxt = DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
           if ((int)pMaxLevelEntry >= pSkillTxt) {
@@ -3676,11 +3668,7 @@ int32_t __stdcall SKILLS_CanUseSkill(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     }
 
     uint32_t bCheckResult = SKILLS_HasRequiredWeaponOrQuantity(pSkill, pUnit);
-    if (!bCheckResult) {
-      return 2;
-    }
-
-    BOOL bCheckPassed = SKILLS_CheckWeaponRequirements(pUnit, pSkill);
+    BOOL bCheckPassed = bCheckResult ? SKILLS_CheckWeaponRequirements(pUnit, pSkill) : 0;
     if (!bCheckPassed) {
       return 2;
     }

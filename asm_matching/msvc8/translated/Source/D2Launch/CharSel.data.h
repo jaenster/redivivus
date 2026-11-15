@@ -14,6 +14,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2RealmCharListCacheEntryStrc;
 struct D2WinButton;
 
 extern char PreferredClosedRealm[256];
@@ -24,3 +25,4 @@ extern uint32_t gbCharSelectInProgress;
 extern int nCharacterSelectionIndex;
 extern uint32_t gnCharSelLoadedCharCount;
 extern uint32_t gnCharSelCreateNewButtonClickCount;
+extern D2RealmCharListCacheEntryStrc * gpRealmCharListCache;

@@ -644,6 +644,7 @@ _SERVICE_STATUS lpServiceStatus_007065fc = {
 } // namespace Game::Main
 static _SERVICE_STATUS gszCommandLineLocaleCode = {}; D2_STATIC_GUARD(gszCommandLineLocaleCode, "gszCommandLineLocaleCode");
 namespace Game::Main {
+fnAppModeRun * CurrentApplication = (fnAppModeRun *)0x00000000; D2_GLOBAL_GUARD(CurrentApplication, "Game::Main::CurrentApplication");
 eD2ApplicationMode geModState = APPMODE_mode0; D2_GLOBAL_GUARD(geModState, "Game::Main::geModState");
 SERVICE_STATUS_HANDLE ghServiceCtrlHandler = nullptr; D2_GLOBAL_GUARD(ghServiceCtrlHandler, "Game::Main::ghServiceCtrlHandler");
 HINSTANCE WinMain_hInstance = (HINSTANCE)0x00000000; D2_GLOBAL_GUARD(WinMain_hInstance, "Game::Main::WinMain_hInstance");
@@ -941,7 +942,6 @@ int32_t __stdcall ApplicationRunCurrentMode(D2IniConfigStrc * pD2IniData) {
         /* .destroy = */ &D2Client::ClientModeInGame::AppModeClientShutdown
     }
 }; D2_STATIC_GUARD(sModStateFunc, "Game::Main::ApplicationRunCurrentMode::sModStateFunc");
-    static fnAppModeRun * CurrentApplication = (fnAppModeRun *)0x00000000; D2_STATIC_GUARD(CurrentApplication, "Game::Main::ApplicationRunCurrentMode::CurrentApplication");
 
     int32_t modeResult;
     if ((uint32_t)(geModState - APPMODE_client) <= 4) {

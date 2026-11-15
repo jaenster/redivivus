@@ -577,9 +577,8 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
 
       Storm::Source::SFile::SFileCloseArchive(__frame0.pArchiveHandle);
       nStrLen = Storm::Source::SSTR::SStrLen(lpFileName);
-      pbArchivePath = lpFileName + nStrLen + 1;
       lpFileName = lpFileName + nStrLen + 1;
-    } while (*pbArchivePath != '\0');
+    } while (*lpFileName != '\0');
 
     pbArchivePath = szRegistryPath;
     __frame0.pVerifySigOut = lpFileName;

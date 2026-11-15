@@ -1029,11 +1029,11 @@ uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(D2UnitStrc * pUnit, uint
     } else {
       int32_t nWorldOffset;
       nBais = D2Common::Units::GetScreenX(pUnit);
-      nWorldOffset = UI::Path::DRAW_GetWorldOffsetX();
-      __frame0.nScreenX = nBais - nWorldOffset;
+      nBais -= UI::Path::DRAW_GetWorldOffsetX();
+      __frame0.nScreenX = nBais;
       nBais = D2Common::Units::GetScreenY(pUnit);
-      nWorldOffset = UI::Path::DRAW_GetWorldOffsetY();
-      __frame0.nScreenY = nBais - nWorldOffset;
+      nBais -= UI::Path::DRAW_GetWorldOffsetY();
+      __frame0.nScreenY = nBais;
     }
 
     BOOL pGfxInfo = Gfx::GFX_IsUnitOnScreen(pUnit, __frame0.nScreenX, __frame0.nScreenY, 0, 0);

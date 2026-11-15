@@ -1710,7 +1710,7 @@ BOOL __fastcall Draw(::D2WinEditBox * pEditBox) {
         nSelMin = pEditBox->nSelCursor;
         if (nSelMaxInLine != nSelMin) {
           nSelMax = nSelMaxInLine;
-          if (nSelMin <= nSelMaxInLine) {
+          if (nSelMaxInLine >= nSelMin) {
             nSelMax = nSelMin;
           }
           if (nSelMaxInLine <= nSelMin) {

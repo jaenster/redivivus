@@ -215,7 +215,7 @@ D2RoomExStrc * __thiscall DRLGSPAWN_GetRandomPresetSpawnPoint(D2DrlgLevelStrc * 
       } while (nSpawnIdx);
 
       if (nMatchingCount) {
-        if ((int)nMatchingCount < 1) {
+        if ((int)nMatchingCount <= 0) {
           nSelectedIdx = 1;
         } else {
           nSeedHighU = (uint64_t)pLevel->sSeed.nSeedHigh;

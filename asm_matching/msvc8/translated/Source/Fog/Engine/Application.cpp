@@ -185,11 +185,7 @@ static uint8_t __stdcall DEBUG_ParseModuleHeaders(D2FogDebugModuleEntryStrc * pp
     }
 
     /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(pNtHeader + 6, (uint32_t)*(uint16_t*)(pNtHeader + 5));
-    if (bIsBadPtr) {
-      return 0;
-    }
-
-    uint32_t bIsValidImage = DEBUG_GetPEImageType((short int*)(pNtHeader + 6));
+    uint32_t bIsValidImage = !bIsBadPtr ? DEBUG_GetPEImageType((short int*)(pNtHeader + 6)) : 0;
     if (!bIsValidImage) {
       return 0;
     }
@@ -284,12 +280,7 @@ static bool __stdcall DEBUG_AddModuleToList(int * pModuleList, LPCWSTR szModuleP
 
     D2DebugModuleInfo* pSrcInfo = &aModuleInfo;
     int* pListSlot = pModuleList + *pModuleList * 0x8a + 1;
-    for (nCopyCount = 0x8a; nCopyCount; nCopyCount--) {
-      *pListSlot = pSrcInfo->pBase;
-      pSrcInfo = (D2DebugModuleInfo*)&pSrcInfo->dwField04;
-      pListSlot++;
-    }
-
+    memcpy(pListSlot, pSrcInfo, 0x228);
     (*pModuleList)++;
     nMbLen = *pModuleList;
     return nMbLen < 0x100;

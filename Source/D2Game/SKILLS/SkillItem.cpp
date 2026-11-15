@@ -104,6 +104,7 @@ uint8_t gaSkillLevelCaps[60] = {
     0x0,
     0x0
 }; D2_GLOBAL_GUARD(gaSkillLevelCaps, "gaSkillLevelCaps");
+void* gapSkillDispatchTableBase = (void*)&gaSkillLevelCaps; D2_GLOBAL_GUARD(gapSkillDispatchTableBase, "gapSkillDispatchTableBase");
 static D2ItemSpellStrc ITEMSPELLFUNCS[31] = {
     {
         /* .pSpellInit = */ nullptr,
@@ -515,9 +516,6 @@ int32_t __fastcall MONREGION_RollRandomMonsterType(::SGAMEDATA * pGame, D2Monste
 }
 
 int * __fastcall RollRoomSeed(D2RoomStrc * pRoom) {
-    // Static local variables (originally global data)
-    static void* gapSkillDispatchTableBase = (void*)&gaSkillLevelCaps; D2_STATIC_GUARD(gapSkillDispatchTableBase, "D2Game::SKILLS::SkillItem::RollRoomSeed::gapSkillDispatchTableBase");
-
     D2SeedStrc* pSeed = !pRoom ? 0 : &pRoom->sSeed;
     D2_SeedRoll(pSeed);
     return (int*)gapSkillDispatchTableBase;
@@ -2227,11 +2225,7 @@ BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent,
     }
 
     uint32_t DVar1 = D2_SeedRoll(&pUnit->sSeed);
-    if ((int)(DVar1 % 100) >= nProcChance) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(eProcSkill);
+    D2SkillsTxt* pSkillsTxt = !((int)(DVar1 % 100) >= nProcChance) ? D2Common::Skills::TXT_Skills_GetLine(eProcSkill) : 0;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -2274,11 +2268,7 @@ BOOL __fastcall ITEMEVENT_SkillOnGetHit(::SGAMEDATA * pGame, uint32_t nUnitEvent
     }
 
     uint32_t nRandRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, 100);
-    if ((int)nRandRoll >= nProcChance) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(eProcSkill);
+    D2SkillsTxt* pSkillsTxt = !((int)nRandRoll >= nProcChance) ? D2Common::Skills::TXT_Skills_GetLine(eProcSkill) : 0;
     if (!pSkillsTxt) {
       return 0;
     }

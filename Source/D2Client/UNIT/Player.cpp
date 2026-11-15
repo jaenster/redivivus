@@ -489,8 +489,8 @@ static void CLIENT_OnPlayerEnterRoom(D2UnitStrc * pUnit) {
 
     eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     uint32_t nPortalFlags = D2Common::Units::GetPlayerPortalFlags(pUnit);
-    uint32_t nLevelPortalFlag = D2Common::DUNGEON::Dungeon::GetPortalFlagFromLevelId(eLevel);
-    D2Common::Units::SetPlayerPortalFlags(pUnit, nPortalFlags | nLevelPortalFlag);
+    nPortalFlags |= D2Common::DUNGEON::Dungeon::GetPortalFlagFromLevelId(eLevel);
+    D2Common::Units::SetPlayerPortalFlags(pUnit, nPortalFlags);
     D2RoomStrc* pCurrentRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     D2Common::DUNGEON::Dungeon::InitRoomTileAnimation(GAME::Game::sgpDrlgAct, D2Common::PATH::DynamicPath::GetNextRoom(pUnit->pPath.pDynamicPath), pCurrentRoom);
     BOOL bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);

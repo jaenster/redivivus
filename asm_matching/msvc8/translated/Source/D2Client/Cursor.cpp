@@ -113,7 +113,7 @@ namespace D2Client { namespace Cursor {
 DC6 * pCursorsDC6[7] = {0}; D2_GLOBAL_GUARD(pCursorsDC6, "D2Client::Cursor::pCursorsDC6");
 int nCursorDataIndex = 0; D2_GLOBAL_GUARD(nCursorDataIndex, "D2Client::Cursor::nCursorDataIndex");
 }} // namespace D2Client::Cursor
-static int32_t gCursorAnimationFrame = 0; D2_STATIC_GUARD(gCursorAnimationFrame, "gCursorAnimationFrame");
+int32_t gCursorAnimationFrame = 0; D2_GLOBAL_GUARD(gCursorAnimationFrame, "gCursorAnimationFrame");
 static uint32_t gnCursorAnimStartTick = 0; D2_STATIC_GUARD(gnCursorAnimStartTick, "gnCursorAnimStartTick");
 namespace D2Client { namespace Cursor {
 int ItemTypeOnHand = 0; D2_GLOBAL_GUARD(ItemTypeOnHand, "D2Client::Cursor::ItemTypeOnHand");

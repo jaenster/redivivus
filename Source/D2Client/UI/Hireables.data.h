@@ -16,6 +16,8 @@
 // Forward declarations
 struct DC6;
 
+extern uint32_t gnHireIconHoverY;
+
 namespace D2Client::UI::Hireables {
 extern DC6 * ClassIcons[7];
 extern uint8_t HealthBarGreen;

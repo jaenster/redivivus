@@ -892,24 +892,26 @@ void __fastcall InitCache(D2DrlgStrc * pDrlg, D2DrlgTileDataStrc * pDrlgActSub18
       byActNo = pDrlg->nActNo;
       nTileSubType_00 = 0;
       nTileSubType = 0;
-      if (byActNo) {
-        switch (byActNo) {
-          case 1:
-            {
-              nTileSubType = 1;
-              break;
-            }
-          default:
-            {
-              return;
-            }
-          case 2:
-            {
-              nTileSubType_00 = 0x1d;
-              nTileSubType = 0xc;
-              break;
-            }
-        }
+      switch (byActNo) {
+        case 1:
+          {
+            nTileSubType = 1;
+            break;
+          }
+        default:
+          {
+            return;
+          }
+        case 2:
+          {
+            nTileSubType_00 = 0x1d;
+            nTileSubType = 0xc;
+            break;
+          }
+        case 0:
+          {
+            break;
+          }
       }
 
       nTileCount = D2CMP::DUNGEON::Dungeon::TILEPROJECT_LookupTilesInAllProjects((void**)pDrlg->apTileProjects, 0, nTileSubType_00, nTileSubType, nTileIndices, 0x28);
@@ -4194,7 +4196,7 @@ D2DrlgOutRoomPathNodeStrc * __stdcall DRLGOUTROOM_PathSearchStep(D2DrlgOutRoomPa
         nHMin = nFCost;
         if (nFCost >= nHCost) {
           nHMin = nHCost;
-          if (nHCost < nFCost) {
+          if (nFCost > nHCost) {
             nHCost = nFCost;
           }
         }

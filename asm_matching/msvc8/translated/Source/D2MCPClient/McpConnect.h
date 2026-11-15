@@ -83,6 +83,13 @@ __pragma(pack(push, 1)) struct MCPPacketClt0x16 {
 
 #endif // D2_MODULE_D2MCPClient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2MCPClient)
+__pragma(pack(push, 1)) struct MCPPacketClt0x19 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t nRequestedCount; // characters requested (MCP 0x19 CHARLIST2)
+}; __pragma(pack(pop))
+
+#endif // D2_MODULE_D2MCPClient
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2MCPClient)
 __pragma(pack(push, 1)) struct MCPPacketCltStr {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint16_t wRequestId;

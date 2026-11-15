@@ -810,6 +810,7 @@ BOOL __fastcall OBJOP_A3Q5_SmashCompellingOrb(D2ObjectOperateFnArg * pOperation)
     bool bQuestState;
     int32_t nItemCode;
     D2QuestDataStrc* pQuestData;
+    D2UnitDataPlayerStrc* pAttackerPlayerData;
     eD2QuestState eQuestState_00;
     int32_t nClassId;
     D2ObjectsTxt* pObjectsTxt;
@@ -836,15 +837,18 @@ BOOL __fastcall OBJOP_A3Q5_SmashCompellingOrb(D2ObjectOperateFnArg * pOperation)
         }
 
         pGameInner = pOperation->sArg.pGame;
+        pAttackerPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
         /* SetQuestState(Khalim's Will=0x12, Completed=0): orb used twice -> Khalim's
-                         Will done */ D2Common::QuestRecord::SetQuestState(GetQuestBitBufferInline(pGameInner, pOperation->pAttacker), QUEST_KhalimsWill, QUESTSTATE_Completed);
+                         Will done */ D2Common::QuestRecord::SetQuestState(pAttackerPlayerData->pQuestRecord[pGameInner->nDifficulty], QUEST_KhalimsWill, QUESTSTATE_Completed);
         pGameInner = pOperation->sArg.pGame;
+        pAttackerPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
         /* SetQuestState(Khalim's Will=0x12, JustCompleted=0xd): fire Khalim's Will
-                         completion notify */ D2Common::QuestRecord::SetQuestState(GetQuestBitBufferInline(pGameInner, pOperation->pAttacker), QUEST_KhalimsWill, QUESTSTATE_JustCompleted);
+                         completion notify */ D2Common::QuestRecord::SetQuestState(pAttackerPlayerData->pQuestRecord[pGameInner->nDifficulty], QUEST_KhalimsWill, QUESTSTATE_JustCompleted);
         QUEST_RemoveQuestItemFromPlayer(pOperation->sArg.pGame, pOperation->pAttacker, 0x20326671);
         pGameInner = pOperation->sArg.pGame;
+        pAttackerPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
         /* GetQuestState(Blackened Temple=0x15, Step0x04=4): if council already dead,
-                         finishing Khalim's Will also completes the temple */ _bQuestState = D2Common::QuestRecord::GetQuestState(GetQuestBitBufferInline(pGameInner, pOperation->pAttacker), QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
+                         finishing Khalim's Will also completes the temple */ _bQuestState = D2Common::QuestRecord::GetQuestState(pAttackerPlayerData->pQuestRecord[pGameInner->nDifficulty], QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
         if (_bQuestState) {
           eQuestState = QUESTSTATE_Completed;
           eQuestId = QUEST_TheBlackenedTemple;

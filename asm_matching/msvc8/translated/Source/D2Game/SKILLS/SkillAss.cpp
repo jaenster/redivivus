@@ -2437,10 +2437,7 @@ void __fastcall SKILLASS_EquipSummonItems(::SGAMEDATA * pGame, D2UnitStrc * pOwn
     D2MonEquipEntryStrc sEquipEntry;
     uint8_t byBodyLoc;
     short int nRowMonClass;
-    uint32_t nSeedLowSave;
-    uint64_t nSlotCount;
     D2MonEquipTxt* pNextRow;
-    D2SeedStrc sNewSeed;
     int nUnit;
     D2UnitStrc* pMonster = pUnit;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
@@ -2475,20 +2472,7 @@ void __fastcall SKILLASS_EquipSummonItems(::SGAMEDATA * pGame, D2UnitStrc * pOwn
       } while ((int)nRandEquipSlot < 3);
 
       if ((int)nRandEquipSlot > 0) {
-        nSeedLowSave = pMonster->sSeed.nSeedLow;
-        nSlotCount = (uint64_t)pMonster->sSeed.nSeedHigh;
-        if (nRandEquipSlot & nRandEquipSlot - 1) {
-          sNewSeed = (D2SeedStrc)((uint64_t)nSeedLowSave * 0x6ac690c5 + nSlotCount);
-          pMonster->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-          pMonster->sSeed.nSeedLow = sNewSeed.nSeedLow;
-          nRandEquipSlot = (uint32_t)(sNewSeed.nSeedLow % nRandEquipSlot);
-        } else {
-          sNewSeed = (D2SeedStrc)((uint64_t)nSeedLowSave * 0x6ac690c5 + nSlotCount);
-          pMonster->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-          pMonster->sSeed.nSeedLow = sNewSeed.nSeedLow;
-          nRandEquipSlot = nRandEquipSlot - 1 & sNewSeed.nSeedLow;
-        }
-
+        nRandEquipSlot = D2_SeedRollLimited(&pMonster->sSeed, nRandEquipSlot);
         byBodyLoc = pEquipTableRow->loc[nRandEquipSlot];
         pExistingItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, (int)(char)byBodyLoc);
         if (!pExistingItem) {
@@ -2742,8 +2726,8 @@ BOOL __fastcall Skills_SrvDoFunc_050_DragonTail_FireExplosion(::SGAMEDATA * pGam
       memset(&sFireExplosionDamage, 0, 0x70);
       nPercentDivisor = 100;
       nFireDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
-      nFireMastery = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_fire_mastery, 0);
-      sFireExplosionDamage.dwFireDmg = D2Common::DATATBLS::DataTbls::D2ApplyPercent(sDamage.dwPhysDamage, nFireDmgPct + nFireMastery, nPercentDivisor);
+      nFireDmgPct += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_fire_mastery, 0);
+      sFireExplosionDamage.dwFireDmg = D2Common::DATATBLS::DataTbls::D2ApplyPercent(sDamage.dwPhysDamage, nFireDmgPct, nPercentDivisor);
       sFireExplosionDamage.wResultFlags = 9;
       nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
       nCollisionFlags = 0;

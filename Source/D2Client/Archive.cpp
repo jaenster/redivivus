@@ -104,7 +104,7 @@ void __thiscall ARCHIVE_UnlinkNode(StormLinkedListStrc * pThis, int * pNode) {
 }
 
 void __thiscall ARCHIVE_LinkNode(int * * ppList, int * * ppNode, int32_t nMode, int * * ppTarget) {
-    int* pPrevLink;
+    int** pPrevLink;
     int** ppCurNode = ppNode;
     if (!ppNode) {
       ppCurNode = ppList + 1;
@@ -112,14 +112,8 @@ void __thiscall ARCHIVE_LinkNode(int * * ppList, int * * ppNode, int32_t nMode, 
 
     int* pNext = *ppCurNode;
     if (pNext) {
-      pPrevLink = ppCurNode[1];
-      if ((intptr_t)pPrevLink < 0) {
-        pPrevLink = (int*)~(uintptr_t)pPrevLink;
-      } else {
-        pPrevLink = (int*)((intptr_t)pPrevLink + ((intptr_t)ppCurNode - pNext[1]));
-      }
-
-      *pPrevLink = (int)pNext;
+      pPrevLink = (int**)D2_StormNextLink(ppCurNode, -1);
+      *pPrevLink = pNext;
       (*ppCurNode)[1] = (int)ppCurNode[1];
       *ppCurNode = 0;
       ppCurNode[1] = 0;
@@ -133,18 +127,7 @@ void __thiscall ARCHIVE_LinkNode(int * * ppList, int * * ppNode, int32_t nMode, 
         {
           *ppCurNode = (int*)ppTarget;
           ppCurNode[1] = ppTarget[1];
-          pNext = *ppList;
-          pPrevLink = ppTarget[1];
-          if ((intptr_t)pPrevLink < 0) {
-            *(int***)~(uintptr_t)pPrevLink = (int**)ppCurNode;
-            ppTarget[1] = (int*)ppNode;
-            return;
-          }
-          if ((intptr_t)pNext < 0) {
-            pNext = (int*)((char*)ppTarget - (*ppTarget)[1]);
-          }
-
-          *(int***)((intptr_t)pPrevLink + (intptr_t)pNext) = (int**)ppCurNode;
+          *(int***)D2_StormNextLink(ppTarget, (intptr_t)*ppList) = (int**)ppCurNode;
           ppTarget[1] = (int*)ppNode;
           return;
         }
@@ -300,12 +283,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
         pNextNode = *pNewRec;
         if (pNextNode) {
           pPrevLink = pNewRec[1];
-          if ((intptr_t)pPrevLink < 0) {
-            pPrevLink = (int*)~(uintptr_t)pPrevLink;
-          } else {
-            pPrevLink = (int*)((intptr_t)pPrevLink + ((intptr_t)pNewRec - pNextNode[1]));
-          }
-
+          pPrevLink = (int*)D2_StormNextLink(pNewRec, -1);
           *pPrevLink = (int)pNextNode;
           (*pNewRec)[1] = (int)pNewRec[1];
           *pNewRec = 0;

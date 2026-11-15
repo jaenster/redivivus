@@ -42,9 +42,9 @@ static uint32_t gnSelectConstant13_Y = 0x13; D2_STATIC_GUARD(gnSelectConstant13_
 namespace D2Client { namespace _Selection {
 int nSelectedUnitGUID = 0; D2_GLOBAL_GUARD(nSelectedUnitGUID, "D2Client::_Selection::nSelectedUnitGUID");
 }} // namespace D2Client::_Selection
-static int gnSelectExclusionRectLeft = 0; D2_STATIC_GUARD(gnSelectExclusionRectLeft, "gnSelectExclusionRectLeft");
-static int gnSelectExclusionRectTop = 0; D2_STATIC_GUARD(gnSelectExclusionRectTop, "gnSelectExclusionRectTop");
-static int gnSelectExclusionRectRight = 0; D2_STATIC_GUARD(gnSelectExclusionRectRight, "gnSelectExclusionRectRight");
+int gnSelectExclusionRectLeft = 0; D2_GLOBAL_GUARD(gnSelectExclusionRectLeft, "gnSelectExclusionRectLeft");
+int gnSelectExclusionRectTop = 0; D2_GLOBAL_GUARD(gnSelectExclusionRectTop, "gnSelectExclusionRectTop");
+int gnSelectExclusionRectRight = 0; D2_GLOBAL_GUARD(gnSelectExclusionRectRight, "gnSelectExclusionRectRight");
 static int gnSelectExclusionRectBottom = 0; D2_STATIC_GUARD(gnSelectExclusionRectBottom, "gnSelectExclusionRectBottom");
 namespace D2Client { namespace _Selection {
 eD2UnitType eSelectedUnitType = 0; D2_GLOBAL_GUARD(eSelectedUnitType, "D2Client::_Selection::eSelectedUnitType");

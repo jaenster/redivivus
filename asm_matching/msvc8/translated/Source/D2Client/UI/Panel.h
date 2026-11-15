@@ -90,8 +90,6 @@ int Unreferenced_00498310();
 void __stdcall PANEL_DrawLife();
 void __stdcall DRAW_UI_BorderLeft();
 void __stdcall DRAW_UI_BorderRight();
-void __stdcall ClickBelt(struct D2InventoryStrc * pInventory, int32_t nMouseX, int32_t nMouseY);
-void __stdcall ClickBeltRight(uint32_t nBeltSlot, struct D2UnitStrc * pUnit, struct D2InventoryStrc * pInventory, int32_t bToMercenary);
 // Key-command handler for belt slot 1. If not exiting and the player is alive and
 // gbPanelStatStrengthColor is set, calls ClickBeltRight(0, pUnit, pUnit->pInventory, SHIFT-held).
 // It reads no colour and returns nothing.
@@ -129,6 +127,6 @@ void __stdcall INPUT_PanelLeftClickUp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall PANEL_UpdatePanelFromMode(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_PanelRightClick(struct D2UIMouseMsgStrc * pMsg);
 #endif // D2_MODULE_D2Client
-// 10 internal functions (defined in .cpp)
+// 12 internal functions (defined in .cpp)
 
 }}} // namespace D2Client::UI::Panel

@@ -28,7 +28,7 @@ void __stdcall D2WinPopup();
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
 // Destroys the global popup control if it exists. Calls FORMS_DestroyControl and clears the global pointer.
-void __stdcall D2WINPOPUP_Destroy();
+BOOL __stdcall D2WINPOPUP_Destroy();
 // Returns TRUE if the popup control exists, is of type FORM_Popup (0xb), is active (state & 4), and is visible (state & 1). Used to check if popup is ready for interaction.
 BOOL __stdcall D2WINPOPUP_IsActiveAndVisible();
 // Adds a message entry to the popup. Validates message count (max 8), copies 132-byte message data into next slot, calculates text width using font 1, updates popup width/height. Returns TRUE on success.

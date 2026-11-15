@@ -15,6 +15,7 @@
 
 extern void * g_pBNetGameListData;
 extern void * gpBNetWriteUserData;
+extern uint32_t g_dwNewsTimestamp;
 
 namespace Bnclient::BnSend {
 extern char s___AUItem_NewsTable___0072ff8c[24];

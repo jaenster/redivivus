@@ -1593,6 +1593,8 @@ namespace D2Win::Src::D2Comp {
 int nD2CompItemsSize = 0; D2_GLOBAL_GUARD(nD2CompItemsSize, "D2Win::Src::D2Comp::nD2CompItemsSize");
 D2ItemsTxt * pD2CompItems = 0; D2_GLOBAL_GUARD(pD2CompItems, "D2Win::Src::D2Comp::pD2CompItems");
 } // namespace D2Win::Src::D2Comp
+D2ItemsTxt * pD2CompArmor = 0; D2_GLOBAL_GUARD(pD2CompArmor, "pD2CompArmor");
+short * pD2CompItemsShortStructure = 0; D2_GLOBAL_GUARD(pD2CompItemsShortStructure, "pD2CompItemsShortStructure");
 uint8_t gaItemPaletteTransformData[241920] = {}; D2_GLOBAL_GUARD(gaItemPaletteTransformData, "gaItemPaletteTransformData");
 static uint8_t gaGlideEmblemPrimaryColorTableEntries[12] = {}; D2_STATIC_GUARD(gaGlideEmblemPrimaryColorTableEntries, "gaGlideEmblemPrimaryColorTableEntries");
 static D2TxtLinkStrc * gnHitClassTxtLinkHandle = 0; D2_STATIC_GUARD(gnHitClassTxtLinkHandle, "gnHitClassTxtLinkHandle");
@@ -3029,9 +3031,7 @@ void __fastcall D2COMP_AllocTxt_Items(D2PoolManagerStrc * pMemory) {
     static size_t nD2CompWeaponsSize; D2_STATIC_GUARD_BSS(nD2CompWeaponsSize, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::nD2CompWeaponsSize");
     static D2ItemsTxt * pD2CompWeapons; D2_STATIC_GUARD_BSS(pD2CompWeapons, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::pD2CompWeapons");
     static size_t nD2CompArmorSize; D2_STATIC_GUARD_BSS(nD2CompArmorSize, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::nD2CompArmorSize");
-    static D2ItemsTxt * pD2CompArmor; D2_STATIC_GUARD_BSS(pD2CompArmor, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::pD2CompArmor");
     static size_t nD2CompMiscSize; D2_STATIC_GUARD_BSS(nD2CompMiscSize, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::nD2CompMiscSize");
-    static short * pD2CompItemsShortStructure; D2_STATIC_GUARD_BSS(pD2CompItemsShortStructure, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::pD2CompItemsShortStructure");
 
     int j;
     int nItemIdx = 0;

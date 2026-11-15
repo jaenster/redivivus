@@ -76,7 +76,7 @@ int nTxtLvlMazeSize = 0; D2_GLOBAL_GUARD(nTxtLvlMazeSize, "D2Common::DATATBLS::L
 D2LvlSubTxt * sgpTxtLvlSub = 0; D2_GLOBAL_GUARD(sgpTxtLvlSub, "D2Common::DATATBLS::LvlTbls::sgpTxtLvlSub");
 int nTxtLvlSubSize = 0; D2_GLOBAL_GUARD(nTxtLvlSubSize, "D2Common::DATATBLS::LvlTbls::nTxtLvlSubSize");
 } // namespace D2Common::DATATBLS::LvlTbls
-static int * gpnLvlSubTypeToIndex = 0; D2_STATIC_GUARD(gpnLvlSubTypeToIndex, "gpnLvlSubTypeToIndex");
+int * gpnLvlSubTypeToIndex = 0; D2_GLOBAL_GUARD(gpnLvlSubTypeToIndex, "gpnLvlSubTypeToIndex");
 static D2LvlTypeTileLibrariesStrc * gpLvlTypeTileLibraries = 0; D2_STATIC_GUARD(gpLvlTypeTileLibraries, "gpLvlTypeTileLibraries");
 static D2DrlgFileStrc * * pTxtLvlTbls = 0; D2_STATIC_GUARD(pTxtLvlTbls, "pTxtLvlTbls");
 static D2DrlgFileStrc * * gpaDrlgLvlSubPresetFiles = 0; D2_STATIC_GUARD(gpaDrlgLvlSubPresetFiles, "gpaDrlgLvlSubPresetFiles");

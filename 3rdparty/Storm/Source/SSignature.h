@@ -79,7 +79,7 @@ uint32_t __fastcall SSignatureVerifyStream_GetSignatureLength(struct D2SsigConte
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SSIG_UpdateHash. Storm export (PPC vector 100cdfd4 -> 100a3af0). Basis: callee set {Sha1::Append, BlockMoveData} == 1.14d {Sha1_Append, SSYSTEM_Memmove, STORM_Memcpy}; PPC reads r3,r4,r5 = 3 args == 3 params here.
 void __fastcall SSignatureVerifyStream_ProvideData(struct D2SsigContextStrc * pContext, uint8_t * pData, size_t nDataLen);
-void __fastcall SSIG_InitRSAPair(struct BigData * * pRSAPair);
+struct BigData * * __fastcall SSIG_InitRSAPair(struct BigData * * pRSAPair);
 void __fastcall SSIG_FreeRSAPair(struct BigData * * pRSAPair);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SSIG_SignData. Storm export (PPC vector 100cdff4 -> 100a3570). Basis: PPC reads r3..r10 = 8 args == 8 params here (no other SSignature function takes 8). Callee set: PPC {Sha1::Initialize, Sha1::Append, Sha1::Finalize, BlockMoveData, SBigNew, Crypt::RSA::Prepare, Crypt::RSA::Process, SBigDel} == 1.14d {SSIG_HashData (= Init/Append/Finalize factored out), STORM_Memcpy, SSIG_InitRSAPair, CryptRSA_Prepare, CryptRSA_Process, SSIG_FreeRSAPair}. Both search for the "SIGN" magic 0x5349474e in the buffer first.

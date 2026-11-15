@@ -3146,11 +3146,7 @@ int32_t __fastcall UNITSND_GetFootstepSound(D2UnitStrc * pUnit, int32_t bIsRunni
 
       nFootstepSound = gaUnitSoundTableByClassId[nClassId][10];
     } else {
-      if (eUnitType != UNIT_MONSTER) {
-        return 0;
-      }
-
-      pMonSoundsLine = TxtGetSoundIdLineFromUnit(pUnit);
+      pMonSoundsLine = eUnitType == UNIT_MONSTER ? TxtGetSoundIdLineFromUnit(pUnit) : 0;
       if (!pMonSoundsLine) {
         return 0;
       }

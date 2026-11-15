@@ -1064,43 +1064,47 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountUpgradeProof(char * pPacketDa
       Debug::DEBUG_Trace("INVALID: AuthAccountUpgradeProof");
       return 0;
     }
-    if (*(int*)pPacketData) {
-      if (*(int*)pPacketData != 2) {
-        Debug::DEBUG_Trace("Upgrade Proof failed: Unknown Result");
-        BNMESSQUEUE_SetStateIfZero(0x12);
-        return 0;
-      }
 
-      bIsLogonFlow = NET_SID_CLIENT_GetSIDFlag2();
-      if (bIsLogonFlow) {
-        Debug::DEBUG_Trace("Upgrade Proof Failed: Invalid password during logon");
-        NET_SID_ClearSrpPassword();
-        g_nRealmLogonResult = 2;
-        BNMESSQUEUE_SetStateIfZero(0xe);
-        return 1;
-      }
+    switch (*(int*)pPacketData) {
+      case 2:
+        {
+          bIsLogonFlow = NET_SID_CLIENT_GetSIDFlag2();
+          if (bIsLogonFlow) {
+            Debug::DEBUG_Trace("Upgrade Proof Failed: Invalid password during logon");
+            NET_SID_ClearSrpPassword();
+            g_nRealmLogonResult = 2;
+            BNMESSQUEUE_SetStateIfZero(0xe);
+            return 1;
+          }
 
-      Debug::DEBUG_Trace("Upgrade Proof Failed: Invalid password during change");
-      NET_SID_ClearSrpPassword();
-      g_nSIDResponseCount1 = 2;
-      g_SIDPacketResponseFlags[0x55] = 1;
-      BNMESSQUEUE_SetStateIfZero(0xe);
-      return 1;
+          Debug::DEBUG_Trace("Upgrade Proof Failed: Invalid password during change");
+          NET_SID_ClearSrpPassword();
+          g_nSIDResponseCount1 = 2;
+          g_SIDPacketResponseFlags[0x55] = 1;
+          BNMESSQUEUE_SetStateIfZero(0xe);
+          return 1;
+        }
+      case 0:
+        {
+          int32_t iVar1;
+          bIsLogonFlow = NET_SID_CLIENT_GetSIDFlag2();
+          if (bIsLogonFlow) {
+            Debug::DEBUG_Trace("Upgrade Proof success, logging in");
+            iVar1 = NET_SID_CLIENT_Resend_0x53_AuthAccountLogon();
+            return iVar1;
+          }
+
+          Debug::DEBUG_Trace("Upgrade Proof success, password changed");
+          NET_SID_ClearSrpPassword();
+          g_nSIDResponseCount1 = 0;
+          g_SIDPacketResponseFlags[0x55] = 1;
+          return 1;
+        }
     }
 
-    int32_t iVar1;
-    bIsLogonFlow = NET_SID_CLIENT_GetSIDFlag2();
-    if (bIsLogonFlow) {
-      Debug::DEBUG_Trace("Upgrade Proof success, logging in");
-      iVar1 = NET_SID_CLIENT_Resend_0x53_AuthAccountLogon();
-      return iVar1;
-    }
-
-    Debug::DEBUG_Trace("Upgrade Proof success, password changed");
-    NET_SID_ClearSrpPassword();
-    g_nSIDResponseCount1 = 0;
-    g_SIDPacketResponseFlags[0x55] = 1;
-    return 1;
+    Debug::DEBUG_Trace("Upgrade Proof failed: Unknown Result");
+    BNMESSQUEUE_SetStateIfZero(0x12);
+    return 0;
 }
 
 // SID_SETEMAIL (0x59) packet handler - Email address update confirmation
@@ -1951,27 +1955,25 @@ void __fastcall NET_SID_CLIENT_ExpandCdKeyToBase5(char * pCdKeyString, uint8_t *
 }
 
 static void __fastcall NET_SID_CLIENT_PermuteBitsLFSR(uint32_t * pToken) {
-    // Frame -32..-4 is ONE Ghidra variable the decompiler printed as 2 locals.
-    // Separate locals let the compiler reorder them, so the pieces are one struct.
-    struct __frame0_t {
-      uint32_t srcTokenCopy[3];
-      uint32_t auStack_14[4];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 28, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     uint32_t nextSrcBitIdx;
-    uint8_t srcBitShift;
+    uint8_t bVar2;
+    uint32_t dstBitShift;
+    uint32_t srcBitShift;
     int dstWordIdx;
-    __frame0.auStack_14[0] = pToken[3];
+    uint32_t srcTokenCopy[4];
+    srcTokenCopy[0] = *pToken;
+    srcTokenCopy[1] = pToken[1];
+    srcTokenCopy[2] = pToken[2];
+    srcTokenCopy[3] = pToken[3];
     uint32_t srcBitIdx = 0;
     uint32_t dstBitIdx = 2;
     do {
-      uint8_t dstBitShift;
+      uint8_t bVar1;
       dstBitShift = (uint8_t)(dstBitIdx - 2) & 0x1f;
       dstWordIdx = 3 - (dstBitIdx - 2 >> 5);
       srcBitShift = (uint8_t)srcBitIdx & 0x1f;
       nextSrcBitIdx = srcBitIdx + 0xb;
-      pToken[dstWordIdx] = ((__frame0.auStack_14[-(srcBitIdx >> 5)] & 1 << srcBitShift) >> srcBitShift & 1) << dstBitShift | ~(1 << dstBitShift) & pToken[dstWordIdx];
+      pToken[dstWordIdx] = ((srcTokenCopy[3 - (srcBitIdx >> 5)] & 1 << (uint8_t)srcBitShift) >> (uint8_t)srcBitShift & 1) << (uint8_t)dstBitShift | ~(1 << (uint8_t)dstBitShift) & pToken[dstWordIdx];
       if (nextSrcBitIdx >= 0x78) {
         nextSrcBitIdx = srcBitIdx - 0x6d;
         if ((int)nextSrcBitIdx < 0) {
@@ -1979,11 +1981,11 @@ static void __fastcall NET_SID_CLIENT_PermuteBitsLFSR(uint32_t * pToken) {
         }
       }
 
-      dstBitShift = (uint8_t)(dstBitIdx - 1) & 0x1f;
+      bVar1 = (uint8_t)(dstBitIdx - 1) & 0x1f;
       dstWordIdx = 3 - (dstBitIdx - 1 >> 5);
-      srcBitShift = (uint8_t)nextSrcBitIdx & 0x1f;
+      bVar2 = (uint8_t)nextSrcBitIdx & 0x1f;
       srcBitIdx = nextSrcBitIdx + 0xb;
-      pToken[dstWordIdx] = ((__frame0.auStack_14[-(nextSrcBitIdx >> 5)] & 1 << srcBitShift) >> srcBitShift & 1) << dstBitShift | ~(1 << dstBitShift) & pToken[dstWordIdx];
+      pToken[dstWordIdx] = ((srcTokenCopy[3 - (nextSrcBitIdx >> 5)] & 1 << bVar2) >> bVar2 & 1) << bVar1 | ~(1 << bVar1) & pToken[dstWordIdx];
       if (srcBitIdx >= 0x78) {
         srcBitIdx = nextSrcBitIdx - 0x6d;
         if ((int)srcBitIdx < 0) {
@@ -1991,11 +1993,11 @@ static void __fastcall NET_SID_CLIENT_PermuteBitsLFSR(uint32_t * pToken) {
         }
       }
 
-      dstBitShift = (uint8_t)dstBitIdx & 0x1f;
+      bVar1 = (uint8_t)dstBitIdx & 0x1f;
       dstWordIdx = 3 - (dstBitIdx >> 5);
-      srcBitShift = (uint8_t)srcBitIdx & 0x1f;
+      bVar2 = (uint8_t)srcBitIdx & 0x1f;
       nextSrcBitIdx = srcBitIdx + 0xb;
-      pToken[dstWordIdx] = ((__frame0.auStack_14[-(srcBitIdx >> 5)] & 1 << srcBitShift) >> srcBitShift & 1) << dstBitShift | ~(1 << dstBitShift) & pToken[dstWordIdx];
+      pToken[dstWordIdx] = ((srcTokenCopy[3 - (srcBitIdx >> 5)] & 1 << bVar2) >> bVar2 & 1) << bVar1 | ~(1 << bVar1) & pToken[dstWordIdx];
       if (nextSrcBitIdx >= 0x78) {
         nextSrcBitIdx = srcBitIdx - 0x6d;
         if ((int)nextSrcBitIdx < 0) {
@@ -2003,11 +2005,11 @@ static void __fastcall NET_SID_CLIENT_PermuteBitsLFSR(uint32_t * pToken) {
         }
       }
 
-      dstBitShift = (uint8_t)(dstBitIdx + 1) & 0x1f;
+      bVar1 = (uint8_t)(dstBitIdx + 1) & 0x1f;
       dstWordIdx = 3 - (dstBitIdx + 1 >> 5);
-      srcBitShift = (uint8_t)nextSrcBitIdx & 0x1f;
+      bVar2 = (uint8_t)nextSrcBitIdx & 0x1f;
       srcBitIdx = nextSrcBitIdx + 0xb;
-      pToken[dstWordIdx] = ((__frame0.auStack_14[-(nextSrcBitIdx >> 5)] & 1 << srcBitShift) >> srcBitShift & 1) << dstBitShift | ~(1 << dstBitShift) & pToken[dstWordIdx];
+      pToken[dstWordIdx] = ((srcTokenCopy[3 - (nextSrcBitIdx >> 5)] & 1 << bVar2) >> bVar2 & 1) << bVar1 | ~(1 << bVar1) & pToken[dstWordIdx];
       if (srcBitIdx >= 0x78) {
         srcBitIdx = nextSrcBitIdx - 0x6d;
         if ((int)srcBitIdx < 0) {
@@ -2015,11 +2017,11 @@ static void __fastcall NET_SID_CLIENT_PermuteBitsLFSR(uint32_t * pToken) {
         }
       }
 
-      dstBitShift = (uint8_t)(dstBitIdx + 2) & 0x1f;
+      bVar1 = (uint8_t)(dstBitIdx + 2) & 0x1f;
       dstWordIdx = 3 - (dstBitIdx + 2 >> 5);
-      srcBitShift = (uint8_t)srcBitIdx & 0x1f;
+      bVar2 = (uint8_t)srcBitIdx & 0x1f;
       nextSrcBitIdx = srcBitIdx + 0xb;
-      pToken[dstWordIdx] = ((__frame0.auStack_14[-(srcBitIdx >> 5)] & 1 << srcBitShift) >> srcBitShift & 1) << dstBitShift | ~(1 << dstBitShift) & pToken[dstWordIdx];
+      pToken[dstWordIdx] = ((srcTokenCopy[3 - (srcBitIdx >> 5)] & 1 << bVar2) >> bVar2 & 1) << bVar1 | ~(1 << bVar1) & pToken[dstWordIdx];
       if (nextSrcBitIdx >= 0x78) {
         nextSrcBitIdx = srcBitIdx - 0x6d;
         if ((int)nextSrcBitIdx < 0) {
@@ -2027,11 +2029,11 @@ static void __fastcall NET_SID_CLIENT_PermuteBitsLFSR(uint32_t * pToken) {
         }
       }
 
-      dstBitShift = (uint8_t)(dstBitIdx + 3) & 0x1f;
+      bVar1 = (uint8_t)(dstBitIdx + 3) & 0x1f;
       dstWordIdx = 3 - (dstBitIdx + 3 >> 5);
-      srcBitShift = (uint8_t)nextSrcBitIdx & 0x1f;
+      bVar2 = (uint8_t)nextSrcBitIdx & 0x1f;
       srcBitIdx = nextSrcBitIdx + 0xb;
-      pToken[dstWordIdx] = ((__frame0.auStack_14[-(nextSrcBitIdx >> 5)] & 1 << srcBitShift) >> srcBitShift & 1) << dstBitShift | ~(1 << dstBitShift) & pToken[dstWordIdx];
+      pToken[dstWordIdx] = ((srcTokenCopy[3 - (nextSrcBitIdx >> 5)] & 1 << bVar2) >> bVar2 & 1) << bVar1 | ~(1 << bVar1) & pToken[dstWordIdx];
       if (srcBitIdx >= 0x78) {
         srcBitIdx = nextSrcBitIdx - 0x6d;
         if ((int)srcBitIdx < 0) {

@@ -464,34 +464,38 @@ static int32_t PATH_GetMoveTestCollisionMaskFromMonStats(D2UnitStrc * pUnit) {
 int32_t __stdcall PATH_GetDynamicPathField(int32_t nMonStatsIdx) {
     D2MonStats2Txt* pMonStatsEx;
     uint32_t dwMonStats2Flags;
+    int nMonStatsExId;
+    pMonStatsEx = 0;
     if (nMonStatsIdx >= 0 && nMonStatsIdx < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
-      int nMonStatsExId;
       nMonStatsExId = (int)ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatsIdx].MonStatsEx;
       pMonStatsEx = nMonStatsExId >= 0 && nMonStatsExId < ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr;
-      if (pMonStatsEx && (uint32_t)(int)pMonStatsEx->SizeX <= 3) {
-        dwMonStats2Flags = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsEx + 0x5);
-        nMonStatsExId = gaUnitTypeInteractSizes[pMonStatsEx->SizeX];
-        if (!((Fog::BitBuffer::gadwBitMasks[0] & dwMonStats2Flags || Fog::BitBuffer::gadwBitMasks[2] & dwMonStats2Flags) && !(Fog::BitBuffer::gadwBitMasks[1] & dwMonStats2Flags))) {
-          return nMonStatsExId;
-        }
-
-        switch (nMonStatsExId) {
-          case 1:
-            {
-              nMonStatsExId = 3;
-              break;
-            }
-          case 2:
-            {
-              return 4;
-            }
-        }
-
-        return nMonStatsExId;
-      }
+    }
+    if (!pMonStatsEx) {
+      return 1;
+    }
+    if ((uint32_t)(int)pMonStatsEx->SizeX > 3) {
+      return 1;
     }
 
-    return 1;
+    dwMonStats2Flags = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsEx + 0x5);
+    nMonStatsExId = gaUnitTypeInteractSizes[pMonStatsEx->SizeX];
+    if (!((Fog::BitBuffer::gadwBitMasks[0] & dwMonStats2Flags || Fog::BitBuffer::gadwBitMasks[2] & dwMonStats2Flags) && !(Fog::BitBuffer::gadwBitMasks[1] & dwMonStats2Flags))) {
+      return nMonStatsExId;
+    }
+
+    switch (nMonStatsExId) {
+      case 1:
+        {
+          nMonStatsExId = 3;
+          break;
+        }
+      case 2:
+        {
+          return 4;
+        }
+    }
+
+    return nMonStatsExId;
 }
 
 int32_t __stdcall GetInteractSize(D2UnitStrc * pUnit, int32_t nSizeX) {

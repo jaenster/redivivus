@@ -97,10 +97,9 @@
         "DSBUFFERDESC",
         "WAVEFORMATEX",
         "int32_t",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ],
-      "dh": "a33c23b5"
+      "dh": "632300e3"
     },
     {
       "name": "SOUND_Initialize",

@@ -627,18 +627,17 @@ static void __stdcall CLIENT_UpdateSkillMissilePosition(D2SkillStrc * pSkill, in
 
     int nTargetY = nDestY * 3 + nTargetYPos * -2;
     D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nTargetXPos, nTargetY);
-    if (pRoom) {
-      BOOL bIsTown;
-      bIsTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-      if (bIsTown) {
-        return;
-      }
+    BOOL bIsTown;
+    bIsTown = pRoom ? D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) : 0;
+    if (!bIsTown) {
+      D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nTargetXPos, (int16_t)nTargetY);
+      D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 0xb);
+      D2Common::PATH::DynamicPath::SetDistance(pDynamicPath, 5);
+      D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
+      return;
     }
 
-    D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nTargetXPos, (int16_t)nTargetY);
-    D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 0xb);
-    D2Common::PATH::DynamicPath::SetDistance(pDynamicPath, 5);
-    D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
+    return;
 }
 
 // Teleport/leap landing fixup: removes stale collision at the target tile and resets the unit's dynamic-path collision type, pattern and path type.

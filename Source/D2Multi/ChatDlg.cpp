@@ -1685,7 +1685,7 @@ static ::D2WinTextBox * BattleNetNews = 0; D2_STATIC_GUARD(BattleNetNews, "Battl
 ::D2WinTextBox * gpControlJoinGameError = 0; D2_GLOBAL_GUARD(gpControlJoinGameError, "gpControlJoinGameError");
 uint32_t gnOpenBNetMode = 0; D2_GLOBAL_GUARD(gnOpenBNetMode, "gnOpenBNetMode");
 static ChatDlgCallback gpfnChatDlgCallback = (ChatDlgCallback)0; D2_STATIC_GUARD(gpfnChatDlgCallback, "gpfnChatDlgCallback");
-static D2ChatDlgUnknown_0x10 * gpChatMessageQueueHead = 0; D2_STATIC_GUARD(gpChatMessageQueueHead, "gpChatMessageQueueHead");
+D2ChatDlgUnknown_0x10 * gpChatMessageQueueHead = 0; D2_GLOBAL_GUARD(gpChatMessageQueueHead, "gpChatMessageQueueHead");
 static D2ChatDlgUnknown_0x10 * gpChatMessageQueueTail = 0; D2_STATIC_GUARD(gpChatMessageQueueTail, "gpChatMessageQueueTail");
 static D2ChatPlayerNameNodeStrc * gpChatPlayerNameListHead = 0; D2_STATIC_GUARD(gpChatPlayerNameListHead, "gpChatPlayerNameListHead");
 

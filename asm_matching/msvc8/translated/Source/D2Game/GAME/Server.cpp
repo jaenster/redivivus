@@ -83,7 +83,7 @@ typedef void (__fastcall *fpForEachClientFn)(D2ClientStrc * pClient, void * pCon
 static uint8_t gaTableNullSub15_Data = 0x0; D2_STATIC_GUARD(gaTableNullSub15_Data, "gaTableNullSub15_Data");
 static unsigned short QServerNextToken = 0x1; D2_STATIC_GUARD(QServerNextToken, "QServerNextToken");
 uint32_t GameSeed = -0x1; D2_GLOBAL_GUARD(GameSeed, "GameSeed");
-static uint32_t dwCycleLastSecond = 0x19; D2_STATIC_GUARD(dwCycleLastSecond, "dwCycleLastSecond");
+uint32_t dwCycleLastSecond = 0x19; D2_GLOBAL_GUARD(dwCycleLastSecond, "dwCycleLastSecond");
 static int32_t Frames_PerSecond = 0x19; D2_STATIC_GUARD(Frames_PerSecond, "Frames_PerSecond");
 static D2UnitIdToNameFunc PFN_UnitTypeCallbackTable[5] = { &D2Game::GAME::Server::SERVER_GetPlayerClassName, &D2Game::GAME::Server::MonsterIdToName, &D2Game::GAME::Server::ObjectIdToName, &D2Game::GAME::Server::ItemIdToName, &D2Game::GAME::Server::MissileIdToname }; D2_STATIC_GUARD(PFN_UnitTypeCallbackTable, "PFN_UnitTypeCallbackTable");
 // also labelled: lpCritical_GenerateToken, lpCriticalSection_00882d18

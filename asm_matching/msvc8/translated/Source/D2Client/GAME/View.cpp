@@ -747,7 +747,7 @@ static void SHAKE_UpdateShakeSoundVolume(int32_t nShakeIntensity) {
     if (nTargetVolume == nCurrentVolume) {
       return;
     }
-    if ((int)nCurrentVolume < (int)nTargetVolume) {
+    if ((int)nTargetVolume > (int)nCurrentVolume) {
       nNewVolume = nCurrentVolume + 6;
       if ((int)nTargetVolume >= (int)(nCurrentVolume + 6)) {
         goto apply_volume;

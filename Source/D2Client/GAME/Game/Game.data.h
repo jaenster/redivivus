@@ -19,6 +19,7 @@ struct D2EndGameUiState;
 extern char string_IpAddressTcpIp[24];
 extern char string_IpaddressGameserverBattlenet[24];
 extern char RealmName[32];
+extern short gnTcpIpJoinId;
 extern eD2PlayerClassID nD2PlayerClassID;
 // Long connection timeout start tick (5 min check in Client_CheckConnectionTimeouts).
 extern int gConnectLongTimeoutStartTick;

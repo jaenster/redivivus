@@ -4094,7 +4094,7 @@ static ::D2WinTextBox * gpCtlClassDescriptionTooltipPrimary = 0; D2_STATIC_GUARD
 static ::D2WinTextBox * gpCtlClassDescriptionTooltipSecondary = 0; D2_STATIC_GUARD(gpCtlClassDescriptionTooltipSecondary, "gpCtlClassDescriptionTooltipSecondary");
 static ::D2WinTextBox * gpCtlTcpIpAddress = 0; D2_STATIC_GUARD(gpCtlTcpIpAddress, "gpCtlTcpIpAddress");
 static ::D2WinTextBox * gpCtlTcpIpPort = 0; D2_STATIC_GUARD(gpCtlTcpIpPort, "gpCtlTcpIpPort");
-static uint32_t gnSelectedCharGameState = 0; D2_STATIC_GUARD(gnSelectedCharGameState, "gnSelectedCharGameState");
+uint32_t gnSelectedCharGameState = 0; D2_GLOBAL_GUARD(gnSelectedCharGameState, "gnSelectedCharGameState");
 namespace D2Launch::MainMenus {
 eOogCurrentCharSelectionMode OogCurrentCharSelectionMode = 0; D2_GLOBAL_GUARD(OogCurrentCharSelectionMode, "D2Launch::MainMenus::OogCurrentCharSelectionMode");
 } // namespace D2Launch::MainMenus
@@ -4189,6 +4189,7 @@ static uint32_t gnMainMenuConnectFlag = 0; D2_STATIC_GUARD(gnMainMenuConnectFlag
 static ::D2WinTextBox * gpPatchProgressTextBox = 0; D2_STATIC_GUARD(gpPatchProgressTextBox, "gpPatchProgressTextBox");
 static ::D2WinImage * gpCtlPatchProgressAnimImage = 0; D2_STATIC_GUARD(gpCtlPatchProgressAnimImage, "gpCtlPatchProgressAnimImage");
 static uint32_t gbMainMenuShowBNetRealmPanel = 0; D2_STATIC_GUARD(gbMainMenuShowBNetRealmPanel, "gbMainMenuShowBNetRealmPanel");
+int gbCreateCharDialogShown = 0; D2_GLOBAL_GUARD(gbCreateCharDialogShown, "gbCreateCharDialogShown");
 static D2BNetRealmEntryStrc * * g_pBNetRealmList = 0; D2_STATIC_GUARD(g_pBNetRealmList, "g_pBNetRealmList");
 static int gnRealmListCount = 0; D2_STATIC_GUARD(gnRealmListCount, "gnRealmListCount");
 static uint32_t gnBnetConnectionSuccessFlag = 0; D2_STATIC_GUARD(gnBnetConnectionSuccessFlag, "gnBnetConnectionSuccessFlag");
@@ -6629,27 +6630,34 @@ uint32_t __fastcall MAINMENU_ConnectToRealm(uint8_t * pszRealmName, int32_t bSil
 
       return 0;
     }
-    if (Launcher::gpBNetCallbacks) {
-      pnLogonResult = (int*)Launcher::gpBNetCallbacks->pfnSendLogonRealmEx((char*)pszRealmName, "password");
-      if (pnLogonResult && *pnLogonResult != 8) {
-        Storm::Source::SSTR::SStrCopy(D2IniData_launcher->szCharacterRealm, (char*)pszRealmName, 0x100);
-        Storm::Source::SSTR::SStrCopy(D2IniData_launcher->szREALM, (char*)pszRealmName, 0x100);
-        D2MCPClient::McpConnect::MCPCONNECT_CreateThread((uint32_t*)(pnLogonResult + 1));
-        nResult = 3;
-        if (!bSilent) {
-          D2Win::Src::D2WinMain::MessagePump(MAINMENU_PollMCPThreadStatusPump);
-          nResult = MAINMENU_PollMCPThreadStatus();
-          FORMS_DestroyList();
-        }
 
-        return nResult;
+    pnLogonResult = Launcher::gpBNetCallbacks ? (int*)Launcher::gpBNetCallbacks->pfnSendLogonRealmEx((char*)pszRealmName, "password") : 0;
+    if (!pnLogonResult) {
+      if (!bSilent) {
+        FORMS_DestroyList();
       }
+
+      return 2;
     }
+    if (*pnLogonResult == 8) {
+      if (!bSilent) {
+        FORMS_DestroyList();
+      }
+
+      return 2;
+    }
+
+    Storm::Source::SSTR::SStrCopy(D2IniData_launcher->szCharacterRealm, (char*)pszRealmName, 0x100);
+    Storm::Source::SSTR::SStrCopy(D2IniData_launcher->szREALM, (char*)pszRealmName, 0x100);
+    D2MCPClient::McpConnect::MCPCONNECT_CreateThread((uint32_t*)(pnLogonResult + 1));
+    nResult = 3;
     if (!bSilent) {
+      D2Win::Src::D2WinMain::MessagePump(MAINMENU_PollMCPThreadStatusPump);
+      nResult = MAINMENU_PollMCPThreadStatus();
       FORMS_DestroyList();
     }
 
-    return 2;
+    return nResult;
 }
 
 void __stdcall UIMENU_PleaseReadAfterCreatingAccount() {
@@ -8900,9 +8908,6 @@ BOOL __stdcall MAINMENU_OnPressCreateHeroSinglePlayer(D2ControlMsg * pControlMsg
 }
 
 void __stdcall UIMENU_ConfirmCreateCharacter() {
-    // Static local variables (originally global data)
-    static int gbCreateCharDialogShown; D2_STATIC_GUARD_BSS(gbCreateCharDialogShown, "D2Launch::MainMenus::UIMENU_ConfirmCreateCharacter::gbCreateCharDialogShown");
-
     uint16_t* wszCharName;
     char szCharNameUtf8[256];
     BOOL bSaveFileExists = MAINMENU_CheckCharacterSaveFileExists();

@@ -4205,7 +4205,7 @@ void __fastcall DrawSolidRectEx(int nXStart, int nYStart, int nXEnd, int nYEnd, 
     if (nClampedBottom == nClampedYStart) {
       return;
     }
-    if ((int)nClampedBottom < (int)nClampedYStart) {
+    if ((int)nClampedYStart > (int)nClampedBottom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2b);
       exit(-1);
     }
@@ -4298,7 +4298,7 @@ void __fastcall DrawSolidRectAlpha(int nXStart, int nYStart, int nXEnd, int nYEn
     if (nClampedBottom == nClampedYStart) {
       return;
     }
-    if ((int)nClampedBottom < (int)nClampedYStart) {
+    if ((int)nClampedYStart > (int)nClampedBottom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x68);
       exit(-1);
     }
@@ -4467,7 +4467,7 @@ void __fastcall DrawRectEx(RECT * pRect, DWORD nPaletteIndex) {
       if (nClampedBottom == nClampedLeft) {
         return;
       }
-      if ((int)nClampedBottom < (int)nClampedLeft) {
+      if ((int)nClampedLeft > (int)nClampedBottom) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfc);
         exit(-1);
       }

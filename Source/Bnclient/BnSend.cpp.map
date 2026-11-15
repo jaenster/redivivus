@@ -20,10 +20,9 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
-        "SID_C2S_ClientId",
-        "uint32_t"
+        "SID_C2S_ClientId"
       ],
-      "dh": "4797dd52"
+      "dh": "cd3b775c"
     },
     {
       "name": "BNSEND_SetServerToken",
@@ -268,9 +267,10 @@
       ],
       "usedTypes": [
         "SID_C2S_ReportVersion",
+        "int32_t",
         "uint32_t"
       ],
-      "dh": "8ace3870",
+      "dh": "c881f9b6",
       "paramStorage": [
         [
           "dwExeHash",
@@ -546,9 +546,10 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "int32_t",
         "uint32_t"
       ],
-      "dh": "ce4342a3",
+      "dh": "2f17e35d",
       "paramStorage": [
         [
           "szText1",
@@ -834,10 +835,10 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
-        "uint32_t",
-        "uint8_t"
+        "SID_C2S_GetAdvListEx",
+        "uint32_t"
       ],
-      "dh": "8c26c71e",
+      "dh": "7c1bb2bc",
       "paramStorage": [
         [
           "szText1",
@@ -1196,7 +1197,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e163ad96",
+      "dh": "f551a2b0",
       "paramStorage": [
         [
           "szText",

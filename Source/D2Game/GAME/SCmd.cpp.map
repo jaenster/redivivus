@@ -2460,10 +2460,10 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
-        "D2GSPacketSrv0x78",
-        "uint8_t"
+        "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x78"
       ],
-      "dh": "721b5368",
+      "dh": "899c83a6",
       "paramStorage": [
         [
           "pClient",

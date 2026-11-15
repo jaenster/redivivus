@@ -161,7 +161,6 @@ int32_t __fastcall ITEMDROP_RollArmorItemClass(::SGAMEDATA * pGame, D2SeedStrc *
     int nLoopIdx;
     nLoopIdx = 0;
     if (nItemCount > 0) {
-      uint32_t seedNext;
       do {
         _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeedLocal, bSkipRarityRoll, nItemLevel, pItemTxt, nItemTypeFilter);
         if (_bPassesFilter && (pGameLocal->bExpansion || (uint16_t)pItemTxt->wVersion < 100) && (int)nCandidateIdx < 0x3ff) {
@@ -175,14 +174,7 @@ int32_t __fastcall ITEMDROP_RollArmorItemClass(::SGAMEDATA * pGame, D2SeedStrc *
       } while (nLoopIdx < nItemCount);
 
       if ((int)nCandidateIdx > 0) {
-        if (nCandidateIdx & nCandidateIdx - 1) {
-          seedNext = D2_SeedRoll(pSeedLocal);
-          nRandIndex = (uint32_t)(seedNext % nCandidateIdx);
-        } else {
-          seedNext = D2_SeedRoll(pSeedLocal);
-          nRandIndex = nCandidateIdx - 1 & seedNext;
-        }
-
+        nRandIndex = D2_SeedRollLimited(pSeedLocal, nCandidateIdx);
         goto return_candidate;
       }
     }
@@ -222,7 +214,6 @@ int32_t __fastcall ITEMDROP_RollWeaponItemClass(::SGAMEDATA * pGame, D2SeedStrc 
     int nLoopIdx;
     nLoopIdx = 0;
     if (nItemCount > 0) {
-      uint32_t seedNext;
       do {
         _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeedLocal, bSkipRarityRoll, nItemLevel, pItemTxt, nItemTypeFilter);
         if (_bPassesFilter && (pGameLocal->bExpansion || (uint16_t)pItemTxt->wVersion < 100) && (int)nCandidateIdx < 0x3ff) {
@@ -236,14 +227,7 @@ int32_t __fastcall ITEMDROP_RollWeaponItemClass(::SGAMEDATA * pGame, D2SeedStrc 
       } while (nLoopIdx < nItemCount);
 
       if ((int)nCandidateIdx > 0) {
-        if (nCandidateIdx & nCandidateIdx - 1) {
-          seedNext = D2_SeedRoll(pSeedLocal);
-          nRandIndex = (uint32_t)(seedNext % nCandidateIdx);
-        } else {
-          seedNext = D2_SeedRoll(pSeedLocal);
-          nRandIndex = nCandidateIdx - 1 & seedNext;
-        }
-
+        nRandIndex = D2_SeedRollLimited(pSeedLocal, nCandidateIdx);
         goto return_candidate;
       }
     }
@@ -281,7 +265,6 @@ int32_t __fastcall ITEMDROP_RollMiscItemClass(::SGAMEDATA * pGame, D2SeedStrc * 
     int nLoopIdx;
     nLoopIdx = 0;
     if (nItemCount > 0) {
-      uint32_t seedNext;
       do {
         if (bIsMonsterDrop || pItemTxt->wType != 0x28) {
           _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeed, bSkipRarityRoll, nItemLevel, pItemTxt, nItemTypeFilter);
@@ -299,14 +282,7 @@ int32_t __fastcall ITEMDROP_RollMiscItemClass(::SGAMEDATA * pGame, D2SeedStrc * 
       } while (nLoopIdx < nItemCount);
 
       if ((int)nCandidateCount > 0) {
-        if (nCandidateCount & nCandidateCount - 1) {
-          seedNext = D2_SeedRoll(pSeed);
-          nRandIndex = (uint32_t)(seedNext % nCandidateCount);
-        } else {
-          seedNext = D2_SeedRoll(pSeed);
-          nRandIndex = nCandidateCount - 1 & seedNext;
-        }
-
+        nRandIndex = D2_SeedRollLimited(pSeed, nCandidateCount);
         goto return_candidate;
       }
     }
@@ -3407,7 +3383,7 @@ D2UnitStrc * __fastcall ITEM_CloneFromSerializedData(::SGAMEDATA * pGame, D2Unit
       if (bCloneSockets && stItemDetails.usedSockets) {
         __frame0.nUsedSocketCount = stItemDetails.usedSockets;
         __frame0.nSocketLoopIndex = 0;
-        if (0 < (int)stItemDetails.usedSockets) {
+        if ((int)stItemDetails.usedSockets > 0) {
           do {
             D2Common::ITEMS::Items::ExtractItemDetails(__frame0.pSocketDataCursor, nSerializedSize, 1, &stItemDetails);
             pSocketedGem = ITEM_CreateFromSaveData(pGame, nullptr, __frame0.pSocketDataCursor, nSerializedSize, 1, &stItemDetails, &__frame0.nBytesConsumed, 0x60);

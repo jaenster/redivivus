@@ -1949,16 +1949,16 @@ int __stdcall SStrHashHT(uint8_t * pszText) {
     uint32_t nLen;
     uint8_t szUpper[1024];
     uint32_t nChar;
-    uint8_t bChar = *pszText;
+    uint32_t bChar = *pszText;
     uint8_t* pWrite = szUpper;
-    for (nLen = 0; nChar = (uint32_t)bChar , nChar && (pszText++ , nLen < 0x3ff); nLen++) {
+    for (nLen = 0; nChar = (uint32_t)(uint8_t)bChar , nChar && (pszText++ , nLen < 0x3ff); nLen++) {
       if (nChar >= 0x61 && nChar <= 0x7a) {
-        bChar -= 0x20;
+        bChar = (uint8_t)bChar - 0x20;
       } else if (nChar == 0x2f) {
         bChar = 0x5c;
       }
 
-      *pWrite = bChar;
+      *pWrite = (uint8_t)bChar;
       bChar = *pszText;
       pWrite++;
     }

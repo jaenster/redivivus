@@ -2721,6 +2721,9 @@ namespace D2Game::SKILLS::SkillEMonst {
 BOOL __fastcall fpBaalWaveFunction(::SGAMEDATA * pGame, struct D2UnitStrc * pAttacker, struct D2UnitStrc * pUnit, int32_t nSkillLvl, uint32_t dwParam);
 } // namespace D2Game::SKILLS::SkillEMonst
 
+// Globals
+extern uint32_t dwCycleLastSecond;
+
 // Inline functions: the module compiled these into each caller
 namespace D2Game::Seed {
 #ifndef D2_DEFINED_INLINE_00472280

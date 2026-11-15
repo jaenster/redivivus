@@ -1906,15 +1906,16 @@ void __fastcall SUNITNPC_HandleIdentify(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 static BOOL __stdcall UnitHasItemInInventory(int32_t guid, D2UnitStrc * pUnit) {
-    if (pUnit->pInventory) {
-      D2UnitStrc* pDVar1;
-      pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory);
-      if (pDVar1 && pDVar1->nUnitGUID == guid) {
-        return 1;
-      }
+    D2UnitStrc* pDVar1;
+    pDVar1 = pUnit->pInventory ? D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory) : 0;
+    if (!pDVar1) {
+      return 0;
+    }
+    if (pDVar1->nUnitGUID != guid) {
+      return 0;
     }
 
-    return 0;
+    return 1;
 }
 
 // @sourcefile .\UNIT\SUNITNPC.CPP
