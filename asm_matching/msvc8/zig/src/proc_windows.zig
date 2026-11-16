@@ -682,9 +682,14 @@ test "Windows captured child and merged stream" {
     try std.testing.expectEqual(@as(i32, 0), env.status);
     try std.testing.expect(std.mem.indexOf(u8, env.out, "from-child") != null);
 
-    const input = ".zig-cache/proc-windows-stdin.txt";
+    // setup-zig may place every cache outside the working directory.
+    const temp_dir = try wide(util.getenv("TEMP") orelse ".");
+    var temp_file: [c.MAX_PATH]u16 = undefined;
+    if (c.GetTempFileNameW(temp_dir.ptr, (try wide("orz")).ptr, 0, &temp_file) == 0)
+        return error.TempFile;
+    defer _ = c.DeleteFileW(&temp_file);
+    const input = try std.unicode.wtf16LeToWtf8Alloc(gpa, std.mem.sliceTo(&temp_file, 0));
     try util.writeFile(input, "from-file\r\n");
-    defer remove(input);
     const fed = try run(&.{ shell, "/d", "/c", "more" }, .{ .stdin_path = input });
     try std.testing.expectEqual(@as(i32, 0), fed.status);
     try std.testing.expect(std.mem.indexOf(u8, fed.out, "from-file") != null);
