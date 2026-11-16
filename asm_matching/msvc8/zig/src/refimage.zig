@@ -299,11 +299,13 @@ pub const Reference = struct {
             // A function whose code ends on a 16-byte boundary needs no padding before the next
             // one, so the pad rule cannot see that one's start; nothing may call it either (an
             // unreferenced function the link keeps, one reached through a table the carve does
-            // not read). Its start is where the decoded function before it ends.
+            // not read). Its start is where the decoded function before it ends. Code that data
+            // points at is left to the rule for it above: an SEH __finally or C++ EH funclet laid
+            // out after its function's body is an entry into that function, not one of its own.
             for (starts) |s| {
                 const e = ends.get(s).?;
                 if (e % 16 != 0 or e >= te) continue;
-                if (reached.contains(e) or why.contains(e)) continue;
+                if (reached.contains(e) or why.contains(e) or others.contains(e) or eh.contains(e)) continue;
                 if (r.code[e - ts] == 0xCC) continue;
                 try pending.append(gpa, .{ .a = e, .w = W.next });
             }
