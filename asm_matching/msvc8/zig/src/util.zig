@@ -1,6 +1,7 @@
 //! Shared plumbing: one process-wide arena, files through libc stdio, tab-separated lines,
 //! and the printf formats Python's %-formatting needs (%.3f rounds as C does, as Python does).
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
 
 var arena_state = std.heap.ArenaAllocator.init(std.heap.c_allocator);
@@ -51,21 +52,36 @@ pub fn writeFile(path: []const u8, data: []const u8) !void {
 pub fn makeDirs(path: []const u8) void {
     var i: usize = 1;
     while (i <= path.len) : (i += 1) {
-        if (i == path.len or path[i] == '/') {
+        if (i == path.len or path[i] == '/' or (builtin.os.tag == .windows and path[i] == '\\')) {
+            if (builtin.os.tag == .windows and i == 2 and path[1] == ':') continue;
             const pz = z(path[0..i]) catch return;
-            _ = c.mkdir(pz.ptr, 0o777);
+            if (builtin.os.tag == .windows) {
+                _ = c.mkdir(pz.ptr);
+            } else {
+                _ = c.mkdir(pz.ptr, 0o777);
+            }
         }
     }
 }
 
 pub fn dirname(p: []const u8) []const u8 {
-    const i = std.mem.lastIndexOfScalar(u8, p, '/') orelse return ".";
-    return if (i == 0) "/" else p[0..i];
+    const i = lastSeparator(p) orelse return ".";
+    if (i == 0 or (builtin.os.tag == .windows and i == 2 and p[1] == ':')) return p[0 .. i + 1];
+    return p[0..i];
 }
 
 pub fn basename(p: []const u8) []const u8 {
-    const i = std.mem.lastIndexOfScalar(u8, p, '/') orelse return p;
+    const i = lastSeparator(p) orelse return p;
     return p[i + 1 ..];
+}
+
+fn lastSeparator(p: []const u8) ?usize {
+    const slash = std.mem.lastIndexOfScalar(u8, p, '/');
+    if (builtin.os.tag != .windows) return slash;
+    const backslash = std.mem.lastIndexOfScalar(u8, p, '\\');
+    if (slash == null) return backslash;
+    if (backslash == null) return slash;
+    return @max(slash.?, backslash.?);
 }
 
 pub fn join(a: []const u8, b: []const u8) ![]u8 {
@@ -117,7 +133,7 @@ pub fn strip(s: []const u8) []const u8 {
 pub fn say(s: []const u8) void {
     var p = s;
     while (p.len > 0) {
-        const n = c.write(1, p.ptr, p.len);
+        const n = c.write(1, p.ptr, @intCast(@min(p.len, 0x7fff_ffff)));
         if (n <= 0) return;
         p = p[@intCast(n)..];
     }

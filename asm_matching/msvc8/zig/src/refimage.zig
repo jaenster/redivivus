@@ -3,6 +3,7 @@
 const std = @import("std");
 const pe_mod = @import("pe.zig");
 const dec = @import("decode.zig");
+const proc = @import("proc.zig");
 const util = @import("util.zig");
 
 const gpa = util.gpa;
@@ -473,5 +474,32 @@ pub fn carveMain(args: []const []const u8) !void {
     const r = try Reference.open(exe);
     try r.carve();
     try r.writeFunctions(out);
+    util.say(try std.fmt.allocPrint(gpa, "{d} functions -> {s}\n", .{ r.starts.len, out }));
+}
+
+/// On a native Windows host the Bash `oracle` wrapper is unavailable. Derive
+/// the reference cache from an already present Game.exe when it is missing.
+pub fn ensureFunctions(oracle_root: []const u8) !void {
+    const exe = try util.join(oracle_root, "reference/Game.exe");
+    if (!util.exists(exe)) {
+        std.debug.print("reference image missing: {s} (provide Game.exe before running the oracle)\n", .{exe});
+        return error.ReferenceImageMissing;
+    }
+    const expected = "631066c1649c4ea9ffe48bf97e24c00bca1f7a6759c21150f1a79982589adaaf";
+    var digest: [32]u8 = undefined;
+    std.crypto.hash.sha2.Sha256.hash(try util.readFile(exe), &digest, .{});
+    const actual = std.fmt.bytesToHex(digest, .lower);
+    if (!std.mem.eql(u8, actual[0..], expected)) {
+        std.debug.print("reference image SHA-256 mismatch: {s} has {s}, expected {s}\n", .{ exe, actual, expected });
+        return error.ReferenceImageMismatch;
+    }
+    const out = try util.join(oracle_root, "build/ref/functions.tsv");
+    if (util.exists(out)) return;
+    util.makeDirs(util.dirname(out));
+    const tmp = try std.mem.concat(gpa, u8, &.{ out, ".new" });
+    const r = try Reference.open(exe);
+    try r.carve();
+    try r.writeFunctions(tmp);
+    try proc.rename(tmp, out);
     util.say(try std.fmt.allocPrint(gpa, "{d} functions -> {s}\n", .{ r.starts.len, out }));
 }

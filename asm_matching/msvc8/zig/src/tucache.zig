@@ -16,6 +16,7 @@
 //! Cache root: $D2_TU_CACHE, default ~/Library/Caches/d2-tucache; D2_TU_CACHE=off disables
 //! every lookup and store. The compiler is $D2_CXX (default i686-w64-mingw32-g++).
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
 const util = @import("util.zig");
 const gpa = util.gpa;
@@ -84,6 +85,10 @@ fn parseArgs(argv: []const []const u8) !Args {
 }
 
 pub fn main(argv: []const []const u8) !void {
+    if (builtin.os.tag == .windows) {
+        std.debug.print("tucache is for the Unix GCC build and is unavailable on a Windows host\n", .{});
+        return error.UnsupportedWindowsTucache;
+    }
     const a = try parseArgs(argv);
     if (std.mem.eql(u8, a.cmd, "probe")) return;
     if (std.mem.eql(u8, a.cmd, "lookup")) return cmdLookup(a);

@@ -1,0 +1,297 @@
+name: oracle-windows
+
+# Same shipped translation on two hosts, plus the unmodified main Linux pipeline
+# when its source inputs are identical. No translator checkout or CRT regeneration.
+on:
+  pull_request:
+    paths:
+      - 'asm_matching/msvc8/zig/**'
+      - 'asm_matching/msvc8/scripts/oracle-parity.ps1'
+      - '.github/workflows/oracle-windows.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: oracle-windows-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  GAME_EXE_URL: https://files.typeguru.nl/diablo/diablo2/windows/lod/1.14d/Game.exe
+  GAME_EXE_SHA256: 631066c1649c4ea9ffe48bf97e24c00bca1f7a6759c21150f1a79982589adaaf
+  ORACLE_TRANSLATED: ${{ github.workspace }}/asm_matching/msvc8/translated
+  ORACLE_NOCACHE: '1'
+  LC_ALL: C
+
+jobs:
+  linux:
+    name: Linux ${{ matrix.variant }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [baseline, candidate]
+    env:
+      VC8_TOOLCHAIN: ${{ github.workspace }}/../vc8-toolchain
+      D2_GAME_EXE: ${{ github.workspace }}/../ref114d/Game.exe
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.variant == 'baseline' && github.event.pull_request.base.ref || github.event.pull_request.head.sha }}
+      - name: Record unchanged shipped inputs
+        shell: pwsh
+        run: |
+          if (Test-Path Env:GR) { throw 'A translator checkout must not be configured' }
+          $oracleRoot = Join-Path $env:GITHUB_WORKSPACE 'asm_matching/msvc8'
+          function Optional-Hash([string]$file) {
+            if (Test-Path -LiteralPath $file -PathType Leaf) {
+              return (Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash.ToLowerInvariant()
+            }
+            return $null
+          }
+          $provenance = [ordered]@{
+            commit = (& git rev-parse HEAD).Trim()
+            sourceManifest = Optional-Hash (Join-Path $oracleRoot 'translated/sources.tsv')
+            crtmap = Optional-Hash (Join-Path $oracleRoot 'evidence/crtmap.tsv')
+            prebuilt = Optional-Hash (Join-Path $oracleRoot 'evidence/prebuilt.tsv')
+            linkerMap = Optional-Hash (Join-Path $oracleRoot 'build-exe/d2recon-vc8.map')
+          }
+          [IO.File]::WriteAllText((Join-Path $env:GITHUB_WORKSPACE 'oracle-inputs.json'),
+            ($provenance | ConvertTo-Json) + "`n", [Text.UTF8Encoding]::new($false))
+      - name: Tools (same as the published Linux oracle)
+        shell: bash
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq wine wine32:i386 wine64 p7zip-full cabextract msitools faketime curl >/dev/null
+          if ! command -v wineserver >/dev/null; then
+            ws=$(ls /usr/lib/x86_64-linux-gnu/wine/wineserver /usr/lib/wine/wineserver64 /usr/lib/wine/wineserver /usr/lib/i386-linux-gnu/wine/wineserver /usr/lib/wine/wineserver32 2>/dev/null | head -1)
+            [ -n "$ws" ] || { echo "no wineserver" >&2; exit 1; }
+            mkdir -p "$HOME/.local/bin" && ln -sf "$ws" "$HOME/.local/bin/wineserver"
+            echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          fi
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: 0.17.0
+      - name: Test and build oracle-zig
+        working-directory: asm_matching/msvc8/zig
+        run: |
+          zig build test
+          zig build --release=fast
+      - name: Fetch reference as data and check its hash
+        shell: bash
+        run: |
+          mkdir -p "$(dirname "$D2_GAME_EXE")"
+          curl -sfL --retry 3 "$GAME_EXE_URL" -o "$D2_GAME_EXE"
+          echo "$GAME_EXE_SHA256  $D2_GAME_EXE" | sha256sum -c -
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.VC8_TOOLCHAIN }}
+          key: vc8-toolchain-${{ hashFiles('asm_matching/msvc8/scripts/setup_toolchain.sh') }}
+      - name: Set up the published VC8 toolchain
+        run: asm_matching/msvc8/oracle setup
+      - name: Build, map and audit the shipped translation
+        shell: bash
+        run: |
+          set -o pipefail
+          asm_matching/msvc8/oracle all 2>&1 | tee oracle-all.log
+          grep -q '^translate (shipped ' oracle-all.log
+      - name: Record complete module order in the C locale
+        shell: bash
+        run: |
+          set -o pipefail
+          git ls-files '*.cpp' '*.c' | grep -v '^asm_matching/' | sed -E 's/\.(cpp|c)$//' |
+            asm_matching/msvc8/zig/zig-out/bin/oracle-zig modules order --repo "$GITHUB_WORKSPACE" > oracle-module-order.txt
+      - name: Keep auditable rows and provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: oracle-linux-${{ matrix.variant }}
+          path: |
+            oracle-inputs.json
+            oracle-all.log
+            oracle-module-order.txt
+            asm_matching/msvc8/evidence/*.summary
+            asm_matching/msvc8/evidence/funcmap.tsv
+            asm_matching/msvc8/evidence/libmap.tsv
+            asm_matching/msvc8/evidence/audit.tsv
+            asm_matching/msvc8/evidence/datamap.tsv
+            asm_matching/msvc8/evidence/crtmap.tsv
+          if-no-files-found: warn
+
+  windows:
+    name: Native Windows candidate
+    runs-on: windows-latest
+    timeout-minutes: 120
+    steps:
+      - name: Preserve committed source bytes
+        shell: pwsh
+        run: git config --global core.autocrlf false
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Record unchanged shipped inputs
+        shell: pwsh
+        run: |
+          if (Test-Path Env:GR) { throw 'A translator checkout must not be configured' }
+          $oracleRoot = Join-Path $env:GITHUB_WORKSPACE 'asm_matching/msvc8'
+          function Optional-Hash([string]$file) {
+            if (Test-Path -LiteralPath $file -PathType Leaf) {
+              return (Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash.ToLowerInvariant()
+            }
+            return $null
+          }
+          $provenance = [ordered]@{
+            commit = (& git rev-parse HEAD).Trim()
+            sourceManifest = Optional-Hash (Join-Path $oracleRoot 'translated/sources.tsv')
+            crtmap = Optional-Hash (Join-Path $oracleRoot 'evidence/crtmap.tsv')
+            prebuilt = Optional-Hash (Join-Path $oracleRoot 'evidence/prebuilt.tsv')
+            linkerMap = Optional-Hash (Join-Path $oracleRoot 'build-exe/d2recon-vc8.map')
+          }
+          [IO.File]::WriteAllText((Join-Path $env:GITHUB_WORKSPACE 'oracle-inputs.json'),
+            ($provenance | ConvertTo-Json) + "`n", [Text.UTF8Encoding]::new($false))
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: 0.17.0
+      # The action checks each cl.exe banner and verifies its pinned package hash.
+      # RTM comes first so the final INCLUDE/LIB environment belongs to SP1.
+      - name: Set up Visual C++ 2005 RTM libraries
+        id: rtm
+        uses: jaenster/setup-msvc@843b5c50f974286ab28da9640898650d4346daa0 # v1
+        with:
+          version: '14.00.50727.42'
+          runner: native
+          # Restoring the action's installed-tree cache can recreate an existing
+          # PlatformSDK symlink and fail before the compiler runs.
+          cache: 'false'
+
+      - name: Set up Visual C++ 2005 SP1
+        id: sp1
+        uses: jaenster/setup-msvc@843b5c50f974286ab28da9640898650d4346daa0 # v1
+        with:
+          version: '14.00.50727.762'
+          runner: native
+          cache: 'false'
+
+      - name: Verify and stage the exact CRT archives
+        shell: pwsh
+        env:
+          RTM_ROOT: ${{ steps.rtm.outputs.root }}
+          RTM_VERSION: ${{ steps.rtm.outputs.version }}
+          RTM_CAN_LINK: ${{ steps.rtm.outputs.can-link }}
+          SP1_ROOT: ${{ steps.sp1.outputs.root }}
+          SP1_BIN: ${{ steps.sp1.outputs.bin }}
+          SP1_VERSION: ${{ steps.sp1.outputs.version }}
+          SP1_CAN_LINK: ${{ steps.sp1.outputs.can-link }}
+        run: |
+          if ($env:RTM_VERSION -ne '14.00.50727.42' -or $env:SP1_VERSION -ne '14.00.50727.762') {
+            throw "Wrong VC8 versions: RTM=$env:RTM_VERSION SP1=$env:SP1_VERSION"
+          }
+          if ($env:RTM_CAN_LINK -ne 'true' -or $env:SP1_CAN_LINK -ne 'true') {
+            throw 'Both VC8 installs need runtime libraries'
+          }
+          $nativeRoot = Join-Path $env:RUNNER_TEMP 'vc8-native'
+          $expected = @{
+            rtm = @{ 'libcmt.lib' = '7fb99b9594299faeef938366bd7e73e967c8dbd9'; 'libcpmt.lib' = '1e9ffb813ccf7d41533299c9e80c7645805245ef' }
+            sp1 = @{ 'libcmt.lib' = 'c87e83f5bd5fe05223c7dca645b17793ad3909b9'; 'libcpmt.lib' = '836f06d085574f8e68ae132ccabb14e5db276326' }
+          }
+          $retailSha256 = @{
+            rtm = @{ 'libcmt.lib' = 'b20711704d94d164b53000be4be4819b42c6025609adc1429c6949d2fd62714a'; 'libcpmt.lib' = '879af746bfb52ac705176de540a7543662d6ed3207fab8448ac45d17238ad565' }
+            sp1 = @{ 'libcmt.lib' = '3bc6c5b90f8507964839fd0264d8565c3b766d01f9efcad336532a11e8f06ac3'; 'libcpmt.lib' = 'e1b17cb213bfcf77e3c0988f8cb33ec8be143872d1c52de62c5da07ea1eb8031' }
+          }
+          foreach ($version in @('rtm', 'sp1')) {
+            $sourceRoot = if ($version -eq 'rtm') { $env:RTM_ROOT } else { $env:SP1_ROOT }
+            $target = Join-Path $nativeRoot "$version/lib"
+            New-Item -ItemType Directory -Force -Path $target | Out-Null
+            foreach ($name in @('libcmt.lib', 'libcpmt.lib')) {
+              $source = Join-Path $sourceRoot "lib/$name"
+              if (-not (Test-Path -LiteralPath $source -PathType Leaf)) { throw "Missing $source" }
+              $actual = (& git hash-object -- $source).Trim()
+              if ($LASTEXITCODE -ne 0 -or $actual -ne $expected[$version][$name]) {
+                throw "Unexpected $version $name Git blob: $actual"
+              }
+              $sha256 = (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant()
+              if ($sha256 -ne $retailSha256[$version][$name]) { throw "Unexpected $version $name SHA256: $sha256" }
+              Write-Host "$version $name SHA256 $sha256"
+              Copy-Item -LiteralPath $source -Destination $target
+            }
+          }
+          "VC8_NATIVE_ROOT=$nativeRoot" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "VC8_NATIVE_CL=$(Join-Path $env:SP1_BIN 'cl.exe')" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Fetch reference as data and check its hash
+        shell: pwsh
+        run: |
+          $imagePath = Join-Path $env:GITHUB_WORKSPACE 'asm_matching/msvc8/reference/Game.exe'
+          New-Item -ItemType Directory -Force -Path (Split-Path $imagePath) | Out-Null
+          Invoke-WebRequest -Uri $env:GAME_EXE_URL -OutFile $imagePath
+          if ((Get-FileHash -LiteralPath $imagePath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $env:GAME_EXE_SHA256) {
+            throw 'Reference image hash mismatch'
+          }
+      - name: Test and build the native oracle
+        working-directory: asm_matching/msvc8/zig
+        shell: pwsh
+        run: |
+          zig build test
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          zig build --release=fast
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Build, map and audit the shipped translation
+        shell: pwsh
+        run: |
+          $oracleRoot = Join-Path $env:GITHUB_WORKSPACE 'asm_matching/msvc8'
+          & "$oracleRoot/zig/zig-out/bin/oracle-zig.exe" all --root $oracleRoot 2>&1 | Tee-Object -FilePath oracle-all.log
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          if (-not (Select-String -LiteralPath oracle-all.log -Pattern '^translate \(shipped ' -Quiet)) {
+            throw 'The native oracle did not compile the shipped translation'
+          }
+      - name: Record complete native module order
+        shell: pwsh
+        run: |
+          $oracleRoot = Join-Path $env:GITHUB_WORKSPACE 'asm_matching/msvc8'
+          $tuNames = @(& git ls-files '*.cpp' '*.c' | Where-Object { $_ -notlike 'asm_matching/*' } | ForEach-Object { $_ -replace '\.(cpp|c)$', '' })
+          $tuNames | & "$oracleRoot/zig/zig-out/bin/oracle-zig.exe" modules order --repo $env:GITHUB_WORKSPACE |
+            Set-Content -LiteralPath oracle-module-order.txt -Encoding utf8
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Keep auditable rows and provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: oracle-windows-candidate
+          path: |
+            oracle-inputs.json
+            oracle-all.log
+            oracle-module-order.txt
+            asm_matching/msvc8/evidence/*.summary
+            asm_matching/msvc8/evidence/funcmap.tsv
+            asm_matching/msvc8/evidence/libmap.tsv
+            asm_matching/msvc8/evidence/audit.tsv
+            asm_matching/msvc8/evidence/datamap.tsv
+            asm_matching/msvc8/evidence/crtmap.tsv
+          if-no-files-found: warn
+
+  compare:
+    name: Same-input host and published-pipeline parity
+    needs: [linux, windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: oracle-*
+          path: oracle-results
+      - name: Require fresh invariants and same-run equality
+        shell: pwsh
+        run: |
+          & ./asm_matching/msvc8/scripts/oracle-parity.ps1 -Artifacts ./oracle-results |
+            Tee-Object -FilePath oracle-parity.json
+          Get-Content -LiteralPath oracle-parity.json | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: oracle-parity-report
+          path: oracle-parity.json
+          if-no-files-found: warn
