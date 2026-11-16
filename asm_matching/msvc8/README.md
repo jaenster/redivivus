@@ -237,7 +237,8 @@ audit summary's self-check line reports both kinds of disagreement.
 ## How a function is judged
 
 `oracle ref` (`zig/src/refimage.zig`) carves the original into functions (16-aligned starts
-after int3 padding, call targets to a fixpoint, vtables, and every address
+after int3 padding, or where the function before ends on a 16-byte boundary
+and so needed none, call targets to a fixpoint, vtables, and every address
 code takes - `push offset Callback` - that no function's decoding reaches;
 everything else in data that points at code is an entry *into* a function -
 SEH filters, handlers, C++ EH funclets) and decodes each by recursive

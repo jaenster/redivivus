@@ -8,7 +8,7 @@ const util = @import("util.zig");
 const gpa = util.gpa;
 
 // Reasons, in the alphabetical order Python's sorted() joins them.
-const WHY = [_][]const u8{ "call", "data", "entry", "export", "fptr", "jmp", "pad", "seh", "vtbl" };
+const WHY = [_][]const u8{ "call", "data", "entry", "export", "fptr", "jmp", "next", "pad", "seh", "vtbl" };
 const W = struct {
     const call = 1 << 0;
     const data = 1 << 1;
@@ -16,9 +16,10 @@ const W = struct {
     const exp = 1 << 3;
     const fptr = 1 << 4;
     const jmp = 1 << 5;
-    const pad = 1 << 6;
-    const seh = 1 << 7;
-    const vtbl = 1 << 8;
+    const next = 1 << 6;
+    const pad = 1 << 7;
+    const seh = 1 << 8;
+    const vtbl = 1 << 9;
 };
 
 /// One row of functions.tsv.
@@ -294,6 +295,17 @@ pub const Reference = struct {
                 const i = floorIdx(starts, v) orelse continue;
                 const e = ends.get(starts[i]).?;
                 if (e <= v and r.padOnlyBetween(e, v)) try pending.append(gpa, .{ .a = v, .w = W.jmp });
+            }
+            // A function whose code ends on a 16-byte boundary needs no padding before the next
+            // one, so the pad rule cannot see that one's start; nothing may call it either (an
+            // unreferenced function the link keeps, one reached through a table the carve does
+            // not read). Its start is where the decoded function before it ends.
+            for (starts) |s| {
+                const e = ends.get(s).?;
+                if (e % 16 != 0 or e >= te) continue;
+                if (reached.contains(e) or why.contains(e)) continue;
+                if (r.code[e - ts] == 0xCC) continue;
+                try pending.append(gpa, .{ .a = e, .w = W.next });
             }
             for (pending.items) |p| {
                 try add(&why, p.a, p.w);
