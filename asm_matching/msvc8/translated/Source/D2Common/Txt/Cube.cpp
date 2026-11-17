@@ -389,8 +389,6 @@ static void __stdcall CUBE_ParseOutputItem(D2CubeOutputStrc * pOutput, char * ps
     int nOutput;
     int nPszPadded;
     uint32_t nPszPadded2;
-    int nPszPadded3;
-    uint32_t nPszPadded4;
     D2CubeOutputStrc* pOutputCopy;
     pOutputCopy = pOutput;
     if (*pszField == '\"') {
@@ -448,11 +446,11 @@ static void __stdcall CUBE_ParseOutputItem(D2CubeOutputStrc * pOutput, char * ps
               pOutputCopy->nType = 0xfe;
             } else {
               if ((uint32_t)(int)strlen(pszItemCodeField) <= 4) {
-                CUBE_PadItemCodeString(pszItemCodeField, (char*)&nPszPadded4);
-                pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nPszPadded4, (int*)&nPszPadded3);
+                CUBE_PadItemCodeString(pszItemCodeField, (char*)&nPszPadded2);
+                pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nPszPadded2, (int*)&nPszPadded);
                 if (pItemsTxt) {
                   pOutputCopy->nType = 0xfc;
-                  pOutputCopy->nItemClassId = (uint16_t)nPszPadded3;
+                  pOutputCopy->nItemClassId = (uint16_t)nPszPadded;
                   pszCursor = szPaddedCode;
                   goto parse_modifiers;
                 }

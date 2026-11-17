@@ -509,8 +509,8 @@ uint32_t __fastcall SKILLSOR_ApplyStaticFieldToUnit(D2SkillCallbackContextStrc *
       nHpDrain = nHp - 1;
     }
 
-    nHp = nHpDrain << 8;
-    if (nHpDrain << 8 < *pDmgEvent) {
+    nHp = nHpDrain * 0x100;
+    if (nHpDrain * 0x100 < *pDmgEvent) {
       nHp = *pDmgEvent;
     }
 

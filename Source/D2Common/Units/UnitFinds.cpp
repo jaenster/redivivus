@@ -292,7 +292,8 @@ int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg)
     DWORD nMonsterMode;
     eD2PlayerAnimMode ePlayerMode;
     uint32_t nSearchFlags;
-    int32_t nUnitFindArg;
+    int nUnit;
+    int nUnitFindArg;
     D2UnitFindArgStrc* pArgs = pUnitFindArg;
     D2UnitStrc* pTestUnit = pUnit;
     if (!pUnitFindArg) {
@@ -313,15 +314,15 @@ int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg)
 
     eD2UnitType eUnitTypeY = pTestUnit->eUnitType;
     if (eUnitTypeY == UNIT_OBJECT || (int)eUnitTypeY > 3 && (int)eUnitTypeY <= 5) {
-      pUnit = *(D2UnitStrc**)&pTestUnit->pPath.pDynamicPath->nTargetX;
+      nUnit = (int)*(D2UnitStrc**)&pTestUnit->pPath.pDynamicPath->nTargetX;
     } else if (pTestUnit->pPath.pDynamicPath) {
-      pUnit = (D2UnitStrc*)PATH::DynamicPath::GetYPos(pTestUnit->pPath.pDynamicPath);
+      nUnit = PATH::DynamicPath::GetYPos(pTestUnit->pPath.pDynamicPath);
     } else {
-      pUnit = 0;
+      nUnit = 0x0;
     }
 
     int nOffsetX = nUnitFindArg - pArgs->nX;
-    int nOffsetY = (int)pUnit - pArgs->nY;
+    int nOffsetY = nUnit - pArgs->nY;
     if (nOffsetY * nOffsetY + nOffsetX * nOffsetX > pArgs->nDistance * pArgs->nDistance) {
       return 0;
     }
@@ -428,14 +429,14 @@ int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg)
       eCollisionFlags eCollision;
       pUnitRoom = UNITS_GetRoom(pTestUnit);
       if (pUnitRoom) {
-        bLOSStep = DATATBLS::FieldTbls::FIELDTBLS_StepFieldTowardsPoint(pArgs->pCoords, (int*)&nUnitFindArg, (int*)&pUnit);
+        bLOSStep = DATATBLS::FieldTbls::FIELDTBLS_StepFieldTowardsPoint(pArgs->pCoords, &nUnitFindArg, &nUnit);
         while (bLOSStep) {
-          eCollision = Collision::CheckCollision_BlockPlayerMissile(pUnitRoom, nUnitFindArg, (int32_t)pUnit, COLLIDE_WALL);
+          eCollision = Collision::CheckCollision_BlockPlayerMissile(pUnitRoom, nUnitFindArg, nUnit, COLLIDE_WALL);
           if (eCollision == COLBIT_MISSILE_BARRIER) {
             return 0;
           }
 
-          bLOSStep = DATATBLS::FieldTbls::FIELDTBLS_StepFieldTowardsPoint(pArgs->pCoords, (int*)&nUnitFindArg, (int*)&pUnit);
+          bLOSStep = DATATBLS::FieldTbls::FIELDTBLS_StepFieldTowardsPoint(pArgs->pCoords, &nUnitFindArg, &nUnit);
         }
       }
     }

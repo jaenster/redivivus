@@ -74,7 +74,7 @@ void __fastcall DRLGROOMTILE_AllocTileDataArrays(struct D2RoomExStrc * pRoomEx);
 // Grows tile data array capacity via realloc.
 // @sourcefile .\DRLG\RoomTile.cpp
 void __fastcall DRLGROOMTILE_GrowTileDataArray(struct D2PoolManagerStrc * pMemory, struct D2DrlgTileGridStrc * pTileGrid, int nAdditionalTiles);
-int __fastcall Unreferenced_0066f030(struct D2RoomStrc * param_1);
+int __fastcall Unreferenced_0066f030(struct D2RoomStrc * pRoom);
 // @sourcefile .\DRLG\RoomTile.cpp
 void __fastcall DRLGROOMTILE_FreeRoomTilesAll(struct D2RoomExStrc * pRoomEx);
 #endif // D2_MODULE_D2Common

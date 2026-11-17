@@ -109,7 +109,7 @@ int __stdcall CHAT_SendOutOfGameMessage();
 // Provenance: asm 004428b0..004428bf (RET 4); popup built by UIMENU_DrawTitleAndSubtitleOnCenterScreen, called only from OOGUTIL_SendChatMessage.
 BOOL __stdcall OOGUTIL_OnPressChatWarningOk(struct D2ControlMsg * pControlMsg);
 int __stdcall OOGUTIL_SendChatMessageWide(uint16_t * wszText);
-int __fastcall Unreferenced_00442a70(uint32_t * param_1, int param_2);
+int __fastcall Unreferenced_00442a70(uint32_t * pFlags, int nValue);
 char * __fastcall OOGUTIL_GetStringEnd(char * szText);
 uint32_t __fastcall OOGUTIL_CheckCharacterLevel(uint8_t * pszLevelChars);
 // OOGMENU_AddGameToCache(pGameInfo = g_CharSelectBuffer): append one realm game to the JOIN-screen

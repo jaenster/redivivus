@@ -1551,8 +1551,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x0B_UNITCTRL(char * pBytes) {
 void __fastcall NET_D2GS_CLIENT_Incoming0x0C_UNITCHANGE(D2UnitStrc * pUnit, D2GSPacketSrv0x0C * pBytes) {
     D2ServerMessageHandleStrc msg;
     memset(&msg, 0, sizeof(msg));
-    msg.nItemId = (uint32_t)pBytes->nHpPercent;
     msg.nSkillId = (uint32_t)pBytes->nHitClass;
+    msg.nItemId = (uint32_t)pBytes->nHpPercent;
     UNIT::UnitMode::HandleMessage((uint32_t)pBytes->nMessageType, pUnit, &msg, 1);
 }
 
@@ -3123,8 +3123,6 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA8_UNITSTATE_ONVAL_EX(D2GSPacketSrv0xA
     }
 
     eD2States eState = (eD2States)pBytes->nStateId;
-    eD2States eStateCopy = eState;
-    D2UnitStrc* pUnit = pFoundUnit;
     UNIT::PlrSkills::STATES_SetStateOnUnit(pFoundUnit, eState);
     Fog::BitBuffer::InitBitBuffer(&bitBuffer, pBytes->aBitStream, pBytes->nPacketSize - 8);
     D2StatListExStrc* pStatList = 0;
@@ -3159,10 +3157,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA8_UNITSTATE_ONVAL_EX(D2GSPacketSrv0xA
         eSkill = Fog::BitBuffer::ReadUnsigned(&bitBuffer, (uint32_t)nSendBits);
       }
 
-      pStatList = UNIT::PlrSkills::NET_D2GS_CLIENT_HandleAddSTatUnit(pUnit, pStatList, eStateCopy, eUnitStat, eSkill, nStatParam);
+      pStatList = UNIT::PlrSkills::NET_D2GS_CLIENT_HandleAddSTatUnit(pFoundUnit, pStatList, eState, eUnitStat, eSkill, nStatParam);
       eUnitStat = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 9);
-      eState = eStateCopy;
-      pFoundUnit = pUnit;
     }
 
     UNIT::PlrSkills::STATES_DispatchSetFunc(pFoundUnit, eState);

@@ -562,7 +562,7 @@ BOOL __fastcall SOUND_SetSoundMixer(int32_t nMixer) {
 }
 
 // Sets the global BackgroundSoundsActive flag then reinitializes the audio stream channels to apply the change. Queries the current mixer mode (DirectSound=1 or Sound3D=2), checks whether the corresponding subsystem is initialized, and calls SOUND_ShutdownAudio + SOUND_InitStreamChannels. Falls back to mixer mode 0 on init failure and adjusts the stored mixer setting accordingly.
-void __fastcall SOUND_SetBackgroundSoundsActive(uint32_t bActive) {
+void __fastcall SOUND_SetBackgroundSoundsActive(BOOL bActive) {
     DWORD dwInitFlag;
     BackgroundSoundsActive = bActive;
     int32_t nMixerMode;

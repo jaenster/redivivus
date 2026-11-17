@@ -105,10 +105,10 @@
       "usedTypes": [
         "D2FogHeapBlockHdrStrc"
       ],
-      "dh": "3571fcf5",
+      "dh": "547f59c8",
       "paramStorage": [
         [
-          "param_1",
+          "pBlockHdr",
           "ECX:4"
         ]
       ]

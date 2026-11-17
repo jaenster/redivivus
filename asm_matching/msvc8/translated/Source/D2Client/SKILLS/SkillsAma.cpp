@@ -245,11 +245,8 @@ BOOL __fastcall Skills_CltDoFunc_Ama_MultiShotArrows(D2UnitStrc * pUnit, eD2Skil
     int32_t nArrowCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
     BOOL bGotCoords = Skills::GetCooordinates(pUnit, &nTargetX, &nTargetY);
     if (bGotCoords) {
-      int32_t nTmp;
-      nTmp = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-      nDirX = nTargetX - nTmp;
-      nTmp = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-      nDirY = nTargetY - nTmp;
+      nDirX = nTargetX - D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+      nDirY = nTargetY - D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
       Skills::SKILL_ScaleUpVelocityVector(&nDirX, &nDirY);
       Skills::SKILL_ComputePerpendicularUnitVector(&nDirX, &nDirY);
       nTargetX -= nDirX * nArrowCount / 2;
@@ -332,7 +329,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_GuidedArrow(D2UnitStrc * pUnit, eD2Skills e
 
         nTargetMode = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
         nUnitPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-        D2Common::Units::Missile::SetTargetY(pMissileUnit, ((short int)((short int)nTargetY - (short int)nUnitPosY) << 0x10) + (int)(short int)((short int)nTargetX - (short int)nTargetMode));
+        D2Common::Units::Missile::SetTargetY(pMissileUnit, (short int)((short int)nTargetY - (short int)nUnitPosY) * 0x10000 + (int)(short int)((short int)nTargetX - (short int)nTargetMode));
       }
 
       return 1;

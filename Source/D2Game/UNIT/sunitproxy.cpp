@@ -1028,9 +1028,11 @@ void __fastcall SUNITPROXY_RemovePlayerFromNpc(::SGAMEDATA * pGame, D2UnitStrc *
       pInteractionIter = &pInteractionEntry->pNext;
       pPrevInteraction = pInteractionEntry;
       pInteractionEntry = *pInteractionIter;
-      if (!*pInteractionIter) {
-        return;
+      if (*pInteractionIter) {
+        continue;
       }
+
+      return;
     }
 
     if (pPrevInteraction) {

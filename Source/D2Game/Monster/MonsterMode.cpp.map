@@ -507,6 +507,7 @@
       ],
       "namespace": "D2Game::Monster::MonsterMode",
       "calledFunctions": [
+        "MONSTER_OnDeathDispatch",
         "MONSTERMODE_TryDropTreasure",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
@@ -528,7 +529,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "037116d0",
+      "dh": "f6153c83",
       "paramStorage": [
         [
           "pGame",
@@ -801,6 +802,7 @@
       ],
       "namespace": "D2Game::Monster::MonsterMode",
       "calledFunctions": [
+        "MONSTER_OnDeathDispatch",
         "MONSTERMODE_ApplyDeathAreaDamage",
         "UNITS_GetRoom",
         "GetCollisionDistance",
@@ -819,7 +821,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "92bb932d",
+      "dh": "e31f9305",
       "paramStorage": [
         [
           "pGame",
@@ -1568,7 +1570,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "22599402",
+      "dh": "dcc4a1d3",
       "paramStorage": [
         [
           "pGame",
@@ -1610,7 +1612,7 @@
         "eD2MonsterAnimMode",
         "int32_t"
       ],
-      "dh": "5db2e025",
+      "dh": "d05b35e6",
       "paramStorage": [
         [
           "pGame",
@@ -1681,7 +1683,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2cccc340",
+      "dh": "cc42d577",
       "paramStorage": [
         [
           "pGame",

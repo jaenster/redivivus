@@ -25,6 +25,21 @@ pub fn build(b: *std.Build) void {
     const exe = b.addExecutable(.{ .name = "oracle-zig", .root_module = mod });
     b.installArtifact(exe);
 
+    const test_step = b.step("test", "run the unit tests");
     const tests = b.addTest(.{ .root_module = mod });
-    b.step("test", "run the unit tests").dependOn(&b.addRunArtifact(tests).step);
+    test_step.dependOn(&b.addRunArtifact(tests).step);
+
+    // The conditional platform router does not make the Windows backend's
+    // own tests visible to Zig's root test discovery, so compile it explicitly.
+    if (target.result.os.tag == .windows) {
+        const proc_test_mod = b.createModule(.{
+            .root_source_file = b.path("src/proc_windows.zig"),
+            .target = target,
+            .optimize = .Debug,
+            .link_libc = true,
+        });
+        proc_test_mod.addImport("c", tc.createModule());
+        const proc_tests = b.addTest(.{ .root_module = proc_test_mod });
+        test_step.dependOn(&b.addRunArtifact(proc_tests).step);
+    }
 }

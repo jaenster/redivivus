@@ -2169,6 +2169,21 @@
       ]
     },
     {
+      "name": "Unreferenced_0053c730",
+      "address": "0053c730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053c730"
+        }
+      ],
+      "namespace": "D2Game::GAME::SCmd",
+      "calledFunctions": [
+        "Unreferenced_0053c730"
+      ],
+      "dh": "31875f5a"
+    },
+    {
       "name": "NET_D2GS_SERVER_Send_0x26_CHATSTART",
       "address": "0053c750",
       "lines": [
@@ -5186,13 +5201,18 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
-        "D2GSPacketSrv0x8F"
+        "D2GSPacketSrv0x8F",
+        "int32_t"
       ],
-      "dh": "5312adf9",
+      "dh": "9dfd603b",
       "paramStorage": [
         [
           "pClient",
           "ECX:4"
+        ],
+        [
+          "dwSendTick",
+          "EDX:4"
         ]
       ]
     },

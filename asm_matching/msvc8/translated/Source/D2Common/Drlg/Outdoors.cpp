@@ -1133,8 +1133,8 @@ static void DRLGOUTDOOR_CreateOutdoorRoomExGrid(D2DrlgLevelStrc * pLevel) {
     }
 }
 
-D2DrlgVertexStrc * __fastcall Unreferenced_00675290(D2DrlgLevelStrc * param_1, int param_2) {
-    return param_1->pDrlgLevelData.pDrlgLevelOutdoorsData->pAdjacentVertices[param_2];
+D2DrlgVertexStrc * __fastcall Unreferenced_00675290(D2DrlgLevelStrc * pLevel, int nIndex) {
+    return pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->pAdjacentVertices[nIndex];
 }
 
 void __fastcall AddAct124SecondaryBorder(D2DrlgLevelStrc * pLevel, int32_t nLvlSubId, int32_t nLevelPrestId) {
@@ -1291,11 +1291,11 @@ static void DRLGOUTDOOR_SpawnAct4OutdoorPresets(D2DrlgLevelStrc * pLevel) {
     SpawnOutdoorLevelPreset(pLevel, nPresetBaseB + 1, -1, 0, '\x0f');
     SpawnOutdoorLevelPreset(pLevel, nPresetBaseB + 2, -1, 0, '\x0f');
     SpawnOutdoorLevelPreset(pLevel, nPresetBaseB + 2, -1, 0, '\x0f');
-    nPresetBaseB += 3;
-    SpawnOutdoorLevelPreset(pLevel, nPresetBaseB, -1, 0, '\x0f');
-    SpawnOutdoorLevelPreset(pLevel, nPresetBaseB, -1, 0, '\x0f');
-    SpawnOutdoorLevelPreset(pLevel, nPresetBaseB, -1, 0, '\x0f');
-    SpawnOutdoorLevelPreset(pLevel, nPresetBaseB, -1, 0, '\x0f');
+    int nLastSceneryBase = nPresetBaseB + 3;
+    SpawnOutdoorLevelPreset(pLevel, nLastSceneryBase, -1, 0, '\x0f');
+    SpawnOutdoorLevelPreset(pLevel, nLastSceneryBase, -1, 0, '\x0f');
+    SpawnOutdoorLevelPreset(pLevel, nLastSceneryBase, -1, 0, '\x0f');
+    SpawnOutdoorLevelPreset(pLevel, nLastSceneryBase, -1, 0, '\x0f');
 }
 
 static void BuildChaosSanctuary(D2DrlgLevelStrc * pLevel) {

@@ -74,7 +74,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8e119eb0",
+      "dh": "05d83b1d",
       "paramStorage": [
         [
           "pGame",
@@ -130,7 +130,7 @@
         "eD2ItemAnimMode",
         "int32_t"
       ],
-      "dh": "61baea56",
+      "dh": "1a559482",
       "paramStorage": [
         [
           "pGame",
@@ -635,7 +635,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6afb8ae7",
+      "dh": "a6729863",
       "paramStorage": [
         [
           "szOut",
@@ -885,7 +885,7 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "0a7ad30e",
+      "dh": "1380d370",
       "paramStorage": [
         [
           "pGame",
@@ -1495,11 +1495,10 @@
         "SGAMEDATA",
         "eD2ItemFlag",
         "int32_t",
-        "short *",
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b1bbe568",
+      "dh": "b23e0aae",
       "paramStorage": [
         [
           "pGame",
@@ -1550,10 +1549,9 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
-        "short *",
         "uint32_t"
       ],
-      "dh": "ecbcedf4",
+      "dh": "69654ca4",
       "paramStorage": [
         [
           "pGame",
@@ -1618,7 +1616,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c62b8b57",
+      "dh": "45cc970e",
       "paramStorage": [
         [
           "pCorpseData",
@@ -1834,7 +1832,7 @@
         "uint32_t *",
         "uint8_t"
       ],
-      "dh": "28a0f587",
+      "dh": "c5f4adbf",
       "paramStorage": [
         [
           "pUnit",
@@ -1954,7 +1952,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5e2ebfec",
+      "dh": "bd78b47f",
       "paramStorage": [
         [
           "pGame",

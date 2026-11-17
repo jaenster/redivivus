@@ -76,13 +76,13 @@ static uint32_t SMEM_GetHandleByCaller(int * pnName, uint32_t nNameLen) {
     return g_SMemCachedHeapNameHash;
 }
 
-void * __fastcall Unreferenced_004116e0(D2FogHeapBlockHdrStrc * param_1) {
-    if (!param_1) {
+void * __fastcall Unreferenced_004116e0(D2FogHeapBlockHdrStrc * pBlockHdr) {
+    if (!pBlockHdr) {
       return nullptr;
     }
 
-    D2FogHeapBlockHdrStrc* pDVar1 = param_1 + 1;
-    if (param_1->byFlags & 4) {
+    D2FogHeapBlockHdrStrc* pDVar1 = pBlockHdr + 1;
+    if (pBlockHdr->byFlags & 4) {
       pDVar1 = *(D2FogHeapBlockHdrStrc**)pDVar1;
     }
 

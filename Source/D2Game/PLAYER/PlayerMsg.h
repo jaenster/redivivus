@@ -810,6 +810,7 @@ int32_t __stdcall PLAYERMSG_GetMessagePriority(uint32_t nParam);
 eD2ServerIncomingStatus __thiscall SERVER_IsItemOnCursor(::SGAMEDATA * pThis, struct D2UnitStrc * pUnit, uint32_t dwItemGUID);
 eD2ServerIncomingStatus __thiscall IsPlayerTheOwner(::SGAMEDATA * pThis, struct D2UnitStrc * pOwner, uint32_t nItemGid);
 eD2ServerIncomingStatus __thiscall ItemBelongsToUnit(::SGAMEDATA * pThis, struct D2UnitStrc * pOwner, uint32_t nItemGid);
+bool Unreferenced_005492a0();
 eD2ServerIncomingStatus __thiscall ItemBelongsToInventoryOf(::SGAMEDATA * pThis, struct D2UnitStrc * pPlayer, uint32_t nItemGid);
 // C->S Packet 0x01 - Walk to XY (5 bytes)
 // [op:1][x:u16][y:u16]
@@ -1033,9 +1034,9 @@ eD2ServerIncomingStatus __fastcall SCMD_0x40_RefreshQuestData(::SGAMEDATA * pGam
 // Server-side handler for client packet 0x41 (Resurrect). Validates packet size=1 and that the player unit is in Dead mode. Restores HP/mana/stamina to txt-table max, sets UNITFLAG_TARGETABLE, briefly toggles STATE_uninterruptable, warps the player to the act town (InitLevel + PLRMODES_MoveToLocation), and reselects their left/right skills. Disconnects flagged clients (file-flag 4). Returns SERVERSTATUS_OK.
 // @sourcefile .\PLAYER\PlrMsg.cpp
 eD2ServerIncomingStatus __fastcall SCMD_0x41_Resurrect(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x41_Resurrect * pPacket, uint32_t nSize);
-// Client packet 0x5D handler: Cube recipe check/preview. Validates packet size (7 bytes), checks arena "no cube" flag, validates action parameter (<=10), and dispatches to PlayerScreen action table. Used to preview if a cube recipe is valid before applying it.
+// C->S 0x5D party-screen toggle (7B): [op:1][action:1][on/off:1][playerGUID:4]. Rejected when ARENA_IsNoCubeRecipes is set; action > 10 is bad data. Dispatches through PARTYSCREEN_DispatchAction with the on/off byte (loot, mute, squelch, hostile).
 eD2ServerIncomingStatus __fastcall SCMD_0x5D_PartyScreenToggle(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2GSPacketClt0x5D_PartyScreenToggle * pPacket, uint32_t nSize);
-// Client packet 0x5E handler: Apply cube transmutation. Validates packet size (6 bytes), checks arena "no cube" flag, validates action parameter (<=10), and dispatches to PlayerScreen action table with arg=0. Triggers the actual cube transmutation process.
+// C->S 0x5E party-screen action (6B): [op:1][action:1][playerGUID:4]. Rejected when ARENA_IsNoCubeRecipes is set; action > 10 is bad data. Dispatches through PARTYSCREEN_DispatchAction with 0 (invite, cancel, accept, leave).
 eD2ServerIncomingStatus __fastcall SCMD_0x5E_PartyScreenAction(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2GSPacketClt0x5E_PartyScreenAction * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x42_StaffInOrifice1(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, char * pBytes, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x43_StaffInOrifice2(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, char * pBytes, uint32_t nSize);
@@ -1060,11 +1061,9 @@ eD2ServerIncomingStatus __fastcall SCMD_0x4F_ClickButton(::SGAMEDATA * pGame, st
 eD2ServerIncomingStatus __fastcall SCMD_0x50_DropGold(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x50_DropGold * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x51_SetHotkey(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x51_SetHotkey * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x52_Unused(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x52_Unused * pPacket, uint32_t nSize);
-// C->S 0x53 Gamepad Run Toggle (1B). Packet: [op:1]. No data payload. If player is walking and has stamina (stat 10 > 0), switches to run mode. Partially implemented gamepad support — no retail client sends this packet.
+// C->S 0x53 Start Running (1B). Packet: [op:1]. If the player is walking (mode 2) and has stamina (stat 10 != 0), sets mode 3 (Run). Sent by CMD_ToggleRunMode 0x00469000; 0x54 is the opposite.
 eD2ServerIncomingStatus __fastcall SCMD_0x53_StartRunning(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x53_StartRunning * pPacket, uint32_t nSize);
-// C->S 0x54 Stack Merge (1 byte)
-// [op:1]
-// If player running, sets update flag 2.
+// C->S 0x54 Stop Running (1B). Packet: [op:1]. If the player is in mode 3 (Run), sets mode 2 (Walk). Sent by the client's CMD_StopRun.
 eD2ServerIncomingStatus __fastcall SCMD_0x54_StopRunning(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x54_StopRunning * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x58_MarkQuestDone(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x58_MarkQuestDone * pPacket, uint32_t nSize);
 // C->S 0x59 Command NPC (17 bytes): [op:1][unitType:u32][unitGUID:u32][x:u32][y:u32]. Finds target unit within distance 0x32, verifies it is an interactable NPC (MonStats interact+npc flags), clears its path, fires AITHINK event, schedules next AI tick at gameFrame+1, and sets AI args 1/2/3 to 0x28/Y/X to direct the NPC toward the requested coordinates.

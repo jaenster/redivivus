@@ -12,6 +12,7 @@
 //! there are any). Only refs and indexes are written, never the working tree; the branch
 //! moves to the new tip, and the old one stays in the reflog. Nothing is pushed.
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
 const cli = @import("cli.zig");
 const proc = @import("proc.zig");
@@ -65,6 +66,10 @@ fn cat(parts: []const []const u8) ![]const []const u8 {
 }
 
 pub fn main(args: []const []const u8) !void {
+    if (builtin.os.tag == .windows) {
+        cli.sayErr("commit requires the Unix oracle environment\n");
+        return error.UnsupportedWindowsCommit;
+    }
     const p = cli.parse(args, &.{ .{ .long = "--base" }, .{ .long = "--tooling", .many = true }, .{ .long = "--message", .short = "-m" } }, USAGE);
     if (p.pos.len > 0) {
         cli.sayErr(USAGE);

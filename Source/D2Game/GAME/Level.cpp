@@ -343,10 +343,10 @@ void __fastcall TellClientToLoadAct(::SGAMEDATA * pGame, D2ClientStrc * pClient)
     eD2LevelId eTownLevelId = D2Common::DUNGEON::Dungeon::GetTownLevelIdFromAct(pGame->pAct[bActNo]);
     SCmd::NET_D2GS_SERVER_Send_0x03_NEWACT(pClient, '\x03', (uint8_t)_byActNoArg, pGame->pInitSeed.nSeedLow, pGame->pInitSeed.nSeedHigh, (uint16_t)eTownLevelId);
     D2Common::Environment::DRLGENV_GetCycleIndex_Ticks_EclipseFromAct(pGame->pAct[bActNo], &nCycleOut, &nTicksOut, (BOOL*)bEclipseOut);
-    sPacket.nTicks = nTicksOut;
-    sPacket.bEclipse = bEclipseOut[0];
     sPacket.nHeader = 'S';
     sPacket.nCycleIndex = nCycleOut;
+    sPacket.nTicks = nTicksOut;
+    sPacket.bEclipse = bEclipseOut[0];
     SCmd::NET_D2GS_SERVER_Send_0x53_ACTTIMEOFDAY(pClient, &sPacket);
 }
 

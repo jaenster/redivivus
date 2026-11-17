@@ -73,10 +73,10 @@
       "usedTypes": [
         "D2BitStreamReader32Strc"
       ],
-      "dh": "5ea9a7c5",
+      "dh": "68e2e81c",
       "paramStorage": [
         [
-          "param_1",
+          "pReader",
           "ECX:4"
         ]
       ]
@@ -1081,7 +1081,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "88827f3d",
+      "dh": "b36e04fb",
       "paramStorage": [
         [
           "pDst",
@@ -1174,7 +1174,7 @@
         "SCOMP_CleanupTempBuffer",
         "SMemFree"
       ],
-      "dh": "e6010603"
+      "dh": "9f6f2639"
     },
     {
       "name": "HUFFMAN_GetDecodedOffset",
@@ -1222,13 +1222,31 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "0bd943b8",
+      "dh": "149fa40d",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
           "ECX:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_0041e940",
+      "address": "0041e940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e940"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "Unreferenced_0041e940"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "629f4714"
     },
     {
       "name": "LINKEDLIST_NodeDestructor_Unref_0041e970",
@@ -1271,10 +1289,10 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "6709c326",
+      "dh": "cfc0e9d1",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -1292,14 +1310,14 @@
       "calledFunctions": [
         "Unreferenced_0041e9d0"
       ],
-      "dh": "806b5a05",
+      "dh": "20e60b06",
       "paramStorage": [
         [
-          "param_1",
+          "pValueA",
           "ECX:4"
         ],
         [
-          "param_2",
+          "pValueB",
           "EDX:4"
         ]
       ]
@@ -1391,13 +1409,28 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "cb9381ab",
+      "dh": "fcdb1293",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
           "ECX:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_0041ea50",
+      "address": "0041ea50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041ea50"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "Unreferenced_0041ea50"
+      ],
+      "dh": "b32aaeb6"
     },
     {
       "name": "Unreferenced_0041ea60",
@@ -1416,6 +1449,30 @@
       "paramStorage": [
         [
           "param_1",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0041ea70",
+      "address": "0041ea70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041ea70"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0041ea70"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "006fe846",
+      "paramStorage": [
+        [
+          "pNode",
           "ECX:4"
         ]
       ]
@@ -1520,10 +1577,10 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "4fcd084e",
+      "dh": "80c3e4c4",
       "paramStorage": [
         [
-          "param_1",
+          "pData",
           "ECX:4"
         ]
       ]
@@ -1602,10 +1659,10 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "520e5d46",
+      "dh": "38379eac",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]

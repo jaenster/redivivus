@@ -52,7 +52,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Lang)
 uint16_t * __fastcall UNICODE_FindSubstringNoCase(uint16_t * pwszHaystack, uint16_t * pwszNeedle);
-int __fastcall Unreferenced_00526d00(uint16_t * param_1);
+int __fastcall Unreferenced_00526d00(uint16_t * pChar);
 bool __thiscall UNICODE_CheckTrailingPunctuation(char * szSourceFile, uint16_t * pwChar);
 void UNICODE_FreeBuffer(void * pBuffer);
 void UNICODE_AllocBuffer(uint32_t nSize);
@@ -63,7 +63,7 @@ void __stdcall UNICODE_FreeKamapTables();
 BOOL __fastcall UNICODE_LoadKamapFile(struct D2PoolManagerStrc * pMemory, char * szFilename);
 int UNICODE_CompareKamapEntry(LPCVOID pKey, LPCVOID pEntry);
 uint16_t * __fastcall UNICODE_ConvertMultiByteToWide(uint16_t * wszText, uint8_t * szSource, int32_t nSize);
-uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * szDest, uint16_t * wszSource, int32_t nSize);
+char * __fastcall UNICODE_ConvertWideToMultiByte(char * szDest, uint16_t * wszSource, int32_t nSize);
 int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nMaxChars);
 int32_t __fastcall UNICODE_GetWideCharCount(char * szText, int32_t szSourceFile);
 #endif // D2_MODULE_D2Lang

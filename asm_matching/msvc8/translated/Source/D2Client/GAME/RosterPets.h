@@ -19,6 +19,7 @@ struct D2RosterMercArg;
 struct D2RosterPetSeedStrc;
 struct D2RosterPetStrc;
 struct D2UnitStrc;
+typedef uint32_t eD2LevelId;
 
 namespace D2Client { namespace GAME { namespace RosterPets {
 
@@ -27,7 +28,7 @@ namespace D2Client { namespace GAME { namespace RosterPets {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 // @sourcefile .\GAME\RosterPets.cpp
 void __stdcall FreeRosterPet();
-struct D2RosterPetStrc * __fastcall Unreferenced_00478a90(int param_1);
+struct D2RosterPetStrc * __fastcall Unreferenced_00478a90(int nRosterGUID);
 // @sourcefile .\GAME\RosterPets.cpp
 void __fastcall AddRosterPet(int32_t nRosterGUID, int32_t nOwnerGUID, int32_t nSkillId, int32_t nRosterType);
 // Registers a pet or mercenary in the client-side roster pet list. For skillID 7 (merc), first removes any existing merc for the owner, then adds the pet entry and populates seed/owner fields from pMercArg. If the merc unit already exists in the world, initializes it via MERC_InitializeFromPacket, marks it attackable, sets up its light map, and flags it for update.
@@ -47,6 +48,7 @@ void __stdcall ROSTER_UpdateHostileColors();
 void __fastcall UpdateLifeAndArea(DWORD nRosterGUID, int32_t nHpPercent, uint16_t eLevel);
 int32_t __fastcall GetRosterPerHPPercent(int32_t nRosterGUID);
 void __fastcall ROSTERPETS_GetPetData(int32_t nRosterGUID, int * pnSkillId, int * pnField6_0x18);
+eD2LevelId Unreferenced_004790f0();
 int32_t __fastcall GetRosterClass(int32_t nRosterGUID);
 DWORD __fastcall GetRosterOwnerGUID(DWORD nRosterGUID);
 int32_t __fastcall GetSkillId(int32_t nRosterGUID);

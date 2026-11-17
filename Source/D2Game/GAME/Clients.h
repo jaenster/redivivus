@@ -56,7 +56,7 @@ void __fastcall SERVER_LinkServerPlayerUnitToClient(struct D2ClientStrc * pClien
 void __fastcall SetCientFlag0x01(struct D2ClientStrc * pClient);
 void __fastcall SetGameDataHook(::SGAMEDATA * pGame);
 void __fastcall AppearenceItems(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint32_t * pAppearanceBuf, uint32_t nBufSize);
-void __fastcall AppearenceItems2(uint32_t pClient, struct D2UnitStrc * pUnit, uint32_t * pAppearanceBuf, uint32_t nBufSize);
+void __fastcall AppearenceItems2(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint32_t * pAppearanceBuf, uint32_t nBufSize);
 // @sourcefile .\GAME\Clients.cpp
 void __fastcall FreeClientList(::SGAMEDATA * pGame);
 // Builds a proximity-sorted list of up to nParam units from all adjacent rooms around the client's current room and serialises them into the client's packet buffer. Gets the player unit's world position, iterates every unit in adjacent rooms via CLIENT_AddUnitToProximitySortedList, then calls CLIENT_PopulateVisibilityPacketBuffer. Halts fatally if pClient->pRoom is null or the adjacent-room list is unavailable.
@@ -150,7 +150,7 @@ struct D2PacketListStrc * __fastcall CLIENT_ClearDispatchList(struct D2ClientStr
 struct D2PacketListStrc * __fastcall CLIENT_GetPacketList(struct D2ClientStrc * pClient);
 struct D2PacketListStrc * __fastcall CLIENT_GetDispatchList(struct D2ClientStrc * pClient);
 void __fastcall GetAccountName(struct D2ClientStrc * pClient, char * szText);
-void __fastcall GetClientContainer(struct D2ClientStrc * pClient, uint32_t * pdwContainer);
+void __fastcall GetClientContainer(struct D2ClientStrc * pClient, void * * pdwContainer);
 void __fastcall GetRealm(struct D2ClientStrc * pClient, uint32_t * pdwRealm);
 void __fastcall SetRealm(struct D2ClientStrc * pClient, uint32_t dwRealm);
 struct D2PlayerBasicsData * __fastcall CLIENT_GetPlayerBasicsData(struct D2ClientStrc * pClient);

@@ -71,7 +71,7 @@ BOOL __stdcall D2WINPOPUP_IsActiveAndVisible() {
 }
 
 // Adds a message entry to the popup. Validates message count (max 8), copies 132-byte message data into next slot, calculates text width using font 1, updates popup width/height. Returns TRUE on success.
-uint32_t __stdcall D2WINPOPUP_AddMessage(D2WinPopupEntry * pEntry) {
+BOOL __stdcall D2WINPOPUP_AddMessage(D2WinPopupEntry * pEntry) {
     int32_t nLine;
     ::D2WinPopup* pPopup = gpD2WinPopupControl;
     if (gpD2WinPopupControl->sControl.neD2FormType != FORM_Popup) {

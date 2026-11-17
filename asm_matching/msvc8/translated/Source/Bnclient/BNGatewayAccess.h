@@ -68,7 +68,6 @@ int32_t __stdcall GMT(struct D2BNetGatewayAccessStr * pGatewayAccess, int nIndex
 void __fastcall GetGatewayList(void * pThis, int, char * szText);
 void __fastcall GetBattlenetGatewayList(struct D2BNetGatewayAccessStr * nGatewayAccess);
 void __fastcall GetBattlenetRealmsList(struct D2BNetGatewayAccessStr * nGatewayAccess);
-uint32_t * __stdcall WritingDefaultGatewayList(DWORD * pdwFileSize);
 void __fastcall WriteDefaultGatewayList(char * szText);
 // Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
 char * __fastcall SkipToEOL(struct D2BNetGatewayAccessStr * pGatewayAccess, int, char * szText1, char * szText2);
@@ -86,5 +85,6 @@ void __fastcall PickClosestZone(void * pThis, int, int32_t nGmtMinutes);
 // @sourcefile .\BNetGW.cpp
 void __stdcall UpdateGatewaysFromIni(struct D2BNetGatewayAccessStr * pClientSideData, char * szText);
 #endif // D2_MODULE_Bnclient
+// 1 internal function (defined in .cpp)
 
 }} // namespace Bnclient::BNGatewayAccess

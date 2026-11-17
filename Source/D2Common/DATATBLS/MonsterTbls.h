@@ -105,7 +105,7 @@ struct D2ParsedTreasureClassStrc * __stdcall DATATBLS_GetChestTreasureClass(int3
 struct D2SuperUniquesTxt * __stdcall TXT_SuperUniques_GetLine(int32_t nSuperUnique);
 int32_t __stdcall MONSTERTBLS_GetSuperUniquesTxtCount();
 struct D2HirelingTxt * __stdcall GetHirelingText(int32_t bIsExpansion, int32_t nHirelingId, int32_t nLevel);
-struct D2HirelingTxt * __stdcall GetHirelingEntry(int32_t bIsExpansion, int32_t nNpcClassId, int32_t nDifficulty, int32_t pPrevEntry);
+struct D2HirelingTxt * __stdcall GetHirelingEntry(int32_t bIsExpansion, int32_t nNpcClassId, int32_t nDifficulty, struct D2HirelingTxt * pPrevEntry);
 struct D2HirelingTxt * __stdcall GetHirelingDataTable(int32_t nVersion, int32_t nAct, int32_t nDifficulty, struct D2HirelingTxt * pHirelingTxt);
 struct D2MonSoundsTxt * __stdcall TxtGetMonSoundsLine(int32_t nSoundId);
 struct D2MonSoundsTxt * __stdcall MONSTERTBLS_GetMonSoundsTxtRecord(int32_t nMonStatsId);
@@ -123,7 +123,7 @@ void Unreferenced_00653d30();
 void __stdcall MONSTER_SetVelocityByIndex(int32_t nMonStatsId, int16_t nVelocity);
 void __fastcall DATATBLS_CompileUniqueTitleTxt(struct D2PoolManagerStrc * pMemory, char * szText, uint32_t nTitleIdx);
 void __stdcall TXT_UnloadUniqueMonsterNameTables();
-uint16_t * __fastcall Unreferenced_00653e50(struct D2UnitStrc * param_1, int param_2);
+uint16_t * __fastcall Unreferenced_00653e50(struct D2UnitStrc * pUnit, int nTableIndex);
 uint16_t * __fastcall MONSTER_GetRandomUniquePrefix_Unref_00653e90(struct D2UnitStrc * pUnit);
 struct D2ParsedTreasureClassStrc * __fastcall TC_ExtendTreasureClassSize(char * szText);
 void __fastcall ResizeParsedTCEntries(struct D2ParsedTreasureClassStrc * pParsedTC, int32_t nCount);
@@ -132,6 +132,7 @@ struct D2ParsedTreasureClassEntriesStrc * __fastcall AddOneParsedTCEntry(struct 
 void __fastcall AdjustRarities(struct D2ParsedTreasureClassStrc * pParsedTC, struct D2ParsedTreasureClassEntriesStrc * pParsedTCEntry, int32_t nRarity, BOOL bIsNotVersion100);
 // One-time initialization that auto-generates level-banded treasure classes for each spawnable item type. For every ItemTypes.txt record that has auto-TC enabled (szCode[0x1d] != 0), creates TC entries named "&lt;typeCode&gt;&lt;level&gt;" (level 3..96 step 3) via TC_ExtendTreasureClassSize, then populates each TC with items whose nLevel falls within the band, excluding missile potions and marking LoD-only items with TC_Expansion. Calls AdjustRarities to finalize drop weights.
 void __stdcall TC_GenerateAutoItemTypeTreasureClasses();
+void Unreferenced_006543c0();
 // Loads and compiles TreasureClassEx.txt (drop tables). Builds the D2BinFieldInputStrc descriptor array (treasure class name, group, level, picks, unique/set/rare/magic chances, nodrop, and item1..item10 with prob1..prob10), compiles into D2TreasureClassExTxt records, then post-processes each line: allocates a parsed-TC record via TC_ExtendTreasureClassSize, fills group(+base offset)/level/prob(min 1)/nodrop/magic/rare/set/unique, and parses up to 10 item entries via TC_ParseTreasureClassEntry. Frees the raw bin afterward (UnloadBin). One-time table init; allocates from pMemory. Note: many fields accessed via raw pointer arithmetic over D2PoolManagerStrc casts (decompiler smell), not real pool fields.
 void __stdcall TXT_AllocTxt_TreasureClassEx(struct D2PoolManagerStrc * pMemory);
 void __stdcall FreeParsedTC();
@@ -152,8 +153,8 @@ void Unreferenced_006556a0();
 // Loads and compiles hireling.txt into sgtDataTable.pTxtHireling (record stride 0x118). Builds the column-binding descriptor (version/id/class/act/difficulty/seller/gold/level, namefirst/namelast, per-level stat-growth columns, 6 skill/mode/chance/level groups linked to the Skills table, hiredesc linked to the HireDesc table, equipment slots) and calls CompileTxt. Afterward initializes the nTxtHirelingIdLines lookup table to -1, resolves namefirst/namelast string-table ids, validates them on expansion games (error-halts on missing/ordering/range violations), and fills the (class,act-difficulty) -> row-index map. __fastcall(pMemory). Side effect: populates global hireling data table.
 void __fastcall TXT_AllocTxt_hireling(struct D2PoolManagerStrc * pMemory);
 void __stdcall MONSTERTBLS_FreeHirelingTxt();
-struct D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t nMercNameId, int32_t pPrevEntry);
-struct D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t nClassId, int32_t pPrevEntry);
+struct D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t nMercNameId, struct D2HirelingTxt * pPrevEntry);
+struct D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t nClassId, struct D2HirelingTxt * pPrevEntry);
 // Loads and compiles the npc.txt data table (vendor pricing). Builds a D2BinFieldInputStrc field-definition array (npc name linked to MonStats, sell/buy/rep mult, questflag A/B/C, per-quest sell/buy/rep multipliers, and max buy gold per difficulty) and passes it to DataTbls::CompileTxt with row size 0x4C, storing the result into sgtDataTable.pTxtNpc and the row count into sgtDataTable.nTxtNpcSize. Allocates from the supplied D2PoolManagerStrc. Called once during data-table init.
 void __fastcall TXT_AllocTxt_npc(struct D2PoolManagerStrc * pMemory);
 void __stdcall DATATBLS_UnloadNpcTxt();

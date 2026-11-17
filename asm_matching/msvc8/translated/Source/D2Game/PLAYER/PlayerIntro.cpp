@@ -149,8 +149,8 @@ void __fastcall PLAYERINTRO_CopyIntro2ToBuffer(D2UnitDataPlayerInteractedNPCStrc
     *(uint32_t*)(pDest + 4) = pSizePosData[1];
 }
 
-void __fastcall PLAYERINTRO_CopyIntroData8Bytes(D2UnitDataPlayerInteractedNPCStrc * pdwParam1, uint32_t * pdwSrc) {
-    uint8_t* pDstBuf = pdwParam1->pIntro->pBuffer;
+void __fastcall PLAYERINTRO_CopyIntroData8Bytes(D2UnitDataPlayerInteractedNPCStrc * pInteractedNpc, uint32_t * pdwSrc) {
+    uint8_t* pDstBuf = pInteractedNpc->pIntro->pBuffer;
     *(uint32_t*)pDstBuf = *pdwSrc;
     *(uint32_t*)(pDstBuf + 4) = pdwSrc[1];
 }

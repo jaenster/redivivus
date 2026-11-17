@@ -57,7 +57,7 @@ struct D2CompCofListNodeStrc {
 namespace D2Win { namespace Src { namespace D2Comp {
 
 // Function declarations
-void __stdcall D2COMP_DestroyCompositeUnit(struct D2CharSelStrc * pCharSel, int32_t bUnlink);
+void __stdcall D2COMP_DestroyCompositeUnit(struct D2CharSelCompStrc * pCharSel, int32_t bUnlink);
 void __stdcall D2COMP_SetUnitDisplayStrings(struct D2CharSelCompStrc * pCompUnit, uint16_t * wszText1, uint16_t * wszText2, uint16_t * wszText3, uint16_t * wszText4, int32_t nDisplayFlags, int32_t nExtraData);
 BOOL __fastcall D2COMP_SetAnimationMode(struct D2CharSelCompStrc * pCompUnit, int32_t nAnimMode);
 void __stdcall D2COMP_SetSelectionAndAuraImages(struct DC6 * pDC6, struct DC6 * pDC62);
@@ -69,7 +69,7 @@ void __stdcall D2COMP_SetCurrentFrame(struct D2CharSelCompStrc * pCompUnit, uint
 void __stdcall D2COMP_SetScreenX(struct D2CharSelCompStrc * pCompUnit, int32_t nScreenX);
 void __stdcall D2COMP_SetScreenY(struct D2CharSelCompStrc * pCompUnit, int32_t nScreenY);
 uint32_t __stdcall D2COMP_GetFlags(struct D2CharSelCompStrc * pCompUnit);
-void __stdcall D2COMP_SetFlags(struct D2CharSelStrc * pCharSel, uint32_t dwFlags);
+void __stdcall D2COMP_SetFlags(struct D2CharSelCompStrc * pCharSel, uint32_t dwFlags);
 char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank, int32_t bExpansion);
 struct D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, int32_t nAnimMode, uint8_t * pbyEquipSlots, char * szText);
 // Module-private: no other module references these

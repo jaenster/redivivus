@@ -132,6 +132,7 @@ int __fastcall deflateSetHeader(z_stream * pStream, gz_header * pHead) {
     return -2;
 }
 
+#if 0 // ratchet: the match body of 00427220 (evidence 1985bb0f9) could not be re-spelled: parameter 2 retyped: uint32_t * -> int *
 uint32_t __fastcall deflatePending(z_stream * pStream, uint32_t * pPending, uint32_t * pBits) {
     if (pStream && pStream->state) {
       if (pPending) {
@@ -139,6 +140,21 @@ uint32_t __fastcall deflatePending(z_stream * pStream, uint32_t * pPending, uint
       }
       if (pBits) {
         *pBits = *(uint32_t*)((char*)pStream->state + 0x16bc);
+      }
+
+      return 0;
+    }
+
+    return -2;
+}
+#endif
+int __fastcall deflatePending(z_stream * pStream, uint32_t * pPending, int * pBits) {
+    if (pStream && pStream->state) {
+      if (pPending) {
+        *pPending = *(uint32_t*)((char*)pStream->state + 0x14);
+      }
+      if (pBits) {
+        *pBits = *(int*)((char*)pStream->state + 0x16bc);
       }
 
       return 0;
@@ -176,7 +192,7 @@ uint32_t __fastcall deflatePrime(z_stream * pStream, int32_t nBits, uint32_t uVa
     return 0;
 }
 
-uint32_t __fastcall deflateTune(z_stream * pStream, uint32_t nGoodMatch, uint32_t nMaxLazyMatch, int32_t nNiceMatch, uint32_t nMaxChainLen) {
+int __fastcall deflateTune(z_stream * pStream, int32_t nGoodMatch, int32_t nMaxLazyMatch, int32_t nNiceMatch, int32_t nMaxChainLen) {
     if (pStream) {
       deflate_state* pDeflateState;
       pDeflateState = (deflate_state*)pStream->state;
@@ -336,7 +352,7 @@ uint32_t __fastcall deflateEnd(z_stream * pStream) {
     return -2;
 }
 
-uint32_t __fastcall deflateCopy(z_stream * pDestStream, z_stream * pSrcStream) {
+int __fastcall deflateCopy(z_stream * pDestStream, z_stream * pSrcStream) {
     uint8_t* pAllocTree;
     uint16_t* pHashHead;
     int nCopyWords;

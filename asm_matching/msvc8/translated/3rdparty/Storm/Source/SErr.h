@@ -131,17 +131,20 @@ void __stdcall SERR_InternalLeaveCriticalSection();
 // @oracle-basis Callee set {EnterCriticalSection, GetCurrentThreadId, LeaveCriticalSection} is exactly the oracle's and is unique among all 19 SErr exports and all 82 functions of this namespace - the only other GetCurrentThreadId user, SErrDisplayAppFatal 0041d160, additionally calls memset/vsprintf/DisplayError/ExitProcess. Arity 2 = 2 (PPC prologue saves r3 and r4 only).
 void __stdcall SErrPrepareAppFatal(void * pfnCallback, uint32_t nCallbackParam);
 uint32_t __fastcall SSYSTEM_ListOffsetToPointer(struct StormLinkStrc * pNode, int, intptr_t pBase);
-void __fastcall Unreferenced_0041c410(struct StormLinkedListStrc * param_1);
+void __fastcall Unreferenced_0041c410(struct StormLinkedListStrc * pList);
 int32_t __fastcall SSYSTEM_ListGetPointer(int32_t pList, int, int32_t pNode);
 void __fastcall SSYSTEM_ListUnlinkAndInsert(int * * pList, int, int * * pNode, int32_t nInsertMode, int * * ppTarget);
 uint32_t __fastcall SSYSTEM_ListGetNext(struct StormLinkedListStrc * pList, int, struct StormLinkStrc * pNode);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0041c650(struct StormLinkStrc * pNode);
 void __fastcall SSYSTEM_ListUnlink(struct StormLinkedListStrc * pThis, int, struct StormLinkStrc * pNode);
-struct StormLinkedListStrc * __fastcall Unreferenced_0041c6e0(struct StormLinkedListStrc * param_1);
+struct StormLinkedListStrc * __fastcall Unreferenced_0041c6e0(struct StormLinkedListStrc * pList);
 intptr_t __fastcall SSYSTEM_ListGetData(struct StormLinkedListStrc * pList, int, struct StormLinkStrc * pNode);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0041c730(struct StormLinkStrc * pNode);
 // TSList<HANDLER>::~TSList: UnlinkAll, then unlinks the list's terminator link.
 // Named per redivivus issue #35; T from the UnlinkAll it calls (SErr's .?AUHANDLER@@ list).
 void __fastcall TSList_HANDLER_Destructor(struct StormLinkedListStrc * pList);
-struct StormLinkStrc * __fastcall Unreferenced_0041c7f0(struct StormLinkStrc * param_1);
+struct StormLinkStrc * __fastcall Unreferenced_0041c7f0(struct StormLinkStrc * pLink);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0041c800(struct StormLinkStrc * pNode);
 int * * __fastcall SSYSTEM_ListAllocNode(int * * pList, int, int32_t nInsertMode, int32_t nDataSize, uint32_t nAllocFlags);
 int * __fastcall SSYSTEM_ListFreeNode(struct StormLinkStrc * pNode, int, uint8_t bFreeMemory);
 // Under the error critical section, SMemAllocs a 12-byte list node, links it into gpStormErrorCallbackListHead and stores the caller's handler pointer at +8.

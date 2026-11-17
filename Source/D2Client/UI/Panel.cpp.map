@@ -1700,6 +1700,24 @@
           "Stack[0x4]:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_00499de0",
+      "address": "00499de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00499de0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "Unreferenced_00499de0"
+      ],
+      "usedTypes": [
+        "D2UiPartyStrc"
+      ],
+      "dh": "cc1d13ba"
     }
   ]
 }

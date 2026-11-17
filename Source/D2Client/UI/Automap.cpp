@@ -645,12 +645,12 @@ void __stdcall AUTOMAP_RebalanceTreeLeft(D2AutomapCellStrc * * ppCell) {
     }
 }
 
-int __fastcall Unreferenced_00457ac0(D2AutomapCellStrc * param_1, D2AutomapCellStrc * param_2) {
-    int iVar1 = (int)param_1->yPixel - (int)param_2->yPixel;
+int __fastcall Unreferenced_00457ac0(D2AutomapCellStrc * pCellA, D2AutomapCellStrc * pCellB) {
+    int iVar1 = (int)pCellA->yPixel - (int)pCellB->yPixel;
     if (!iVar1) {
-      iVar1 = (int)param_1->xPixel - (int)param_2->xPixel;
-      if (!iVar1 && gnAutoMapCellPriority[param_1->nCellNo] != -1 && gnAutoMapCellPriority[param_1->nCellNo] != gnAutoMapCellPriority[param_2->nCellNo]) {
-        iVar1 = (int)param_1->nCellNo - (int)param_2->nCellNo;
+      iVar1 = (int)pCellA->xPixel - (int)pCellB->xPixel;
+      if (!iVar1 && gnAutoMapCellPriority[pCellA->nCellNo] != -1 && gnAutoMapCellPriority[pCellA->nCellNo] != gnAutoMapCellPriority[pCellB->nCellNo]) {
+        iVar1 = (int)pCellA->nCellNo - (int)pCellB->nCellNo;
       }
     }
 
@@ -1690,7 +1690,7 @@ void __stdcall AUTOMAP_SetRefreshDelay() {
 }
 
 void __stdcall AUTOMAP_RevealRoomCallback(D2RoomStrc * pRoom) {
-    int nLayer = !sgpAutomapLayerEx ? -1 : sgpAutomapLayerEx->nLayer;
+    int nLayer = sgpAutomapLayerEx ? sgpAutomapLayerEx->nLayer : -1;
     int nLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     D2LevelDefsTxt* pLevelDefs = D2Common::DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(nLevelId);
     D2AutomapLayerStrc* pAutomapLayer = AUTOMAP_AddLayer(pLevelDefs->Layer);
@@ -2882,9 +2882,14 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
     uD2UnitMode uUnitColor;
     eD2UnitType nUnitTypeOrName;
     int32_t nUnitTypeOrName2;
-    eD2UnitType nUnitTypeOrName3 = !pUnit ? 0x6 : (eD2UnitType)pUnit->eUnitType;
+    if (!pUnit) {
+      nUnitTypeOrName = 0x6;
+    } else {
+      nUnitTypeOrName = (eD2UnitType)pUnit->eUnitType;
+    }
+
     uUnitColor.ePlayerMode &= -256;
-    if (!(nUnitTypeOrName3 || (nTemp = UNIT::CUnit::IsActive(pUnit) , !nTemp) || (eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody) , eUnitState != 0))) {
+    if (!(nUnitTypeOrName || (nTemp = UNIT::CUnit::IsActive(pUnit) , !nTemp) || (eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody) , eUnitState != 0))) {
       return;
     }
 
@@ -2902,7 +2907,7 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
       return;
     }
 
-    switch (nUnitTypeOrName3) {
+    switch (nUnitTypeOrName) {
       case 0x0:
         {
           if (nAutoMapParty || *(uint8_t*)(char*)&uUnitColor.ePlayerMode != nAutoMapColorParty) {

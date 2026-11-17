@@ -626,7 +626,8 @@ static int32_t GFXUTIL_GetBodyLocWeaponToken(int32_t nBodyLoc, D2UnitStrc * pUni
 
       pQuiverItem = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 5);
       if (pQuiverItem) {
-        pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pQuiverItem->nClassId);
+        int t2_c0 = pQuiverItem->nClassId;
+        pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(t2_c0);
         if (pItemsTxt) {
           if (pItemsTxt->dwAlternateGfx) {
             return pItemsTxt->dwAlternateGfx;
@@ -1481,7 +1482,7 @@ static BOOL __stdcall GFXUTIL_BuildMonsterCofParams(void * pCofFile, int32_t nAn
                          COF layer entry (layer+5 is its weapon-class token), which is why the
                          parameter is void * rather than D2MonStatsTxt *.
                          U2 2026-10-21: asm MOV [EBP+0x10],EDI after the +0x10 Code read at 004dbbe6.
-                          */ byColorVariant = *(uint8_t*)((nComponentRow << 4) + (uint32_t)byColorIdx + 4 + (char*)pComponentTable);
+                          */ byColorVariant = *(uint8_t*)(nComponentRow * 0x10 + (uint32_t)byColorIdx + 4 + (char*)pComponentTable);
         nComponentTable = (uint32_t)((uint32_t)(uint8_t)byColorVariant << 24 | (uint32_t)((uint32_t)d2_load24((char*)&pComponentTable) & 0xffffffu));
         pMonStatsTxt2 = pCofEntry;
         if (!nAnimMode || nAnimMode == 0xc) {

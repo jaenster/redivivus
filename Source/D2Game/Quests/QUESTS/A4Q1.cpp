@@ -343,7 +343,6 @@ void __fastcall Q26_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 
 // Q26_QuestUpdate_SpawnIzual — deferred quest timer (added in Callback_08). If stateflag just reached 4 (and prev wasn't 4/0xd), broadcast stateflag 3. Then, if a spawn was queued, spawn Izual's monster (classId 0x196) at the recorded subtile coords in Act4 (pAct[3]); tries skill-variant ids 1/3/5. Materializes the actual Izual demon unit for the kill.
 uint8_t __fastcall Q26_QuestUpdate_SpawnIzual(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
-    int32_t nX;
     D2RoomStrc* pRoom;
     D2UnitStrc* pIzualUnit;
     D2QuestDataA4Q1Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA4Q1;
@@ -352,11 +351,8 @@ uint8_t __fastcall Q26_QuestUpdate_SpawnIzual(::SGAMEDATA * pGame, D2QuestDataSt
       QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q26_PlayerNotifyCompleted, 1);
     }
     if (pQuestSpecificData->bIzualLocationSet) {
-      int32_t nY;
-      nY = pQuestSpecificData->ptIzualDeath.y;
-      nX = pQuestSpecificData->ptIzualDeath.x;
       pQuestSpecificData->bIzualLocationSet = 0;
-      pRoom = D2Common::DUNGEON::Dungeon::FindRoomBySubtileCoordinates(pGame->pAct[3], nX, nY);
+      pRoom = D2Common::DUNGEON::Dungeon::FindRoomBySubtileCoordinates(pGame->pAct[3], pQuestSpecificData->ptIzualDeath.x, pQuestSpecificData->ptIzualDeath.y);
       if (pRoom) {
         pIzualUnit = Monster::Create::SpawnMonsterAtRoomPos(pGame, pRoom, pQuestSpecificData->ptIzualDeath.x, pQuestSpecificData->ptIzualDeath.y, 0x196, eD2MonsterAnimMode_ns::Skill1, -1, 0);
         if (!pIzualUnit) {
@@ -388,7 +384,8 @@ BOOL __fastcall Q26_PlayerCheckNearIzual(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       exit(-1);
     }
 
-    D2RoomStrc* pQuestData = D2Common::Units::UNITS_GetRoom(pPlayerData->pQuestSpecificData.pA4Q1->pIzualUnit);
+    D2UnitStrc* t2_c0 = pPlayerData->pQuestSpecificData.pA4Q1->pIzualUnit;
+    D2RoomStrc* pQuestData = D2Common::Units::UNITS_GetRoom(t2_c0);
     if (pPlayerRoom) {
       D2BitBufferStrc* pBitBuffer;
       bIsNearIzual = 0;
@@ -486,8 +483,9 @@ void __fastcall Q26_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       return;
     }
 
+    D2UnitStrc* t2_c0 = pQuestArgs->pPlayer;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
-    D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, t2_c0);
     BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pQuestRecord, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
     if (BVar1 == 1) {
       return;

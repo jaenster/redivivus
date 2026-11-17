@@ -1301,7 +1301,7 @@ static void __fastcall ChatCommandProcessor(uint16_t * pwInputMessage, int, char
     sChatPacket.nCmd = '\x15';
     sChatPacket.nIMEMode = (uint8_t)gnLanguageCode;
     if (!gbChatInputEnabled || (nCmpResult = CHAT_IsWideStringASCII(pwInputMessage) , (char)nCmpResult != '\0')) {
-      BVar1 = CHAT_ParseCommand((char**)&pInputOffset, &sChatPacket.nMsgType, sChatPacket.szTarget);
+      BVar1 = CHAT_ParseCommand(&pInputOffset, &sChatPacket.nMsgType, sChatPacket.szTarget);
       pszInput = pInputOffset;
       if (BVar1 && sChatPacket.nMsgType == '\0') {
         sChatPacket.nCmd = '\x14';

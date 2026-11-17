@@ -29,7 +29,7 @@ void LOGGING_FilePrintf(FILE * pFile, uint32_t dwGame, uint32_t dwFrame, uint32_
 // time/thread/level logger. Two different loggers, one name.
 // @caveat zero xrefs - called through a pointer or dead. Name derived from its format strings.
 void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nLogType, int32_t nLogTypeArg, char * szFormat, ...);
-bool __fastcall LOGGING_OpenLogFile(char * szLogFileName);
+int32_t __fastcall LOGGING_OpenLogFile(char * szLogFileName);
 void __stdcall CloseLogging();
 #endif // D2_MODULE_D2Common
 // 1 internal function (defined in .cpp)

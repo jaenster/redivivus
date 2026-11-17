@@ -395,6 +395,11 @@ bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(char * szPath) {
     return pEnd < 0x400;
 }
 
+static LPWSTR Unreferenced_00404100(LPWSTR szString, uint16_t wChar) {
+    LPWSTR pszLastChar = wcsrchr(szString, wChar);
+    return pszLastChar;
+}
+
 static size_t STRING_CopyStringBounded(int32_t nDestSize, char * szDest, char * szSrc) {
     char* pSrcScan;
     pSrcScan = szSrc;
@@ -640,5 +645,6 @@ static bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext) 
 }
 
 static void * keep_00403fa0 = (0 ? (FILETOOLS_ExtractDirectory(*(char * *)0, *(uint32_t *)0, *(char * *)0), (void *)0) : (void *)0);
+static void * keep_00404100 = (0 ? (Unreferenced_00404100(*(LPWSTR *)0, *(uint16_t *)0), (void *)0) : (void *)0);
 
 }} // namespace Fog::File

@@ -81,12 +81,12 @@
         "IterateAllUnits"
       ],
       "usedTypes": [
-        "D2QuestDataA3Q3Strc",
+        "D2QuestDataA4Q1Strc",
         "D2QuestDataStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "86318976",
+      "dh": "a46f1723",
       "paramStorage": [
         [
           "pGame",

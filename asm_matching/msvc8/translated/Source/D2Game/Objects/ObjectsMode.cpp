@@ -384,6 +384,7 @@ void __fastcall OBJMODE_UpdateDayNightState(::SGAMEDATA * pGame, D2UnitStrc * pU
     return;
 }
 
+#if 0 // ratchet: the match body of 00581410 (evidence b0e96f655) could not be re-spelled: callee SKILLS::SkillsServer::LinkPortal parameter eLevel retyped: D2RoomStrc * -> eD2LevelId
 void __fastcall OBJMODE_CreateRedPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2RoomStrc* eLevel;
     eD2LevelId nLevelId2 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(D2Common::Units::UNITS_GetRoom(pUnit));
@@ -397,6 +398,35 @@ void __fastcall OBJMODE_CreateRedPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
       case LEVEL_ArreatPlateau:
         {
           eLevel = (D2RoomStrc*)0x7e;
+          break;
+        }
+    }
+
+    D2UnitStrc* pPortalUnit = SKILLS::SkillsServer::LinkPortal(pGame, nullptr, pUnit, eLevel, nLevelId2);
+    if (pPortalUnit) {
+      uint8_t byPortalFlags;
+      byPortalFlags = D2Common::Units::GetObjectPortalFlags(pPortalUnit);
+      byPortalFlags |= 3;
+      D2Common::Units::SetObjectPortalFlags(pPortalUnit, byPortalFlags);
+    }
+
+    D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pUnit), 0);
+    D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pPortalUnit), 0);
+}
+#endif
+void __fastcall OBJMODE_CreateRedPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+    eD2LevelId nLevelId2 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+    eD2LevelId eLevel = LEVEL_InfernalPit;
+    switch (nLevelId2) {
+      case LEVEL_FrigidHighlands:
+        {
+          eLevel = LEVEL_Abaddon;
+          break;
+        }
+      case LEVEL_ArreatPlateau:
+        {
+          eLevel = LEVEL_PitOfAcheron;
           break;
         }
     }
@@ -1548,7 +1578,6 @@ static BOOL __stdcall Shrines_GemShrine_SpawnGem(int32_t nItemClassId, D2UnitStr
     POINT* pNewPosition = &ptSpawnPos;
     D2UnitStrc* pSpawnedItem = (D2UnitStrc*)ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit2), &ptUnitCoords, pNewPosition, uSearchFlag, bSearchNeighbors);
     if (pSpawnedItem) {
-      eInventoryPage ePreviousPage;
       memset(&sItemGenCtx, 0, 0x84);
       sItemGenCtx.pUnit = 0;
       sItemGenCtx.pSeed = 0;
@@ -1573,8 +1602,7 @@ static BOOL __stdcall Shrines_GemShrine_SpawnGem(int32_t nItemClassId, D2UnitStr
       if (pUnit) {
         pSpawnedItem = 0;
         D2Common::ITEMS::Items::ITEM_SetServerSideFlag((uint32_t*)&pSpawnedItem, 0x20, 1);
-        ePreviousPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pUnit);
-        D2Common::ITEMS::Items::ITEM_SetItemData_ePreviousPage(pUnit, ePreviousPage);
+        D2Common::ITEMS::Items::ITEM_SetItemData_ePreviousPage(pUnit, D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pUnit));
         pOldGemItem = pUnit;
         pNewGemItem = pSpawnedItem;
         GAME::SCmd::Send0x9DRemoveItemFromContainer(UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\OBJECTS\\ObjMode.cpp", 0x80f), pUnit2, pOldGemItem, (eD2ItemFlag)pNewGemItem);
@@ -1712,7 +1740,7 @@ void __fastcall Shrines_StormShrineFunction(D2ObjectOperateFnArg * pArguments, D
         bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pTargetUnit);
         if (!bIsDead) {
           nHpReduction = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_hitpoints, 0);
-          D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pTargetUnit, UNITSTAT_hitpoints, (int)(uSlot8.pTxtShrinesLocal->dwArg0 * (nHpReduction >> 8)) / -100 << 8, 0);
+          D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pTargetUnit, UNITSTAT_hitpoints, (int)(uSlot8.pTxtShrinesLocal->dwArg0 * (nHpReduction >> 8)) / -100 * 0x100, 0);
         }
       }
     }
@@ -2244,10 +2272,10 @@ void __fastcall Shrines_SkillBoostFunction(D2ObjectOperateFnArg * pArguments, D2
     stateArg.pTarget = pArguments->pAttacker;
     stateArg.eSkill = SKILL_Attack;
     stateArg.nSkillLvl = 0;
-    stateArg.nSkillCalc = 0;
     stateArg.nDurationInFrames = pTxtShrines->dwDurationInFrames;
-    stateArg.eAuraState = OBJECTSHRINEFUNCTION[pTxtShrines->nCode].nState;
+    stateArg.nSkillCalc = 0;
     stateArg.eStat = UNITSTAT_maxstamina;
+    stateArg.eAuraState = OBJECTSHRINEFUNCTION[pTxtShrines->nCode].nState;
     stateArg.pFunction = SHRINE_OnSkillExpire;
     SKILLS::SkillsServer::SetStateWithExpiryTime(&stateArg);
     SKILLS::SkillsServer::SKILLS_UpdatePassivesAndPets(pArguments->pAttacker);
@@ -2419,7 +2447,6 @@ BOOL __fastcall OBJOP_SearchBookshelf(D2ObjectOperateFnArg * pOperation) {
     uint32_t seedNext;
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
-      D2SeedStrc* pDVar1;
       D2Common::Units::ChangeAnimMode(pUnit, 2);
       pUnit = pOperation->sArg.pVictim;
       if (pUnit) {
@@ -2427,18 +2454,16 @@ BOOL __fastcall OBJOP_SearchBookshelf(D2ObjectOperateFnArg * pOperation) {
       }
 
       D2Common::Units::GetCoords(pOperation->sArg.pVictim, &ptPos);
-      pDVar1 = pOperation->pSeed;
-      seedNext = D2_SeedRoll(pDVar1);
-      pDVar1 = pOperation->pSeed;
+      seedNext = D2_SeedRoll(pOperation->pSeed);
       if ((int)(seedNext % 0x14) > 0xc) {
-        seedNext = D2_SeedRoll(pDVar1);
+        seedNext = D2_SeedRoll(pOperation->pSeed);
         if (seedNext & 1) {
           pOperation->sArg.pVictim->dwDropItemCode = 0x206b6269;
         } else {
           pOperation->sArg.pVictim->dwDropItemCode = 0x206b6274;
         }
       } else {
-        seedNext = D2_SeedRoll(pDVar1);
+        seedNext = D2_SeedRoll(pOperation->pSeed);
         if (seedNext & 1) {
           pOperation->sArg.pVictim->dwDropItemCode = 0x20637369;
         } else {
@@ -3611,7 +3636,7 @@ void __fastcall OBJMODE_FinalizePortalLink(::SGAMEDATA * pGame, D2UnitStrc * pOw
     UNIT::SUnit::FreeServerUnit(pGame, pUnit);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pBluePortal);
     eD2LevelId nLevelId2 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    pBluePortal = SKILLS::SkillsServer::LinkPortal(pGame, pOwner, pBluePortal, (D2RoomStrc*)eLevel, nLevelId2);
+    pBluePortal = SKILLS::SkillsServer::LinkPortal(pGame, pOwner, pBluePortal, eLevel, nLevelId2);
     if (!pBluePortal) {
       OBJMODE_FinalizePortalLink_HaltTail(0x11fb);
     }
@@ -4396,7 +4421,7 @@ BOOL __fastcall OBJOP_OpenBossChestSpawnUniques(D2ObjectOperateFnArg * pOperatio
     return 1;
 }
 
-D2UnitStrc ** __fastcall OBJMODE_RollChestDrops(D2ObjectOperateFnArg * pOperateArg) {
+D2UnitStrc * * __fastcall OBJMODE_RollChestDrops(D2ObjectOperateFnArg * pOperateArg) {
     D2SeedStrc* pSeedPtr = pOperateArg->pSeed;
     uint32_t seedNext = D2_SeedRoll(pSeedPtr);
     if (seedNext % 100 <= 0x14) {

@@ -181,9 +181,10 @@
       ],
       "usedTypes": [
         "int32_t",
-        "uint16_t"
+        "uint16_t",
+        "uint32_t"
       ],
-      "dh": "e12ef901",
+      "dh": "ae2165b5",
       "paramStorage": [
         [
           "nKeyScheduleIdx",

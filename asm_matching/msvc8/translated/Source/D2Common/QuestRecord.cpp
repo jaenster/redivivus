@@ -2,7 +2,9 @@
 
 #include "Source/D2Common/QuestRecord.h"
 #include "Source/D2Common/D2BitBufferStrc.h"
+#include "Source/D2Common/Txt/Skills.h"
 #include "Source/Fog/Fog.h"
+#include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -132,6 +134,15 @@ void __stdcall CopyQuestBitBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pOutpu
       pInputAddress++;
       pOutputBuffer = (uint8_t*)((char*)pOutputBuffer + 4);
     }
+}
+
+D2PropertiesTxt * Unreferenced_0065c5a0() {
+    int in_ECX;
+    if (in_ECX >= 0 && in_ECX < ITEMS::Items::sgptDataTable->nTxtPropertiesSize) {
+      return ITEMS::Items::sgptDataTable->pTxtProperties + in_ECX;
+    }
+
+    return nullptr;
 }
 
 }} // namespace D2Common::QuestRecord

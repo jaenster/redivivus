@@ -926,6 +926,21 @@
       ]
     },
     {
+      "name": "Unreferenced_0050a220",
+      "address": "0050a220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050a220"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "Unreferenced_0050a220"
+      ],
+      "dh": "f2219df3"
+    },
+    {
       "name": "RENDERER_GLIDE_GetSpriteMetadata",
       "address": "0050a260",
       "lines": [

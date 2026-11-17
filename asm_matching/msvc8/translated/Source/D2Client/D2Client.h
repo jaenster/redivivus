@@ -2515,12 +2515,12 @@ __pragma(pack(push, 1)) struct D2MonsterRegionStrc {
 #ifndef D2_DEFINED_D2MonsterUModHandlerRowStrc
 #define D2_DEFINED_D2MonsterUModHandlerRowStrc
 struct D2MonsterUModHandlerRowStrc {
-    /* 0x00 */ void (__fastcall *pfnHandler0)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Handler for dispatch type 0
-    /* 0x04 */ void (__fastcall *pfnHandler1)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Handler for dispatch type 1
-    /* 0x08 */ void (__fastcall *pfnHandler2)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Handler for dispatch type 2
-    /* 0x0C */ void (__fastcall *pfnHandler3)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Handler for dispatch type 3
-    /* 0x10 */ void (__fastcall *pfnHandler4)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Handler for dispatch type 4
-    /* 0x14 */ void (__fastcall *pfnHandlerInit)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Init handler (dispatch type 5), called by MONSTER_DispatchUniqueModifiers when param_3==5
+    /* 0x00 */ void (__fastcall *pfnModeStart)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Mode start: run before a monster mode change other than GetHit (MONSTER_DispatchUModModeStart, index 0)
+    /* 0x04 */ void (__fastcall *pfnModeChange)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Mode change: run after the mode's start handler (MONSTER_DispatchUModModeChange, index 1)
+    /* 0x08 */ void (__fastcall *pfnEvent)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Scheduled monster timer event 7 (MONSTER_DispatchUModEvent, index 2)
+    /* 0x0C */ void (__fastcall *pfnAttackHit)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // The monster's own attack landed (MONSTER_DispatchUModOnAttack from DAMAGE_ApplyDamageToUnit, index 3)
+    /* 0x10 */ void (__fastcall *pfnDamaged)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // The monster was hit (MONSTER_DispatchUModDamaged from SERVER_GetHitCalculation, index 4)
+    /* 0x14 */ void (__fastcall *pfnMissile)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // The monster created a missile (MONSTER_DispatchUModMissile, index 5, read at [id*24+0x0073c0cc])
 };
 #endif // D2_DEFINED_D2MonsterUModHandlerRowStrc
 #ifndef D2_DEFINED_D2NET_CLIENT_D2GS_ServerToClient

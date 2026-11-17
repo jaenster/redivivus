@@ -189,7 +189,7 @@ void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nNpcClass
     int* pSlotEntry;
     int nSlotCount;
     uint32_t nNameLast;
-    int nNpcUnit3;
+    int nNpcUnit2;
     D2GameNpcStrc* pDVar2 = nNpcUnit;
     if (nNpcUnit->sTrade.bHirelingsInitialized) {
       return;
@@ -206,12 +206,12 @@ void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nNpcClass
     memset(pNpcDataBlock, 0, 0x450);
     D2SeedStrc* pNpcControl = sunitproxy::SUNITPROXY_GetNpcControl(pGame);
     D2MercForHire* pNpcDataRaw = pDVar2->pHirelingSlots;
-    uint32_t nHirelingCount = PLAYER::PlayerPets::GetHirelingNamesAndSize(pGame, nNpcClassId, (uint32_t*)&nNpcUnit3, &nNameLast, nullptr);
+    uint32_t nHirelingCount = PLAYER::PlayerPets::GetHirelingNamesAndSize(pGame, nNpcClassId, (uint32_t*)&nNpcUnit2, &nNameLast, nullptr);
     if (nHirelingCount == -1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7a);
       exit(-1);
     }
-    if (nNpcUnit3 <= (int)nNameLast) {
+    if (nNpcUnit2 <= (int)nNameLast) {
       uint32_t DVar1;
       nSlotCount = 0;
       pSlotEntry = &pNpcDataRaw->bActive;
@@ -220,17 +220,17 @@ void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nNpcClass
           break;
         }
 
-        ((D2MercForHire*)(pSlotEntry - 2))->nNameStringId = (short int)nNpcUnit3 + (short int)nSlotCount;
+        ((D2MercForHire*)(pSlotEntry - 2))->nNameStringId = (short int)nNpcUnit2 + (short int)nSlotCount;
         DVar1 = D2_SeedRoll(pNpcControl);
         pSlotEntry[-1] = DVar1;
         nSlotCount++;
         *pSlotEntry = 0;
         pSlotEntry[1] = 0;
         pSlotEntry += 4;
-      } while (nNpcUnit3 + nSlotCount <= (int)nNameLast);
+      } while (nNpcUnit2 + nSlotCount <= (int)nNameLast);
     }
 
-    int nNpcUnit2 = 0x0;
+    nNpcUnit2 = 0x0;
     do {
       nCandidateSlot = D2Common::Seed::UNIT_GetModuloFromSeed(pNpcControl, nHirelingCount);
       nSearchSlot = nCandidateSlot;
@@ -522,7 +522,7 @@ void __fastcall SendMercForHireList(::SGAMEDATA * pGame, D2ClientStrc * pClient,
     }
 
     D2MercForHire* pDVar1 = pGameNpc->pHirelingSlots;
-    D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingEntry(pGame->bExpansion, nLine, 0, 0);
+    D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingEntry(pGame->bExpansion, nLine, 0, nullptr);
     if (!pHirelingTxt) {
       *(volatile uint8_t*)0x0 = 0;
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1fb);
@@ -774,7 +774,7 @@ int __fastcall SUNITNPC_RollTradeListItemCode(::SGAMEDATA * pGame, D2UnitStrc * 
       if (nModulo && pGameNpc->sTrade.pTradeList1) {
         pDVar1 = (D2SeedStrc*)D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nModulo);
         D2_SeedRoll(pSeedSave);
-        pSeed = pDVar1;
+        nSeed = (uint32_t)pDVar1;
         D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(pGameNpc->sTrade.pTradeList1[(intptr_t)pDVar1].dwItemCode, (int*)&nSeed);
         D2Common::ITEMS::Items::TXT_Items_GetBitFieldAnd0x01(nSeed);
         *pdwOutItemCode = pGameNpc->sTrade.pTradeList1[(intptr_t)pDVar1].dwItemCode;
@@ -962,7 +962,7 @@ void __fastcall ResetNpcHireListIfEmpty(::SGAMEDATA * pGame, int32_t nNpcClassId
     D2GameNpcStrc* pNpcData = nFilledSlots;
     D2MercForHire* pHireSlotArray = nFilledSlots->pHirelingSlots;
     nFilledSlots = 0;
-    D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingEntry(pGame->bExpansion, nNpcClassId, 0, 0);
+    D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingEntry(pGame->bExpansion, nNpcClassId, 0, nullptr);
     if (!pHirelingTxt) {
       *(volatile uint8_t*)0x0 = 0;
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x632);
@@ -1586,7 +1586,7 @@ BOOL __fastcall SUNITNPC_BuyItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2Un
           __frame0.pScrollSocketItem.nScrollSocketItem = pClonedItem->nClassId;
           bCanAfford = D2Common::ITEMS::Items::INVENTORY_CheckIfItemCanBeAutoBelted(__frame0.pPlayerInventory, pClonedItem);
           if (bCanAfford) {
-            nItemGUID = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pPlayer, pClonedItem->nUnitGUID, 0, 1, (uint32_t*)&__frame0.nBeltSlotResult);
+            nItemGUID = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pPlayer, pClonedItem->nUnitGUID, 0, 1, &__frame0.nBeltSlotResult);
             if (!nItemGUID) {
               bStackBuy = 0;
               goto place_outside_belt;
@@ -2666,7 +2666,7 @@ void __fastcall HireMercFromNpc(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, int32
       }
 
       hire_first_available:
-      pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingEntry(pGame->bExpansion, nNpcClassId, (uint32_t)pGame->nDifficulty, 0);
+      pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingEntry(pGame->bExpansion, nNpcClassId, (uint32_t)pGame->nDifficulty, nullptr);
       if (!pHirelingTxt) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfa2);
         exit(-1);

@@ -13,7 +13,7 @@
 
 #ifndef RECON_FPTD_fpD2QServerLineHook
 #define RECON_FPTD_fpD2QServerLineHook
-typedef void (*fpD2QServerLineHook)(int nLine);
+typedef void (__fastcall *fpD2QServerLineHook)(uint32_t nIpAddress, char * szFile, int nLine);
 #endif
 
 int NET_D2GS_CLIENT_INCOMING_SIZE[181] = {

@@ -142,7 +142,7 @@ void __fastcall COMPRESS_DestroyEncoderContext(struct D2CompressEncoderStrc * pE
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041c3d0(struct StormLinkStrc * pNode);
 struct D2BitStreamReaderStrc * __fastcall LINKEDLIST_Unlink(struct D2BitStreamReaderStrc * pList, int, uint32_t * pNode);
-int __fastcall Unreferenced_0041d8a0(struct D2BitStreamReader32Strc * param_1);
+int __fastcall Unreferenced_0041d8a0(struct D2BitStreamReader32Strc * pReader);
 uint32_t __fastcall BITBUFFER_PeekBits(uint16_t * * pBitBuffer, int, uint16_t * nBitCount, uint32_t nMask);
 void __fastcall LINKEDLIST_Clear(uint8_t * pBitBuffer, int, int32_t nBits);
 struct D2BitStreamWriterStrc * __fastcall LINKEDLIST_InsertAfter(struct D2BitStreamWriterStrc * pList, int, uint8_t * pNode, int32_t pNewNode);
@@ -178,30 +178,33 @@ void __fastcall SCOMP_AdpcmStereoDecompress(short * pDst, uint32_t * pnDstLen, u
 // @wasnamed SCOMP_Compress
 // @basis behaviour-confirmed. (dst, pdstlen, src, srclen, methodmask, level, userdata). Counts the set bits of the method mask, rejects any bit outside the supported set (mask & 0xffffff34), walks the codec dispatch table paSCompCompressCodecTable forward applying each selected codec, ping-pongs between the destination and a scratch buffer from SCOMP_AcquireTempBuffer, drops any codec that failed to shrink the data, and writes the surviving method mask as the FIRST OUTPUT BYTE - the byte SCompDecompress reads back.
 // @seealso SCompDecompress 0041e720
-uint32_t __stdcall SCompCompress(uint8_t * pDst, uint32_t * pnDstLen, uint32_t * pSrc, uint32_t nSrcLen, uint32_t nMethodMask, uint32_t nLevel, uint32_t dwUserData);
+BOOL __stdcall SCompCompress(uint8_t * pDst, uint32_t * pnDstLen, uint32_t * pSrc, uint32_t nSrcLen, uint32_t nMethodMask, uint32_t nLevel, uint32_t dwUserData);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SCompDecompress". SComp exports exactly two symbols, SCompCompress and SCompDecompress.
 // @wasnamed SCOMP_Decompress
 // @basis behaviour-confirmed and the exact inverse of SCompCompress. (dst, pdstsize, src, srcsize, flags). Reads the leading method byte that SCompCompress wrote, rejects unsupported bits (byte & 0x34), then walks the same codec dispatch table BACKWARDS - opposite direction to the compressor - ping-ponging between the destination and a scratch buffer. srcsize == dstsize short-circuits to a plain memcpy, which is the uncompressed-sector case.
 // @seealso SCompCompress 0041e570
 BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSizeIn, uint32_t dwFlags);
 // @sourcefile .\SOURCE\SCOMP.CPP
-uint32_t __stdcall SCOMP_CleanupTempBuffer();
+BOOL __stdcall SCOMP_CleanupTempBuffer();
 struct StormLinkStrc * __fastcall HUFFMAN_GetDecodedOffset(struct StormLinkStrc * pNode, int, intptr_t pBase);
-int __fastcall Unreferenced_0041e930(struct StormLinkStrc * param_1);
+int __fastcall Unreferenced_0041e930(struct StormLinkStrc * pLink);
+uint32_t Unreferenced_0041e940();
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041e970(struct StormLinkStrc * pNode);
-void __fastcall Unreferenced_0041e9b0(struct StormLinkedListStrc * param_1);
-int __fastcall Unreferenced_0041e9d0(int * param_1, int * param_2);
+void __fastcall Unreferenced_0041e9b0(struct StormLinkedListStrc * pList);
+int __fastcall Unreferenced_0041e9d0(int * pValueA, int * pValueB);
 uint32_t __fastcall BITBUFFER_ReadBits(struct D2BitStreamReaderStrc * pBitBuf, int, uint32_t nBits, uint32_t nMask);
 void __stdcall SCOMP_DecompressSimple(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSize);
-int __fastcall Unreferenced_0041ea40(struct StormLinkStrc * param_1);
+int __fastcall Unreferenced_0041ea40(struct StormLinkStrc * pLink);
+uint32_t Unreferenced_0041ea50();
 int __fastcall Unreferenced_0041ea60(int param_1);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0041ea70(struct StormLinkStrc * pNode);
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041eae0(struct StormLinkStrc * pNode);
 int32_t __fastcall HUFFMAN_GetNextNodeOrDefault(int32_t pThis, int, int32_t nChildOrDefault);
 void __fastcall LINKEDLIST_UnlinkNode(struct StormLinkedListStrc * pThis, int, int * pNode);
-uint32_t * __fastcall Unreferenced_0041ebb0(uint32_t * param_1);
+uint32_t * __fastcall Unreferenced_0041ebb0(uint32_t * pData);
 int32_t __fastcall HUFFMAN_DecodeSymbol(struct D2HuffmanContextStrc * pThis, int, struct D2BitStreamReaderStrc * pBitBuf);
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041ed30(struct StormLinkStrc * pNode);
-struct StormLinkedListStrc * __fastcall Unreferenced_0041ed70(struct StormLinkedListStrc * param_1);
+struct StormLinkedListStrc * __fastcall Unreferenced_0041ed70(struct StormLinkedListStrc * pList);
 void __fastcall LINKEDLIST_MoveNode(int * * pListHead, int, int * * pNode, int32_t nInsertAtHead, int * * pInsertRef);
 void __fastcall LINKEDLIST_UnlinkAll(struct StormLinkedListStrc * pList);
 void * __fastcall LINKEDLIST_LinkBefore(void * pNode);

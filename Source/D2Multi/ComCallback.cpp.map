@@ -618,7 +618,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "83c8fd6b"
+      "dh": "8cfd61ac"
     },
     {
       "name": "COMCALLBACK_AddUserToChannelList",
@@ -688,7 +688,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4a2b5830"
+      "dh": "db3985bd"
     },
     {
       "name": "COMCALLBACK_HandleChannelJoin",
@@ -747,7 +747,7 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "3d1f4d7f",
+      "dh": "6aa3f11e",
       "paramStorage": [
         [
           "dwParam",
@@ -1320,7 +1320,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1bc188de",
+      "dh": "20b3c237",
       "paramStorage": [
         [
           "pnClickMsg",
@@ -1356,7 +1356,7 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "30d6c993",
+      "dh": "ce6b1d82",
       "paramStorage": [
         [
           "pControlMsg",
@@ -1391,7 +1391,7 @@
         "WCHAR",
         "uint8_t"
       ],
-      "dh": "78145742",
+      "dh": "9fedd9d1",
       "paramStorage": [
         [
           "pControlMsg",
@@ -1600,7 +1600,7 @@
         "WCHAR",
         "uint8_t"
       ],
-      "dh": "ca9e77f8",
+      "dh": "ddcbf152",
       "paramStorage": [
         [
           "szUsername",
@@ -1633,7 +1633,7 @@
         "D2ChannelUserStrc",
         "WCHAR"
       ],
-      "dh": "2ebe2787"
+      "dh": "138ca975"
     },
     {
       "name": "COMCALLBACK_HandleChannelUserLeave",

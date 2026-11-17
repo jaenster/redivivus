@@ -428,12 +428,13 @@ void __fastcall Q23_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       if (bLamEsenDone == 1) {
         dwJournalStringId = 0x1cf;
         nPlayerGUID = 2;
+        QUEST_SetStateFlag(pQuestData, nPlayerGUID, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q6.cpp", dwJournalStringId);
       } else {
         dwJournalStringId = 0x1d3;
         nPlayerGUID = 3;
+        QUEST_SetStateFlag(pQuestData, nPlayerGUID, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q6.cpp", dwJournalStringId);
       }
 
-      QUEST_SetStateFlag(pQuestData, nPlayerGUID, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q6.cpp", dwJournalStringId);
       pQuestData->pQuestSpecificData.pA3Q6->bAcceptedQuest = '\x01';
       QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
       return;

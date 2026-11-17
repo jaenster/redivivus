@@ -1489,8 +1489,24 @@ void __fastcall Q33_AnyaTimerCallback(D2QuestDataStrc * pQuestData, D2UnitStrc *
 
 // Q33_GetAnyaCoordinates (PrisonOfIce): returns the stored portal coords if active, portal spawned and Anya not yet
 // running. Used to locate the rescue portal.
+#if 0 // ratchet: the match body of 0058a7d0 (evidence 1985bb0f9) could not be re-spelled: parameter 0 retyped: void * -> SGAMEDATA *
 uint32_t __fastcall Q33_GetAnyaCoordinates(void * pThis, int, int32_t * pOutCoords) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal((::SGAMEDATA*)pThis, QUESTINT_PrisonOfIce);
+    if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
+      D2QuestDataA5Q3Strc* pA5Q3Data;
+      pA5Q3Data = pQuestData->pQuestSpecificData.pA5Q3;
+      if (pA5Q3Data->bPortalSpawned && !pA5Q3Data->bAnyaCanRun) {
+        *pOutCoords = pA5Q3Data->nPortalSpawnX;
+        pOutCoords[1] = pA5Q3Data->nPortalSpawnY;
+        return 1;
+      }
+    }
+
+    return 0;
+}
+#endif
+BOOL __fastcall Q33_GetAnyaCoordinates(::SGAMEDATA * pGame, int, int32_t * pOutCoords) {
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_PrisonOfIce);
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
       D2QuestDataA5Q3Strc* pA5Q3Data;
       pA5Q3Data = pQuestData->pQuestSpecificData.pA5Q3;
@@ -1523,8 +1539,7 @@ BOOL __fastcall Q33_SpawnPortalNearAnya(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
       return 0;
     }
 
-    int nPortalY = pDVar2->sAnyaPosition.y;
-    D2RoomStrc* pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), pDVar2->sAnyaPosition.x, nPortalY);
+    D2RoomStrc* pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), pDVar2->sAnyaPosition.x, pDVar2->sAnyaPosition.y);
     if (!pNearbyRoom) {
       pDVar2->sAnyaPosition.x += 3;
       pDVar2->sAnyaPosition.y += 3;
@@ -1787,20 +1802,19 @@ void __fastcall Q33_OnPresetObjectLoad1(void * pThis, int, D2MapAIStrc * pMapAI)
       return;
     }
 
-    D2MapAIStrc** ppDrlgMap = &pQuestSpecificData->pDrlgMap;
     D2MapAIStrc* pCopiedPreset = D2Common::Drlg::Preset::DRLGPRESET_CopyMapAI(pQuestData->pGame->pMemoryPool, pMapAI);
-    *ppDrlgMap = pCopiedPreset;
+    pQuestSpecificData->pDrlgMap = pCopiedPreset;
     if (!pQuestSpecificData->bFrozenAnyaSpawned) {
       return;
     }
 
     D2UnitStrc* pFrozenAnya = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_MONSTER, pQuestSpecificData->nFrozenAnyaGUID);
-    if (!(pFrozenAnya && *ppDrlgMap && (*ppDrlgMap)->pPosition && !pQuestSpecificData->bDrlgMapTaken)) {
+    if (!(pFrozenAnya && pQuestSpecificData->pDrlgMap && pQuestSpecificData->pDrlgMap->pPosition && !pQuestSpecificData->bDrlgMapTaken)) {
       return;
     }
 
     D2MapAIStrc** ppMonsterMapAi = Ai::AiGeneral::GetMonsterMapAi(pFrozenAnya);
-    D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(ppDrlgMap, ppMonsterMapAi);
+    D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(&pQuestSpecificData->pDrlgMap, ppMonsterMapAi);
     pQuestSpecificData->bDrlgMapTaken = 1;
 }
 

@@ -376,26 +376,25 @@ BOOL __fastcall Skills_CltDoFunc_DualMissileAtCoords(D2UnitStrc * pUnit, eD2Skil
 
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 1;
+    sSkillArg.pOwner = pUnit;
     sSkillArg.nX = nCoordX;
     sSkillArg.nY = nCoordY;
-    sSkillArg.nSkillLevel = nSkillLvl;
-    sSkillArg.pOwner = pUnit;
     sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nSkillLevel = nSkillLvl;
     if (pSkillTxt->cltmissile[1] >= 0) {
-      sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[1];
-      if ((int)sSkillArg.nMissileTxtNo < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+      if ((int)(eMissilesId)pSkillTxt->cltmissile[1] < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+        sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[1];
         UNIT::Missile::MakeMissile(&sSkillArg);
       }
     }
     if (pSkillTxt->cltmissile[2] < 0) {
       return 1;
     }
-
-    sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[2];
-    if ((int)sSkillArg.nMissileTxtNo >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+    if ((int)(eMissilesId)pSkillTxt->cltmissile[2] >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 1;
     }
 
+    sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[2];
     D2UnitStrc* pUnit_00 = UNIT::Missile::MakeMissile(&sSkillArg);
     if (pUnit_00) {
       D2Common::Units::Missile::SetTargetX(pUnit_00, pUnit->nInitSeed);

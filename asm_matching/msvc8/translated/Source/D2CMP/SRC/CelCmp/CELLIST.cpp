@@ -26,6 +26,22 @@ void __fastcall Destructor(::CELLIST * pThis, int) {
     pThis->Destructor();
 }
 
+void Unreferenced_00602bd0() {
+    uint32_t* in_ECX;
+    uint32_t* in_EDX;
+    if (!in_ECX) {
+      return;
+    }
+
+    uint32_t* puVar1 = in_ECX + 1;
+    *puVar1 = 0;
+    in_ECX[2] = 0;
+    uint32_t uVar2 = *in_EDX;
+    *puVar1 = (uint32_t)(uintptr_t)puVar1;
+    *in_ECX = uVar2;
+    in_ECX[2] = ~(uint32_t)puVar1;
+}
+
 ::CELLIST * __fastcall ScalarDeletingDestructor(::CELLIST * pThis, int, uint32_t dwFlags) {
     TSList<TCELENTRY, TSGetLink<TCELENTRY>>* pList = &pThis->m_frames;
     pList->UnlinkAll();

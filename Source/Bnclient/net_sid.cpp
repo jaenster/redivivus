@@ -88,12 +88,12 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_ChatEvent(char * pBytes, size_t nSize) {
     return 1;
 }
 
-void __fastcall Unreferenced_00520680(D2XSHA1Strc * param_1) {
-    param_1->h[0] = 0x67452301;
-    param_1->h[1] = 0xefcdab89;
-    param_1->h[2] = 0x98badcfe;
-    param_1->h[3] = 0x10325476;
-    param_1->h[4] = 0xc3d2e1f0;
+void __fastcall Unreferenced_00520680(D2XSHA1Strc * pSha1) {
+    pSha1->h[0] = 0x67452301;
+    pSha1->h[1] = 0xefcdab89;
+    pSha1->h[2] = 0x98badcfe;
+    pSha1->h[3] = 0x10325476;
+    pSha1->h[4] = 0xc3d2e1f0;
 }
 
 // Battle.net "broken SHA-1" (XSHA1) block transform: schedule W[i] = ROL(1, (W[i-3]^W[i-8]^W[i-14]^W[i-16]) & 31), block copied without byte swap.
@@ -314,9 +314,9 @@ uint32_t __fastcall SID_GetPacketResponseFlag(uint8_t nPacketId) {
     return g_SIDPacketResponseFlags[nPacketId];
 }
 
-int __fastcall Unreferenced_00520c30(uint8_t param_1, int param_2) {
-    g_SIDPacketResponseFlags[param_1] = param_2;
-    return (uint32_t)param_1;
+int __fastcall Unreferenced_00520c30(uint8_t byPacketId, int nValue) {
+    g_SIDPacketResponseFlags[byPacketId] = nValue;
+    return (uint32_t)byPacketId;
 }
 
 BOOL __fastcall NET_SID_CLIENT_IncomingReturn(char * pBytes, size_t nSize) {
@@ -655,7 +655,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthInfo(SID_S2C_AuthInfo * pPacketData,
     ftArchiveTimestamp.dwLowDateTime = pPacketData->ftArchiveTimeLow;
     ftArchiveTimestamp.dwHighDateTime = pPacketData->ftArchiveTimeHigh;
     uint32_t dwClientToken = pPacketData->dwClientToken;
-    uint32_t dwServerToken = pPacketData->dwServerToken;
+    DWORD dwServerToken = pPacketData->dwServerToken;
     char* szText = &pPacketData->szArchiveFilename;
     uint32_t pArchiveNameEnd = Storm::Source::SSTR::SStrLen(szText);
     char* szCheckRevisionFormula = szText + (pArchiveNameEnd + 1);
@@ -1646,9 +1646,9 @@ void __fastcall NET_SID_CLIENT_SetCDKeyNibble(uint32_t * pCdKeyData, uint32_t nN
     pCdKeyData[nWordIndex] = ~(0xf << nBitShift) & pCdKeyData[nWordIndex] | (nNibbleValue & 0xf) << nBitShift;
 }
 
-int __fastcall Unreferenced_00522570(uint32_t * param_1, int param_2) {
-    int32_t bVar1 = param_2 & 0x1f;
-    return (param_1[3 - ((uint32_t)param_2 >> 5)] & 1 << bVar1) >> bVar1;
+int __fastcall Unreferenced_00522570(uint32_t * pBits, int nBitIndex) {
+    int32_t bVar1 = nBitIndex & 0x1f;
+    return (pBits[3 - ((uint32_t)nBitIndex >> 5)] & 1 << bVar1) >> bVar1;
 }
 
 void __fastcall NET_SID_CLIENT_SetCDKeyBit(uint32_t * pCdKeyData, uint32_t nBitIndex, uint8_t nBitValue) {
@@ -1947,10 +1947,10 @@ void __fastcall NET_SID_CLIENT_ExpandCdKeyToBase5(char * pCdKeyString, uint8_t *
     do {
       uint32_t outIdx1;
       outIdx1 = (outIdx2 + 0x7b5) % 0x34;
-      nextInIdx = inIdx + 1;
       outIdx2 = (outIdx1 + 0x7b5) % 0x34;
       digitValue = g_CdKeyCharToDigitTable[(uint8_t)pCdKeyString[inIdx]];
       pOutBase5[outIdx1] = digitValue / 5;
+      nextInIdx = inIdx + 1;
       pOutBase5[outIdx2] = digitValue % 5;
       inIdx = nextInIdx;
     } while (nextInIdx < 0x1a);
@@ -2148,24 +2148,37 @@ void __fastcall NET_SID_CLIENT_GenerateRandomString(char * szOutBuf, int32_t nLe
 }
 
 void __thiscall NET_SID_CLIENT_EncodeCDKeyHash(char * pThis, int32_t nSeed) {
+    // Frame -92..-8 is ONE Ghidra variable the decompiler printed as 2 locals.
+    // Separate locals let the compiler reorder them, so the pieces are one struct.
+    struct __frame0_t {
+      uint32_t local_5c;
+      uint8_t __pad4[60];
+      uint32_t uStack_1c;
+      uint8_t __pad68[16];
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 84, "frame group __frame0_t must reproduce the Ghidra frame layout");
+    __frame0_t __frame0;
     int nRandByte;
     int nKeyCharIdx;
     int nKeyCharIdx2;
-    uint8_t hashWorkBuf[196];
+    uint32_t hashWorkBuf;
+    uint32_t local_9c_unused[16];
     char cKeyChar;
+    uint8_t* pIdeaKeyBuf;
+    uint8_t* pShaHashBuf;
     if (!pThis) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4e);
       exit(-1);
     }
 
     srand(0x4fa7);
-    uint8_t* pRandBufPos = hashWorkBuf;
+    uint32_t* pRandBufPos = &hashWorkBuf;
     int nKeyCharOffset = 0x70;
     do {
       nKeyCharOffset--;
       nRandByte = rand();
-      *pRandBufPos = (uint8_t)nRandByte;
-      pRandBufPos++;
+      *(char*)pRandBufPos = (char)nRandByte;
+      pRandBufPos = (uint32_t*)((char*)pRandBufPos + 1);
     } while (nKeyCharOffset);
 
     uint32_t nXorIdx = _time32(nullptr);
@@ -2179,51 +2192,54 @@ void __thiscall NET_SID_CLIENT_EncodeCDKeyHash(char * pThis, int32_t nSeed) {
 
       nKeyCharIdx = nKeyCharOffset + 1;
       cKeyChar = pThis[nKeyCharIdx];
-      hashWorkBuf[nRandByte + 0x70] = pThis[nKeyCharOffset];
+      *(char*)((intptr_t)&__frame0.local_5c + nRandByte) = pThis[nKeyCharOffset];
       if (cKeyChar == '\0') {
         nKeyCharIdx = 0;
       }
 
       nKeyCharIdx2 = nKeyCharIdx + 1;
       cKeyChar = pThis[nKeyCharIdx2];
-      hashWorkBuf[nRandByte + 0x71] = pThis[nKeyCharIdx];
+      *(char*)((intptr_t)&__frame0.local_5c + (nRandByte + 1)) = pThis[nKeyCharIdx];
       if (cKeyChar == '\0') {
         nKeyCharIdx2 = 0;
       }
 
       nKeyCharOffset = nKeyCharIdx2 + 1;
       cKeyChar = pThis[nKeyCharOffset];
-      hashWorkBuf[nRandByte + 0x72] = pThis[nKeyCharIdx2];
+      *(char*)((intptr_t)&__frame0.local_5c + (nRandByte + 2)) = pThis[nKeyCharIdx2];
       if (cKeyChar == '\0') {
         nKeyCharOffset = 0;
       }
 
-      hashWorkBuf[nRandByte + 0x73] = pThis[nKeyCharOffset];
+      *(char*)((intptr_t)&__frame0.local_5c + (nRandByte + 3)) = pThis[nKeyCharOffset];
       nRandByte += 4;
       nKeyCharOffset++;
     } while (nRandByte < 0x40);
 
     NET_SID_CLIENT_InitSHAContext(0);
-    NET_SID_CLIENT_SHA1Compress(0, (uint32_t*)(hashWorkBuf + 0x70), (uint32_t*)(hashWorkBuf + 0xb0));
+    NET_SID_CLIENT_SHA1Compress(0, &__frame0.local_5c, &__frame0.uStack_1c);
     NET_SID_CLIENT_ClearSHAContexts();
     nXorIdx = 0;
     do {
-      pRandBufPos = hashWorkBuf + nXorIdx;
-      *pRandBufPos ^= hashWorkBuf[nXorIdx % 0x14 + 0xb0];
-      hashWorkBuf[nXorIdx + 1] ^= hashWorkBuf[nXorIdx + (uint32_t)(pRandBufPos - hashWorkBuf + 1) / 0x14 * -0x14 + 0xb1];
-      hashWorkBuf[nXorIdx + 2] ^= hashWorkBuf[nXorIdx + (uint32_t)(pRandBufPos - hashWorkBuf + 2) / 0x14 * -0x14 + 0xb2];
-      hashWorkBuf[nXorIdx + 3] ^= hashWorkBuf[nXorIdx + (uint32_t)(pRandBufPos - hashWorkBuf + 3) / 0x14 * -0x14 + 0xb3];
+      pIdeaKeyBuf = (uint8_t*)((intptr_t)&hashWorkBuf + nXorIdx);
+      *pIdeaKeyBuf ^= *(uint8_t*)((intptr_t)&__frame0.uStack_1c + nXorIdx % 0x14);
+      pShaHashBuf = (uint8_t*)((intptr_t)&hashWorkBuf + (nXorIdx + 1));
+      *pShaHashBuf ^= *(uint8_t*)((intptr_t)&__frame0.uStack_1c + nXorIdx + (uint32_t)((char*)pIdeaKeyBuf - (char*)&hashWorkBuf + 1) / 0x14 * -0x14 + 1);
+      pShaHashBuf = (uint8_t*)((intptr_t)&hashWorkBuf + (nXorIdx + 2));
+      *pShaHashBuf ^= *(uint8_t*)((intptr_t)&__frame0.uStack_1c + nXorIdx + (uint32_t)((char*)pIdeaKeyBuf - (char*)&hashWorkBuf + 2) / 0x14 * -0x14 + 2);
+      pShaHashBuf = (uint8_t*)((intptr_t)&hashWorkBuf + (nXorIdx + 3));
+      *pShaHashBuf ^= *(uint8_t*)((intptr_t)&__frame0.uStack_1c + nXorIdx + (uint32_t)((char*)pIdeaKeyBuf - (char*)&hashWorkBuf + 3) / 0x14 * -0x14 + 3);
       nXorIdx += 4;
     } while (nXorIdx < 0x70);
 
     nKeyCharOffset = 0;
-    pRandBufPos = hashWorkBuf;
+    uint32_t* pdwKeyMaterial = &hashWorkBuf;
     do {
-      NET_SID_CLIENT_SetupIDEAKey(nKeyCharOffset, nSeed, (uint32_t*)pRandBufPos);
+      NET_SID_CLIENT_SetupIDEAKey(nKeyCharOffset, nSeed, pdwKeyMaterial);
       NET_SID_CLIENT_InitSHAContext(nKeyCharOffset);
-      NET_SID_CLIENT_SHA1Compress(nKeyCharOffset, (uint32_t*)(hashWorkBuf + 0x30), nullptr);
+      NET_SID_CLIENT_SHA1Compress(nKeyCharOffset, local_9c_unused, nullptr);
       nKeyCharOffset++;
-      pRandBufPos += 0x10;
+      pdwKeyMaterial += 4;
     } while (nKeyCharOffset < 3);
 }
 
@@ -2256,7 +2272,7 @@ int32_t __fastcall NET_SID_CLIENT_DecodeCDKeyHash(int * pnData, uint32_t nDataSi
       if (nDataSize <= 8) {
         return 0;
       }
-      if ((nAlignedLen = nDataSize - 8 , (nAlignedLen & 0x3f) != 0)) {
+      if (nAlignedLen = nDataSize - 8 , (nAlignedLen & 0x3f) != 0) {
         return 0;
       }
 
@@ -2873,11 +2889,11 @@ void __fastcall NET_SID_CLIENT_SHA1Compress(int32_t nCtxIndex, uint32_t * pdwBlo
     }
 
     *(int*)(g_SHA1Contexts + (nCtxOffset + 0x14)) = nCtxOffset2;
-    uint8_t* pCtxBlock = g_SHA1Contexts + (nCtxOffset + 0x1c);
+    uint32_t* pCtxBlock = (uint32_t*)(g_SHA1Contexts + (nCtxOffset + 0x1c));
     for (nCtxOffset2 = 0x10; nCtxOffset2; nCtxOffset2--) {
-      *(uint32_t*)pCtxBlock = *pdwBlock;
+      *pCtxBlock = *pdwBlock;
       pdwBlock++;
-      pCtxBlock += 4;
+      pCtxBlock++;
     }
 
     SHA0_Transform((uint32_t*)(g_SHA1Contexts + nCtxOffset));
@@ -2972,7 +2988,7 @@ void __fastcall NET_SID_CLIENT_IDEAExpandKey(uint16_t * pUserKey, uint16_t * pEx
     do {
       uint32_t nextIdx;
       nextIdx = uVar1 + 1 & 7;
-      pExpandedSubkeys[uVar1 + 8] = (uint16_t)pExpandedSubkeys[uVar1 + 2 & 7] >> 7 | pExpandedSubkeys[nextIdx] << 9;
+      pExpandedSubkeys[uVar1 + 8] = pExpandedSubkeys[uVar1 + 2 & 7] >> 7 | pExpandedSubkeys[nextIdx] << 9;
       remainingSubkeys--;
       pExpandedSubkeys += uVar1 + 1 & 8;
       uVar1 = nextIdx;

@@ -394,14 +394,14 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "4f321d80",
+      "dh": "079d5090",
       "paramStorage": [
         [
-          "param_1",
+          "pUnit",
           "ECX:4"
         ],
         [
-          "param_2",
+          "nNecroPetGUID",
           "EDX:4"
         ]
       ]
@@ -1474,10 +1474,10 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "b00edb12",
+      "dh": "ed932e39",
       "paramStorage": [
         [
-          "param_1",
+          "pUnit",
           "ECX:4"
         ]
       ]

@@ -222,6 +222,7 @@ static uint32_t __stdcall PLAYER_PlaceItemInInventory(::SGAMEDATA * pGame, int32
     }
 }
 
+#if 0 // ratchet: the match body of 00534bb0 (evidence 1985bb0f9) could not be re-spelled: callee ITEMS::ItemMode::SERVER_EquipItemToBodyLoc parameter pbBadParams retyped: uint32_t * -> BOOL *
 static BOOL __stdcall PLAYER_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     BOOL bEquipResult;
     uint32_t dwEquipResultOut;
@@ -242,7 +243,29 @@ static BOOL __stdcall PLAYER_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc 
       return (uint32_t)(bEquipResult != 0);
     }
 }
+#endif
+static BOOL __stdcall PLAYER_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+    BOOL bEquipResult;
+    uint32_t dwEquipResultOut;
+    uint32_t* pResultOut;
+    if (!pUnit2) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc6);
+      exit(-1);
+    } else {
+      DWORD nItemGUID_00;
+      if (!pUnit) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 199);
+        exit(-1);
+      }
 
+      nItemGUID_00 = pUnit2->nUnitGUID;
+      pResultOut = &dwEquipResultOut;
+      bEquipResult = ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit, nItemGUID_00, D2Common::ITEMS::Items::GetBodyLocation(pUnit2), 1, (BOOL*)pResultOut);
+      return (uint32_t)(bEquipResult != 0);
+    }
+}
+
+#if 0 // ratchet: the match body of 00534c10 (evidence 1985bb0f9) could not be re-spelled: callee ITEMS::ItemMode::ITEM_TryPlaceInBelt parameter pbBadParams retyped: uint32_t * -> BOOL *
 static uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t bAutoPlace, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     BOOL bBeltPlaced;
     int32_t dwGUID;
@@ -261,6 +284,28 @@ static uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t bA
       pnBeltSlot = &bAutoPlace;
       dwGUID = bAutoPlace;
       bBeltPlaced = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, nItemGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit2), dwGUID, (uint32_t*)pnBeltSlot);
+      return (uint32_t)(bBeltPlaced != 0);
+    }
+}
+#endif
+static uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t bAutoPlace, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+    BOOL bBeltPlaced;
+    int32_t dwGUID;
+    int32_t* pnBeltSlot;
+    if (!pUnit2) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd8);
+      exit(-1);
+    } else {
+      DWORD nItemGUID;
+      if (!pUnit) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd9);
+        exit(-1);
+      }
+
+      nItemGUID = pUnit2->nUnitGUID;
+      pnBeltSlot = &bAutoPlace;
+      dwGUID = bAutoPlace;
+      bBeltPlaced = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, nItemGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit2), dwGUID, pnBeltSlot);
       return (uint32_t)(bBeltPlaced != 0);
     }
 }
@@ -306,7 +351,7 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
     // Frame slots -20..-4 are ONE object: &dwBeltSlotOut is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
-      uint32_t dwBeltSlotOut;
+      BOOL dwBeltSlotOut;
       int32_t nItemTxtLine;
       int i;
       ::SGAMEDATA* pGameSaved;

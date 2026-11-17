@@ -235,7 +235,10 @@ D2UnitStrc * __stdcall CLIENTS_GetControlUnit(D2ClientStrc * pClient, int32_t al
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfb);
       exit(-1);
     }
-    if (!(!(pClient->fClientFlags & 1) && !alwaysZero)) {
+    if (pClient->fClientFlags & 1) {
+      return pClient->pPlayer;
+    }
+    if (alwaysZero) {
       return pClient->pPlayer;
     }
     if (!pClient->pPlayer) {
@@ -309,7 +312,7 @@ void __fastcall AppearenceItems(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint
     exit(-1);
 }
 
-void __fastcall AppearenceItems2(uint32_t pClient, D2UnitStrc * pUnit, uint32_t * pAppearanceBuf, uint32_t nBufSize) {
+void __fastcall AppearenceItems2(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint32_t * pAppearanceBuf, uint32_t nBufSize) {
     char szAppearanceTmp[16];
     if (nBufSize >= 0x10 && pUnit) {
       *pAppearanceBuf = -1;
@@ -979,7 +982,7 @@ void __fastcall SetClientStatus(D2ClientStrc * pClient, int32_t nQuestProgress, 
       return;
     }
 
-    pClient->nCharacterStatus = (short int)nDifficulty * (short int)nDifficultyBase + (short int)nQuestProgress << 8 | pClient->nCharacterStatus & 0xe0ff;
+    pClient->nCharacterStatus = ((short int)nDifficulty * (short int)nDifficultyBase + (short int)nQuestProgress) * 0x100 | pClient->nCharacterStatus & 0xe0ff;
 }
 
 // Sets client connection state (0=Initial, 1=GameCreated, 2=LoadingAct, 3=WaitingRooms, 4=FullyPlaying, 5/6=ChangingAct teardown). Simple state machine transition with validation. Part of 6-state join flow from Initial through FullyPlaying.
@@ -1174,7 +1177,7 @@ void __fastcall SendPongByClientId(uint32_t nClientId, int32_t dwSendTick, int32
 
         qwNewAvgPing = _aulldiv(nSampleCount, dwPingAccumHi, nSamplesToAvg, (int)nSamplesToAvg >> 0x1f);
         pClient->tQServerExt.qwAveragePingTicks = qwNewAvgPing;
-        SCmd::NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(pClient);
+        SCmd::NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(pClient, dwSendTick);
         pClient->dwTimeOut = dwNowTick;
       }
 
@@ -1206,7 +1209,7 @@ void __fastcall SendPongByClientId(uint32_t nClientId, int32_t dwSendTick, int32
         pClient->tQServerExt.qwAveragePingTicks = qwNewAvgPing;
       }
 
-      SCmd::NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(pClient);
+      SCmd::NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(pClient, dwSendTick);
       pClient->tQServerExt.nHeartbeatSampleCount++;
       pClient->dwTimeOut = dwNowTick;
     }
@@ -1572,8 +1575,13 @@ void __fastcall GetAccountName(D2ClientStrc * pClient, char * szText) {
     Storm::Source::SSTR::SStrCopy(szText, pClient->szAccName, 0x32);
 }
 
+#if 0 // ratchet: the match body of 00539300 (evidence 1985bb0f9) could not be re-spelled: parameter 1 retyped: uint32_t * -> void * *
 void __fastcall GetClientContainer(D2ClientStrc * pClient, uint32_t * pdwContainer) {
     *pdwContainer = (uint32_t)(uintptr_t)pClient->pClientContainer;
+}
+#endif
+void __fastcall GetClientContainer(D2ClientStrc * pClient, void * * pdwContainer) {
+    *pdwContainer = pClient->pClientContainer;
 }
 
 void __fastcall GetRealm(D2ClientStrc * pClient, uint32_t * pdwRealm) {

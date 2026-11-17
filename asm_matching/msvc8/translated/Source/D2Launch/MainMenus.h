@@ -123,8 +123,9 @@ void __fastcall FORMS_DestroyEncoderContext_Thunk_Unref_0041f940(uint32_t * pEnc
 uint16_t __fastcall Unreferenced_0042e5c0(uint16_t nValue);
 void __fastcall CRYPTO_ByteSwap16Array(uint16_t * pArray, uint32_t nCount);
 uint16_t * __fastcall CRYPTO_ByteSwap32Array(uint16_t * pwOut, int, uint16_t wValue);
-int __fastcall Unreferenced_0042e620(uint16_t * param_1);
-int __fastcall Unreferenced_0042e630(uint16_t * param_1);
+uint16_t Unreferenced_0042e610();
+int __fastcall Unreferenced_0042e620(uint16_t * pChar);
+int __fastcall Unreferenced_0042e630(uint16_t * pChar);
 void __fastcall CRYPTO_ByteSwap64Array(uint16_t * pwIn, int, uint16_t * pwOut);
 void __fastcall MAINMENU_SetGlobalValue1(pfnUIMenuInstance pfnMenuInstance);
 void __stdcall MAINMENU_SetGlobalFlag();
@@ -163,7 +164,7 @@ BOOL __stdcall MAINMENU_ReadBattleNetRegistry();
 uint32_t __stdcall MAINMENU_CheckBattleNetIPFlag();
 // Displays main menu screen before menu UI. Creates background forms with sky palette, retrieves copyright string (classic: 0x13f0, expansion: 0x557a), searches for year "2000"/"2001" and replaces with "2000 - 2016" to update copyright range, converts UTF8 to wide char, sets textbox text, hides cursor, and enables music if configured.
 void __stdcall UIMENU_MainScreenBeforeMenu();
-uint32_t __fastcall MAINMENU_CheckFileExists(char * szFileName);
+BOOL __fastcall MAINMENU_CheckFileExists(char * szFileName);
 void __stdcall MAINMENU_CloseAndLaunchCharSelect();
 int __stdcall MAINMENU_ValidateCharNameChar(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar);
 // Edit-box key filter installed via D2WINEDITBOX_SetMaxLength @004fdad0 into D2WinEditBox+0x268 (fpFilterCallback, fpD2WinEditBoxFilter). Body is MOV EAX,1 / RET 0xc - accepts every character. Signature proven by RET 0xc (3 stack args, callee cleans) and by the funcdef of the slot it is stored into.
@@ -243,6 +244,7 @@ void __stdcall MAINMENU_AppendCreditsEnd();
 uint16_t * __stdcall MAINMENU_LoadCreditsFile(uint32_t * pnCharCount);
 void __stdcall MAINMENU_SyncCreditsColumns();
 void __stdcall Unreferenced_00431020();
+void Unreferenced_00431040();
 // @sourcefile .\Src\MainMenus.cpp
 // Registers: nReserved (ECX) is 0 at the only call site and not read.
 int __fastcall MAINMENU_DisplayCredits(int32_t nReserved);
@@ -292,7 +294,7 @@ void __fastcall UIMENU_CreatePopupWithContent(uint16_t * wszTitle, uint16_t * ws
 void __fastcall UIMENU_CreatePopupWithContentAndFooter(uint16_t * wszTitle, uint16_t * wszContent, uint16_t * wszFooter, pfnUIMenuInstance pMenuInstance);
 void __fastcall UIMENU_CrashingCantTestIt(uint16_t * wszText1, uint16_t * wszText2, uint16_t * wszText3, uint16_t * wszText4, pfnUIMenuInstance pfnMenuInstance);
 void __fastcall MAINMENU_ShowPopupDialog(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance, int32_t bHasCancel);
-void __fastcall Unreferenced_00433440(uint16_t * param_1, pfnUIMenuInstance param_2);
+void __fastcall Unreferenced_00433440(uint16_t * wszText, pfnUIMenuInstance pfnMenu);
 void __fastcall MAINMENU_ShowPopupWithCancel(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance);
 void __fastcall UIMENU_CreateSmallPopup(uint16_t * wszTitle, pfnUIMenuInstance pfnMenuInstance);
 BOOL __stdcall MAINMENU_DismissPopup(struct D2ControlStrc * pControl);
@@ -345,10 +347,10 @@ BOOL __stdcall MAINMENU_OnPressSelectBattleNet(struct D2ControlMsg * pControlMsg
 BOOL __stdcall MAINMENU_OnPressRealmList(struct D2ControlMsg * pMsg);
 uint32_t __stdcall thunk_UIMENU_CreateHeroSinglePlayer(struct D2ControlMsg * pControlMsg);
 void __stdcall NET_MCP_CLIENT_HandleCharCreation();
-// BNet login submit handler. Reads account/password from gbPasswordChangeInProgress-related inputs, calls launcher authentication. On success, transitions to char select or creates hero.
-BOOL __stdcall MAINMENU_Unused13(struct D2ControlStrc * pControl);
+// LOG IN button (string 5288) of the Battle.net login form, also the submit callback of its account and password edit boxes. With pControl NULL returns to the main menu. Otherwise, if the password-change button is visible, saves account and password to the launcher settings, logs in through EnterEmailMessagePumper and goes on to character select (Battle.net), the save-file character select, or hero creation.
+BOOL __stdcall MAINMENU_OnPressLogIn(struct D2ControlStrc * pControl);
 BOOL __stdcall MAINMENU_OnPressReturnToMainMenuAgain(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_Unused14(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressNewAccountNoticeOk(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressDestroyListAndReturnToMainMenuAgain(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_SetUIActiveAndMainMenuAgain(struct D2ControlMsg * pControlMsg);
 int __stdcall Unreferenced_00436340(int param_1);

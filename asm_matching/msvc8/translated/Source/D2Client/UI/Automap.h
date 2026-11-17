@@ -147,7 +147,7 @@ void __fastcall AUTOMAP_RotateCellLeft(uint32_t dwUnused, struct D2AutomapCellSt
 void __stdcall AUTOMAP_RebalanceTreeRight(struct D2AutomapCellStrc * * ppRootNode);
 // AVL tree left rebalance: handles single left rotation (right-right case) and double left-right rotation based on grandchild balance factor. Halts on unexpected balance states.
 void __stdcall AUTOMAP_RebalanceTreeLeft(struct D2AutomapCellStrc * * ppCell);
-int __fastcall Unreferenced_00457ac0(struct D2AutomapCellStrc * param_1, struct D2AutomapCellStrc * param_2);
+int __fastcall Unreferenced_00457ac0(struct D2AutomapCellStrc * pCellA, struct D2AutomapCellStrc * pCellB);
 // AUTOMAP_InsertCellIntoTree - Inserts an automap cell into an AVL tree.
 // Cells are sorted by (yPixel, xPixel, cellNo) with AVL self-balancing
 // using wWeight as the balance factor (-1, 0, +1).

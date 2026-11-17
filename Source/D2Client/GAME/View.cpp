@@ -157,12 +157,12 @@ uint8_t * __stdcall VIEW_AllocByteTable(uint32_t nDim, int32_t nSteps) {
     return pTable;
 }
 
-void __fastcall Unreferenced_00475c30(LPVOID param_1) {
-    if (!param_1) {
+void __fastcall Unreferenced_00475c30(LPVOID pMemory) {
+    if (!pMemory) {
       return;
     }
 
-    D2Hell::D2MEM_VirtualFree(param_1);
+    D2Hell::D2MEM_VirtualFree(pMemory);
 }
 
 // Allocates a (nDim × nDim × (nSteps+1)) pointer table via D2MEM_VirtualAlloc and fills it with pointers into gPaletteTransitionTable for each interpolated palette entry. Used to build lighting/palette blend lookup tables for the game view renderer. Returns the base pointer of the allocated table.
@@ -210,12 +210,12 @@ uint8_t * * __stdcall VIEW_AllocPalettePointerTable(uint32_t nDim, uint32_t nSte
     return pTable;
 }
 
-void __fastcall Unreferenced_00475d20(LPVOID param_1) {
-    if (!param_1) {
+void __fastcall Unreferenced_00475d20(LPVOID pMemory) {
+    if (!pMemory) {
       return;
     }
 
-    D2Hell::D2MEM_VirtualFree(param_1);
+    D2Hell::D2MEM_VirtualFree(pMemory);
 }
 
 uint8_t * * __stdcall VIEW_AllocPalettePointerTable2(uint32_t nDim, int32_t nSteps) {
@@ -253,12 +253,12 @@ uint8_t * * __stdcall VIEW_AllocPalettePointerTable2(uint32_t nDim, int32_t nSte
     return pTable;
 }
 
-void __fastcall Unreferenced_00475de0(LPVOID param_1) {
-    if (!param_1) {
+void __fastcall Unreferenced_00475de0(LPVOID pMemory) {
+    if (!pMemory) {
       return;
     }
 
-    D2Hell::D2MEM_VirtualFree(param_1);
+    D2Hell::D2MEM_VirtualFree(pMemory);
 }
 
 void __stdcall VIEW_InitLookupTables() {

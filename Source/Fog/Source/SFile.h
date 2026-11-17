@@ -109,7 +109,8 @@ void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 int __fastcall SFILE_EnsurePathEndsWithBackslash(char * szText1, uint32_t nMaxLen);
 int __fastcall SFILE_MoveDirectoryRecursive(LPCSTR szSrcRoot, LPCSTR szDstRoot);
-uint32_t * __fastcall Unreferenced_00407260(uint32_t * param_1);
+uint32_t * __fastcall Unreferenced_00407260(uint32_t * pData);
+int Unreferenced_00407270();
 int __fastcall Unreferenced_00407280(int param_1);
 int __fastcall Unreferenced_00407290(int param_1);
 int32_t __thiscall SFILE_CalculateBufferOffset(int32_t pThis, int32_t nBufferOffset);

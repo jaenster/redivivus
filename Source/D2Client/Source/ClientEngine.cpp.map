@@ -2050,10 +2050,10 @@
       "usedTypes": [
         "D2OverlayTxt"
       ],
-      "dh": "882a6c94",
+      "dh": "cc1edbfb",
       "paramStorage": [
         [
-          "param_1",
+          "nIndex",
           "ECX:4"
         ]
       ]

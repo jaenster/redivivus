@@ -269,7 +269,7 @@ int __stdcall LoadPalette(char * szDatFile, char * szPl2File) {
     return 1;
 }
 
-void __fastcall D2WINTEXTBOX_SetCompactLineSpacing(uint32_t bCompactLineSpacingMode) {
+void __fastcall D2WINTEXTBOX_SetCompactLineSpacing(BOOL bCompactLineSpacingMode) {
     D2WinTextBox::gbCompactLineSpacingMode = bCompactLineSpacingMode;
 }
 

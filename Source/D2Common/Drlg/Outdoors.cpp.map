@@ -877,14 +877,14 @@
         "D2DrlgLevelStrc",
         "D2DrlgVertexStrc"
       ],
-      "dh": "cef599d0",
+      "dh": "fa0327b9",
       "paramStorage": [
         [
-          "param_1",
+          "pLevel",
           "ECX:4"
         ],
         [
-          "param_2",
+          "nIndex",
           "EDX:4"
         ]
       ]

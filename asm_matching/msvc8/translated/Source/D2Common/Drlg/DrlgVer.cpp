@@ -255,9 +255,9 @@ void __fastcall DRLGVER_FreeVertices(D2PoolManagerStrc * pMemory, D2DrlgVertexSt
     *ppVertices = 0;
 }
 
-int __fastcall Unreferenced_0067d250(D2DrlgVertexStrc * * param_1) {
+int __fastcall Unreferenced_0067d250(D2DrlgVertexStrc * * ppVertices) {
     D2DrlgVertexStrc* pDVar2;
-    D2DrlgVertexStrc* pDVar1 = *param_1;
+    D2DrlgVertexStrc* pDVar1 = *ppVertices;
     D2DrlgVertexStrc* pDVar3 = 0;
     while (pDVar2 = pDVar1) {
       pDVar1 = pDVar2->pNext;
@@ -265,7 +265,7 @@ int __fastcall Unreferenced_0067d250(D2DrlgVertexStrc * * param_1) {
       pDVar3 = pDVar2;
     }
 
-    *param_1 = pDVar3;
+    *ppVertices = pDVar3;
     return 0;
 }
 

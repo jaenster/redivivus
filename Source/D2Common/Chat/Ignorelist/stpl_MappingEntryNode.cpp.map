@@ -252,6 +252,24 @@
       ]
     },
     {
+      "name": "Unreferenced_0060f360",
+      "address": "0060f360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f360"
+        }
+      ],
+      "namespace": "TSExplicitList<MappingEntryNode, -572662307>",
+      "calledFunctions": [
+        "Unreferenced_0060f360"
+      ],
+      "usedTypes": [
+        "TSExplicitList<MappingEntryNode, -572662307>"
+      ],
+      "dh": "0896d70e"
+    },
+    {
       "name": "Ptr",
       "address": "0060f510",
       "lines": [

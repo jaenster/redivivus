@@ -597,4 +597,8 @@ void __stdcall SOUND_FreeSoundEffectBuffers() {
     DeleteCriticalSection(&lpCriticalSection_008817c4);
 }
 
+void Unreferenced_00515110() {
+
+}
+
 }}} // namespace D2Sound::Src::D2SoundFast

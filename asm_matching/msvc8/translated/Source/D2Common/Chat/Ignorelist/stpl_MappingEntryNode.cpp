@@ -180,6 +180,19 @@ template<> TSExplicitList<::MappingEntryNode, -572662307>* TSExplicitList<Mappin
     return this;
 }
 
+template<> void TSExplicitList<MappingEntryNode, -572662307>::Unreferenced_0060f360() {
+    if (!this) {
+      return;
+    }
+
+    TSLink<::MappingEntryNode>* pTVar1 = &this->m_terminator;
+    pTVar1->m_prevlink = 0;
+    pTVar1->m_next = 0;
+    pTVar1->m_prevlink = pTVar1;
+    this->m_linkoffset = -0x22222223;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
+}
+
 template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Ptr(char * szKey) {
     char* pszText = szKey;
     uint32_t nExState = -1;

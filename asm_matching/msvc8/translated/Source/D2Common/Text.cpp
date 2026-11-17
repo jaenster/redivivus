@@ -186,8 +186,8 @@ void __stdcall BuildPacket0x27Messages(D2GSPacketSrv0x27_TextStrc * pTxtMsg, uin
     } else {
       memset(pOutMessageData, 0, 34 * sizeof(pOutMessageData[0]));
       pCurEntry = pTxtMsg->pMessage;
-      nSlot = 0;
       *pOutMessageData = (uint8_t)pTxtMsg->nCount;
+      nSlot = 0;
       while (true) {
         if (!pCurEntry) {
           return;
@@ -211,7 +211,7 @@ void __stdcall BuildPacket0x27Messages(D2GSPacketSrv0x27_TextStrc * pTxtMsg, uin
 // @sourcefile .\Text\Text.cpp
 void __stdcall StoreMessages(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, uint8_t * pPacketData) {
     D2GSPacketSrv0x27_EntryStrc* pNewEntry;
-    uint8_t byMsgType;
+    uint32_t byMsgType;
     short int nMsgCode;
     short int* pCurPacket;
     D2GSPacketSrv0x27_EntryStrc* pOldHead;
@@ -237,13 +237,13 @@ void __stdcall StoreMessages(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text,
       }
 
       do {
-        pOldHead = pTxtMsg->pMessage;
-        nMsgCode = pCurPacket[2];
         byMsgType = *(uint8_t*)(pCurPacket + 1);
+        nMsgCode = pCurPacket[2];
+        pOldHead = pTxtMsg->pMessage;
         pNewEntry = D2_NEW_POOL_AT(pTxtMsg->pMemory, D2GSPacketSrv0x27_EntryStrc, ".\\Text\\Text.cpp", 0x5a);
         pNewEntry->pPrev = pOldHead;
         pNewEntry->nMessage = nMsgCode;
-        pNewEntry->nType = (uint32_t)byMsgType;
+        pNewEntry->nType = byMsgType;
         pTxtMsg->nCount++;
         pTxtMsg->pMessage = pNewEntry;
         nGSPacketSrv0x27_Text++;

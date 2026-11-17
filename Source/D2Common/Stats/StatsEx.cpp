@@ -2732,7 +2732,7 @@ int __fastcall nullsub(int32_t nCalcCode, void * pContext) {
     return 0;
 }
 
-int32_t __fastcall MATH_Min(int32_t nLeft, int32_t nRight, uint32_t dwParam1, uint32_t dwParam2) {
+int32_t __fastcall MATH_Min(int32_t nLeft, int32_t nRight, uint32_t dwParam1, void * dwParam2) {
     if (nLeft < nRight) {
       return nLeft;
     }
@@ -2741,7 +2741,7 @@ int32_t __fastcall MATH_Min(int32_t nLeft, int32_t nRight, uint32_t dwParam1, ui
     return nLeft;
 }
 
-int32_t __fastcall MATH_Max(int32_t nLeft, int32_t nRight, uint32_t nOperand3, uint32_t pContext) {
+int32_t __fastcall MATH_Max(int32_t nLeft, int32_t nRight, uint32_t nOperand3, void * pContext) {
     if (nLeft > nRight) {
       return nLeft;
     }

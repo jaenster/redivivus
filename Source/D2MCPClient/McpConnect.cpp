@@ -195,7 +195,7 @@ void __stdcall MCPSTATE_SetCreateGameSuccess(BOOL bSuccess) {
     g_bMCPCreateGameSuccess = bSuccess;
 }
 
-void __stdcall MCPSTATE_SetListGameSuccess(uint32_t bSuccess) {
+void __stdcall MCPSTATE_SetListGameSuccess(BOOL bSuccess) {
     g_bMCPListGameSuccess = bSuccess;
 }
 
@@ -207,10 +207,11 @@ BOOL __stdcall MCPSTATE_GetCharDeleteSuccess() {
     return g_bMCPCharDeleteSuccess;
 }
 
-void __stdcall MCPSTATE_SetCharDeleteSuccess(uint32_t bSuccess) {
+void __stdcall MCPSTATE_SetCharDeleteSuccess(BOOL bSuccess) {
     g_bMCPCharDeleteSuccess = bSuccess;
 }
 
+#if 0 // ratchet: the match body of 00449cd0 (evidence 1985bb0f9) could not be re-spelled: returns int32_t, was uint32_t; parameter 0 retyped: int32_t -> char *; parameter 1 retyped: int32_t -> char *
 uint32_t __stdcall MCPCONNECT_GetGameNameAndPassword(int32_t pGameNameOut, int32_t pPasswordOut) {
     char ch;
     char* pSrc = g_szMCPGameName;
@@ -229,8 +230,27 @@ uint32_t __stdcall MCPCONNECT_GetGameNameAndPassword(int32_t pGameNameOut, int32
 
     return g_nMCPGameDifficulty;
 }
+#endif
+int32_t __stdcall MCPCONNECT_GetGameNameAndPassword(char * pGameNameOut, char * pPasswordOut) {
+    char ch;
+    char* pSrc = g_szMCPGameName;
+    do {
+      ch = *pSrc;
+      ((char*)(pGameNameOut - (char*)&g_szMCPGameName))[(intptr_t)pSrc] = ch;
+      pSrc++;
+    } while (ch != '\0');
 
-void __stdcall MCPCONNECT_SetGameNameAndPassword(uint32_t nDifficulty, char * szGameName, char * szPassword) {
+    pSrc = g_szMCPGamePassword;
+    do {
+      ch = *pSrc;
+      ((char*)(pPasswordOut - (char*)&g_szMCPGamePassword))[(intptr_t)pSrc] = ch;
+      pSrc++;
+    } while (ch != '\0');
+
+    return g_nMCPGameDifficulty;
+}
+
+void __stdcall MCPCONNECT_SetGameNameAndPassword(int32_t nDifficulty, char * szGameName, char * szPassword) {
     char ch;
     int nCopyDelta;
     strcpy((char*)g_szMCPGameName, szGameName);
@@ -250,7 +270,7 @@ uint32_t __stdcall MCPSTATE_GetCharUpgradeSuccess() {
     return g_bMCPCharUpgradeSuccess;
 }
 
-void __stdcall MCPSTATE_SetCharUpgradeSuccess(uint32_t bSuccess) {
+void __stdcall MCPSTATE_SetCharUpgradeSuccess(BOOL bSuccess) {
     g_bMCPCharUpgradeSuccess = bSuccess;
 }
 
@@ -258,7 +278,7 @@ uint32_t __stdcall MCPSTATE_GetCharCreateSuccess() {
     return g_bMCPCharCreateSuccess;
 }
 
-void __stdcall MCPSTATE_SetCharCreateSuccess(uint32_t bSuccess) {
+void __stdcall MCPSTATE_SetCharCreateSuccess(BOOL bSuccess) {
     g_bMCPCharCreateSuccess = bSuccess;
 }
 
@@ -266,7 +286,7 @@ uint32_t __stdcall MCPCONNECT_GetD2GSConnectReady() {
     return g_bMCPD2GSConnectReady;
 }
 
-void __stdcall MCPSTATE_SetD2GSConnectReady(uint32_t bReady) {
+void __stdcall MCPSTATE_SetD2GSConnectReady(BOOL bReady) {
     g_bMCPD2GSConnectReady = bReady;
 }
 
@@ -294,7 +314,7 @@ BOOL __stdcall getIsMPCJoinSuccesfull() {
     return IsMcpGameJoinSuccesful;
 }
 
-void __stdcall SetIsMPCJoinSuccesfull(uint32_t bSuccess) {
+void __stdcall SetIsMPCJoinSuccesfull(BOOL bSuccess) {
     IsMcpGameJoinSuccesful = bSuccess;
 }
 

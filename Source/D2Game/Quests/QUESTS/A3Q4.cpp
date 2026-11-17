@@ -58,30 +58,29 @@ bool __fastcall Q21_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
       if (bQuestState) {
         return true;
       }
-
-      return false;
-    }
-    if (nTargetClassId == 0x108) {
-      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x2034336a);
-      if (pQuestItem) {
-        return true;
-      }
-    } else if (nTargetClassId == 0xf5) {
-      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x2034336a);
-      /* GetQuestState Step0x02(2) -- Meshif(0xf5): active w/ Jade only if
-                         not-yet-traded-to-Meshif */ if (pQuestItem) {
-        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGoldenBird, QUESTSTATE_Step0x02);
-        if (!bQuestState) {
+    } else {
+      if (nTargetClassId == 0x108) {
+        pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x2034336a);
+        if (pQuestItem) {
           return true;
         }
-      }
+      } else if (nTargetClassId == 0xf5) {
+        pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x2034336a);
+        /* GetQuestState Step0x02(2) -- Meshif(0xf5): active w/ Jade only if
+                         not-yet-traded-to-Meshif */ if (pQuestItem) {
+          bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGoldenBird, QUESTSTATE_Step0x02);
+          if (!bQuestState) {
+            return true;
+          }
+        }
 
-      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20343367);
-      /* GetQuestState Step0x04(4) -- Meshif(0xf5): active w/ Golden Bird only if
+        pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20343367);
+        /* GetQuestState Step0x04(4) -- Meshif(0xf5): active w/ Golden Bird only if
                          not-yet-shown-bird */ if (pQuestItem) {
-        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGoldenBird, QUESTSTATE_Step0x04);
-        if (!bQuestState) {
-          return true;
+          bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGoldenBird, QUESTSTATE_Step0x04);
+          if (!bQuestState) {
+            return true;
+          }
         }
       }
     }

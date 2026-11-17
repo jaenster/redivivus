@@ -2732,7 +2732,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b1297f8a",
+      "dh": "7c50c8ee",
       "paramStorage": [
         [
           "pGame",
@@ -2911,7 +2911,7 @@
       ]
     },
     {
-      "name": "SKILLAMZ_GetStrafeArrowCount",
+      "name": "SKILLASSN_AuraCallback_AreaDamage",
       "address": "005d7c40",
       "lines": [
         {
@@ -2921,7 +2921,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillAss",
       "calledFunctions": [
-        "SKILLAMZ_GetStrafeArrowCount",
+        "SKILLASSN_AuraCallback_AreaDamage",
         "SKILLS_CalcMissileToHit",
         "DAMAGE_CalculateOffensiveDamage",
         "DAMAGE_CalculateAndApplyDamage",
@@ -2934,7 +2934,7 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "b2fccf62",
+      "dh": "6f0bc599",
       "paramStorage": [
         [
           "pContext",
@@ -2975,7 +2975,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "e8840f22",
+      "dh": "3b2ab1d9",
       "paramStorage": [
         [
           "pGame",

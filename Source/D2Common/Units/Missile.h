@@ -111,8 +111,8 @@ void __stdcall SetHomeType(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarge
 void __stdcall GetHomeType(struct D2UnitStrc * pUnit, int * nHomeType, int * nHomeGUID);
 // Resolves a numeric parameter from a missile's Missiles.txt row, selected by nParamId. Validates pUnit is a UNIT_MISSILE (or null) and nMissileId is in range, then switch(nParamId) returns either a raw txt column (Param1-5, CltParam1-5, sHitPar/cHitPar 1-3, dParam1-2, level), a computed elemental/physical min/max damage (via GetMin/MaxElemDamage / GetMin/MaxDamage, some >>8 fixed-point), a range (LevRange*level+Range), or a per-level scaling (linear param1+(lvl-1)*param2 or SKILLS_CalcDiminishingReturns). Returns 0 if validation fails or nParamId is unhandled. Used by missile damage/behavior calc.
 int32_t __stdcall GetSpecialParamValue(struct D2UnitStrc * pUnit, struct D2UnitStrc * pOwner, uint8_t nParamId, int32_t nMissileId, int32_t nLevel);
-int __fastcall MISSILE_Min(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4);
-int __fastcall MISSILE_Max(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4);
+int __fastcall MISSILE_Min(int nLeft, int nRight, uint32_t nOperand3, void * pContext);
+int __fastcall MISSILE_Max(int nLeft, int nRight, uint32_t nOperand3, void * pContext);
 int32_t __fastcall GetRandomNumberInRange(int32_t nMin, int32_t nMax, int32_t nUnused, struct D2MissileRandCalcStrc * pCalc);
 int32_t __fastcall GetSpecialParamValueForSkillMissile(eD2Skills eSkill, uint8_t nParamId, int32_t nUnused, struct D2MissileCalcContextStrc * pMissileCalc);
 #endif // D2_MODULE_D2Common

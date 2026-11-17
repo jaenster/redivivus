@@ -14,7 +14,6 @@
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/DataTbls.inline.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -33,7 +32,6 @@
 
 static unsigned int gDelim_A_Act = 0x4341; D2_STATIC_GUARD(gDelim_A_Act, "gDelim_A_Act");
 static char gDelim_n_NpcClass[4] = { 'n', 'p', 'c', '\x00' }; D2_STATIC_GUARD(gDelim_n_NpcClass, "gDelim_n_NpcClass");
-uint32_t gszHirelingFieldName_act = 0x746361; D2_GLOBAL_GUARD(gszHirelingFieldName_act, "gszHirelingFieldName_act");
 static D2MonItemPercentTxt * pMonItemPercentTxt = 0; D2_STATIC_GUARD(pMonItemPercentTxt, "pMonItemPercentTxt");
 static D2UniqueNameTablesStrc gsTxtUniqueNameTables = {0}; D2_STATIC_GUARD(gsTxtUniqueNameTables, "gsTxtUniqueNameTables");
 static unsigned int gnAutoItemTypeTCCount = {0}; D2_STATIC_GUARD(gnAutoItemTypeTCCount, "gnAutoItemTypeTCCount");
@@ -667,17 +665,17 @@ void __stdcall TXT_UnloadUniqueMonsterNameTables() {
     } while ((intptr_t)ppEntry < (intptr_t)((char*)&gsTxtUniqueNameTables + 16));
 }
 
-uint16_t * __fastcall Unreferenced_00653e50(D2UnitStrc * param_1, int param_2) {
-    if (!(param_1 && gsTxtUniqueNameTables.anSize[param_2] > 0)) {
+uint16_t * __fastcall Unreferenced_00653e50(D2UnitStrc * pUnit, int nTableIndex) {
+    if (!(pUnit && gsTxtUniqueNameTables.anSize[nTableIndex] > 0)) {
       return &gwMonsterTblsDefaultId;
     }
 
-    uint32_t uVar1 = Seed::RANDOM_RandomNumberSelector(&param_1->sSeed, gsTxtUniqueNameTables.anSize[param_2]);
-    if (!gsTxtUniqueNameTables.apTable[param_2][uVar1]) {
+    uint32_t uVar1 = Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, gsTxtUniqueNameTables.anSize[nTableIndex]);
+    if (!gsTxtUniqueNameTables.apTable[nTableIndex][uVar1]) {
       return &gwMonsterTblsDefaultId;
     }
 
-    uint16_t* pWVar2 = D2Lang::StrTable::strtable::GetLocaleString(gsTxtUniqueNameTables.apTable[param_2][uVar1]);
+    uint16_t* pWVar2 = D2Lang::StrTable::strtable::GetLocaleString(gsTxtUniqueNameTables.apTable[nTableIndex][uVar1]);
     if (!pWVar2) {
       return &gwMonsterTblsDefaultId;
     }
@@ -938,6 +936,23 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
     }
 }
 
+void Unreferenced_006543c0() {
+    char* in_EAX;
+    if (*in_EAX == '\"') {
+      in_EAX++;
+    }
+
+    char cVar1 = *in_EAX;
+    while (cVar1 != '\0') {
+      if (*in_EAX == '\"') {
+        *in_EAX = '\0';
+      }
+
+      in_EAX++;
+      cVar1 = *in_EAX;
+    }
+}
+
 static int32_t TC_ExtractNextIntModifier(char cSeparator, uint32_t * * ppCursor) {
     uint32_t* pCurrent = *ppCursor;
     char* pSeparator = strchr((char*)pCurrent, (int)cSeparator);
@@ -965,6 +980,7 @@ static void __stdcall TC_ParseTreasureClassEntry(D2ParsedTreasureClassStrc * pPa
     int16_t wItemClassId[2];
     int32_t nItemClassId;
     long int nParsedInt;
+    char* pParsedTC2;
     char* pProb;
     if (nProb <= 0) {
       return;
@@ -1083,7 +1099,7 @@ static void __stdcall TC_ParseTreasureClassEntry(D2ParsedTreasureClassStrc * pPa
         szModKey++;
       } while (bModifierMatch);
 
-      pParsedTC = szModValue;
+      pParsedTC2 = (char*)szModValue;
       if (bModifierMatch) {
         szModKey = strchr((char*)szModValue, 0x2c);
         pScanPtr = 0;
@@ -1124,21 +1140,21 @@ static void __stdcall TC_ParseTreasureClassEntry(D2ParsedTreasureClassStrc * pPa
         } else {
           bModifierMatch = !strcmp(pProb, "cr");
           if (bModifierMatch) {
-            nNodeId = TC_ExtractNextIntModifier(',', (uint32_t**)&pParsedTC);
+            nNodeId = TC_ExtractNextIntModifier(',', (uint32_t**)&pParsedTC2);
             pTCEntry->nRareMod = (int16_t)nNodeId;
-            pScanPtr = (char*)pParsedTC;
+            pScanPtr = pParsedTC2;
           } else {
             bModifierMatch = !strcmp(pProb, "cm");
             if (bModifierMatch) {
-              nNodeId = TC_ExtractNextIntModifier(',', (uint32_t**)&pParsedTC);
+              nNodeId = TC_ExtractNextIntModifier(',', (uint32_t**)&pParsedTC2);
               pTCEntry->nMagicMod = (int16_t)nNodeId;
-              pScanPtr = (char*)pParsedTC;
+              pScanPtr = pParsedTC2;
             } else {
               bModifierMatch = !strcmp(pProb, "ce");
               if (bModifierMatch) {
-                nNodeId = TC_ExtractNextIntModifier(',', (uint32_t**)&pParsedTC);
+                nNodeId = TC_ExtractNextIntModifier(',', (uint32_t**)&pParsedTC2);
                 pTCEntry->nFromTC0x30Mod = (int16_t)nNodeId;
-                pScanPtr = (char*)pParsedTC;
+                pScanPtr = pParsedTC2;
               } else {
                 bModifierMatch = !strcmp(pProb, "cg");
                 if (!bModifierMatch) {
@@ -1150,16 +1166,16 @@ static void __stdcall TC_ParseTreasureClassEntry(D2ParsedTreasureClassStrc * pPa
                     }
                   }
 
-                  nNodeId = TC_ExtractNextIntModifier(',', (uint32_t**)&pParsedTC);
+                  nNodeId = TC_ExtractNextIntModifier(',', (uint32_t**)&pParsedTC2);
                   nModValue = (int16_t)nNodeId;
-                  pScanPtr = (char*)pParsedTC;
+                  pScanPtr = pParsedTC2;
                   pTCEntry->nItemLinkNodeId = nModValue;
                   continue;
                 }
 
-                nNodeId = TC_ExtractNextIntModifier(',', (uint32_t**)&pParsedTC);
+                nNodeId = TC_ExtractNextIntModifier(',', (uint32_t**)&pParsedTC2);
                 pTCEntry->nFromTC0x32Mod = (int16_t)nNodeId;
-                pScanPtr = (char*)pParsedTC;
+                pScanPtr = pParsedTC2;
               }
             }
           }
@@ -1693,10 +1709,10 @@ D2HirelingTxt * __stdcall GetHirelingText(int32_t bIsExpansion, int32_t nHirelin
     return pResult;
 }
 
-D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t nMercNameId, int32_t pPrevEntry) {
+D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t nMercNameId, D2HirelingTxt * pPrevEntry) {
     int nIndex = 0;
     if (pPrevEntry) {
-      nIndex = (pPrevEntry - (intptr_t)sgtDataTable.pTxtHireling) / 0x118 + 1;
+      nIndex = ((intptr_t)pPrevEntry - (intptr_t)sgtDataTable.pTxtHireling) / 0x118 + 1;
     }
     if (nIndex < sgtDataTable.nTxtHirelingSize) {
       uint16_t* pNameRange;
@@ -1715,10 +1731,10 @@ D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t n
     return nullptr;
 }
 
-D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t nClassId, int32_t pPrevEntry) {
+D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t nClassId, D2HirelingTxt * pPrevEntry) {
     int nIndex = 0;
     if (pPrevEntry) {
-      nIndex = (pPrevEntry - (intptr_t)sgtDataTable.pTxtHireling) / 0x118 + 1;
+      nIndex = ((intptr_t)pPrevEntry - (intptr_t)sgtDataTable.pTxtHireling) / 0x118 + 1;
     }
     if (nIndex < sgtDataTable.nTxtHirelingSize) {
       D2HirelingTxt* pEntry;
@@ -1737,11 +1753,11 @@ D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t n
     return nullptr;
 }
 
-D2HirelingTxt * __stdcall GetHirelingEntry(int32_t bIsExpansion, int32_t nNpcClassId, int32_t nDifficulty, int32_t pPrevEntry) {
+D2HirelingTxt * __stdcall GetHirelingEntry(int32_t bIsExpansion, int32_t nNpcClassId, int32_t nDifficulty, D2HirelingTxt * pPrevEntry) {
     *(uint16_t*)(char*)&bIsExpansion = bIsExpansion ? 100 : 0;
     int nIndex = 0;
     if (pPrevEntry) {
-      nIndex = (pPrevEntry - (intptr_t)sgtDataTable.pTxtHireling) / 0x118 + 1;
+      nIndex = ((intptr_t)pPrevEntry - (intptr_t)sgtDataTable.pTxtHireling) / 0x118 + 1;
     }
     if (nIndex < sgtDataTable.nTxtHirelingSize) {
       int* pDifficulty;

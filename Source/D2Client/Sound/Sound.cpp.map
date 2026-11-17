@@ -39,7 +39,7 @@
       "usedTypes": [
         "D2MPQFileStrc"
       ],
-      "dh": "d1666c7c",
+      "dh": "9ea89b04",
       "paramStorage": [
         [
           "szFileName",
@@ -162,10 +162,10 @@
       "usedTypes": [
         "D2SoundChannelStrc"
       ],
-      "dh": "d985d27f",
+      "dh": "c00ca1ff",
       "paramStorage": [
         [
-          "param_1",
+          "nChannelHandle",
           "ECX:4"
         ]
       ]
@@ -244,10 +244,10 @@
       "calledFunctions": [
         "Unreferenced_004b9560"
       ],
-      "dh": "77cbff1b",
+      "dh": "3db0e901",
       "paramStorage": [
         [
-          "param_1",
+          "nChannelHandle",
           "ECX:4"
         ]
       ]

@@ -20,15 +20,16 @@ namespace Storm::Source::SSystem {
 void __stdcall SSYSTEM_SetSystemOption(uint32_t nOptionId, uint32_t * pValue, int32_t nValueSize);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-uint32_t __stdcall SSYSTEM_Shutdown(uint32_t nShutdownCode);
+int __stdcall SSYSTEM_Shutdown(uint32_t nShutdownCode);
 void __stdcall SSYSTEM_Initialize();
 // @blizzard StormGetInstance (STORM.CPP)
 HMODULE __stdcall StormGetInstance();
-uint32_t __stdcall SSYSTEM_GetSystemOption(uint32_t nOptionId, uint32_t * pOutValue, uint32_t * pnBufferSize);
+BOOL __stdcall SSYSTEM_GetSystemOption(uint32_t nOptionId, uint32_t * pOutValue, uint32_t * pnBufferSize);
 uint32_t __fastcall SSYSTEM_InitializeAndReturn(uint32_t nFlags);
 char * ILT_strpbrk(char * _Str, char * _Control);
 void __stdcall __break();
-void __stdcall SSYSTEM_SetShutdownFlag(uint32_t bShutdown);
+void __stdcall SSYSTEM_SetShutdownFlag(BOOL bShutdown);
+uint32_t Unreferenced_0041c380();
 // TSFixedArray<unsigned int> constructor: zeroes the 20-byte array header.
 // Named per redivivus issue #35: SBIG_Constructor passes it with TSFixedArray_Ui_Destructor to the eh vector constructor iterator, so it is not a TSList helper.
 void * __fastcall TSFixedArray_Ui_Constructor(void * pNode);

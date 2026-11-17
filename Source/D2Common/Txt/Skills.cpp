@@ -256,7 +256,7 @@ int __stdcall TXT_Skills_GetPassiveState(int nSkillId) {
     return (int)nPassiveState;
 }
 
-int __fastcall SKILLS_Min(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4) {
+int __fastcall SKILLS_Min(int nLeft, int nRight, uint32_t nOperand3, void * pContext) {
     if (nLeft < nRight) {
       return nLeft;
     }
@@ -265,7 +265,7 @@ int __fastcall SKILLS_Min(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwP
     return nLeft;
 }
 
-int __fastcall SKILLS_Max(int nLeft, int nRight, uint32_t nOperand3, uint32_t pContext) {
+int __fastcall SKILLS_Max(int nLeft, int nRight, uint32_t nOperand3, void * pContext) {
     if (nLeft > nRight) {
       return nLeft;
     }
@@ -541,7 +541,7 @@ BOOL __stdcall SKILLS_GetSkillData(D2SkillStrc * pSkill, int32_t * pOwnerGUID, e
     return 1;
 }
 
-uint32_t __stdcall SKILLS_SetCharges(D2SkillStrc * pSkill, int32_t nCharges) {
+BOOL __stdcall SKILLS_SetCharges(D2SkillStrc * pSkill, int32_t nCharges) {
     if (!pSkill) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x657);
       exit(-1);
@@ -716,7 +716,7 @@ static int32_t __stdcall SKILLS_CheckItemTypeRequirement(D2UnitStrc * pUnit, D2U
     }
 
     int32_t nMatchCount = 0;
-    short int* psTypeEntry = psSkillFields + nHandIdx * 2 + 0x12;
+    short int* psTypeEntry = psSkillFields + (nHandIdx * 2 + 0x12);
     do {
       if (*psTypeEntry <= 0) {
         break;
@@ -732,7 +732,7 @@ static int32_t __stdcall SKILLS_CheckItemTypeRequirement(D2UnitStrc * pUnit, D2U
     } while (nMatchCount < 2);
 
     int nMatchedTypeCount = 0;
-    psTypeEntry = psSkillFields + nHandIdx * 3 + 0xc;
+    psTypeEntry = psSkillFields + (nHandIdx * 3 + 0xc);
     while (true) {
       if (*psTypeEntry <= 0) {
         return (uint32_t)!nMatchedTypeCount;
@@ -1475,7 +1475,7 @@ static int32_t __stdcall SKILLS_CalculateBaseDamageFromStats(int32_t nType, D2Un
       return nDamage / 4 << 8;
     }
 
-    return nDamage / 3 << 8;
+    return nDamage / 3 * 0x100;
 }
 
 // Applies an Sorceress elemental mastery passive bonus to a base damage value. Given an element type (fire/lightning/cold/freeze/poison), reads the corresponding passive mastery stat from pUnit and scales nBaseDamage by that percentage via D2ApplyPercent. Returns the adjusted damage, or 0 if no mastery bonus or unrecognized element type.
@@ -2179,8 +2179,8 @@ uint32_t __stdcall SKILLS_HasLineOfSightToUnit(LONG nSrcX, LONG nSrcY, D2UnitStr
       xValue = 0;
     }
 
-    ptUnitPos.x = xValue;
     D2RoomStrc* pUnitRoom = Units::UNITS_GetRoom(pUnit);
+    ptUnitPos.x = xValue;
     ptSrc.x = nSrcX;
     ptSrc.y = nSrcY;
     ptUnitPos.y = nUnitY;
@@ -2534,6 +2534,10 @@ BOOL __stdcall STATES_RemoveDisguiseStates(D2UnitStrc * pUnit) {
     } while (nUnit < nStateCount);
 
     return 1;
+}
+
+void Unreferenced_006460b0() {
+
 }
 
 eD2Skills __stdcall SKILLS_GetClassSkillByIndex(uint32_t nClassId, int32_t nSkillIndex) {
@@ -3214,7 +3218,7 @@ void __stdcall SKILLS_UpdateAllPassiveSkills(D2UnitStrc * pUnit) {
 
 // Removes a permanent skill entry from pUnit's skill list. Clears the associated passive state if any, deselects the skill from left/right/current slots if it was active, and either decrements the skill's level (when decrement flag is set and level remains >= 1) or fully unlinks and frees the D2SkillStrc node. Finishes by updating passive skill stats.
 // @sourcefile .\SKILLS\Skills.cpp
-static void __stdcall SKILLS_RemoveSkill(D2UnitStrc * pUnitStrc, eD2Skills eSkill, int bDecrementLevel) {
+static void __stdcall SKILLS_RemoveSkill(D2UnitStrc * pUnitStrc, eD2Skills eSkill, BOOL bDecrementLevel) {
     if (!pUnitStrc) {
       return;
     }
@@ -3719,8 +3723,8 @@ static uint32_t SKILLS_CheckItemChargesRemaining(D2UnitStrc * pUnit, D2SkillStrc
       pItem = INVENTORY::Inventory::INVENTORY_GetNextItem(pItem);
     }
 
-    uint32_t nChargesStat = Stats::StatsEx::STATSEX_GetCurrentStat(pCarriedItem, UNITSTAT_item_charged_skill, ((uint16_t)nSkillLevel & 0x3f) + (nSkillId << 6));
-    return (uint32_t)((nChargesStat & 0xff) != 0);
+    uint32_t nChargesStat = Stats::StatsEx::STATSEX_GetCurrentStat(pCarriedItem, UNITSTAT_item_charged_skill, ((uint16_t)nSkillLevel & 0x3f) + nSkillId * 0x40);
+    return (uint32_t)((int32_t)(nChargesStat & 0xff) > 0);
 }
 
 static uint32_t __stdcall SKILL_IsDelayExpired(D2SkillStrc * pSkill, D2UnitStrc * pUnit) {
@@ -3886,7 +3890,7 @@ void __stdcall SKILL_AdjustSkillLevelBonus(D2UnitStrc * pUnit, eD2Skills eSkill,
     }
 }
 
-// Calculates the minimum damage for a skill at a given level. For poison skills (flags2 bit 1), derives base from STR+DEX-20 (player) or level×3 (non-player), floored at 1, returned as fixed-point ×256. For normal skills, optionally sources weapon min-damage (SrcDam scaled by percentage) using two-handed detection; adds MinDam txt value plus level-breakpoint bonus (MinLevDam). If DmgSymPerCalc is set, adds a skill-calc percentage bonus. Returns the result shifted left by HitShift bits.
+// Calculates the minimum damage for a skill at a given level. For kick skills (skills.txt Kick flag, D2SkillsTxt byte +5 mask 0x2), derives base from STR+DEX-20 (player) or level×3 (non-player), floored at 1, returned as /4 shifted left 8. For other skills, optionally sources weapon min-damage (SrcDam scaled by percentage) using two-handed detection; adds MinDam txt value plus level-breakpoint bonus (MinLevDam). If DmgSymPerCalc is set, adds a skill-calc percentage bonus. Returns the result shifted left by HitShift bits.
 int32_t __stdcall SKILL_CalcMinDamage(D2UnitStrc * pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t bUseWeaponDamage) {
     int nMinDmg;
     D2UnitStrc* pWeapon;
@@ -3937,7 +3941,7 @@ int32_t __stdcall SKILL_CalcMinDamage(D2UnitStrc * pUnit, int32_t nSkillId, int3
     return nMinDmg << D2_SHIFT_COUNT(pSkillTxt->HitShift);
 }
 
-// Calculates the maximum damage for a skill at a given level. If the skill's flags2 bit 1 is set, delegates to SKILLS_CalculateBaseDamageFromStats. Otherwise, optionally scales weapon max damage by SrcDam (handling two-handed weapons), adds MaxLev breakpoint bonus and MaxDam base, optionally applies DmgSymPerCalc formula percent modifier, and finally left-shifts by HitShift. bUseWeaponDamage controls whether weapon damage contributes.
+// Calculates the maximum damage for a skill at a given level. For kick skills (skills.txt Kick flag, D2SkillsTxt byte +5 mask 0x2), delegates to SKILLS_CalculateBaseDamageFromStats: STR+DEX-20 (player) or level×3, floored at 1, /3 shifted left 8. Otherwise, optionally scales weapon max damage by SrcDam (handling two-handed weapons), adds MaxLev breakpoint bonus and MaxDam base, optionally applies DmgSymPerCalc formula percent modifier, and finally left-shifts by HitShift. bUseWeaponDamage controls whether weapon damage contributes.
 int32_t __stdcall SKILL_CalcMaxDamage(D2UnitStrc * pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t bUseWeaponDamage) {
     int32_t nLevDamBonus;
     D2SkillsTxt* pSkillTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;

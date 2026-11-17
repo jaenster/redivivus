@@ -109,6 +109,10 @@ void __stdcall SBigMul(struct BigData * pResult, struct BigData * pBigA, struct 
 // @oracle Mac PPC 1.10b Storm -- PPC SBigPowMod -> 100994b0, single bl .PowMod__FR9BigBufferRC9BigBufferRC9BigBufferRC9BigBufferR8BigStackR (5 args -> 4-arg C API). 1.14d: 4-arg forwarder onto BigBuffer_PowMod 00425150, whose callee set {SetOne, MulMod, Square, Div} matches .PowMod's {SetOne, Mul, Div, Square}.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 void __stdcall SBigPowMod(struct BigData * pResult, struct BigData * pBase, struct BigData * pExponent, struct BigData * pModulus);
+// @renamed-from SBIG_MillerRabinTestWrapper (2026-08-28, Storm PowerPC oracle pass 4)
+// @oracle Mac PPC 1.10b Storm -- PPC SBigIsPrime -> 100999e0, single bl .IsPrime__FRC9BigBufferR8BigStack (2 args -> 1-arg C API). 1.14d: 1-arg forwarder onto BigBuffer_IsPrime 00425350.
+// @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
+void __stdcall SBigIsPrime(struct BigData * pBigNum);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 // @was SBIG_DynArray_GetElementPtr (pass 6, 2026.08.28)
@@ -250,7 +254,8 @@ void __fastcall TSFixedArray_Ui_Destructor_Unref_004217f0(struct TSGrowableArray
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void __fastcall TSFixedArray_Ui_Destructor(void * pArray);
 void __fastcall Unreferenced_00421830(void * pArray);
-uint32_t * __fastcall Unreferenced_00421860(uint32_t * param_1);
+void __fastcall Unreferenced_00421840(struct TSGrowableArray_Ui * pArray);
+uint32_t * __fastcall Unreferenced_00421860(uint32_t * pData);
 // @was SBIG_ArrayDwordCopyAssign (pass 6, 2026.08.28)
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method PLAUSIBLE. The oracle's operator= body MINUS the trailing chunk-field copy - i.e. the TSFixedArray form, which has no chunk field, as against TSGrowableArray_Ui_Assign 00421ba0 which has it.
@@ -458,10 +463,6 @@ void __stdcall SBigSquare(struct BigData * pResult, struct BigData * pBigSrc);
 // @oracle Mac PPC 1.10b Storm -- PPC SBigInvMod -> 10099b20, single bl .InvMod__FR9BigBufferRC9BigBufferRC9BigBufferR8BigStack. 1.14d: 3-arg forwarder onto BigBuffer_InvMod 00424fb0, whose callee set {SetOne, SetZero, Div, Mul, Add, IsZero, Sub} matches .InvMod exactly.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 void __stdcall SBigInvMod(struct BigData * pResult, struct BigData * pInput, struct BigData * pModulus);
-// @renamed-from SBIG_MillerRabinTestWrapper (2026-08-28, Storm PowerPC oracle pass 4)
-// @oracle Mac PPC 1.10b Storm -- PPC SBigIsPrime -> 100999e0, single bl .IsPrime__FRC9BigBufferR8BigStack (2 args -> 1-arg C API). 1.14d: 1-arg forwarder onto BigBuffer_IsPrime 00425350.
-// @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
-void __stdcall SBigIsPrime(struct BigData * pBigNum);
 // @renamed-from SBIG_GeneratePrimeWrapper (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigFindPrime -> 10099d20, single bl .FindPrime__FR9BigBufferUiRC9BigBufferRC9BigBufferR8BigStack (5 args -> 4-arg C API). 1.14d: 4-arg forwarder onto BigBuffer_FindPrime 004255e0, whose callee set matches .FindPrime's nine callees one for one.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.

@@ -23,7 +23,7 @@ typedef uint32_t eD2GSConnectionType;
 typedef uint32_t eD2GSGameType;
 #ifndef RECON_FPTD_fpD2QServerLineHook
 #define RECON_FPTD_fpD2QServerLineHook
-typedef void (*fpD2QServerLineHook)(int nLine);
+typedef void (__fastcall *fpD2QServerLineHook)(uint32_t nIpAddress, char * szFile, int nLine);
 #endif
 #ifndef RECON_FPTD_fpD2QServerPacketClassifier
 #define RECON_FPTD_fpD2QServerPacketClassifier
@@ -443,7 +443,7 @@ uint32_t __stdcall GetClientPeerIpByToken(struct D2QServerStrc * pQServer, uint3
 uint16_t __stdcall GetClientPeerPortByToken(struct D2QServerStrc * pQServer, uint32_t nToken);
 uint32_t __stdcall ProbePeerNameByToken(struct D2QServerStrc * pQServer, uint32_t nToken);
 void __stdcall QSHackListSize(struct D2QServerStrc * pQServer, uint32_t szFile, uint32_t nLine);
-void __fastcall Unreferenced_006bf170(struct D2QServerStrc * param_1);
+void __fastcall Unreferenced_006bf170(struct D2QServerStrc * pQServer);
 int __stdcall CountAllQueuedPackets(struct D2QServerStrc * pQServer);
 // Checks whether a value matches any configured game-token filter entry.
 int __fastcall MatchesGameTokenFilter(struct D2QServerStrc * pQServer, int, uint32_t nValue);

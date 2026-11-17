@@ -125,6 +125,10 @@ template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -5
     return this;
 }
 
+template<> void TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044fd50() {
+    ((TSHashObject<::SGAMEDATA, HASHKEY_NONE>*)this)->Destructor();
+}
+
 template<> __attribute__((noinline)) inline void TSGrowableArray<SGAMEDATA>::Destructor() {
     uint32_t nIndex;
     nIndex = 0;
@@ -271,6 +275,10 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
     }
 
     Storm::Source::SMem::SMemFree(this->m_data, D2Client::s___AV__TSExplicitList_USGAMEDATA__0070f584, -2, 0);
+}
+
+template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044ffe0() {
+    ((TSGrowableArray<::SGAMEDATA>*)this)->Destructor();
 }
 
 template<> void __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044fff0(TSGrowableArray<::SGAMEDATA>* pArray) {
@@ -790,6 +798,10 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
           return;
         }
     }
+}
+
+template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Clear() {
+    this->InternalClear(0);
 }
 
 // Static data members

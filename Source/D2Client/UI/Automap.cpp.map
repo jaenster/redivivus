@@ -522,14 +522,14 @@
       "usedTypes": [
         "D2AutomapCellStrc"
       ],
-      "dh": "c6989a80",
+      "dh": "b37d7ea7",
       "paramStorage": [
         [
-          "param_1",
+          "pCellA",
           "ECX:4"
         ],
         [
-          "param_2",
+          "pCellB",
           "EDX:4"
         ]
       ]

@@ -927,10 +927,10 @@
         "D2DrlgGridStrc",
         "D2RoomExStrc"
       ],
-      "dh": "49edd3fe",
+      "dh": "8ae14889",
       "paramStorage": [
         [
-          "param_1",
+          "pRoomEx",
           "ECX:4"
         ]
       ]
@@ -951,10 +951,10 @@
       "usedTypes": [
         "D2RoomExStrc"
       ],
-      "dh": "2f9f36ea",
+      "dh": "db294ee5",
       "paramStorage": [
         [
-          "param_1",
+          "pRoomEx",
           "ECX:4"
         ]
       ]
@@ -1127,10 +1127,10 @@
         "D2DrlgLevelStrc",
         "D2DrlgVertexStrc"
       ],
-      "dh": "ffbcd783",
+      "dh": "87126799",
       "paramStorage": [
         [
-          "param_1",
+          "pLevel",
           "ECX:4"
         ]
       ]

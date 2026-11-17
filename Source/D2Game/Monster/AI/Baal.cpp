@@ -50,7 +50,7 @@ static char gszSrcFileAiBaal[16] = {
 
 namespace D2Game::Monster::AI::Baal {
 
-uint32_t __fastcall AI_Baal_IsPortalInRange(uint32_t pGame, D2UnitStrc * pUnit, D2UnitStrc * portal, D2MonsterAiParameterStruct * pAiParam) {
+uint32_t __fastcall AI_Baal_IsPortalInRange(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * portal, D2MonsterAiParameterStruct * pAiParam) {
     if (portal && portal->eUnitType == UNIT_OBJECT && portal->nClassId == 0x233) {
       int32_t nCollisionDist;
       nCollisionDist = D2Common::Collision::GetCollisionDistance(portal, pUnit);
@@ -734,7 +734,9 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
     _bVeryFarFromAnchor = 0;
     if (pAnchorAiCmd) {
       nDistToAnchorPt = AI_GetWeightedDistanceToPoint(pUnit2, pAnchorAiCmd->nCmdArg[1], pAnchorAiCmd->nCmdArg[2]);
-      _bVeryFarFromAnchor = (uint32_t)(nDistToAnchorPt > 0x4b);
+      if (nDistToAnchorPt > 0x4b) {
+        _bVeryFarFromAnchor = 1;
+      }
       if (nDistToAnchorPt > 100) {
         nAction = 1;
       }
@@ -1152,13 +1154,13 @@ void __fastcall AI_Baal_SpawnTentacle(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     POINT* pSpawnPoint = &ptSpawn;
     pUnit->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
     pUnit->sSeed.nSeedLow = sNewSeed.nSeedLow;
-    uint32_t nRandBit = sNewSeed.nSeedLow & 1;
     aTentacleClassIds[0] = 0x2dc;
     aTentacleClassIds[1] = 0x2db;
     aTentacleClassIds[2] = 0x2dd;
     aeAnimModes[0] = eD2MonsterAnimMode_ns::Neutral;
     aeAnimModes[1] = 7;
     aeAnimModes[2] = 8;
+    uint32_t nRandBit = sNewSeed.nSeedLow & 1;
     D2RoomStrc* pSpawnRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(D2Common::Units::UNITS_GetRoom(pUnit), pSpawnPoint, nUnitSize, eCollisionFlag, bAllowNeighboorRooms);
     if (!pSpawnRoom) {
       return;

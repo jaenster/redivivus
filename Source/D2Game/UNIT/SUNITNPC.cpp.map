@@ -382,7 +382,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "35a55478",
+      "dh": "6fd966ea",
       "paramStorage": [
         [
           "pGame",
@@ -854,7 +854,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9659d897",
+      "dh": "67b9d737",
       "paramStorage": [
         [
           "pGame",
@@ -2139,7 +2139,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "48f97300",
+      "dh": "6e11ed73",
       "paramStorage": [
         [
           "pGame",

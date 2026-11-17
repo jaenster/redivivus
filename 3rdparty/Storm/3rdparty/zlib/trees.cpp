@@ -2939,9 +2939,11 @@ static BOOL detect_data_type(deflate_state * pDeflateState) {
         while (!pwFreq->fc) {
           nIndex++;
           pwFreq++;
-          if (nIndex >= 0x100) {
-            return 0;
+          if (nIndex < 0x100) {
+            continue;
           }
+
+          return 0;
         }
 
         return 1;

@@ -222,7 +222,7 @@ void __fastcall GetBattlenetRealmsList(D2BNetGatewayAccessStr * nGatewayAccess) 
     exit(-1);
 }
 
-uint32_t * __stdcall WritingDefaultGatewayList(DWORD * pdwFileSize) {
+static uint32_t * __stdcall WritingDefaultGatewayList(DWORD * pdwFileSize) {
     uint32_t _bFileLoaded;
     bool bFileLoaded;
     uint32_t* pFileData;

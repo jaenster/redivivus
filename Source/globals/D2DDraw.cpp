@@ -150,10 +150,6 @@ namespace D2Common::Chat::Ignorelist::IgnoreList {
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList
 
-namespace D2Common::DATATBLS::ItemTbls {
-
-} // namespace D2Common::DATATBLS::ItemTbls
-
 namespace D2Common::Drlg::OutSiege {
 
 } // namespace D2Common::Drlg::OutSiege

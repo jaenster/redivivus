@@ -20,10 +20,11 @@
       "usedTypes": [
         "D2MonsterAiParameterStruct",
         "D2UnitStrc",
+        "SGAMEDATA",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0bcc20db",
+      "dh": "720e443c",
       "paramStorage": [
         [
           "pGame",

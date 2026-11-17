@@ -1382,9 +1382,9 @@ int32_t __stdcall SKILLS_CanUseSkill(struct D2UnitStrc * pUnit, struct D2SkillSt
 void __stdcall SKILLS_SetSkillLevelBonus(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nLevelBonus);
 // Adjusts the +skill-level bonus (nLevelBonus) for the given skill on a unit's innate skill list (owner GUID -1). Searches the unit's skill list for the matching skill; if absent and nDelta>0, allocates it (initializing nLevel to 0 and updating passive stats). Adds nDelta to nLevelBonus, clamping the result to a floor of 0. No-op for negative delta when the skill isn't present.
 void __stdcall SKILL_AdjustSkillLevelBonus(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nDelta);
-// Calculates the minimum damage for a skill at a given level. For poison skills (flags2 bit 1), derives base from STR+DEX-20 (player) or level×3 (non-player), floored at 1, returned as fixed-point ×256. For normal skills, optionally sources weapon min-damage (SrcDam scaled by percentage) using two-handed detection; adds MinDam txt value plus level-breakpoint bonus (MinLevDam). If DmgSymPerCalc is set, adds a skill-calc percentage bonus. Returns the result shifted left by HitShift bits.
+// Calculates the minimum damage for a skill at a given level. For kick skills (skills.txt Kick flag, D2SkillsTxt byte +5 mask 0x2), derives base from STR+DEX-20 (player) or level×3 (non-player), floored at 1, returned as /4 shifted left 8. For other skills, optionally sources weapon min-damage (SrcDam scaled by percentage) using two-handed detection; adds MinDam txt value plus level-breakpoint bonus (MinLevDam). If DmgSymPerCalc is set, adds a skill-calc percentage bonus. Returns the result shifted left by HitShift bits.
 int32_t __stdcall SKILL_CalcMinDamage(struct D2UnitStrc * pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t bUseWeaponDamage);
-// Calculates the maximum damage for a skill at a given level. If the skill's flags2 bit 1 is set, delegates to SKILLS_CalculateBaseDamageFromStats. Otherwise, optionally scales weapon max damage by SrcDam (handling two-handed weapons), adds MaxLev breakpoint bonus and MaxDam base, optionally applies DmgSymPerCalc formula percent modifier, and finally left-shifts by HitShift. bUseWeaponDamage controls whether weapon damage contributes.
+// Calculates the maximum damage for a skill at a given level. For kick skills (skills.txt Kick flag, D2SkillsTxt byte +5 mask 0x2), delegates to SKILLS_CalculateBaseDamageFromStats: STR+DEX-20 (player) or level×3, floored at 1, /3 shifted left 8. Otherwise, optionally scales weapon max damage by SrcDam (handling two-handed weapons), adds MaxLev breakpoint bonus and MaxDam base, optionally applies DmgSymPerCalc formula percent modifier, and finally left-shifts by HitShift. bUseWeaponDamage controls whether weapon damage contributes.
 int32_t __stdcall SKILL_CalcMaxDamage(struct D2UnitStrc * pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t bUseWeaponDamage);
 // Initialises a unit's skill list with class default skills if not already populated. Checks whether the base Attack skill (skill 0, nOwnerGUID -1) is present; if not, allocates it plus all class-specific skills from CharStats.txt (up to 10 entries). Also ensures left and right skill slots are assigned, defaulting to Attack (left) and skill 0 (right) if unset.
 void __stdcall STRUCT_FillSkillsList(struct D2UnitStrc * pUnit);
@@ -1394,8 +1394,8 @@ void __stdcall STRUCT_FillSkillsList(struct D2UnitStrc * pUnit);
 int32_t __fastcall SKILLS_CalcSkillParam(eD2Skills eSkill, int32_t nSkillLevel);
 int Unreferenced_006435c0();
 short __fastcall Unreferenced_006435d0(int nIndex);
-int __fastcall SKILLS_Min(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4);
-int __fastcall SKILLS_Max(int nLeft, int nRight, uint32_t nOperand3, uint32_t pContext);
+int __fastcall SKILLS_Min(int nLeft, int nRight, uint32_t nOperand3, void * pContext);
+int __fastcall SKILLS_Max(int nLeft, int nRight, uint32_t nOperand3, void * pContext);
 int __fastcall SKILLS_RandomRange(int32_t pnMinVal, int32_t nRange, uint32_t nUnused, struct D2SkillCalcContextStrc * pnSeed);
 int __fastcall SKILLS_GetMissileSpecialParam(int32_t nParamIndex, uint8_t bParamType, uint32_t nUnused, struct D2SkillCalcContextStrc * ppContext);
 int32_t __fastcall SKILLS_GetUnitStatValue(eD2UnitStat eUnitStat, int32_t nShiftCount, uint32_t nUnused, struct D2UnitStrc * * ppContext);
@@ -1408,7 +1408,7 @@ struct D2LightMapStrc * __stdcall SKILLS_GetUnitField0xa8_0x14(struct D2UnitStrc
 // Frees the entire skill list on a unit. Iterates through pFirstSkill linked list, freeing each D2SkillStrc, then frees the D2SkillListStrc itself. Sets pUnit->pSkillsList to NULL. Called by FreeUnit.
 // @sourcefile .\SKILLS\Skills.cpp
 void __stdcall SKILLS_FreeSkillList(struct D2UnitStrc * pUnit);
-uint32_t __stdcall SKILLS_SetCharges(struct D2SkillStrc * pSkill, int32_t nCharges);
+BOOL __stdcall SKILLS_SetCharges(struct D2SkillStrc * pSkill, int32_t nCharges);
 uint32_t __fastcall GetSequenceId(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
 int32_t __stdcall GetShrineBonus(struct D2UnitStrc * pUnit);
 int __stdcall SKILLS_GetField0x10(struct D2SkillStrc * pSkill);
@@ -1428,6 +1428,7 @@ int32_t __stdcall SKILLS_CalculateDamageReduction(int32_t nParam);
 int32_t __fastcall SKILLS_CalculateSynergyValue_Recursive(int32_t nLevel, int32_t nMinVal, int32_t nMaxVal);
 int32_t __stdcall SKILLS_CalcDiminishingReturns(int32_t nLevel, int32_t nMinVal, int32_t nMaxVal);
 int32_t __stdcall SKILLS_GetParam23WithDiminishing(int32_t nLevel, int32_t nSkillId);
+void Unreferenced_006460b0();
 int __stdcall SKILL_CalcAttackFrames(struct D2UnitStrc * pUnit);
 // Evaluates one skill-description calc code (bParam selects which, 0..0x48) for skill eSkill at level/param nParam, optionally for unit pUnit; returns the computed value. Dispatches a large switch over the calc selector to skill range, mana cost (and shifted variants), to-hit, min/max/synergy damage (>>8 for display scaling), per-element min/max damage and length from the skill's descmissile entries, missile range, unit level/skill-level, aura/passive radii, and the raw skills.txt calc-column fields (auralencalc, calc[0..3], aurarangecalc, aurastatcalc[0..5], passivecalc[0..4], petmax, skpoints). For the raw-field cases it then runs the value through SKILLS_CompileSkillFormula against the skills calc-code blob. Bounds-checks eSkill; returns 0 on invalid skill/missile or out-of-range selector.
 uint32_t __stdcall SKILLDESC_EvalDescCalcValue(struct D2UnitStrc * pUnit, uint8_t byCalcType, eD2Skills eSkill, int nSkillLevel);

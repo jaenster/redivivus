@@ -23,7 +23,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5e7fe0c5",
+      "dh": "69371b9b",
       "paramStorage": [
         [
           "byRunValue",
@@ -222,10 +222,10 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "672f0536",
+      "dh": "c157abb0",
       "paramStorage": [
         [
-          "param_1",
+          "pData",
           "ECX:4"
         ]
       ]

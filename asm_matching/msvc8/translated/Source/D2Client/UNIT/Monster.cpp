@@ -701,12 +701,12 @@ int * __fastcall MONSTER_GetAiDataPtr(D2UnitStrc * pUnit) {
     return &pUnit->pUnitData.pUnitDataMonster->nAiRelated1;
 }
 
-void __fastcall Unreferenced_004ae190(D2UnitStrc * param_1, int param_2) {
-    if (!(param_1 && param_1->eUnitType == UNIT_MONSTER && param_1->pUnitData.pUnitDataMonster)) {
+void __fastcall Unreferenced_004ae190(D2UnitStrc * pUnit, int nNecroPetGUID) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
     }
 
-    param_1->pUnitData.pUnitDataMonster->nNecroPetGUID = param_2;
+    pUnit->pUnitData.pUnitDataMonster->nNecroPetGUID = nNecroPetGUID;
 }
 
 static void MONSTER_ResetToNeutralFacingTarget(D2UnitStrc * pUnit) {
@@ -1760,7 +1760,7 @@ static void MONSTER_ProcessSkillAnimation(D2UnitStrc * pUnit) {
                 }
                 if (nCurrentFrame >= (int)(uint32_t)pMonStats2->byInfernoRollback) {
                   bResult = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 4);
-                  pUnit->nGfxCurrentFrame = (bResult - 4 + (uint32_t)pMonStats2->byInfernoRollback) * 0x100;
+                  pUnit->nGfxCurrentFrame = bResult - 4 + (uint32_t)pMonStats2->byInfernoRollback << 8;
                   return;
                 }
               }
@@ -2957,11 +2957,11 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
     goto apply_death_mode;
 }
 
-D2UnitStrc * __fastcall Unreferenced_004b1030(D2UnitStrc * param_1) {
+D2UnitStrc * __fastcall Unreferenced_004b1030(D2UnitStrc * pUnit) {
     D2UnitStrc* pDVar1;
-    if (param_1->eUnitType == UNIT_MONSTER && param_1->pUnitData.pUnitDataMonster) {
+    if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
       int nUnitGUID;
-      nUnitGUID = param_1->pUnitData.pUnitDataMonster->nOwnerGUID;
+      nUnitGUID = pUnit->pUnitData.pUnitDataMonster->nOwnerGUID;
       if (nUnitGUID != -1) {
         pDVar1 = CUnit::UNITS_FindClientSideUnit(nUnitGUID, UNIT_PLAYER);
         return pDVar1;

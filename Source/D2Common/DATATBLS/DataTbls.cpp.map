@@ -1408,6 +1408,22 @@
       ]
     },
     {
+      "name": "Unreferenced_00617c20",
+      "address": "00617c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00617c20"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "Unreferenced_00617c20",
+        "TXT_AllocTxt_skill_skilldesc"
+      ],
+      "dh": "b7e17779"
+    },
+    {
       "name": "DATATBLS_FreeSkillsTxtTables",
       "address": "00617c30",
       "lines": [

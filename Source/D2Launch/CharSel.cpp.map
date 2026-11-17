@@ -292,7 +292,7 @@
         "D2COMP_DestroyCompositeUnit",
         "FreeClientMemory"
       ],
-      "dh": "9dc6b1d4"
+      "dh": "2cffc8d5"
     },
     {
       "name": "CHARSEL_GetDaysUntilExpiry",
@@ -360,7 +360,7 @@
         "uint32_t",
         "wchar_t"
       ],
-      "dh": "d19b2e70"
+      "dh": "194fa714"
     },
     {
       "name": "DRAW_LocalCharsInSelectionScreen0",
@@ -410,7 +410,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "13f34267"
+      "dh": "cef6182c"
     },
     {
       "name": "SAVEFILE_ParseSaveData",
@@ -493,7 +493,7 @@
       "usedTypes": [
         "D2CharSelStrc"
       ],
-      "dh": "c11d67c0"
+      "dh": "c0453f04"
     },
     {
       "name": "Unreferenced_00438f40",
@@ -508,10 +508,10 @@
       "calledFunctions": [
         "Unreferenced_00438f40"
       ],
-      "dh": "4a8e0a03",
+      "dh": "a41c9402",
       "paramStorage": [
         [
-          "param_1",
+          "szName",
           "ECX:4"
         ]
       ]
@@ -618,7 +618,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0ae26983"
+      "dh": "7ae61e45"
     },
     {
       "name": "UIMENU_SelectDifficultySinglePlayerOrTcpip",
@@ -1306,7 +1306,7 @@
         "D2WINMAIN_SetControlActive",
         "D2CheckExpansionGame"
       ],
-      "dh": "c48189a2"
+      "dh": "a164862d"
     },
     {
       "name": "CHARSEL_ResetCharListUI",

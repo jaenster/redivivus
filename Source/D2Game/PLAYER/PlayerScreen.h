@@ -57,8 +57,9 @@ void __fastcall PARTYSCREEN_CancelPartyInvite(::SGAMEDATA * pGame, struct D2Unit
 // @sourcefile .\PLAYER\PartyScreen.cpp
 void __fastcall PARTYSCREEN_SendPartyInvite(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t dwUnused1, uint32_t dwUnused2);
 // @sourcefile .\PLAYER\PartyScreen.cpp
-void __fastcall PARTY_SendPlayerLeftEvent(uint32_t dwUnused, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther);
+void __fastcall PARTY_SendPlayerLeftEvent(::SGAMEDATA * dwUnused, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther);
 void __fastcall SendPlayerPartyInfo(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
+// Passes PARTY_SendPlayerLeftEvent by address.
 void __fastcall PARTYSCREEN_LeaveParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t dwArg, int * pnError);
 // @sourcefile .\PLAYER\PartyScreen.cpp
 void __fastcall PARTYSCREEN_SetHostileForPlayer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);

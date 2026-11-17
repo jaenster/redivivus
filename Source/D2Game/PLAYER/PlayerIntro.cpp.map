@@ -250,10 +250,10 @@
         "D2UnitDataPlayerInteractedNPCStrc",
         "uint8_t"
       ],
-      "dh": "370641c0",
+      "dh": "9c79d559",
       "paramStorage": [
         [
-          "pdwParam1",
+          "pInteractedNpc",
           "ECX:4"
         ],
         [

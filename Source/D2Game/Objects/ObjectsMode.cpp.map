@@ -69,7 +69,7 @@
         "eD2LevelId",
         "uint8_t"
       ],
-      "dh": "603ebdae",
+      "dh": "7fa6c706",
       "paramStorage": [
         [
           "pGame",
@@ -3559,7 +3559,7 @@
         "eD2UnitType",
         "uint8_t"
       ],
-      "dh": "cc8105bc",
+      "dh": "5d871f8a",
       "paramStorage": [
         [
           "pGame",
@@ -4112,10 +4112,9 @@
       "usedTypes": [
         "D2ObjectOperateFnArg",
         "D2SeedStrc",
-        "D2UnitStrc",
         "D2UnitStrc *"
       ],
-      "dh": "aa12adb7",
+      "dh": "59936e22",
       "paramStorage": [
         [
           "pOperateArg",

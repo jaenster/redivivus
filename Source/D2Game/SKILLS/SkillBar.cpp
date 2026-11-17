@@ -88,7 +88,7 @@ BOOL __fastcall SKILLBAR_SrvStFn32_StrikeWithAuraState(::SGAMEDATA * pGame, D2Un
     D2DamageStrc* pCombatQueueEntry = UNIT::SUnitDmg::DAMAGE_FindCombatEntry(pUnit, pTarget);
     if (pCombatQueueEntry) {
       nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl);
-      pCombatQueueEntry->dwPhysDamage += nCalcVal << 8;
+      pCombatQueueEntry->dwPhysDamage += nCalcVal * 0x100;
     }
 
     short int eAuraState = pSkillsTxt->aurastate;
@@ -777,7 +777,7 @@ void __fastcall SKILLBAR_StateCallback_Whirlwind(D2UnitStrc * pUnit, eD2States e
     SkillsServer::SKILLS_UpdatePassivesAndPets(pUnit);
 }
 
-// Server-side skill "start" function (srvstfunc 38): a charge/leap-to-target movement skill (e.g. War Cry / charge class). Validates eSkill against skills.txt and that the unit has the skill; resolves target/cursor position. If a melee target is already in range, queues client packet 0xA5 and force-attacks it. Otherwise sets the unit's dynamic path collision pattern/type, calculates a path toward the cursor, applies walk velocities, lands the unit at the final path point, registers collision there, sets uninterruptable + skill_move state, and stores the destination into the skill's Param1-4. Finally applies the skill's aurastate (if valid): updates state, sets an expiry-timed state via SetStateWithExpiryTime (OnWarCryExpire callback), copies aura/passive stats and the modifier skill/level stats, and fires up to 3 auraevent handlers. Returns 1 on success, 0 on any validation/path failure (queuing 0xA5 to the client on failure).
+// Server-side skill "start" function (srvstfunc 38): a charge/leap-to-target movement skill (e.g. War Cry / charge class). Validates eSkill against skills.txt and that the unit has the skill; resolves target/cursor position. If a melee target is already in range, queues client packet 0xA5 and force-attacks it. Otherwise sets the unit's dynamic path collision pattern/type, calculates a path toward the cursor, applies walk velocities, lands the unit at the final path point, registers collision there, sets uninterruptable + skill_move state, and stores the destination into the skill's Param1-4. Finally applies the skill's aurastate (if valid): updates state, sets an expiry-timed state via SetStateWithExpiryTime (SKILLBAR_StateCallback_Whirlwind callback), copies aura/passive stats and the modifier skill/level stats, and fires up to 3 auraevent handlers. Returns 1 on success, 0 on any validation/path failure (queuing 0xA5 to the client on failure).
 BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bHasTargetPos;
     D2PathPointStrc* pPathPoints;
@@ -796,7 +796,7 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
       UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
       return 0;
     }
-    if ((bHasTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame2, pUnit, &nTargetX, &nTargetY) , !bHasTargetPos)) {
+    if (bHasTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame2, pUnit, &nTargetX, &nTargetY) , !bHasTargetPos) {
       UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
       return 0;
     }

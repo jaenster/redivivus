@@ -352,10 +352,10 @@ static int32_t GetPetUidByIndex(int32_t nIndex, D2UnitStrc * pUnit) {
     return pFirstPet->nPetGUID;
 }
 
-int __fastcall Unreferenced_00574810(D2UnitStrc * param_1, int param_2) {
+int __fastcall Unreferenced_00574810(D2UnitStrc * pUnit, int nPetType) {
     D2PetListStrc* pDVar1;
-    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(param_1);
-    pDVar1 = pDVar2 && pDVar2->pPets && param_2 >= 0 && param_2 < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? pDVar2->pPets->pPetList + param_2 : nullptr;
+    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pUnit);
+    pDVar1 = pDVar2 && pDVar2->pPets && nPetType >= 0 && nPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? pDVar2->pPets->pPetList + nPetType : nullptr;
     if (pDVar1) {
       return pDVar1->nMax;
     }
@@ -801,7 +801,7 @@ void __fastcall PLAYERPETS_SendPetListToClient(D2ClientStrc * pClient, D2UnitStr
 }
 
 // @sourcefile .\PLAYER\PlayerPets.cpp
-uint32_t __fastcall PETS_HasMercenary(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+BOOL __fastcall PETS_HasMercenary(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2PetListStrc* paMercPetList;
     D2PetStrc* pPetNode;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
@@ -1573,9 +1573,35 @@ uint32_t __fastcall GetCarry1FlagOfitem(D2UnitStrc * pUnit) {
     return 0;
 }
 
+#if 0 // ratchet: the match body of 00575ff0 (evidence 1985bb0f9) could not be re-spelled: callee D2Common::DATATBLS::MonsterTbls::GetHirelingEntry parameter pPrevEntry retyped: int32_t -> D2HirelingTxt *
 int32_t __fastcall GetHirelingNamesAndSize(::SGAMEDATA * pGame, int32_t nNcpClassId, uint32_t * pNameFirst, uint32_t * pNameLast, int * pClassId) {
     int32_t nCount;
     D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingEntry(pGame->bExpansion, nNcpClassId, 0, 0);
+    if (!pHirelingTxt) {
+      *pNameFirst = 0;
+      *pNameLast = 0;
+      *pClassId = 0;
+      nCount = -1;
+    } else {
+      *pNameFirst = (uint32_t)pHirelingTxt->nNameFirst;
+      *pNameLast = (uint32_t)pHirelingTxt->nNameLast;
+      if (pClassId) {
+        *pClassId = pHirelingTxt->classId;
+      }
+
+      nCount = *pNameLast - *pNameFirst + 1;
+      if (nCount == -1) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x60);
+        exit(-1);
+      }
+    }
+
+    return nCount;
+}
+#endif
+int32_t __fastcall GetHirelingNamesAndSize(::SGAMEDATA * pGame, int32_t nNcpClassId, uint32_t * pNameFirst, uint32_t * pNameLast, int * pClassId) {
+    int32_t nCount;
+    D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingEntry(pGame->bExpansion, nNcpClassId, 0, nullptr);
     if (!pHirelingTxt) {
       *pNameFirst = 0;
       *pNameLast = 0;

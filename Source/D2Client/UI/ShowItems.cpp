@@ -472,6 +472,16 @@ void __stdcall DRAW_AltItems() {
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(nullptr, 0, 0, 0, 0);
 }
 
+void Unreferenced_004c0ce0() {
+    int in_ECX;
+    int iVar1;
+    uint32_t* puVar2 = (uint32_t*)(in_ECX + 0x14);
+    for (iVar1 = 0x40; iVar1; iVar1--) {
+      *puVar2 = 0;
+      puVar2++;
+    }
+}
+
 void StaticInit_gaGroundItemLabels() {
     int nRemaining = 0x1f;
     do {

@@ -455,6 +455,21 @@
       "dh": "2c1a4c3b"
     },
     {
+      "name": "Unreferenced_004f8dd0",
+      "address": "004f8dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8dd0"
+        }
+      ],
+      "namespace": "D2gfx::D2GfxHelperStrc",
+      "calledFunctions": [
+        "Unreferenced_004f8dd0"
+      ],
+      "dh": "d186793c"
+    },
+    {
       "name": "fpFillYBufferTable",
       "address": "004f8de0",
       "lines": [

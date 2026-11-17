@@ -54,7 +54,7 @@ int32_t __fastcall D2WINTEXTBOX_GetLineCount(::D2WinTextBox * pTextBox);
 int32_t __fastcall D2WINTEXTBOX_GetScrollPosition(::D2WinTextBox * pTextBox);
 int32_t __fastcall D2WINTEXTBOX_GetSelectedLine(::D2WinTextBox * pTextBox);
 void __fastcall D2WINTEXTBOX_SetSelectedLine(::D2WinTextBox * pTextBox, int32_t nLineIndex);
-uint32_t __fastcall D2WINTEXTBOX_ScrollToLine(::D2WinTextBox * pTextBox, int32_t nTargetLine);
+BOOL __fastcall D2WINTEXTBOX_ScrollToLine(::D2WinTextBox * pTextBox, int32_t nTargetLine);
 int32_t __fastcall D2WINTEXTBOX_GetVisibleLineCount(::D2WinTextBox * pTextBox);
 uint16_t * __fastcall D2WINTEXTBOX_GetSelectedLineText(::D2WinTextBox * pnTextBox);
 uint16_t * __fastcall D2WINTEXTBOX_GetLineCellValue(::D2WinTextBox * pTextBox, int32_t nRow, int32_t nColIndex);
@@ -62,7 +62,7 @@ void __fastcall D2WINTEXTBOX_SetColumnCount(::D2WinTextBox * pTextBox, int32_t n
 void __fastcall D2WINTEXTBOX_SetColumnWidth(::D2WinTextBox * pTextBox, int32_t nColumnIndex, int32_t nColumnWidth);
 void __fastcall D2WINTEXTBOX_SetColumnAlignment(::D2WinTextBox * pTextBox, int32_t nColumnIndex, int32_t nAlignment);
 int32_t __fastcall D2WINTEXTBOX_GetLastLineIndex(::D2WinTextBox * pTextBox);
-uint32_t __fastcall D2WINTEXTBOX_SetLineColor(::D2WinTextBox * pTextBox, int32_t nRow, int32_t dwColor);
+BOOL __fastcall D2WINTEXTBOX_SetLineColor(::D2WinTextBox * pTextBox, int32_t nRow, int32_t dwColor);
 BOOL __fastcall Draw(::D2WinTextBox * pTextBox);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall Key(struct D2ControlMsg * pControlMsg);

@@ -228,13 +228,13 @@ int __fastcall PLRSAVE_RestoreItemFromSaveData(::SGAMEDATA * pGame, D2UnitStrc *
         return 0xc;
       case eD2PlayerAnimMode_ns::Neutral:
         D2Common::Units::ChangeAnimMode(pItem, 4);
-      bRestored = ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit, pItem->nUnitGUID, pSavedItemData->nEquipLoc, 1, (uint32_t*)&pItemUnknownStructure);
+      bRestored = ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit, pItem->nUnitGUID, pSavedItemData->nEquipLoc, 1, (BOOL*)&pItemUnknownStructure);
       break;
       case Walk:
         D2Common::Units::ChangeAnimMode(pItem, 4);
       D2Common::Units::SetXForStaticUnit(pItem, pSavedItemData->nPosX);
       D2Common::Units::SetYForStaticUnit(pItem, pSavedItemData->nPosY);
-      bRestored = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, pItem->nUnitGUID, pSavedItemData->nPosX, 0, (uint32_t*)&pItemUnknownStructure);
+      bRestored = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, pItem->nUnitGUID, pSavedItemData->nPosX, 0, (BOOL*)&pItemUnknownStructure);
       break;
       case eD2PlayerAnimMode_ns::GetHit:
         D2Common::Units::ChangeAnimMode(pItem, 4);
@@ -279,7 +279,6 @@ int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     DWORD dwContainerGUID;
     D2UnitStrc** pBodyLocParam;
     DWORD nSourceItem;
-    DWORD nSourceItem2;
     int32_t nSourceItem3;
     D2UnitStrc* pUnit_00 = pSourceItem;
     if (!pSourceItem) {
@@ -305,13 +304,13 @@ int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       case Equipment:
         D2Common::Units::ChangeAnimMode(pSourceItem, 4);
       if (!pUnit_00) {
-        nSourceItem2 = -1;
+        nSourceItem = -1;
       } else {
-        nSourceItem2 = (DWORD)pUnit_00->nUnitGUID;
+        nSourceItem = (DWORD)pUnit_00->nUnitGUID;
       }
 
       pBodyLocParam = &eBodyLocation;
-      nPlaceResult = ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit, nSourceItem2, D2Common::ITEMS::Items::GetBodyLocation(pUnit_00), 1, (uint32_t*)pBodyLocParam);
+      nPlaceResult = ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit, nSourceItem, D2Common::ITEMS::Items::GetBodyLocation(pUnit_00), 1, (BOOL*)pBodyLocParam);
       break;
       case Belt:
         D2Common::Units::ChangeAnimMode(pSourceItem, 4);
@@ -322,7 +321,7 @@ int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       }
 
       pBodyLocParam = &eBodyLocation;
-      nPlaceResult = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, nSourceItem, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit_00), 0, (uint32_t*)pBodyLocParam);
+      nPlaceResult = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, nSourceItem, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit_00), 0, (BOOL*)pBodyLocParam);
       break;
       case Ground:
 
@@ -849,14 +848,14 @@ void __fastcall PLAYERSAVE_ByteToHexChar(char * pszHexOut, uint8_t nByteValue) {
     pszHexOut[1] = byLowHexDigit;
 }
 
-uint8_t * __fastcall PLAYERSAVE_ByteArrayToHexString(uint8_t * szOut, uint8_t * pbyData, int32_t nLength) {
+char * __fastcall PLAYERSAVE_ByteArrayToHexString(char * szOut, uint8_t * pbyData, int32_t nLength) {
     if (nLength <= 0) {
       return nullptr;
     }
 
-    *szOut = 0x30;
-    szOut[1] = 0x78;
-    char* pOutCursor = (char*)(szOut + 2);
+    *szOut = '0';
+    szOut[1] = 'x';
+    char* pOutCursor = szOut + 2;
     do {
       PLAYERSAVE_ByteToHexChar(pOutCursor, *pbyData);
       pOutCursor += 2;
@@ -865,7 +864,7 @@ uint8_t * __fastcall PLAYERSAVE_ByteArrayToHexString(uint8_t * szOut, uint8_t * 
     } while (nLength);
 
     *pOutCursor = '\0';
-    return (uint8_t*)pOutCursor;
+    return pOutCursor;
 }
 
 // Computes a CRC32 over a D2MissilesTxt row for save-file integrity. For rows with packed flags > 0x5B, temporarily zeros out server-side function IDs (pSrvDoFunc/pSrvHitFunc), sub-missiles, sounds, and extra hit flags before hashing, then restores them — ensuring the CRC covers only data that is stable across patches.
@@ -876,8 +875,8 @@ uint32_t __fastcall PLAYERSAVE_CalculateChecksum(D2SaveFileHeaderStrc * pSaveHea
     int savedProgSounds = 0;
     int savedHitFlagsExtra = 0;
     if (nFieldCount > 0x5b) {
-      savedCltHitSubs = pSaveHeader->nTime32;
       savedFuncIds = pSaveHeader->dwChecksum;
+      savedCltHitSubs = pSaveHeader->nTime32;
       savedProgSounds = pSaveHeader->nTimeEx;
       savedHitFlagsExtra = pSaveHeader->nInitSeed;
       pSaveHeader->dwChecksum = 0;
@@ -1114,6 +1113,7 @@ static void __stdcall SaveToBuffer(::SGAMEDATA * pGame, int32_t nSaveParam, D2Un
 
 // Top-level player save dispatcher. Clears UNITFLAGEX_UPDATEINV, detects if the player is currently trading (interact with another UNIT_PLAYER), then routes to SaveToBuffer (OBNet/LAN), SaveToFile (SP without BNet service), or SaveToFileBnet (BNet) based on game type and BattleNetServerService pointer.
 // @sourcefile .\PLAYER\PlrSave.cpp
+#if 0 // ratchet: the match body of 00532400 (evidence 5b183fa9f) could not be re-spelled: callee GAME::Clients::GetClientContainer parameter pdwContainer retyped: uint32_t * -> void * *
 BOOL __fastcall SaveGameAllGameTypes(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pCharName, BOOL bUnknown) {
     BOOL _bHasInteractInfo;
     bool bHasInteractInfo;
@@ -1143,6 +1143,51 @@ BOOL __fastcall SaveGameAllGameTypes(::SGAMEDATA * pGame, D2UnitStrc * pUnit, ch
     pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave.cpp", 0xb67);
     GAME::Clients::GetAccountName(pClient, szAccountName);
     GAME::Clients::GetClientContainer(pClient, &clientContainer);
+    GAME::Clients::GetRealm(pClient, &nRealm);
+    bSaveSucceeded = 1;
+    if (pGame->nGameType == SGAMETYPE_OBNET_HOST || pGame->nGameType == SGAMETYPE_LAN_HOST) {
+      ::SGAMEDATA* pGameCopy = pGame;
+      SaveToBuffer(pGameCopy, bIsInteracting, pUnit, pClient);
+    } else if (BattleNetServerService) {
+      nSaveResult = SaveToFileBnet(pGame, szAccountName, pUnit, szCharName, bIsInteracting, clientContainer, bUnknown, nRealm);
+      bSaveSucceeded = nSaveResult;
+    } else {
+      PlayerSave::SaveToFile(pGame, pUnit, bIsInteracting, bUnknown, szCharName);
+    }
+
+    _bHasInteractInfo = bSaveSucceeded;
+    return _bHasInteractInfo;
+}
+#endif
+BOOL __fastcall SaveGameAllGameTypes(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pCharName, BOOL bUnknown) {
+    BOOL _bHasInteractInfo;
+    bool bHasInteractInfo;
+    D2ClientStrc* pClient;
+    int nSaveResult;
+    uint32_t nInteractUnitGUID;
+    uint32_t clientContainer;
+    uint32_t nRealm;
+    eD2UnitType eInteractUnitType;
+    int bSaveSucceeded;
+    int bIsInteracting;
+    char szAccountName[52];
+    uint32_t nSecurityCookie;
+    char* szCharName = pCharName;
+    if (!pUnit) {
+      return 0;
+    }
+
+    pUnit->eUnitFlagsEx &= ~UNITFLAGEX_UPDATEINV;
+    bIsInteracting = 0;
+    eInteractUnitType = UNIT_COUNT;
+    _bHasInteractInfo = UNIT::SUnit::GetInteractInfo(pUnit, &eInteractUnitType, &nInteractUnitGUID);
+    if (_bHasInteractInfo && eInteractUnitType == UNIT_PLAYER) {
+      bIsInteracting = 1;
+    }
+
+    pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave.cpp", 0xb67);
+    GAME::Clients::GetAccountName(pClient, szAccountName);
+    GAME::Clients::GetClientContainer(pClient, (void**)&clientContainer);
     GAME::Clients::GetRealm(pClient, &nRealm);
     bSaveSucceeded = 1;
     if (pGame->nGameType == SGAMETYPE_OBNET_HOST || pGame->nGameType == SGAMETYPE_LAN_HOST) {
@@ -1890,7 +1935,7 @@ int __fastcall PLRSAVE_RestoreItemsFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Deserializes a save-file item list from the bit stream and rebuilds the units. pItem must be the 'JM' list header (count follows); iterates nItemCount items, parsing each with ReadInfoFromStreamVersioned + ITEM_CreateFromSaveData (format eItemFormat), then attaching it to pUnit via PLRSAVE_RestoreItemToUnit or, when bUsePageHandler set, SetPageAndQuestHandler. For each item also reads its socketed/contained items (usedSockets) and attaches them to the parent. Frees units that fail to restore, and strips items whose runeword no longer validates. Writes bytes-consumed back through ppnShort. Returns 0 on success, 0xe on a parse/format error.
-int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, uint32_t eItemFormat, int32_t nStreamEnd, int32_t bUsePageHandler, short * * ppnBytesConsumed) {
+int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * pItem, uint32_t eItemFormat, int32_t nStreamEnd, int32_t bUsePageHandler, uint32_t * ppnBytesConsumed) {
     eD2ItemFlag eItemFlags;
     D2RuneTableStrc* pRuneTable;
     D2UnitDataItemDetailsStrc itemDetails;
@@ -1898,13 +1943,14 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
     int nBytesConsumed;
     int nRestoreResult;
     uint8_t* nBytesLeft;
-    uint8_t* pItemLocal = (uint8_t*)pItem;
-    if ((short int)pItem->eUnitType != 0x4d4a) {
+    D2UnitStrc* pUnit2;
+    uint8_t* pItemLocal = pItem;
+    if (*(short int*)pItem != 0x4d4a) {
       return 0xe;
     }
 
-    int nItemCount = (int)(uint16_t)*(uint16_t*)((intptr_t)&pItem->eUnitType + 2);
-    uint8_t* pStreamCursor = (uint8_t*)&pItem->nClassId;
+    int nItemCount = (int)*(uint16_t*)(pItem + 2);
+    uint8_t* pStreamCursor = pItem + 4;
     int nItemIndex = 0;
     D2UnitStrc* pCurrentUnit = pUnit;
     if (nItemCount) {
@@ -1917,28 +1963,28 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
           return 0xe;
         }
 
-        pItem = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, pStreamCursor, (size_t)nBytesLeft, 1, &itemDetails, &nBytesConsumed, eItemFormat);
-        if (!pItem && nBytesConsumed <= 0) {
+        pUnit2 = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, pStreamCursor, (size_t)nBytesLeft, 1, &itemDetails, &nBytesConsumed, eItemFormat);
+        if (!pUnit2 && nBytesConsumed <= 0) {
           return 0xe;
         }
 
-        pStreamCursor = (uint8_t*)((char*)pStreamCursor + nBytesConsumed);
-        if (pItem) {
-          GAME::Task::TASK_Nop(pItem);
+        pStreamCursor += nBytesConsumed;
+        if (pUnit2) {
+          GAME::Task::TASK_Nop(pUnit2);
           if (bUsePageHandler) {
-            nRestoreResult = PLRSAVE_RestoreItemToBodyLoc(pItem, pGame, pCurrentUnit, nullptr);
+            nRestoreResult = PLRSAVE_RestoreItemToBodyLoc(pUnit2, pGame, pCurrentUnit, nullptr);
           } else {
-            nRestoreResult = PLRSAVE_RestoreItemToUnit(pGame, pCurrentUnit, pItem, nullptr);
+            nRestoreResult = PLRSAVE_RestoreItemToUnit(pGame, pCurrentUnit, pUnit2, nullptr);
           }
         }
 
         nUsedSockets = itemDetails.usedSockets;
         if (nRestoreResult) {
-          if (pItem) {
-            UNIT::SUnit::FreeServerUnit(pGame, pItem);
+          if (pUnit2) {
+            UNIT::SUnit::FreeServerUnit(pGame, pUnit2);
           }
 
-          pItem = 0;
+          pUnit2 = 0;
         }
 
         for (nRestoreResult = 0; nRestoreResult < nUsedSockets; nRestoreResult++) {
@@ -1949,27 +1995,27 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
             return 0xe;
           }
 
-          pStreamCursor = (uint8_t*)((char*)pStreamCursor + nBytesConsumed);
-          if (!pItem) {
+          pStreamCursor += nBytesConsumed;
+          if (!(uint8_t*)pUnit2) {
             if (pSocketItem) {
               UNIT::SUnit::FreeServerUnit(pGame, pSocketItem);
             }
           } else if (pSocketItem) {
             GAME::Task::TASK_Nop(pSocketItem);
             if (bUsePageHandler) {
-              PLRSAVE_RestoreItemToBodyLoc(pSocketItem, pGame, pCurrentUnit, pItem);
+              PLRSAVE_RestoreItemToBodyLoc(pSocketItem, pGame, pCurrentUnit, pUnit2);
             } else {
-              PLRSAVE_RestoreItemToUnit(pGame, pCurrentUnit, pSocketItem, pItem);
+              PLRSAVE_RestoreItemToUnit(pGame, pCurrentUnit, pSocketItem, pUnit2);
             }
           }
         }
 
-        if (pItem) {
-          eItemFlags = D2Common::ITEMS::Items::ITEM_GetItemData_eD2ItemFlag(pItem);
+        if ((uint8_t*)pUnit2) {
+          eItemFlags = D2Common::ITEMS::Items::ITEM_GetItemData_eD2ItemFlag(pUnit2);
           if ((eItemFlags & ITEMFLAG_RUNEWORD) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
-            pRuneTable = D2Common::ITEMS::Items::CalculateRunewordByItem(pItem);
+            pRuneTable = D2Common::ITEMS::Items::CalculateRunewordByItem(pUnit2);
             if (!pRuneTable) {
-              ITEMS::ItemMode::ITEM_RemoveItemFromCurrentLocation(pGame, pCurrentUnit, pItem);
+              ITEMS::ItemMode::ITEM_RemoveItemFromCurrentLocation(pGame, pCurrentUnit, pUnit2);
             }
           }
         }
@@ -1978,20 +2024,20 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
       } while (nItemIndex < nItemCount);
     }
     if (ppnBytesConsumed) {
-      *ppnBytesConsumed = (short int*)((intptr_t)pStreamCursor - (intptr_t)pItemLocal);
+      *ppnBytesConsumed = (intptr_t)pStreamCursor - (intptr_t)pItemLocal;
     }
 
     return 0;
 }
 
-int __fastcall PLRSAVE_DispatchItemLoadByFormat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pItemData, uint32_t eFormat, int32_t nStreamEnd, int32_t bUsePageHandler, short * * ppnShort) {
+int __fastcall PLRSAVE_DispatchItemLoadByFormat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pItemData, uint32_t eFormat, int32_t nStreamEnd, int32_t bUsePageHandler, uint32_t * ppnShort) {
     int nNewStreamResult;
     if (eFormat == 0x47) {
       nNewStreamResult = PLRSAVE_RestoreItemsFromStream(pGame, pUnit, (short int*)pItemData, 0x47, nStreamEnd, bUsePageHandler, (int*)ppnShort);
       return nNewStreamResult;
     }
     if (eFormat >= 0x48 && eFormat <= 0x60) {
-      nNewStreamResult = PLRSAVE_LoadItemListFromStream(pGame, pUnit, (D2UnitStrc*)pItemData, eFormat, nStreamEnd, bUsePageHandler, ppnShort);
+      nNewStreamResult = PLRSAVE_LoadItemListFromStream(pGame, pUnit, (uint8_t*)pItemData, eFormat, nStreamEnd, bUsePageHandler, ppnShort);
       return nNewStreamResult;
     }
 
@@ -2040,7 +2086,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart7_part1(uint8_t * pCorpseData, u
         return 1;
       }
 
-      nItemLoadResult = PLRSAVE_LoadItemListFromStream(pGame, pCorpseUnit, (D2UnitStrc*)(pCorpseData + 0xc), nFormat, nSize - 0xc, 1, (short int**)&uSlot8.pClientLocal);
+      nItemLoadResult = PLRSAVE_LoadItemListFromStream(pGame, pCorpseUnit, pCorpseData + 0xc, nFormat, nSize - 0xc, 1, &uSlot8.nItemBytesRead);
     }
     if (!nItemLoadResult) {
       uint32_t pCorpseBytesRead;
@@ -2302,7 +2348,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint8_t * 
           }
 
           pbVar4 = pdwReadPos;
-          nErrorLine = PLRSAVE_DispatchItemLoadByFormat(pGame, pMercUnit, pdwReadPos, nVersion, (int32_t)(pbVar3 - pdwReadPos + nBytesRemaining), 0, (short int**)&pdwReadPos);
+          nErrorLine = PLRSAVE_DispatchItemLoadByFormat(pGame, pMercUnit, pdwReadPos, nVersion, (int32_t)(pbVar3 - pdwReadPos + nBytesRemaining), 0, (uint32_t*)&pdwReadPos);
           if (!nErrorLine) {
             ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pMercUnit, 0, 0);
             ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pMercUnit, 0);
@@ -2482,7 +2528,7 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
       pPlayerData->eRightSkillId = leftSkill;
       nBytesRemaining -= (int)ppUnit;
       pItemsData += (intptr_t)ppUnit;
-      nLoadResult = PLRSAVE_DispatchItemLoadByFormat(__frame1.pGameLocal, pUnit, pItemsData, nSavefileSize, nBytesRemaining, 0, (short int**)&ppUnit);
+      nLoadResult = PLRSAVE_DispatchItemLoadByFormat(__frame1.pGameLocal, pUnit, pItemsData, nSavefileSize, nBytesRemaining, 0, (uint32_t*)&ppUnit);
       if (!nLoadResult) {
         nGoldLimit = nBytesRemaining - (int)ppUnit;
         pCorpseHeader = (short int*)(pItemsData + (intptr_t)ppUnit);

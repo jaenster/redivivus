@@ -204,9 +204,10 @@
       "usedTypes": [
         "_MEMORYSTATUS",
         "eD2RendererMode",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ],
-      "dh": "2d21e7f1"
+      "dh": "449d811e"
     },
     {
       "name": "ResetStats",

@@ -638,8 +638,9 @@ void __fastcall Q34_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
         }
       }
     } else {
+      D2UnitStrc* t2_c0 = pQuestArgs->pPlayer;
       pSVar1 = pQuestArgs->pGame;
-      pDVar2 = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+      pDVar2 = D2Common::Units::GetPlayerData(t2_c0);
       pBitBuffer = pDVar2->pQuestRecord[pSVar1->nDifficulty];
       bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
       if (!bQuestState) {

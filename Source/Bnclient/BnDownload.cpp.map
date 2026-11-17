@@ -567,7 +567,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f79339e4",
+      "dh": "66797a24",
       "paramStorage": [
         [
           "pResultOut",
@@ -589,7 +589,7 @@
         "BNDOWNLOAD_ApplyPrepatch",
         "BNDOWNLOAD_ProcessPrepatchList"
       ],
-      "dh": "f1664c72",
+      "dh": "ed515f8f",
       "paramStorage": [
         [
           "pbPatcherLaunched",

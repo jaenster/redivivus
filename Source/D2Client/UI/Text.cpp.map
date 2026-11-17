@@ -304,10 +304,10 @@
       "calledFunctions": [
         "Unreferenced_0049d590"
       ],
-      "dh": "cd1aa2ab",
+      "dh": "8e100f55",
       "paramStorage": [
         [
-          "param_1",
+          "nValue",
           "ECX:4"
         ]
       ]
@@ -523,10 +523,10 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "a07ae690",
+      "dh": "7de03d26",
       "paramStorage": [
         [
-          "param_1",
+          "pData",
           "ECX:4"
         ]
       ]
@@ -548,14 +548,14 @@
         "D2CoordStrc",
         "D2TextBoxStrc"
       ],
-      "dh": "9581b5ee",
+      "dh": "6f7bcfaf",
       "paramStorage": [
         [
-          "param_1",
+          "pTextBox",
           "ECX:4"
         ],
         [
-          "param_2",
+          "pCoord",
           "EDX:4"
         ]
       ]

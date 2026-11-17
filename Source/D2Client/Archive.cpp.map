@@ -64,13 +64,28 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "8e64f467",
+      "dh": "375c175c",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
           "ECX:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_0045b9e0",
+      "address": "0045b9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b9e0"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "Unreferenced_0045b9e0"
+      ],
+      "dh": "9be12f53"
     },
     {
       "name": "Unreferenced_0045ba80",
@@ -89,10 +104,10 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "2374c21a",
+      "dh": "e7683fc6",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -113,10 +128,82 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "b3593244",
+      "dh": "98383906",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0045bab0",
+      "address": "0045bab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bab0"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "Unreferenced_0045bab0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "425c1572",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0045bac0",
+      "address": "0045bac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bac0"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "Unreferenced_0045bac0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "a41ee63b",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0045bad0",
+      "address": "0045bad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bad0"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0045bad0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "e7094920",
+      "paramStorage": [
+        [
+          "pNode",
           "ECX:4"
         ]
       ]
@@ -299,6 +386,30 @@
       ]
     },
     {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0045bcc0",
+      "address": "0045bcc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bcc0"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0045bcc0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "f93a21c9",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
       "name": "ARCHIVE_ClearList",
       "address": "0045bd00",
       "lines": [
@@ -370,10 +481,34 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "ec83de4c",
+      "dh": "bc928f13",
       "paramStorage": [
         [
-          "param_1",
+          "pData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0045bd90",
+      "address": "0045bd90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bd90"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0045bd90"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "2089b03f",
+      "paramStorage": [
+        [
+          "pNode",
           "ECX:4"
         ]
       ]

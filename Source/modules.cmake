@@ -185,7 +185,7 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/GAME/Server.cpp  # 0044cf20, 1 run
     Source/D2Client/GAME/stpl_SGAMEDATA.cpp  # 0044dd90, 7 runs
     Source/D2Client/GAME/Game/SGAMEDATA.cpp  # 0044fbb0, 2 runs
-    Source/D2Client/GAME/Game/stpl_SGAMEDATA.cpp  # 0044fbe0, 2 runs
+    Source/D2Client/GAME/Game/stpl_SGAMEDATA.cpp  # 0044fbe0, 3 runs
     Source/D2Client/Lng.cpp  # 004512c0, 1 run
     Source/D2Client/GAME/Record.cpp  # 00451400, 1 run
     Source/D2Client/Message.cpp  # 00451a90, 1 run
@@ -737,7 +737,7 @@ set(D2_MODULE_D2CMP_UNITS
     Source/D2CMP/SRC/stpl_TCELENTRY.cpp  # 00601fa0, 6 runs
     Source/D2CMP/SRC/CelCmp/TCELENTRY.cpp  # 00602a40, 1 run
     Source/D2CMP/SRC/CelCmp/stpl_CELLIST.cpp  # 00602aa0, 5 runs
-    Source/D2CMP/SRC/CelCmp/CELLIST.cpp  # 00602b20, 3 runs
+    Source/D2CMP/SRC/CelCmp/CELLIST.cpp  # 00602b20, 4 runs
     Source/D2CMP/SRC/CelCmp/stpl_TCELENTRY.cpp  # 00602bf0, 1 run
     Source/D2CMP/SRC/stpl_MappingEntryNode.cpp  # 00604070, 1 run
     Source/D2CMP/DUNGEON/Dungeon.cpp  # 00604a40, 1 run

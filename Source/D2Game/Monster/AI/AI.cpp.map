@@ -516,7 +516,7 @@
         "SERVER_UNIT_CastSkill"
       ],
       "usedTypes": [
-        "D2AiGeneralStrc *",
+        "D2AiParamStrc",
         "D2RoomCoordListStrc",
         "D2RoomStrc",
         "D2SeedStrc",
@@ -526,7 +526,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e3925bcf",
+      "dh": "b3504e3f",
       "paramStorage": [
         [
           "pGame",
@@ -575,7 +575,7 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "fe538fcc",
+      "dh": "25648c92",
       "paramStorage": [
         [
           "pGame",
@@ -1019,10 +1019,10 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "b4dc2918",
+      "dh": "a0039c0a",
       "paramStorage": [
         [
-          "param_1",
+          "pUnit",
           "ECX:4"
         ]
       ]
@@ -1418,9 +1418,10 @@
       "usedTypes": [
         "D2MonsterAiParameterStruct",
         "D2UnitStrc",
+        "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "d87df411",
+      "dh": "1a6dc990",
       "paramStorage": [
         [
           "pGame",
@@ -1459,9 +1460,10 @@
       "usedTypes": [
         "D2AiCorpseScanStrc",
         "D2UnitStrc",
+        "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8b89065b",
+      "dh": "0b20310c",
       "paramStorage": [
         [
           "pGame",
@@ -1499,10 +1501,11 @@
       "usedTypes": [
         "D2AiClassCountScanStrc",
         "D2UnitStrc",
+        "SGAMEDATA",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ecb6a816",
+      "dh": "5c728b3b",
       "paramStorage": [
         [
           "pGame",
@@ -6565,7 +6568,8 @@
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
-        "D2AiGeneralStrc *",
+        "D2AiParamStrc",
+        "D2MonStatsTxt",
         "D2RoomStrc",
         "D2SeedStrc",
         "D2UnitStrc",
@@ -6574,7 +6578,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "d3cacbba",
+      "dh": "aaa252e8",
       "paramStorage": [
         [
           "pGame",
@@ -6619,8 +6623,8 @@
         "MONSTERAI_CommandWalkRandomOffset"
       ],
       "usedTypes": [
-        "D2AiGeneralStrc",
-        "D2AiGeneralStrc *",
+        "D2AiParamStrc",
+        "D2MonStatsTxt",
         "D2RoomStrc",
         "D2SeedStrc",
         "D2UnitStrc",
@@ -6628,7 +6632,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "77c7129c",
+      "dh": "a5c72bed",
       "paramStorage": [
         [
           "pGame",
@@ -6665,7 +6669,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e527816b",
+      "dh": "59034aa3",
       "paramStorage": [
         [
           "pGame",
@@ -8252,10 +8256,10 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "e2722fd9",
+      "dh": "e2a1fb49",
       "paramStorage": [
         [
-          "param_1",
+          "pUnit",
           "ECX:4"
         ]
       ]
@@ -11603,14 +11607,14 @@
       "usedTypes": [
         "uint8_t *"
       ],
-      "dh": "ce1e1b9f",
+      "dh": "1aa48273",
       "paramStorage": [
         [
-          "param_1",
+          "ppData",
           "ECX:4"
         ],
         [
-          "param_2",
+          "nMask",
           "EDX:4"
         ]
       ]
@@ -11830,7 +11834,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "971e5d28",
+      "dh": "da6ec213",
       "paramStorage": [
         [
           "pGame",
@@ -11993,9 +11997,10 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
+        "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "7e3580f7",
+      "dh": "f31a3fb9",
       "paramStorage": [
         [
           "dwUnused",
@@ -12042,7 +12047,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "530714a8",
+      "dh": "bc32eedc",
       "paramStorage": [
         [
           "pGame",
@@ -12358,10 +12363,11 @@
       "usedTypes": [
         "D2UnitStrc",
         "D2UnitStrc *",
+        "SGAMEDATA",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "752d5ca1",
+      "dh": "cdd0f35e",
       "paramStorage": [
         [
           "dwUnused",
@@ -12417,7 +12423,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "b4effab3",
+      "dh": "0c7e1ebd",
       "paramStorage": [
         [
           "pGame",
@@ -13178,10 +13184,11 @@
         "D2AiResurrectScanStrc",
         "D2MonStatsTxt",
         "D2UnitStrc",
+        "SGAMEDATA",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4261be51",
+      "dh": "004dfd94",
       "paramStorage": [
         [
           "dwUnused",
@@ -13236,7 +13243,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "d5fa1029",
+      "dh": "128f0eb6",
       "paramStorage": [
         [
           "pGame",
@@ -13354,10 +13361,11 @@
       "usedTypes": [
         "D2AiLowLifeScanStrc",
         "D2UnitStrc",
+        "SGAMEDATA",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4e0c170d",
+      "dh": "cfc7b9bb",
       "paramStorage": [
         [
           "dwUnused",
@@ -13426,7 +13434,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "07e51326",
+      "dh": "5be3093a",
       "paramStorage": [
         [
           "pGame",
@@ -14492,10 +14500,10 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "6cc9d641",
+      "dh": "54646e94",
       "paramStorage": [
         [
-          "param_1",
+          "pData",
           "ECX:4"
         ]
       ]

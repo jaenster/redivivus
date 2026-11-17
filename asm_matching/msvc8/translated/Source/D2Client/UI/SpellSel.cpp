@@ -266,7 +266,7 @@ DC6 * __fastcall ARCHIVE_LoadSpellsClassSkillicon(short * pSkillId) {
     return gpSpellSelSkillIconDC6;
 }
 
-void __fastcall SPELLSEL_SetMouseHandFlag(uint32_t bLeftHand) {
+void __fastcall SPELLSEL_SetMouseHandFlag(BOOL bLeftHand) {
     gbSpellSelMouseHandFlag = bLeftHand;
 }
 
@@ -757,7 +757,7 @@ void __stdcall INPUT_SpellSelectClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
-void __stdcall SPELLSEL_ClearSkillBinding(short * pSkillId, int32_t nChargesLeft) {
+static void __stdcall SPELLSEL_ClearSkillBinding(short * pSkillId, int32_t nChargesLeft) {
     int nByteOffset;
     int nSlotMsgKey;
     int* pSlotSkillId = gSpellSelGridRegion.aLeftHandSlots;
@@ -818,7 +818,7 @@ void __fastcall SPELLSEL_HandleSkillSelection(int32_t nSlotIndex) {
       nMouseY = Cursor::GetMouseY();
       if (nMouseX >= nSlotScreenX && nMouseX <= nSlotScreenX + 0x30 && nMouseY >= nSlotScreenY - 0x30 && nMouseY <= nSlotScreenY) {
         if (gSpellSelectionSkillIDs[nSlotIndex] != -1) {
-          GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x51, (nSlotIndex << 0x10) + 0xffff, -1);
+          GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x51, nSlotIndex * 0x10000 + 0xffff, -1);
         }
 
         bIsRightHand = !gbSpellSelMouseHandFlag;
@@ -832,7 +832,7 @@ void __fastcall SPELLSEL_HandleSkillSelection(int32_t nSlotIndex) {
 
         nSkillSlotValue = pSlotSkillXPtr->aRightHandSlots[0];
         gSpellSelLeftSkillBindings[nSlotIndex] = nSkillSlotValue;
-        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x51, (nSlotIndex << 0x10) + (gSpellSelRightSkillBindings[nSlotIndex] ? 0x8000 : 0) + nSlotScreenY, nSkillSlotValue);
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x51, nSlotIndex * 0x10000 + (gSpellSelRightSkillBindings[nSlotIndex] ? 0x8000 : 0) + nSlotScreenY, nSkillSlotValue);
         nSlotScreenY = 0;
         nSlotScreenX = 0xffff;
         do {
@@ -894,14 +894,12 @@ void __fastcall SPELLSEL_ActivateSkillSlot(int32_t nSlot) {
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     gbSpellSelActiveRightSkillSlot = nSlot;
     GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x3c, (gSpellSelRightSkillBindings[nSlot] ? 0x80000000 : 0) + gSpellSelectionSkillIDs[nSlot], gSpellSelLeftSkillBindings[nSlot]);
-    int32_t nOwnerGUID_00 = gSpellSelLeftSkillBindings[nSlot];
-    eD2Skills nOwnerGUID = gSpellSelectionSkillIDs[nSlot];
     if (gSpellSelRightSkillBindings[nSlot]) {
-      D2Common::Skills::SelectSkillLeft(pUnit, nOwnerGUID, nOwnerGUID_00);
+      D2Common::Skills::SelectSkillLeft(pUnit, gSpellSelectionSkillIDs[nSlot], gSpellSelLeftSkillBindings[nSlot]);
       return;
     }
 
-    D2Common::Skills::SelectSkillRight(pUnit, nOwnerGUID, nOwnerGUID_00);
+    D2Common::Skills::SelectSkillRight(pUnit, gSpellSelectionSkillIDs[nSlot], gSpellSelLeftSkillBindings[nSlot]);
 }
 
 void __fastcall SPELLSEL_SetSkillSlot(int32_t nSlotIndex, int32_t nSkillId, int32_t nRightHandBinding, int32_t nOwnerGUID) {
@@ -1149,6 +1147,18 @@ void __fastcall SPELLSEL_DrawSkillGrid(D2UnitStrc * pUnit, int32_t nGridStartX, 
         return;
       }
     } while (true);
+}
+
+void Unreferenced_004aa680() {
+    if (!gbSpellSelMouseHandFlag) {
+      return;
+    }
+
+    BOOL bChargedOnly = 0;
+    BOOL bShowTooltips = 0;
+    BOOL bWeaponSwap = 1;
+    gSpellSelGridRegion.sGridIndex[0] = 0;
+    SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), 0x50, bWeaponSwap, bShowTooltips, bChargedOnly);
 }
 
 void __fastcall Unreferenced_004aa6b0(BOOL bChargedOnly) {

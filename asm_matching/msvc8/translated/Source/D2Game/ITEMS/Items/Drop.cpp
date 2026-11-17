@@ -439,24 +439,25 @@ static BOOL __stdcall ITEM_MarkUniqueAsDropped(::SGAMEDATA * pGame, D2UnitStrc *
 
     uint32_t nFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
     D2UniqueItemsTxt* pUniqueItemsTxt = (int)nFileIndex >= 0 && (int)nFileIndex < D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + nFileIndex : nullptr;
-    if (!pUniqueItemsTxt) {
-      return 0;
-    }
-    if (*((uint8_t*)pUniqueItemsTxt + 0x2c) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
-      return 1;
-    }
-    if (pItemsTxt->bQuest == '\0') {
-      nClassId = ITEM_IsUniqueAlreadyDropped(pGame, pUnit);
-      if (nClassId) {
+    if (pUniqueItemsTxt) {
+      if (*((uint8_t*)pUniqueItemsTxt + 0x2c) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+        return 1;
+      }
+      if (pItemsTxt->bQuest == '\0') {
+        nClassId = ITEM_IsUniqueAlreadyDropped(pGame, pUnit);
+        if (nClassId) {
+          return 0;
+        }
+      }
+      if ((int)nFileIndex > 0x1000) {
         return 0;
       }
-    }
-    if ((int)nFileIndex > 0x1000) {
+
+      pGame->fUniqueSpawn[(int)nFileIndex >> 5] |= Fog::BitBuffer::gadwBitMasks[nFileIndex & 0x1f];
+      return 1;
+    } else {
       return 0;
     }
-
-    pGame->fUniqueSpawn[(int)nFileIndex >> 5] |= Fog::BitBuffer::gadwBitMasks[nFileIndex & 0x1f];
-    return 1;
 }
 
 static BOOL __stdcall ITEM_RollMagicPrefixSuffix(D2ItemGenContextStrc * pItemGenCtx, D2UnitStrc * * ppUnit) {
@@ -2188,7 +2189,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     int nBaseRollChance;
     nBaseRollChance = pQualityRatio->Unique - nLevelDiff / pQualityRatio->UniqueDivisor;
     int nScaledRollChance;
-    nScaledRollChance = nBaseRollChance << 7;
+    nScaledRollChance = nBaseRollChance * 0x80;
     if (bHasMF) {
       nAdjustedChance = ITEMDROP_AdjustDrop(nMFWithBase, 0xfa, 0xfa);
       if (nAdjustedChance) {
@@ -2211,7 +2212,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     }
 
     nBaseRollChance = pQualityRatio->Set - nLevelDiff / pQualityRatio->SetDivisor;
-    nScaledRollChance = nBaseRollChance << 7;
+    nScaledRollChance = nBaseRollChance * 0x80;
     if (bHasMF) {
       nAdjustedChance = ITEMDROP_AdjustDrop(nMFWithBase, 500, 500);
       if (nAdjustedChance) {
@@ -2233,7 +2234,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     }
     if (pItemTypeTxt->rare != '\0') {
       nBaseRollChance = pQualityRatio->Rare - nLevelDiff / pQualityRatio->RareDivisor;
-      nScaledRollChance = nBaseRollChance << 7;
+      nScaledRollChance = nBaseRollChance * 0x80;
       if (bHasMF) {
         nAdjustedChance = ITEMDROP_AdjustDrop(nMFWithBase, 600, 600);
         if (nAdjustedChance) {
@@ -2259,7 +2260,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     }
 
     nBaseRollChance = pQualityRatio->Magic - nLevelDiff / pQualityRatio->MagicDivisor;
-    nScaledRollChance = nBaseRollChance << 7;
+    nScaledRollChance = nBaseRollChance * 0x80;
     if (bHasMF) {
       nScaledRollChance = nBaseRollChance * 0x3200 / nMFWithBase;
     }
@@ -2278,7 +2279,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     }
 
     roll_superior:
-    nRoll = pQualityRatio->HiQuality - nLevelDiff / pQualityRatio->HiQualityDivisor << 7;
+    nRoll = (pQualityRatio->HiQuality - nLevelDiff / pQualityRatio->HiQualityDivisor) * 0x80;
     if ((int)nRoll <= 0) {
       return 3;
     }
@@ -2288,7 +2289,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
       return 3;
     }
 
-    nRoll = pQualityRatio->Normal - nLevelDiff / pQualityRatio->NormalDivisor << 7;
+    nRoll = (pQualityRatio->Normal - nLevelDiff / pQualityRatio->NormalDivisor) * 0x80;
     if ((int)nRoll <= 0) {
       return 2;
     }

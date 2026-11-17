@@ -1634,17 +1634,20 @@ D2RoomStrc * __stdcall SpawnUnit(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, in
     D2RoomStrc* pFreeCoordRoom;
     POINT ptSpawnCoord;
     int nLocalY;
-    int32_t nDrlgAct;
-    if (pDrlgAct) {
+    int nDrlgAct;
+    if (!pDrlgAct) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x22c);
+      exit(-1);
+    } else {
       {
         D2DrlgStrc** ppDVar1;
         ppDVar1 = &pDrlgAct->pDrlg;
         nDrlgAct = 0x0;
         nLocalY = 0;
-        pSpawnRoom = Drlg::DrlgRoom::DRLGSPAWN_FindSpawnLocationInLevel(*ppDVar1, eLevel, nSpawnTypeOrMode, (int*)&nDrlgAct, &nLocalY);
+        pSpawnRoom = Drlg::DrlgRoom::DRLGSPAWN_FindSpawnLocationInLevel(*ppDVar1, eLevel, nSpawnTypeOrMode, &nDrlgAct, &nLocalY);
         if (pSpawnRoom) {
-          Drlg::Transform::CoordsRoomToWorld((int32_t*)&nDrlgAct, &nLocalY);
-          ptSpawnCoord.x = nDrlgAct + 3;
+          Drlg::Transform::CoordsRoomToWorld(&nDrlgAct, &nLocalY);
+          ptSpawnCoord.x = (intptr_t)&((D2DrlgActStrc*)nDrlgAct)->eLevelIdFirst + 3;
           ptSpawnCoord.y = nLocalY + 3;
           pFreeCoordRoom = Collision::GetFreeCoordinates_WithNeighboorRooms(pSpawnRoom, &ptSpawnCoord, nUnitSize, 0x1c09, 0);
           if (!pFreeCoordRoom) {
@@ -1661,9 +1664,6 @@ D2RoomStrc * __stdcall SpawnUnit(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, in
         return nullptr;
       }
     }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x22c);
-    exit(-1);
 }
 
 int32_t __stdcall GetGridIndex(D2RoomStrc * pRoom, int32_t nX, int32_t nY) {

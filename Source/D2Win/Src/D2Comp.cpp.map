@@ -824,12 +824,12 @@
         "exit"
       ],
       "usedTypes": [
-        "D2CharSelStrc",
+        "D2CharSelCompStrc",
         "D2CompCofListNodeStrc",
         "D2CompCofListNodeStrc *",
         "int32_t"
       ],
-      "dh": "b33935db",
+      "dh": "f2f7bd99",
       "paramStorage": [
         [
           "pCharSel",
@@ -1333,7 +1333,7 @@
         "D2COMP_DestroyCompositeUnit",
         "FreeClientMemory"
       ],
-      "dh": "f74ad2fb"
+      "dh": "61ff5100"
     },
     {
       "name": "D2COMP_GetCompositeUnitListHead",
@@ -1614,11 +1614,11 @@
         "exit"
       ],
       "usedTypes": [
-        "D2CharSelStrc",
+        "D2CharSelCompStrc",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f5ea5943",
+      "dh": "b49a251c",
       "paramStorage": [
         [
           "pCharSel",

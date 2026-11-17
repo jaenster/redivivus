@@ -153,6 +153,46 @@ camelCase, so a port reads side by side with its original.
 |`layout.zig`|`msi_paths.py`, `vc8_layout.py`, `setup_psdk.sh`|the toolchain trees from the installer cabinets|
 |`projectjson.zig`|`publish-kit/tools/public-project-json.py`|the public module table, as `json.dumps(indent=2)`|
 
+## Windows host inputs (experimental)
+
+The native Windows compile driver requires `VC8_NATIVE_CL` to name an absolute VC8
+`cl.exe`. Set `INCLUDE` and `LIB` for that installation as you would for a VC8 command
+prompt. `VC8_NATIVE_ROOT` names a VC8 runtime tree with `rtm/lib` and `sp1/lib`;
+`crt` and `libmap` require it on Windows. Provide `reference/Game.exe` and use the
+checked-in `asm_matching/msvc8/translated` tree. Set `ORACLE_TRANSLATED` to its absolute
+path and leave `GR` unset for the published pipeline. The translation's source hashes
+are checked before compilation; neither a translator checkout nor Node is needed.
+`oracle-zig all --root <asm_matching/msvc8>` runs native build, map, libmap, and audit
+in order. `oracle-zig quick --root <asm_matching/msvc8>` runs the incremental pipeline;
+both require the VC8 inputs above. On Windows, `all`, `quick`, and `map` carve a missing
+`build/ref/functions.tsv` from the local Game.exe; they do not download the image.
+These commands check Game.exe against the oracle's pinned 1.14d SHA-256 before use.
+The Unix `oracle` Bash wrapper and its build.py fallback are not used by these native
+commands. `all` and `quick` require baseline settings (default `ORACLE_VC=sp1` and no
+custom `ORACLE_CFLAGS`) because they write the baseline evidence directory.
+Any existing `evidence/crtmap.tsv` is an optional input to this pipeline: `all` does
+not run `crt` or replace that input. A clean main checkout has no CRT map; the paired
+workflow preserves that absence instead of inserting a different preprocessing step.
+
+The `commit`, `x64` helper, and Unix GCC `tucache` commands require the Unix oracle
+environment and report an unsupported-command error on Windows. Native x64
+compilation and Unix shell setup scripts are outside this Windows host port.
+
+Windows module ordering uses bytewise lexical sorting, equivalent to Unix `sort(1)`
+with `LC_ALL=C`. A unit fixture covers case, punctuation, numeric suffixes, UTF-8 and
+duplicates. The paired CI additionally compares the complete current tree's module
+order from native Windows with Linux in the C locale.
+
+`oracle-windows.yml` compiles the shipped translation on Linux and Windows at the
+same candidate commit, and runs the unmodified main Linux pipeline as a control.
+The comparison script requires matching input fingerprints, headline figures,
+total MATCH, library figures, module order, and all five evidence TSV digests across
+hosts. It also compares main when its shipped inputs are identical, checks that
+the CRT input was preserved, and requires zero MISSING/QUARANTINE and a clean address
+self-check. Counts and output digests are measured within each run rather than
+pinned to one source export. The Windows PR remains experimental until that full
+comparison passes; local compilation alone is not a parity claim.
+
 ## Porting the next stage
 
 - Read the Python whole and port the algorithm, including its orderings: dict iteration is

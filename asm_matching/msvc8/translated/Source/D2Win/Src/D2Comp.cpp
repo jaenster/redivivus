@@ -2870,6 +2870,7 @@ void __stdcall D2COMP_AllocSmallClientBlock() {
     *pAllocated = 0;
 }
 
+#if 0 // ratchet: the match body of 005041b0 (evidence 1985bb0f9) could not be re-spelled: parameter 0 retyped: D2CharSelStrc * -> D2CharSelCompStrc *
 void __stdcall D2COMP_DestroyCompositeUnit(D2CharSelStrc * pCharSel, int32_t bUnlink) {
     D2CompCofListNodeStrc** pCOFListHead;
     D2CompCofListNodeStrc* pNextCOFNode;
@@ -2903,6 +2904,43 @@ void __stdcall D2COMP_DestroyCompositeUnit(D2CharSelStrc * pCharSel, int32_t bUn
       }
 
       D2COMP_UnlinkCompositeUnit(pCharSel);
+      return;
+    }
+}
+#endif
+void __stdcall D2COMP_DestroyCompositeUnit(D2CharSelCompStrc * pCharSel, int32_t bUnlink) {
+    D2CompCofListNodeStrc** pCOFListHead;
+    D2CompCofListNodeStrc* pNextCOFNode;
+    if (!pCharSel) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x877);
+      exit(-1);
+    } else {
+      D2CompCofListNodeStrc* pMemoryToFree;
+      pCOFListHead = pCharSel->ppCofCacheEntries;
+      if (!pCOFListHead) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x87b);
+        exit(-1);
+      }
+
+      pMemoryToFree = *pCOFListHead;
+      while (pMemoryToFree) {
+        pNextCOFNode = pMemoryToFree->pNext;
+        D2COMP_ReleaseCOFCacheEntry(1, pMemoryToFree->pCacheEntry);
+        D2_FREE_AT(pMemoryToFree, ".\\Src\\D2Comp.cpp", 0x883);
+        pMemoryToFree = pNextCOFNode;
+      }
+
+      *pCOFListHead = 0;
+      D2_FREE_AT(pCOFListHead, ".\\Src\\D2Comp.cpp", 0x889);
+      if (pCharSel->pGuildEmblemImage) {
+        D2WinArchive::IMAGE_FreeImage(pCharSel->pGuildEmblemImage);
+        pCharSel->pGuildEmblemImage = 0;
+      }
+      if (!bUnlink) {
+        return;
+      }
+
+      D2COMP_UnlinkCompositeUnit((D2CharSelStrc*)pCharSel);
       return;
     }
 }
@@ -3524,11 +3562,25 @@ void __stdcall D2COMP_CreateCompositeUnit(D2CharSelCompStrc * pCompUnit, uint32_
     }
 }
 
+#if 0 // ratchet: the match body of 00505100 (evidence 1985bb0f9) could not be re-spelled: callee D2COMP_DestroyCompositeUnit parameter pCharSel retyped: D2CharSelStrc * -> D2CharSelCompStrc *
 void __stdcall D2COMP_FreeAllCompositeUnits() {
     D2CharSelStrc* pCharSel = (D2CharSelStrc*)gpCompositeUnitListHead;
     while (pCharSel) {
       D2CharSelStrc* pDVar1;
       pDVar1 = *(D2CharSelStrc**)(pCharSel->szCharname + 0xc4);
+      D2COMP_DestroyCompositeUnit(pCharSel, 0);
+      D2_FREE_AT(pCharSel, ".\\Src\\D2Comp.cpp", 0xd38);
+      pCharSel = pDVar1;
+    }
+
+    gpCompositeUnitListHead = 0;
+}
+#endif
+void __stdcall D2COMP_FreeAllCompositeUnits() {
+    D2CharSelCompStrc* pCharSel = gpCompositeUnitListHead;
+    while (pCharSel) {
+      D2CharSelCompStrc* pDVar1;
+      pDVar1 = pCharSel->pNext;
       D2COMP_DestroyCompositeUnit(pCharSel, 0);
       D2_FREE_AT(pCharSel, ".\\Src\\D2Comp.cpp", 0xd38);
       pCharSel = pDVar1;
@@ -3634,6 +3686,7 @@ uint32_t __stdcall D2COMP_GetFlags(D2CharSelCompStrc * pCompUnit) {
     return pCompUnit->nFlags;
 }
 
+#if 0 // ratchet: the match body of 00505360 (evidence 1985bb0f9) could not be re-spelled: parameter 0 retyped: D2CharSelStrc * -> D2CharSelCompStrc *
 void __stdcall D2COMP_SetFlags(D2CharSelStrc * pCharSel, uint32_t dwFlags) {
     if (!pCharSel) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xda2);
@@ -3641,6 +3694,15 @@ void __stdcall D2COMP_SetFlags(D2CharSelStrc * pCharSel, uint32_t dwFlags) {
     }
 
     *(uint32_t*)pCharSel->szCharname = dwFlags;
+}
+#endif
+void __stdcall D2COMP_SetFlags(D2CharSelCompStrc * pCharSel, uint32_t dwFlags) {
+    if (!pCharSel) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xda2);
+      exit(-1);
+    }
+
+    pCharSel->nFlags = dwFlags;
 }
 
 void __stdcall D2COMP_LoadGuildEmblemIcon(D2CharSelCompStrc * pCompUnit, uint8_t byEmblemIcon, uint8_t byPrimaryColor, uint8_t bySecondaryColor) {

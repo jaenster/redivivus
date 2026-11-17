@@ -669,10 +669,34 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "6a86690b",
+      "dh": "a9380ed9",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0040f530",
+      "address": "0040f530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040f530"
+        }
+      ],
+      "namespace": "Fog::Src::LogManager",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0040f530"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "313693d2",
+      "paramStorage": [
+        [
+          "pNode",
           "ECX:4"
         ]
       ]
@@ -694,10 +718,10 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "19db7302",
+      "dh": "1feeaaf3",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -853,10 +877,10 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "d4dae873",
+      "dh": "a642e325",
       "paramStorage": [
         [
-          "param_1",
+          "pData",
           "ECX:4"
         ]
       ]

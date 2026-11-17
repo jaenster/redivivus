@@ -62,6 +62,19 @@ template<> TSExplicitList<::StringEntryNode, -572662307>* TSExplicitList<StringE
     return this;
 }
 
+template<> void TSExplicitList<StringEntryNode, -572662307>::Unreferenced_0060f020() {
+    if (!this) {
+      return;
+    }
+
+    TSLink<::StringEntryNode>* pTVar1 = &this->m_terminator;
+    pTVar1->m_prevlink = 0;
+    pTVar1->m_next = 0;
+    pTVar1->m_prevlink = pTVar1;
+    this->m_linkoffset = -0x22222223;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
+}
+
 template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::DeleteNode(::StringEntryNode * pNode) {
     TSLink<::StringEntryNode>* pNextLink = !pNode ? &this->m_terminator : (TSLink<::StringEntryNode>*)((intptr_t)&pNode->m_hashval + this->m_linkoffset);
     intptr_t uNextEntry = pNextLink->m_next;

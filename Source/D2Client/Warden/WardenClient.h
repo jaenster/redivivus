@@ -152,7 +152,7 @@ void __fastcall WARDEN_CbAllocModuleStruct(uint32_t nSize);
 void __fastcall WARDEN_CbFreeModuleStruct(void * pModuleStruct);
 // @sourcefile .\WARDEN\WardenClient.cpp
 LPVOID * __thiscall WARDEN_DestroyModuleObject(LPVOID * ppModule, uint8_t bFreeStruct);
-uint32_t __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t nSize);
+BOOL __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t nSize);
 ::WardenClient * __thiscall Constructor(::WardenClient * pThis);
 // @sourcefile .\WARDEN\WardenClient.cpp
 void __stdcall WARDEN_UnloadActiveModule();

@@ -37,7 +37,10 @@
       "calledFunctions": [
         "BNSEND_SetServerToken"
       ],
-      "dh": "a4a8605b",
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "b06055ba",
       "paramStorage": [
         [
           "nServerToken",
@@ -76,7 +79,7 @@
       "calledFunctions": [
         "BNSEND_SetClientToken"
       ],
-      "dh": "68046ec3",
+      "dh": "51bfd8f4",
       "paramStorage": [
         [
           "nClientToken",
@@ -515,7 +518,7 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "0901fb96",
+      "dh": "b8b56d21",
       "paramStorage": [
         [
           "szText",
@@ -1441,6 +1444,21 @@
       "dh": "844ac2b3"
     },
     {
+      "name": "Unreferenced_0051beb0",
+      "address": "0051beb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051beb0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051beb0"
+      ],
+      "dh": "7d1e0652"
+    },
+    {
       "name": "D2CheckExpansionGame",
       "address": "0051bec0",
       "lines": [],
@@ -1904,10 +1922,10 @@
         "Unreferenced_0051c570",
         "WSASocket2_Send"
       ],
-      "dh": "562fbaad",
+      "dh": "fdcd6b34",
       "paramStorage": [
         [
-          "param_1",
+          "szText",
           "ECX:4"
         ]
       ]
@@ -1965,10 +1983,10 @@
         "Unreferenced_0051c6b0",
         "BNMESSQUEUE_EnqueueString"
       ],
-      "dh": "5a60d772",
+      "dh": "cfad8acd",
       "paramStorage": [
         [
-          "param_1",
+          "szText",
           "ECX:4"
         ]
       ]
@@ -2204,7 +2222,7 @@
       "calledFunctions": [
         "BNSEND_SetGlobalFlag"
       ],
-      "dh": "52e3acce",
+      "dh": "dea0c944",
       "paramStorage": [
         [
           "dwThreadInitFlag",
@@ -2433,14 +2451,14 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "8e472cb6",
+      "dh": "5fa08765",
       "paramStorage": [
         [
-          "param_1",
+          "pDst",
           "ECX:4"
         ],
         [
-          "param_2",
+          "pSrc",
           "EDX:4"
         ]
       ]
@@ -2610,10 +2628,10 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "9f3283aa",
+      "dh": "aaec7181",
       "paramStorage": [
         [
-          "param_1",
+          "pData",
           "ECX:4"
         ]
       ]
@@ -2693,10 +2711,32 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "a85c7cb6",
+      "dh": "05b41e8f",
       "paramStorage": [
         [
-          "param_1",
+          "pData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0051d730",
+      "address": "0051d730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d730"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051d730",
+        "SMemFree"
+      ],
+      "dh": "1b9a3931",
+      "paramStorage": [
+        [
+          "pArray",
           "ECX:4"
         ]
       ]
@@ -2993,6 +3033,22 @@
           "ESI:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_0051dd20",
+      "address": "0051dd20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051dd20"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051dd20",
+        "tolower"
+      ],
+      "dh": "c14e4e1d"
     },
     {
       "name": "BNSEND_CalculateCDKeyChecksum",

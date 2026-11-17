@@ -2420,8 +2420,8 @@ void __fastcall TEXT_SetTextDisplayMode(int32_t nDisplayMode) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Text Display Beta", 0, nDisplayMode);
 }
 
-int __fastcall Unreferenced_0049d590(int param_1) {
-    return 0x70 - ((uint32_t)param_1 >> 10);
+int __fastcall Unreferenced_0049d590(int nValue) {
+    return 0x70 - ((uint32_t)nValue >> 10);
 }
 
 static BOOL TEXT_DrawScrollingTextBox(D2TextBoxStrc * ppwszText) {
@@ -2542,7 +2542,7 @@ static BOOL TEXT_DrawScrollingTextBox(D2TextBoxStrc * ppwszText) {
           nBottomCropOffset = nYTop + 0x12;
           nFontHeight = D2Win::Src::D2WinFont::D2WINFONT_GetCurrentFontHeight();
           if (nBottomCropOffset < (int)nFontHeight && (gnTextDisplayMode || gbTextScrollBoxVisible)) {
-            D2Win::Src::D2WinFont::D2WINFONT_DrawVerticalCroppedText(uSlot10.pBottomLine->wszLine, gnTextBoxExclusionX + 0x10, gnScrollingTextBoxTopY + nYTop + 0x83, 0, nBottomCropOffset, nFontHeight - nBottomCropOffset);
+            D2Win::Src::D2WinFont::D2WINFONT_DrawVerticalCroppedText(uSlot10.pBottomLine->wszLine, gnTextBoxExclusionX + 0x10, gnScrollingTextBoxTopY + (nYTop + 0x83), 0, nBottomCropOffset, nFontHeight - nBottomCropOffset);
           }
         }
       }
@@ -2684,24 +2684,24 @@ void __fastcall Unreferenced_0049da60(int bRegister) {
     }
 }
 
-int __fastcall Unreferenced_0049dac0(uint8_t * param_1) {
-    if (!param_1) {
+int __fastcall Unreferenced_0049dac0(uint8_t * pData) {
+    if (!pData) {
       return 0;
     }
-    if (!(*(int*)(param_1 + 0x16) == 1 || !*(int*)(param_1 + 0x16))) {
+    if (!(*(int*)(pData + 0x16) == 1 || !*(int*)(pData + 0x16))) {
       return 0;
     }
 
     return 1;
 }
 
-int __fastcall Unreferenced_0049dae0(D2TextBoxStrc * param_1, D2CoordStrc * param_2) {
+int __fastcall Unreferenced_0049dae0(D2TextBoxStrc * pTextBox, D2CoordStrc * pCoord) {
     int iVar2;
-    uint16_t uVar1 = param_1->nWidth;
-    param_2->nX -= (uint32_t)(uVar1 >> 1);
-    param_2->nY += -0x32;
-    iVar2 = param_2->nY + param_1->nLineCount * -0xf - 3;
-    param_2->nY = iVar2;
+    uint16_t uVar1 = pTextBox->nWidth;
+    pCoord->nX -= (uint32_t)(uVar1 >> 1);
+    pCoord->nY += -0x32;
+    iVar2 = pCoord->nY + pTextBox->nLineCount * -0xf - 3;
+    pCoord->nY = iVar2;
     return iVar2;
 }
 

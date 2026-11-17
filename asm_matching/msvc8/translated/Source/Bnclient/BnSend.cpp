@@ -118,7 +118,7 @@ uint32_t __stdcall BNSEND_GetServerToken() {
     return g_nBNetServerToken;
 }
 
-void __fastcall BNSEND_SetClientToken(uint32_t nClientToken) {
+void __fastcall BNSEND_SetClientToken(DWORD nClientToken) {
     g_nBNetClientToken = nClientToken;
 }
 
@@ -394,7 +394,7 @@ void __fastcall NET_SID_CLIENT_Send_0x0C_JoinChannel(char * szText, int32_t bFor
     NET_SID_CLIENT_Send(0xc, (char*)&__frame0.dwJoinFlags, (size_t)(pszChannelCursor + (5 - (intptr_t)(__frame0.szChannelBuf + 1))));
 }
 
-uint32_t __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount) {
+BOOL __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount) {
     char* pSrc;
     if (nByteCount <= 0) {
       return 1;
@@ -1014,6 +1014,12 @@ int Unreferenced_0051bea0() {
     return LVar1;
 }
 
+void Unreferenced_0051beb0() {
+    LONG in_EAX;
+    LONG in_ECX;
+    InterlockedCompareExchange((LONG*)&g_pBNetSocketData, in_ECX, in_EAX);
+}
+
 // JMP thunk
 BOOL __stdcall D2CheckExpansionGame() {
     return ::Fog::D2CheckExpansionGame();
@@ -1405,11 +1411,11 @@ BOOL __stdcall BNSEND_Disconnect() {
     return 1;
 }
 
-int __fastcall Unreferenced_0051c570(char * param_1) {
+int __fastcall Unreferenced_0051c570(char * szText) {
     char cVar1;
     D2NetDataStrc* pNetData = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
-    int nLen = (int)strlen(param_1);
-    Fog::Src::Safesock::WSASocket2_Send(pNetData, param_1, nLen);
+    int nLen = (int)strlen(szText);
+    Fog::Src::Safesock::WSASocket2_Send(pNetData, szText, nLen);
     Fog::Src::Safesock::WSASocket2_Send(pNetData, "\n", 1);
     return 1;
 }
@@ -1446,8 +1452,8 @@ int32_t __fastcall NET_SID_CLIENT_Send(uint8_t nPacketId, char * pBytes, size_t 
     return 0;
 }
 
-void __fastcall Unreferenced_0051c6b0(char * param_1) {
-    BNMESSQUEUE_EnqueueString(1, param_1);
+void __fastcall Unreferenced_0051c6b0(char * szText) {
+    BNMESSQUEUE_EnqueueString(1, szText);
 }
 
 void __fastcall BNCLIENT_ParseAndEnqueueChatMessages(char * szMessageText) {
@@ -1617,7 +1623,7 @@ DWORD __stdcall BNSEND_GetBNetThreadInitFlag() {
     return g_nBNetThreadInitFlag;
 }
 
-void __fastcall BNSEND_SetGlobalFlag(uint32_t dwThreadInitFlag) {
+void __fastcall BNSEND_SetGlobalFlag(DWORD dwThreadInitFlag) {
     g_nBNetThreadInitFlag = dwThreadInitFlag;
 }
 
@@ -2028,16 +2034,16 @@ DWORD __stdcall BNNEWS_RoundUpToMultiple(DWORD dwValue, DWORD dwMultiple) {
     return dwValue;
 }
 
-void __fastcall Unreferenced_0051d350(uint32_t * param_1, uint32_t * param_2) {
+void __fastcall Unreferenced_0051d350(uint32_t * pDst, uint32_t * pSrc) {
     int iVar1;
-    if (!param_1) {
+    if (!pDst) {
       return;
     }
 
     for (iVar1 = 0x102; iVar1; iVar1--) {
-      *param_1 = *param_2;
-      param_2++;
-      param_1++;
+      *pDst = *pSrc;
+      pSrc++;
+      pDst++;
     }
 }
 
@@ -2218,12 +2224,12 @@ void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d670(void * pArray) {
     Storm::Source::SMem::SMemFree(*(void**)((char*)pArray + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
 }
 
-uint32_t * __fastcall Unreferenced_0051d690(uint32_t * param_1) {
-    *param_1 = 0;
-    param_1[1] = 0;
-    param_1[2] = 0;
-    param_1[3] = 0;
-    return param_1;
+uint32_t * __fastcall Unreferenced_0051d690(uint32_t * pData) {
+    *pData = 0;
+    pData[1] = 0;
+    pData[2] = 0;
+    pData[3] = 0;
+    return pData;
 }
 
 void __fastcall BNNEWS_ClearNewsTable(D2BnNewsTableStrc * pNewsTable) {
@@ -2262,12 +2268,20 @@ void __fastcall BNNEWS_EnsureCapacityWithGrowth(uint32_t * pNewsTable, int, uint
     vc8_thiscall(BNNEWS_ReallocateNewsTable)((D2BnNewsTableStrc*)pNewsTable, dwAdditionalCount);
 }
 
-uint32_t * __fastcall Unreferenced_0051d720(uint32_t * param_1) {
-    *param_1 = 0;
-    param_1[1] = 0;
-    param_1[2] = 0;
-    param_1[3] = 0;
-    return param_1;
+uint32_t * __fastcall Unreferenced_0051d720(uint32_t * pData) {
+    *pData = 0;
+    pData[1] = 0;
+    pData[2] = 0;
+    pData[3] = 0;
+    return pData;
+}
+
+void __fastcall Unreferenced_0051d730(void * pArray) {
+    if (!*(void**)((char*)pArray + 8)) {
+      return;
+    }
+
+    Storm::Source::SMem::SMemFree(*(void**)((char*)pArray + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
 }
 
 BOOL __stdcall BNNEWS_Shutdown() {
@@ -2604,6 +2618,17 @@ static void __stdcall BNNEWS_TransformCDKeyCharacter(uint8_t bKeyChar, uint32_t 
     }
 
     *pOutChar = bKeyChar & 1 ^ bUpperChar;
+}
+
+int Unreferenced_0051dd20() {
+    char in_AL;
+    int iVar2 = tolower((int)in_AL);
+    char cVar1 = (char)iVar2;
+    if (cVar1 >= 'a') {
+      return cVar1 - 0x57;
+    }
+
+    return cVar1 - 0x30;
 }
 
 // Calculates checksum byte for CD key validation. Uses lookup table at 0x006df238. Iterates through 8 pairs of hex characters, accumulating checksum as bit flags.

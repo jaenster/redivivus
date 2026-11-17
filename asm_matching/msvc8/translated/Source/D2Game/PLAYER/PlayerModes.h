@@ -16,6 +16,7 @@
 
 // Forward declarations
 struct D2ClientStrc;
+struct D2RoomStrc;
 struct D2SkillStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
@@ -41,7 +42,7 @@ void __fastcall PLRMODES_SetTargetAndStartPath(::SGAMEDATA * pGame, struct D2Uni
 void __fastcall PLRMODES_SetMoveTargetPosition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2PlayerAnimMode eMode, int32_t nPosX, int32_t nPosY);
 void __fastcall SERVERUNIT_GoldAmmountForDeadBody(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pDeadBody, uint32_t nGoldAmmount, uint32_t nGoldPileCount);
 // @sourcefile .\PLAYER\PlrModes.cpp
-struct D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nX, int32_t nY, struct D2UnitStrc * pRoom);
+struct D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nX, int32_t nY, struct D2RoomStrc * pRoom);
 // Processes a player picking up their own corpse. Validates the corpse has STATE_playerbody and is owned by the acting player. If the corpse holds pending experience (e.g. from Nightmare/Hell death penalty), awards it via DAMAGE_AwardKillExperience. Equips corpse items back onto the player; on success, removes the corpse from inventory, deletes the unit from the room, sends packet 0x8E (corpse assign=0) to clients, removes collision, and frees the unit.
 void __fastcall PLRMODES_PickupCorpse(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCorpseUnit);
 // Server-side handler executed when a player's death animation completes. Creates the dead-body unit at the player's current position, frees all pets, sets the client's dead flag (bit 3), and saves the game (ladder games only). Then: forces anim mode 0x11 (dead), resets HP to 0, recalculates stats, filters active states, detaches unit type from client, enables corpse collision, and cancels all periodic skill/stat timer events.

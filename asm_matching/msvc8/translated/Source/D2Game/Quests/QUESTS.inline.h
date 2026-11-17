@@ -25,8 +25,8 @@ static D2_FORCEINLINE D2BitBufferStrc * GetQuestBitBufferInline(::SGAMEDATA * pG
 }
 
 // Unreferenced_00543540 as its callers expanded it: forced inline where the original read the record in place.
-static D2_FORCEINLINE D2UnitDataPlayerInteractedNPCStrc * Unreferenced_00543540Inline(::SGAMEDATA * param_1, D2UnitStrc * param_2) {
-    return D2Common::Units::GetPlayerData(param_2)->pInteractedNPCs[param_1->nDifficulty];
+static D2_FORCEINLINE D2UnitDataPlayerInteractedNPCStrc * Unreferenced_00543540Inline(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    return D2Common::Units::GetPlayerData(pUnit)->pInteractedNPCs[pGame->nDifficulty];
 }
 
 }}} // namespace D2Game::Quests::QUESTS

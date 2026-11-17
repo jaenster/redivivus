@@ -2023,8 +2023,7 @@ BOOL __fastcall Q04_SpawnCainCage(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       return 1;
     }
 
-    LONG nY = pDVar2->ptCainPos.y;
-    D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), pDVar2->ptCainPos.x, nY);
+    D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), pDVar2->ptCainPos.x, pDVar2->ptCainPos.y);
     if (!pSpawnRoom) {
       pDVar2->ptCainPos.x += 3;
       pDVar2->ptCainPos.y += 3;

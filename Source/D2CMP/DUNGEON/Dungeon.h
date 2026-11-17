@@ -34,7 +34,7 @@ BYTE * __stdcall TILE_GetTileFlags(struct D2TileLibraryEntryStrc * pTileLibraryE
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 void __stdcall TILEPROJECT_FreeSlot(int32_t * pnProjectIds, struct D2TileLibraryHeaderStrc * pTileLibrary);
-int __stdcall TILEPROJECT_GetTileDataPtr(struct D2TileLibraryEntryStrc * nParam);
+int __stdcall TILEPROJECT_GetTileDataPtr(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
 uint32_t __stdcall TILEPROJECT_GetTileOrientationIndex(uint32_t * pnOrientationIndex);
 #endif // D2_MODULE_D2CMP
 

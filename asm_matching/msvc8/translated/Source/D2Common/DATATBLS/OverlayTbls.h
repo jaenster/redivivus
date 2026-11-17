@@ -40,7 +40,7 @@ int32_t __stdcall OVERLAYTBLS_GetYOffset(int32_t nOverlayId);
 uint32_t __stdcall OVERLAYTBLS_GetTrans(int32_t nOverlayId);
 uint32_t __stdcall OVERLAYTBLS_GetLightRadiusAndRGB(int32_t nOverlayId, int * pnInitRadius, int * pnRadius, char * pbyRed, char * pbyGreen, char * pbyBlue);
 uint32_t __stdcall OVERLAYTBLS_GetDir(int32_t nOverlayId);
-int __fastcall Unreferenced_00664800(int param_1, int param_2);
+int __fastcall Unreferenced_00664800(int nMonStatsId, int nIndex);
 #endif // D2_MODULE_D2Common
 
 }}} // namespace D2Common::DATATBLS::OverlayTbls

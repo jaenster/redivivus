@@ -310,7 +310,7 @@ void __fastcall D2WINTEXTBOX_SetSelectedLine(::D2WinTextBox * pTextBox, int32_t 
     }
 }
 
-uint32_t __fastcall D2WINTEXTBOX_ScrollToLine(::D2WinTextBox * pTextBox, int32_t nTargetLine) {
+BOOL __fastcall D2WINTEXTBOX_ScrollToLine(::D2WinTextBox * pTextBox, int32_t nTargetLine) {
     int nLineIndex;
     D2WinTextBoxLineStrc* pNextLineNode;
     if (!pTextBox) {
@@ -570,7 +570,7 @@ void __stdcall D2WINTEXTBOX_Unused_HaltLine814() {
     exit(-1);
 }
 
-uint32_t __fastcall D2WINTEXTBOX_SetLineColor(::D2WinTextBox * pTextBox, int32_t nRow, int32_t dwColor) {
+BOOL __fastcall D2WINTEXTBOX_SetLineColor(::D2WinTextBox * pTextBox, int32_t nRow, int32_t dwColor) {
     D2WinTextBoxLineStrc* pCurLineNode;
     int nLineIndex;
     D2WinTextBoxLineStrc* pNextLineNode;

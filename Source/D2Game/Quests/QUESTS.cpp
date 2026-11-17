@@ -117,14 +117,14 @@ D2BitBufferStrc * __fastcall GetQuestBitBuffer(::SGAMEDATA * pGame, D2UnitStrc *
     return pBitBuffer->pQuestRecord[pGame->nDifficulty];
 }
 
-D2UnitDataPlayerInteractedNPCStrc * __fastcall Unreferenced_00543540(::SGAMEDATA * param_1, D2UnitStrc * param_2) {
-    D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(param_2);
-    return pDVar1->pInteractedNPCs[param_1->nDifficulty];
+D2UnitDataPlayerInteractedNPCStrc * __fastcall Unreferenced_00543540(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
+    return pDVar1->pInteractedNPCs[pGame->nDifficulty];
 }
 
-int __fastcall Unreferenced_00543560(int param_1) {
-    if (param_1 >= 0 && param_1 < D2Common::ITEMS::Items::sgptDataTable->nTxtSuperUniquesSize) {
-      return D2Common::ITEMS::Items::sgptDataTable->pTxtSuperUniques[param_1].hcIdx;
+int __fastcall Unreferenced_00543560(int nIndex) {
+    if (nIndex >= 0 && nIndex < D2Common::ITEMS::Items::sgptDataTable->nTxtSuperUniquesSize) {
+      return D2Common::ITEMS::Items::sgptDataTable->pTxtSuperUniques[nIndex].hcIdx;
     }
 
     return -1;
@@ -1620,6 +1620,35 @@ void __fastcall INTRONPC_FillInPacketWithIntroNpcIdsInAct(::SGAMEDATA * pGame, D
     }
 }
 
+uint32_t Unreferenced_005451b0() {
+    uint32_t nItemClassId;
+    D2ItemsTxt* pDVar2;
+    int in_ECX;
+    D2UnitStrc* pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(*(D2InventoryStrc**)(in_ECX + 0x60));
+    while (true) {
+      D2UnitStrc* pDVar1;
+      if (!pUnit) {
+        return 0;
+      }
+
+      pDVar1 = D2Common::INVENTORY::Inventory::GetCarriedItem(pUnit);
+      if (!pDVar1) {
+        nItemClassId = -1;
+      } else {
+        nItemClassId = pDVar1->nClassId;
+      }
+
+      pDVar2 = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
+      if (pDVar2->dwBitfield1 & 2) {
+        break;
+      }
+
+      pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pUnit);
+    }
+
+    return 1;
+}
+
 void __fastcall QUESTGUID_AddPlayerToList(D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID) {
     uint16_t nPlayerCount = pQuestGUID->nPlayerCount;
     if (nPlayerCount >= 0x20) {
@@ -1994,9 +2023,9 @@ void __fastcall QUEST_SendQuestStatePacket(D2UnitStrc * pUnit, int bQuestId, uin
 
     D2GSPacketSrv0x5D aPacketBuf;
     memset(&aPacketBuf, 0, sizeof(aPacketBuf));
-    aPacketBuf.nQuestId = (uint8_t)bQuestId;
     aPacketBuf.nPacketId = ']';
     aPacketBuf.nAlertFlags = '\0';
+    aPacketBuf.nQuestId = (uint8_t)bQuestId;
     aPacketBuf.nFilterStatus = '\f';
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xd82);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &aPacketBuf);
@@ -2325,11 +2354,12 @@ void __fastcall AllocQuestControl(::SGAMEDATA * pGame) {
     pGame->pQuestControl = pQuestControl;
 }
 
-// Searches the quest-control timer list for the entry matching both pQuestUpdate (callback) and pQuestData (quest), unlinks it from the singly-linked list, and frees its memory. Asserts the timer list is not currently being executed (bExecuting). Logs a debug message if no matching timer is found.
+// Searches the quest-control timer list for the entry matching both pQuestUpdate (callback) and pQuestData (quest), unlinks it from the singly-linked list, and frees its memory. Asserts the timer list is not currently being executed (bExecuting). Logs a debug message if no matching timer is found. The game comes from pQuestData->pGame. No caller in 1.14d.
 // @sourcefile .\QUESTS\QUESTS.CPP
-static void RemoveQuestTimer(D2QuestDataStrc * pQuestData, QUESTUPDATE pQuestUpdate, ::SGAMEDATA * pGame) {
+void __fastcall RemoveQuestTimer(D2QuestDataStrc * pQuestData, QUESTUPDATE pQuestUpdate) {
+    ::SGAMEDATA* pGame;
     D2QuestTimerStrc* pMemoryToFree;
-    D2QuestControlStrc* pQuestControl = pGame->pQuestControl;
+    D2QuestControlStrc* pQuestControl = pQuestData->pGame->pQuestControl;
     if (!pQuestControl) {
       return;
     }
@@ -2360,7 +2390,7 @@ static void RemoveQuestTimer(D2QuestDataStrc * pQuestData, QUESTUPDATE pQuestUpd
       return;
     }
 
-    PLAYER::PlayerMsg::PrepareClientMessage(pGame, "Error in timer usage", '\x04');
+    PLAYER::PlayerMsg::PrepareClientMessage(pQuestData->pGame, "Error in timer usage", '\x04');
 }
 
 // Resends a player's full quest state to their client (called on (re)entering a game / quest log refresh). Sends the raw quest-record bitfield via the 0x28 PlayerQuestInfo packet, then walks the game's quest-data linked list computing each quest's display state into a 0x29-byte per-quest array using each quest's fpStatusFilter callback (or QUEST_GetQuestLogDisplayState fallback). Builds and conditionally sends a 0x50 QuestSpecial packet carrying Act1 Den-of-Evil monsters-left, Act5 RescueOnMountArreat barbarians-left, and (once the Summoner is dead and Act2 reached) Tal Rasha's tomb symbol level id. Finally sends the assembled 0x52 PlayerQuestLog packet. Halts via ErrorManager on a malformed quest list / bad filter pointer.
@@ -3464,7 +3494,6 @@ BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow3(D2ObjectOperateFnArg * pOperati
 
 static void * keep_00544f60 = (0 ? (QUEST_MarkNPCsAsIntroduced(*(::SGAMEDATA * *)0, *(int32_t * *)0, *(D2UnitStrc * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 static void * keep_00545d40 = (0 ? (QUEST_InitializeQuestDataStruct(*(::SGAMEDATA * *)0, *(uint32_t *)0, *(bool *)0, *(D2QuestDataStrc * *)0), (void *)0) : (void *)0);
-static void * keep_00545fa5 = (0 ? (RemoveQuestTimer(*(D2QuestDataStrc * *)0, *(QUESTUPDATE *)0, *(::SGAMEDATA * *)0), (void *)0) : (void *)0);
 static void * keep_00594700 = (0 ? (QUEST_AddPlayerGUIDToTrackingList(*(uint32_t *)0, *(int32_t *)0, *(D2QuestDataA1Q5Strc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::Quests::QUESTS

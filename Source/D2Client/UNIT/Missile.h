@@ -85,7 +85,7 @@ void __fastcall MISSILE_SetPathFromTotalFrames_ForCatapultChargedBall(struct D2U
 int32_t __fastcall MISSILE_CltHitFn46_CatapultChargedBall(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 int32_t __fastcall MISSILE_CltHitFn51_LightTrailJavelin(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 int32_t __fastcall MISSILE_CltHitFn61_WorldStoneShake(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
-void __fastcall LIGHTMAP_SetQualityLevel(uint32_t nQualityLastCheck);
+void __fastcall LIGHTMAP_SetQualityLevel(int nQualityLastCheck);
 int __stdcall LIGHTMAP_GetQualityLevel();
 int32_t __fastcall Missiles_SrvDoFuncData_02(struct D2UnitStrc * pUnit, struct D2MissileCltCollideCtxStrc * pCtx);
 int32_t __fastcall Missiles_SrvDoFuncData_01(struct D2UnitStrc * pUnit, struct D2MissileCltCollideCtxStrc * pCtx);

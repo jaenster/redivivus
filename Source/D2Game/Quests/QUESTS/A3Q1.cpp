@@ -63,7 +63,7 @@ void __fastcall Objects_InitFn49_HratliStart(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Q17_GetHratliCoords — (QUEST_SpokeToHratli helper, not Lam Esen). Reads SpokeToHratli quest-specific data and, if the reward was given and the quest accepted, exports two values (notify-completion flag + cached monster/Blood-Raven GUID) through the out param. Returns 1 on success, 0 otherwise. Pure read; no quest-state mutation.
-uint32_t __fastcall Q17_GetHratliCoords(::SGAMEDATA * pGame, int32_t * pnCoords) {
+BOOL __fastcall Q17_GetHratliCoords(::SGAMEDATA * pGame, int32_t * pnCoords) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_SpokeToHratli);
     if (pQuestData) {
       D2QuestDataA3Q0Strc* pA1Q2Data;

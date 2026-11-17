@@ -307,14 +307,14 @@
       "calledFunctions": [
         "Unreferenced_00664800"
       ],
-      "dh": "cc72fd63",
+      "dh": "c55edfa2",
       "paramStorage": [
         [
-          "param_1",
+          "nMonStatsId",
           "ECX:4"
         ],
         [
-          "param_2",
+          "nIndex",
           "EDX:4"
         ]
       ]

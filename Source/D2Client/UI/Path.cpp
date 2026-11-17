@@ -283,16 +283,16 @@ void __stdcall DRAW_DrawRoomCollisionGrid(D2RoomStrc * pRoom) {
       return;
     }
 
-    int nXEnd = roomCoords.dwXSize + 5 + roomCoords.dwXStart;
     int nXStart = roomCoords.dwXStart;
+    int nXEnd = roomCoords.dwXSize + 5 + roomCoords.dwXStart;
     int nYStart = roomCoords.dwYStart;
     do {
       int nX;
       nX = nXStart + 3;
       while (nX < nXEnd) {
         nGridIndex = D2Common::DUNGEON::Dungeon::GetGridIndex(pRoom, nX, nY);
-        nScreenY = nY;
         nScreenX = nX;
+        nScreenY = nY;
         D2Common::Drlg::Transform::CoordsMapToScreen(&nScreenX, &nScreenY);
         rect.left = nScreenX - MouseXOffset - 0x10;
         rect.right = nScreenX - MouseXOffset + 0x10;

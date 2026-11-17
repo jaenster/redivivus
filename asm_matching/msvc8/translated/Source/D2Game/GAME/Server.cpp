@@ -1864,7 +1864,7 @@ static void __stdcall NET_D2GS_SERVER_Send_0xB3_SendSaveFile(::SGAMEDATA * pGame
       return;
     }
 
-    char* pReadCursor = pClient->pSaveGame->szCharacterName + pClient->nFileSize - 0x14;
+    char* pReadCursor = pClient->pSaveGame->szCharacterName + (pClient->nFileSize - 0x14);
     int nSendSize = pClient->nSaveOpenSize - pClient->nFileSize;
     if (nSendSize >= 0xff) {
       nSendSize = 0xff;
@@ -2240,9 +2240,9 @@ void __stdcall QSERVER_GetGameListByAge(short * pHistogramOut, int32_t nMaxMinut
 }
 
 uint32_t __stdcall QSERVER_GetClientCountByServerId(uint16_t nServerId) {
+    ::SGAMEDATA* nToken = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
     ::SGAMEDATA* pGame = gaQServerGameByToken[nServerId];
-    ::SGAMEDATA* nToken = 0;
     if (pGame && pGame != (::SGAMEDATA*)-1) {
       nToken = pGame;
     }
@@ -2366,9 +2366,9 @@ int32_t __stdcall QSERVER_FillServerTokenArray(uint16_t * pOutArray, int32_t nMa
 }
 
 int32_t __stdcall GetUnitCountByServerId(uint16_t nServerId) {
+    ::SGAMEDATA* nToken = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
     ::SGAMEDATA* pGame = gaQServerGameByToken[nServerId];
-    ::SGAMEDATA* nToken = 0;
     if (pGame && pGame != (::SGAMEDATA*)-1) {
       nToken = pGame;
     }
@@ -2700,8 +2700,8 @@ void __stdcall QSERVER_BroadcastChatByServerId(uint16_t nServerId, char * pMessa
 }
 
 ::SGAMEDATA * __stdcall QSERVER_GetFirstActiveGame() {
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
     ::SGAMEDATA* nToken = 0;
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
     if (gaQServerGameByToken[1] && gaQServerGameByToken[1] != (::SGAMEDATA*)-1) {
       nToken = gaQServerGameByToken[1];
     }
@@ -2775,8 +2775,8 @@ uint32_t __fastcall QSERVER_FindGameTokenByName(char * szGameName) {
 // Inline QSERVER_GetFirstActiveGame: returns that game's pInitSeed.nSeedLow and leaves its critical section, or 0 with no game; halts (line 4196) when the game has no critical section.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 uint32_t __stdcall QSERVER_GetFirstActiveGameSeed() {
-    EnterCriticalSection(&gQServerGameListCs);
     ::SGAMEDATA* nToken = 0;
+    EnterCriticalSection(&gQServerGameListCs);
     if (gaQServerGameByToken[1] && gaQServerGameByToken[1] != (::SGAMEDATA*)-1) {
       nToken = gaQServerGameByToken[1];
     }
@@ -3662,6 +3662,11 @@ BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_0060e0c0(int32_t pQServer) {
 
 void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0060e230(int32_t pQServer) {
     return *(void**)(pQServer + 4);
+}
+
+uint32_t Unreferenced_0060e250() {
+    int in_ECX;
+    return *(uint32_t*)(in_ECX + 4);
 }
 
 void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00650e90(int32_t pQServer) {

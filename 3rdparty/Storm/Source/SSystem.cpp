@@ -15,7 +15,7 @@
 
 namespace Storm::Source::SSystem {
 
-uint32_t __stdcall SSYSTEM_Shutdown(uint32_t nShutdownCode) {
+int __stdcall SSYSTEM_Shutdown(uint32_t nShutdownCode) {
     // Static local variables (originally global data)
     static pfnSSystemShutdown fpSSystemShutdownCallback; D2_STATIC_GUARD_BSS(fpSSystemShutdownCallback, "Storm::Source::SSystem::SSYSTEM_Shutdown::fpSSystemShutdownCallback");
 
@@ -40,7 +40,7 @@ HMODULE __stdcall StormGetInstance() {
     return pHVar1;
 }
 
-uint32_t __stdcall SSYSTEM_GetSystemOption(uint32_t nOptionId, uint32_t * pOutValue, uint32_t * pnBufferSize) {
+BOOL __stdcall SSYSTEM_GetSystemOption(uint32_t nOptionId, uint32_t * pOutValue, uint32_t * pnBufferSize) {
     uint32_t nBufferSize;
     uint32_t nOptionValue;
     D2_CHECKS_BEGIN;
@@ -152,8 +152,13 @@ void __stdcall __break() {
     __debugbreak();
 }
 
-void __stdcall SSYSTEM_SetShutdownFlag(uint32_t bShutdown) {
+void __stdcall SSYSTEM_SetShutdownFlag(BOOL bShutdown) {
     gbSSystemShutdownInProgress = bShutdown;
+}
+
+uint32_t Unreferenced_0041c380() {
+    int in_ECX;
+    return *(uint32_t*)(in_ECX + 4);
 }
 
 // TSFixedArray<unsigned int> constructor: zeroes the 20-byte array header.

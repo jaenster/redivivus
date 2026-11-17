@@ -31,6 +31,7 @@ namespace D2CMP { namespace SRC { namespace CelCmp { namespace CELLIST {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 void __fastcall Destructor(::CELLIST * pThis, int);
+void Unreferenced_00602bd0();
 ::CELLIST * __fastcall ScalarDeletingDestructor(::CELLIST * pThis, int, uint32_t dwFlags);
 // Copy pool metadata from src pool and init free-list sentinel links on this node
 ::CELLIST * __fastcall CopyConstructor(::CELLIST * pThis, int, ::CELLIST * pSource);

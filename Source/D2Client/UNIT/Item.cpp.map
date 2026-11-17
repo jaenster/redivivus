@@ -175,7 +175,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2c15607f",
+      "dh": "e37c6301",
       "paramStorage": [
         [
           "nItemX",
@@ -183,7 +183,7 @@
         ],
         [
           "nItemY",
-          "Stack[0x8]:4"
+          "Stack[0x8]:2"
         ],
         [
           "bSendIdentRequest",
@@ -1259,10 +1259,10 @@
       "calledFunctions": [
         "Unreferenced_004c2150"
       ],
-      "dh": "e1ab43dc",
+      "dh": "ccc59521",
       "paramStorage": [
         [
-          "param_1",
+          "nInvType",
           "ECX:4"
         ]
       ]
@@ -2411,7 +2411,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5b9495df",
+      "dh": "fb9df40a",
       "paramStorage": [
         [
           "pPacket",

@@ -128,10 +128,10 @@
         "Unreferenced_00475c30",
         "D2MEM_VirtualFree"
       ],
-      "dh": "2529c1f8",
+      "dh": "f3ba134d",
       "paramStorage": [
         [
-          "param_1",
+          "pMemory",
           "ECX:4"
         ]
       ]
@@ -180,10 +180,10 @@
         "Unreferenced_00475d20",
         "D2MEM_VirtualFree"
       ],
-      "dh": "e1804f32",
+      "dh": "7b5afa42",
       "paramStorage": [
         [
-          "param_1",
+          "pMemory",
           "ECX:4"
         ]
       ]
@@ -233,10 +233,10 @@
         "Unreferenced_00475de0",
         "D2MEM_VirtualFree"
       ],
-      "dh": "124fa08d",
+      "dh": "ebd0005b",
       "paramStorage": [
         [
-          "param_1",
+          "pMemory",
           "ECX:4"
         ]
       ]

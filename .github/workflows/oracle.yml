@@ -66,10 +66,16 @@ jobs:
           curl -sfL --retry 3 "$GAME_EXE_URL" -o "$D2_GAME_EXE"
           echo "$GAME_EXE_SHA256  $D2_GAME_EXE" | sha256sum -c -
 
+      - name: Resolve the toolchain cache path
+        id: toolchain-cache-path
+        run: |
+          toolchain_cache_path=$(realpath -m "$VC8_TOOLCHAIN")
+          printf 'path=%s\n' "$toolchain_cache_path" >> "$GITHUB_OUTPUT"
+
       - name: Restore the VC8 toolchain
         uses: actions/cache@v4
         with:
-          path: ${{ env.VC8_TOOLCHAIN }}
+          path: ${{ steps.toolchain-cache-path.outputs.path }}
           key: vc8-toolchain-${{ hashFiles('asm_matching/msvc8/scripts/setup_toolchain.sh') }}
 
       - name: Setup (skips what the caches hold)

@@ -2869,7 +2869,7 @@ int __fastcall inflateInit_(z_stream * pStream, char * szVersion, int32_t nStrea
     return nRet;
 }
 
-uint32_t __fastcall inflatePrime(z_stream * pStream, int32_t nBits, uint32_t nValue) {
+int __fastcall inflatePrime(z_stream * pStream, int32_t nBits, uint32_t nValue) {
     uint32_t nOldBits;
     uint32_t nTotalBits;
     inflate_state* pState;
@@ -4170,7 +4170,7 @@ int __fastcall inflateEnd(z_stream * pStream) {
     return -2;
 }
 
-uint32_t __fastcall inflateGetDictionary(z_stream * pStream, uint8_t * pDictionary, uint32_t * pnDictLength) {
+int __fastcall inflateGetDictionary(z_stream * pStream, uint8_t * pDictionary, uint32_t * pnDictLength) {
     if (pStream) {
       inflate_state* pState;
       pState = (inflate_state*)pStream->state;
@@ -4190,7 +4190,7 @@ uint32_t __fastcall inflateGetDictionary(z_stream * pStream, uint8_t * pDictiona
     return -2;
 }
 
-uint32_t __fastcall inflateSetDictionary(z_stream * pStream, uint8_t * pDictionary, uint32_t nDictLength) {
+int __fastcall inflateSetDictionary(z_stream * pStream, uint8_t * pDictionary, uint32_t nDictLength) {
     if (!pStream) {
       return -2;
     }
@@ -4252,7 +4252,7 @@ static uint32_t __stdcall syncsearch(uint32_t * pnMatchState, uint32_t nLen, uin
     return i;
 }
 
-uint32_t __fastcall inflateSync(z_stream * pStream) {
+int __fastcall inflateSync(z_stream * pStream) {
     uint32_t nPartialBits;
     uint32_t nBytesWritten;
     inflateSync_Slotm8 uSlot8;
@@ -4328,7 +4328,7 @@ int __fastcall inflateSyncPoint(z_stream * pStream) {
     return -2;
 }
 
-uint32_t __fastcall inflateCopy(z_stream * pDestStream, z_stream * pSrcStream) {
+int __fastcall inflateCopy(z_stream * pDestStream, z_stream * pSrcStream) {
     inflate_state* pDstState;
     int nFieldCopyCount;
     z_stream* pDstCursor;
@@ -4392,10 +4392,10 @@ int32_t __fastcall inflateMark(z_stream * pStream) {
       return -0x10000;
     }
     if (*pState == 0xf) {
-      return (pState[0x6f1] << 0x10) + pState[0x10];
+      return pState[0x6f1] * 0x10000 + pState[0x10];
     }
     if (*pState == 0x18) {
-      return (pState[0x6f1] << 0x10) + (pState[0x6f2] - pState[0x10]);
+      return pState[0x6f1] * 0x10000 + (pState[0x6f2] - pState[0x10]);
     }
 
     return pState[0x6f1] << 0x10;

@@ -103,6 +103,24 @@
       ]
     },
     {
+      "name": "Unreferenced_0060f020",
+      "address": "0060f020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f020"
+        }
+      ],
+      "namespace": "TSExplicitList<StringEntryNode, -572662307>",
+      "calledFunctions": [
+        "Unreferenced_0060f020"
+      ],
+      "usedTypes": [
+        "TSExplicitList<StringEntryNode, -572662307>"
+      ],
+      "dh": "351f18f6"
+    },
+    {
       "name": "DeleteNode",
       "address": "0060f270",
       "lines": [

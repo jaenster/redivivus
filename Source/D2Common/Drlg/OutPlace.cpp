@@ -724,6 +724,194 @@ D2DrlgLevelDataList ACT4_D2DrlgLevelData2 = {
         }
     }
 }; D2_GLOBAL_GUARD(ACT4_D2DrlgLevelData2, "ACT4_D2DrlgLevelData2");
+static D2DrlgLevelDataList ACT5_D2DrlgLevelData1 = {
+    /* .aEntry = */ {
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE1,
+            /* .neD2LevelId = */ LEVEL_Harrogath,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE1,
+            /* .neD2LevelId = */ LEVEL_BloodyFoothills,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::DRLGPLACE_OrientedFixedOffset,
+            /* .neD2LevelId = */ LEVEL_FrigidHighlands,
+            /* .nNodeLevelEntryIdPrev = */ 0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::DRLGPLACE_OrientedTableLookup,
+            /* .neD2LevelId = */ LEVEL_ArreatPlateau,
+            /* .nNodeLevelEntryIdPrev = */ 0x2,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        }
+    }
+}; D2_STATIC_GUARD(ACT5_D2DrlgLevelData1, "ACT5_D2DrlgLevelData1");
+static D2DrlgLevelDataList ACT5_D2DrlgLevelData2 = {
+    /* .aEntry = */ {
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::DRLGPLACE_OrientedAbsolutePos,
+            /* .neD2LevelId = */ LEVEL_FrozenTundra,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        }
+    }
+}; D2_STATIC_GUARD(ACT5_D2DrlgLevelData2, "ACT5_D2DrlgLevelData2");
 int gaRoadPresetDirectionLookup[9] = {
     -0x1,
     0x1,
@@ -1270,13 +1458,12 @@ static void __stdcall DRLGACT_SetWarpConnectionsBetweenTwoAreas(D2DrlgStrc * pDr
     }
 }
 
-// Allocates a DrlgOrth connection between a level data entry's RoomEx and an adjacent level.
-// Computes the direction between the two levels' coordinate rects, then calls AllocDrlgOrth
-// on the RoomEx at offset +0x264 of the level data struct.
-// Used as a callback during level chain parsing to establish orthogonal room linkage.
-static void DRLGLEVEL_AllocOrthForAdjacentLevel(D2DrlgStrc * pDrlg, D2DrlgLevelStrc * pLevelData, eD2LevelId eLevel) {
+// Allocates a DrlgOrth connection between a level's RoomEx data and an adjacent level: allocates eLevel in pLevelData->pDrlg, computes the direction between the two levels' coordinate rects, then calls AllocDrlgOrth on the orth list at +0x264 of the level's wilderness data.
+// No caller in 1.14d (no call, jump or address reference in Game.exe).
+static void DRLGLEVEL_AllocOrthForAdjacentLevel(D2DrlgLevelStrc * pLevelData, eD2LevelId eLevel) {
+    D2DrlgStrc* pDrlg;
     D2DrlgLevelDataWildernessLevel* pLevelDataBase = pLevelData->pDrlgLevelData.pDrlgLevelOutdoorsData;
-    D2DrlgLevelStrc* pLevel = GetLevelAndAlloc(pDrlg, eLevel);
+    D2DrlgLevelStrc* pLevel = GetLevelAndAlloc(pLevelData->pDrlg, eLevel);
     eDrlgDirection eDirection = GetDirectionFromCoordinates(&pLevelData->sCoordinatesAndSize, &pLevel->sCoordinatesAndSize);
     DrlgRoom::AllocDrlgOrth(&pLevelDataBase->pOrthData, pLevel, eDirection, (uint32_t)(pLevel->eDrlgType == 2));
 }
@@ -1304,6 +1491,18 @@ static void __stdcall DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(D2DrlgStrc * 
         }
       }
     }
+}
+
+static void DRLGActMisc_InitAct1(D2DrlgStrc * pDrlg) {
+    DRLGLEVEL_ParseLevelData(&ACT1_D2DrlgLevelData1, (fpLevelDataFn1)DRLGPLACE_ACT1_ValidatePlacementList1, (fpLevelDataFn2)ACT1_fpLevelDataFn2_A, pDrlg);
+    DRLGLEVEL_ParseLevelData(&ACT1_D2DrlgLevelData2, (fpLevelDataFn1)DRLGPLACE_ACT1_ValidatePlacementList2WithGap, (fpLevelDataFn2)ACT1_fpLevelDataFn2_A, pDrlg);
+    DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(pDrlg, LEVEL_BurialGrounds, LEVEL_RogueEncampment);
+}
+
+static void DRLGActMisc_InitAct2(D2DrlgStrc * pDrlg) {
+    DRLGLEVEL_ParseLevelData(&ACT2_D2DrlgLevelData1, (fpLevelDataFn1)DRLGPLACE_ACT2_ValidatePlacementList1, nullptr, pDrlg);
+    DRLGLEVEL_ParseLevelData(&ACT2_D2DrlgLevelData2, (fpLevelDataFn1)DRLGPLACE_ACT2_ValidatePlacementList2, nullptr, pDrlg);
+    DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(pDrlg, LEVEL_CanyonOfTheMagi, LEVEL_LutGholein);
 }
 
 // Calculates placement coordinates for a sub-level within the outdoor grid, writing results to pOutCoords.
@@ -1344,6 +1543,12 @@ static void __stdcall DRLGOUTPLACE_CalcSubLevelPlacement(int nHeight, int nWidth
     pOutCoords->sCoords.WorldSize.x = nWidth;
     pOutCoords->sCoords.WorldSize.y = nHeight;
     pOutCoords->nDirection = nDirection;
+}
+
+bool Unreferenced_00677870() {
+    int in_EAX;
+    int in_EDX;
+    return *(int*)(in_EAX + 4) > *(int*)(in_EDX + 4);
 }
 
 // Server-side DRLG out-of-placement generator for the Spider Forest level (LEVEL_SpiderForest). Places three procedurally-connected sub-levels (ids 0x4c..0x4e) inside the forest using the drlg RNG seed: picks non-overlapping room placements (FreeRoomEx), allocates four scratch tile maps from the level memory pool, carves a maze of connecting paths/exits between sub-levels (flood/adjacency passes building per-cell connection-flag bitmasks 0x10/0x20/0x40/0x80), maps cell flags to tile codes via the gdwOutPlaceMap* lookup tables, writes the resulting grids back into each sub-level, sorts the three sub-levels, then GetLevelAndAllocs each and stores coords/size/automap. Frees the scratch maps and returns the last allocated sub-level. Halts via Fog ErrorManager on overflow/invalid tile. pLevel passed in EAX (custom convention); mutates pDrlg->nSeed throughout.
@@ -2178,198 +2383,27 @@ static void DRLGActMisc_InitAct3(D2DrlgStrc * pDrlg) {
     DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(pDrlg, LEVEL_Travincal, LEVEL_KurastDocktown);
 }
 
-// Act-specific level allocation. Parses per-act level data tables, allocates level ranges for the act, initializes Act III special handling, and sets Act V warp connections. Act IV sets a flag in Outer Steppes level data before allocating the rest.
-void __fastcall DRLGACTMISC_AllocDrlgLevelForAct(D2DrlgStrc * pDrlg, eAct nActNo) {
-    // Static local variables (originally global data)
-    static D2DrlgLevelDataList ACT5_D2DrlgLevelData1 = {
-    /* .aEntry = */ {
-        {
-            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE1,
-            /* .neD2LevelId = */ LEVEL_Harrogath,
-            /* .nNodeLevelEntryIdPrev = */ -0x1,
-            /* .nNodeLevelEntryIdNext = */ -0x1
-        },
-        {
-            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE1,
-            /* .neD2LevelId = */ LEVEL_BloodyFoothills,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ -0x1
-        },
-        {
-            /* .nfpLevelDataEntry = */ &D2Common::Drlg::DRLGPLACE_OrientedFixedOffset,
-            /* .neD2LevelId = */ LEVEL_FrigidHighlands,
-            /* .nNodeLevelEntryIdPrev = */ 0x1,
-            /* .nNodeLevelEntryIdNext = */ -0x1
-        },
-        {
-            /* .nfpLevelDataEntry = */ &D2Common::Drlg::DRLGPLACE_OrientedTableLookup,
-            /* .neD2LevelId = */ LEVEL_ArreatPlateau,
-            /* .nNodeLevelEntryIdPrev = */ 0x2,
-            /* .nNodeLevelEntryIdNext = */ -0x1
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ -0x1,
-            /* .nNodeLevelEntryIdNext = */ -0x1
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        }
-    }
-}; D2_STATIC_GUARD(ACT5_D2DrlgLevelData1, "D2Common::Drlg::OutPlace::DRLGACTMISC_AllocDrlgLevelForAct::ACT5_D2DrlgLevelData1");
-    static D2DrlgLevelDataList ACT5_D2DrlgLevelData2 = {
-    /* .aEntry = */ {
-        {
-            /* .nfpLevelDataEntry = */ &D2Common::Drlg::DRLGPLACE_OrientedAbsolutePos,
-            /* .neD2LevelId = */ LEVEL_FrozenTundra,
-            /* .nNodeLevelEntryIdPrev = */ -0x1,
-            /* .nNodeLevelEntryIdNext = */ -0x1
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ -0x1,
-            /* .nNodeLevelEntryIdNext = */ -0x1
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        },
-        {
-            /* .nfpLevelDataEntry = */ nullptr,
-            /* .neD2LevelId = */ LEVEL_None,
-            /* .nNodeLevelEntryIdPrev = */ 0x0,
-            /* .nNodeLevelEntryIdNext = */ 0x0
-        }
-    }
-}; D2_STATIC_GUARD(ACT5_D2DrlgLevelData2, "D2Common::Drlg::OutPlace::DRLGACTMISC_AllocDrlgLevelForAct::ACT5_D2DrlgLevelData2");
+static void DRLGActMisc_InitAct4(D2DrlgStrc * pDrlg) {
+    DRLGLEVEL_ParseLevelData(&ACT4_D2DrlgLevelData1, (fpLevelDataFn1)DRLGPLACE_ACT4_ValidatePlacementList1, nullptr, pDrlg);
+    DRLGLEVEL_ParseLevelData(&ACT4_D2DrlgLevelData2, (fpLevelDataFn1)DRLGPLACE_ACT4_ValidatePlacementList2, nullptr, pDrlg);
+    D2DrlgLevelStrc* pDVar1 = GetLevelAndAlloc(pDrlg, 0x68);
+    pDVar1->pDrlgLevelData.pTxtLvlMaze->Level |= gdwDrlgLevelPlacementFlags;
+    DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(pDrlg, LEVEL_CityOfTheDamned, LEVEL_ThePandemoniumFortress);
+}
 
+static void DRLGActMisc_InitAct5(D2DrlgStrc * pDrlg) {
+    DRLGLEVEL_ParseLevelData(&ACT5_D2DrlgLevelData1, nullptr, nullptr, pDrlg);
+    DRLGLEVEL_ParseLevelData(&ACT5_D2DrlgLevelData2, nullptr, nullptr, pDrlg);
+    DRLGACT_SetWarpConnectionsBetweenTwoAreas(pDrlg, LEVEL_FrigidHighlands, 0x70);
+    DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(pDrlg, LEVEL_ArreatPlateau, LEVEL_FrigidHighlands);
+    DRLGACT_SetWarpConnectionsBetweenTwoAreas(pDrlg, LEVEL_BloodyFoothills, 0x6f);
+    DRLGACT_SetWarpConnectionsBetweenTwoAreas(pDrlg, LEVEL_Harrogath, 0x6e);
+    DRLGLEVEL_ParseLevelData(&ACT5_D2DrlgLevelData3, (fpLevelDataFn1)DRLGPLACE_ACT5_ValidatePlacementList3, nullptr, pDrlg);
+}
+
+// Act-specific level setup dispatcher: moves pDrlg to EAX and tail-jumps through a 5-entry table to DRLGActMisc_InitAct1..InitAct5 by nActNo; nActNo above 4 returns.
+// 1.14d: jump table at 00678afc, stubs 00678ae1..00678af5.
+void __fastcall DRLGACTMISC_AllocDrlgLevelForAct(D2DrlgStrc * pDrlg, eAct nActNo) {
     D2DrlgLevelStrc* pLevel;
     switch (nActNo) {
       case ACT_I:
@@ -2389,7 +2423,7 @@ void __fastcall DRLGACTMISC_AllocDrlgLevelForAct(D2DrlgStrc * pDrlg, eAct nActNo
         DRLGLEVEL_ParseLevelData(&ACT4_D2DrlgLevelData1, (fpLevelDataFn1)DRLGPLACE_ACT4_ValidatePlacementList1, nullptr, pDrlg);
       DRLGLEVEL_ParseLevelData(&ACT4_D2DrlgLevelData2, (fpLevelDataFn1)DRLGPLACE_ACT4_ValidatePlacementList2, nullptr, pDrlg);
       pLevel = GetLevelAndAlloc(pDrlg, 0x68);
-      pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->dwFlags |= gdwDrlgLevelPlacementFlags;
+      pLevel->pDrlgLevelData.pTxtLvlMaze->Level |= gdwDrlgLevelPlacementFlags;
       DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(pDrlg, LEVEL_CityOfTheDamned, LEVEL_ThePandemoniumFortress);
       return;
       case ACT_V:
@@ -2503,6 +2537,10 @@ void __fastcall InitAct3OutdoorLevel(D2DrlgLevelStrc * pLevel) {
     BuildTravincal(pLevel);
 }
 
-static void * keep_00677647 = (0 ? (DRLGLEVEL_AllocOrthForAdjacentLevel(*(D2DrlgStrc * *)0, *(D2DrlgLevelStrc * *)0, *(eD2LevelId *)0), (void *)0) : (void *)0);
+static void * keep_00677640 = (0 ? (DRLGLEVEL_AllocOrthForAdjacentLevel(*(D2DrlgLevelStrc * *)0, *(eD2LevelId *)0), (void *)0) : (void *)0);
+static void * keep_00677750 = (0 ? (DRLGActMisc_InitAct1(*(D2DrlgStrc * *)0), (void *)0) : (void *)0);
+static void * keep_00677790 = (0 ? (DRLGActMisc_InitAct2(*(D2DrlgStrc * *)0), (void *)0) : (void *)0);
+static void * keep_00678a20 = (0 ? (DRLGActMisc_InitAct4(*(D2DrlgStrc * *)0), (void *)0) : (void *)0);
+static void * keep_00678a70 = (0 ? (DRLGActMisc_InitAct5(*(D2DrlgStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg::OutPlace

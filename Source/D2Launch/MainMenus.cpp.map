@@ -135,6 +135,21 @@
       ]
     },
     {
+      "name": "Unreferenced_0042e610",
+      "address": "0042e610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e610"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "Unreferenced_0042e610"
+      ],
+      "dh": "546de52c"
+    },
+    {
       "name": "Unreferenced_0042e620",
       "address": "0042e620",
       "lines": [
@@ -150,10 +165,10 @@
       "usedTypes": [
         "uint16_t"
       ],
-      "dh": "8727d629",
+      "dh": "57f9cc4a",
       "paramStorage": [
         [
-          "param_1",
+          "pChar",
           "ECX:4"
         ]
       ]
@@ -175,10 +190,10 @@
       "usedTypes": [
         "uint16_t"
       ],
-      "dh": "1d5c9211",
+      "dh": "179e8964",
       "paramStorage": [
         [
-          "param_1",
+          "pChar",
           "ECX:4"
         ]
       ]
@@ -807,7 +822,7 @@
       "usedTypes": [
         "D2MPQFileStrc"
       ],
-      "dh": "3527ca2a",
+      "dh": "90476f0f",
       "paramStorage": [
         [
           "szFileName",
@@ -2094,6 +2109,22 @@
         "D2WINTEXTBOX_SetTextFromAnsiSimple"
       ],
       "dh": "233e16b5"
+    },
+    {
+      "name": "Unreferenced_00431040",
+      "address": "00431040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431040"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "Unreferenced_00431040",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple"
+      ],
+      "dh": "d0c51312"
     },
     {
       "name": "MAINMENU_DisplayCredits",
@@ -3590,14 +3621,14 @@
         "WCHAR",
         "pfnUIMenuInstance"
       ],
-      "dh": "e277fcbf",
+      "dh": "2aafd803",
       "paramStorage": [
         [
-          "param_1",
+          "wszText",
           "ECX:4"
         ],
         [
-          "param_2",
+          "pfnMenu",
           "EDX:4"
         ]
       ]
@@ -5114,7 +5145,7 @@
       "dh": "0b1b89aa"
     },
     {
-      "name": "MAINMENU_Unused13",
+      "name": "MAINMENU_OnPressLogIn",
       "address": "004361b0",
       "lines": [
         {
@@ -5124,7 +5155,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused13",
+        "MAINMENU_OnPressLogIn",
         "UIMENU_MainMenu",
         "D2WINMAIN_GetControlVisible",
         "MAINMENU_SaveAccountAndPasswordToINI",
@@ -5140,7 +5171,7 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "86a9c88f",
+      "dh": "7279a333",
       "paramStorage": [
         [
           "pControl",
@@ -5174,7 +5205,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused14",
+      "name": "MAINMENU_OnPressNewAccountNoticeOk",
       "address": "00436280",
       "lines": [
         {
@@ -5184,7 +5215,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused14",
+        "MAINMENU_OnPressNewAccountNoticeOk",
         "EnterEmailMessagePumper",
         "UIMENU_MainMenuAgain",
         "SRegSaveString",
@@ -5197,7 +5228,7 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "0d856d2b",
+      "dh": "e8b9455e",
       "paramStorage": [
         [
           "pControlMsg",

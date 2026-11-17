@@ -375,16 +375,16 @@ BOOL __thiscall SRP_ClientKeyExchange(D2Srp * * pThis, D2SrpCredentialsStrc * pC
     SHA::SHA1_BigIntFree(pServerPublicB);
     SHA::SHA1_BigIntFree(pClientPublicA);
     SHA::SHA1_BigIntFree(pPasswordHash);
-    if (bSharedSecretOk) {
+    if (!bSharedSecretOk) {
+      SHA::SHA1_BigIntFree(pSharedSecret);
+      return 0;
+    } else {
       nSecretByteLen = SHA::SHA1_ToBigIntBytes(pSharedSecret, sessionKeyBytes, 0x20);
       SHA::SHA1_HashWideString(pContext->aSessionKey_K, (char*)sessionKeyBytes, nSecretByteLen);
       SHA::SHA1_BigIntFree(pSharedSecretOut);
       SRP_ComputeClientProof(*pThis, pContext->szUsername, pSalt, pContext->aClientPublicKey_A, pServerPublicBytes, pContext->aSessionKey_K, pContext->aClientProof_M1);
       return 1;
     }
-
-    SHA::SHA1_BigIntFree(pSharedSecret);
-    return 0;
 }
 
 BOOL __thiscall SRP_ClientVerifyServerProof(D2Srp * * pThis, void * pSrpContext, uint8_t * pServerProof) {

@@ -237,7 +237,7 @@ void __fastcall MESSAGE_UnregisterEventHandlerBatch(HWND hWnd, D2UIFlagInitStrc 
     }
 }
 
-uint32_t __fastcall MESSAGE_RegisterWindowMessageHandlers(HWND hWnd) {
+BOOL __fastcall MESSAGE_RegisterWindowMessageHandlers(HWND hWnd) {
     if (!hWnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x178);
       exit(-1);

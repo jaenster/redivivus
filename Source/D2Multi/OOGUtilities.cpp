@@ -910,9 +910,9 @@ int __stdcall OOGUTIL_SendChatMessageWide(uint16_t * wszText) {
     return nCopyIndex;
 }
 
-int __fastcall Unreferenced_00442a70(uint32_t * param_1, int param_2) {
-    uint32_t uVar1 = *param_1 & -28673 | param_2 << 0xc;
-    *param_1 = uVar1;
+int __fastcall Unreferenced_00442a70(uint32_t * pFlags, int nValue) {
+    uint32_t uVar1 = *pFlags & -28673 | nValue << 0xc;
+    *pFlags = uVar1;
     return uVar1;
 }
 

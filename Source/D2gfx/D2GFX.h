@@ -145,7 +145,7 @@ typedef void (__fastcall *fpDrawSolidRectAlpha)(int nXStart, int nYStart, int nX
 #endif
 #ifndef RECON_FPTD_fpDrawSolidRectEx
 #define RECON_FPTD_fpDrawSolidRectEx
-typedef void (__fastcall *fpDrawSolidRectEx)(int nXStart, int nYStart, int nXEnd, int nYEnd, DWORD dwColor, DRAWMODE nDrawMode);
+typedef void (__fastcall *fpDrawSolidRectEx)(int nXStart, int nYStart, int nXEnd, int nYEnd, BYTE dwColor, DRAWMODE nDrawMode);
 #endif
 #ifndef RECON_FPTD_fpDrawSolidSquare
 #define RECON_FPTD_fpDrawSolidSquare
@@ -323,7 +323,7 @@ struct D2RendererFunctionsStrc {
     /* 0xAC */ void (__fastcall *nfpDrawRectEx)(RECT *, BYTE);
     /* 0xB0 */ void (__fastcall *nfpDrawSolidRect)(RECT *, BYTE);
     /* 0xB4 */ void (__fastcall *nfpDrawSolidSquare)(POINT *, BYTE, BYTE);
-    /* 0xB8 */ void (__fastcall *nfpDrawSolidRectEx)(int, int, int, int, DWORD, DRAWMODE);
+    /* 0xB8 */ void (__fastcall *nfpDrawSolidRectEx)(int, int, int, int, BYTE, DRAWMODE);
     /* 0xBC */ void (__fastcall *nfpDrawSolidRectAlpha)(int, int, int, int, DWORD, BYTE);
     /* 0xC0 */ void (__fastcall *nfpDrawLine)(int, int, int, int, DWORD, BYTE);
     /* 0xC4 */ void (__fastcall *nfpClearScreen)(BOOL);

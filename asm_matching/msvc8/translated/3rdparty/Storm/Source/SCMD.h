@@ -116,11 +116,11 @@ BOOL __stdcall SCmdRegisterArgList(struct ARGLIST * pArgList, uint32_t nCount);
 int __stdcall SCmdProcess(char * szCommandLine, int bSkipFirstToken, pfnSCmdUnknownArgCallback pfnUnknownCallback, pfnSCmdErrorCallback pfnErrorCallback);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-int __fastcall Unreferenced_006c4010(struct StormLinkStrc * param_1);
-intptr_t __fastcall Unreferenced_006c40b0(struct StormLinkedListStrc * param_1);
-int __fastcall Unreferenced_006c40d0(struct StormLinkStrc * param_1);
-struct StormLinkedListStrc * __fastcall Unreferenced_006c4360(struct StormLinkedListStrc * param_1);
-struct StormLinkStrc * __fastcall Unreferenced_006c4470(struct StormLinkStrc * param_1);
+int __fastcall Unreferenced_006c4010(struct StormLinkStrc * pLink);
+intptr_t __fastcall Unreferenced_006c40b0(struct StormLinkedListStrc * pList);
+int __fastcall Unreferenced_006c40d0(struct StormLinkStrc * pLink);
+struct StormLinkedListStrc * __fastcall Unreferenced_006c4360(struct StormLinkedListStrc * pList);
+struct StormLinkStrc * __fastcall Unreferenced_006c4470(struct StormLinkStrc * pLink);
 ::SCMD * __fastcall SCMD_FreeNode(::SCMD * pThis, int, uint8_t bFreeMemory);
 // @blizzard ProcessFlags (SCMD.CPP)
 BOOL __fastcall SCMD_ProcessFlags(pfnSCmdErrorCallback pfnErrorCallback, char * szText, struct StormCmdProcessingStrc * pProcessing);

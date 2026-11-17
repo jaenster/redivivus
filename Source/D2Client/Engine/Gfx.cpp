@@ -1809,9 +1809,9 @@ void __fastcall GFX_PrecacheMonsterAllModes(int32_t nMonsterClassId, int32_t nFl
 
 int __stdcall GFX_GetGfxMemory() {
     // Static local variables (originally global data)
-    static int gnGfxCofCacheFlags; D2_STATIC_GUARD_BSS(gnGfxCofCacheFlags, "D2Client::Engine::Gfx::GFX_GetGfxMemory::gnGfxCofCacheFlags");
+    static int gnGfxMemory; D2_STATIC_GUARD_BSS(gnGfxMemory, "D2Client::Engine::Gfx::GFX_GetGfxMemory::gnGfxMemory");
 
-    return gnGfxCofCacheFlags;
+    return gnGfxMemory;
 }
 
 int __stdcall GFX_GetCofCacheMemUsage() {
@@ -1940,10 +1940,9 @@ static D2GfxInfoUnkStrc * __stdcall GFX_AsyncLoadUnitSprites(int32_t nAsyncBlock
       pInventoryUsed = pOwnerUnit->pInventory;
     }
 
-    uint32_t nWeaponClass = D2Common::COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit, pInventoryUsed, (uint32_t*)&__frame0.nTransformGfx, nAnimMode, 0);
-    D2GfxInfoUnkStrc* pGfxInfoUnk = GFX_FindGfxInfoByModeAndWeapon(pUnit, nWeaponClass, nAnimMode);
-    if (!pGfxInfoUnk && (pGfxInfoUnk = GFX_EnsureUnitCofLoaded(pUnit, nWeaponClass, nAnimMode) , !pGfxInfoUnk)) {
-      sprintf(szCofName, "sAsyncLoadBlock failed on async:%d unittype:%d unitclass:%d unitmode:%d weaponclass:%d wclass:%d\n", nAsyncBlockId, pUnit->eUnitType, pUnit->nClassId, nAnimMode, __frame0.nTransformGfx, nWeaponClass);
+    D2GfxInfoUnkStrc* pGfxInfoUnk = GFX_FindGfxInfoByModeAndWeapon(pUnit, D2Common::COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit, pInventoryUsed, (uint32_t*)&__frame0.nTransformGfx, nAnimMode, 0), nAnimMode);
+    if (!pGfxInfoUnk && (pGfxInfoUnk = GFX_EnsureUnitCofLoaded(pUnit, D2Common::COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit, pInventoryUsed, (uint32_t*)&__frame0.nTransformGfx, nAnimMode, 0), nAnimMode) , !pGfxInfoUnk)) {
+      sprintf(szCofName, "sAsyncLoadBlock failed on async:%d unittype:%d unitclass:%d unitmode:%d weaponclass:%d wclass:%d\n", nAsyncBlockId, pUnit->eUnitType, pUnit->nClassId, nAnimMode, __frame0.nTransformGfx, D2Common::COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit, pInventoryUsed, (uint32_t*)&__frame0.nTransformGfx, nAnimMode, 0));
     } else {
       uint8_t nDirection;
       pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);

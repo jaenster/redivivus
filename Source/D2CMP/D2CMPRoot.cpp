@@ -117,7 +117,7 @@ void __stdcall D2CMP_MaxDouble(double fParam1, double fParam2) {
     }
 }
 
-int32_t __fastcall SUBTILE_CountRunLength(char * pDataStart, char * pDataEnd, int32_t nMaxRunLength, uint32_t * pIsAtEndFlag, uint32_t * pIsExactMatchFlag) {
+int32_t __fastcall SUBTILE_CountRunLength(char * pDataStart, char * pDataEnd, int32_t nMaxRunLength, BOOL * pIsAtEndFlag, uint32_t * pIsExactMatchFlag) {
     int32_t nLine;
     if (pDataStart >= pDataEnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19);
@@ -148,7 +148,7 @@ int32_t __fastcall SUBTILE_CountRunLength(char * pDataStart, char * pDataEnd, in
     return nLine;
 }
 
-int32_t __fastcall SUBTILE_CountRunLengthForByte(char * pCur, char * pEnd, char cSkipByte, int32_t nMaxRunLen, uint32_t * pbAtEnd, uint32_t * pbExactMatch) {
+int32_t __fastcall SUBTILE_CountRunLengthForByte(char * pCur, char * pEnd, char cSkipByte, int32_t nMaxRunLen, BOOL * pbAtEnd, uint32_t * pbExactMatch) {
     int32_t nLine;
     if (pCur >= pEnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6f);

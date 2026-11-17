@@ -115,9 +115,10 @@
       ],
       "usedTypes": [
         "D2FogDebugModuleEntryStrc",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ],
-      "dh": "99f97924",
+      "dh": "5d865809",
       "paramStorage": [
         [
           "nDataSize",
@@ -154,7 +155,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2711e7f9",
+      "dh": "ea7e47c8",
       "paramStorage": [
         [
           "nCount",
@@ -444,9 +445,9 @@
       "usedTypes": [
         "CV_INFO_PDB20",
         "D2FogDebugModuleEntryStrc",
-        "uint32_t"
+        "uint8_t"
       ],
-      "dh": "e14a7d02",
+      "dh": "47b00a97",
       "paramStorage": [
         [
           "pDebugRecord",

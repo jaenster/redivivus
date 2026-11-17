@@ -254,10 +254,10 @@
       "usedTypes": [
         "D2DrlgTileDataStrc"
       ],
-      "dh": "a191e893",
+      "dh": "e629845a",
       "paramStorage": [
         [
-          "param_1",
+          "pTileData",
           "ECX:4"
         ]
       ]

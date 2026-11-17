@@ -54,8 +54,10 @@ void __fastcall SetBlankBorderGridCells(struct D2DrlgLevelStrc * pLevel);
 void __fastcall SetOutGridLinkFlags(struct D2DrlgLevelStrc * pLevel);
 // DRLG outdoor wilderness border/road generator: walks the level's polygon outline (linked list of D2DrlgVertexStrc edges) and stamps edge presets, corner presets and grid border flags into the outdoor preset grid. For each edge it picks a road/border preset type from the level type (case 2 dirt, 0x10, 0x1b, 0x1f siege-grid-division) and direction lookup tables (gaRoadPresetDirectionLookup / gaOutPlaceRoadPresetLookup / gRoadPresetIdLookupTable), then spawns presets along the edge via SpawnOutdoorLevelPresetEx and flags cells via AlterGridFlag. Has act-specific corner handling for acts I/II/IV/V (and special-cases level 0x11) plus joint/corner presets at each vertex. Finishes with SetBlankBorderGridCells. Used during outdoor level layout for acts 1,2,4,5.
 void __fastcall PlaceAct1245OutdoorBorders(struct D2DrlgLevelStrc * pLevel);
+bool Unreferenced_00677870();
 struct D2DrlgLevelStrc * __stdcall DRLGLEVEL_FixDrlgLevelForLowerKurast(struct D2DrlgLevelStrc * pLevel);
-// Act-specific level allocation. Parses per-act level data tables, allocates level ranges for the act, initializes Act III special handling, and sets Act V warp connections. Act IV sets a flag in Outer Steppes level data before allocating the rest.
+// Act-specific level setup dispatcher: moves pDrlg to EAX and tail-jumps through a 5-entry table to DRLGActMisc_InitAct1..InitAct5 by nActNo; nActNo above 4 returns.
+// 1.14d: jump table at 00678afc, stubs 00678ae1..00678af5.
 void __fastcall DRLGACTMISC_AllocDrlgLevelForAct(struct D2DrlgStrc * pDrlg, eAct nActNo);
 struct D2RoomExStrc * __fastcall DRLGOUTROOM_CreateOutdoorRoomEx(struct D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t dwRoomFlags, int32_t dwOutdoorFlags, int32_t dwOutdoorFlagsEx, int32_t dwDT1Mask);
 // Selects and spawns border tiles and random preset rooms for the three Kurast outdoor levels (Docktown 0x4F, Upper Kurast 0x50, Causeway 0x51) and the spider-cavern placeholder (0x52). Dispatches to level-specific border builders then places fixed and randomly-seeded DS1 preset files.
@@ -63,6 +65,6 @@ void __fastcall BuildKurast(struct D2DrlgLevelStrc * pLevel);
 void __fastcall BuildTravincal(struct D2DrlgLevelStrc * pLevel);
 void __fastcall InitAct3OutdoorLevel(struct D2DrlgLevelStrc * pLevel);
 #endif // D2_MODULE_D2Common
-// 6 internal functions (defined in .cpp)
+// 10 internal functions (defined in .cpp)
 
 }}} // namespace D2Common::Drlg::OutPlace

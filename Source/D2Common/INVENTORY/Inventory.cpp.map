@@ -253,10 +253,10 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "260dd0bb",
+      "dh": "e6ceab78",
       "paramStorage": [
         [
-          "param_1",
+          "pUnit",
           "ECX:4"
         ]
       ]
@@ -700,7 +700,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1df0354a",
+      "dh": "cae0ed74",
       "paramStorage": [
         [
           "dwUnused",
@@ -708,7 +708,7 @@
         ],
         [
           "nGridCol",
-          "EDX:4"
+          "DL:1"
         ],
         [
           "nY",
@@ -748,7 +748,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "42a664e7",
+      "dh": "97fe3847",
       "paramStorage": [
         [
           "byItemHeight",
@@ -1282,9 +1282,9 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "int32_t",
-        "uint32_t"
+        "uint8_t"
       ],
-      "dh": "286aabe5",
+      "dh": "fdcaf928",
       "paramStorage": [
         [
           "pInventory",
@@ -1316,7 +1316,7 @@
         ],
         [
           "nPage",
-          "Stack[0x20]:4"
+          "Stack[0x20]:1"
         ]
       ]
     },
@@ -1344,9 +1344,10 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ],
-      "dh": "a9acd17e",
+      "dh": "292296d0",
       "paramStorage": [
         [
           "pInventory",
@@ -1374,7 +1375,7 @@
         ],
         [
           "nPageByte",
-          "Stack[0x1c]:4"
+          "Stack[0x1c]:1"
         ],
         [
           "bCheckBox",
@@ -1722,7 +1723,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "3c9ad244",
+      "dh": "5f125676",
       "paramStorage": [
         [
           "pInventory",
@@ -2466,7 +2467,7 @@
         "D2InventoryStrc",
         "uint32_t"
       ],
-      "dh": "b9fb85dc",
+      "dh": "2e04a80f",
       "paramStorage": [
         [
           "pInventory",
@@ -3657,16 +3658,8 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ba0dce94",
+      "dh": "1b9e0bd3",
       "paramStorage": [
-        [
-          "pUnit",
-          "ECX:4"
-        ],
-        [
-          "pNewItem",
-          "EDX:4"
-        ],
         [
           "pUnit1",
           "Stack[0x4]:4"
@@ -3676,8 +3669,16 @@
           "Stack[0x8]:4"
         ],
         [
+          "pNewItem",
+          "EDX:4"
+        ],
+        [
           "pUnit2",
           "EAX:4"
+        ],
+        [
+          "pUnit",
+          "ECX:4"
         ]
       ]
     },
@@ -3706,7 +3707,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d8c208cd",
+      "dh": "0ecd155a",
       "paramStorage": [
         [
           "pUnit",

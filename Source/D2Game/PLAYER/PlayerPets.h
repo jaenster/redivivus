@@ -79,7 +79,7 @@ void __fastcall Send0x7aSummonLog(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit
 // Releases all pet tracking memory for a player unit. Iterates every pet type list (skipping index 0), calling PETS_FreeOrKillPetList for each (type 7 = merc gets special kill flag). Frees the pet list array and the D2UnitDataPlayerPetsStrc itself from the game memory pool, then nulls pPets. Halts on missing player data.
 // @sourcefile .\PLAYER\PlayerPets.cpp
 void __fastcall FreePets(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-int __fastcall Unreferenced_00574810(struct D2UnitStrc * param_1, int param_2);
+int __fastcall Unreferenced_00574810(struct D2UnitStrc * pUnit, int nPetType);
 // @sourcefile .\PLAYER\PlayerPets.cpp
 void __fastcall PLAYERPETS_SendPetUpdateCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2PetArgStrc * pSummonArgs);
 void __fastcall PETS_UpdatePetData(struct D2UnitStrc * pUnit, ePetType nPetType, int32_t nTargetPetGUID, struct D2PetDataStrc * pNewPetData);
@@ -96,7 +96,7 @@ int32_t __fastcall PETS_GetTotalPetCount(struct D2UnitStrc * pUnit);
 // Sends the full pet roster of a player unit to a client. For each live pet across all type lists: mercs (type 7) get a 0x81 AssignMerc packet (with seed and name ID); all other pets get a 0x7A SummonLog packet. Used on game join or area transition to synchronise the client's summon display.
 void __fastcall PLAYERPETS_SendPetListToClient(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit);
 // @sourcefile .\PLAYER\PlayerPets.cpp
-uint32_t __fastcall PETS_HasMercenary(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+BOOL __fastcall PETS_HasMercenary(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall RemovePetByGuidAndNotify(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, DWORD nPetGUID, BOOL bKillHandler);
 // Removes a pet (by its unit pointer) from a player's pet tracking data on death/dismissal. For non-merc pets calls RemovePetByGuidAndNotify; for all types marks the node dead (bit 0), computes revive cost and sends a 0x9B MercReviveCost packet to the owner, then broadcasts 0x7A to all units to remove the summon log entry.
 // @sourcefile .\PLAYER\PlayerPets.cpp

@@ -325,7 +325,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "23da69ff",
+      "dh": "5c7227e8",
       "paramStorage": [
         [
           "pInventory",
@@ -2054,9 +2054,10 @@
         "eD2Sounds",
         "eD2UnitType",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ],
-      "dh": "bd7860fa",
+      "dh": "60949dc2",
       "paramStorage": [
         [
           "pItem",
@@ -2068,7 +2069,7 @@
         ],
         [
           "nPage",
-          "EAX:4"
+          "AL:1"
         ],
         [
           "pPlayer",
@@ -3298,7 +3299,13 @@
         "INV_StashOpenedWithGold",
         "SetUIFlag"
       ],
-      "dh": "a079ce72"
+      "dh": "c75d71e7",
+      "paramStorage": [
+        [
+          "nTransactionType",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INV_SetInventoryActive",
@@ -5232,7 +5239,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4601b3ab",
+      "dh": "9701430a",
       "paramStorage": [
         [
           "pUnit",
@@ -5260,7 +5267,7 @@
         ],
         [
           "nPage",
-          "EAX:4"
+          "AL:1"
         ]
       ]
     },
@@ -5480,7 +5487,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2a3779e4",
+      "dh": "34927b0c",
       "paramStorage": [
         [
           "pMsg",
@@ -5519,7 +5526,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a5dce349",
+      "dh": "5a6bfc34",
       "paramStorage": [
         [
           "pMsg",
@@ -5592,7 +5599,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b7046e91",
+      "dh": "57447c4d",
       "paramStorage": [
         [
           "pMsg",
@@ -5640,7 +5647,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "b7e60de9",
+      "dh": "41c7448a",
       "paramStorage": [
         [
           "pMsg",

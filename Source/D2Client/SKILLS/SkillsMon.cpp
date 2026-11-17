@@ -1660,8 +1660,9 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ScatterDoubleMissile(D2UnitStrc * pUnit, eD
       sSkillArg.nMissileTxtNo = eMissileIdA;
       sSkillArg.eSkillNo = eSkill;
       Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 2, 1);
-      sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[2];
-      if ((int)sSkillArg.nMissileTxtNo >= 0 && (int)sSkillArg.nMissileTxtNo < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+      eMissilesId nMissileIdB = (eMissilesId)pSkillTxt->cltmissile[2];
+      if ((int)nMissileIdB >= 0 && (int)nMissileIdB < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+        sSkillArg.nMissileTxtNo = nMissileIdB;
         Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 4, 5);
       }
 

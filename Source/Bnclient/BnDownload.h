@@ -73,8 +73,8 @@ int __stdcall BNDOWNLOAD_GetProgress();
 int __fastcall BNDOWNLOAD_SetPatchFilename(char * szText);
 uint32_t __stdcall BNDOWNLOAD_HasPatchFilename();
 // Processes BNet prepatch.lst from downloaded MPQ archive - executes patches, extracts files, launches updates
-void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut);
-int __fastcall BNDOWNLOAD_ApplyPrepatch(uint32_t * pbPatcherLaunched);
+int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut);
+int __fastcall BNDOWNLOAD_ApplyPrepatch(BOOL * pbPatcherLaunched);
 uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam);
 void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t dwDownloadFlags, uint32_t eFileType, uint32_t nOpcode, FILETIME * pFileTime, char * szText1, char * szText2);
 // Processes downloaded BNFTP files: version info, cache files, ads, bnserver.ini, and ExtraWork DLLs. Handles extraction, loading, and cleanup.

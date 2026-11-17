@@ -707,13 +707,28 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "e1198ab1",
+      "dh": "1d4fa5eb",
       "paramStorage": [
         [
-          "param_1",
+          "pData",
           "ECX:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_00407270",
+      "address": "00407270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407270"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00407270"
+      ],
+      "dh": "73d75414"
     },
     {
       "name": "Unreferenced_00407280",

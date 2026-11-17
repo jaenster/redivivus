@@ -394,14 +394,14 @@ static int32_t __stdcall BNDOWNLOAD_RecvFileFromSocket(LPCSTR pThis, SOCKET hSoc
 }
 
 // Processes BNet prepatch.lst from downloaded MPQ archive - executes patches, extracts files, launches updates
-void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
+int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
     // Frame slots -4020..-3996 are ONE object: &dwAuthResult is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
       uint32_t dwAuthResult;
       char* dwTmp2;
       D2MPQFileStrc* dwTmp;
-      uint32_t* pOpenFileOut;
+      int* pOpenFileOut;
       char* pVerifySigOut;
       D2ArchiveStrc* pArchiveHandle;
     };
@@ -457,7 +457,7 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
     nErrorLine = Storm::Source::SReg::SRegLoadData((uint32_t*)"Patch", "Patches", 2, (LPBYTE)cRegistryValue, 0x3fe, nullptr);
     if (!nErrorLine || cRegistryValue[0] == '\0') {
       *pResultOut = 0;
-      return;
+      return 0;
     }
 
     cArchiveListBuf[0] = '\0';
@@ -471,7 +471,7 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
       if (!bArchiveOpened) {
         /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(lpFileName);
         *__frame0.pOpenFileOut = -1;
-        return;
+        return 0;
       }
 
       Storm::Source::SFile::SFileAuthenticateArchive(__frame0.pArchiveHandle, &__frame0.dwAuthResult);
@@ -479,7 +479,7 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
         Storm::Source::SFile::SFileCloseArchive(__frame0.pArchiveHandle);
         /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(lpFileName);
         *__frame0.pOpenFileOut = -1;
-        return;
+        return 0;
       }
 
       bArchiveOpened = Storm::Source::SFile::SFileOpenFileEx(__frame0.pArchiveHandle, "Prepatch.lst", 0, (void**)&__frame0.dwTmp);
@@ -607,24 +607,31 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
     bIsExpansion = BNDOWNLOAD_LaunchVerifiedExecutables(szModulePath, cArchiveListBuf);
     if (bIsExpansion) {
       *__frame0.pOpenFileOut = 2;
-      return;
+      return 1;
     }
 
     *__frame0.pOpenFileOut = -1;
+    return 0;
 }
 
-int __fastcall BNDOWNLOAD_ApplyPrepatch(uint32_t * pbPatcherLaunched) {
-    uint32_t* pResultLocal = pbPatcherLaunched;
-    BNDOWNLOAD_ProcessPrepatchList((uint32_t*)&pResultLocal);
-    if (pResultLocal && pResultLocal != (uint32_t*)0x1) {
-      if (pResultLocal == (uint32_t*)0x2) {
-        *pbPatcherLaunched = 1;
-      }
-
-      return 0;
+int __fastcall BNDOWNLOAD_ApplyPrepatch(BOOL * pbPatcherLaunched) {
+    int pResultLocal = (int)pbPatcherLaunched;
+    BNDOWNLOAD_ProcessPrepatchList(&pResultLocal);
+    switch (pResultLocal) {
+      case 0:
+        case 1:
+          {
+            return 1;
+          }
+      case 2:
+        {
+          *pbPatcherLaunched = 1;
+        }
+      default:
+        {
+          return 0;
+        }
     }
-
-    return 1;
 }
 
 uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {

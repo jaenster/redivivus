@@ -881,7 +881,7 @@ static int __thiscall SBMP_DecodeBmpFile(int * pWidth, void * palette, D2MPQFile
       SFile::SFileSetFilePointer(hFile, sBmpFileHeader.bfOffBits - (palette ? 0x400 : 0) - 0x36, nullptr, 1);
       nHeight = 0x0;
       pRawBits = (uint8_t*)SMem::SMemAlloc(aBmpInfoExtraBuf.biSizeImage, ".\\SOURCE\\SBMP.CPP", 0x1ff, 0);
-      SFile::SFileReadFile(hFile, pRawBits, aBmpInfoExtraBuf.biSizeImage, (uint32_t*)&nHeight, (LPOVERLAPPED)0x0);
+      SFile::SFileReadFile(hFile, pRawBits, aBmpInfoExtraBuf.biSizeImage, &nHeight, (LPOVERLAPPED)0x0);
       rowWidth = (int)((uint32_t)aBmpInfoExtraBuf.biBitCount * aBmpInfoExtraBuf.biWidth) >> 3;
       srcStride = rowWidth;
       if (rowWidth & 3) {

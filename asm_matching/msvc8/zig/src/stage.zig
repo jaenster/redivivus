@@ -15,6 +15,10 @@ extern fn _NSGetExecutablePath(buf: [*]u8, size: *u32) c_int;
 /// This executable's own path: a rebuilt oracle-zig may derive other results.
 fn selfPath() ![]const u8 {
     var buf: [4096]u8 = undefined;
+    if (builtin.os.tag == .windows) {
+        const n = std.process.executablePath(std.Io.Threaded.global_single_threaded.io(), &buf) catch return error.SelfPath;
+        return gpa.dupe(u8, buf[0..n]);
+    }
     if (builtin.os.tag == .macos) {
         var n: u32 = buf.len;
         if (_NSGetExecutablePath(&buf, &n) != 0) return error.SelfPath;

@@ -73,6 +73,7 @@ char * __fastcall GetRosterName(struct D2RosterStrc * pRoster);
 struct D2RosterStrc * __stdcall ROSTER_SortByName(struct D2RosterStrc * pRoster);
 struct D2RosterStrc * Unreferenced_004796b0();
 struct D2RosterStrc * Unreferenced_00479740();
+struct D2RosterPartyListStrc * Unreferenced_00479750();
 // @sourcefile .\GAME\Roster.cpp
 void __stdcall FreeRosterPartyList();
 // Insertion-sorts the global pRosterPartyList singly-linked list ascending by nPartyId. Rebuilds the list in-place by relinking pNext pointers and reassigns the global head when done. No allocation; operates on the existing D2RosterPartyListStrc chain.
@@ -84,6 +85,7 @@ void __stdcall ROSTER_FlattenPartyListsIntoSingleRosterChain();
 void __stdcall ROSTER_RebuildPlayerParty();
 // Sets arena score on roster entry by GUID. Score is uint16 from packet 0x65, sign-extended if bit 15 set (negative scores). Triggers party UI rebuild.
 void __fastcall ROSTER_SetArenaScore(int32_t nRosterGUID, uint16_t nArenaScore);
+uint16_t Unreferenced_00479b50();
 int __fastcall Unreferenced_00479b60(int param_1);
 int __fastcall Unreferenced_00479b70(int param_1);
 // Returns arena score from roster entry field 0x18. Returns 0 if roster is null.
@@ -110,7 +112,7 @@ uint32_t __fastcall CheckRostersArePartied(int32_t nRoster1GUID, int32_t nRoster
 int32_t __fastcall GetRosterGUID(struct D2RosterStrc * pRoster);
 void __fastcall SetRosterHpAndArea(int32_t nRosterGUID, int32_t nHpPercent, uint16_t eLevel);
 void __fastcall SetRosterPosition(int32_t nRosterGUID, int32_t nX, int32_t nY);
-uint32_t __fastcall ROSTER_CheckPlayerInSameParty(struct D2RosterStrc * pRoster);
+BOOL __fastcall ROSTER_CheckPlayerInSameParty(struct D2RosterStrc * pRoster);
 int32_t __fastcall GetRosterHP(int32_t nRosterGUID);
 uint32_t __fastcall ROSTER_CheckPlayerNotHostile(int32_t nRosterGUID);
 void __fastcall GetRosterPosition(struct D2RosterStrc * pRoster, int * pX, int * pY);

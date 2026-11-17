@@ -2305,6 +2305,7 @@ BOOL __fastcall fpLDE4(D2DrlgLevelPlacementStrc * pLevelUnknown) {
       pLevelUnknown->aFlipState[pLevelUnknown->nCurrentNode] = sNextSeed & 1;
       nCurrentNode = pLevelUnknown->nCurrentNode;
       nFlipNext = pLevelUnknown->aFlipState[nCurrentNode];
+      pLevelUnknown->aStepCounter[nCurrentNode] = nFlipNext;
     } else {
       uint32_t nNextDir;
       nNextDir = (pLevelUnknown->aCurrentDir[nCurrentNode] + pLevelUnknown->aStepCounter[nCurrentNode]) % 4;
@@ -2315,9 +2316,9 @@ BOOL __fastcall fpLDE4(D2DrlgLevelPlacementStrc * pLevelUnknown) {
 
       pLevelUnknown->aCurrentDir[nCurrentNode] = nNextDir;
       nCurrentNode = pLevelUnknown->nCurrentNode;
+      pLevelUnknown->aStepCounter[nCurrentNode] = nFlipNext;
     }
 
-    pLevelUnknown->aStepCounter[nCurrentNode] = nFlipNext;
     nCurrentNode = pLevelUnknown->nCurrentNode;
     D2DrlgCoordsStrc* pPrevCoordsEntry = pLevelUnknown->aCoordsAndSize + pLevelUnknown->pLevelData->aEntry[nCurrentNode].nNodeLevelEntryIdPrev;
     if (pLevelUnknown->aStepCounter[nCurrentNode] == 1) {
@@ -3012,7 +3013,7 @@ void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLeve
         pLevelDefs = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(nLevelId);
         nDifficulty = (int)pDrlg->nDifficulty;
         *(int*)((intptr_t)&pLevelUnknown.aCoordsAndSize[0].WorldSize.x + nCoordsOffset) = pLevelDefs->SizeX[nDifficulty];
-        nNodeEntryOffset = nNodeOffset << 4;
+        nNodeEntryOffset = nNodeOffset * 0x10;
         *(int*)((intptr_t)&pLevelUnknown.aCoordsAndSize[0].WorldSize.y + nCoordsOffset) = pLevelDefs->SizeY[nDifficulty];
         nLevelId = pLevelData->aEntry[nNodeOffset + 1].neD2LevelId;
         nNodeOffset++;
@@ -3146,7 +3147,7 @@ void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLeve
                          offset into pLevelUnknown.aCoordsAndSize (stride 16), recomputed every
                          iteration so the aCurrentDir[] read at 0067747d/00677489 cannot leak into it.
                           */ fnPlacementValidator = (fpLevelDataFn1)((uint8_t*)fnPlacementValidator + 1);
-      nNodeOffset = (intptr_t)fnPlacementValidator << 4;
+      nNodeOffset = (int)fnPlacementValidator * 0x10;
       /* Second pass cursor advances by ONE 16-byte entry (EDI = index*0x10 added to
                          pLevelData), not by a whole list. */ pLevelData1 = (D2DrlgLevelDataList*)(pLevelData->aEntry + (intptr_t)fnPlacementValidator);
     } while (((D2DrlgLevelDataEntry*)pLevelData1)->neD2LevelId != LEVEL_None);

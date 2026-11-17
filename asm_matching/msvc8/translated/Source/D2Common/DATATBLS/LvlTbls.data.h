@@ -16,8 +16,6 @@
 // Forward declarations
 struct D2SeedStrc;
 
-extern uint32_t gszTxtCol_Act;
-extern unsigned int gszTxtCol_Red;
 extern int * gpnLvlSubTypeToIndex;
 
 namespace D2Common { namespace DATATBLS { namespace LvlTbls {

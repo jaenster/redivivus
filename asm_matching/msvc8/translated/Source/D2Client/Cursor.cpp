@@ -192,8 +192,11 @@ void __stdcall UI_HandleCursorMouseMove(D2UIMouseMsgStrc * pMsgEvent) {
 }
 
 void __stdcall UI_HandleCursorMouseUp(D2UIMouseMsgStrc * pMsg) {
-    MouseX = (int)pMsg->uLParam.sMousePos.nMouseX;
-    MouseY = (int)pMsg->uLParam.sMousePos.nMouseY;
+    POINT sPair;
+    sPair.x = (int)pMsg->uLParam.sMousePos.nMouseX;
+    sPair.y = (int)pMsg->uLParam.sMousePos.nMouseY;
+    MouseX = sPair.x;
+    MouseY = sPair.y;
     gnCursorAnimStartTick = GetTickCount();
     if (ItemTypeOnHand == 5) {
       nCursorDataIndex = 5;
@@ -409,7 +412,8 @@ void __stdcall UI_DrawCursorIcon() {
     sGfxData.pDC6 = pCursorsDC6[6];
     sGfxData.nFrameNumber = gCursorAnimationFrame;
     sGfxData.nDirection = 0;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnCursorType + MouseX, MouseY + 0x21, -1, DRAW_SOLID, nullptr);
+    int t2_c0 = MouseX;
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnCursorType + t2_c0, MouseY + 0x21, -1, DRAW_SOLID, nullptr);
 }
 
 void __stdcall DrawCursor() {

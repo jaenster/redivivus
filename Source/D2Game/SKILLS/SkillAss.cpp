@@ -1510,8 +1510,8 @@ static void __stdcall SKILLASS_FillKickDamage(::SGAMEDATA * pGame, D2DamageStrc 
     nEnhDmgPct = nEnhDmgPctWork;
     D2Common::Skills::SKILL_CalcKickDamage(pUnit2, &nMinDmgKick, &nMaxDmgKick, (int*)&nEnhDmgPct);
     nEnhDmgPctWork = nEnhDmgPct;
-    nMinDmgKick = nMinDmgKick << 8;
-    nEnhMaxDmg = nMaxDmgKick << 8;
+    nMinDmgKick *= 0x100;
+    nEnhMaxDmg = nMaxDmgKick * 0x100;
     if (nMinDmgKick > 0x100000) {
       if (nMinDmgKick < 0x640) {
         nScaledDamage64 = (int64_t)(int)nEnhDmgPct * (int64_t)nMinDmgKick / 100;
@@ -2153,6 +2153,7 @@ uint32_t __fastcall SKILL_ApplyTimedStateWithCurseExpiry(D2SkillCallbackContextS
     D2StateExArgStrc sStateArgs;
     memset(&sStateArgs, 0, sizeof(sStateArgs));
     sStateArgs.pUnit = pContext->pUnit;
+    sStateArgs.pTarget = pUnit;
     sStateArgs.eSkill = *pStatId;
     sStateArgs.nSkillLvl = pStatId[1];
     sStateArgs.nDurationInFrames = pStatId[2];
@@ -2164,7 +2165,6 @@ uint32_t __fastcall SKILL_ApplyTimedStateWithCurseExpiry(D2SkillCallbackContextS
     sStateArgs.nSkillCalc = pStatId[10];
     sStateArgs.eAuraState = pStatId[3];
     sStateArgs.pFunction = SkillNec::SKILLNEC_OnCurseExpire;
-    sStateArgs.pTarget = pUnit;
     D2StatListExStrc* pStatsEx = SkillsServer::SetStateWithExpiryTime(&sStateArgs);
     if (!pStatsEx) {
       return 0;
@@ -2386,7 +2386,7 @@ BOOL __fastcall SKILLASS_SrvStFn26_BladeFury(::SGAMEDATA * pGame, D2UnitStrc * p
       if (pSkillTxt->startmana > 0) {
         int32_t nCurMana;
         nCurMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
-        if (nCurMana < pSkillTxt->startmana << 8) {
+        if (nCurMana < pSkillTxt->startmana * 0x100) {
           return 0;
         }
       }
@@ -2931,7 +2931,7 @@ uint32_t __fastcall SKILLASSN_AuraCallback_MindBlast(D2SkillCallbackContextStrc 
     return 1;
 }
 
-// Mind Blast / Psychic Hammer SrvDoFunc. Gets target/cursor position, computes AoE radius via SKILLASS_GetChargeUpCalcValue (fallback aurarangecalc), builds a damage struct with random skill damage + SetDamageOnEvent + skill ResultFlags/HitFlags, then applies area effect using SKILLAMZ_HandleStrafeDamageAndNextDelay as the per-unit callback. Returns 1 on success.
+// Mind Blast / Psychic Hammer SrvDoFunc. Gets target/cursor position, computes AoE radius via SKILLASS_GetChargeUpCalcValue (fallback aurarangecalc), builds a damage struct with random skill damage + SetDamageOnEvent + skill ResultFlags/HitFlags, then applies area effect using SKILLASSN_AuraCallback_MindBlast as the per-unit callback. Returns 1 on success.
 // @sourcefile .\SKILLS\SkillAss.cpp
 BOOL __fastcall Skills_SrvDoFunc_051_MindBlast(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
@@ -3139,7 +3139,9 @@ BOOL __fastcall Skills_SrvDoFunc_053_Venom_BladeShield_AreaPulse(::SGAMEDATA * p
     return 1;
 }
 
-uint32_t __fastcall SKILLAMZ_GetStrafeArrowCount(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
+// Per-unit callback of the do slot 142 area attack (Skills_SrvDoFunc_142_BladeShield_SpinDamage). Copies the prebuilt damage from the D2SkillAreaDamageArgStrc, rolls missile to-hit, and on a hit adds the arg's hit flags, applies offensive damage and queues the combat entry. Returns 1.
+// From the single xref at 0x005d7de7 and the callee names.
+uint32_t __fastcall SKILLASSN_AuraCallback_AreaDamage(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
     int i;
     D2DamageStrc* pDamageDst;
     D2SkillAreaDamageArgStrc* pEventData = (D2SkillAreaDamageArgStrc*)pContext->pCallbackArg;
@@ -3159,7 +3161,7 @@ uint32_t __fastcall SKILLAMZ_GetStrafeArrowCount(D2SkillCallbackContextStrc * pC
     return 1;
 }
 
-// Blade Shield spin-damage SrvDoFunc. Computes AoE radius via SKILLASS_GetChargeUpCalcValue (fallback aurarangecalc), builds a damage struct (dwHitFlags=2, random skill damage, SetDamageOnEvent, HitClass from txt), conditionally runs SKILLS_CalcToHit if ResultFlags bit 0 is clear, then calls SKILLS_ApplyAreaEffect centred on the caster (0,0) using SKILLAMZ_GetStrafeArrowCount as per-unit callback.
+// Blade Shield spin-damage SrvDoFunc. Computes AoE radius via SKILLASS_GetChargeUpCalcValue (fallback aurarangecalc), builds a damage struct (dwHitFlags=2, random skill damage, SetDamageOnEvent, HitClass from txt), conditionally runs SKILLS_CalcToHit if ResultFlags bit 0 is clear, then calls SKILLS_ApplyAreaEffect centred on the caster (0,0) using SKILLASSN_AuraCallback_AreaDamage as per-unit callback.
 // @sourcefile .\SKILLS\SkillAss.cpp
 BOOL __fastcall Skills_SrvDoFunc_142_BladeShield_SpinDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
@@ -3192,7 +3194,7 @@ BOOL __fastcall Skills_SrvDoFunc_142_BladeShield_SpinDamage(::SGAMEDATA * pGame,
       sAreaDamageArgs.nToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill_00, nSkillLvl);
     }
 
-    SkillsServer::SKILLS_ApplyAreaEffect(pGame, pUnit, 0, 0, eSkill, pSkillsTxt->aurafilter, SKILLAMZ_GetStrafeArrowCount, &sAreaDamageArgs, 0, ".\\SKILLS\\SkillAss.cpp", 0xc4f);
+    SkillsServer::SKILLS_ApplyAreaEffect(pGame, pUnit, 0, 0, eSkill, pSkillsTxt->aurafilter, SKILLASSN_AuraCallback_AreaDamage, &sAreaDamageArgs, 0, ".\\SKILLS\\SkillAss.cpp", 0xc4f);
     return 1;
 }
 

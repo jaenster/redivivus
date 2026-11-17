@@ -55,8 +55,7 @@ uint32_t __stdcall isDebuggerPresent() {
 // process exits with 0xFFFFFFFF. The convention is __fastcall with that argument explicit.
 // @abi __fastcall(UINT uExitCode @ECX) -> BOOL.
 void __fastcall SYSTEM_Win32TerminateProcess(uint32_t uExitCode) {
-    HANDLE hProcess = GetCurrentProcess();
-    /* HANDLE hProcess for TerminateProcess */ TerminateProcess(hProcess, uExitCode);
+    /* HANDLE hProcess for TerminateProcess */ TerminateProcess(GetCurrentProcess(), uExitCode);
 }
 
 // @wasnamed SYSTEM_GetParentProcessId - it does not return a parent PID.

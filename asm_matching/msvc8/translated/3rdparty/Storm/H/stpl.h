@@ -42,6 +42,8 @@ struct HSGAMEDATALOCK__;
 struct HSGAMEDATA__;
 struct MappingEntryNode;
 struct SGAMEDATA;
+struct StormLinkStrc;
+struct StormLinkedListStrc;
 struct StringEntryNode;
 struct TCELENTRY;
 struct WNDREC;
@@ -69,6 +71,9 @@ public:
     /* 0x04 */ intptr_t m_next; // address of the next element (not its link), or ~address of the list terminator at the end
 
     TSLink<T>* NextLink(intptr_t nLinkOffset);
+    static void __fastcall LINKEDLIST_UnlinkSelf_Unref_0044ddd0(StormLinkStrc* pNode);
+    static void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601c70(StormLinkStrc* pNode);
+    void Unreferenced_0060e1b0();
 };
 
 template<class T, class TGetLink>
@@ -99,15 +104,21 @@ public:
     void Assign(TSExplicitList<T, OFFSET>* pSource);
     TSLink<T>* Link(T* pNode);
     static uint32_t* __fastcall Unreferenced_0044ed40(uint32_t* param_1);
+    static void __fastcall LINKEDLIST_UnlinkSelf_Unref_0044ed50(StormLinkStrc* pNode);
     static uint32_t* __fastcall Unreferenced_0044ed90(uint32_t* param_1);
     void UnlinkNode(T* pNode);
     void SetLinkOffset(int32_t nLinkOffset);
     TSExplicitList<T, OFFSET>* CopyConstructor(TSExplicitList<T, OFFSET>* pSource);
     void UnlinkAll();
     void ChangeLinkOffset(int32_t nLinkOffset);
+    static StormLinkedListStrc* __fastcall Unreferenced_0044f9d0(StormLinkedListStrc* pList);
+    void Unreferenced_0044f9f0();
     void Destructor();
+    TSExplicitList<T, OFFSET>* Constructor();
+    void Unreferenced_0044fb50();
     void Clear();
     TSExplicitList<T, OFFSET>* ScalarDeletingDestructor(uint32_t dwFlags);
+    void Unreferenced_0044fd50();
     void LinkNode(T* pNode, uint32_t nLinkType, T* pExisting);
     static uint32_t* __fastcall Unreferenced_00450350(uint32_t* param_1);
     static uint32_t* __fastcall Unreferenced_00450370(uint32_t* param_1);
@@ -115,7 +126,14 @@ public:
     T* RawNext(T* pNode);
     T* Next(T* pNode);
     T* DeleteNode(T* pNode);
+    static void __fastcall LINKEDLIST_UnlinkSelf_Unref_00602140(StormLinkStrc* pNode);
+    static StormLinkedListStrc* __fastcall Unreferenced_00602730(StormLinkedListStrc* pList);
+    static uint32_t* __fastcall Unreferenced_00602750(uint32_t* pData);
+    static void __fastcall LINKEDLIST_UnlinkSelf_Unref_00602760(StormLinkStrc* pNode);
+    void Unreferenced_00602950();
     static int __fastcall Unreferenced_00603f70(int param_1, int param_2, int param_3);
+    void Unreferenced_0060f020();
+    void Unreferenced_0060f360();
 };
 
 template<class T>
@@ -127,10 +145,12 @@ public:
     /* 0x0C */ uint32_t m_chunk; // growth granularity; 0 = CalcChunkSize picks one
 
     T* OperatorIndex(uint32_t nIndex);
+    static uint8_t Unreferenced_0044de40();
     uint32_t CalcChunkSize(uint32_t nCount);
     static uint32_t __stdcall RoundToMultiple(uint32_t nValue, uint32_t nMultiple);
     void Destructor();
     void ReallocData(uint32_t nAlloc);
+    void Unreferenced_0044ffe0();
     static void __fastcall Unreferenced_0044fff0(TSGrowableArray<::SGAMEDATA>* pArray);
     static TSGrowableArray<T>* __fastcall Unreferenced_00450030(TSGrowableArray<T>* param_1);
     void Reserve(uint32_t nCount, int32_t bRound);
@@ -141,6 +161,7 @@ public:
     void ReserveNoRound(uint32_t nCount);
     void Destructor_UnwindThunk_Unref_00450f70();
     void Destructor_UnwindThunk_Unref_004545a0();
+    TSGrowableArray<T>* Unreferenced_00601cf0();
     void Destructor_UnwindThunk_Unref_00603270();
     void Destructor_UnwindThunk_Unref_00604460();
     void Destructor_UnwindThunk_Unref_00604800();
@@ -193,6 +214,7 @@ public:
     static void __fastcall Destroy(TSHashTable<T, TKey>* pThis, int);
     static TSHashTable<T, TKey>* __fastcall ScalarDeletingDestructor(TSHashTable<T, TKey>* pThis, int, uint32_t dwFlags);
     TSHashTable<T, TKey>* Constructor();
+    void Clear();
     void Unlink(T* pNode);
     void Delete(T* pNode);
     T* Ptr(uint32_t dwHashVal, TKey* pKey);
@@ -202,7 +224,6 @@ public:
     uint32_t ComputeSlot(uint32_t dwHashVal);
     void Clear_Unref_00604070();
     T* Next(T* pNode);
-    void Clear();
     T* DeleteNode(T* pNode);
     T* Ptr(char* szKey);
     T* New(char* szKey, uint32_t nExtraBytes, uint32_t dwFlags);
@@ -230,6 +251,8 @@ public:
     static void __fastcall Destroy(TSHashTableReuse<T, TKey, N>* pThis, int);
     static TSHashTableReuse<T, TKey, N>* __fastcall ScalarDeletingDestructor(TSHashTableReuse<T, TKey, N>* pThis, int, uint32_t dwFlags);
     TSHashTableReuse<T, TKey, N>* Constructor();
+    void Unreferenced_00451160();
+    static uint8_t Unreferenced_00603ed0();
 };
 
 template<class T, class THandle, int N>
@@ -287,6 +310,7 @@ public:
 // Byte-identical to TSExplicitList<StringEntryNode,..>::Assign 0060e370.
 template<> void TSExplicitList<CELLIST, -572662307>::Assign(TSExplicitList<::CELLIST, -572662307>* pSource);
 template<> TSLink<::CELLIST>* TSExplicitList<CELLIST, -572662307>::Link(::CELLIST * pNode);
+template<> void __fastcall TSExplicitList<CELLIST, -572662307>::LINKEDLIST_UnlinkSelf_Unref_00602140(StormLinkStrc * pNode);
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::RawNext(::CELLIST * pNode);
 template<> void TSExplicitList<CELLIST, -572662307>::UnlinkNode(::CELLIST * pNode);
 template<> void TSExplicitList<CELLIST, -572662307>::SetLinkOffset(int32_t nLinkOffset);
@@ -295,6 +319,10 @@ template<> TSExplicitList<::CELLIST, -572662307>* TSExplicitList<CELLIST, -57266
 template<> void TSExplicitList<CELLIST, -572662307>::LinkNode(::CELLIST * pNode, uint32_t nLinkType, ::CELLIST * pExisting);
 template<> __declspec(noinline) inline void TSExplicitList<CELLIST, -572662307>::UnlinkAll();
 template<> void TSExplicitList<CELLIST, -572662307>::ChangeLinkOffset(int32_t nLinkOffset);
+template<> StormLinkedListStrc * __fastcall TSExplicitList<CELLIST, -572662307>::Unreferenced_00602730(StormLinkedListStrc * pList);
+template<> uint32_t * __fastcall TSExplicitList<CELLIST, -572662307>::Unreferenced_00602750(uint32_t * pData);
+template<> void __fastcall TSExplicitList<CELLIST, -572662307>::LINKEDLIST_UnlinkSelf_Unref_00602760(StormLinkStrc * pNode);
+template<> void TSExplicitList<CELLIST, -572662307>::Unreferenced_00602950();
 template<> void TSExplicitList<CELLIST, -572662307>::Destructor();
 template<> TSExplicitList<::CELLIST, -572662307>* TSExplicitList<CELLIST, -572662307>::ScalarDeletingDestructor(uint32_t dwFlags);
 template<> __declspec(noinline) inline void TSExplicitList<CELLIST, -572662307>::Clear();
@@ -316,6 +344,7 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::ChangeLinkOffset(i
 template<> ::MappingEntryNode * TSExplicitList<MappingEntryNode, -572662307>::DeleteNode(::MappingEntryNode * pNode);
 template<> void TSExplicitList<MappingEntryNode, -572662307>::Destructor();
 template<> TSExplicitList<::MappingEntryNode, -572662307>* TSExplicitList<MappingEntryNode, -572662307>::ScalarDeletingDestructor(uint32_t dwFlags);
+template<> void TSExplicitList<MappingEntryNode, -572662307>::Unreferenced_0060f360();
 template<> ::MappingEntryNode * TSExplicitList<MappingEntryNode, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags);
 
 // TSExplicitList<SGAMEDATA, -572662307>
@@ -326,6 +355,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::Assign(TSExplicitList<::S
 // Byte-identical to TSExplicitList<CELLIST,..>::Link 00602110; T not proven (no xrefs), filed with the SGAMEDATA block.
 template<> TSLink<::SGAMEDATA>* TSExplicitList<SGAMEDATA, -572662307>::Link(::SGAMEDATA * pNode);
 template<> uint32_t * __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044ed40(uint32_t * param_1);
+template<> void __fastcall TSExplicitList<SGAMEDATA, -572662307>::LINKEDLIST_UnlinkSelf_Unref_0044ed50(StormLinkStrc * pNode);
 template<> uint32_t * __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044ed90(uint32_t * param_1);
 // Unlinks pNode from this list and clears its link.
 // Byte-identical to TSExplicitList<CELLIST,..>::UnlinkNode 006022a0; T not proven (no xrefs), filed with the SGAMEDATA block.
@@ -340,6 +370,9 @@ template<> __declspec(noinline) inline void TSExplicitList<SGAMEDATA, -572662307
 // Changes the link offset; when it differs, unlinks every node first and resets the terminator.
 // Same code as TSExplicitList<CELLIST,..>::ChangeLinkOffset 006026e0; T from its call to UnlinkAll 0044f8e0.
 template<> void TSExplicitList<SGAMEDATA, -572662307>::ChangeLinkOffset(int32_t nLinkOffset);
+template<> StormLinkedListStrc * __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044f9d0(StormLinkedListStrc * pList);
+template<> void TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044f9f0();
+template<> void TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044fb50();
 // Destructor: unlinks every node, then unlinks the terminator.
 // Same code as TSExplicitList<CELLIST,..>::Destructor 00602aa0; T from its call to UnlinkAll 0044f8e0; reached from Unwind_006ca010.
 template<> void TSExplicitList<SGAMEDATA, -572662307>::Destructor();
@@ -347,6 +380,7 @@ template<> __declspec(noinline) inline void TSExplicitList<SGAMEDATA, -572662307
 // Scalar deleting destructor: destructs, then SMemFree when dwFlags & 1; returns this.
 // Same code as TSExplicitList<CELLIST,..>::ScalarDeletingDestructor 00602b70; T from its call to UnlinkAll 0044f8e0.
 template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -572662307>::ScalarDeletingDestructor(uint32_t dwFlags);
+template<> void TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044fd50();
 template<> __declspec(noinline) inline void TSExplicitList<SGAMEDATA, -572662307>::LinkNode(::SGAMEDATA * pNode, uint32_t nLinkType, ::SGAMEDATA * pExisting);
 template<> uint32_t * __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_00450350(uint32_t * param_1);
 template<> uint32_t * __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_00450370(uint32_t * param_1);
@@ -368,6 +402,7 @@ template<> TSExplicitList<::StringEntryNode, -572662307>* TSExplicitList<StringE
 template<> void TSExplicitList<StringEntryNode, -572662307>::ChangeLinkOffset(int32_t nLinkOffset);
 template<> void TSExplicitList<StringEntryNode, -572662307>::Destructor();
 template<> TSExplicitList<::StringEntryNode, -572662307>* TSExplicitList<StringEntryNode, -572662307>::ScalarDeletingDestructor(uint32_t dwFlags);
+template<> void TSExplicitList<StringEntryNode, -572662307>::Unreferenced_0060f020();
 template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::DeleteNode(::StringEntryNode * pNode);
 template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags);
 
@@ -377,6 +412,7 @@ template<> TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* TSHashObjectChunk<CELLIST
 // TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>
 template<> __declspec(noinline) inline void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::UnlinkAll();
 template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Destructor();
+template<> TSExplicitList<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>, 16>* TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Constructor();
 // Walk the chunk list and free all CelList object chunks
 template<> __declspec(noinline) inline void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Clear();
 // Copies pSource's link offset and resets this list's terminator to empty.
@@ -396,6 +432,7 @@ template<> __declspec(noinline) inline void TSExplicitList<TSHashObjectChunk<SGA
 // Destructor: unlinks every chunk, then unlinks the terminator.
 // Same code as TSExplicitList<TSHashObjectChunk<CELLIST,..>,16>::Destructor 006028d0; T from its call to UnlinkAll 0044f930.
 template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::Destructor();
+template<> TSExplicitList<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>, 16>* TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::Constructor();
 template<> __declspec(noinline) inline void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::Clear();
 template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::LinkNode(TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pNode, uint32_t nLinkType, TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pExisting);
 template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags);
@@ -478,6 +515,7 @@ template<> void TSGrowableArray<SGAMEDATA>::ReserveNoRound(uint32_t nCount);
 
 // TSGrowableArray<TSExplicitList<CELLIST, -572662307>>
 template<> TSExplicitList<::CELLIST, -572662307>* TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::OperatorIndex(uint32_t nIndex);
+template<> TSGrowableArray<TSExplicitList<CELLIST, -572662307>> * TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Unreferenced_00601cf0();
 template<> uint32_t TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::CalcChunkSize(uint32_t nCount);
 template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::ReallocData(uint32_t nAlloc);
 template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor();
@@ -506,12 +544,14 @@ template<> void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::C
 // operator[]: address of element nIndex (stride 0xc).
 // Byte-identical to TSGrowableArray<TSExplicitList<CELLIST,..>>::OperatorIndex 00601cc0; T from the 0xc stride, the only 12-byte array element in this block.
 template<> TSExplicitList<::SGAMEDATA, -572662307>* TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::OperatorIndex(uint32_t nIndex);
+template<> uint8_t TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044de40();
 template<> uint32_t TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::CalcChunkSize(uint32_t nCount);
 // Static: rounds nValue up to a multiple of nMultiple.
 // Byte-identical to 0060e2e0; T by adjacency to this instantiation's CalcChunkSize 0044df30 (no xrefs).
 template<> uint32_t __stdcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::RoundToMultiple(uint32_t nValue, uint32_t nMultiple);
 template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::ReallocData(uint32_t nAlloc);
 template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Destructor();
+template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044ffe0();
 template<> void __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044fff0(TSGrowableArray<::SGAMEDATA>* pArray);
 template<> TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_00450030(TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * param_1);
 template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Reserve(uint32_t nCount, int32_t bRound);
@@ -613,6 +653,7 @@ template<> void __fastcall TSHashTable<SGAMEDATA, HASHKEY_NONE>::Destroy(TSHashT
 // @blizzard TSHashTable<SGAMEDATA,HASHKEY_NONE> scalar deleting destructor (STORM.H)
 template<> TSHashTable<::SGAMEDATA, HASHKEY_NONE>* __fastcall TSHashTable<SGAMEDATA, HASHKEY_NONE>::ScalarDeletingDestructor(TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis, int, uint32_t dwFlags);
 template<> TSHashTable<::SGAMEDATA, HASHKEY_NONE>* TSHashTable<SGAMEDATA, HASHKEY_NONE>::Constructor();
+template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Clear();
 // Unlinks a SGAMEDATA from up to two intrusive hash-table chains (pHashLink1/pHashLink2 with their corresponding nHashLinkOffset fields). For each non-null link, computes the back-pointer using the stored offset, patches the predecessor's next pointer to skip this node, then zeroes the game's own link field and offset. Called during game teardown to remove the game from name/token lookup tables before freeing memory.
 template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Unlink(::SGAMEDATA * pNode);
 template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Delete(::SGAMEDATA * pNode);
@@ -658,6 +699,7 @@ template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::New(c
 
 template<> void TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::InternalDestroy();
 template<> TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::Constructor();
+template<> uint8_t TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::Unreferenced_00603ed0();
 // Free a pool node: flush its active CelList, unlink from free list, unlink both entries, then SMemFree
 // @blizzard TSHashTableReuse<CELLIST,HASHKEY_NONE,0>::InternalDelete (STORM.H)
 template<> void __fastcall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::InternalDelete(TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* pThis, int, ::CELLIST * pNode);
@@ -685,9 +727,11 @@ template<> void __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Destroy
 // @blizzard TSHashTableReuse<SGAMEDATA,HASHKEY_NONE,0> scalar deleting destructor (STORM.H)
 template<> TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::ScalarDeletingDestructor(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, int, uint32_t dwFlags);
 template<> __declspec(noinline) inline TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Constructor();
+template<> void TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Unreferenced_00451160();
 
 // TSLink<CELLIST>
 template<> TSLink<::CELLIST>* TSLink<CELLIST>::NextLink(intptr_t nLinkOffset);
+template<> void __fastcall TSLink<CELLIST>::LINKEDLIST_UnlinkSelf_Unref_00601c70(StormLinkStrc * pNode);
 
 // TSLink<CMDDEF>
 template<> TSLink<CMDDEF> * TSLink<CMDDEF>::NextLink(intptr_t nLinkOffset);
@@ -699,9 +743,11 @@ template<> TSLink<::MappingEntryNode>* TSLink<MappingEntryNode>::NextLink(intptr
 // Returns the link after this one; a negative link offset is derived from the neighbour.
 // Byte-identical to TSLink<CELLIST>::NextLink 00601bc0; T not proven (no xrefs), filed with the SGAMEDATA block.
 template<> TSLink<::SGAMEDATA>* TSLink<SGAMEDATA>::NextLink(intptr_t nLinkOffset);
+template<> void __fastcall TSLink<SGAMEDATA>::LINKEDLIST_UnlinkSelf_Unref_0044ddd0(StormLinkStrc * pNode);
 
 // TSLink<StringEntryNode>
 template<> TSLink<::StringEntryNode>* TSLink<StringEntryNode>::NextLink(intptr_t nLinkOffset);
+template<> void TSLink<StringEntryNode>::Unreferenced_0060e1b0();
 
 // TSList<ARCHIVEREC, TSGetLink<ARCHIVEREC>>
 template<> __declspec(noinline) inline void TSList<ARCHIVEREC, TSGetLink<ARCHIVEREC>>::UnlinkAll();

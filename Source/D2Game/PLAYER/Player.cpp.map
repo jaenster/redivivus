@@ -406,7 +406,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "763f947b",
+      "dh": "e02287ac",
       "paramStorage": [
         [
           "pGame",
@@ -561,7 +561,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "c0f6ad66",
+      "dh": "545c1656",
       "paramStorage": [
         [
           "pGame",

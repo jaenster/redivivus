@@ -299,9 +299,10 @@
       "usedTypes": [
         "DC6",
         "int32_t",
+        "pfnTilecmpPixelCallback",
         "uint32_t"
       ],
-      "dh": "0ab7e973",
+      "dh": "47424ff8",
       "paramStorage": [
         [
           "pDCC",
@@ -335,7 +336,7 @@
         "DC6Block *",
         "uint32_t"
       ],
-      "dh": "2e3e2add",
+      "dh": "a77b7fd0",
       "paramStorage": [
         [
           "pDCCSrc",
@@ -558,7 +559,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7c332f96",
+      "dh": "d31b9a3b",
       "paramStorage": [
         [
           "pDC6",
@@ -1076,6 +1077,21 @@
       ]
     },
     {
+      "name": "Unreferenced_00601b40",
+      "address": "00601b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601b40"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "Unreferenced_00601b40"
+      ],
+      "dh": "eceaa278"
+    },
+    {
       "name": "CELCMP_RoundUpToMultiple",
       "address": "00601e60",
       "lines": [
@@ -1246,9 +1262,10 @@
       "usedTypes": [
         "CELLIST",
         "DC6",
+        "DC6 *",
         "uint32_t"
       ],
-      "dh": "9e8e788f",
+      "dh": "5d878cce",
       "paramStorage": [
         [
           "nCelListKey",
@@ -1349,11 +1366,11 @@
     },
     {
       "name": "BITSTREAM_CopyState",
-      "address": "0060b16a",
+      "address": "0060b160",
       "lines": [
         {
           "line": 1,
-          "address": "0060b16a"
+          "address": "0060b160"
         }
       ],
       "namespace": "D2CMP::SRC::CelCmp",
@@ -1363,7 +1380,7 @@
       "usedTypes": [
         "D2CodecBitStateStrc"
       ],
-      "dh": "d245385e",
+      "dh": "d211cb12",
       "paramStorage": [
         [
           "dest",

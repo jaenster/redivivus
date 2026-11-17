@@ -107,6 +107,25 @@
       ]
     },
     {
+      "name": "Unreferenced_0044fd50",
+      "address": "0044fd50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044fd50"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "Unreferenced_0044fd50",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSExplicitList<SGAMEDATA, -572662307>"
+      ],
+      "dh": "79204f9d"
+    },
+    {
       "name": "Destructor",
       "address": "0044fd80",
       "lines": [
@@ -209,6 +228,25 @@
         "uint32_t"
       ],
       "dh": "9bb17302"
+    },
+    {
+      "name": "Unreferenced_0044ffe0",
+      "address": "0044ffe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ffe0"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+      "calledFunctions": [
+        "Unreferenced_0044ffe0",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>"
+      ],
+      "dh": "2786ab6d"
     },
     {
       "name": "Unreferenced_0044fff0",
@@ -900,6 +938,25 @@
           "Stack[0xc]:4"
         ]
       ]
+    },
+    {
+      "name": "Clear",
+      "address": "00450d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450d20"
+        }
+      ],
+      "namespace": "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+      "calledFunctions": [
+        "Clear",
+        "InternalClear"
+      ],
+      "usedTypes": [
+        "TSHashTable<SGAMEDATA, HASHKEY_NONE>"
+      ],
+      "dh": "0b154dd7"
     }
   ]
 }

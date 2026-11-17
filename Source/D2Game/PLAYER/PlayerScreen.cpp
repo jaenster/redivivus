@@ -305,7 +305,7 @@ void __fastcall PARTYSCREEN_SendPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // @sourcefile .\PLAYER\PartyScreen.cpp
-void __fastcall PARTY_SendPlayerLeftEvent(uint32_t dwUnused, D2UnitStrc * pUnit, D2UnitStrc * pOther) {
+void __fastcall PARTY_SendPlayerLeftEvent(::SGAMEDATA * dwUnused, D2UnitStrc * pUnit, D2UnitStrc * pOther) {
     uint32_t nOtherGUID;
     if (pUnit == pOther) {
       return;
@@ -338,6 +338,7 @@ void __fastcall SendPlayerPartyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
     GAME::SCmd::NET_D2GS_SERVER_Send_0x75_UPDATEROSTER(pTarget, pUnit);
 }
 
+// Passes PARTY_SendPlayerLeftEvent by address.
 void __fastcall PARTYSCREEN_LeaveParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t dwArg, int * pnError) {
     uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
     UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)PARTY_SendPlayerLeftEvent, pUnit);

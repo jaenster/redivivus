@@ -510,9 +510,9 @@ void __fastcall WEATHER_SpawnSplash(int nScreenX, int nScreenY, int nWorldX, int
     uint32_t bIsPerspectiveActive = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     if (bIsPerspectiveActive) {
       nRoll = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 5);
-      *(int32_t*)(pSplashArrayData + (nSplashSlotIndex * 0x18 + 4)) = (nRoll << 0x10) + nWorldX;
+      *(int32_t*)(pSplashArrayData + (nSplashSlotIndex * 0x18 + 4)) = nRoll * 0x10000 + nWorldX;
       nRoll = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 5);
-      *(int32_t*)(pSplashArrayData + (nSplashSlotIndex * 0x18 + 8)) = (nRoll << 0x10) + nWorldY;
+      *(int32_t*)(pSplashArrayData + (nSplashSlotIndex * 0x18 + 8)) = nRoll * 0x10000 + nWorldY;
     } else {
       int nHalfRange;
       nRoll = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 0x50);
@@ -566,9 +566,9 @@ void __fastcall WEATHER_SpawnBubble(int nScreenX, int nScreenY, int nWorldX, int
     uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     if (bPerspective) {
       nRollResult = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 5);
-      *(int32_t*)(pBubbleData + (nBubbleIndex * 0x18 + 4)) = (nRollResult - 2 << 0x10) + nWorldX;
+      *(int32_t*)(pBubbleData + (nBubbleIndex * 0x18 + 4)) = (nRollResult - 2) * 0x10000 + nWorldX;
       nRollResult = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 5);
-      nRange = (nRollResult - 2 << 0x10) + nWorldY;
+      nRange = (nRollResult - 2) * 0x10000 + nWorldY;
     } else {
       nRollResult = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 0x50);
       nRange = nRollResult - 0x28;

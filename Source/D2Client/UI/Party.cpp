@@ -333,8 +333,8 @@ void __thiscall UI_DrawPartyButtonLabelText(int32_t eButtonType, int32_t nBaseY,
       return;
     }
 
-    nX = Inv::gnPanelOffsetX + nX;
-    ui::UI_DrawTextCentered(nX, nBaseY - Inv::gnPanelOffsetY - 2, nX + 0x35, D2Lang::StrTable::strtable::GetLocaleString(nLocaleId), nTextFlags);
+    int nX_2 = Inv::gnPanelOffsetX + nX;
+    ui::UI_DrawTextCentered(nX_2, nBaseY - Inv::gnPanelOffsetY - 2, nX_2 + 0x35, D2Lang::StrTable::strtable::GetLocaleString(nLocaleId), nTextFlags);
 }
 
 void __stdcall UI_DrawPartyLeaveButton() {

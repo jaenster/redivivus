@@ -122,13 +122,13 @@ uint32_t __stdcall TILEPROJECT_GetTileCount(D2TileLibraryEntryStrc * pTileEntry)
     return (uint32_t)(uint16_t)pTileEntry->nFlags;
 }
 
-int __stdcall TILEPROJECT_GetTileDataPtr(D2TileLibraryEntryStrc * nParam) {
-    if (!nParam) {
+int __stdcall TILEPROJECT_GetTileDataPtr(D2TileLibraryEntryStrc * pTileLibraryEntry) {
+    if (!pTileLibraryEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7c);
       exit(-1);
     }
 
-    return nParam->nWidth;
+    return pTileLibraryEntry->nWidth;
 }
 
 int __stdcall TILEPROJECT_GetAnimatedTileDataPtr(D2TileLibraryEntryStrc * pTileLibraryEntry) {

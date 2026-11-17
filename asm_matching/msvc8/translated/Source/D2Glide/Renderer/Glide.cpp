@@ -1697,6 +1697,24 @@ void __fastcall GLIDE_PixelDataFreeCallback_ClearCacheNodes(int * pCacheIndices)
     gGlideVertex0.aTextureCache[pCacheIndices[8] - 1].pNodes[pCacheIndices[9] - 1].pHashTable = 0;
 }
 
+char Unreferenced_0050a220() {
+    int in_EAX;
+    if (in_EAX == 0x100) {
+      return '\b';
+    }
+    if (in_EAX == 0x80) {
+      return '\a';
+    }
+    if (in_EAX == 0x40) {
+      return '\x06';
+    }
+    if (in_EAX == 0x20) {
+      return '\x05';
+    }
+
+    return in_EAX == 0x10 ? 4 : 3;
+}
+
 static int RENDERER_GLIDE_GetSpriteMetadata(D2GfxDataStrc * pGfxData, GlideTexInfoStrc * ppMetadata) {
     int bSpriteLoaded = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(pGfxData, 0, 1);
     if (!bSpriteLoaded) {
@@ -2108,7 +2126,6 @@ static void __stdcall RENDERER_GLIDE_DrawPalettedQuad(GlideTexInfoStrc * pGlideQ
 }
 
 static void RENDERER_GLIDE_SetDrawMode(int32_t nDrawMode) {
-    int32_t nBlendModeArg;
     if (false) {
       default_case:
       RENDERER_GLIDE_SetAlphaBlendMode(4);
@@ -2138,16 +2155,16 @@ static void RENDERER_GLIDE_SetDrawMode(int32_t nDrawMode) {
       default:
         goto default_case;
       case 3:
-        nBlendModeArg = 2;
-      break;
+        RENDERER_GLIDE_SetAlphaBlendMode(2);
+      (*GLIDEDLL_grConstantColorValue_4)(0xff);
+      (*GLIDEDLL_grDitherMode_4)(0);
+      return;
       case 4:
-        nBlendModeArg = 3;
-      break;
+        RENDERER_GLIDE_SetAlphaBlendMode(3);
+      (*GLIDEDLL_grConstantColorValue_4)(0xff);
+      (*GLIDEDLL_grDitherMode_4)(0);
+      return;
     }
-
-    RENDERER_GLIDE_SetAlphaBlendMode(nBlendModeArg);
-    (*GLIDEDLL_grConstantColorValue_4)(0xff);
-    (*GLIDEDLL_grDitherMode_4)(0);
 }
 
 // Glide: draw isometric perspective image with texture filtering and lighting
@@ -2172,9 +2189,9 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int32_t nPosX, int32
       textureSize.nTexHeight = textureSize.nHeight;
     }
 
-    int nHalfTexHeightScaled = textureSize.nTexHeight << 0xc;
-    int nAnchorX = nPosX + ((textureSize.nTop << 0xc) + (textureSize.nLeft << 0xb));
-    int nAnchorY = nPosY + ((textureSize.nTop << 0xc) + textureSize.nLeft * -0x800);
+    int nHalfTexHeightScaled = textureSize.nTexHeight * 0x1000;
+    int nAnchorX = nPosX + (textureSize.nTop * 0x1000 + textureSize.nLeft * 0x800);
+    int nAnchorY = nPosY + (textureSize.nTop * 0x1000 + textureSize.nLeft * -0x800);
     bSpriteResult = nAnchorY + textureSize.nTexHeight * -0x1000;
     Glide::AdjustPerspectivePosition(nAnchorX + textureSize.nTexHeight * -0x1000, bSpriteResult, 0, &nScreenX, &nScreenY);
     gGlideVertex0.aVertex[0].fX = (float)nScreenX;
@@ -2188,13 +2205,13 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int32_t nPosX, int32
     gGlideVertex0.aVertex[1].fOOW = 1.0;
     gGlideVertex0.aVertex[1].fS = fTexS0Scaled;
     gGlideVertex0.aVertex[1].fT = fTexS1Scaled;
-    Glide::AdjustPerspectivePosition((textureSize.nTexWidth << 0xb) + nAnchorX, nAnchorY + textureSize.nTexWidth * -0x800, 0, &nScreenX, &nScreenY);
+    Glide::AdjustPerspectivePosition(textureSize.nTexWidth * 0x800 + nAnchorX, nAnchorY + textureSize.nTexWidth * -0x800, 0, &nScreenX, &nScreenY);
     gGlideVertex0.aVertex[2].fX = (float)nScreenX;
     gGlideVertex0.aVertex[2].fY = (float)nScreenY;
     gGlideVertex0.aVertex[2].fOOW = 1.0;
     gGlideVertex0.aVertex[2].fS = fTexT1Scaled;
     gGlideVertex0.aVertex[2].fT = fTexS1Scaled;
-    Glide::AdjustPerspectivePosition((textureSize.nTexWidth << 0xb) - nHalfTexHeightScaled + nAnchorX, bSpriteResult + textureSize.nTexWidth * -0x800, 0, &nScreenX, &nScreenY);
+    Glide::AdjustPerspectivePosition(textureSize.nTexWidth * 0x800 - nHalfTexHeightScaled + nAnchorX, bSpriteResult + textureSize.nTexWidth * -0x800, 0, &nScreenX, &nScreenY);
     gGlideVertex0.aVertex[3].fX = (float)nScreenX;
     gGlideVertex0.aVertex[3].fY = (float)nScreenY;
     gGlideVertex0.aVertex[3].fOOW = 1.0;
@@ -3370,7 +3387,7 @@ BOOL __fastcall RENDERER_GLIDE_DrawShadowTilePerspective(D2TileLibraryEntryStrc 
     D2TileLibraryEntryStrc* pTileStrc = pTile;
     RENDERER_GLIDE_CalculateScreenBounds(1, &nScreenXMax, nScreenPanels, &nScreenXOffset);
     int nCornerFixedY = nPosY * 0x2000;
-    int nWorldXFixed = nPosX << 0xd;
+    int nWorldXFixed = nPosX * 0x2000;
     int nSubtileIdx = 0;
     BOOL bDrawn = 0;
     if (pTileStrc->nSubTiles > 0) {
@@ -3380,8 +3397,8 @@ BOOL __fastcall RENDERER_GLIDE_DrawShadowTilePerspective(D2TileLibraryEntryStrc 
         psSubtile = &pTileStrc->pSubTiles[nSubtileIdx].nOffsetX;
         nSubtileRow = psSubtile[1] + 0x60 >> 5;
         nSubtileCol = (int)*psSubtile >> 5;
-        nCornerFixedX = (nSubtileCol + nSubtileRow * 2 << 0x10) - 0x38000;
-        nSubtileRow = (nSubtileRow * 2 - nSubtileCol << 0x10) + 0x18000;
+        nCornerFixedX = (nSubtileCol + nSubtileRow * 2) * 0x10000 - 0x38000;
+        nSubtileRow = (nSubtileRow * 2 - nSubtileCol) * 0x10000 + 0x18000;
         nWorldYFixed = nCornerFixedX + nWorldXFixed;
         Glide::AdjustPerspectivePosition(nWorldYFixed, nCornerFixedY + nSubtileRow, 0, &nAdjX, &nScreenPanels);
         gaGlidePerspectiveVertices[0].fX = (float)nAdjX;
@@ -3563,10 +3580,10 @@ static int32_t __stdcall RENDERER_GLIDE_DrawWallTilePerspective(int32_t nScreenP
           nCornerFixedY = (int)d2_bits_of(fSubtileIndex) + dwTileType * 6;
           nWorldYFixed = gaGlideWallCornerTable[nCornerFixedY].nY + nScreenY * 0x2000;
           nCornerFixedX = gaGlideWallCornerTable[nCornerFixedY].nZ - (int)d2_bits_of(fScreenMinX);
-          nLeftFixedX = gaGlideWallCornerTable[nCornerFixedY + 1].nX + (nScreenX << 0xd);
+          nLeftFixedX = gaGlideWallCornerTable[nCornerFixedY + 1].nX + nScreenX * 0x2000;
           nRightFixedZ = gaGlideWallCornerTable[nCornerFixedY + 1].nZ - (int)d2_bits_of(fScreenMinX);
           nLeftFixedY = gaGlideWallCornerTable[nCornerFixedY + 1].nY + nScreenY * 0x2000;
-          nCornerFixedY = gaGlideWallCornerTable[nCornerFixedY].nX + (nScreenX << 0xd);
+          nCornerFixedY = gaGlideWallCornerTable[nCornerFixedY].nX + nScreenX * 0x2000;
           nScreenXMax = nCornerFixedY;
           nScreenYMin = nWorldYFixed;
           nScreenYMax = nCornerFixedX;
@@ -3874,9 +3891,10 @@ void __stdcall RENDERER_GLIDE_BuildLightingTable() {
     do {
       int nColorIdx;
       nColorIdx = 0;
+      int nRowBase = nIntensity * 0x100;
       nAccum = 0;
       do {
-        gpGlideLightingTable[nColorIdx + (nIntensity << 8)] = (char)(nAccum / 0xff);
+        gpGlideLightingTable[nColorIdx + nRowBase] = (char)(nAccum / 0xff);
         nColorIdx++;
         nAccum += nIntensity;
       } while (nColorIdx < 0x100);
@@ -4203,7 +4221,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       uint32_t bFileLoadOk;
       pVersion = 0;
       dwFileSize = 0;
-      bFileLoadOk = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&pVersion, &dwFileSize, 0, 3, (LPOVERLAPPED)0x0);
+      bFileLoadOk = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, &pVersion, &dwFileSize, 0, 3, (LPOVERLAPPED)0x0);
       if (bFileLoadOk && pVersion) {
         bDecoded = Storm::Source::SBMP::SBmpDecodeImage(2, pVersion, dwFileSize, abImgBuf, *gpGlideSmackerTexBuf2, 0x6db0, &nImgWidth, &nImgHeight, &nImgBpp);
         Storm::Source::SMem::SMemFree(pVersion, ".\\Src\\glSmack.cpp", 0xdb, 0);

@@ -1315,7 +1315,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b9ab6ea1",
+      "dh": "7d4f41ea",
       "paramStorage": [
         [
           "pUnit",
@@ -1797,7 +1797,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "7db0cc5e",
+      "dh": "0fc24b3d",
       "paramStorage": [
         [
           "pGame",
@@ -1861,7 +1861,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1d950965",
+      "dh": "6aa0631b",
       "paramStorage": [
         [
           "pGame",
@@ -2126,7 +2126,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ac09b6dc",
+      "dh": "edb25ea9",
       "paramStorage": [
         [
           "pGame",
@@ -2728,7 +2728,7 @@
         "D2UnitStrc",
         "eD2Skills"
       ],
-      "dh": "bbf840d2",
+      "dh": "9db59788",
       "paramStorage": [
         [
           "pUnit",
@@ -4883,14 +4883,16 @@
       "usedTypes": [
         "D2SkillsTxt",
         "D2StatListExStrc",
+        "D2StatListStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
         "eD2States",
         "eD2UnitType",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ],
-      "dh": "e10bb37d",
+      "dh": "9f32d257",
       "paramStorage": [
         [
           "pGame",

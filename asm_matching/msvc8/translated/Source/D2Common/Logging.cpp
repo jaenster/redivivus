@@ -135,19 +135,19 @@ void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nLo
     }
 }
 
-bool __fastcall LOGGING_OpenLogFile(char * szLogFileName) {
+int32_t __fastcall LOGGING_OpenLogFile(char * szLogFileName) {
     if (pLOGFILE) {
-      return true;
+      return 1;
     }
 
     pLOGFILE = fopen(szLogFileName, "wt");
     if (!pLOGFILE) {
-      return false;
+      return 0;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&lpCriticalSection_0096ca30);
     LOGGING_LogLine(1, 8, 2, 0x80000, ".\\Logging\\Logging.cpp", 0xf9, "Log Started");
-    return true;
+    return 1;
 }
 
 void __stdcall CloseLogging() {

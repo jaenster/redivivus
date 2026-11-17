@@ -431,12 +431,17 @@ void __fastcall GetAndCreateSavePath(char * pBuffer, size_t nSize) {
     }
 }
 
-uint32_t * __fastcall Unreferenced_00407260(uint32_t * param_1) {
-    *param_1 = 0;
-    param_1[1] = 0;
-    param_1[2] = 0;
-    param_1[3] = 0;
-    return param_1;
+uint32_t * __fastcall Unreferenced_00407260(uint32_t * pData) {
+    *pData = 0;
+    pData[1] = 0;
+    pData[2] = 0;
+    pData[3] = 0;
+    return pData;
+}
+
+int Unreferenced_00407270() {
+    int in_ECX;
+    return in_ECX + 8;
 }
 
 int __fastcall Unreferenced_00407280(int param_1) {

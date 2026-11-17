@@ -58,8 +58,6 @@ static char gaAutomapTileNames[20][8] = {
     { 'f', 'd', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
     { 'f', 'i', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' }
 }; D2_STATIC_GUARD(gaAutomapTileNames, "gaAutomapTileNames");
-uint32_t gszTxtCol_Act = 0x746341; D2_GLOBAL_GUARD(gszTxtCol_Act, "gszTxtCol_Act");
-unsigned int gszTxtCol_Red = 0x646552; D2_GLOBAL_GUARD(gszTxtCol_Red, "gszTxtCol_Red");
 static D2SeedStrc * psDataTableSeed = (D2SeedStrc *)&D2Common::DATATBLS::LvlTbls::gsAutoMapSeed; D2_STATIC_GUARD(psDataTableSeed, "psDataTableSeed");
 namespace D2Common { namespace DATATBLS { namespace LvlTbls {
 D2SeedStrc gsAutoMapSeed = D2SeedStrc(); D2_GLOBAL_GUARD(gsAutoMapSeed, "D2Common::DATATBLS::LvlTbls::gsAutoMapSeed");

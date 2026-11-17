@@ -130,10 +130,10 @@
       "usedTypes": [
         "D2XSHA1Strc"
       ],
-      "dh": "80d085bf",
+      "dh": "ed5f5dcc",
       "paramStorage": [
         [
-          "param_1",
+          "pSha1",
           "ECX:4"
         ]
       ]
@@ -431,14 +431,14 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "f27381a0",
+      "dh": "7fb62020",
       "paramStorage": [
         [
-          "param_1",
+          "byPacketId",
           "CL:1"
         ],
         [
-          "param_2",
+          "nValue",
           "EDX:4"
         ]
       ]
@@ -589,7 +589,7 @@
         "NET_SID_CLIENT_Incoming_LogonChallenge",
         "BNSEND_SetServerToken"
       ],
-      "dh": "2ea71594",
+      "dh": "f5cb9c85",
       "paramStorage": [
         [
           "pBytes",
@@ -642,7 +642,7 @@
         "BNET_LogIndent",
         "BnetLog_WriteLine"
       ],
-      "dh": "d69fec9f",
+      "dh": "30098a39",
       "paramStorage": [
         [
           "pBytes",
@@ -1157,7 +1157,7 @@
         "SID_S2C_AuthInfo",
         "uint32_t"
       ],
-      "dh": "9565901c",
+      "dh": "736a43f7",
       "paramStorage": [
         [
           "pPacketData",
@@ -2065,14 +2065,14 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "7dc01f79",
+      "dh": "5ebf54c9",
       "paramStorage": [
         [
-          "param_1",
+          "pBits",
           "ECX:4"
         ],
         [
-          "param_2",
+          "nBitIndex",
           "EDX:4"
         ]
       ]
@@ -2359,7 +2359,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "65bfe06b",
+      "dh": "4e8d0107",
       "paramStorage": [
         [
           "pThis",
@@ -2399,7 +2399,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b005fe8a",
+      "dh": "ec2bc5e5",
       "paramStorage": [
         [
           "pnData",
@@ -2474,7 +2474,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4c30e7e0",
+      "dh": "365847d8",
       "paramStorage": [
         [
           "pdwData",
@@ -2715,9 +2715,10 @@
         "NET_SID_CLIENT_GetSHAState"
       ],
       "usedTypes": [
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ],
-      "dh": "6dd686e5",
+      "dh": "40fd7e30",
       "paramStorage": [
         [
           "nCtxIndex",
@@ -2745,9 +2746,9 @@
       ],
       "usedTypes": [
         "int32_t",
-        "uint8_t"
+        "uint32_t"
       ],
-      "dh": "c501d025",
+      "dh": "8cfe4417",
       "paramStorage": [
         [
           "nCtxIndex",
@@ -2827,9 +2828,10 @@
         "NET_SID_CLIENT_IDEAExpandKey"
       ],
       "usedTypes": [
+        "uint16_t",
         "uint32_t"
       ],
-      "dh": "31991021",
+      "dh": "8d92bb03",
       "paramStorage": [
         [
           "pUserKey",
@@ -2860,7 +2862,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "5bb44b1d",
+      "dh": "6d4b90d4",
       "paramStorage": [
         [
           "pEncryptKey",

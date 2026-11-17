@@ -247,6 +247,11 @@ uint32_t __fastcall UNITS_IncrementUnitGUIDCounter(::SGAMEDATA * pGame, eD2UnitT
     return nNextGUID_lcl;
 }
 
+uint32_t Unreferenced_00552f20() {
+    uint32_t in_ECX;
+    return in_ECX & 0x7f;
+}
+
 static D2UnitStrc * * __stdcall UNITS_GetHashTableSlot(eD2UnitType eUnitType, ::SGAMEDATA * pGame, uint32_t nUnitGUID) {
     if (eUnitType <= UNIT_ITEM) {
       return (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eUnitType] + (nUnitGUID & 0x7f) * 4 - 0x2a);
@@ -545,10 +550,10 @@ void __fastcall InitAnimFrame(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    bool bIsSequenceMode = false;
     pUnit->nActionFrame = 0;
+    BOOL bIsSequenceMode = 0;
     if (pUnit->eUnitType == UNIT_PLAYER && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Sequence) {
-      bIsSequenceMode = true;
+      bIsSequenceMode = 1;
     }
     if (pUnit->eUnitType == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Skill2 || bIsSequenceMode) {
       pSeqTxt = D2Common::Merc::MERC_GetSequenceTxt(pUnit);
@@ -900,6 +905,7 @@ void __fastcall UNITS_SetupAnimTimerEvents(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
 // Resets animation timer events for pUnit starting at nPercent% through the current animation cycle. Fires MODECHANGE and ENDANIM trigger callbacks first, resets nGfxCurrentFrame based on the percentage offset, then schedules per-frame anim events (attack/cast/special hits, type 1-4) into the game event queue for the remaining frames, and finally queues the ENDANIM event. Handles both normal and sequenced (merc) animations.
 void __fastcall UNITS_SetupAnimTimerEventsFromPercent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nPercent) {
+    int nAnimSpeedAccum;
     uint32_t nAnimSpeed;
     uint32_t nEventType;
     uint32_t pCurEventFrame;
@@ -923,8 +929,8 @@ void __fastcall UNITS_SetupAnimTimerEventsFromPercent(::SGAMEDATA * pGame, D2Uni
 
     D2AnimDataRecordStrc* pAnimData = pUnit->pAnimData;
     int nFrameIdx = nFrameOffset - 1;
-    nFrameOffset = nFrameOffset << 8;
-    int nAnimSpeedAccum = nFrameOffset + nAnimSpeed;
+    nFrameOffset *= 0x100;
+    nAnimSpeedAccum = nFrameOffset + nAnimSpeed;
     while (nAnimSpeedAccum < nTotalFrameCount) {
       nNextEventFrame++;
       nFrameOffset += nAnimSpeed;
@@ -952,6 +958,7 @@ void __fastcall UNITS_SetupAnimTimerEventsFromPercent(::SGAMEDATA * pGame, D2Uni
 
 // Rebuilds animation timer events for pUnit starting nDelay frames in the past relative to the current game frame. Flushes existing MODECHANGE and ENDANIM triggers, resyncs nGfxCurrentFrame, then iterates the animation hash table (or sequence via ANIM_GetEventFrame) to re-schedule event types 1-4 at their correct future frames, and sets the end-of-anim event.
 void __fastcall UNITS_SetupAnimTimerEventsWithDelay(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nDelay) {
+    int nAnimSpeedAccum;
     uint32_t nAnimSpeed;
     uint32_t nEventType;
     uint32_t pCurEventFrame;
@@ -979,8 +986,8 @@ void __fastcall UNITS_SetupAnimTimerEventsWithDelay(::SGAMEDATA * pGame, D2UnitS
 
     D2AnimDataRecordStrc* pAnimData = pUnit->pAnimData;
     int nFrameIdx = nFrameOffsetAccum - 1;
-    nFrameOffsetAccum = nFrameOffsetAccum << 8;
-    int nAnimSpeedAccum = nFrameOffsetAccum + nAnimSpeed;
+    nFrameOffsetAccum *= 0x100;
+    nAnimSpeedAccum = nFrameOffsetAccum + nAnimSpeed;
     while (nAnimSpeedAccum < nTotalFrameCount) {
       int nFrameIndexShifted;
       nNextEventFrame++;
@@ -1032,7 +1039,7 @@ void __fastcall UNITS_SetupAnimTimerEventsFromFrame(::SGAMEDATA * pGame, D2UnitS
 
     D2AnimDataRecordStrc* pAnimData = pUnit->pAnimData;
     int nFrameIdx = nFrame - 1;
-    int nFrameOffsetAccum = nFrame << 8;
+    int nFrameOffsetAccum = nFrame * 0x100;
     int nAnimSpeedAccum = nFrameOffsetAccum + nAnimSpeed;
     while (nAnimSpeedAccum < nTotalFrameCount) {
       int nFrameIndexShifted;
@@ -1825,8 +1832,8 @@ uint32_t __fastcall UNITS_CanUseSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * 
 
     uint32_t nTarget = (uint32_t)pTargetUnit->nUnitGUID;
     if (eTargetUnitType == UNIT_MONSTER) {
-      Ai::AiGeneral::AIGENERAL_GetOwnerData(pTargetUnit, (uint32_t*)&nTarget, (int*)&eMonsterOwnerType);
-      if (nTarget == -1) {
+      Ai::AiGeneral::AIGENERAL_GetOwnerData(pTargetUnit, &nTarget, (int*)&eMonsterOwnerType);
+      if ((D2UnitStrc*)nTarget == (D2UnitStrc*)-1) {
         return 0;
       }
       if (eMonsterOwnerType != UNIT_PLAYER) {

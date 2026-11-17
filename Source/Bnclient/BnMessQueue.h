@@ -36,13 +36,13 @@ void __stdcall BNMESSQUEUE_Initialize();
 // Shuts down Battle.net message queue. Deletes critical section at lpCriticalSection_00882004.
 void __stdcall BNMESSQUEUE_Shutdown();
 int __fastcall BNMESSQUEUE_EnqueueBytes(int32_t nEventType, char * pBytes, size_t nSize);
-uint32_t __fastcall BNMESSQUEUE_EnqueueString(int32_t nEventType, char * szMessage);
+BOOL __fastcall BNMESSQUEUE_EnqueueString(int32_t nEventType, char * szMessage);
 // Dequeues next Battle.net lobby chat message. Thread-safe dequeue from global linked list (nLobbyChatCurrentMessage). Copies message buffer to output, returns data size. Returns 0 if queue empty.
 size_t __fastcall BNMESSQUEUE_DequeueMessage(int * pMessageTypeOut, void * pBufferOut);
 int __stdcall BNMESSQUEUE_ClearAll();
-uint32_t __fastcall BNMESSQUEUE_SetStateIfZero(int32_t nState);
+BOOL __fastcall BNMESSQUEUE_SetStateIfZero(int32_t nState);
 int __fastcall BNMESSQUEUE_SetStateWithString(int32_t nState, char * szMessage);
-uint32_t __fastcall SID_SetStateFlag1(uint32_t nState);
+BOOL __fastcall SID_SetStateFlag1(int32_t nState);
 int __fastcall SID_SetStateFlag2(uint32_t nData);
 #endif // D2_MODULE_Bnclient
 

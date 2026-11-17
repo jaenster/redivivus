@@ -601,8 +601,6 @@ void __stdcall DrawCursorOOG() {
     static uint32_t gnCursorDrawPosY; D2_STATIC_GUARD_BSS(gnCursorDrawPosY, "D2Win::Src::D2WinMain::DrawCursorOOG::gnCursorDrawPosY");
 
     D2GfxDataStrc sGfxData;
-    int nMouseY = nPosY;
-    int nMouseX = nPosX;
     DC6* pDVar1 = gpCursorDC6;
     if (!(gpCursorDC6 && gbCursorVisible)) {
       return;
@@ -614,7 +612,7 @@ void __stdcall DrawCursorOOG() {
     sGfxData.nFrameNumber = D2GFX::gnCursorDC6FrameNumber;
     sGfxData.pDC6 = pDVar1;
     sGfxData.nDirection = 0;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nMouseX <= 0 ? 0 : nMouseX, (nMouseY <= 0 ? 0 : nMouseY) - 1, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPosX <= 0 ? 0 : nPosX, (nPosY <= 0 ? 0 : nPosY) - 1, -1, DRAW_SOLID, nullptr);
 }
 
 void __stdcall DRAW_UI_Sprites() {
@@ -742,13 +740,13 @@ LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nWParam, LPARAM lPa
     return lResult;
 }
 
-int __fastcall Unreferenced_004f9b30(D2ControlStrc * param_1) {
+int __fastcall Unreferenced_004f9b30(D2ControlStrc * pControl) {
     if (!pFormImage) {
       return 1;
     }
 
     D2ControlStrc* pDVar2 = pFormImage;
-    while (pDVar2 != param_1) {
+    while (pDVar2 != pControl) {
       D2ControlStrc** ppDVar1;
       ppDVar1 = &pDVar2->pNext;
       pDVar2 = *ppDVar1;
@@ -1114,6 +1112,21 @@ void __stdcall D2WIN_ToggleMusicOptions(D2UIMouseMsgStrc * pMsg) {
 
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
+}
+
+uint32_t Unreferenced_004fa1b0() {
+    int* in_EAX;
+    int in_ECX;
+    if (*(code**)(in_ECX + 0x38)) {
+      uint32_t uVar1;
+      uVar1 = (**(code**)((char*)in_ECX + 56))();
+      return uVar1;
+    }
+    if (*in_EAX >= *(int*)(in_ECX + 0xc) && in_EAX[1] >= *(int*)(in_ECX + 0x10) - *(int*)(in_ECX + 0x18) && *in_EAX < *(int*)(in_ECX + 0x14) + *(int*)(in_ECX + 0xc) && in_EAX[1] < *(int*)(in_ECX + 0x10)) {
+      return 1;
+    }
+
+    return 0;
 }
 
 D2ControlStrc * __stdcall D2WIN_FindClosestControlToMouse(D2ControlStrc * pControl1, D2ControlStrc * pControl2) {

@@ -1194,7 +1194,7 @@ void __stdcall RENDERER_D3D_AllocateTextureCaches() {
       uSubtileCacheAlloc = (uint32_t)((uint64_t)((uSmallCacheAlloc - nSmackerBase) * 0x50) * 0x51eb851f >> 0x20);
     }
 
-    gnTextureMemoryUsageBytes.nGlideSmallTextureCacheMemBytes = nGenericCacheEnd << 0x10;
+    gnTextureMemoryUsageBytes.nGlideSmallTextureCacheMemBytes = nGenericCacheEnd * 0x10000;
     nSmackerBase = d3dTextureCache::RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches + 1, nGenericNodeBytes, (uSubtileCacheAlloc >> 5) + nSmackerBase, 0x80, 0x80);
     gnTextureMemoryUsageBytes.nGlideMediumTextureCacheMemBytes = gD3DGenericTextureCache.aCaches[1].nMaxNodes << 0xe << 0xe;
     d3dTextureCache::RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches + 2, nSmackerBase, uSmallCacheAlloc, 0x20, 0x20);
@@ -3226,9 +3226,9 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
     iMipLevel = *(int*)(pIVar1 + nMipIdx * 8);
     int* pnCacheNodeIdx = (int*)(pIVar1 + 4 + nMipIdx * 8);
     D3DTextureCacheStrc* pCache = (D3DTextureCacheStrc*)(&DAT_00970eac + iMipLevel * 0x1c);
-    if (*pnCacheNodeIdx && (*(uint8_t**)((*pnCacheNodeIdx << 5) - 0x14 + (&INT_00970ec4)[iMipLevel * 7]) == pPalette || nMode == 4)) {
+    if (*pnCacheNodeIdx && (*(uint8_t**)(*pnCacheNodeIdx * 0x20 - 0x14 + (&INT_00970ec4)[iMipLevel * 7]) == pPalette || nMode == 4)) {
       d3dTextureCache::D3DTEXCACHE_InvalidateByIndex(pCache, *pnCacheNodeIdx);
-      dwHResult = g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, *(void**)((*pnCacheNodeIdx << 5) + (&INT_00970ec4)[iMipLevel * 7] - 0xc));
+      dwHResult = g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, *(void**)(*pnCacheNodeIdx * 0x20 + (&INT_00970ec4)[iMipLevel * 7] - 0xc));
       if (!dwHResult) {
         return 1;
       }
@@ -3254,7 +3254,7 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x165);
       exit(-1);
     } else {
-      iCacheNodeIdx = *pnCacheNodeIdx << 5;
+      iCacheNodeIdx = *pnCacheNodeIdx * 0x20;
       nTmp = *(int*)(iCacheNodeIdx - 0x10 + (&INT_00970ec4)[iMipLevel * 7]);
       pIMipLevel = (char*)(iCacheNodeIdx - 0x20 + (&INT_00970ec4)[iMipLevel * 7]);
       pbPixelData = gpD3DTextureSpritePoolMemory0;
@@ -3575,8 +3575,8 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int nPosX, int nPosY
     }
 
     RENDERER_D3D_CalculateTextureSize(&spriteInfo);
-    int nPosX_00 = nPosX + ((spriteInfo.nOffsetY << 0xc) + (spriteInfo.nOffsetX << 0xb));
-    nPosY += (spriteInfo.nOffsetY << 0xc) + spriteInfo.nOffsetX * -0x800;
+    int nPosX_00 = nPosX + (spriteInfo.nOffsetY * 0x1000 + spriteInfo.nOffsetX * 0x800);
+    nPosY += spriteInfo.nOffsetY * 0x1000 + spriteInfo.nOffsetX * -0x800;
     nQuadTopY = nPosY + spriteInfo.nTexHeight * -0x1000;
     Renderer::AdjustPerspectivePosition(nPosX_00 + spriteInfo.nTexHeight * -0x1000, nQuadTopY, 0, &nAdjPosXOut, &nAdjPosY);
     aQuadVertexData[0].fX = (float)nAdjPosXOut;
@@ -3592,14 +3592,14 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int nPosX, int nPosY
     aQuadVertexData[1].fRHW = 1.0;
     aQuadVertexData[1].fU = spriteInfo.fU0;
     aQuadVertexData[1].fV = spriteInfo.fV1;
-    Renderer::AdjustPerspectivePosition((spriteInfo.nTexWidth << 0xb) + nPosX_00, nPosY + spriteInfo.nTexWidth * -0x800, 0, &nAdjPosXOut, &nAdjPosY);
+    Renderer::AdjustPerspectivePosition(spriteInfo.nTexWidth * 0x800 + nPosX_00, nPosY + spriteInfo.nTexWidth * -0x800, 0, &nAdjPosXOut, &nAdjPosY);
     aQuadVertexData[2].fX = (float)nAdjPosXOut;
     aQuadVertexData[2].fY = (float)nAdjPosY;
     aQuadVertexData[2].fZ = 0.5;
     aQuadVertexData[2].fRHW = 1.0;
     aQuadVertexData[2].fU = spriteInfo.fU1;
     aQuadVertexData[2].fV = spriteInfo.fV1;
-    Renderer::AdjustPerspectivePosition((spriteInfo.nTexWidth << 0xb) + spriteInfo.nTexHeight * -0x1000 + nPosX_00, nQuadTopY + spriteInfo.nTexWidth * -0x800, 0, &nAdjPosXOut, &nAdjPosY);
+    Renderer::AdjustPerspectivePosition(spriteInfo.nTexWidth * 0x800 + spriteInfo.nTexHeight * -0x1000 + nPosX_00, nQuadTopY + spriteInfo.nTexWidth * -0x800, 0, &nAdjPosXOut, &nAdjPosY);
     aQuadVertexData[3].fX = (float)nAdjPosXOut;
     aQuadVertexData[3].fY = (float)nAdjPosY;
     aQuadVertexData[3].fZ = 0.5;
@@ -3646,7 +3646,7 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int nPosX, int nPosY
       return;
     }
 
-    nPosY += gd3dVertexBufferOffset << 5;
+    nPosY += gd3dVertexBufferOffset * 0x20;
     pfDst = aQuadVertexData;
     pfSrc = (float*)nPosY;
     memcpy(pfSrc, pfDst, 0x80);
@@ -4715,7 +4715,7 @@ int __fastcall RENDERER_D3D_RenderShadowTileWithPerspective(D2TileLibraryEntrySt
     D2TileLibraryEntryStrc* pTileLibraryEntryPtr = pTileEntry;
     RENDERER_D3D_CalculateViewportRect(&nViewportLeft, nScreenSplitIndex, &nPanelXOffset, 1);
     int nFixedWorldY = nTilePosY * 0x2000;
-    int nFixedWorldX = nTilePosX << 0xd;
+    int nFixedWorldX = nTilePosX * 0x2000;
     int nSubtileIndex = 0;
     int bRenderedAny = 0;
     if (pTileLibraryEntryPtr->nSubTiles > 0) {
@@ -4725,8 +4725,8 @@ int __fastcall RENDERER_D3D_RenderShadowTileWithPerspective(D2TileLibraryEntrySt
         psSubtileCoords = &pTileLibraryEntryPtr->pSubTiles[nSubtileIndex].nOffsetX;
         bRenderedAny = psSubtileCoords[1] + 0x60 >> 5;
         nSubtileScreenY = (int)*psSubtileCoords >> 5;
-        nVertexIter = (nSubtileScreenY + bRenderedAny * 2 << 0x10) - 0x38000;
-        bRenderedAny = (bRenderedAny * 2 - nSubtileScreenY << 0x10) + 0x18000;
+        nVertexIter = (nSubtileScreenY + bRenderedAny * 2) * 0x10000 - 0x38000;
+        bRenderedAny = (bRenderedAny * 2 - nSubtileScreenY) * 0x10000 + 0x18000;
         nFixedScreenX = nVertexIter + nFixedWorldX;
         Renderer::AdjustPerspectivePosition(nFixedScreenX, nFixedWorldY + bRenderedAny, 0, &nScreenXAdj, &nScreenSplitIndex);
         gaD3DPerspectiveStripVertices[0].fX = (float)nScreenXAdj;
@@ -4916,10 +4916,10 @@ static BOOL __stdcall RENDERER_D3D_RenderWallTileWithPerspective(int nScreenPane
           nTileTableIdx = uVar3 + uVar1 * 6;
           nFixedY0 = gaD3DWallCornerTable[nTileTableIdx].nY + nPosY * 0x2000;
           nBias = gaD3DWallCornerTable[nTileTableIdx].nZ - (int)d2_bits_of(fLayerIndex);
-          nX1 = gaD3DWallCornerTable[nTileTableIdx + 1].nX + (nPosX << 0xd);
+          nX1 = gaD3DWallCornerTable[nTileTableIdx + 1].nX + nPosX * 0x2000;
           nZ1 = gaD3DWallCornerTable[nTileTableIdx + 1].nZ - (int)d2_bits_of(fLayerIndex);
           nY1 = gaD3DWallCornerTable[nTileTableIdx + 1].nY + nPosY * 0x2000;
-          nTileTableIdx = gaD3DWallCornerTable[nTileTableIdx].nX + (nPosX << 0xd);
+          nTileTableIdx = gaD3DWallCornerTable[nTileTableIdx].nX + nPosX * 0x2000;
           Renderer::AdjustPerspectivePosition(nTileTableIdx, nFixedY0, nBias, &nScreenX, &nScreenY);
           gaD3DPerspectiveStripVertices[0].fX = (float)nScreenX;
           gaD3DPerspectiveStripVertices[0].fY = (float)nScreenY;
@@ -5171,7 +5171,6 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
     DWORD DVar2;
     uint8_t byLightIntensity;
     float* pAlpha;
-    float* pAlpha2;
     BOOL BVar1;
     BVar1 = d3dFloorCache::D3D_RenderFloorTileToTexture(pTile);
     if (!BVar1) {
@@ -5186,7 +5185,7 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
     D3DVB_Lock pVBLockFn;
     pVBLockFn = g_pD3DGroundTileVB->lpVtbl->Lock;
     if (pD2GFXRenderedDataStrc->bLowQuality) {
-      DVar2 = (*pVBLockFn)(g_pD3DGroundTileVB, 0x21, (void**)&pAlpha2, nullptr);
+      DVar2 = (*pVBLockFn)(g_pD3DGroundTileVB, 0x21, (void**)&pAlpha, nullptr);
       if (DVar2) {
         lock_failed:
         DIRECTD3D_LogError("Vertex buffer lock failed!", DVar2);
@@ -5194,21 +5193,21 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
       }
 
       byLightIntensity = pLight->sLight.nIntensity;
-      *(uint32_t*)((char*)pAlpha2 + 0x10) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight->sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight->sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight->sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
-      *pAlpha2 = (float)pLight->nX;
-      *(float*)((char*)pAlpha2 + 4) = (float)pLight->nY;
+      *(uint32_t*)((char*)pAlpha + 0x10) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight->sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight->sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight->sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
+      *pAlpha = (float)pLight->nX;
+      *(float*)((char*)pAlpha + 4) = (float)pLight->nY;
       byLightIntensity = pLight[5].sLight.nIntensity;
-      *(uint32_t*)((char*)pAlpha2 + 0xb0) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[5].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[5].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[5].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
-      *(float*)((char*)pAlpha2 + 0xa0) = (float)pLight[5].nX;
-      *(float*)((char*)pAlpha2 + 0xa4) = (float)pLight[5].nY;
+      *(uint32_t*)((char*)pAlpha + 0xb0) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[5].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[5].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[5].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
+      *(float*)((char*)pAlpha + 0xa0) = (float)pLight[5].nX;
+      *(float*)((char*)pAlpha + 0xa4) = (float)pLight[5].nY;
       byLightIntensity = pLight[0x23].sLight.nIntensity;
-      *(uint32_t*)((char*)pAlpha2 + 0x470) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x23].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x23].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x23].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
-      *(float*)((char*)pAlpha2 + 0x460) = (float)pLight[0x23].nX;
-      *(float*)((char*)pAlpha2 + 0x464) = (float)pLight[0x23].nY;
+      *(uint32_t*)((char*)pAlpha + 0x470) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x23].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x23].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x23].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
+      *(float*)((char*)pAlpha + 0x460) = (float)pLight[0x23].nX;
+      *(float*)((char*)pAlpha + 0x464) = (float)pLight[0x23].nY;
       byLightIntensity = pLight[0x1e].sLight.nIntensity;
-      *(uint32_t*)((char*)pAlpha2 + 0x3d0) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x1e].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x1e].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x1e].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
-      *(float*)((char*)pAlpha2 + 0x3c0) = (float)pLight[0x1e].nX;
-      *(float*)((char*)pAlpha2 + 0x3c4) = (float)pLight[0x1e].nY;
+      *(uint32_t*)((char*)pAlpha + 0x3d0) = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x1e].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x1e].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLight[0x1e].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
+      *(float*)((char*)pAlpha + 0x3c0) = (float)pLight[0x1e].nX;
+      *(float*)((char*)pAlpha + 0x3c4) = (float)pLight[0x1e].nY;
       DVar2 = g_pD3DGroundTileVB->lpVtbl->Unlock(g_pD3DGroundTileVB);
       if (DVar2) {
         unlock_failed:
@@ -5660,7 +5659,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       uint32_t bFileLoaded;
       pVersion = 0;
       nFileSize = 0;
-      bFileLoaded = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&pVersion, &nFileSize, 0, 3, (LPOVERLAPPED)0x0);
+      bFileLoaded = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, &pVersion, &nFileSize, 0, 3, (LPOVERLAPPED)0x0);
       if (bFileLoaded && pVersion) {
         nPixelCol = Storm::Source::SBMP::SBmpDecodeImage(2, pVersion, nFileSize, aPaletteRGBA, aPixelData, 0x6db0, &nImgWidth, &nImgBpp, &nImgHeight);
         Storm::Source::SMem::SMemFree(pVersion, ".\\Src\\d3dSmack.cpp", 0xda, 0);

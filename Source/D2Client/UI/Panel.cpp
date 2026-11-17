@@ -4,6 +4,7 @@
 #include "Source/D2Client/Core/Archive.h"
 #include "Source/D2Client/Cursor.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
+#include "Source/D2Client/D2UiPartyStrc.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/GAME/Game/Game.h"
 #include "Source/D2Client/GAME/Msg.h"
@@ -34,6 +35,7 @@
 #include "Source/D2Client/UI/Inv.data.h"
 #include "Source/D2Client/UI/MiniPanel.data.h"
 #include "Source/D2Client/UI/Panel.data.h"
+#include "Source/D2Client/UI/Party.data.h"
 #include "Source/D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -682,8 +684,7 @@ void __stdcall PANEL_DrawStaminaBar() {
       gbyPanelStaminaColorBlue = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0, 0xff);
     }
 
-    uint8_t byBarColor;
-    byBarColor = gbyPanelStaminaColorNormal;
+    uint32_t byBarColor = gbyPanelStaminaColorNormal;
     if (nMaxStamina + 5 < nCurStamina || (eState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x18) , eState != 0)) {
       nMaxStamina = nCurStamina;
       byBarColor = gbyPanelStaminaColorBlue;
@@ -698,7 +699,7 @@ void __stdcall PANEL_DrawStaminaBar() {
       }
     }
 
-    Engine::Gfx::D2GFX_DrawSolidRectExBySize(ui::ScreenSizeX / 2 - 0x7f, Inv::ScreenSizeY - 0x1b, nMaxStamina, 0x12, (uint32_t)byBarColor, DRAW_LESSTRANSPARENT);
+    Engine::Gfx::D2GFX_DrawSolidRectExBySize(ui::ScreenSizeX / 2 - 0x7f, Inv::ScreenSizeY - 0x1b, nMaxStamina, 0x12, byBarColor, DRAW_LESSTRANSPARENT);
     int nMouseX;
     nMouseX = Cursor::GetMouseX();
     int nMouseY;
@@ -717,8 +718,8 @@ void __stdcall PANEL_DrawStaminaBar() {
       }
     }
 
-    nCurStamina = 3;
     nCurStaminaUnits = nMaxStaminaUnits;
+    nCurStamina = 3;
     show_stamina_tooltip:
     for (nClearCount = 0; nClearCount < 0x64; nClearCount++) {
       wszTooltip[nClearCount] = L'\0';
@@ -2436,6 +2437,23 @@ void __stdcall INPUT_PanelRightClick(D2UIMouseMsgStrc * pMsg) {
     }
 
     pMsg->bHandled = 0;
+}
+
+D2UiPartyStrc * Unreferenced_00499de0() {
+    D2UiPartyStrc* pDVar1 = Party::pUiParty;
+    while (true) {
+      int in_ECX;
+      if (!pDVar1) {
+        return nullptr;
+      }
+      if (pDVar1->nRosterGUID == in_ECX) {
+        break;
+      }
+
+      pDVar1 = pDVar1->pNext;
+    }
+
+    return pDVar1;
 }
 
 } // namespace D2Client::UI::Panel

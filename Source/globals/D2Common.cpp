@@ -301,16 +301,6 @@ void * vftable[12] = {
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList
 
-namespace D2Common::DATATBLS::ItemTbls {
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-unsigned int gszTxtColName_op = 0x706f; D2_GLOBAL_GUARD(gszTxtColName_op, "D2Common::DATATBLS::ItemTbls::gszTxtColName_op");
-
-} // namespace D2Common::DATATBLS::ItemTbls
-
 namespace D2Common::Drlg::OutSiege {
 
 // =============================================================================

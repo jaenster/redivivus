@@ -433,10 +433,10 @@
       "usedTypes": [
         "uint16_t"
       ],
-      "dh": "a6fd4406",
+      "dh": "2e1daabc",
       "paramStorage": [
         [
-          "param_1",
+          "pChar",
           "ECX:4"
         ]
       ]
@@ -1006,7 +1006,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "23745a69",
+      "dh": "7f30ffea",
       "paramStorage": [
         [
           "szDest",

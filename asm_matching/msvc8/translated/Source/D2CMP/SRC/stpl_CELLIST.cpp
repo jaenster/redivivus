@@ -38,12 +38,30 @@ TSLink<::CELLIST>* __fastcall NextLink_Unreferenced(TSLink<::CELLIST>* pThis, in
     return (TSLink<::CELLIST>*)(nOffsetOrRef + nLinkOffset);
 }
 
+template<> void __fastcall TSLink<CELLIST>::LINKEDLIST_UnlinkSelf_Unref_00601c70(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
+}
+
 template<> int32_t TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::IsForWriting(int32_t nLockedHandle) {
     return (uint32_t)(nLockedHandle == 1);
 }
 
 template<> TSExplicitList<::CELLIST, -572662307>* TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::OperatorIndex(uint32_t nIndex) {
     return this->m_data + nIndex;
+}
+
+template<> TSGrowableArray<TSExplicitList<CELLIST, -572662307>> * TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Unreferenced_00601cf0() {
+    return this;
 }
 
 template<> uint32_t TSHashTable<CELLIST, HASHKEY_NONE>::ComputeSlot(uint32_t dwHashVal) {
@@ -104,6 +122,20 @@ template<> TSLink<::CELLIST>* TSExplicitList<CELLIST, -572662307>::Link(::CELLIS
     }
 
     return &this->m_terminator;
+}
+
+template<> void __fastcall TSExplicitList<CELLIST, -572662307>::LINKEDLIST_UnlinkSelf_Unref_00602140(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 template<> __declspec(noinline) inline void TSHashTable<CELLIST, HASHKEY_NONE>::Unlink(::CELLIST * pNode) {
@@ -373,6 +405,36 @@ template<> void TSExplicitList<CELLIST, -572662307>::ChangeLinkOffset(int32_t nL
     this->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }
 
+template<> StormLinkedListStrc * __fastcall TSExplicitList<CELLIST, -572662307>::Unreferenced_00602730(StormLinkedListStrc * pList) {
+    StormLinkStrc* pSVar1 = &pList->head;
+    pSVar1->pPrevLink = 0;
+    pSVar1->pNext = 0;
+    pSVar1->pPrevLink = pSVar1;
+    pList->nLinkOffset = 0;
+    pList->head.pNext = ~(uintptr_t)pSVar1;
+    return pList;
+}
+
+template<> uint32_t * __fastcall TSExplicitList<CELLIST, -572662307>::Unreferenced_00602750(uint32_t * pData) {
+    *pData = 0;
+    pData[1] = 0;
+    return pData;
+}
+
+template<> void __fastcall TSExplicitList<CELLIST, -572662307>::LINKEDLIST_UnlinkSelf_Unref_00602760(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
+}
+
 template<> void TSExportTableSimple<CELLIST, HCELLIST__*, 0>::Delete(::CELLIST * pNode) {
     this->Unlink(pNode);
     vc8_thiscall(this->pVtable->InternalDelete)(this, pNode);
@@ -457,6 +519,29 @@ template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::De
     pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;
+}
+
+template<> TSExplicitList<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>, 16>* TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Constructor() {
+    TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* pTVar1 = &this->m_terminator;
+    pTVar1->m_prevlink = 0;
+    pTVar1->m_next = 0;
+    pTVar1->m_prevlink = pTVar1;
+    this->m_linkoffset = 0x10;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
+    return this;
+}
+
+template<> void TSExplicitList<CELLIST, -572662307>::Unreferenced_00602950() {
+    if (!this) {
+      return;
+    }
+
+    TSLink<::CELLIST>* pTVar1 = &this->m_terminator;
+    pTVar1->m_prevlink = 0;
+    pTVar1->m_next = 0;
+    pTVar1->m_prevlink = pTVar1;
+    this->m_linkoffset = -0x22222223;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }
 
 template<> void TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::DeleteUnlock(::CELLIST * pNode, int32_t nLockedHandle) {
@@ -686,6 +771,11 @@ template<> TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* TSHashTableReuse<CELLIS
     }
 
     return this;
+}
+
+template<> uint8_t TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::Unreferenced_00603ed0() {
+    int* in_ECX;
+    return *in_ECX - in_ECX[1];
 }
 
 template<> uint32_t TSGrowableArray<CELLIST>::CalcChunkSize(uint32_t nCount) {

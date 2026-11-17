@@ -182,8 +182,8 @@ namespace D2Game { namespace Quests { namespace QUESTS {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2BitBufferStrc * __fastcall GetQuestBitBuffer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-struct D2UnitDataPlayerInteractedNPCStrc * __fastcall Unreferenced_00543540(::SGAMEDATA * param_1, struct D2UnitStrc * param_2);
-int __fastcall Unreferenced_00543560(int param_1);
+struct D2UnitDataPlayerInteractedNPCStrc * __fastcall Unreferenced_00543540(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+int __fastcall Unreferenced_00543560(int nIndex);
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall FreeQuestDataList(::SGAMEDATA * pGame, struct D2UnitQuestDataListStrc * pQuestDataList);
 struct D2QuestDataStrc * __fastcall GetQuestDataByQuestNoInternal(::SGAMEDATA * pGame, eD2QuestsInternal eQuestNoInternal);
@@ -257,6 +257,7 @@ void __fastcall QUEST_OnGoldenBirdCouncilKilled(::SGAMEDATA * pGameStrc, struct 
 // @sourcefile .\QUESTS\QUESTS.CPP
 // @returns void: EAX at the epilogue is leftover from the last call, and all four call sites in IterateNpcIntroUnits (void) discard it. Found by KierTaylor on the Mac twin (Redivivus proposal #1215).
 void __fastcall INTRONPC_FillInPacketWithIntroNpcIdsInAct(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eAct nActNo);
+uint32_t Unreferenced_005451b0();
 void __fastcall QUESTGUID_AddPlayerToList(struct D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID);
 BOOL __fastcall QUESTGUID_RemovePlayerFromList(struct D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID);
 // Returns 1 if iValue is one of the first nPlayerCount entries of
@@ -303,6 +304,9 @@ void __fastcall AttachToUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, str
 // Builds the game's quest-state object graph at game creation. Allocates one 0xF8-byte D2QuestDataStrc per entry in aQuestInitDataExtended (the real act quests) and per entry in QuestInitDataSimple (sub-quests/QUESTINT_SimpleQuest1+), linking them into a singly-linked list via pPrev, stamping nAct/nQuestNoInternal/pGame and calling each entry's fpQuestInit/fpQuestData callback (validated with IsBadCodePtr). Then allocates the 0x24-byte D2QuestControlStrc head (pQuestData=list, fresh seed derived from the game seed with nSeedHigh=0x29A, a quest-flag BitBuffer) and stores it in pGame->pQuestControl. Halts via ERROR_UnrecoverableInternalError on a bad callback pointer.
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall AllocQuestControl(::SGAMEDATA * pGame);
+// Searches the quest-control timer list for the entry matching both pQuestUpdate (callback) and pQuestData (quest), unlinks it from the singly-linked list, and frees its memory. Asserts the timer list is not currently being executed (bExecuting). Logs a debug message if no matching timer is found. The game comes from pQuestData->pGame. No caller in 1.14d.
+// @sourcefile .\QUESTS\QUESTS.CPP
+void __fastcall RemoveQuestTimer(struct D2QuestDataStrc * pQuestData, QUESTUPDATE pQuestUpdate);
 // Resends a player's full quest state to their client (called on (re)entering a game / quest log refresh). Sends the raw quest-record bitfield via the 0x28 PlayerQuestInfo packet, then walks the game's quest-data linked list computing each quest's display state into a 0x29-byte per-quest array using each quest's fpStatusFilter callback (or QUEST_GetQuestLogDisplayState fallback). Builds and conditionally sends a 0x50 QuestSpecial packet carrying Act1 Den-of-Evil monsters-left, Act5 RescueOnMountArreat barbarians-left, and (once the Summoner is dead and Act2 reached) Tal Rasha's tomb symbol level id. Finally sends the assembled 0x52 PlayerQuestLog packet. Halts via ErrorManager on a malformed quest list / bad filter pointer.
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall RefreshQuestDataForUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
@@ -334,6 +338,6 @@ BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow1(struct D2ObjectOperateFnArg * p
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow2(struct D2ObjectOperateFnArg * pOperation);
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow3(struct D2ObjectOperateFnArg * pOperation);
 #endif // D2_MODULE_D2Game
-// 13 internal functions (defined in .cpp)
+// 12 internal functions (defined in .cpp)
 
 }}} // namespace D2Game::Quests::QUESTS

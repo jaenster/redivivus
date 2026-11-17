@@ -798,7 +798,7 @@ static BOOL __stdcall WARDEN_ResolveAndLoadModule(void * pRc4Key, uint8_t * pMod
     return bCacheReadSuccess;
 }
 
-uint32_t __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t nSize) {
+BOOL __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t nSize) {
     _FILETIME fileTime;
     if (!sgpUnknownSequence) {
       return 0;

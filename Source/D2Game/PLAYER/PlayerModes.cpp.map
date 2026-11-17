@@ -846,7 +846,7 @@
         "int32_t",
         "int64_t"
       ],
-      "dh": "a34baafb",
+      "dh": "0706fd85",
       "paramStorage": [
         [
           "pGame",
@@ -991,13 +991,14 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
+        "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d62e3e90",
+      "dh": "ef014aa6",
       "paramStorage": [
         [
           "pGame",

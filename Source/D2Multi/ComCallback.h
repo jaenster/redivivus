@@ -91,7 +91,7 @@ void __stdcall COMCALLBACK_UpdateChannelUserList();
 void __stdcall COMCALLBACK_ClearChannelListView();
 // Handles BNet channel join event. Finds matching user in gpChannelUserListHead by username, then calls AddUserToChannelList to build the visual composite. Returns 1 on match, 0 if not found.
 BOOL __fastcall COMCALLBACK_HandleChannelJoin(uint32_t dwUnused, uint32_t dwCbArg2, char * szUsername, uint8_t * pbRawData);
-uint32_t __stdcall COMCALLBACK_AppendServerMessage(uint32_t dwParam, char * szText);
+BOOL __stdcall COMCALLBACK_AppendServerMessage(uint32_t dwParam, char * szText);
 // Broadcasts chat message from local player to Battle.net channel. Retrieves current username from network interface, finds matching user in channel list to determine status flags (operator/speaker/moderator), formats message with username and clan tag prefix, then dispatches to chat system with appropriate color based on user status (0=operator red, 3=speaker/moderator yellow, 4=normal white).
 void __fastcall COMCALLBACK_BroadcastChatMessage(char * szMessageBody);
 // Handles incoming BNet whisper message. Checks ignore list, finds sender in channel user list for status flags, formats sender/message and appends to chat with appropriate color.
@@ -108,8 +108,8 @@ BOOL __fastcall COMCALLBACK_ProcessEmoteCommand(uint32_t dwCbArg1, uint32_t dwCb
 void __fastcall COMCALLBACK_ScrollChannelUserList(int32_t nScrollDelta);
 BOOL __stdcall COMCALLBACK_HandleUserListClick(struct D2ControlMsg * pnClickMsg);
 // Handles Battle.net game list errors by auto-squelching spamming users. When chat room context exists and throttle timer expires (1000ms cooldown), extracts username from context (strips clan tag *prefix), formats "/squelch *username" command, sends to network layer, clears channel view, and optionally adds user to ignore list if not self-squelching. Returns 1 on success, 0 if network send fails.
-uint32_t __stdcall COMCALLBACK_HandleGameListError1(struct D2ControlMsg * pControlMsg);
-uint32_t __stdcall COMCALLBACK_HandleGameListError2(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall COMCALLBACK_HandleGameListError1(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall COMCALLBACK_HandleGameListError2(struct D2ControlMsg * pControlMsg);
 // Creates or updates Battle.net channel user entry. If user doesn't exist in list, allocates D2ChannelUserStrc (180 bytes), copies username and character data, creates character composite sprite with class/items/level, randomizes animation frame, formats display name, appends to linked list, increments channel user count, formats channel title "Channel Name (N)" as Unicode, displays in chat window, sorts list, and updates UI. If user exists, updates via COMCALLBACK_AddUserToChannelList instead.
 struct D2ChannelUserStrc * __stdcall COMCALLBACK_CreateChannelUserEntry(char * szUsername, uint32_t * pCharDataAndItems, uint32_t dwStatusFlags);
 BOOL __fastcall COMCALLBACK_AddChannelUser(uint32_t dwStatusFlags, uint32_t dwCbArg2, uint32_t * pszUsername, uint32_t * pCharData);

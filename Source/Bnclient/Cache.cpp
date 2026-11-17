@@ -405,8 +405,8 @@ static uint32_t __stdcall CACHE_FindHashEntry(uint32_t nLocale, char * szText) {
     uint32_t nHash2 = CACHE_HashString(2, szText);
     uint32_t nHashTableMask = gpCacheFileHeader->nHashTableSize - 1;
     uint32_t nStartHashSlot = nHashTableMask & nHash0;
-    int nHashSlotOffset = nStartHashSlot * 0x10;
-    int nBlockIdx = *(int*)(gpCacheBufferPoolFirst + nHashSlotOffset + 0xc);
+    int nHashSlotOffset = nStartHashSlot << 4;
+    int nBlockIdx = *(int*)(gpCacheBufferPoolFirst + (nHashSlotOffset + 0xc));
     uint32_t nFoundHashSlot = -1;
     nHash0 = nStartHashSlot;
     while (true) {
@@ -430,8 +430,8 @@ static uint32_t __stdcall CACHE_FindHashEntry(uint32_t nLocale, char * szText) {
         break;
       }
 
-      nHashSlotOffset = nHash0 * 0x10;
-      nBlockIdx = *(int*)(gpCacheBufferPoolFirst + nHashSlotOffset + 0xc);
+      nHashSlotOffset = nHash0 << 4;
+      nBlockIdx = *(int*)(gpCacheBufferPoolFirst + (nHashSlotOffset + 0xc));
     }
 
     return nFoundHashSlot;

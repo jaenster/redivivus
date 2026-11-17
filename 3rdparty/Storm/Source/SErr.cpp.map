@@ -295,10 +295,10 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "1ffd9b4b",
+      "dh": "8fc1e2af",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -439,6 +439,30 @@
       ]
     },
     {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0041c650",
+      "address": "0041c650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c650"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0041c650"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "abc03e62",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
       "name": "SSYSTEM_ListUnlink",
       "address": "0041c690",
       "lines": [
@@ -485,10 +509,10 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "bbf9a515",
+      "dh": "7f6ee8bf",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -520,6 +544,30 @@
         [
           "pNode",
           "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0041c730",
+      "address": "0041c730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c730"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0041c730"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "2416444e",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
         ]
       ]
     },
@@ -588,10 +636,34 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "4fc00be9",
+      "dh": "ef423eb3",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0041c800",
+      "address": "0041c800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c800"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0041c800"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "894845bb",
+      "paramStorage": [
+        [
+          "pNode",
           "ECX:4"
         ]
       ]

@@ -110,11 +110,12 @@ BOOL __fastcall Q11_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUn
 BOOL __fastcall Q11_SendDarknessPacket(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2GSPacketSrv0x53 sPacket53;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q3.cpp", 0x142);
-    sPacket53.bEclipse = GAME::Clients::GetAct(pClient);
-    if (sPacket53.bEclipse == 1) {
+    uint8_t nActNo = GAME::Clients::GetAct(pClient);
+    if (nActNo == 1) {
       sPacket53.nHeader = 'S';
       sPacket53.nCycleIndex = 5;
       sPacket53.nTicks = 0;
+      sPacket53.bEclipse = nActNo;
       GAME::SCmd::NET_D2GS_SERVER_Send_0x53_ACTTIMEOFDAY(pClient, &sPacket53);
       D2GSPacketSrv0x5D sPacket5D;
       memset(&sPacket5D, 0, sizeof(sPacket5D));

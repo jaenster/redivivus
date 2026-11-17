@@ -830,13 +830,13 @@ void __stdcall InitializeStaticPath(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int3
     }
 
     D2StaticPathStrc* pPath = pUnit->pPath.pStaticPath;
+    pPath->nDirection = 0;
     pPath->nPosX = nX;
     pPath->nPosY = nY;
-    pPath->nDirection = 0;
     pPath->pRoom = pRoom;
     int nUnit = nX;
     int nScreenYLocal = nY;
-    Drlg::Transform::CoordsMapToScreen((int32_t*)&nUnit, &nScreenYLocal);
+    Drlg::Transform::CoordsMapToScreen(&nUnit, &nScreenYLocal);
     pPath->nScreenX = nUnit;
     pPath->nScreenY = nScreenYLocal;
 }
@@ -1250,11 +1250,11 @@ void __stdcall UpdateFrame(D2UnitStrc * pUnit) {
 
 void __stdcall SetFrameNonRate(D2UnitStrc * pUnit, int32_t nRate, int32_t nFailRate) {
     pUnit->nGfxCurrentFrame += (int)pUnit->nAnimSpeed;
-    if (!(pUnit->nGfxCurrentFrame >= nFailRate << 8)) {
+    if (!(pUnit->nGfxCurrentFrame >= nFailRate * 0x100)) {
       return;
     }
 
-    pUnit->nGfxCurrentFrame = (nRate << 8) + nFailRate * -0x100 + pUnit->nGfxCurrentFrame;
+    pUnit->nGfxCurrentFrame = nRate * 0x100 + nFailRate * -0x100 + pUnit->nGfxCurrentFrame;
 }
 
 static int32_t UNITS_GetBaseWalkVelocity(eD2UnitType eUnitType, int32_t nClassId) {
@@ -2164,6 +2164,7 @@ int32_t __stdcall GetDefense(D2UnitStrc * pUnit) {
     D2SkillsTxt* pDVar4;
     int32_t nHolyShieldEcx;
     int32_t nHolyShieldEdx;
+    D2StatListExStrc* pStatListEx;
     D2UnitStrc* pUnitOrig = pUnit;
     int nBaseArmor = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_armorclass, 0);
     int nDexBonus = Stats::StatsEx::STATSEX_GetCurrentStat(pUnitOrig, UNITSTAT_dexterity, 0);
@@ -2174,16 +2175,16 @@ int32_t __stdcall GetDefense(D2UnitStrc * pUnit) {
     eHolyShieldState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnitOrig, STATE_holyshield);
     if (eHolyShieldState != STATE_none) {
       eD2Skills eSkill;
-      pUnit = (D2UnitStrc*)Stats::StatsEx::GetStatsByState(pUnitOrig, STATE_holyshield);
-      if (pUnit) {
-        eSkill = Stats::StatsEx::STATLIST_GetBaseStatValue((D2StatListExStrc*)pUnit, UNITSTAT_modifierlist_skill, 0);
-        nSkillLvl = Stats::StatsEx::STATLIST_GetBaseStatValue((D2StatListExStrc*)pUnit, UNITSTAT_modifierlist_level, 0);
+      pStatListEx = Stats::StatsEx::GetStatsByState(pUnitOrig, STATE_holyshield);
+      if ((D2UnitStrc*)pStatListEx) {
+        eSkill = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, UNITSTAT_modifierlist_skill, 0);
+        nSkillLvl = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, UNITSTAT_modifierlist_level, 0);
         if ((int)eSkill > 0 && nSkillLvl > 0) {
           pDVar4 = Skills::TXT_Skills_GetLine(eSkill);
           if (pDVar4) {
-            pUnit = 0;
-            INVENTORY::Inventory::INVENTORY_GetEquippedShield(pUnitOrig->pInventory, &pUnit);
-            if (pUnit) {
+            pStatListEx = 0;
+            INVENTORY::Inventory::INVENTORY_GetEquippedShield(pUnitOrig->pInventory, (D2UnitStrc**)&pStatListEx);
+            if ((D2UnitStrc*)pStatListEx) {
               nSkillArmorPct = Skills::D2GetSkillCalc(pUnitOrig, pDVar4->calc[0], eSkill, nSkillLvl);
               nDexBonus += nSkillArmorPct;
             }
@@ -3497,7 +3498,7 @@ uint32_t __stdcall UNITS_GetFrameBonus(D2UnitStrc * pUnit) {
       nUnit = -1;
     }
 
-    Skills::SKILLS_GetStateTransformGfx(pUnitOrg, &eUnitType, (int*)&nUnit, (int*)&nAnimMode, ".\\UNITS\\Units.cpp", 0x118a);
+    Skills::SKILLS_GetStateTransformGfx(pUnitOrg, &eUnitType, &nUnit, (int*)&nAnimMode, ".\\UNITS\\Units.cpp", 0x118a);
     if (!(eUnitType == UNIT_PLAYER && true)) {
       return 0;
     }
@@ -3513,7 +3514,7 @@ uint32_t __stdcall UNITS_GetFrameBonus(D2UnitStrc * pUnit) {
         nAnimClassIdx = (uint32_t)wAnimClass;
       }
 
-      return gaClassWeaponFrameBonus[(int)(nUnit + 0x19 + (nAnimClassIdx * 7 - 0x19))];
+      return gaClassWeaponFrameBonus[(int)(nUnit + (nAnimClassIdx * 7 - 0x19) + 25)];
       case eD2PlayerAnimMode_ns::Skill3:
 
       case eD2PlayerAnimMode_ns::Skill4:
@@ -3526,7 +3527,7 @@ uint32_t __stdcall UNITS_GetFrameBonus(D2UnitStrc * pUnit) {
           nWeaponAnimClass = (uint32_t)wAnimClass;
         }
 
-        return gaClassWeaponFrameBonus[(int)(nUnit + 0x19 + (nWeaponAnimClass * 7 - 0x19))];
+        return gaClassWeaponFrameBonus[(int)(nUnit + (nWeaponAnimClass * 7 - 0x19) + 25)];
       }
     }
 
@@ -3988,6 +3989,7 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
     eD2UnitType eUnitType;
     D2UnitStrc* pAnimMode;
     short int wFrameDelta;
+    int nUnitArg;
     D2UnitStrc* pUnit_00 = pUnitArg;
     if (!pUnitArg) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x951);
@@ -3998,18 +4000,18 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
       short int wAnimSpeed;
       pUnitArg->nActionFrame = 0;
       nWeaponAnimClass = UNITS_GetFrameBonus(pUnitArg);
-      pUnitArg = *(D2UnitStrc**)&pUnit_00->eAnimMode;
+      nUnitArg = (int)*(D2UnitStrc**)&pUnit_00->eAnimMode;
       nClassId = pUnit_00->nClassId;
       pUnit_00->nGfxCurrentFrame = nWeaponAnimClass << 8;
       eUnitType = pUnit_00->eUnitType;
-      Skills::SKILLS_GetStateTransformGfx(pUnit_00, &eUnitType, &nClassId, (int*)&pUnitArg, ".\\UNITS\\Units.cpp", 0x958);
-      pAnimMode = pUnitArg;
+      Skills::SKILLS_GetStateTransformGfx(pUnit_00, &eUnitType, &nClassId, &nUnitArg, ".\\UNITS\\Units.cpp", 0x958);
+      pAnimMode = (D2UnitStrc*)nUnitArg;
       switch (eUnitType) {
         case UNIT_PLAYER:
-          if (pUnitArg == (D2UnitStrc*)0x3 || pUnitArg == (D2UnitStrc*)0x13) {
+          if ((D2UnitStrc*)nUnitArg == (D2UnitStrc*)0x3 || (D2UnitStrc*)nUnitArg == (D2UnitStrc*)0x13) {
             UNITS_AddRunVelocityBonus(pUnit_00, nClassId);
           }
-        if (pUnitArg != (D2UnitStrc*)0x12) {
+        if ((D2UnitStrc*)nUnitArg != (D2UnitStrc*)0x12) {
           pUnit_00->pAnimSeq = 0;
           UpdateAnimSpeed(pUnit_00, ".\\UNITS\\Units.cpp", 0x96a);
           pUnit_00->nFrameCount = pUnit_00->pAnimData->nFrames << 8;
@@ -4020,10 +4022,10 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
         UpdateAnimSpeed(pUnit_00, ".\\UNITS\\Units.cpp", 0x967);
         return;
         case UNIT_MONSTER:
-          if (pUnit_00->eUnitType == UNIT_PLAYER && (bIsShapeshifted = DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit_00) , bIsShapeshifted != 0) && (pUnitArg == (D2UnitStrc*)0xd || pUnitArg == (D2UnitStrc*)0xf)) {
+          if (pUnit_00->eUnitType == UNIT_PLAYER && (bIsShapeshifted = DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit_00) , bIsShapeshifted != 0) && ((D2UnitStrc*)nUnitArg == (D2UnitStrc*)0xd || (D2UnitStrc*)nUnitArg == (D2UnitStrc*)0xf)) {
             UNITS_AddRunVelocityBonus(pUnit_00, pUnit_00->nClassId);
           }
-        if (pUnitArg != (D2UnitStrc*)0xe) {
+        if ((D2UnitStrc*)nUnitArg != (D2UnitStrc*)0xe) {
           UpdateAnimSpeed(pUnit_00, ".\\UNITS\\Units.cpp", 0x980);
           pUnit_00->pAnimSeq = 0;
           pUnit_00->nFrameCount = pUnit_00->pAnimData->nFrames << 8;
@@ -4034,7 +4036,7 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
         UpdateAnimSpeed(pUnit_00, ".\\UNITS\\Units.cpp", 0x97e);
         return;
         case UNIT_OBJECT:
-          if ((intptr_t)pUnitArg < 8) {
+          if (nUnitArg < 8) {
             pObjTxt = DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit_00->nClassId);
             pUnit_00->nFrameCount = pObjTxt->FrameCnt[(intptr_t)pAnimMode];
             wFrameDelta = pObjTxt->FrameDelta[(intptr_t)pAnimMode];
@@ -4057,13 +4059,13 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x98a);
         exit(-1);
         case UNIT_ITEM:
-          if (pUnitArg == (D2UnitStrc*)0x3) {
+          if ((D2UnitStrc*)nUnitArg == (D2UnitStrc*)0x3) {
             pUnit_00->nAnimSpeed = 0;
             pUnit_00->nFrameCount = 0x1100;
             pUnit_00->nGfxCurrentFrame = 0x1000;
             return;
           }
-        if (pUnitArg == (D2UnitStrc*)0x5) {
+        if ((D2UnitStrc*)nUnitArg == (D2UnitStrc*)0x5) {
           pUnit_00->nAnimSpeed = 0x100;
           pUnit_00->nFrameCount = 0x1100;
           return;

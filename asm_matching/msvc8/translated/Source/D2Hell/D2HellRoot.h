@@ -204,7 +204,7 @@ void AtexitCleanup_FreeLinkedListAndCritSec();
 void __fastcall FAULT_LookupErrorString(uint32_t nErrorCode, char * szText, int32_t nMaxLen);
 void FAULT_ShowFormattedError(uint32_t nErrorCode, ...);
 void FAULT_ShowFormattedErrorAndTerminate(uint32_t nErrorCode, ...);
-uint32_t __fastcall D2MEM_CompareBytes(uint8_t * pBuf1, uint8_t * pBuf2, uint32_t nByteCount);
+BOOL __fastcall D2MEM_CompareBytes(uint8_t * pBuf1, uint8_t * pBuf2, uint32_t nByteCount);
 int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText);
 // Extracts signer organization from signed file's certificate. Converts file path to wide char, queries certificate store, retrieves X.509 certificate, extracts organization field (OID 2.5.4.10), converts back to ANSI.
 bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, int32_t nOrgMaxLen);

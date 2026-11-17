@@ -150,8 +150,8 @@ static D2AnimDataRecordStrc * ANIMDATA_GetRecordByNameHash(LPSTR szCofName) {
 D2AnimDataRecordStrc * __fastcall ANIMDATA_GetAnimDataForUnit(D2UnitStrc * pUnit, uint32_t nClassId, uint32_t nCofMode, uint32_t nWeaponClass, D2InventoryStrc * pInventory) {
     D2AnimDataStrc* pDVar1;
     char szCofName[8];
-    memset(szCofName, 0, 8 * sizeof(szCofName[0]));
     int32_t nCofNameLen = 0;
+    memset(szCofName, 0, 8 * sizeof(szCofName[0]));
     COMPOSIT::Composit::COMPOSIT_BuildCofPath(pUnit, nClassId, nCofMode, nWeaponClass, pInventory, szCofName, &nCofNameLen, 0, 1);
     D2AnimDataRecordStrc* pRecord = ANIMDATA_GetRecordByNameHash(szCofName);
     if (!pRecord) {

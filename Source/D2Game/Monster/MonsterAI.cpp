@@ -161,7 +161,7 @@ void __fastcall MERC_ApplyLevelStats(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, 
         }
 
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_dexterity, nCalc, 0);
-        nCalc = (pHirelingTxt->hpPerlvl << 8 << 8) + (pHirelingTxt->hp << 8);
+        nCalc = pHirelingTxt->hpPerlvl * 0x100 * nTmp + pHirelingTxt->hp * 0x100;
         if (nCalc < 0x2800) {
           nCalc = 0x2800;
         }

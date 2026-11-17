@@ -169,6 +169,24 @@
       ]
     },
     {
+      "name": "Unreferenced_00552f20",
+      "address": "00552f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00552f20"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnit",
+      "calledFunctions": [
+        "Unreferenced_00552f20"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "cc895830"
+    },
+    {
       "name": "UNITS_GetHashTableSlot",
       "address": "00552f30",
       "lines": [

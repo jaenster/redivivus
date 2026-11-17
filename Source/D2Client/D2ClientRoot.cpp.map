@@ -91,7 +91,7 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "cda84262"
+      "dh": "e4676e2d"
     },
     {
       "name": "LOADER_PopupGameLoopCallback",
@@ -1452,10 +1452,10 @@
       "usedTypes": [
         "uint16_t"
       ],
-      "dh": "ab28986a",
+      "dh": "ad16bb2d",
       "paramStorage": [
         [
-          "param_1",
+          "pChar",
           "ECX:4"
         ]
       ]
@@ -1656,7 +1656,7 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6f2e8827",
+      "dh": "78d3d29f",
       "paramStorage": [
         [
           "nCutsceneId",
@@ -2417,7 +2417,7 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "483d3f52",
+      "dh": "5502a9ac",
       "paramStorage": [
         [
           "nParam",

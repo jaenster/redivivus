@@ -3,7 +3,9 @@
 //! calls/bracket/refs/align to a fixpoint - each pairing one-to-one. Writes
 //! evidence/funcmap.tsv and <out>.unmapped, row for row what funcmap.py writes.
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
+const proc = @import("proc.zig");
 const audit = @import("audit.zig");
 const compare = @import("compare.zig");
 const crtmap = @import("crtmap.zig");
@@ -465,6 +467,23 @@ pub const Matcher = struct {
 
     fn walkMaps(root: []const u8, rel: []const u8, out: *std.StringHashMapUnmanaged([]const u8)) !void {
         const dir_path = if (rel.len == 0) root else try util.join(root, rel);
+        if (builtin.os.tag == .windows) {
+            var dirs: std.ArrayList([]const u8) = .empty;
+            for (try proc.listDir(dir_path)) |name| {
+                const full = try util.join(dir_path, name);
+                const relp = if (rel.len == 0) name else try util.join(rel, name);
+                if (proc.isDir(full)) {
+                    if (!proc.isLink(full) and name.len > 0 and name[0] != '.' and !std.mem.eql(u8, name, "asm_matching"))
+                        try dirs.append(gpa, relp);
+                } else if (proc.isFile(full) and std.mem.endsWith(u8, name, ".cpp.map")) {
+                    const k = try gpa.dupe(u8, relp[0 .. relp.len - 8]);
+                    for (k) |*ch| ch.* = std.ascii.toLower(ch.*);
+                    try out.put(gpa, k, full);
+                }
+            }
+            for (dirs.items) |d| try walkMaps(root, d, out);
+            return;
+        }
         const dz = try util.z(dir_path);
         const dp = c.opendir(dz.ptr) orelse return;
         var dirs: std.ArrayList([]const u8) = .empty;
@@ -1889,6 +1908,7 @@ pub fn main(args: []const []const u8) !void {
 }
 
 fn realpath(p: []const u8) ![]const u8 {
+    if (builtin.os.tag == .windows) return proc.realpath(p);
     var buf: [4096]u8 = undefined;
     const pz = try util.z(p);
     const r = c.realpath(pz.ptr, &buf) orelse return p;

@@ -43,7 +43,7 @@ BOOL __stdcall SOUND_IsEaxAvailable_ForEaxItem() {
     return ::D2Client::Sound::SOUND_IsEaxAvailable();
 }
 
-uint32_t __fastcall SOUND_FileExists(char * szFileName) {
+BOOL __fastcall SOUND_FileExists(char * szFileName) {
     D2MPQFileStrc* pFile;
     int bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, szFileName, 0, (void**)&pFile);
     if (!bOpened) {
@@ -94,14 +94,14 @@ D2SoundChannelStrc * __stdcall SOUND_GetChannelArray() {
     return nullptr;
 }
 
-D2SoundChannelStrc * __fastcall Unreferenced_004b9440(int param_1) {
+D2SoundChannelStrc * __fastcall Unreferenced_004b9440(int nChannelHandle) {
     D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
-    if (!param_1) {
+    if (!nChannelHandle) {
       return nullptr;
     }
 
     for (; pDVar1; pDVar1 = pDVar1->pNext) {
-      if (pDVar1->pChannel->nChannelHandle == param_1) {
+      if (pDVar1->pChannel->nChannelHandle == nChannelHandle) {
         return pDVar1->pChannel;
       }
     }
@@ -147,13 +147,13 @@ static void SOUND_ReleaseChannel(D2SoundChannelStrc * pChannel) {
     pChannel->pListNode = 0;
 }
 
-int __fastcall Unreferenced_004b9560(int param_1) {
+int __fastcall Unreferenced_004b9560(int nChannelHandle) {
     D2SoundChannelStrc* pDVar2;
-    if (param_1) {
+    if (nChannelHandle) {
       D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
       for (; pDVar1; pDVar1 = pDVar1->pNext) {
         pDVar2 = pDVar1->pChannel;
-        if (pDVar2->nChannelHandle == param_1) {
+        if (pDVar2->nChannelHandle == nChannelHandle) {
           return (uint32_t)(pDVar2 != 0);
         }
       }

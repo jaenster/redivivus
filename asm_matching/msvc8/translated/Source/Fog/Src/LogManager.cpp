@@ -1086,14 +1086,28 @@ StormLinkStrc * __fastcall ComputeAbsoluteFromRelative(StormLinkStrc * pNode, in
     return (StormLinkStrc*)(nOffset + pBase);
 }
 
-void * __fastcall Unreferenced_0040f520(StormLinkStrc * param_1) {
-    return (void*)(param_1->pNext <= 0 ? 0 : param_1->pNext);
+void * __fastcall Unreferenced_0040f520(StormLinkStrc * pLink) {
+    return (void*)(pLink->pNext <= 0 ? 0 : pLink->pNext);
 }
 
-intptr_t __fastcall Unreferenced_0040f580(StormLinkedListStrc * param_1) {
-    StormLinkStrc* pSVar1 = &param_1->head;
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0040f530(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
+}
+
+intptr_t __fastcall Unreferenced_0040f580(StormLinkedListStrc * pList) {
+    StormLinkStrc* pSVar1 = &pList->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uintptr_t)pSVar1;
+    pList->head.pNext = ~(uintptr_t)pSVar1;
     return ~(uintptr_t)pSVar1;
 }
 
@@ -1167,10 +1181,10 @@ void __fastcall LogToFile(D2LogRecordStrc * pLogRecord) {
     gLogFileLastAccessTimeArray[(intptr_t)nSlot] = dwNow;
 }
 
-uint32_t * __fastcall Unreferenced_0040f810(uint32_t * param_1) {
-    *param_1 = 0;
-    param_1[1] = 0;
-    return param_1;
+uint32_t * __fastcall Unreferenced_0040f810(uint32_t * pData) {
+    *pData = 0;
+    pData[1] = 0;
+    return pData;
 }
 
 void __fastcall UnlinkListNode(StormLinkStrc * pNode) {

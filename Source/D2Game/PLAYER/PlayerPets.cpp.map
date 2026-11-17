@@ -293,14 +293,14 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "7f8b02ee",
+      "dh": "a7bc57e1",
       "paramStorage": [
         [
-          "param_1",
+          "pUnit",
           "ECX:4"
         ],
         [
-          "param_2",
+          "nPetType",
           "EDX:4"
         ]
       ]
@@ -867,7 +867,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "879340c0",
+      "dh": "f30b724c",
       "paramStorage": [
         [
           "pGame",
@@ -1645,7 +1645,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "15914f0a",
+      "dh": "6151d6a5",
       "paramStorage": [
         [
           "pGame",

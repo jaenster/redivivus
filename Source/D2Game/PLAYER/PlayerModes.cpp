@@ -711,7 +711,7 @@ static int32_t __stdcall PLRMODES_CleanupInvalidCorpses(::SGAMEDATA * pGame, D2U
 }
 
 // @sourcefile .\PLAYER\PlrModes.cpp
-D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nX, int32_t nY, D2UnitStrc * pRoom) {
+D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nX, int32_t nY, D2RoomStrc * pRoom) {
     D2RoomStrc* pSpawnRoom;
     D2UnitStrc* pUnit_00;
     D2ClientStrc* pClient;
@@ -731,7 +731,7 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
     int32_t nBodyLocIndex;
     D2InventoryStrc* pCorpseInventory;
     D2UnitStrc* pSlotItem;
-    pSlotItem = pRoom;
+    pSlotItem = (D2UnitStrc*)pRoom;
     D2UnitStrc* pOrigUnit;
     pOrigUnit = pUnit;
     ::SGAMEDATA* pSavedGame;
@@ -1001,8 +1001,8 @@ void __fastcall PLRMODES_HandlePlayerDeath(::SGAMEDATA * pGame, D2UnitStrc * pUn
       nDeathX = 0;
     }
 
-    D2UnitStrc* pRoom;
-    pRoom = (D2UnitStrc*)D2Common::Units::UNITS_GetRoom(pUnit);
+    D2RoomStrc* pRoom;
+    pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     PLRMODES_CreateDeadBody(pGame, pUnit, nDeathX, nDeathY, pRoom);
     PlayerPets::PETS_FreeAllPetsByType(pGame, pUnit);
     D2ClientStrc* pClient;
@@ -1018,10 +1018,7 @@ void __fastcall PLRMODES_HandlePlayerDeath(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
     BOOL bOverwriteSave;
     bOverwriteSave = 0;
-    pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrModes.cpp", 0x43a);
-    char* szCharName;
-    szCharName = GAME::Clients::GetCharName(pClient);
-    PlayerSave::SaveGameAllGameTypes(pGame, pUnit, szCharName, bOverwriteSave);
+    PlayerSave::SaveGameAllGameTypes(pGame, pUnit, GAME::Clients::GetCharName(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrModes.cpp", 0x43a)), bOverwriteSave);
     skip_death_save:
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 0x11);
     UNIT::SUnit::InitAnimFrame(pUnit);

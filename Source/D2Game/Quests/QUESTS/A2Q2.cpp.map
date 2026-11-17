@@ -151,7 +151,7 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "f7b7868b",
+      "dh": "bbbe6e27",
       "paramStorage": [
         [
           "pQuestData",
@@ -188,7 +188,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e6eb95d7",
+      "dh": "7431bf83",
       "paramStorage": [
         [
           "pQuestData",

@@ -608,6 +608,7 @@ uint16_t * __fastcall GetMercTypeString(uint32_t nIndex) {
 }
 
 // 2022.01.09 - dzik
+#if 0 // ratchet: the match body of 00663750 (evidence 1985bb0f9) could not be re-spelled: callee DATATBLS::MonsterTbls::GetHirelingEntryByClassId parameter pPrevEntry retyped: int32_t -> D2HirelingTxt *; callee DATATBLS::MonsterTbls::GetHirelingEntryByNameId parameter pPrevEntry retyped: int32_t -> D2HirelingTxt *
 int32_t __fastcall GetMercAct(BOOL bIsExpansion, int32_t nClassId, uint16_t nMercNameId) {
     D2HirelingTxt* pHirelingTxt = DATATBLS::MonsterTbls::GetHirelingEntryByClassId(bIsExpansion, nClassId, 0);
     if (pHirelingTxt) {
@@ -615,6 +616,20 @@ int32_t __fastcall GetMercAct(BOOL bIsExpansion, int32_t nClassId, uint16_t nMer
     }
 
     pHirelingTxt = DATATBLS::MonsterTbls::GetHirelingEntryByNameId(bIsExpansion, nMercNameId, 0);
+    if (pHirelingTxt) {
+      return pHirelingTxt->act - 1;
+    }
+
+    return 0;
+}
+#endif
+int32_t __fastcall GetMercAct(BOOL bIsExpansion, int32_t nClassId, uint16_t nMercNameId) {
+    D2HirelingTxt* pHirelingTxt = DATATBLS::MonsterTbls::GetHirelingEntryByClassId(bIsExpansion, nClassId, nullptr);
+    if (pHirelingTxt) {
+      return pHirelingTxt->act - 1;
+    }
+
+    pHirelingTxt = DATATBLS::MonsterTbls::GetHirelingEntryByNameId(bIsExpansion, nMercNameId, nullptr);
     if (pHirelingTxt) {
       return pHirelingTxt->act - 1;
     }

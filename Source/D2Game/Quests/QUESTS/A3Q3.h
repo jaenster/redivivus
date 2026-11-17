@@ -126,6 +126,7 @@ void __fastcall Q20_Callback13_PlayerStartedGame(struct D2QuestDataStrc * pQuest
 // 0->Cb00, 2->Cb02, 3->Cb03, 4->Cb04, 9->Cb09, 0xb->Cb11, 0xd->Cb13, 0xe->Cb14. Allocates and zeroes
 // the 0x30-byte A3Q3-specific state struct (nQuestStage=0).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q3.cpp
+// Passes Q20_Callback02_NpcDeactivate by address.
 void __fastcall Q20_InitData(struct D2QuestDataStrc * pQuestData);
 // A3Q3 "Khalim's Will" — accessor: returns the quest's "blade has been given/dropped" flag
 // (bTaintedSunStartedFailed field of the A3Q3 state struct) from the global quest data. Read-only.
@@ -150,7 +151,7 @@ BOOL __fastcall OBJOP_A3Q3_ActivateGidbinn(struct D2ObjectOperateFnArg * pOperat
 // A3Q3 "Khalim's Will" — accessor: returns the recorded serpent-killer/spawn GUID into *pnParam
 // (and true) when the quest is in real play and the relevant flag is set; else false. Read-only.
 bool __fastcall Q20_GetSerpentKillerGUID(::SGAMEDATA * pGame, int * pnPlayerGUID);
-void __fastcall Unreferenced_005b9c80(struct D2QuestDataStrc * param_1, struct D2UnitStrc * param_2);
+void __fastcall Unreferenced_005b9c80(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit);
 // A3Q3 "Khalim's Will" — accessor: when the serpent/orb-object "pending" flag (field_0x06) is set,
 // returns its location (field_0x10) and GUID into pdwParam[0..1] and 1; else 0. Read-only.
 BOOL __fastcall Q20_GetSerpentLocation(::SGAMEDATA * pGame, uint32_t * pdwOut);

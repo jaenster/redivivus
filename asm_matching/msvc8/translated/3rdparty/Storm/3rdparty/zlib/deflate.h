@@ -165,12 +165,12 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush);
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 int __fastcall deflateResetKeep(z_stream * pStream);
 int __fastcall deflateSetHeader(z_stream * pStream, gz_header * pHead);
-uint32_t __fastcall deflatePending(z_stream * pStream, uint32_t * pPending, uint32_t * pBits);
+int __fastcall deflatePending(z_stream * pStream, uint32_t * pPending, int * pBits);
 uint32_t __fastcall deflatePrime(z_stream * pStream, int32_t nBits, uint32_t uValue);
-uint32_t __fastcall deflateTune(z_stream * pStream, uint32_t nGoodMatch, uint32_t nMaxLazyMatch, int32_t nNiceMatch, uint32_t nMaxChainLen);
+int __fastcall deflateTune(z_stream * pStream, int32_t nGoodMatch, int32_t nMaxLazyMatch, int32_t nNiceMatch, int32_t nMaxChainLen);
 int32_t __fastcall deflateBound(z_stream * pStream, uint32_t nSourceLen);
 uint32_t __fastcall deflateEnd(z_stream * pStream);
-uint32_t __fastcall deflateCopy(z_stream * pDestStream, z_stream * pSrcStream);
+int __fastcall deflateCopy(z_stream * pDestStream, z_stream * pSrcStream);
 int32_t __fastcall deflate_stored(deflate_state * pDeflateState, int32_t nFlush);
 // zlib deflate_fast() - hash-chain matching, single pass compression strategy
 int32_t __fastcall deflate_fast(deflate_state * pDeflateState, int32_t nFlush);

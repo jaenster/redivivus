@@ -693,6 +693,20 @@ void __stdcall MISC_GetValueFromD2Ini(D2IniConfigStrc * pD2IniData) {
     } while (nEntryOffset < 58);
 }
 
+void Unreferenced_00405550() {
+    char* in_ECX;
+    char cVar1 = *in_ECX;
+    while (cVar1 != '\0') {
+      cVar1 = *in_ECX;
+      if (cVar1 >= 'A' && cVar1 <= 'Z') {
+        *in_ECX = cVar1 + ' ';
+      }
+
+      in_ECX++;
+      cVar1 = *in_ECX;
+    }
+}
+
 int32_t __stdcall INI_FindConfigValueIndex(uint8_t * pbArgName) {
     int nIndex = 0;
     char* pbEntry = D2IniConfigValues[0].szCmdLineArg;

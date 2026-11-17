@@ -1462,8 +1462,8 @@ void __fastcall RENDERER_DDRAW_DrawLine(POINT * pStartPoint, POINT * pEndPoint, 
       } while (nAccumulatorX * nAccumulatorX < nAccumulatorY);
     }
 
-    nDeltaX = (nDeltaX << 0x10) / nLineLength;
-    nDeltaY = (nDeltaY << 0x10) / nLineLength;
+    nDeltaX = nDeltaX * 0x10000 / nLineLength;
+    nDeltaY = nDeltaY * 0x10000 / nLineLength;
     nAccumulatorY = 0;
     nAccumulatorX = 0;
     int nPixelsDrawn = 0;
@@ -1963,7 +1963,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       memset(gpSmackerImageBuffer, 0, 0x6db0);
       pVersion = 0;
       nFileSize = 0;
-      bLoaded = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&pVersion, &nFileSize, 0, 3, (LPOVERLAPPED)0x0);
+      bLoaded = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, &pVersion, &nFileSize, 0, 3, (LPOVERLAPPED)0x0);
       if (bLoaded && pVersion) {
         bDecoded = Storm::Source::SBMP::SBmpDecodeImage(2, pVersion, nFileSize, aPaletteRgb, (uint8_t*)gpSmackerImageBuffer, 0x6db0, &nImageHeight, &nImageWidth, &nBitDepth);
         Storm::Source::SMem::SMemFree(pVersion, ".\\Src\\ddSmack.cpp", 0x78, 0);

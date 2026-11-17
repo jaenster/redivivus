@@ -2429,7 +2429,7 @@ void __fastcall PLAYER_HandlePlayerDeath(D2GSPacketSrv0x74 * pDeathMsg) {
     }
 }
 
-uint32_t __fastcall PLAYER_GetAppearanceBytes(uint32_t * pAppearanceOut, uint32_t nBufSize) {
+BOOL __fastcall PLAYER_GetAppearanceBytes(uint32_t * pAppearanceOut, uint32_t nBufSize) {
     D2UnitStrc* pUnit = GetPlayerUnit_UI();
     if (nBufSize >= 0x10 && pUnit) {
       char szScratch[16];
@@ -2444,7 +2444,7 @@ uint32_t __fastcall PLAYER_GetAppearanceBytes(uint32_t * pAppearanceOut, uint32_
     return 0;
 }
 
-uint32_t __fastcall PLAYER_GetMercAppearanceBytes(uint32_t * pAppearanceOut, uint32_t nBufSize) {
+BOOL __fastcall PLAYER_GetMercAppearanceBytes(uint32_t * pAppearanceOut, uint32_t nBufSize) {
     D2UnitStrc* pUnit = GetPlayerUnit_UI();
     if (nBufSize >= 0x10 && pUnit) {
       char szScratch[16];
@@ -2860,9 +2860,9 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
     CLIENT_ResolvePlayerCollision(pUnit);
 }
 
-uint8_t * __fastcall Unreferenced_004637f0(D2UnitStrc * param_1) {
-    if (param_1 && param_1->eUnitType == UNIT_MONSTER && param_1->pUnitData.pUnitDataMonster) {
-      return param_1->pUnitData.pUnitDataMonster->Components;
+uint8_t * __fastcall Unreferenced_004637f0(D2UnitStrc * pUnit) {
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+      return pUnit->pUnitData.pUnitDataMonster->Components;
     }
 
     return nullptr;

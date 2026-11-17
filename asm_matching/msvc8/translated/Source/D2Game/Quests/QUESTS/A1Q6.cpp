@@ -226,7 +226,6 @@ void __fastcall Q06_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     BOOL bFound;
     int nPlayerGUIDLocal;
     int nNPCClassId;
-    uint8_t nStateFlag;
     uint32_t nGossipLineIdx;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -296,17 +295,15 @@ void __fastcall Q06_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 4);
       return;
     }
-
-    nStateFlag = pQuestData->nStateFlag;
-    if (nStateFlag == 1 && nNPCClassId == 0x109 && !bCompleted) {
+    if (pQuestData->nStateFlag == 1 && nNPCClassId == 0x109 && !bCompleted) {
       AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x109, 0);
       return;
     }
-    if (!(nStateFlag && (bCompleted != 1 || bParticipated) && (nStateFlag < 4 || bParticipated) && (bCompleted != 1 || bParticipated != 1))) {
+    if (!(pQuestData->nStateFlag && (bCompleted != 1 || bParticipated) && (pQuestData->nStateFlag < 4 || bParticipated) && (bCompleted != 1 || bParticipated != 1))) {
       return;
     }
 
-    nGossipLineIdx = gdwQuestCallbackAddressQ41[nStateFlag];
+    nGossipLineIdx = gdwQuestCallbackAddressQ41[pQuestData->nStateFlag];
     if (!(nGossipLineIdx != -1 && nGossipLineIdx < 6)) {
       return;
     }

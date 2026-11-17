@@ -50,10 +50,10 @@ uint32_t __stdcall PATH_ComputeDirectionFromPreciseCoords(uint32_t nFromXfp, uin
 int32_t __fastcall DRLGPATH_AdvanceAlongPathPoints(struct D2DynamicPathStrc * pDynamicPath, int32_t bSetDirOnWaypoint, int32_t bForceDirection);
 // Re-runs A* pathfinding for a unit whose current path has become stale or blocked. If the path is not frozen (flag 0x10), marks the unit for update and resets the path point index. For walk/run/follow path types (2, 0xD, 0xF), selects ePathType 2 (restore saved target) or 0xD based on nParam, attempts PATH_CalculatePath, and falls back to type 0xF on failure. Returns the result of PATH_CalculatePath.
 uint32_t __stdcall PATH_RecalculatePath(struct D2UnitStrc * pUnit, int32_t bHasTargetUnit);
-uint32_t __fastcall PATH_CheckPathCollision(struct D2UnitStrc * pUnit, struct D2DynamicPathStrc * pDynamicPath);
+BOOL __fastcall PATH_CheckPathCollision(struct D2UnitStrc * pUnit, struct D2DynamicPathStrc * pDynamicPath);
 BOOL __stdcall PATH_HasReachedTarget(struct D2UnitStrc * pUnit);
-struct D2DynamicPathStrc * __fastcall Unreferenced_00650800(struct D2UnitStrc * param_1);
-uint32_t __stdcall PATH_TestLineOfSight(struct D2DynamicPathStrc * pDynamicPath, int * pbCollisionType, struct D2RoomStrc * pRoom, int32_t nTargetX, int32_t nTargetY);
+struct D2DynamicPathStrc * __fastcall Unreferenced_00650800(struct D2UnitStrc * pUnit);
+BOOL __stdcall PATH_TestLineOfSight(struct D2DynamicPathStrc * pDynamicPath, int * pbCollisionType, struct D2RoomStrc * pRoom, int32_t nTargetX, int32_t nTargetY);
 #endif // D2_MODULE_D2Common
 // 12 internal functions (defined in .cpp)
 

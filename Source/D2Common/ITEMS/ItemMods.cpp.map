@@ -199,7 +199,7 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "3c4ae64f",
+      "dh": "d126c6de",
       "paramStorage": [
         [
           "nPackedValue",
@@ -214,11 +214,11 @@
           "Stack[0xc]:4"
         ],
         [
-          "pnParam3",
+          "pnCharges",
           "Stack[0x10]:4"
         ],
         [
-          "pnParam4",
+          "pnMaxCharges",
           "Stack[0x14]:4"
         ]
       ]
@@ -577,6 +577,21 @@
           "EAX:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_0065cca0",
+      "address": "0065cca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065cca0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "Unreferenced_0065cca0"
+      ],
+      "dh": "b0e4e9cc"
     },
     {
       "name": "ITEMMOD_MaximizeStatForEnhanced",
@@ -2281,6 +2296,21 @@
       ]
     },
     {
+      "name": "Unreferenced_0065e610",
+      "address": "0065e610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065e610"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "Unreferenced_0065e610"
+      ],
+      "dh": "15e32253"
+    },
+    {
       "name": "ITEMMOD_CanApplyAutomod",
       "address": "0065e620",
       "lines": [
@@ -2571,7 +2601,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9c044ba1",
+      "dh": "986b3ac9",
       "paramStorage": [
         [
           "nType",
@@ -2641,7 +2671,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0b098452",
+      "dh": "ff110bb7",
       "paramStorage": [
         [
           "nType",
@@ -2711,7 +2741,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "665f7461",
+      "dh": "7d9adcf3",
       "paramStorage": [
         [
           "nType",
@@ -2781,7 +2811,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "412f90a2",
+      "dh": "3e77bd53",
       "paramStorage": [
         [
           "nType",
@@ -2855,7 +2885,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "26717cfa",
+      "dh": "8f967ca7",
       "paramStorage": [
         [
           "nType",
@@ -2929,7 +2959,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "acc6bb7c",
+      "dh": "8db24e4a",
       "paramStorage": [
         [
           "nType",
@@ -3857,7 +3887,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "05369ebb",
+      "dh": "89eb3ea3",
       "paramStorage": [
         [
           "nType",
@@ -3926,7 +3956,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8033b72b",
+      "dh": "eab0b93b",
       "paramStorage": [
         [
           "nType",
@@ -3995,7 +4025,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "13f851bb",
+      "dh": "6472612a",
       "paramStorage": [
         [
           "nType",
@@ -4064,7 +4094,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6bcaf9cb",
+      "dh": "6839080a",
       "paramStorage": [
         [
           "nType",
@@ -4133,7 +4163,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ba015eb7",
+      "dh": "63a5355f",
       "paramStorage": [
         [
           "nType",
@@ -4205,7 +4235,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "18539153",
+      "dh": "bcf6d5d5",
       "paramStorage": [
         [
           "nType",
@@ -4275,7 +4305,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3d864719",
+      "dh": "186fd0d2",
       "paramStorage": [
         [
           "nType",

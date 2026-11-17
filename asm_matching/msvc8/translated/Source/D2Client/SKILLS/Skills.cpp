@@ -582,8 +582,8 @@ void __fastcall SKILL_ScaleUpVelocityVector(int * pVX, int * pVY) {
 }
 
 void __fastcall SKILL_ComputePerpendicularUnitVector(int * pVX, int * pVY) {
-    int nVX = -*pVX;
     int nVY = *pVY;
+    int nVX = -*pVX;
     int nC = nVX * nVX + nVY * nVY;
     while (nC > 3) {
       nVY /= 2;
@@ -1250,7 +1250,8 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetIsPetWithFlag(D2UnitStrc * pUnit, eD
       return 0;
     }
 
-    int32_t nPetTypeIdx = GAME::RosterPets::GetSkillId(pTargetUnit->nUnitGUID);
+    int t2_c0 = pTargetUnit->nUnitGUID;
+    int32_t nPetTypeIdx = GAME::RosterPets::GetSkillId(t2_c0);
     D2PetTypeTxt* pPetTypeTxt = nPetTypeIdx >= 0 && nPetTypeIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtPetType + nPetTypeIdx : nullptr;
     if (!pPetTypeTxt) {
       return 0;

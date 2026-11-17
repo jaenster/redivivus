@@ -39,6 +39,7 @@ void __fastcall D2GFXHELPER_DrawGroundTileDispatch2(struct D2GroundSubTileStrc *
 void __fastcall D2GFXHELPER_DrawGroundTileWithLight(struct D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, uint8_t * pDstBase, uint8_t nLightVal);
 void __fastcall D2GFXHELPER_DrawGroundTileWithPerspectiveLight(struct D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, uint8_t * pDstBase, int * pLightCorners);
 void __stdcall D2GFX_SetupRenderFunctions();
+void Unreferenced_004f8dd0();
 #endif // D2_MODULE_D2gfx
 
 } // namespace D2gfx

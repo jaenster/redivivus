@@ -553,8 +553,8 @@ void UNICODE_FormatWideString(int32_t nMaxChars, uint16_t * wszDst, uint16_t * w
     }
 }
 
-int __fastcall Unreferenced_00526d00(uint16_t * param_1) {
-    if (!((*param_1 < 0x590 || *param_1 > 0x5ff) && (*param_1 < 0x600 || *param_1 > 0x6ff))) {
+int __fastcall Unreferenced_00526d00(uint16_t * pChar) {
+    if (!((*pChar < 0x590 || *pChar > 0x5ff) && (*pChar < 0x600 || *pChar > 0x6ff))) {
       return 0;
     }
 
@@ -621,8 +621,8 @@ uint16_t * __fastcall STRING_ConvertCharToWchar(uint16_t * pwszBuffer, char * ps
         }
 
         pWVar1 = pwszBuffer + nCharsCopied;
-        nCharsCopied++;
         *pWVar1 = *pWVar2;
+        nCharsCopied++;
       } while (nCharsCopied < nSize);
     }
     if (wszBuffer[nCharsCopied] != L'\0') {
@@ -1231,15 +1231,15 @@ uint16_t * __fastcall UNICODE_ConvertMultiByteToWide(uint16_t * wszText, uint8_t
     return wszText;
 }
 
-uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * szDest, uint16_t * wszSource, int32_t nSize) {
+char * __fastcall UNICODE_ConvertWideToMultiByte(char * szDest, uint16_t * wszSource, int32_t nSize) {
     uint16_t* pFoundEntry;
     int32_t nIsControl;
     uint16_t awSearchKey[2];
     uint16_t wChar;
     if (!gpUnicodeKamapToCodeTable) {
       char* pFallbackResult;
-      pFallbackResult = UNICODE_WideToMultiByte((char*)szDest, wszSource, nSize);
-      return (uint8_t*)pFallbackResult;
+      pFallbackResult = UNICODE_WideToMultiByte(szDest, wszSource, nSize);
+      return pFallbackResult;
     }
 
     int i;
@@ -1276,7 +1276,7 @@ uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * szDest, uint16_t *
     if (!*wszSource) {
       terminate_output:
       if (i < nSize) {
-        szDest[i] = 0;
+        szDest[i] = '\0';
       }
     }
 

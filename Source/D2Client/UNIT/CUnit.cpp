@@ -1650,9 +1650,10 @@ void __fastcall CLIENT_TeleportUnitToPosition(D2UnitStrc * pUnit, int32_t nX, in
     eD2PlayerAnimMode eUnitAnimMode;
     int32_t nLine;
     D2DynamicPathStrc* pDynamicPathCast;
-    D2UnitStrc* pPlayer = pPlayerUnit;
+    D2UnitStrc* t2_c0 = pPlayerUnit;
+    D2UnitStrc* pPlayer = t2_c0;
     int32_t nXSaved = nX;
-    if (pUnit == pPlayerUnit) {
+    if (pUnit == t2_c0) {
       GAME::Select::ClearSelectedUnit();
     }
 

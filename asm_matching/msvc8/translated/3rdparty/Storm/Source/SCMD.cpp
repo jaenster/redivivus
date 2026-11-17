@@ -93,11 +93,11 @@ static void __stdcall SCMD_ConvertNumber(CMDDEF * cmdDef, char * str, int * outC
     char* pcParseEnd = 0;
     if (cmdDef->nArgTypeFlags & 1) {
       uParsedValue = strtol(str, &pcParseEnd, 0);
+      cmdDef->uValue.bValue = uParsedValue;
     } else {
       uParsedValue = strtoul(str, &pcParseEnd, 0);
+      cmdDef->uValue.bValue = uParsedValue;
     }
-
-    cmdDef->uValue.bValue = uParsedValue;
     if (pcParseEnd) {
       *outConsumed = (intptr_t)pcParseEnd - (intptr_t)str;
     } else {
@@ -212,19 +212,19 @@ static BOOL __stdcall SCMD_ProcessFile(char * filename, StormCmdProcessingStrc *
     return nResult;
 }
 
-int __fastcall Unreferenced_006c4010(StormLinkStrc * param_1) {
-    return param_1->pNext <= 0 ? 0 : param_1->pNext;
+int __fastcall Unreferenced_006c4010(StormLinkStrc * pLink) {
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
-intptr_t __fastcall Unreferenced_006c40b0(StormLinkedListStrc * param_1) {
-    StormLinkStrc* pSVar1 = &param_1->head;
+intptr_t __fastcall Unreferenced_006c40b0(StormLinkedListStrc * pList) {
+    StormLinkStrc* pSVar1 = &pList->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uintptr_t)pSVar1;
+    pList->head.pNext = ~(uintptr_t)pSVar1;
     return ~(uintptr_t)pSVar1;
 }
 
-int __fastcall Unreferenced_006c40d0(StormLinkStrc * param_1) {
-    return param_1->pNext <= 0 ? 0 : param_1->pNext;
+int __fastcall Unreferenced_006c40d0(StormLinkStrc * pLink) {
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
 // @blizzard FindFlagDef (SCMD.CPP)
@@ -258,20 +258,20 @@ static CMDDEF * __stdcall SCMD_FindFlagDef(CMDDEF * cmdList, char * str, int min
     return pMinLen;
 }
 
-StormLinkedListStrc * __fastcall Unreferenced_006c4360(StormLinkedListStrc * param_1) {
-    StormLinkStrc* pSVar1 = &param_1->head;
+StormLinkedListStrc * __fastcall Unreferenced_006c4360(StormLinkedListStrc * pList) {
+    StormLinkStrc* pSVar1 = &pList->head;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
     pSVar1->pPrevLink = pSVar1;
-    param_1->nLinkOffset = 0;
-    param_1->head.pNext = ~(uintptr_t)pSVar1;
-    return param_1;
+    pList->nLinkOffset = 0;
+    pList->head.pNext = ~(uintptr_t)pSVar1;
+    return pList;
 }
 
-StormLinkStrc * __fastcall Unreferenced_006c4470(StormLinkStrc * param_1) {
-    param_1->pPrevLink = 0;
-    param_1->pNext = 0;
-    return param_1;
+StormLinkStrc * __fastcall Unreferenced_006c4470(StormLinkStrc * pLink) {
+    pLink->pPrevLink = 0;
+    pLink->pNext = 0;
+    return pLink;
 }
 
 ::SCMD * __fastcall SCMD_FreeNode(::SCMD * pThis, int, uint8_t bFreeMemory) {

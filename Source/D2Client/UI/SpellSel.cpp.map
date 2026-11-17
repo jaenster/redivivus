@@ -82,10 +82,7 @@
       "calledFunctions": [
         "SPELLSEL_SetMouseHandFlag"
       ],
-      "usedTypes": [
-        "uint32_t"
-      ],
-      "dh": "2a6a064d",
+      "dh": "dbbfb488",
       "paramStorage": [
         [
           "bLeftHand",
@@ -1084,6 +1081,23 @@
           "Stack[0xc]:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_004aa680",
+      "address": "004aa680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa680"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "Unreferenced_004aa680",
+        "GetPlayerUnit_UI",
+        "SPELLSEL_DrawSkillGrid"
+      ],
+      "dh": "fb4ce81d"
     },
     {
       "name": "Unreferenced_004aa6b0",

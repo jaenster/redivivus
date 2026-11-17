@@ -420,7 +420,7 @@
       "calledFunctions": [
         "MCPSTATE_SetListGameSuccess"
       ],
-      "dh": "9b590a4a",
+      "dh": "c083a8aa",
       "paramStorage": [
         [
           "bSuccess",
@@ -471,7 +471,7 @@
       "calledFunctions": [
         "MCPSTATE_SetCharDeleteSuccess"
       ],
-      "dh": "fb8f7ebd",
+      "dh": "b666c250",
       "paramStorage": [
         [
           "bSuccess",
@@ -495,7 +495,7 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ad102a89",
+      "dh": "ba1524bd",
       "paramStorage": [
         [
           "pGameNameOut",
@@ -520,7 +520,10 @@
       "calledFunctions": [
         "MCPCONNECT_SetGameNameAndPassword"
       ],
-      "dh": "3e37e580",
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "1e68c013",
       "paramStorage": [
         [
           "nDifficulty",
@@ -601,7 +604,7 @@
       "calledFunctions": [
         "MCPSTATE_SetCharUpgradeSuccess"
       ],
-      "dh": "5c59bbfc",
+      "dh": "cd42a0da",
       "paramStorage": [
         [
           "bSuccess",
@@ -640,7 +643,7 @@
       "calledFunctions": [
         "MCPSTATE_SetCharCreateSuccess"
       ],
-      "dh": "e6cb652b",
+      "dh": "0720cdaa",
       "paramStorage": [
         [
           "bSuccess",
@@ -679,7 +682,7 @@
       "calledFunctions": [
         "MCPSTATE_SetD2GSConnectReady"
       ],
-      "dh": "7a5c2923",
+      "dh": "c41d219d",
       "paramStorage": [
         [
           "bReady",
@@ -824,7 +827,7 @@
       "calledFunctions": [
         "SetIsMPCJoinSuccesfull"
       ],
-      "dh": "d0579801",
+      "dh": "1e8d12fe",
       "paramStorage": [
         [
           "bSuccess",

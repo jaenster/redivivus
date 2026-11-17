@@ -73,7 +73,7 @@ typedef int (__fastcall *fnSkillCalcMethod)(int32_t nCalcCode, void * pContext);
 #endif
 #ifndef RECON_FPTD_fpD2QServerLineHook
 #define RECON_FPTD_fpD2QServerLineHook
-typedef void (*fpD2QServerLineHook)(int nLine);
+typedef void (__fastcall *fpD2QServerLineHook)(uint32_t nIpAddress, char * szFile, int nLine);
 #endif
 #ifndef RECON_FPTD_fpD2QServerPacketClassifier
 #define RECON_FPTD_fpD2QServerPacketClassifier
@@ -479,7 +479,7 @@ __pragma(pack(push, 1)) struct D2QServerStrc {
     /* 0xB90 */ SOCKET aListenSockets[4];
     /* 0xBA0 */ u_short aListenPorts[4];
     /* 0xBA8 */ int aWorkerSlotValues[4]; // Externally swappable per-worker slot value
-    /* 0xBB8 */ void (*pfnOnHacklistAddLineHook)(int); // Optional one-arg line hook invoked when adding an IP to hacklist
+    /* 0xBB8 */ void (__fastcall *pfnOnHacklistAddLineHook)(uint32_t, char *, int); // Optional hook invoked when adding an IP to the hacklist: (IP, source file, line)
     /* 0xBBC */ void * pfnReservedHook0xBBC; // Reserved callback slot; setter exposed via NET_QServer_SetReservedHook0xBBC
     /* 0xBC0 */ int32_t (__fastcall *pfnPacketClassifier)(uint8_t *, size_t, uint32_t *, int *, int *, int *, uint32_t, uint32_t, uint32_t); // Inbound packet classifier/parser callback
     /* 0xBC4 */ int32_t (__fastcall *pfnOnClientAcceptedHook)(struct D2QServerStrc *, uint32_t, char *, int); // Optional source-line hook on successful accept

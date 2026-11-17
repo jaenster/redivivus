@@ -608,14 +608,14 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "e090a483",
+      "dh": "e44ef9a0",
       "paramStorage": [
         [
-          "param_1",
+          "pFlags",
           "ECX:4"
         ],
         [
-          "param_2",
+          "nValue",
           "EDX:4"
         ]
       ]

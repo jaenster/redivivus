@@ -49,13 +49,13 @@ void __stdcall FreeRosterPet() {
     pRosterPet = 0;
 }
 
-D2RosterPetStrc * __fastcall Unreferenced_00478a90(int param_1) {
+D2RosterPetStrc * __fastcall Unreferenced_00478a90(int nRosterGUID) {
     D2RosterPetStrc* pDVar1 = pRosterPet;
     while (true) {
       if (!pDVar1) {
         return nullptr;
       }
-      if (pDVar1->nRosterGUID == param_1) {
+      if (pDVar1->nRosterGUID == nRosterGUID) {
         break;
       }
 
@@ -474,6 +474,23 @@ void __fastcall ROSTERPETS_GetPetData(int32_t nRosterGUID, int * pnSkillId, int 
 
     *pnSkillId = pRosterPet->field5_0x14;
     *pnField6_0x18 = pRosterPet->field6_0x18;
+}
+
+eD2LevelId Unreferenced_004790f0() {
+    D2RosterPetStrc* pDVar1 = pRosterPet;
+    while (true) {
+      int in_ECX;
+      if (!pDVar1) {
+        return LEVEL_None;
+      }
+      if (pDVar1->nRosterGUID == in_ECX) {
+        break;
+      }
+
+      pDVar1 = pDVar1->pNext;
+    }
+
+    return pDVar1->eLevelId;
 }
 
 int32_t __fastcall GetRosterClass(int32_t nRosterGUID) {

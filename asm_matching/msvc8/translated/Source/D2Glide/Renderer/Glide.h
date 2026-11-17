@@ -170,6 +170,7 @@ BOOL __fastcall InitPerspective(struct D2GfxSettingsStrc * pSettings, ::D2GfxHel
 // @sourcefile .\Src\glSprite.cpp
 void __stdcall RENDERER_GLIDE_FreeSpriteBuffers();
 void __fastcall GLIDE_PixelDataFreeCallback_ClearCacheNodes(int * pCacheIndices);
+char Unreferenced_0050a220();
 // Glide: draw isometric perspective image with texture filtering and lighting
 void __fastcall DrawPerspectiveImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, DWORD dwGamma, int32_t nDrawMode, int32_t nScreenMode, BYTE * pPalette);
 BOOL __fastcall DrawImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, DWORD dwGamma, int32_t nDrawMode, BYTE * pPalette);

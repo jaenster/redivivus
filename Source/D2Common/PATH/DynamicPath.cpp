@@ -1324,8 +1324,7 @@ void __stdcall PATH_PeriodicPathRecalc(D2UnitStrc * pUnit) {
       return;
     }
 
-    D2UnitStrc* pTargetUnit = GetTargetUnit(pUnit->pPath.pDynamicPath);
-    uint32_t bRecalcSuccess = Path::PATH_RecalculatePath(pUnit, (uint32_t)(pTargetUnit != 0));
+    uint32_t bRecalcSuccess = Path::PATH_RecalculatePath(pUnit, (uint32_t)(GetTargetUnit(pUnit->pPath.pDynamicPath) != 0));
     if (!bRecalcSuccess) {
       return;
     }
@@ -1963,8 +1962,8 @@ void __stdcall AllocDynamicPath(D2PoolManagerStrc * pMemory, D2RoomStrc * pRoom,
     eD2CollisionShapeType eVar1;
     eVar1 = GetInteractSize(pUnit_00, nUnitSize);
     pDynamicPath->nCollisionPattern = eVar1;
-    pDynamicPath->Coords.tFixed.x = (nX << 0x10) + 0x8000;
-    pDynamicPath->Coords.tFixed.y = (nY << 0x10) + 0x8000;
+    pDynamicPath->Coords.tFixed.x = nX * 0x10000 + 0x8000;
+    pDynamicPath->Coords.tFixed.y = nY * 0x10000 + 0x8000;
     pDynamicPath->SaveCoords[0].nX = (uint16_t)nX;
     pDynamicPath->dwVelocity = 0x800;
     pDynamicPath->pRoom = pRoom;
@@ -2030,7 +2029,7 @@ void __stdcall AllocDynamicPath(D2PoolManagerStrc * pMemory, D2RoomStrc * pRoom,
       PATH_AddUnitCollision(pUnit_00);
       Unit::DRLGROOM_AddUnitToRoom(pUnit_00, pDynamicPath->pRoom);
     }
-    LONG nMemory = (uint32_t)pDynamicPath->Coords.tFixed.x >> 0xb;
+    LONG nMemory = (LONG)((uint32_t)pDynamicPath->Coords.tFixed.x >> 0xb);
     uint32_t nScreenY = (uint32_t)pDynamicPath->Coords.tFixed.y >> 0xb;
     Drlg::Transform::DRLG_MapWorldToScreenCoords((int32_t*)&nMemory, (int32_t*)&nScreenY);
     pDynamicPath->ScreenPos.x = nMemory;
@@ -2047,7 +2046,7 @@ void __stdcall PATH_SetDirectionToTarget(D2DynamicPathStrc * pDynamicPath, int32
       return;
     }
 
-    uint32_t nDirection = Path::PATH_ComputeDirectionFromPreciseCoords(pDynamicPath->Coords.tFixed.x, pDynamicPath->Coords.tFixed.y, (nTargetX << 0x10) + 0x8000, (nTargetY << 0x10) + 0x8000);
+    uint32_t nDirection = Path::PATH_ComputeDirectionFromPreciseCoords(pDynamicPath->Coords.tFixed.x, pDynamicPath->Coords.tFixed.y, nTargetX * 0x10000 + 0x8000, nTargetY * 0x10000 + 0x8000);
     if (bImmediate) {
       uint8_t nDirectionByte;
       nDirectionByte = (uint8_t)nDirection & 0x3f;

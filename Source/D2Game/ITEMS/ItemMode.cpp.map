@@ -764,7 +764,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "946fd1ad",
+      "dh": "b0fa1c0e",
       "paramStorage": [
         [
           "pUnit",
@@ -1652,10 +1652,10 @@
         "D2ClientStrc",
         "D2UnitStrc"
       ],
-      "dh": "218a22aa",
+      "dh": "e61a7904",
       "paramStorage": [
         [
-          "param_1",
+          "pUnit",
           "ECX:4"
         ]
       ]
@@ -2110,7 +2110,7 @@
         "eInventoryPage",
         "int32_t"
       ],
-      "dh": "d8a8248f",
+      "dh": "f5fd5ca4",
       "paramStorage": [
         [
           "pGame",
@@ -2247,7 +2247,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e9caf21d",
+      "dh": "4168bb73",
       "paramStorage": [
         [
           "pGame",
@@ -2319,7 +2319,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "49080629",
+      "dh": "3f85a727",
       "paramStorage": [
         [
           "pGame",
@@ -2515,7 +2515,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "3b94e863",
+      "dh": "b9c1081e",
       "paramStorage": [
         [
           "pGame",
@@ -3890,7 +3890,7 @@
         "eD2BodyLoc",
         "int32_t"
       ],
-      "dh": "177b675c",
+      "dh": "41e55c6e",
       "paramStorage": [
         [
           "pGame",
@@ -5556,7 +5556,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c008c61a",
+      "dh": "b80bb8cd",
       "paramStorage": [
         [
           "pGame",
@@ -5633,6 +5633,21 @@
           "Stack[0x4]:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_005641c0",
+      "address": "005641c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005641c0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "Unreferenced_005641c0"
+      ],
+      "dh": "0eebeab0"
     },
     {
       "name": "ITEMMODE_ReturnZero3_Unref_00570690",

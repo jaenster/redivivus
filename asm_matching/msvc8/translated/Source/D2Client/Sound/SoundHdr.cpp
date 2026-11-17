@@ -402,7 +402,7 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
     }
 }
 
-void __fastcall SOUNDHDR_Init(uint32_t bBackgroundActive) {
+void __fastcall SOUNDHDR_Init(BOOL bBackgroundActive) {
     IDirectSound* nSpeakerCfg = D2Sound::SOUND_GetDirectSoundDevice();
     if (!nSpeakerCfg) {
       return;

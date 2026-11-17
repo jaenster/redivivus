@@ -4154,7 +4154,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "151cf4b1",
+      "dh": "73b01abd",
       "paramStorage": [
         [
           "nClientId",
@@ -5203,6 +5203,21 @@
           "ECX:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_0060e250",
+      "address": "0060e250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e250"
+        }
+      ],
+      "namespace": "D2Game::GAME::Server",
+      "calledFunctions": [
+        "Unreferenced_0060e250"
+      ],
+      "dh": "411319fe"
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_00650e90",

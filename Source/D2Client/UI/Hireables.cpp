@@ -230,9 +230,6 @@ static void __fastcall UI_DrawHirelingNameFromString(char * szText, int32_t nX, 
 }
 
 void __stdcall UI_DrawSummonCount(int32_t nSummonCount, int32_t nDrawPositionX) {
-    int32_t nStrLen;
-    int nTextWidth;
-    uint16_t* pwszTrunc;
     char szSummonCountStr[32];
     uint16_t wszConverted[32];
     uint16_t wszSummonCountText[32];
@@ -248,10 +245,10 @@ void __stdcall UI_DrawSummonCount(int32_t nSummonCount, int32_t nDrawPositionX) 
     memset(wszSummonCountText, 0, 0x40);
     D2Lang::UTF8_ConvertToWideChar(wszConverted, szSummonCountStr, 0x20);
     D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszSummonCountText, wszConverted, 0x20);
-    *(uint32_t*)((char*)&wszSummonCountText + 60) &= 0xffff;
-    nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszSummonCountText);
-    pwszTrunc = wszSummonCountText + nStrLen;
-    nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszSummonCountText);
+    wszSummonCountText[31] = 0;
+    int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszSummonCountText);
+    uint16_t* pwszTrunc = wszSummonCountText + nStrLen;
+    int nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszSummonCountText);
     while (nTextWidth > 0x2e) {
       pwszTrunc--;
       *pwszTrunc = L'\0';
@@ -303,7 +300,7 @@ DC6 * __fastcall GetRosterIcon(D2UnitStrc * pUnit, int32_t nSkillId, int32_t * p
     DC6** ppIcon = &gpHireablesList[nSkillIdSaved].pIcon + nIconIndex;
     if (!(&gpHireablesList[nSkillIdSaved].pIcon)[nIconIndex]) {
       char szIconPath[256];
-      sprintf(szIconPath, "hireables\\%s", pPetType->baseicon + (nIconIndex << 5));
+      sprintf(szIconPath, "hireables\\%s", pPetType->baseicon + nIconIndex * 0x20);
       ppIcon = &gpHireablesList[nRosterGUID].pIcon + nIconIndex;
       pIcon = ui::ARCHIVE_LoadOverlayImageUsedInGame(szIconPath);
       *ppIcon = pIcon;

@@ -1031,8 +1031,8 @@ void __fastcall ManaBurn(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     }
 
     nMaxDamConst = GetUmodConstant(nLevel);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_manadrainmindam, (nLevelIdx >> 5) - (nLevelIdx >> 0x1f) << 8, 0);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_manadrainmaxdam, nMaxDamConst * nLvlDamage / 100 << 8, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_manadrainmindam, ((nLevelIdx >> 5) - (nLevelIdx >> 0x1f)) * 0x100, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_manadrainmaxdam, nMaxDamConst * nLvlDamage / 100 * 0x100, 0);
     MagicResist(pUnit, nIndex, bUnique);
 }
 

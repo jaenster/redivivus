@@ -22,7 +22,7 @@ namespace D2Client { namespace DataTbls { namespace MonsterTbls {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct D2MonStats2Txt * __fastcall Unreferenced_00451fb0(int param_1);
+struct D2MonStats2Txt * __fastcall Unreferenced_00451fb0(int nIndex);
 int Unreferenced_00452020();
 int Unreferenced_00452030();
 #endif // D2_MODULE_D2Client

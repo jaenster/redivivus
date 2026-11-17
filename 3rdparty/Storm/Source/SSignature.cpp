@@ -311,9 +311,9 @@ void __fastcall SHA1_Round4(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t n
     *pnW = 0;
 }
 
-int __fastcall Unreferenced_00425830(uint32_t * param_1, uint8_t * param_2) {
-    uint32_t uVar1 = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)*param_2 << 8 | (uint16_t)(uint8_t)param_2[1]) << 8 | (uint32_t)(uint8_t)param_2[2]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)param_2[3]);
-    *param_1 = uVar1;
+int __fastcall Unreferenced_00425830(uint32_t * pValue, uint8_t * pBytes) {
+    uint32_t uVar1 = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)*pBytes << 8 | (uint16_t)(uint8_t)pBytes[1]) << 8 | (uint32_t)(uint8_t)pBytes[2]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pBytes[3]);
+    *pValue = uVar1;
     return uVar1;
 }
 
@@ -507,11 +507,11 @@ uint32_t __thiscall SSIG_StoreBigEndian64(uint8_t * pbOut, uint32_t dwValueLow, 
     return 0;
 }
 
-void __fastcall Unreferenced_00425ee0(int param_1, uint8_t * param_2) {
-    param_2[3] = (uint8_t)param_1;
-    param_2[2] = (uint8_t)(param_1 >> 8);
-    param_2[1] = (uint8_t)(param_1 >> 0x10);
-    *param_2 = (uint8_t)(param_1 >> 0x18);
+void __fastcall Unreferenced_00425ee0(int nValue, uint8_t * pBytes) {
+    pBytes[3] = (uint8_t)nValue;
+    pBytes[2] = (uint8_t)(nValue >> 8);
+    pBytes[1] = (uint8_t)(nValue >> 0x10);
+    *pBytes = (uint8_t)(nValue >> 0x18);
 }
 
 // Storm SBig SHA-1 implementation - init, update, and finalize functions

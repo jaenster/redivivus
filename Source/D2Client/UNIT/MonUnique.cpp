@@ -731,7 +731,7 @@ static void __stdcall MONUNIQUE_SpawnDirectionalMissiles(D2UnitStrc * pUnit, eMi
         nPosY = 0;
       }
 
-      nDirX = *(int*)((intptr_t)anDirOffsets + eMissileId + MISSILE_Cr_Arrow4);
+      nDirX = *(int*)((intptr_t)anDirOffsets + (eMissileId + MISSILE_Cr_Arrow4));
       nDirY = *(int*)((char*)anDirOffsets + eMissileId);
       nMissileCopyIdx = 0;
       do {
@@ -888,7 +888,6 @@ void __fastcall MONUNIQUE_SpawnExplodingArrowDeath(D2UnitStrc * pUnit, int32_t n
 // Per-frame callback for suicide-exploder monsters (e.g. Flesh Beast). Fires only at Death animation frame 4. Reads the monster's treasure class index (difficulty-adjusted) to decide the explosion type: index 1 spawns MISSILE_Suicidefireexplode, index>=2 spawns MISSILE_Suicideiceexplode. Always spawns MISSILE_Suicidecorpseexplode at the unit's position as the secondary corpse-burst effect.
 void __fastcall MONUNIQUE_SpawnSuicideExplosion(D2UnitStrc * pUnit, int32_t nUMod, uint32_t nParam2) {
     int32_t nPosY;
-    int32_t nPosX;
     eMissilesId eMissileId;
     D2MonStatsTxt* pMonStatsTxt;
     int nClassId;
@@ -914,9 +913,8 @@ void __fastcall MONUNIQUE_SpawnSuicideExplosion(D2UnitStrc * pUnit, int32_t nUMo
     }
     if (nClassId == 1) {
       eSkill = SKILL_Attack;
-      nPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-      nPosX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
       eMissileId = MISSILE_Suicidefireexplode;
+      Missile::MakeMissileAtXY(pUnit, eMissileId, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit), eSkill, nClassId);
     } else {
       if (nClassId < 2) {
         goto spawn_corpse_explosion;
@@ -924,12 +922,10 @@ void __fastcall MONUNIQUE_SpawnSuicideExplosion(D2UnitStrc * pUnit, int32_t nUMo
 
       nClassId = 1;
       eSkill = SKILL_Attack;
-      nPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-      nPosX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
       eMissileId = MISSILE_Suicideiceexplode;
+      Missile::MakeMissileAtXY(pUnit, eMissileId, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit), eSkill, nClassId);
     }
 
-    Missile::MakeMissileAtXY(pUnit, eMissileId, nPosX, nPosY, eSkill, nClassId);
     spawn_corpse_explosion:
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {

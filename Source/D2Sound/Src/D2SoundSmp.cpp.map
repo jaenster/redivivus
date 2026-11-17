@@ -466,7 +466,7 @@
         "D2SoundSmpStrc",
         "int32_t"
       ],
-      "dh": "c3951b7f",
+      "dh": "aa63c2ae",
       "paramStorage": [
         [
           "pSound",
@@ -499,14 +499,14 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f1f87fd1",
+      "dh": "0437529e",
       "paramStorage": [
         [
           "pSound",
           "ECX:4"
         ],
         [
-          "dwParam",
+          "nMinBufSize",
           "EDX:4"
         ]
       ]

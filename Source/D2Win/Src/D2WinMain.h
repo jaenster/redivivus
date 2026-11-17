@@ -140,7 +140,7 @@ uint32_t __stdcall FORMS_GetFormTextAndEditBox_Unref_004f97d0();
 void __stdcall DrawCursorOOG();
 void __stdcall DRAW_UI_Sprites();
 LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nWParam, LPARAM lParam);
-int __fastcall Unreferenced_004f9b30(struct D2ControlStrc * param_1);
+int __fastcall Unreferenced_004f9b30(struct D2ControlStrc * pControl);
 void __stdcall INPUT_FormKeyHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormKeyDownHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_CtrlKeyDown(struct D2UIMouseMsgStrc * pMsg);
@@ -150,6 +150,7 @@ void __stdcall D2WIN_HandleActivation(struct D2UIMouseMsgStrc * pMsg);
 // @sourcefile .\Src\D2WinMain.cpp
 void __fastcall D2WIN_TakeThrottledScreenshot(LPCSTR szFileName);
 void __stdcall D2WIN_ToggleMusicOptions(struct D2UIMouseMsgStrc * pMsg);
+uint32_t Unreferenced_004fa1b0();
 struct D2ControlStrc * __stdcall D2WIN_FindClosestControlToMouse(struct D2ControlStrc * pControl1, struct D2ControlStrc * pControl2);
 void __stdcall INPUT_FormMouseWheel(struct D2UIMouseMsgStrc * pMsg);
 // Returns gnWinMainState global value

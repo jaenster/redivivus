@@ -321,11 +321,12 @@
         "exit"
       ],
       "usedTypes": [
+        "D2ClientStrc",
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6b03a188",
+      "dh": "bb8864a4",
       "paramStorage": [
         [
           "pClient",
@@ -1666,7 +1667,7 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "ad1fab53",
+      "dh": "a4fb2583",
       "paramStorage": [
         [
           "nClientId",
@@ -2730,9 +2731,10 @@
         "GetClientContainer"
       ],
       "usedTypes": [
-        "D2ClientStrc"
+        "D2ClientStrc",
+        "void *"
       ],
-      "dh": "38fdce02",
+      "dh": "69f26bc7",
       "paramStorage": [
         [
           "pClient",
@@ -2758,9 +2760,10 @@
         "GetRealm"
       ],
       "usedTypes": [
-        "D2ClientStrc"
+        "D2ClientStrc",
+        "uint32_t"
       ],
-      "dh": "c4f30c3c",
+      "dh": "a6aa2e86",
       "paramStorage": [
         [
           "pClient",

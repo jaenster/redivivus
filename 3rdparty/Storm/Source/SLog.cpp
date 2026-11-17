@@ -318,7 +318,7 @@ void __stdcall SLogFlushAll() {
 
 // @blizzard SLogInitialize (SLOG.CPP)
 void __stdcall SLogInitialize() {
-    int nRemaining = 4;
+    uint32_t nRemaining = 4;
     do {
       /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&gaSLogCritSect[-nRemaining + 4]);
       nRemaining--;

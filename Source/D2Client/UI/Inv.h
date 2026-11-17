@@ -222,7 +222,7 @@ BOOL __stdcall INV_IsShopBuySellMode();
 uint32_t __stdcall INV_IsRepairMode();
 BOOL __stdcall INV_GetGambleFlag();
 void __stdcall INV_StashOpened();
-void __stdcall INV_StashOpenedWithGold();
+void __fastcall INV_StashOpenedWithGold(int nTransactionType);
 void __fastcall INV_SetInventoryActive(int32_t bActive);
 void Unreferenced_00489a10();
 void __stdcall INV_HandleStashMouseMove(struct D2UIMouseMsgStrc * pMsg);

@@ -188,7 +188,7 @@ int __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, char * pszM
 // @sourcefile .\Src\ChatDlg.cpp
 int __stdcall CHATDLG_EnqueueClearMessage();
 int __fastcall CHATDLG_AppendTextToTextBox(uint16_t * wszText, int32_t nLineStyle);
-uint32_t __fastcall CHATDLG_AppendTextToTextBox_ForComCallback(uint16_t * wszText, int32_t nLineStyle);
+BOOL __fastcall CHATDLG_AppendTextToTextBox_ForComCallback(uint16_t * wszText, int32_t nLineStyle);
 int __fastcall FORMS_DisplayBattleNetNews(uint16_t * wszText);
 // Shows gpCtlChannelOkButton only while gpCtlChannelNameEditBox holds a non-empty name: D2WINMAIN_SetControlVisible(gpCtlChannelOkButton, name non-empty). Run by that edit box's change callback and once at the end of OOGUTIL_OpenChannelDialog.
 // Provenance: asm 0043e660..0043e6b6; change callback installed at 00441097, tail jump at 004411d7.
@@ -197,7 +197,7 @@ BOOL __stdcall CHATDLG_DetectCDKeyInString(char * szText);
 void __stdcall FORMS_DestroyListEx();
 void __fastcall UIMENU_DrawTitleAndSubtitleOnCenterScreen(uint16_t * wszTitle, uint16_t * wszSubTitle);
 int __stdcall CHATDLG_DestroyListCallback(struct D2ControlMsg * pControlMsg);
-uint32_t __stdcall CHATDLG_InvokeCallbackIfSet(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall CHATDLG_InvokeCallbackIfSet(struct D2ControlMsg * pControlMsg);
 // Opens the ladder type menu: background form 0x5d (gpDC6LadderChoiceEXP), title text box 0x5e (string 0x14c5), buttons 0x5f HARDCORE LADDER, 0x61 STANDARD LADDER, 0x62/0x63 expansion hardcore/standard ladder and 0x64 CANCEL (CHATDLG_OnPressCloseDialog); 0x60 is never created.
 // Provenance: asm 0043eb30..0043eb93; called by CHATDLG_DestroyFormsAndShowLadder (lobby LADDER button) and CHATDLG_OnPressCloseDialogRedrawLadder.
 void __stdcall CHATDLG_OpenLadderTypeMenu();
@@ -245,7 +245,7 @@ void __fastcall CHATDLG_SetControlParent(struct D2ControlStrc * pControl);
 // Provenance: asm 0043f5a4..0043f5d7.
 int __stdcall CHATDLG_PollUserProfileReply(int nFrameIndex);
 uint32_t __fastcall CHATDLG_SendProfileData(char * szAccount, char * szSex, char * szLocation, char * szDescription);
-uint32_t __stdcall CHATDLG_ToggleLadderNews(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall CHATDLG_ToggleLadderNews(struct D2ControlMsg * pControlMsg);
 // OnPress handler of the chat-commands dialog button (form record 0070ea70, FORM_Button, string 0x13ee, created by UIMENU_DialogWindowChatCommands): calls OOGUTIL_DestroyChatCommandsDialog; returns 1.
 // Provenance: 1.14d asm 0043f720 CALL 00444e20; MOV EAX,1; RET 4.
 BOOL __stdcall CHATDLG_OnPressChatCommandsOK(struct D2ControlMsg * pControlMsg);
@@ -254,7 +254,7 @@ void __stdcall CHATDLG_RefreshGameNameDisplay();
 void __stdcall CHATDLG_FreePlayerNameList();
 int __stdcall CHATDLG_CancelGameCreate();
 void __stdcall CHATDLG_DestroyAllForms();
-uint32_t __stdcall CHATDLG_SetDestroyCallback(uint32_t dwUnused, ChatDlgCallback pfnCallback);
+BOOL __stdcall CHATDLG_SetDestroyCallback(uint32_t dwUnused, ChatDlgCallback pfnCallback);
 int __stdcall CHATDLG_HandleTabCompletion(uint32_t nKeyCode, size_t nSize, char * szText);
 int __fastcall UIMENU_DrawSpecificJoinGameError(uint16_t * wszText, ChatDlgCallback pfnCallback);
 void __stdcall CHATDLG_ResetButtonsAndForms();

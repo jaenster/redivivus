@@ -116,14 +116,14 @@ int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint16_t mous
 uint8_t __stdcall PLAYER_GetWeaponTypeForAnimation(struct D2UnitStrc * pPlayerUnit, struct D2UnitStrc * pUnit);
 // Client-side handler for a player-death message (msg ptr arg: type byte at +1, dead-unit GUID at +2, killer GUID at +6). Locates the dead player unit; if inactive sets its anim mode to Death. If the dead unit is the local player, finds the killer unit, makes the corpse non-colliding (width 5), and copies the dead unit's position/facing onto the corpse. Then walks the dead unit's inventory unequipping each equipped (grid type 3) item: swaps primary weapon, clears weapon anim mode flags, removes item stats, reloads the unit COF, and drops the item from the client object table.
 void __fastcall PLAYER_HandlePlayerDeath(struct D2GSPacketSrv0x74 * pDeathMsg);
-uint32_t __fastcall PLAYER_GetAppearanceBytes(uint32_t * pAppearanceOut, uint32_t nBufSize);
-uint32_t __fastcall PLAYER_GetMercAppearanceBytes(uint32_t * pAppearanceOut, uint32_t nBufSize);
+BOOL __fastcall PLAYER_GetAppearanceBytes(uint32_t * pAppearanceOut, uint32_t nBufSize);
+BOOL __fastcall PLAYER_GetMercAppearanceBytes(uint32_t * pAppearanceOut, uint32_t nBufSize);
 // Teleports a player unit to a new room/position (via PATH_CheckCollisionFlags) and, if the unit was in a movement mode, re-issues the appropriate walk/run PlayerMessage to resume movement toward the previous target unit or coordinates.
 void __fastcall CLIENT_WarpPlayerAndContinueMove(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, uint16_t nNewX, uint16_t nNewY);
 // Per-frame client-side state machine driving a player unit's current animation mode. Uses gaPlayerInitStats[playerMode] flag columns to decide behavior: steps the path and plays footstep sounds for moving modes, advances/handles the skill cast step (setting skill flags and re-issuing the current skill) for action modes, and advances or clamps the animation frame per the mode's loop/freeze attribute. On animation completion it transitions the mode: KnockBack restores position/velocity and reverts to GetHit; players with a queued skill set a pending-interact flag; otherwise it clears the current skill, frees the light map, and reverts to Neutral/TownNeutral. Also reloads the COF when needed, handles room-change updates, interpolates facing direction, cancels run/walk, applies active damage-state skill effects, and resolves player collision.
 // @blizzard UnitProcessPlayerModeSimulation
 void __fastcall PLAYER_ProcessPlayerModeSimulation(struct D2UnitStrc * pUnit);
-uint8_t * __fastcall Unreferenced_004637f0(struct D2UnitStrc * param_1);
+uint8_t * __fastcall Unreferenced_004637f0(struct D2UnitStrc * pUnit);
 uint16_t * __fastcall PLAYER_GetMonsterOwnerId(struct D2UnitStrc * pUnit);
 void __fastcall CLIENT_UpdateMonsterAllegiance(struct D2UnitStrc * pUnit, uint8_t byOldAllegiance, uint8_t byNewAllegiance);
 void __stdcall CLIENT_ClearServerAndClientUnitLists();

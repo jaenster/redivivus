@@ -577,14 +577,14 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "5b321325",
+      "dh": "60170909",
       "paramStorage": [
         [
-          "param_1",
+          "pUnit",
           "ECX:4"
         ],
         [
-          "param_2",
+          "nTableIndex",
           "EDX:4"
         ]
       ]
@@ -859,6 +859,21 @@
         "uint32_t"
       ],
       "dh": "05ea03e9"
+    },
+    {
+      "name": "Unreferenced_006543c0",
+      "address": "006543c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006543c0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "calledFunctions": [
+        "Unreferenced_006543c0"
+      ],
+      "dh": "5cf669cd"
     },
     {
       "name": "TC_ExtractNextIntModifier",
@@ -1395,10 +1410,9 @@
       ],
       "usedTypes": [
         "D2HirelingTxt",
-        "int32_t",
         "uint16_t"
       ],
-      "dh": "76770fec",
+      "dh": "4e7165f2",
       "paramStorage": [
         [
           "bIsExpansion",
@@ -1431,7 +1445,7 @@
         "D2HirelingTxt",
         "int32_t"
       ],
-      "dh": "50830e21",
+      "dh": "33a59c60",
       "paramStorage": [
         [
           "bIsExpansion",
@@ -1464,7 +1478,7 @@
         "D2HirelingTxt",
         "int32_t"
       ],
-      "dh": "33880535",
+      "dh": "0607fb27",
       "paramStorage": [
         [
           "bIsExpansion",

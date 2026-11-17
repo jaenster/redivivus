@@ -76,9 +76,10 @@
         "deflatePending"
       ],
       "usedTypes": [
+        "uint32_t",
         "z_stream"
       ],
-      "dh": "acb1f4f7",
+      "dh": "f85ab4b1",
       "paramStorage": [
         [
           "pStream",
@@ -146,10 +147,9 @@
       "usedTypes": [
         "deflate_state",
         "int32_t",
-        "uint32_t",
         "z_stream"
       ],
-      "dh": "d1b5a93d",
+      "dh": "8d590efb",
       "paramStorage": [
         [
           "pStream",
@@ -310,7 +310,7 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "74914a48",
+      "dh": "834a72f6",
       "paramStorage": [
         [
           "pDestStream",

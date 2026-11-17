@@ -481,7 +481,7 @@
       "calledFunctions": [
         "LIGHTMAP_SetQualityLevel"
       ],
-      "dh": "ddad5ca6",
+      "dh": "78bc975c",
       "paramStorage": [
         [
           "nQualityLastCheck",

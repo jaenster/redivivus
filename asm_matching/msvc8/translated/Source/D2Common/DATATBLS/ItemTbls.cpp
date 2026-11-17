@@ -37,7 +37,6 @@ typedef int (__fastcall *CalcGetLinkerIndex_t)(char * szText, int * pOutHasResol
 #endif
 
 static unsigned int gItemCommon_i_ItemTypeId = 0x646461; D2_STATIC_GUARD(gItemCommon_i_ItemTypeId, "gItemCommon_i_ItemTypeId");
-unsigned int gszTxtColName_lvl = 0x6c766c; D2_GLOBAL_GUARD(gszTxtColName_lvl, "gszTxtColName_lvl");
 static D2ItemsTableStrc gsItemsTable = {0}; D2_STATIC_GUARD(gsItemsTable, "gsItemsTable");
 static D2ItemsTableStrc sgpTxtItems = {0}; D2_STATIC_GUARD(sgpTxtItems, "sgpTxtItems");
 uint16_t * gpItemIndexOldToCurrent = 0; D2_GLOBAL_GUARD(gpItemIndexOldToCurrent, "gpItemIndexOldToCurrent");
@@ -2030,7 +2029,7 @@ void __stdcall ITEMTBLS_CopyRunewordRecord(int32_t nRunewordId, char * pSourceRe
     D2RunesTxt* pDstRecord;
     if (nTxtRunesSize.nSize <= nRunewordId) {
       size_t nNewAllocSize;
-      nNewAllocSize = nRunewordId * 9 + 9 << 5;
+      nNewAllocSize = (nRunewordId * 9 + 9) * 0x20;
       pDstRecord = nTxtRunesSize.pTable;
       if (gbTxtAllocCountHeader) {
         pDstRecord = (D2RunesTxt*)&nTxtRunesSize.pTable[-1].t1max7;

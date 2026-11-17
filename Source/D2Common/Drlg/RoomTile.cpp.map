@@ -1285,10 +1285,10 @@
       "usedTypes": [
         "D2RoomStrc"
       ],
-      "dh": "74b54abe",
+      "dh": "4d1a2da0",
       "paramStorage": [
         [
-          "param_1",
+          "pRoom",
           "ECX:4"
         ]
       ]

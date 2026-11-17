@@ -2263,6 +2263,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillMonst",
       "calledFunctions": [
+        "Skills_SrvDoFunc_109_MonsterFrenzyAttack",
         "SKILLMONST_GetMonFrenzySequenceFrame",
         "MERC_GetSequenceTxt",
         "GetCounter1",
@@ -2275,7 +2276,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "892e7ad8",
+      "dh": "95452427",
       "paramStorage": [
         [
           "pUnit",

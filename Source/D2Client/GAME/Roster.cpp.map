@@ -335,6 +335,24 @@
       "dh": "aa542301"
     },
     {
+      "name": "Unreferenced_00479750",
+      "address": "00479750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479750"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "Unreferenced_00479750"
+      ],
+      "usedTypes": [
+        "D2RosterPartyListStrc"
+      ],
+      "dh": "7f5333d7"
+    },
+    {
       "name": "AllocRosterPartyList",
       "address": "00479770",
       "lines": [
@@ -603,6 +621,21 @@
           "DX:2"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_00479b50",
+      "address": "00479b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479b50"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "Unreferenced_00479b50"
+      ],
+      "dh": "dab13b60"
     },
     {
       "name": "Unreferenced_00479b60",
@@ -1324,7 +1357,7 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "675149b2",
+      "dh": "473a26ac",
       "paramStorage": [
         [
           "pRoster",

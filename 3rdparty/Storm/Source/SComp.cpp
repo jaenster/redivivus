@@ -213,15 +213,15 @@ D2BitStreamReaderStrc * __thiscall LINKEDLIST_Unlink(D2BitStreamReaderStrc * pLi
     return pList;
 }
 
-int __fastcall Unreferenced_0041d8a0(D2BitStreamReader32Strc * param_1) {
-    uint32_t uVar2 = param_1->dwBitBuffer;
-    uint32_t* puVar1 = &param_1->nBitCount;
+int __fastcall Unreferenced_0041d8a0(D2BitStreamReader32Strc * pReader) {
+    uint32_t uVar2 = pReader->dwBitBuffer;
+    uint32_t* puVar1 = &pReader->nBitCount;
     (*puVar1)--;
-    param_1->dwBitBuffer = uVar2 >> 1;
+    pReader->dwBitBuffer = uVar2 >> 1;
     if (!*puVar1) {
-      param_1->dwBitBuffer = *param_1->pCur;
-      param_1->pCur++;
-      param_1->nBitCount = 0x20;
+      pReader->dwBitBuffer = *pReader->pCur;
+      pReader->pCur++;
+      pReader->nBitCount = 0x20;
     }
 
     return uVar2 & 1;
@@ -232,8 +232,8 @@ uint32_t __thiscall BITBUFFER_PeekBits(uint16_t * * pBitBuffer, uint16_t * nBitC
     if (nBitPos <= nBitCount) {
       uint16_t wWord;
       wWord = **pBitBuffer;
-      pBitBuffer[2] = nBitPos + 8;
       pBitBuffer[1] = (uint16_t*)((uintptr_t)pBitBuffer[1] | (uint32_t)wWord << D2_SHIFT_COUNT((uintptr_t)nBitPos));
+      pBitBuffer[2] = nBitPos + 8;
       (*pBitBuffer)++;
     }
 
@@ -905,7 +905,7 @@ static void __stdcall SCOMP_ReleaseTempBuffer(int32_t bShared, void * pBuf) {
 // @wasnamed SCOMP_Compress
 // @basis behaviour-confirmed. (dst, pdstlen, src, srclen, methodmask, level, userdata). Counts the set bits of the method mask, rejects any bit outside the supported set (mask & 0xffffff34), walks the codec dispatch table paSCompCompressCodecTable forward applying each selected codec, ping-pongs between the destination and a scratch buffer from SCOMP_AcquireTempBuffer, drops any codec that failed to shrink the data, and writes the surviving method mask as the FIRST OUTPUT BYTE - the byte SCompDecompress reads back.
 // @seealso SCompDecompress 0041e720
-uint32_t __stdcall SCompCompress(uint8_t * pDst, uint32_t * pnDstLen, uint32_t * pSrc, uint32_t nSrcLen, uint32_t nMethodMask, uint32_t nLevel, uint32_t dwUserData) {
+BOOL __stdcall SCompCompress(uint8_t * pDst, uint32_t * pnDstLen, uint32_t * pSrc, uint32_t nSrcLen, uint32_t nMethodMask, uint32_t nLevel, uint32_t dwUserData) {
     // Static local variables (originally global data)
     static SCompEncodeCodecEntryStrc paSCompCompressCodecTable[5] = {
     {
@@ -1157,7 +1157,7 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
 }
 
 // @sourcefile .\SOURCE\SCOMP.CPP
-uint32_t __stdcall SCOMP_CleanupTempBuffer() {
+BOOL __stdcall SCOMP_CleanupTempBuffer() {
     if (gpScompTempBuffer) {
       SMem::SMemFree(gpScompTempBuffer, ".\\SOURCE\\SCOMP.CPP", 0x733, 0);
       gpScompTempBuffer = 0;
@@ -1178,8 +1178,13 @@ StormLinkStrc * __thiscall HUFFMAN_GetDecodedOffset(StormLinkStrc * pNode, intpt
     return (StormLinkStrc*)(nOffset + pBase);
 }
 
-int __fastcall Unreferenced_0041e930(StormLinkStrc * param_1) {
-    return param_1->pNext <= 0 ? 0 : param_1->pNext;
+int __fastcall Unreferenced_0041e930(StormLinkStrc * pLink) {
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
+}
+
+uint32_t Unreferenced_0041e940() {
+    uint32_t* in_ECX;
+    return (int)*(uint32_t*)(*(int*)*in_ECX + 4) <= 0 ? 0 : *(uint32_t*)(*(int*)*in_ECX + 4);
 }
 
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041e970(StormLinkStrc * pNode) {
@@ -1196,16 +1201,16 @@ void __fastcall LINKEDLIST_NodeDestructor_Unref_0041e970(StormLinkStrc * pNode) 
     pNode->pNext = 0;
 }
 
-void __fastcall Unreferenced_0041e9b0(StormLinkedListStrc * param_1) {
-    StormLinkStrc* pSVar1 = &param_1->head;
+void __fastcall Unreferenced_0041e9b0(StormLinkedListStrc * pList) {
+    StormLinkStrc* pSVar1 = &pList->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uintptr_t)pSVar1;
+    pList->head.pNext = ~(uintptr_t)pSVar1;
 }
 
-int __fastcall Unreferenced_0041e9d0(int * param_1, int * param_2) {
-    int iVar1 = *param_1;
-    *param_1 = *param_2;
-    *param_2 = iVar1;
+int __fastcall Unreferenced_0041e9d0(int * pValueA, int * pValueB) {
+    int iVar1 = *pValueA;
+    *pValueA = *pValueB;
+    *pValueB = iVar1;
     return iVar1;
 }
 
@@ -1229,14 +1234,33 @@ void __stdcall SCOMP_DecompressSimple(uint32_t * pDst, uint32_t * pnDstSize, uin
     SCompDecompress(pDst, pnDstSize, pSrc, nSrcSize, 0);
 }
 
-int __fastcall Unreferenced_0041ea40(StormLinkStrc * param_1) {
-    return param_1->pNext <= 0 ? 0 : param_1->pNext;
+int __fastcall Unreferenced_0041ea40(StormLinkStrc * pLink) {
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
+}
+
+uint32_t Unreferenced_0041ea50() {
+    int in_ECX;
+    return *(uint32_t*)(in_ECX + 4);
 }
 
 int __fastcall Unreferenced_0041ea60(int param_1) {
     *(uint32_t*)param_1 = 0;
     *(uint32_t*)(param_1 + 4) = 0;
     return param_1;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0041ea70(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041eae0(StormLinkStrc * pNode) {
@@ -1280,10 +1304,10 @@ void __thiscall LINKEDLIST_UnlinkNode(StormLinkedListStrc * pThis, int * pNode) 
     ((StormLinkStrc*)pNode)->pNext = 0;
 }
 
-uint32_t * __fastcall Unreferenced_0041ebb0(uint32_t * param_1) {
-    *param_1 = 0;
-    param_1[1] = 0;
-    return param_1;
+uint32_t * __fastcall Unreferenced_0041ebb0(uint32_t * pData) {
+    *pData = 0;
+    pData[1] = 0;
+    return pData;
 }
 
 int32_t __thiscall HUFFMAN_DecodeSymbol(D2HuffmanContextStrc * pThis, D2BitStreamReaderStrc * pBitBuf) {
@@ -1383,14 +1407,14 @@ void __fastcall LINKEDLIST_NodeDestructor_Unref_0041ed30(StormLinkStrc * pNode) 
     pNode->pNext = 0;
 }
 
-StormLinkedListStrc * __fastcall Unreferenced_0041ed70(StormLinkedListStrc * param_1) {
-    StormLinkStrc* pSVar1 = &param_1->head;
+StormLinkedListStrc * __fastcall Unreferenced_0041ed70(StormLinkedListStrc * pList) {
+    StormLinkStrc* pSVar1 = &pList->head;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
     pSVar1->pPrevLink = pSVar1;
-    param_1->nLinkOffset = 0;
-    param_1->head.pNext = ~(uintptr_t)pSVar1;
-    return param_1;
+    pList->nLinkOffset = 0;
+    pList->head.pNext = ~(uintptr_t)pSVar1;
+    return pList;
 }
 
 void __thiscall LINKEDLIST_MoveNode(int * * pListHead, int * * pNode, int32_t nInsertAtHead, int * * pInsertRef) {

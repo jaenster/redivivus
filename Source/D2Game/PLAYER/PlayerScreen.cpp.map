@@ -384,7 +384,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5c5c9331",
+      "dh": "0ef41d2b",
       "paramStorage": [
         [
           "pGame",
@@ -434,7 +434,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "77a6086e",
+      "dh": "2754c040",
       "paramStorage": [
         [
           "pGame",
@@ -476,10 +476,11 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2UnitStrc",
+        "SGAMEDATA",
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "039a4195",
+      "dh": "123541be",
       "paramStorage": [
         [
           "dwUnused",
@@ -554,7 +555,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "24669a7b",
+      "dh": "eef27d19",
       "paramStorage": [
         [
           "pGame",

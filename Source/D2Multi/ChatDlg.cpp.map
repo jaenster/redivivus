@@ -391,7 +391,7 @@
         "Unreferenced_0043dce0",
         "D2COMP_DestroyCompositeUnit"
       ],
-      "dh": "bb2d686b"
+      "dh": "f9c02700"
     },
     {
       "name": "LAUNCHER_GetDifficultyNameStringId",
@@ -824,7 +824,7 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "cef17a15",
+      "dh": "0d277c3b",
       "paramStorage": [
         [
           "wszText",
@@ -1130,7 +1130,7 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "56a90676",
+      "dh": "f3d5cf5b",
       "paramStorage": [
         [
           "pControlMsg",
@@ -1777,7 +1777,7 @@
         "WCHAR",
         "uint16_t"
       ],
-      "dh": "1aec17ed",
+      "dh": "29e98c0e",
       "paramStorage": [
         [
           "pControlMsg",
@@ -1969,7 +1969,7 @@
         "ChatDlgCallback",
         "int32_t"
       ],
-      "dh": "b3acb573",
+      "dh": "470d4dd9",
       "paramStorage": [
         [
           "dwUnused",
@@ -2105,7 +2105,7 @@
         "D2WinButton",
         "D2WinButton *"
       ],
-      "dh": "cccca7fd"
+      "dh": "4cd63860"
     },
     {
       "name": "OOGMENU_CreateGame",

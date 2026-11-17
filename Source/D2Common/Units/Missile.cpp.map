@@ -1365,7 +1365,10 @@
       "calledFunctions": [
         "MISSILE_Min"
       ],
-      "dh": "4941512b",
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "149d0b35",
       "paramStorage": [
         [
           "nLeft",
@@ -1376,11 +1379,11 @@
           "EDX:4"
         ],
         [
-          "dwParam3",
+          "nOperand3",
           "Stack[0x4]:4"
         ],
         [
-          "dwParam4",
+          "pContext",
           "Stack[0x8]:4"
         ]
       ]
@@ -1398,7 +1401,10 @@
       "calledFunctions": [
         "MISSILE_Max"
       ],
-      "dh": "1b51cbec",
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "99776083",
       "paramStorage": [
         [
           "nLeft",
@@ -1409,11 +1415,11 @@
           "EDX:4"
         ],
         [
-          "dwParam3",
+          "nOperand3",
           "Stack[0x4]:4"
         ],
         [
-          "dwParam4",
+          "pContext",
           "Stack[0x8]:4"
         ]
       ]

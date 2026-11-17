@@ -25,6 +25,11 @@ template<> TSLink<::StringEntryNode>* TSLink<StringEntryNode>::NextLink(intptr_t
     return (TSLink<::StringEntryNode>*)(nNextOffset + nLinkOffset);
 }
 
+template<> void TSLink<StringEntryNode>::Unreferenced_0060e1b0() {
+    this->m_prevlink = 0;
+    this->m_next = 0;
+}
+
 // Test a flag bit in nBucketMask field of the hash table
 template<> uint32_t TSHashTable<StringEntryNode, HASHKEY_STRI>::ComputeSlot(uint32_t dwHashVal) {
     return this->nSlotMask & dwHashVal;

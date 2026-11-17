@@ -3528,7 +3528,6 @@ static void UI_BuildUberBossImmunityString(D2UnitStrc * pUnit) {
 
     int nResist;
     uint16_t* pWszFill;
-    bool bHasPrevious;
     uint16_t wszBuffer[256];
     if (!(!pUnit || pUnit->nClassId < 0x2c0 || pUnit->nClassId > 0x2c5)) {
       return;
@@ -3546,12 +3545,11 @@ static void UI_BuildUberBossImmunityString(D2UnitStrc * pUnit) {
       uint16_t wszLine[256];
       nResist = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, ((D2UberBossImmunityStrc*)(pImmunityTblEntry - 2))->nStat, 0);
       if (nResist >= 100) {
-        bHasPrevious = wszBuffer[0] != L'\0';
         for (nResist = 0; nResist < 0x100; nResist++) {
           wszLine[nResist] = L'\0';
         }
 
-        if (bHasPrevious) {
+        if (wszBuffer[0] != L'\0') {
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszBuffer, wszSeparator);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszBuffer, wszColorReset);
         }
@@ -3712,26 +3710,21 @@ static void __stdcall UI_FormatPlayerNameAndStatus(D2UnitStrc * pUnit, uint16_t 
     int nRoster1GUID;
     char* pRosterName = GAME::Roster::GetPlayerRosterName(pUnit);
     char* pszRosterNameCopy = pRosterName;
-    if (pUnit) {
+    if (pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead) {
       uint16_t wszDeadName[128];
-      if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead) {
-        *pnHpBarValue = 0;
-        for (nUnitGUID = 0; nUnitGUID < 0x80; nUnitGUID++) {
-          wszDeadName[nUnitGUID] = L'\0';
-        }
-
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDeadName, pRosterName, 0x80);
-        nLangCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
-        D2Lang::Unicode::UNISYS::UNICODE_FormatPossessiveName(wszText, wszDeadName, D2Lang::StrTable::strtable::GetLocaleString(0x90b), nFormatMode, nLangCode);
-        *pbIsPartied = 1;
-        return;
+      *pnHpBarValue = 0;
+      for (nUnitGUID = 0; nUnitGUID < 0x80; nUnitGUID++) {
+        wszDeadName[nUnitGUID] = L'\0';
       }
 
-      nUnitGUID = pUnit->nUnitGUID;
-    } else {
-      nUnitGUID = -1;
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDeadName, pRosterName, 0x80);
+      nLangCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
+      D2Lang::Unicode::UNISYS::UNICODE_FormatPossessiveName(wszText, wszDeadName, D2Lang::StrTable::strtable::GetLocaleString(0x90b), nFormatMode, nLangCode);
+      *pbIsPartied = 1;
+      return;
     }
 
+    nUnitGUID = !pUnit ? -1 : pUnit->nUnitGUID;
     int32_t nHpPercent = GAME::Roster::GetRosterPlayerHpPercent(nUnitGUID);
     *pnHpBarValue = (nHpPercent << 7) / 100;
     *pbIsPartied = 0;
@@ -4543,7 +4536,7 @@ void __stdcall UI_DrawPartyRoster() {
       memset(wszRosterName, 0, 16 * sizeof(wszRosterName[0]));
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszRosterName, pszRosterName, 0x10);
       nRowY = nRowBaseY + 0x19;
-      *(uint32_t*)((char*)&wszRosterName + 28) &= 0xffff;
+      wszRosterName[15] = 0;
       D2Win::Src::D2WinFont::DRAW_text(wszRosterName, 0x96, nRowY, 0, 0);
       for (int iFill = 0; iFill < 20; iFill++) {
         wszPartyText[iFill] = L'\0';
@@ -4562,7 +4555,7 @@ void __stdcall UI_DrawPartyRoster() {
         pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0xfb0);
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszPartyText, pwszLabel);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszPartyText, wszPartyIdNum);
-        *(uint32_t*)((char*)&wszPartyText + 36) &= 0xffff;
+        wszPartyText[19] = 0;
         pwszPartyLabel = wszPartyText;
       }
 
@@ -4829,22 +4822,22 @@ void __fastcall UI_ShowGoldTransactionDialog(int32_t nTransactionType) {
             break;
             case 1:
               wPromptLocaleId = 0xfc1;
-            Inv::INV_StashOpenedWithGold();
+            Inv::INV_StashOpenedWithGold(1);
             eGoldStat = UNITSTAT_gold;
             break;
             case 2:
               wPromptLocaleId = 0xfce;
-            Inv::INV_StashOpenedWithGold();
+            Inv::INV_StashOpenedWithGold(2);
             eGoldStat = UNITSTAT_gold;
             break;
             case 3:
               wPromptLocaleId = 0xfd1;
-            Inv::INV_StashOpenedWithGold();
+            Inv::INV_StashOpenedWithGold(3);
             eGoldStat = UNITSTAT_gold;
             break;
             case 4:
               wPromptLocaleId = 0xfd2;
-            Inv::INV_StashOpenedWithGold();
+            Inv::INV_StashOpenedWithGold(4);
             eGoldStat = UNITSTAT_goldbank;
             break;
             default:
@@ -5139,15 +5132,15 @@ uint32_t __stdcall DRAW_IsDialogActive() {
     return (uint32_t)(Dialog::gpDialog != 0);
 }
 
-uint32_t * __fastcall Unreferenced_004549d0(uint32_t * param_1) {
+uint32_t * __fastcall Unreferenced_004549d0(uint32_t * pData) {
     int iVar1;
-    uint32_t* puVar2 = param_1;
+    uint32_t* puVar2 = pData;
     for (iVar1 = 0x28; iVar1; iVar1--) {
       *puVar2 = 0;
       puVar2++;
     }
 
-    return param_1;
+    return pData;
 }
 
 static void __stdcall DRAW_CenteredText(int32_t nFontId, int32_t nY, DWORD dwColor, uint16_t * wszText) {
@@ -7239,6 +7232,19 @@ static BOOL UI_IsMouseOverActiveControlConfigButton(int32_t nMouseX, int32_t nMo
       int32_t nTabIndex;
       nTabIndex = UI_GetControlConfigTabIndex(nMouseX, nMouseY);
       if (nTabIndex == nActiveButton) {
+        return 1;
+      }
+    }
+
+    return 0;
+}
+
+uint32_t Unreferenced_004a4aa0() {
+    int in_ECX;
+    int iVar1 = 0;
+    while (!gaControlConfigRegionMouseState[iVar1] || iVar1 == in_ECX) {
+      iVar1++;
+      if (iVar1 >= 7) {
         return 1;
       }
     }
@@ -10430,12 +10436,8 @@ void StaticInit_gU16ImmunityStringBuffer1() {
 }
 
 void StaticInit_gU16ImmunityStringBuffer2() {
-    int nWordsRemaining;
-    uint16_t* pImmunityBuf2 = gU16ImmunityStringBuffer2;
-    for (nWordsRemaining = 0x80; nWordsRemaining; nWordsRemaining--) {
-      pImmunityBuf2[0] = 0;
-      pImmunityBuf2[1] = 0;
-      pImmunityBuf2 += 2;
+    for (int i = 0; i < 0x100; i++) {
+      gU16ImmunityStringBuffer2[i] = 0;
     }
 }
 

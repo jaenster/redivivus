@@ -63,7 +63,7 @@ typedef void (__fastcall *fpDrawShadow)(D2GfxDataStrc * pData, int nPosX, int nP
 typedef void (__fastcall *fpDrawShiftedImage)(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, DRAWMODE nDrawMode, GLOBALPALLETE nGlobalPaletteShift);
 typedef void (__fastcall *fpDrawSolidRect)(RECT * pRect, BYTE nPaletteIndex);
 typedef void (__fastcall *fpDrawSolidRectAlpha)(int nXStart, int nYStart, int nXEnd, int nYEnd, DWORD dwColor, BYTE nAlpha);
-typedef void (__fastcall *fpDrawSolidRectEx)(int nXStart, int nYStart, int nXEnd, int nYEnd, DWORD dwColor, DRAWMODE nDrawMode);
+typedef void (__fastcall *fpDrawSolidRectEx)(int nXStart, int nYStart, int nXEnd, int nYEnd, BYTE dwColor, DRAWMODE nDrawMode);
 typedef void (__fastcall *fpDrawSolidSquare)(POINT * pPoint, BYTE nSize, BYTE nPaletteIndex);
 typedef void (__fastcall *fpDrawString)(int nPosX, int nPosY, char * szFormat, va_list va);
 typedef void (__fastcall *fpDrawVerticalCropImage)(D2GfxDataStrc * pData, int nPosX, int nPosY, int nSkipLines, int nDrawLines, int nDrawMode);

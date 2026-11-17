@@ -22,10 +22,28 @@ template<> TSLink<::SGAMEDATA>* TSLink<SGAMEDATA>::NextLink(intptr_t nLinkOffset
     return (TSLink<::SGAMEDATA>*)(nOffset + nLinkOffset);
 }
 
+template<> void __fastcall TSLink<SGAMEDATA>::LINKEDLIST_UnlinkSelf_Unref_0044ddd0(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
+}
+
 // operator[]: address of element nIndex (stride 0xc).
 // Byte-identical to TSGrowableArray<TSExplicitList<CELLIST,..>>::OperatorIndex 00601cc0; T from the 0xc stride, the only 12-byte array element in this block.
 template<> TSExplicitList<::SGAMEDATA, -572662307>* TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::OperatorIndex(uint32_t nIndex) {
     return this->m_data + nIndex;
+}
+
+template<> uint8_t TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044de40() {
+    return 4;
 }
 
 // Unreferenced copy of NextLink: the link after this one.
@@ -94,6 +112,20 @@ template<> uint32_t * __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unrefere
     *param_1 = 0;
     param_1[1] = 0;
     return param_1;
+}
+
+template<> void __fastcall TSExplicitList<SGAMEDATA, -572662307>::LINKEDLIST_UnlinkSelf_Unref_0044ed50(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 template<> uint32_t * __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044ed90(uint32_t * param_1) {
@@ -268,6 +300,20 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::ChangeLinkOffset(int32_t 
     this->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }
 
+template<> StormLinkedListStrc * __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044f9d0(StormLinkedListStrc * pList) {
+    StormLinkStrc* pSVar1 = &pList->head;
+    pSVar1->pPrevLink = 0;
+    pSVar1->pNext = 0;
+    pSVar1->pPrevLink = pSVar1;
+    pList->nLinkOffset = 0;
+    pList->head.pNext = ~(uintptr_t)pSVar1;
+    return pList;
+}
+
+template<> void TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044f9f0() {
+    ((TSHashObject<::SGAMEDATA, HASHKEY_NONE>*)this)->Destructor();
+}
+
 template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalClear(int32_t bUnlinkOnly) {
     TSExplicitList<::SGAMEDATA, -572662307>* pTVar1;
     ::SGAMEDATA* pGame;
@@ -344,6 +390,29 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
     pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;
+}
+
+template<> TSExplicitList<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>, 16>* TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::Constructor() {
+    TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pTVar1 = &this->m_terminator;
+    pTVar1->m_prevlink = 0;
+    pTVar1->m_next = 0;
+    pTVar1->m_prevlink = pTVar1;
+    this->m_linkoffset = 0x10;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
+    return this;
+}
+
+template<> void TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044fb50() {
+    if (!this) {
+      return;
+    }
+
+    TSLink<::SGAMEDATA>* pTVar1 = &this->m_terminator;
+    pTVar1->m_prevlink = 0;
+    pTVar1->m_next = 0;
+    pTVar1->m_prevlink = pTVar1;
+    this->m_linkoffset = -0x22222223;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }
 
 // Unreferenced copy of the copy constructor; returns this.

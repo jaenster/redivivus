@@ -61,7 +61,7 @@ static void __stdcall FASTCMP_CompressToRLE(int32_t nWidth, uint32_t nLineCount,
       int32_t nZeroRunLen;
       do {
         if (!*pBaseData) {
-          nZeroRunLen = D2CMP::SUBTILE_CountRunLength((char*)pBaseData, pWidth, 0x7f, (uint32_t*)&nZeroTailFlag, &nColorTailFlag);
+          nZeroRunLen = D2CMP::SUBTILE_CountRunLength((char*)pBaseData, pWidth, 0x7f, &nZeroTailFlag, &nColorTailFlag);
           if (!nColorTailFlag && !nZeroTailFlag) {
             *pbRLEOut = (uint8_t)nZeroRunLen | 0x80;
             pbRLEOut++;
@@ -76,7 +76,7 @@ static void __stdcall FASTCMP_CompressToRLE(int32_t nWidth, uint32_t nLineCount,
             pFlags = (uint8_t*)((char*)pFlags + pbLineStride);
           }
         } else {
-          nColorRunLen = SUBTILE_CountRunLengthForByte((char*)pBaseData, pWidth, '\0', 0x7f, (uint32_t*)&nZeroTailFlag, &nColorTailFlag);
+          nColorRunLen = SUBTILE_CountRunLengthForByte((char*)pBaseData, pWidth, '\0', 0x7f, &nZeroTailFlag, &nColorTailFlag);
           *pbRLEOut = (uint8_t)nColorRunLen;
           for (; pbRLEOut++ , (uint32_t)nColorRunLen > 0; nColorRunLen--) {
             *pbRLEOut = *pBaseData;

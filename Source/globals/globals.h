@@ -378,7 +378,8 @@ typedef BOOL (__fastcall *D2SkillCltStFunc)(D2UnitStrc * pUnit, eD2Skills eD2Ski
 typedef BOOL (__fastcall *D2SkillSrvStFunc)(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, eD2Skills eD2Skill, int nSkillLvl);
 typedef BOOL (__fastcall *fnCacheReadData)(char * szKey, int * pCrc, void * ppBuf, int * pSize);
 typedef BOOL (__fastcall *fnCacheWriteData)(char * szKey, void * pData, uint32_t nSize, int * pTime, uint32_t nExp, int nCacheExp);
-typedef BOOL (__fastcall *fnD2DropHandler)(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill);
+typedef BOOL (__fastcall *fnD2MonModeStart)(::SGAMEDATA * pGame, D2ModeChangeStrc * pModeChange);
+typedef BOOL (__fastcall *fnD2MonModeUpdate)(::SGAMEDATA * pGame, D2UnitStrc * pUnit);
 typedef BOOL (__fastcall *fnGetEnterChatFlags)(uint32_t * pFlags);
 typedef BOOL (__fastcall *fnSendChangeEmail)(char * szAcct, char * szOld, char * szNew);
 typedef BOOL (__fastcall *fnSendResetPassword)(char * szAcct, char * szEmail);
@@ -475,6 +476,7 @@ typedef uint32_t (__fastcall *fnSendReadUserData)(char * szAccount, uint32_t nCo
 typedef uint32_t (__fastcall *fnSendWriteUserData)(char * szAccount, uint32_t nCount, char * * pszKeys, char * * pszValues);
 typedef uint32_t (__fastcall *fpCelDecodeCachedByFormat)(::CELLIST * pDCCSrc, DC6 * pDCCDest);
 typedef uint32_t (__fastcall *fpMonsterAiForEach)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2MonsterAiParameterStruct * test);
+typedef uint32_t (__fastcall *fpProperties)(uint32_t param_1, D2UnitStrc * param_2, D2UnitStrc * param_3, D2SetsTxtFStrc * param_4, uint32_t param_5, int param_6, uint32_t param_7, uint32_t param_8, int param_9, uint32_t param_10, D2UnitStrc * pContextUnit);
 typedef uint64_t (__stdcall *pfnSymGetModuleBase64)(HANDLE hProcess, DWORD qwAddrLow, DWORD qwAddrHigh);
 typedef uint64_t (__stdcall *pfnSymLoadModule64)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD BaseOfDllLow, DWORD BaseOfDllHigh, DWORD SizeOfDll);
 typedef void (*fnLogWriteLine)(char * szFmt, ...);
@@ -496,7 +498,7 @@ typedef void (__fastcall *PFN_PlayerModeMoveFn)(::SGAMEDATA * pGame, D2UnitStrc 
 typedef void (__fastcall *PFN_PlayerModeStartFn)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nModeIndex, D2UnitStrc * pTargetUnit);
 typedef void (__fastcall *QUESTINIT)(D2QuestDataStrc * pQuestData);
 typedef void (__fastcall *fnClientDrawProc)(int32_t nParam);
-typedef void (__fastcall *fnD2DropHandlerFn3)(::SGAMEDATA * pGame, D2UnitStrc * pUnit);
+typedef void (__fastcall *fnD2MonModeEnd)(::SGAMEDATA * pGame, D2UnitStrc * pUnit);
 typedef void (__fastcall *fnGetConnectionState)(int * pOut);
 typedef void (__fastcall *fnMonUniqueModCallback)(D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion);
 typedef void (__fastcall *fnSendChatCommand)(uint8_t * pbCmd);
@@ -1324,11 +1326,6 @@ namespace D2Common::Chat::Ignorelist::IgnoreList {
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList
 
-namespace D2Common::DATATBLS::ItemTbls {
-
-
-} // namespace D2Common::DATATBLS::ItemTbls
-
 namespace D2Common::Drlg::OutSiege {
 
 
@@ -1958,6 +1955,11 @@ namespace D2Common::Logging {
 
 
 } // namespace D2Common::Logging
+
+namespace D2Common::DATATBLS::ItemTbls {
+
+
+} // namespace D2Common::DATATBLS::ItemTbls
 
 namespace D2Common::DATATBLS::ObjectTbls {
 

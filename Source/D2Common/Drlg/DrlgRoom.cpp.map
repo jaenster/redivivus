@@ -427,6 +427,22 @@
       ]
     },
     {
+      "name": "Unreferenced_0066b010",
+      "address": "0066b010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b010"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "Unreferenced_0066b010",
+        "GetPresetUnits"
+      ],
+      "dh": "e292a282"
+    },
+    {
       "name": "DRLGWARP_InitWarpConnectionsBetweenLevels",
       "address": "0066b030",
       "lines": [

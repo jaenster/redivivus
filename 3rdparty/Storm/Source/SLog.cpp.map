@@ -371,9 +371,10 @@
         "SLogInitialize"
       ],
       "usedTypes": [
-        "CRITICAL_SECTION"
+        "CRITICAL_SECTION",
+        "uint32_t"
       ],
-      "dh": "4e7cb343"
+      "dh": "618e4828"
     },
     {
       "name": "SLogPend",

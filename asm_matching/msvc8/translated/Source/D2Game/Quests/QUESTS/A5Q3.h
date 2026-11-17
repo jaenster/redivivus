@@ -156,7 +156,7 @@ void __fastcall Objects_InitFn69_NihlathakStartOutsideTown(struct D2ObjectInitFn
 void __fastcall Q33_AnyaTimerCallback(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit);
 // Q33_GetAnyaCoordinates (PrisonOfIce): returns the stored portal coords if active, portal spawned and Anya not yet
 // running. Used to locate the rescue portal.
-uint32_t __fastcall Q33_GetAnyaCoordinates(void * pThis, int, int32_t * pOutCoords);
+BOOL __fastcall Q33_GetAnyaCoordinates(::SGAMEDATA * pGame, int, int32_t * pOutCoords);
 // Q33_SpawnPortalNearAnya (PrisonOfIce): creates the town-portal OBJECT (classId 0xbd) at stored coords in a nearby
 // valid room (nudging coords +3 if none found), once. Records portal GUID. The portal Anya uses to return to Harrogath.
 BOOL __fastcall Q33_SpawnPortalNearAnya(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);

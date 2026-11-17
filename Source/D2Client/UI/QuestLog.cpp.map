@@ -842,7 +842,10 @@
       "calledFunctions": [
         "QUESTLOG_SetZooSpawnFlag"
       ],
-      "dh": "f7923261",
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "4329c5af",
       "paramStorage": [
         [
           "nZooSpawnCounter",
@@ -936,10 +939,10 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "939527ec",
+      "dh": "4a360ff7",
       "paramStorage": [
         [
-          "param_1",
+          "pData",
           "ECX:4"
         ]
       ]

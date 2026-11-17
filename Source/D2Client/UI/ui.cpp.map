@@ -1867,7 +1867,7 @@
         "pfnEHHandlerRoutine",
         "uint16_t"
       ],
-      "dh": "67f4ef3a",
+      "dh": "58e780d3",
       "paramStorage": [
         [
           "nTransactionType",
@@ -2218,10 +2218,10 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "8bbe4000",
+      "dh": "bef8c75e",
       "paramStorage": [
         [
-          "param_1",
+          "pData",
           "ECX:4"
         ]
       ]
@@ -3293,6 +3293,21 @@
           "EDX:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_004a4aa0",
+      "address": "004a4aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a4aa0"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "Unreferenced_004a4aa0"
+      ],
+      "dh": "fb66e788"
     },
     {
       "name": "UI_UpdateConfigControlsState",

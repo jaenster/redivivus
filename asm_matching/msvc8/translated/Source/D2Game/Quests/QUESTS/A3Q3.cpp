@@ -349,8 +349,9 @@ void __fastcall Q20_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs);
     if (pQuestData->nStateFlag == 2) {
       D2BitBufferStrc* pBitBuffer;
+      D2UnitStrc* t2_c0 = pQuestArgs->pPlayer;
       pGame = pQuestArgs->pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+      pPlayerData = D2Common::Units::GetPlayerData(t2_c0);
       pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
       /* GetQuestState Completed(0) keyed by dynamic nQuestIdReal (this quest): skip
                          advancing if already done */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
@@ -783,6 +784,7 @@ void __fastcall Q20_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // 0->Cb00, 2->Cb02, 3->Cb03, 4->Cb04, 9->Cb09, 0xb->Cb11, 0xd->Cb13, 0xe->Cb14. Allocates and zeroes
 // the 0x30-byte A3Q3-specific state struct (nQuestStage=0).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q3.cpp
+// Passes Q20_Callback02_NpcDeactivate by address.
 void __fastcall Q20_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, 0x3c);
     ::SGAMEDATA* pSVar1 = pQuestData->pGame;
@@ -994,16 +996,16 @@ bool __fastcall Q20_GetSerpentKillerGUID(::SGAMEDATA * pGame, int * pnPlayerGUID
     return false;
 }
 
-void __fastcall Unreferenced_005b9c80(D2QuestDataStrc * param_1, D2UnitStrc * param_2) {
+void __fastcall Unreferenced_005b9c80(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     int iVar2;
-    D2QuestDataA1Q3Strc* pDVar1 = param_1->pQuestSpecificData.pA1Q3;
+    D2QuestDataA1Q3Strc* pDVar1 = pQuestData->pQuestSpecificData.pA1Q3;
     if (pDVar1->bCharsiNotified != 1) {
       return;
     }
-    if (!param_2) {
+    if (!pUnit) {
       iVar2 = -1;
     } else {
-      iVar2 = param_2->nUnitGUID;
+      iVar2 = pUnit->nUnitGUID;
     }
     if (pDVar1->sQuestGUID.aPlayerGUID[4] != iVar2) {
       return;
@@ -1038,10 +1040,9 @@ void __fastcall Q20_ActivateSerpentObject(::SGAMEDATA * pGame) {
       return;
     }
 
-    D2QuestDataA2Q3Strc* pA2Q3Data = (D2QuestDataA2Q3Strc*)pQuestData->pQuestSpecificData.pA2Q3;
-    uint32_t nUnitGUID = pA2Q3Data->sPlayerGUID.aPlayerGUID[5];
-    pA2Q3Data->field_0x06 = 0;
-    D2UnitStrc* pSerpentObj = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, nUnitGUID);
+    D2QuestDataA3Q3Strc* pA2Q3Data = pQuestData->pQuestSpecificData.pA3Q3;
+    pA2Q3Data->field_0x6 = 0;
+    D2UnitStrc* pSerpentObj = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, pA2Q3Data->nSerpentObjectGUID);
     if (!pSerpentObj) {
       return;
     }
@@ -1049,7 +1050,7 @@ void __fastcall Q20_ActivateSerpentObject(::SGAMEDATA * pGame) {
     D2Common::Units::ChangeAnimMode(pSerpentObj, 1);
     D2ObjectsTxt* pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pSerpentObj->nClassId);
     GAME::Event::SetEvent(pGame, pSerpentObj, 1, (pObjTxt->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
-    pA2Q3Data->sPlayerGUID.aPlayerGUID[6] = 2;
+    pA2Q3Data->nQuestStage = 2;
 }
 
 // A3Q3 "Khalim's Will" — object init fn (#39) for a second quest object. Records the object's GUID

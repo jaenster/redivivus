@@ -205,7 +205,7 @@ int __stdcall NET_SID_CLIENT_Send_0x1E_ClientId2();
 void __fastcall BNSEND_SetServerToken(uint32_t nServerToken);
 // Returns cached Battle.net server token (g_nBNetServerToken) received from SID_AUTH_INFO. Used during CD key authentication.
 uint32_t __stdcall BNSEND_GetServerToken();
-void __fastcall BNSEND_SetClientToken(uint32_t nClientToken);
+void __fastcall BNSEND_SetClientToken(DWORD nClientToken);
 DWORD __stdcall BNCLIENT_GetBNetClientToken();
 int __fastcall NET_SID_CLIENT_Send_0x29_LogonResponse(char * szText1, char * szText2);
 int __fastcall NET_SID_CLIENT_Send_0x3A_LogonResponse2(char * szText1, char * szText2);
@@ -224,7 +224,7 @@ void * __stdcall NET_SID_CLIENT_Send_0x40_QueryRealms2();
 void __stdcall BNSEND_FreeChannelListData();
 char * __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t bIsExpansionChar);
 void __fastcall NET_SID_CLIENT_Send_0x0C_JoinChannel(char * szText, int32_t bForceJoin, int32_t nJoinType);
-uint32_t __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount);
+BOOL __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount);
 BOOL __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * szText1, char * szText2, char * dwProductCode);
 uint32_t __fastcall NET_SID_CLIENT_Send_0x10_LeaveChat();
 void __fastcall NET_SID_CLIENT_Send_0x0E_ChatCommand(uint8_t * szChatText);
@@ -266,6 +266,7 @@ void __fastcall BNSEND_StoreChannelListData(uint8_t * pbChannelData, size_t nSiz
 void __fastcall BNSEND_StoreGameListData(uint8_t * pbGameData, size_t nSize);
 void BNCLIENT_InterlockedCompareExchange(long * pDestination, LONG nExchange, LONG nComperand);
 int Unreferenced_0051bea0();
+void Unreferenced_0051beb0();
 BOOL __stdcall D2CheckExpansionGame();
 void __fastcall Unreferenced_0051bed0(int nConnectionState);
 // lpStartAddress parameter of CreateThread
@@ -285,9 +286,9 @@ BOOL __fastcall BNCLIENT_WaitForChangePasswordResponse(uint32_t * pOutResponseCo
 int __fastcall BNCLIENT_EnterChatAndJoinChannel(char * szUsername, char * szStatstring, char * szAccountName, char * szChannelName, uint32_t dwFlags);
 int __stdcall thunk_NET_SID_CLIENT_Send_0x10_LeaveChat();
 BOOL __stdcall BNSEND_Disconnect();
-int __fastcall Unreferenced_0051c570(char * param_1);
+int __fastcall Unreferenced_0051c570(char * szText);
 int32_t __fastcall NET_SID_CLIENT_Send(uint8_t nPacketId, char * pBytes, size_t nSizeNoHeader);
-void __fastcall Unreferenced_0051c6b0(char * param_1);
+void __fastcall Unreferenced_0051c6b0(char * szText);
 void __fastcall BNCLIENT_ParseAndEnqueueChatMessages(char * szMessageText);
 // BATTLE.NET PACKET DISPATCH LOOP
 // Iterates over received network buffer, scanning for 0xFF packet start markers and dispatching complete packets to NET_SID_CLIENT_IncomingPacketHandler. For each packet: validates 4-byte header (0xFF, ID, size_lo, size_hi), checks if buffer contains full packet based on 2-byte little-endian size field, dispatches packet data (excluding 4-byte header) to handler, advances buffer pointer by packet size. Returns pointer to remaining unparsed buffer data for next iteration.
@@ -300,7 +301,7 @@ int32_t __stdcall GET_GameVersion();
 char __stdcall BNCLIENT_GetProtocolVersionChar();
 BOOL __stdcall BNCLIENT_IsSocketConnected();
 DWORD __stdcall BNSEND_GetBNetThreadInitFlag();
-void __fastcall BNSEND_SetGlobalFlag(uint32_t dwThreadInitFlag);
+void __fastcall BNSEND_SetGlobalFlag(DWORD dwThreadInitFlag);
 // Battle.net connection orchestrator. Manages full logon sequence: server selection via fastest-connect test (select() on 64 candidate sockets, 5-second timeout per batch), protocol init (0x01 byte), SID_AUTHINFO (0x50) handshake, SID_AUTHCHECK (0x51) version/CD-key verification. Uses non-blocking socket multiplexing across up to 32 server candidates. Connection state machine: 2=searching, 3=accessing accounts, 4=checking version. Stores final socket in g_pBNetSocketData via InterlockedCompareExchange.
 BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList);
 // lpStartAddress parameter of CreateThread
@@ -310,7 +311,7 @@ void __fastcall BNNEWS_SetNewsChannel(int bIsClassic);
 int __fastcall BNNEWS_GetNewsEntryByIndex(int * pNewsTable, int, int nIndex);
 uint32_t __fastcall BNNEWS_RoundToPowerOfTwo(struct D2BnNewsTableStrc * pNewsTable, int, uint32_t dwSize);
 DWORD __stdcall BNNEWS_RoundUpToMultiple(DWORD dwValue, DWORD dwMultiple);
-void __fastcall Unreferenced_0051d350(uint32_t * param_1, uint32_t * param_2);
+void __fastcall Unreferenced_0051d350(uint32_t * pDst, uint32_t * pSrc);
 // @sourcefile .\BNNews.cpp
 void __stdcall BNNEWS_SaveToCache();
 // Calls g_pfnMotdCallback(dwEntryId in ECX, szMessage in EDX) once per unread news entry.
@@ -319,10 +320,11 @@ void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d570(void * pArray);
 void * __fastcall BNNEWS_DestroyNewsTable(struct D2BnNewsTableStrc * pNewsTable, int, uint8_t bFreeMemory);
 void __fastcall BNNEWS_ReallocateNewsTable(struct D2BnNewsTableStrc * pNewsTable, int, uint32_t dwNewCapacity);
 void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d670(void * pArray);
-uint32_t * __fastcall Unreferenced_0051d690(uint32_t * param_1);
+uint32_t * __fastcall Unreferenced_0051d690(uint32_t * pData);
 void __fastcall BNNEWS_ClearNewsTable(struct D2BnNewsTableStrc * pNewsTable);
 void __fastcall BNNEWS_EnsureCapacityWithGrowth(uint32_t * pNewsTable, int, uint32_t dwAdditionalCount, int bGrow);
-uint32_t * __fastcall Unreferenced_0051d720(uint32_t * param_1);
+uint32_t * __fastcall Unreferenced_0051d720(uint32_t * pData);
+void __fastcall Unreferenced_0051d730(void * pArray);
 BOOL __stdcall BNNEWS_Shutdown();
 int __fastcall BNNEWS_AllocateNewsEntry(uint32_t * pNewsTable);
 void __fastcall BNNEWS_EnsureCapacity(struct D2BnNewsTableStrc * pNewsTable, int, uint32_t dwAdditionalCount);
@@ -335,6 +337,7 @@ BOOL __stdcall BNNEWS_LoadCachedNews();
 int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnNewsEntryCallback pfnMotdCallback, pfnVoidNoArgCallback pfnNewsCallback);
 // Hashes CD key data using Storm SBig (SHA-1-like) algorithm. Used for both 16-char and 26-char CD keys. Produces 20-byte hash output.
 void __fastcall BNSEND_HashCDKeyData(void * pOutHash, void * pTokenData, uint32_t nDataLength);
+int Unreferenced_0051dd20();
 // Decodes 16-character CD key string into three components (Product: 3 hex digits, Public: 7 hex digits, Private: 9 hex digits). Validates checksum and performs character shuffling/XOR transformations. Returns 1 on success, 0 on failure.
 int __fastcall BNSEND_DecodeCDKeyString(uint32_t * pOutProduct, uint32_t * pOutPublic, char * szCDKey, uint32_t * pOutPrivate);
 BOOL __fastcall BNNEWS_DecodeCDKey26Char(char * szCDKey, uint32_t * pOutValue1, uint32_t * pOutValue2, uint16_t * pOutValue3);

@@ -110,13 +110,18 @@ uint32_t __stdcall SMsgPushRegisterState(HWND nSubId) {
     return 1;
 }
 
-uint32_t __stdcall WND_SetActiveWindow(HWND pWindow) {
+BOOL __stdcall WND_SetActiveWindow(HWND pWindow) {
     gpActiveWindow = pWindow;
     return 1;
 }
 
-int __fastcall Unreferenced_004203c0(StormLinkStrc * param_1) {
-    return param_1->pNext <= 0 ? 0 : param_1->pNext;
+int __fastcall Unreferenced_004203c0(StormLinkStrc * pLink) {
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
+}
+
+uint32_t Unreferenced_004203d0() {
+    int in_ECX;
+    return *(uint32_t*)(in_ECX + 4);
 }
 
 StormLinkStrc * __fastcall WND_ResolveListOffset(StormLinkStrc * pNode, int, intptr_t pBase) {
@@ -131,14 +136,21 @@ StormLinkStrc * __fastcall WND_ResolveListOffset(StormLinkStrc * pNode, int, int
     return (StormLinkStrc*)(nOffset + pBase);
 }
 
-void __fastcall Unreferenced_00420470(StormLinkedListStrc * param_1) {
-    StormLinkStrc* pSVar1 = &param_1->head;
+void __fastcall Unreferenced_00420470(StormLinkedListStrc * pList) {
+    StormLinkStrc* pSVar1 = &pList->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uintptr_t)pSVar1;
+    pList->head.pNext = ~(uintptr_t)pSVar1;
 }
 
-int __fastcall Unreferenced_004204f0(StormLinkStrc * param_1) {
-    return param_1->pNext <= 0 ? 0 : param_1->pNext;
+int __fastcall Unreferenced_004204f0(StormLinkStrc * pLink) {
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
+}
+
+void __fastcall Unreferenced_00420500(StormLinkedListStrc * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->head;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 int32_t __fastcall WND_GetNodeOrDefault(int32_t pThis, int, int32_t pNode) {
@@ -198,6 +210,20 @@ uint32_t __fastcall WND_GetNodeMaskedOffset(StormLinkedListStrc * pThis, int, St
     return pNode->pNext <= 0 ? 0 : pNode->pNext;
 }
 
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_00420610(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
+}
+
 void __fastcall WND_UnlinkListNode(StormLinkedListStrc * pThis, int, StormLinkStrc * pNode) {
     StormLinkStrc** pBacklink;
     if (!pNode) {
@@ -216,14 +242,19 @@ void __fastcall WND_UnlinkListNode(StormLinkedListStrc * pThis, int, StormLinkSt
     pNode->pNext = 0;
 }
 
-StormLinkedListStrc * __fastcall Unreferenced_004206a0(StormLinkedListStrc * param_1) {
-    StormLinkStrc* pSVar1 = &param_1->head;
+StormLinkedListStrc * __fastcall Unreferenced_004206a0(StormLinkedListStrc * pList) {
+    StormLinkStrc* pSVar1 = &pList->head;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
     pSVar1->pPrevLink = pSVar1;
-    param_1->nLinkOffset = 0;
-    param_1->head.pNext = ~(uintptr_t)pSVar1;
-    return param_1;
+    pList->nLinkOffset = 0;
+    pList->head.pNext = ~(uintptr_t)pSVar1;
+    return pList;
+}
+
+int __fastcall Unreferenced_004206c0(StormLinkedListStrc * pList) {
+    uint32_t uVar1 = pList->head.pNext;
+    return (uint32_t)!((int)uVar1 <= 0 ? 0 : uVar1);
 }
 
 intptr_t __fastcall WND_GetNodeData(StormLinkedListStrc * pThis, int, StormLinkStrc * pNode) {
@@ -232,6 +263,20 @@ intptr_t __fastcall WND_GetNodeData(StormLinkedListStrc * pThis, int, StormLinkS
     }
 
     return pThis->head.pNext;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_00420710(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 }} // namespace Storm::WindowHandle
@@ -275,10 +320,24 @@ void __fastcall WND_DetachAndClearChildren(StormLinkedListStrc * pWindow) {
     pSVar1->pNext = 0;
 }
 
-StormLinkStrc * __fastcall Unreferenced_004207d0(StormLinkStrc * param_1) {
-    param_1->pPrevLink = 0;
-    param_1->pNext = 0;
-    return param_1;
+StormLinkStrc * __fastcall Unreferenced_004207d0(StormLinkStrc * pLink) {
+    pLink->pPrevLink = 0;
+    pLink->pNext = 0;
+    return pLink;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_004207e0(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 int * * __fastcall WND_AllocRecord(int * * ppList, int, int32_t nMode, int32_t nSize, uint32_t dwFlags) {
@@ -555,15 +614,15 @@ uint8_t * __stdcall WND_GetWndProc(int32_t nResourceId) {
     return (uint8_t*)GenericWndProc;
 }
 
-int __fastcall Unreferenced_00420d80(uint32_t * param_1) {
-    *param_1 = 0;
-    param_1[1] = 0;
-    param_1[2] = 0;
+int __fastcall Unreferenced_00420d80(uint32_t * pData) {
+    *pData = 0;
+    pData[1] = 0;
+    pData[2] = 0;
     return 0;
 }
 
-int __fastcall Unreferenced_00420da0(BigBuffer * param_1) {
-    return param_1->nCount - param_1->nStartWord;
+int __fastcall Unreferenced_00420da0(BigBuffer * pBigBuffer) {
+    return pBigBuffer->nCount - pBigBuffer->nStartWord;
 }
 
 uint32_t __fastcall WND_ByteBuffer_HasRoom(uint8_t * pThis, int, int32_t nAddBytes) {

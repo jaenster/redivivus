@@ -87,6 +87,30 @@
       ]
     },
     {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_00601c70",
+      "address": "00601c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601c70"
+        }
+      ],
+      "namespace": "TSLink<CELLIST>",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_00601c70"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "c296f613",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
       "name": "IsForWriting",
       "address": "00601cb0",
       "lines": [
@@ -136,6 +160,24 @@
           "Stack[0x4]:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_00601cf0",
+      "address": "00601cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601cf0"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "Unreferenced_00601cf0"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>"
+      ],
+      "dh": "9ca56d5b"
     },
     {
       "name": "ComputeSlot",
@@ -289,6 +331,30 @@
         [
           "pNode",
           "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_00602140",
+      "address": "00602140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602140"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_00602140"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "2f1e22bf",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
         ]
       ]
     },
@@ -720,6 +786,78 @@
       ]
     },
     {
+      "name": "Unreferenced_00602730",
+      "address": "00602730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602730"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "Unreferenced_00602730"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
+      ],
+      "dh": "9320ab54",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00602750",
+      "address": "00602750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602750"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "Unreferenced_00602750"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "38a4b96a",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_00602760",
+      "address": "00602760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602760"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_00602760"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "1c96e42c",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
       "name": "Delete",
       "address": "006027e0",
       "lines": [
@@ -824,6 +962,42 @@
         "intptr_t"
       ],
       "dh": "a6269cd3"
+    },
+    {
+      "name": "Constructor",
+      "address": "00602930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602930"
+        }
+      ],
+      "namespace": "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+      "calledFunctions": [
+        "Constructor"
+      ],
+      "usedTypes": [
+        "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>"
+      ],
+      "dh": "e35bd970"
+    },
+    {
+      "name": "Unreferenced_00602950",
+      "address": "00602950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602950"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "Unreferenced_00602950"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>"
+      ],
+      "dh": "7df6b7ce"
     },
     {
       "name": "DeleteUnlock",
@@ -964,6 +1138,21 @@
         "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>"
       ],
       "dh": "b1ba4b1a"
+    },
+    {
+      "name": "Unreferenced_00603ed0",
+      "address": "00603ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603ed0"
+        }
+      ],
+      "namespace": "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>",
+      "calledFunctions": [
+        "Unreferenced_00603ed0"
+      ],
+      "dh": "eb7cb826"
     },
     {
       "name": "CalcChunkSize",

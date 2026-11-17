@@ -17,6 +17,7 @@
 // Forward declarations
 struct D2BitBufferStrc;
 struct D2PoolManagerStrc;
+struct D2PropertiesTxt;
 typedef uint32_t eD2QuestState;
 typedef uint32_t eD2Quests;
 
@@ -35,5 +36,9 @@ void __stdcall FreeQuestRecordPool(struct D2PoolManagerStrc * pMemory, struct D2
 // Bit numbers from the 1.14d asm 0065c50e-0065c54d (ESI = slot base + 14) and the program's eD2QuestState enum.
 void __stdcall ReadQuestRecordFromBuffer(struct D2BitBufferStrc * pBitBuffer, char * szText, int16_t nSize, int32_t bResetQuestFlags);
 void __stdcall CopyQuestBitBuffer(struct D2BitBufferStrc * pBitBuffer, uint8_t * pOutputBuffer, int16_t nLength, uint32_t dwParam);
+// Module-private: no other module references these
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
+struct D2PropertiesTxt * Unreferenced_0065c5a0();
+#endif // D2_MODULE_D2Common
 
 } // namespace D2Common::QuestRecord

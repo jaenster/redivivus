@@ -1124,10 +1124,10 @@ static void CreateObjectPresetsForMap(D2DrlgMapStrc * pMapStrc, D2PoolManagerStr
     int floorFlagsBuf[256];
     D2DrlgGridStrc floorGrid;
     D2DrlgCoordStrc mapCoords;
-    mapCoords.nHeight = pMapStrc->nSizeY;
     mapCoords.nWidth = pMapStrc->nSizeX;
-    uint32_t xIndex = 0;
+    mapCoords.nHeight = pMapStrc->nSizeY;
     mapCoords.nPosX = 0;
+    uint32_t xIndex = 0;
     mapCoords.nPosY = 0;
     DrlgGrid::FillExternalCellFlags(&floorGrid, (D2DrlgMapStrc*)pMapStrc->pDrlgFile->pFloorLayer[0], &mapCoords, mapCoords.nWidth + 1, floorFlagsBuf);
     mapCoords.nPosX = pMapStrc->nRealOffsetX;
@@ -1671,12 +1671,12 @@ int32_t __fastcall GetSizeY(int32_t nLvlPrestId) {
     return pLvlPrest->SizeY;
 }
 
-D2DrlgGridStrc * __fastcall Unreferenced_00666ff0(D2RoomExStrc * param_1) {
-    return param_1->pRoomExData.pRoomExDataPreset->pMazeGrid;
+D2DrlgGridStrc * __fastcall Unreferenced_00666ff0(D2RoomExStrc * pRoomEx) {
+    return pRoomEx->pRoomExData.pRoomExDataPreset->pMazeGrid;
 }
 
-int __fastcall Unreferenced_00667000(D2RoomExStrc * param_1) {
-    return (int)param_1->pRoomExData.pRoomExDataOutdoorRoom->pOrientationGrid.pCellsFlags;
+int __fastcall Unreferenced_00667000(D2RoomExStrc * pRoomEx) {
+    return (int)pRoomEx->pRoomExData.pRoomExDataOutdoorRoom->pOrientationGrid.pCellsFlags;
 }
 
 // DRLGPRESET_GetPickedFilePathFromRoomEx
@@ -1887,14 +1887,15 @@ void __fastcall UpdatePops(D2RoomExStrc * pRoomEx, int32_t nX, int32_t nY, BOOL 
     } while (nNearIdx < pRoomEx->nDrlgRoomsExNearCount);
 }
 
-D2DrlgVertexStrc * __fastcall Unreferenced_00667420(D2DrlgLevelStrc * param_1) {
-    return param_1->pDrlgLevelData.pDrlgLevelPresetData->pDrlgMap->pVertices;
+D2DrlgVertexStrc * __fastcall Unreferenced_00667420(D2DrlgLevelStrc * pLevel) {
+    return pLevel->pDrlgLevelData.pDrlgLevelPresetData->pDrlgMap->pVertices;
 }
 
 // @sourcefile .\DRLG\Preset.cpp
 void __fastcall DRLGLEVEL_InitializeWithPresetArea(D2DrlgLevelStrc * pLevel) {
     uint32_t nRandomFile;
-    D2DrlgLevelDataPresetArea* pDrlgLevelPresetData = D2_NEW_POOL_AT(pLevel->pDrlg->pMemoryPool, D2DrlgLevelDataPresetArea, ".\\DRLG\\Preset.cpp", 0xaf9);
+    D2PoolManagerStrc* t2_c0 = pLevel->pDrlg->pMemoryPool;
+    D2DrlgLevelDataPresetArea* pDrlgLevelPresetData = D2_NEW_POOL_AT(t2_c0, D2DrlgLevelDataPresetArea, ".\\DRLG\\Preset.cpp", 0xaf9);
     D2LvlPrestTxt* pLvlPrest = DATATBLS::LvlTbls::TXT_LvlPrest_FindLineByLevelId(pLevel->eD2LevelId);
     if (!pLvlPrest) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xafb);

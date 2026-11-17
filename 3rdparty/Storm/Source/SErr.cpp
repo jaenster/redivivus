@@ -239,10 +239,10 @@ uint32_t __thiscall SSYSTEM_ListOffsetToPointer(StormLinkStrc * pNode, intptr_t 
     return nOffset + pBase;
 }
 
-void __fastcall Unreferenced_0041c410(StormLinkedListStrc * param_1) {
-    StormLinkStrc* pSVar1 = &param_1->head;
+void __fastcall Unreferenced_0041c410(StormLinkedListStrc * pList) {
+    StormLinkStrc* pSVar1 = &pList->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uintptr_t)pSVar1;
+    pList->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 // Looks the message-source module for (dwMessageId >> 16) & 0xfff out of gpErrorModuleList, then calls FormatMessageA with that module as lpSource. Returns nonzero on success.
@@ -339,6 +339,20 @@ uint32_t __thiscall SSYSTEM_ListGetNext(StormLinkedListStrc * pList, StormLinkSt
     return pNode->pNext <= 0 ? 0 : pNode->pNext;
 }
 
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0041c650(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
+}
+
 void __thiscall SSYSTEM_ListUnlink(StormLinkedListStrc * pThis, StormLinkStrc * pNode) {
     StormLinkStrc** pPrevLink;
     if (!pNode) {
@@ -357,14 +371,14 @@ void __thiscall SSYSTEM_ListUnlink(StormLinkedListStrc * pThis, StormLinkStrc * 
     pNode->pNext = 0;
 }
 
-StormLinkedListStrc * __fastcall Unreferenced_0041c6e0(StormLinkedListStrc * param_1) {
-    StormLinkStrc* pSVar1 = &param_1->head;
+StormLinkedListStrc * __fastcall Unreferenced_0041c6e0(StormLinkedListStrc * pList) {
+    StormLinkStrc* pSVar1 = &pList->head;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
     pSVar1->pPrevLink = pSVar1;
-    param_1->nLinkOffset = 0;
-    param_1->head.pNext = ~(uintptr_t)pSVar1;
-    return param_1;
+    pList->nLinkOffset = 0;
+    pList->head.pNext = ~(uintptr_t)pSVar1;
+    return pList;
 }
 
 intptr_t __thiscall SSYSTEM_ListGetData(StormLinkedListStrc * pList, StormLinkStrc * pNode) {
@@ -373,6 +387,20 @@ intptr_t __thiscall SSYSTEM_ListGetData(StormLinkedListStrc * pList, StormLinkSt
     }
 
     return pList->head.pNext;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0041c730(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 } // namespace Storm::Source::SErr
@@ -420,10 +448,24 @@ void __fastcall TSList_HANDLER_Destructor(StormLinkedListStrc * pList) {
     pSVar1->pNext = 0;
 }
 
-StormLinkStrc * __fastcall Unreferenced_0041c7f0(StormLinkStrc * param_1) {
-    param_1->pPrevLink = 0;
-    param_1->pNext = 0;
-    return param_1;
+StormLinkStrc * __fastcall Unreferenced_0041c7f0(StormLinkStrc * pLink) {
+    pLink->pPrevLink = 0;
+    pLink->pNext = 0;
+    return pLink;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0041c800(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 int * * __thiscall SSYSTEM_ListAllocNode(int * * pList, int32_t nInsertMode, int32_t nDataSize, uint32_t nAllocFlags) {
@@ -491,12 +533,13 @@ void __stdcall SErrRegisterHandler(pfnSErrDisplayCallback pfnCallback) {
 
     pNode->pPrevLink = (StormLinkStrc*)((char*)&gnStormErrorCallbackCount + 4);
     pNode->pNext = gnStormErrorCallbackCount.head.pNext;
+    int32_t t2_c0 = gnStormErrorCallbackCount.nLinkOffset;
     if (gnStormErrorCallbackCount.head.pNext < 0) {
       pPrevSlot = (uint32_t*)~gnStormErrorCallbackCount.head.pNext;
     } else {
       intptr_t nListOffset;
-      nListOffset = gnStormErrorCallbackCount.nLinkOffset;
-      if (gnStormErrorCallbackCount.nLinkOffset < 0) {
+      nListOffset = t2_c0;
+      if (t2_c0 < 0) {
         nListOffset = (intptr_t)&gnStormErrorCallbackCount.head - gnStormErrorCallbackCount.head.pPrevLink->pNext;
       }
 

@@ -83,7 +83,7 @@ void __stdcall Q35_Noop();
 // [A5Q5 = Rite of Passage] Q35_IsAncientsActive: returns 1 if the Ancients fight is currently engaged (field_0x11). No quest-state writes.
 BOOL __fastcall Q35_IsAncientsActive(::SGAMEDATA * pGame);
 // [A5Q5 = Rite of Passage] Q35_AreAncientsReadyToFight: returns 1 if Ancients were spawned but none remain alive (i.e. all defeated). No quest-state writes.
-uint32_t __fastcall Q35_AreAncientsReadyToFight(::SGAMEDATA * pGame);
+BOOL __fastcall Q35_AreAncientsReadyToFight(::SGAMEDATA * pGame);
 // [A5Q5 = Rite of Passage] Q35_FindAncientByClassId: looks up a live spawned Ancient unit by classId among the tracked GUIDs. No quest-state writes.
 struct D2UnitStrc * __fastcall Q35_FindAncientByClassId(::SGAMEDATA * pGame, int32_t nClassId);
 // [A5Q5 = Rite of Passage] Q35_CheckQuestNotStarted: predicate (returns BOOL in EAX) — true if quest is active but the Ancients fight hasn't been started yet. No quest-state writes.

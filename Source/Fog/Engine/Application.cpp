@@ -31,7 +31,7 @@ HMODULE gaEnumProcessModuleHandles[1024] = {}; D2_GLOBAL_GUARD(gaEnumProcessModu
 
 namespace Fog::Engine::Application {
 
-static uint32_t DEBUG_ParseNB01DebugInfo(CV_INFO_PDB20 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo);
+static uint8_t DEBUG_ParseNB01DebugInfo(CV_INFO_PDB20 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo);
 static uint8_t DEBUG_ParseRSDSDebugInfo(CV_INFO_PDB70 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo);
 
 int Unreferenced_004046d0() {
@@ -94,76 +94,66 @@ bool __stdcall DEBUG_IsValidDebugDirectorySize(uint32_t nDirSize) {
     return nDirSize >= 0x1c ? true : false;
 }
 
-static uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, D2FogDebugModuleEntryStrc * pModuleInfoOut) {
-    uint32_t nParseResult;
-    uint32_t extraout_var;
+static uint8_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, D2FogDebugModuleEntryStrc * pModuleInfoOut) {
+    uint8_t bVar1;
     if (nDataSize < 4) {
-      return nDataSize & -256;
+      return 0;
     }
 
-    /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ nDataSize = IsBadReadPtr(pDebugData, nDataSize);
-    if (nDataSize) {
-      return nDataSize & -256;
+    BOOL BVar2 = IsBadReadPtr(pDebugData, nDataSize);
+    if (BVar2) {
+      return 0;
     }
-
-    nDataSize = *pDebugData;
-    if (nDataSize == 0x3031424e) {
-      nParseResult = DEBUG_ParseNB01DebugInfo((CV_INFO_PDB20*)pDebugData, pModuleInfoOut);
-      return nParseResult;
+    if (*pDebugData == 0x3031424e) {
+      bVar1 = DEBUG_ParseNB01DebugInfo((CV_INFO_PDB20*)pDebugData, pModuleInfoOut);
+      return bVar1;
     }
-    if (nDataSize == 0x53445352) {
-      uint8_t bVar1;
+    if (*pDebugData == 0x53445352) {
       bVar1 = DEBUG_ParseRSDSDebugInfo((CV_INFO_PDB70*)pDebugData, pModuleInfoOut);
-      return (uint32_t)((uint32_t)((uint32_t)extraout_var & 0xffffffu) << 8 | (uint32_t)(uint8_t)bVar1);
+      return bVar1;
     }
 
-    return nDataSize & -256;
+    return 0;
 }
 
-static uint32_t __stdcall DEBUG_ParseDebugDataDirectory(uint32_t nCount, uint8_t * nBaseAddress, uint8_t * pDirEntries, D2FogDebugModuleEntryStrc * pOutput) {
+static uint8_t __stdcall DEBUG_ParseDebugDataDirectory(uint32_t nCount, uint8_t * nBaseAddress, uint8_t * pDirEntries, D2FogDebugModuleEntryStrc * pOutput) {
     uint8_t bVar1;
     BOOL bIsBadPtr;
-    uint32_t nParseResult;
     CV_INFO_PDB70* pDebugData;
-    uint32_t nDirIter;
-    nDirIter = nCount * 0x24924925;
     uint32_t nIter;
     nIter = 0;
     if (!(nCount / 0x1c)) {
-      return nDirIter & -256;
+      return 0;
     }
 
     int* pEntry;
     pEntry = (int*)(pDirEntries + 0xc);
     do {
-      uint32_t extraout_var;
       pDebugData = (CV_INFO_PDB70*)(nBaseAddress + pEntry[2]);
       if (*pEntry == 2 && (uint32_t)pEntry[1] >= 4) {
         /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(pDebugData, pEntry[1]);
         if (!bIsBadPtr) {
           if (pDebugData->CvSignature == 0x3031424e) {
-            nParseResult = DEBUG_ParseNB01DebugInfo((CV_INFO_PDB20*)pDebugData, pOutput);
+            bVar1 = DEBUG_ParseNB01DebugInfo((CV_INFO_PDB20*)pDebugData, pOutput);
           } else {
             if (pDebugData->CvSignature != 0x53445352) {
               goto next_entry;
             }
 
             bVar1 = DEBUG_ParseRSDSDebugInfo(pDebugData, pOutput);
-            nParseResult = (uint32_t)((uint32_t)((uint32_t)extraout_var & 0xffffffu) << 8 | (uint32_t)(uint8_t)bVar1);
           }
-          if ((char)nParseResult != '\0') {
-            return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)(nParseResult >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+          if (bVar1) {
+            return 1;
           }
         }
       }
 
       next_entry:
-      nDirIter = nIter + 1;
+      nIter++;
       pEntry += 7;
-      nIter = nDirIter;
-    } while (nDirIter < nCount / 0x1c);
+    } while (nIter < nCount / 0x1c);
 
-    return nDirIter & -256;
+    return 0;
 }
 
 static uint8_t __stdcall DEBUG_ParseModuleHeaders(D2FogDebugModuleEntryStrc * ppModuleBase, short * pModuleBase) {
@@ -452,15 +442,15 @@ static void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwUnused, uint32_t 
     *pnSize = nSize;
 }
 
-static uint32_t DEBUG_ParseNB01DebugInfo(CV_INFO_PDB20 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo) {
-    uint32_t bIsBadPtr = IsBadReadPtr(pDebugRecord, 0x14);
+static uint8_t DEBUG_ParseNB01DebugInfo(CV_INFO_PDB20 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo) {
+    BOOL bIsBadPtr = IsBadReadPtr(pDebugRecord, 0x14);
     if (bIsBadPtr) {
-      return bIsBadPtr & -256;
+      return 0;
     }
 
     /* UINT_PTR ucchMax for IsBadStringPtrA */ /* LPCSTR lpsz for IsBadStringPtrA */ bIsBadPtr = IsBadStringPtrA((LPCSTR)(pDebugRecord + 1), 0x104);
     if (bIsBadPtr) {
-      return bIsBadPtr & -256;
+      return 0;
     }
 
     strncpy_s(pModuleInfo->szImagePath, 0x100, (char*)(pDebugRecord + 1), -1);

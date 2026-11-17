@@ -701,34 +701,34 @@ void __fastcall CLIENT_AdjustMemoryBudget(D2PoolManagerStrc * pMemory, int32_t b
       exit(-1);
     }
 
-    uint32_t dwPhysMemBytes;
-    dwPhysMemBytes = pStormGlobal->dwTotalPhysicalMemory;
-    if (dwPhysMemBytes < 0x167d000) {
-      fPhysMemMB = (float)dwPhysMemBytes;
+    uint32_t uVar1;
+    uVar1 = pStormGlobal->dwTotalPhysicalMemory;
+    if (uVar1 < 0x167d000) {
+      fPhysMemMB = (float)uVar1;
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("This machine doesn\'t have enough physical memory (> %.2f MB) for minimal performance!", (double)(fPhysMemMB * 9.5367431640625e-7));
       exit(-1);
     }
 
     uint32_t dwAvailMemOverride;
-    dwAvailMemOverride = dwPhysMemBytes - 0xb00000;
-    dwPhysMemBytes = dwAvailMemOverride * 10 / 100;
-    if (dwPhysMemBytes > 0x300000) {
-      if (dwPhysMemBytes >= 0x500000) {
-        dwPhysMemBytes = 0x500000;
+    dwAvailMemOverride = uVar1 - 0xb00000;
+    uint32_t dwCelCacheSize;
+    dwCelCacheSize = dwAvailMemOverride * 10 / 100;
+    if (dwCelCacheSize > 0x300000) {
+      if (dwCelCacheSize >= 0x500000) {
+        dwCelCacheSize = 0x500000;
       }
     } else {
-      dwPhysMemBytes = 0x300000;
+      dwCelCacheSize = 0x300000;
     }
 
-    Sound::SoundHdr::SOUNDHDR_SetGlobal4(dwPhysMemBytes);
+    Sound::SoundHdr::SOUNDHDR_SetGlobal4(dwCelCacheSize);
     int nRemainingBytes;
-    nRemainingBytes = dwAvailMemOverride - dwPhysMemBytes;
+    nRemainingBytes = dwAvailMemOverride - dwCelCacheSize;
     if (bInitSpriteCache) {
       nRemainingBytes += -0x600000;
       D2CMP::SRC::SpriteCache::GFX_InitLRUCache(pMemory, 0x600000);
     }
 
-    uint32_t dwCelCacheSize;
     dwCelCacheSize = (nRemainingBytes - 0x200000U) / 3;
     if (dwCelCacheSize > 0x1800000) {
       if (dwCelCacheSize >= 0x4000000) {

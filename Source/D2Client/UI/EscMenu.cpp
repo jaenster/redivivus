@@ -59058,13 +59058,13 @@ static void ESCMENU_HandleSliderDrag(int32_t nMouseX, int32_t nMouseY) {
 void __stdcall INPUT_EscMenuMouseDown(D2UIMouseMsgStrc * pMsg) {
     uint32_t nMouseX;
     uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    uint16_t uVar1 = pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t uVar1 = pMsg->uLParam.sMousePos.nMouseX;
     int32_t nHitIndex = ESCMENU_GetItemIndexFromMouseY(nMouseY);
     if (nHitIndex != -1) {
       gnEscMenuSelectedIndex = nHitIndex;
     }
 
-    ESCMENU_HandleSliderDrag((uint32_t)uVar1, nMouseY);
+    ESCMENU_HandleSliderDrag(uVar1, nMouseY);
     gbEscMenuSliderDragging = 1;
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;

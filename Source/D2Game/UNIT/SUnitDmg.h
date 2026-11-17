@@ -172,7 +172,7 @@ void __fastcall DAMAGE_AddSkillBonusDamage(struct D2UnitStrc * pUnit, eD2Skills 
 void __fastcall SKILL_CalculateDamageForEvent(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nSkillLevel, struct D2DamageStrc * pDamage);
 int32_t __fastcall DAMAGE_SafeShiftMultiply(int32_t nMultiplicand, int32_t nMultiplier, int32_t nShiftBits);
 // Iterator callback used when distributing kill experience to nearby party members. For each candidate player unit (pUnit), checks if dead (early-return), then tests whether the unit is within range of the victim (squared-distance threshold 0x1900). If in range, appends the unit and its level into the pPartyExp accumulator struct (max 8 players); halts fatally if the party array is full.
-BOOL __fastcall ExperienceLoopOverPlayers(uint32_t pGame, struct D2UnitStrc * pUnit, struct D2PartyExperienceStrc * pPartyExp);
+BOOL __fastcall ExperienceLoopOverPlayers(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2PartyExperienceStrc * pPartyExp);
 void __fastcall SERVER_KillExperience(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim);
 void __fastcall DAMAGE_AwardKillExperience(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nXpGain);
 // Forces a player or mercenary unit to reach nTargetLevel by granting the required XP delta. For players, reads the Experience.txt threshold and calls SERVER_PlayerUpdateExperience with the deficit. For merc monsters, locates the owner's pet data and HirelingTxt record, then calls SERVER_SEND_MercExperience to synchronise. No-ops if unit is already at or above nTargetLevel.

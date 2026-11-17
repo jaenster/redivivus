@@ -1024,7 +1024,7 @@ void __fastcall DRLGPATH_CalcPathDirection(POINT * pPoint, uint32_t * pnDirectio
 // DRLGPATH_GetDirectionFromCoords - Converts tile coordinates to fixed-point and calls DRLGPATH_CalcDirectionVector. Used by GetDirectionToCoords, Skills_SrvDoFunc_062, and Update to determine facing direction.
 uint32_t __stdcall DRLGPATH_GetDirectionFromCoords(uint32_t nX, int32_t nY, int32_t nNewX, int32_t nNewY) {
     POINT ptResult;
-    DRLGPATH_CalcDirectionVector(&ptResult, &nX, (nX << 0x10) + 0x8000, (nY << 0x10) + 0x8000, (nNewX << 0x10) + 0x8000, (nNewY << 0x10) + 0x8000);
+    DRLGPATH_CalcDirectionVector(&ptResult, &nX, (nX << 0x10) + 0x8000, nY * 0x10000 + 0x8000, nNewX * 0x10000 + 0x8000, nNewY * 0x10000 + 0x8000);
     return nX;
 }
 
@@ -1398,7 +1398,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) 
     return p->eUnitFlags >> 21 & 1;
 }
 
-uint32_t __fastcall PATH_CheckPathCollision(D2UnitStrc * pUnit, D2DynamicPathStrc * pDynamicPath) {
+BOOL __fastcall PATH_CheckPathCollision(D2UnitStrc * pUnit, D2DynamicPathStrc * pDynamicPath) {
     eD2UnitType eOwnerType = UNIT_COUNT;
     if (pUnit) {
       eOwnerType = pUnit->eUnitType;
@@ -1536,8 +1536,8 @@ static void PATH_ResetPathState(D2DynamicPathStrc * pDynamicPath) {
     pDynamicPath->nVelocityY = 0;
 }
 
-D2DynamicPathStrc * __fastcall Unreferenced_00650800(D2UnitStrc * param_1) {
-    D2DynamicPathStrc* pDynamicPath = param_1->pPath.pDynamicPath;
+D2DynamicPathStrc * __fastcall Unreferenced_00650800(D2UnitStrc * pUnit) {
+    D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     if (!pDynamicPath) {
       return nullptr;
     }
@@ -1698,7 +1698,7 @@ BOOL __stdcall PATH_MoveUnitToRoomPosition(D2DynamicPathStrc * pDynamicPath, D2U
     return 1;
 }
 
-uint32_t __stdcall PATH_TestLineOfSight(D2DynamicPathStrc * pDynamicPath, int * pbCollisionType, D2RoomStrc * pRoom, int32_t nTargetX, int32_t nTargetY) {
+BOOL __stdcall PATH_TestLineOfSight(D2DynamicPathStrc * pDynamicPath, int * pbCollisionType, D2RoomStrc * pRoom, int32_t nTargetX, int32_t nTargetY) {
     D2RoomStrc* pBetterRoom;
     if (!pbCollisionType) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x50d);
@@ -1718,7 +1718,7 @@ uint32_t __stdcall PATH_TestLineOfSight(D2DynamicPathStrc * pDynamicPath, int * 
       pDynamicPath->nFlags |= 1;
     }
 
-    DRLGPATH_SetPathPosition((nTargetX << 0x10) + 0x8000, (nTargetY << 0x10) + 0x8000, pRoom, pDynamicPath);
+    DRLGPATH_SetPathPosition(nTargetX * 0x10000 + 0x8000, nTargetY * 0x10000 + 0x8000, pRoom, pDynamicPath);
     pBetterRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nTargetX, nTargetY);
     if (!pBetterRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x524);

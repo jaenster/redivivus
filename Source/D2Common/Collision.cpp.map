@@ -570,6 +570,21 @@
       ]
     },
     {
+      "name": "Unreferenced_0064c8f0",
+      "address": "0064c8f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c8f0"
+        }
+      ],
+      "namespace": "D2Common::Collision",
+      "calledFunctions": [
+        "Unreferenced_0064c8f0"
+      ],
+      "dh": "e2b65d4a"
+    },
+    {
       "name": "AllocRoomCollisionGrid",
       "address": "0064c900",
       "lines": [

@@ -19,10 +19,10 @@
       "usedTypes": [
         "D2MonStats2Txt"
       ],
-      "dh": "00e4355e",
+      "dh": "7a65c626",
       "paramStorage": [
         [
-          "param_1",
+          "nIndex",
           "ECX:4"
         ]
       ]

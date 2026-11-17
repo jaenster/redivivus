@@ -176,7 +176,7 @@ static int32_t FindFreeSlotInBitmap(uint32_t * pnBitmap, uint32_t nTotalBits) {
       if (nWordCount <= 8) {
         if (nTotalBits & 0x1f && pnBitmap[nWordCount] != gdwFogMemoryAllocFlags[nTotalBits & 0x1f]) {
           nFreeSlot = FindFirstFreeBit(pnBitmap[nWordCount]);
-          nFreeSlot = (nWordCount << 5) + (nFreeSlot + nBaseOffset);
+          nFreeSlot = nWordCount * 0x20 + (nFreeSlot + nBaseOffset);
         }
 
         return nFreeSlot;

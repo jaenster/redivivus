@@ -137,7 +137,7 @@
       "calledFunctions": [
         "WND_SetActiveWindow"
       ],
-      "dh": "1e84f3d7",
+      "dh": "9241bd35",
       "paramStorage": [
         [
           "pWindow",
@@ -161,13 +161,28 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "0e6aa392",
+      "dh": "754355a9",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
           "ECX:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_004203d0",
+      "address": "004203d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004203d0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "Unreferenced_004203d0"
+      ],
+      "dh": "74d4c61a"
     },
     {
       "name": "WND_ResolveListOffset",
@@ -215,10 +230,10 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "93e373d5",
+      "dh": "4fba2829",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -239,10 +254,34 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "8d4828da",
+      "dh": "323138b3",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00420500",
+      "address": "00420500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420500"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "Unreferenced_00420500"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
+      ],
+      "dh": "097e212a",
+      "paramStorage": [
+        [
+          "pListHead",
           "ECX:4"
         ]
       ]
@@ -346,6 +385,30 @@
       ]
     },
     {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_00420610",
+      "address": "00420610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420610"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_00420610"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "8d5d2765",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
       "name": "WND_UnlinkListNode",
       "address": "00420650",
       "lines": [
@@ -392,10 +455,34 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "a6062aaf",
+      "dh": "897354e8",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_004206c0",
+      "address": "004206c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004206c0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "Unreferenced_004206c0"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
+      ],
+      "dh": "7d59f201",
+      "paramStorage": [
+        [
+          "pList",
           "ECX:4"
         ]
       ]
@@ -427,6 +514,30 @@
         [
           "pNode",
           "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_00420710",
+      "address": "00420710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420710"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_00420710"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "126bc651",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
         ]
       ]
     },
@@ -495,10 +606,34 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "a97c18f7",
+      "dh": "9c37f8ea",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_004207e0",
+      "address": "004207e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004207e0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_004207e0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "394b2163",
+      "paramStorage": [
+        [
+          "pNode",
           "ECX:4"
         ]
       ]
@@ -1176,10 +1311,10 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "ed662ec3",
+      "dh": "4a5b49cf",
       "paramStorage": [
         [
-          "param_1",
+          "pData",
           "ECX:4"
         ]
       ]
@@ -1200,10 +1335,10 @@
       "usedTypes": [
         "BigBuffer"
       ],
-      "dh": "24997a2a",
+      "dh": "4f738101",
       "paramStorage": [
         [
-          "param_1",
+          "pBigBuffer",
           "ECX:4"
         ]
       ]

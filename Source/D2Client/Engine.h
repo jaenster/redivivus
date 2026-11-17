@@ -58,12 +58,12 @@ void __stdcall INPUT_CharScreenDualButtonCancel(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall LOADER_FreePopupImages();
 void __fastcall LOADER_SetConnectionLostFlag(BOOL bConnectionLost);
 // Sets draw function mode, registers event handlers, runs game loop with custom fpGameLoopFunction, then cleans up
-uint32_t __fastcall ENGINE_RunDrawModeGameLoop(int32_t nDrawMode);
+BOOL __fastcall ENGINE_RunDrawModeGameLoop(int32_t nDrawMode);
 void __fastcall CLIENT_SetUnitFlag(struct D2UnitStrc * pUnit, uint16_t wFlag, BOOL bSet);
-void __fastcall Unreferenced_00460760(struct D2UnitStrc * param_1, int param_2);
-int __fastcall Unreferenced_004607d0(struct D2UnitStrc * param_1);
-int __fastcall Unreferenced_004607f0(struct D2UnitStrc * param_1);
-int __fastcall Unreferenced_00460810(struct D2UnitStrc * param_1);
+void __fastcall Unreferenced_00460760(struct D2UnitStrc * pUnit, int bPendingInteract);
+int __fastcall Unreferenced_004607d0(struct D2UnitStrc * pUnit);
+int __fastcall Unreferenced_004607f0(struct D2UnitStrc * pUnit);
+int __fastcall Unreferenced_00460810(struct D2UnitStrc * pUnit);
 void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms();
 void __fastcall CLIENT_UpdateUnitLightRadius(struct D2UnitStrc * pUnit, int32_t nRadiusBonus);
 void __fastcall CLIENT_SetUnitLightColor(struct D2UnitStrc * pUnit, int32_t dwRGB);

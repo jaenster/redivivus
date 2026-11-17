@@ -3,12 +3,13 @@
 const std = @import("std");
 const pe_mod = @import("pe.zig");
 const dec = @import("decode.zig");
+const proc = @import("proc.zig");
 const util = @import("util.zig");
 
 const gpa = util.gpa;
 
 // Reasons, in the alphabetical order Python's sorted() joins them.
-const WHY = [_][]const u8{ "call", "data", "entry", "export", "fptr", "jmp", "pad", "seh", "vtbl" };
+const WHY = [_][]const u8{ "call", "data", "entry", "export", "fptr", "jmp", "next", "pad", "seh", "vtbl" };
 const W = struct {
     const call = 1 << 0;
     const data = 1 << 1;
@@ -16,9 +17,10 @@ const W = struct {
     const exp = 1 << 3;
     const fptr = 1 << 4;
     const jmp = 1 << 5;
-    const pad = 1 << 6;
-    const seh = 1 << 7;
-    const vtbl = 1 << 8;
+    const next = 1 << 6;
+    const pad = 1 << 7;
+    const seh = 1 << 8;
+    const vtbl = 1 << 9;
 };
 
 /// One row of functions.tsv.
@@ -295,6 +297,19 @@ pub const Reference = struct {
                 const e = ends.get(starts[i]).?;
                 if (e <= v and r.padOnlyBetween(e, v)) try pending.append(gpa, .{ .a = v, .w = W.jmp });
             }
+            // A function whose code ends on a 16-byte boundary needs no padding before the next
+            // one, so the pad rule cannot see that one's start; nothing may call it either (an
+            // unreferenced function the link keeps, one reached through a table the carve does
+            // not read). Its start is where the decoded function before it ends. Code that data
+            // points at is left to the rule for it above: an SEH __finally or C++ EH funclet laid
+            // out after its function's body is an entry into that function, not one of its own.
+            for (starts) |s| {
+                const e = ends.get(s).?;
+                if (e % 16 != 0 or e >= te) continue;
+                if (reached.contains(e) or why.contains(e) or others.contains(e) or eh.contains(e)) continue;
+                if (r.code[e - ts] == 0xCC) continue;
+                try pending.append(gpa, .{ .a = e, .w = W.next });
+            }
             for (pending.items) |p| {
                 try add(&why, p.a, p.w);
                 added += 1;
@@ -473,5 +488,32 @@ pub fn carveMain(args: []const []const u8) !void {
     const r = try Reference.open(exe);
     try r.carve();
     try r.writeFunctions(out);
+    util.say(try std.fmt.allocPrint(gpa, "{d} functions -> {s}\n", .{ r.starts.len, out }));
+}
+
+/// On a native Windows host the Bash `oracle` wrapper is unavailable. Derive
+/// the reference cache from an already present Game.exe when it is missing.
+pub fn ensureFunctions(oracle_root: []const u8) !void {
+    const exe = try util.join(oracle_root, "reference/Game.exe");
+    if (!util.exists(exe)) {
+        std.debug.print("reference image missing: {s} (provide Game.exe before running the oracle)\n", .{exe});
+        return error.ReferenceImageMissing;
+    }
+    const expected = "631066c1649c4ea9ffe48bf97e24c00bca1f7a6759c21150f1a79982589adaaf";
+    var digest: [32]u8 = undefined;
+    std.crypto.hash.sha2.Sha256.hash(try util.readFile(exe), &digest, .{});
+    const actual = std.fmt.bytesToHex(digest, .lower);
+    if (!std.mem.eql(u8, actual[0..], expected)) {
+        std.debug.print("reference image SHA-256 mismatch: {s} has {s}, expected {s}\n", .{ exe, actual, expected });
+        return error.ReferenceImageMismatch;
+    }
+    const out = try util.join(oracle_root, "build/ref/functions.tsv");
+    if (util.exists(out)) return;
+    util.makeDirs(util.dirname(out));
+    const tmp = try std.mem.concat(gpa, u8, &.{ out, ".new" });
+    const r = try Reference.open(exe);
+    try r.carve();
+    try r.writeFunctions(tmp);
+    try proc.rename(tmp, out);
     util.say(try std.fmt.allocPrint(gpa, "{d} functions -> {s}\n", .{ r.starts.len, out }));
 }

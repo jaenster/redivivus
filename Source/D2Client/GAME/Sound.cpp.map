@@ -528,7 +528,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d4f22f21",
+      "dh": "92838e85",
       "paramStorage": [
         [
           "pSoundChannel",
@@ -587,7 +587,7 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d88efa08",
+      "dh": "7974b5b0",
       "paramStorage": [
         [
           "bActive",

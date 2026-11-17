@@ -80,7 +80,7 @@ int __fastcall BNMESSQUEUE_EnqueueBytes(int32_t nEventType, char * pBytes, size_
     return 1;
 }
 
-uint32_t __fastcall BNMESSQUEUE_EnqueueString(int32_t nEventType, char * szMessage) {
+BOOL __fastcall BNMESSQUEUE_EnqueueString(int32_t nEventType, char * szMessage) {
     char cCurrentChar;
     ::BnMessQueue* pNewMessage = D2_NEW_AT(::BnMessQueue, ".\\BnMessQueue.cpp", 0x5c);
     char* pDestBuffer = pNewMessage->bBuffer;
@@ -141,7 +141,7 @@ int __stdcall BNMESSQUEUE_ClearAll() {
     return 1;
 }
 
-uint32_t __fastcall BNMESSQUEUE_SetStateIfZero(int32_t nState) {
+BOOL __fastcall BNMESSQUEUE_SetStateIfZero(int32_t nState) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
     if (!g_nBattleNetConnectionState) {
       g_nBattleNetConnectionState = nState;
@@ -162,7 +162,7 @@ int __fastcall BNMESSQUEUE_SetStateWithString(int32_t nState, char * szMessage) 
     return 1;
 }
 
-uint32_t __fastcall SID_SetStateFlag1(uint32_t nState) {
+BOOL __fastcall SID_SetStateFlag1(int32_t nState) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
     g_nBattleNetConnectionState = nState;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00882004);

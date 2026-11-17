@@ -221,10 +221,10 @@
         "D2TileLibraryEntryStrc",
         "int32_t"
       ],
-      "dh": "d4e2559c",
+      "dh": "d37bbdd5",
       "paramStorage": [
         [
-          "nParam",
+          "pTileLibraryEntry",
           "Stack[0x4]:4"
         ]
       ]

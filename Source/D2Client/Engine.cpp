@@ -441,7 +441,7 @@ BOOL fpRequiredUserAction() {
 }
 
 // Sets draw function mode, registers event handlers, runs game loop with custom fpGameLoopFunction, then cleans up
-uint32_t __fastcall ENGINE_RunDrawModeGameLoop(int32_t nDrawMode) {
+BOOL __fastcall ENGINE_RunDrawModeGameLoop(int32_t nDrawMode) {
     GAME::Game::GAMEDATA_SetDrawFunction(nDrawMode);
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIEngineFlagInit, 4);
     _Message::MessageGameLoop((::fpGameLoopFunction)fpGameLoopFunction);
@@ -478,33 +478,33 @@ void __fastcall CLIENT_SetUnitFlag(D2UnitStrc * pUnit, uint16_t wFlag, BOOL bSet
     *(uint16_t*)&pUnit->pUnitData.pUnitDataMonster->pAiGeneral &= ~wFlag;
 }
 
-void __fastcall Unreferenced_00460760(D2UnitStrc * param_1, int param_2) {
-    if (!(param_1 && param_1->eUnitType == UNIT_PLAYER && param_1->pUnitData.pUnitDataPlayer)) {
+void __fastcall Unreferenced_00460760(D2UnitStrc * pUnit, int bPendingInteract) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->pUnitData.pUnitDataPlayer)) {
       return;
     }
 
-    param_1->pUnitData.pUnitDataPlayer->bHasPendingInteract = param_2;
+    pUnit->pUnitData.pUnitDataPlayer->bHasPendingInteract = bPendingInteract;
 }
 
-int __fastcall Unreferenced_004607d0(D2UnitStrc * param_1) {
-    if (param_1 && param_1->eUnitType == UNIT_PLAYER && param_1->pUnitData.pUnitDataPlayer) {
-      return param_1->pUnitData.pUnitDataPlayer->eQueuedSkillId;
+int __fastcall Unreferenced_004607d0(D2UnitStrc * pUnit) {
+    if (pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->pUnitData.pUnitDataPlayer) {
+      return pUnit->pUnitData.pUnitDataPlayer->eQueuedSkillId;
     }
 
     return 0;
 }
 
-int __fastcall Unreferenced_004607f0(D2UnitStrc * param_1) {
-    if (param_1 && param_1->eUnitType == UNIT_PLAYER && param_1->pUnitData.pUnitDataPlayer) {
-      return param_1->pUnitData.pUnitDataPlayer->eTargetUnitType;
+int __fastcall Unreferenced_004607f0(D2UnitStrc * pUnit) {
+    if (pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->pUnitData.pUnitDataPlayer) {
+      return pUnit->pUnitData.pUnitDataPlayer->eTargetUnitType;
     }
 
     return 0;
 }
 
-int __fastcall Unreferenced_00460810(D2UnitStrc * param_1) {
-    if (param_1 && param_1->eUnitType == UNIT_PLAYER && param_1->pUnitData.pUnitDataPlayer) {
-      return param_1->pUnitData.pUnitDataPlayer->nTargetUnitGUID;
+int __fastcall Unreferenced_00460810(D2UnitStrc * pUnit) {
+    if (pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->pUnitData.pUnitDataPlayer) {
+      return pUnit->pUnitData.pUnitDataPlayer->nTargetUnitGUID;
     }
 
     return 0;

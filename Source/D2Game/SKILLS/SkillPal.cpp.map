@@ -1181,7 +1181,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "784e62d9",
+      "dh": "4c9d9c00",
       "paramStorage": [
         [
           "pGame",
@@ -1220,6 +1220,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillPal",
       "calledFunctions": [
+        "Skills_SrvDoFunc_082_Redemption",
         "SKILLPAL_AuraCallback_Redemption",
         "SKILLS_IsSelectableCorpse3",
         "D2GetSkillCalc",
@@ -1238,7 +1239,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "601dd4ab",
+      "dh": "a2128ed1",
       "paramStorage": [
         [
           "pContext",

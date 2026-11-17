@@ -762,7 +762,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .nLabelAsLocaleStringId = */ 0x4,
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
-        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_Unused13,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_OnPressLogIn,
         /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
         /* .nFlagsOrType = */ 0x0
     },
@@ -773,7 +773,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .nLabelAsLocaleStringId = */ 0x4,
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
-        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_Unused13,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_OnPressLogIn,
         /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
         /* .nFlagsOrType = */ 0x21
     },
@@ -805,7 +805,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .nExtraParam = */ 0xd,
         /* .nLabelAsLocaleStringId = */ 0x14a8,
         /* .pDC6 = */ &DC6_FrontEnd_3WideButtonBlank,
-        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::MAINMENU_Unused13,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::MAINMENU_OnPressLogIn,
         /* .pTypeArg1 = */ nullptr,
         /* .pTypeArg2 = */ nullptr,
         /* .nFlagsOrType = */ 0x20
@@ -1476,7 +1476,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .nExtraParam = */ 0xd,
         /* .nLabelAsLocaleStringId = */ 0x13ee,
         /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
-        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_Unused14,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressNewAccountNoticeOk,
         /* .pTypeArg1 = */ nullptr,
         /* .pTypeArg2 = */ nullptr,
         /* .nFlagsOrType = */ 0x0
@@ -4238,14 +4238,19 @@ uint16_t * __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue) 
     return pwOut;
 }
 
-int __fastcall Unreferenced_0042e620(uint16_t * param_1) {
-    return (uint32_t)(*param_1 == 10);
+uint16_t Unreferenced_0042e610() {
+    uint16_t* in_ECX;
+    return *in_ECX;
 }
 
-int __fastcall Unreferenced_0042e630(uint16_t * param_1) {
-    if (*param_1 < 0x80) {
+int __fastcall Unreferenced_0042e620(uint16_t * pChar) {
+    return (uint32_t)(*pChar == 10);
+}
+
+int __fastcall Unreferenced_0042e630(uint16_t * pChar) {
+    if (*pChar < 0x80) {
       int iVar1;
-      iVar1 = isalpha((int)(char)*param_1);
+      iVar1 = isalpha((int)(char)*pChar);
       if (iVar1) {
         return 1;
       }
@@ -4714,13 +4719,13 @@ void __fastcall MAINMENU_CreateMessageBox(uint16_t * wszText1, uint16_t * wszTex
           pForm = FORMS_CreateAnyFormFromList(0x119);
           D2Win::Src::D2WinMain::FORMS_SetGlobalFormImage(pForm, 1);
           D2Win::Src::D2WinMain::SetUnsetFlag0x08(pForm, 1);
+          gaPredefinedForms[0x11b].nLabelAsLocaleStringId = nButton1LabelId;
           gaPredefinedForms[0x11b].nExtraParam = bEnableHotkeys ? 0xd : 0;
           gaPredefinedForms[0x11b].fpOnPressCallback = pfnOnPress1;
-          gaPredefinedForms[0x11b].nLabelAsLocaleStringId = nButton1LabelId;
           pForm = FORMS_CreateAnyFormFromList(0x11b);
           D2Win::Src::D2WinMain::SetUnsetFlag0x08(pForm, 1);
-          gaPredefinedForms[0x11c].nExtraParam = bEnableHotkeys ? 0x1b : 0;
           gaPredefinedForms[0x11c].nLabelAsLocaleStringId = nButton2LabelId;
+          gaPredefinedForms[0x11c].nExtraParam = bEnableHotkeys ? 0x1b : 0;
           gaPredefinedForms[0x11c].fpOnPressCallback = pfnOnPress2;
           nLine = 0x11c;
           break;
@@ -4835,7 +4840,8 @@ void __stdcall UIMENU_DownloadingPatch() {
     D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x143b), 0, false, 0);
     FORMS_CreateAnyFormFromListExEx(0x118);
     int nFrameCount = D2Win::Src::D2WinImage::D2WINIMAGE_GetFrameCount(gpCtlPatchProgressAnimImage);
-    D2Win::Src::D2WinImage::D2WINIMAGE_SetFrame(gpCtlPatchProgressAnimImage, nFrameCount * nProgressPercent / 100);
+    int32_t nAnimationFrame = nFrameCount * nProgressPercent / 100;
+    D2Win::Src::D2WinImage::D2WINIMAGE_SetFrame(gpCtlPatchProgressAnimImage, nAnimationFrame);
     sprintf(szPercentBuffer, "%d%%", nProgressPercent);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpPatchProgressTextBox, szPercentBuffer, 0);
 }
@@ -4969,7 +4975,7 @@ void __stdcall UIMENU_MainScreenBeforeMenu() {
     D2Sound::Src::D2SoundFast::SOUND_SetMusicEnabled(1);
 }
 
-uint32_t __fastcall MAINMENU_CheckFileExists(char * szFileName) {
+BOOL __fastcall MAINMENU_CheckFileExists(char * szFileName) {
     D2MPQFileStrc* pFileHandle;
     int bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, szFileName, 0, (void**)&pFileHandle);
     if (!bOpened) {
@@ -5777,6 +5783,10 @@ void __stdcall MAINMENU_SyncCreditsColumns() {
 void __stdcall Unreferenced_00431020() {
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairLeftTextBox, "");
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairRightTextBox, "");
+}
+
+void Unreferenced_00431040() {
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsLineTextBox, "");
 }
 
 // @sourcefile .\Src\MainMenus.cpp
@@ -7021,8 +7031,8 @@ void __fastcall MAINMENU_ShowPopupDialog(uint16_t * wszText, pfnUIMenuInstance p
     gpCurrentUIMenuInstance = pfnMenuInstance;
 }
 
-void __fastcall Unreferenced_00433440(uint16_t * param_1, pfnUIMenuInstance param_2) {
-    MAINMENU_ShowPopupDialog(param_1, param_2, 0);
+void __fastcall Unreferenced_00433440(uint16_t * wszText, pfnUIMenuInstance pfnMenu) {
+    MAINMENU_ShowPopupDialog(wszText, pfnMenu, 0);
 }
 
 void __fastcall MAINMENU_ShowPopupWithCancel(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance) {
@@ -8763,8 +8773,8 @@ void __stdcall NET_MCP_CLIENT_HandleCharCreation() {
     MAINMENU_ShowPopupDialog(wszMessage, MAINMENU_CloseAndLaunchCharSelect, 1);
 }
 
-// BNet login submit handler. Reads account/password from gbPasswordChangeInProgress-related inputs, calls launcher authentication. On success, transitions to char select or creates hero.
-BOOL __stdcall MAINMENU_Unused13(D2ControlStrc * pControl) {
+// LOG IN button (string 5288) of the Battle.net login form, also the submit callback of its account and password edit boxes. With pControl NULL returns to the main menu. Otherwise, if the password-change button is visible, saves account and password to the launcher settings, logs in through EnterEmailMessagePumper and goes on to character select (Battle.net), the save-file character select, or hero creation.
+BOOL __stdcall MAINMENU_OnPressLogIn(D2ControlStrc * pControl) {
     if (!pControl) {
       UIMENU_MainMenu();
       return 1;
@@ -8803,7 +8813,7 @@ BOOL __stdcall MAINMENU_OnPressReturnToMainMenuAgain(D2ControlMsg * pControlMsg)
     return 1;
 }
 
-BOOL __stdcall MAINMENU_Unused14(D2ControlMsg * pControlMsg) {
+BOOL __stdcall MAINMENU_OnPressNewAccountNoticeOk(D2ControlMsg * pControlMsg) {
     gnBNetBusyFlag = 0;
     int nPumpResult = Launcher::EnterEmailMessagePumper(D2IniData_launcher, 1, 0);
     if (!nPumpResult) {

@@ -53,19 +53,48 @@ StormLinkStrc * __fastcall ARCHIVE_ComputeAddress(StormLinkStrc * pNode, int, in
     return (StormLinkStrc*)(nOffset + nBaseAddr);
 }
 
-int __fastcall Unreferenced_0045b9d0(StormLinkStrc * param_1) {
-    return param_1->pNext <= 0 ? 0 : param_1->pNext;
+int __fastcall Unreferenced_0045b9d0(StormLinkStrc * pLink) {
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
-intptr_t __fastcall Unreferenced_0045ba80(StormLinkedListStrc * param_1) {
-    StormLinkStrc* pSVar1 = &param_1->head;
+uint32_t Unreferenced_0045b9e0() {
+    int in_ECX;
+    return *(uint32_t*)(in_ECX + 4);
+}
+
+intptr_t __fastcall Unreferenced_0045ba80(StormLinkedListStrc * pList) {
+    StormLinkStrc* pSVar1 = &pList->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uintptr_t)pSVar1;
+    pList->head.pNext = ~(uintptr_t)pSVar1;
     return ~(uintptr_t)pSVar1;
 }
 
-int __fastcall Unreferenced_0045baa0(StormLinkStrc * param_1) {
-    return param_1->pNext <= 0 ? 0 : param_1->pNext;
+int __fastcall Unreferenced_0045baa0(StormLinkStrc * pLink) {
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
+}
+
+uint32_t __fastcall Unreferenced_0045bab0(int * pList) {
+    return pList[2] <= 0 ? 0 : pList[2];
+}
+
+uint32_t * __fastcall Unreferenced_0045bac0(uint32_t * pData) {
+    *pData = 0;
+    pData[1] = 0;
+    return pData;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045bad0(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 int32_t __fastcall ARCHIVE_GetNodeOrDefault(int32_t pThis, int, int32_t nNode) {
@@ -157,6 +186,20 @@ int __fastcall Unreferenced_0045bcb0(int param_1) {
     return param_1;
 }
 
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045bcc0(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
+}
+
 void __fastcall ARCHIVE_ClearAndFreeHead(StormLinkedListStrc * nList) {
     StormLinkStrc** pPrevLink;
     ARCHIVE_ClearList(nList);
@@ -173,10 +216,24 @@ void __fastcall ARCHIVE_ClearAndFreeHead(StormLinkedListStrc * nList) {
     pSVar1->pNext = 0;
 }
 
-uint32_t * __fastcall Unreferenced_0045bd80(uint32_t * param_1) {
-    *param_1 = 0;
-    param_1[1] = 0;
-    return param_1;
+uint32_t * __fastcall Unreferenced_0045bd80(uint32_t * pData) {
+    *pData = 0;
+    pData[1] = 0;
+    return pData;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045bd90(StormLinkStrc * pNode) {
+    StormLinkStrc** piVar3;
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
+      return;
+    }
+
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 int * * __fastcall ARCHIVE_AllocNode(int * * ppList, int, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags) {

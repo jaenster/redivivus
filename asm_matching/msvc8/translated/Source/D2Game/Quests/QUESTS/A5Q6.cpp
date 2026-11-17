@@ -891,7 +891,8 @@ void __fastcall Objects_InitFn77_LastPortal(D2ObjectInitFnArg * pInitArg) {
 BOOL __fastcall OBJOP_A5Q6_TyraelPortalToEnd(D2ObjectOperateFnArg * pOperation) {
     int32_t nTradeTick;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_EveOfDestruction);
-    if (pQuestData->pQuestSpecificData.pA5Q6->nField_0x9C != 2) {
+    D2QuestSpecificDataUnion t2_c0 = pQuestData->pQuestSpecificData;
+    if (t2_c0.pA5Q6->nField_0x9C != 2) {
       return 0;
     }
 

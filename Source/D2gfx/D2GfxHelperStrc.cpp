@@ -657,6 +657,10 @@ void __stdcall D2GFX_SetupRenderFunctions() {
     pRenderSurfaceBuffer = 0;
 }
 
+void Unreferenced_004f8dd0() {
+
+}
+
 void __fastcall fpFillYBufferTable(void * ppvBits, int32_t nWidth, int32_t nHeight, int32_t a4) {
     // Static local variables (originally global data)
     static uint32_t fnFillYTableCookie = -0x1; D2_STATIC_GUARD(fnFillYTableCookie, "D2gfx::fpFillYBufferTable::fnFillYTableCookie");

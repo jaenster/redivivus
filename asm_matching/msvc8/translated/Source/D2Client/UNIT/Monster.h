@@ -296,12 +296,12 @@ struct D2MonsterPalShiftSlotStrc {
 #ifndef D2_DEFINED_D2MonsterUModHandlerRowStrc
 #define D2_DEFINED_D2MonsterUModHandlerRowStrc
 struct D2MonsterUModHandlerRowStrc {
-    /* 0x00 */ void (__fastcall *pfnHandler0)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Handler for dispatch type 0
-    /* 0x04 */ void (__fastcall *pfnHandler1)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Handler for dispatch type 1
-    /* 0x08 */ void (__fastcall *pfnHandler2)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Handler for dispatch type 2
-    /* 0x0C */ void (__fastcall *pfnHandler3)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Handler for dispatch type 3
-    /* 0x10 */ void (__fastcall *pfnHandler4)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Handler for dispatch type 4
-    /* 0x14 */ void (__fastcall *pfnHandlerInit)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Init handler (dispatch type 5), called by MONSTER_DispatchUniqueModifiers when param_3==5
+    /* 0x00 */ void (__fastcall *pfnModeStart)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Mode start: run before a monster mode change other than GetHit (MONSTER_DispatchUModModeStart, index 0)
+    /* 0x04 */ void (__fastcall *pfnModeChange)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Mode change: run after the mode's start handler (MONSTER_DispatchUModModeChange, index 1)
+    /* 0x08 */ void (__fastcall *pfnEvent)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Scheduled monster timer event 7 (MONSTER_DispatchUModEvent, index 2)
+    /* 0x0C */ void (__fastcall *pfnAttackHit)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // The monster's own attack landed (MONSTER_DispatchUModOnAttack from DAMAGE_ApplyDamageToUnit, index 3)
+    /* 0x10 */ void (__fastcall *pfnDamaged)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // The monster was hit (MONSTER_DispatchUModDamaged from SERVER_GetHitCalculation, index 4)
+    /* 0x14 */ void (__fastcall *pfnMissile)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // The monster created a missile (MONSTER_DispatchUModMissile, index 5, read at [id*24+0x0073c0cc])
 };
 
 #endif // D2_DEFINED_D2MonsterUModHandlerRowStrc
@@ -337,7 +337,7 @@ int32_t * __fastcall GetMonsterAi(struct D2UnitStrc * pUnit);
 int32_t __fastcall GetOwnerGUID(struct D2UnitStrc * pUnit);
 void __fastcall SetOwnerGUID(struct D2UnitStrc * pUnit, int32_t nOwnerGUID);
 int * __fastcall MONSTER_GetAiDataPtr(struct D2UnitStrc * pUnit);
-void __fastcall Unreferenced_004ae190(struct D2UnitStrc * param_1, int param_2);
+void __fastcall Unreferenced_004ae190(struct D2UnitStrc * pUnit, int nNecroPetGUID);
 // Allocates and attaches a D2LightMapStrc to a monster unit. Computes the final light radius as the max of the monster's equipment light and its MonStats2 byLight value; special-cases Den of Evil quest monsters (clamped to radius 3). Replaces any existing light map and updates the unit's stored light radius.
 void __fastcall MONSTER_InitLightMap(struct D2UnitStrc * pUnit);
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
@@ -361,7 +361,7 @@ void __stdcall MONSTER_SpawnFetishMissileSpread(struct D2UnitStrc * pUnit, eMiss
 void __fastcall MONSTER_SpawnBloodParticles(struct D2UnitStrc * pUnit, int nDefaultCount, int nBloodDirSlot);
 // Central per-monster state/mode message dispatcher. Given a message type nParam (0..0x1d), a monster D2UnitStrc, and a server message handle, transitions the monster's path/anim mode: walk/run/move-to (0,1,4,5,etc.), got-hit (6,0x13), death (8) and dying/corpse (9), sequence/skill start (0x14,0x15,0x16), town-walk (0x12), etc. Restores collision and resets the 0x2000 path flag, sets target unit by type/GUID, calculates paths, applies per-classId special cases (unique death overlays/missiles/sounds, burrow transitions, special facing) keyed on the monster's base MonStats id, and updates UNITFLAG targetable/shadow/nodraw flags. Halts via Fog ErrorManager when a required pMessage is null. Tail applies velocity-percent stat changes and dispatches unique-mod walk callbacks. __fastcall (nParam in ECX, pUnit in EDX).
 void __fastcall MonsterMessage(int32_t nMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage);
-struct D2UnitStrc * __fastcall Unreferenced_004b1030(struct D2UnitStrc * param_1);
+struct D2UnitStrc * __fastcall Unreferenced_004b1030(struct D2UnitStrc * pUnit);
 uint32_t __fastcall NPCMENU_ParseSpeechData(struct D2UnitStrc * pUnit, uint8_t * pParam, int * pnSpeechResult);
 // Client-side initialization of a mercenary unit from a network packet. Sets ISMERC|TARGETABLE flags, reads the name/seed from the packet, rolls stats via RollMercStats using the current player's level and difficulty, then assigns skills (id, level, mode) from the HirelingTxt table, sets the localized name, and recalculates equipped item stats.
 void __fastcall MERC_InitializeFromPacket(struct D2UnitStrc * pUnit, struct D2MercInitArgStrc * pMercInit);

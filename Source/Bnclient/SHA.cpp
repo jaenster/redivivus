@@ -205,6 +205,11 @@ void __fastcall SHA1_BigIntPowModValue(BigData * pResult, BigData * pBase, uint3
     Storm::Source::SBig::SBigDel(pTmpBigInt);
 }
 
+void Unreferenced_0052a5f0() {
+    BigData* in_ECX;
+    Storm::Source::SBig::SBigIsPrime(in_ECX);
+}
+
 void __fastcall SHA1_BigIntFree(BigData * pBigData) {
     Storm::Source::SBig::SBigDel(pBigData);
 }

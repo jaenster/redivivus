@@ -1101,9 +1101,9 @@ BOOL __fastcall Skills_SrvDoFunc_095_MonInferno(::SGAMEDATA * pGame, D2UnitStrc 
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
     sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     sSkillArg.nSkillLevel = nSkillLvl;
+    sSkillArg.nMissileTxtNo = nMissileId;
     int nVelCalc = (uint32_t)pMissileTxt->VelLev * nSkillLvl;
     sSkillArg.nVelocityOverride = nVelCalc / 8 + (uint32_t)pMissileTxt->Vel;
-    sSkillArg.nMissileTxtNo = nMissileId;
     BOOL eStateCheck = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
     if (!eStateCheck) {
       SKILLMONST_TriggerModeChange(pUnit, pGame);
@@ -1166,9 +1166,9 @@ BOOL __fastcall Skills_SrvDoFunc_152_DiabLight(::SGAMEDATA * pGame, D2UnitStrc *
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
     sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     sSkillArg.nSkillLevel = nSkillLvl;
+    sSkillArg.nMissileTxtNo = nMissileId;
     int nVelCalc = (uint32_t)pMissileTxt->VelLev * nSkillLvl;
     sSkillArg.nVelocityOverride = nVelCalc / 8 + (uint32_t)pMissileTxt->Vel;
-    sSkillArg.nMissileTxtNo = nMissileId;
     BOOL eStateCheck = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
     if (!eStateCheck) {
       SKILLMONST_TriggerModeChange(pUnit, pGame);
@@ -1742,6 +1742,8 @@ BOOL __fastcall Skills_SrvDoFunc_103_ChargeAndMeleeStrike(::SGAMEDATA * pGame, D
     D2DamageStrc sDamage;
     int nSeqFrame2;
     int nSeqFrame1;
+    char* pVelFileRef;
+    int32_t nVelLineRef;
     ::SGAMEDATA* pGameApplyDmg;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -1771,14 +1773,14 @@ BOOL __fastcall Skills_SrvDoFunc_103_ChargeAndMeleeStrike(::SGAMEDATA * pGame, D
       }
 
       int32_t nVelocity = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
-      nVelocity = nVelocity << 8;
+      nVelocity *= 0x100;
       if (nVelocity <= 0x100) {
         nVelocity = 0x100;
       }
 
       nCalcOrHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_velocitypercent, 0);
-      int32_t nVelLineRef = 0x731;
-      char* pVelFileRef = ".\\SKILLS\\SkillMonst.cpp";
+      nVelLineRef = 0x731;
+      pVelFileRef = ".\\SKILLS\\SkillMonst.cpp";
       D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, D2Common::DATATBLS::DataTbls::D2ApplyPercent(nVelocity, nCalcOrHp, 100), pVelFileRef, nVelLineRef);
       D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 1);
       D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
@@ -2174,7 +2176,8 @@ BOOL __fastcall Skills_SrvDoFunc_108_DevourMinionForHP(::SGAMEDATA * pGame, D2Un
     return 1;
 }
 
-// Returns the first non-zero animation event value from the current frame onward in the caster's anim data, used to determine how many Holy Bolt targets to hit. Handles both sequenced (merc) and non-sequenced monsters. Returns 0 if no event found before the animation ends.
+// Returns the first non-zero animation event value from the current frame onward in the caster's anim data. Handles both sequenced (merc) and non-sequenced monsters. Returns 0 if no event found before the animation ends.
+// Only caller: Skills_SrvDoFunc_109_MonsterFrenzyAttack (call at 0x005cdf59; skills.txt MonFrenzy, BloodLordFrenzy).
 uint32_t __fastcall SKILLMONST_GetMonFrenzySequenceFrame(D2UnitStrc * pUnit) {
     int32_t nTotalFrames;
     int nNextFrame;

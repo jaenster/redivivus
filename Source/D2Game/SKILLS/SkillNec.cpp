@@ -1474,7 +1474,7 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
       nCorpseHpRaw = pCorpseTarget->nClassId;
       pOutStats = &sMonStats;
       D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nCorpseHpRaw, nPhysDmgMinVal, (uint32_t)pGame->nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCorpseTarget, UNITSTAT_level, 0), 1, pOutStats);
-      nCorpseHpRaw = sMonStats.nMaxHP + sMonStats.nMinHP << 7;
+      nCorpseHpRaw = (sMonStats.nMaxHP + sMonStats.nMinHP) * 0x80;
     }
 
     int32_t nX;
@@ -1806,21 +1806,20 @@ BOOL __fastcall Skills_SrvDoFunc_058_ReviveCorpseCheck(::SGAMEDATA * pGame, D2Un
     int32_t iVar3 = pTarget->nClassId;
     D2MonStatsInitStrc* pOutStats = &local_4c;
     D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(iVar3, local_14, (uint32_t)pGame->nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_level, 0), 1, pOutStats);
-    uint32_t uVar4 = D2Common::Seed::RANDOM_RandomNumberSelector(&pTarget->sSeed, local_4c.nMaxHP - local_4c.nMinHP + 1);
-    int nValue = uVar4 + local_4c.nMinHP << 8;
+    int nValue = D2Common::Seed::RANDOM_RandomNumberSelector(&pTarget->sSeed, local_4c.nMaxHP - local_4c.nMinHP + 1) + local_4c.nMinHP << 8;
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_maxhp, nValue, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_hitpoints, nValue, 0);
-    local_14 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(local_c, UNITSTAT_level, 0);
+    int32_t local_14_2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(local_c, UNITSTAT_level, 0);
     int iVar2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_level, 0);
-    if (iVar2 && local_14 < iVar2) {
-      iVar3 = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nValue, local_14, iVar2);
+    if (iVar2 && local_14_2 < iVar2) {
+      iVar3 = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nValue, local_14_2, iVar2);
       if (iVar3 < 1) {
         iVar3 = 1;
       }
 
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_maxhp, iVar3, 0);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_hitpoints, iVar3, 0);
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_level, local_14, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_level, local_14_2, 0);
     }
 
     SKILLNEC_ApplySummonBuffs(pGame, local_c, pTarget, eSkill, nSkillLvl, 0);
@@ -2495,8 +2494,9 @@ BOOL __fastcall ITEMEVENT_BloodGolemLifeSteal(::SGAMEDATA * pGame, uint32_t nUni
     }
 
     nOwnerHealAmt = SKILLNEC_AddHitpoints(pUnit, nLeechDmg);
-    if (pOwnerUnit && nLeechDmg - nOwnerHealAmt > 0) {
-      SKILLNEC_AddHitpoints(pOwnerUnit, nLeechDmg - nOwnerHealAmt);
+    nLeechDmg -= nOwnerHealAmt;
+    if (pOwnerUnit && nLeechDmg > 0) {
+      SKILLNEC_AddHitpoints(pOwnerUnit, nLeechDmg);
     }
 
     D2Common::Units::SetOverlay(pUnit, 0x97, 0);

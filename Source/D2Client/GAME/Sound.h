@@ -158,7 +158,7 @@ void __stdcall SOUND_ShutdownAudio();
 void __fastcall SOUND_UpdateChannelParams(struct D2ClientSoundChannelStrc * pSoundChannel);
 BOOL __fastcall SOUND_SetSoundMixer(int32_t nMixer);
 // Sets the global BackgroundSoundsActive flag then reinitializes the audio stream channels to apply the change. Queries the current mixer mode (DirectSound=1 or Sound3D=2), checks whether the corresponding subsystem is initialized, and calls SOUND_ShutdownAudio + SOUND_InitStreamChannels. Falls back to mixer mode 0 on init failure and adjusts the stored mixer setting accordingly.
-void __fastcall SOUND_SetBackgroundSoundsActive(uint32_t bActive);
+void __fastcall SOUND_SetBackgroundSoundsActive(BOOL bActive);
 void __stdcall SOUND_ShutdownAudio_Thunk();
 // Plays a positioned (panned) sound effect using the game's channel system. Resolves the sound ID (randomizing from a group if flagged), checks for a duplicate already-playing instance, loads the sound file if needed, selects a mono/stereo/EAX channel, sets reverb and frequency, loads WAV data or opens a streaming file, and calls SOUNDSMP_Play/SOUNDSMP_OpenAndStreamFile. Returns the allocated channel slot on success, null on failure or if a duplicate throttle fires.
 struct D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(struct D2SoundChannelStrc * pMemory);

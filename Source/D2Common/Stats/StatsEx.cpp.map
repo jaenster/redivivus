@@ -3781,9 +3781,10 @@
         "MATH_Min"
       ],
       "usedTypes": [
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ],
-      "dh": "171acff5",
+      "dh": "3170cfa0",
       "paramStorage": [
         [
           "nLeft",
@@ -3817,9 +3818,10 @@
         "MATH_Max"
       ],
       "usedTypes": [
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ],
-      "dh": "572569ed",
+      "dh": "7045e6ab",
       "paramStorage": [
         [
           "nLeft",
@@ -3858,7 +3860,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "57163cd8",
+      "dh": "ec255603",
       "paramStorage": [
         [
           "nMin",
@@ -3899,9 +3901,10 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "eD2UnitStat",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ],
-      "dh": "3cbca91e",
+      "dh": "b84b91b7",
       "paramStorage": [
         [
           "eUnitStat",

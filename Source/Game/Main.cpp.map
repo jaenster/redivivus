@@ -58,6 +58,21 @@
       ]
     },
     {
+      "name": "Unreferenced_00405550",
+      "address": "00405550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00405550"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "Unreferenced_00405550"
+      ],
+      "dh": "3dca2c47"
+    },
+    {
       "name": "INI_FindConfigValueIndex",
       "address": "00405570",
       "lines": [

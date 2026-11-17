@@ -32,6 +32,21 @@
       ]
     },
     {
+      "name": "Unreferenced_00602bd0",
+      "address": "00602bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602bd0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp::CELLIST",
+      "calledFunctions": [
+        "Unreferenced_00602bd0"
+      ],
+      "dh": "982b595f"
+    },
+    {
       "name": "ScalarDeletingDestructor",
       "address": "00602cb0",
       "lines": [

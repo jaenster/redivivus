@@ -38,10 +38,10 @@
       "usedTypes": [
         "D2RosterPetStrc"
       ],
-      "dh": "0d042d4e",
+      "dh": "af17950d",
       "paramStorage": [
         [
-          "param_1",
+          "nRosterGUID",
           "ECX:4"
         ]
       ]
@@ -493,6 +493,24 @@
           "Stack[0x4]:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_004790f0",
+      "address": "004790f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004790f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "Unreferenced_004790f0"
+      ],
+      "usedTypes": [
+        "eD2LevelId"
+      ],
+      "dh": "d07dd94e"
     },
     {
       "name": "GetRosterClass",

@@ -54,14 +54,14 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "8a846070",
+      "dh": "b85a3532",
       "paramStorage": [
         [
-          "param_1",
+          "pGame",
           "ECX:4"
         ],
         [
-          "param_2",
+          "pUnit",
           "EDX:4"
         ]
       ]
@@ -79,10 +79,10 @@
       "calledFunctions": [
         "Unreferenced_00543560"
       ],
-      "dh": "29ac5379",
+      "dh": "dc5559e4",
       "paramStorage": [
         [
-          "param_1",
+          "nIndex",
           "ECX:4"
         ]
       ]
@@ -2057,6 +2057,25 @@
       ]
     },
     {
+      "name": "Unreferenced_005451b0",
+      "address": "005451b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005451b0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS",
+      "calledFunctions": [
+        "Unreferenced_005451b0",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "TXT_Items_GetLine",
+        "INVENTORY_GetNextItem"
+      ],
+      "dh": "cc0f5cf7"
+    },
+    {
       "name": "QUESTGUID_AddPlayerToList",
       "address": "00545200",
       "lines": [
@@ -3138,11 +3157,11 @@
     },
     {
       "name": "RemoveQuestTimer",
-      "address": "00545fa5",
+      "address": "00545fa0",
       "lines": [
         {
           "line": 1,
-          "address": "00545fa5"
+          "address": "00545fa0"
         }
       ],
       "namespace": "D2Game::Quests::QUESTS",
@@ -3162,7 +3181,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "af4dcc3a",
+      "dh": "599460a8",
       "paramStorage": [
         [
           "pQuestData",
@@ -3171,10 +3190,6 @@
         [
           "pQuestUpdate",
           "EDX:4"
-        ],
-        [
-          "pGame",
-          "EBX:4"
         ]
       ]
     },

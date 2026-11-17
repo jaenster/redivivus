@@ -31,7 +31,7 @@ BOOL __fastcall INTRONPC_CheckIfSpokenWithNPC_Intro2(struct D2UnitDataPlayerInte
 void __fastcall PLAYER_UnsetSpokenWithNPC_Intro2(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nMonStatsId);
 void __fastcall PLAYERINTRO_CopyIntroToBuffer(struct D2UnitDataPlayerInteractedNPCStrc * pInteractedNPC, char * pDest);
 void __fastcall PLAYERINTRO_CopyIntro2ToBuffer(struct D2UnitDataPlayerInteractedNPCStrc * pInteractedNPC, uint8_t * pDest);
-void __fastcall PLAYERINTRO_CopyIntroData8Bytes(struct D2UnitDataPlayerInteractedNPCStrc * pdwParam1, uint32_t * pdwSrc);
+void __fastcall PLAYERINTRO_CopyIntroData8Bytes(struct D2UnitDataPlayerInteractedNPCStrc * pInteractedNpc, uint32_t * pdwSrc);
 void __fastcall PLAYERINTRO_CopyIntroDataIndirect(struct D2UnitDataPlayerInteractedNPCStrc * pSrc, uint32_t * pdwIntroData);
 // @sourcefile .\PLAYER\PlrIntro.cpp
 struct D2UnitDataPlayerInteractedNPCStrc * __fastcall STRUCT_AllocPlayerInteractedNPC(::SGAMEDATA * pGame);

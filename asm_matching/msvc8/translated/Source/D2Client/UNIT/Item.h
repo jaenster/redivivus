@@ -201,7 +201,7 @@ void __fastcall ITEM_HandleStatUpdatePacket(DWORD nUnitGUID, char bSetStat, eD2U
 void __fastcall ITEM_HandleItemFlagEditPacket(struct D2GSPacketSrv0x40 * pbPacket);
 void __fastcall ITEM_HandleCursorItemRemoval(struct D2GSPacketSrv0x42 * pbPacket);
 void __fastcall HandleItemToCursor(uint8_t * pBytes);
-int __fastcall Unreferenced_004c2150(int param_1);
+int __fastcall Unreferenced_004c2150(int nInvType);
 // @sourcefile .\UNIT\Item.cpp
 void __fastcall ITEM_RemoveUninterruptableState(struct D2UnitStrc * pUnit);
 void __fastcall ITEM_ClearUnitState(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * dwParam);

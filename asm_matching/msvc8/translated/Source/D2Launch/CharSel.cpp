@@ -337,12 +337,25 @@ static BOOL __stdcall CHARSEL_ClassHasAlternateDeath(int nPlayerClass) {
 }
 
 // @sourcefile .\Src\CharSel.cpp
+#if 0 // ratchet: the match body of 00438060 (evidence 1985bb0f9) could not be re-spelled: callee D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit parameter pCharSel retyped: D2CharSelStrc * -> D2CharSelCompStrc *
 void __stdcall CHARSEL_DestroySelectedChar() {
     if (!gpCharSelPendingEntry) {
       return;
     }
     if (!gpCharSelPendingEntry->nEntryType) {
       D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit((D2CharSelStrc*)gpCharSelPendingEntry->pCharSelCompStrc, 1);
+    }
+
+    D2_FREE_AT(gpCharSelPendingEntry, ".\\Src\\CharSel.cpp", 0x2a1);
+    gpCharSelPendingEntry = 0;
+}
+#endif
+void __stdcall CHARSEL_DestroySelectedChar() {
+    if (!gpCharSelPendingEntry) {
+      return;
+    }
+    if (!gpCharSelPendingEntry->nEntryType) {
+      D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit(gpCharSelPendingEntry->pCharSelCompStrc, 1);
     }
 
     D2_FREE_AT(gpCharSelPendingEntry, ".\\Src\\CharSel.cpp", 0x2a1);
@@ -418,7 +431,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
     for (; pCharSel; pCharSel = pCharSel->pNext) {
       uint16_t wszClassName[100];
       if (nNavigationIndex < g_nCharSelNavigationIndex || nNavigationIndex >= g_nCharSelNavigationIndex + gnCharSelScreenSlotCount) {
-        D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)pCharSel->pCharSelCompStrc, 0);
+        D2Win::Src::D2Comp::D2COMP_SetFlags(pCharSel->pCharSelCompStrc, 0);
       } else {
         nCharacterIndex = nNavigationIndex - g_nCharSelNavigationIndex;
         D2Win::Src::D2Comp::D2COMP_SetScreenX(pCharSel->pCharSelCompStrc, nSlotBoxX + 0x1e);
@@ -436,7 +449,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
           nLanguageCode = dwCompFlags & Fog::BitBuffer::gadwInvBitMasks[5];
         }
 
-        D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)pCharSel->pCharSelCompStrc, nLanguageCode);
+        D2Win::Src::D2Comp::D2COMP_SetFlags(pCharSel->pCharSelCompStrc, nLanguageCode);
         if (pCharSel->nEntryType == 2) {
           D2Win::Src::D2WinTextBox::SetText(gaCharSelScreenSlotControls[nCharacterIndex], D2Lang::StrTable::strtable::GetLocaleString(0x2b3b), 1, false, 0);
         } else if (!pCharSel->nEntryType) {
@@ -584,13 +597,13 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
     do {
       uint16_t wszClassName[100];
       if (nCharIndex < g_nCharSelNavigationIndex || nCharIndex >= g_nCharSelNavigationIndex + gnCharSelScreenSlotCount) {
-        D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)pCharEntry->pCharSelCompStrc, 0);
+        D2Win::Src::D2Comp::D2COMP_SetFlags(pCharEntry->pCharSelCompStrc, 0);
       } else {
         nCharIndex -= g_nCharSelNavigationIndex;
         D2Win::Src::D2Comp::D2COMP_SetScreenX(pCharEntry->pCharSelCompStrc, 0x221);
         D2Win::Src::D2Comp::D2COMP_SetScreenY(pCharEntry->pCharSelCompStrc, nSlotBoxY);
         if (pCharEntry->nEntryType == 1) {
-          D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)pCharEntry->pCharSelCompStrc, 0);
+          D2Win::Src::D2Comp::D2COMP_SetFlags(pCharEntry->pCharSelCompStrc, 0);
           D2Win::Src::D2WinImage::D2WINIMAGE_SetPosition((::D2WinImage*)gpControlCharSelArrows, 0x200, gnCharSlotYPositions[nCharIndex] - 3);
           D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gpControlCharSelArrows, 1);
           nLoopIdx = 0;
@@ -622,7 +635,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
             nLanguageCode = dwCompFlags & Fog::BitBuffer::gadwInvBitMasks[5];
           }
 
-          D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)pCharEntry->pCharSelCompStrc, nLanguageCode);
+          D2Win::Src::D2Comp::D2COMP_SetFlags(pCharEntry->pCharSelCompStrc, nLanguageCode);
           if (pCharEntry->nEntryType == 2) {
             D2Win::Src::D2WinTextBox::SetText(gaCharSelScreenSlotControls[nCharIndex], D2Lang::StrTable::strtable::GetLocaleString(0x2b3b), 1, false, 0);
             nSlotBoxY += 0x5d;
@@ -963,6 +976,7 @@ static BOOL __stdcall SAVEFILE_ParseSaveData(char * szRealmName, char * szCharac
 }
 
 // @sourcefile .\Src\CharSel.cpp
+#if 0 // ratchet: the match body of 00438ea0 (evidence 1985bb0f9) could not be re-spelled: callee D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit parameter pCharSel retyped: D2CharSelStrc * -> D2CharSelCompStrc *
 void __stdcall CHARSEL_DestroyAllCharEntries() {
     D2CharSelStrc* pMemoryToFree = D2CharSelStrcFirst;
     while (pMemoryToFree) {
@@ -987,12 +1001,37 @@ void __stdcall CHARSEL_DestroyAllCharEntries() {
     D2_FREE_AT(gpCharSelPendingEntry, ".\\Src\\CharSel.cpp", 0x2a1);
     gpCharSelPendingEntry = 0;
 }
+#endif
+void __stdcall CHARSEL_DestroyAllCharEntries() {
+    D2CharSelStrc* pMemoryToFree = D2CharSelStrcFirst;
+    while (pMemoryToFree) {
+      D2CharSelStrc* pDVar1;
+      pDVar1 = pMemoryToFree->pNext;
+      D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit(pMemoryToFree->pCharSelCompStrc, 1);
+      D2_FREE_AT(pMemoryToFree, ".\\Src\\CharSel.cpp", 0x518);
+      pMemoryToFree = pDVar1;
+    }
 
-int __fastcall Unreferenced_00438f40(char * param_1) {
+    D2CharSelStrcFirst = 0;
+    TotalCurrentChars = 0;
+    g_nCharSelNavigationIndex = 0;
+    gnCharSelLoadedCharCount = 0;
+    if (!gpCharSelPendingEntry) {
+      return;
+    }
+    if (!gpCharSelPendingEntry->nEntryType) {
+      D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit(gpCharSelPendingEntry->pCharSelCompStrc, 1);
+    }
+
+    D2_FREE_AT(gpCharSelPendingEntry, ".\\Src\\CharSel.cpp", 0x2a1);
+    gpCharSelPendingEntry = 0;
+}
+
+int __fastcall Unreferenced_00438f40(char * szName) {
     char cVar1;
-    char* pcVar2 = param_1;
+    char* pcVar2 = szName;
     pcVar2 = pcVar2 + strlen(pcVar2) + 1;
-    if (pcVar2 + (-2 - (intptr_t)(param_1 + 1)) < (char*)0xe && param_1[(int)(pcVar2 - (param_1 + 1) - 1)] != '-' && *param_1 != '_') {
+    if (pcVar2 + (-2 - (intptr_t)(szName + 1)) < (char*)0xe && szName[(int)(pcVar2 - (szName + 1) - 1)] != '-' && *szName != '_') {
       return 1;
     }
 
@@ -1184,7 +1223,7 @@ BOOL __stdcall CHARSEL_UpdateSelectedCharDisplay() {
     }
     if (gpCharSelPendingEntry) {
       if (!gpCharSelPendingEntry->nEntryType) {
-        D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit((D2CharSelStrc*)gpCharSelPendingEntry->pCharSelCompStrc, 1);
+        D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit(gpCharSelPendingEntry->pCharSelCompStrc, 1);
       }
 
       D2_FREE_AT(gpCharSelPendingEntry, ".\\Src\\CharSel.cpp", 0x5de);
@@ -1259,7 +1298,7 @@ BOOL __stdcall CHARSEL_UpdateSelectedCharDisplay() {
           dwFlags = dwCompFlags & Fog::BitBuffer::gadwInvBitMasks[0xc];
         }
 
-        D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)gpCharSelPendingEntry->pCharSelCompStrc, dwFlags);
+        D2Win::Src::D2Comp::D2COMP_SetFlags(gpCharSelPendingEntry->pCharSelCompStrc, dwFlags);
         Fog::File::CONTAINER_InitializeBuffer(wszClassName, 2, 100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpaCharSelectDisplay);
         pszText = gpCharSelPendingEntry->szGuildTag;
@@ -1955,10 +1994,40 @@ void __stdcall CHARSEL_AddRetrievingEntry() {
 }
 
 // @sourcefile .\Src\CharSel.cpp
+#if 0 // ratchet: the match body of 0043a650 (evidence 1985bb0f9) could not be re-spelled: callee D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit parameter pCharSel retyped: D2CharSelStrc * -> D2CharSelCompStrc *
 void __stdcall CHARSEL_ClearCharDetailUI() {
     if (gpCharSelPendingEntry) {
       if (!gpCharSelPendingEntry->nEntryType) {
         D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit((D2CharSelStrc*)gpCharSelPendingEntry->pCharSelCompStrc, 1);
+      }
+
+      D2_FREE_AT(gpCharSelPendingEntry, ".\\Src\\CharSel.cpp", 0x2a1);
+      gpCharSelPendingEntry = 0;
+    }
+
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpaCharSelectDisplay);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCharSelDeleteButton);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCharSelExpansionToggle);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCtlCharSelDownArrow->sControl, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlCharSelDeleteButton, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCharSelExitButton, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCtlCharSelOKButton->sControl, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlCharSelectGameTypeBtn, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpaCharSelCharacterList->sControl, 0);
+    BOOL bIsExpansion = Fog::D2CheckExpansionGame();
+    if (bIsExpansion) {
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCharSelScreenControl->sControl, 0);
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpControlCharSelArrows, 0);
+      return;
+    }
+
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpControlCharSelImage->sControl, 0);
+}
+#endif
+void __stdcall CHARSEL_ClearCharDetailUI() {
+    if (gpCharSelPendingEntry) {
+      if (!gpCharSelPendingEntry->nEntryType) {
+        D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit(gpCharSelPendingEntry->pCharSelCompStrc, 1);
       }
 
       D2_FREE_AT(gpCharSelPendingEntry, ".\\Src\\CharSel.cpp", 0x2a1);

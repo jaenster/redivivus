@@ -781,9 +781,10 @@
         "DRAW_BuildAllPaletteTables"
       ],
       "usedTypes": [
-        "tagPALETTEENTRY"
+        "tagPALETTEENTRY",
+        "uint32_t"
       ],
-      "dh": "28b6c1ce",
+      "dh": "0b480d82",
       "paramStorage": [
         [
           "pPaletteEntry",

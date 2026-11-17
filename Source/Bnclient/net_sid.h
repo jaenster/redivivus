@@ -138,7 +138,7 @@ void * __stdcall NET_SID_CLIENT_GetChannelNamePtr();
 // BATTLE.NET SID_CHATEVENT (0x0F) HANDLER
 // Receives chat event notifications from the Battle.net server with event type, flags, ping, username, and message text. Event types include: 0x01=show_user, 0x02=join, 0x03=leave, 0x04=whisper_recv, 0x05=talk, 0x06=broadcast, 0x07=channel, etc. Enqueues the raw packet bytes to the message queue (type 0) for asynchronous processing by the chat UI system.
 BOOL __fastcall NET_SID_CLIENT_Incoming_ChatEvent(char * pBytes, size_t nSize);
-void __fastcall Unreferenced_00520680(struct D2XSHA1Strc * param_1);
+void __fastcall Unreferenced_00520680(struct D2XSHA1Strc * pSha1);
 // Battle.net "broken SHA-1" (XSHA1) block transform: schedule W[i] = ROL(1, (W[i-3]^W[i-8]^W[i-14]^W[i-16]) & 31), block copied without byte swap.
 // Name per redivivus issue #36 (asm-verified hash variant).
 void __fastcall XSHA1_Transform(struct D2XSHA1ContextStrc * pShaCtx);
@@ -156,7 +156,7 @@ BOOL __fastcall NET_SID_CLIENT_WaitForPacketId(uint8_t nPacketId);
 BOOL __fastcall NET_SID_CLIENT_GetRequiredAnswer(uint8_t nPacketId);
 void __fastcall NET_SID_CLIENT_ResetRequireResponse(uint8_t nPacketId);
 uint32_t __fastcall SID_GetPacketResponseFlag(uint8_t nPacketId);
-int __fastcall Unreferenced_00520c30(uint8_t param_1, int param_2);
+int __fastcall Unreferenced_00520c30(uint8_t byPacketId, int nValue);
 BOOL __fastcall NET_SID_CLIENT_IncomingReturn(char * pBytes, size_t nSize);
 // SID_CREATEACCOUNT (0x2A) response handler. Legacy account creation result. Receives (DWORD)Status where 0=success, 1=name too short, 2=invalid characters, 3=prohibited word, 4=already exists, 5=still processing. Stores status in global g_dwSIDCreateAccountStatus.
 BOOL __fastcall NET_SID_CLIENT_Incoming_CreateAccount(char * pBytes, size_t nSize);
@@ -368,7 +368,7 @@ BOOL __stdcall NET_SID_CLIENT_GetSIDFlag2();
 void __stdcall NET_SID_ClearSrpPassword();
 uint32_t __fastcall NET_SID_CLIENT_ExtractCDKeyNibble(uint32_t * pCdKeyData, uint32_t nNibbleIndex);
 void __fastcall NET_SID_CLIENT_SetCDKeyNibble(uint32_t * pCdKeyData, uint32_t nNibbleIndex, uint8_t nNibbleValue);
-int __fastcall Unreferenced_00522570(uint32_t * param_1, int param_2);
+int __fastcall Unreferenced_00522570(uint32_t * pBits, int nBitIndex);
 void __fastcall NET_SID_CLIENT_SetCDKeyBit(uint32_t * pCdKeyData, uint32_t nBitIndex, uint8_t nBitValue);
 void __fastcall NET_SID_CLIENT_BigNumMultiplyAccumulate(int32_t nWords, uint32_t multiplier, uint32_t * pSrc, uint32_t * pDst, uint32_t carryIn);
 void __fastcall NET_SID_CLIENT_ExpandCdKeyToBase5(char * pCdKeyString, uint8_t * pOutBase5);

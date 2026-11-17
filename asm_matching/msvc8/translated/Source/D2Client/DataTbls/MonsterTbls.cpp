@@ -10,9 +10,9 @@
 
 namespace D2Client { namespace DataTbls { namespace MonsterTbls {
 
-D2MonStats2Txt * __fastcall Unreferenced_00451fb0(int param_1) {
-    if (param_1 >= 0 && param_1 < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize) {
-      return D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + param_1;
+D2MonStats2Txt * __fastcall Unreferenced_00451fb0(int nIndex) {
+    if (nIndex >= 0 && nIndex < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize) {
+      return D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nIndex;
     }
 
     return nullptr;

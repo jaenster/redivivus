@@ -213,10 +213,10 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "57016e69",
+      "dh": "7aec23c3",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
           "ECX:4"
         ]
       ]
@@ -238,10 +238,10 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "1341e202",
+      "dh": "102e6676",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -262,10 +262,10 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "53b49896",
+      "dh": "b221314f",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
           "ECX:4"
         ]
       ]
@@ -322,10 +322,10 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "e9aa6b8b",
+      "dh": "7a1f9575",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -346,10 +346,10 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "f2eb8c0b",
+      "dh": "ed2ece1a",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
           "ECX:4"
         ]
       ]

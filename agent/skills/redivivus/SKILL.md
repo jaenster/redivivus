@@ -31,7 +31,11 @@ https://redivivus.app/agent-setup/rules.md. Read both before the first proposal.
 - **The ops**: `rename_function`, `rename_global`, `rename_local` (parameters too), `retype_local`,
   `set_prototype`, `set_global_type`, `struct_field`, and on Windows two that record what a VC8
   compile proved: `vc8form` (a source-form tag) and `linkage` (file-static, or the file a function is
-  defined in). Both of those need an `oracle` evidence item for their function.
+  defined in). Both of those need an `oracle` evidence item for their function. Also: `add_tag`
+  (a `blizzard-name:<spelling>` tag on a function), `add_comment` (one prose line appended to a
+  plate), `set_namespace` (moves a function between translation units: always held for the owner as
+  structural), and `funcdef_param` / `funcdef_return` (a function-signature type's own parameters
+  and return type, by ordinal).
 - **Evidence a reviewer can re-check**: at least one item that is not `free_text` - an xref, a call
   site, a Mac pair, an assert or string reference, a field access, or the VC8 audit status before and
   after (`oracle`). "It looks like" or "the name suggests" is not evidence.
@@ -48,8 +52,6 @@ Accepted proposals are applied to Ghidra and so land in the next regeneration of
 Open an issue on https://github.com/jaenster/redivivus/issues instead when the checker cannot take the
 claim:
 
-- **renaming a name someone already chose**, a function, global, local, parameter or field; the checker
-  only fills in default names (below) and refuses the rest;
 - a defect no op expresses: a lost register, a truncated table, a wrong generator output;
 - a new generator form, a filing rule, anything the generator has to learn (with the measurements);
 - a disagreement with these rules or with a refusal of the checker.
@@ -86,8 +88,10 @@ suspicion is reportable from xrefs, the surrounding bytes and the table you foun
 
 ## When to name at all
 
-- **Only default names are fair game.** Never replace a name someone already chose. If you think it is
-  wrong, open an issue with the evidence and let review decide.
+- **Default names first.** A name someone already chose is replaced only with an `evidence` field on
+  the rename op (`rename_function`, `rename_global`, `rename_local`, `struct_field`, `funcdef_param`)
+  that says why the chosen name is wrong; such a proposal is always reviewed by hand, never approved
+  automatically. Without that field the checker refuses it.
 - **Reordering parameters is not renaming them.** A `set_prototype` that only puts the existing
   parameters in another order (each keeps its name and type; same count, return type and convention;
   storage may follow the convention or be custom) leaves every chosen name alone. It changes what every

@@ -628,10 +628,10 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "4afd5538",
+      "dh": "e21928f7",
       "paramStorage": [
         [
-          "param_1",
+          "pControl",
           "ECX:4"
         ]
       ]
@@ -907,6 +907,21 @@
           "Stack[0x4]:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_004fa1b0",
+      "address": "004fa1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa1b0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "Unreferenced_004fa1b0"
+      ],
+      "dh": "be4a2dfa"
     },
     {
       "name": "D2WIN_FindClosestControlToMouse",

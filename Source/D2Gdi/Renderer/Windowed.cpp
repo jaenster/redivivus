@@ -973,8 +973,8 @@ void __fastcall RENDERER_WINDOWED_DrawLineBresenham(POINT * pnEndPoint, POINT * 
       } while (nSqrtIter * nSqrtIter < nAccumX);
     }
 
-    nDistSq = (nDistSq << 0x10) / nDistance;
-    nStepX = (nStepX << 0x10) / nDistance;
+    nDistSq = nDistSq * 0x10000 / nDistance;
+    nStepX = nStepX * 0x10000 / nDistance;
     nAccumX = 0;
     nSqrtIter = 0;
     int nStepCount = 0;
@@ -1468,7 +1468,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       memset(gnSmackerGlideYOffset.pFrameBuffer, 0, 0x6db0);
       pVersion = 0;
       nFileSize = 0;
-      dwLoadResult = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&pVersion, &nFileSize, 0, 3, (LPOVERLAPPED)0x0);
+      dwLoadResult = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, &pVersion, &nFileSize, 0, 3, (LPOVERLAPPED)0x0);
       if (dwLoadResult && pVersion) {
         iVar2 = Storm::Source::SBMP::SBmpDecodeImage(2, pVersion, nFileSize, aPaletteBuf, (uint8_t*)gnSmackerGlideYOffset.pFrameBuffer, 0x6db0, &nImgWidth, &nImgHeight, &nImgBitDepth);
         Storm::Source::SMem::SMemFree(pVersion, ".\\Src\\gdiSmack.cpp", 0x78, 0);

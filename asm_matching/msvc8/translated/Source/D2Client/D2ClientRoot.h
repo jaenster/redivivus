@@ -51,7 +51,7 @@ void __stdcall CMD_AutomapCenterOnPlayer_Unref_0040d530();
 BOOL __stdcall WINMAIN_TestMemoryAccess(struct CMDPARAMS * pParams, char * szCmdLine);
 // Triggers end-game congrats flow: set gShowEndGameCongrats, reset beta index, send exit packet, set ExitVar3.
 void TriggerEndGameCongratsExit();
-uint32_t __stdcall LOADER_RunInsertDiscPopup();
+BOOL __stdcall LOADER_RunInsertDiscPopup();
 uint32_t __stdcall LOADER_PopupGameLoopCallback(uint32_t dwArg1);
 // SelectProc=1 handler: target must be a selectable corpse (type 2). Thunk that pushes pTargetUnit and calls SKILLS_IsSelectableCorpse2. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
 int __fastcall SKILL_SelectProc_IsSelectableCorpse2(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
@@ -130,7 +130,7 @@ void __fastcall CLIENT_SetDefaultCharClass(eD2PlayerClassIDDWORD dwValue);
 eD2PlayerClassIDDWORD __stdcall CLIENT_GetDefaultCharClass();
 // Returns 1 if arena mode is active (bit 8 of CLIENT_ArenaFlags is set), indicating the game session is running in arena/PvP mode.
 uint32_t __stdcall CLIENT_IsArenaMode();
-int __fastcall Unreferenced_0047aa40(uint16_t * param_1);
+int __fastcall Unreferenced_0047aa40(uint16_t * pChar);
 void __stdcall INPUT_HandleIMEComposition(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandleIMEStartComposition(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandleIMEEndComposition(struct D2UIMouseMsgStrc * pMsg);
@@ -143,6 +143,7 @@ void __fastcall AUTOMAP_UpdatePartyNamesCallback(struct D2EscMenuItemStrc * pIte
 // which reaches D2GFX_PlayCutScene and only ever holds PING or 0. void * is the honest type for both -
 // it is what D2GFX_PlayCutScene declares for the parameter - and no call is made through either slot
 // here.
+// Passes LOADER_RunInsertDiscPopup by address.
 void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId);
 void __stdcall INV_SetItemDescFlag();
 void __stdcall INV_ResetItemDescFlags();
@@ -185,7 +186,7 @@ void __stdcall DRAW_WORLD_SetWarpFadeTimer();
 void __stdcall dSceneTransitionDraw();
 void __stdcall DRAW_WORLD_ClearWarpFadeTimer();
 int __fastcall CUNITEVENT_DispatchCallbacks(int nClientEvent, struct D2UnitStrc * pOwnerUnit, struct D2UnitStrc * pMissile, uint32_t dwParam4);
-uint32_t __stdcall DRAW_ShouldDrawEdges(int32_t nParam);
+BOOL __stdcall DRAW_ShouldDrawEdges(int32_t nParam);
 int32_t __fastcall UI_GetDialogLineCount(int16_t nDialogId);
 pfnWardenCreateInterface __fastcall WARDEN_DecryptBuffer(struct D2WardenModuleStrc * ppModule, int, int32_t nOrdinal);
 // Decrypt Warden anti-cheat module data using RSA/crypto operations

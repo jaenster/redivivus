@@ -29,6 +29,30 @@
       ]
     },
     {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0044ddd0",
+      "address": "0044ddd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ddd0"
+        }
+      ],
+      "namespace": "TSLink<SGAMEDATA>",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0044ddd0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "678a0354",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
       "name": "OperatorIndex",
       "address": "0044de10",
       "lines": [
@@ -53,6 +77,21 @@
           "Stack[0x4]:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_0044de40",
+      "address": "0044de40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044de40"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+      "calledFunctions": [
+        "Unreferenced_0044de40"
+      ],
+      "dh": "0a82b77a"
     },
     {
       "name": "NextLink_Unreferenced",
@@ -207,6 +246,30 @@
       "paramStorage": [
         [
           "param_1",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0044ed50",
+      "address": "0044ed50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ed50"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0044ed50"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "4beee1e0",
+      "paramStorage": [
+        [
+          "pNode",
           "ECX:4"
         ]
       ]
@@ -493,6 +556,49 @@
       ]
     },
     {
+      "name": "Unreferenced_0044f9d0",
+      "address": "0044f9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044f9d0"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "Unreferenced_0044f9d0"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
+      ],
+      "dh": "6ea286d5",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0044f9f0",
+      "address": "0044f9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044f9f0"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "Unreferenced_0044f9f0",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSExplicitList<SGAMEDATA, -572662307>"
+      ],
+      "dh": "d6f00790"
+    },
+    {
       "name": "InternalClear",
       "address": "0044fa00",
       "lines": [
@@ -570,6 +676,42 @@
         "intptr_t"
       ],
       "dh": "4d47f8c4"
+    },
+    {
+      "name": "Constructor",
+      "address": "0044fb30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044fb30"
+        }
+      ],
+      "namespace": "TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>",
+      "calledFunctions": [
+        "Constructor"
+      ],
+      "usedTypes": [
+        "TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>"
+      ],
+      "dh": "15076fa2"
+    },
+    {
+      "name": "Unreferenced_0044fb50",
+      "address": "0044fb50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044fb50"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "Unreferenced_0044fb50"
+      ],
+      "usedTypes": [
+        "TSExplicitList<SGAMEDATA, -572662307>"
+      ],
+      "dh": "96cf9799"
     },
     {
       "name": "CopyConstructor_Unreferenced",

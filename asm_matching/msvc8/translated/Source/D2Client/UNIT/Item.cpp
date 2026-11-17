@@ -338,6 +338,7 @@ static D2UnitStrc * __stdcall ITEM_CreateItemFromGroundPacket(uint16_t nItemX, u
 }
 
 // @sourcefile .\UNIT\Item.cpp
+#if 0 // ratchet: the match body of 004c0ff0 (evidence 5b183fa9f) could not be re-spelled: parameter 1 retyped: uint32_t -> uint16_t
 static D2UnitStrc * __stdcall ITEM_CreateItemFromBodyPacket(uint16_t nItemX, uint32_t nItemY, int32_t bSendIdentRequest, uint8_t * pPacketData, D2UnitDataItemDetailsStrc * pUnitDataItemDetails) {
     D2UnitDataItemDetailsStrc itemDetails;
     int32_t bLoadFailed;
@@ -348,6 +349,69 @@ static D2UnitStrc * __stdcall ITEM_CreateItemFromBodyPacket(uint16_t nItemX, uin
     }
 
     D2UnitStrc* pUnit = CUnit::UNIT_CreateWarp(*(int32_t*)(pPacketData + 4), pUnitDataItemDetails->classId, (uint32_t)nItemX, nItemY & 0xffff, UNIT_ITEM, (uint32_t)pUnitDataItemDetails->nAnimMode);
+    D2Common::ITEMS::Items::ITEM_LoadFromSaveData(pUnit, pPacketData + 0xd, byPacketSize - 0xd, 0, nullptr, 0x60, &bLoadFailed);
+    if (bLoadFailed) {
+      CUnit::RemoveObjectFromServerObjectTable(*(uint32_t*)(pPacketData + 4), UNIT_ITEM);
+      return nullptr;
+    }
+
+    uint32_t bBoughtFlag = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(pUnitDataItemDetails->flags, ITEMFLAG_BOUGHT);
+    if (bBoughtFlag) {
+      BOOL bIdentified;
+      D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_BOUGHT, 0);
+      if (bSendIdentRequest) {
+        bIdentified = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0xfe, ".\\UNIT\\Item.cpp");
+        if (!bIdentified) {
+          GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x37, *(int32_t*)(pPacketData + 4));
+        }
+      }
+    }
+
+    return pUnit;
+}
+#endif
+#if 0 // ratchet: the match body of 004c0ff0 (evidence 3d53ccc7c) could not be re-spelled: parameter 1 retyped: uint32_t -> uint16_t
+static D2UnitStrc * __stdcall ITEM_CreateItemFromBodyPacket(uint16_t nItemX, uint32_t nItemY, int32_t bSendIdentRequest, uint8_t * pPacketData, D2UnitDataItemDetailsStrc * pUnitDataItemDetails) {
+    D2UnitDataItemDetailsStrc itemDetails;
+    int32_t bLoadFailed;
+    uint8_t byPacketSize = pPacketData[2];
+    if (!pUnitDataItemDetails) {
+      D2Common::ITEMS::Items::ExtractItemDetails(pPacketData + 0xd, byPacketSize - 0xd, 0, &itemDetails);
+      pUnitDataItemDetails = &itemDetails;
+    }
+
+    D2UnitStrc* pUnit = CUnit::UNIT_CreateWarp(*(int32_t*)(pPacketData + 4), pUnitDataItemDetails->classId, (uint32_t)nItemX, nItemY & 0xffff, UNIT_ITEM, (uint32_t)pUnitDataItemDetails->nAnimMode);
+    D2Common::ITEMS::Items::ITEM_LoadFromSaveData(pUnit, pPacketData + 0xd, byPacketSize - 0xd, 0, nullptr, 0x60, &bLoadFailed);
+    if (bLoadFailed) {
+      CUnit::RemoveObjectFromServerObjectTable(*(uint32_t*)(pPacketData + 4), UNIT_ITEM);
+      return nullptr;
+    }
+
+    uint32_t bBoughtFlag = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(pUnitDataItemDetails->flags, ITEMFLAG_BOUGHT);
+    if (bBoughtFlag) {
+      BOOL bIdentified;
+      D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_BOUGHT, 0);
+      if (bSendIdentRequest) {
+        bIdentified = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0xfe, ".\\UNIT\\Item.cpp");
+        if (!bIdentified) {
+          GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x37, *(int32_t*)(pPacketData + 4));
+        }
+      }
+    }
+
+    return pUnit;
+}
+#endif
+static D2UnitStrc * __stdcall ITEM_CreateItemFromBodyPacket(uint16_t nItemX, uint16_t nItemY, int32_t bSendIdentRequest, uint8_t * pPacketData, D2UnitDataItemDetailsStrc * pUnitDataItemDetails) {
+    D2UnitDataItemDetailsStrc itemDetails;
+    int32_t bLoadFailed;
+    uint8_t byPacketSize = pPacketData[2];
+    if (!pUnitDataItemDetails) {
+      D2Common::ITEMS::Items::ExtractItemDetails(pPacketData + 0xd, byPacketSize - 0xd, 0, &itemDetails);
+      pUnitDataItemDetails = &itemDetails;
+    }
+
+    D2UnitStrc* pUnit = CUnit::UNIT_CreateWarp(*(int32_t*)(pPacketData + 4), pUnitDataItemDetails->classId, (uint32_t)nItemX, (uint32_t)nItemY, UNIT_ITEM, (uint32_t)pUnitDataItemDetails->nAnimMode);
     D2Common::ITEMS::Items::ITEM_LoadFromSaveData(pUnit, pPacketData + 0xd, byPacketSize - 0xd, 0, nullptr, 0x60, &bLoadFailed);
     if (bLoadFailed) {
       CUnit::RemoveObjectFromServerObjectTable(*(uint32_t*)(pPacketData + 4), UNIT_ITEM);
@@ -1270,14 +1334,14 @@ void __fastcall HandleItemToCursor(uint8_t * pBytes) {
     }
 }
 
-int __fastcall Unreferenced_004c2150(int param_1) {
+int __fastcall Unreferenced_004c2150(int nInvType) {
     // Static local variables (originally global data)
     static uint32_t gnCursorInvTypeAutoOpenC[5] = { 0x0, 0x1, 0x4, 0x2, 0x6 }; D2_STATIC_GUARD(gnCursorInvTypeAutoOpenC, "D2Client::UNIT::Unreferenced_004c2150::gnCursorInvTypeAutoOpenC");
     static uint32_t gnCursorInvTypeAutoOpenA = 0x5; D2_STATIC_GUARD(gnCursorInvTypeAutoOpenA, "D2Client::UNIT::Unreferenced_004c2150::gnCursorInvTypeAutoOpenA");
 
     uint32_t uVar1;
     for (uVar1 = 0; uVar1 < gnCursorInvTypeAutoOpenA; uVar1++) {
-      if (param_1 == gnCursorInvTypeAutoOpenC[uVar1]) {
+      if (nInvType == gnCursorInvTypeAutoOpenC[uVar1]) {
         return 4;
       }
     }
@@ -1311,7 +1375,7 @@ void __fastcall ITEM_RemoveClientSide(D2UnitStrc * pUnit) {
     eD2UnitType eUnitType;
     D2StatListExStrc* pUninterruptStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_uninterruptable);
     if (!pUninterruptStatList) {
-      int32_t nUnitGUID;
+      uint32_t nUnitGUID;
       if (!pUnit) {
         nUnitGUID = -1;
         eUnitType = UNIT_COUNT;
@@ -2617,17 +2681,17 @@ void __fastcall HandleItemInShop(uint8_t * pPacket) {
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
       int nCollisionResult;
-      uint32_t bIsReload;
+      int32_t bIsReload;
       int32_t nNpcGuid;
       D2UnitStrc* pNpcUnit;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 16, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     eInventoryPage eContainingPage;
+    uint32_t uVar4;
     D2UnitStrc* pBelongsResult;
-    int32_t iVar1;
-    uint32_t nShopResult;
-    uint8_t nInvPage;
+    int32_t nShopResult;
+    uint8_t uVar1;
     D2UnitDataItemDetailsStrc stItemDetails;
     D2UnitStrc* pCollidedItem;
     D2Common::ITEMS::Items::ExtractItemDetails(pPacket + 8, pPacket[2] - 8, 0, &stItemDetails);
@@ -2659,8 +2723,8 @@ void __fastcall HandleItemInShop(uint8_t * pPacket) {
         return;
       }
 
-      nShopResult = UI::npcmenu::NPCMENU_IsShopActive();
-      if (nShopResult) {
+      uVar4 = UI::npcmenu::NPCMENU_IsShopActive();
+      if (uVar4) {
         UI::Inv::INV_ResetHoverAndContextState();
       }
 
@@ -2676,9 +2740,9 @@ void __fastcall HandleItemInShop(uint8_t * pPacket) {
       }
 
       bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-      nInvPage = (uint8_t)__frame0.bIsReload;
-      iVar1 = D2Common::Units::UNITS_GetInventoryRecordId(__frame0.pNpcUnit, nInvPage, bIsExpansion);
-      D2Common::INVENTORY::Inventory::UnusedDebug(".\\UNIT\\Item.cpp", 0x81b, pInventory, (uint32_t)stItemDetails.x, (uint32_t)stItemDetails.y, (eInventoryPage)iVar1, 1, nInvPage);
+      uVar1 = (uint8_t)__frame0.bIsReload;
+      nShopResult = D2Common::Units::UNITS_GetInventoryRecordId(__frame0.pNpcUnit, uVar1, bIsExpansion);
+      D2Common::INVENTORY::Inventory::UnusedDebug(".\\UNIT\\Item.cpp", 0x81b, pInventory, (uint32_t)stItemDetails.x, (uint32_t)stItemDetails.y, (eInventoryPage)nShopResult, 1, uVar1);
       UI::ui::UI_SendMouseMoveMessage();
       CUnit::RemoveObjectFromServerObjectTable(*(uint32_t*)(pPacket + 4), UNIT_ITEM);
       UI::npcmenu::NPCMENU_OnItemInShop(*(int32_t*)(pPacket + 4));
@@ -2692,8 +2756,8 @@ void __fastcall HandleItemInShop(uint8_t * pPacket) {
       nShopResult = *(uint32_t*)((char*)&stItemDetails + 16);
     } else {
       D2Common::INVENTORY::Inventory::INVENTORY_CheckDoItemBelongToInventory(pInventory, pItem);
-      nShopResult = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(stItemDetails.flags, ITEMFLAG_RELOAD);
-      if (nShopResult) {
+      uVar4 = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(stItemDetails.flags, ITEMFLAG_RELOAD);
+      if (uVar4) {
         CUnit::RemoveObjectFromServerObjectTable(*(uint32_t*)(pPacket + 4), UNIT_ITEM);
         pItem = ITEM_CreateItemFromGroundPacket(0, 0, 0, pPacket, &stItemDetails);
         if (!pItem) {
@@ -2721,8 +2785,9 @@ void __fastcall HandleItemInShop(uint8_t * pPacket) {
     nShopResult = *(uint32_t*)((char*)&stItemDetails + 16);
     bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
     pBelongsResult = __frame0.pNpcUnit;
-    iVar1 = D2Common::Units::UNITS_GetInventoryRecordId(__frame0.pNpcUnit, stItemDetails.nInvPage, bIsExpansion);
-    bIsExpansion = D2Common::INVENTORY::Inventory::INVENTORY_CheckGridCollisions(pInventory, pItem, (uint32_t)stItemDetails.x, (uint32_t)stItemDetails.y, iVar1, ppCollidedItemOut, pnCollisionResult, nShopResult);
+    uVar1 = (uint8_t)nShopResult;
+    nShopResult = D2Common::Units::UNITS_GetInventoryRecordId(__frame0.pNpcUnit, stItemDetails.nInvPage, bIsExpansion);
+    bIsExpansion = D2Common::INVENTORY::Inventory::INVENTORY_CheckGridCollisions(pInventory, pItem, (uint32_t)stItemDetails.x, (uint32_t)stItemDetails.y, nShopResult, ppCollidedItemOut, pnCollisionResult, uVar1);
     if (!bIsExpansion) {
       return;
     }

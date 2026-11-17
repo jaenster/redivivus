@@ -481,7 +481,10 @@
       "calledFunctions": [
         "SKILLS_Min"
       ],
-      "dh": "eca8d500",
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "333afe1d",
       "paramStorage": [
         [
           "nLeft",
@@ -492,11 +495,11 @@
           "EDX:4"
         ],
         [
-          "dwParam3",
+          "nOperand3",
           "Stack[0x4]:4"
         ],
         [
-          "dwParam4",
+          "pContext",
           "Stack[0x8]:4"
         ]
       ]
@@ -514,7 +517,10 @@
       "calledFunctions": [
         "SKILLS_Max"
       ],
-      "dh": "e7df9178",
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "adee6d06",
       "paramStorage": [
         [
           "nLeft",
@@ -1172,7 +1178,7 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "4fbcefc5",
+      "dh": "f7b697d0",
       "paramStorage": [
         [
           "pSkill",
@@ -3760,6 +3766,21 @@
       ]
     },
     {
+      "name": "Unreferenced_006460b0",
+      "address": "006460b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006460b0"
+        }
+      ],
+      "namespace": "D2Common::Skills",
+      "calledFunctions": [
+        "Unreferenced_006460b0"
+      ],
+      "dh": "910457c1"
+    },
+    {
       "name": "SKILLS_GetClassSkillByIndex",
       "address": "006460f0",
       "lines": [
@@ -4302,7 +4323,7 @@
         "eD2Skills",
         "eD2States"
       ],
-      "dh": "e2f46af8",
+      "dh": "39da5baf",
       "paramStorage": [
         [
           "pUnitStrc",
@@ -4843,7 +4864,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9c5b9ed9",
+      "dh": "8cbc7024",
       "paramStorage": [
         [
           "pUnit",
@@ -4889,7 +4910,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "6b3b784b",
+      "dh": "eee81081",
       "paramStorage": [
         [
           "pUnit",

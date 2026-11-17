@@ -211,348 +211,348 @@ fpUmodInit aUmodInitTable[43] = {
 }}} // namespace D2Game::Monsters::Umod
 static D2MonsterUModHandlerRowStrc g_MonsterUModHandlerTable[43] = {
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ &D2Game::Monsters::MONSTER_CastAmplifyDamageOnHit,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ &D2Game::Monsters::MONSTER_CastAmplifyDamageOnHit,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ &D2Game::Monsters::MONSTER_OnDeathScheduleDelayed,
-        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_CorpseExplode,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ &D2Game::Monsters::MONSTER_OnDeathScheduleDelayed,
+        /* .pfnEvent = */ &D2Game::Monsters::MONSTER_CorpseExplode,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
-        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_DeathPoisonCloud,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
+        /* .pfnEvent = */ &D2Game::Monsters::MONSTER_DeathPoisonCloud,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ (fpMonsterUModHandler)&D2Game::Monsters::UMOD_SetLevelAndAttackRating,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ &D2Game::Monsters::UMOD_SetLevelAndAttackRating,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_OnDeathKillOwnerAndMinions,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ &D2Game::Monsters::MONSTER_OnDeathKillOwnerAndMinions,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ &D2Game::Monsters::MONSTER_LightningEnchantedModeChange,
-        /* .pfnHandler2 = */ &D2Game::Monsters::MONSTER_CastLightningUniqueBolts,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ &D2Game::Monsters::MONSTER_CastLightningUniqueBoltsIfNotGetHit,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ &D2Game::Monsters::MONSTER_LightningEnchantedModeChange,
+        /* .pfnEvent = */ &D2Game::Monsters::MONSTER_CastLightningUniqueBolts,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ &D2Game::Monsters::MONSTER_CastLightningUniqueBoltsIfNotGetHit,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
-        /* .pfnHandler2 = */ &D2Game::Monsters::MONSTER_DeathMissileRing,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
+        /* .pfnEvent = */ &D2Game::Monsters::MONSTER_DeathMissileRing,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ (fpMonsterUModHandler)&D2Game::Monsters::UMOD_AddBaseDamageBonus,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScaleMissileDamageByOwner
+        /* .pfnModeStart = */ &D2Game::Monsters::UMOD_AddBaseDamageBonus,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ &D2Game::Monsters::MONSTER_ScaleMissileDamageByOwner
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ &D2Game::MONSTER_ScheduleEventOnGetHitOrDeath,
-        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_BugLightningDeathBolts,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ &D2Game::MONSTER_ScheduleEventOnGetHitOrDeath,
+        /* .pfnEvent = */ &D2Game::Monsters::MONSTER_BugLightningDeathBolts,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_HandleMinionDeath,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ &D2Game::Monsters::MONSTER_HandleMinionDeath,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_DispatchSpecialDeath,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ &D2Game::Monsters::MONSTER_DispatchSpecialDeath,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_QueenPoisonCloudDeath,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ &D2Game::Monsters::MONSTER_QueenPoisonCloudDeath,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ &D2Game::Monsters::MONSTER_StealPotionFromBelt,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ &D2Game::Monsters::MONSTER_StealPotionFromBelt,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ &D2Game::Monsters::UMOD_SetRandomElementalDamage,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ &D2Game::Monsters::UMOD_SetRandomElementalForMissile
+        /* .pfnModeStart = */ &D2Game::Monsters::UMOD_SetRandomElementalDamage,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ &D2Game::Monsters::UMOD_SetRandomElementalForMissile
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_MissileSplitOnHit
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_MissileSplitOnHit
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
-        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_CorpseExplodeFixed,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
+        /* .pfnEvent = */ &D2Game::Monsters::MONSTER_CorpseExplodeFixed,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
-        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_AoEPhysicalDamage,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
+        /* .pfnEvent = */ &D2Game::Monsters::MONSTER_AoEPhysicalDamage,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_HandleModeTransition,
-        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_SuicideExplosion,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ &D2Game::Monsters::MONSTER_HandleModeTransition,
+        /* .pfnEvent = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_SuicideExplosion,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_OnDeathTryScheduleRevive,
-        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_SelfResurrect,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ &D2Game::Monsters::MONSTER_OnDeathTryScheduleRevive,
+        /* .pfnEvent = */ &D2Game::Monsters::MONSTER_SelfResurrect,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ &D2Game::Monsters::MONSTER_ShatterOnDeath,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ &D2Game::Monsters::MONSTER_ShatterOnDeath,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ &D2Game::Monsters::MONSTER_SpawnWormOnDeath,
-        /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ &D2Game::Monsters::MONSTER_SpawnWormOnDeath,
+        /* .pfnEvent = */ nullptr,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ &D2Game::Monsters::MONUMOD_TickAlwaysRunAi,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ nullptr,
+        /* .pfnEvent = */ &D2Game::Monsters::MONUMOD_TickAlwaysRunAi,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
-        /* .pfnHandler2 = */ &D2Game::Monsters::MONSTER_ShadowDeathNova,
-        /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ nullptr
+        /* .pfnModeStart = */ nullptr,
+        /* .pfnModeChange = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
+        /* .pfnEvent = */ &D2Game::Monsters::MONSTER_ShadowDeathNova,
+        /* .pfnAttackHit = */ nullptr,
+        /* .pfnDamaged = */ nullptr,
+        /* .pfnMissile = */ nullptr
     }
 }; D2_STATIC_GUARD(g_MonsterUModHandlerTable, "g_MonsterUModHandlerTable");
 
@@ -570,12 +570,12 @@ int Unreferenced_005a0030() {
     return D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize;
 }
 
-D2MonUModTxt * __fastcall Unreferenced_005a0040(int param_1) {
-    if (param_1 >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize) {
+D2MonUModTxt * __fastcall Unreferenced_005a0040(int nIndex) {
+    if (nIndex >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize) {
       return nullptr;
     }
 
-    return D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + param_1;
+    return D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + nIndex;
 }
 
 int Unreferenced_005a0060() {
@@ -1479,7 +1479,7 @@ void __fastcall MONSTER_OnDeathScheduleDelayed(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Server-side handler for a monster corpse explosion (Necromancer Corpse Explosion skill or similar). Spawns a MISSILE_Monstercorpseexplode at the corpse's position, scales damage from MonStats using difficulty-dependent CEDamagePercent (Normal -25%, Nightmare -33%, Hell -87.5% reduction), then applies AoE physical damage around the origin via DAMAGE_ApplyAreaOfEffectDamage.
-void __fastcall MONSTER_CorpseExplode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nUnused1, uint32_t nUnused2) {
+void __fastcall MONSTER_CorpseExplode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nUnused1, int32_t nUnused2) {
     int64_t nDivResult;
     D2DamageStrc sDamage;
     D2MonStatsInitStrc sMonStats;
@@ -1562,7 +1562,7 @@ void __fastcall MONSTER_CorpseExplode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
     UNIT::SUnitDmg::DAMAGE_ApplyAreaOfEffectDamage(pGame, pCorpseMissile, nPosX, nPosY, pGame->nDifficulty + 4, &sDamage, 0, 0, nullptr, 0x581);
 }
 
-void __fastcall MONSTER_CorpseExplodeFixed(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, uint32_t dwParam2) {
+void __fastcall MONSTER_CorpseExplodeFixed(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t dwParam2) {
     int nPosX;
     int nPosY;
     D2DamageStrc sDamage;
@@ -1633,7 +1633,7 @@ void __fastcall MONSTER_ShadowDeathNova(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     SKILLS::SkillsServer::SKILLS_CreateMissileRing(pGame, pUnit, pUnit, MISSILE_Nova, SKILL_Attack, eSkill, nLifePct);
 }
 
-// Server-side: emits the radial lightning-bolt nova fired by a lightning-enchanted unique monster (e.g. on death/trigger). When bShouldTrigger is set and at least 10 game frames have passed since the last burst (stored in the monster's data field), sets the monster's lightning-enchant flag bit, records the current game frame, computes skill level = unit level/2 (min 1), then builds a D2SkillArgStrc at the unit's position and spawns MISSILE_Lightunique charged bolts using SKILL_InitChargedBoltPath. Offsets are taken from the gnElementalDamageScale_LightningUnique / gnEnchantmentApplyScale_Lightning tables (4 directions x 2 bolts each). If <10 frames elapsed it instead clears the enchant flag bit and returns. No return value.
+// Server-side: emits the radial lightning-bolt nova fired by a lightning-enchanted unique monster when it is hit (row 17 column 2, run by timer event 7 that MONSTER_LightningEnchantedModeChange schedules on GetHit; also called directly by MONSTER_CastLightningUniqueBoltsIfNotGetHit). When bShouldTrigger is set and at least 10 game frames have passed since the last burst (stored in the monster's data field), sets the monster's lightning-enchant flag bit, records the current game frame, computes skill level = unit level/2 (min 1), then builds a D2SkillArgStrc at the unit's position and spawns MISSILE_Lightunique charged bolts using SKILL_InitChargedBoltPath. Offsets are taken from the gnElementalDamageScale_LightningUnique / gnEnchantmentApplyScale_Lightning tables (4 directions x 2 bolts each). If <10 frames elapsed it instead clears the enchant flag bit and returns. No return value.
 void __fastcall MONSTER_CastLightningUniqueBolts(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
     // Static local variables (originally global data)
     static int gaMissileOffsets_LightningUniqueX[4] = { 0x0, 0x1, 0x0, -0x1 }; D2_STATIC_GUARD(gaMissileOffsets_LightningUniqueX, "D2Game::Monsters::MONSTER_CastLightningUniqueBolts::gaMissileOffsets_LightningUniqueX");
@@ -1771,7 +1771,7 @@ void __fastcall MONSTER_DeathMissileRing(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     SKILLS::SkillsServer::SKILLS_CreateMissileRing(pGame, pUnit, pUnit, MISSILE_Coldunique, SKILL_Attack, eSkill, nMissileVelocity);
 }
 
-void __fastcall MONSTER_DeathPoisonCloud(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, uint32_t dwParam2) {
+void __fastcall MONSTER_DeathPoisonCloud(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t dwParam2) {
     int nPosY;
     int32_t nPosX;
     int32_t nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
@@ -1800,7 +1800,7 @@ void __fastcall MONSTER_DeathPoisonCloud(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     SKILLS::SkillsServer::CreatingAMissile(pGame, MISSILE_Corpsepoisoncloud, pUnit, SKILL_Attack, nLevel, 0, 0, nPosX, nPosY, 1);
 }
 
-void __fastcall MONSTER_KillWithMinions(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t dwParam) {
+void __fastcall MONSTER_KillWithMinions(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, void * dwParam) {
     D2ModeChangeStrc sKillStrc;
     Ai::AiGeneral::FreeAiOfMinions(pUnit);
     Ai::AiGeneral::AssignMinionOwner(pGame, pUnit, -1, UNIT_MONSTER, 0, 0);
@@ -1812,7 +1812,8 @@ void __fastcall MONSTER_KillWithMinions(D2UnitStrc * pUnit, ::SGAMEDATA * pGame,
     Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKillStrc, 1);
 }
 
-void __fastcall MONSTER_OnDeathKillOwnerAndMinions(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
+// Passes MONSTER_KillWithMinions by address.
+void __fastcall MONSTER_OnDeathKillOwnerAndMinions(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {
     D2ModeChangeStrc sOwnerKillStrc;
     if (!(!pUnit || pUnit->eAnimMode.ePlayerMode == Death)) {
       return;
@@ -1833,6 +1834,7 @@ void __fastcall MONSTER_OnDeathKillOwnerAndMinions(::SGAMEDATA * pGame, D2UnitSt
     Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sOwnerKillStrc, 1);
 }
 
+#if 0 // ratchet: the pin body of 005a2d80 (evidence 0ba282de8) could not be re-spelled: parameter 0 retyped: uint32_t -> SGAMEDATA *; parameter 3 retyped: uint32_t -> int32_t
 void __fastcall UMOD_AddBaseDamageBonus(uint32_t dwUnused1, D2UnitStrc * pUnit, uint32_t dwUnused2, uint32_t dwUnused3) {
     int nMinDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mindamage, 0);
     int nMaxDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_maxdamage, 0);
@@ -1853,8 +1855,29 @@ void __fastcall UMOD_AddBaseDamageBonus(uint32_t dwUnused1, D2UnitStrc * pUnit, 
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_mindamage, nMinDmg, 0);
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_maxdamage, nMaxDmg, 0);
 }
+#endif
+void __fastcall UMOD_AddBaseDamageBonus(::SGAMEDATA * dwUnused1, D2UnitStrc * pUnit, uint32_t dwUnused2, int32_t dwUnused3) {
+    int nMinDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mindamage, 0);
+    int nMaxDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_maxdamage, 0);
+    if (!(nMaxDmg > 0 && (!pUnit || pUnit->nClassId != 0x10f))) {
+      return;
+    }
 
-void __fastcall MONSTER_ScaleMissileDamageByOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
+    nMinDmg += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_secondary_mindamage, 0) - 1;
+    nMaxDmg += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_secondary_maxdamage, 0) - 1;
+    if (nMinDmg < 0) {
+      nMinDmg = 0;
+    }
+    if (nMaxDmg < 0) {
+      nMaxDmg = 0;
+    }
+
+    D2StatListExStrc* pStatsEx = D2Common::Stats::StatsEx::GetStatsByFlags(pUnit, 1);
+    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_mindamage, nMinDmg, 0);
+    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_maxdamage, nMaxDmg, 0);
+}
+
+void __fastcall MONSTER_ScaleMissileDamageByOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
       return;
     }
@@ -1886,7 +1909,7 @@ void __fastcall MONSTER_ScaleMissileDamageByOwner(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // Spawns the Burning Dead Archer / Afflicted bug-lightning death-bolt salvo on unit death. Fires 4 directional pairs (8 total) of MISSILE_Buglightning using offsets from gaMissileOffsets_BugLightningX/Y, with SKILL_InitChargedBoltPath as the init callback. Level is taken from UNITSTAT_level; dwUnused1/dwUnused2 are ignored (death-event signature padding).
-void __fastcall MONSTER_BugLightningDeathBolts(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall MONSTER_BugLightningDeathBolts(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {
     // Static local variables (originally global data)
     static int gaMissileOffsets_BugLightningY[4] = { -0x1, 0x0, 0x1, 0x0 }; D2_STATIC_GUARD(gaMissileOffsets_BugLightningY, "D2Game::Monsters::MONSTER_BugLightningDeathBolts::gaMissileOffsets_BugLightningY");
     static int gaMissileOffsets_BugLightningX[4] = { 0x0, 0x1, 0x0, -0x1 }; D2_STATIC_GUARD(gaMissileOffsets_BugLightningX, "D2Game::Monsters::MONSTER_BugLightningDeathBolts::gaMissileOffsets_BugLightningX");
@@ -1947,11 +1970,13 @@ void __fastcall MONSTER_BugLightningDeathBolts(::SGAMEDATA * pGame, D2UnitStrc *
 
       nDirX = gaMissileOffsets_BugLightningX[nDirLoopIdx];
       nDirY = gaMissileOffsets_BugLightningY[nDirLoopIdx];
+      int nSpawnX = nDirX + nPosX;
+      int nSpawnY = nDirY + nPosY;
       nMissileSpawnIdx = 0;
       do {
         sSkillArg.nFunctionParam = nMissileSpawnIdx;
-        sSkillArg.nUnitX = nDirX + nPosX;
-        sSkillArg.nUnitY = nDirY + nPosY;
+        sSkillArg.nUnitX = nSpawnX;
+        sSkillArg.nUnitY = nSpawnY;
         MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
         nMissileSpawnIdx++;
       } while (nMissileSpawnIdx < 2);
@@ -2061,7 +2086,7 @@ void __fastcall MONSTER_StealPotionFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Routes a monster's death event to its boss-specific handler based on nClassId. Handles Bloodraven (ranged special), Radament (ring attack), Mephisto (death missile), Izual (melee skill), Andariel (ranged short), Overseer (ranged normal), Uber Mephisto/Baal/Diablo (loot drop check), and no-op uber variants. Only triggers the handler if the unit is actually in Death anim mode (except Overseer/Uber which check null too).
-void __fastcall MONSTER_DispatchSpecialDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall MONSTER_DispatchSpecialDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {
     eD2MonsterClassId nMonClassId;
     if (!pUnit) {
       nMonClassId = ~MonsterUnitSkeleton1;
@@ -2140,7 +2165,7 @@ void __fastcall MONSTER_DispatchSpecialDeath(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // Death handler for the Andariel Queen Bee / Spider Queen: spawns MISSILE_Queenpoisoncloud in four cardinal directions (±X, ±Y) from the unit's position. Each direction fires 2 missiles via CreatingMissile with SKILL_InitChargedBoltPath as the path function and the unit's level as the toHit value. Called as a fastcall death callback with pGame and pUnit.
-void __fastcall MONSTER_QueenPoisonCloudDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall MONSTER_QueenPoisonCloudDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {
     int nPosX;
     int nPosY;
     D2SkillArgStrc sSkillArg;
@@ -2312,7 +2337,7 @@ void __fastcall MONSTER_ScheduleDeathEvent(::SGAMEDATA * pGame, D2UnitStrc * pUn
     GAME::Event::SetEvent(pGame, pUnit, 7, pGame->dwGameFrame + 4, 0, 0);
 }
 
-void __fastcall MONSTER_OnDeathTryScheduleRevive(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall MONSTER_OnDeathTryScheduleRevive(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {
     D2MonStatsTxt* pMonStatsTxt;
     int32_t nClassIdTmp;
     if (!(!pUnit || pUnit->eAnimMode.ePlayerMode == Death)) {
@@ -2339,7 +2364,7 @@ void __fastcall MONSTER_OnDeathTryScheduleRevive(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // AI callback that resurrects a monster that has just died via SKILL_SelfResurrect. Validates that the monster is dead, lacks a passive-state lock, is not a quest-flagged boss, is not Champion-aligned, and that its current tile is unblocked; if all checks pass, casts self-resurrection, clears the NOXP/NOTC flags, increments AI argument 1, and schedules the next think event.
-void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {
     BOOL _bIsDead;
     bool bIsDead;
     int nClassId;
@@ -2402,7 +2427,7 @@ void __fastcall MONSTER_ShatterOnDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_shatter, 1);
 }
 
-void __fastcall MONSTER_HandleMinionDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall MONSTER_HandleMinionDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {
     BOOL _bIsDead;
     bool bIsDead;
     D2ModeChangeStrc sKillStrc;
@@ -2428,7 +2453,7 @@ void __fastcall MONSTER_HandleMinionDeath(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Initialises level and attack-rating stats for a monster unit spawned via a UMOD (unit-modifier) entry. Derives monster level from the room's level record and the game difficulty/expansion flags stored in the pUModEntry struct, clamped to minimum 1. Sets UNITSTAT_level and UNITSTAT_tohit (capped at 90). For specific monster class IDs 0x146-0x171 (elemental enchanted types), also adds elemental damage stats (fire, lightning, poison) scaled from the computed level. Halts with an internal error if pUnit is not a monster.
-void __fastcall UMOD_SetLevelAndAttackRating(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall UMOD_SetLevelAndAttackRating(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {
     int nElMinDmg;
     int32_t nMonLevel = 2;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -2499,7 +2524,7 @@ void __fastcall UMOD_SetLevelAndAttackRating(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // Server-side monster skill handler that deals physical AoE damage centered on the casting monster. Reads El1MinD/El1MaxD from MonStatsTxt for the damage range, rolls a random value using the unit's RNG seed, scales by unit level and a difficulty-dependent multiplier from MonStatsTxt, then calls DAMAGE_ApplyAreaOfEffectDamage with zero magic damage flags. dwUnused1/dwUnused2 are not consumed.
-void __fastcall MONSTER_AoEPhysicalDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall MONSTER_AoEPhysicalDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {
     int32_t nPosY;
     uint32_t nDmgRoll;
     D2MonStatsTxt* pMonStatsTxt;
@@ -2540,7 +2565,7 @@ void __fastcall MONSTER_AoEPhysicalDamage(::SGAMEDATA * pGame, D2UnitStrc * pUni
     UNIT::SUnitDmg::DAMAGE_ApplyAreaOfEffectDamage(pGame, pUnit, nClassId, nPosY, nLevel * nRadiusPerLevel, &sDamage, 0, 0, nullptr, 0);
 }
 
-void __fastcall MONSTER_HandleModeTransition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall MONSTER_HandleModeTransition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {
     eD2MonsterAnimMode eAnimMode;
     if (pUnit) {
       D2ModeChangeStrc sKillStrc;
@@ -2729,8 +2754,8 @@ static void __stdcall MONSTER_DispatchUniqueModifiers(::SGAMEDATA * pGame, D2Uni
     }
     if (nEvent != 5) {
       do {
-        if ((&g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnHandler0)[nEvent]) {
-          (*(&g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnHandler0)[nEvent])(pGame, pUnit, (uint32_t)pUModList[nUModSlot], nSecurityCookie);
+        if ((&g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnModeStart)[nEvent]) {
+          (*(&g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnModeStart)[nEvent])(pGame, pUnit, (uint32_t)pUModList[nUModSlot], nSecurityCookie);
         }
 
         nUModSlot++;
@@ -2740,8 +2765,8 @@ static void __stdcall MONSTER_DispatchUniqueModifiers(::SGAMEDATA * pGame, D2Uni
     }
 
     do {
-      if (g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnHandlerInit) {
-        g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnHandlerInit(pGame, pMissile, (uint32_t)pUModList[nUModSlot], nSecurityCookie);
+      if (g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnMissile) {
+        g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnMissile(pGame, pMissile, (uint32_t)pUModList[nUModSlot], nSecurityCookie);
       }
 
       nUModSlot++;

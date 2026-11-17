@@ -6,7 +6,9 @@
 //! experiment: its build directory); a summary into <out>.summary, and the globals each of
 //! ours implies into datamap.tsv beside it. The same rows, bytes and summary as audit.py.
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
+const proc = @import("proc.zig");
 const compare = @import("compare.zig");
 const dec = @import("decode.zig");
 const libmap = @import("libmap.zig");
@@ -67,6 +69,7 @@ pub const Config = struct {
 
 /// os.path.realpath, for an existing path; else the path as given.
 fn realpath(p: []const u8) ![]const u8 {
+    if (builtin.os.tag == .windows) return proc.realpath(p);
     var buf: [4096]u8 = undefined;
     const pz = try util.z(p);
     const r = c.realpath(pz.ptr, &buf) orelse return p;
@@ -440,6 +443,11 @@ fn pct(l: *std.ArrayList(u8), a: u64, b: u64) !void {
 
 pub fn gitDescribe(repo: []const u8) ![]const u8 {
     // git -C <repo> describe --always --dirty --tags; stdout stripped, else 'unknown'.
+    if (builtin.os.tag == .windows) {
+        const result = proc.run(&.{ "git", "-C", repo, "describe", "--always", "--dirty", "--tags" }, .{}) catch return "unknown";
+        const s = util.strip(result.out);
+        return if (result.status == 0 and s.len > 0) s else "unknown";
+    }
     var cmd: std.ArrayList(u8) = .empty;
     try cmd.appendSlice(gpa, "git -C '");
     for (repo) |ch| if (ch == '\'') try cmd.appendSlice(gpa, "'\\''") else try cmd.append(gpa, ch);

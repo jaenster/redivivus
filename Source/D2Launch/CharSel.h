@@ -133,7 +133,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen();
 void __stdcall DRAW_LocalCharsInSelectionScreen0();
 // @sourcefile .\Src\CharSel.cpp
 void __stdcall CHARSEL_DestroyAllCharEntries();
-int __fastcall Unreferenced_00438f40(char * param_1);
+int __fastcall Unreferenced_00438f40(char * szName);
 void __stdcall CHARSEL_EnumerateLocalSaves();
 int __stdcall CHARSEL_UpdateSelectionExpansion();
 // @sourcefile .\Src\CharSel.cpp

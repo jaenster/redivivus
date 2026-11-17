@@ -47,7 +47,6 @@ void __fastcall D2WINTIMER_DisableSpaceKey(int * pTimer) {
 BOOL __fastcall DrawEx(::D2WinTimer * pTimer) {
     DWORD dwTickCount;
     D2ControlMsg sMsg;
-    OnPress pfnOnPress;
     if (pTimer->sControl.neD2FormType != FORM_Timer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x52);
       exit(-1);
@@ -57,10 +56,9 @@ BOOL __fastcall DrawEx(::D2WinTimer * pTimer) {
     if (Fog::BitBuffer::gadwBitMasks[2] & uVar1 && Fog::BitBuffer::gadwBitMasks[0] & uVar1) {
       dwTickCount = GetTickCount();
       if (dwTickCount / 1000 - (uint32_t)pTimer->nCreationTickCount / 1000 > (uint32_t)pTimer->nTimeoutInSeconds) {
-        pfnOnPress = pTimer->sControl.fpOnPress;
-        if (pfnOnPress) {
-          sMsg.pControl = &pTimer->sControl;
-          (*pfnOnPress)(&sMsg);
+        sMsg.pControl = &pTimer->sControl;
+        if (pTimer->sControl.fpOnPress) {
+          (*pTimer->sControl.fpOnPress)(&sMsg);
         }
       }
 

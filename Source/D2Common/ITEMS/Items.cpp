@@ -1236,8 +1236,8 @@ void __fastcall ITEM_AddStatCostsToPrices(D2UnitStrc * pItem, int * pnSellPrice,
 static void __stdcall ITEMS_AddInventoryValueToTotal(int * pTotal1, int * pTotal2, int * pTotal3, D2UnitStrc * pOwnerUnit) {
     D2ItemsTxt* pItemsTxt;
     int nHalfCost;
-    int nCostSum1 = 0;
     int nCostSum2 = 0;
+    int nCostSum1 = 0;
     int nCostSum3 = 0;
     if (!pOwnerUnit->pInventory) {
       return;
@@ -1249,7 +1249,8 @@ static void __stdcall ITEMS_AddInventoryValueToTotal(int * pTotal1, int * pTotal
       pCarriedItem = INVENTORY::Inventory::GetCarriedItem(pUnit);
       pUnit = INVENTORY::Inventory::INVENTORY_GetNextItem(pUnit);
       if (pCarriedItem) {
-        pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(pCarriedItem->nClassId);
+        int t2_c0 = pCarriedItem->nClassId;
+        pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(t2_c0);
         nHalfCost = pItemsTxt->dwCost / 2;
         nCostSum2 += nHalfCost;
         nCostSum1 += nHalfCost;
@@ -2694,16 +2695,20 @@ BOOL __stdcall ReadInfoFromStreamVersioned(uint8_t * pBytesAfterId, size_t size,
       t = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 3);
       itemData->nInvPage = (char)t - 1;
     }
+
+    uint32_t t2;
     /* is item not an ear? */ if ((itemFlags & ITEMFLAG_BODYPART) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
       /* ear */ t = 0x20726165;
+      t2 = DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId(t);
     } else {
       t = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 0x20);
       /* "nec " */ if (nFileVersion <= 0x5c && t == 0x2063656e) {
         t = 0x2067656e;
       }
+
+      t2 = DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId(t);
     }
 
-    uint32_t t2 = DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId(t);
     itemData->classId = t2;
     t = 0;
     /* read sockets */ if ((itemFlags & (ITEMFLAG_CRUDE | ITEMFLAG_COMPACT)) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
@@ -2945,13 +2950,13 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
 
     int32_t nItemsTxtLine = 0x0;
     int nStatListEx = 0x0;
-    ITEM_GetItemData_0x1Cand0x20(pItem, (int*)&nItemsTxtLine, (int*)&nStatListEx);
-    int32_t nSeedHigh = nStatListEx;
+    ITEM_GetItemData_0x1Cand0x20(pItem, (int*)&nItemsTxtLine, &nStatListEx);
+    D2StatListExStrc* pSeedHigh = (D2StatListExStrc*)nStatListEx;
     nErrLine = 1;
-    if (nStatListEx) {
+    if ((D2StatListExStrc*)nStatListEx) {
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 1, 1);
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nItemsTxtLine, 0x20);
-      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nSeedHigh, 0x20);
+      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, (int32_t)pSeedHigh, 0x20);
       nErrLine = 0x20;
     }
 
@@ -5367,7 +5372,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
                 }
               nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0x15);
               ItemMods::ITEMMODS_UnpackSkillLevelChance(nBitVal, &nOnAttackChance, (uint32_t*)nOnAttackSkillBuf, &nOnAttackSkillLevel);
-              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillonattack, nOnAttackSkillLevel, (nOnAttackSkillBuf[0] & 0x3f) + ((short int)nOnAttackChance << 6));
+              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillonattack, nOnAttackSkillLevel, (nOnAttackSkillBuf[0] & 0x3f) + (short int)nOnAttackChance * 0x40);
               break;
               case UNITSTAT_item_skillonhit:
 
@@ -5379,7 +5384,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
                 }
               nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0x15);
               ItemMods::ITEMMODS_UnpackSkillLevelChance(nBitVal, &nOnHitChance, (uint32_t*)nOnHitSkillBuf, &nOnHitSkillLevel);
-              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillonhit, nOnHitSkillLevel, (nOnHitSkillBuf[0] & 0x3f) + ((short int)nOnHitChance << 6));
+              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillonhit, nOnHitSkillLevel, (nOnHitSkillBuf[0] & 0x3f) + (short int)nOnHitChance * 0x40);
               break;
               case UNITSTAT_item_skillongethit:
 
@@ -5391,7 +5396,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
                 }
               nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0x15);
               ItemMods::ITEMMODS_UnpackSkillLevelChance(nBitVal, &nOnGetHitChance, (uint32_t*)nOnGetHitSkillBuf, &nOnGetHitSkillLevel);
-              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillongethit, nOnGetHitSkillLevel, (nOnGetHitSkillBuf[0] & 0x3f) + ((short int)nOnGetHitChance << 6));
+              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillongethit, nOnGetHitSkillLevel, (nOnGetHitSkillBuf[0] & 0x3f) + (short int)nOnGetHitChance * 0x40);
               break;
               case UNITSTAT_item_charged_skill:
 

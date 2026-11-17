@@ -630,14 +630,14 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "944075f2",
+      "dh": "7135f5ee",
       "paramStorage": [
         [
-          "param_1",
+          "pValue",
           "ECX:4"
         ],
         [
-          "param_2",
+          "pBytes",
           "EDX:4"
         ]
       ]
@@ -779,14 +779,14 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "cd4c55c2",
+      "dh": "67737312",
       "paramStorage": [
         [
-          "param_1",
+          "nValue",
           "ECX:4"
         ],
         [
-          "param_2",
+          "pBytes",
           "EDX:4"
         ]
       ]

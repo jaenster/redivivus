@@ -414,7 +414,7 @@ int32_t __stdcall SBIG_BigBuffer_FindHighestBit(BigBuffer * pBitSet) {
           nBit--;
           uWord = vc8_thiscall(SBIG_BigBuffer_GetWord)(pBitSet, nWordIndex);
           if (uMask & uWord) {
-            return (nWordIndex << 5) + nBit;
+            return nWordIndex * 0x20 + nBit;
           }
 
           uMask >>= 1;
@@ -714,12 +714,20 @@ void __fastcall Unreferenced_00421830(void * pArray) {
     _eh_vector_destructor_iterator_(pArray, 0x14, 0x10, TSFixedArray_Ui_Destructor);
 }
 
-uint32_t * __fastcall Unreferenced_00421860(uint32_t * param_1) {
-    *param_1 = 0;
-    param_1[1] = 0;
-    param_1[2] = 0;
-    param_1[3] = 0;
-    return param_1;
+void __fastcall Unreferenced_00421840(TSGrowableArray_Ui * pArray) {
+    if (!pArray->pData) {
+      return;
+    }
+
+    SMem::SMemFree(pArray->pData, s__E_00708880, -2, 0);
+}
+
+uint32_t * __fastcall Unreferenced_00421860(uint32_t * pData) {
+    *pData = 0;
+    pData[1] = 0;
+    pData[2] = 0;
+    pData[3] = 0;
+    return pData;
 }
 
 // @was SBIG_ArrayDwordCopyAssign (pass 6, 2026.08.28)
@@ -1388,7 +1396,7 @@ static void __stdcall BigBuffer_Add(BigBuffer * pSourceA, BigBuffer * pSourceB, 
         nWordB = 0;
       }
 
-      nSum = nCarry + nWordB + nDestIndex;
+      nSum = nCarry + (nWordB + nDestIndex);
       nCarry = (uint32_t)((uint32_t)((uint32_t)nWordB + (uint32_t)nDestIndex) < (uint32_t)nWordB) + (uint32_t)((uint32_t)((uint32_t)nCarry + (uint32_t)(nWordB + nDestIndex)) < (uint32_t)nCarry);
       nDestIndex = pDest->nStartWord + i;
       if (nDestIndex >= pDest->nCount) {
@@ -2075,7 +2083,7 @@ static void __stdcall BigBuffer_Shr(BigBuffer * pSrc, BigBuffer * pResult, uint3
     if (nAlignedCount + nWordShift < nSrcCount) {
       uint32_t nChunkSize;
       do {
-        nIndex = nWordShift + nAlignedCount + i;
+        nIndex = nWordShift + (nAlignedCount + i);
         if (nIndex < nSrcCount) {
           nIndex = pSrc->pData[nIndex];
         } else {
@@ -2983,7 +2991,7 @@ static void __stdcall BigBuffer_Div(BigBuffer * pQuotient, BigBuffer * pRemainde
       BigBuffer* pResult;
       uVar1 = pStack->nUsed;
       pResult = pStack->aBuffers + uVar1;
-      pResult_00 = pStack->aBuffers + uVar1 + 1;
+      pResult_00 = pStack->aBuffers + (uVar1 + 1);
       pStack->nUsed = uVar1 + 3;
       nDivisorHigh = SBIG_BigBuffer_FindHighestBit(pDivisor);
       nNormShift = 0x1f - (nDivisorHigh & 0x1f);
@@ -3032,8 +3040,8 @@ static void __stdcall BigBuffer_Div(BigBuffer * pQuotient, BigBuffer * pRemainde
         }
 
         vc8_thiscall(SBIG_GrowToIndex)(pQuotient, 0);
-        BigBuffer_Mul_Ux(pResult_00, pQuotient->pData[pQuotient->nStartWord], 0, pStack->aBuffers + uVar1 + 2);
-        pSubOperand = pStack->aBuffers + uVar1 + 2;
+        BigBuffer_Mul_Ux(pResult_00, pQuotient->pData[pQuotient->nStartWord], 0, pStack->aBuffers + (uVar1 + 2));
+        pSubOperand = pStack->aBuffers + (uVar1 + 2);
         while (true) {
           BigBuffer_Sub(pResult, pSubOperand, pResult);
           correct_quotient_digit:
@@ -3137,7 +3145,7 @@ static void __stdcall BigBuffer_Gcd(BigBuffer * pnA, BigStack * pStack, BigBuffe
     uint32_t nStackBase = pStack->nUsed;
     BigBuffer* pnQuotient = pStack->aBuffers + nStackBase;
     pStack->nUsed = nStackBase + 2;
-    BigBuffer* pBignum = pStack->aBuffers + nStackBase + 1;
+    BigBuffer* pBignum = pStack->aBuffers + (nStackBase + 1);
     int32_t nCmp = BigBuffer_Compare(pnA, pnB);
     if (nCmp > 0) {
       if (pnResult != pnA) {
@@ -3897,10 +3905,10 @@ void __stdcall SBigSquare(BigData * pResult, BigData * pBigSrc) {
 static void __stdcall BigBuffer_InvMod(BigBuffer * pnResult, BigBuffer * pnModulus, BigStack * pStack, BigBuffer * pnInput) {
     uint32_t nStackBase = pStack->nUsed;
     BigBuffer* pResult = pStack->aBuffers + nStackBase;
-    BigBuffer* pDividend = pStack->aBuffers + nStackBase + 1;
-    BigBuffer* pBignum = pStack->aBuffers + nStackBase + 2;
-    BigBuffer* pQuotient = pStack->aBuffers + nStackBase + 3;
-    BigBuffer* pnT1 = pStack->aBuffers + nStackBase + 4;
+    BigBuffer* pDividend = pStack->aBuffers + (nStackBase + 1);
+    BigBuffer* pBignum = pStack->aBuffers + (nStackBase + 2);
+    BigBuffer* pQuotient = pStack->aBuffers + (nStackBase + 3);
+    BigBuffer* pnT1 = pStack->aBuffers + (nStackBase + 4);
     pStack->nUsed = nStackBase + 5;
     if (pDividend != pnInput) {
       vc8_thiscall(TSBaseArray_Ui_Copy)((TSGrowableArray_Ui*)pDividend, pnInput->nCount, pnInput->pData);
@@ -3975,18 +3983,18 @@ static void __stdcall BigBuffer_PowMod(BigBuffer * pnResult, BigBuffer * pnBase,
     uint32_t nStackBase;
     nStackBase = pStack->nUsed;
     BigBuffer* pnBaseSquared;
-    pnBaseSquared = pStack->aBuffers + nStackBase + 1;
+    pnBaseSquared = pStack->aBuffers + (nStackBase + 1);
     pStack->nUsed = nStackBase + 3;
     if (pnResult == pnBase || pnResult == pnExponent || (pnAcc = pnResult , pnResult == pnModulus)) {
       pStack->nUsed = nStackBase + 4;
-      pnAcc = pStack->aBuffers + nStackBase + 3;
+      pnAcc = pStack->aBuffers + (nStackBase + 3);
     }
 
     BigBuffer_MulMod(pnBase, pnBaseSquared, pnBase, pnModulus, pStack);
-    BigBuffer_MulMod(pnBase, pStack->aBuffers + nStackBase + 2, pnBaseSquared, pnModulus, pStack);
+    BigBuffer_MulMod(pnBase, pStack->aBuffers + (nStackBase + 2), pnBaseSquared, pnModulus, pStack);
     apBasePowers[1] = pnBase;
     apBasePowers[2] = pnBaseSquared;
-    apBasePowers[3] = pStack->aBuffers + nStackBase + 2;
+    apBasePowers[3] = pStack->aBuffers + (nStackBase + 2);
     BigBuffer_SetOne(pnAcc);
     int nWordIdx;
     nWordIdx = pnExponent->nCount - pnExponent->nStartWord;

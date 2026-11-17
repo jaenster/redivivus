@@ -1377,7 +1377,7 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "4f67eed2",
+      "dh": "53ddea69",
       "paramStorage": [
         [
           "pGame",
@@ -1439,14 +1439,14 @@
         "D2ClientStrc",
         "D2RoomStrc",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "SGAMEDATA",
         "int32_t",
         "uint16_t",
         "uint32_t",
-        "uint8_t"
+        "uint8_t",
+        "uint8_t *"
       ],
-      "dh": "51fc46c6",
+      "dh": "711a510a",
       "paramStorage": [
         [
           "pGame",
@@ -1551,11 +1551,12 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
-        "D2UnitStrc *",
         "SGAMEDATA",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
       ],
-      "dh": "f8a4db76",
+      "dh": "3e5aa3c8",
       "paramStorage": [
         [
           "pGame",
@@ -1675,11 +1676,11 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "short *",
         "uint32_t",
-        "uint8_t"
+        "uint8_t",
+        "uint8_t *"
       ],
-      "dh": "6cbd90dc",
+      "dh": "2f6af84b",
       "paramStorage": [
         [
           "pGame",
@@ -1839,7 +1840,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4300a676",
+      "dh": "22f8dbf5",
       "paramStorage": [
         [
           "pGame",

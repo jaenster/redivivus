@@ -13,5 +13,4 @@
 
 #include "Source/D2Headers/d2_platform.h"
 
-extern unsigned int gszTxtColName_lvl;
 extern uint16_t * gpItemIndexOldToCurrent;

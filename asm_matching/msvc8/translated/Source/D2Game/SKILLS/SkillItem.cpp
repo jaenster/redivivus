@@ -1502,9 +1502,9 @@ BOOL __fastcall ITEM_CastFireballOnTarget(::SGAMEDATA * pGame, D2UnitStrc * pUni
       return BVar1;
     }
 
-    nItemClassId = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
-    uint32_t nTargetX = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
-    BVar1 = Monster::AI::MONSTERAI_CastItemEffectSkill(pUnit, SKILL_FireBall, 1, nTargetX, nItemClassId, nCastParam);
+    
+    
+    BVar1 = Monster::AI::MONSTERAI_CastItemEffectSkill(pUnit, SKILL_FireBall, 1, (uint32_t)(D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath)), (uint32_t)(D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath)), nCastParam);
     return BVar1;
 }
 
@@ -1734,7 +1734,10 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
 
 BOOL __fastcall ITEMEVENT_PhysDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
-    if (!(pUnit && pTarget && FlagBit_D2UnitStrc_eUnitFlags_2(pTarget))) {
+    if (!pUnit || !pTarget) {
+      return 0;
+    }
+    if (!FlagBit_D2UnitStrc_eUnitFlags_2(pTarget)) {
       return 0;
     }
 
@@ -1754,7 +1757,10 @@ BOOL __fastcall ITEMEVENT_PhysDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUn
 
 BOOL __fastcall ITEMEVENT_LightningDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
-    if (!(pUnit && pTarget && FlagBit_D2UnitStrc_eUnitFlags_2(pTarget))) {
+    if (!pUnit || !pTarget) {
+      return 0;
+    }
+    if (!FlagBit_D2UnitStrc_eUnitFlags_2(pTarget)) {
       return 0;
     }
 
@@ -1774,7 +1780,10 @@ BOOL __fastcall ITEMEVENT_LightningDamageOnAttacked(::SGAMEDATA * pGame, uint32_
 
 BOOL __fastcall ITEMEVENT_FireDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
-    if (!(pUnit && pTarget && FlagBit_D2UnitStrc_eUnitFlags_2(pTarget))) {
+    if (!pUnit || !pTarget) {
+      return 0;
+    }
+    if (!FlagBit_D2UnitStrc_eUnitFlags_2(pTarget)) {
       return 0;
     }
 
@@ -1795,7 +1804,10 @@ BOOL __fastcall ITEMEVENT_FireDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUn
 BOOL __fastcall ITEMEVENT_ColdDamageWithFreezeLength(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2UnitStrc* pAttacker = pUnit;
-    if (!(pUnit && pTarget && FlagBit_D2UnitStrc_eUnitFlags_2(pTarget))) {
+    if (!pUnit || !pTarget) {
+      return 0;
+    }
+    if (!FlagBit_D2UnitStrc_eUnitFlags_2(pTarget)) {
       return 0;
     }
 
@@ -2175,7 +2187,7 @@ BOOL __fastcall ITEMEVENT_ReplenishManaFlat(::SGAMEDATA * pGame, uint32_t nUnitE
       return 0;
     }
 
-    uint32_t nNewMana = nCurMana + (nStatPct << 8);
+    uint32_t nNewMana = nCurMana + nStatPct * 0x100;
     nNewMana = (int)nNewMana <= 0 ? 0 : nNewMana;
     if ((int)nNewMana < (int)nMaxMana) {
       nMaxMana = nNewMana;
@@ -2202,7 +2214,7 @@ BOOL __fastcall ITEMEVENT_ReplenishLifeFlat(::SGAMEDATA * pGame, uint32_t nUnitE
       return 0;
     }
 
-    uint32_t nNewLife = nCurLife + (nStatPct << 8);
+    uint32_t nNewLife = nCurLife + nStatPct * 0x100;
     nNewLife = (int)nNewLife <= 0 ? 0 : nNewLife;
     if ((int)nNewLife < (int)nMaxLife) {
       nMaxLife = nNewLife;
@@ -2235,7 +2247,7 @@ BOOL __fastcall ITEMEVENT_LifeDrainDemon(::SGAMEDATA * pGame, uint32_t nUnitEven
         return 0;
       }
 
-      nNewLife = nCurLife + (nStatPct << 8);
+      nNewLife = nCurLife + nStatPct * 0x100;
       nNewLife = (int)nNewLife <= 0 ? 0 : nNewLife;
       if ((int)nNewLife < (int)nMaxLife) {
         nMaxLife = nNewLife;

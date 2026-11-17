@@ -1263,6 +1263,31 @@
       ]
     },
     {
+      "name": "Unreferenced_00421840",
+      "address": "00421840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421840"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_00421840",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Ui"
+      ],
+      "dh": "82df7e6e",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
       "name": "Unreferenced_00421860",
       "address": "00421860",
       "lines": [
@@ -1278,10 +1303,10 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "4ff6d0a9",
+      "dh": "ae9ccc6d",
       "paramStorage": [
         [
-          "param_1",
+          "pData",
           "ECX:4"
         ]
       ]

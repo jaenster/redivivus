@@ -14,6 +14,7 @@
 //!   oracle-zig x64 layout <x64.tsv> <keyed-dir> <dest> <prefix>
 //!       lay out the x64 compiler, libraries and SDK libraries from the cabinet members
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
 const cli = @import("cli.zig");
 const proc = @import("proc.zig");
@@ -30,6 +31,10 @@ const USAGE =
 ;
 
 pub fn main(args: []const []const u8) !void {
+    if (builtin.os.tag == .windows) {
+        cli.sayErr("x64 helpers require the Unix oracle environment\n");
+        return error.UnsupportedWindowsX64;
+    }
     if (args.len >= 1) {
         const sub = args[0];
         const rest = args[1..];
@@ -344,7 +349,13 @@ fn compileMain(args: []const []const u8) !void {
     var status: std.StringHashMapUnmanaged(Status) = .empty;
     var done: usize = 0;
     for (work, 0..) |b, bi| {
-        while (!results[bi].done.load(.acquire)) _ = c.usleep(20_000);
+        while (!results[bi].done.load(.acquire)) {
+            if (builtin.os.tag == .windows) {
+                c.Sleep(20);
+            } else {
+                _ = c.usleep(20_000);
+            }
+        }
         const text = results[bi].text;
         var per: std.StringHashMapUnmanaged(std.ArrayList([]const u8)) = .empty;
         for (b.part) |x| try per.put(gpa, x, .empty);
@@ -550,7 +561,11 @@ fn jsonMain(args: []const []const u8) !void {
 
     var t: c.time_t = c.time(null);
     var tm: c.struct_tm = undefined;
-    _ = c.localtime_r(&t, &tm);
+    if (builtin.os.tag == .windows) {
+        _ = c._localtime64_s(&tm, &t);
+    } else {
+        _ = c.localtime_r(&t, &tm);
+    }
     var dbuf: [32]u8 = undefined;
     const dn = c.strftime(&dbuf, dbuf.len, "%Y-%m-%d", &tm);
 

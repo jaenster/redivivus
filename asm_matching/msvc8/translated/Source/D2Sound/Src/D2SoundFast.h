@@ -49,6 +49,7 @@ BOOL __stdcall SOUND_GetMusicEnabled();
 int __stdcall SOUND_PlayNextAmbientSound();
 void __stdcall SOUND_LoadRegistrySettings();
 void Unreferenced_00514ff0();
+void Unreferenced_00515110();
 #endif // D2_MODULE_D2Sound
 // 1 internal function (defined in .cpp)
 

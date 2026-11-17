@@ -271,7 +271,7 @@ void TriggerEndGameCongratsExit() {
     D2CLIENT_ExitVar3 = 1;
 }
 
-uint32_t __stdcall LOADER_RunInsertDiscPopup() {
+BOOL __stdcall LOADER_RunInsertDiscPopup() {
     Engine::gbCharScreenOkPressed = 0;
     D2Win::Src::D2WinPalette::D2WINPALETTE_SetPaletteIndex(0);
     IMG_popupok_DiscPrompt = (D2ArchiveStrc*)Core::Archive::IMAGE_LoadDC6Ex("Data\\Global\\UI\\Bigmenu\\popupok", 0);
@@ -1026,10 +1026,10 @@ uint32_t __stdcall CLIENT_IsArenaMode() {
     return CLIENT_ArenaFlags >> 8 & 1;
 }
 
-int __fastcall Unreferenced_0047aa40(uint16_t * param_1) {
-    if (*param_1 < 0x100) {
+int __fastcall Unreferenced_0047aa40(uint16_t * pChar) {
+    if (*pChar < 0x100) {
       int iVar1;
-      iVar1 = isspace((uint32_t)*param_1);
+      iVar1 = isspace((uint32_t)*pChar);
       return iVar1;
     }
 
@@ -1063,7 +1063,7 @@ void __stdcall INPUT_HandleIMEComposition(D2UIMouseMsgStrc * pMsg) {
         /* DWORD dwBufLen for ImmGetCompositionStringA */ /* LPVOID lpBuf for ImmGetCompositionStringA */ /* DWORD param_2 for ImmGetCompositionStringA */ /* HIMC param_1 for ImmGetCompositionStringA */ ImmGetCompositionStringA(hImc, 0x800, szMultiByte, dwBufLen);
         /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ szMultiByte[199] = '\0';
         MultiByteToWideChar(0, 1, szMultiByte, -1, (LPWSTR)wszWide, 0x20);
-        *(uint32_t*)((char*)&wszWide + 60) &= 0xffff;
+        wszWide[31] = 0;
         nNewLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszWide);
         nCompLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwcImeCompositionBuffer);
         nResultLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(UI::Chat::gwszChatInputText);
@@ -1101,7 +1101,7 @@ void __stdcall INPUT_HandleIMEComposition(D2UIMouseMsgStrc * pMsg) {
               if (nNewLen < 0x1f) {
                 wszWide[nNewLen] = L'\0';
               } else {
-                *(uint32_t*)((char*)&wszWide + 60) &= 0xffff;
+                wszWide[31] = 0;
               }
               if (nNewLen >= 0x20) {
                 D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(gwcIMECompositionString, wszWide, 0x1f);
@@ -1193,6 +1193,7 @@ static void SOUND_LocalizeSoundPath(char * szFormat, char * pszOutPath, char * p
 // which reaches D2GFX_PlayCutScene and only ever holds PING or 0. void * is the honest type for both -
 // it is what D2GFX_PlayCutScene declares for the parameter - and no call is made through either slot
 // here.
+// Passes LOADER_RunInsertDiscPopup by address.
 void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
     // Static local variables (originally global data)
     static int gnCutsceneCount = 0x8; D2_STATIC_GUARD(gnCutsceneCount, "D2Client::ExitGamePlayCutScene::gnCutsceneCount");
@@ -1812,7 +1813,7 @@ int __fastcall CUNITEVENT_DispatchCallbacks(int nClientEvent, D2UnitStrc * pOwne
     return dwResult;
 }
 
-uint32_t __stdcall DRAW_ShouldDrawEdges(int32_t nParam) {
+BOOL __stdcall DRAW_ShouldDrawEdges(int32_t nParam) {
     D2LevelsTxt* pLevelTxt;
     DWORD dwResMode;
     D2RoomStrc* pRoom = UNIT::CUnit::GetCurrentRoom();

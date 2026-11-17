@@ -486,6 +486,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x23_SetSkill(struct D2ClientStrc * pClient
 void __fastcall NET_D2GS_SERVER_Send_0x94_SETALLSKILLS(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit);
 // Builds and sends S2C packet 0x93 (8 bytes) to adjust skill level bonuses filtered by element type and skill tree page. Used for item mods like "+1 to Fire Skills" or "+2 to [class] Skill Tab". If bAllPages is 0, nSkillPage is overridden to 4 (all pages). Appears to be dead code in 1.14d — zero callers, superseded by packet 0x94 bulk skill sync.
 void __fastcall NET_D2GS_SERVER_SendSkillTabBonusDelta(struct D2ClientStrc * pClient, uint32_t dwPlayerGUID, int8_t nBonusDelta, uint8_t neSkillEType, int32_t bAllPages, uint8_t nSkillPage);
+void Unreferenced_0053c730();
 void __fastcall NET_D2GS_SERVER_Send_0x26_CHATSTART(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x26 * pPacket);
 void __fastcall NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG(struct D2ClientStrc * pClient, struct D2Packet0x5aEventStructure * pEventPacket);
 void __fastcall NET_D2GS_SERVER_Send_0x27_NpcInfo(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x27 * pPacket);
@@ -590,7 +591,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(::SGAMEDATA * pGam
 void __fastcall NET_D2GS_SERVER_Send_0x8E_CorpseAssign(struct D2ClientStrc * pClient, uint32_t dwUnitGUID_param, uint32_t dwCorpseGUIDArg, bool byCorpseFlagArg);
 void __fastcall NET_D2GS_SERVER_Send_0x89_QUESTEVENTTRIGGER(struct D2ClientStrc * pClient, struct D2GSPacketClt0x89 * pPacket0x89);
 void __fastcall NET_D2GS_SERVER_Send_0x8A_NpcWantsInteract(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x8A * pPacket);
-void __fastcall NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(struct D2ClientStrc * pClient);
+void __fastcall NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(struct D2ClientStrc * pClient, int32_t dwSendTick);
 void __fastcall NET_D2GS_SERVER_Send_0x91_WELCOME_BACK(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x91 * pD2GSPacketSrv0x91);
 void __fastcall NET_D2GS_SERVER_Send_0x98_SETSPAWNERMONSTER(struct D2ClientStrc * pClient, uint32_t nUnitGUID, uint16_t wSpawnClassId);
 void __fastcall NET_D2GS_SERVER_Send_0x9B_MercReviveCost(struct D2ClientStrc * pClient, uint16_t wMercNameId, uint32_t dwReviveCost);

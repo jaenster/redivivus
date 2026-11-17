@@ -291,6 +291,35 @@
       ]
     },
     {
+      "name": "Unreferenced_00404100",
+      "address": "00404100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00404100"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "Unreferenced_00404100",
+        "wcsrchr"
+      ],
+      "usedTypes": [
+        "wchar_t"
+      ],
+      "dh": "9f32c9bf",
+      "paramStorage": [
+        [
+          "szString",
+          "ECX:4"
+        ],
+        [
+          "wChar",
+          "AX:2"
+        ]
+      ]
+    },
+    {
       "name": "STRING_CopyStringBounded",
       "address": "00404110",
       "lines": [

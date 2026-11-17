@@ -22,13 +22,17 @@ struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2MonsterAnimMode;
 typedef uint32_t eMissilesId;
-#ifndef RECON_FPTD_fnD2DropHandler
-#define RECON_FPTD_fnD2DropHandler
-typedef BOOL (__fastcall *fnD2DropHandler)(::SGAMEDATA * pGame, struct D2ModeChangeStrc * pMonsterKill);
+#ifndef RECON_FPTD_fnD2MonModeEnd
+#define RECON_FPTD_fnD2MonModeEnd
+typedef void (__fastcall *fnD2MonModeEnd)(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 #endif
-#ifndef RECON_FPTD_fnD2DropHandlerFn3
-#define RECON_FPTD_fnD2DropHandlerFn3
-typedef void (__fastcall *fnD2DropHandlerFn3)(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+#ifndef RECON_FPTD_fnD2MonModeStart
+#define RECON_FPTD_fnD2MonModeStart
+typedef BOOL (__fastcall *fnD2MonModeStart)(::SGAMEDATA * pGame, struct D2ModeChangeStrc * pModeChange);
+#endif
+#ifndef RECON_FPTD_fnD2MonModeUpdate
+#define RECON_FPTD_fnD2MonModeUpdate
+typedef BOOL (__fastcall *fnD2MonModeUpdate)(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 #endif
 
 // Data types
@@ -36,7 +40,7 @@ typedef void (__fastcall *fnD2DropHandlerFn3)(::SGAMEDATA * pGame, struct D2Unit
 #define D2_DEFINED_D2MonModeTableRowStrc
 struct D2MonModeTableRowStrc {
     /* 0x00 */ BOOL (__fastcall *pfnStart)(::SGAMEDATA *, struct D2ModeChangeStrc *);
-    /* 0x04 */ BOOL (__fastcall *pfnUpdate)(::SGAMEDATA *, struct D2ModeChangeStrc *);
+    /* 0x04 */ BOOL (__fastcall *pfnUpdate)(::SGAMEDATA *, struct D2UnitStrc *);
     /* 0x08 */ void (__fastcall *pfnEnd)(::SGAMEDATA *, struct D2UnitStrc *);
     /* 0x0C */ BOOL bScheduleEvents;
 };
@@ -57,7 +61,7 @@ struct D2MonsterPathParamStrc * __fastcall AllocAiParam(::SGAMEDATA * pGame);
 // @sourcefile .\MONSTER\MonsterMode.cpp
 void __fastcall MONSTERDATA_FreeMonsterMode(::SGAMEDATA * pGame, struct D2MonsterPathParamStrc * pPathParam);
 void __stdcall SERVER_ITEM_DecideDrops(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, BOOL bIsItemFindDrop, struct D2ObjectOperateFnArg * pUnitKill);
-// Dead-code wrapper (marked Unused) that validates the victim unit from pUnitKill->sArg.pVictim, skips units with flag bit 0x11 set (already processed) and classId 0x158 (bonewall), checks COLLISION_ITEMS at the victim's position, then delegates to SERVER_ITEM_DecideDrops. Not called in shipping 1.14d.
+// Drops the dead monster's treasure: validates the victim unit from pUnitKill->sArg.pVictim, skips units with flag bit 0x11 set and classId 0x158 (bonewall), checks COLLISION_ITEMS at the victim's position, then calls SERVER_ITEM_DecideDrops. Called once from MONSTER_OnDeathDispatch (0x005a7027).
 void __fastcall MONSTERMODE_TryDropTreasure(::SGAMEDATA * pGame, struct D2ObjectOperateFnArg * pUnitKill, uint32_t dwParam);
 // Periodic server HP-regen/poison-tick event handler for a unit (reschedules itself each game frame). Computes net HP regen (subtracting the server-side hpregen component when a progressive state applies); unless STATE_preventheal blocks healing, applies the delta to UNITSTAT_hitpoints clamped to TxtMaxHp. Town rooms skip damage so you don't die in town. When the HP% changes by more than the threshold it broadcasts packet 0xAB and updates last_sent_hp_pct. If HP reaches zero (and not already dying), it locates the poison/state attacker via GetStatsByState/owner-GUID lookup and either sets STATE_death_delay (if uninterruptable) or calls SERVER_KillMonster and dispatches death (event 10) and kill-credit (event 9) events.
 void __fastcall RegenAndPsnDecreaser(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);

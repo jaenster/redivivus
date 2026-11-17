@@ -881,7 +881,6 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
       uint8_t* pLocal_318;
       uint32_t nLocal_318;
       int nLocal_3182;
-      int nLocal_3183;
     };
     static_assert(sizeof(void*) != 4 || sizeof(local_318_u) == 4, "local_318_u must stay one 4-byte frame slot");
     // The values VC8 kept in local_334's one frame slot, one member each: a frame object reaches the slot.
@@ -1017,7 +1016,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
         }
 
         __frame0.local_32c = uVar10 >> 0xc & 0xf;
-        local_318.nLocal_3183 = uVar10 & 0xf;
+        local_318.nLocal_3182 = uVar10 & 0xf;
         __frame0.local_348 = uVar10 >> 0x10 & 0xf;
         __frame0.pComponentTableEnd = gCodecFrameWorkBuffer + aFrameHeaderInfo[3];
         local_314 = 0;
@@ -1027,7 +1026,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
           uVar9 = g_aCodecBitMaskLookupTable[uVar10 >> 0x18 & 0xf];
           nNumBits = g_aCodecBitMaskLookupTable[uVar10 >> 8 & 0xf];
           nNumBits_00 = g_aCodecBitMaskLookupTable[__frame0.local_32c];
-          local_318.nLocal_3182 = (int)g_aCodecBitMaskLookupTable[local_318.nLocal_3183];
+          local_318.nLocal_3182 = (int)g_aCodecBitMaskLookupTable[local_318.nLocal_3182];
           __frame0.local_348 = g_aCodecBitMaskLookupTable[__frame0.local_348];
           uVar10 = g_aCodecBitMaskLookupTable[uVar10 >> 0x14 & 0xf];
           __frame0.local_32c = (aFrameHeaderInfo[3] * 0x2c - 1) / 0x2c + 1;

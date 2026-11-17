@@ -203,7 +203,10 @@
       "calledFunctions": [
         "SOUNDHDR_SetGlobal4"
       ],
-      "dh": "7c48496f",
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "35816c1b",
       "paramStorage": [
         [
           "nMaxBytes",
@@ -409,7 +412,7 @@
       "usedTypes": [
         "IDirectSound"
       ],
-      "dh": "2408c3fe",
+      "dh": "5c13406f",
       "paramStorage": [
         [
           "bBackgroundActive",

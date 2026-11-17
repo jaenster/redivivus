@@ -228,10 +228,6 @@ namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreLis
 
 }}}} // namespace D2Common::Chat::Ignorelist::IgnoreList
 
-namespace D2Common { namespace DATATBLS { namespace ItemTbls {
-
-}}} // namespace D2Common::DATATBLS::ItemTbls
-
 namespace D2Common { namespace Drlg { namespace OutSiege {
 
 }}} // namespace D2Common::Drlg::OutSiege

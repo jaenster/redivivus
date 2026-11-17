@@ -30,7 +30,7 @@ typedef uint8_t (__stdcall *pfnRGBToPaletteIndex)(uint8_t nRed, uint8_t nGreen, 
 
 namespace D2CMP::SRC::SubTile {
 
-int __fastcall SUBTILE_CountRunLength(char byRunValue, char * pCur, char * pEnd, int32_t nMaxRunLen, uint32_t * pbAtEnd, uint32_t * pbExactMatch) {
+int __fastcall SUBTILE_CountRunLength(char byRunValue, char * pCur, char * pEnd, int32_t nMaxRunLen, BOOL * pbAtEnd, uint32_t * pbExactMatch) {
     if (pCur >= pEnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45);
       exit(-1);
@@ -77,7 +77,7 @@ char * __fastcall SUBTILE_CompressToRLE(char * pDataStart, uint32_t * ppCompress
     char* pDstPtr;
     pDstPtr = pWorkBuf;
     do {
-      nRunLength = SubTile::SUBTILE_CountRunLength('\0', pDataStart, pRowEnd, 0x7f, (uint32_t*)&bAtEnd, &bExactMatch);
+      nRunLength = SubTile::SUBTILE_CountRunLength('\0', pDataStart, pRowEnd, 0x7f, &bAtEnd, &bExactMatch);
       pDataStart += nRunLength;
       if (!bAtEnd && !bExactMatch) {
         pNextRowStart = pRowStart;
@@ -85,7 +85,7 @@ char * __fastcall SUBTILE_CompressToRLE(char * pDataStart, uint32_t * ppCompress
           *pDstPtr = '\x7f';
           pDstPtr++;
         } else {
-          nLiteralCount = SUBTILE_CountRunLengthForByte(pDataStart, pRowEnd, '\0', 0x7f, (uint32_t*)&bAtEnd, &bExactMatch);
+          nLiteralCount = SUBTILE_CountRunLengthForByte(pDataStart, pRowEnd, '\0', 0x7f, &bAtEnd, &bExactMatch);
           cZeroRunLen = (char)nRunLength;
           *pDstPtr = cZeroRunLen;
           pDstPtr[1] = (char)nLiteralCount;
@@ -273,15 +273,15 @@ char * __stdcall SUBTILE_ConvertRGBToIndexed(char * pSrcRGBData, int nRGBDataSiz
     return (char*)pIndexedBuf;
 }
 
-int __fastcall Unreferenced_0060d7c0(uint8_t * param_1) {
+int __fastcall Unreferenced_0060d7c0(uint8_t * pData) {
     int iVar1 = 0;
     do {
-      if (*param_1 != '\0') {
+      if (*pData != '\0') {
         return 0;
       }
 
       iVar1++;
-      param_1++;
+      pData++;
     } while (iVar1 < 0x200);
 
     return 1;
@@ -314,6 +314,7 @@ static BOOL SUBTILE_CheckIfIsometricEmpty(uint8_t * pSubTileData) {
     return 0;
 }
 
+#if 0 // ratchet: the match body of 0060d840 (evidence 1985bb0f9) could not be re-spelled: callee SubTile::SUBTILE_CountRunLength parameter pbAtEnd retyped: uint32_t * -> BOOL *; callee SUBTILE_CountRunLengthForByte parameter pbAtEnd retyped: uint32_t * -> BOOL *
 static void __stdcall SUBTILE_CompressIsometricShape(D2GroundSubTileStrc * pSubTileEntry, char * pPixelData) {
     int nNonZeroLen;
     uint8_t* pFinalBuf;
@@ -348,6 +349,92 @@ static void __stdcall SUBTILE_CompressIsometricShape(D2GroundSubTileStrc * pSubT
             pDst++;
           } else {
             nNonZeroLen = SUBTILE_CountRunLengthForByte(pPixelData, pWorkPtr, '\0', 0x7f, (uint32_t*)&bAtEnd, &bExactMatch);
+            cZeroCount = (char)nZeroRunLen;
+            *pDst = cZeroCount;
+            pDst[1] = (char)nNonZeroLen;
+            pDst += 2;
+            if (nNonZeroLen > 0) {
+              do {
+                *pDst = *pPixelData;
+                pDst++;
+                pPixelData++;
+                nNonZeroLen--;
+              } while (nNonZeroLen);
+            }
+            if (bAtEnd || bExactMatch) {
+              goto end_row;
+            }
+          }
+        } else {
+          end_row:
+          pWorkPtr += 0x20;
+          *pDst = '\0';
+          pDst[1] = '\0';
+          pDst += 2;
+          pRowEnd = pSrc + 0x20;
+          iRow++;
+          pPixelData = pSrc;
+        }
+
+        pSrc = pRowEnd;
+      } while (iRow < 0xf);
+
+      nAllocSize = (intptr_t)pDst - (intptr_t)pWorkBuf;
+      if (!((int)nAllocSize < 0x10000)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x166);
+        exit(-1);
+      }
+
+      pFinalBuf = (uint8_t*)D2_ALLOC_AT(nAllocSize, ".\\SRC\\SubTile.cpp", 0x169);
+      if (!pFinalBuf) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x16a);
+        exit(-1);
+      }
+
+      memset(pFinalBuf, 0, nAllocSize);
+      memcpy(pFinalBuf, pWorkBuf, nAllocSize);
+      pSubTileEntry->wFormat |= 5;
+      pSubTileEntry->pPixelData = pFinalBuf;
+      pSubTileEntry->wDataLength = (uint16_t)nAllocSize;
+      D2_FREE_AT(pWorkBuf, ".\\SRC\\SubTile.cpp", 0x176);
+      return;
+    }
+}
+#endif
+static void __stdcall SUBTILE_CompressIsometricShape(D2GroundSubTileStrc * pSubTileEntry, char * pPixelData) {
+    int nNonZeroLen;
+    uint8_t* pFinalBuf;
+    char* pSrc;
+    char* pRowEnd;
+    char* pDst;
+    size_t nAllocSize;
+    char cZeroCount;
+    uint32_t bExactMatch;
+    int bAtEnd;
+    uint32_t iRow;
+    char* pWorkPtr;
+    char* pWorkBuf;
+    pWorkBuf = (char*)D2_ALLOC_AT(0x5af, ".\\SRC\\SubTile.cpp", 0x128);
+    if (!pWorkBuf) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x129);
+      exit(-1);
+    } else {
+      int nZeroRunLen;
+      memset(pWorkBuf, 0, 0x5af);
+      pWorkPtr = pPixelData + 0x20;
+      iRow = 0;
+      pSrc = pWorkPtr;
+      pDst = pWorkBuf;
+      do {
+        nZeroRunLen = SubTile::SUBTILE_CountRunLength('\0', pPixelData, pWorkPtr, 0x7f, &bAtEnd, &bExactMatch);
+        pPixelData += nZeroRunLen;
+        if (!bAtEnd && !bExactMatch) {
+          pRowEnd = pSrc;
+          if (nZeroRunLen == 0x7f) {
+            *pDst = '\x7f';
+            pDst++;
+          } else {
+            nNonZeroLen = SUBTILE_CountRunLengthForByte(pPixelData, pWorkPtr, '\0', 0x7f, &bAtEnd, &bExactMatch);
             cZeroCount = (char)nZeroRunLen;
             *pDst = cZeroCount;
             pDst[1] = (char)nNonZeroLen;

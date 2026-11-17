@@ -1154,13 +1154,14 @@
       "usedTypes": [
         "D2QuestDataA5Q3Strc",
         "D2QuestDataStrc",
+        "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "d8cb4e2d",
+      "dh": "f698f578",
       "paramStorage": [
         [
-          "pThis",
-          "ECX:4 (auto)"
+          "pGame",
+          "ECX:4"
         ],
         [
           "pOutCoords",

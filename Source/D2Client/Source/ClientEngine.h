@@ -89,7 +89,7 @@ void __stdcall CLIENT_ClearActiveUnitSlotArray();
 // - Special cases: Corpse seekers, idle wanderers, basic chase
 // Called from CUNIT_UpdateClientFramesAndAI
 void __fastcall CLIENT_DispatchMonsterAiBehavior(struct D2UnitStrc * pUnit);
-struct D2OverlayTxt * __fastcall Unreferenced_0046d9c0(int param_1);
+struct D2OverlayTxt * __fastcall Unreferenced_0046d9c0(int nIndex);
 eD2UnitType __fastcall CLIENT_GetEffectiveUnitType(struct D2UnitStrc * pUnit);
 int __fastcall CLIENT_GetEffectiveAnimMode(struct D2UnitStrc * pUnit);
 DWORD __fastcall CLIENT_GetEffectiveClassId(struct D2UnitStrc * pUnit);

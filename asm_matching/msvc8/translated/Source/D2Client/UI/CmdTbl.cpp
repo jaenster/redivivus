@@ -2172,10 +2172,10 @@ void __fastcall CMD_InitKeyConfigUI(int32_t nFadeInDuration, int32_t nHoldDurati
 
 void StaticInit_6caab0() {
     // Static local variables (originally global data)
-    static int gaKeyBindingDefaultArray = 0x1; D2_STATIC_GUARD(gaKeyBindingDefaultArray, "D2Client::UI::CmdTbl::StaticInit_6caab0::gaKeyBindingDefaultArray");
+    static int gnStaticInitDivisor = 0x1; D2_STATIC_GUARD(gnStaticInitDivisor, "D2Client::UI::CmdTbl::StaticInit_6caab0::gnStaticInitDivisor");
     static int INT_007a6b0c; D2_STATIC_GUARD_BSS(INT_007a6b0c, "D2Client::UI::CmdTbl::StaticInit_6caab0::INT_007a6b0c");
 
-    INT_007a6b0c = (int)(1000 / gaKeyBindingDefaultArray);
+    INT_007a6b0c = (int)(1000 / gnStaticInitDivisor);
 }
 
 void StaticInit_gwKeyNameBuffer() {

@@ -3,6 +3,7 @@
 //! of our TUs follows from it (`linkOrder`), and with it which copy of a COMDAT the link keeps.
 //! `linked` and `moduleOf` by repository are what permodule reads.
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
 const util = @import("util.zig");
 const coff = @import("coff.zig");
@@ -241,13 +242,19 @@ pub fn load(repo: []const u8) !Modules {
     return .{ .mods = mods, .units = u };
 }
 
-/// The TUs through sort(1), as the build scripts sort paths (the locale's collation); plain
-/// sorted() if sort(1) fails or does not return the same set (modules.sort1).
-pub fn sort1(tus_in: []const []const u8) ![][]const u8 {
+fn lexicalSort(tus_in: []const []const u8) ![][]const u8 {
     var uniq: std.StringArrayHashMapUnmanaged(void) = .empty;
     for (tus_in) |t| try uniq.put(gpa, t, {});
     const tus = try gpa.dupe([]const u8, uniq.keys());
     std.mem.sort([]const u8, tus, {}, lessStr);
+    return tus;
+}
+
+/// The TUs through sort(1), as the build scripts sort paths (the locale's collation);
+/// bytewise lexical order on Windows or if sort(1) fails. This equals LC_ALL=C sort.
+pub fn sort1(tus_in: []const []const u8) ![][]const u8 {
+    const tus = try lexicalSort(tus_in);
+    if (builtin.os.tag == .windows) return tus;
     var input: std.ArrayList(u8) = .empty;
     for (tus) |t| {
         try input.appendSlice(gpa, t);
@@ -279,6 +286,18 @@ pub fn sort1(tus_in: []const []const u8) ![][]const u8 {
     if (chk.len != tus.len) return tus;
     for (chk, tus) |a, b| if (!std.mem.eql(u8, a, b)) return tus;
     return out.items;
+}
+
+test "lexical module order matches C sort for case, punctuation, numbers and UTF-8" {
+    const input: []const []const u8 = &.{ "Source/a2", "Source/é", "Source/Z", "Source/a10", "Source/_aux", "Source/A", "Source/a", "Source/a" };
+    const expected: []const []const u8 = &.{ "Source/A", "Source/Z", "Source/_aux", "Source/a", "Source/a10", "Source/a2", "Source/é" };
+    const actual = try lexicalSort(input);
+    try std.testing.expectEqual(expected.len, actual.len);
+    for (expected, actual) |want, got| try std.testing.expectEqualStrings(want, got);
+    if (builtin.os.tag == .windows) {
+        const native = try sort1(input);
+        for (expected, native) |want, got| try std.testing.expectEqualStrings(want, got);
+    }
 }
 
 // ---- includes: one /INCLUDE symbol per library member (modules.include_symbols)

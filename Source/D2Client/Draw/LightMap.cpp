@@ -345,31 +345,32 @@ void __fastcall FreeLightMap(D2LightMapStrc * pLightMap) {
     D2LightMapStrc* pPrevLightMap = 0;
     D2LightMapStrc* pDVar1 = gpLightMap;
     do {
-      if (!pDVar1) {
+      if (pDVar1) {
+        if (pDVar1 == pLightMap) {
+          if (!pDVar1) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x17a);
+            exit(-1);
+          }
+          if (pPrevLightMap) {
+            pPrevLightMap->pPrev = pDVar1->pPrev;
+          } else {
+            gpLightMap = pDVar1->pPrev;
+          }
+          if (pLightMap->pPixelMap) {
+            D2_FREE_AT(pLightMap->pPixelMap, ".\\DRAW\\dLightMap.cpp", 0x181);
+          }
+
+          D2_FREE_AT(pLightMap, ".\\DRAW\\dLightMap.cpp", 0x183);
+          nFreedLightMapsCounter++;
+          return;
+        }
+
+        pPrevLightMap = pDVar1;
+        pDVar1 = pDVar1->pPrev;
+      } else {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x17a);
         exit(-1);
       }
-      if (pDVar1 == pLightMap) {
-        if (!pDVar1) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x17a);
-          exit(-1);
-        }
-        if (pPrevLightMap) {
-          pPrevLightMap->pPrev = pDVar1->pPrev;
-        } else {
-          gpLightMap = pDVar1->pPrev;
-        }
-        if (pLightMap->pPixelMap) {
-          D2_FREE_AT(pLightMap->pPixelMap, ".\\DRAW\\dLightMap.cpp", 0x181);
-        }
-
-        D2_FREE_AT(pLightMap, ".\\DRAW\\dLightMap.cpp", 0x183);
-        nFreedLightMapsCounter++;
-        return;
-      }
-
-      pPrevLightMap = pDVar1;
-      pDVar1 = pDVar1->pPrev;
     } while (true);
 }
 
@@ -762,7 +763,7 @@ static void LIGHTMAP_InterpolateCell(int nBufferX, int nBufferY) {
       case 0:
         return;
       case 2:
-        nNeighborIdx = (nBufferY << 6) + gnLightmapInterpDirX + nBufferX;
+        nNeighborIdx = nBufferY * 0x40 + gnLightmapInterpDirX + nBufferX;
       nSample1 = gaLightmapInterpBuffer[nNeighborIdx];
       if (!nSample1) {
         nSample1 = gLightMapBuffer[nNeighborIdx];
@@ -774,7 +775,7 @@ static void LIGHTMAP_InterpolateCell(int nBufferX, int nBufferY) {
         nSample2 = gLightMapBuffer[nNeighborIdx];
       }
 
-      gLightMapBuffer[(nBufferY << 6) + nBufferX] = (int)((0x100 - gnLightmapInterpSubdivRatio) * nSample1 + gnLightmapInterpSubdivRatio * nSample2) >> 8;
+      gLightMapBuffer[nBufferY * 0x40 + nBufferX] = (int)((0x100 - gnLightmapInterpSubdivRatio) * nSample1 + gnLightmapInterpSubdivRatio * nSample2) >> 8;
       return;
       case 3:
         nRowOffset = gnLightmapInterpDirY + nBufferY << 6;
@@ -790,13 +791,13 @@ static void LIGHTMAP_InterpolateCell(int nBufferX, int nBufferY) {
         nSample2 = gLightMapBuffer[nNeighborIdx];
       }
 
-      gLightMapBuffer[(nBufferY << 6) + nBufferX] = (int)((0x100 - gnLightmapInterpSubdivRatio) * nSample1 + gnLightmapInterpSubdivRatio * nSample2) >> 8;
+      gLightMapBuffer[nBufferY * 0x40 + nBufferX] = (int)((0x100 - gnLightmapInterpSubdivRatio) * nSample1 + gnLightmapInterpSubdivRatio * nSample2) >> 8;
       return;
       case 1:
-        nNeighborIdx = gnLightmapInterpDirX + (nBufferY << 6) + nBufferX;
+        nNeighborIdx = gnLightmapInterpDirX + nBufferY * 0x40 + nBufferX;
       nSample1 = gaLightmapInterpBuffer[nNeighborIdx];
       if (!nSample1) {
-        gLightMapBuffer[(nBufferY << 6) + nBufferX] = gLightMapBuffer[nNeighborIdx];
+        gLightMapBuffer[nBufferY * 0x40 + nBufferX] = gLightMapBuffer[nNeighborIdx];
         return;
       }
 

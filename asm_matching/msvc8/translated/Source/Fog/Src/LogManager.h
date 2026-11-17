@@ -88,15 +88,16 @@ void __stdcall CloseStaleLogFileHandles();
 void __fastcall DeleteOldLogFile(FILETIME * pRefFileTime, char * szFileName);
 void __fastcall CloseLogFileByName(uint8_t * szFileName);
 struct StormLinkStrc * __fastcall ComputeAbsoluteFromRelative(struct StormLinkStrc * pNode, int, intptr_t pBase);
-void * __fastcall Unreferenced_0040f520(struct StormLinkStrc * param_1);
-intptr_t __fastcall Unreferenced_0040f580(struct StormLinkedListStrc * param_1);
+void * __fastcall Unreferenced_0040f520(struct StormLinkStrc * pLink);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0040f530(struct StormLinkStrc * pNode);
+intptr_t __fastcall Unreferenced_0040f580(struct StormLinkedListStrc * pList);
 void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix);
 long __fastcall GetLogFileSize(uint8_t * szFileName);
 // @sourcefile .\Src\LogManager.cpp
 char * __fastcall ReadLogFileRange(uint8_t * szFileName, int32_t nStartOffset, int32_t nEndOffset);
 // Writes one log record to its log file, prefixed with the record's time of day.
 void __fastcall LogToFile(struct D2LogRecordStrc * pLogRecord);
-uint32_t * __fastcall Unreferenced_0040f810(uint32_t * param_1);
+uint32_t * __fastcall Unreferenced_0040f810(uint32_t * pData);
 void __fastcall UnlinkListNode(struct StormLinkStrc * pNode);
 int32_t __fastcall NormalizeListNodePointer(int32_t pThis, int, int32_t pNodePtr);
 void __stdcall ExitOrCrashCleanup();

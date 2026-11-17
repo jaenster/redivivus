@@ -59,7 +59,7 @@ namespace D2Client::UI::SpellSel {
 void __stdcall SPELLSEL_Initialize();
 void __stdcall SPELLSEL_Cleanup();
 struct DC6 * __fastcall ARCHIVE_LoadSpellsClassSkillicon(short * pSkillId);
-void __fastcall SPELLSEL_SetMouseHandFlag(uint32_t bLeftHand);
+void __fastcall SPELLSEL_SetMouseHandFlag(BOOL bLeftHand);
 int32_t __fastcall SPELLSEL_GetSkillPalette(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
 void __fastcall SPELLSEL_DrawSkillTooltip(short * pSkillId, int32_t bShowExpanded, int32_t nSkillDescId, int32_t nStatId, int32_t nIconX, int32_t nIconY);
 void __fastcall SPELLSEL_DrawKeyBindingText(int32_t nCmdIndex, int32_t nX, int32_t nY, int32_t dwColor);
@@ -71,7 +71,6 @@ int __fastcall SPELLSEL_FindChargedSkill2(struct D2UnitStrc * pUnit, int32_t nTa
 int __fastcall SPELLSEL_FindChargedSkill3(struct D2UnitStrc * pUnit, int32_t nTargetSkillId);
 int __fastcall SPELLSEL_FindChargedSkill4(struct D2UnitStrc * pUnit, int32_t nTargetSkillId);
 void __stdcall INPUT_SpellSelectClick(struct D2UIMouseMsgStrc * pMsg);
-void __stdcall SPELLSEL_ClearSkillBinding(short * pSkillId, int32_t nChargesLeft);
 void __stdcall SPELLSEL_ClearChargedSkillBindings();
 void __fastcall SPELLSEL_HandleSkillSelection(int32_t nSlotIndex);
 void __fastcall SPELLSEL_ActivateSkillSlot(int32_t nSlot);
@@ -79,6 +78,7 @@ void __fastcall SPELLSEL_SetSkillSlot(int32_t nSlotIndex, int32_t nSkillId, int3
 void __stdcall SPELLSEL_AutoBindNonChargedSkills();
 void __fastcall SPELLSEL_DrawSkillRequirementTooltip(short * pwSkillId, int32_t bMouseOverIn, uint32_t nChargeCount, int32_t nScreenX, int32_t nBoxBottomY);
 void __fastcall SPELLSEL_DrawSkillGrid(struct D2UnitStrc * pUnit, int32_t nGridStartX, BOOL bWeaponSwap, BOOL bShowTooltips, BOOL bChargedOnly);
+void Unreferenced_004aa680();
 void __fastcall Unreferenced_004aa6b0(BOOL bChargedOnly);
 void __stdcall Unreferenced_004aa6e0();
 void __stdcall Unreferenced_004aa710();
@@ -105,6 +105,6 @@ void __stdcall DRAW_UI_SkillSkillsWithAvailableSkills();
 void __stdcall SKILLTREE_DrawAllSkillNodes();
 void __stdcall DRAW_UI_SkillWindow();
 #endif // D2_MODULE_D2Client
-// 9 internal functions (defined in .cpp)
+// 10 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::SpellSel

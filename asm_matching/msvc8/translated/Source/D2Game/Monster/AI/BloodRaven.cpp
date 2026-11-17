@@ -75,7 +75,7 @@ int32_t __fastcall AI_BloodRaven_MoveRandomNearTarget(::SGAMEDATA * pGame, D2Uni
     D2Common::PATH::DynamicPath::SetStepNum(pSelf->pPath.pDynamicPath, 1);
     MonsterMode::MONMODE_InitModeChange(pSelf, eMoveMode, &sMonsterKillArgs);
     sMonsterKillArgs.nTargetX = nTargetUnitType;
-    sMonsterKillArgs.nTargetY = (int)(((D2UnitStrc*)nTarget)->unk0x19 + (nRadius - 0x19));
+    sMonsterKillArgs.nTargetY = (int)(nTarget + (nRadius - 0x19) + 25);
     int32_t nLifecycleResult = MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGameSaved, &sMonsterKillArgs, 1);
     return nLifecycleResult;
 }

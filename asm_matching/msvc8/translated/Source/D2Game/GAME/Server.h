@@ -482,6 +482,7 @@ BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_00601dc0(int32_t pQServer);
 void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00601dd0(int32_t pQServer);
 BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_0060e0c0(int32_t pQServer);
 void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0060e230(int32_t pQServer);
+uint32_t Unreferenced_0060e250();
 void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00650e90(int32_t pQServer);
 void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00666eb0(int32_t pQServer);
 void StaticInit_Frames_TimeBetweenFrames();

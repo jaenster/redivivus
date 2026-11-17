@@ -1078,14 +1078,14 @@
         "D2DialogStrc",
         "D2DialogStringData"
       ],
-      "dh": "4a98970f",
+      "dh": "693bcd40",
       "paramStorage": [
         [
-          "param_1",
+          "pDialog",
           "ECX:4"
         ],
         [
-          "param_2",
+          "nIndex",
           "EDX:4"
         ]
       ]

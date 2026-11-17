@@ -79,6 +79,21 @@
       "dh": "74617603"
     },
     {
+      "name": "Unreferenced_00601b70",
+      "address": "00601b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601b70"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist",
+      "calledFunctions": [
+        "Unreferenced_00601b70"
+      ],
+      "dh": "449c7536"
+    },
+    {
       "name": "IGNORELIST_Initialize_Unref_0060ac50",
       "address": "0060ac50",
       "lines": [

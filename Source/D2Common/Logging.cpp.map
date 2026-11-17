@@ -194,7 +194,10 @@
         "fopen",
         "LOGGING_LogLine"
       ],
-      "dh": "d7721233",
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "70e7ef7b",
       "paramStorage": [
         [
           "szLogFileName",

@@ -1730,7 +1730,21 @@ void * * __fastcall SPRITECACHE_AllocEntry2(D2GfxMemoryStrc * pGfxMemory, uint32
 
     D2SpriteCacheEntryStrc* pEvicted = SPRITECACHE_Query(nSize, bPriority, pGfxMemory);
     while (true) {
-      if (pEvicted) {
+      if (!pEvicted) {
+        if (bPriority) {
+          dwTickCount = GetTickCount();
+          if (dwTickCount - dwOldestTick < 15000) {
+            break;
+          }
+        }
+
+        pEvicted = SPRITECACHE_EvictEntry(pGfxMemory, nullptr, 1);
+        if (!pEvicted) {
+          break;
+        }
+
+        pEvicted = SPRITECACHE_Query(nSize, bPriority, pGfxMemory);
+      } else {
         if (bPriority) {
           pEvicted->dwFlags |= 1;
         } else {
@@ -1745,19 +1759,6 @@ void * * __fastcall SPRITECACHE_AllocEntry2(D2GfxMemoryStrc * pGfxMemory, uint32
         pGfxMemory->nAllocations++;
         return &pEvicted->pData;
       }
-      if (bPriority) {
-        dwTickCount = GetTickCount();
-        if (dwTickCount - dwOldestTick < 15000) {
-          break;
-        }
-      }
-
-      pEvicted = SPRITECACHE_EvictEntry(pGfxMemory, nullptr, 1);
-      if (!pEvicted) {
-        break;
-      }
-
-      pEvicted = SPRITECACHE_Query(nSize, bPriority, pGfxMemory);
     }
 
     return nullptr;

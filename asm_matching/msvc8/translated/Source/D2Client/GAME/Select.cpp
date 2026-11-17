@@ -595,7 +595,8 @@ static D2UnitStrc * __stdcall SKILL_FindTargetInRange(D2SkillStrc * pSkill, D2Un
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\GAME\\Select.cpp", 0x301);
     if (eSkillId == SKILL_IronGolem) {
       if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
-        bHitTest = D2Common::ITEMS::Items::TXT_Items_GetBitFieldAnd0x02(pUnit->nClassId);
+        int32_t nItemClassId = pUnit->nClassId;
+        bHitTest = D2Common::ITEMS::Items::TXT_Items_GetBitFieldAnd0x02(nItemClassId);
         if (bHitTest) {
           return pUnit;
         }
@@ -608,8 +609,8 @@ static D2UnitStrc * __stdcall SKILL_FindTargetInRange(D2SkillStrc * pSkill, D2Un
     memset(&sUnitFindArg, 0, sizeof(sUnitFindArg));
     sUnitFindArg.nFlags = nFindFlags;
     sUnitFindArg.pAttacker = UNIT::Player::GetPlayerUnit_Net();
-    int nY = *pY;
     int nX = *pX;
+    int nY = *pY;
     D2UnitFindArgStrc* pFindArg = &sUnitFindArg;
     nRadius = 9;
     sUnitFindArg.nX = nX;
@@ -625,8 +626,8 @@ static D2UnitStrc * __stdcall SKILL_FindTargetInRange(D2SkillStrc * pSkill, D2Un
       nDistToUnit = D2Common::Collision::GetDistanceToXY(pFoundUnit, *pX, *pY);
       bHitTest = UNIT::CUnit::HitTestScreen(pFoundUnit, 0, 0, nullptr);
       if (bHitTest && nDistToUnit < nSkill) {
-        nSkill = nDistToUnit;
         pUnit = pFoundUnit;
+        nSkill = nDistToUnit;
       }
     }
 

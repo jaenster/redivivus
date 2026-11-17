@@ -910,11 +910,11 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
-        "D2QuestDataA2Q2Strc",
+        "D2QuestDataA3Q5Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "608ede6e",
+      "dh": "a0ee5d6f",
       "paramStorage": [
         [
           "pInitArg",

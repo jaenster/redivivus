@@ -703,9 +703,10 @@
         "SetClientServerTokenByClientId"
       ],
       "usedTypes": [
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ],
-      "dh": "c2f2e248",
+      "dh": "df14b201",
       "paramStorage": [
         [
           "nClientId",

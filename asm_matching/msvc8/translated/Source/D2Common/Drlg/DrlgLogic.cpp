@@ -173,15 +173,15 @@ static void __stdcall DRLGLOGIC_SetGridDoorFlags(D2DrlgGridStrc * pGrid, D2RoomE
     } while (nTileIndex < (uint32_t)pRoomTiles->sRoomTiles.nWallTilesCount);
 }
 
-int __fastcall Unreferenced_0066c840(D2DrlgTileDataStrc * param_1) {
-    if ((param_1->nFlags & 0x1c000U) != 0x4000) {
+int __fastcall Unreferenced_0066c840(D2DrlgTileDataStrc * pTileData) {
+    if ((pTileData->nFlags & 0x1c000U) != 0x4000) {
       return 0;
     }
-    if (param_1->nTileType == 0xf) {
+    if (pTileData->nTileType == 0xf) {
       return 0;
     }
 
-    return ~((uint32_t)param_1->nFlags >> 0xb) & 1;
+    return ~((uint32_t)pTileData->nFlags >> 0xb) & 1;
 }
 
 // Two-pass wall flagging for DRLG layout grids. First pass: iterates pRoomEx's own wall tile array and calls AlterGridFlag for tiles that are standard left-side wall type (nFlags bits 0x1c000==0x4000, tileType!=15, non-special). Second pass: checks neighbouring rooms' map-link tile chains for matching wall tiles that project into pRoomEx bounds, flagging them with coordinate-transformed positions.

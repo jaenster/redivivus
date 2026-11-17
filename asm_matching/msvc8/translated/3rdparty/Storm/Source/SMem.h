@@ -127,7 +127,7 @@ void __stdcall SMemFill(void * pMemory, size_t nSize, uint8_t bValue);
 void __stdcall SMemZero(void * pMemory, size_t nSize);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-void * __fastcall Unreferenced_004116e0(struct D2FogHeapBlockHdrStrc * param_1);
+void * __fastcall Unreferenced_004116e0(struct D2FogHeapBlockHdrStrc * pBlockHdr);
 uint32_t __stdcall SMemExtractBucketIndex(uint32_t nHeapId);
 // @blizzard ComputePageSize (SMEM.CPP)
 void __stdcall SMEM_ComputePageSize();

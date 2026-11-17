@@ -942,7 +942,7 @@ int32_t __stdcall GetSpecialParamValue(D2UnitStrc * pUnit, D2UnitStrc * pOwner, 
     return 0;
 }
 
-int __fastcall MISSILE_Min(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4) {
+int __fastcall MISSILE_Min(int nLeft, int nRight, uint32_t nOperand3, void * pContext) {
     if (nLeft < nRight) {
       return nLeft;
     }
@@ -951,7 +951,7 @@ int __fastcall MISSILE_Min(int nLeft, int nRight, uint32_t dwParam3, uint32_t dw
     return nLeft;
 }
 
-int __fastcall MISSILE_Max(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4) {
+int __fastcall MISSILE_Max(int nLeft, int nRight, uint32_t nOperand3, void * pContext) {
     if (nLeft > nRight) {
       return nLeft;
     }

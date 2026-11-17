@@ -65,17 +65,23 @@ __declspec(noinline) inline void __fastcall ARCHIVE_ClearList(struct StormLinked
 // Writes formatted text to a file handle using wvsprintfA. Variadic printf-style format arguments follow pFormat on the stack. Epilogue is a bare RET (no stack cleanup by callee), so the convention is __cdecl, not __stdcall.
 BOOL ARCHIVE_WriteFormattedText(HANDLE hFile, char * pFormat, ...);
 struct StormLinkStrc * __fastcall ARCHIVE_ComputeAddress(struct StormLinkStrc * pNode, int, intptr_t nBaseAddr);
-int __fastcall Unreferenced_0045b9d0(struct StormLinkStrc * param_1);
-intptr_t __fastcall Unreferenced_0045ba80(struct StormLinkedListStrc * param_1);
-int __fastcall Unreferenced_0045baa0(struct StormLinkStrc * param_1);
+int __fastcall Unreferenced_0045b9d0(struct StormLinkStrc * pLink);
+uint32_t Unreferenced_0045b9e0();
+intptr_t __fastcall Unreferenced_0045ba80(struct StormLinkedListStrc * pList);
+int __fastcall Unreferenced_0045baa0(struct StormLinkStrc * pLink);
+uint32_t __fastcall Unreferenced_0045bab0(int * pList);
+uint32_t * __fastcall Unreferenced_0045bac0(uint32_t * pData);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045bad0(struct StormLinkStrc * pNode);
 int32_t __fastcall ARCHIVE_GetNodeOrDefault(int32_t pThis, int, int32_t nNode);
 uint32_t __fastcall ARCHIVE_GetNodeValue(struct StormLinkedListStrc * pThis, int, struct StormLinkStrc * nNode);
 void __fastcall ARCHIVE_UnlinkNode(struct StormLinkedListStrc * pThis, int, int * pNode);
 void __fastcall ARCHIVE_LinkNode(int * * ppList, int, int * * ppNode, int32_t nMode, int * * ppTarget);
 intptr_t __fastcall ARCHIVE_GetNodeSize(struct StormLinkedListStrc * pThis, int, struct StormLinkStrc * nNode);
 int __fastcall Unreferenced_0045bcb0(int param_1);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045bcc0(struct StormLinkStrc * pNode);
 void __fastcall ARCHIVE_ClearAndFreeHead(struct StormLinkedListStrc * nList);
-uint32_t * __fastcall Unreferenced_0045bd80(uint32_t * param_1);
+uint32_t * __fastcall Unreferenced_0045bd80(uint32_t * pData);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045bd90(struct StormLinkStrc * pNode);
 int * * __fastcall ARCHIVE_AllocNode(int * * ppList, int, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags);
 int * __fastcall ARCHIVE_FreeNode(struct StormLinkStrc * pNode, int, uint8_t byFree);
 uint32_t __fastcall ARCHIVE_RemoveNode(struct StormLinkedListStrc * pThis, int, struct StormLinkStrc * pNode);

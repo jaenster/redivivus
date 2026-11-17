@@ -1100,12 +1100,11 @@ void DRAW_Overlay_SecondsLeftToGame() {
       return;
     }
 
-    int32_t nSecondsLeft = gnGameEndTime - nHighResTime;
     for (nClearCount = 0; nClearCount < 0x100; nClearCount++) {
       wszText[nClearCount] = L'\0';
     }
 
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszText, D2Lang::StrTable::strtable::GetLocaleString(0x13e9), nSecondsLeft);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszText, D2Lang::StrTable::strtable::GetLocaleString(0x13e9), gnGameEndTime - nHighResTime);
     int32_t nSavedFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);
     int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszText);
     D2Win::Src::D2WinFont::DRAW_text(wszText, UI::ui::ScreenSizeX / 2 - nTextWidth / 2, 0x177, 9, 1);
@@ -2278,9 +2277,9 @@ void __fastcall CLIENT_DispatchMonsterAiBehavior(D2UnitStrc * pUnit) {
     ;
 }
 
-D2OverlayTxt * __fastcall Unreferenced_0046d9c0(int param_1) {
-    if (param_1 >= 0 && param_1 < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
-      return D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay + param_1;
+D2OverlayTxt * __fastcall Unreferenced_0046d9c0(int nIndex) {
+    if (nIndex >= 0 && nIndex < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
+      return D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay + nIndex;
     }
 
     return nullptr;

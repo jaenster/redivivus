@@ -1249,10 +1249,10 @@
       "usedTypes": [
         "D2QServerStrc"
       ],
-      "dh": "14f163b9",
+      "dh": "67531b6f",
       "paramStorage": [
         [
-          "param_1",
+          "pQServer",
           "ECX:4"
         ]
       ]
@@ -1904,7 +1904,7 @@
         "D2QServerStrc",
         "uint32_t"
       ],
-      "dh": "3f7a2096",
+      "dh": "00a8a7d2",
       "paramStorage": [
         [
           "pQServer",

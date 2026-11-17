@@ -42,7 +42,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2QServerIpRateEntryStrc) == 0x10, 
 
 #ifndef RECON_FPTD_fpD2QServerLineHook
 #define RECON_FPTD_fpD2QServerLineHook
-typedef void (*fpD2QServerLineHook)(int nLine);
+typedef void (__fastcall *fpD2QServerLineHook)(uint32_t nIpAddress, char * szFile, int nLine);
 #endif
 #ifndef RECON_FPTD_fpD2QServerPacketClassifier
 #define RECON_FPTD_fpD2QServerPacketClassifier
@@ -775,13 +775,13 @@ static void FreeHacklistBuckets(D2QServerStrc * pQServer) {
     LeaveCriticalSection(&pQServer->csHacklist);
 }
 
-void __fastcall Unreferenced_006bf170(D2QServerStrc * param_1) {
-    if (param_1->bUseNtLocalMode) {
-      QServer::QServerNT::AwaitAndClose(param_1);
+void __fastcall Unreferenced_006bf170(D2QServerStrc * pQServer) {
+    if (pQServer->bUseNtLocalMode) {
+      QServer::QServerNT::AwaitAndClose(pQServer);
       return;
     }
 
-    QServer::QServer98::QSERVER_CloseAllConnections(param_1);
+    QServer::QServer98::QSERVER_CloseAllConnections(pQServer);
 }
 
 // Increments active-connection counter for a client IP in QServer's per-IP hash table.
@@ -1387,7 +1387,7 @@ void __fastcall BanIpAddress(D2QServerStrc * pQServer, char * szFile, uint32_t n
       return;
     }
     if (pQServer->pfnOnHacklistAddLineHook) {
-      pQServer->pfnOnHacklistAddLineHook(nLine);
+      pQServer->pfnOnHacklistAddLineHook(nIpAddress, szFile, nLine);
     }
 
     CRITICAL_SECTION* lpCriticalSection = &pQServer->csHacklist;

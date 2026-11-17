@@ -343,11 +343,9 @@ uint32_t __stdcall COMPOSIT_GetWeaponClassWithTransform(D2UnitStrc * pUnit, D2In
     if (nMode == -1) {
       nMode = Units::GetAnimOrSeqMode(pOrigUnit);
     }
-
-    int32_t nAnimMode = nMode;
-    nMode = nAnimMode;
     if (FlagBit_D2UnitStrc_eUnitFlagsEx_3(pOrigUnit)) {
-      Skills::SKILLS_GetStateTransformGfx(pOrigUnit, &eUnitType, (int*)&nUnit, &nMode, ".\\COMPOSIT\\Composit.cpp", 0x236);
+      int32_t nAnimMode = nMode;
+      Skills::SKILLS_GetStateTransformGfx(pOrigUnit, &eUnitType, &nUnit, &nMode, ".\\COMPOSIT\\Composit.cpp", 0x236);
       if (!bIgnoreTransform) {
         nMode = nAnimMode;
       }
@@ -368,14 +366,14 @@ BOOL __stdcall DoesBodyHaveAppearanceColors(int32_t nBodyIndex) {
 // @sourcefile .\COMPOSIT\Composit.cpp
 BOOL __stdcall COMPOSIT_HasWeaponDrawn(D2UnitStrc * pUnit) {
     D2UnitStrc* pOrigUnit = pUnit;
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    D2InventoryStrc* pInventory = pUnit->pInventory;
     int32_t nWeaponClassIndex = 0;
     int32_t nAnimMode = -1;
+    eD2UnitType eUnitType = pUnit->eUnitType;
+    D2InventoryStrc* pInventory = pUnit->pInventory;
     int32_t nUnit = pUnit->nClassId;
     nAnimMode = Units::GetAnimOrSeqMode(pOrigUnit);
     if (FlagBit_D2UnitStrc_eUnitFlagsEx_3(pOrigUnit)) {
-      Skills::SKILLS_GetStateTransformGfx(pOrigUnit, &eUnitType, (int*)&nUnit, &nAnimMode, ".\\COMPOSIT\\Composit.cpp", 0x236);
+      Skills::SKILLS_GetStateTransformGfx(pOrigUnit, &eUnitType, &nUnit, &nAnimMode, ".\\COMPOSIT\\Composit.cpp", 0x236);
     }
 
     COMPOSIT_ResolveWeaponClass(pOrigUnit, eUnitType, nUnit, nAnimMode, pInventory, &nWeaponClassIndex);

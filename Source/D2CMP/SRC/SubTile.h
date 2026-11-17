@@ -44,12 +44,12 @@ namespace D2CMP::SRC::SubTile {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
-int __fastcall SUBTILE_CountRunLength(char byRunValue, char * pCur, char * pEnd, int32_t nMaxRunLen, uint32_t * pbAtEnd, uint32_t * pbExactMatch);
+int __fastcall SUBTILE_CountRunLength(char byRunValue, char * pCur, char * pEnd, int32_t nMaxRunLen, BOOL * pbAtEnd, uint32_t * pbExactMatch);
 char * __fastcall SUBTILE_CompressToRLE(char * pDataStart, uint32_t * ppCompressedEnd);
 void __fastcall SUBTILE_AllocAndCompress(uint32_t * pRawData, int bIsRaw);
 void __fastcall SUBTILE_ConvertToIndexed(struct D2GroundSubTileStrc * pDstFrame, struct D2GroundSubTileStrc * pSrcFrame, uint32_t dwColorKey, pfnRGBToPaletteIndex pfnGetPaletteIndex);
 char * __stdcall SUBTILE_ConvertRGBToIndexed(char * pSrcRGBData, int nRGBDataSize, uint32_t dwColorKey, pfnRGBToPaletteIndex pfnGetPaletteIndex);
-int __fastcall Unreferenced_0060d7c0(uint8_t * param_1);
+int __fastcall Unreferenced_0060d7c0(uint8_t * pData);
 void __stdcall SUBTILE_ExtractIsometricPixels(struct D2GroundSubTileStrc * pSubTileEntry, uint8_t * pSrcPixelData);
 void __fastcall SUBTILE_RecompressExisting(struct D2GroundSubTileStrc * pSubTileEntry);
 void __fastcall CELCMP_CompressAllFramesWithColorKey(struct D2TileLibraryEntryStrc * pSrcCelFile, struct D2TileLibraryEntryStrc * pDstCelFile, uint32_t dwColorKey, uint8_t * pfnGetPaletteIndex);

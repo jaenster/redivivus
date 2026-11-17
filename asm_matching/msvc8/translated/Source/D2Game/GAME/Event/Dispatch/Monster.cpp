@@ -538,7 +538,7 @@ BOOL __fastcall MONSTER_UpdateSkillCastAnimation(::SGAMEDATA * pGame, D2UnitStrc
 
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     uint32_t dwSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
-    bool bShouldSpawnSkill = true;
+    BOOL bShouldSpawnSkill = 1;
     if (dwSkillFlags & 1) {
       int32_t nMoveStatus;
       UNIT::SUnit::GetTarget(pGame, pUnit);
@@ -546,7 +546,7 @@ BOOL __fastcall MONSTER_UpdateSkillCastAnimation(::SGAMEDATA * pGame, D2UnitStrc
       if (nMoveStatus == 2) {
         D2Common::Skills::SKILL_SetFlags(pSkill, dwSkillFlags | 2);
         SKILLS::SkillsServer::SKILLS_PeriodicSkillSpawnAndTimer(pGame, pUnit);
-        bShouldSpawnSkill = false;
+        bShouldSpawnSkill = 0;
       }
     }
 

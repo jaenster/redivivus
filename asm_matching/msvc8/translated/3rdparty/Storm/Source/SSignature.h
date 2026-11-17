@@ -104,7 +104,7 @@ void __fastcall SHA1_Round3(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t n
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1_Round4. Confirmed: E += rol(A,5) + (B ^ C ^ D) + 0xCA62C1D6 + W - Parity with K4, SHA-1 rounds 60..79. See SHA1_Round1's plate.
 void __fastcall SHA1_Round4(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW);
-int __fastcall Unreferenced_00425830(uint32_t * param_1, uint8_t * param_2);
+int __fastcall Unreferenced_00425830(uint32_t * pValue, uint8_t * pBytes);
 // SHA-1 cryptographic hash transform. Processes 512-bit message block in 80 rounds (4 phases with different functions). Updates 5 hash state variables (A,B,C,D,E).
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1Transform, and filed under Storm::Source::SBig. Oracle name is the class method Sha1::Pump, PPC mangled symbol ".Pump__4Sha1FPUlPCUc" @100a2ee0 = Pump(unsigned long*, const unsigned char*). Basis: same two arguments (state array, 64-byte block), no callees in either build, and it is the sole callee of Sha1_Append/Sha1::Append. PPC body 1680 bytes vs 1339 here - both fully unrolled. NOT part of SBig: it is a client of SBig's file, not a member; module fixed to SSignature.
@@ -112,7 +112,7 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer);
 // Stores a 64-bit value big-endian into pbOut[0..7]: pbOut[0..3] = dwValueHigh, pbOut[4..7] = dwValueLow. The 64-bit bit-length encoder that Sha1_Finalize / Sha1::Finalize emit inline; zero callers (MSVC out-of-line COMDAT copy).
 // Descriptive name; corroborated by the Mac PPC 1.10b Storm rlwimi/stb chain at 100a2b00.
 uint32_t __fastcall SSIG_StoreBigEndian64(uint8_t * pbOut, int, uint32_t dwValueLow, uint32_t dwValueHigh);
-void __fastcall Unreferenced_00425ee0(int param_1, uint8_t * param_2);
+void __fastcall Unreferenced_00425ee0(int nValue, uint8_t * pBytes);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_RSA_ModPowWrapper. DESCRIPTIVE, not an oracle name. Body = SBigPowMod(*p4, *p1, *p2, *p3) and nothing else - the middle of Crypt::RSA::Process, which the PPC emits inline. Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
 struct BigData * * __fastcall SSIGNATURE_RsaPowMod(struct BigData * * ppResult, int, struct BigData * * ppBase, struct BigData * * ppExponent, struct BigData * * ppModulus);

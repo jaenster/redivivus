@@ -56,7 +56,7 @@ void __stdcall MCPCONNECT_SendCharCreate(char * szCharName, uint32_t dwArg1, uin
 void __stdcall thunk_NET_MCP_CLIENT_Send_0x07_CharLogon(char * szText);
 uint32_t __stdcall MCPSTATE_GetJoinTimestamp();
 BOOL __stdcall getIsMPCJoinSuccesfull();
-void __stdcall SetIsMPCJoinSuccesfull(uint32_t bSuccess);
+void __stdcall SetIsMPCJoinSuccesfull(BOOL bSuccess);
 void * __stdcall MCPCONNECT_GetCharListPacket();
 void __stdcall CopyCharListToGlobal(char * pBytes, size_t nSize);
 void __stdcall MCPCONNECT_CreateThread(uint32_t * pSrcState);

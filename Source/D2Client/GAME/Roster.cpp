@@ -310,6 +310,23 @@ D2RosterStrc * Unreferenced_00479740() {
     return gpRosterPlayers;
 }
 
+D2RosterPartyListStrc * Unreferenced_00479750() {
+    D2RosterPartyListStrc* pDVar1 = pRosterPartyList;
+    while (true) {
+      uint16_t in_CX;
+      if (!pDVar1) {
+        return nullptr;
+      }
+      if (pDVar1->nPartyId == in_CX) {
+        break;
+      }
+
+      pDVar1 = pDVar1->pNext;
+    }
+
+    return pDVar1;
+}
+
 // @sourcefile .\GAME\Roster.cpp
 static void AllocRosterPartyList(uint16_t nPartyId) {
     D2RosterPartyListStrc* pNewParty;
@@ -587,6 +604,15 @@ void __fastcall ROSTER_SetArenaScore(int32_t nRosterGUID, uint16_t nArenaScore) 
 
     ROSTER_RebuildPlayerParty();
     UI::Party::ResetPartyUi();
+}
+
+uint16_t Unreferenced_00479b50() {
+    int in_ECX;
+    if (!in_ECX) {
+      return 0;
+    }
+
+    return *(uint16_t*)(in_ECX + 0x44);
 }
 
 int __fastcall Unreferenced_00479b60(int param_1) {
@@ -983,7 +1009,7 @@ void __fastcall SetRosterPosition(int32_t nRosterGUID, int32_t nX, int32_t nY) {
     pRoster->nY = nY;
 }
 
-uint32_t __fastcall ROSTER_CheckPlayerInSameParty(D2RosterStrc * pRoster) {
+BOOL __fastcall ROSTER_CheckPlayerInSameParty(D2RosterStrc * pRoster) {
     D2UnitStrc* pUnit;
     if (pRoster && pRoster->nPartyId != 0xffff) {
       uint16_t nPlayerPartyId;

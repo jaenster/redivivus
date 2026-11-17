@@ -255,12 +255,13 @@ void __fastcall DRLGROOMTILE_FillTileData(D2RoomExStrc * pRoomEx, D2DrlgTileData
     pTileData->nAlphaEnd = 0xff;
     pTileData->nCurrentAlpha = 0xff;
     if (pRoomEx) {
+      int32_t nTileLibEntry;
       pTileData->nPosX = nPosX - pRoomEx->sCoords.WorldPosition.x;
-      pTileLibEntry = (D2TileLibraryEntryStrc*)(nPosY + 1);
+      nTileLibEntry = (int32_t)(nPosY + 1);
       pTileData->nPosY = nPosY - pRoomEx->sCoords.WorldPosition.y;
-      Transform::CoordsMiniMapToScreen(&nPosX, (int32_t*)&pTileLibEntry);
+      Transform::CoordsMiniMapToScreen(&nPosX, &nTileLibEntry);
       pTileData->nScreenX = nPosX;
-      pTileData->nScreenY = (int)pTileLibEntry->abSubTileFlags;
+      pTileData->nScreenY = nTileLibEntry + 40;
     }
 
     pTileData->nFlags |= ((nGridFlags >> 0x12 & 3) << 0xe) + 0x4000;
@@ -1170,12 +1171,12 @@ void __fastcall DRLGROOMTILE_GrowTileDataArray(D2PoolManagerStrc * pMemory, D2Dr
     pTileGrid->sRoomTiles.nRoofTilesCount += nAdditionalTiles;
 }
 
-int __fastcall Unreferenced_0066f030(D2RoomStrc * param_1) {
-    if (!param_1) {
+int __fastcall Unreferenced_0066f030(D2RoomStrc * pRoom) {
+    if (!pRoom) {
       return 0;
     }
 
-    D2RoomExStrc* pDVar1 = DUNGEON::Dungeon::GetRoomExFromRoom(param_1);
+    D2RoomExStrc* pDVar1 = DUNGEON::Dungeon::GetRoomExFromRoom(pRoom);
     return pDVar1->pRoomTiles->nShadows;
 }
 

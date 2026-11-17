@@ -260,6 +260,22 @@
       ]
     },
     {
+      "name": "Unreferenced_00594db0",
+      "address": "00594db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00594db0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q5",
+      "calledFunctions": [
+        "Unreferenced_00594db0",
+        "ChangeAnimMode"
+      ],
+      "dh": "d256c395"
+    },
+    {
       "name": "Q05_SetRewardForPlayersInTower",
       "address": "00594dd0",
       "lines": [

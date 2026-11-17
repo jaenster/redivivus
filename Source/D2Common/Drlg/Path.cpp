@@ -832,7 +832,7 @@ uint32_t __fastcall DRLGPATH_UpdatePathVelocityAndDirection(uint32_t * pPathData
       if (nDistY < 0) {
         nDistY = -nDistY;
       }
-      if ((int)nVelX > nDistX << 0x10 && (int)nVelY > nDistY << 0x10) {
+      if ((int)nVelX > nDistX * 0x10000 && (int)nVelY > nDistY * 0x10000) {
         return 0;
       }
     }
@@ -2589,7 +2589,6 @@ static void DRLGPATH_InsertNodeSorted(D2DrlgPathSearchCtxStrc * pSearchCtx, D2Dr
       D2DrlgPathNodeStrc* pSortedNode;
       do {
         pSortedNode = pNextSortedNode;
-        pNextSortedNode = pSortedNode;
         if (pNode->nFCost <= pSortedNode->nFCost) {
           break;
         }
@@ -3004,9 +3003,9 @@ static int32_t DRLGPATH_CheckSurroundingCollisions(D2PathTypeArg * pPathTypeArg)
     }
 
     uint32_t nX = (uint32_t)pPathTypeArg->tTargetCoord.nX;
-    int32_t iVar2 = pPathTypeArg->nCollisionMask;
     D2RoomStrc* pRoom = pPathTypeArg->pRoom;
     int32_t nType = pPathTypeArg->nCollisionPattern;
+    int32_t iVar2 = pPathTypeArg->nCollisionMask;
     uint32_t nY = (uint32_t)pPathTypeArg->tTargetCoord.nY;
     int32_t iVar1 = Collision::CheckCollision_BlockPlayer_Type(pRoom, nX - 2, nY - 2, nType, iVar2);
     if (!iVar1) {

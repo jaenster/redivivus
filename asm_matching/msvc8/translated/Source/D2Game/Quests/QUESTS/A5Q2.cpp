@@ -921,6 +921,7 @@ void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     eD2QuestState eSurvivalTierState;
     ::SGAMEDATA* pGameLoop;
     D2UnitStrc* pIterUnit;
+    D2RoomStrc* pRoom;
     ::SGAMEDATA* pGameSaved;
     pGameSaved = pGame;
     D2UnitStrc* pUnitSaved;
@@ -999,10 +1000,10 @@ void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit
           goto update_rescue_progress;
         }
 
-        pBarricadeUnit = pIterUnit;
-        FindSpawnableLocation((D2RoomStrc*)pIterUnit, &sPortalCoords, 2, 0x8000, (D2RoomStrc**)&pBarricadeUnit, 0x11, 100);
-        if (pBarricadeUnit) {
-          pIterUnit = pBarricadeUnit;
+        pRoom = (D2RoomStrc*)pIterUnit;
+        FindSpawnableLocation((D2RoomStrc*)pIterUnit, &sPortalCoords, 2, 0x8000, &pRoom, 0x11, 100);
+        if ((D2UnitStrc*)pRoom) {
+          pIterUnit = (D2UnitStrc*)pRoom;
         }
 
         pPortalUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, sPortalCoords.x, sPortalCoords.y, pQuestData->pGame, (D2RoomStrc*)pIterUnit, 1, 1, 0);

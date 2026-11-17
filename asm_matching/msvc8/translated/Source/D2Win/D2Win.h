@@ -15,7 +15,6 @@
 
 // Forward declarations
 struct D2CharSelCompStrc;
-struct D2CharSelStrc;
 struct D2CompCofCacheEntryStrc;
 struct D2ControlMsg;
 struct D2ControlStrc;
@@ -349,7 +348,7 @@ BOOL __stdcall D2GFX_SetVideoMode(int32_t nResolutionMode);
 void __stdcall thunk_D2GFX_ClearCaches();
 }} // namespace D2Win::D2GFX
 namespace D2Win { namespace Src { namespace D2Comp {
-void __stdcall D2COMP_DestroyCompositeUnit(struct D2CharSelStrc * pCharSel, int32_t bUnlink);
+void __stdcall D2COMP_DestroyCompositeUnit(struct D2CharSelCompStrc * pCharSel, int32_t bUnlink);
 void __stdcall D2COMP_SetUnitDisplayStrings(struct D2CharSelCompStrc * pCompUnit, uint16_t * wszText1, uint16_t * wszText2, uint16_t * wszText3, uint16_t * wszText4, int32_t nDisplayFlags, int32_t nExtraData);
 BOOL __fastcall D2COMP_SetAnimationMode(struct D2CharSelCompStrc * pCompUnit, int32_t nAnimMode);
 void __stdcall D2COMP_SetSelectionAndAuraImages(struct DC6 * pDC6, struct DC6 * pDC62);
@@ -361,7 +360,7 @@ void __stdcall D2COMP_SetCurrentFrame(struct D2CharSelCompStrc * pCompUnit, uint
 void __stdcall D2COMP_SetScreenX(struct D2CharSelCompStrc * pCompUnit, int32_t nScreenX);
 void __stdcall D2COMP_SetScreenY(struct D2CharSelCompStrc * pCompUnit, int32_t nScreenY);
 uint32_t __stdcall D2COMP_GetFlags(struct D2CharSelCompStrc * pCompUnit);
-void __stdcall D2COMP_SetFlags(struct D2CharSelStrc * pCharSel, uint32_t dwFlags);
+void __stdcall D2COMP_SetFlags(struct D2CharSelCompStrc * pCharSel, uint32_t dwFlags);
 char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank, int32_t bExpansion);
 struct D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, int32_t nAnimMode, uint8_t * pbyEquipSlots, char * szText);
 }}} // namespace D2Win::Src::D2Comp
@@ -531,7 +530,7 @@ uint8_t __stdcall D2GFX_GetColorFromCurrentPallete(uint8_t nRed, uint8_t nGreen,
 void __fastcall D2WINPAL_CopyPalette(void * pDest);
 BOOL __fastcall D2WINPAL_LoadActPalette(uint8_t nAct);
 int __stdcall LoadPalette(char * szDatFile, char * szPl2File);
-void __fastcall D2WINTEXTBOX_SetCompactLineSpacing(uint32_t bCompactLineSpacingMode);
+void __fastcall D2WINTEXTBOX_SetCompactLineSpacing(BOOL bCompactLineSpacingMode);
 }}} // namespace D2Win::Src::D2WinPalette
 namespace D2Win { namespace Src { namespace D2WinPopup {
 BOOL __fastcall DrawEx(::D2WinPopup * pPopup);
@@ -570,7 +569,7 @@ int32_t __fastcall D2WINTEXTBOX_GetLineCount(::D2WinTextBox * pTextBox);
 int32_t __fastcall D2WINTEXTBOX_GetScrollPosition(::D2WinTextBox * pTextBox);
 int32_t __fastcall D2WINTEXTBOX_GetSelectedLine(::D2WinTextBox * pTextBox);
 void __fastcall D2WINTEXTBOX_SetSelectedLine(::D2WinTextBox * pTextBox, int32_t nLineIndex);
-uint32_t __fastcall D2WINTEXTBOX_ScrollToLine(::D2WinTextBox * pTextBox, int32_t nTargetLine);
+BOOL __fastcall D2WINTEXTBOX_ScrollToLine(::D2WinTextBox * pTextBox, int32_t nTargetLine);
 int32_t __fastcall D2WINTEXTBOX_GetVisibleLineCount(::D2WinTextBox * pTextBox);
 uint16_t * __fastcall D2WINTEXTBOX_GetSelectedLineText(::D2WinTextBox * pnTextBox);
 uint16_t * __fastcall D2WINTEXTBOX_GetLineCellValue(::D2WinTextBox * pTextBox, int32_t nRow, int32_t nColIndex);
@@ -578,7 +577,7 @@ void __fastcall D2WINTEXTBOX_SetColumnCount(::D2WinTextBox * pTextBox, int32_t n
 void __fastcall D2WINTEXTBOX_SetColumnWidth(::D2WinTextBox * pTextBox, int32_t nColumnIndex, int32_t nColumnWidth);
 void __fastcall D2WINTEXTBOX_SetColumnAlignment(::D2WinTextBox * pTextBox, int32_t nColumnIndex, int32_t nAlignment);
 int32_t __fastcall D2WINTEXTBOX_GetLastLineIndex(::D2WinTextBox * pTextBox);
-uint32_t __fastcall D2WINTEXTBOX_SetLineColor(::D2WinTextBox * pTextBox, int32_t nRow, int32_t dwColor);
+BOOL __fastcall D2WINTEXTBOX_SetLineColor(::D2WinTextBox * pTextBox, int32_t nRow, int32_t dwColor);
 BOOL __fastcall Draw(::D2WinTextBox * pTextBox);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall Key(struct D2ControlMsg * pControlMsg);

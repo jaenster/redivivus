@@ -379,8 +379,8 @@ char * __fastcall inet_nameToIp(char * szText) {
     int nOctet2;
     int nOctet3;
     char cChar;
-    bool bDidStartUp;
-    bDidStartUp = false;
+    BOOL bDidStartUp;
+    bDidStartUp = 0;
     int nResult;
     nResult = sscanf(szText, "%d.%d.%d.%d", &nOctet0, &nOctets, &nOctet2, &nOctet3);
     if (nResult == 4) {
@@ -420,7 +420,7 @@ char * __fastcall inet_nameToIp(char * szText) {
 
     /* char * name for gethostbyname */ pHostEnt = gethostbyname(szText);
     if (pHostEnt && pHostEnt->h_addr_list && *pHostEnt->h_addr_list) {
-      bDidStartUp = true;
+      bDidStartUp = 1;
       goto copy_resolved_ip;
     }
 

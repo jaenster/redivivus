@@ -246,10 +246,10 @@
       "calledFunctions": [
         "Unreferenced_0044be10"
       ],
-      "dh": "99772ec3",
+      "dh": "a1981e17",
       "paramStorage": [
         [
-          "param_1",
+          "pPair",
           "ECX:4"
         ]
       ]
@@ -4153,6 +4153,21 @@
           "ECX:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_00603570",
+      "address": "00603570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603570"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "Unreferenced_00603570"
+      ],
+      "dh": "becc32d6"
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced_Unref_0060e610",

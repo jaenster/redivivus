@@ -191,7 +191,7 @@ int32_t __stdcall DRAW_GetBottomPanelY();
 void __stdcall DRAW_RegisterDrawHandlers();
 void __stdcall DRAW_RefreshNpcDialog();
 uint32_t __stdcall DRAW_IsDialogActive();
-uint32_t * __fastcall Unreferenced_004549d0(uint32_t * param_1);
+uint32_t * __fastcall Unreferenced_004549d0(uint32_t * pData);
 void __stdcall DRAW_MonsterUnderCursorImmunites();
 void __fastcall DRAW_MonsterHealthBar(struct D2UnitStrc * pUnit);
 // Draw UI label showing unit name/life under mouse cursor during gameplay
@@ -215,6 +215,7 @@ int64_t __stdcall UI_GetControlConfigRowCount();
 void __fastcall UI_ScrollConfigListVertical(int32_t nSteps);
 void __fastcall UI_ScrollConfigListHorizontal(int32_t nSteps);
 uint32_t __stdcall UI_IsMouseInRightColumn(int32_t nMouseX);
+uint32_t Unreferenced_004a4aa0();
 // Control config mouse handler. Tracks g_nControlConfigMouseButtonState array for each UI region (scroll up/down, list drag, buttons). Dispatches scroll/selection based on mouse state. Main mouse logic for config UI.
 void __stdcall UI_UpdateConfigControlsState(int32_t nMouseXStack, int32_t nMouseYStack);
 void __fastcall UIAction_ResetKeyBindingsToDefaults();

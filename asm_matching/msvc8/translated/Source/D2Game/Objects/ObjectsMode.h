@@ -194,7 +194,7 @@ BOOL __fastcall OBJOP_OpenSparklyChest(struct D2ObjectOperateFnArg * pOperation)
 BOOL __fastcall OBJOP_OpenChestSpawnMonster(struct D2ObjectOperateFnArg * pOperation);
 // Object-operate callback for boss chests that can spawn a unique monster pack. If the chest is in Death mode or null, rolls drops via RollChestDrops (ITEMTYPE_None1). On success: marks object as updated, clears UNITFLAG_TARGETABLE, schedules an animation-end event, then rolls (via chest Parm+0x1e threshold from seed) whether to spawn a unique pack. If yes, finds the first monster-region entry for the chest's level with GetSomeMonsterStatFlag==2 (unique-capable) and calls SpawnUniquePack. Finally removes collision if HasCollision[1] is false and dispatches the operate callback. Always returns 1.
 BOOL __fastcall OBJOP_OpenBossChestSpawnUniques(struct D2ObjectOperateFnArg * pOperation);
-struct D2UnitStrc ** __fastcall OBJMODE_RollChestDrops(struct D2ObjectOperateFnArg * pOperateArg);
+struct D2UnitStrc * * __fastcall OBJMODE_RollChestDrops(struct D2ObjectOperateFnArg * pOperateArg);
 BOOL __fastcall OBJOP_OpenChestNoMonster(struct D2ObjectOperateFnArg * pOperation);
 BOOL __fastcall OBJOP_OpenContainer(struct D2ObjectOperateFnArg * pOperation);
 void __fastcall OBJMODE_RollChestLoot(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);

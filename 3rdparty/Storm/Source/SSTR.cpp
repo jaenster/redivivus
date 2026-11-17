@@ -2841,19 +2841,19 @@ int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnBy
         case 4:
           cByte = *pEndInner;
         pEndInner++;
-        iAccum = iAccum + cByte << 6;
+        iAccum = (iAccum + cByte) * 0x40;
         case 3:
           cByte = *pEndInner;
         pEndInner++;
-        iAccum = iAccum + cByte << 6;
+        iAccum = (iAccum + cByte) * 0x40;
         case 2:
           cByte = *pEndInner;
         pEndInner++;
-        iAccum = iAccum + cByte << 6;
+        iAccum = (iAccum + cByte) * 0x40;
         case 1:
           cByte = *pEndInner;
         pEndInner++;
-        iAccum = iAccum + cByte << 6;
+        iAccum = (iAccum + cByte) * 0x40;
         case 0:
           iAccum += *pEndInner;
         pEndInner++;

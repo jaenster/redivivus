@@ -89,7 +89,7 @@ static uint32_t __stdcall DAMAGE_RollPhysicalDamageRange(int32_t nDamageRange, i
 
 static uint32_t __stdcall DAMAGE_RollElementalDamageWithBonus(eD2UnitStat eUnitStat, eD2UnitStat eStat1, int32_t nMinPctBonus, int32_t nRangePctBonus, uint32_t nDamageAccum, D2UnitStrc * pUnit, eD2UnitStat eStat2) {
     int nDamageBase = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eStat2, 0);
-    if (nDamageBase << 8 < 8) {
+    if (nDamageBase * 0x100 < 8) {
       return (int)nDamageAccum < 0 ? 0 : nDamageAccum;
     }
 
@@ -101,7 +101,7 @@ static uint32_t __stdcall DAMAGE_RollElementalDamageWithBonus(eD2UnitStat eUnitS
       nRangePctBonus += nBonusStat;
     }
 
-    uint32_t nResult = DAMAGE_RollPhysicalDamageRange(nDamageBase << 8, nMinPctBonus, pUnit, nMinDamage << 8, nRangePctBonus, nDamageAccum);
+    uint32_t nResult = DAMAGE_RollPhysicalDamageRange(nDamageBase * 0x100, nMinPctBonus, pUnit, nMinDamage << 8, nRangePctBonus, nDamageAccum);
     return nResult;
 }
 
@@ -628,8 +628,8 @@ uint32_t __fastcall DAMAGE_CalculatePhysicalDamage(D2UnitStrc * pUnit, int32_t b
 
     int32_t nNormDmgBonus;
     nNormDmgBonus = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_normaldamage, 0);
-    nMaxDmg += nNormDmgBonus << 8;
-    nMinDmg += nNormDmgBonus << 8;
+    nMaxDmg += nNormDmgBonus * 0x100;
+    nMinDmg += nNormDmgBonus * 0x100;
     if (nMinDmg < 1) {
       nMinDmg = 0x100;
     }
@@ -1100,7 +1100,7 @@ static int32_t DAMAGE_AbsorbDamageByPercent(D2DamageContext * pCtx, D2ResistTabl
     nDamage -= nAbsorbPct;
     apply_flat_absorb:
     nFlatAbsorbAmt = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCtx->pDefender, pEntry->eAbsorbFlatStat, 0);
-    nFlatAbsorbAmt = nFlatAbsorbAmt << 8;
+    nFlatAbsorbAmt *= 0x100;
     if (nFlatAbsorbAmt > 0) {
       if (nFlatAbsorbAmt >= nDamage) {
         nFlatAbsorbAmt = nDamage;
@@ -3329,7 +3329,7 @@ static void __stdcall SERVER_PlayerUpdateExperience(::SGAMEDATA * pGame, int32_t
 }
 
 // Iterator callback used when distributing kill experience to nearby party members. For each candidate player unit (pUnit), checks if dead (early-return), then tests whether the unit is within range of the victim (squared-distance threshold 0x1900). If in range, appends the unit and its level into the pPartyExp accumulator struct (max 8 players); halts fatally if the party array is full.
-BOOL __fastcall ExperienceLoopOverPlayers(uint32_t pGame, D2UnitStrc * pUnit, D2PartyExperienceStrc * pPartyExp) {
+BOOL __fastcall ExperienceLoopOverPlayers(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2PartyExperienceStrc * pPartyExp) {
     int nPlayerCount;
     int32_t nUnitPosX;
     int32_t nUnitPosY;
@@ -3392,6 +3392,7 @@ BOOL __fastcall ExperienceLoopOverPlayers(uint32_t pGame, D2UnitStrc * pUnit, D2
 }
 
 // Distributes kill XP among all party members near the victim. Calls ExperienceLoopOverPlayers to collect eligible players into D2PartyExperienceStrc. For a solo kill, computes and grants XP directly. For parties, computes each member's share proportionally by level and calls SERVER_PlayerUpdateExperience per member.
+// Passes ExperienceLoopOverPlayers by address.
 static void __stdcall SERVER_PartyShareExperience(int32_t nBaseExperience, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pVictim, int32_t nAttackerLevel, int32_t nVictimLevel) {
     uint32_t nXpForPlayer;
     uint32_t nXpShareRatio;

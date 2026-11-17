@@ -498,15 +498,16 @@ void __stdcall INPUT_DialogConfirm(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
-    if (!gpDialogActual) {
+    D2DialogStrc* t2_c0 = gpDialogActual;
+    if (!t2_c0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1c2);
       exit(-1);
     }
-    if (!((uint32_t)gpDialogActual->nDrawFrameCount >= 5 && gpDialogActual->fpDialogFunc1)) {
+    if (!((uint32_t)t2_c0->nDrawFrameCount >= 5 && t2_c0->fpDialogFunc1)) {
       return;
     }
 
-    gpDialogActual->fpDialogFunc1();
+    t2_c0->fpDialogFunc1();
     ui::UI_UpdateCursorAnimationTimer();
 }
 
@@ -1237,9 +1238,9 @@ int32_t __fastcall DIALOG_GetSelectedIndex(D2DialogStrc * pDialog) {
     return -1;
 }
 
-D2DialogStringData * __fastcall Unreferenced_004b8590(D2DialogStrc * param_1, int param_2) {
-    if (param_1 && param_2 >= 0 && param_2 < param_1->nSubCounter) {
-      return param_1->aStringData + param_2;
+D2DialogStringData * __fastcall Unreferenced_004b8590(D2DialogStrc * pDialog, int nIndex) {
+    if (pDialog && nIndex >= 0 && nIndex < pDialog->nSubCounter) {
+      return pDialog->aStringData + nIndex;
     }
 
     return nullptr;

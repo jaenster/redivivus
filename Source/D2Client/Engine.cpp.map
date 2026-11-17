@@ -681,7 +681,7 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "b45c957d",
+      "dh": "49913aa0",
       "paramStorage": [
         [
           "nDrawMode",
@@ -774,14 +774,14 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "715f17a1",
+      "dh": "cb026e16",
       "paramStorage": [
         [
-          "param_1",
+          "pUnit",
           "ECX:4"
         ],
         [
-          "param_2",
+          "bPendingInteract",
           "EDX:4"
         ]
       ]
@@ -802,10 +802,10 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "58296ec9",
+      "dh": "3be74a16",
       "paramStorage": [
         [
-          "param_1",
+          "pUnit",
           "ECX:4"
         ]
       ]
@@ -826,10 +826,10 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "90420684",
+      "dh": "9f1d0b2b",
       "paramStorage": [
         [
-          "param_1",
+          "pUnit",
           "ECX:4"
         ]
       ]
@@ -850,10 +850,10 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "73899fba",
+      "dh": "e3e0faff",
       "paramStorage": [
         [
-          "param_1",
+          "pUnit",
           "ECX:4"
         ]
       ]

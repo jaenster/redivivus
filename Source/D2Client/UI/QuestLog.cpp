@@ -2221,15 +2221,15 @@ void __fastcall QUESTLOG_SpawnZooDummyMonsters(int32_t nSpawnX, int32_t nSpawnY)
     } while ((int)i < nZooMonsterCount);
 }
 
-uint8_t * __fastcall Unreferenced_004a3200(uint8_t * param_1) {
+uint8_t * __fastcall Unreferenced_004a3200(uint8_t * pData) {
     int iVar1;
-    uint8_t* puVar2 = param_1 + 7;
+    uint8_t* puVar2 = pData + 7;
     for (iVar1 = 0x96; iVar1; iVar1--) {
       *(uint32_t*)puVar2 = 0;
       puVar2 += 4;
     }
 
-    return param_1;
+    return pData;
 }
 
 // Loads quest icons for an act from gQuestIconsPerActTable. Reads act index, iterates quest icon range per act, loads DC6 files to global quest icon array. Handles expansion/classic quest sets.
@@ -2905,7 +2905,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x52_QUESTSTATUS(char * pBytes) {
 }
 
 void __stdcall QUESTLOG_OnButtonMouseUp(D2UIMouseMsgStrc * pMsg) {
-    bool bVar1 = QUESTLOG_IsPointInQuestLog((uint32_t)pMsg->uLParam.sMousePos.nMouseX, (uint32_t)pMsg->uLParam.sMousePos.nMouseY);
+    uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
+    bool bVar1 = QUESTLOG_IsPointInQuestLog(nMouseX, (uint32_t)pMsg->uLParam.sMousePos.nMouseY);
     if (bVar1 && gQuestLog.bQuestLogWindowOpen != '\0') {
       ui::SetUIFlag(UI_QUESTLOG, UI_RESET, 0);
       QUESTLOG_ToggleQuestScreen(0);

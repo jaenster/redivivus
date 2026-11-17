@@ -1183,7 +1183,7 @@ void __fastcall CalculateManaUse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Ski
     }
 
     int nManaCost = (int)pSkillTxt->lvlmana * ((int)(nSkillLevel - 1U) < 0 ? 0 : nSkillLevel - 1U) + (int)pSkillTxt->mana << D2_SHIFT_COUNT(pSkillTxt->manashift);
-    int nMinManaCost = pSkillTxt->minmana << 8;
+    int nMinManaCost = pSkillTxt->minmana * 0x100;
     if (nMinManaCost > nManaCost) {
       nManaCost = nMinManaCost;
     }
@@ -1599,7 +1599,7 @@ void __fastcall SERVER_AppendDamageToUnitEvent(D2UnitStrc * pUnit, D2DamageStrc 
       }
     }
 
-    uint32_t dwHitSfxId = -1;
+    int32_t dwHitSfxId = -1;
     switch (eSkillType) {
       case Fire:
         pEvent->dwFireDmg += randomizeValue;
@@ -1861,6 +1861,7 @@ void __fastcall SKILLS_SetPeriodicStatOrSkillTimer(::SGAMEDATA * pGame, D2UnitSt
 
 // Server-side: spawns and links a Town Portal object for pUnit. Finds a free spawn coordinate in eSrcLevel, checks for the special Duriel portal, creates an OBJECT unit of pUnit's class, stores the source level ID in the portal's char name buffer, sets portal flags, and bidirectionally links owner/portal via StoreOwner and LinkPortalCoords. Frees the placeholder pUnit on spawn failure. Returns the new portal unit or NULL on error.
 // Registers: pGame in ECX; pOwner in EDX is passed by the callers but not read.
+#if 0 // ratchet: the match body of 0056cf40 (evidence 5b183fa9f) could not be re-spelled: parameter 3 retyped: D2RoomStrc * -> eD2LevelId
 D2UnitStrc * __fastcall LinkPortal(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pUnit, D2RoomStrc * eLevel, eD2LevelId nLevelId2) {
     int nUnitGUID;
     D2UnitStrc* pNewPortal;
@@ -1946,8 +1947,95 @@ D2UnitStrc * __fastcall LinkPortal(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2U
       return pNewPortal;
     }
 }
+#endif
+D2UnitStrc * __fastcall LinkPortal(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pUnit, eD2LevelId eLevel, eD2LevelId nLevelId2) {
+    int nUnitGUID;
+    D2RoomStrc* pRoom;
+    D2UnitStrc* pNewPortal;
+    POINT ptPortalPos;
+    int32_t nSpawnY;
+    int32_t nSpawnX;
+    eD2UnitType eUnitType;
+    int32_t nLine;
+    eD2LevelId eSrcLevelId = eLevel;
+    eAct neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    D2RoomStrc* pRoom2 = D2Common::DUNGEON::Dungeon::SpawnUnit(pGame->pAct[neAct], eSrcLevelId, 0xb, &nSpawnX, &nSpawnY, 3);
+    D2RoomStrc* pSpawnRoom = pRoom2;
+    GAME::Server::SetSomeRoomFlags(pGame, pRoom2);
+    if ((eD2LevelId)pRoom2 == LEVEL_None) {
+      if (!pUnit) {
+        nUnitGUID = -1;
+      } else {
+        nUnitGUID = pUnit->nUnitGUID;
+      }
+
+      eUnitType = UNIT_OBJECT;
+      D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nUnitGUID);
+      UNIT::SUnit::FreeServerUnit(pGame, pUnit);
+      return nullptr;
+    }
+
+    ptPortalPos.x = nSpawnX;
+    ptPortalPos.y = nSpawnY;
+    BOOL BVar1 = Quests::QUESTS::IsPortalFromDuriel(pGame, &ptPortalPos, nLevelId2, (D2RoomStrc**)&pRoom2);
+    if (BVar1) {
+      pRoom2 = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom2, ptPortalPos.x, ptPortalPos.y);
+    }
+    if ((eD2LevelId)pRoom2 == LEVEL_None) {
+      pRoom2 = pSpawnRoom;
+      ptPortalPos.x = nSpawnX;
+      ptPortalPos.y = nSpawnY;
+    }
+
+    pRoom2 = D2Common::Collision::GetFreeCoordinates_WithIncrementValue(pRoom2, &ptPortalPos, 3, 0xbe11, 5);
+    if (!pRoom2 && (pRoom2 = D2Common::DUNGEON::Dungeon::SpawnUnit(pGame->pAct[neAct], eSrcLevelId, 0xb, &nSpawnX, &nSpawnY, 3) , !pRoom2) && (pRoom2 = pSpawnRoom , !pSpawnRoom)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe08);
+      exit(-1);
+    } else {
+      uint8_t byPortalFlags;
+      nSpawnX = ptPortalPos.x;
+      nSpawnY = ptPortalPos.y;
+      if (!pUnit) {
+        nLine = -1;
+      } else {
+        nLine = pUnit->nClassId;
+      }
+
+      pNewPortal = UNIT::SUnit::CreateUnit(UNIT_OBJECT, nLine, ptPortalPos.x, ptPortalPos.y, pGame, pRoom2, 1, 2, 0);
+      if (!pNewPortal) {
+        if (!pUnit) {
+          nUnitGUID = -1;
+        } else {
+          nUnitGUID = pUnit->nUnitGUID;
+        }
+
+        eUnitType = UNIT_OBJECT;
+        D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nUnitGUID);
+        UNIT::SUnit::FreeServerUnit(pGame, pUnit);
+        return nullptr;
+      }
+
+      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+      eSrcLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+      if (!((int)eSrcLevelId <= 0xff)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe2b);
+        exit(-1);
+      }
+
+      pNewPortal->pUnitData.pUnitDataObject->nShrineId = (uint8_t)eSrcLevelId;
+      byPortalFlags = D2Common::Units::GetObjectPortalFlags(pNewPortal);
+      byPortalFlags |= 3;
+      D2Common::Units::SetObjectPortalFlags(pNewPortal, byPortalFlags);
+      D2Common::Units::ChangeAnimMode(pNewPortal, 2);
+      UNIT::SUnit::LinkPortalCoords(pUnit, pNewPortal);
+      D2Common::Units::StoreOwner(pUnit, pNewPortal);
+      D2Common::Units::StoreOwner(pNewPortal, pUnit);
+      return pNewPortal;
+    }
+}
 
 // Spawns a town-portal or special portal object at the best free coordinate near (nX, nY) in pRoom, linking it to eLevel. Validates that caster is in town (blocks non-uber portals from town); requires source and destination to share the same act. Finds a free spawn location via collision, creates the UNIT_OBJECT (class nClassId), sets portal flags, writes *ppPortal, and toggles the room's has-portal flag. Returns 1 on success, 0 if no spawn point found, halts if pRoom is null or acts differ.
+#if 0 // ratchet: the match body of 0056d130 (evidence 5b183fa9f) could not be re-spelled: callee LinkPortal parameter eLevel retyped: D2RoomStrc * -> eD2LevelId
 BOOL __fastcall SERVER_SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX, int32_t nY, eD2LevelId eLevel, D2UnitStrc * * ppPortal, int32_t nClassId, BOOL bIgnoreFindSpawnLocationMaybe) {
     LONG nPosY;
     eAct eDestAct;
@@ -2003,6 +2091,75 @@ BOOL __fastcall SERVER_SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
 
         D2Common::Units::ChangeAnimMode(pPortal, 1);
         pPortal = LinkPortal(pGame, pUnit, pPortal, (D2RoomStrc*)eLevel, eLevel_00);
+        if (!pPortal) {
+          return 0;
+        }
+
+        byPortalFlags = D2Common::Units::GetObjectPortalFlags(pPortal);
+        byPortalFlags |= 3;
+        D2Common::Units::SetObjectPortalFlags(pPortal, byPortalFlags);
+        D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(pSpawnRoom, 0);
+        D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pPortal), 0);
+        return 1;
+      }
+    }
+}
+#endif
+BOOL __fastcall SERVER_SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX, int32_t nY, eD2LevelId eLevel, D2UnitStrc * * ppPortal, int32_t nClassId, BOOL bIgnoreFindSpawnLocationMaybe) {
+    LONG nPosY;
+    eAct eDestAct;
+    eAct eSrcAct;
+    uint8_t byPortalFlags;
+    BOOL bCasterInTown;
+    eD2LevelId eLevel_00;
+    D2RoomStrc* pSpawnRoom;
+    D2UnitStrc* pPortal;
+    POINT ptSpawnPos;
+    if (!pRoom) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe42);
+      exit(-1);
+    } else {
+      {
+        LONG nPosX;
+        if (ppPortal) {
+          *ppPortal = 0;
+        }
+        if (pUnit) {
+          bCasterInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
+          if (bCasterInTown && (eLevel != LEVEL_MooMooFarm && eLevel != LEVEL_UberTristram && eLevel != LEVEL_MatronsDen && eLevel != LEVEL_FogottenSands && eLevel != LEVEL_FurnaceofPain || nClassId != 0x3c)) {
+            UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x18, pUnit);
+            return 0;
+          }
+        }
+
+        eDestAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+        eLevel_00 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+        eSrcAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel_00);
+        if (eDestAct != eSrcAct) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe5c);
+          exit(-1);
+        }
+
+        ptSpawnPos.x = nX;
+        ptSpawnPos.y = nY;
+        if (!(bIgnoreFindSpawnLocationMaybe || (pSpawnRoom = D2Common::Collision::GetFreeCoordinates_WithFieldCoords(pRoom, &ptSpawnPos, &ptSpawnPos, 3, 0x3e01, 0xc01, 0) , pSpawnRoom != 0))) {
+          return 0;
+        }
+
+        nPosX = ptSpawnPos.x;
+        nPosY = ptSpawnPos.y;
+        pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, ptSpawnPos.x, ptSpawnPos.y);
+        if (!pSpawnRoom) {
+          return 0;
+        }
+
+        pPortal = UNIT::SUnit::CreateUnit(UNIT_OBJECT, nClassId, nPosX, nPosY, pGame, pSpawnRoom, 1, 1, 0);
+        if (ppPortal) {
+          *ppPortal = pPortal;
+        }
+
+        D2Common::Units::ChangeAnimMode(pPortal, 1);
+        pPortal = LinkPortal(pGame, pUnit, pPortal, eLevel, eLevel_00);
         if (!pPortal) {
           return 0;
         }
@@ -2075,8 +2232,8 @@ void __fastcall SKILLS_NormalizeDirectionMin(int * pnDx, int * pnDy) {
 }
 
 void __fastcall SKILLS_NormalizeDirectionPerp(int * pnDx, int * pnDy) {
-    int nNegDx = -*pnDx;
     int nDy = *pnDy;
+    int nNegDx = -*pnDx;
     int nLenSq = nNegDx * nNegDx + nDy * nDy;
     while (nLenSq > 3) {
       nDy /= 2;
@@ -2382,7 +2539,7 @@ void __fastcall SKILLS_SpawnWeaponForHand(::SGAMEDATA * pGame, D2UnitStrc * pUni
                 exit(-1);
               }
 
-              ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGameLocal, pUnit, pCreatedItem->nUnitGUID, (eD2BodyLoc)eBodyLoc, 0, (uint32_t*)&pGameCopy);
+              ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGameLocal, pUnit, pCreatedItem->nUnitGUID, (eD2BodyLoc)eBodyLoc, 0, (BOOL*)&pGameCopy);
               return;
             }
           }
@@ -2692,12 +2849,12 @@ void __fastcall SKILLS_SetupBaalWaveParams(::SGAMEDATA * pGame, int32_t nUnitFin
     D2BaalWaveParamStrc sBaalWaveParam;
     memset(&sBaalWaveParam, 0, sizeof(sBaalWaveParam));
     sBaalWaveParam.nUnitFindFlags = nUnitFindFlags;
-    sBaalWaveParam.nY = nY;
     sBaalWaveParam.nX = nX;
-    sBaalWaveParam.eSkillId = eSkill;
+    sBaalWaveParam.nY = nY;
     sBaalWaveParam.pAttacker = pUnit;
-    sBaalWaveParam.fpFunction = pfnBaalWave;
+    sBaalWaveParam.eSkillId = eSkill;
     sBaalWaveParam.nSkillLevel = nSkillLevel;
+    sBaalWaveParam.fpFunction = pfnBaalWave;
     SKILLS_ForEachUnitBaalWave(pGame, &sBaalWaveParam);
 }
 
@@ -2752,7 +2909,7 @@ void __fastcall SKILLS_FreeSkillAndUpdatePassives(D2UnitStrc * pUnit, eD2Skills 
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
-uint32_t __fastcall SKILLS_IsSkillEquipped(D2UnitStrc * pUnit, eD2Skills eSkill) {
+BOOL __fastcall SKILLS_IsSkillEquipped(D2UnitStrc * pUnit, eD2Skills eSkill) {
     D2SkillStrc* pEquippedSkill = D2Common::Units::GetRightSkill(pUnit);
     if (pEquippedSkill) {
       eD2Skills eEquippedSkillId;
@@ -4628,8 +4785,8 @@ void __fastcall SKILL_StunExpireAndRestoreAi(D2UnitStrc * pUnit, eD2States eStat
     DefaultExpireFunction(pUnit, eState, pStatListEx);
 }
 
-D2UnitStrc * __fastcall SKILL_CreateTimedAuraStatList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, eD2States eState, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t dwCasterGUID;
+D2StatListStrc * __fastcall SKILL_CreateTimedAuraStatList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, eD2States eState, eD2Skills eSkill, int32_t nSkillLvl) {
+    uint32_t dwCasterGUID;
     eD2UnitType eCasterUnitType;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -4656,7 +4813,7 @@ D2UnitStrc * __fastcall SKILL_CreateTimedAuraStatList(::SGAMEDATA * pGame, D2Uni
     D2Common::DATATBLS::ItemStats::SetState(pTargetUnit, eState, 1);
     GAME::Event::SetEvent(pGame, pTargetUnit, 0xc, pGame->dwGameFrame + nAuraDuration, 0, 0);
     SkillDruid::D2SetAurastatsFromSkills(pUnit, pStatListEx, pSkillsTxt, eSkill, nSkillLvl);
-    return (D2UnitStrc*)pStatListEx;
+    return &pStatListEx->sStatList;
 }
 
 void __fastcall SKILLS_CallD2UpdateStateWithOne(uint16_t * wszText, eD2States pfnMenuInstance) {

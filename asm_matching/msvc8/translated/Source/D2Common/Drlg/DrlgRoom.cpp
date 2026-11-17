@@ -410,6 +410,12 @@ static int DRLGWARP_FindNthVisEntryForLevel(D2DrlgStrc * pDrlg, eD2LevelId eLeve
     return -1;
 }
 
+void Unreferenced_0066b010() {
+    D2PresetUnitStrc* pDVar1;
+    D2RoomExStrc* in_ECX;
+    for (pDVar1 = GetPresetUnits(in_ECX); pDVar1 && pDVar1->eType != UNIT_WARP; pDVar1 = pDVar1->pPresetUnitNext) {}
+}
+
 // Ensure both levels are allocated+initialized. For each matching visibility-slot pair between eLevel and eLevelTarget, find a room in each level with the corresponding warp flag bit (slot+4), init both rooms, and locate UNIT_WARP preset units. Repeats up to 8 pairs; returns if no matching vis slots.
 void __fastcall DRLGWARP_InitWarpConnectionsBetweenLevels(D2DrlgStrc * pDrlg, uint8_t nActNo, eD2LevelId eLevel, eD2LevelId eLevelTarget) {
     int* pVisArray;

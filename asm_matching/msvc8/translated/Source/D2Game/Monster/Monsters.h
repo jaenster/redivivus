@@ -74,7 +74,7 @@ namespace D2Game { namespace Monsters {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2MonLvlTxt * __fastcall GetMonLvlTxt(int32_t nMonLvlId);
 int Unreferenced_005a0030();
-struct D2MonUModTxt * __fastcall Unreferenced_005a0040(int param_1);
+struct D2MonUModTxt * __fastcall Unreferenced_005a0040(int nIndex);
 int Unreferenced_005a0060();
 uint32_t __fastcall MONSTER_CheckMonTypeHasFlag(struct D2UnitStrc * pUnit, int32_t nMonTypeFlag);
 int32_t __fastcall GetUmodConstant(int32_t nUmodId);
@@ -99,44 +99,45 @@ void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, struct D2Un
 void __fastcall MONSTER_CastAmplifyDamageOnHit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
 void __fastcall MONSTER_OnDeathScheduleDelayed(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
 // Server-side handler for a monster corpse explosion (Necromancer Corpse Explosion skill or similar). Spawns a MISSILE_Monstercorpseexplode at the corpse's position, scales damage from MonStats using difficulty-dependent CEDamagePercent (Normal -25%, Nightmare -33%, Hell -87.5% reduction), then applies AoE physical damage around the origin via DAMAGE_ApplyAreaOfEffectDamage.
-void __fastcall MONSTER_CorpseExplode(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUnused1, uint32_t nUnused2);
-void __fastcall MONSTER_CorpseExplodeFixed(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, uint32_t dwParam2);
+void __fastcall MONSTER_CorpseExplode(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUnused1, int32_t nUnused2);
+void __fastcall MONSTER_CorpseExplodeFixed(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, int32_t dwParam2);
 // Fires a Death Nova missile ring from a Shadow Warrior/Master minion when bShouldTrigger != 0. Selects the missile skill based on the owner's ShadowWarrior skill level (clamped to SKILL_Kick..SKILL_PoisonJavelin), then overrides to SKILL_Kick if the unit's life percentage exceeds 10%. Calls SKILLS_CreateMissileRing with missile id 0x5A at the calculated velocity.
 void __fastcall MONSTER_ShadowDeathNova(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
-// Server-side: emits the radial lightning-bolt nova fired by a lightning-enchanted unique monster (e.g. on death/trigger). When bShouldTrigger is set and at least 10 game frames have passed since the last burst (stored in the monster's data field), sets the monster's lightning-enchant flag bit, records the current game frame, computes skill level = unit level/2 (min 1), then builds a D2SkillArgStrc at the unit's position and spawns MISSILE_Lightunique charged bolts using SKILL_InitChargedBoltPath. Offsets are taken from the gnElementalDamageScale_LightningUnique / gnEnchantmentApplyScale_Lightning tables (4 directions x 2 bolts each). If <10 frames elapsed it instead clears the enchant flag bit and returns. No return value.
+// Server-side: emits the radial lightning-bolt nova fired by a lightning-enchanted unique monster when it is hit (row 17 column 2, run by timer event 7 that MONSTER_LightningEnchantedModeChange schedules on GetHit; also called directly by MONSTER_CastLightningUniqueBoltsIfNotGetHit). When bShouldTrigger is set and at least 10 game frames have passed since the last burst (stored in the monster's data field), sets the monster's lightning-enchant flag bit, records the current game frame, computes skill level = unit level/2 (min 1), then builds a D2SkillArgStrc at the unit's position and spawns MISSILE_Lightunique charged bolts using SKILL_InitChargedBoltPath. Offsets are taken from the gnElementalDamageScale_LightningUnique / gnEnchantmentApplyScale_Lightning tables (4 directions x 2 bolts each). If <10 frames elapsed it instead clears the enchant flag bit and returns. No return value.
 void __fastcall MONSTER_CastLightningUniqueBolts(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
 void __fastcall MONSTER_CastLightningUniqueBoltsIfNotGetHit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
 void __fastcall MONSTER_DeathMissileRing(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
-void __fastcall MONSTER_DeathPoisonCloud(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, uint32_t dwParam2);
-void __fastcall MONSTER_KillWithMinions(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t dwParam);
-void __fastcall MONSTER_OnDeathKillOwnerAndMinions(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
-void __fastcall UMOD_AddBaseDamageBonus(uint32_t dwUnused1, struct D2UnitStrc * pUnit, uint32_t dwUnused2, uint32_t dwUnused3);
-void __fastcall MONSTER_ScaleMissileDamageByOwner(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
+void __fastcall MONSTER_DeathPoisonCloud(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, int32_t dwParam2);
+void __fastcall MONSTER_KillWithMinions(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, void * dwParam);
+// Passes MONSTER_KillWithMinions by address.
+void __fastcall MONSTER_OnDeathKillOwnerAndMinions(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2);
+void __fastcall UMOD_AddBaseDamageBonus(::SGAMEDATA * dwUnused1, struct D2UnitStrc * pUnit, uint32_t dwUnused2, int32_t dwUnused3);
+void __fastcall MONSTER_ScaleMissileDamageByOwner(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2);
 // Spawns the Burning Dead Archer / Afflicted bug-lightning death-bolt salvo on unit death. Fires 4 directional pairs (8 total) of MISSILE_Buglightning using offsets from gaMissileOffsets_BugLightningX/Y, with SKILL_InitChargedBoltPath as the init callback. Level is taken from UNITSTAT_level; dwUnused1/dwUnused2 are ignored (death-event signature padding).
-void __fastcall MONSTER_BugLightningDeathBolts(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
+void __fastcall MONSTER_BugLightningDeathBolts(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2);
 void __fastcall UMOD_SetRandomElementalDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
 void __fastcall UMOD_SetRandomElementalForMissile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
 // Server-side tick handler: when bShouldTrigger is set, rolls the unit's seed for a chance (>29/100) to find a player target, picks the first occupied belt slot, clones the item via serialized data, finds a drop spot near the owner, drops the clone, then consumes and removes the original belt item and re-sorts the belt column.
 void __fastcall MONSTER_StealPotionFromBelt(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
 // Routes a monster's death event to its boss-specific handler based on nClassId. Handles Bloodraven (ranged special), Radament (ring attack), Mephisto (death missile), Izual (melee skill), Andariel (ranged short), Overseer (ranged normal), Uber Mephisto/Baal/Diablo (loot drop check), and no-op uber variants. Only triggers the handler if the unit is actually in Death anim mode (except Overseer/Uber which check null too).
-void __fastcall MONSTER_DispatchSpecialDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
+void __fastcall MONSTER_DispatchSpecialDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2);
 // Death handler for the Andariel Queen Bee / Spider Queen: spawns MISSILE_Queenpoisoncloud in four cardinal directions (±X, ±Y) from the unit's position. Each direction fires 2 missiles via CreatingMissile with SKILL_InitChargedBoltPath as the path function and the unit's level as the toHit value. Called as a fastcall death callback with pGame and pUnit.
-void __fastcall MONSTER_QueenPoisonCloudDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
+void __fastcall MONSTER_QueenPoisonCloudDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2);
 // Server-side missile hit handler that splits an Aura-Enchanted monster's missile into two diverging copies on impact. Validates the missile has the split flag set (flags2 & 0x10) and the owner is not aura-enchanted (type 0x80). Computes perpendicular offset directions from owner to target, spawns two child missiles via CreatingAMissile, and temporarily sets/clears the owner's 0x80 monster-type bit to prevent recursion.
 void __fastcall MONSTER_MissileSplitOnHit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t nTargetX);
 void __fastcall MONSTER_LightningEnchantedModeChange(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
 void __fastcall MONSTER_ScheduleDeathEvent(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nEventId, int32_t bShouldTrigger);
-void __fastcall MONSTER_OnDeathTryScheduleRevive(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
+void __fastcall MONSTER_OnDeathTryScheduleRevive(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2);
 // AI callback that resurrects a monster that has just died via SKILL_SelfResurrect. Validates that the monster is dead, lacks a passive-state lock, is not a quest-flagged boss, is not Champion-aligned, and that its current tile is unblocked; if all checks pass, casts self-resurrection, clears the NOXP/NOTC flags, increments AI argument 1, and schedules the next think event.
-void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
+void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2);
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 35. On death (or no unit) sets STATE_shatter.
 void __fastcall MONSTER_ShatterOnDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUModId, int32_t nParam2);
-void __fastcall MONSTER_HandleMinionDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
+void __fastcall MONSTER_HandleMinionDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2);
 // Initialises level and attack-rating stats for a monster unit spawned via a UMOD (unit-modifier) entry. Derives monster level from the room's level record and the game difficulty/expansion flags stored in the pUModEntry struct, clamped to minimum 1. Sets UNITSTAT_level and UNITSTAT_tohit (capped at 90). For specific monster class IDs 0x146-0x171 (elemental enchanted types), also adds elemental damage stats (fire, lightning, poison) scaled from the computed level. Halts with an internal error if pUnit is not a monster.
-void __fastcall UMOD_SetLevelAndAttackRating(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
+void __fastcall UMOD_SetLevelAndAttackRating(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2);
 // Server-side monster skill handler that deals physical AoE damage centered on the casting monster. Reads El1MinD/El1MaxD from MonStatsTxt for the damage range, rolls a random value using the unit's RNG seed, scales by unit level and a difficulty-dependent multiplier from MonStatsTxt, then calls DAMAGE_ApplyAreaOfEffectDamage with zero magic damage flags. dwUnused1/dwUnused2 are not consumed.
-void __fastcall MONSTER_AoEPhysicalDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
-void __fastcall MONSTER_HandleModeTransition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
+void __fastcall MONSTER_AoEPhysicalDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2);
+void __fastcall MONSTER_HandleModeTransition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2);
 // Trigger suicide monster explosion. Loads MonStats treasure class, rolls damage, chooses missile based on TC result (fire/corpse/ice), spawns missile at unit location and applies area damage.
 void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUnused1, uint32_t nUnused2);
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 40. On death (or no unit) spawns monster 0x227 and sets STATE_corpse_nodraw.

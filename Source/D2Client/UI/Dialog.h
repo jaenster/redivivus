@@ -145,7 +145,7 @@ void __fastcall DIALOG_SetSelectedLine(struct D2DialogStrc * pDialog, int32_t nS
 void __fastcall DIALOG_SetHighlightStyle(struct D2DialogStrc * pDialog, int32_t nStyle);
 void __fastcall DIALOG_RecalculateLayout(struct D2DialogStrc * pDialog);
 int32_t __fastcall DIALOG_GetSelectedIndex(struct D2DialogStrc * pDialog);
-struct D2DialogStringData * __fastcall Unreferenced_004b8590(struct D2DialogStrc * param_1, int param_2);
+struct D2DialogStringData * __fastcall Unreferenced_004b8590(struct D2DialogStrc * pDialog, int nIndex);
 void __fastcall Unreferenced_004b85b0(struct D2DialogStrc * pDialog, RECT * pRect);
 int __stdcall GetDialogCounter();
 void __fastcall AddStringData(struct D2DialogStrc * pDialog, uint16_t * szString, uint32_t nYPos, uint32_t nColor, int32_t nLineType, uint32_t nFont, fpDialogFunc pfnOnClick, int32_t nCallbackParam);

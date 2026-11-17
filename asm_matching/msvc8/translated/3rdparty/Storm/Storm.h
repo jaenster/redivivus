@@ -868,6 +868,10 @@ void __stdcall SBigMul(struct BigData * pResult, struct BigData * pBigA, struct 
 // @oracle Mac PPC 1.10b Storm -- PPC SBigPowMod -> 100994b0, single bl .PowMod__FR9BigBufferRC9BigBufferRC9BigBufferRC9BigBufferR8BigStackR (5 args -> 4-arg C API). 1.14d: 4-arg forwarder onto BigBuffer_PowMod 00425150, whose callee set {SetOne, MulMod, Square, Div} matches .PowMod's {SetOne, Mul, Div, Square}.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 void __stdcall SBigPowMod(struct BigData * pResult, struct BigData * pBase, struct BigData * pExponent, struct BigData * pModulus);
+// @renamed-from SBIG_MillerRabinTestWrapper (2026-08-28, Storm PowerPC oracle pass 4)
+// @oracle Mac PPC 1.10b Storm -- PPC SBigIsPrime -> 100999e0, single bl .IsPrime__FRC9BigBufferR8BigStack (2 args -> 1-arg C API). 1.14d: 1-arg forwarder onto BigBuffer_IsPrime 00425350.
+// @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
+void __stdcall SBigIsPrime(struct BigData * pBigNum);
 }}} // namespace Storm::Source::SBig
 namespace Storm { namespace Source { namespace SBMP {
 // Decodes an image already held in memory. With nFormat 0 it sniffs the first two bytes via SBMP_DetectFormat, then dispatches to SBMP_LoadBMPFromMemory / SBMP_LoadGIFFromMemory / SBMP_LoadFromMemory (TGA).

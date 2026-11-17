@@ -452,7 +452,7 @@ uint32_t __fastcall SOUNDSMP_GetStreamProgress(D2SoundSmpStrc * pSound) {
     return 0;
 }
 
-void __fastcall SOUNDSMP_SetFrequency(D2SoundSmpStrc * pSound, int bLoop) {
+void __fastcall SOUNDSMP_SetFrequency(D2SoundSmpStrc * pSound, BOOL bLoop) {
     if (!pSound) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x32f);
       exit(-1);
@@ -461,13 +461,13 @@ void __fastcall SOUNDSMP_SetFrequency(D2SoundSmpStrc * pSound, int bLoop) {
     pSound->bLooping = bLoop;
 }
 
-void __fastcall SOUNDSMP_SetMinDistance(D2SoundSmpStrc * pSound, uint32_t dwParam) {
+void __fastcall SOUNDSMP_SetMinDistance(D2SoundSmpStrc * pSound, uint32_t nMinBufSize) {
     if (!pSound) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x33a);
       exit(-1);
     }
 
-    pSound->nMinBufSize = dwParam;
+    pSound->nMinBufSize = nMinBufSize;
 }
 
 void __fastcall SOUNDSMP_SetEaxObstruction(D2SoundSmpStrc * pSoundSmp, float fObstruction) {

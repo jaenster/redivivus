@@ -667,6 +667,22 @@
       ]
     },
     {
+      "name": "Unreferenced_0052a5f0",
+      "address": "0052a5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a5f0"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "Unreferenced_0052a5f0",
+        "SBigIsPrime"
+      ],
+      "dh": "3fbf7295"
+    },
+    {
       "name": "SHA1_BigIntFree",
       "address": "0052a600",
       "lines": [

@@ -799,7 +799,7 @@ struct __attribute__((packed)) D2ModeChangeStrc {
 #define D2_DEFINED_D2MonModeTableRowStrc
 struct D2MonModeTableRowStrc {
     /* 0x00 */ BOOL (__fastcall *pfnStart)(::SGAMEDATA *, struct D2ModeChangeStrc *);
-    /* 0x04 */ BOOL (__fastcall *pfnUpdate)(::SGAMEDATA *, struct D2ModeChangeStrc *);
+    /* 0x04 */ BOOL (__fastcall *pfnUpdate)(::SGAMEDATA *, struct D2UnitStrc *);
     /* 0x08 */ void (__fastcall *pfnEnd)(::SGAMEDATA *, struct D2UnitStrc *);
     /* 0x0C */ BOOL bScheduleEvents;
 };

@@ -739,7 +739,7 @@ void __fastcall D2MEM_CopyRows(char * pCharSelComp, uint8_t * pSrc, int32_t nDst
     } while (nRows);
 }
 
-uint32_t __fastcall D2MEM_CompareBytes(uint8_t * pBuf1, uint8_t * pBuf2, uint32_t nByteCount) {
+BOOL __fastcall D2MEM_CompareBytes(uint8_t * pBuf1, uint8_t * pBuf2, uint32_t nByteCount) {
     uint32_t nRemainder = nByteCount & 3;
     if (nRemainder) {
       switch (nRemainder) {

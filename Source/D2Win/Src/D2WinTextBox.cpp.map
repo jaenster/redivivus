@@ -315,7 +315,7 @@
         "D2WinTextBoxLineStrc",
         "int32_t"
       ],
-      "dh": "ed627650",
+      "dh": "a1b210eb",
       "paramStorage": [
         [
           "pTextBox",
@@ -631,7 +631,7 @@
         "D2WinTextBoxLineStrc",
         "int32_t"
       ],
-      "dh": "e5849acd",
+      "dh": "0a64525a",
       "paramStorage": [
         [
           "pTextBox",

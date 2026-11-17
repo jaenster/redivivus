@@ -212,11 +212,11 @@
     },
     {
       "name": "DRLGLEVEL_AllocOrthForAdjacentLevel",
-      "address": "00677647",
+      "address": "00677640",
       "lines": [
         {
           "line": 1,
-          "address": "00677647"
+          "address": "00677640"
         }
       ],
       "namespace": "D2Common::Drlg::OutPlace",
@@ -233,12 +233,8 @@
         "eD2LevelId",
         "eDrlgDirection"
       ],
-      "dh": "45f86964",
+      "dh": "2a4014e1",
       "paramStorage": [
-        [
-          "pDrlg",
-          "ECX:4"
-        ],
         [
           "pLevelData",
           "EDI:4"
@@ -291,6 +287,58 @@
       ]
     },
     {
+      "name": "DRLGActMisc_InitAct1",
+      "address": "00677750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00677750"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGActMisc_InitAct1",
+        "DRLGLEVEL_ParseLevelData",
+        "DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc"
+      ],
+      "dh": "e93da728",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRLGActMisc_InitAct2",
+      "address": "00677790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00677790"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGActMisc_InitAct2",
+        "DRLGLEVEL_ParseLevelData",
+        "DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc"
+      ],
+      "dh": "6b50b953",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
       "name": "DRLGOUTPLACE_CalcSubLevelPlacement",
       "address": "006777d0",
       "lines": [
@@ -330,6 +378,21 @@
           "Stack[0x8]:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_00677870",
+      "address": "00677870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00677870"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "Unreferenced_00677870"
+      ],
+      "dh": "0f2b38ea"
     },
     {
       "name": "DRLGLEVEL_FixDrlgLevelForSpiderForest",
@@ -434,6 +497,60 @@
       ]
     },
     {
+      "name": "DRLGActMisc_InitAct4",
+      "address": "00678a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678a20"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGActMisc_InitAct4",
+        "DRLGLEVEL_ParseLevelData",
+        "GetLevelAndAlloc",
+        "DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc"
+      ],
+      "dh": "5f92f834",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRLGActMisc_InitAct5",
+      "address": "00678a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678a70"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGActMisc_InitAct5",
+        "DRLGLEVEL_ParseLevelData",
+        "DRLGACT_SetWarpConnectionsBetweenTwoAreas",
+        "DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc"
+      ],
+      "dh": "5978ae55",
+      "paramStorage": [
+        [
+          "pDrlg",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
       "name": "DRLGACTMISC_AllocDrlgLevelForAct",
       "address": "00678ad0",
       "lines": [
@@ -456,7 +573,7 @@
         "D2DrlgStrc",
         "eAct"
       ],
-      "dh": "e00d5549",
+      "dh": "7749229c",
       "paramStorage": [
         [
           "pDrlg",

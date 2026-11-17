@@ -351,6 +351,21 @@
       ]
     },
     {
+      "name": "Unreferenced_004e5a10",
+      "address": "004e5a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e5a10"
+        }
+      ],
+      "namespace": "D2Client::UI::SkillDesc",
+      "calledFunctions": [
+        "Unreferenced_004e5a10"
+      ],
+      "dh": "dee649d0"
+    },
+    {
       "name": "SKILLDESC_BuildStatDescription",
       "address": "004e5a20",
       "lines": [

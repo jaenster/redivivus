@@ -1619,10 +1619,34 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "a4badbdc",
+      "dh": "ed9772a6",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_004167b0",
+      "address": "004167b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004167b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_004167b0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "3e0847d9",
+      "paramStorage": [
+        [
+          "pNode",
           "ECX:4"
         ]
       ]
@@ -1643,13 +1667,28 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "3a48b276",
+      "dh": "18746013",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
           "ECX:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_00416800",
+      "address": "00416800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416800"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00416800"
+      ],
+      "dh": "7ebed781"
     },
     {
       "name": "Unreferenced_00416820",
@@ -1667,13 +1706,52 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "baeecc61",
+      "dh": "a6fff5d6",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
           "ECX:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_00416830",
+      "address": "00416830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416830"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00416830"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "a148d406",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00416840",
+      "address": "00416840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416840"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00416840"
+      ],
+      "dh": "506a1178"
     },
     {
       "name": "Unreferenced_00416850",
@@ -1691,13 +1769,31 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "449083ce",
+      "dh": "de1dcfaf",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
           "ECX:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_00416860",
+      "address": "00416860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416860"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00416860"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "b7d61f4b"
     },
     {
       "name": "SFILE_CompareFileTime2",
@@ -1860,10 +1956,10 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "b9e3e57d",
+      "dh": "7308c44b",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -1884,10 +1980,10 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "42d679e8",
+      "dh": "032c9996",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -1909,10 +2005,10 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "1b84cbd3",
+      "dh": "9ff51476",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -1934,10 +2030,10 @@
         "StormLinkedListStrc",
         "intptr_t"
       ],
-      "dh": "049e5590",
+      "dh": "9b66d358",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -1958,10 +2054,10 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "b31cbee9",
+      "dh": "aaf4c834",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -2181,6 +2277,96 @@
       ]
     },
     {
+      "name": "Unreferenced_00417770",
+      "address": "00417770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417770"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00417770"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "a73f9548",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00417780",
+      "address": "00417780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417780"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00417780"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "fe94deb2",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00417790",
+      "address": "00417790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417790"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00417790"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "3520e68d",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_004177a0",
+      "address": "004177a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004177a0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_004177a0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "a4eafba9"
+    },
+    {
       "name": "Unreferenced_00417850",
       "address": "00417850",
       "lines": [
@@ -2196,10 +2382,34 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "00df4d0c",
+      "dh": "105cea34",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_00417860",
+      "address": "00417860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417860"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_00417860"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "18c99e87",
+      "paramStorage": [
+        [
+          "pNode",
           "ECX:4"
         ]
       ]
@@ -2220,10 +2430,58 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "3b7e5cce",
+      "dh": "678180a1",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_004178b0",
+      "address": "004178b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004178b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_004178b0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "7c26353b",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_004178c0",
+      "address": "004178c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004178c0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_004178c0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "c0076859",
+      "paramStorage": [
+        [
+          "pNode",
           "ECX:4"
         ]
       ]
@@ -2269,10 +2527,34 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "076005d4",
+      "dh": "f4716942",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_00417950",
+      "address": "00417950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417950"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_00417950"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "17ac1028",
+      "paramStorage": [
+        [
+          "pNode",
           "ECX:4"
         ]
       ]
@@ -2293,10 +2575,58 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "bdebc6d5",
+      "dh": "b816f807",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_004179a0",
+      "address": "004179a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004179a0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_004179a0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "65e0b1c8",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_004179b0",
+      "address": "004179b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004179b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_004179b0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "55ac33d3",
+      "paramStorage": [
+        [
+          "pNode",
           "ECX:4"
         ]
       ]
@@ -2425,6 +2755,30 @@
         [
           "pLink",
           "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00417b40",
+      "address": "00417b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417b40"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00417b40"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
+      ],
+      "dh": "2feaa7db",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
         ]
       ]
     },
@@ -2597,6 +2951,30 @@
       ]
     },
     {
+      "name": "Unreferenced_00417d40",
+      "address": "00417d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417d40"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00417d40"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
+      ],
+      "dh": "938d6d3a",
+      "paramStorage": [
+        [
+          "pListHead",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
       "name": "SFILE_FreeFileRecord4",
       "address": "00417d60",
       "lines": [
@@ -2691,6 +3069,30 @@
         [
           "pLink",
           "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_00417e50",
+      "address": "00417e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417e50"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_00417e50"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "082723b7",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
         ]
       ]
     },
@@ -2991,10 +3393,34 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "6f3e1c53",
+      "dh": "1bc9fe5b",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00418490",
+      "address": "00418490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418490"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00418490"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
+      ],
+      "dh": "79247d18",
+      "paramStorage": [
+        [
+          "pList",
           "ECX:4"
         ]
       ]
@@ -3086,10 +3512,10 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "7bc74dca",
+      "dh": "efba8f68",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -3274,6 +3700,54 @@
         [
           "pNode",
           "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00418770",
+      "address": "00418770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418770"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00418770"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "03f52a8c",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_00418780",
+      "address": "00418780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418780"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_00418780"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "dfb78efe",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
         ]
       ]
     },
@@ -3535,10 +4009,10 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "124c8163",
+      "dh": "6a2c588e",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
           "ECX:4"
         ]
       ]
@@ -3847,10 +4321,10 @@
       "usedTypes": [
         "StormLinkedListStrc"
       ],
-      "dh": "a6b9da30",
+      "dh": "d28a7eb5",
       "paramStorage": [
         [
-          "param_1",
+          "pList",
           "ECX:4"
         ]
       ]
@@ -3899,10 +4373,82 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "6f050e97",
+      "dh": "44ad39cf",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00418df0",
+      "address": "00418df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418df0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00418df0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "1c1d4906",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00418e00",
+      "address": "00418e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418e00"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00418e00"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "2b920585",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_00418e10",
+      "address": "00418e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418e10"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_00418e10"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "ca8ce705",
+      "paramStorage": [
+        [
+          "pNode",
           "ECX:4"
         ]
       ]
@@ -3923,13 +4469,28 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "28331e16",
+      "dh": "a2099ee6",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
           "ECX:4"
         ]
       ]
+    },
+    {
+      "name": "Unreferenced_00418e60",
+      "address": "00418e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418e60"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00418e60"
+      ],
+      "dh": "e8ab7105"
     },
     {
       "name": "SFILE_DestroyFileRecord",
@@ -4097,10 +4658,10 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "2dd9d406",
+      "dh": "7eb5e74d",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
           "ECX:4"
         ]
       ]
@@ -4152,10 +4713,10 @@
       "usedTypes": [
         "StormLinkStrc"
       ],
-      "dh": "f43eddc8",
+      "dh": "ab04b6e9",
       "paramStorage": [
         [
-          "param_1",
+          "pLink",
           "ECX:4"
         ]
       ]
@@ -5045,14 +5606,14 @@
         "Unreferenced_0041a8d0",
         "SFILE_CreateCdThread"
       ],
-      "dh": "affcaf6c",
+      "dh": "f8a04cd6",
       "paramStorage": [
         [
-          "param_1",
+          "pThreadId",
           "ECX:4"
         ],
         [
-          "param_2",
+          "pThreadHandle",
           "EDX:4"
         ]
       ]

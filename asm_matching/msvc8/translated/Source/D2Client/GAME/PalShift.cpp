@@ -318,12 +318,12 @@ D2GamePalShiftRandTransformStrc * * __fastcall PALSHIFT_GetMonsterTransform(D2Un
       if (nBloodFlag) {
         pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
         if (pMonStats2 && pMonStats2->byLocalBlood == 2) {
-          return (D2GamePalShiftRandTransformStrc**)(pPalShiftEntryPtr->aPalShifts + ((nPalShiftIndex << 8) + 0x800));
+          return (D2GamePalShiftRandTransformStrc**)(pPalShiftEntryPtr->aPalShifts + (nPalShiftIndex * 0x100 + 0x800));
         }
       }
     }
 
-    return (D2GamePalShiftRandTransformStrc**)(pPalShiftEntryPtr->aPalShifts + (nPalShiftIndex << 8));
+    return (D2GamePalShiftRandTransformStrc**)(pPalShiftEntryPtr->aPalShifts + nPalShiftIndex * 0x100);
 }
 
 // GetClassId as its callers inlined it: two returns, the value in a register of its own.

@@ -610,7 +610,7 @@ static void OBJECT_UpdateAnimation(D2UnitStrc * pUnit) {
           return;
         }
 
-        pUnit->nGfxCurrentFrame = (uint32_t)pTxtLine->Start[eAnimMode] * 0x100 - nFrameCnt + pUnit->nGfxCurrentFrame;
+        pUnit->nGfxCurrentFrame = ((uint32_t)pTxtLine->Start[eAnimMode] << 8) - nFrameCnt + pUnit->nGfxCurrentFrame;
       }
     }
 }

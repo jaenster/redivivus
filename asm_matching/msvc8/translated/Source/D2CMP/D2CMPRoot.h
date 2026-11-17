@@ -31,8 +31,8 @@ uint32_t __stdcall TILEPROJECT_GetMainIndex(struct D2TileLibraryEntryStrc * pCom
 char * __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(struct D2TileLibraryEntryStrc * pComp24);
 void __stdcall D2CMP_MinDouble(double fParam1, double fParam2);
 void __stdcall D2CMP_MaxDouble(double fParam1, double fParam2);
-int32_t __fastcall SUBTILE_CountRunLength(char * pDataStart, char * pDataEnd, int32_t nMaxRunLength, uint32_t * pIsAtEndFlag, uint32_t * pIsExactMatchFlag);
-int32_t __fastcall SUBTILE_CountRunLengthForByte(char * pCur, char * pEnd, char cSkipByte, int32_t nMaxRunLen, uint32_t * pbAtEnd, uint32_t * pbExactMatch);
+int32_t __fastcall SUBTILE_CountRunLength(char * pDataStart, char * pDataEnd, int32_t nMaxRunLength, BOOL * pIsAtEndFlag, uint32_t * pIsExactMatchFlag);
+int32_t __fastcall SUBTILE_CountRunLengthForByte(char * pCur, char * pEnd, char cSkipByte, int32_t nMaxRunLen, BOOL * pbAtEnd, uint32_t * pbExactMatch);
 #endif // D2_MODULE_D2CMP
 
 } // namespace D2CMP

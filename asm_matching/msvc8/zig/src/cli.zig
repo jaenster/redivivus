@@ -3,6 +3,7 @@
 //! (`--ex` for `--examples`), short options (`-j 4`, `-j4`), and positionals in between.
 //! Also where the oracle lives when no `--root` names it, and stdout as Python prints it.
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
 const util = @import("util.zig");
 const proc = @import("proc.zig");
@@ -147,6 +148,7 @@ pub fn root(given: ?[]const u8) ![]const u8 {
 }
 
 fn absolute(p: []const u8) ![]const u8 {
+    if (builtin.os.tag == .windows) return proc.realpath(p);
     if (p.len > 0 and p[0] == '/') return proc.normpath(p);
     var buf: [4096]u8 = undefined;
     const cwd = std.mem.sliceTo(c.getcwd(&buf, buf.len) orelse return error.Cwd, 0);
@@ -169,7 +171,7 @@ pub fn exitMsg(comptime fmt: []const u8, args: anytype) noreturn {
 pub fn sayErr(s: []const u8) void {
     var p = s;
     while (p.len > 0) {
-        const n = c.write(2, p.ptr, p.len);
+        const n = c.write(2, p.ptr, @intCast(@min(p.len, 0x7fff_ffff)));
         if (n <= 0) return;
         p = p[@intCast(n)..];
     }

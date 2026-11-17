@@ -277,8 +277,8 @@ void __thiscall GAMEDATA_TimerInitWithTickCount(uint32_t * pTimerStruct, uint32_
     pTimerStruct[1] = dwDurationMs;
 }
 
-int __fastcall Unreferenced_0044be10(int * param_1) {
-    return param_1[1] + *param_1;
+int __fastcall Unreferenced_0044be10(int * pPair) {
+    return pPair[1] + *pPair;
 }
 
 void __fastcall GAMEDATA_SetByteInUshort(uint16_t * pWord, uint8_t byteValue) {
@@ -3044,6 +3044,19 @@ void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00603510(StormLinkedLis
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
     pListHead->head.pNext = ~(uintptr_t)pSVar1;
+}
+
+void Unreferenced_00603570() {
+    int in_ECX;
+    *(uint32_t*)(in_ECX + 4) = 0;
+    *(uint32_t*)(in_ECX + 8) = 0;
+    *(uint32_t*)(in_ECX + 0xc) = 0;
+    *(uint32_t*)(in_ECX + 0x10) = 0;
+    uint32_t uVar1 = in_ECX + 0x30;
+    *(uint32_t*)(in_ECX + 0x34) = 0;
+    *(uint32_t*)uVar1 = uVar1;
+    *(uint32_t*)(in_ECX + 0x2c) = 0;
+    *(uint32_t*)(in_ECX + 0x34) = ~uVar1;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0060e610(StormLinkedListStrc * pListHead) {

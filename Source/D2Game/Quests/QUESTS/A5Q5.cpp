@@ -1046,7 +1046,7 @@ BOOL __fastcall Q35_IsAncientsActive(::SGAMEDATA * pGame) {
 }
 
 // [A5Q5 = Rite of Passage] Q35_AreAncientsReadyToFight: returns 1 if Ancients were spawned but none remain alive (i.e. all defeated). No quest-state writes.
-uint32_t __fastcall Q35_AreAncientsReadyToFight(::SGAMEDATA * pGame) {
+BOOL __fastcall Q35_AreAncientsReadyToFight(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RiteOfPassage);
     if (pQuestData && pQuestData->pQuestSpecificData.pA5Q5->bAncientsSpawned && !pQuestData->pQuestSpecificData.pA5Q5->nAncientsAlive) {
       return 1;

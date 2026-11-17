@@ -102,7 +102,7 @@
         "BnMessQueue",
         "int32_t"
       ],
-      "dh": "e2d4f7df",
+      "dh": "8ab2c973",
       "paramStorage": [
         [
           "nEventType",
@@ -179,7 +179,7 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2cbf6f5f",
+      "dh": "90cf001b",
       "paramStorage": [
         [
           "nState",
@@ -229,7 +229,10 @@
       "calledFunctions": [
         "SID_SetStateFlag1"
       ],
-      "dh": "a1d7190f",
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "fbd1ff06",
       "paramStorage": [
         [
           "nState",

@@ -109,6 +109,21 @@
       "dh": "722bf46e"
     },
     {
+      "name": "Unreferenced_004c0ce0",
+      "address": "004c0ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c0ce0"
+        }
+      ],
+      "namespace": "D2Client::UI::ShowItems",
+      "calledFunctions": [
+        "Unreferenced_004c0ce0"
+      ],
+      "dh": "70cfdc59"
+    },
+    {
       "name": "StaticInit_gaGroundItemLabels",
       "address": "006cadb0",
       "lines": [
