@@ -2139,23 +2139,6 @@ int32_t __fastcall ITEMMODE_CheckItemRequirements(D2UnitStrc * pUnit, D2UnitStrc
     return bMeetsEquipReqs;
 }
 
-#if 0 // ratchet: the match body of 0055db80 (evidence 1985bb0f9) could not be re-spelled: parameter param_1 is pUnit now, a name the stored body declares for a local
-D2ClientStrc * __fastcall Unreferenced_0055db80(D2UnitStrc * param_1) {
-    D2ClientStrc* pDVar1;
-    if (param_1 && param_1->eUnitType == UNIT_PLAYER) {
-      pDVar1 = UNIT::SUnit::SUNIT_GetClient(param_1, ".\\ITEMS\\ItemMode.cpp", 0xa44);
-      return pDVar1;
-    }
-
-    D2UnitStrc* pUnit = Ai::AiGeneral::GetOwnerUnit(param_1);
-    if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
-      pDVar1 = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0xa49);
-      return pDVar1;
-    }
-
-    return nullptr;
-}
-#endif
 D2ClientStrc * __fastcall Unreferenced_0055db80(D2UnitStrc * pUnit) {
     D2ClientStrc* pDVar1;
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
@@ -3965,31 +3948,6 @@ void __fastcall ITEMMODE_RechargeItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     }
 }
 
-#if 0 // ratchet: the match body of 0055ffa0 (evidence 5b183fa9f) could not be re-spelled: callee ITEM_InsertScrollIntoBook parameter pbBadParams retyped: uint32_t * -> BOOL *
-static BOOL ITEMMODE_ValidateInventorySlot(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pScrollItem) {
-    int32_t bInserted;
-    BOOL BVar1;
-    int32_t nInsertResult;
-    if (!pGame) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x610);
-      exit(-1);
-    }
-
-    D2UnitStrc* pMatchingBook = D2Common::INVENTORY::Inventory::INVENTORY_FindMatchingScrollBook(pUnit->pInventory, pScrollItem, nullptr);
-    if (pMatchingBook) {
-      if (!pScrollItem) {
-        bInserted = ITEM_InsertScrollIntoBook(pGame, pUnit, -1, pMatchingBook->nUnitGUID, (uint32_t*)&nInsertResult);
-        return bInserted;
-      }
-
-      int t2_c2 = pScrollItem->nUnitGUID;
-      BVar1 = ITEM_InsertScrollIntoBook(pGame, pUnit, t2_c2, pMatchingBook->nUnitGUID, (uint32_t*)&nInsertResult);
-      return BVar1;
-    }
-
-    return 0;
-}
-#endif
 static BOOL ITEMMODE_ValidateInventorySlot(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pScrollItem) {
     int32_t bInserted;
     BOOL BVar1;

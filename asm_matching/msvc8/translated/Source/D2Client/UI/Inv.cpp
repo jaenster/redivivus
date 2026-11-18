@@ -4938,16 +4938,6 @@ void __stdcall INV_StashOpened() {
     g_nCurrentInventoryPage = 0xc;
 }
 
-#if 0 // ratchet: the match body of 004898a0 (evidence 1985bb0f9) could not be re-spelled: arity changed: 0 -> 1 parameters
-void __stdcall INV_StashOpenedWithGold() {
-    gbInvGoldDialogOpen = 1;
-    if (g_nCurrentInventoryPage == 0xd) {
-      g_nCurrentInventoryPage = 0xc;
-    }
-
-    ui::SetUIFlag(UI_CHATBOX, UI_RESET, 0);
-}
-#endif
 void __fastcall INV_StashOpenedWithGold(int nTransactionType) {
     gbInvGoldDialogOpen = 1;
     if (g_nCurrentInventoryPage == 0xd) {

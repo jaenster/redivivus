@@ -144,7 +144,6 @@ void __fastcall DRLGROOMTILE_CountAnimTilesFromGrid(D2RoomExStrc * pRoomEx, D2Dr
 
 static void AnimateTile(D2RoomExStrc * pRoomEx) {
     D2DrlgAnimTileGridStrc* pAnimTile;
-    int* dwTmp;
     if (!(pRoomEx->eRoomExFlags & 0x8000000U && pRoomEx->pRoomTiles)) {
       return;
     }
@@ -153,16 +152,14 @@ static void AnimateTile(D2RoomExStrc * pRoomEx) {
       int nFrameIndex;
       nFrameIndex = pAnimTile->nCurrentFrame >> 8;
       if (pAnimTile->ppTileData[nFrameIndex]) {
-        dwTmp = &pAnimTile->ppTileData[nFrameIndex]->nFlags;
-        *dwTmp |= 8;
+        pAnimTile->ppTileData[nFrameIndex]->nFlags |= 8;
       }
 
       nFrameIndex = (pAnimTile->nFrameStep + pAnimTile->nCurrentFrame) % (pAnimTile->nFrames << 8);
       pAnimTile->nCurrentFrame = nFrameIndex;
       nFrameIndex >>= 8;
       if (pAnimTile->ppTileData[nFrameIndex]) {
-        dwTmp = &pAnimTile->ppTileData[nFrameIndex]->nFlags;
-        *dwTmp &= -9;
+        pAnimTile->ppTileData[nFrameIndex]->nFlags &= -9;
       }
     }
 }

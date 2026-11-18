@@ -137,7 +137,6 @@ static void __stdcall CUBE_ParseInputItem(char * pszField, D2CubeInputStrc * pIn
     char* pszNextFlagsToken;
     char cCur;
     uint32_t nPszNextFlagsToken;
-    uint32_t nPszNextFlagsToken2;
     if (*pszField == '\"') {
       pszField++;
     }
@@ -183,8 +182,8 @@ static void __stdcall CUBE_ParseInputItem(char * pszField, D2CubeInputStrc * pIn
       }
     }
     if ((uint32_t)(int)strlen(pszField) <= 4) {
-      CUBE_PadItemCodeString(pszField, (char*)&nPszNextFlagsToken2);
-      nClassId = Fog::Src::Excel::GetClassIdFromName(DATATBLS::MonsterTbls::sgtDataTable.pTxtItemTypesLink, nPszNextFlagsToken2, 0);
+      CUBE_PadItemCodeString(pszField, (char*)&nPszNextFlagsToken);
+      nClassId = Fog::Src::Excel::GetClassIdFromName(DATATBLS::MonsterTbls::sgtDataTable.pTxtItemTypesLink, nPszNextFlagsToken, 0);
       if (nClassId >= 0) {
         pInput->wFlagsAndUpgrade |= 2;
         pInput->nItemClassId = (uint16_t)nClassId;

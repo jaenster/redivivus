@@ -36,8 +36,7 @@ static D2SLogStrc * __stdcall SLOG_LockLog(uint32_t * pnSlotOut, int32_t bAlloca
     }
 
     uint32_t nSlot = nHandle & 3;
-    LPCRITICAL_SECTION lpCriticalSection = gaSLogCritSect + nSlot;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(gaSLogCritSect + nSlot);
     *pnSlotOut = nSlot;
     D2SLogStrc** ppNext = gaSLogHead + nSlot;
     D2SLogStrc* pDVar1 = gaSLogHead[nSlot];
@@ -51,7 +50,7 @@ static D2SLogStrc * __stdcall SLOG_LockLog(uint32_t * pnSlotOut, int32_t bAlloca
     }
 
     if (!bAllocate) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(gaSLogCritSect + nSlot);
       *pnSlotOut = -1;
       return nullptr;
     }
@@ -60,7 +59,7 @@ static D2SLogStrc * __stdcall SLOG_LockLog(uint32_t * pnSlotOut, int32_t bAlloca
     /* DWORD flProtect for VirtualAlloc */ /* DWORD flAllocationType for VirtualAlloc */ /* SIZE_T dwSize for VirtualAlloc */ /* LPVOID lpAddress for VirtualAlloc */ pContext = (D2SLogStrc*)VirtualAlloc((LPVOID)0x0, 0x1001c, 0x1000, 4);
     *ppNext = pContext;
     if (!pContext) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(gaSLogCritSect + nSlot);
       *pnSlotOut = -1;
       return nullptr;
     }

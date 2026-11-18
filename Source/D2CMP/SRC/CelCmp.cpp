@@ -1860,36 +1860,6 @@ void __stdcall CELCMP_FixupOffsetsAndSerialize(int * pOldFile, uint32_t * ppSeri
 }
 
 // Walk every frame in the DC6 sprite and apply palette colour-key conversion; asserts bit 2 of nFlags is set (indexed/ready format)
-#if 0 // ratchet: the match body of 00601180 (evidence 1985bb0f9) could not be re-spelled: parameter 1 retyped: uint8_t * -> pfnTilecmpPixelCallback
-void __stdcall CELCMP_ApplyPaletteToAllFrames(DC6 * pDCC, uint8_t * pPalette) {
-    uint32_t nDirIndex;
-    uint32_t nFrameIndex;
-    if (!(pDCC->nFlags & 4)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x322);
-      exit(-1);
-    }
-
-    {
-      uint32_t nNumFrames;
-      nDirIndex = 0;
-      if ((uint32_t)pDCC->nDirections <= 0) {
-        return;
-      }
-
-      nNumFrames = pDCC->nFrames;
-      do {
-        for (nFrameIndex = 0; nFrameIndex < nNumFrames; nFrameIndex++) {
-          CELCMP_ApplyColorKeyToAllPixels(*(void**)(pDCC[1].nTerm + (nNumFrames * nDirIndex + nFrameIndex) * 4 - 0xc), (pfnTilecmpPixelCallback)pPalette, *(uint32_t*)pDCC->nTerm);
-          nNumFrames = pDCC->nFrames;
-        }
-
-        nDirIndex++;
-      } while (nDirIndex < (uint32_t)pDCC->nDirections);
-
-      return;
-    }
-}
-#endif
 void __stdcall CELCMP_ApplyPaletteToAllFrames(DC6 * pDCC, pfnTilecmpPixelCallback pPalette) {
     uint32_t nDirIndex;
     uint32_t nFrameIndex;
@@ -2526,48 +2496,6 @@ void __stdcall CELCMP_FreeCachedCelFrame(uint32_t dwHashVal) {
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);
 }
 
-#if 0 // ratchet: the match body of 00603a70 (evidence 1985bb0f9) could not be re-spelled: parameter 1 retyped: uint32_t * -> DC6 * *
-uint32_t __stdcall CELCMP_CreateCelFileFromCache(uint32_t nCelListKey, uint32_t * ppCelFileOut) {
-    // Static local variables (originally global data)
-    static fpCelDecodeCachedByFormat gapfnCelDecodeCachedByFormat[2] = { &D2CMP::SRC::FastCmp::FASTCMP_DecompressRLEWithPaletteConversion, nullptr }; D2_STATIC_GUARD(gapfnCelDecodeCachedByFormat, "D2CMP::SRC::CelCmp::CELCMP_CreateCelFileFromCache::gapfnCelDecodeCachedByFormat");
-
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);
-    int bLockAcquired = -1;
-    ::CELLIST* pHashEntry = gCelCmpCacheHandler.TSHashTable<::CELLIST, HASHKEY_NONE>::Ptr(nCelListKey, &gCelCmpCacheHandler.tKey);
-    if (!pHashEntry) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);
-      bLockAcquired = 0;
-    }
-
-    *ppCelFileOut = 0;
-    uint32_t uFrameCount = pHashEntry->nFrameCount;
-    if (!uFrameCount) {
-      return 0x85200001;
-    }
-    if (uFrameCount % pHashEntry->nDirections) {
-      return 0x85200002;
-    }
-
-    DC6* pCelFile = (DC6*)D2_ALLOC_AT(uFrameCount * 4 + 0x18, ".\\SRC\\CelCmp.cpp", 0x267);
-    pCelFile->nVersion = 6;
-    pCelFile->nFlags = pHashEntry->dwFlags;
-    pCelFile->nFormat = pHashEntry->nFormat;
-    pCelFile->nDirections = pHashEntry->nDirections;
-    pCelFile->nFrames = pHashEntry->nFrameCount / pHashEntry->nDirections;
-    if (pHashEntry->dwFlags & 4) {
-      Raw::RAW_CreateCelFrames(pHashEntry, pCelFile);
-      *(void**)pCelFile->nTerm = pHashEntry->pRawData;
-    } else {
-      (*gapfnCelDecodeCachedByFormat[pHashEntry->nFormat])(pHashEntry, pCelFile);
-    }
-    if (bLockAcquired) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);
-    }
-
-    *ppCelFileOut = (uint32_t)(uintptr_t)pCelFile;
-    return 0;
-}
-#endif
 uint32_t __stdcall CELCMP_CreateCelFileFromCache(uint32_t nCelListKey, DC6 * * ppCelFileOut) {
     // Static local variables (originally global data)
     static fpCelDecodeCachedByFormat gapfnCelDecodeCachedByFormat[2] = { &D2CMP::SRC::FastCmp::FASTCMP_DecompressRLEWithPaletteConversion, nullptr }; D2_STATIC_GUARD(gapfnCelDecodeCachedByFormat, "D2CMP::SRC::CelCmp::CELCMP_CreateCelFileFromCache::gapfnCelDecodeCachedByFormat");

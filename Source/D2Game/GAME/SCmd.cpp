@@ -2215,14 +2215,6 @@ void __fastcall NET_D2GS_SERVER_Send_0x8A_NpcWantsInteract(D2ClientStrc * pClien
     SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 6);
 }
 
-#if 0 // ratchet: the match body of 0053e020 (evidence 1985bb0f9) could not be re-spelled: arity changed: 1 -> 2 parameters
-void __fastcall NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(D2ClientStrc * pClient) {
-    D2GSPacketSrv0x8F aPacket;
-    memset(aPacket.adwZero, 0, 8 * sizeof(aPacket.adwZero[0]));
-    aPacket.nPacketId = 0x8f;
-    SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 0x21);
-}
-#endif
 void __fastcall NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(D2ClientStrc * pClient, int32_t dwSendTick) {
     D2GSPacketSrv0x8F aPacket;
     memset(aPacket.adwZero, 0, 8 * sizeof(aPacket.adwZero[0]));

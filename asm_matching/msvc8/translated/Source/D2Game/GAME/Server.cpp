@@ -2394,9 +2394,9 @@ int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, D2QServer
     D2QServerUnitRecordStrc* pOutCursor;
     int nBucketIdx;
     int32_t nExported = 0;
+    ::SGAMEDATA* nToken = 0;
     EnterCriticalSection(&gQServerGameListCs);
     ::SGAMEDATA* pGame = gaQServerGameByToken[(uint16_t)nServerId];
-    ::SGAMEDATA* nToken = 0;
     if (pGame && pGame != (::SGAMEDATA*)-1) {
       nToken = pGame;
     }
@@ -2405,8 +2405,8 @@ int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, D2QServer
     pGame = QSERVER_FindAndLockGame((uint32_t)nToken);
     if (pGame) {
       D2UnitStrc* pUnit;
-      nServerId = (uint32_t)pGame->pUnitList;
       nBucketIdx = 0;
+      nServerId = (uint32_t)pGame->pUnitList;
       do {
         if (nExported >= nMaxCount) {
           break;

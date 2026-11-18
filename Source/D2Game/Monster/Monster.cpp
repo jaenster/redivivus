@@ -390,46 +390,6 @@ BOOL __fastcall CheckComponents(D2UnitStrc * pUnit) {
 }
 
 // Creates an item from a class-code entry (ppItemId) and equips it to a monster unit at the body location encoded in the entry. Allocates inventory if needed, sets ITEMFLAG_MONSTER, calls SERVER_EquipItemToBodyLoc, and initialises durability to max. Frees the item unit if equipping fails.
-#if 0 // ratchet: the match body of 00573b20 (evidence 5b183fa9f) could not be re-spelled: callee ITEMS::ItemMode::SERVER_EquipItemToBodyLoc parameter pbBadParams retyped: uint32_t * -> BOOL *
-void __fastcall MONSTER_CreateAndEquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MonEquipEntryStrc * ppItemId, int32_t nItemLevel, eD2ItemQuality eQuality) {
-    bool bEquipSuccess;
-    int32_t nItemClassId;
-    int32_t nDurStatLayer;
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
-      return;
-    }
-    if (!pUnit->pInventory) {
-      D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(nullptr, pUnit);
-    }
-
-    D2MonEquipEntryStrc* pItemCodeEntry = ppItemId;
-    D2ItemsTxt* pItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(ppItemId->dwItemCode, &nItemClassId);
-    if (!pItemsTxt) {
-      return;
-    }
-
-    D2UnitStrc* pItemUnit = ITEMS::Items::Drop::ITEM_CreateFromTemplate(pUnit, nItemClassId, pGame, 4, eQuality, 1, 1, nItemLevel, 0, 0, 0);
-    if (!pItemUnit) {
-      return;
-    }
-
-    D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItemUnit, ITEMFLAG_MONSTER, 1);
-    D2Common::ITEMS::Items::SetBodyLoc(pItemUnit, pItemCodeEntry->nBodyLoc);
-    if (pItemCodeEntry->nBodyLoc == '\0') {
-      return;
-    }
-
-    uint32_t nItemUnitGUID = pItemUnit->nUnitGUID;
-    D2MonEquipEntryStrc** ppItemCodeEntry = &ppItemId;
-    BOOL bEquipped = ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit, nItemUnitGUID, D2Common::ITEMS::Items::GetBodyLocation(pItemUnit), 1, (uint32_t*)ppItemCodeEntry);
-    if (!bEquipped) {
-      UNIT::SUnit::FreeServerUnit(pGame, pItemUnit);
-      return;
-    }
-
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_durability, D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pItemUnit), 0);
-}
-#endif
 void __fastcall MONSTER_CreateAndEquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MonEquipEntryStrc * ppItemId, int32_t nItemLevel, eD2ItemQuality eQuality) {
     bool bEquipSuccess;
     int32_t nItemClassId;

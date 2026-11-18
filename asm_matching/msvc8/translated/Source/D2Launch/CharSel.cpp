@@ -337,19 +337,6 @@ static BOOL __stdcall CHARSEL_ClassHasAlternateDeath(int nPlayerClass) {
 }
 
 // @sourcefile .\Src\CharSel.cpp
-#if 0 // ratchet: the match body of 00438060 (evidence 1985bb0f9) could not be re-spelled: callee D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit parameter pCharSel retyped: D2CharSelStrc * -> D2CharSelCompStrc *
-void __stdcall CHARSEL_DestroySelectedChar() {
-    if (!gpCharSelPendingEntry) {
-      return;
-    }
-    if (!gpCharSelPendingEntry->nEntryType) {
-      D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit((D2CharSelStrc*)gpCharSelPendingEntry->pCharSelCompStrc, 1);
-    }
-
-    D2_FREE_AT(gpCharSelPendingEntry, ".\\Src\\CharSel.cpp", 0x2a1);
-    gpCharSelPendingEntry = 0;
-}
-#endif
 void __stdcall CHARSEL_DestroySelectedChar() {
     if (!gpCharSelPendingEntry) {
       return;
@@ -976,32 +963,6 @@ static BOOL __stdcall SAVEFILE_ParseSaveData(char * szRealmName, char * szCharac
 }
 
 // @sourcefile .\Src\CharSel.cpp
-#if 0 // ratchet: the match body of 00438ea0 (evidence 1985bb0f9) could not be re-spelled: callee D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit parameter pCharSel retyped: D2CharSelStrc * -> D2CharSelCompStrc *
-void __stdcall CHARSEL_DestroyAllCharEntries() {
-    D2CharSelStrc* pMemoryToFree = D2CharSelStrcFirst;
-    while (pMemoryToFree) {
-      D2CharSelStrc* pDVar1;
-      pDVar1 = pMemoryToFree->pNext;
-      D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit((D2CharSelStrc*)pMemoryToFree->pCharSelCompStrc, 1);
-      D2_FREE_AT(pMemoryToFree, ".\\Src\\CharSel.cpp", 0x518);
-      pMemoryToFree = pDVar1;
-    }
-
-    D2CharSelStrcFirst = 0;
-    TotalCurrentChars = 0;
-    g_nCharSelNavigationIndex = 0;
-    gnCharSelLoadedCharCount = 0;
-    if (!gpCharSelPendingEntry) {
-      return;
-    }
-    if (!gpCharSelPendingEntry->nEntryType) {
-      D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit((D2CharSelStrc*)gpCharSelPendingEntry->pCharSelCompStrc, 1);
-    }
-
-    D2_FREE_AT(gpCharSelPendingEntry, ".\\Src\\CharSel.cpp", 0x2a1);
-    gpCharSelPendingEntry = 0;
-}
-#endif
 void __stdcall CHARSEL_DestroyAllCharEntries() {
     D2CharSelStrc* pMemoryToFree = D2CharSelStrcFirst;
     while (pMemoryToFree) {
@@ -1994,36 +1955,6 @@ void __stdcall CHARSEL_AddRetrievingEntry() {
 }
 
 // @sourcefile .\Src\CharSel.cpp
-#if 0 // ratchet: the match body of 0043a650 (evidence 1985bb0f9) could not be re-spelled: callee D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit parameter pCharSel retyped: D2CharSelStrc * -> D2CharSelCompStrc *
-void __stdcall CHARSEL_ClearCharDetailUI() {
-    if (gpCharSelPendingEntry) {
-      if (!gpCharSelPendingEntry->nEntryType) {
-        D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit((D2CharSelStrc*)gpCharSelPendingEntry->pCharSelCompStrc, 1);
-      }
-
-      D2_FREE_AT(gpCharSelPendingEntry, ".\\Src\\CharSel.cpp", 0x2a1);
-      gpCharSelPendingEntry = 0;
-    }
-
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpaCharSelectDisplay);
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCharSelDeleteButton);
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCharSelExpansionToggle);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCtlCharSelDownArrow->sControl, 0);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlCharSelDeleteButton, 0);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCharSelExitButton, 0);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCtlCharSelOKButton->sControl, 0);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlCharSelectGameTypeBtn, 0);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpaCharSelCharacterList->sControl, 0);
-    BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    if (bIsExpansion) {
-      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCharSelScreenControl->sControl, 0);
-      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpControlCharSelArrows, 0);
-      return;
-    }
-
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpControlCharSelImage->sControl, 0);
-}
-#endif
 void __stdcall CHARSEL_ClearCharDetailUI() {
     if (gpCharSelPendingEntry) {
       if (!gpCharSelPendingEntry->nEntryType) {

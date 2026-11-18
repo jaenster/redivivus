@@ -1595,18 +1595,20 @@ BOOL __fastcall SKILLPAL_ApplyRedemptionEffect(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[1], eSkill, nSkillLvl);
+    int32_t nLifeGain = nCalcVal * 0x100;
     int32_t nMaxVal = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     nStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    nStatVal += nCalcVal * 0x100;
+    nStatVal += nLifeGain;
     if (nMaxVal < nStatVal) {
       nStatVal = nMaxVal;
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nStatVal, 0);
     nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[2], eSkill, nSkillLvl);
+    int32_t nManaGain = nCalcVal * 0x100;
     nMaxVal = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
     nStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
-    nStatVal += nCalcVal * 0x100;
+    nStatVal += nManaGain;
     if (nMaxVal < nStatVal) {
       nStatVal = nMaxVal;
     }

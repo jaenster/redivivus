@@ -1433,29 +1433,6 @@ static void __stdcall COMCALLBACK_AddUserToChannelList(D2ChannelUserStrc * pChan
     COMCALLBACK_UpdateChannelUserList();
 }
 
-#if 0 // ratchet: the match body of 00448050 (evidence 1985bb0f9) could not be re-spelled: callee D2Win::Src::D2Comp::D2COMP_SetFlags parameter pCharSel retyped: D2CharSelStrc * -> D2CharSelCompStrc *
-void __stdcall COMCALLBACK_ClearChannelListView() {
-    uint32_t dwFlags;
-    if (gpCurrentChatRoomContext) {
-      if (!gpCurrentChatRoomContext->pComposite) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x85a);
-        exit(-1);
-      }
-
-      dwFlags = D2Win::Src::D2Comp::D2COMP_GetFlags(gpCurrentChatRoomContext->pComposite);
-      D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)gpCurrentChatRoomContext->pComposite, Fog::BitBuffer::gadwInvBitMasks[10] & dwFlags);
-      gpCurrentChatRoomContext = 0;
-      gnCurrentChannelContextId = -1;
-    }
-
-    BOOL nLauncherFlag = ChatDlg::CHATDLG_IsLobbyInitialized();
-    if (nLauncherFlag) {
-      return;
-    }
-
-    COMCALLBACK_ClearChannelUserList();
-}
-#endif
 void __stdcall COMCALLBACK_ClearChannelListView() {
     uint32_t dwFlags;
     if (gpCurrentChatRoomContext) {
@@ -2352,46 +2329,6 @@ void __stdcall COMCALLBACK_RemoveChannelUser(char * szUsername) {
     COMCALLBACK_UpdateChannelUserList();
 }
 
-#if 0 // ratchet: the match body of 004495a0 (evidence 1985bb0f9) could not be re-spelled: callee D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit parameter pCharSel retyped: D2CharSelStrc * -> D2CharSelCompStrc *
-void __stdcall COMCALLBACK_ClearAllChannelUsers() {
-    int i;
-    uint16_t* pwszClear;
-    uint16_t wszUserCountText[576];
-    char szChannelUserCount[256];
-    D2ChannelUserStrc* pNextUser;
-    COMCALLBACK_ClearChannelListView();
-    D2ChannelUserStrc* pMemoryToFree = gpChannelUserListHead;
-    while (pMemoryToFree) {
-      pNextUser = pMemoryToFree->pNext;
-      D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit((D2CharSelStrc*)pMemoryToFree->pComposite, 1);
-      pMemoryToFree->pComposite = 0;
-      D2_FREE_AT(pMemoryToFree, ".\\Src\\ComCallback.cpp", 0x822);
-      pMemoryToFree = pNextUser;
-    }
-
-    gpChannelUserListHead = 0;
-    D2ChannelUserNameNodeStrc* pLinkedNode = gpChannelUserLinkedListHead;
-    while (pLinkedNode) {
-      D2ChannelUserNameNodeStrc* pNextLinkedNode;
-      pNextLinkedNode = pLinkedNode->pNext;
-      D2_FREE_AT(pLinkedNode, ".\\Src\\ComCallback.cpp", 0x82a);
-      pLinkedNode = pNextLinkedNode;
-    }
-
-    gpChannelUserLinkedListHead = 0;
-    gnChannelUserTotalCount = 0;
-    gnChannelUserCount = 0;
-    sprintf(szChannelUserCount, "%s (%d)", gszCurrentChannelName, 0);
-    for (i = 0; i < 0x240; i++) {
-      wszUserCountText[i] = L'\0';
-    }
-
-    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszUserCountText, szChannelUserCount, 0x240);
-    ChatDlg::FORMS_DisplayBattleNetNews(wszUserCountText);
-    gnChannelUserListScrollOffset = 0;
-    COMCALLBACK_ScrollChannelUserList(0);
-}
-#endif
 void __stdcall COMCALLBACK_ClearAllChannelUsers() {
     int i;
     uint16_t* pwszClear;

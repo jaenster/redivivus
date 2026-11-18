@@ -166,8 +166,8 @@ D2AnimDataRecordStrc * __fastcall ANIMDATA_GetAnimDataForUnit(D2UnitStrc * pUnit
 // Builds composit name, looks up record, writes nParam to the speed field.
 void __stdcall ANIMDATA_SetAnimSpeedForUnit(D2UnitStrc * pUnit, int32_t nAnimSpeed) {
     char szCofName[8];
-    memset(szCofName, 0, 8 * sizeof(szCofName[0]));
     int nCofNameLen = 0;
+    memset(szCofName, 0, 8 * sizeof(szCofName[0]));
     COMPOSIT::Composit::COMPOSIT_GetCofPathWithTransform(pUnit, szCofName, &nCofNameLen, 0, 1, pUnit->pInventory, -1);
     D2AnimDataRecordStrc* pRecord = ANIMDATA_GetRecordByNameHash(szCofName);
     if (pRecord) {

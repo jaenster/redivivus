@@ -180,8 +180,8 @@ BOOL __stdcall Q35_PrepareAncientsForBattle(D2QuestDataStrc * pQuestData, D2Ques
 static void __stdcall Q35_ResetAncientsArena(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData, D2QuestDataA5Q5Strc * pA5Q5Data) {
     bool bKillSuccess;
     D2UnitStrc* pStatue;
-    int* pAncientGUID = pA5Q5Data->anAncientMonsterGUID;
     int nAncientIdx = 0;
+    int* pAncientGUID = pA5Q5Data->anAncientMonsterGUID;
     do {
       if (pA5Q5Data->abAncientSpawned[nAncientIdx]) {
         bKillSuccess = Q35_KillAndRemoveAncient(pGame, *pAncientGUID);

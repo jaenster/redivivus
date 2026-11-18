@@ -334,6 +334,7 @@ static void __stdcall MONSTER_SetMinionsForBoss(D2RoomCoordListStrc * pRoomCoord
       return;
     }
 
+    int32_t nLeft = nMinionCount;
     do {
       D2UnitStrc* pMinion;
       pMinion = Monster::Create::SpawnMonsterAtCoordList(pGame, pRoomCoordList, pUnit, nMinionClassId, eD2MonsterAnimMode_ns::Neutral, 4, 0);
@@ -341,8 +342,8 @@ static void __stdcall MONSTER_SetMinionsForBoss(D2RoomCoordListStrc * pRoomCoord
         MONSTER_AddUniqueModifier(pGame, pMinion, '\x10');
       }
 
-      nMinionCount--;
-    } while (nMinionCount);
+      nLeft--;
+    } while (nLeft);
 }
 
 static uint32_t __stdcall MONSTER_SpawnUniquePackInRoom(D2RoomStrc * pRoom, ::SGAMEDATA * pGame, D2RoomCoordListStrc * pCoordList, uint32_t nClassId) {

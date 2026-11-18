@@ -132,22 +132,6 @@ int __fastcall deflateSetHeader(z_stream * pStream, gz_header * pHead) {
     return -2;
 }
 
-#if 0 // ratchet: the match body of 00427220 (evidence 1985bb0f9) could not be re-spelled: parameter 2 retyped: uint32_t * -> int *
-uint32_t __fastcall deflatePending(z_stream * pStream, uint32_t * pPending, uint32_t * pBits) {
-    if (pStream && pStream->state) {
-      if (pPending) {
-        *pPending = *(uint32_t*)((char*)pStream->state + 0x14);
-      }
-      if (pBits) {
-        *pBits = *(uint32_t*)((char*)pStream->state + 0x16bc);
-      }
-
-      return 0;
-    }
-
-    return -2;
-}
-#endif
 int __fastcall deflatePending(z_stream * pStream, uint32_t * pPending, int * pBits) {
     if (pStream && pStream->state) {
       if (pPending) {

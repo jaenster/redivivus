@@ -10242,7 +10242,8 @@ BOOL __stdcall NPCSHOP_IsRepairTabActive() {
     if (gnPlayerCashDisplay == 2) {
       pDVar1 = UNIT::Player::GetPlayerUnit_UI();
       if (pDVar1) {
-        pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pDVar1->pInventory);
+        D2InventoryStrc* t2_c0 = pDVar1->pInventory;
+        pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(t2_c0);
       } else {
         pDVar1 = 0;
       }

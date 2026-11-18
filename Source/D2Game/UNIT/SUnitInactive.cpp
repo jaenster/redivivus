@@ -386,7 +386,6 @@ static D2InactiveUnitListStrc * __stdcall SUNITINACTIVE_AllocOrFindInactiveList(
       D2InactiveUnitListStrc* pCurList;
       while (true) {
         pCurList = pNextList;
-        pNextList = pCurList;
         if (!(x != pCurList->nX || nY != pCurList->nY)) {
           break;
         }

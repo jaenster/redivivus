@@ -1642,43 +1642,6 @@ void __fastcall SendRemoveItemDisplayPacket0x92(::SGAMEDATA * pGame, D2UnitStrc 
     GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0x83b), 0x92, 0, nOtherGUID);
 }
 
-#if 0 // ratchet: the match body of 00566cc0 (evidence 1985bb0f9) could not be re-spelled: callee PlayerSave::PLRSAVE_DispatchItemLoadByFormat parameter ppnShort retyped: short * * -> uint32_t *
-void __fastcall TRADE_RestoreInventoryFromBackup(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    int i;
-    short int* pSavePtr;
-    D2TradeRecordStrc* pTradeCopy;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    if (!pPlayerData) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x880);
-      exit(-1);
-    } else {
-      int iInvPage;
-      i = 1;
-      do {
-        D2Common::INVENTORY::Inventory::NullSub_2Arg(pUnit->pInventory, i);
-        i++;
-      } while (i < 0xd);
-
-      pTradeCopy = pPlayerData->pTradeCopyInventory;
-      if (!pTradeCopy) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x888);
-        exit(-1);
-      }
-
-      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, 0);
-      PlayerSave::PLRSAVE_DispatchItemLoadByFormat(pGame, pUnit, pTradeCopy->pSaveBuffer, 0x60, 0x2000, 0, &pSavePtr);
-      iInvPage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-      uD2UnitMode t1_c1 = pUnit->eAnimMode;
-      if (!(iInvPage > 0 && t1_c1.ePlayerMode != Death && t1_c1.ePlayerMode != eD2PlayerAnimMode_ns::Dead)) {
-        return;
-      }
-
-      UNIT::Party::ChangeGoldForPlayer(pUnit, UNITSTAT_gold, -iInvPage);
-      UNIT::Party::ChangeGoldForPlayer(pUnit, UNITSTAT_gold, pTradeCopy->nGold);
-      return;
-    }
-}
-#endif
 void __fastcall TRADE_RestoreInventoryFromBackup(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int i;
     short int* pSavePtr;

@@ -2163,15 +2163,6 @@ static void LAUNCHER_AllocCharSelectComponent(uint8_t * pCharInfo) {
     D2Win::Src::D2Comp::D2COMP_SetCurrentFrame(gpChatDlgCharSelCompositeUnit, 0);
 }
 
-#if 0 // ratchet: the match body of 0043dce0 (evidence 1985bb0f9) could not be re-spelled: callee D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit parameter pCharSel retyped: D2CharSelStrc * -> D2CharSelCompStrc *
-void Unreferenced_0043dce0() {
-    if (gpChatDlgCharSelCompositeUnit) {
-      D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit((D2CharSelStrc*)gpChatDlgCharSelCompositeUnit, 1);
-    }
-
-    gpChatDlgCharSelCompositeUnit = 0;
-}
-#endif
 void Unreferenced_0043dce0() {
     if (gpChatDlgCharSelCompositeUnit) {
       D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit(gpChatDlgCharSelCompositeUnit, 1);
@@ -3480,63 +3471,6 @@ void __stdcall CHATDLG_ResetButtonsAndForms() {
     OOGUtilities::gpChatFormList = 0;
 }
 
-#if 0 // ratchet: the match body of 0043fc20 (evidence 5b183fa9f) could not be re-spelled: callee D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit parameter pCharSel retyped: D2CharSelStrc * -> D2CharSelCompStrc *
-void __stdcall CHATDLG_CreateAllForms() {
-    char szRealmCharName[256];
-    if (!gbLobbyInitialized) {
-      return;
-    }
-
-    gbLobbyInitialized = 0;
-    sprintf(szRealmCharName, "%s,%s", OOGUtilities::D2IniData_multiplayer->szCharacterRealm, OOGUtilities::D2IniData_multiplayer->szNAME);
-    CHATDLG_DestroyLobbyChatForms();
-    if (gpChatDlgCharSelCompositeUnit) {
-      D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit((D2CharSelStrc*)gpChatDlgCharSelCompositeUnit, 1);
-    }
-
-    gpChatDlgCharSelCompositeUnit = 0;
-    D2Win::Src::D2WinMain::D2WINMAIN_SetBackgroundDC6(gpDC6BnetBackground);
-    gpLobbyForm0.pLobbyForm0 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b);
-    gpLobbyForm0.pLobbyForm1 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 1);
-    gpLobbyForm0.pLobbyForm2 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 2);
-    gpLobbyForm0.pLobbyForm3 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 3);
-    gpLobbyForm0.pLobbyForm4 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 4);
-    gpLobbyForm0.pLobbyForm5 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 5);
-    gpLobbyForm0.pCtlLobbyUserListPrevPageButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0xb);
-    gpLobbyForm0.pCtlLobbyUserListNextPageButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0xc);
-    gpLobbyForm0.pCtlLobbyUserListPrevLineButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0xd);
-    gpLobbyForm0.pCtlLobbyUserListNextLineButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0xe);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyChannelButton->sControl, 1);
-    gpChatDlgInputEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x16);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpChatDlgInputEditBox, (fpD2WinEditBoxFilter)CHATDLG_HandleTabCompletion);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpChatDlgInputEditBox, ComCallback::EDITBOX_Cb_COMCALLBACK_ClearChannelUserList);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpChatDlgInputEditBox->sControl);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpChatDlgInputEditBox, 200);
-    ComCallback::COMCALLBACK_ClearChannelUserList();
-    D2Win::Src::D2WinMain::SetUnsetFlag0x08(gpLobbyForm0.pCtlLobbyUserListPrevPageButton, 1);
-    D2Win::Src::D2WinMain::SetUnsetFlag0x08(gpLobbyForm0.pCtlLobbyUserListNextPageButton, 1);
-    D2Win::Src::D2WinMain::SetUnsetFlag0x08(gpLobbyForm0.pCtlLobbyUserListPrevLineButton, 1);
-    D2Win::Src::D2WinMain::SetUnsetFlag0x08(gpLobbyForm0.pCtlLobbyUserListNextLineButton, 1);
-    ::D2WinButton** ppButtonSlot = gaChatUserListButtonArray;
-    int nYPos = 0x28;
-    do {
-      ::D2WinButton* pButton;
-      pButton = D2Win::Src::D2WinButton::D2WinButton(nYPos, 0x24f, 0x3c, 100, nullptr, ComCallback::COMCALLBACK_HandleUserListClick, 0, 0, 4, 0, nullptr);
-      *ppButtonSlot = pButton;
-      nYPos += 0x3c;
-      ppButtonSlot++;
-    } while (nYPos < 700);
-
-    gpCtlLobbyAccountList = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x14);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gpCtlLobbyAccountList, 0);
-    gpCtlLobbyLadderNewsToggle = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x1c);
-    if (!gbLadderNewsExpanded) {
-      return;
-    }
-
-    D2Win::Src::D2WinButton::D2WINBUTTON_SetImageIndex(gpCtlLobbyLadderNewsToggle, 2);
-}
-#endif
 void __stdcall CHATDLG_CreateAllForms() {
     char szRealmCharName[256];
     if (!gbLobbyInitialized) {

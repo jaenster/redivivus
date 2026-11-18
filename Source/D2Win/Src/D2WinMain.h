@@ -150,7 +150,6 @@ void __stdcall D2WIN_HandleActivation(struct D2UIMouseMsgStrc * pMsg);
 // @sourcefile .\Src\D2WinMain.cpp
 void __fastcall D2WIN_TakeThrottledScreenshot(LPCSTR szFileName);
 void __stdcall D2WIN_ToggleMusicOptions(struct D2UIMouseMsgStrc * pMsg);
-uint32_t Unreferenced_004fa1b0();
 struct D2ControlStrc * __stdcall D2WIN_FindClosestControlToMouse(struct D2ControlStrc * pControl1, struct D2ControlStrc * pControl2);
 void __stdcall INPUT_FormMouseWheel(struct D2UIMouseMsgStrc * pMsg);
 // Returns gnWinMainState global value
@@ -164,6 +163,6 @@ void __stdcall INPUT_FormEscapeKey(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall D2WIN_TakeScreenshotMsgHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormMouseHandler(struct D2UIMouseMsgStrc * pMsg);
 #endif // D2_MODULE_D2Win
-// 1 internal function (defined in .cpp)
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2Win::Src::D2WinMain

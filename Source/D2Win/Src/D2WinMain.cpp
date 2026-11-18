@@ -1114,15 +1114,13 @@ void __stdcall D2WIN_ToggleMusicOptions(D2UIMouseMsgStrc * pMsg) {
     pMsg->dwResult = 0;
 }
 
-uint32_t Unreferenced_004fa1b0() {
-    int* in_EAX;
-    int in_ECX;
-    if (*(code**)(in_ECX + 0x38)) {
-      uint32_t uVar1;
-      uVar1 = (**(code**)((char*)in_ECX + 56))();
-      return uVar1;
+static BOOL __fastcall Unreferenced_004fa1b0(POINT * pPoint, D2ControlStrc * pControl) {
+    if (pControl->fpHitTest) {
+      BOOL BVar1;
+      BVar1 = pControl->fpHitTest(pControl);
+      return BVar1;
     }
-    if (*in_EAX >= *(int*)(in_ECX + 0xc) && in_EAX[1] >= *(int*)(in_ECX + 0x10) - *(int*)(in_ECX + 0x18) && *in_EAX < *(int*)(in_ECX + 0x14) + *(int*)(in_ECX + 0xc) && in_EAX[1] < *(int*)(in_ECX + 0x10)) {
+    if (pPoint->x >= pControl->dwPosX && pPoint->y >= pControl->dwPosY - pControl->dwSizeY && pPoint->x < pControl->dwSizeX + pControl->dwPosX && pPoint->y < pControl->dwPosY) {
       return 1;
     }
 
@@ -1570,5 +1568,7 @@ void __stdcall INPUT_FormMouseHandler(D2UIMouseMsgStrc * pMsg) {
 
     Storm::SMsgBreakHandlerChain(pMsg);
 }
+
+static void * keep_004fa1b0 = (0 ? (Unreferenced_004fa1b0(*(POINT * *)0, *(D2ControlStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Win::Src::D2WinMain

@@ -921,7 +921,21 @@
       "calledFunctions": [
         "Unreferenced_004fa1b0"
       ],
-      "dh": "be4a2dfa"
+      "usedTypes": [
+        "D2ControlStrc",
+        "POINT"
+      ],
+      "dh": "e43d7e83",
+      "paramStorage": [
+        [
+          "pPoint",
+          "EAX:4"
+        ],
+        [
+          "pControl",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "D2WIN_FindClosestControlToMouse",

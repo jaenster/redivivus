@@ -1113,52 +1113,6 @@ static void __stdcall SaveToBuffer(::SGAMEDATA * pGame, int32_t nSaveParam, D2Un
 
 // Top-level player save dispatcher. Clears UNITFLAGEX_UPDATEINV, detects if the player is currently trading (interact with another UNIT_PLAYER), then routes to SaveToBuffer (OBNet/LAN), SaveToFile (SP without BNet service), or SaveToFileBnet (BNet) based on game type and BattleNetServerService pointer.
 // @sourcefile .\PLAYER\PlrSave.cpp
-#if 0 // ratchet: the match body of 00532400 (evidence 5b183fa9f) could not be re-spelled: callee GAME::Clients::GetClientContainer parameter pdwContainer retyped: uint32_t * -> void * *
-BOOL __fastcall SaveGameAllGameTypes(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pCharName, BOOL bUnknown) {
-    BOOL _bHasInteractInfo;
-    bool bHasInteractInfo;
-    D2ClientStrc* pClient;
-    int nSaveResult;
-    uint32_t nInteractUnitGUID;
-    uint32_t clientContainer;
-    uint32_t nRealm;
-    eD2UnitType eInteractUnitType;
-    int bSaveSucceeded;
-    int bIsInteracting;
-    char szAccountName[52];
-    uint32_t nSecurityCookie;
-    char* szCharName = pCharName;
-    if (!pUnit) {
-      return 0;
-    }
-
-    pUnit->eUnitFlagsEx &= ~UNITFLAGEX_UPDATEINV;
-    bIsInteracting = 0;
-    eInteractUnitType = UNIT_COUNT;
-    _bHasInteractInfo = UNIT::SUnit::GetInteractInfo(pUnit, &eInteractUnitType, &nInteractUnitGUID);
-    if (_bHasInteractInfo && eInteractUnitType == UNIT_PLAYER) {
-      bIsInteracting = 1;
-    }
-
-    pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave.cpp", 0xb67);
-    GAME::Clients::GetAccountName(pClient, szAccountName);
-    GAME::Clients::GetClientContainer(pClient, &clientContainer);
-    GAME::Clients::GetRealm(pClient, &nRealm);
-    bSaveSucceeded = 1;
-    if (pGame->nGameType == SGAMETYPE_OBNET_HOST || pGame->nGameType == SGAMETYPE_LAN_HOST) {
-      ::SGAMEDATA* pGameCopy = pGame;
-      SaveToBuffer(pGameCopy, bIsInteracting, pUnit, pClient);
-    } else if (BattleNetServerService) {
-      nSaveResult = SaveToFileBnet(pGame, szAccountName, pUnit, szCharName, bIsInteracting, clientContainer, bUnknown, nRealm);
-      bSaveSucceeded = nSaveResult;
-    } else {
-      PlayerSave::SaveToFile(pGame, pUnit, bIsInteracting, bUnknown, szCharName);
-    }
-
-    _bHasInteractInfo = bSaveSucceeded;
-    return _bHasInteractInfo;
-}
-#endif
 BOOL __fastcall SaveGameAllGameTypes(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pCharName, BOOL bUnknown) {
     BOOL _bHasInteractInfo;
     bool bHasInteractInfo;

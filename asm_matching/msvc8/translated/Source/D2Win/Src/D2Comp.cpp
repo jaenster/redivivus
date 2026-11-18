@@ -3562,20 +3562,6 @@ void __stdcall D2COMP_CreateCompositeUnit(D2CharSelCompStrc * pCompUnit, uint32_
     }
 }
 
-#if 0 // ratchet: the match body of 00505100 (evidence 1985bb0f9) could not be re-spelled: callee D2COMP_DestroyCompositeUnit parameter pCharSel retyped: D2CharSelStrc * -> D2CharSelCompStrc *
-void __stdcall D2COMP_FreeAllCompositeUnits() {
-    D2CharSelStrc* pCharSel = (D2CharSelStrc*)gpCompositeUnitListHead;
-    while (pCharSel) {
-      D2CharSelStrc* pDVar1;
-      pDVar1 = *(D2CharSelStrc**)(pCharSel->szCharname + 0xc4);
-      D2COMP_DestroyCompositeUnit(pCharSel, 0);
-      D2_FREE_AT(pCharSel, ".\\Src\\D2Comp.cpp", 0xd38);
-      pCharSel = pDVar1;
-    }
-
-    gpCompositeUnitListHead = 0;
-}
-#endif
 void __stdcall D2COMP_FreeAllCompositeUnits() {
     D2CharSelCompStrc* pCharSel = gpCompositeUnitListHead;
     while (pCharSel) {
@@ -3686,16 +3672,6 @@ uint32_t __stdcall D2COMP_GetFlags(D2CharSelCompStrc * pCompUnit) {
     return pCompUnit->nFlags;
 }
 
-#if 0 // ratchet: the match body of 00505360 (evidence 1985bb0f9) could not be re-spelled: parameter 0 retyped: D2CharSelStrc * -> D2CharSelCompStrc *
-void __stdcall D2COMP_SetFlags(D2CharSelStrc * pCharSel, uint32_t dwFlags) {
-    if (!pCharSel) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xda2);
-      exit(-1);
-    }
-
-    *(uint32_t*)pCharSel->szCharname = dwFlags;
-}
-#endif
 void __stdcall D2COMP_SetFlags(D2CharSelCompStrc * pCharSel, uint32_t dwFlags) {
     if (!pCharSel) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xda2);

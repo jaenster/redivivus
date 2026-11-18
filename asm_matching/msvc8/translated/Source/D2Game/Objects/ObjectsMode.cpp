@@ -415,8 +415,7 @@ void __fastcall OBJMODE_CreateRedPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
 }
 #endif
 void __fastcall OBJMODE_CreateRedPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    eD2LevelId nLevelId2 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+    eD2LevelId nLevelId2 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(D2Common::Units::UNITS_GetRoom(pUnit));
     eD2LevelId eLevel = LEVEL_InfernalPit;
     switch (nLevelId2) {
       case LEVEL_FrigidHighlands:

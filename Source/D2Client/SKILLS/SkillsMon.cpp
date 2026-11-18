@@ -684,14 +684,14 @@ static D2UnitStrc * __stdcall SKILLSMON_CreateMissileWithSeed(int32_t * pVelocit
     memset(&sSkillArg, 0, 0x5c);
     D2SeedStrc sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
     sSkillArg.nFlags = 0x25;
+    sSkillArg.pOwner = pUnit;
     pUnit->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
     pUnit->sSeed.nSeedLow = sNewSeed.nSeedLow;
-    if (sNewSeed.nSeedLow & 3) {
+    if ((int32_t)(sNewSeed.nSeedLow & 3) > 0) {
       sSkillArg.nFlags = 0x4025;
     }
 
     eD2UnitType eUnitType = pUnit->eUnitType;
-    sSkillArg.pOwner = pUnit;
     sSkillArg.nMissileTxtNo = nMissileId;
     int nXValue;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {

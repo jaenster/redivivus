@@ -314,7 +314,8 @@ BOOL __fastcall Skills_SrvDoFunc_070_DoubleSwing(::SGAMEDATA * pGame, D2UnitStrc
     int32_t nMeleeRange;
     pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     nMeleeRange = SkillsServer::GetMeleeRangePlusFour(pUnit);
-    pTargetUnit = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, nMeleeRange, 0x20003, pTargetUnit->nUnitGUID, nullptr);
+    int t2_c0 = pTargetUnit->nUnitGUID;
+    pTargetUnit = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, nMeleeRange, 0x20003, t2_c0, nullptr);
     if (!pTargetUnit) {
       return 0;
     }

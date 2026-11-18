@@ -3520,7 +3520,8 @@ static void __stdcall DRLGOUTROOM_FindWarpExitInColumn(D2DrlgLevelStrc * pLevel,
       uint32_t nPresetGridFlags;
       nPresetGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridPreset, nX, nY);
       nGridFlags2 = (uint32_t)DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, nX, nY) >> 0x10;
-      if (nPresetGridFlags == 0x1c && (nGridFlags2 & 0xf) == 1) {
+      uint32_t dwWarpExitFlags = nGridFlags2 & 0xf;
+      if (nPresetGridFlags == 0x1c && dwWarpExitFlags == 1) {
         *pFoundX = nX;
         *pFoundY = nY;
         return;

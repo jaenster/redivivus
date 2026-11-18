@@ -211,26 +211,6 @@ void __stdcall MCPSTATE_SetCharDeleteSuccess(BOOL bSuccess) {
     g_bMCPCharDeleteSuccess = bSuccess;
 }
 
-#if 0 // ratchet: the match body of 00449cd0 (evidence 1985bb0f9) could not be re-spelled: returns int32_t, was uint32_t; parameter 0 retyped: int32_t -> char *; parameter 1 retyped: int32_t -> char *
-uint32_t __stdcall MCPCONNECT_GetGameNameAndPassword(int32_t pGameNameOut, int32_t pPasswordOut) {
-    char ch;
-    char* pSrc = g_szMCPGameName;
-    do {
-      ch = *pSrc;
-      pSrc[pGameNameOut - (intptr_t)&g_szMCPGameName] = ch;
-      pSrc++;
-    } while (ch != '\0');
-
-    pSrc = g_szMCPGamePassword;
-    do {
-      ch = *pSrc;
-      pSrc[pPasswordOut - (intptr_t)&g_szMCPGamePassword] = ch;
-      pSrc++;
-    } while (ch != '\0');
-
-    return g_nMCPGameDifficulty;
-}
-#endif
 int32_t __stdcall MCPCONNECT_GetGameNameAndPassword(char * pGameNameOut, char * pPasswordOut) {
     char ch;
     char* pSrc = g_szMCPGameName;

@@ -7907,17 +7907,6 @@ void __fastcall AITHINK4_PetThinkCastSkillAndFollow(::SGAMEDATA * pGame, D2UnitS
     MONSTERAI_CommandWalkRandomOffset(pGame, pUnit, pOwner, 4);
 }
 
-#if 0 // ratchet: the match body of 005e4cf0 (evidence 1985bb0f9) could not be re-spelled: callee AITHINK4_PetThinkCastSkillAndFollow parameter pAiParam retyped: D2AiGeneralStrc * * -> D2AiParamStrc *; callee AI_Pet_ThinkCombatAndFollow parameter pAiParam retyped: D2AiGeneralStrc * * -> D2AiParamStrc *
-void __fastcall AITHINK_Fn1_NecroPet(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
-    if (pAiParam->pMonsterAiGeneral->dwArg0) {
-      AITHINK4_PetThinkCastSkillAndFollow(pGame, pUnit, &pAiParam->pMonsterAiGeneral);
-      return;
-    }
-
-    AI_Pet_ThinkCombatAndFollow(pGame, pUnit, &pAiParam->pMonsterAiGeneral);
-}
-#endif
 void __fastcall AITHINK_Fn1_NecroPet(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
     if (pAiParam->pMonsterAiGeneral->dwArg0) {
@@ -15237,40 +15226,6 @@ void __fastcall AI_Fn1_BaalThrone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // Passes AI_Baal_IsPortalInRange by address.
-#if 0 // ratchet: the match body of 005ef620 (evidence 5b183fa9f) could not be re-spelled: callee Baal::AI_Baal_IsPortalInRange parameter pGame retyped: uint32_t -> SGAMEDATA *
-void __fastcall AITHINK_Fn1_BaalToStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    D2MonsterAiParameterStruct sPortalSearchParams2;
-    int nGUID;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    sPortalSearchParams2.pBestUnit = 0;
-    sPortalSearchParams2.nBestDistance = 0x19;
-    D2UnitStrc* pPortal = (D2UnitStrc*)ForEach(pGame, pUnit, &sPortalSearchParams2, (fpMonsterAiForEach)Baal::AI_Baal_IsPortalInRange, 1);
-    if (pPortal) {
-      int32_t nDistanceToPortal = D2Common::Collision::GetCollisionDistance(pUnit, pPortal);
-      if (nDistanceToPortal < pMonStats->aip[0][pGame->nDifficulty]) {
-        eD2UnitType eUnitType;
-        Quests::QUESTS::A5Q6::SetFlagToOpenedStairs(pGame);
-        D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_invis, 1);
-        D2Common::PATH::DynamicPath::ZeroPathPointsSize(pUnit->pPath.pDynamicPath);
-        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
-        nGUID = pUnit->nUnitGUID;
-        eUnitType = pUnit->eUnitType;
-        D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nGUID);
-        D2Common::Units::RemoveCollision_Vector(pUnit);
-        D2Common::Unit::RemoveUnitFromRoom(pUnit);
-        UNIT::SUnit::FreeServerUnit(pGame, pUnit);
-        return;
-      }
-
-      AITACTICS_SetPathOverrides(pUnit, 1, 0, '\0');
-      MONSTERAI_WalkToUnit(pGame, pUnit, pPortal);
-      return;
-    }
-
-    PlanNextAiMove(pGame, pUnit, 0x19);
-    return;
-}
-#endif
 void __fastcall AITHINK_Fn1_BaalToStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiParameterStruct sPortalSearchParams2;
     int nGUID;

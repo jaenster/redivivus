@@ -1575,11 +1575,6 @@ void __fastcall GetAccountName(D2ClientStrc * pClient, char * szText) {
     Storm::Source::SSTR::SStrCopy(szText, pClient->szAccName, 0x32);
 }
 
-#if 0 // ratchet: the match body of 00539300 (evidence 1985bb0f9) could not be re-spelled: parameter 1 retyped: uint32_t * -> void * *
-void __fastcall GetClientContainer(D2ClientStrc * pClient, uint32_t * pdwContainer) {
-    *pdwContainer = (uint32_t)(uintptr_t)pClient->pClientContainer;
-}
-#endif
 void __fastcall GetClientContainer(D2ClientStrc * pClient, void * * pdwContainer) {
     *pdwContainer = pClient->pClientContainer;
 }

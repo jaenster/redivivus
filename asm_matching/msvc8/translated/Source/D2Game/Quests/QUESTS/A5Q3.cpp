@@ -1489,22 +1489,6 @@ void __fastcall Q33_AnyaTimerCallback(D2QuestDataStrc * pQuestData, D2UnitStrc *
 
 // Q33_GetAnyaCoordinates (PrisonOfIce): returns the stored portal coords if active, portal spawned and Anya not yet
 // running. Used to locate the rescue portal.
-#if 0 // ratchet: the match body of 0058a7d0 (evidence 1985bb0f9) could not be re-spelled: parameter 0 retyped: void * -> SGAMEDATA *
-uint32_t __fastcall Q33_GetAnyaCoordinates(void * pThis, int, int32_t * pOutCoords) {
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal((::SGAMEDATA*)pThis, QUESTINT_PrisonOfIce);
-    if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
-      D2QuestDataA5Q3Strc* pA5Q3Data;
-      pA5Q3Data = pQuestData->pQuestSpecificData.pA5Q3;
-      if (pA5Q3Data->bPortalSpawned && !pA5Q3Data->bAnyaCanRun) {
-        *pOutCoords = pA5Q3Data->nPortalSpawnX;
-        pOutCoords[1] = pA5Q3Data->nPortalSpawnY;
-        return 1;
-      }
-    }
-
-    return 0;
-}
-#endif
 BOOL __fastcall Q33_GetAnyaCoordinates(::SGAMEDATA * pGame, int, int32_t * pOutCoords) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_PrisonOfIce);
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
