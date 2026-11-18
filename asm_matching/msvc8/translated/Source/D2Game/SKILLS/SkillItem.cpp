@@ -634,7 +634,7 @@ int32_t __fastcall MONREGION_RollRandomMonsterType(::SGAMEDATA * pGame, D2Monste
 }
 
 int * __fastcall RollRoomSeed(D2RoomStrc * pRoom) {
-    D2SeedStrc* pSeed = !pRoom ? 0 : &pRoom->sSeed;
+    D2SeedStrc* pSeed = pRoom ? &pRoom->sSeed : 0;
     D2_SeedRoll(pSeed);
     return (int*)gapSkillDispatchTableBase;
 }

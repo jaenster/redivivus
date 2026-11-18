@@ -115,6 +115,72 @@ void __fastcall SKILLSSOR_SetInfernoFrames(D2UnitStrc * pUnit, int32_t nTotalFra
 }
 
 // Client-side: spawns an Inferno (or Hydra-fire variant) missile for the Sorceress. Looks up cltmissilea/cltmissileb from SkillsTxt; randomly picks between them using the unit seed (50/50). Reads target coords via GetCooordinates, evaluates calc[0] for frame count (min 1), fires MakeMissile with nFlags=0x8020. If the missile is created and the unit has STATE_inferno active: advances the animation sequence to frame 8 (or decrements nGfxCurrentFrame by 0x200 if no anim sequence).
+#if 0 // ratchet: the pin body of 004e31c0 (evidence 0ba282de8) could not be re-spelled: field D2UnitStrc::pAnimSeq retyped: D2AnimSeqStrc* -> D2MonSeqTxt*
+D2UnitStrc * __fastcall SKILLSSOR_CltCreateInfernoMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+    int32_t nTotalFrames;
+    D2UnitStrc* pMissile;
+    D2SkillArgStrc sSkillArg;
+    int nTargetY;
+    int nTargetX;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
+      return nullptr;
+    }
+
+    eMissilesId eMissileIdA = (eMissilesId)pSkillTxt->cltmissile[1];
+    if (!((int)eMissileIdA >= 0 && (int)eMissileIdA < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
+      return nullptr;
+    }
+
+    eMissilesId eMissileIdB = (eMissilesId)pSkillTxt->cltmissile[2];
+    if ((int)eMissileIdB < 0 || (int)eMissileIdB >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+      eMissileIdB = ~MISSILE_Arrow;
+    }
+
+    BOOL bGotCoords = Skills::GetCooordinates(pUnit, &nTargetX, &nTargetY);
+    if (bGotCoords) {
+      uint32_t nSeedRoll;
+      if ((int)eMissileIdB >= 0) {
+        nSeedRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 2);
+        if (nSeedRoll) {
+          eMissileIdA = eMissileIdB;
+        }
+      }
+
+      nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
+      if (nTotalFrames < 1) {
+        nTotalFrames = 1;
+      }
+
+      memset(&sSkillArg, 0, 0x5c);
+      sSkillArg.nFlags = 0x8020;
+      sSkillArg.pOwner = pUnit;
+      sSkillArg.pMissile = pUnit;
+      sSkillArg.nMissileTxtNo = eMissileIdA;
+      sSkillArg.eSkillNo = eSkill;
+      sSkillArg.nSkillLevel = nSkillLvl;
+      sSkillArg.nUnitX = nTargetX;
+      sSkillArg.nUnitY = nTargetY;
+      sSkillArg.nTotalFrames = nTotalFrames;
+      pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
+      if (pMissile) {
+        SKILLSSOR_SetInfernoFrames(pMissile, nTotalFrames);
+      }
+
+      if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno)) {
+        if (pUnit->pAnimSeq) {
+          D2Common::Units::SetSequenceFrame(pUnit, 8);
+          pUnit->nFrameCount = 0x500;
+        } else {
+          pUnit->nGfxCurrentFrame = (pUnit->nGfxCurrentFrame & 0xffffff00U) - 0x200;
+        }
+      }
+      return pMissile;
+    }
+
+    return nullptr;
+}
+#endif
 D2UnitStrc * __fastcall SKILLSSOR_CltCreateInfernoMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nTotalFrames;
     D2UnitStrc* pMissile;

@@ -1548,7 +1548,7 @@ void __stdcall PLAYERSAVE_RestoreSkillLevel(D2UnitStrc * pUnit, eD2Skills eSkill
 
 // Body continues at 00532eb7, the JZ target of 00532eaa - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named '_oldSaveGameLoadingPart6_part1'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from '_oldSaveGameLoadingPart6_part1':
-int __fastcall _oldSaveGameLoadingPart6(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2UnitStrc * pUnit, uint8_t * pSkillSection, uint32_t dwParam2, uint32_t nFormat, uint32_t * pnBytesConsumed) {
+int __fastcall _oldSaveGameLoadingPart6(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2UnitStrc * pUnit, uint8_t * pSkillSection, uint32_t dwUnused, uint32_t nFormat, uint32_t * pnBytesConsumed) {
     *pnBytesConsumed = 0;
     if (*(short int*)pSkillSection != 0x6669) {
       return 5;

@@ -9,7 +9,7 @@ Python fixers are retired: their rules are ghidra-reconstruct's.
 
 ```sh
 zig build --release=fast                   # zig-out/bin/oracle-zig (capstone 5.0.7 from source)
-oracle-zig carve [Game.exe] [functions.tsv]
+oracle-zig carve [Game.exe] [functions.tsv] [confirmed-starts.tsv]
 oracle-zig audit --root <asm_matching/msvc8> [--funcmap F] [--libmap L] [--out O]
 oracle-zig crt --root <asm_matching/msvc8> [--out F]
 oracle-zig map --root <asm_matching/msvc8> [--out F]
@@ -164,9 +164,14 @@ path and leave `GR` unset for the published pipeline. The translation's source h
 are checked before compilation; neither a translator checkout nor Node is needed.
 `oracle-zig all --root <asm_matching/msvc8>` runs native build, map, libmap, and audit
 in order. `oracle-zig quick --root <asm_matching/msvc8>` runs the incremental pipeline;
-both require the VC8 inputs above. On Windows, `all`, `quick`, and `map` carve a missing
-`build/ref/functions.tsv` from the local Game.exe; they do not download the image.
+both require the VC8 inputs above. On Windows, `all`, `quick`, and `map` carve
+`build/ref/functions.tsv` from the local Game.exe when needed; they do not download the image.
 These commands check Game.exe against the oracle's pinned 1.14d SHA-256 before use.
+Confirmed starts come from `evidence/confirmed-starts.tsv`. The cache's
+`functions.tsv.inputs` records the image, evidence and carver-source SHA-256 values;
+a cache without that record, or with any of them changed, is carved again
+(`oracle-zig ref --root <dir> [--force]`, which the Unix `oracle ref` also runs).
+Invalid evidence or a wrong image leaves the existing reference cache intact.
 The Unix `oracle` Bash wrapper and its build.py fallback are not used by these native
 commands. `all` and `quick` require baseline settings (default `ORACLE_VC=sp1` and no
 custom `ORACLE_CFLAGS`) because they write the baseline evidence directory.

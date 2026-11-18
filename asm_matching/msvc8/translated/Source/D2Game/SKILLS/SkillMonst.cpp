@@ -2186,23 +2186,7 @@ uint32_t __fastcall SKILLMONST_GetMonFrenzySequenceFrame(D2UnitStrc * pUnit) {
     int32_t nCurFrameShifted;
     uint8_t byEventVal;
     D2MonSeqTxt* pSeqTxt = D2Common::Merc::MERC_GetSequenceTxt(pUnit);
-    if (pSeqTxt) {
-      int32_t nTotalSeqFrames;
-      nTotalSeqFrames = D2Common::Merc::GetCounter1(pUnit);
-      nCurFrameShifted = pUnit->nSeqFrame >> 8;
-      nFrameIdx = nCurFrameShifted + 1;
-      if (nFrameIdx < nTotalSeqFrames >> 8) {
-        nCurFrameShifted <<= 8;
-        do {
-          D2Common::Merc::ANIM_GetEventFrame((D2MonSeqTxt*)pUnit->pAnimSeq, nCurFrameShifted, &nEventFrame);
-          if (nEventFrame) {
-            return nEventFrame;
-          }
-
-          nFrameIdx++;
-        } while (nFrameIdx < nTotalSeqFrames >> 8);
-      }
-    } else {
+    if (!pSeqTxt) {
       nTotalFrames = pUnit->nFrameCount >> 8;
       nFrameIdx = pUnit->nGfxCurrentFrame >> 8;
       if ((uint32_t)nTotalFrames <= (uint32_t)pUnit->pAnimData->nFrames) {
@@ -2219,6 +2203,22 @@ uint32_t __fastcall SKILLMONST_GetMonFrenzySequenceFrame(D2UnitStrc * pUnit) {
 
           return 0;
         }
+      }
+    } else {
+      int32_t nTotalSeqFrames;
+      nTotalSeqFrames = D2Common::Merc::GetCounter1(pUnit);
+      nCurFrameShifted = pUnit->nSeqFrame >> 8;
+      nFrameIdx = nCurFrameShifted + 1;
+      if (nFrameIdx < nTotalSeqFrames >> 8) {
+        nCurFrameShifted <<= 8;
+        do {
+          D2Common::Merc::ANIM_GetEventFrame(pUnit->pAnimSeq, nCurFrameShifted, &nEventFrame);
+          if (nEventFrame) {
+            return nEventFrame;
+          }
+
+          nFrameIdx++;
+        } while (nFrameIdx < nTotalSeqFrames >> 8);
       }
     }
 

@@ -16,6 +16,7 @@
 #include "Source/D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "Source/D2Common/Drlg/Path.h"
 #include "Source/D2Common/Drlg/Transform.h"
+#include "Source/D2Common/Merc.h"
 #include "Source/D2Common/PATH/DynamicPath.h"
 #include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Common/Unit.h"
@@ -130,6 +131,7 @@ void __fastcall PATH_CheckPathPointsInRoom(D2DynamicPathStrc * pPath) {
     int i;
     int nRoomStart;
     D2RoomStrc* pRoom;
+    D2PathPointStrc* t2_c0 = pPath->PathPoints;
     pPath->nFlags &= -2;
     pRoom = pPath->pRoom;
     i = 0;
@@ -139,22 +141,24 @@ void __fastcall PATH_CheckPathPointsInRoom(D2DynamicPathStrc * pPath) {
 
     while (pRoom) {
       uint32_t nPointX;
-      nPointX = (uint32_t)pPath->PathPoints[i].nX;
+      nPointX = (uint32_t)t2_c0[i].nX;
       nRoomStart = pRoom->sCoords.dwXStart;
       if ((int)nPointX < nRoomStart || (int)nPointX >= pRoom->sCoords.dwXSize + nRoomStart) {
         break;
       }
 
-      nPointX = (uint32_t)pPath->PathPoints[i].nY;
+      nPointX = (uint32_t)t2_c0[i].nY;
       nRoomStart = pRoom->sCoords.dwYStart;
       if ((int)nPointX < nRoomStart || (int)nPointX >= pRoom->sCoords.dwYSize + nRoomStart) {
         break;
       }
 
       i++;
-      if (i >= pPath->dwPathPoints) {
-        return;
+      if (i < pPath->dwPathPoints) {
+        continue;
       }
+
+      return;
     }
 
     pPath->nFlags |= 1;
@@ -1403,14 +1407,22 @@ BOOL __fastcall PATH_CheckPathCollision(D2UnitStrc * pUnit, D2DynamicPathStrc * 
     if (pUnit) {
       eOwnerType = pUnit->eUnitType;
     }
-    if (eOwnerType != UNIT_PLAYER) {
-      if (eOwnerType == UNIT_MONSTER && pDynamicPath->nFlags & 0x10 && (!pUnit || !FlagBit_D2UnitStrc_eUnitFlags_21(pUnit))) {
-        return 0;
-      }
-    } else {
-      if (!(pDynamicPath->nFlags & 0x10)) {
-        return 0;
-      }
+
+    switch (eOwnerType) {
+      case UNIT_MONSTER:
+        {
+          if (pDynamicPath->nFlags & 0x10 && (!pUnit || !FlagBit_D2UnitStrc_eUnitFlags_21(pUnit))) {
+            return 0;
+          }
+        }
+      break;
+      case UNIT_PLAYER:
+        {
+          if (!(pDynamicPath->nFlags & 0x10)) {
+            return 0;
+          }
+        }
+      break;
     }
 
     return 1;

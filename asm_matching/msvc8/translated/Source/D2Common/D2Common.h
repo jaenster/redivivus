@@ -354,14 +354,6 @@ __pragma(pack(push, 1)) struct D2AnimDataStrc {
     /* 0x404 */ D2AnimDataRecordStrc pDefaultRecord;
 }; __pragma(pack(pop))
 #endif // D2_DEFINED_D2AnimDataStrc
-#ifndef D2_DEFINED_D2AnimSeqStrc
-#define D2_DEFINED_D2AnimSeqStrc
-struct D2AnimSeqStrc {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-
-    /* 0x00 */ int nFrame;
-};
-#endif // D2_DEFINED_D2AnimSeqStrc
 #ifndef D2_DEFINED_D2AutoMapLvlTbls
 #define D2_DEFINED_D2AutoMapLvlTbls
 struct D2AutoMapLvlTbls {

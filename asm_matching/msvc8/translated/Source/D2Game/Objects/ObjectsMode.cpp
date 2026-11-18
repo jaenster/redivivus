@@ -384,36 +384,6 @@ void __fastcall OBJMODE_UpdateDayNightState(::SGAMEDATA * pGame, D2UnitStrc * pU
     return;
 }
 
-#if 0 // ratchet: the match body of 00581410 (evidence b0e96f655) could not be re-spelled: callee SKILLS::SkillsServer::LinkPortal parameter eLevel retyped: D2RoomStrc * -> eD2LevelId
-void __fastcall OBJMODE_CreateRedPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    D2RoomStrc* eLevel;
-    eD2LevelId nLevelId2 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(D2Common::Units::UNITS_GetRoom(pUnit));
-    eLevel = (D2RoomStrc*)0x7f;
-    switch (nLevelId2) {
-      case LEVEL_FrigidHighlands:
-        {
-          eLevel = (D2RoomStrc*)0x7d;
-          break;
-        }
-      case LEVEL_ArreatPlateau:
-        {
-          eLevel = (D2RoomStrc*)0x7e;
-          break;
-        }
-    }
-
-    D2UnitStrc* pPortalUnit = SKILLS::SkillsServer::LinkPortal(pGame, nullptr, pUnit, eLevel, nLevelId2);
-    if (pPortalUnit) {
-      uint8_t byPortalFlags;
-      byPortalFlags = D2Common::Units::GetObjectPortalFlags(pPortalUnit);
-      byPortalFlags |= 3;
-      D2Common::Units::SetObjectPortalFlags(pPortalUnit, byPortalFlags);
-    }
-
-    D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pUnit), 0);
-    D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pPortalUnit), 0);
-}
-#endif
 void __fastcall OBJMODE_CreateRedPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     eD2LevelId nLevelId2 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(D2Common::Units::UNITS_GetRoom(pUnit));
     eD2LevelId eLevel = LEVEL_InfernalPit;

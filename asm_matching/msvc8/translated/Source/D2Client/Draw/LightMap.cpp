@@ -22,6 +22,7 @@
 #include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgStrc.h"
 #include "Source/D2Common/Environment.h"
+#include "Source/D2Common/Merc.h"
 #include "Source/D2Common/PATH/DynamicPath.h"
 #include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2Game.h"

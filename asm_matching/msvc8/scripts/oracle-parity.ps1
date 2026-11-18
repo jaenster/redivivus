@@ -21,6 +21,10 @@ function Read-Result([string]$Role) {
     if ($inputs.commit -notmatch '^[0-9a-f]{40}$' -or $inputs.sourceManifest -notmatch '^[0-9a-f]{64}$') {
         throw "$Role has invalid checkout/source provenance"
     }
+    if (-not $inputs.ContainsKey('confirmedStarts') -or
+        ($null -ne $inputs.confirmedStarts -and $inputs.confirmedStarts -notmatch '^[0-9a-f]{64}$')) {
+        throw "$Role has invalid confirmed-start input provenance"
+    }
     $evidence = Join-Path $dir 'asm_matching/msvc8/evidence'
     $audit = Get-Content -LiteralPath (Join-Path $evidence 'audit.tsv.summary') -Raw
     $libmap = Get-Content -LiteralPath (Join-Path $evidence 'libmap.tsv.summary') -Raw
@@ -55,7 +59,7 @@ function Read-Result([string]$Role) {
 }
 
 function Same-Inputs($A, $B) {
-    foreach ($key in @('sourceManifest', 'crtmap', 'prebuilt', 'linkerMap')) {
+    foreach ($key in @('sourceManifest', 'confirmedStarts', 'crtmap', 'prebuilt', 'linkerMap')) {
         if ($A.inputs[$key] -cne $B.inputs[$key]) { return $false }
     }
     return $true
@@ -89,7 +93,7 @@ if ($publishedParity) { Assert-Same $baseline $linux }
     mainControlCommit = $baseline.inputs.commit
     candidateHostParity = $true
     publishedMainInputsIdentical = $publishedParity
-    publishedMainParity = if ($publishedParity) { $true } else { 'not comparable: source inputs changed' }
+    publishedMainParity = if ($publishedParity) { $true } else { 'not comparable: source or reference inputs changed' }
     headline = $linux.headline
     totalMatch = $linux.totalMatch
     runtime = $linux.runtime

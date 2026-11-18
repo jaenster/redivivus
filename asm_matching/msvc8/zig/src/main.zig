@@ -1,6 +1,8 @@
 //! oracle-zig: the msvc8 oracle's core in Zig, one executable with a subcommand each.
 //!
-//!   oracle-zig carve [Game.exe] [functions.tsv]   carve the original into functions (refimage.py)
+//!   oracle-zig carve [Game.exe] [functions.tsv] [confirmed-starts.tsv]
+//!                                                 carve the original into functions (refimage.py)
+//!   oracle-zig ref --root <dir> [--force]         the cached carve, refreshed when its inputs change
 //!   oracle-zig audit --root <dir> [--funcmap F] [--libmap L] [--out O]
 //!                                                 compare every mapped function (audit.py)
 //!   oracle-zig crt --root <dir> [--out F]         the linked CRT, by bytes (crtmap.py)
@@ -64,7 +66,8 @@ const commit = @import("commit.zig");
 const x64 = @import("x64.zig");
 
 const USAGE =
-    \\usage: oracle-zig carve [Game.exe] [functions.tsv]
+    \\usage: oracle-zig carve [Game.exe] [functions.tsv] [confirmed-starts.tsv]
+    \\       oracle-zig ref --root <asm_matching/msvc8> [--force]
     \\       oracle-zig audit --root <asm_matching/msvc8> [--funcmap F] [--libmap L] [--out O]
     \\       oracle-zig crt --root <asm_matching/msvc8> [--out F]
     \\       oracle-zig map --root <asm_matching/msvc8> [--out F]
@@ -137,7 +140,7 @@ fn allWindows(args: []const []const u8) !void {
     const root = try cli.root(given_root);
     const cfg = try audit.Config.init(root);
     if (cfg.experiment) cli.exitMsg("all: the baseline only (map, libmap, and audit write evidence/)", .{});
-    try refimage.ensureFunctions(root);
+    try refimage.ensureFunctions(root, false);
 
     const self = try cli.selfExe();
     var build: std.ArrayList([]const u8) = .empty;
@@ -162,13 +165,20 @@ pub fn main(init: std.process.Init.Minimal) !void {
     const cmd = args.items[0];
     const rest = args.items[1..];
     if (std.mem.eql(u8, cmd, "carve")) return refimage.carveMain(rest);
+    if (std.mem.eql(u8, cmd, "ref")) {
+        var force = false;
+        for (rest) |a| if (std.mem.eql(u8, a, "--force")) {
+            force = true;
+        };
+        return refimage.ensureFunctions(try cli.root(mapRoot(rest)), force);
+    }
     if (std.mem.eql(u8, cmd, "audit")) return audit.main(rest);
     if (std.mem.eql(u8, cmd, "crt")) {
-        if (builtin.os.tag == .windows) if (mapRoot(rest)) |root| try refimage.ensureFunctions(try cli.root(root));
+        if (builtin.os.tag == .windows) if (mapRoot(rest)) |root| try refimage.ensureFunctions(try cli.root(root), false);
         return crtmap.main(rest);
     }
     if (std.mem.eql(u8, cmd, "map")) {
-        if (builtin.os.tag == .windows) if (mapRoot(rest)) |root| try refimage.ensureFunctions(try cli.root(root));
+        if (builtin.os.tag == .windows) if (mapRoot(rest)) |root| try refimage.ensureFunctions(try cli.root(root), false);
         return funcmap.main(rest);
     }
     if (std.mem.eql(u8, cmd, "libmap")) return libmap.main(rest);
@@ -209,6 +219,7 @@ pub fn main(init: std.process.Init.Minimal) !void {
 
 test {
     _ = modules;
+    _ = @import("confirmed_starts.zig");
     _ = datamatch;
     _ = classify;
     _ = permodule;

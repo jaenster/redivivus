@@ -76,13 +76,12 @@ zigtool_noroot() {
     oracle_zig "$sub" "$@"
 }
 
-# The carve: oracle-zig, about a second.
+# The carve: oracle-zig, about a second. build/ref/functions.tsv is reused while
+# functions.tsv.inputs names the same image, confirmed-start evidence and carver
+# by SHA-256; otherwise it is carved again. --force carves regardless.
 carve() {
     have_zig || need_zig carve
-    local ref="$ORACLE_ROOT/build/ref"
-    mkdir -p "$ref"
-    oracle_zig carve "$REFERENCE_EXE" "$ref/functions.tsv.new"
-    mv "$ref/functions.tsv.new" "$ref/functions.tsv"
+    oracle_zig ref --root "$ORACLE_ROOT" "$@"
 }
 
 # The compile: oracle-zig build. It translates with a ghidra-reconstruct checkout (GR, else
@@ -95,7 +94,7 @@ build() {
 
 ensure_ref() {
     [ -f "$REFERENCE_EXE" ] || "$SCRIPTS/fetch_reference.sh"
-    [ -f "$ORACLE_ROOT/build/ref/functions.tsv" ] || carve
+    carve
 }
 
 is_experiment() { [ "$ORACLE_VC" != sp1 ] || [ -n "${ORACLE_CFLAGS:-}" ]; }
@@ -106,7 +105,7 @@ case "$cmd" in
     build)  build "$@" ;;
     translate) [ $# -eq 1 ] || { echo "usage: oracle translate <out>" >&2; exit 2; }
             zigtool_noroot translate --repo "$REPO_ROOT" "$1" ;;
-    ref)    [ -f "$REFERENCE_EXE" ] || "$SCRIPTS/fetch_reference.sh"; carve "$@" ;;
+    ref)    [ -f "$REFERENCE_EXE" ] || "$SCRIPTS/fetch_reference.sh"; carve --force ;;
     crt)    ensure_ref
             zigtool crt "$@" ;;
     map)    ensure_ref

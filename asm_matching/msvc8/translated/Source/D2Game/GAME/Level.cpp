@@ -18,6 +18,7 @@
 #include "Source/D2Common/Drlg/D2DrlgStrc.h"
 #include "Source/D2Common/Drlg/Drlg.h"
 #include "Source/D2Common/Environment.h"
+#include "Source/D2Common/Merc.h"
 #include "Source/D2Common/PATH/Path.h"
 #include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"

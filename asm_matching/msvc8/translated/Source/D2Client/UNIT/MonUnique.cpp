@@ -25,6 +25,11 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+#ifndef RECON_FPTD_pfnMonUniqueModInit
+#define RECON_FPTD_pfnMonUniqueModInit
+typedef void (__fastcall *pfnMonUniqueModInit)(D2UnitStrc * pUnit, int32_t eModifier, int32_t bApply);
+#endif
+
 namespace D2Client { namespace UNIT { namespace MonUnique {
 
 uint8_t * __fastcall GetMonUModList(D2UnitStrc * pUnit) {
@@ -520,8 +525,9 @@ void __fastcall MONUNIQUE_ApplyModifierEffects(D2UnitStrc * pUnit) {
 
     int* pInitFuncIter = gaMonUniqueBaseModIds;
     do {
-      if (gapMonUniqueModInitFuncs[*pInitFuncIter]) {
-        (*gapMonUniqueModInitFuncs[*pInitFuncIter])(pUnit, *pInitFuncIter, bApply);
+      pfnMonUniqueModInit pfnHandler = gapMonUniqueModInitFuncs[*pInitFuncIter];
+      if (pfnHandler) {
+        (*pfnHandler)(pUnit, *pInitFuncIter, bApply);
       }
 
       pInitFuncIter++;
@@ -529,8 +535,9 @@ void __fastcall MONUNIQUE_ApplyModifierEffects(D2UnitStrc * pUnit) {
 
     int i = 0;
     do {
-      if (gapMonUniqueModInitFuncs[pTmp[i]]) {
-        (*gapMonUniqueModInitFuncs[pTmp[i]])(pUnit, (uint32_t)pTmp[i], bApply);
+      pfnMonUniqueModInit pfnHandler2 = gapMonUniqueModInitFuncs[pTmp[i]];
+      if (pfnHandler2) {
+        (*pfnHandler2)(pUnit, (uint32_t)pTmp[i], bApply);
       }
 
       i++;

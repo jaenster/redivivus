@@ -7,6 +7,7 @@ on:
     paths:
       - 'asm_matching/msvc8/zig/**'
       - 'asm_matching/msvc8/scripts/oracle-parity.ps1'
+      - 'asm_matching/msvc8/evidence/confirmed-starts.tsv'
       - '.github/workflows/oracle-windows.yml'
 
 permissions:
@@ -53,6 +54,7 @@ jobs:
           $provenance = [ordered]@{
             commit = (& git rev-parse HEAD).Trim()
             sourceManifest = Optional-Hash (Join-Path $oracleRoot 'translated/sources.tsv')
+            confirmedStarts = Optional-Hash (Join-Path $oracleRoot 'evidence/confirmed-starts.tsv')
             crtmap = Optional-Hash (Join-Path $oracleRoot 'evidence/crtmap.tsv')
             prebuilt = Optional-Hash (Join-Path $oracleRoot 'evidence/prebuilt.tsv')
             linkerMap = Optional-Hash (Join-Path $oracleRoot 'build-exe/d2recon-vc8.map')
@@ -153,6 +155,7 @@ jobs:
           $provenance = [ordered]@{
             commit = (& git rev-parse HEAD).Trim()
             sourceManifest = Optional-Hash (Join-Path $oracleRoot 'translated/sources.tsv')
+            confirmedStarts = Optional-Hash (Join-Path $oracleRoot 'evidence/confirmed-starts.tsv')
             crtmap = Optional-Hash (Join-Path $oracleRoot 'evidence/crtmap.tsv')
             prebuilt = Optional-Hash (Join-Path $oracleRoot 'evidence/prebuilt.tsv')
             linkerMap = Optional-Hash (Join-Path $oracleRoot 'build-exe/d2recon-vc8.map')

@@ -161,7 +161,7 @@ pub fn main(args: []const []const u8) !void {
     const root = try cli.root(p.get("--root"));
     const cfg = try audit.Config.init(root);
     if (cfg.experiment) cli.exitMsg("quick: the baseline only (it writes evidence/)", .{});
-    if (builtin.os.tag == .windows) try refimage.ensureFunctions(root);
+    if (builtin.os.tag == .windows) try refimage.ensureFunctions(root, false);
     const jobs = try std.fmt.allocPrint(gpa, "{d}", .{p.int("--jobs", @intCast(proc.cpuCount()))});
     const exe_map = p.get("--exe-map");
     const evidence = try util.join(root, "evidence");

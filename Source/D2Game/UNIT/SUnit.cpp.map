@@ -628,7 +628,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c17dbef9",
+      "dh": "70bee221",
       "paramStorage": [
         [
           "pUnit",
@@ -1051,7 +1051,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "66cb67f0",
+      "dh": "4514f392",
       "paramStorage": [
         [
           "pGame",
@@ -1086,7 +1086,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f848f343",
+      "dh": "9f3f6219",
       "paramStorage": [
         [
           "pGame",
@@ -1125,7 +1125,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a4e4c506",
+      "dh": "2b416fe3",
       "paramStorage": [
         [
           "pGame",
@@ -1164,7 +1164,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d0c64487",
+      "dh": "6b2b6923",
       "paramStorage": [
         [
           "pGame",

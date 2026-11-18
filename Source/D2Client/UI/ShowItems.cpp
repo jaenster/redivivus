@@ -19,6 +19,7 @@
 #include "Source/D2Common/Drlg/D2DrlgActStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Merc.h"
 #include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2Game.h"
 #include "Source/D2Game/GAME/Event.h"

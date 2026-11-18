@@ -4,12 +4,13 @@ const std = @import("std");
 const pe_mod = @import("pe.zig");
 const dec = @import("decode.zig");
 const proc = @import("proc.zig");
+const confirmed_starts = @import("confirmed_starts.zig");
 const util = @import("util.zig");
 
 const gpa = util.gpa;
 
 // Reasons, in the alphabetical order Python's sorted() joins them.
-const WHY = [_][]const u8{ "call", "data", "entry", "export", "fptr", "jmp", "next", "pad", "seh", "vtbl" };
+const WHY = [_][]const u8{ "call", "data", "entry", "export", "fptr", "jmp", "next", "pad", "seed", "seh", "vtbl" };
 const W = struct {
     const call = 1 << 0;
     const data = 1 << 1;
@@ -19,8 +20,9 @@ const W = struct {
     const jmp = 1 << 5;
     const next = 1 << 6;
     const pad = 1 << 7;
-    const seh = 1 << 8;
-    const vtbl = 1 << 9;
+    const seed = 1 << 8;
+    const seh = 1 << 9;
+    const vtbl = 1 << 10;
 };
 
 /// One row of functions.tsv.
@@ -181,8 +183,9 @@ pub const Reference = struct {
         }
     }
 
-    /// refimage.carve: fills `functions`.
-    pub fn carve(r: *Reference) !void {
+    /// refimage.carve: fills `functions`. `confirmed` are starts the evidence
+    /// confirms for this image (evidence/confirmed-starts.tsv).
+    pub fn carve(r: *Reference, confirmed: []const u32) !void {
         const img = &r.img;
         var why: std.AutoArrayHashMapUnmanaged(u32, u16) = .empty;
         const add = struct {
@@ -197,6 +200,10 @@ pub const Reference = struct {
         try add(&why, ts, W.pad);
         var a: u32 = ts + 16;
         while (a < te) : (a += 16) if (r.code[a - ts - 1] == 0xCC and r.code[a - ts] != 0xCC) try add(&why, a, W.pad);
+        for (confirmed) |start| {
+            if (!r.inText(start)) return error.ConfirmedStartOutsideText;
+            try add(&why, start, W.seed);
+        }
         const entry = img.base + img.entry_rva;
         if (r.inText(entry)) try add(&why, entry, W.entry);
         for (try img.exports(gpa)) |v| if (r.inText(v)) try add(&why, v, W.exp);
@@ -481,39 +488,86 @@ fn floorIdx(starts: []const u32, v: u32) ?usize {
     return if (i == 0) null else i - 1;
 }
 
-/// `oracle-zig carve [Game.exe] [functions.tsv]`
+/// `oracle-zig carve [Game.exe] [functions.tsv] [confirmed-starts.tsv]`
 pub fn carveMain(args: []const []const u8) !void {
     const exe = if (args.len > 0) args[0] else "../reference/Game.exe";
     const out = if (args.len > 1) args[1] else "../build/ref/functions.tsv";
+    const evidence = if (args.len > 2) args[2] else "../evidence/confirmed-starts.tsv";
     const r = try Reference.open(exe);
-    try r.carve();
+    const confirmed = try confirmed_starts.read(gpa, try util.readFile(evidence), r.img.data);
+    try r.carve(confirmed);
     try r.writeFunctions(out);
     util.say(try std.fmt.allocPrint(gpa, "{d} functions -> {s}\n", .{ r.starts.len, out }));
 }
 
-/// On a native Windows host the Bash `oracle` wrapper is unavailable. Derive
-/// the reference cache from an already present Game.exe when it is missing.
-pub fn ensureFunctions(oracle_root: []const u8) !void {
+/// The carver's own source, so a change to the carve invalidates the cache too.
+const carver_sources = [_][]const u8{
+    @embedFile("refimage.zig"),
+    @embedFile("decode.zig"),
+    @embedFile("pe.zig"),
+    @embedFile("confirmed_starts.zig"),
+};
+
+fn hexSha256(data: []const u8) [64]u8 {
+    var digest: [32]u8 = undefined;
+    std.crypto.hash.sha2.Sha256.hash(data, &digest, .{});
+    return std.fmt.bytesToHex(digest, .lower);
+}
+
+/// The key `build/ref/functions.tsv.inputs` records: image, evidence and carver SHA-256.
+fn inputsKey(image_hash: []const u8, evidence: []const u8) ![]u8 {
+    var h = std.crypto.hash.sha2.Sha256.init(.{});
+    for (carver_sources) |src| {
+        var len: [8]u8 = undefined;
+        std.mem.writeInt(u64, &len, src.len, .little);
+        h.update(&len);
+        h.update(src);
+    }
+    var carver: [32]u8 = undefined;
+    h.final(&carver);
+    return std.fmt.allocPrint(gpa, "image\t{s}\nevidence\t{s}\ncarver\t{s}\n", .{
+        image_hash, hexSha256(evidence), std.fmt.bytesToHex(carver, .lower),
+    });
+}
+
+/// `build/ref/functions.tsv`, carved from reference/Game.exe and
+/// evidence/confirmed-starts.tsv. The cache is reused only while its
+/// `functions.tsv.inputs` names the same image, evidence and carver by content;
+/// a cache without that record, or with a different one, is carved again
+/// (`force` carves regardless). A wrong image or invalid evidence fails before
+/// anything is written, so the existing cache stays as it was.
+pub fn ensureFunctions(oracle_root: []const u8, force: bool) !void {
     const exe = try util.join(oracle_root, "reference/Game.exe");
     if (!util.exists(exe)) {
         std.debug.print("reference image missing: {s} (provide Game.exe before running the oracle)\n", .{exe});
         return error.ReferenceImageMissing;
     }
     const expected = "631066c1649c4ea9ffe48bf97e24c00bca1f7a6759c21150f1a79982589adaaf";
-    var digest: [32]u8 = undefined;
-    std.crypto.hash.sha2.Sha256.hash(try util.readFile(exe), &digest, .{});
-    const actual = std.fmt.bytesToHex(digest, .lower);
+    const image = try util.readFile(exe);
+    const actual = hexSha256(image);
     if (!std.mem.eql(u8, actual[0..], expected)) {
         std.debug.print("reference image SHA-256 mismatch: {s} has {s}, expected {s}\n", .{ exe, actual, expected });
         return error.ReferenceImageMismatch;
     }
+    const evidence = try util.readFile(try util.join(oracle_root, "evidence/confirmed-starts.tsv"));
+    const key = try inputsKey(&actual, evidence);
     const out = try util.join(oracle_root, "build/ref/functions.tsv");
-    if (util.exists(out)) return;
+    const stamp = try std.mem.concat(gpa, u8, &.{ out, ".inputs" });
+    if (!force and util.exists(out)) {
+        if (try util.readFileOpt(stamp)) |have| if (std.mem.eql(u8, have, key)) return;
+    }
+    const confirmed = try confirmed_starts.read(gpa, evidence, image);
+    const r = try Reference.open(exe);
+    try r.carve(confirmed);
     util.makeDirs(util.dirname(out));
     const tmp = try std.mem.concat(gpa, u8, &.{ out, ".new" });
-    const r = try Reference.open(exe);
-    try r.carve();
     try r.writeFunctions(tmp);
+    // The stamp goes first: a cache whose stamp is newer than its table is
+    // only ever carved again, never trusted.
+    proc.remove(stamp);
     try proc.rename(tmp, out);
+    const stamp_tmp = try std.mem.concat(gpa, u8, &.{ stamp, ".new" });
+    try util.writeFile(stamp_tmp, key);
+    try proc.rename(stamp_tmp, stamp);
     util.say(try std.fmt.allocPrint(gpa, "{d} functions -> {s}\n", .{ r.starts.len, out }));
 }

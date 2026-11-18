@@ -1667,9 +1667,7 @@ void __stdcall CMD_UseBeltSlot1() {
     }
 
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    uint16_t wShiftKeyState = GetKeyState(0x10);
-    wShiftKeyState &= 0x8000;
-    ClickBeltRight(0, pUnit, pUnit->pInventory, wShiftKeyState);
+    ClickBeltRight(0, pUnit, pUnit->pInventory, GetKeyState(0x10) & 0x8000);
 }
 
 // Key-command handler for belt slot 2. If not exiting and the player is alive and
@@ -1688,9 +1686,7 @@ void __stdcall CMD_UseBeltSlot2() {
     }
 
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    uint16_t wShiftKeyState = GetKeyState(0x10);
-    wShiftKeyState &= 0x8000;
-    ClickBeltRight(1, pUnit, pUnit->pInventory, wShiftKeyState);
+    ClickBeltRight(1, pUnit, pUnit->pInventory, GetKeyState(0x10) & 0x8000);
 }
 
 // Key-command handler for belt slot 3. If not exiting and the player is alive and
@@ -1709,9 +1705,7 @@ void __stdcall CMD_UseBeltSlot3() {
     }
 
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    uint16_t wShiftKeyState = GetKeyState(0x10);
-    wShiftKeyState &= 0x8000;
-    ClickBeltRight(2, pUnit, pUnit->pInventory, wShiftKeyState);
+    ClickBeltRight(2, pUnit, pUnit->pInventory, GetKeyState(0x10) & 0x8000);
 }
 
 // Key-command handler for belt slot 4. If not exiting and the player is alive and
@@ -1730,9 +1724,7 @@ void __stdcall CMD_UseBeltSlot4() {
     }
 
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    uint16_t wShiftKeyState = GetKeyState(0x10);
-    wShiftKeyState &= 0x8000;
-    ClickBeltRight(3, pUnit, pUnit->pInventory, wShiftKeyState);
+    ClickBeltRight(3, pUnit, pUnit->pInventory, GetKeyState(0x10) & 0x8000);
 }
 
 void __fastcall PANEL_SetBeltSlotHasItem(uint32_t nIndex, int bHasItem) {

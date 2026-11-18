@@ -40,6 +40,7 @@
 #include "Source/D2Common/Drlg/D2DrlgTileDataStrc.h"
 #include "Source/D2Common/Drlg/Drlg.h"
 #include "Source/D2Common/Drlg/Transform.h"
+#include "Source/D2Common/Merc.h"
 #include "Source/D2Common/PATH/DynamicPath.h"
 #include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2Game.h"

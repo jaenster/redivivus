@@ -160,6 +160,14 @@ typedef void (__fastcall *pfnMinionForEachCallback)(D2UnitStrc * pMinion, void *
 #define RECON_FPTD_fnSkillUnitProc
 typedef void (__fastcall *fnSkillUnitProc)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, int nDuration);
 #endif
+#ifndef RECON_FPTD_fpMonsterUModHandler
+#define RECON_FPTD_fpMonsterUModHandler
+typedef void (__fastcall *fpMonsterUModHandler)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
+#endif
+#ifndef RECON_FPTD_fpUmodInit
+#define RECON_FPTD_fpUmodInit
+typedef void (__fastcall *fpUmodInit)(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown);
+#endif
 
 static int gaMissileOffsets_LightningUniqueY[4] = { -0x1, 0x0, 0x1, 0x0 }; D2_STATIC_GUARD(gaMissileOffsets_LightningUniqueY, "gaMissileOffsets_LightningUniqueY");
 namespace D2Game { namespace Monsters { namespace Umod {
@@ -2754,8 +2762,9 @@ static void __stdcall MONSTER_DispatchUniqueModifiers(::SGAMEDATA * pGame, D2Uni
     }
     if (nEvent != 5) {
       do {
-        if ((&g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnModeStart)[nEvent]) {
-          (*(&g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnModeStart)[nEvent])(pGame, pUnit, (uint32_t)pUModList[nUModSlot], nSecurityCookie);
+        fpMonsterUModHandler pfnHandler = (&g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnModeStart)[nEvent];
+        if (pfnHandler) {
+          (*pfnHandler)(pGame, pUnit, (uint32_t)pUModList[nUModSlot], nSecurityCookie);
         }
 
         nUModSlot++;
@@ -2765,8 +2774,9 @@ static void __stdcall MONSTER_DispatchUniqueModifiers(::SGAMEDATA * pGame, D2Uni
     }
 
     do {
-      if (g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnMissile) {
-        g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnMissile(pGame, pMissile, (uint32_t)pUModList[nUModSlot], nSecurityCookie);
+      fpMonsterUModHandler pfnHandler2 = g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnMissile;
+      if (pfnHandler2) {
+        pfnHandler2(pGame, pMissile, (uint32_t)pUModList[nUModSlot], nSecurityCookie);
       }
 
       nUModSlot++;
@@ -2967,8 +2977,9 @@ D2UnitStrc * __fastcall MONSTER_SpawnWithUniqueModifiers(::SGAMEDATA * pGame, D2
     anBaseUModIds[3] = 4;
     int nUModIdx = 0;
     do {
-      if (Umod::aUmodInitTable[anBaseUModIds[nUModIdx]]) {
-        (*Umod::aUmodInitTable[anBaseUModIds[nUModIdx]])(pSpawnedUnit, anBaseUModIds[nUModIdx], 0);
+      fpUmodInit pfnHandler = Umod::aUmodInitTable[anBaseUModIds[nUModIdx]];
+      if (pfnHandler) {
+        (*pfnHandler)(pSpawnedUnit, anBaseUModIds[nUModIdx], 0);
       }
 
       nUModIdx++;
@@ -2976,8 +2987,9 @@ D2UnitStrc * __fastcall MONSTER_SpawnWithUniqueModifiers(::SGAMEDATA * pGame, D2
 
     nUModIdx = 0;
     do {
-      if (Umod::aUmodInitTable[pUModList[nUModIdx]]) {
-        (*Umod::aUmodInitTable[pUModList[nUModIdx]])(pSpawnedUnit, (uint32_t)pUModList[nUModIdx], 0);
+      fpUmodInit pfnHandler2 = Umod::aUmodInitTable[pUModList[nUModIdx]];
+      if (pfnHandler2) {
+        (*pfnHandler2)(pSpawnedUnit, (uint32_t)pUModList[nUModIdx], 0);
       }
 
       nUModIdx++;

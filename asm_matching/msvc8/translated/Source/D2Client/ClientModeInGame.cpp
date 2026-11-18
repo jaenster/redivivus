@@ -316,13 +316,11 @@ D2BNetClientCallbacksStrc * __stdcall CLIENT_GetBNetClientCallbacks() {
 
 char * __stdcall CLIENTMODE_GetGamePasswordPart1() {
     char cChar;
-    if (!D2IniData_client) {
-      return nullptr;
-    }
-
-    char* pszCursor;
-    if (strlen(D2IniData_client->szGAMENAME) >= 1) {
-      return D2IniData_client->szGAMENAME;
+    if (D2IniData_client) {
+      char* pszCursor;
+      if (strlen(D2IniData_client->szGAMENAME) >= 1) {
+        return D2IniData_client->szGAMENAME;
+      }
     }
 
     return nullptr;
@@ -330,13 +328,11 @@ char * __stdcall CLIENTMODE_GetGamePasswordPart1() {
 
 char * __stdcall CLIENTMODE_GetGamePasswordPart2() {
     char cChar;
-    if (!D2IniData_client) {
-      return nullptr;
-    }
-
-    char* pszCursor;
-    if (strlen(D2IniData_client->szGamePassword) >= 1) {
-      return D2IniData_client->szGamePassword;
+    if (D2IniData_client) {
+      char* pszCursor;
+      if (strlen(D2IniData_client->szGamePassword) >= 1) {
+        return D2IniData_client->szGamePassword;
+      }
     }
 
     return nullptr;
@@ -344,13 +340,11 @@ char * __stdcall CLIENTMODE_GetGamePasswordPart2() {
 
 char * __stdcall CLIENTMODE_GetGamePasswordPart3() {
     char ch;
-    if (!D2IniData_client) {
-      return nullptr;
-    }
-
-    char* pServerIp;
-    if (strlen(D2IniData_client->szSERVERIP) >= 1) {
-      return D2IniData_client->szSERVERIP;
+    if (D2IniData_client) {
+      char* pServerIp;
+      if (strlen(D2IniData_client->szSERVERIP) >= 1) {
+        return D2IniData_client->szSERVERIP;
+      }
     }
 
     return nullptr;

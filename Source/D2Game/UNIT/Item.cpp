@@ -14,6 +14,7 @@
 #include "Source/D2Common/Drlg/D2DrlgActStrc.h"
 #include "Source/D2Common/INVENTORY/Inventory.h"
 #include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Merc.h"
 #include "Source/D2Common/Monsters/MONSTERS.h"
 #include "Source/D2Common/PATH/DynamicPath.h"
 #include "Source/D2Common/Stats/StatsEx.h"

@@ -31,6 +31,7 @@
 #include "Source/D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgStrc.h"
 #include "Source/D2Common/Drlg/Transform.h"
+#include "Source/D2Common/Merc.h"
 #include "Source/D2Common/PATH/DynamicPath.h"
 #include "Source/D2Common/PATH/Path.h"
 #include "Source/D2Common/Stats/StatsEx.h"

@@ -25,6 +25,7 @@ struct D2GfxInfoUnkStrc;
 struct D2GfxUnknown_0xa8;
 struct D2InventoryStrc;
 struct D2LightMapStrc;
+struct D2MonSeqTxt;
 struct D2ParticleStrc;
 struct D2PoolManagerStrc;
 struct D2SUnitMsgStrc;
@@ -34,15 +35,6 @@ struct D2TimerStrc;
 typedef uint32_t eD2UnitType;
 
 // Data types
-#ifndef D2_DEFINED_D2AnimSeqStrc
-#define D2_DEFINED_D2AnimSeqStrc
-struct D2AnimSeqStrc {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-
-    /* 0x00 */ int nFrame;
-};
-
-#endif // D2_DEFINED_D2AnimSeqStrc
 #ifndef D2_DEFINED_D2GfxInfoStrc
 #define D2_DEFINED_D2GfxInfoStrc
 struct D2GfxInfoStrc {
@@ -136,7 +128,7 @@ struct D2UnitStrc {
     /* 0x20 */ D2SeedStrc sSeed;
     /* 0x28 */ int nInitSeed;
     /* 0x2C */ D2PathUnion pPath;
-    /* 0x30 */ struct D2AnimSeqStrc * pAnimSeq;
+    /* 0x30 */ struct D2MonSeqTxt * pAnimSeq;
     /* 0x34 */ int nSeqFrameCount;
     /* 0x38 */ int nSeqFrame;
     /* 0x3C */ uint32_t nSeqAnimSpeed;

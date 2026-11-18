@@ -665,12 +665,13 @@ BOOL __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(D2UnitStrc * pUni
     if (*(char*)((char*)pSkillData + 0x10) == '\0') {
       nTargetGUID = *(uint32_t*)((char*)pSkillData + 0x14);
       nSwitchAiMode = 1;
+      Monster::MonsterAI::AI_SetSwitchAiTargetParams(pUnit, nSwitchAiMode, nTargetGUID);
     } else {
       nTargetGUID = *(uint32_t*)((char*)pSkillData + 0x14);
       nSwitchAiMode = 2;
+      Monster::MonsterAI::AI_SetSwitchAiTargetParams(pUnit, nSwitchAiMode, nTargetGUID);
     }
 
-    Monster::MonsterAI::AI_SetSwitchAiTargetParams(pUnit, nSwitchAiMode, nTargetGUID);
     GAME::Event::SetEvent(*(::SGAMEDATA**)pSkillData, pUnit, 10, (*(::SGAMEDATA**)pSkillData)->dwGameFrame + *(int*)((char*)pSkillData + 0x18), 0, 0);
     return 1;
 }

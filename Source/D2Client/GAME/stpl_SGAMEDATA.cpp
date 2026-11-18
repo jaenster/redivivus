@@ -644,6 +644,11 @@ template<> __attribute__((noinline)) inline TSHashTableReuse<::SGAMEDATA, HASHKE
     return this;
 }
 
+// JMP thunk
+template<> void TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Unreferenced_00451160() {
+    this->Destructor();
+}
+
 template<> TSExportTableSimple<::SGAMEDATA, HSGAMEDATA__*, 0>* TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::Constructor() {
     this->TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>::Constructor();
     this->nSequence = ~(uint32_t)this & 0xfffffff;

@@ -1048,7 +1048,8 @@ void __fastcall Q20_ActivateSerpentObject(::SGAMEDATA * pGame) {
     }
 
     D2Common::Units::ChangeAnimMode(pSerpentObj, 1);
-    D2ObjectsTxt* pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pSerpentObj->nClassId);
+    int t2_c0 = pSerpentObj->nClassId;
+    D2ObjectsTxt* pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(t2_c0);
     GAME::Event::SetEvent(pGame, pSerpentObj, 1, (pObjTxt->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
     pA2Q3Data->nQuestStage = 2;
 }

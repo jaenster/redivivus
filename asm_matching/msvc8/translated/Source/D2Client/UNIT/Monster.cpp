@@ -200,6 +200,10 @@
 #endif
 
 
+#ifndef RECON_FPTD_fnMonUniqueModCallback
+#define RECON_FPTD_fnMonUniqueModCallback
+typedef void (__fastcall *fnMonUniqueModCallback)(D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion);
+#endif
 #ifndef RECON_FPTD_fnRoomUnitScanCallback
 #define RECON_FPTD_fnRoomUnitScanCallback
 typedef int32_t (__fastcall *fnRoomUnitScanCallback)(D2UnitStrc * pSourceUnit, D2UnitStrc * pCandidate, D2UnitStrc * * ppBestUnit, int32_t * pnBestValue);
@@ -470,8 +474,9 @@ void __stdcall MONUNIQUE_DispatchModifierByIndex(D2UnitStrc * pUnit, D2UnitStrc 
     int i = 0;
     if (nIndex != 4) {
       do {
-        if (gapMonUniqueModDispatchTable[nIndex + (uint32_t)pUModList[i] * 5]) {
-          (*gapMonUniqueModDispatchTable[nIndex + (uint32_t)pUModList[i] * 5])(pUnit, (uint32_t)pUModList[i], bIsChampion);
+        fnMonUniqueModCallback pfnHandler = gapMonUniqueModDispatchTable[nIndex + (uint32_t)pUModList[i] * 5];
+        if (pfnHandler) {
+          (*pfnHandler)(pUnit, (uint32_t)pUModList[i], bIsChampion);
         }
 
         i++;
@@ -481,8 +486,9 @@ void __stdcall MONUNIQUE_DispatchModifierByIndex(D2UnitStrc * pUnit, D2UnitStrc 
     }
 
     do {
-      if (gapMonUniqueModDispatchTable[(uint32_t)pUModList[i] * 5 + 4]) {
-        (*gapMonUniqueModDispatchTable[(uint32_t)pUModList[i] * 5 + 4])(pUnit2, (uint32_t)pUModList[i], bIsChampion);
+      fnMonUniqueModCallback pfnHandler2 = gapMonUniqueModDispatchTable[(uint32_t)pUModList[i] * 5 + 4];
+      if (pfnHandler2) {
+        (*pfnHandler2)(pUnit2, (uint32_t)pUModList[i], bIsChampion);
       }
 
       i++;

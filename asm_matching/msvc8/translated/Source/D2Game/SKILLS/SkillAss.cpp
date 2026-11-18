@@ -29,6 +29,10 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+#ifndef RECON_FPTD_D2SkillSrvDoFunc
+#define RECON_FPTD_D2SkillSrvDoFunc
+typedef BOOL (__fastcall *D2SkillSrvDoFunc)(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, eD2Skills eD2Skill, int nSkillLvl);
+#endif
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
 typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam);
@@ -1410,8 +1414,9 @@ void __fastcall SKILLASS_ReleaseChargeUpAttack(::SGAMEDATA * pGame, D2UnitStrc *
                     do {
                       if (*pSrvPrgFunc > 0 && *pSrvPrgFunc < SKILLSRVDOFUNCS_SIZE) {
                         D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatListSaved, (int)pDVar4->aurastat[0], i + 1, 0);
-                        if (SKILLSRVDOFUNCS[*pSrvPrgFunc]) {
-                          (*SKILLSRVDOFUNCS[*pSrvPrgFunc])(pGameCopy, pUnit, eSkillId, nEffectiveSkillLvl);
+                        D2SkillSrvDoFunc pfnHandler = SKILLSRVDOFUNCS[*pSrvPrgFunc];
+                        if (pfnHandler) {
+                          (*pfnHandler)(pGameCopy, pUnit, eSkillId, nEffectiveSkillLvl);
                         }
                       }
 

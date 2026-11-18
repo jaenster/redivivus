@@ -6,7 +6,6 @@
 #include "Source/D2Lang/D2Lang.h"
 #include "Source/D2Multi/OOGUtilities.h"
 #include "Source/Fog/Fog.h"
-#include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2MCPClient/McpConnect.data.h"
 #include "Source/D2MCPClient/McpConnect.inline.h"
@@ -22,6 +21,10 @@
 #endif
 
 
+#ifndef RECON_FPTD_D2NET_CLIENT_MCPtoCLT
+#define RECON_FPTD_D2NET_CLIENT_MCPtoCLT
+typedef BOOL (__fastcall *D2NET_CLIENT_MCPtoCLT)(char * pBytes, size_t nSize);
+#endif
 #ifndef RECON_FPTD_pfnMCPGameListEntry
 #define RECON_FPTD_pfnMCPGameListEntry
 typedef void (__fastcall *pfnMCPGameListEntry)(uint32_t nEntryField0, uint32_t nEntryCount, uint32_t nEntryField2, uint32_t nListFlag, void * pEntryData);

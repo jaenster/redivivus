@@ -1333,7 +1333,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fcad3d3e",
+      "dh": "c6e1b06d",
       "paramStorage": [
         [
           "pGame",
@@ -1352,7 +1352,7 @@
           "Stack[0x8]:4"
         ],
         [
-          "dwParam2",
+          "dwUnused",
           "Stack[0xc]:4"
         ],
         [
