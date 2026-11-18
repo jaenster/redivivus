@@ -2489,8 +2489,8 @@ static void StoreData(int32_t nColor, int32_t nLength, char * szText) {
 }
 
 D2ChatDlgUnknown_0x10 * Unreferenced_0043e370() {
-    EnterCriticalSection(&lpCriticalSection_0077ae28);
     D2ChatDlgUnknown_0x10* pDVar1 = 0;
+    EnterCriticalSection(&lpCriticalSection_0077ae28);
     if (gpChatMessageQueueHead) {
       pDVar1 = gpChatMessageQueueHead;
       gpChatMessageQueueHead = gpChatMessageQueueHead->pNext;
@@ -3302,27 +3302,24 @@ void __stdcall CHATDLG_RefreshGameNameDisplay() {
     aszGameNames[0] = '\0';
     D2ChatPlayerNameNodeStrc* pszNameNode;
     pszNameNode = gpChatPlayerNameListHead;
-    if (gpChatPlayerNameListHead) {
-      int nUsedLen = 0;
-      do {
-        if (nUsedLen >= 0x200) {
-          break;
-        }
-
-        strncat(aszGameNames, pszNameNode->szName, 0x200 - nUsedLen);
-        int nLen = (int)strlen(aszGameNames);
-        pszNameNode = pszNameNode->pNext;
-        nUsedLen = nLen;
-      } while (pszNameNode);
-
-      if (aszGameNames[0] != '\0') {
-        bActive = 0;
-        goto update_display;
+    int nUsedLen = 0;
+    while (pszNameNode) {
+      if (nUsedLen >= 0x200) {
+        break;
       }
+
+      strncat(aszGameNames, pszNameNode->szName, 0x200 - nUsedLen);
+      int nLen = (int)strlen(aszGameNames);
+      pszNameNode = pszNameNode->pNext;
+      nUsedLen = nLen;
     }
 
-    bActive = 1;
-    update_display:
+    if (aszGameNames[0] == '\0') {
+      bActive = 1;
+    } else {
+      bActive = 0;
+    }
+
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(ghWndGameNameEditBox, bActive);
     D2Lang::Unicode::UNISYS::STRING_ConvertCharToWchar(awszGameNames, aszGameNames, 0x200);
     D2Win::Src::D2WinTextBox::SetText(pGameListCache, awszGameNames, 1, false, 0);
@@ -3896,13 +3893,12 @@ void __stdcall UIMENU_LadderBoard_PrintClassesAndTableHeaders() {
     D2ControlStrc* pForm = FORMS_CreateAnyFormFromListEx(0x6d);
     D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(pForm);
     ::D2WinTextBox* pHeaderBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListEx(0x67);
-    uint32_t nLangCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
-    uint16_t nStrId = 0x2b54;
-    if (nLangCode != 3) {
-      nStrId = 0x14c8;
+    uint16_t* pwszLabel;
+    if (D2Lang::StrTable::strtable::MISC_GetLanguageCode() == 3) {
+      pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0x2b54);
+    } else {
+      pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0x14c8);
     }
-
-    uint16_t* pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(nStrId);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(pHeaderBox, pwszLabel);
     pHeaderBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListEx(0x68);
     pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0x14c9);

@@ -1062,10 +1062,21 @@
       "calledFunctions": [
         "ReturnVoid"
       ],
-      "dh": "0843eacf",
+      "usedTypes": [
+        "D2ClientStrc"
+      ],
+      "dh": "9d3b189a",
       "paramStorage": [
         [
-          "dwParam",
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "nUnused",
+          "EDX:4"
+        ],
+        [
+          "nParam",
           "Stack[0x4]:4"
         ]
       ]

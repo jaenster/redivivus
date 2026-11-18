@@ -3611,7 +3611,7 @@ eD2NpcUiState geNpcUiState = 0; D2_GLOBAL_GUARD(geNpcUiState, "D2Client::_Intera
 }} // namespace D2Client::_Interaction
 static int PLAYER_CurrentGold = 0; D2_STATIC_GUARD(PLAYER_CurrentGold, "PLAYER_CurrentGold");
 static uint16_t gnNpcMenuRepairCostGold = 0; D2_STATIC_GUARD(gnNpcMenuRepairCostGold, "gnNpcMenuRepairCostGold");
-static int16_t gnNpcMenuTradeActionGold = 0; D2_STATIC_GUARD(gnNpcMenuTradeActionGold, "gnNpcMenuTradeActionGold");
+static uint16_t gnNpcMenuTradeActionGold = 0; D2_STATIC_GUARD(gnNpcMenuTradeActionGold, "gnNpcMenuTradeActionGold");
 // also labelled: g_nNpcTradeMenuState
 static D2NPCSpeechStrc * gpNpcCurrentSpeech = 0; D2_STATIC_GUARD(gpNpcCurrentSpeech, "gpNpcCurrentSpeech");
 static uint32_t gnNpcMenuCainIdentifyGUID = 0; D2_STATIC_GUARD(gnNpcMenuCainIdentifyGUID, "gnNpcMenuCainIdentifyGUID");
@@ -5569,11 +5569,7 @@ void __fastcall NPCMENU_HandlePlayerInteractionEnd(D2UnitStrc * pUnit) {
         pCurrentSpeech += 0x16;
       } while (nSpeechEntryIdx < D2NPCSpeechCount);
     }
-    if (!_Interaction::bInteractingWithNpc) {
-      return;
-    }
-
-    pPlayer = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+    pPlayer = _Interaction::bInteractingWithNpc ? UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) : 0;
     if (!pPlayer) {
       return;
     }
@@ -5977,7 +5973,7 @@ int __stdcall NPCMENU_TradeDrawCallback() {
         gaNpcMenuHandledMessageIds[gnNpcMenuScrollMessageHead] = gnNpcMenuRepairCostGold;
         gnNpcMenuScrollMessageHead++;
       }
-      if (gnNpcMenuTradeActionGold == -1) {
+      if (gnNpcMenuTradeActionGold == 0xffff) {
         _Interaction::geNpcUiState = NPCUI_NONE;
       } else {
         gnNpcMenuActiveMode = 1;
@@ -7550,7 +7546,7 @@ int __fastcall NPCMENU_OnScrollComplete(void * pUserParam, int32_t nReason, int3
     }
     if (gnNpcMenuActiveMode == '\x01') {
       bool bIsSideNpc;
-      if (gnNpcMenuTradeActionGold != -1 && _Interaction::bInteractingWithNpc) {
+      if (gnNpcMenuTradeActionGold != 0xffff && _Interaction::bInteractingWithNpc) {
         pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
         if (pNpcUnit) {
           gnNpcMenuScrollCompleteMode = gnNpcMenuTradeActionGold;
@@ -7676,7 +7672,7 @@ int __stdcall NPCMENU_EnableAkaraRespecOption() {
 }
 
 void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnitGUID, char * pQuestBuffer, uint8_t nActionType) {
-    short int nMessage;
+    uint16_t nMessage;
     bool bIsSideNpc;
     uint16_t nMsgTypeToFind;
     D2GSPacketSrv0x27_TextStrc* pOverheadTextPtr;
@@ -7741,13 +7737,13 @@ void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnit
     }
 
     gnNpcMenuScrollMessageHead = 0;
-    if (nMessage != -1) {
+    if (nMessage != 0xffff) {
       ui::UI_CloseActivePanels(0, 0);
       gnNpcMenuRepairCostGold = nMessage;
       Text::TEXT_ShowNpcDialog(pNpcUnit, nMessage, 1);
       NPCMENU_AddHandledMessageId(nMessage);
       gnNpcMenuTradeActionGold = NPCMENU_FindNextUnhandledMessage(nMessage);
-      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x31, pNpcUnit->nUnitGUID, (uint32_t)(uint16_t)nMessage);
+      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x31, pNpcUnit->nUnitGUID, (uint32_t)nMessage);
       gnNpcMenuActiveMode = 1;
       Text::TEXT_SetScrollCompleteCallback((pfnTextScrollComplete)NPCMENU_OnScrollComplete, nullptr);
       SetInteractedUnitInfo(pNpcUnit);

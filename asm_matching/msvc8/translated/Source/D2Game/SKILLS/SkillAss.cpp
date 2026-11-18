@@ -1299,14 +1299,15 @@ BOOL __fastcall Skills_SrvDoFunc_041_ChargeRelease_RandomMissileBurst(::SGAMEDAT
     sSkillArg.nX = nTargetX;
     sSkillArg.nFlags = 3;
     sSkillArg.nY = nTargetY;
-    sSkillArg.eSkillNo = eSkill;
-    sSkillArg.nSkillLevel = nSkillLvl;
-    nSkillLvl = nMissileCount;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nMissileTxtNo = eMissileId;
+    sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nSkillLevel = nSkillLvl;
     if ((int)nMissileCount <= 0) {
       return 1;
     }
+
+    nSkillLvl = nMissileCount;
 
     do {
       D2UnitStrc* pMissile;
@@ -1322,7 +1323,7 @@ BOOL __fastcall Skills_SrvDoFunc_041_ChargeRelease_RandomMissileBurst(::SGAMEDAT
       if (pMissile) {
         nSeedLow = D2Common::Seed::GetSeed_nSeedLow(&sSeedCopy);
         D2Common::Units::Missile::SetTargetX(pMissile, nSeedLow);
-        D2Common::Units::Missile::SetTargetY(pMissile, (uint32_t)((uint32_t)(uint16_t)sSkillArg.nUnitY << 16 | (uint32_t)(uint16_t)sSkillArg.nUnitX));
+        D2Common::Units::Missile::SetTargetY(pMissile, (uint32_t)(((uint32_t)(uint16_t)sSkillArg.nUnitY << 16) + (uint32_t)(uint16_t)sSkillArg.nUnitX));
       }
 
       nSkillLvl--;

@@ -5,7 +5,7 @@
 
 Diablo II: Lord of Destruction 1.14d, reverse-engineered into C++ that builds and runs.
 
-|At this commit|Ghidra database v2122|
+|At this commit|Ghidra database v2124|
 |-|-|
 |Build|every translation unit compiles with a strict `-std=c++17`, no `-fpermissive`; the executable links with no undefined symbol|
 |Play|single player works; a full playthrough has been completed on the Visual C++ 2005 build|
@@ -16,9 +16,9 @@ Machine code identical to 1.14d, compiled with Visual C++ 2005 SP1, the compiler
 
 |Measure|Identical machine code|
 |-|-|
-|Functions|9,226 of 14,900 (61.9%)|
-|Code|834,707 of 2,612,801 bytes (31.95%)|
-|Instructions|1,902,345 of 2,612,801 bytes (72.8%), counting identical instructions in functions that still differ|
+|Functions|9,369 of 14,900 (62.9%)|
+|Code|869,977 of 2,612,801 bytes (33.30%)|
+|Instructions|1,905,685 of 2,612,801 bytes (72.9%), counting identical instructions in functions that still differ|
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">

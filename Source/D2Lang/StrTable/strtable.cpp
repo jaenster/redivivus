@@ -751,28 +751,19 @@ void __stdcall STRINGTABLE_FreeStringTables() {
       gpStringBufferExpansion = 0;
     }
 
-    D2UntranslatedStringCacheNodeStrc* pMemoryToFree = gpUntranslatedStringCacheHead;
-    D2StringTableTblFileStrc* pDVar1 = 0;
     if (gpStringTableExpansion) {
       D2_FREE_AT(gpStringTableExpansion, ".\\StrTable\\strtable.cpp", 0x121);
       gpStringTableExpansion = 0;
-      pMemoryToFree = gpUntranslatedStringCacheHead;
-      pDVar1 = gpStringTableExpansion;
     }
 
-    while (true) {
+    D2UntranslatedStringCacheNodeStrc* pMemoryToFree = gpUntranslatedStringCacheHead;
+    while (pMemoryToFree) {
       D2UntranslatedStringCacheNodeStrc* pNextCacheEntry;
-      gpStringTableExpansion = pDVar1;
-      if (!pMemoryToFree) {
-        break;
-      }
-
       pNextCacheEntry = pMemoryToFree->pNext;
       D2_FREE_AT(pMemoryToFree->wszText, ".\\StrTable\\strtable.cpp", 0x377);
       D2_FREE_AT(pMemoryToFree->szKey, ".\\StrTable\\strtable.cpp", 0x378);
       D2_FREE_AT(pMemoryToFree, ".\\StrTable\\strtable.cpp", 0x379);
       pMemoryToFree = pNextCacheEntry;
-      pDVar1 = gpStringTableExpansion;
     }
 
     gpUntranslatedStringCacheHead = 0;
@@ -1244,22 +1235,20 @@ static uint16_t * __fastcall STRTABLE_LoadStringTableFile(char * szFileName) {
       exit(-1);
     }
 
+    uint8_t* pNodeTable = (uint8_t*)&pArchive[1] + (uint32_t)pArchive->wIndexCount * 2;
     int i = 0;
     if (pArchive->nNodeCount > 0) {
-      uint32_t* pdwNodeStringOffset;
-      pdwNodeStringOffset = (uint32_t*)((intptr_t)&pArchive[1].dwDataStartOffset + ((uint32_t)pArchive->wIndexCount * 2 + 2));
       do {
-        if (pdwNodeStringOffset[-1] >= pArchive->dwFileSize) {
+        if (*(uint32_t*)(pNodeTable + i * 0x11 + 7) >= pArchive->dwFileSize) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe0);
           exit(-1);
         }
-        if (*pdwNodeStringOffset >= pArchive->dwFileSize) {
+        if (*(uint32_t*)(pNodeTable + i * 0x11 + 0xb) >= pArchive->dwFileSize) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe1);
           exit(-1);
         }
 
         i++;
-        pdwNodeStringOffset = (uint32_t*)((char*)pdwNodeStringOffset + 0x11);
       } while (i < pArchive->nNodeCount);
     }
 

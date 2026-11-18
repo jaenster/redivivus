@@ -1178,13 +1178,11 @@ void __stdcall DrawSolidRect_HaltTail(int nLine) {
 
 void __fastcall DrawSolidSquare(POINT * pPoint, BYTE nSize, BYTE nPaletteIndex) {
     tagRECT sRect;
-    if (nSize == '\0') {
-      return;
+    if (nSize) {
+      nSize--;
+      /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&sRect, pPoint->x - nSize, pPoint->y - nSize, pPoint->x + 1 + nSize, pPoint->y + 1 + nSize);
+      Windowed::DrawSolidRect(&sRect, nPaletteIndex);
     }
-
-    uint32_t nExtent = (uint32_t)(uint8_t)(nSize - 1);
-    /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&sRect, pPoint->x - nExtent, pPoint->y - nExtent, pPoint->x + 1 + nExtent, pPoint->y + 1 + nExtent);
-    Windowed::DrawSolidRect(&sRect, nPaletteIndex);
 }
 
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting

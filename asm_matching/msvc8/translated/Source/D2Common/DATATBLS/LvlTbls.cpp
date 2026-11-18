@@ -348,14 +348,7 @@ int32_t __stdcall TXT_Levels_GetMonLvlForDifficulty(eD2LevelId eLevel, eD2Diffic
     if (!(nDifficulty < (DIFFICULTY_HELL | DIFFICULTY_NIGHTMARE))) {
       return 1;
     }
-    if ((int)eLevel <= 0) {
-      return 1;
-    }
-    if (!((int)eLevel < ITEMS::Items::sgptDataTable->nTxtLevelsSize)) {
-      return 1;
-    }
-
-    D2LevelsTxt* pLevelsTxt = ITEMS::Items::sgptDataTable->pTxtLevels + eLevel;
+    D2LevelsTxt* pLevelsTxt = (int)eLevel > 0 && (int)eLevel < ITEMS::Items::sgptDataTable->nTxtLevelsSize ? ITEMS::Items::sgptDataTable->pTxtLevels + eLevel : nullptr;
     if (!pLevelsTxt) {
       return 1;
     }

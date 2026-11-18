@@ -242,7 +242,7 @@
         "D2GSPacketSrv0x01",
         "eD2ArenaFlags"
       ],
-      "dh": "abd529fb",
+      "dh": "264d09a9",
       "paramStorage": [
         [
           "pBytes",
@@ -553,7 +553,7 @@
       "usedTypes": [
         "D2GSPacketSrv0x51"
       ],
-      "dh": "6ed7b0d9",
+      "dh": "d5d6eda5",
       "paramStorage": [
         [
           "pBytes",

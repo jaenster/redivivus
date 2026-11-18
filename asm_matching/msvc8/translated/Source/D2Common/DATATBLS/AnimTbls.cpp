@@ -40,13 +40,13 @@ D2AnimDataStrc * __fastcall TXT_AllocTxt_AnimTbls(D2PoolManagerStrc * pMemory) {
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFilePath, "%s\\AnimData.d2", "DATA\\GLOBAL");
     D2AnimDataBucketStrc* pArchive = (D2AnimDataBucketStrc*)D2Hell::D2FILE_AllocAndLoadD2File(pMemory, szFilePath, nullptr, ".\\DATATBLS\\AnimTbls.cpp", 0x8a);
     pAnimTbls->pRecords = (D2AnimDataRecordStrc*)pArchive;
+    D2AnimDataBucketStrc** pHashEntry = pAnimTbls->pHashTable;
     int nHashBucketCount = 0x100;
-    D2AnimDataBucketStrc** pHashEntry = (D2AnimDataBucketStrc**)pAnimTbls;
     do {
-      pHashEntry = ((D2AnimDataStrc*)pHashEntry)->pHashTable;
       *pHashEntry = pArchive;
-      nHashBucketCount--;
       pArchive = (D2AnimDataBucketStrc*)(pArchive->aRecords + pArchive->nCount);
+      pHashEntry++;
+      nHashBucketCount--;
     } while (nHashBucketCount);
 
     pAnimTbls->pDefaultRecord.nFrames = 0x800;

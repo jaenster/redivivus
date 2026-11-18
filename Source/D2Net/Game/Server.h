@@ -56,7 +56,7 @@ void __stdcall WaitForEmptyEvent(DWORD dwTimeout);
 void __stdcall NET_Thunk_QServerSwapWorkerSlotValue(int nWorkerIndex, int nNewSlotValueOrZero);
 void __stdcall NET_Thunk_QServerAddGameTokenFilter(uint32_t nExpectedMaskedToken, uint32_t nMaskTableIndex);
 void __stdcall QSERVER_GetConnectedClients();
-void __stdcall GetIpFromToken(uint32_t nToken);
+uint32_t __stdcall GetIpFromToken(uint32_t nToken);
 void __stdcall SERVER_GetClientSocketByToken(uint32_t nToken);
 void __stdcall NET_HACK_CloseAndBanHackerIP(in_addr addr, char * szFile, int32_t nLine);
 void __stdcall NET_HACK_UnlistIP(in_addr addr, char * dwDuration, uint32_t dwFlags);

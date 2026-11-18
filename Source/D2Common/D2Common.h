@@ -1508,7 +1508,7 @@ struct D2HireDescTxt {
 #ifndef D2_DEFINED_D2HirelingTxt
 #define D2_DEFINED_D2HirelingTxt
 struct __attribute__((packed)) D2HirelingTxt {
-    /* 0x000 */ short version;
+    /* 0x000 */ uint16_t version;
     /* 0x002 */ uint8_t field_0x2;
     /* 0x003 */ uint8_t field_0x3;
     /* 0x004 */ int id;

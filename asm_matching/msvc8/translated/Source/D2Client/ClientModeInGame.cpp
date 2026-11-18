@@ -478,8 +478,8 @@ void __fastcall CLIENT_SetScreenResolution(DWORD RequestedScreenModeMaybe) {
     uint32_t nBorderType = UI::Path::DRAW_GetTypeOfBorder();
     UI::Path::TypeOfUiOverlayOverWorld(nBorderType);
     UI::Automap::AUTOMAP_CenterOnPlayer(1);
-    UI::Draw::DRAW_NoOp();
-    UI::ui::DRAW_RefreshNpcDialog();
+    UI::Draw::DRAW_NoOp(RequestedScreenModeMaybe);
+    UI::ui::DRAW_RefreshNpcDialog(RequestedScreenModeMaybe);
 }
 
 uint32_t __stdcall CLIENTMODE_WaitForQServerConnection(uint32_t dwUnused) {

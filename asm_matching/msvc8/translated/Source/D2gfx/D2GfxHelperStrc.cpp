@@ -669,10 +669,11 @@ void __fastcall fpFillYBufferTable(void * ppvBits, int32_t nWidth, int32_t nHeig
     static uint32_t gnLastRenderBufferWidth; D2_STATIC_GUARD_BSS(gnLastRenderBufferWidth, "D2gfx::fpFillYBufferTable::gnLastRenderBufferWidth");
 
     pRenderSurfaceBuffer = (uint8_t*)ppvBits;
+    gRenderBufferPitch = nWidth;
     gnRenderSurfaceHeight = nHeight;
     gnFillYBufferCookie = a4;
-    gRenderBufferPitch = nWidth;
     if (nWidth != gnLastRenderBufferWidth) {
+      gRenderBufferPitch = nWidth;
       gnLastRenderBufferWidth = nWidth;
       D2GFX_ClearYBuffer();
     }

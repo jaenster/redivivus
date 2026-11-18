@@ -192,9 +192,8 @@ BOOL __fastcall GLBLOCKS_LoadFloorTileTexture(D2TileLibraryEntryStrc * pTileLibr
       }
       if (!nCacheSlot) {
         GLBLOCKS_RenderTileSubBlocks(pTileLibraryEntry, (uint8_t*)gpGlBlocksFloorBuffer);
-        nCacheSlot = glFloorCache::GLFLOOR_EnsureCapacity(&gGlideFloorTextureCache);
-        pTileLibraryEntry->nTextureCacheIndex = nCacheSlot;
-        nNodeIndex = nCacheSlot - 1;
+        pTileLibraryEntry->nTextureCacheIndex = glFloorCache::GLFLOOR_EnsureCapacity(&gGlideFloorTextureCache);
+        nNodeIndex = pTileLibraryEntry->nTextureCacheIndex - 1;
         if (nNodeIndex < 0) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe5);
           exit(-1);
@@ -204,7 +203,7 @@ BOOL __fastcall GLBLOCKS_LoadFloorTileTexture(D2TileLibraryEntryStrc * pTileLibr
           exit(-1);
         }
 
-        gGlideFloorTextureCache.pNodes[nCacheSlot - 1].pTile = pTileLibraryEntry;
+        gGlideFloorTextureCache.pNodes[pTileLibraryEntry->nTextureCacheIndex - 1].pTile = pTileLibraryEntry;
         startAddress = gGlideFloorTextureCache.pNodes[pTileLibraryEntry->nTextureCacheIndex - 1].dwAddress;
         (*Renderer::Glide::GLIDEDLL_grTexDownloadMipMap_16)(gnGlideTMUId, startAddress, 3, &gTexInfoGlideSurfaceBlocks);
       } else {

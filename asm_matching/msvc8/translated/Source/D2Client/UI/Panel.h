@@ -63,7 +63,6 @@ void __stdcall thunk_CMD_UseBeltSlot3();
 // handler table.
 void __stdcall thunk_CMD_UseBeltSlot4();
 uint32_t __stdcall PANEL_GetMiniPanelClickedButtonFlag();
-void __stdcall PANEL_ClearInvMousePosition();
 uint32_t __stdcall INV_HasItemToDescribe();
 void __stdcall LoadPanelImages();
 void __stdcall FreePanelImages();

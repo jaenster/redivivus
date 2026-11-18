@@ -272,10 +272,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(uint8_t * pBytes) {
 
 void __fastcall TRADE_HandleTradeGoldUpdate(uint8_t * pPacket) {
     char szTraderName[16];
-    *(uint32_t*)(char*)&szTraderName = *(uint32_t*)(pPacket + 1);
-    *(uint32_t*)((char*)&szTraderName + 4) = *(uint32_t*)(pPacket + 5);
-    *(uint32_t*)((char*)&szTraderName + 8) = *(uint32_t*)(pPacket + 9);
-    *(uint32_t*)((char*)&szTraderName + 12) = *(uint32_t*)(pPacket + 0xd) & 0xffffff;
+    memcpy(szTraderName, pPacket + 1, 0x10);
+    szTraderName[15] = 0;
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize((uint16_t*)gwszTradePartnerName, szTraderName, 0x10);
     gnTradeGoldUpdateBuffer = *(uint32_t*)(pPacket + 0x11);
 }

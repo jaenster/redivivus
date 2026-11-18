@@ -146,11 +146,11 @@ static void DRAW_ConvertPaletteHSLtoRGB(D2HSLColorStrc * pHSLIn, uint8_t * pRGBO
     do {
       uint8_t byRed;
       if (pHSLIn->dSaturation == 0.0) {
-        byChannel = (uint8_t)(int)(pHSLIn->dLightness * 255.0);
-        byRed = byChannel;
-        byGreen = byChannel;
+        byRed = (uint8_t)(int)(pHSLIn->dLightness * 255.0);
+        byGreen = byRed;
+        byChannel = byRed;
       } else {
-        if (!(0.5 < pHSLIn->dLightness)) {
+        if (pHSLIn->dLightness <= 0.5) {
           dP = (pHSLIn->dSaturation + 1.0) * pHSLIn->dLightness;
         } else {
           dP = pHSLIn->dLightness + pHSLIn->dSaturation - pHSLIn->dLightness * pHSLIn->dSaturation;
@@ -250,7 +250,6 @@ void __stdcall DRAW_SetTransparentColorRGB(uint32_t nRGB) {
 }
 
 BOOL __fastcall DRAW_LoadPaletteFromPCX(LPCSTR szFilePath) {
-    uint8_t* pbPaletteEntry;
     PcxPaletteTrailer pcxPaletteTrailer;
     D2PcxHeaderStrc sPcxHeader;
     HANDLE hFile = CreateFileA(szFilePath, 0x80000000, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0, (HANDLE)0x0);
@@ -270,14 +269,12 @@ BOOL __fastcall DRAW_LoadPaletteFromPCX(LPCSTR szFilePath) {
       /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(hFile, -0x301, (PLONG)0x0, 2);
       /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, &pcxPaletteTrailer, 0x301, &nBytesRead, (LPOVERLAPPED)0x0);
       if (nBytesRead == 0x301 && pcxPaletteTrailer.nMarker == 0xc) {
-        pbPaletteEntry = &pcxPaletteTrailer.rgb[0].g;
         iPaletteEntry = 0;
         do {
-          gaGlobalPaletteRed[iPaletteEntry].r = ((D2PcxRgbStrc*)(pbPaletteEntry - 1))->r;
-          gaGlobalPaletteRed[iPaletteEntry].g = *pbPaletteEntry;
-          gaGlobalPaletteRed[iPaletteEntry].b = pbPaletteEntry[1];
+          gaGlobalPaletteRed[iPaletteEntry].r = pcxPaletteTrailer.rgb[iPaletteEntry].r;
+          gaGlobalPaletteRed[iPaletteEntry].g = pcxPaletteTrailer.rgb[iPaletteEntry].g;
+          gaGlobalPaletteRed[iPaletteEntry].b = pcxPaletteTrailer.rgb[iPaletteEntry].b;
           iPaletteEntry++;
-          pbPaletteEntry += 3;
         } while (iPaletteEntry < 256);
 
         /* HANDLE hObject for CloseHandle */ CloseHandle(hFile);
@@ -303,7 +300,6 @@ BOOL __stdcall DRAW_InitPalette(LPCSTR szPaletteFile, int nStartIndex, int nEndI
     HANDLE hFile;
     DWORD DVar1;
     uint32_t nPaletteIndex;
-    uint8_t* pbPaletteEntry;
     LPCSTR lpFileName = szPaletteFile;
     if (!szPaletteFile) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3b6);
@@ -344,15 +340,13 @@ BOOL __stdcall DRAW_InitPalette(LPCSTR szPaletteFile, int nStartIndex, int nEndI
           /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ szPaletteFile = (LPCSTR)0x0;
           ReadFile(hFile, lpBuffer_008e8d28, 0x300, (LPDWORD)&szPaletteFile, (LPOVERLAPPED)0x0);
           if (szPaletteFile == (LPCSTR)0x300) {
-            pbPaletteEntry = &gaGlobalPaletteRed[0].g;
             nPaletteIndex = 0;
             do {
-              pbPaletteEntry[1] = lpBuffer_008e8d28[nPaletteIndex];
-              *pbPaletteEntry = lpBuffer_008e8d28[nPaletteIndex + 1];
-              ((D2PaletteEntryStrc*)(pbPaletteEntry - 1))->r = lpBuffer_008e8d28[nPaletteIndex + 2];
-              nPaletteIndex += 3;
-              pbPaletteEntry += 4;
-            } while (nPaletteIndex < 0x300);
+              gaGlobalPaletteRed[nPaletteIndex].b = lpBuffer_008e8d28[nPaletteIndex * 3];
+              gaGlobalPaletteRed[nPaletteIndex].g = lpBuffer_008e8d28[nPaletteIndex * 3 + 1];
+              gaGlobalPaletteRed[nPaletteIndex].r = lpBuffer_008e8d28[nPaletteIndex * 3 + 2];
+              nPaletteIndex++;
+            } while (nPaletteIndex < 0x100);
 
             /* HANDLE hObject for CloseHandle */ gbPaletteLoaded = 1;
             CloseHandle(hFile);

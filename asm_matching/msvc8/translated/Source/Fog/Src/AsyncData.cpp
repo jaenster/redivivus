@@ -347,10 +347,11 @@ void __fastcall ASYNCDATA_DeferPriorityUpdates(BOOL bDefer) {
     {
       D2AsyncData_Line0x128* pEntry;
       gnAsyncDataPriorityDeferDepth--;
-      pEntry = gpAsyncDataDeferredList;
       if (gnAsyncDataPriorityDeferDepth) {
         return;
       }
+
+      pEntry = gpAsyncDataDeferredList;
 
       while (pEntry) {
         pNext = pEntry->pNextDeferred;

@@ -1189,16 +1189,13 @@ static BOOL __stdcall SERVER_CreatePlayerUnit(::SGAMEDATA * pGameStrc, D2ClientS
     pPlayerData->eLeftSkillId = SKILL_Attack;
     pPlayerData->eRightSkillId = SKILL_Attack;
     if (!byAct && pUnit) {
-      D2CharStatsTxt* pCharStatsTxt;
       nClassIdCheck = pUnit->nClassId;
-      if (nClassIdCheck >= 0 && nClassIdCheck < D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
-        pCharStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nClassIdCheck;
-        if (pCharStatsTxt && pCharStatsTxt->StartSkill) {
-          pDVar1 = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)pCharStatsTxt->StartSkill);
-          if (pDVar1) {
-            SKILLS::SkillsServer::Server_SelectSkill(pUnit, 0, (int)pCharStatsTxt->StartSkill, -1);
-            pPlayerData->eRightSkillId = (int)pCharStatsTxt->StartSkill;
-          }
+      D2CharStatsTxt* pCharStatsTxt = nClassIdCheck >= 0 && nClassIdCheck < D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nClassIdCheck : nullptr;
+      if (pCharStatsTxt && pCharStatsTxt->StartSkill) {
+        pDVar1 = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)pCharStatsTxt->StartSkill);
+        if (pDVar1) {
+          SKILLS::SkillsServer::Server_SelectSkill(pUnit, 0, (int)pCharStatsTxt->StartSkill, -1);
+          pPlayerData->eRightSkillId = (int)pCharStatsTxt->StartSkill;
         }
       }
     }

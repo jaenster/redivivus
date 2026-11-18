@@ -1583,7 +1583,7 @@ void __stdcall INVENTORY_SetCursorItem(D2InventoryStrc * pInventory, D2UnitStrc 
     if (!pItem) {
       D2UnitStrc* pCursorItem_lcl;
       pCursorItem_lcl = pInventory->pCursorItem;
-      if (pCursorItem_lcl && pCursorItem_lcl->eUnitType == UNIT_ITEM && pCursorItem_lcl->pUnitData.pUnitDataItem && pCursorItem_lcl->pUnitData.pUnitDataItem != (D2UnitDataItemStrc*)-92) {
+      if (pCursorItem_lcl && pCursorItem_lcl->eUnitType == UNIT_ITEM && pCursorItem_lcl->pUnitData.pUnitDataItem && (ppInventory = &pCursorItem_lcl->pUnitData.pUnitDataItem->sInvNode , ppInventory != 0)) {
         INVENTORY_RemoveItemFromInventory(pCursorItem_lcl);
         return;
       }

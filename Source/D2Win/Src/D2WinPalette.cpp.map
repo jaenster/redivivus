@@ -218,10 +218,10 @@
         "D2GFX_SetPalette"
       ],
       "usedTypes": [
-        "uint32_t",
+        "int32_t",
         "uint8_t"
       ],
-      "dh": "4dbb0d01",
+      "dh": "bba25c34",
       "paramStorage": [
         [
           "nAct",

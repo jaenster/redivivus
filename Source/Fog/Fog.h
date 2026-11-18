@@ -773,7 +773,7 @@ int __stdcall DequeueModePacket(struct D2QServerStrc * pQServer, int nMode, char
 // its caller is D2Game::Game::Server::WaitForEmptyEvent @0052b1f0.
 uint32_t __stdcall WaitForEmptyEventOrPumpIo(struct D2QServerStrc * pQServer, DWORD dwTimeoutMs);
 void __stdcall GetClientIpStringByClientId(struct D2QServerStrc * pQServer, int nClientId, char * szIpAddress, int nBufferSize);
-in_addr __stdcall GetClientIpByToken(struct D2QServerStrc * pQServer, uint32_t nToken);
+uint32_t __stdcall GetClientIpByToken(struct D2QServerStrc * pQServer, uint32_t nToken);
 uint32_t __stdcall GetClientSocketByToken(struct D2QServerStrc * pQServer, uint32_t nClientToken);
 void __stdcall QSHackUnlistIP(struct D2QServerStrc * pQServer, in_addr pIp, char * szFile2, uint32_t nLine);
 void __stdcall SetHacklistLineHook(struct D2QServerStrc * pQServer, fpD2QServerLineHook pfnHook);

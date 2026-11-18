@@ -468,18 +468,19 @@ static void OBJECT_ToggleDoorState(D2UnitStrc * pUnit) {
     if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run) {
       pUnit->eAnimMode.ePlayerMode = Death;
       byStartFrame = pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Start[0];
+      pUnit->nGfxCurrentFrame = (uint32_t)byStartFrame;
     } else {
-      if (pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
+      if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral) {
+        D2Common::Units::RemoveCollision_Vector(pUnit);
+        pUnit->eAnimMode.ePlayerMode = Walk;
+        byStartFrame = pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Start[2];
+        pUnit->nGfxCurrentFrame = (uint32_t)byStartFrame;
+      } else {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11f);
         exit(-1);
       }
-
-      D2Common::Units::RemoveCollision_Vector(pUnit);
-      pUnit->eAnimMode.ePlayerMode = Walk;
-      byStartFrame = pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Start[2];
     }
 
-    pUnit->nGfxCurrentFrame = (uint32_t)byStartFrame;
     Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
     D2Common::Units::InitAnimMode(pUnit);
     if (pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Selectable[pUnit->eAnimMode.ePlayerMode]) {

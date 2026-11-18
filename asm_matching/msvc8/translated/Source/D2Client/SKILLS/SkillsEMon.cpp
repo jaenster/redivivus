@@ -677,19 +677,16 @@ BOOL __fastcall Skills_CltStFunc_SetParamsFromTargetPositionEMon(D2UnitStrc * pU
 
     D2Common::Skills::SKILL_SetParam1(pSkill, nPosX);
     eTargetType = pTarget->eUnitType;
-    if (eTargetType != UNIT_OBJECT && ((int)eTargetType <= 3 || (int)eTargetType > 5)) {
-      int32_t nTargetY;
-      if (pTarget->pPath.pDynamicPath) {
-        nTargetY = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
-        D2Common::Skills::SKILL_SetParam2(pSkill, nTargetY);
-        return 1;
-      }
-
-      D2Common::Skills::SKILL_SetParam2(pSkill, 0);
-      return 1;
+    int32_t nTargetY;
+    if (eTargetType == UNIT_OBJECT || (int)eTargetType > 3 && (int)eTargetType <= 5) {
+      nTargetY = pTarget->pPath.pStaticPath->nPosY;
+    } else if (pTarget->pPath.pDynamicPath) {
+      nTargetY = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
+    } else {
+      nTargetY = 0;
     }
 
-    D2Common::Skills::SKILL_SetParam2(pSkill, pTarget->pPath.pStaticPath->nPosY);
+    D2Common::Skills::SKILL_SetParam2(pSkill, nTargetY);
     return 1;
 }
 

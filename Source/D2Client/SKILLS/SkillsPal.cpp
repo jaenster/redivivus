@@ -110,14 +110,14 @@ BOOL __fastcall Skills_CltDoFunc_Pal_BlessedHammer(D2UnitStrc * pUnit, eD2Skills
     }
 
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.nUnitY = nDestY;
     sSkillArg.nFlags = 0x20;
-    sSkillArg.nUnitX = nDestX;
-    sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
-    sSkillArg.nMissileTxtNo = eCltMissileId;
+    sSkillArg.nUnitX = nDestX;
+    sSkillArg.nUnitY = nDestY;
     sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nSkillLevel = nSkillLvl;
+    sSkillArg.nMissileTxtNo = eCltMissileId;
     D2UnitStrc* pMissileUnit = UNIT::Missile::MakeMissile(&sSkillArg);
     if (pMissileUnit) {
       D2DynamicPathStrc* pDynamicPath;

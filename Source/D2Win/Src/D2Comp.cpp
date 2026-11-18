@@ -1910,8 +1910,7 @@ void __fastcall D2COMP_PopulateComponentFromCOF(D2CharSelCompStrc * pCOFData, D2
 
     {
       uint8_t* pCOFLayerData;
-      nArgSlot = pCOFData->nAnimMode;
-      pCOFLayerData = D2COMP_GetOrLoadCOF(pCOFData->ppCofCacheEntries, pCOFData->nPlayerClassId, nArgSlot, gaCompWeaponClassTokens[pCOFData->nWeaponClass]);
+      pCOFLayerData = D2COMP_GetOrLoadCOF(pCOFData->ppCofCacheEntries, pCOFData->nPlayerClassId, pCOFData->nAnimMode, gaCompWeaponClassTokens[pCOFData->nWeaponClass]);
       if (!pCOFLayerData) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x506);
         exit(-1);
@@ -2773,12 +2772,8 @@ void __stdcall D2COMP_AddTextLineToLayout(uint16_t * wszText, uint8_t * pLayoutB
 
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(pLineEntry, wszText);
     D2WinFont::TEXT_CalcTextDimensions(pLineEntry, (int*)(pLineEntry + 0x100), (int*)(pLineEntry + 0x102));
-    int nLineWidthPadded = *(int*)(pLineEntry + 0x100) + 6;
-    if (*pnMaxWidth > nLineWidthPadded) {
-      nLineWidthPadded = *pnMaxWidth;
-    }
-
-    *pnMaxWidth = nLineWidthPadded;
+    int nLineWidth = *(int*)(pLineEntry + 0x100);
+    *pnMaxWidth = *pnMaxWidth > nLineWidth + 6 ? *pnMaxWidth : nLineWidth + 6;
     *pnTotalHeight += *(int*)(pLineEntry + 0x102);
     (*pnLineCount)++;
 }

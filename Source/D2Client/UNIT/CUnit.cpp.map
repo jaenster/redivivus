@@ -2317,9 +2317,10 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2UnitType",
-        "int32_t"
+        "int32_t",
+        "uint8_t"
       ],
-      "dh": "ae734099",
+      "dh": "c402000f",
       "paramStorage": [
         [
           "nUnitGUID",

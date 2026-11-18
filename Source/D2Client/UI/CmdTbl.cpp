@@ -1520,11 +1520,6 @@ uint16_t * __fastcall CMD_GetKeyNameForCommand(int32_t nCmdIndex, int32_t nSlot)
       }
     } else {
       switch (wKeyLookup) {
-        case 4:
-          {
-            pName = D2Lang::StrTable::strtable::GetLocaleString(0xeb6);
-            return pName;
-          }
         case 1:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xeb3);
         return pName;
@@ -1533,6 +1528,9 @@ uint16_t * __fastcall CMD_GetKeyNameForCommand(int32_t nCmdIndex, int32_t nSlot)
         return pName;
         case 3:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xeb5);
+        return pName;
+        case 4:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xeb6);
         return pName;
         case 0x15:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xebb);
@@ -1807,9 +1805,8 @@ uint16_t * __fastcall CMD_GetKeyNameForCommand(int32_t nCmdIndex, int32_t nSlot)
       }
     }
 
-    gwKeyNameBuffer[2] = L'\0';
-    gwKeyNameBuffer[3] = L'\0';
-    *(uint32_t*)(char*)&gwKeyNameBuffer = wKeyLookup & -65281;
+    memset(gwKeyNameBuffer, 0, sizeof(gwKeyNameBuffer));
+    gwKeyNameBuffer[0] = (uint8_t)wKeyLookup;
     return gwKeyNameBuffer;
 }
 

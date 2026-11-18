@@ -172,7 +172,7 @@ typedef HRESULT (__stdcall *D3DVB_Unlock)(void * This);
 #endif
 #ifndef RECON_FPTD_D3DVP3_Clear2
 #define RECON_FPTD_D3DVP3_Clear2
-typedef HRESULT (__stdcall *D3DVP3_Clear2)(void * This, DWORD dwCount, void * lpRects, DWORD dwFlags, DWORD dwColor, DWORD dvZ, DWORD dwStencil);
+typedef HRESULT (__stdcall *D3DVP3_Clear2)(void * This, DWORD dwCount, void * lpRects, DWORD dwFlags, DWORD dwColor, float dvZ, DWORD dwStencil);
 #endif
 #ifndef RECON_FPTD_D3DVP3_SetViewport2
 #define RECON_FPTD_D3DVP3_SetViewport2
@@ -971,7 +971,7 @@ struct IDirect3DViewport3Vtbl {
     /* 0x44 */ HRESULT (__stdcall *SetViewport2)(void *, void *);
     /* 0x48 */ uint8_t ** SetBackgroundDepth2;
     /* 0x4C */ uint8_t ** GetBackgroundDepth2;
-    /* 0x50 */ HRESULT (__stdcall *Clear2)(void *, DWORD, void *, DWORD, DWORD, DWORD, DWORD);
+    /* 0x50 */ HRESULT (__stdcall *Clear2)(void *, DWORD, void *, DWORD, DWORD, float, DWORD);
 };
 
 #endif // D2_DEFINED_IDirect3DViewport3Vtbl

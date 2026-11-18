@@ -655,10 +655,9 @@
         "D2ShrinesTxt",
         "D2UnitStrc",
         "int32_t",
-        "uint32_t",
         "uint8_t"
       ],
-      "dh": "c8fa60f3",
+      "dh": "371204d8",
       "paramStorage": [
         [
           "pMessage",

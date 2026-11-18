@@ -128,7 +128,7 @@ int __fastcall Unreferenced_0042e620(uint16_t * pChar);
 int __fastcall Unreferenced_0042e630(uint16_t * pChar);
 void __fastcall CRYPTO_ByteSwap64Array(uint16_t * pwIn, int, uint16_t * pwOut);
 void __fastcall MAINMENU_SetGlobalValue1(pfnUIMenuInstance pfnMenuInstance);
-void __stdcall MAINMENU_SetGlobalFlag();
+void __fastcall MAINMENU_SetGlobalFlag(int32_t nValue);
 BOOL __stdcall MAINMENU_GetMainMenuUIActive();
 // Loads all predefined DC6 image resources for main menus and UI elements. Constructs file paths using wsprintfA into a stack buffer, then loads 40+ DC6 images (buttons, backgrounds, popups) via IMAGE_LoadDC6. Expansion detection switches between classic and expansion asset paths for 8 conditional images.
 void __stdcall IMAGE_LoadPredefinedImages();

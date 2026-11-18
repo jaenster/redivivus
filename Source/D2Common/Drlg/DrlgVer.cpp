@@ -255,7 +255,7 @@ void __fastcall DRLGVER_FreeVertices(D2PoolManagerStrc * pMemory, D2DrlgVertexSt
     *ppVertices = 0;
 }
 
-int __fastcall Unreferenced_0067d250(D2DrlgVertexStrc * * ppVertices) {
+void __fastcall Unreferenced_0067d250(D2DrlgVertexStrc * * ppVertices) {
     D2DrlgVertexStrc* pDVar2;
     D2DrlgVertexStrc* pDVar1 = *ppVertices;
     D2DrlgVertexStrc* pDVar3 = 0;
@@ -266,7 +266,6 @@ int __fastcall Unreferenced_0067d250(D2DrlgVertexStrc * * ppVertices) {
     }
 
     *ppVertices = pDVar3;
-    return 0;
 }
 
 void __fastcall GetCoordDiff(D2DrlgVertexStrc * pDrlgVertex, int * pDiffX, int * pDiffY) {

@@ -2164,7 +2164,6 @@ void __fastcall Q04_DropShieldRewards(D2QuestDataStrc * pQuestData, D2UnitStrc *
       int32_t nShieldCount;
       pQuestSpecificData->sSub.bShieldDropActive = true;
       nShieldCount = 0x14;
-      pDroppedItemOut = (int32_t)pQuestData;
       nShieldCount = Seed::SEED_RollRange(GetQuestControlSeed(pQuestData->pGame), 10, nShieldCount);
       pQuestSpecificData->sSub.nShieldsRemaining = nShieldCount;
       pUnit->dwDropItemCode = 0x20646c67;

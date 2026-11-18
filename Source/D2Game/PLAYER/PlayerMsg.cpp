@@ -1503,18 +1503,15 @@ static eD2ServerIncomingStatus __stdcall CloseEnoughToInteract(::SGAMEDATA * pGa
     }
 
     eTargetType = pTargetUnit->eUnitType;
-    if (eTargetType != UNIT_OBJECT && ((int)eTargetType <= 3 || (int)eTargetType > 5)) {
-      if (pTargetUnit->pPath.pDynamicPath) {
-        iVar1 = D2Common::PATH::DynamicPath::GetYPos(pTargetUnit->pPath.pDynamicPath);
-        eVar2 = CheckIfCoordsAreInRange(pUnit, nRange, (uint16_t)wTargetX, (uint16_t)iVar1);
-        return eVar2;
-      }
-
-      eVar2 = CheckIfCoordsAreInRange(pUnit, nRange, (uint16_t)wTargetX, 0);
-      return eVar2;
+    if (eTargetType == UNIT_OBJECT || (int)eTargetType > 3 && (int)eTargetType <= 5) {
+      iVar1 = pTargetUnit->pPath.pStaticPath->nPosY;
+    } else if (pTargetUnit->pPath.pDynamicPath) {
+      iVar1 = D2Common::PATH::DynamicPath::GetYPos(pTargetUnit->pPath.pDynamicPath);
+    } else {
+      iVar1 = 0;
     }
 
-    eVar2 = CheckIfCoordsAreInRange(pUnit, nRange, (uint16_t)wTargetX, (uint16_t)pTargetUnit->pPath.pStaticPath->nPosY);
+    eVar2 = CheckIfCoordsAreInRange(pUnit, nRange, (uint16_t)wTargetX, (uint16_t)iVar1);
     return eVar2;
 }
 
@@ -2763,11 +2760,13 @@ eD2ServerIncomingStatus __fastcall SCMD_0x13_InteractWithEntity(::SGAMEDATA * pG
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
     }
-    if (pPacket->nUnitType >= UNIT_COUNT) {
+    uint32_t nUnitType = pPacket->nUnitType;
+    uint32_t nGUID = pPacket->nGUID;
+    if (nUnitType >= UNIT_COUNT) {
       return SERVERSTATUS_BAD_DATA;
     }
 
-    eD2ServerIncomingStatus eInteractResult = SERVER_InteractOrPick(pUnit, pPacket->nUnitType, pPacket->nGUID, 0, pGame);
+    eD2ServerIncomingStatus eInteractResult = SERVER_InteractOrPick(pUnit, (eD2UnitType)nUnitType, nGUID, 0, pGame);
     return (eD2ServerIncomingStatus)eInteractResult;
 }
 
@@ -3293,10 +3292,12 @@ eD2ServerIncomingStatus __fastcall SCMD_0x23_ItemToBelt(::SGAMEDATA * pGame, D2U
 
     DWORD dwItemGUID = pPacket->dwItemGUID;
     uint32_t nBeltSlotOrIndex = pPacket->nBeltSlotOrIndex;
-    nSize = SERVER_IsItemOnCursor(pGame, pUnit, dwItemGUID);
-    if (nSize != SERVERSTATUS_OK) {
-      return (eD2ServerIncomingStatus)nSize;
+    eD2ServerIncomingStatus eCursorStatus = SERVER_IsItemOnCursor(pGame, pUnit, dwItemGUID);
+    if (eCursorStatus != SERVERSTATUS_OK) {
+      return eCursorStatus;
     }
+
+    nSize = 0;
 
     BOOL bPlacedInBelt = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, dwItemGUID, nBeltSlotOrIndex, 0, (BOOL*)&nSize);
     if (!bPlacedInBelt && nSize) {
@@ -3627,14 +3628,9 @@ eD2ServerIncomingStatus __fastcall SCMD_0x30_NpcCancelDialog(::SGAMEDATA * pGame
     if (nActCheckResult) {
       return (eD2ServerIncomingStatus)nActCheckResult;
     }
-    if (pNpc->eUnitType == UNIT_MONSTER && pNpc->pUnitData.pUnitDataMonster) {
-      Monster::MonsterAI::FreeAndResetAiSub(pGame, pUnit, pNpc, pNpc->pUnitData.pUnitDataMonster->pMonsterAi);
-      return SERVERSTATUS_OK;
-    }
 
-    Monster::MonsterAI::FreeAndResetAiSub(pGame, pUnit, pNpc, nullptr);
-    nActCheckResult = 0;
-    return (eD2ServerIncomingStatus)nActCheckResult;
+    Monster::MonsterAI::FreeAndResetAiSub(pGame, pUnit, pNpc, (pNpc->eUnitType == UNIT_MONSTER && pNpc->pUnitData.pUnitDataMonster ? pNpc->pUnitData.pUnitDataMonster->pMonsterAi : nullptr));
+    return SERVERSTATUS_OK;
 }
 
 // C->S 0x31 handler for NPC gossip interaction packet; validates length and forwards NPC GUID + gossip option id to QUEST_OnNpcGossip.
@@ -4384,13 +4380,15 @@ eD2ServerIncomingStatus __fastcall SCMD_0x59_CommandNPC(::SGAMEDATA * pGame, D2U
       return SERVERSTATUS_BAD_PARAMS;
     }
 
+    uint32_t nUnitType = pPacket->nUnitType;
+    uint32_t nUnitGUID = pPacket->nUnitGUID;
     uint32_t nTargetY = pPacket->nY;
     uint32_t nTargetX = pPacket->nX;
-    if (pPacket->nUnitType >= UNIT_COUNT) {
+    if (nUnitType >= UNIT_COUNT) {
       return SERVERSTATUS_BAD_DATA;
     }
 
-    D2UnitStrc* pMonster = UNIT::SUnit::FindUnitFromTable(pGame, pPacket->nUnitType, pPacket->nUnitGUID);
+    D2UnitStrc* pMonster = UNIT::SUnit::FindUnitFromTable(pGame, nUnitType, nUnitGUID);
     if (!pMonster) {
       return SERVERSTATUS_BAD_TARGET;
     }
@@ -4631,10 +4629,11 @@ eD2ServerIncomingStatus __fastcall SCMD_0x60_WeaponSwap(::SGAMEDATA * pGame, D2U
       return SERVERSTATUS_OK;
     }
 
-    nSize = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-    if (nSize) {
+    if (UNIT::SUnit::CheckForModeZeroDeath(pUnit)) {
       return SERVERSTATUS_OK;
     }
+
+    nSize = 0;
 
     BOOL bSwapFailed = ITEMS::ItemMode::ITEMMODE_WeaponSwap(pGame, pUnit, (bool*)&nSize);
     if (!(!bSwapFailed && nSize)) {

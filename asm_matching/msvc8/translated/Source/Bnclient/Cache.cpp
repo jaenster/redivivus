@@ -359,9 +359,9 @@ static LPFILETIME CACHE_GetFileTime(uint32_t nSecondsFromNow) {
 static uint32_t __stdcall CACHE_HashString(int32_t nHashType, char * szText) {
     uint32_t dwHash = 0x7fed7fed;
     int nHashSeed = -0x11111112;
-    for (; szText && *szText != '\0'; szText++) {
+    for (; szText && *szText != '\0';) {
       int nUpperChar;
-      nUpperChar = toupper((int)*szText);
+      nUpperChar = toupper((int)*szText++);
       dwHash = dwHash + nHashSeed ^ g_pCacheCryptTable[nHashType * 0x100 + (int)(char)nUpperChar];
       nHashSeed = nHashSeed * 0x21 + (int)(char)nUpperChar + 3 + dwHash;
     }

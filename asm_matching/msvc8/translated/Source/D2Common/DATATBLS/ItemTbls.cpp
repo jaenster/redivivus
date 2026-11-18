@@ -1065,8 +1065,6 @@ D2QualityItemsTxt * __stdcall TXT_QualityItems_GetLine(int32_t nIndex) {
 void __fastcall TXT_AllocTxt_gems(D2PoolManagerStrc * pMemory) {
     int nGemsSize;
     char szGemCode[4];
-    int byCodeChar;
-    char* pGemOffset;
     D2BinFieldInputStrc aFieldDefs[42] = {
       {"name", FIELDTYPE_ASCII, 0x1f, 0, 0},
       {"letter", FIELDTYPE_ASCII, 5, 0x20, 0},
@@ -1119,11 +1117,9 @@ void __fastcall TXT_AllocTxt_gems(D2PoolManagerStrc * pMemory) {
       nGemsSize = 0;
       do {
         szGemCode[0] = nTxtGemsSize.pTable->letter[nGemsSize + 8] == 0x20U ? 0 : nTxtGemsSize.pTable->letter[nGemsSize + 8];
-        byCodeChar = *(uint8_t*)((char*)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 7);
-        szGemCode[1] = byCodeChar == 0x20 ? 0 : byCodeChar;
-        byCodeChar = *(uint8_t*)((char*)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 6);
+        szGemCode[1] = nTxtGemsSize.pTable->letter[nGemsSize + 9] == 0x20U ? 0 : nTxtGemsSize.pTable->letter[nGemsSize + 9];
+        szGemCode[2] = nTxtGemsSize.pTable->letter[nGemsSize + 10] == 0x20U ? 0 : nTxtGemsSize.pTable->letter[nGemsSize + 10];
         szGemCode[3] = '\0';
-        szGemCode[2] = byCodeChar == 0x20 ? 0 : byCodeChar;
         nTxtGemsBase = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)szGemCode, &pStringLookup);
         *(short int*)((char*)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 4) = (short int)nTxtGemsBase;
         nGemIdx++;
@@ -1131,27 +1127,12 @@ void __fastcall TXT_AllocTxt_gems(D2PoolManagerStrc * pMemory) {
       } while (nGemIdx < nTxtGemsSize.nSize);
     }
 
-    nGemsSize = 0;
-    if (nTxtGemsSize.nSize <= 0) {
-      return;
-    }
-
-    int nRunesSize = 0;
-    int nTotalGemsRunesSize = 0;
-    do {
-      pGemOffset = (char*)&gsItemsTable.pItems[nTotalGemsRunesSize].dwGemOffset;
-      pGemOffset[0] = -1;
-      pGemOffset[1] = -1;
-      pGemOffset[2] = -1;
-      pGemOffset[3] = -1;
-      if (nTxtGemsSize.pTable[nRunesSize].code >= 0) {
-        gsItemsTable.pItems[nTxtGemsSize.pTable[nRunesSize].code].dwGemOffset = nGemsSize;
+    for (nGemsSize = 0; nGemsSize < nTxtGemsSize.nSize; nGemsSize++) {
+      gsItemsTable.pItems[nGemsSize].dwGemOffset = -1;
+      if (nTxtGemsSize.pTable[nGemsSize].code >= 0) {
+        gsItemsTable.pItems[nTxtGemsSize.pTable[nGemsSize].code].dwGemOffset = nGemsSize;
       }
-
-      nGemsSize++;
-      nTotalGemsRunesSize++;
-      nRunesSize++;
-    } while (nGemsSize < nTxtGemsSize.nSize);
+    }
 }
 
 void __stdcall DATATBLS_UnloadGemsTxt() {
@@ -1685,8 +1666,10 @@ int TXT_Gamble_SortFunction(LPCVOID pEntry1, LPCVOID pEntry2) {
     if (*(uint32_t*)((char*)pEntry1 + 4) > *(uint32_t*)((char*)pEntry2 + 4)) {
       return 1;
     }
-
-    return -(uint32_t)(*(uint32_t*)((char*)pEntry2 + 4) > *(uint32_t*)((char*)pEntry1 + 4));
+    if (*(uint32_t*)((char*)pEntry1 + 4) < *(uint32_t*)((char*)pEntry2 + 4)) {
+      return -1;
+    }
+    return 0;
 }
 
 // One-time loader for gamble.txt. Compiles the binary "gamble" table (code field only), resolves each item code to a class id via the items link, then sorts the entries by level and builds two side-tables: GambleTable (sorted class-id array) and the per-level row counts (anLevelLimit) (per-level upper-bound cache for [1..99]).

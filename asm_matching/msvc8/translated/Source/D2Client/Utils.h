@@ -14,6 +14,9 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 
+// Forward declarations
+struct D2UnitStrc;
+
 namespace D2Client { namespace _Utils {
 
 // Function declarations
@@ -21,7 +24,7 @@ namespace D2Client { namespace _Utils {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 void __stdcall UTILS_OnUnitModeChange_NoOp();
 void __stdcall UTILS_OnUnitModeChange_NoOp_Unref_004e4030();
-void __stdcall ANIM_OnSkillCastStub();
+void __fastcall ANIM_OnSkillCastStub(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
 float __stdcall UTILS_SqrtFloat(float fInput);
 float thunk___CIsqrt(float fValue);
 int32_t __fastcall RollRandomNumerUpToArgument(int32_t nNumber);

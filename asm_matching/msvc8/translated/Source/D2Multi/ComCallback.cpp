@@ -1758,7 +1758,7 @@ static void __stdcall COMCALLBACK_FormatWhisperReply(uint8_t * pbReplyText, uint
       char* pchStar;
       if (*pbReplyText == 0x2a) {
         pchStar = Storm::Source::SSTR::SStrChr((char*)pbSenderName, '*');
-        if (!pchStar || (pbScanSender = (uint8_t*)(pchStar + 1) , !pchStar[1])) {
+        if (!pchStar || (pbScanSender = (uint8_t*)++pchStar , !*pchStar)) {
           pbScanSender = pbSenderName;
         }
 

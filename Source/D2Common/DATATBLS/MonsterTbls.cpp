@@ -1651,7 +1651,7 @@ void __fastcall TXT_AllocTxt_hireling(D2PoolManagerStrc * pMemory) {
 
       nHirelingId = sgtDataTable.pTxtHireling[nCounter].id;
       if (nHirelingId < 0x100) {
-        nHirelingId = (uint32_t)(99 < (uint16_t)sgtDataTable.pTxtHireling[nCounter].version) * 0x100 + nHirelingId;
+        nHirelingId = (uint32_t)(99 < sgtDataTable.pTxtHireling[nCounter].version) * 0x100 + nHirelingId;
         if (sgtDataTable.nTxtHirelingIdLines[nHirelingId] < 0) {
           sgtDataTable.nTxtHirelingIdLines[nHirelingId] = nCounter;
         }
@@ -1762,7 +1762,7 @@ D2HirelingTxt * __stdcall GetHirelingEntry(int32_t bIsExpansion, int32_t nNpcCla
     if (nIndex < sgtDataTable.nTxtHirelingSize) {
       int* pDifficulty;
       pDifficulty = &sgtDataTable.pTxtHireling[nIndex].difficulty;
-      while (pDifficulty[1] != nNpcClassId || *pDifficulty != nDifficulty + 1 || (uint16_t)((D2HirelingTxt*)(pDifficulty - 4))->version != (uint16_t)bIsExpansion) {
+      while (pDifficulty[1] != nNpcClassId || *pDifficulty != nDifficulty + 1 || ((D2HirelingTxt*)(pDifficulty - 4))->version != (uint16_t)bIsExpansion) {
         nIndex++;
         pDifficulty += 0x46;
         if (nIndex >= sgtDataTable.nTxtHirelingSize) {
@@ -1792,7 +1792,7 @@ D2HirelingTxt * __stdcall GetHirelingDataTable(int32_t nVersion, int32_t nAct, i
     do {
       D2HirelingTxt* pEntry;
       pEntry = (D2HirelingTxt*)(pDifficulty - 4);
-      if (pDifficulty[-1] == nAct + 1 && *pDifficulty == nDifficulty + 1 && (uint16_t)pEntry->version == (uint16_t)nVersion) {
+      if (pDifficulty[-1] == nAct + 1 && *pDifficulty == nDifficulty + 1 && pEntry->version == (uint16_t)nVersion) {
         if (!nStartLevel) {
           return pEntry;
         }

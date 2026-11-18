@@ -498,7 +498,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_CDKey3(char * pBytes, size_t nSize) {
     switch (gnCDKey3ValidationResult) {
       case 0:
         g_SIDPacketResponseFlags[0x42] = 1;
-      return 1;
+      break;
       case 3:
         SID_SetStateFlag1(3);
       return 1;
@@ -987,7 +987,6 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChange(char * pPacketData, si
 // On status 2, old password was incorrect. Sets global gbAuthChangeProofComplete to signal UI completion.
 BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChangeProof(char * pPacketData, size_t nPacketSize) {
     int32_t bProofValid;
-    char* szFailureMessage;
     if (nPacketSize < 0x18) {
       Debug::DEBUG_Trace("INVALID: AuthAccountChangeProof");
       return 0;
@@ -1005,8 +1004,9 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChangeProof(char * pPacketDat
             return 1;
           }
 
-          szFailureMessage = "Change Proof failed: Server didn\'t know our password but told us it did!";
-          break;
+          Debug::DEBUG_Trace("Change Proof failed: Server didn\'t know our password but told us it did!");
+          BNMESSQUEUE_SetStateIfZero(0x12);
+          return 0;
         }
       case 2:
         {
@@ -1017,13 +1017,11 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChangeProof(char * pPacketDat
         }
       default:
         {
-          szFailureMessage = "Change Proof failed: Unknown result";
+          Debug::DEBUG_Trace("Change Proof failed: Unknown result");
+          BNMESSQUEUE_SetStateIfZero(0x12);
+          return 0;
         }
     }
-
-    Debug::DEBUG_Trace(szFailureMessage);
-    BNMESSQUEUE_SetStateIfZero(0x12);
-    return 0;
 }
 
 // SID_AUTH_ACCOUNTUPGRADE (0x57) packet handler - Account upgrade to NLS initiation

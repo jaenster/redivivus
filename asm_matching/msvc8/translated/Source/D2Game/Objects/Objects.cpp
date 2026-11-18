@@ -776,11 +776,7 @@ void __fastcall Objects_InitFn28_GoldPlaceholder(D2ObjectInitFnArg * pInitArg) {
     D2SeedStrc* pDVar1 = pInitArg->pSeed;
     uint32_t DVar2 = D2_SeedRoll(pDVar1);
     int nGoldDropCount = DVar2 % 9 + 1;
-    if (nGoldDropCount <= 0) {
-      return;
-    }
-
-    do {
+    for (int nGoldPile = 0; nGoldPile < nGoldDropCount; nGoldPile++) {
       uint32_t nRandOffX;
       pDVar1 = pInitArg->pSeed;
       DVar2 = D2_SeedRoll(pDVar1);
@@ -791,16 +787,14 @@ void __fastcall Objects_InitFn28_GoldPlaceholder(D2ObjectInitFnArg * pInitArg) {
       nOffsetX = nRandOffX;
       pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pInitArg->pRoom, ptSpawnPos.x + nRandOffX, nRandOffX2 + ptSpawnPos.y);
       if (pRoom == pInitArg->pRoom) {
-        ptSpawnPos.y = pInitArg->nY + nRandOffX2;
         ptSpawnPos.x = pInitArg->nX + nRandOffX;
+        ptSpawnPos.y = pInitArg->nY + nRandOffX2;
         eCollision = D2Common::Collision::CheckCollision_Vector(pRoom, ptSpawnPos.x, ptSpawnPos.y, 1, 1, 0x3f11);
         if (eCollision == COLBIT_NONE) {
           ITEMS::Items::Drop::DROP_SpawnGoldInRoom(pInitArg->pGame, pInitArg->pRoom, &ptSpawnPos);
         }
       }
-
-      nGoldDropCount--;
-    } while (nGoldDropCount);
+    }
 }
 
 // Shrine object initialization function (object init table entry 1). Reads the shrine-type param from ObjectsTxt; if 0, randomly rolls a shrine type from the Shrines table (up to 8 tries, filtered by dwLevelMin vs current level); if 1/2 rolls fixed shrine category 2/3; otherwise calls OBJECT_SelectRandomShrineType. Remaps certain shrine IDs (4→2, 5→3, 0x10→0x12), stores the result in the object's szCharName[4], and sets the ShrineTxt record pointer.
@@ -923,7 +917,6 @@ void __fastcall Objects_InitFn27_GooPile(D2ObjectInitFnArg * pInitArg) {
 // Init callback for lockable chest objects (group 03). Calls Objects_InitFn02 for base setup, then reads the chest's current flags. If the object's txt Lockable flag is set, rolls a seed value against (MonLvl/2 + 8) percent chance; if the roll passes the chest is flagged as locked (bit 0x80). Finally seeds the object's own RNG state with a derived value and writes back the flags.
 void __fastcall Objects_InitFn03_Chest(D2ObjectInitFnArg * pInitArg) {
     D2SeedStrc* pDVar1;
-    int nSeedHighDiv;
     uint32_t seedRolled;
     Objects_InitFn02_Urn(pInitArg);
     uint8_t byChestFlags;
@@ -945,8 +938,7 @@ void __fastcall Objects_InitFn03_Chest(D2ObjectInitFnArg * pInitArg) {
     store_seed_and_flags:
     pDVar1 = pInitArg->pSeed;
     seedRolled = D2_SeedRoll(pDVar1);
-    nSeedHighDiv = (int)((uint64_t)seedRolled * 0x20005 >> 0x20);
-    D2Common::Seed::InitSeed_Param_666(&pInitArg->pObject->sSeed, seedRolled + ((seedRolled - nSeedHighDiv >> 1) + nSeedHighDiv >> 0xf) * -0xfffe + 1);
+    D2Common::Seed::InitSeed_Param_666(&pInitArg->pObject->sSeed, seedRolled % 0xfffe + 1);
     pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = byChestFlags;
 }
 
@@ -2433,8 +2425,8 @@ static int32_t __stdcall OBJECT_RollAndDispatchPopulateFn(::SGAMEDATA * pGame, D
         nDensityPct = 5;
       }
 
-      int nRoomArea = pObjRng->nLevelRooms;
-      if (pObjRng->pad_0x4 > nRoomArea - nRoomArea / 4) {
+      int nRoomArea;
+      if (pObjRng->pad_0x4 > pObjRng->nLevelRooms - pObjRng->nLevelRooms / 4) {
         nDensityPct += 5;
       }
       if (!(nEnabledPopTypes[7] < nDensityPct + 0xc)) {

@@ -552,10 +552,9 @@ BOOL __fastcall OBJOP_A2Q2_OpenHoradricScrollChest(D2ObjectOperateFnArg * pOpera
         return 0;
       }
 
-      do {
+      for (int i = 0; i < nDropCount; i++) {
         Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-        nDropCount--;
-      } while (nDropCount);
+      }
 
       return 0;
     }
@@ -647,10 +646,9 @@ BOOL __fastcall OBJOP_A2Q2_OpenHoradricCubeChest(D2ObjectOperateFnArg * pOperati
         return 0;
       }
 
-      do {
+      for (int i = 0; i < nGoldDropsLeft; i++) {
         Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-        nGoldDropsLeft--;
-      } while (nGoldDropsLeft);
+      }
 
       return 0;
     }

@@ -290,7 +290,7 @@ template<> void __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>
       *puVar4 = uVar2;
       *(uint32_t*)(pTVar1->m_alloc + 4) = pTVar1->m_count;
       pTVar1->m_alloc = 0;
-      pArray[1].m_count = 0;
+      pTVar1->m_count = 0;
     }
 
     pArray->Destructor();

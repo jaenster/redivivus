@@ -628,14 +628,14 @@ void __stdcall GetClientIpStringByClientId(D2QServerStrc * pQServer, int nClient
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
 }
 
-in_addr __stdcall GetClientIpByToken(D2QServerStrc * pQServer, uint32_t nToken) {
+uint32_t __stdcall GetClientIpByToken(D2QServerStrc * pQServer, uint32_t nToken) {
     uint32_t nBucketIndex = pQServer->nClientHashMask & nToken;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
     D2QServerClientConnectionStrc* pDVar1 = pQServer->pQServerClientList[nBucketIndex];
     while (true) {
       if (!pDVar1) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
-        return (in_addr)(_union_1226)0x0;
+        return 0;
       }
       if (pDVar1->nClientToken == nToken) {
         break;
@@ -644,9 +644,9 @@ in_addr __stdcall GetClientIpByToken(D2QServerStrc * pQServer, uint32_t nToken) 
       pDVar1 = pDVar1->pNextByToken;
     }
 
-    _union_1226 ipAddrResult = (_union_1226)pDVar1->ipAddress.S_un.S_addr;
+    uint32_t ipAddrResult = pDVar1->ipAddress.S_un.S_addr;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
-    return (in_addr)ipAddrResult;
+    return ipAddrResult;
 }
 
 uint32_t __stdcall ProbePeerNameByToken(D2QServerStrc * pQServer, uint32_t nToken) {
@@ -932,10 +932,11 @@ int __stdcall QSERVER_EnqueueClientPacket(D2QServerStrc * pQServer, char * pByte
     pModePacketNode->nClientToken = nClientId;
     if ((int)nClassifierOuts[3] < pQServer->nModeCount) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csClientLifecycle);
-      if (!pQServer->ppModePacketQueueTails[nClassifierOuts[3]]) {
+      D2QServerModePacketNodeStrc* pTail = pQServer->ppModePacketQueueTails[nClassifierOuts[3]];
+      if (!pTail) {
         pQServer->ppModePacketQueueHeads[nClassifierOuts[3]] = pModePacketNode;
       } else {
-        pQServer->ppModePacketQueueTails[nClassifierOuts[3]]->pNext = pModePacketNode;
+        pTail->pNext = pModePacketNode;
       }
 
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQServer->ppModePacketQueueTails[nClassifierOuts[3]] = pModePacketNode;
@@ -1481,12 +1482,10 @@ static BOOL __stdcall QSSpamCheck(D2QServerClientConnectionStrc * pQServerClient
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
     pQServerClientConnectionStrc->dwSpamWindowStartTick = DVar1;
     if ((uint32_t)pQServerClientConnectionStrc->nSpamBytesAccum >= 200) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQServerClientConnectionStrc->nSpamBytesAccum -= 200;
-      LeaveCriticalSection(lpCriticalSection);
-      return 1;
+      pQServerClientConnectionStrc->nSpamBytesAccum -= 200;
+    } else {
+      pQServerClientConnectionStrc->nSpamBytesAccum = 0;
     }
-
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQServerClientConnectionStrc->nSpamBytesAccum = 0;
     LeaveCriticalSection(lpCriticalSection);
     return 1;
 }
@@ -1684,9 +1683,9 @@ void __stdcall DisconnectAndBanIp(D2QServerStrc * pQServer, uint32_t nIpAddress,
       return;
     }
 
-    uint32_t nHashMask = pQServer->nClientHashMask;
+    uint32_t nHashIdx = pQServer->nClientHashMask & nIpAddress;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csTokenHash);
-    for (pClientConn = pQServer->pIpHashBuckets[nHashMask & nIpAddress]; pClientConn && pClientConn->ipAddress.S_un.S_addr != nIpAddress; pClientConn = pClientConn->pNextByIpHash) {}
+    for (pClientConn = pQServer->pIpHashBuckets[nHashIdx]; pClientConn && pClientConn->ipAddress.S_un.S_addr != nIpAddress; pClientConn = pClientConn->pNextByIpHash) {}
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pQServer->csTokenHash);
     if (pClientConn) {
@@ -1696,10 +1695,7 @@ void __stdcall DisconnectAndBanIp(D2QServerStrc * pQServer, uint32_t nIpAddress,
       LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  Client %s is already closed", szLogFile);
     }
 
-    szLogFile = szFile;
-    int nLogLine = nLine;
-    char* szIpStr = inet_ntoa((in_addr)nIpAddress);
-    LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  IP:%s  QSHackListIP() from FILE:%s  LINE:%d", szIpStr, szLogFile, nLogLine);
+    LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  IP:%s  QSHackListIP() from FILE:%s  LINE:%d", inet_ntoa((in_addr)nIpAddress), szFile, nLine);
     BanIpAddress(pQServer, szFile, nIpAddress, nLine);
 }
 
@@ -1758,9 +1754,9 @@ static void __stdcall HACKL_DisconnectAndBanClient(int nClientToken, char * pRea
 int __fastcall CheckIfPlayerIsBannedByAddress(D2QServerStrc * pQServer, in_addr * pAddr, char * szFile, int32_t nLine) {
     D2QServerClientConnectionStrc* pFoundClient;
     uint32_t nIpAddr = pAddr->S_un.S_addr;
-    uint32_t nHashMask = pQServer->nClientHashMask;
+    uint32_t nHashIdx = pQServer->nClientHashMask & nIpAddr;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csTokenHash);
-    for (pFoundClient = pQServer->pIpHashBuckets[nHashMask & nIpAddr]; pFoundClient && pFoundClient->ipAddress.S_un.S_addr != nIpAddr; pFoundClient = pFoundClient->pNextByIpHash) {}
+    for (pFoundClient = pQServer->pIpHashBuckets[nHashIdx]; pFoundClient && pFoundClient->ipAddress.S_un.S_addr != nIpAddr; pFoundClient = pFoundClient->pNextByIpHash) {}
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pQServer->csTokenHash);
     if (!pFoundClient) {
@@ -1772,7 +1768,7 @@ int __fastcall CheckIfPlayerIsBannedByAddress(D2QServerStrc * pQServer, in_addr 
       return 1;
     }
 
-    char* szIpStr = inet_ntoa((in_addr)pAddr->S_un.S_un_b);
+    char* szIpStr = inet_ntoa(*pAddr);
     LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  Client %d at %s banned via QSBanByAddr()", pFoundClient->nClientToken, szIpStr);
     HACKL_DisconnectAndBanClient(pFoundClient->nClientToken, ".\\Src\\QServer\\QServer.cpp", 0x584, pQServer);
     return 1;

@@ -172,12 +172,7 @@ void __fastcall SendRelationshipStatus(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       } else {
         nOtherUnitGUID = pTargetUnit->nUnitGUID;
       }
-      if (!pUnit) {
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x8C_RelationshipUpdate_Sender(pGame, -1, nOtherUnitGUID, (uint16_t)pListEntry->nRelationshipFlags);
-        return;
-      }
-
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x8C_RelationshipUpdate_Sender(pGame, pUnit->nUnitGUID, nOtherUnitGUID, (uint16_t)pListEntry->nRelationshipFlags);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x8C_RelationshipUpdate_Sender(pGame, !pUnit ? -1 : pUnit->nUnitGUID, nOtherUnitGUID, (uint16_t)pListEntry->nRelationshipFlags);
     }
 }
 

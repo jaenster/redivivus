@@ -361,7 +361,7 @@ void __fastcall MONSTERDATA_FreeMonsterMode(::SGAMEDATA * pGame, D2MonsterPathPa
 static void __stdcall MONSTERMODE_OnDeath(uint8_t nDirection, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL _bHasLightState;
     bool bHasLightState;
-    D2MonStatsTxt* pMonStats = 0;
+    D2MonStatsTxt* pMonStats;
     if (pUnit && pUnit->pHoverText) {
       D2Common::Chat::Free(pGame->pMemoryPool, pUnit->pHoverText);
       pUnit->pHoverText = 0;
@@ -373,9 +373,9 @@ static void __stdcall MONSTERMODE_OnDeath(uint8_t nDirection, ::SGAMEDATA * pGam
     if (pUnit) {
       int nSuperUniqueId;
       nSuperUniqueId = pUnit->nClassId;
-      if (nSuperUniqueId >= 0 && nSuperUniqueId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
-        pMonStats = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nSuperUniqueId;
-      }
+      pMonStats = nSuperUniqueId >= 0 && nSuperUniqueId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nSuperUniqueId : nullptr;
+    } else {
+      pMonStats = 0;
     }
 
     GAME::Targets::MONSTER_FreeUnitNodes(pGame, pUnit);

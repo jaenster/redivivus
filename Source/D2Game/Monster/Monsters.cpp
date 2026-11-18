@@ -1656,7 +1656,7 @@ void __fastcall MONSTER_CastLightningUniqueBolts(::SGAMEDATA * pGame, D2UnitStrc
     if (!bShouldTrigger) {
       return;
     }
-    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       nSkillLevel = 0;
     } else {
       nSkillLevel = pUnit->pUnitData.pUnitDataMonster->nDurielUnk;
@@ -1740,13 +1740,13 @@ void __fastcall MONSTER_CastLightningUniqueBolts(::SGAMEDATA * pGame, D2UnitStrc
       }
 
       do {
-        nSkillLevel = gaMissileOffsets_LightningUniqueX[nDirLoopOffset];
-        nDirY = gaMissileOffsets_LightningUniqueY[nDirLoopOffset];
+        nSkillLevel = gaMissileOffsets_LightningUniqueX[nDirLoopOffset] + bShouldTrigger;
+        nDirY = gaMissileOffsets_LightningUniqueY[nDirLoopOffset] + nSpawnOriginY;
         nMissileSpawnIdx = 0;
         do {
           sSkillArg.nFunctionParam = nMissileSpawnIdx;
-          sSkillArg.nUnitX = nSkillLevel + bShouldTrigger;
-          sSkillArg.nUnitY = nDirY + nSpawnOriginY;
+          sSkillArg.nUnitX = nSkillLevel;
+          sSkillArg.nUnitY = nDirY;
           MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
           nMissileSpawnIdx++;
         } while (nMissileSpawnIdx < 2);

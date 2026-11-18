@@ -1587,7 +1587,12 @@ static int32_t GetUnitCount(D2UnitStrc * * ppUnitBuckets) {
     int nBucketIdx = 0;
     do {
       /* The argument is an array of D2UnitStrc */ if (ppUnitBuckets[nBucketIdx]) {
-        for (pCurUnit = UNIT::SUnit::GetNextUnit(ppUnitBuckets[nBucketIdx]); nCount++ , pCurUnit != 0; pCurUnit = UNIT::SUnit::GetNextUnit(pCurUnit)) {}
+        nCount++;
+        pCurUnit = UNIT::SUnit::GetNextUnit(ppUnitBuckets[nBucketIdx]);
+        while (pCurUnit) {
+          nCount++;
+          pCurUnit = UNIT::SUnit::GetNextUnit(pCurUnit);
+        }
       }
 
       nBucketIdx++;
@@ -1875,9 +1880,9 @@ static void __stdcall NET_D2GS_SERVER_Send_0xB3_SendSaveFile(::SGAMEDATA * pGame
     pBytes[1] = (char)nSendSize;
     pBytes[2] = !pClient->nFileSize;
     *(int*)(pBytes + 3) = pClient->nSaveOpenSize;
-    int nBytesLeft = nSendSize;
+    char* pWriteCursor = pBytes + 7;
     if (nSendSize > 0) {
-      char* pWriteCursor = pBytes + 7;
+      int nBytesLeft = nSendSize;
       do {
         *pWriteCursor = *pReadCursor;
         pReadCursor++;
@@ -2049,15 +2054,15 @@ void __fastcall QSERVER_DestroyGameByToken(uint32_t nToken) {
     ::SGAMEDATA* pGame = pQServerState->TSHashTable<::SGAMEDATA, HASHKEY_NONE>::Ptr(nToken, &pQServerState->tKey);
     if (!pGame) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection->m_critsect);
-      return nullptr;
-    }
-    if (!pGame->lpCriticalSection) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1181);
-      exit(-1);
-    }
+    } else {
+      if (!pGame->lpCriticalSection) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1181);
+        exit(-1);
+      }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(pGame->lpCriticalSection);
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gpQServerGameState->tSync.m_critsect);
+      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(pGame->lpCriticalSection);
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gpQServerGameState->tSync.m_critsect);
+    }
     return pGame;
 }
 
@@ -2668,9 +2673,9 @@ void __stdcall QSERVER_BroadcastPlayerMessage(int32_t nMsgType, uint32_t dwEvent
 }
 
 void __stdcall QSERVER_BroadcastChatByServerId(uint16_t nServerId, char * pMessageBuffer) {
+    ::SGAMEDATA* nToken = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
     ::SGAMEDATA* pGame = gaQServerGameByToken[nServerId];
-    ::SGAMEDATA* nToken = 0;
     if (pGame && pGame != (::SGAMEDATA*)-1) {
       nToken = pGame;
     }
@@ -3282,16 +3287,14 @@ void __fastcall NET_D2GS_SERVER_LeaveServer(uint32_t nClientId, int32_t bBroadca
           SCmd::NET_D2GS_SERVER_SendStateCommand(pClient, 6);
           ServerCmd::NET_D2GS_SERVER_Send_0xB0_ConnectionTerminated(nClientId);
           FlushClientPackets(pGame, 0, pClient);
-          sEvent.nArgTypes = '\0';
-          memset(sEvent.szName1, 0, 16 * sizeof(sEvent.szName1[0]));
-          memset(sEvent.szName2, 0, 16 * sizeof(sEvent.szName2[0]));
+          memset(&sEvent, 0, sizeof(sEvent));
           sEvent.nPacketId = 'Z';
           sEvent.nMessageType = '\x03';
           sEvent.nColor = '\x04';
           sEvent.nArg = 0;
           Clients::GetAccountName(pClient, sEvent.szName2);
           nAddress = 0x10;
-          *(uint32_t*)((char*)&sEvent.szName2 + 12) &= 0xffffff;
+          sEvent.szName2[15] = '\0';
           Storm::Source::SSTR::SStrCopy(sEvent.szName1, Clients::GetCharName(pClient), nAddress);
           Clients::CleanUpClient(pGame, nClientId, (uint32_t)!nGameToken);
           if (bBroadcastLeave) {

@@ -1363,7 +1363,7 @@ void __fastcall NET_D2GS_CLIENT_PacketHandle_from0xAF(uint8_t * pBytes, size_t n
 void __fastcall NET_D2GS_CLIENT_Incoming0x01_NEWGAME(D2GSPacketSrv0x01 * pBytes) {
     eD2ArenaFlags eArenaFlags = pBytes->dwArenaFlags;
     Game::CLIENT_SetDifficulty(pBytes->nDifficulty);
-    Game::CLIENT_SetExpansion((bool)pBytes->nExpansion);
+    Game::CLIENT_SetExpansion(pBytes->nExpansion);
     Game::CLIENT_SetLadder((uint32_t)pBytes->nLadder);
     CLIENT_SetArenaFlags(eArenaFlags);
     UI::Draw::InitializeUI();
@@ -1517,7 +1517,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x09_AssignLevelWarp(D2GSPacketSrv0x09 *
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x51_NEWOBJECT(D2GSPacketSrv0x51 * pBytes) {
-    UNIT::CUnit::CreateObject(pBytes->dwObjectGUID, (uint32_t)pBytes->wClassId, (uint32_t)pBytes->wX, (uint32_t)pBytes->wY, (eD2UnitType)pBytes->nObjectType, 0, (uint32_t)pBytes->nState, (bool)pBytes->nInteraction);
+    UNIT::CUnit::CreateObject(pBytes->dwObjectGUID, (uint32_t)pBytes->wClassId, (uint32_t)pBytes->wX, (uint32_t)pBytes->wY, (eD2UnitType)pBytes->nObjectType, 0, (uint32_t)pBytes->nState, pBytes->nInteraction);
 }
 
 // JMP thunk

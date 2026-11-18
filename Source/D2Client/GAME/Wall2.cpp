@@ -693,13 +693,10 @@ void __fastcall WALL2_UpdateScheduledSound(int32_t nDelayedSoundOffset, int32_t 
       int32_t nRecordingIdx;
       nRecordingIdx = Game::gnRecordingIndex();
       gnDelayedSoundPlayIndex = nRecordingIdx + nDelayedSoundOffset;
-      gbPendingDelayedSoundPlay = bPlayDelayed;
-      gnSoundSequenceEndIndex = nRecordingIdx + nDelayedSoundOffset + 0x32;
-      return;
     }
 
+    gbPendingDelayedSoundPlay = bPlayDelayed;
     gnSoundSequenceEndIndex = gnDelayedSoundPlayIndex + 0x32;
-    gbPendingDelayedSoundPlay = 0;
 }
 
 // @sourcefile .\GAME\Wall2.cpp
@@ -1106,7 +1103,6 @@ static void __stdcall WALL2_AddRoofTile(D2Wall2DrawListStrc * pDrawList, D2Wall2
 
 // Appends a tile to the cell's pShadowPassList and sets pass-mask bit 3. Called for every tile from DRLGROOM_GetRoofTilesFromRoom and for wall tiles whose flags bits 14..16 are clear.
 static void __stdcall WALL2_AddShadowPassTile(D2Wall2CellStrc * pWall2Cell, D2RoomStrc * pRoom, D2DrlgTileDataStrc * pTileData, D2Wall2DrawListStrc * pDrawList) {
-    D2DrlgRoomCoordsStrc roomCoords;
     D2Wall2DrawEntryStrc* pCurNode;
     uint32_t nEntryIdx = pDrawList->nWall2EntryCount;
     pDrawList->nWall2EntryCount = nEntryIdx + 1;
@@ -1118,9 +1114,12 @@ static void __stdcall WALL2_AddShadowPassTile(D2Wall2CellStrc * pWall2Cell, D2Ro
     pDVar1->dwType = 1;
     pDVar1->pData = pTileData;
     pDVar1->pNext = 0;
-    D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
-    pDVar1->nX = (roomCoords.dwXStart + pTileData->nPosX * 5) * 8;
-    pDVar1->nY = (roomCoords.dwYStart + pTileData->nPosY * 5) * 8;
+    {
+      D2DrlgRoomCoordsStrc roomCoords;
+      D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
+      pDVar1->nX = (roomCoords.dwXStart + pTileData->nPosX * 5) * 8;
+      pDVar1->nY = (roomCoords.dwYStart + pTileData->nPosY * 5) * 8;
+    }
     pDrawList->dwWall2PassMask |= Fog::BitBuffer::gadwBitMasks[3];
     pCurNode = pWall2Cell->pShadowPassList;
     if (!pCurNode) {

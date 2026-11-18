@@ -2182,7 +2182,16 @@
         "TEXT_CloseMessageUI",
         "NPCMENU_RefreshMenuDialog"
       ],
-      "dh": "f894eaaa"
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "58e8dcf7",
+      "paramStorage": [
+        [
+          "nScreenMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_IsDialogActive",
@@ -4061,13 +4070,13 @@
       ],
       "usedTypes": [
         "int32_t",
-        "uint16_t"
+        "uint32_t"
       ],
-      "dh": "ff27c652",
+      "dh": "c87689bc",
       "paramStorage": [
         [
-          "wKeyCode",
-          "CX:2"
+          "nKeyCode",
+          "ECX:4"
         ]
       ]
     },
@@ -4116,9 +4125,9 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc",
-        "uint16_t"
+        "uint32_t"
       ],
-      "dh": "224beb82",
+      "dh": "4102de30",
       "paramStorage": [
         [
           "pMsg",

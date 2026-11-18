@@ -304,7 +304,7 @@ template<> StormLinkedListStrc * __fastcall TSExplicitList<SGAMEDATA, -572662307
     StormLinkStrc* pSVar1 = &pList->head;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
-    pSVar1->pPrevLink = pSVar1;
+    pList->head.pPrevLink = pSVar1;
     pList->nLinkOffset = 0;
     pList->head.pNext = ~(uintptr_t)pSVar1;
     return pList;

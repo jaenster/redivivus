@@ -1265,6 +1265,7 @@ BOOL __fastcall Skills_CltStFunc_AlwaysAllow(D2UnitStrc * pUnit, eD2Skills eD2Sk
 }
 
 BOOL __fastcall Skills_CltDoFunc_Bow_ShootArrow(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+    D2UnitStrc* pTargetUnit;
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
@@ -1278,8 +1279,8 @@ BOOL __fastcall Skills_CltDoFunc_Bow_ShootArrow(D2UnitStrc * pUnit, eD2Skills eS
         return 1;
       }
     } else {
-      UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
-      _Utils::ANIM_OnSkillCastStub();
+      pTargetUnit = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
+      _Utils::ANIM_OnSkillCastStub(pUnit, pTargetUnit);
     }
 
     return 1;

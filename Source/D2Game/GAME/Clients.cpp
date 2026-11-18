@@ -938,7 +938,7 @@ int __stdcall ReturnFFFFFFFF() {
     return -1;
 }
 
-void __stdcall ReturnVoid(uint32_t dwParam) {
+void __fastcall ReturnVoid(D2ClientStrc * pClient, int nUnused, int nParam) {
 
 }
 

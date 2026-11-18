@@ -1914,7 +1914,9 @@ void __fastcall QUEST_SendNpcInfoPacket(D2UnitStrc * pUnit, D2UnitStrc * pNpcUni
 // @sourcefile .\QUESTS\QUESTS.CPP
 BOOL __fastcall QUESTS_SendQuestInfoAndEventTrigger(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     uint16_t wGameIdHigh = (uint16_t)((uintptr_t)pGame >> 0x10);
-    D2GSPacketClt0x89 DStack_8 = d2_bits_as<D2GSPacketClt0x89>((uint16_t)((uint16_t)(uint8_t)pGame->pQuestControl->nEventId << 8 | (uint16_t)(uint8_t)0x89));
+    D2GSPacketClt0x89 DStack_8;
+    DStack_8.nPacketId = 0x89;
+    DStack_8.nEventType = (uint8_t)pGame->pQuestControl->nEventId;
     D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pUnit);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, '\x06', 0, pBitBuffer, 0);
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xd0e);
@@ -1996,10 +1998,8 @@ void __fastcall SendQuestState(D2UnitStrc * pUnit, int32_t nQuestId) {
     D2GSPacketSrv0x5D sPacket;
     memset(&sPacket, 0, sizeof(sPacket));
     sPacket.nQuestId = (uint8_t)nQuestId;
-    sPacket.nExtra = 0;
     sPacket.nPacketId = ']';
     sPacket.nAlertFlags = '\x02';
-    sPacket.nFilterStatus = '\0';
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xd69);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &sPacket);
 }

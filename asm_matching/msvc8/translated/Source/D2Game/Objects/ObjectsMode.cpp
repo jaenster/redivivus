@@ -4543,18 +4543,11 @@ BOOL __fastcall OBJOP_OpenUnlockedChest(D2ObjectOperateFnArg * pOperation) {
     ::SGAMEDATA* pGame;
     D2UnitStrc* pVictim;
     pVictim = pOperation->sArg.pVictim;
-    if (pVictim) {
-      if (pVictim->eAnimMode.ePlayerMode != Death) {
-        return 0;
-      }
-      if (pVictim) {
-        nClassId = pVictim->nClassId;
-        goto open_chest;
-      }
+    if (pVictim && pVictim->eAnimMode.ePlayerMode != Death) {
+      return 0;
     }
 
-    nClassId = -1;
-    open_chest:
+    nClassId = !pOperation->sArg.pVictim ? -1 : pOperation->sArg.pVictim->nClassId;
     pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassId);
     D2SeedStrc* pSeedPtr = pOperation->pSeed;
     uint32_t newSeed = D2_SeedRoll(pSeedPtr);

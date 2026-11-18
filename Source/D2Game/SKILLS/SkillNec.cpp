@@ -342,12 +342,7 @@ void __thiscall SKILLNEC_AssignCurseAiBehavior(::SGAMEDATA * pGame, D2UnitStrc *
         }
     }
 
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
-      Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, pUnit->pUnitData.pUnitDataMonster->pAiGeneral, nFunctionId);
-      return;
-    }
-
-    Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, nullptr, nFunctionId);
+    Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster ? pUnit->pUnitData.pUnitDataMonster->pAiGeneral : nullptr, nFunctionId);
 }
 
 int32_t __fastcall SKILLNEC_ClampResistPenalty(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue) {

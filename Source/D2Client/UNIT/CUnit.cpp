@@ -695,18 +695,15 @@ void __fastcall FacePlayer(D2UnitStrc * pUnit) {
     }
 
     eUnitType = pPlayer->eUnitType;
-    if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
-      if (pPlayer->pPath.pDynamicPath) {
-        nTargetX_00 = D2Common::PATH::DynamicPath::GetXPos(pPlayer->pPath.pDynamicPath);
-        D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, nTargetX_00, nTargetY, 0);
-        return;
-      }
-
-      D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, 0, nTargetY, 0);
-      return;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+      nTargetX_00 = pPlayer->pPath.pStaticPath->nPosX;
+    } else if (pPlayer->pPath.pDynamicPath) {
+      nTargetX_00 = D2Common::PATH::DynamicPath::GetXPos(pPlayer->pPath.pDynamicPath);
+    } else {
+      nTargetX_00 = 0;
     }
 
-    D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, pPlayer->pPath.pStaticPath->nPosX, nTargetY, 0);
+    D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, nTargetX_00, nTargetY, 0);
 }
 
 // Rotates the local player unit to face pUnit when the player is in Neutral or TownNeutral anim mode. Reads pUnit's position (static or dynamic path) and calls PATH_SetDirectionToTarget on the player's dynamic path. No-ops if the player is moving or has no dynamic path (halts fatally on null path).
@@ -2375,7 +2372,7 @@ D2UnitStrc * __fastcall UNIT_CreatePlayer(int32_t nUnitGuid, int32_t nClassId, i
     return pUnit;
 }
 
-D2UnitStrc * __fastcall CreateObject(int32_t nUnitGUID, int32_t nClassId, int32_t nX, int32_t nY, eD2UnitType eUnitType, int32_t nUnused, int32_t nState, bool nInteraction) {
+D2UnitStrc * __fastcall CreateObject(int32_t nUnitGUID, int32_t nClassId, int32_t nX, int32_t nY, eD2UnitType eUnitType, int32_t nUnused, int32_t nState, uint8_t nInteraction) {
     D2UnitStrc* pUnit = D2Common::Units::AllocUnit(nullptr, eUnitType);
     if (!pUnit) {
       return nullptr;

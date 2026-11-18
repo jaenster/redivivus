@@ -56,7 +56,7 @@ void __stdcall FreeDraw();
 void __fastcall DRAW_UI(struct D2GameViewStrc * pGameView);
 void __fastcall CLIENT_AdjustMemoryBudget(struct D2PoolManagerStrc * pMemory, int32_t bInitSpriteCache);
 void __fastcall GFX_ShutdownSpriteCacheAndCofSystem(int32_t nMemoryPoolHandle);
-void __stdcall DRAW_NoOp();
+void __fastcall DRAW_NoOp(int32_t nScreenMode);
 void __stdcall DRAW_PfHandlerCallback_CloseActivePanels(struct D2UIMouseMsgStrc * pMsg);
 #endif // D2_MODULE_D2Client
 

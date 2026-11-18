@@ -2641,11 +2641,9 @@ void __stdcall D2ProfileDump() {
     LARGE_INTEGER liFrequencyHigh;
     /* LARGE_INTEGER * lpFrequency for QueryPerformanceFrequency */ QueryPerformanceFrequency(&liFrequencyHigh);
     LOGGING_LogLine(1, 2, 1, 0x80000, ".\\Logging\\ProfCore.cpp", 0x4e, "PROFILING DUMP FREQUENCY %d:\n", liFrequencyHigh.u.LowPart, liFrequencyHigh.u.HighPart);
-    LARGE_INTEGER* pLVar1 = &gaProfilingDumpFrequency[0].liTime;
-    do {
-      LOGGING_LogLine(1, 2, 1, 0x80000, ".\\Logging\\ProfCore.cpp", 0x54, "FUNCTION: %30s, TIME %12d, COUNT %5d", (D2ProfilingDumpFrequency*)(pLVar1 - 0xd), pLVar1->u.LowPart, *(int*)&pLVar1[1].u);
-      pLVar1 += 0xf;
-    } while ((intptr_t)pLVar1 < (intptr_t)((char*)&gaProfilingDumpFrequency + sizeof(gaProfilingDumpFrequency) + 104));
+    for (int i = 0; i < 23; i++) {
+      LOGGING_LogLine(1, 2, 1, 0x80000, ".\\Logging\\ProfCore.cpp", 0x54, "FUNCTION: %30s, TIME %12d, COUNT %5d", gaProfilingDumpFrequency[i].szFunction, gaProfilingDumpFrequency[i].liTime.u.LowPart, gaProfilingDumpFrequency[i].nCount);
+    }
 }
 
 void __stdcall TXT_FreeParsedTC_Thunk() {

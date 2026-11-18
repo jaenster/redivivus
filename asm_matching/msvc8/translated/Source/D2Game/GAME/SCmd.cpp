@@ -1570,11 +1570,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(D2ClientStrc * pClient
     D2BitBufferStrc bitBuf;
     uint8_t aPacket[34];
     int32_t nBitPos;
-    memset(aPacket + 4, 0, 30 * sizeof(aPacket[0]));
+    memset(aPacket, 0, 34 * sizeof(aPacket[0]));
     aPacket[0] = 0x3e;
-    aPacket[1] = 0;
-    aPacket[2] = 0;
-    aPacket[3] = 0;
     Fog::BitBuffer::InitBitBuffer(&bitBuf, aPacket + 2, 0x20);
     if (!pUnit) {
       dwUnitGUID = -1;

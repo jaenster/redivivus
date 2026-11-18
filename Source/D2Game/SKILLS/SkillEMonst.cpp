@@ -364,12 +364,7 @@ void __fastcall SKILLEMONST_AttachToHost(::SGAMEDATA * pGame, D2UnitStrc * pUnit
             GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, eSkill);
             GAME::Event::EVENT_TriggerImmediate(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, eSkill, nSkillLevel);
             pUnit->eUnitFlags &= ~(UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE);
-            if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
-              Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, pUnit->pUnitData.pUnitDataMonster->pAiGeneral, 0x10);
-              return;
-            }
-
-            Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, nullptr, 0x10);
+            Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) ? pUnit->pUnitData.pUnitDataMonster->pAiGeneral : nullptr, 0x10);
             break;
           }
     }

@@ -966,10 +966,10 @@ static void __stdcall SKILLDESC_BuildStatListDesc(D2UnitStrc * pUnit, D2StatList
     int i;
     eD2UnitStat* pLayoutEntry;
     memset(pnStatValues, 0, 0xa8);
+    i = 0;
     if (gnSkillStatListDescCount > 0) {
       eD2UnitStat eUnitStat;
       pLayoutEntry = gnSkillDescLayoutA;
-      i = 0;
       do {
         eUnitStat = *pLayoutEntry;
         if (eUnitStat != ~UNITSTAT_strength && true) {
@@ -3171,12 +3171,13 @@ static BOOL __stdcall SKILLDESC_FormatMinMaxRange(int32_t nMinVal, int32_t nMaxV
     return 1;
 }
 
-static void __stdcall SKILLDESC_FormatMinMaxRangeLabelsFirst(int32_t nMinVal, int32_t nMaxVal, uint16_t * wszText, int32_t bPrefixSign, uint16_t nSuffixLabelId, uint16_t nPrefixLabelId) {
+static BOOL __stdcall SKILLDESC_FormatMinMaxRangeLabelsFirst(int32_t nMinVal, int32_t nMaxVal, uint16_t * wszText, int32_t bPrefixSign, uint16_t nSuffixLabelId, uint16_t nPrefixLabelId) {
     uint16_t wszRangeStr[32];
     char szBuf[32];
     if (nMinVal == nMaxVal) {
-      SKILLDESC_FormatSignedRangeOrValue(nMinVal, nPrefixLabelId, nSuffixLabelId, 0, wszText);
-      return;
+      BOOL nFmtResult;
+      nFmtResult = SKILLDESC_FormatSignedRangeOrValue(nMinVal, nPrefixLabelId, nSuffixLabelId, 0, wszText);
+      return nFmtResult;
     }
 
     for (int iFill = 0; iFill < 32; iFill++) {
@@ -3197,6 +3198,7 @@ static void __stdcall SKILLDESC_FormatMinMaxRangeLabelsFirst(int32_t nMinVal, in
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszRangeStr);
     pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
+    return 1;
 }
 
 static int __stdcall SKILLDESC_FormatDamageMinMax(int32_t nMinDmg, int32_t nMaxDmg, uint16_t * wszText, int32_t bShowLabel, uint16_t nLabelId, int32_t bPrefixSign) {

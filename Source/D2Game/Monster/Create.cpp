@@ -688,7 +688,7 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
       return;
     }
 
-    do {
+    for (int i = 0; i < nPartySize; i++) {
       D2UnitStrc* pSpawnedMinion;
       pSpawnedMinion = SpawnMonsterAtUnit(pGameInst, pUnit, (int)*(short int*)(pMonStats->Code + (nMinionTypeSlot * 2 + 0x16)), eD2MonsterAnimMode_ns::Neutral, 4, 0x40);
       if (pSpawnedMinion && *((uint8_t*)pMonStats + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
@@ -704,8 +704,7 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
         nMinionTypeSlot = 0;
       }
 
-      nPartySize--;
-    } while (nPartySize);
+    }
 }
 
 // Server-side monster spawner. Validates classId against MonStats/MonStats2 tables, derives the spawn collision mask from MonStats2.spawnCol, and computes the legal spawn rectangle (from the supplied coord-list rect or the room's own coords, transformed room->world). Searches outward in a spiraling ring (radius step 3, up to nSpawnRadius*3), advancing a walk cursor via the room RNG, testing each candidate with PtInRect, optional grid-zone match, MONSTERAI_CanSpawnMonsterAt and a width collision check; certain class ranges use FindDiagonalNonCollisionCoords instead. On finding a free tile it creates the UNIT_MONSTER (unless flag bit0 set), bumps the region spawn count, assigns AI param, sets alignment from MonStats.Align, applies special umods (unless bit1), attaches quest hooks (MONSTER_OnCreateAttachQuests) and spawns the minion group (unless bit6). Returns the new unit, a sentinel (flag bit0), or NULL on failure.

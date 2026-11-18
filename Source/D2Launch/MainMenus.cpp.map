@@ -263,7 +263,16 @@
       "calledFunctions": [
         "MAINMENU_SetGlobalFlag"
       ],
-      "dh": "24b0030b"
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "cde5b627",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "MAINMENU_GetMainMenuUIActive",
@@ -6031,7 +6040,7 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "f2ae8592"
+      "dh": "4b5e5d76"
     },
     {
       "name": "MAINMENU_OnPressSubmitEmailAddress",

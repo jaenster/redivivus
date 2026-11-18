@@ -212,9 +212,12 @@ void __fastcall GLFLOOR_EvictLRU(GlFloorCacheStrc * pCache) {
       return;
     }
 
-    GlFloorCacheNodeStrc* pEvictNode = pCache->pActiveHead;
-    if (pEvictNode) {
-      pNextNode = pEvictNode->pNext;
+    GlFloorCacheNodeStrc* pEvictNode;
+    GlFloorCacheNodeStrc* pActiveHead = pCache->pActiveHead;
+    if (!pActiveHead) {
+      pEvictNode = nullptr;
+    } else {
+      pNextNode = pActiveHead->pNext;
       pCache->pActiveHead = pNextNode;
       if (pNextNode) {
         pNextNode->pPrev = 0;
@@ -222,8 +225,12 @@ void __fastcall GLFLOOR_EvictLRU(GlFloorCacheStrc * pCache) {
         pCache->pActiveTail = 0;
       }
 
-      pEvictNode->pNext = 0;
-      pEvictNode->pPrev = 0;
+      pActiveHead->pNext = 0;
+      pActiveHead->pPrev = 0;
+      pEvictNode = pActiveHead;
+    }
+
+    if (pEvictNode) {
       if (!pEvictNode->pTile) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd3);
         exit(-1);

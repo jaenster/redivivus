@@ -242,8 +242,8 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
 BOOL __fastcall D2WINPAL_LoadActPalette(uint8_t nAct) {
     char szDatPath[260];
     char szPl2Path[260];
-    uint32_t nActIndex = nAct + 1;
-    if (!nActIndex || (int32_t)nActIndex > 5) {
+    int32_t nActIndex = nAct + 1;
+    if (!nActIndex || (int32_t)(uint32_t)nActIndex > 5) {
       nActIndex = 1;
     }
 

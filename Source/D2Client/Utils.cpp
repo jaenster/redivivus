@@ -19,7 +19,7 @@ void __stdcall UTILS_OnUnitModeChange_NoOp_Unref_004e4030() {
 
 }
 
-void __stdcall ANIM_OnSkillCastStub() {
+void __fastcall ANIM_OnSkillCastStub(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
 
 }
 
@@ -62,7 +62,8 @@ int32_t __fastcall RollRandomNumberTimesTwo(int32_t nRange) {
 }
 
 float __stdcall CalculateHypotenuse(float a, float b) {
-    long double fVar1 = sqrt((double)(b * b + a * a));
+    a = b * b + a * a;
+    long double fVar1 = sqrt((double)a);
     return (float)fVar1;
 }
 

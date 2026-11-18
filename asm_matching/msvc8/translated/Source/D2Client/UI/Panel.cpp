@@ -32,7 +32,6 @@
 #include "Source/Fog/Fog.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/UI/Inv.data.h"
 #include "Source/D2Client/UI/MiniPanel.data.h"
 #include "Source/D2Client/UI/Panel.data.h"
 #include "Source/D2Client/UI/Party.data.h"
@@ -119,11 +118,6 @@ void __stdcall thunk_CMD_UseBeltSlot4() {
 
 uint32_t __stdcall PANEL_GetMiniPanelClickedButtonFlag() {
     return (uint32_t)(gnMiniPanelClickedButton != 0);
-}
-
-void __stdcall PANEL_ClearInvMousePosition() {
-    gnInvMouseX = 0;
-    gnInvMouseY = 0;
 }
 
 uint32_t __stdcall INV_HasItemToDescribe() {

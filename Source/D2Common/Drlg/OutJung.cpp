@@ -32,8 +32,13 @@ void __fastcall BuildJungle(D2DrlgLevelStrc * pLevel) {
     int nRand;
     int nXCell;
     int nYCell;
-    if (!(pLevel->eD2LevelId - 0x4cU <= 2)) {
-      return;
+    switch (pLevel->eD2LevelId) {
+      case 0x4c:
+      case 0x4d:
+      case 0x4e:
+        break;
+      default:
+        return;
     }
 
     D2LevelDefsTxt* pSpiderForestDefs = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(LEVEL_SpiderForest);

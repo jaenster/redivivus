@@ -2057,14 +2057,14 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "60949dc2",
+      "dh": "3a6fade1",
       "paramStorage": [
         [
-          "pItem",
+          "nMouseY",
           "ECX:4"
         ],
         [
-          "pGridCoords",
+          "nMouseX",
           "EDX:4"
         ],
         [
@@ -2486,6 +2486,21 @@
         "int32_t"
       ],
       "dh": "a53e0e45"
+    },
+    {
+      "name": "PANEL_ClearInvMousePosition",
+      "address": "004880f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004880f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Inv",
+      "calledFunctions": [
+        "PANEL_ClearInvMousePosition"
+      ],
+      "dh": "a5d20e5a"
     },
     {
       "name": "DRAW_UI_INVENTORY_Gold",

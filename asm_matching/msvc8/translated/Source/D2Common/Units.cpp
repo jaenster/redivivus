@@ -1197,32 +1197,6 @@ void __stdcall SetAnimOrSeqMode(D2UnitStrc * pUnit, int32_t nAnimMode) {
     pUnit->eAnimMode.ePlayerMode = nAnimMode;
 }
 
-#if 0 // ratchet: the match body of 00621210 (evidence 1985bb0f9) could not be re-spelled: field D2UnitStrc::pAnimSeq retyped: D2AnimSeqStrc* -> D2MonSeqTxt*
-static int32_t __stdcall UpdateSequenceMode(D2UnitStrc * pUnit, uint32_t nSeqMode) {
-    uint32_t nFrameCount;
-    uint8_t byActionFrame[4];
-    uint32_t nStartFrame;
-    uint32_t nPrevSeqMode = pUnit->nSeqMode;
-    Merc::ANIM_GetSequenceFrameInfo((D2MonSeqTxt*)pUnit->pAnimSeq, pUnit->nSeqFrame, nSeqMode, &nSeqMode, &nStartFrame, &nFrameCount, (uint32_t*)byActionFrame);
-    pUnit->nGfxCurrentFrame = nStartFrame << 8;
-    pUnit->nSeqMode = nSeqMode;
-    pUnit->nActionFrame = byActionFrame[0];
-    return (uint32_t)(nSeqMode != nPrevSeqMode);
-}
-#endif
-#if 0 // ratchet: the match body of 00621210 (evidence 1985bb0f9) could not be re-spelled: field D2UnitStrc::pAnimSeq retyped: D2AnimSeqStrc* -> D2MonSeqTxt*
-static int32_t __stdcall UpdateSequenceMode(D2UnitStrc * pUnit, uint32_t nSeqMode) {
-    uint32_t nFrameCount;
-    uint8_t byActionFrame[4];
-    uint32_t nStartFrame;
-    uint32_t nPrevSeqMode = pUnit->nSeqMode;
-    Merc::ANIM_GetSequenceFrameInfo((D2MonSeqTxt*)pUnit->pAnimSeq, pUnit->nSeqFrame, nSeqMode, &nSeqMode, &nStartFrame, &nFrameCount, (uint32_t*)byActionFrame);
-    pUnit->nGfxCurrentFrame = nStartFrame << 8;
-    pUnit->nSeqMode = nSeqMode;
-    pUnit->nActionFrame = byActionFrame[0];
-    return (uint32_t)(nSeqMode != nPrevSeqMode);
-}
-#endif
 static int32_t __stdcall UpdateSequenceMode(D2UnitStrc * pUnit, uint32_t nSeqMode) {
     uint32_t nFrameCount;
     uint8_t byActionFrame[4];
@@ -1235,28 +1209,6 @@ static int32_t __stdcall UpdateSequenceMode(D2UnitStrc * pUnit, uint32_t nSeqMod
     return (uint32_t)(nSeqMode != nPrevSeqMode);
 }
 
-#if 0 // ratchet: the match body of 00621260 (evidence 1985bb0f9) could not be re-spelled: field D2UnitStrc::pAnimSeq retyped: D2AnimSeqStrc* -> D2MonSeqTxt*; type D2AnimSeqStrc gone
-void __stdcall InitializeSequence(D2UnitStrc * pUnit) {
-    if (!pUnit) {
-      return;
-    }
-
-    D2MonSeqTxt* pSeqTxt = Merc::MERC_GetSequenceTxt(pUnit);
-    pUnit->pAnimSeq = (D2AnimSeqStrc*)pSeqTxt;
-    if (!pSeqTxt) {
-      return;
-    }
-
-    uint32_t nSeqFrameCount = Merc::GetCounter1(pUnit);
-    pUnit->nSeqFrameCount = nSeqFrameCount;
-    pUnit->nSeqFrame = 0;
-    pUnit->nSeqAnimSpeed = 0x100;
-    int32_t nFrameCount = Merc::GetCounter2(pUnit);
-    pUnit->nFrameCount = nFrameCount << 8;
-    UpdateSequenceMode(pUnit, 0);
-    pUnit->eUnitFlags |= UNITFLAG_SQGFXCHANGE;
-}
-#endif
 void __stdcall InitializeSequence(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return;

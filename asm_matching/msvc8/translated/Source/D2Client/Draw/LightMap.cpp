@@ -1207,10 +1207,10 @@ static void __stdcall LIGHTMAP_UpdateSingleLight(int nQuality, D2LightMapStrc * 
           pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pLightMap->nUnitGUID, eUnitType);
         }
         if (pUnit) {
-          nPrecisionX = D2Common::Units::GetPrecisionX(pUnit) >> 0xd;
-          nPrecisionY = D2Common::Units::GetPrecisionY(pUnit) >> 0xd;
-          pLightMap->nGridX = nPrecisionX + 4;
-          pLightMap->nGridY = nPrecisionY + 4;
+          nPrecisionX = D2Common::Units::GetPrecisionX(pUnit);
+          nPrecisionY = D2Common::Units::GetPrecisionY(pUnit);
+          pLightMap->nGridX = (nPrecisionX >> 0xd) + 4;
+          pLightMap->nGridY = (nPrecisionY >> 0xd) + 4;
         }
       }
     }
@@ -1224,14 +1224,11 @@ static void __stdcall LIGHTMAP_UpdateSingleLight(int nQuality, D2LightMapStrc * 
         pLightMap->pPixelMap = 0;
       }
 
-      nRadius = pLightMap->nRadiusX;
-      if (pLightMap->nRadiusY > nRadius) {
-        nRadius += 8;
+      if (pLightMap->nRadiusY > pLightMap->nRadiusX) {
+        pLightMap->nRadiusX += 8;
       } else {
-        nRadius += -8;
+        pLightMap->nRadiusX -= 8;
       }
-
-      pLightMap->nRadiusX = nRadius;
     }
     if (pLightMap->nRadiusX >= 0x100) {
       pLightMap->nRadiusX = 0xf8;
@@ -1387,8 +1384,8 @@ void __stdcall dLightMapUpdate() {
 
     gnLightmapWorldRefreshFlag = nPlayerX - 0x18;
     gnLightmapBufferState = nQualityLevel - 0x18;
-    gnLightmapWorldMaxX = nPlayerX + 0x18;
-    gnLightmapWorldMaxY = nQualityLevel + 0x18;
+    gnLightmapWorldMaxX = gnLightmapWorldRefreshFlag + 0x30;
+    gnLightmapWorldMaxY = gnLightmapBufferState + 0x30;
     LIGHTMAP_InitFromPlayerAndRooms(0);
     LIGHTMAP_BuildCollisionFlags();
     nPlayerX = LightMap::LIGHTMAP_GetQualityLevel();

@@ -2217,7 +2217,7 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "ca5d6f98"
+      "dh": "3a68331e"
     },
     {
       "name": "NPCMENU_OpenInteractionDialog",
@@ -3083,7 +3083,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "509c5562",
+      "dh": "bc7ebfcf",
       "paramStorage": [
         [
           "pUserParam",
@@ -3212,9 +3212,10 @@
         "D2GSPacketSrv0x27_TextStrc",
         "D2UnitStrc",
         "int32_t",
+        "uint16_t",
         "uint8_t"
       ],
-      "dh": "1101b5c6",
+      "dh": "9346f99d",
       "paramStorage": [
         [
           "nUpdateType",

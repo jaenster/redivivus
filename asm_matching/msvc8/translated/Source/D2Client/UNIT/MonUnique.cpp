@@ -306,9 +306,9 @@ void __fastcall MONUNIQUE_ApplyModifierBishbosh(D2UnitStrc * pUnit, int32_t eMod
     }
 
     CUnit::FreeLightMap(pUnit);
-    if (pUnit) {
+    {
       D2SeedStrc sNewSeed;
-      if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster && pUnit->pUnitData.pUnitDataMonster->eMonsterType & 4) {
+      if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster && pUnit->pUnitData.pUnitDataMonster->eMonsterType & 4) {
         uSeedStep1 = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
         uSeedStep4 = (uSeedStep1 & 0xffffffff) * 0x6ac690c5 + (uSeedStep1 >> 0x20);
         sNewSeed = D2_SEED_NEXT_VAL(uSeedStep4);
@@ -317,9 +317,7 @@ void __fastcall MONUNIQUE_ApplyModifierBishbosh(D2UnitStrc * pUnit, int32_t eMod
         goto attach_light;
       }
 
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
+      nClassId = !pUnit ? -1 : pUnit->nClassId;
     }
 
     D2MonStats2Txt* pMonStats2;

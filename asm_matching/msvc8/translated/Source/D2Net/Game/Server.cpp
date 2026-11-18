@@ -308,8 +308,10 @@ void __stdcall NET_HACK_SetUseQServerHack(BOOL bResult) {
 }
 
 void NET_QServer_FreeAndSend0xB0ToEveryone() {
-    uint8_t nShutdownCmd;
-    Fog::Src::Shutdown(gpQServer, (char*)&nShutdownCmd, 1);
+    uint8_t aShutdownCmd[4];
+    aShutdownCmd[3] = 0xb0;
+    d2_store24((char*)&aShutdownCmd, 0);
+    Fog::Src::Shutdown(gpQServer, (char*)(aShutdownCmd + 3), 1);
     gpQServer = 0;
 }
 
@@ -377,8 +379,9 @@ void __stdcall NET_QServer_FindIpAddressByClientIdForQServer(int32_t nClientId, 
     Fog::Src::GetClientIpStringByClientId(gpQServer, nClientId, szIpAddress, nBufferSize);
 }
 
-void __stdcall GetIpFromToken(uint32_t nToken) {
-    Fog::Src::GetClientIpByToken(gpQServer, nToken);
+uint32_t __stdcall GetIpFromToken(uint32_t nToken) {
+    uint32_t uVar1 = Fog::Src::GetClientIpByToken(gpQServer, nToken);
+    return uVar1;
 }
 
 void __stdcall SERVER_GetClientSocketByToken(uint32_t nToken) {

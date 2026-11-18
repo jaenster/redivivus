@@ -204,7 +204,7 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/UNIT/CUnit.cpp  # 00463940, 5 runs
     Source/D2Client/GAME/Select.cpp  # 00466dc0, 2 runs
     Source/D2Client/Cursor.cpp  # 00467df0, 3 runs
-    Source/D2Client/UI/Panel.cpp  # 00468f40, 7 runs
+    Source/D2Client/UI/Panel.cpp  # 00468f40, 6 runs
     Source/D2Client/GAME/Msg.cpp  # 00468f90, 2 runs
     Source/D2Client/UI/CmdTbl.cpp  # 00469000, 5 runs
     Source/D2Client/Source/ClientEngine.cpp  # 0046aee0, 4 runs
@@ -230,7 +230,7 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/UNIT/UnitMode.cpp  # 00480930, 1 run
     Source/D2Client/Sound/SoundHdr.cpp  # 00481720, 2 runs
     Source/D2Client/SkillHelpers.cpp  # 004834a0, 1 run
-    Source/D2Client/UI/Inv.cpp  # 004835b0, 6 runs
+    Source/D2Client/UI/Inv.cpp  # 004835b0, 5 runs
     Source/D2Client/UI/npcmenu.cpp  # 00486e00, 12 runs
     Source/D2Client/UI/Hireables.cpp  # 00492c10, 1 run
     Source/D2Client/UI/Help.cpp  # 004942d0, 2 runs

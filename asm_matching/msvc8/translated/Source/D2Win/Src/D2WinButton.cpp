@@ -112,7 +112,6 @@ void __fastcall D2WINBUTTON_SetBounds(::D2WinButton * pButton, int32_t nX, int32
 
 // Invokes button click callback (field 9) and optional secondary callback (field 10). Sets active flag (field 0x13) before callback dispatch. Uses global recursion counter INT_007d55c4.
 void __fastcall D2WINBUTTON_InvokeClickCallback(D2ControlMsg * ppButton) {
-    D2ControlMsg sMsgBuf;
     D2ControlStrc* pDVar1 = ppButton->pControl;
     if (pDVar1->neD2FormType != FORM_Button) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xbc);
@@ -126,14 +125,13 @@ void __fastcall D2WINBUTTON_InvokeClickCallback(D2ControlMsg * ppButton) {
 
     pDVar1[1].dwPosX = 1;
     (*pPVar2)(ppButton);
-    if (!pDVar1->fpMouse) {
-      return;
+    if (pDVar1->fpMouse) {
+      D2ControlMsg sMsgBuf;
+      sMsgBuf.pControl = ppButton->pControl;
+      gnFormControlCount++;
+      pDVar1->fpMouse(&sMsgBuf);
+      gnFormControlCount--;
     }
-
-    sMsgBuf.pControl = ppButton->pControl;
-    gnFormControlCount++;
-    pDVar1->fpMouse(&sMsgBuf);
-    gnFormControlCount--;
 }
 
 // Sets the active image index (field 0x17) for multi-state button controls.
@@ -487,7 +485,6 @@ BOOL __stdcall Mouse(D2ControlMsg * pControlMsg) {
 // fpKey handler of a button with a hotkey: for any key message except WM_CHAR (0x102) whose wParam equals nHotkeyVK, sets nClickAnimState to 1, runs fpPush and then fpMouse (a message holding only pControl), so the key acts as a click. Returns fpPush's result, else 0. Halts if the control is not FORM_Button.
 // Provenance: asm 005011f0..00501284 (RET 4); installed by D2WinButton at 005012f0 when nHotkeyVK != 0.
 BOOL __stdcall D2WINBUTTON_HandleHotkey(D2ControlMsg * pControlMsg) {
-    D2ControlMsg sClickMsg;
     ::D2WinButton* pButton = (::D2WinButton*)pControlMsg->pControl;
     if (pButton->sControl.neD2FormType != FORM_Button) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x259);
@@ -507,6 +504,7 @@ BOOL __stdcall D2WINBUTTON_HandleHotkey(D2ControlMsg * pControlMsg) {
 
         bResult = (*pPVar1)(pControlMsg);
         if (pButton->sControl.fpMouse) {
+          D2ControlMsg sClickMsg;
           sClickMsg.pControl = pControlMsg->pControl;
           gnFormControlCount++;
           pButton->sControl.fpMouse(&sClickMsg);

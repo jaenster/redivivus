@@ -806,12 +806,13 @@ BOOL __fastcall CheckIfPlayerCanAffordCost(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 
     Party::ChangeGoldForPlayer(pUnit, UNITSTAT_gold, -nGoldOnPerson);
+    int nBankDelta = nGoldOnPerson - nCost;
     if (!pUnit) {
       return 1;
     }
 
     nGoldBank = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_goldbank, 0);
-    nGoldBank += nGoldOnPerson - nCost;
+    nGoldBank += nBankDelta;
     if (nGoldBank < 0) {
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_goldbank, 0, 0);
       return 1;
@@ -825,7 +826,7 @@ BOOL __fastcall CheckIfPlayerCanAffordCost(::SGAMEDATA * pGame, D2UnitStrc * pUn
       }
     }
 
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_goldbank, nGoldOnPerson - nCost, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_goldbank, nBankDelta, 0);
     return 1;
 }
 
@@ -1157,18 +1158,15 @@ void __fastcall SUNITNPC_UpdateHirelingPosition(::SGAMEDATA * pGame, D2UnitStrc 
     }
 
     eUnitType = pPlayer->eUnitType;
-    if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
-      if (pPlayer->pPath.pDynamicPath) {
-        nPosX = D2Common::PATH::DynamicPath::GetXPos(pPlayer->pPath.pDynamicPath);
-        PLAYER::PlayerPets::PETS_ManagePetsByType(pGame, pPlayer, (uint16_t)nPosX, (uint16_t)wPosY);
-        return;
-      }
-
-      PLAYER::PlayerPets::PETS_ManagePetsByType(pGame, pPlayer, 0, (uint16_t)wPosY);
-      return;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+      nPosX = pPlayer->pPath.pStaticPath->nPosX;
+    } else if (pPlayer->pPath.pDynamicPath) {
+      nPosX = D2Common::PATH::DynamicPath::GetXPos(pPlayer->pPath.pDynamicPath);
+    } else {
+      nPosX = 0;
     }
 
-    PLAYER::PlayerPets::PETS_ManagePetsByType(pGame, pPlayer, (uint16_t)pPlayer->pPath.pStaticPath->nPosX, (uint16_t)wPosY);
+    PLAYER::PlayerPets::PETS_ManagePetsByType(pGame, pPlayer, (uint16_t)nPosX, (uint16_t)wPosY);
 }
 
 void __fastcall SUNITNPC_RefreshHirelingItemStats(D2UnitStrc * pHireling) {
@@ -2354,9 +2352,9 @@ BOOL __fastcall SUNITNPC_RemoveCurableStates(D2UnitStrc * pUnit) {
     eD2States eState;
     BOOL bAnyStateRemoved = 0;
     BOOL bStateRemoved = 0;
+    eState = STATE_none;
     if (D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize > 0) {
       BOOL eActiveState;
-      eState = STATE_none;
       do {
         eActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
         if (eActiveState) {

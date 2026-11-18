@@ -1021,7 +1021,7 @@ int CompareUintDescending(LPCVOID pLeft, LPCVOID pRight) {
       return 1;
     }
 
-    return -(uint32_t)(*(uint32_t*)pRight > *(uint32_t*)pLeft);
+    return (*(uint32_t*)pLeft < *(uint32_t*)pRight) ? -1 : 0;
 }
 
 bool __fastcall Unreferenced_00402c30(D2FogDebugModuleEntryStrc * pSrcEntry, D2FogDebugModuleTableStrc * pTable) {
@@ -1128,15 +1128,15 @@ static void InitializeDebugInfoTable(D2FogDebugModuleTableStrc * pTable) {
 void __fastcall CRASH_DumpThreadContext(DWORD dwThreadId, void * pContext, fnCrashOutputLine pOutputCallback, ::Report * pReport, char bIncludeThreadName, char bIncludeStackInfo, uint32_t nMaxFrames) {
     D2CrashFrameStrc aFrames[128];
     int nFrameCountClamped = 0x7f;
-    uint32_t* pFrameBufCursor = &aFrames[0].dw08;
+    D2CrashFrameStrc* pFrame = aFrames;
     do {
-      ((D2CrashFrameStrc*)(pFrameBufCursor - 2))->dwReturnAddr = 0;
-      pFrameBufCursor[-1] = 0;
-      *pFrameBufCursor = 0;
-      pFrameBufCursor[1] = 0;
-      *(uint8_t*)(pFrameBufCursor + 2) = '\0';
-      memset(pFrameBufCursor + 3, 0, 4 * sizeof(pFrameBufCursor[0]));
-      pFrameBufCursor += 9;
+      pFrame->dwReturnAddr = 0;
+      pFrame->dw04 = 0;
+      pFrame->dw08 = 0;
+      pFrame->dw0C = 0;
+      pFrame->b10 = 0;
+      memset(pFrame->a14, 0, sizeof(pFrame->a14));
+      pFrame++;
       nFrameCountClamped--;
     } while (nFrameCountClamped >= 0);
 
@@ -1689,7 +1689,6 @@ static D2FogModuleNodeStrc * __stdcall LoadSymbolsForAllModules(HANDLE hProcess,
     static uint32_t gnSymbolLoadState; D2_STATIC_GUARD_BSS(gnSymbolLoadState, "Fog::Debug::LoadSymbolsForAllModules::gnSymbolLoadState");
 
     D2FogModuleNodeStrc* pszCopySrc;
-    char* pcVar2;
     DWORD dwLastError;
     char szModulePath[260];
     char szModuleName[256];
@@ -1713,9 +1712,7 @@ static D2FogModuleNodeStrc * __stdcall LoadSymbolsForAllModules(HANDLE hProcess,
         dwLastError = (*pSymLoadModule)(hProcess, (HANDLE)0x0, szModulePath, szModuleName, (DWORD)pCurModule->dwBaseAddress, pCurModule->dwSize);
         if (!gnSymbolLoadState) {
           if (!dwLastError) {
-            pcVar2 = szModuleName;
-            dwLastError = GetLastError();
-            Src::LogManager::LOGMANAGER_TraceToModuleLog("", "Error (%d) loading symbols for \'%s\'", dwLastError, pcVar2);
+            Src::LogManager::LOGMANAGER_TraceToModuleLog("", "Error (%d) loading symbols for \'%s\'", GetLastError(), szModuleName);
           } else {
             Src::LogManager::LOGMANAGER_TraceToModuleLog("", "Symbols Loaded for \'%s\'", szModuleName);
           }
@@ -1723,11 +1720,9 @@ static D2FogModuleNodeStrc * __stdcall LoadSymbolsForAllModules(HANDLE hProcess,
 
         pCurModule = pNextModule;
       } while (pNextModule);
-
-      return pModuleListHead;
     }
 
-    return nullptr;
+    return pModuleListHead;
 }
 
 BOOL __fastcall FILETOOLS_GetExecutableFolderPath(LPSTR lpFilename, DWORD nSize) {

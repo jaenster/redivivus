@@ -949,10 +949,9 @@
       "usedTypes": [
         "D2MissileDamageDataStrc",
         "D2UnitStrc",
-        "int32_t",
-        "uint8_t"
+        "int32_t"
       ],
-      "dh": "f96afde8",
+      "dh": "c8470da6",
       "paramStorage": [
         [
           "pMissileDamageData",

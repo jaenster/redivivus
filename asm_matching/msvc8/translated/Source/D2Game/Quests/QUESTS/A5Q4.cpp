@@ -622,7 +622,7 @@ void __fastcall Q34_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
     D2UnitDataPlayerStrc* pDVar2;
     ::SGAMEDATA* pGame;
     D2QuestDataA5Q4Strc* pA5Q4Data = pQuestData->pQuestSpecificData.pA5Q4;
-    int32_t nWaypointId = (int32_t)pQuestData;
+    int32_t nWaypointId;
     if (pQuestData->bIsNotIntroduction == '\0') {
       D2WaypointStrc* pWaypoint;
       pQuestData->nStateFlag = 5;

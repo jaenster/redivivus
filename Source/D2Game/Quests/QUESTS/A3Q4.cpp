@@ -545,11 +545,7 @@ bool __fastcall Q21_SequenceFilter(D2QuestDataStrc * pQuestData) {
       {
         bool cGidbinnFilterResult;
         cGidbinnFilterResult = pNextQuestData->fpSequenceFilter(pNextQuestData);
-        if (!cGidbinnFilterResult && !cPrereqFilterResult) {
-          return false;
-        }
-
-        return true;
+        return cGidbinnFilterResult || cPrereqFilterResult;
       }
     }
 

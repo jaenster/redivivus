@@ -253,8 +253,8 @@ BOOL __stdcall IsLeftScreenOpen() {
     gnMiniPanelLeftScreen = _bIsOpen;
     bFlagSet = ui::GetUIFlag(UI_MERCINV);
     if (bFlagSet) {
-      gnMiniPanelLeftScreen = 1;
-      return 1;
+      _bIsOpen = 1;
+      gnMiniPanelLeftScreen = _bIsOpen;
     }
 
     return _bIsOpen;

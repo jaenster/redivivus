@@ -3197,13 +3197,11 @@ void __fastcall DrawSolidRect(RECT * pRect, BYTE nPaletteIndex) {
 
 void __fastcall DrawSolidSquare(POINT * pPoint, BYTE nSize, int32_t nPaletteIndex) {
     tagRECT rcSquare;
-    if (nSize == '\0') {
-      return;
+    if (nSize) {
+      nSize--;
+      /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rcSquare, pPoint->x - nSize, pPoint->y - nSize, pPoint->x + 1 + nSize, pPoint->y + 1 + nSize);
+      Glide::DrawSolidRectEx(rcSquare.left, rcSquare.top, rcSquare.right, rcSquare.bottom, (uint8_t)nPaletteIndex, 5);
     }
-
-    uint32_t nHalfSize = (uint32_t)(uint8_t)(nSize - 1);
-    /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rcSquare, pPoint->x - nHalfSize, pPoint->y - nHalfSize, pPoint->x + 1 + nHalfSize, pPoint->y + 1 + nHalfSize);
-    Glide::DrawSolidRectEx(rcSquare.left, rcSquare.top, rcSquare.right, rcSquare.bottom, (uint8_t)nPaletteIndex, 5);
 }
 
 void __fastcall ClearScreen(BOOL bPartial) {

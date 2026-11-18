@@ -269,7 +269,7 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "ffaa0c6d"
+      "dh": "68362783"
     },
     {
       "name": "NET_D2GS_SERVER_DequeueModePacket_Mode1",
@@ -448,7 +448,7 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "d4be57a6",
+      "dh": "6881d7f4",
       "paramStorage": [
         [
           "nToken",

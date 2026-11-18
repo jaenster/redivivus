@@ -1938,7 +1938,7 @@ void __fastcall CLIENT_SetDifficulty(char nDifficulty) {
     CLIENT_nDifficulty = nDifficulty;
 }
 
-void __fastcall CLIENT_SetExpansion(bool bExpansion) {
+void __fastcall CLIENT_SetExpansion(uint8_t bExpansion) {
     gClientGameData.CLIENT_bExpansion = (uint32_t)bExpansion;
 }
 

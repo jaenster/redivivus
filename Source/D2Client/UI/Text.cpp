@@ -6740,15 +6740,16 @@ void __stdcall TEXT_FreeEverything() {
       gpOverHeadStrc = 0;
     }
 
-    D2TextBoxStrc* pTextBox = gpTextScrollingBox;
+    D2TextBoxStrc* pTextBox;
     if (gpTextScrollingBox) {
+      pTextBox = gpTextScrollingBox;
       TEXT_FreeTextLineList(gpTextScrollingBox->pLineList);
       D2_FREE_AT(pTextBox, ".\\UI\\text.cpp", 0x68e);
       gpTextScrollingBox = 0;
     }
 
-    pTextBox = gpStaticTextPopup;
     if (gpStaticTextPopup) {
+      pTextBox = gpStaticTextPopup;
       TEXT_FreeTextLineList(gpStaticTextPopup->pLineList);
       D2_FREE_AT(pTextBox, ".\\UI\\text.cpp", 0x68e);
       D2_FREE_AT(gpStaticTextPopup, ".\\UI\\text.cpp", 0x6e4);
@@ -7335,8 +7336,9 @@ void __fastcall TEXT_ShowScrollingText(uint16_t wDialogStringId, int32_t bAlignT
 }
 
 void __fastcall TEXT_ShowStaticTextPopup(uint16_t wStringId) {
-    D2TextBoxStrc* ppTextBox = gpStaticTextPopup;
+    D2TextBoxStrc* ppTextBox;
     if (gpStaticTextPopup) {
+      ppTextBox = gpStaticTextPopup;
       TEXT_FreeTextLineList(gpStaticTextPopup->pLineList);
       D2_FREE_AT(ppTextBox, ".\\UI\\text.cpp", 0x68e);
       gpStaticTextPopup = 0;
@@ -7356,8 +7358,8 @@ void __fastcall TEXT_ShowStaticTextPopup(uint16_t wStringId) {
 
     gpStaticTextPopup->nState = 1;
     nSavedFont = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszString);
-    DWORD dwTickCount = GetTickCount();
-    gdwTextPopupExpireTime = dwTickCount + (nSavedFont + 0x19) * 200;
+    nSavedFont = (nSavedFont + 0x19) * 200;
+    gdwTextPopupExpireTime = GetTickCount() + nSavedFont;
     gpTextStaticPopupBox = 1;
     gbTextStaticPopupActive = 1;
     gaTextStaticPopupRect[1] = 100 - (uint32_t)(gpStaticTextPopup->nHeight >> 2);

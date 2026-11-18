@@ -46,7 +46,20 @@
       "calledFunctions": [
         "ANIM_OnSkillCastStub"
       ],
-      "dh": "69de8a64"
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "f83772ac",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "UTILS_SqrtFloat",

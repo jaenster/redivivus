@@ -191,6 +191,7 @@ void __stdcall INV_SelectDefaultNpcButton();
 void __stdcall INV_SetIdentifyMode();
 void __stdcall INV_ExitIdentifyMode();
 void __stdcall INV_InitNpcButtonsByClass();
+void __stdcall PANEL_ClearInvMousePosition();
 // Draws gold amount and coin icon in inventory UI for three contexts: stash (param=0), inventory (param=1), and trade (param=2). Retrieves player's gold from appropriate stat (UNITSTAT_goldbank for stash, UNITSTAT_gold for inventory), formats the number, renders text and animated coin icon at context-specific screen coordinates.
 void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode);
 void __stdcall DRAW_UI_Inventory_DrawShop();

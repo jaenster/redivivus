@@ -78,12 +78,7 @@ BOOL __fastcall Skills_CltStFunc_MonInitAndSpawnCltMissile(D2UnitStrc * pUnit, e
     }
 
     ptSpawnPos.y = yValue;
-    BOOL bAllowNeighborRooms = 1;
-    int32_t nY = 0x1c09;
-    int32_t nCollisionType = D2Common::Units::GetUnitSizeX(pUnit);
-    POINT* pSpawnPoint = &ptSpawnPos;
-    pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, pSpawnPoint, nCollisionType, nY, bAllowNeighborRooms);
+    pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(D2Common::Units::UNITS_GetRoom(pUnit), &ptSpawnPos, D2Common::Units::GetUnitSizeX(pUnit), 0x1c09, 1);
     if (!pRoom) {
       return 0;
     }
@@ -91,7 +86,7 @@ BOOL __fastcall Skills_CltStFunc_MonInitAndSpawnCltMissile(D2UnitStrc * pUnit, e
       return 0;
     }
 
-    nCollisionType = D2Common::PATH::Path::PATH_GetCollisionTypeAt(pUnit->pPath.pDynamicPath, pUnit, pRoom, ptSpawnPos.x, ptSpawnPos.y);
+    int32_t nCollisionType = D2Common::PATH::Path::PATH_GetCollisionTypeAt(pUnit->pPath.pDynamicPath, pUnit, pRoom, ptSpawnPos.x, ptSpawnPos.y);
     if (!nCollisionType) {
       return 0;
     }
@@ -169,19 +164,16 @@ BOOL __fastcall Skills_CltStFunc_SetParamsFromTargetPosition(D2UnitStrc * pUnit,
 
     D2Common::Skills::SKILL_SetParam1(pSkill, nTargetX);
     eTargetUnitType = pTarget->eUnitType;
-    if (eTargetUnitType != UNIT_OBJECT && ((int)eTargetUnitType <= 3 || (int)eTargetUnitType > 5)) {
-      int32_t nPar2;
-      if (pTarget->pPath.pDynamicPath) {
-        nPar2 = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
-        D2Common::Skills::SKILL_SetParam2(pSkill, nPar2);
-        return 1;
-      }
-
-      D2Common::Skills::SKILL_SetParam2(pSkill, 0);
-      return 1;
+    int32_t nPar2;
+    if (eTargetUnitType == UNIT_OBJECT || (int)eTargetUnitType > 3 && (int)eTargetUnitType <= 5) {
+      nPar2 = pTarget->pPath.pStaticPath->nPosY;
+    } else if (pTarget->pPath.pDynamicPath) {
+      nPar2 = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
+    } else {
+      nPar2 = 0;
     }
 
-    D2Common::Skills::SKILL_SetParam2(pSkill, pTarget->pPath.pStaticPath->nPosY);
+    D2Common::Skills::SKILL_SetParam2(pSkill, nPar2);
     return 1;
 }
 

@@ -41,15 +41,7 @@ void __fastcall SRP_InitializeRandomState(D2Srp * pThis, int, uint32_t dwSeed) {
     SHA1::SHA1_Init(&aShaCtx);
     SHA1::SHA1_Update(&aShaCtx, &sSeedEntropy, 0xc);
     SHA1::SHA1_Final(pThis->aRandomPoolA, &aShaCtx);
-    uint32_t dwPoolCopy1 = *(uint32_t*)(pThis->aRandomPoolA + 4);
-    uint32_t dwPoolCopy2 = *(uint32_t*)(pThis->aRandomPoolA + 8);
-    *(uint32_t*)pThis->aRandomPoolB = *(uint32_t*)pThis->aRandomPoolA;
-    uint32_t dwPoolCopy3 = *(uint32_t*)(pThis->aRandomPoolA + 0xc);
-    *(uint32_t*)(pThis->aRandomPoolB + 4) = dwPoolCopy1;
-    uint32_t dwPoolCopy4 = *(uint32_t*)(pThis->aRandomPoolA + 0x10);
-    *(uint32_t*)(pThis->aRandomPoolB + 8) = dwPoolCopy2;
-    *(uint32_t*)(pThis->aRandomPoolB + 0xc) = dwPoolCopy3;
-    *(uint32_t*)(pThis->aRandomPoolB + 0x10) = dwPoolCopy4;
+    memcpy(pThis->aRandomPoolB, pThis->aRandomPoolA, 20);
     memset(pThis->aOutputBuffer, 0, 20 * sizeof(pThis->aOutputBuffer[0]));
     pThis->nBytesAvailable = 0;
 }
@@ -202,10 +194,6 @@ void __fastcall SRP_ComputeClientProof(D2Srp * pThis, int, char * szUsername, vo
     uint8_t hashG[20];
     uint8_t xorHashNPrime[32];
     uint8_t hashN[20];
-    uint8_t byXorA;
-    uint8_t byXorB;
-    uint8_t byXorC;
-    uint8_t byXorD;
     uint32_t nByteLen = SHA::SHA1_ToBigIntBytes(pThis->pModulusN, xorHashNPrime, 0x20);
     SHA1::SHA1_Init(&sha1Ctx);
     SHA1::SHA1_Update(&sha1Ctx, xorHashNPrime, nByteLen);
@@ -214,23 +202,9 @@ void __fastcall SRP_ComputeClientProof(D2Srp * pThis, int, char * szUsername, vo
     SHA1::SHA1_Init(&sha1Ctx);
     SHA1::SHA1_Update(&sha1Ctx, xorHashNPrime, nByteLen);
     SHA1::SHA1_Final(hashG, &sha1Ctx);
-    int i = 0;
-    do {
-      byXorC = hashN[i + 1];
-      byXorA = hashG[i + 1];
+    for (int i = 0; i < 0x14; i++) {
       xorHashNPrime[i] = hashG[i] ^ hashN[i];
-      byXorD = hashN[i + 2];
-      byXorB = hashG[i + 2];
-      xorHashNPrime[i + 1] = byXorC ^ byXorA;
-      byXorC = hashN[i + 3];
-      byXorA = hashG[i + 3];
-      xorHashNPrime[i + 2] = byXorD ^ byXorB;
-      byXorD = hashN[i + 4];
-      byXorB = hashG[i + 4];
-      xorHashNPrime[i + 3] = byXorC ^ byXorA;
-      xorHashNPrime[i + 4] = byXorD ^ byXorB;
-      i += 5;
-    } while (i < 0x14);
+    }
 
     SHA1::SHA1_Init(&sha1Ctx);
     nByteLen = Storm::Source::SSTR::SStrLen(szUsername);
@@ -263,14 +237,7 @@ BOOL __fastcall SRP_IsContextInitialized(D2Srp * pSrp) {
 // @sourcefile .\SRP.cpp
 D2Srp * * __fastcall SRP_CreateContext(D2Srp * * ppSrp) {
     D2Srp* pAllocated = (D2Srp*)Storm::Source::SMem::SMemAlloc(0x4c, ".\\SRP.cpp", 0x157, 0);
-    if (pAllocated) {
-      D2Srp* pConstructed;
-      pConstructed = SRP_ConstructContext(pAllocated);
-      *ppSrp = pConstructed;
-      return ppSrp;
-    }
-
-    *ppSrp = 0;
+    *ppSrp = pAllocated ? SRP_ConstructContext(pAllocated) : 0;
     return ppSrp;
 }
 
@@ -320,11 +287,9 @@ void __fastcall SRP_FreeParameters(D2Srp * * ppSrp) {
     if (pDVar1->bInitialized) {
       SHA::SHA1_BigIntFree(pDVar1->pModulusN);
       SHA::SHA1_BigIntFree((*ppSrp)->pGenerator);
-      (*ppSrp)->bInitialized = 0;
-      return;
     }
 
-    pDVar1->bInitialized = 0;
+    (*ppSrp)->bInitialized = 0;
 }
 
 void __fastcall SRP_ClientGenerateVerifier(void * pThis, int, char * szUsername, uint32_t * szPassword, uint32_t * pSaltOut, void * pVerifierOut) {

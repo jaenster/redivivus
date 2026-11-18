@@ -248,8 +248,11 @@ void __fastcall CLIENT_RevealRoomAndSendUnits(::SGAMEDATA * pGame, D2RoomStrc * 
       D2Common::DUNGEON::Dungeon::DRLGROOM_AddClientToRoom(pRoom, pClient);
       if ((uint32_t)pRoom->nClientsCount <= 1) {
         for (pRoomUnit = pRoom->pUnitList; pRoomUnit; pRoomUnit = pRoomUnit->pRoomNext) {
-          eUnitType = UNIT_COUNT;
-          eUnitType = pRoomUnit->eUnitType;
+          if (!pRoomUnit) {
+            eUnitType = UNIT_COUNT;
+          } else {
+            eUnitType = pRoomUnit->eUnitType;
+          }
           switch (eUnitType) {
             case UNIT_MONSTER:
               {
@@ -296,8 +299,11 @@ void __fastcall RoomClearForClientAndHideMap(::SGAMEDATA * pGame, D2RoomStrc * p
             break;
           }
 
-          eUnitType = UNIT_COUNT;
-          eUnitType = pRoomUnit->eUnitType;
+          if (!pRoomUnit) {
+            eUnitType = UNIT_COUNT;
+          } else {
+            eUnitType = pRoomUnit->eUnitType;
+          }
           switch (eUnitType) {
             case UNIT_MONSTER:
               {
@@ -369,7 +375,6 @@ static void InitDrlgAct(::SGAMEDATA * pGame, char nActNo) {
 // Server-side act transition: warps a client's player unit to a destination act/level (e.g. waypoint/portal to another act). No-op in arena levels. Derives the target act from eLevel, lazily initializes the act's DRLG if absent, sets connection state, frees non-expansion pets, clears progressive states, spawns/finds a free room+coords (collision-checked with GetFreeCoordinates), then relinks the unit: clears old room, sends state command, sets client+unit act and pDrlgAct, tells the client to load the act, attaches the spawn room, sets the TELEPORTED flag, updates visibility, and re-manages pets at the new position. Halts via Fog::ErrorManager on failure paths.
 void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD2LevelId eLevel, int32_t nSpawnTypeOrMode) {
     D2DrlgActStrc** ppDVar1;
-    uint16_t wPosY;
     D2UnitStrc* pUnit;
     D2RoomStrc* pSpawnRoom;
     D2RoomStrc* pRoom;
@@ -387,7 +392,6 @@ void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD
       return;
     }
 
-    int32_t nErrorLine;
     eAct eDestAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
     if (eDestAct == pClient->nAct) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19f);
@@ -434,38 +438,34 @@ void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       bCollisionOk = D2Common::PATH::Path::PATH_GetCollisionMaskAt(pDynamicPath, pUnit, nullptr, 0, 0);
       if (!bCollisionOk) {
-        nErrorLine = 0x1d1;
-      } else {
-        UNIT::SUnit::UNITS_UpdateRoomClientVisibility(pGameSave, pUnit, pRoom);
-        bCollisionOk = D2Common::PATH::Path::PATH_GetCollisionMaskAt(pDynamicPath, pUnit, pSpawnRoom, (uint16_t)nSpawnX, (uint16_t)nSpawnY);
-        if (bCollisionOk) {
-          Clients::CLIENT_SetRoom(pClient, nullptr);
-          SCmd::NET_D2GS_SERVER_SendStateCommand(pClient, 5);
-          Clients::CLIENT_SetAct(pClient, eDestAct);
-          pUnit->nAct = eDestAct;
-          pUnit->pDrlgAct = *ppSpawnActOut;
-          TellClientToLoadAct(pGameSave, pClient);
-          Clients::CLIENT_SetRoom(pClient, pSpawnRoom);
-          D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
-          pGamePost = pGameSave;
-          pUnit->eUnitFlagsEx |= UNITFLAGEX_TELEPORTED;
-          UNIT::SUnit::UNITS_UpdateRoomClientVisibility(pGameSave, pUnit, nullptr);
-          D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
-          if (pUnit->eUnitType != UNIT_PLAYER) {
-            return;
-          }
-
-          nErrorLine = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-          wPosY = (uint16_t)nErrorLine;
-          PLAYER::PlayerPets::PETS_ManagePetsByType(pGamePost, pUnit, (uint16_t)D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), wPosY);
-          return;
-        }
-
-        nErrorLine = 0x1d6;
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1d1);
+        exit(-1);
       }
 
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nErrorLine);
-      exit(-1);
+      UNIT::SUnit::UNITS_UpdateRoomClientVisibility(pGameSave, pUnit, pRoom);
+      bCollisionOk = D2Common::PATH::Path::PATH_GetCollisionMaskAt(pDynamicPath, pUnit, pSpawnRoom, (uint16_t)nSpawnX, (uint16_t)nSpawnY);
+      if (!bCollisionOk) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1d6);
+        exit(-1);
+      }
+
+      Clients::CLIENT_SetRoom(pClient, nullptr);
+      SCmd::NET_D2GS_SERVER_SendStateCommand(pClient, 5);
+      Clients::CLIENT_SetAct(pClient, eDestAct);
+      pUnit->nAct = eDestAct;
+      pUnit->pDrlgAct = *ppSpawnActOut;
+      TellClientToLoadAct(pGameSave, pClient);
+      Clients::CLIENT_SetRoom(pClient, pSpawnRoom);
+      D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
+      pGamePost = pGameSave;
+      pUnit->eUnitFlagsEx |= UNITFLAGEX_TELEPORTED;
+      UNIT::SUnit::UNITS_UpdateRoomClientVisibility(pGameSave, pUnit, nullptr);
+      D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
+      if (pUnit->eUnitType != UNIT_PLAYER) {
+        return;
+      }
+
+      PLAYER::PlayerPets::PETS_ManagePetsByType(pGamePost, pUnit, (uint16_t)D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), (uint16_t)D2Common::Units::GetYPosFromDynamicPathUnit(pUnit));
       return;
     }
 }

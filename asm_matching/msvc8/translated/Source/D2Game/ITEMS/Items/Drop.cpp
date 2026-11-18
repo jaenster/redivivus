@@ -3179,13 +3179,14 @@ void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     bIsArmor = nCurDurability - 1;
     if ((int)bIsArmor > 0) {
       _bIsThrowable = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pItemUnit);
-      if (_bIsThrowable <= (int)bIsArmor) {
+      if ((int)bIsArmor >= _bIsThrowable) {
         bIsArmor = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pItemUnit);
       }
 
       RefreshDurability(pGame, pItemUnit);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_durability, bIsArmor, 0);
-      _bIsThrowable = 0xc5a;
+      wStatLayer = 0;
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", 0xc5a), pItemUnit, '\x01', 0x48, bIsArmor, wStatLayer);
     } else {
       uint16_t wItemVersion;
       if (!bIsWeapon) {
@@ -3234,14 +3235,9 @@ void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_durability, 0, 0);
       bIsArmor = 0;
-      _bIsThrowable = 0xc87;
+      wStatLayer = 0;
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", 0xc87), pItemUnit, '\x01', 0x48, bIsArmor, wStatLayer);
     }
-
-    wStatLayer = 0;
-    
-    
-    
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats((D2ClientStrc*)(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", _bIsThrowable)), pItemUnit, (char)('\x01'), (int32_t)(0x48), bIsArmor, wStatLayer);
 }
 
 // Splits nGoldAmount across up to nMaxPiles gold-item units dropped near pUnit's position. Each iteration creates a gold item via ITEM_CreateFromTemplate, caps the pile amount to the inventory gold limit if the recipient is a player, sets UNITSTAT_gold, and calls DropItem to place it at a collision-free nearby tile. Fills pUnitTable with created item pointers and updates *pnUnitCount. Uses the room collision system to find free coordinates; exits early if no free tile is found or the pile cap is reached.

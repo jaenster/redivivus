@@ -4509,7 +4509,7 @@ void __stdcall UI_DrawArenaKillCount() {
 
 void __stdcall UI_DrawPartyRoster() {
     // Static local variables (originally global data)
-    static uint32_t gnPartyRosterRowHeight = 0x13; D2_STATIC_GUARD(gnPartyRosterRowHeight, "D2Client::UI::ui::UI_DrawPartyRoster::gnPartyRosterRowHeight");
+    static int gnPartyRosterRowHeight = 0x13; D2_STATIC_GUARD(gnPartyRosterRowHeight, "D2Client::UI::ui::UI_DrawPartyRoster::gnPartyRosterRowHeight");
 
     uint16_t* pwszLabel;
     char* pszRosterName;
@@ -4677,11 +4677,12 @@ void __stdcall UI_CloseCurrentDialog() {
       gpUiGoldDialogCancelButton = 0;
     }
     if (gnGoldDialogTransactionType) {
-      if (!(gnGoldDialogTransactionType > 0 && gnGoldDialogTransactionType <= 4)) {
-        return;
+      if (gnGoldDialogTransactionType > 0) {
+        if (gnGoldDialogTransactionType > 4) {
+          return;
+        }
+        Inv::INV_StashOpened();
       }
-
-      Inv::INV_StashOpened();
       return;
     }
 
@@ -5123,7 +5124,7 @@ void __stdcall DRAW_RegisterDrawHandlers() {
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gUIFlagDrawPanelInit, 1);
 }
 
-void __stdcall DRAW_RefreshNpcDialog() {
+void __fastcall DRAW_RefreshNpcDialog(int32_t nScreenMode) {
     Text::TEXT_CloseMessageUI();
     npcmenu::NPCMENU_RefreshMenuDialog();
 }
@@ -8134,10 +8135,9 @@ void __stdcall INPUT_ConfigKeyBindAlternate(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
-void __fastcall UI_ConfigSetKeyBinding(uint16_t wKeyCode) {
-    uint16_t nKeyCodeHiWord;
+void __fastcall UI_ConfigSetKeyBinding(uint32_t nKeyCode) {
     int nPendingKeyStrId = 0;
-    BOOL nBindResult = CmdTbl::CMD_SetKeyBinding(gpStatDescriptorTable[g_ControlConfigUIState].nCmdIndex, nConfigControlSelected, (uint32_t)(uint32_t)(uint16_t)wKeyCode, (uint16_t*)&nPendingKeyStrId);
+    BOOL nBindResult = CmdTbl::CMD_SetKeyBinding(gpStatDescriptorTable[g_ControlConfigUIState].nCmdIndex, nConfigControlSelected, nKeyCode, (uint16_t*)&nPendingKeyStrId);
     if (nBindResult) {
       _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIFlagInit0, 6);
       _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit3, 1);
@@ -8169,7 +8169,7 @@ void __stdcall INPUT_ConfigMouseClick(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall INPUT_ConfigMouseButtonHandler(D2UIMouseMsgStrc * pMsg) {
-    uint16_t nKeyCode;
+    uint32_t nKeyCode;
     BOOL bExitFlag;
     bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bExitFlag) {

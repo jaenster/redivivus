@@ -902,7 +902,7 @@ static int32_t __stdcall PLAYERSAVE_CreateNewCharacter(D2ClientStrc * pSaveConte
     uint32_t nClassId = GAME::Clients::GetPlayerClassId(pSaveContext);
     D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_PLAYER, nClassId, 0, 0, pGameStrc, nullptr, 0, 0, 0);
     PLAYERSAVE_LinkPlayerToUnit(pGameStrc, pUnit, pSaveContext);
-    GAME::Clients::ReturnVoid(1);
+    GAME::Clients::ReturnVoid(pSaveContext, 0, 1);
     UNIT::SUnitMsg::SERVER_SendInitUnitPacket(pGameStrc, pUnit, pSaveContext);
     uint8_t byAct = GAME::Clients::GetAct(pSaveContext);
     UNIT::SUnitMsg::PLAYER_InitBaseStats(pGameStrc, pUnit, byAct);
@@ -1054,15 +1054,9 @@ int __fastcall PLRSAVE_ReadQuestsFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc** ppDVar1 = pPlayerData->pQuestRecord;
-    char* pReadPtr = (char*)((char*)pBufStart + 10);
-    int nActCount = 3;
-    do {
-      D2Common::QuestRecord::ReadQuestRecordFromBuffer(*ppDVar1, pReadPtr, 0x60, 1);
-      ppDVar1++;
-      pReadPtr += 0x60;
-      nActCount--;
-    } while (nActCount);
+    for (int nActCount = 0; nActCount < 3; nActCount++) {
+      D2Common::QuestRecord::ReadQuestRecordFromBuffer(pPlayerData->pQuestRecord[nActCount], (char*)pBufStart + 10 + nActCount * 0x60, 0x60, 1);
+    }
 
     *ppQuestBuffer = (int*)((char*)pBufStart + 0x12aU);
     return 0;
@@ -1109,16 +1103,10 @@ int __fastcall LoadPlayerIntro(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, shor
     }
 
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    D2UnitDataPlayerInteractedNPCStrc** ppNpcRecord = pPlayerData->pInteractedNPCs;
-    uint32_t* pNpcData = (uint32_t*)(pBufStart + 0xe);
-    int nActCount = 3;
-    do {
-      PlayerIntro::PLAYERINTRO_CopyIntroData8Bytes(*ppNpcRecord, pNpcData - 6);
-      PlayerIntro::PLAYERINTRO_CopyIntroDataIndirect(*ppNpcRecord, pNpcData);
-      ppNpcRecord++;
-      pNpcData += 2;
-      nActCount--;
-    } while (nActCount);
+    for (int nActCount = 0; nActCount < 3; nActCount++) {
+      PlayerIntro::PLAYERINTRO_CopyIntroData8Bytes(pPlayerData->pInteractedNPCs[nActCount], (uint32_t*)(pBufStart + 2) + nActCount * 2);
+      PlayerIntro::PLAYERINTRO_CopyIntroDataIndirect(pPlayerData->pInteractedNPCs[nActCount], (uint32_t*)(pBufStart + 0xe) + nActCount * 2);
+    }
 
     *ppReadPos = pBufStart + 0x1a;
     return 0;

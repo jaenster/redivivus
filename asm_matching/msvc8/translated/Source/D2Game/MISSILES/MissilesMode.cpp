@@ -892,14 +892,14 @@ void __fastcall MISSILES_SpawnRadialPattern(::SGAMEDATA * pGame, D2UnitStrc * pU
     } while (nTableOffset < 0x3c);
 }
 
-static bool __stdcall MISSILESMODE_CheckCollisionAtOffset(int32_t nDistance, D2RoomStrc * pRoom, int32_t nMaxDistSquared, int32_t nFromX, int32_t nFromY, int32_t nOffsetY) {
+static BOOL __stdcall MISSILESMODE_CheckCollisionAtOffset(int32_t nDistance, D2RoomStrc * pRoom, int32_t nMaxDistSquared, int32_t nFromX, int32_t nFromY, int32_t nOffsetY) {
     POINT ptFrom;
     POINT ptTo;
     if (!pRoom) {
-      return false;
+      return 0;
     }
     if (nDistance * nDistance + nOffsetY * nOffsetY > nMaxDistSquared) {
-      return false;
+      return 0;
     }
 
     ptFrom.y = nFromY;
@@ -907,7 +907,7 @@ static bool __stdcall MISSILESMODE_CheckCollisionAtOffset(int32_t nDistance, D2R
     ptTo.x = nFromX + nDistance;
     ptTo.y = nFromY + nOffsetY;
     BOOL bCollides = D2Common::Collision::TestCollision(pRoom, &ptFrom, &ptTo, 4);
-    return (bool)(bCollides != 0 ? 0 : 1);
+    return (uint32_t)!bCollides;
 }
 
 // Server-side missile spawner that fills a square/circular area around the owning unit's position with copies of missile nMissileId. Centers on pUnit's path position (static or dynamic), then sweeps a (2*nRadiusParam+1) grid; for each cell within the radius (distance^2 <= nRadiusParam^2) it wall-tests via TestCollision(COLLIDE_WALL) and, if clear and the cell maps to a valid non-town room, fills a D2SkillArgStrc (owner, skill id, level) and calls CreatingMissile. nParam (when nonzero) sets a duration/total-frames field and an extra flag. Used for AoE patterns (e.g. nova-/firewall-style area fills).
@@ -5444,13 +5444,9 @@ int __fastcall MISSMODE_SrvDoFn15_FrozenOrb(::SGAMEDATA * pGame, D2UnitStrc * pU
         sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
         sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
         sSkillArg.nMissileTxtNo = (eMissilesId)pMissilesTxt->SubMissile1;
-        nSpreadAngleIdx = D2Common::Units::Missile::GetTargetX(pUnit);
-        nSpreadAngleIdx &= 0x8000003f;
+        nSpreadAngleIdx = (int)D2Common::Units::Missile::GetTargetX(pUnit) % 64;
         if ((int)nSpreadAngleIdx < 0) {
-          nSpreadAngleIdx = (nSpreadAngleIdx - 1 | -64) + 1;
-          if ((int)nSpreadAngleIdx < 0) {
-            nSpreadAngleIdx = -nSpreadAngleIdx;
-          }
+          nSpreadAngleIdx = -nSpreadAngleIdx;
         }
 
         sSkillArg.nUnitX = gnMissileSrvSpreadTableY[nSpreadAngleIdx];

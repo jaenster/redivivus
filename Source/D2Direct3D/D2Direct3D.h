@@ -527,7 +527,7 @@ struct IDirect3DViewport3Vtbl {
     /* 0x44 */ HRESULT (__stdcall *SetViewport2)(void *, void *);
     /* 0x48 */ uint8_t ** SetBackgroundDepth2;
     /* 0x4C */ uint8_t ** GetBackgroundDepth2;
-    /* 0x50 */ HRESULT (__stdcall *Clear2)(void *, DWORD, void *, DWORD, DWORD, DWORD, DWORD);
+    /* 0x50 */ HRESULT (__stdcall *Clear2)(void *, DWORD, void *, DWORD, DWORD, float, DWORD);
 };
 #endif // D2_DEFINED_IDirect3DViewport3Vtbl
 #ifndef D2_DEFINED_IDirectDraw1

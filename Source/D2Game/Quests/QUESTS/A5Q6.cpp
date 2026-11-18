@@ -544,6 +544,7 @@ void __fastcall Q36_Callback_08_CompleteQuest(D2QuestDataStrc * pQuestData, D2Qu
         UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q36_SendCompletionNotification);
         if (bPlayerNotYetComplete) {
           nBaseGold = (uint32_t)pQuestData->pGame->nDifficulty * 6000;
+          int nMinGold = nBaseGold + 0x5dc;
           nGoldCap = nBaseGold + 3000;
           if (nGoldCap >= 0xffff) {
             nGoldCap = 0xffff;
@@ -551,7 +552,7 @@ void __fastcall Q36_Callback_08_CompleteQuest(D2QuestDataStrc * pQuestData, D2Qu
 
           for (i = 0; i < pA5Q6Data->nPlayersInWorldstone; i++) {
             QUEST_StubEmpty(pQuestData, pQuestArgs, 0x5f);
-            ITEMS::Items::Drop::DROP_SpawnGoldOnGround(pQuestData->pGame, pQuestArgs->pTarget, Seed::SEED_RollRange(GetQuestControlSeed(pQuestData->pGame), nBaseGold + 0x5dc, nGoldCap));
+            ITEMS::Items::Drop::DROP_SpawnGoldOnGround(pQuestData->pGame, pQuestArgs->pTarget, Seed::SEED_RollRange(GetQuestControlSeed(pQuestData->pGame), nMinGold, nGoldCap));
           }
         }
 

@@ -1944,18 +1944,18 @@ int32_t __fastcall GetDistance(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     }
 
     nSizeX = D2Common::Units::GetUnitSizeX(pUnit);
-    nUnit2Coord = nDiffX - nSizeX;
+    nDiffX -= nSizeX;
     nAbsDiffY -= nSizeX;
-    if (nUnit2Coord < 0) {
-      nUnit2Coord = 0;
+    if (nDiffX < 0) {
+      nDiffX = 0;
     }
     if (nAbsDiffY < 0) {
       nAbsDiffY = 0;
     }
 
-    nWeightedDist = nAbsDiffY + nUnit2Coord * 2;
-    if (nUnit2Coord <= nAbsDiffY) {
-      nWeightedDist = nUnit2Coord + nAbsDiffY * 2;
+    nWeightedDist = nAbsDiffY + nDiffX * 2;
+    if (nDiffX <= nAbsDiffY) {
+      nWeightedDist = nDiffX + nAbsDiffY * 2;
     }
 
     return nWeightedDist / 2;
@@ -9092,9 +9092,9 @@ bool __fastcall AI_Monster_CheckReturnToHome(::SGAMEDATA * pGame, D2UnitStrc * p
     D2MonsterAiCmdStrc* pReturnCmd;
     D2MonsterAiCmdStrc* pHomeCmd = Ai::AiGeneral::FindMonsterAiCmd(pUnit, 10, 0);
     if (!pHomeCmd) {
-      uint32_t nInitResult;
-      nInitResult = AI_Monster_InitializeHomePosition(pGame, pUnit, pAiParam);
-      return *(uint8_t*)(char*)&nInitResult;
+      bool bVar1;
+      bVar1 = AI_Monster_InitializeHomePosition(pGame, pUnit, pAiParam);
+      return bVar1;
     }
 
     uint32_t nDistToHome = MONSTERAI_GetDistanceToCoords(pUnit, pHomeCmd->nCmdArg[1], pHomeCmd->nCmdArg[2]);
@@ -18869,8 +18869,9 @@ void __fastcall AITHINK_Fn1_CorruptArcher(::SGAMEDATA * pGame, D2UnitStrc * pUni
 void __fastcall AITHINK_Fn1_CorruptLancer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nRoll;
     uint32_t sNewSeed;
-    D2SeedStrc* pSeed = &pUnit->sSeed;
+    int bInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
+    D2SeedStrc* pSeed = &pUnit->sSeed;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     if (pAiParam->nDistanceToTarget > (int)pMonStats->aip[4][pGame->nDifficulty]) {
@@ -18880,7 +18881,7 @@ void __fastcall AITHINK_Fn1_CorruptLancer(::SGAMEDATA * pGame, D2UnitStrc * pUni
       pMonsterAiGeneral->dwArg0 = 1;
       return;
     }
-    if (pAiParam->bEngagedInCombat) {
+    if (bInCombat) {
       if (!pMonsterAiGeneral->dwArg0) {
         sNewSeed = D2_SeedRoll(pSeed);
         if ((int)(sNewSeed % 100) >= (int)pMonStats->aip[1][pGame->nDifficulty]) {

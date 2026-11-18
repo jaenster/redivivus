@@ -4273,7 +4273,7 @@ void __fastcall MAINMENU_SetGlobalValue1(pfnUIMenuInstance pfnMenuInstance) {
     gpCurrentUIMenuInstance = pfnMenuInstance;
 }
 
-void __stdcall MAINMENU_SetGlobalFlag() {
+void __fastcall MAINMENU_SetGlobalFlag(int32_t nValue) {
     gbMainMenuUIActive = 1;
 }
 
@@ -5213,15 +5213,16 @@ void __stdcall UIMENU_CreateBattleNetAccount() {
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpBnetPasswordEditBox, D2IniData_launcher->szLastKnownIpTcpIp);
     gpBnetPasswordConfirmEditBox = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x56);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpBnetPasswordConfirmEditBox, 0xd);
-    ::D2WinEditBox* pFocusControl = gpBnetAccountEditBox;
     if (D2IniData_launcher->szLastBnetAccount[0] != '\0') {
-      pFocusControl = gpBnetPasswordEditBox;
       if (D2IniData_launcher->szLastKnownIpTcpIp[0] != '\0') {
-        pFocusControl = gpBnetPasswordConfirmEditBox;
+        D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpBnetPasswordConfirmEditBox->sControl);
+      } else {
+        D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpBnetPasswordEditBox->sControl);
       }
+    } else {
+      D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpBnetAccountEditBox->sControl);
     }
 
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&pFocusControl->sControl);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_LinkTabOrder(gpBnetAccountEditBox, gpBnetPasswordEditBox);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_LinkTabOrder(gpBnetPasswordEditBox, gpBnetPasswordConfirmEditBox);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_LinkTabOrder(gpBnetPasswordConfirmEditBox, gpBnetAccountEditBox);
@@ -5980,16 +5981,11 @@ void __fastcall UIMENU_PleaseInsertExpansionCdWithNotWorkingCancelButton(int32_t
     ::D2WinTextBox* pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xd9);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
     D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1430), 0, (bool)0, 0);
-    int nTextPadC = 0;
-    bool bIndent = false;
-    int32_t nTextPadB = 0;
-    uint16_t wStrId = 0x5578;
-    if (!nMode) {
-      wStrId = 0x1431;
+    if (nMode) {
+      D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x5578), 0, (bool)0, 0);
+    } else {
+      D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1431), 0, (bool)0, 0);
     }
-
-    uint16_t* pwText = D2Lang::StrTable::strtable::GetLocaleString(wStrId);
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, pwText, nTextPadB, bIndent, nTextPadC);
 }
 
 BOOL __stdcall MAINMENU_ShowCinematicsMenu(D2ControlMsg * pControlMsg) {
@@ -6496,13 +6492,12 @@ void __stdcall UIMENU_ChangePassword() {
     pCheckboxCtl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x1e);
     pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0x2b2e);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(pCheckboxCtl, pwszLabel);
-    BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    int32_t nFormId = 0x21;
-    if (!bIsExpansion) {
-      nFormId = 0x1f;
+    if (Fog::D2CheckExpansionGame()) {
+      pCheckboxCtl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x21);
+    } else {
+      pCheckboxCtl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x1f);
     }
 
-    pCheckboxCtl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(nFormId);
     D2Win::Src::D2WinTextBox::SetText(pCheckboxCtl, D2Lang::StrTable::strtable::GetLocaleString(0x2b2b), 0, false, 0);
     gpBnetAccountEditBox = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x59);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpBnetAccountEditBox, MAINMENU_ValidateGameNameChar);
@@ -6515,12 +6510,12 @@ void __stdcall UIMENU_ChangePassword() {
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpCtlChangePasswordInput, 0xd);
     gpBnetPasswordConfirmEditBox = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x5c);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpBnetPasswordConfirmEditBox, 0xd);
-    ::D2WinEditBox* pFocusControl = gpBnetAccountEditBox;
     if (D2IniData_launcher->szLastBnetAccount[0] != '\0') {
-      pFocusControl = gpBnetPasswordEditBox;
+      D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpBnetPasswordEditBox->sControl);
+    } else {
+      D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpBnetAccountEditBox->sControl);
     }
 
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&pFocusControl->sControl);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_LinkTabOrder(gpBnetAccountEditBox, gpBnetPasswordEditBox);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_LinkTabOrder(gpBnetPasswordEditBox, gpCtlChangePasswordInput);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_LinkTabOrder(gpCtlChangePasswordInput, gpBnetPasswordConfirmEditBox);
@@ -9446,7 +9441,7 @@ int __stdcall LAUNCHER_BnetConnectionPollCallback(int nFrameIndex) {
 void __stdcall UIMENU_ConnectinToBattleNetWitProgressDots() {
     gbBNetConnectionProgressFlag = GetTickCount();
     FORMS_DestroyList();
-    MAINMENU_SetGlobalFlag();
+    MAINMENU_SetGlobalFlag(1);
     D2ControlStrc* pBackgroundControl = FORMS_CreateAnyFormFromList(0xe2);
     D2Win::Src::D2WinMain::FORMS_SetGlobalFormImage(pBackgroundControl, 0);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(pBackgroundControl, 1);

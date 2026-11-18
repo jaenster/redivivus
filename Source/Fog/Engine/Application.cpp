@@ -456,10 +456,7 @@ static uint8_t DEBUG_ParseNB01DebugInfo(CV_INFO_PDB20 * pDebugRecord, D2FogDebug
     strncpy_s(pModuleInfo->szImagePath, 0x100, (char*)(pDebugRecord + 1), -1);
     pModuleInfo->dwPdbAge = pDebugRecord->Age;
     pModuleInfo->dwPdbSignature = pDebugRecord->Signature;
-    pModuleInfo->guidPdb.Data1 = 0;
-    pModuleInfo->guidPdb.Data2 = 0;
-    pModuleInfo->guidPdb.Data3 = 0;
-    memset(pModuleInfo->guidPdb.Data4, 0, 8 * sizeof(pModuleInfo->guidPdb.Data4[0]));
+    memset(&pModuleInfo->guidPdb, 0, sizeof(pModuleInfo->guidPdb));
     return 1;
 }
 

@@ -325,7 +325,7 @@ void GAMEDATA_CheckColorTxtOverride();
 void __stdcall GAME_ToggleBloodFlag();
 BOOL __stdcall GAMEDATA_GetBloodFlag();
 void __fastcall CLIENT_SetDifficulty(char nDifficulty);
-void __fastcall CLIENT_SetExpansion(bool bExpansion);
+void __fastcall CLIENT_SetExpansion(uint8_t bExpansion);
 void __fastcall CLIENT_SetLadder(BOOL bLadder);
 uint32_t __stdcall GAMEDATA_GetLadderOrGameType();
 BOOL __stdcall CLIENT_CheckExpansion();

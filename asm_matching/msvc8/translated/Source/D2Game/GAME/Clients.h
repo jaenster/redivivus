@@ -85,7 +85,7 @@ void __fastcall InitUnitForClient(struct D2ClientStrc * pClient, struct D2UnitSt
 void __fastcall RemoveUnitForClient(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit);
 int32_t __fastcall GetClientNo(struct D2ClientStrc * pClient);
 int __stdcall ReturnFFFFFFFF();
-void __stdcall ReturnVoid(uint32_t dwParam);
+void __fastcall ReturnVoid(struct D2ClientStrc * pClient, int nUnused, int nParam);
 uint32_t __fastcall GetPlayerClassId(struct D2ClientStrc * pClient);
 void __fastcall SetClassOfClient(struct D2ClientStrc * pClient, int nClass);
 void __fastcall SetFileFlags(struct D2ClientStrc * pClient, int16_t nCharStatus);

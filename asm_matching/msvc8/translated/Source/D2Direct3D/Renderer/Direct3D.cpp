@@ -3891,7 +3891,6 @@ void __fastcall DebugFillBackBuffer(int nPosX, int nPosY) {
 }
 
 void __stdcall RENDERER_D3D_InitializeTexturePools() {
-    D3DVERTEXBUFFERDESC sVBDesc;
     int32_t nErrorLine;
     if (gpD3DTextureSpritePoolMemory0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x55);
@@ -3923,6 +3922,7 @@ void __stdcall RENDERER_D3D_InitializeTexturePools() {
             exit(-1);
           }
 
+          D3DVERTEXBUFFERDESC sVBDesc = {0};
           sVBDesc.dwSize = 0x10;
           sVBDesc.dwCaps = 0x10800;
           sVBDesc.dwFVF = 0x1c4;
@@ -4358,8 +4358,8 @@ void __fastcall DrawLine(int nXStart, int nYStart, int nXEnd, int nYEnd, BYTE dw
     }
 
     RENDERER_D3D_SetTextureFilterMode(1);
-    v1[1].dwDiffuse = dwRGBColor;
     if (nXStart == nXEnd && nYStart == nYEnd) {
+      v1[1].dwDiffuse = dwRGBColor;
       v1[1].fX = (float)nXStart;
       v1[1].fY = (float)nYStart;
       v1[1].fZ = 0.5;
@@ -4383,6 +4383,7 @@ void __fastcall DrawLine(int nXStart, int nYStart, int nXEnd, int nYEnd, BYTE dw
     v1[1].fU = 0.0;
     v1[1].fV = 0.0;
     v1[0].dwDiffuse = dwRGBColor;
+    v1[1].dwDiffuse = dwRGBColor;
     g_pD3DDevice->lpVtbl->DrawPrimitive(g_pD3DDevice, 2, 0x1c4, v1, 2, 0x1c);
 }
 
@@ -4502,13 +4503,11 @@ void __fastcall DrawSolidRect(RECT * pRect, BYTE nPaletteIndex) {
 
 void __fastcall DrawSolidSquare(POINT * pPoint, BYTE nSize, BYTE nPaletteIndex) {
     tagRECT rect;
-    if (nSize == '\0') {
-      return;
+    if (nSize) {
+      nSize--;
+      /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rect, pPoint->x - nSize, pPoint->y - nSize, pPoint->x + 1 + nSize, pPoint->y + 1 + nSize);
+      Renderer::DrawSolidRectEx(rect.left, rect.top, rect.right, rect.bottom, nPaletteIndex, 5);
     }
-
-    uint32_t nHalfSize = (uint32_t)(uint8_t)(nSize - 1);
-    /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rect, pPoint->x - nHalfSize, pPoint->y - nHalfSize, pPoint->x + 1 + nHalfSize, pPoint->y + 1 + nHalfSize);
-    Renderer::DrawSolidRectEx(rect.left, rect.top, rect.right, rect.bottom, nPaletteIndex, 5);
 }
 
 void __fastcall ClearScreen(BOOL bPartial) {

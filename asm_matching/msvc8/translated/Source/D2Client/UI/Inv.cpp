@@ -3521,7 +3521,7 @@ void __stdcall INV_HandleMouseMove(D2UIMouseMsgStrc * pMsg) {
     CurrentInventoryPage = bySavedPage;
 }
 
-static int32_t __stdcall ClickItemRight(int32_t pItem, int32_t pGridCoords, uint8_t nPage, D2UnitStrc * pPlayer, D2InventoryStrc * pInventory) {
+static int32_t __stdcall ClickItemRight(int32_t nMouseY, int32_t nMouseX, uint8_t nPage, D2UnitStrc * pPlayer, D2InventoryStrc * pInventory) {
     uint32_t nCol;
     uint32_t nRowOffset;
     int32_t nPosX;
@@ -3536,18 +3536,18 @@ static int32_t __stdcall ClickItemRight(int32_t pItem, int32_t pGridCoords, uint
     BOOL bExpansion = GAME::Game::CLIENT_CheckExpansion();
     int32_t nInvPageFull = D2Common::Units::UNITS_GetInventoryRecordId(pPlayer, nPage, bExpansion);
     if (nPage == '\0') {
-      nCol = (uint32_t)(pGridCoords - pInventoryGridScreenCoordinated.nPixelLeft) / (uint32_t)pInventoryGridScreenCoordinated.nCellWidth;
-      nRowOffset = pItem - pInventoryGridScreenCoordinated.nTop;
+      nCol = (uint32_t)(nMouseX - pInventoryGridScreenCoordinated.nPixelLeft) / (uint32_t)pInventoryGridScreenCoordinated.nCellWidth;
+      nRowOffset = nMouseY - pInventoryGridScreenCoordinated.nTop;
       nCellHeightDivisor = (uint32_t)pInventoryGridScreenCoordinated.nCellHeight;
     } else {
       bExpansion = GAME::Game::CLIENT_CheckExpansion();
       if (bExpansion) {
-        nCol = (uint32_t)(pGridCoords - pBigBankPageGridScreenCoordinates.nPixelLeft) / (uint32_t)pBigBankPageGridScreenCoordinates.nCellWidth;
-        nRowOffset = pItem - pBigBankPageGridScreenCoordinates.nTop;
+        nCol = (uint32_t)(nMouseX - pBigBankPageGridScreenCoordinates.nPixelLeft) / (uint32_t)pBigBankPageGridScreenCoordinates.nCellWidth;
+        nRowOffset = nMouseY - pBigBankPageGridScreenCoordinates.nTop;
         nCellHeightDivisor = (uint32_t)pBigBankPageGridScreenCoordinates.nCellHeight;
       } else {
-        nCol = (uint32_t)(pGridCoords - pBankPageGridScreenCoordinates.nPixelLeft) / (uint32_t)pBankPageGridScreenCoordinates.nCellWidth;
-        nRowOffset = pItem - pBankPageGridScreenCoordinates.nTop;
+        nCol = (uint32_t)(nMouseX - pBankPageGridScreenCoordinates.nPixelLeft) / (uint32_t)pBankPageGridScreenCoordinates.nCellWidth;
+        nRowOffset = nMouseY - pBankPageGridScreenCoordinates.nTop;
         nCellHeightDivisor = (uint32_t)pBankPageGridScreenCoordinates.nCellHeight;
       }
     }
@@ -3991,6 +3991,11 @@ void __stdcall INV_InitNpcButtonsByClass() {
     gaNpcShopButtons[0].nDrawCallback = 0;
     gaNpcShopButtonTable[0] = 4;
     CurrentNpcButtonSelection = 3;
+}
+
+void __stdcall PANEL_ClearInvMousePosition() {
+    gnInvMouseX = 0;
+    gnInvMouseY = 0;
 }
 
 // Draws gold amount and coin icon in inventory UI for three contexts: stash (param=0), inventory (param=1), and trade (param=2). Retrieves player's gold from appropriate stat (UNITSTAT_goldbank for stash, UNITSTAT_gold for inventory), formats the number, renders text and animated coin icon at context-specific screen coordinates.

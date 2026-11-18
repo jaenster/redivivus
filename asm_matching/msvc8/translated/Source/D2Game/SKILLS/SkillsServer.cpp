@@ -2249,6 +2249,7 @@ void __fastcall SKILLS_CreateMissileRing(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     sSkillArg.nY = nYValue;
+    sSkillArg.pOwner = pUnit;
     sSkillArg.nMissileTxtNo = eMissileId;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLevel;
@@ -2258,10 +2259,9 @@ void __fastcall SKILLS_CreateMissileRing(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     int nAngleIdx = 0;
-    sSkillArg.pOwner = pUnit;
     do {
-      sSkillArg.nUnitY = ganMissileRingYOffsets[nAngleIdx];
       sSkillArg.nUnitX = ganMissileRingCosTable[nAngleIdx];
+      sSkillArg.nUnitY = ganMissileRingYOffsets[nAngleIdx];
       MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       nAngleIdx++;
     } while (nAngleIdx < 64);
@@ -2511,10 +2511,8 @@ D2UnitStrc * __fastcall SKILL_CreateSummon(::SGAMEDATA * pGame, D2MonsterCastPet
       eUnitType = UNIT_COUNT;
       if (pOwner) {
         eUnitType = pOwner->eUnitType;
-        nOwnerUnitGUID = pOwner->nUnitGUID;
-      } else {
-        nOwnerUnitGUID = -1;
       }
+      nOwnerUnitGUID = !pOwner ? -1 : pOwner->nUnitGUID;
 
       Ai::AiGeneral::AssignMinionOwner(pGame, pMonster, nOwnerUnitGUID, eUnitType, 0, 0);
       eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pMonster, STATE_uninterruptable);
@@ -3396,10 +3394,7 @@ D2StatListExStrc * __fastcall SetStateWithExpiryTime(D2StateExArgStrc * pStateEx
       eSourceUnitType = pSourceUnit->eUnitType;
     }
 
-    D2PoolManagerStrc* pUnitMemPoolPtr = 0;
-    if (pUnit_00) {
-      pUnitMemPoolPtr = pUnit_00->pMemory;
-    }
+    D2PoolManagerStrc* pUnitMemPoolPtr = !pUnit_00 ? 0 : pUnit_00->pMemory;
 
     D2StatListExStrc* pNewStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pUnitMemPoolPtr, nStatListFlags, pExpiryFrame, eSourceUnitType, nSourceUnitGUID);
     D2Common::Stats::StatsEx::SetState(pNewStatList, eAuraState);

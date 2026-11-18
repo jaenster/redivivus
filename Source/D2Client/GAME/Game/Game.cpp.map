@@ -3240,7 +3240,10 @@
       "calledFunctions": [
         "CLIENT_SetExpansion"
       ],
-      "dh": "fd62706f",
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "dh": "35e392ec",
       "paramStorage": [
         [
           "bExpansion",

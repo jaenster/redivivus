@@ -450,22 +450,22 @@ static BOOL __stdcall HasBonusStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
 // nShift is passed in EBX and copied to ECX before each SHL; only CL is used.
 static void AddStatsToDamage(D2MissileDamageDataStrc * pMissileDamageData, D2UnitStrc * pUnit, int32_t nShift) {
     int nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_firemindam, 0);
-    uint8_t nShiftTmp = (uint8_t)nShift;
-    pMissileDamageData->nFireMinDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
+    uint8_t bVar1 = (uint8_t)nShift;
+    pMissileDamageData->nFireMinDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_firemaxdam, 0);
-    pMissileDamageData->nFireMaxDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
+    pMissileDamageData->nFireMaxDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_lightmindam, 0);
-    pMissileDamageData->nLightMinDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
+    pMissileDamageData->nLightMinDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_lightmaxdam, 0);
-    pMissileDamageData->nLightMaxDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
+    pMissileDamageData->nLightMaxDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_magicmindam, 0);
-    pMissileDamageData->nMagicMinDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
+    pMissileDamageData->nMagicMinDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_magicmaxdam, 0);
-    pMissileDamageData->nMagicMaxDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
+    pMissileDamageData->nMagicMaxDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_coldmindam, 0);
-    pMissileDamageData->nColdMinDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
+    pMissileDamageData->nColdMinDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_coldmaxdam, 0);
-    pMissileDamageData->nColdMaxDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
+    pMissileDamageData->nColdMaxDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_coldlength, 0);
     pMissileDamageData->nColdLength += nStatValue;
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_poisonmindam, 0);

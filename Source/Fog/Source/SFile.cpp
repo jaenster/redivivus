@@ -554,19 +554,17 @@ void __fastcall SFILE_DeleteOldLogFiles(char * szLogPrefix) {
       SafeCreateDirectoryTree(szLogDir);
     }
 
-    uint32_t nDay = (uint32_t)systemTime.wDay;
     uint32_t nYear = (uint32_t)systemTime.wYear;
     uint32_t nMonth = (uint32_t)systemTime.wMonth;
+    uint32_t nDay = (uint32_t)systemTime.wDay;
     int32_t nTodayJulian = SFILE_JulianDayNumber(nYear, nMonth, nDay);
     int nJulianDay = nTodayJulian - 5;
-    int iCount = 10;
-    do {
+    for (int iCount = 0; iCount < 10; iCount++) {
       SFILE_GregorianCalendarFromJulian(nJulianDay, (int*)&nYear, (int*)&nMonth, (int*)&nDay);
       Storm::Source::SSTR::SStrPrintf(szFilePath, 0x1000, "%s%s%02d%02d%02d.txt", szLogDir, szFileNamePrefix, (int)nYear % 100, nMonth, nDay);
       /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(szFilePath);
       nJulianDay--;
-      iCount--;
-    } while (iCount);
+    }
 }
 
 void __stdcall LOGFILE_StoreGameStartupInfo() {

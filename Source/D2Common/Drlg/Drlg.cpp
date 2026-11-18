@@ -1915,7 +1915,8 @@ void __fastcall SubTypeWpShrine(D2DrlgWallLayerGridsStrc * pWallLayerGrids) {
 
     D2LvlSubTxt* pLvlSubTxtRecord = DATATBLS::LvlTbls::TXT_LvlSub_GetLineFromSubType(pWallLayerGrids->nSubTypeLookupId);
     D2PoolManagerStrc* pMemory = pWallLayerGrids->pRoomEx->pLevel->pDrlg->pDS1MemPool;
-    for (dwSubTypeBitMask = pWallLayerGrids->nSubTypeCount; dwSubTypeBitMask; dwSubTypeBitMask >>= 1) {
+    dwSubTypeBitMask = pWallLayerGrids->nSubTypeCount;
+    while (dwSubTypeBitMask) {
       if (dwSubTypeBitMask & 1) {
         TileSub::InitializeDrlgFile(pMemory, pLvlSubTxtRecord);
         if (pLvlSubTxtRecord->CheckAll) {
@@ -1925,6 +1926,7 @@ void __fastcall SubTypeWpShrine(D2DrlgWallLayerGridsStrc * pWallLayerGrids) {
         }
       }
 
+      dwSubTypeBitMask >>= 1;
       pLvlSubTxtRecord++;
     }
 }

@@ -1170,7 +1170,6 @@ static uint32_t UNICODE_BinarySearchKamap(uint16_t wChar) {
     }
 
     aSearchKey[1] = wChar;
-    aSearchKey[0] = 0;
     uint16_t* pFoundEntry = (uint16_t*)bsearch(aSearchKey, gpUnicodeKamapToCodeTable, (uint32_t)gnUnicodeKamapEntryCount, 4, UNICODE_CompareKamapEntry);
     if (!pFoundEntry) {
       return -1;

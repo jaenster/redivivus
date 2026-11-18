@@ -58,21 +58,6 @@
       "dh": "f7f2e277"
     },
     {
-      "name": "PANEL_ClearInvMousePosition",
-      "address": "004880f0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004880f0"
-        }
-      ],
-      "namespace": "D2Client::UI::Panel",
-      "calledFunctions": [
-        "PANEL_ClearInvMousePosition"
-      ],
-      "dh": "a5d20e5a"
-    },
-    {
       "name": "INV_HasItemToDescribe",
       "address": "0048a690",
       "lines": [

@@ -403,7 +403,16 @@
       "calledFunctions": [
         "DRAW_NoOp"
       ],
-      "dh": "14d9764f"
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "966c8311",
+      "paramStorage": [
+        [
+          "nScreenMode",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRAW_PfHandlerCallback_CloseActivePanels",

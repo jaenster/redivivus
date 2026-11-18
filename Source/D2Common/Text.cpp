@@ -364,8 +364,8 @@ void __stdcall TEXT_SortMessageList(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x2
     TEXT_SortMessages(pGSPacketSrv0x27_Text->nCount, pSortBuf, TEXT_CompareMessagesByCode);
     pCurEntry = pGSPacketSrv0x27_Text->pMessage;
     int iEntry = 0;
-    pBufSlot = pSortBuf;
     if ((uint16_t)pGSPacketSrv0x27_Text->nCount > 0) {
+      pBufSlot = pSortBuf;
       do {
         pCurEntry->nMessage = *pBufSlot;
         pCurEntry->nType = *(int*)(pBufSlot + 2);

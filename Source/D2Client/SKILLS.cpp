@@ -1125,10 +1125,11 @@ static void __stdcall SKILLSCLT_CreateProjectileMissile(uint32_t dwUnused, uint3
     sSkillArg.nMissileTxtNo = pMissileId;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLevel;
-    nX = nCount;
     if (nCount <= 0) {
       return;
     }
+
+    nX = nCount;
 
     do {
       D2UnitStrc* pMissileUnit;
@@ -1144,7 +1145,7 @@ static void __stdcall SKILLSCLT_CreateProjectileMissile(uint32_t dwUnused, uint3
       if (pMissileUnit) {
         nSeedLowVal = D2Common::Seed::GetSeed_nSeedLow(&sSeed);
         D2Common::Units::Missile::SetTargetX(pMissileUnit, nSeedLowVal);
-        D2Common::Units::Missile::SetTargetY(pMissileUnit, (uint32_t)((uint32_t)(uint16_t)sSkillArg.nUnitY << 16 | (uint32_t)(uint16_t)sSkillArg.nUnitX));
+        D2Common::Units::Missile::SetTargetY(pMissileUnit, ((uint32_t)(uint16_t)sSkillArg.nUnitY << 16) + (uint32_t)(uint16_t)sSkillArg.nUnitX);
       }
 
       nX--;

@@ -752,7 +752,7 @@ void __fastcall GFX_ShutdownSpriteCacheAndCofSystem(int32_t nMemoryPoolHandle) {
     Engine::Gfx::GFX_ShutdownCofSystem();
 }
 
-void __stdcall DRAW_NoOp() {
+void __fastcall DRAW_NoOp(int32_t nScreenMode) {
 
 }
 

@@ -590,7 +590,7 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "c05662f2",
+      "dh": "f78a470c",
       "paramStorage": [
         [
           "RequestedScreenModeMaybe",
