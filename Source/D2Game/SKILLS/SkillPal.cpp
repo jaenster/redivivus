@@ -256,7 +256,7 @@ BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2Unit
       }
     }
 
-    for (nCurseStateIdx = 0; nCurseStateIdx < (short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x0BSize; nCurseStateIdx++) {
+    for (nCurseStateIdx = 0; nCurseStateIdx < D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x0BSize; nCurseStateIdx++) {
       eState = (eD2States)D2Common::ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x0B[nCurseStateIdx].nStateId;
       ePoisonState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
       if (ePoisonState) {
@@ -1145,7 +1145,7 @@ BOOL __fastcall SKILPAL_SrvStFn36_HolyShield(::SGAMEDATA * pGame, D2UnitStrc * p
     return (uint32_t)(bHasShield != 0);
 }
 
-void __fastcall SKILLPAL_OnConversionExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
+void __fastcall SKILLPAL_OnConversionExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
     uint32_t dwAlignmentRaw;
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
     UNIT::SUnit::SetAlignment(pUnit, '\0', 1);

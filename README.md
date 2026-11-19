@@ -5,20 +5,20 @@
 
 Diablo II: Lord of Destruction 1.14d, reverse-engineered into C++ that builds and runs.
 
-|At this commit|Ghidra database v2124|
+|At this commit|Ghidra database v2129|
 |-|-|
 |Build|every translation unit compiles with a strict `-std=c++17`, no `-fpermissive`; the executable links with no undefined symbol|
 |Play|single player works; a full playthrough has been completed on the Visual C++ 2005 build|
 |Modules|22 libraries, one per original module; 4 strict, with no include the original DLL imports did not allow|
-|64-bit|all 464 files compile for x64 with Visual C++ 2005; 890 pointer-width casts left (from 7,955), [counted](asm_matching/msvc8/x64/README.md) by that compiler|
+|64-bit|a 64-bit build links (mingw x86-64, -fpermissive, 20 stubbed 32-bit-only imports); never run; 907 pointer-width casts left (from 7,955), [counted](asm_matching/msvc8/x64/README.md) with Visual C++ 2005 x64|
 
 Machine code identical to 1.14d, compiled with Visual C++ 2005 SP1, the compiler of the original:
 
 |Measure|Identical machine code|
 |-|-|
-|Functions|9,369 of 14,900 (62.9%)|
-|Code|869,977 of 2,612,801 bytes (33.30%)|
-|Instructions|1,905,685 of 2,612,801 bytes (72.9%), counting identical instructions in functions that still differ|
+|Functions|9,414 of 14,900 (63.2%)|
+|Code|875,022 of 2,612,801 bytes (33.49%)|
+|Instructions|1,907,922 of 2,612,801 bytes (73.0%), counting identical instructions in functions that still differ|
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">

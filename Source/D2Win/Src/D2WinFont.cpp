@@ -715,7 +715,17 @@ static void D2WINFONT_DrawWideStringSimple(uint16_t * wszText, int32_t nX, int32
 }
 
 void __fastcall TEXT_TooltipSetAttributes(uint16_t * wszBuffer, int32_t nTooltipX, int32_t nTooltipY, int32_t nTooltipColor, int32_t nCenterFlag) {
-    if (wszBuffer) {
+    if (!wszBuffer) {
+      memset(&DisplayedTooltip, 0, 0x800);
+      DisplayedTooltip.nX = nTooltipX;
+      DisplayedTooltip.nY = nTooltipY;
+      DisplayedTooltip.nColor = nTooltipColor;
+      DisplayedTooltip.nCenterFlag = nCenterFlag;
+      DisplayedTooltip.nLoadProgress = 0;
+      return;
+    }
+
+    {
       int32_t nStrLen;
       nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszBuffer);
       if (nStrLen < 0x400) {
@@ -728,7 +738,6 @@ void __fastcall TEXT_TooltipSetAttributes(uint16_t * wszBuffer, int32_t nTooltip
         return;
       }
     }
-
     memset(&DisplayedTooltip, 0, 0x800);
     DisplayedTooltip.nX = nTooltipX;
     DisplayedTooltip.nY = nTooltipY;

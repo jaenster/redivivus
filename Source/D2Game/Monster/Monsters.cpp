@@ -2427,7 +2427,7 @@ void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
 }
 
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 35. On death (or no unit) sets STATE_shatter.
-void __fastcall MONSTER_ShatterOnDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nUModId, int32_t nParam2) {
+void __fastcall MONSTER_ShatterOnDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nUModId, int32_t nUnused) {
     if (!(!pUnit || pUnit->eAnimMode.ePlayerMode == Death)) {
       return;
     }

@@ -92,7 +92,7 @@ void __fastcall ResetNpcHireListIfEmpty(::SGAMEDATA * pGame, int32_t nNpcClassId
 // @sourcefile .\UNIT\SUNITNPC.CPP
 void __fastcall NPC_ProcessMercHire(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pNPC, uint16_t nMarcNameId);
 void __fastcall SUNITNPC_UpdateHirelingPosition(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer);
-void __fastcall SUNITNPC_RefreshHirelingItemStats(struct D2UnitStrc * pHireling);
+BOOL __fastcall SUNITNPC_RefreshHirelingItemStats(struct D2UnitStrc * pHireling);
 // Creates and hires a mercenary unit for player pUnit. Validates act/expansion eligibility, resolves the HirelingTxt row (by nNameIdOverride or the act/difficulty table), clamps nMercNameId to the valid name range, marks the seller NPC slot, spawns a UNIT_MONSTER via CreateUnit, then finalises hiring via MERC_HireAndReplaceMerc. Returns the new merc unit or null on failure.
 // @sourcefile .\UNIT\SUNITNPC.CPP
 struct D2UnitStrc * __fastcall CreateMerc(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint16_t nMercNameId, uint32_t dwHireFlags, uint16_t nNameIdOverride, int32_t nClassIdOverride, int32_t nReplaceFlag);

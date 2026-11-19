@@ -1140,15 +1140,25 @@ struct __attribute__((packed)) D2DataTableTxtStrc {
     /* 0x0C8 */ struct D2StatesDataTbls * pStatesDataTbls;
     /* 0x0CC */ struct D2StatesDataTbls * pSingleStateDataTbl[40];
     /* 0x16C */ struct D2AllStatesDataTbl * pAllStatesDataTblFlag0x04;
-    /* 0x170 */ int nAllStatesDataTblFlag0x04Size;
+    /* 0x170 */ short nAllStatesDataTblFlag0x04Size; // 16-bit count: DATATBLS_BuildStatesDataList 00611dc0 writes it as a word (MOV word ptr [ESI],0; ADD word ptr [ESI],1) and every reader loads a word (MOVSX/CMP word ptr)
+    /* 0x172 */ uint8_t field_0x172;
+    /* 0x173 */ uint8_t field_0x173;
     /* 0x174 */ struct D2AllStatesDataTbl * pAllStatesDataTblFlag0x0B;
-    /* 0x178 */ int nAllStatesDataTblFlag0x0BSize;
+    /* 0x178 */ short nAllStatesDataTblFlag0x0BSize; // 16-bit count: DATATBLS_BuildStatesDataList 00611dc0 writes it as a word (MOV word ptr [ESI],0; ADD word ptr [ESI],1) and every reader loads a word (MOVSX/CMP word ptr)
+    /* 0x17A */ uint8_t field_0x17a;
+    /* 0x17B */ uint8_t field_0x17b;
     /* 0x17C */ uint16_t * pAllStatesDataTblFlag0x10;
-    /* 0x180 */ int nAllStatesDataTblFlag0x10Size;
+    /* 0x180 */ short nAllStatesDataTblFlag0x10Size; // 16-bit count: DATATBLS_BuildStatesDataList 00611dc0 writes it as a word (MOV word ptr [ESI],0; ADD word ptr [ESI],1) and every reader loads a word (MOVSX/CMP word ptr)
+    /* 0x182 */ uint8_t field_0x182;
+    /* 0x183 */ uint8_t field_0x183;
     /* 0x184 */ uint16_t * pAllStatesDataTblFlag0x05;
-    /* 0x188 */ int nAllStatesDataTblFlag0x05Size;
+    /* 0x188 */ short nAllStatesDataTblFlag0x05Size; // 16-bit count: DATATBLS_BuildStatesDataList 00611dc0 writes it as a word (MOV word ptr [ESI],0; ADD word ptr [ESI],1) and every reader loads a word (MOVSX/CMP word ptr)
+    /* 0x18A */ uint8_t field_0x18a;
+    /* 0x18B */ uint8_t field_0x18b;
     /* 0x18C */ uint16_t * pStatesItemTypesDataTbl;
-    /* 0x190 */ int nStatesItemTypesDataTblSize;
+    /* 0x190 */ short nStatesItemTypesDataTblSize; // 16-bit count: DATATBLS_BuildStatesDataList 00611dc0 writes it as a word (MOV word ptr [ESI],0; ADD word ptr [ESI],1) and every reader loads a word (MOVSX/CMP word ptr)
+    /* 0x192 */ uint8_t field_0x192;
+    /* 0x193 */ uint8_t field_0x193;
     /* 0x194 */ struct D2SoundsTxtSmall * pTxtSounds;
     /* 0x198 */ struct D2TxtLinkStrc * pTxtSoundsLink;
     /* 0x19C */ int nTxtSoundsSize;

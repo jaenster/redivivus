@@ -20,7 +20,7 @@
         "D2StatInfoStrc",
         "int32_t"
       ],
-      "dh": "84231582",
+      "dh": "654a5a6c",
       "paramStorage": [
         [
           "nStatKey",
@@ -49,7 +49,7 @@
         "D2StatInfoStrc",
         "int32_t"
       ],
-      "dh": "a822162a",
+      "dh": "4c43727d",
       "paramStorage": [
         [
           "nStatKey",
@@ -78,7 +78,7 @@
         "D2StatInfoStrc",
         "int32_t"
       ],
-      "dh": "7a087189",
+      "dh": "98bb1bf4",
       "paramStorage": [
         [
           "nStatKey",
@@ -112,7 +112,7 @@
         "D2StatStrc",
         "int32_t"
       ],
-      "dh": "ce07bb98",
+      "dh": "c07dba6e",
       "paramStorage": [
         [
           "pStatInfo",
@@ -351,7 +351,7 @@
         "D2StatListExStrc",
         "int32_t"
       ],
-      "dh": "b064e712",
+      "dh": "22d4f3d4",
       "paramStorage": [
         [
           "nStatId",
@@ -1464,7 +1464,7 @@
         "pfnStatChangedCb",
         "uint32_t"
       ],
-      "dh": "f31b490b",
+      "dh": "f95e813c",
       "paramStorage": [
         [
           "pUnit",
@@ -1747,13 +1747,13 @@
         "STATLIST_CopyStatsToBuffer"
       ],
       "usedTypes": [
+        "D2StatKeyUnion",
         "D2StatListExStrc",
         "D2StatStrc",
         "D2UnitStrc",
-        "int32_t",
-        "uint16_t"
+        "int32_t"
       ],
-      "dh": "769b8773",
+      "dh": "00d579cf",
       "paramStorage": [
         [
           "pUnit",
@@ -1783,12 +1783,12 @@
         "CopyStatsToBuffer"
       ],
       "usedTypes": [
+        "D2StatKeyUnion",
         "D2StatListExStrc",
         "D2StatStrc",
-        "int32_t",
-        "uint16_t"
+        "int32_t"
       ],
-      "dh": "6760f042",
+      "dh": "752e1267",
       "paramStorage": [
         [
           "pStatListEx",
@@ -2330,7 +2330,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d5e062bd",
+      "dh": "8f3e7a55",
       "paramStorage": [
         [
           "pOutStatPairs",
@@ -2592,7 +2592,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c40b4431",
+      "dh": "7760dfba",
       "paramStorage": [
         [
           "pStatListEx",
@@ -2774,7 +2774,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "33d00ab9",
+      "dh": "088b68a6",
       "paramStorage": [
         [
           "pOp45Owner",
@@ -3225,9 +3225,10 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "D2StatListExStrc",
-        "D2StatStrc"
+        "D2StatStrc",
+        "int32_t"
       ],
-      "dh": "0604b21d",
+      "dh": "133cdbe4",
       "paramStorage": [
         [
           "pStatList",
@@ -3312,7 +3313,7 @@
         "D2StatListExStrc",
         "D2StatStrc"
       ],
-      "dh": "18a337a6",
+      "dh": "061aa866",
       "paramStorage": [
         [
           "pStatListExDest",
@@ -3406,7 +3407,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "53f06e0f",
+      "dh": "4d5d375b",
       "paramStorage": [
         [
           "pUnit",
@@ -3573,7 +3574,7 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "834f06df",
+      "dh": "2936dbfa",
       "paramStorage": [
         [
           "pUnit",
@@ -3688,7 +3689,7 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "68da9f7f",
+      "dh": "cb0b5046",
       "paramStorage": [
         [
           "pUnit",

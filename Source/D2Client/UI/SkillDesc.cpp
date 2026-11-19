@@ -263,6 +263,7 @@ void __fastcall SKILLDESC_FormatItemStatLine(D2UnitStrc * pUnit, uint16_t * wszT
     uint32_t nClassIndex;
     uint16_t* wszStatName;
     int i;
+    uint32_t nSkillId;
     D2StatStrc anStatValues[128];
     uint16_t wString1[128];
     uint16_t wString2[128];
@@ -270,7 +271,6 @@ void __fastcall SKILLDESC_FormatItemStatLine(D2UnitStrc * pUnit, uint16_t * wszT
     uint16_t wszStatValueStr[10];
     int nCharClass;
     int nStatValue;
-    uint16_t wStatId;
     for (i = 0; i < 0x80; i++) {
       wString2[i] = L'\0';
     }
@@ -292,11 +292,11 @@ void __fastcall SKILLDESC_FormatItemStatLine(D2UnitStrc * pUnit, uint16_t * wszT
 
     do {
       uint16_t wStatNameStrId;
-      wStatId = anStatValues[i].wSubIndex;
+      nSkillId = (uint32_t)(uint16_t)anStatValues[i].uKey.sKey.wSubIndex;
       nStatValue = anStatValues[i].nStatValue;
       wString2[0] = L'\0';
       wString1[0] = L'\0';
-      wStatNameStrId = SKILLDESC_GetStatNameString((uint32_t)wStatId, 0);
+      wStatNameStrId = SKILLDESC_GetStatNameString(nSkillId, 0);
       wszStatName = D2Lang::StrTable::strtable::GetLocaleString(wStatNameStrId);
       wszStatValueStr[0] = L'\0';
       wszStatValueStr[1] = 0;
@@ -325,7 +325,7 @@ void __fastcall SKILLDESC_FormatItemStatLine(D2UnitStrc * pUnit, uint16_t * wszT
       if (nParam2 == 0x6b) {
         D2Lang::Unicode::UNISYS::AppendToBuffer(wString2, wszText2);
         nCharClass = 7;
-        nClassIndex = D2Common::Skills::SKILLS_GetCharClassFromSkillId_Validated((uint32_t)wStatId, &nCharClass);
+        nClassIndex = D2Common::Skills::SKILLS_GetCharClassFromSkillId_Validated(nSkillId, &nCharClass);
         if (nClassIndex) {
           if (nCharClass < 0 || nCharClass >= 7 || nCharClass >= D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nCharClass)) {
             D2Lang::Unicode::UNISYS::AppendToBuffer(wString2, wszMinus);
@@ -2609,7 +2609,7 @@ int32_t __stdcall SKILLDESC_GetAuraBonusDamage() {
     }
 
     int nTotalDmg = 0;
-    for (nStateIdx = 0; nStateIdx < (short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size; nStateIdx++) {
+    for (nStateIdx = 0; nStateIdx < D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size; nStateIdx++) {
       eD2States eState;
       eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)D2Common::ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x04[nStateIdx].nStateId);
       if (eState != STATE_none) {
@@ -2649,7 +2649,7 @@ int __stdcall SKILLDESC_AccumulateAuraBonusDmg(D2UnitStrc * pUnit, int * pnMinDm
     uint8_t byElemType;
     short int nAuraStat;
     D2SkillsTxt* pSkillsTxt;
-    for (nStateIdx = 0; nStateIdx < (short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size; nStateIdx++) {
+    for (nStateIdx = 0; nStateIdx < D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size; nStateIdx++) {
       BOOL eState;
       eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)D2Common::ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x04[nStateIdx].nStateId);
       if (eState) {

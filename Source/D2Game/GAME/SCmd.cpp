@@ -2514,8 +2514,8 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
           nScratch = 0;
         } else {
           do {
-            nStatIndex = (uint32_t)aStatBuf[nIndex].wStatIndex;
-            nComponentBytes = (uint32_t)(uint16_t)aStatBuf[nIndex].wSubIndex;
+            nStatIndex = (uint32_t)aStatBuf[nIndex].uKey.sKey.wStatIndex;
+            nComponentBytes = (uint32_t)(uint16_t)aStatBuf[nIndex].uKey.sKey.wSubIndex;
             nStatValue = aStatBuf[nIndex].nStatValue;
             pStatCostTxt = (int)nStatIndex < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatIndex : nullptr;
             if (pStatCostTxt && (char)pStatCostTxt->dwItemStatFlags & (uint8_t)Fog::BitBuffer::gadwBitMasks[0] && pStatCostTxt->sendBits > '\0') {

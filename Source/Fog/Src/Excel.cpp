@@ -414,13 +414,16 @@ char * __fastcall FOG_GetRecordField(D2TxtLinkNodeStrc * pClientSideData, int nL
 
 char * __stdcall FOG_ParseIntField(D2TxtLinkStrc * pTxtLink, int nLinkIndex, int nParam2) {
     char* pRecord = gnExcelRecordFieldNotFound;
-    if (pTxtLink && nLinkIndex >= 0 && nLinkIndex < pTxtLink->nRecords) {
+    if (!(pTxtLink && nLinkIndex >= 0 && nLinkIndex < pTxtLink->nRecords)) {
+      return pRecord;
+    }
+
+    {
       pRecord = FOG_GetRecordField(pTxtLink->pTxtLinkNode, nLinkIndex);
       if ((!pRecord || pRecord == gnExcelRecordFieldNotFound) && nParam2) {
         return gnExcelRecordFieldNotFound;
       }
     }
-
     return pRecord;
 }
 

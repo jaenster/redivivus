@@ -438,7 +438,7 @@ void __fastcall MISSILE_SetDamage(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2Un
           if (nMonType > 0) {
             nElemDamage = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0xb4, aStatBonusValues, 0x80);
             for (nStatValue = 0; nStatValue < nElemDamage; nStatValue++) {
-              dwTmp = UNIT::SUnitDmg::DAMAGE_CheckMonsterTypeVsMonsterType((uint32_t)(uint16_t)aStatBonusValues[nStatValue].wSubIndex, (int)nMonType);
+              dwTmp = UNIT::SUnitDmg::DAMAGE_CheckMonsterTypeVsMonsterType((uint32_t)(uint16_t)aStatBonusValues[nStatValue].uKey.sKey.wSubIndex, (int)nMonType);
               if (dwTmp) {
                 nDamage += aStatBonusValues[nStatValue].nStatValue;
               }
@@ -1466,7 +1466,11 @@ BOOL __fastcall Missiles_SrvHitFunc_BlockSelfHitByState(::SGAMEDATA * pGame, D2U
     BOOL eState;
     bool bResult;
     _bResult = 2;
-    if (pTarget) {
+    if (!pTarget) {
+      return _bResult;
+    }
+
+    {
       D2UnitStrc* pOwnerUnit;
       pOwnerUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
       if (pOwnerUnit && pTarget == pOwnerUnit) {
@@ -1476,7 +1480,6 @@ BOOL __fastcall Missiles_SrvHitFunc_BlockSelfHitByState(::SGAMEDATA * pGame, D2U
         }
       }
     }
-
     return _bResult;
 }
 

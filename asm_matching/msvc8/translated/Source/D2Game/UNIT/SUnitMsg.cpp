@@ -466,9 +466,9 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
                 pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                 if (nBitPosCheck > 0) {
                   do {
-                    nStatId = (int)aStatBuf[nStatBufIdx].wStatIndex;
+                    nStatId = (int)aStatBuf[nStatBufIdx].uKey.sKey.wStatIndex;
                     nStatValue = aStatBuf[nStatBufIdx].nStatValue;
-                    nStatSubIndex = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].wSubIndex;
+                    nStatSubIndex = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].uKey.sKey.wSubIndex;
                     pItemStatCost = nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;
                     if (pItemStatCost) {
                       bySendBits = pItemStatCost->sendBits;
@@ -616,9 +616,9 @@ void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc *
                       pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                       if (nCopiedStats > 0) {
                         do {
-                          nStatId = (int)aStatBuf[nStatBufIdx].wStatIndex;
+                          nStatId = (int)aStatBuf[nStatBufIdx].uKey.sKey.wStatIndex;
                           nStatValue = aStatBuf[nStatBufIdx].nStatValue;
-                          nStatSubIndex = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].wSubIndex;
+                          nStatSubIndex = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].uKey.sKey.wSubIndex;
                           pItemStatCost = nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;
                           if (pItemStatCost) {
                             bySendBits = pItemStatCost->sendBits;

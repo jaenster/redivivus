@@ -519,14 +519,17 @@ BOOL __stdcall SFILE_CheckForCdRom(char * szText) {
     dwFreeClusters = 0;
     dwTotalClusters = 0;
     bApiOk = GetDiskFreeSpaceA(szRootPath, (LPDWORD)&dwSectorsPerCluster, &dwBytesPerSector, &dwFreeClusters, &dwTotalClusters);
-    if (bApiOk) {
+    if (!bApiOk) {
+      return 0;
+    }
+
+    {
       nChecksum = dwFsFlags & 4 ^ *(uint32_t*)(char*)&szFsName ^ dwFreeClusters ^ dwBytesPerSector ^ nDriveType;
       nFoldedChecksum = (uint16_t)(nChecksum >> 0x10) ^ (uint16_t)nChecksum;
       if (nFoldedChecksum == 0x1f00 || nFoldedChecksum == 0x805) {
         return 1;
       }
     }
-
     return 0;
 }
 
@@ -2869,8 +2872,7 @@ StormLinkedListStrc * __fastcall Unreferenced_00418470(StormLinkedListStrc * pLi
 }
 
 int __fastcall Unreferenced_00418490(StormLinkedListStrc * pList) {
-    uint32_t uVar1 = pList->head.pNext;
-    return (uint32_t)!((int)uVar1 <= 0 ? 0 : uVar1);
+    return (uint32_t)!((int)pList->head.pNext <= 0 ? 0 : pList->head.pNext);
 }
 
 void __thiscall SFILE_InsertFileRecordIntoList5(int * * ppListContainer, int * * pNode, int32_t nInsertMode, int * * ppListHead) {

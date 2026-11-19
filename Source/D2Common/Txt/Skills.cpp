@@ -1777,7 +1777,7 @@ void __stdcall SKILLS_GetStateTransformGfx(D2UnitStrc * pUnit, eD2UnitType * pUn
     }
 
     int32_t nStateIdx = 0;
-    if ((short int)ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size <= 0) {
+    if (ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size <= 0) {
       return;
     }
 
@@ -1821,7 +1821,7 @@ void __stdcall SKILLS_GetStateTransformGfx(D2UnitStrc * pUnit, eD2UnitType * pUn
       }
 
       nStateIdx++;
-      if (nStateIdx >= (short int)ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size) {
+      if (nStateIdx >= ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size) {
         return;
       }
     } while (true);
@@ -2073,7 +2073,7 @@ int32_t __stdcall SKILL_GetThrownWeaponBonus(D2UnitStrc * pUnit, D2UnitStrc * pU
     _bIsThrowable = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, uStatOrResult, aBonusEntries, 0x20);
     int nBestThrowBonus = 0;
     for (nIdx = 0; nIdx < _bIsThrowable; nIdx++) {
-      uStatOrResult = ITEMS::Items::ITEMS_IsA(pUnit1, (eD2ItemTypes)(uint16_t)aBonusEntries[nIdx].wSubIndex);
+      uStatOrResult = ITEMS::Items::ITEMS_IsA(pUnit1, (eD2ItemTypes)(uint16_t)aBonusEntries[nIdx].uKey.sKey.wSubIndex);
       if (uStatOrResult && aBonusEntries[nIdx].nStatValue > nBestThrowBonus) {
         nBestThrowBonus = aBonusEntries[nIdx].nStatValue;
       }
@@ -2134,7 +2134,7 @@ int32_t __stdcall SKILLS_GetItemBonusDamage(D2UnitStrc * pUnit, D2UnitStrc * pIt
     nBonusCount = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pCaster, uStatId, aBonusEntries, 0x20);
     int nBestBonus = 0;
     for (nIdx = 0; nIdx < nBonusCount; nIdx++) {
-      uStatId = ITEMS::Items::ITEMS_IsA(pItem, (eD2ItemTypes)(uint16_t)aBonusEntries[nIdx].wSubIndex);
+      uStatId = ITEMS::Items::ITEMS_IsA(pItem, (eD2ItemTypes)(uint16_t)aBonusEntries[nIdx].uKey.sKey.wSubIndex);
       if (uStatId && aBonusEntries[nIdx].nStatValue > nBestBonus) {
         nBestBonus = aBonusEntries[nIdx].nStatValue;
       }
@@ -2511,7 +2511,7 @@ BOOL __stdcall STATES_RemoveDisguiseStates(D2UnitStrc * pUnit) {
     }
 
     int nUnit = 0x0;
-    if ((short int)ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size <= 0) {
+    if (ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size <= 0) {
       return 1;
     }
 
@@ -2529,7 +2529,7 @@ BOOL __stdcall STATES_RemoveDisguiseStates(D2UnitStrc * pUnit) {
         DATATBLS::ItemStats::SetState(i, eState, 0);
       }
 
-      nStateCount = (int32_t)(short int)ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size;
+      nStateCount = (int32_t)ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size;
       nUnit++;
     } while (nUnit < nStateCount);
 

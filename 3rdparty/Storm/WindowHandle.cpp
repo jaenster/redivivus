@@ -253,8 +253,7 @@ StormLinkedListStrc * __fastcall Unreferenced_004206a0(StormLinkedListStrc * pLi
 }
 
 int __fastcall Unreferenced_004206c0(StormLinkedListStrc * pList) {
-    uint32_t uVar1 = pList->head.pNext;
-    return (uint32_t)!((int)uVar1 <= 0 ? 0 : uVar1);
+    return (uint32_t)!((int)pList->head.pNext <= 0 ? 0 : pList->head.pNext);
 }
 
 intptr_t __thiscall WND_GetNodeData(StormLinkedListStrc * pThis, StormLinkStrc * pNode) {

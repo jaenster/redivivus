@@ -1062,22 +1062,14 @@
     {
       "name": "Unreferenced_00451160",
       "address": "00451160",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00451160"
-        }
-      ],
+      "lines": [],
       "namespace": "TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>",
       "calledFunctions": [
-        "Unreferenced_00451160",
-        "Destructor",
         "Destructor"
       ],
       "usedTypes": [
         "TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>"
-      ],
-      "dh": "cce89dff"
+      ]
     },
     {
       "name": "Constructor",

@@ -90,7 +90,16 @@ void __fastcall Draw_UI_LoadGame(int32_t bAdvanceFrame) {
     eD2GSGameType eGameType = GAME::Game::CLIENT_GetD2GSGameType();
     GAME::Game::GAMEDATA_SendPeriodicPing();
     nResult = D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState();
-    if (!nResult) {
+    if (nResult) {
+      if (!bAdvanceFrame) {
+        return;
+      }
+
+      gnLoadScreenAnimFrame++;
+      return;
+    }
+
+    {
       BOOL bSceneBegun;
       D2Win::Src::D2WinPalette::DRAW_SetOrReloadPalleteMain();
       bSceneBegun = D2gfx::D2GFX::D2GFX_BeginScene(1, 0, 0, 0);

@@ -2051,7 +2051,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1b7e2158",
+      "dh": "6bfbd05f",
       "paramStorage": [
         [
           "pUnit",
@@ -2088,7 +2088,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0740718b",
+      "dh": "28147a24",
       "paramStorage": [
         [
           "pItem",
@@ -4347,7 +4347,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9f510fec",
+      "dh": "c8dec0ae",
       "paramStorage": [
         [
           "pUnit",
@@ -4767,7 +4767,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "eddffb38",
+      "dh": "14816d74",
       "paramStorage": [
         [
           "pUnit",
@@ -5702,7 +5702,7 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "ad2a4813",
+      "dh": "d390da85",
       "paramStorage": [
         [
           "pBuy",
@@ -6055,7 +6055,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2f2f9484",
+      "dh": "a81f36f1",
       "paramStorage": [
         [
           "pItemUnit",

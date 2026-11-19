@@ -1012,10 +1012,8 @@ void __fastcall SetRosterPosition(int32_t nRosterGUID, int32_t nX, int32_t nY) {
 BOOL __fastcall ROSTER_CheckPlayerInSameParty(D2RosterStrc * pRoster) {
     D2UnitStrc* pUnit;
     if (pRoster && pRoster->nPartyId != 0xffff) {
-      uint16_t nPlayerPartyId;
       pUnit = UNIT::Player::GetPlayerUnit_UI();
-      nPlayerPartyId = UNIT::CUnit::GetPlayerUnitPartyId(pUnit);
-      if (nPlayerPartyId == pRoster->nPartyId) {
+      if ((uint16_t)UNIT::CUnit::GetPlayerUnitPartyId(pUnit) == pRoster->nPartyId) {
         return 1;
       }
     }
@@ -1501,43 +1499,35 @@ void __fastcall ROSTER_UpdatePlayerPartyInfo(int32_t nUnitGuid, int16_t nPartyId
 void __fastcall PlayerLeft(int32_t nPlayerUid) {
     D2RosterLinkListStrc* pCurrentRoster;
     D2RosterLinkListStrc* pNextRoster;
-    D2RosterStrc** ppNext;
+    D2RosterStrc* pPrevious = 0;
+    D2RosterStrc* pCurrent = gpRosterPlayers;
     if (nPlayerUid == -1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x121);
       exit(-1);
     }
 
-    D2RosterStrc* pPrevious = 0;
-    D2RosterStrc* pCurrent = gpRosterPlayers;
-    if (gpRosterPlayers) {
-      while (pCurrent->nRosterGUID != nPlayerUid) {
-        ppNext = &pCurrent->pNext;
-        pPrevious = pCurrent;
-        pCurrent = *ppNext;
-        if (!*ppNext) {
-          ROSTER_RebuildPlayerParty();
-          UI::Party::ResetPartyUi();
-          return;
+    for (; pCurrent; pCurrent = pCurrent->pNext) {
+      if (pCurrent->nRosterGUID == nPlayerUid) {
+        if (pPrevious) {
+          pPrevious->pNext = pCurrent->pNext;
+        } else {
+          gpRosterPlayers = pCurrent->pNext;
         }
-      }
 
-      if (pPrevious) {
-        pPrevious->pNext = pCurrent->pNext;
-      } else {
-        gpRosterPlayers = pCurrent->pNext;
-      }
+        UNIT::PlayerList::FreePlayerList(pCurrent->pPlayerList);
+        pCurrent->pPlayerList = 0;
+        pCurrentRoster = pCurrent->pRosterLinkList;
+        while (pCurrentRoster) {
+          pNextRoster = pCurrentRoster->pNext;
+          D2_FREE_AT(pCurrentRoster, ".\\GAME\\Roster.cpp", 0x110);
+          pCurrentRoster = pNextRoster;
+        }
 
-      UNIT::PlayerList::FreePlayerList(pCurrent->pPlayerList);
-      pCurrent->pPlayerList = 0;
-      pCurrentRoster = pCurrent->pRosterLinkList;
-      while (pCurrentRoster) {
-        pNextRoster = pCurrentRoster->pNext;
-        D2_FREE_AT(pCurrentRoster, ".\\GAME\\Roster.cpp", 0x110);
-        pCurrentRoster = pNextRoster;
+        pCurrent->pRosterLinkList = 0;
+        D2_FREE_AT(pCurrent, ".\\GAME\\Roster.cpp", 0x131);
+        break;
       }
-
-      pCurrent->pRosterLinkList = 0;
-      D2_FREE_AT(pCurrent, ".\\GAME\\Roster.cpp", 0x131);
+      pPrevious = pCurrent;
     }
 
     ROSTER_RebuildPlayerParty();

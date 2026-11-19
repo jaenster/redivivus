@@ -581,24 +581,26 @@ BOOL __fastcall Q05_MarkCompleteForPlayersInTower(::SGAMEDATA * pGame, D2UnitStr
     return 0;
 }
 
-// 1.14d: 0x594fd3 | A1Q5 "The Forgotten Tower" — top-level completion handler (Countess slain).
+// 1.14d: 0x594fd0 | A1Q5 "The Forgotten Tower" — top-level completion handler (Countess slain).
+// Takes pQuestData in ESI and loads pGame from pQuestData->pGame at the entry (00594fd0 MOV ECX,[ESI+4]).
 // Iterates all player units calling Q05_MarkCompleteForPlayersInTower to stamp each player's quest
 // record (Completed/JustCompleted, or CannotComplete if absent). Then sets the GAME-WIDE quest record
 // state to QUESTSTATE_JustCompleted via QUEST_SetQuestRecordState. Finally inspects quest-data: if a
 // sub-counter (+0x64) is nonzero it schedules the Q05_Callback_10 continuation (death-effect /
 // loot sequence still pending); otherwise it clears a busy flag (+0xa) marking the handler finished.
-static int __fastcall Q05_OnTowerComplete(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
-    UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q05_MarkCompleteForPlayersInTower);
+static int __fastcall Q05_OnTowerComplete(D2QuestDataStrc * pQuestData) {
+    UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q05_MarkCompleteForPlayersInTower);
     /* QUEST_SetQuestRecordState(ForgottenTower, JustCompleted=0xd) — game-wide
                          quest record */ QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_ForgottenTower, QUESTSTATE_JustCompleted);
-    D2QuestDataA1Q5Strc* pDVar1 = pQuestData->pQuestSpecificData.pA1Q5;
-    if (!pQuestData->pQuestSpecificData.pA1Q5->nPlayersForRewardCount) {
+    D2QuestDataA1Q4Strc* unionfacet5_594ff0 = pQuestData->pQuestSpecificData.pA1Q4;
+    short int sVar1 = (short int)((uint32_t)(uint8_t)unionfacet5_594ff0->sSub.field_0x4C | (uint32_t)(uint8_t)unionfacet5_594ff0->sSub.field_0x4D << 8);
+    if (!sVar1) {
       pQuestData->bIsActive = '\0';
     } else {
       pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q05_Callback10_PlayerLeavesGame;
     }
 
-    return (int)pDVar1;
+    return (int)unionfacet5_594ff0;
 }
 
 // A1Q5 "Tools of the Trade" (Horadric Malus) quest-state handler slot[3]. On dialog index 0x14: advances state 0->2 (sets flag); on index 0x19: advances toward state 3. Broadcasts the new quest state to all players via QUEST_SetStateAndBroadcast and re-syncs each player with Q05_SyncQuestStepToPlayer. In the non-intro path (pTextControl==1) at state 2 it finalizes once the player's quest record shows Completed, and at state 5 removes the player from the tracking list and deactivates the quest when no objects remain.
@@ -1085,6 +1087,6 @@ void __fastcall Objects_InitFn04_TowerTome(D2ObjectInitFnArg * pInitArg) {
 }
 
 static void * keep_005947e0 = (0 ? (QUEST_IsPlayerGUIDInTrackingList(*(D2QuestDataA1Q5Strc * *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
-static void * keep_00594fd3 = (0 ? (Q05_OnTowerComplete(*(::SGAMEDATA * *)0, *(D2QuestDataStrc * *)0), (void *)0) : (void *)0);
+static void * keep_00594fd0 = (0 ? (Q05_OnTowerComplete(*(D2QuestDataStrc * *)0), (void *)0) : (void *)0);
 
 }}}} // namespace D2Game::Quests::QUESTS::A1Q5

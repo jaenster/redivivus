@@ -895,8 +895,7 @@ int __stdcall SCmdProcess(char * szCommandLine, int bSkipFirstToken, pfnSCmdUnkn
 // @former-name SCMD_ParseCommandLineFromOS
 void __stdcall SCmdProcessCommandLine(pfnSCmdUnknownArgCallback pfnUnknownCallback, pfnSCmdErrorCallback pfnErrorCallback) {
     int bSkipFirstToken = 1;
-    LPSTR szCommandLine = GetCommandLineA();
-    SCmdProcess(szCommandLine, bSkipFirstToken, pfnUnknownCallback, pfnErrorCallback);
+    SCmdProcess(GetCommandLineA(), bSkipFirstToken, pfnUnknownCallback, pfnErrorCallback);
 }
 
 void StaticInit_gStormCmdListBackslash() {

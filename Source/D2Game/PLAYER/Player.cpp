@@ -837,15 +837,19 @@ void __fastcall COMMAND_playersX(DWORD count) {
 }
 
 int32_t __fastcall SERVER_GAME_CountPlayers(::SGAMEDATA * pGame) {
-    int PlayerCountFixed;
     int ModeZeroCount = 0;
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYER_CountLivingPlayersCallback, &ModeZeroCount);
-    if (!((uint8_t)(pGame->nGameType - SGAMETYPE_OBNET_HOST) > 2 || (PlayerCountFixed = PlayerCountOverride , PlayerCountOverride <= ModeZeroCount))) {
-      return PlayerCountFixed;
+    switch (pGame->nGameType) {
+      case SGAMETYPE_OBNET_HOST:
+      case SGAMETYPE_LAN_HOST:
+      case SGAMETYPE_SINGLEPLAYER:
+        if (PlayerCountOverride > ModeZeroCount) {
+          return PlayerCountOverride;
+        }
+        break;
     }
 
-    PlayerCountFixed = ModeZeroCount;
-    return PlayerCountFixed;
+    return ModeZeroCount;
 }
 
 // Applies the on-death gold penalty to the dying player pUnit2 (killer = pUnit). Penalty = min(level,20)% of (inventory gold + stash/bank gold). In single-player it is further capped so the player keeps at least level*500. If killed by another player (or a player-owned monster), the lost gold is moved into the bank (clamped to stash limit); otherwise it is dropped on the ground via GOLD_DropGoldFromInventory and inventory gold zeroed. Records the amount in UNITSTAT_goldlost. Note: uses a custom calling convention (pUnit2 in ESI, pGame/pUnit on stack).

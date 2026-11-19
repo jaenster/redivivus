@@ -324,16 +324,13 @@ BOOL __stdcall IsRightScreenOpen() {
     }
 
     check_inv_or_skilltree:
-    bFlagSet = ui::GetUIFlag(UI_INVENTORY);
-    if (!bFlagSet) {
-      gnMiniPanelRightScreen = ui::GetUIFlag(UI_SKILLTREE);
-      if (!gnMiniPanelRightScreen) {
-        return _bIsOpen;
-      }
+    if (ui::GetUIFlag(UI_INVENTORY) || ui::GetUIFlag(UI_SKILLTREE)) {
+      _bIsOpen = 1;
+      gnMiniPanelRightScreen = 1;
+    } else {
+      gnMiniPanelRightScreen = 0;
     }
-
-    gnMiniPanelRightScreen = 1;
-    return 1;
+    return _bIsOpen;
 }
 
 int __fastcall Unreferenced_0047ec20(int param_1) {

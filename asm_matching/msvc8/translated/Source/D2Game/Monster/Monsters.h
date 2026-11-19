@@ -131,7 +131,7 @@ void __fastcall MONSTER_OnDeathTryScheduleRevive(::SGAMEDATA * pGame, struct D2U
 // AI callback that resurrects a monster that has just died via SKILL_SelfResurrect. Validates that the monster is dead, lacks a passive-state lock, is not a quest-flagged boss, is not Champion-aligned, and that its current tile is unblocked; if all checks pass, casts self-resurrection, clears the NOXP/NOTC flags, increments AI argument 1, and schedules the next think event.
 void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2);
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 35. On death (or no unit) sets STATE_shatter.
-void __fastcall MONSTER_ShatterOnDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUModId, int32_t nParam2);
+void __fastcall MONSTER_ShatterOnDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUModId, int32_t nUnused);
 void __fastcall MONSTER_HandleMinionDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2);
 // Initialises level and attack-rating stats for a monster unit spawned via a UMOD (unit-modifier) entry. Derives monster level from the room's level record and the game difficulty/expansion flags stored in the pUModEntry struct, clamped to minimum 1. Sets UNITSTAT_level and UNITSTAT_tohit (capped at 90). For specific monster class IDs 0x146-0x171 (elemental enchanted types), also adds elemental damage stats (fire, lightning, poison) scaled from the computed level. Halts with an internal error if pUnit is not a monster.
 void __fastcall UMOD_SetLevelAndAttackRating(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2);

@@ -1174,7 +1174,12 @@ void __fastcall RENDERER_GLIDE_SetColorCombine(int32_t nCombineMode) {
 
 void __fastcall RENDERER_GLIDE_SetAlphaBlendMode(int32_t nAlphaBlendMode) {
     int nBlendMode;
-    if (!gnGlideAlphaBlendMode || (nBlendMode = gnGlideAlphaBlendMode , nAlphaBlendMode != gnGlideAlphaBlendMode)) {
+    if (!(!gnGlideAlphaBlendMode || (nBlendMode = gnGlideAlphaBlendMode , nAlphaBlendMode != gnGlideAlphaBlendMode))) {
+      gnGlideAlphaBlendMode = nBlendMode;
+      return;
+    }
+
+    {
       nBlendMode = nAlphaBlendMode;
       switch (nAlphaBlendMode) {
         case 1:
@@ -1198,7 +1203,6 @@ void __fastcall RENDERER_GLIDE_SetAlphaBlendMode(int32_t nAlphaBlendMode) {
         nBlendMode = nAlphaBlendMode;
       }
     }
-
     gnGlideAlphaBlendMode = nBlendMode;
 }
 

@@ -988,12 +988,12 @@ static void __stdcall OBJECT_DispatchShrineServerActivate(int * pMessage, D2Unit
       byShrineCode = pObjectsTxt->ShrineFunction;
     }
 
-    uint32_t nShrineCode = (uint32_t)byShrineCode;
+    int nShrineCode = byShrineCode;
     D2UnitStrc* pPlayer = CUnit::UNITS_FindClientSideUnit(*pMessage, UNIT_PLAYER);
     if (!pPlayer) {
       return;
     }
-    if (nShrineCode && (int)nShrineCode < nShrineDispatchTableSize && aShrineDispatchTable[nShrineCode].fpServerActivate) {
+    if (nShrineCode && nShrineCode < nShrineDispatchTableSize && aShrineDispatchTable[nShrineCode].fpServerActivate) {
       aShrineDispatchTable[nShrineCode].fpServerActivate(pUnit, pPlayer, pShrinesTxt);
     }
 

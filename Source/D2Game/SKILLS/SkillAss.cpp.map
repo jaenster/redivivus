@@ -526,7 +526,7 @@
         "D2UnitStrc",
         "eD2Skills"
       ],
-      "dh": "9b9041c5",
+      "dh": "72e885b5",
       "paramStorage": [
         [
           "pUnit",
@@ -566,7 +566,7 @@
         "eD2Skills",
         "uint8_t"
       ],
-      "dh": "bdb34b7c",
+      "dh": "1cf67541",
       "paramStorage": [
         [
           "pUnit",
@@ -1297,7 +1297,7 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "19533653",
+      "dh": "e038d067",
       "paramStorage": [
         [
           "pGame",

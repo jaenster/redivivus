@@ -2224,7 +2224,7 @@ void __fastcall SKILL_ProcessActiveStateEffects(D2UnitStrc * pUnit) {
     }
 
     int nStateListIdx = 0;
-    if ((short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x05Size <= 0) {
+    if (D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x05Size <= 0) {
       return;
     }
 
@@ -2249,7 +2249,7 @@ void __fastcall SKILL_ProcessActiveStateEffects(D2UnitStrc * pUnit) {
       }
 
       nStateListIdx++;
-    } while (nStateListIdx < (short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x05Size);
+    } while (nStateListIdx < D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x05Size);
 }
 
 void __fastcall SKILL_CreateMissileAtCoords(D2UnitStrc * pUnit, eMissilesId pMissileId, eD2Skills eSkill, int32_t nToHit, uint32_t nX, uint32_t nY) {

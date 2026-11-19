@@ -4150,7 +4150,7 @@ void __stdcall UI_DrawPlayerStateOverlays() {
     }
 
     pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_Net();
-    for (i = 0; i < (short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size; i++) {
+    for (i = 0; i < D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size; i++) {
       BOOL nActiveState;
       eState = (eD2States)D2Common::ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x04[i].nStateId;
       nActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayerUnit_lcl, eState);
@@ -8051,8 +8051,8 @@ void __stdcall INPUT_ConfigScreenOpen(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
-    uint16_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIFlagInit0, 6);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit3, 1);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit2, 1);
@@ -8060,7 +8060,7 @@ void __stdcall INPUT_ConfigScreenOpen(D2UIMouseMsgStrc * pMsg) {
     DRAW_RegisterDrawHandlers();
     gbUICtrlConfigKeyBindMode = 0;
     gnUICtrlConfigMouseButtonState = 1;
-    UI_UpdateConfigControlsState((uint32_t)nMouseX, (uint32_t)nMouseY);
+    UI_UpdateConfigControlsState(nMouseX, nMouseY);
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
@@ -8840,7 +8840,7 @@ static int32_t UI_GetStatDescriptionStringId(D2UnitStrc * nUnit) {
     if (iVar1 > 0) {
       uint32_t bIsOfType;
       do {
-        eItemType = (eD2ItemTypes)(uint16_t)aBonusStringIds[i].wSubIndex;
+        eItemType = (eD2ItemTypes)(uint16_t)aBonusStringIds[i].uKey.sKey.wSubIndex;
         nCandidateStringId = aBonusStringIds[i].nStatValue;
         if (eItemType == ITEMTYPE_None1 || (pLeftHandItem && (bIsOfType = D2Common::ITEMS::Items::ITEMS_IsA(pLeftHandItem, eItemType) , bIsOfType != 0) || pRightHandItem && (bIsOfType = D2Common::ITEMS::Items::ITEMS_IsA(pRightHandItem, eItemType) , bIsOfType != 0)) && nCandidateStringId > nBestStringId) {
           nBestStringId = nCandidateStringId;

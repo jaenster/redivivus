@@ -650,7 +650,7 @@ void __stdcall SetDamageStats(D2UnitStrc * pUnit, D2UnitStrc * pMissile, D2Missi
 
     int32_t nBonusCount = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0xb4, awBonusLayers, 0x80);
     for (iBonusLayer = 0; iBonusLayer < nBonusCount; iBonusLayer++) {
-      Stats::StatsEx::STATLIST_SetUnitStat(pMissile, UNITSTAT_damage_vs_montype, awBonusLayers[iBonusLayer].nStatValue, awBonusLayers[iBonusLayer].wSubIndex);
+      Stats::StatsEx::STATLIST_SetUnitStat(pMissile, UNITSTAT_damage_vs_montype, awBonusLayers[iBonusLayer].nStatValue, awBonusLayers[iBonusLayer].uKey.sKey.wSubIndex);
     }
 }
 

@@ -143,7 +143,7 @@ static D2GridScreenCoordinates gnTradePage2ScreenBottom = {0}; D2_STATIC_GUARD(g
 static D2GridScreenCoordinates gnTradePage2ScreenLeft = {0}; D2_STATIC_GUARD(gnTradePage2ScreenLeft, "gnTradePage2ScreenLeft");
 static D2GridScreenCoordinates gnTradePage2ScreenRight = {0}; D2_STATIC_GUARD(gnTradePage2ScreenRight, "gnTradePage2ScreenRight");
 static unsigned int gdwInvLastActionTickCount = {0}; D2_STATIC_GUARD(gdwInvLastActionTickCount, "gdwInvLastActionTickCount");
-int gnInvMouseX = 0; D2_GLOBAL_GUARD(gnInvMouseX, "gnInvMouseX");
+static int gnInvMouseX = 0; D2_STATIC_GUARD(gnInvMouseX, "gnInvMouseX");
 namespace D2Client { namespace UI { namespace Inv {
 D2GridScreenCoordinates pBigBankPageGridScreenCoordinates = {0}; D2_GLOBAL_GUARD(pBigBankPageGridScreenCoordinates, "D2Client::UI::Inv::pBigBankPageGridScreenCoordinates");
 uint8_t gaInvHighlightColors[5] = {0}; D2_GLOBAL_GUARD(gaInvHighlightColors, "D2Client::UI::Inv::gaInvHighlightColors");
@@ -158,7 +158,7 @@ D2GridScreenCoordinates pTransmogrifyBoxGridScreenCoordinates = {0}; D2_GLOBAL_G
 D2GridScreenCoordinates pInventoryGridScreenCoordinated = {0}; D2_GLOBAL_GUARD(pInventoryGridScreenCoordinated, "D2Client::UI::Inv::pInventoryGridScreenCoordinated");
 D2GridScreenCoordinates pHirelingGridScreenCoordinates = {0}; D2_GLOBAL_GUARD(pHirelingGridScreenCoordinates, "D2Client::UI::Inv::pHirelingGridScreenCoordinates");
 }}} // namespace D2Client::UI::Inv
-int gnInvMouseY = 0; D2_GLOBAL_GUARD(gnInvMouseY, "gnInvMouseY");
+static int gnInvMouseY = 0; D2_STATIC_GUARD(gnInvMouseY, "gnInvMouseY");
 static int gbInvNpcScreenCoordsInitialized = 0; D2_STATIC_GUARD(gbInvNpcScreenCoordsInitialized, "gbInvNpcScreenCoordsInitialized");
 static BOOL gbInvItemUnderCursorExists = 0; D2_STATIC_GUARD(gbInvItemUnderCursorExists, "gbInvItemUnderCursorExists");
 namespace D2Client { namespace UI { namespace Inv {

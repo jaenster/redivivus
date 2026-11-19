@@ -82,7 +82,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a4ebace1",
+      "dh": "b9aad598",
       "paramStorage": [
         [
           "pUnit",
@@ -1067,7 +1067,7 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "713cfd56"
+      "dh": "dd08e911"
     },
     {
       "name": "SKILLDESC_AccumulateAuraBonusDmg",
@@ -1100,7 +1100,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "36402b80",
+      "dh": "5cdc9d2b",
       "paramStorage": [
         [
           "pUnit",

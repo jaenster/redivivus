@@ -681,29 +681,24 @@ void __fastcall DRLGLEVEL_AdjustRoomCoordinates(D2DrlgLevelStrc * pLevel) {
 }
 
 D2RoomExStrc * __fastcall GetRoomOfCoord(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY) {
-    D2RoomExStrc* pRoom;
     if (!pLevel) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2fd);
       exit(-1);
-    } else {
-      BOOL bIsInside;
-      pRoom = pLevel->pRoomExFirst;
-      if (!pRoom) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2fe);
-        exit(-1);
-      }
-
-      do {
-        bIsInside = DrlgRoom::AreXYInsideCoordinates(&pRoom->sCoords, nX, nY);
-        if (bIsInside) {
-          return pRoom;
-        }
-
-        pRoom = pRoom->pRoomExNext;
-      } while (pRoom);
-
-      return nullptr;
     }
+
+    D2RoomExStrc* pFirstRoom = pLevel->pRoomExFirst;
+    if (!pFirstRoom) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2fe);
+      exit(-1);
+    }
+
+    for (D2RoomExStrc* pRoom = pFirstRoom; pRoom; pRoom = pRoom->pRoomExNext) {
+      if (DrlgRoom::AreXYInsideCoordinates(&pRoom->sCoords, nX, nY)) {
+        return pRoom;
+      }
+    }
+
+    return nullptr;
 }
 
 BOOL __fastcall LEVEL_CheckIfLevelIsTown(eD2LevelId eLevel) {
@@ -3157,11 +3152,12 @@ void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLeve
 
 void __fastcall DRLGGRID_OrFlagOnCellList(D2DrlgGridStrc * nGridPtr, D2DrlgVertexStrc * pnCellNode, int32_t nFlag) {
     int nY;
-    while (pnCellNode) {
+    D2DrlgVertexStrc* pCurrent = pnCellNode;
+    while (pCurrent) {
       int nCellX;
-      nCellX = pnCellNode->nPosX;
-      nY = pnCellNode->nPosY;
-      pnCellNode = pnCellNode->pNext;
+      nCellX = pCurrent->nPosX;
+      nY = pCurrent->nPosY;
+      pCurrent = pCurrent->pNext;
       if (nCellX >= 0 && nCellX < nGridPtr->nWidth && nY >= 0 && nY < nGridPtr->nHeight) {
         (*DrlgGrid::apFlagOperations[0])((int*)(nGridPtr->pCellsFlags + (nGridPtr->pCellsRowOffsets[nY] + nCellX)), nFlag);
       }

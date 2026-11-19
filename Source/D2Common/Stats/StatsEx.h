@@ -42,6 +42,17 @@ typedef void (__fastcall *fpStatListExChangeCb)(::SGAMEDATA * pGame, struct D2Un
 typedef void (__fastcall *pfnStatChangedCb)(struct D2UnitStrc * pUnit, uint16_t nStatId, uint32_t dwValue, struct D2UnitStrc * pOwner);
 #endif
 
+// Data types
+#ifndef D2_DEFINED_D2StatKeyStrc
+#define D2_DEFINED_D2StatKeyStrc
+struct D2StatKeyStrc {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ short wSubIndex;
+    /* 0x02 */ uint16_t wStatIndex;
+};
+
+#endif // D2_DEFINED_D2StatKeyStrc
 namespace D2Common::Stats::StatsEx {
 
 // Function declarations

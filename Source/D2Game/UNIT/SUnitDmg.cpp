@@ -748,7 +748,7 @@ static void __stdcall DAMAGE_ApplyMonsterTypeBonusDamage(D2UnitStrc * pUnit, D2D
     D2DataTableTxtStrc* pDataTbl = D2Common::ITEMS::Items::sgptDataTable;
     for (i = 0; i < nBonusCount; i++) {
       uint32_t nMonTypeId;
-      nMonTypeId = (uint32_t)(uint16_t)anBonusValues[i].wSubIndex;
+      nMonTypeId = (uint32_t)(uint16_t)anBonusValues[i].uKey.sKey.wSubIndex;
       if (nMonTypeId && (int)nMonTypeId < pDataTbl->nTxtMonTypeSize && nMonTypeCount > 0 && nMonTypeCount < pDataTbl->nTxtMonTypeSize && *(uint32_t*)((uint8_t*)pDataTbl->pTxtMonTypeUnknown + (pDataTbl->nMonTypeEquivRowDwords * nMonTypeCount + ((int)nMonTypeId >> 5)) * 4) & Fog::BitBuffer::gadwBitMasks[nMonTypeId & 0x1f]) {
         pDamage->dwEnDmgPct += anBonusValues[i].nStatValue;
         pDataTbl = D2Common::ITEMS::Items::sgptDataTable;
@@ -2772,7 +2772,7 @@ BOOL __fastcall DAMAGE_RollAttackHit(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, in
             nDexBonus = nBaseAR;
             if (nAR > 0) {
               do {
-                nToHitStat = DAMAGE_CheckMonsterTypeVsMonsterType((uint32_t)(uint16_t)aMonTypeStatEntries[nHitChance].wSubIndex, (int)nMonType);
+                nToHitStat = DAMAGE_CheckMonsterTypeVsMonsterType((uint32_t)(uint16_t)aMonTypeStatEntries[nHitChance].uKey.sKey.wSubIndex, (int)nMonType);
                 if (nToHitStat) {
                   nToHitBonus += aMonTypeStatEntries[nHitChance].nStatValue;
                 }
@@ -2888,7 +2888,7 @@ static int32_t DAMAGE_GetPassiveWeaponBlock(D2UnitStrc * pUnit) {
     if (iVar1 > 0) {
       uint32_t bTypeMatch;
       do {
-        eItemType = (eD2ItemTypes)(uint16_t)aStatEntries[i].wSubIndex;
+        eItemType = (eD2ItemTypes)(uint16_t)aStatEntries[i].uKey.sKey.wSubIndex;
         nBonusVal = aStatEntries[i].nStatValue;
         if (eItemType == ITEMTYPE_None1 || (pLeftWeapon && (bTypeMatch = D2Common::ITEMS::Items::ITEMS_IsA(pLeftWeapon, eItemType) , bTypeMatch != 0) || pRightWeapon && (bTypeMatch = D2Common::ITEMS::Items::ITEMS_IsA(pRightWeapon, eItemType) , bTypeMatch != 0)) && nBonusVal > nBestBonus) {
           nBestBonus = nBonusVal;

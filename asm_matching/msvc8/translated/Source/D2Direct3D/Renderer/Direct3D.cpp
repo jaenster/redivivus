@@ -463,10 +463,13 @@ namespace D2Direct3D { namespace Renderer {
 // D3DEnumPixelFormatsCallback. Parameter 1 is an LPDDPIXELFORMAT; parameter 2 is the device-caps flag word, and the 0x200 bit
 // it sets is the one Direct3DCallBack tests for "Supports 1555 textures".
 HRESULT __stdcall D3D_EnumTextureFormatsCallback(DDPIXELFORMAT * lpDDPixFmt, DWORD * pnDeviceFlags) {
-    if (pnDeviceFlags && lpDDPixFmt->dwFlags == gsD3DTextureDescTemplate[1] && lpDDPixFmt->dwRGBBitCount == gsD3DTextureDescTemplate[3] && lpDDPixFmt->dwRBitMask == gsD3DTextureDescTemplate[4] && lpDDPixFmt->dwGBitMask == gsD3DTextureDescTemplate[5] && lpDDPixFmt->dwBBitMask == gsD3DTextureDescTemplate[6] && lpDDPixFmt->dwRGBAlphaBitMask == gsD3DTextureDescTemplate[7]) {
-      *pnDeviceFlags |= Fog::BitBuffer::gadwBitMasks[9];
+    if (!(pnDeviceFlags && lpDDPixFmt->dwFlags == gsD3DTextureDescTemplate[1] && lpDDPixFmt->dwRGBBitCount == gsD3DTextureDescTemplate[3] && lpDDPixFmt->dwRBitMask == gsD3DTextureDescTemplate[4] && lpDDPixFmt->dwGBitMask == gsD3DTextureDescTemplate[5] && lpDDPixFmt->dwBBitMask == gsD3DTextureDescTemplate[6] && lpDDPixFmt->dwRGBAlphaBitMask == gsD3DTextureDescTemplate[7])) {
+      return 1;
     }
 
+    {
+      *pnDeviceFlags |= Fog::BitBuffer::gadwBitMasks[9];
+    }
     return 1;
 }
 
@@ -4521,7 +4524,7 @@ void __fastcall ClearScreen(BOOL bPartial) {
     nViewportLeft.top = 0;
     nViewportLeft.bottom = RENDERER_nWindowHeight;
     nViewportLeft.right = RENDERER_nWindowWidth;
-    g_pD3DViewport->lpVtbl->Clear2(g_pD3DViewport, 1, &nViewportLeft, 1, -16777216, 0, 0);
+    g_pD3DViewport->lpVtbl->Clear2(g_pD3DViewport, 1, &nViewportLeft, 1, -16777216, 0.0, 0);
 }
 
 // Calculates viewport rectangle based on screen panel layout. nScreenPanels=0: full screen. nScreenPanels=1: left half. nScreenPanels=2: right half. When nParam1=0, adds 32-pixel border and adjusts for status bar (47 pixels). When nParam1=1, applies quarter-width offset for panel centering (stored in pOffset).
@@ -5279,22 +5282,11 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
 
 // Builds 256x256 lighting lookup table at 0x00971740 for color modulation. Each entry[row][col] = clamp((row+col) / 255, 0, 255). Used by RENDERER_D3D_ApplyShadowTextureCoords and RENDERER_D3D_SetTextureStageColor to apply dynamic lighting to vertices. Total table size: 64KB.
 void __stdcall RENDERER_D3D_InitLightingTable() {
-    int nRowColProduct;
-    uint8_t* pTableRow = g_aLightingTable;
-    int nRow = 0;
-    do {
-      int nCol;
-      nCol = 0;
-      nRowColProduct = 0;
-      do {
-        pTableRow[nCol] = (char)(nRowColProduct / 0xff);
-        nCol++;
-        nRowColProduct += nRow;
-      } while (nCol < 0x100);
-
-      pTableRow += 0x100;
-      nRow++;
-    } while ((intptr_t)pTableRow < (intptr_t)((char*)&g_aLightingTable + sizeof(g_aLightingTable)));
+    for (int nRow = 0; nRow < 256; nRow++) {
+      for (int nCol = 0; nCol < 256; nCol++) {
+        g_aLightingTable[nRow * 256 + nCol] = (uint8_t)((nRow * nCol) / 255);
+      }
+    }
 }
 
 void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue) {

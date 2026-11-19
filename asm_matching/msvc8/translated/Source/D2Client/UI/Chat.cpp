@@ -930,7 +930,12 @@ static char * CHAT_ExtractWhisperTarget(char * szText) {
 }
 
 static void CHAT_ExtractWhisperPrefix(char * szInput, char * szOutPrefix) {
-    if (*szInput != '*') {
+    if (*szInput == '*') {
+      Storm::Source::SSTR::SStrCopy(szOutPrefix, szInput, 0x7fffffff);
+      return;
+    }
+
+    {
       char* pStar;
       pStar = Storm::Source::SSTR::SStrChr(szInput, '*');
       if (pStar) {
@@ -939,7 +944,6 @@ static void CHAT_ExtractWhisperPrefix(char * szInput, char * szOutPrefix) {
         return;
       }
     }
-
     Storm::Source::SSTR::SStrCopy(szOutPrefix, szInput, 0x7fffffff);
 }
 

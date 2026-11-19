@@ -461,8 +461,8 @@ BOOL __fastcall SaveStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * p
         pDataTable = D2Common::ITEMS::Items::sgptDataTable;
         if (nBitStreamLen > 0) {
           do {
-            nStatId = (uint32_t)statsBuf[iStat].wStatIndex;
-            nSubIndex = statsBuf[iStat].wSubIndex;
+            nStatId = (uint32_t)statsBuf[iStat].uKey.sKey.wStatIndex;
+            nSubIndex = statsBuf[iStat].uKey.sKey.wSubIndex;
             nRawStatValue = statsBuf[iStat].nStatValue;
             pStatCostTxt = (int)nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;
             if (pStatCostTxt) {

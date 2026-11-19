@@ -1936,11 +1936,11 @@ void __fastcall TXT_AllocTxt_states(D2PoolManagerStrc * pMemory) {
       nStateIdx++;
     } while ((int)nStateIdx < 0x28);
 
-    DATATBLS_BuildStatesDataList(&MonsterTbls::sgtDataTable.pAllStatesDataTblFlag0x04, (short int*)&MonsterTbls::sgtDataTable.nAllStatesDataTblFlag0x04Size, 4);
-    DATATBLS_BuildStatesDataList(&MonsterTbls::sgtDataTable.pAllStatesDataTblFlag0x0B, (short int*)&MonsterTbls::sgtDataTable.nAllStatesDataTblFlag0x0BSize, 0xb);
-    DATATBLS_BuildStatesDataList((D2AllStatesDataTbl**)&MonsterTbls::sgtDataTable.pAllStatesDataTblFlag0x10, (short int*)&MonsterTbls::sgtDataTable.nAllStatesDataTblFlag0x10Size, 0x10);
-    DATATBLS_BuildStatesDataList((D2AllStatesDataTbl**)&MonsterTbls::sgtDataTable.pAllStatesDataTblFlag0x05, (short int*)&MonsterTbls::sgtDataTable.nAllStatesDataTblFlag0x05Size, 5);
-    TXT_States_AllocItemTypesStateDataTable((D2AllStatesDataTbl**)&MonsterTbls::sgtDataTable.pStatesItemTypesDataTbl, (short int*)&MonsterTbls::sgtDataTable.nStatesItemTypesDataTblSize, 0x2a);
+    DATATBLS_BuildStatesDataList(&MonsterTbls::sgtDataTable.pAllStatesDataTblFlag0x04, &MonsterTbls::sgtDataTable.nAllStatesDataTblFlag0x04Size, 4);
+    DATATBLS_BuildStatesDataList(&MonsterTbls::sgtDataTable.pAllStatesDataTblFlag0x0B, &MonsterTbls::sgtDataTable.nAllStatesDataTblFlag0x0BSize, 0xb);
+    DATATBLS_BuildStatesDataList((D2AllStatesDataTbl**)&MonsterTbls::sgtDataTable.pAllStatesDataTblFlag0x10, &MonsterTbls::sgtDataTable.nAllStatesDataTblFlag0x10Size, 0x10);
+    DATATBLS_BuildStatesDataList((D2AllStatesDataTbl**)&MonsterTbls::sgtDataTable.pAllStatesDataTblFlag0x05, &MonsterTbls::sgtDataTable.nAllStatesDataTblFlag0x05Size, 5);
+    TXT_States_AllocItemTypesStateDataTable((D2AllStatesDataTbl**)&MonsterTbls::sgtDataTable.pStatesItemTypesDataTbl, &MonsterTbls::sgtDataTable.nStatesItemTypesDataTblSize, 0x2a);
 }
 
 // Frees all states.txt-derived allocations from sgtDataTable: the D2StatesDataTbls block, four D2AllStatesDataTbl flag-indexed blocks (0x04, 0x0B, 0x10, 0x05), zeroes the single-state array, frees pTxtStates (adjusting the pointer by -1 row if gpaMiscTxtTables is set), and releases the Excel txt-link. Sets each pointer to null after freeing.

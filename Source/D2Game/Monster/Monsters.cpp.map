@@ -2072,7 +2072,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9a56c93d",
+      "dh": "745ec645",
       "paramStorage": [
         [
           "pGame",
@@ -2087,7 +2087,7 @@
           "Stack[0x4]:4"
         ],
         [
-          "nParam2",
+          "nUnused",
           "Stack[0x8]:4"
         ]
       ]

@@ -819,7 +819,11 @@ static int MISSILE_CheckAndDecrementPierce(D2UnitStrc * pUnit) {
     } else {
       pMissileTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileClassId;
     }
-    if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+    if (!(*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
+      return nResult;
+    }
+
+    {
       int nPierceCount;
       nPierceCount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_pierce_idx, 0);
       if (nPierceCount) {
@@ -827,7 +831,6 @@ static int MISSILE_CheckAndDecrementPierce(D2UnitStrc * pUnit) {
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, nPierceCount - 1, 0);
       }
     }
-
     return nResult;
 }
 

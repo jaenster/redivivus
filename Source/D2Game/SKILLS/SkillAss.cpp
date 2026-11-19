@@ -458,7 +458,7 @@ void __fastcall SKILLASS_ApplyProgressiveDamageToTarget(D2UnitStrc * pUnit, D2Da
     }
 
     int nChargeStateIdx = 0;
-    if ((short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size <= 0) {
+    if (D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size <= 0) {
       return;
     }
 
@@ -479,7 +479,7 @@ void __fastcall SKILLASS_ApplyProgressiveDamageToTarget(D2UnitStrc * pUnit, D2Da
       }
 
       nChargeStateIdx++;
-    } while (nChargeStateIdx < (short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size);
+    } while (nChargeStateIdx < D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size);
 }
 
 // Iterates all active charge-up states on pUnit (sgptDataTable->pAllStatesDataTblFlag0x04) and, for each that is active and has a valid skill, dispatches to the appropriate handler based on pSkillTxt->prgdam: 2=AddChargeUpDamageRange, 3=ApplyChargeUpDamage, 4=ApplyChargeUpConvertDamage. Only runs if pDamage result-flag bit 0 is set.
@@ -493,7 +493,7 @@ void __fastcall SKILLASS_DispatchChargeUpDamage(D2UnitStrc * pUnit, D2DamageStrc
     }
 
     int nChargeStateIdx = 0;
-    if ((short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size <= 0) {
+    if (D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size <= 0) {
       return;
     }
 
@@ -531,7 +531,7 @@ void __fastcall SKILLASS_DispatchChargeUpDamage(D2UnitStrc * pUnit, D2DamageStrc
       }
 
       nChargeStateIdx++;
-    } while (nChargeStateIdx < (short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size);
+    } while (nChargeStateIdx < D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size);
 }
 
 uint32_t __fastcall SKILLS_AreaCallback_ApplyCopiedDamage(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
@@ -1370,7 +1370,7 @@ void __fastcall SKILLASS_ReleaseChargeUpAttack(::SGAMEDATA * pGame, D2UnitStrc *
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    for (nStateIdxLoop = 0; nStateIdxLoop < (short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size; nStateIdxLoop = nChargeLvl + 1) {
+    for (nStateIdxLoop = 0; nStateIdxLoop < D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size; nStateIdxLoop = nChargeLvl + 1) {
       ::SGAMEDATA* pGameCopy = pGame;
       nChargeLvl = nStateIdxLoop;
       bInMeleeRange = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)D2Common::ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x04[nStateIdxLoop].nStateId);

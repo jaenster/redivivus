@@ -647,7 +647,7 @@ static void __stdcall SUNITINACTIVE_DeactivateMonster(::SGAMEDATA * pGame, D2Uni
       return;
     }
 
-    for (nTmpVal = 0; nTmpVal < (short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x0BSize; nTmpVal++) {
+    for (nTmpVal = 0; nTmpVal < D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x0BSize; nTmpVal++) {
       nStateId = D2Common::ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x0B[nTmpVal].nStateId;
       nAiCmdType = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nStateId);
       if (nAiCmdType) {

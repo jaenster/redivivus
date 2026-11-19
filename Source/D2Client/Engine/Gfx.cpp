@@ -264,7 +264,15 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_3(D2UnitStrc * p)
 
 D2InventoryStrc * __fastcall CLIENT_GetEffectiveInventory(D2UnitStrc * pUnit, int * pUnit2) {
     D2UnitStrc* pOwnerUnit;
-    if (pUnit && FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
+    if (!(pUnit && FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit))) {
+      if (pUnit2) {
+        *pUnit2 = 0;
+      }
+
+      return pUnit->pInventory;
+    }
+
+    {
       BOOL bHasStateFlag;
       bHasStateFlag = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25);
       if (bHasStateFlag) {

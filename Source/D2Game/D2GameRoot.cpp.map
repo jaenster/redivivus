@@ -22,14 +22,14 @@
         "D2ClientStrc *",
         "uint32_t"
       ],
-      "dh": "ca336454",
+      "dh": "6a5ab5b7",
       "paramStorage": [
         [
           "pClient",
           "ECX:4"
         ],
         [
-          "pdwClientOut",
+          "ppClientOut",
           "EDX:4"
         ]
       ]

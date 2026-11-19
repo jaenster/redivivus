@@ -1045,6 +1045,7 @@ int32_t __fastcall ITEMS_CalcChargedSkillPriceModifier(D2UnitStrc * pUnit, int32
     int nCostTmp;
     int nMaxCharges;
     uint32_t uVar1;
+    uint32_t uVar2;
     D2StatStrc aStatValues[64];
     int32_t nNumStats = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0xcc, aStatValues, 0x40);
     int nStatIdx = 0;
@@ -1052,12 +1053,13 @@ int32_t __fastcall ITEMS_CalcChargedSkillPriceModifier(D2UnitStrc * pUnit, int32
     if (nNumStats > 0) {
       do {
         int nSkillLevel;
-        nSkillLevel = (int)(uint32_t)(uint16_t)aStatValues[nStatIdx].wSubIndex >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
-        uVar1 = aStatValues[nStatIdx].nStatValue & 0xff;
+        uVar1 = (uint32_t)(uint16_t)aStatValues[nStatIdx].uKey.sKey.wSubIndex;
+        nSkillLevel = (int)uVar1 >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
+        uVar2 = aStatValues[nStatIdx].nStatValue & 0xff;
         nMaxCharges = aStatValues[nStatIdx].nStatValue >> 8;
-        pSkillsTxt = (int)uVar1 < nMaxCharges && nSkillLevel >= 0 && nSkillLevel < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillLevel : nullptr;
+        pSkillsTxt = (int)uVar2 < nMaxCharges && nSkillLevel >= 0 && nSkillLevel < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillLevel : nullptr;
         if (pSkillsTxt) {
-          nSkillLevel = (sgptDataTable->dwChargedSkillLevelMask & (uint32_t)(uint16_t)aStatValues[nStatIdx].wSubIndex) + 2 + (int)pSkillsTxt->reqlevel / 6 * 2;
+          nSkillLevel = (sgptDataTable->dwChargedSkillLevelMask & uVar1) + 2 + (int)pSkillsTxt->reqlevel / 6 * 2;
           nCostTmp = nSkillLevel * nMultiplier;
           if (nCostTmp <= 0xffff || !pSkillsTxt->costmult) {
             nSkillLevel = pSkillsTxt->costmult * nSkillLevel * nMultiplier;
@@ -1066,7 +1068,7 @@ int32_t __fastcall ITEMS_CalcChargedSkillPriceModifier(D2UnitStrc * pUnit, int32
             nSkillLevel = nCostTmp / 1024 * pSkillsTxt->costmult;
           }
 
-          nTotalModifier += (int)((nMaxCharges - uVar1) * (nSkillLevel + pSkillsTxt->costadd)) / nMaxCharges;
+          nTotalModifier += (int)((nMaxCharges - uVar2) * (nSkillLevel + pSkillsTxt->costadd)) / nMaxCharges;
         }
 
         nStatIdx++;
@@ -1111,8 +1113,8 @@ void __fastcall ITEM_AddStatCostsToPrices(D2UnitStrc * pItem, int * pnSellPrice,
     if (nStatCount > 0) {
       int32_t nStatVal;
       for (; nStatIdx < nStatCount; nStatIdx++ , pItem = pItemSaved , pnSellPrice = pnSellPriceSaved) {
-        eUnitStat = (eD2UnitStat)aStatBuf[nStatIdx].wStatIndex;
-        nStatVal = Stats::StatsEx::STATLIST_GetStatBonusFromLists(pItem, eUnitStat, (uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex);
+        eUnitStat = (eD2UnitStat)aStatBuf[nStatIdx].uKey.sKey.wStatIndex;
+        nStatVal = Stats::StatsEx::STATLIST_GetStatBonusFromLists(pItem, eUnitStat, (uint32_t)(uint16_t)aStatBuf[nStatIdx].uKey.sKey.wSubIndex);
         pStatCostTxt = nStatVal && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
         if (pStatCostTxt) {
           if (pStatCostTxt->valshift) {
@@ -1121,9 +1123,19 @@ void __fastcall ITEM_AddStatCostsToPrices(D2UnitStrc * pItem, int * pnSellPrice,
 
           switch (pStatCostTxt->encode) {
             case '\x01':
-              if (false || (int)(uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex >= sgptDataTable->nTxtSkillsCount || (pSkillsTxt = sgptDataTable->pTxtSkills + (uint16_t)aStatBuf[nStatIdx].wSubIndex , !pSkillsTxt)) {
-                continue;
-              }
+              nAvgDmgCost = (uint32_t)(uint16_t)aStatBuf[nStatIdx].uKey.sKey.wSubIndex;
+            if (false) {
+              continue;
+            }
+            if ((int)nAvgDmgCost >= sgptDataTable->nTxtSkillsCount) {
+              continue;
+            }
+
+            pSkillsTxt = sgptDataTable->pTxtSkills + nAvgDmgCost;
+            if (!pSkillsTxt) {
+              continue;
+            }
+
             nCostTmp = *pnSellPriceSaved * nStatVal;
             if (nCostTmp <= 0xffff || !pSkillsTxt->costmult) {
               nCostTmp = pSkillsTxt->costmult;
@@ -1147,8 +1159,9 @@ void __fastcall ITEM_AddStatCostsToPrices(D2UnitStrc * pItem, int * pnSellPrice,
             case '\x02':
 
             case '\x03':
-              nCostTmp = (int)(uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
-            nAvgDmgCost = sgptDataTable->dwChargedSkillLevelMask & (uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex;
+              nAvgDmgCost = (uint32_t)(uint16_t)aStatBuf[nStatIdx].uKey.sKey.wSubIndex;
+            nCostTmp = (int)nAvgDmgCost >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
+            nAvgDmgCost = sgptDataTable->dwChargedSkillLevelMask & nAvgDmgCost;
             if (nCostTmp < 0 || nCostTmp >= sgptDataTable->nTxtSkillsCount) {
               pSkillsTxt = 0;
             } else {
@@ -3300,8 +3313,10 @@ uint32_t __fastcall ITEM_CalcRequiredLevel(D2UnitStrc * pUnit, D2UnitStrc * pUni
 
     nSkillOnItemCount = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0x6b, anSkillOnItemBuf, 0x40);
     for (nIdx = 0; nIdx < nSkillOnItemCount; nIdx++) {
-      if ((int)(uint32_t)(uint16_t)anSkillOnItemBuf[nIdx].wSubIndex < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + (uint16_t)anSkillOnItemBuf[nIdx].wSubIndex) {
-        nCandidateLvlReq = (int)sgptDataTable->pTxtSkills[(uint16_t)anSkillOnItemBuf[nIdx].wSubIndex].reqlevel;
+      uAffixIdx = (uint32_t)(uint16_t)anSkillOnItemBuf[nIdx].uKey.sKey.wSubIndex;
+      D2SkillsTxt* pSkillsTxt = (int)uAffixIdx < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + uAffixIdx : nullptr;
+      if (pSkillsTxt) {
+        nCandidateLvlReq = (int)pSkillsTxt->reqlevel;
         if (nCandidateLvlReq > nMaxLvlReq) {
           nMaxLvlReq = nCandidateLvlReq;
         }
@@ -3310,17 +3325,16 @@ uint32_t __fastcall ITEM_CalcRequiredLevel(D2UnitStrc * pUnit, D2UnitStrc * pUni
 
     nSkillOnItemCount = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0x61, anSkillOnItemBuf, 0x40);
     for (nAffixByteOffset = 0; nAffixByteOffset < nSkillOnItemCount; nAffixByteOffset++) {
-      if ((int)(uint32_t)(uint16_t)anSkillOnItemBuf[nAffixByteOffset].wSubIndex < sgptDataTable->nTxtSkillsCount) {
-        pSkillTxt = sgptDataTable->pTxtSkills + (uint16_t)anSkillOnItemBuf[nAffixByteOffset].wSubIndex;
-        if (pSkillTxt) {
-          if (!pUnit2 || (eUnitType = Units::GetType(pUnit2) , eUnitType != UNIT_PLAYER) || (cCharClass = pSkillTxt->charclass , cCharClass < '\0' || cCharClass >= 7 || (uAffixIdx = Units::GetClassId(pUnit2) , (uint8_t)uAffixIdx != (int)cCharClass))) {
-            nClassId = (int)pSkillTxt->reqlevel + 6;
-          } else {
-            nClassId = (uint32_t)pSkillTxt->reqlevel;
-          }
-          if ((int)nClassId > nMaxLvlReq) {
-            nMaxLvlReq = nClassId;
-          }
+      uAffixIdx = (uint32_t)(uint16_t)anSkillOnItemBuf[nAffixByteOffset].uKey.sKey.wSubIndex;
+      pSkillTxt = (int)uAffixIdx < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + uAffixIdx : nullptr;
+      if (pSkillTxt) {
+        if (!pUnit2 || (eUnitType = Units::GetType(pUnit2) , eUnitType != UNIT_PLAYER) || (cCharClass = pSkillTxt->charclass , cCharClass < '\0' || cCharClass >= 7 || (uAffixIdx = Units::GetClassId(pUnit2) , (uint8_t)uAffixIdx != (int)cCharClass))) {
+          nClassId = (int)pSkillTxt->reqlevel + 6;
+        } else {
+          nClassId = (uint32_t)pSkillTxt->reqlevel;
+        }
+        if ((int)nClassId > nMaxLvlReq) {
+          nMaxLvlReq = nClassId;
         }
       }
     }
@@ -3779,7 +3793,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
     if (pUnit) {
       D2StatesTxt* pDVar1;
       nStateOrAffixIdx = 0;
-      if ((short int)sgptDataTable->nStatesItemTypesDataTblSize > 0) {
+      if (sgptDataTable->nStatesItemTypesDataTblSize > 0) {
         do {
           eStateId = (eD2States)(short int)sgptDataTable->pStatesItemTypesDataTbl[nStateOrAffixIdx];
           eUnitState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eStateId);
@@ -3797,7 +3811,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
           }
 
           nStateOrAffixIdx++;
-        } while (nStateOrAffixIdx < (short int)sgptDataTable->nStatesItemTypesDataTblSize);
+        } while (nStateOrAffixIdx < sgptDataTable->nStatesItemTypesDataTblSize);
       }
     }
     if (pItem->eUnitType == UNIT_ITEM && pItem->pUnitData.pUnitDataItem) {
@@ -6012,25 +6026,25 @@ static void __stdcall ITEMS_CalcStaffModsPriceModifier(int * pBuy, int * pSell, 
     uint32_t nRepairDeltaAccum = 0;
     int32_t iVar1 = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pItem, 0x6b, aSkillBonusBuf, 0x40);
     for (i = 0; i < iVar1; i++) {
-      if ((int)(uint32_t)(uint16_t)aSkillBonusBuf[i].wSubIndex < sgptDataTable->nTxtSkillsCount) {
-        pSkillTxt = sgptDataTable->pTxtSkills + (uint16_t)aSkillBonusBuf[i].wSubIndex;
-        if (pSkillTxt) {
-          nSkillLvlMult = aSkillBonusBuf[i].nStatValue * 2 - 1;
-          if (*pBuy <= 0xffff || !pSkillTxt->costmult) {
-            nSkillCostMult = pSkillTxt->costmult;
-            nCostAdd = pSkillTxt->costadd;
-            nCostMult = nSkillCostMult * *pBuy;
-            nBuyDelta += (nCostMult / 1024 + nCostAdd) * nSkillLvlMult;
-            nSellDeltaAccum += (*pSell * nSkillCostMult / 4096 + nCostAdd) * nSkillLvlMult;
-            nRepairDeltaAccum += (*pRepair * nSkillCostMult / 1024 + nCostAdd) * nSkillLvlMult;
-          } else {
-            nSkillCostMult = pSkillTxt->costmult;
-            nCostAdd = pSkillTxt->costadd;
-            nCostMult = nSkillCostMult / 1024;
-            nBuyDelta += (nCostMult * *pBuy + nCostAdd) * nSkillLvlMult;
-            nSellDeltaAccum += (nSkillCostMult / 4096 * *pSell + nCostAdd) * nSkillLvlMult;
-            nRepairDeltaAccum += (*pRepair * nCostMult + nCostAdd) * nSkillLvlMult;
-          }
+      uint32_t uVar2;
+      uVar2 = (uint32_t)(uint16_t)aSkillBonusBuf[i].uKey.sKey.wSubIndex;
+      pSkillTxt = (int)uVar2 < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + uVar2 : nullptr;
+      if (pSkillTxt) {
+        nSkillLvlMult = aSkillBonusBuf[i].nStatValue * 2 - 1;
+        if (*pBuy <= 0xffff || !pSkillTxt->costmult) {
+          nSkillCostMult = pSkillTxt->costmult;
+          nCostAdd = pSkillTxt->costadd;
+          nCostMult = nSkillCostMult * *pBuy;
+          nBuyDelta += (nCostMult / 1024 + nCostAdd) * nSkillLvlMult;
+          nSellDeltaAccum += (*pSell * nSkillCostMult / 4096 + nCostAdd) * nSkillLvlMult;
+          nRepairDeltaAccum += (*pRepair * nSkillCostMult / 1024 + nCostAdd) * nSkillLvlMult;
+        } else {
+          nSkillCostMult = pSkillTxt->costmult;
+          nCostAdd = pSkillTxt->costadd;
+          nCostMult = nSkillCostMult / 1024;
+          nBuyDelta += (nCostMult * *pBuy + nCostAdd) * nSkillLvlMult;
+          nSellDeltaAccum += (nSkillCostMult / 4096 * *pSell + nCostAdd) * nSkillLvlMult;
+          nRepairDeltaAccum += (*pRepair * nCostMult + nCostAdd) * nSkillLvlMult;
         }
       }
     }
@@ -7546,8 +7560,8 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
           i = 0;
           if (nCopiedCount > 0) {
             for (; i < nCopiedCount; i++) {
-              eUnitStat = (eD2UnitStat)aStat[i].wStatIndex;
-              nBitValue = (uint32_t)(uint16_t)aStat[i].wSubIndex;
+              eUnitStat = (eD2UnitStat)aStat[i].uKey.sKey.wStatIndex;
+              nBitValue = (uint32_t)(uint16_t)aStat[i].uKey.sKey.wSubIndex;
               if (false || (int)eUnitStat >= sgptDataTable->nTxtItemStatCostSize) {
                 pItemStatCostLine = 0;
               } else {

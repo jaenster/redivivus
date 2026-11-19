@@ -18,13 +18,13 @@
 
 namespace D2Game {
 
-void __fastcall CLIENT_GetSaveCompleteClient(D2ClientStrc * pClient, D2ClientStrc * * pdwClientOut) {
+void __fastcall CLIENT_GetSaveCompleteClient(D2ClientStrc * pClient, D2ClientStrc * * ppClientOut) {
     uint32_t dwSaveComplete = GAME::Clients::CLIENT_GetSaveCompleteFlag(pClient);
     if (!dwSaveComplete) {
       return;
     }
 
-    *pdwClientOut = pClient;
+    *ppClientOut = pClient;
 }
 
 // Callback for iterating active clients: if *pnParam is 0 (not yet assigned), writes nParam into *pnParam. Used as a visitor to capture the first active client slot index.

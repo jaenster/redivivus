@@ -258,20 +258,12 @@ D2DrlgTileDataStrc * __stdcall GetTileDataFromAct(D2DrlgActStrc * pDrlgAct) {
 }
 
 void __stdcall DRLGROOM_GetRoomCoordinates(D2RoomStrc * pRoom, D2DrlgRoomCoordsStrc * pCoords) {
-    int nDwordsLeft;
     if (!pCoords) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd1);
       exit(-1);
     }
     if (!pRoom) {
-      pCoords->dwXStart = 0;
-      pCoords->dwYStart = 0;
-      pCoords->dwXSize = 0;
-      pCoords->dwYSize = 0;
-      pCoords->sTileRect.left = 0;
-      pCoords->sTileRect.top = 0;
-      pCoords->sTileRect.right = 0;
-      pCoords->sTileRect.bottom = 0;
+      memset(pCoords, 0, sizeof(*pCoords));
       return;
     }
 
@@ -919,7 +911,7 @@ BOOL __stdcall DRLGROOM_TestRoomCanUntile(D2DrlgActStrc * pDrlgAct, D2RoomStrc *
 
 uint32_t __stdcall Is0x44Above2(D2RoomStrc * pRoom) {
     uint8_t byVal = Get0x44FromRoomEx(pRoom->pRoomEx);
-    return (uint32_t)(2 < byVal);
+    return (uint32_t)(byVal >= 3);
 }
 
 // Checks if all near rooms in pRoom's adjacency list have the active flag (0x1) set, and that the count matches the RoomEx near count. Used by SendPacketsToClients.
@@ -1484,29 +1476,23 @@ void __stdcall GetPortalLevelArrayFromPortalFlags(D2PoolManagerStrc * pMemory, i
       exit(-1);
     }
 
-    int nBitIdx = 0;
-    if (nTotalLevels > 0) {
-      do {
-        if (nFlags & dwBitMask) {
-          anMatchedLevels[nMatchCount] = pLvlTblsArray[nBitIdx];
-          nMatchCount++;
-        }
-
-        nBitIdx++;
-        dwBitMask *= 2;
-      } while (nBitIdx < nTotalLevels);
-
-      if (nMatchCount) {
-        pAllocatedLevels = (int*)D2_ALLOC_POOL_AT(pMemory, nMatchCount * 4, ".\\DUNGEON\\Dungeon.cpp", 0x614);
-        *ppLevels = pAllocatedLevels;
-        memcpy(pAllocatedLevels, anMatchedLevels, nMatchCount * 4);
-        *pnLevels = nMatchCount;
-        return;
+    for (int nBitIdx = 0; nBitIdx < nTotalLevels; nBitIdx++) {
+      if (nFlags & dwBitMask) {
+        anMatchedLevels[nMatchCount] = pLvlTblsArray[nBitIdx];
+        nMatchCount++;
       }
+
+      dwBitMask *= 2;
     }
 
-    *ppLevels = 0;
-    *pnLevels = 0;
+    if (nMatchCount) {
+      pAllocatedLevels = (int*)D2_ALLOC_POOL_AT(pMemory, nMatchCount * 4, ".\\DUNGEON\\Dungeon.cpp", 0x614);
+      *ppLevels = pAllocatedLevels;
+      memcpy(pAllocatedLevels, anMatchedLevels, nMatchCount * 4);
+    } else {
+      *ppLevels = 0;
+    }
+    *pnLevels = nMatchCount;
 }
 
 int32_t __stdcall GetPortalFlagFromLevelId(eD2LevelId eLevel) {

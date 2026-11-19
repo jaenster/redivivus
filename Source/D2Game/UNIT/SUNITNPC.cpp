@@ -1169,10 +1169,13 @@ void __fastcall SUNITNPC_UpdateHirelingPosition(::SGAMEDATA * pGame, D2UnitStrc 
     PLAYER::PlayerPets::PETS_ManagePetsByType(pGame, pPlayer, (uint16_t)nPosX, (uint16_t)wPosY);
 }
 
-void __fastcall SUNITNPC_RefreshHirelingItemStats(D2UnitStrc * pHireling) {
+BOOL __fastcall SUNITNPC_RefreshHirelingItemStats(D2UnitStrc * pHireling) {
     D2UnitStrc* pCarriedItem;
-    if (!(pHireling && pHireling->pInventory)) {
-      return;
+    if (!pHireling) {
+      return 0;
+    }
+    if (!pHireling->pInventory) {
+      return 0;
     }
 
     D2UnitStrc* pOwnerUnit = pHireling;
@@ -1193,6 +1196,8 @@ void __fastcall SUNITNPC_RefreshHirelingItemStats(D2UnitStrc * pHireling) {
 
       pCurItem = pNextItem;
     }
+
+    return 1;
 }
 
 // Creates and hires a mercenary unit for player pUnit. Validates act/expansion eligibility, resolves the HirelingTxt row (by nNameIdOverride or the act/difficulty table), clamps nMercNameId to the valid name range, marks the seller NPC slot, spawns a UNIT_MONSTER via CreateUnit, then finalises hiring via MERC_HireAndReplaceMerc. Returns the new merc unit or null on failure.
@@ -2549,18 +2554,8 @@ BOOL __fastcall SUNITNPC_DiscardTradeListRolls(::SGAMEDATA * pGame, D2UnitStrc *
     D2SeedStrc* pNpcControl = sunitproxy::SUNITPROXY_GetNpcControl(pGame);
     int nAttempts = 0;
     uint32_t nLevel = SUNITNPC_GetActCappedLevel(pGame, pUnit, nQueueEntryField0);
-    while (true) {
-      int bSuccess;
-      if (nAttempts >= 5) {
-        return 0;
-      }
-
-      bSuccess = SUNITNPC_RollTradeListItemCode(pGame, pUnit, pNpcControl, nLevel, &dwItemCode, &dwTradeEntryValue);
-      if (!bSuccess) {
-        break;
-      }
-
-      nAttempts++;
+    while ((nAttempts < 5 ? SUNITNPC_RollTradeListItemCode(pGame, pUnit, pNpcControl, nLevel, &dwItemCode, &dwTradeEntryValue) : 0) != 0) {
+      ++nAttempts;
     }
 
     return 0;

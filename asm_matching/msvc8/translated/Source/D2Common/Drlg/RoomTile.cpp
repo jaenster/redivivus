@@ -1184,21 +1184,22 @@ int __fastcall Unreferenced_0066f030(D2RoomStrc * pRoom) {
 // @sourcefile .\DRLG\RoomTile.cpp
 static void DRLGROOMTILE_FreeTileArrays(D2RoomExStrc * pLevelCtx, D2PoolManagerStrc * pPoolManagerStrc) {
     D2DrlgTileGridStrc* pTileGrid = pLevelCtx->pRoomTiles;
-    if (!(pTileGrid && &pTileGrid->sRoomTiles)) {
+    D2DrlgRoomTilesStrc* pTiles = pTileGrid ? &pTileGrid->sRoomTiles : 0;
+    if (!pTiles) {
       return;
     }
 
-    D2DrlgTileDataStrc* pFloorTiles = pTileGrid->sRoomTiles.pWallTiles;
+    D2DrlgTileDataStrc* pFloorTiles = pTiles->pWallTiles;
     if (pFloorTiles) {
       D2_FREE_POOL_AT(pPoolManagerStrc, pFloorTiles, ".\\DRLG\\RoomTile.cpp", 0x592);
     }
 
-    pFloorTiles = pTileGrid->sRoomTiles.pFloorTiles;
+    pFloorTiles = pTiles->pFloorTiles;
     if (pFloorTiles) {
       D2_FREE_POOL_AT(pPoolManagerStrc, pFloorTiles, ".\\DRLG\\RoomTile.cpp", 0x593);
     }
 
-    pFloorTiles = pTileGrid->sRoomTiles.pRoofTiles;
+    pFloorTiles = pTiles->pRoofTiles;
     if (!pFloorTiles) {
       return;
     }

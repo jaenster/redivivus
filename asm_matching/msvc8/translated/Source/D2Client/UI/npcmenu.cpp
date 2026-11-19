@@ -7726,7 +7726,8 @@ void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnit
     }
 
     pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayerUnit_lcl->pInventory);
+    D2InventoryStrc* t2_c0 = pPlayerUnit_lcl->pInventory;
+    pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(t2_c0);
     if (pPlayerUnit_lcl) {
       _Interaction::bInteractingWithNpc = 1;
       _Interaction::nCurrentInteractedNpcGUID = pNpcUnit->nUnitGUID;

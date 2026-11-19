@@ -16,8 +16,6 @@
 // Forward declarations
 struct D2GridScreenCoordinates;
 
-extern int gnInvMouseX;
-extern int gnInvMouseY;
 extern uint32_t gnInvMercBodySlot2;
 
 namespace D2Client { namespace UI { namespace Inv {

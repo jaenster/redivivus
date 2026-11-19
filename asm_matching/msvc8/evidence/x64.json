@@ -1,12 +1,12 @@
 {
   "compiler": "cl 14.00.50727.42 for x64, /Zs /W3 /Wp64",
-  "commit": "f4aa096b27ccf324bbf99999ea7cf2b72ffe9246",
-  "ghidra": "2057",
-  "measured": "2026-11-11",
-  "c4311": 399,
-  "c4312": 514,
-  "lines": 890,
-  "tus_total": 464,
+  "commit": "8ddde45702cc7b37dba342be7f454860eccf0585",
+  "ghidra": "2129",
+  "measured": "2026-11-19",
+  "c4311": 383,
+  "c4312": 541,
+  "lines": 907,
+  "tus_total": 463,
   "tus_failing": 0,
   "failing": []
 }

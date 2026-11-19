@@ -33,7 +33,7 @@ void __fastcall PLAYERSAVE_EnableSaveFileWriting(BOOL bEnable);
 struct D2UnitStrc * __stdcall QSERVER_FindUnitInFirstActiveGame(eD2UnitType eUnitType, DWORD dwUnitId);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-void __fastcall CLIENT_GetSaveCompleteClient(struct D2ClientStrc * pClient, struct D2ClientStrc * * pdwClientOut);
+void __fastcall CLIENT_GetSaveCompleteClient(struct D2ClientStrc * pClient, struct D2ClientStrc * * ppClientOut);
 // Callback for iterating active clients: if *pnParam is 0 (not yet assigned), writes nParam into *pnParam. Used as a visitor to capture the first active client slot index.
 void __fastcall CLIENT_GetFirstActiveClient(int pClient, int * ppActiveClient);
 int __stdcall thunk_QSERVER_CountClientsWithStatusFlag0x20();

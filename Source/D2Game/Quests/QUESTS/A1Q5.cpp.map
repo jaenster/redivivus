@@ -406,11 +406,11 @@
     },
     {
       "name": "Q05_OnTowerComplete",
-      "address": "00594fd3",
+      "address": "00594fd0",
       "lines": [
         {
           "line": 1,
-          "address": "00594fd3"
+          "address": "00594fd0"
         }
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q5",
@@ -420,15 +420,10 @@
         "QUEST_SetQuestRecordState"
       ],
       "usedTypes": [
-        "D2QuestDataStrc",
-        "SGAMEDATA"
+        "D2QuestDataStrc"
       ],
-      "dh": "cd2fbf1e",
+      "dh": "5d1f6f9e",
       "paramStorage": [
-        [
-          "pGame",
-          "ECX:4"
-        ],
         [
           "pQuestData",
           "ESI:4"

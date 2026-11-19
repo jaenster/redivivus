@@ -232,7 +232,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6f4fe531",
+      "dh": "ae7bb961",
       "paramStorage": [
         [
           "pGame",
@@ -831,7 +831,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0ccd2d1e",
+      "dh": "97f972ae",
       "paramStorage": [
         [
           "pUnit",
@@ -842,7 +842,7 @@
           "EDX:4"
         ],
         [
-          "dwParam",
+          "pStatList",
           "Stack[0x4]:4"
         ]
       ]

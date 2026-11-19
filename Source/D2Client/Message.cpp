@@ -129,7 +129,13 @@ int32_t __fastcall MessageGameLoop(::fpGameLoopFunction nfpGameLoopFunction) {
 
 // Registers a Windows event handler (message/command/keyup/keydown) based on eEventType. Filters out WM_COMMAND (0x111) from generic message handlers.
 void __fastcall MESSAGE_RegisterEventHandler(HWND hWnd, int32_t eEventType, int32_t nMessageOrKeyCode, int32_t pfHandler) {
-    if (hWnd) {
+    if (!hWnd) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x110);
+      exit(-1);
+      return;
+    }
+
+    {
       switch (eEventType) {
         case 0:
           {
@@ -153,14 +159,19 @@ void __fastcall MESSAGE_RegisterEventHandler(HWND hWnd, int32_t eEventType, int3
           return;
       }
     }
-
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x110);
     exit(-1);
 }
 
 // Unregisters a Windows event handler (message/command/keyup/keydown) based on eEventType. Filters out WM_COMMAND (0x111) from generic message handlers.
 void __fastcall MESSAGE_UnregisterEventHandler(HWND hWnd, int32_t eEventType, int32_t nMessageOrKeyCode, char * pfHandler) {
-    if (hWnd) {
+    if (!hWnd) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x131);
+      exit(-1);
+      return;
+    }
+
+    {
       switch (eEventType) {
         case 0:
           {
@@ -184,7 +195,6 @@ void __fastcall MESSAGE_UnregisterEventHandler(HWND hWnd, int32_t eEventType, in
           return;
       }
     }
-
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x131);
     exit(-1);
 }

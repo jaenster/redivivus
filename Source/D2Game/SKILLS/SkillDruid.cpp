@@ -1207,14 +1207,14 @@ BOOL __fastcall Skills_SrvDoFunc_146_ArmageddonTick(::SGAMEDATA * pGame, D2UnitS
 }
 
 static int32_t SKILLDRUID_GetSummonHealthBonus(int * pnAbsorb, int32_t nAbsorbDelta) {
-    int nCurAbsorb = *pnAbsorb;
-    if (nAbsorbDelta <= nCurAbsorb) {
-      *pnAbsorb = nCurAbsorb - nAbsorbDelta;
+    if (nAbsorbDelta <= *pnAbsorb) {
+      *pnAbsorb -= nAbsorbDelta;
       return 0;
     }
 
+    nAbsorbDelta -= *pnAbsorb;
     *pnAbsorb = 0;
-    return nAbsorbDelta - nCurAbsorb;
+    return nAbsorbDelta;
 }
 
 // Item-event / aura-tick callback for the Druid summon HP-sharing aura (Heart of Wolverine / Spirit of Barbs style). Reads the aura's stat list from the caster, sums health contributions from up to three summon slots in pParam via SKILLDRUID_GetSummonHealthBonus, converts the total to a percentage of the reference value (aurastat[1]), and compares against the previous cached percentage (UNITSTAT_unsentparam1). If the change exceeds 4 percentage points it refreshes the aura GFX and updates the cached value. If the computed absorption drops to zero, deactivates the state, removes and frees the stat list entirely. Returns 1 on any handled path, 0 on invalid inputs.
@@ -1315,7 +1315,7 @@ BOOL __fastcall SKILLDRUID_ApplyAccumulatedStateDamage(::SGAMEDATA * pGame, D2Un
 
     int nTotalToHit = 0;
     uint8_t bySrcDam = 0x80;
-    if ((short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size > 0) {
+    if (D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size > 0) {
       eD2States eStateType;
       do {
         eState = (eD2States)(short int)D2Common::ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x10[nStateIdx];
@@ -1337,7 +1337,7 @@ BOOL __fastcall SKILLDRUID_ApplyAccumulatedStateDamage(::SGAMEDATA * pGame, D2Un
         }
 
         nStateIdx++;
-      } while (nStateIdx < (short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size);
+      } while (nStateIdx < D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size);
     }
 
     memset(&sDamage, 0, 0x70);

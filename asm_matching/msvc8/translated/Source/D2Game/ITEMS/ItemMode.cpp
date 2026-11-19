@@ -3919,6 +3919,7 @@ void __fastcall ITEMMODE_ApplyItemStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // Recharges all charged-skill stats (stat 0xCC) on an item that are below their maximum charge count. For each under-charged skill, calls ITEMMOD_SetChargedSkillCharges and sends a 0x3E UpdateItemStats packet to the owning player's client. Returns 1 if any charge was restored, 0 otherwise.
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall ITEMMODE_RechargeItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
+    uint32_t nMaxCharges;
     int nLevel;
     uint32_t nSkillId;
     D2StatStrc aStatBonusData[64];
@@ -3935,10 +3936,11 @@ void __fastcall ITEMMODE_RechargeItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 
     int32_t nStatCount = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pItem, 0xcc, aStatBonusData, 0x40);
     for (nChargedStatIdx = 0; nChargedStatIdx < nStatCount; nChargedStatIdx++) {
-      uint32_t nMaxCharges;
-      nSkillId = D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & (uint32_t)(uint16_t)aStatBonusData[nChargedStatIdx].wSubIndex;
+      uint32_t uVar1;
+      uVar1 = (uint32_t)(uint16_t)aStatBonusData[nChargedStatIdx].uKey.sKey.wSubIndex;
+      nSkillId = D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & uVar1;
       nMaxCharges = aStatBonusData[nChargedStatIdx].nStatValue >> 8;
-      nLevel = (int)(uint32_t)(uint16_t)aStatBonusData[nChargedStatIdx].wSubIndex >> D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits);
+      nLevel = (int)uVar1 >> D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits);
       if ((int)(aStatBonusData[nChargedStatIdx].nStatValue & 0xffU) < (int)nMaxCharges) {
         D2Common::ITEMS::ItemMods::ITEMMOD_SetChargedSkillCharges(pItem, nLevel, nSkillId, nMaxCharges);
         if (pClient) {

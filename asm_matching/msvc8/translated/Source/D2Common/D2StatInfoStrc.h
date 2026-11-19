@@ -13,6 +13,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Common/Stats/StatsEx.h"
 
 struct D2StatStrc;
 
@@ -26,17 +27,19 @@ struct D2StatInfoStrc {
 };
 
 #endif // D2_DEFINED_D2StatInfoStrc
+#ifndef D2_DEFINED_D2StatKeyUnion
+#define D2_DEFINED_D2StatKeyUnion
+union D2StatKeyUnion {
+    /* 0x00 */ D2StatKeyStrc sKey;
+    /* 0x00 */ int32_t nPackedStatId; // wStatIndex<<16 | wSubIndex as one key
+};
+
+#endif // D2_DEFINED_D2StatKeyUnion
 #ifndef D2_DEFINED_D2StatStrc
 #define D2_DEFINED_D2StatStrc
-struct D2StatStrc {
-    D2StatStrc() {}
-    D2StatStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
-    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2StatStrc(short a0, uint16_t a1, int a2) : wSubIndex(a0), wStatIndex(a1), nStatValue(a2) {}
-
-    /* 0x00 */ short wSubIndex;
-    /* 0x02 */ uint16_t wStatIndex;
+__pragma(pack(push, 1)) struct D2StatStrc {
+    /* 0x00 */ D2StatKeyUnion uKey; // stat key: halves or packed (see D2StatKeyUnion)
     /* 0x04 */ int nStatValue;
-};
+}; __pragma(pack(pop))
 
 #endif // D2_DEFINED_D2StatStrc

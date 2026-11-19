@@ -1756,7 +1756,16 @@ D2AiListStrc * __fastcall MONSTERAI_GetAiFunctionFromTable(D2UnitStrc * pUnit, i
     BOOL _bCanSwitchAI;
     bool bCanSwitchAI;
     D2MonStatsTxt* pMonStatsTxt = !pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt;
-    if (nFunctionId) {
+    if (!nFunctionId) {
+      short int wAiIndex = pMonStatsTxt->AI;
+      if (wAiIndex >= 0 && (uint16_t)wAiIndex < 148) {
+        return arrGeneralAiList + wAiIndex;
+      }
+
+      return arrGeneralAiList;
+    }
+
+    {
       int nClassId;
       if (nFunctionId == 10 || nFunctionId == 0xb || nFunctionId == 0xc) {
         if (!pUnit) {
@@ -1773,7 +1782,6 @@ D2AiListStrc * __fastcall MONSTERAI_GetAiFunctionFromTable(D2UnitStrc * pUnit, i
         return arrSpecialStateAiList + nFunctionId;
       }
     }
-
     short int wAiIndex = pMonStatsTxt->AI;
     if (wAiIndex >= 0 && (uint16_t)wAiIndex < 148) {
       return arrGeneralAiList + wAiIndex;
@@ -11688,7 +11696,12 @@ void __fastcall AITHINK_Fn1_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
     }
 
     D2UnitStrc* pAttacker = pAiParam->pTarget;
-    if (pAttacker && pAiParam->nDistanceToTarget < 0x19) {
+    if (!(pAttacker && pAiParam->nDistanceToTarget < 0x19)) {
+      PlanNextAiMove(pGame, pUnit, 10);
+      return;
+    }
+
+    {
       uint32_t DVar1;
       DVar1 = D2_SeedRoll(&pUnit->sSeed);
       if ((int)(DVar1 % 100) < 0x3c) {
@@ -11696,7 +11709,6 @@ void __fastcall AITHINK_Fn1_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
         return;
       }
     }
-
     PlanNextAiMove(pGame, pUnit, 10);
 }
 
@@ -11797,8 +11809,8 @@ void __fastcall AITHINK_Fn1_7TIllusion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 // AI tick for the Dark Wanderer (Act 3 Q7 boss). Queries Q24_GetDarkWandererSpawnCoords; if coords unavailable or target too far (≥20 units) idles. State machine in dwArg0: 1=walk to spawn coords, 2=poll distance and cast BaalMonsterSpawn skill at position (mode 0) + start portal timer once within 2 units (retries up to 3 times via ApplyCombatAndMonStats before forcing cast). Directly tied to quest progression logic.
 void __fastcall AITHINK_Fn1_DarkWanderer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2CoordStrc sSpawnCoord;
-    int nDistToTarget = pAiParam->nDistanceToTarget;
     D2UnitStrc* pDVar2 = pAiParam->pTarget;
+    int nDistToTarget = pAiParam->nDistanceToTarget;
     D2AiGeneralStrc* pDVar1 = pAiParam->pMonsterAiGeneral;
     BOOL bHasSpawnCoords = Quests::QUESTS::A3Q7::Q24_GetDarkWandererSpawnCoords(pGame, pUnit, &sSpawnCoord.nX);
     if (!bHasSpawnCoords) {
@@ -11816,7 +11828,12 @@ void __fastcall AITHINK_Fn1_DarkWanderer(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       PlanNextAiMove(pGame, pUnit, 10);
       return;
     }
-    if (nDistToTarget < 0x14) {
+    if (nDistToTarget >= 0x14) {
+      PlanNextAiMove(pGame, pUnit, 0x28);
+      return;
+    }
+
+    {
       if (pDVar1->dwArg0 == 1) {
         WalkToCoords(pGame, pUnit, sSpawnCoord.nX, sSpawnCoord.nY);
         pDVar1->dwArg0 = 2;
@@ -11848,7 +11865,6 @@ void __fastcall AITHINK_Fn1_DarkWanderer(::SGAMEDATA * pGame, D2UnitStrc * pUnit
         return;
       }
     }
-
     PlanNextAiMove(pGame, pUnit, 0x28);
     return;
 }
@@ -20056,17 +20072,23 @@ void __fastcall AITHINK_Fn1_UberMephisto(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 void __fastcall AITHINK_Fn2_FrogDemon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     int nFunctionId = pMonsterAiGeneral->nFunctionId;
-    if (nFunctionId != 10 && nFunctionId != 0xb) {
+    D2MonStatsTxt* t2_c0 = pAiParam->pMonStats;
+    if (!(nFunctionId != 10 && nFunctionId != 0xb)) {
+      AttachCorrectAiFunctionToMonster(pGame, pUnit, pMonsterAiGeneral, nFunctionId);
+      RestartAiThink(pGame, pUnit, 1);
+      return;
+    }
+
+    {
       short int nSkillId;
-      nSkillId = pAiParam->pMonStats->aSkill[0];
+      nSkillId = t2_c0->aSkill[0];
       if (nSkillId >= 0 && pMonsterAiGeneral->dwArg2 >= 2) {
-        SERVER_UNIT_CastSkill(pGame, pUnit, pAiParam->pMonStats->aSkMode[0], (int)nSkillId, pAiParam->pTarget, 0, 0);
+        SERVER_UNIT_CastSkill(pGame, pUnit, t2_c0->aSkMode[0], (int)nSkillId, pAiParam->pTarget, 0, 0);
         pMonsterAiGeneral->dwArg2 = 1;
         ClearCollisionAndResetPath(pGame, pUnit);
         return;
       }
     }
-
     AttachCorrectAiFunctionToMonster(pGame, pUnit, pMonsterAiGeneral, nFunctionId);
     RestartAiThink(pGame, pUnit, 1);
 }
@@ -21653,7 +21675,22 @@ uint32_t __fastcall AI_OblivionKnight_ScanCallback(::SGAMEDATA * pGame, D2UnitSt
     if (nResult) {
       return 0;
     }
-    if (nDistance < pScan->nNearestDist) {
+    if (nDistance >= pScan->nNearestDist) {
+      if (nDistance >= pScan->nWoundedDist) {
+        return 0;
+      }
+
+      nResult = D2Common::Units::GetCurrentLifePercentage(pCandidate);
+      if (nResult >= 0x28) {
+        return 0;
+      }
+
+      pScan->pWoundedBloodLord = pCandidate;
+      pScan->nWoundedDist = nDistance;
+      return 0;
+    }
+
+    {
       pScan->pNearestBloodLord = pCandidate;
       pScan->nNearestDist = nDistance;
     }
@@ -21928,16 +21965,15 @@ int32_t __fastcall AI_GetMonsterRegionBehaviorType(::SGAMEDATA * pGame, D2UnitSt
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     D2MonsterRegionStrc* pDVar1 = MonsterRegion::ReturnMonsterRegionEntryForLevel(pGame->pMonsterRegion, eLevel);
-    if (pDVar1->nBehaviorType >= 0) {
-      return pDVar1->nBehaviorType;
-    }
-    if ((int)eLevel < 0x28) {
-      pDVar1->nBehaviorType = 0;
-      return pDVar1->nBehaviorType;
+    if (pDVar1->nBehaviorType < 0) {
+      if ((int)eLevel < 0x28) {
+        pDVar1->nBehaviorType = 0;
+      } else {
+        int32_t nBehaviorType = Seed::SEED_RollRange(&pUnit->sSeed, 0, 3);
+        pDVar1->nBehaviorType = nBehaviorType;
+      }
     }
 
-    int32_t nBehaviorType = Seed::SEED_RollRange(&pUnit->sSeed, 0, 3);
-    pDVar1->nBehaviorType = nBehaviorType;
     return pDVar1->nBehaviorType;
 }
 
