@@ -151,6 +151,7 @@
 #include "Source/D2Common/ITEMS/ItemMods.h"
 #include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Quests/QUESTS.inline.h"
 #include "Source/D2Game/SKILLS/SkillAss.h"
@@ -1158,14 +1159,7 @@ void __fastcall SUNITNPC_UpdateHirelingPosition(::SGAMEDATA * pGame, D2UnitStrc 
     }
 
     eUnitType = pPlayer->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nPosX = pPlayer->pPath.pStaticPath->nPosX;
-    } else if (pPlayer->pPath.pDynamicPath) {
-      nPosX = D2Common::PATH::DynamicPath::GetXPos(pPlayer->pPath.pDynamicPath);
-    } else {
-      nPosX = 0;
-    }
-
+    nPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pPlayer);
     PLAYER::PlayerPets::PETS_ManagePetsByType(pGame, pPlayer, (uint16_t)nPosX, (uint16_t)wPosY);
 }
 
@@ -3074,7 +3068,6 @@ void __fastcall SUNITNPC_ResurrectHireling(::SGAMEDATA * pGame, D2UnitStrc * pPl
     int32_t wPosY;
     int32_t nPosX;
     int32_t nMaxHp;
-    int32_t nPosTemp;
     eD2UnitType eMonsterType;
     if (!(pHireling && pPlayer)) {
       return;
@@ -3102,25 +3095,9 @@ void __fastcall SUNITNPC_ResurrectHireling(::SGAMEDATA * pGame, D2UnitStrc * pPl
     pHireling->eUnitFlagsEx &= ~UNITFLAGEX_NODRAW;
     SUNITNPC_RefreshHirelingItemStats(pHireling);
     eMonsterType = pPlayer->eUnitType;
-    if (eMonsterType == UNIT_OBJECT || (int)eMonsterType > 3 && (int)eMonsterType <= 5) {
-      wPosY = pPlayer->pPath.pStaticPath->nPosY;
-    } else if (pPlayer->pPath.pDynamicPath) {
-      nPosTemp = D2Common::PATH::DynamicPath::GetYPos(pPlayer->pPath.pDynamicPath);
-      wPosY = nPosTemp;
-    } else {
-      wPosY = 0;
-    }
-
+    wPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pPlayer);
     eMonsterType = pPlayer->eUnitType;
-    if (eMonsterType == UNIT_OBJECT || (int)eMonsterType > 3 && (int)eMonsterType <= 5) {
-      nPosX = pPlayer->pPath.pStaticPath->nPosX;
-    } else if (pPlayer->pPath.pDynamicPath) {
-      nPosTemp = D2Common::PATH::DynamicPath::GetXPos(pPlayer->pPath.pDynamicPath);
-      nPosX = nPosTemp;
-    } else {
-      nPosX = 0;
-    }
-
+    nPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pPlayer);
     PLAYER::PlayerPets::PETS_ManagePetsByType(pGame, pPlayer, nPosX, wPosY);
     D2Game::Monster::MonsterAI::SendMercPackets(pGame, pPlayer, 0);
 }

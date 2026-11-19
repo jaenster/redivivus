@@ -2723,16 +2723,15 @@ void __stdcall SHA0_Transform(uint32_t * pShaCtx) {
     W[0xd] = pShaCtx[0x14];
     W[0xe] = pShaCtx[0x15];
     uint32_t* pMsgSchedule = W + 8;
-    uint32_t nExpandIdx = 0x10;
-    do {
+    uint32_t nExpandIdx;
+    for (nExpandIdx = 0; nExpandIdx < 0x10; nExpandIdx++) {
       pMsgSchedule[9] = pMsgSchedule[-7] ^ pMsgSchedule[6] ^ pMsgSchedule[1] ^ pMsgSchedule[-5];
       uA = pMsgSchedule[-8] ^ pMsgSchedule[5] ^ pMsgSchedule[-6] ^ *pMsgSchedule;
       pMsgSchedule[8] = uA;
       pMsgSchedule[10] = pMsgSchedule[7] ^ pMsgSchedule[-4] ^ pMsgSchedule[2] ^ pMsgSchedule[-6];
       pMsgSchedule[0xb] = pMsgSchedule[-3] ^ pMsgSchedule[3] ^ pMsgSchedule[-5] ^ uA;
       pMsgSchedule += 4;
-      nExpandIdx--;
-    } while (nExpandIdx);
+    }
 
     uA = *pShaCtx;
     uint32_t uB = pShaCtx[1];

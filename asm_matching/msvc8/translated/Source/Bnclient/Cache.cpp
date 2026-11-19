@@ -376,8 +376,7 @@ void __stdcall CACHE_InitCryptTable() {
 
     uint32_t uSeed1 = 0x100001;
     uint32_t* pEntry = g_pCacheCryptTable + 0x200;
-    int nCount = 0x100;
-    do {
+    for (int nCount = 0; nCount < 0x100; nCount++) {
       uint32_t uSeed2;
       uSeed1 = (uSeed1 * 0x7d + 3) % 0x2aaaab;
       uSeed2 = (uSeed1 * 0x7d + 3) % 0x2aaaab;
@@ -395,8 +394,7 @@ void __stdcall CACHE_InitCryptTable() {
       uSeed1 = (uSeed2 * 0x7d + 3) % 0x2aaaab;
       pEntry[0x200] = uSeed2 << 0x10 | (uint16_t)uSeed1;
       pEntry++;
-      nCount--;
-    } while (nCount);
+    }
 }
 
 static uint32_t __stdcall CACHE_FindHashEntry(uint32_t nLocale, char * szText) {
@@ -595,15 +593,13 @@ int32_t __stdcall CACHE_Open() {
 
       pHeaderBuf->dwFileSize = nCrc32;
       pHashTableBuf += 0xc;
-      nInitCounter = 0x400;
-      do {
+      for (nInitCounter = 0; nInitCounter < 0x400; nInitCounter++) {
         pHashTableBuf[0] = 0xff;
         pHashTableBuf[1] = 0xff;
         pHashTableBuf[2] = 0xff;
         pHashTableBuf[3] = 0xff;
         pHashTableBuf += 0x10;
-        nInitCounter--;
-      } while (nInitCounter);
+      }
 
       gpCacheBlockTable = (D2BnCacheBlockEntryStrc*)Storm::Source::SMem::SMemAlloc(0x4000, ".\\CACHE.CPP", 0x229, 8);
       pHeaderBuf = gpCacheFileHeader;

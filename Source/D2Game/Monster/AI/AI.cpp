@@ -10862,12 +10862,11 @@ int32_t __fastcall AI_Diablo_DecideAction(D2AiGeneralStrc * pDiabloAiCtx, D2Unit
 
     int* pWeightSrc = aActionWeights;
     nTotalWeightSum = 0;
-    int i = 0x11;
-    do {
+    int i;
+    for (i = 0; i < 0x11; i++) {
       nTotalWeightSum += *pWeightSrc;
       pWeightSrc++;
-      i--;
-    } while (i);
+    }
 
     uint32_t nRandResult = 0;
     if ((int)nTotalWeightSum > 0) {
@@ -11638,12 +11637,10 @@ int32_t __fastcall AI_BAAL_ChooseCombatAction(D2AiGeneralStrc * nAiContext, D2Un
 
     int* pWeightEntry = aActionWeights;
     nDistToArenaCenterOrTotal = 0;
-    i = 0x11;
-    do {
+    for (i = 0; i < 0x11; i++) {
       nDistToArenaCenterOrTotal += *pWeightEntry;
       pWeightEntry++;
-      i--;
-    } while (i);
+    }
 
     uint32_t nRandPick = 0;
     if ((int)nDistToArenaCenterOrTotal > 0) {

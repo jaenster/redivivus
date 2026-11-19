@@ -2545,28 +2545,25 @@ static void __stdcall SKILLASS_ApplyLevelScaledBuffs(::SGAMEDATA * pGame, D2Skil
 
     D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
     short int* pStatPtr = pSkillsTxt->aurastat;
-    int nStatsRemaining = 6;
-    do {
+    int nStatsRemaining;
+    for (nStatsRemaining = 0; nStatsRemaining < 6; nStatsRemaining++) {
       if (*pStatPtr >= 0 && (int)*pStatPtr < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         nValue = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurastatcalc[1], eSkill, nSkillLvl);
         D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, (int)*pStatPtr, nValue, 0);
       }
 
       pStatPtr++;
-      nStatsRemaining--;
-    } while (nStatsRemaining);
+    }
 
     pStatPtr = pSkillsTxt->passivestat;
-    nStatsRemaining = 5;
-    do {
+    for (nStatsRemaining = 0; nStatsRemaining < 5; nStatsRemaining++) {
       if (*pStatPtr >= 0 && (int)*pStatPtr < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         nValue = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->passivecalc[1], eSkill, nSkillLvl);
         D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, (int)*pStatPtr, nValue, 0);
       }
 
       pStatPtr++;
-      nStatsRemaining--;
-    } while (nStatsRemaining);
+    }
 
     short int nUniqueModCode = pSkillsTxt->sumumod;
     if (!(nUniqueModCode > 0 && nUniqueModCode < 0x2b)) {

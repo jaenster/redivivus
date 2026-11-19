@@ -322,8 +322,7 @@ int __fastcall SKILLPAL_ApplyAuraStateToTarget(D2SkillCallbackContextStrc * pCon
 
     int32_t* pAuraStatEntry = pAuraArgs->anStats;
     pAuraArgs->pStatList = pNewStatList;
-    int nStatCount = 6;
-    do {
+    for (int nStatCount = 0; nStatCount < 6; nStatCount++) {
       int32_t nStatValue;
       nStatValue = pAuraStatEntry[6];
       if (nStatValue) {
@@ -385,8 +384,7 @@ int __fastcall SKILLPAL_ApplyAuraStateToTarget(D2SkillCallbackContextStrc * pCon
       }
 
       pAuraStatEntry++;
-      nStatCount--;
-    } while (nStatCount);
+    }
 
     D2Common::Units::UpdateAnimSpeed(pUnit, ".\\SKILLS\\SkilPal.cpp", 0x19d);
     D2StatListExStrc* pCasterStatList = pNewStatList;
@@ -457,8 +455,7 @@ BOOL __fastcall Skills_SrvDoFunc_065_Prayer(::SGAMEDATA * pGame, D2UnitStrc * pU
         if (nAuraStateArg.pStatList && nMana > nManaCost && pSkillData->passivestate <= 0) {
           pSkillsTxtSaved = pSkillData->passivecalc;
           pSkill = (short int*)pSkillData->passivestat;
-          nCurMana = 5;
-          do {
+          for (nCurMana = 0; nCurMana < 5; nCurMana++) {
             eUnitStat = (eD2UnitStat)*pSkill;
             nDelayInterval = D2Common::Skills::D2GetSkillCalc(pUnit, *pSkillsTxtSaved, eSkill_00, nSkillLvl);
             if (nDelayInterval && (int)eUnitStat > 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
@@ -467,8 +464,7 @@ BOOL __fastcall Skills_SrvDoFunc_065_Prayer(::SGAMEDATA * pGame, D2UnitStrc * pU
 
             pSkill = (short int*)((char*)pSkill + SKILL_Throw);
             pSkillsTxtSaved++;
-            nCurMana--;
-          } while (nCurMana);
+          }
         }
       }
     }

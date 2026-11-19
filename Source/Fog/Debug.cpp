@@ -221,12 +221,6 @@ static void InitializeDebugInfoTable(D2FogDebugModuleTableStrc * pTable);
 
 void __stdcall DebugThread() {
     void* pSavedEsp;
-    EH4_EXCEPTION_REGISTRATION tSehFrame;
-    tSehFrame.TryLevel = -2;
-    tSehFrame.ExceptionHandler = _except_handler4;
-    tSehFrame.Next = (EH4_EXCEPTION_REGISTRATION*)ExceptionList;
-    tSehFrame.EncodedScopeTable = DEFAULT_SECURITY_COOKIE ^ 0x702290;
-    ExceptionList = &tSehFrame;
     BOOL bDebuggerPresent = IsDebuggerPresent();
     if (bDebuggerPresent == 1) {
       THREADNAME_INFO tThreadNameInfo;
@@ -234,11 +228,12 @@ void __stdcall DebugThread() {
       tThreadNameInfo.szName = "MiniDump Thread";
       tThreadNameInfo.dwThreadID = -1;
       tThreadNameInfo.dwFlags = 0;
-      tSehFrame.TryLevel = 0;
-      /* ULONG_PTR * lpArguments for RaiseException */ /* DWORD nNumberOfArguments for RaiseException */ /* DWORD dwExceptionFlags for RaiseException */ /* DWORD dwExceptionCode for RaiseException */ RaiseException(0x406d1388, 0, 4, (ULONG_PTR*)&tThreadNameInfo.dwType);
+      // __try / __except (EXCEPTION_CONTINUE_EXECUTION): scope table 00702290, filter 00401adf; the handler 00401ae3 resumes at 00401ae6, after the __try
+      D2_SEH_TRY
+        /* ULONG_PTR * lpArguments for RaiseException */ /* DWORD nNumberOfArguments for RaiseException */ /* DWORD dwExceptionFlags for RaiseException */ /* DWORD dwExceptionCode for RaiseException */ RaiseException(0x406d1388, 0, 4, (ULONG_PTR*)&tThreadNameInfo.dwType);
+      D2_SEH_EXCEPT(EXCEPTION_CONTINUE_EXECUTION)
+      D2_SEH_END
     }
-
-    ExceptionList = tSehFrame.Next;
 }
 
 // Loads dbghelp.dll once and resolves its 64-bit symbol APIs into globals. Returns true when the library is (already) loaded and every API resolved, in AL.

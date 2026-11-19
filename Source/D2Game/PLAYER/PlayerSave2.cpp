@@ -376,13 +376,11 @@ int32_t __fastcall SaveWaypoints(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_
     pSaveWaypoints.nSize = 0x50;
     D2SaveWaypointListEntryStrc* pEntry = pSaveWaypoints.pActWaypoints.pWaypoints;
     D2WaypointStrc** ppWaypoint = pPlayerData->pWaypoint;
-    int i = 3;
-    do {
+    for (int i = 0; i < 3; i++) {
       D2Common::Waypoints::CopyWaypoint(*ppWaypoint, &pEntry->pWaypoints);
       ppWaypoint++;
       pEntry++;
-      i--;
-    } while (i);
+    }
 
     D2SaveFileWaypointsStrc* pSrc = &pSaveWaypoints;
     /* Safety checks */ memcpy(pDst, pSrc, 0x50);
@@ -410,14 +408,12 @@ int32_t __fastcall SaveNPC(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * 
     pSaveNpc.nSize = 0x34;
     uint8_t (*pDest)[8] = pSaveNpc.pActNpcBitInfo;
     D2UnitDataPlayerInteractedNPCStrc** ppDVar4 = pPlayerData->pInteractedNPCs;
-    int i = 3;
-    do {
+    for (int i = 0; i < 3; i++) {
       PlayerIntro::PLAYERINTRO_CopyIntroToBuffer(*ppDVar4, (char*)(pDest - 3));
       PlayerIntro::PLAYERINTRO_CopyIntro2ToBuffer(*ppDVar4, *pDest);
       ppDVar4++;
       pDest++;
-      i--;
-    } while (i);
+    }
 
     D2SaveFileNpcStrc* pSrc = &pSaveNpc;
     /* Safety ckecks */ for (j = 0xd; j; j--) {

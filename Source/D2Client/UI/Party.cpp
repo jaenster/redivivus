@@ -1383,16 +1383,14 @@ void __stdcall INPUT_PartyScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
         } else {
           for (; pUiParty; pUiParty = pUiParty->pNext) {
             pButtonField = &pUiParty->pPartyButtons[0].bIsPressed;
-            nMouseX = 5;
-            do {
+            for (nMouseX = 0; nMouseX < 5; nMouseX++) {
               if (*pButtonField) {
                 pButtonField[-3]--;
                 *pButtonField = 0;
               }
 
               pButtonField += 8;
-              nMouseX--;
-            } while (nMouseX);
+            }
           }
         }
       } else {

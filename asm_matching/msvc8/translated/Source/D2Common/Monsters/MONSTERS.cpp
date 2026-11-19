@@ -728,8 +728,7 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t bExpan
     }
 
     int* pScalingEntry = gMonLvl_U_UniqueMonsterLevelChance2[0] + 2;
-    int nEntriesLeft = 3;
-    do {
+    for (int nEntriesLeft = 0; nEntriesLeft < 3; nEntriesLeft++) {
       int nCurrentStatVal;
       nCurrentStatVal = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (*(int (*)[5])(pScalingEntry - 2))[0], 0);
       if (byDifficulty == 1) {
@@ -744,8 +743,7 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t bExpan
       nValue = DATATBLS::DataTbls::D2ApplyPercent(nCurrentStatVal, nPercent, nDivisor);
       Stats::StatsEx::STATLIST_SetUnitStat(pUnit, (*(int (*)[5])(pScalingEntry - 2))[0], nValue, nLayer);
       pScalingEntry += 5;
-      nEntriesLeft--;
-    } while (nEntriesLeft);
+    }
 
     Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, (int)pMonStats->aLevel[0] + (uint32_t)byDifficulty * 0x19, 0);
 }

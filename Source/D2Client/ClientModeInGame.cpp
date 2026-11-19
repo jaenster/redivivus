@@ -51,11 +51,7 @@ typedef LRESULT (__stdcall *WndProcB)(HWND param_1, uint32_t uMsg, uint32_t para
 typedef uint32_t (__stdcall *fpGameLoopFunction)(uint32_t param_1);
 #endif
 
-namespace D2Client::ClientModeInGame {
-// also labelled: lpText_006d5b20
-char gCmdLineHelpText[154] = { "Available command line options:\n  -set[default command line]\t\tSet new default command line string\n  -lng[lngfile]\t\t\tUse \"lngfile\" for language resources\n" }; D2_GLOBAL_GUARD(gCmdLineHelpText, "D2Client::ClientModeInGame::gCmdLineHelpText");
-} // namespace D2Client::ClientModeInGame
-char * gpszCmdLineHelpText = (char *)&D2Client::ClientModeInGame::gCmdLineHelpText; D2_GLOBAL_GUARD(gpszCmdLineHelpText, "gpszCmdLineHelpText");
+char * gpszCmdLineHelpText = (char*)"Available command line options:\012  -set[default command line]\011\011Set new default command line string\012  -lng[lngfile]\011\011\011Use \"lngfile\" for language resources\012"; D2_GLOBAL_GUARD(gpszCmdLineHelpText, "gpszCmdLineHelpText");
 static ARGLIST gaClientCmdLineArgs[8] = {
     {
         /* .dwFlags = */ 0x0,

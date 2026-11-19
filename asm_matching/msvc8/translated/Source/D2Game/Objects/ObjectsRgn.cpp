@@ -166,15 +166,13 @@ void __fastcall FreeObjectControl(::SGAMEDATA * pGame) {
     }
 
     uint8_t** ppShrineRng = (uint8_t**)pObjectControl->sShrinesRng.aShrinesRng;
-    iLevelIdx = 8;
-    do {
+    for (iLevelIdx = 0; iLevelIdx < 8; iLevelIdx++) {
       if (*ppShrineRng) {
         D2_FREE_POOL_AT(pGame->pMemoryPool, *ppShrineRng, ".\\OBJECTS\\objrgn.cpp", 0xe8);
       }
 
       ppShrineRng++;
-      iLevelIdx--;
-    } while (iLevelIdx);
+    }
 
     D2_FREE_POOL_AT(pGame->pMemoryPool, pGame->pObjectControl, ".\\OBJECTS\\objrgn.cpp", 0xec);
 }

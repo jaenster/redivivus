@@ -2899,8 +2899,7 @@ static void BNSEND_CalculateCDKeyChecksum(char * szCDKey, uint32_t * pOutChecksu
     uint32_t nBitFlag = 1;
     *pOutChecksum = 0;
     uint8_t* pKeyPair = (uint8_t*)(szCDKey + 1);
-    int nPairIndex = 8;
-    do {
+    for (int nPairIndex = 0; nPairIndex < 8; nPairIndex++) {
       uint32_t nByteVal;
       nByteVal = (int)(char)gaCDKeyCharLookup[*pKeyPair] + (char)gaCDKeyCharLookup[pKeyPair[-1]] * 0x18;
       if (nByteVal >= 0x100) {
@@ -2927,8 +2926,7 @@ static void BNSEND_CalculateCDKeyChecksum(char * szCDKey, uint32_t * pOutChecksu
       *pKeyPair = bHexChar;
       pKeyPair += 2;
       nBitFlag *= 2;
-      nPairIndex--;
-    } while (nPairIndex);
+    }
 }
 
 // Decodes 16-character CD key string into three components (Product: 3 hex digits, Public: 7 hex digits, Private: 9 hex digits). Validates checksum and performs character shuffling/XOR transformations. Returns 1 on success, 0 on failure.

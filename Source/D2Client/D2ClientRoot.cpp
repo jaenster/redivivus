@@ -3,9 +3,6 @@
 #include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/ClientModeInGame.h"
 #include "Source/D2Client/Core/Archive.h"
-#include "Source/D2Client/D2ClientStrc.h"
-#include "Source/D2Client/D2DialogStrc.h"
-#include "Source/D2Client/D2IniConfigStrc.h"
 #include "Source/D2Client/Draw/LightMap.h"
 #include "Source/D2Client/Engine.h"
 #include "Source/D2Client/GAME/Game/Game.h"
@@ -39,182 +36,22 @@
 #include "Source/D2Client/UNIT/UnitMode.h"
 #include "Source/D2Client/Warden/WardenClient.h"
 #include "Source/D2Common/D2Common.h"
-#include "Source/D2Common/D2CharStatsTxt.h"
-#include "Source/D2Common/D2InventoryStrc.h"
-#include "Source/D2Common/D2MissilesTxt.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2RoomExStrc.h"
-#include "Source/D2Common/D2RoomStrc.h"
-#include "Source/D2Common/D2SkillsTxt.h"
-#include "Source/D2Common/D2StatListExStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/AnimTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgActStrc.h"
-#include "Source/D2Common/Drlg/D2DrlgDeleteStrc.h"
-#include "Source/D2Common/Drlg/Preset.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Game/D2Game.h"
-#include "Source/D2Game/Ai/D2AiGeneralStrc.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
-#include "Source/D2Game/GAME/Event.h"
-#include "Source/D2Game/GAME/Targets.h"
-#include "Source/D2Game/Monster/Monsters.h"
-#include "Source/D2Game/SKILLS/SkillsServer.h"
-#include "Source/D2Game/UNIT/SUnitDmg.h"
-#include "Source/D2Game/UNIT/SUnitInactive.h"
-#include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Lang/Unicode/UNISYS.h"
-#include "Source/D2Launch/MainMenus.h"
 #include "Source/D2Win/D2Win.h"
-#include "Source/D2Win/D2GFX.h"
-#include "Source/D2Win/DC6.h"
-#include "Source/D2Win/DC6Block.h"
-#include "Source/D2Win/Src/D2WinArchive.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/D2Win/Src/D2WinPalette.h"
 #include "Source/D2gfx/D2gfx.public.h"
-#include "Source/D2gfx/D2GFX.h"
 #include "Source/Fog/Fog.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/Debug.h"
-#include "Source/Fog/FogRoot.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/SMem.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "3rdparty/Storm/Storm.h"
-#include "3rdparty/Storm/D2ArchiveStrc.h"
-#include "3rdparty/Storm/D2MPQFileStrc.h"
-#include "3rdparty/Storm/Source/SFile.h"
-#include "3rdparty/Storm/StormRoot.h"
-#include "Source/globals/globals.h"
-#include "Source/Bnclient/BnSend.h"
-#include "Source/Bnclient/SRP.h"
-#include "Source/Bnclient/net_sid.h"
-#include "Source/D2CMP/D2CMP.h"
-#include "Source/D2CMP/Draw.h"
-#include "Source/D2CMP/SRC/Codec.h"
-#include "Source/D2CMP/SRC/LRUCache.h"
-#include "Source/D2Client/ClientModeInGame.h"
-#include "Source/D2Client/Cursor.h"
-#include "Source/D2Client/D2BNetGatewayAccessStr.h"
 #include "Source/D2Client/D2Client.globals.h"
-#include "Source/D2Client/D2GSPacketSrv0x2A.h"
-#include "Source/D2Client/D2GfxMemoryStrc.h"
-#include "Source/D2Client/D2GfxSettingsStrc.h"
-#include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
-#include "Source/D2Client/Draw/Weather.h"
-#include "Source/D2Client/Engine/Gfx.h"
-#include "Source/D2Client/GAME/Draw.h"
-#include "Source/D2Client/GAME/Game/Game.h"
-#include "Source/D2Client/GAME/Record.h"
-#include "Source/D2Client/GAME/SCmd.h"
-#include "Source/D2Client/GAME/Sound.h"
-#include "Source/D2Client/Sound/Sound.h"
-#include "Source/D2Client/UI/Automap.h"
-#include "Source/D2Client/UI/Chat.h"
-#include "Source/D2Client/UI/CmdTbl.h"
-#include "Source/D2Client/UI/EscMenu.h"
-#include "Source/D2Client/UI/Inv.h"
-#include "Source/D2Client/UI/Panel.h"
-#include "Source/D2Client/UI/Path.h"
-#include "Source/D2Client/UI/QuestLog.h"
-#include "Source/D2Client/UI/ShowItems.h"
-#include "Source/D2Client/UI/SkillDesc.h"
-#include "Source/D2Client/UI/SpellSel.h"
-#include "Source/D2Client/UI/Text.h"
-#include "Source/D2Client/UI/UseItem.h"
-#include "Source/D2Client/UI/Waypoint.h"
-#include "Source/D2Client/UI/npcmenu.h"
-#include "Source/D2Client/UI/npcmenu/Merc.h"
-#include "Source/D2Client/UI/ui.h"
-#include "Source/D2Client/UNIT/Item.h"
-#include "Source/D2Client/UNIT/Missile.h"
-#include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Client/UNIT/Object.h"
-#include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Client/UNIT/PlrSkills.h"
-#include "Source/D2Client/UNIT/UnitSnd.h"
-#include "Source/D2Client/Warden/WardenClient.h"
-#include "Source/D2Common/COMPOSIT/Composit.h"
-#include "Source/D2Common/D2Common.globals.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
-#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Drlg/OutSiege.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/ItemMods.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Logging/ProfCore.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Unit.h"
-#include "Source/D2Game/D2QuestDataStrc.h"
-#include "Source/D2Game/GAME/Arena.h"
-#include "Source/D2Game/GAME/Task.h"
-#include "Source/D2Game/Monster/AI/AI.h"
-#include "Source/D2Game/Monster/AI/Baal.h"
-#include "Source/D2Game/Monster/MonsterMode.h"
-#include "Source/D2Game/Objects/Objects.h"
-#include "Source/D2Game/PLAYER/PlayerMsg.h"
-#include "Source/D2Game/Quests/QUESTS.h"
-#include "Source/D2Game/SKILLS/Items.h"
-#include "Source/D2Game/SKILLS/SkillAss.h"
-#include "Source/D2Game/UNIT/SUnitDmg.h"
-#include "Source/D2Game/UNIT/sunitproxy.h"
-#include "Source/D2Lang/D2LangRoot.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Win/Src/D2Comp.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/D2MemoryManagerStrc.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/D2QServerStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Save.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Source/SSComp.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
-#include "3rdparty/Storm/H/stpl.h"
-#include "3rdparty/Storm/Source/SCMD.h"
-#include "3rdparty/Storm/Source/SComp.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SFile.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/Engine.data.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"
 #include "Source/D2Client/GAME/Sound.data.h"
 #include "Source/D2Client/Sound/SoundHdr.data.h"
 #include "Source/D2Client/UI/Chat.data.h"
-#include "Source/D2Client/UI/Chat.h"
-#include "Source/D2Client/UI/MiniPanel.h"
 #include "Source/D2Client/UI/UseItem.data.h"
 #include "Source/D2Client/UI/npcmenu.data.h"
-#include "Source/D2Client/UNIT/PlrSkills.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/ITEMS/ItemMods.h"
-#include "Source/D2Game/GAME/Arena.h"
-#include "Source/D2Game/Monster/AI/AI.h"
-#include "Source/D2Game/Objects/ObjectsRgn.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -3617,7 +3454,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
     FARPROC pProcAddress;
     HANDLE hProcess;
     uint32_t nAlignedSize;
-    volatile int nIterCount;
+    int nIterCount;
     uint32_t** ppuVar1;
     uint32_t nHeaderSize;
     void* pImageWritePtr;
@@ -3634,308 +3471,147 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
     uint32_t nImportIdx;
     uint32_t nRelocationCount;
     bool bCopyPass;
-    EH3_EXCEPTION_REGISTRATION tSehFrame;
     LPVOID lpAddress;
     uint8_t nRelocEntryByte;
     uint32_t nModuleBase;
     uint8_t* pSavedEsp;
     pSavedEsp = &bSehScratch;
-    volatile int bFailed;
+    int bFailed;
     bFailed = 1;
-    uint32_t** volatile ppInputSaved;
-    {
-      // __try / __except (EXCEPTION_EXECUTE_HANDLER): scope table 007011a0, filter 004e0977
-      #if defined(_MSC_VER)
-      __try {
-        uint32_t* ppFVar7 = *ppOutput;
-        ppInput[1] = ppFVar7;
-        ppInputSaved = ppInput;
-        /* DWORD flProtect for VirtualAlloc */ /* DWORD flAllocationType for VirtualAlloc */ /* SIZE_T dwSize for VirtualAlloc */ /* LPVOID lpAddress for VirtualAlloc */ ppFVar7 = (uint32_t*)VirtualAlloc((LPVOID)0x0, (SIZE_T)ppFVar7, 0x1000, 4);
-        *ppInput = ppFVar7;
-        if (ppFVar7) {
-          HMODULE hModule;
-          ppuVar1 = ppOutput;
-          for (nIterCount = 10; nIterCount; nIterCount--) {
-            *ppFVar7 = (uint32_t)*ppuVar1;
-            ppuVar1++;
-            ppFVar7++;
-          }
-
-          ppFVar7 = *ppInputSaved;
-          pImageWritePtr = (void*)((intptr_t)ppOutput[10] + (intptr_t)ppFVar7);
-          nHeaderSize = *ppFVar7;
-          bCopyPass = true;
-          ppuVar1 = ppInputSaved;
-          ppSectionEntry = ppOutput + (ppFVar7[9] * 3 + 10);
-          while (true) {
-            pCopyDst = pImageWritePtr;
-            if (pImageWritePtr >= (void*)(nHeaderSize + (char*)ppFVar7)) {
-              break;
-            }
-
-            nModuleBase = (uint32_t)*(uint16_t*)ppSectionEntry;
-            ppSectionDataCursor = (uint32_t**)((char*)ppSectionEntry + 2);
-            if (bCopyPass) {
-              ppSectionEntry = ppSectionDataCursor;
-              memcpy(pImageWritePtr, ppSectionDataCursor, nModuleBase);
-              ppSectionDataCursor = (uint32_t**)((char*)ppSectionDataCursor + (nModuleBase & 0xffff));
-              ppuVar1 = ppInputSaved;
-            }
-
-            pImageWritePtr = (void*)((char*)pImageWritePtr + (uint32_t)(uint16_t)nModuleBase);
-            pCopyDst = pImageWritePtr;
-            ppSectionEntry = ppSectionDataCursor;
-            if (pImageWritePtr >= (void*)(nHeaderSize + (char*)ppFVar7)) {
-              break;
-            }
-
-            bCopyPass = !bCopyPass;
-          }
-
-          pRelocationEntry = (uint8_t*)((*ppuVar1)[2] + (char*)*ppuVar1);
-          nRelOffset = 0;
-          nRelocationCount = 0;
-          while (true) {
-            pModuleBase = *ppuVar1;
-            if (nRelocationCount >= pModuleBase[3]) {
-              break;
-            }
-
-            nRelocEntryByte = *pRelocationEntry;
-            if (nRelocEntryByte & 0x80) {
-              nRelOffset = (((nRelocEntryByte & 0x7f) * 0x100 + (uint32_t)pRelocationEntry[1]) * 0x100 + (uint32_t)pRelocationEntry[2]) * 0x100 + (uint32_t)pRelocationEntry[3];
-              pRelocationEntry += 4;
-              *(int*)((char*)pModuleBase + nRelOffset) += (int)pModuleBase;
-              nRelocationCount++;
-            } else {
-              nRelOffset = (uint32_t)pRelocationEntry[1] + nRelOffset + ((uint32_t)nRelocEntryByte << 8);
-              pRelocationEntry += 2;
-              *(int*)((char*)pModuleBase + nRelOffset) += (int)pModuleBase;
-              nRelocationCount++;
-            }
-          }
-
-          pModuleBase = (uint32_t*)(pModuleBase[7] + (char*)pModuleBase);
-          for (nImportIdx = 0; nHeaderSize = nImportIdx , ppFVar7 = pModuleBase , nImportIdx < (*ppuVar1)[8]; nImportIdx++) {
-            /* LPCSTR lpLibFileName for LoadLibraryA */ hModule = LoadLibraryA((LPCSTR)(pModuleBase[nImportIdx * 2] + (char*)*ppuVar1));
-            ppuVar1 = ppInputSaved;
-            if (!hModule) {
-              goto release_if_failed;
-            }
-
-            ppFVar7 = (uint32_t*)(ppFVar7[nHeaderSize * 2 + 1] + (char*)*ppInputSaved);
-            while (true) {
-              nHeaderSize = *ppFVar7;
-              pSectionData = ppFVar7;
-              if (!nHeaderSize) {
-                break;
-              }
-              if ((int)nHeaderSize < 0) {
-                /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pProcAddress = GetProcAddress(hModule, (LPCSTR)(nHeaderSize & 0x7fffffff));
-                *ppFVar7 = (uint32_t)pProcAddress;
-                ppFVar7++;
-              } else {
-                /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pProcAddress = GetProcAddress(hModule, (LPCSTR)((char*)*ppuVar1 + nHeaderSize));
-                *ppFVar7 = (uint32_t)pProcAddress;
-                ppFVar7++;
-              }
-            }
-
-            ppuVar1[2] = (uint32_t*)((char*)ppuVar1[2] + 1);
-          }
-
-          nHeaderSize = 0;
-          while (true) {
-            ppFVar7 = *ppInputSaved;
-            nSectionIdx = nHeaderSize;
-            if (nHeaderSize >= ppFVar7[9]) {
-              break;
-            }
-
-            ppuVar1 = ppOutput + (nHeaderSize * 3 + 10);
-            lpAddress = (LPVOID)((intptr_t)*ppuVar1 + (intptr_t)ppFVar7);
-            pModuleBase = ppuVar1[1];
-            /* PDWORD lpflOldProtect for VirtualProtect */ /* DWORD flNewProtect for VirtualProtect */ /* SIZE_T dwSize for VirtualProtect */ /* LPVOID lpAddress for VirtualProtect */ VirtualProtect(lpAddress, (SIZE_T)pModuleBase, (DWORD)ppuVar1[2], &dwOldProtect);
-            if ((uintptr_t)ppuVar1[2] & 0xf0) {
-              ppFVar7 = pModuleBase;
-              /* SIZE_T dwSize for FlushInstructionCache */ /* LPCVOID lpBaseAddress for FlushInstructionCache */ hProcess = GetCurrentProcess();
-              /* HANDLE hProcess for FlushInstructionCache */ FlushInstructionCache(hProcess, lpAddress, (SIZE_T)ppFVar7);
-            }
-
-            nHeaderSize++;
-          }
-
-          nHeaderSize = ppFVar7[2];
-          if (nHeaderSize < *ppFVar7) {
-            nAlignedSize = nHeaderSize + 0xfff & -4096;
-            if (nAlignedSize >= nHeaderSize && nAlignedSize < *ppFVar7) {
-              /* DWORD dwFreeType for VirtualFree */ /* SIZE_T dwSize for VirtualFree */ /* LPVOID lpAddress for VirtualFree */ VirtualFree((LPVOID)((char*)ppFVar7 + nAlignedSize), *ppFVar7 - nAlignedSize, 0x4000);
-            }
-          }
-
-          bFailed = 0;
+    uint32_t** ppInputSaved;
+    // __try / __except (EXCEPTION_EXECUTE_HANDLER): scope table 007011a0, filter 004e0977; the handler 004e097d resumes at 004e0980, after the __try
+    D2_SEH_TRY
+      uint32_t* ppFVar7 = *ppOutput;
+      ppInput[1] = ppFVar7;
+      ppInputSaved = ppInput;
+      /* DWORD flProtect for VirtualAlloc */ /* DWORD flAllocationType for VirtualAlloc */ /* SIZE_T dwSize for VirtualAlloc */ /* LPVOID lpAddress for VirtualAlloc */ ppFVar7 = (uint32_t*)VirtualAlloc((LPVOID)0x0, (SIZE_T)ppFVar7, 0x1000, 4);
+      *ppInput = ppFVar7;
+      if (ppFVar7) {
+        HMODULE hModule;
+        ppuVar1 = ppOutput;
+        for (nIterCount = 10; nIterCount; nIterCount--) {
+          *ppFVar7 = (uint32_t)*ppuVar1;
+          ppuVar1++;
+          ppFVar7++;
         }
-      } __except (1) {}
-      #else
-      D2SehScope __seh0{1};
-      // __except block: the handler 004e097d resumes at 004e0980, after the __try
-      if (D2_SEH_SETJMP(__seh0) == 0) {
-        __seh0.Enter();
-        uint32_t* ppFVar7 = *ppOutput;
-        D2_SEH_FENCE();
-        ppInput[1] = ppFVar7;
-        D2_SEH_FENCE();
-        ppInputSaved = ppInput;
-        D2_SEH_FENCE();
-        /* DWORD flProtect for VirtualAlloc */ /* DWORD flAllocationType for VirtualAlloc */ /* SIZE_T dwSize for VirtualAlloc */ /* LPVOID lpAddress for VirtualAlloc */ ppFVar7 = (uint32_t*)VirtualAlloc((LPVOID)0x0, (SIZE_T)ppFVar7, 0x1000, 4);
-        D2_SEH_FENCE();
-        *ppInput = ppFVar7;
-        D2_SEH_FENCE();
-        if (ppFVar7) {
-          HMODULE hModule;
-          ppuVar1 = ppOutput;
-          D2_SEH_FENCE();
-          for (nIterCount = 10; nIterCount; nIterCount--) {
-            D2_SEH_FENCE();
-            *ppFVar7 = (uint32_t)*ppuVar1;
-            D2_SEH_FENCE();
-            ppuVar1++;
-            ppFVar7++;
-            D2_SEH_FENCE();
+
+        ppFVar7 = *ppInputSaved;
+        pImageWritePtr = (void*)((intptr_t)ppOutput[10] + (intptr_t)ppFVar7);
+        nHeaderSize = *ppFVar7;
+        bCopyPass = true;
+        ppuVar1 = ppInputSaved;
+        ppSectionEntry = ppOutput + (ppFVar7[9] * 3 + 10);
+        while (true) {
+          pCopyDst = pImageWritePtr;
+          if (pImageWritePtr >= (void*)(nHeaderSize + (char*)ppFVar7)) {
+            break;
           }
 
-          D2_SEH_FENCE();
-          ppFVar7 = *ppInputSaved;
-          pImageWritePtr = (void*)((intptr_t)ppOutput[10] + (intptr_t)ppFVar7);
-          nHeaderSize = *ppFVar7;
-          bCopyPass = true;
-          ppuVar1 = ppInputSaved;
-          ppSectionEntry = ppOutput + (ppFVar7[9] * 3 + 10);
-          while (true) {
-            pCopyDst = pImageWritePtr;
-            if (pImageWritePtr >= (void*)(nHeaderSize + (char*)ppFVar7)) {
-              break;
-            }
-
-            nModuleBase = (uint32_t)*(uint16_t*)ppSectionEntry;
-            ppSectionDataCursor = (uint32_t**)((char*)ppSectionEntry + 2);
-            if (bCopyPass) {
-              ppSectionEntry = ppSectionDataCursor;
-              D2_SEH_FENCE();
-              memcpy(pImageWritePtr, ppSectionDataCursor, nModuleBase);
-              D2_SEH_FENCE();
-              ppSectionDataCursor = (uint32_t**)((char*)ppSectionDataCursor + (nModuleBase & 0xffff));
-              ppuVar1 = ppInputSaved;
-            }
-
-            pImageWritePtr = (void*)((char*)pImageWritePtr + (uint32_t)(uint16_t)nModuleBase);
-            pCopyDst = pImageWritePtr;
+          nModuleBase = (uint32_t)*(uint16_t*)ppSectionEntry;
+          ppSectionDataCursor = (uint32_t**)((char*)ppSectionEntry + 2);
+          if (bCopyPass) {
             ppSectionEntry = ppSectionDataCursor;
-            if (pImageWritePtr >= (void*)(nHeaderSize + (char*)ppFVar7)) {
-              break;
-            }
-
-            bCopyPass = !bCopyPass;
-          }
-
-          pRelocationEntry = (uint8_t*)((*ppuVar1)[2] + (char*)*ppuVar1);
-          nRelOffset = 0;
-          nRelocationCount = 0;
-          while (true) {
-            pModuleBase = *ppuVar1;
-            if (nRelocationCount >= pModuleBase[3]) {
-              break;
-            }
-
-            nRelocEntryByte = *pRelocationEntry;
-            if (nRelocEntryByte & 0x80) {
-              nRelOffset = (((nRelocEntryByte & 0x7f) * 0x100 + (uint32_t)pRelocationEntry[1]) * 0x100 + (uint32_t)pRelocationEntry[2]) * 0x100 + (uint32_t)pRelocationEntry[3];
-              pRelocationEntry += 4;
-              D2_SEH_FENCE();
-              *(int*)((char*)pModuleBase + nRelOffset) += (int)pModuleBase;
-              D2_SEH_FENCE();
-              nRelocationCount++;
-            } else {
-              nRelOffset = (uint32_t)pRelocationEntry[1] + nRelOffset + ((uint32_t)nRelocEntryByte << 8);
-              pRelocationEntry += 2;
-              D2_SEH_FENCE();
-              *(int*)((char*)pModuleBase + nRelOffset) += (int)pModuleBase;
-              D2_SEH_FENCE();
-              nRelocationCount++;
-            }
-          }
-
-          pModuleBase = (uint32_t*)(pModuleBase[7] + (char*)pModuleBase);
-          for (nImportIdx = 0; nHeaderSize = nImportIdx , ppFVar7 = pModuleBase , nImportIdx < (*ppuVar1)[8]; nImportIdx++) {
-            /* LPCSTR lpLibFileName for LoadLibraryA */ hModule = LoadLibraryA((LPCSTR)(pModuleBase[nImportIdx * 2] + (char*)*ppuVar1));
+            memcpy(pImageWritePtr, ppSectionDataCursor, nModuleBase);
+            ppSectionDataCursor = (uint32_t**)((char*)ppSectionDataCursor + (nModuleBase & 0xffff));
             ppuVar1 = ppInputSaved;
-            if (!hModule) {
-              goto release_if_failed;
-            }
-
-            ppFVar7 = (uint32_t*)(ppFVar7[nHeaderSize * 2 + 1] + (char*)*ppInputSaved);
-            while (true) {
-              nHeaderSize = *ppFVar7;
-              pSectionData = ppFVar7;
-              if (!nHeaderSize) {
-                break;
-              }
-              if ((int)nHeaderSize < 0) {
-                /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pProcAddress = GetProcAddress(hModule, (LPCSTR)(nHeaderSize & 0x7fffffff));
-                D2_SEH_FENCE();
-                *ppFVar7 = (uint32_t)pProcAddress;
-                D2_SEH_FENCE();
-                ppFVar7++;
-              } else {
-                /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pProcAddress = GetProcAddress(hModule, (LPCSTR)((char*)*ppuVar1 + nHeaderSize));
-                D2_SEH_FENCE();
-                *ppFVar7 = (uint32_t)pProcAddress;
-                D2_SEH_FENCE();
-                ppFVar7++;
-              }
-            }
-
-            D2_SEH_FENCE();
-            ppuVar1[2] = (uint32_t*)((char*)ppuVar1[2] + 1);
-            D2_SEH_FENCE();
           }
 
-          nHeaderSize = 0;
+          pImageWritePtr = (void*)((char*)pImageWritePtr + (uint32_t)(uint16_t)nModuleBase);
+          pCopyDst = pImageWritePtr;
+          ppSectionEntry = ppSectionDataCursor;
+          if (pImageWritePtr >= (void*)(nHeaderSize + (char*)ppFVar7)) {
+            break;
+          }
+
+          bCopyPass = !bCopyPass;
+        }
+
+        pRelocationEntry = (uint8_t*)((*ppuVar1)[2] + (char*)*ppuVar1);
+        nRelOffset = 0;
+        nRelocationCount = 0;
+        while (true) {
+          pModuleBase = *ppuVar1;
+          if (nRelocationCount >= pModuleBase[3]) {
+            break;
+          }
+
+          nRelocEntryByte = *pRelocationEntry;
+          if (nRelocEntryByte & 0x80) {
+            nRelOffset = (((nRelocEntryByte & 0x7f) * 0x100 + (uint32_t)pRelocationEntry[1]) * 0x100 + (uint32_t)pRelocationEntry[2]) * 0x100 + (uint32_t)pRelocationEntry[3];
+            pRelocationEntry += 4;
+            *(int*)((char*)pModuleBase + nRelOffset) += (int)pModuleBase;
+            nRelocationCount++;
+          } else {
+            nRelOffset = (uint32_t)pRelocationEntry[1] + nRelOffset + ((uint32_t)nRelocEntryByte << 8);
+            pRelocationEntry += 2;
+            *(int*)((char*)pModuleBase + nRelOffset) += (int)pModuleBase;
+            nRelocationCount++;
+          }
+        }
+
+        pModuleBase = (uint32_t*)(pModuleBase[7] + (char*)pModuleBase);
+        for (nImportIdx = 0; nHeaderSize = nImportIdx , ppFVar7 = pModuleBase , nImportIdx < (*ppuVar1)[8]; nImportIdx++) {
+          /* LPCSTR lpLibFileName for LoadLibraryA */ hModule = LoadLibraryA((LPCSTR)(pModuleBase[nImportIdx * 2] + (char*)*ppuVar1));
+          ppuVar1 = ppInputSaved;
+          if (!hModule) {
+            goto release_if_failed;
+          }
+
+          ppFVar7 = (uint32_t*)(ppFVar7[nHeaderSize * 2 + 1] + (char*)*ppInputSaved);
           while (true) {
-            ppFVar7 = *ppInputSaved;
-            nSectionIdx = nHeaderSize;
-            if (nHeaderSize >= ppFVar7[9]) {
+            nHeaderSize = *ppFVar7;
+            pSectionData = ppFVar7;
+            if (!nHeaderSize) {
               break;
             }
-
-            ppuVar1 = ppOutput + (nHeaderSize * 3 + 10);
-            lpAddress = (LPVOID)((intptr_t)*ppuVar1 + (intptr_t)ppFVar7);
-            pModuleBase = ppuVar1[1];
-            /* PDWORD lpflOldProtect for VirtualProtect */ /* DWORD flNewProtect for VirtualProtect */ /* SIZE_T dwSize for VirtualProtect */ /* LPVOID lpAddress for VirtualProtect */ VirtualProtect(lpAddress, (SIZE_T)pModuleBase, (DWORD)ppuVar1[2], &dwOldProtect);
-            if ((uintptr_t)ppuVar1[2] & 0xf0) {
-              ppFVar7 = pModuleBase;
-              /* SIZE_T dwSize for FlushInstructionCache */ /* LPCVOID lpBaseAddress for FlushInstructionCache */ hProcess = GetCurrentProcess();
-              /* HANDLE hProcess for FlushInstructionCache */ FlushInstructionCache(hProcess, lpAddress, (SIZE_T)ppFVar7);
-            }
-
-            nHeaderSize++;
-          }
-
-          nHeaderSize = ppFVar7[2];
-          if (nHeaderSize < *ppFVar7) {
-            nAlignedSize = nHeaderSize + 0xfff & -4096;
-            if (nAlignedSize >= nHeaderSize && nAlignedSize < *ppFVar7) {
-              /* DWORD dwFreeType for VirtualFree */ /* SIZE_T dwSize for VirtualFree */ /* LPVOID lpAddress for VirtualFree */ VirtualFree((LPVOID)((char*)ppFVar7 + nAlignedSize), *ppFVar7 - nAlignedSize, 0x4000);
+            if ((int)nHeaderSize < 0) {
+              /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pProcAddress = GetProcAddress(hModule, (LPCSTR)(nHeaderSize & 0x7fffffff));
+              *ppFVar7 = (uint32_t)pProcAddress;
+              ppFVar7++;
+            } else {
+              /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pProcAddress = GetProcAddress(hModule, (LPCSTR)((char*)*ppuVar1 + nHeaderSize));
+              *ppFVar7 = (uint32_t)pProcAddress;
+              ppFVar7++;
             }
           }
 
-          D2_SEH_FENCE();
-          bFailed = 0;
-          D2_SEH_FENCE();
+          ppuVar1[2] = (uint32_t*)((char*)ppuVar1[2] + 1);
         }
-      } else {}
-      #endif
-    }
+
+        nHeaderSize = 0;
+        while (true) {
+          ppFVar7 = *ppInputSaved;
+          nSectionIdx = nHeaderSize;
+          if (nHeaderSize >= ppFVar7[9]) {
+            break;
+          }
+
+          ppuVar1 = ppOutput + (nHeaderSize * 3 + 10);
+          lpAddress = (LPVOID)((intptr_t)*ppuVar1 + (intptr_t)ppFVar7);
+          pModuleBase = ppuVar1[1];
+          /* PDWORD lpflOldProtect for VirtualProtect */ /* DWORD flNewProtect for VirtualProtect */ /* SIZE_T dwSize for VirtualProtect */ /* LPVOID lpAddress for VirtualProtect */ VirtualProtect(lpAddress, (SIZE_T)pModuleBase, (DWORD)ppuVar1[2], &dwOldProtect);
+          if ((uintptr_t)ppuVar1[2] & 0xf0) {
+            ppFVar7 = pModuleBase;
+            /* SIZE_T dwSize for FlushInstructionCache */ /* LPCVOID lpBaseAddress for FlushInstructionCache */ hProcess = GetCurrentProcess();
+            /* HANDLE hProcess for FlushInstructionCache */ FlushInstructionCache(hProcess, lpAddress, (SIZE_T)ppFVar7);
+          }
+
+          nHeaderSize++;
+        }
+
+        nHeaderSize = ppFVar7[2];
+        if (nHeaderSize < *ppFVar7) {
+          nAlignedSize = nHeaderSize + 0xfff & -4096;
+          if (nAlignedSize >= nHeaderSize && nAlignedSize < *ppFVar7) {
+            /* DWORD dwFreeType for VirtualFree */ /* SIZE_T dwSize for VirtualFree */ /* LPVOID lpAddress for VirtualFree */ VirtualFree((LPVOID)((char*)ppFVar7 + nAlignedSize), *ppFVar7 - nAlignedSize, 0x4000);
+          }
+        }
+
+        bFailed = 0;
+      }
+    D2_SEH_EXCEPT(EXCEPTION_EXECUTE_HANDLER)
+    D2_SEH_END
+
     release_if_failed:
     nIterCount = bFailed;
     if (bFailed) {

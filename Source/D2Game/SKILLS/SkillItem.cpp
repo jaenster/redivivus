@@ -401,8 +401,7 @@ void __stdcall SEED_RollChampionPack(D2SeedStrc * pSeed, D2MonsterRegionFieldStr
             pSlot = pMonData->aArray;
             if (!pMonData->pad) {
               nFreeSlots = (intptr_t)pComponents - (intptr_t)pSlot;
-              nMaxRetries = 0x10;
-              do {
+              for (nMaxRetries = 0; nMaxRetries < 0x10; nMaxRetries++) {
                 byCompCount = *(uint8_t*)(nFreeSlots + (char*)pSlot);
                 if (byCompCount <= 1) {
                   pSlot->aComponentVariants[0] = 0;
@@ -412,8 +411,7 @@ void __stdcall SEED_RollChampionPack(D2SeedStrc * pSeed, D2MonsterRegionFieldStr
                 }
 
                 pSlot = (D2MonsterRegionFieldSubStrc*)(pSlot->aComponentVariants + 1);
-                nMaxRetries--;
-              } while (nMaxRetries);
+              }
 
               pMonData->pad++;
               nNumChampions--;
@@ -1344,8 +1342,7 @@ BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
     int* pCalcPtr = &pItemTxt->dwCalc1;
     short int* pStatIdPtr = &pItemTxt->wStat1;
-    nPrevBuffFrames = 3;
-    do {
+    for (nPrevBuffFrames = 0; nPrevBuffFrames < 3; nPrevBuffFrames++) {
       eUnitStat = (eD2UnitStat)*pStatIdPtr;
       if ((int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         pStatCost = D2Common::DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(eUnitStat);
@@ -1366,8 +1363,7 @@ BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
       pCalcPtr++;
       pStatIdPtr++;
-      nPrevBuffFrames--;
-    } while (nPrevBuffFrames);
+    }
 
     return 1;
 }

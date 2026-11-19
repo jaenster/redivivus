@@ -6960,10 +6960,9 @@ void __fastcall UI_ScrollConfigListVertical(int32_t nSteps) {
         return;
       }
 
-      do {
+      for (int32_t i = 0; i < nSteps; i++) {
         UI_ScrollConfigListVertical(1);
-        nSteps--;
-      } while (nSteps);
+      }
 
       return;
     }
@@ -7023,10 +7022,9 @@ void __fastcall UI_ScrollConfigListHorizontal(int32_t nSteps) {
         return;
       }
 
-      do {
+      for (int32_t i = 0; i < nSteps; i++) {
         UI_ScrollConfigListHorizontal(1);
-        nSteps--;
-      } while (nSteps);
+      }
 
       return;
     }

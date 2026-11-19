@@ -2429,8 +2429,7 @@ void __fastcall COMCALLBACK_RemoveUserFromList(char * nStrBase, uint32_t * pnCar
     uint32_t nBitMask = 1;
     *pnCarryMask = 0;
     uint8_t* pbHexPair = (uint8_t*)(nStrBase + 1);
-    int nByteCount = 8;
-    do {
+    for (int nByteCount = 0; nByteCount < 8; nByteCount++) {
       uint32_t nSum;
       nSum = (int)(char)gaBnetCdKeyCharDecodeTable[*pbHexPair] + (char)gaBnetCdKeyCharDecodeTable[pbHexPair[-1]] * 0x18;
       if (nSum >= 0x100) {
@@ -2457,8 +2456,7 @@ void __fastcall COMCALLBACK_RemoveUserFromList(char * nStrBase, uint32_t * pnCar
       *pbHexPair = byHexChar;
       pbHexPair += 2;
       nBitMask *= 2;
-      nByteCount--;
-    } while (nByteCount);
+    }
 }
 
 BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * pnKeyHi, uint32_t * pnKeyLo) {

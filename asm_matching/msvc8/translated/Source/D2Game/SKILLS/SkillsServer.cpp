@@ -155,6 +155,7 @@
 #include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 #include "Source/D2Game/SKILLS/SkillAma.h"
 #include "Source/D2Game/SKILLS/SkillBar.h"
 #include "Source/D2Game/SKILLS/SkillItem.h"
@@ -920,7 +921,6 @@ BOOL __fastcall SKILLS_ApplyAreaDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 uint32_t __fastcall SKILLS_AreaEffect_FindNearestUnit(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pTargetUnit) {
-    int nUnitX;
     int nDeltaX;
     int nUnitY;
     int nDistSq;
@@ -935,15 +935,7 @@ uint32_t __fastcall SKILLS_AreaEffect_FindNearestUnit(D2SkillCallbackContextStrc
     }
 
     eD2UnitType eUnitType = pTargetUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nDeltaX = pTargetUnit->pPath.pStaticPath->nPosX;
-    } else if (pTargetUnit->pPath.pDynamicPath) {
-      nUnitX = D2Common::PATH::DynamicPath::GetXPos(pTargetUnit->pPath.pDynamicPath);
-      nDeltaX = nUnitX;
-    } else {
-      nDeltaX = 0;
-    }
-
+    nDeltaX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pTargetUnit);
     nDeltaX -= pSearchContext->nX;
     eTargetType = pTargetUnit->eUnitType;
     if (eTargetType == UNIT_OBJECT || (int)eTargetType > 3 && (int)eTargetType <= 5) {

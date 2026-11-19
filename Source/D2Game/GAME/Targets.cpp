@@ -215,16 +215,14 @@ void __fastcall TARGETS_FreeAllUnitNodes(::SGAMEDATA * pGame) {
 
     D2UnitNodeStrc* pNode = pGame->pUnitNodes[0];
     D2UnitNodeStrc** ppNodeSlot = pGame->pUnitNodes;
-    int nSlotsLeft = 10;
-    do {
+    for (int nSlotsLeft = 0; nSlotsLeft < 10; nSlotsLeft++) {
       if (pNode && pNode->pUnit) {
         UNIT_FreeUnitNodes(pGame, pNode->pUnit);
       }
 
       pNode = ppNodeSlot[1];
       ppNodeSlot++;
-      nSlotsLeft--;
-    } while (nSlotsLeft);
+    }
 }
 
 } // namespace D2Game::GAME::Targets

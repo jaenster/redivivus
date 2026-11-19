@@ -1720,11 +1720,9 @@ void __fastcall Q04_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q04_SetSecretCowLevelDiscovered);
     QUEST_StubEmpty(pQuestData, pQuestArgs, 0x40);
     pQuestArgs->pTarget->dwDropItemCode = 0x20737076;
-    int nDropCount = 8;
-    do {
+    for (int nDropCount = 0; nDropCount < 8; nDropCount++) {
       ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestArgs->pGame, pQuestArgs->pTarget, QUALITY_INVALID, (int32_t*)&pQuestDataTmp, nullptr, -1, 0);
-      nDropCount--;
-    } while (nDropCount);
+    }
 }
 
 // A1Q4 — Q04_SetScrollActivatedFlag: sets the quest sub-struct flag at offset 0x52

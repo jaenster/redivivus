@@ -2559,11 +2559,9 @@ void __stdcall DRAW_UI_Quest() {
         nActIndex++;
       } while (nActIndex < 5);
     }
-    nActIndex = 6;
-    do {
+    for (nActIndex = 0; nActIndex < 6; nActIndex++) {
       memset(gQuestLog.aQuestLogEntries, 0, 0xe7c);
-      nActIndex--;
-    } while (nActIndex);
+    }
 
     char bShowSocketBg;
     bShowSocketBg = '\0';

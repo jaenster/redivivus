@@ -2865,44 +2865,6 @@ void __stdcall D2COMP_AllocSmallClientBlock() {
     *pAllocated = 0;
 }
 
-#if 0 // ratchet: the match body of 005041b0 (evidence 1985bb0f9) could not be re-spelled: parameter 0 retyped: D2CharSelStrc * -> D2CharSelCompStrc *
-void __stdcall D2COMP_DestroyCompositeUnit(D2CharSelStrc * pCharSel, int32_t bUnlink) {
-    D2CompCofListNodeStrc** pCOFListHead;
-    D2CompCofListNodeStrc* pNextCOFNode;
-    if (!pCharSel) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x877);
-      exit(-1);
-    } else {
-      D2CompCofListNodeStrc* pMemoryToFree;
-      pCOFListHead = *(D2CompCofListNodeStrc***)(pCharSel->szCharname + 0xb8);
-      if (!pCOFListHead) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x87b);
-        exit(-1);
-      }
-
-      pMemoryToFree = *pCOFListHead;
-      while (pMemoryToFree) {
-        pNextCOFNode = pMemoryToFree->pNext;
-        D2COMP_ReleaseCOFCacheEntry(1, pMemoryToFree->pCacheEntry);
-        D2_FREE_AT(pMemoryToFree, ".\\Src\\D2Comp.cpp", 0x883);
-        pMemoryToFree = pNextCOFNode;
-      }
-
-      *pCOFListHead = 0;
-      D2_FREE_AT(pCOFListHead, ".\\Src\\D2Comp.cpp", 0x889);
-      if (*(DC6**)(pCharSel->szCharname + 0xbc)) {
-        D2WinArchive::IMAGE_FreeImage(*(DC6**)(pCharSel->szCharname + 0xbc));
-        *(uint32_t*)(pCharSel->szCharname + 188) = 0;
-      }
-      if (!bUnlink) {
-        return;
-      }
-
-      D2COMP_UnlinkCompositeUnit(pCharSel);
-      return;
-    }
-}
-#endif
 void __stdcall D2COMP_DestroyCompositeUnit(D2CharSelCompStrc * pCharSel, int32_t bUnlink) {
     D2CompCofListNodeStrc** pCOFListHead;
     D2CompCofListNodeStrc* pNextCOFNode;
@@ -3516,8 +3478,7 @@ void __stdcall D2COMP_CreateCompositeUnit(D2CharSelCompStrc * pCompUnit, uint32_
       } while (nSlot < 0x10);
 
       pCodeDst = pCompUnit->nComponentTransforms + 1;
-      nCofResult = 4;
-      do {
+      for (nCofResult = 0; nCofResult < 4; nCofResult++) {
         cCodeByte = *szText;
         pCodeDst[-1] = cCodeByte;
         if (cCodeByte != -1) {
@@ -3544,8 +3505,7 @@ void __stdcall D2COMP_CreateCompositeUnit(D2CharSelCompStrc * pCompUnit, uint32_
 
         pCodeDst += 4;
         szText += 4;
-        nCofResult--;
-      } while (nCofResult);
+      }
 
       BVar2 = D2COMP_ValidateAndLoadCOFForUnit(pCompUnit);
       if (!BVar2) {
@@ -4476,8 +4436,7 @@ D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, 
         } while (nComponentSlot < 0x10);
 
         pTransformByte = pCharSelComp->nComponentTransforms + 1;
-        nRemaining = 4;
-        do {
+        for (nRemaining = 0; nRemaining < 4; nRemaining++) {
           cTransform = *szText;
           pTransformByte[-1] = cTransform;
           if (cTransform != -1) {
@@ -4504,8 +4463,7 @@ D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, 
 
           pTransformByte += 4;
           szText += 4;
-          nRemaining--;
-        } while (nRemaining);
+        }
 
         BVar2 = D2COMP_ValidateAndLoadCOFForUnit(pCharSelComp);
         if (BVar2) {

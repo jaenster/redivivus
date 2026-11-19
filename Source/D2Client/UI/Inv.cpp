@@ -6074,8 +6074,7 @@ static void INV_DrawHirelingStats(D2UnitStrc * pUnit) {
         nPropertyArray1[9] = UNITSTAT_coldmindam;
         nPropertyArray1[10] = UNITSTAT_coldmaxdam;
         nPropertyArray1[0xb] = UNITSTAT_vitality;
-        iDmgTypeLoopCount = 4;
-        do {
+        for (iDmgTypeLoopCount = 0; iDmgTypeLoopCount < 4; iDmgTypeLoopCount++) {
           iStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, uSlot10.pDmgTypeStatArray[-1], 0);
           iStatCheck = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, *uSlot10.pDmgTypeStatArray, 0);
           if (iStatValue || iStatCheck) {
@@ -6085,8 +6084,7 @@ static void INV_DrawHirelingStats(D2UnitStrc * pUnit) {
           iDamageValue += iStatValue;
           uSlot10.pDmgTypeStatArray += 3;
           iStatRaw += iStatCheck;
-          iDmgTypeLoopCount--;
-        } while (iDmgTypeLoopCount);
+        }
 
         iStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_poisonmindam, 0);
         iStatBonusPct = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_poisonmaxdam, 0);

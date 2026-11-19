@@ -923,16 +923,14 @@ static int __fastcall SBMP_DecodeBmpMem(int * pWidth, int * pHeight, uint32_t * 
         pDstPaletteByte = (uint8_t*)(palette + 3);
         pSrcPaletteByte = pData + 0x37;
         nPaletteByteOffset = palette - (intptr_t)(pData + 0x36);
-        palette = 0x100;
-        do {
+        for (palette = 0; palette < 0x100; palette++) {
           pDstPaletteByte[-3] = pSrcPaletteByte[1];
           pSrcPaletteByte[nPaletteByteOffset] = *pSrcPaletteByte;
           pDstPaletteByte[-1] = pSrcPaletteByte[-1];
           *pDstPaletteByte = 0;
           pSrcPaletteByte += 4;
           pDstPaletteByte += 4;
-          palette--;
-        } while (palette);
+        }
       }
     }
     if (pixels) {
@@ -1209,16 +1207,14 @@ static int __fastcall SBMP_DecodePcxFile(D2MPQFileStrc * hFile, uint8_t * pixels
       SFile::SFileReadFile(hFile, abPalette, 0x300, nullptr, (LPOVERLAPPED)0x0);
       pDstPalEntry = abPalette + 1;
       pSrcPalEntry = palette + 2;
-      iResult = 0x100;
-      do {
+      for (iResult = 0; iResult < 0x100; iResult++) {
         pSrcPalEntry[-2] = pDstPalEntry[-1];
         pSrcPalEntry[-1] = *pDstPalEntry;
         *pSrcPalEntry = pDstPalEntry[1];
         pSrcPalEntry[1] = '\0';
         pDstPalEntry += 3;
         pSrcPalEntry += 4;
-        iResult--;
-      } while (iResult);
+      }
     }
 
     return 1;
@@ -1253,16 +1249,14 @@ static int __thiscall SBMP_DecodePcxMem(uint32_t * pWidth, D2PcxHeaderStrc * gif
 
     uint8_t* pSrcPalette = (uint8_t*)((char*)gifData + (dataSize - 0x2fe));
     uint8_t* pDstPalette = palette + 2;
-    nHeight = 0x100;
-    do {
+    for (nHeight = 0; nHeight < 0x100; nHeight++) {
       pDstPalette[-2] = pSrcPalette[-2];
       pDstPalette[-1] = pSrcPalette[-1];
       *pDstPalette = *pSrcPalette;
       pDstPalette[1] = '\0';
       pSrcPalette += 3;
       pDstPalette += 4;
-      nHeight--;
-    } while (nHeight);
+    }
 
     return 1;
 }

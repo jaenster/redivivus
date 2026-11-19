@@ -75,7 +75,6 @@
 #include "Source/D2Lang/D2Lang.h"
 #include "Source/D2Lang/D2LangRoot.h"
 #include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Win/D2Win.globals.h"
 #include "Source/Fog/D2MemoryManagerStrc.h"
 #include "Source/Fog/D2PoolManagerStrc.h"
 #include "Source/Fog/D2QServerStrc.h"
@@ -95,9 +94,8 @@
 #include "3rdparty/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/UI/Automap.h"
-#include "Source/D2Common/Unit.h"
+#include "Source/D2Common/Units.twin.inline.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
-#include "Source/D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -605,38 +603,18 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_11(D2UnitStrc * p) 
 
 // Server-side per-unit update flush: emits all pending network packets for one unit to one client (pClient) based on the unit's eUnitFlags/eUnitFlagsEx. Sends a 0x15 reassign packet on UNITFLAGEX_TELEPORTED (with current x/y) and refreshes room visibility; flushes monster update (DOUPDATE), queued unit messages, hover text, proxy/merc inventory items (HASINV), sound, NPC health, and (when nIsNew==0) state/overlay/enchant updates. Reads STATES_HasAnyGfxFlag / STATLIST_HasChangedStats to decide state/overlay sends, and clears UNITFLAG_MONMODEISCHANGING.
 void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, int32_t nIsNew) {
-    int32_t wPosX;
+    
     D2UnitStrc* pPlayer;
     uint32_t bIsInNpcState2;
     D2UnitStrc* pOwner;
     int fHasGfxFlag;
     uint32_t nMercType;
-    int32_t nPosRaw;
-    eD2UnitType eType;
     if (pUnit) {
-      int32_t wPosY;
+      
       if (pUnit->eUnitFlagsEx & UNITFLAGEX_TELEPORTED) {
-        eType = pUnit->eUnitType;
-        if (eType == UNIT_OBJECT || (int)eType > 3 && (int)eType <= 5) {
-          wPosY = pUnit->pPath.pStaticPath->nPosY;
-        } else if (pUnit->pPath.pDynamicPath) {
-          nPosRaw = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-          wPosY = nPosRaw;
-        } else {
-          wPosY = 0;
-        }
-
-        eType = pUnit->eUnitType;
-        if (eType == UNIT_OBJECT || (int)eType > 3 && (int)eType <= 5) {
-          wPosX = pUnit->pPath.pStaticPath->nPosX;
-        } else if (pUnit->pPath.pDynamicPath) {
-          nPosRaw = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-          wPosX = nPosRaw;
-        } else {
-          wPosX = 0;
-        }
-
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', pUnit->eUnitType, pUnit->nUnitGUID, wPosX, wPosY, '\x01');
+        
+        
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', pUnit->eUnitType, pUnit->nUnitGUID, (int32_t)(D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit)), (int32_t)(D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit)), '\x01');
         SUnit::UNITS_UpdateRoomClientVisibility(pGame, pUnit, nullptr);
       }
       if (pUnit->eUnitFlags & UNITFLAG_DOUPDATE) {

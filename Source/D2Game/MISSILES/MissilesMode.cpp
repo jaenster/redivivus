@@ -147,6 +147,7 @@
 #include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 #include "Source/D2Game/MISSILES/MissilesMode.data.h"
 #include "Source/D2Game/SKILLS/SkillEMonst.h"
 #include "Source/Fog/Src/Safesock.h"

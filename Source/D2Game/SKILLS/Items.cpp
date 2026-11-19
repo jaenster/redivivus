@@ -229,8 +229,7 @@ void __stdcall STAFFMOD_RollStaffModSkills(D2UnitStrc * pUnit, int32_t nSkillId,
         nSkillId = 4;
       }
 
-      nRetryCount = 6;
-      do {
+      for (nRetryCount = 0; nRetryCount < 6; nRetryCount++) {
         pItemSeed = D2Common::ITEMS::Items::GetItemSeed(pUnit);
         sNewSeed = D2_SeedRoll(pItemSeed);
         nSkillLevel = 1;
@@ -239,9 +238,7 @@ void __stdcall STAFFMOD_RollStaffModSkills(D2UnitStrc * pUnit, int32_t nSkillId,
           anSkillIds[iSkillSlot] = nLayer;
           break;
         }
-
-        nRetryCount--;
-      } while (nRetryCount > 0);
+      }
 
       wItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
       if (wItemVersion < 100 || (nRngRoll = D2Common::ITEMS::Items::GetItemQuality(pUnit) , nRngRoll != 1)) {

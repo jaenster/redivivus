@@ -85,8 +85,7 @@ void __fastcall AwaitAndClose(D2QServerStrc * pQserver) {
     }
 
     HANDLE* pHandleSlot = pQserver->aAcceptThreadHandles;
-    int nThreadSlotCount = 4;
-    do {
+    for (int nThreadSlotCount = 0; nThreadSlotCount < 4; nThreadSlotCount++) {
       if (*pHandleSlot) {
         /* HANDLE hObject for CloseHandle */ CloseHandle(*pHandleSlot);
         *pHandleSlot = (HANDLE)0x0;
@@ -99,8 +98,7 @@ void __fastcall AwaitAndClose(D2QServerStrc * pQserver) {
       }
 
       pHandleSlot++;
-      nThreadSlotCount--;
-    } while (nThreadSlotCount);
+    }
 }
 
 static BOOL __stdcall BeginAsyncReadForClient(D2QServerStrc * pQServer, D2QServerClientConnectionStrc * pClient) {

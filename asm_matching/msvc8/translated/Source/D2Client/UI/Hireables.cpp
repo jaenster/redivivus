@@ -106,14 +106,12 @@ void __stdcall LoadClassIcons() {
     ClassIcons[6] = 0;
     int nIndex = 0;
     char (*ppClassEntry)[32] = aBaseIconPaths;
-    nClassCount = 5;
-    do {
+    for (nClassCount = 0; nClassCount < 5; nClassCount++) {
       pIconDC6 = ui::ARCHIVE_LoadOverlayImageUsedInGame(*ppClassEntry);
       ClassIcons[nIndex] = pIconDC6;
       ppClassEntry++;
       nIndex++;
-      nClassCount--;
-    } while (nClassCount);
+    }
 
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     if (bIsExpansion) {

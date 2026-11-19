@@ -340,11 +340,14 @@ static int * __stdcall FindMpqFromDiskOrCd(char * pszMpqName, int * pnPriority, 
 
     Storm::Source::SSTR::SStrPack(szText, pszMpqName, 0x7fffffff);
     bOpenedFromCd = Storm::Source::SFile::SFileOpenArchive(szText, pnPriority, nFlags, (D2ArchiveStrc**)&ppArchive);
-    if (!bOpenedFromCd) {
+    if (bOpenedFromCd) {
+      return ppArchive;
+    }
+
+    {
       bOpenedFromCd = FindMPQOnCd(pszMpqName, pnPriority, (D2ArchiveStrc**)&ppArchive, szText);
       ppArchive = bOpenedFromCd ? (int*)ppArchive : nullptr;
     }
-
     return ppArchive;
 }
 

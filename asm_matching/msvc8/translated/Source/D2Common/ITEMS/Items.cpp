@@ -6501,8 +6501,7 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
       }
 
       pQuestMultEntry = &pNpcTxt->questsellmultA;
-      nQuestMultIter = 3;
-      do {
+      for (nQuestMultIter = 0; nQuestMultIter < 3; nQuestMultIter++) {
         if (pQuestMultEntry[-3] != QUEST_SpokeToWarriv) {
           bIsStackable = QuestRecord::GetQuestState(pQuestBitBuffer, pQuestMultEntry[-3], QUESTSTATE_Completed);
           if (bIsStackable == 1 || (bIsStackable = QuestRecord::GetQuestState(pQuestBitBuffer, pQuestMultEntry[-3], QUESTSTATE_RewardAwaits) , bIsStackable == 1)) {
@@ -6525,8 +6524,7 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
         }
 
         pQuestMultEntry++;
-        nQuestMultIter--;
-      } while (nQuestMultIter);
+      }
 
       dwResult = ITEMS_IsA(pItem, ITEMTYPE_Book);
       if (!dwResult) {

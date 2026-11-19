@@ -418,11 +418,11 @@ void __stdcall SMemInitialize() {
 
     SReg::SRegLoadValue("Internal", "Debug Memory", 0, (int32_t*)&DebugMemory);
     SReg::SRegLoadValue("Internal", "Protect Memory", 0, (int32_t*)&ProtectMemory);
-    int nCount = 0x100;
-    do {
-      /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&DebugMemoryCriticalSection[-nCount + 256]);
-      nCount--;
-    } while (nCount);
+    CRITICAL_SECTION* lpCriticalSection = DebugMemoryCriticalSection;
+    for (int nCount = 0; nCount < 0x100; nCount++) {
+      /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(lpCriticalSection);
+      lpCriticalSection++;
+    }
 
     g_SMemInitialized = 1;
 }
@@ -569,13 +569,12 @@ void __stdcall SMEM_FreeEmptyHeaps() {
     int nBucketOffset = 0;
     g_SMemPendingCleanupHeap = 0;
     CRITICAL_SECTION* lpCriticalSection = DebugMemoryCriticalSection;
-    int nCount = 0x100;
-    do {
-      if (*(int*)((char*)g_SMemHeapCleanupFlags + nBucketOffset)) {
+    for (int nCount = 0; nCount < 0x100; nCount++) {
+      if (g_SMemHeapCleanupFlags[nBucketOffset]) {
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-        *(uint32_t*)((char*)g_SMemHeapCleanupFlags + nBucketOffset) = 0;
-        pHeap = *(LPVOID*)((char*)g_SMemHeapBuckets + nBucketOffset);
-        ppPrevLink = (LPVOID*)((char*)g_SMemHeapBuckets + nBucketOffset);
+        g_SMemHeapCleanupFlags[nBucketOffset] = 0;
+        pHeap = g_SMemHeapBuckets[nBucketOffset];
+        ppPrevLink = &g_SMemHeapBuckets[nBucketOffset];
         while (pHeap) {
           ppNextHeap = (LPVOID*)*ppPrevLink;
           if (!ppNextHeap[5] && ppNextHeap[1] < (LPVOID)0x80000000) {
@@ -590,10 +589,9 @@ void __stdcall SMEM_FreeEmptyHeaps() {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
       }
 
-      nBucketOffset += 4;
+      nBucketOffset++;
       lpCriticalSection++;
-      nCount--;
-    } while (nCount);
+    }
 }
 
 // Grow, shrink or merge a heap block in place. The heap descriptor arrives in EAX.
@@ -708,12 +706,11 @@ uint32_t __stdcall SMemDestroy() {
 
     g_SMemInitialized = 0;
     CRITICAL_SECTION* lpCriticalSection = DebugMemoryCriticalSection;
-    int nCount = 0x100;
-    do {
+    for (int nCount = 0; nCount < 0x100; nCount++) {
       LPVOID* ppHeapLink;
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-      ppHeapLink = (LPVOID*)((char*)g_SMemHeapBuckets + nBucketOffset);
-      *(uint32_t*)((char*)g_SMemHeapCleanupFlags + nBucketOffset) = 0;
+      ppHeapLink = &g_SMemHeapBuckets[nBucketOffset];
+      g_SMemHeapCleanupFlags[nBucketOffset] = 0;
       pHeap = *ppHeapLink;
       while (pHeap) {
         pHeap = *ppHeapLink;
@@ -732,10 +729,9 @@ uint32_t __stdcall SMemDestroy() {
 
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
       /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(lpCriticalSection);
-      nBucketOffset += 4;
+      nBucketOffset++;
       lpCriticalSection++;
-      nCount--;
-    } while (nCount);
+    }
 
     return 1;
 }

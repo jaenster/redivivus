@@ -3979,10 +3979,6 @@ bool __thiscall GetRC4Data(::WardenClient * pThis, void * pDest, uint32_t * pnSi
 extern int gnScaleFactor;
 extern RGBQUAD nColor;
 extern D2SoundsTxt * pTxtSounds;
-namespace D2Client::ClientModeInGame {
-// TODO: Register param types uncertain - needs manual analysis: pushort (EAX): ushort*, param_ecx (ECX): undefined4, pbyte (EDX): byte*
-extern char gCmdLineHelpText[154];
-} // namespace D2Client::ClientModeInGame
 namespace D2Client::GAME::Game {
 extern char s___AUSGAMEDATA___0070f56c[16];
 } // namespace D2Client::GAME::Game

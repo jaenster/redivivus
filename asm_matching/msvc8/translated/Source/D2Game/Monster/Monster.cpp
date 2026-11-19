@@ -331,8 +331,7 @@ void __fastcall MONSTER_RollComponentAppearance(D2MonsterRegionFieldStrc * pMonR
       }
 
       nComponentIndex = 0;
-      nLoopCount = 0x10;
-      do {
+      for (nLoopCount = 0; nLoopCount < 0x10; nLoopCount++) {
         nRollResult = D2Common::DATATBLS::OverlayTbls::GetComponentsData(pUnit, nComponentIndex);
         if ((int)nRollResult <= 0) {
           byComponent = 0;
@@ -354,8 +353,7 @@ void __fastcall MONSTER_RollComponentAppearance(D2MonsterRegionFieldStrc * pMonR
 
         pComponentData[nComponentIndex] = byComponent;
         nComponentIndex++;
-        nLoopCount--;
-      } while (nLoopCount);
+      }
     } else {
       D2MonsterRegionFieldSubStrc* pDVar1;
       nRollResult = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, (uint32_t)pMonRegionField->pad);

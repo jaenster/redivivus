@@ -301,23 +301,30 @@ template<> TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * __fastcall T
     return param_1;
 }
 
+// D2_RoundUp, rounding up to a granularity, as its callers inlined it: the parameter changed and returned.
+static inline uint32_t D2_RoundUp(uint32_t n, uint32_t g) {
+    if (n % g) {
+        n = g - n % g + n;
+    }
+    return n;
+}
+
 template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Reserve(uint32_t nCount, int32_t bRound) {
-    uint32_t nRequired = nCount + this->m_count;
-    if (nRequired <= this->m_alloc) {
+    nCount = nCount + this->m_count;
+    if (nCount <= this->m_alloc) {
       return;
     }
     if (bRound) {
       uint32_t nGranularity;
       nGranularity = this->m_chunk;
       if (!nGranularity) {
-        nGranularity = this->CalcChunkSize(nRequired);
+        nGranularity = this->CalcChunkSize(nCount);
       }
-      if (nRequired % nGranularity) {
-        nRequired = nGranularity - nRequired % nGranularity + nRequired;
-      }
+
+      nCount = D2_RoundUp(nCount, nGranularity);
     }
 
-    this->ReallocData(nRequired);
+    this->ReallocData(nCount);
 }
 
 // stpl-orphan: a COMDAT copy in TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> that no member owns

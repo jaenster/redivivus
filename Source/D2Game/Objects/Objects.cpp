@@ -114,6 +114,7 @@
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Common/Chat.h"
 #include "Source/D2Common/Seed.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Objects/Objects.data.h"
 #include "Source/D2Game/Quests/QUESTS.h"
@@ -2690,8 +2691,7 @@ void __fastcall OBJECT_FreeObjectData(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 void __fastcall FreeObjects(::SGAMEDATA * pGame) {
     D2UnitStrc* pNextUnit;
     D2UnitStrc** ppUnitList = pGame->pUnitList[2];
-    int nBuckets = 0x80;
-    do {
+    for (int nBuckets = 0; nBuckets < 0x80; nBuckets++) {
       D2UnitStrc* pUnit;
       pUnit = *ppUnitList;
       while (pUnit) {
@@ -2701,8 +2701,7 @@ void __fastcall FreeObjects(::SGAMEDATA * pGame) {
       }
 
       ppUnitList++;
-      nBuckets--;
-    } while (nBuckets);
+    }
 }
 
 int32_t __fastcall OBJECT_GetDoubledTxtSize(D2ObjectsTxt * pObjectsTxt) {
@@ -2835,18 +2834,8 @@ D2UnitStrc * __fastcall Objects_PopulateFn2_WaypointShrine(::SGAMEDATA * pGame, 
         }
 
         eUnitType = pUnit->eUnitType;
-        if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
-          if (pUnit->pPath.pDynamicPath) {
-            nXPos = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-            ObjectsRgn::AddPointsToLevelRngPoints1(pGameSave, eLevelId, nXPos, nY);
-            return pUnit;
-          }
-
-          ObjectsRgn::AddPointsToLevelRngPoints1(pGameSave, eLevelId, 0, nY);
-          return pUnit;
-        }
-
-        ObjectsRgn::AddPointsToLevelRngPoints1(pGameSave, eLevelId, pUnit->pPath.pStaticPath->nPosX, nY);
+        nXPos = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+        ObjectsRgn::AddPointsToLevelRngPoints1(pGameSave, eLevelId, nXPos, nY);
         return pUnit;
       }
     }

@@ -172,8 +172,7 @@ void __fastcall PLAYER_FreeAllResources(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
 void __fastcall FreePlayers(::SGAMEDATA * pGame) {
     D2UnitStrc* pNextUnit;
     D2UnitStrc** ppBucket = pGame->pUnitList[0];
-    int nBucketCount = 0x80;
-    do {
+    for (int nBucketCount = 0; nBucketCount < 0x80; nBucketCount++) {
       D2UnitStrc* pUnit;
       pUnit = *ppBucket;
       while (pUnit) {
@@ -183,8 +182,7 @@ void __fastcall FreePlayers(::SGAMEDATA * pGame) {
       }
 
       ppBucket++;
-      nBucketCount--;
-    } while (nBucketCount);
+    }
 }
 
 void __fastcall PLAYER_ClearTargetIfMatch(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {

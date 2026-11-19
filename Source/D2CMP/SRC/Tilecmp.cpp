@@ -302,14 +302,13 @@ static void __stdcall TILECMP_ExtractIsometricSubTile(D2TileCmpTileNodeStrc * pS
 
     memset(pSubTilePixelBuf, 0, 0x600);
     uint8_t* pFillPixel = pSubTilePixelBuf + 2;
-    int iRow = 0x200;
-    do {
+    int iRow;
+    for (iRow = 0; iRow < 0x200; iRow++) {
       pFillPixel[-2] = (uint8_t)dwColorKey;
       pFillPixel[-1] = (uint8_t)(dwColorKey >> 8);
       *pFillPixel = *(uint8_t*)((char*)&dwColorKey + 2);
       pFillPixel += 3;
-      iRow--;
-    } while (iRow);
+    }
 
     iRow = 0;
     void* pSrcDT1Pixel = (void*)((char*)pTileData + (nSubTileOffset * 0xa0 + nSubTileIndex) * 3);

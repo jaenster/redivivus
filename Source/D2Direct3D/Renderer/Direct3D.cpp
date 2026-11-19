@@ -571,11 +571,7 @@ static BYTE * gaGlidePaletteTable[72] = {}; D2_STATIC_GUARD(gaGlidePaletteTable,
 void __fastcall RENDERER_D3D_ConvertPalettedTo16Bit(uint8_t * pSrc8Bit, uint16_t * pDest16Bit, int nWidth, int nHeight, int nDestPitchInPixels, uint32_t dwUnused) {
     uint8_t* pbSrcPixel;
     int nPixelsRemaining;
-    if (nHeight <= 0) {
-      return;
-    }
-
-    do {
+    for (int i = 0; i < nHeight; i++) {
       uint16_t* pwDstPixel;
       pwDstPixel = pDest16Bit;
       pbSrcPixel = pSrc8Bit;
@@ -591,18 +587,13 @@ void __fastcall RENDERER_D3D_ConvertPalettedTo16Bit(uint8_t * pSrc8Bit, uint16_t
 
       pDest16Bit += nDestPitchInPixels;
       pSrc8Bit += nWidth;
-      nHeight--;
-    } while (nHeight);
+    }
 }
 
 void __fastcall RENDERER_D3D_ConvertPalettedTo32Bit(uint8_t * pSrc8Bit, uint32_t * pDest32Bit, int nWidth, int nHeight, int nDestPitchInPixels, uint32_t dwParam6) {
     uint8_t* pSrcPixel;
     int nPixelsRemaining;
-    if (nHeight <= 0) {
-      return;
-    }
-
-    do {
+    for (int i = 0; i < nHeight; i++) {
       uint32_t* pDestPixel;
       pDestPixel = pDest32Bit;
       pSrcPixel = pSrc8Bit;
@@ -618,8 +609,7 @@ void __fastcall RENDERER_D3D_ConvertPalettedTo32Bit(uint8_t * pSrc8Bit, uint32_t
 
       pDest32Bit += nDestPitchInPixels;
       pSrc8Bit += nWidth;
-      nHeight--;
-    } while (nHeight);
+    }
 }
 
 void __fastcall RENDERER_D3D_SetBlendMode(int nBlendMode) {
@@ -1122,7 +1112,7 @@ void __fastcall RENDERER_D3D_SaveDeviceConfigToRegistry(uint32_t nRenderMode, in
     /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ RegSetValueExA(hCreatedKey, "Render", 0, 4, (uint8_t*)&dwRegValue, 4);
     char* lpData = gdwD3DDeviceFlags[nDeviceIndex].szName;
     if (!lpData) {
-      CRT_ReturnValue(0x80004005);
+      AtlThrow(0x80004005);
     }
 
     int nNameLen = lstrlenA(lpData);
@@ -5140,8 +5130,7 @@ void __stdcall RENDERER_D3D_InitGroundTileCache() {
 
     puDestIndex = gpD3DGroundTileVertexBuffer + 0xc;
     psIndexBuf = aStripIndices;
-    iRow = 5;
-    do {
+    for (iRow = 0; iRow < 5; iRow++) {
       *(uint32_t*)(puDestIndex - 0xc) = *(uint32_t*)psIndexBuf;
       *(uint32_t*)(puDestIndex - 10) = *(uint32_t*)(psIndexBuf + 2);
       *(uint32_t*)(puDestIndex - 8) = *(uint32_t*)(psIndexBuf + 4);
@@ -5151,8 +5140,7 @@ void __stdcall RENDERER_D3D_InitGroundTileCache() {
       *puDestIndex = puDestIndex[-1];
       puDestIndex += 0xd;
       psIndexBuf += 0xc;
-      iRow--;
-    } while (iRow);
+    }
 
     return;
 }
@@ -5657,8 +5645,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
         if (nPixelCol && nImgWidth == 0x1d4 && nImgBpp == 0x3c && nImgHeight == 8) {
           pOutputPixel = aPixelData + 1;
           pCurOutputRow = (uint16_t*)pSmackerDecodeBuffer;
-          nRowsRemaining = 0x3c;
-          do {
+          for (nRowsRemaining = 0; nRowsRemaining < 0x3c; nRowsRemaining++) {
             nPixelCol = 0;
             pIndexedPixels = pCurOutputRow;
             do {
@@ -5680,8 +5667,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
 
             pCurOutputRow += 0x200;
             pOutputPixel += 0x1d4;
-            nRowsRemaining--;
-          } while (nRowsRemaining);
+          }
 
           if (gnRenderState) {
             return;

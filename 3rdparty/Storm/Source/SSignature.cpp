@@ -602,8 +602,7 @@ int __thiscall Sha1_Finalize(D2Sha1ContextStrc * pCtx, uint8_t * pDigest) {
     Sha1_Append(pCtx, abyBitLength, 8);
     uint32_t* pStateCursor = pCtx->aState;
     uint8_t* pDigestCursor = pDigest + 1;
-    int nWordsLeft = 5;
-    do {
+    for (int nWordsLeft = 0; nWordsLeft < 5; nWordsLeft++) {
       dwStateWord = *pStateCursor;
       pDigestCursor[2] = (uint8_t)dwStateWord;
       pDigestCursor[1] = (uint8_t)(dwStateWord >> 8);
@@ -611,8 +610,7 @@ int __thiscall Sha1_Finalize(D2Sha1ContextStrc * pCtx, uint8_t * pDigest) {
       pDigestCursor[-1] = (uint8_t)(dwStateWord >> 0x18);
       pStateCursor++;
       pDigestCursor += 4;
-      nWordsLeft--;
-    } while (nWordsLeft);
+    }
 
     return dwStateWord >> 0x18;
 }

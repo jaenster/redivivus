@@ -13,13 +13,12 @@
 #include "Source/D2Client/UNIT/UnitSnd.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2CharStatsTxt.h"
-#include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/DataTbls.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -856,20 +855,8 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Leap_ArcParticle(D2UnitStrc * pUnit, eD2Ski
     }
 
     nUnitType = pUnit->eUnitType;
-    if (nUnitType != UNIT_OBJECT && ((int)nUnitType <= 3 || (int)nUnitType > 5)) {
-      if (pUnit->pPath.pDynamicPath) {
-        nSrvPathY = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-        PATH_ResetCollisionOnLanding(nSrvPathX, nSrvPathY, pUnit);
-        D2Common::Skills::SKILL_SetFlags(pSkill, 0);
-        return 1;
-      }
-
-      PATH_ResetCollisionOnLanding(nSrvPathX, 0, pUnit);
-      D2Common::Skills::SKILL_SetFlags(pSkill, 0);
-      return 1;
-    }
-
-    PATH_ResetCollisionOnLanding(nSrvPathX, pUnit->pPath.pStaticPath->nPosX, pUnit);
+    nSrvPathY = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    PATH_ResetCollisionOnLanding(nSrvPathX, nSrvPathY, pUnit);
     D2Common::Skills::SKILL_SetFlags(pSkill, 0);
     return 1;
 }

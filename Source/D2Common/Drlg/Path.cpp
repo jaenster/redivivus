@@ -3,11 +3,11 @@
 #include "Source/D2Common/Drlg/Path.h"
 #include "Source/D2Common/Collision.h"
 #include "Source/D2Common/D2DynamicPathStrc.h"
-#include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
 #include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Game/D2PathTypeArg.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Common/Units.twin.inline.h"
+#include "Source/D2Game/D2Game.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -1039,9 +1039,7 @@ void __fastcall DRLGPATH_GetMissileTargetPosition(short * pOutPos, D2DynamicPath
     float fVar2;
     short int nOffsetRadius;
     D2UnitStrc* pOwner;
-    eD2UnitType eUnitType;
     float fSpiralRadius;
-    int32_t nLine;
     if (!pDynamicPath) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x201);
       exit(-1);
@@ -1053,28 +1051,10 @@ void __fastcall DRLGPATH_GetMissileTargetPosition(short * pOutPos, D2DynamicPath
         exit(-1);
       }
 
-      eUnitType = pOwner->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nCoord = pOwner->pPath.pStaticPath->nPosX;
-      } else if (pOwner->pPath.pDynamicPath) {
-        nLine = PATH::DynamicPath::GetXPos(pOwner->pPath.pDynamicPath);
-        nCoord = nLine;
-      } else {
-        nCoord = 0;
-      }
-
+      nCoord = D2Common::Units::GetXPosFromDynamicPathUnitInline(pOwner);
       *pOutPos = nCoord;
       pDVar1 = pDynamicPath->pTargetUnit;
-      eUnitType = pDVar1->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nCoord = pDVar1->pPath.pStaticPath->nPosY;
-      } else if (pDVar1->pPath.pDynamicPath) {
-        nLine = PATH::DynamicPath::GetYPos(pDVar1->pPath.pDynamicPath);
-        nCoord = nLine;
-      } else {
-        nCoord = 0;
-      }
-
+      nCoord = D2Common::Units::GetYPosFromDynamicPathUnitInline(pDVar1);
       pOutPos[1] = nCoord;
       if (!pDynamicPath->nMissileOffset) {
         return;

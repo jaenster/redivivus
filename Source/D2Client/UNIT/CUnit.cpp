@@ -215,6 +215,7 @@
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/SKILLS/SkillAss.h"
 
@@ -695,14 +696,7 @@ void __fastcall FacePlayer(D2UnitStrc * pUnit) {
     }
 
     eUnitType = pPlayer->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nTargetX_00 = pPlayer->pPath.pStaticPath->nPosX;
-    } else if (pPlayer->pPath.pDynamicPath) {
-      nTargetX_00 = D2Common::PATH::DynamicPath::GetXPos(pPlayer->pPath.pDynamicPath);
-    } else {
-      nTargetX_00 = 0;
-    }
-
+    nTargetX_00 = D2Common::Units::GetXPosFromDynamicPathUnitInline(pPlayer);
     D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, nTargetX_00, nTargetY, 0);
 }
 
@@ -730,18 +724,8 @@ void __fastcall CLIENT_TurnPlayerToFaceUnit(D2UnitStrc * pUnit) {
     }
 
     eUnitType = pUnit->eUnitType;
-    if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
-      if (pUnit->pPath.pDynamicPath) {
-        nTargetX_00 = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-        D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, nTargetX_00, nTargetY, 0);
-        return;
-      }
-
-      D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, 0, nTargetY, 0);
-      return;
-    }
-
-    D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, pUnit->pPath.pStaticPath->nPosX, nTargetY, 0);
+    nTargetX_00 = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, nTargetX_00, nTargetY, 0);
 }
 
 static uint32_t __stdcall SKILL_IsSequenceInputReady(D2UnitStrc * pUnit, D2SkillStrc * pSkillUnused) {

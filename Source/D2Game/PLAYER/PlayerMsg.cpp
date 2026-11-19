@@ -155,6 +155,7 @@
 #include "Source/D2Common/ITEMS/ItemMods.h"
 #include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 #include "Source/D2Game/PLAYER/PlayerMsg.data.h"
 #include "Source/D2Game/Quests/QUESTS.inline.h"
 #include "Source/D2Game/SKILLS/SkillAss.h"
@@ -910,30 +911,11 @@ void __fastcall SendPlayerMove(::SGAMEDATA * pGame, D2UnitStrc * pUnitRaw, D2Cli
 void __fastcall SendPlayerStop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, eD2MonsterAnimMode eAnimMode) {
     int32_t wPosY;
     int32_t wPosX;
-    int32_t nPos;
     uint32_t dwLastHitClass = pUnit->dwLastHitClass;
     int32_t dwMoveMode = gaPlayerModeNetMsgTable[eAnimMode].nMoveModeByte;
     int32_t nLifePct = D2Common::Units::GetCurrentLifePercentage(pUnit);
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nPos = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      wPosY = nPos;
-    } else {
-      wPosY = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nPos = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      wPosX = nPos;
-    } else {
-      wPosX = 0;
-    }
-
+    wPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
+    wPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(pClient, '\r', '\0', pUnit->nUnitGUID, (uint8_t)dwMoveMode, wPosX, wPosY, (uint8_t)dwLastHitClass, (uint8_t)nLifePct);
 }
 

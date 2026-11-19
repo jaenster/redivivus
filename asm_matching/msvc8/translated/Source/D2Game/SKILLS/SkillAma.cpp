@@ -561,14 +561,13 @@ BOOL __fastcall Skills_SrvDoFunc_008_MultipleShot(::SGAMEDATA * pGame, D2UnitStr
         return 1;
       }
 
-      do {
+      for (int i = 0; i < iVar1; i++) {
         sSkillArg.nUnitX = nTargetX;
         sSkillArg.nUnitY = nTargetY;
         MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
         nTargetX += nDirX;
         nTargetY += nDirY;
-        iVar1--;
-      } while (iVar1);
+      }
     }
 
     return 1;

@@ -1104,8 +1104,7 @@ uint32_t __fastcall A2Q6_GetNextFalseTombPortalClassId(D2QuestDataStrc * pQuestD
         pSpecificData->bFalseTombRingInit = '\x01';
         iTomb = 0;
         pnDecoyRingEntry = pSpecificData->anFalseTombPortalClassId;
-        nTombsLeft = 7;
-        do {
+        for (nTombsLeft = 0; nTombsLeft < 7; nTombsLeft++) {
           if (iTomb == eTombLevel - LEVEL_TalRashasTomb1) {
             iTomb++;
           } else if (iTomb < 7 && nDecoysPlaced < 6) {
@@ -1114,9 +1113,7 @@ uint32_t __fastcall A2Q6_GetNextFalseTombPortalClassId(D2QuestDataStrc * pQuestD
             pnDecoyRingEntry++;
             iTomb++;
           }
-
-          nTombsLeft--;
-        } while (nTombsLeft);
+        }
       }
       if (pSpecificData->nFalseTombRingIndex == 6) {
         pSpecificData->nFalseTombRingIndex = 0;

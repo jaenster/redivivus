@@ -4249,23 +4249,17 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
       }
     }
 
-    iVar3 = 5;
-    do {
+    for (iVar3 = 0; iVar3 < 5; iVar3++) {
       SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_INVALID);
-      iVar3--;
-    } while (iVar3);
+    }
 
-    iVar3 = 2;
-    do {
+    for (iVar3 = 0; iVar3 < 2; iVar3++) {
       SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20337068, QUALITY_INVALID);
-      iVar3--;
-    } while (iVar3);
+    }
 
-    iVar3 = 2;
-    do {
+    for (iVar3 = 0; iVar3 < 2; iVar3++) {
       SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x2033706d, QUALITY_INVALID);
-      iVar3--;
-    } while (iVar3);
+    }
 
     finish_opening:
     pTxtObjectsFinal = pTxtObjects;

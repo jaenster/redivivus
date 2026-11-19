@@ -79,8 +79,7 @@ static void __fastcall MONSTER_EquipFromClassTable(D2UnitStrc * pUnit) {
     ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
     int nMonsterLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     uint32_t* pEquipTableEntry = (uint32_t*)&gaMonsterEquipTable[nClassId - 540];
-    int nEquipSlotsLeft = 4;
-    do {
+    for (int nEquipSlotsLeft = 0; nEquipSlotsLeft < 4; nEquipSlotsLeft++) {
       D2ItemsTxt* pItemsTxt;
       sEquipEntry.dwItemCode = *pEquipTableEntry;
       *(uint32_t*)((char*)&sEquipEntry + 4) = pEquipTableEntry[1];
@@ -100,8 +99,7 @@ static void __fastcall MONSTER_EquipFromClassTable(D2UnitStrc * pUnit) {
 
       MONSTER_CreateAndEquipItem(pGame, pUnit, &sEquipEntry, nMonsterLevel, QUALITY_MAGIC);
       pEquipTableEntry += 6;
-      nEquipSlotsLeft--;
-    } while (nEquipSlotsLeft);
+    }
 }
 
 // Called when a server monster is created (from CreateMonster) to wire up quest behavior based on the monster's base class id (resolved through MonStats BaseId). Dispatches per boss/quest-monster: attaches the relevant quest record to the unit (QUEST_AttachToUnitByQuestId, e.g. Andariel->SistersToTheSlaughter, Radament->RadamentsLair, Summoner->TheSummoner, Diablo->TerrorsEnd, Baal->EveOfDestruction, Izual->TheFallenAngel, Hephasto->HellsForge, Nihlathak->BetrayalOfHaggorath, Anya-on-mount->RescueOnMountArreat) and/or applies fixed monster umods via InitUmods, sets unit flags (SUMMONER, NOTC), or special-cases (NM/Hell clone ids 0x2c0-0x2c5 get extra umods; act bosses get equip/umods; Q12 death dispatch by position). No-op for ordinary monsters.
@@ -407,20 +405,14 @@ void __fastcall SpawnMinions_BySlot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int
     }
 
     int32_t nUnitGUID = pUnit->nUnitGUID;
-    if (nMinionCount <= 0) {
-      return;
-    }
-
-    do {
+    for (int32_t i = 0; i < nMinionCount; i++) {
       D2UnitStrc* pMinion;
       pMinion = SpawnMonsterAtUnit(pGame, pUnit, nClassId, eMode, nSpawnRadius, wFlags);
       if (pMinion) {
         Ai::AiGeneral::AssignMinionOwner(pGame, pMinion, nUnitGUID, UNIT_MONSTER, 0, 0);
         Ai::AiGeneral::AddMinionToList(pGame, pUnit, pMinion);
       }
-
-      nMinionCount--;
-    } while (nMinionCount);
+    }
 }
 
 BOOL __fastcall SpawnMinions_ByPattern(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nMinionCount, int32_t nSpawnX, int16_t wFlags) {
@@ -684,11 +676,7 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
     }
 
     nPartySize = Seed::SEED_RollRangeInclusive(&pUnit->sSeed, (uint32_t)pMonStats->PartyMin, (uint32_t)pMonStats->PartyMax);
-    if (nPartySize <= 0) {
-      return;
-    }
-
-    for (int i = 0; i < nPartySize; i++) {
+    for (int32_t i = 0; i < nPartySize; i++) {
       D2UnitStrc* pSpawnedMinion;
       pSpawnedMinion = SpawnMonsterAtUnit(pGameInst, pUnit, (int)*(short int*)(pMonStats->Code + (nMinionTypeSlot * 2 + 0x16)), eD2MonsterAnimMode_ns::Neutral, 4, 0x40);
       if (pSpawnedMinion && *((uint8_t*)pMonStats + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
@@ -703,7 +691,6 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
       if (nMinionTypeSlot > bHasSecondMinionType) {
         nMinionTypeSlot = 0;
       }
-
     }
 }
 

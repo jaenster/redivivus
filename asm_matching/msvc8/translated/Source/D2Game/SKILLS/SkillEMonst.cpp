@@ -1200,7 +1200,7 @@ BOOL __fastcall Skills_SrvDoFunc_140_BaalTentacle(::SGAMEDATA * pGame, D2UnitStr
       return 1;
     }
 
-    do {
+    for (int32_t i = 0; i < nSpawnCount; i++) {
       D2RoomStrc* pSpawnRoom;
       uSeedRoll = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
       nOffsetX = (int)((uint32_t)uSeedRoll % 0x12) - 9 + nBaseX;
@@ -1219,9 +1219,7 @@ BOOL __fastcall Skills_SrvDoFunc_140_BaalTentacle(::SGAMEDATA * pGame, D2UnitStr
           D2Common::Units::StoreOwner(pSpawnedMinion, pUnit);
         }
       }
-
-      nSpawnCount--;
-    } while (nSpawnCount);
+    }
 
     return 1;
 }

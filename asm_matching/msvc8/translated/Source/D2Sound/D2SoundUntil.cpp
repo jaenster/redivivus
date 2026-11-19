@@ -3,27 +3,6 @@
 #include "Source/D2Sound/D2SoundUntil.h"
 #include "Source/D2Client/Sound/Sound.h"
 #include "Source/Fog/Fog.h"
-#include "Source/Fog/Memory.h"
-#include "Source/D2Client/Sound/Sound.h"
-#include "Source/D2gfx/D2gfx.public.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/D2MemoryManagerStrc.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/D2QServerStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Save.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Source/SSComp.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "3rdparty/Storm/Storm.h"
-#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
-#include "3rdparty/Storm/H/stpl.h"
-#include "3rdparty/Storm/Source/SCMD.h"
-#include "3rdparty/Storm/Source/SComp.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SFile.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -169,16 +148,14 @@ void __fastcall SOUNDUTIL_AppendToLinkedList(D2SoundListNodeStrc * * ppListHead,
 BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBufferSize, void * pBuffer) {
     uint32_t* pnBufferSizeSaved;
     HANDLE hFileSaved;
-    EH3_EXCEPTION_REGISTRATION tSehFrame;
     int nResourceOffset;
     uint32_t nResourceSize;
-    volatile HANDLE hMapping = (HANDLE)0x0;
-    volatile LPVOID pView = (LPVOID)0x0;
-    volatile int bSuccess = 0;
-    volatile HANDLE hFile;
-    // __finally block: run by the termination handler 00516bfc on unwind and by the normal path; both reach 00516c01
-    #if defined(_MSC_VER)
-    __try {
+    HANDLE hMapping = (HANDLE)0x0;
+    LPVOID pView = (LPVOID)0x0;
+    int bSuccess = 0;
+    HANDLE hFile;
+    // __try / __finally: scope table 007011b0; the termination handler 00516bfc and the normal path both run 00516c01
+    D2_SEH_TRY
       hFile = CreateFileA(szText, 0x80000000, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0, (HANDLE)0x0);
       /* LPCSTR lpName for CreateFileMappingA */ /* DWORD dwMaximumSizeLow for CreateFileMappingA */ /* DWORD dwMaximumSizeHigh for CreateFileMappingA */ /* DWORD flProtect for CreateFileMappingA */ /* LPSECURITY_ATTRIBUTES lpFileMappingAttributes for CreateFileMappingA */ /* HANDLE hFile for CreateFileMappingA */ /* SIZE_T dwNumberOfBytesToMap for MapViewOfFile */ /* DWORD dwFileOffsetLow for MapViewOfFile */ /* DWORD dwFileOffsetHigh for MapViewOfFile */ /* DWORD dwDesiredAccess for MapViewOfFile */ /* HANDLE hFileMappingObject for MapViewOfFile */ if (hFile != (HANDLE)-1) {
         int* pPeHeader;
@@ -210,7 +187,7 @@ BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBuffer
           }
         }
       }
-    } __finally {
+    D2_SEH_FINALLY
       DWORD dwErrCode = GetLastError();
       if (pView) {
         UnmapViewOfFile(pView);
@@ -223,77 +200,8 @@ BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBuffer
       }
 
       SetLastError(dwErrCode);
-    }
-    #else
-    auto __finally0 = [&] {
-      DWORD dwErrCode = GetLastError();
-      if (pView) {
-        UnmapViewOfFile(pView);
-      }
-      if (hMapping) {
-        CloseHandle(hMapping);
-      }
-      if (hFile != (HANDLE)-1) {
-        CloseHandle(hFile);
-      }
+    D2_SEH_END
 
-      SetLastError(dwErrCode);
-    };
-    {
-      // __try / __finally: scope table 007011b0
-      D2SehScope __seh0(__finally0);
-      __seh0.Enter();
-      D2_SEH_FENCE();
-      hFile = CreateFileA(szText, 0x80000000, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0, (HANDLE)0x0);
-      D2_SEH_FENCE();
-      /* LPCSTR lpName for CreateFileMappingA */ /* DWORD dwMaximumSizeLow for CreateFileMappingA */ /* DWORD dwMaximumSizeHigh for CreateFileMappingA */ /* DWORD flProtect for CreateFileMappingA */ /* LPSECURITY_ATTRIBUTES lpFileMappingAttributes for CreateFileMappingA */ /* HANDLE hFile for CreateFileMappingA */ /* SIZE_T dwNumberOfBytesToMap for MapViewOfFile */ /* DWORD dwFileOffsetLow for MapViewOfFile */ /* DWORD dwFileOffsetHigh for MapViewOfFile */ /* DWORD dwDesiredAccess for MapViewOfFile */ /* HANDLE hFileMappingObject for MapViewOfFile */ if (hFile != (HANDLE)-1) {
-        int* pPeHeader;
-        D2_SEH_FENCE();
-        hMapping = CreateFileMappingA(hFile, (LPSECURITY_ATTRIBUTES)0x0, 2, 0, 0, (LPCSTR)0x0);
-        D2_SEH_FENCE();
-        if (hMapping) {
-          D2_SEH_FENCE();
-          pView = MapViewOfFile(hMapping, 4, 0, 0, 0);
-          D2_SEH_FENCE();
-          if (pView) {
-            if (*(short int*)pView == 0x5a4d && (pPeHeader = (int*)(*(int*)((char*)pView + 0x3c) + (intptr_t)pView) , *pPeHeader == 0x454c)) {
-              if (!pPeHeader[0x2f]) {
-                D2_SEH_FENCE();
-                *pnBufferSize = 0;
-                D2_SEH_FENCE();
-                /* DWORD dwErrCode for SetLastError */ SetLastError(0x714);
-              } else {
-                nResourceOffset = pPeHeader[0x2e];
-                nResourceSize = *(uint32_t*)((char*)pView + (nResourceOffset + 8));
-                if (!pBuffer || *pnBufferSize < nResourceSize) {
-                  D2_SEH_FENCE();
-                  *pnBufferSize = nResourceSize;
-                  D2_SEH_FENCE();
-                  /* DWORD dwErrCode for SetLastError */ SetLastError(0x7a);
-                } else {
-                  D2_SEH_FENCE();
-                  memset(pBuffer, 0, *pnBufferSize);
-                  D2_SEH_FENCE();
-                  memcpy(pBuffer, (void*)((char*)pView + (nResourceOffset + 0xc)), nResourceSize);
-                  D2_SEH_FENCE();
-                  *pnBufferSize = nResourceSize;
-                  D2_SEH_FENCE();
-                  /* DWORD dwErrCode for SetLastError */ SetLastError(0);
-                  D2_SEH_FENCE();
-                  bSuccess = 1;
-                  D2_SEH_FENCE();
-                }
-              }
-            } else {
-              /* DWORD dwErrCode for SetLastError */ SetLastError(0xb);
-            }
-          }
-        }
-      }
-    }
-    // normal termination: the parent calls 00516c01 after the __try
-    __finally0();
-    #endif
     return bSuccess;
 }
 

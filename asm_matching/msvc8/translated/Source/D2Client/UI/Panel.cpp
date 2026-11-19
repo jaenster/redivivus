@@ -1916,16 +1916,14 @@ void __stdcall PANEL_DrawBottomPanel() {
       sGfxData.nFrameNumber = 0;
       sGfxData.pDC6 = ctrlpnl_popbelt;
       pbRowVisible = aRowVisible;
-      nBeltState = 3;
-      do {
+      for (nBeltState = 0; nBeltState < 3; nBeltState++) {
         if (*pbRowVisible != '\0') {
           D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX / 2 + 0x15, Inv::ScreenSizeY - nDrawY - 0x29, -1, DRAW_SOLID, nullptr);
         }
 
         pbRowVisible++;
         nDrawY += 0x20;
-        nBeltState--;
-      } while (nBeltState);
+      }
     }
 
     D2Common::DATATBLS::BeltsTbls::GetBeltsLine(gnBeltPanelState, Inv::nScreenMode, &sBeltsTxt);

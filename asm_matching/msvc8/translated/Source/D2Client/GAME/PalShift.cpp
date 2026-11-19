@@ -148,8 +148,7 @@ static void PALSHIFT_ApplyGreenBloodPalette(uint8_t * pPaletteData, int32_t nMon
       pDstPal += 4;
     }
 
-    int nPalRows = 8;
-    do {
+    for (int nPalRows = 0; nPalRows < 8; nPalRows++) {
       nMonStatsExId = 0;
       do {
         if (pGreenBlood->abyRemap[(pPalBase + nMonStatsExId)[-0x800]] != '\0') {
@@ -169,8 +168,7 @@ static void PALSHIFT_ApplyGreenBloodPalette(uint8_t * pPaletteData, int32_t nMon
       } while (nMonStatsExId < 0x100);
 
       pPalBase += 0x100;
-      nPalRows--;
-    } while (nPalRows);
+    }
 }
 
 // Loads a monster's palshift.dat color-remapping table on demand. Looks up MonStats for nMonsterId, returns early if missing or if a palshift entry already exists. Builds the path Data\\Global\\Monsters\\<2-char monster code>\\Cof\\palshift.dat, opens it if present, allocates a 0x1008-byte client-memory entry, reads the file into it, applies the green-blood palette transform, links it into the global palshift list, and registers it in gpMonsterPalShiftList by monster index. Side effects: client-memory alloc, MPQ file read, mutates global palshift list/array.

@@ -890,13 +890,11 @@ static BOOL __stdcall SAVEFILE_ParseSaveData(char * szRealmName, char * szCharac
     pNewCharSel->pCharSelCompStrc = pCharSelComp;
     if (!pCharSelComp) {
       pbReadPtr = pNewCharSel->abEquipSlot2;
-      nEquipIndex = 0x10;
-      do {
+      for (nEquipIndex = 0; nEquipIndex < 0x10; nEquipIndex++) {
         pbReadPtr[-0x10] = 0;
         *pbReadPtr = 0xff;
         pbReadPtr++;
-        nEquipIndex--;
-      } while (nEquipIndex);
+      }
 
       pNewCharSel->abEquipSlot1[1] = 1;
       pCharSelComp = D2Win::Src::D2Comp::AllocCharSelectComponent(7, 5, pNewCharSel->abEquipSlot1, (char*)pNewCharSel->abEquipSlot2);

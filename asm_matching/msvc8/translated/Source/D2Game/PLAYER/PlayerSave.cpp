@@ -1424,13 +1424,11 @@ int __fastcall _oldSaveGameLoadingPart2(D2UnitStrc * pUnit, int * pnSaveData, ui
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc** ppDVar1 = pPlayerData->pQuestRecord;
     char (*pQuestBufPos)[96] = questDataBuf.pActQuests;
-    int nCopyCount = 3;
-    do {
+    for (int nCopyCount = 0; nCopyCount < 3; nCopyCount++) {
       D2Common::QuestRecord::ReadQuestRecordFromBuffer(*ppDVar1, *pQuestBufPos, 0x60, 1);
       ppDVar1++;
       pQuestBufPos++;
-      nCopyCount--;
-    } while (nCopyCount);
+    }
 
     *pnBytesConsumed = 0x12a;
     return 0;

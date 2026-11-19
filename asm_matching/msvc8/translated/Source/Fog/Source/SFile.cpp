@@ -496,8 +496,8 @@ int32_t __fastcall SFILE_JulianDayNumber(int32_t nYear, int32_t nMonth, int32_t 
       nJulian = nMonth + 0xd;
     }
 
-    long double fMonthDays = CRT_Floor((double)nJulian * 30.6001);
-    long double fYearDays = CRT_Floor((double)nYearAdj * 365.25);
+    long double fMonthDays = floor((double)((double)nJulian * 30.6001));
+    long double fYearDays = floor((double)((double)nYearAdj * 365.25));
     nJulian = (int)(fYearDays + (long double)(double)fMonthDays + (long double)nDay + (long double)1720995.0);
     if ((nMonth + nYear * 0xc) * 0x1f + nDay >= 0x8fc1d) {
       int nCentury;

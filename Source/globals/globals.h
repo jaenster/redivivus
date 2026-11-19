@@ -1176,15 +1176,15 @@ namespace D2Launch::CharSel {
 
 } // namespace D2Launch::CharSel
 
-namespace D2Client::ClientModeInGame {
-
-
-} // namespace D2Client::ClientModeInGame
-
 namespace D2Common::DATATBLS::LvlTbls {
 
 
 } // namespace D2Common::DATATBLS::LvlTbls
+
+namespace D2Client::ClientModeInGame {
+
+
+} // namespace D2Client::ClientModeInGame
 
 namespace D2Client::UI::Draw {
 

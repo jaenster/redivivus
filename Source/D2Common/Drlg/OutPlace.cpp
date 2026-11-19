@@ -1071,8 +1071,7 @@ void __fastcall SetBlankBorderGridCells(D2DrlgLevelStrc * pLevel) {
     aDirTable[0xc] = 1;
     aDirTable[0xd] = 1;
     D2DrlgGridStrc* pDrlgGrid = &pDVar1->sGridOutdoor;
-    int nDirCount = 4;
-    do {
+    for (int nDirCount = 0; nDirCount < 4; nDirCount++) {
       uint32_t nGridFlags;
       nGridX = 0;
       if (pDirRow[-1]) {
@@ -1101,8 +1100,7 @@ void __fastcall SetBlankBorderGridCells(D2DrlgLevelStrc * pLevel) {
       }
 
       pDirRow += 4;
-      nDirCount--;
-    } while (nDirCount);
+    }
 }
 
 void __fastcall SetOutGridLinkFlags(D2DrlgLevelStrc * pLevel) {
@@ -2282,8 +2280,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
         do {
           bSwapped = false;
           pSubLevelSizeYSrc = &aSubLevelRecords[1].sCoords.WorldPosition.y;
-          nSortPass = 2;
-          do {
+          for (nSortPass = 0; nSortPass < 2; nSortPass++) {
             if (*pSubLevelSizeYSrc > pSubLevelSizeYSrc[-0xe]) {
               pPVar6 = (POINT*)(pSubLevelSizeYSrc - 1);
               pSwapSrc = &aSwapBuffer;
@@ -2313,8 +2310,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
             }
 
             pSubLevelSizeYSrc += 0xe;
-            nSortPass--;
-          } while (nSortPass);
+          }
         } while (bSwapped);
 
         iVar3 = 0;

@@ -191,6 +191,7 @@
 #include "Source/D2Common/ITEMS/ItemMods.h"
 #include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 #include "Source/D2Game/Ai/D2AiGeneralStrc.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Monster/Monsters.h"

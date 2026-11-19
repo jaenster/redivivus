@@ -3767,8 +3767,7 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
                   pChildQualMods = pTCStack[nTCStackDepth].aQualityRatios + 1;
                   pParentQualMods = pTCStack[nParentDepth].aQualityRatios + 1;
                   pNestedQualMods = &pNestedTC->nRare;
-                  nDropCount = 2;
-                  do {
+                  for (nDropCount = 0; nDropCount < 2; nDropCount++) {
                     wTempMod = pParentQualMods[-1];
                     if (!wTempMod) {
                       wTempMod = pNestedQualMods[-1];
@@ -3808,8 +3807,7 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
                     pNestedQualMods += 3;
                     pParentQualMods += 3;
                     pChildQualMods += 3;
-                    nDropCount--;
-                  } while (nDropCount);
+                  }
                 } else {
                   wTempMod = pEntry[nEntryIdx].nItemClassId;
                   nRolledItemClassId = (uint32_t)wTempMod;

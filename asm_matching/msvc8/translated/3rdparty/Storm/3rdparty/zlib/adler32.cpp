@@ -63,8 +63,7 @@ uint32_t __fastcall ZLIB_Adler32(uint32_t nAdler, uint8_t * pbData, uint32_t nLe
         nLen /= 0x15b0;
         do {
           nRemaining -= 0x15b0;
-          nOuterCount = 0x15b;
-          do {
+          for (nOuterCount = 0; nOuterCount < 0x15b; nOuterCount++) {
             nRun1 = nSum1 + *pbData;
             nRun2 = nRun1 + (uint32_t)pbData[1];
             nRun3 = nRun2 + (uint32_t)pbData[2];
@@ -83,8 +82,7 @@ uint32_t __fastcall ZLIB_Adler32(uint32_t nAdler, uint8_t * pbData, uint32_t nLe
             nSum1 = nRun15 + (uint32_t)pbData[0xf];
             nSum2 = nSum2 + nRun1 + nRun2 + nRun3 + nRun4 + nRun5 + nRun6 + nRun7 + nRun8 + nRun9 + nRun10 + nRun11 + nRun12 + nRun13 + nRun14 + nRun15 + nSum1;
             pbData += 0x10;
-            nOuterCount--;
-          } while (nOuterCount);
+          }
 
           nSum1 %= 0xfff1;
           nSum2 %= 0xfff1;

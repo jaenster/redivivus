@@ -206,11 +206,7 @@ static void __stdcall D2WinImage_Draw(D2GfxTileRectStrc * pScreenRect, D2GfxTile
     nTilesX = (nTilesX - 1 + nTileCountX) / nTileCountX;
     int nTileRepeatX = (nDstOffsetX - 1 + nTileHeight) / nTileHeight;
     nDstOffsetX = pScreenRect->nY0 - pDstRect->nY0 + 0x100;
-    if (nTileRepeatX <= 0) {
-      return;
-    }
-
-    do {
+    for (int i = 0; i < nTileRepeatX; i++) {
       int nDrawX;
       nDrawX = pScreenRect->nX0 - pDstRect->nX0;
       nSrcX1 = nTilesX;
@@ -243,8 +239,7 @@ static void __stdcall D2WinImage_Draw(D2GfxTileRectStrc * pScreenRect, D2GfxTile
       }
 
       nDstOffsetX += nTileHeight;
-      nTileRepeatX--;
-    } while (nTileRepeatX);
+    }
 }
 
 BOOL __fastcall Draw(D2WinImageEx * pImageEx) {

@@ -981,16 +981,14 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
               uSlot18.pbyUMod = pInactiveMonRec->nMonUMods;
               uSlotC.pbyCurUMod = Monsters::GetMonUModList(pSpawnedMonster);
               if (uSlotC.pbyCurUMod) {
-                nSpawnFlags = 9;
-                do {
+                for (nSpawnFlags = 0; nSpawnFlags < 9; nSpawnFlags++) {
                   if (*uSlotC.pbyCurUMod != *uSlot18.pbyUMod) {
                     Monsters::InitUmods(pGame, pSpawnedMonster, (uint32_t)*uSlot18.pbyUMod, 0);
                   }
 
                   uSlot18.pbyUMod++;
                   uSlotC.pbyCurUMod++;
-                  nSpawnFlags--;
-                } while (nSpawnFlags);
+                }
               }
 
               SUnit::SetAlignment(pSpawnedMonster, (uint8_t)nAlignmentVal, 1);
@@ -1413,8 +1411,7 @@ void __fastcall SUNITINACTIVE_FreeAllInactiveLists(::SGAMEDATA * pGame) {
     D2InactiveUnitListStrc* pNextList;
     D2InactiveUnitRecordStrc* pNextUnitRecord;
     D2InactiveUnitListStrc** ppActList = pGame->pInactiveUnitList;
-    int nActsRemaining = 5;
-    do {
+    for (int nActsRemaining = 0; nActsRemaining < 5; nActsRemaining++) {
       D2InactiveUnitListStrc* pCurList;
       pCurList = *ppActList;
       while (pCurList) {
@@ -1439,8 +1436,7 @@ void __fastcall SUNITINACTIVE_FreeAllInactiveLists(::SGAMEDATA * pGame) {
       }
 
       ppActList++;
-      nActsRemaining--;
-    } while (nActsRemaining);
+    }
 }
 
 // Removes a single inactive unit record from the per-act inactive list by unit type and class ID. For monsters (nUnitType==1) delegates to SUNITINACTIVE_RemoveInactiveMonsterByClassId; for other types walks the linked list and frees the matching D2InactiveUnitRecordStrc from the game memory pool.

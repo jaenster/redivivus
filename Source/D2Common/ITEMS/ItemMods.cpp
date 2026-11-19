@@ -3733,12 +3733,10 @@ void __stdcall ApplyRuneAndGemStats(uint32_t nType, D2UnitStrc * pUnit2, D2UnitS
         pUniqueLine = DATATBLS::ItemTbls::INV_GetUniqueItemsTxtLine(nPropIter);
         if (pUniqueLine) {
           pPropEntry = (D2SetsTxtFStrc*)pUniqueLine->sEntry;
-          nPropIter = 0xc;
-          do {
+          for (nPropIter = 0; nPropIter < 0xc; nPropIter++) {
             ITEMMOD_ApplyPropertyToUnitStats(3, nullptr, pPropEntry, pUnit, nullptr, 0, 0, bClearStat, 0, 0x40, nullptr);
             pPropEntry++;
-            nPropIter--;
-          } while (nPropIter);
+          }
 
           return;
         }
@@ -3755,22 +3753,18 @@ void __stdcall ApplyRuneAndGemStats(uint32_t nType, D2UnitStrc * pUnit2, D2UnitS
       wItemVersion = Items::ITEM_GetItemData_wItemVersion(pUnit);
       pPropEntry = (D2SetsTxtFStrc*)pSetItemLine->sEntry;
       if (!wItemVersion) {
-        nPropIter = 2;
-        do {
+        for (nPropIter = 0; nPropIter < 2; nPropIter++) {
           ITEMMOD_ApplyPropertyToUnitStats(4, nullptr, pPropEntry, pUnit, nullptr, 0, 0, bClearStat, 0, 0x40, nullptr);
           pPropEntry++;
-          nPropIter--;
-        } while (nPropIter);
+        }
 
         return;
       }
 
-      nPropIter = 9;
-      do {
+      for (nPropIter = 0; nPropIter < 9; nPropIter++) {
         ITEMMOD_ApplyPropertyToUnitStats(4, nullptr, pPropEntry, pUnit, nullptr, 0, 0, bClearStat, 0, 0x40, nullptr);
         pPropEntry++;
-        nPropIter--;
-      } while (nPropIter);
+      }
 
       pPropEntry = (D2SetsTxtFStrc*)pSetItemLine->sEntryEx;
       nBonusSetIdx = 0;

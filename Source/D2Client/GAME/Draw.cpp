@@ -309,20 +309,15 @@ static void __stdcall GetIntensityFlagsForTile(int32_t nTileX, int32_t nTileY, i
       int32_t nIntensity;
       nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(Game::sgpDrlgAct);
       D2Common::Environment::DRLGENV_GetLightColorFromAct(Game::sgpDrlgAct, (uint8_t*)((intptr_t)&nTileX + 3), (uint8_t*)((intptr_t)&nTileY + 3), (uint8_t*)((intptr_t)&nIndoorFlag + 3));
-      nRow = 8;
-      do {
-        nCol = 8;
-        do {
+      for (nRow = 0; nRow < 8; nRow++) {
+        for (nCol = 0; nCol < 8; nCol++) {
           pLightGrid->sLight.nRed = *(uint8_t*)((char*)&nTileX + 3);
           pLightGrid->sLight.nIntensity = (uint8_t)nIntensity;
           pLightGrid->sLight.nBlue = *(uint8_t*)((char*)&nIndoorFlag + 3);
           pLightGrid->sLight.nGreen = *(uint8_t*)((char*)&nTileY + 3);
           pLightGrid++;
-          nCol--;
-        } while (nCol);
-
-        nRow--;
-      } while (nRow);
+        }
+      }
 
       return;
     }
@@ -587,20 +582,15 @@ void __thiscall DrawFloorTile(D2DrawFloorStrc * pFloor, D2DrlgTileDataStrc * pTi
                          version of the game) */ if (nRowY < 4) {
       pLightEx = aFloorLightGrid8x8;
       if (pTileOther->nFlags & 0x100U) {
-        nRowY = 8;
-        do {
-          nColIter = 8;
-          do {
+        for (nRowY = 0; nRowY < 8; nRowY++) {
+          for (nColIter = 0; nColIter < 8; nColIter++) {
             pLightEx->sLight.nIntensity = 0xff;
             pLightEx->sLight.nRed = 0xff;
             pLightEx->sLight.nBlue = 0xff;
             pLightEx->sLight.nGreen = 0xff;
             pLightEx++;
-            nColIter--;
-          } while (nColIter);
-
-          nRowY--;
-        } while (nRowY);
+          }
+        }
       } else {
         GetIntensityFlagsForTile(nWorldX, nWorldY, 0, pLightEx);
       }

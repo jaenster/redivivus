@@ -90,6 +90,7 @@
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -1356,37 +1357,16 @@ uint32_t __stdcall PATH_HasRemainingDistance(D2DynamicPathStrc * pDynamicPath) {
 // Attempts to build a single-step direct path from pDynamicPath's current position to its target unit. Snapshots the target's current X/Y into pDynamicPath-&gt;nTargetX/Y, validates both axes are within 99 units and non-zero, then writes a one-point path and advances along it. Sets flag bit 1 if the target falls outside the current room bounds. Returns dwPathPoints (1 on success, 0 on rejection).
 static uint32_t PATH_BuildDirectPathToTarget(D2DynamicPathStrc * pDynamicPath) {
     int32_t sTargetY;
-    int32_t nCoord;
-    int32_t nRoomBound;
-    eD2UnitType eUnitType;
     D2UnitStrc* pTargetUnit = pDynamicPath->pTargetUnit;
     uint16_t wCurY = pDynamicPath->Coords.tSubtile.nPosY;
     uint16_t wCurX = pDynamicPath->Coords.tSubtile.nPosX;
     pDynamicPath->nPathPointIndex = 0;
     if (pTargetUnit) {
       int32_t sTargetCoord;
-      eUnitType = pTargetUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        sTargetCoord = pTargetUnit->pPath.pStaticPath->nPosX;
-      } else if (pTargetUnit->pPath.pDynamicPath) {
-        nCoord = GetXPos(pTargetUnit->pPath.pDynamicPath);
-        sTargetCoord = nCoord;
-      } else {
-        sTargetCoord = 0;
-      }
-
+      sTargetCoord = D2Common::Units::GetXPosFromDynamicPathUnitInline(pTargetUnit);
       pTargetUnit = pDynamicPath->pTargetUnit;
       pDynamicPath->nTargetX = sTargetCoord;
-      eUnitType = pTargetUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        sTargetY = pTargetUnit->pPath.pStaticPath->nPosY;
-      } else if (pTargetUnit->pPath.pDynamicPath) {
-        nRoomBound = GetYPos(pTargetUnit->pPath.pDynamicPath);
-        sTargetY = nRoomBound;
-      } else {
-        sTargetY = 0;
-      }
-
+      sTargetY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pTargetUnit);
       pDynamicPath->nTargetY = sTargetY;
     }
 
@@ -1662,9 +1642,7 @@ static uint8_t PATH_ResolveTargetPosition(D2PathTypeArg * pPathTypeArg, int32_t 
     short int nTargetY;
     uint32_t nUnitPos;
     uint32_t nDoorTargetX;
-    int32_t nCoord;
     BOOL bTargetIsDoor;
-    int32_t nLine;
     D2DynamicPathStrc* pDynamicPath = pPathTypeArg->pDynamicPath;
     D2UnitStrc* pTargetUnit = pDynamicPath->pTargetUnit;
     if (!pTargetUnit) {
@@ -1672,26 +1650,10 @@ static uint8_t PATH_ResolveTargetPosition(D2PathTypeArg * pPathTypeArg, int32_t 
     }
 
     eD2UnitType eUnitType = pTargetUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nTargetY = (short int)pTargetUnit->pPath.pStaticPath->nPosX;
-    } else if (pTargetUnit->pPath.pDynamicPath) {
-      nCoord = GetXPos(pTargetUnit->pPath.pDynamicPath);
-      nTargetY = (short int)nCoord;
-    } else {
-      nTargetY = 0;
-    }
-
+    nTargetY = D2Common::Units::GetXPosFromDynamicPathUnitInline(pTargetUnit);
     pDynamicPath->nTargetX = nTargetY;
     eUnitType = pTargetUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nTargetY = (short int)pTargetUnit->pPath.pStaticPath->nPosY;
-    } else if (pTargetUnit->pPath.pDynamicPath) {
-      nLine = GetYPos(pTargetUnit->pPath.pDynamicPath);
-      nTargetY = (short int)nLine;
-    } else {
-      nTargetY = 0;
-    }
-
+    nTargetY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pTargetUnit);
     pDynamicPath->nTargetY = nTargetY;
     if (!pDynamicPath->nTargetX && !nTargetY) {
       return 0;

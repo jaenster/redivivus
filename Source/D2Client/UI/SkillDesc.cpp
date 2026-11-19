@@ -6039,8 +6039,8 @@ static void __stdcall SKILLDESC_DescLine27_SkillElemCalc(D2UnitStrc * pUnit, uin
     int nMaxDmgFinal = sMonStats.nA1MaxD;
     nDmgPercent = 0;
     int* pCalcIdIter = pSkillsTxt->aurastatcalc;
-    int nLoopCount = 6;
-    do {
+    int nLoopCount;
+    for (nLoopCount = 0; nLoopCount < 6; nLoopCount++) {
       if (*pElemTypeIter1 == 0x19) {
         nCalcValue = D2Common::Skills::D2GetSkillCalc(pUnit, *pCalcIdIter, eSkill, nCalcInputA);
         nDmgPercent += nCalcValue;
@@ -6048,13 +6048,11 @@ static void __stdcall SKILLDESC_DescLine27_SkillElemCalc(D2UnitStrc * pUnit, uin
 
       pElemTypeIter1++;
       pCalcIdIter++;
-      nLoopCount--;
-    } while (nLoopCount);
+    }
 
     pCalcIdIter = pSkillsTxt->passivecalc;
     short int* pElemTypeIter2 = pSkillsTxt->passivestat;
-    nLoopCount = 5;
-    do {
+    for (nLoopCount = 0; nLoopCount < 5; nLoopCount++) {
       if (*pElemTypeIter2 == 0x19) {
         nCalcValue = D2Common::Skills::D2GetSkillCalc(pUnit, *pCalcIdIter, eSkill, nCalcInputA);
         nDmgPercent += nCalcValue;
@@ -6062,8 +6060,7 @@ static void __stdcall SKILLDESC_DescLine27_SkillElemCalc(D2UnitStrc * pUnit, uin
 
       pElemTypeIter2++;
       pCalcIdIter++;
-      nLoopCount--;
-    } while (nLoopCount);
+    }
 
     if (nDmgPercent) {
       int64_t uDivResult;
@@ -6234,8 +6231,7 @@ BOOL __stdcall SKILLDESC_DescLine22_SkillSynergies(D2UnitStrc * pUnit, uint16_t 
 
     pCalcIdIter = (int32_t*)(pSkillsTxt + 0x52);
     short* pSkillsTxt2 = pSkillsTxt + 0x4c;
-    nLoopCount = 5;
-    do {
+    for (nLoopCount = 0; nLoopCount < 5; nLoopCount++) {
       if (*(short int*)pSkillsTxt2 == 0x19) {
         nCalcValue = D2Common::Skills::D2GetSkillCalc(pUnit, *pCalcIdIter, eSkill, nSkillLevel);
         nElemPctBonus += nCalcValue;
@@ -6248,8 +6244,7 @@ BOOL __stdcall SKILLDESC_DescLine22_SkillSynergies(D2UnitStrc * pUnit, uint16_t 
 
       pSkillsTxt2 = (short int*)pSkillsTxt2 + 1;
       pCalcIdIter++;
-      nLoopCount--;
-    } while (nLoopCount);
+    }
 
     if (nElemPctBonus) {
       int64_t uDivResult;

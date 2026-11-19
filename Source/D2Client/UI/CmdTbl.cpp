@@ -1041,13 +1041,11 @@ void __stdcall CMD_WriteKeyFile() {
     szBuffer[0] = '%';
     szBuffer[1] = '\0';
     char* pDst = szBuffer + 6;
-    int nCount = 0x72;
-    do {
+    for (int nCount = 0; nCount < 0x72; nCount++) {
       pDst[0] = -1;
       pDst[1] = -1;
       pDst += 10;
-      nCount--;
-    } while (nCount);
+    }
 
     D2KeyBindStrc* pSrc = g_KeyBindingsTable;
     int32_t* pCopyDst = (int32_t*)(szBuffer + 2);

@@ -2037,8 +2037,7 @@ void __fastcall MONSTERTBLS_ParseMonStats2ComponentVariants(char * szText, char 
 
     int nTotalFrames = 0;
     uint8_t* pFrameCount = (uint8_t*)(pRecord + 0x16);
-    int nLoopCount = 4;
-    do {
+    for (int nLoopCount = 0; nLoopCount < 4; nLoopCount++) {
       if (pFrameCount[-1] > 1) {
         nTotalFrames = nTotalFrames - 1 + (uint32_t)pFrameCount[-1];
       }
@@ -2053,8 +2052,7 @@ void __fastcall MONSTERTBLS_ParseMonStats2ComponentVariants(char * szText, char 
       }
 
       pFrameCount += 4;
-      nLoopCount--;
-    } while (nLoopCount);
+    }
 
     if (nTotalFrames > 0xfe) {
       nTotalFrames = 0xfe;
@@ -2740,16 +2738,14 @@ void __fastcall TXT_AllocTxt_MonEquip(D2PoolManagerStrc * pMemory) {
 
             pLocSlot = pMonStatEntry->loc;
             pdwItemCode = pMonStatEntry->item;
-            nSlotLoop = 3;
-            do {
+            for (nSlotLoop = 0; nSlotLoop < 3; nSlotLoop++) {
               if ((char)*pLocSlot <= 0 || (char)*pLocSlot >= 11 || *pdwItemCode != 0x20202020 && (nErrCode = Fog::Src::Excel::GetClassIdFromName(ITEMS::Items::sgptDataTable->sTxtItemsLink, *pdwItemCode, 1) , nErrCode < 0)) {
                 *pLocSlot = 0;
               }
 
               pdwItemCode++;
               pLocSlot++;
-              nSlotLoop--;
-            } while (nSlotLoop);
+            }
           }
         }
 

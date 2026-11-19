@@ -908,8 +908,7 @@ void __stdcall GenerateWolrdstoneAndTombs(D2DrlgLevelStrc * pLevel) {
     D2RoomExStrc* pRoomExStrc = pLevel->pRoomExFirst;
     uint32_t sNextSeed = D2_SeedRoll(&pLevel->sSeed);
     uint32_t nRollValue = sNextSeed & 3;
-    int nLoopCount = 3;
-    do {
+    for (int nLoopCount = 0; nLoopCount < 3; nLoopCount++) {
       D2RoomExStrc* pNew;
       pNew = DrlgRoom::DRLGROOMEX_AllocRoomEx(pRoomExStrc->pLevel, 2);
       pLvlMazeTxt = pNew->pLevel->pDrlgLevelData.pTxtLvlMaze;
@@ -927,8 +926,7 @@ void __stdcall GenerateWolrdstoneAndTombs(D2DrlgLevelStrc * pLevel) {
       }
 
       nRollValue = (int)(nRollValue + 1) % 4;
-      nLoopCount--;
-    } while (nLoopCount);
+    }
 
     switch (pLevel->nLevelType) {
       case 0x11:
@@ -1246,8 +1244,7 @@ void __fastcall RollArcaneTypePath(D2DrlgLevelStrc * pLevel) {
 
     nDirection = 2;
     D2RoomExStrc** ppArmRooms = nRoomPtrs + 1;
-    int pRoomTmp = 10;
-    do {
+    for (int pRoomTmp = 0; pRoomTmp < 10; pRoomTmp++) {
       if (ppArmRooms[-1]) {
         nDirWrapped = (nDirection - 2) / 0xf + nBaseDir & 0x80000003;
         ppArmRooms[-1]->pRoomExData.pRoomExDataPreset->nPickedFile = nDirWrapped;
@@ -1275,8 +1272,7 @@ void __fastcall RollArcaneTypePath(D2DrlgLevelStrc * pLevel) {
 
       nDirection += 6;
       ppArmRooms += 6;
-      pRoomTmp--;
-    } while (pRoomTmp);
+    }
 
     pRoomExStrc->pRoomExData.pRoomExDataPreset->nPickedFile = 4;
 }

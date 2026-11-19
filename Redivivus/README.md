@@ -60,54 +60,18 @@ down. Nothing is stubbed to make a count fall.
 
 # Shimmed
 
-## The five MSVC x87 `__CI*` intrinsics
+## Spelled as source by the generator - no shim
 
-`_CIcos`, `_CIsin`, `_CIlog`, `_CIlog10`, `_CIpow` take their operands **in the x87 stack
-registers** and return in `ST(0)`. They are not ABI-compatible with `cos`/`sin`/`log`/`pow`, and
-aliasing the symbols to those would link and read garbage.
-
-That trap does not apply here, and the reason is the load-bearing part: **Ghidra v791 already models
-the operands as parameters with `ST0`/`ST1` custom storage**, with the evidence recorded in each
-function's plate comment. The decompiler therefore threads the values through, and the emitted call
-sites are ordinary C calls carrying the operand as a `long double` argument -
-`D2Common/Drlg/Environment.cpp:83` is `fFloatResult = CRT_CICos(fVar1);`, not an argument-less call.
-The definitions in `d2_crt_support.cpp` match the prototypes in `d2_platform.h` that those call
-sites were compiled against, so GCC generates the calls and the x87 stack never enters it. mingw's
-`long double` is the same 80-bit x87 type as Ghidra's `float10`.
-
-|Symbol|Address|Ghidra signature|Body evidence|Shim|
-|-|-|-|-|-|
-|`CRT_CICos`|`006886c0`|`float10 CRT_CICos(float10 fValue @ST0)`|`FCOS` at `0068872d`, with `FLD 2pi`/`FXCH`/`FPREM1` range reduction at `00688752..00688766`|`cosl`|
-|`CRT_CISin`|`00688590`|`float10 CRT_CISin(float10 @ST0)`|sibling of the above at the same SSE2-dispatch prologue|`sinl`|
-|`CRT_CILog`|`00687ac0`|`float10 CRT_CILog(float10 @ST0)`|`FLDLN2`/`FXCH`/`FYL2X` at `00687b3f` = `ln(2)*log2(x)` = **natural** log|`logl`|
-|`CRT_CILog10`|`00687ea0`|`float10 CRT_CILog10(float10 @ST0)`|the `FLDLG2` form of the same sequence|`log10l`|
-|`CRT_CIPow`|`00687c10`|`float10 CRT_CIPow(float10 fBase @ST1, float10 fExponent @ST0)`|`FXCH`/`FSTP qword[ESP]`/`FST qword[ESP+8]` at `00687c4e..00687c53` spills two live operands; `FYL2X`+`F2XM1` body at `00687c6d`|`powl(base, exponent)`|
-
-The `FXCH` is what fixes `CRT_CIPow`'s operand order - base is `ST(1)`, exponent is `ST(0)`. The
-shim's argument order follows Ghidra's parameter ordinals, which encode exactly that.
-
-Call-site ABI confirmed directly at `0061bc26` (`DRLGENV_UpdateLightIntensity`): the operand is
-computed into `ST(0)` by `FMUL double[006e7d30]` / `FST double[EBP-0xc]`, `CALL 006886c0` follows
-with **no `PUSH`**, and `FCHS`/`FSTP float[ESI+0x1c]` consumes the result from `ST(0)`.
+The x87 math helpers (`_CIpow`, `_CIlog`, `_CIlog10`, `_CIsin`, `_CIcos`, `_CIsqrt`), libcmt's
+`floor`/`ceil` (`CRT_Floor` @ `00683080`) and ATL's `AtlThrowImpl` (`CRT_ReturnValue` @ `006b1a30`,
+which throws an `ATL::CAtlException` holding the HRESULT) are what VC8 or ATL produced for a plain
+`pow`/`sqrt`/`floor` call and an `AtlThrow(hr)`. ghidra-reconstruct's `crt-intrinsic-call` writes
+those calls as the source function, and `d2_platform.h` defines `AtlThrow` the way `atlexcept.h`
+does (a noinline inline), so nothing here has to stand in for them. A `__try` is the
+`D2_SEH_TRY`/`D2_SEH_EXCEPT`/`D2_SEH_FINALLY`/`D2_SEH_END` macro family in `d2_platform.h`: the
+real construct under MSVC, the bare body elsewhere, with no runtime.
 
 ## Ordinary CRT with a genuine equivalent
-
-One of these is declared in the generated `d2_platform.h` with the emitter's unknown-signature
-fallback `T NAME(...)`. A variadic declaration with no named parameter cannot be defined portably,
-and re-declaring the name concretely in the same TU collides with the forced include. Both problems
-are avoided by giving the real definition a private C++ name plus an **asm label** carrying the exact
-object-file symbol (`__asm__("_CRT_Floor")` - i386 PE user-label prefix). On i386 `cdecl` a
-fixed-arity definition is call-compatible with a variadic declaration: every argument goes on the
-stack and the caller cleans up.
-
-### `CRT_Floor` -> `floor` @ `00683080`
-
-Ghidra: `float10 CRT_Floor(double fParam)` `__cdecl`, argument at `Stack[0x4]`. The x87 fallback
-jumps to `0068ea71`, which Ghidra's FID matches as `__floor_default` (Visual Studio 2005 Release,
-single match); the SSE2 path at `006830c0` loads `qword[ESP+4]` and does exponent-field extraction
-(`PSRLQ` by `0x34`, `PSUBD` against a bias constant) - the standard branch-free floor. It is the one
-member of this family that is *not* an `__CI*` intrinsic: normal stack argument. Both call sites,
-`Fog/Source/SFile.cpp:614-615` inside the Julian-day-number computation, discard the result.
 
 ### Runtime functions the tree calls by their libcmt names - no shim
 
@@ -136,29 +100,6 @@ exports no `_set_se_translator`, so there the overload calls `D2_SetSeTranslator
 the get / set / return-previous semantics and the per-thread storage (`thread_local`) and **nothing
 else**: GCC code has no MSVC SEH layer to invoke a translator.
 
-### `CRT_ReturnValue` - **it is ATL's `AtlThrow`** @ `006b1a30`
-
-Not a return-value helper. `__stdcall`, does not return, one statement:
-`std::exception::__CxxThrowException_8(&dwParam, &DAT_007020b4)`.
-
-Chasing the `ThrowInfo` at `007020b4`:
-
-```
-007020b4  00000000 00000000 00000000 007020c4   attributes, pmfnUnwind, pForwardCompat, pCatchableTypeArray
-007020c4  00000001 007020cc                     nCatchableTypes = 1
-007020cc  00000000 0074c0a8 ... 00000004        pType, sizeOrOffset = 4
-0074c0a8  ".?AVCAtlException@ATL@@"             TypeDescriptor
-```
-
-So it throws a 4-byte `ATL::CAtlException` carrying the HRESULT. The only call site,
-`D2Direct3D/Renderer/Direct3D.cpp:596` - `CRT_ReturnValue(0x80004005)` (`E_FAIL`) guarded by a null
-test - is the `ATLENSURE` shape.
-
-mingw has no ATL. The shim declares the type to the shape the type descriptor gives (a 4-byte object
-holding the HRESULT, named `ATL::CAtlException`) and throws it. Nothing in this tree catches it,
-because the MSVC EH frames are not emitted, so in practice it terminates - which matches the
-binary's own "does not return".
-
 ## SEH and /GS
 
 ### `_except_handler4` @ `00684f50` - **a stub that dies, stated plainly** (mingw only)
@@ -181,7 +122,9 @@ body.
 
 # Left undefined, with the reason
 
-Eleven symbols in this lane are **not** shimmed. Each is a Ghidra defect with a bounded fix, and
+Since the generator spells the x87 helpers and the dead `_Wrappers` names as source, the
+symbols of sections A and C below are no longer referenced by the tree at all; they are kept
+here as the record of why they were never shimmed. Eleven symbols in this lane are **not** shimmed. Each is a Ghidra defect with a bounded fix, and
 shimming would be either a fabrication or a papering-over of real game code.
 
 ## A. The operand is in `ST(0)` and the call sites pass nothing

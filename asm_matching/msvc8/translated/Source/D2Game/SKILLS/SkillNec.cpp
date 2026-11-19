@@ -451,8 +451,8 @@ void __fastcall SKILLNEC_ApplyCurseToUnit(D2UnitStrc * pUnit, D2NecroSkillArgStr
     }
 
     eD2UnitStat* peCurStat = pNecroSkillArg->eStat;
-    int iStatLoop = 5;
-    do {
+    int iStatLoop;
+    for (iStatLoop = 0; iStatLoop < 5; iStatLoop++) {
       eD2UnitStat eUnitStat;
       peCurStat++;
       eUnitStat = *peCurStat;
@@ -462,9 +462,7 @@ void __fastcall SKILLNEC_ApplyCurseToUnit(D2UnitStrc * pUnit, D2NecroSkillArgStr
           D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatListEx, *peCurStat, nAlignment, 0);
         }
       }
-
-      iStatLoop--;
-    } while (iStatLoop);
+    }
 
     if (pNecroSkillArg->bUpdateAnimSpeed) {
       D2Common::Units::UpdateAnimSpeed(pUnit, ".\\SKILLS\\SkillNec.cpp", 0x246);
@@ -476,15 +474,13 @@ void __fastcall SKILLNEC_ApplyCurseToUnit(D2UnitStrc * pUnit, D2NecroSkillArgStr
     }
 
     UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(pNecroSkillArg->pGame, pUnit, 1, pNecroSkillArg->eAuraState);
-    iStatLoop = 3;
-    do {
+    for (iStatLoop = 0; iStatLoop < 3; iStatLoop++) {
       if (pNecroSkillArg->nAuraEvent[0] >= 0 && pNecroSkillArg->nAuraEventFunc[0] > 0) {
         SkillsServer::D2SetAuraEvent(pNecroSkillArg->pGame, pUnit, *pItemEventIds, pNecroSkillArg->eSkill, pNecroSkillArg->nSkillLvl, pItemEventIds[3], 1, pNecroSkillArg->eAuraState);
       }
 
       pItemEventIds++;
-      iStatLoop--;
-    } while (iStatLoop);
+    }
 }
 
 static int32_t SKILLNEC_ApplyCurseDifficultyDivisor(uint8_t nDifficulty, int32_t nCurseValue) {
@@ -788,8 +784,7 @@ int32_t __fastcall SKILLNEC_ApplyConvertToUnit(D2UnitStrc * pUnit, D2SkillAuraCt
     }
 
     int32_t* pStatIdCursor = pCtx->anStatIds;
-    int iStatLoop = 5;
-    do {
+    for (int iStatLoop = 0; iStatLoop < 5; iStatLoop++) {
       pStatIdCursor++;
       eStatId = *pStatIdCursor;
       if ((int)eStatId >= 0 && (int)eStatId < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
@@ -798,9 +793,7 @@ int32_t __fastcall SKILLNEC_ApplyConvertToUnit(D2UnitStrc * pUnit, D2SkillAuraCt
           D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatListEx, *pStatIdCursor, nClampedStatCalc, 0);
         }
       }
-
-      iStatLoop--;
-    } while (iStatLoop);
+    }
 
     if (pCtx->bUpdateAnimRate) {
       D2Common::Units::UpdateAnimSpeed(pUnit, ".\\SKILLS\\SkillNec.cpp", 0x3d7);
@@ -1180,8 +1173,7 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pSummon, UNITSTAT_hitpoints, nMaxHp + nHpBonus, 0);
     short int* pSumSkillCursor = pSkillsTxt->sumskill;
     pSummonStatList = (D2UnitStrc*)pSkillsTxt->sumskcalc;
-    iStatLoop = 5;
-    do {
+    for (iStatLoop = 0; iStatLoop < 5; iStatLoop++) {
       if (*pSumSkillCursor > 0 && (int)*pSumSkillCursor < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         nStatCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSummonStatList->eUnitType, eSkill, nSkillLvl);
         if (nStatCalc > 0) {
@@ -1200,8 +1192,7 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
       pSummonStatList = (D2UnitStrc*)&pSummonStatList->nClassId;
       pSumSkillCursor++;
-      iStatLoop--;
-    } while (iStatLoop);
+    }
 
     pSumSkillCursor = pSkillsTxt->auraevent;
     if (*pSumSkillCursor >= 0) {

@@ -4064,8 +4064,7 @@ void __stdcall STRUCT_FillSkillsList(D2UnitStrc * pUnit) {
     AllocSkill(pUnit, SKILL_Attack);
     short int* pClassSkillEntry;
     pClassSkillEntry = pCharStatsTxt[nUnitClassId].Skill;
-    nUnitClassId = 10;
-    do {
+    for (nUnitClassId = 0; nUnitClassId < 10; nUnitClassId++) {
       short int nClassSkillId;
       nClassSkillId = *pClassSkillEntry;
       if (nClassSkillId >= 0 && (int)nClassSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
@@ -4073,8 +4072,7 @@ void __stdcall STRUCT_FillSkillsList(D2UnitStrc * pUnit) {
       }
 
       pClassSkillEntry++;
-      nUnitClassId--;
-    } while (nUnitClassId);
+    }
 
     select_default_skills:
     pSkill = Units::GetLeftSkill(pUnit);

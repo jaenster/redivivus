@@ -280,12 +280,11 @@ BOOL __fastcall Skills_CltDoFunc_MultiMissileDirected(D2UnitStrc * pUnit, eD2Ski
       return 1;
     }
 
-    do {
+    for (int32_t i = 0; i < nSkillLvl; i++) {
       SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
       SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
       SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
-      nSkillLvl--;
-    } while (nSkillLvl);
+    }
 
     return 1;
 }
