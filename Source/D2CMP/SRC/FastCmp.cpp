@@ -302,41 +302,43 @@ void __fastcall FASTCMP_DecompressRLEWithClip(uint8_t * pImageHeader, uint8_t * 
 }
 
 void __fastcall FASTCMP_DecompressRLEWithBlend(uint8_t * pbSrcStream, uint8_t * pbDst, int32_t nRows, int32_t nStride, uint8_t * nBlendTableBase, uint8_t * nBlendTableOffset) {
-    uint32_t nRemainder;
-    int nFullChunks;
-    uint8_t byRunToken;
-    while (true) {
-      uint8_t* pbRowStart;
-      pbRowStart = pbDst + nStride;
-      do {
-        while (true) {
-          byRunToken = *pbSrcStream;
-          pbSrcStream = pbSrcStream + 1;
-          if (byRunToken & 0x80) {
-            break;
+    uint8_t* pbNextRow = pbDst + nStride;
+    for (;;) {
+      char chToken = (char)*pbSrcStream++;
+      if (chToken < 0) {
+        chToken &= 0x7f;
+        if (!chToken) {
+          if (--nRows == 0) {
+            return;
           }
-
-          nRemainder = (int)(char)byRunToken & 7;
-          nFullChunks = (int)(char)byRunToken >> 3;
-          switch (nRemainder) {
-            case 7:
-              pbDst[6] = nBlendTableOffset[((uint32_t)pbDst[6] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[6]]];
-            case 6:
-              pbDst[5] = nBlendTableOffset[((uint32_t)pbDst[5] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[5]]];
-            case 5:
-              pbDst[4] = nBlendTableOffset[((uint32_t)pbDst[4] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[4]]];
-            case 4:
-              pbDst[3] = nBlendTableOffset[((uint32_t)pbDst[3] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[3]]];
-            case 3:
-              pbDst[2] = nBlendTableOffset[((uint32_t)pbDst[2] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[2]]];
-            case 2:
-              pbDst[1] = nBlendTableOffset[((uint32_t)pbDst[1] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[1]]];
-            case 1:
-              *pbDst = nBlendTableOffset[((uint32_t)*pbDst << 8) + (uint32_t)nBlendTableBase[*pbSrcStream]];
-            case 0:
-              pbDst += nRemainder;
+          pbDst = pbNextRow;
+          pbNextRow += nStride;
+        } else {
+          pbDst += chToken;
+        }
+      } else {
+        const int nRunLen = chToken;
+        int nFullChunks = nRunLen >> 3;
+        const uint32_t nRemainder = nRunLen & 7;
+        switch (nRemainder) {
+          case 7:
+            pbDst[6] = nBlendTableOffset[((uint32_t)pbDst[6] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[6]]];
+          case 6:
+            pbDst[5] = nBlendTableOffset[((uint32_t)pbDst[5] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[5]]];
+          case 5:
+            pbDst[4] = nBlendTableOffset[((uint32_t)pbDst[4] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[4]]];
+          case 4:
+            pbDst[3] = nBlendTableOffset[((uint32_t)pbDst[3] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[3]]];
+          case 3:
+            pbDst[2] = nBlendTableOffset[((uint32_t)pbDst[2] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[2]]];
+          case 2:
+            pbDst[1] = nBlendTableOffset[((uint32_t)pbDst[1] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[1]]];
+          case 1:
+            *pbDst = nBlendTableOffset[((uint32_t)*pbDst << 8) + (uint32_t)nBlendTableBase[*pbSrcStream]];
+          case 0:
+            pbDst += nRemainder;
             pbSrcStream += nRemainder;
-            for (; nFullChunks; nFullChunks--) {
+            while (nFullChunks) {
               pbDst[7] = nBlendTableOffset[((uint32_t)pbDst[7] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[7]]];
               pbDst[6] = nBlendTableOffset[((uint32_t)pbDst[6] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[6]]];
               pbDst[5] = nBlendTableOffset[((uint32_t)pbDst[5] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[5]]];
@@ -345,23 +347,11 @@ void __fastcall FASTCMP_DecompressRLEWithBlend(uint8_t * pbSrcStream, uint8_t * 
               pbDst[2] = nBlendTableOffset[((uint32_t)pbDst[2] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[2]]];
               pbDst[1] = nBlendTableOffset[((uint32_t)pbDst[1] << 8) + (uint32_t)nBlendTableBase[pbSrcStream[1]]];
               *pbDst = nBlendTableOffset[((uint32_t)*pbDst << 8) + (uint32_t)nBlendTableBase[*pbSrcStream]];
+              --nFullChunks;
               pbDst += 8;
               pbSrcStream += 8;
             }
-          }
         }
-
-        if (!(byRunToken & 0x7f)) {
-          break;
-        }
-
-        pbDst += (char)(byRunToken & 0x7f);
-      } while (true);
-
-      nRows--;
-      pbDst = pbRowStart;
-      if (!nRows) {
-        return;
       }
     }
 }
@@ -468,41 +458,43 @@ void __fastcall FASTCMP_DecompressRLEWithBlendAndClip(uint8_t * pRLEData, uint8_
 }
 
 void __fastcall FASTCMP_DecompressRLEWithLookup2(uint8_t * pbSrcStream, uint8_t * pDst, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable1, uint8_t * pLookupTable2) {
-    int nFullChunks;
-    uint32_t nRemainder;
-    uint8_t byRunToken;
-    while (true) {
-      uint8_t* puNextRowStart;
-      puNextRowStart = pDst + nDstPitch;
-      do {
-        while (true) {
-          byRunToken = *pbSrcStream;
-          pbSrcStream = pbSrcStream + 1;
-          if (byRunToken & 0x80) {
-            break;
+    uint8_t* pbNextRow = pDst + nDstPitch;
+    for (;;) {
+      char chToken = (char)*pbSrcStream++;
+      if (chToken < 0) {
+        chToken &= 0x7f;
+        if (!chToken) {
+          if (--nRowCount == 0) {
+            return;
           }
-
-          nRemainder = (int)(char)byRunToken & 7;
-          nFullChunks = (int)(char)byRunToken >> 3;
-          switch (nRemainder) {
-            case 7:
-              pDst[6] = pLookupTable1[pLookupTable2[pbSrcStream[6]]];
-            case 6:
-              pDst[5] = pLookupTable1[pLookupTable2[pbSrcStream[5]]];
-            case 5:
-              pDst[4] = pLookupTable1[pLookupTable2[pbSrcStream[4]]];
-            case 4:
-              pDst[3] = pLookupTable1[pLookupTable2[pbSrcStream[3]]];
-            case 3:
-              pDst[2] = pLookupTable1[pLookupTable2[pbSrcStream[2]]];
-            case 2:
-              pDst[1] = pLookupTable1[pLookupTable2[pbSrcStream[1]]];
-            case 1:
-              *pDst = pLookupTable1[pLookupTable2[*pbSrcStream]];
-            case 0:
-              pDst += nRemainder;
+          pDst = pbNextRow;
+          pbNextRow += nDstPitch;
+        } else {
+          pDst += chToken;
+        }
+      } else {
+        const int nRunLen = chToken;
+        int nFullChunks = nRunLen >> 3;
+        const uint32_t nRemainder = nRunLen & 7;
+        switch (nRemainder) {
+          case 7:
+            pDst[6] = pLookupTable1[pLookupTable2[pbSrcStream[6]]];
+          case 6:
+            pDst[5] = pLookupTable1[pLookupTable2[pbSrcStream[5]]];
+          case 5:
+            pDst[4] = pLookupTable1[pLookupTable2[pbSrcStream[4]]];
+          case 4:
+            pDst[3] = pLookupTable1[pLookupTable2[pbSrcStream[3]]];
+          case 3:
+            pDst[2] = pLookupTable1[pLookupTable2[pbSrcStream[2]]];
+          case 2:
+            pDst[1] = pLookupTable1[pLookupTable2[pbSrcStream[1]]];
+          case 1:
+            *pDst = pLookupTable1[pLookupTable2[*pbSrcStream]];
+          case 0:
+            pDst += nRemainder;
             pbSrcStream += nRemainder;
-            for (; nFullChunks; nFullChunks--) {
+            while (nFullChunks) {
               pDst[7] = pLookupTable1[pLookupTable2[pbSrcStream[7]]];
               pDst[6] = pLookupTable1[pLookupTable2[pbSrcStream[6]]];
               pDst[5] = pLookupTable1[pLookupTable2[pbSrcStream[5]]];
@@ -511,23 +503,11 @@ void __fastcall FASTCMP_DecompressRLEWithLookup2(uint8_t * pbSrcStream, uint8_t 
               pDst[2] = pLookupTable1[pLookupTable2[pbSrcStream[2]]];
               pDst[1] = pLookupTable1[pLookupTable2[pbSrcStream[1]]];
               *pDst = pLookupTable1[pLookupTable2[*pbSrcStream]];
+              --nFullChunks;
               pDst += 8;
               pbSrcStream += 8;
             }
-          }
         }
-
-        if (!(byRunToken & 0x7f)) {
-          break;
-        }
-
-        pDst += (char)(byRunToken & 0x7f);
-      } while (true);
-
-      nRowCount--;
-      pDst = puNextRowStart;
-      if (!nRowCount) {
-        return;
       }
     }
 }
@@ -633,41 +613,43 @@ void __fastcall FASTCMP_DecompressRLEWithLookup2AndClip(uint8_t * pbSrcStream, u
 }
 
 void __fastcall FASTCMP_DecompressRLEWithLookup1(uint8_t * pbSrcStream, uint8_t * pDst, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable) {
-    uint32_t nRemainder;
-    int nFullChunks;
-    uint8_t byRunToken;
-    while (true) {
-      uint8_t* puNextRowStart;
-      puNextRowStart = pDst + nDstPitch;
-      do {
-        while (true) {
-          byRunToken = *pbSrcStream;
-          pbSrcStream = pbSrcStream + 1;
-          if (byRunToken & 0x80) {
-            break;
+    uint8_t* pbNextRow = pDst + nDstPitch;
+    for (;;) {
+      char chToken = (char)*pbSrcStream++;
+      if (chToken < 0) {
+        chToken &= 0x7f;
+        if (!chToken) {
+          if (--nRowCount == 0) {
+            return;
           }
-
-          nRemainder = (int)(char)byRunToken & 7;
-          nFullChunks = (int)(char)byRunToken >> 3;
-          switch (nRemainder) {
-            case 7:
-              pDst[6] = pLookupTable[pbSrcStream[6]];
-            case 6:
-              pDst[5] = pLookupTable[pbSrcStream[5]];
-            case 5:
-              pDst[4] = pLookupTable[pbSrcStream[4]];
-            case 4:
-              pDst[3] = pLookupTable[pbSrcStream[3]];
-            case 3:
-              pDst[2] = pLookupTable[pbSrcStream[2]];
-            case 2:
-              pDst[1] = pLookupTable[pbSrcStream[1]];
-            case 1:
-              *pDst = pLookupTable[*pbSrcStream];
-            case 0:
-              pDst += nRemainder;
+          pDst = pbNextRow;
+          pbNextRow += nDstPitch;
+        } else {
+          pDst += chToken;
+        }
+      } else {
+        const int nRunLen = chToken;
+        int nFullChunks = nRunLen >> 3;
+        const uint32_t nRemainder = nRunLen & 7;
+        switch (nRemainder) {
+          case 7:
+            pDst[6] = pLookupTable[pbSrcStream[6]];
+          case 6:
+            pDst[5] = pLookupTable[pbSrcStream[5]];
+          case 5:
+            pDst[4] = pLookupTable[pbSrcStream[4]];
+          case 4:
+            pDst[3] = pLookupTable[pbSrcStream[3]];
+          case 3:
+            pDst[2] = pLookupTable[pbSrcStream[2]];
+          case 2:
+            pDst[1] = pLookupTable[pbSrcStream[1]];
+          case 1:
+            *pDst = pLookupTable[*pbSrcStream];
+          case 0:
+            pDst += nRemainder;
             pbSrcStream += nRemainder;
-            for (; nFullChunks; nFullChunks--) {
+            while (nFullChunks) {
               pDst[7] = pLookupTable[pbSrcStream[7]];
               pDst[6] = pLookupTable[pbSrcStream[6]];
               pDst[5] = pLookupTable[pbSrcStream[5]];
@@ -676,23 +658,11 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1(uint8_t * pbSrcStream, uint8_t 
               pDst[2] = pLookupTable[pbSrcStream[2]];
               pDst[1] = pLookupTable[pbSrcStream[1]];
               *pDst = pLookupTable[*pbSrcStream];
+              --nFullChunks;
               pDst += 8;
               pbSrcStream += 8;
             }
-          }
         }
-
-        if (!(byRunToken & 0x7f)) {
-          break;
-        }
-
-        pDst += (char)(byRunToken & 0x7f);
-      } while (true);
-
-      nRowCount--;
-      pDst = puNextRowStart;
-      if (!nRowCount) {
-        return;
       }
     }
 }
@@ -798,41 +768,43 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip(uint8_t * pbSrcStream, u
 }
 
 void __fastcall FASTCMP_DecompressRLEWithBlend2(uint8_t * pbSrcStream, uint8_t * pbDst, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable, uint8_t * pBlendTable) {
-    uint32_t nRemainder;
-    int nFullChunks;
-    uint8_t byRunToken;
-    while (true) {
-      uint8_t* pbNextRowStart;
-      pbNextRowStart = pbDst + nDstPitch;
-      do {
-        while (true) {
-          byRunToken = *pbSrcStream;
-          pbSrcStream = pbSrcStream + 1;
-          if (byRunToken & 0x80) {
-            break;
+    uint8_t* pbNextRow = pbDst + nDstPitch;
+    for (;;) {
+      char chToken = (char)*pbSrcStream++;
+      if (chToken < 0) {
+        chToken &= 0x7f;
+        if (!chToken) {
+          if (--nRowCount == 0) {
+            return;
           }
-
-          nRemainder = (int)(char)byRunToken & 7;
-          nFullChunks = (int)(char)byRunToken >> 3;
-          switch (nRemainder) {
-            case 7:
-              pbDst[6] = pBlendTable[((uint32_t)pbDst[6] << 8) + (uint32_t)pLookupTable[pbSrcStream[6]]];
-            case 6:
-              pbDst[5] = pBlendTable[((uint32_t)pbDst[5] << 8) + (uint32_t)pLookupTable[pbSrcStream[5]]];
-            case 5:
-              pbDst[4] = pBlendTable[((uint32_t)pbDst[4] << 8) + (uint32_t)pLookupTable[pbSrcStream[4]]];
-            case 4:
-              pbDst[3] = pBlendTable[((uint32_t)pbDst[3] << 8) + (uint32_t)pLookupTable[pbSrcStream[3]]];
-            case 3:
-              pbDst[2] = pBlendTable[((uint32_t)pbDst[2] << 8) + (uint32_t)pLookupTable[pbSrcStream[2]]];
-            case 2:
-              pbDst[1] = pBlendTable[((uint32_t)pbDst[1] << 8) + (uint32_t)pLookupTable[pbSrcStream[1]]];
-            case 1:
-              *pbDst = pBlendTable[((uint32_t)*pbDst << 8) + (uint32_t)pLookupTable[*pbSrcStream]];
-            case 0:
-              pbDst += nRemainder;
+          pbDst = pbNextRow;
+          pbNextRow += nDstPitch;
+        } else {
+          pbDst += chToken;
+        }
+      } else {
+        const int nRunLen = chToken;
+        int nFullChunks = nRunLen >> 3;
+        const uint32_t nRemainder = nRunLen & 7;
+        switch (nRemainder) {
+          case 7:
+            pbDst[6] = pBlendTable[((uint32_t)pbDst[6] << 8) + (uint32_t)pLookupTable[pbSrcStream[6]]];
+          case 6:
+            pbDst[5] = pBlendTable[((uint32_t)pbDst[5] << 8) + (uint32_t)pLookupTable[pbSrcStream[5]]];
+          case 5:
+            pbDst[4] = pBlendTable[((uint32_t)pbDst[4] << 8) + (uint32_t)pLookupTable[pbSrcStream[4]]];
+          case 4:
+            pbDst[3] = pBlendTable[((uint32_t)pbDst[3] << 8) + (uint32_t)pLookupTable[pbSrcStream[3]]];
+          case 3:
+            pbDst[2] = pBlendTable[((uint32_t)pbDst[2] << 8) + (uint32_t)pLookupTable[pbSrcStream[2]]];
+          case 2:
+            pbDst[1] = pBlendTable[((uint32_t)pbDst[1] << 8) + (uint32_t)pLookupTable[pbSrcStream[1]]];
+          case 1:
+            *pbDst = pBlendTable[((uint32_t)*pbDst << 8) + (uint32_t)pLookupTable[*pbSrcStream]];
+          case 0:
+            pbDst += nRemainder;
             pbSrcStream += nRemainder;
-            for (; nFullChunks; nFullChunks--) {
+            while (nFullChunks) {
               pbDst[7] = pBlendTable[((uint32_t)pbDst[7] << 8) + (uint32_t)pLookupTable[pbSrcStream[7]]];
               pbDst[6] = pBlendTable[((uint32_t)pbDst[6] << 8) + (uint32_t)pLookupTable[pbSrcStream[6]]];
               pbDst[5] = pBlendTable[((uint32_t)pbDst[5] << 8) + (uint32_t)pLookupTable[pbSrcStream[5]]];
@@ -841,23 +813,11 @@ void __fastcall FASTCMP_DecompressRLEWithBlend2(uint8_t * pbSrcStream, uint8_t *
               pbDst[2] = pBlendTable[((uint32_t)pbDst[2] << 8) + (uint32_t)pLookupTable[pbSrcStream[2]]];
               pbDst[1] = pBlendTable[((uint32_t)pbDst[1] << 8) + (uint32_t)pLookupTable[pbSrcStream[1]]];
               *pbDst = pBlendTable[((uint32_t)*pbDst << 8) + (uint32_t)pLookupTable[*pbSrcStream]];
+              --nFullChunks;
               pbDst += 8;
               pbSrcStream += 8;
             }
-          }
         }
-
-        if (!(byRunToken & 0x7f)) {
-          break;
-        }
-
-        pbDst += (char)(byRunToken & 0x7f);
-      } while (true);
-
-      nRowCount--;
-      pbDst = pbNextRowStart;
-      if (!nRowCount) {
-        return;
       }
     }
 }
@@ -962,41 +922,43 @@ void __fastcall FASTCMP_DecompressRLEWithBlend2AndClip(uint8_t * pbSrcStream, ui
 }
 
 void __fastcall FASTCMP_DecompressRLEWithLookup1_v2(uint8_t * pbSrcStream, uint8_t * pDst, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable) {
-    uint32_t nRemainder;
-    int nFullChunks;
-    uint8_t byRunToken;
-    while (true) {
-      uint8_t* puNextRowStart;
-      puNextRowStart = pDst + nDstPitch;
-      do {
-        while (true) {
-          byRunToken = *pbSrcStream;
-          pbSrcStream = pbSrcStream + 1;
-          if (byRunToken & 0x80) {
-            break;
+    uint8_t* pbNextRow = pDst + nDstPitch;
+    for (;;) {
+      char chToken = (char)*pbSrcStream++;
+      if (chToken < 0) {
+        chToken &= 0x7f;
+        if (!chToken) {
+          if (--nRowCount == 0) {
+            return;
           }
-
-          nRemainder = (int)(char)byRunToken & 7;
-          nFullChunks = (int)(char)byRunToken >> 3;
-          switch (nRemainder) {
-            case 7:
-              pDst[6] = pLookupTable[pbSrcStream[6]];
-            case 6:
-              pDst[5] = pLookupTable[pbSrcStream[5]];
-            case 5:
-              pDst[4] = pLookupTable[pbSrcStream[4]];
-            case 4:
-              pDst[3] = pLookupTable[pbSrcStream[3]];
-            case 3:
-              pDst[2] = pLookupTable[pbSrcStream[2]];
-            case 2:
-              pDst[1] = pLookupTable[pbSrcStream[1]];
-            case 1:
-              *pDst = pLookupTable[*pbSrcStream];
-            case 0:
-              pDst += nRemainder;
+          pDst = pbNextRow;
+          pbNextRow += nDstPitch;
+        } else {
+          pDst += chToken;
+        }
+      } else {
+        const int nRunLen = chToken;
+        int nFullChunks = nRunLen >> 3;
+        const uint32_t nRemainder = nRunLen & 7;
+        switch (nRemainder) {
+          case 7:
+            pDst[6] = pLookupTable[pbSrcStream[6]];
+          case 6:
+            pDst[5] = pLookupTable[pbSrcStream[5]];
+          case 5:
+            pDst[4] = pLookupTable[pbSrcStream[4]];
+          case 4:
+            pDst[3] = pLookupTable[pbSrcStream[3]];
+          case 3:
+            pDst[2] = pLookupTable[pbSrcStream[2]];
+          case 2:
+            pDst[1] = pLookupTable[pbSrcStream[1]];
+          case 1:
+            *pDst = pLookupTable[*pbSrcStream];
+          case 0:
+            pDst += nRemainder;
             pbSrcStream += nRemainder;
-            for (; nFullChunks; nFullChunks--) {
+            while (nFullChunks) {
               pDst[7] = pLookupTable[pbSrcStream[7]];
               pDst[6] = pLookupTable[pbSrcStream[6]];
               pDst[5] = pLookupTable[pbSrcStream[5]];
@@ -1005,23 +967,11 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1_v2(uint8_t * pbSrcStream, uint8
               pDst[2] = pLookupTable[pbSrcStream[2]];
               pDst[1] = pLookupTable[pbSrcStream[1]];
               *pDst = pLookupTable[*pbSrcStream];
+              --nFullChunks;
               pDst += 8;
               pbSrcStream += 8;
             }
-          }
         }
-
-        if (!(byRunToken & 0x7f)) {
-          break;
-        }
-
-        pDst += (char)(byRunToken & 0x7f);
-      } while (true);
-
-      nRowCount--;
-      pDst = puNextRowStart;
-      if (!nRowCount) {
-        return;
       }
     }
 }
@@ -1127,41 +1077,43 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip_v2(uint8_t * pbSrcStream
 }
 
 void __fastcall FASTCMP_DecompressRLEWithBlend3(uint8_t * pbSrcStream, uint8_t * pbDst, int32_t nRowCount, int32_t nDstPitch, uint8_t * pBlendTable) {
-    uint32_t nRemainder;
-    int nFullChunks;
-    uint8_t byRunToken;
-    while (true) {
-      uint8_t* pbNextRowStart;
-      pbNextRowStart = pbDst + nDstPitch;
-      do {
-        while (true) {
-          byRunToken = *pbSrcStream;
-          pbSrcStream = pbSrcStream + 1;
-          if (byRunToken & 0x80) {
-            break;
+    uint8_t* pbNextRow = pbDst + nDstPitch;
+    for (;;) {
+      char chToken = (char)*pbSrcStream++;
+      if (chToken < 0) {
+        chToken &= 0x7f;
+        if (!chToken) {
+          if (--nRowCount == 0) {
+            return;
           }
-
-          nRemainder = (int)(char)byRunToken & 7;
-          nFullChunks = (int)(char)byRunToken >> 3;
-          switch (nRemainder) {
-            case 7:
-              pbDst[6] = pBlendTable[(uint32_t)pbSrcStream[6] + ((uint32_t)pbDst[6] << 8)];
-            case 6:
-              pbDst[5] = pBlendTable[(uint32_t)pbSrcStream[5] + ((uint32_t)pbDst[5] << 8)];
-            case 5:
-              pbDst[4] = pBlendTable[(uint32_t)pbSrcStream[4] + ((uint32_t)pbDst[4] << 8)];
-            case 4:
-              pbDst[3] = pBlendTable[(uint32_t)pbSrcStream[3] + ((uint32_t)pbDst[3] << 8)];
-            case 3:
-              pbDst[2] = pBlendTable[(uint32_t)pbSrcStream[2] + ((uint32_t)pbDst[2] << 8)];
-            case 2:
-              pbDst[1] = pBlendTable[(uint32_t)pbSrcStream[1] + ((uint32_t)pbDst[1] << 8)];
-            case 1:
-              *pbDst = pBlendTable[(uint32_t)*pbSrcStream + ((uint32_t)*pbDst << 8)];
-            case 0:
-              pbDst += nRemainder;
+          pbDst = pbNextRow;
+          pbNextRow += nDstPitch;
+        } else {
+          pbDst += chToken;
+        }
+      } else {
+        const int nRunLen = chToken;
+        int nFullChunks = nRunLen >> 3;
+        const uint32_t nRemainder = nRunLen & 7;
+        switch (nRemainder) {
+          case 7:
+            pbDst[6] = pBlendTable[(uint32_t)pbSrcStream[6] + ((uint32_t)pbDst[6] << 8)];
+          case 6:
+            pbDst[5] = pBlendTable[(uint32_t)pbSrcStream[5] + ((uint32_t)pbDst[5] << 8)];
+          case 5:
+            pbDst[4] = pBlendTable[(uint32_t)pbSrcStream[4] + ((uint32_t)pbDst[4] << 8)];
+          case 4:
+            pbDst[3] = pBlendTable[(uint32_t)pbSrcStream[3] + ((uint32_t)pbDst[3] << 8)];
+          case 3:
+            pbDst[2] = pBlendTable[(uint32_t)pbSrcStream[2] + ((uint32_t)pbDst[2] << 8)];
+          case 2:
+            pbDst[1] = pBlendTable[(uint32_t)pbSrcStream[1] + ((uint32_t)pbDst[1] << 8)];
+          case 1:
+            *pbDst = pBlendTable[(uint32_t)*pbSrcStream + ((uint32_t)*pbDst << 8)];
+          case 0:
+            pbDst += nRemainder;
             pbSrcStream += nRemainder;
-            for (; nFullChunks; nFullChunks--) {
+            while (nFullChunks) {
               pbDst[7] = pBlendTable[(uint32_t)pbSrcStream[7] + ((uint32_t)pbDst[7] << 8)];
               pbDst[6] = pBlendTable[(uint32_t)pbSrcStream[6] + ((uint32_t)pbDst[6] << 8)];
               pbDst[5] = pBlendTable[(uint32_t)pbSrcStream[5] + ((uint32_t)pbDst[5] << 8)];
@@ -1170,23 +1122,11 @@ void __fastcall FASTCMP_DecompressRLEWithBlend3(uint8_t * pbSrcStream, uint8_t *
               pbDst[2] = pBlendTable[(uint32_t)pbSrcStream[2] + ((uint32_t)pbDst[2] << 8)];
               pbDst[1] = pBlendTable[(uint32_t)pbSrcStream[1] + ((uint32_t)pbDst[1] << 8)];
               *pbDst = pBlendTable[(uint32_t)*pbSrcStream + ((uint32_t)*pbDst << 8)];
+              --nFullChunks;
               pbDst += 8;
               pbSrcStream += 8;
             }
-          }
         }
-
-        if (!(byRunToken & 0x7f)) {
-          break;
-        }
-
-        pbDst += (char)(byRunToken & 0x7f);
-      } while (true);
-
-      nRowCount--;
-      pbDst = pbNextRowStart;
-      if (!nRowCount) {
-        return;
       }
     }
 }

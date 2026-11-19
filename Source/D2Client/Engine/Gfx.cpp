@@ -81,9 +81,9 @@
 #include "Source/Bnclient/BnSend.h"
 #include "Source/Bnclient/SRP.h"
 #include "Source/Bnclient/net_sid.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/ClientModeInGame.h"
 #include "Source/D2Client/Cursor.h"
 #include "Source/D2Client/D2BNetGatewayAccessStr.h"
@@ -416,10 +416,9 @@ static void __stdcall GFX_LoadAndHashCofArchive(char * szPath, D2CofCacheStrc * 
       exit(-1);
     }
 
+    unsigned char* pRecordCursor = (unsigned char*)pEntry;
     int nRemaining = pCache->nCacheEntryCount;
     gnCofCacheMemUsage += nRemaining;
-    unsigned char* pRecordCursor;
-    pRecordCursor = (unsigned char*)pEntry;
     for (; nRemaining; nRemaining += -0x18 - *puVar1) {
       pEntry = (D2CofTextureCacheEntryStrc*)pRecordCursor;
       uint32_t nHash;
@@ -439,7 +438,11 @@ static void __stdcall GFX_LoadAndHashCofArchive(char * szPath, D2CofCacheStrc * 
       }
 
       nHash = Storm::Source::SSTR::SStrHash(pEntry->szName, 1, 0);
-      nBucket = (((nHash >> 8 ^ nHash) >> 8 ^ nHash) >> 8 ^ nHash) & 0x1ff;
+      nBucket = nHash;
+      for (unsigned int i = 0; i < 3; ++i) {
+        nBucket = (nBucket >> 8) ^ nHash;
+      }
+      nBucket &= 0x1ff;
       pEntry->pNext = pCache->apBuckets[nBucket];
       pCache->apBuckets[nBucket] = pEntry;
       puVar1 = &pEntry->nFileSize;

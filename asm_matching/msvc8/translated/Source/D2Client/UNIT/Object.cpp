@@ -1285,41 +1285,24 @@ bool __fastcall OBJECT_ClientFn_PlayActBossCinematic(D2UnitStrc * pUnit) {
 // ClientFn 0xd handler, slot 13 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). Rite of Passage (quest record 0x27): once the quest is started and flag 4 is clear, with the player within 25, stops the player's path and sends UNITMODE_ExecuteSkillAction(0x13, player, 2, guid), then sets mode ON.
 // Provenance: 1.14d asm 004bdc10.
 bool __fastcall OBJECT_ClientFn_RiteOfPassageAncients(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eAnimMode.ePlayerMode != Death) {
-      return true;
+    if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
+      D2UnitStrc* const pPlayer = Player::GetPlayerUnit_UI();
+      if (pPlayer && D2Common::QuestRecord::GetQuestState(UI::npcmenu::GetQuestInfo(), QUEST_RiteOfPassage, QUESTSTATE_Completed)
+          && !D2Common::QuestRecord::GetQuestState(UI::npcmenu::GetQuestInfo(), QUEST_RiteOfPassage, QUESTSTATE_Step0x04)) {
+        D2UnitStrc* const pTarget = Player::GetPlayerUnit_UI();
+        const int32_t nDistance = D2Common::Collision::GetCollisionDistance(pUnit, pTarget);
+        if (nDistance < 25) {
+          if (pPlayer->pPath.pDynamicPath) {
+            D2Common::PATH::DynamicPath::ZeroPathPointsSize(pPlayer->pPath.pDynamicPath);
+          }
+
+          UnitMode::UNITMODE_ExecuteSkillAction(UNITMODEACTION_ITEM_INTERACT, pPlayer, 2, pUnit->nUnitGUID, 0);
+          D2Common::Units::ChangeAnimMode(pUnit, 2);
+          Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
+        }
+      }
     }
 
-    D2UnitStrc* pUnit_00 = Player::GetPlayerUnit_UI();
-    if (!pUnit_00) {
-      return true;
-    }
-
-    eD2QuestState eQuestState = QUESTSTATE_Completed;
-    eD2Quests eQuestId = QUEST_RiteOfPassage;
-    BOOL bQuestState = D2Common::QuestRecord::GetQuestState(UI::npcmenu::GetQuestInfo(), eQuestId, eQuestState);
-    if (!bQuestState) {
-      return true;
-    }
-
-    eQuestState = QUESTSTATE_Step0x04;
-    eQuestId = QUEST_RiteOfPassage;
-    bQuestState = D2Common::QuestRecord::GetQuestState(UI::npcmenu::GetQuestInfo(), eQuestId, eQuestState);
-    if (bQuestState) {
-      return true;
-    }
-
-    D2UnitStrc* pTarget = Player::GetPlayerUnit_UI();
-    int32_t nDistance = D2Common::Collision::GetCollisionDistance(pUnit, pTarget);
-    if (nDistance >= 0x19) {
-      return true;
-    }
-    if (pUnit_00->pPath.pDynamicPath) {
-      D2Common::PATH::DynamicPath::ZeroPathPointsSize(pUnit_00->pPath.pDynamicPath);
-    }
-
-    UnitMode::UNITMODE_ExecuteSkillAction(UNITMODEACTION_ITEM_INTERACT, pUnit_00, 2, pUnit->nUnitGUID, 0);
-    D2Common::Units::ChangeAnimMode(pUnit, 2);
-    Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
     return true;
 }
 

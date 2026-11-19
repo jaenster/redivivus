@@ -72,7 +72,7 @@
         "SGAMEDATA",
         "TSExplicitList<SGAMEDATA, -572662307>"
       ],
-      "dh": "4af98ec9",
+      "dh": "91c0ee36",
       "paramStorage": [
         [
           "pNode",
@@ -98,7 +98,7 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "intptr_t"
       ],
-      "dh": "ea10299d",
+      "dh": "ab2708c4",
       "paramStorage": [
         [
           "pNode",
@@ -235,7 +235,7 @@
         "TSLink<SGAMEDATA>",
         "intptr_t"
       ],
-      "dh": "0f8fd1ab",
+      "dh": "849c0f7f",
       "paramStorage": [
         [
           "pNode",
@@ -379,7 +379,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "800d9506"
+      "dh": "40148e69"
     },
     {
       "name": "MonitorFullness",
@@ -402,7 +402,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "21cc95a1",
+      "dh": "c5e25742",
       "paramStorage": [
         [
           "nSlot",

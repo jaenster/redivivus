@@ -295,11 +295,13 @@ void __fastcall PLRSKILLS_StateSetFn05_ChangeClass(D2UnitStrc * pUnit, eD2States
 }
 
 static int32_t __stdcall STATES_CalcDamageSeverityTier(int32_t nMax, int32_t nValue) {
+    const int32_t nOneThird = nMax / 3;
+    const int32_t nTwoThirds = nOneThird * 2;
     int32_t nTier = 3;
-    if (nValue < nMax / 3) {
+    if (nValue < nOneThird) {
       nTier = 2;
     }
-    if (nValue < nMax / 3 * 2) {
+    if (nValue < nTwoThirds) {
       nTier--;
     }
 
@@ -446,11 +448,13 @@ void __fastcall PLRSKILLS_StateSetFn06_BoneArmor(D2UnitStrc * pUnit, eD2States e
 }
 
 static int32_t __stdcall PLRSKILLS_CalcDamageSeverityTier_Unreferenced(int32_t nMaxValue, int32_t nValue) {
+    const int32_t nOneThird = nMaxValue / 3;
+    const int32_t nTwoThirds = nOneThird * 2;
     int32_t nTier = 3;
-    if (nValue < nMaxValue / 3) {
+    if (nValue < nOneThird) {
       nTier = 2;
     }
-    if (nValue < nMaxValue / 3 * 2) {
+    if (nValue < nTwoThirds) {
       nTier--;
     }
 

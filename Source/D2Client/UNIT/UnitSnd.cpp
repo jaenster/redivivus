@@ -2617,8 +2617,9 @@ int __fastcall UNITSND_GetSkillCastSound(D2UnitStrc * pUnit, uint32_t nAnimMode)
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb5c);
       exit(-1);
     } else {
-      if ((nAnimMode & 0xf) <= 0xd) {
-        return gaUnitSoundTable[(nAnimMode & 0xf) * 2];
+      const uint32_t nMode = nAnimMode & 0xf;
+      if (nMode <= 0xd) {
+        return gaUnitSoundTable[nMode * 2];
       }
 
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb60);
@@ -2632,13 +2633,14 @@ uint32_t __fastcall UNITSND_GetSkillStartSound(D2UnitStrc * pUnit, uint32_t nAni
       exit(-1);
     } else {
       uint32_t nAnimFrames;
-      if ((nAnimMode & 0xf) <= 0xd) {
+      const uint32_t nMode = nAnimMode & 0xf;
+      if (nMode <= 0xd) {
         nAnimFrames = (uint32_t)pUnit->nAnimSpeed;
         if (!nAnimFrames) {
           nAnimFrames = 1;
         }
 
-        return (gaUnitSoundTable[(nAnimMode & 0xf) * 2 + 1] * 0x100 + 0x80U) / nAnimFrames;
+        return (gaUnitSoundTable[nMode * 2 + 1] * 0x100 + 0x80U) / nAnimFrames;
       }
 
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb6f);
@@ -2858,30 +2860,26 @@ void __fastcall IterateUnitSfxData(D2UnitStrc * pUnit, int32_t bForceStop) {
       exit(-1);
     }
 
-    D2SoundListNodeStrc* pDVar1 = pUnit->uSideData.pClientSide.pUnitSfxData;
-    while (pDVar1) {
-      intptr_t* piVar2;
-      piVar2 = &pDVar1->nItemKey;
-      pDVar1 = pDVar1->pNext;
-      Sound::SOUND_StopUnitSoundByIndex(*piVar2, pUnit, bForceStop);
+    D2SoundListNodeStrc* pNext;
+    for (D2SoundListNodeStrc* pCurrent = pUnit->uSideData.pClientSide.pUnitSfxData; pCurrent; pCurrent = pNext) {
+      pNext = pCurrent->pNext;
+      Sound::SOUND_StopUnitSoundByIndex(pCurrent->nItemKey, pUnit, bForceStop);
     }
 }
 
 void __fastcall UNITSND_UpdatePositionalAudio(D2UnitStrc * pUnit) {
     int nSoundId_00;
     uint32_t nLoopFlag;
-    int32_t nChannelId;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc2c);
       exit(-1);
     }
 
     {
-      D2SoundListNodeStrc* pDVar1;
-      pDVar1 = pUnit->uSideData.pClientSide.pUnitSfxData;
-      while (pDVar1) {
-        nChannelId = pDVar1->nItemKey;
-        pDVar1 = pDVar1->pNext;
+      D2SoundListNodeStrc* pNext;
+      for (D2SoundListNodeStrc* pCurrent = pUnit->uSideData.pClientSide.pUnitSfxData; pCurrent; pCurrent = pNext) {
+        const int32_t nChannelId = pCurrent->nItemKey;
+        pNext = pCurrent->pNext;
         nSoundId_00 = Sound::SOUND_GetSoundIdByChannelHandle(nChannelId);
         nLoopFlag = Sound::SoundHdr::SOUNDHDR_GetSoundLoopFlag(nSoundId_00);
         if (nLoopFlag) {
@@ -3347,10 +3345,10 @@ void __fastcall UNITSND_StopAllSkillSounds(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    D2SoundListNodeStrc* pDVar1 = pUnit->uSideData.pClientSide.pUnitSfxData;
-    while (pDVar1) {
-      nSfxChannelId = pDVar1->nItemKey;
-      pDVar1 = pDVar1->pNext;
+    D2SoundListNodeStrc* pNext;
+    for (D2SoundListNodeStrc* pCurrent = pUnit->uSideData.pClientSide.pUnitSfxData; pCurrent; pCurrent = pNext) {
+      nSfxChannelId = pCurrent->nItemKey;
+      pNext = pCurrent->pNext;
       nSoundField60 = Sound::SOUND_GetSoundIdByChannelHandle(nSfxChannelId);
       nSoundField60 = Sound::SoundHdr::SOUNDHDR_GetSoundField0x60(nSoundField60);
       if (nSoundField60 == pMonSoundsLine->Skill[0] || nSoundField60 == pMonSoundsLine->Skill[1] || nSoundField60 == pMonSoundsLine->Skill[2] || nSoundField60 == pMonSoundsLine->Skill[3]) {
@@ -3418,10 +3416,10 @@ void __stdcall UNITSND_StopAllCombatSounds(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    D2SoundListNodeStrc* pDVar1 = pUnit->uSideData.pClientSide.pUnitSfxData;
-    while (pDVar1) {
-      nSfxChannelId = pDVar1->nItemKey;
-      pDVar1 = pDVar1->pNext;
+    D2SoundListNodeStrc* pNext;
+    for (D2SoundListNodeStrc* pCurrent = pUnit->uSideData.pClientSide.pUnitSfxData; pCurrent; pCurrent = pNext) {
+      nSfxChannelId = pCurrent->nItemKey;
+      pNext = pCurrent->pNext;
       nSoundField60 = Sound::SOUND_GetSoundIdByChannelHandle(nSfxChannelId);
       nSoundField60 = Sound::SoundHdr::SOUNDHDR_GetSoundField0x60(nSoundField60);
       if (nSoundField60 == pMonSoundsLine->Attack1 || nSoundField60 == pMonSoundsLine->Attack2 || nSoundField60 == pMonSoundsLine->HitSound || nSoundField60 == pMonSoundsLine->Neutral || nSoundField60 == pMonSoundsLine->Skill[0] || nSoundField60 == pMonSoundsLine->Skill[1] || nSoundField60 == pMonSoundsLine->Skill[2] || nSoundField60 == pMonSoundsLine->Skill[3] || nSoundField60 == pMonSoundsLine->Init || nSoundField60 == pMonSoundsLine->Taunt || nSoundField60 == pMonSoundsLine->Flee) {

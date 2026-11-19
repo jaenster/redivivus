@@ -261,24 +261,18 @@ int __fastcall GetScreenSize(int * pWidth, int * pHeight) {
 }
 
 void __fastcall SetPalette(LPPALETTEENTRY pPalette) {
-    int nRemaining;
-    RGBQUAD* pDstRgbQuad = prgbq_00989c40;
-    uint8_t* pSrcPaletteByte = &pPalette->peBlue;
+    LPPALETTEENTRY pSource = pPalette;
+    RGBQUAD *pDestination = prgbq_00989c40;
     do {
-      pSrcPaletteByte[(intptr_t)prgbq_00989c40 - (intptr_t)pPalette] = ((tagPALETTEENTRY*)(pSrcPaletteByte - 2))->peRed;
-      pDstRgbQuad->rgbGreen = pSrcPaletteByte[-1];
-      pDstRgbQuad->rgbBlue = *pSrcPaletteByte;
-      pDstRgbQuad++;
-      pSrcPaletteByte += 4;
-    } while ((intptr_t)pDstRgbQuad < (intptr_t)((char*)&prgbq_00989c40 + sizeof(prgbq_00989c40)));
+      pDestination->rgbRed = pSource->peRed;
+      pDestination->rgbGreen = pSource->peGreen;
+      pDestination->rgbBlue = pSource->peBlue;
+      ++pSource;
+      ++pDestination;
+    } while ((intptr_t)pDestination < (intptr_t)(prgbq_00989c40 + 256));
 
     /* PALETTEENTRY * pPalEntries for SetPaletteEntries */ /* UINT cEntries for SetPaletteEntries */ /* UINT iStart for SetPaletteEntries */ /* HPALETTE hpal for SetPaletteEntries */ SetPaletteEntries(RENDERER_WINDOWED_hPalette, 0, 0x100, pPalette);
-    tagPALETTEENTRY* pDitherRemapEntry = (tagPALETTEENTRY*)gaDirectDrawDitherPaletteRemap;
-    for (nRemaining = 0x100; nRemaining; nRemaining--) {
-      *pDitherRemapEntry = *pPalette;
-      pPalette++;
-      pDitherRemapEntry++;
-    }
+    memcpy(gaDirectDrawDitherPaletteRemap, pPalette, 256 * sizeof(PALETTEENTRY));
 }
 
 void __fastcall SetPaletteTable(BYTE * * ppPaletteTable) {

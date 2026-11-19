@@ -49,9 +49,9 @@
 #include "Source/Fog/Skills.h"
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/UI/Automap.h"
 #include "Source/D2Client/UI/Inv.h"
 #include "Source/D2Client/UI/SkillDesc.h"
@@ -2210,49 +2210,41 @@ int32_t __stdcall PLAYER_GetUnidentifiedItemsCount(D2UnitStrc * pUnit) {
 }
 
 int32_t __stdcall ITEMS_GetBonusLifeBasedOnClass(D2UnitStrc * pPlayer, int32_t nValue) {
-    if (!pPlayer || pPlayer->eUnitType != UNIT_PLAYER) {
-      double_value:
-      nValue *= 2;
-    } else {
+    int32_t nResult = nValue;
+    if (pPlayer && pPlayer->eUnitType == UNIT_PLAYER) {
       switch (pPlayer->nClassId) {
         case 0:
-
         case 3:
-
         case 6:
-          return (nValue >> 1) + nValue;
-        default:
+          nResult = (nValue >> 1) + nValue;
           break;
         case 4:
-          goto double_value;
+          nResult = nValue * 2;
+          break;
       }
+    } else {
+      nResult = nValue * 2;
     }
-
-    return nValue;
+    return nResult;
 }
 
 int32_t __stdcall ITEMS_GetBonusManaBasedOnClass(D2UnitStrc * pPlayer, int32_t nValue) {
-    if (!(pPlayer && pPlayer->eUnitType == UNIT_PLAYER && true)) {
-      return nValue;
+    int32_t nResult = nValue;
+    if (pPlayer && pPlayer->eUnitType == UNIT_PLAYER) {
+      switch (pPlayer->nClassId) {
+        case 1:
+        case 2:
+        case 5:
+          nResult = nValue * 2;
+          break;
+        case 0:
+        case 3:
+        case 6:
+          nResult = (nValue >> 1) + nValue;
+          break;
+      }
     }
-
-    switch (pPlayer->nClassId) {
-      case 1:
-
-      case 2:
-
-      case 5:
-        return nValue * 2;
-      case 0:
-
-      case 3:
-
-      case 6:
-        nValue = (nValue >> 1) + nValue;
-      break;
-    }
-
-    return nValue;
+    return nResult;
 }
 
 uint16_t __stdcall ITEM_GetItemData_wItemVersion(D2UnitStrc * pUnit) {
@@ -5619,14 +5611,7 @@ static BOOL ITEM_IsReplenishable(D2UnitStrc * pUnit) {
     if (!nErrLine) {
       return 0;
     }
-
-    BOOL bIsStackable = IsStackable(pUnit);
-    if (!bIsStackable) {
-      return 0;
-    }
-
-    uint32_t bIsEthereal = ITEM_GetItemData_eD2ItemFlag_IsEthereal(pUnit);
-    if (bIsEthereal) {
+    if (!IsStackable(pUnit) || ITEM_GetItemData_eD2ItemFlag_IsEthereal(pUnit)) {
       return 0;
     }
 

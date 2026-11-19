@@ -63,9 +63,9 @@
 #include "Source/Bnclient/SRP.h"
 #include "Source/Bnclient/net_sid.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/ClientModeInGame.h"
 #include "Source/D2Client/Cursor.h"
 #include "Source/D2Client/D2BNetGatewayAccessStr.h"
@@ -741,7 +741,7 @@ static int32_t ITEM_GetItemDropSound(uint32_t * pnDropSfxFrame, D2UnitStrc * pUn
             *pnDropSfxFrame = (uint32_t)(uint8_t)pUniqueItemsTxt->dropsfxframe;
           }
 
-          return (int)pUniqueItemsTxt->dropsound;
+          nDropSound = (int)pUniqueItemsTxt->dropsound;
         }
       }
     } else {
@@ -784,7 +784,7 @@ static int32_t ITEM_GetItemUseSound(D2UnitStrc * pUnit) {
       eQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
       pUniqueItemsTxt = eQuality >= 0 && eQuality < D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + eQuality : nullptr;
       if (pUniqueItemsTxt && pUniqueItemsTxt->dropsound > 0) {
-        return (int)pUniqueItemsTxt->usesound;
+        nSoundId = (int)pUniqueItemsTxt->usesound;
       }
     } else {
       eQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);

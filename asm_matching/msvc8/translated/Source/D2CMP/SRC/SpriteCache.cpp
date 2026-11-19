@@ -171,25 +171,14 @@ void __stdcall SPRITECACHE_Unlock() {
 }
 
 void __fastcall SPRITECACHE_TouchEntry(D2TileLibraryHeaderStrc * pTileLibrary) {
-    uint8_t* pBVar1;
-    int nEntryIdx = 0;
-    if (pTileLibrary->nTiles <= 0) {
-      return;
-    }
-
-    do {
-      D2TileLibraryEntryStrc* pDVar2;
-      pDVar2 = pTileLibrary->pTiles;
-      if (pDVar2[nEntryIdx].pLruNode) {
-        LRUCache::LRUCACHE_FreeEntry(&gSpriteCacheLru, pDVar2[nEntryIdx].pLruNode);
-        pBVar1 = (uint8_t*)(unsigned char*)&pDVar2[nEntryIdx].pSubTiles;
-        *(uint32_t*)pBVar1 = 0;
-        pBVar1 = (uint8_t*)(unsigned char*)&pDVar2[nEntryIdx].pLruNode;
-        *(uint32_t*)pBVar1 = 0;
+    for (int nEntryIdx = 0; nEntryIdx < pTileLibrary->nTiles; ++nEntryIdx) {
+      D2TileLibraryEntryStrc *pEntry = &pTileLibrary->pTiles[nEntryIdx];
+      if (pEntry->pLruNode) {
+        LRUCache::LRUCACHE_FreeEntry(&gSpriteCacheLru, pEntry->pLruNode);
+        pEntry->pSubTiles = nullptr;
+        pEntry->pLruNode = nullptr;
       }
-
-      nEntryIdx++;
-    } while (nEntryIdx < pTileLibrary->nTiles);
+    }
 }
 
 void __stdcall GFX_InitLRUCache(D2PoolManagerStrc * pMemory, uint32_t pPoolManager) {
@@ -1429,12 +1418,12 @@ void __fastcall SPRITECACHE_FreeMemory(D2GfxMemoryStrc * pGfxMemory, D2SpriteCac
     uint32_t uVar1;
     CRITICAL_SECTION* lpCriticalSection = &pGfxMemory->lpCriticalSection;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-    uint32_t nSize = pCacheEntry->nSize;
-    pGfxMemory->nUsedMemory -= nSize;
+    const uint32_t nOldSize = pCacheEntry->nSize;
+    const uint32_t nNewSize = nFreedSize + nOldSize;
+    pGfxMemory->nUsedMemory -= nOldSize;
     pCacheEntry->dwFlags |= 2;
-    nSize = nFreedSize + nSize;
-    pCacheEntry->nSize = nSize;
-    pGfxMemory->nUsedMemory += nSize;
+    pCacheEntry->nSize = nNewSize;
+    pGfxMemory->nUsedMemory += nNewSize;
     uVar1 = pGfxMemory->nUsedMemory;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
     while (uVar1 > pGfxMemory->pMaxMemory) {

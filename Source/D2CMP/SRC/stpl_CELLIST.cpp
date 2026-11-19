@@ -261,28 +261,28 @@ template<> void TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCrit
 
 template<> void TSHashObject<CELLIST, HASHKEY_NONE>::Destructor() {
     TSLink<::CELLIST>** pBackLink2;
-    TSLink<::CELLIST>* pTVar1 = &this->m_linktofull;
-    TSLink<::CELLIST>* nEntry = pTVar1->m_prevlink;
-    if (nEntry) {
+    TSLink<::CELLIST>* pFullLink = &this->m_linktofull;
+    TSLink<::CELLIST>* pPreviousLink = pFullLink->m_prevlink;
+    if (pPreviousLink) {
       TSLink<::CELLIST>** pBackLink;
-      pBackLink = (TSLink<::CELLIST>**)D2_StormNextLink(pTVar1, -1);
-      *pBackLink = nEntry;
-      pTVar1->m_prevlink->m_next = pTVar1->m_next;
-      pTVar1->m_prevlink = 0;
-      this->m_linktofull.m_next = 0;
+      pBackLink = (TSLink<::CELLIST>**)D2_StormNextLink(pFullLink, -1);
+      *pBackLink = pPreviousLink;
+      pFullLink->m_prevlink->m_next = pFullLink->m_next;
+      pFullLink->m_prevlink = 0;
+      pFullLink->m_next = 0;
     }
 
-    nEntry = this->m_linktoslot.m_prevlink;
-    pTVar1 = &this->m_linktoslot;
-    if (!nEntry) {
+    TSLink<::CELLIST>* pSlotLink = &this->m_linktoslot;
+    pPreviousLink = pSlotLink->m_prevlink;
+    if (!pPreviousLink) {
       return;
     }
 
-    pBackLink2 = (TSLink<::CELLIST>**)D2_StormNextLink(pTVar1, -1);
-    *pBackLink2 = nEntry;
-    pTVar1->m_prevlink->m_next = pTVar1->m_next;
-    pTVar1->m_prevlink = 0;
-    pTVar1->m_next = 0;
+    pBackLink2 = (TSLink<::CELLIST>**)D2_StormNextLink(pSlotLink, -1);
+    *pBackLink2 = pPreviousLink;
+    pSlotLink->m_prevlink->m_next = pSlotLink->m_next;
+    pSlotLink->m_prevlink = 0;
+    pSlotLink->m_next = 0;
 }
 
 template<> void TSExplicitList<CELLIST, -572662307>::LinkNode(::CELLIST * pNode, uint32_t nLinkType, ::CELLIST * pExisting) {

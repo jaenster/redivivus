@@ -52,9 +52,9 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/UNIT/Item.h"
 #include "Source/D2Client/UNIT/PlrSkills.h"
 #include "Source/D2Common/COMPOSIT/Composit.h"
@@ -191,14 +191,7 @@ namespace D2Common::Skills {
 
 // Calculates a skill parameter value using Param[6] and Param[7] from SkillsTxt. Formula: (level - 1) * Param[7] + Param[6]. Returns 0 if skill ID or level is invalid.
 int32_t __fastcall SKILLS_CalcSkillParam(eD2Skills eSkill, int32_t nSkillLevel) {
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if (!((int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    const D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -556,16 +549,16 @@ BOOL __stdcall SKILLS_SetCharges(D2SkillStrc * pSkill, int32_t nCharges) {
 }
 
 void __stdcall SelectSkillLeft(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nOwnerGUID) {
-    D2SkillsTxt* pSkillsTxt;
-    if ((int)eSkill < 0 || (int)eSkill >= ITEMS::Items::sgptDataTable->nTxtSkillsCount || (pSkillsTxt = ITEMS::Items::sgptDataTable->pTxtSkills , !(pSkillsTxt + eSkill))) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x668);
       exit(-1);
     }
 
     D2SkillStrc* pMatchSkill;
     pMatchSkill = Units::GetFirstSkill(pUnit);
-    bool bFound;
-    bFound = false;
+    BOOL bFound;
+    bFound = 0;
     if (!pMatchSkill) {
       return;
     }
@@ -574,8 +567,8 @@ void __stdcall SelectSkillLeft(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nOw
       if (bFound) {
         goto select_found_skill;
       }
-      if (pMatchSkill->pRecord == pSkillsTxt + eSkill && pMatchSkill->nOwnerGUID == nOwnerGUID) {
-        bFound = true;
+      if (pMatchSkill->pRecord == pSkillsTxt && pMatchSkill->nOwnerGUID == nOwnerGUID) {
+        bFound = 1;
       } else {
         pMatchSkill = pMatchSkill->pNext;
       }
@@ -590,16 +583,16 @@ void __stdcall SelectSkillLeft(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nOw
 }
 
 void __stdcall SelectSkillRight(D2UnitStrc * pUnit, int32_t nSkillId, int32_t nOwnerGUID) {
-    D2SkillsTxt* pSkillsTxt;
-    if (nSkillId < 0 || nSkillId >= ITEMS::Items::sgptDataTable->nTxtSkillsCount || (pSkillsTxt = ITEMS::Items::sgptDataTable->pTxtSkills , !(pSkillsTxt + nSkillId))) {
+    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
+    if (!pSkillsTxt) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x67f);
       exit(-1);
     }
 
     D2SkillStrc* pMatchSkill;
     pMatchSkill = Units::GetFirstSkill(pUnit);
-    bool bFound;
-    bFound = false;
+    BOOL bFound;
+    bFound = 0;
     if (!pMatchSkill) {
       return;
     }
@@ -608,8 +601,8 @@ void __stdcall SelectSkillRight(D2UnitStrc * pUnit, int32_t nSkillId, int32_t nO
       if (bFound) {
         goto select_found_skill;
       }
-      if (pMatchSkill->pRecord == pSkillsTxt + nSkillId && pMatchSkill->nOwnerGUID == nOwnerGUID) {
-        bFound = true;
+      if (pMatchSkill->pRecord == pSkillsTxt && pMatchSkill->nOwnerGUID == nOwnerGUID) {
+        bFound = 1;
       } else {
         pMatchSkill = pMatchSkill->pNext;
       }

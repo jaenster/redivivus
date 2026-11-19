@@ -1682,23 +1682,43 @@ void __stdcall RENDERER_GLIDE_FreeSpriteBuffers() {
 }
 
 void __fastcall GLIDE_PixelDataFreeCallback_ClearCacheNodes(int * pCacheIndices) {
-    if (-1 < *pCacheIndices - 1 && -1 < pCacheIndices[1] - 1) {
-      gGlideVertex0.aTextureCache[*pCacheIndices - 1].pNodes[pCacheIndices[1] - 1].pHashTable = 0;
+    int nCacheIndex;
+    int nNodeIndex;
+    nCacheIndex = static_cast<int>(pCacheIndices[0] - 1u);
+    if (nCacheIndex >= 0) {
+      nNodeIndex = static_cast<int>(pCacheIndices[1] - 1u);
+      if (nNodeIndex >= 0) {
+        gGlideVertex0.aTextureCache[nCacheIndex].pNodes[nNodeIndex].pHashTable = 0;
+      }
     }
-    if (-1 < pCacheIndices[2] - 1 && -1 < pCacheIndices[3] - 1) {
-      gGlideVertex0.aTextureCache[pCacheIndices[2] - 1].pNodes[pCacheIndices[3] - 1].pHashTable = 0;
+    nCacheIndex = static_cast<int>(pCacheIndices[2] - 1u);
+    if (nCacheIndex >= 0) {
+      nNodeIndex = static_cast<int>(pCacheIndices[3] - 1u);
+      if (nNodeIndex >= 0) {
+        gGlideVertex0.aTextureCache[nCacheIndex].pNodes[nNodeIndex].pHashTable = 0;
+      }
     }
-    if (-1 < pCacheIndices[4] - 1 && -1 < pCacheIndices[5] - 1) {
-      gGlideVertex0.aTextureCache[pCacheIndices[4] - 1].pNodes[pCacheIndices[5] - 1].pHashTable = 0;
+    nCacheIndex = static_cast<int>(pCacheIndices[4] - 1u);
+    if (nCacheIndex >= 0) {
+      nNodeIndex = static_cast<int>(pCacheIndices[5] - 1u);
+      if (nNodeIndex >= 0) {
+        gGlideVertex0.aTextureCache[nCacheIndex].pNodes[nNodeIndex].pHashTable = 0;
+      }
     }
-    if (-1 < pCacheIndices[6] - 1 && -1 < pCacheIndices[7] - 1) {
-      gGlideVertex0.aTextureCache[pCacheIndices[6] - 1].pNodes[pCacheIndices[7] - 1].pHashTable = 0;
+    nCacheIndex = static_cast<int>(pCacheIndices[6] - 1u);
+    if (nCacheIndex >= 0) {
+      nNodeIndex = static_cast<int>(pCacheIndices[7] - 1u);
+      if (nNodeIndex >= 0) {
+        gGlideVertex0.aTextureCache[nCacheIndex].pNodes[nNodeIndex].pHashTable = 0;
+      }
     }
-    if (!(-1 < pCacheIndices[8] - 1 && -1 < pCacheIndices[9] - 1)) {
-      return;
+    nCacheIndex = static_cast<int>(pCacheIndices[8] - 1u);
+    if (nCacheIndex >= 0) {
+      nNodeIndex = static_cast<int>(pCacheIndices[9] - 1u);
+      if (nNodeIndex >= 0) {
+        gGlideVertex0.aTextureCache[nCacheIndex].pNodes[nNodeIndex].pHashTable = 0;
+      }
     }
-
-    gGlideVertex0.aTextureCache[pCacheIndices[8] - 1].pNodes[pCacheIndices[9] - 1].pHashTable = 0;
 }
 
 char Unreferenced_0050a220() {

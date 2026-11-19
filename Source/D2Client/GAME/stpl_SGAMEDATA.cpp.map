@@ -70,7 +70,7 @@
         "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
         "uint32_t"
       ],
-      "dh": "bd3327c6",
+      "dh": "3ba191cc",
       "paramStorage": [
         [
           "nIndex",
@@ -140,7 +140,7 @@
         "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
         "uint32_t"
       ],
-      "dh": "882fbc61",
+      "dh": "4879198b",
       "paramStorage": [
         [
           "nCount",
@@ -192,7 +192,7 @@
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>"
       ],
-      "dh": "6aed440d",
+      "dh": "9866bf38",
       "paramStorage": [
         [
           "pSource",
@@ -218,7 +218,7 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSLink<SGAMEDATA>"
       ],
-      "dh": "0039fabf",
+      "dh": "711774d8",
       "paramStorage": [
         [
           "pNode",
@@ -316,7 +316,7 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSLink<SGAMEDATA>"
       ],
-      "dh": "9b3fb89e",
+      "dh": "9850f66e",
       "paramStorage": [
         [
           "pThis",
@@ -348,7 +348,7 @@
         "TSLink<SGAMEDATA> *",
         "uint32_t"
       ],
-      "dh": "7ae8a8b8",
+      "dh": "3497069e",
       "paramStorage": [
         [
           "pNode",
@@ -373,7 +373,7 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "int32_t"
       ],
-      "dh": "208661cb",
+      "dh": "625bb1a4",
       "paramStorage": [
         [
           "nLinkOffset",
@@ -398,7 +398,7 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "int32_t"
       ],
-      "dh": "f94be7ac",
+      "dh": "c5e3f996",
       "paramStorage": [
         [
           "pThis",
@@ -426,7 +426,7 @@
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>"
       ],
-      "dh": "6fdd869a",
+      "dh": "3cff5585",
       "paramStorage": [
         [
           "pSource",
@@ -475,7 +475,7 @@
         "TSLink<SGAMEDATA> *",
         "uint32_t"
       ],
-      "dh": "fd1cda03",
+      "dh": "fa1f317b",
       "paramStorage": [
         [
           "pThis",
@@ -506,7 +506,7 @@
         "TSLink<SGAMEDATA> *",
         "intptr_t"
       ],
-      "dh": "1c44a9c5"
+      "dh": "eab504cd"
     },
     {
       "name": "UnlinkAll",
@@ -547,7 +547,7 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "int32_t"
       ],
-      "dh": "2f6c1ca0",
+      "dh": "739357b4",
       "paramStorage": [
         [
           "nLinkOffset",
@@ -596,7 +596,7 @@
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>"
       ],
-      "dh": "d6f00790"
+      "dh": "c3b08dfa"
     },
     {
       "name": "InternalClear",
@@ -619,7 +619,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a3baac9f",
+      "dh": "9311b640",
       "paramStorage": [
         [
           "bUnlinkOnly",
@@ -647,7 +647,7 @@
         "TSLink<SGAMEDATA> *",
         "uint32_t"
       ],
-      "dh": "a866192f",
+      "dh": "f38c3a0a",
       "paramStorage": [
         [
           "pThis",
@@ -711,7 +711,7 @@
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>"
       ],
-      "dh": "96cf9799"
+      "dh": "c89180a5"
     },
     {
       "name": "CopyConstructor_Unreferenced",
@@ -729,7 +729,7 @@
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>"
       ],
-      "dh": "a93ba620",
+      "dh": "7275d72a",
       "paramStorage": [
         [
           "pThis",
@@ -900,7 +900,7 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>"
       ],
-      "dh": "3e7953f3"
+      "dh": "1063c1da"
     },
     {
       "name": "NewNode",
@@ -960,7 +960,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "ad204ffd",
+      "dh": "54e362e1",
       "paramStorage": [
         [
           "pThis",
@@ -1057,7 +1057,7 @@
         "TSLink<SGAMEDATA>",
         "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>>"
       ],
-      "dh": "5e96c8ae"
+      "dh": "9d100710"
     },
     {
       "name": "Unreferenced_00451160",

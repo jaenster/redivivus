@@ -59,9 +59,9 @@
 #include "Source/Bnclient/BnSend.h"
 #include "Source/Bnclient/SRP.h"
 #include "Source/Bnclient/net_sid.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/ClientModeInGame.h"
 #include "Source/D2Client/Cursor.h"
 #include "Source/D2Client/D2BNetGatewayAccessStr.h"
@@ -508,9 +508,7 @@ void __stdcall WALL2_ResetAmbientSound() {
       return;
     }
 
-    int nGlobal0 = D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal0();
-    int nGlobal1 = D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal1();
-    memset(pSoundHdrGlobal2, 0, (1 - nGlobal0 + nGlobal1) * 4);
+    memset(pSoundHdrGlobal2, 0, (1 - D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal0() + D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal1()) * sizeof(*pSoundHdrGlobal2));
 }
 
 // Per-frame ambient/level music driver (called with the current GetTickCount). Resolves the current level's SoundEnviron line (via SoundHdr GetSoundEnv) to a Song id, gated by the global song-id range; tracks level changes (gdwAmbientMusicLevelChangeTick / geAmbientMusicLevelId). Honors master+music volume (stops music when either is 0), and after a debounce delay switches/starts the ambient track (SOUND_PlaySound/StopMusic/FadeOutMusic). Also services the scripted sound-sequence state machine (gbSoundSequenceActive: pending sequence sound, delayed player sound keyed off the client recording index, and end-of-sequence fade-out) and stores the resumed music position back into the SoundHdr global-2 table. Client-side audio; no game-state mutation.

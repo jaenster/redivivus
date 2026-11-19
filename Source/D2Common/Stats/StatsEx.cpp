@@ -48,26 +48,20 @@ namespace D2Common::Stats::StatsEx {
 
 // Binary search for a stat entry by ID in a sorted stat array. Takes stat ID in EDI and pointer to stat array descriptor in EAX. Returns index on success, -1 if not found.
 static long STATLIST_BinarySearchStatById(int32_t nStatKey, D2StatInfoStrc * pStatInfo) {
-    int nMid;
-    int nCount = (int)pStatInfo->wStatCount;
+    const D2StatStrc* pEntries = pStatInfo->pStatInfo;
+    int nHi = pStatInfo->wStatCount;
     int nLo = 0;
-    if (nCount <= 0) {
-      return -1;
-    }
-
-    do {
-      int nEntryKey;
-      nMid = (nCount - nLo) / 2 + nLo;
-      nEntryKey = pStatInfo->pStatInfo[nMid].uKey.nPackedStatId;
+    while (nLo < nHi) {
+      int nMid = nLo + (nHi - nLo) / 2;
+      int32_t nEntryKey = pEntries[nMid].uKey.nPackedStatId;
       if (nStatKey > nEntryKey) {
         nLo = nMid + 1;
-        nMid = nCount;
-      } else if (nEntryKey <= nStatKey) {
+      } else if (nStatKey < nEntryKey) {
+        nHi = nMid;
+      } else {
         return nMid;
       }
-
-      nCount = nMid;
-    } while (nLo < nMid);
+    }
 
     return -1;
 }
@@ -276,11 +270,8 @@ static D2StatInfoStrc * STATLIST_GetEffectiveStatsArray(D2StatListExStrc * pStat
 
 // Binary-searches pStatEx's stat array for the packed stat key (wStatIndex:wSubIndex == nParam), returns its nStatValue. If the ItemStatCost record has ITEMSTATCOSTFLAG_FMIN set and the owning unit is a player or monster and the found value is below minaccr, returns minaccr left-shifted by valshift instead. Returns 0 if stat not found.
 static int32_t __stdcall STATLIST_GetStatValueByKey(D2ItemStatCostTxt * pItemStatCostLine, D2StatListExStrc * pStatEx, int32_t nStatKey) {
-    uint32_t bIsFullList = pStatEx->sStatList.nFlags & 0x80000000;
-    D2StatInfoStrc* pStatInfoArray = &pStatEx->sFullStats;
-    if (!bIsFullList) {
-      pStatInfoArray = &pStatEx->sStatList.sBaseStats;
-    }
+    const uint32_t nListFlags = pStatEx->sStatList.nFlags;
+    D2StatInfoStrc* pStatInfoArray = (nListFlags & 0x80000000) ? &pStatEx->sFullStats : &pStatEx->sStatList.sBaseStats;
 
     long int nStatIdx = STATLIST_BinarySearchStatById(nStatKey, pStatInfoArray);
     D2StatStrc* pStatInfoRecord = nStatIdx >= 0 ? pStatInfoArray->pStatInfo + nStatIdx : nullptr;
@@ -289,10 +280,10 @@ static int32_t __stdcall STATLIST_GetStatValueByKey(D2ItemStatCostTxt * pItemSta
     }
 
     int nLo = pStatInfoRecord->nStatValue;
-    if (pItemStatCostLine && *(uint8_t*)((intptr_t)&pItemStatCostLine->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2] && bIsFullList) {
+    if (pItemStatCostLine && *(uint8_t*)((intptr_t)&pItemStatCostLine->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2] && (nListFlags & 0x80000000)) {
       D2UnitStrc* pUnit;
       pUnit = pStatEx->pOwner;
-      if (pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit && pUnit->eUnitType == UNIT_MONSTER) && nLo < pItemStatCostLine->minaccr) {
+      if (pUnit && (pUnit->eUnitType == UNIT_PLAYER || pStatEx->pOwner && pStatEx->pOwner->eUnitType == UNIT_MONSTER) && nLo < pItemStatCostLine->minaccr) {
         nLo = pItemStatCostLine->minaccr << D2_SHIFT_COUNT(pItemStatCostLine->valshift);
       }
     }
@@ -1089,36 +1080,36 @@ int32_t __stdcall STATLIST_GetMaxLifeFromUnit(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
-    /* ID 7 = maxhp */ if (!(pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 7 && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 7)) {
+    D2ItemStatCostTxt* pCostLine = pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 7 ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + 7 : nullptr;
+    if (!pCostLine) {
       return 0;
     }
 
-    int32_t nMaxHp = STATLIST_GetStatValueByKey(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 7, pUnit->pStatsEx, 0x70000);
-    return nMaxHp;
+    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x70000);
 }
 
 int32_t __stdcall STATLIST_GetMaxManaFromUnit(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
-    /* ID 9 = maxmana */ if (!(pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 9 && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 9)) {
+    D2ItemStatCostTxt* pCostLine = pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 9 ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + 9 : nullptr;
+    if (!pCostLine) {
       return 0;
     }
 
-    int32_t nMaxMana = STATLIST_GetStatValueByKey(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 9, pUnit->pStatsEx, 0x90000);
-    return nMaxMana;
+    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x90000);
 }
 
 int32_t __stdcall STATLIST_GetMaxStaminaFromUnit(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
-    /* ID 11 = maxstamina */ if (!(pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0xb && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0xb)) {
+    D2ItemStatCostTxt* pCostLine = pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0xb ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0xb : nullptr;
+    if (!pCostLine) {
       return 0;
     }
 
-    int32_t nMaxStamina = STATLIST_GetStatValueByKey(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0xb, pUnit->pStatsEx, 0xb0000);
-    return nMaxStamina;
+    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0xb0000);
 }
 
 int32_t __stdcall STATLIST_GetMaxDurabilityFromUnit(D2UnitStrc * pUnit) {
@@ -1151,73 +1142,85 @@ int32_t __stdcall STATLIST_GetMaxDurabilityFromUnit(D2UnitStrc * pUnit) {
 }
 
 int32_t __stdcall STATLIST_GetMaxDamageFromUnit(D2UnitStrc * pUnit, BOOL bCheckSecondaryDamage) {
-    int32_t nDamage;
     if (bCheckSecondaryDamage) {
-      /* ID 24 = secondary_maxdamage */ if (pUnit && pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x18 && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x18) {
-        nDamage = STATLIST_GetStatValueByKey(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x18, pUnit->pStatsEx, 0x180000);
-        return nDamage;
+      if (!pUnit) {
+        return 0;
       }
-    } else {
-      /* ID 22 = maxdamage */ if (pUnit && pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x16 && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x16) {
-        nDamage = STATLIST_GetStatValueByKey(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x16, pUnit->pStatsEx, 0x160000);
-        return nDamage;
+      D2ItemStatCostTxt* pCostLine = pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x18
+          ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x18 : nullptr;
+      if (!pCostLine) {
+        return 0;
       }
+      return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x180000);
     }
-
-    return 0;
+    if (!pUnit) {
+      return 0;
+    }
+    D2ItemStatCostTxt* pCostLine = pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x16
+        ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x16 : nullptr;
+    if (!pCostLine) {
+      return 0;
+    }
+    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x160000);
 }
 
 int32_t __stdcall STATLIST_GetMinDamageFromUnit(D2UnitStrc * pUnit, BOOL bCheckSecondaryDamage) {
-    int32_t nDamage;
     if (bCheckSecondaryDamage) {
-      /* ID 23 = secondary_mindamage */ if (pUnit && pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x17 && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x17) {
-        nDamage = STATLIST_GetStatValueByKey(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x17, pUnit->pStatsEx, 0x170000);
-        return nDamage;
+      if (!pUnit) {
+        return 0;
       }
-    } else {
-      /* ID 21 = mindamage */ if (pUnit && pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x15 && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x15) {
-        nDamage = STATLIST_GetStatValueByKey(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x15, pUnit->pStatsEx, 0x150000);
-        return nDamage;
+      D2ItemStatCostTxt* pCostLine = pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x17
+          ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x17 : nullptr;
+      if (!pCostLine) {
+        return 0;
       }
+      return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x170000);
     }
-
-    return 0;
+    if (!pUnit) {
+      return 0;
+    }
+    D2ItemStatCostTxt* pCostLine = pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x15
+        ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x15 : nullptr;
+    if (!pCostLine) {
+      return 0;
+    }
+    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x150000);
 }
 
 int32_t __stdcall STATLIST_GetMaxThrowDamageFromUnit(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
-    /* ID 160 = item_throw_maxdamage */ if (!(pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0xa0 && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0xa0)) {
+    D2ItemStatCostTxt* pCostLine = pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0xa0 ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0xa0 : nullptr;
+    if (!pCostLine) {
       return 0;
     }
 
-    int32_t nThrowMaxDamage = STATLIST_GetStatValueByKey(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0xa0, pUnit->pStatsEx, 0xa00000);
-    return nThrowMaxDamage;
+    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0xa00000);
 }
 
 int32_t __stdcall STATLIST_GetMinThrowDamageFromUnit(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
-    /* ID 159 = item_throw_mindamage */ if (!(pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x9f && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x9f)) {
+    D2ItemStatCostTxt* pCostLine = pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x9f ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x9f : nullptr;
+    if (!pCostLine) {
       return 0;
     }
 
-    int32_t nThrowMinDamage = STATLIST_GetStatValueByKey(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x9f, pUnit->pStatsEx, 0x9f0000);
-    return nThrowMinDamage;
+    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x9f0000);
 }
 
 int32_t __stdcall STATLIST_GetDefenseFromUnit(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
-    /* ID 31 = armorclass */ if (!(pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x1f && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x1f)) {
+    D2ItemStatCostTxt* pCostLine = pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x1f ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x1f : nullptr;
+    if (!pCostLine) {
       return 0;
     }
 
-    int32_t nArmorClass = STATLIST_GetStatValueByKey(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x1f, pUnit->pStatsEx, 0x1f0000);
-    return nArmorClass;
+    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x1f0000);
 }
 
 int32_t __stdcall STATLIST_GetStatForDamageCalc(D2UnitStrc * pUnit2, D2UnitStrc * pUnit, eD2UnitStat eUnitStat) {
@@ -2312,7 +2315,7 @@ void __stdcall STATLIST_RemoveAllStatsFromOverlay(D2UnitStrc * pUnit) {
 
 // Walks the active child stat-list chain of pUnit and frees any timed (flag bit 2) stat lists whose timeout has expired. When nFrameNumber is 0, decrements each timeout counter by 1 and frees on reaching zero; otherwise frees all whose timeout field is <= nFrameNumber.
 void __stdcall RemoveStatListAfterTimeout(D2UnitStrc * pUnit, int32_t nFrameNumber) {
-    D2StatListExStrc* pCurStatList;
+    D2StatListExStrc* pNextStatList;
     uint32_t nFlags;
     if (!pUnit) {
       return;
@@ -2323,37 +2326,29 @@ void __stdcall RemoveStatListAfterTimeout(D2UnitStrc * pUnit, int32_t nFrameNumb
       return;
     }
 
-    D2StatListExStrc* pPlayerStatsEx = pStatsExRoot->pActiveHead;
+    D2StatListExStrc* pStatList = pStatsExRoot->pActiveHead;
     if (nFrameNumber) {
-      if (pPlayerStatsEx) {
-        do {
-          nFlags = pPlayerStatsEx->sStatList.nFlags;
-          pCurStatList = pPlayerStatsEx->sStatList.pPrevLink;
-          if (nFlags & 2 && pPlayerStatsEx->sStatList.nTimeout <= nFrameNumber) {
-            if ((int)nFlags >= 0) {
-              FreeAnyStatList(pPlayerStatsEx);
-            }
-
-            pCurStatList = pStatsExRoot->pActiveHead;
+      for (; pStatList; pStatList = pNextStatList) {
+        nFlags = pStatList->sStatList.nFlags;
+        pNextStatList = pStatList->sStatList.pPrevLink;
+        if (nFlags & 2 && pStatList->sStatList.nTimeout <= nFrameNumber) {
+          if (!(nFlags & 0x80000000U)) {
+            FreeAnyStatList(pStatList);
           }
-
-          pPlayerStatsEx = pCurStatList;
-        } while (pCurStatList);
-
-        return;
+          pNextStatList = pStatsExRoot->pActiveHead;
+        }
       }
     } else {
-      while (pCurStatList = pPlayerStatsEx) {
-        nFlags = pCurStatList->sStatList.nFlags;
-        pPlayerStatsEx = pCurStatList->sStatList.pPrevLink;
+      for (; pStatList; pStatList = pNextStatList) {
+        nFlags = pStatList->sStatList.nFlags;
+        pNextStatList = pStatList->sStatList.pPrevLink;
         if (nFlags & 2) {
-          pCurStatList->sStatList.nTimeout--;
-          if (pCurStatList->sStatList.nTimeout <= 0) {
-            if ((int)nFlags >= 0) {
-              FreeAnyStatList(pCurStatList);
+          --pStatList->sStatList.nTimeout;
+          if (pStatList->sStatList.nTimeout <= 0) {
+            if (!(nFlags & 0x80000000U)) {
+              FreeAnyStatList(pStatList);
             }
-
-            pPlayerStatsEx = pStatsExRoot->pActiveHead;
+            pNextStatList = pStatsExRoot->pActiveHead;
           }
         }
       }

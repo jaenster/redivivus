@@ -481,11 +481,11 @@ int32_t __fastcall SFILE_JulianDayNumber(int32_t nYear, int32_t nMonth, int32_t 
     int nTmp;
     int nTmp2;
     int nJulian;
-    if (!nYear) {
+    int32_t nYearAdj = nYear;
+    if (!nYearAdj) {
       return 0;
     }
 
-    int32_t nYearAdj = nYear;
     if (nYear < 0) {
       nYearAdj = nYear + 1;
     }
@@ -496,12 +496,13 @@ int32_t __fastcall SFILE_JulianDayNumber(int32_t nYear, int32_t nMonth, int32_t 
       nJulian = nMonth + 0xd;
     }
 
-    long double fMonthDays = floor((double)((double)nJulian * 30.6001));
-    long double fYearDays = floor((double)((double)nYearAdj * 365.25));
+    const double fAdjustedYear = static_cast<double>(nYearAdj);
+    long double fMonthDays = floor((double)nJulian * 30.6001);
+    long double fYearDays = floor(fAdjustedYear * 365.25);
     nJulian = (int)(fYearDays + (long double)(double)fMonthDays + (long double)nDay + (long double)1720995.0);
     if ((nMonth + nYear * 0xc) * 0x1f + nDay >= 0x8fc1d) {
       int nCentury;
-      nCentury = (int)((double)nYearAdj * 0.01);
+      nCentury = (int)(fAdjustedYear * 0.01);
       nJulian += 2 - (int)((double)nCentury * -0.25) - nCentury;
     }
 

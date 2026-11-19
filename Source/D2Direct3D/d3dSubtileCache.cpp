@@ -2,8 +2,6 @@
 
 #include "Source/D2Direct3D/d3dSubtileCache.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -112,38 +110,39 @@ static void __fastcall D3DSUBTILE_InsertNodeAtTail(D3DSubtileCacheNodeStrc * pNo
 }
 
 D3DSubtileCacheNodeStrc * __fastcall D3DSUBTILE_RemoveNodeByIndex(D3DSubtileCacheStrc * pCache, int nIndex) {
-    D2UnitStrc* pNextNode;
-    D2InventoryGridStrc* pUsedHead = (D2InventoryGridStrc*)pCache->pUsedHead;
+    D3DSubtileCacheNodeStrc* pNextNode;
+    D3DSubtileCacheNodeStrc* pUsedHead = pCache->pUsedHead;
     if (!pUsedHead) {
       return nullptr;
     }
 
-    D2InventoryGridStrc* pTargetNode = (D2InventoryGridStrc*)(pCache->pNodeBuffer + nIndex);
+    D3DSubtileCacheNodeStrc* pTargetNode = pCache->pNodeBuffer + nIndex;
     if (pTargetNode == pUsedHead) {
-      pNextNode = pUsedHead->pRightArmItem;
-      pCache->pUsedHead = (D3DSubtileCacheNodeStrc*)pNextNode;
+      pNextNode = pUsedHead->pNext;
+      pCache->pUsedHead = pNextNode;
       if (pNextNode) {
-        pNextNode->pUnitData.pUnitDataPlayer = 0;
+        pNextNode->pPrev = 0;
       } else {
         pCache->pUsedTail = 0;
       }
 
-      pUsedHead->pRightArmItem = 0;
-      pUsedHead->pLeftArmItem = 0;
-      return (D3DSubtileCacheNodeStrc*)pUsedHead;
+      pUsedHead->pNext = 0;
+      pUsedHead->pPrev = 0;
+      return pUsedHead;
     }
-    if (pTargetNode == (D2InventoryGridStrc*)pCache->pUsedTail) {
-      pNextNode = ((D2InventoryGridStrc*)pCache->pUsedTail)->pLeftArmItem;
-      pCache->pUsedTail = (D3DSubtileCacheNodeStrc*)pNextNode;
-      pNextNode->eAnimMode.ePlayerMode = Death;
+    if (pTargetNode == pCache->pUsedTail) {
+      D3DSubtileCacheNodeStrc* pDVar1;
+      pDVar1 = pCache->pUsedTail->pPrev;
+      pCache->pUsedTail = pDVar1;
+      pDVar1->pNext = 0;
     } else {
-      pTargetNode->pLeftArmItem->eAnimMode = d2_bits_as<uD2UnitMode>(pTargetNode->pRightArmItem);
-      pTargetNode->pRightArmItem->pUnitData = d2_bits_as<D2UnitDataUnion>(pTargetNode->pLeftArmItem);
+      pTargetNode->pPrev->pNext = pTargetNode->pNext;
+      pTargetNode->pNext->pPrev = pTargetNode->pPrev;
     }
 
-    pTargetNode->pRightArmItem = 0;
-    pTargetNode->pLeftArmItem = 0;
-    return (D3DSubtileCacheNodeStrc*)pTargetNode;
+    pTargetNode->pNext = 0;
+    pTargetNode->pPrev = 0;
+    return pTargetNode;
 }
 
 static int __stdcall D3DSUBTILE_AllocateNodeFromFreeList(D3DSubtileCacheStrc * pCache) {

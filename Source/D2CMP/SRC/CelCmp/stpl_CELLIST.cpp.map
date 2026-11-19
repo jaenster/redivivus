@@ -23,7 +23,7 @@
         "TSLink<CELLIST> *",
         "intptr_t"
       ],
-      "dh": "5835bcb9"
+      "dh": "90d973db"
     },
     {
       "name": "Destructor_Unreferenced",
@@ -75,7 +75,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "7a39fc59",
+      "dh": "464732dd",
       "paramStorage": [
         [
           "dwFlags",
@@ -104,7 +104,7 @@
         "TSLink<TCELENTRY>",
         "intptr_t"
       ],
-      "dh": "f2eca91d"
+      "dh": "8c3a34e9"
     },
     {
       "name": "Destructor_Unreferenced2",
@@ -126,7 +126,7 @@
         "TSLink<CELLIST> *",
         "uint32_t"
       ],
-      "dh": "2463da2e",
+      "dh": "b66681fd",
       "paramStorage": [
         [
           "pThis",
@@ -159,7 +159,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "b57cc39f",
+      "dh": "f2e46025",
       "paramStorage": [
         [
           "pNode",
@@ -220,7 +220,7 @@
         "TSLink<CELLIST> *",
         "uint32_t"
       ],
-      "dh": "fa4799df",
+      "dh": "19b26e01",
       "paramStorage": [
         [
           "nAlloc",
@@ -250,7 +250,7 @@
         "TSLink<CELLIST> *",
         "uint32_t"
       ],
-      "dh": "4bb36586"
+      "dh": "36ac55e4"
     },
     {
       "name": "Ptr",
@@ -328,7 +328,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "da901562",
+      "dh": "b81dd0af",
       "paramStorage": [
         [
           "nCount",
@@ -401,7 +401,7 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>"
       ],
-      "dh": "624f95dc"
+      "dh": "c0354fac"
     },
     {
       "name": "GenerateUniqueHandle",
@@ -446,7 +446,7 @@
         "TSLink<CELLIST> *",
         "uint32_t"
       ],
-      "dh": "113df95d",
+      "dh": "17a172e7",
       "paramStorage": [
         [
           "nCount",
@@ -532,7 +532,7 @@
         "TSExplicitList<CELLIST, -572662307>",
         "uint32_t"
       ],
-      "dh": "6c9a577e",
+      "dh": "797c538d",
       "paramStorage": [
         [
           "nLocation",
@@ -571,7 +571,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "3f1be5bc",
+      "dh": "f761c273",
       "paramStorage": [
         [
           "pThis",
@@ -645,7 +645,7 @@
         "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
         "uint32_t"
       ],
-      "dh": "3a935444",
+      "dh": "6476a682",
       "paramStorage": [
         [
           "dwFlags",
@@ -670,7 +670,7 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>"
       ],
-      "dh": "749f9c81"
+      "dh": "d5b4a672"
     },
     {
       "name": "Destroy",
@@ -690,7 +690,7 @@
       "usedTypes": [
         "TSHashTable<CELLIST, HASHKEY_NONE>"
       ],
-      "dh": "13f07340",
+      "dh": "f0050322",
       "paramStorage": [
         [
           "pThis",
@@ -777,7 +777,7 @@
         "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
         "uint32_t"
       ],
-      "dh": "fd0d05bf",
+      "dh": "d80b8553",
       "paramStorage": [
         [
           "pThis",
@@ -954,7 +954,7 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>"
       ],
-      "dh": "5f67928c"
+      "dh": "567130ca"
     },
     {
       "name": "NewNode",
@@ -1015,7 +1015,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "5bc5977f",
+      "dh": "d95f6372",
       "paramStorage": [
         [
           "pThis",
@@ -1055,7 +1055,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b75b6bac",
+      "dh": "46e7b6d5",
       "paramStorage": [
         [
           "nSlot",
@@ -1223,7 +1223,7 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>"
       ],
-      "dh": "0e882f28"
+      "dh": "9ca3208a"
     },
     {
       "name": "Constructor",

@@ -1814,26 +1814,25 @@ void __stdcall PANEL_DrawGoldAmount() {
       return;
     }
 
-    uint32_t nExpScaled = nExpIntoLevel;
+    uint32_t nPixels;
     if (nExpIntoLevel >= 0x226b902) {
-      nExpScaled = nExpIntoLevel >> 7;
-      nBarWidth >>= 7;
+      nPixels = (nExpIntoLevel >> 7) * 0x77 / (nBarWidth >> 7);
+    } else {
+      nPixels = nExpIntoLevel * 0x77 / nBarWidth;
     }
-
-    nBarWidth = nExpScaled * 0x77 / nBarWidth;
-    if (nBarWidth > 0x77) {
-      nBarWidth = 0;
+    if (nPixels > 0x77) {
+      nPixels = 0;
     }
-
-    uint32_t pMaxExpLine = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(nClassId);
-    nClassOrX = Inv::ScreenSizeY;
-    if (!((uint32_t)nCurrentLevel < pMaxExpLine && nBarWidth > 0)) {
+    const uint32_t nMaxLevel = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(nClassId);
+    if (!((uint32_t)nCurrentLevel < nMaxLevel && nPixels > 0)) {
       return;
     }
-
-    int nXStart = ui::ScreenSizeX / 2 - 0x90;
-    D2gfx::D2GFX::D2GFX_DrawLine(nXStart, Inv::ScreenSizeY - 0x26, nBarWidth + nXStart, Inv::ScreenSizeY - 0x26, 0xff, 0xff);
-    D2gfx::D2GFX::D2GFX_DrawLine(nXStart, nClassOrX - 0x25, nBarWidth + nXStart, nClassOrX - 0x25, 0xff, 0xff);
+    const int nXStart = ui::ScreenSizeX / 2 - 0x90;
+    int nY = Inv::ScreenSizeY - 0x26;
+    const int nXEnd = nXStart + nPixels;
+    D2gfx::D2GFX::D2GFX_DrawLine(nXStart, nY, nXEnd, nY, 0xff, 0xff);
+    ++nY;
+    D2gfx::D2GFX::D2GFX_DrawLine(nXStart, nY, nXEnd, nY, 0xff, 0xff);
 }
 
 // Renders bottom UI panel - belt slots, expanded rows animation, item highlights, hotkey text

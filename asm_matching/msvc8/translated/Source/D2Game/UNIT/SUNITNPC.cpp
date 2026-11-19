@@ -81,9 +81,9 @@
 #include "Source/Fog/Save.h"
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Client/GAME/SCmd.h"
 #include "Source/D2Client/UI/QuestLog.h"
@@ -1172,19 +1172,18 @@ BOOL __fastcall SUNITNPC_RefreshHirelingItemStats(D2UnitStrc * pHireling) {
       return 0;
     }
 
-    D2UnitStrc* pOwnerUnit = pHireling;
     D2UnitStrc* pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pHireling->pInventory);
     while (pCurItem) {
       D2UnitStrc* pNextItem;
       pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pCurItem);
       pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pCurItem);
-      pOwnerUnit = 0;
+      uint32_t bStatNotDynamic = 0;
       D2UnitStrc* pNextItem2;
       if (pCarriedItem && pCarriedItem->eUnitType == UNIT_ITEM) {
-        pNextItem2 = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pCarriedItem, (uint32_t*)&pOwnerUnit);
+        pNextItem2 = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pCarriedItem, &bStatNotDynamic);
         if (pNextItem2) {
           D2Common::Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pHireling, pCarriedItem);
-          D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pHireling, pCarriedItem, (int32_t)pOwnerUnit);
+          D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pHireling, pCarriedItem, (int32_t)bStatNotDynamic);
         }
       }
 
@@ -2468,15 +2467,20 @@ void __fastcall HealByPlayerByNPC(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Uni
 }
 
 void __fastcall SUNITNPC_OnInteractHeal(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pNpc) {
+    int nNpcGuid;
     if (!pNpc) {
-      gnMonsterSpawnTotalCount = -1;
+      nNpcGuid = -1;
     } else {
-      int nNpcClassId;
-      gnMonsterSpawnTotalCount = pNpc->nUnitGUID;
-      nNpcClassId = pNpc->nClassId;
-      /* Akara, Malah, Atma, Fara, Jamella, Ormus */ if (nNpcClassId == 0x94 || nNpcClassId == 0x201 || nNpcClassId == 0xb0 || nNpcClassId == 0xb2 || nNpcClassId == 0x195 || nNpcClassId == 0xff) {
-        HealByPlayerByNPC(pGame, pPlayer, pNpc);
-      }
+      nNpcGuid = pNpc->nUnitGUID;
+    }
+    gnMonsterSpawnTotalCount = nNpcGuid;
+
+    if (!pNpc) {
+      return;
+    }
+    const int nNpcClassId = pNpc->nClassId;
+    if (nNpcClassId == 0x94 || nNpcClassId == 0x201 || nNpcClassId == 0xb0 || nNpcClassId == 0xb2 || nNpcClassId == 0x195 || nNpcClassId == 0xff) {
+      HealByPlayerByNPC(pGame, pPlayer, pNpc);
     }
 }
 

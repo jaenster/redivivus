@@ -70,7 +70,7 @@
         "TSLink<StringEntryNode> *",
         "intptr_t"
       ],
-      "dh": "c1683bbd"
+      "dh": "34d84b77"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -94,7 +94,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "1e3e5e82",
+      "dh": "ca794287",
       "paramStorage": [
         [
           "dwFlags",
@@ -118,7 +118,7 @@
       "usedTypes": [
         "TSExplicitList<StringEntryNode, -572662307>"
       ],
-      "dh": "351f18f6"
+      "dh": "c40c41ce"
     },
     {
       "name": "DeleteNode",
@@ -141,7 +141,7 @@
         "TSLink<StringEntryNode>",
         "intptr_t"
       ],
-      "dh": "e8529544",
+      "dh": "3067b418",
       "paramStorage": [
         [
           "pNode",
@@ -169,7 +169,7 @@
         "TSLink<StringEntryNode> *",
         "uint32_t"
       ],
-      "dh": "194c1582",
+      "dh": "69015075",
       "paramStorage": [
         [
           "pThis",
@@ -201,7 +201,7 @@
         "TSLink<StringEntryNode> *",
         "uint32_t"
       ],
-      "dh": "0ef93416",
+      "dh": "924631b5",
       "paramStorage": [
         [
           "nAlloc",
@@ -265,7 +265,7 @@
         "TSLink<StringEntryNode> *",
         "uint32_t"
       ],
-      "dh": "aaa4b963"
+      "dh": "64ba549b"
     },
     {
       "name": "Reserve",
@@ -287,7 +287,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4b2fc49d",
+      "dh": "1737ccfc",
       "paramStorage": [
         [
           "nCount",
@@ -370,7 +370,7 @@
         "TSLink<StringEntryNode> *",
         "uint32_t"
       ],
-      "dh": "c215016d",
+      "dh": "817bc257",
       "paramStorage": [
         [
           "nCount",
@@ -423,7 +423,7 @@
         "TSExplicitList<StringEntryNode, -572662307>",
         "uint32_t"
       ],
-      "dh": "ed5b80a1",
+      "dh": "7beba715",
       "paramStorage": [
         [
           "nLocation",
@@ -462,7 +462,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "dde9d990",
+      "dh": "14c5458f",
       "paramStorage": [
         [
           "pThis",
@@ -532,7 +532,7 @@
         "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
         "uint32_t"
       ],
-      "dh": "74b86fcb",
+      "dh": "fc115ffc",
       "paramStorage": [
         [
           "dwFlags",
@@ -557,7 +557,7 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>"
       ],
-      "dh": "ba9e80d7"
+      "dh": "dcefd173"
     },
     {
       "name": "Destroy",
@@ -577,7 +577,7 @@
       "usedTypes": [
         "TSHashTable<StringEntryNode, HASHKEY_STRI>"
       ],
-      "dh": "ed6f578a",
+      "dh": "a9645b72",
       "paramStorage": [
         [
           "pThis",
@@ -634,7 +634,7 @@
         "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
         "uint32_t"
       ],
-      "dh": "fae34ad3",
+      "dh": "ad0e85b5",
       "paramStorage": [
         [
           "pThis",
@@ -669,7 +669,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "34a0770f"
+      "dh": "0f29d3f0"
     },
     {
       "name": "Constructor",
@@ -691,7 +691,7 @@
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
         "uint32_t"
       ],
-      "dh": "a4977706"
+      "dh": "d02bb489"
     },
     {
       "name": "MonitorFullness",
@@ -713,7 +713,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6f60575c",
+      "dh": "4b562768",
       "paramStorage": [
         [
           "nSlot",

@@ -31,6 +31,21 @@ typedef void (__stdcall *pfnTilecmpPixelCallback)(uint32_t dwPixel);
 struct D2TileCmpTileSetStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2PaletteEntryStrc
+#define D2_DEFINED_D2PaletteEntryStrc
+struct D2PaletteEntryStrc {
+    D2PaletteEntryStrc() = default;
+    D2PaletteEntryStrc(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    D2PaletteEntryStrc(uint8_t a0, uint8_t a1, uint8_t a2, uint8_t a3) : r(a0), g(a1), b(a2), a(a3) {}
+
+    /* 0x00 */ uint8_t r;
+    /* 0x01 */ uint8_t g;
+    /* 0x02 */ uint8_t b;
+    /* 0x03 */ uint8_t a;
+};
+
+#endif // D2_DEFINED_D2PaletteEntryStrc
 #ifndef D2_DEFINED_D2TileCmpTileNodeStrc
 #define D2_DEFINED_D2TileCmpTileNodeStrc
 struct D2TileCmpTileNodeStrc {

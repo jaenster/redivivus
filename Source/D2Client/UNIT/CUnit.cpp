@@ -110,9 +110,9 @@
 #include "Source/Bnclient/BnSend.h"
 #include "Source/Bnclient/SRP.h"
 #include "Source/Bnclient/net_sid.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/ClientModeInGame.h"
 #include "Source/D2Client/Cursor.h"
 #include "Source/D2Client/D2BNetGatewayAccessStr.h"
@@ -836,22 +836,24 @@ D2RoomStrc * __stdcall GetCurrentRoom() {
 
 // On period-of-day change, refresh object auto-light state across object lists.
 void __stdcall UpdateObjectAutoLightOnPeriodChange() {
-    // Static local variables (originally global data)
-    static uint32_t gnCachedPeriodOfDay; D2_STATIC_GUARD_BSS(gnCachedPeriodOfDay, "D2Client::UNIT::CUnit::UpdateObjectAutoLightOnPeriodChange::gnCachedPeriodOfDay");
+    static uint32_t gnCachedPeriodOfDay;
+    D2_STATIC_GUARD_BSS(gnCachedPeriodOfDay, "D2Client::UNIT::CUnit::UpdateObjectAutoLightOnPeriodChange::gnCachedPeriodOfDay");
 
-    D2UnitStrc* pNextObject;
-    D2UnitStrc* pObject;
     int32_t nPeriodOfDay = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(GAME::Game::sgpDrlgAct, nullptr);
     if (nPeriodOfDay == gnCachedPeriodOfDay) {
       return;
     }
 
-    D2UnitStrc** ppObjListBucket = ServerSideUnitHashTables[2];
     gnCachedPeriodOfDay = nPeriodOfDay;
-    do {
-      pObject = *ppObjListBucket;
+    const int nBucketCount = 128;
+    const intptr_t nServerObjectsEnd = reinterpret_cast<intptr_t>(ServerSideUnitHashTables[UNIT_OBJECT] + nBucketCount);
+    const intptr_t nClientObjectsEnd = reinterpret_cast<intptr_t>(ClientSideUnitHashTables[UNIT_OBJECT] + nBucketCount);
+
+    for (D2UnitStrc** ppObjListBucket = ServerSideUnitHashTables[UNIT_OBJECT];
+         reinterpret_cast<intptr_t>(ppObjListBucket) < nServerObjectsEnd; ++ppObjListBucket) {
+      D2UnitStrc* pObject = *ppObjListBucket;
       while (pObject) {
-        pNextObject = pObject->pListNext;
+        D2UnitStrc* const pNextObject = pObject->pListNext;
         if (pObject->eUnitType != UNIT_OBJECT) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x88c);
           exit(-1);
@@ -860,15 +862,13 @@ void __stdcall UpdateObjectAutoLightOnPeriodChange() {
         Object::OBJECT_CheckAutoLight(pObject, 0);
         pObject = pNextObject;
       }
+    }
 
-      ppObjListBucket++;
-    } while ((intptr_t)ppObjListBucket < (intptr_t)((char*)&ServerSideUnitHashTables + 1536));
-
-    D2UnitStrc** ppDynamicLightObjBucket = ClientSideUnitHashTables[2];
-    do {
-      pObject = *ppDynamicLightObjBucket;
+    for (D2UnitStrc** ppDynamicLightObjBucket = ClientSideUnitHashTables[UNIT_OBJECT];
+         reinterpret_cast<intptr_t>(ppDynamicLightObjBucket) < nClientObjectsEnd; ++ppDynamicLightObjBucket) {
+      D2UnitStrc* pObject = *ppDynamicLightObjBucket;
       while (pObject) {
-        pNextObject = pObject->pListNext;
+        D2UnitStrc* const pNextObject = pObject->pListNext;
         if (pObject->eUnitType != UNIT_OBJECT) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x896);
           exit(-1);
@@ -877,9 +877,7 @@ void __stdcall UpdateObjectAutoLightOnPeriodChange() {
         Object::OBJECT_CheckAutoLight(pObject, 0);
         pObject = pNextObject;
       }
-
-      ppDynamicLightObjBucket++;
-    } while ((intptr_t)ppDynamicLightObjBucket < (intptr_t)((char*)&ClientSideUnitHashTables + 1536));
+    }
 }
 
 D2ServerCmdStrc * __fastcall GetServerCmd(D2UnitStrc * pUnit) {

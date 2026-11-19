@@ -101,10 +101,8 @@ void __fastcall NET_D2GS_CLIENT_Send_0x67(char * szGameName) {
 }
 
 void __stdcall NET_D2GS_CLIENT_Send_0x6B() {
-    uint8_t aPacketFrame[4];
-    aPacketFrame[3] = 0x6b;
-    d2_store24((char*)&aPacketFrame, 0);
-    D2Net::SRC::Client::NET_D2GS_CLIENT_SendPacketAfterChecks(1, 0, (char*)(aPacketFrame + 3));
+    char nOpcode = 0x6b;
+    D2Net::SRC::Client::NET_D2GS_CLIENT_SendPacketAfterChecks(sizeof(nOpcode), 0, &nOpcode);
     gnD2GSBytesSentTotal++;
     gnD2GSPacketsSentTotal++;
 }
@@ -179,10 +177,8 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
 // The prologue's PUSH ECX only reserves the 4-byte frame slot; ECX is not an argument.
 void __stdcall NET_D2GS_CLIENT_Send_0x69() {
     D2BNetClientCallbacksStrc* pCallbacks;
-    uint8_t aPacketFrame[4];
-    aPacketFrame[3] = 0x69;
-    d2_store24((char*)&aPacketFrame, 0);
-    D2Net::SRC::Client::NET_D2GS_CLIENT_SendPacketAfterChecks(1, 0, (char*)(aPacketFrame + 3));
+    char nOpcode = 0x69;
+    D2Net::SRC::Client::NET_D2GS_CLIENT_SendPacketAfterChecks(sizeof(nOpcode), 0, &nOpcode);
     gnD2GSBytesSentTotal++;
     gnD2GSPacketsSentTotal++;
     if (eD2GSGameType_007a0610 != GAMETYPE_SINGLEPLAYER && eD2GSGameType_007a0610 != GAMETYPE_SINGLEPLAYER_UNCAPPED) {
@@ -236,10 +232,8 @@ void __fastcall NET_D2GS_CLIENT_Send_0x68(int16_t nGameToken, int32_t nGameHash)
 }
 
 void __stdcall NET_D2GS_CLIENT_Send_0x6A() {
-    uint8_t aPacketFrame[4];
-    aPacketFrame[3] = 0x6a;
-    d2_store24((char*)&aPacketFrame, 0);
-    D2Net::SRC::Client::NET_D2GS_CLIENT_SendPacketAfterChecks(1, 0, (char*)(aPacketFrame + 3));
+    char nOpcode = 0x6a;
+    D2Net::SRC::Client::NET_D2GS_CLIENT_SendPacketAfterChecks(sizeof(nOpcode), 0, &nOpcode);
     gnD2GSBytesSentTotal++;
     gnD2GSPacketsSentTotal++;
 }
@@ -538,15 +532,12 @@ void __fastcall NET_D2GS_CLIENT_Send_INT_INT_INT_INT(uint8_t nPacketId, int32_t 
 void __fastcall NET_D2GS_CLIENT_Send_0x5D(int nActionType, uint32_t nPlayerGUID, int32_t bToggle) {
     D2GSPacketClt0x5D sPacket;
     memset(&sPacket, 0, sizeof(sPacket));
+    sPacket.nId = 0x5d;
+    sPacket.nActionType = static_cast<uint8_t>(nActionType);
+    sPacket.nPlayerGUID = nPlayerGUID;
     if (bToggle != 0) {
       sPacket.bToggle = true;
     }
-
-    sPacket.nId = 0x5d;
-    sPacket.nActionType = (uint8_t)nActionType;
-    *(uint8_t*)(char*)&sPacket.nPlayerGUID = (uint8_t)nPlayerGUID;
-    *(uint16_t*)((char*)&sPacket.nPlayerGUID + 1) = (uint16_t)(nPlayerGUID >> 8);
-    *(uint8_t*)((char*)&sPacket.nPlayerGUID + 3) = (uint8_t)(nPlayerGUID >> 0x18);
     NET_D2GS_CLIENT_Send(&sPacket.nId, 7);
 }
 
@@ -560,23 +551,21 @@ void __fastcall NET_D2GS_CLIENT_Send_0x5E(int nActionType, int32_t nPlayerGUID) 
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_Chat(D2ChatPacketBuildStrc * pChatPacket) {
-    char* pTerminator;
     D2ChatPacketSendStrc sPacket;
     sPacket.nCmd = pChatPacket->nCmd;
     sPacket.nMsgType = pChatPacket->nMsgType;
     sPacket.nIMEMode = pChatPacket->nIMEMode;
-    uint32_t nMsgLen = Storm::Source::SSTR::SStrCopy(sPacket.abData, pChatPacket->szMsg, 0x100);
-    if (pChatPacket->szTarget) {
-      uint32_t nTargetLen;
-      nTargetLen = Storm::Source::SSTR::SStrCopy(sPacket.abData + (nMsgLen + 1), pChatPacket->szTarget, 0x10);
-      pTerminator = sPacket.abData + nTargetLen + nMsgLen + 2;
+    const uint32_t nMsgLen = Storm::Source::SSTR::SStrCopy(sPacket.abData, pChatPacket->szMsg, 0x100);
+    char* pTerminator = sPacket.abData + nMsgLen + 1;
+    char* szTarget = pChatPacket->szTarget;
+    if (szTarget) {
+      pTerminator += Storm::Source::SSTR::SStrCopy(pTerminator, szTarget, 0x10) + 1;
     } else {
-      sPacket.abData[nMsgLen + 1] = '\0';
-      pTerminator = sPacket.abData + (nMsgLen + 2);
+      *pTerminator++ = '\0';
     }
 
     *pTerminator = '\0';
-    NET_D2GS_CLIENT_Send(&sPacket.nCmd, (int32_t)((char*)pTerminator - (char*)&sPacket + 1));
+    NET_D2GS_CLIENT_Send(&sPacket.nCmd, (int32_t)(pTerminator - reinterpret_cast<char*>(&sPacket) + 1));
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_0x66(void * pData, uint32_t nLen) {

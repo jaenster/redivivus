@@ -2476,18 +2476,23 @@ void __fastcall SKILLDESC_BuildMagicAffixDesc(D2UnitStrc * pUnit, uint16_t * wsz
 }
 
 uint16_t __fastcall SKILLDESC_GetStatNameString(int32_t nSkillId, int32_t nStatOffset) {
+    int nSkillDescId;
+    D2SkillDescTxt* pSkillDescTxt;
     D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillsTxt) {
-      return 0x1506;
+      goto missing_stat_name;
     }
 
-    int nSkillDescId = (int)pSkillsTxt->skilldesc;
-    D2SkillDescTxt* pSkillDescTxt = nSkillDescId >= 0 && nSkillDescId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nSkillDescId : nullptr;
+    nSkillDescId = (int)pSkillsTxt->skilldesc;
+    pSkillDescTxt = nSkillDescId >= 0 && nSkillDescId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nSkillDescId : nullptr;
     if (!pSkillDescTxt) {
-      return 0x1506;
+      goto missing_stat_name;
     }
 
     return *(uint16_t*)(pSkillDescTxt->dmelem + nStatOffset * 2 - 0x18);
+
+    missing_stat_name:
+    return 0x1506;
 }
 
 static int16_t GetSkillLongDescription(eD2Skills eSkill) {
@@ -4568,11 +4573,11 @@ void __fastcall SKILLDESC_DrawSkillDmgBasic(D2UnitStrc * pUnit, D2SkillStrc * pS
       return;
     }
 
-    char cDmgShift = pSkillsTxt->HitShift;
-    int nMaxDmgShifted = pSkillsTxt->MinDam;
-    int32_t nKickMinDmgStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_kickdamage, 0);
-    nMaxDmgShifted = (nMaxDmgShifted << D2_SHIFT_COUNT(cDmgShift - 8U)) + nKickMinDmgStat;
-    SKILLDESC_DrawDamageNumbers(nMaxDmgShifted, nMaxDmgShifted, 0, nXLeft, nY, nXRight);
+    const uint32_t nHitShift = pSkillsTxt->HitShift;
+    uint32_t nDamage = pSkillsTxt->MinDam;
+    nDamage <<= D2_SHIFT_COUNT(nHitShift - 8U);
+    nDamage += D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_kickdamage, 0);
+    SKILLDESC_DrawDamageNumbers((int32_t)nDamage, (int32_t)nDamage, 0, nXLeft, nY, nXRight);
 }
 
 void __fastcall SKILLDESC_CalcAuraDamageRange(D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, int32_t * pElemType, int32_t nAuraBonusPct, uint32_t dwParam1, D2SkillStrc * pSkill, uint32_t dwParam2, D2UnitStrc * pUnit2) {
@@ -4781,22 +4786,18 @@ void __fastcall SKILLDESC_DrawSkillDmgAura(D2UnitStrc * pUnit, D2SkillStrc * pSk
 }
 
 void __fastcall SKILLDESC_DrawSkillDmgAuraElem(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
-    int nMinDamage;
-    int nMaxDamage;
-    D2SkillsTxt* nSkillDescAddrSaved = pSkillsTxt;
-    if (!(pSkill && pSkillsTxt)) {
+    int aDamage[2];
+    if (!pSkill || !pSkillsTxt) {
       return;
     }
 
-    uint8_t byDmgShiftFactor = pSkillsTxt->SrcDam;
+    const uint32_t nDmgShiftFactor = pSkillsTxt->SrcDam;
     int32_t nSkillsTxt = 0x0;
-    SKILLDESC_CalcAuraDamageRange(pUnit, &nMinDamage, &nMaxDamage, &nSkillsTxt, 0, 0, pSkill, 0, nullptr);
-    nMinDamage *= (uint32_t)byDmgShiftFactor;
-    nMinDamage = nMinDamage / 128;
-    nMaxDamage *= (uint32_t)byDmgShiftFactor;
-    nMaxDamage = nMaxDamage / 128;
-    SKILLDESC_CalcSkillElemDamage(pUnit, &nMinDamage, &nMaxDamage, &nSkillsTxt, nSkillDescAddrSaved, nSkillLevel);
-    SKILLDESC_DrawDamageNumbers(nMinDamage, nMaxDamage, nSkillsTxt, nXLeft, nY, nXRight);
+    SKILLDESC_CalcAuraDamageRange(pUnit, &aDamage[0], &aDamage[1], &nSkillsTxt, 0, 0, pSkill, 0, nullptr);
+    aDamage[0] = static_cast<int32_t>(static_cast<uint32_t>(aDamage[0]) * nDmgShiftFactor) / 128;
+    aDamage[1] = static_cast<int32_t>(static_cast<uint32_t>(aDamage[1]) * nDmgShiftFactor) / 128;
+    SKILLDESC_CalcSkillElemDamage(pUnit, &aDamage[0], &aDamage[1], &nSkillsTxt, pSkillsTxt, nSkillLevel);
+    SKILLDESC_DrawDamageNumbers(aDamage[0], aDamage[1], nSkillsTxt, nXLeft, nY, nXRight);
 }
 
 void __fastcall SKILLDESC_DrawSkillDmgDualWield(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {

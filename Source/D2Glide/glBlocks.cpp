@@ -128,19 +128,19 @@ void __stdcall GLBLOCKS_RenderTileSubBlocks(D2TileLibraryEntryStrc * pTileEntry,
           nRleRowsLeft = 0xf;
           pbRleRowStart = pbDstRow;
           do {
-            bySkip = *pbSrc;
-            byRunLen = pbSrc[1];
-            pbSrc += 2;
+            bySkip = *pbSrc++;
+            byRunLen = *pbSrc++;
             if (!bySkip && !byRunLen) {
               nRleRowsLeft--;
-              pbDstRow = pbRleRowStart + 0x100;
-              pbRleRowStart = pbDstRow;
+              pbRleRowStart += 0x100;
+              pbDstRow = pbRleRowStart;
             } else {
               pbDstRow += bySkip;
-              for (; byRunLen; byRunLen--) {
+              while (byRunLen) {
+                --byRunLen;
                 *pbDstRow = *pbSrc;
-                pbDstRow++;
-                pbSrc++;
+                ++pbDstRow;
+                ++pbSrc;
               }
             }
           } while (nRleRowsLeft);
@@ -229,10 +229,9 @@ void __fastcall GLBLOCKS_LoadWallSubtileTexture(D2GroundSubTileStrc * pSubTile) 
       FxU32 startAddress;
       if (!nTexCacheIdx) {
         GLBLOCKS_DecodeRLEBlock(pSubTile->pPixelData, (uint8_t*)gpGlBlocksWallBuffer);
-        nNodeIdx0 = glSubtileCache::GLSUBTILE_EnsureCapacity(&gGlideSubtileTextureCache);
-        nTexCacheIdx = (short int)nNodeIdx0;
-        pSubTile->nTextureCacheIndex = nTexCacheIdx;
-        nNodeIdx0 = nTexCacheIdx - 1;
+        const int nNewIndex = glSubtileCache::GLSUBTILE_EnsureCapacity(&gGlideSubtileTextureCache);
+        pSubTile->nTextureCacheIndex = (short int)nNewIndex;
+        nNodeIdx0 = (short int)nNewIndex - 1;
         if (nNodeIdx0 < 0) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x112);
           exit(-1);
@@ -242,17 +241,14 @@ void __fastcall GLBLOCKS_LoadWallSubtileTexture(D2GroundSubTileStrc * pSubTile) 
             exit(-1);
           }
 
-          gGlideSubtileTextureCache.pNodes[nTexCacheIdx - 1].pSubTile = pSubTile;
+          gGlideSubtileTextureCache.pNodes[(short int)nNewIndex - 1].pSubTile = pSubTile;
           startAddress = gGlideSubtileTextureCache.pNodes[pSubTile->nTextureCacheIndex - 1].dwAddress;
           (*Renderer::Glide::GLIDEDLL_grTexDownloadMipMap_16)(gnGlideTMUId, startAddress, 3, &g_GrTexInfoGlBlocks);
-          (*GLIDEDLL_grTexSource_16)(gnGlideTMUId, startAddress, 3, &g_GrTexInfoGlBlocks);
-          Renderer::Glide::RENDERER_GLIDE_SetTextureMode(gnGlideTMUId);
-          return;
         }
+      } else {
+        glSubtileCache::GLSUBTILE_PromoteNodeToMRU(&gGlideSubtileTextureCache, (int)nTexCacheIdx);
+        startAddress = gGlideSubtileTextureCache.pNodes[pSubTile->nTextureCacheIndex - 1].dwAddress;
       }
-
-      glSubtileCache::GLSUBTILE_PromoteNodeToMRU(&gGlideSubtileTextureCache, (int)nTexCacheIdx);
-      startAddress = gGlideSubtileTextureCache.pNodes[pSubTile->nTextureCacheIndex - 1].dwAddress;
       (*GLIDEDLL_grTexSource_16)(gnGlideTMUId, startAddress, 3, &g_GrTexInfoGlBlocks);
       Renderer::Glide::RENDERER_GLIDE_SetTextureMode(gnGlideTMUId);
       return;

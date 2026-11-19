@@ -1467,17 +1467,20 @@ void __fastcall CMD_UnbindCommand(int32_t nCmdIndex, int32_t nSlot) {
 }
 
 uint32_t __fastcall CMD_IsCommandBound(int32_t nCmdIndex, int32_t nSlot) {
+    uint16_t wKeyCode;
     int nIndex = 0;
     PD2KeyBindSlot pBinding = &g_KeyBindingsTable[0].nSlot;
-    while (((D2KeyBindStrc*)((char*)pBinding - 0x6))->nCmdIndex != nCmdIndex || ((D2KeyBindStrc*)((char*)pBinding - 0x6))->nSlot != nSlot) {
-      pBinding = (PD2KeyBindSlot)((char*)pBinding + 10);
+    while (((D2KeyBindStrc*)((char*)pBinding - offsetof(D2KeyBindStrc, nSlot)))->nCmdIndex != nCmdIndex || *pBinding != nSlot) {
+      pBinding = (PD2KeyBindSlot)((char*)pBinding + sizeof(D2KeyBindStrc));
       nIndex++;
-      if ((intptr_t)pBinding >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6)) {
-        return 0;
+      if ((intptr_t)pBinding >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + offsetof(D2KeyBindStrc, nSlot))) {
+        wKeyCode = 0xffff;
+        goto test_binding;
       }
     }
-
-    return (uint32_t)(g_KeyBindingsTable[nIndex].wKeyCode != 0xffff);
+    wKeyCode = g_KeyBindingsTable[nIndex].wKeyCode;
+    test_binding:
+    return wKeyCode != 0xffff;
 }
 
 uint16_t * __fastcall CMD_GetKeyNameForCommand(int32_t nCmdIndex, int32_t nSlot) {

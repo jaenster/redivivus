@@ -106,7 +106,7 @@ namespace D2Common::Drlg::OutDesr {
 // Given an array of nVariants preset IDs, rolls the level seed to pick a starting index, then iterates all variants calling SpawnOutdoorLevelPreset for each. If bIterateFiles is set, expands each preset ID to all its LvlPrest file entries and spawns each file separately.
 static void __stdcall PlacePresetVariants(D2DrlgLevelStrc * pLevel, D2LvlPrestId * pLevelPrestIds, uint32_t nVariants, BOOL bIterateFiles) {
     D2LvlPrestTxt* pLvlPrest;
-    uint32_t nRandVariantIdx;
+    int nRandVariantIdx;
     int nFileIdx;
     int nFileCount;
     nRandVariantIdx = D2_SeedRollLimited(&pLevel->sSeed, nVariants);

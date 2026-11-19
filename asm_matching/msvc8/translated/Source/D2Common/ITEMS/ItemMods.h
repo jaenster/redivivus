@@ -81,7 +81,7 @@ void __stdcall ITEMMODS_UnpackChargedSkill(uint32_t nPackedValue, uint32_t * pnS
 int32_t __stdcall ITEMMODS_PackSkillAndLevel(int32_t nParam1, int32_t nParam2);
 void __stdcall ITEMMODS_UnpackSkillLevelChance(uint32_t nPackedValue, uint32_t * pnSkillId, uint32_t * pnSkillLevel, uint32_t * pnChance);
 int32_t __stdcall ITEMMODS_PackSkillLevelChance(int32_t nParam1, int32_t nParam2, int32_t nParam3);
-void __stdcall ITEMMODS_UnpackSkillTab(uint32_t nPackedValue, uint32_t * pnPlayerClass, uint32_t * pnSkillTab, uint32_t * pnSkillLevels);
+void __stdcall ITEMMODS_UnpackSkillTab(int32_t nPackedValue, uint32_t * pnPlayerClass, uint32_t * pnSkillTab, uint32_t * pnSkillLevels);
 int32_t __stdcall ITEMMODS_GetQualityField3(int32_t nPlayerClass, int32_t nSkillTab, int32_t nSkillLevels);
 uint32_t Unreferenced_0065cca0();
 // Property-to-stat conversion with additional context parameter for situational stat application. Reads scaled value from pPropData+4, optionally maximizes enhanced-damage stats, gets or creates the stat list (using pUnit as context for ITEMMOD_GetOrCreateStatList), then adds or negates the stat value. Halts on stat list failure.

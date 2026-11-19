@@ -20,7 +20,7 @@
         "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
         "uint32_t"
       ],
-      "dh": "02921d3c",
+      "dh": "9a5746de",
       "paramStorage": [
         [
           "nCount",
@@ -74,7 +74,7 @@
         "TSLink<StringEntryNode>",
         "uint32_t"
       ],
-      "dh": "8bc3aa66",
+      "dh": "fa0769d4",
       "paramStorage": [
         [
           "pSource",
@@ -100,7 +100,7 @@
         "TSExplicitList<StringEntryNode, -572662307>",
         "TSLink<StringEntryNode>"
       ],
-      "dh": "40df01f2",
+      "dh": "f2b022dd",
       "paramStorage": [
         [
           "pNode",
@@ -126,7 +126,7 @@
         "TSLink<StringEntryNode>",
         "int32_t"
       ],
-      "dh": "28f8d02d",
+      "dh": "3cd8013a",
       "paramStorage": [
         [
           "nLinkOffset",
@@ -155,7 +155,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "2d23fdeb",
+      "dh": "97ccf919",
       "paramStorage": [
         [
           "pNode",
@@ -188,7 +188,7 @@
         "StringEntryNode",
         "TSExplicitList<StringEntryNode, -572662307>"
       ],
-      "dh": "6687ba7b",
+      "dh": "7363f275",
       "paramStorage": [
         [
           "pNode",
@@ -216,7 +216,7 @@
         "TSLink<StringEntryNode> *",
         "uint32_t"
       ],
-      "dh": "90837633",
+      "dh": "b5f0c880",
       "paramStorage": [
         [
           "pNode",
@@ -242,7 +242,7 @@
         "TSExplicitList<StringEntryNode, -572662307>",
         "intptr_t"
       ],
-      "dh": "abc5d3d4",
+      "dh": "5e12d720",
       "paramStorage": [
         [
           "pNode",
@@ -323,7 +323,7 @@
         "TSLink<StringEntryNode> *",
         "intptr_t"
       ],
-      "dh": "dba49e4d"
+      "dh": "a6a623c9"
     },
     {
       "name": "CopyConstructor",
@@ -343,7 +343,7 @@
         "TSLink<StringEntryNode>",
         "uint32_t"
       ],
-      "dh": "5282c604",
+      "dh": "0b5478f9",
       "paramStorage": [
         [
           "pSource",
@@ -369,7 +369,7 @@
         "TSLink<StringEntryNode>",
         "uint32_t"
       ],
-      "dh": "4e96a363",
+      "dh": "b8fc0f73",
       "paramStorage": [
         [
           "pThis",
@@ -451,7 +451,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "e7e96464",
+      "dh": "4a638ed9",
       "paramStorage": [
         [
           "bUnlinkOnly",
@@ -479,7 +479,7 @@
         "TSLink<StringEntryNode> *",
         "uint32_t"
       ],
-      "dh": "2654f77b",
+      "dh": "86d9cc94",
       "paramStorage": [
         [
           "pThis",
@@ -505,7 +505,7 @@
         "TSExplicitList<StringEntryNode, -572662307>",
         "int32_t"
       ],
-      "dh": "668b3cec",
+      "dh": "f65bfa5d",
       "paramStorage": [
         [
           "nLinkOffset",

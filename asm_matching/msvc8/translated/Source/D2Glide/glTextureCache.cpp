@@ -144,10 +144,10 @@ static int GLTEXCACHE_AllocateNode(GlTextureCacheStrc * pCache) {
       return 0;
     }
 
-    GlTextureCacheNodeStrc* pAllocNode = pCache->pFreeHead;
-    if (pAllocNode) {
+    GlTextureCacheNodeStrc* pNode = pCache->pFreeHead;
+    if (pNode) {
       GlTextureCacheNodeStrc* pNewFreeHead;
-      pNewFreeHead = pAllocNode->pNext;
+      pNewFreeHead = pNode->pNext;
       pCache->pFreeHead = pNewFreeHead;
       if (pNewFreeHead) {
         pNewFreeHead->pPrev = 0;
@@ -155,23 +155,26 @@ static int GLTEXCACHE_AllocateNode(GlTextureCacheStrc * pCache) {
         pCache->pFreeTail = 0;
       }
 
-      pAllocNode->pNext = 0;
-      pAllocNode->pPrev = 0;
+      pNode->pNext = 0;
+      pNode->pPrev = 0;
       if (!pCache->pActiveHead) {
         pCache->nUsedCount++;
-        pCache->pActiveHead = pAllocNode;
-      } else {
-        pCache->pActiveTail->pNext = pAllocNode;
-        pAllocNode->pPrev = pCache->pActiveTail;
-        pCache->nUsedCount++;
+        pCache->pActiveHead = pNode;
+        pCache->pActiveTail = pNode;
+        return pNode->nIndex + 1;
       }
-
-      pCache->pActiveTail = pAllocNode;
-      return pAllocNode->nIndex + 1;
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc1);
-    exit(-1);
+    if (!pNode) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc1);
+      exit(-1);
+    }
+
+    pCache->pActiveTail->pNext = pNode;
+    pNode->pPrev = pCache->pActiveTail;
+    pCache->nUsedCount++;
+    pCache->pActiveTail = pNode;
+    return pNode->nIndex + 1;
 }
 
 // Promotes a texture cache node to most-recently-used position (active list tail). Validates index range and ensures cache has multiple entries before relinking.

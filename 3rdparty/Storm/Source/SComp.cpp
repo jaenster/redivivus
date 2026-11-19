@@ -791,31 +791,29 @@ void __fastcall SCOMP_ZlibCompressWithLevel(uint8_t * pDst, uint32_t * pnDstLen,
 static int __stdcall SCOMP_InflateZlibStackArena(uint32_t * pnOutLen, uint8_t * pDst, uint32_t nSrcLen, uint8_t * pSrc) {
     int32_t nRet;
     z_stream zStream;
-    D2ScompArenaStrc sArena;
     uint8_t aArenaBuf[47000];
-    zStream.avail_out = *pnOutLen;
-    zStream.next_out = pDst;
-    sArena.pCur = aArenaBuf;
+    zStream.next_in = pSrc;
     zStream.avail_in = nSrcLen;
+    zStream.next_out = pDst;
+    zStream.avail_out = *pnOutLen;
+    D2ScompArenaStrc sArena = {aArenaBuf, sizeof(aArenaBuf), aArenaBuf};
     zStream.opaque = &sArena;
-    sArena.nSize = 47000;
     zStream.zalloc = (z_alloc_func)SCOMP_ArenaAlloc;
     zStream.zfree = (z_free_func)SCOMP_ArenaFree;
-    zStream.next_in = pSrc;
-    sArena.pBase = sArena.pCur;
     int nRetInit = _3rdparty::zlib::inflate::inflateInit_(&zStream, "1.1.3", 0x38);
-    if (!nRetInit) {
-      nRet = _3rdparty::zlib::inflate::inflate(&zStream, 4);
-      if (nRet != 1) {
-        _3rdparty::zlib::inflate::inflateEnd(&zStream);
-        nRetInit = -5;
-        if (nRet) {
-          return nRet;
-        }
-      } else {
-        *pnOutLen = zStream.total_out;
-        nRetInit = _3rdparty::zlib::inflate::inflateEnd(&zStream);
+    if (nRetInit) {
+      return nRetInit;
+    }
+    nRet = _3rdparty::zlib::inflate::inflate(&zStream, 4);
+    if (nRet != 1) {
+      _3rdparty::zlib::inflate::inflateEnd(&zStream);
+      nRetInit = -5;
+      if (nRet) {
+        return nRet;
       }
+    } else {
+      *pnOutLen = zStream.total_out;
+      nRetInit = _3rdparty::zlib::inflate::inflateEnd(&zStream);
     }
 
     return nRetInit;

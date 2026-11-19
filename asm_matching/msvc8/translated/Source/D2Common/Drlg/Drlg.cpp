@@ -537,20 +537,13 @@ static void DRLGWARP_InitLevelWarpCoordinates(D2DrlgLevelStrc * pDrlgLevelStrc) 
     int32_t* pWarpX;
     D2RoomExStrc* pRoomEx;
     pRoomEx = pDrlgLevelStrc->pRoomExFirst;
-    bool foundWarpRoom;
-    foundWarpRoom = false;
-    do {
-      if (!pRoomEx) {
-        return;
-      }
+    BOOL foundWarpRoom;
+    foundWarpRoom = 0;
+    for (; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
       if (pRoomEx->eRoomExFlags & 0x30000U) {
-        foundWarpRoom = true;
+        foundWarpRoom = 1;
       }
-      if (!(pRoomEx->eRoomExFlags & 0xff0U)) {
-        if (foundWarpRoom) {
-          goto record_warp_coords;
-        }
-      } else if (!foundWarpRoom) {
+      if ((pRoomEx->eRoomExFlags & 0xff0U) && !foundWarpRoom) {
         roomFlagMask = 0x10;
         warpIndex = 0;
         do {
@@ -564,21 +557,21 @@ static void DRLGWARP_InitLevelWarpCoordinates(D2DrlgLevelStrc * pDrlgLevelStrc) 
           roomFlagMask *= 2;
           warpIndex++;
         } while (roomFlagMask & 0xff0);
-      } else {
+      }
+      if (foundWarpRoom) {
         record_warp_coords:
         destLevelId = pDrlgLevelStrc->sWarpCoordinates.nEntriesCount;
         pWarpX = pDrlgLevelStrc->sWarpCoordinates.anX + destLevelId;
         pY = pDrlgLevelStrc->sWarpCoordinates.anY + destLevelId;
         *pWarpX = pRoomEx->sCoords.WorldSize.x / 2 + pRoomEx->sCoords.WorldPosition.x;
-        foundWarpRoom = false;
+        foundWarpRoom = 0;
         *pY = pRoomEx->sCoords.WorldSize.y / 2 + pRoomEx->sCoords.WorldPosition.y;
         Transform::CoordsRoomToWorld(pWarpX, pY);
         pWarpX = &pDrlgLevelStrc->sWarpCoordinates.nEntriesCount;
         (*pWarpX)++;
       }
 
-      pRoomEx = pRoomEx->pRoomExNext;
-    } while (true);
+    }
 }
 
 // Initializes a level's seed and dispatches generation based on eDrlgType (maze / preset / outdoor). Always runs InitRelated and initializes warp coordinates after generation.
@@ -1026,16 +1019,17 @@ D2RoomExStrc * __fastcall GetRoomOfCoords(int32_t nX, int32_t nY, D2DrlgStrc * p
     }
     if (!pLevel) {
       eLevel = GetRoomByCoordsByLevel(pDrlg, nX, nY);
-      for (pLevel = pDrlg->pLevel; pLevel; pLevel = pLevel->pLevelNext) {
-        if (pLevel->eD2LevelId == eLevel) {
-          goto find_room_in_level;
+      for (D2DrlgLevelStrc* pCandidate = pDrlg->pLevel; pCandidate; pCandidate = pCandidate->pLevelNext) {
+        if (pCandidate->eD2LevelId == eLevel) {
+          pLevel = pCandidate;
+          break;
         }
       }
-
-      pLevel = DRLGACTMISC_AllocDrlgLevel(pDrlg, eLevel);
+      if (!pLevel) {
+        pLevel = DRLGACTMISC_AllocDrlgLevel(pDrlg, eLevel);
+      }
     }
 
-    find_room_in_level:
     if (!pLevel->pRoomExFirst) {
       D2Common::Drlg::InitLevel(pLevel);
     }
@@ -3347,19 +3341,16 @@ BOOL __fastcall DRLGPLACE_OrientedAbsolutePos(D2DrlgLevelPlacementStrc * pLevelU
     uint32_t nOrientDir = DVar1 & 1;
     pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] = nOrientDir;
     pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode] = nOrientDir;
-    int nNodeIdx = pLevelUnknown->nCurrentNode;
-    if (DVar1 & 1) {
-      switch (nOrientDir) {
-        case 1:
-          {
-            pLevelUnknown->aCoordsAndSize[nNodeIdx].WorldSize.x = 0xa0;
-            pLevelUnknown->aCoordsAndSize[nNodeIdx].WorldSize.y = 0x40;
-            break;
-          }
-      }
-    } else {
-      pLevelUnknown->aCoordsAndSize[nNodeIdx].WorldSize.x = 0x40;
-      pLevelUnknown->aCoordsAndSize[nNodeIdx].WorldSize.y = 0xa0;
+    D2DrlgCoordsStrc* pCurrentNode = pLevelUnknown->aCoordsAndSize + pLevelUnknown->nCurrentNode;
+    switch (nOrientDir) {
+      case 0:
+        pCurrentNode->WorldSize.x = 0x40;
+        pCurrentNode->WorldSize.y = 0xa0;
+        break;
+      case 1:
+        pCurrentNode->WorldSize.x = 0xa0;
+        pCurrentNode->WorldSize.y = 0x40;
+        break;
     }
 
     D2LevelDefsTxt* pLevelDefs = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(pLevelUnknown->neD2LevelId);
@@ -3414,23 +3405,20 @@ BOOL __fastcall DRLGPLACE_OrientedTableLookup(D2DrlgLevelPlacementStrc * pLevelU
 // Places border presets (Type A pattern) for Act 3 Kurast outdoor levels. Spawns north/south edge presets (0x25D-0x25E) with special portal variants, east/west walls (0x25F-0x260), and four corner presets (0x261-0x264). Called by BuildKurast.
 void __fastcall DRLGOUTJUNG_BuildKurastDocktownBorders(D2DrlgLevelStrc * pLevel) {
     int nXIter;
-    int nY = pLevel->sCoordinatesAndSize.WorldSize.x;
-    int nYIter = pLevel->sCoordinatesAndSize.WorldSize.y;
-    int nPortalX = nY / 8;
-    int nX = nPortalX - 1;
-    nY = nYIter / 8 - 1;
-    if (pLevel->pDrlg->bJungleInterlink) {
-      nPortalX = 1;
-    } else {
-      nPortalX += -2;
-    }
+    int nYIter;
+    const int nRoomWidth = pLevel->sCoordinatesAndSize.WorldSize.x;
+    const int nRoomHeight = pLevel->sCoordinatesAndSize.WorldSize.y;
+    const int nX = nRoomWidth / 8 - 1;
+    const int nY = nRoomHeight / 8 - 1;
+    const int nEastEntranceX = nX / 2;
+    const int nPortalX = pLevel->pDrlg->bJungleInterlink ? 1 : nX - 1;
 
     for (nXIter = 1; nXIter < nX; nXIter++) {
       Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXIter, 0, nXIter == nPortalX ? 0x265U : 0x25dU, -1, 0);
     }
 
-    for (nYIter = 1; nYIter < nX; nYIter = nYIter + 1 + (uint32_t)(nYIter == nX / 2)) {
-      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nYIter, nY, nYIter == nX / 2 ? 0x266U : 0x25eU, -1, 0);
+    for (nYIter = 1; nYIter < nX; nYIter = nYIter + 1 + (uint32_t)(nYIter == nEastEntranceX)) {
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nYIter, nY, nYIter == nEastEntranceX ? 0x266U : 0x25eU, -1, 0);
     }
 
     for (nYIter = 1; nYIter < nY; nYIter++) {
@@ -3479,19 +3467,14 @@ void __fastcall DRLGOUTJUNG_BuildKurastUpperBorders(D2DrlgLevelStrc * pLevel) {
 
 // Places border presets (Type C pattern) for Act 3 Kurast outdoor levels. Uses preset IDs 0x27C-0x283. The north edge has centered portal variants while the south edge uses offset-based variants. Called by BuildKurast.
 void __fastcall DRLGOUTJUNG_BuildKurastCausewayBorders(D2DrlgLevelStrc * pLevel) {
-    int nIter = pLevel->sCoordinatesAndSize.WorldSize.x;
-    int nY = pLevel->sCoordinatesAndSize.WorldSize.y;
-    int nPortalX = nIter / 8;
-    nY = nY / 8 - 1;
-    int nX = nPortalX - 1;
-    if (pLevel->pDrlg->bJungleInterlink) {
-      nPortalX += -2;
-    } else {
-      nPortalX = 1;
-    }
+    int nIter;
+    const int nX = pLevel->sCoordinatesAndSize.WorldSize.x / 8 - 1;
+    const int nY = pLevel->sCoordinatesAndSize.WorldSize.y / 8 - 1;
+    const int nPortalX = pLevel->pDrlg->bJungleInterlink ? nX - 1 : 1;
+    const int nEntranceX = nX / 2;
 
-    for (nIter = 1; nIter < nX; nIter = nIter + 1 + (uint32_t)(nIter == nX / 2)) {
-      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nIter, 0, nIter == nX / 2 ? 0x284U : 0x27cU, -1, 0);
+    for (nIter = 1; nIter < nX; nIter = nIter + 1 + (uint32_t)(nIter == nEntranceX)) {
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nIter, 0, nIter == nEntranceX ? 0x284U : 0x27cU, -1, 0);
     }
 
     for (nIter = 1; nIter < nX; nIter++) {

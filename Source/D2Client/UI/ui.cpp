@@ -127,9 +127,9 @@
 #include "Source/Bnclient/BnSend.h"
 #include "Source/Bnclient/SRP.h"
 #include "Source/Bnclient/net_sid.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/ClientModeInGame.h"
 #include "Source/D2Client/Cursor.h"
 #include "Source/D2Client/D2BNetGatewayAccessStr.h"
@@ -3935,31 +3935,31 @@ void __fastcall DRAW_Direct_RectFrame(RECT * pRect) {
 }
 
 void __stdcall UI_DrawStoredTooltip() {
-    int32_t nDrawX = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(UNICODE_007a2c80);
-    if (!nDrawX) {
+    const int32_t nTextLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(UNICODE_007a2c80);
+    if (!nTextLength) {
       return;
     }
 
-    nDrawX = D2Win::Src::D2WinFont::DRAW_text0(UNICODE_007a2c80);
-    int nWidth = nDrawX + 8;
-    uint32_t nFontHeight = D2Win::Src::D2WinFont::D2WINFONT_GetCurrentFontHeight();
-    nDrawX = gnTooltipScreenX - (nWidth >> 1);
+    const int nWidth = D2Win::Src::D2WinFont::DRAW_text0(UNICODE_007a2c80) + 8;
+    const int nMinY = D2Win::Src::D2WinFont::D2WINFONT_GetCurrentFontHeight() + 7;
+    int nDrawX = gnTooltipScreenX - (nWidth >> 1);
+    int nDrawY = gnTooltipScreenY + 2;
     if (nDrawX < 0) {
       nDrawX = 0;
     }
-    if (nDrawX + nWidth > ScreenSizeX) {
-      nDrawX = ScreenSizeX - nWidth;
+    const int nScreenWidth = ScreenSizeX;
+    if (nDrawX + nWidth > nScreenWidth) {
+      nDrawX = nScreenWidth - nWidth;
+    }
+    if (nDrawY - nMinY < 0) {
+      nDrawY = nMinY;
+    }
+    const int nMaxY = Inv::ScreenSizeY - 0x1f;
+    if (nDrawY > nMaxY) {
+      nDrawY = nMaxY;
     }
 
-    nWidth = gnTooltipScreenY + 2;
-    if ((int)(gnTooltipScreenY + 2 - (nFontHeight + 7)) < 0) {
-      nWidth = nFontHeight + 7;
-    }
-    if (nWidth > Inv::ScreenSizeY - 0x1f) {
-      nWidth = Inv::ScreenSizeY - 0x1f;
-    }
-
-    D2Win::Src::D2WinFont::DRAW_text(UNICODE_007a2c80, nDrawX, nWidth - 2, 0, 1);
+    D2Win::Src::D2WinFont::DRAW_text(UNICODE_007a2c80, nDrawX, nDrawY - 2, 0, 1);
     memset(UNICODE_007a2c80, 0, 0xa0);
 }
 
@@ -8542,9 +8542,7 @@ bool __stdcall UI_CanAllocateStatPoint(int32_t nBorderType) {
 }
 
 void __stdcall UI_DrawLevelUpButtonLeft() {
-    int nCenterX;
     D2GfxDataStrc sGfxData;
-    int32_t bShowTooltip;
     DWORD eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode != 2) {
       return;
@@ -8559,10 +8557,7 @@ void __stdcall UI_DrawLevelUpButtonLeft() {
       BOOL bEscMenuOpen;
       bEscMenuOpen = GetUIFlag(UI_ESCMENU);
       if (!bEscMenuOpen) {
-        bShowTooltip = 1;
-        bHasPoints = Inv::ScreenSizeY - 0x32;
-        nCenterX = ScreenSizeX / 2;
-        D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0xf92), nCenterX - 0xb3, bHasPoints, bEscMenuOpen, bShowTooltip);
+        D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0xf92), ScreenSizeX / 2 - 0xb3, Inv::ScreenSizeY - 0x32, bEscMenuOpen, true);
       }
     }
 
@@ -8689,9 +8684,7 @@ bool __stdcall UI_GetNewSkillPointsForClass(int32_t nCharClass) {
 }
 
 void __stdcall UI_DrawLevelUpButtonRight() {
-    int nCenterX;
     D2GfxDataStrc sGfxData;
-    int32_t bShowTooltip;
     DWORD eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode != 2) {
       return;
@@ -8706,10 +8699,7 @@ void __stdcall UI_DrawLevelUpButtonRight() {
       BOOL bEscMenuOpen;
       bEscMenuOpen = GetUIFlag(UI_ESCMENU);
       if (!bEscMenuOpen) {
-        bShowTooltip = 1;
-        bHasPoints = Inv::ScreenSizeY - 0x32;
-        nCenterX = ScreenSizeX / 2;
-        D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0xf93), nCenterX + 0xb2, bHasPoints, bEscMenuOpen, bShowTooltip);
+        D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0xf93), ScreenSizeX / 2 + 0xb2, Inv::ScreenSizeY - 0x32, bEscMenuOpen, true);
       }
     }
 

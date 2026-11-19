@@ -252,13 +252,14 @@ void __stdcall PALSHIFT_InitPalShiftTable() {
       gpPalShiftEntryListHead = pDVar1;
     }
 
-    int nTxtMonStatsCount = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
-    if (!gpMonsterPalShiftList) {
-      gpMonsterPalShiftList = (D2MonsterPalShiftSlotStrc*)D2_ALLOC_AT(nTxtMonStatsCount * 8, ".\\GAME\\PalShift.cpp", 0x11f);
-    }
-
+    const int nTxtMonStatsCount = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
     D2MonsterPalShiftSlotStrc* pPalShiftList = gpMonsterPalShiftList;
-    memset(gpMonsterPalShiftList, 0, nTxtMonStatsCount * 8);
+    const size_t nPalShiftBytes = nTxtMonStatsCount * sizeof(*pPalShiftList);
+    if (!pPalShiftList) {
+      pPalShiftList = static_cast<D2MonsterPalShiftSlotStrc*>(D2_ALLOC_AT(nPalShiftBytes, ".\\GAME\\PalShift.cpp", 0x11f));
+      gpMonsterPalShiftList = pPalShiftList;
+    }
+    memset(pPalShiftList, 0, nPalShiftBytes);
     for (i = 0; i < nTxtMonStatsCount; i++) {
       pPalShiftList[i].nMonsterId = i;
     }

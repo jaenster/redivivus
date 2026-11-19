@@ -255,11 +255,13 @@ int32_t __stdcall ITEMMODS_PackSkillLevelChance(int32_t nParam1, int32_t nParam2
     return (nParam3 * 0x20 + nParam2) * 0x200 + nParam1;
 }
 
-void __stdcall ITEMMODS_UnpackSkillTab(uint32_t nPackedValue, uint32_t * pnPlayerClass, uint32_t * pnSkillTab, uint32_t * pnSkillLevels) {
+void __stdcall ITEMMODS_UnpackSkillTab(int32_t nPackedValue, uint32_t * pnPlayerClass, uint32_t * pnSkillTab, uint32_t * pnSkillLevels) {
     if (pnPlayerClass && pnSkillTab && pnSkillLevels) {
-      *pnPlayerClass = (nPackedValue & 0x1f) / 3;
-      *pnSkillTab = (nPackedValue & 0x1f) % 3;
-      *pnSkillLevels = (int)nPackedValue >> 5 & 0x1f;
+      const int nClassTab = nPackedValue & 0x1f;
+      const int nClass = nClassTab / 3;
+      *pnPlayerClass = nClass;
+      *pnSkillTab = nClassTab - nClass * 3;
+      *pnSkillLevels = nPackedValue >> 5 & 0x1f;
       return;
     }
 
@@ -2202,7 +2204,8 @@ uint32_t __fastcall ITEMPROP_AddSkillTabBonus(uint32_t nType, D2UnitStrc * pUnit
       }
     }
 
-    uint32_t nResult = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (int16_t)nStatId, pProperty->fparam % 3 + pProperty->fparam / 3 * 8, nRolledValue, nState);
+    int nLayer = pProperty->fparam % 3 + pProperty->fparam / 3 * 8;
+    uint32_t nResult = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (int16_t)nStatId, nLayer, nRolledValue, nState);
     return nResult;
 }
 

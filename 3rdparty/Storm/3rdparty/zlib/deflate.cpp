@@ -343,45 +343,44 @@ int __fastcall deflateCopy(z_stream * pDestStream, z_stream * pSrcStream) {
     z_stream* pDestCursor;
     deflate_state* pSrcState;
     deflate_state* pDestState;
-    pSrcState = pSrcStream && pDestStream ? (deflate_state*)pSrcStream->state : 0;
-    if (!pSrcState) {
-      return -2;
-    }
+    if (pSrcStream && pDestStream && (pSrcState = (deflate_state*)pSrcStream->state)) {
+      pDestCursor = pDestStream;
+      *pDestCursor = *pSrcStream;
+      pDestState = (deflate_state*)pDestStream->zalloc(pDestStream->opaque, 1, 0x16c4);
+      if (!pDestState) {
+        return -4;
+      }
 
-    pDestCursor = pDestStream;
-    *pDestCursor = *pSrcStream;
-    pDestState = (deflate_state*)pDestStream->zalloc(pDestStream->opaque, 1, 0x16c4);
-    if (!pDestState) {
+      pDestStream->state = pDestState;
+      memcpy(pDestState, pSrcState, 0x16c4);
+      pDestState->strm = pDestStream;
+      pAllocTree = (uint8_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->w_size, 2);
+      pDestState->window = pAllocTree;
+      pHashHead = (uint16_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->w_size, 2);
+      pDestState->prev = pHashHead;
+      pHashHead = (uint16_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->hash_size, 2);
+      pDestState->head = pHashHead;
+      pAllocTree = (uint8_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->lit_bufsize, 4);
+      pDestState->pending_buf = pAllocTree;
+      if (pDestState->window && pDestState->prev && pDestState->head && pAllocTree) {
+        memcpy(pDestState->window, pSrcState->window, pDestState->w_size * 2);
+        memcpy(pDestState->prev, pSrcState->prev, pDestState->w_size * 2);
+        memcpy(pDestState->head, pSrcState->head, pDestState->hash_size * 2);
+        memcpy(pDestState->pending_buf, pSrcState->pending_buf, pDestState->pending_buf_size);
+        pDestState->pending_out = pDestState->pending_buf + ((intptr_t)pSrcState->pending_out - (intptr_t)pSrcState->pending_buf);
+        pDestState->d_buf = (uint16_t*)pAllocTree + (pDestState->lit_bufsize / 2);
+        pDestState->l_buf = pDestState->pending_buf + pDestState->lit_bufsize * 3;
+        pDestState->l_desc.dyn_tree = pDestState->dyn_ltree;
+        pDestState->d_desc.dyn_tree = pDestState->dyn_dtree;
+        pDestState->bl_desc.dyn_tree = pDestState->bl_tree;
+        return 0;
+      }
+
+      deflateEnd(pDestStream);
       return -4;
     }
 
-    pDestStream->state = pDestState;
-    memcpy(pDestState, pSrcState, 0x16c4);
-    pDestState->strm = pDestStream;
-    pAllocTree = (uint8_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->w_size, 2);
-    pDestState->window = pAllocTree;
-    pHashHead = (uint16_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->w_size, 2);
-    pDestState->prev = pHashHead;
-    pHashHead = (uint16_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->hash_size, 2);
-    pDestState->head = pHashHead;
-    pAllocTree = (uint8_t*)pDestStream->zalloc(pDestStream->opaque, pDestState->lit_bufsize, 4);
-    pDestState->pending_buf = pAllocTree;
-    if (pDestState->window && pDestState->prev && pDestState->head && pAllocTree) {
-      memcpy(pDestState->window, pSrcState->window, pDestState->w_size * 2);
-      memcpy(pDestState->prev, pSrcState->prev, pDestState->w_size * 2);
-      memcpy(pDestState->head, pSrcState->head, pDestState->hash_size * 2);
-      memcpy(pDestState->pending_buf, pSrcState->pending_buf, pDestState->pending_buf_size);
-      pDestState->pending_out = pDestState->pending_buf + ((intptr_t)pSrcState->pending_out - (intptr_t)pSrcState->pending_buf);
-      pDestState->d_buf = (uint16_t*)(pAllocTree + (pDestState->lit_bufsize & -2));
-      pDestState->l_buf = pDestState->pending_buf + pDestState->lit_bufsize * 3;
-      pDestState->d_desc.dyn_tree = pDestState->dyn_dtree;
-      pDestState->l_desc.dyn_tree = pDestState->dyn_ltree;
-      pDestState->bl_desc.dyn_tree = pDestState->bl_tree;
-      return 0;
-    }
-
-    deflateEnd(pDestStream);
-    return -4;
+    return -2;
 }
 
 uint32_t __fastcall read_buf(z_stream * pStream, uint8_t * pBuf, uint32_t nSize) {

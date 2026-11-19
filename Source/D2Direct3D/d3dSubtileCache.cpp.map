@@ -121,12 +121,10 @@
         "D3DSUBTILE_RemoveNodeByIndex"
       ],
       "usedTypes": [
-        "D2InventoryGridStrc",
-        "D2UnitStrc",
         "D3DSubtileCacheNodeStrc",
         "D3DSubtileCacheStrc"
       ],
-      "dh": "727fb66e",
+      "dh": "50cf33d1",
       "paramStorage": [
         [
           "pCache",

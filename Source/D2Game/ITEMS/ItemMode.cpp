@@ -69,9 +69,9 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/UI/Automap.h"
 #include "Source/D2Client/UI/Panel.h"
 #include "Source/D2Client/UI/QuestLog.h"
@@ -2393,32 +2393,29 @@ static void __stdcall ITEMMODE_ConsumeItem(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 static eD2Skills ITEMMODE_GetItemCastSkill(D2UnitStrc * pUnit) {
-    uint16_t uVar1;
     D2BooksTxt* pBooksTxtLine;
     eD2Skills eSkillId = ~SKILL_Attack;
     uint32_t bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Book);
     if (bIsType) {
-      int* pBookTxt;
-      uVar1 = D2Common::ITEMS::Items::GetMagicSuffix(pUnit, 0);
-      pBookTxt = (int*)D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar1);
+      D2BooksTxt* pBookTxt;
+      pBookTxt = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine(D2Common::ITEMS::Items::GetMagicSuffix(pUnit, 0));
       if (!pBookTxt) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfa4);
         exit(-1);
       }
 
-      return pBookTxt[3];
-    }
+      eSkillId = pBookTxt->bookskill;
+    } else {
+      bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Scroll);
+      if (bIsType) {
+        pBooksTxtLine = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine(D2Common::ITEMS::Items::GetMagicSuffix(pUnit, 0));
+        if (!pBooksTxtLine) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfab);
+          exit(-1);
+        }
 
-    bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Scroll);
-    if (bIsType) {
-      uVar1 = D2Common::ITEMS::Items::GetMagicSuffix(pUnit, 0);
-      pBooksTxtLine = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar1);
-      if (!pBooksTxtLine) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfab);
-        exit(-1);
+        eSkillId = pBooksTxtLine->scrollskill;
       }
-
-      eSkillId = pBooksTxtLine->scrollskill;
     }
 
     return eSkillId;
@@ -2868,7 +2865,7 @@ BOOL __fastcall ITEM_TryPlaceInBelt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
       if (bAutoPlace) {
         bPlaced = D2Common::INVENTORY::Inventory::INVENTORY_PlacePotionInBelt(pInventory, pBeltItem);
         if (!bPlaced) {
-          return 0;
+          goto placement_failed;
         }
       } else {
         D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pBeltItem, (char*)((intptr_t)&bAutoPlace + 3), (char*)((intptr_t)&nItemGUID + 3), ".\\ITEMS\\ItemMode.cpp", 0x1222);
@@ -2899,6 +2896,7 @@ BOOL __fastcall ITEM_TryPlaceInBelt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
       }
 
       *pbBadParams = 1;
+    placement_failed:
       return 0;
     }
 }

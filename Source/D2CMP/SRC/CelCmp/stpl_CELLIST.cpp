@@ -599,8 +599,9 @@ template<> ::CELLIST * __thiscall TSHashTable<CELLIST, HASHKEY_NONE>::InternalNe
 
 // @blizzard TSHashTable<CELLIST,HASHKEY_NONE>::InternalDelete (STORM.H)
 template<> void __thiscall TSHashTable<CELLIST, HASHKEY_NONE>::InternalDelete(TSHashTable<::CELLIST, HASHKEY_NONE>* pThis, ::CELLIST * pNode) {
-    pNode->m_frames.UnlinkAll();
-    TSLink<::TCELENTRY>* pTVar1 = &pNode->m_frames.m_terminator;
+    TSList<TCELENTRY, TSGetLink<TCELENTRY>>* pFrames = &pNode->m_frames;
+    pFrames->UnlinkAll();
+    TSLink<::TCELENTRY>* pTVar1 = &pFrames->m_terminator;
     TSLink<::TCELENTRY>* nNext = pTVar1->m_prevlink;
     if (nNext) {
       TSLink<::TCELENTRY>** pBackLink;
@@ -681,8 +682,9 @@ void __thiscall SetCount_Unreferenced(TSGrowableArray<TSExplicitList<CELLIST, -5
 // Free a pool node: flush its active CelList, unlink from free list, unlink both entries, then SMemFree
 // @blizzard TSHashTableReuse<CELLIST,HASHKEY_NONE,0>::InternalDelete (STORM.H)
 template<> void __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::InternalDelete(TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* pThis, ::CELLIST * pNode) {
-    pNode->m_frames.UnlinkAll();
-    TSLink<::TCELENTRY>* pTVar1 = &pNode->m_frames.m_terminator;
+    TSList<TCELENTRY, TSGetLink<TCELENTRY>>* pFrames = &pNode->m_frames;
+    pFrames->UnlinkAll();
+    TSLink<::TCELENTRY>* pTVar1 = &pFrames->m_terminator;
     TSLink<::TCELENTRY>* nNextEntry = pTVar1->m_prevlink;
     if (nNextEntry) {
       TSLink<::TCELENTRY>** pBackLink;

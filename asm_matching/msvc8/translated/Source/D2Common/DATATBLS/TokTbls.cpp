@@ -54,17 +54,18 @@ void __fastcall TXT_AllocTxt_plrmode_plrtype(D2PoolManagerStrc * pMemory) {
     D2PlrTypeModeTxt* pTxtPlrType = (D2PlrTypeModeTxt*)DataTbls::CompileTxt(pMemory, "plrtype", plr, &nTxtPlrTypeSize, 0x34);
     D2PlrTypeModeTxt* pTxtPlrMode = (D2PlrTypeModeTxt*)DataTbls::CompileTxt(pMemory, "plrmode", plr, &nTxtPlrModeSize, 0x34);
     uint32_t nTotalSize = nTxtPlrModeSize + nTxtPlrTypeSize;
-    D2PlrTypeModeTxt* pTxtPlrTypeMode = (D2PlrTypeModeTxt*)D2_ALLOC_POOL_AT(nullptr, nTotalSize * 0x34, ".\\DATATBLS\\TokTbls.cpp", 0x37);
+    D2PlrTypeModeTxt* pTxtPlrTypeMode = (D2PlrTypeModeTxt*)D2_ALLOC_POOL_AT(nullptr, nTotalSize * sizeof(*pTxtPlrType), ".\\DATATBLS\\TokTbls.cpp", 0x37);
     if (!pTxtPlrTypeMode) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x38);
       exit(-1);
     }
 
-    memcpy(pTxtPlrTypeMode, pTxtPlrType, nTxtPlrTypeSize * 0x34);
-    memcpy(pTxtPlrTypeMode + nTxtPlrTypeSize, pTxtPlrMode, nTxtPlrModeSize * 0x34);
+    memcpy(pTxtPlrTypeMode, pTxtPlrType, nTxtPlrTypeSize * sizeof(*pTxtPlrType));
+    D2PlrTypeModeTxt* pMode = pTxtPlrTypeMode + nTxtPlrTypeSize;
+    memcpy(pMode, pTxtPlrMode, nTxtPlrModeSize * sizeof(*pTxtPlrMode));
     DataTbls::UnloadBin(pTxtPlrType);
     DataTbls::UnloadBin(pTxtPlrMode);
-    pTxtPlrTypeMode3 = pTxtPlrTypeMode + nTxtPlrTypeSize;
+    pTxtPlrTypeMode3 = pMode;
     pTxtPlrTypeMode1 = pTxtPlrTypeMode;
     pTxtPlrTypeMode2 = pTxtPlrTypeMode;
     nTxtPlrTypeModeSize = nTotalSize;

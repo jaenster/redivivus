@@ -3108,23 +3108,43 @@ void __stdcall RENDERER_D3D_ReleaseTexturePools() {
 }
 
 void __fastcall D3D_PixelDataFreeCallback_ClearCacheNodes(int * pCacheIndices) {
-    if (-1 < *pCacheIndices - 1 && -1 < pCacheIndices[1] - 1) {
-      gD3DGenericTextureCache.aCaches[*pCacheIndices - 1].pNodeBuffer[pCacheIndices[1] - 1].pAssociatedTilePtr = 0;
+    int nCacheIndex;
+    int nNodeIndex;
+    nCacheIndex = static_cast<int>(pCacheIndices[0] - 1u);
+    if (nCacheIndex >= 0) {
+      nNodeIndex = static_cast<int>(pCacheIndices[1] - 1u);
+      if (nNodeIndex >= 0) {
+        gD3DGenericTextureCache.aCaches[nCacheIndex].pNodeBuffer[nNodeIndex].pAssociatedTilePtr = 0;
+      }
     }
-    if (-1 < pCacheIndices[2] - 1 && -1 < pCacheIndices[3] - 1) {
-      gD3DGenericTextureCache.aCaches[pCacheIndices[2] - 1].pNodeBuffer[pCacheIndices[3] - 1].pAssociatedTilePtr = 0;
+    nCacheIndex = static_cast<int>(pCacheIndices[2] - 1u);
+    if (nCacheIndex >= 0) {
+      nNodeIndex = static_cast<int>(pCacheIndices[3] - 1u);
+      if (nNodeIndex >= 0) {
+        gD3DGenericTextureCache.aCaches[nCacheIndex].pNodeBuffer[nNodeIndex].pAssociatedTilePtr = 0;
+      }
     }
-    if (-1 < pCacheIndices[4] - 1 && -1 < pCacheIndices[5] - 1) {
-      gD3DGenericTextureCache.aCaches[pCacheIndices[4] - 1].pNodeBuffer[pCacheIndices[5] - 1].pAssociatedTilePtr = 0;
+    nCacheIndex = static_cast<int>(pCacheIndices[4] - 1u);
+    if (nCacheIndex >= 0) {
+      nNodeIndex = static_cast<int>(pCacheIndices[5] - 1u);
+      if (nNodeIndex >= 0) {
+        gD3DGenericTextureCache.aCaches[nCacheIndex].pNodeBuffer[nNodeIndex].pAssociatedTilePtr = 0;
+      }
     }
-    if (-1 < pCacheIndices[6] - 1 && -1 < pCacheIndices[7] - 1) {
-      gD3DGenericTextureCache.aCaches[pCacheIndices[6] - 1].pNodeBuffer[pCacheIndices[7] - 1].pAssociatedTilePtr = 0;
+    nCacheIndex = static_cast<int>(pCacheIndices[6] - 1u);
+    if (nCacheIndex >= 0) {
+      nNodeIndex = static_cast<int>(pCacheIndices[7] - 1u);
+      if (nNodeIndex >= 0) {
+        gD3DGenericTextureCache.aCaches[nCacheIndex].pNodeBuffer[nNodeIndex].pAssociatedTilePtr = 0;
+      }
     }
-    if (!(-1 < pCacheIndices[8] - 1 && -1 < pCacheIndices[9] - 1)) {
-      return;
+    nCacheIndex = static_cast<int>(pCacheIndices[8] - 1u);
+    if (nCacheIndex >= 0) {
+      nNodeIndex = static_cast<int>(pCacheIndices[9] - 1u);
+      if (nNodeIndex >= 0) {
+        gD3DGenericTextureCache.aCaches[nCacheIndex].pNodeBuffer[nNodeIndex].pAssociatedTilePtr = 0;
+      }
     }
-
-    gD3DGenericTextureCache.aCaches[pCacheIndices[8] - 1].pNodeBuffer[pCacheIndices[9] - 1].pAssociatedTilePtr = 0;
 }
 
 static BOOL __stdcall RENDERER_D3D_ExtractSpriteInfo(D2GfxDataStrc * pSprite, D2D3DSpriteInfoStrc * pOutput) {
@@ -5539,8 +5559,7 @@ static void __fastcall RENDERER_D3D_BlitSmackerFrame(int nHeight, int, D2Smacker
 
 static void __fastcall RENDERER_D3D_CopySmackerRowWithAlpha(uint16_t * pSrc, int, uint8_t * pDest, int nPitch) {
     int nPixelsRemaining;
-    int nRowsRemaining = 0x40;
-    do {
+    for (int nRowsRemaining = 0; nRowsRemaining < 0x40; nRowsRemaining++) {
       uint16_t* pSrcPixel;
       nPixelsRemaining = 0x100;
       pSrcPixel = pSrc;
@@ -5552,8 +5571,7 @@ static void __fastcall RENDERER_D3D_CopySmackerRowWithAlpha(uint16_t * pSrc, int
 
       pDest += nPitch;
       pSrc += 0x200;
-      nRowsRemaining--;
-    } while (nRowsRemaining);
+    }
 }
 
 void __stdcall RENDERER_D3D_PresentSmackerFrame() {

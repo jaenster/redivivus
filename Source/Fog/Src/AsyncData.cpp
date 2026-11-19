@@ -132,10 +132,7 @@ void __fastcall ASYNCDATA_CancelAndCleanup(D2AsyncData_Line0x128 * pAsyncData) {
     nResultSize = pAsyncData->tCallback.nResultSize;
     pAsyncData->pReadBuffer = pAsyncData->tCallback.pResultBuffer;
     pAsyncData->nReadSize = nResultSize;
-    pAsyncData->tCallback.pfnCallback = 0;
-    memset(pAsyncData->tCallback.aUserData, 0, 4 * sizeof(pAsyncData->tCallback.aUserData[0]));
-    pAsyncData->tCallback.pResultBuffer = 0;
-    pAsyncData->tCallback.nResultSize = 0;
+    memset(&pAsyncData->tCallback, 0, sizeof(pAsyncData->tCallback));
 }
 
 D2AsyncDataSlotStrc * __stdcall ASYNCDATA_AllocSlot() {

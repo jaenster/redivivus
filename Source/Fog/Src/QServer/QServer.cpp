@@ -245,12 +245,11 @@ static void __stdcall NET_QServerClientPacket_FreeAllPackets(D2QServerClientConn
       QSERVER_LOG("QSRV", "  ptClient->ptNextClient =  %08X", pQServerClient->pNextByToken);
     }
 
-    D2QServerClientPacketStrc* pQServerClientPacket = pQServerClient->pSendQueueHead;
-    while (pQServerClientPacket) {
-      D2QServerClientPacketStrc* pDVar1;
-      pDVar1 = pQServerClientPacket->pQServerClientPacketNext;
-      D2_FREE_AT(pQServerClientPacket, ".\\Src\\QServer\\QServer.cpp", 0x3a7);
-      pQServerClientPacket = pDVar1;
+    D2QServerClientPacketStrc* pPacket = pQServerClient->pSendQueueHead;
+    while (pPacket) {
+      D2QServerClientPacketStrc* pCurrent = pPacket;
+      pPacket = pPacket->pQServerClientPacketNext;
+      D2_FREE_AT(pCurrent, ".\\Src\\QServer\\QServer.cpp", 0x3a7);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ pQServerClient->pSendQueueHead = 0;
@@ -757,15 +756,13 @@ uint32_t __stdcall GetClientServerTokenByClientId(D2QServerStrc * pQServer, uint
 // @sourcefile .\Src\QServer\QServer.cpp
 static void FreeHacklistBuckets(D2QServerStrc * pQServer) {
     uint32_t nBucketIndex;
-    D2QServerHacklistEntryStrc* pNext;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csHacklist);
     for (nBucketIndex = 0; nBucketIndex < pQServer->nHacklistBucketCount; nBucketIndex++) {
-      D2QServerHacklistEntryStrc* pMemoryToFree;
-      pMemoryToFree = pQServer->ppHacklistBuckets[nBucketIndex];
-      while (pMemoryToFree) {
-        pNext = pMemoryToFree->pNext;
-        D2_FREE_AT(pMemoryToFree, ".\\Src\\QServer\\QServer.cpp", 0x8be);
-        pMemoryToFree = pNext;
+      D2QServerHacklistEntryStrc* pEntry = pQServer->ppHacklistBuckets[nBucketIndex];
+      while (pEntry) {
+        D2QServerHacklistEntryStrc* pCurrent = pEntry;
+        pEntry = pEntry->pNext;
+        D2_FREE_AT(pCurrent, ".\\Src\\QServer\\QServer.cpp", 0x8be);
       }
 
       pQServer->ppHacklistBuckets[nBucketIndex] = 0;
@@ -975,14 +972,15 @@ int __stdcall CountAllQueuedPackets(D2QServerStrc * pQServer) {
     if (nTotal > 0) {
       D2QServerModePacketNodeStrc** ppModeHead;
       ppModeHead = pQServer->ppModePacketQueueHeads;
+      int nModeCount = nTotal;
       do {
         for (pNode = *ppModeHead; pNode; pNode = pNode->pNext) {
           nModesLeft++;
         }
 
         ppModeHead++;
-        nTotal--;
-      } while (nTotal);
+        --nModeCount;
+      } while (nModeCount);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pQServer->csClientLifecycle);

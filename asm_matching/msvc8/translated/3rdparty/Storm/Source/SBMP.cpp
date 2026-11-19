@@ -801,22 +801,17 @@ static void __fastcall SBMP_UncompressPcxImage(int dstSize, uint8_t * dst, int s
 
 // @blizzard FindExtension (SBMP.CPP)
 static char * __stdcall SBMP_FindExtension(char * path) {
-    char* pScanPtr = SSTR::SStrChr(path, '\\');
-    while (pScanPtr) {
-      pScanPtr = SSTR::SStrChr(path, '\\');
-      path = pScanPtr + 1;
-      pScanPtr = SSTR::SStrChr(path, '\\');
+    char* pPath = path;
+    while (SSTR::SStrChr(pPath, '\\')) {
+      pPath = SSTR::SStrChr(pPath, '\\') + 1;
     }
 
-    pScanPtr = path + 1;
-    char* pDotPos = SSTR::SStrChr(pScanPtr, '.');
-    while (pDotPos) {
-      path = SSTR::SStrChr(pScanPtr, '.');
-      pScanPtr = path + 1;
-      pDotPos = SSTR::SStrChr(pScanPtr, '.');
+    char* pScan = pPath + 1;
+    while (SSTR::SStrChr(pScan, '.')) {
+      pPath = SSTR::SStrChr(pScan, '.');
+      pScan = pPath + 1;
     }
-
-    return path;
+    return pPath;
 }
 
 // @blizzard DetermineImageType (SBMP.CPP)

@@ -1105,23 +1105,20 @@ void __fastcall SetBlankBorderGridCells(D2DrlgLevelStrc * pLevel) {
 
 void __fastcall SetOutGridLinkFlags(D2DrlgLevelStrc * pLevel) {
     int32_t nLinkVisFlag;
-    bool bHasNext;
-    uint8_t byDirection;
     D2DrlgLevelDataWildernessLevel* pLevelData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     D2DrlgVertexStrc* pDrlgVertex = pLevelData->pVertices;
-    D2DrlgVertexStrc* pNextVertex = pLevelData->pVertices->pNext;
+    D2DrlgVertexStrc* pNextVertex = pDrlgVertex->pNext;
     do {
       if (pDrlgVertex->dwFlags & 1) {
         nLinkVisFlag = Outdoors::GetOutLinkVisFlag(pLevel, pDrlgVertex);
-        byDirection = pDrlgVertex->nDirection;
+        const uint32_t nGridFlags = pDrlgVertex->nDirection != 0 ? 0x3U : 0x1U;
         DrlgGrid::DRLGGRID_SetEdgeGridFlags(&pLevelData->sGridLink, pDrlgVertex, nLinkVisFlag, 0, 1);
-        DrlgGrid::DRLGGRID_SetEdgeGridFlags(&pLevelData->sGridOutdoor, pDrlgVertex, byDirection != 0 ? 0x3U : 0x1U, 0, 1);
+        DrlgGrid::DRLGGRID_SetEdgeGridFlags(&pLevelData->sGridOutdoor, pDrlgVertex, nGridFlags, 0, 1);
       }
 
-      bHasNext = pNextVertex != pLevelData->pVertices;
       pDrlgVertex = pNextVertex;
       pNextVertex = pNextVertex->pNext;
-    } while (bHasNext);
+    } while (pDrlgVertex != pLevelData->pVertices);
 }
 
 // DRLG outdoor wilderness border/road generator: walks the level's polygon outline (linked list of D2DrlgVertexStrc edges) and stamps edge presets, corner presets and grid border flags into the outdoor preset grid. For each edge it picks a road/border preset type from the level type (case 2 dirt, 0x10, 0x1b, 0x1f siege-grid-division) and direction lookup tables (gaRoadPresetDirectionLookup / gaOutPlaceRoadPresetLookup / gRoadPresetIdLookupTable), then spawns presets along the edge via SpawnOutdoorLevelPresetEx and flags cells via AlterGridFlag. Has act-specific corner handling for acts I/II/IV/V (and special-cases level 0x11) plus joint/corner presets at each vertex. Finishes with SetBlankBorderGridCells. Used during outdoor level layout for acts 1,2,4,5.

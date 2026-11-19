@@ -336,12 +336,12 @@
         "TILECMP_CheckTilePatternRLE"
       ],
       "usedTypes": [
-        "uint32_t"
+        "D2PaletteEntryStrc"
       ],
-      "dh": "2b6f6037",
+      "dh": "41333589",
       "paramStorage": [
         [
-          "dwColorKey",
+          "sColorKey",
           "Stack[0x4]:4"
         ],
         [
@@ -372,12 +372,12 @@
         "FreeClientMemory"
       ],
       "usedTypes": [
+        "D2PaletteEntryStrc",
         "D2TileCmpTileNodeStrc",
         "int32_t",
-        "uint32_t",
         "uint8_t"
       ],
-      "dh": "60808c6d",
+      "dh": "afa2cbcc",
       "paramStorage": [
         [
           "pSubTile",
@@ -388,7 +388,7 @@
           "Stack[0x8]:4"
         ],
         [
-          "dwColorKey",
+          "sColorKey",
           "Stack[0xc]:4"
         ],
         [
@@ -425,7 +425,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "86dcbec9",
+      "dh": "9fd8b25a",
       "paramStorage": [
         [
           "pTileSet",

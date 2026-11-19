@@ -110,9 +110,9 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/PlrSkills.h"
@@ -19675,7 +19675,8 @@ uint32_t __fastcall CollectMephistoTargetInfo(::SGAMEDATA * pGame, D2UnitStrc * 
 
 D2UnitStrc * __fastcall DecideMephistoAlternateTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MonStatsTxt * nMonStatsOffset, D2UnitStrc * fallback) {
     uint32_t DVar1;
-    D2AiMephistoScanStrc searchParams = {0};
+    D2AiMephistoScanStrc searchParams;
+    memset(&searchParams, 0, sizeof(searchParams));
     searchParams.nNearestDistance = 0x7fffffff;
     searchParams.nWeakestLife = 0x7fffffff;
     searchParams.nNearestWhenPlayerDistance = 0x7fffffff;
@@ -19686,16 +19687,14 @@ D2UnitStrc * __fastcall DecideMephistoAlternateTarget(::SGAMEDATA * pGame, D2Uni
         return searchParams.pWeakestUnit;
       }
     }
-    if (!searchParams.pNearestWhenPlayer) {
-      return fallback;
+    if (searchParams.pNearestWhenPlayer) {
+      DVar1 = D2_SeedRoll(&pUnit->sSeed);
+      if ((int)(DVar1 % 100) < (int)nMonStatsOffset->aip[2][pGame->nDifficulty]) {
+        return searchParams.pWeakestUnit;
+      }
     }
 
-    DVar1 = D2_SeedRoll(&pUnit->sSeed);
-    if ((int)(DVar1 % 100) >= (int)nMonStatsOffset->aip[2][pGame->nDifficulty]) {
-      return fallback;
-    }
-
-    return searchParams.pWeakestUnit;
+    return fallback;
 }
 
 // Server-side primary AI think function for the Mephisto act boss. Reads its AI state (dwArg0/1/2 in the D2AiGeneralStrc passed via pAiParam) plus current life%, distance to target and difficulty to pick the next action: melee, teleport-on-collision/range, or weighted-random cast among MonStats Skill1..6 (Sk*mode). Uses the unit RNG seed for all rolls. Mutates dwArg0 (skill-rotation counter), dwArg1 (sub-phase) and dwArg2 (next skill-state); issues moves/casts and schedules the next think via PlanNextAiMove. No return value.

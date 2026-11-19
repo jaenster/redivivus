@@ -92,9 +92,9 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Client/UI/Automap.h"
 #include "Source/D2Client/UI/QuestLog.h"
@@ -1552,13 +1552,13 @@ static BOOL __stdcall Shrines_GemShrine_SpawnGem(int32_t nItemClassId, D2UnitStr
       sItemGenCtx.pSeed = 0;
       sItemGenCtx.wItemFormat = pGame->wItemFormat;
       sItemGenCtx.nItemClassid = nItemClassId;
-      sItemGenCtx.nPosX = ptSpawnPos.x;
-      sItemGenCtx.pDrlgRoom = (D2RoomStrc*)pSpawnedItem;
+      sItemGenCtx.pGame = pGame;
       sItemGenCtx.dwMode = 3;
+      sItemGenCtx.nPosX = ptSpawnPos.x;
       sItemGenCtx.nPosY = ptSpawnPos.y;
+      sItemGenCtx.pDrlgRoom = (D2RoomStrc*)pSpawnedItem;
       sItemGenCtx.usually_one = 1;
       sItemGenCtx.eQuality = QUALITY_NORMAL;
-      sItemGenCtx.pGame = pGame;
       sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pUnit2, LEVEL_None);
       pSpawnedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pSpawnedItem, UNITSTAT_quantity, 1, 0);
@@ -3762,15 +3762,15 @@ D2UnitStrc * __fastcall SpawnDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint3
         memset(&sItemGenCtx, 0, 0x84);
         sItemGenCtx.wItemFormat = pGame->wItemFormat;
         sItemGenCtx.nItemClassid = nItemClassId;
-        sItemGenCtx.nPosY = ptSpawnPos.y;
-        sItemGenCtx.eQuality = eItemQuality;
+        sItemGenCtx.pUnit = pUnit;
         sItemGenCtx.pSeed = 0;
+        sItemGenCtx.pGame = pGame;
         sItemGenCtx.dwMode = 3;
         sItemGenCtx.nPosX = ptSpawnPos.x;
-        sItemGenCtx.usually_one = 1;
-        sItemGenCtx.pUnit = pUnit;
-        sItemGenCtx.pGame = pGame;
+        sItemGenCtx.nPosY = ptSpawnPos.y;
+        sItemGenCtx.eQuality = eItemQuality;
         sItemGenCtx.pDrlgRoom = pRoom;
+        sItemGenCtx.usually_one = 1;
         sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
         pDVar1 = ITEMS::Items::Drop::ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
         return pDVar1;
@@ -3800,15 +3800,15 @@ D2UnitStrc * __fastcall OBJMODE_DropItemAtPosition(::SGAMEDATA * pGame, D2UnitSt
     memset(&sItemGenCtx, 0, 0x84);
     sItemGenCtx.wItemFormat = pGame->wItemFormat;
     sItemGenCtx.nItemClassid = nItemClassId;
-    sItemGenCtx.nPosX = ptSpawnPos.x;
-    sItemGenCtx.eQuality = eItemType;
-    sItemGenCtx.pSeed = 0;
-    sItemGenCtx.dwMode = 3;
-    sItemGenCtx.nPosY = ptSpawnPos.y;
-    sItemGenCtx.usually_one = 1;
     sItemGenCtx.pUnit = pUnit;
+    sItemGenCtx.pSeed = 0;
     sItemGenCtx.pGame = pGame;
+    sItemGenCtx.dwMode = 3;
+    sItemGenCtx.nPosX = ptSpawnPos.x;
+    sItemGenCtx.nPosY = ptSpawnPos.y;
+    sItemGenCtx.eQuality = eItemType;
     sItemGenCtx.pDrlgRoom = pSpawnRoom;
+    sItemGenCtx.usually_one = 1;
     sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
     D2UnitStrc* pDVar1 = ITEMS::Items::Drop::ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
     return pDVar1;

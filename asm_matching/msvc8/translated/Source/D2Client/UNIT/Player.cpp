@@ -80,9 +80,9 @@
 #include "Source/Bnclient/SRP.h"
 #include "Source/Bnclient/net_sid.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/ClientModeInGame.h"
 #include "Source/D2Client/Cursor.h"
 #include "Source/D2Client/D2BNetGatewayAccessStr.h"
@@ -1149,7 +1149,6 @@ static void __stdcall PLAYER_InteractWithObject(int32_t nObjectGUID, D2UnderMous
     int32_t nX;
     eD2States eCurseState;
     eD2States eState;
-    int32_t nLine;
     D2UnitStrc* pObject = CUnit::UNITS_FindClientSideUnit(nObjectGUID, UNIT_OBJECT);
     if (!pObject) {
       return;
@@ -1184,27 +1183,9 @@ static void __stdcall PLAYER_InteractWithObject(int32_t nObjectGUID, D2UnderMous
     }
 
     pObject = pUnderMouse->pTarget;
-    eD2UnitType eUnitType = pObject->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nY = pObject->pPath.pStaticPath->nPosY;
-    } else if (pObject->pPath.pDynamicPath) {
-      nLine = D2Common::PATH::DynamicPath::GetYPos(pObject->pPath.pDynamicPath);
-      nY = nLine;
-    } else {
-      nY = 0;
-    }
-
+    nY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pObject);
     pObject = pUnderMouse->pTarget;
-    eUnitType = pObject->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nX = pObject->pPath.pStaticPath->nPosX;
-    } else if (pObject->pPath.pDynamicPath) {
-      nLine = D2Common::PATH::DynamicPath::GetXPos(pObject->pPath.pDynamicPath);
-      nX = nLine;
-    } else {
-      nX = 0;
-    }
-
+    nX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pObject);
     CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, nX, nY, pUnderMouse->nMoveActionType);
     if (!bCanInteract) {
       return;
@@ -1998,25 +1979,41 @@ void __stdcall PLAYER_ClearRecursionClick() {
 }
 
 BOOL __fastcall IsUnitNotMoving(D2UnderMouseStrc * pUnderMouse) {
-    // Static local variables (originally global data)
-    static uint32_t gnUnitClickState; D2_STATIC_GUARD_BSS(gnUnitClickState, "D2Client::UNIT::Player::IsUnitNotMoving::gnUnitClickState");
+    static uint32_t gnUnitClickState;
+    D2_STATIC_GUARD_BSS(gnUnitClickState, "D2Client::UNIT::Player::IsUnitNotMoving::gnUnitClickState");
 
-    eD2UnitType eTargetUnitType;
-    uint32_t dwFlags = pUnderMouse->flags;
+    const uint32_t dwFlags = pUnderMouse->flags;
     if (dwFlags & 0x10) {
       gnUnitClickState = 0;
-    } else {
-      eD2PlayerAnimMode ePlayerAnimMode;
-      if (dwFlags & 4) {
-        gnUnitClickState = pUnderMouse->pTarget != 0 ? 2 : 1;
-        return 1;
-      }
-      if (!(dwFlags & 8) || gnUnitClickState && (!pUnderMouse->pTarget || (eTargetUnitType = pUnderMouse->pTarget->eUnitType , (int)eTargetUnitType >= 0 && ((int)eTargetUnitType <= 1 || eTargetUnitType == UNIT_WARP)) && (!pUnderMouse->pPlayer || (ePlayerAnimMode = pUnderMouse->pPlayer->eAnimMode.ePlayerMode , ePlayerAnimMode != Walk && ePlayerAnimMode != eD2PlayerAnimMode_ns::Run) && ePlayerAnimMode != TownWalk))) {
-        return 1;
-      }
+      return 0;
+    }
+    if (dwFlags & 4) {
+      gnUnitClickState = pUnderMouse->pTarget != nullptr ? 2 : 1;
+      return 1;
     }
 
-    return 0;
+    if (dwFlags & 8) {
+      if (!gnUnitClickState) {
+        return 0;
+      }
+      const D2UnitStrc* pTarget = pUnderMouse->pTarget;
+      if (!pTarget) {
+        return 1;
+      }
+      const int nTargetType = static_cast<int>(pTarget->eUnitType);
+      if (nTargetType < 0 || (nTargetType > static_cast<int>(UNIT_MONSTER) && nTargetType != static_cast<int>(UNIT_WARP))) {
+        return 0;
+      }
+      const D2UnitStrc* pPlayer = pUnderMouse->pPlayer;
+      if (!pPlayer) {
+        return 1;
+      }
+      const eD2PlayerAnimMode eMode = pPlayer->eAnimMode.ePlayerMode;
+      if (eMode == Walk || eMode == eD2PlayerAnimMode_ns::Run || eMode == TownWalk) {
+        return 0;
+      }
+    }
+    return 1;
 }
 
 static BOOL INPUT_HandleLeftClickRepeat(D2UnderMouseStrc * pUnderMouse) {

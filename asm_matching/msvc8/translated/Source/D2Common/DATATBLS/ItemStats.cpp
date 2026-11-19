@@ -101,65 +101,32 @@ int * __stdcall STATES_AssertGetGfxFlags(D2UnitStrc * pUnit) {
 
 // Splits a unit's active state bitmask into server-side and GFX-side halves based on context. Uses pSingleStateDataTbl[0xd] (player) or [0xe] (non-player) when nParam==0, and [0xf] when nParam!=0, masking the state flags array so only context-relevant states remain in the server copy while visual-only states are ORed into the GFX flags. Calls ROOM_LinkUnitToUpdateList after filtering (unless non-player with nParam==0).
 void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t bIsBoss) {
-    int i;
-    int j;
-    intptr_t nGfxOffset;
-    uint32_t* pGfxWord;
     int* pGfxFlags = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
     uint32_t* pStateFlags = (uint32_t*)Stats::StatsEx::GetStateFlags(pUnit);
     if (!(pGfxFlags && pStateFlags)) {
       return;
     }
 
-    int nDwordCount = ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f;
-    nDwordCount = nDwordCount / 32;
+    const int nDwordCount = (ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f) / 32;
     if (bIsBoss) {
-      if (nDwordCount > 0) {
-        nGfxOffset = (intptr_t)pGfxFlags - (intptr_t)pStateFlags;
-        j = 0;
-        do {
-          i = j + 1;
-          pGfxWord = (uint32_t*)(nGfxOffset + (char*)pStateFlags);
-          *pGfxWord |= ~ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xf]->nStateBitmask[j] & *pStateFlags;
-          *pStateFlags &= ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xf]->nStateBitmask[j];
-          pStateFlags++;
-          j = i;
-        } while (i < nDwordCount);
-
-        Unit::ROOM_LinkUnitToUpdateList(pUnit);
-        return;
+      for (int i = 0; i < nDwordCount; ++i) {
+        pGfxFlags[i] |= ~ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xf]->nStateBitmask[i] & pStateFlags[i];
+        
+        pStateFlags[i] &= ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xf]->nStateBitmask[i];
+      }
+    } else if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
+      for (int i = 0; i < nDwordCount; ++i) {
+        pGfxFlags[i] |= ~ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[i] & pStateFlags[i];
+        
+        pStateFlags[i] &= ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[i];
       }
     } else {
-      if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
-        if (nDwordCount > 0) {
-          nGfxOffset = (intptr_t)pGfxFlags - (intptr_t)pStateFlags;
-          j = 0;
-          do {
-            i = j + 1;
-            pGfxWord = (uint32_t*)((char*)pStateFlags + nGfxOffset);
-            *pGfxWord |= ~ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[j] & *pStateFlags;
-            *pStateFlags &= ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[j];
-            pStateFlags++;
-            j = i;
-          } while (i < nDwordCount);
-        }
-      } else if (nDwordCount > 0) {
-        nGfxOffset = (intptr_t)pGfxFlags - (intptr_t)pStateFlags;
-        j = 0;
-        do {
-          i = j + 1;
-          pGfxWord = (uint32_t*)((char*)pStateFlags + nGfxOffset);
-          *pGfxWord |= ~ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[j] & *pStateFlags;
-          *pStateFlags &= ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[j];
-          pStateFlags++;
-          j = i;
-        } while (i < nDwordCount);
-
-        Unit::ROOM_LinkUnitToUpdateList(pUnit);
-        return;
+      for (int i = 0; i < nDwordCount; ++i) {
+        pGfxFlags[i] |= ~ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[i] & pStateFlags[i];
+        
+        pStateFlags[i] &= ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[i];
       }
     }
-
     Unit::ROOM_LinkUnitToUpdateList(pUnit);
 }
 

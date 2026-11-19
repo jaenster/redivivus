@@ -32,18 +32,6 @@ struct D2HSLColorStrc {
 };
 
 #endif // D2_MODULE_D2CMP
-#ifndef D2_DEFINED_D2PaletteEntryStrc
-#define D2_DEFINED_D2PaletteEntryStrc
-struct D2PaletteEntryStrc {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-
-    /* 0x00 */ uint8_t r;
-    /* 0x01 */ uint8_t g;
-    /* 0x02 */ uint8_t b;
-    /* 0x03 */ uint8_t a;
-};
-
-#endif // D2_DEFINED_D2PaletteEntryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 struct D2PcxRgbStrc {
     /* 0x00 */ uint8_t r;

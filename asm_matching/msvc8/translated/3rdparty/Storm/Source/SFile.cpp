@@ -227,8 +227,7 @@ static void SFILE_InitializeHashSource(uint32_t nSeed) {
     }
 
     uint32_t* pCryptEntry = g_pStormMpqCryptTable + 0x200;
-    int nEntriesLeft = 0x100;
-    do {
+    for (int nEntriesLeft = 0; nEntriesLeft < 0x100; nEntriesLeft++) {
       uint32_t nHi;
       nHi = (nSeed * 0x7d + 3) % 0x2aaaab;
       nLo = (nHi * 0x7d + 3) % 0x2aaaab;
@@ -246,8 +245,7 @@ static void SFILE_InitializeHashSource(uint32_t nSeed) {
       nSeed = (nHi * 0x7d + 3) % 0x2aaaab;
       pCryptEntry[0x200] = nHi << 0x10 | (uint16_t)nSeed;
       pCryptEntry++;
-      nEntriesLeft--;
-    } while (nEntriesLeft);
+    }
 }
 
 // @blizzard ReadFileChecked (SFILE.CPP)
@@ -3230,7 +3228,6 @@ StormLinkStrc * __fastcall Unreferenced_00418a40(StormLinkStrc * pLink) {
 
 // @sourcefile .\SOURCE\SFILE.CPP
 void __fastcall SFILE_FreeArchiveRecord(D2ArchiveStrc * pArchive) {
-    D2ArchiveStrc** ppPrevSlot;
     if (!pArchive || !pArchive->pBaseArchive) {
       if (pArchive->hFile != (HANDLE)-1 && !pArchive->bDontCloseHandle) {
         /* HANDLE hObject for CloseHandle */ CloseHandle(pArchive->hFile);
@@ -3254,12 +3251,7 @@ void __fastcall SFILE_FreeArchiveRecord(D2ArchiveStrc * pArchive) {
       return;
     }
 
-    D2ArchiveStrc* pPrevLink = pArchive->pNext;
-    if ((intptr_t)pPrevLink < 0) {
-      ppPrevSlot = (D2ArchiveStrc**)~(uintptr_t)pPrevLink;
-    } else {
-      ppPrevSlot = (D2ArchiveStrc**)((char*)pPrevLink + ((intptr_t)pArchive - (intptr_t)pNextNode->pNext));
-    }
+    D2ArchiveStrc** ppPrevSlot = (D2ArchiveStrc**)D2_StormNextLink(pArchive, -1);
 
     *ppPrevSlot = pNextNode;
     pArchive->pPrevLink->pNext = pArchive->pNext;

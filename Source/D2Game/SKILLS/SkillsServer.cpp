@@ -84,9 +84,9 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/UNIT/Missile.h"
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Client/UNIT/Player.h"
@@ -1294,32 +1294,31 @@ BOOL __fastcall SKILLS_SetSrvDoFuncAndAttackTarget(::SGAMEDATA * pGame, D2UnitSt
 // Decrements the quantity of a bow/throwable ammo item by 1 (floor 0), updates UNITSTAT_quantity, calls RefreshQuantity to update world state, and sends a 0x3E UpdateItemStats packet for stat 0x46 (quantity) to the owning player's client. Also resets UNITSTAT_durability to max if it differs, sending a second 0x3E for stat 0x48. Calls PLRMODES_CheckWeaponQuantityAndDurability to handle empty-quiver logic. Returns previous quantity (>=1) or 0 if already empty.
 // @sourcefile .\SKILLS\Skills.cpp
 int32_t __fastcall BowDecreaseQuantity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
-    if (!pItem) {
-      return 0;
-    }
+    if (pItem) {
+      BOOL bWasZero = FALSE;
+      int nOldQuantity = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0);
+      uint32_t nValue = nOldQuantity - 1;
+      if ((int)nValue < 0) {
+        bWasZero = TRUE;
+        nValue = 0;
+      }
 
-    int nOldQuantity = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0);
-    uint32_t nValue = nOldQuantity - 1;
-    bool bWasZero = (int)nValue < 0;
-    if (bWasZero) {
-      nValue = 0;
-    }
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_quantity, nValue, 0);
+      ITEMS::Items::Drop::RefreshQuantity(pGame, pItem);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x546), pItem, '\x01', 0x46, nValue, 0);
+      uint32_t nMaxDurability = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pItem);
+      uint32_t nCurrentDurability = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_durability, 0);
+      if (nCurrentDurability != nMaxDurability) {
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_durability, nMaxDurability, 0);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x54c), pItem, '\x01', 0x48, nMaxDurability, 0);
+      }
 
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_quantity, nValue, 0);
-    ITEMS::Items::Drop::RefreshQuantity(pGame, pItem);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x546), pItem, '\x01', 0x46, nValue, 0);
-    uint32_t nMaxDurability = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pItem);
-    uint32_t nCurrentDurability = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_durability, 0);
-    if (nCurrentDurability != nMaxDurability) {
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_durability, nMaxDurability, 0);
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x54c), pItem, '\x01', 0x48, nMaxDurability, 0);
-    }
+      PLAYER::PlayerModes::PLRMODES_CheckWeaponQuantityAndDurability(pGame, pUnit);
+      if (!bWasZero) {
+        return nValue + 1;
+      }
 
-    PLAYER::PlayerModes::PLRMODES_CheckWeaponQuantityAndDurability(pGame, pUnit);
-    if (!bWasZero) {
-      return nValue + 1;
     }
-
     return 0;
 }
 
@@ -2279,38 +2278,23 @@ void __fastcall SKILLS_CreateMissileStar(::SGAMEDATA * pGame, int32_t nMissileCo
     pSkillArg->nUnitX = 0xe;
     pSkillArg->nUnitY = -0xe;
     MISSILES::Missiles::CreatingMissile(pGame, pSkillArg);
-    int iRingRow = 0;
-    int nSkillArg = nMissileCount - 1;
-    do {
-      if (!nSkillArg) {
-        return;
-      }
-
-      iRingCol = 0;
-      do {
-        if (nSkillArg <= 0) {
-          break;
-        }
-
+    int nRemaining = nMissileCount - 1;
+    for (int iRingRow = 0; iRingRow < 7 && nRemaining; ++iRingRow) {
+      for (iRingCol = 0; iRingCol < 4 && nRemaining > 0; ++iRingCol) {
         pSkillArgCopy->nUnitX = gaSkillMissileStarOffsets_4[iRingCol] * gaSkillMissileStarOffsets_3[iRingRow];
         pSkillArgCopy->nUnitY = gaSkillMissileStarOffsets_2[iRingCol] * gaSkillMissileStarOffsets_1[iRingRow];
         MISSILES::Missiles::CreatingMissile(pGame, pSkillArgCopy);
         pSkillArgCopy->nUnitX = gaSkillMissileStarOffsets_4[iRingCol] * gaSkillMissileStarOffsets_1[iRingRow];
         pSkillArgCopy->nUnitY = gaSkillMissileStarOffsets_2[iRingCol] * gaSkillMissileStarOffsets_3[iRingRow];
         MISSILES::Missiles::CreatingMissile(pGame, pSkillArgCopy);
-        nSkillArg = nSkillArg - 4 + 2;
-        iRingCol++;
-      } while (iRingCol < 4);
+        nRemaining -= 2;
+      }
 
       pSkillArgCopy->nUnitX = gnSkillMissileOffset_SkillStar1[iRingRow];
       pSkillArgCopy->nUnitY = gnSkillMissileOffset_SkillStar2[iRingRow];
       MISSILES::Missiles::CreatingMissile(pGame, pSkillArgCopy);
-      nSkillArg = nSkillArg - 4 + 3;
-      iRingRow++;
-      if (iRingRow >= 7) {
-        return;
-      }
-    } while (true);
+      --nRemaining;
+    }
 }
 
 // Server-side: gives a player a temporary weapon item in the free weapon hand for skills that require one. Inspects the player's R_ARM/L_ARM body-loc items; if a hand is empty (or the held item is not a one-handed weapon) it generates a normal-quality item of szItemCode via ITEM_CreateItemInstance at the appropriate ilvl and equips it to that body location (BODYLOC_R_ARM=4 / L_ARM=5) via SERVER_EquipItemToBodyLoc. No-op for non-player units. Halts with Fog error 0xf4c (bad item code) or 0xf55 (item creation failed).
@@ -2557,15 +2541,15 @@ D2UnitStrc * __fastcall SKILLS_DropItemByCode(::SGAMEDATA * pGame, D2UnitStrc * 
         memset(&sItemGenCtx, 0, 0x84);
         sItemGenCtx.wItemFormat = pGame->wItemFormat;
         sItemGenCtx.nItemClassid = nItemClassId;
-        sItemGenCtx.nPosY = ptSpawnPos.y;
-        sItemGenCtx.eQuality = eQuality;
+        sItemGenCtx.pUnit = pUnit;
         sItemGenCtx.pSeed = 0;
+        sItemGenCtx.pGame = pGame;
         sItemGenCtx.dwMode = 3;
         sItemGenCtx.nPosX = ptSpawnPos.x;
-        sItemGenCtx.usually_one = 1;
-        sItemGenCtx.pUnit = pUnit;
-        sItemGenCtx.pGame = pGame;
+        sItemGenCtx.nPosY = ptSpawnPos.y;
+        sItemGenCtx.eQuality = eQuality;
         sItemGenCtx.pDrlgRoom = pRoom;
+        sItemGenCtx.usually_one = 1;
         sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
         pDroppedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
         return pDroppedItem;

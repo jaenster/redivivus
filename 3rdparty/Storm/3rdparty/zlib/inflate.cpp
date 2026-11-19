@@ -4191,34 +4191,31 @@ int __fastcall inflateGetDictionary(z_stream * pStream, uint8_t * pDictionary, u
 }
 
 int __fastcall inflateSetDictionary(z_stream * pStream, uint8_t * pDictionary, uint32_t nDictLength) {
-    if (!pStream) {
-      return -2;
-    }
-
-    inflate_state* pState = (inflate_state*)pStream->state;
-    if (!pState) {
-      return -2;
-    }
-    if (pState->wrap && pState->mode != 10) {
-      return -2;
-    }
-    if (pState->mode == 10) {
-      uint32_t nAdler;
-      nAdler = adler32::ZLIB_Adler32(0, nullptr, 0);
-      nAdler = adler32::ZLIB_Adler32(nAdler, pDictionary, nDictLength);
-      if (nAdler != pState->check) {
-        return -3;
+    inflate_state* pState;
+    if (pStream && (pState = (inflate_state*)pStream->state)) {
+      if (pState->wrap && pState->mode != 10) {
+        return -2;
       }
+      if (pState->mode == 10) {
+        uint32_t nAdler;
+        nAdler = adler32::ZLIB_Adler32(0, nullptr, 0);
+        nAdler = adler32::ZLIB_Adler32(nAdler, pDictionary, nDictLength);
+        if (nAdler != pState->check) {
+          return -3;
+        }
+      }
+
+      BOOL nWindowRet = updatewindow(nDictLength, pDictionary + nDictLength, pStream);
+      if (nWindowRet) {
+        pState->mode = 0x1e;
+        return -4;
+      }
+
+      pState->havedict = 1;
+      return 0;
     }
 
-    BOOL nWindowRet = updatewindow(nDictLength, pDictionary + nDictLength, pStream);
-    if (nWindowRet) {
-      pState->mode = 0x1e;
-      return -4;
-    }
-
-    pState->havedict = 1;
-    return 0;
+    return -2;
 }
 
 int __fastcall inflateGetHeader(z_stream * pStream, gz_header * pHead) {

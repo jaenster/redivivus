@@ -25,7 +25,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "333bde88",
+      "dh": "42fd3576",
       "paramStorage": [
         [
           "bUnlinkOnly",
@@ -53,7 +53,7 @@
         "TSLink<MappingEntryNode> *",
         "uint32_t"
       ],
-      "dh": "dd896e9e",
+      "dh": "a60d83e0",
       "paramStorage": [
         [
           "pThis",
@@ -79,7 +79,7 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "int32_t"
       ],
-      "dh": "e690f8c0",
+      "dh": "20496901",
       "paramStorage": [
         [
           "nLinkOffset",
@@ -108,7 +108,7 @@
         "TSLink<MappingEntryNode>",
         "intptr_t"
       ],
-      "dh": "376eb03d",
+      "dh": "0372c9cb",
       "paramStorage": [
         [
           "pNode",
@@ -134,7 +134,7 @@
         "TSLink<MappingEntryNode>",
         "uint32_t"
       ],
-      "dh": "eebf4b63",
+      "dh": "04d79311",
       "paramStorage": [
         [
           "pThis",
@@ -185,7 +185,7 @@
         "TSLink<MappingEntryNode> *",
         "intptr_t"
       ],
-      "dh": "3ed19055"
+      "dh": "2419b645"
     },
     {
       "name": "Ptr",
@@ -243,7 +243,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "e12adfe6",
+      "dh": "0b5ec94b",
       "paramStorage": [
         [
           "dwFlags",
@@ -267,7 +267,7 @@
       "usedTypes": [
         "TSExplicitList<MappingEntryNode, -572662307>"
       ],
-      "dh": "0896d70e"
+      "dh": "fc6ac5b3"
     },
     {
       "name": "Ptr",
@@ -320,7 +320,7 @@
         "TSLink<MappingEntryNode> *",
         "uint32_t"
       ],
-      "dh": "683d5fda",
+      "dh": "ca2bd218",
       "paramStorage": [
         [
           "pThis",
@@ -352,7 +352,7 @@
         "TSLink<MappingEntryNode> *",
         "uint32_t"
       ],
-      "dh": "68271ca1",
+      "dh": "af912780",
       "paramStorage": [
         [
           "nAlloc",
@@ -382,7 +382,7 @@
         "TSLink<MappingEntryNode> *",
         "uint32_t"
       ],
-      "dh": "25bb0342"
+      "dh": "23a43922"
     },
     {
       "name": "Reserve",
@@ -404,7 +404,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7b22dca2",
+      "dh": "8ce32ad4",
       "paramStorage": [
         [
           "nCount",
@@ -456,7 +456,7 @@
         "TSLink<MappingEntryNode> *",
         "uint32_t"
       ],
-      "dh": "045e2c3c",
+      "dh": "57b72699",
       "paramStorage": [
         [
           "nCount",
@@ -509,7 +509,7 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "uint32_t"
       ],
-      "dh": "027e242b",
+      "dh": "18ab029a",
       "paramStorage": [
         [
           "nLocation",
@@ -579,7 +579,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "78e78b31",
+      "dh": "2719afa9",
       "paramStorage": [
         [
           "pThis",
@@ -618,7 +618,7 @@
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
         "uint32_t"
       ],
-      "dh": "6a5e1186",
+      "dh": "e2ce81d7",
       "paramStorage": [
         [
           "dwFlags",
@@ -643,7 +643,7 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>"
       ],
-      "dh": "dc83b468"
+      "dh": "31d0425a"
     },
     {
       "name": "Destroy",
@@ -663,7 +663,7 @@
       "usedTypes": [
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>"
       ],
-      "dh": "1ed2bc65",
+      "dh": "7f7fd55f",
       "paramStorage": [
         [
           "pThis",
@@ -720,7 +720,7 @@
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
         "uint32_t"
       ],
-      "dh": "cd2ea751",
+      "dh": "983d9f2c",
       "paramStorage": [
         [
           "pThis",
@@ -755,7 +755,7 @@
         "intptr_t",
         "uint32_t"
       ],
-      "dh": "15404a99"
+      "dh": "4686aac7"
     },
     {
       "name": "Constructor",
@@ -777,7 +777,7 @@
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "uint32_t"
       ],
-      "dh": "68eb03fe"
+      "dh": "57ec1dcd"
     },
     {
       "name": "MonitorFullness",
@@ -799,7 +799,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dc4ef2c4",
+      "dh": "e0e721c2",
       "paramStorage": [
         [
           "nSlot",

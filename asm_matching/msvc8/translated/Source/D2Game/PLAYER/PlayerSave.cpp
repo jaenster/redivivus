@@ -78,9 +78,9 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/Fog/Src/LogManager.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Client/UI/Automap.h"
 #include "Source/D2Client/UNIT/Item.h"
@@ -1550,14 +1550,15 @@ int __fastcall _oldSaveGameLoadingPart6(::SGAMEDATA * pGame, D2ClientStrc * pCli
     }
 
     uint32_t nClassId = GAME::Clients::GetPlayerClassId(pClient);
+    const uint8_t* pSkillLevels = pSkillSection + 2;
     int nSkillIndex = 0;
     int32_t nClassSkillCount = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
     if (nClassSkillCount > 0) {
       eD2Skills eSkill;
       do {
         eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, nSkillIndex);
-        if (pSkillSection[nSkillIndex + 2]) {
-          SKILLS::SkillsServer::SetSkill(pUnit, eSkill, (uint32_t)pSkillSection[nSkillIndex + 2], 1);
+        if (pSkillLevels[nSkillIndex]) {
+          SKILLS::SkillsServer::SetSkill(pUnit, eSkill, (uint32_t)pSkillLevels[nSkillIndex], 1);
         }
 
         nSkillIndex++;
@@ -1566,9 +1567,9 @@ int __fastcall _oldSaveGameLoadingPart6(::SGAMEDATA * pGame, D2ClientStrc * pCli
     }
 
     GAME::SCmd::NET_D2GS_SERVER_Send_0x94_SETALLSKILLS(pClient, pUnit);
-    nClassSkillCount = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
+    const uint32_t nSectionBytes = D2Common::Skills::AmountOfSkillsByClassId(nClassId) + 2;
     SKILLS::SkillsServer::SKILLS_UpdatePassivesAndPets(pUnit);
-    *pnBytesConsumed = nClassSkillCount + 2;
+    *pnBytesConsumed = nSectionBytes;
     return 0;
 }
 

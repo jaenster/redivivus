@@ -434,7 +434,7 @@
         "POINT",
         "tagRECT"
       ],
-      "dh": "1f57a383",
+      "dh": "56e3bf86",
       "paramStorage": [
         [
           "pPoint",
@@ -2808,7 +2808,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "2a84d0e7"
+      "dh": "27d65fd6"
     },
     {
       "name": "NPCMENU_HandleTradePacket",

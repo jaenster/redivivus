@@ -159,11 +159,11 @@
         "exit"
       ],
       "usedTypes": [
+        "GlSubtileCacheNodeStrc",
         "GlSubtileCacheStrc",
-        "int32_t",
-        "uint8_t"
+        "int32_t"
       ],
-      "dh": "9812d1bc",
+      "dh": "69dec899",
       "paramStorage": [
         [
           "pCache",

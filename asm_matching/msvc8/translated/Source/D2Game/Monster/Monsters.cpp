@@ -73,9 +73,9 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2CMP/Draw.h"
 #include "Source/D2CMP/SRC/Codec.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2CMP/SRC/Tilecmp.h"
 #include "Source/D2Client/UI/SkillDesc.h"
 #include "Source/D2Client/UNIT/Missile.h"
 #include "Source/D2Client/UNIT/Monster.h"
@@ -1226,11 +1226,7 @@ static void __stdcall MONSTER_SpawnMinionsForBoss(D2RoomCoordListStrc * pCoordLi
 
     uint32_t nCountRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nMinionCountMax - nMinionCountMin + 1);
     nMinionCountMin = nCountRoll + nMinionCountMin;
-    if (nMinionCountMin <= 0) {
-      return;
-    }
-
-    do {
+    for (int32_t i = 0; i < nMinionCountMin; i++) {
       D2UnitStrc* pMinion = !pCoordList ? Monster::Create::SpawnMonsterAtUnit(pGame, pUnit, nMinion1ClassId, eD2MonsterAnimMode_ns::Neutral, 3, 0x40) : Monster::Create::SpawnMonsterAtCoordList(pGame, pCoordList, pUnit, nMinion1ClassId, eD2MonsterAnimMode_ns::Neutral, 3, 0x40);
       if (pMinion) {
         MONSTER_TransferEnchantments(pMinion, 0, pUnit);
@@ -1245,9 +1241,7 @@ static void __stdcall MONSTER_SpawnMinionsForBoss(D2RoomCoordListStrc * pCoordLi
           *pMonType |= MONTYPE_MINION;
         }
       }
-
-      nMinionCountMin--;
-    } while (nMinionCountMin);
+    }
 }
 
 void __fastcall UMOD_DispatchInitFunction(D2UnitStrc * pUnit, int32_t nUModId, BOOL bApply) {
@@ -2951,10 +2945,14 @@ D2UnitStrc * __fastcall MONSTER_SpawnWithUniqueModifiers(::SGAMEDATA * pGame, D2
         }
       }
     }
-    if (pSpawnedUnit->eUnitType == UNIT_MONSTER && pSpawnedUnit->pUnitData.pUnitDataMonster) {
-      pUModList = pSpawnedUnit->pUnitData.pUnitDataMonster->MonUModList;
+    D2UnitDataMonsterStrc* pMonsterData = nullptr;
+    if (pSpawnedUnit->eUnitType == UNIT_MONSTER) {
+      pMonsterData = pSpawnedUnit->pUnitData.pUnitDataMonster;
+    }
+    if (!pMonsterData) {
+      pUModList = nullptr;
     } else {
-      pUModList = 0;
+      pUModList = pMonsterData->MonUModList;
     }
 
     *pUModList = *pUModListSrc;

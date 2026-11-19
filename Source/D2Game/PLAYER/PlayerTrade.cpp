@@ -2023,7 +2023,8 @@ void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, D2UnitStrc
 
     bUidSet = SetUidOther((int*)&nInteractGUID, nItemGUID, pUnit);
     if (bUidSet) {
-      bHasInteract = ITEMS::ItemMode::SERVER_TakeItemToCursor(pGame, pOtherUnit, nInteractGUID, (uint32_t*)&pItem, 1, 1, nullptr, 1);
+      uint32_t nTransferredItem;
+      bHasInteract = ITEMS::ItemMode::SERVER_TakeItemToCursor(pGame, pOtherUnit, nInteractGUID, &nTransferredItem, 1, 1, nullptr, 1);
       if (bHasInteract) {
         pDataSelf = D2Common::Units::GetPlayerData(pUnit);
         if (pDataSelf && pDataSelf->pTradeCopyInventory) {
@@ -2033,9 +2034,9 @@ void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     pDataSelf = D2Common::Units::GetPlayerData(pUnit);
-    pItem = (D2UnitStrc*)D2Common::Units::GetPlayerData(pOtherUnit);
+    D2UnitDataPlayerStrc* pOtherPlayerData = D2Common::Units::GetPlayerData(pOtherUnit);
     pDVar2 = pDataSelf->pTradeCopyInventory;
-    pTradeCopyOther = ((D2UnitDataPlayerStrc*)pItem)->pTradeCopyInventory;
+    pTradeCopyOther = pOtherPlayerData->pTradeCopyInventory;
     dwTick = GetTickCount();
     pDVar2->dwAcceptLockEndTick = dwTick + 10000;
     pTradeCopyOther->dwAcceptLockEndTick = dwTick + 10000;
@@ -2043,7 +2044,7 @@ void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, D2UnitStrc
     GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 0xe);
     pClient = UNIT::SUnit::SUNIT_GetClient(pOtherUnit, ".\\PLAYER\\PlrTrade.cpp", 0xcfa);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 0xe);
-    if (!(pDataSelf->dwTradeState == 4 || pItem->pAnimData == (D2AnimDataRecordStrc*)0x4)) {
+    if (!(pDataSelf->dwTradeState == 4 || pOtherPlayerData->dwTradeState == 4)) {
       return;
     }
 
@@ -2051,7 +2052,7 @@ void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, D2UnitStrc
     GAME::SCmd::NET_D2GS_SERVER_Send_0x79_TRADEGOLD(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0xd00), 0, '\x01');
     GAME::SCmd::NET_D2GS_SERVER_Send_0x79_TRADEGOLD(UNIT::SUnit::SUNIT_GetClient(pOtherUnit, ".\\PLAYER\\PlrTrade.cpp", 0xd01), 0, '\0');
     GAME::SCmd::NET_D2GS_SERVER_Send_0x79_TRADEGOLD(UNIT::SUnit::SUNIT_GetClient(pOtherUnit, ".\\PLAYER\\PlrTrade.cpp", 0xd02), 0, '\x01');
-    TRADE_SendTradeCompleteToPlayers(pUnit, pOtherUnit, pDataSelf, (D2UnitDataPlayerStrc*)pItem);
+    TRADE_SendTradeCompleteToPlayers(pUnit, pOtherUnit, pDataSelf, pOtherPlayerData);
     return;
 }
 

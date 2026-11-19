@@ -147,10 +147,10 @@ static int GLFLOOR_AllocateNode(GlFloorCacheStrc * pCache) {
       return 0;
     }
 
-    GlFloorCacheNodeStrc* pGVar1 = pCache->pFreeHead;
-    if (pGVar1) {
+    GlFloorCacheNodeStrc* pNode = pCache->pFreeHead;
+    if (pNode) {
       GlFloorCacheNodeStrc* pNextFree;
-      pNextFree = pGVar1->pNext;
+      pNextFree = pNode->pNext;
       pCache->pFreeHead = pNextFree;
       if (pNextFree) {
         pNextFree->pPrev = 0;
@@ -158,23 +158,26 @@ static int GLFLOOR_AllocateNode(GlFloorCacheStrc * pCache) {
         pCache->pFreeTail = 0;
       }
 
-      pGVar1->pNext = 0;
-      pGVar1->pPrev = 0;
+      pNode->pNext = 0;
+      pNode->pPrev = 0;
       if (!pCache->pActiveHead) {
         pCache->nUsedCount++;
-        pCache->pActiveHead = pGVar1;
-      } else {
-        pCache->pActiveTail->pNext = pGVar1;
-        pGVar1->pPrev = pCache->pActiveTail;
-        pCache->nUsedCount++;
+        pCache->pActiveHead = pNode;
+        pCache->pActiveTail = pNode;
+        return pNode->nIndex + 1;
       }
-
-      pCache->pActiveTail = pGVar1;
-      return pGVar1->nIndex + 1;
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9f);
-    exit(-1);
+    if (!pNode) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9f);
+      exit(-1);
+    }
+
+    pCache->pActiveTail->pNext = pNode;
+    pNode->pPrev = pCache->pActiveTail;
+    pCache->nUsedCount++;
+    pCache->pActiveTail = pNode;
+    return pNode->nIndex + 1;
 }
 
 // Promotes a floor cache node to most-recently-used position (active list tail).

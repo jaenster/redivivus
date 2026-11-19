@@ -3995,19 +3995,16 @@ int __stdcall NPCMENU_ShowIntroduceDialog() {
 }
 
 static int NPCMENU_CalculateDialogPosition(POINT * pPoint) {
-    int nViewOriginX;
-    int nViewOriginY;
-    int nViewWidth;
-    int nViewHeight;
-    int nViewCenterY;
-    int nViewCenterX;
+    enum { LEFT, TOP, RIGHT, BOTTOM };
+    int aViewBounds[4];
+    enum { X, Y };
+    int aCenter[2];
     if (!_Interaction::bInteractingWithNpc) {
       return 0;
     }
 
     D2UnitStrc* pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     if (pNpcUnit) {
-      tagRECT rcViewport;
       if (_Interaction::bInteractingWithNpc) {
         pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       } else {
@@ -4015,11 +4012,14 @@ static int NPCMENU_CalculateDialogPosition(POINT * pPoint) {
       }
 
       D2Common::Units::GetScreenCoords(pNpcUnit, pPoint);
-      GAME::View::VIEW_GetViewRect(GAME::Game::D2GameView, &nViewOriginX, &nViewOriginY, &nViewWidth, &nViewHeight);
-      GAME::View::GetCenterXY(GAME::Game::D2GameView, &nViewCenterY, &nViewCenterX);
-      /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rcViewport, nViewCenterY, nViewCenterX, nViewWidth - nViewOriginX + nViewCenterY, nViewHeight - nViewOriginY + nViewCenterX);
+      GAME::View::VIEW_GetViewRect(GAME::Game::D2GameView, &aViewBounds[LEFT], &aViewBounds[TOP], &aViewBounds[RIGHT], &aViewBounds[BOTTOM]);
+      GAME::View::GetCenterXY(GAME::Game::D2GameView, &aCenter[X], &aCenter[Y]);
+      tagRECT rcViewport;
+      SetRect(&rcViewport, aCenter[X], aCenter[Y],
+              aCenter[X] + aViewBounds[RIGHT] - aViewBounds[LEFT],
+              aCenter[Y] + aViewBounds[BOTTOM] - aViewBounds[TOP]);
+      pPoint->y += -150 - rcViewport.top;
       pPoint->x -= rcViewport.left;
-      pPoint->y += -0x96 - rcViewport.top;
       if (pPoint->y < 0x14) {
         pPoint->y = 0x14;
       }
@@ -7198,14 +7198,12 @@ static BOOL __stdcall NPCMENU_ConfigureMenuOption(BOOL bAddTradeOption, int32_t 
           nOptionsCount--;
           pwStringIdSlot = (uint16_t*)&NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionStringId[nOptionsCount + 1];
           pdwCallbackSlot = (uint32_t*)&NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionCallback[nOptionsCount + 1];
-          nOptionIdx = 1;
-          do {
+          for (nOptionIdx = 0; nOptionIdx < 1; nOptionIdx++) {
             *pdwCallbackSlot = pdwCallbackSlot[-1];
             *pwStringIdSlot = pwStringIdSlot[-1];
             pdwCallbackSlot--;
             pwStringIdSlot--;
-            nOptionIdx--;
-          } while (nOptionIdx);
+          }
 
           NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionsCount++;
           NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionCallback[nOptionsCount] = NPCMENU_RequestMercResurrect;
