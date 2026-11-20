@@ -192,36 +192,51 @@ D2SoundsTxt * __fastcall TXT_sounds_GetLineBySoundId(int32_t nSoundId) {
 }
 
 int __fastcall SOUNDHDR_GetSoundField0x60(int32_t nSoundId) {
-    if (!pTxtSounds) {
+    D2SoundsTxt* pSound = pTxtSounds;
+    if (!pSound) {
       return 0;
     }
-    if (nSoundId >= 0 && nSoundId < nTxtSoundsSize) {
-      return pTxtSounds[nSoundId].nGroupStartIndex;
-    }
 
-    return *(volatile uint8_t*)0x60;
+    D2SoundsTxt* pRow;
+    if (nSoundId >= 0 && nSoundId < nTxtSoundsSize) {
+      pRow = nSoundId + pSound;
+    } else {
+      pRow = nullptr;
+    }
+    // An invalid sound ID selects a null row in the original.
+    return pRow->nGroupStartIndex;
 }
 
 uint8_t __fastcall SOUNDHDR_GetSoundGroupSize(int32_t nSoundId) {
-    if (!pTxtSounds) {
-      return '\0';
-    }
-    if (nSoundId >= 0 && nSoundId < nTxtSoundsSize) {
-      return pTxtSounds[nSoundId].Group_Size;
+    D2SoundsTxt* pSound = pTxtSounds;
+    if (!pSound) {
+      return 0;
     }
 
-    return *(volatile uint8_t*)0x3d;
+    D2SoundsTxt* pRow;
+    if (nSoundId >= 0 && nSoundId < nTxtSoundsSize) {
+      pRow = nSoundId + pSound;
+    } else {
+      pRow = nullptr;
+    }
+    // An invalid sound ID selects a null row in the original.
+    return pRow->Group_Size;
 }
 
 uint32_t __fastcall SOUNDHDR_GetSoundLoopFlag(int32_t nSoundId) {
-    if (!pTxtSounds) {
+    D2SoundsTxt* pSound = pTxtSounds;
+    if (!pSound) {
       return 0;
     }
-    if (nSoundId >= 0 && nSoundId < nTxtSoundsSize) {
-      return (uint32_t)pTxtSounds[nSoundId].Loop;
-    }
 
-    return (uint32_t)*(volatile uint8_t*)0x3e;
+    D2SoundsTxt* pRow;
+    if (nSoundId >= 0 && nSoundId < nTxtSoundsSize) {
+      pRow = nSoundId + pSound;
+    } else {
+      pRow = nullptr;
+    }
+    // An invalid sound ID selects a null row in the original.
+    return pRow->Loop;
 }
 
 D2SoundEnvironTxt * __fastcall GetSoundEnvironLine(int32_t nSoundEnviron) {

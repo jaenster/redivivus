@@ -503,20 +503,19 @@ BOOL __fastcall Q19_CheckPlayerHasKhalimsHeart(::SGAMEDATA * pGame, D2UnitStrc *
 // Operate handler (OperateFn57) for a Khalim's Will relic super-chest/portal. On activation: spawns 0–4 seeded gold piles, sets dwDropItemCode to Khalim's Heart (0x20726871), counts players still missing the Heart via Q19_CheckPlayerHasKhalimsHeart, drops that many reward items, then rolls normal chest drops. No QuestRecord state transitions.
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pDroppedUnit;
-    D2ObjectOperateFnArg* pOperationArg;
+    int32_t nDropResult;
     BOOL nGoldPiles = QUESTS_OpenQuestChest(pOperation);
     if (!nGoldPiles) {
       return 0;
     }
 
     D2SeedStrc* pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-    int iHeartDropIdx = 0;
-    uint32_t seedNext = D2_SeedRoll(pControlSeed);
-    int iVar2 = seedNext % 5 + 5;
-    if (iVar2 > 0) {
+    const int32_t nGoldDropCount = D2_SeedRoll(pControlSeed) % 5 + 5;
+    if (nGoldDropCount > 0) {
+      int iVar2 = nGoldDropCount;
       do {
         Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-        iVar2--;
+        --iVar2;
       } while (iVar2);
     }
 
@@ -528,8 +527,9 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOpera
       pDVar1->nKhalimsEyeCount = 0;
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsHeart);
       if (pDVar1->nKhalimsEyeCount > 0) {
+        int iHeartDropIdx = 0;
         do {
-          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, (int32_t*)&pOperationArg, nullptr, -1, 1);
+          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, &nDropResult, nullptr, -1, 1);
           if (pDroppedUnit) {
             pDVar1->nKhalimsBrainCount++;
             pDVar1->bKhalimsBrainDropped = 1;
@@ -547,20 +547,19 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOpera
 // Operate handler (OperateFn58) for a Khalim's Will relic super-chest/portal. Same flow as Drop1 but drops Khalim's Eye (0x20796571), counting eligible players via Q19_CheckPlayerHasKhalimsEye. No QuestRecord state transitions.
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pDroppedUnit;
-    D2ObjectOperateFnArg* pOperationArg;
+    int32_t nDropResult;
     BOOL nGoldPiles = QUESTS_OpenQuestChest(pOperation);
     if (!nGoldPiles) {
       return 0;
     }
 
     D2SeedStrc* pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-    int iEyeDropIdx = 0;
-    uint32_t seedNext = D2_SeedRoll(pControlSeed);
-    int iVar2 = seedNext % 5 + 5;
-    if (iVar2 > 0) {
+    const int32_t nGoldDropCount = D2_SeedRoll(pControlSeed) % 5 + 5;
+    if (nGoldDropCount > 0) {
+      int iVar2 = nGoldDropCount;
       do {
         Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-        iVar2--;
+        --iVar2;
       } while (iVar2);
     }
 
@@ -572,8 +571,9 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOpera
       pDVar1->nKhalimsEyeCount = 0;
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsEye);
       if (pDVar1->nKhalimsEyeCount > 0) {
+        int iEyeDropIdx = 0;
         do {
-          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, (int32_t*)&pOperationArg, nullptr, -1, 1);
+          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, &nDropResult, nullptr, -1, 1);
           if (pDroppedUnit) {
             pDVar1->nKhalimsFlailCount++;
             pDVar1->bKhalimsFlailDropped = 1;
@@ -591,20 +591,19 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOpera
 // Operate handler (OperateFn59) for a Khalim's Will relic super-chest/portal. Same flow as Drop1 but drops Khalim's Brain (0x20726271), counting eligible players via Q19_CheckPlayerHasKhalimsBrain. No QuestRecord state transitions.
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop3(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pDroppedUnit;
-    D2ObjectOperateFnArg* pOperationArg;
+    int32_t nDropResult;
     BOOL nGoldPiles = QUESTS_OpenQuestChest(pOperation);
     if (!nGoldPiles) {
       return 0;
     }
 
     D2SeedStrc* pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-    int iBrainDropIdx = 0;
-    uint32_t seedNext = D2_SeedRoll(pControlSeed);
-    int iVar2 = seedNext % 5 + 5;
-    if (iVar2 > 0) {
+    const int32_t nGoldDropCount = D2_SeedRoll(pControlSeed) % 5 + 5;
+    if (nGoldDropCount > 0) {
+      int iVar2 = nGoldDropCount;
       do {
         Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-        iVar2--;
+        --iVar2;
       } while (iVar2);
     }
 
@@ -616,8 +615,9 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop3(D2ObjectOperateFnArg * pOpera
       pDVar1->nKhalimsEyeCount = 0;
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsBrain);
       if (pDVar1->nKhalimsEyeCount > 0) {
+        int iBrainDropIdx = 0;
         do {
-          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, (int32_t*)&pOperationArg, nullptr, -1, 1);
+          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, &nDropResult, nullptr, -1, 1);
           if (pDroppedUnit) {
             pDVar1->nKhalimsHeartCount++;
             pDVar1->bKhalimsHeartDropped = 1;

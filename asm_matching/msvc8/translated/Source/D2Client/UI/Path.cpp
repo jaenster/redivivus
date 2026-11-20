@@ -37,18 +37,17 @@ uint32_t __stdcall DRAW_GetTypeOfBorder() {
 }
 
 void __fastcall TypeOfUiOverlayOverWorld(uint32_t eBorderType) {
-    if (eBorderType <= 3) {
-      switch (eBorderType) {
-        case 1:
-          MouseYRelatedB = -(ui::ScreenSizeX / 4);
+    switch (eBorderType) {
+      case 0:
+      case 3:
+        MouseYRelatedB = 0;
         break;
-        case 2:
-          MouseYRelatedB = ui::ScreenSizeX / 4;
+      case 1:
+        MouseYRelatedB = -(ui::ScreenSizeX / 4);
         break;
-        default:
-          MouseYRelatedB = 0;
+      case 2:
+        MouseYRelatedB = ui::ScreenSizeX / 4;
         break;
-      }
     }
 
     gnBorderType = eBorderType;
@@ -144,10 +143,10 @@ void __fastcall DRAW_DrawRoomUnits(D2RoomStrc * pRoom) {
 
 void __fastcall DEBUG_DrawRoomBoundsRect(int32_t nX, int32_t nY, BYTE bColor) {
     RECT rect;
-    rect.top = nY - MouseYOffset;
     rect.left = nX - MouseXOffset - 0x10;
-    rect.bottom = rect.top + 0x10;
+    rect.top = nY - MouseYOffset;
     rect.right = nX - MouseXOffset + 0x10;
+    rect.bottom = nY - MouseYOffset + 0x10;
     D2gfx::D2GFX::D2GFX_DrawRect(&rect, bColor);
 }
 

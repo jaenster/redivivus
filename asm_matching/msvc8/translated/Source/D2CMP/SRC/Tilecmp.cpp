@@ -171,48 +171,33 @@ void __stdcall TILECMP_AddTileToSet(D2TileCmpTileSetListStrc * pTileSetList, uin
 }
 
 static BOOL __stdcall TILECMP_ValidateTilePixels(uint8_t * pTilePixels, int32_t nPitch, D2TileCmpTileSetStrc * pTile) {
-    int iCol;
-    int iRow;
-    uint32_t dwPixel;
-    if (pTile->field_0x51 & 2) {
-      iRow = 0;
-      do {
-        iCol = 0;
-        do {
-          dwPixel = *(uint32_t*)pTilePixels;
-          pTilePixels = (uint8_t*)((char*)pTilePixels + 3);
-          if ((dwPixel & 0xffffff) != (uint32_t)((uint32_t)pTile->dwTransparentColor & 0xffffffu)) {
+    uint8_t nTileFlags = pTile->field_0x51;
+    if (nTileFlags & 2) {
+      const uint8_t* pKey = reinterpret_cast<const uint8_t*>(&pTile->dwTransparentColor);
+      const int nRgbRemainder = nPitch - 0x60;
+      const uint32_t nKey = ((static_cast<uint32_t>(pKey[2]) << 8) + pKey[1]) * 256 + pKey[0];
+      for (int nRow = 0; nRow < 32; ++nRow) {
+        for (int nCol = 0; nCol < 32; ++nCol) {
+          const uint32_t nPixel = *reinterpret_cast<const uint32_t*>(pTilePixels) & 0x00ffffffu;
+          pTilePixels += 3;
+          if (nPixel != nKey) {
             return 0;
           }
-
-          iCol++;
-        } while (iCol < 0x20);
-
-        iRow++;
-        pTilePixels = (uint8_t*)((char*)pTilePixels + (nPitch - 0x60));
-      } while (iRow < 0x20);
-    }
-    if (!(pTile->field_0x51 & 1)) {
-      return 1;
-    }
-
-    iRow = 0;
-    do {
-      iCol = 0;
-      do {
-        dwPixel = *(uint32_t*)pTilePixels;
-        pTilePixels = (uint8_t*)((char*)pTilePixels + 1);
-        if ((char)dwPixel != '\0') {
-          return 0;
         }
-
-        iCol++;
-      } while (iCol < 0x20);
-
-      iRow++;
-      pTilePixels = (uint8_t*)((char*)pTilePixels + (nPitch - 0x20));
-    } while (iRow < 0x20);
-
+        pTilePixels += nRgbRemainder;
+      }
+    }
+    if (nTileFlags & 1) {
+      const int nIndexRemainder = nPitch - 0x20;
+      for (int nRow = 0; nRow < 32; ++nRow) {
+        for (int nCol = 0; nCol < 32; ++nCol) {
+          if (*pTilePixels++) {
+            return 0;
+          }
+        }
+        pTilePixels += nIndexRemainder;
+      }
+    }
     return 1;
 }
 

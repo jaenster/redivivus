@@ -115,29 +115,25 @@ void __fastcall FILETOOLS_WriteOneStringToFile(::Report * pReport, char * szStri
 }
 
 DWORD __fastcall GetParentProcessId(int32_t nProcessId) {
+    DWORD dwParentProcessId = 0;
     PROCESSENTRY32 procEntry;
-    HANDLE hSnapshot;
-    hSnapshot = (HANDLE)CreateToolhelp32Snapshot(2, 0);
-    procEntry.dwSize = 0x128;
-    int nParentPid;
-    nParentPid = Process32First(hSnapshot, &procEntry);
-    while (nParentPid) {
+    HANDLE hSnapshot = CreateToolhelp32Snapshot(2, 0);
+    procEntry.dwSize = sizeof(procEntry);
+    BOOL bHasEntry = Process32First(hSnapshot, &procEntry);
+    while (bHasEntry) {
       if (procEntry.th32ProcessID == nProcessId) {
-        goto found_process;
+        break;
       }
 
-      nParentPid = Process32Next(hSnapshot, &procEntry);
+      bHasEntry = Process32Next(hSnapshot, &procEntry);
     }
 
-    DWORD DVar1;
-    DVar1 = 0;
     if (procEntry.th32ProcessID == nProcessId) {
-      found_process:
-      DVar1 = procEntry.th32ParentProcessID;
+      dwParentProcessId = procEntry.th32ParentProcessID;
     }
 
     /* HANDLE hObject for CloseHandle */ CloseHandle(hSnapshot);
-    return DVar1;
+    return dwParentProcessId;
 }
 
 uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, DWORD nBufferSize) {

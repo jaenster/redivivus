@@ -633,15 +633,14 @@ void __fastcall Q28_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     }
 
     D2QuestDataA4Q3Strc* pA4Q3Data = pQuestData->pQuestSpecificData.pA4Q3;
-    int nPrevStateFlag = 1;
     if (pA4Q3Data->bForgeQuestAccepted != 1) {
       return;
     }
     if (pA4Q3Data->bGotHammer) {
-      nPrevStateFlag = 4;
+      QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q28_PlayerNotifyCompletedForge, 1);
+    } else {
+      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q28_PlayerNotifyCompletedForge, 1);
     }
-
-    QUEST_SetStateAndBroadcast(pQuestData, nPrevStateFlag, nullptr, (::fpExecuteOnUnitFunction)Q28_PlayerNotifyCompletedForge, 1);
     pQuestData->nQuestPacketFlags = '\0';
     pA4Q3Data->bForgeQuestAccepted = 0;
     ::SGAMEDATA* pGame = pQuestData->pGame;

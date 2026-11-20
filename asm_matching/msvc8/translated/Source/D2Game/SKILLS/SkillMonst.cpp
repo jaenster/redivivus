@@ -1329,7 +1329,7 @@ int __fastcall SKILLMONST_ResurrectUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
 BOOL __fastcall Skills_SrvDoFunc_097_ResurrectDeadMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2RoomStrc* pRoom;
     eD2CollisionShapeType nCollisionWidth;
-    uint16_t wCollideFlags;
+    int32_t nCollideFlags;
     eD2MonsterAnimMode eReviveMode;
     D2ModeChangeStrc sMonKillData;
     int32_t nTargetX;
@@ -1368,16 +1368,17 @@ BOOL __fastcall Skills_SrvDoFunc_097_ResurrectDeadMonster(::SGAMEDATA * pGame, D
       }
 
       nCollisionWidth = D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pTarget);
-      wCollideFlags = D2Common::Collision::CheckCollision_BlockPlayer_Type(pRoom, nTargetX, nTargetY, nCollisionWidth, eUnitType != UNIT_PLAYER ? 0x3c01 : 0x1c09);
-      if (wCollideFlags) {
+      nCollideFlags = D2Common::Collision::CheckCollision_BlockPlayer_Type(pRoom, nTargetX, nTargetY, nCollisionWidth, eUnitType != UNIT_PLAYER ? 0x3c01 : 0x1c09);
+      if (nCollideFlags) {
         return 0;
       }
 
       D2Common::PATH::DynamicPath::SetTarget(pCasterSaved->pPath.pDynamicPath, pTarget);
       pGameForResurrect = pGameSaved;
       SKILLMONST_ResurrectUnit(pGameSaved, pTarget);
-      if (pTarget->eUnitType == UNIT_MONSTER) {
-        eReviveMode = Monster::AI::MONSTERAI_GetResurrectMode(pTarget, 1);
+      const eD2UnitType eResurrectedType = pTarget->eUnitType;
+      if (eResurrectedType == UNIT_MONSTER) {
+        eReviveMode = Monster::AI::MONSTERAI_GetResurrectMode(pTarget, static_cast<int32_t>(eResurrectedType));
         Monster::MonsterMode::MONMODE_InitModeChange(pTarget, eReviveMode, &sMonKillData);
         Monster::AI::MONSTERAI_GetResurrectMode(pTarget, 1);
         Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGameForResurrect, &sMonKillData, (uint32_t)(eReviveMode != eD2MonsterAnimMode_ns::Sequence));
@@ -1851,10 +1852,11 @@ BOOL __fastcall Skills_SrvDoFunc_104_SpawnPredefinedAtTarget(::SGAMEDATA * pGame
       }
 
       nObjectGUID = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
-      pUnit_00 = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, nObjectGUID);
-      if (!pUnit_00) {
-        return 0;
+      D2UnitStrc* pFallback = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, nObjectGUID);
+      if (!pFallback) {
+        return FALSE;
       }
+      pUnit_00 = pFallback;
     }
 
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit_00);
@@ -1862,13 +1864,11 @@ BOOL __fastcall Skills_SrvDoFunc_104_SpawnPredefinedAtTarget(::SGAMEDATA * pGame
       return 0;
     }
 
-    BOOL bIsTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    if (bIsTown) {
-      return 0;
+    if (!D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom)) {
+      Monster::Create::MONSTER_SpawnPredefinedAtUnit(pGame, D2Common::Units::UNITS_GetRoom(pUnit_00), 0, 0, pUnit_00, nMonClassId, 0);
+      return TRUE;
     }
-
-    Monster::Create::MONSTER_SpawnPredefinedAtUnit(pGame, D2Common::Units::UNITS_GetRoom(pUnit_00), 0, 0, pUnit_00, nMonClassId, (uint16_t)bIsTown);
-    return 1;
+    return FALSE;
 }
 
 // Server-side skill DoFunc #105: fires a parallel volley/line of missiles (the server counterpart of the monster line-missile-spread). Bounds-checks eSkill and its srvmissilea against the data tables, sets UNITFLAG_SKSRVDOFUNC on pUnit, and resolves the target/cursor position (SKILLS_GetTargetOrCursorPos). Computes the cast direction into 8-way step deltas, uses skill calc[0] as the missile count N (D2GetSkillCalc), then spawns N missiles spread along a line perpendicular to the aim, calling CreatingMissile per shot with a D2SkillArgStrc (flags=3, owner=pUnit, per-step x/y, toHit=nSkillLvl). Returns TRUE if launched, FALSE on bad skill/missile id or no target/zero direction. __fastcall(pGame,pUnit,eSkill,nSkillLvl).

@@ -648,7 +648,7 @@ BOOL __fastcall SOUND_IsChannelAvailable(D2SoundChannelStrc * pChanA, D2SoundCha
       if (pChanA->fPanResult < pChanB->fPanResult) {
         return 1;
       }
-      if (pChanB->fPanResult < pChanA->fPanResult) {
+      if (pChanA->fPanResult > pChanB->fPanResult) {
         return 0;
       }
     }
@@ -658,7 +658,7 @@ BOOL __fastcall SOUND_IsChannelAvailable(D2SoundChannelStrc * pChanA, D2SoundCha
 
     uint32_t nStartTick1 = pChanA->nScheduledTime;
     uint32_t nStartTick2 = pChanB->nScheduledTime;
-    if (nStartTick1 >= nStartTick2 && nStartTick1 != nStartTick2) {
+    if (nStartTick1 > nStartTick2) {
       return 1;
     }
     if (nStartTick1 < nStartTick2) {

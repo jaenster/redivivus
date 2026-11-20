@@ -423,40 +423,28 @@ uint32_t __stdcall ITEMMOD_RollMagicAffixLegacy(D2UnitStrc * pUnit, int32_t bSpa
 
 // Returns 1 if pUnit (an item) has any magic prefix or suffix whose affix group ID matches nGroupId, else 0. Iterates up to 3 prefix slots then up to 3 suffix slots, looking up each affix ID via TXT_magicaffixes_GetLine and comparing the group field. Used to gate skill behavior on item modifier groups.
 static BOOL HasSufixOrPrefix(int32_t nGroupId, D2UnitStrc * pUnit) {
-    uint16_t wAffixId;
-    D2MagicAffixTxt* pAffixTxt;
-    int iSlot = 0;
-    do {
-      wAffixId = D2Common::ITEMS::Items::GetMagicPrefix(pUnit, iSlot);
-      pAffixTxt = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine((uint32_t)wAffixId);
+    for (int iSlot = 0; iSlot < 3; ++iSlot) {
+      D2MagicAffixTxt* pAffixTxt = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine(
+        static_cast<uint16_t>(D2Common::ITEMS::Items::GetMagicPrefix(pUnit, iSlot)));
       if (!pAffixTxt) {
         break;
       }
       if (pAffixTxt->group == nGroupId) {
         return 1;
       }
-
-      iSlot++;
-    } while (iSlot < 3);
-
-    iSlot = 0;
-    while (true) {
-      wAffixId = D2Common::ITEMS::Items::GetMagicSuffix(pUnit, iSlot);
-      pAffixTxt = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine((uint32_t)wAffixId);
+    }
+    for (int iSlot = 0; iSlot < 3; ++iSlot) {
+      D2MagicAffixTxt* pAffixTxt = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine(
+        D2Common::ITEMS::Items::GetMagicSuffix(pUnit, iSlot));
       if (!pAffixTxt) {
         return 0;
       }
       if (pAffixTxt->group == nGroupId) {
-        break;
-      }
-
-      iSlot++;
-      if (iSlot >= 3) {
-        return 0;
+        return 1;
       }
     }
 
-    return 1;
+    return 0;
 }
 
 // Rolls one magic prefix or suffix for an item using the magicprefix/magicsuffix txt tables. Advances the item's mod-seed RNG, computes an effective magic level (item level adjusted by the base item's magic_lvl), then walks the candidate affix range - filtering by suffix/prefix flag, level min/max, version, item type/class, quality, group exclusion and existing affixes - accumulating frequency weights into a scratch list, and picks one by weighted RNG. Returns the affix index + 1, or 0 on no roll.
@@ -1793,7 +1781,10 @@ BOOL __fastcall ITEMMOD_ApplyCrudeQualityClassic(D2UnitStrc * pUnit, D2ItemGenCo
 
     D2ItemsTxt* pItemsTxt;
     pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nClassId);
-    if (!pnLowQualCount || !pItemsTxt) {
+    if (!pnLowQualCount) {
+      return 0;
+    }
+    if (!pItemsTxt) {
       return 0;
     }
 
@@ -1805,7 +1796,7 @@ BOOL __fastcall ITEMMOD_ApplyCrudeQualityClassic(D2UnitStrc * pUnit, D2ItemGenCo
     bResult = 0;
     nClassId = D2Common::ITEMS::Items::ITEM_CheckIfItemHasDurability(pUnit);
     if (nClassId) {
-      uint32_t nDurabilityThird;
+      int32_t nDurabilityThird;
       if (!pUnit) {
         nClassId = -1;
       } else {
@@ -1814,13 +1805,14 @@ BOOL __fastcall ITEMMOD_ApplyCrudeQualityClassic(D2UnitStrc * pUnit, D2ItemGenCo
 
       pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nClassId);
       if (pItemsTxt) {
-        nDurabilityThird = (uint32_t)pItemsTxt->bDurability * 0x21 / 100;
-        if (!nDurabilityThird) {
+        nDurabilityThird = static_cast<int32_t>(pItemsTxt->bDurability) * 0x21 / 100;
+        if (nDurabilityThird < 1) {
           nDurabilityThird = 1;
         }
 
-        nClassId = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nDurabilityThird >> 1);
-        nStatValue = nClassId + (nDurabilityThird >> 1);
+        const uint32_t nHalfDurability = static_cast<uint32_t>(nDurabilityThird) >> 1;
+        nClassId = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nHalfDurability);
+        nStatValue = nClassId + nHalfDurability;
         if (!nStatValue) {
           nStatValue = 1;
         }

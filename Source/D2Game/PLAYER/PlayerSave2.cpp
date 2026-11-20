@@ -1609,8 +1609,9 @@ int __fastcall LoadGolem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * pp
       return 0x17;
     }
 
-    uint8_t* pItemReadPtr = pReadPos + 3;
-    if (pReadPos[2] != '\0') {
+    uint8_t* pItemReadPtr = pReadPos + 2;
+    const uint8_t bHasGolem = *pItemReadPtr++;
+    if (bHasGolem) {
       D2SkillStrc* pSkill;
       pUnit2 = 0;
       pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, SKILL_IronGolem);

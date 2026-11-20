@@ -2802,14 +2802,7 @@ D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, D2UnitSt
 // Server-side act-travel gate triggered when a player talks to a caravan/escort NPC. Branches on the NPC monster class: Warriv (Act1->2) marks QUEST_AbleGoToAct2 Completed+JustCompleted, sends quest info, and pushes SCMD 0x61 CanGoToAct(2); if Sisters quest just completed it also fires that quest's handler[3] (with IsBadCodePtr guard) and force-starts A1Q4. Meshif (Act2->3) completes The Horadric Staff (removing 'msf '/'vip ' staff items), marks AbleGoToAct3, grants Act II reward, sends CanGoToAct(3). Tyrael (Act4->5, expansion only) marks AbleGoToAct5, grants reward, sends quest-state 0x5D then CanGoToAct(5). Guarded by dwTradeTick so each transition packet sends once.
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMonster, int32_t nDestinationAct, int32_t nUnused) {
-    // Frame slots -12..-4 are ONE object: &pPlayerDataSaved is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      D2UnitDataPlayerStrc* pPlayerDataSaved;
-      uint16_t wPacketPad;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    D2UnitDataPlayerStrc* pPlayerDataSaved;
     QUESTCALLBACKFN lpfn;
     BOOL bQuestState;
     D2ClientStrc* pClient;
@@ -2820,7 +2813,7 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
       return;
     }
 
-    __frame0.pPlayerDataSaved = D2Common::Units::GetPlayerData(pUnit);
+    pPlayerDataSaved = D2Common::Units::GetPlayerData(pUnit);
     eD2MonsterClassId nMonsterClassId = pMonster->nClassId;
     switch (nMonsterClassId) {
       case MonsterUnitWarrivAct1:
@@ -2831,8 +2824,8 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
             D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct2, QUESTSTATE_JustCompleted);
             QUEST_SendQuestInfoToUnit(pGame, pUnit);
             pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xad3);
-            if (__frame0.pPlayerDataSaved->bCutscenePending != 1) {
-              __frame0.pPlayerDataSaved->bCutscenePending = 1;
+            if (pPlayerDataSaved->bCutscenePending != 1) {
+              pPlayerDataSaved->bCutscenePending = 1;
               GAME::SCmd::NET_D2GS_SERVER_Send_0x61_CanGoToAct(pClient, 2);
             }
 
@@ -2845,12 +2838,14 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
             if (bQuestState == 1 && pGame->pQuestControl) {
               pQuestDataIter = pGame->pQuestControl->pQuestData;
               if (pQuestDataIter) {
-                while (pQuestDataIter->nQuestNoInternal != QUESTINT_SistersToTheSlaughter) {
-                  pQuestDataIter = pQuestDataIter->pPrev;
-                  if (!pQuestDataIter) {
-                    A1Q4::ForceStartQuest(pGame, pUnit);
-                    return;
+                for (; pQuestDataIter; pQuestDataIter = pQuestDataIter->pPrev) {
+                  if (pQuestDataIter->nQuestNoInternal == QUESTINT_SistersToTheSlaughter) {
+                    break;
                   }
+                }
+                if (!pQuestDataIter) {
+                  A1Q4::ForceStartQuest(pGame, pUnit);
+                  return;
                 }
 
                 if (pQuestDataIter->bIsNotIntroduction != '\0') {
@@ -2894,8 +2889,8 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
             QUEST_SetActNpcIntroFlags(pGame, pUnit, ACT_II);
             QUEST_SendQuestInfoToUnit(pGame, pUnit);
             pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xb0f);
-            if (__frame0.pPlayerDataSaved->bCutscenePending != 1) {
-              __frame0.pPlayerDataSaved->bCutscenePending = 1;
+            if (pPlayerDataSaved->bCutscenePending != 1) {
+              pPlayerDataSaved->bCutscenePending = 1;
               GAME::SCmd::NET_D2GS_SERVER_Send_0x61_CanGoToAct(pClient, 3);
               return;
             }
@@ -2912,11 +2907,14 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
             QUEST_SetActNpcIntroFlags(pGame, pUnit, ACT_II);
             QUEST_SendQuestInfoToUnit(pGame, pUnit);
             pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xb1f);
-            if (__frame0.pPlayerDataSaved->bCutscenePending != 1) {
-              __frame0.pPlayerDataSaved->bCutscenePending = 1;
-              __frame0.wPacketPad = 0;
-              __frame0.pPlayerDataSaved = (D2UnitDataPlayerStrc*)0x2175d;
-              GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, (D2GSPacketSrv0x5D*)&__frame0.pPlayerDataSaved);
+            if (pPlayerDataSaved->bCutscenePending != 1) {
+              pPlayerDataSaved->bCutscenePending = 1;
+              D2GSPacketSrv0x5D packet;
+              memset(&packet, 0, sizeof(packet));
+              packet.nPacketId = 0x5d;
+              packet.nQuestId = 0x17;
+              packet.nAlertFlags = 2;
+              GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &packet);
               GAME::SCmd::NET_D2GS_SERVER_Send_0x61_CanGoToAct(pClient, 5);
               return;
             }

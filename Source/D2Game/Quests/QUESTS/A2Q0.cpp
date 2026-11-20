@@ -45,7 +45,6 @@ void __fastcall Q08_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 // A2Q0 QUEST_SpokeToJerhyn — state-handler 0x00 (gossip-select / NPC-talk entry). Branches on target NPC classId. Jerhyn (0xc9): if SpokeToJerhyn not yet Completed, queue his gossip line (string 0). Meshif (0xf4, boat to Act3): only if QUEST_TheSearchForCain is CannotCompleteQuestInGame (Cain already freed elsewhere) AND this player isn't already in the A2Q0 GUID list -> queue Meshif gossip (string 1) and remove player from the A1Q4 (Cain) list. Read-only quest gating; no state writes.
 void __fastcall Q08_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL BVar1;
-    int32_t nPlayerGUID;
     int nTargetClassId;
     D2QuestDataA2Q0Strc* pA2Q0Data;
     if (!pQuestArgs->pTarget) {
@@ -56,9 +55,10 @@ void __fastcall Q08_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2BitBufferStrc* const pQuestRecord = pPlayerData->pQuestRecord[pGame->nDifficulty];
     if (nTargetClassId == 0xc9) {
       /* GetQuestState(rec, QUEST_SpokeToJerhyn, QUESTSTATE_Completed=0) — if NOT
-                         done, show Jerhyn's gossip line */ BVar1 = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_SpokeToJerhyn, QUESTSTATE_Completed);
+                         done, show Jerhyn's gossip line */ BVar1 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_SpokeToJerhyn, QUESTSTATE_Completed);
       if (!BVar1) {
         AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xc9, 0);
         return;
@@ -67,8 +67,9 @@ void __fastcall Q08_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       pA2Q0Data = pQuestData->pQuestSpecificData.pA2Q0;
       /* GetQuestState(rec, QUEST_TheSearchForCain,
                          QUESTSTATE_CannotCompleteQuestInGame=0xe) — Cain-search closed-out self
-                         game; gate Meshif boat gossip */ BVar1 = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_TheSearchForCain, QUESTSTATE_CannotCompleteQuestInGame);
+                         game; gate Meshif boat gossip */ BVar1 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheSearchForCain, QUESTSTATE_CannotCompleteQuestInGame);
       if (BVar1 == 1) {
+        int32_t nPlayerGUID;
         if (!pQuestArgs->pPlayer) {
           nPlayerGUID = -1;
         } else {

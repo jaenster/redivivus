@@ -301,14 +301,6 @@ BOOL __fastcall Draw(D2WinImageEx * pImageEx) {
 }
 
 BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
-    BOOL bPressResult;
-    int nHitAreaIdx;
-    int nRelMouseY;
-    int nRelMouseX;
-    D2WinImageHitArea* pHitAreaCur;
-    D2WinImageHitArea* pHitAreaTable;
-    ImageHitArea pfnHitEntry;
-    OnPress pfnOnPress;
     ::D2WinImage* pImage = (::D2WinImage*)pControlMsg->pControl;
     if (pImage->sControl.neD2FormType != FORM_Image) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x159);
@@ -317,32 +309,23 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 
     uint32_t dwState = pImage->sControl.dwState;
     if (Fog::BitBuffer::gadwBitMasks[2] & dwState && Fog::BitBuffer::gadwBitMasks[0] & dwState) {
-      nRelMouseY = pImage->sControl.dwSizeY - pImage->sControl.dwPosY + D2WinMain::nPosY;
-      nRelMouseX = D2WinMain::nPosX - pImage->sControl.dwPosX;
-      pHitAreaTable = pImage->pHitAreas;
+      const int nRelMouseY = pImage->sControl.dwSizeY - pImage->sControl.dwPosY + D2WinMain::nPosY;
+      const int nRelMouseX = D2WinMain::nPosX - pImage->sControl.dwPosX;
+      const D2WinImageHitArea* pHitAreaTable = pImage->pHitAreas;
       if (pHitAreaTable) {
-        nHitAreaIdx = 0;
-        pfnHitEntry = pHitAreaTable->pfnOnHit;
-        pHitAreaCur = pHitAreaTable;
-        while (pfnHitEntry) {
-          if (nRelMouseX >= pHitAreaCur->nX && nRelMouseY >= pHitAreaCur->nY - pHitAreaCur->nHeight && nRelMouseX < pHitAreaCur->nWidth + pHitAreaCur->nX && nRelMouseY < pHitAreaCur->nY) {
-            bPressResult = pHitAreaTable[nHitAreaIdx].pfnOnHit(pControlMsg);
-            return bPressResult;
+        for (int nHitAreaIdx = 0; pHitAreaTable[nHitAreaIdx].pfnOnHit; ++nHitAreaIdx) {
+          const D2WinImageHitArea& hitArea = pHitAreaTable[nHitAreaIdx];
+          const int nX = hitArea.nX;
+          const int nY = hitArea.nY;
+          if (nRelMouseX >= nX && nRelMouseY >= nY - hitArea.nHeight &&
+              nRelMouseX < hitArea.nWidth + nX && nRelMouseY < nY) {
+            return pHitAreaTable[nHitAreaIdx].pfnOnHit(pControlMsg);
           }
-
-          nHitAreaIdx++;
-          pHitAreaCur = pHitAreaTable + nHitAreaIdx;
-          pfnHitEntry = pHitAreaTable[nHitAreaIdx].pfnOnHit;
         }
       }
 
-      pfnOnPress = pControlMsg->pControl->fpOnPress;
-      if (pfnOnPress) {
-        bPressResult = (*pfnOnPress)(pControlMsg);
-        return bPressResult;
-      }
-
-      return 0;
+      const OnPress pfnOnPress = pControlMsg->pControl->fpOnPress;
+      return pfnOnPress ? pfnOnPress(pControlMsg) : 0;
     }
 
     return 0;

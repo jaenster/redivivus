@@ -43,19 +43,22 @@ void __fastcall Q09_AICallback_GreaterMummy(::SGAMEDATA * pGame, D2UnitStrc * pU
       return;
     }
 
-    bool bNeedsStateAdvance = pQuestData->nStateFlag < 3;
+    bool bNeedsStateAdvance = false;
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
-    if (bNeedsStateAdvance) {
+    if (pQuestData->nStateFlag < 3) {
+      bNeedsStateAdvance = true;
       QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q1.cpp", 0x2c4);
     }
     if (pQuestData->nStateFlagPrev < 2) {
       pQuestData->nQuestPacketFlags = '\0';
-      bNeedsStateAdvance = !pQuestData->pQuestSpecificData.pA2Q1->bRadamentCompleteNotified;
-      if (bNeedsStateAdvance) {
-        pQuestData->pQuestSpecificData.pA2Q1->bRadamentCompleteNotified = 1;
+      D2QuestDataA2Q1Strc* pA2Q1 = pQuestData->pQuestSpecificData.pA2Q1;
+      bool bNotifyNow = false;
+      if (!pA2Q1->bRadamentCompleteNotified) {
+        pA2Q1->bRadamentCompleteNotified = 1;
+        bNotifyNow = true;
       }
 
-      QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)A2Q1::Q09_NotifyRadamentComplete, bNeedsStateAdvance);
+      QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)A2Q1::Q09_NotifyRadamentComplete, bNotifyNow);
     } else if (!bNeedsStateAdvance) {
       return;
     }

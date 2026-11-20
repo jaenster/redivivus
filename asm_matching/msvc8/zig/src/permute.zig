@@ -66,7 +66,7 @@ fn readStdin() ![]const u8 {
 
 /// sha256 over cl.rsp, pch/oracle.key, mirror.key (each `-` when missing) and the tree's
 /// HEAD: a build or a checkout move meanwhile makes every baseline stale.
-fn stateKey() ![]const u8 {
+pub fn stateKey() ![]const u8 {
     var h = std.crypto.hash.sha2.Sha256.init(.{});
     for ([_][]const u8{ "cl.rsp", "pch/oracle.key", "mirror.key" }) |p| {
         if (try util.readFileOpt(try util.join(compile.BUILD, p))) |d| h.update(d) else h.update("-");
@@ -91,7 +91,7 @@ const Round = struct {
     lock: proc.Mutex = .{},
 };
 
-fn stem(path: []const u8) []const u8 {
+pub fn stem(path: []const u8) []const u8 {
     const b = util.basename(path);
     return if (std.mem.endsWith(u8, b, ".cpp")) b[0 .. b.len - 4] else b;
 }
@@ -172,47 +172,60 @@ fn trialMain(args: []const []const u8) !void {
         try tus.append(gpa, line[0..tab]);
         try srcs.append(gpa, line[tab + 1 ..]);
     }
+    const objs = (try compileTrials(tus.items, srcs.items, scratch, jobs, batch, expect)) orelse {
+        std.debug.print("the checkout changed under the run (a build or an update): start again\n", .{});
+        std.process.exit(3);
+    };
+    var o: std.ArrayList(u8) = .empty;
+    for (objs) |obj| {
+        try o.appendSlice(gpa, obj orelse "-");
+        try o.append(gpa, '\n');
+    }
+    util.say(o.items);
+}
+
+/// Compile the trial sources `srcs` (each a translated TU beside its own `tus[i]` in
+/// build/src) into `scratch`, as `trial --out` does; compile.configure must have run. Returns
+/// each trial's object, null where there is no valid one, or null for the whole round when
+/// the state key is no longer `expect`.
+pub fn compileTrials(tus: []const []const u8, srcs: []const []const u8, scratch: []const u8, jobs: usize, batch: usize, expect: ?[]const u8) !?[]?[]const u8 {
     // Grouped by the flags each TU compiles with, in first-seen order.
     var groups: std.StringArrayHashMapUnmanaged(std.ArrayList(usize)) = .empty;
-    for (tus.items, 0..) |tu, i| {
+    for (tus, 0..) |tu, i| {
         const g = try groups.getOrPut(gpa, compile.extraFlags(try std.mem.concat(gpa, u8, &.{ tu, ".cpp" })));
         if (!g.found_existing) g.value_ptr.* = .empty;
         try g.value_ptr.append(gpa, i);
     }
     // A small round is spread over every job: one cl.exe per 16 trials would leave most of
     // them idle when a step has a few dozen.
-    const n = tus.items.len;
+    const n = tus.len;
     const size = @max(1, @min(batch, (n + jobs - 1) / @max(1, jobs)));
     var work: std.ArrayList(Work) = .empty;
     for (groups.values()) |ks| {
         var i: usize = 0;
         while (i < ks.items.len) : (i += size) {
             const part = ks.items[i..@min(ks.items.len, i + size)];
-            try work.append(gpa, .{ .ks = part, .tu = tus.items[part[0]] });
+            try work.append(gpa, .{ .ks = part, .tu = tus[part[0]] });
         }
     }
     const out_win = try trialOutputDir(scratch);
-    var round = Round{ .work = work.items, .srcs = srcs.items, .rsp = try util.join(compile.BUILD, "cl.rsp"), .out_win = out_win, .scratch = scratch };
+    var round = Round{ .work = work.items, .srcs = srcs, .rsp = try util.join(compile.BUILD, "cl.rsp"), .out_win = out_win, .scratch = scratch };
     round.lock.init();
     {
         const fd = try proc.flockPath(try util.join(compile.BUILD, ".build.lock"));
         defer proc.closeFd(fd);
-        if (expect) |e| if (!std.mem.eql(u8, e, try stateKey())) {
-            std.debug.print("the checkout changed under the run (a build or an update): start again\n", .{});
-            std.process.exit(3);
-        };
+        if (expect) |e| if (!std.mem.eql(u8, e, try stateKey())) return null;
         var threads: std.ArrayList(std.Thread) = .empty;
         for (0..@max(@as(usize, 1), @min(jobs, work.items.len))) |_| try threads.append(gpa, try std.Thread.spawn(.{}, worker, .{&round}));
         for (threads.items) |t| t.join();
     }
     if (round.err) |e| return e;
-    var o: std.ArrayList(u8) = .empty;
-    for (srcs.items) |s| {
+    const objs = try gpa.alloc(?[]const u8, srcs.len);
+    for (srcs, 0..) |s, i| {
         const obj = try std.fmt.allocPrint(gpa, "{s}/{s}.obj", .{ scratch, stem(s) });
-        try o.appendSlice(gpa, if (util.exists(obj) and compile.validObject(obj)) obj else "-");
-        try o.append(gpa, '\n');
+        objs[i] = if (util.exists(obj) and compile.validObject(obj)) obj else null;
     }
-    util.say(o.items);
+    return objs;
 }
 
 // ---- judge
@@ -257,7 +270,22 @@ fn registerOnly(v: *const compare.Viewer, ov: []const compare.NInsn, rv: []const
     return true;
 }
 
-const Judge = struct {
+/// One funcmap function of a TU, judged: the views and the comparison are kept for a caller
+/// that shows the difference (try-source).
+pub const Eval = struct {
+    row: audit.MapRow,
+    f: ?*const ours.OurFunc = null,
+    status: []const u8 = "MISSING",
+    sim: f64 = 0,
+    reg: bool = false,
+    frame_ours: u64 = 0,
+    frame_ref: u64 = 0,
+    res: ?compare.Result = null,
+    ov: []const compare.NInsn = &.{},
+    rv: []const compare.NInsn = &.{},
+};
+
+pub const Judge = struct {
     ref: *refimage.Reference,
     model: compare.Model,
     by_tu: std.StringHashMapUnmanaged(std.ArrayList(audit.MapRow)) = .empty,
@@ -266,7 +294,9 @@ const Judge = struct {
     d: dec.Decoder,
     viewer: compare.Viewer = undefined,
 
-    fn judge(j: *Judge, out: *std.ArrayList(u8), tu: []const u8, obj: ?[]const u8) !void {
+    /// Every funcmap function of `tu`, in funcmap order, judged in the object `obj` (none:
+    /// every one MISSING).
+    pub fn evaluate(j: *Judge, tu: []const u8, obj: ?[]const u8) ![]Eval {
         var fns: std.StringHashMapUnmanaged(*const ours.OurFunc) = .empty;
         var by_name: std.StringHashMapUnmanaged(std.ArrayList(*const ours.OurFunc)) = .empty;
         if (obj) |path| if (util.exists(path)) {
@@ -285,39 +315,44 @@ const Judge = struct {
                 try g.value_ptr.append(gpa, o.*);
             }
         };
-        try out.appendSlice(gpa, "{\"fns\": [");
         const rows: []const audit.MapRow = if (j.by_tu.get(tu)) |l| l.items else &.{};
+        const out = try gpa.alloc(Eval, rows.len);
         for (rows, 0..) |r, n| {
-            if (n > 0) try out.appendSlice(gpa, ", ");
-            var f = fns.get(r.sym);
-            if (f == null) if (by_name.get(r.name)) |l| if (l.items.len == 1) {
-                f = l.items[0];
+            var e = Eval{ .row = r };
+            e.f = fns.get(r.sym);
+            if (e.f == null) if (by_name.get(r.name)) |l| if (l.items.len == 1) {
+                e.f = l.items[0];
             };
-            var status: []const u8 = "MISSING";
-            var sim: f64 = 0;
-            var reg = false;
-            var frame_ours: u64 = 0;
-            var frame_ref: u64 = 0;
-            if (f != null and j.model.contains(r.s)) {
-                frame_ours = try classify.frameSize(f.?.f.decoded.insns.items);
-                frame_ref = try classify.frameSize(j.model.getPtr(r.s).?.f.insns.items);
+            if (e.f != null and j.model.contains(r.s)) {
+                e.frame_ours = try classify.frameSize(e.f.?.f.decoded.insns.items);
+                e.frame_ref = try classify.frameSize(j.model.getPtr(r.s).?.f.insns.items);
                 if (j.quarantined.get(try audit.qkey(r.tu, audit.lastPart(r.name))) != null) {
-                    status = "QUARANTINE";
+                    e.status = "QUARANTINE";
                 } else {
-                    const ov = try j.viewer.ourView(f.?, &j.syms);
-                    const rv = try j.viewer.refViewSpan(r.s, r.e, &j.model);
-                    const res = try compare.compare(ov, rv);
-                    status = res.status;
-                    sim = res.similarity;
-                    reg = std.mem.eql(u8, status, "INSN_MATCH") and try registerOnly(&j.viewer, ov, rv);
+                    e.ov = try j.viewer.ourView(e.f.?, &j.syms);
+                    e.rv = try j.viewer.refViewSpan(r.s, r.e, &j.model);
+                    const res = try compare.compare(e.ov, e.rv);
+                    e.res = res;
+                    e.status = res.status;
+                    e.sim = res.similarity;
+                    e.reg = std.mem.eql(u8, e.status, "INSN_MATCH") and try registerOnly(&j.viewer, e.ov, e.rv);
                 }
             }
-            try out.print(gpa, "[{d}, ", .{r.s});
-            try objcache.jsonString(out, status);
+            out[n] = e;
+        }
+        return out;
+    }
+
+    fn judge(j: *Judge, out: *std.ArrayList(u8), tu: []const u8, obj: ?[]const u8) !void {
+        try out.appendSlice(gpa, "{\"fns\": [");
+        for (try j.evaluate(tu, obj), 0..) |e, n| {
+            if (n > 0) try out.appendSlice(gpa, ", ");
+            try out.print(gpa, "[{d}, ", .{e.row.s});
+            try objcache.jsonString(out, e.status);
             try out.appendSlice(gpa, ", \"");
-            try util.fixed(out, "%.4f", sim);
-            try out.print(gpa, "\", {s}, [", .{if (reg) "true" else "false"});
-            if (f) |o| {
+            try util.fixed(out, "%.4f", e.sim);
+            try out.print(gpa, "\", {s}, [", .{if (e.reg) "true" else "false"});
+            if (e.f) |o| {
                 var first = true;
                 for (o.f.refs) |ref| if (ref.kind == .call) {
                     if (!first) try out.appendSlice(gpa, ", ");
@@ -325,7 +360,7 @@ const Judge = struct {
                     try objcache.jsonString(out, ref.s);
                 };
             }
-            try out.print(gpa, "], {d}, {d}]", .{ frame_ours, frame_ref });
+            try out.print(gpa, "], {d}, {d}]", .{ e.frame_ours, e.frame_ref });
         }
         try out.appendSlice(gpa, "]}\n");
     }
@@ -349,19 +384,14 @@ const Judge = struct {
     }
 };
 
-fn judgeMain(args: []const []const u8) !void {
-    var root: ?[]const u8 = null;
-    var k: usize = 0;
-    while (k < args.len) : (k += 1) {
-        if (std.mem.eql(u8, args[k], "--root") and k + 1 < args.len) {
-            root = args[k + 1];
-            k += 1;
-        } else usage();
-    }
-    const cfg = try audit.Config.init(root orelse usage());
+/// The judge over the oracle at `root`: the original carved and decoded, the function map,
+/// the symbol map and the quarantine.
+pub fn openJudge(root: []const u8) !*Judge {
+    const cfg = try audit.Config.init(root);
     const ref = try refimage.Reference.open(try util.join(cfg.oracle, "reference/Game.exe"));
     try ref.load(try util.join(cfg.refcache, "functions.tsv"));
-    var j = Judge{
+    const j = try gpa.create(Judge);
+    j.* = Judge{
         .ref = ref,
         .model = try ref.model(),
         .syms = undefined,
@@ -378,6 +408,19 @@ fn judgeMain(args: []const []const u8) !void {
         try g.value_ptr.append(gpa, r);
     }
     j.viewer = .{ .d = &j.d, .with_text = true };
+    return j;
+}
+
+fn judgeMain(args: []const []const u8) !void {
+    var root: ?[]const u8 = null;
+    var k: usize = 0;
+    while (k < args.len) : (k += 1) {
+        if (std.mem.eql(u8, args[k], "--root") and k + 1 < args.len) {
+            root = args[k + 1];
+            k += 1;
+        } else usage();
+    }
+    const j = try openJudge(root orelse usage());
     util.say("ready\n");
 
     // One request per line, answered as it comes.

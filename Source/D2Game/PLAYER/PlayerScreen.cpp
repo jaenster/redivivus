@@ -518,14 +518,13 @@ int __fastcall PARTYSCREEN_ClearHostileRelation(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 void __fastcall PARTYSCREEN_SetHostileRelation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
-      UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pTarget);
-      UNIT::PlayerList::SendRelationshipStatus(pGame, pUnit, pTarget, 8, 1);
-      return;
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_PLAYER) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x24);
+      exit(-1);
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x24);
-    exit(-1);
+    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pTarget);
+    UNIT::PlayerList::SendRelationshipStatus(pGame, pUnit, pTarget, 8, 1);
 }
 
 uint32_t __fastcall PLAYERSCREEN_CheckUnitsCanSeeEachOther(uint32_t dwUnused, D2UnitStrc * pUnit, D2UnitStrc * pOtherUnit) {

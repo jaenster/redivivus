@@ -290,13 +290,12 @@ int32_t __fastcall SPELLSEL_GetSkillPalette(D2UnitStrc * pUnit, D2SkillStrc * pS
 }
 
 void __fastcall SPELLSEL_DrawSkillTooltip(short * pSkillId, int32_t bShowExpanded, int32_t nSkillDescId, int32_t nStatId, int32_t nIconX, int32_t nIconY) {
-    uint32_t nDrawMode;
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (nMouseX < nIconX || nMouseX > nIconX + 0x30 || nMouseY < nIconY - 0x30 || nMouseY > nIconY) {
-      nDrawMode = 1;
+      bShowExpanded = 1;
     } else {
-      nDrawMode = (uint32_t)(bShowExpanded == 1);
+      bShowExpanded = (bShowExpanded == 1);
     }
 
     nMouseX = Cursor::GetMouseX();
@@ -305,8 +304,7 @@ void __fastcall SPELLSEL_DrawSkillTooltip(short * pSkillId, int32_t bShowExpande
       return;
     }
 
-    short int wSkillId = *pSkillId;
-    SkillDesc::SKILLDESC_BuildSkillShortTooltip(UNIT::Player::GetPlayerUnit_UI(), (int)wSkillId, nSkillDescId, nStatId, nDrawMode, nIconX, nIconY);
+    SkillDesc::SKILLDESC_BuildSkillShortTooltip(UNIT::Player::GetPlayerUnit_UI(), *pSkillId, nSkillDescId, nStatId, bShowExpanded, nIconX, nIconY);
 }
 
 void __fastcall SPELLSEL_DrawKeyBindingText(int32_t nCmdIndex, int32_t nX, int32_t nY, int32_t dwColor) {

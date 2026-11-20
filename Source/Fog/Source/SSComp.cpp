@@ -41,13 +41,10 @@ void __fastcall COMPRESS_HeapSiftDown(int32_t * pArray, int32_t nCount, int32_t 
 }
 
 void __fastcall COMPRESS_HeapSort(int32_t * pArray, int32_t nCount) {
-    int32_t* pArrayAfter = pArray;
-    int32_t* pArrayAfter2 = pArray;
     int nHeapIndex = nCount / 2;
     while (nHeapIndex) {
       nHeapIndex--;
       COMPRESS_HeapSiftDown(pArray, nCount, nHeapIndex);
-      pArray = pArrayAfter;
     }
 
     while (--nCount) {
@@ -56,7 +53,6 @@ void __fastcall COMPRESS_HeapSort(int32_t * pArray, int32_t nCount) {
       *pArray = pArray[nCount];
       pArray[nCount] = nSwapTmp;
       COMPRESS_HeapSiftDown(pArray, nCount, 0);
-      pArray = pArrayAfter2;
     }
 }
 

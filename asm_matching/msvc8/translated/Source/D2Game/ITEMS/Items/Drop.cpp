@@ -658,40 +658,29 @@ BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2It
 
 // Rolls and assigns magic prefix and/or suffix for an item during generation. Respects forced prefix/suffix overrides from pItemGenCtx (nForcePrefix/nForceSuffix). If both overrides are absent, rolls randomly via ITEMMOD_RollMagicAffixVersioned. Halts if neither prefix nor suffix could be assigned. Clears ITEMFLAG_IDENTIFIED on success.
 static int __stdcall ITEM_RollForcedMagicAffix(D2ItemGenContextStrc * pItemGenCtx, D2UnitStrc * pUnit) {
-    int16_t wMagicSuffix;
-    int16_t wForcedPrefix;
-    wForcedPrefix = 0;
-    int16_t wMagicPrefix;
-    wMagicPrefix = 0;
-    int pExcludeFlag;
-    pExcludeFlag = 0;
+    int16_t wForcedPrefixOrRandomSuffix = 0;
+    int16_t wRandomPrefixOrForcedSuffix = 0;
+    int pExcludeFlag = 0;
     if (pItemGenCtx->nForcePrefix > 0) {
-      wMagicPrefix = SKILLS::Items::ITEMMOD_RollMagicAffixVersioned(pUnit, 1, 1, 1, 1, pItemGenCtx->nForcePrefix);
-      D2Common::ITEMS::Items::SetMagixPrefix(pUnit, wMagicPrefix, 0);
+      wForcedPrefixOrRandomSuffix = SKILLS::Items::ITEMMOD_RollMagicAffixVersioned(pUnit, 1, 1, 1, 1, pItemGenCtx->nForcePrefix);
+      D2Common::ITEMS::Items::SetMagixPrefix(pUnit, wForcedPrefixOrRandomSuffix, 0);
     } else {
       if (pItemGenCtx->nForceSuffix <= 0) {
-        wForcedPrefix = SKILLS::Items::ITEMMOD_RollMagicAffixVersioned(pUnit, 1, 0, 1, 1, pItemGenCtx->nForceSuffix);
-        D2Common::ITEMS::Items::SetMagixPrefix(pUnit, wForcedPrefix, 0);
-        if (!wForcedPrefix) {
+        wRandomPrefixOrForcedSuffix = SKILLS::Items::ITEMMOD_RollMagicAffixVersioned(pUnit, 1, 0, 1, 1, pItemGenCtx->nForceSuffix);
+        D2Common::ITEMS::Items::SetMagixPrefix(pUnit, wRandomPrefixOrForcedSuffix, 0);
+        if (!wRandomPrefixOrForcedSuffix) {
           pExcludeFlag = 1;
         }
       }
     }
     if (pItemGenCtx->nForceSuffix > 0) {
-      wForcedPrefix = SKILLS::Items::ITEMMOD_RollMagicAffixVersioned(pUnit, 1, 1, 1, 0, pItemGenCtx->nForceSuffix);
-      wMagicSuffix = wForcedPrefix;
-    } else {
-      if (pItemGenCtx->nForcePrefix > 0) {
-        goto check_affix_rolled;
-      }
-
-      wMagicPrefix = SKILLS::Items::ITEMMOD_RollMagicAffixVersioned(pUnit, 1, pExcludeFlag, 1, 0, pItemGenCtx->nForcePrefix);
-      wMagicSuffix = wMagicPrefix;
+      wRandomPrefixOrForcedSuffix = SKILLS::Items::ITEMMOD_RollMagicAffixVersioned(pUnit, 1, 1, 1, 0, pItemGenCtx->nForceSuffix);
+      D2Common::ITEMS::Items::SetMagicSuffix(pUnit, wRandomPrefixOrForcedSuffix, 0);
+    } else if (pItemGenCtx->nForcePrefix <= 0) {
+      wForcedPrefixOrRandomSuffix = SKILLS::Items::ITEMMOD_RollMagicAffixVersioned(pUnit, 1, pExcludeFlag, 1, 0, pItemGenCtx->nForcePrefix);
+      D2Common::ITEMS::Items::SetMagicSuffix(pUnit, wForcedPrefixOrRandomSuffix, 0);
     }
-
-    D2Common::ITEMS::Items::SetMagicSuffix(pUnit, wMagicSuffix, 0);
-    check_affix_rolled:
-    if (!wMagicPrefix && !wForcedPrefix) {
+    if (!wForcedPrefixOrRandomSuffix && !wRandomPrefixOrForcedSuffix) {
       D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pUnit);
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x372);
       exit(-1);
@@ -2124,11 +2113,14 @@ static int32_t ITEM_GetTotalMagicFind(D2UnitStrc * pUnit) {
 }
 
 int32_t __fastcall ITEMDROP_AdjustDrop(int32_t nMagicFind, int32_t nDiminishFactor, int32_t nMFAdjusted) {
-    if (nMagicFind <= 0x6e) {
+    if (nMagicFind <= 110) {
       return nMagicFind;
     }
 
-    return (nMagicFind - 100) * nMFAdjusted / (nMagicFind - 100 + nDiminishFactor) + 100;
+    nMagicFind -= 100;
+    nMFAdjusted *= nMagicFind;
+    nMagicFind += nDiminishFactor;
+    return nMFAdjusted / nMagicFind + 100;
 }
 
 // Item quality selector. QualityRatio.txt cascading rolls: Unique(128/idx) -> Set(128/idx) -> Rare(128/idx if allowed) -> Magic(128/idx) -> Superior(128/idx) else Normal. MF applies diminishing returns via ITEMDROP_AdjustDrop. The quality modifiers in pMagicFindUnit ([0]=magic, [1]=rare, [2]=set, [3]=unique, in 1024ths) reduce each roll chance. Returns eD2ItemTypes quality enum.
@@ -3243,7 +3235,6 @@ void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 // Splits nGoldAmount across up to nMaxPiles gold-item units dropped near pUnit's position. Each iteration creates a gold item via ITEM_CreateFromTemplate, caps the pile amount to the inventory gold limit if the recipient is a player, sets UNITSTAT_gold, and calls DropItem to place it at a collision-free nearby tile. Fills pUnitTable with created item pointers and updates *pnUnitCount. Uses the room collision system to find free coordinates; exits early if no free tile is found or the pile cap is reached.
 void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nGoldAmount, D2UnitStrc * * pUnitTable, int * pnUnitCount, int32_t nMaxPiles) {
     D2UnitStrc* pGoldItem;
-    int32_t nGoldCapacity;
     int nY;
     int nX;
     POINT ptUnitCoords;
@@ -3270,9 +3261,10 @@ void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uin
         return;
       }
 
-      nPileAmount = 2000000000;
-      if (nGoldAmount <= 2000000000) {
-        nPileAmount = nGoldAmount;
+      if (nGoldAmount > 2000000000U) {
+        nPileAmount = 2000000000;
+      } else {
+        nPileAmount = static_cast<int32_t>(nGoldAmount);
       }
 
       nGoldAllocated += nPileAmount;
@@ -3281,11 +3273,11 @@ void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uin
       nX = ptUnitCoords.x + 2;
       nY = ptUnitCoords.y + 3;
       pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX, nY);
-      ptSpawnPos.x = nX;
-      ptSpawnPos.y = nY;
-      if (!pSpawnRoom) {
-        ptSpawnPos.x = ptUnitCoords.x;
-        ptSpawnPos.y = ptUnitCoords.y;
+      if (pSpawnRoom) {
+        ptSpawnPos.x = nX;
+        ptSpawnPos.y = nY;
+      } else {
+        ptSpawnPos = ptUnitCoords;
       }
 
       pCurrentRoom = D2Common::Collision::GetFreeCoordinates_WithFieldCoords(pCurrentRoom, &ptSpawnPos, &ptUnitCoords, 1, 0x3e01, 0x801, 0);
@@ -3296,12 +3288,12 @@ void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uin
       pGoldItem = ITEM_CreateFromTemplate(pUnit, nGoldClassId, pGameSaved, 4, QUALITY_NORMAL, 1, 1, 1, 0, 0, 0);
       if (pGoldItem) {
         if (nPileAmount < 0) {
-          nPileAmount = 0;
-        } else if (pGoldItem->eUnitType == UNIT_PLAYER && (nGoldCapacity = D2Common::Units::GetInventoryGoldLimit(pGoldItem) , nPileAmount > nGoldCapacity)) {
-          nPileAmount = 0;
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pGoldItem, UNITSTAT_gold, 0, 0);
+        } else if (pGoldItem->eUnitType == UNIT_PLAYER && nPileAmount > static_cast<int32_t>(D2Common::Units::GetInventoryGoldLimit(pGoldItem))) {
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pGoldItem, UNITSTAT_gold, 0, 0);
+        } else {
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pGoldItem, UNITSTAT_gold, nPileAmount, 0);
         }
-
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pGoldItem, UNITSTAT_gold, nPileAmount, 0);
         DropItem(pGameSaved, pUnit, pGoldItem, pCurrentRoom, ptSpawnPos.x, ptSpawnPos.y);
         pUnitTable[*pnUnitCount] = pGoldItem;
         (*pnUnitCount)++;

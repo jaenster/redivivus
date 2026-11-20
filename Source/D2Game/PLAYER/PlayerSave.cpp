@@ -853,18 +853,17 @@ char * __fastcall PLAYERSAVE_ByteArrayToHexString(char * szOut, uint8_t * pbyDat
       return nullptr;
     }
 
-    *szOut = '0';
-    szOut[1] = 'x';
-    char* pOutCursor = szOut + 2;
+    *szOut++ = '0';
+    *szOut++ = 'x';
     do {
-      PLAYERSAVE_ByteToHexChar(pOutCursor, *pbyData);
-      pOutCursor += 2;
+      PLAYERSAVE_ByteToHexChar(szOut, *pbyData);
+      szOut += 2;
       pbyData++;
       nLength--;
     } while (nLength);
 
-    *pOutCursor = '\0';
-    return pOutCursor;
+    *szOut = '\0';
+    return szOut;
 }
 
 // Computes a CRC32 over a D2MissilesTxt row for save-file integrity. For rows with packed flags > 0x5B, temporarily zeros out server-side function IDs (pSrvDoFunc/pSrvHitFunc), sub-missiles, sounds, and extra hit flags before hashing, then restores them — ensuring the CRC covers only data that is stable across patches.
@@ -1981,17 +1980,16 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 int __fastcall PLRSAVE_DispatchItemLoadByFormat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pItemData, uint32_t eFormat, int32_t nStreamEnd, int32_t bUsePageHandler, uint32_t * ppnShort) {
-    int nNewStreamResult;
+    int nResult;
     if (eFormat == 0x47) {
-      nNewStreamResult = PLRSAVE_RestoreItemsFromStream(pGame, pUnit, (short int*)pItemData, 0x47, nStreamEnd, bUsePageHandler, (int*)ppnShort);
-      return nNewStreamResult;
+      nResult = PLRSAVE_RestoreItemsFromStream(pGame, pUnit, (short int*)pItemData, 0x47, nStreamEnd, bUsePageHandler, (int*)ppnShort);
+    } else {
+      if (!(eFormat >= 0x48 && eFormat <= 0x60)) {
+        return 1;
+      }
+      nResult = PLRSAVE_LoadItemListFromStream(pGame, pUnit, (uint8_t*)pItemData, eFormat, nStreamEnd, bUsePageHandler, ppnShort);
     }
-    if (eFormat >= 0x48 && eFormat <= 0x60) {
-      nNewStreamResult = PLRSAVE_LoadItemListFromStream(pGame, pUnit, (uint8_t*)pItemData, eFormat, nStreamEnd, bUsePageHandler, ppnShort);
-      return nNewStreamResult;
-    }
-
-    return 1;
+    return nResult;
 }
 
 // Creates a player corpse unit during save-game loading. Allocates a UNIT_PLAYER ghost with UNITFLAG_CANBEATTACKED cleared and STATE_playerbody set, copies client/name/seed from the live unit, sets inventory owner GUID, then restores the corpse's items from the save stream (either PLRSAVE_RestoreItemsFromStream for format 0x47 or PLRSAVE_LoadItemListFromStream for 0x48-0x60). On success appends an inventory notification and sends 0x8E CorpseAssign.
@@ -2116,10 +2114,10 @@ int32_t __fastcall _oldSaveGameLoadingPart8_part1_part1(uint16_t wHirelingId, in
       case 7:
 
       case 8:
-        if (nLevel < 0x37) {
-          return nLevel >= 0x1f ? 0xd2 : 0x69;
+        if (nLevel >= 0x37) {
+          return 0x1a4;
         }
-      return 0x1a4;
+        return nLevel >= 0x1f ? 0xd2 : 0x69;
       case 9:
 
       case 10:
@@ -2129,15 +2127,15 @@ int32_t __fastcall _oldSaveGameLoadingPart8_part1_part1(uint16_t wHirelingId, in
       case 0xf:
 
       case 0x11:
-        if (nLevel < 0x3d) {
-          return nLevel >= 0x25 ? 0xdc : 0x6e;
+        if (nLevel >= 0x3d) {
+          return 0x1b8;
         }
-      return 0x1b8;
+        return nLevel >= 0x25 ? 0xdc : 0x6e;
       case 0x10:
-        if (nLevel < 0x3d) {
-          return nLevel >= 0x25 ? 0xe6 : 0x73;
+        if (nLevel >= 0x3d) {
+          return 0x104;
         }
-      return 0x104;
+        return nLevel >= 0x25 ? 0xe6 : 0x73;
       case 0x12:
 
       case 0x14:
@@ -2149,10 +2147,10 @@ int32_t __fastcall _oldSaveGameLoadingPart8_part1_part1(uint16_t wHirelingId, in
       case 0x18:
 
       case 0x19:
-        if (nLevel < 0x4b) {
-          return nLevel >= 0x2a ? 0x1b8 : 0xdc;
+        if (nLevel >= 0x4b) {
+          return 0x370;
         }
-      return 0x370;
+        return nLevel >= 0x2a ? 0x1b8 : 0xdc;
       case 0x1a:
 
       case 0x1b:

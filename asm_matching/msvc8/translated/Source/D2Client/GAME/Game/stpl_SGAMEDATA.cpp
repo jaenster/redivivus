@@ -354,17 +354,6 @@ template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSHashObjectChunk<SGAME
 }
 
 template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::SetCount(uint32_t nCount) {
-    TSLink<::SGAMEDATA>* pTVar1;
-    uint32_t uVar2;
-    TSLink<::SGAMEDATA>* pTVar3;
-    uint32_t nAligned;
-    uint32_t* pSlot;
-    int nByteOff;
-    int nRemain;
-    TSExplicitList<::SGAMEDATA, -572662307>* pSlotI;
-    TSLink<::SGAMEDATA>** pPrevLink;
-    uint32_t nIndex;
-    uint32_t* ppNewNodePrevLink;
     if (nCount > this->m_count) {
       uint32_t nGranularity;
       if (nCount > this->m_alloc) {
@@ -373,7 +362,7 @@ template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<SGAME
           nGranularity = this->CalcChunkSize(nCount);
         }
 
-        nAligned = nCount;
+        uint32_t nAligned = nCount;
         if (nCount % nGranularity) {
           nAligned = nGranularity - nCount % nGranularity + nCount;
         }
@@ -381,44 +370,43 @@ template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<SGAME
         this->ReallocData(nAligned);
       }
 
-      uVar2 = this->m_count;
-      if (uVar2 < nCount) {
-        nByteOff = uVar2 * 0xc;
-        nRemain = nCount - uVar2;
+      const uint32_t nOldCount = this->m_count;
+      if (nOldCount < nCount) {
+        int nByteOffset = nOldCount * sizeof(*this->m_data);
+        int nRemaining = nCount - nOldCount;
         do {
-          pSlot = (uint32_t*)((intptr_t)&this->m_data->m_linkoffset + nByteOff);
-          if (pSlot) {
-            ppNewNodePrevLink = pSlot + 1;
-            *ppNewNodePrevLink = 0;
-            pSlot[2] = 0;
-            *ppNewNodePrevLink = (uint32_t)(uintptr_t)ppNewNodePrevLink;
-            *pSlot = 0xdddddddd;
-            pSlot[2] = ~(uint32_t)ppNewNodePrevLink;
+          TSExplicitList<::SGAMEDATA, -572662307>* pInitSlot = reinterpret_cast<TSExplicitList<::SGAMEDATA, -572662307>*>(reinterpret_cast<char*>(this->m_data) + nByteOffset);
+          if (pInitSlot) {
+            TSLink<::SGAMEDATA>* pTerminator = &pInitSlot->m_terminator;
+            pTerminator->m_prevlink = 0;
+            pTerminator->m_next = 0;
+            pInitSlot->m_terminator.m_prevlink = pTerminator;
+            pInitSlot->m_linkoffset = -0x22222223;
+            pInitSlot->m_terminator.m_next = ~reinterpret_cast<intptr_t>(pTerminator);
           }
 
-          nByteOff += 0xc;
-          nRemain--;
-        } while (nRemain);
+          nByteOffset += sizeof(*this->m_data);
+          nRemaining--;
+        } while (nRemaining);
       }
     } else if (nCount < this->m_count) {
-      nIndex = nCount;
-      nByteOff = nCount * 0xc;
+      uint32_t nIndex = nCount;
+      int nByteOffset = nCount * sizeof(*this->m_data);
       do {
-        pSlotI = (TSExplicitList<::SGAMEDATA, -572662307>*)((intptr_t)&this->m_data->m_linkoffset + nByteOff);
+        TSExplicitList<::SGAMEDATA, -572662307>* pSlotI = reinterpret_cast<TSExplicitList<::SGAMEDATA, -572662307>*>(reinterpret_cast<char*>(this->m_data) + nByteOffset);
         pSlotI->UnlinkAll();
-        pTVar3 = pSlotI->m_terminator.m_prevlink;
-        pTVar1 = &pSlotI->m_terminator;
-        if (pTVar3) {
-          uVar2 = pTVar1->m_next;
-          pPrevLink = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pTVar1, -1);
-          *pPrevLink = pTVar3;
-          pTVar1->m_prevlink->m_next = pTVar1->m_next;
-          pTVar1->m_prevlink = 0;
-          pTVar1->m_next = 0;
+        TSLink<::SGAMEDATA>* pTerminator = &pSlotI->m_terminator;
+        TSLink<::SGAMEDATA>* pPrevious = pTerminator->m_prevlink;
+        if (pPrevious) {
+          TSLink<::SGAMEDATA>** pBackLink = reinterpret_cast<TSLink<::SGAMEDATA>**>(D2_StormNextLink(pTerminator, -1));
+          *pBackLink = pPrevious;
+          pTerminator->m_prevlink->m_next = pTerminator->m_next;
+          pTerminator->m_prevlink = 0;
+          pTerminator->m_next = 0;
         }
 
         nIndex++;
-        nByteOff += 0xc;
+        nByteOffset += sizeof(*this->m_data);
       } while (nIndex < this->m_count);
 
       this->m_count = nCount;

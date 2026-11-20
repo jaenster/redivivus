@@ -10,124 +10,124 @@ namespace Storm { namespace _3rdparty { namespace zlib { namespace adler32 {
 
 // Adler-32 checksum for DEFLATE algorithm. Combines two 16-bit checksums: sum of uncompressed bytes mod 65521 and sum-of-sums mod 65521. Optimized with 16-byte blocks for speed.
 uint32_t __fastcall ZLIB_Adler32(uint32_t nAdler, uint8_t * pbData, uint32_t nLen) {
-    uint32_t nBlockCount;
-    int nRun1;
-    int nRun2;
-    int nRun3;
-    int nRun4;
-    int nRun5;
-    int nRun6;
-    int nRun7;
-    int nRun8;
-    int nRun9;
-    int nRun10;
-    int nRun11;
-    int nRun12;
-    int nRun13;
-    int nRun14;
-    int nRun15;
-    uint32_t nRemaining;
-    uint32_t nSum2 = nAdler >> 0x10;
-    uint32_t nSum1 = nAdler & 0xffff;
+    const uint32_t nBase = 65521;
+    const uint32_t nMaxBlock = 5552;
+    uint32_t nSum2 = nAdler >> 16;
+    nAdler &= 0xffff;
     if (nLen == 1) {
-      nSum1 += *pbData;
-      if (nSum1 >= 0xfff1) {
-        nSum1 -= 0xfff1;
+      nAdler += pbData[0];
+      if (nAdler >= nBase) {
+        nAdler -= nBase;
       }
-
-      nSum2 += nSum1;
-      if (nSum2 >= 0xfff1) {
-        return nSum2 - 0xfff1 << 0x10 | nSum1;
+      nSum2 += nAdler;
+      if (nSum2 >= nBase) {
+        nSum2 -= nBase;
       }
-    } else {
-      int nOuterCount;
-      if (!pbData) {
-        return 1;
-      }
-      if (nLen < 0x10) {
-        for (; nLen; nLen--) {
-          nSum1 += *pbData;
-          pbData++;
-          nSum2 += nSum1;
-        }
-
-        if (nSum1 >= 0xfff1) {
-          nSum1 -= 0xfff1;
-        }
-
-        return nSum2 / 0xfff1 * 0xf + nSum2 << 0x10 | nSum1;
-      }
-
-      nRemaining = nLen;
-      if (nLen >= 0x15b0) {
-        nLen /= 0x15b0;
-        do {
-          nRemaining -= 0x15b0;
-          for (nOuterCount = 0; nOuterCount < 0x15b; nOuterCount++) {
-            nRun1 = nSum1 + *pbData;
-            nRun2 = nRun1 + (uint32_t)pbData[1];
-            nRun3 = nRun2 + (uint32_t)pbData[2];
-            nRun4 = nRun3 + (uint32_t)pbData[3];
-            nRun5 = nRun4 + (uint32_t)pbData[4];
-            nRun6 = nRun5 + (uint32_t)pbData[5];
-            nRun7 = nRun6 + (uint32_t)pbData[6];
-            nRun8 = nRun7 + (uint32_t)pbData[7];
-            nRun9 = nRun8 + (uint32_t)pbData[8];
-            nRun10 = nRun9 + (uint32_t)pbData[9];
-            nRun11 = nRun10 + (uint32_t)pbData[10];
-            nRun12 = nRun11 + (uint32_t)pbData[0xb];
-            nRun13 = nRun12 + (uint32_t)pbData[0xc];
-            nRun14 = nRun13 + (uint32_t)pbData[0xd];
-            nRun15 = nRun14 + (uint32_t)pbData[0xe];
-            nSum1 = nRun15 + (uint32_t)pbData[0xf];
-            nSum2 = nSum2 + nRun1 + nRun2 + nRun3 + nRun4 + nRun5 + nRun6 + nRun7 + nRun8 + nRun9 + nRun10 + nRun11 + nRun12 + nRun13 + nRun14 + nRun15 + nSum1;
-            pbData += 0x10;
-          }
-
-          nSum1 %= 0xfff1;
-          nSum2 %= 0xfff1;
-          nLen--;
-        } while (nLen);
-      }
-      if (nRemaining) {
-        if (nRemaining >= 0x10) {
-          nBlockCount = nRemaining >> 4;
-          do {
-            nOuterCount = nSum1 + *pbData;
-            nRun1 = nOuterCount + (uint32_t)pbData[1];
-            nRun2 = nRun1 + (uint32_t)pbData[2];
-            nRun3 = nRun2 + (uint32_t)pbData[3];
-            nRun4 = nRun3 + (uint32_t)pbData[4];
-            nRun5 = nRun4 + (uint32_t)pbData[5];
-            nRun6 = nRun5 + (uint32_t)pbData[6];
-            nRun7 = nRun6 + (uint32_t)pbData[7];
-            nRun8 = nRun7 + (uint32_t)pbData[8];
-            nRun9 = nRun8 + (uint32_t)pbData[9];
-            nRun10 = nRun9 + (uint32_t)pbData[10];
-            nRun11 = nRun10 + (uint32_t)pbData[0xb];
-            nRun12 = nRun11 + (uint32_t)pbData[0xc];
-            nRun13 = nRun12 + (uint32_t)pbData[0xd];
-            nRun14 = nRun13 + (uint32_t)pbData[0xe];
-            nSum1 = nRun14 + (uint32_t)pbData[0xf];
-            nRemaining -= 0x10;
-            nSum2 = nSum2 + nOuterCount + nRun1 + nRun2 + nRun3 + nRun4 + nRun5 + nRun6 + nRun7 + nRun8 + nRun9 + nRun10 + nRun11 + nRun12 + nRun13 + nRun14 + nSum1;
-            pbData += 0x10;
-            nBlockCount--;
-          } while (nBlockCount);
-        }
-
-        for (; nRemaining; nRemaining--) {
-          nSum1 += *pbData;
-          pbData++;
-          nSum2 += nSum1;
-        }
-
-        nSum1 %= 0xfff1;
-        nSum2 %= 0xfff1;
-      }
+      return nAdler | (nSum2 << 16);
     }
 
-    return nSum2 << 0x10 | nSum1;
+    if (!pbData) {
+      return 1;
+    }
+
+    if (nLen < 16) {
+      while (nLen--) {
+        nAdler += *pbData++;
+        nSum2 += nAdler;
+      }
+      if (nAdler >= nBase) {
+        nAdler -= nBase;
+      }
+      nSum2 %= nBase;
+      return nAdler | (nSum2 << 16);
+    }
+
+    while (nLen >= nMaxBlock) {
+      nLen -= nMaxBlock;
+      uint32_t n = nMaxBlock / 16;
+      do {
+        nAdler += pbData[0];
+        nSum2 += nAdler;
+        nAdler += pbData[1];
+        nSum2 += nAdler;
+        nAdler += pbData[2];
+        nSum2 += nAdler;
+        nAdler += pbData[3];
+        nSum2 += nAdler;
+        nAdler += pbData[4];
+        nSum2 += nAdler;
+        nAdler += pbData[5];
+        nSum2 += nAdler;
+        nAdler += pbData[6];
+        nSum2 += nAdler;
+        nAdler += pbData[7];
+        nSum2 += nAdler;
+        nAdler += pbData[8];
+        nSum2 += nAdler;
+        nAdler += pbData[9];
+        nSum2 += nAdler;
+        nAdler += pbData[10];
+        nSum2 += nAdler;
+        nAdler += pbData[11];
+        nSum2 += nAdler;
+        nAdler += pbData[12];
+        nSum2 += nAdler;
+        nAdler += pbData[13];
+        nSum2 += nAdler;
+        nAdler += pbData[14];
+        nSum2 += nAdler;
+        nAdler += pbData[15];
+        nSum2 += nAdler;
+        pbData += 16;
+      } while (--n);
+      nAdler %= nBase;
+      nSum2 %= nBase;
+    }
+    if (nLen != 0) {
+      while (nLen >= 16) {
+        nLen -= 16;
+        nAdler += pbData[0];
+        nSum2 += nAdler;
+        nAdler += pbData[1];
+        nSum2 += nAdler;
+        nAdler += pbData[2];
+        nSum2 += nAdler;
+        nAdler += pbData[3];
+        nSum2 += nAdler;
+        nAdler += pbData[4];
+        nSum2 += nAdler;
+        nAdler += pbData[5];
+        nSum2 += nAdler;
+        nAdler += pbData[6];
+        nSum2 += nAdler;
+        nAdler += pbData[7];
+        nSum2 += nAdler;
+        nAdler += pbData[8];
+        nSum2 += nAdler;
+        nAdler += pbData[9];
+        nSum2 += nAdler;
+        nAdler += pbData[10];
+        nSum2 += nAdler;
+        nAdler += pbData[11];
+        nSum2 += nAdler;
+        nAdler += pbData[12];
+        nSum2 += nAdler;
+        nAdler += pbData[13];
+        nSum2 += nAdler;
+        nAdler += pbData[14];
+        nSum2 += nAdler;
+        nAdler += pbData[15];
+        nSum2 += nAdler;
+        pbData += 16;
+      }
+      while (nLen--) {
+        nAdler += *pbData++;
+        nSum2 += nAdler;
+      }
+      nAdler %= nBase;
+      nSum2 %= nBase;
+    }
+    return nAdler | (nSum2 << 16);
 }
 
 static uint32_t __stdcall ZLIB_Adler32Combine(uint32_t nAdler1, uint32_t nLen2Lo, uint32_t nLen2Hi, uint32_t nAdler2) {

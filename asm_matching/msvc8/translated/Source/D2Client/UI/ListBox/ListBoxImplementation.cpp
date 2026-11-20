@@ -391,11 +391,12 @@ int __fastcall OnDownArrow(::ListBoxImplementation * pThis, int, D2UIMouseMsgStr
     if (pThis->nSelectedIndex < (int)(pThis->nItemCount - 1)) {
       pThis->nSelectedIndex++;
       Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
-      if (pThis->nSelectedIndex < pThis->nFirstVisibleIndex) {
-        pThis->nFirstVisibleIndex = pThis->nSelectedIndex;
+      int* pFirst = &pThis->nFirstVisibleIndex;
+      if (pThis->nSelectedIndex < (*pFirst)) {
+        (*pFirst) = pThis->nSelectedIndex;
       }
-      if (pThis->nSelectedIndex >= pThis->nVisibleRows + pThis->nFirstVisibleIndex) {
-        pThis->nFirstVisibleIndex++;
+      if (pThis->nSelectedIndex >= (*pFirst) + pThis->nVisibleRows) {
+        ++(*pFirst);
       }
     }
 

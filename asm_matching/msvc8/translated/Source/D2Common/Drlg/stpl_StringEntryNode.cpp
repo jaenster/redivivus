@@ -232,34 +232,32 @@ template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::Next(
 }
 
 template<> void TSHashObject<StringEntryNode, HASHKEY_STRI>::Destructor() {
-    TSLink<::StringEntryNode>** pPrevLink2;
     char* pObject = this->m_key.szString;
     if (pObject) {
       Storm::Source::SMem::SMemFree(pObject, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
     }
 
-    TSLink<::StringEntryNode>* nHeadEntry = this->m_linktofull.m_prevlink;
-    TSLink<::StringEntryNode>* pTVar1 = &this->m_linktofull;
-    if (nHeadEntry) {
-      TSLink<::StringEntryNode>** pPrevLink;
-      pPrevLink = (TSLink<::StringEntryNode>**)D2_StormNextLink(pTVar1, -1);
-      *pPrevLink = nHeadEntry;
-      pTVar1->m_prevlink->m_next = pTVar1->m_next;
-      pTVar1->m_prevlink = 0;
-      this->m_linktofull.m_next = 0;
+    TSLink<::StringEntryNode>* pFullLink = &this->m_linktofull;
+    TSLink<::StringEntryNode>* pPreviousLink = pFullLink->m_prevlink;
+    if (pPreviousLink) {
+      TSLink<::StringEntryNode>** pBackLink = (TSLink<::StringEntryNode>**)D2_StormNextLink(pFullLink, -1);
+      *pBackLink = pPreviousLink;
+      pFullLink->m_prevlink->m_next = pFullLink->m_next;
+      pFullLink->m_prevlink = 0;
+      pFullLink->m_next = 0;
     }
 
-    nHeadEntry = this->m_linktoslot.m_prevlink;
-    pTVar1 = &this->m_linktoslot;
-    if (!nHeadEntry) {
+    TSLink<::StringEntryNode>* pSlotLink = &this->m_linktoslot;
+    pPreviousLink = pSlotLink->m_prevlink;
+    if (!pPreviousLink) {
       return;
     }
 
-    pPrevLink2 = (TSLink<::StringEntryNode>**)D2_StormNextLink(pTVar1, -1);
-    *pPrevLink2 = nHeadEntry;
-    pTVar1->m_prevlink->m_next = pTVar1->m_next;
-    pTVar1->m_prevlink = 0;
-    pTVar1->m_next = 0;
+    TSLink<::StringEntryNode>** pBackLink2 = (TSLink<::StringEntryNode>**)D2_StormNextLink(pSlotLink, -1);
+    *pBackLink2 = pPreviousLink;
+    pSlotLink->m_prevlink->m_next = pSlotLink->m_next;
+    pSlotLink->m_prevlink = 0;
+    pSlotLink->m_next = 0;
 }
 
 template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalClear(int32_t bUnlinkOnly) {

@@ -1437,14 +1437,8 @@ static BOOL RENDERER_GLIDE_InitWindow(int32_t nParam, FxU32 dwWindowHandle) {
     static int gnGlideRefreshRate640; D2_STATIC_GUARD_BSS(gnGlideRefreshRate640, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitWindow::gnGlideRefreshRate640");
     static int gnGlideRefreshRate800; D2_STATIC_GUARD_BSS(gnGlideRefreshRate800, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitWindow::gnGlideRefreshRate800");
 
-    // Frame slots -16..-8 are ONE object: &nIsDebugHardware is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nIsDebugHardware;
-      BOOL nResult;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    BOOL nResult;
+    int nIsDebugHardware;
     BOOL bInitTexMemOk;
     GrScreenResolution_t screen_resolution;
     FxI32 nTexMemFbzModes;
@@ -1457,32 +1451,27 @@ static BOOL RENDERER_GLIDE_InitWindow(int32_t nParam, FxU32 dwWindowHandle) {
     }
 
     RENDERER_GLIDE_GenerateDebugFont();
-    __frame0.nResult = 0;
-    if (!nParam) {
+    nResult = 0;
+    if (nParam == 0) {
       screen_resolution = 7;
-      RENDERER_nWindowWidth = 0x280;
-      RENDERER_nWindowHeight = 0x1e0;
+      RENDERER_nWindowWidth = 640;
+      RENDERER_nWindowHeight = 480;
       refresh_rate = gnGlideRefreshRate640;
     } else {
       screen_resolution = 8;
       RENDERER_nWindowWidth = 800;
       RENDERER_nWindowHeight = 600;
-      gbGlidePerspectiveMode = 0;
       refresh_rate = gnGlideRefreshRate800;
-      switch (nParam) {
-        default:
-          {
-            goto open_sst_window;
-          }
-        case 2:
-          {
-            break;
-          }
-      }
     }
-
-    gbGlidePerspectiveMode = 1;
-    open_sst_window:
+    switch (nParam) {
+    case 0:
+    case 2:
+      gbGlidePerspectiveMode = 1;
+      break;
+    default:
+      gbGlidePerspectiveMode = 0;
+      break;
+    }
     gnGlideWindowHandle = (HWND)dwWindowHandle;
     ghGlideSstWindow = (*GLIDEDLL_grSstWinOpen_28)(dwWindowHandle, screen_resolution, refresh_rate, 2, 0, 2, 0);
     if (ghGlideSstWindow) {
@@ -1495,13 +1484,13 @@ static BOOL RENDERER_GLIDE_InitWindow(int32_t nParam, FxU32 dwWindowHandle) {
         (*GLIDEDLL_grGet_12)(0x11, 4, &nTMUCount);
         gnGlideSecondaryTMUCount[0] = (int)(1 < nTMUCount);
         (*GLIDEDLL_grGet_12)(0x13, 4, &gnGlideTextureMemoryUsed);
-        if (2 < gnGlideTextureMemoryUsed) {
+        if (gnGlideTextureMemoryUsed >= 3) {
           gnGlideTextureMemoryUsed = 3;
         }
 
         (*GLIDEDLL_grGet_12)(0x24, 4, &gnGlideTextureMemoryMask);
-        (*GLIDEDLL_grGet_12)(0xe, 4, &__frame0.nIsDebugHardware);
-        gbGlideIsDebugBuild = (uint32_t)(__frame0.nIsDebugHardware != 0);
+        (*GLIDEDLL_grGet_12)(0xe, 4, &nIsDebugHardware);
+        gbGlideIsDebugBuild = (uint32_t)(nIsDebugHardware != 0);
         if (!gnGlideTextureMemoryUsed) {
           return 0;
         }
@@ -1534,13 +1523,13 @@ static BOOL RENDERER_GLIDE_InitWindow(int32_t nParam, FxU32 dwWindowHandle) {
       (*GLIDEDLL_grChromakeyValue_4)(0xff);
       bInitTexMemOk = RENDERER_GLIDE_InitTextureMemory();
       if (bInitTexMemOk) {
-        return 1;
+        nResult = 1;
       }
     } else {
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("Opening Glide window failed!");
     }
 
-    return __frame0.nResult;
+    return nResult;
 }
 
 BOOL Release() {

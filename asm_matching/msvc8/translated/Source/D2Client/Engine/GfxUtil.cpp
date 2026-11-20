@@ -184,24 +184,33 @@ static int gArmTypeTokens[3] = {0}; D2_STATIC_GUARD(gArmTypeTokens, "gArmTypeTok
 namespace D2Client { namespace Engine { namespace GfxUtil {
 
 static void GFXUTIL_PadTokenString(char * szText1, char * szText2) {
-    if (*szText1 == '\0') {
-      memcpy(szText2, "    ", 4);
+    const char cInput0 = szText1[0];
+    if (cInput0 == '\0') {
+      szText2[0] = ' ';
+      szText2[1] = ' ';
+      szText2[2] = ' ';
+      szText2[3] = ' ';
       return;
     }
 
-    *szText2 = *szText1;
-    if (szText1[1] == '\0') {
+    szText2[0] = cInput0;
+    const char cInput1 = szText1[1];
+    if (cInput1 == '\0') {
       szText2[1] = ' ';
       szText2[2] = ' ';
-    } else {
-      szText2[1] = szText1[1];
-      if (szText1[2] == '\0') {
-        szText2[2] = ' ';
-      } else {
-        szText2[2] = szText1[2];
-      }
+      szText2[3] = ' ';
+      return;
     }
 
+    szText2[1] = cInput1;
+    const char cInput2 = szText1[2];
+    if (cInput2 == '\0') {
+      szText2[2] = ' ';
+      szText2[3] = ' ';
+      return;
+    }
+
+    szText2[2] = cInput2;
     szText2[3] = ' ';
 }
 
@@ -271,25 +280,18 @@ void __stdcall InitializeModeTokens() {
       nMode++;
     } while (nMode < 8);
 
-    gArmTypeTokens[0] = 0;
-    gArmTypeTokens[1] = 0;
-    gArmTypeTokens[2] = 0;
+    memset(gArmTypeTokens, 0, 3 * sizeof(gArmTypeTokens[0]));
     uint32_t nId = 0;
-    while (true) {
+    do {
       pArmTypeTxt = D2Common::DATATBLS::TokTbls::TxtGetArmTypeLine(nId);
       if (!pArmTypeTxt) {
-        break;
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a);
+        exit(-1);
       }
 
       gArmTypeTokens[nId] = *(int*)pArmTypeTxt->token;
       nId++;
-      if (nId >= 3) {
-        return;
-      }
-    }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a);
-    exit(-1);
+    } while (nId < 3);
 }
 
 static void __stdcall GFXUTIL_SetMissileCelFile(D2GfxDataStrc * pGfxData, D2UnitStrc * pMissile) {

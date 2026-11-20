@@ -155,11 +155,11 @@ void __stdcall UI_ToggleMiniPanel() {
     int32_t nInteractGuid;
     int nMiniPanelRegVal;
     _bRegistryRead = Storm::Source::SReg::SRegLoadValue("Diablo II", "Mini Panel", 1, &nMiniPanelRegVal);
-    BOOL bWasMiniPanelOpen = GFX_bShowUIFlag.MiniPanel;
     if (_bRegistryRead && nMiniPanelRegVal) {
       return;
     }
 
+    BOOL bWasMiniPanelOpen = GFX_bShowUIFlag.MiniPanel;
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     if (bIsExpansion) {
       GAME::Game::CLIENT_CheckExpansion();
@@ -191,8 +191,11 @@ void __stdcall UI_ToggleMiniPanel() {
               case 1:
                 ui::SetUIFlag(eUI, UI_RESET, 0);
               break;
+              case 2:
+              case 3:
+                goto skip_toggle;
               default:
-                return;
+                goto skip_toggle;
             }
           }
 
@@ -201,7 +204,8 @@ void __stdcall UI_ToggleMiniPanel() {
       }
     }
 
-    D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
+    D2UnitStrc* pUnit;
+    pUnit = UNIT::Player::GetPlayerUnit_UI();
     if (!pUnit || pUnit->eUnitType == UNIT_PLAYER && (_bRegistryRead = UNIT::CUnit::IsActive(pUnit) , !_bRegistryRead)) {
       GFX_bShowUIFlag.MiniPanel = (BOOL)!GFX_bShowUIFlag.MiniPanel;
     }
@@ -218,6 +222,8 @@ void __stdcall UI_ToggleMiniPanel() {
 
     Cursor::GetMouseX();
     Cursor::GetMouseY();
+skip_toggle:
+    return;
 }
 
 void __stdcall InitializeUI() {

@@ -27,6 +27,10 @@
 //!   oracle-zig trial --root <dir> --state | --out DIR [-j N] [--batch N] [--expect KEY] < trials
 //!                                                 compile form-permuter trials beside the build
 //!   oracle-zig judge --root <dir> < requests      judge trial objects against the original
+//!   oracle-zig try-source [--root R] <address> <body file> [--helpers F] [--expect STATUS]
+//!                                                 one hand-written body judged in its TU
+//!   oracle-zig try-serve [--root R] [--idle S] [--max-requests N]
+//!                                                 the queue try-source talks to
 //!
 //! The tools around them, each with its script's command line (`--root` optional, cli.root):
 //!   quick, check, diff, snippet, objdiff, diffgrams, sizetrend, abcompare, tulayout, svg,
@@ -50,6 +54,7 @@ const permodule = @import("permodule.zig");
 const compile = @import("compile.zig");
 const tucache = @import("tucache.zig");
 const permute = @import("permute.zig");
+const trysource = @import("trysource.zig");
 const aligndump = @import("aligndump.zig");
 const soleblock = @import("soleblock.zig");
 const asmdiff = @import("asmdiff.zig");
@@ -84,6 +89,8 @@ const USAGE =
     \\       oracle-zig trial --root <asm_matching/msvc8> --state
     \\       oracle-zig trial --root <asm_matching/msvc8> --out DIR [-j N] [--batch N] [--expect KEY] < trials
     \\       oracle-zig judge --root <asm_matching/msvc8> < requests
+    \\       oracle-zig try-source [--root R] <address> <body file> [--helpers FILE] [--expect STATUS] [--context N]
+    \\       oracle-zig try-serve [--root R] [--idle SECONDS] [--max-requests N]
     \\       oracle-zig quick [-j N] [--verify] [--exe-map F]
     \\       oracle-zig all --root <asm_matching/msvc8> [build options]  (Windows host)
     \\       oracle-zig check [--update] [PATTERN ...]
@@ -191,6 +198,7 @@ pub fn main(init: std.process.Init.Minimal) !void {
     if (std.mem.eql(u8, cmd, "translate")) return compile.translateMain(rest);
     if (std.mem.eql(u8, cmd, "tucache")) return tucache.main(rest);
     if (std.mem.eql(u8, cmd, "trial") or std.mem.eql(u8, cmd, "judge")) return permute.main(cmd, rest);
+    if (std.mem.eql(u8, cmd, "try-source") or std.mem.eql(u8, cmd, "try-serve")) return trysource.main(cmd, rest);
     if (std.mem.eql(u8, cmd, "diff")) return asmdiff.main(rest);
     if (std.mem.eql(u8, cmd, "aligndump")) return aligndump.main(rest);
     if (std.mem.eql(u8, cmd, "soleblock")) return soleblock.main(rest);
@@ -225,4 +233,5 @@ test {
     _ = permodule;
     _ = soleblock;
     _ = permute;
+    _ = trysource;
 }

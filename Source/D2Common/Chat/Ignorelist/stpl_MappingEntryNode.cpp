@@ -188,7 +188,7 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::Unreferenced_0060f
     TSLink<::MappingEntryNode>* pTVar1 = &this->m_terminator;
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;
-    pTVar1->m_prevlink = pTVar1;
+    this->m_terminator.m_prevlink = pTVar1;
     this->m_linkoffset = -0x22222223;
     this->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }
@@ -376,72 +376,60 @@ void __thiscall thunk_Destructor(TSGrowableArray<TSExplicitList<MappingEntryNode
 }
 
 template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::SetCount(uint32_t nCount) {
-    TSLink<::MappingEntryNode>* pTVar1;
-    uint32_t uVar2;
-    TSLink<::MappingEntryNode>* pTVar3;
-    uint32_t uAlignedSize;
-    uint32_t* pBucket;
-    int nByteOffset;
-    int nCountReg;
-    TSExplicitList<::MappingEntryNode, -572662307>* pSrcBucket;
-    TSLink<::MappingEntryNode>** pPrevLink;
-    uint32_t nBucketIdx;
-    uint32_t* pBucketSlot;
     if (nCount > this->m_count) {
-      uint32_t uGranularity;
+      uint32_t nGranularity;
       if (nCount > this->m_alloc) {
-        uGranularity = this->m_chunk;
-        if (!uGranularity) {
-          uGranularity = this->CalcChunkSize(nCount);
+        nGranularity = this->m_chunk;
+        if (!nGranularity) {
+          nGranularity = this->CalcChunkSize(nCount);
         }
 
-        uAlignedSize = nCount;
-        if (nCount % uGranularity) {
-          uAlignedSize = uGranularity - nCount % uGranularity + nCount;
+        uint32_t nAligned = nCount;
+        if (nCount % nGranularity) {
+          nAligned = nGranularity - nCount % nGranularity + nCount;
         }
 
-        this->ReallocData(uAlignedSize);
+        this->ReallocData(nAligned);
       }
 
-      uVar2 = this->m_count;
-      if (uVar2 < nCount) {
-        nByteOffset = uVar2 * 0xc;
-        nCountReg = nCount - uVar2;
+      const uint32_t nOldCount = this->m_count;
+      if (nOldCount < nCount) {
+        int nByteOffset = nOldCount * sizeof(*this->m_data);
+        int nRemaining = nCount - nOldCount;
         do {
-          pBucket = (uint32_t*)((intptr_t)&this->m_data->m_linkoffset + nByteOffset);
-          if (pBucket) {
-            pBucketSlot = pBucket + 1;
-            *pBucketSlot = 0;
-            pBucket[2] = 0;
-            *pBucketSlot = (uint32_t)(uintptr_t)pBucketSlot;
-            *pBucket = 0xdddddddd;
-            pBucket[2] = ~(uint32_t)pBucketSlot;
+          TSExplicitList<::MappingEntryNode, -572662307>* pInitSlot = reinterpret_cast<TSExplicitList<::MappingEntryNode, -572662307>*>(reinterpret_cast<char*>(this->m_data) + nByteOffset);
+          if (pInitSlot) {
+            TSLink<::MappingEntryNode>* pTerminator = &pInitSlot->m_terminator;
+            pTerminator->m_prevlink = 0;
+            pTerminator->m_next = 0;
+            pInitSlot->m_terminator.m_prevlink = pTerminator;
+            pInitSlot->m_linkoffset = -0x22222223;
+            pInitSlot->m_terminator.m_next = ~reinterpret_cast<intptr_t>(pTerminator);
           }
 
-          nByteOffset += 0xc;
-          nCountReg--;
-        } while (nCountReg);
+          nByteOffset += sizeof(*this->m_data);
+          nRemaining--;
+        } while (nRemaining);
       }
     } else if (nCount < this->m_count) {
-      nBucketIdx = nCount;
-      nByteOffset = nCount * 0xc;
+      uint32_t nIndex = nCount;
+      int nByteOffset = nCount * sizeof(*this->m_data);
       do {
-        pSrcBucket = (TSExplicitList<::MappingEntryNode, -572662307>*)((intptr_t)&this->m_data->m_linkoffset + nByteOffset);
-        pSrcBucket->UnlinkAll();
-        pTVar3 = pSrcBucket->m_terminator.m_prevlink;
-        pTVar1 = &pSrcBucket->m_terminator;
-        if (pTVar3) {
-          uVar2 = pTVar1->m_next;
-          pPrevLink = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pTVar1, -1);
-          *pPrevLink = pTVar3;
-          pTVar1->m_prevlink->m_next = pTVar1->m_next;
-          pTVar1->m_prevlink = 0;
-          pTVar1->m_next = 0;
+        TSExplicitList<::MappingEntryNode, -572662307>* pSlotI = reinterpret_cast<TSExplicitList<::MappingEntryNode, -572662307>*>(reinterpret_cast<char*>(this->m_data) + nByteOffset);
+        pSlotI->UnlinkAll();
+        TSLink<::MappingEntryNode>* pTerminator = &pSlotI->m_terminator;
+        TSLink<::MappingEntryNode>* pPrevious = pTerminator->m_prevlink;
+        if (pPrevious) {
+          TSLink<::MappingEntryNode>** pBackLink = reinterpret_cast<TSLink<::MappingEntryNode>**>(D2_StormNextLink(pTerminator, -1));
+          *pBackLink = pPrevious;
+          pTerminator->m_prevlink->m_next = pTerminator->m_next;
+          pTerminator->m_prevlink = 0;
+          pTerminator->m_next = 0;
         }
 
-        nBucketIdx++;
-        nByteOffset += 0xc;
-      } while (nBucketIdx < this->m_count);
+        nIndex++;
+        nByteOffset += sizeof(*this->m_data);
+      } while (nIndex < this->m_count);
 
       this->m_count = nCount;
       return;

@@ -439,12 +439,12 @@ static BOOL __fastcall SCMD_PerformConversion(char * str, CMDDEF * cmdDef, int *
     cmdDef->bSupplied = 1;
     if (cmdDef->pfnCallback) {
       BOOL nCbResult;
-      sParams.dwId = cmdDef->nCmdGroupId;
       sParams.dwFlags = cmdDef->nArgTypeFlags;
-      sParams.pVariable = cmdDef->pVariable;
+      sParams.dwId = cmdDef->nCmdGroupId;
       sParams.szName = cmdDef->szName;
-      sParams.dwSetMask = cmdDef->dwSetMask;
+      sParams.pVariable = cmdDef->pVariable;
       sParams.dwSetValue = cmdDef->dwSetValue;
+      sParams.dwSetMask = cmdDef->dwSetMask;
       sParams.uValue = cmdDef->uValue;
       nCbResult = cmdDef->pfnCallback(&sParams, str);
       if (!nCbResult) {
@@ -483,7 +483,7 @@ static BOOL __fastcall SCMD_PerformConversion(char * str, CMDDEF * cmdDef, int *
       }
 
       i++;
-    } while (i < 2);
+    } while (i <= 1);
 
     return 1;
 }

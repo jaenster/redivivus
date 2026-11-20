@@ -401,32 +401,25 @@ static LPWSTR Unreferenced_00404100(LPWSTR szString, uint16_t wChar) {
 }
 
 static size_t STRING_CopyStringBounded(int32_t nDestSize, char * szDest, char * szSrc) {
-    char* pSrcScan;
-    pSrcScan = szSrc;
-    if (nDestSize) {
-      char cCurChar;
-      do {
-        nDestSize--;
-        if (!nDestSize) {
-          goto truncate;
+    char* pSrcScan = szSrc;
+    if (nDestSize != 0) {
+      uint32_t nRemaining = static_cast<uint32_t>(nDestSize) - 1;
+      for (; nRemaining != 0; --nRemaining) {
+        const char cByte = *pSrcScan;
+        *szDest++ = cByte;
+        ++pSrcScan;
+        if (cByte == '\0') {
+          break;
         }
-
-        cCurChar = *pSrcScan;
-        *szDest = cCurChar;
-        szDest++;
-        pSrcScan++;
-      } while (cCurChar != '\0');
-
-      if (nDestSize) {
-        return (size_t)(pSrcScan + (-1 - (intptr_t)szSrc));
       }
-
-      truncate:
+      if (nRemaining != 0) {
+        return pSrcScan - szSrc - 1;
+      }
       *szDest = '\0';
     }
-
-    pSrcScan = pSrcScan + strlen(pSrcScan) + 1;
-    return (size_t)(pSrcScan + (-1 - (intptr_t)szSrc));
+    while (*pSrcScan++ != '\0') {
+    }
+    return pSrcScan - szSrc - 1;
 }
 
 size_t __stdcall STRING_AppendStringToString(char * szDest, int32_t nDestSize, char * szSrc) {

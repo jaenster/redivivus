@@ -497,7 +497,10 @@ uint32_t __fastcall ARENA_IsNoCubeRecipes(::SGAMEDATA * pGame) {
       exit(-1);
     }
 
-    return pGame->pArenaCtrl->eArenaFlags >> 0x10 & 1;
+    if ((pGame->pArenaCtrl->eArenaFlags & 0x10000u) != 0) {
+      return 1;
+    }
+    return 0;
 }
 
 eD2ArenaFlags __fastcall ARENA_GetFlags(::SGAMEDATA * pGame) {

@@ -1103,11 +1103,11 @@ void __fastcall RENDERER_D3D_SaveDeviceConfigToRegistry(uint32_t nRenderMode, in
     sprintf(szGuidKey, "GUID");
     HKEY hCreatedKey = (HKEY)0x0;
     LSTATUS nRegResult = RegCreateKeyExA(HKEY_CURRENT_USER, "SOFTWARE\\Blizzard Entertainment\\Diablo II\\VideoConfig", 0, (LPSTR)0x0, 0, 0x20006, (LPSECURITY_ATTRIBUTES)0x0, &hCreatedKey, &dwDisposition);
-    HKEY hKey = hCreatedKey;
     if (nRegResult) {
       return;
     }
 
+    HKEY hKey = hCreatedKey;
     uint32_t dwRegValue = nRenderMode;
     /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ RegSetValueExA(hCreatedKey, "Render", 0, 4, (uint8_t*)&dwRegValue, 4);
     char* lpData = gdwD3DDeviceFlags[nDeviceIndex].szName;

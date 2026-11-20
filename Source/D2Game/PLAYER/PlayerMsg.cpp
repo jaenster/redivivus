@@ -1203,21 +1203,15 @@ void __fastcall SendInitUpdateAttributes(D2UnitStrc * pUnit, D2ClientStrc * pCli
     // Static local variables (originally global data)
     static eD2UnitStat geInitAttrStatFirst[6] = { UNITSTAT_velocitypercent, UNITSTAT_attackrate, UNITSTAT_level, UNITSTAT_strength, UNITSTAT_dexterity, (eD2UnitStat)-1 }; D2_STATIC_GUARD(geInitAttrStatFirst, "D2Game::PLAYER::PlayerMsg::SendInitUpdateAttributes::geInitAttrStatFirst");
 
-    int nNextStatIdx;
     D2UnitStrc* pClientUnit = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
     if (pClientUnit == pUnit) {
       return;
     }
 
-    int nStatIdx = 0;
-    eD2UnitStat pStatEntry = geInitAttrStatFirst[0];
-    while (pStatEntry != ~UNITSTAT_strength) {
-      uint32_t nStatValue;
-      nStatValue = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, pStatEntry, 0);
-      SendAttributeUpdate(pUnit, (uint16_t)pStatEntry, nStatValue, pClientUnit);
-      nNextStatIdx = nStatIdx + 1;
-      nStatIdx++;
-      pStatEntry = geInitAttrStatFirst[nNextStatIdx];
+    for (int nStatIdx = 0; geInitAttrStatFirst[nStatIdx] != static_cast<eD2UnitStat>(-1); ++nStatIdx) {
+      const eD2UnitStat eStat = geInitAttrStatFirst[nStatIdx];
+      const uint32_t nStatValue = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, eStat, 0);
+      SendAttributeUpdate(pUnit, static_cast<uint16_t>(eStat), nStatValue, pClientUnit);
     }
 }
 
@@ -1605,54 +1599,43 @@ eD2ServerIncomingStatus __thiscall ItemBelongsToInventoryOf(::SGAMEDATA * pThis,
 
 // Validates that an item (by GID) is accessible to the acting player for an interaction. Looks up the item unit; for ground/dropped states (Death/Neutral/Walk/GetHit modes) delegates to ItemIsOfPlayerAndNotOnCursor. For the Run mode (item on ground in another act area) calls IsOtherAct and CheckIfCoordsAreInRange (range 10). Returns 0 on success or a non-zero eD2ServerIncomingStatus error code (SERVERSTATUS_BAD_TARGET if item not found).
 static uint32_t __stdcall IsAccessableCheck(DWORD nItemGid, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    int32_t iVar1;
-    eD2ServerIncomingStatus nResult;
-    int32_t nErrOrCoordY;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x503);
       exit(-1);
     }
 
-    D2UnitStrc* pItem;
-    pItem = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_ITEM, nItemGid);
+    D2UnitStrc* pItem = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_ITEM, nItemGid);
     if (!pItem) {
-      bad_target:
-      nResult = SERVERSTATUS_BAD_TARGET;
-    } else {
-      switch (pItem->eAnimMode.ePlayerMode) {
-        case eD2PlayerAnimMode_ns::Run:
-          nResult = IsOtherAct(pItem, pUnit);
-        if (nResult == SERVERSTATUS_OK) {
-          nErrOrCoordY = D2Common::Units::GetXPosFromDynamicPathUnit(pItem);
-          iVar1 = D2Common::Units::GetYPosFromDynamicPathUnit(pItem);
-          nResult = CheckIfCoordsAreInRange(pUnit, 10, (uint16_t)nErrOrCoordY, (uint16_t)iVar1);
-          if (nResult != SERVERSTATUS_OK) {
-            return nResult;
-          }
-
-          return 0;
+      return SERVERSTATUS_BAD_TARGET;
+    }
+    switch (pItem->eAnimMode.ePlayerMode) {
+      case eD2PlayerAnimMode_ns::Run: {
+        const eD2ServerIncomingStatus eActStatus = IsOtherAct(pItem, pUnit);
+        if (eActStatus != SERVERSTATUS_OK) {
+          return eActStatus;
         }
-
-        break;
-        default:
-          goto bad_target;
-        case Death:
-
-        case eD2PlayerAnimMode_ns::Neutral:
-
-        case Walk:
-
-        case eD2PlayerAnimMode_ns::GetHit:
-          nResult = ItemIsOfPlayerAndNotOnCursor(nItemGid, pUnit, pGame);
-        if (nResult == SERVERSTATUS_OK) {
-          return 0;
+        const int32_t nX = D2Common::Units::GetXPosFromDynamicPathUnit(pItem);
+        const int32_t nY = D2Common::Units::GetYPosFromDynamicPathUnit(pItem);
+        const eD2ServerIncomingStatus coordStatus = CheckIfCoordsAreInRange(pUnit, 10, (uint16_t)nX, (uint16_t)nY);
+        if (coordStatus != SERVERSTATUS_OK) {
+          return coordStatus;
         }
-
         break;
       }
+      case Death:
+      case eD2PlayerAnimMode_ns::Neutral:
+      case Walk:
+      case eD2PlayerAnimMode_ns::GetHit: {
+        const eD2ServerIncomingStatus ownerStatus = ItemIsOfPlayerAndNotOnCursor(nItemGid, pUnit, pGame);
+        if (ownerStatus != SERVERSTATUS_OK) {
+          return ownerStatus;
+        }
+        break;
+      }
+      default:
+        return SERVERSTATUS_BAD_TARGET;
     }
-
-    return nResult;
+    return SERVERSTATUS_OK;
 }
 
 static int32_t __stdcall MONSTER_FindNearbyAllyUnit(::SGAMEDATA * pGame, int32_t bCheckRange, D2UnitStrc * * ppUnit, D2UnitStrc * pUnit, DWORD nUnitId) {
@@ -3023,13 +3006,13 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1D_SwapBodyItem(::SGAMEDATA * pGame, D
     }
 
     DWORD dwItemGUID = pPacket->dwItemGUID;
-    nSize = (uint32_t)(uint8_t)pPacket->dwBodyLoc;
+    const uint8_t nBodyLoc = static_cast<uint8_t>(pPacket->dwBodyLoc);
     eD2ServerIncomingStatus eVar1 = SERVER_IsItemOnCursor(pGame, pUnit, dwItemGUID);
     if (eVar1 != SERVERSTATUS_OK) {
       return (eD2ServerIncomingStatus)eVar1;
     }
 
-    uint32_t nGridOffset = nSize & 0xff;
+    uint32_t nGridOffset = nBodyLoc;
     if (nGridOffset - 1 > 9) {
       return SERVERSTATUS_BAD_DATA;
     }
@@ -3038,13 +3021,13 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1D_SwapBodyItem(::SGAMEDATA * pGame, D
     if (!pItem) {
       return SERVERSTATUS_BAD_TARGET;
     }
-    if ((char)nSize != '\b' || (nTradeCheck = PlayerTrade::PLAYERTRADE_CheckNoEquippedTradeItems(pGame, pUnit) , nTradeCheck != 0)) {
+    if (nBodyLoc != '\b' || (nTradeCheck = PlayerTrade::PLAYERTRADE_CheckNoEquippedTradeItems(pGame, pUnit) , nTradeCheck != 0)) {
       uint32_t nMovePermission;
       pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pUnit->pInventory, nGridOffset);
       nMovePermission = Player::CheckItemMovePermission(pGame, pUnit, pItem);
       if (nMovePermission) {
         nPacket = 0x0;
-        nSwapResult = ITEMS::ItemMode::SERVER_Swap2HandItem(pGame, pUnit, dwItemGUID, (eD2BodyLoc)nSize, 0, &nPacket);
+        nSwapResult = ITEMS::ItemMode::SERVER_Swap2HandItem(pGame, pUnit, dwItemGUID, static_cast<eD2BodyLoc>(nBodyLoc), 0, &nPacket);
         if (!nSwapResult && (D2GSPacketClt0x1D_Swap2HandItem*)nPacket) {
           return SERVERSTATUS_BAD_PARAMS;
         }
@@ -3506,9 +3489,6 @@ eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2D_ReturnBadParams(::SGAMEDATA * 
 
 // If target level is in the same act as the player, spawns a red portal (object 0x3B) at player position-5 X. If target is LEVEL_None, loads current act's town. If target is a different act, calls InitLevel directly. Used by SCMD handlers that warp the player to a new area.
 void __fastcall LoadAreaOrSpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2LevelId eLevel, int32_t nMasks) {
-    int32_t nUnitPosX;
-    int32_t nUnitPosY;
-    eD2UnitType eUnitType;
     eAct eTargetAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     eD2LevelId eCurLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
@@ -3520,25 +3500,9 @@ void __fastcall LoadAreaOrSpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, e
       return;
     }
     if (eTargetAct == eCurrentAct) {
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nUnitPosX = pUnit->pPath.pStaticPath->nPosX;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nUnitPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nUnitPosX = 0;
-      }
-
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nUnitPosY = pUnit->pPath.pStaticPath->nPosY;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nUnitPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nUnitPosY = 0;
-      }
-
-      SKILLS::SkillsServer::SERVER_SpawnPortal(pGame, pUnit, pRoom, nUnitPosX - 5, nUnitPosY, eLevel, nullptr, 0x3b, 0);
+      const int32_t nSpawnPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit) - 5;
+      const int32_t nUnitPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
+      SKILLS::SkillsServer::SERVER_SpawnPortal(pGame, pUnit, pRoom, nSpawnPosX, nUnitPosY, eLevel, nullptr, 0x3b, 0);
       return;
     }
 

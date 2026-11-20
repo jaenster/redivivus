@@ -538,40 +538,24 @@ void __fastcall Unreferenced_0055bfe0(D2UnitStrc * pUnit) {
 
 // Returns the skill ID associated with a scroll or book item unit. Checks if pUnit is a scroll (returns scrollskill) or book (returns bookskill) via the books.txt lookup using the item's magic suffix; returns -1 if not a scroll/book or if no books.txt record found. In: pUnit (ESI). Out: eD2Skills or 0xFFFFFFFF.
 static eD2Skills ITEMMODE_GetItemSkillId(D2UnitStrc * pUnit) {
-    uint32_t _bIsScrollOrBookType;
-    bool bIsScrollOrBookType;
-    uint32_t nSuffixId;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ec);
       exit(-1);
     }
 
-    _bIsScrollOrBookType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Scroll);
-    if (!_bIsScrollOrBookType) {
-      _bIsScrollOrBookType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Book);
-      if (!_bIsScrollOrBookType) {
-        return ~SKILL_Attack;
+    if (D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Scroll) || D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Book)) {
+      D2BooksTxt* pBookLine = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine(static_cast<uint16_t>(D2Common::ITEMS::Items::GetMagicSuffix(pUnit, 0)));
+      if (pBookLine) {
+        if (D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Scroll)) {
+          return pBookLine->scrollskill;
+        }
+        if (D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Book)) {
+          return pBookLine->bookskill;
+        }
       }
     }
 
-    *(uint16_t*)(char*)&nSuffixId = D2Common::ITEMS::Items::GetMagicSuffix(pUnit, 0);
-    nSuffixId = (uint32_t)(uint16_t)nSuffixId;
-    D2BooksTxt* pBookLine = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine(nSuffixId);
-    if (!pBookLine) {
-      return ~SKILL_Attack;
-    }
-
-    _bIsScrollOrBookType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Scroll);
-    if (_bIsScrollOrBookType) {
-      return pBookLine->scrollskill;
-    }
-
-    _bIsScrollOrBookType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Book);
-    if (!_bIsScrollOrBookType) {
-      return ~SKILL_Attack;
-    }
-
-    return pBookLine->bookskill;
+    return ~SKILL_Attack;
 }
 
 // Adjusts the quantity of the skill associated with a scroll/book item (pUnit2) on the caster unit (pUnit) by nParam (positive=add, negative=subtract). After updating the skill quantity via SKILL_SetQuantity, sends 0x22 UpdateItemSkill packet to the client. Halts if either unit pointer is null.
@@ -2923,7 +2907,7 @@ BOOL __fastcall SERVER_BeltSwapItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
       *pbBadParams = 0;
       SERVER_ITEM_SendStackableUsagePackets(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1290);
       pNewItem = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_ITEM, nItemGUID);
-      if (!(pNewItem && pNewItem->eUnitType == UNIT_ITEM && pNewItem->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::GetHit)) {
+      if (!(pNewItem && pNewItem->eUnitType == UNIT_ITEM && pNewItem->eAnimMode.eItemMode == eD2ItemAnimMode_ns::Cursor)) {
         return 0;
       }
 
@@ -2936,7 +2920,8 @@ BOOL __fastcall SERVER_BeltSwapItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
       if (!(pExistingBeltItem && pExistingBeltItem->eUnitType == UNIT_ITEM)) {
         return 0;
       }
-      if (pExistingBeltItem->eAnimMode.ePlayerMode != Walk) {
+      const eD2ItemAnimMode eBeltMode = pExistingBeltItem->eAnimMode.eItemMode;
+      if (eBeltMode != eD2ItemAnimMode_ns::Belt) {
         *pbBadParams = 1;
         return 0;
       }
@@ -2974,7 +2959,7 @@ BOOL __fastcall SERVER_BeltSwapItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
               ITEMMODE_AddStatsList(pGame, pNewItem, pUnit, 0);
             }
 
-            D2Common::Units::ChangeAnimMode(pNewItem, 2);
+            D2Common::Units::ChangeAnimMode(pNewItem, eBeltMode);
             D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pNewItem, INVPAGE_None);
             D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pNewItem, ITEMCMD_BELT_EXCHANGE_ITEM, 1);
             D2Common::INVENTORY::Inventory::UpsertToUpdateList(pInventory, pNewItem);
@@ -3720,20 +3705,17 @@ void __fastcall ITEMMODE_RebuildBookScrollSkillQuantities(::SGAMEDATA * pGameStr
     }
 
     pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
-    do {
-      do {
-        if (!pCurItem) {
+    while (pCurItem) {
+      pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pCurItem);
+      pExpiredScrollItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pCurItem);
+      if ((!pExpiredScrollItem || pExpiredScrollItem->eAnimMode.ePlayerMode == Death) && D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pExpiredScrollItem) == INVPAGE_INVENTORY) {
+        ITEMMODE_UpdateItemSkill(1, pExpiredScrollItem, pUnit);
+        if (!--nExpiredScrollCount) {
           return;
         }
-
-        pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pCurItem);
-        pExpiredScrollItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pCurItem);
-        pCurItem = pNextItem;
-      } while (pExpiredScrollItem && pExpiredScrollItem->eAnimMode.ePlayerMode != Death || (eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pExpiredScrollItem) , eInvPage != INVPAGE_INVENTORY));
-
-      ITEMMODE_UpdateItemSkill(1, pExpiredScrollItem, pUnit);
-      nExpiredScrollCount--;
-    } while (nExpiredScrollCount);
+      }
+      pCurItem = pNextItem;
+    }
 }
 
 BOOL __fastcall ITEMMODE_PutItemOnCursor(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pItem) {

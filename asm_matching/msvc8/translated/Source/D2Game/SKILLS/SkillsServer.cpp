@@ -3156,7 +3156,6 @@ uint32_t __fastcall SKILLS_ApplyEffectToUnitsInRange(::SGAMEDATA * pGame, uint32
     int nCurUnitX;
     int32_t nDistanceSq;
     uint32_t bPassedTargetFlags;
-    int nRoomIndex;
     int nAdjacentRooms;
     uint32_t nTargetX;
     uint32_t nTargetY;
@@ -3178,8 +3177,9 @@ uint32_t __fastcall SKILLS_ApplyEffectToUnitsInRange(::SGAMEDATA * pGame, uint32
       return 0;
     }
 
+    const int32_t nRadiusSquared = nRadius * nRadius;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppRoomList, &nAdjacentRooms);
-    for (nRoomIndex = 0; nRoomIndex < nAdjacentRooms; nRoomIndex++) {
+    for (int nRoomIndex = 0; nRoomIndex < nAdjacentRooms; nRoomIndex++) {
       if (!(nTargetFlags & 0x2000) || (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(ppRoomList[nRoomIndex]) , !bIsInTown)) {
         bIsInTown = SKILLS_IsRoomInRange(ppRoomList[nRoomIndex], nTargetX, nRadius, nTargetY);
         if (bIsInTown) {
@@ -3203,7 +3203,7 @@ uint32_t __fastcall SKILLS_ApplyEffectToUnitsInRange(::SGAMEDATA * pGame, uint32
             }
 
             nDistanceSq = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nTargetX, nTargetY, nCurUnitX, y2);
-            if (nRadius * nRadius >= nDistanceSq) {
+            if (nRadiusSquared >= nDistanceSq) {
               bPassedTargetFlags = SKILLS_CheckTargetFlags(pUnit, pCurUnit, nTargetFlags);
               if (bPassedTargetFlags) {
                 (*fpCallback)(pCurUnit, pCallbackCtx);
@@ -4511,7 +4511,6 @@ void __fastcall Server_SelectSkill(D2UnitStrc * pUnit, int32_t leftOrRight, eD2S
 void __fastcall ClearSkills(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2SkillStrc* pSkill;
     int nSkillLevel;
-    int nSkillIndex = 0;
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
       return;
     }
@@ -4519,20 +4518,15 @@ void __fastcall ClearSkills(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint32_t nClassId = pUnit->nClassId;
     int32_t nTotalClassSkills = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
     int nRefundedPoints = 0;
-    if (nTotalClassSkills > 0) {
-      eD2Skills eSkill;
-      do {
-        eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, nSkillIndex);
-        pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);
-        if (pSkill) {
-          nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 0);
-          nRefundedPoints += nSkillLevel;
-          SkillsServer::SetSkill(pUnit, eSkill, 0, 1);
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x10a1), pUnit, eSkill, 0, 1);
-        }
-
-        nSkillIndex++;
-      } while (nSkillIndex < nTotalClassSkills);
+    for (int nSkillIndex = 0; nSkillIndex < nTotalClassSkills; ++nSkillIndex) {
+      eD2Skills eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, nSkillIndex);
+      pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);
+      if (pSkill) {
+        nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 0);
+        nRefundedPoints += nSkillLevel;
+        SkillsServer::SetSkill(pUnit, eSkill, 0, 1);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x10a1), pUnit, eSkill, 0, 1);
+      }
     }
 
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_newskills, nRefundedPoints, 0);

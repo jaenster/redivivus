@@ -1449,13 +1449,13 @@ void __fastcall Q14_OnStaffUsedInOrifice(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       pMissileTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + 0x152;
     }
 
-    short int nMissileRange = pMissileTxt->Range;
+    const int32_t nPortalDelay = (pMissileTxt->Range - 0x4b) / 0x14;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
     D2QuestDataA2Q6Strc* pA2Q4Data = pQuestData->pQuestSpecificData.pA2Q6;
     pA2Q4Data->field_0xD = 1;
     pA2Q4Data->bStaffInserted = 1;
     if (!pA2Q4Data->bPortalTimerArmed) {
-      AddQuestTimer(pQuestData, Q14_TimerCreatePortal, (nMissileRange - 0x4b) / 0x14);
+      AddQuestTimer(pQuestData, Q14_TimerCreatePortal, nPortalDelay);
       pA2Q4Data->bPortalTimerArmed = 1;
     }
 

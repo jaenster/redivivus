@@ -1836,28 +1836,6 @@ void __fastcall MONSTER_OnDeathKillOwnerAndMinions(::SGAMEDATA * pGame, D2UnitSt
     Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sOwnerKillStrc, 1);
 }
 
-#if 0 // ratchet: the pin body of 005a2d80 (evidence 0ba282de8) could not be re-spelled: parameter 0 retyped: uint32_t -> SGAMEDATA *; parameter 3 retyped: uint32_t -> int32_t
-void __fastcall UMOD_AddBaseDamageBonus(uint32_t dwUnused1, D2UnitStrc * pUnit, uint32_t dwUnused2, uint32_t dwUnused3) {
-    int nMinDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mindamage, 0);
-    int nMaxDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_maxdamage, 0);
-    if (!(nMaxDmg > 0 && (!pUnit || pUnit->nClassId != 0x10f))) {
-      return;
-    }
-
-    nMinDmg += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_secondary_mindamage, 0) - 1;
-    nMaxDmg += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_secondary_maxdamage, 0) - 1;
-    if (nMinDmg < 0) {
-      nMinDmg = 0;
-    }
-    if (nMaxDmg < 0) {
-      nMaxDmg = 0;
-    }
-
-    D2StatListExStrc* pStatsEx = D2Common::Stats::StatsEx::GetStatsByFlags(pUnit, 1);
-    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_mindamage, nMinDmg, 0);
-    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_maxdamage, nMaxDmg, 0);
-}
-#endif
 void __fastcall UMOD_AddBaseDamageBonus(::SGAMEDATA * dwUnused1, D2UnitStrc * pUnit, uint32_t dwUnused2, int32_t dwUnused3) {
     int nMinDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mindamage, 0);
     int nMaxDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_maxdamage, 0);

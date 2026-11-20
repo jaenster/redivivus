@@ -89,26 +89,25 @@ int32_t __fastcall ITEMTBLS_ParseItemStatCostOrBase(char * szFieldValue, int32_t
 }
 
 void __fastcall ITEMTBLS_CompileItemCodeExpression(char * szExpression, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
-    size_t nParsedLen;
-    int32_t nFieldLen;
-    uint8_t szWorkBuf[1024];
+    size_t nByteCodeLen;
+    uint32_t nCompiledLen;
+    uint8_t aByteCodeBuf[1024];
+    const int32_t nInvalidOffset = -1;
     if (!pRecord) {
       return;
     }
-    if (szExpression) {
-      nParsedLen = Fog::Skills::SKILLS_ParseCalcExpression(szExpression, szWorkBuf, 0x400, ITEMTBLS_CalcExpr_ParseTokenType, ITEMTBLS_CalcExpr_GetConstTwo, (CalcGetLinkerIndex_t)ITEMTBLS_ParseItemStatCostOrBase);
-      if ((int)nParsedLen > 0) {
-        nFieldLen = DataTbls::DATATBLS_AppendDataToBuffer(&MonsterTbls::sgtDataTable.pItemsCode, &MonsterTbls::sgtDataTable.nItemsCodeSize, &MonsterTbls::sgtDataTable.nItemsCodeCapacity, szWorkBuf, nParsedLen);
-        *(int32_t*)(pRecord + nOffset) = nFieldLen;
-        return;
-      }
+    if (!szExpression) {
+      memcpy(pRecord + nOffset, &nInvalidOffset, sizeof(nInvalidOffset));
+      return;
     }
 
-    char* pCodeField = pRecord + nOffset;
-    pCodeField[0] = -1;
-    pCodeField[1] = -1;
-    pCodeField[2] = -1;
-    pCodeField[3] = -1;
+    nByteCodeLen = Fog::Skills::SKILLS_ParseCalcExpression(szExpression, aByteCodeBuf, 0x400, ITEMTBLS_CalcExpr_ParseTokenType, ITEMTBLS_CalcExpr_GetConstTwo, (CalcGetLinkerIndex_t)ITEMTBLS_ParseItemStatCostOrBase);
+    if ((int)nByteCodeLen <= 0) {
+      memcpy(pRecord + nOffset, &nInvalidOffset, sizeof(nInvalidOffset));
+      return;
+    }
+    nCompiledLen = DataTbls::DATATBLS_AppendDataToBuffer(&MonsterTbls::sgtDataTable.pItemsCode, &MonsterTbls::sgtDataTable.nItemsCodeSize, &MonsterTbls::sgtDataTable.nItemsCodeCapacity, aByteCodeBuf, nByteCodeLen);
+    *(uint32_t*)(pRecord + nOffset) = nCompiledLen;
 }
 
 // Loads and compiles items.txt into the engine's runtime ItemsTxt table. Builds the ~194-field D2BinFieldInputStrc schema (code/version/type/damage/req/inv/vendor min-max/quality columns, with code/string/sound/stat/state link resolvers and calc-string compilers), then compiles the weapons, armor and misc .txt files separately and memcpy-merges them into one contiguous sgpTxtItems array (sgpTxtWeapons/sgpTxtArmor/sgpTxtMisc point into it). Registers each item code in the items code link (FillUpTxtLinkSub0x08) unless bUseTxt, saves the itemscode bin, and builds sgpTxtItemsVersion: a short index table of all rows whose version==0 (classic items). __fastcall(pMemory).
@@ -574,8 +573,7 @@ D2MagicAffixTxt * __stdcall TXT_magicaffixes_GetLine(int32_t nAffixIndex) {
 // Loads and compiles the rare-affix data tables. Defines the shared field schema (name, version, itype1-7, etype1-4 with itemtypes linker) and compiles both raresuffix.txt and rareprefix.txt via CompileTxt (row stride 0x48), then allocates one combined buffer (pTxtRareAffixes = suffix rows followed by prefix rows) and frees the temporaries. Finally resolves each row's name string into its string-table id (STRTABLE_LookupString) stored at row offset 0xc. Populates globals pTxtRareAffixes/pTxtRareSuffix/pTxtRarePrefix and nTxtRareAffixesSize.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
 void __fastcall TXT_AllocTxt_RareAffixes(D2PoolManagerStrc * pMemory) {
-    int nTxtRarePrefixSize;
-    int nTxtRareSuffixSize;
+    int anRareAffixCount[2]; // Prefix count first, suffix count second.
     D2BinFieldInputStrc rareaffixes[14] = {
       {"name", FIELDTYPE_ASCII, 0x1f, 0x26, 0},
       {"version", FIELDTYPE_SHORT, 0, 0xe, 0},
@@ -592,14 +590,16 @@ void __fastcall TXT_AllocTxt_RareAffixes(D2PoolManagerStrc * pMemory) {
       {"etype4", FIELDTYPE_CODE_SHORT, 0, 0x24, &MonsterTbls::sgtDataTable.pTxtItemTypesLink},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
-    void* pTxtRareSuffixTmp = DataTbls::CompileTxt(pMemory, "raresuffix", rareaffixes, &nTxtRareSuffixSize, 0x48);
-    void* pTxtRarePrefixTmp = DataTbls::CompileTxt(pMemory, "rareprefix", rareaffixes, &nTxtRarePrefixSize, 0x48);
-    gsRareAffixTable.nSize = nTxtRarePrefixSize + nTxtRareSuffixSize;
+    void* pTxtRareSuffixTmp = DataTbls::CompileTxt(pMemory, "raresuffix", rareaffixes, &anRareAffixCount[1], 0x48);
+    void* pTxtRarePrefixTmp = DataTbls::CompileTxt(pMemory, "rareprefix", rareaffixes, &anRareAffixCount[0], 0x48);
+    int nTotalAffixes = anRareAffixCount[1];
+    nTotalAffixes += anRareAffixCount[0];
+    gsRareAffixTable.nSize = nTotalAffixes;
     gsRareAffixTable.pTable = (D2RareAffixTxt*)D2_ALLOC_POOL_AT(nullptr, gsRareAffixTable.nSize * 0x48, ".\\DATATBLS\\ItemTbls.cpp", 0x2f4);
     gsRareAffixTable.pSuffixStart = gsRareAffixTable.pTable;
-    memcpy(gsRareAffixTable.pTable, pTxtRareSuffixTmp, nTxtRareSuffixSize * 0x48);
-    gsRareAffixTable.pPrefixStart = gsRareAffixTable.pSuffixStart + nTxtRareSuffixSize;
-    memcpy(gsRareAffixTable.pPrefixStart, pTxtRarePrefixTmp, nTxtRarePrefixSize * 0x48);
+    memcpy(gsRareAffixTable.pTable, pTxtRareSuffixTmp, anRareAffixCount[1] * 0x48);
+    gsRareAffixTable.pPrefixStart = gsRareAffixTable.pSuffixStart + anRareAffixCount[1];
+    memcpy(gsRareAffixTable.pPrefixStart, pTxtRarePrefixTmp, anRareAffixCount[0] * 0x48);
     DataTbls::UnloadBin(pTxtRareSuffixTmp);
     DataTbls::UnloadBin(pTxtRarePrefixTmp);
     uint16_t* pStringOut = 0;
@@ -1307,29 +1307,27 @@ D2ItemRatioTxt * __stdcall TXT_QualityRatio_GetLine(uint32_t nItemClassId, uint3
     }
 
     int nRatioIdx = 0;
-    if (nTxtItemRatioSize <= 0) {
+    if (nTxtItemRatioSize > 0) {
+      short int* pEntry = &pTxtItemRatio->Version;
+      do {
+        if (uVar1 == (uint8_t)*(char*)((char*)pEntry + 3) && bIsUpgradeable == *(uint8_t*)(pEntry + 1)) {
+          wMinVal = *pEntry;
+          if (wMinVal <= nQualityTier && (int)(uint32_t)wMinVal >= (int)nBestMinVal) {
+            nBestMinVal = (uint32_t)wMinVal;
+            nBestMatchIdx = nRatioIdx;
+          }
+        }
+
+        nRatioIdx++;
+        pEntry += 0x22;
+      } while (nRatioIdx < nTxtItemRatioSize);
+
+    }
+
+    if (nBestMatchIdx < 0) {
       return nullptr;
     }
-
-    short int* pEntry = &pTxtItemRatio->Version;
-    do {
-      if (uVar1 == (uint8_t)*(char*)((char*)pEntry + 3) && bIsUpgradeable == *(uint8_t*)(pEntry + 1)) {
-        wMinVal = *pEntry;
-        if (wMinVal <= nQualityTier && (int)(uint32_t)wMinVal >= (int)nBestMinVal) {
-          nBestMatchIdx = nRatioIdx;
-          nBestMinVal = (uint32_t)wMinVal;
-        }
-      }
-
-      nRatioIdx++;
-      pEntry += 0x22;
-    } while (nRatioIdx < nTxtItemRatioSize);
-
-    if (nBestMatchIdx >= 0) {
-      return pTxtItemRatio + nBestMatchIdx;
-    }
-
-    return nullptr;
+    return pTxtItemRatio + nBestMatchIdx;
 }
 
 int SORT_ItemDescPriority(LPCVOID pEntry1, LPCVOID pEntry2) {

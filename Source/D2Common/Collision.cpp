@@ -1467,9 +1467,9 @@ static int32_t __stdcall COLLISN_CheckCellMaskOrBlocked(D2RoomStrc * pRoom, int3
 static eCollisionFlags __stdcall CheckCollision_BoundingBox1(D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t eCollisionFlag) {
     D2BoundingBoxStrc bbox1x1;
     bbox1x1.nLeft = nX - 1;
-    bbox1x1.nRight = nX + 1;
+    bbox1x1.nRight = bbox1x1.nLeft + 2;
     bbox1x1.nBottom = nY - 1;
-    bbox1x1.nTop = nY + 1;
+    bbox1x1.nTop = bbox1x1.nBottom + 2;
     eCollisionFlags eCollisionResult = CheckCollision_BoundingBox(pRoom, &bbox1x1, eCollisionFlag);
     return eCollisionResult;
 }
@@ -1687,9 +1687,9 @@ static int32_t __stdcall CheckCollision_BlockPlayer_Cross(D2RoomStrc * pRoom, in
 static int32_t __stdcall CheckCollision_BlockPlayer_BoundingBox1(D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t eCollisionFlag) {
     D2BoundingBoxStrc bbox1x1;
     bbox1x1.nLeft = nX - 1;
-    bbox1x1.nRight = nX + 1;
+    bbox1x1.nRight = bbox1x1.nLeft + 2;
     bbox1x1.nBottom = nY - 1;
-    bbox1x1.nTop = nY + 1;
+    bbox1x1.nTop = bbox1x1.nBottom + 2;
     int32_t iVar1 = CheckCollision_BlockPlayer_BoundingBox(pRoom, &bbox1x1, eCollisionFlag);
     return iVar1;
 }
@@ -1956,9 +1956,9 @@ static void __stdcall COLLISN_SetCellMask(D2RoomStrc * pRoom, int32_t nX, int32_
 static void __stdcall AddCollision_BoundingBox1(D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t eCollisionFlag) {
     D2BoundingBoxStrc sBoundingBox;
     sBoundingBox.nLeft = nX - 1;
-    sBoundingBox.nRight = nX + 1;
+    sBoundingBox.nRight = sBoundingBox.nLeft + 2;
     sBoundingBox.nBottom = nY - 1;
-    sBoundingBox.nTop = nY + 1;
+    sBoundingBox.nTop = sBoundingBox.nBottom + 2;
     AddCollision_BoundingBox(pRoom, &sBoundingBox, eCollisionFlag);
 }
 

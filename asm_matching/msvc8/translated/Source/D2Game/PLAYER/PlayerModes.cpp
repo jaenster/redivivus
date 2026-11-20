@@ -1364,26 +1364,28 @@ int32_t __fastcall PLRMODES_ModeCallback_AttackSkill(::SGAMEDATA * pGame, D2Unit
 
     D2Common::Units::SetSequenceFrame(pUnit, nSeqFrame);
     uint32_t nSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
-    if (!(nSkillFlags & 1)) {
-      if (pUnit && pUnit->eUnitFlags >> 6 & 1 || nModeArg != 1 && nModeArg != 2) {
-        bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-        return bIsDead != 0 ? 2 : 1;
-      }
-    } else {
-      int32_t nMoveResult;
+    if (nSkillFlags & 1) {
       UNIT::SUnit::GetTarget(pGame, pUnit);
-      nMoveResult = UNIT::SUnit::UNITS_ProcessUnitMovement(pGame, pUnit);
-      if (nMoveResult != 2) {
-        if (pUnit && pUnit->eUnitFlags >> 6 & 1 || nModeArg != 1 && nModeArg != 2) {
-          bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-          return bIsDead != 0 ? 2 : 1;
-        }
-      } else {
+      if (UNIT::SUnit::UNITS_ProcessUnitMovement(pGame, pUnit) == 2) {
         D2Common::Skills::SKILL_SetFlags(pSkill, nSkillFlags | 2);
+        goto refresh_skill;
       }
     }
-
+    {
+      uint32_t bHasServerSkillFlag = 0;
+      if (pUnit) {
+        bHasServerSkillFlag = (pUnit->eUnitFlags >> 6) & 1;
+      }
+      if (bHasServerSkillFlag) {
+        goto done;
+      }
+      if (nModeArg != 1 && nModeArg != 2) {
+        goto done;
+      }
+    }
+refresh_skill:
     SKILLS::SkillsServer::SKILLS_PeriodicSkillSpawnAndTimer(pGame, pUnit);
+done:
     bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     return bIsDead != 0 ? 2 : 1;
 }

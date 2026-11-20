@@ -971,22 +971,17 @@ void __stdcall MONMODE_OwnerCastOrDie(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     }
 
     ptSpawn.y = yValue;
-    BOOL bAllowNeighboorRooms = 0;
-    int32_t nOwnerAlignment = 0x3c01;
-    
-    
-    
-    D2RoomStrc* pFreeRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms((D2RoomStrc*)(D2Common::Units::UNITS_GetRoom(pOwner)), (POINT*)(&ptSpawn), (int32_t)(D2Common::Units::GetUnitSizeX(pOwner)), nOwnerAlignment, bAllowNeighboorRooms);
-    nOwnerAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
-    int32_t nCastResult;
-    nCastResult = !nOwnerAlignment && pFreeRoom ? AI::SERVER_UNIT_CastSkill(pGame, pOwner, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], nullptr, ptSpawn.x, ptSpawn.y) : 0;
-    if (!nCastResult) {
-      UNIT::SUnitDmg::SERVER_KillMonster(pGame, pOwner, nullptr, 1);
+    const BOOL bAllowNeighboorRooms = 0;
+    const int32_t nCollisionMask = 0x3c01;
+    const BOOL bHaveFreeRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(
+      D2Common::Units::UNITS_GetRoom(pOwner), &ptSpawn, D2Common::Units::GetUnitSizeX(pOwner),
+      nCollisionMask, bAllowNeighboorRooms) != nullptr;
+    const int32_t nOwnerAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
+    if (!nOwnerAlignment && bHaveFreeRoom && AI::SERVER_UNIT_CastSkill(pGame, pOwner, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], nullptr, ptSpawn.x, ptSpawn.y)) {
+      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pOwner, UNITEVENTCALLBACK_AITHINK, 0);
       return;
     }
-
-    GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pOwner, UNITEVENTCALLBACK_AITHINK, 0);
-    return;
+    UNIT::SUnitDmg::SERVER_KillMonster(pGame, pOwner, nullptr, 1);
 }
 
 // The live monster-death dispatcher.
@@ -1178,7 +1173,7 @@ BOOL __fastcall MONMODE_StartDead(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonst
 BOOL __fastcall MONMODE_StartNeutral(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     int32_t _bTimerExists;
     bool bTimerExists;
-    uint8_t byAiDel;
+    int32_t nAiDelay;
     D2UnitStrc* pUnit = pMonsterKill->pUnit;
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 1);
     _bTimerExists = GAME::Event::EVENT_GetTimerFrame(pGame, pUnit, UNITEVENTCALLBACK_AITHINK);
@@ -1200,17 +1195,16 @@ BOOL __fastcall MONMODE_StartNeutral(::SGAMEDATA * pGame, D2ModeChangeStrc * pMo
       return 1;
     }
     if (pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER) {
-      byAiDel = pDVar1->aidel[0];
+      nAiDelay = pDVar1->aidel[0];
     } else {
-      byAiDel = pDVar1->aidel[pGame->nDifficulty];
+      nAiDelay = pDVar1->aidel[pGame->nDifficulty];
     }
 
-    uint32_t nFrame = (uint32_t)byAiDel;
-    if (!nFrame) {
-      nFrame = 0xf;
+    if (nAiDelay <= 0) {
+      nAiDelay = 0xf;
     }
 
-    GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + nFrame, 0, 0);
+    GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + static_cast<uint32_t>(nAiDelay), 0, 0);
     return 1;
 }
 
@@ -1806,13 +1800,11 @@ void __stdcall MONMODE_InitModeChange(D2UnitStrc * pUnit, eD2MonsterAnimMode nUn
     memset(pModeChange, 0, sizeof(*pModeChange));
     pModeChange->nUnitMode = nUnitMode;
     pModeChange->pUnit = pUnit;
-    uint32_t bHasSequence = MONSTER_HasAnimModeSequence(pUnit, nUnitMode);
-    if (bHasSequence) {
-      pModeChange->nAnimatedMode2 = 'e';
-      return;
+    eD2PathTypes ePathType = PATH_TYPE_NONE;
+    if (MONSTER_HasAnimModeSequence(pUnit, nUnitMode)) {
+      ePathType = PATH_TYPE_BEST;
     }
-
-    pModeChange->nAnimatedMode2 = 'd';
+    pModeChange->nAnimatedMode2 = ePathType;
 }
 
 static void * keep_005a61b0 = (0 ? (MONSTERMODE_ConsumeStoredPosition(*(int * *)0, *(int * *)0, *(char * *)0, *(D2MonsterPathParamStrc * *)0), (void *)0) : (void *)0);

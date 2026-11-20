@@ -201,29 +201,29 @@ template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -5
 }
 
 template<> __attribute__((noinline)) inline void TSHashObject<SGAMEDATA, HASHKEY_NONE>::Destructor() {
-    TSLink<::SGAMEDATA>** pPrevLink2;
-    TSLink<::SGAMEDATA>* pTVar1 = &this->m_linktofull;
-    TSLink<::SGAMEDATA>* pNextNode = pTVar1->m_prevlink;
-    if (pNextNode) {
-      TSLink<::SGAMEDATA>** pPrevLink;
-      pPrevLink = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pTVar1, -1);
-      *pPrevLink = pNextNode;
-      pTVar1->m_prevlink->m_next = pTVar1->m_next;
-      pTVar1->m_prevlink = 0;
-      this->m_linktofull.m_next = 0;
+    TSLink<::SGAMEDATA>** pBackLink2;
+    TSLink<::SGAMEDATA>* pFullLink = &this->m_linktofull;
+    TSLink<::SGAMEDATA>* pPreviousLink = pFullLink->m_prevlink;
+    if (pPreviousLink) {
+      TSLink<::SGAMEDATA>** pBackLink;
+      pBackLink = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pFullLink, -1);
+      *pBackLink = pPreviousLink;
+      pFullLink->m_prevlink->m_next = pFullLink->m_next;
+      pFullLink->m_prevlink = 0;
+      pFullLink->m_next = 0;
     }
 
-    pNextNode = this->m_linktoslot.m_prevlink;
-    pTVar1 = &this->m_linktoslot;
-    if (!pNextNode) {
+    TSLink<::SGAMEDATA>* pSlotLink = &this->m_linktoslot;
+    pPreviousLink = pSlotLink->m_prevlink;
+    if (!pPreviousLink) {
       return;
     }
 
-    pPrevLink2 = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pTVar1, -1);
-    *pPrevLink2 = pNextNode;
-    pTVar1->m_prevlink->m_next = pTVar1->m_next;
-    pTVar1->m_prevlink = 0;
-    pTVar1->m_next = 0;
+    pBackLink2 = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pSlotLink, -1);
+    *pBackLink2 = pPreviousLink;
+    pSlotLink->m_prevlink->m_next = pSlotLink->m_next;
+    pSlotLink->m_prevlink = 0;
+    pSlotLink->m_next = 0;
 }
 
 // Unreferenced copy of UnlinkNode: unlinks pNode and clears its link.
@@ -410,7 +410,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044fb50() {
     TSLink<::SGAMEDATA>* pTVar1 = &this->m_terminator;
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;
-    pTVar1->m_prevlink = pTVar1;
+    this->m_terminator.m_prevlink = pTVar1;
     this->m_linkoffset = -0x22222223;
     this->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }

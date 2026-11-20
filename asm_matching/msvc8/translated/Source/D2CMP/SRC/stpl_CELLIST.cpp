@@ -539,7 +539,7 @@ template<> void TSExplicitList<CELLIST, -572662307>::Unreferenced_00602950() {
     TSLink<::CELLIST>* pTVar1 = &this->m_terminator;
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;
-    pTVar1->m_prevlink = pTVar1;
+    this->m_terminator.m_prevlink = pTVar1;
     this->m_linkoffset = -0x22222223;
     this->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }

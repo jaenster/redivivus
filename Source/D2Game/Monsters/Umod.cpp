@@ -297,22 +297,20 @@ void __fastcall MONUMOD_ApplyBerserk(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
     }
 
     UMOD_IncreaseMonsterHp(-75, pUnit);
-    int nValue = 300;
-    D2DifficultyLevelsTxt* pDiffLevels = D2Common::DATATBLS::DataTbls::GetDifficultyLevels((uint32_t)pGame->nDifficulty);
-    int32_t nBaseClassId = 300;
+    int32_t nDamageBonus = 300;
+    int32_t nHitBonus = nDamageBonus;
+    D2DifficultyLevelsTxt* pDiffLevels = D2Common::DATATBLS::DataTbls::GetDifficultyLevels(pGame->nDifficulty);
     if (pDiffLevels) {
-      int32_t nValidatedId;
-      nValue = pDiffLevels->ChampionDamageBonus * 300 / 100;
-      nBaseClassId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
-      nValidatedId = D2Common::DATATBLS::MonsterTbls::ValidateClassId(nBaseClassId);
-      nBaseClassId = nValue;
-      if (nValidatedId == 0x76) {
-        nBaseClassId = nValue / 2;
+      nDamageBonus = pDiffLevels->ChampionDamageBonus * 300 / 100;
+      nHitBonus = nDamageBonus;
+      const int32_t nMonsterId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
+      if (D2Common::DATATBLS::MonsterTbls::ValidateClassId(nMonsterId) == 0x76) {
+        nDamageBonus /= 2;
       }
     }
 
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_damagepercent, nBaseClassId, 0);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_item_tohit_percent, nValue, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_damagepercent, nDamageBonus, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_item_tohit_percent, nHitBonus, 0);
 }
 
 void __fastcall MONUMOD_SetEventTimer(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnused) {

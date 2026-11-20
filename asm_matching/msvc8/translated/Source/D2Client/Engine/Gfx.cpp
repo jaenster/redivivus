@@ -2570,14 +2570,14 @@ BOOL __fastcall GFX_IsUnitInsideBounds(D2UnitStrc * pUnit, int32_t nOriginX, int
     int nClassId = pUnit->nClassId;
     int pSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &pSeqMode, ".\\ENGINE\\Gfx.cpp", 0xd90);
+    const int nAnimMode = pSeqMode;
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (!pGfxInfo) {
       return 0;
     }
 
     for (pGfxInfoUnk = pGfxInfo->pGfxInfoUnk; pGfxInfoUnk; pGfxInfoUnk = pGfxInfoUnk->pNext) {
-      int pAnimMode = pSeqMode;
-      if (pGfxInfoUnk->nAnimMode == pAnimMode) {
+      if (pGfxInfoUnk->nAnimMode == nAnimMode) {
         pData = pGfxInfoUnk->pCofDataArray->pFileData;
         if (!pData) {
           return 0;
@@ -2597,11 +2597,10 @@ BOOL __fastcall GFX_IsUnitInsideBounds(D2UnitStrc * pUnit, int32_t nOriginX, int
         if (nTestY < *(int*)((char*)pBounds + 0x10) - 0x10 + nOriginY) {
           return 0;
         }
-        if (nTestY >= *(int*)((char*)pBounds + 0x14) + 0x10 + nOriginY) {
-          return 0;
+        if (nTestY < *(int*)((char*)pBounds + 0x14) + 0x10 + nOriginY) {
+          return 1;
         }
-
-        return 1;
+        break;
       }
     }
 

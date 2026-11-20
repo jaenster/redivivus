@@ -230,30 +230,20 @@ static void __stdcall PARTY_FreePartyMembers(D2UnitPartyControlSub * pPartyContr
 
 // Removes a party sub-record matching nPartyId from the game's party control linked list and frees its members. Walks the pSub chain, unlinks the matching entry by patching the predecessor's pPrev pointer (or updating pPartyControl->pSub for the head), then calls PARTY_FreePartyMembers. Halts with an internal error if pPartyControl is null.
 void __fastcall PARTY_DisbandParty(::SGAMEDATA * pGame, int16_t nPartyId) {
-    D2UnitPartyControlSub* pFoundSub;
     D2UnitPartyControl* pPartyControl = pGame->pPartyControl;
+    D2UnitPartyControlSub* pPrevSub = nullptr;
     if (!pPartyControl) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb4);
       exit(-1);
     }
 
-    D2UnitPartyControlSub* pIterSub = pPartyControl->pSub;
-    D2UnitPartyControlSub* pPrevSub = 0;
-    if (!pPartyControl->pSub) {
-      return;
-    }
-
-    while (true) {
-      pFoundSub = pIterSub;
-      if (pFoundSub->nPartyId == (uint16_t)nPartyId) {
-        break;
-      }
-
-      pIterSub = pFoundSub->pPrev;
+    D2UnitPartyControlSub* pFoundSub = pPartyControl->pSub;
+    while (pFoundSub && pFoundSub->nPartyId != (uint16_t)nPartyId) {
       pPrevSub = pFoundSub;
-      if (!pFoundSub->pPrev) {
-        return;
-      }
+      pFoundSub = pFoundSub->pPrev;
+    }
+    if (!pFoundSub) {
+      return;
     }
 
     if (pPrevSub) {
@@ -380,8 +370,9 @@ int32_t __fastcall CountPartyControlSubSize(::SGAMEDATA * pGame, int16_t nPartyI
       exit(-1);
     }
 
-    for (pFoundSub = pGame->pPartyControl->pSub; pFoundSub; pFoundSub = pFoundSub->pPrev) {
-      if (pFoundSub->nPartyId == (uint16_t)nPartyId) {
+    for (D2UnitPartyControlSub* pCurrentSub = pGame->pPartyControl->pSub; pCurrentSub; pCurrentSub = pCurrentSub->pPrev) {
+      if (pCurrentSub->nPartyId == (uint16_t)nPartyId) {
+        pFoundSub = pCurrentSub;
         goto count_members;
       }
     }

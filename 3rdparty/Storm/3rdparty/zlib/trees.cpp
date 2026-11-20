@@ -2267,152 +2267,265 @@ static void __stdcall pqdownheap(int32_t nIndex, deflate_state * pDeflateState, 
 }
 
 static void gen_bitlen(tree_desc * pTreeDesc, deflate_state * pDeflateState) {
-    uint32_t nBits;
-    uint16_t* pwBitLenCount;
-    int32_t nXBits;
-    uint16_t* pwMaxBitLenCount;
-    uint16_t wCurBitLenCount;
-    uint16_t wFreq;
-    int nHeapCursor;
-    int nMaxSymbol = pTreeDesc->max_code;
-    ct_data* pDynTree = pTreeDesc->dyn_tree;
-    static_tree_desc* pStatDesc = pTreeDesc->stat_desc;
-    ct_data* pStatTree = pStatDesc->static_tree;
-    int32_t* pExtraBitsTable = pStatDesc->extra_bits;
-    int nExtraBaseIdx = pStatDesc->extra_base;
-    uint32_t nMaxBitLen = pStatDesc->max_length;
-    memset(pDeflateState->bl_count, 0, 16 * sizeof(pDeflateState->bl_count[0]));
-    pDynTree[pDeflateState->heap[pDeflateState->heap_max]].dl = 0;
+    const int nMaxCode = pTreeDesc->max_code;
+    ct_data* pTree = pTreeDesc->dyn_tree;
+    const static_tree_desc* pStatDesc = pTreeDesc->stat_desc;
+    const ct_data* pStaticTree = pStatDesc->static_tree;
+    const int32_t* pExtra = pStatDesc->extra_bits;
+    const int nBase = pStatDesc->extra_base;
+    const int nMaxLength = pStatDesc->max_length;
+    const int nHeapCapacity = 573;
     int nOverflow = 0;
-    int nHeapMaxIdx = pDeflateState->heap_max + 1;
-    int nOverflowCheckpoint = 0;
-    if (nHeapMaxIdx >= 0x23d) {
-      return;
+    int nHeapIndex;
+    int nBits;
+
+    memset(pDeflateState->bl_count, 0, 16 * sizeof(pDeflateState->bl_count[0]));
+    pTree[pDeflateState->heap[pDeflateState->heap_max]].dl = 0;
+
+    for (nHeapIndex = pDeflateState->heap_max + 1; nHeapIndex < nHeapCapacity; ++nHeapIndex) {
+      const int nSymbol = pDeflateState->heap[nHeapIndex];
+      nBits = pTree[pTree[nSymbol].dl].dl + 1;
+      if (nBits > nMaxLength) {
+        nBits = nMaxLength;
+        ++nOverflow;
+      }
+      pTree[nSymbol].dl = static_cast<uint16_t>(nBits);
+      if (nSymbol > nMaxCode) {
+        continue;
+      }
+      ++pDeflateState->bl_count[nBits];
+      int nExtra = 0;
+      if (nSymbol >= nBase) {
+        nExtra = pExtra[nSymbol - nBase];
+      }
+      const uint16_t wFrequency = pTree[nSymbol].fc;
+      pDeflateState->opt_len += (nBits + nExtra) * wFrequency;
+      if (pStaticTree) {
+        pDeflateState->static_len += (pStaticTree[nSymbol].dl + nExtra) * wFrequency;
+      }
     }
-
-    int32_t* pHeapCursor = pDeflateState->heap + (pDeflateState->heap_max + 1);
-    int nHeapCount = 0x23d - nHeapMaxIdx;
-    nHeapMaxIdx += nHeapCount;
-    do {
-      int nHeapNode;
-      nHeapNode = *pHeapCursor;
-      nBits = pDynTree[pDynTree[nHeapNode].dl].dl + 1;
-      if ((int)nBits > (int)nMaxBitLen) {
-        nOverflow++;
-        nBits = nMaxBitLen;
-        nOverflowCheckpoint = nOverflow;
-      }
-
-      pDynTree[nHeapNode].dl = (uint16_t)nBits;
-      if (nHeapNode <= nMaxSymbol) {
-        pDeflateState->bl_count[nBits]++;
-        nXBits = 0;
-        if (nHeapNode >= nExtraBaseIdx) {
-          nXBits = pExtraBitsTable[nHeapNode - nExtraBaseIdx];
-        }
-
-        wFreq = pDynTree[nHeapNode].fc;
-        pDeflateState->opt_len += (nBits + nXBits) * (uint32_t)wFreq;
-        nOverflow = nOverflowCheckpoint;
-        if (pStatTree) {
-          pDeflateState->static_len += ((uint32_t)pStatTree[nHeapNode].dl + nXBits) * (uint32_t)wFreq;
-        }
-      }
-
-      pHeapCursor++;
-      nHeapCount--;
-    } while (nHeapCount);
 
     if (!nOverflow) {
       return;
     }
 
-    pwMaxBitLenCount = pDeflateState->bl_count + nMaxBitLen;
     do {
-      pwBitLenCount = pDeflateState->bl_count + (nMaxBitLen - 1);
-      wCurBitLenCount = pDeflateState->bl_count[nMaxBitLen - 1];
-      nBits = nMaxBitLen;
-      while (!wCurBitLenCount) {
-        pwBitLenCount--;
-        nBits--;
-        wCurBitLenCount = *pwBitLenCount;
+      nBits = nMaxLength - 1;
+      while (pDeflateState->bl_count[nBits] == 0) {
+        --nBits;
       }
-
-      pDeflateState->bl_count[nBits - 1]--;
-      pDeflateState->bl_count[nBits] += 2;
-      (*pwMaxBitLenCount)--;
-      nOverflow += -2;
+      --pDeflateState->bl_count[nBits];
+      pDeflateState->bl_count[nBits + 1] += 2;
+      --pDeflateState->bl_count[nMaxLength];
+      nOverflow -= 2;
     } while (nOverflow > 0);
 
-    for (; nMaxBitLen; nMaxBitLen--) {
-      nBits = (uint32_t)*pwMaxBitLenCount;
-      if (nBits) {
-        pwBitLenCount = (uint16_t*)(pDeflateState->heap + nHeapMaxIdx);
-        nHeapCursor = (int)nBits;
-        do {
-          nExtraBaseIdx = *(int*)(pwBitLenCount - 2);
-          nHeapMaxIdx--;
-          pwBitLenCount += -2;
-          if (nExtraBaseIdx <= nMaxSymbol) {
-            if (pDynTree[nExtraBaseIdx].dl != nMaxBitLen) {
-              pDeflateState->opt_len += (nMaxBitLen - pDynTree[nExtraBaseIdx].dl) * (uint32_t)pDynTree[nExtraBaseIdx].fc;
-              pDynTree[nExtraBaseIdx].dl = (uint16_t)nMaxBitLen;
-            }
-
-            nBits = nHeapCursor - 1;
-            nHeapCursor = (int)nBits;
-          }
-        } while (nBits);
+    for (nBits = nMaxLength; nBits != 0; --nBits) {
+      int nRemaining = pDeflateState->bl_count[nBits];
+      while (nRemaining != 0) {
+        const int nSymbol = pDeflateState->heap[--nHeapIndex];
+        if (nSymbol > nMaxCode) {
+          continue;
+        }
+        if (pTree[nSymbol].dl != nBits) {
+          pDeflateState->opt_len += (nBits - pTree[nSymbol].dl) * pTree[nSymbol].fc;
+          pTree[nSymbol].dl = static_cast<uint16_t>(nBits);
+        }
+        --nRemaining;
       }
-
-      pwMaxBitLenCount--;
     }
 }
 
 static void __stdcall scan_tree(int32_t nMaxCode, deflate_state * pDeflateState, ct_data * pTree) {
-    uint16_t wNextLen = pTree->dl;
+    int nPrevLen = -1;
+    int nNextLen = pTree[0].dl;
     int nCount = 0;
-    uint32_t nPrevLen = -1;
     int nMaxCount = 7;
     int nMinCount = 4;
-    if (!wNextLen) {
-      nMaxCount = 0x8a;
+    if (nNextLen == 0) {
+      nMaxCount = 138;
+      nMinCount = 3;
+    }
+    pTree[nMaxCode + 1].dl = 0xffff;
+    for (int nIndex = 0; nIndex <= nMaxCode; ++nIndex) {
+      const int nCurLen = nNextLen;
+      nNextLen = pTree[nIndex + 1].dl;
+      if (++nCount < nMaxCount && nCurLen == nNextLen) {
+        continue;
+      }
+      if (nCount < nMinCount) {
+        pDeflateState->bl_tree[nCurLen].fc += static_cast<uint16_t>(nCount);
+      } else if (nCurLen != 0) {
+        if (nCurLen != nPrevLen) {
+          ++pDeflateState->bl_tree[nCurLen].fc;
+        }
+        ++pDeflateState->bl_tree[16].fc;
+      } else if (nCount <= 10) {
+        ++pDeflateState->bl_tree[17].fc;
+      } else {
+        ++pDeflateState->bl_tree[18].fc;
+      }
+      nCount = 0;
+      nPrevLen = nCurLen;
+      if (!nNextLen) {
+        nMaxCount = 138;
+        nMinCount = 3;
+      } else if (nCurLen == nNextLen) {
+        nMaxCount = 6;
+        nMinCount = 3;
+      } else {
+        nMaxCount = 7;
+        nMinCount = 4;
+      }
+    }
+}
+
+static void send_tree(deflate_state * pDeflateState, ct_data * pTree, int32_t nMaxCode) {
+    int nPrevLen = -1;
+    int nNextLen = pTree[0].dl;
+    int nCount = 0;
+    int nMaxCount = 7;
+    int nMinCount = 4;
+    if (nNextLen == 0) {
+      nMaxCount = 138;
       nMinCount = 3;
     }
 
-    pTree[nMaxCode + 1].dl = 0xffff;
-    if (nMaxCode < 0) {
-      return;
-    }
-
-    uint16_t* pwTreeLen = &pTree[1].dl;
-    int nRemaining = nMaxCode + 1;
-    uint32_t nCurLen = (uint32_t)wNextLen;
-    do {
-      uint32_t nNextLen;
-      nNextLen = (uint32_t)*pwTreeLen;
-      nCount++;
-      if (nCount >= nMaxCount || nCurLen != nNextLen) {
+    for (int nIndex = 0; nIndex <= nMaxCode; ++nIndex) {
+      const int nCurLen = nNextLen;
+      nNextLen = pTree[nIndex + 1].dl;
+      if (++nCount >= nMaxCount || nCurLen != nNextLen) {
         if (nCount < nMinCount) {
-          pDeflateState->bl_tree[nCurLen].fc += (short int)nCount;
-        } else if (nCurLen) {
+          do {
+            {
+              const int nBits = pDeflateState->bl_tree[nCurLen].dl;
+              const int nBitCount = pDeflateState->bi_valid;
+              if (nBitCount > 16 - nBits) {
+                const int nCode = pDeflateState->bl_tree[nCurLen].fc;
+                pDeflateState->bi_buf |= static_cast<uint32_t>(nCode) << D2_SHIFT_COUNT(nBitCount);
+                pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf);
+                pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf >> 8);
+                pDeflateState->bi_buf = static_cast<uint16_t>(nCode) >> D2_SHIFT_COUNT(16 - pDeflateState->bi_valid);
+                pDeflateState->bi_valid = pDeflateState->bi_valid + nBits - 16;
+              } else {
+                pDeflateState->bi_buf |= static_cast<uint32_t>(pDeflateState->bl_tree[nCurLen].fc) << D2_SHIFT_COUNT(nBitCount);
+                pDeflateState->bi_valid = nBitCount + nBits;
+              }
+            }
+          } while (--nCount);
+        } else if (nCurLen != 0) {
           if (nCurLen != nPrevLen) {
-            pDeflateState->bl_tree[nCurLen].fc++;
+            {
+              const int nBits = pDeflateState->bl_tree[nCurLen].dl;
+              const int nBitCount = pDeflateState->bi_valid;
+              if (nBitCount > 16 - nBits) {
+                const int nCode = pDeflateState->bl_tree[nCurLen].fc;
+                pDeflateState->bi_buf |= static_cast<uint32_t>(nCode) << D2_SHIFT_COUNT(nBitCount);
+                pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf);
+                pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf >> 8);
+                pDeflateState->bi_buf = static_cast<uint16_t>(nCode) >> D2_SHIFT_COUNT(16 - pDeflateState->bi_valid);
+                pDeflateState->bi_valid = pDeflateState->bi_valid + nBits - 16;
+              } else {
+                pDeflateState->bi_buf |= static_cast<uint32_t>(pDeflateState->bl_tree[nCurLen].fc) << D2_SHIFT_COUNT(nBitCount);
+                pDeflateState->bi_valid = nBitCount + nBits;
+              }
+            }
+            --nCount;
           }
-
-          pDeflateState->bl_tree[0x10].fc++;
+          {
+            const int nBits = pDeflateState->bl_tree[16].dl;
+            const int nBitCount = pDeflateState->bi_valid;
+            if (nBitCount > 16 - nBits) {
+              const int nCode = pDeflateState->bl_tree[16].fc;
+              pDeflateState->bi_buf |= static_cast<uint32_t>(nCode) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf >> 8);
+              pDeflateState->bi_buf = static_cast<uint16_t>(nCode) >> D2_SHIFT_COUNT(16 - pDeflateState->bi_valid);
+              pDeflateState->bi_valid = pDeflateState->bi_valid + nBits - 16;
+            } else {
+              pDeflateState->bi_buf |= static_cast<uint32_t>(pDeflateState->bl_tree[16].fc) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->bi_valid = nBitCount + nBits;
+            }
+          }
+          {
+            const int nBitCount = pDeflateState->bi_valid;
+            if (nBitCount > 16 - 2) {
+              const int nCode = nCount - 3;
+              pDeflateState->bi_buf |= static_cast<uint32_t>(nCode) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf >> 8);
+              pDeflateState->bi_buf = static_cast<uint16_t>(nCode) >> D2_SHIFT_COUNT(16 - pDeflateState->bi_valid);
+              pDeflateState->bi_valid = pDeflateState->bi_valid + 2 - 16;
+            } else {
+              pDeflateState->bi_buf |= static_cast<uint32_t>(nCount - 3) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->bi_valid = nBitCount + 2;
+            }
+          }
+        } else if (nCount <= 10) {
+          {
+            const int nBits = pDeflateState->bl_tree[17].dl;
+            const int nBitCount = pDeflateState->bi_valid;
+            if (nBitCount > 16 - nBits) {
+              const int nCode = pDeflateState->bl_tree[17].fc;
+              pDeflateState->bi_buf |= static_cast<uint32_t>(nCode) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf >> 8);
+              pDeflateState->bi_buf = static_cast<uint16_t>(nCode) >> D2_SHIFT_COUNT(16 - pDeflateState->bi_valid);
+              pDeflateState->bi_valid = pDeflateState->bi_valid + nBits - 16;
+            } else {
+              pDeflateState->bi_buf |= static_cast<uint32_t>(pDeflateState->bl_tree[17].fc) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->bi_valid = nBitCount + nBits;
+            }
+          }
+          {
+            const int nBitCount = pDeflateState->bi_valid;
+            if (nBitCount > 16 - 3) {
+              const int nCode = nCount - 3;
+              pDeflateState->bi_buf |= static_cast<uint32_t>(nCode) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf >> 8);
+              pDeflateState->bi_buf = static_cast<uint16_t>(nCode) >> D2_SHIFT_COUNT(16 - pDeflateState->bi_valid);
+              pDeflateState->bi_valid = pDeflateState->bi_valid + 3 - 16;
+            } else {
+              pDeflateState->bi_buf |= static_cast<uint32_t>(nCount - 3) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->bi_valid = nBitCount + 3;
+            }
+          }
         } else {
-          if (nCount <= 0xa) {
-            pDeflateState->bl_tree[0x11].fc++;
-          } else {
-            pDeflateState->bl_tree[0x12].fc++;
+          {
+            const int nBits = pDeflateState->bl_tree[18].dl;
+            const int nBitCount = pDeflateState->bi_valid;
+            if (nBitCount > 16 - nBits) {
+              const int nCode = pDeflateState->bl_tree[18].fc;
+              pDeflateState->bi_buf |= static_cast<uint32_t>(nCode) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf >> 8);
+              pDeflateState->bi_buf = static_cast<uint16_t>(nCode) >> D2_SHIFT_COUNT(16 - pDeflateState->bi_valid);
+              pDeflateState->bi_valid = pDeflateState->bi_valid + nBits - 16;
+            } else {
+              pDeflateState->bi_buf |= static_cast<uint32_t>(pDeflateState->bl_tree[18].fc) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->bi_valid = nBitCount + nBits;
+            }
+          }
+          {
+            const int nBitCount = pDeflateState->bi_valid;
+            if (nBitCount > 16 - 7) {
+              const int nCode = nCount - 11;
+              pDeflateState->bi_buf |= static_cast<uint32_t>(nCode) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf >> 8);
+              pDeflateState->bi_buf = static_cast<uint16_t>(nCode) >> D2_SHIFT_COUNT(16 - pDeflateState->bi_valid);
+              pDeflateState->bi_valid = pDeflateState->bi_valid + 7 - 16;
+            } else {
+              pDeflateState->bi_buf |= static_cast<uint32_t>(nCount - 11) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->bi_valid = nBitCount + 7;
+            }
           }
         }
-
         nCount = 0;
         nPrevLen = nCurLen;
         if (!nNextLen) {
-          nMaxCount = 0x8a;
+          nMaxCount = 138;
           nMinCount = 3;
         } else if (nCurLen == nNextLen) {
           nMaxCount = 6;
@@ -2422,205 +2535,7 @@ static void __stdcall scan_tree(int32_t nMaxCode, deflate_state * pDeflateState,
           nMinCount = 4;
         }
       }
-
-      pwTreeLen += 2;
-      nRemaining--;
-      nCurLen = nNextLen;
-    } while (nRemaining);
-}
-
-static void send_tree(deflate_state * pDeflateState, ct_data * pTree, int32_t nMaxCode) {
-    uint8_t byBitCount;
-    int32_t iVar1;
-    uint32_t nSymBitLen;
-    int nRepeatCount;
-    uint16_t wCode;
-    uint32_t nPrevLen = -1;
-    int nBitBufLen = 7;
-    int nMinRepeat = 4;
-    if (!pTree->dl) {
-      nBitBufLen = 0x8a;
-      nMinRepeat = 3;
     }
-    if (nMaxCode < 0) {
-      return;
-    }
-
-    uint16_t* pwTreeLen = &pTree[1].dl;
-    int nRemaining = nMaxCode + 1;
-    int nCount = 0;
-    uint32_t nCurLen = (uint32_t)pTree->dl;
-    do {
-      uint32_t nNextLen;
-      nNextLen = (uint32_t)*pwTreeLen;
-      nRepeatCount = nCount + 1;
-      if (nRepeatCount >= nBitBufLen || nCurLen != nNextLen) {
-        if (nRepeatCount < nMinRepeat) {
-          do {
-            nSymBitLen = (uint32_t)pDeflateState->bl_tree[nCurLen].dl;
-            nBitBufLen = pDeflateState->bi_valid;
-            if (nBitBufLen > (int)(0x10 - nSymBitLen)) {
-              wCode = pDeflateState->bl_tree[nCurLen].fc;
-              pDeflateState->bi_buf |= wCode << D2_SHIFT_COUNT(nBitBufLen);
-              pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-              pDeflateState->pending++;
-              pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
-              pDeflateState->pending++;
-              nBitBufLen = pDeflateState->bi_valid - 0x10;
-              pDeflateState->bi_buf = wCode >> D2_SHIFT_COUNT(0x10U - pDeflateState->bi_valid);
-            } else {
-              pDeflateState->bi_buf |= pDeflateState->bl_tree[nCurLen].fc << D2_SHIFT_COUNT(nBitBufLen);
-            }
-
-            nRepeatCount--;
-            pDeflateState->bi_valid = nBitBufLen + nSymBitLen;
-          } while (nRepeatCount);
-        } else if (nCurLen) {
-          if (nCurLen != nPrevLen) {
-            nSymBitLen = (uint32_t)pDeflateState->bl_tree[nCurLen].dl;
-            byBitCount = (uint8_t)pDeflateState->bi_valid;
-            if (pDeflateState->bi_valid > (int)(0x10 - nSymBitLen)) {
-              wCode = pDeflateState->bl_tree[nCurLen].fc;
-              pDeflateState->bi_buf |= wCode << D2_SHIFT_COUNT(byBitCount);
-              pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-              pDeflateState->pending++;
-              pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
-              pDeflateState->pending++;
-              nBitBufLen = pDeflateState->bi_valid - 0x10;
-              pDeflateState->bi_buf = wCode >> D2_SHIFT_COUNT(0x10U - pDeflateState->bi_valid);
-            } else {
-              nBitBufLen = pDeflateState->bi_valid;
-              pDeflateState->bi_buf |= pDeflateState->bl_tree[nCurLen].fc << D2_SHIFT_COUNT(byBitCount);
-            }
-
-            pDeflateState->bi_valid = nBitBufLen + nSymBitLen;
-            nRepeatCount = nCount;
-          }
-
-          nSymBitLen = (uint32_t)pDeflateState->bl_tree[0x10].dl;
-          byBitCount = (uint8_t)pDeflateState->bi_valid;
-          if (pDeflateState->bi_valid > (int)(0x10 - nSymBitLen)) {
-            wCode = pDeflateState->bl_tree[0x10].fc;
-            pDeflateState->bi_buf |= wCode << D2_SHIFT_COUNT(byBitCount);
-            pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-            pDeflateState->pending++;
-            pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
-            pDeflateState->pending++;
-            nBitBufLen = pDeflateState->bi_valid - 0x10;
-            pDeflateState->bi_buf = wCode >> D2_SHIFT_COUNT(0x10U - pDeflateState->bi_valid);
-          } else {
-            nBitBufLen = pDeflateState->bi_valid;
-            pDeflateState->bi_buf |= pDeflateState->bl_tree[0x10].fc << D2_SHIFT_COUNT(byBitCount);
-          }
-
-          nBitBufLen += nSymBitLen;
-          nRepeatCount += -3;
-          pDeflateState->bi_valid = nBitBufLen;
-          if (nBitBufLen > 0xe) {
-            pDeflateState->bi_buf |= (uint16_t)(nRepeatCount << D2_SHIFT_COUNT(nBitBufLen));
-            pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-            pDeflateState->pending++;
-            pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
-            pDeflateState->pending++;
-            nBitBufLen = pDeflateState->bi_valid;
-            pDeflateState->bi_valid = nBitBufLen - 0xe;
-            pDeflateState->bi_buf = (uint16_t)nRepeatCount >> D2_SHIFT_COUNT(0x10U - nBitBufLen);
-          } else {
-            pDeflateState->bi_buf |= (uint16_t)(nRepeatCount << D2_SHIFT_COUNT(nBitBufLen));
-            iVar1 = nBitBufLen + 2;
-            pDeflateState->bi_valid = iVar1;
-          }
-        } else {
-          if (nRepeatCount <= 0xa) {
-            nSymBitLen = (uint32_t)pDeflateState->bl_tree[0x11].dl;
-            byBitCount = (uint8_t)pDeflateState->bi_valid;
-            if (pDeflateState->bi_valid > (int)(0x10 - nSymBitLen)) {
-              wCode = pDeflateState->bl_tree[0x11].fc;
-              pDeflateState->bi_buf |= wCode << D2_SHIFT_COUNT(byBitCount);
-              pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-              pDeflateState->pending++;
-              pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
-              pDeflateState->pending++;
-              nBitBufLen = pDeflateState->bi_valid - 0x10;
-              pDeflateState->bi_buf = wCode >> D2_SHIFT_COUNT(0x10U - pDeflateState->bi_valid);
-            } else {
-              nBitBufLen = pDeflateState->bi_valid;
-              pDeflateState->bi_buf |= pDeflateState->bl_tree[0x11].fc << D2_SHIFT_COUNT(byBitCount);
-            }
-
-            nBitBufLen += nSymBitLen;
-            nCount += -2;
-            pDeflateState->bi_valid = nBitBufLen;
-            if (nBitBufLen > 0xd) {
-              pDeflateState->bi_buf |= (uint16_t)(nCount << D2_SHIFT_COUNT(nBitBufLen));
-              pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-              pDeflateState->pending++;
-              pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
-              pDeflateState->pending++;
-              nBitBufLen = pDeflateState->bi_valid;
-              pDeflateState->bi_valid = nBitBufLen - 0xd;
-              pDeflateState->bi_buf = (uint16_t)nCount >> D2_SHIFT_COUNT(0x10U - nBitBufLen);
-            } else {
-              pDeflateState->bi_buf |= (uint16_t)(nCount << D2_SHIFT_COUNT(nBitBufLen));
-              iVar1 = nBitBufLen + 3;
-              pDeflateState->bi_valid = iVar1;
-            }
-          } else {
-            nSymBitLen = (uint32_t)pDeflateState->bl_tree[0x12].dl;
-            byBitCount = (uint8_t)pDeflateState->bi_valid;
-            if (pDeflateState->bi_valid > (int)(0x10 - nSymBitLen)) {
-              wCode = pDeflateState->bl_tree[0x12].fc;
-              pDeflateState->bi_buf |= wCode << D2_SHIFT_COUNT(byBitCount);
-              pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-              pDeflateState->pending++;
-              pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
-              pDeflateState->pending++;
-              nBitBufLen = pDeflateState->bi_valid - 0x10;
-              pDeflateState->bi_buf = wCode >> D2_SHIFT_COUNT(0x10U - pDeflateState->bi_valid);
-            } else {
-              nBitBufLen = pDeflateState->bi_valid;
-              pDeflateState->bi_buf |= pDeflateState->bl_tree[0x12].fc << D2_SHIFT_COUNT(byBitCount);
-            }
-
-            nBitBufLen += nSymBitLen;
-            nCount += -10;
-            pDeflateState->bi_valid = nBitBufLen;
-            if (nBitBufLen > 9) {
-              pDeflateState->bi_buf |= (uint16_t)(nCount << D2_SHIFT_COUNT(nBitBufLen));
-              pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-              pDeflateState->pending++;
-              pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
-              pDeflateState->pending++;
-              nBitBufLen = pDeflateState->bi_valid;
-              pDeflateState->bi_valid = nBitBufLen - 9;
-              pDeflateState->bi_buf = (uint16_t)nCount >> D2_SHIFT_COUNT(0x10U - nBitBufLen);
-            } else {
-              pDeflateState->bi_buf |= (uint16_t)(nCount << D2_SHIFT_COUNT(nBitBufLen));
-              iVar1 = nBitBufLen + 7;
-              pDeflateState->bi_valid = iVar1;
-            }
-          }
-        }
-
-        nRepeatCount = 0;
-        nPrevLen = nCurLen;
-        if (!nNextLen) {
-          nBitBufLen = 0x8a;
-          nMinRepeat = 3;
-        } else if (nCurLen == nNextLen) {
-          nBitBufLen = 6;
-          nMinRepeat = 3;
-        } else {
-          nBitBufLen = 7;
-          nMinRepeat = 4;
-        }
-      }
-
-      pwTreeLen += 2;
-      nRemaining--;
-      nCount = nRepeatCount;
-      nCurLen = nNextLen;
-    } while (nRemaining);
 }
 
 static void __stdcall send_all_trees(int32_t nLCodes, int32_t nDCodes, int32_t nBlCodes, deflate_state * pDeflateState) {
@@ -2783,142 +2698,121 @@ static int gaZlibBaseDist[30] = {
     0x6000
 }; D2_STATIC_GUARD(gaZlibBaseDist, "Storm::_3rdparty::zlib::trees::compress_block::gaZlibBaseDist");
 
-    int nBitCount;
-    uint32_t nCodeLen;
-    uint32_t nCode;
-    uint32_t nLc;
-    int nExtra;
-    uint32_t nDist;
-    int nBitCount2;
-    uint16_t wCode;
-    uint32_t nLx = 0;
-    if (pDeflateState->last_lit) {
-      uint8_t byBitCount;
+    uint32_t nLiteralIndex = 0;
+    if (pDeflateState->last_lit != 0) {
       do {
-        nDist = (uint32_t)pDeflateState->d_buf[nLx];
-        nLc = (uint32_t)pDeflateState->l_buf[nLx];
-        nLx++;
-        if (!nDist) {
-          nDist = (uint32_t)pLTree[nLc].dl;
-          nBitCount = pDeflateState->bi_valid;
-          if (nBitCount > (int)(0x10 - nDist)) {
-            wCode = pLTree[nLc].fc;
-            pDeflateState->bi_buf |= wCode << D2_SHIFT_COUNT(nBitCount);
-            pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-            pDeflateState->pending++;
-            pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
-            pDeflateState->pending++;
-            nBitCount = pDeflateState->bi_valid - 0x10 + nDist;
-            pDeflateState->bi_buf = wCode >> D2_SHIFT_COUNT(0x10U - pDeflateState->bi_valid);
-          } else {
-            pDeflateState->bi_buf |= pLTree[nLc].fc << D2_SHIFT_COUNT(nBitCount);
-            nBitCount += nDist;
-          }
-
-          pDeflateState->bi_valid = nBitCount;
-        } else {
-          nCode = (uint32_t)gaZlibLengthCodeTable[nLc];
-          nCodeLen = (uint32_t)pLTree[nCode + 0x101].dl;
-          byBitCount = (uint8_t)pDeflateState->bi_valid;
-          if (pDeflateState->bi_valid > (int)(0x10 - nCodeLen)) {
-            wCode = pLTree[nCode + 0x101].fc;
-            pDeflateState->bi_buf |= wCode << D2_SHIFT_COUNT(byBitCount);
-            pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-            pDeflateState->pending++;
-            pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
-            nBitCount2 = pDeflateState->bi_valid;
-            pDeflateState->pending++;
-            pDeflateState->bi_valid = nBitCount2 - 0x10 + nCodeLen;
-            pDeflateState->bi_buf = wCode >> D2_SHIFT_COUNT(0x10U - nBitCount2);
-          } else {
-            pDeflateState->bi_buf |= pLTree[nCode + 0x101].fc << D2_SHIFT_COUNT(byBitCount);
-            pDeflateState->bi_valid += nCodeLen;
-          }
-
-          nBitCount2 = gZlibExtraLBitsBlOrder.extra_lbits[nCode];
-          if (nBitCount2) {
-            nExtra = nLc - gaZlibBaseLength[nCode];
-            nBitCount = pDeflateState->bi_valid;
-            if (nBitCount > 0x10 - nBitCount2) {
-              pDeflateState->bi_buf |= (uint16_t)(nExtra << D2_SHIFT_COUNT(nBitCount));
-              pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-              pDeflateState->pending++;
-              pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
-              nBitCount = pDeflateState->bi_valid;
-              pDeflateState->pending++;
-              pDeflateState->bi_valid = nBitCount - 0x10 + nBitCount2;
-              pDeflateState->bi_buf = (uint16_t)nExtra >> D2_SHIFT_COUNT(0x10U - nBitCount);
+        uint32_t nDist = pDeflateState->d_buf[nLiteralIndex];
+        uint32_t nLiteral = pDeflateState->l_buf[nLiteralIndex++];
+        if (nDist == 0) {
+          {
+            const int nBitsUsed = pLTree[nLiteral].dl;
+            const int nBitCount = pDeflateState->bi_valid;
+            if (nBitCount > 16 - nBitsUsed) {
+              const int nBitsValue = pLTree[nLiteral].fc;
+              pDeflateState->bi_buf |= static_cast<uint32_t>(nBitsValue) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf >> 8);
+              pDeflateState->bi_buf = static_cast<uint16_t>(nBitsValue) >> D2_SHIFT_COUNT(16 - pDeflateState->bi_valid);
+              pDeflateState->bi_valid = pDeflateState->bi_valid + nBitsUsed - 16;
             } else {
-              pDeflateState->bi_buf |= (uint16_t)(nExtra << D2_SHIFT_COUNT(nBitCount));
-              pDeflateState->bi_valid = nBitCount + nBitCount2;
+              pDeflateState->bi_buf |= static_cast<uint32_t>(pLTree[nLiteral].fc) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->bi_valid = nBitCount + nBitsUsed;
             }
           }
-
-          nLc = nDist - 1;
-          if (nLc < 0x100) {
-            byBitCount = *(uint8_t*)((char*)_dist_code + nDist - 1);
-          } else {
-            byBitCount = _dist_code[(nLc >> 7) + 0x100];
-          }
-
-          nDist = (uint32_t)pDTree[byBitCount].dl;
-          nBitCount2 = pDeflateState->bi_valid;
-          if (nBitCount2 > (int)(0x10 - nDist)) {
-            wCode = pDTree[byBitCount].fc;
-            pDeflateState->bi_buf |= wCode << D2_SHIFT_COUNT(nBitCount2);
-            pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-            pDeflateState->pending++;
-            pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
-            nBitCount2 = pDeflateState->bi_valid;
-            pDeflateState->pending++;
-            pDeflateState->bi_valid = nBitCount2 - 0x10 + nDist;
-            pDeflateState->bi_buf = wCode >> D2_SHIFT_COUNT(0x10U - nBitCount2);
-          } else {
-            pDeflateState->bi_buf |= pDTree[byBitCount].fc << D2_SHIFT_COUNT(nBitCount2);
-            pDeflateState->bi_valid = nBitCount2 + nDist;
-          }
-
-          nBitCount2 = gaZlibExtraDBits[byBitCount];
-          if (nBitCount2) {
-            nExtra = nLc - gaZlibBaseDist[byBitCount];
-            nBitCount = pDeflateState->bi_valid;
-            if (!(nBitCount <= 0x10 - nBitCount2)) {
-              pDeflateState->bi_buf |= (uint16_t)(nExtra << D2_SHIFT_COUNT(nBitCount));
-              pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-              pDeflateState->pending++;
-              pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
-              nBitCount = pDeflateState->bi_valid;
-              pDeflateState->pending++;
-              pDeflateState->bi_valid = nBitCount - 0x10 + nBitCount2;
-              pDeflateState->bi_buf = (uint16_t)nExtra >> D2_SHIFT_COUNT(0x10U - nBitCount);
+        } else {
+          uint32_t nCode = gaZlibLengthCodeTable[nLiteral];
+          {
+            const int nBitsUsed = pLTree[nCode + 257].dl;
+            const int nBitCount = pDeflateState->bi_valid;
+            if (nBitCount > 16 - nBitsUsed) {
+              const int nBitsValue = pLTree[nCode + 257].fc;
+              pDeflateState->bi_buf |= static_cast<uint32_t>(nBitsValue) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf >> 8);
+              pDeflateState->bi_buf = static_cast<uint16_t>(nBitsValue) >> D2_SHIFT_COUNT(16 - pDeflateState->bi_valid);
+              pDeflateState->bi_valid = pDeflateState->bi_valid + nBitsUsed - 16;
             } else {
-              pDeflateState->bi_buf |= (uint16_t)(nExtra << D2_SHIFT_COUNT(nBitCount));
-              nBitCount += nBitCount2;
-              pDeflateState->bi_valid = nBitCount;
+              pDeflateState->bi_buf |= static_cast<uint32_t>(pLTree[nCode + 257].fc) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->bi_valid = nBitCount + nBitsUsed;
+            }
+          }
+          int nExtra = gZlibExtraLBitsBlOrder.extra_lbits[nCode];
+          if (nExtra != 0) {
+            nLiteral -= gaZlibBaseLength[nCode];
+            {
+              const int nBitsUsed = nExtra;
+              const int nBitCount = pDeflateState->bi_valid;
+              if (nBitCount > 16 - nBitsUsed) {
+                const int nBitsValue = nLiteral;
+                pDeflateState->bi_buf |= static_cast<uint32_t>(nBitsValue) << D2_SHIFT_COUNT(nBitCount);
+                pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf);
+                pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf >> 8);
+                pDeflateState->bi_buf = static_cast<uint16_t>(nBitsValue) >> D2_SHIFT_COUNT(16 - pDeflateState->bi_valid);
+                pDeflateState->bi_valid = pDeflateState->bi_valid + nBitsUsed - 16;
+              } else {
+                pDeflateState->bi_buf |= static_cast<uint32_t>(nLiteral) << D2_SHIFT_COUNT(nBitCount);
+                pDeflateState->bi_valid = nBitCount + nBitsUsed;
+              }
+            }
+          }
+          --nDist;
+          if (nDist < 256) {
+            nCode = _dist_code[nDist];
+          } else {
+            nCode = _dist_code[256 + (nDist >> 7)];
+          }
+          {
+            const int nBitsUsed = pDTree[nCode].dl;
+            const int nBitCount = pDeflateState->bi_valid;
+            if (nBitCount > 16 - nBitsUsed) {
+              const int nBitsValue = pDTree[nCode].fc;
+              pDeflateState->bi_buf |= static_cast<uint32_t>(nBitsValue) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf);
+              pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf >> 8);
+              pDeflateState->bi_buf = static_cast<uint16_t>(nBitsValue) >> D2_SHIFT_COUNT(16 - pDeflateState->bi_valid);
+              pDeflateState->bi_valid = pDeflateState->bi_valid + nBitsUsed - 16;
+            } else {
+              pDeflateState->bi_buf |= static_cast<uint32_t>(pDTree[nCode].fc) << D2_SHIFT_COUNT(nBitCount);
+              pDeflateState->bi_valid = nBitCount + nBitsUsed;
+            }
+          }
+          nExtra = gaZlibExtraDBits[nCode];
+          if (nExtra != 0) {
+            nDist -= gaZlibBaseDist[nCode];
+            {
+              const int nBitsUsed = nExtra;
+              const int nBitCount = pDeflateState->bi_valid;
+              if (nBitCount > 16 - nBitsUsed) {
+                const int nBitsValue = nDist;
+                pDeflateState->bi_buf |= static_cast<uint32_t>(nBitsValue) << D2_SHIFT_COUNT(nBitCount);
+                pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf);
+                pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf >> 8);
+                pDeflateState->bi_buf = static_cast<uint16_t>(nBitsValue) >> D2_SHIFT_COUNT(16 - pDeflateState->bi_valid);
+                pDeflateState->bi_valid = pDeflateState->bi_valid + nBitsUsed - 16;
+              } else {
+                pDeflateState->bi_buf |= static_cast<uint32_t>(nDist) << D2_SHIFT_COUNT(nBitCount);
+                pDeflateState->bi_valid = nBitCount + nBitsUsed;
+              }
             }
           }
         }
-      } while (nLx < pDeflateState->last_lit);
+      } while (nLiteralIndex < pDeflateState->last_lit);
     }
-
-    nLx = (uint32_t)pLTree[0x100].dl;
-    nBitCount2 = pDeflateState->bi_valid;
-    if (!(nBitCount2 <= (int)(0x10 - nLx))) {
-      wCode = pLTree[0x100].fc;
-      pDeflateState->bi_buf |= wCode << D2_SHIFT_COUNT(nBitCount2);
-      pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-      pDeflateState->pending++;
-      pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
-      nBitCount2 = pDeflateState->bi_valid;
-      pDeflateState->pending++;
-      pDeflateState->bi_valid = nBitCount2 - 0x10 + nLx;
-      pDeflateState->bi_buf = wCode >> D2_SHIFT_COUNT(0x10U - nBitCount2);
-      return;
+    {
+      const int nBitsUsed = pLTree[256].dl;
+      const int nBitCount = pDeflateState->bi_valid;
+      if (nBitCount > 16 - nBitsUsed) {
+        const int nBitsValue = pLTree[256].fc;
+        pDeflateState->bi_buf |= static_cast<uint32_t>(nBitsValue) << D2_SHIFT_COUNT(nBitCount);
+        pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf);
+        pDeflateState->pending_buf[pDeflateState->pending++] = static_cast<uint8_t>(pDeflateState->bi_buf >> 8);
+        pDeflateState->bi_buf = static_cast<uint16_t>(nBitsValue) >> D2_SHIFT_COUNT(16 - pDeflateState->bi_valid);
+        pDeflateState->bi_valid = pDeflateState->bi_valid + nBitsUsed - 16;
+      } else {
+        pDeflateState->bi_buf |= static_cast<uint32_t>(pLTree[256].fc) << D2_SHIFT_COUNT(nBitCount);
+        pDeflateState->bi_valid = nBitCount + nBitsUsed;
+      }
     }
-
-    pDeflateState->bi_buf |= pLTree[0x100].fc << D2_SHIFT_COUNT(nBitCount2);
-    pDeflateState->bi_valid = nBitCount2 + nLx;
-    return;
 }
 
 static BOOL detect_data_type(deflate_state * pDeflateState) {
@@ -3267,8 +3161,11 @@ void __fastcall _tr_align(deflate_state * pDeflateState) {
       pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
       nBitCount = pDeflateState->bi_valid;
       pDeflateState->pending++;
-      pDeflateState->bi_valid = nBitCount - 0xd;
-      pDeflateState->bi_buf = 2 >> D2_SHIFT_COUNT(0x10U - nBitCount);
+      uint16_t wBits = 2;
+      wBits >>= D2_SHIFT_COUNT(0x10U - nBitCount);
+      pDeflateState->bi_buf = wBits;
+      nBitCount -= 13;
+      pDeflateState->bi_valid = nBitCount;
     } else {
       pDeflateState->bi_valid = nBitCount + 3;
     }
@@ -3281,8 +3178,11 @@ void __fastcall _tr_align(deflate_state * pDeflateState) {
       pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((intptr_t)&pDeflateState->bi_buf + 1);
       pDeflateState->pending++;
       nBitCount = pDeflateState->bi_valid;
-      pDeflateState->bi_valid = nBitCount - 9;
-      pDeflateState->bi_buf = 0 >> D2_SHIFT_COUNT(0x10U - nBitCount);
+      uint16_t wBits = 0;
+      wBits >>= D2_SHIFT_COUNT(0x10U - nBitCount);
+      pDeflateState->bi_buf = wBits;
+      nBitCount -= 9;
+      pDeflateState->bi_valid = nBitCount;
     } else {
       pDeflateState->bi_valid = nBitCount + 7;
     }

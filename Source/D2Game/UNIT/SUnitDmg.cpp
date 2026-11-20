@@ -451,7 +451,6 @@ static void __stdcall DAMAGE_ApplyCold(D2UnitStrc * pUnit, int32_t nColdLength, 
 }
 
 void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
-    uint8_t byAIDelay;
     BOOL bIsModeZeroDeath = SUnit::CheckForModeZeroDeath(pUnit);
     uint32_t bStateActive;
     bStateActive = bIsModeZeroDeath ? D2Common::DATATBLS::ItemStats::STATES_DoesStateStayOnDeath(pUnit, eState) : 0;
@@ -471,19 +470,19 @@ void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(D2UnitStrc * pUnit, eD2Stat
       if (!pMonStatsTxt) {
         return;
       }
+      int32_t nAIResumeDelay;
       if (pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER) {
-        byAIDelay = pMonStatsTxt->aidel[0];
+        nAIResumeDelay = pMonStatsTxt->aidel[0];
       } else {
-        byAIDelay = pMonStatsTxt->aidel[pGame->nDifficulty];
+        nAIResumeDelay = pMonStatsTxt->aidel[pGame->nDifficulty];
       }
 
-      uint32_t nAIResumeDelay = (uint32_t)byAIDelay;
-      if (!nAIResumeDelay) {
+      if (nAIResumeDelay <= 0) {
         nAIResumeDelay = 0xf;
       }
 
       GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
-      GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + nAIResumeDelay, 0, 0);
+      GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + static_cast<uint32_t>(nAIResumeDelay), 0, 0);
       return;
     }
 
@@ -3164,36 +3163,28 @@ static int32_t EXPERIENCE_ApplyLevelDiffPenaulty(int32_t nExperience, int32_t nD
     0x5
 }; D2_STATIC_GUARD(gaExperiencePenaultyHigherAttacker, "D2Game::UNIT::SUnitDmg::EXPERIENCE_ApplyLevelDiffPenaulty::gaExperiencePenaultyHigherAttacker");
 
-    int nExperienceAdjusted1;
-    int nLevelDifference2;
-    int nLevelDifference;
-    int nPercent;
-    if (!(nAttackerLevel > nDefenderLevel)) {
-      nLevelDifference2 = nDefenderLevel - nAttackerLevel;
-      if (nLevelDifference2 >= 11) {
-        nLevelDifference2 = 10;
-      }
-
-      nPercent = gaExperiencePenaultyHigherDefender[nLevelDifference2];
-    } else {
-      if (nDefenderLevel >= 25 && nAttackerLevel > 0) {
-        nExperienceAdjusted1 = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nExperience, nDefenderLevel, nAttackerLevel);
-        return nExperienceAdjusted1;
-      }
-
-      nLevelDifference = nAttackerLevel - nDefenderLevel;
+    if (nAttackerLevel <= nDefenderLevel) {
+      int nLevelDifference = nDefenderLevel - nAttackerLevel;
       if (nLevelDifference >= 11) {
         nLevelDifference = 10;
       }
-
-      nPercent = gaExperiencePenaultyHigherAttacker[nLevelDifference];
+      const int nPercent = gaExperiencePenaultyHigherDefender[nLevelDifference];
+      if (nPercent == 0x100) {
+        return nExperience;
+      }
+      return D2Common::DATATBLS::DataTbls::D2ApplyPercent(nExperience, nPercent, 0x100);
     }
+    if (nDefenderLevel >= 25 && nAttackerLevel > 0) {
+      return D2Common::DATATBLS::DataTbls::D2ApplyPercent(nExperience, nDefenderLevel, nAttackerLevel);
+    }
+    int nLevelDifference = nAttackerLevel - nDefenderLevel;
+    if (nLevelDifference >= 11) {
+      nLevelDifference = 10;
+    }
+    const int nPercent = gaExperiencePenaultyHigherAttacker[nLevelDifference];
     if (nPercent != 0x100) {
-      int nExperienceAdjusted2;
-      nExperienceAdjusted2 = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nExperience, nPercent, 0x100);
-      return nExperienceAdjusted2;
+      return D2Common::DATATBLS::DataTbls::D2ApplyPercent(nExperience, nPercent, 0x100);
     }
-
     return nExperience;
 }
 

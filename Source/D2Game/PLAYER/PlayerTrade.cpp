@@ -703,10 +703,8 @@ static BOOL __stdcall CUBE_ValidateRecipeInputs(::SGAMEDATA * pGame, D2CubeSetup
 
 // Two explicit GuardStack tails carrying a packed 16-bit item class id (aCandidateIds[nEndId]) on success, 0 on no-candidates-found. Own doc comment: "Returns class ID in EAX."
 uint16_t __fastcall ITEM_SelectRandomItemClassByType(::SGAMEDATA * pGame, int32_t nItemLevel, eD2ItemTypes eItemType) {
-    D2ItemsTxt* pDVar1;
     BOOL bTypeMatch;
     uint16_t aCandidateIds[256];
-    uint16_t nSelectedClassId;
     D2ItemsTableStrc* pItemTbl = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
     uint32_t nCandidateCount = 0;
     if (!pItemTbl) {
@@ -714,41 +712,40 @@ uint16_t __fastcall ITEM_SelectRandomItemClassByType(::SGAMEDATA * pGame, int32_
       exit(-1);
     }
 
-    uint32_t nStartId = D2Common::Seed::RANDOM_RandomNumberSelector(&pGame->pGameSeed, pItemTbl->nSize);
-    uint32_t nEndId = nStartId - 1;
+    const uint32_t nFirstId = D2Common::Seed::RANDOM_RandomNumberSelector(&pGame->pGameSeed, pItemTbl->nSize);
+    uint32_t nEndId = nFirstId - 1;
     if ((int)nEndId < 0) {
       nEndId = pItemTbl->nSize - 1;
     }
-    if (nStartId != nEndId) {
+    uint32_t nCurrentId = nFirstId;
+    if (nCurrentId != nEndId) {
       do {
         if ((int)nCandidateCount >= 0x100) {
           break;
         }
 
-        bTypeMatch = D2Common::ITEMS::Items::TXT_ItemTypes_CheckEquivalence(nStartId, eItemType);
-        /* wItemFormat < 100 check: items with wVersion >= 100 need an LoD-format game.
-                          */ if (bTypeMatch) {
-          pDVar1 = pItemTbl->pItems;
-          if (pDVar1[nStartId].bSpawnable != '\0' && ((uint16_t)pDVar1[nStartId].wVersion < 100 || 99 < pGame->wItemFormat) && (int)(uint32_t)(uint8_t)pDVar1[nStartId].nLevel <= nItemLevel) {
-            aCandidateIds[nCandidateCount] = (uint16_t)nStartId;
+        bTypeMatch = D2Common::ITEMS::Items::TXT_ItemTypes_CheckEquivalence(nCurrentId, eItemType);
+        if (bTypeMatch) {
+          const uint16_t nExpansionItemFormat = 100;
+          const D2ItemsTxt* pItemRecord = pItemTbl->pItems + nCurrentId;
+          if (pItemRecord->bSpawnable != '\0' && ((uint16_t)pItemRecord->wVersion < nExpansionItemFormat || pGame->wItemFormat >= nExpansionItemFormat) && (int)(uint32_t)(uint8_t)pItemRecord->nLevel <= nItemLevel) {
+            aCandidateIds[nCandidateCount] = (uint16_t)nCurrentId;
             nCandidateCount++;
           }
         }
 
-        nStartId++;
-        if ((int)nStartId >= pItemTbl->nSize) {
-          nStartId = 0;
+        nCurrentId++;
+        if ((int)nCurrentId >= pItemTbl->nSize) {
+          nCurrentId = 0;
         }
-      } while (nStartId != nEndId);
-
-      if (nCandidateCount) {
-        nEndId = D2Common::Seed::RANDOM_RandomNumberSelector(&pGame->pGameSeed, nCandidateCount);
-        nSelectedClassId = aCandidateIds[nEndId];
-        return nSelectedClassId;
-      }
+      } while (nCurrentId != nEndId);
     }
 
-    return 0;
+    if (!nCandidateCount) {
+      return 0;
+    }
+    const uint32_t nSelection = D2Common::Seed::RANDOM_RandomNumberSelector(&pGame->pGameSeed, nCandidateCount);
+    return aCandidateIds[nSelection];
 }
 
 // JMP thunk
@@ -1689,9 +1686,9 @@ void __fastcall SendEventMsg(D2UnitStrc * pUnit, uint8_t nMessageType, char * sz
     sEventPacket.nArg = 0;
     if (szName) {
       Storm::Source::SSTR::SStrCopy(sEventPacket.szName1, szName, 0x7fffffff);
-      *(uint32_t*)((char*)&sEventPacket.szName1 + 12) &= 0xffffff;
+      sEventPacket.szName1[sizeof(sEventPacket.szName1) - 1] = 0;
     } else {
-      *(uint32_t*)sEventPacket.szName1 = 0;
+      sEventPacket.szName1[0] = 0;
     }
 
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0x8ce);

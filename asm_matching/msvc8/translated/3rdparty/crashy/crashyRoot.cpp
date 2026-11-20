@@ -17,29 +17,28 @@ void __fastcall CRT_LocalTime_Thunk(uint8_t * pLocalTime, uint32_t * pTime) {
 }
 
 static bool __stdcall FILETOOLS_GetTempPath_UTF8(char * pSrc) {
-    char* pSrcCur = gszCrashLogTempDir;
-    int nRemainingCapacity = 0x3ff;
-    char* pSrcScan = pSrc;
+    char cCh;
+    char* pDst = gszCrashLogTempDir;
+    char* pSrcCur = pSrc;
+    int nRemaining = 0x3ff;
     do {
-      char cCh;
-      cCh = *pSrcScan;
-      *pSrcCur = cCh;
-      pSrcCur++;
-      pSrcScan++;
+      cCh = *pSrcCur;
+      *pDst = cCh;
+      ++pDst;
+      ++pSrcCur;
       if (cCh == '\0') {
-        if (nRemainingCapacity) {
-          return pSrcScan + (-1 - (intptr_t)pSrc) < (char*)0x400 ? true : false;
+        if (nRemaining) {
+          goto test_source_length;
         }
-
         break;
       }
-
-      nRemainingCapacity--;
-    } while (nRemainingCapacity);
-
-    *pSrcCur = '\0';
-    pSrcScan = pSrcScan + strlen(pSrcScan) + 1;
-    return pSrcScan + (-1 - (intptr_t)pSrc) < (char*)0x400 ? true : false;
+      --nRemaining;
+    } while (nRemaining);
+    *pDst = '\0';
+    while (*pSrcCur++) {
+    }
+    test_source_length:
+    return (size_t)(pSrcCur - pSrc - 1) < 0x400 ? true : false;
 }
 
 uint32_t __stdcall isDebuggerPresent() {
@@ -203,12 +202,9 @@ bool __stdcall InternalCheckCorp() {
 
 void __fastcall SYSTEM_SetGlobalString(char * szText) {
     char cCh;
-    char* pDst;
-    pDst = gszSystemGlobalString;
-    int nRemaining;
-    nRemaining = 0x3ff;
-    char* pSrcCur;
-    pSrcCur = szText;
+    char* pDst = gszSystemGlobalString;
+    char* pSrcCur = szText;
+    int nRemaining = 0x3ff;
     do {
       cCh = *pSrcCur;
       *pDst = cCh;
@@ -226,9 +222,10 @@ void __fastcall SYSTEM_SetGlobalString(char * szText) {
     } while (nRemaining);
 
     *pDst = '\0';
-    pSrcCur = pSrcCur + strlen(pSrcCur) + 1;
+    while (*pSrcCur++) {
+    }
     clear_if_too_long:
-    if ((char*)0x3ff < pSrcCur + (-1 - (intptr_t)szText)) {
+    if ((size_t)(pSrcCur - szText - 1) >= 0x400) {
       gszSystemGlobalString[0] = '\0';
     }
 }

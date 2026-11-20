@@ -1077,7 +1077,6 @@ void __fastcall GetTypeAndMode(D2UnitStrc * pUnit, D2QServerUnitRecordStrc * pOu
     int32_t nPosY;
     char cNameChar;
     eD2UnitType eUnitType;
-    intptr_t nCharNameDelta;
     if (!pOutRecord) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9aa);
       exit(-1);
@@ -1088,11 +1087,13 @@ void __fastcall GetTypeAndMode(D2UnitStrc * pUnit, D2QServerUnitRecordStrc * pOu
         exit(-1);
       }
       if (pUnit->eUnitType == UNIT_PLAYER && (pPlayerData = D2Common::Units::GetPlayerData(pUnit) , pPlayerData != 0)) {
-        nCharNameDelta = 0x24 - (intptr_t)pPlayerData;
+        const char* pSource = pPlayerData->szCharName;
+        char* pDestination = pOutRecord->szCharName;
         do {
-          cNameChar = pPlayerData->szCharName[0];
-          *(char*)((intptr_t)pOutRecord + nCharNameDelta + (intptr_t)pPlayerData) = cNameChar;
-          pPlayerData = (D2UnitDataPlayerStrc*)(pPlayerData->szCharName + 1);
+          cNameChar = *pSource;
+          *pDestination = cNameChar;
+          ++pSource;
+          ++pDestination;
         } while (cNameChar != '\0');
       } else {
         pOutRecord->szCharName[0] = '\0';
@@ -1813,16 +1814,19 @@ D2UnitStrc * __fastcall GetInteractedNpc(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 // Returns 1 if pUnit (must be a player) can use eSkill on the target described by peUnitType. Applies only to skills flagged with bit 2 of flags4 in Skills.txt (party-targeted skills). For monster targets, resolves the owner player. Returns 1 only if caster and target share the same non-(-1) party ID, i.e. are in the same party.
 uint32_t __fastcall UNITS_CanUseSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill) {
     D2UnitStrc* pTargetUnit = pTarget;
-    if (!pUnit || !pTarget || pUnit->eUnitType != UNIT_PLAYER) {
+    if (!pUnit || !pTarget) {
+      return 0;
+    }
+    if (pUnit->eUnitType != UNIT_PLAYER) {
       return 0;
     }
 
     eD2UnitType eTargetUnitType = pTarget->eUnitType;
+    eD2UnitType eMonsterOwnerType = eTargetUnitType;
     if (!(eTargetUnitType == UNIT_PLAYER || eTargetUnitType == UNIT_MONSTER)) {
       return 0;
     }
 
-    eD2UnitType eMonsterOwnerType = eTargetUnitType;
     D2SkillsTxt* pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(eSkill);
     if (!(pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
       return 0;

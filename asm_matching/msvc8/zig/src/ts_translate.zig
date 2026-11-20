@@ -199,7 +199,39 @@ pub const Translator = struct {
         return .{ try std.fmt.parseInt(u64, words.items[1], 10), try std.fmt.parseInt(u64, words.items[3], 10) };
     }
 
+    /// The translator serving single files with no mirror first: `rel` may then name a
+    /// copy of a source anywhere under the tree (try-source's spliced TUs).
+    pub fn serve(t: *Translator) !void {
+        var args: std.ArrayList([]const u8) = .empty;
+        if (builtin.os.tag == .windows) {
+            try args.appendSlice(gpa, &.{ "node", try util.join(t.gr, "node_modules/tsx/dist/cli.mjs"), try util.join(t.gr, CLI), t.repo, "-", "--serve" });
+        } else {
+            try args.appendSlice(gpa, &.{ "pnpm", "--silent", "--dir", t.gr, "exec", "tsx", CLI, t.repo, "-", "--serve" });
+        }
+        t.pipe = try proc.Pipe.spawn(args.items);
+    }
+
+    /// File `rel` of the tree translated, or the translator's message when it cannot be.
+    pub fn translateChecked(t: *Translator, rel: []const u8) !union(enum) { text: []const u8, err: []const u8 } {
+        const v = try t.askRaw(rel, &.{}, null);
+        if (v.object.get("error")) |e| return .{ .err = if (e == .string) e.string else "?" };
+        const b64 = (v.object.get("text") orelse return error.TranslatorReply).string;
+        const dec = std.base64.standard.Decoder;
+        const out = try gpa.alloc(u8, try dec.calcSizeForSlice(b64));
+        try dec.decode(out, b64);
+        return .{ .text = out };
+    }
+
     fn ask(t: *Translator, rel: []const u8, lines: []const u32, at: ?[]const u32) !std.json.Value {
+        const v = try t.askRaw(rel, lines, at);
+        if (v.object.get("error")) |e| {
+            std.debug.print("{s}/{s}: {s}\n", .{ t.repo, rel, if (e == .string) e.string else "?" });
+            std.process.exit(1);
+        }
+        return v;
+    }
+
+    fn askRaw(t: *Translator, rel: []const u8, lines: []const u32, at: ?[]const u32) !std.json.Value {
         var req: std.ArrayList(u8) = .empty;
         try req.appendSlice(gpa, "{\"rel\": ");
         try objcache.jsonString(&req, rel);
@@ -218,11 +250,9 @@ pub const Translator = struct {
             try t.pipe.?.write(req.items);
             break :blk try t.pipe.?.readLine();
         };
+        if (reply.len == 0) return error.TranslatorGone;
         const v = try std.json.parseFromSliceLeaky(std.json.Value, gpa, reply, .{});
-        if (v.object.get("error")) |e| {
-            std.debug.print("{s}/{s}: {s}\n", .{ t.repo, rel, if (e == .string) e.string else "?" });
-            std.process.exit(1);
-        }
+        if (v != .object) return error.TranslatorReply;
         return v;
     }
 

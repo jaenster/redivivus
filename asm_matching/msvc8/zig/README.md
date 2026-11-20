@@ -27,6 +27,8 @@ oracle-zig translate --repo <tree> <out>        # the VC8 translation with sourc
 oracle-zig tucache lookup|store|prune [...]   # recon/runs/link.sh and measure.sh
 oracle-zig trial --root <asm_matching/msvc8> --state | --out DIR [-j N] [--batch N] [--expect KEY] < trials
 oracle-zig judge --root <asm_matching/msvc8> < requests
+oracle-zig try-source [--root R] <address> <body file> [--helpers F] [--expect STATUS] [--context N]
+oracle-zig try-serve [--root R] [--idle SECONDS] [--max-requests N]
 ```
 
 The inspection tools and helpers keep their scripts' command lines; `--root` defaults to
@@ -103,6 +105,15 @@ holds. `judge` stays up and judges one object per request against the original a
 does (same views, same `compare`), with the INSN_MATCH register-only test and the masked
 original bytes (`bh`) a vc8form tag records.
 
+`try-source` judges one hand-written function body: it replaces the definition after the
+function's `// 1.14d:` anchor in a copy of its TU, has the translator translate the copy, and
+compiles and judges it as `trial` and `judge` do, beside the TU's unchanged copy for the
+`baseline` and `collateral` fields. Its reply is one JSON line: the status, the counts, the
+frames, the differing lines of `diff`'s side-by-side view and every other function of the TU whose
+status moved. Callers share `try-serve`, which the first one starts (POSIX hosts): one queue on
+`build/try-source.sock` that batches whatever arrives together into one trial round, under the
+build's lock and `WINE_BENCH_LOCK` when set, `D2_VC8_JOBS` (6) cl.exe at a time.
+
 ## Modules
 
 One file per Python module (most of them since deleted), named after it; the functions keep the Python names in
@@ -136,6 +147,7 @@ camelCase, so a port reads side by side with its original.
 |`proc.zig`| |child processes (posix_spawn, both pipes, timeout), mutex, flock, os.walk/os.path, Python str rules over latin1|
 |`tucache.zig`|`recon/runs/tucache.py`|the per-TU gcc result cache|
 |`permute.zig`|(permute.py's Compiler and Oracle)|`trial` and `judge`: the form permuter's compiles and judging|
+|`trysource.zig`| |`try-source` and its queue `try-serve`: one hand-written body spliced, compiled and judged|
 |`cli.zig`| |argparse-style command lines, where the oracle is, stdout as Python prints Latin-1 and UTF-8 text|
 |`context.zig`|`audit.load_context`|the original carved and decoded, the symbol map, one object's functions|
 |`quick.zig`|`quick.py`|the incremental measurement, gained/lost MATCH, `--verify`|

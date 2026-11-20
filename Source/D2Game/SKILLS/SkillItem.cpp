@@ -1600,7 +1600,6 @@ int32_t __fastcall SKILLITEM_DispatchItemSpell(::SGAMEDATA * pGame, D2UnitStrc *
 // Retired notes from 'SKILL_UseScrollOrBookFromInventory':
 // Scans the player's inventory item list for a book or scroll whose spell (Books.txt spell column) matches the requested spell id at *(nParam+8). For scrolls matches at +8; for books matches at +0xc and requires quantity>0. On a hit, reads the item's inventory grid type: grid 1 routes to SpecialItemsBonuses, grid 2 routes to SERVER_UseItemAtCoords (with the item's GUID and dynamic-path X/Y). Returns 1 if a matching item was used, 0 otherwise. Server-side helper for casting a spell from a scroll/tome in the inventory.
 BOOL __fastcall Skills_SrvDoFunc_113_UseScrollOrBook(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    uint16_t wMagicSuffix;
     D2UnitStrc* pItem;
     uint32_t bIsItemType;
     D2BooksTxt* pBooksTxt;
@@ -1615,72 +1614,69 @@ BOOL __fastcall Skills_SrvDoFunc_113_UseScrollOrBook(::SGAMEDATA * pGame, D2Unit
 
     D2UnitStrc* pInvItem;
     pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory);
-    eD2Skills eSkillWanted;
-    eSkillWanted = eSkill;
-    do {
-      if (!pInvItem) {
-        return 0;
-      }
-
-      pItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pInvItem);
-      bIsItemType = D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Book);
-      if (bIsItemType) {
-        wMagicSuffix = D2Common::ITEMS::Items::GetMagicSuffix(pItem, 0);
-        pBooksTxt = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)wMagicSuffix);
-        if (pBooksTxt && pBooksTxt->bookskill == eSkillWanted) {
-          nQuantity = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0);
-          if (nQuantity > 0) {
-            LAB_005bf43c:
-            if (!pInvItem) {
-              return 0;
-            }
-            iVar1 = D2Common::INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pInvItem);
-            switch (iVar1) {
-              default:
-                {
-                  return 0;
-                }
-              case 2:
-                {
-                  if (!pItem) {
-                    dwItemGUID = -1;
-                  } else {
-                    dwItemGUID = pItem->nUnitGUID;
-                  }
-
-                  bUseMerc = 0;
-                  peVar2 = &eSkill;
-                  ITEMS::ItemMode::SERVER_UseItemAtCoords(pGame, pUnit, dwItemGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), (int32_t*)peVar2, bUseMerc);
-                  return 1;
-                }
-              case 1:
-                {
-                  if (!pItem) {
-                    dwItemGUID = -1;
-                  } else {
-                    dwItemGUID = pItem->nUnitGUID;
-                  }
-
-                  peVar2 = &eSkill;
-                  ITEMS::ItemMode::SpecialItemsBonuses(pGame, pUnit, dwItemGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), (BOOL*)peVar2);
-                  return 1;
-                }
-            }
-          }
-        }
-      } else {
-        bIsItemType = D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Scroll);
+    if (pInvItem) {
+      const eD2Skills eSkillWanted = eSkill;
+      do {
+        pItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pInvItem);
+        bIsItemType = D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Book);
         if (bIsItemType) {
-          wMagicSuffix = D2Common::ITEMS::Items::GetMagicSuffix(pItem, 0);
-          pBooksTxt = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)wMagicSuffix);
-          if (pBooksTxt && pBooksTxt->scrollskill == eSkillWanted) {
-            goto LAB_005bf43c;
+          pBooksTxt = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine(static_cast<uint16_t>(D2Common::ITEMS::Items::GetMagicSuffix(pItem, 0)));
+          if (pBooksTxt && pBooksTxt->bookskill == eSkillWanted) {
+            nQuantity = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0);
+            if (nQuantity > 0) {
+              LAB_005bf43c:
+              if (!pInvItem) {
+                return 0;
+              }
+              iVar1 = D2Common::INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pInvItem);
+              switch (iVar1) {
+                default:
+                  {
+                    return 0;
+                  }
+                case 2:
+                  {
+                    if (!pItem) {
+                      dwItemGUID = -1;
+                    } else {
+                      dwItemGUID = pItem->nUnitGUID;
+                    }
+
+                    bUseMerc = 0;
+                    peVar2 = &eSkill;
+                    ITEMS::ItemMode::SERVER_UseItemAtCoords(pGame, pUnit, dwItemGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), (int32_t*)peVar2, bUseMerc);
+                    return 1;
+                  }
+                case 1:
+                  {
+                    if (!pItem) {
+                      dwItemGUID = -1;
+                    } else {
+                      dwItemGUID = pItem->nUnitGUID;
+                    }
+
+                    peVar2 = &eSkill;
+                    ITEMS::ItemMode::SpecialItemsBonuses(pGame, pUnit, dwItemGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), (BOOL*)peVar2);
+                    return 1;
+                  }
+              }
+            }
+          }
+        } else {
+          bIsItemType = D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Scroll);
+          if (bIsItemType) {
+            pBooksTxt = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine(static_cast<uint16_t>(D2Common::ITEMS::Items::GetMagicSuffix(pItem, 0)));
+            if (pBooksTxt && pBooksTxt->scrollskill == eSkillWanted) {
+              goto LAB_005bf43c;
+            }
           }
         }
-      }
 
-      pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvItem);
-    } while (true);
+        pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvItem);
+      } while (pInvItem);
+    }
+
+    return 0;
 }
 
 void __fastcall SKILL_ProcessPeriodicAuraTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nOwnerGUID, eD2Skills eSkill, int32_t nSkillLvl) {

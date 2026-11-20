@@ -412,35 +412,30 @@ void SLogWrite(uint32_t nHandle, char * szFormat, ...) {
 
 // @blizzard SLogDestroy (SLOG.CPP)
 void __stdcall SLogDestroy() {
-    int nSlotsLeft;
     SLogFlushAll();
     CRITICAL_SECTION* pCs = gaSLogCritSect;
     D2SLogStrc** ppListHead = gaSLogHead;
-    int nRemaining = 4;
+    const int nSlotCount = 4;
+    int nRemaining = nSlotCount;
     do {
-      D2SLogStrc* pNode;
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ nSlotsLeft = nRemaining;
       EnterCriticalSection(pCs);
-      pNode = *ppListHead;
+      D2SLogStrc* pNode = *ppListHead;
       while (pNode) {
         SLogClose(pNode->nHandle);
         SErr::SErrReportResourceLeak("HSLOG");
         pNode = *ppListHead;
       }
+      LeaveCriticalSection(pCs);
+      ++ppListHead;
+      ++pCs;
+    } while (--nRemaining);
 
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pCs);
-      ppListHead++;
-      pCs++;
-      nRemaining = nSlotsLeft - 1;
-    } while (nRemaining);
-
-    nSlotsLeft += 3;
-    pCs = gaSLogCritSect;
+    int nDeleteCount = nSlotCount;
+    CRITICAL_SECTION* pToDelete = gaSLogCritSect;
     do {
-      /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(pCs);
-      pCs++;
-      nSlotsLeft--;
-    } while (nSlotsLeft);
+      DeleteCriticalSection(pToDelete);
+      ++pToDelete;
+    } while (--nDeleteCount);
 }
 
 } // namespace Storm::Source::SLog

@@ -1640,14 +1640,16 @@ int32_t __stdcall SKILLS_GetElementalLength(D2UnitStrc * pUnit, int32_t eSkillId
 }
 
 int32_t __stdcall SKILLS_GetCharClassFromSkillId(int32_t eSkillId) {
-    int32_t nCharClass;
-    char cCharClass;
-    if (!(eSkillId < 0 || eSkillId >= ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId) || (cCharClass = ITEMS::Items::sgptDataTable->pTxtSkills[eSkillId].charclass , nCharClass = (int32_t)cCharClass , cCharClass < '\0'))) {
-      return nCharClass;
+    const D2SkillsTxt* pSkill;
+    if (eSkillId < 0 || eSkillId >= ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
+      pSkill = 0;
+    } else {
+      pSkill = ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId;
     }
-
-    nCharClass = 7;
-    return nCharClass;
+    if (!pSkill || pSkill->charclass < 0) {
+      return 7;
+    }
+    return pSkill->charclass;
 }
 
 uint32_t __stdcall SKILLS_GetCharClassFromSkillId_Validated(int32_t eSkillId, int * pOutCharClass) {
@@ -2227,14 +2229,7 @@ int32_t __stdcall SKILLS_CalcDiminishingReturns(int32_t nLevel, int32_t nMinVal,
 }
 
 int32_t __stdcall SKILLS_GetParam01WithDiminishing(int32_t nLevel, int32_t nSkillId) {
-    if (nSkillId < 0) {
-      return 0;
-    }
-    if (!(nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId;
+    const D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -2247,14 +2242,7 @@ int32_t __stdcall SKILLS_GetParam01WithDiminishing(int32_t nLevel, int32_t nSkil
 }
 
 int32_t __stdcall SKILLS_GetParam23WithDiminishing(int32_t nLevel, int32_t nSkillId) {
-    if (nSkillId < 0) {
-      return 0;
-    }
-    if (!(nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId;
+    const D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -2267,14 +2255,7 @@ int32_t __stdcall SKILLS_GetParam23WithDiminishing(int32_t nLevel, int32_t nSkil
 }
 
 int32_t __stdcall SKILLS_GetParam45WithDiminishing(int32_t nLevel, int32_t nSkillId) {
-    if (nSkillId < 0) {
-      return 0;
-    }
-    if (!(nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId;
+    const D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }

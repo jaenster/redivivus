@@ -161,7 +161,6 @@ static uint32_t __stdcall SKILLAMZ_CreateLightningFuryBolts(::SGAMEDATA * pGame,
     { 0x20357068, 0x2035706d, 0x206c7672 }
 }; D2_STATIC_GUARD(gaAmzLightningFuryBoltTable, "D2Game::SKILLS::SkillBar::SKILLAMZ_CreateLightningFuryBolts::gaAmzLightningFuryBoltTable");
 
-    int nBoltCountOffset;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
       return 0;
@@ -169,22 +168,21 @@ static uint32_t __stdcall SKILLAMZ_CreateLightningFuryBolts(::SGAMEDATA * pGame,
 
     eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     int32_t eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-    if (eVar1 > 4) {
+    if (static_cast<uint32_t>(eVar1) > 4) {
       return 0;
     }
 
     int nActDiffIdx = (uint32_t)eVar1 + (uint32_t)pGame->nDifficulty * 5;
+    int32_t nBoltCountOffset = 0;
     uint32_t sNewSeed = D2_SeedRoll(&pUnit->sSeed);
     int nRoll = sNewSeed % 100;
     int32_t nBoltChance1 = D2Common::Skills::GetSkilParam2(eSkill);
     if (nRoll < nBoltChance1) {
       nBoltCountOffset = 1;
     } else {
-      int32_t nBoltChance2;
-      nBoltChance2 = D2Common::Skills::GetSkilParam3(eSkill);
-      nBoltCountOffset = 2;
-      if (nRoll >= nBoltChance2 + nBoltChance1) {
-        nBoltCountOffset = 0;
+      const int32_t nBoltChance2 = D2Common::Skills::GetSkilParam3(eSkill);
+      if (nRoll < nBoltChance2 + nBoltChance1) {
+        nBoltCountOffset = 2;
       }
     }
     if (nActDiffIdx <= gnLightningFuryBoltCount) {

@@ -185,7 +185,7 @@
       ]
     },
     {
-      "name": "D2CMP_MinDouble",
+      "name": "D2CMP_MaxDouble",
       "address": "00604db0",
       "lines": [
         {
@@ -195,9 +195,9 @@
       ],
       "namespace": "D2CMP",
       "calledFunctions": [
-        "D2CMP_MinDouble"
+        "D2CMP_MaxDouble"
       ],
-      "dh": "2e0a176c",
+      "dh": "114b7cca",
       "paramStorage": [
         [
           "fParam1",
@@ -210,7 +210,7 @@
       ]
     },
     {
-      "name": "D2CMP_MaxDouble",
+      "name": "D2CMP_MinDouble",
       "address": "00604dd0",
       "lines": [
         {
@@ -220,9 +220,9 @@
       ],
       "namespace": "D2CMP",
       "calledFunctions": [
-        "D2CMP_MaxDouble"
+        "D2CMP_MinDouble"
       ],
-      "dh": "c7a9c4b4",
+      "dh": "dc4a2cf3",
       "paramStorage": [
         [
           "fParam1",

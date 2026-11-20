@@ -726,18 +726,10 @@ void __stdcall DRAW_UI_ChatInput() {
 }
 
 void __stdcall CHAT_RestoreFromHistory() {
-    int i;
+    uint8_t* pHistoryBytes = reinterpret_cast<uint8_t*>(gaChatHistoryBuffer);
     int nHistoryOffset = gnChatHistoryScrollIndex * 0x202;
-    uint16_t* pwSrc = (uint16_t*)(gaChatHistoryBuffer + nHistoryOffset);
-    uint16_t* ppwDst = gwszChatInputText;
-    for (i = 0x80; i; i--) {
-      *(uint32_t*)ppwDst = *(uint32_t*)pwSrc;
-      pwSrc += 2;
-      ppwDst += 2;
-    }
-
-    *ppwDst = *pwSrc;
-    gnChatInputTextCursorPosition = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength((uint16_t*)(gaChatHistoryBuffer + nHistoryOffset));
+    memcpy(gwszChatInputText, pHistoryBytes + nHistoryOffset, sizeof(gwszChatInputText));
+    gnChatInputTextCursorPosition = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength((uint16_t*)(pHistoryBytes + nHistoryOffset));
 }
 
 static void __fastcall CHAT_AddToHistory(uint16_t * pwSrc) {
@@ -772,19 +764,18 @@ static void __fastcall CHAT_AddToHistory(uint16_t * pwSrc) {
 }
 
 void __stdcall CHAT_ScrollHistory(int32_t nDirection) {
-    int nNewIndex = gnChatHistoryScrollIndex + nDirection;
+    const int nOldIndex = gnChatHistoryScrollIndex;
+    gnChatHistoryScrollIndex += nDirection;
+    int nNewIndex = gnChatHistoryScrollIndex;
     if (nNewIndex >= 8) {
-      nNewIndex = 0;
-    } else {
-      if (nNewIndex < 0) {
-        nNewIndex = 7;
-      }
+      gnChatHistoryScrollIndex = nNewIndex = 0;
+    } else if (nNewIndex < 0) {
+      gnChatHistoryScrollIndex = nNewIndex = 7;
     }
-    if (gnChatHistoryFillCount < 7 && 8 - nNewIndex > (int)(uint32_t)gnChatHistoryFillCount) {
-      nNewIndex = gnChatHistoryScrollIndex;
+    const unsigned short nFill = gnChatHistoryFillCount;
+    if (nFill < 7 && 8 - nNewIndex > (int)nFill) {
+      gnChatHistoryScrollIndex = nOldIndex;
     }
-
-    gnChatHistoryScrollIndex = nNewIndex;
 }
 
 BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, char * szOutParam) {
@@ -1560,15 +1551,9 @@ void __stdcall INPUT_HandleChatCharInput(D2UIMouseMsgStrc * pMsg) {
 }
 
 void StaticInit_gwszChatInputText() {
-    int nWordsRemaining;
-    uint16_t* pChatInputBuf = gwszChatInputText;
-    for (nWordsRemaining = 0x80; nWordsRemaining; nWordsRemaining--) {
-      pChatInputBuf[0] = L'\0';
-      pChatInputBuf[1] = L'\0';
-      pChatInputBuf += 2;
+    for (size_t i = 0; i < sizeof(gwszChatInputText) / sizeof(gwszChatInputText[0]); ++i) {
+      gwszChatInputText[i] = 0;
     }
-
-    *pChatInputBuf = L'\0';
 }
 
 void StaticInit_gaChatHistoryBuffer() {

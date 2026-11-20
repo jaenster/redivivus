@@ -1459,23 +1459,19 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
 }
 
 static uint32_t D2vsprintf(char * szFormat, size_t nSize, char * pBuffer, va_list pArgs) {
-    uint32_t nWritten;
     if (nSize) {
-      if (nSize == 0x7fffffff) {
-        nWritten = vsprintf(pBuffer, szFormat, pArgs);
+      if (nSize != 0x7fffffff) {
+        uint32_t nWritten = vsnprintf(pBuffer, nSize, szFormat, pArgs);
+        if (nWritten >= nSize) {
+          const size_t nLast = nSize - 1;
+          pBuffer[nLast] = '\0';
+          return nLast;
+        }
         return nWritten;
       }
-
-      nWritten = vsnprintf(pBuffer, nSize, szFormat, pArgs);
-      if (nWritten >= nSize) {
-        pBuffer[nSize - 1] = '\0';
-        return nSize - 1;
-      }
-    } else {
-      nWritten = 0;
+      return vsprintf(pBuffer, szFormat, pArgs);
     }
-
-    return nWritten;
+    return 0;
 }
 
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.

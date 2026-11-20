@@ -2870,31 +2870,23 @@ int __fastcall inflateInit_(z_stream * pStream, char * szVersion, int32_t nStrea
 }
 
 int __fastcall inflatePrime(z_stream * pStream, int32_t nBits, uint32_t nValue) {
-    uint32_t nOldBits;
-    uint32_t nTotalBits;
-    inflate_state* pState;
-    pState = pStream ? (inflate_state*)pStream->state : 0;
-    if (!pState) {
+    if (!pStream || !pStream->state) {
       return -2;
     }
+    inflate_state* pState = static_cast<inflate_state*>(pStream->state);
     if (nBits < 0) {
       pState->hold = 0;
       pState->bits = 0;
       return 0;
     }
-    if (nBits > 0x10) {
+    if (nBits > 16 || pState->bits + nBits > 32) {
       return -2;
     }
-
-    nOldBits = pState->bits;
-    nTotalBits = nOldBits + nBits;
-    if (nTotalBits <= 0x20) {
-      pState->bits = nTotalBits;
-      pState->hold += ((1 << (uint8_t)nBits) - 1U & nValue) << D2_SHIFT_COUNT(nOldBits);
-      return 0;
-    }
-
-    return -2;
+    const uint32_t nOldBits = pState->bits;
+    nValue &= (1U << D2_SHIFT_COUNT(nBits)) - 1;
+    pState->hold += nValue << D2_SHIFT_COUNT(nOldBits);
+    pState->bits += nBits;
+    return 0;
 }
 
 static void __fastcall fixedtables(inflate_state * state) {

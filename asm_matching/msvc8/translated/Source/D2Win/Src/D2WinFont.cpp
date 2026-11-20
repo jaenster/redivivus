@@ -1462,12 +1462,8 @@ void __stdcall Draw_UnitNameUnderCursor() {
 }
 
 void StaticInit_DisplayedTooltip() {
-    int i;
-    D2TooltipTextStrc* pDVar1 = &DisplayedTooltip;
-    for (i = 0x200; i; i--) {
-      pDVar1->wszString[0] = L'\0';
-      pDVar1->wszString[1] = L'\0';
-      pDVar1 = (D2TooltipTextStrc*)(pDVar1->wszString + 2);
+    for (size_t i = 0; i < sizeof(DisplayedTooltip.wszString) / sizeof(DisplayedTooltip.wszString[0]); ++i) {
+      DisplayedTooltip.wszString[i] = 0;
     }
 }
 

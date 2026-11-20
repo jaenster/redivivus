@@ -1006,15 +1006,14 @@ D2UnitStrc * __fastcall SpawnMonsterAtRoomPos(::SGAMEDATA * pGame, D2RoomStrc * 
 }
 
 D2UnitStrc * __fastcall SpawnMonsterAtCoordList(::SGAMEDATA * pGame, D2RoomCoordListStrc * pCoordList, D2UnitStrc * pUnit, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int16_t nFlags) {
-    D2UnitStrc* pMonster;
     D2UnknownCreateMonsterStrc sSpawnParams;
     sSpawnParams.nGUID = 0;
     sSpawnParams.nClassId = nClassId;
     sSpawnParams.eMode = eMode;
     sSpawnParams.pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+    sSpawnParams.nSpawnRadius = nSpawnRadius;
     sSpawnParams.nFlags = nFlags;
     eD2UnitType eUnitTypeX = pUnit->eUnitType;
-    sSpawnParams.nSpawnRadius = nSpawnRadius;
     sSpawnParams.pGame = pGame;
     sSpawnParams.pCoordList = pCoordList;
     int nXValue;
@@ -1027,22 +1026,17 @@ D2UnitStrc * __fastcall SpawnMonsterAtCoordList(::SGAMEDATA * pGame, D2RoomCoord
     }
 
     sSpawnParams.nX = nXValue;
+    int32_t nYValue;
     eD2UnitType eUnitTypeY = pUnit->eUnitType;
-    if (eUnitTypeY != UNIT_OBJECT && ((int)eUnitTypeY <= 3 || (int)eUnitTypeY > 5)) {
-      if (pUnit->pPath.pDynamicPath) {
-        sSpawnParams.nY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-        pMonster = CreateMonster(&sSpawnParams);
-        return pMonster;
-      }
-
-      sSpawnParams.nY = 0;
-      pMonster = CreateMonster(&sSpawnParams);
-      return pMonster;
+    if (eUnitTypeY == UNIT_OBJECT || (int)eUnitTypeY > 3 && (int)eUnitTypeY <= 5) {
+      nYValue = pUnit->pPath.pStaticPath->nPosY;
+    } else if (pUnit->pPath.pDynamicPath) {
+      nYValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+    } else {
+      nYValue = 0;
     }
-
-    sSpawnParams.nY = pUnit->pPath.pStaticPath->nPosY;
-    pMonster = CreateMonster(&sSpawnParams);
-    return pMonster;
+    sSpawnParams.nY = nYValue;
+    return CreateMonster(&sSpawnParams);
 }
 
 // Thin wrapper: builds a spawn-args struct and tail-calls CreateMonster (already fixed to return D2UnitStrc*), but drops the call's result as a bare statement. Passes it straight through.

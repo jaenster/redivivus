@@ -78,17 +78,16 @@ BOOL __fastcall D2WINANIMIMAGE_TryAdvanceToPlaying(::D2WinAnimImage * pAnimImage
 }
 
 BOOL __fastcall D2WINANIMIMAGE_HitTest(::D2WinAnimImage * pAnimImage) {
-    int32_t nOffsetX;
     D2GfxDataStrc sGfxData;
     int nPosX;
     int nPosY;
-    int nMouseX = Src::D2WinMain::nPosX;
     if (pAnimImage->sControl.neD2FormType != FORM_Image) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x73);
       exit(-1);
     }
 
     int nMouseY = Src::D2WinMain::nPosY;
+    int nMouseX = Src::D2WinMain::nPosX;
     DC6** pFrameEntry = pAnimImage->pAnimFrames[pAnimImage->nAnimState].ppBaseImage;
     DC6* pDC6 = 0;
     if (pFrameEntry) {
@@ -102,14 +101,13 @@ BOOL __fastcall D2WINANIMIMAGE_HitTest(::D2WinAnimImage * pAnimImage) {
     DC6Block* pDC6Block = D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockFromGfxData(&sGfxData);
     nPosX = pAnimImage->sControl.dwPosX;
     nPosY = pAnimImage->sControl.dwPosY;
-    int32_t local_14 = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
-    int32_t nDC6Height = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
-    nOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    int32_t nOffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
-    if (nMouseX - nOffsetX >= nPosX && nMouseY - nOffsetY >= nPosY - nDC6Height && nMouseX - nOffsetX < local_14 + nPosX && nMouseY - nOffsetY < nPosY) {
+    const int nDC6Width = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
+    const int nDC6Height = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
+    nMouseX -= D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
+    nMouseY -= D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
+    if (nMouseX >= nPosX && nMouseY >= nPosY - nDC6Height && nMouseX < nDC6Width + nPosX && nMouseY < nPosY) {
       return 1;
     }
-
     return 0;
 }
 
@@ -284,36 +282,26 @@ BOOL __fastcall Draw(::D2WinAnimImage * pAnimImage) {
 
 BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     BOOL nOnPressResult;
-    DWORD dwTick;
     ::D2WinAnimImage* pAnimImage = (::D2WinAnimImage*)pControlMsg->pControl;
     if (pAnimImage->sControl.neD2FormType != FORM_Image) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x15a);
       exit(-1);
     }
 
-    OnPress pOVar1 = pAnimImage->sControl.fpOnPress;
-    if (pOVar1) {
-      nOnPressResult = (*pOVar1)(pControlMsg);
-      if (!nOnPressResult) {
-        return nOnPressResult;
-      }
+    OnPress pfnOnPress = pAnimImage->sControl.fpOnPress;
+    nOnPressResult = pfnOnPress ? pfnOnPress(pControlMsg) : 0;
+    if (nOnPressResult) {
       if (pAnimImage->nAnimState == 3) {
         pAnimImage->nAnimState = 4;
-      } else {
-        if (pAnimImage->nAnimState != 1) {
-          return nOnPressResult;
-        }
-
+      } else if (pAnimImage->nAnimState == 1) {
         pAnimImage->nAnimState = 2;
+      } else {
+        return nOnPressResult;
       }
-
       pAnimImage->nCurrentFrame = 0;
-      dwTick = GetTickCount();
-      pAnimImage->dwAnimStartTick = dwTick;
-      return nOnPressResult;
+      pAnimImage->dwAnimStartTick = GetTickCount();
     }
-
-    return 0;
+    return nOnPressResult;
 }
 
 // Sets bAnimate (+0x5c): while it is 0, Draw keeps nCurrentFrame where it is. Returns 1; halts if the control is not FORM_Image.

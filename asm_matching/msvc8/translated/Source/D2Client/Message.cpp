@@ -237,11 +237,11 @@ void __fastcall MESSAGE_UnregisterEventHandlerBatch(HWND hWnd, D2UIFlagInitStrc 
       }
 
       pnMessageCode = &pEventHandlers->nMessageOrKeyCode;
-      do {
+      while (nCount != 0) {
         MESSAGE_UnregisterEventHandler(hWnd, ((D2UIFlagInitStrc*)(pnMessageCode - 1))->eEventType, *pnMessageCode, (char*)pnMessageCode[1]);
         pnMessageCode += 3;
         nCount--;
-      } while (nCount);
+      }
 
       return;
     }

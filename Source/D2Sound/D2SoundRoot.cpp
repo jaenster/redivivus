@@ -79,24 +79,26 @@ DWORD __stdcall SOUND_GetHardwareAccelerationFlag() {
 // Toggles EAX environment preset. Sets gpDirectSoundEAXInterface property based on param (1=generic, else=custom -10000 volume). Calls IDirectSound3DListener::Set() with EAX property GUIDs. Returns success flag.
 BOOL __fastcall SOUND_ToggleEAXEnvironmentPreset(int nPresetType) {
     HRESULT hResult;
-    uint32_t nPropertyValue;
     if (!Sound::gpDirectSoundEAXInterface) {
       return 0;
     }
     if (nPresetType == 1) {
-      nPropertyValue = 0;
-      hResult = Sound::gpDirectSoundEAXInterface->lpVtbl->Set(Sound::gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved1, 2, nullptr, 0, &nPropertyValue, 4);
+      float fPropertyValue = 0.0f;
+      hResult = Sound::gpDirectSoundEAXInterface->lpVtbl->Set(Sound::gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved1, 2, nullptr, 0, &fPropertyValue, 4);
+      if (hResult < 0) {
+        return 0;
+      }
     } else {
-      nPropertyValue = -10000;
+      int32_t nPropertyValue = -10000;
       hResult = Sound::gpDirectSoundEAXInterface->lpVtbl->Set(Sound::gpDirectSoundEAXInterface, Sound::gEAXPropertyGuid_Reserved2, 2, nullptr, 0, &nPropertyValue, 4);
       if (hResult < 0) {
         return 0;
       }
 
       hResult = Sound::gpDirectSoundEAXInterface->lpVtbl->Set(Sound::gpDirectSoundEAXInterface, Sound::gEAXPropertyGuid_Reserved2, 3, nullptr, 0, &nPropertyValue, 4);
-    }
-    if (hResult < 0) {
-      return 0;
+      if (hResult < 0) {
+        return 0;
+      }
     }
 
     g_bEAXEnabled = 1;

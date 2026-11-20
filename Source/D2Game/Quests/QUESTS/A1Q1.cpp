@@ -404,10 +404,10 @@ void __fastcall Q01_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
         AddQuestTimer(pQuestData, Q01_TimerNotifyCompletion, 8);
         return;
       }
-
-      nMonsterRegionRoomCount = pMonsterRegion->nRoomsCount;
     }
-    if (nPopulatedRooms <= nMonsterRegionRoomCount && pQuestGUID->nDenMonstersLeftToKillCount < 6) {
+
+    nMonsterRegionRoomCount = pMonsterRegion->nRoomsCount;
+    if (nPopulatedRooms <= nMonsterRegionRoomCount && pQuestGUID->nDenMonstersLeftToKillCount <= 5) {
       pQuestData->nQuestPacketFlags = ' ';
       QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, 1);
       pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;

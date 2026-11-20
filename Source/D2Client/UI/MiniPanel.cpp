@@ -73,12 +73,12 @@ static void MINIPANEL_DrawBackground(int32_t nPanelSection) {
       case 2:
         {
           if (gbMiniPanelSinglePlayer) {
-            nXOffset = -0x4a;
+            nXOffset = ui::ScreenSizeX / 2 - 0x4a;
           } else {
-            nXOffset = -0x54;
+            nXOffset = ui::ScreenSizeX / 2 - 0x54;
           }
 
-          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX / 2 + nXOffset - 3, Inv::ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
+          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nXOffset - 3, Inv::ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
           return;
         }
       case 3:
@@ -347,7 +347,6 @@ int __fastcall Unreferenced_0047ec20(int param_1) {
 
 static void MINIPANEL_HandleButtonClick(int32_t nButtonId) {
     BOOL _bFlagActive;
-    bool bFlagActive;
     eD2GSGameType eGameType;
     BOOL bFlagSet;
     eD2UIvars eUI;
@@ -363,30 +362,44 @@ static void MINIPANEL_HandleButtonClick(int32_t nButtonId) {
       break;
       case 1:
         bFlagSet = ui::GetUIFlag(UI_INVENTORY);
-      if (!bFlagSet) {
-        ui::SetUIFlag(UI_INVENTORY, UI_TOGGLE, 0);
+      if (bFlagSet) {
+        ui::SetUIFlag(UI_INVENTORY, UI_RESET, 0);
         return;
       }
-
-      ui::SetUIFlag(UI_INVENTORY, UI_RESET, 0);
+      ui::SetUIFlag(UI_INVENTORY, UI_TOGGLE, 0);
       return;
       case 2:
         _bFlagActive = ui::GetUIFlag(UI_SKILLTREE);
       eUI = UI_SKILLTREE;
-      goto toggle_panel;
+      if (_bFlagActive) {
+        ui::SetUIFlag(eUI, UI_RESET, 0);
+      } else {
+        ui::SetUIFlag(eUI, UI_TOGGLE, 0);
+      }
+      return;
       case 3:
         eGameType = GAME::Game::CLIENT_GetD2GSGameType();
       if (eGameType != GAMETYPE_SINGLEPLAYER) {
         _bFlagActive = ui::GetUIFlag(UI_PARTYSCREEN);
         eUI = UI_PARTYSCREEN;
-        goto toggle_panel;
+        if (_bFlagActive) {
+          ui::SetUIFlag(eUI, UI_RESET, 0);
+        } else {
+          ui::SetUIFlag(eUI, UI_TOGGLE, 0);
+        }
+        return;
       }
 
       break;
       case 4:
         _bFlagActive = ui::GetUIFlag(UI_AUTOMAP);
       eUI = UI_AUTOMAP;
-      goto toggle_panel;
+      if (_bFlagActive) {
+        ui::SetUIFlag(eUI, UI_RESET, 0);
+      } else {
+        ui::SetUIFlag(eUI, UI_TOGGLE, 0);
+      }
+      return;
       case 5:
         bFlagSet = ui::GetUIFlag(UI_BELTROWS);
       if (bFlagSet) {
@@ -395,12 +408,11 @@ static void MINIPANEL_HandleButtonClick(int32_t nButtonId) {
 
       _bFlagActive = ui::GetUIFlag(UI_MSGLOG);
       eUI = UI_MSGLOG;
-      toggle_panel:
-      if (!_bFlagActive) {
+      if (_bFlagActive) {
+        ui::SetUIFlag(eUI, UI_RESET, 0);
+      } else {
         ui::SetUIFlag(eUI, UI_TOGGLE, 0);
-        return;
       }
-      ui::SetUIFlag(eUI, UI_RESET, 0);
       return;
       case 6:
         /* LPCSTR lpOutputString for OutputDebugStringA */ OutputDebugStringA("Panel quest log toggle\n");

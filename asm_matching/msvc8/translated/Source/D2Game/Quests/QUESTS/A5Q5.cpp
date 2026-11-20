@@ -806,14 +806,7 @@ void __fastcall Q35_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q35_OnAncientsDefeated);
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q35_SetCannotComplete);
     QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q5.cpp", 0x34a);
-    uint32_t pCreateParam = 0;
-    int32_t nPosYSpawn = 0;
-    bool bActiveUnit = true;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pQuestArgs->pTarget);
-    ::SGAMEDATA* pGame = pQuestArgs->pGame;
-    nPosYSpawn2 = D2Common::Units::GetYPosFromDynamicPathUnit(pQuestArgs->pTarget);
-    int32_t nPlayerLevel = D2Common::Units::GetXPosFromDynamicPathUnit(pQuestArgs->pTarget);
-    UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x231, nPlayerLevel, nPosYSpawn2, pGame, pRoom, bActiveUnit, nPosYSpawn, pCreateParam);
+    UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x231, D2Common::Units::GetXPosFromDynamicPathUnit(pQuestArgs->pTarget), D2Common::Units::GetYPosFromDynamicPathUnit(pQuestArgs->pTarget), pQuestArgs->pGame, D2Common::Units::UNITS_GetRoom(pQuestArgs->pTarget), true, 0, 0);
     D2QuestDataStrc* pNextQuestData = GetQuestDataByQuestNoInternal(pQuestData->pGame, pQuestData->nSequenceQuestId);
     if (pNextQuestData) {
       /* FARPROC lpfn for IsBadCodePtr */ bIsCompleted = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);

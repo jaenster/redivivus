@@ -988,9 +988,8 @@ static void __stdcall SKILLNEC_RollSkeletonMastery(D2UnitStrc * pUnit, int * pSu
       }
 
       sSeedNew = D2_SeedRoll(&pUnit->sSeed);
-      bHasExtraVariant = 1;
-      if ((int)(sSeedNew % 100) >= nExtraVariantChance) {
-        bHasExtraVariant = 0;
+      if ((int)(sSeedNew % 100) < nExtraVariantChance) {
+        bHasExtraVariant = 1;
       }
     }
 

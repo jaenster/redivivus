@@ -6180,10 +6180,7 @@ int __fastcall MISSILESMODE_SrvDoFn31_TwinWaveMaker(::SGAMEDATA * pGame, D2UnitS
     ::SGAMEDATA* pGameLocal;
     int nMissileClassId;
     D2MissilesTxt* pMissileTxtSaved = pUnit && (nMissileClassId = pUnit->nClassId) >= 0 && nMissileClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileClassId : nullptr;
-    if (!pMissileTxtSaved) {
-      return 2;
-    }
-    if (pMissileTxtSaved->SubMissile1 < 0) {
+    if (!pMissileTxtSaved || pMissileTxtSaved->SubMissile1 < 0) {
       return 2;
     }
 
@@ -6240,8 +6237,9 @@ int __fastcall MISSILESMODE_SrvDoFn31_TwinWaveMaker(::SGAMEDATA * pGame, D2UnitS
       sSkillArg.pOwner = pOwner;
       sSkillArg.pMissile = pUnit;
       sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
-      sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
+      const int32_t nWaveLevel = D2Common::Units::Missile::GetLevel(pUnit);
       sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxtSaved->SubMissile1;
+      sSkillArg.nSkillLevel = nWaveLevel;
       sSkillArg.nUnitX = nTargetY;
       sSkillArg.nUnitY = nX;
       Missiles::CreatingMissile(pGameSaved, &sSkillArg);
@@ -6265,10 +6263,7 @@ int __fastcall MISSILESMODE_SrvDoFn32_TigerFury(::SGAMEDATA * pGame, D2UnitStrc 
       nMissileClassId = pUnit->nClassId;
       pMissileTxt = nMissileClassId >= 0 && nMissileClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileClassId : nullptr;
     }
-    if (!pMissileTxt) {
-      return 2;
-    }
-    if (pMissileTxt->SubMissile1 < 0) {
+    if (!pMissileTxt || pMissileTxt->SubMissile1 < 0) {
       return 2;
     }
 
@@ -6279,8 +6274,9 @@ int __fastcall MISSILESMODE_SrvDoFn32_TigerFury(::SGAMEDATA * pGame, D2UnitStrc 
       sSkillArg.pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
       sSkillArg.pMissile = pUnit;
       sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
-      sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
+      const int nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
       sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxt->SubMissile1;
+      sSkillArg.nSkillLevel = nSkillLevel;
       Missiles::CreatingMissile(pGame, &sSkillArg);
     }
 

@@ -1880,23 +1880,18 @@ static void __stdcall COMPRESS_Implode(void * pAddress, char * szModulePath, int
 // @sourcefile .\Src\Exceptions.cpp
 int __stdcall InitializeSymbolsWithRefcount() {
     // Static local variables (originally global data)
-    static char szDbgSymbolSearchPath[4096] = {}; D2_STATIC_GUARD(szDbgSymbolSearchPath, "Fog::Debug::InitializeSymbolsWithRefcount::szDbgSymbolSearchPath");
+    static char szDbgSymbolSearchPath[4096] = {0}; D2_STATIC_GUARD(szDbgSymbolSearchPath, "Fog::Debug::InitializeSymbolsWithRefcount::szDbgSymbolSearchPath");
 
     HANDLE hProcess;
     BOOL BVar1;
     DWORD dwProcessId;
     D2FogModuleNodeStrc* pModuleNode;
-    bool bNeedsInit;
     D2FogModuleNodeStrc* pNextModule;
     int bResult = 0;
     EnterCriticalSection(&lpCriticalSection_0075cfbc);
     if (bBetterStackCrawls) {
-      int nRefcount;
       bResult = 1;
-      nRefcount = gnDbgSymInitRefcount + 1;
-      bNeedsInit = (int32_t)gnDbgSymInitRefcount <= 0;
-      gnDbgSymInitRefcount = nRefcount;
-      if (bNeedsInit) {
+      if (static_cast<int32_t>(gnDbgSymInitRefcount++) <= 0) {
         if (szDbgSymbolSearchPath[0] == '\0') {
           BuildSymbolSearchPath(szDbgSymbolSearchPath);
         }
@@ -1907,9 +1902,9 @@ int __stdcall InitializeSymbolsWithRefcount() {
           dwProcessId = GetLastError();
           Src::LogManager::LOGMANAGER_TraceToModuleLog("", "s_DoSymInitialize(): err = %lu", dwProcessId);
           (*pSymCleanup)(hProcess);
-          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnDbgSymInitRefcount = 0;
-          LeaveCriticalSection(&lpCriticalSection_0075cfbc);
-          return 0;
+          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ bResult = 0;
+          gnDbgSymInitRefcount = bResult;
+          goto done;
         }
 
         gnDbgSymInitRefcount++;
@@ -1926,7 +1921,8 @@ int __stdcall InitializeSymbolsWithRefcount() {
       }
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0075cfbc);
+  done:
+    LeaveCriticalSection(&lpCriticalSection_0075cfbc);
     return bResult;
 }
 

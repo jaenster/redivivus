@@ -1307,49 +1307,62 @@ static uint32_t crc32_little(uint8_t * pbBuf, uint32_t nLen, uint32_t nCrc) {
     0xde0506f1
 }; D2_STATIC_GUARD(gdwCrc32Table3, "Storm::_3rdparty::zlib::crc32::crc32_little::gdwCrc32Table3");
 
-    uint32_t nBlockCount;
     uint32_t nCrcAcc = ~nCrc;
-    for (; nLen && (uintptr_t)pbBuf & 3; pbBuf = (uint8_t*)((char*)pbBuf + 1)) {
-      nCrcAcc = nCrcAcc >> 8 ^ gdwCrc32Table0[((uint8_t)*(uint32_t*)pbBuf ^ nCrcAcc) & 0xff];
-      nLen--;
+    while (nLen && (reinterpret_cast<uintptr_t>(pbBuf) & 3)) {
+      nCrcAcc = (nCrcAcc >> 8) ^ gdwCrc32Table0[(nCrcAcc ^ *pbBuf++) & 0xff];
+      --nLen;
     }
 
-    if (nLen >= 0x20) {
-      uint32_t* pdwBuf;
-      nBlockCount = nLen >> 5;
-      pdwBuf = (uint32_t*)pbBuf;
+    const uint32_t* pdwBuf = reinterpret_cast<const uint32_t*>(pbBuf);
+    while (nLen >= 32) {
+      nCrcAcc ^= *pdwBuf++;
+      nCrcAcc = gdwCrc32Table1[(nCrcAcc >> 16) & 0xff] ^
+                gdwCrc32Table2[(nCrcAcc >> 8) & 0xff] ^
+                gdwCrc32Table0[nCrcAcc >> 24] ^ gdwCrc32Table3[nCrcAcc & 0xff];
+      nCrcAcc ^= *pdwBuf++;
+      nCrcAcc = gdwCrc32Table1[(nCrcAcc >> 16) & 0xff] ^
+                gdwCrc32Table2[(nCrcAcc >> 8) & 0xff] ^
+                gdwCrc32Table0[nCrcAcc >> 24] ^ gdwCrc32Table3[nCrcAcc & 0xff];
+      nCrcAcc ^= *pdwBuf++;
+      nCrcAcc = gdwCrc32Table1[(nCrcAcc >> 16) & 0xff] ^
+                gdwCrc32Table2[(nCrcAcc >> 8) & 0xff] ^
+                gdwCrc32Table0[nCrcAcc >> 24] ^ gdwCrc32Table3[nCrcAcc & 0xff];
+      nCrcAcc ^= *pdwBuf++;
+      nCrcAcc = gdwCrc32Table1[(nCrcAcc >> 16) & 0xff] ^
+                gdwCrc32Table2[(nCrcAcc >> 8) & 0xff] ^
+                gdwCrc32Table0[nCrcAcc >> 24] ^ gdwCrc32Table3[nCrcAcc & 0xff];
+      nCrcAcc ^= *pdwBuf++;
+      nCrcAcc = gdwCrc32Table1[(nCrcAcc >> 16) & 0xff] ^
+                gdwCrc32Table2[(nCrcAcc >> 8) & 0xff] ^
+                gdwCrc32Table0[nCrcAcc >> 24] ^ gdwCrc32Table3[nCrcAcc & 0xff];
+      nCrcAcc ^= *pdwBuf++;
+      nCrcAcc = gdwCrc32Table1[(nCrcAcc >> 16) & 0xff] ^
+                gdwCrc32Table2[(nCrcAcc >> 8) & 0xff] ^
+                gdwCrc32Table0[nCrcAcc >> 24] ^ gdwCrc32Table3[nCrcAcc & 0xff];
+      nCrcAcc ^= *pdwBuf++;
+      nCrcAcc = gdwCrc32Table1[(nCrcAcc >> 16) & 0xff] ^
+                gdwCrc32Table2[(nCrcAcc >> 8) & 0xff] ^
+                gdwCrc32Table0[nCrcAcc >> 24] ^ gdwCrc32Table3[nCrcAcc & 0xff];
+      nCrcAcc ^= *pdwBuf++;
+      nCrcAcc = gdwCrc32Table1[(nCrcAcc >> 16) & 0xff] ^
+                gdwCrc32Table2[(nCrcAcc >> 8) & 0xff] ^
+                gdwCrc32Table0[nCrcAcc >> 24] ^ gdwCrc32Table3[nCrcAcc & 0xff];
+      nLen -= 32;
+    }
+    while (nLen >= 4) {
+      nCrcAcc ^= *pdwBuf++;
+      nCrcAcc = gdwCrc32Table1[(nCrcAcc >> 16) & 0xff] ^
+                gdwCrc32Table2[(nCrcAcc >> 8) & 0xff] ^
+                gdwCrc32Table0[nCrcAcc >> 24] ^ gdwCrc32Table3[nCrcAcc & 0xff];
+      nLen -= 4;
+    }
+
+    const uint8_t* pbTail = reinterpret_cast<const uint8_t*>(pdwBuf);
+    if (nLen) {
       do {
-        nCrcAcc ^= *pdwBuf;
-        nCrcAcc = gdwCrc32Table1[nCrcAcc >> 0x10 & 0xff] ^ gdwCrc32Table2[nCrcAcc >> 8 & 0xff] ^ gdwCrc32Table0[nCrcAcc >> 0x18] ^ gdwCrc32Table3[nCrcAcc & 0xff] ^ pdwBuf[1];
-        nCrcAcc = gdwCrc32Table1[nCrcAcc >> 0x10 & 0xff] ^ gdwCrc32Table2[nCrcAcc >> 8 & 0xff] ^ gdwCrc32Table0[nCrcAcc >> 0x18] ^ gdwCrc32Table3[nCrcAcc & 0xff] ^ pdwBuf[2];
-        nCrcAcc = gdwCrc32Table1[nCrcAcc >> 0x10 & 0xff] ^ gdwCrc32Table2[nCrcAcc >> 8 & 0xff] ^ gdwCrc32Table0[nCrcAcc >> 0x18] ^ gdwCrc32Table3[nCrcAcc & 0xff] ^ pdwBuf[3];
-        nCrcAcc = gdwCrc32Table1[nCrcAcc >> 0x10 & 0xff] ^ gdwCrc32Table2[nCrcAcc >> 8 & 0xff] ^ gdwCrc32Table0[nCrcAcc >> 0x18] ^ gdwCrc32Table3[nCrcAcc & 0xff] ^ pdwBuf[4];
-        nCrcAcc = gdwCrc32Table1[nCrcAcc >> 0x10 & 0xff] ^ gdwCrc32Table2[nCrcAcc >> 8 & 0xff] ^ gdwCrc32Table0[nCrcAcc >> 0x18] ^ gdwCrc32Table3[nCrcAcc & 0xff] ^ pdwBuf[5];
-        nCrcAcc = gdwCrc32Table1[nCrcAcc >> 0x10 & 0xff] ^ gdwCrc32Table2[nCrcAcc >> 8 & 0xff] ^ gdwCrc32Table0[nCrcAcc >> 0x18] ^ gdwCrc32Table3[nCrcAcc & 0xff] ^ pdwBuf[6];
-        pbBuf = (uint8_t*)(pdwBuf + 8);
-        nLen -= 0x20;
-        nCrcAcc = gdwCrc32Table1[nCrcAcc >> 0x10 & 0xff] ^ gdwCrc32Table2[nCrcAcc >> 8 & 0xff] ^ gdwCrc32Table0[nCrcAcc >> 0x18] ^ gdwCrc32Table3[nCrcAcc & 0xff] ^ pdwBuf[7];
-        nCrcAcc = gdwCrc32Table1[nCrcAcc >> 0x10 & 0xff] ^ gdwCrc32Table2[nCrcAcc >> 8 & 0xff] ^ gdwCrc32Table0[nCrcAcc >> 0x18] ^ gdwCrc32Table3[nCrcAcc & 0xff];
-        nBlockCount--;
-        pdwBuf = (uint32_t*)pbBuf;
-      } while (nBlockCount);
+        nCrcAcc = (nCrcAcc >> 8) ^ gdwCrc32Table0[(nCrcAcc ^ *pbTail++) & 0xff];
+      } while (--nLen);
     }
-    if (nLen >= 4) {
-      nBlockCount = nLen >> 2;
-      do {
-        nCrcAcc ^= *(uint32_t*)pbBuf;
-        pbBuf = (uint8_t*)((char*)pbBuf + 4);
-        nCrcAcc = gdwCrc32Table1[nCrcAcc >> 0x10 & 0xff] ^ gdwCrc32Table2[nCrcAcc >> 8 & 0xff] ^ gdwCrc32Table0[nCrcAcc >> 0x18] ^ gdwCrc32Table3[nCrcAcc & 0xff];
-        nLen -= 4;
-        nBlockCount--;
-      } while (nBlockCount);
-    }
-
-    for (; nLen; nLen--) {
-      nCrcAcc = nCrcAcc >> 8 ^ gdwCrc32Table0[((uint8_t)*(uint32_t*)pbBuf ^ nCrcAcc) & 0xff];
-      pbBuf = (uint8_t*)((char*)pbBuf + 1);
-    }
-
     return ~nCrcAcc;
 }
 

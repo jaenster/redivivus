@@ -340,18 +340,17 @@ static void SMEM_FreeHeapBlock(D2FogHeapBlockHdrStrc * pwBlock, D2FogHeapDescStr
 
 static void SMemGetBlockDataAndSize(uint8_t * nBlockAddr, int * pnOutHeaderSize, int * pnOutDataSize, D2FogHeapBlockHdrStrc * pwBlockHdr) {
     if (pwBlockHdr->byFlags & 4) {
-      *pnOutDataSize = *(int*)(nBlockAddr - 0x10);
+      *pnOutDataSize = *reinterpret_cast<const int*>(nBlockAddr - 0x10);
       *pnOutHeaderSize = pwBlockHdr->byPadding + 0x1c;
       return;
     }
 
-    uint8_t byPadding = pwBlockHdr->byPadding;
-    *pnOutHeaderSize = byPadding + 8;
+    *pnOutHeaderSize = pwBlockHdr->byPadding + sizeof(*pwBlockHdr);
     if (pwBlockHdr->byFlags & 1) {
-      *pnOutHeaderSize = byPadding + 10;
+      *pnOutHeaderSize += sizeof(uint16_t);
     }
 
-    *pnOutDataSize = (uint32_t)pwBlockHdr->wBlockSize - *pnOutHeaderSize;
+    *pnOutDataSize = static_cast<int>(pwBlockHdr->wBlockSize) - *pnOutHeaderSize;
 }
 
 static BOOL SMemCommitMorePages(int32_t nTargetOffset, D2FogHeapDescStrc * pHeap) {

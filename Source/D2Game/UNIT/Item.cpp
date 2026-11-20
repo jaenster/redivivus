@@ -323,18 +323,22 @@ void __fastcall SendUpdatedItemsToClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       pItem = SUnit::FindUnitFromTable(pGame, UNIT_ITEM, dwItemGUID);
       if (pItem) {
         Pre0x9DAnd0x9CPacket(pClient, pUnit, pItem);
-        if (pItem->eUnitFlagsEx & UNITFLAGEX_HASINV) {
-          if (!pItem->pInventory) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x108);
-            exit(-1);
-          }
+      }
+      uint32_t bHasInventory = 0;
+      if (pItem) {
+        bHasInventory = pItem->eUnitFlagsEx & UNITFLAGEX_HASINV;
+      }
+      if (bHasInventory) {
+        if (!pItem->pInventory) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x108);
+          exit(-1);
+        }
 
-          for (pInventoryToBeUpdated = D2Common::INVENTORY::Inventory::GetUpdates(pItem->pInventory); pInventoryToBeUpdated; pInventoryToBeUpdated = D2Common::INVENTORY::Inventory::GetNextUpdate(pInventoryToBeUpdated)) {
-            dwItemGUID = D2Common::INVENTORY::Inventory::GetUpdatesUUid(pInventoryToBeUpdated);
-            pSocketedItem = SUnit::FindUnitFromTable(pGame, UNIT_ITEM, dwItemGUID);
-            if (pSocketedItem) {
-              Pre0x9DAnd0x9CPacket(pClient, pUnit, pItem);
-            }
+        for (pInventoryToBeUpdated = D2Common::INVENTORY::Inventory::GetUpdates(pItem->pInventory); pInventoryToBeUpdated; pInventoryToBeUpdated = D2Common::INVENTORY::Inventory::GetNextUpdate(pInventoryToBeUpdated)) {
+          dwItemGUID = D2Common::INVENTORY::Inventory::GetUpdatesUUid(pInventoryToBeUpdated);
+          pSocketedItem = SUnit::FindUnitFromTable(pGame, UNIT_ITEM, dwItemGUID);
+          if (pSocketedItem) {
+            Pre0x9DAnd0x9CPacket(pClient, pUnit, pItem);
           }
         }
       }

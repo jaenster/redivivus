@@ -1974,19 +1974,24 @@ static void __stdcall D2COMP_InitComponentEntry(int32_t nAnimMode, int32_t nWeap
 }
 
 uint8_t * __fastcall D2COMP_GetPaletteTransformTable(uint32_t nPaletteShift) {
-    uint32_t nColorIndex = nPaletteShift & 0x1f;
     int nTransformGroup = (int)nPaletteShift >> 5;
-    if (nColorIndex > 0x14) {
+    nPaletteShift &= 0x1f;
+    if (nPaletteShift > 0x14) {
       return nullptr;
     }
     if (!nTransformGroup) {
-      return gaItemPaletteTransformData + (nColorIndex + 0x348 << 8);
+      nTransformGroup = 8;
+      goto get_table;
     }
-    if (nTransformGroup >= 0 && nTransformGroup < 9 && (nTransformGroup <= 2 || nTransformGroup > 4)) {
-      return gaItemPaletteTransformData + (nTransformGroup * 0x69 + nColorIndex << 8);
+    if (nTransformGroup < 0) {
+      return nullptr;
     }
-
+    if (nTransformGroup < 9 && (nTransformGroup <= 2 || nTransformGroup > 4)) {
+      goto get_table;
+    }
     return nullptr;
+get_table:
+    return gaItemPaletteTransformData + ((nTransformGroup * 0x69 + nPaletteShift) << 8);
 }
 
 static uint8_t __stdcall D2COMP_ValidateComponentType(uint32_t dwComponentMask, uint8_t bComponentType) {
@@ -3814,88 +3819,102 @@ void __stdcall D2COMP_InitEmblemColorTables() {
 
 char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank, int32_t bExpansion) {
     if (bExpansion) {
+      bool bFemale;
       switch (nCharClass) {
         case 0:
-
         case 1:
-
         case 6:
-
         case 9:
-          switch (nTitleRank) {
-            case 1:
-              return "Slayer ";
-            case 4:
-              return "Destroyer ";
-            case 5:
-              return "Conqueror ";
-            case 6:
-              return "Guardian ";
-            case 2:
-              return "Champion ";
-            case 3:
-              return "Matriarch ";
-            default:
-              return "";
-          }
+          bFemale = true;
+          break;
+        default:
+          bFemale = false;
+          break;
       }
-
-      switch (nTitleRank) {
-        case 1:
-          return "Slayer ";
-        case 3:
-          return "Patriarch ";
-        case 4:
-          return "Destroyer ";
-        case 5:
-          return "Conqueror ";
-        case 6:
-          return "Guardian ";
-        case 2:
-          return "Champion ";
+      if (!bFemale) {
+        switch (nTitleRank) {
+          case 1:
+            return "Slayer ";
+          case 3:
+            return "Patriarch ";
+          case 4:
+            return "Destroyer ";
+          case 5:
+            return "Conqueror ";
+          case 6:
+            return "Guardian ";
+          case 2:
+            return "Champion ";
+          default:
+            return "";
+        }
+      } else {
+        switch (nTitleRank) {
+          case 1:
+            return "Slayer ";
+          case 2:
+            return "Champion ";
+          case 3:
+            return "Matriarch ";
+          case 4:
+            return "Destroyer ";
+          case 5:
+            return "Conqueror ";
+          case 6:
+            return "Guardian ";
+          default:
+            return "";
+        }
       }
     } else {
+      bool bFemale;
       switch (nCharClass) {
         case 0:
-
         case 1:
-
         case 6:
-
         case 9:
-          switch (nTitleRank) {
-            case 1:
-              return "Dame ";
-            case 2:
-              return "Lady ";
-            case 3:
-              return "Baroness ";
-            case 4:
-              return "Countess ";
-            case 5:
-              return "Duchess ";
-            case 6:
-              return "Queen ";
-          }
-        return "";
+          bFemale = true;
+          break;
+        default:
+          bFemale = false;
+          break;
       }
-
-      switch (nTitleRank) {
-        case 1:
-          return "Sir ";
-        case 2:
-          return "Lord ";
-        case 3:
-          return "Baron ";
-        case 4:
-          return "Count ";
-        case 5:
-          return "Duke ";
-        case 6:
-          return "King ";
+      if (!bFemale) {
+        switch (nTitleRank) {
+          case 1:
+            return "Sir ";
+          case 2:
+            return "Lord ";
+          case 3:
+            return "Baron ";
+          case 4:
+            return "Count ";
+          case 5:
+            return "Duke ";
+          case 6:
+            return "King ";
+          default:
+            return "";
+        }
+      } else {
+        switch (nTitleRank) {
+          case 1:
+            return "Dame ";
+          case 2:
+            return "Lady ";
+          case 3:
+            return "Baroness ";
+          case 4:
+            return "Countess ";
+          case 5:
+            return "Duchess ";
+          case 6:
+            return "Queen ";
+          default:
+            return "";
+        }
       }
     }
-
     return "";
 }
 

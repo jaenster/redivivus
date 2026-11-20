@@ -1213,26 +1213,19 @@ void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pC
 
 // @sourcefile .\UNIT\SUnitMsg.cpp
 void __fastcall SERVER_UnitQueuePacketFree(D2UnitStrc * pUnit) {
-    int32_t nNull;
-    D2SUnitMsgStrc* pMsgNext;
-    char* szFile;
-    D2SUnitMsgStrc* pMemoryToFree = pUnit->pMsgFirst;
-    if (!pMemoryToFree) {
+    D2SUnitMsgStrc* pMessage = pUnit->pMsgFirst;
+    if (!pMessage) {
       return;
     }
 
     do {
-      int32_t nLine;
-      nNull = 0;
-      nLine = 0x3ce;
-      pMsgNext = pMemoryToFree->pNext;
-      szFile = ".\\UNIT\\SUnitMsg.cpp";
-      Fog::Memory::FreeServerMemory(D2Common::Units::GetMemPool(pUnit), pMemoryToFree, szFile, nLine, nNull);
-      pMemoryToFree = pMsgNext;
-    } while (pMsgNext);
+      D2SUnitMsgStrc* pMemoryToFree = pMessage;
+      pMessage = pMessage->pNext;
+      Fog::Memory::FreeServerMemory(D2Common::Units::GetMemPool(pUnit), pMemoryToFree, ".\\UNIT\\SUnitMsg.cpp", 0x3ce, 0);
+    } while (pMessage);
 
-    pUnit->pMsgLast = 0;
-    pUnit->pMsgFirst = 0;
+    pUnit->pMsgLast = nullptr;
+    pUnit->pMsgFirst = nullptr;
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.

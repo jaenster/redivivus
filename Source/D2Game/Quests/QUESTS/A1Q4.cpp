@@ -1582,7 +1582,6 @@ BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(D2ObjectOperateFnArg * pOperation
 // and transmits. Lets the client highlight stones in the correct activation sequence.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
 void __fastcall Q04_SendStonesOrderToClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    uint16_t wNormalizedStoneId;
     int i;
     D2GSPacketSrv0x50 sPacket;
     D2QuestDataA1Q4SubStrc* pSubData;
@@ -1600,9 +1599,8 @@ void __fastcall Q04_SendStonesOrderToClient(::SGAMEDATA * pGame, D2UnitStrc * pU
       pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q4.cpp", 0x879);
       i = 0;
       do {
-        wNormalizedStoneId = pSubData->aStones[i] - 0x11;
-        sPacket.aPayload[i] = wNormalizedStoneId;
-        if (wNormalizedStoneId >= 5) {
+        sPacket.aPayload[i] = pSubData->aStones[i] - 0x11;
+        if (sPacket.aPayload[i] >= (uint16_t)5) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x87f);
           exit(-1);
         }

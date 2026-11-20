@@ -630,22 +630,16 @@ void __stdcall GetClientIpStringByClientId(D2QServerStrc * pQServer, int nClient
 uint32_t __stdcall GetClientIpByToken(D2QServerStrc * pQServer, uint32_t nToken) {
     uint32_t nBucketIndex = pQServer->nClientHashMask & nToken;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
-    D2QServerClientConnectionStrc* pDVar1 = pQServer->pQServerClientList[nBucketIndex];
-    while (true) {
-      if (!pDVar1) {
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
-        return 0;
+    D2QServerClientConnectionStrc* pClient = pQServer->pQServerClientList[nBucketIndex];
+    for (; pClient; pClient = pClient->pNextByToken) {
+      if (pClient->nClientToken == nToken) {
+        uint32_t nClientIp = pClient->ipAddress.S_un.S_addr;
+        LeaveCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
+        return nClientIp;
       }
-      if (pDVar1->nClientToken == nToken) {
-        break;
-      }
-
-      pDVar1 = pDVar1->pNextByToken;
     }
-
-    uint32_t ipAddrResult = pDVar1->ipAddress.S_un.S_addr;
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
-    return ipAddrResult;
+    LeaveCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
+    return 0;
 }
 
 uint32_t __stdcall ProbePeerNameByToken(D2QServerStrc * pQServer, uint32_t nToken) {

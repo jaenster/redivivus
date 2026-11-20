@@ -313,11 +313,11 @@ void __fastcall AllocMonsterRegion(D2PoolManagerStrc * pMemory, D2MonsterRegionS
 
 // @sourcefile .\MONSTER\MonsterRegion.cpp
 void __fastcall FreeMonsterRegion(D2PoolManagerStrc * pMemory, D2MonsterRegionStrc * * ppMonsterRegion) {
-    int i;
-    for (i = 1; i < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize; i++) {
-      ppMonsterRegion++;
-      if (*ppMonsterRegion) {
-        D2_FREE_POOL_AT(pMemory, *ppMonsterRegion, ".\\MONSTER\\MonsterRegion.cpp", 0xc5);
+    ++ppMonsterRegion;
+    for (int32_t i = 1; i < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize; ++i, ++ppMonsterRegion) {
+      D2MonsterRegionStrc* pRegion = *ppMonsterRegion;
+      if (pRegion) {
+        D2_FREE_POOL_AT(pMemory, pRegion, ".\\MONSTER\\MonsterRegion.cpp", 0xc5);
       }
     }
 }

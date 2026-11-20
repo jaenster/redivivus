@@ -105,16 +105,22 @@ char * __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(D2TileLibraryEntryStrc * pC
     return pComp24->szFilePath;
 }
 
-void __stdcall D2CMP_MinDouble(double fParam1, double fParam2) {
-    if (!(fParam2 < fParam1)) {
-      return;
+// Returns the larger of two doubles; fParam2 when equal or unordered (FCOM, TEST AH,0x41).
+double __stdcall D2CMP_MaxDouble(double fParam1, double fParam2) {
+    if (fParam2 < fParam1) {
+      return fParam1;
     }
+
+    return fParam2;
 }
 
-void __stdcall D2CMP_MaxDouble(double fParam1, double fParam2) {
-    if (!(fParam1 < fParam2)) {
-      return;
+// Returns the smaller of two doubles; fParam2 when equal or unordered (FCOM, TEST AH,0x5 / JP).
+double __stdcall D2CMP_MinDouble(double fParam1, double fParam2) {
+    if (fParam1 < fParam2) {
+      return fParam1;
     }
+
+    return fParam2;
 }
 
 int32_t __fastcall SUBTILE_CountRunLength(char * pDataStart, char * pDataEnd, int32_t nMaxRunLength, BOOL * pIsAtEndFlag, uint32_t * pIsExactMatchFlag) {

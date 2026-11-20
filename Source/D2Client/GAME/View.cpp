@@ -719,16 +719,10 @@ static void SHAKE_UpdateShakeSoundVolume(int32_t nShakeIntensity) {
     uint32_t nTargetVolume;
     nTargetVolume = nShakeIntensity * 0xff / 0x14;
     nTargetVolume = (int)nTargetVolume <= 0 ? 0 : nTargetVolume;
-    if ((int)nTargetVolume < 0xff) {
-      if (nTargetVolume) {
-        goto ensure_sound_playing;
-      }
-      if (!gnSoundShakeVolume) {
-        return;
-      }
-    } else {
+    if ((int)nTargetVolume >= 0xff) {
       nTargetVolume = 0xff;
-      ensure_sound_playing:
+    }
+    if (nTargetVolume) {
       if (!gnSoundShakeVolume) {
         gnSoundShakeVolume = D2Client::Sound::SOUND_PlaySound(SOUND_BABOONDEMON_HIT_4, nullptr, 0, 0, 0);
         if (!gnSoundShakeVolume) {
@@ -740,6 +734,8 @@ static void SHAKE_UpdateShakeSoundVolume(int32_t nShakeIntensity) {
           return;
         }
       }
+    } else if (!gnSoundShakeVolume) {
+      return;
     }
 
     uint32_t nCurrentVolume;
@@ -761,12 +757,13 @@ static void SHAKE_UpdateShakeSoundVolume(int32_t nShakeIntensity) {
 
     nNewVolume = nTargetVolume;
     apply_volume:
-    if (!nNewVolume) {
-      D2Client::Sound::SOUND_StopById(gnSoundShakeVolume);
-      gnSoundShakeVolume = 0;
+    if (nNewVolume) {
+      D2Client::Sound::SOUND_SetChannelPriority(gnSoundShakeVolume, nNewVolume);
       return;
     }
-    D2Client::Sound::SOUND_SetChannelPriority(gnSoundShakeVolume, nNewVolume);
+
+    D2Client::Sound::SOUND_StopById(gnSoundShakeVolume);
+    gnSoundShakeVolume = 0;
 }
 
 void __fastcall SetShake(int32_t nAmplitude, int32_t nArg3, int32_t nArg1, int32_t nArg2) {

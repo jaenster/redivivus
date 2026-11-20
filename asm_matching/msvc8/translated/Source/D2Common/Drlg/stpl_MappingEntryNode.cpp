@@ -137,34 +137,32 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::UnlinkNode(::Mappi
 }
 
 template<> void TSHashObject<MappingEntryNode, HASHKEY_STRI>::Destructor() {
-    TSLink<::MappingEntryNode>** pPrevLink2;
     char* pObject = this->m_key.szString;
     if (pObject) {
       Storm::Source::SMem::SMemFree(pObject, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
     }
 
-    TSLink<::MappingEntryNode>* nHeadEntry = this->m_linktofull.m_prevlink;
-    TSLink<::MappingEntryNode>* pTVar1 = &this->m_linktofull;
-    if (nHeadEntry) {
-      TSLink<::MappingEntryNode>** pPrevLink;
-      pPrevLink = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pTVar1, -1);
-      *pPrevLink = nHeadEntry;
-      pTVar1->m_prevlink->m_next = pTVar1->m_next;
-      pTVar1->m_prevlink = 0;
-      this->m_linktofull.m_next = 0;
+    TSLink<::MappingEntryNode>* pFullLink = &this->m_linktofull;
+    TSLink<::MappingEntryNode>* pPreviousLink = pFullLink->m_prevlink;
+    if (pPreviousLink) {
+      TSLink<::MappingEntryNode>** pBackLink = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pFullLink, -1);
+      *pBackLink = pPreviousLink;
+      pFullLink->m_prevlink->m_next = pFullLink->m_next;
+      pFullLink->m_prevlink = 0;
+      pFullLink->m_next = 0;
     }
 
-    nHeadEntry = this->m_linktoslot.m_prevlink;
-    pTVar1 = &this->m_linktoslot;
-    if (!nHeadEntry) {
+    TSLink<::MappingEntryNode>* pSlotLink = &this->m_linktoslot;
+    pPreviousLink = pSlotLink->m_prevlink;
+    if (!pPreviousLink) {
       return;
     }
 
-    pPrevLink2 = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pTVar1, -1);
-    *pPrevLink2 = nHeadEntry;
-    pTVar1->m_prevlink->m_next = pTVar1->m_next;
-    pTVar1->m_prevlink = 0;
-    pTVar1->m_next = 0;
+    TSLink<::MappingEntryNode>** pBackLink2 = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pSlotLink, -1);
+    *pBackLink2 = pPreviousLink;
+    pSlotLink->m_prevlink->m_next = pSlotLink->m_next;
+    pSlotLink->m_prevlink = 0;
+    pSlotLink->m_next = 0;
 }
 
 template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Next(::MappingEntryNode * pNode) {

@@ -2836,7 +2836,7 @@ void __stdcall INVENTORY_SwapPrimaryWeaponOnRemoval(D2InventoryStrc * pInventory
     if (!bIsWeapon) {
       return;
     }
-    if (pInventory->nSignatureMagic == 0x1020304 && pUnit->eUnitType == UNIT_ITEM && pInventory->dwPrimaryWeaponGUID == pUnit->nUnitGUID) {
+    if (pInventory->nSignatureMagic == 0x1020304 && pUnit->eUnitType == UNIT_ITEM && pInventory->dwPrimaryWeaponGUID == GetGUIDInline(pUnit)) {
       pInventory->dwPrimaryWeaponGUID = -1;
     }
 
@@ -2859,7 +2859,7 @@ void __stdcall INVENTORY_SwapPrimaryWeaponOnRemoval(D2InventoryStrc * pInventory
       return;
     }
 
-    pInventory->dwPrimaryWeaponGUID = pOtherArmWeapon->nUnitGUID;
+    pInventory->dwPrimaryWeaponGUID = GetGUIDInline(pOtherArmWeapon);
 }
 
 // Determines the equipped-weapon handedness for a unit. Returns -1 (no weapon), 1 (dual-wield / Barbarian dual-handed), or 2 (two-handed weapon). Reads the left-arm (slot 5) and right-arm (slot 4) body-location cells from the equipment grid, checks IsTwoHanded and BARBARIAN_CheckItemData for each combination.

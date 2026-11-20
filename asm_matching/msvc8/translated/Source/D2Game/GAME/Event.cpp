@@ -56,24 +56,21 @@ static D2TimerStrc * * __stdcall EVENT_GetDispatchBucketForFrame(eD2UnitType eUn
 // Allocates a timer pool containing 600 D2TimerStrc slots linked as a free list. Pool size is 0x7088 bytes (600 * 48 bytes per timer + header). Multiple pools are chained together via pNextList when capacity is exhausted. Returns the first available timer from pFirstList.
 // @sourcefile .\GAME\Event.cpp
 static D2TimerListStrc * EVENT_AllocTimerPool(::SGAMEDATA * pGame) {
-    D2TimerStrc* pSlot;
     D2TimerListStrc* pPool = D2_NEW_POOL_AT(pGame->pMemoryPool, D2TimerListStrc, ".\\GAME\\Event.cpp", 0xa9);
     if (!pPool) {
       return nullptr;
     }
 
     memset(pPool, 0, 0x7088);
-    pPool->pFirstList = pPool->pTimerList;
-    int nRemaining = 599;
-    D2TimerListStrc* pCurSlot = pPool;
+    D2TimerStrc* pSlot = pPool->pTimerList;
+    pPool->pFirstList = pSlot;
+    int nTimers = 599;
     do {
-      pSlot = pCurSlot->pTimerList;
-      nRemaining--;
       pSlot->pNextTimerList = pSlot + 1;
-      pCurSlot = (D2TimerListStrc*)(pSlot + 1);
-    } while (nRemaining);
+      ++pSlot;
+    } while (--nTimers);
 
-    pSlot[1].pNextTimerList = 0;
+    pSlot->pNextTimerList = nullptr;
     return pPool;
 }
 
@@ -172,13 +169,13 @@ static D2TimerStrc * EVENT_AllocTimerToUnit(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     pTimer->eUnitType = eUnitType;
+    int nUnitGUID;
     if (!pUnit) {
-      pTimer->nFlags &= 0xfffd;
-      pTimer->nUnitGUID = -1;
-      return pTimer;
+      nUnitGUID = -1;
+    } else {
+      nUnitGUID = pUnit->nUnitGUID;
     }
 
-    int nUnitGUID = pUnit->nUnitGUID;
     pTimer->nFlags &= 0xfffd;
     pTimer->nUnitGUID = nUnitGUID;
     return pTimer;

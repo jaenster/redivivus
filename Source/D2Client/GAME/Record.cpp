@@ -120,17 +120,12 @@ void __stdcall SaveGameRecordToFile() {
     D2GameRecordFileHeaderStrc sHeader;
     DWORD dwBytesWritten;
     HANDLE hFile = CreateFileA("Record.dr1", 0x40000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 2, 0x80, (HANDLE)0x0);
-    int nBlockCount = 1;
     D2GameRecordStrc* pBlock = &gsGameRecordContext;
     sHeader.nVersion = 1;
     sHeader.nBlockCount = 1;
-    if (gsGameRecordContext.pNext) {
-      pBlock = &gsGameRecordContext;
-      do {
-        nBlockCount++;
-        pBlock = pBlock->pNext;
-        sHeader.nBlockCount = nBlockCount;
-      } while (pBlock->pNext);
+    while (pBlock->pNext) {
+      ++sHeader.nBlockCount;
+      pBlock = pBlock->pNext;
     }
 
     sHeader.nLastBlockEntries = pBlock->nEntrySize - 500 + sHeader.nBlockCount * 500;

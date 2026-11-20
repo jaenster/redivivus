@@ -173,19 +173,23 @@ void __stdcall UI_HandleCursorMouseDown(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall UI_HandleCursorMouseMove(D2UIMouseMsgStrc * pMsgEvent) {
-    MouseX = (int)pMsgEvent->uLParam.sMousePos.nMouseX;
-    MouseY = (int)pMsgEvent->uLParam.sMousePos.nMouseY;
-    gnCursorAnimStartTick = GetTickCount();
-    if (ItemTypeOnHand != 5) {
-      int nKeyPressCount;
-      nKeyPressCount = CursorData[nCursorDataIndex].bKeyPressSwitch;
-      pMsgEvent->bHandled = 0;
-      if (nKeyPressCount) {
-        ItemTypeOnHand = 5;
+    POINT sPair;
+    sPair.x = (int)pMsgEvent->uLParam.sMousePos.nMouseX;
+    sPair.y = (int)pMsgEvent->uLParam.sMousePos.nMouseY;
+    MouseX = sPair.x;
+    MouseY = sPair.y;
+    const DWORD dwTick = GetTickCount();
+    const int nButtonMode = 5;
+    gnCursorAnimStartTick = dwTick;
+    if (ItemTypeOnHand != nButtonMode) {
+      if (CursorData[nCursorDataIndex].bKeyPressSwitch) {
+        pMsgEvent->bHandled = 0;
+        ItemTypeOnHand = nButtonMode;
         nCursorDataIndex = 4;
         gCursorAnimationFrame = 0;
         return;
       }
+      pMsgEvent->bHandled = 0;
     } else {
       pMsgEvent->bHandled = 0;
     }
@@ -290,17 +294,18 @@ void __stdcall UI_FreeCursor() {
 void __stdcall UI_AnimateCursorForward() {
     uint32_t sNewSeed;
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    int nSavedCursorIndex = nCursorDataIndex;
     if (!pPlayerUnit_lcl) {
       return;
     }
+    int nSavedCursorIndex = nCursorDataIndex;
     if (ItemTypeOnHand == 1) {
       sNewSeed = D2_SeedRoll(&pPlayerUnit_lcl->sSeed);
-      if (((uint8_t)sNewSeed & 0x3f) < 0x10) {
+      const int nRoll = sNewSeed % 64;
+      if (nRoll < 16) {
         gCursorAnimationFrame += 0x20;
       }
     } else {
-      gCursorAnimationFrame += CursorData[nCursorDataIndex].nAnimStep;
+      gCursorAnimationFrame += CursorData[nSavedCursorIndex].nAnimStep;
     }
 
     int32_t nMaxFrames = UI_GetCursorMaxFrames(nSavedCursorIndex);
@@ -309,7 +314,6 @@ void __stdcall UI_AnimateCursorForward() {
     }
 
     int nFrameOffset = UI_GetCursorFrameOffset(nCursorDataIndex);
-    nSavedCursorIndex = ItemTypeOnHand;
     if (nFrameOffset) {
       nMaxFrames = UI_GetCursorMaxFrames(nCursorDataIndex);
       gCursorAnimationFrame -= nMaxFrames;
@@ -323,7 +327,7 @@ void __stdcall UI_AnimateCursorForward() {
     }
     if (ItemTypeOnHand == 5) {
       ItemTypeOnHand = 1;
-      nCursorDataIndex = nSavedCursorIndex;
+      nCursorDataIndex = 5;
       gCursorAnimationFrame = 0;
       return;
     }

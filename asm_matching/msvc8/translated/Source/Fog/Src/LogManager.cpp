@@ -1017,31 +1017,25 @@ void __stdcall CloseStaleLogFileHandles() {
 }
 
 void __fastcall DeleteOldLogFile(FILETIME * pRefFileTime, char * szFileName) {
-    _FILETIME fileTime;
-    uint16_t nDay[2];
-    WORD nMonth[2];
-    int nYear;
-    uint32_t nNameLen = Storm::Source::SSTR::SStrLen(szFileName);
-    if ((int)(nNameLen - 10) <= 0) {
+    FILETIME ftLog;
+    int32_t nDay;
+    int32_t nMonth;
+    int32_t nYear;
+    const int32_t nDateOffset = static_cast<int32_t>(Storm::Source::SSTR::SStrLen(szFileName)) - 10;
+    if (nDateOffset <= 0) {
       return;
     }
-
-    sscanf(szFileName + (nNameLen - 10), "%2d%2d%2d", &nYear, (int*)nMonth, (int*)nDay);
-    SYSTEMTIME sysTimeHead = {0};
-    if (nYear > 0x5a) {
-      sysTimeHead.wYear = (short int)nYear + 0x76c;
-    } else {
-      sysTimeHead.wYear = (short int)nYear + 2000;
+    sscanf(szFileName + nDateOffset, "%2d%2d%2d", &nYear, &nMonth, &nDay);
+    SYSTEMTIME tDate;
+    memset(&tDate, 0, sizeof tDate);
+    tDate.wYear = static_cast<WORD>(nYear > 90 ? nYear + 1900 : nYear + 2000);
+    tDate.wMonth = static_cast<WORD>(nMonth);
+    tDate.wDay = static_cast<WORD>(nDay);
+    SystemTimeToFileTime(&tDate, &ftLog);
+    if (pRefFileTime->dwHighDateTime >= ftLog.dwHighDateTime &&
+        pRefFileTime->dwHighDateTime - ftLog.dwHighDateTime >= 0x4b7) {
+      DeleteFileA(szFileName);
     }
-
-    sysTimeHead.wMonth = nMonth[0];
-    /* LPFILETIME lpFileTime for SystemTimeToFileTime */ /* SYSTEMTIME * lpSystemTime for SystemTimeToFileTime */ *(uint32_t*)((char*)&sysTimeHead + 4) = (uint32_t)nDay[0] << 0x10;
-    SystemTimeToFileTime(&sysTimeHead, &fileTime);
-    if (!(pRefFileTime->dwHighDateTime >= fileTime.dwHighDateTime && pRefFileTime->dwHighDateTime - fileTime.dwHighDateTime >= 0x4b7)) {
-      return;
-    }
-
-    /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(szFileName);
 }
 
 void __fastcall CloseLogFileByName(uint8_t * szFileName) {

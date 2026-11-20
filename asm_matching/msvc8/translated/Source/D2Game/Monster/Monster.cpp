@@ -373,7 +373,17 @@ void __fastcall MONSTER_RollComponentAppearance(D2MonsterRegionFieldStrc * pMonR
 
 // 2022.01.09 - dzik
 BOOL __fastcall CheckComponents(D2UnitStrc * pUnit) {
-    uint8_t* pComponents = !pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->Components;
+    const uint8_t* pComponents;
+    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
+      pComponents = nullptr;
+    } else {
+      D2UnitDataMonsterStrc* pMonsterData = pUnit->pUnitData.pUnitDataMonster;
+      if (pMonsterData) {
+        pComponents = pMonsterData->Components;
+      } else {
+        pComponents = nullptr;
+      }
+    }
     int i = 0;
     do {
       if (*pComponents) {

@@ -252,7 +252,7 @@ static int32_t __stdcall STATLIST_LookupBaseStatWithMinAccr(D2ItemStatCostTxt * 
     if (pItemStatCostLine && *(uint8_t*)((intptr_t)&pItemStatCostLine->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2] && pStatList->sStatList.nFlags & 0x80000000U) {
       D2UnitStrc* pOwner;
       pOwner = pStatList->pOwner;
-      if (pOwner && (pOwner->eUnitType == UNIT_PLAYER || pOwner && pOwner->eUnitType == UNIT_MONSTER) && nLo < pItemStatCostLine->minaccr) {
+      if ((pOwner && pOwner->eUnitType == UNIT_PLAYER || pStatList->pOwner && pStatList->pOwner->eUnitType == UNIT_MONSTER) && nLo < pItemStatCostLine->minaccr) {
         nLo = pItemStatCostLine->minaccr << D2_SHIFT_COUNT(pItemStatCostLine->valshift);
       }
     }

@@ -1089,15 +1089,8 @@ void __stdcall CMD_LoadDefaultKeyBindings(DWORD bUseInstallDir) {
     uint16_t wVersion;
     D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(szLangAbbr, 0);
     if (bUseInstallDir) {
-      char* pEnd;
       Fog::Source::SFile::SFILE_GetInstallPath(szPath, 0xdc);
-      pScan = szPath - 1;
-      do {
-        pEnd = pScan;
-        pScan = pEnd + 1;
-      } while (pEnd[1] != '\0');
-
-      memcpy(pEnd + 1, "default.key", 0xc);
+      strcat(szPath, "default.key");
       hFile = Fog::Source::SFile::thunk_CreateFileA(szPath, 0x80000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 3, 0x80, (HANDLE)0x0);
       if (hFile != (HANDLE)-1) {
         Fog::Source::SFile::thunk_ReadFile(hFile, aKeyBindFileBuf, 0x47a, &bUseInstallDir, (LPOVERLAPPED)0x0);
@@ -1120,13 +1113,7 @@ void __stdcall CMD_LoadDefaultKeyBindings(DWORD bUseInstallDir) {
     apply_key_data:
     if (pKeyData) {
       if (pKeyData->wMagic == 0x5357 && pKeyData->wVersion == 0x25 && pKeyData->wSize == 0x47a) {
-        pSrc = pKeyData->aBindings;
-        pDstDefault = gaKeyBindingsDefault;
-        for (nCount = 0x11d; nCount; nCount--) {
-          *pDstDefault = pSrc->nCmdIndex;
-          pSrc = (D2KeyBindStrc*)&pSrc->wKeyCode;
-          pDstDefault++;
-        }
+        memcpy(gaKeyBindingsDefault, pKeyData->aBindings, sizeof(gaKeyBindingsDefault));
 
         D2_FREE_AT(pKeyData, ".\\UI\\CmdTbl.cpp", 0x52c);
         return;
@@ -1938,9 +1925,12 @@ void __stdcall WindowsKeyPressedEvent(D2UIMouseMsgStrc * pMsg) {
     }
 
     int nIndex = 0;
-    while ((uint32_t)g_KeyBindingsTable[nIndex].wKeyCode != pMsg->nWParam || (nCmdIndex = g_KeyBindingsTable[nIndex].nCmdIndex , nCmdIndex == 0xffff) || nCmdIndex >= 0x39 || nCmdIndex > 0xdf || !gaCmdBindings[nCmdIndex].pfnHandler) {
-      nIndex++;
-      if ((intptr_t)&g_KeyBindingsTable[nIndex] >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable))) {
+    const D2KeyBindStrc* pBinding = g_KeyBindingsTable;
+    const D2KeyBindStrc* pEnd = g_KeyBindingsTable + sizeof(g_KeyBindingsTable) / sizeof(g_KeyBindingsTable[0]);
+    while ((uint32_t)pBinding->wKeyCode != pMsg->nWParam || (nCmdIndex = pBinding->nCmdIndex , nCmdIndex == 0xffff) || nCmdIndex >= 0x39 || nCmdIndex > 0xdf || !gaCmdBindings[nCmdIndex].pfnHandler) {
+      ++pBinding;
+      ++nIndex;
+      if (reinterpret_cast<intptr_t>(pBinding) >= reinterpret_cast<intptr_t>(pEnd)) {
         return;
       }
     }
@@ -1965,9 +1955,12 @@ void __stdcall WindowsKeyPressedEvent(D2UIMouseMsgStrc * pMsg) {
 void __stdcall INPUT_DispatchKeyCommand(D2UIMouseMsgStrc * pMsg) {
     int nCmdIndex;
     int nBindingIndex = 0;
-    while ((uint32_t)g_KeyBindingsTable[nBindingIndex].wKeyCode != pMsg->nWParam || (nCmdIndex = g_KeyBindingsTable[nBindingIndex].nCmdIndex , nCmdIndex == 0xffff) || nCmdIndex >= 0x39 || nCmdIndex > 0xdf || !gaCmdBindings[nCmdIndex].pfnAltHandler) {
-      nBindingIndex++;
-      if ((intptr_t)&g_KeyBindingsTable[nBindingIndex] >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable))) {
+    const D2KeyBindStrc* pBinding = g_KeyBindingsTable;
+    const D2KeyBindStrc* pEnd = g_KeyBindingsTable + sizeof(g_KeyBindingsTable) / sizeof(g_KeyBindingsTable[0]);
+    while ((uint32_t)pBinding->wKeyCode != pMsg->nWParam || (nCmdIndex = pBinding->nCmdIndex , nCmdIndex == 0xffff) || nCmdIndex >= 0x39 || nCmdIndex > 0xdf || !gaCmdBindings[nCmdIndex].pfnAltHandler) {
+      ++pBinding;
+      ++nBindingIndex;
+      if (reinterpret_cast<intptr_t>(pBinding) >= reinterpret_cast<intptr_t>(pEnd)) {
         return;
       }
     }

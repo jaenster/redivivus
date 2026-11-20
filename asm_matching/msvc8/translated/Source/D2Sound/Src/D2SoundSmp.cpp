@@ -985,16 +985,17 @@ float __stdcall SOUNDSMP_ClampVolume(float fValue, float fMax, float fInput) {
 
     long double fUpper = (long double)fMax;
     long double fThreshold = fUpper - (long double)9.999999747378752e-05;
-    if (fThreshold < fVar1 != (fThreshold == fVar1)) {
+    if (fVar1 >= fThreshold) {
       return 0.0;
     }
 
-    long double fDivisor = fUpper;
-    if (fVar1) {
-      fDivisor = fVar1;
+    long double fRatio;
+    if (fVar1 != 0.0) {
+      fRatio = (fUpper + (long double)fValue) / fVar1;
+    } else {
+      fRatio = (fUpper + (long double)fValue) / fUpper;
     }
-
-    fVar1 = log10((double)((fUpper + (long double)fValue) / fDivisor));
+    fVar1 = log10((double)fRatio);
     return (float)(fVar1 * (long double)-2000.0);
 }
 

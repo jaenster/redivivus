@@ -21,6 +21,8 @@
 #include <spawn.h>
 #include <string.h>
 #include <sys/file.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <sys/time.h>
 #include <sys/wait.h>
 #include <time.h>

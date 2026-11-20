@@ -628,24 +628,22 @@ BOOL __fastcall D2WINTEXTBOX_SetLineColor(::D2WinTextBox * pTextBox, int32_t nRo
 }
 
 static int32_t D2WINTEXTBOX_GetVisibleLinesFromScroll(::D2WinTextBox * pTextBox) {
-    D2WinTextBoxLineStrc* pCurLineNode;
     if (!pTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x393);
       exit(-1);
-    } else {
-      int nCount;
-      if (pTextBox->sControl.neD2FormType != FORM_TextBox) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x394);
-        exit(-1);
-      }
-
-      nCount = 0;
-      for (pCurLineNode = pTextBox->sListState.pTopLine; pCurLineNode; pCurLineNode = pCurLineNode->pNext) {
-        nCount++;
-      }
-
-      return nCount;
     }
+    if (pTextBox->sControl.neD2FormType != FORM_TextBox) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x394);
+      exit(-1);
+    }
+
+    D2WinTextBoxLineStrc* pLine = pTextBox->sListState.pTopLine;
+    int nCount = 0;
+    while (pLine != nullptr) {
+      pLine = pLine->pNext;
+      ++nCount;
+    }
+    return nCount;
 }
 
 static int32_t __stdcall D2WINTEXTBOX_TruncateStringToFitWidth(int32_t nMaxWidth, uint16_t * wszText) {

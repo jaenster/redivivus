@@ -300,10 +300,7 @@ void __fastcall SetGameDataHook(::SGAMEDATA * pGame) {
 void __fastcall AppearenceItems(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint32_t * pAppearanceBuf, uint32_t nBufSize) {
     char szAppearanceTmp[16];
     if (nBufSize >= 0x10 && pUnit) {
-      *pAppearanceBuf = -1;
-      pAppearanceBuf[1] = -1;
-      pAppearanceBuf[2] = -1;
-      pAppearanceBuf[3] = -1;
+      memset(pAppearanceBuf, 0xff, 4 * sizeof(*pAppearanceBuf));
       D2Common::INVENTORY::Inventory::SaveCharAppearance(pUnit, (char*)pAppearanceBuf, szAppearanceTmp);
       return;
     }
@@ -315,10 +312,7 @@ void __fastcall AppearenceItems(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint
 void __fastcall AppearenceItems2(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint32_t * pAppearanceBuf, uint32_t nBufSize) {
     char szAppearanceTmp[16];
     if (nBufSize >= 0x10 && pUnit) {
-      *pAppearanceBuf = -1;
-      pAppearanceBuf[1] = -1;
-      pAppearanceBuf[2] = -1;
-      pAppearanceBuf[3] = -1;
+      memset(pAppearanceBuf, 0xff, 4 * sizeof(*pAppearanceBuf));
       D2Common::INVENTORY::Inventory::SaveCharAppearance(pUnit, szAppearanceTmp, (char*)pAppearanceBuf);
       return;
     }
@@ -432,10 +426,11 @@ static void __stdcall GAME_OnClientRoomChange(D2RoomStrc * pRoom, D2ClientStrc *
             if (!pClient->pPlayer) {
               pUnit = 0;
             } else {
-              pUnit = UNIT::SUnit::FindUnitFromTable(pClient->pGame, pClient->nPlayerType, pClient->dwPlayerGUID);
-              if (!pUnit) {
+              D2UnitStrc* const pLookupUnit = UNIT::SUnit::FindUnitFromTable(pClient->pGame, pClient->nPlayerType, pClient->dwPlayerGUID);
+              if (!pLookupUnit) {
                 pClient->pPlayer = 0;
               }
+              pUnit = pLookupUnit;
             }
           }
 
@@ -455,8 +450,8 @@ static void __stdcall GAME_OnClientRoomChange(D2RoomStrc * pRoom, D2ClientStrc *
 
     eD2LevelId eNewLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     uint32_t dwCurrentPortalFlags = D2Common::Units::GetPlayerPortalFlags(pClient->pPlayer);
-    uint32_t dwLevelPortalFlag = D2Common::DUNGEON::Dungeon::GetPortalFlagFromLevelId(eNewLevelId);
-    D2Common::Units::SetPlayerPortalFlags(pClient->pPlayer, dwCurrentPortalFlags | dwLevelPortalFlag);
+    dwCurrentPortalFlags |= D2Common::DUNGEON::Dungeon::GetPortalFlagFromLevelId(eNewLevelId);
+    D2Common::Units::SetPlayerPortalFlags(pClient->pPlayer, dwCurrentPortalFlags);
 }
 
 // Inserts a player unit into a client's bounded nearest-units list kept sorted by Manhattan distance. Computes |nX-unitX|+|nY-unitY| using the unit's static (objects) or dynamic path position, then maintains an intrusive singly-linked sorted list of up to nMaxSlots entries (each entry = {pUnit, dist, nextLink}, head link at pSortList[2]; current count at pClient->nPacketBuffer+500). If full and the new unit is nearer than the farthest, evicts the tail; otherwise allocates the next free slot. Splices the entry into distance order and updates *ppnMaxDist (the running worst kept distance). Only acts on UNIT_PLAYER units. Custom calling convention: nX in EAX, pSortList in ESI, rest on stack.

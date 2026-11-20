@@ -211,22 +211,16 @@ void __thiscall SendDebugMessageToEveryone(::SGAMEDATA * pThis, char * pMessage)
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 288, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    char cChar;
     __frame0.sPacket.szName[0] = '\0';
     __frame0.sPacket.nColor = '\0';
-    intptr_t nBufOffset = 0x1a - (intptr_t)pMessage;
-    do {
-      cChar = *pMessage;
-      pMessage[(intptr_t)&__frame0.sPacket + nBufOffset] = cChar;
-      pMessage++;
-    } while (cChar != '\0');
+    strcpy(__frame0.sPacket.szMessage, pMessage);
 
-    __frame0.pPacket = &__frame0.sPacket;
     __frame0.sPacket.nMessageColor = '\0';
     __frame0.sPacket.nPacketId = '&';
     __frame0.sPacket.nUnitGUID = 0;
     __frame0.sPacket.nMsgSubType = '\x02';
     __frame0.sPacket.nMessageType = '\x01';
+    __frame0.pPacket = &__frame0.sPacket;
     GAME::Server::ForEachClient(pThis, (fpForEachClientFn)Send_0x26_Chat, &__frame0.pPacket);
 }
 

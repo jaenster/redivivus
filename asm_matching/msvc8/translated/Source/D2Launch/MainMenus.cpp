@@ -7065,13 +7065,12 @@ void __stdcall MAINMENU_PlayExpansionIntro() {
     int32_t nCutSceneFlags = 0;
     BOOL bLoggingEnabled = Fog::Src::LogManager::GetLoggerState_Stub();
     if (!bLoggingEnabled) {
-      memcpy(szVidSuffix + 4, "292", 4);
+      memcpy(szVidSuffix, dwIntroFrameRate_29_32, sizeof(szVidSuffix));
     } else {
       nCutSceneFlags = 2;
-      memcpy(szVidSuffix + 4, "146", 4);
+      memcpy(szVidSuffix, dwIntroFrameRate_24_36, sizeof(szVidSuffix));
     }
 
-    memcpy(szVidSuffix, "640x", 4);
     D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(szLangAbbrev, 0);
     sprintf(szVideoPath, "%s\\video\\%s\\D2x_Intro_%s.bik", "DATA\\LOCAL", szLangAbbrev, szVidSuffix);
     int nIsHighRes = Storm::Source::SFile::SFileOpenFileEx(nullptr, szVideoPath, 0, (void**)&pVideoFile);

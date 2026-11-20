@@ -1415,7 +1415,8 @@ void __fastcall Objects_InitFn69_NihlathakStartOutsideTown(D2ObjectInitFnArg * p
       return;
     }
 
-    int32_t nMonsterClassId = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_MapSuperUniqueId(2, (uint32_t)(uint16_t)D2Common::ITEMS::Items::sgptDataTable->aTxtSuperUniquesHardcoded[0x3c]);
+    const uint32_t nSuperUnique = static_cast<uint16_t>(D2Common::ITEMS::Items::sgptDataTable->aTxtSuperUniquesHardcoded[0x3c]);
+    int32_t nMonsterClassId = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_MapSuperUniqueId(2, nSuperUnique);
     D2UnitStrc* pSpawnedMonster = Monsters::Spawn::SpawnMonster(pInitArg->pGame, pInitArg->pRoom, nMonsterClassId, pInitArg->nX, pInitArg->nY, 1);
     if (!pSpawnedMonster) {
       return;
@@ -1433,7 +1434,6 @@ void __fastcall Q33_AnyaTimerCallback(D2QuestDataStrc * pQuestData, D2UnitStrc *
     D2RoomStrc* pUnitRoom;
     eD2LevelId eLevelId;
     D2QuestDataA5Q3Strc* pA5Q3Data;
-    eD2MonsterAnimMode nAnimMode;
     if (!pUnit) {
       eCurrentMode = Death;
     } else {
@@ -1443,7 +1443,7 @@ void __fastcall Q33_AnyaTimerCallback(D2QuestDataStrc * pQuestData, D2UnitStrc *
     switch (eCurrentMode) {
       case eD2MonsterAnimMode_ns::Neutral:
         {
-          nAnimMode = Walk;
+          D2Common::Units::ChangeAnimMode(pUnit, Walk);
           break;
         }
       case Walk:
@@ -1456,34 +1456,26 @@ void __fastcall Q33_AnyaTimerCallback(D2QuestDataStrc * pQuestData, D2UnitStrc *
             if (pA5Q3Data->nWalkTickCount > 5) {
               pA5Q3Data->bAnyaCanRun = 1;
             }
-            if (!pA5Q3Data->bAnyaCanRun) {
-              goto rearm_timer;
+            if (pA5Q3Data->bAnyaCanRun) {
+              D2Common::Units::ChangeAnimMode(pUnit, eD2MonsterAnimMode_ns::GetHit);
             }
-
-            nAnimMode = eD2MonsterAnimMode_ns::GetHit;
-          } else {
-            if (!pA5Q3Data->bAnyaReachable) {
-              goto rearm_timer;
-            }
-
-            nAnimMode = eD2MonsterAnimMode_ns::GetHit;
+          } else if (pA5Q3Data->bAnyaReachable) {
+            D2Common::Units::ChangeAnimMode(pUnit, eD2MonsterAnimMode_ns::GetHit);
           }
 
           break;
         }
       default:
         {
-          goto rearm_timer;
+          break;
         }
       case eD2MonsterAnimMode_ns::GetHit:
         {
-          nAnimMode = eD2MonsterAnimMode_ns::Attack1;
+          D2Common::Units::ChangeAnimMode(pUnit, eD2MonsterAnimMode_ns::Attack1);
           break;
         }
     }
 
-    D2Common::Units::ChangeAnimMode(pUnit, nAnimMode);
-    rearm_timer:
     GAME::Event::SetEvent(pQuestData->pGame, pUnit, 7, pQuestData->pGame->dwGameFrame + 0x19, 0, 0);
 }
 

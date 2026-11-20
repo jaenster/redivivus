@@ -2702,7 +2702,6 @@ BOOL __fastcall Skills_SrvDoFunc_050_DragonTail_FireExplosion(::SGAMEDATA * pGam
     uint32_t nCollisionFlags;
     D2DamageStrc sDamage;
     D2DamageStrc sFireExplosionDamage;
-    uint32_t nPercentDivisor;
     D2DamageStrc* pExplosionDamage;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -2719,19 +2718,12 @@ BOOL __fastcall Skills_SrvDoFunc_050_DragonTail_FireExplosion(::SGAMEDATA * pGam
       return 0;
     }
 
-    uint32_t* pCombatSrc = (uint32_t*)pCombatQueueEntry;
-    uint32_t* pDamageDst = (uint32_t*)&sDamage;
-    memcpy(pDamageDst, pCombatSrc, 0x70);
+    sDamage = *pCombatQueueEntry;
     SKILLASS_ReleaseChargeUpAttack(pGame, pUnit, pCombatQueueEntry);
     UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
-    BOOL bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-    if (!bIsDead) {
-      int32_t nFireDmgPct;
+    if (!UNIT::SUnit::CheckForModeZeroDeath(pUnit)) {
       memset(&sFireExplosionDamage, 0, 0x70);
-      nPercentDivisor = 100;
-      nFireDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
-      nFireDmgPct += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_fire_mastery, 0);
-      sFireExplosionDamage.dwFireDmg = D2Common::DATATBLS::DataTbls::D2ApplyPercent(sDamage.dwPhysDamage, nFireDmgPct, nPercentDivisor);
+      sFireExplosionDamage.dwFireDmg = D2Common::DATATBLS::DataTbls::D2ApplyPercent(sDamage.dwPhysDamage, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl) + D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_fire_mastery, 0), 100);
       sFireExplosionDamage.wResultFlags = 9;
       nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
       nCollisionFlags = 0;

@@ -881,16 +881,14 @@ void __fastcall SERVER_DisconnectClient(::SGAMEDATA * pGame, D2ClientStrc * pCli
     if (pClient) {
       int32_t nClientId;
       nClientId = Clients::GetClientNo(pClient);
-      packet0x5a.nMessageType = nDisconnectReason;
-      packet0x5a.nArgTypes = '\0';
-      memset(packet0x5a.szName1, 0, 16 * sizeof(packet0x5a.szName1[0]));
-      memset(packet0x5a.szName2, 0, 16 * sizeof(packet0x5a.szName2[0]));
+      memset(&packet0x5a, 0, sizeof(packet0x5a));
       packet0x5a.nPacketId = 'Z';
+      packet0x5a.nMessageType = nDisconnectReason;
       packet0x5a.nColor = '\x04';
       packet0x5a.nArg = 0;
       Clients::GetAccountName(pClient, packet0x5a.szName2);
       nCleanupFlag = 0x10;
-      *(uint32_t*)((char*)&packet0x5a.szName2 + 12) &= 0xffffff;
+      packet0x5a.szName2[sizeof(packet0x5a.szName2) - 1] = '\0';
       Storm::Source::SSTR::SStrCopy(packet0x5a.szName1, Clients::GetCharName(pClient), nCleanupFlag);
       PLAYER::PlayerMsg::BroadcastEventMessage(pGame, &packet0x5a);
       Clients::CleanUpClient(pGame, Clients::GetClientNo(pClient), 1);
@@ -2633,14 +2631,12 @@ void __stdcall QSERVER_BroadcastPlayerMessage(int32_t nMsgType, uint32_t dwEvent
         switch (nMsgType) {
           case 1:
             {
-              sEvent.nArgTypes = '\0';
+              memset(&sEvent, 0, sizeof(sEvent));
               sEvent.nArg = dwEventPayload;
-              memset(sEvent.szName1, 0, 16 * sizeof(sEvent.szName1[0]));
-              memset(sEvent.szName2 + 4, 0, 12 * sizeof(sEvent.szName2[0]));
               sEvent.nPacketId = 'Z';
               sEvent.nMessageType = '\x0f';
               sEvent.nColor = '\x04';
-              *(uint32_t*)sEvent.szName2 = 0;
+              sEvent.szName2[0] = '\0';
               PLAYER::PlayerMsg::BroadcastEventMessage(pGame, &sEvent);
               break;
             }
@@ -3222,7 +3218,6 @@ BOOL __stdcall QSERVER_DisconnectClientByName(char * szClientName, uint32_t nRea
 void __stdcall QSERVER_DisconnectClientFromGame(uint32_t nClientId) {
     uint32_t nToken;
     ::SGAMEDATA* pGame;
-    BOOL bIsInGame;
     D2ClientStrc* pClient;
     D2Packet0x5aEventStructure byPacketType;
     int32_t nCopyLen;
@@ -3230,22 +3225,21 @@ void __stdcall QSERVER_DisconnectClientFromGame(uint32_t nClientId) {
       nToken = D2Net::Game::Server::QSERVER_GetClientGameToken(nClientId);
       pGame = QSERVER_FindAndLockGame(nToken);
       if (pGame) {
-        bIsInGame = Clients::IsClientInGame(pGame, nClientId);
-        if (bIsInGame) {
-          pClient = Clients::SERVER_GetClientFromGmeByClientId(pGame, nClientId);
-          byPacketType.nArgTypes = '\0';
-          nCopyLen = 0x10;
-          memset(byPacketType.szName1, 0, 16 * sizeof(byPacketType.szName1[0]));
-          memset(byPacketType.szName2 + 4, 0, 12 * sizeof(byPacketType.szName2[0]));
-          byPacketType.nPacketId = 'Z';
-          byPacketType.nMessageType = '\0';
-          byPacketType.nColor = '\x04';
-          byPacketType.nArg = 0;
-          *(uint32_t*)byPacketType.szName2 = 0;
-          Storm::Source::SSTR::SStrCopy(byPacketType.szName1, Clients::GetCharName(pClient), nCopyLen);
-          PLAYER::PlayerMsg::BroadcastEventMessage(pGame, &byPacketType);
-          Clients::CleanUpClient(pGame, Clients::GetClientNo(pClient), 1);
+        if (!Clients::IsClientInGame(pGame, nClientId)) {
+          Server::Unlock(pGame);
+          return;
         }
+        pClient = Clients::SERVER_GetClientFromGmeByClientId(pGame, nClientId);
+        memset(&byPacketType, 0, sizeof(byPacketType));
+        nCopyLen = 0x10;
+        byPacketType.nPacketId = 'Z';
+        byPacketType.nMessageType = 0;
+        byPacketType.nColor = 4;
+        byPacketType.nArg = 0;
+        byPacketType.szName2[0] = '\0';
+        Storm::Source::SSTR::SStrCopy(byPacketType.szName1, Clients::GetCharName(pClient), nCopyLen);
+        PLAYER::PlayerMsg::BroadcastEventMessage(pGame, &byPacketType);
+        Clients::CleanUpClient(pGame, Clients::GetClientNo(pClient), 1);
 
         Server::Unlock(pGame);
       }

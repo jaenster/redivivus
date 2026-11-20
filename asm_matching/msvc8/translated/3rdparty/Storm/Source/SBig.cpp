@@ -50,8 +50,13 @@ static uint32_t __stdcall SBIG_Accumulator_AddWithCarry(ULONGLONG ullAddend, uin
 // @caution THE TAIL IS ACTIVELY MISLEADING and pass 6 deliberately did NOT rename it, because what it should be called is not established. There is no multiply-and-add here: the __allmul(lo, hi, 0, 1) call is a multiply by 2^32, i.e. a 32-bit word shift. No oracle counterpart exists. Read the body before trusting or reusing this name.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
 static void __stdcall SBIG_Accumulator_MulAndAdd(uint32_t * pnAccumulator, uint32_t nAddend) {
-    int64_t u64Product = _allmul(*pnAccumulator, pnAccumulator[1], 0, 1);
-    *(uint64_t*)pnAccumulator = u64Product + (uint64_t)nAddend;
+    uint64_t nAccum;
+    unsigned char* pBytes = reinterpret_cast<unsigned char*>(&nAccum);
+    memcpy(pBytes + sizeof(uint32_t), pnAccumulator + 1, sizeof(uint32_t));
+    memcpy(pBytes, pnAccumulator, sizeof(uint32_t));
+    const uint64_t nWordRadix = 0x100000000ULL;
+    const uint64_t nResult = nAccum * nWordRadix + nAddend;
+    memcpy(pnAccumulator, &nResult, sizeof(nResult));
 }
 
 // @module-history Pass 5 established the module (contiguous SBig.cpp COMDAT run 00420eb0-00421d80, moved out of D2Client::WindowHandle with a mechanical WND_ -> SBIG_ prefix swap, tail unverified). Pass 6 bound 35 of the 45 tails to oracle template methods; this one is among the 10 it did not.
@@ -845,22 +850,16 @@ void __fastcall SBIG_ArrayByteAppendByte(uint32_t * pArray, int, uint8_t * pByte
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void __fastcall TSBaseArray_Uc_Copy(TSGrowableArray_Uc * pArray, int, uint32_t nCount, uint8_t * pSrc) {
     pArray->nCapacity = nCount;
-    if ((uint32_t*)pArray->pData || nCount) {
+    if (pArray->pData || nCount) {
       uint32_t* pNewBuffer;
       pNewBuffer = SMem::SMemReAlloc((uint32_t*)pArray->pData, nCount, s__E_00708880, -2, 0);
       pArray->pData = (uint8_t*)pNewBuffer;
     }
 
-    uint32_t nIndex = 0;
-    if (nCount > 0) {
-      do {
-        if (pArray->pData + nIndex) {
-          pArray->pData[nIndex] = *pSrc;
-        }
-
-        nIndex++;
-        pSrc++;
-      } while (nIndex < nCount);
+    for (uint32_t nIndex = 0; nIndex < nCount; ++nIndex, ++pSrc) {
+      if (uint8_t* pDst = pArray->pData + nIndex) {
+        *pDst = *pSrc;
+      }
     }
 
     pArray->nLen = nCount;
@@ -872,22 +871,16 @@ void __fastcall TSBaseArray_Uc_Copy(TSGrowableArray_Uc * pArray, int, uint32_t n
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void __fastcall TSBaseArray_UcAlt_Copy(TSGrowableArray_Uc * pArray, int, uint32_t nCount, uint8_t * pSrc) {
     pArray->nCapacity = nCount;
-    if ((uint32_t*)pArray->pData || nCount) {
+    if (pArray->pData || nCount) {
       uint32_t* pNewBuffer;
       pNewBuffer = SMem::SMemReAlloc((uint32_t*)pArray->pData, nCount, s__D_0070888c, -2, 0);
       pArray->pData = (uint8_t*)pNewBuffer;
     }
 
-    uint32_t nIndex = 0;
-    if (nCount > 0) {
-      do {
-        if (pArray->pData + nIndex) {
-          pArray->pData[nIndex] = *pSrc;
-        }
-
-        nIndex++;
-        pSrc++;
-      } while (nIndex < nCount);
+    for (uint32_t nIndex = 0; nIndex < nCount; ++nIndex, ++pSrc) {
+      if (uint8_t* pDst = pArray->pData + nIndex) {
+        *pDst = *pSrc;
+      }
     }
 
     pArray->nLen = nCount;

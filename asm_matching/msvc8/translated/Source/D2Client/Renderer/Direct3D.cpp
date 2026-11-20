@@ -11,8 +11,8 @@ namespace D2Client { namespace Renderer {
 void __fastcall RENDERER_D3D_CopyPixelsWithStride(uint8_t * pSrc, uint8_t * pDest, size_t nWidthBytes, int nHeight, int nDestPitch, uint32_t dwParam6) {
     for (int i = 0; i < nHeight; i++) {
       memcpy(pDest, pSrc, nWidthBytes);
-      pDest += nDestPitch;
       pSrc += nWidthBytes;
+      pDest += nDestPitch;
     }
 }
 

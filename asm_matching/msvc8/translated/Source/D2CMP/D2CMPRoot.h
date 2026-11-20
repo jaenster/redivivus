@@ -29,8 +29,10 @@ uint32_t __stdcall CELCMP_AllocateCelListKey(uint32_t nFormat, uint32_t dwNumDir
 int __stdcall TILEPROJECT_GetSoundIndexIndex(struct D2TileLibraryEntryStrc * pComp8);
 uint32_t __stdcall TILEPROJECT_GetMainIndex(struct D2TileLibraryEntryStrc * pComp24);
 char * __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(struct D2TileLibraryEntryStrc * pComp24);
-void __stdcall D2CMP_MinDouble(double fParam1, double fParam2);
-void __stdcall D2CMP_MaxDouble(double fParam1, double fParam2);
+// Returns the larger of two doubles; fParam2 when equal or unordered (FCOM, TEST AH,0x41).
+double __stdcall D2CMP_MaxDouble(double fParam1, double fParam2);
+// Returns the smaller of two doubles; fParam2 when equal or unordered (FCOM, TEST AH,0x5 / JP).
+double __stdcall D2CMP_MinDouble(double fParam1, double fParam2);
 int32_t __fastcall SUBTILE_CountRunLength(char * pDataStart, char * pDataEnd, int32_t nMaxRunLength, BOOL * pIsAtEndFlag, uint32_t * pIsExactMatchFlag);
 int32_t __fastcall SUBTILE_CountRunLengthForByte(char * pCur, char * pEnd, char cSkipByte, int32_t nMaxRunLen, BOOL * pbAtEnd, uint32_t * pbExactMatch);
 #endif // D2_MODULE_D2CMP

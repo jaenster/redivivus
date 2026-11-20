@@ -385,99 +385,77 @@ template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor
 }
 
 template<> __attribute__((noinline)) inline uint32_t TSExportTableSimple<CELLIST, HCELLIST__*, 0>::GenerateUniqueHandle() {
-    uint32_t* pnCounter;
     while (true) {
-      ::CELLIST* pCounterField;
-      while (true) {
-        pnCounter = &this->nSequence;
-        (*pnCounter)++;
-        if (*pnCounter) {
-          break;
-        }
-
+      uint32_t& nSequence = this->nSequence;
+      const uint32_t nHandle = ++nSequence;
+      if (!nHandle) {
         this->bWrapped = 1;
+        continue;
       }
-
       if (!this->bWrapped) {
-        break;
+        return nHandle;
       }
-
-      pCounterField = this->TSHashTable<::CELLIST, HASHKEY_NONE>::Ptr(this->nSequence, &this->tKey);
-      if (!pCounterField) {
+      if (!this->TSHashTable<::CELLIST, HASHKEY_NONE>::Ptr(nHandle, &this->tKey)) {
         return this->nSequence;
       }
     }
-
-    return this->nSequence;
 }
 
 template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::SetCount(uint32_t nCount) {
-    TSLink<::CELLIST>* pTVar1;
-    uint32_t uVar2;
-    TSLink<::CELLIST>* pTVar3;
-    uint32_t uNewCapacity;
-    uint32_t* pBucketInit;
-    int nBucketOffset;
-    int nRemaining;
-    TSExplicitList<::CELLIST, -572662307>* pFlushSlot;
-    TSLink<::CELLIST>** pBackLink2;
-    uint32_t nShrinkIdx;
-    uint32_t* pEmptyBucketNext;
     if (nCount > this->m_count) {
-      uint32_t uNormalizeStep;
+      uint32_t nGranularity;
       if (nCount > this->m_alloc) {
-        uNormalizeStep = this->m_chunk;
-        if (!uNormalizeStep) {
-          uNormalizeStep = this->CalcChunkSize(nCount);
+        nGranularity = this->m_chunk;
+        if (!nGranularity) {
+          nGranularity = this->CalcChunkSize(nCount);
         }
 
-        uNewCapacity = nCount;
-        if (nCount % uNormalizeStep) {
-          uNewCapacity = uNormalizeStep - nCount % uNormalizeStep + nCount;
+        uint32_t nAligned = nCount;
+        if (nCount % nGranularity) {
+          nAligned = nGranularity - nCount % nGranularity + nCount;
         }
 
-        this->ReallocData(uNewCapacity);
+        this->ReallocData(nAligned);
       }
 
-      uVar2 = this->m_count;
-      if (uVar2 < nCount) {
-        nBucketOffset = uVar2 * 0xc;
-        nRemaining = nCount - uVar2;
+      const uint32_t nOldCount = this->m_count;
+      if (nOldCount < nCount) {
+        int nByteOffset = nOldCount * sizeof(*this->m_data);
+        int nRemaining = nCount - nOldCount;
         do {
-          pBucketInit = (uint32_t*)((intptr_t)&this->m_data->m_linkoffset + nBucketOffset);
-          if (pBucketInit) {
-            pEmptyBucketNext = pBucketInit + 1;
-            *pEmptyBucketNext = 0;
-            pBucketInit[2] = 0;
-            *pEmptyBucketNext = (uint32_t)(uintptr_t)pEmptyBucketNext;
-            *pBucketInit = 0xdddddddd;
-            pBucketInit[2] = ~(uint32_t)pEmptyBucketNext;
+          TSExplicitList<::CELLIST, -572662307>* pInitSlot = reinterpret_cast<TSExplicitList<::CELLIST, -572662307>*>(reinterpret_cast<char*>(this->m_data) + nByteOffset);
+          if (pInitSlot) {
+            TSLink<::CELLIST>* pTerminator = &pInitSlot->m_terminator;
+            pTerminator->m_prevlink = 0;
+            pTerminator->m_next = 0;
+            pInitSlot->m_terminator.m_prevlink = pTerminator;
+            pInitSlot->m_linkoffset = -0x22222223;
+            pInitSlot->m_terminator.m_next = ~reinterpret_cast<intptr_t>(pTerminator);
           }
 
-          nBucketOffset += 0xc;
+          nByteOffset += sizeof(*this->m_data);
           nRemaining--;
         } while (nRemaining);
       }
     } else if (nCount < this->m_count) {
-      nShrinkIdx = nCount;
-      nBucketOffset = nCount * 0xc;
+      uint32_t nIndex = nCount;
+      int nByteOffset = nCount * sizeof(*this->m_data);
       do {
-        pFlushSlot = (TSExplicitList<::CELLIST, -572662307>*)((intptr_t)&this->m_data->m_linkoffset + nBucketOffset);
-        pFlushSlot->UnlinkAll();
-        pTVar3 = pFlushSlot->m_terminator.m_prevlink;
-        pTVar1 = &pFlushSlot->m_terminator;
-        if (pTVar3) {
-          uVar2 = pTVar1->m_next;
-          pBackLink2 = (TSLink<::CELLIST>**)D2_StormNextLink(pTVar1, -1);
-          *pBackLink2 = pTVar3;
-          pTVar1->m_prevlink->m_next = pTVar1->m_next;
-          pTVar1->m_prevlink = 0;
-          pTVar1->m_next = 0;
+        TSExplicitList<::CELLIST, -572662307>* pSlotI = reinterpret_cast<TSExplicitList<::CELLIST, -572662307>*>(reinterpret_cast<char*>(this->m_data) + nByteOffset);
+        pSlotI->UnlinkAll();
+        TSLink<::CELLIST>* pTerminator = &pSlotI->m_terminator;
+        TSLink<::CELLIST>* pPrevious = pTerminator->m_prevlink;
+        if (pPrevious) {
+          TSLink<::CELLIST>** pBackLink = reinterpret_cast<TSLink<::CELLIST>**>(D2_StormNextLink(pTerminator, -1));
+          *pBackLink = pPrevious;
+          pTerminator->m_prevlink->m_next = pTerminator->m_next;
+          pTerminator->m_prevlink = 0;
+          pTerminator->m_next = 0;
         }
 
-        nShrinkIdx++;
-        nBucketOffset += 0xc;
-      } while (nShrinkIdx < this->m_count);
+        nIndex++;
+        nByteOffset += sizeof(*this->m_data);
+      } while (nIndex < this->m_count);
 
       this->m_count = nCount;
       return;
