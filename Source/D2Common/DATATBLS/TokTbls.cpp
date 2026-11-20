@@ -121,10 +121,11 @@ void __fastcall TXT_AllocTxt_objtype_objmode(D2PoolManagerStrc * pMemory) {
     }
 
     memcpy(pTxtObjType2, pTxtObjType_lcl, nObjTypeSize * 0x34);
-    memcpy((D2ObjModeTxt*)(pTxtObjType2 + nObjTypeSize), pTxtObjMode_lcl, nObjModeSize * 0x34);
+    D2ObjModeTxt* pModes = (D2ObjModeTxt*)(pTxtObjType2 + nObjTypeSize);
+    memcpy(pModes, pTxtObjMode_lcl, nObjModeSize * 0x34);
     DataTbls::UnloadBin(pTxtObjType_lcl);
     DataTbls::UnloadBin(pTxtObjMode_lcl);
-    pTxtObjMode = (D2ObjModeTxt*)(pTxtObjType2 + nObjTypeSize);
+    pTxtObjMode = pModes;
     pTxtObjTypeMode = pTxtObjType2;
     pTxtObjType = pTxtObjType2;
     nTxtObjTypeModeSize = nTotalSize;

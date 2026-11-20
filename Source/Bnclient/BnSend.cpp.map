@@ -1456,7 +1456,17 @@
       "calledFunctions": [
         "Unreferenced_0051beb0"
       ],
-      "dh": "7d1e0652"
+      "dh": "8e6b0fbe",
+      "paramStorage": [
+        [
+          "nExchange",
+          "ECX:4"
+        ],
+        [
+          "nComparand",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "D2CheckExpansionGame",
@@ -3048,7 +3058,16 @@
         "Unreferenced_0051dd20",
         "tolower"
       ],
-      "dh": "c14e4e1d"
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "7c4eb12f",
+      "paramStorage": [
+        [
+          "cHexDigit",
+          "AL:1"
+        ]
+      ]
     },
     {
       "name": "BNSEND_CalculateCDKeyChecksum",

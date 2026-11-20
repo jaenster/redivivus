@@ -46,14 +46,14 @@ static uint32_t DEBUG_GetPEImageType(short * nMagic) {
     return *nMagic == 0x20b ? 0x2 : 0;
 }
 
-static uint32_t DEBUG_ParsePEDebugDirectory(uint32_t * pnSize, int * pnRVA, short * pOptHeader) {
+static bool DEBUG_ParsePEDebugDirectory(uint32_t * pnSize, int * pnRVA, short * pOptHeader) {
     uint32_t nDirSize;
     int nDirRVA;
     if (*pOptHeader == 0x10b) {
       nDirRVA = 1;
     } else {
       if (*pOptHeader != 0x20b) {
-        return (uintptr_t)pOptHeader & -256;
+        return false;
       }
 
       nDirRVA = 2;
@@ -63,14 +63,14 @@ static uint32_t DEBUG_ParsePEDebugDirectory(uint32_t * pnSize, int * pnRVA, shor
     *pnSize = -1;
     if (nDirRVA == 2) {
       if (*(uint32_t*)(pOptHeader + 0x36) <= 6) {
-        return 0;
+        return false;
       }
 
       nDirRVA = *(int*)(pOptHeader + 0x50);
       nDirSize = *(uint32_t*)(pOptHeader + 0x52);
     } else {
       if (*(uint32_t*)(pOptHeader + 0x2e) <= 6) {
-        return 0;
+        return false;
       }
 
       nDirRVA = *(int*)(pOptHeader + 0x48);
@@ -81,13 +81,13 @@ static uint32_t DEBUG_ParsePEDebugDirectory(uint32_t * pnSize, int * pnRVA, shor
     *pnRVA = nDirRVA;
     if (!nDirRVA) {
       if (!nDirSize) {
-        return 1;
+        return true;
       }
     } else if (*pnSize >= 0x1c) {
-      return 1;
+      return true;
     }
 
-    return 0;
+    return false;
 }
 
 bool __stdcall DEBUG_IsValidDebugDirectorySize(uint32_t nDirSize) {
@@ -192,9 +192,9 @@ static uint8_t __stdcall DEBUG_ParseModuleHeaders(D2FogDebugModuleEntryStrc * pp
 
     int nDirRVA = 0;
     uint32_t nDirSize = 0;
-    bIsValidImage = DEBUG_ParsePEDebugDirectory(&nDirSize, &nDirRVA, (short int*)(pNtHeader + 6));
+    bool bVar1 = DEBUG_ParsePEDebugDirectory(&nDirSize, &nDirRVA, (short int*)(pNtHeader + 6));
     uint32_t nCount = nDirSize;
-    if ((char)bIsValidImage != '\0' && nDirRVA && nDirSize) {
+    if (bVar1 && nDirRVA && nDirSize) {
       uint8_t* pDebugDir;
       pDebugDir = (uint8_t*)(nDirRVA + (char*)pModuleBase);
       /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(pDebugDir, nDirSize);
@@ -433,13 +433,11 @@ static void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t *
 }
 
 static void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwUnused, uint32_t * pnRVA, uint32_t * pnSize, IMAGE_OPTIONAL_HEADER32 * pOptHeader) {
-    if (pOptHeader->NumberOfRvaAndSizes <= 6) {
-      return;
+    if (pOptHeader->NumberOfRvaAndSizes > 6) {
+      IMAGE_DATA_DIRECTORY dir = pOptHeader->DataDirectory[6];
+      *pnRVA = dir.VirtualAddress;
+      *pnSize = dir.Size;
     }
-
-    uint32_t nSize = pOptHeader->DataDirectory[6].Size;
-    *pnRVA = pOptHeader->DataDirectory[6].VirtualAddress;
-    *pnSize = nSize;
 }
 
 static uint8_t DEBUG_ParseNB01DebugInfo(CV_INFO_PDB20 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo) {
@@ -681,31 +679,30 @@ int Unreferenced_004067c0() {
     return iVar1;
 }
 
-uint32_t __stdcall PATH_GetKnownFolderPath(LPSTR szOutPath, int32_t nBufferSize) {
+bool __stdcall PATH_GetKnownFolderPath(LPSTR szOutPath, int32_t nBufferSize) {
     // Static local variables (originally global data)
     static GUID GUID_006cca6c = {0x4c5c32ff, 0xbb9d, 0x43b0, {0xb5, 0xb4, 0x2d, 0x72, 0xe5, 0x4e, 0xaa, 0xa4}} /* 4c5c32ff-bb9d-43b0-b5b4-2d72e54eaaa4 */; D2_STATIC_GUARD(GUID_006cca6c, "Fog::Engine::Application::PATH_GetKnownFolderPath::GUID_006cca6c");
 
     LPWSTR pwszKnownPath;
     HMODULE hModule = GetModuleHandleA("Shell32.dll");
     pfnSHGetKnownFolderPath pSHGetKnownFolderPath = (pfnSHGetKnownFolderPath)GetProcAddress(hModule, "SHGetKnownFolderPath");
-    uint32_t hrResult = 0;
     if (!pSHGetKnownFolderPath) {
-      return hrResult & -256;
+      return false;
     }
 
-    hrResult = (*pSHGetKnownFolderPath)((GUID*)&GUID_006cca6c, 0x8000, (HANDLE)0x0, &pwszKnownPath);
-    if ((int)hrResult < 0) {
-      return hrResult & -256;
+    HRESULT hrResult = (*pSHGetKnownFolderPath)((GUID*)&GUID_006cca6c, 0x8000, (HANDLE)0x0, &pwszKnownPath);
+    if (hrResult < 0) {
+      return false;
     }
 
     BOOL bUsedDefaultChar = 0;
     int nWideConverted = WideCharToMultiByte(0, 0x400, pwszKnownPath, -1, szOutPath, nBufferSize, (LPCSTR)0x0, &bUsedDefaultChar);
     /* LPVOID pv for CoTaskMemFree */ CoTaskMemFree(pwszKnownPath);
     if (nWideConverted && !bUsedDefaultChar) {
-      return 1;
+      return true;
     }
 
-    return 0;
+    return false;
 }
 
 static void * keep_004048c0 = (0 ? (DEBUG_ParseDebugInfoFromMemory(*(uint32_t *)0, *(uint32_t * *)0, *(D2FogDebugModuleEntryStrc * *)0), (void *)0) : (void *)0);

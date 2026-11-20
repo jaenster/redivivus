@@ -48,7 +48,7 @@ uint32_t __fastcall SHA1_BigIntModToInt(struct BigData * pBigInt, uint32_t dwMod
 void __fastcall SHA1_BigIntMulMod(struct BigData * pResult, struct BigData * pBigA, struct BigData * pBigB, struct BigData * pModulus);
 void __fastcall SHA1_BigIntPowMod(struct BigData * pResult, struct BigData * pBase, struct BigData * pExponent, struct BigData * pModulus);
 void __fastcall SHA1_BigIntPowModValue(struct BigData * pResult, struct BigData * pBase, uint32_t dwExponent, struct BigData * pModulus);
-void Unreferenced_0052a5f0();
+void __fastcall Unreferenced_0052a5f0(void * pContext);
 void __fastcall SHA1_BigIntFree(struct BigData * pBigData);
 #endif // D2_MODULE_Bnclient
 

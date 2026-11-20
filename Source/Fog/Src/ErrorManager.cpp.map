@@ -857,21 +857,7 @@
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "e2863e0f",
-      "paramStorage": [
-        [
-          "bFlags",
-          "Stack[0x4]:1"
-        ],
-        [
-          "szText",
-          "Stack[0x8]:4"
-        ],
-        [
-          "firstArg",
-          "Stack[0xc]:4"
-        ]
-      ]
+      "dh": "ad04bb38"
     },
     {
       "name": "FormatDebugOutputLogOnly",

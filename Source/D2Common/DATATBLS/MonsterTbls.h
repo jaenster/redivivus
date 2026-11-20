@@ -132,7 +132,6 @@ struct D2ParsedTreasureClassEntriesStrc * __fastcall AddOneParsedTCEntry(struct 
 void __fastcall AdjustRarities(struct D2ParsedTreasureClassStrc * pParsedTC, struct D2ParsedTreasureClassEntriesStrc * pParsedTCEntry, int32_t nRarity, BOOL bIsNotVersion100);
 // One-time initialization that auto-generates level-banded treasure classes for each spawnable item type. For every ItemTypes.txt record that has auto-TC enabled (szCode[0x1d] != 0), creates TC entries named "&lt;typeCode&gt;&lt;level&gt;" (level 3..96 step 3) via TC_ExtendTreasureClassSize, then populates each TC with items whose nLevel falls within the band, excluding missile potions and marking LoD-only items with TC_Expansion. Calls AdjustRarities to finalize drop weights.
 void __stdcall TC_GenerateAutoItemTypeTreasureClasses();
-void Unreferenced_006543c0();
 // Loads and compiles TreasureClassEx.txt (drop tables). Builds the D2BinFieldInputStrc descriptor array (treasure class name, group, level, picks, unique/set/rare/magic chances, nodrop, and item1..item10 with prob1..prob10), compiles into D2TreasureClassExTxt records, then post-processes each line: allocates a parsed-TC record via TC_ExtendTreasureClassSize, fills group(+base offset)/level/prob(min 1)/nodrop/magic/rare/set/unique, and parses up to 10 item entries via TC_ParseTreasureClassEntry. Frees the raw bin afterward (UnloadBin). One-time table init; allocates from pMemory. Note: many fields accessed via raw pointer arithmetic over D2PoolManagerStrc casts (decompiler smell), not real pool fields.
 void __stdcall TXT_AllocTxt_TreasureClassEx(struct D2PoolManagerStrc * pMemory);
 void __stdcall FreeParsedTC();
@@ -202,6 +201,6 @@ void __fastcall TXT_AllocItemDropData_Thunk(struct D2PoolManagerStrc * bPartial)
 // Allocates and compiles all monster-related TXT data tables into the given memory pool. Loads uniquetitle/uniqueprefix/uniquesuffix/uniqueappellation (each keyed on the 'Name' column via DATATBLS_LookupStringId), then delegates to per-table alloc helpers for monlvl, monstats/monstats2, monprop, monsounds, monseq, monumod, superuniques, monpreset, hireling, npc, and MonEquip. Called once at startup during data-table initialization.
 void __fastcall TXT_AllocMonsterTables(struct D2PoolManagerStrc * pMemory);
 #endif // D2_MODULE_D2Common
-// 3 internal functions (defined in .cpp)
+// 4 internal functions (defined in .cpp)
 
 } // namespace D2Common::DATATBLS::MonsterTbls

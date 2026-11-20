@@ -1180,9 +1180,8 @@ int __fastcall Unreferenced_0041e930(StormLinkStrc * pLink) {
     return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
-uint32_t Unreferenced_0041e940() {
-    uint32_t* in_ECX;
-    return (int)*(uint32_t*)(*(int*)*in_ECX + 4) <= 0 ? 0 : *(uint32_t*)(*(int*)*in_ECX + 4);
+int32_t __fastcall Unreferenced_0041e940(void * pHandle) {
+    return (int)*(uint32_t*)(**(int**)pHandle + 4) <= 0 ? 0 : *(uint32_t*)(**(int**)pHandle + 4);
 }
 
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041e970(StormLinkStrc * pNode) {
@@ -1236,9 +1235,8 @@ int __fastcall Unreferenced_0041ea40(StormLinkStrc * pLink) {
     return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
-uint32_t Unreferenced_0041ea50() {
-    int in_ECX;
-    return *(uint32_t*)(in_ECX + 4);
+uint32_t __fastcall Unreferenced_0041ea50(StormLinkStrc * pLink) {
+    return pLink->pNext;
 }
 
 int __fastcall Unreferenced_0041ea60(int param_1) {

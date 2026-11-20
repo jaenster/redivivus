@@ -66,7 +66,7 @@ __declspec(noinline) inline void __fastcall ARCHIVE_ClearList(struct StormLinked
 BOOL ARCHIVE_WriteFormattedText(HANDLE hFile, char * pFormat, ...);
 struct StormLinkStrc * __fastcall ARCHIVE_ComputeAddress(struct StormLinkStrc * pNode, int, intptr_t nBaseAddr);
 int __fastcall Unreferenced_0045b9d0(struct StormLinkStrc * pLink);
-uint32_t Unreferenced_0045b9e0();
+uint32_t __fastcall Unreferenced_0045b9e0(struct StormLinkStrc * pLink);
 intptr_t __fastcall Unreferenced_0045ba80(struct StormLinkedListStrc * pList);
 int __fastcall Unreferenced_0045baa0(struct StormLinkStrc * pLink);
 uint32_t __fastcall Unreferenced_0045bab0(int * pList);

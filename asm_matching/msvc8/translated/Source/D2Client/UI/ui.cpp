@@ -3274,7 +3274,7 @@ uint16_t * __fastcall AppendAsWideChar(uint16_t * wszText, int nColor) {
     return wszText;
 }
 
-uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, char byColor) {
+uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, int nColor) {
     uint16_t wszDigit[4];
     char szDigit[4];
     int32_t nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
@@ -3288,7 +3288,7 @@ uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, char byColo
     wszDigit[0] = L'\0';
     wszDigit[1] = 0;
     wszDigit[2] = 0;
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDigit, "%c", (int)(char)(byColor + '0'));
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDigit, "%c", (int)(char)((char)nColor + '0'));
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDigit, szDigit, 2);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszDigit);
     return wszText;
@@ -7238,10 +7238,9 @@ static BOOL UI_IsMouseOverActiveControlConfigButton(int32_t nMouseX, int32_t nMo
     return 0;
 }
 
-uint32_t Unreferenced_004a4aa0() {
-    int in_ECX;
+uint32_t __fastcall Unreferenced_004a4aa0(int32_t nIgnoredRegion) {
     int iVar1 = 0;
-    while (!gaControlConfigRegionMouseState[iVar1] || iVar1 == in_ECX) {
+    while (!gaControlConfigRegionMouseState[iVar1] || iVar1 == nIgnoredRegion) {
       iVar1++;
       if (iVar1 >= 7) {
         return 1;

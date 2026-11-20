@@ -284,6 +284,19 @@ D2Hell's row (`/Y- /O1 /Oy- /Ob1`, above) now covers 36 mapped functions
 instead of 17 after the v1871 move of the misfiled block: 18 MATCH, against 9 at
 v1870 (897431ade).
 
+## zlib 1.2.8 genuine sources - DONE, `/Y- /Ob2` adopted for zlib
+
+With the genuine zlib 1.2.8 bodies (see 3rdparty/Storm/3rdparty/zlib/README.md) in
+place of the generated ones, the original's inlining of static helpers shows: 1.14d's
+deflate_stored, deflate_fast and the rest carry flush_pending inline, inflateReset2
+carries inflateReset, as `/Ob2` (any function) gives and `/Ob1` (marked inline only)
+does not. The generated bodies had that inlining spelled out by hand, which is why the
+v1877 trial above saw no change. `/Y-` keeps the precompiled header from dropping it.
+
+Measured on 96ad1a2d9 (drive v): the row alone, generated bodies, 0 gained / 0 lost.
+With the genuine bodies, 9721 -> 9737 non-CRT MATCH (+16 / -0; zlib 61 -> 75 of its 92 rows
+(87 functions and five one-byte tr_static_init stubs), Bnclient SHA1 +2).
+
 ## Symbol phase (the declarations ahead of a function) - DONE, not a flag
 
 Not a flag but the compile context, measured the same way. VC8 breaks some

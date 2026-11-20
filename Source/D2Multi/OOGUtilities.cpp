@@ -3195,38 +3195,39 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gUIGameListMaxPlayersInactiveArrowButton, 0);
     }
 
-    bool bDifficultySelected = false;
-    int32_t nRegValue = 0;
-    bRegReadOk = Storm::Source::SReg::SRegLoadValue("Diablo II", "DIFF_LEVEL", 0, &nRegValue);
+    int nDifficultySelected = 0;
+    unsigned long nRegValue = 0;
+    bRegReadOk = Storm::Source::SReg::SRegLoadValue("Diablo II", "DIFF_LEVEL", 0, (int32_t*)&nRegValue);
     if (!bRegReadOk) {
       Storm::Source::SReg::SRegSaveValue("Diablo II", "DIFF_LEVEL", 0, 0);
     }
 
-    uint8_t byActProgress = *(uint8_t*)((intptr_t)&D2IniData_multiplayer->eCTEMP_eD2PlayerStatus + 1) & 0x1f;
+    int nActLevel = *(uint8_t*)((intptr_t)&D2IniData_multiplayer->eCTEMP_eD2PlayerStatus + 1) & 0x1f;
     gUIGameListDifficultyHellButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x52);
     gUIGameListActLabel = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x55);
     gUIGameListDifficultyNightmareButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x51);
     gUIGameListPlayerListText = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x54);
-    eD2PlayerStatus ePlayerStatus = D2IniData_multiplayer->eCTEMP_eD2PlayerStatus;
-    if (!(ePlayerStatus & PLAYERSTATUS_Expansion) && 7 < byActProgress || 9 < byActProgress) {
+    int nExpansion = *(uint8_t*)&D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & 0x20;
+    if (!nExpansion && nActLevel >= 8 || nActLevel >= 10) {
       D2Win::Src::D2WinTextBox::SetText(gUIGameListActLabel, D2Lang::StrTable::strtable::GetLocaleString(0x2720), 4, false, 0);
       if (nRegValue == 2) {
         D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListDifficultyHellButton, 1);
         CreateGameDifflevel = 2;
         D2IniData_multiplayer->nDifficulty = 2;
-        bDifficultySelected = true;
+        nDifficultySelected = 1;
       }
     } else {
       D2Win::Src::D2WinTextBox::SetText(gUIGameListActLabel, D2Lang::StrTable::strtable::GetLocaleString(0x2720), 5, false, 0);
       ChatDlg::CHATDLG_SetControlParent(&gUIGameListDifficultyHellButton->sControl);
     }
-    if (!(ePlayerStatus & PLAYERSTATUS_Expansion) && 3 < byActProgress || 4 < byActProgress) {
+
+    if (!nExpansion && nActLevel >= 4 || nActLevel >= 5) {
       D2Win::Src::D2WinTextBox::SetText(gUIGameListPlayerListText, D2Lang::StrTable::strtable::GetLocaleString(0x2721), 4, false, 0);
       if (nRegValue == 1) {
         D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListDifficultyNightmareButton, 1);
         CreateGameDifflevel = 1;
         D2IniData_multiplayer->nDifficulty = 1;
-        bDifficultySelected = true;
+        nDifficultySelected = 1;
       }
     } else {
       D2Win::Src::D2WinTextBox::SetText(gUIGameListPlayerListText, D2Lang::StrTable::strtable::GetLocaleString(0x2721), 5, false, 0);
@@ -3236,7 +3237,7 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
     gUIGameListStatusLabel = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x53);
     D2Win::Src::D2WinTextBox::SetText(gUIGameListStatusLabel, D2Lang::StrTable::strtable::GetLocaleString(0x2722), 4, false, 0);
     gUIGameListDifficultyNormalButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x50);
-    if (!bDifficultySelected) {
+    if (!nDifficultySelected) {
       D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListDifficultyNormalButton, 1);
       CreateGameDifflevel = 0;
     }

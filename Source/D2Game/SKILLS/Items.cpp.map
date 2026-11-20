@@ -272,7 +272,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "0d6a73d7",
+      "dh": "6226ce9f",
       "paramStorage": [
         [
           "pUnit",
@@ -424,10 +424,9 @@
         "D2UnitStrc",
         "int16_t",
         "int32_t",
-        "uint16_t",
-        "uint32_t"
+        "uint16_t"
       ],
-      "dh": "4aa61de7",
+      "dh": "e25d2abb",
       "paramStorage": [
         [
           "pUnit",
@@ -474,10 +473,9 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t",
-        "uint16_t",
-        "uint32_t"
+        "uint16_t"
       ],
-      "dh": "719846c0",
+      "dh": "f536cd67",
       "paramStorage": [
         [
           "pUnit",
@@ -533,9 +531,10 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "int32_t",
+        "uint16_t",
         "uint32_t"
       ],
-      "dh": "989f102a",
+      "dh": "cfa21da9",
       "paramStorage": [
         [
           "pThis",
@@ -571,9 +570,10 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "int32_t",
+        "uint16_t",
         "uint32_t"
       ],
-      "dh": "2fb208f6",
+      "dh": "cad36717",
       "paramStorage": [
         [
           "pThis",
@@ -604,10 +604,9 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t",
-        "uint16_t",
-        "uint32_t"
+        "uint16_t"
       ],
-      "dh": "5d65d8e9",
+      "dh": "3ca21d21",
       "paramStorage": [
         [
           "pUnit",
@@ -659,10 +658,9 @@
         "D2UnitStrc",
         "eD2ItemTypes",
         "int32_t",
-        "uint16_t",
-        "uint32_t"
+        "uint16_t"
       ],
-      "dh": "e41f9eaa",
+      "dh": "b70627e6",
       "paramStorage": [
         [
           "pItemGenContext",
@@ -714,7 +712,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "f576796b",
+      "dh": "535d6cf5",
       "paramStorage": [
         [
           "pItemGenContext",
@@ -799,7 +797,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "74bd92cb",
+      "dh": "8e74693f",
       "paramStorage": [
         [
           "pUnit",

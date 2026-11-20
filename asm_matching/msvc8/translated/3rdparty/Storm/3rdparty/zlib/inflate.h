@@ -60,7 +60,7 @@ struct inflate_state {
     /* 0x0038 */ uint32_t hold; // input bit accumulator
     /* 0x003C */ uint32_t bits; // number of bits in hold
     /* 0x0040 */ uint32_t length; // literal or length of data to copy
-    /* 0x0044 */ uint32_t offset_val; // distance back to copy string from
+    /* 0x0044 */ uint32_t offset; // distance back to copy string from
     /* 0x0048 */ uint32_t extra; // extra bits needed
     /* 0x004C */ inflate_code * lencode; // starting table for length/literal decoding
     /* 0x0050 */ inflate_code * distcode; // starting table for distance decoding
@@ -84,24 +84,24 @@ struct inflate_state {
 namespace Storm { namespace _3rdparty { namespace zlib { namespace inflate {
 
 // Function declarations
-int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush);
+int32_t __fastcall inflate(z_stream * strm, int32_t flush);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-int __fastcall inflateResetKeep(z_stream * pStream);
-int __fastcall inflateReset(z_stream * pStream);
-int __fastcall inflateReset2(z_stream * pStream, uint32_t nWindowBits);
-int32_t __fastcall inflateInit2_(z_stream * pStream, uint32_t nWindowBits, char * szVersion, int32_t nStreamSize);
-int __fastcall inflateInit_(z_stream * pStream, char * szVersion, int32_t nStreamSize);
-int __fastcall inflatePrime(z_stream * pStream, int32_t nBits, uint32_t nValue);
-int __fastcall inflateEnd(z_stream * pStream);
-int __fastcall inflateGetDictionary(z_stream * pStream, uint8_t * pDictionary, uint32_t * pnDictLength);
-int __fastcall inflateSetDictionary(z_stream * pStream, uint8_t * pDictionary, uint32_t nDictLength);
-int __fastcall inflateGetHeader(z_stream * pStream, gz_header * pHead);
-int __fastcall inflateSync(z_stream * pStream);
-int __fastcall inflateSyncPoint(z_stream * pStream);
-int __fastcall inflateCopy(z_stream * pDestStream, z_stream * pSrcStream);
-int __fastcall inflateUndermine(z_stream * pStream, int nSubvert);
-int32_t __fastcall inflateMark(z_stream * pStream);
+int __fastcall inflateResetKeep(z_stream * strm);
+int __fastcall inflateReset(z_stream * strm);
+int __fastcall inflateReset2(z_stream * strm, int windowBits);
+int32_t __fastcall inflateInit2_(z_stream * strm, uint32_t windowBits, char * version, int32_t stream_size);
+int __fastcall inflateInit_(z_stream * strm, char * version, int32_t stream_size);
+int __fastcall inflatePrime(z_stream * strm, int32_t bits, uint32_t value);
+int __fastcall inflateEnd(z_stream * strm);
+int __fastcall inflateGetDictionary(z_stream * strm, uint8_t * dictionary, uint32_t * dictLength);
+int __fastcall inflateSetDictionary(z_stream * strm, uint8_t * dictionary, uint32_t dictLength);
+int __fastcall inflateGetHeader(z_stream * strm, gz_header * head);
+int __fastcall inflateSync(z_stream * strm);
+int __fastcall inflateSyncPoint(z_stream * strm);
+int __fastcall inflateCopy(z_stream * dest, z_stream * source);
+int __fastcall inflateUndermine(z_stream * strm, int subvert);
+int32_t __fastcall inflateMark(z_stream * strm);
 #endif // D2_MODULE_Storm
 // 3 internal functions (defined in .cpp)
 

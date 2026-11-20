@@ -1540,10 +1540,8 @@ static void __stdcall DRLGOUTPLACE_CalcSubLevelPlacement(int nHeight, int nWidth
     pOutCoords->nDirection = nDirection;
 }
 
-bool Unreferenced_00677870() {
-    int in_EAX;
-    int in_EDX;
-    return *(int*)(in_EAX + 4) > *(int*)(in_EDX + 4);
+static BOOL __stdcall Unreferenced_00677870(void * pFirst, void * pSecond) {
+    return (uint32_t)(*(int*)((char*)pFirst + 4) > *(int*)((char*)pSecond + 4));
 }
 
 // Server-side DRLG out-of-placement generator for the Spider Forest level (LEVEL_SpiderForest). Places three procedurally-connected sub-levels (ids 0x4c..0x4e) inside the forest using the drlg RNG seed: picks non-overlapping room placements (FreeRoomEx), allocates four scratch tile maps from the level memory pool, carves a maze of connecting paths/exits between sub-levels (flood/adjacency passes building per-cell connection-flag bitmasks 0x10/0x20/0x40/0x80), maps cell flags to tile codes via the gdwOutPlaceMap* lookup tables, writes the resulting grids back into each sub-level, sorts the three sub-levels, then GetLevelAndAllocs each and stores coords/size/automap. Frees the scratch maps and returns the last allocated sub-level. Halts via Fog ErrorManager on overflow/invalid tile. pLevel passed in EAX (custom convention); mutates pDrlg->nSeed throughout.
@@ -2533,6 +2531,7 @@ void __fastcall InitAct3OutdoorLevel(D2DrlgLevelStrc * pLevel) {
 static void * keep_00677640 = (0 ? (DRLGLEVEL_AllocOrthForAdjacentLevel(*(D2DrlgLevelStrc * *)0, *(eD2LevelId *)0), (void *)0) : (void *)0);
 static void * keep_00677750 = (0 ? (DRLGActMisc_InitAct1(*(D2DrlgStrc * *)0), (void *)0) : (void *)0);
 static void * keep_00677790 = (0 ? (DRLGActMisc_InitAct2(*(D2DrlgStrc * *)0), (void *)0) : (void *)0);
+static void * keep_00677870 = (0 ? (Unreferenced_00677870(*(void * *)0, *(void * *)0), (void *)0) : (void *)0);
 static void * keep_00678a20 = (0 ? (DRLGActMisc_InitAct4(*(D2DrlgStrc * *)0), (void *)0) : (void *)0);
 static void * keep_00678a70 = (0 ? (DRLGActMisc_InitAct5(*(D2DrlgStrc * *)0), (void *)0) : (void *)0);
 

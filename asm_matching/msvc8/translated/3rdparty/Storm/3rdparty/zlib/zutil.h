@@ -21,7 +21,7 @@ namespace Storm { namespace _3rdparty { namespace zlib { namespace zutil {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 char * zlibVersion();
 uint32_t zlibCompileFlags();
-char * __fastcall zError(int nErr);
+char * __fastcall zError(int err);
 // zlib allocation hook (z_alloc_func): returns _malloc(items * size); opaque is unused.
 // @library zcalloc (zlib zutil.c)
 void * __fastcall zcalloc(void * opaque, uint32_t items, uint32_t size);

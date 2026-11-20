@@ -644,7 +644,7 @@ __pragma(pack(push, 1)) struct D2DataTableTxtStrc {
     /* 0xAD4 */ struct D2SuperUniquesTxt * pTxtSuperUniques;
     /* 0xAD8 */ struct D2TxtLinkStrc * pTxtSuperUniquesLink;
     /* 0xADC */ int nTxtSuperUniquesSize;
-    /* 0xAE0 */ short aTxtSuperUniquesHardcoded[66];
+    /* 0xAE0 */ uint16_t aTxtSuperUniquesHardcoded[66];
     /* 0xB64 */ struct D2MissilesTxt * pTxtMissiles;
     /* 0xB68 */ struct D2TxtLinkStrc * pTxtMissilesLink;
     /* 0xB6C */ int nTxtMissilesSize;
@@ -7054,7 +7054,7 @@ struct D2RunesTxt {
     /* 0x040 */ char rune_name[64]; // d2bs binfields FIELDTYPE_ASCII
     /* 0x080 */ char complete; // d2bs binfields FIELDTYPE_CHAR
     /* 0x081 */ char server; // d2bs binfields FIELDTYPE_CHAR
-    /* 0x082 */ uint16_t field4_0x82;
+    /* 0x082 */ uint16_t wStringId;
     /* 0x084 */ uint8_t field_0x84;
     /* 0x085 */ uint8_t field_0x85;
     /* 0x086 */ short itype1; // d2bs binfields FIELDTYPE_CODE_SHORT

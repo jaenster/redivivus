@@ -73,7 +73,7 @@ char * __fastcall GetRosterName(struct D2RosterStrc * pRoster);
 struct D2RosterStrc * __stdcall ROSTER_SortByName(struct D2RosterStrc * pRoster);
 struct D2RosterStrc * Unreferenced_004796b0();
 struct D2RosterStrc * Unreferenced_00479740();
-struct D2RosterPartyListStrc * Unreferenced_00479750();
+struct D2RosterPartyListStrc * __fastcall Unreferenced_00479750(uint16_t nPartyId);
 // @sourcefile .\GAME\Roster.cpp
 void __stdcall FreeRosterPartyList();
 // Insertion-sorts the global pRosterPartyList singly-linked list ascending by nPartyId. Rebuilds the list in-place by relinking pNext pointers and reassigns the global head when done. No allocation; operates on the existing D2RosterPartyListStrc chain.
@@ -85,7 +85,7 @@ void __stdcall ROSTER_FlattenPartyListsIntoSingleRosterChain();
 void __stdcall ROSTER_RebuildPlayerParty();
 // Sets arena score on roster entry by GUID. Score is uint16 from packet 0x65, sign-extended if bit 15 set (negative scores). Triggers party UI rebuild.
 void __fastcall ROSTER_SetArenaScore(int32_t nRosterGUID, uint16_t nArenaScore);
-uint16_t Unreferenced_00479b50();
+uint16_t __fastcall Unreferenced_00479b50(struct D2RosterStrc * pRoster);
 int __fastcall Unreferenced_00479b60(int param_1);
 int __fastcall Unreferenced_00479b70(int param_1);
 // Returns arena score from roster entry field 0x18. Returns 0 if roster is null.

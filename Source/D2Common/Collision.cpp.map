@@ -1742,10 +1742,9 @@
       "usedTypes": [
         "D2BoundingBoxStrc",
         "D2RoomStrc",
-        "eCollisionFlags",
         "int32_t"
       ],
-      "dh": "0c8ce156",
+      "dh": "a3211c2c",
       "paramStorage": [
         [
           "pRoom",

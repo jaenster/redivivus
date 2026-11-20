@@ -1251,7 +1251,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "e6152ef8",
+      "dh": "9577e10f",
       "paramStorage": [
         [
           "pGame",
@@ -2573,7 +2573,7 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "093d9ab7",
+      "dh": "551556d0",
       "paramStorage": [
         [
           "pGame",

@@ -267,8 +267,7 @@ void __stdcall DRLGROOM_GetRoomCoordinates(D2RoomStrc * pRoom, D2DrlgRoomCoordsS
       return;
     }
 
-    D2DrlgRoomCoordsStrc* pSrcCoords = &pRoom->sCoords;
-    *pCoords = *pSrcCoords;
+    *pCoords = pRoom->sCoords;
 }
 
 void __stdcall DRLGROOM_GetAdjacentRoomsList(D2RoomStrc * pRoom, D2RoomStrc * * * pppRoomList, int * pNumRooms) {

@@ -2925,7 +2925,7 @@ void __stdcall CUNIT_UpdateClientFramesAndAI(D2UnitStrc * * pUnitHashTable) {
     for (int nBucketIdx = 0; nBucketIdx < 0x80; nBucketIdx++) {
       D2UnitStrc* pCurUnit = pUnitHashTable[nBucketIdx];
       while (pCurUnit) {
-        D2UnitStrc* pNextUnit = pCurUnit->pListNext;
+        D2UnitStrc* pNextUnit = pCurUnit->pListNext; // steer-ok: next link saved before the frame update and AI dispatch can touch the node
         uint32_t nUnitGUID = pCurUnit->nUnitGUID;
         eD2UnitType eCurUnitType = pCurUnit->eUnitType;
         Path::CLIENT_UpdateUnitFrame(pCurUnit);

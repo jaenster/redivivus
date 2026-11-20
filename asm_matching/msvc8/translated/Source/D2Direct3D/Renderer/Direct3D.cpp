@@ -733,356 +733,119 @@ BOOL __fastcall SetOption(int nOption, int nValue) {
 }
 
 void __fastcall DIRECTD3D_LogError(char * szErrorMessage, DWORD nResult) {
-    if ((int)nResult <= -0x7789fefc) {
-      if (nResult == 0x88760104) {
-        Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOOVERLAYHW", 0x88760104);
-        return;
-      }
-      if ((int)nResult <= -0x7789fffb) {
-        if (nResult == 0x88760005) {
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_ALREADYINITIALIZED", 0x88760005);
-          return;
-        }
-        if ((int)nResult <= -0x7ffbfe10) {
-          if (nResult == 0x800401f0) {
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOTINITIALIZED", 0x800401f0);
-            return;
-          }
-          if (nResult == 0x80004001) {
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_UNSUPPORTED", 0x80004001);
-            return;
-          }
-          if (nResult == 0x80004005) {
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_GENERIC", 0x80004005);
-            return;
-          }
-        } else {
-          if (nResult == 0x8007000e) {
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_OUTOFMEMORY", 0x8007000e);
-            return;
-          }
-          if (nResult == 0x80070057) {
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_INVALIDPARAMS", 0x80070057);
-            return;
-          }
-        }
-      } else {
-        switch (nResult) {
-          case 0x8876000a:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_CANNOTATTACHSURFACE", nResult);
-          return;
-          case 0x88760014:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_CANNOTDETACHSURFACE", nResult);
-          return;
-          case 0x88760028:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_CURRENTLYNOTAVAIL", nResult);
-          return;
-          case 0x88760037:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_EXCEPTION", nResult);
-          return;
-          case 0x8876005a:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_HEIGHTALIGN", nResult);
-          return;
-          case 0x8876005f:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_INCOMPATIBLEPRIMARY", nResult);
-          return;
-          case 0x88760064:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_INVALIDCAPS", nResult);
-          return;
-          case 0x8876006e:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_INVALIDCLIPLIST", nResult);
-          return;
-          case 0x88760078:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_INVALIDMODE", nResult);
-          return;
-          case 0x88760082:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_INVALIDOBJECT", nResult);
-          return;
-          case 0x88760091:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_INVALIDPIXELFORMAT", nResult);
-          return;
-          case 0x88760096:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_INVALIDRECT", nResult);
-          return;
-          case 0x887600a0:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_LOCKEDSURFACES", nResult);
-          return;
-          case 0x887600aa:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NO3D", nResult);
-          return;
-          case 0x887600b4:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOALPHAHW", nResult);
-          return;
-          case 0x887600cd:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOCLIPLIST", nResult);
-          return;
-          case 0x887600d2:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOCOLORCONVHW", nResult);
-          return;
-          case 0x887600d4:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOCOOPERATIVELEVELSET", nResult);
-          return;
-          case 0x887600d7:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOCOLORKEY", nResult);
-          return;
-          case 0x887600dc:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOCOLORKEYHW", nResult);
-          return;
-          case 0x887600de:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NODIRECTDRAWSUPPORT", nResult);
-          return;
-          case 0x887600e1:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOEXCLUSIVEMODE", nResult);
-          return;
-          case 0x887600e6:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOFLIPHW", nResult);
-          return;
-          case 0x887600f0:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOGDI", nResult);
-          return;
-          case 0x887600fa:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOMIRRORHW", nResult);
-          return;
-          case 0x887600ff:
-            Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOTFOUND", nResult);
-          return;
-        }
-      }
-    } else if ((int)nResult <= -0x7789fde7) {
-      if (nResult == 0x88760219) {
-        Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_VERTICALBLANKINPROGRESS", 0x88760219);
-        return;
-      }
 
-      switch (nResult) {
-        case 0x88760118:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NORASTEROPHW", nResult);
-        return;
-        case 0x88760122:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOROTATIONHW", nResult);
-        return;
-        case 0x88760136:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOSTRETCHHW", nResult);
-        return;
-        case 0x8876013c:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOT4BITCOLOR", nResult);
-        return;
-        case 0x8876013d:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOT4BITCOLORINDEX", nResult);
-        return;
-        case 0x88760140:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOT8BITCOLOR", nResult);
-        return;
-        case 0x8876014a:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOTEXTUREHW", nResult);
-        return;
-        case 0x8876014f:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOVSYNCHW", nResult);
-        return;
-        case 0x88760154:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOZBUFFERHW", nResult);
-        return;
-        case 0x8876015e:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOZOVERLAYHW", nResult);
-        return;
-        case 0x88760168:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_OUTOFCAPS", nResult);
-        return;
-        case 0x8876017c:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_OUTOFVIDEOMEMORY", nResult);
-        return;
-        case 0x8876017e:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_OVERLAYCANTCLIP", nResult);
-        return;
-        case 0x88760180:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_OVERLAYCOLORKEYONLYONEACTIVE", nResult);
-        return;
-        case 0x88760183:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_PALETTEBUSY", nResult);
-        return;
-        case 0x88760190:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_COLORKEYNOTSET", nResult);
-        return;
-        case 0x8876019a:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_SURFACEALREADYATTACHED", nResult);
-        return;
-        case 0x887601a4:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_SURFACEALREADYDEPENDENT", nResult);
-        return;
-        case 0x887601ae:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_SURFACEBUSY", nResult);
-        return;
-        case 0x887601b3:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_CANTLOCKSURFACE", nResult);
-        return;
-        case 0x887601b8:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_SURFACEISOBSCURED", nResult);
-        return;
-        case 0x887601c2:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_SURFACELOST", nResult);
-        return;
-        case 0x887601cc:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_SURFACENOTATTACHED", nResult);
-        return;
-        case 0x887601d6:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_TOOBIGHEIGHT", nResult);
-        return;
-        case 0x887601e0:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_TOOBIGSIZE", nResult);
-        return;
-        case 0x887601ea:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_TOOBIGWIDTH", nResult);
-        return;
-        case 0x887601fe:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_UNSUPPORTEDFORMAT", nResult);
-        return;
-        case 0x88760208:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_UNSUPPORTEDMASK", nResult);
-        return;
-      }
-    } else if ((int)nResult <= 0) {
-      if (!nResult) {
-        Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DD_OK", 0);
-        return;
-      }
-
-      switch (nResult) {
-        case 0x8876021c:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_WASSTILLDRAWING", nResult);
-        return;
-        case 0x88760230:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_XALIGN", nResult);
-        return;
-        case 0x88760231:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_INVALIDDIRECTDRAWGUID", nResult);
-        return;
-        case 0x88760232:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_DIRECTDRAWALREADYCREATED", nResult);
-        return;
-        case 0x88760233:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NODIRECTDRAWHW", nResult);
-        return;
-        case 0x88760234:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_PRIMARYSURFACEALREADYEXISTS", nResult);
-        return;
-        case 0x88760235:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOEMULATION", nResult);
-        return;
-        case 0x88760236:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_REGIONTOOSMALL", nResult);
-        return;
-        case 0x88760237:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_CLIPPERISUSINGHWND", nResult);
-        return;
-        case 0x88760238:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOCLIPPERATTACHED", nResult);
-        return;
-        case 0x88760239:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOHWND", nResult);
-        return;
-        case 0x8876023a:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_HWNDSUBCLASSED", nResult);
-        return;
-        case 0x8876023b:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_HWNDALREADYSET", nResult);
-        return;
-        case 0x8876023c:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOPALETTEATTACHED", nResult);
-        return;
-        case 0x8876023d:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOPALETTEHW", nResult);
-        return;
-        case 0x8876023e:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_BLTFASTCANTCLIP", nResult);
-        return;
-        case 0x8876023f:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOBLTHW", nResult);
-        return;
-        case 0x88760240:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NODDROPSHW", nResult);
-        return;
-        case 0x88760241:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_OVERLAYNOTVISIBLE", nResult);
-        return;
-        case 0x88760242:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOOVERLAYDEST", nResult);
-        return;
-        case 0x88760243:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_INVALIDPOSITION", nResult);
-        return;
-        case 0x88760244:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOTAOVERLAYSURFACE", nResult);
-        return;
-        case 0x88760245:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_EXCLUSIVEMODEALREADYSET", nResult);
-        return;
-        case 0x88760246:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOTFLIPPABLE", nResult);
-        return;
-        case 0x88760247:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_CANTDUPLICATE", nResult);
-        return;
-        case 0x88760248:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOTLOCKED", nResult);
-        return;
-        case 0x88760249:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_CANTCREATEDC", nResult);
-        return;
-        case 0x8876024a:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NODC", nResult);
-        return;
-        case 0x8876024b:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_WRONGMODE", nResult);
-        return;
-        case 0x8876024c:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_IMPLICITLYCREATED", nResult);
-        return;
-        case 0x8876024d:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOTPALETTIZED", nResult);
-        return;
-        case 0x8876024e:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_UNSUPPORTEDMODE", nResult);
-        return;
-        case 0x8876024f:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOMIPMAPHW", nResult);
-        return;
-        case 0x88760250:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_INVALIDSURFACETYPE", nResult);
-        return;
-        case 0x88760258:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOOPTIMIZEHW", nResult);
-        return;
-        case 0x88760259:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOTLOADED", nResult);
-        return;
-        case 0x8876026c:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_DCALREADYCREATED", nResult);
-        return;
-        case 0x88760276:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NONONLOCALVIDMEM", nResult);
-        return;
-        case 0x88760280:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_CANTPAGELOCK", nResult);
-        return;
-        case 0x88760294:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_CANTPAGEUNLOCK", nResult);
-        return;
-        case 0x887602a8:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_NOTPAGELOCKED", nResult);
-        return;
-        case 0x887602b2:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_MOREDATA", nResult);
-        return;
-        case 0x887602b7:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_VIDEONOTACTIVE", nResult);
-        return;
-        case 0x887602bb:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "DDERR_DEVICEDOESNTOWNSURFACE", nResult);
-        return;
-      }
+    const char * pszName;
+    switch ((int32_t)nResult) {
+      case (int32_t)0x88760104: pszName = "DDERR_NOOVERLAYHW"; break;
+      case (int32_t)0x88760005: pszName = "DDERR_ALREADYINITIALIZED"; break;
+      case (int32_t)0x800401f0: pszName = "DDERR_NOTINITIALIZED"; break;
+      case (int32_t)0x80004001: pszName = "DDERR_UNSUPPORTED"; break;
+      case (int32_t)0x80004005: pszName = "DDERR_GENERIC"; break;
+      case (int32_t)0x8007000e: pszName = "DDERR_OUTOFMEMORY"; break;
+      case (int32_t)0x80070057: pszName = "DDERR_INVALIDPARAMS"; break;
+      case (int32_t)0x8876000a: pszName = "DDERR_CANNOTATTACHSURFACE"; break;
+      case (int32_t)0x88760014: pszName = "DDERR_CANNOTDETACHSURFACE"; break;
+      case (int32_t)0x88760028: pszName = "DDERR_CURRENTLYNOTAVAIL"; break;
+      case (int32_t)0x88760037: pszName = "DDERR_EXCEPTION"; break;
+      case (int32_t)0x8876005a: pszName = "DDERR_HEIGHTALIGN"; break;
+      case (int32_t)0x8876005f: pszName = "DDERR_INCOMPATIBLEPRIMARY"; break;
+      case (int32_t)0x88760064: pszName = "DDERR_INVALIDCAPS"; break;
+      case (int32_t)0x8876006e: pszName = "DDERR_INVALIDCLIPLIST"; break;
+      case (int32_t)0x88760078: pszName = "DDERR_INVALIDMODE"; break;
+      case (int32_t)0x88760082: pszName = "DDERR_INVALIDOBJECT"; break;
+      case (int32_t)0x88760091: pszName = "DDERR_INVALIDPIXELFORMAT"; break;
+      case (int32_t)0x88760096: pszName = "DDERR_INVALIDRECT"; break;
+      case (int32_t)0x887600a0: pszName = "DDERR_LOCKEDSURFACES"; break;
+      case (int32_t)0x887600aa: pszName = "DDERR_NO3D"; break;
+      case (int32_t)0x887600b4: pszName = "DDERR_NOALPHAHW"; break;
+      case (int32_t)0x887600cd: pszName = "DDERR_NOCLIPLIST"; break;
+      case (int32_t)0x887600d2: pszName = "DDERR_NOCOLORCONVHW"; break;
+      case (int32_t)0x887600d4: pszName = "DDERR_NOCOOPERATIVELEVELSET"; break;
+      case (int32_t)0x887600d7: pszName = "DDERR_NOCOLORKEY"; break;
+      case (int32_t)0x887600dc: pszName = "DDERR_NOCOLORKEYHW"; break;
+      case (int32_t)0x887600de: pszName = "DDERR_NODIRECTDRAWSUPPORT"; break;
+      case (int32_t)0x887600e1: pszName = "DDERR_NOEXCLUSIVEMODE"; break;
+      case (int32_t)0x887600e6: pszName = "DDERR_NOFLIPHW"; break;
+      case (int32_t)0x887600f0: pszName = "DDERR_NOGDI"; break;
+      case (int32_t)0x887600fa: pszName = "DDERR_NOMIRRORHW"; break;
+      case (int32_t)0x887600ff: pszName = "DDERR_NOTFOUND"; break;
+      case (int32_t)0x88760219: pszName = "DDERR_VERTICALBLANKINPROGRESS"; break;
+      case (int32_t)0x88760118: pszName = "DDERR_NORASTEROPHW"; break;
+      case (int32_t)0x88760122: pszName = "DDERR_NOROTATIONHW"; break;
+      case (int32_t)0x88760136: pszName = "DDERR_NOSTRETCHHW"; break;
+      case (int32_t)0x8876013c: pszName = "DDERR_NOT4BITCOLOR"; break;
+      case (int32_t)0x8876013d: pszName = "DDERR_NOT4BITCOLORINDEX"; break;
+      case (int32_t)0x88760140: pszName = "DDERR_NOT8BITCOLOR"; break;
+      case (int32_t)0x8876014a: pszName = "DDERR_NOTEXTUREHW"; break;
+      case (int32_t)0x8876014f: pszName = "DDERR_NOVSYNCHW"; break;
+      case (int32_t)0x88760154: pszName = "DDERR_NOZBUFFERHW"; break;
+      case (int32_t)0x8876015e: pszName = "DDERR_NOZOVERLAYHW"; break;
+      case (int32_t)0x88760168: pszName = "DDERR_OUTOFCAPS"; break;
+      case (int32_t)0x8876017c: pszName = "DDERR_OUTOFVIDEOMEMORY"; break;
+      case (int32_t)0x8876017e: pszName = "DDERR_OVERLAYCANTCLIP"; break;
+      case (int32_t)0x88760180: pszName = "DDERR_OVERLAYCOLORKEYONLYONEACTIVE"; break;
+      case (int32_t)0x88760183: pszName = "DDERR_PALETTEBUSY"; break;
+      case (int32_t)0x88760190: pszName = "DDERR_COLORKEYNOTSET"; break;
+      case (int32_t)0x8876019a: pszName = "DDERR_SURFACEALREADYATTACHED"; break;
+      case (int32_t)0x887601a4: pszName = "DDERR_SURFACEALREADYDEPENDENT"; break;
+      case (int32_t)0x887601ae: pszName = "DDERR_SURFACEBUSY"; break;
+      case (int32_t)0x887601b3: pszName = "DDERR_CANTLOCKSURFACE"; break;
+      case (int32_t)0x887601b8: pszName = "DDERR_SURFACEISOBSCURED"; break;
+      case (int32_t)0x887601c2: pszName = "DDERR_SURFACELOST"; break;
+      case (int32_t)0x887601cc: pszName = "DDERR_SURFACENOTATTACHED"; break;
+      case (int32_t)0x887601d6: pszName = "DDERR_TOOBIGHEIGHT"; break;
+      case (int32_t)0x887601e0: pszName = "DDERR_TOOBIGSIZE"; break;
+      case (int32_t)0x887601ea: pszName = "DDERR_TOOBIGWIDTH"; break;
+      case (int32_t)0x887601fe: pszName = "DDERR_UNSUPPORTEDFORMAT"; break;
+      case (int32_t)0x88760208: pszName = "DDERR_UNSUPPORTEDMASK"; break;
+      case (int32_t)0: pszName = "DD_OK"; break;
+      case (int32_t)0x8876021c: pszName = "DDERR_WASSTILLDRAWING"; break;
+      case (int32_t)0x88760230: pszName = "DDERR_XALIGN"; break;
+      case (int32_t)0x88760231: pszName = "DDERR_INVALIDDIRECTDRAWGUID"; break;
+      case (int32_t)0x88760232: pszName = "DDERR_DIRECTDRAWALREADYCREATED"; break;
+      case (int32_t)0x88760233: pszName = "DDERR_NODIRECTDRAWHW"; break;
+      case (int32_t)0x88760234: pszName = "DDERR_PRIMARYSURFACEALREADYEXISTS"; break;
+      case (int32_t)0x88760235: pszName = "DDERR_NOEMULATION"; break;
+      case (int32_t)0x88760236: pszName = "DDERR_REGIONTOOSMALL"; break;
+      case (int32_t)0x88760237: pszName = "DDERR_CLIPPERISUSINGHWND"; break;
+      case (int32_t)0x88760238: pszName = "DDERR_NOCLIPPERATTACHED"; break;
+      case (int32_t)0x88760239: pszName = "DDERR_NOHWND"; break;
+      case (int32_t)0x8876023a: pszName = "DDERR_HWNDSUBCLASSED"; break;
+      case (int32_t)0x8876023b: pszName = "DDERR_HWNDALREADYSET"; break;
+      case (int32_t)0x8876023c: pszName = "DDERR_NOPALETTEATTACHED"; break;
+      case (int32_t)0x8876023d: pszName = "DDERR_NOPALETTEHW"; break;
+      case (int32_t)0x8876023e: pszName = "DDERR_BLTFASTCANTCLIP"; break;
+      case (int32_t)0x8876023f: pszName = "DDERR_NOBLTHW"; break;
+      case (int32_t)0x88760240: pszName = "DDERR_NODDROPSHW"; break;
+      case (int32_t)0x88760241: pszName = "DDERR_OVERLAYNOTVISIBLE"; break;
+      case (int32_t)0x88760242: pszName = "DDERR_NOOVERLAYDEST"; break;
+      case (int32_t)0x88760243: pszName = "DDERR_INVALIDPOSITION"; break;
+      case (int32_t)0x88760244: pszName = "DDERR_NOTAOVERLAYSURFACE"; break;
+      case (int32_t)0x88760245: pszName = "DDERR_EXCLUSIVEMODEALREADYSET"; break;
+      case (int32_t)0x88760246: pszName = "DDERR_NOTFLIPPABLE"; break;
+      case (int32_t)0x88760247: pszName = "DDERR_CANTDUPLICATE"; break;
+      case (int32_t)0x88760248: pszName = "DDERR_NOTLOCKED"; break;
+      case (int32_t)0x88760249: pszName = "DDERR_CANTCREATEDC"; break;
+      case (int32_t)0x8876024a: pszName = "DDERR_NODC"; break;
+      case (int32_t)0x8876024b: pszName = "DDERR_WRONGMODE"; break;
+      case (int32_t)0x8876024c: pszName = "DDERR_IMPLICITLYCREATED"; break;
+      case (int32_t)0x8876024d: pszName = "DDERR_NOTPALETTIZED"; break;
+      case (int32_t)0x8876024e: pszName = "DDERR_UNSUPPORTEDMODE"; break;
+      case (int32_t)0x8876024f: pszName = "DDERR_NOMIPMAPHW"; break;
+      case (int32_t)0x88760250: pszName = "DDERR_INVALIDSURFACETYPE"; break;
+      case (int32_t)0x88760258: pszName = "DDERR_NOOPTIMIZEHW"; break;
+      case (int32_t)0x88760259: pszName = "DDERR_NOTLOADED"; break;
+      case (int32_t)0x8876026c: pszName = "DDERR_DCALREADYCREATED"; break;
+      case (int32_t)0x88760276: pszName = "DDERR_NONONLOCALVIDMEM"; break;
+      case (int32_t)0x88760280: pszName = "DDERR_CANTPAGELOCK"; break;
+      case (int32_t)0x88760294: pszName = "DDERR_CANTPAGEUNLOCK"; break;
+      case (int32_t)0x887602a8: pszName = "DDERR_NOTPAGELOCKED"; break;
+      case (int32_t)0x887602b2: pszName = "DDERR_MOREDATA"; break;
+      case (int32_t)0x887602b7: pszName = "DDERR_VIDEONOTACTIVE"; break;
+      case (int32_t)0x887602bb: pszName = "DDERR_DEVICEDOESNTOWNSURFACE"; break;
+      default: pszName = "< unknown >"; break;
     }
-
-    Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "< unknown >", nResult);
+    Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, pszName, nResult);
 }
 
 uint32_t __stdcall DIRECT3D_GetPerspectiveMode() {
@@ -4532,8 +4295,8 @@ void __fastcall ClearScreen(BOOL bPartial) {
 
     nViewportLeft.left = 0;
     nViewportLeft.top = 0;
-    nViewportLeft.bottom = RENDERER_nWindowHeight;
     nViewportLeft.right = RENDERER_nWindowWidth;
+    nViewportLeft.bottom = RENDERER_nWindowHeight;
     g_pD3DViewport->lpVtbl->Clear2(g_pD3DViewport, 1, &nViewportLeft, 1, -16777216, 0.0, 0);
 }
 

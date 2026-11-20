@@ -392,7 +392,17 @@
       "calledFunctions": [
         "Unreferenced_00677870"
       ],
-      "dh": "0f2b38ea"
+      "dh": "63e1300b",
+      "paramStorage": [
+        [
+          "pFirst",
+          "EAX:4"
+        ],
+        [
+          "pSecond",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGLEVEL_FixDrlgLevelForSpiderForest",

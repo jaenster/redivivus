@@ -15,12 +15,12 @@
 
 // Forward declarations
 struct D2GameRecordStrc;
-typedef void (*RecordCleanupFn)();
+typedef void (__stdcall *pfnFaultError)(LPCSTR szFile, int nLine, LPCSTR szExpression);
 
 extern D2GameRecordStrc gsGameRecordContext;
 
 namespace D2Client { namespace GAME { namespace Record {
-extern RecordCleanupFn CleanUpFn;
+extern pfnFaultError CleanUpFn;
 extern uint32_t NotRecording;
 extern BOOL SettedUp;
 // @data gbIsRecording

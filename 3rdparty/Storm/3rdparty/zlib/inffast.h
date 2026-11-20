@@ -23,7 +23,7 @@ namespace Storm::_3rdparty::zlib::inffast {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 // Fast-path inflate decompression main loop. Processes compressed data using precomputed Huffman tables with 15-bit lookahead for literal/distance pairs. Copies match data with optimized 3-byte blocking pattern.
-void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos);
+void __fastcall inflate_fast(z_stream * strm, int32_t start);
 #endif // D2_MODULE_Storm
 
 } // namespace Storm::_3rdparty::zlib::inffast

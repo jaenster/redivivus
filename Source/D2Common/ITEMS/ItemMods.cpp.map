@@ -591,7 +591,16 @@
       "calledFunctions": [
         "Unreferenced_0065cca0"
       ],
-      "dh": "b0e4e9cc"
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "c3a41962",
+      "paramStorage": [
+        [
+          "nValue",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "ITEMMOD_MaximizeStatForEnhanced",

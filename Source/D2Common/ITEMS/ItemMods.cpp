@@ -312,9 +312,8 @@ static D2StatListExStrc * __stdcall ITEMMOD_GetOrCreateStatList(D2UnitStrc * pUn
     exit(-1);
 }
 
-uint32_t Unreferenced_0065cca0() {
-    int in_EAX;
-    if (in_EAX >= 0x10 && in_EAX <= 0x12) {
+static BOOL __stdcall Unreferenced_0065cca0(int32_t nValue) {
+    if (nValue >= 0x10 && nValue <= 0x12) {
       return 1;
     }
 
@@ -3983,6 +3982,7 @@ void __stdcall ITEMMOD_ApplyRunewordProperties(D2UnitStrc * pUnit, D2SetsTxtFStr
 }
 
 static void * keep_0065c6a0 = (0 ? (TXT_UniqueItems_GetModEntry(*(void * *)0, *(uint32_t *)0), (void *)0) : (void *)0);
+static void * keep_0065cca0 = (0 ? (Unreferenced_0065cca0(*(int32_t *)0), (void *)0) : (void *)0);
 static void * keep_0065d1f0 = (0 ? (PropertyFunc_SimpleStatThunk1(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(D2UnitStrc * *)0, *(int32_t *)0, *(eD2UnitStat *)0, *(D2UnitStrc * *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 static void * keep_0065d2e0 = (0 ? (PropertyFunc_SimpleStatThunk2(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(D2UnitStrc * *)0, *(int32_t *)0, *(eD2UnitStat *)0, *(D2UnitStrc * *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 

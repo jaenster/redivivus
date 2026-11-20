@@ -69,7 +69,7 @@ namespace D2Lang { namespace StrTable { namespace strtable {
 
 // Function declarations
 uint16_t * __fastcall GetLocaleString(uint16_t nStringIndex);
-uint32_t __stdcall STRTABLE_LookupString(uint8_t * pbKey, uint16_t * * ppwszText);
+uint16_t __stdcall STRTABLE_LookupString(uint8_t * pbKey, uint16_t * * ppwszText);
 uint16_t * __fastcall STRTABLE_GetStringByKey(uint8_t * szKey);
 // @sourcefile .\StrTable\strtable.cpp
 void __stdcall STRINGTABLE_FreeStringTables();

@@ -533,15 +533,15 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "3dcf1aca",
+      "dh": "7203d3bb",
       "paramStorage": [
         [
           "wszText",
           "ECX:4"
         ],
         [
-          "byColor",
-          "DL:1"
+          "nColor",
+          "EDX:4"
         ]
       ]
     },
@@ -3316,7 +3316,17 @@
       "calledFunctions": [
         "Unreferenced_004a4aa0"
       ],
-      "dh": "fb66e788"
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "afdd20c7",
+      "paramStorage": [
+        [
+          "nIgnoredRegion",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UI_UpdateConfigControlsState",

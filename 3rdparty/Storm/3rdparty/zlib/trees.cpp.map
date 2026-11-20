@@ -110,10 +110,10 @@
         "ct_data",
         "deflate_state"
       ],
-      "dh": "3a3692e1",
+      "dh": "83372920",
       "paramStorage": [
         [
-          "pDeflateState",
+          "s",
           "EDX:4"
         ]
       ]
@@ -136,18 +136,18 @@
         "deflate_state",
         "int32_t"
       ],
-      "dh": "f7a1e52a",
+      "dh": "05af6347",
       "paramStorage": [
         [
-          "nIndex",
+          "k",
           "Stack[0x4]:4"
         ],
         [
-          "pDeflateState",
+          "s",
           "EAX:4"
         ],
         [
-          "pTree",
+          "tree",
           "EDI:4"
         ]
       ]
@@ -174,14 +174,14 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "7fea4b5d",
+      "dh": "8b54ee5a",
       "paramStorage": [
         [
-          "pTreeDesc",
+          "desc",
           "ECX:4"
         ],
         [
-          "pDeflateState",
+          "s",
           "EAX:4"
         ]
       ]
@@ -206,18 +206,18 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "afb3c488",
+      "dh": "5f566db7",
       "paramStorage": [
         [
-          "nMaxCode",
+          "max_code",
           "ECX:4"
         ],
         [
-          "pDeflateState",
+          "s",
           "Stack[0x4]:4"
         ],
         [
-          "pTree",
+          "tree",
           "EAX:4"
         ]
       ]
@@ -243,18 +243,18 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "65f9cda7",
+      "dh": "1d68a387",
       "paramStorage": [
         [
-          "pDeflateState",
+          "s",
           "EAX:4"
         ],
         [
-          "pTree",
+          "tree",
           "EDX:4"
         ],
         [
-          "nMaxCode",
+          "max_code",
           "ECX:4"
         ]
       ]
@@ -278,22 +278,22 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "3eaf75c6",
+      "dh": "83e5f08c",
       "paramStorage": [
         [
-          "nLCodes",
+          "lcodes",
           "Stack[0x4]:4"
         ],
         [
-          "nDCodes",
+          "dcodes",
           "Stack[0x8]:4"
         ],
         [
-          "nBlCodes",
+          "blcodes",
           "Stack[0xc]:4"
         ],
         [
-          "pDeflateState",
+          "s",
           "EAX:4"
         ]
       ]
@@ -317,18 +317,18 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2928218a",
+      "dh": "b03f2d8a",
       "paramStorage": [
         [
-          "pDeflateState",
+          "s",
           "ECX:4"
         ],
         [
-          "nDist",
+          "dist",
           "EDX:4"
         ],
         [
-          "nLc",
+          "lc",
           "Stack[0x4]:4"
         ]
       ]
@@ -353,18 +353,18 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f59b894c",
+      "dh": "ed9157c2",
       "paramStorage": [
         [
-          "pLTree",
+          "ltree",
           "Stack[0x4]:4"
         ],
         [
-          "pDTree",
+          "dtree",
           "Stack[0x8]:4"
         ],
         [
-          "pDeflateState",
+          "s",
           "EAX:4"
         ]
       ]
@@ -387,10 +387,10 @@
         "deflate_state",
         "uint32_t"
       ],
-      "dh": "fce5a120",
+      "dh": "28f87aae",
       "paramStorage": [
         [
-          "pDeflateState",
+          "s",
           "ESI:4"
         ]
       ]
@@ -411,14 +411,14 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "aaed1f92",
+      "dh": "2e6b6598",
       "paramStorage": [
         [
-          "nCode",
+          "code",
           "ECX:4"
         ],
         [
-          "nLen",
+          "len",
           "EDX:4"
         ]
       ]
@@ -440,10 +440,10 @@
         "deflate_state",
         "uint8_t"
       ],
-      "dh": "22425cfd",
+      "dh": "e58c24f0",
       "paramStorage": [
         [
-          "pDeflateState",
+          "s",
           "EAX:4"
         ]
       ]
@@ -465,10 +465,10 @@
         "deflate_state",
         "uint8_t"
       ],
-      "dh": "327c2d41",
+      "dh": "e0c39d50",
       "paramStorage": [
         [
-          "pDeflateState",
+          "s",
           "EAX:4"
         ]
       ]
@@ -491,23 +491,23 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "b5d81cf3",
+      "dh": "64600c61",
       "paramStorage": [
         [
-          "nLen",
-          "ECX:4"
+          "s",
+          "EAX:4"
         ],
         [
-          "pbBuf",
+          "buf",
           "EDX:4"
         ],
         [
-          "bWriteHeader",
-          "Stack[0x4]:4"
+          "len",
+          "ECX:4"
         ],
         [
-          "pDeflateState",
-          "EAX:4"
+          "header",
+          "Stack[0x4]:4"
         ]
       ]
     },
@@ -528,10 +528,10 @@
       "usedTypes": [
         "deflate_state"
       ],
-      "dh": "b20161e9",
+      "dh": "ccb1085f",
       "paramStorage": [
         [
-          "pDeflateState",
+          "s",
           "ECX:4"
         ]
       ]
@@ -556,18 +556,18 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "8cd6aa40",
+      "dh": "e2c7a55c",
       "paramStorage": [
         [
-          "pTree",
+          "tree",
           "EDI:4"
         ],
         [
-          "nMaxCode",
+          "max_code",
           "Stack[0x4]:4"
         ],
         [
-          "pBlCount",
+          "bl_count",
           "EDX:4"
         ]
       ]
@@ -595,14 +595,14 @@
         "tree_desc",
         "uint8_t"
       ],
-      "dh": "f261e2ec",
+      "dh": "ed00f1bd",
       "paramStorage": [
         [
-          "pTreeDesc",
+          "desc",
           "Stack[0x4]:4"
         ],
         [
-          "pDeflateState",
+          "s",
           "ESI:4"
         ]
       ]
@@ -626,10 +626,10 @@
         "deflate_state",
         "int32_t"
       ],
-      "dh": "fc2c02d2",
+      "dh": "d3cf4247",
       "paramStorage": [
         [
-          "pDeflateState",
+          "s",
           "EAX:4"
         ]
       ]
@@ -654,22 +654,22 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1cf48853",
+      "dh": "c032180b",
       "paramStorage": [
         [
-          "pDeflateState",
+          "s",
           "ECX:4"
         ],
         [
-          "pbBuf",
+          "buf",
           "EDX:4"
         ],
         [
-          "nStoredLen",
+          "stored_len",
           "Stack[0x4]:4"
         ],
         [
-          "nLast",
+          "last",
           "Stack[0x8]:4"
         ]
       ]
@@ -691,10 +691,10 @@
       "usedTypes": [
         "deflate_state"
       ],
-      "dh": "c1fabe18",
+      "dh": "135538a5",
       "paramStorage": [
         [
-          "pDeflateState",
+          "s",
           "ECX:4"
         ]
       ]
@@ -716,10 +716,10 @@
       "usedTypes": [
         "deflate_state"
       ],
-      "dh": "b15b0d47",
+      "dh": "ffed38ff",
       "paramStorage": [
         [
-          "pDeflateState",
+          "s",
           "ECX:4"
         ]
       ]
@@ -752,22 +752,22 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "80aa271f",
+      "dh": "84b851cd",
       "paramStorage": [
         [
-          "pDeflateState",
+          "s",
           "ECX:4"
         ],
         [
-          "pbBuf",
+          "buf",
           "EDX:4"
         ],
         [
-          "nStoredLen",
+          "stored_len",
           "Stack[0x4]:4"
         ],
         [
-          "nLast",
+          "last",
           "Stack[0x8]:4"
         ]
       ]

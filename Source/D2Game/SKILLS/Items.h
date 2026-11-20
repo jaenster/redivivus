@@ -111,7 +111,7 @@ void __stdcall STAFFMOD_RollStaffModSkills(struct D2UnitStrc * pUnit, int32_t nS
 void __fastcall StaffMod(struct D2UnitStrc * pUnit, struct D2ItemGenContextStrc * pItemData);
 // Rolls one magic affix for items with wItemVersion 0 (pre-1.08 legacy items): counts eligible rows and picks one uniformly with RollBetweenMinAndMax on the item seed. Called by the version dispatchers 0x005c18e0/0x005c1940 and the rare/prefix rollers.
 // bSpawnableOnly (argument 2) skips rows whose byte at legacy row+0x32 is 0 (005c13e8), the same filter as ITEMMOD_RollMagicAffix's spawnable test.
-uint32_t __stdcall ITEMMOD_RollMagicAffixLegacy(struct D2UnitStrc * pUnit, int32_t bSpawnableOnly, int bForceRoll, int32_t bApplyStats, int bIsPrefix, int nForcedAffix);
+uint16_t __stdcall ITEMMOD_RollMagicAffixLegacy(struct D2UnitStrc * pUnit, int32_t bSpawnableOnly, int bForceRoll, int32_t bApplyStats, int bIsPrefix, int nForcedAffix);
 // Rolls one magic prefix or suffix for an item using the magicprefix/magicsuffix txt tables. Advances the item's mod-seed RNG, computes an effective magic level (item level adjusted by the base item's magic_lvl), then walks the candidate affix range - filtering by suffix/prefix flag, level min/max, version, item type/class, quality, group exclusion and existing affixes - accumulating frequency weights into a scratch list, and picks one by weighted RNG. Returns the affix index + 1, or 0 on no roll.
 // bIsPrefix and nAutoMagicGroup select which sub-table range to walk: automagic when nAutoMagicGroup is set, prefix when bIsPrefix is set, suffix otherwise. nForcedAffix, when > 0, is a one-based row index that is taken directly.
 // The last five arguments are INTEGERS. They were typed D2ItemsTxt *, which is not merely cosmetic: the decompiler then wrote the loop counter's increment as `pBaseItemTxt->szFlippyFile + 1`, so the emitted C++ advanced it by offsetof(szFlippyFile)+1 instead of by 1, and the group compare became `&pExclude2[-1].pad422 + 1`. Every caller passes small literals - ITEMMOD_GenerateRareAffixes passes 1, 0, and a group id read out of the item's own affix table - which is what gave it away.
@@ -122,11 +122,11 @@ int16_t __fastcall ITEMMOD_RollMagicAffixVersioned(struct D2UnitStrc * pUnit, in
 // Version dispatcher: tail-calls ITEMMOD_RollMagicAffix (char*, "affix index+1") or ITEMMOD_RollMagicAffixLegacy (uint32_t, "affix index") as a bare statement, dropping the result both branches compute.
 uint16_t __fastcall ITEMMOD_RollMagicAffixVersionedEx(struct D2UnitStrc * pUnit, int32_t bSpawnableOnly, int bForceRoll, int32_t bApplyAffixStats, int bIsPrefix, int nForcedAffix, int nAutoMagicGroup);
 // Selects a random eligible rare affix group for classic item generation. Iterates the prefix (this==0) or suffix half of the rare affix table, filters each entry with ITEMMOD_CanApplyAffix, builds a candidate index array (max 511 entries), then rolls the item seed to pick one. Returns the chosen table index + 1, or 0 if no candidates pass.
-uint32_t __thiscall ITEMMOD_GetMaxAffixGroupClassic(int32_t pThis, struct D2UnitStrc * pUnit);
+uint16_t __thiscall ITEMMOD_GetMaxAffixGroupClassic(int32_t pThis, struct D2UnitStrc * pUnit);
 // Selects a random valid rare affix index for an item. Iterates the prefix (this==0) or suffix (this!=0) range of the rare-affix table, calls ITEMMOD_CanApplyAffix for each entry to build a candidate list (up to 511), then rolls a random index via the item's seed. Returns the 1-based affix table index of the chosen affix, or 0 if no valid affix found.
-uint32_t __thiscall GetMaxToRoll(int32_t pThis, struct D2UnitStrc * pUnit);
+uint16_t __thiscall GetMaxToRoll(int32_t pThis, struct D2UnitStrc * pUnit);
 // Version dispatcher: tail-calls GetMaxToRoll or ITEMMOD_GetMaxAffixGroupClassic, both uint32_t-returning ("chosen affix table index + 1, or 0"), as a bare statement.
-uint32_t __fastcall ITEMMOD_SelectMagicAffixVersioned(struct D2UnitStrc * pUnit, int32_t bIsPrefix);
+uint16_t __fastcall ITEMMOD_SelectMagicAffixVersioned(struct D2UnitStrc * pUnit, int32_t bIsPrefix);
 // Early-out returns bCanBeRare (0) directly; the dispatched branches tail-call ITEMMOD_GenerateRareAffixes or RollPrefixes, both documented "Returns 1 on success, 0 ..." and both dropped as bare statements.
 BOOL __fastcall RollingItem(struct D2UnitStrc * pUnit, struct D2ItemGenContextStrc * pItemGenContext);
 // Rare affix selection. Count: 1-6 based on ilvl (>70=4-6, >50=3-6, >30=2-6, else 1-6). Alternates prefix/suffix by seed LSB. Enforces 3-slot cap per type. 252 retry limit for duplicates. Applies name filtering from RarePrefix/RareSuffix tables.

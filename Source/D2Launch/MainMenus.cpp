@@ -4238,9 +4238,8 @@ uint16_t * __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue) 
     return pwOut;
 }
 
-uint16_t Unreferenced_0042e610() {
-    uint16_t* in_ECX;
-    return *in_ECX;
+uint16_t __fastcall Unreferenced_0042e610(uint16_t * pCharacter) {
+    return *pCharacter;
 }
 
 int __fastcall Unreferenced_0042e620(uint16_t * pChar) {

@@ -1123,7 +1123,20 @@
         "Unreferenced_005492a0",
         "INVENTORY_GetItemByGridOffset"
       ],
-      "dh": "3e96a849"
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "75a681f7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nArg",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "PLRMSG_CheckWeaponSlotEmpty",

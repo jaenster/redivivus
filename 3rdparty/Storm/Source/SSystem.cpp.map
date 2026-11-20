@@ -229,7 +229,17 @@
       "calledFunctions": [
         "Unreferenced_0041c380"
       ],
-      "dh": "2d228b8d"
+      "usedTypes": [
+        "StormLinkStrc",
+        "uint32_t"
+      ],
+      "dh": "d8a5d2f0",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSFixedArray_Ui_Constructor",

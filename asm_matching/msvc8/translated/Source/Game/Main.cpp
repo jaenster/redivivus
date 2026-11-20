@@ -693,17 +693,16 @@ void __stdcall MISC_GetValueFromD2Ini(D2IniConfigStrc * pD2IniData) {
     } while (nEntryOffset < 58);
 }
 
-void Unreferenced_00405550() {
-    char* in_ECX;
-    char cVar1 = *in_ECX;
+void __fastcall Unreferenced_00405550(char * szString) {
+    char cVar1 = *szString;
     while (cVar1 != '\0') {
-      cVar1 = *in_ECX;
+      cVar1 = *szString;
       if (cVar1 >= 'A' && cVar1 <= 'Z') {
-        *in_ECX = cVar1 + ' ';
+        *szString = cVar1 + ' ';
       }
 
-      in_ECX++;
-      cVar1 = *in_ECX;
+      szString++;
+      cVar1 = *szString;
     }
 }
 

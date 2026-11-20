@@ -1806,8 +1806,7 @@ void __stdcall PANEL_DrawGoldAmount() {
     }
 
     if (nMouseX >= ui::ScreenSizeX / 2 - 0x92 && nMouseX <= ui::ScreenSizeX / 2 - 0x17 && nMouseY >= Inv::ScreenSizeY - 0x2b && nMouseY <= Inv::ScreenSizeY - 0x22) {
-      DWORD nNextLevelExp2 = nNextLevelExp;
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, awsTooltip, D2Lang::StrTable::strtable::GetLocaleString(0x1043), nCurrentExp, nNextLevelExp2);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, awsTooltip, D2Lang::StrTable::strtable::GetLocaleString(0x1043), nCurrentExp, nNextLevelExp);
       D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(awsTooltip, ui::ScreenSizeX / 2 - 0x92, Inv::ScreenSizeY - 0x33, 0, 1);
     }
     if (!nBarWidth) {
@@ -2422,14 +2421,13 @@ void __stdcall INPUT_PanelRightClick(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 0;
 }
 
-D2UiPartyStrc * Unreferenced_00499de0() {
+D2UiPartyStrc * __fastcall Unreferenced_00499de0(int32_t nRosterGUID) {
     D2UiPartyStrc* pDVar1 = Party::pUiParty;
     while (true) {
-      int in_ECX;
       if (!pDVar1) {
         return nullptr;
       }
-      if (pDVar1->nRosterGUID == in_ECX) {
+      if (pDVar1->nRosterGUID == nRosterGUID) {
         break;
       }
 

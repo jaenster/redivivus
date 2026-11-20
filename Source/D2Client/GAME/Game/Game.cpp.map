@@ -4170,7 +4170,16 @@
       "calledFunctions": [
         "Unreferenced_00603570"
       ],
-      "dh": "becc32d6"
+      "usedTypes": [
+        "CELLIST"
+      ],
+      "dh": "ad567a50",
+      "paramStorage": [
+        [
+          "pCellList",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced_Unref_0060e610",

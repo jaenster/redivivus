@@ -2315,52 +2315,45 @@ pfnCelPixelDataFree __stdcall CELCMP_GetPixelDataFreeCallback() {
     return gpCelPixelDataFreeCallback;
 }
 
-void __stdcall DeleteCellFile(DC6 * pDC6) {
-    void* nAddress;
-    pfnCelPixelDataFree pfnFreeCallback;
-    uint32_t nFrameIndex;
-    DC6* pBlockIter;
+BOOL __stdcall DeleteCellFile(DC6 * pDC6) {
     if (!pDC6) {
-      return;
+      return FALSE;
     }
-    if (pDC6->nVersion == 6) {
-      {
-        int* pPixelData;
-        nAddress = *(void**)(pDC6[1].nVersion + 0x18);
-        pBlockIter = pDC6 + 1;
-        if (!nAddress) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5f5);
-          exit(-1);
-        }
+    if (pDC6->nVersion != 6) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5f1);
+      exit(-1);
+    }
 
-        nFrameIndex = 0;
-        pfnFreeCallback = gpCelPixelDataFreeCallback;
-        if ((uint32_t)(pDC6->nFrames * pDC6->nDirections) > 0) {
-          do {
-            if (pBlockIter->nVersion) {
-              pPixelData = *(int**)(pBlockIter->nVersion + 0x18);
-              if (pPixelData) {
-                if (pfnFreeCallback) {
-                  (*pfnFreeCallback)(pPixelData);
-                  pfnFreeCallback = gpCelPixelDataFreeCallback;
-                }
+    void* pBackingPixels = reinterpret_cast<void*>(pDC6->pBlocks[0]->nNextBlock);
+    DC6Block** ppBlock = pDC6->pBlocks;
+    if (!pBackingPixels) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5f5);
+      exit(-1);
+    }
 
-                *(uint32_t*)(pBlockIter->nVersion + 0x18) = 0;
-              }
+    uint32_t nFrameIndex = 0;
+    if ((uint32_t)(pDC6->nFrames * pDC6->nDirections) > 0) {
+      pfnCelPixelDataFree pfnFreeCallback = gpCelPixelDataFreeCallback;
+      do {
+        if (*ppBlock) {
+          int* pPixelData = reinterpret_cast<int*>((*ppBlock)->nNextBlock);
+          if (pPixelData) {
+            if (pfnFreeCallback) {
+              (*pfnFreeCallback)(pPixelData);
+              pfnFreeCallback = gpCelPixelDataFreeCallback;
             }
 
-            nFrameIndex++;
-            pBlockIter = (DC6*)&pBlockIter->nFlags;
-          } while (nFrameIndex < (uint32_t)(pDC6->nFrames * pDC6->nDirections));
+            (*ppBlock)->nNextBlock = 0;
+          }
         }
 
-        D2_FREE_AT(nAddress, ".\\SRC\\CelCmp.cpp", 0x61d);
-        return;
-      }
+        nFrameIndex++;
+        ++ppBlock;
+      } while (nFrameIndex < (uint32_t)(pDC6->nFrames * pDC6->nDirections));
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5f1);
-    exit(-1);
+    D2_FREE_AT(pBackingPixels, ".\\SRC\\CelCmp.cpp", 0x61d);
+    return TRUE;
 }
 
 int __stdcall CELCMP_GetDC6BlockPixelData(DC6Block * pDC6Block) {

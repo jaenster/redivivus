@@ -147,7 +147,16 @@
       "calledFunctions": [
         "Unreferenced_0042e610"
       ],
-      "dh": "546de52c"
+      "usedTypes": [
+        "uint16_t"
+      ],
+      "dh": "932ad476",
+      "paramStorage": [
+        [
+          "pCharacter",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0042e620",

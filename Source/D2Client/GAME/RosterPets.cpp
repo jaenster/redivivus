@@ -476,14 +476,13 @@ void __fastcall ROSTERPETS_GetPetData(int32_t nRosterGUID, int * pnSkillId, int 
     *pnField6_0x18 = pRosterPet->field6_0x18;
 }
 
-eD2LevelId Unreferenced_004790f0() {
+eD2LevelId __fastcall Unreferenced_004790f0(int32_t nRosterGUID) {
     D2RosterPetStrc* pDVar1 = pRosterPet;
     while (true) {
-      int in_ECX;
       if (!pDVar1) {
         return LEVEL_None;
       }
-      if (pDVar1->nRosterGUID == in_ECX) {
+      if (pDVar1->nRosterGUID == nRosterGUID) {
         break;
       }
 

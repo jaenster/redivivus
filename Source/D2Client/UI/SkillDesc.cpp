@@ -1700,13 +1700,12 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
     return 1;
 }
 
-int Unreferenced_004e5a10() {
-    uint32_t in_EAX;
-    if (in_EAX >= 0x40) {
+static int32_t __stdcall Unreferenced_004e5a10(int32_t nIndex) {
+    if ((uint32_t)nIndex >= 0x40) {
       return 0;
     }
 
-    return gnPopCountBitTable[in_EAX];
+    return gnPopCountBitTable[nIndex];
 }
 
 static int __stdcall SKILLDESC_BuildStatDescription(eD2UnitStat eUnitStat, uint16_t * wszOutputBuffer, int * apnStatValues) {
@@ -4573,9 +4572,8 @@ void __fastcall SKILLDESC_DrawSkillDmgBasic(D2UnitStrc * pUnit, D2SkillStrc * pS
       return;
     }
 
-    const uint32_t nHitShift = pSkillsTxt->HitShift;
     uint32_t nDamage = pSkillsTxt->MinDam;
-    nDamage <<= D2_SHIFT_COUNT(nHitShift - 8U);
+    nDamage <<= D2_SHIFT_COUNT(pSkillsTxt->HitShift - 8U);
     nDamage += D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_kickdamage, 0);
     SKILLDESC_DrawDamageNumbers((int32_t)nDamage, (int32_t)nDamage, 0, nXLeft, nY, nXRight);
 }
@@ -7730,6 +7728,7 @@ void __fastcall SKILLDESC_BuildSkillShortTooltip(D2UnitStrc * pUnit, eD2Skills e
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltipBuf, nScreenX, nTooltipHeight + 3 + nScreenY, nParam1, 0);
 }
 
+static void * keep_004e5a10 = (0 ? (Unreferenced_004e5a10(*(int32_t *)0), (void *)0) : (void *)0);
 static void * keep_004e6de0 = (0 ? (GetSkillLongDescription(*(eD2Skills *)0), (void *)0) : (void *)0);
 static void * keep_004e75b0 = (0 ? (SKILLDESC_FormatDamageRangeWithCalc(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(uint16_t * *)0), (void *)0) : (void *)0);
 static void * keep_004e94e0 = (0 ? (SKILLDESC_CalcDualWieldDmg(*(D2SkillStrc * *)0, *(int32_t * *)0, *(D2UnitStrc * *)0, *(int32_t * *)0, *(int32_t * *)0, *(int32_t * *)0, *(int32_t *)0), (void *)0) : (void *)0);

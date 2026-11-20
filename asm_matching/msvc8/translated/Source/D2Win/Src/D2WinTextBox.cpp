@@ -294,7 +294,6 @@ int32_t __fastcall D2WINTEXTBOX_GetSelectedLine(::D2WinTextBox * pTextBox) {
 }
 
 void __fastcall D2WINTEXTBOX_SetSelectedLine(::D2WinTextBox * pTextBox, int32_t nLineIndex) {
-    int nClamped;
     if (!pTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x262);
       exit(-1);
@@ -304,8 +303,7 @@ void __fastcall D2WINTEXTBOX_SetSelectedLine(::D2WinTextBox * pTextBox, int32_t 
         exit(-1);
       }
 
-      nClamped = nLineIndex > -1 ? nLineIndex : -1;
-      pTextBox->sListState.nSelectedLine = nClamped < pTextBox->sListState.nLineCount - 1 ? (nLineIndex > -1 ? nLineIndex : -1) : pTextBox->sListState.nLineCount - 1;
+      pTextBox->sListState.nSelectedLine = (nLineIndex > -1 ? nLineIndex : -1) < pTextBox->sListState.nLineCount - 1 ? (nLineIndex > -1 ? nLineIndex : -1) : pTextBox->sListState.nLineCount - 1;
       return;
     }
 }

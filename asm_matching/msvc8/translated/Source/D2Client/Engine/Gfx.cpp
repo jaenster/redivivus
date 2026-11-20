@@ -408,8 +408,7 @@ static void __stdcall GFX_LoadAndHashCofArchive(char * szPath, D2CofCacheStrc * 
 
     int32_t nSrcLine = 0x10b;
     char* pNameEnd = ".\\ENGINE\\Gfx.cpp";
-    int32_t* pSize = &pCache->nCacheEntryCount;
-    D2CofTextureCacheEntryStrc* pEntry = (D2CofTextureCacheEntryStrc*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, (uint32_t*)pSize, pNameEnd, nSrcLine);
+    D2CofTextureCacheEntryStrc* pEntry = (D2CofTextureCacheEntryStrc*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, (uint32_t*)&pCache->nCacheEntryCount, pNameEnd, nSrcLine);
     pCache->pCacheMemory = pEntry;
     if (!pEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x10c);

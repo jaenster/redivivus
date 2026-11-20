@@ -1563,11 +1563,9 @@ static eD2ServerIncomingStatus __stdcall ItemIsOfPlayerAndNotOnCursor(uint32_t n
     return (uint32_t)(pCursorItem_lcl != pItem);
 }
 
-bool Unreferenced_005492a0() {
-    int32_t in_EAX;
-    int in_ECX;
-    D2UnitStrc* pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(*(D2InventoryStrc**)(in_ECX + 0x60), in_EAX);
-    return !pDVar1;
+static BOOL __stdcall Unreferenced_005492a0(void * pUnit, int32_t nArg) {
+    D2UnitStrc* pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(*(D2InventoryStrc**)((char*)pUnit + 0x60), nArg);
+    return (uint32_t)!pDVar1;
 }
 
 static int32_t __stdcall PLRMSG_CheckWeaponSlotEmpty(D2UnitStrc * pUnit, int32_t nBodyLoc) {
@@ -2726,7 +2724,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x13_InteractWithEntity(::SGAMEDATA * pG
       return SERVERSTATUS_BAD_PARAMS;
     }
     uint32_t nUnitType = pPacket->nUnitType;
-    uint32_t nGUID = pPacket->nGUID;
+    uint32_t nGUID = pPacket->nGUID; // steer-ok: packet fields are read together on entry, before the type check
     if (nUnitType >= UNIT_COUNT) {
       return SERVERSTATUS_BAD_DATA;
     }
@@ -4327,7 +4325,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x59_CommandNPC(::SGAMEDATA * pGame, D2U
     }
 
     uint32_t nUnitType = pPacket->nUnitType;
-    uint32_t nUnitGUID = pPacket->nUnitGUID;
+    uint32_t nUnitGUID = pPacket->nUnitGUID; // steer-ok: packet fields are read together on entry, before the type check
     uint32_t nTargetY = pPacket->nY;
     uint32_t nTargetX = pPacket->nX;
     if (nUnitType >= UNIT_COUNT) {
@@ -5191,6 +5189,7 @@ void __fastcall SendPlayerStopAndAtributeUpdate(::SGAMEDATA * pGame, D2UnitStrc 
     SendAttributeUpdate(pUnit, 0xaf, nGoldLost, pUnit);
 }
 
+static void * keep_005492a0 = (0 ? (Unreferenced_005492a0(*(void * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 static void * keep_005492c0 = (0 ? (PLRMSG_CheckWeaponSlotEmpty(*(D2UnitStrc * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 static void * keep_00549410 = (0 ? (MONSTER_FindNearbyAllyUnit(*(::SGAMEDATA * *)0, *(int32_t *)0, *(D2UnitStrc * * *)0, *(D2UnitStrc * *)0, *(DWORD *)0), (void *)0) : (void *)0);
 

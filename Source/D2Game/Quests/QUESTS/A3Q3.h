@@ -130,7 +130,7 @@ void __fastcall Q20_Callback13_PlayerStartedGame(struct D2QuestDataStrc * pQuest
 void __fastcall Q20_InitData(struct D2QuestDataStrc * pQuestData);
 // A3Q3 "Khalim's Will" — accessor: returns the quest's "blade has been given/dropped" flag
 // (bTaintedSunStartedFailed field of the A3Q3 state struct) from the global quest data. Read-only.
-uint32_t __fastcall Q20_GetBladeHasBeenGiven(::SGAMEDATA * pGame);
+uint8_t __fastcall Q20_GetBladeHasBeenGiven(::SGAMEDATA * pGame);
 // A3Q3 "Khalim's Will" — quest-state callback #8: on-monster-death drop handler. If the quest can
 // still drop the Will (bCanDropBlade) during real play and the dead target is a boss/marked-boss,
 // forces its drop code to the quest item (0x20333367) and drops it. On success marks

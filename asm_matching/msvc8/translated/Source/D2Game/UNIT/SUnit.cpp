@@ -243,9 +243,8 @@ uint32_t __fastcall UNITS_IncrementUnitGUIDCounter(::SGAMEDATA * pGame, eD2UnitT
     return nNextGUID_lcl;
 }
 
-uint32_t Unreferenced_00552f20() {
-    uint32_t in_ECX;
-    return in_ECX & 0x7f;
+uint32_t __fastcall Unreferenced_00552f20(uint32_t nValue) {
+    return nValue & 0x7f;
 }
 
 static D2UnitStrc * * __stdcall UNITS_GetHashTableSlot(eD2UnitType eUnitType, ::SGAMEDATA * pGame, uint32_t nUnitGUID) {
@@ -1416,19 +1415,20 @@ void __fastcall SetUninterruptableState(D2UnitStrc * pUnit, int32_t bSet) {
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
 }
 
-void __fastcall PLAYER_CancelMapReveal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t dwUnused2, int32_t dwUnused3) {
+BOOL __fastcall PLAYER_CancelMapReveal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t dwUnused2, int32_t dwUnused3) {
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
-      return;
+      return 0;
     }
 
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    if (!pPlayerData) {
-      return;
+    if (pPlayerData) {
+      pPlayerData->nRevealingMapRelated = 0;
+      pPlayerData->nRevealingMapRelated2 = 0;
+      GAME::Event::EVENT_RemoveCustomTimer(pGame, pUnit, UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN, PLAYER_CancelMapReveal);
+      return 1;
     }
 
-    pPlayerData->nRevealingMapRelated = 0;
-    pPlayerData->nRevealingMapRelated2 = 0;
-    GAME::Event::EVENT_RemoveCustomTimer(pGame, pUnit, UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN, PLAYER_CancelMapReveal);
+    return 0;
 }
 
 D2RoomStrc * __fastcall UNITS_GetTargetRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {

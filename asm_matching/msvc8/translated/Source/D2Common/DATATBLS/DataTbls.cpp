@@ -98,9 +98,9 @@ static void DATATBLS_NormalizeCodeTo4Chars(char * szText1, char * szText2) {
 
 int32_t __fastcall DATATBLS_LookupStringId(char * szKey) {
     uint16_t* pwszResult = (uint16_t*)szKey;
-    uint32_t nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)szKey, &pwszResult);
-    uint32_t nResult = (uint16_t)nStringId;
-    if ((short int)nStringId) {
+    uint16_t uVar1 = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)szKey, &pwszResult);
+    uint32_t nResult = (uint32_t)uVar1;
+    if (uVar1) {
       return nResult;
     }
 
@@ -1732,9 +1732,8 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
     }
 }
 
-void Unreferenced_00617c20() {
-    D2PoolManagerStrc* in_ECX;
-    TXT_AllocTxt_skill_skilldesc(in_ECX);
+void __fastcall Unreferenced_00617c20(D2PoolManagerStrc * pMemPool) {
+    TXT_AllocTxt_skill_skilldesc(pMemPool);
 }
 
 // Frees all skills and skill-description txt table allocations from the global sgtDataTable. Releases pSkillsPerClassCounter, pSkillsPerClassStrc, pPassiveSkillsPerClassStrc, pSkillsCodeUnk1, pSkillsDescCodeUnk1, pTxtSkills (with a -1 entry offset when gpaMiscTxtTables is set), and pTxtSkillDesc. Also frees the txt link structures for skills and skill descriptions and resets all associated counts to zero.
@@ -1842,8 +1841,6 @@ void __stdcall TXT_AllocTxt_difficultylevels(D2PoolManagerStrc * pMemory) {
 // Loads and compiles states.txt into sgtDataTable.pTxtStates (record stride 0x3C). Builds the column-binding descriptor: state name (linked to the States txt-link), group, a large block of behavior bit-flags (nosend/hide/transform/aura/active/curse/curable/staydeath variants/bossinv/shatter/etc.), per-state overlays (overlay1-4/pgsv/cast/rem), linked stat/missile/skill/sounds/itemtype/itemtrans, gfx fields, and client/server event+func indices. Creates the txt-link, calls CompileTxt, and error-halts if more than 255 states. Then allocates and zero-fills the per-state bitmask data tables (pStatesDataTbls, one 32-bit-rounded bitmask block per state, 0x28 entries) via DATATBLS_BuildStatesDataBitMask, and builds the grouped state lists for flag classes 0x04/0x0B/0x10/0x05 and the item-types state-data table. __fastcall(pMemory). Side effect: populates global state data tables.
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void __fastcall TXT_AllocTxt_states(D2PoolManagerStrc * pMemory) {
-    D2StatesDataTbls* pStateDataEntry;
-    uint32_t nStateIdx = 0;
     D2BinFieldInputStrc states[70] = {
       {"state", FIELDTYPE_NAME_I_WORD, 0, 0, &MonsterTbls::sgtDataTable.pTxtStatesLink},
       {"group", FIELDTYPE_SHORT, 0, 0x1e, 0},
@@ -1923,18 +1920,15 @@ void __fastcall TXT_AllocTxt_states(D2PoolManagerStrc * pMemory) {
       exit(-1);
     }
 
-    int nDwordCount = (MonsterTbls::sgtDataTable.nTxtStatesSize + 0x1f) / 32;
-    size_t nAllocSize = nDwordCount * 0xa0;
+    size_t nMaskBytes = ((MonsterTbls::sgtDataTable.nTxtStatesSize + 0x1f) / 32) * 4;
+    size_t nAllocSize = nMaskBytes * 40;
     MonsterTbls::sgtDataTable.pStatesDataTbls = (D2StatesDataTbls*)D2_ALLOC_POOL_AT(nullptr, nAllocSize, ".\\DATATBLS\\DataTbls.cpp", 0x6ce);
     memset(MonsterTbls::sgtDataTable.pStatesDataTbls, 0, nAllocSize);
-    int nStateDataOffset = 0;
-    do {
-      pStateDataEntry = (D2StatesDataTbls*)((char*)MonsterTbls::sgtDataTable.pStatesDataTbls->nStateBitmask + nStateDataOffset);
+    for (int nStateIdx = 0; nStateIdx < 40; nStateIdx++) {
+      D2StatesDataTbls* pStateDataEntry = (D2StatesDataTbls*)((uint32_t*)MonsterTbls::sgtDataTable.pStatesDataTbls + nStateIdx * (nMaskBytes >> 2));
       MonsterTbls::sgtDataTable.pSingleStateDataTbl[nStateIdx] = pStateDataEntry;
       DATATBLS_BuildStatesDataBitMask(pStateDataEntry, nStateIdx);
-      nStateDataOffset += nDwordCount * 4;
-      nStateIdx++;
-    } while ((int)nStateIdx < 0x28);
+    }
 
     DATATBLS_BuildStatesDataList(&MonsterTbls::sgtDataTable.pAllStatesDataTblFlag0x04, &MonsterTbls::sgtDataTable.nAllStatesDataTblFlag0x04Size, 4);
     DATATBLS_BuildStatesDataList(&MonsterTbls::sgtDataTable.pAllStatesDataTblFlag0x0B, &MonsterTbls::sgtDataTable.nAllStatesDataTblFlag0x0BSize, 0xb);

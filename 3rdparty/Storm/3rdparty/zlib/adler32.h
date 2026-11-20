@@ -17,12 +17,12 @@
 namespace Storm::_3rdparty::zlib::adler32 {
 
 // Function declarations
+// Adler-32 checksum for DEFLATE algorithm. Combines two 16-bit checksums: sum of uncompressed bytes mod 65521 and sum-of-sums mod 65521. Optimized with 16-byte blocks for speed.
+uint32_t __fastcall adler32(uint32_t adler, uint8_t * buf, uint32_t len);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-// Adler-32 checksum for DEFLATE algorithm. Combines two 16-bit checksums: sum of uncompressed bytes mod 65521 and sum-of-sums mod 65521. Optimized with 16-byte blocks for speed.
-uint32_t __fastcall ZLIB_Adler32(uint32_t nAdler, uint8_t * pbData, uint32_t nLen);
-uint32_t __fastcall ZLIB_Adler32Combine32(uint32_t nAdler1, uint32_t nAdler2, uint32_t nLen2);
-uint32_t __fastcall ZLIB_Adler32Combine64(uint32_t nAdler1, uint32_t nAdler2, uint32_t nLen2Lo, uint32_t nLen2Hi);
+uint32_t __fastcall adler32_combine(uint32_t adler1, uint32_t adler2, uint32_t len2);
+uint32_t __fastcall adler32_combine64(uint32_t nAdler1, uint32_t nAdler2, int64_t nLen2);
 #endif // D2_MODULE_Storm
 // 1 internal function (defined in .cpp)
 

@@ -91,7 +91,17 @@
       "calledFunctions": [
         "Unreferenced_00601b70"
       ],
-      "dh": "449c7536"
+      "usedTypes": [
+        "StormLinkStrc",
+        "uint32_t"
+      ],
+      "dh": "06344b9d",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "IGNORELIST_Initialize_Unref_0060ac50",

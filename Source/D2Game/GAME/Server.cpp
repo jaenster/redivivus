@@ -1390,8 +1390,6 @@ void __fastcall UpdateActEnvironments(::SGAMEDATA * pGame) {
     uint32_t nActIndex = 0;
     D2DrlgActStrc** ppActLoop = pGame->pAct;
     do {
-      D2DrlgActStrc** ppActCurrent;
-      ppActCurrent = ppActLoop;
       if (*ppActLoop) {
         bCycleChanged = D2Common::Environment::DRLGENV_UpdateCycleIndex(*ppActLoop, nActIndex);
         if (bCycleChanged) {
@@ -1419,7 +1417,7 @@ void __fastcall UpdateActEnvironments(::SGAMEDATA * pGame) {
       }
 
       nActIndex++;
-      ppActLoop = ppActCurrent + 1;
+      ppActLoop++;
     } while ((int)nActIndex < 5);
 }
 
@@ -3661,9 +3659,8 @@ void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0060e230(int32_t pQServer) {
     return *(void**)(pQServer + 4);
 }
 
-uint32_t Unreferenced_0060e250() {
-    int in_ECX;
-    return *(uint32_t*)(in_ECX + 4);
+uint32_t __fastcall Unreferenced_0060e250(void * pLink) {
+    return *(uint32_t*)((char*)pLink + 4);
 }
 
 void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00650e90(int32_t pQServer) {

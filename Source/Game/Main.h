@@ -36,7 +36,7 @@ void * MISC_OperatorNewShim(uint32_t nSize);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Game)
 void __stdcall MISC_GetValueFromD2Ini(struct D2IniConfigStrc * pD2IniData);
-void Unreferenced_00405550();
+void __fastcall Unreferenced_00405550(char * szString);
 int32_t __stdcall INI_FindConfigValueIndex(uint8_t * pbArgName);
 uint32_t __fastcall INI_IsDelimiterChar(char cChar);
 int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, char * pOutValue);

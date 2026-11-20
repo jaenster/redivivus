@@ -136,10 +136,9 @@ void __stdcall CopyQuestBitBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pOutpu
     }
 }
 
-D2PropertiesTxt * Unreferenced_0065c5a0() {
-    int in_ECX;
-    if (in_ECX >= 0 && in_ECX < ITEMS::Items::sgptDataTable->nTxtPropertiesSize) {
-      return ITEMS::Items::sgptDataTable->pTxtProperties + in_ECX;
+D2PropertiesTxt * __fastcall Unreferenced_0065c5a0(int32_t nPropertyIndex) {
+    if (nPropertyIndex >= 0 && nPropertyIndex < ITEMS::Items::sgptDataTable->nTxtPropertiesSize) {
+      return ITEMS::Items::sgptDataTable->pTxtProperties + nPropertyIndex;
     }
 
     return nullptr;

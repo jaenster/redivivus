@@ -17,14 +17,14 @@
 namespace Storm::_3rdparty::zlib::crc32 {
 
 // Function declarations
-uint32_t __fastcall crc32(uint32_t dwCrcSeed, uint8_t * pBuffer, uint32_t nLength);
+uint32_t __fastcall crc32(uint32_t crc, uint8_t * buf, uint32_t len);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 uint32_t * get_crc_table();
-uint32_t __fastcall gf2_matrix_times(uint32_t dwVec, uint32_t * pdwMat);
-uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int64_t nLength);
-void __fastcall crc32_combine(uint32_t dwCrc, uint32_t dwFinalXor, int32_t nExp);
-void __fastcall crc32_combine64(uint32_t dwCrc, uint32_t dwFinalXor, int64_t nLength);
+uint32_t __fastcall gf2_matrix_times(uint32_t vec, uint32_t * mat);
+uint32_t __stdcall crc32_combine_(uint32_t crc1, uint32_t crc2, int64_t len2);
+uint32_t __fastcall crc32_combine(uint32_t crc1, uint32_t crc2, int32_t len2);
+uint32_t __fastcall crc32_combine64(uint32_t crc1, uint32_t crc2, int64_t len2);
 #endif // D2_MODULE_Storm
 // 3 internal functions (defined in .cpp)
 

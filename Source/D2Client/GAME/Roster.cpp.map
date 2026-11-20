@@ -348,9 +348,16 @@
         "Unreferenced_00479750"
       ],
       "usedTypes": [
-        "D2RosterPartyListStrc"
+        "D2RosterPartyListStrc",
+        "uint16_t"
       ],
-      "dh": "7f5333d7"
+      "dh": "caddc46f",
+      "paramStorage": [
+        [
+          "nPartyId",
+          "CX:2"
+        ]
+      ]
     },
     {
       "name": "AllocRosterPartyList",
@@ -635,7 +642,17 @@
       "calledFunctions": [
         "Unreferenced_00479b50"
       ],
-      "dh": "dab13b60"
+      "usedTypes": [
+        "D2RosterStrc",
+        "uint16_t"
+      ],
+      "dh": "efa19dfb",
+      "paramStorage": [
+        [
+          "pRoster",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00479b60",

@@ -62,7 +62,7 @@ void __fastcall SetSeed(struct D2UnitStrc * pUnit, struct D2SeedStrc * pSeed);
 void __fastcall SetItemSeeds(struct D2UnitStrc * pUnit, struct D2SeedStrc * pSeed);
 // Increments and returns pGame->anUnitGuidCounters[eUnitType] (+0x90), skipping -1. The incremented value IS the new unit's GUID and is returned in EAX; typing it void made every caller read the GUID out of an unassigned local.
 uint32_t __fastcall UNITS_IncrementUnitGUIDCounter(::SGAMEDATA * pGame, eD2UnitType eUnitType);
-uint32_t Unreferenced_00552f20();
+uint32_t __fastcall Unreferenced_00552f20(uint32_t nValue);
 // Finds a unit by type and GUID in the game's unit hash tables. Walks the unit linked list (pNext at offset 0xE4) matching dwUnitId.
 struct D2UnitStrc * __fastcall FindUnitFromTable(::SGAMEDATA * pGame, eD2UnitType eUnitType, uint32_t nUnitGUID);
 // Returns the owner unit (parent) of the given unit. Checks eUnitFlagsEx bit 10 (has owner flag), then looks up eOwnerType/nOwnerGUID via FindUnitFromTable.
@@ -133,7 +133,7 @@ BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, struct 
 void __fastcall SetAlignment(struct D2UnitStrc * pUnit, uint8_t nAlignment, int32_t nOldAlignment);
 // Applies or removes STATE_uninterruptable on pUnit (nParam=1 to set, 0 to clear). When clearing: if STATE_death_delay is active, it removes that state and immediately kills the unit (via SERVER_KillMonster if no killer, or SERVER_GetHitCalculation with the KILL result flag if a killer exists). Additionally triggers AITHINK for monster units to resume AI after the uninterruptable window closes.
 void __fastcall SetUninterruptableState(struct D2UnitStrc * pUnit, int32_t bSet);
-void __fastcall PLAYER_CancelMapReveal(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t dwUnused2, int32_t dwUnused3);
+BOOL __fastcall PLAYER_CancelMapReveal(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t dwUnused2, int32_t dwUnused3);
 struct D2RoomStrc * __fastcall UNITS_GetTargetRoom(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // 2022.01.09 - dzik
 uint16_t __fastcall GetPartyId(struct D2UnitStrc * pUnit);

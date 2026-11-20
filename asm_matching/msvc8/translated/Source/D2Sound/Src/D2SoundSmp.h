@@ -110,7 +110,7 @@ int __fastcall SOUNDSMP_GetVolume(struct D2SoundSmpStrc * pSoundSmp);
 void __fastcall SOUNDSMP_StartFade(struct D2SoundSmpStrc * pSoundSmp, uint32_t dwTargetVolume, int32_t nFadeDuration);
 uint32_t __stdcall SOUNDSMP_GetEffectiveVolume();
 void __fastcall SOUNDSMP_CancelStream(struct D2SoundSmpStrc * ppnParam);
-void __fastcall SOUNDSMP_CheckBufferLost(struct D2SoundSmpStrc * ppnParam);
+BOOL __fastcall SOUNDSMP_CheckBufferLost(struct D2SoundSmpStrc * ppnParam);
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall D2SOUNDSMP_SoundUpdateThreadProc(void * lpThreadParam);
 void __stdcall SOUNDSMP_CreateSoundThread();

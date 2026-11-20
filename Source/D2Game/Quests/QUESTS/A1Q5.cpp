@@ -438,14 +438,12 @@ void __fastcall Q05_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNpcClassId, nGossipLineIdx);
 }
 
-void Unreferenced_00594db0() {
-    int in_ECX;
-    int in_EDX;
-    if (*(char*)(in_ECX + 9) != '\0') {
+void __fastcall Unreferenced_00594db0(void * pQuestData, void * pArg) {
+    if (*(char*)((char*)pQuestData + 9) != '\0') {
       return;
     }
 
-    D2Common::Units::ChangeAnimMode(*(D2UnitStrc**)(in_EDX + 4), 3);
+    D2Common::Units::ChangeAnimMode(*(D2UnitStrc**)((char*)pArg + 4), 3);
 }
 
 // 1.14d: 0x594dd0 | A1Q5 "The Forgotten Tower" — reward-award pass (per-player iterator callback).

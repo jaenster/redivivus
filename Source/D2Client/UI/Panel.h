@@ -126,7 +126,7 @@ void __stdcall INPUT_PanelLeftClickDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_PanelLeftClickUp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall PANEL_UpdatePanelFromMode(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_PanelRightClick(struct D2UIMouseMsgStrc * pMsg);
-struct D2UiPartyStrc * Unreferenced_00499de0();
+struct D2UiPartyStrc * __fastcall Unreferenced_00499de0(int32_t nRosterGUID);
 #endif // D2_MODULE_D2Client
 // 12 internal functions (defined in .cpp)
 

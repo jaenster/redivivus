@@ -21,10 +21,10 @@
         "inflate_state",
         "z_stream"
       ],
-      "dh": "e0c8b362",
+      "dh": "11e64fb7",
       "paramStorage": [
         [
-          "pStream",
+          "strm",
           "ECX:4"
         ]
       ]
@@ -47,10 +47,10 @@
         "inflate_state",
         "z_stream"
       ],
-      "dh": "c170e415",
+      "dh": "d7a69d68",
       "paramStorage": [
         [
-          "pStream",
+          "strm",
           "ECX:4"
         ]
       ]
@@ -72,17 +72,16 @@
       "usedTypes": [
         "inflate_state",
         "int32_t",
-        "uint32_t",
         "z_stream"
       ],
-      "dh": "05eeb052",
+      "dh": "15a054ae",
       "paramStorage": [
         [
-          "pStream",
+          "strm",
           "ECX:4"
         ],
         [
-          "nWindowBits",
+          "windowBits",
           "EDX:4"
         ]
       ]
@@ -107,22 +106,22 @@
         "uint32_t",
         "z_stream"
       ],
-      "dh": "af1c4dfc",
+      "dh": "b0f7640c",
       "paramStorage": [
         [
-          "pStream",
+          "strm",
           "ECX:4"
         ],
         [
-          "nWindowBits",
+          "windowBits",
           "EDX:4"
         ],
         [
-          "szVersion",
+          "version",
           "Stack[0x4]:4"
         ],
         [
-          "nStreamSize",
+          "stream_size",
           "Stack[0x8]:4"
         ]
       ]
@@ -145,18 +144,18 @@
         "int32_t",
         "z_stream"
       ],
-      "dh": "e74f7ec4",
+      "dh": "10596406",
       "paramStorage": [
         [
-          "pStream",
+          "strm",
           "ECX:4"
         ],
         [
-          "szVersion",
+          "version",
           "EDX:4"
         ],
         [
-          "nStreamSize",
+          "stream_size",
           "Stack[0x4]:4"
         ]
       ]
@@ -180,18 +179,18 @@
         "uint32_t",
         "z_stream"
       ],
-      "dh": "40ed8896",
+      "dh": "dda4b2bb",
       "paramStorage": [
         [
-          "pStream",
+          "strm",
           "ECX:4"
         ],
         [
-          "nBits",
+          "bits",
           "EDX:4"
         ],
         [
-          "nValue",
+          "value",
           "Stack[0x4]:4"
         ]
       ]
@@ -212,7 +211,7 @@
       "usedTypes": [
         "inflate_state"
       ],
-      "dh": "a482e6d0",
+      "dh": "7e87b728",
       "paramStorage": [
         [
           "state",
@@ -240,18 +239,18 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "241939d9",
+      "dh": "373ff81d",
       "paramStorage": [
         [
-          "nCopy",
+          "copy",
           "ECX:4"
         ],
         [
-          "pEnd",
+          "end",
           "Stack[0x4]:4"
         ],
         [
-          "pStream",
+          "strm",
           "EAX:4"
         ]
       ]
@@ -268,12 +267,12 @@
       "namespace": "Storm::_3rdparty::zlib::inflate",
       "calledFunctions": [
         "inflate",
-        "ZLIB_Adler32",
+        "adler32",
         "crc32",
         "memcpy",
         "updatewindow",
-        "ZLIB_InflateTable",
-        "ZLIB_InflateFast"
+        "inflate_table",
+        "inflate_fast"
       ],
       "usedTypes": [
         "gz_header",
@@ -285,14 +284,14 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "171e1ead",
+      "dh": "32252cb5",
       "paramStorage": [
         [
-          "pInflateStream",
+          "strm",
           "ECX:4"
         ],
         [
-          "nFlush",
+          "flush",
           "EDX:4"
         ]
       ]
@@ -313,10 +312,10 @@
       "usedTypes": [
         "z_stream"
       ],
-      "dh": "9b86f723",
+      "dh": "3251df67",
       "paramStorage": [
         [
-          "pStream",
+          "strm",
           "ECX:4"
         ]
       ]
@@ -341,18 +340,18 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "869b1221",
+      "dh": "f7ca5b6c",
       "paramStorage": [
         [
-          "pStream",
+          "strm",
           "ECX:4"
         ],
         [
-          "pDictionary",
+          "dictionary",
           "EDX:4"
         ],
         [
-          "pnDictLength",
+          "dictLength",
           "Stack[0x4]:4"
         ]
       ]
@@ -369,7 +368,7 @@
       "namespace": "Storm::_3rdparty::zlib::inflate",
       "calledFunctions": [
         "inflateSetDictionary",
-        "ZLIB_Adler32",
+        "adler32",
         "updatewindow"
       ],
       "usedTypes": [
@@ -378,18 +377,18 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "087935be",
+      "dh": "9ec28112",
       "paramStorage": [
         [
-          "pStream",
+          "strm",
           "ECX:4"
         ],
         [
-          "pDictionary",
+          "dictionary",
           "EDX:4"
         ],
         [
-          "nDictLength",
+          "dictLength",
           "Stack[0x4]:4"
         ]
       ]
@@ -412,14 +411,14 @@
         "inflate_state",
         "z_stream"
       ],
-      "dh": "5022df96",
+      "dh": "5f85c0c8",
       "paramStorage": [
         [
-          "pStream",
+          "strm",
           "ECX:4"
         ],
         [
-          "pHead",
+          "head",
           "EDX:4"
         ]
       ]
@@ -441,18 +440,18 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "254b91c5",
+      "dh": "4c3f9b84",
       "paramStorage": [
         [
-          "pnMatchState",
+          "have",
           "Stack[0x4]:4"
         ],
         [
-          "nLen",
+          "len",
           "Stack[0x8]:4"
         ],
         [
-          "pBuf",
+          "buf",
           "ESI:4"
         ]
       ]
@@ -478,10 +477,10 @@
         "uint32_t",
         "z_stream"
       ],
-      "dh": "f8a2744e",
+      "dh": "91e7f021",
       "paramStorage": [
         [
-          "pStream",
+          "strm",
           "ECX:4"
         ]
       ]
@@ -502,10 +501,10 @@
       "usedTypes": [
         "z_stream"
       ],
-      "dh": "126dabe3",
+      "dh": "b6a0cfc7",
       "paramStorage": [
         [
-          "pStream",
+          "strm",
           "ECX:4"
         ]
       ]
@@ -530,14 +529,14 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "f5c27b7a",
+      "dh": "33fe4e3d",
       "paramStorage": [
         [
-          "pDestStream",
+          "dest",
           "ECX:4"
         ],
         [
-          "pSrcStream",
+          "source",
           "EDX:4"
         ]
       ]
@@ -558,14 +557,14 @@
       "usedTypes": [
         "z_stream"
       ],
-      "dh": "bb7f28f3",
+      "dh": "39a9449d",
       "paramStorage": [
         [
-          "pStream",
+          "strm",
           "ECX:4"
         ],
         [
-          "nSubvert",
+          "subvert",
           "EDX:4"
         ]
       ]
@@ -587,10 +586,10 @@
         "int32_t",
         "z_stream"
       ],
-      "dh": "6477f1a1",
+      "dh": "faa46b62",
       "paramStorage": [
         [
-          "pStream",
+          "strm",
           "ECX:4"
         ]
       ]

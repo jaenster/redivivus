@@ -1191,13 +1191,13 @@ static BOOL ITEM_FallbackToRareQuality(D2ItemGenContextStrc * pItemGenContext, i
 
 // Apply quality tier to item and generate affixes based on quality type (magic/rare/set/unique/superior)
 int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * ppItem, D2ItemGenContextStrc * pItemGenContext) {
-    uint16_t wAutoMagic;
+    uint16_t wRarePrefix;
+    uint16_t wRareSuffix;
     int32_t iVar1;
     BOOL nCrudeResult;
     uint16_t wItemVersion;
     uint32_t nSeedLow;
     D2SeedStrc* pSeed;
-    uint32_t uVar2;
     D2MagicAffixTxt* pMagicAffixLine;
     uint32_t nSeedLowBackup;
     D2UnitStrc* pItem;
@@ -1378,14 +1378,14 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
       D2Common::ITEMS::Items::SetRareSuffix(*ppItem, 0);
       pSeed = D2Common::ITEMS::Items::GetItemSeed(*ppItem);
       nSeedLowBackup = D2Common::Seed::GetSeed_nSeedLow(pSeed);
-      bTypeCheck = SKILLS::Items::ITEMMOD_SelectMagicAffixVersioned(*ppItem, 1);
-      uVar2 = SKILLS::Items::ITEMMOD_SelectMagicAffixVersioned(*ppItem, 0);
-      if (!(short int)bTypeCheck || !(short int)uVar2) {
+      wRarePrefix = SKILLS::Items::ITEMMOD_SelectMagicAffixVersioned(*ppItem, 1);
+      wRareSuffix = SKILLS::Items::ITEMMOD_SelectMagicAffixVersioned(*ppItem, 0);
+      if (!wRarePrefix || !wRareSuffix) {
         fallback_to_normal:
         ITEM_FallbackToNormalQuality(ppItem, pGame, pItemGenContext, nSeedLowBackup);
       } else {
-        D2Common::ITEMS::Items::SetRarePrefix(*ppItem, (short int)bTypeCheck);
-        D2Common::ITEMS::Items::SetRareSuffix(*ppItem, (short int)uVar2);
+        D2Common::ITEMS::Items::SetRarePrefix(*ppItem, wRarePrefix);
+        D2Common::ITEMS::Items::SetRareSuffix(*ppItem, wRareSuffix);
       }
 
       break;
@@ -1471,10 +1471,10 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
 
       case 9:
         if ((uint16_t)pItemTxt->wAutoPrefix) {
-          wAutoMagic = SKILLS::Items::ITEMMOD_RollMagicAffixVersionedEx(*ppItem, 0, 1, 0, 1, 0, (uint32_t)(uint16_t)pItemTxt->wAutoPrefix);
-          if (wAutoMagic > 0) {
-            D2Common::ITEMS::Items::SetAutoMagic(*ppItem, wAutoMagic);
-            pMagicAffixLine = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine((uint32_t)wAutoMagic);
+          wRarePrefix = SKILLS::Items::ITEMMOD_RollMagicAffixVersionedEx(*ppItem, 0, 1, 0, 1, 0, (uint32_t)(uint16_t)pItemTxt->wAutoPrefix);
+          if (wRarePrefix > 0) {
+            D2Common::ITEMS::Items::SetAutoMagic(*ppItem, wRarePrefix);
+            pMagicAffixLine = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine((uint32_t)wRarePrefix);
             D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(0, nullptr, *ppItem, pMagicAffixLine, 0, 0);
           }
         }
@@ -2894,7 +2894,7 @@ void __fastcall DROP_SpawnWeaponItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, PO
 }
 
 // Spawns a single elite/special drop item into the world near pCoords in pRoom. Derives an effective item level from the room's level id (clamped, monster-level-for-difficulty, or 1 in town/no level), then rolls an item class via ITEMDROP_RollEliteItemClass (using the room seed, treasure-class filter nTCFilter, monster level, and whether pUnit is a monster). Finds a nearby better room and a free collision-clear coordinate (GetFreeCoordinates_WithFieldCoords); if a valid spawn spot is found, fills a D2ItemGenContextStrc (mode 3, quality invalid/auto, the rolled class id and item level) and creates the item instance via ITEM_CreateItemInstance. Uses Fog GuardStack as the tail epilogue. No return; side effect is the new world item.
-void __fastcall DROP_SpawnMiscItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POINT * pCoords, int32_t nItemTypeFilter, int32_t bSkipRarityRoll, D2UnitStrc * pUnit) {
+D2UnitStrc * __fastcall DROP_SpawnMiscItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POINT * pCoords, int32_t nItemTypeFilter, int32_t bSkipRarityRoll, D2UnitStrc * pUnit) {
     BOOL _bIsTown;
     bool bIsTown;
     int32_t bIsMonsterFlag;
@@ -2902,8 +2902,6 @@ void __fastcall DROP_SpawnMiscItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POIN
     POINT ptSpawnPos;
     D2SeedStrc* pRoomSeed;
     int32_t nEffectiveMonLevel;
-    POINT* pCoordsIn;
-    pCoordsIn = pCoords;
     D2UnitStrc* pSourceUnit;
     pSourceUnit = pUnit;
     eD2LevelId eLevel;
@@ -2933,7 +2931,7 @@ void __fastcall DROP_SpawnMiscItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POIN
     }
 
     int32_t nRolledClassId = ITEMDROP_RollMiscItemClass(pGame, pRoomSeed, nEffectiveMonLevel, nItemTypeFilter, bSkipRarityRoll, bIsMonsterFlag);
-    ptCandidatePos = *pCoordsIn;
+    ptCandidatePos = *pCoords;
     int nOffsetX = ptCandidatePos.x + 2;
     LONG nCoordsIn = ptCandidatePos.y + 3;
     D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nOffsetX, nCoordsIn);
@@ -2949,21 +2947,21 @@ void __fastcall DROP_SpawnMiscItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POIN
     if (pSpawnRoom) {
       D2ItemGenContextStrc sItemGenCtx;
       memset(&sItemGenCtx, 0, 0x84);
-      sItemGenCtx.wItemFormat = pGame->wItemFormat;
       sItemGenCtx.pUnit = pSourceUnit;
       sItemGenCtx.pSeed = pRoomSeed;
+      sItemGenCtx.wItemFormat = pGame->wItemFormat;
+      sItemGenCtx.nItemClassid = nRolledClassId;
       sItemGenCtx.nPosX = ptSpawnPos.x;
       sItemGenCtx.nPosY = ptSpawnPos.y;
+      sItemGenCtx.pGame = pGame;
       sItemGenCtx.dwMode = 3;
+      sItemGenCtx.pDrlgRoom = pSpawnRoom;
       sItemGenCtx.usually_one = 1;
       sItemGenCtx.eQuality = QUALITY_INVALID;
       sItemGenCtx.nItemLevel = nEffectiveMonLevel;
-      sItemGenCtx.pGame = pGame;
-      sItemGenCtx.nItemClassid = nRolledClassId;
-      sItemGenCtx.pDrlgRoom = pSpawnRoom;
-      ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
-      return;
+      return ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
     }
+    return nullptr;
 }
 
 // Server-side: rolls and creates a reward/drop item instance to be dropped near a unit. Determines item level from the source unit (monster level, player level, or level-table mon level by difficulty/expansion; min 2) and writes it to *pnParam. If the unit carries a forced drop code, converts it to a class id; otherwise rolls an item class by level (for gold drops, retries up to 11 times until an Items.txt entry with the gold bitfield is found, then falls back to a normal class roll). Finds the best passable spawn spot in the unit's room, fills a D2ItemGenContextStrc (quality, position, level, class id) and calls ITEM_CreateItemInstance. If ppUnit is non-null, copies the 0x84-byte context out to it. Returns the created item unit (NULL on spawn-spot failure); halts with unrecoverable error on bad game ptr or bad item code.

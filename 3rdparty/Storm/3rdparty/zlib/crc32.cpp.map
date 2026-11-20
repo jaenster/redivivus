@@ -38,18 +38,18 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bb7077dd",
+      "dh": "ecb38695",
       "paramStorage": [
         [
-          "pbBuf",
+          "buf",
           "ECX:4"
         ],
         [
-          "nLen",
+          "len",
           "EDX:4"
         ],
         [
-          "nCrc",
+          "crc",
           "EAX:4"
         ]
       ]
@@ -68,23 +68,22 @@
         "crc32_big"
       ],
       "usedTypes": [
-        "int32_t",
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f2d9a240",
+      "dh": "4cc28f10",
       "paramStorage": [
         [
-          "nLength",
-          "ECX:4"
-        ],
-        [
-          "dwInitialCrc",
+          "crc",
           "Stack[0x4]:4"
         ],
         [
-          "pbData",
+          "buf",
           "EAX:4"
+        ],
+        [
+          "len",
+          "ECX:4"
         ]
       ]
     },
@@ -104,14 +103,14 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "28d973fd",
+      "dh": "fec87cff",
       "paramStorage": [
         [
-          "dwVec",
+          "vec",
           "ECX:4"
         ],
         [
-          "pdwMat",
+          "mat",
           "EDX:4"
         ]
       ]
@@ -132,14 +131,14 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "25f9f54a",
+      "dh": "fc11a051",
       "paramStorage": [
         [
-          "pdwMatA",
+          "square",
           "EAX:4"
         ],
         [
-          "pdwMatB",
+          "mat",
           "EBX:4"
         ]
       ]
@@ -164,18 +163,18 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "c828fc5f",
+      "dh": "3dfd9576",
       "paramStorage": [
         [
-          "dwCrc",
+          "crc1",
           "Stack[0x4]:4"
         ],
         [
-          "dwFinalXor",
+          "crc2",
           "Stack[0x8]:4"
         ],
         [
-          "nLength",
+          "len2",
           "Stack[0xc]:8"
         ]
       ]
@@ -198,18 +197,18 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c6b3f7b7",
+      "dh": "56348e60",
       "paramStorage": [
         [
-          "dwCrc",
+          "crc1",
           "ECX:4"
         ],
         [
-          "dwFinalXor",
+          "crc2",
           "EDX:4"
         ],
         [
-          "nExp",
+          "len2",
           "Stack[0x4]:4"
         ]
       ]
@@ -232,18 +231,18 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "a3101a30",
+      "dh": "6886a8e1",
       "paramStorage": [
         [
-          "dwCrc",
+          "crc1",
           "ECX:4"
         ],
         [
-          "dwFinalXor",
+          "crc2",
           "EDX:4"
         ],
         [
-          "nLength",
+          "len2",
           "Stack[0x4]:8"
         ]
       ]
@@ -266,18 +265,18 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a7f1e39a",
+      "dh": "4408012f",
       "paramStorage": [
         [
-          "dwCrcSeed",
+          "crc",
           "ECX:4"
         ],
         [
-          "pBuffer",
+          "buf",
           "EDX:4"
         ],
         [
-          "nLength",
+          "len",
           "Stack[0x4]:4"
         ]
       ]

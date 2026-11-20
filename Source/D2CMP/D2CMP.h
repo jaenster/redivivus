@@ -340,7 +340,7 @@ int32_t __stdcall GetDC6OffsetX(struct DC6Block * pDC6Block);
 int32_t __stdcall GetDC6OffsetY(struct DC6Block * pDC6Block);
 int32_t __stdcall IMAGE_GetFramesCount(struct DC6 * pDC6);
 void __stdcall CELCMP_SetPixelDataFreeCallback(pfnCelPixelDataFree pfnFreeCallback);
-void __stdcall DeleteCellFile(struct DC6 * pDC6);
+BOOL __stdcall DeleteCellFile(struct DC6 * pDC6);
 int __stdcall CELCMP_GetDC6BlockPixelData(struct DC6Block * pDC6Block);
 void __stdcall GFX_SetSpriteCacheFreeCallback(pfnLruFreeEntry pfnFreeEntry);
 } // namespace D2CMP::SRC::CelCmp

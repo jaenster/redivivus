@@ -118,11 +118,12 @@ uint32_t * __fastcall SFILE_SetStreamBuffer4(uint32_t * pdwValues, int, uint32_t
 }
 
 // Copies a 4-element stream buffer structure from source to destination by copying 4 consecutive fields. Custom calling convention uses ECX for destination pointer. Used for duplicating stream buffer state.
-void __fastcall SFILE_CopyStreamBuffer4(uint32_t * pDest, int, uint32_t * pSrc) {
+uint32_t * __fastcall SFILE_CopyStreamBuffer4(uint32_t * pDest, int, uint32_t * pSrc) {
     *pDest = *pSrc;
     pDest[1] = pSrc[1];
     pDest[2] = pSrc[2];
     pDest[3] = pSrc[3];
+    return pDest;
 }
 
 int __fastcall Unreferenced_00415190(int param_1) {
@@ -998,14 +999,14 @@ BOOL __stdcall SFileDdaInitialize(IDirectSound * lpDS) {
 
 // Sets archive priority by modifying the refcount at offset 0x258. Validates archive handle, then increments refcount if param2==0, decrements if param2!=0. Thread-safe via lpCriticalSection_00779068. Returns 1 on success, 0 on invalid handle.
 int __stdcall SFILE_SetArchivePriority(D2ArchiveStrc * pArchive, int32_t bDecrement) {
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
+    EnterCriticalSection(&lpCriticalSection_00779068);
     int bValid = SFILE_CheckArchiveHandle(pArchive, &pArchive);
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (!bValid) {
+    if (!bValid) {
       LeaveCriticalSection(&lpCriticalSection_00779068);
       return 0;
     }
 
-    pArchive->nPriority += (uint32_t)!bDecrement * 2 - 1;
+    pArchive->nPriority += bDecrement ? -1 : 1;
     LeaveCriticalSection(&lpCriticalSection_00779068);
     return 1;
 }
@@ -1488,9 +1489,8 @@ int __fastcall Unreferenced_004167f0(StormLinkStrc * pLink) {
     return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
-uint32_t Unreferenced_00416800() {
-    int in_ECX;
-    return *(uint32_t*)(in_ECX + 4);
+uint32_t __fastcall Unreferenced_00416800(StormLinkStrc * pLink) {
+    return pLink->pNext;
 }
 
 int __fastcall Unreferenced_00416820(StormLinkStrc * pLink) {
@@ -1501,18 +1501,16 @@ void * __fastcall Unreferenced_00416830(StormLinkStrc * pLink) {
     return (void*)(pLink->pNext <= 0 ? 0 : pLink->pNext);
 }
 
-uint32_t Unreferenced_00416840() {
-    int in_ECX;
-    return *(uint32_t*)(in_ECX + 4);
+uint32_t __fastcall Unreferenced_00416840(StormLinkStrc * pLink) {
+    return pLink->pNext;
 }
 
 int __fastcall Unreferenced_00416850(StormLinkStrc * pLink) {
     return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
-uint32_t Unreferenced_00416860() {
-    uint32_t* in_ECX;
-    return (int)*(uint32_t*)(*(int*)*in_ECX + 4) <= 0 ? 0 : *(uint32_t*)(*(int*)*in_ECX + 4);
+int32_t __fastcall Unreferenced_00416860(void * pHandle) {
+    return (int)*(uint32_t*)(**(int**)pHandle + 4) <= 0 ? 0 : *(uint32_t*)(**(int**)pHandle + 4);
 }
 
 uint32_t __fastcall SFILE_CompareFileTime2(StormLinkStrc * pLink, int, intptr_t pLeft) {
@@ -2216,9 +2214,8 @@ void * __fastcall Unreferenced_00417790(StormLinkStrc * pLink) {
     return (void*)(pLink->pNext <= 0 ? 0 : pLink->pNext);
 }
 
-uint32_t Unreferenced_004177a0() {
-    uint32_t* in_ECX;
-    return (int)*(uint32_t*)(*(int*)*in_ECX + 4) <= 0 ? 0 : *(uint32_t*)(*(int*)*in_ECX + 4);
+int32_t __fastcall Unreferenced_004177a0(void * pHandle) {
+    return (int)*(uint32_t*)(**(int**)pHandle + 4) <= 0 ? 0 : *(uint32_t*)(**(int**)pHandle + 4);
 }
 
 StormLinkStrc * __fastcall Unreferenced_00417850(StormLinkStrc * pLink) {
@@ -3455,15 +3452,15 @@ StormLinkStrc * __fastcall Unreferenced_00418e50(StormLinkStrc * pLink) {
     return pLink;
 }
 
-void Unreferenced_00418e60() {
-    uint32_t* in_ECX;
-    *in_ECX = 0;
-    in_ECX[1] = 0;
-    in_ECX[0x43] = 0;
-    in_ECX[0x44] = -1;
-    in_ECX[0x45] = 0;
-    in_ECX[0x4b] = 0;
-    in_ECX[0x4e] = 0;
+D2MPQFileStrc * __fastcall Unreferenced_00418e60(D2MPQFileStrc * pFile) {
+    pFile->pPrevLink = 0;
+    pFile->pNext = 0;
+    pFile->szFilePath = 0;
+    pFile->hFile = (HANDLE)-1;
+    pFile->pArchive = 0;
+    pFile->pSectorTable = 0;
+    pFile->pReadBuffer = 0;
+    return pFile;
 }
 
 void __fastcall SFILE_DestroyFileRecord(D2MPQFileStrc * pMPQFile) {

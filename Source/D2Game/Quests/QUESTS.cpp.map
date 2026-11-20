@@ -2073,7 +2073,17 @@
         "TXT_Items_GetLine",
         "INVENTORY_GetNextItem"
       ],
-      "dh": "cc0f5cf7"
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "d91ce9d9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QUESTGUID_AddPlayerToList",

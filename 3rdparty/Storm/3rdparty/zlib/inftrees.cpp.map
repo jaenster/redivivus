@@ -4,7 +4,7 @@
   "file": "3rdparty/Storm/3rdparty/zlib/inftrees.cpp",
   "functions": [
     {
-      "name": "ZLIB_InflateTable",
+      "name": "inflate_table",
       "address": "0042e120",
       "lines": [
         {
@@ -14,7 +14,7 @@
       ],
       "namespace": "Storm::_3rdparty::zlib::inftrees",
       "calledFunctions": [
-        "ZLIB_InflateTable",
+        "inflate_table",
         "__security_check_cookie"
       ],
       "usedTypes": [
@@ -25,30 +25,30 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e371aef8",
+      "dh": "deef258a",
       "paramStorage": [
         [
-          "nTableType",
+          "type",
           "ECX:4"
         ],
         [
-          "pBitLengths",
+          "lens",
           "EDX:4"
         ],
         [
-          "nNumCodes",
+          "codes",
           "Stack[0x4]:4"
         ],
         [
-          "ppOutTable",
+          "table",
           "Stack[0x8]:4"
         ],
         [
-          "pMaxBits",
+          "bits",
           "Stack[0xc]:4"
         ],
         [
-          "aOutCodes",
+          "work",
           "Stack[0x10]:4"
         ]
       ]

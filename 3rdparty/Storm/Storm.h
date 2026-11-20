@@ -549,7 +549,7 @@ struct gz_header {
     /* 0x18 */ uint32_t extra_max;
     /* 0x1C */ uint8_t * name;
     /* 0x20 */ uint32_t name_max;
-    /* 0x24 */ uint8_t * comm;
+    /* 0x24 */ uint8_t * comment;
     /* 0x28 */ uint32_t comm_max;
     /* 0x2C */ int hcrc;
     /* 0x30 */ int done;
@@ -775,15 +775,19 @@ namespace Storm::_3rdparty::PKWARE::implode {
 // code statically linked into several modules and which translation unit owns it is not established.
 uint32_t implode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, struct TCmpStruct * pWorkBuf, void * pUserData, uint32_t * pnType, uint32_t * pnDictSize);
 } // namespace Storm::_3rdparty::PKWARE::implode
+namespace Storm::_3rdparty::zlib::adler32 {
+// Adler-32 checksum for DEFLATE algorithm. Combines two 16-bit checksums: sum of uncompressed bytes mod 65521 and sum-of-sums mod 65521. Optimized with 16-byte blocks for speed.
+uint32_t __fastcall adler32(uint32_t adler, uint8_t * buf, uint32_t len);
+} // namespace Storm::_3rdparty::zlib::adler32
 namespace Storm::_3rdparty::zlib::crc32 {
-uint32_t __fastcall crc32(uint32_t dwCrcSeed, uint8_t * pBuffer, uint32_t nLength);
+uint32_t __fastcall crc32(uint32_t crc, uint8_t * buf, uint32_t len);
 } // namespace Storm::_3rdparty::zlib::crc32
 namespace Storm::_3rdparty::zlib::deflate {
-uint32_t __fastcall read_buf(z_stream * pStream, uint8_t * pBuf, uint32_t nSize);
-uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush);
+uint32_t __fastcall read_buf(z_stream * strm, uint8_t * buf, uint32_t size);
+uint32_t __fastcall deflate(z_stream * strm, int32_t flush);
 } // namespace Storm::_3rdparty::zlib::deflate
 namespace Storm::_3rdparty::zlib::inflate {
-int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush);
+int32_t __fastcall inflate(z_stream * strm, int32_t flush);
 } // namespace Storm::_3rdparty::zlib::inflate
 namespace Storm::_3rdparty::zlib::uncompr {
 // zlib uncompress: inflates one complete zlib stream from source into dest with Z_FINISH and maps the inflate result to a zlib return code.
@@ -1271,6 +1275,7 @@ void __stdcall SMsgUnregisterMessage(HWND hWnd, uint32_t szText1, char * szText2
 
 // Globals
 extern void * ExceptionList;
+extern int extra_dbits[30];
 extern uint16_t gnSFileSearchLocale;
 
 // Inline functions: the module compiled these into each caller

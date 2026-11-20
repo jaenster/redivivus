@@ -35,7 +35,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2TimerQueueStrc) == 0xa20, "D2_NEW
 
 #ifndef RECON_FPTD_fpTimerFunctionUnit
 #define RECON_FPTD_fpTimerFunctionUnit
-typedef void (__fastcall *fpTimerFunctionUnit)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t nArg1, int32_t nArg2);
+typedef BOOL (__fastcall *fpTimerFunctionUnit)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t nArg1, int32_t nArg2);
 #endif
 
 namespace D2Game::GAME::Event::Dispatch {

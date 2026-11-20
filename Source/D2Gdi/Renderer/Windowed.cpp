@@ -342,14 +342,14 @@ BOOL __fastcall SetOption(int nOption, int nValue) {
 }
 
 // Palette quantization via brute-force nearest-neighbor search. Iterates all 256 palette entries (prgbq_00989c40), calculates Manhattan distance (|R1-R2| + |G1-G2| + |B1-B2|) in RGB space, returns index of closest match. Classic indexed color dithering support for 8-bit framebuffer.
-uint32_t __fastcall RENDERER_WINDOWED_FindNearestPaletteIndex(int nRed, int nBlue, int nGreen) {
-    int nRedDelta;
+uint8_t __fastcall RENDERER_WINDOWED_FindNearestPaletteIndex(int nRed, int nBlue, int nGreen) {
+    int nDist;
     int nBlueDelta;
     uint32_t uVar2 = 0;
     int iVar1 = 10000;
     uint32_t nPaletteIdx = 1;
     do {
-      int nDist;
+      int nRedDelta;
       nRedDelta = (uint32_t)prgbq_00989c40[nPaletteIdx].rgbRed - nRed;
       if (nRedDelta < 0) {
         nRedDelta = -nRedDelta;
@@ -365,16 +365,16 @@ uint32_t __fastcall RENDERER_WINDOWED_FindNearestPaletteIndex(int nRed, int nBlu
         nBlueDelta = -nBlueDelta;
       }
 
-      nDist = nBlueDelta + nDist + nRedDelta;
-      if (nDist < iVar1) {
+      nRedDelta = nBlueDelta + nDist + nRedDelta;
+      if (nRedDelta < iVar1) {
         uVar2 = nPaletteIdx & 0xff;
-        iVar1 = nDist;
+        iVar1 = nRedDelta;
       }
 
       nPaletteIdx++;
     } while ((int)nPaletteIdx < 0x100);
 
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)nRedDelta >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)(char)uVar2);
+    return (uint8_t)uVar2;
 }
 
 int * __fastcall GetRendererStatistics() {

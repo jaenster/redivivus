@@ -70,7 +70,13 @@
       "calledFunctions": [
         "Unreferenced_00405550"
       ],
-      "dh": "3dca2c47"
+      "dh": "5ff2eedd",
+      "paramStorage": [
+        [
+          "szString",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "INI_FindConfigValueIndex",

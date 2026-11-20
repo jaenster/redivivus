@@ -257,7 +257,7 @@ void __fastcall QUEST_OnGoldenBirdCouncilKilled(::SGAMEDATA * pGameStrc, struct 
 // @sourcefile .\QUESTS\QUESTS.CPP
 // @returns void: EAX at the epilogue is leftover from the last call, and all four call sites in IterateNpcIntroUnits (void) discard it. Found by KierTaylor on the Mac twin (Redivivus proposal #1215).
 void __fastcall INTRONPC_FillInPacketWithIntroNpcIdsInAct(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eAct nActNo);
-uint32_t Unreferenced_005451b0();
+uint32_t __fastcall Unreferenced_005451b0(struct D2UnitStrc * pUnit);
 void __fastcall QUESTGUID_AddPlayerToList(struct D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID);
 BOOL __fastcall QUESTGUID_RemovePlayerFromList(struct D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID);
 // Returns 1 if iValue is one of the first nPlayerCount entries of

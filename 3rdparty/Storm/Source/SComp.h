@@ -188,14 +188,14 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
 BOOL __stdcall SCOMP_CleanupTempBuffer();
 struct StormLinkStrc * __thiscall HUFFMAN_GetDecodedOffset(struct StormLinkStrc * pNode, intptr_t pBase);
 int __fastcall Unreferenced_0041e930(struct StormLinkStrc * pLink);
-uint32_t Unreferenced_0041e940();
+int32_t __fastcall Unreferenced_0041e940(void * pHandle);
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041e970(struct StormLinkStrc * pNode);
 void __fastcall Unreferenced_0041e9b0(struct StormLinkedListStrc * pList);
 int __fastcall Unreferenced_0041e9d0(int * pValueA, int * pValueB);
 uint32_t __thiscall BITBUFFER_ReadBits(struct D2BitStreamReaderStrc * pBitBuf, uint32_t nBits, uint32_t nMask);
 void __stdcall SCOMP_DecompressSimple(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSize);
 int __fastcall Unreferenced_0041ea40(struct StormLinkStrc * pLink);
-uint32_t Unreferenced_0041ea50();
+uint32_t __fastcall Unreferenced_0041ea50(struct StormLinkStrc * pLink);
 int __fastcall Unreferenced_0041ea60(int param_1);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0041ea70(struct StormLinkStrc * pNode);
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041eae0(struct StormLinkStrc * pNode);

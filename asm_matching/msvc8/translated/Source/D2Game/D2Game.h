@@ -2500,7 +2500,7 @@ __pragma(pack(push, 1)) struct D2TimerStrc {
     /* 0x20 */ struct D2TimerStrc * pPrevTimerList; // previous timer in the type/frame bucket list (EVENT_RemoveAndRecycleTimer, SetEventInternal)
     /* 0x24 */ struct D2TimerStrc * pNextTimerOnUnit; // the next timer assigned to this unit
     /* 0x28 */ struct D2TimerStrc * pPrevTimerOnUnit; // previous timer on the same unit: EVENT_AllocTimerToUnit stores the new head into the old head's +0x28
-    /* 0x2C */ void (__fastcall *nfpTimerFunction)(::SGAMEDATA *, struct D2UnitStrc *, eD2TimerTypeDWORD, int32_t, int32_t); // function called when the timer ends
+    /* 0x2C */ BOOL (__fastcall *nfpTimerFunction)(::SGAMEDATA *, struct D2UnitStrc *, eD2TimerTypeDWORD, int32_t, int32_t); // function called when the timer ends
 }; __pragma(pack(pop))
 #endif // D2_DEFINED_D2TimerStrc
 #ifndef D2_DEFINED_D2TimerListStrc

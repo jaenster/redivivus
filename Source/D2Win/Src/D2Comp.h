@@ -95,7 +95,7 @@ void __stdcall Unreferenced_005049d0();
 int32_t __stdcall D2COMP_IsItemTypeDescendant(int32_t nItemType, int32_t nAncestorType);
 struct D2CharSelCompStrc * __stdcall D2COMP_GetCompositeUnitListHead();
 struct D2CharSelCompStrc * __stdcall D2COMP_GetNextCompositeUnit(struct D2CharSelCompStrc * pCompUnit);
-uint32_t __stdcall D2COMP_GetNumDirections(struct D2CharSelCompStrc * pCompUnit);
+uint8_t __stdcall D2COMP_GetNumDirections(struct D2CharSelCompStrc * pCompUnit);
 void __stdcall D2COMP_LoadGuildEmblemIcon(struct D2CharSelCompStrc * pCompUnit, uint8_t byEmblemIcon, uint8_t byPrimaryColor, uint8_t bySecondaryColor);
 void __stdcall D2COMP_LoadAllItemPalettes();
 void __stdcall D2COMP_InitEmblemColorTables();

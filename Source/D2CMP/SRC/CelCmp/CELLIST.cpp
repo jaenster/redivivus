@@ -26,20 +26,18 @@ void __thiscall Destructor(::CELLIST * pThis) {
     pThis->Destructor();
 }
 
-void Unreferenced_00602bd0() {
-    uint32_t* in_ECX;
-    uint32_t* in_EDX;
-    if (!in_ECX) {
+void __fastcall Unreferenced_00602bd0(StormLinkedListStrc * pList, int32_t * pnLinkOffset) {
+    if (!pList) {
       return;
     }
 
-    uint32_t* puVar1 = in_ECX + 1;
-    *puVar1 = 0;
-    in_ECX[2] = 0;
-    uint32_t uVar2 = *in_EDX;
-    *puVar1 = (uint32_t)(uintptr_t)puVar1;
-    *in_ECX = uVar2;
-    in_ECX[2] = ~(uint32_t)puVar1;
+    StormLinkStrc* pSVar1 = &pList->head;
+    pSVar1->pPrevLink = 0;
+    pSVar1->pNext = 0;
+    int32_t iVar2 = *pnLinkOffset;
+    pSVar1->pPrevLink = pSVar1;
+    pList->nLinkOffset = iVar2;
+    pList->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 ::CELLIST * __thiscall ScalarDeletingDestructor(::CELLIST * pThis, uint32_t dwFlags) {

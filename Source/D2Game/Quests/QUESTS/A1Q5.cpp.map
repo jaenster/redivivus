@@ -273,7 +273,17 @@
         "Unreferenced_00594db0",
         "ChangeAnimMode"
       ],
-      "dh": "d256c395"
+      "dh": "2a84baf5",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pArg",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "Q05_SetRewardForPlayersInTower",

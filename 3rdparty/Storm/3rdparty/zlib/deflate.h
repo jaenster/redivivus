@@ -38,7 +38,7 @@ struct gz_header {
     /* 0x18 */ uint32_t extra_max;
     /* 0x1C */ uint8_t * name;
     /* 0x20 */ uint32_t name_max;
-    /* 0x24 */ uint8_t * comm;
+    /* 0x24 */ uint8_t * comment;
     /* 0x28 */ uint32_t comm_max;
     /* 0x2C */ int hcrc;
     /* 0x30 */ int done;
@@ -159,27 +159,27 @@ struct __attribute__((packed)) deflate_state {
 namespace Storm::_3rdparty::zlib::deflate {
 
 // Function declarations
-uint32_t __fastcall read_buf(z_stream * pStream, uint8_t * pBuf, uint32_t nSize);
-uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush);
+uint32_t __fastcall read_buf(z_stream * strm, uint8_t * buf, uint32_t size);
+uint32_t __fastcall deflate(z_stream * strm, int32_t flush);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-int __fastcall deflateResetKeep(z_stream * pStream);
-int __fastcall deflateSetHeader(z_stream * pStream, gz_header * pHead);
-int __fastcall deflatePending(z_stream * pStream, uint32_t * pPending, int * pBits);
-uint32_t __fastcall deflatePrime(z_stream * pStream, int32_t nBits, uint32_t uValue);
-int __fastcall deflateTune(z_stream * pStream, int32_t nGoodMatch, int32_t nMaxLazyMatch, int32_t nNiceMatch, int32_t nMaxChainLen);
-int32_t __fastcall deflateBound(z_stream * pStream, uint32_t nSourceLen);
-uint32_t __fastcall deflateEnd(z_stream * pStream);
-int __fastcall deflateCopy(z_stream * pDestStream, z_stream * pSrcStream);
-int32_t __fastcall deflate_stored(deflate_state * pDeflateState, int32_t nFlush);
+int __fastcall deflateResetKeep(z_stream * strm);
+int __fastcall deflateSetHeader(z_stream * strm, gz_header * head);
+int __fastcall deflatePending(z_stream * strm, uint32_t * pending, int * bits);
+int __fastcall deflatePrime(z_stream * strm, int32_t bits, int32_t value);
+int __fastcall deflateTune(z_stream * strm, int32_t good_length, int32_t max_lazy, int32_t nice_length, int32_t max_chain);
+int32_t __fastcall deflateBound(z_stream * strm, uint32_t sourceLen);
+uint32_t __fastcall deflateEnd(z_stream * strm);
+int __fastcall deflateCopy(z_stream * dest, z_stream * source);
+int32_t __fastcall deflate_stored(deflate_state * s, int32_t flush);
 // zlib deflate_fast() - hash-chain matching, single pass compression strategy
-int32_t __fastcall deflate_fast(deflate_state * pDeflateState, int32_t nFlush);
-int32_t __fastcall deflate_slow(deflate_state * pDeflateState, int32_t nFlush);
-int __fastcall deflateSetDictionary(z_stream * pStream, uint8_t * pDictionary, uint32_t nDictLength);
-int32_t __fastcall deflateReset(z_stream * pStream);
-int32_t __fastcall deflateInit2_(z_stream * pStream, uint32_t nLevel, int32_t nMethod, int32_t nWindowBits, int32_t nMemLevel, uint32_t nStrategy, char * szVersion, int32_t nStreamSize);
-uint32_t __fastcall deflateParams(z_stream * pStream, int32_t nLevel, uint32_t nStrategy);
-int __fastcall deflateInit_(z_stream * pStream, uint32_t nLevel, char * szVersion, int32_t nStreamSize);
+int32_t __fastcall deflate_fast(deflate_state * s, int32_t flush);
+int32_t __fastcall deflate_slow(deflate_state * s, int32_t flush);
+int __fastcall deflateSetDictionary(z_stream * strm, uint8_t * dictionary, uint32_t dictLength);
+int32_t __fastcall deflateReset(z_stream * strm);
+int32_t __fastcall deflateInit2_(z_stream * strm, uint32_t level, int32_t method, int32_t windowBits, int32_t memLevel, uint32_t strategy, char * version, int32_t stream_size);
+uint32_t __fastcall deflateParams(z_stream * strm, int32_t level, uint32_t strategy);
+int __fastcall deflateInit_(z_stream * strm, uint32_t level, char * version, int32_t stream_size);
 #endif // D2_MODULE_Storm
 // 7 internal functions (defined in .cpp)
 

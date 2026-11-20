@@ -440,7 +440,16 @@
         "Unreferenced_0066b010",
         "GetPresetUnits"
       ],
-      "dh": "e292a282"
+      "usedTypes": [
+        "D2RoomExStrc"
+      ],
+      "dh": "fc16fdc6",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DRLGWARP_InitWarpConnectionsBetweenLevels",

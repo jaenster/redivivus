@@ -192,7 +192,7 @@ BOOL __fastcall ResizeWindow(HWND hWnd, BOOL bForceResize);
 BOOL __fastcall ActivateWindow();
 BOOL __fastcall SetOption(int nOption, int nValue);
 // Palette quantization via brute-force nearest-neighbor search. Iterates all 256 palette entries (prgbq_00989c40), calculates Manhattan distance (|R1-R2| + |G1-G2| + |B1-B2|) in RGB space, returns index of closest match. Classic indexed color dithering support for 8-bit framebuffer.
-uint32_t __fastcall RENDERER_WINDOWED_FindNearestPaletteIndex(int nRed, int nBlue, int nGreen);
+uint8_t __fastcall RENDERER_WINDOWED_FindNearestPaletteIndex(int nRed, int nBlue, int nGreen);
 int * __fastcall GetRendererStatistics();
 // Stores RENDERER_WINDOWED_hPalette in *phPalette and the RGBQUAD table at 0x989c40 in *ppRgbQuad; halts (lines 546/547) on a NULL out-pointer.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.

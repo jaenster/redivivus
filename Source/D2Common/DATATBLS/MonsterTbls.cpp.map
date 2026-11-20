@@ -873,7 +873,13 @@
       "calledFunctions": [
         "Unreferenced_006543c0"
       ],
-      "dh": "5cf669cd"
+      "dh": "d44265f6",
+      "paramStorage": [
+        [
+          "szText",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "TC_ExtractNextIntModifier",
@@ -1242,9 +1248,10 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
+        "uint16_t",
         "uint32_t"
       ],
-      "dh": "935d5e46",
+      "dh": "c5d2e131",
       "paramStorage": [
         [
           "pMemory",
@@ -1336,9 +1343,9 @@
         "D2PoolManagerStrc",
         "WCHAR",
         "int32_t",
-        "uint32_t"
+        "uint16_t"
       ],
-      "dh": "f972d48f",
+      "dh": "4569c116",
       "paramStorage": [
         [
           "pMemory",

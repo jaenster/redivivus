@@ -771,10 +771,9 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
 
     uint8_t byOutputType;
     uint16_t uVar1;
+    uint16_t wRareSuffix;
     int32_t pMaxExpTxt;
     D2UnitStrc* pClonedOutput;
-    uint32_t wMagicPrefixId;
-    uint32_t wRarePrefixId;
     eD2ItemQuality eSourceQuality;
     D2UnitStrc* pDVar2;
     D2UnitStrc* pExtractedItem;
@@ -974,14 +973,14 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           D2Common::Units::ChangeAnimMode(pClonedOutput, 4);
           D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pDVar2, INVPAGE_CUBE);
           if (pOutput->nQuality == 9) {
-            wMagicPrefixId = SKILLS::Items::ITEMMOD_SelectMagicAffixVersioned(pClonedOutput, 1);
-            wRarePrefixId = SKILLS::Items::ITEMMOD_SelectMagicAffixVersioned(pClonedOutput, 0);
-            if (!(short int)wMagicPrefixId || !(short int)wRarePrefixId) {
+            uVar1 = SKILLS::Items::ITEMMOD_SelectMagicAffixVersioned(pClonedOutput, 1);
+            wRareSuffix = SKILLS::Items::ITEMMOD_SelectMagicAffixVersioned(pClonedOutput, 0);
+            if (!uVar1 || !wRareSuffix) {
               bApplyMods = 0;
             } else {
               D2Common::ITEMS::Items::SetItemQuality(pClonedOutput, QUALITY_TAMPERED);
-              D2Common::ITEMS::Items::SetRarePrefix(pClonedOutput, (short int)wMagicPrefixId);
-              D2Common::ITEMS::Items::SetRareSuffix(pClonedOutput, (short int)wRarePrefixId);
+              D2Common::ITEMS::Items::SetRarePrefix(pClonedOutput, uVar1);
+              D2Common::ITEMS::Items::SetRareSuffix(pClonedOutput, wRareSuffix);
             }
           }
         } else {
@@ -2032,7 +2031,7 @@ void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, D2UnitStrc
 
     pDataSelf = D2Common::Units::GetPlayerData(pUnit);
     D2UnitDataPlayerStrc* pOtherPlayerData = D2Common::Units::GetPlayerData(pOtherUnit);
-    pDVar2 = pDataSelf->pTradeCopyInventory;
+    pDVar2 = pDataSelf->pTradeCopyInventory; // steer-ok: both trade records are fetched before the shared tick stamps them
     pTradeCopyOther = pOtherPlayerData->pTradeCopyInventory;
     dwTick = GetTickCount();
     pDVar2->dwAcceptLockEndTick = dwTick + 10000;

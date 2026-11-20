@@ -230,7 +230,7 @@ void __fastcall SERVER_DropItemFromPlayer(::SGAMEDATA * pGame, struct D2UnitStrc
 BOOL __fastcall ITEMMODE_EquipItemToSwapBodyLoc(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nItemGUID, eD2BodyLoc eTargetBodyLoc, int32_t bSkipRequirementsCheck, BOOL * pbBadParams);
 // Explicit GuardStack(0)/GuardStack(1) tails on the two normal-completion paths; all error paths tail into a noreturn halt.
 BOOL __fastcall Transmorgify(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
-void Unreferenced_005641c0();
+void __fastcall Unreferenced_005641c0(void * pListHead);
 void __fastcall ITEMMODE_ReturnZero3_Unref_00570690(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam);
 BOOL __stdcall RemoveStackItem_Unref_005e5270(uint32_t dwParam1, uint32_t dwParam2);
 #endif // D2_MODULE_D2Game

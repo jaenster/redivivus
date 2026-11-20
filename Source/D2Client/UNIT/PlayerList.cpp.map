@@ -206,14 +206,17 @@
         "Unreferenced_004dc480",
         "GetPlayerList"
       ],
-      "dh": "998bc6fd",
+      "usedTypes": [
+        "uint16_t"
+      ],
+      "dh": "32553043",
       "paramStorage": [
         [
-          "param_1",
+          "nUnitGUID",
           "ECX:4"
         ],
         [
-          "param_2",
+          "nRosterGUID",
           "EDX:4"
         ]
       ]

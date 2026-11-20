@@ -508,9 +508,16 @@
         "Unreferenced_004790f0"
       ],
       "usedTypes": [
-        "eD2LevelId"
+        "eD2LevelId",
+        "int32_t"
       ],
-      "dh": "d07dd94e"
+      "dh": "4a9131e3",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GetRosterClass",

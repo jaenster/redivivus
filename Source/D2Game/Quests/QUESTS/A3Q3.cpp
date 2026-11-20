@@ -828,13 +828,13 @@ static void Q20_SpawnUniqueSerpent(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2Qu
 
 // A3Q3 "Khalim's Will" — accessor: returns the quest's "blade has been given/dropped" flag
 // (bTaintedSunStartedFailed field of the A3Q3 state struct) from the global quest data. Read-only.
-uint32_t __fastcall Q20_GetBladeHasBeenGiven(::SGAMEDATA * pGame) {
+uint8_t __fastcall Q20_GetBladeHasBeenGiven(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_BladeOfTheOldReligion);
     if (pQuestData) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pQuestData->pQuestSpecificData.pA3Q3 >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA3Q3->nBladeGivenFlag);
+      return pQuestData->pQuestSpecificData.pA3Q3->nBladeGivenFlag;
     }
 
-    return 0;
+    return '\0';
 }
 
 // A3Q3 "Khalim's Will" — quest-state callback #8: on-monster-death drop handler. If the quest can

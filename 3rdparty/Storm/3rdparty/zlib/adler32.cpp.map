@@ -4,7 +4,7 @@
   "file": "3rdparty/Storm/3rdparty/zlib/adler32.cpp",
   "functions": [
     {
-      "name": "ZLIB_Adler32",
+      "name": "adler32",
       "address": "0042b660",
       "lines": [
         {
@@ -14,30 +14,30 @@
       ],
       "namespace": "Storm::_3rdparty::zlib::adler32",
       "calledFunctions": [
-        "ZLIB_Adler32"
+        "adler32"
       ],
       "usedTypes": [
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "871476a3",
+      "dh": "cdb1ea64",
       "paramStorage": [
         [
-          "nAdler",
+          "adler",
           "ECX:4"
         ],
         [
-          "pbData",
+          "buf",
           "EDX:4"
         ],
         [
-          "nLen",
+          "len",
           "Stack[0x4]:4"
         ]
       ]
     },
     {
-      "name": "ZLIB_Adler32Combine",
+      "name": "adler32_combine_",
       "address": "0042b8e0",
       "lines": [
         {
@@ -47,35 +47,31 @@
       ],
       "namespace": "Storm::_3rdparty::zlib::adler32",
       "calledFunctions": [
-        "ZLIB_Adler32Combine",
+        "adler32_combine_",
         "_allrem"
       ],
       "usedTypes": [
         "int64_t",
         "uint32_t"
       ],
-      "dh": "eaa44abf",
+      "dh": "b6d09f0c",
       "paramStorage": [
         [
           "nAdler1",
           "ECX:4"
         ],
         [
-          "nLen2Lo",
-          "Stack[0x4]:4"
-        ],
-        [
-          "nLen2Hi",
-          "Stack[0x8]:4"
-        ],
-        [
           "nAdler2",
           "EAX:4"
+        ],
+        [
+          "nLen2",
+          "Stack[0x4]:8"
         ]
       ]
     },
     {
-      "name": "ZLIB_Adler32Combine32",
+      "name": "adler32_combine",
       "address": "0042b990",
       "lines": [
         {
@@ -85,13 +81,47 @@
       ],
       "namespace": "Storm::_3rdparty::zlib::adler32",
       "calledFunctions": [
-        "ZLIB_Adler32Combine32",
-        "ZLIB_Adler32Combine"
+        "adler32_combine",
+        "adler32_combine_"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "a6758abc",
+      "dh": "f6154b37",
+      "paramStorage": [
+        [
+          "adler1",
+          "ECX:4"
+        ],
+        [
+          "adler2",
+          "EDX:4"
+        ],
+        [
+          "len2",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "adler32_combine64",
+      "address": "0042b9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042b9b0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::adler32",
+      "calledFunctions": [
+        "adler32_combine64",
+        "adler32_combine_"
+      ],
+      "usedTypes": [
+        "int64_t",
+        "uint32_t"
+      ],
+      "dh": "f331a0c5",
       "paramStorage": [
         [
           "nAdler1",
@@ -103,44 +133,7 @@
         ],
         [
           "nLen2",
-          "Stack[0x4]:4"
-        ]
-      ]
-    },
-    {
-      "name": "ZLIB_Adler32Combine64",
-      "address": "0042b9b0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0042b9b0"
-        }
-      ],
-      "namespace": "Storm::_3rdparty::zlib::adler32",
-      "calledFunctions": [
-        "ZLIB_Adler32Combine64",
-        "ZLIB_Adler32Combine"
-      ],
-      "usedTypes": [
-        "uint32_t"
-      ],
-      "dh": "183bddb7",
-      "paramStorage": [
-        [
-          "nAdler1",
-          "ECX:4"
-        ],
-        [
-          "nAdler2",
-          "EDX:4"
-        ],
-        [
-          "nLen2Lo",
-          "Stack[0x4]:4"
-        ],
-        [
-          "nLen2Hi",
-          "Stack[0x8]:4"
+          "Stack[0x4]:8"
         ]
       ]
     }

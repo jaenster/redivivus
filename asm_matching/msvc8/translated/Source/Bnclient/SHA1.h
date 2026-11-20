@@ -22,9 +22,9 @@ namespace Bnclient { namespace SHA1 {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-void __fastcall SHA1_Init(struct D2BnSha1ContextStrc * pState);
-void __fastcall SHA1_Update(struct D2BnSha1ContextStrc * pShaCtx, void * pData, uint32_t nByteLen);
-void __fastcall SHA1_Final(uint8_t * pHashOut, struct D2BnSha1ContextStrc * pShaCtx);
+void __fastcall SHA1Init(struct D2BnSha1ContextStrc * context);
+void __fastcall SHA1Update(struct D2BnSha1ContextStrc * context, void * data, uint32_t len);
+void __fastcall SHA1Final(uint8_t * digest, struct D2BnSha1ContextStrc * context);
 #endif // D2_MODULE_Bnclient
 // 1 internal function (defined in .cpp)
 

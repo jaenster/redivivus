@@ -249,13 +249,10 @@ D2SoundEnvironTxt * __fastcall GetSoundEnvironLine(int32_t nSoundEnviron) {
 
 // @sourcefile .\Sound\SoundHdr.cpp
 void __stdcall TXT_AllocTxt_sounds_soundenviron() {
-    uint8_t byMatCount;
     char* pD2File;
     D2BinFieldExcelStrc* pBinExcel;
     D2SoundsTxt* pSounds;
     D2SoundEnvironTxt* pSoundEnviron;
-    uint32_t nMatIdx;
-    int nMaxSong;
     D2SoundEnvironTxt* pEnvironRow;
     uint8_t* pSoundRow;
     int nEnvRemaining;
@@ -322,7 +319,6 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
     }
 
     {
-      size_t nAllocSize;
       if (pTxtSoundEnviron) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfd);
         exit(-1);
@@ -352,67 +348,62 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
       memset(pSoundEnviron, 0, nTxtSoundEnvironSize * 0x58);
       Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinExcel, soundenviron, (char*)pSoundEnviron, nTxtSoundEnvironSize, 0x58);
       Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinExcel);
-      nEnvRemaining = 1;
-      nMaxSong = 0;
+      int nIdx = 1;
+      int nGroupStart = 0;
       nGroupSize = 1;
       if (1 < nTxtSoundsSize) {
         pSoundRow = &pTxtSounds[1].Group_Size;
         do {
-          if (!nMaxSong || nEnvRemaining < nMaxSong || nEnvRemaining >= nGroupSize + nMaxSong) {
-            *(int*)(pSoundRow + 0x23) = nEnvRemaining;
+          if (nGroupStart && nIdx >= nGroupStart && nIdx < nGroupSize + nGroupStart) {
+            *(int*)(pSoundRow + 0x23) = nGroupStart;
           } else {
-            *(int*)(pSoundRow + 0x23) = nMaxSong;
+            *(int*)(pSoundRow + 0x23) = nIdx;
           }
           if (*pSoundRow) {
+            nGroupStart = nIdx;
             nGroupSize = (int)*pSoundRow;
-            nMaxSong = nEnvRemaining;
           } else {
             *pSoundRow = 1;
           }
 
-          nMatIdx = 0;
+          uint8_t nBlocks = 0;
           do {
-            byMatCount = (uint8_t)nMatIdx;
-            if (*(int*)(pSoundRow + (nMatIdx * 4 + 0x17)) == -1) {
+            if (*(int*)(pSoundRow + (nBlocks * 4 + 0x17)) == -1) {
               break;
             }
+            nBlocks++;
+          } while (nBlocks < 3);
 
-            byMatCount++;
-            nMatIdx = (uint32_t)byMatCount;
-          } while (byMatCount < 3);
-
-          pSoundRow[0x43] = byMatCount;
-          nEnvRemaining++;
+          pSoundRow[0x43] = nBlocks;
+          nIdx++;
           pSoundRow += 0x8e;
-        } while (nEnvRemaining < nTxtSoundsSize);
+        } while (nIdx < nTxtSoundsSize);
       }
 
-      nMaxSong = 0;
+      gpSoundHdrGlobal = nTxtSoundsSize;
       gnSoundIdRangeMax = 0;
       pEnvironRow = pTxtSoundEnviron;
-      gpSoundHdrGlobal = nTxtSoundsSize;
-      nEnvRemaining = nTxtSoundEnvironSize;
-      if (nTxtSoundEnvironSize > 0) {
+      int nEnvCount = nTxtSoundEnvironSize;
+      if (nEnvCount > 0) {
+        nEnvRemaining = nEnvCount;
         do {
           nSong = pEnvironRow->Song;
           if (nSong > 0) {
             if (nSong < gpSoundHdrGlobal) {
               gpSoundHdrGlobal = nSong;
             }
-            if (nSong > nMaxSong) {
-              nMaxSong = nSong;
+            if (nSong > gnSoundIdRangeMax) {
+              gnSoundIdRangeMax = nSong;
             }
           }
-
-          nEnvRemaining--;
           pEnvironRow++;
-          gnSoundIdRangeMax = nMaxSong;
+          nEnvRemaining--;
         } while (nEnvRemaining);
       }
 
-      nAllocSize = (gnSoundIdRangeMax - gpSoundHdrGlobal + 1) * 4;
-      pSoundChannelDataArray = D2_ALLOC_AT(nAllocSize, ".\\Sound\\SoundHdr.cpp", 0x147);
-      memset(pSoundChannelDataArray, 0, nAllocSize);
+      int nCount = gnSoundIdRangeMax - gpSoundHdrGlobal + 1;
+      pSoundChannelDataArray = D2_ALLOC_AT(nCount * 4, ".\\Sound\\SoundHdr.cpp", 0x147);
+      memset(pSoundChannelDataArray, 0, nCount * 4);
       return;
     }
 }

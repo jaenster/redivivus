@@ -131,7 +131,7 @@ void __stdcall InitializeGlobalsWithColors();
 void * __fastcall MoveArgumentToEAX(void * pParam);
 void __fastcall UI_TranslateWideCharacterLookup(uint16_t * wszText);
 uint16_t * __fastcall AppendAsWideChar(uint16_t * wszText, int nColor);
-uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, char byColor);
+uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, int nColor);
 uint16_t * __fastcall UI_RemoveColorCodesFromString(uint16_t * wszText);
 uint16_t * __fastcall UI_WrapStringWithColorCodes(uint16_t * wszText, char cStartColor, char cEndColor);
 void __fastcall UI_StoreGlobalTooltipText(uint16_t * wszText, int32_t nScreenX, int32_t nScreenY, int32_t nHpBarValue);
@@ -215,7 +215,7 @@ int64_t __stdcall UI_GetControlConfigRowCount();
 void __fastcall UI_ScrollConfigListVertical(int32_t nSteps);
 void __fastcall UI_ScrollConfigListHorizontal(int32_t nSteps);
 uint32_t __stdcall UI_IsMouseInRightColumn(int32_t nMouseX);
-uint32_t Unreferenced_004a4aa0();
+uint32_t __fastcall Unreferenced_004a4aa0(int32_t nIgnoredRegion);
 // Control config mouse handler. Tracks g_nControlConfigMouseButtonState array for each UI region (scroll up/down, list drag, buttons). Dispatches scroll/selection based on mouse state. Main mouse logic for config UI.
 void __stdcall UI_UpdateConfigControlsState(int32_t nMouseXStack, int32_t nMouseYStack);
 void __fastcall UIAction_ResetKeyBindingsToDefaults();

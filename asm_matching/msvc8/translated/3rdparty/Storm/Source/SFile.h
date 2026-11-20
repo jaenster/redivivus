@@ -417,7 +417,7 @@ int __stdcall SFileOpenArchive(char * szArchiveName, int * pUserData, uint32_t n
 // Initializes a 4-element stream buffer structure by copying 4 sequential parameters into consecutive fields (param1→field[0], param2→field[1], param3→field[2], param4→field[3]). Used for stream buffer initialization in custom calling convention (ECX register for destination pointer).
 uint32_t * __fastcall SFILE_SetStreamBuffer4(uint32_t * pdwValues, int, uint32_t pVal0, uint32_t pVal1, uint32_t pVal2, uint32_t pVal3);
 // Copies a 4-element stream buffer structure from source to destination by copying 4 consecutive fields. Custom calling convention uses ECX for destination pointer. Used for duplicating stream buffer state.
-void __fastcall SFILE_CopyStreamBuffer4(uint32_t * pDest, int, uint32_t * pSrc);
+uint32_t * __fastcall SFILE_CopyStreamBuffer4(uint32_t * pDest, int, uint32_t * pSrc);
 int __fastcall Unreferenced_00415190(int param_1);
 int __fastcall Unreferenced_004151b0(int param_1);
 // Reads data from an internal buffer with bounds checking. Calculates available bytes (param3[4] - param3[1]), clamps to requested size (*param2), memcpy's from buffer (param3[0] + param3[1]), and advances read position (param3[1] += size). Returns actual bytes read.
@@ -508,12 +508,12 @@ uint32_t __fastcall SFILE_CompareFileTime1(struct StormLinkStrc * pLink, int, in
 int __fastcall Unreferenced_004167a0(struct StormLinkStrc * pLink);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_004167b0(struct StormLinkStrc * pNode);
 int __fastcall Unreferenced_004167f0(struct StormLinkStrc * pLink);
-uint32_t Unreferenced_00416800();
+uint32_t __fastcall Unreferenced_00416800(struct StormLinkStrc * pLink);
 int __fastcall Unreferenced_00416820(struct StormLinkStrc * pLink);
 void * __fastcall Unreferenced_00416830(struct StormLinkStrc * pLink);
-uint32_t Unreferenced_00416840();
+uint32_t __fastcall Unreferenced_00416840(struct StormLinkStrc * pLink);
 int __fastcall Unreferenced_00416850(struct StormLinkStrc * pLink);
-uint32_t Unreferenced_00416860();
+int32_t __fastcall Unreferenced_00416860(void * pHandle);
 uint32_t __fastcall SFILE_CompareFileTime2(struct StormLinkStrc * pLink, int, intptr_t pLeft);
 void __fastcall SFILE_CloseAllOpenFiles1_Unref_004168f0(struct D2ArchiveStrc * pArchive);
 uint32_t __fastcall SFILE_CompareFileSize1(struct StormLinkStrc * pLink, int, intptr_t pLeft);
@@ -532,7 +532,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(struct D2MPQFileStrc * pArchive, ui
 void * __fastcall Unreferenced_00417770(struct StormLinkStrc * pLink);
 uint32_t * __fastcall Unreferenced_00417780(uint32_t * pData);
 void * __fastcall Unreferenced_00417790(struct StormLinkStrc * pLink);
-uint32_t Unreferenced_004177a0();
+int32_t __fastcall Unreferenced_004177a0(void * pHandle);
 struct StormLinkStrc * __fastcall Unreferenced_00417850(struct StormLinkStrc * pLink);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_00417860(struct StormLinkStrc * pNode);
 int __fastcall Unreferenced_004178a0(struct StormLinkStrc * pLink);
@@ -607,7 +607,7 @@ uint32_t * __fastcall Unreferenced_00418df0(uint32_t * pData);
 uint32_t * __fastcall Unreferenced_00418e00(uint32_t * pData);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_00418e10(struct StormLinkStrc * pNode);
 struct StormLinkStrc * __fastcall Unreferenced_00418e50(struct StormLinkStrc * pLink);
-void Unreferenced_00418e60();
+struct D2MPQFileStrc * __fastcall Unreferenced_00418e60(struct D2MPQFileStrc * pFile);
 void __fastcall SFILE_DestroyFileRecord(struct D2MPQFileStrc * pMPQFile);
 struct D2MPQFileStrc * * __fastcall SFILE_AllocFileRecord1(int * * ppArchive, int, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags);
 struct D2MPQFileStrc * __fastcall SFILE_AllocFileRecord(int * * ppArchive, int, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags);

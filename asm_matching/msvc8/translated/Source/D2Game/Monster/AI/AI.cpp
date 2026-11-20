@@ -18873,7 +18873,7 @@ void __fastcall AITHINK_Fn1_CorruptArcher(::SGAMEDATA * pGame, D2UnitStrc * pUni
 void __fastcall AITHINK_Fn1_CorruptLancer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nRoll;
     uint32_t sNewSeed;
-    int bInCombat = pAiParam->bEngagedInCombat;
+    int bInCombat = pAiParam->bEngagedInCombat; // steer-ok: entry loads of the AI param fields in declaration order, as in sibling AITHINK_Fn1_* functions
     D2UnitStrc* pAttacker = pAiParam->pTarget;
     D2SeedStrc* pSeed = &pUnit->sSeed;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;

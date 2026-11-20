@@ -439,34 +439,33 @@ void OutputDebugStringSimple(char * szText, ...) {
     va_list __va;
     va_start(__va, szText);
     char szBuffer[4096];
-    char cCurrent;
-    char* pScan = szBuffer;
     szBuffer[0] = '\0';
-    pScan = pScan + strlen(pScan) + 1;
-    vsnprintf(szBuffer + ((intptr_t)pScan - (intptr_t)(szBuffer + 1)), 0x1000 - ((intptr_t)pScan - (intptr_t)(szBuffer + 1)), szText, __va);
+    const size_t nSize = strlen(szBuffer);
+    vsnprintf(szBuffer + nSize, sizeof(szBuffer) - nSize, szText, __va);
     /* LPCSTR lpOutputString for OutputDebugStringA */ szBuffer[0xfff] = '\0';
     OutputDebugStringA(szBuffer);
+    va_end(__va);
 }
 
 void OutputDebugStringIfCapsLock(char * szText, ...) {
     va_list __va;
     va_start(__va, szText);
-    char* pScan;
     char szBuffer[4096];
-    char cCurrent;
     uint16_t wKeyState = GetAsyncKeyState(0x14);
     if (wKeyState & 1) {
-      pScan = szBuffer;
       szBuffer[0] = '\0';
-      pScan = pScan + strlen(pScan) + 1;
-      vsnprintf(szBuffer + ((intptr_t)pScan - (intptr_t)(szBuffer + 1)), 0x1000 - ((intptr_t)pScan - (intptr_t)(szBuffer + 1)), szText, __va);
+      const size_t nSize = strlen(szBuffer);
+      vsnprintf(szBuffer + nSize, sizeof(szBuffer) - nSize, szText, __va);
       /* LPCSTR lpOutputString for OutputDebugStringA */ szBuffer[0xfff] = '\0';
       OutputDebugStringA(szBuffer);
     }
+    va_end(__va);
 }
 
-void FormatDebugOutputVariadic(uint8_t bFlags, char * szText, uint32_t firstArg) {
-    FormatDebugOutput(bFlags, (va_list)&firstArg, szText);
+void FormatDebugOutputVariadic(uint8_t bFlags, char * szText, ...) {
+    va_list __va;
+    va_start(__va, szText);
+    FormatDebugOutput(bFlags, __va, szText);
 }
 
 void FormatDebugOutputLogOnly(char * szText, ...) {

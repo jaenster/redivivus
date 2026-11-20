@@ -83,7 +83,6 @@ void __stdcall ITEMMODS_UnpackSkillLevelChance(uint32_t nPackedValue, uint32_t *
 int32_t __stdcall ITEMMODS_PackSkillLevelChance(int32_t nParam1, int32_t nParam2, int32_t nParam3);
 void __stdcall ITEMMODS_UnpackSkillTab(int32_t nPackedValue, uint32_t * pnPlayerClass, uint32_t * pnSkillTab, uint32_t * pnSkillLevels);
 int32_t __stdcall ITEMMODS_GetQualityField3(int32_t nPlayerClass, int32_t nSkillTab, int32_t nSkillLevels);
-uint32_t Unreferenced_0065cca0();
 // Property-to-stat conversion with additional context parameter for situational stat application. Reads scaled value from pPropData+4, optionally maximizes enhanced-damage stats, gets or creates the stat list (using pUnit as context for ITEMMOD_GetOrCreateStatList), then adds or negates the stat value. Halts on stat list failure.
 int32_t __fastcall PropertyFunc_SimpleStatWithContext(int32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItemUnit, struct D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, struct D2UnitStrc * pContextUnit);
 // Property function wrapper - delegates to ITEMMOD_ApplyRandomStatValue (normal mode).
@@ -341,6 +340,6 @@ uint32_t __fastcall ITEMPROP_ApplyEthereal(uint32_t nType, struct D2UnitStrc * p
 // Applies set-item partial and full set bonus properties to pUnit when equipping set item pUnit2 (nApplyFlags nonzero). Only acts on UNIT_ITEM of quality 5 (set). Resolves the item's SetItems/Sets txt lines, computes how many set pieces are equipped (ITEMS_GetEquippedSetItemsMask -> count via gnPropertyBaseValueByCode), then iterates the set's partial-bonus property list up to that piece count and, if the full set is worn, its full-set property block, applying each valid property via ITEMMOD_ApplyPropertyToUnitStats(type 4). No return.
 void __fastcall ITEMMOD_ApplySetBonuses(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nApplyFlags);
 #endif // D2_MODULE_D2Common
-// 12 internal functions (defined in .cpp)
+// 13 internal functions (defined in .cpp)
 
 } // namespace D2Common::ITEMS::ItemMods

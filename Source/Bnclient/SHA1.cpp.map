@@ -4,7 +4,7 @@
   "file": "Source/Bnclient/SHA1.cpp",
   "functions": [
     {
-      "name": "SHA1_Transform",
+      "name": "SHA1Transform",
       "address": "00528c90",
       "lines": [
         {
@@ -14,25 +14,25 @@
       ],
       "namespace": "Bnclient::SHA1",
       "calledFunctions": [
-        "SHA1_Transform"
+        "SHA1Transform"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "20c4b212",
+      "dh": "0481c0de",
       "paramStorage": [
         [
-          "blockWords",
-          "EAX:4"
+          "state",
+          "ECX:4"
         ],
         [
-          "stateWords",
-          "ECX:4"
+          "buffer",
+          "EAX:4"
         ]
       ]
     },
     {
-      "name": "SHA1_Init",
+      "name": "SHA1Init",
       "address": "00529f50",
       "lines": [
         {
@@ -42,21 +42,21 @@
       ],
       "namespace": "Bnclient::SHA1",
       "calledFunctions": [
-        "SHA1_Init"
+        "SHA1Init"
       ],
       "usedTypes": [
         "D2BnSha1ContextStrc"
       ],
-      "dh": "3e0b0b7f",
+      "dh": "3d7f9af4",
       "paramStorage": [
         [
-          "pState",
+          "context",
           "ECX:4"
         ]
       ]
     },
     {
-      "name": "SHA1_Update",
+      "name": "SHA1Update",
       "address": "00529f80",
       "lines": [
         {
@@ -66,32 +66,32 @@
       ],
       "namespace": "Bnclient::SHA1",
       "calledFunctions": [
-        "SHA1_Update",
+        "SHA1Update",
         "memcpy",
-        "SHA1_Transform"
+        "SHA1Transform"
       ],
       "usedTypes": [
         "D2BnSha1ContextStrc",
         "uint32_t"
       ],
-      "dh": "c65c44f6",
+      "dh": "afd24485",
       "paramStorage": [
         [
-          "pShaCtx",
+          "context",
           "ECX:4"
         ],
         [
-          "pData",
+          "data",
           "EDX:4"
         ],
         [
-          "nByteLen",
+          "len",
           "Stack[0x4]:4"
         ]
       ]
     },
     {
-      "name": "SHA1_Final",
+      "name": "SHA1Final",
       "address": "0052a040",
       "lines": [
         {
@@ -101,8 +101,8 @@
       ],
       "namespace": "Bnclient::SHA1",
       "calledFunctions": [
-        "SHA1_Final",
-        "SHA1_Update",
+        "SHA1Final",
+        "SHA1Update",
         "__security_check_cookie"
       ],
       "usedTypes": [
@@ -110,14 +110,14 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cc1e2446",
+      "dh": "96dcb2be",
       "paramStorage": [
         [
-          "pHashOut",
+          "digest",
           "ECX:4"
         ],
         [
-          "pShaCtx",
+          "context",
           "EDX:4"
         ]
       ]

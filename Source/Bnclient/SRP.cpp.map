@@ -66,10 +66,10 @@
         "_time32",
         "rand",
         "srand",
-        "SHA1_Update",
         "SRP_InitializeRandomState",
-        "SHA1_Init",
-        "SHA1_Final",
+        "SHA1Init",
+        "SHA1Update",
+        "SHA1Final",
         "__security_check_cookie"
       ],
       "usedTypes": [
@@ -78,7 +78,7 @@
         "D2SrpSeedEntropyStrc",
         "uint32_t"
       ],
-      "dh": "1d1c3400",
+      "dh": "2c66edf1",
       "paramStorage": [
         [
           "pThis",
@@ -103,9 +103,9 @@
       "calledFunctions": [
         "SRP_ExtractSessionKeyBytes",
         "memcpy",
-        "SHA1_Init",
-        "SHA1_Update",
-        "SHA1_Final",
+        "SHA1Init",
+        "SHA1Update",
+        "SHA1Final",
         "__security_check_cookie"
       ],
       "usedTypes": [
@@ -114,7 +114,7 @@
         "D2Srp *",
         "uint32_t"
       ],
-      "dh": "c63b90f7",
+      "dh": "180a3846",
       "paramStorage": [
         [
           "pThis",
@@ -142,10 +142,10 @@
       "namespace": "Bnclient::SRP",
       "calledFunctions": [
         "SRP_ComputePasswordHash",
-        "SHA1_Init",
+        "SHA1Init",
         "SStrLen",
-        "SHA1_Update",
-        "SHA1_Final",
+        "SHA1Update",
+        "SHA1Final",
         "SHA1_FromBigIntBytes",
         "__security_check_cookie"
       ],
@@ -157,7 +157,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "494772c3",
+      "dh": "ea1b33cb",
       "paramStorage": [
         [
           "pSrp",
@@ -228,9 +228,9 @@
       "calledFunctions": [
         "SRP_HashBigNumToU32",
         "SHA1_ToBigIntBytes",
-        "SHA1_Init",
-        "SHA1_Update",
-        "SHA1_Final",
+        "SHA1Init",
+        "SHA1Update",
+        "SHA1Final",
         "__security_check_cookie"
       ],
       "usedTypes": [
@@ -240,7 +240,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2cf93c82",
+      "dh": "485de4a3",
       "paramStorage": [
         [
           "pSrp",
@@ -379,9 +379,9 @@
       "calledFunctions": [
         "SRP_ComputeClientProof",
         "SHA1_ToBigIntBytes",
-        "SHA1_Init",
-        "SHA1_Update",
-        "SHA1_Final",
+        "SHA1Init",
+        "SHA1Update",
+        "SHA1Final",
         "SStrLen",
         "__security_check_cookie"
       ],
@@ -391,7 +391,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "264f04a9",
+      "dh": "48acfa7e",
       "paramStorage": [
         [
           "pThis",
@@ -435,9 +435,9 @@
       "namespace": "Bnclient::SRP",
       "calledFunctions": [
         "SRP_ComputeServerProof",
-        "SHA1_Init",
-        "SHA1_Update",
-        "SHA1_Final",
+        "SHA1Init",
+        "SHA1Update",
+        "SHA1Final",
         "__security_check_cookie"
       ],
       "usedTypes": [
@@ -445,7 +445,7 @@
         "D2Srp",
         "uint8_t"
       ],
-      "dh": "341e6bcf",
+      "dh": "e8a7de99",
       "paramStorage": [
         [
           "pSrp",

@@ -20,3 +20,4 @@ Source/D2Win/	/GS-	evidence/flags.md "/GS-"
 Source/D2gfx/	/GS-	evidence/flags.md "/GS-"
 Source/D2Hell/	/Y- /O1 /Oy- /Ob1	evidence/flags.md "/O1 for D2Hell"
 3rdparty/crashy/	/Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT	crashy's InternalCheckCorp (004016c0) calls WSAStartup/gethostbyname/WSACleanup through the IAT, the rest of the game through import stubs (vc8_compat.h); /Y- because the precompiled header already fixed the linkage
+3rdparty/Storm/3rdparty/zlib/	/Y- /Ob2	evidence/flags.md "zlib 1.2.8 genuine sources": the original inlines static helpers (flush_pending, inflateReset) the way /Ob2 does; /Y- so the precompiled header does not drop it

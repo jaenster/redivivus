@@ -85,7 +85,17 @@
       "calledFunctions": [
         "Unreferenced_0045b9e0"
       ],
-      "dh": "9be12f53"
+      "usedTypes": [
+        "StormLinkStrc",
+        "uint32_t"
+      ],
+      "dh": "a06222be",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0045ba80",

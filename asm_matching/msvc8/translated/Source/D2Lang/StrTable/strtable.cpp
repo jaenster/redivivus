@@ -656,11 +656,10 @@ static uint16_t __stdcall STRTABLE_FindStringByKey(uint16_t * * ppHashTable, uin
     return 0xffff;
 }
 
-uint32_t __stdcall STRTABLE_LookupString(uint8_t * pbKey, uint16_t * * ppwszText) {
+uint16_t __stdcall STRTABLE_LookupString(uint8_t * pbKey, uint16_t * * ppwszText) {
     // Static local variables (originally global data)
     static uint16_t gwStrTableLanguageCode; D2_STATIC_GUARD_BSS(gwStrTableLanguageCode, "D2Lang::StrTable::strtable::STRTABLE_LookupString::gwStrTableLanguageCode");
 
-    uint32_t nBaseResult;
     uint16_t* pTranslated;
     if (!gpStringTableBase) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ba);
@@ -679,7 +678,7 @@ uint32_t __stdcall STRTABLE_LookupString(uint8_t * pbKey, uint16_t * * ppwszText
         }
         if (!*pbKey) {
           *ppwszText = (uint16_t*)&gwStrTableLanguageCode;
-          return (uintptr_t)ppwszText & -65536;
+          return 0;
         }
 
         uVar1 = STRTABLE_FindStringByKey(gpStringIndexPatchD2, pbKey, ppwszText, gpStringTablePatchD2);
@@ -694,14 +693,13 @@ uint32_t __stdcall STRTABLE_LookupString(uint8_t * pbKey, uint16_t * * ppwszText
         }
 
         uVar1 = STRTABLE_FindStringByKey(gpStringIndexBase, pbKey, ppwszText, gpStringTableBase);
-        nBaseResult = (uint32_t)uVar1;
         if (uVar1 == 0xffff) {
           pTranslated = STRTABLE_GetTranslatedString(pbKey);
           *ppwszText = pTranslated;
-          nBaseResult = (uintptr_t)pTranslated & -65536;
+          return 0;
         }
 
-        return nBaseResult;
+        return uVar1;
       }
     }
 }
@@ -1228,8 +1226,7 @@ static void STRTABLE_LoadAbbreviationSymbols(DWORD dwParam) {
 static uint16_t * __fastcall STRTABLE_LoadStringTableFile(char * szFileName) {
     uint32_t wComputedCRC;
     D2StringTableTblFileStrc* pArchive = (D2StringTableTblFileStrc*)D2Hell::D2FILE_AllocAndLoadD2File((D2PoolManagerStrc*)MPQ_d2data, szFileName, nullptr, ".\\StrTable\\strtable.cpp", 0xc0);
-    uint32_t nCrcStartOffset = pArchive->dwDataStartOffset;
-    STRTABLE_CalculateCRC((uint16_t*)&wComputedCRC, (uint8_t*)pArchive, nCrcStartOffset, pArchive->dwFileSize);
+    STRTABLE_CalculateCRC((uint16_t*)&wComputedCRC, (uint8_t*)pArchive, pArchive->dwDataStartOffset, pArchive->dwFileSize);
     if ((uint16_t)wComputedCRC != pArchive->wCRC) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xce);
       exit(-1);

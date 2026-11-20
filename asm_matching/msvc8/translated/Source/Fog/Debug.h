@@ -332,7 +332,7 @@ void __stdcall DebugThread();
 // Loads dbghelp.dll once and resolves its 64-bit symbol APIs into globals. Returns true when the library is (already) loaded and every API resolved, in AL.
 bool __stdcall DEBUG_LoadDbgHelp64Apis();
 void __stdcall Unreferenced_00401c80();
-int __stdcall InitializeDebugSymbols();
+bool __stdcall InitializeDebugSymbols();
 void __stdcall Unreferenced_00401dd0();
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
 bool __stdcall GetModuleInfoForAddress(uint32_t dwQueryAddr, uint32_t * pdwModuleBase, char * szModuleName);
@@ -349,7 +349,7 @@ void __stdcall WriteCrashDumpViaThread();
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall DEBUG_CrashDumpRequestThreadProc(void * lpThreadParam);
 bool __fastcall CrashDumpWriterThread(LPCSTR szDumpPath, char * pExceptionPtrs, struct _EXCEPTION_POINTERS * nEventHandle, DWORD dwThreadId);
-uint32_t __stdcall DEBUG_GetDbgHelpModuleRange(LPVOID * ppBaseOfDll, DWORD * pdwSizeOfImage);
+bool __stdcall DEBUG_GetDbgHelpModuleRange(LPVOID * ppBaseOfDll, DWORD * pdwSizeOfImage);
 void __stdcall CleanupDebugSymbols();
 uint32_t * __fastcall ZeroStruct36Bytes(uint32_t * pStruct);
 void __fastcall SKILLSTXT_ZeroOutFields(struct D2SkillsTxt * pSkillsTxt);

@@ -609,7 +609,7 @@ int32_t __stdcall DRLGPATH_GetApproxDistancePacked(uint32_t nPackedCoord1, uint3
       nDy = -nDy;
     }
 
-    int nMin = nDx < nDy ? nDx : nDy;
+    int nMin = nDx < nDy ? nDx : nDy; // steer-ok: MIN then MAX of the two axis deltas, weighted distance min + 2*max
     int nMax = nDx > nDy ? nDx : nDy;
     return nMin + nMax * 2;
 }
@@ -2102,7 +2102,7 @@ int32_t __stdcall DRLGPATH_GetSimpleDistancePacked(uint32_t nPackedPosA, uint32_
       nDY = -nDY;
     }
 
-    int nMin = nDX < nDY ? nDX : nDY;
+    int nMin = nDX < nDY ? nDX : nDY; // steer-ok: MIN then MAX of the two axis deltas, weighted distance min + 2*max
     int nMax = nDX > nDY ? nDX : nDY;
     return nMin + nMax * 2;
 }

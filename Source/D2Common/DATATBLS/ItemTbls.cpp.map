@@ -417,10 +417,9 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
-        "WCHAR",
-        "uint32_t"
+        "WCHAR"
       ],
-      "dh": "a2e90208",
+      "dh": "183edbc7",
       "paramStorage": [
         [
           "pMemory",
@@ -511,10 +510,9 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
-        "WCHAR",
-        "uint32_t"
+        "WCHAR"
       ],
-      "dh": "1673b1c8",
+      "dh": "feed75b6",
       "paramStorage": [
         [
           "pMemory",
@@ -608,10 +606,9 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "WCHAR",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ],
-      "dh": "18c0affd",
+      "dh": "13d1fe67",
       "paramStorage": [
         [
           "pMemory",
@@ -662,10 +659,9 @@
         "D2SetItemsTxt",
         "D2SetsTxt",
         "WCHAR",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ],
-      "dh": "c97676cb",
+      "dh": "2979fd02",
       "paramStorage": [
         [
           "pMemory",
@@ -708,10 +704,9 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
-        "WCHAR",
-        "uint32_t"
+        "WCHAR"
       ],
-      "dh": "f38b8528",
+      "dh": "9301c930",
       "paramStorage": [
         [
           "pMemory",
@@ -800,10 +795,9 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "WCHAR",
-        "uint32_t",
         "uint8_t"
       ],
-      "dh": "98addf93",
+      "dh": "39b7ffb4",
       "paramStorage": [
         [
           "pMemory",
@@ -976,10 +970,9 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
-        "WCHAR",
-        "uint32_t"
+        "WCHAR"
       ],
-      "dh": "2132afe5",
+      "dh": "0518f535",
       "paramStorage": [
         [
           "pMemory",
@@ -1504,10 +1497,9 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "WCHAR",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ],
-      "dh": "a6162106",
+      "dh": "c7a5f6b2",
       "paramStorage": [
         [
           "pMemory",

@@ -26,7 +26,7 @@ typedef void (__fastcall *fpTimerFunction)(::SGAMEDATA * pGame, struct D2UnitStr
 #endif
 #ifndef RECON_FPTD_fpTimerFunctionUnit
 #define RECON_FPTD_fpTimerFunctionUnit
-typedef void (__fastcall *fpTimerFunctionUnit)(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t nArg1, int32_t nArg2);
+typedef BOOL (__fastcall *fpTimerFunctionUnit)(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t nArg1, int32_t nArg2);
 #endif
 
 struct D2EventStrc;
@@ -2662,7 +2662,7 @@ struct __attribute__((packed)) D2TimerStrc {
     /* 0x20 */ struct D2TimerStrc * pPrevTimerList; // previous timer in the type/frame bucket list (EVENT_RemoveAndRecycleTimer, SetEventInternal)
     /* 0x24 */ struct D2TimerStrc * pNextTimerOnUnit; // the next timer assigned to this unit
     /* 0x28 */ struct D2TimerStrc * pPrevTimerOnUnit; // previous timer on the same unit: EVENT_AllocTimerToUnit stores the new head into the old head's +0x28
-    /* 0x2C */ void (__fastcall *nfpTimerFunction)(::SGAMEDATA *, struct D2UnitStrc *, eD2TimerTypeDWORD, int32_t, int32_t); // function called when the timer ends
+    /* 0x2C */ BOOL (__fastcall *nfpTimerFunction)(::SGAMEDATA *, struct D2UnitStrc *, eD2TimerTypeDWORD, int32_t, int32_t); // function called when the timer ends
 };
 
 #endif // D2_DEFINED_D2TimerStrc

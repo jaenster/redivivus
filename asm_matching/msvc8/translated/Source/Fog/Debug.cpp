@@ -315,16 +315,15 @@ void __stdcall Unreferenced_00401c80() {
     hDbgHelpDll = (HMODULE)0x0;
 }
 
-int __stdcall InitializeDebugSymbols() {
-    char* pLastBackslash;
+bool __stdcall InitializeDebugSymbols() {
     DWORD dwProcessId;
     BOOL bSymInitOk;
     char szSymbolPath[32768];
-    uint32_t uVar1 = DEFAULT_SECURITY_COOKIE ^ (uintptr_t)0;
     if (bDebugSymbolsInitialized != '\0') {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)(uVar1 >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+      return true;
     }
     if (hDbgHelpDll && pSymSetOptionsApi && pSymInitializeApi) {
+      char* pLastBackslash;
       dwProcessId = (*pSymGetOptionsApi)();
       dwProcessId |= 0x214;
       (*pSymSetOptionsApi)(dwProcessId);
@@ -344,14 +343,13 @@ int __stdcall InitializeDebugSymbols() {
 
       /* HANDLE Process for GetProcessId */ dwProcessId = GetProcessId(ghCurrentProcessHandle);
       bSymInitOk = (*pSymInitializeApi)(ghCurrentProcessHandle, szSymbolPath, (uint32_t)(dwProcessId != 0));
-      uVar1 = 0;
       if (bSymInitOk) {
         bDebugSymbolsInitialized = '\x01';
-        return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)bSymInitOk >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+        return true;
       }
     }
 
-    return uVar1 & -256;
+    return false;
 }
 
 void __stdcall Unreferenced_00401dd0() {
@@ -366,7 +364,6 @@ void __stdcall Unreferenced_00401dd0() {
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
 bool __stdcall GetModuleInfoForAddress(uint32_t dwQueryAddr, uint32_t * pdwModuleBase, char * szModuleName) {
     bool bVar1;
-    BOOL bGotModuleInfo;
     HMODULE hModule;
     IMAGEHLP_MODULE64 sModuleInfo;
     pfnSymGetModuleInfo64 pfnSymGetModuleInfo64Cached;
@@ -382,10 +379,10 @@ bool __stdcall GetModuleInfoForAddress(uint32_t dwQueryAddr, uint32_t * pdwModul
     EnterCriticalSection(&lpCriticalSection_0098a6f0);
     nSehState = 0;
     if (hDbgHelpDll || (bVar1 = DEBUG_LoadDbgHelp64Apis() , bVar1)) {
-      int bSymbolsInitOk;
+      BOOL bGotModuleInfo;
       if (bDebugSymbolsInitialized == '\0') {
-        bSymbolsInitOk = InitializeDebugSymbols();
-        if ((char)bSymbolsInitOk == '\0') {
+        bVar1 = InitializeDebugSymbols();
+        if (!bVar1) {
           goto error;
         }
       }
@@ -419,7 +416,6 @@ bool __stdcall GetModuleInfoForAddress(uint32_t dwQueryAddr, uint32_t * pdwModul
 
 bool __stdcall GetSymbolNameForAddress(DWORD dwQueryAddr, char * szSymbolName, uint32_t * pdwSymDisplacement) {
     bool bVar1;
-    BOOL bApiOk;
     uint32_t adwDisplacement[2];
     IMAGEHLP_MODULE64 moduleInfo;
     D2ImagehlpSymbol64BufStrc sSymbol;
@@ -435,10 +431,10 @@ bool __stdcall GetSymbolNameForAddress(DWORD dwQueryAddr, char * szSymbolName, u
     EnterCriticalSection(&lpCriticalSection_0098a6f0);
     nSehState = 0;
     if (hDbgHelpDll || (bVar1 = DEBUG_LoadDbgHelp64Apis() , bVar1)) {
-      int bInitOk;
+      BOOL bApiOk;
       if (bDebugSymbolsInitialized == '\0') {
-        bInitOk = InitializeDebugSymbols();
-        if ((char)bInitOk == '\0') {
+        bVar1 = InitializeDebugSymbols();
+        if (!bVar1) {
           goto error;
         }
       }
@@ -487,8 +483,7 @@ bool __stdcall GetSourceLineForAddress(uint32_t dwQueryAddr, char * szFileName, 
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    int uInitSymbolsResult;
-    BOOL bGotLine;
+    bool bVar1;
     uint32_t nSehState;
     nSehState = -1;
     pfnEHHandlerRoutine pSehHandlerFunc;
@@ -500,19 +495,19 @@ bool __stdcall GetSourceLineForAddress(uint32_t dwQueryAddr, char * szFileName, 
     EnterCriticalSection(&lpCriticalSection_0098a6f0);
     nSehState = 0;
     if (!hDbgHelpDll) {
-      bool bVar1;
       bVar1 = DEBUG_LoadDbgHelp64Apis();
       if (!bVar1) {
         goto error;
       }
     }
     if (bDebugSymbolsInitialized == '\0') {
-      uInitSymbolsResult = InitializeDebugSymbols();
-      if ((char)uInitSymbolsResult == '\0') {
+      bVar1 = InitializeDebugSymbols();
+      if (!bVar1) {
         goto error;
       }
     }
     if (pSymGetLineFromAddr64) {
+      BOOL bGotLine;
       IMAGEHLP_LINE64 sLineInfo;
       memset(&sLineInfo, 0, sizeof(sLineInfo));
       *(uint32_t*)(char*)&sLineInfo.Address = 0;
@@ -564,7 +559,7 @@ bool __stdcall EnumerateLoadedModules(void * pfnModuleCallback, void * pUserCont
 }
 
 void __fastcall SetSymbolSearchPath(char * szSearchPath) {
-    int bSymbolsInitOk;
+    bool bVar1;
     uint32_t nSehState;
     nSehState = -1;
     pfnEHHandlerRoutine pSehHandler;
@@ -581,15 +576,14 @@ void __fastcall SetSymbolSearchPath(char * szSearchPath) {
       return;
     }
     if (!hDbgHelpDll) {
-      bool bVar1;
       bVar1 = DEBUG_LoadDbgHelp64Apis();
       if (!bVar1) {
         goto unlock_and_return;
       }
     }
     if (bDebugSymbolsInitialized == '\0') {
-      bSymbolsInitOk = InitializeDebugSymbols();
-      if ((char)bSymbolsInitOk == '\0') {
+      bVar1 = InitializeDebugSymbols();
+      if (!bVar1) {
         goto unlock_and_return;
       }
     }
@@ -606,8 +600,7 @@ void __fastcall SetSymbolSearchPath(char * szSearchPath) {
 }
 
 int __fastcall FindSymbolFile(void * pfnFindCallback, int, char * szSearchPath, char * szFileName, void * nId, uint32_t dwTimestamp, uint32_t nThree, uint32_t dwFlags, char * szFoundFile, void * pUserContext) {
-    int bSymbolsInitOk;
-    BOOL bFound;
+    bool bVar1;
     uint32_t nSehState;
     nSehState = -1;
     pfnEHHandlerRoutine pSehHandler;
@@ -618,19 +611,19 @@ int __fastcall FindSymbolFile(void * pfnFindCallback, int, char * szSearchPath, 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0098a6f0);
     nSehState = 0;
     if (!hDbgHelpDll) {
-      bool bVar1;
       bVar1 = DEBUG_LoadDbgHelp64Apis();
       if (!bVar1) {
         goto error;
       }
     }
     if (bDebugSymbolsInitialized == '\0') {
-      bSymbolsInitOk = InitializeDebugSymbols();
-      if ((char)bSymbolsInitOk == '\0') {
+      bVar1 = InitializeDebugSymbols();
+      if (!bVar1) {
         goto error;
       }
     }
     if (pSymFindFileInPath) {
+      BOOL bFound;
       if (!pfnFindCallback) {
         pfnFindCallback = (void*)Src::ErrorManager::FOG_ReturnZeroCallback;
       }
@@ -648,8 +641,7 @@ int __fastcall FindSymbolFile(void * pfnFindCallback, int, char * szSearchPath, 
 }
 
 int __stdcall LoadModuleSymbols(HANDLE hFile, char * szImageName, char * szModuleName, uint32_t dwBaseOfDll, uint32_t dwSizeOfDll, uint32_t dwBaseHigh) {
-    int bInitOk;
-    uint64_t uVar2;
+    bool bVar1;
     uint32_t nSehState;
     nSehState = -1;
     pfnEHHandlerRoutine pfnSehHandler;
@@ -660,19 +652,19 @@ int __stdcall LoadModuleSymbols(HANDLE hFile, char * szImageName, char * szModul
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0098a6f0);
     nSehState = 0;
     if (!hDbgHelpDll) {
-      bool bVar1;
       bVar1 = DEBUG_LoadDbgHelp64Apis();
       if (!bVar1) {
         goto error;
       }
     }
     if (bDebugSymbolsInitialized == '\0') {
-      bInitOk = InitializeDebugSymbols();
-      if ((char)bInitOk == '\0') {
+      bVar1 = InitializeDebugSymbols();
+      if (!bVar1) {
         goto error;
       }
     }
     if (pSymLoadModule64) {
+      uint64_t uVar2;
       *(uint32_t*)(char*)&uVar2 = (*pSymLoadModule64)(ghCurrentProcessHandle, hFile, szImageName, szModuleName, dwBaseOfDll, dwSizeOfDll, dwBaseHigh);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
       ExceptionList = pPrevExceptionRecord;
@@ -686,8 +678,7 @@ int __stdcall LoadModuleSymbols(HANDLE hFile, char * szImageName, char * szModul
 }
 
 uint32_t __stdcall UnloadModuleSymbols(uint32_t dwBaseOfDll, uint32_t dwBaseHigh) {
-    int bSymbolsInitOk;
-    BOOL bUnloaded;
+    bool bVar1;
     uint32_t nSehState;
     nSehState = -1;
     pfnEHHandlerRoutine pSehHandler;
@@ -698,19 +689,19 @@ uint32_t __stdcall UnloadModuleSymbols(uint32_t dwBaseOfDll, uint32_t dwBaseHigh
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0098a6f0);
     nSehState = 0;
     if (!hDbgHelpDll) {
-      bool bVar1;
       bVar1 = DEBUG_LoadDbgHelp64Apis();
       if (!bVar1) {
         goto error;
       }
     }
     if (bDebugSymbolsInitialized == '\0') {
-      bSymbolsInitOk = InitializeDebugSymbols();
-      if ((char)bSymbolsInitOk == '\0') {
+      bVar1 = InitializeDebugSymbols();
+      if (!bVar1) {
         goto error;
       }
     }
     if (pSymUnloadModule64) {
+      BOOL bUnloaded;
       bUnloaded = (*pSymUnloadModule64)(ghCurrentProcessHandle, dwBaseOfDll, dwBaseHigh);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
       ExceptionList = pSehFrame;
@@ -724,8 +715,7 @@ uint32_t __stdcall UnloadModuleSymbols(uint32_t dwBaseOfDll, uint32_t dwBaseHigh
 }
 
 bool __stdcall WalkStackFrame(HANDLE hThread, void * pStackFrame, void * pContextRecord) {
-    int bSymbolsInitOk;
-    BOOL bWalkOk;
+    bool bVar1;
     uint32_t nSehState;
     nSehState = -1;
     pfnEHHandlerRoutine pSehHandler;
@@ -736,19 +726,19 @@ bool __stdcall WalkStackFrame(HANDLE hThread, void * pStackFrame, void * pContex
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0098a6f0);
     nSehState = 0;
     if (!hDbgHelpDll) {
-      bool bVar1;
       bVar1 = DEBUG_LoadDbgHelp64Apis();
       if (!bVar1) {
         goto error;
       }
     }
     if (bDebugSymbolsInitialized == '\0') {
-      bSymbolsInitOk = InitializeDebugSymbols();
-      if ((char)bSymbolsInitOk == '\0') {
+      bVar1 = InitializeDebugSymbols();
+      if (!bVar1) {
         goto error;
       }
     }
     if (pStackWalk64 && pSymFunctionTableAccess64 && pSymGetModuleBase64) {
+      BOOL bWalkOk;
       bWalkOk = (*pStackWalk64)(0x14c, ghCurrentProcessHandle, hThread, pStackFrame, pContextRecord, nullptr, (void*)pSymFunctionTableAccess64, (void*)pSymGetModuleBase64, nullptr);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
       ExceptionList = pSehFrame;
@@ -901,10 +891,10 @@ void __stdcall InitializeDebugSubsystem() {
     bEnableCrashDumps = bDebuggerPresent != 1;
 }
 
-uint32_t __stdcall DEBUG_GetDbgHelpModuleRange(LPVOID * ppBaseOfDll, DWORD * pdwSizeOfImage) {
+bool __stdcall DEBUG_GetDbgHelpModuleRange(LPVOID * ppBaseOfDll, DWORD * pdwSizeOfImage) {
     _MODULEINFO moduleInfo;
     if (!hDbgHelpDll) {
-      return 0;
+      return false;
     }
 
     DWORD cb = 0xc;
@@ -913,12 +903,12 @@ uint32_t __stdcall DEBUG_GetDbgHelpModuleRange(LPVOID * ppBaseOfDll, DWORD * pdw
     HANDLE hProcess = GetCurrentProcess();
     BOOL bGotInfo = GetModuleInformation(hProcess, hModule, pModuleInfo, cb);
     if (!bGotInfo) {
-      return 0;
+      return false;
     }
 
     *ppBaseOfDll = moduleInfo.lpBaseOfDll;
     *pdwSizeOfImage = moduleInfo.SizeOfImage;
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)ppBaseOfDll >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    return true;
 }
 
 void __stdcall CleanupDebugSymbols() {

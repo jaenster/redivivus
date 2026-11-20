@@ -23,7 +23,7 @@ namespace Storm { namespace _3rdparty { namespace zlib { namespace inftrees {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 // Build Huffman decoding table from bit lengths. Generates lookup tables for inflate decompression. Uses intermediate code arrays and calculates bit-level offsets for dynamic Huffman tree construction.
-int __fastcall ZLIB_InflateTable(int32_t nTableType, uint16_t * pBitLengths, uint32_t nNumCodes, inflate_code * * ppOutTable, uint32_t * pMaxBits, uint16_t * aOutCodes);
+int __fastcall inflate_table(int32_t type, uint16_t * lens, uint32_t codes, inflate_code * * table, uint32_t * bits, uint16_t * work);
 #endif // D2_MODULE_Storm
 
 }}}} // namespace Storm::_3rdparty::zlib::inftrees

@@ -108,7 +108,7 @@ void __fastcall Objects_InitFn56_Seal(struct D2ObjectInitFnArg * pInitArg);
 // [A4Q3 Terror's End] Object operate-fn for the 5 Chaos Sanctuary seal objects (class 0x188-0x18c). On activation sets the corresponding per-seal flag in the A4Q2 struct; once all 5 seals + 3 seal-bosses are done, calls Q27_ActivateAllSealsKillChaos (summon Diablo) and arms the spawn timer.
 BOOL __fastcall OBJOP_A4Q2_DiabloSealActivateKillChaos(struct D2ObjectOperateFnArg * pOperation);
 // [A4Q3 Terror's End] Getter: returns the "Diablo currently spawned" flag (field_0x14) from the A4Q2 quest-specific struct.
-uint32_t __fastcall Q27_IsDiabloSpawned(::SGAMEDATA * pGame);
+uint8_t __fastcall Q27_IsDiabloSpawned(::SGAMEDATA * pGame);
 // A4Q3 — OBJOP_A4Q2_PandemoniumFortressGate: operate handler for the Act4 Pandemonium Fortress gate to Act5. Gate is locked until Terror's End (QUEST_TerrorsEnd: Diablo dead) is Completed or JustCompleted; else plays the locked "can't" sound and returns. Once unlocked AND player is in Act IV: sets QUEST_AbleGoToAct5 Completed+JustCompleted (first time only), sends the 0x5D quest-state and 0x61 can-go-to-act packets, loads/portals the player to Harrogath (LEVEL_Harrogath, act 5), resyncs quest info, and unlocks the Harrogath waypoint. Expansion-only.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
 BOOL __fastcall OBJOP_A4Q2_PandemoniumFortressGate(struct D2ObjectOperateFnArg * pOperation);

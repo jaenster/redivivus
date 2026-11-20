@@ -810,7 +810,6 @@ int32_t __stdcall PLAYERMSG_GetMessagePriority(uint32_t nParam);
 eD2ServerIncomingStatus __thiscall SERVER_IsItemOnCursor(::SGAMEDATA * pThis, struct D2UnitStrc * pUnit, uint32_t dwItemGUID);
 eD2ServerIncomingStatus __thiscall IsPlayerTheOwner(::SGAMEDATA * pThis, struct D2UnitStrc * pOwner, uint32_t nItemGid);
 eD2ServerIncomingStatus __thiscall ItemBelongsToUnit(::SGAMEDATA * pThis, struct D2UnitStrc * pOwner, uint32_t nItemGid);
-bool Unreferenced_005492a0();
 eD2ServerIncomingStatus __thiscall ItemBelongsToInventoryOf(::SGAMEDATA * pThis, struct D2UnitStrc * pPlayer, uint32_t nItemGid);
 // C->S Packet 0x01 - Walk to XY (5 bytes)
 // [op:1][x:u16][y:u16]
@@ -1096,7 +1095,7 @@ eD2ServerIncomingStatus __fastcall NET_D2GS_SERVER_HandleIncomingPacketAfterClie
 void __fastcall PLAYERMSG_BroadcastPlayerSlain(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim);
 void __fastcall SendPlayerStopAndAtributeUpdate(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient, int32_t nStopReason);
 #endif // D2_MODULE_D2Game
-// 26 internal functions (defined in .cpp)
+// 27 internal functions (defined in .cpp)
 
 // Extern entries for hand-written callers (each forwards to the function of its name)
 eD2ServerIncomingStatus __stdcall CastSkillOnLocation_Extern(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t nTargetX, int32_t nTargetY, struct D2SkillStrc * pSkill);

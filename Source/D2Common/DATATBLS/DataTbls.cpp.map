@@ -160,7 +160,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d85d7366",
+      "dh": "5fce1d30",
       "paramStorage": [
         [
           "szKey",
@@ -1421,7 +1421,16 @@
         "Unreferenced_00617c20",
         "TXT_AllocTxt_skill_skilldesc"
       ],
-      "dh": "b7e17779"
+      "usedTypes": [
+        "D2PoolManagerStrc"
+      ],
+      "dh": "5646048d",
+      "paramStorage": [
+        [
+          "pMemPool",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "DATATBLS_FreeSkillsTxtTables",

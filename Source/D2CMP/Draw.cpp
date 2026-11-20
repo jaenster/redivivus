@@ -686,24 +686,19 @@ void __stdcall DRAW_BuildDarkenTable(LPPALETTEENTRY pPalette) {
 }
 
 void __stdcall DRAW_BuildBrightenTable(LPPALETTEENTRY pPalette) {
-    uint8_t bVar1;
-    uint8_t* pbPaletteEntry;
-    uint32_t nBrightenLevel = 0;
-    uint8_t* pDestTable = &pPalette[0x900].peRed;
+    uint32_t nRow = 0;
+    uint8_t (*pTables)[0x100] = (uint8_t (*)[0x100])&pPalette[0x900];
     do {
-      uint32_t nColorIndex;
-      nColorIndex = 0;
-      nBrightenLevel++;
-      pbPaletteEntry = &pPalette->peGreen;
+      uint32_t nColorIndex = 0;
+      uint32_t nBrightenLevel = nRow + 1;
+      uint8_t* pbPaletteEntry = &pPalette->peGreen;
       do {
-        bVar1 = D2GFX_FindNearestPaletteIndex(pPalette, 0x100, ((0xff - (uint32_t)((tagPALETTEENTRY*)(pbPaletteEntry - 1))->peRed) * nBrightenLevel >> 4) + (uint32_t)((tagPALETTEENTRY*)(pbPaletteEntry - 1))->peRed, ((0xff - (uint32_t)*pbPaletteEntry) * nBrightenLevel >> 4) + (uint32_t)*pbPaletteEntry, ((0xff - (uint32_t)pbPaletteEntry[1]) * nBrightenLevel >> 4) + (uint32_t)pbPaletteEntry[1]);
-        pDestTable[nColorIndex] = bVar1;
+        pTables[nRow][nColorIndex] = D2GFX_FindNearestPaletteIndex(pPalette, 0x100, ((0xff - (uint32_t)pbPaletteEntry[-1]) * nBrightenLevel >> 4) + (uint32_t)pbPaletteEntry[-1], ((0xff - (uint32_t)*pbPaletteEntry) * nBrightenLevel >> 4) + (uint32_t)*pbPaletteEntry, ((0xff - (uint32_t)pbPaletteEntry[1]) * nBrightenLevel >> 4) + (uint32_t)pbPaletteEntry[1]);
         nColorIndex++;
         pbPaletteEntry += 4;
       } while (nColorIndex < 0x100);
-
-      pDestTable += 0x100;
-    } while (nBrightenLevel < 0x10);
+      nRow++;
+    } while (nRow < 0x10);
 }
 
 void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorStrc * pHSLPalette) {
@@ -857,8 +852,8 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
         pHSLLoopPtr->dSaturation = 0.5;
         dVar1 = pHSLLoopPtr->dLightness + 0.20000000298023224;
         pHSLLoopPtr->dLightness = dVar1;
-        if (1.2000000476837158 < dVar1) {
-          pHSLLoopPtr->dLightness = 1.2000000476837158;
+        if (1.0 < dVar1) {
+          pHSLLoopPtr->dLightness = 1.0;
         }
 
         pHSLLoopPtr++;
@@ -1031,7 +1026,7 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
         *(uint32_t*)((intptr_t)&pHSLEntry->dLightness + 4) = *(uint32_t*)(nHSLSrcOffset + 0x14 + (char*)pHSLEntry);
         pHSLEntry->dHue = (double)(fHueFloat * 30.0);
         nEntryCount--;
-        pHSLEntry->dSaturation = 1.2000000476837158;
+        pHSLEntry->dSaturation = 1.0;
         pHSLEntry++;
       } while (nEntryCount);
 

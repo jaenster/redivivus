@@ -92,7 +92,7 @@ namespace Fog { namespace File {
 
 // Function declarations
 void __stdcall CONTAINER_InitializeBuffer(void * pBuffer, int32_t nTypeSize, int32_t nBufferSize, CONTAINER_TypeInitialValue fpInitValueCallback);
-uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, uint32_t nDestSize);
+bool __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, uint32_t nDestSize);
 bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(char * szPath);
 size_t __stdcall STRING_AppendStringToString(char * szDest, int32_t nDestSize, char * szSrc);
 // Convention __cdecl_ediesi: the destination and its size arrive in EDI/ESI, the format and its arguments on the stack. A model, not custom storage, because the decompiler drops custom register parameters at a varargs call site.

@@ -296,7 +296,7 @@ void __fastcall PLRSKILLS_StateSetFn05_ChangeClass(D2UnitStrc * pUnit, eD2States
 
 static int32_t __stdcall STATES_CalcDamageSeverityTier(int32_t nMax, int32_t nValue) {
     const int32_t nOneThird = nMax / 3;
-    const int32_t nTwoThirds = nOneThird * 2;
+    const int32_t nTwoThirds = nOneThird * 2; // steer-ok: the two tier boundaries are named side by side; VC8 computes both before the first compare
     int32_t nTier = 3;
     if (nValue < nOneThird) {
       nTier = 2;
@@ -449,7 +449,7 @@ void __fastcall PLRSKILLS_StateSetFn06_BoneArmor(D2UnitStrc * pUnit, eD2States e
 
 static int32_t __stdcall PLRSKILLS_CalcDamageSeverityTier_Unreferenced(int32_t nMaxValue, int32_t nValue) {
     const int32_t nOneThird = nMaxValue / 3;
-    const int32_t nTwoThirds = nOneThird * 2;
+    const int32_t nTwoThirds = nOneThird * 2; // steer-ok: the two tier boundaries are named side by side; VC8 computes both before the first compare
     int32_t nTier = 3;
     if (nValue < nOneThird) {
       nTier = 2;

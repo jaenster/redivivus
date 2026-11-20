@@ -246,6 +246,7 @@ BOOL __stdcall GetUseDirectCommand() {
     return D2Ini_bUseDirect;
 }
 
+#if 0 // ratchet: the match body of 00406d30 (evidence 1985bb0f9) could not be re-spelled: callee Engine::Application::PATH_GetKnownFolderPath returns bool, was uint32_t
 static bool SFILE_GetSaveGamePath(LPSTR szOutPath, uint32_t nMaxLen) {
     int nResult;
     char szAppDataPath[260];
@@ -259,6 +260,34 @@ static bool SFILE_GetSaveGamePath(LPSTR szOutPath, uint32_t nMaxLen) {
 
     uint32_t bKnownFolderOk = Engine::Application::PATH_GetKnownFolderPath(szOutPath, nMaxLen);
     if ((char)bKnownFolderOk != '\0') {
+      SFILE_EnsurePathEndsWithBackslash(szOutPath, nMaxLen);
+      Storm::Source::SSTR::SStrPack(szOutPath, "Diablo II", nMaxLen);
+    } else {
+      nResult = SHGetFolderPathA(0, 5, 0, 0, szAppDataPath);
+      if (nResult) {
+        return false;
+      }
+
+      SFILE_EnsurePathEndsWithBackslash(szOutPath, nMaxLen);
+      Storm::Source::SSTR::SStrPack(szOutPath, "Diablo II\\Save", nMaxLen);
+    }
+
+    return true;
+}
+#endif
+static bool SFILE_GetSaveGamePath(LPSTR szOutPath, uint32_t nMaxLen) {
+    int nResult;
+    char szAppDataPath[260];
+    if (!nMaxLen) {
+      return false;
+    }
+    if (!szOutPath) {
+      Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x44);
+      exit(-1);
+    }
+
+    bool bVar1 = Engine::Application::PATH_GetKnownFolderPath(szOutPath, nMaxLen);
+    if (bVar1) {
       SFILE_EnsurePathEndsWithBackslash(szOutPath, nMaxLen);
       Storm::Source::SSTR::SStrPack(szOutPath, "Diablo II", nMaxLen);
     } else {
@@ -439,9 +468,8 @@ uint32_t * __fastcall Unreferenced_00407260(uint32_t * pData) {
     return pData;
 }
 
-int Unreferenced_00407270() {
-    int in_ECX;
-    return in_ECX + 8;
+char * __fastcall Unreferenced_00407270(char * pPathStorage) {
+    return pPathStorage + 8;
 }
 
 int __fastcall Unreferenced_00407280(int param_1) {

@@ -221,7 +221,13 @@
       "calledFunctions": [
         "IGNORELIST_Initialize_Unref_0060b130"
       ],
-      "dh": "a12fc429"
+      "dh": "61de8d36",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

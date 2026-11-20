@@ -127,9 +127,8 @@ uint32_t __fastcall LINKEDLIST_GetCount_Unref_0041eab0(int * pList) {
     return pList[2] <= 0 ? 0 : pList[2];
 }
 
-uint32_t Unreferenced_0041eac0() {
-    int in_ECX;
-    uint32_t uVar1 = *(uint32_t*)(**(int**)(in_ECX + 4) + 4);
+int32_t __fastcall Unreferenced_0041eac0(void * pHandle) {
+    uint32_t uVar1 = *(uint32_t*)(**(int**)((char*)pHandle + 4) + 4);
     return (int)uVar1 <= 0 ? 0 : uVar1;
 }
 

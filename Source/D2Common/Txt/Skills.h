@@ -1191,7 +1191,7 @@ struct __attribute__((packed)) D2DataTableTxtStrc {
     /* 0xAD4 */ struct D2SuperUniquesTxt * pTxtSuperUniques;
     /* 0xAD8 */ struct D2TxtLinkStrc * pTxtSuperUniquesLink;
     /* 0xADC */ int nTxtSuperUniquesSize;
-    /* 0xAE0 */ short aTxtSuperUniquesHardcoded[66];
+    /* 0xAE0 */ uint16_t aTxtSuperUniquesHardcoded[66];
     /* 0xB64 */ struct D2MissilesTxt * pTxtMissiles;
     /* 0xB68 */ struct D2TxtLinkStrc * pTxtMissilesLink;
     /* 0xB6C */ int nTxtMissilesSize;

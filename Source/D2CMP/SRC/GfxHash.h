@@ -65,7 +65,7 @@ namespace D2CMP::SRC::GfxHash {
 void __thiscall GFXHASH_UnlinkCacheEntry(uint8_t * pHashTable, struct D2PoolManagerStrc * pMemory, struct D2GfxHashEntryStrc * pEntry);
 void __fastcall GFXHASH_InitHashTable(void * pHashTable);
 void __fastcall GFX_UnlinkCacheEntry(struct D2PoolManagerStrc * pMemory, void * pHashTable, struct D2GfxHashEntryStrc * pEntry);
-void __stdcall IGNORELIST_Initialize_Unref_0060ab70();
+void __fastcall IGNORELIST_Initialize_Unref_0060ab70(void * pHashTable);
 uint32_t __fastcall GFXHASH_CalcDirectionIndex(struct D2GfxDataStrc * pGfxData, uint32_t * pnDirectionDivisor, struct D2CelFileCacheEntryStrc * pCelEntry);
 struct D2GfxHashEntryStrc * __fastcall GFXHASH_FindEntryByGfxData(uint8_t * pHashTable, struct D2GfxDataStrc * pGfxData, int * pnDirIdx, uint32_t * pnFrameStep, struct D2CelFileCacheEntryStrc * pCelEntry);
 // @sourcefile .\SRC\GfxHash.cpp

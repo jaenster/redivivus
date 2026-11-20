@@ -607,7 +607,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8a093ac4",
+      "dh": "b95d2f30",
       "paramStorage": [
         [
           "szOutPath",
@@ -728,7 +728,13 @@
       "calledFunctions": [
         "Unreferenced_00407270"
       ],
-      "dh": "73d75414"
+      "dh": "ce0b356d",
+      "paramStorage": [
+        [
+          "pPathStorage",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00407280",

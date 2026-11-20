@@ -119,9 +119,8 @@ int __fastcall Unreferenced_004203c0(StormLinkStrc * pLink) {
     return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
-uint32_t Unreferenced_004203d0() {
-    int in_ECX;
-    return *(uint32_t*)(in_ECX + 4);
+uint32_t __fastcall Unreferenced_004203d0(StormLinkStrc * pLink) {
+    return pLink->pNext;
 }
 
 StormLinkStrc * __thiscall WND_ResolveListOffset(StormLinkStrc * pNode, intptr_t pBase) {

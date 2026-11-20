@@ -122,7 +122,13 @@
       "calledFunctions": [
         "IGNORELIST_Initialize_Unref_0060ab70"
       ],
-      "dh": "5a2f193e"
+      "dh": "7ab9a0d3",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "GFXHASH_CalcDirectionIndex",

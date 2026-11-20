@@ -128,7 +128,12 @@ void __fastcall GFX_RemoveCacheEntry(D2PoolManagerStrc * pMemory, D2CelDataHashT
     D2_FREE_POOL_AT(pMemory, pEntry, ".\\SRC\\CelDataHash.cpp", 0x3a);
 }
 
+#if 0 // ratchet: the match body of 0060b130 (evidence 1985bb0f9) could not be re-spelled: arity changed: 0 -> 1 parameters
 void __stdcall IGNORELIST_Initialize_Unref_0060b130() {
+
+}
+#endif
+void __fastcall IGNORELIST_Initialize_Unref_0060b130(void * pHashTable) {
 
 }
 

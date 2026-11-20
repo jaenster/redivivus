@@ -1856,15 +1856,13 @@ static void __stdcall COLLISN_ClearCellMask(D2RoomStrc * pRoom, int32_t nX, int3
     *peTargetCell &= ~eCollisionFlag;
 }
 
-static eCollisionFlags __stdcall RemoveCollision_BoundingBox1(D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t eCollisionFlag) {
-    eCollisionFlags eRemovedFlags;
+static void __stdcall RemoveCollision_BoundingBox1(D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t eCollisionFlag) {
     D2BoundingBoxStrc BoundingBox;
     BoundingBox.nLeft = nX - 1;
-    BoundingBox.nRight = nX + 1;
+    BoundingBox.nRight = BoundingBox.nLeft + 2;
     BoundingBox.nBottom = nY - 1;
-    BoundingBox.nTop = nY + 1;
+    BoundingBox.nTop = BoundingBox.nBottom + 2;
     RemoveCollision_BoundingBox(pRoom, &BoundingBox, eCollisionFlag);
-    return eRemovedFlags;
 }
 
 void __stdcall RemoveCollision_Vector(D2RoomStrc * pRoom, int32_t nX, int32_t nY, uint32_t nVectorX, uint32_t nVectorY, int32_t eCollisionFlag) {

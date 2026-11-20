@@ -2,6 +2,7 @@
 
 #include "Source/D2Client/GAME/Game/Game.h"
 #include "Source/D2CMP/D2CMP.h"
+#include "Source/D2CMP/SRC/CelCmp/CELLIST.h"
 #include "Source/D2Client/ClientModeInGame.h"
 #include "Source/D2Client/Core/Archive.h"
 #include "Source/D2Client/Cursor.h"
@@ -3046,17 +3047,18 @@ void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00603510(StormLinkedLis
     pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
-void Unreferenced_00603570() {
-    int in_ECX;
-    *(uint32_t*)(in_ECX + 4) = 0;
-    *(uint32_t*)(in_ECX + 8) = 0;
-    *(uint32_t*)(in_ECX + 0xc) = 0;
-    *(uint32_t*)(in_ECX + 0x10) = 0;
-    uint32_t uVar1 = in_ECX + 0x30;
-    *(uint32_t*)(in_ECX + 0x34) = 0;
-    *(uint32_t*)uVar1 = uVar1;
-    *(uint32_t*)(in_ECX + 0x2c) = 0;
-    *(uint32_t*)(in_ECX + 0x34) = ~uVar1;
+::CELLIST * __fastcall Unreferenced_00603570(::CELLIST * pCellList) {
+    pCellList->m_linktoslot.m_prevlink = 0;
+    pCellList->m_linktoslot.m_next = 0;
+    pCellList->m_linktofull.m_prevlink = 0;
+    pCellList->m_linktofull.m_next = 0;
+    TSList<TCELENTRY, TSGetLink<TCELENTRY> >* pFrameList = &pCellList->m_frames;
+    TSLink<TCELENTRY>* pHead = &pFrameList->m_terminator;
+    pHead->m_next = 0;
+    pHead->m_prevlink = pHead;
+    pFrameList->m_linkoffset = 0;
+    pFrameList->m_terminator.m_next = ~(intptr_t)pHead;
+    return pCellList;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0060e610(StormLinkedListStrc * pListHead) {

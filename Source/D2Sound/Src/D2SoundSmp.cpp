@@ -681,28 +681,26 @@ void __fastcall CleanupSoundBuffer(uint32_t nFadeTimeMs) {
     }
 }
 
-void __fastcall SOUNDSMP_CheckBufferLost(D2SoundSmpStrc * ppnParam) {
-    D2SoundSmpStrc* dwBufferStatus = ppnParam;
+BOOL __fastcall SOUNDSMP_CheckBufferLost(D2SoundSmpStrc * ppnParam) {
+    const DWORD dwBufferLostFlag = 0x2;
+    const HRESULT nBufferLost = -0x7787ff6a;
     if (!ppnParam->pDSBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x122);
       exit(-1);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
-    HRESULT nHResult = ppnParam->pDSBuffer->lpVtbl->GetStatus(ppnParam->pDSBuffer, (DWORD*)&dwBufferStatus);
+    DWORD dwBufferStatus;
+    HRESULT nHResult = ppnParam->pDSBuffer->lpVtbl->GetStatus(ppnParam->pDSBuffer, &dwBufferStatus);
     if (nHResult < 0) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
-      return;
+      return FALSE;
     }
-    if ((uintptr_t)dwBufferStatus & 2) {
+    if (dwBufferStatus & dwBufferLostFlag) {
       do {
-        while (true) {
-          nHResult = ppnParam->pDSBuffer->lpVtbl->Restore(ppnParam->pDSBuffer);
-          if (nHResult != -0x7787ff6a) {
-            break;
-          }
-
-          /* DWORD dwMilliseconds for Sleep */ Sleep(10);
+        nHResult = ppnParam->pDSBuffer->lpVtbl->Restore(ppnParam->pDSBuffer);
+        if (nHResult == nBufferLost) {
+          Sleep(10);
         }
       } while (nHResult < 0);
 
@@ -710,7 +708,7 @@ void __fastcall SOUNDSMP_CheckBufferLost(D2SoundSmpStrc * ppnParam) {
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
-    return;
+    return TRUE;
 }
 
 // The local holding the EAX interface was typed IUnknown *. It is IKsPropertySet *, the declared type

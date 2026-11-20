@@ -310,14 +310,13 @@ D2RosterStrc * Unreferenced_00479740() {
     return gpRosterPlayers;
 }
 
-D2RosterPartyListStrc * Unreferenced_00479750() {
+D2RosterPartyListStrc * __fastcall Unreferenced_00479750(uint16_t nPartyId) {
     D2RosterPartyListStrc* pDVar1 = pRosterPartyList;
     while (true) {
-      uint16_t in_CX;
       if (!pDVar1) {
         return nullptr;
       }
-      if (pDVar1->nPartyId == in_CX) {
+      if (pDVar1->nPartyId == nPartyId) {
         break;
       }
 
@@ -606,13 +605,12 @@ void __fastcall ROSTER_SetArenaScore(int32_t nRosterGUID, uint16_t nArenaScore) 
     UI::Party::ResetPartyUi();
 }
 
-uint16_t Unreferenced_00479b50() {
-    int in_ECX;
-    if (!in_ECX) {
+uint16_t __fastcall Unreferenced_00479b50(D2RosterStrc * pRoster) {
+    if (!pRoster) {
       return 0;
     }
 
-    return *(uint16_t*)(in_ECX + 0x44);
+    return pRoster->nGuildFlags;
 }
 
 int __fastcall Unreferenced_00479b60(int param_1) {

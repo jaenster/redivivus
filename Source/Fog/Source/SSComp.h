@@ -34,11 +34,11 @@ union COMPRESS_BuildHuffmanDecodeTable_Slotm20c {
 #ifndef D2_DEFINED_D2SSCompDeflateBlockEntryStrc
 #define D2_DEFINED_D2SSCompDeflateBlockEntryStrc
 struct D2SSCompDeflateBlockEntryStrc {
-    /* 0x00 */ uint16_t nGoodLength; // zlib configuration_table.good_length -> deflate_state.good_match
-    /* 0x02 */ uint16_t nMaxLazy; // zlib configuration_table.max_lazy -> deflate_state.max_lazy_match
-    /* 0x04 */ uint16_t nNiceLength; // zlib configuration_table.nice_length -> deflate_state.nice_match
-    /* 0x06 */ uint16_t nMaxChain; // zlib configuration_table.max_chain -> deflate_state.max_chain_length
-    /* 0x08 */ int32_t (__fastcall *pfnDeflateBlock)(deflate_state *, int32_t); // zlib configuration_table.func (DeflateStored / DeflateFast / DeflateSlow), __fastcall
+    /* 0x00 */ uint16_t good_length; // zlib configuration_table.good_length -> deflate_state.good_match
+    /* 0x02 */ uint16_t max_lazy; // zlib configuration_table.max_lazy -> deflate_state.max_lazy_match
+    /* 0x04 */ uint16_t nice_length; // zlib configuration_table.nice_length -> deflate_state.nice_match
+    /* 0x06 */ uint16_t max_chain; // zlib configuration_table.max_chain -> deflate_state.max_chain_length
+    /* 0x08 */ int32_t (__fastcall *func)(deflate_state *, int32_t); // zlib configuration_table.func (DeflateStored / DeflateFast / DeflateSlow), __fastcall
 };
 
 #endif // D2_DEFINED_D2SSCompDeflateBlockEntryStrc

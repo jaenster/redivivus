@@ -57,9 +57,8 @@ int __fastcall Unreferenced_0045b9d0(StormLinkStrc * pLink) {
     return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
-uint32_t Unreferenced_0045b9e0() {
-    int in_ECX;
-    return *(uint32_t*)(in_ECX + 4);
+uint32_t __fastcall Unreferenced_0045b9e0(StormLinkStrc * pLink) {
+    return pLink->pNext;
 }
 
 intptr_t __fastcall Unreferenced_0045ba80(StormLinkedListStrc * pList) {

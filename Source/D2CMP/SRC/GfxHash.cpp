@@ -104,7 +104,12 @@ void __fastcall GFX_UnlinkCacheEntry(D2PoolManagerStrc * pMemory, void * pHashTa
     GFXHASH_UnlinkCacheEntry((uint8_t*)pHashTable, pMemory, pEntry);
 }
 
+#if 0 // ratchet: the match body of 0060ab70 (evidence 1985bb0f9) could not be re-spelled: arity changed: 0 -> 1 parameters
 void __stdcall IGNORELIST_Initialize_Unref_0060ab70() {
+
+}
+#endif
+void __fastcall IGNORELIST_Initialize_Unref_0060ab70(void * pHashTable) {
 
 }
 

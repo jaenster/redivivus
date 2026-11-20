@@ -363,7 +363,16 @@
       "calledFunctions": [
         "Unreferenced_004e5a10"
       ],
-      "dh": "dee649d0"
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "ba6de5d9",
+      "paramStorage": [
+        [
+          "nIndex",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "SKILLDESC_BuildStatDescription",

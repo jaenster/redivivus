@@ -13,7 +13,7 @@ static char gszSystemGlobalString[1024] = {}; D2_STATIC_GUARD(gszSystemGlobalStr
 namespace Fog::_3rdparty::crashy {
 
 void __fastcall CRT_LocalTime_Thunk(uint8_t * pLocalTime, uint32_t * pTime) {
-    /* MCP write-path test — safe to delete */ _localtime64_s((tm*)pLocalTime, (__time64_t*)pTime);
+    _localtime64_s((tm*)pLocalTime, (__time64_t*)pTime);
 }
 
 static bool __stdcall FILETOOLS_GetTempPath_UTF8(char * pSrc) {

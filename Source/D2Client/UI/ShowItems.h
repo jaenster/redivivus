@@ -41,7 +41,7 @@ namespace D2Client::UI::ShowItems {
 BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, int * pnBottom, int32_t nPlacementMode, int32_t nMaxX, int32_t nMinX);
 // @sourcefile .\UI\showitems.cpp
 void __stdcall DRAW_AltItems();
-void Unreferenced_004c0ce0();
+struct D2GroundItemLabelStrc * __fastcall Unreferenced_004c0ce0(struct D2GroundItemLabelStrc * pLabel);
 void StaticInit_gaGroundItemLabels();
 void StaticInit_6cade0();
 void StaticFini_Empty_6cb400();

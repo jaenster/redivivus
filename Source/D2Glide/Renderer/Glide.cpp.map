@@ -938,7 +938,16 @@
       "calledFunctions": [
         "Unreferenced_0050a220"
       ],
-      "dh": "f2219df3"
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "2a754c65",
+      "paramStorage": [
+        [
+          "nValue",
+          "EAX:4"
+        ]
+      ]
     },
     {
       "name": "RENDERER_GLIDE_GetSpriteMetadata",

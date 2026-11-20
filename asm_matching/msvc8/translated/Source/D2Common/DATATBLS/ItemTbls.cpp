@@ -317,14 +317,14 @@ void __fastcall TXT_AllocTxt_items(D2PoolManagerStrc * pMemory) {
     D2ItemsTxt* pTxtMiscTmp = (D2ItemsTxt*)DataTbls::CompileTxt(pMemory, "misc", items, &gsItemsTable.nMiscSize, 0x1a8);
     gsItemsTable.nSize = gsItemsTable.nMiscSize + gsItemsTable.nArmorSize + gsItemsTable.nWeaponsSize;
     D2ItemsTxt* pTxtItemsMerged = (D2ItemsTxt*)D2_ALLOC_POOL_AT(nullptr, gsItemsTable.nSize * 0x1a8, ".\\DATATBLS\\ItemTbls.cpp", 399);
-    gsItemsTable.pItems = pTxtItemsMerged;
-    gsItemsTable.pWeapons = pTxtItemsMerged;
+    gsItemsTable.pWeapons = pTxtItemsMerged = gsItemsTable.pItems = pTxtItemsMerged;
     memcpy(pTxtItemsMerged, pTxtWeaponsTmp, gsItemsTable.nWeaponsSize * 0x1a8);
-    D2ItemsTxt* pTxtArmorBase = pTxtItemsMerged + gsItemsTable.nWeaponsSize;
-    gsItemsTable.pArmor = pTxtArmorBase;
-    memcpy(pTxtArmorBase, pTxtArmorTmp, gsItemsTable.nArmorSize * 0x1a8);
-    gsItemsTable.pMisc = pTxtArmorBase + gsItemsTable.nArmorSize;
-    memcpy(gsItemsTable.pMisc, pTxtMiscTmp, gsItemsTable.nMiscSize * 0x1a8);
+    pTxtItemsMerged += gsItemsTable.nWeaponsSize;
+    gsItemsTable.pArmor = pTxtItemsMerged;
+    memcpy(pTxtItemsMerged, pTxtArmorTmp, gsItemsTable.nArmorSize * 0x1a8);
+    pTxtItemsMerged += gsItemsTable.nArmorSize;
+    gsItemsTable.pMisc = pTxtItemsMerged;
+    memcpy(pTxtItemsMerged, pTxtMiscTmp, gsItemsTable.nMiscSize * 0x1a8);
     DataTbls::UnloadBin(pTxtWeaponsTmp);
     DataTbls::UnloadBin(pTxtArmorTmp);
     DataTbls::UnloadBin(pTxtMiscTmp);
@@ -348,16 +348,16 @@ void __fastcall TXT_AllocTxt_items(D2PoolManagerStrc * pMemory) {
       return;
     }
 
+    D2ItemsTxt* pRow = gsItemsTable.pItems;
     nTxtByteOffset = 0;
-    short int* pItemVersion = &gsItemsTable.pItems->wVersion;
     do {
-      if (!*pItemVersion) {
-        *(short int*)(nTxtByteOffset + (char*)gpItemIndexOldToCurrent) = (short int)i;
-        nTxtByteOffset += 2;
+      if (!pRow->wVersion) {
+        gpItemIndexOldToCurrent[nTxtByteOffset] = (uint16_t)i;
+        nTxtByteOffset++;
       }
 
       i++;
-      pItemVersion += 0xd4;
+      pRow++;
     } while (i < gsItemsTable.nSize);
 }
 
@@ -536,9 +536,9 @@ void __fastcall TXT_AllocTxt_MagicAffixes(D2PoolManagerStrc * pMemory) {
     }
 
     do {
-      uint32_t nStringId;
-      nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&gsMagicAffixTable.pTable[nIdx].name[0], &pStringOut);
-      gsMagicAffixTable.pTable[nIdx].wNameStr = (short int)nStringId;
+      uint16_t uVar1;
+      uVar1 = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&gsMagicAffixTable.pTable[nIdx].name[0], &pStringOut);
+      gsMagicAffixTable.pTable[nIdx].wNameStr = uVar1;
       nIdx++;
     } while (nIdx < gsMagicAffixTable.nSize);
 }
@@ -604,9 +604,7 @@ void __fastcall TXT_AllocTxt_RareAffixes(D2PoolManagerStrc * pMemory) {
     DataTbls::UnloadBin(pTxtRarePrefixTmp);
     uint16_t* pStringOut = 0;
     for (int nIdx = 0; nIdx < gsRareAffixTable.nSize; nIdx++) {
-      uint32_t nStringId;
-      nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&gsRareAffixTable.pTable[nIdx].name[0], &pStringOut);
-      gsRareAffixTable.pTable[nIdx].wNameStrId = (short int)nStringId;
+      gsRareAffixTable.pTable[nIdx].wNameStrId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&gsRareAffixTable.pTable[nIdx].name[0], &pStringOut);
     }
 }
 
@@ -642,7 +640,6 @@ D2RareAffixTxt * __stdcall TXT_RareAffixes_GetLine(int32_t nIndex) {
 // Loads and compiles uniqueitems.txt into sgtDataTable.pTxtUniqueItems (record stride 0x14C). Builds the column-binding descriptor: index, version, enabled/ladder/nolimit/carry1 bit flags, code (item base), rarity, lvl, lvl req, chr/inv transform colors, flippyfile/invfile graphics, cost mult/add, drop/use sounds, and the 12 prop/par/min/max modifier groups (props linked to the Properties table, par parsed via ITEMTBLS_ParseSkillMonTypeOrStateId). Creates the unique-items txt-link, calls CompileTxt, and error-halts if more than 0x7FFE rows. Then for each record: writes its sequential index, parses the index string field, and resolves the display-name string-table id (defaulting to 0x1507 if not found). __stdcall(void). Side effect: populates the global unique-items data table.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
 void __fastcall TXT_AllocTxt_uniqueitems(D2PoolManagerStrc * pMemory) {
-    uint32_t nStringId;
     uint16_t* pStringLookup;
     char* pCurRecord;
     D2BinFieldInputStrc uniqueitems[68] = {
@@ -715,9 +712,8 @@ void __fastcall TXT_AllocTxt_uniqueitems(D2PoolManagerStrc * pMemory) {
       {"max12", FIELDTYPE_INT, 0, 0x148, 0},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
-    D2PoolManagerStrc* pPoolManager = pMemory;
     MonsterTbls::sgtDataTable.pTxtUniqueItemsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\ItemTbls.cpp", 0x37a);
-    MonsterTbls::sgtDataTable.pTxtUniqueItems = (D2UniqueItemsTxt*)DataTbls::CompileTxt(pPoolManager, "uniqueitems", uniqueitems, &MonsterTbls::sgtDataTable.nTxtUniqueItemsSize, 0x14c);
+    MonsterTbls::sgtDataTable.pTxtUniqueItems = (D2UniqueItemsTxt*)DataTbls::CompileTxt(pMemory, "uniqueitems", uniqueitems, &MonsterTbls::sgtDataTable.nTxtUniqueItemsSize, 0x14c);
     if (MonsterTbls::sgtDataTable.nTxtUniqueItemsSize >= 0x7fff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x37c);
       exit(-1);
@@ -733,9 +729,8 @@ void __fastcall TXT_AllocTxt_uniqueitems(D2PoolManagerStrc * pMemory) {
       *(uint16_t*)pCurRecord = (uint16_t)nIdx;
       Fog::Src::Excel::FOG_ParseStringField(MonsterTbls::sgtDataTable.pTxtUniqueItemsLink, pCurRecord + 2);
       pStringLookup = 0;
-      nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)(pCurRecord + 2), &pStringLookup);
-      *(short int*)(pCurRecord + 0x22) = (short int)nStringId;
-      if (!(short int)nStringId) {
+      *(uint16_t*)(pCurRecord + 0x22) = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)(pCurRecord + 2), &pStringLookup);
+      if (!*(short int*)(pCurRecord + 0x22)) {
         *(short int*)(pCurRecord + 0x22) = 0x1507;
       }
 
@@ -837,7 +832,7 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
     }
 
     {
-      uint32_t nStringId;
+      uint16_t uVar1;
       D2BinFieldInputStrc setitems[93] = {
         {"index", FIELDTYPE_ASCII, 0x1f, 2, 0},
         {"item", FIELDTYPE_RAW4, 0, 0x28, 0},
@@ -950,9 +945,9 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
         pCurSetItem->nId = (short int)nIdx;
         Fog::Src::Excel::FOG_ParseStringField(MonsterTbls::sgtDataTable.pTxtSetItemsLink, pCurSetItem->index);
         pStringLookup = 0;
-        nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)pCurSetItem->index, &pStringLookup);
-        pCurSetItem->stringId = (uint16_t)nStringId;
-        if (!(uint16_t)nStringId) {
+        uVar1 = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)pCurSetItem->index, &pStringLookup);
+        pCurSetItem->stringId = uVar1;
+        if (!uVar1) {
           pCurSetItem->stringId = 0x1507;
         }
 
@@ -986,7 +981,6 @@ void __stdcall ITEMTBLS_FreeSetsAndSetItems() {
 
 // Compiles QualityItems.txt into the in-memory pTxtQualityItems table during data-table init. Declares the column schema (nummods, mod1/2 code+param+min+max, effect1/effect2 strings, and the per-equipment-type applicability flags armor/weapon/shield/scepter/wand/staff/bow/boots/gloves/belt) with field types and struct offsets, linking mod codes to the Properties table, then calls DataTbls::CompileTxt (record size 0x70). Post-process: for each row resolves the effect1/effect2 string-table keys via STRTABLE_LookupString and writes the looked-up string indices back into the record. Side effect: sets the global pTxtQualityItems / nTxtQualityItemsSize. Allocates from pMemory.
 void __fastcall TXT_AllocTxt_qualityitems(D2PoolManagerStrc * pMemory) {
-    uint32_t nTxtQualItemsBase;
     D2BinFieldInputStrc qualityitems[22] = {
       {"nummods", FIELDTYPE_CHAR, 0, 10, 0},
       {"mod1code", FIELDTYPE_NAME_INT, 0, 0xc, &MonsterTbls::sgtDataTable.pTxtPropertiesLink},
@@ -1020,12 +1014,10 @@ void __fastcall TXT_AllocTxt_qualityitems(D2PoolManagerStrc * pMemory) {
 
     do {
       if (nTxtQualityItemsSize.pTable[nIdx].effect1[0] != '\0') {
-        nTxtQualItemsBase = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&nTxtQualityItemsSize.pTable[nIdx].effect1[0], &pStringOut);
-        *(short int*)(nTxtQualityItemsSize.pTable[nIdx].effect2 + 0x20) = (short int)nTxtQualItemsBase;
+        *(uint16_t*)(nTxtQualityItemsSize.pTable[nIdx].effect2 + 0x20) = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&nTxtQualityItemsSize.pTable[nIdx].effect1[0], &pStringOut);
       }
       if (nTxtQualityItemsSize.pTable[nIdx].effect2[0] != '\0') {
-        nTxtQualItemsBase = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&nTxtQualityItemsSize.pTable[nIdx].effect2[0], &pStringOut);
-        *(short int*)(nTxtQualityItemsSize.pTable[nIdx].effect2 + 0x22) = (short int)nTxtQualItemsBase;
+        *(uint16_t*)(nTxtQualityItemsSize.pTable[nIdx].effect2 + 0x22) = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&nTxtQualityItemsSize.pTable[nIdx].effect2[0], &pStringOut);
       }
 
       nIdx++;
@@ -1113,15 +1105,13 @@ void __fastcall TXT_AllocTxt_gems(D2PoolManagerStrc * pMemory) {
     uint16_t* pStringLookup = 0;
     int nGemIdx = 0;
     if (nTxtGemsSize.nSize > 0) {
-      uint32_t nTxtGemsBase;
       nGemsSize = 0;
       do {
         szGemCode[0] = nTxtGemsSize.pTable->letter[nGemsSize + 8] == 0x20U ? 0 : nTxtGemsSize.pTable->letter[nGemsSize + 8];
         szGemCode[1] = nTxtGemsSize.pTable->letter[nGemsSize + 9] == 0x20U ? 0 : nTxtGemsSize.pTable->letter[nGemsSize + 9];
         szGemCode[2] = nTxtGemsSize.pTable->letter[nGemsSize + 10] == 0x20U ? 0 : nTxtGemsSize.pTable->letter[nGemsSize + 10];
         szGemCode[3] = '\0';
-        nTxtGemsBase = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)szGemCode, &pStringLookup);
-        *(short int*)((char*)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 4) = (short int)nTxtGemsBase;
+        *(uint16_t*)((char*)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 4) = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)szGemCode, &pStringLookup);
         nGemIdx++;
         nGemsSize += 0xc0;
       } while (nGemIdx < nTxtGemsSize.nSize);
@@ -1223,9 +1213,7 @@ void __fastcall TXT_AllocTxt_lowqualityitems(D2PoolManagerStrc * pMemory) {
     }
 
     do {
-      uint32_t nStringId;
-      nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&nTxtLowQualityItemsSize.pTable[nIdx].Name[0], &pStringOut);
-      nTxtLowQualityItemsSize.pTable[nIdx].wNameStringId = (short int)nStringId;
+      nTxtLowQualityItemsSize.pTable[nIdx].wNameStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&nTxtLowQualityItemsSize.pTable[nIdx].Name[0], &pStringOut);
       nIdx++;
     } while (nIdx < nTxtLowQualityItemsSize.nSize);
 }
@@ -1966,7 +1954,7 @@ void __fastcall TXT_AllocTxt_runes(D2PoolManagerStrc * pMemory) {
     }
 
     {
-      uint32_t nStringId;
+      uint16_t uVar1;
       bSrvBinExists = ITEMTBLS_CheckIfDataFileExists("runessrv", pMemory, ".bin");
       if (bSrvBinExists) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x908);
@@ -1986,8 +1974,8 @@ void __fastcall TXT_AllocTxt_runes(D2PoolManagerStrc * pMemory) {
       }
 
       do {
-        nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&nTxtRunesSize.pTable[nRuneIdx].name[0], &pStringOut);
-        *(short int*)(nTxtRunesSize.pTable[nRuneIdx].rune_name + 0x42) = (short int)nStringId;
+        uVar1 = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&nTxtRunesSize.pTable[nRuneIdx].name[0], &pStringOut);
+        nTxtRunesSize.pTable[nRuneIdx].wStringId = uVar1;
         nRuneIdx++;
       } while (nRuneIdx < nTxtRunesSize.nSize);
 

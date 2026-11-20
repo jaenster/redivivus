@@ -96,6 +96,8 @@ uint32_t g_dwNewsTimestamp = 0; D2_GLOBAL_GUARD(g_dwNewsTimestamp, "g_dwNewsTime
 
 namespace Bnclient { namespace BnSend {
 
+static LONG __stdcall Unreferenced_0051beb0(LONG nExchange, LONG nComparand);
+
 int __stdcall NET_SID_CLIENT_Send_0x1E_ClientId2() {
     SID_C2S_ClientId2 abPacketBuf;
     Storm::Source::SReg::SRegLoadValue("Configuration", "Registration Version", 2, (int32_t*)&abPacketBuf.dwRegVersion);
@@ -1014,10 +1016,9 @@ int Unreferenced_0051bea0() {
     return LVar1;
 }
 
-void Unreferenced_0051beb0() {
-    LONG in_EAX;
-    LONG in_ECX;
-    InterlockedCompareExchange((LONG*)&g_pBNetSocketData, in_ECX, in_EAX);
+static inline LONG __stdcall Unreferenced_0051beb0(LONG nExchange, LONG nComparand) {
+    LONG LVar1 = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, nExchange, nComparand);
+    return LVar1;
 }
 
 // JMP thunk
@@ -1920,6 +1921,7 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
 }
 
 // lpStartAddress parameter of CreateThread
+#if 0 // ratchet: the match body of 0051d0a0 (evidence 1985bb0f9) could not be re-spelled: callee SID_SetStateFlag1 returns BOOL, was uint32_t
 int __stdcall BattleConnectFastest() {
     // Static local variables (originally global data)
     static char RealmDNS[256] = {0}; D2_STATIC_GUARD(RealmDNS, "Bnclient::BnSend::BattleConnectFastest::RealmDNS");
@@ -1954,6 +1956,51 @@ int __stdcall BattleConnectFastest() {
     NET_SID_CLIENT_LogonSequence(EntireDnsRecordOfServers);
     Bnet::BNET_LogIndent(2, -4);
     /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedResult = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+    if (!lInterlockedResult) {
+      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedResult = InterlockedCompareExchange(&Target_00881bfc, 0, 0);
+      if (!lInterlockedResult) {
+        SID_SetStateFlag1(0xc);
+      }
+    }
+
+    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881c00);
+    return 1;
+}
+#endif
+int __stdcall BattleConnectFastest() {
+    // Static local variables (originally global data)
+    static char RealmDNS[256] = {0}; D2_STATIC_GUARD(RealmDNS, "Bnclient::BnSend::BattleConnectFastest::RealmDNS");
+    static char EntireDnsRecordOfServers[512] = {0}; D2_STATIC_GUARD(EntireDnsRecordOfServers, "Bnclient::BnSend::BattleConnectFastest::EntireDnsRecordOfServers");
+
+    Debug::DEBUG_Trace("BattleConnectFastest()");
+    LONG lInterlockedResult = InterlockedIncrement((LONG*)&Destination_00881c00);
+    if (lInterlockedResult > 1) {
+      /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881c00);
+      return 0;
+    }
+
+    BnDownload::BNDOWNLOAD_ResetState(0x66);
+    GetBnetIp(RealmDNS, 0x100);
+    Debug::DEBUG_Trace("   connect to: %s", RealmDNS);
+    Bnet::BNET_LogIndent(2, 4);
+    Bnet::BnetLog_WriteLine("querying gateway %s", RealmDNS);
+    EntireDnsRecordOfServers[0] = '\0';
+    BOOL bWinsockOk = Fog::Src::Safesock::StartUp();
+    if (bWinsockOk) {
+      GetDnsRecordSync((char**)EntireDnsRecordOfServers, RealmDNS);
+    }
+    if (EntireDnsRecordOfServers[0] == '\0') {
+      /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881c00);
+      SID_SetStateFlag1(0xc);
+      Debug::DEBUG_Trace("   failed to get server list");
+      Bnet::BNET_LogIndent(2, -4);
+      return 0;
+    }
+
+    SID_SetStateFlag1(0);
+    NET_SID_CLIENT_LogonSequence(EntireDnsRecordOfServers);
+    Bnet::BNET_LogIndent(2, -4);
+    /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedResult = Unreferenced_0051beb0(0, 0);
     if (!lInterlockedResult) {
       /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedResult = InterlockedCompareExchange(&Target_00881bfc, 0, 0);
       if (!lInterlockedResult) {
@@ -2620,9 +2667,8 @@ static void __stdcall BNNEWS_TransformCDKeyCharacter(uint8_t bKeyChar, uint32_t 
     *pOutChar = bKeyChar & 1 ^ bUpperChar;
 }
 
-int Unreferenced_0051dd20() {
-    char in_AL;
-    int iVar2 = tolower((int)in_AL);
+static int32_t __stdcall Unreferenced_0051dd20(char cHexDigit) {
+    int iVar2 = tolower((int)cHexDigit);
     char cVar1 = (char)iVar2;
     if (cVar1 >= 'a') {
       return cVar1 - 0x57;
@@ -3245,5 +3291,6 @@ void StaticFini_gpBNetNewsCache() {
 
 static void * keep_0051dc70 = (0 ? (BNSEND_GetTime32(*(__time32_t * *)0), (void *)0) : (void *)0);
 static void * keep_0051dcd0 = (0 ? (BNNEWS_TransformCDKeyCharacter(*(uint8_t *)0, *(uint32_t * *)0, *(uint8_t * *)0), (void *)0) : (void *)0);
+static void * keep_0051dd20 = (0 ? (Unreferenced_0051dd20(*(char *)0), (void *)0) : (void *)0);
 
 }} // namespace Bnclient::BnSend

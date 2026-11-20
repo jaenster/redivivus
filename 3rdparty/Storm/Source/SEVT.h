@@ -96,7 +96,7 @@ uint32_t __fastcall LINKEDLIST_GetCount_Unref_0041c4e0(int * pList);
 uint32_t * __fastcall Unreferenced_0041c4f0(uint32_t * pData);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0041c500(struct StormLinkStrc * pNode);
 uint32_t __fastcall LINKEDLIST_GetCount_Unref_0041eab0(int * pList);
-uint32_t Unreferenced_0041eac0();
+int32_t __fastcall Unreferenced_0041eac0(void * pHandle);
 uint32_t __fastcall LINKEDLIST_GetCount_Unref_00420490(int * pList);
 uint32_t * __fastcall Unreferenced_004204a0(uint32_t * pData);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_004204b0(struct StormLinkStrc * pNode);

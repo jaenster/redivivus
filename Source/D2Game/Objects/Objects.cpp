@@ -765,7 +765,6 @@ void __fastcall Objects_InitFn28_GoldPlaceholder(D2ObjectInitFnArg * pInitArg) {
     uint32_t nRandOffX2;
     D2RoomStrc* pRoom;
     POINT ptSpawnPos;
-    uint32_t nOffsetX;
     D2UnitStrc* pUnit = pInitArg->pObject;
     if (!(!pUnit || pUnit->eAnimMode.ePlayerMode == Death)) {
       return;
@@ -785,7 +784,6 @@ void __fastcall Objects_InitFn28_GoldPlaceholder(D2ObjectInitFnArg * pInitArg) {
       nRandOffX = DVar2 & 3;
       nRandOffX2 = D2_SeedRoll(pDVar1);
       nRandOffX2 &= 3;
-      nOffsetX = nRandOffX;
       pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pInitArg->pRoom, ptSpawnPos.x + nRandOffX, nRandOffX2 + ptSpawnPos.y);
       if (pRoom == pInitArg->pRoom) {
         ptSpawnPos.x = pInitArg->nX + nRandOffX;

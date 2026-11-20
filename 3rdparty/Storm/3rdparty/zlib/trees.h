@@ -40,13 +40,13 @@ void tr_static_init_Unref_00421070();
 void tr_static_init_Unref_00421080();
 void tr_static_init_Unref_004212b0();
 void tr_static_init();
-uint32_t __fastcall _tr_tally(deflate_state * pDeflateState, int32_t nDist, int32_t nLc);
-uint32_t __fastcall bi_reverse(uint32_t nCode, int nLen);
-void __fastcall _tr_init(deflate_state * pDeflateState);
-void __fastcall _tr_stored_block(deflate_state * pDeflateState, char * pbBuf, uint32_t nStoredLen, int32_t nLast);
-void __fastcall _tr_flush_bits(deflate_state * pDeflateState);
-void __fastcall _tr_align(deflate_state * pDeflateState);
-void __fastcall _tr_flush_block(deflate_state * pDeflateState, char * pbBuf, uint32_t nStoredLen, int32_t nLast);
+uint32_t __fastcall _tr_tally(deflate_state * s, int32_t dist, int32_t lc);
+uint32_t __fastcall bi_reverse(uint32_t code, int len);
+void __fastcall _tr_init(deflate_state * s);
+void __fastcall _tr_stored_block(deflate_state * s, char * buf, uint32_t stored_len, int32_t last);
+void __fastcall _tr_flush_bits(deflate_state * s);
+void __fastcall _tr_align(deflate_state * s);
+void __fastcall _tr_flush_block(deflate_state * s, char * buf, uint32_t stored_len, int32_t last);
 #endif // D2_MODULE_Storm
 // 14 internal functions (defined in .cpp)
 

@@ -1078,9 +1078,7 @@ void __stdcall CMD_LoadDefaultKeyBindings(DWORD bUseInstallDir) {
     HANDLE hFile;
     D2CmdTbl_Line0x50f* pKeyData;
     int nCount;
-    uint16_t* pFileBufCursor;
     D2KeyBindStrc* pSrc;
-    D2CmdTbl_Line0x50f* pDst;
     int* pDstDefault;
     uint8_t aKeyBindFileBuf[1146];
     char szPath[260];
@@ -1097,9 +1095,7 @@ void __stdcall CMD_LoadDefaultKeyBindings(DWORD bUseInstallDir) {
         Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
         if (bUseInstallDir == 0x47a) {
           pKeyData = D2_NEW_POOL_AT(nullptr, D2CmdTbl_Line0x50f, ".\\UI\\CmdTbl.cpp", 0x50f);
-          pFileBufCursor = (uint16_t*)aKeyBindFileBuf;
-          pDst = pKeyData;
-          memcpy(pDst, pFileBufCursor, 0x47a);
+          memcpy(pKeyData, aKeyBindFileBuf, 0x47a);
           goto apply_key_data;
         }
       }

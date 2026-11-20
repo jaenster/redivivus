@@ -855,9 +855,10 @@
         "RENDERER_WINDOWED_FindNearestPaletteIndex"
       ],
       "usedTypes": [
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ],
-      "dh": "04a90a4f",
+      "dh": "b430ce09",
       "paramStorage": [
         [
           "nRed",

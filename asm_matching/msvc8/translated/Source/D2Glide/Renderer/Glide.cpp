@@ -1710,22 +1710,21 @@ void __fastcall GLIDE_PixelDataFreeCallback_ClearCacheNodes(int * pCacheIndices)
     }
 }
 
-char Unreferenced_0050a220() {
-    int in_EAX;
-    if (in_EAX == 0x100) {
-      return '\b';
+static int32_t __stdcall Unreferenced_0050a220(int32_t nValue) {
+    if (nValue == 0x100) {
+      return 8;
     }
-    if (in_EAX == 0x80) {
-      return '\a';
+    if (nValue == 0x80) {
+      return 7;
     }
-    if (in_EAX == 0x40) {
-      return '\x06';
+    if (nValue == 0x40) {
+      return 6;
     }
-    if (in_EAX == 0x20) {
-      return '\x05';
+    if (nValue == 0x20) {
+      return 5;
     }
 
-    return in_EAX == 0x10 ? 4 : 3;
+    return nValue == 0x10 ? 4 : 3;
 }
 
 static int RENDERER_GLIDE_GetSpriteMetadata(D2GfxDataStrc * pGfxData, GlideTexInfoStrc * ppMetadata) {
@@ -4322,6 +4321,8 @@ void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
         }
     }
 }
+
+static void * keep_0050a220 = (0 ? (Unreferenced_0050a220(*(int32_t *)0), (void *)0) : (void *)0);
 
 }}} // namespace D2Glide::Renderer::Glide
 

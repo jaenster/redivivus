@@ -266,7 +266,6 @@ void __fastcall BNSEND_StoreChannelListData(uint8_t * pbChannelData, size_t nSiz
 void __fastcall BNSEND_StoreGameListData(uint8_t * pbGameData, size_t nSize);
 void BNCLIENT_InterlockedCompareExchange(long * pDestination, LONG nExchange, LONG nComperand);
 int Unreferenced_0051bea0();
-void Unreferenced_0051beb0();
 BOOL __stdcall D2CheckExpansionGame();
 void __fastcall Unreferenced_0051bed0(int nConnectionState);
 // lpStartAddress parameter of CreateThread
@@ -337,7 +336,6 @@ BOOL __stdcall BNNEWS_LoadCachedNews();
 int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnNewsEntryCallback pfnMotdCallback, pfnVoidNoArgCallback pfnNewsCallback);
 // Hashes CD key data using Storm SBig (SHA-1-like) algorithm. Used for both 16-char and 26-char CD keys. Produces 20-byte hash output.
 void __fastcall BNSEND_HashCDKeyData(void * pOutHash, void * pTokenData, uint32_t nDataLength);
-int Unreferenced_0051dd20();
 // Decodes 16-character CD key string into three components (Product: 3 hex digits, Public: 7 hex digits, Private: 9 hex digits). Validates checksum and performs character shuffling/XOR transformations. Returns 1 on success, 0 on failure.
 int __fastcall BNSEND_DecodeCDKeyString(uint32_t * pOutProduct, uint32_t * pOutPublic, char * szCDKey, uint32_t * pOutPrivate);
 BOOL __fastcall BNNEWS_DecodeCDKey26Char(char * szCDKey, uint32_t * pOutValue1, uint32_t * pOutValue2, uint16_t * pOutValue3);
@@ -352,6 +350,6 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x33_GetFileTime(char * szText, uint32_t dwR
 void StaticInit_gpBNetNewsCache();
 void StaticFini_gpBNetNewsCache();
 #endif // D2_MODULE_Bnclient
-// 4 internal functions (defined in .cpp)
+// 6 internal functions (defined in .cpp)
 
 }} // namespace Bnclient::BnSend

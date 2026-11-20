@@ -233,18 +233,18 @@
         "CallCloseRecordingFunction",
         "SaveGameRecordToFile"
       ],
-      "dh": "4d6ebbde",
+      "dh": "95d37204",
       "paramStorage": [
         [
-          "uMsg",
+          "szFile",
           "Stack[0x4]:4"
         ],
         [
-          "wParam",
+          "nLine",
           "Stack[0x8]:4"
         ],
         [
-          "lParam",
+          "szExpression",
           "Stack[0xc]:4"
         ]
       ]
@@ -263,7 +263,7 @@
         "SetCleanupFunction",
         "RegisterExitFunction"
       ],
-      "dh": "ca0e36b5"
+      "dh": "38d208f3"
     },
     {
       "name": "RECORD_GetSettedUp",

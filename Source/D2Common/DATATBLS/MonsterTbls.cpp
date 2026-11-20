@@ -936,20 +936,19 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
     }
 }
 
-void Unreferenced_006543c0() {
-    char* in_EAX;
-    if (*in_EAX == '\"') {
-      in_EAX++;
+static void __stdcall Unreferenced_006543c0(char * szText) {
+    if (*szText == '\"') {
+      szText++;
     }
 
-    char cVar1 = *in_EAX;
+    char cVar1 = *szText;
     while (cVar1 != '\0') {
-      if (*in_EAX == '\"') {
-        *in_EAX = '\0';
+      if (*szText == '\"') {
+        *szText = '\0';
       }
 
-      in_EAX++;
-      cVar1 = *in_EAX;
+      szText++;
+      cVar1 = *szText;
     }
 }
 
@@ -1452,7 +1451,6 @@ void Unreferenced_006552a0() {
 
 // Loads and compiles superuniques.txt into sgtDataTable. Declares the column schema (Superunique key, Name string-id, Class->MonStats link, hcIdx, MonSound link, Mod1-3, Min/MaxGrp, AutoPos, EClass, Stacks, Replaceable, Utrans/(N)/(H), TC/(N)/(H)->MonsterTbls links) and a TxtLink, then compiles via CompileTxt into pTxtSuperUniques (cap 0x200 rows). Builds the aTxtSuperUniquesHardcoded[] reverse-lookup array (init -1) mapping each row's hcIdx (<66) to its first row index, then asserts every hardcoded slot was filled (unrecoverable-halt at line 0x782 if any is still -1). Side effect: populates global superunique data table and hardcoded index map. Server-side D2Common DataTbls (MonsterTbls).
 void __fastcall TXT_AllocTxt_superuniques(D2PoolManagerStrc * pMemory) {
-    int nIdx;
     D2BinFieldInputStrc superuniques[21] = {
       {"Superunique", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtSuperUniquesLink},
       {"Name", FIELDTYPE_KEY_WORD, 0, 2, (void*)DataTbls::DATATBLS_LookupStringId},
@@ -1478,39 +1476,27 @@ void __fastcall TXT_AllocTxt_superuniques(D2PoolManagerStrc * pMemory) {
     };
     sgtDataTable.pTxtSuperUniquesLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\MonsterTbls.cpp", 0x744);
     sgtDataTable.pTxtSuperUniques = (D2SuperUniquesTxt*)DataTbls::CompileTxt(pMemory, "superuniques", superuniques, &sgtDataTable.nTxtSuperUniquesSize, 0x34);
-    if (0x1ff < sgtDataTable.nTxtSuperUniquesSize) {
+    if (sgtDataTable.nTxtSuperUniquesSize >= 0x200) {
       sgtDataTable.nTxtSuperUniquesSize = 0x200;
     }
 
-    short int* pHcEntryInit = sgtDataTable.aTxtSuperUniquesHardcoded;
-    for (nIdx = 33; nIdx; nIdx--) {
-      pHcEntryInit[0] = -1;
-      pHcEntryInit[1] = -1;
-      pHcEntryInit += 2;
+    for (int i = 0; i < 66; i++) {
+      sgtDataTable.aTxtSuperUniquesHardcoded[i] = -1;
     }
 
-    if (sgtDataTable.nTxtSuperUniquesSize > 0) {
-      uint32_t nHardcodedIdx;
-      nIdx = 0;
-      do {
-        nHardcodedIdx = (uint32_t)sgtDataTable.pTxtSuperUniques[nIdx].hcIdx;
-        if (nHardcodedIdx <= 65 && sgtDataTable.aTxtSuperUniquesHardcoded[nHardcodedIdx] == -1) {
-          sgtDataTable.aTxtSuperUniquesHardcoded[nHardcodedIdx] = (short int)nIdx;
-        }
-
-        nIdx++;
-      } while (nIdx < sgtDataTable.nTxtSuperUniquesSize);
+    for (int i = 0; i < sgtDataTable.nTxtSuperUniquesSize; i++) {
+      uint32_t nHardcodedIdx = (uint32_t)sgtDataTable.pTxtSuperUniques[i].hcIdx;
+      if (nHardcodedIdx <= 65 && (uint16_t)sgtDataTable.aTxtSuperUniquesHardcoded[nHardcodedIdx] == 0xffff) {
+        sgtDataTable.aTxtSuperUniquesHardcoded[nHardcodedIdx] = (short int)i;
+      }
     }
 
-    short int* pHardcodedEntry = sgtDataTable.aTxtSuperUniquesHardcoded;
-    do {
-      if (*pHardcodedEntry == -1) {
+    for (int i = 0; i < 66; i++) {
+      if ((uint16_t)sgtDataTable.aTxtSuperUniquesHardcoded[i] == 0xffff) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x782);
         exit(-1);
       }
-
-      pHardcodedEntry++;
-    } while ((intptr_t)pHardcodedEntry < (intptr_t)((char*)&sgtDataTable + 2916));
+    }
 }
 
 void Unreferenced_006556a0() {
@@ -1628,12 +1614,12 @@ void __fastcall TXT_AllocTxt_hireling(D2PoolManagerStrc * pMemory) {
     }
 
     do {
-      uint32_t nStrId;
+      uint16_t uVar1;
       pwStrLookup = 0;
-      nStrId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&sgtDataTable.pTxtHireling[nCounter].namefirst[0], &pwStrLookup);
-      sgtDataTable.pTxtHireling[nCounter].nNameFirst = (short int)nStrId;
-      nStrId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&sgtDataTable.pTxtHireling[nCounter].namelast[0], &pwStrLookup);
-      sgtDataTable.pTxtHireling[nCounter].nNameLast = (short int)nStrId;
+      uVar1 = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&sgtDataTable.pTxtHireling[nCounter].namefirst[0], &pwStrLookup);
+      sgtDataTable.pTxtHireling[nCounter].nNameFirst = uVar1;
+      uVar1 = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&sgtDataTable.pTxtHireling[nCounter].namelast[0], &pwStrLookup);
+      sgtDataTable.pTxtHireling[nCounter].nNameLast = uVar1;
       if (bIsExpansion) {
         if (sgtDataTable.pTxtHireling[nCounter].nNameFirst <= 0) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x816);
@@ -2253,9 +2239,6 @@ BOOL __fastcall MONSTERTBLS_CheckNestedMonsterTypes(int32_t nMonTypeId, int32_t 
 
 // Loads and compiles the montype.txt data table into sgtDataTable.pTxtMonType. Defines 7 field descriptors (type, equiv1-3, strsing, strplur, end), calls CompileTxt, then allocates and populates a bitfield matrix (nTxtMonTypeSize x ceil(nTxtMonTypeSize/32) words) encoding the transitive type-membership graph by calling MONSTERTBLS_GetMonSeqFrameCount for every (row, col) type pair.
 void __fastcall TXT_AllocTxt_montype(D2PoolManagerStrc * pMemory) {
-    BOOL bIsSubType;
-    uint32_t nBitIdx;
-    uint8_t* pBitArray;
     D2BinFieldInputStrc aFieldDefs[7] = {
       {"type", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtMonTypeLink},
       {"equiv1", FIELDTYPE_NAME_SHORT, 0, 2, &sgtDataTable.pTxtMonTypeLink},
@@ -2268,34 +2251,17 @@ void __fastcall TXT_AllocTxt_montype(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtMonTypeLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\MonsterTbls.cpp", 0xaf6);
     sgtDataTable.pTxtMonType = (D2MonTypeTxt*)DataTbls::CompileTxt(pMemory, "montype", aFieldDefs, &sgtDataTable.nTxtMonTypeSize, 0xc);
     sgtDataTable.nMonTypeEquivRowDwords = (sgtDataTable.nTxtMonTypeSize + 0x1f) / 32;
-    size_t nBitMatrixBytes = sgtDataTable.nMonTypeEquivRowDwords * sgtDataTable.nTxtMonTypeSize * 4;
-    sgtDataTable.pTxtMonTypeUnknown = D2_ALLOC_POOL_AT(nullptr, nBitMatrixBytes, ".\\DATATBLS\\MonsterTbls.cpp", 0xafc);
-    memset(sgtDataTable.pTxtMonTypeUnknown, 0, nBitMatrixBytes);
-    int nRowTypeIdx = 0;
-    int nMonTypeTotal = sgtDataTable.nTxtMonTypeSize;
-    if (sgtDataTable.nTxtMonTypeSize <= 0) {
-      return;
-    }
-
-    do {
-      int nTypeIdx;
-      pBitArray = (uint8_t*)sgtDataTable.pTxtMonTypeUnknown;
-      nTypeIdx = nRowTypeIdx * sgtDataTable.nMonTypeEquivRowDwords;
-      nBitIdx = 0;
-      if (nMonTypeTotal > 0) {
-        do {
-          bIsSubType = MONSTERTBLS_CheckNestedMonsterTypes(nRowTypeIdx, nBitIdx);
-          if (bIsSubType) {
-            *(uint32_t*)(pBitArray + (((int)nBitIdx >> 5) * 4 + nTypeIdx * 4)) |= Fog::BitBuffer::gadwBitMasks[nBitIdx & 0x1f];
-            nMonTypeTotal = sgtDataTable.nTxtMonTypeSize;
-          }
-
-          nBitIdx++;
-        } while ((int)nBitIdx < nMonTypeTotal);
+    int nBitMatrixDwords = sgtDataTable.nMonTypeEquivRowDwords * sgtDataTable.nTxtMonTypeSize;
+    sgtDataTable.pTxtMonTypeUnknown = D2_ALLOC_POOL_AT(nullptr, nBitMatrixDwords * 4, ".\\DATATBLS\\MonsterTbls.cpp", 0xafc);
+    memset(sgtDataTable.pTxtMonTypeUnknown, 0, nBitMatrixDwords * 4);
+    for (int nRowTypeIdx = 0; nRowTypeIdx < sgtDataTable.nTxtMonTypeSize; nRowTypeIdx++) {
+      uint32_t* pRowBits = (uint32_t*)sgtDataTable.pTxtMonTypeUnknown + nRowTypeIdx * sgtDataTable.nMonTypeEquivRowDwords;
+      for (int nBitIdx = 0; nBitIdx < sgtDataTable.nTxtMonTypeSize; nBitIdx++) {
+        if (MONSTERTBLS_CheckNestedMonsterTypes(nRowTypeIdx, nBitIdx)) {
+          pRowBits[nBitIdx >> 5] |= Fog::BitBuffer::gadwBitMasks[nBitIdx & 0x1f];
+        }
       }
-
-      nRowTypeIdx++;
-    } while (nRowTypeIdx < nMonTypeTotal);
+    }
 }
 
 void __stdcall DATATBLS_UnloadMonTypeTxt() {
@@ -2935,5 +2901,7 @@ void __fastcall TXT_AllocMonsterTables(D2PoolManagerStrc * pMemory) {
     TXT_AllocTxt_npc(pMemory);
     TXT_AllocTxt_MonEquip(pMemory);
 }
+
+static void * keep_006543c0 = (0 ? (Unreferenced_006543c0(*(char * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::DATATBLS::MonsterTbls

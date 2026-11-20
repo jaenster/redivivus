@@ -1094,13 +1094,13 @@ BOOL __fastcall OBJOP_A4Q2_DiabloSealActivateKillChaos(D2ObjectOperateFnArg * pO
 }
 
 // [A4Q3 Terror's End] Getter: returns the "Diablo currently spawned" flag (field_0x14) from the A4Q2 quest-specific struct.
-uint32_t __fastcall Q27_IsDiabloSpawned(::SGAMEDATA * pGame) {
+uint8_t __fastcall Q27_IsDiabloSpawned(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TerrorsEnd);
     if (pQuestData) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pQuestData->pQuestSpecificData.pA4Q2 >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA4Q2->bDiabloKilledBroadcast);
+      return pQuestData->pQuestSpecificData.pA4Q2->bDiabloKilledBroadcast;
     }
 
-    return 0;
+    return '\0';
 }
 
 // A4Q3 — OBJOP_A4Q2_PandemoniumFortressGate: operate handler for the Act4 Pandemonium Fortress gate to Act5. Gate is locked until Terror's End (QUEST_TerrorsEnd: Diablo dead) is Completed or JustCompleted; else plays the locked "can't" sound and returns. Once unlocked AND player is in Act IV: sets QUEST_AbleGoToAct5 Completed+JustCompleted (first time only), sends the 0x5D quest-state and 0x61 can-go-to-act packets, loads/portals the player to Harrogath (LEVEL_Harrogath, act 5), resyncs quest info, and unlocks the Harrogath waypoint. Expansion-only.

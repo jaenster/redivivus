@@ -54,7 +54,6 @@ void __fastcall SetBlankBorderGridCells(struct D2DrlgLevelStrc * pLevel);
 void __fastcall SetOutGridLinkFlags(struct D2DrlgLevelStrc * pLevel);
 // DRLG outdoor wilderness border/road generator: walks the level's polygon outline (linked list of D2DrlgVertexStrc edges) and stamps edge presets, corner presets and grid border flags into the outdoor preset grid. For each edge it picks a road/border preset type from the level type (case 2 dirt, 0x10, 0x1b, 0x1f siege-grid-division) and direction lookup tables (gaRoadPresetDirectionLookup / gaOutPlaceRoadPresetLookup / gRoadPresetIdLookupTable), then spawns presets along the edge via SpawnOutdoorLevelPresetEx and flags cells via AlterGridFlag. Has act-specific corner handling for acts I/II/IV/V (and special-cases level 0x11) plus joint/corner presets at each vertex. Finishes with SetBlankBorderGridCells. Used during outdoor level layout for acts 1,2,4,5.
 void __fastcall PlaceAct1245OutdoorBorders(struct D2DrlgLevelStrc * pLevel);
-bool Unreferenced_00677870();
 struct D2DrlgLevelStrc * __stdcall DRLGLEVEL_FixDrlgLevelForLowerKurast(struct D2DrlgLevelStrc * pLevel);
 // Act-specific level setup dispatcher: moves pDrlg to EAX and tail-jumps through a 5-entry table to DRLGActMisc_InitAct1..InitAct5 by nActNo; nActNo above 4 returns.
 // 1.14d: jump table at 00678afc, stubs 00678ae1..00678af5.
@@ -65,6 +64,6 @@ void __fastcall BuildKurast(struct D2DrlgLevelStrc * pLevel);
 void __fastcall BuildTravincal(struct D2DrlgLevelStrc * pLevel);
 void __fastcall InitAct3OutdoorLevel(struct D2DrlgLevelStrc * pLevel);
 #endif // D2_MODULE_D2Common
-// 10 internal functions (defined in .cpp)
+// 11 internal functions (defined in .cpp)
 
 }}} // namespace D2Common::Drlg::OutPlace

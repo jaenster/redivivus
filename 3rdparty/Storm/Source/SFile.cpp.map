@@ -59,7 +59,7 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "70da71f1",
+      "dh": "56c6a40f",
       "paramStorage": [
         [
           "pDest",
@@ -1688,7 +1688,17 @@
       "calledFunctions": [
         "Unreferenced_00416800"
       ],
-      "dh": "7ebed781"
+      "usedTypes": [
+        "StormLinkStrc",
+        "uint32_t"
+      ],
+      "dh": "0fb2b77c",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00416820",
@@ -1751,7 +1761,17 @@
       "calledFunctions": [
         "Unreferenced_00416840"
       ],
-      "dh": "506a1178"
+      "usedTypes": [
+        "StormLinkStrc",
+        "uint32_t"
+      ],
+      "dh": "a29764c4",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00416850",
@@ -1791,9 +1811,15 @@
         "Unreferenced_00416860"
       ],
       "usedTypes": [
-        "uint32_t"
+        "int32_t"
       ],
-      "dh": "b7d61f4b"
+      "dh": "ddae81a7",
+      "paramStorage": [
+        [
+          "pHandle",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_CompareFileTime2",
@@ -2362,9 +2388,15 @@
         "Unreferenced_004177a0"
       ],
       "usedTypes": [
-        "uint32_t"
+        "int32_t"
       ],
-      "dh": "a4eafba9"
+      "dh": "ad5e916b",
+      "paramStorage": [
+        [
+          "pHandle",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_00417850",
@@ -4490,7 +4522,16 @@
       "calledFunctions": [
         "Unreferenced_00418e60"
       ],
-      "dh": "e8ab7105"
+      "usedTypes": [
+        "D2MPQFileStrc"
+      ],
+      "dh": "000188df",
+      "paramStorage": [
+        [
+          "pFile",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SFILE_DestroyFileRecord",

@@ -95,8 +95,8 @@ bool __thiscall IsOpen(::Report * pThis) {
 }
 
 int8_t __thiscall AddAttachment(::Report * pThis, char * szPath, int8_t bCopyToReportDir) {
+    bool bVar1;
     char* pBaseDirPtr;
-    uint32_t bExtracted;
     char* pDst;
     char (*pEntrySlot)[1024];
     int nCopyRemaining;
@@ -135,8 +135,8 @@ int8_t __thiscall AddAttachment(::Report * pThis, char * szPath, int8_t bCopyToR
         pBaseDirPtr += -1 - (intptr_t)pThis->szReportDir;
         if (pBaseDirPtr < (char*)0x400) {
           szPathCopy[(intptr_t)pBaseDirPtr] = '/';
-          bExtracted = File::FILETOOLS_ExtractFilename(szPathCopy + (intptr_t)(pBaseDirPtr + 1), szPath, (intptr_t)&local_8 - (intptr_t)(szPathCopy + (intptr_t)(pBaseDirPtr + 1)));
-          if ((char)bExtracted != '\0') {
+          bVar1 = File::FILETOOLS_ExtractFilename(szPathCopy + (intptr_t)(pBaseDirPtr + 1), szPath, (intptr_t)&local_8 - (intptr_t)(szPathCopy + (intptr_t)(pBaseDirPtr + 1)));
+          if (bVar1) {
             File::FILETOOLS_CopyFile_UTF8(szPath, szPathCopy);
             szPath = szPathCopy;
             goto store_path;

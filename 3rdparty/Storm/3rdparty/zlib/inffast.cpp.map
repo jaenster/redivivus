@@ -4,7 +4,7 @@
   "file": "3rdparty/Storm/3rdparty/zlib/inffast.cpp",
   "functions": [
     {
-      "name": "ZLIB_InflateFast",
+      "name": "inflate_fast",
       "address": "0042dca0",
       "lines": [
         {
@@ -14,7 +14,7 @@
       ],
       "namespace": "Storm::_3rdparty::zlib::inffast",
       "calledFunctions": [
-        "ZLIB_InflateFast"
+        "inflate_fast"
       ],
       "usedTypes": [
         "inflate_code",
@@ -24,14 +24,14 @@
         "uint8_t",
         "z_stream"
       ],
-      "dh": "c29ef53c",
+      "dh": "b8f9959f",
       "paramStorage": [
         [
-          "pInflateState",
+          "strm",
           "ECX:4"
         ],
         [
-          "nEndPos",
+          "start",
           "EDX:4"
         ]
       ]

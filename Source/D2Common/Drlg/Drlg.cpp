@@ -3406,10 +3406,8 @@ BOOL __fastcall DRLGPLACE_OrientedTableLookup(D2DrlgLevelPlacementStrc * pLevelU
 void __fastcall DRLGOUTJUNG_BuildKurastDocktownBorders(D2DrlgLevelStrc * pLevel) {
     int nXIter;
     int nYIter;
-    const int nRoomWidth = pLevel->sCoordinatesAndSize.WorldSize.x;
-    const int nRoomHeight = pLevel->sCoordinatesAndSize.WorldSize.y;
-    const int nX = nRoomWidth / 8 - 1;
-    const int nY = nRoomHeight / 8 - 1;
+    const int nX = pLevel->sCoordinatesAndSize.WorldSize.x / 8 - 1;
+    const int nY = pLevel->sCoordinatesAndSize.WorldSize.y / 8 - 1;
     const int nEastEntranceX = nX / 2;
     const int nPortalX = pLevel->pDrlg->bJungleInterlink ? 1 : nX - 1;
 

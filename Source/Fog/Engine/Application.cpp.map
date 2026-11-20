@@ -58,7 +58,7 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "40ea72dd",
+      "dh": "ce3ee64b",
       "paramStorage": [
         [
           "pnSize",
@@ -196,7 +196,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d7a58d35",
+      "dh": "f1dc63f0",
       "paramStorage": [
         [
           "ppModuleBase",
@@ -596,10 +596,9 @@
       ],
       "usedTypes": [
         "int32_t",
-        "pfnSHGetKnownFolderPath",
-        "uint32_t"
+        "pfnSHGetKnownFolderPath"
       ],
-      "dh": "6edfd181",
+      "dh": "389ac41f",
       "paramStorage": [
         [
           "szOutPath",

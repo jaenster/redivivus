@@ -5418,7 +5418,6 @@ int __fastcall MISSMODE_SrvDoFn15_FrozenOrb(::SGAMEDATA * pGame, D2UnitStrc * pU
     ::SGAMEDATA* pGameLocal;
     int nInterval;
     int nClassId;
-    ::SGAMEDATA* pGameAfterSpawn;
     if (pUnit) {
       D2MissilesTxt* pMissilesTxt;
       nClassId = pUnit->nClassId;
@@ -5457,9 +5456,8 @@ int __fastcall MISSMODE_SrvDoFn15_FrozenOrb(::SGAMEDATA * pGame, D2UnitStrc * pU
         sSkillArg.nUnitY = gnMissileSrvSpreadTableX[nSpreadAngleIdx];
         nSpreadAngleIdx = (int)(pMissilesTxt->Param2 + nSpreadAngleIdx) % 64;
         D2Common::Units::Missile::SetTargetX(pUnit, nSpreadAngleIdx);
-        pGameAfterSpawn = pGameLocal;
         Missiles::CreatingMissile(pGameLocal, &sSkillArg);
-        nClassId = MISSMODE_SrvDoFn01_BasicMissile(pGameAfterSpawn, pUnit);
+        nClassId = MISSMODE_SrvDoFn01_BasicMissile(pGameLocal, pUnit);
         return nClassId;
       }
     }

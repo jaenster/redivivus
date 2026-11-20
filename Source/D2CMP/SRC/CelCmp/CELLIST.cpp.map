@@ -44,7 +44,21 @@
       "calledFunctions": [
         "Unreferenced_00602bd0"
       ],
-      "dh": "982b595f"
+      "usedTypes": [
+        "StormLinkedListStrc",
+        "int32_t"
+      ],
+      "dh": "59b924d8",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pnLinkOffset",
+          "EDX:4"
+        ]
+      ]
     },
     {
       "name": "ScalarDeletingDestructor",

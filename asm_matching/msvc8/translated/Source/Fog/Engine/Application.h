@@ -115,7 +115,7 @@ bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList);
 int __fastcall DEBUG_UnwindStackFrames(CONTEXT * pContext, int, DWORD dwThreadId, struct D2CrashFrameStrc * pFrameArray, uint32_t nSkipFrames);
 bool __stdcall DEBUG_FormatAddressInfo(uint32_t nAddress, char * pOutput);
 int Unreferenced_004067c0();
-uint32_t __stdcall PATH_GetKnownFolderPath(LPSTR szOutPath, int32_t nBufferSize);
+bool __stdcall PATH_GetKnownFolderPath(LPSTR szOutPath, int32_t nBufferSize);
 #endif // D2_MODULE_Fog
 // 11 internal functions (defined in .cpp)
 

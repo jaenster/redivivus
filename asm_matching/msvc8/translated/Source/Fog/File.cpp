@@ -301,7 +301,7 @@ void __fastcall CRASH_SetExceptionHandler(pfnFogExceptionFilter pfnFilter, void 
     }
 }
 
-static uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, uint32_t nDestSize, char * szSrcPath) {
+static bool __stdcall FILETOOLS_ExtractDirectory(char * szDest, uint32_t nDestSize, char * szSrcPath) {
     char* pSep = strrchr(szSrcPath, 0x2f);
     char* pLastSep = 0;
     if ((uintptr_t)pSep > 0) {
@@ -320,16 +320,17 @@ static uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, uint32_t nDe
     if (!pLastSep) {
       *szDest = '\0';
     } else {
-      szDest = (char*)STRING_CopyStringBounded(nDestSize, szDest, szSrcPath);
-      if ((uintptr_t)szDest >= nDestSize) {
-        return (uintptr_t)szDest & -256;
+      size_t sVar1;
+      sVar1 = STRING_CopyStringBounded(nDestSize, szDest, szSrcPath);
+      if (sVar1 >= nDestSize) {
+        return false;
       }
     }
 
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)szDest >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    return true;
 }
 
-uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, uint32_t nDestSize) {
+bool __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, uint32_t nDestSize) {
     char* pSep;
     pSep = strrchr(szSrcPath, 0x2f);
     char* pLastSep;
@@ -369,7 +370,7 @@ uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, ui
       } while (cCurChar != '\0');
 
       if (nRemaining) {
-        return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)(pLastSep - szSrcPath - 1) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) < nDestSize));
+        return (uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) < nDestSize;
       }
 
       truncate:
@@ -377,7 +378,7 @@ uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, ui
     }
 
     pLastSep = pLastSep + strlen(pLastSep) + 1;
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)(pLastSep - szSrcPath - 1) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) < nDestSize));
+    return (uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) < nDestSize;
 }
 
 bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(char * szPath) {

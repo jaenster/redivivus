@@ -121,7 +121,16 @@
       "calledFunctions": [
         "Unreferenced_004c0ce0"
       ],
-      "dh": "70cfdc59"
+      "usedTypes": [
+        "D2GroundItemLabelStrc"
+      ],
+      "dh": "2629b57b",
+      "paramStorage": [
+        [
+          "pLabel",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "StaticInit_gaGroundItemLabels",

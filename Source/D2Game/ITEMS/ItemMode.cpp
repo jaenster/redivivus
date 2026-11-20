@@ -7065,10 +7065,9 @@ BOOL __fastcall Transmorgify(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc
     return 1;
 }
 
-void Unreferenced_005641c0() {
-    int in_ECX;
-    *(int*)in_ECX = in_ECX;
-    *(int*)(in_ECX + 4) = in_ECX;
+void __fastcall Unreferenced_005641c0(void * pListHead) {
+    *(void**)pListHead = (void*)pListHead;
+    *(void**)((char*)pListHead + 4) = (void*)pListHead;
 }
 
 void __fastcall ITEMMODE_ReturnZero3_Unref_00570690(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam) {

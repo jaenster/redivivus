@@ -50,7 +50,7 @@ struct D2CelDataHashEntryStrc * __fastcall CELDATAHASH_FindByFilename(struct D2C
 struct D2CelDataHashEntryStrc * __fastcall CELDATAHASH_AllocEntry(struct D2PoolManagerStrc * pPoolManager, struct D2CelDataHashTableStrc * pHashTable, void * nRefCount, char * szFileName);
 // @sourcefile .\SRC\CelDataHash.cpp
 void __fastcall GFX_RemoveCacheEntry(struct D2PoolManagerStrc * pMemory, struct D2CelDataHashTableStrc * pHashTable, struct D2CelDataHashEntryStrc * pEntry);
-void __stdcall IGNORELIST_Initialize_Unref_0060b130();
+void __fastcall IGNORELIST_Initialize_Unref_0060b130(void * pHashTable);
 #endif // D2_MODULE_D2CMP
 
 }}} // namespace D2CMP::SRC::CelDataHash

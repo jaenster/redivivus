@@ -473,14 +473,12 @@ void __stdcall DRAW_AltItems() {
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(nullptr, 0, 0, 0, 0);
 }
 
-void Unreferenced_004c0ce0() {
-    int in_ECX;
-    int iVar1;
-    uint32_t* puVar2 = (uint32_t*)(in_ECX + 0x14);
-    for (iVar1 = 0x40; iVar1; iVar1--) {
-      *puVar2 = 0;
-      puVar2++;
+D2GroundItemLabelStrc * __fastcall Unreferenced_004c0ce0(D2GroundItemLabelStrc * pLabel) {
+    for (int nCharacter = 0; nCharacter < 128; ++nCharacter) {
+      pLabel->wszName[nCharacter] = 0;
     }
+
+    return pLabel;
 }
 
 void StaticInit_gaGroundItemLabels() {

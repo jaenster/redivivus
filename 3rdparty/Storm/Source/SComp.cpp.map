@@ -1244,9 +1244,15 @@
         "Unreferenced_0041e940"
       ],
       "usedTypes": [
-        "uint32_t"
+        "int32_t"
       ],
-      "dh": "629f4714"
+      "dh": "1cbbb22e",
+      "paramStorage": [
+        [
+          "pHandle",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_NodeDestructor_Unref_0041e970",
@@ -1430,7 +1436,17 @@
       "calledFunctions": [
         "Unreferenced_0041ea50"
       ],
-      "dh": "b32aaeb6"
+      "usedTypes": [
+        "StormLinkStrc",
+        "uint32_t"
+      ],
+      "dh": "076188be",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "Unreferenced_0041ea60",

@@ -374,7 +374,6 @@ static void InitDrlgAct(::SGAMEDATA * pGame, char nActNo) {
 
 // Server-side act transition: warps a client's player unit to a destination act/level (e.g. waypoint/portal to another act). No-op in arena levels. Derives the target act from eLevel, lazily initializes the act's DRLG if absent, sets connection state, frees non-expansion pets, clears progressive states, spawns/finds a free room+coords (collision-checked with GetFreeCoordinates), then relinks the unit: clears old room, sends state command, sets client+unit act and pDrlgAct, tells the client to load the act, attaches the spawn room, sets the TELEPORTED flag, updates visibility, and re-manages pets at the new position. Halts via Fog::ErrorManager on failure paths.
 void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD2LevelId eLevel, int32_t nSpawnTypeOrMode) {
-    D2DrlgActStrc** ppDVar1;
     D2UnitStrc* pUnit;
     D2RoomStrc* pSpawnRoom;
     D2RoomStrc* pRoom;
@@ -385,7 +384,6 @@ void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD
     int nSpawnX;
     int nSpawnY;
     int32_t nSearchRadius;
-    ::SGAMEDATA* pGamePost;
     ::SGAMEDATA* pGameSave = pGame;
     uint32_t bIsArena = Arena::ARENA_IsArenaLevel(pGame);
     if (bIsArena) {
@@ -405,7 +403,6 @@ void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD
         InitDrlgAct(pGame, eDestAct);
       }
 
-      ppDVar1 = ppSpawnActOut;
       Clients::CLIENT_SetConnectionState(pClient, 5);
       pUnit = Clients::CLIENTS_GetControlUnit(pClient, 0);
       if (!pUnit) {
@@ -418,7 +415,7 @@ void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD
 
       D2Common::Skills::STATES_RemoveDisguiseStates(pUnit);
       bIsArena = D2Common::Units::GetUnitSizeX(pUnit);
-      pSpawnRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(*ppDVar1, eLevel, nSpawnTypeOrMode, &nSpawnX, &nSpawnY, bIsArena);
+      pSpawnRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(*ppSpawnActOut, eLevel, nSpawnTypeOrMode, &nSpawnX, &nSpawnY, bIsArena);
       if (!pSpawnRoom) {
         return;
       }
@@ -457,7 +454,6 @@ void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD
       TellClientToLoadAct(pGameSave, pClient);
       Clients::CLIENT_SetRoom(pClient, pSpawnRoom);
       D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
-      pGamePost = pGameSave;
       pUnit->eUnitFlagsEx |= UNITFLAGEX_TELEPORTED;
       UNIT::SUnit::UNITS_UpdateRoomClientVisibility(pGameSave, pUnit, nullptr);
       D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
@@ -465,7 +461,7 @@ void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD
         return;
       }
 
-      PLAYER::PlayerPets::PETS_ManagePetsByType(pGamePost, pUnit, (uint16_t)D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), (uint16_t)D2Common::Units::GetYPosFromDynamicPathUnit(pUnit));
+      PLAYER::PlayerPets::PETS_ManagePetsByType(pGameSave, pUnit, (uint16_t)D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), (uint16_t)D2Common::Units::GetYPosFromDynamicPathUnit(pUnit));
       return;
     }
 }

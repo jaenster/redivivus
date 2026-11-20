@@ -12,6 +12,7 @@
 #endif
 
 #include "Source/D2Headers/d2_platform.h"
+#include "3rdparty/Storm/Storm.h"
 
 // Forward declarations (used only by pointer here)
 struct D2ZlibExtraLBitsBlOrderStrc;
@@ -20,9 +21,9 @@ struct D2ZlibExtraLBitsBlOrderStrc;
 struct ct_data;
 
 extern D2ZlibExtraLBitsBlOrderStrc gZlibExtraLBitsBlOrder;
-extern int gaZlibExtraDBits[30];
-extern int gaZlibExtraBlBits[19];
-extern ct_data gaZlibStaticLTree[288];
-extern ct_data gZlibStaticDTreeDistCode[30];
+extern int extra_dbits[30];
+extern int extra_blbits[19];
+extern ct_data static_ltree[288];
+extern ct_data static_dtree[30];
 extern uint8_t _dist_code[512];
-extern uint8_t gaZlibLengthCodeTable[256];
+extern uint8_t _length_code[256];

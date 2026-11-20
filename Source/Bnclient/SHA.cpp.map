@@ -16,9 +16,9 @@
       "calledFunctions": [
         "SHA1_HashWideString",
         "SMemAlloc",
-        "SHA1_Init",
-        "SHA1_Update",
-        "SHA1_Final",
+        "SHA1Init",
+        "SHA1Update",
+        "SHA1Final",
         "SMemFree",
         "__security_check_cookie"
       ],
@@ -28,7 +28,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8d9acc62",
+      "dh": "de9a117e",
       "paramStorage": [
         [
           "pHashOut",
@@ -680,7 +680,13 @@
         "Unreferenced_0052a5f0",
         "SBigIsPrime"
       ],
-      "dh": "3fbf7295"
+      "dh": "47454a64",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "SHA1_BigIntFree",

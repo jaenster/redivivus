@@ -315,9 +315,16 @@
         "Unreferenced_0065c5a0"
       ],
       "usedTypes": [
-        "D2PropertiesTxt"
+        "D2PropertiesTxt",
+        "int32_t"
       ],
-      "dh": "097fce1f"
+      "dh": "e5e7268a",
+      "paramStorage": [
+        [
+          "nPropertyIndex",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

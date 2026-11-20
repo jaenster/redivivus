@@ -42,9 +42,9 @@ int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int3
         } while (nByteIdx < nHalfLen);
       }
 
-      SHA1::SHA1_Init(&shaCtx);
-      SHA1::SHA1_Update(&shaCtx, pTmpBuf, nHalfLen);
-      SHA1::SHA1_Final(aHashBuf, &shaCtx);
+      SHA1::SHA1Init(&shaCtx);
+      SHA1::SHA1Update(&shaCtx, pTmpBuf, nHalfLen);
+      SHA1::SHA1Final(aHashBuf, &shaCtx);
       i = 0;
       do {
         pHashOut[i * 2] = aHashBuf[i];
@@ -61,9 +61,9 @@ int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int3
         } while (i < nHalfLen);
       }
 
-      SHA1::SHA1_Init(&shaCtx);
-      SHA1::SHA1_Update(&shaCtx, pTmpBuf, nHalfLen);
-      SHA1::SHA1_Final(aHashBuf, &shaCtx);
+      SHA1::SHA1Init(&shaCtx);
+      SHA1::SHA1Update(&shaCtx, pTmpBuf, nHalfLen);
+      SHA1::SHA1Final(aHashBuf, &shaCtx);
       i = 0;
       pDstByte = pHashOut + 1;
       do {
@@ -205,9 +205,8 @@ void __fastcall SHA1_BigIntPowModValue(BigData * pResult, BigData * pBase, uint3
     Storm::Source::SBig::SBigDel(pTmpBigInt);
 }
 
-void Unreferenced_0052a5f0() {
-    BigData* in_ECX;
-    Storm::Source::SBig::SBigIsPrime(in_ECX);
+void __fastcall Unreferenced_0052a5f0(void * pContext) {
+    Storm::Source::SBig::SBigIsPrime((BigData*)pContext);
 }
 
 void __fastcall SHA1_BigIntFree(BigData * pBigData) {

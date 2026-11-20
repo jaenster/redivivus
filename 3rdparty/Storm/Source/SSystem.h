@@ -14,6 +14,9 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 
+// Forward declarations
+struct StormLinkStrc;
+
 namespace Storm::Source::SSystem {
 
 // Function declarations
@@ -29,7 +32,7 @@ uint32_t __fastcall SSYSTEM_InitializeAndReturn(uint32_t nFlags);
 char * ILT_strpbrk(char * _Str, char * _Control);
 void __stdcall __break();
 void __stdcall SSYSTEM_SetShutdownFlag(BOOL bShutdown);
-uint32_t Unreferenced_0041c380();
+uint32_t __fastcall Unreferenced_0041c380(struct StormLinkStrc * pLink);
 // TSFixedArray<unsigned int> constructor: zeroes the 20-byte array header.
 // Named per redivivus issue #35: SBIG_Constructor passes it with TSFixedArray_Ui_Destructor to the eh vector constructor iterator, so it is not a TSList helper.
 void * __fastcall TSFixedArray_Ui_Constructor(void * pNode);

@@ -48,7 +48,7 @@ void __stdcall ROSTER_UpdateHostileColors();
 void __fastcall UpdateLifeAndArea(DWORD nRosterGUID, int32_t nHpPercent, uint16_t eLevel);
 int32_t __fastcall GetRosterPerHPPercent(int32_t nRosterGUID);
 void __fastcall ROSTERPETS_GetPetData(int32_t nRosterGUID, int * pnSkillId, int * pnField6_0x18);
-eD2LevelId Unreferenced_004790f0();
+eD2LevelId __fastcall Unreferenced_004790f0(int32_t nRosterGUID);
 int32_t __fastcall GetRosterClass(int32_t nRosterGUID);
 DWORD __fastcall GetRosterOwnerGUID(DWORD nRosterGUID);
 int32_t __fastcall GetSkillId(int32_t nRosterGUID);

@@ -39,9 +39,8 @@ void __stdcall IGNORELIST_Initialize_Unref_00601b50() {
 
 }
 
-uint32_t Unreferenced_00601b70() {
-    int in_ECX;
-    return *(uint32_t*)(in_ECX + 4);
+uint32_t __fastcall Unreferenced_00601b70(StormLinkStrc * pLink) {
+    return pLink->pNext;
 }
 
 void __stdcall IGNORELIST_Initialize_Unref_0060ac50() {

@@ -16,6 +16,7 @@
 #include "3rdparty/Storm/Storm.h"
 
 // Forward declarations
+struct CELLIST;
 struct D2BNetClientCallbacksStrc;
 struct D2IniConfigStrc;
 struct D2PoolManagerStrc;
@@ -375,7 +376,7 @@ void __stdcall thunk_GAMEDATA_CheckAutomapCenterOnLoad();
 void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00602370(struct StormLinkedListStrc * pListHead);
 void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00602390(struct StormLinkedListStrc * pListHead);
 void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00603510(struct StormLinkedListStrc * pListHead);
-void Unreferenced_00603570();
+::CELLIST * __fastcall Unreferenced_00603570(::CELLIST * pCellList);
 void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0060e610(struct StormLinkedListStrc * pListHead);
 void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_006c4140(struct StormLinkedListStrc * pListHead);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca026(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);

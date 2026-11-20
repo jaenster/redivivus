@@ -66,7 +66,7 @@ WPARAM __stdcall SMsgDoMessageLoop(pfnStormMsgIdleCallback pfnIdleCallback, uint
 HWND __stdcall WND_GetActiveWindow();
 BOOL __stdcall WND_SetActiveWindow(HWND pWindow);
 int __fastcall Unreferenced_004203c0(struct StormLinkStrc * pLink);
-uint32_t Unreferenced_004203d0();
+uint32_t __fastcall Unreferenced_004203d0(struct StormLinkStrc * pLink);
 struct StormLinkStrc * __thiscall WND_ResolveListOffset(struct StormLinkStrc * pNode, intptr_t pBase);
 void __fastcall Unreferenced_00420470(struct StormLinkedListStrc * pList);
 int __fastcall Unreferenced_004204f0(struct StormLinkStrc * pLink);

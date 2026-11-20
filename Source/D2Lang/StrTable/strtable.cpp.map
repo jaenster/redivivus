@@ -263,10 +263,10 @@
         "WCHAR",
         "WCHAR *",
         "int32_t",
-        "uint32_t",
+        "uint16_t",
         "uint8_t"
       ],
-      "dh": "16bbffe5",
+      "dh": "a05145ff",
       "paramStorage": [
         [
           "pbKey",

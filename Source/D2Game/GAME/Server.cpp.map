@@ -5217,7 +5217,16 @@
       "calledFunctions": [
         "Unreferenced_0060e250"
       ],
-      "dh": "411319fe"
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "a915023c",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_00650e90",

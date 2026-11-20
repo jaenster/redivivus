@@ -595,11 +595,11 @@ struct D2SFileSignatureKeyStrc {
 #ifndef D2_DEFINED_D2SSCompDeflateBlockEntryStrc
 #define D2_DEFINED_D2SSCompDeflateBlockEntryStrc
 struct D2SSCompDeflateBlockEntryStrc {
-    /* 0x00 */ uint16_t nGoodLength; // zlib configuration_table.good_length -> deflate_state.good_match
-    /* 0x02 */ uint16_t nMaxLazy; // zlib configuration_table.max_lazy -> deflate_state.max_lazy_match
-    /* 0x04 */ uint16_t nNiceLength; // zlib configuration_table.nice_length -> deflate_state.nice_match
-    /* 0x06 */ uint16_t nMaxChain; // zlib configuration_table.max_chain -> deflate_state.max_chain_length
-    /* 0x08 */ int32_t (__fastcall *pfnDeflateBlock)(deflate_state *, int32_t); // zlib configuration_table.func (DeflateStored / DeflateFast / DeflateSlow), __fastcall
+    /* 0x00 */ uint16_t good_length; // zlib configuration_table.good_length -> deflate_state.good_match
+    /* 0x02 */ uint16_t max_lazy; // zlib configuration_table.max_lazy -> deflate_state.max_lazy_match
+    /* 0x04 */ uint16_t nice_length; // zlib configuration_table.nice_length -> deflate_state.nice_match
+    /* 0x06 */ uint16_t max_chain; // zlib configuration_table.max_chain -> deflate_state.max_chain_length
+    /* 0x08 */ int32_t (__fastcall *func)(deflate_state *, int32_t); // zlib configuration_table.func (DeflateStored / DeflateFast / DeflateSlow), __fastcall
 };
 #endif // D2_DEFINED_D2SSCompDeflateBlockEntryStrc
 #ifndef D2_DEFINED_D2SystemInfoStrc
@@ -676,7 +676,7 @@ BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize);
 }} // namespace Fog::Debug
 namespace Fog { namespace File {
 void __stdcall CONTAINER_InitializeBuffer(void * pBuffer, int32_t nTypeSize, int32_t nBufferSize, CONTAINER_TypeInitialValue fpInitValueCallback);
-uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, uint32_t nDestSize);
+bool __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, uint32_t nDestSize);
 bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(char * szPath);
 size_t __stdcall STRING_AppendStringToString(char * szDest, int32_t nDestSize, char * szSrc);
 // Convention __cdecl_ediesi: the destination and its size arrive in EDI/ESI, the format and its arguments on the stack. A model, not custom storage, because the decompiler drops custom register parameters at a varargs call site.

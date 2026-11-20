@@ -1700,9 +1700,16 @@
         "Unreferenced_00499de0"
       ],
       "usedTypes": [
-        "D2UiPartyStrc"
+        "D2UiPartyStrc",
+        "int32_t"
       ],
-      "dh": "cc1d13ba"
+      "dh": "fbe90977",
+      "paramStorage": [
+        [
+          "nRosterGUID",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

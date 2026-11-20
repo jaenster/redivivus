@@ -68,7 +68,7 @@
         "strrchr",
         "strncpy_s"
       ],
-      "dh": "1b97a8ba"
+      "dh": "71ae2bb6"
     },
     {
       "name": "Unreferenced_00401dd0",
@@ -109,7 +109,7 @@
         "pfnSymGetModuleInfo64",
         "uint32_t"
       ],
-      "dh": "32e71d8d",
+      "dh": "6e7a617a",
       "paramStorage": [
         [
           "dwQueryAddr",
@@ -149,7 +149,7 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "503c5336",
+      "dh": "8f1ba7a0",
       "paramStorage": [
         [
           "dwQueryAddr",
@@ -186,7 +186,7 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "6c368b89",
+      "dh": "e7b21ce5",
       "paramStorage": [
         [
           "dwQueryAddr",
@@ -250,7 +250,7 @@
       "usedTypes": [
         "pfnEHHandlerRoutine"
       ],
-      "dh": "c1c84af7",
+      "dh": "3357f5f1",
       "paramStorage": [
         [
           "szSearchPath",
@@ -277,7 +277,7 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "5924df61",
+      "dh": "4aabc780",
       "paramStorage": [
         [
           "pfnFindCallback",
@@ -336,7 +336,7 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "afa2ed50",
+      "dh": "49d139f0",
       "paramStorage": [
         [
           "hFile",
@@ -383,7 +383,7 @@
         "pfnEHHandlerRoutine",
         "uint32_t"
       ],
-      "dh": "d74eedb1",
+      "dh": "86edbf70",
       "paramStorage": [
         [
           "dwBaseOfDll",
@@ -413,7 +413,7 @@
       "usedTypes": [
         "pfnEHHandlerRoutine"
       ],
-      "dh": "6b071c92",
+      "dh": "24b8646d",
       "paramStorage": [
         [
           "hThread",
@@ -547,10 +547,9 @@
         "DEBUG_GetDbgHelpModuleRange"
       ],
       "usedTypes": [
-        "_MODULEINFO",
-        "uint32_t"
+        "_MODULEINFO"
       ],
-      "dh": "89244eb7",
+      "dh": "98dcda0f",
       "paramStorage": [
         [
           "ppBaseOfDll",

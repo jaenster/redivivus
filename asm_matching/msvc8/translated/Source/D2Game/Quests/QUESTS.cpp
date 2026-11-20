@@ -1620,18 +1620,17 @@ void __fastcall INTRONPC_FillInPacketWithIntroNpcIdsInAct(::SGAMEDATA * pGame, D
     }
 }
 
-uint32_t Unreferenced_005451b0() {
+uint32_t __fastcall Unreferenced_005451b0(D2UnitStrc * pUnit) {
     uint32_t nItemClassId;
     D2ItemsTxt* pDVar2;
-    int in_ECX;
-    D2UnitStrc* pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(*(D2InventoryStrc**)(in_ECX + 0x60));
+    D2UnitStrc* pUnit_00 = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory);
     while (true) {
       D2UnitStrc* pDVar1;
-      if (!pUnit) {
+      if (!pUnit_00) {
         return 0;
       }
 
-      pDVar1 = D2Common::INVENTORY::Inventory::GetCarriedItem(pUnit);
+      pDVar1 = D2Common::INVENTORY::Inventory::GetCarriedItem(pUnit_00);
       if (!pDVar1) {
         nItemClassId = -1;
       } else {
@@ -1643,7 +1642,7 @@ uint32_t Unreferenced_005451b0() {
         break;
       }
 
-      pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pUnit);
+      pUnit_00 = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pUnit_00);
     }
 
     return 1;
@@ -1913,7 +1912,6 @@ void __fastcall QUEST_SendNpcInfoPacket(D2UnitStrc * pUnit, D2UnitStrc * pNpcUni
 
 // @sourcefile .\QUESTS\QUESTS.CPP
 BOOL __fastcall QUESTS_SendQuestInfoAndEventTrigger(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    uint16_t wGameIdHigh = (uint16_t)((uintptr_t)pGame >> 0x10);
     D2GSPacketClt0x89 DStack_8;
     DStack_8.nPacketId = 0x89;
     DStack_8.nEventType = (uint8_t)pGame->pQuestControl->nEventId;

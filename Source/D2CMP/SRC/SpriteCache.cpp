@@ -916,7 +916,7 @@ static void __stdcall SPRITECACHE_LoadAndCacheDC6(D2CelFileCacheEntryStrc * pCel
 }
 
 void __stdcall GFXHASH_InitIgnoreList_Thunk() {
-    GfxHash::IGNORELIST_Initialize_Unref_0060ab70();
+    GfxHash::IGNORELIST_Initialize_Unref_0060ab70(gaGfxHashTable);
 }
 
 uint32_t __stdcall SPRITECACHE_GetMemUsage() {
@@ -931,7 +931,7 @@ uint32_t __stdcall SPRITECACHE_GetCacheSize() {
 }
 
 void __stdcall CELDATAHASH_InitIgnoreList_Thunk() {
-    CelDataHash::IGNORELIST_Initialize_Unref_0060b130();
+    CelDataHash::IGNORELIST_Initialize_Unref_0060b130(gaCelDataHashTable);
 }
 
 int __stdcall CELDATACACHE_GetMemUsage() {

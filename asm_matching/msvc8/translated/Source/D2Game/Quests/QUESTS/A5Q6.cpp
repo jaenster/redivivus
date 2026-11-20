@@ -512,7 +512,6 @@ void __fastcall Q36_Callback_08_CompleteQuest(D2QuestDataStrc * pQuestData, D2Qu
     uint32_t nPosX;
     int i;
     uint32_t nGoldCap;
-    ::SGAMEDATA* pGame;
     bool bPlayerNotYetComplete;
     D2QuestDataA5Q6Strc* pA5Q6Data = pQuestData->pQuestSpecificData.pA5Q6;
     NotifyPlayersAboutEvent(pQuestData->pGame, 0x13);
@@ -528,9 +527,8 @@ void __fastcall Q36_Callback_08_CompleteQuest(D2QuestDataStrc * pQuestData, D2Qu
       QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)SendQuestBitsIfNeeded, 1);
       if (pQuestArgs->pPlayer) {
         if (pQuestData->bIsNotIntroduction != '\0') {
-          pGame = pQuestArgs->pGame;
           /* GetQuestState(QUEST_EveOfDestruction, 0=Completed) — track if the
-                         triggering player had not yet completed (gates gold reward) */ D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+                         triggering player had not yet completed (gates gold reward) */ D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
           _bQuestCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_EveOfDestruction, QUESTSTATE_Completed);
           if (!_bQuestCompleted) {
             bPlayerNotYetComplete = true;

@@ -65,7 +65,7 @@ void __stdcall FreeGameRecord();
 void __fastcall GAME_ReplayRecordedWindowMessage(struct D2GameRecordEntryStrc * pIndex);
 void __stdcall SetupRecording();
 BOOL __stdcall IsNotRecording();
-void __stdcall CallCloseRecordingFunction(uint32_t uMsg, uint32_t wParam, uint32_t lParam);
+void __stdcall CallCloseRecordingFunction(LPCSTR szFile, int nLine, LPCSTR szExpression);
 void __stdcall SetCleanupFunction();
 BOOL __stdcall RECORD_GetSettedUp();
 void __stdcall RECORD_SetPlaybackActive();

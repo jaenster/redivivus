@@ -305,9 +305,15 @@
         "Unreferenced_0041eac0"
       ],
       "usedTypes": [
-        "uint32_t"
+        "int32_t"
       ],
-      "dh": "4144a7ea"
+      "dh": "73fa0f2e",
+      "paramStorage": [
+        [
+          "pHandle",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "LINKEDLIST_GetCount_Unref_00420490",

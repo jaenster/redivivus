@@ -27,19 +27,10 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2GameRecordStrc) == 0x1f4c, "D2_NE
 #endif
 
 
-#ifndef RECON_FPTD_RecordCleanupFn
-#define RECON_FPTD_RecordCleanupFn
-typedef void (*RecordCleanupFn)();
-#endif
-#ifndef RECON_FPTD_pfnFaultError
-#define RECON_FPTD_pfnFaultError
-typedef void (__stdcall *pfnFaultError)(LPCSTR szFile, int nLine, LPCSTR szExpression);
-#endif
-
 static D2GameRecordStrc * gpCurrentGameRecord = (D2GameRecordStrc *)&gsGameRecordContext; D2_STATIC_GUARD(gpCurrentGameRecord, "gpCurrentGameRecord");
 D2GameRecordStrc gsGameRecordContext = {0}; D2_GLOBAL_GUARD(gsGameRecordContext, "gsGameRecordContext");
 namespace D2Client { namespace GAME { namespace Record {
-RecordCleanupFn CleanUpFn = (RecordCleanupFn)0; D2_GLOBAL_GUARD(CleanUpFn, "D2Client::GAME::Record::CleanUpFn");
+pfnFaultError CleanUpFn = (pfnFaultError)0; D2_GLOBAL_GUARD(CleanUpFn, "D2Client::GAME::Record::CleanUpFn");
 }}} // namespace D2Client::GAME::Record
 static D2GameRecordFileHeaderStrc lpBuffer_007a2768 = {0}; D2_STATIC_GUARD(lpBuffer_007a2768, "lpBuffer_007a2768");
 namespace D2Client { namespace GAME { namespace Record {
@@ -233,18 +224,24 @@ BOOL __stdcall IsNotRecording() {
     return NotRecording;
 }
 
-void __stdcall CallCloseRecordingFunction(uint32_t uMsg, uint32_t wParam, uint32_t lParam) {
+void __stdcall CallCloseRecordingFunction(LPCSTR szFile, int nLine, LPCSTR szExpression) {
     SaveGameRecordToFile();
     if (!CleanUpFn) {
       return;
     }
 
-    (*CleanUpFn)();
+    (*CleanUpFn)(szFile, nLine, szExpression);
 }
 
+#if 0 // ratchet: the match body of 00451940 (evidence 1985bb0f9) could not be re-spelled: global CleanUpFn retyped: RecordCleanupFn* -> pfnFaultError*; type RecordCleanupFn gone; callee CallCloseRecordingFunction parameter szFile retyped: uint32_t -> LPCSTR
 void __stdcall SetCleanupFunction() {
     SettedUp = 1;
     CleanUpFn = (RecordCleanupFn)D2Hell::RegisterExitFunction((pfnFaultError)CallCloseRecordingFunction);
+}
+#endif
+void __stdcall SetCleanupFunction() {
+    SettedUp = 1;
+    CleanUpFn = D2Hell::RegisterExitFunction(CallCloseRecordingFunction);
 }
 
 BOOL __stdcall RECORD_GetSettedUp() {

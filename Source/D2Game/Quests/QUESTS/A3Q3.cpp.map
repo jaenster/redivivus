@@ -657,9 +657,10 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc",
-        "SGAMEDATA"
+        "SGAMEDATA",
+        "uint8_t"
       ],
-      "dh": "627844c7",
+      "dh": "e31b3e62",
       "paramStorage": [
         [
           "pGame",

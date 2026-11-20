@@ -156,9 +156,8 @@ void __stdcall SSYSTEM_SetShutdownFlag(BOOL bShutdown) {
     gbSSystemShutdownInProgress = bShutdown;
 }
 
-uint32_t Unreferenced_0041c380() {
-    int in_ECX;
-    return *(uint32_t*)(in_ECX + 4);
+uint32_t __fastcall Unreferenced_0041c380(StormLinkStrc * pLink) {
+    return pLink->pNext;
 }
 
 // TSFixedArray<unsigned int> constructor: zeroes the 20-byte array header.

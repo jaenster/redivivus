@@ -111,7 +111,6 @@ void __fastcall SKILLDESC_FormatItemStatLine(struct D2UnitStrc * pUnit, uint16_t
 // NOTE: Register params: pUnit (ECX): D2UnitStrc *, pwszOutputBuffer (EDX): short *
 void __fastcall DamageToUndeadText(struct D2UnitStrc * pUnit, short * pwszOutputBuffer, int32_t nMaxBufferSize);
 BOOL __stdcall SKILLDESC_CalcStatGroupMinMax(struct D2UnitStrc * pUnit, struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nGroupValue, struct D2ItemStatCostTxt * pItemStatCostTxt, BOOL * pbIsFirstInGroup);
-int Unreferenced_004e5a10();
 void __fastcall SKILLDESC_BuildStatBuffDesc(struct D2UnitStrc * pUnit, uint16_t * wszOutputBuffer, int32_t nMaxBufferSize, int32_t bIncludeUndeadDamage, eD2States eState, eD2States eState2, uint32_t eStatListFlags, int32_t bAppendNewline);
 void __fastcall SKILLDESC_AppendStatBuffText(struct D2UnitStrc * pUnit, uint16_t * wszOutputBuffer, int32_t nMaxBufferSize, int32_t bAppendNewline, uint16_t * wszPrefixText);
 void __fastcall SKILLDESC_AppendItemBuffText(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, uint16_t * wszOutputBuffer, int32_t nMaxBufferSize);
@@ -178,6 +177,6 @@ void __fastcall SKILLDESC_BuildSkillTooltip(struct D2UnitStrc * pUnit, eD2Skills
 void __fastcall SKILLDESC_BuildSkillTooltip_NoMaxLevelCheck(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCalcIndex, int32_t nScreenX, int32_t nScreenY);
 void __fastcall SKILLDESC_BuildSkillShortTooltip(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCalcIndex, int32_t nParam1, int32_t nScreenX, int32_t nScreenY);
 #endif // D2_MODULE_D2Client
-// 68 internal functions (defined in .cpp)
+// 69 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::SkillDesc

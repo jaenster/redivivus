@@ -184,7 +184,13 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "cc895830"
+      "dh": "02236fe2",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "UNITS_GetHashTableSlot",
@@ -1756,7 +1762,7 @@
         "eD2TimerTypeDWORD",
         "int32_t"
       ],
-      "dh": "7eae009c",
+      "dh": "6a28d9df",
       "paramStorage": [
         [
           "pGame",

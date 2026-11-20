@@ -41,7 +41,7 @@ void __fastcall Q05_Callback11_ScrollMessage(struct D2QuestDataStrc * pQuestData
 void __fastcall Q05_Callback10_PlayerLeavesGame(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // A1Q5 (Forgotten Tower) NPC-talk gossip callback (handler slot 0). Only runs once the quest intro is past. Looks up the talking player's quest record for QUEST_ForgottenTower (Completed/JustCompleted), and resolves the target NPC class id and player GUID. Scans the quest-specific per-player GUID lists to pick which gossip line to play, then calls AddGossipMessageOnMonster to make the NPC speak the appropriate line (completion line, or the initial-mask line from gdwQuestDataIntialMask indexed by stateFlag). Pure dialog selection; no quest-state mutation.
 void __fastcall Q05_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
-void Unreferenced_00594db0();
+void __fastcall Unreferenced_00594db0(void * pQuestData, void * pArg);
 // 1.14d: 0x594dd0 | A1Q5 "The Forgotten Tower" — reward-award pass (per-player iterator callback).
 // Runs once per player unit. Skips if this player's quest record already has Completed OR RewardAwaits.
 // Gate: player must be standing in LEVEL_TowerCellarLevel5 (the Countess room). Records the player's

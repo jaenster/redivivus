@@ -182,7 +182,17 @@
       "calledFunctions": [
         "Unreferenced_004203d0"
       ],
-      "dh": "74d4c61a"
+      "usedTypes": [
+        "StormLinkStrc",
+        "uint32_t"
+      ],
+      "dh": "438d842b",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
     },
     {
       "name": "WND_ResolveListOffset",

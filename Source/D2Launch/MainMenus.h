@@ -123,7 +123,7 @@ void __fastcall FORMS_DestroyEncoderContext_Thunk_Unref_0041f940(uint32_t * pEnc
 uint16_t __fastcall Unreferenced_0042e5c0(uint16_t nValue);
 void __fastcall CRYPTO_ByteSwap16Array(uint16_t * pArray, uint32_t nCount);
 uint16_t * __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue);
-uint16_t Unreferenced_0042e610();
+uint16_t __fastcall Unreferenced_0042e610(uint16_t * pCharacter);
 int __fastcall Unreferenced_0042e620(uint16_t * pChar);
 int __fastcall Unreferenced_0042e630(uint16_t * pChar);
 void __thiscall CRYPTO_ByteSwap64Array(uint16_t * pwIn, uint16_t * pwOut);

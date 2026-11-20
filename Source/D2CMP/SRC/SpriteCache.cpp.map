@@ -632,7 +632,7 @@
         "GFXHASH_InitIgnoreList_Thunk",
         "IGNORELIST_Initialize_Unref_0060ab70"
       ],
-      "dh": "7c5d4e6f"
+      "dh": "320e0c65"
     },
     {
       "name": "SPRITECACHE_GetMemUsage",
@@ -684,7 +684,7 @@
         "CELDATAHASH_InitIgnoreList_Thunk",
         "IGNORELIST_Initialize_Unref_0060b130"
       ],
-      "dh": "64668ca1"
+      "dh": "e7ed1982"
     },
     {
       "name": "CELDATACACHE_GetMemUsage",

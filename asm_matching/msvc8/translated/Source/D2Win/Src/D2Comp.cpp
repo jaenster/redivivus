@@ -1890,7 +1890,6 @@ void __fastcall D2COMP_PopulateComponentFromCOF(D2CharSelCompStrc * pCOFData, D2
 
     uint32_t nLayerIndex;
     uint8_t* pLayerEntry;
-    int32_t nArgSlot;
     pGfxData->nClassId = pCOFData->nPlayerClassId;
     pGfxData->nMode = pCOFData->nAnimMode;
     uint32_t nComponentType = (uint32_t)pGfxData->nComponentType;
@@ -1930,7 +1929,6 @@ void __fastcall D2COMP_PopulateComponentFromCOF(D2CharSelCompStrc * pCOFData, D2
             }
 
             nWeaponClassToken = 0;
-            nArgSlot = 0x503841;
             D2COMP_PadStringTo4Chars((char*)(pLayerEntry + 5), (char*)&nWeaponClassToken);
             pGfxData->nWeaponClass = (int)nWeaponClassToken;
             break;
@@ -3572,13 +3570,13 @@ void __stdcall D2COMP_SetAnimationSpeed(D2CharSelCompStrc * pCompUnit, uint8_t b
     pCompUnit->nAnimSpeed = byClampedSpeed;
 }
 
-uint32_t __stdcall D2COMP_GetNumDirections(D2CharSelCompStrc * pCompUnit) {
+uint8_t __stdcall D2COMP_GetNumDirections(D2CharSelCompStrc * pCompUnit) {
     if (!pCompUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd61);
       exit(-1);
     }
 
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pCompUnit >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pCompUnit->nNumDirections);
+    return pCompUnit->nNumDirections;
 }
 
 int __stdcall D2COMP_GetNumFrames(D2CharSelCompStrc * pCompUnit) {
