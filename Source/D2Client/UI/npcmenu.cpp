@@ -6751,7 +6751,16 @@ void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechId
     Dialog::DIALOG_SetHighlightStyle(Dialog::gpNpcGossipDialog, 1);
     Dialog::AddStringData(Dialog::gpNpcGossipDialog, D2Lang::StrTable::strtable::GetLocaleString(nTitleStringId), 0x15, 0, 4, 1, 0, 0);
     D2GSPacketSrv0x27_TextStrc* pMsgLog = Text::TEXT_GetOverheadGlobalPointer();
-    if (pMsgLog) {
+    if (!pMsgLog) {
+      iVar1 = 1;
+      uint32_t dwEnabledArg = 1;
+      nErrorLine = 0;
+      uint32_t dwColorArg = 0;
+      dwFontArg = 0xf;
+      fpDialogFunc pfnMercOnClick = NPCMENU_MercDrawCallback1;
+      uint16_t* pszDialogLine = D2Lang::StrTable::strtable::GetLocaleString(0xd48);
+      Dialog::AddStringData(Dialog::gpNpcGossipDialog, pszDialogLine, dwFontArg, dwColorArg, nErrorLine, dwEnabledArg, pfnMercOnClick, iVar1);
+    } else {
       uint16_t nSoundId;
       nErrorLine = D2Common::Text::TEXT_CountMessagesOfType2(pMsgLog);
       gnNpcMenuCainIdentifyGUID = nSpeechIdx;
@@ -6793,16 +6802,16 @@ void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechId
           }
         }
       }
-    }
 
-    iVar1 = 1;
-    uint32_t dwEnabledArg = 1;
-    nErrorLine = 0;
-    uint32_t dwColorArg = 0;
-    dwFontArg = 0xf;
-    fpDialogFunc pfnMercOnClick = NPCMENU_MercDrawCallback1;
-    uint16_t* pszDialogLine = D2Lang::StrTable::strtable::GetLocaleString(0xd48);
-    Dialog::AddStringData(Dialog::gpNpcGossipDialog, pszDialogLine, dwFontArg, dwColorArg, nErrorLine, dwEnabledArg, pfnMercOnClick, iVar1);
+      iVar1 = 1;
+      uint32_t dwEnabledArg = 1;
+      nErrorLine = 0;
+      uint32_t dwColorArg = 0;
+      dwFontArg = 0xf;
+      fpDialogFunc pfnMercOnClick = NPCMENU_MercDrawCallback1;
+      uint16_t* pszDialogLine = D2Lang::StrTable::strtable::GetLocaleString(0xd48);
+      Dialog::AddStringData(Dialog::gpNpcGossipDialog, pszDialogLine, dwFontArg, dwColorArg, nErrorLine, dwEnabledArg, pfnMercOnClick, iVar1);
+    }
 }
 
 // Opens a confirm dialog for an NPC action (gpNpcRepairDialog). Line 1 is the localized string nTitleStringId (font 0x15), then "ok" (3401) -> NPCMENU_ConfirmDialogOkCallback and "cancel" (3400) -> NPCMENU_ConfirmDialogCancelCallback. The dialog's own callbacks are NPCMENU_ConfirmDialogCancelCallback and NPCMENU_EmptyDrawCallback2.

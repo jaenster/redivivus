@@ -37,9 +37,7 @@ namespace D2Client { namespace GAME { namespace Game {
     *(uint32_t*)(pThis->szGamePassword + 4) = *(uint32_t*)(pSource->szGamePassword + 4);
     *(uint32_t*)(pThis->szGamePassword + 8) = *(uint32_t*)(pSource->szGamePassword + 8);
     *(uint32_t*)(pThis->szGamePassword + 0xc) = *(uint32_t*)(pSource->szGamePassword + 0xc);
-    char* pSrcDesc = pSource->szGameDescription;
-    char* pDstDesc = pThis->szGameDescription;
-    memcpy(pDstDesc, pSrcDesc, 32);
+    memcpy(pThis->szGameDescription, pSource->szGameDescription, 32);
     pThis->nGameType = pSource->nGameType;
     pThis->nTemplateLevel = pSource->nTemplateLevel;
     pThis->nReserved = pSource->nReserved;
@@ -80,54 +78,12 @@ namespace D2Client { namespace GAME { namespace Game {
     memcpy(pThis->pMonsterRegion, pSource->pMonsterRegion, 0x1000);
     pThis->pObjectControl = pSource->pObjectControl;
     pThis->pQuestControl = pSource->pQuestControl;
-    D2UnitNodeStrc** ppSrcUnitNode = pSource->pUnitNodes;
-    D2UnitNodeStrc** ppDstUnitNode = pThis->pUnitNodes;
-    memcpy(ppDstUnitNode, ppSrcUnitNode, 40);
-    int nWordsLeft = 0x80;
-    D2UnitStrc** ppSrcUnit = pSource->pUnitList[0];
-    D2UnitStrc** ppDstUnit = pThis->pUnitList[0];
-    for (; nWordsLeft; nWordsLeft--) {
-      *ppDstUnit = *ppSrcUnit;
-      ppSrcUnit++;
-      ppDstUnit++;
-    }
-
-    nWordsLeft = 0x80;
-    D2UnitStrc** ppSrcMonsterBucket = pSource->pUnitList[1];
-    D2UnitStrc** ppDstMonsterBucket = pThis->pUnitList[1];
-    for (; nWordsLeft; nWordsLeft--) {
-      *ppDstMonsterBucket = *ppSrcMonsterBucket;
-      ppSrcMonsterBucket++;
-      ppDstMonsterBucket++;
-    }
-
-    nWordsLeft = 0x80;
-    D2UnitStrc** ppSrcObjectBucket = pSource->pUnitList[2];
-    D2UnitStrc** ppDstObjectBucket = pThis->pUnitList[2];
-    for (; nWordsLeft; nWordsLeft--) {
-      *ppDstObjectBucket = *ppSrcObjectBucket;
-      ppSrcObjectBucket++;
-      ppDstObjectBucket++;
-    }
-
-    nWordsLeft = 0x80;
-    D2UnitStrc** ppSrcMissileBucket = pSource->pUnitList[3];
-    D2UnitStrc** ppDstMissileBucket = pThis->pUnitList[3];
-    for (; nWordsLeft; nWordsLeft--) {
-      *ppDstMissileBucket = *ppSrcMissileBucket;
-      ppSrcMissileBucket++;
-      ppDstMissileBucket++;
-    }
-
-    nWordsLeft = 0x80;
-    D2UnitStrc** ppSrcUnit2 = pSource->pUnitList[4];
-    D2UnitStrc** ppDstUnit2 = pThis->pUnitList[4];
-    for (; nWordsLeft; nWordsLeft--) {
-      *ppDstUnit2 = *ppSrcUnit2;
-      ppSrcUnit2++;
-      ppDstUnit2++;
-    }
-
+    memcpy(pThis->pUnitNodes, pSource->pUnitNodes, 40);
+    memcpy(pThis->pUnitList[0], pSource->pUnitList[0], 0x200);
+    memcpy(pThis->pUnitList[1], pSource->pUnitList[1], 0x200);
+    memcpy(pThis->pUnitList[2], pSource->pUnitList[2], 0x200);
+    memcpy(pThis->pUnitList[3], pSource->pUnitList[3], 0x200);
+    memcpy(pThis->pUnitList[4], pSource->pUnitList[4], 0x200);
     pThis->pWarpTileList = pSource->pWarpTileList;
     uint32_t* pSrcArray = pSource->fUniqueSpawn;
     uint32_t* pDstArray = pThis->fUniqueSpawn;
@@ -135,9 +91,7 @@ namespace D2Client { namespace GAME { namespace Game {
     pThis->pNpcControl = pSource->pNpcControl;
     pThis->pArenaCtrl = pSource->pArenaCtrl;
     pThis->pPartyControl = pSource->pPartyControl;
-    uint8_t* pSrcBossFlags = pSource->nBossFlagList;
-    uint8_t* pDstBossFlags = pThis->nBossFlagList;
-    memcpy(pDstBossFlags, pSrcBossFlags, 0x40);
+    memcpy(pThis->nBossFlagList, pSource->nBossFlagList, 0x40);
     pSrcArray = pSource->nPathCount;
     pDstArray = pThis->nPathCount;
     memcpy(pDstArray, pSrcArray, 0x48);

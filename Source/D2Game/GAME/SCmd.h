@@ -569,7 +569,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x74_SYNCHDEADBODY(struct D2ClientStrc * pC
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall NET_D2GS_SERVER_Send_0x75_UPDATEROSTER(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
 void __fastcall NET_D2GS_SERVER_Send_0x7B_SYNCHOTKEYS(struct D2ClientStrc * pClient, uint8_t nHotkeySlot, int32_t nSkillId, int32_t bIsLeftSkill, uint32_t dwHotkeyArg);
-void __fastcall NET_D2GS_SERVER_Send_0x7E_LoadMonsterCof(struct D2ClientStrc * pClient);
+void __fastcall NET_D2GS_SERVER_Send_0x7E_LoadMonsterCof(struct D2ClientStrc * pClient, uint32_t dwMonSeed);
 void __fastcall NET_D2GS_SERVER_Send_0x82_PortalOwnership(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, uint32_t dwPortalObjGUID, uint32_t dwPortalGUIDArg);
 void __fastcall NET_D2GS_SERVER_Send_0x83_Unused(struct D2ClientStrc * pClient, char * szText, uint16_t wDataLen, uint16_t wExtraFlag, uint16_t wParam, void * pData);
 void __fastcall NET_D2GS_SERVER_Send_0x84_Unused(struct D2ClientStrc * pClient, uint8_t byFlag, uint16_t wDataLen, void * pData);

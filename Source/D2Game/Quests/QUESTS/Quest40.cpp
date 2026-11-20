@@ -18,15 +18,6 @@
 
 namespace D2Game::Quests::QUESTS::Quest40 {
 
-#if 0 // ratchet: the match body of 00586b30 (evidence 1985bb0f9) could not be re-spelled: field D2DataTableTxtStrc::aTxtSuperUniquesHardcoded retyped: short* -> uint16_t*
-uint32_t __fastcall TXT_SuperUniquesHardcoded_GetSuperUniqueIndex(uint32_t nHardcodedIndex) {
-    if (nHardcodedIndex <= 0x41) {
-      return (uint32_t)(uint16_t)D2Common::ITEMS::Items::sgptDataTable->aTxtSuperUniquesHardcoded[nHardcodedIndex];
-    }
-
-    return -1;
-}
-#endif
 uint32_t __fastcall TXT_SuperUniquesHardcoded_GetSuperUniqueIndex(uint32_t nHardcodedIndex) {
     if (nHardcodedIndex <= 0x41) {
       return (uint32_t)D2Common::ITEMS::Items::sgptDataTable->aTxtSuperUniquesHardcoded[nHardcodedIndex];

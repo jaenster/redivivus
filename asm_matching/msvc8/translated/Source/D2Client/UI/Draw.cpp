@@ -646,6 +646,10 @@ void __fastcall DRAW_UI(D2GameViewStrc * pGameView) {
                   case 1:
                     ui::SetUIFlag(eUIIndex, UI_RESET, 0);
                   break;
+                  case 2:
+                    goto draw_help_menu;
+                  case 3:
+                    goto draw_help_menu;
                   default:
                     goto draw_help_menu;
                 }

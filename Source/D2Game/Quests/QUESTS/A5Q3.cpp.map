@@ -358,11 +358,15 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "ebd24d60",
+      "dh": "980054ae",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
+        ],
+        [
+          "pObject",
+          "EDX:4"
         ]
       ]
     },

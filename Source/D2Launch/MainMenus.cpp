@@ -7337,8 +7337,8 @@ int __stdcall ClickOnClassCreate(D2ControlMsg * pControlMsg) {
     BOOL bIsExpansion;
     bIsExpansion = Fog::D2CheckExpansionGame();
     D2ControlStrc** ppAnimIter;
-    ppAnimIter = gaAnimImgCharCreateByClass;
     if (bIsExpansion) {
+      ppAnimIter = gaAnimImgCharCreateByClass;
       do {
         bIsExpansion = D2Win::D2WINANIMIMAGE_TryAdvanceToPlaying((::D2WinAnimImage*)*ppAnimIter);
         if (!bIsExpansion) {
@@ -7348,6 +7348,7 @@ int __stdcall ClickOnClassCreate(D2ControlMsg * pControlMsg) {
         ppAnimIter++;
       } while ((intptr_t)ppAnimIter < (intptr_t)((char*)&gaAnimImgCharCreateByClass + sizeof(gaAnimImgCharCreateByClass)));
     } else {
+      ppAnimIter = gaAnimImgCharCreateByClass;
       do {
         bIsExpansion = D2Win::D2WINANIMIMAGE_TryAdvanceToPlaying((::D2WinAnimImage*)*ppAnimIter);
         if (!bIsExpansion) {
@@ -7362,10 +7363,8 @@ int __stdcall ClickOnClassCreate(D2ControlMsg * pControlMsg) {
     nPrevClassId = gnClassDescriptionTooltipState;
     uint32_t nNewClassId;
     nNewClassId = -1;
-    bool bHadClassSelected;
-    bHadClassSelected = gnClassDescriptionTooltipState != -1;
     gnClassDescriptionTooltipState = -1;
-    if (bHadClassSelected) {
+    if (nPrevClassId != -1) {
       char* pszSoundFile;
       D2Sound::Src::D2SoundFast::SOUND_FadeOutAllSoundEffects();
       switch (nPrevClassId) {

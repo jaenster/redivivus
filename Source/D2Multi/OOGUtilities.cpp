@@ -1614,55 +1614,53 @@ int __stdcall OOGUTIL_ProcessGameListEntry(D2ControlStrc * pControl) {
 
     uint16_t* pwszLocaleStr = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpOogGamePasswordEditControl->sControl);
     uint16_t* pwszGameName = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpCtlGameListTop->sControl);
-    if (!pwszLocaleStr) {
-      return 0;
-    }
-
-    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte((char*)aPassword, (uint16_t*)pwszLocaleStr, 0x100);
-    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(aGameName, (uint16_t*)pwszGameName, 0x100);
-    Fog::Src::String::FogString::SMEM_TitleCaseString((char*)aPassword);
-    Fog::Src::String::FogString::SMEM_TitleCaseString(aGameName);
-    int32_t bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
-    if (bHasPeerName) {
-      ChatDlg::OOGMENU_JoinGame(0, (char*)aPassword, aGameName, nullptr);
-      UIMENU_DestroyLobbyAndJoinGameForms();
-      pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
-      ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszLocaleStr, nullptr);
-      return 1;
-    }
-
-    int nEntryIdx = 0;
-    if (nGameListDifficultyFilter > 0) {
-      int nCmp;
-      do {
-        nCmp = strcmp(gbLanGameListEntryNamePadding[nEntryIdx].szName, (char*)aPassword);
-        if (!nCmp) {
-          pbEntryName = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(gbLanGameListEntryNamePadding[nEntryIdx].dwIpAddr);
-          ChatDlg::OOGMENU_JoinGame(gbLanGameListEntryNamePadding[nEntryIdx].nJoinId, (char*)aPassword, aGameName, pbEntryName);
-          UIMENU_DestroyLobbyAndJoinGameForms();
-          pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
-          ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszLocaleStr, nullptr);
-          return 1;
-        }
-
-        nEntryIdx++;
-      } while (nEntryIdx < nGameListDifficultyFilter);
-    }
-
-    bHasPeerName = OOGUTIL_HandleGameListEntry((char*)aPassword, aGameName, &sGameEntry);
-    if (bHasPeerName) {
-      nEntryIdx = strcmp(sGameEntry.szGameName, (char*)aPassword);
-      if (!nEntryIdx) {
-        pbEntryName = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(sGameEntry.dwIpAddress);
-        ChatDlg::OOGMENU_JoinGame(sGameEntry.nPort, (char*)aPassword, aGameName, pbEntryName);
+    if (pwszLocaleStr) {
+      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte((char*)aPassword, (uint16_t*)pwszLocaleStr, 0x100);
+      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(aGameName, (uint16_t*)pwszGameName, 0x100);
+      Fog::Src::String::FogString::SMEM_TitleCaseString((char*)aPassword);
+      Fog::Src::String::FogString::SMEM_TitleCaseString(aGameName);
+      int32_t bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
+      if (bHasPeerName) {
+        ChatDlg::OOGMENU_JoinGame(0, (char*)aPassword, aGameName, nullptr);
         UIMENU_DestroyLobbyAndJoinGameForms();
         pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
         ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszLocaleStr, nullptr);
         return 1;
       }
-    } else {
-      pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x1411);
-      ChatDlg::UIMENU_DrawTitleOnCenterSmaller(pwszLocaleStr, nullptr);
+
+      int nEntryIdx = 0;
+      if (nGameListDifficultyFilter > 0) {
+        int nCmp;
+        do {
+          nCmp = strcmp(gbLanGameListEntryNamePadding[nEntryIdx].szName, (char*)aPassword);
+          if (!nCmp) {
+            pbEntryName = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(gbLanGameListEntryNamePadding[nEntryIdx].dwIpAddr);
+            ChatDlg::OOGMENU_JoinGame(gbLanGameListEntryNamePadding[nEntryIdx].nJoinId, (char*)aPassword, aGameName, pbEntryName);
+            UIMENU_DestroyLobbyAndJoinGameForms();
+            pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
+            ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszLocaleStr, nullptr);
+            return 1;
+          }
+
+          nEntryIdx++;
+        } while (nEntryIdx < nGameListDifficultyFilter);
+      }
+
+      bHasPeerName = OOGUTIL_HandleGameListEntry((char*)aPassword, aGameName, &sGameEntry);
+      if (bHasPeerName) {
+        nEntryIdx = strcmp(sGameEntry.szGameName, (char*)aPassword);
+        if (!nEntryIdx) {
+          pbEntryName = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(sGameEntry.dwIpAddress);
+          ChatDlg::OOGMENU_JoinGame(sGameEntry.nPort, (char*)aPassword, aGameName, pbEntryName);
+          UIMENU_DestroyLobbyAndJoinGameForms();
+          pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
+          ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszLocaleStr, nullptr);
+          return 1;
+        }
+      } else {
+        pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x1411);
+        ChatDlg::UIMENU_DrawTitleOnCenterSmaller(pwszLocaleStr, nullptr);
+      }
     }
 
     return 0;

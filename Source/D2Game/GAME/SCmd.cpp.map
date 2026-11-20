@@ -4556,13 +4556,18 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
-        "D2GSPacketSrv0x7E"
+        "D2GSPacketSrv0x7E",
+        "uint32_t"
       ],
-      "dh": "9d7d66b1",
+      "dh": "592732fa",
       "paramStorage": [
         [
           "pClient",
           "ECX:4"
+        ],
+        [
+          "dwMonSeed",
+          "EDX:4"
         ]
       ]
     },

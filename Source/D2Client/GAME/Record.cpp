@@ -233,12 +233,6 @@ void __stdcall CallCloseRecordingFunction(LPCSTR szFile, int nLine, LPCSTR szExp
     (*CleanUpFn)(szFile, nLine, szExpression);
 }
 
-#if 0 // ratchet: the match body of 00451940 (evidence 1985bb0f9) could not be re-spelled: global CleanUpFn retyped: RecordCleanupFn* -> pfnFaultError*; type RecordCleanupFn gone; callee CallCloseRecordingFunction parameter szFile retyped: uint32_t -> LPCSTR
-void __stdcall SetCleanupFunction() {
-    SettedUp = 1;
-    CleanUpFn = (RecordCleanupFn)D2Hell::RegisterExitFunction((pfnFaultError)CallCloseRecordingFunction);
-}
-#endif
 void __stdcall SetCleanupFunction() {
     SettedUp = 1;
     CleanUpFn = D2Hell::RegisterExitFunction(CallCloseRecordingFunction);

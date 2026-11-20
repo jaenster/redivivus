@@ -2866,17 +2866,9 @@ int __fastcall inflatePrime(z_stream * strm, int32_t bits, uint32_t value) {
 }
 
 static void __fastcall fixedtables(inflate_state * state) {
-    /* inffixed.h -- table for decoding fixed codes
-     * Generated automatically by makefixed().
-     */
-    /* WARNING: this file should *not* be used by applications.
-       It is part of the implementation of this library and is
-       subject to change. Applications should only use zlib.h.
-     */
-
-    state->lencode = (inflate_code *)lenfix;
+    state->lencode = (inflate_code*)lenfix;
     state->lenbits = 9;
-    state->distcode = (inflate_code *)distfix;
+    state->distcode = (inflate_code*)distfix;
     state->distbits = 5;
 }
 

@@ -1921,52 +1921,6 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
 }
 
 // lpStartAddress parameter of CreateThread
-#if 0 // ratchet: the match body of 0051d0a0 (evidence 1985bb0f9) could not be re-spelled: callee SID_SetStateFlag1 returns BOOL, was uint32_t
-int __stdcall BattleConnectFastest() {
-    // Static local variables (originally global data)
-    static char RealmDNS[256] = {}; D2_STATIC_GUARD(RealmDNS, "Bnclient::BnSend::BattleConnectFastest::RealmDNS");
-    static char EntireDnsRecordOfServers[512] = {}; D2_STATIC_GUARD(EntireDnsRecordOfServers, "Bnclient::BnSend::BattleConnectFastest::EntireDnsRecordOfServers");
-
-    Debug::DEBUG_Trace("BattleConnectFastest()");
-    LONG lInterlockedResult = InterlockedIncrement((LONG*)&Destination_00881c00);
-    if (lInterlockedResult > 1) {
-      /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881c00);
-      return 0;
-    }
-
-    BnDownload::BNDOWNLOAD_ResetState(0x66);
-    GetBnetIp(RealmDNS, 0x100);
-    Debug::DEBUG_Trace("   connect to: %s", RealmDNS);
-    Bnet::BNET_LogIndent(2, 4);
-    Bnet::BnetLog_WriteLine("querying gateway %s", RealmDNS);
-    EntireDnsRecordOfServers[0] = '\0';
-    BOOL bWinsockOk = Fog::Src::Safesock::StartUp();
-    if (bWinsockOk) {
-      GetDnsRecordSync((char**)EntireDnsRecordOfServers, RealmDNS);
-    }
-    if (EntireDnsRecordOfServers[0] == '\0') {
-      /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881c00);
-      SID_SetStateFlag1(0xc);
-      Debug::DEBUG_Trace("   failed to get server list");
-      Bnet::BNET_LogIndent(2, -4);
-      return 0;
-    }
-
-    SID_SetStateFlag1(0);
-    NET_SID_CLIENT_LogonSequence(EntireDnsRecordOfServers);
-    Bnet::BNET_LogIndent(2, -4);
-    /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedResult = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
-    if (!lInterlockedResult) {
-      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedResult = InterlockedCompareExchange(&Target_00881bfc, 0, 0);
-      if (!lInterlockedResult) {
-        SID_SetStateFlag1(0xc);
-      }
-    }
-
-    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881c00);
-    return 1;
-}
-#endif
 int __stdcall BattleConnectFastest() {
     // Static local variables (originally global data)
     static char RealmDNS[256] = {}; D2_STATIC_GUARD(RealmDNS, "Bnclient::BnSend::BattleConnectFastest::RealmDNS");

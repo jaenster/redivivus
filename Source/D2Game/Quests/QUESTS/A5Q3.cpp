@@ -346,7 +346,24 @@ static void Q33_CleanupQuestMonsters(D2QuestDataStrc * pQuestData) {
 
 // Q33_KillAnyaMonsterTimer (PrisonOfIce): quest timer that instantly kills the rescued-Anya monster (table type 1) —
 // clear AI sub, zero path, AITHINK, hp=0, Dead skill + lifecycle transition, relink. Used to finalize the escort.
+#if 0 // ratchet: the match body of 00589540 (evidence 5b183fa9f) could not be re-spelled: arity changed: 1 -> 2 parameters
 void __fastcall Q33_KillAnyaMonsterTimer(::SGAMEDATA * pGame) {
+    bool bHasAiSub;
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_PrisonOfIce);
+    if (!pQuestData) {
+      return;
+    }
+
+    D2QuestDataA5Q3Strc* pA5Q3Data = pQuestData->pQuestSpecificData.pA5Q3;
+    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_MONSTER, pA5Q3Data->nAnyaCorpseGUID);
+    if (!pUnit) {
+      return;
+    }
+
+    A5Q3_KillMonsterInstantly(pUnit, (::SGAMEDATA**)pQuestData);
+}
+#endif
+void __fastcall Q33_KillAnyaMonsterTimer(::SGAMEDATA * pGame, D2UnitStrc * pObject) {
     bool bHasAiSub;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_PrisonOfIce);
     if (!pQuestData) {

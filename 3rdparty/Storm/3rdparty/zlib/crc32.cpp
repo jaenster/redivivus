@@ -2306,21 +2306,11 @@ uint32_t __stdcall crc32_combine_(uint32_t crc1, uint32_t crc2, int64_t len2) {
     return crc1 ^ crc2;
 }
 
-#if 0 // ratchet: the match body of 0042dbc0 (evidence 1985bb0f9) could not be re-spelled: returns uint32_t, was void
-void __fastcall crc32_combine(uint32_t dwCrc, uint32_t dwFinalXor, int32_t nExp) {
-    crc32_combine_(dwCrc, dwFinalXor, (int64_t)nExp);
-}
-#endif
 uint32_t __fastcall crc32_combine(uint32_t crc1, uint32_t crc2, int32_t len2) {
     uint32_t uVar1 = crc32_combine_(crc1, crc2, (int64_t)len2);
     return uVar1;
 }
 
-#if 0 // ratchet: the match body of 0042dbe0 (evidence 1985bb0f9) could not be re-spelled: returns uint32_t, was void
-void __fastcall crc32_combine64(uint32_t dwCrc, uint32_t dwFinalXor, int64_t nLength) {
-    crc32_combine_(dwCrc, dwFinalXor, nLength);
-}
-#endif
 uint32_t __fastcall crc32_combine64(uint32_t crc1, uint32_t crc2, int64_t len2) {
     uint32_t uVar1 = crc32_combine_(crc1, crc2, len2);
     return uVar1;

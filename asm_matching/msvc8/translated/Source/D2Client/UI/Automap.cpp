@@ -2541,7 +2541,6 @@ void Unreferenced_0045a280() {
 void __stdcall AUTOMAP_LoadDC6Sprites() {
     BOOL bIsExpansion;
     char szPath[260];
-    char* szFmt;
     szPath[0] = '\0';
     memset(szPath + 1, 0, 0x103);
     DC6** ppDC6 = pAutoMapDC6;
@@ -2566,7 +2565,9 @@ void __stdcall AUTOMAP_LoadDC6Sprites() {
           sprintf(szPath, "%s\\UI\\AutoMap\\Act4MapS", "DATA\\GLOBAL");
           pAutoMapDC6[2] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
           nAutoMapDC6FrameCount[2] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[2]);
-          szFmt = "%s\\UI\\AutoMap\\ExTnMapS";
+          sprintf(szPath, "%s\\UI\\AutoMap\\ExTnMapS", "DATA\\GLOBAL");
+          pAutoMapDC6[3] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
+          nAutoMapDC6FrameCount[3] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[3]);
           break;
         }
       default:
@@ -2581,19 +2582,16 @@ void __stdcall AUTOMAP_LoadDC6Sprites() {
           pAutoMapDC6[2] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
           nAutoMapDC6FrameCount[2] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[2]);
           bIsExpansion = Fog::D2CheckExpansionGame();
-          if (!bIsExpansion) {
+          if (bIsExpansion) {
+            sprintf(szPath, "%s\\UI\\AutoMap\\ExTnMap", "DATA\\GLOBAL");
+            pAutoMapDC6[3] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
+            nAutoMapDC6FrameCount[3] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[3]);
+          } else {
             pAutoMapDC6[3] = 0;
             nAutoMapDC6FrameCount[3] = 0;
-            return;
           }
-
-          szFmt = "%s\\UI\\AutoMap\\ExTnMap";
         }
     }
-
-    sprintf(szPath, szFmt, "DATA\\GLOBAL");
-    pAutoMapDC6[3] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
-    nAutoMapDC6FrameCount[3] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[3]);
 }
 
 // AUTOMAP_Init - Initializes the automap subsystem.

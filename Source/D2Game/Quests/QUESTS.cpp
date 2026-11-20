@@ -1214,207 +1214,162 @@ void __fastcall Objects_InitFn07_CainGibbet(D2ObjectInitFnArg * pInitArg) {
 // Quest dispatcher keyed on a unit's monster/object class id. Given pGame and the triggering pUnit, looks up the unit's nClassId and routes to the matching act-quest timer/callback (e.g. Khalim's Will compelling orb 0x16f, Cain/Tower 0xbd by level, Countess 0x173, Hell's Forge 0x178, Anya/Nihlathak act-5 0x1cb-0x1cd, Ancients 0x1da-0x1dc). Walks pGame->pQuestControl->pQuestData list to find the relevant quest record before invoking its handler. No return; pure side-effecting quest progression.
 void __fastcall QUESTS_DispatchObjectEvent(::SGAMEDATA * pGame, D2UnitStrc * pObject) {
     eD2LevelId eLevelId;
+    eAct eActNo;
     D2QuestDataStrc* pQuestData;
-    D2QuestDataStrc* pQuestDataB;
     int nObjectClassId = !pObject ? -1 : pObject->nClassId;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pObject);
-    if (nObjectClassId <= 0x16f) {
-      eAct eActNo;
-      if (nObjectClassId != 0x16f) {
-        if (nObjectClassId <= 0xbd) {
-          if (nObjectClassId != 0xbd) {
-            if (nObjectClassId == 0x1a) {
-              A1Q4::MakeTownPortalFromScroolTree(pGame, pObject);
-              return;
-            }
-            if (nObjectClassId != 0x7a) {
-              if (nObjectClassId == 0x83 && pRoom) {
-                if (pObject && pObject->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral) {
-                  D2Common::Units::ChangeAnimMode(pObject, 2);
-                }
-
-                eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-                switch (eLevelId) {
-                  case LEVEL_SpiderForest:
-                    {
-                      Monster::Create::SpawnMonsterAtUnit(pGame, pObject, 0x12d, eD2MonsterAnimMode_ns::Neutral, -1, 0);
-                      return;
-                    }
-                  case LEVEL_ChaosSanctuary:
-                    {
-                      A4Q3::Q27_SpawnSealBoss(pGame, pObject);
-                      return;
-                    }
-                }
-              }
-            } else {
-              if (pGame->pQuestControl) {
-                pQuestData = pGame->pQuestControl->pQuestData;
-                if (pQuestData) {
-                  do {
-                    if (pQuestData->nQuestNoInternal == QUESTINT_TheArcaneSanctuary) {
-                      A2Q4::BlockHaremRoomForPlayerAccess(pQuestData, pObject);
-                      return;
-                    }
-
-                    pQuestData = pQuestData->pPrev;
-                  } while (pQuestData);
-
-                  return;
-                }
-              }
-            }
-          } else {
-            eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-            eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevelId);
-            if (eActNo == ACT_I) {
-              if (pGame->pQuestControl) {
-                pQuestData = pGame->pQuestControl->pQuestData;
-                if (pQuestData) {
-                  do {
-                    if (pQuestData->nQuestNoInternal == QUESTINT_TheSearchForCain) {
-                      A1Q4::Q04_UpdateCainPortalInTown(pQuestData, pObject);
-                      return;
-                    }
-
-                    pQuestData = pQuestData->pPrev;
-                  } while (pQuestData);
-
-                  return;
-                }
-              }
-            } else if (eLevelId == LEVEL_Harrogath || (int)eLevelId >= 0x71) {
-              if (pGame->pQuestControl) {
-                pQuestData = pGame->pQuestControl->pQuestData;
-                if (pQuestData) {
-                  do {
-                    if (pQuestData->nQuestNoInternal == QUESTINT_PrisonOfIce) {
-                      A5Q3::Q33_AnyaTimerCallback(pQuestData, pObject);
-                      return;
-                    }
-
-                    pQuestData = pQuestData->pPrev;
-                  } while (pQuestData);
-
-                  return;
-                }
-              }
-            } else if (pGame->pQuestControl && (pQuestData = pGame->pQuestControl->pQuestData , pQuestData != 0)) {
-              do {
-                if (pQuestData->nQuestNoInternal == QUESTINT_RescueOnMountArreat) {
-                  A5Q2::Q32_PrisonerTimerCallback(pQuestData, pObject);
-                  return;
-                }
-
-                pQuestData = pQuestData->pPrev;
-              } while (pQuestData);
-
-              return;
-            }
+    switch (nObjectClassId) {
+      case 0x1a:
+        A1Q4::MakeTownPortalFromScroolTree(pGame, pObject);
+        return;
+      case 0x7a:
+      if (pGame->pQuestControl) {
+        pQuestData = pGame->pQuestControl->pQuestData;
+        while (pQuestData) {
+          if (pQuestData->nQuestNoInternal == QUESTINT_TheArcaneSanctuary) {
+            A2Q4::BlockHaremRoomForPlayerAccess(pQuestData, pObject);
+            return;
           }
-        } else if (nObjectClassId != 0x10c) {
-          if (nObjectClassId == 0x155 && pGame->pQuestControl && (pQuestData = pGame->pQuestControl->pQuestData , pQuestData != 0)) {
-            do {
-              if (pQuestData->nQuestNoInternal == QUESTINT_TheGuardian) {
-                A3Q6::Q23_TimerCallback_MephistoApproach(pQuestData, pObject);
+          pQuestData = pQuestData->pPrev;
+        }
+      }
+        return;
+      case 0x83:
+        if (pRoom) {
+          if (pObject && pObject->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral) {
+            D2Common::Units::ChangeAnimMode(pObject, 2);
+          }
+          eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+          switch (eLevelId) {
+            case LEVEL_SpiderForest:
+              Monster::Create::SpawnMonsterAtUnit(pGame, pObject, 0x12d, eD2MonsterAnimMode_ns::Neutral, -1, 0);
+              return;
+            case LEVEL_ChaosSanctuary:
+              A4Q3::Q27_SpawnSealBoss(pGame, pObject);
+              return;
+          }
+        }
+        return;
+      case 0xbd:
+        eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+        eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevelId);
+        if (eActNo == ACT_I) {
+          if (pGame->pQuestControl) {
+            pQuestData = pGame->pQuestControl->pQuestData;
+            while (pQuestData) {
+              if (pQuestData->nQuestNoInternal == QUESTINT_TheSearchForCain) {
+                A1Q4::Q04_UpdateCainPortalInTown(pQuestData, pObject);
                 return;
               }
-
               pQuestData = pQuestData->pPrev;
-            } while (pQuestData);
-
-            return;
+            }
+          }
+        } else if (eLevelId == LEVEL_Harrogath || (int)eLevelId >= 0x71) {
+          if (pGame->pQuestControl) {
+            pQuestData = pGame->pQuestControl->pQuestData;
+            while (pQuestData) {
+              if (pQuestData->nQuestNoInternal == QUESTINT_PrisonOfIce) {
+                A5Q3::Q33_AnyaTimerCallback(pQuestData, pObject);
+                return;
+              }
+              pQuestData = pQuestData->pPrev;
+            }
           }
         } else {
           if (pGame->pQuestControl) {
             pQuestData = pGame->pQuestControl->pQuestData;
-            if (pQuestData) {
-              do {
-                if (pQuestData->nQuestNoInternal == QUESTINT_TheSearchForCain) {
-                  A1Q4::Q04_DropShieldRewards(pQuestData, pObject);
-                  return;
-                }
-
-                pQuestData = pQuestData->pPrev;
-              } while (pQuestData);
-
-              return;
+            while (pQuestData) {
+              if (pQuestData->nQuestNoInternal == QUESTINT_RescueOnMountArreat) {
+                A5Q2::Q32_PrisonerTimerCallback(pQuestData, pObject);
+                return;
+              }
+              pQuestData = pQuestData->pPrev;
             }
           }
         }
-      } else {
-        if (pGame->pQuestControl) {
-          pQuestData = pGame->pQuestControl->pQuestData;
-          if (pQuestData) {
-            do {
-              if (pQuestData->nQuestNoInternal == QUESTINT_KhalimsWill) {
-                A3Q2::Q19_UpdateSewerStairsObject(pQuestData, pObject);
-                return;
-              }
-
-              pQuestData = pQuestData->pPrev;
-            } while (pQuestData);
-
+        return;
+      case 0x10c:
+      if (pGame->pQuestControl) {
+        pQuestData = pGame->pQuestControl->pQuestData;
+        while (pQuestData) {
+          if (pQuestData->nQuestNoInternal == QUESTINT_TheSearchForCain) {
+            A1Q4::Q04_DropShieldRewards(pQuestData, pObject);
             return;
           }
+          pQuestData = pQuestData->pPrev;
         }
       }
-    } else {
-      switch (nObjectClassId) {
-        case 0x178:
-          if (pGame->pQuestControl && (pQuestDataB = pGame->pQuestControl->pQuestData , pQuestDataB != 0)) {
-            do {
-              if (pQuestDataB->nQuestNoInternal == QUESTINT_HellsForge) {
-                A4Q3::Q28_TimerCallback_DropForgeRunes(pQuestDataB, pObject);
-                return;
-              }
-
-              pQuestDataB = pQuestDataB->pPrev;
-            } while (pQuestDataB);
-
+        return;
+      case 0x155:
+      if (pGame->pQuestControl) {
+        pQuestData = pGame->pQuestControl->pQuestData;
+        while (pQuestData) {
+          if (pQuestData->nQuestNoInternal == QUESTINT_TheGuardian) {
+            A3Q6::Q23_TimerCallback_MephistoApproach(pQuestData, pObject);
             return;
           }
-        break;
-        case 0x1da:
-
-        case 0x1db:
-
-        case 0x1dc:
-          if (pGame->pQuestControl && (pQuestData = pGame->pQuestControl->pQuestData , pQuestData != 0)) {
-            do {
-              if (pQuestData->nQuestNoInternal == QUESTINT_RiteOfPassage) {
-                A5Q5::Q35_SpawnAncientTimer(pQuestData, pObject);
-                return;
-              }
-
-              pQuestData = pQuestData->pPrev;
-            } while (pQuestData);
-
-            return;
-          }
-        break;
-        case 0x1cd:
-          /* FanaticMinion */ A5Q3::Q33_KillAnyaMonsterTimer(pGame);
-        return;
-        case 0x1cb:
-          A5Q4::Q34_SpawnNihlathakPortalTimer(pGame, pObject);
-        return;
-        case 0x1cc:
-          /* GreaterIceSpawn */ A5Q3::SpawnFrozenAnya(pGame, pObject);
-        return;
-        case 0x173:
-          if (pGame->pQuestControl && (pQuestData = pGame->pQuestControl->pQuestData , pQuestData != 0)) {
-            while (pQuestData->nQuestNoInternal != QUESTINT_ForgottenTower) {
-              pQuestData = pQuestData->pPrev;
-              if (!pQuestData) {
-                return;
-              }
-            }
-
-            A1Q5::Q05_TriggerCountessDeathEffect(pQuestData, pObject);
-          }
-        break;
+          pQuestData = pQuestData->pPrev;
+        }
       }
+        return;
+      case 0x16f:
+      if (pGame->pQuestControl) {
+        pQuestData = pGame->pQuestControl->pQuestData;
+        while (pQuestData) {
+          if (pQuestData->nQuestNoInternal == QUESTINT_KhalimsWill) {
+            A3Q2::Q19_UpdateSewerStairsObject(pQuestData, pObject);
+            return;
+          }
+          pQuestData = pQuestData->pPrev;
+        }
+      }
+        return;
+      case 0x178:
+      if (pGame->pQuestControl) {
+        pQuestData = pGame->pQuestControl->pQuestData;
+        while (pQuestData) {
+          if (pQuestData->nQuestNoInternal == QUESTINT_HellsForge) {
+            A4Q3::Q28_TimerCallback_DropForgeRunes(pQuestData, pObject);
+            return;
+          }
+          pQuestData = pQuestData->pPrev;
+        }
+      }
+        return;
+      case 0x1da:
+      case 0x1db:
+      case 0x1dc:
+      if (pGame->pQuestControl) {
+        pQuestData = pGame->pQuestControl->pQuestData;
+        while (pQuestData) {
+          if (pQuestData->nQuestNoInternal == QUESTINT_RiteOfPassage) {
+            A5Q5::Q35_SpawnAncientTimer(pQuestData, pObject);
+            return;
+          }
+          pQuestData = pQuestData->pPrev;
+        }
+      }
+        return;
+      case 0x1cd:
+        A5Q3::Q33_KillAnyaMonsterTimer(pGame, pObject);
+        return;
+      case 0x1cb:
+        A5Q4::Q34_SpawnNihlathakPortalTimer(pGame, pObject);
+        return;
+      case 0x1cc:
+        A5Q3::SpawnFrozenAnya(pGame, pObject);
+        return;
+      case 0x173:
+        if (pGame->pQuestControl && (pQuestData = pGame->pQuestControl->pQuestData) != 0) {
+          do {
+            if (pQuestData->nQuestNoInternal == QUESTINT_ForgottenTower) {
+              A1Q5::Q05_TriggerCountessDeathEffect(pQuestData, pObject);
+              break;
+            }
+            pQuestData = pQuestData->pPrev;
+          } while (pQuestData);
+        }
+        break;
     }
 }
 

@@ -2320,7 +2320,6 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
     char szPathPal[260];
     char szBaseName[260];
     D2GfxDataStrc sGfxData;
-    int nY;
     int32_t nQueryResult = D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState();
     if (!nQueryResult) {
       BOOL bDrawFlag;
@@ -2330,12 +2329,10 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
       }
       if (!gpCongratsBgDC6) {
         if (!gClientGameData.CLIENT_bExpansion) {
-          memcpy(szBaseName + 4, "ame", 4);
+          strcpy(szBaseName, "endgame");
         } else {
-          memcpy(szBaseName + 4, "ame2", 5);
+          strcpy(szBaseName, "endgame2");
         }
-
-        memcpy(szBaseName, "endg", 4);
         sprintf(szPathBg, "%s\\ui\\menu\\%s", "DATA\\GLOBAL", szBaseName);
         gpCongratsBgDC6 = Core::Archive::IMAGE_LoadDC6Ex(szPathBg, 0);
         sprintf(szPathPal, "%s\\Palette\\%s\\pal.dat", "DATA\\GLOBAL", szBaseName);
@@ -2367,8 +2364,7 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
         sGfxData.nFrameNumber = 6;
         D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, UI::ui::ScreenSizeX / 2, UI::Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
         sGfxData.nFrameNumber = 7;
-        nY = UI::ui::ScreenSizeX / 2 + 0x100;
-        nFrameOffset = UI::Inv::ScreenSizeY;
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, UI::ui::ScreenSizeX / 2 + 0x100, UI::Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
       } else {
         D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0, 0x100, -1, DRAW_SOLID, nullptr);
         sGfxData.nFrameNumber = 1;
@@ -2391,20 +2387,18 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
         D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x100, 600, -1, DRAW_SOLID, nullptr);
         sGfxData.nFrameNumber = 10;
         D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x200, 600, -1, DRAW_SOLID, nullptr);
-        nFrameOffset = 600;
         sGfxData.nFrameNumber = 0xb;
-        nY = 0x300;
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x300, 600, -1, DRAW_SOLID, nullptr);
       }
 
-      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nY, nFrameOffset, -1, DRAW_SOLID, nullptr);
       D2Win::Src::D2WinFont::SetAndReturnLastFont(3);
       GAMEDATA_DrawLoadingScreenText();
       GAMEDATA_DrawCharacterPortrait();
       D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
       memset(&sGfxData, 0, 0x48);
-      sGfxData.nFrameNumber = (int)(gbMinimapClickValid != 0);
       sGfxData.pDC6 = gpCongratzOkButtonDC6;
       sGfxData.nDirection = 0;
+      sGfxData.nFrameNumber = (int)(gbMinimapClickValid != 0);
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, UI::ui::ScreenSizeX / 2 - 0x30, UI::Inv::ScreenSizeY - 0x50, -1, DRAW_SOLID, nullptr);
       nQueryResult = GAMEDATA_GetCenteredTextX(0x13ee, UI::ui::ScreenSizeX / 2);
       nFrameOffset = 0;
@@ -2416,20 +2410,20 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
       Cursor::DrawCursor();
       D2gfx::D2GFX::D2GFX_EndScene();
     }
-    if (!gEndGameUiState.congratzOkClicked) {
-      return 0;
-    }
-    if (gpCongratsBgDC6) {
-      Core::Archive::DC6_FreeAndDelete(gpCongratsBgDC6);
-      gpCongratsBgDC6 = 0;
-    }
-    if (gpCongratzOkButtonDC6) {
-      Core::Archive::DC6_FreeAndDelete(gpCongratzOkButtonDC6);
-      gpCongratzOkButtonDC6 = 0;
-    }
+    if (gEndGameUiState.congratzOkClicked) {
+      if (gpCongratsBgDC6) {
+        Core::Archive::DC6_FreeAndDelete(gpCongratsBgDC6);
+        gpCongratsBgDC6 = 0;
+      }
+      if (gpCongratzOkButtonDC6) {
+        Core::Archive::DC6_FreeAndDelete(gpCongratzOkButtonDC6);
+        gpCongratzOkButtonDC6 = 0;
+      }
 
-    ClientModeInGame::D2CLIENT_SetExitVar1(0);
-    return 1;
+      ClientModeInGame::D2CLIENT_SetExitVar1(0);
+      return 1;
+    }
+    return 0;
 }
 
 void __stdcall GAMEDATA_ShowEndGameCutscene() {

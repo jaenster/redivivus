@@ -2013,7 +2013,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x7B_SYNCHOTKEYS(D2ClientStrc * pClient, ui
     SCMD_QueuePacketForClient(pClient, &sPacket.nPacketId, 8);
 }
 
-void __fastcall NET_D2GS_SERVER_Send_0x7E_LoadMonsterCof(D2ClientStrc * pClient) {
+void __fastcall NET_D2GS_SERVER_Send_0x7E_LoadMonsterCof(D2ClientStrc * pClient, uint32_t dwMonSeed) {
     D2GSPacketSrv0x7E aPacketBuf;
     aPacketBuf.nPacketId = '~';
     SCMD_QueuePacketForClient(pClient, &aPacketBuf.nPacketId, 5);

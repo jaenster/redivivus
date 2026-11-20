@@ -4172,13 +4172,12 @@ BOOL __fastcall SERVER_TakeItemToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     D2UnitStrc* pItem;
     eInventoryPage eSrcPage;
     uint32_t bIsActiveCharm;
-    eInventoryPage eDestPage;
     int bHasSocketedItems;
     int32_t nPageResult;
     int32_t bTradeBusy;
     BOOL bItemDisabled;
-    bool bCopyInv;
-    bool bIsMercPage;
+    BOOL bCopyInv;
+    BOOL bIsMercPage;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x906);
       exit(-1);
@@ -4249,22 +4248,22 @@ BOOL __fastcall SERVER_TakeItemToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       ITEMMODE_RemoveItemStates(pUnit, pItem);
       eSrcPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem);
       nPageResult = D2Common::Units::UNITS_GetInventoryRecordId(pUnit, eSrcPage, pGame->bExpansion);
-      eDestPage = (eInventoryPage)nPageResult;
       bIsMercPage = false;
       bCopyInv = true;
       if (pUnit->eUnitType == UNIT_PLAYER) {
-        if (eSrcPage != INVPAGE_TRADEGRID1) {
-          if (eSrcPage == INVPAGE_TRADEGRID2) {
+        switch (eSrcPage) {
+          case INVPAGE_TRADEGRID1:
+            bCopyInv = false;
+            break;
+          case INVPAGE_TRADEGRID2:
             bIsMercPage = true;
-          }
-        } else {
-          bCopyInv = false;
+            break;
         }
       } else {
         bCopyInv = false;
       }
 
-      D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0x965, pTargetInventory, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), eDestPage, 0, eSrcPage);
+      D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0x965, pTargetInventory, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), (eInventoryPage)nPageResult, 0, eSrcPage);
       D2Common::ITEMS::Items::ITEM_SetItemData_ePreviousPage(pItem, eSrcPage);
       D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, INVPAGE_None);
       if (bCopyInv) {
@@ -4276,7 +4275,7 @@ BOOL __fastcall SERVER_TakeItemToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
         if (bSetRemovedFlag) {
           D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_REMOVED, 1);
         }
-        if (bIsMercPage) {
+        if (bIsMercPage == 1) {
           PLAYER::PlayerTrade::SERVER_TradeTransferItemToCursor(pGame, pUnit, pItem);
         }
 
@@ -6471,7 +6470,7 @@ void __fastcall ITEM_RemoveItemFromCurrentLocation(::SGAMEDATA * pGame, D2UnitSt
 
 // Server-side item pickup handler: moves the ground item with GUID itemUID onto pUnit (player). Out-param *pbResult is set to 1 to signal a "can't pick / not pickable" client notification, 0 otherwise. Aborts if a cursor item is already held or the player is busy/trading. Resolves the item by GUID, requires it to be a UNIT_ITEM currently in its "on ground" anim mode, and checks pickability. Gold goes through PickingGold. Otherwise tries, in order: free inventory-grid space, auto-belt for beltable potions, or an auto-equip body slot. On a successful inventory/belt placement it removes the item from the room (collision + room link), puts it in the inventory, recomputes owner item stats, clears targetable/resurrect flags, refreshes inventory, and re-applies charm states if it is an active charm. Returns 1 on success, 0 on failure; calls the unrecoverable error halt on an inventory-corruption path.
 // @sourcefile .\ITEMS\ItemMode.cpp
-void __fastcall SERVER_PickToInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD itemUID, uint32_t * pbResult) {
+BOOL __fastcall SERVER_PickToInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD itemUID, uint32_t * pbResult) {
     bool bIsBeltable;
     BOOL nResult;
     eD2ItemTypes eItemType;
@@ -6504,44 +6503,44 @@ void __fastcall SERVER_PickToInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
     pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayerInv);
     if (pItem) {
-      return;
+      return 0;
     }
 
     bTradeBusy = PLAYER::Player::GetPlayerTradeTickOrBusy(pUnit);
     if (bTradeBusy) {
-      return;
+      return 0;
     }
 
     pItem = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_ITEM, itemUID);
     if (!pItem) {
       *pbResult = 1;
-      return;
+      return 0;
     }
     if (pItem->eUnitType != UNIT_ITEM) {
-      return;
+      return 0;
     }
     if (pItem->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Run) {
       *pbResult = 1;
-      return;
+      return 0;
     }
 
     SERVER_ITEM_SendStackableUsagePackets(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x7a2);
     nResult = SERVER_CheckIfPickable(pGame, pUnit, pItem);
     if (!nResult) {
       ITEMMODE_GetItemPageForUnit(0x13, pUnit, pItem);
-      return;
+      return 0;
     }
 
     UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, UNITEVENTCALLBACK_ENDANIM, pUnit);
     eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pItem);
     if (eItemType == ITEMTYPE_Gold) {
       PickingGold(pGame, pItem, pUnit);
-      return;
+      return 1;
     }
 
     nResult = ITEMMODE_CheckInventorySpace(pGame, pUnit, pItem);
     if (nResult) {
-      return;
+      return 0;
     }
 
     nResult = ITEMMODE_FindBestBodyLocForItem(pUnit, pItem, (uint32_t*)&itemUID, 0);
@@ -6549,7 +6548,7 @@ void __fastcall SERVER_PickToInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       nBodySlotAction = D2Common::INVENTORY::Inventory::INVENTORY_GetEquipActionForBodySlot(pUnit, itemUID, pItem, 0);
       if (nBodySlotAction != 1) {
         *pbResult = 1;
-        return;
+        return 0;
       }
 
       pRoom = D2Common::Units::UNITS_GetRoom(pItem);
@@ -6561,11 +6560,11 @@ void __fastcall SERVER_PickToInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
       nResult = ITEMMODE_EquipItemAtBestBodyLoc(pGame, pUnit, pItem, 0);
       if (!nResult) {
-        return;
+        return 0;
       }
 
       Quests::QUESTS::QUEST_OnItemPickedUp(pGame, pUnit, pItem);
-      return;
+      return 1;
     }
 
     bBeltable = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_beltable(pItem);
@@ -6573,7 +6572,7 @@ void __fastcall SERVER_PickToInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       nResult = ITEMMODE_PlaceItemInInventoryPage(pGame, 1, 0, pUnit, pItem, ".\\ITEMS\\ItemMode.cpp", 0x7ef);
       if (!nResult) {
         ITEMMODE_GetItemPageForUnit(0x17, pUnit, pItem);
-        return;
+        return 0;
       }
     } else {
       pRoom = D2Common::Units::UNITS_GetRoom(pItem);
@@ -6612,7 +6611,7 @@ void __fastcall SERVER_PickToInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       }
     }
 
-    return;
+    return 1;
 }
 
 // Empties a Horadric Cube (item code 'box ') into the player's main inventory, or drops to ground if it won't fit. Verifies pUnit is the cube item, then iterates every item carried in the cube's inventory: for each, sends a 0x9D remove-from-container packet, repages the item to INVPAGE_INVENTORY, and tries INVENTORY_PlaceItemInGrid + PutItemInInventory. On success applies item-to-owner effects, clears targetable flag, handles charms/socketed reload, refreshes inventory and adds to trade if open. If placement fails, sets page None and drops the item at the best nearby spot via FindBestSpotToSpawnItem/DropItem. No return value.

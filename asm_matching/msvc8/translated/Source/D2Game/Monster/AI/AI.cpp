@@ -19329,17 +19329,14 @@ void __fastcall AITHINK_Fn1_ZakarumZealot(::SGAMEDATA * pGame, D2UnitStrc * pUni
     eD2LevelId eLevel;
     BOOL bBlackenedTempleComplete;
     uint32_t nRandRoll;
-    uint32_t nOwnerGUID;
-    int pOwnerUnit;
     eD2UnitType eUnitTypeTmp;
-    int64_t nSeedMul64;
     D2SeedStrc sNewSeed;
     int nTargetUnit;
     int bInCombat = pAiParam->bEngagedInCombat;
+    D2SeedStrc* pSeed = &pUnit->sSeed;
     D2UnitStrc* pTargetRaw = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
-    D2SeedStrc* pSeed = &pUnit->sSeed;
     int32_t eRunSpeedPct = 0;
     if (pMonStats->Velocity > 0) {
       nRunSpeedRaw = pMonStats->Run * 100 / (int)pMonStats->Velocity - 100;
@@ -19354,6 +19351,8 @@ void __fastcall AITHINK_Fn1_ZakarumZealot(::SGAMEDATA * pGame, D2UnitStrc * pUni
     if (pTargetRaw) {
       eAct eActNo;
       if (pTargetRaw->eUnitType == UNIT_MONSTER) {
+        uint32_t nOwnerGUID;
+        int pOwnerUnit;
         Ai::AiGeneral::AIGENERAL_GetOwnerData(pTargetRaw, &nOwnerGUID, &pOwnerUnit);
         if (!pOwnerUnit) {
           pTargetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, nOwnerGUID);
@@ -19444,9 +19443,7 @@ void __fastcall AITHINK_Fn1_ZakarumZealot(::SGAMEDATA * pGame, D2UnitStrc * pUni
       }
 
       pAiGeneral->dwArg0 = 1;
-      nSeedMul64 = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-      nOwnerGUID = (uint32_t)((uint64_t)nSeedMul64 >> 0x20);
-      sNewSeed = (D2SeedStrc)(nSeedMul64 + (uint64_t)pUnit->sSeed.nSeedHigh);
+      sNewSeed = D2_SEED_NEXT(*pSeed);
       *pSeed = sNewSeed;
       if ((int)(sNewSeed.nSeedLow % 100) < (int)pMonStats->aip[1][pGame->nDifficulty]) {
         AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pTargetRaw);
@@ -19458,9 +19455,7 @@ void __fastcall AITHINK_Fn1_ZakarumZealot(::SGAMEDATA * pGame, D2UnitStrc * pUni
     }
 
     pAiGeneral->dwArg0 = 0;
-    nSeedMul64 = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-    nOwnerGUID = (uint32_t)((uint64_t)nSeedMul64 >> 0x20);
-    sNewSeed = (D2SeedStrc)(nSeedMul64 + (uint64_t)pUnit->sSeed.nSeedHigh);
+    sNewSeed = D2_SEED_NEXT(*pSeed);
     *pSeed = sNewSeed;
     if (!((int)(sNewSeed.nSeedLow % 100) >= (int)pMonStats->aip[3][pGame->nDifficulty])) {
       AITACTICS_SetPathOverrides(pUnit, 0, eRunSpeedPct, '\0');

@@ -1694,10 +1694,19 @@ void __stdcall CheckAll(D2DrlgWallLayerGridsStrc * pWallLayerGrids, D2LvlSubTxt 
       nMaxX = pDVar1->sCoords.WorldSize.x - pGroupEntry[2] + 1;
       nMaxY = pDVar1->sCoords.WorldSize.y - pGroupEntry[3] + 1;
       if (nMaxX > 0 && nMaxY > 0) {
-        if (pFile->nAct != 1) {
-          if (pFile->nAct == 2 && nMaxY > 0) {
-            nRowIter = 0;
-            do {
+        switch (pFile->nAct) {
+          case 1:
+            for (nRowIter = 1; nRowIter < nMaxY; nRowIter++) {
+              for (nCellX = 1; nCellX < nMaxX; nCellX++) {
+                bOverlapOk = Outdoors::DRLGOUTDOOR_CheckSubTileOverlap(nCellX, nRowIter, pWallLayerGrids, pGroupEntry, pSubTxt);
+                if (bOverlapOk) {
+                  DRLGOUTDOOR_ApplyLvlSubTileData(pMemory, nCellX, nRowIter, pWallLayerGrids, pGroupEntry, pSubTxt, 0);
+                }
+              }
+            }
+            break;
+          case 2:
+            for (nRowIter = 0; nRowIter < nMaxY; nRowIter++) {
               for (nColIter = 0; nColIter < nMaxX; nColIter++) {
                 bOverlapOk = DRLGOUTDOOR_MatchSubTileTypes(nColIter, nRowIter, pWallLayerGrids, pSubTxt, pGroupEntry);
                 if (bOverlapOk) {
@@ -1710,19 +1719,8 @@ void __stdcall CheckAll(D2DrlgWallLayerGridsStrc * pWallLayerGrids, D2LvlSubTxt 
                   }
                 }
               }
-
-              nRowIter++;
-            } while (nRowIter < nMaxY);
-          }
-        } else {
-          for (nRowIter = 1; nRowIter < nMaxY; nRowIter++) {
-            for (nCellX = 1; nCellX < nMaxX; nCellX++) {
-              bOverlapOk = Outdoors::DRLGOUTDOOR_CheckSubTileOverlap(nCellX, nRowIter, pWallLayerGrids, pGroupEntry, pSubTxt);
-              if (bOverlapOk) {
-                DRLGOUTDOOR_ApplyLvlSubTileData(pMemory, nCellX, nRowIter, pWallLayerGrids, pGroupEntry, pSubTxt, 0);
-              }
             }
-          }
+            break;
         }
       }
 

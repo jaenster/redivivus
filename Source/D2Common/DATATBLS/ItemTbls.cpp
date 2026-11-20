@@ -752,7 +752,6 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
     int nIdx;
     short int nSetItemSlot;
     D2SetItemsTxt* pCurSetItem;
-    D2SetsTxt* pTxtSetsCached;
     D2BinFieldInputStrc sets[68] = {
       {"index", FIELDTYPE_NAME_I_WORD, 0, 0, &MonsterTbls::sgtDataTable.pTxtSetsLink},
       {"name", FIELDTYPE_KEY_WORD, 0, 2, (void*)DataTbls::DATATBLS_LookupStringId},
@@ -832,7 +831,6 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
     }
 
     {
-      uint16_t uVar1;
       D2BinFieldInputStrc setitems[93] = {
         {"index", FIELDTYPE_ASCII, 0x1f, 2, 0},
         {"item", FIELDTYPE_RAW4, 0, 0x28, 0},
@@ -945,21 +943,22 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
         pCurSetItem->nId = (short int)nIdx;
         Fog::Src::Excel::FOG_ParseStringField(MonsterTbls::sgtDataTable.pTxtSetItemsLink, pCurSetItem->index);
         pStringLookup = 0;
-        uVar1 = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)pCurSetItem->index, &pStringLookup);
-        pCurSetItem->stringId = uVar1;
-        if (!uVar1) {
+        pCurSetItem->stringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)pCurSetItem->index, &pStringLookup);
+        if (!pCurSetItem->stringId) {
           pCurSetItem->stringId = 0x1507;
         }
 
-        pTxtSetsCached = MonsterTbls::sgtDataTable.pTxtSets;
         if (pCurSetItem->set >= 0) {
           nSetIdx = (int)pCurSetItem->set;
-          if (nSetIdx < MonsterTbls::sgtDataTable.nTxtSetsSize && MonsterTbls::sgtDataTable.pTxtSets[nSetIdx].nTxtSetItemsCount < 6) {
-            pCurSetItem->version = MonsterTbls::sgtDataTable.pTxtSets[nSetIdx].version;
-            nSetItemSlot = (short int)pTxtSetsCached[nSetIdx].nTxtSetItemsCount;
-            pCurSetItem->setIndex = nSetItemSlot;
-            pTxtSetsCached[nSetIdx].pTxtSetItems[nSetItemSlot] = pCurSetItem;
-            pTxtSetsCached[nSetIdx].nTxtSetItemsCount++;
+          if (nSetIdx < MonsterTbls::sgtDataTable.nTxtSetsSize) {
+            D2SetsTxt* pSet = &MonsterTbls::sgtDataTable.pTxtSets[nSetIdx];
+            if (pSet->nTxtSetItemsCount < 6) {
+              pCurSetItem->version = pSet->version;
+              nSetItemSlot = (short int)pSet->nTxtSetItemsCount;
+              pCurSetItem->setIndex = nSetItemSlot;
+              pSet->pTxtSetItems[nSetItemSlot] = pCurSetItem;
+              pSet->nTxtSetItemsCount++;
+            }
           }
         }
 

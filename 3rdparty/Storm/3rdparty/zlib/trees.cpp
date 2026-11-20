@@ -2195,6 +2195,7 @@ void tr_static_init_Unref_004212b0() {
 }
 
 void tr_static_init() {
+
 }
 
 static void __fastcall init_block(deflate_state * s) {

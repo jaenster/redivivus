@@ -76,7 +76,7 @@ BOOL __fastcall Q33_OnFrozenAnyaKilled(::SGAMEDATA * pGame, struct D2UnitStrc * 
 bool __fastcall Q33_SequenceFilter(struct D2QuestDataStrc * pQuestData);
 // Q33_KillAnyaMonsterTimer (PrisonOfIce): quest timer that instantly kills the rescued-Anya monster (table type 1) —
 // clear AI sub, zero path, AITHINK, hp=0, Dead skill + lifecycle transition, relink. Used to finalize the escort.
-void __fastcall Q33_KillAnyaMonsterTimer(::SGAMEDATA * pGame);
+void __fastcall Q33_KillAnyaMonsterTimer(::SGAMEDATA * pGame, struct D2UnitStrc * pObject);
 // Q33_Callback_11 (PrisonOfIce, state-0xb / Malah+Anya dialog handler). Holds the per-difficulty class-specific
 // weapon-reward tables (Normal/NM/Hell). Branches on NPC (Malah 0x201 / rescued-Anya 0x200) and dialog string id:
 //  - 0x4e94: Malah intro -> SetStateFlag 2, mirror via Q33_UpdateQuestStep, send gossip.
