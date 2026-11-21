@@ -83,7 +83,9 @@ void __fastcall PALETTE_LoadFromFile(char * szPaletteName, int32_t nPaletteSet) 
     char* szPathDst = nStrEndOffset1;
     memcpy(szPathDst, pSrcWord, 27);
     strcat(nStrEndOffset1, szPaletteName);
-    pSrcWord = (char*)((intptr_t)&szInlineNameBuf + 3);
+    // The scan for the path's NUL starts at &nStrEndOffset1[-1]; the original reaches it as
+    // &szInlineNameBuf + 3 because that local sits 4 bytes below the buffer in its frame.
+    pSrcWord = nStrEndOffset1 - 1;
     do {
       pFullPathEnd = pSrcWord;
       pSrcWord = pFullPathEnd + 1;
