@@ -1983,6 +1983,7 @@ static void __stdcall DAMAGE_RemoveObjectAtSameCoords(int32_t nClassId, D2UnitSt
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+// steer-ok: generated-form FlagBit getter
 static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_31(D2UnitStrc * p) {
     if (!p) {
         return 0;
@@ -2701,12 +2702,9 @@ static void __stdcall DAMAGE_ApplyIgnoreAndFractionalAC(int * pnHitChance, int *
 
       apply_fractional_ac:
       nFractionalACPercent = (int)nFractionalACPercent <= 0 ? 0 : nFractionalACPercent;
-      if ((int)nFractionalACPercent >= 100) {
-        nFractionalACPercent = 100;
-      }
-
+      nACReduction = (int)nFractionalACPercent >= 100 ? 100 : nFractionalACPercent;
       nIgnoreACFlag = *pnArmorClass;
-      nACReduction = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nIgnoreACFlag, nFractionalACPercent, 100);
+      nACReduction = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nIgnoreACFlag, nACReduction, 100);
       *pnArmorClass = nIgnoreACFlag - nACReduction;
     }
 

@@ -1009,42 +1009,30 @@ BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2UnitStrc * pUnit, 
 
 // Renders pUnit at a rotated facing direction for skill animation (e.g. Whirlwind dual-weapon draw). Rotates the unit's dynamic-path direction by +0x2A (full) or +0x15 (half) steps depending on bHalfRotation, computes screen position in both perspective and orthographic modes, calls DRAW_WORLD_Unit_1 to draw the unit, then restores the original direction.
 void __fastcall SKILL_DrawUnitAtRotatedAngle(D2UnitStrc * pUnit, uint32_t nGamma, int32_t bHalfRotation) {
-    uint32_t bPerspective;
-    uint32_t nScreenX;
-    DRAWMODE nScreenY;
-    BOOL bOrder;
-    uint32_t* pXpos;
-    DRAWMODE* pYpos;
+    int nScreenY;
+    int nScreenX;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     if (!pDynamicPath) {
       return;
     }
 
-    uint8_t nDirection = D2Common::PATH::DynamicPath::GetDirection(pDynamicPath);
-    uint8_t nRotatedDir = nDirection + 0x15;
+    int nDirection = D2Common::PATH::DynamicPath::GetDirection(pDynamicPath);
+    int nRotatedDir = nDirection + 0x15;
     if (!bHalfRotation) {
       nRotatedDir = nDirection + 0x2a;
     }
 
-    nRotatedDir &= 0x3f;
-    D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, nRotatedDir);
-    bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
-    if (bPerspective) {
-      int32_t nWorldOffset;
-      bOrder = 0;
-      pYpos = &nScreenY;
-      pXpos = &nScreenX;
-      D2gfx::D2GFX::D2GFX_PerspecitveScalePosition(D2Common::Units::GetPrecisionX(pUnit), D2Common::Units::GetPrecisionY(pUnit), 0x60, (int*)pXpos, (int*)pYpos, bOrder);
-      nWorldOffset = UI::Path::DRAW_GetWorldOffsetX();
-      nScreenX += nWorldOffset;
-      nWorldOffset = UI::Path::DRAW_GetWorldOffsetY();
-      nScreenY += nWorldOffset;
+    D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, nRotatedDir % 64);
+    if (D2gfx::D2GFX::D2GFX_IsPerspectiveActive()) {
+      D2gfx::D2GFX::D2GFX_PerspecitveScalePosition(D2Common::Units::GetPrecisionX(pUnit), D2Common::Units::GetPrecisionY(pUnit), 0x60, &nScreenX, &nScreenY, 0);
+      nScreenX += UI::Path::DRAW_GetWorldOffsetX();
+      nScreenY += UI::Path::DRAW_GetWorldOffsetY();
     } else {
       nScreenX = D2Common::Units::GetScreenX(pUnit);
       nScreenY = D2Common::Units::GetScreenY(pUnit);
     }
 
-    Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nGamma, nScreenX, nScreenY, (uint32_t)(pUnit->eUnitType == UNIT_PLAYER), 0);
+    Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nGamma, nScreenX, (DRAWMODE)nScreenY, GetTypeInline(pUnit) == UNIT_PLAYER, 0);
     D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, nDirection);
 }
 
@@ -1159,17 +1147,17 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_EndCollision(D2UnitStrc * pUnit, 
     int32_t nY;
     uint32_t nSkillFlags;
     int eCollisionFlag;
-    bool bIsPlayer;
+    BOOL bIsPlayer;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     D2SkillStrc* pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
     if (pSkill && pDynamicPath) {
       int32_t nParam1X;
-      bIsPlayer = pUnit->eUnitType == UNIT_PLAYER;
+      bIsPlayer = GetTypeInline(pUnit) == UNIT_PLAYER;
       eCollisionFlag = bIsPlayer ? 0x80 : 0x100;
       nParam1X = D2Common::Skills::SKILL_GetParam1(pSkill);
       nY = D2Common::Skills::SKILL_GetParam2(pSkill);
       nSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
-      if (((uint8_t)nSkillFlags & 3) == 3) {
+      if ((nSkillFlags & 3) == 3) {
         D2Common::Collision::RemoveCollision_Type(D2Common::Units::UNITS_GetRoom(pUnit), nParam1X, nY, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), eCollisionFlag);
         D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, eCollisionFlag);
         D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynamicPath, bIsPlayer ? 0x1c09 : 0x3c01);

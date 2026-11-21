@@ -212,18 +212,16 @@ bool __fastcall Q34_SequenceFilter(D2QuestDataStrc * pQuestData) {
 // A5Q4 (Betrayal of Harrogath) NPC dialog callback for Nihlathak (classId 0x200). On accept-quest line 0x4ea9: advances nStateFlag to 2, marks bAcceptedQuest/bNotifiedCompletion, and iterates Q34_UpdateQuestStep for all players. On return-after-kill line 0x4eb4: broadcasts prev state, sets Step0x04 in the player's QuestRecord, and if JustCompleted already set advances to nStateFlag 5 and runs Q34_SequenceFilter.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q4.cpp
 void __fastcall Q34_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2UnitDataPlayerStrc* pGame;
     BOOL bQuestState;
     eD2Quests nQuestId;
     eD2QuestState eQuestState;
-    ::SGAMEDATA* pQuestSpecific;
     uint16_t nMsgIndex;
+    D2QuestDataA5Q4Strc* pPlayerData = pQuestData->pQuestSpecificData.pA5Q4;
     nMsgIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     if (pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo != 0x200) {
       return;
     }
     if (nMsgIndex == 0x4ea9) {
-      D2QuestDataA5Q4Strc* pPlayerData = pQuestData->pQuestSpecificData.pA5Q4;
       if (pQuestData->bIsNotIntroduction != '\0') {
         QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q4.cpp", 0x11b);
         pPlayerData->bAcceptedQuest = 1;
@@ -233,14 +231,10 @@ void __fastcall Q34_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     } else if (nMsgIndex == 0x4eb4) {
       pQuestData->nQuestPacketFlags = '\0';
       QUEST_SetStateAndBroadcast(pQuestData, (uint32_t)pQuestData->nStateFlagPrev, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, 1);
-      pQuestSpecific = pQuestData->pGame;
-      pGame = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
       /* SetQuestState(Betrayal q0x26, Step0x04=4): on Nihlathak "return after kill"
-                         dialog (0x4eb4), mark talked-to-after-kill step */ D2Common::QuestRecord::SetQuestState(pGame->pQuestRecord[pQuestSpecific->nDifficulty], QUEST_BetrayalOfHaggorath, QUESTSTATE_Step0x04);
-      pQuestSpecific = pQuestData->pGame;
-      pGame = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+                         dialog (0x4eb4), mark talked-to-after-kill step */ D2Common::QuestRecord::SetQuestState(GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer), QUEST_BetrayalOfHaggorath, QUESTSTATE_Step0x04);
       /* GetQuestState(Betrayal q0x26, JustCompleted=0xd): if Nihlathak already dead,
-                         jump straight to state-flag 5 (done) */ bQuestState = D2Common::QuestRecord::GetQuestState(pGame->pQuestRecord[pQuestSpecific->nDifficulty], QUEST_BetrayalOfHaggorath, QUESTSTATE_JustCompleted);
+                         jump straight to state-flag 5 (done) */ bQuestState = D2Common::QuestRecord::GetQuestState(GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer), QUEST_BetrayalOfHaggorath, QUESTSTATE_JustCompleted);
       if (bQuestState) {
         set_final_state:
         QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q4.cpp", 0x12a);

@@ -2353,8 +2353,6 @@ int32_t __stdcall ITEM_ItemsInItem(D2InventoryStrc * pInventory) {
 
 // Walks the inventory item list and returns the first item matching nItemType (via IsOfType). If pAfterItem is non-null, skips items until that item is found, then continues searching from the next grid. Validates inventory magic signature before iterating. Returns NULL if the inventory is invalid, the type is not found, or iteration detects a corrupt chain.
 D2UnitStrc * __stdcall INVENTORY_FindItemByType(D2InventoryStrc * pInventory, int nItemType, D2UnitStrc * pAfterItem) {
-    D2ItemInventoryNodeStrc* pAfterItemNode;
-    uint32_t bIsOfType;
     D2GridScreenCoordinates sGridDims;
     D2UnitDataItemStrc* pItemData;
     if (!pInventory) {
@@ -2379,8 +2377,12 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByType(D2InventoryStrc * pInventory, in
     }
 
     pCurItem = pGridInfo->pFirstItem;
+    D2ItemInventoryNodeStrc* pNode;
     if (pAfterItem) {
-      while (pCurItem) {
+      while (true) {
+        if (!pCurItem) {
+          return nullptr;
+        }
         if (pCurItem == pAfterItem) {
           break;
         }
@@ -2392,49 +2394,42 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByType(D2InventoryStrc * pInventory, in
         if (!pItemData) {
           return nullptr;
         }
-        if (pItemData == (D2UnitDataItemStrc*)-92) {
+
+        pNode = &pItemData->sInvNode;
+        if (!pNode) {
           return nullptr;
         }
 
-        pCurItem = pItemData->sInvNode.pNextItemInPage;
+        pCurItem = pNode->pNextItemInPage;
       }
 
-      if (!pCurItem) {
+      pNode = INVENTORY_GetItemInventoryNode(pCurItem);
+      if (!pNode) {
         return nullptr;
       }
 
-      pAfterItemNode = INVENTORY_GetItemInventoryNode(pCurItem);
-      if (!pAfterItemNode) {
-        return nullptr;
-      }
-
-      pCurItem = pAfterItemNode->pNextItemInPage;
-    }
-    if (!pCurItem) {
-      return nullptr;
+      pCurItem = pNode->pNextItemInPage;
     }
 
-    while (true) {
-      bIsOfType = ITEMS::Items::ITEMS_IsA(pCurItem, nItemType);
-      if (bIsOfType) {
+    while (pCurItem) {
+      if (ITEMS::Items::ITEMS_IsA(pCurItem, nItemType)) {
         return pCurItem;
       }
       if (pCurItem->eUnitType != UNIT_ITEM) {
-        break;
+        return nullptr;
       }
 
       pItemData = pCurItem->pUnitData.pUnitDataItem;
       if (!pItemData) {
-        break;
-      }
-      if (pItemData == (D2UnitDataItemStrc*)-92) {
-        break;
-      }
-
-      pCurItem = pItemData->sInvNode.pNextItemInPage;
-      if (!pCurItem) {
         return nullptr;
       }
+
+      pNode = &pItemData->sInvNode;
+      if (!pNode) {
+        return nullptr;
+      }
+
+      pCurItem = pNode->pNextItemInPage;
     }
 
     return nullptr;
@@ -2763,11 +2758,12 @@ int32_t __stdcall INVENTORY_CountEquippedSetItems(D2InventoryStrc * pInventory, 
       if (!pItemData) {
         return nCount;
       }
-      if (pItemData == (D2UnitDataItemStrc*)-92) {
+      D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+      if (!pNode) {
         return nCount;
       }
 
-      pUnit = pItemData->sInvNode.pNextItemInPage;
+      pUnit = pNode->pNextItemInPage;
     }
 
     return nCount;

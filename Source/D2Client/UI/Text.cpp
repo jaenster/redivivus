@@ -6812,15 +6812,13 @@ void __stdcall TEXT_CloseNpcInteraction() {
 }
 
 int __stdcall TEXT_HandleEscapeKey() {
-    int nResult;
-    int32_t nLine;
+    int nResult = 0;
     gbTextScrollBoxAnimating = 1;
     if (gnTextNpcInteractGuid || gbTextScrollBoxActive == 1) {
       if (gpTextScrollCompleteCallback) {
         TEXT_CloseScrollingText();
         ui::UI_UpdateCursorAnimationTimer();
-        nResult = (*gpTextScrollCompleteCallback)(gpTextScrollCompleteParam, 1, gpTextDismissCallback);
-        if (nResult) {
+        if ((*gpTextScrollCompleteCallback)(gpTextScrollCompleteParam, 1, gpTextDismissCallback)) {
           gpTextDismissCallback = 0;
           return 1;
         }
@@ -6839,15 +6837,12 @@ int __stdcall TEXT_HandleEscapeKey() {
 
       gnTextNpcInteractGuid = 0;
       if (gbTextEventHandlersRegistered == 1) {
-        nLine = 7;
         gbTextEventHandlersRegistered = 0;
-        _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUITextFlagInit, nLine);
+        _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUITextFlagInit, 7);
       }
 
-      gpTextDismissCallback = 0;
-      return 1;
-    }
-    if (gbTextStaticPopupActive == 1) {
+      nResult = 1;
+    } else if (gbTextStaticPopupActive == 1) {
       if (gpTextStaticPopupBox == 1) {
         gpTextDismissCallback = 0;
         return 0;
@@ -6866,9 +6861,8 @@ int __stdcall TEXT_HandleEscapeKey() {
       return 1;
     }
 
-    gbTextScrollBoxAnimating = 1;
     gpTextDismissCallback = 0;
-    return 0;
+    return nResult;
 }
 
 static void __stdcall TEXT_DrawUnitOverheadText(D2HoverTextStrc * pHoverText, int * pScreenPos, D2UnitStrc * pUnit, uint16_t * wszText) {

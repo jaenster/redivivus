@@ -963,7 +963,6 @@ static void D2WINEDITBOX_HandleDelete(::D2WinEditBox * pEditBox) {
     uint16_t wszAfterDelete[256];
     uint16_t wszBeforeDelete[256];
     int32_t nLine;
-    size_t nSelCursor;
     if (!pEditBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1c2);
       exit(-1);
@@ -982,12 +981,8 @@ static void D2WINEDITBOX_HandleDelete(::D2WinEditBox * pEditBox) {
         wszAfterDelete[nTypeCheck] = L'\0';
       }
 
-      nDelEnd = pEditBox->nSelAnchor;
-      nSelCursor = pEditBox->nSelCursor;
-      nDelStart = nDelEnd;
-      if (nDelEnd < (int)nSelCursor || (nDelStart = nSelCursor , nDelEnd <= (int)nSelCursor)) {
-        nDelEnd = nSelCursor;
-      }
+      nDelStart = pEditBox->nSelAnchor < (int)pEditBox->nSelCursor ? pEditBox->nSelAnchor : pEditBox->nSelCursor;
+      nDelEnd = pEditBox->nSelAnchor > (int)pEditBox->nSelCursor ? pEditBox->nSelAnchor : pEditBox->nSelCursor;
       if (nDelStart) {
         D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszBeforeDelete, pEditBox->wszText, nDelStart);
       } else {

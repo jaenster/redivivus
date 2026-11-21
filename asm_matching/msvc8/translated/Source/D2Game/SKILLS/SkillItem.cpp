@@ -1505,24 +1505,31 @@ BOOL __fastcall SKILLITEM_CastExplosivePotionSkill(::SGAMEDATA * pGame, D2UnitSt
     return BVar1;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
 // Resolves and invokes the item-spell handler for using a book/scroll/charged item. Determines the spell index: for Book/Scroll item types it reads the Books.txt line (via magic-suffix) else falls back to Items.txt dwPSpell. Indexes the global ITEMSPELLFUNCS table; if not flagged ITEMFLAG_CURSOR runs the pSpellInit callback, otherwise sets the cursor flag and runs pSpellDestroy. Clears the cursor flag and notifies the client when a callback returns 0. Returns 0 on early reject/handled-init; returns the destroy callback result otherwise.
 // @sourcefile .\SKILLS\SkillItem.cpp
 int32_t __fastcall SKILLITEM_DispatchItemSpell(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int32_t nX, int32_t nY) {
     // Static local variables (originally global data)
     static int ITEMSPELLFUNCS_SIZE = 0x1f; D2_STATIC_GUARD(ITEMSPELLFUNCS_SIZE, "D2Game::SKILLS::SkillItem::SKILLITEM_DispatchItemSpell::ITEMSPELLFUNCS_SIZE");
 
-    uint32_t _bIsBookOrScrollType;
     BOOL _bHasCursorFlag;
-    bool bIsBookOrScrollType;
     int* pBookTxt;
-    bool bHasCursorFlag;
     eD2UnitType eVar2;
     D2UnitStrc* pUnit_00;
     pUnit_00 = pItem;
-    if (!pUnit || pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER) {
+    if (!pUnit) {
       return 0;
     }
-    if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
+    if (pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER) {
+      return 0;
+    }
+    if (!pItem || GetTypeInline(pItem) != UNIT_ITEM) {
       return 0;
     }
 
@@ -1530,11 +1537,8 @@ int32_t __fastcall SKILLITEM_DispatchItemSpell(::SGAMEDATA * pGame, D2UnitStrc *
     nSpellIdx = -1;
     eD2Skills nItem;
     nItem = (eD2Skills)-1;
-    _bIsBookOrScrollType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit_00, ITEMTYPE_Book);
-    if (_bIsBookOrScrollType || (_bIsBookOrScrollType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit_00, ITEMTYPE_Scroll) , _bIsBookOrScrollType != 0)) {
-      uint16_t uVar1;
-      uVar1 = D2Common::ITEMS::Items::GetMagicSuffix(pUnit_00, 0);
-      pBookTxt = (int*)D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar1);
+    if (D2Common::ITEMS::Items::ITEMS_IsA(pUnit_00, ITEMTYPE_Book) || D2Common::ITEMS::Items::ITEMS_IsA(pUnit_00, ITEMTYPE_Scroll)) {
+      pBookTxt = (int*)D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine(D2Common::ITEMS::Items::GetMagicSuffix(pUnit_00, 0));
       if (pBookTxt) {
         nSpellIdx = pBookTxt[1];
         nItem = (eD2Skills)pBookTxt[3];
@@ -1545,7 +1549,7 @@ int32_t __fastcall SKILLITEM_DispatchItemSpell(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     D2ItemsTxt* pItemTxt;
-    pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pUnit_00->nClassId);
+    pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(GetClassIdInline(pUnit_00));
     if (pItemTxt) {
       nSpellIdx = pItemTxt->dwPSpell;
     }
@@ -1825,10 +1829,10 @@ BOOL __fastcall ITEMEVENT_Knockback(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2
       return 0;
     }
 
-    uint32_t nSizeThreshMask = 0x40;
-    if (pTarget->eUnitType == UNIT_MONSTER) {
+    int nSizeThreshMask = 0x40;
+    if (GetTypeInline(pTarget) == UNIT_MONSTER) {
       D2MonStats2Txt* pMonStats2;
-      pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pTarget->nClassId);
+      pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(GetClassIdInline(pTarget));
       if (pMonStats2) {
         if (Fog::BitBuffer::gadwBitMasks[3] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
           nSizeThreshMask = 0x20;
@@ -1840,8 +1844,7 @@ BOOL __fastcall ITEMEVENT_Knockback(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2
       }
     }
 
-    uint32_t sSeedNew = D2_SeedRoll(&pUnit->sSeed);
-    if ((sSeedNew & 0x7f) < nSizeThreshMask) {
+    if ((int)(D2_SeedRoll(&pUnit->sSeed) & 0x7f) < nSizeThreshMask) {
       pDamage->wResultFlags |= 8;
       return 1;
     }

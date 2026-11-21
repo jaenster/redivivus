@@ -136,163 +136,110 @@ static BOOL __stdcall ITEMDROP_IsItemClassEligible(D2SeedStrc * pSeed, int32_t b
 
 // Selects a random exceptional-tier item class index for a drop roll. Iterates the exceptional slice of the Items txt table (between the exceptional and elite size offsets), filters candidates via MONSTER_ShouldSpawnSuperUnique against level/TC constraints, respects the expansion flag, then picks one uniformly at random using the D2SeedStrc PRNG (power-of-two fast path or modulo). Returns the Items txt index of the chosen class, or -1 if none qualify.
 int32_t __fastcall ITEMDROP_RollArmorItemClass(::SGAMEDATA * pGame, D2SeedStrc * pSeed, int32_t nItemLevel, int32_t nItemTypeFilter, int32_t bSkipRarityRoll) {
-    BOOL _bPassesFilter;
-    bool bPassesFilter;
-    uint32_t nRandIndex;
-    int aiCandidateIdxs[2048];
-    ::SGAMEDATA* pGameLocal;
-    pGameLocal = pGame;
-    D2SeedStrc* pSeedLocal;
-    pSeedLocal = pSeed;
-    D2ItemsTableStrc* pItemsTxtSizeArr;
-    pItemsTxtSizeArr = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
-    D2ItemsTxt* pItemTxt;
-    pItemTxt = pItemsTxtSizeArr->pArmor;
-    int nArmorStartIdx;
-    nArmorStartIdx = ((intptr_t)pItemTxt - (intptr_t)pItemsTxtSizeArr->pItems) / 0x1a8;
-    int nItemCount;
-    nItemCount = ((intptr_t)pItemsTxtSizeArr->pMisc - (intptr_t)pItemTxt) / 0x1a8;
-    uint32_t nCandidateIdx;
-    nCandidateIdx = 0;
+    int aCandidates[2048];
+    D2ItemsTableStrc* pItemsTable = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
+    D2ItemsTxt* pItemTxt = pItemsTable->pArmor;
+    int nStartIdx = pItemTxt - pItemsTable->pItems;
+    int nItemCount = pItemsTable->pMisc - pItemTxt;
+    int nCandidates = 0;
     if (!pItemTxt) {
       return -1;
     }
 
-    int nLoopIdx;
-    nLoopIdx = 0;
-    if (nItemCount > 0) {
-      do {
-        _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeedLocal, bSkipRarityRoll, nItemLevel, pItemTxt, nItemTypeFilter);
-        if (_bPassesFilter && (pGameLocal->bExpansion || (uint16_t)pItemTxt->wVersion < 100) && (int)nCandidateIdx < 0x3ff) {
-          aiCandidateIdxs[nCandidateIdx * 2 + 1] = (int)pItemTxt;
-          aiCandidateIdxs[nCandidateIdx * 2] = nLoopIdx + nArmorStartIdx;
-          nCandidateIdx++;
-        }
-
-        nLoopIdx++;
-        pItemTxt++;
-      } while (nLoopIdx < nItemCount);
-
-      if ((int)nCandidateIdx > 0) {
-        nRandIndex = D2_SeedRollLimited(pSeedLocal, nCandidateIdx);
-        goto return_candidate;
+    for (int i = 0; i < nItemCount; i++) {
+      if (ITEMDROP_IsItemClassEligible(pSeed, bSkipRarityRoll, nItemLevel, &pItemTxt[i], nItemTypeFilter) && (pGame->bExpansion || (uint16_t)pItemTxt[i].wVersion < 100) && nCandidates < 0x3ff) {
+        aCandidates[nCandidates * 2 + 1] = (int)&pItemTxt[i];
+        aCandidates[nCandidates * 2] = i + nStartIdx;
+        nCandidates++;
       }
     }
 
-    nRandIndex = 0;
-    return_candidate:
-    if ((int)nRandIndex <= (int)nCandidateIdx && aiCandidateIdxs + nRandIndex * 2) {
-      return aiCandidateIdxs[nRandIndex * 2];
+    int nRandIndex;
+    if (nCandidates <= 0) {
+      nRandIndex = 0;
+    } else {
+      nRandIndex = D2_SeedRollLimited(pSeed, nCandidates);
     }
-    return -1;
+    if (nRandIndex > nCandidates) {
+      return -1;
+    }
+
+    int* pCandidate = &aCandidates[nRandIndex * 2];
+    if (!pCandidate) {
+      return -1;
+    }
+
+    return *pCandidate;
 }
 
 // Selects a random normal-tier item class index for a drop roll. Iterates the normal slice of the Items txt table (between the normal-start and exceptional-start size offsets), filters candidates via MONSTER_ShouldSpawnSuperUnique against level/TC constraints, respects the expansion flag, then picks one uniformly at random using the D2SeedStrc PRNG (power-of-two fast path or modulo). Returns the Items txt index of the chosen class, or -1 if none qualify. Structurally identical to ITEMDROP_RollExceptionalItemClass but over the normal tier.
 int32_t __fastcall ITEMDROP_RollWeaponItemClass(::SGAMEDATA * pGame, D2SeedStrc * pSeed, int32_t nItemLevel, int32_t nItemTypeFilter, int32_t bSkipRarityRoll) {
-    BOOL _bPassesFilter;
-    bool bPassesFilter;
-    uint32_t nRandIndex;
-    int aiCandidateIdxs[2048];
-    ::SGAMEDATA* pGameLocal;
-    pGameLocal = pGame;
-    D2SeedStrc* pSeedLocal;
-    pSeedLocal = pSeed;
-    D2ItemsTableStrc* pItemsTxtSizeArr;
-    pItemsTxtSizeArr = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
-    D2ItemsTxt* pItemTxt;
-    pItemTxt = pItemsTxtSizeArr->pWeapons;
-    int nWeaponStartIdx;
-    nWeaponStartIdx = ((intptr_t)pItemTxt - (intptr_t)pItemsTxtSizeArr->pItems) / 0x1a8;
-    int nItemCount;
-    nItemCount = ((intptr_t)pItemsTxtSizeArr->pArmor - (intptr_t)pItemTxt) / 0x1a8;
-    uint32_t nCandidateIdx;
-    nCandidateIdx = 0;
+    int aCandidates[2048];
+    D2ItemsTableStrc* pItemsTable = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
+    D2ItemsTxt* pItemTxt = pItemsTable->pWeapons;
+    int nStartIdx = pItemTxt - pItemsTable->pItems;
+    int nItemCount = pItemsTable->pArmor - pItemTxt;
+    int nCandidates = 0;
     if (!pItemTxt) {
       return -1;
     }
 
-    int nLoopIdx;
-    nLoopIdx = 0;
-    if (nItemCount > 0) {
-      do {
-        _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeedLocal, bSkipRarityRoll, nItemLevel, pItemTxt, nItemTypeFilter);
-        if (_bPassesFilter && (pGameLocal->bExpansion || (uint16_t)pItemTxt->wVersion < 100) && (int)nCandidateIdx < 0x3ff) {
-          aiCandidateIdxs[nCandidateIdx * 2 + 1] = (int)pItemTxt;
-          aiCandidateIdxs[nCandidateIdx * 2] = nLoopIdx + nWeaponStartIdx;
-          nCandidateIdx++;
-        }
-
-        nLoopIdx++;
-        pItemTxt++;
-      } while (nLoopIdx < nItemCount);
-
-      if ((int)nCandidateIdx > 0) {
-        nRandIndex = D2_SeedRollLimited(pSeedLocal, nCandidateIdx);
-        goto return_candidate;
+    for (int i = 0; i < nItemCount; i++) {
+      if (ITEMDROP_IsItemClassEligible(pSeed, bSkipRarityRoll, nItemLevel, &pItemTxt[i], nItemTypeFilter) && (pGame->bExpansion || (uint16_t)pItemTxt[i].wVersion < 100) && nCandidates < 0x3ff) {
+        aCandidates[nCandidates * 2 + 1] = (int)&pItemTxt[i];
+        aCandidates[nCandidates * 2] = i + nStartIdx;
+        nCandidates++;
       }
     }
 
-    nRandIndex = 0;
-    return_candidate:
-    if ((int)nRandIndex <= (int)nCandidateIdx && aiCandidateIdxs + nRandIndex * 2) {
-      return aiCandidateIdxs[nRandIndex * 2];
+    int nRandIndex;
+    if (nCandidates <= 0) {
+      nRandIndex = 0;
+    } else {
+      nRandIndex = D2_SeedRollLimited(pSeed, nCandidates);
     }
-    return -1;
+    if (nRandIndex > nCandidates) {
+      return -1;
+    }
+
+    int* pCandidate = &aCandidates[nRandIndex * 2];
+    if (!pCandidate) {
+      return -1;
+    }
+
+    return *pCandidate;
 }
 
 // Rolls a random elite item class index for a drop. Iterates all elite-tier ItemsTxt entries (from the elite start offset), filtering candidates via MONSTER_ShouldSpawnSuperUnique using the monster level, area level, and TC filter; also excludes non-expansion items when not in expansion. Picks a random candidate from the eligible list using the RNG seed and returns its ItemsTxt index, or -1 if none qualify.
 int32_t __fastcall ITEMDROP_RollMiscItemClass(::SGAMEDATA * pGame, D2SeedStrc * pSeed, int32_t nItemLevel, int32_t nItemTypeFilter, int32_t bSkipRarityRoll, int32_t bIsMonsterDrop) {
-    BOOL _bPassesFilter;
-    bool bPassesFilter;
-    uint32_t nRandIndex;
     D2ItemClassCandidateStrc aiCandidateArr[1024];
-    D2ItemsTableStrc* pItemsTxtSizeArr;
-    pItemsTxtSizeArr = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
-    D2ItemsTxt* pItemTxt;
-    pItemTxt = pItemsTxtSizeArr->pMisc;
-    int iVar1;
-    iVar1 = (intptr_t)pItemTxt - (intptr_t)pItemsTxtSizeArr->pItems;
-    int nItemCount;
-    nItemCount = (pItemsTxtSizeArr->nSize * 0x1a8 - (intptr_t)pItemTxt + (intptr_t)pItemsTxtSizeArr->pItems) / 0x1a8;
-    uint32_t nCandidateCount;
-    nCandidateCount = 0;
-    uint32_t nCandidateIdx;
-    nCandidateIdx = 0;
+    D2ItemsTableStrc* pItemsTable = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
+    D2ItemsTxt* pItemTxt = pItemsTable->pMisc;
+    int nFirstIndex = pItemTxt - pItemsTable->pItems;
+    int nItemCount = &pItemsTable->pItems[pItemsTable->nSize] - pItemTxt;
+    int nCandidateCount = 0;
     if (!pItemTxt) {
       return -1;
     }
 
-    int nLoopIdx;
-    nLoopIdx = 0;
-    if (nItemCount > 0) {
-      do {
-        if (bIsMonsterDrop || pItemTxt->wType != 0x28) {
-          _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeed, bSkipRarityRoll, nItemLevel, pItemTxt, nItemTypeFilter);
-          nCandidateCount = nCandidateIdx;
-          if (_bPassesFilter && (pGame->bExpansion || (uint16_t)pItemTxt->wVersion < 100) && (int)nCandidateIdx < 0x3ff) {
-            aiCandidateArr[nCandidateIdx].pItemsTxt = pItemTxt;
-            aiCandidateArr[nCandidateIdx].nItemsTxtIdx = nLoopIdx + iVar1 / 0x1a8;
-            nCandidateCount = nCandidateIdx + 1;
-            nCandidateIdx = nCandidateCount;
-          }
-        }
-
-        nLoopIdx++;
-        pItemTxt++;
-      } while (nLoopIdx < nItemCount);
-
-      if ((int)nCandidateCount > 0) {
-        nRandIndex = D2_SeedRollLimited(pSeed, nCandidateCount);
-        goto return_candidate;
+    for (int nLoopIdx = 0; nLoopIdx < nItemCount; nLoopIdx++) {
+      if ((bIsMonsterDrop || pItemTxt->wType != 0x28) && ITEMDROP_IsItemClassEligible(pSeed, bSkipRarityRoll, nItemLevel, pItemTxt, nItemTypeFilter) && (pGame->bExpansion || (uint16_t)pItemTxt->wVersion < 100) && nCandidateCount < 0x3ff) {
+        aiCandidateArr[nCandidateCount].pItemsTxt = pItemTxt;
+        aiCandidateArr[nCandidateCount].nItemsTxtIdx = nLoopIdx + nFirstIndex;
+        nCandidateCount++;
       }
+      pItemTxt++;
     }
 
-    nRandIndex = 0;
-    return_candidate:
-    if ((int)nRandIndex <= (int)nCandidateCount && aiCandidateArr + nRandIndex) {
-      return aiCandidateArr[nRandIndex].nItemsTxtIdx;
+    int nRandIndex = nCandidateCount <= 0 ? 0 : D2_SeedRollLimited(pSeed, nCandidateCount);
+    if (nRandIndex > nCandidateCount) {
+      return -1;
     }
-    return -1;
+    D2ItemClassCandidateStrc* pCandidate = &aiCandidateArr[nRandIndex];
+    if (!pCandidate) {
+      return -1;
+    }
+    return pCandidate->nItemsTxtIdx;
 }
 
 // Rolls the broad item quality tier (gold, exceptional, normal, or elite) for a monster drop at a given area level. Uses a 0-100 RNG roll with level-scaled thresholds: low levels skew toward gold; mid levels can yield normal/exceptional; high levels (≥0x42) halt. Delegates to ITEMDROP_RollExceptionalItemClass, RollNormalItemClass, or RollEliteItemClass based on the roll. One-time initializes the gold item class ID.
@@ -698,98 +645,71 @@ static int __stdcall ITEM_RollForcedMagicAffix(D2ItemGenContextStrc * pItemGenCt
 // below 0x21. On success sets ITEMFLAG_SOCKETED and calls the D2Common ITEM_RollSocketCount with
 // modseed % max + 1 (versioned items) or the max capped at 3, 2 for helms (version 0). No return value.
 static void __stdcall ITEM_RollSocketCount(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenContext) {
-    bool bHasInv;
-    bool Var2;
-    uint16_t wItemVersion;
-    uint32_t bIsArmor;
-    int32_t nItemQuality;
-    nItemQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
-    if (nItemQuality < 2) {
+    if (D2Common::ITEMS::Items::GetItemQuality(pUnit) < 2) {
+      return;
+    }
+    if (!D2Common::ITEMS::Items::ITEM_GetItemsTxt_bHasInv(pUnit)) {
+      return;
+    }
+    if (D2Common::ITEMS::Items::IsStackable(pUnit)) {
+      return;
+    }
+    if (!D2Common::ITEMS::Items::ITEM_GetMaxSockCount(pUnit)) {
       return;
     }
 
-    int32_t bItemHasInv;
-    bItemHasInv = D2Common::ITEMS::Items::ITEM_GetItemsTxt_bHasInv(pUnit);
-    if (!bItemHasInv) {
-      return;
-    }
-
-    BOOL bIsStackable;
-    bIsStackable = D2Common::ITEMS::Items::IsStackable(pUnit);
-    if (bIsStackable) {
-      return;
-    }
-
-    char cSocketTier;
-    cSocketTier = D2Common::ITEMS::Items::ITEM_GetMaxSockCount(pUnit);
-    if (cSocketTier == '\0') {
-      return;
-    }
-
-    uint8_t byMaxSocks;
-    byMaxSocks = D2Common::ITEMS::Items::ITEM_GetMaxSockCount(pUnit);
-    uint32_t nMaxSockCount;
-    nMaxSockCount = (uint32_t)byMaxSocks;
-    int nDifficulty;
-    nDifficulty = (int)pGame->nDifficulty;
-    if (nDifficulty) {
-      if (nDifficulty != 1) {
-        if (nDifficulty == 2 && (int32_t)nMaxSockCount >= 6) {
-          nMaxSockCount = 6;
-          goto roll_sockets;
+    int nMaxSockCount = D2Common::ITEMS::Items::ITEM_GetMaxSockCount(pUnit);
+    switch (pGame->nDifficulty) {
+      case 0:
+        if (nMaxSockCount >= 3) {
+          nMaxSockCount = 3;
         }
-      } else {
-        if ((int32_t)nMaxSockCount >= 4) {
+        break;
+      case 1:
+        if (nMaxSockCount >= 4) {
           nMaxSockCount = 4;
-          goto roll_sockets;
         }
-      }
-    } else {
-      if ((int32_t)nMaxSockCount >= 3) {
-        nMaxSockCount = 3;
-        goto roll_sockets;
-      }
+        break;
+      case 2:
+        if (nMaxSockCount >= 6) {
+          nMaxSockCount = 6;
+        }
+        break;
     }
-    if (!nMaxSockCount) {
+    if (nMaxSockCount <= 0) {
+      return;
+    }
+    if (D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit) < 100 && D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Armor)) {
       return;
     }
 
-    roll_sockets:
-    wItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
-    if (!(wItemVersion >= 100 || (bIsArmor = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Armor) , !bIsArmor))) {
+    int nSocketRoll = D2Common::Seed::UNIT_GetModuloFromSeed(D2Common::ITEMS::Items::GetItemSeed(pUnit), 100);
+    if (pItemGenContext->nFlags & ITEMFLAG_IGNORE) {
       return;
     }
-
-    D2SeedStrc* pItemSeed = D2Common::ITEMS::Items::GetItemSeed(pUnit);
-    uint32_t nSocketRoll = D2Common::Seed::UNIT_GetModuloFromSeed(pItemSeed, 100);
-    if ((pItemGenContext->nFlags & ITEMFLAG_IGNORE) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
-      return;
-    }
-    if ((pItemGenContext->nFlags & ITEMFLAG_IDENTIFIED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
+    if (pItemGenContext->nFlags & ITEMFLAG_IDENTIFIED) {
       nSocketRoll = 0;
     }
-    if (!((pItemGenContext->neD2ItemFlag & ITEMFLAG_SOCKETED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD) || (int)nSocketRoll < 0x21)) {
+    if (!(pItemGenContext->neD2ItemFlag & ITEMFLAG_SOCKETED) && nSocketRoll >= 0x21) {
       return;
     }
 
     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_SOCKETED, 1);
-    int16_t wVersionCheck = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
-    if (wVersionCheck) {
-      uint32_t nModSeed;
-      nModSeed = D2Common::ITEMS::Items::GetModSeed(pUnit);
-      D2Common::ITEMS::Items::ITEM_RollSocketCount(pUnit, nModSeed % nMaxSockCount + 1);
-      return;
-    }
-    if ((int32_t)nMaxSockCount > 3) {
-      nMaxSockCount = 3;
+    int nSockets;
+    if (D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit) >= 1) {
+      nSockets = (uint32_t)D2Common::ITEMS::Items::GetModSeed(pUnit) % nMaxSockCount + 1;
+    } else {
+      if (nMaxSockCount > 3) {
+        nMaxSockCount = 3;
+      }
+      if (D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Helm) && nMaxSockCount > 2) {
+        nMaxSockCount = 2;
+      }
+
+      nSockets = nMaxSockCount;
     }
 
-    uint32_t bIsHelm = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Helm);
-    if (bIsHelm && (int32_t)nMaxSockCount > 2) {
-      nMaxSockCount = 2;
-    }
-
-    D2Common::ITEMS::Items::ITEM_RollSocketCount(pUnit, nMaxSockCount);
+    D2Common::ITEMS::Items::ITEM_RollSocketCount(pUnit, nSockets);
 }
 
 // Conditionally makes an item ethereal during drop generation. Eligible items are weapons or armor with durability, not unique or set quality, not quest items, and not flagged to suppress ethereal (pItemGenContext bit 1). Triggers on a 5% RNG roll or if the drop context forces ethereal (bit 2 or flag 0x400000). Applies ITEMMOD_ApplyEtherealBonus and halves max durability (setting current durability to the new max).

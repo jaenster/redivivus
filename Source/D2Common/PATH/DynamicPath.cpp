@@ -1412,67 +1412,27 @@ static uint32_t PATH_BuildDirectPathToTarget(D2DynamicPathStrc * pDynamicPath) {
 
 // Registers a unit's collision footprint into the room's collision map. Dispatches to AddCollision_Type (players/monsters using dynamic path width), AddCollision_Vector (objects using full size X/Y), or AddCollision_Width (all other unit types) depending on eUnitType and path type.
 void __stdcall PATH_AddUnitCollision(D2UnitStrc * pUnit) {
-    D2DynamicPathStrc* pDynamicPath;
-    int32_t iVar1;
-    int32_t nPosY;
-    int32_t nPosX;
-    eD2UnitType eUnitType;
     if (pUnit) {
-      int32_t nUnitWidth;
-      eUnitType = pUnit->eUnitType;
-      if ((int)eUnitType >= 0) {
-        if ((int)eUnitType <= 1) {
-          pDynamicPath = pUnit->pPath.pDynamicPath;
-          nUnitWidth = pDynamicPath->nCollisionPattern;
-          if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-            iVar1 = (int32_t)((uint32_t)(uint16_t)pDynamicPath->nTargetX | (uint32_t)(uint16_t)pDynamicPath->nTargetY << 16);
-          } else if (pDynamicPath) {
-            iVar1 = GetYPos(pDynamicPath);
-          } else {
-            iVar1 = 0;
-          }
-
-          eUnitType = pUnit->eUnitType;
-          if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-            nPosY = pUnit->pPath.pStaticPath->nPosX;
-          } else if (pUnit->pPath.pDynamicPath) {
-            nPosY = GetXPos(pUnit->pPath.pDynamicPath);
-          } else {
-            nPosY = 0;
-          }
-
-          nPosX = Units::GetCollisionType(pUnit);
-          Collision::AddCollision_Type(Units::UNITS_GetRoom(pUnit), nPosY, iVar1, nUnitWidth, nPosX);
+      switch ((int)pUnit->eUnitType) {
+        case UNIT_PLAYER:
+        case UNIT_MONSTER: {
+          int32_t nUnitWidth = pUnit->pPath.pDynamicPath->nCollisionPattern;
+          int32_t nPosY = Units::GetYPosFromDynamicPathUnitInline(pUnit);
+          int32_t nPosX = Units::GetXPosFromDynamicPathUnitInline(pUnit);
+          Collision::AddCollision_Type(Units::UNITS_GetRoom(pUnit), nPosX, nPosY, nUnitWidth, Units::GetCollisionType(pUnit));
           return;
         }
-        if (eUnitType == UNIT_OBJECT) {
-          iVar1 = Units::GetCollisionType(pUnit);
-          Collision::AddCollision_Vector(Units::UNITS_GetRoom(pUnit), Units::GetXPosFromDynamicPathUnit(pUnit), Units::GetYPosFromDynamicPathUnit(pUnit), Units::GetUnitSizeX(pUnit), Units::GetUnitSizeY(pUnit), iVar1);
+        case UNIT_OBJECT: {
+          int32_t nCollisionType = Units::GetCollisionType(pUnit);
+          Collision::AddCollision_Vector(Units::UNITS_GetRoom(pUnit), Units::GetXPosFromDynamicPathUnit(pUnit), Units::GetYPosFromDynamicPathUnit(pUnit), Units::GetUnitSizeX(pUnit), Units::GetUnitSizeY(pUnit), nCollisionType);
           return;
         }
       }
     }
 
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      iVar1 = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      iVar1 = GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      iVar1 = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nPosY = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nPosY = GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nPosY = 0;
-    }
-
-    nPosX = Units::GetCollisionType(pUnit);
-    Collision::AddCollision_Width(Units::UNITS_GetRoom(pUnit), nPosY, iVar1, Units::GetUnitSizeX(pUnit), nPosX);
+    int32_t nPosY = Units::GetYPosFromDynamicPathUnitInline(pUnit);
+    int32_t nPosX = Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    Collision::AddCollision_Width(Units::UNITS_GetRoom(pUnit), nPosX, nPosY, Units::GetUnitSizeX(pUnit), Units::GetCollisionType(pUnit));
 }
 
 // Removes a unit's collision footprint from its room's collision grid, choosing the removal method by unit type. For players (Dead anim) and monsters (Kick/Death anim), and any unit when forced via nParam, it removes using the dynamic path's target coords + nUnitWidth (RemoveCollision_Type). For objects it removes a size-X box at the unit's position (RemoveCollision_Width). For other unit types it removes a full sizeX-by-sizeY rectangle (RemoveCollision_Vector). Objects/monsters that have no collision and aren't forced (nParam==0) return 0 without acting. Position is read from the static path (objects/types 4-5) or dynamic path Get X/YPos. Returns 1 if collision was removed, 0 if skipped. Called before moving a unit so its old footprint is cleared.

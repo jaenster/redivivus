@@ -439,7 +439,7 @@ typedef int (__fastcall *D2MissileSrvDoFunc)(::SGAMEDATA * pGame, D2UnitStrc * p
 typedef int (__fastcall *D2PathTypeFunc)(D2PathTypeArg * pPathTypeArg);
 typedef int (__fastcall *SkillSelectProcFn)(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit);
 typedef int (__fastcall *fnApplyPrepatch)(int * pdw);
-typedef int (__fastcall *fnCacheFreeMem)(void * pMem);
+typedef int (__fastcall *fnCacheFreeMem)(void * pMem, uint32_t dwSize);
 typedef int (__fastcall *fnDequeueMessage)(int * pTypeOut, void * pBufOut);
 typedef int (__fastcall *fnEnterChatAndJoinChannel)(char * szUser, char * szStat, char * szAcct, char * szChan, uint32_t dwFlags);
 typedef int (__fastcall *fnGetStateAndClear)(int * pOut);

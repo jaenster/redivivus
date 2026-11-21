@@ -290,69 +290,69 @@ void __fastcall LOADER_DrawConnectionLostScreen(int32_t nUnused) {
 }
 
 void __stdcall INPUT_CharScreenDualButtonDown(D2UIMouseMsgStrc * pMsg) {
-    int nBaseX = UI::Inv::gnPanelOffsetX;
-    int nBaseY = -UI::Inv::gnPanelOffsetY;
-    int nLeftEdge = UI::Inv::gnPanelOffsetX + 0xce;
+    int nButtonX = UI::Inv::gnPanelOffsetX + 0xce;
+    int nButtonY = 0x136 - UI::Inv::gnPanelOffsetY;
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
-    if (nMouseX < nLeftEdge || nMouseX > nBaseX + 0x12e || nMouseY < nBaseY + 0x116 || nMouseY > nBaseY + 0x136) {
-      int nBaseX2 = UI::Inv::gnPanelOffsetX;
-      nBaseY = -UI::Inv::gnPanelOffsetY;
-      nMouseY = UI::Inv::gnPanelOffsetX + 0x152;
-      nBaseX = Cursor::GetMouseX();
-      nMouseX = Cursor::GetMouseY();
-      if (nBaseX < nMouseY || nBaseX > nBaseX2 + 0x1b2 || nMouseX < nBaseY + 0x116 || nMouseX > nBaseY + 0x136) {
-        GAME::Game::GAMEDATA_ClearQueuedClicks();
-        pMsg->bHandled = 1;
-        pMsg->dwResult = 0;
-        Storm::SMsgBreakHandlerChain(pMsg);
-        return;
-      }
-
-      gnConnectionLostScreenState = 1;
-    } else {
+    if (nMouseX >= nButtonX && nMouseX <= nButtonX + 0x60 && nMouseY >= nButtonY - 0x20 && nMouseY <= nButtonY) {
       gnCharScreenOkButtonPressed = 1;
+      gnCharScreenInputState = 1;
+      Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
+      pMsg->bHandled = 1;
+      pMsg->dwResult = 0;
+      Storm::SMsgBreakHandlerChain(pMsg);
+      return;
     }
 
-    gnCharScreenInputState = 1;
-    Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
+    nButtonX = UI::Inv::gnPanelOffsetX + 0x152;
+    nButtonY = 0x136 - UI::Inv::gnPanelOffsetY;
+    nMouseX = Cursor::GetMouseX();
+    nMouseY = Cursor::GetMouseY();
+    if (nMouseX >= nButtonX && nMouseX <= nButtonX + 0x60 && nMouseY >= nButtonY - 0x20 && nMouseY <= nButtonY) {
+      gnConnectionLostScreenState = 1;
+      gnCharScreenInputState = 1;
+      Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
+      pMsg->bHandled = 1;
+      pMsg->dwResult = 0;
+      Storm::SMsgBreakHandlerChain(pMsg);
+      return;
+    }
+
+    GAME::Game::GAMEDATA_ClearQueuedClicks();
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
 void __stdcall INPUT_CharScreenDualButtonUp(D2UIMouseMsgStrc * pMsg) {
-    int nMouseY;
-    int nBaseY;
-    int nLeftEdge;
-    int nBaseX2;
-    int nBaseX = UI::Inv::gnPanelOffsetX;
     gnCharScreenOkButtonPressed = 0;
     gnConnectionLostScreenState = 0;
     if (gnCharScreenInputState) {
-      int nMouseX;
-      nBaseY = -UI::Inv::gnPanelOffsetY;
-      nLeftEdge = UI::Inv::gnPanelOffsetX + 0xce;
-      nMouseX = Cursor::GetMouseX();
-      nMouseY = Cursor::GetMouseY();
-      nBaseX2 = UI::Inv::gnPanelOffsetX;
-      if (nMouseX >= nLeftEdge && nMouseX <= nBaseX + 0x12e && nMouseY >= nBaseY + 0x116 && nMouseY <= nBaseY + 0x136) {
+      int nLeft = UI::Inv::gnPanelOffsetX + 0xce;
+      int nBottom = 0x136 - UI::Inv::gnPanelOffsetY;
+      int nMouseX = Cursor::GetMouseX();
+      int nMouseY = Cursor::GetMouseY();
+      if (nMouseX >= nLeft && nMouseX <= nLeft + 0x60 && nMouseY >= nBottom - 0x20 && nMouseY <= nBottom) {
         gbCharScreenOkButtonConfirmed = 1;
         gnCharScreenInputState = 0;
       }
 
-      nBaseX = -UI::Inv::gnPanelOffsetY;
-      nMouseY = UI::Inv::gnPanelOffsetX + 0x152;
-      nBaseY = Cursor::GetMouseX();
-      nMouseX = Cursor::GetMouseY();
-      if (nBaseY >= nMouseY && nBaseY <= nBaseX2 + 0x1b2 && nMouseX >= nBaseX + 0x116 && nMouseX <= nBaseX + 0x136) {
+      nLeft = UI::Inv::gnPanelOffsetX + 0x152;
+      nBottom = 0x136 - UI::Inv::gnPanelOffsetY;
+      nMouseX = Cursor::GetMouseX();
+      nMouseY = Cursor::GetMouseY();
+      if (nMouseX >= nLeft && nMouseX <= nLeft + 0x60 && nMouseY >= nBottom - 0x20 && nMouseY <= nBottom) {
         gbCharScreenCancelPressed = 1;
         gnCharScreenInputState = 0;
       }
-    } else {
-      GAME::Game::GAMEDATA_ClearQueuedClicks();
+
+      pMsg->bHandled = 1;
+      pMsg->dwResult = 0;
+      Storm::SMsgBreakHandlerChain(pMsg);
+      return;
     }
 
+    GAME::Game::GAMEDATA_ClearQueuedClicks();
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);

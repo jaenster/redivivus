@@ -197,75 +197,71 @@ BOOL __fastcall SKILLSOR_SrvStFn11_InfernoChannel(::SGAMEDATA * pGame, D2UnitStr
     return bResult;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
 // Server aura stay-function (SrvStFunc 12): tests whether the caster's current target is within the aura's range and eligible to be attacked. Retrieves the target via GetTargetEx, calculates aura range from aurarangecalc, computes squared distance between caster and target, and returns TRUE only if distance^2 <= range^2, target is attackable (UNITS_CheckIfCanAttackTarget), and neither unit is in town. Returns FALSE if no valid target or out of range.
 BOOL __fastcall SKILLSOR_SrvStFn12_TargetInAuraRange(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    uint32_t _bCanAttack;
-    bool bCanAttack;
     int32_t nDistSq;
-    D2RoomStrc* pTargetRoom;
-    BOOL bIsInTown;
     int32_t nCasterY;
     eD2UnitType eUnitType;
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    D2SkillsTxt* pSkillsTxt;
-    if (pTarget && (pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr)) {
-      int32_t nAuraRange;
-      nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
-      eUnitType = pTarget->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        eSkill = pTarget->pPath.pStaticPath->nPosY;
-      } else if (pTarget->pPath.pDynamicPath) {
-        eSkill = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
-      } else {
-        eSkill = SKILL_Attack;
-      }
+    if (!pTarget) {
+      return 0;
+    }
 
-      eUnitType = pTarget->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nSkillLvl = pTarget->pPath.pStaticPath->nPosX;
-      } else if (pTarget->pPath.pDynamicPath) {
-        nSkillLvl = D2Common::PATH::DynamicPath::GetXPos(pTarget->pPath.pDynamicPath);
-      } else {
-        nSkillLvl = 0;
-      }
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
+      return 0;
+    }
 
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nCasterY = pUnit->pPath.pStaticPath->nPosY;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nCasterY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nCasterY = 0;
-      }
+    int32_t nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
+    nAuraRange *= nAuraRange;
+    eUnitType = pTarget->eUnitType;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+      eSkill = pTarget->pPath.pStaticPath->nPosY;
+    } else if (pTarget->pPath.pDynamicPath) {
+      eSkill = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
+    } else {
+      eSkill = SKILL_Attack;
+    }
 
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nDistSq = pUnit->pPath.pStaticPath->nPosX;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nDistSq = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nDistSq = 0;
-      }
+    eUnitType = pTarget->eUnitType;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+      nSkillLvl = pTarget->pPath.pStaticPath->nPosX;
+    } else if (pTarget->pPath.pDynamicPath) {
+      nSkillLvl = D2Common::PATH::DynamicPath::GetXPos(pTarget->pPath.pDynamicPath);
+    } else {
+      nSkillLvl = 0;
+    }
 
-      nDistSq = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nDistSq, nCasterY, nSkillLvl, eSkill);
-      if (nDistSq <= nAuraRange * nAuraRange) {
-        if (pTarget->eUnitType > UNIT_MONSTER) {
-          return 1;
-        }
+    eUnitType = pUnit->eUnitType;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+      nCasterY = pUnit->pPath.pStaticPath->nPosY;
+    } else if (pUnit->pPath.pDynamicPath) {
+      nCasterY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+    } else {
+      nCasterY = 0;
+    }
 
-        _bCanAttack = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pTarget);
-        if (_bCanAttack) {
-          pTargetRoom = D2Common::Units::UNITS_GetRoom(pTarget);
-          bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pTargetRoom);
-          if (!bIsInTown) {
-            pTargetRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-            bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pTargetRoom);
-            if (!bIsInTown) {
-              return 1;
-            }
-          }
-        }
-      }
+    eUnitType = pUnit->eUnitType;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+      nDistSq = pUnit->pPath.pStaticPath->nPosX;
+    } else if (pUnit->pPath.pDynamicPath) {
+      nDistSq = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+    } else {
+      nDistSq = 0;
+    }
+
+    nDistSq = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nDistSq, nCasterY, nSkillLvl, eSkill);
+    if (nDistSq > nAuraRange) {
+      return 0;
+    }
+    if (GetTypeInline(pTarget) > UNIT_MONSTER || UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pTarget) && !D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(D2Common::Units::UNITS_GetRoom(pTarget)) && !D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(D2Common::Units::UNITS_GetRoom(pUnit))) {
+      return 1;
     }
 
     return 0;

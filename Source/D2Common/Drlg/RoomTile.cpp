@@ -1118,32 +1118,22 @@ void __fastcall DRLGROOMTILE_AllocRoomTileGrid(D2RoomExStrc * pRoomEx) {
 // Allocates wall/floor/roof tile data arrays based on counted tile maximums in pRoomTiles
 // @sourcefile .\DRLG\RoomTile.cpp
 void __fastcall DRLGROOMTILE_AllocTileDataArrays(D2RoomExStrc * pRoomEx) {
-    D2DrlgTileDataStrc* pWallTiles;
-    D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
-    int nSize = pTileGrid->sRoomTiles.nFloorTilesCount;
     D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
-    if (nSize) {
-      D2DrlgTileDataStrc* pFloorTiles;
-      pFloorTiles = (D2DrlgTileDataStrc*)D2_ALLOC_POOL_AT(pMemory, nSize * 0x30, ".\\DRLG\\RoomTile.cpp", 0x545);
-      pTileGrid->sRoomTiles.pFloorTiles = pFloorTiles;
-      memset(pFloorTiles, 0, pTileGrid->sRoomTiles.nFloorTilesCount * 0x30);
+    D2DrlgRoomTilesStrc* pRoomTiles = &pRoomEx->pRoomTiles->sRoomTiles;
+    if (pRoomTiles->nFloorTilesCount) {
+      pRoomTiles->pFloorTiles = (D2DrlgTileDataStrc*)D2_ALLOC_POOL_AT(pMemory, pRoomTiles->nFloorTilesCount * 0x30, ".\\DRLG\\RoomTile.cpp", 0x545);
+      memset(pRoomTiles->pFloorTiles, 0, pRoomTiles->nFloorTilesCount * 0x30);
     }
 
-    nSize = pTileGrid->sRoomTiles.nWallTilesCount;
-    if (nSize) {
-      pWallTiles = (D2DrlgTileDataStrc*)D2_ALLOC_POOL_AT(pMemory, nSize * 0x30, ".\\DRLG\\RoomTile.cpp", 0x54b);
-      pTileGrid->sRoomTiles.pWallTiles = pWallTiles;
-      memset(pWallTiles, 0, pTileGrid->sRoomTiles.nWallTilesCount * 0x30);
+    if (pRoomTiles->nWallTilesCount) {
+      pRoomTiles->pWallTiles = (D2DrlgTileDataStrc*)D2_ALLOC_POOL_AT(pMemory, pRoomTiles->nWallTilesCount * 0x30, ".\\DRLG\\RoomTile.cpp", 0x54b);
+      memset(pRoomTiles->pWallTiles, 0, pRoomTiles->nWallTilesCount * 0x30);
     }
 
-    nSize = pTileGrid->sRoomTiles.nRoofTilesCount;
-    if (!(nSize && !pTileGrid->sRoomTiles.pRoofTiles)) {
-      return;
+    if (pRoomTiles->nRoofTilesCount && !pRoomTiles->pRoofTiles) {
+      pRoomTiles->pRoofTiles = (D2DrlgTileDataStrc*)D2_ALLOC_POOL_AT(pMemory, pRoomTiles->nRoofTilesCount * 0x30, ".\\DRLG\\RoomTile.cpp", 0x551);
+      memset(pRoomTiles->pRoofTiles, 0, pRoomTiles->nRoofTilesCount * 0x30);
     }
-
-    D2DrlgTileDataStrc* pRoofTiles = (D2DrlgTileDataStrc*)D2_ALLOC_POOL_AT(pMemory, nSize * 0x30, ".\\DRLG\\RoomTile.cpp", 0x551);
-    pTileGrid->sRoomTiles.pRoofTiles = pRoofTiles;
-    memset(pRoofTiles, 0, pTileGrid->sRoomTiles.nRoofTilesCount * 0x30);
 }
 
 // Grows tile data array capacity via realloc.

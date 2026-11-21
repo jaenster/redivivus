@@ -2768,36 +2768,16 @@ void __stdcall TXT_AllocParsedTreasureClassDiffActChestABC() {
     static char * gaszTreasureClassChestColumnNames[3] = { (char*)"A", (char*)"B", (char*)"C" }; D2_STATIC_GUARD(gaszTreasureClassChestColumnNames, "D2Common::DATATBLS::MonsterTbls::TXT_AllocParsedTreasureClassDiffActChestABC::gaszTreasureClassChestColumnNames");
     static char * gapTreasureClassChestParsedData[3] = { (char*)"", (char*)" (N)", (char*)" (H)" }; D2_STATIC_GUARD(gapTreasureClassChestParsedData, "D2Common::DATATBLS::MonsterTbls::TXT_AllocParsedTreasureClassDiffActChestABC::gapTreasureClassChestParsedData");
 
-    int nActNum;
-    int32_t nTCIdx;
-    D2ParsedTreasureClassStrc* pTCEntry;
-    char** pszChestId;
     char szTCName[256];
-    D2TxtLinkStrc* pDiffIter;
-    D2ParsedTreasureClassStrc* pTCDest = (D2ParsedTreasureClassStrc*)&sgtDataTable.pParsedTreasureClassDiffActChestABC;
-    char** szDifficulty = gapTreasureClassChestParsedData;
-    do {
-      nActNum = 0;
-      do {
-        nActNum++;
-        pszChestId = gaszTreasureClassChestColumnNames;
-        do {
-          Storm::Source::SSTR::SStrPrintf(szTCName, 0x100, "Act %d%s Chest %s", nActNum, *szDifficulty, *pszChestId);
-          nTCIdx = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtMonsterTblsLink, szTCName, 0);
-          if (nTCIdx >= 0) {
-            pTCEntry = sgtDataTable.pParsedTreasureClass + nTCIdx;
-          } else {
-            pTCEntry = 0;
-          }
-
-          *(D2ParsedTreasureClassStrc**)pTCDest = (D2ParsedTreasureClassStrc*)pTCEntry;
-          pszChestId++;
-          pTCDest = (D2ParsedTreasureClassStrc*)&pTCDest->nEntriesCount;
-        } while ((intptr_t)pszChestId < (intptr_t)((char*)&gaszTreasureClassChestColumnNames + sizeof(gaszTreasureClassChestColumnNames)));
-      } while (nActNum < 5);
-
-      szDifficulty++;
-    } while ((intptr_t)szDifficulty < (intptr_t)((char*)&gapTreasureClassChestParsedData + sizeof(gapTreasureClassChestParsedData)));
+    for (int nDifficulty = 0; nDifficulty < 3; nDifficulty++) {
+      for (int nAct = 0; nAct < 5; nAct++) {
+        for (int nChest = 0; nChest < 3; nChest++) {
+          Storm::Source::SSTR::SStrPrintf(szTCName, 0x100, "Act %d%s Chest %s", nAct + 1, gapTreasureClassChestParsedData[nDifficulty], gaszTreasureClassChestColumnNames[nChest]);
+          int nTCIdx = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtMonsterTblsLink, szTCName, 0);
+          sgtDataTable.pParsedTreasureClassDiffActChestABC.Difficulty[nDifficulty].Act[nAct].Chest[nChest] = nTCIdx >= 0 ? &sgtDataTable.pParsedTreasureClass[nTCIdx] : NULL;
+        }
+      }
+    }
 }
 
 void __stdcall TXT_AllocItemDropData(D2PoolManagerStrc * pMemory) {

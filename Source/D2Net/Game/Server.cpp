@@ -243,7 +243,7 @@ int32_t __fastcall NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect(uint8_t * pbPacket
     }
 
     uint8_t byOpcode = *pbPacket;
-    int32_t pPacketEnd = (int32_t)pbPacket;
+    int32_t pPacketEnd;
     int32_t nPacketSizeResult = NET_D2GS_CLIENT_GetOutgoingPacketSizeFromTableAndVariableSize((char*)pbPacket, nSize, &pPacketEnd);
     if (!nPacketSizeResult) {
       return 3;
@@ -251,10 +251,10 @@ int32_t __fastcall NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect(uint8_t * pbPacket
     if (byOpcode >= 0x71 && byOpcode != 0xff || (uint16_t)pPacketEnd > 0x204) {
       return 4;
     }
-    if ((int)(pPacketEnd & 0xffffU) <= (int)nSize) {
+    if ((int)(uint16_t)pPacketEnd <= (int)nSize) {
       int nTokenMatch;
       *pnUnknown = 0;
-      *pnPacketSize = pPacketEnd & 0xffffU;
+      *pnPacketSize = (uint16_t)pPacketEnd;
       if (byOpcode < 0x67) {
         *pnPacketClass = 1;
       } else if (byOpcode < 0x71) {

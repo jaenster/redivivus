@@ -968,47 +968,28 @@ D2LvlSubTxt * __fastcall TXT_LvlSub_GetLineFromSubType(int32_t nSubType) {
 // Allocates and populates the pExpansionLvlTbls array (one D2ExpansionLvlTblsTxt per LvlTypes row, 0x1000 bytes each). For each LvlTypes row iterates up to 32 File[] entries (stride 60 bytes); skips entries whose filename starts with "0" and skips expansion-only tiles in classic mode. Calls TILEPROJECT_AllocSlot for each valid tile file.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
 void __fastcall LVLTBLS_LoadLvlTypeTileLibraries(D2PoolManagerStrc * pMemory) {
-    char* szFilename;
-    int nFileStrOffset;
-    bool bCharsMatch;
-    int k;
     if (!pTxtLvlTypes) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x410);
       exit(-1);
     }
 
     size_t nAllocSize = nTxtLvlTypesSize << 0xc;
-    D2LvlTypeTileLibrariesStrc* pExpLvlTblsRow = (D2LvlTypeTileLibrariesStrc*)D2_ALLOC_POOL_AT(nullptr, nAllocSize, ".\\DATATBLS\\LvlTbls.cpp", 0x413);
-    gpLvlTypeTileLibraries = pExpLvlTblsRow;
-    memset(pExpLvlTblsRow, 0, nAllocSize);
+    gpLvlTypeTileLibraries = (D2LvlTypeTileLibrariesStrc*)D2_ALLOC_POOL_AT(nullptr, nAllocSize, ".\\DATATBLS\\LvlTbls.cpp", 0x413);
+    memset(gpLvlTypeTileLibraries, 0, nAllocSize);
+    D2LvlTypeTileLibrariesStrc* pExpLvlTblsRow = gpLvlTypeTileLibraries;
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    int i = 0;
-    if (nTxtLvlTypesSize <= 0) {
-      return;
-    }
-
-    int j = 0;
-    do {
-      k = 0;
-      nFileStrOffset = j;
-      do {
-        szFilename = pTxtLvlTypes->File[0] + nFileStrOffset;
-        bCharsMatch = !strcmp(szFilename, "0");
-        if (bCharsMatch) {
+    for (int i = 0; i < nTxtLvlTypesSize; i++) {
+      for (int k = 0; k < 0x20; k++) {
+        if (!strcmp(pTxtLvlTypes[i].File[k], "0")) {
           break;
         }
-        if (bIsExpansion || !*(int*)((int)(pTxtLvlTypes->File + 0x20) + (j + 4))) {
-          D2CMP::DUNGEON::Dungeon::TILEPROJECT_AllocSlot((uint8_t*)pExpLvlTblsRow, szFilename);
+        if (bIsExpansion || !pTxtLvlTypes[i].Expansion) {
+          D2CMP::DUNGEON::Dungeon::TILEPROJECT_AllocSlot((uint8_t*)pExpLvlTblsRow, pTxtLvlTypes[i].File[k]);
         }
+      }
 
-        k++;
-        /* Size of one D2LvlTypesTxt->File entry size */ nFileStrOffset += 60;
-      } while (k < 0x20);
-
-      /* Each entry is size of 0x1000 */ pExpLvlTblsRow++;
-      /* Size of D2LvlTypesTxt */ j += 0x788;
-      i++;
-    } while (i < nTxtLvlTypesSize);
+      pExpLvlTblsRow++;
+    }
 }
 
 // @sourcefile .\DATATBLS\LvlTbls.cpp

@@ -967,7 +967,8 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     return (eD2UnitType)6;
 }
 // @sourcefile .\GAME\SCmd.cpp
-void __fastcall NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(D2ClientStrc * pClient, D2UnitStrc * pUnit, eD2Skills eSkill, uint8_t nBaseAmount, uint8_t bRemove) {
+void __fastcall NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint16_t eSkill, uint8_t nBaseAmount, uint8_t bRemove)
+{
     D2GSPacketSrv0x22_0x23 packet;
     if (!pUnit) {
       return;
@@ -989,11 +990,11 @@ void __fastcall NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(D2ClientStrc * pClient, 
       }
     }
 
-    packet.unitId = pUnit->nUnitGUID;
-    packet.unitType = (uint8_t)pUnit->eUnitType;
+    packet.unitType = (uint8_t)GetTypeInline(pUnit);
     packet.bRemove = bRemove;
     packet.skill = (uint16_t)eSkill;
     packet.packetId = 0x21;
+    packet.unitId = pUnit->nUnitGUID;
     packet.nBaseAmount = nBaseAmount;
     int32_t nLevelBonus = D2Common::Skills::GetSkillBonus(pUnit, (uint16_t)eSkill);
     packet.nLevelBonus = (uint8_t)nLevelBonus;
@@ -1107,7 +1108,7 @@ void __fastcall NET_D2GS_SERVER_SendSkillTabBonusDelta(D2ClientStrc * pClient, u
     SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 8);
 }
 
-void Unreferenced_0053c730() {
+void __stdcall Unreferenced_0053c730(int32_t nUnused1, int32_t nUnused2, int32_t nUnused3) {
 
 }
 
@@ -2566,17 +2567,16 @@ void __fastcall NET_D2GS_SERVER_Send_0xAA_AddUnit_0xA8_SetState(D2ClientStrc * p
 }
 
 void __fastcall NET_D2GS_SERVER_Send_0x59_AssignPlayer(D2ClientStrc * pClient, uint32_t nUnitGUID, uint8_t byCharClass2, char * szCharNameSrc, uint16_t wSrcPosX, uint16_t wSrcPosY) {
-    uint8_t byPacketId[26];
-    *(uint32_t*)(byPacketId + 22) = 0;
-    byPacketId[5] = byCharClass2;
-    d2_store24((char*)&byPacketId + 1, (uint32_t)nUnitGUID & 0xffffffu);
-    byPacketId[0] = 'Y';
-    byPacketId[4] = (uint8_t)(nUnitGUID >> 0x18);
-    memset(byPacketId + 6, 0, 16 * sizeof(byPacketId[0]));
-    Storm::Source::SSTR::SStrCopy((char*)(byPacketId + 6), szCharNameSrc, 0x7fffffff);
-    *(uint16_t*)((char*)&byPacketId + 22) = wSrcPosX;
-    *(uint16_t*)((char*)&byPacketId + 24) = wSrcPosY;
-    SCMD_QueuePacketForClient(pClient, byPacketId, 0x1a);
+    uint8_t aPacket[26];
+    memset(aPacket, 0, sizeof(aPacket));
+    aPacket[5] = byCharClass2;
+    aPacket[0] = 0x59;
+    *(uint32_t*)(aPacket + 1) = nUnitGUID;
+    memset(aPacket + 6, 0, 16);
+    Storm::Source::SSTR::SStrCopy((char*)(aPacket + 6), szCharNameSrc, 0x7fffffff);
+    *(uint16_t*)(aPacket + 22) = wSrcPosX;
+    *(uint16_t*)(aPacket + 24) = wSrcPosY;
+    SCMD_QueuePacketForClient(pClient, aPacket, sizeof(aPacket));
     D2UnitStrc* pUnit = Clients::CLIENTS_GetControlUnit(pClient, 0);
     D2UnitStrc* pTargetUnit = UNIT::SUnit::FindUnitFromTable(Clients::CLIENT_GetGame(pClient), UNIT_PLAYER, nUnitGUID);
     if (pTargetUnit) {

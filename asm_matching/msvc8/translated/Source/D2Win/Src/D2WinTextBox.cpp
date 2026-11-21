@@ -1427,10 +1427,10 @@ int __fastcall D2WINTEXTBOX_AddLines(::D2WinTextBox * pTextBox, uint16_t * wszTe
       }
 
       nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
-      if (nRepeatCount > 0) {
-        do {
+      int nAllocSize = nLine * 2 + 2;
+      for (int i = 0; i < nRepeatCount; i++) {
           pNewEntry = D2_NEW_AT(D2WinTextBoxLineStrc, ".\\Src\\D2WinTextBox.cpp", 0x1af);
-          pAllocedText = (uint16_t*)D2_ALLOC_AT(nLine * 2 + 2, ".\\Src\\D2WinTextBox.cpp", 0x1b0);
+          pAllocedText = (uint16_t*)D2_ALLOC_AT(nAllocSize, ".\\Src\\D2WinTextBox.cpp", 0x1b0);
           pNewEntry->apwszCells[0] = pAllocedText;
           D2Lang::Unicode::UNISYS::STRING_CopyWideString(pAllocedText, wszText);
           memset(pNewEntry->apwszCells + 1, 0, 4 * sizeof(pNewEntry->apwszCells[0]));
@@ -1444,9 +1444,7 @@ int __fastcall D2WINTEXTBOX_AddLines(::D2WinTextBox * pTextBox, uint16_t * wszTe
           }
 
           pTextBox->sListState.nLineCount++;
-          nRepeatCount--;
           pTextBox->sListState.pLineTail = pNewEntry;
-        } while (nRepeatCount);
       }
       if (pTextBox->pScrollbar) {
         nLine = D2WINTEXTBOX_GetVisibleLineCount(pTextBox);

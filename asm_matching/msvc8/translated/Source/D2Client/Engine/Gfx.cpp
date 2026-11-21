@@ -643,86 +643,54 @@ void __fastcall GFX_SetOverlayFrame(D2UnitStrc * pUnit, int32_t nOverlayId, int3
 }
 
 void __fastcall GFX_DrawOverlayOnUnit(D2UnitStrc * pUnit, int32_t nOverlayId, int32_t nScreenX, int32_t nScreenY) {
-    // Frame slots -20..-12 are ONE object: &nAssignResult is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nAssignResult;
-      D2UnitStrc* pUnitSaved;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    int32_t bAssigned;
-    int iVar2;
-    bool bShow;
     D2GfxDataStrc sGfxData;
-    D2GfxUnknown_0xa8* pCur;
-    uint8_t byOne;
-    eOverlayId nThisOverlayId;
-    int* pAssignOut;
-    D2OverlayTxt* pOverlayTxt;
-    eOverlayId nOverlayIdSaved = nOverlayId;
+    int nAssignResult;
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (!pGfxInfo) {
       return;
     }
 
-    D2GfxUnknown_0xa8* pDVar1 = pGfxInfo->pOverlayList;
-    if (!pDVar1) {
+    D2GfxUnknown_0xa8* pCur = pGfxInfo->pOverlayList;
+    if (!pCur) {
       return;
     }
 
-    int nPassIdx = 0;
-    int nPass = nPassIdx;
-    do {
-      __frame0.pUnitSaved = pUnit;
-      for (; pDVar1; pDVar1 = pDVar1->pNext) {
-        bShow = true;
-        if ((!pDVar1->nPreDraw || (bShow = nPass != 0 , !pDVar1->nPreDraw)) && nPass) {
-          bShow = false;
+    for (int nPass = 0; nPass < 2; nPass++) {
+      for (; pCur; pCur = pCur->pNext) {
+        BOOL bShow = TRUE;
+        if (pCur->nPreDraw && !nPass) {
+          bShow = FALSE;
         }
-        if (pDVar1->nOverlayType == 6 && !pDVar1->nValue0) {
-          bShow = false;
+        if (!pCur->nPreDraw && nPass) {
+          bShow = FALSE;
         }
-        if (pDVar1->nOverlayType == 8 && !*(int*)&pDVar1->field_0x3c) {
-          bShow = false;
+        if (pCur->nOverlayType == 6 && !pCur->nValue0) {
+          bShow = FALSE;
+        }
+        if (pCur->nOverlayType == 8 && !*(int*)&pCur->field_0x3c) {
+          bShow = FALSE;
         }
 
-        nThisOverlayId = pDVar1->neOverlayId;
-        if (nThisOverlayId == nOverlayIdSaved && bShow) {
-          iVar2 = (int)pDVar1->nRandomOffset >> 8;
-          if ((int)nThisOverlayId < 0) {
-            return;
-          }
-          if ((int)nThisOverlayId >= D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
-            return;
-          }
-
-          pOverlayTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay;
-          if (!(pOverlayTxt + nThisOverlayId)) {
+        eOverlayId nThisOverlayId = pCur->neOverlayId;
+        if (nThisOverlayId == nOverlayId && bShow) {
+          int nFrame = (int)pCur->nRandomOffset >> 8;
+          D2OverlayTxt* pOverlayTxt = (int)nThisOverlayId >= 0 && (int)nThisOverlayId < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize ? &D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay[nThisOverlayId] : nullptr;
+          if (!pOverlayTxt) {
             return;
           }
 
           memset(&sGfxData, 0, 0x48);
-          bAssigned = -1;
-          byOne = '\x01';
-          pAssignOut = &__frame0.nAssignResult;
-          sGfxData.nOverlayId = nOverlayIdSaved;
-          bAssigned = GfxUtil::DC6_AssignParams(&sGfxData, nullptr, nullptr, (uint32_t)D2Common::Units::GetDirection(__frame0.pUnitSaved), iVar2, pAssignOut, byOne, bAssigned);
-          if (!bAssigned) {
+          sGfxData.nOverlayId = nOverlayId;
+          if (!GfxUtil::DC6_AssignParams(&sGfxData, nullptr, nullptr, (uint32_t)D2Common::Units::GetDirection(pUnit), nFrame, &nAssignResult, 1, -1)) {
             return;
           }
 
-          nPass = nPassIdx;
-          if (iVar2 < (int)pDVar1->nFrameDelay >> 8) {
-            D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pDVar1->nOffsetX + nScreenX, pDVar1->nOffsetY + nScreenY, -0x80, (DRAWMODE)pOverlayTxt[nThisOverlayId].Trans, nullptr);
-            nPass = nPassIdx;
+          if (nFrame < (int)pCur->nFrameDelay >> 8) {
+            D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pCur->nOffsetX + nScreenX, pCur->nOffsetY + nScreenY, -0x80, (DRAWMODE)pOverlayTxt->Trans, nullptr);
           }
         }
       }
-
-      nPass++;
-      nPassIdx = nPass;
-    } while (nPass < 2);
+    }
 }
 
 void __stdcall DRAW_UNIT_States(D2UnitStrc * pUnit, int32_t nBlendMode, int32_t bSecondPass, int32_t nScreenX, int32_t nScreenY, int32_t bRaiseY) {
@@ -1372,15 +1340,8 @@ uint32_t __fastcall DrawItemGfx(D2UnitStrc * pUnit, int32_t nX, int32_t nY) {
       eDrawMode = DRAW_TRANSPARENT;
     }
 
-    int32_t nBlendMode = -1;
-    int32_t nDC6HeightTmp = D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block);
-    nDC6Height = nSavedX;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nSavedX, nDC6HeightTmp + nY, nBlendMode, eDrawMode, pPalette);
-    nDC6HeightTmp = 0;
-    nGoldAmount = D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block);
-    nDrawX = (nGoldAmount >> 1) + nY;
-    nGoldAmount = D2CMP::SRC::CelCmp::GetDC6Width(sGfxData.pDC6Block);
-    DRAW_UNIT_States(pUnit, 0xff, 0, (nGoldAmount >> 1) + nDC6Height, nDrawX, nDC6HeightTmp);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nSavedX, D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block) + nY, -1, eDrawMode, pPalette);
+    DRAW_UNIT_States(pUnit, 0xff, 0, ((uint32_t)D2CMP::SRC::CelCmp::GetDC6Width(sGfxData.pDC6Block) >> 1) + nSavedX, ((uint32_t)D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block) >> 1) + nY, 0);
     return 1;
 }
 

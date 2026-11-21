@@ -184,7 +184,6 @@ D2UnitStrc * __stdcall GetNearestTestedUnit(D2UnitStrc * pUnit, int32_t nX, int3
     int nRoomCount;
     int32_t nBestDist;
     D2RoomStrc** ppRoomList;
-    int32_t nLine;
     D2UnitStrc* pCandUnit;
     D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom) {
@@ -195,9 +194,8 @@ D2UnitStrc * __stdcall GetNearestTestedUnit(D2UnitStrc * pUnit, int32_t nX, int3
       DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppRoomList, &nRoomCount);
       pBestUnit = 0;
       nBestDist = 0xffff;
-      nLine = nRoomIdx;
       if (!nRoomIdx) {
-        nLine = 0x10000;
+        nRoomIdx = 0x10000;
       }
 
       /* FARPROC lpfn for IsBadCodePtr */ bBadPtr = IsBadCodePtr((FARPROC)nfpUnitTest);
@@ -206,12 +204,12 @@ D2UnitStrc * __stdcall GetNearestTestedUnit(D2UnitStrc * pUnit, int32_t nX, int3
         exit(-1);
       }
 
-      for (nRoomIdx = 0; nRoomIdx < nRoomCount; nRoomIdx++) {
-        bBadPtr = CheckRoomIfInRange(ppRoomList[nRoomIdx], nX, nY, nLine);
+      for (int i = 0; i < nRoomCount; i++) {
+        bBadPtr = CheckRoomIfInRange(ppRoomList[i], nX, nY, nRoomIdx);
         if (bBadPtr) {
-          for (pCandUnit = ppRoomList[nRoomIdx]->pUnitList; pCandUnit; pCandUnit = pCandUnit->pRoomNext) {
+          for (pCandUnit = ppRoomList[i]->pUnitList; pCandUnit; pCandUnit = pCandUnit->pRoomNext) {
             nDistToUnit = Collision::GetDistanceToXY(pCandUnit, nX, nY);
-            if (nDistToUnit < nLine && nDistToUnit < nBestDist) {
+            if (nDistToUnit < nRoomIdx && nDistToUnit < nBestDist) {
               nDist = (*nfpUnitTest)(pCandUnit, pUnit);
               if (nDist) {
                 pBestUnit = pCandUnit;

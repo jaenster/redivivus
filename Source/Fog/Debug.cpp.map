@@ -1330,7 +1330,7 @@
       ]
     },
     {
-      "name": "COMPRESS_Implode",
+      "name": "GetLogicalAddress",
       "address": "0040c520",
       "lines": [
         {
@@ -1340,7 +1340,7 @@
       ],
       "namespace": "Fog::Debug",
       "calledFunctions": [
-        "COMPRESS_Implode",
+        "GetLogicalAddress",
         "SStrCopy"
       ],
       "usedTypes": [
@@ -1484,7 +1484,7 @@
         "ExitOrCrashCleanUpJmp",
         "memset",
         "GetSourceLineWithRetry",
-        "COMPRESS_Implode",
+        "GetLogicalAddress",
         "strrchr",
         "LogWithCategory",
         "LogWithCategoryVarArgs",

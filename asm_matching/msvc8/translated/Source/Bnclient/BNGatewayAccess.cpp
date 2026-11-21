@@ -280,47 +280,27 @@ char * __fastcall SkipEOL(D2BNetGatewayAccessStr * pGatewayAccess, int, char * s
 }
 
 char * __fastcall FindSection(D2BNetGatewayAccessStr * pThis, int, char * szText1, char * szText2) {
-    char* pIniCursor = szText1;
-    char* szText2_00 = pIniCursor + strlen(pIniCursor);
-    pIniCursor = szText2_00 + 1;
-    size_t nSectionNameLen = (int)strlen(szText2);
-    char cCur = *szText1;
-    while (true) {
-      int nCmp;
-      if (cCur == '\0') {
-        return nullptr;
+    size_t nIniLen = strlen(szText1);
+    size_t nSectionNameLen = strlen(szText2);
+    char* pCur = szText1;
+    while (*pCur) {
+      while (*pCur && *pCur != '[') {
+        pCur++;
       }
 
-      cCur = *szText1;
-      while (true) {
-        if (cCur == '\0') {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x246);
-          exit(-1);
-        }
-        if (cCur == '[') {
-          break;
-        }
-
-        cCur = szText1[1];
-        szText1++;
+      if (!*pCur) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x246);
+        exit(-1);
       }
 
-      if (*szText1 == '\0') {
-        break;
+      if (!_strnicmp(pCur + 1, szText2, nSectionNameLen)) {
+        return vc8_thiscall(SkipEOL)(pThis, vc8_thiscall(SkipToEOL)(pThis, pCur + nSectionNameLen + 2, szText1 + nIniLen), szText1 + nIniLen);
       }
 
-      nCmp = _strnicmp(szText1 + 1, szText2, nSectionNameLen);
-      if (!nCmp) {
-        pIniCursor = vc8_thiscall(SkipEOL)(pThis, vc8_thiscall(SkipToEOL)(pThis, szText1 + (nSectionNameLen + 2), szText2_00), szText2_00);
-        return pIniCursor;
-      }
-
-      szText1 += nSectionNameLen;
-      cCur = *szText1;
+      pCur += nSectionNameLen;
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x246);
-    exit(-1);
+    return nullptr;
 }
 
 // Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.

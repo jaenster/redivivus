@@ -514,36 +514,25 @@ BOOL __fastcall SaveStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * p
 // Serialises hard skill point allocations for the player's class to the save buffer (magic header 0x6669, then one byte per class skill). Iterates all class skills via SKILLS_GetClassSkillByIndex and writes the base (hard) level only. Returns 0 on success, 1 if buffer too small, 2 if class ID invalid.
 // @sourcefile .\PLAYER\PlrSave2.cpp
 int __fastcall SaveSkills(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * pStartAddress, uint8_t * pEndAddress) {
-    int nHardPoints;
-    uint8_t* pHeader = *pStartAddress;
-    if (pHeader + (D2Common::ITEMS::Items::sgptDataTable->nSkillCountMaxPerClass + 2) > pEndAddress) {
+    uint8_t* pCursor = *pStartAddress;
+    if (pCursor + (D2Common::ITEMS::Items::sgptDataTable->nSkillCountMaxPerClass + 2) > pEndAddress) {
       return 1;
     }
 
-    pHeader[0] = 'i';
-    pHeader[1] = 'f';
-    uint8_t* pWriteCursor = pHeader + 2;
-    D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave2.cpp", 0x307);
-    uint32_t nClassId = GAME::Clients::GetPlayerClassId(pClient);
-    if ((int)nClassId >= 7) {
+    *(uint16_t*)pCursor = 0x6669;
+    pCursor += 2;
+    int nClassId = GAME::Clients::GetPlayerClassId(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave2.cpp", 0x307));
+    if (nClassId >= 7) {
       return 2;
     }
 
-    int iSkill = 0;
-    int32_t nTotalClassSkills = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
-    if (nTotalClassSkills > 0) {
-      eD2Skills eSkill;
-      do {
-        eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, iSkill);
-        nHardPoints = D2Common::Skills::GetSkillLevel(pUnit, D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1), 0);
-        *pWriteCursor = (uint8_t)nHardPoints;
-        pWriteCursor++;
-        iSkill++;
-        nTotalClassSkills = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
-      } while (iSkill < nTotalClassSkills);
+    for (int i = 0; i < D2Common::Skills::AmountOfSkillsByClassId(nClassId); i++) {
+      eD2Skills eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, i);
+      *pCursor = (uint8_t)D2Common::Skills::GetSkillLevel(pUnit, D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1), 0);
+      pCursor++;
     }
 
-    *pStartAddress = pWriteCursor;
+    *pStartAddress = pCursor;
     return 0;
 }
 
@@ -907,16 +896,13 @@ static int32_t __stdcall PLAYERSAVE_CreateNewCharacter(D2ClientStrc * pSaveConte
     pPlayerData->eLeftSkillId = SKILL_Attack;
     pPlayerData->eRightSkillId = SKILL_Attack;
     if (!byAct && pUnit) {
-      D2CharStatsTxt* pCharStatsTxt;
       nClassIdx = pUnit->nClassId;
-      if (nClassIdx >= 0 && nClassIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
-        pCharStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nClassIdx;
-        if (pCharStatsTxt && pCharStatsTxt->StartSkill) {
-          pDVar1 = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)pCharStatsTxt->StartSkill);
-          if (pDVar1) {
-            SKILLS::SkillsServer::Server_SelectSkill(pUnit, 0, (int)pCharStatsTxt->StartSkill, -1);
-            pPlayerData->eRightSkillId = (int)pCharStatsTxt->StartSkill;
-          }
+      D2CharStatsTxt* pCharStatsTxt = nClassIdx >= 0 && nClassIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nClassIdx : nullptr;
+      if (pCharStatsTxt && pCharStatsTxt->StartSkill) {
+        pDVar1 = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)pCharStatsTxt->StartSkill);
+        if (pDVar1) {
+          SKILLS::SkillsServer::Server_SelectSkill(pUnit, 0, (int)pCharStatsTxt->StartSkill, -1);
+          pPlayerData->eRightSkillId = (int)pCharStatsTxt->StartSkill;
         }
       }
     }

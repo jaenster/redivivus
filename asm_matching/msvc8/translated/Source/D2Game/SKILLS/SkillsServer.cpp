@@ -2557,48 +2557,38 @@ D2UnitStrc * __fastcall SKILLS_DropItemByCode(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Enumerates all units within nDistance of the caster's current target/cursor position and invokes ppfnProc(unit, nSkillLevel) on each. Uses SKILLS_GetTargetOrCursorPos for the origin, finds the best nearby room, runs FindAllMatchingUnitsInNeighboredRooms with nUnitFindFlags, then iterates the result array. Validates ppfnProc with IsBadCodePtr and halts with an unrecoverable error if invalid. Frees the unit-find data after iteration.
 void __fastcall SKILLS_ForEachUnitInRangeCallback(::SGAMEDATA * pGame, int32_t nUnitFindFlags, D2UnitStrc * pUnit, int32_t nSkillLevel, int32_t nDistance, fnSkillUnitProc ppfnProc) {
-    int _bIsBadCode;
-    bool bIsBadCode;
-    int nUnitIdx;
+    uint32_t nTargetX;
+    uint32_t nTargetY;
     D2UnitFindArgStrc sUnitFindArg;
     D2UnitFindDataStrc sUnitFindData;
-    uint32_t nCursorYPos;
-    D2UnitStrc* pUnit_00 = pUnit;
-    ::SGAMEDATA* pGameCopy = pGame;
     if (!ppfnProc) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1047);
       exit(-1);
     }
-
-    int32_t nResult = SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&pUnit, &nCursorYPos);
-    if (!nResult) {
+    if (!SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &nTargetY)) {
       return;
     }
 
     memset(&sUnitFindArg, 0, sizeof(sUnitFindArg));
-    D2UnitStrc* pTargetX = pUnit;
-    sUnitFindArg.pAttacker = pUnit_00;
-    sUnitFindArg.nX = (int)pUnit;
-    sUnitFindArg.nY = nCursorYPos;
-    sUnitFindArg.nDistance = nDistance;
-    uint32_t nTargetY = nCursorYPos;
     sUnitFindArg.nFlags = nUnitFindFlags;
-    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit_00), (int32_t)pTargetX, nTargetY);
+    sUnitFindArg.pAttacker = pUnit;
+    sUnitFindArg.nX = nTargetX;
+    sUnitFindArg.nY = nTargetY;
+    sUnitFindArg.nDistance = nDistance;
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nTargetX, nTargetY);
     if (!pRoom) {
       return;
     }
 
-    D2Common::Units::UnitFinds::InitializeUnitFindData(pGameCopy->pMemoryPool, &sUnitFindData, pRoom, (int32_t)pTargetX, nCursorYPos, nDistance, nullptr, &sUnitFindArg);
+    D2Common::Units::UnitFinds::InitializeUnitFindData(pGame->pMemoryPool, &sUnitFindData, pRoom, nTargetX, nTargetY, nDistance, nullptr, &sUnitFindArg);
     D2Common::Units::UnitFinds::UNITFINDS_FindCullRange(&sUnitFindData);
-    /* FARPROC lpfn for IsBadCodePtr */ _bIsBadCode = IsBadCodePtr((FARPROC)ppfnProc);
-    if (_bIsBadCode) {
+    if (IsBadCodePtr((FARPROC)ppfnProc)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1061);
       exit(-1);
     }
 
-    for (nUnitIdx = 0; nUnitIdx < sUnitFindData.nCountedUnits; nUnitIdx++) {
-      ::SGAMEDATA* pGame_00 = pGameCopy;
-      (*ppfnProc)(pGame_00, pUnit_00, sUnitFindData.pUnitsArray->aFoundUnitsList[nUnitIdx], nSkillLevel);
+    for (int i = 0; i < sUnitFindData.nCountedUnits; i++) {
+      (*ppfnProc)(pGame, pUnit, sUnitFindData.pUnitsArray->aFoundUnitsList[i], nSkillLevel);
     }
 
     D2Common::Units::UnitFinds::FreeUnitFindData(&sUnitFindData);
@@ -4358,13 +4348,6 @@ static void __stdcall SKILLS_InitAuraSkill(::SGAMEDATA * pGame, eD2Skills eSkill
 // Server-side handler that spends a skill point to level up eSkill on pUnit. Reads the skill-point cost from TXT (skpoints calc), deducts UNITSTAT_newskills, allocates the skill, updates passive skills, recalculates pet limits for players, broadcasts NET 0x21 (UpdateItemOskill) to the client, and applies any passive state. Returns 1 on success, 0 if insufficient points or invalid skill.
 // @sourcefile .\SKILLS\Skills.cpp
 BOOL __fastcall SKILL_AllocSkillPoint(D2UnitStrc * pUnit, eD2Skills eSkill) {
-    D2SkillStrc* pSkill;
-    int32_t nCurLevel;
-    ::SGAMEDATA* pGame;
-    eD2States eState;
-    uint8_t bRemove;
-    int nNewLevel;
-    eD2Skills eSkillCopy;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
@@ -4372,40 +4355,32 @@ BOOL __fastcall SKILL_AllocSkillPoint(D2UnitStrc * pUnit, eD2Skills eSkill) {
 
     int nSkillCost = 1;
     if (pSkillsTxt->skpoints != -1) {
-      pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);
-      if (pSkill) {
-        nCurLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-      } else {
-        nCurLevel = 0;
+      int nCurLevel = 0;
+      D2SkillStrc* pCurSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);
+      if (pCurSkill) {
+        nCurLevel = D2Common::Skills::GetSkillLevel(pUnit, pCurSkill, 1);
       }
 
       nSkillCost = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->skpoints, eSkill, nCurLevel);
     }
-
-    nCurLevel = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_newskills, 0);
-    if (nCurLevel < nSkillCost) {
+    if (D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_newskills, 0) < nSkillCost) {
       return 0;
     }
 
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_newskills, -nSkillCost, 0);
-    pSkill = D2Common::Skills::AllocSkill(pUnit, eSkill);
+    D2SkillStrc* pSkill = D2Common::Skills::AllocSkill(pUnit, eSkill);
     D2Common::Skills::SKILLS_UpdateAllPassiveSkills(pUnit);
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
-      pGame = UNIT::SUnit::GetGamePointer(pUnit);
-      PLAYER::PlayerPets::PETS_RecalculateAllPetLimits(pGame, pUnit);
+      PLAYER::PlayerPets::PETS_RecalculateAllPetLimits(UNIT::SUnit::GetGamePointer(pUnit), pUnit);
     }
     if (!pSkill) {
       D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_newskills, nSkillCost, 0);
       return 0;
     }
 
-    uint8_t nBaseAmount;
-    nNewLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 0);
-    nBaseAmount = (uint8_t)nNewLevel;
-    bRemove = 0;
-    eSkillCopy = eSkill;
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0xd73), pUnit, eSkillCopy, nBaseAmount, bRemove);
-    eState = D2Common::Skills::TXT_Skills_GetPassiveState(eSkill);
+    int nNewLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 0);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0xd73), pUnit, eSkill, nNewLevel, 0);
+    eD2States eState = D2Common::Skills::TXT_Skills_GetPassiveState(eSkill);
     if (eState != STATE_none) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 1);
     }

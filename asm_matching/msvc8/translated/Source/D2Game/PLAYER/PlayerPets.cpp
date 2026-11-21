@@ -1220,11 +1220,9 @@ void __fastcall PETS_SetMaxAndTrimExcess(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       return;
     }
 
-    int nCurPetCount = pDVar1->nPets2;
     pDVar1->nMax = nBaseMax;
-    while (nCurPetCount > nBaseMax && pDVar1->nPets2 > 0 && nIndex != 7) {
+    while (pDVar1->nPets2 > nBaseMax && pDVar1->nPets2 > 0 && nIndex != 7) {
       RemovePetByGuidAndNotify(pGame, pUnit, GetPetUidByIndex(nIndex, pUnit), 1);
-      nCurPetCount = pDVar1->nPets2;
     }
 }
 

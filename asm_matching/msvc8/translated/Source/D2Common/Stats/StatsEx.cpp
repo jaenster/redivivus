@@ -125,10 +125,8 @@ static D2StatStrc * __stdcall STATLIST_InsertStatIntoArray(D2StatInfoStrc * pSta
       return nullptr;
     }
     if (pStatInfo->wStatCount >= pStatInfo->wStatCapacity) {
-      short int nNewCapacity;
-      nNewCapacity = pStatInfo->wStatCapacity + 4;
-      pStatInfo->wStatCapacity = nNewCapacity;
-      pReallocBuf = (D2StatStrc*)D2_REALLOC_POOL_AT(pStatList, pStatInfo->pStatInfo, nNewCapacity * 8, ".\\Stats\\StatsEx.cpp", 0xe8);
+      pStatInfo->wStatCapacity += 4;
+      pReallocBuf = (D2StatStrc*)D2_REALLOC_POOL_AT(pStatList, pStatInfo->pStatInfo, pStatInfo->wStatCapacity * 8, ".\\Stats\\StatsEx.cpp", 0xe8);
       pStatInfo->pStatInfo = pReallocBuf;
     }
     if (nInsertPos < pStatInfo->wStatCount) {

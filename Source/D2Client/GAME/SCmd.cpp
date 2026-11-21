@@ -3510,39 +3510,19 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAE_WARDENDATA(D2GSPacketSrv0xAE * pByt
 static D2ServerCmdStrc * STRUCT_CreateAndPreprareServerCmd(D2UnitStrc * pUnit) {
     int nMaxPacketSize;
     if (!nD2PacketsClientBufferSize) {
-      int32_t* pTableEntry;
-      pTableEntry = &NET_D2GS_CLIENT_INCOMING[0].nExpectedSize;
-      nMaxPacketSize = 0;
-      do {
-        if ((D2NET_CLIENT_D2GStoCLT_Unit)pTableEntry[1] && *pTableEntry > nMaxPacketSize) {
-          nMaxPacketSize = *pTableEntry;
+      for (int i = 0; i < 175; i++) {
+        if (NET_D2GS_CLIENT_INCOMING[i].fpIncomingHandlerUnit && NET_D2GS_CLIENT_INCOMING[i].nExpectedSize > nD2PacketsClientBufferSize) {
+          nD2PacketsClientBufferSize = NET_D2GS_CLIENT_INCOMING[i].nExpectedSize;
         }
-        if (pTableEntry[4] && pTableEntry[3] > nMaxPacketSize) {
-          nMaxPacketSize = pTableEntry[3];
-        }
-        if (pTableEntry[7] && pTableEntry[6] > nMaxPacketSize) {
-          nMaxPacketSize = pTableEntry[6];
-        }
-        if (pTableEntry[10] && pTableEntry[9] > nMaxPacketSize) {
-          nMaxPacketSize = pTableEntry[9];
-        }
-        if (pTableEntry[0xd] && pTableEntry[0xc] > nMaxPacketSize) {
-          nMaxPacketSize = pTableEntry[0xc];
-        }
+      }
 
-        pTableEntry += 0xf;
-      } while ((intptr_t)pTableEntry < (intptr_t)((char*)&NET_D2GS_CLIENT_INCOMING + sizeof(NET_D2GS_CLIENT_INCOMING) + 4));
-
-      nD2PacketsClientBufferSize = nMaxPacketSize + 5;
+      nD2PacketsClientBufferSize += 5;
     }
 
     D2ServerCmdStrc* pServerCmd = UNIT::CUnit::GetServerCmd(pUnit);
     if (!pServerCmd) {
       pServerCmd = D2_NEW_AT(D2ServerCmdStrc, ".\\GAME\\SCmd.cpp", 0x1266);
-      pServerCmd->nBufferArraySize = 0;
-      pServerCmd->nUsedBuffersCount = 0;
-      pServerCmd->field2_0x8 = 0;
-      pServerCmd->aBuffers = 0;
+      memset(pServerCmd, 0, sizeof(D2ServerCmdStrc));
       UNIT::CUnit::SetServerCmd(pUnit, pServerCmd);
     }
 

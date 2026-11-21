@@ -662,8 +662,6 @@ void __fastcall Q36_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 
 // A5Q6 Eve of Destruction. fpActiveFilter: returns true if the given NPC/monster class should currently offer this quest's gossip (a "!" indicator). True for the Ancients statues 0x219..0x21b once A5Q5 cleared them and Anya not yet transformed; or, once quest Completed, for act-V NPCs (0x1ff/0x200/0x201/0x203/0x208/0x209) whose corresponding journal Step bit (Step0x04..Step0x09) is NOT yet set — i.e. the player still has someone to talk to about Baal. Class 0x208 also suppressed once Step0x10 set.
 bool __fastcall Q36_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    bool bQuestState;
-    eD2QuestState eQuestState;
     if (nTargetClassId >= MonsterUnitAncientStatue1 && nTargetClassId <= MonsterUnitAncientStatue1 + 0x2) {
       D2QuestDataStrc* pA5Q5QuestData;
       pA5Q5QuestData = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_RiteOfPassage);
@@ -672,42 +670,42 @@ bool __fastcall Q36_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId
       }
     }
 
-    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Completed);
-    if (BVar1 && true) {
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Completed)) {
       switch (nTargetClassId) {
         case MonsterUnitLarzuk:
-          eQuestState = QUESTSTATE_Step0x04;
-        break;
+          if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Step0x04)) {
+            return true;
+          }
+          break;
         case MonsterUnitDeckardCain6:
-          /* GetQuestState(QUEST_EveOfDestruction, 0xa=Step0x10) — NPC 0x208: suppress
-                         gossip once final Step0x10 (left act) set */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Step0x10);
-        if (BVar1) {
-          return false;
-        }
+          if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Step0x10)) {
+            return false;
+          }
 
-        eQuestState = QUESTSTATE_Step0x05;
-        break;
+          if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Step0x05)) {
+            return true;
+          }
+          break;
         case MonsterUnitMalah:
-          eQuestState = QUESTSTATE_Step0x06;
-        break;
+          if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Step0x06)) {
+            return true;
+          }
+          break;
         case MonsterUnitTyrael3:
-          eQuestState = QUESTSTATE_Step0x07;
-        break;
+          if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Step0x07)) {
+            return true;
+          }
+          break;
         case MonsterUnitQualkehk:
-          eQuestState = QUESTSTATE_Step0x08;
-        break;
+          if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Step0x08)) {
+            return true;
+          }
+          break;
         case MonsterUnitDrehya1:
-          eQuestState = QUESTSTATE_Step0x09;
-        break;
-        default:
-          return false;
-      }
-
-      /* GetQuestState(QUEST_EveOfDestruction, eStep) — per-NPC Step bit
-                         (0x1ff->Step0x04, 0x200->Step0x09, 0x201->Step0x06, 0x203->Step0x08,
-                         0x208->Step0x05, 0x209->Step0x07); offer gossip only if NOT yet set */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, eQuestState);
-      if (!BVar1) {
-        return true;
+          if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Step0x09)) {
+            return true;
+          }
+          break;
       }
     }
 

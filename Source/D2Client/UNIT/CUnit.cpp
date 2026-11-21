@@ -451,7 +451,6 @@ BOOL __fastcall WARP_IsPointInClickArea(D2UnitStrc * pUnit, int32_t nClickX, int
     int iVar1;
     int nPosY;
     int32_t nPosX;
-    eD2UnitType eUnitType;
     if (pUnit->eUnitType != UNIT_WARP) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x58b);
       exit(-1);
@@ -460,24 +459,8 @@ BOOL __fastcall WARP_IsPointInClickArea(D2UnitStrc * pUnit, int32_t nClickX, int
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     D2LvlWarpTxt* pShadowBounds = D2Common::DUNGEON::Dungeon::DUNGEON_GetLvlWarpTxtForWarpUnit(pRoom, pUnit);
     if (pShadowBounds) {
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nPosX = pUnit->pPath.pStaticPath->nPosX;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nPosX = 0;
-      }
-
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nPosY = pUnit->pPath.pStaticPath->nPosY;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nPosY = 0;
-      }
-
+      nPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+      nPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
       D2Common::Drlg::Transform::CoordsMapToScreen(&nPosX, &nPosY);
       nAreaLeft = pShadowBounds->SelectX + nPosX;
       iVar1 = pShadowBounds->SelectY + nPosY;
@@ -490,30 +473,12 @@ BOOL __fastcall WARP_IsPointInClickArea(D2UnitStrc * pUnit, int32_t nClickX, int
 }
 
 static uint32_t __stdcall CUNIT_IsClickInSpriteBounds(int32_t nClickY, D2UnitStrc * pUnit, D2ObjectsTxt * pObjectsTxt, int32_t nClickX) {
-    int nPosY;
-    int nPosX;
-    eD2UnitType nScreenX = pUnit->eUnitType;
-    if (nScreenX == UNIT_OBJECT || (int)nScreenX > 3 && (int)nScreenX <= 5) {
-      nPosX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nPosX = 0;
-    }
-
-    nScreenX = pUnit->eUnitType;
-    if (nScreenX == UNIT_OBJECT || (int)nScreenX > 3 && (int)nScreenX <= 5) {
-      nPosY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nPosY = 0;
-    }
-
+    int nPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    int nPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
     D2Common::Drlg::Transform::CoordsMapToScreen(&nPosX, &nPosY);
-    nPosX = pObjectsTxt->Left + nPosX;
-    nPosY = pObjectsTxt->Top + nPosY;
-    if (nClickX >= nPosX && nClickY >= nPosY && nClickX <= pObjectsTxt->Width + nPosX && nClickY <= pObjectsTxt->Height + nPosY) {
+    int nLeft = pObjectsTxt->Left + nPosX;
+    int nTop = pObjectsTxt->Top + nPosY;
+    if (nClickX >= nLeft && nClickY >= nTop && nClickX <= pObjectsTxt->Width + nLeft && nClickY <= pObjectsTxt->Height + nTop) {
       return 1;
     }
 
@@ -1312,18 +1277,21 @@ uint32_t __fastcall SKILL_IsTargetOwnedPet(D2UnitStrc * pUnit, int * pnSkillPara
     return (uint32_t)(nOwnerGUID == pUnit->nUnitGUID);
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
 // Returns 1 if pUnit has an allied-targeting skill (flags4 bit 2 set in skills.txt) equipped in either hand AND the skill target (pnSkillParams[3]) is in the same party/owned-by the caster. Returns 0 for non-player units unless pnSkillParams[1] matches. Used by skill targeting logic to allow friendly-fire bypass.
 // @sourcefile .\UNIT\CUnit.cpp
 uint32_t __fastcall SKILL_IsTargetAlliedUnit(D2UnitStrc * pUnit, int * pnSkillParams) {
     eD2Skills eSkillId;
-    bool bHasAlliedSkill = false;
-    if (!pUnit) {
+    BOOL bHasAlliedSkill = 0;
+    if (!pUnit || !pnSkillParams) {
       return 0;
     }
-    if (!pnSkillParams) {
-      return 0;
-    }
-    if (pUnit->eUnitType != UNIT_PLAYER && *pnSkillParams && *pnSkillParams != 1) {
+    if (GetTypeInline(pUnit) != UNIT_PLAYER && *pnSkillParams && *pnSkillParams != 1) {
       return 0;
     }
 
@@ -1332,12 +1300,19 @@ uint32_t __fastcall SKILL_IsTargetAlliedUnit(D2UnitStrc * pUnit, int * pnSkillPa
       eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\CUnit.cpp", 0xb7f);
       D2SkillsTxt* pSkillsTxt;
       if ((pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr) && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
-        bHasAlliedSkill = true;
+        bHasAlliedSkill = 1;
       }
     }
 
     pSkill = D2Common::Units::GetRightSkill(pUnit);
-    if ((!pSkill || (eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\CUnit.cpp", 0xb88) , (int)eSkillId < 0) || (int)eSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId) || !(*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkillId] + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) && !bHasAlliedSkill) {
+    if (pSkill) {
+      eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\CUnit.cpp", 0xb88);
+      D2SkillsTxt* pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
+      if (pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+        bHasAlliedSkill = 1;
+      }
+    }
+    if (!bHasAlliedSkill) {
       return 0;
     }
 

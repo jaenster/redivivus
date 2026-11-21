@@ -331,7 +331,6 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
 
 // Spawns outdoor level border presets (town transitions, caves, vertical dividers) for pLevel based on wilderness flags. Handles the central column divider (dwFlags bit 4), the four cardinal border exits (bits 7-10), and the mandatory town wayback preset (0x33/preset 15). Aborts with an unrecoverable error if the wayback preset fails to place. Skips level 0x27 (Harrogath interior).
 static void SpawnTownTransitionsAndCaves(D2DrlgLevelStrc * pLevel) {
-    D2DrlgLevelStrc* pLinkedLevel;
     int nMidColumn;
     if (pLevel->eD2LevelId == 0x27) {
       return;
@@ -362,8 +361,8 @@ static void SpawnTownTransitionsAndCaves(D2DrlgLevelStrc * pLevel) {
       return;
     }
     if (pLevel->eD2LevelId == 2) {
-      pLinkedLevel = GetLevelAndAlloc(pLevel->pDrlg, 1);
-      nMidColumn = Outdoors::SpawnPresetFarAway(pLevel, (D2DrlgCoordStrc*)&pLinkedLevel->sCoordinatesAndSize, 0x34, -1, 1, '\x0f');
+      D2DrlgCoordStrc* pCoords = (D2DrlgCoordStrc*)&GetLevelAndAlloc(pLevel->pDrlg, 1)->sCoordinatesAndSize;
+      nMidColumn = Outdoors::SpawnPresetFarAway(pLevel, pCoords, 0x34, -1, 1, '\x0f');
     } else {
       nMidColumn = Outdoors::SpawnOutdoorLevelPreset(pLevel, 0x33, -1, 1, '\x0f');
     }

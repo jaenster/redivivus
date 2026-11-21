@@ -7729,25 +7729,20 @@ BOOL __stdcall MAINMENU_OnPressShowGatewaySelect(D2ControlMsg * pControlMsg) {
     FORMS_CreateAnyFormFromListExEx(0x4c);
     D2BNetGatewayAccessStr* pGatewayAccess = (D2BNetGatewayAccessStr*)Launcher::gpBNetCallbacks->pfnBnetLoadAndReturn();
     int nSelectedLine = pGatewayAccess->nCurGatewayIdx;
-    int nGatewayIdx = 1;
-    if (0 < pGatewayAccess->nGatewayCount) {
-      char* pszGatewayName;
-      do {
-        pszGatewayName = Bnclient::BNGatewayAccess::Name(pGatewayAccess, nGatewayIdx);
-        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuGatewayListTextBox, pszGatewayName);
-        nGatewayIdx++;
-      } while (nGatewayIdx <= pGatewayAccess->nGatewayCount);
+    for (int nGatewayIdx = 1; nGatewayIdx <= pGatewayAccess->nGatewayCount; nGatewayIdx++) {
+      char* pszGatewayName = Bnclient::BNGatewayAccess::Name(pGatewayAccess, nGatewayIdx);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuGatewayListTextBox, pszGatewayName);
     }
 
     int32_t nScrollPos = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(gpMainMenuGatewayListTextBox);
     int32_t nVisibleLineCount = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetVisibleLineCount(gpMainMenuGatewayListTextBox);
-    nSelectedLine--;
-    if (nSelectedLine < nScrollPos || nSelectedLine - nScrollPos > nVisibleLineCount) {
-      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpMainMenuGatewayListTextBox, nSelectedLine);
-      nSelectedLine = 0;
+    int nLine = nSelectedLine - 1;
+    if (nLine < nScrollPos || nLine - nScrollPos > nVisibleLineCount) {
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpMainMenuGatewayListTextBox, nLine);
+      nLine = 0;
     }
 
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetSelectedLine(gpMainMenuGatewayListTextBox, nSelectedLine);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetSelectedLine(gpMainMenuGatewayListTextBox, nLine);
     UIMENU_ShowRealmNameOnButton();
     return 1;
 }

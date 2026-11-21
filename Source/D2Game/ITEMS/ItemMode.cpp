@@ -2693,6 +2693,12 @@ static void __stdcall ITEMMODE_MergeStackableItems(::SGAMEDATA * pGame, D2UnitSt
     }
 }
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
 // Server handler for stacking a stackable/socketable item onto another. Validates game and player unit, sends stackable-usage packets, then looks up both source and destination item units. If the destination is on the merc inventory page the operation is silently skipped. If IsItemSocketable confirms compatibility and class IDs match, calls ITEMMODE_MergeStackableItems, marks the destination with ITEMCMD_CURSOR_STACK_ITEM, upserts it in the update list, and refreshes the inventory. Returns 1 on success/handled, 0 if not applicable; calls ERROR_Halt on null game/player.
 // @sourcefile .\ITEMS\ItemMode.cpp
 BOOL __fastcall StackItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGUID, DWORD nScrollGUID, BOOL * pbBadParams) {
@@ -2734,7 +2740,7 @@ BOOL __fastcall StackItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGU
 
             bIsSocketable = D2Common::ITEMS::Items::ITEMS_AreStackablesEqual(pSrcItem, pDstItem);
             if (bIsSocketable) {
-              if (pSrcItem->nClassId == pDstItem->nClassId) {
+              if (GetClassIdInline(pSrcItem) == GetClassIdInline(pDstItem)) {
                 ITEMMODE_MergeStackableItems(pGame, pSrcItem, pDstItem, pUnit);
                 D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pDstItem, ITEMCMD_CURSOR_STACK_ITEM, 1);
                 D2Common::INVENTORY::Inventory::UpsertToUpdateList(pUnit->pInventory, pDstItem);

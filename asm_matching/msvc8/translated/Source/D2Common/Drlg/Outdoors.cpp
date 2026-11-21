@@ -551,39 +551,23 @@ static int32_t DRLGOUTDOOR_AllocPresetFileTracker(int32_t nLevelPrestId, D2DrlgL
 
 // Spawns an outdoor level preset at the given grid coordinates with specified preset ID and file index.
 void __fastcall SpawnOutdoorLevelPresetEx(D2DrlgLevelStrc * pLevel, int nX, int nY, int nPresetId, int nFileIndex, int bFlag) {
-    int nGridX;
-    int nGridEndX;
-    D2DrlgGridStrc* pDrlgGrid;
     D2DrlgLevelDataWildernessLevel* pOutdoorsData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
-    int32_t nPresetSizeX = Preset::GetSizeX(nPresetId);
-    int32_t nPresetSizeY = Preset::GetSizeY(nPresetId);
+    int nGridSizeX = Preset::GetSizeX(nPresetId) / 8;
+    int nGridSizeY = Preset::GetSizeY(nPresetId) / 8;
     if (nFileIndex == -1) {
       nFileIndex = DRLGOUTDOOR_AllocPresetFileTracker(nPresetId, pLevel);
     }
 
-    int nGridEndYInner = nPresetSizeY / 8 + nY;
-    if (nY < nGridEndYInner) {
-      int nY_00;
-      nGridEndX = nPresetSizeX / 8 + nX;
-      nY_00 = nY;
-      do {
-        if (nX < nGridEndX) {
-          pDrlgGrid = &pOutdoorsData->sGridOutdoor;
-          nGridX = nX;
-          do {
-            DrlgGrid::AlterGridFlag(pDrlgGrid, nGridX, nY_00, 0xf0000, 5);
-            DrlgGrid::AlterGridFlag(pDrlgGrid, nGridX, nY_00, nFileIndex << 0x10 | 0x200, 0);
-            if (bFlag && (nPresetId >= 4 && nPresetId <= 0xf || nPresetId - 0x16cU <= 0xb)) {
-              DrlgGrid::AlterGridFlag(pDrlgGrid, nGridX, nY_00, 1, 0);
-            }
-
-            DrlgGrid::AlterGridFlag(&pOutdoorsData->sGridPreset, nGridX, nY_00, 0, 3);
-            nGridX++;
-          } while (nGridX < nGridEndX);
+    for (int nGridY = nY; nGridY < nY + nGridSizeY; nGridY++) {
+      for (int nGridX = nX; nGridX < nX + nGridSizeX; nGridX++) {
+        DrlgGrid::AlterGridFlag(&pOutdoorsData->sGridOutdoor, nGridX, nGridY, 0xf0000, 5);
+        DrlgGrid::AlterGridFlag(&pOutdoorsData->sGridOutdoor, nGridX, nGridY, nFileIndex << 0x10 | 0x200, 0);
+        if (bFlag && (nPresetId >= 4 && nPresetId <= 0xf || nPresetId - 0x16cU <= 0xb)) {
+          DrlgGrid::AlterGridFlag(&pOutdoorsData->sGridOutdoor, nGridX, nGridY, 1, 0);
         }
 
-        nY_00++;
-      } while (nY_00 < nGridEndYInner);
+        DrlgGrid::AlterGridFlag(&pOutdoorsData->sGridPreset, nGridX, nGridY, 0, 3);
+      }
     }
 
     DrlgGrid::AlterGridFlag(&pOutdoorsData->sGridPreset, nX, nY, nPresetId, 3);

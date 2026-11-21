@@ -1069,14 +1069,9 @@ DWORD __fastcall PLAYER_CountPlayersWithFilter2(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Returns the weapon unit the player should use when casting the current skill, respecting dual-wield and weapon-switch rules. For non-dual-wield classes returns the equipped primary weapon. For dual-wield capable classes dispatches on SkillsTxt.weapsel: 2=off-hand preference with main-hand fallback if no valid off-hand, 3=switch-state dependent (reads nSeqFrame weapon-switch bit), 4=no weapon (returns null), default/1=primary then off-hand fallback. Returns the equipped default if the resolved weapon is broken or disabled.
 D2UnitStrc * __fastcall PLAYER_GetActiveWeaponForSkill(D2UnitStrc * pUnit) {
-    D2UnitStrc* pWeaponPrimary;
-    D2UnitStrc* pWeaponResult;
-    uint32_t bIsNotBroken;
-    uint32_t dwSkillFlags;
-    bool bIsWeaponSwitch;
+    D2UnitStrc* pEquippedWeapon;
     int32_t nWeaponSwitch;
     BOOL bIsDualWieldActive;
-    D2UnitStrc* pEquippedWeapon;
     if (!pUnit) {
       return nullptr;
     }
@@ -1086,74 +1081,52 @@ D2UnitStrc * __fastcall PLAYER_GetActiveWeaponForSkill(D2UnitStrc * pUnit) {
       return nullptr;
     }
 
-    D2UnitStrc* pWeaponSwitch = pUnit;
     D2Common::INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pEquippedWeapon, &nWeaponSwitch, &bIsDualWieldActive);
-    BOOL bCanDualWield = D2Common::Units::CanDualWield(pUnit);
-    if (bCanDualWield) {
-      D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
-      if (!pSkill) {
-        return pEquippedWeapon;
-      }
+    if (D2Common::Units::CanDualWield(pUnit)) {
+    D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
+    if (!pSkill) {
+      return pEquippedWeapon;
+    }
 
-      D2SkillsTxt* pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill);
-      if (!pSkillsTxt) {
-        return pEquippedWeapon;
-      }
+    D2SkillsTxt* pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill);
+    if (!pSkillsTxt) {
+      return pEquippedWeapon;
+    }
 
-      switch (pSkillsTxt->weapsel) {
-        case '\x02':
-          dwSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
+    D2UnitStrc* pWeaponResult = nullptr;
+    switch (pSkillsTxt->weapsel) {
+      case 2: {
+        uint32_t dwLeftHandFlag = D2Common::Skills::SKILL_GetFlags(pSkill) & 0x2000;
         pWeaponResult = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 5);
-        pWeaponPrimary = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 6);
-        if (!pWeaponResult || (bIsNotBroken = D2Common::ITEMS::Items::ITEMS_IsA(pWeaponResult, ITEMTYPE_Weapon) , !bIsNotBroken) || pWeaponPrimary && (bIsNotBroken = D2Common::ITEMS::Items::ITEMS_IsA(pWeaponPrimary, ITEMTYPE_Weapon) , bIsNotBroken && dwSkillFlags & 0x2000)) {
-          pWeaponResult = pWeaponPrimary;
+        D2UnitStrc* pWeaponLeft = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 6);
+        if (!pWeaponResult || !D2Common::ITEMS::Items::ITEMS_IsA(pWeaponResult, ITEMTYPE_Weapon) || pWeaponLeft && D2Common::ITEMS::Items::ITEMS_IsA(pWeaponLeft, ITEMTYPE_Weapon) && dwLeftHandFlag) {
+          pWeaponResult = pWeaponLeft;
         }
-
         break;
-        case '\x03':
-          dwSkillFlags = pWeaponSwitch->nSeqFrame >> 8 & 0x80000001;
-        bIsWeaponSwitch = !dwSkillFlags;
-        if ((int)dwSkillFlags < 0) {
-          bIsWeaponSwitch = (dwSkillFlags - 1 | -2) == -1;
+      }
+      case 3:
+        if ((pUnit->nSeqFrame >> 8) % 2) {
+          pWeaponResult = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 6);
+        } else {
+          pWeaponResult = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 5);
         }
-        if (!bIsWeaponSwitch) {
-          bIsNotBroken = 6;
-          pWeaponResult = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, bIsNotBroken);
+        break;
+      case 4:
+        pEquippedWeapon = nullptr;
+        break;
+      default:
+        pWeaponResult = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 5);
+        if (pWeaponResult && D2Common::ITEMS::Items::ITEMS_IsA(pWeaponResult, ITEMTYPE_Weapon)) {
           break;
         }
+      case 1:
+        pWeaponResult = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 6);
+    }
 
-        bIsNotBroken = 5;
-        pWeaponResult = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, bIsNotBroken);
-        break;
-        case '\x04':
-          pEquippedWeapon = 0;
-        pWeaponResult = 0;
-        break;
-        default:
-          pWeaponResult = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 5);
-        if (pWeaponResult) {
-          bIsNotBroken = D2Common::ITEMS::Items::ITEMS_IsA(pWeaponResult, ITEMTYPE_Weapon);
-          if (bIsNotBroken) {
-            break;
-          }
-        }
-
-        case '\x01':
-          bIsNotBroken = 6;
-        pWeaponResult = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, bIsNotBroken);
-      }
-
-      bIsNotBroken = D2Common::ITEMS::Items::ITEMS_IsA(pWeaponResult, ITEMTYPE_Weapon);
-      if (!bIsNotBroken) {
-        return pEquippedWeapon;
-      }
-
-      bCanDualWield = D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pWeaponResult);
-      if (!bCanDualWield) {
-        return pEquippedWeapon;
-      }
-
+    if (D2Common::ITEMS::Items::ITEMS_IsA(pWeaponResult, ITEMTYPE_Weapon) && D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pWeaponResult)) {
       return pWeaponResult;
+    }
+    return pEquippedWeapon;
     }
 
     return pEquippedWeapon;

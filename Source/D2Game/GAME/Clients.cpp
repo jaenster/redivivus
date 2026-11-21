@@ -133,6 +133,7 @@
 #include "Source/D2Game/GAME/Server.data.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/PLAYER/PlayerModes.h"
+#include "Source/D2Common/Units.twin.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -2343,34 +2344,28 @@ void __fastcall UnusedClientJoinGame(D2ClientStrc * pClient, int nClass) {
     return;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 void __fastcall UnusedClientJoinGame2(::SGAMEDATA * pGame, D2ClientStrc * pClient, uint8_t bActNo) {
-    int32_t _bActNo;
-    uint32_t nSpawnY = 0;
     D2UnitStrc* pUnit = CLIENTS_GetControlUnit(pClient, 0);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     pClient->nClass = bActNo;
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      _bActNo = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      _bActNo = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      _bActNo = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nSpawnY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nSpawnY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    }
-
-    int nOldUnitGUID = pUnit->nUnitGUID;
-    eUnitType = pUnit->eUnitType;
-    D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nOldUnitGUID);
+    int nSpawnX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    int nSpawnY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
+    D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), GetTypeInline(pUnit), GetGUIDInline(pUnit));
     UNIT::SUnit::FreeServerUnit(pGame, pUnit);
-    CLIENT_LoadCharacterAndSendGameData(pClient, pGame, 0, pRoom, _bActNo, nSpawnY);
-    CLIENT_PlacePlayerInRoom(pClient, pClient->pPlayer, pGame, pRoom, _bActNo, nSpawnY);
+    CLIENT_LoadCharacterAndSendGameData(pClient, pGame, 0, pRoom, nSpawnX, nSpawnY);
+    CLIENT_PlacePlayerInRoom(pClient, pClient->pPlayer, pGame, pRoom, nSpawnX, nSpawnY);
 }
 
 // pRoom in EAX, pClient in EDI: UNITS_SendUnitUpdateToClient for every unit in pRoom->pUnitList (pRoomNext chain); halts (line 98) on a NULL room.

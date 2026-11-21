@@ -241,10 +241,7 @@ void __fastcall D3DTEXCACHE_InvalidateByTilePtr(D3DTextureCacheStrc * pCache) {
 
 // @sourcefile .\Src\d3dTextureCache.cpp
 void __fastcall D3DTEXCACHE_Free(D3DTextureCacheStrc * pCache, BOOL bInvalidateAll) {
-    IUnknown* pComIface2;
-    IUnknown* pComIface;
-    D3DTextureCacheNodeStrc* pNodeBase;
-    int nNodeByteOffset = 0;
+    int nIndex;
     if (!pCache) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x71);
       exit(-1);
@@ -255,32 +252,20 @@ void __fastcall D3DTEXCACHE_Free(D3DTextureCacheStrc * pCache, BOOL bInvalidateA
         exit(-1);
       }
     } else {
-      int nNodeIndex;
-      nNodeIndex = 0;
-      if (-1 < pCache->nMaxNodes - 1) {
-        do {
-          pNodeBase = pCache->pNodeBuffer;
-          pComIface = *(IUnknown**)&pNodeBase[nNodeIndex].pTexture;
-          if (pComIface) {
-            pComIface->Release();
-            *(uint32_t*)&pNodeBase[nNodeIndex].pTexture = 0;
-          }
-
-          pComIface2 = *(IUnknown**)&pNodeBase[nNodeIndex].pSurface;
-          if (pComIface2) {
-            pComIface2->Release();
-            *(uint32_t*)&pNodeBase[nNodeIndex].pSurface = 0;
-          }
-
-          nNodeIndex++;
-          nNodeByteOffset += 0x20;
-        } while (nNodeIndex <= pCache->nMaxNodes - 1);
+      for (nIndex = 0; nIndex <= pCache->nMaxNodes - 1; nIndex++) {
+        D3DTextureCacheNodeStrc* pNode = &pCache->pNodeBuffer[nIndex];
+        if (pNode->pTexture) {
+          ((IUnknown*)pNode->pTexture)->Release();
+          pNode->pTexture = 0;
+        }
+        if (pNode->pSurface) {
+          ((IUnknown*)pNode->pSurface)->Release();
+          pNode->pSurface = 0;
+        }
       }
       if (bInvalidateAll) {
-        nNodeByteOffset = pCache->nUsedCount;
-        while (nNodeByteOffset) {
+        while (pCache->nUsedCount) {
           D3DTEXCACHE_InvalidateByTilePtr(pCache);
-          nNodeByteOffset = pCache->nUsedCount;
         }
       }
       if (pCache->pNodeBuffer) {

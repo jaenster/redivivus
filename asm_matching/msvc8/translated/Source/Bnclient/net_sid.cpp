@@ -795,7 +795,6 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
 // 9=profanity filter, 10=no alphabetic chars, 11=adjacent punctuation, 12=too much punctuation
 // Sets global g_nSIDResponseCount2 to map status to UI error message display.
 BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountCreate(char * pPacketData, size_t nPacketSize) {
-    char* szErrorMessage;
     if (nPacketSize < 4) {
       Debug::DEBUG_Trace("INVALID: AuthAccountCreate");
       return 0;
@@ -804,43 +803,42 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountCreate(char * pPacketData, si
     switch (*(uint32_t*)pPacketData) {
       case 0:
         g_nSIDResponseCount2 = 0;
-      szErrorMessage = "Account created";
-      break;
+        Debug::DEBUG_Trace("Account created");
+        break;
       case 4:
-        szErrorMessage = "Create failed: Name is in use";
-      g_nSIDResponseCount2 = 4;
-      break;
+        g_nSIDResponseCount2 = 4;
+        Debug::DEBUG_Trace("Create failed: Name is in use");
+        break;
       case 7:
         g_nSIDResponseCount2 = 1;
-      szErrorMessage = "Create failed: Name blank";
-      break;
+        Debug::DEBUG_Trace("Create failed: Name blank");
+        break;
       case 8:
         g_nSIDResponseCount2 = 2;
-      szErrorMessage = "Create failed: Name contains bad characters";
-      break;
+        Debug::DEBUG_Trace("Create failed: Name contains bad characters");
+        break;
       case 9:
         g_nSIDResponseCount2 = 3;
-      szErrorMessage = "Create failed: Name contains bad words";
-      break;
+        Debug::DEBUG_Trace("Create failed: Name contains bad words");
+        break;
       case 10:
         g_nSIDResponseCount2 = 6;
-      szErrorMessage = "Create failed: Name doesn\'t have alpha characters";
-      break;
+        Debug::DEBUG_Trace("Create failed: Name doesn\'t have alpha characters");
+        break;
       case 0xb:
         g_nSIDResponseCount2 = 7;
-      szErrorMessage = "Create failed: Name contains adjacent punctuation";
-      break;
+        Debug::DEBUG_Trace("Create failed: Name contains adjacent punctuation");
+        break;
       case 0xc:
         g_nSIDResponseCount2 = 8;
-      szErrorMessage = "Create failed: Name contains too much punctuation";
-      break;
+        Debug::DEBUG_Trace("Create failed: Name contains too much punctuation");
+        break;
       default:
-        szErrorMessage = "Create failed: unknown result";
-      g_nSIDResponseCount2 = 4;
-      break;
+        g_nSIDResponseCount2 = 4;
+        Debug::DEBUG_Trace("Create failed: unknown result");
+        break;
     }
 
-    Debug::DEBUG_Trace(szErrorMessage);
     g_SIDPacketResponseFlags[0x52] = 1;
     return 1;
 }

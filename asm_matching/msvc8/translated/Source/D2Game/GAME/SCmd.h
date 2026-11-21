@@ -477,7 +477,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x95_PLAYERCOMMONSTATCHANGE_MEDIUM(struct D
 // Server-to-client walk verification. Opcode 0x96.
 void __fastcall NET_D2GS_SERVER_Send_0x96_PLAYERCOMMONSTATCHANGE_SMALL(struct D2ClientStrc * pClient, uint16_t nStamina, uint16_t nX, uint16_t nY, uint8_t nDeltaX, uint8_t nDeltaY);
 // @sourcefile .\GAME\SCmd.cpp
-void __fastcall NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, eD2Skills eSkill, uint8_t nBaseAmount, uint8_t bRemove);
+void __fastcall NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint16_t eSkill, uint8_t nBaseAmount, uint8_t bRemove);
 void __fastcall NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(struct D2ClientStrc * pClient, uint8_t eUnitType, int32_t nUnitGUID, eD2Skills eSkill, uint8_t nNewQuantity);
 // Server-to-client set skill assignment. Opcode 0x23.
 void __fastcall NET_D2GS_SERVER_Send_0x23_SetSkill(struct D2ClientStrc * pClient, uint8_t nUnitType, uint32_t dwUnitGUID, uint8_t nSkillSlot, uint16_t wSkill, uint32_t dwReserved);
@@ -486,7 +486,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x23_SetSkill(struct D2ClientStrc * pClient
 void __fastcall NET_D2GS_SERVER_Send_0x94_SETALLSKILLS(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit);
 // Builds and sends S2C packet 0x93 (8 bytes) to adjust skill level bonuses filtered by element type and skill tree page. Used for item mods like "+1 to Fire Skills" or "+2 to [class] Skill Tab". If bAllPages is 0, nSkillPage is overridden to 4 (all pages). Appears to be dead code in 1.14d — zero callers, superseded by packet 0x94 bulk skill sync.
 void __fastcall NET_D2GS_SERVER_SendSkillTabBonusDelta(struct D2ClientStrc * pClient, uint32_t dwPlayerGUID, int8_t nBonusDelta, uint8_t neSkillEType, int32_t bAllPages, uint8_t nSkillPage);
-void Unreferenced_0053c730();
+void __stdcall Unreferenced_0053c730(int32_t nUnused1, int32_t nUnused2, int32_t nUnused3);
 void __fastcall NET_D2GS_SERVER_Send_0x26_CHATSTART(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x26 * pPacket);
 void __fastcall NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG(struct D2ClientStrc * pClient, struct D2Packet0x5aEventStructure * pEventPacket);
 void __fastcall NET_D2GS_SERVER_Send_0x27_NpcInfo(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x27 * pPacket);

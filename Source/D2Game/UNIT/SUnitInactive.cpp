@@ -1398,34 +1398,34 @@ static void __stdcall SUNITINACTIVE_SaveInactiveUnit(::SGAMEDATA * pGame, D2Unit
 // Iterates all 5 acts in pGame->pInactiveUnitList and frees every D2InactiveUnitListStrc node, along with its linked D2InactiveUnitRecordStrc and D2InactiveItemRecordStrc chains and any inactive monster sub-list, releasing all memory back to the game pool.
 // @sourcefile .\UNIT\SUnitInactive.cpp
 void __fastcall SUNITINACTIVE_FreeAllInactiveLists(::SGAMEDATA * pGame) {
-    D2InactiveItemRecordStrc* pMemoryToFree;
-    D2InactiveUnitRecordStrc* pCurUnitRecord;
-    D2InactiveItemRecordStrc* pNextItemRecord;
-    D2InactiveUnitListStrc* pNextList;
-    D2InactiveUnitRecordStrc* pNextUnitRecord;
+    D2InactiveUnitListStrc* pList;
+    D2InactiveUnitListStrc* pFreeList;
+    D2InactiveUnitRecordStrc* pUnitRecord;
+    D2InactiveUnitRecordStrc* pFreeUnitRecord;
+    D2InactiveItemRecordStrc* pItemRecord;
+    D2InactiveItemRecordStrc* pFreeItemRecord;
     D2InactiveUnitListStrc** ppActList = pGame->pInactiveUnitList;
-    for (int nActsRemaining = 0; nActsRemaining < 5; nActsRemaining++) {
-      D2InactiveUnitListStrc* pCurList;
-      pCurList = *ppActList;
-      while (pCurList) {
-        pNextList = pCurList->pNext;
-        pCurUnitRecord = pCurList->pInactiveUnits;
-        while (pCurUnitRecord) {
-          pNextUnitRecord = pCurUnitRecord->pNext;
-          D2_FREE_POOL_AT(pGame->pMemoryPool, pCurUnitRecord, ".\\UNIT\\SUnitInactive.cpp", 0x29a);
-          pCurUnitRecord = pNextUnitRecord;
+    for (int nAct = 0; nAct < 5; nAct++) {
+      pList = *ppActList;
+      while (pList) {
+        pFreeList = pList;
+        pList = pList->pNext;
+        pUnitRecord = pFreeList->pInactiveUnits;
+        while (pUnitRecord) {
+          pFreeUnitRecord = pUnitRecord;
+          pUnitRecord = pUnitRecord->pNext;
+          D2_FREE_POOL_AT(pGame->pMemoryPool, pFreeUnitRecord, ".\\UNIT\\SUnitInactive.cpp", 0x29a);
         }
 
-        pMemoryToFree = pCurList->pInactiveItems;
-        while (pMemoryToFree) {
-          pNextItemRecord = pMemoryToFree->pNext;
-          D2_FREE_POOL_AT(pGame->pMemoryPool, pMemoryToFree, ".\\UNIT\\SUnitInactive.cpp", 0x2a4);
-          pMemoryToFree = pNextItemRecord;
+        pItemRecord = pFreeList->pInactiveItems;
+        while (pItemRecord) {
+          pFreeItemRecord = pItemRecord->pNext;
+          D2_FREE_POOL_AT(pGame->pMemoryPool, pItemRecord, ".\\UNIT\\SUnitInactive.cpp", 0x2a4);
+          pItemRecord = pFreeItemRecord;
         }
 
-        SUNITINACTIVE_FreeInactiveMonsterList(pGame, pCurList);
-        D2_FREE_POOL_AT(pGame->pMemoryPool, pCurList, ".\\UNIT\\SUnitInactive.cpp", 0x2ab);
-        pCurList = pNextList;
+        SUNITINACTIVE_FreeInactiveMonsterList(pGame, pFreeList);
+        D2_FREE_POOL_AT(pGame->pMemoryPool, pFreeList, ".\\UNIT\\SUnitInactive.cpp", 0x2ab);
       }
 
       ppActList++;

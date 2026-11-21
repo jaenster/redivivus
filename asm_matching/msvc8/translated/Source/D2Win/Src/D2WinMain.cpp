@@ -1481,7 +1481,6 @@ void __stdcall D2WIN_TakeScreenshotMsgHandler(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall INPUT_FormMouseHandler(D2UIMouseMsgStrc * pMsg) {
-    int nMouseX;
     MOUSE_CaptureMousePosition(pMsg);
     BOOL bHandled;
     bHandled = D2WinPopup::D2WINPOPUP_IsActiveAndVisible();
@@ -1504,38 +1503,26 @@ void __stdcall INPUT_FormMouseHandler(D2UIMouseMsgStrc * pMsg) {
 
       case 0x204:
         gbMouseButtonDown = 1;
-      nMouseX = nPosX;
-      if (pControl) {
-        do {
-          if (pControl->fpHitTest) {
-            bHandled = pControl->fpHitTest(pControl);
-            nMouseX = nPosX;
+      for (; pControl; pControl = pControl->pNext) {
+        BOOL bHit;
+        if (pControl->fpHitTest) {
+          bHit = pControl->fpHitTest(pControl);
+        } else {
+          int nLeft = pControl->dwPosX;
+          int nBottom = pControl->dwPosY;
+          bHit = nPosX >= nLeft && nPosY >= nBottom - pControl->dwSizeY && nPosX < pControl->dwSizeX + nLeft && nPosY < nBottom;
+        }
+        if (bHit) {
+          pMsg->hWnd = (HWND)pControl;
+          if (pControl->fpPush) {
+            D2WinButton::gnFormControlCount++;
+            bHandled = pControl->fpPush((D2ControlMsg*)pMsg);
+            D2WinButton::gnFormControlCount--;
             if (bHandled) {
-              push_hit_control:
-              pMsg->hWnd = (HWND)pControl;
-              nMouseX = nPosX;
-              if (pControl->fpPush) {
-                D2WinButton::gnFormControlCount++;
-                bHandled = pControl->fpPush((D2ControlMsg*)pMsg);
-                D2WinButton::gnFormControlCount--;
-                nMouseX = nPosX;
-                if (bHandled) {
-                  break;
-                }
-              }
-            }
-          } else {
-            if (nMouseX >= pControl->dwPosX && nPosY >= pControl->dwPosY - pControl->dwSizeY && nMouseX < pControl->dwSizeX + pControl->dwPosX && nPosY < pControl->dwPosY) {
-              goto push_hit_control;
+              break;
             }
           }
-
-          pControl = pControl->pNext;
-          if (!pControl) {
-            Storm::SMsgBreakHandlerChain(pMsg);
-            return;
-          }
-        } while (true);
+        }
       }
 
       break;

@@ -95,6 +95,7 @@ static void __stdcall GOLD_HandleStashGoldTransaction(int32_t nGoldAmount, ::SGA
     uint32_t nGoldLimit;
     uint32_t nBankGold;
     eD2UnitType eInteractUnitType;
+    uint32_t nInteractGUID;
     D2UnitStrc* pStashUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, nUnitGUID);
     if (!(pStashUnit && pStashUnit->nClassId == 0x10b)) {
       return;
@@ -119,50 +120,49 @@ static void __stdcall GOLD_HandleStashGoldTransaction(int32_t nGoldAmount, ::SGA
     if (!bIsInTown) {
       return;
     }
-    if (nStashAction != 0x12) {
-      if (nStashAction != 0x13) {
-        if (nStashAction == 0x14 && nGoldAmount > 0) {
-          nCurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-          if (nGoldAmount <= nCurrentGold) {
-            nGoldLimit = D2Common::Units::GetStashGoldLimit(pUnit);
-            nBankGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_goldbank, 0);
-            if (nBankGold + nGoldAmount <= nGoldLimit) {
-              UNIT::Party::ChangeGoldForPlayer(pUnit, UNITSTAT_gold, -nGoldAmount);
-              UNIT::Party::ChangeGoldForPlayer(pUnit, UNITSTAT_goldbank, nGoldAmount);
-              return;
-            }
-            if (nBankGold < nGoldLimit) {
-              UNIT::Party::ChangeGoldForPlayer(pUnit, UNITSTAT_goldbank, nGoldLimit - nBankGold);
-              UNIT::Party::ChangeGoldForPlayer(pUnit, UNITSTAT_gold, nBankGold - nGoldLimit);
-              return;
-            }
-          }
-        }
-      } else {
-        if (nGoldAmount > 0) {
-          nCurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_goldbank, 0);
-          if (nGoldAmount <= nCurrentGold) {
-            nCurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-            nGoldLimit = D2Common::Units::GetInventoryGoldLimit(pUnit);
-            if (nCurrentGold + nGoldAmount <= (int)nGoldLimit) {
-              ITEMS::Items::Drop::ITEM_GiveGoldOrDrop(pGame, pUnit, nGoldAmount);
-              UNIT::Party::ChangeGoldForPlayer(pUnit, UNITSTAT_goldbank, -nGoldAmount);
-              return;
-            }
-
-            UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x13, pUnit);
-            return;
-          }
-        }
-      }
-    } else {
-      uint32_t nInteractGUID;
+    switch (nStashAction) {
+    case 0x12: {
       bIsInTown = UNIT::SUnit::GetInteractInfo(pUnit, &eInteractUnitType, &nInteractGUID);
       if (bIsInTown && eInteractUnitType == UNIT_OBJECT) {
         UNIT::SUnit::ClearInteractInfo(pUnit);
       }
 
       ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit);
+      return;
+    }
+    case 0x13:
+      if (nGoldAmount > 0) {
+        nCurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_goldbank, 0);
+        if (nGoldAmount <= nCurrentGold) {
+          if (D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0) + nGoldAmount <= (int)D2Common::Units::GetInventoryGoldLimit(pUnit)) {
+            ITEMS::Items::Drop::ITEM_GiveGoldOrDrop(pGame, pUnit, nGoldAmount);
+            UNIT::Party::ChangeGoldForPlayer(pUnit, UNITSTAT_goldbank, -nGoldAmount);
+            return;
+          }
+
+          UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x13, pUnit);
+          return;
+        }
+      }
+      return;
+    case 0x14:
+      if (nGoldAmount > 0) {
+        nCurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
+        if (nGoldAmount <= nCurrentGold) {
+          nGoldLimit = D2Common::Units::GetStashGoldLimit(pUnit);
+          nBankGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_goldbank, 0);
+          if (nBankGold + nGoldAmount > nGoldLimit) {
+            if (nBankGold < nGoldLimit) {
+              UNIT::Party::ChangeGoldForPlayer(pUnit, UNITSTAT_goldbank, nGoldLimit - nBankGold);
+              UNIT::Party::ChangeGoldForPlayer(pUnit, UNITSTAT_gold, nBankGold - nGoldLimit);
+            }
+          } else {
+            UNIT::Party::ChangeGoldForPlayer(pUnit, UNITSTAT_gold, -nGoldAmount);
+            UNIT::Party::ChangeGoldForPlayer(pUnit, UNITSTAT_goldbank, nGoldAmount);
+          }
+        }
+      }
+      return;
     }
 }
 

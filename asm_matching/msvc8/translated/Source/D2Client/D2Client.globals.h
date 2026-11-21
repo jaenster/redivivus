@@ -289,7 +289,6 @@ extern uint32_t gbInvBodySlotUnderCursorExists;
 extern int g_nCurrentInventoryPage;
 extern D2UnitStrc * pItemToDescribe;
 extern uint32_t gbInvExpansionTabVisible;
-extern uint32_t gbTradeConfirmationPending;
 extern uint32_t gpInvItemDescPending;
 }}} // namespace D2Client::UI::Inv
 namespace D2Client { namespace UI { namespace ListBox { namespace ListBoxImplementation {

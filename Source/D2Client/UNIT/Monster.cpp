@@ -1453,9 +1453,13 @@ static void MONSTER_CastMissileAtTarget(D2UnitStrc * pUnit) {
 
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 0x20;
-    if ((int)eMissileId >= 0x3f && (int)eMissileId <= 0x42) {
-      sSkillArg.nFlags = 0x34;
-      sSkillArg.nVelocityOverride = 2;
+    switch ((int)eMissileId) {
+      case 0x3f:
+      case 0x40:
+      case 0x41:
+      case 0x42:
+        sSkillArg.nFlags = 0x34;
+        sSkillArg.nVelocityOverride = 2;
     }
 
     sSkillArg.pOwner = pUnit;
@@ -2097,29 +2101,26 @@ static void MONSTER_SpawnDeathEffectMissiles(D2UnitStrc * pUnit) {
       return;
     }
 
-    BOOL eUberState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uberminion);
-    sSkillArg.pOwner = pUnit;
-    sSkillArg.pMissile = pUnit;
-    if (eUberState) {
-      eUberState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-      if (!eUberState) {
-        memset(&sSkillArg, 0, 0x5c);
-        sSkillArg.nFlags = 0x2020;
-        sSkillArg.nSkillLevel = 1;
-        sSkillArg.nMissileTxtNo = MISSILE_Suicidefireexplode;
-        Missile::MakeMissile(&sSkillArg);
-        sSkillArg.nMissileTxtNo = MISSILE_Suicidecorpseexplode;
-        Missile::MakeMissile(&sSkillArg);
-        return;
-      }
+    if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uberminion) && !D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze)) {
+      memset(&sSkillArg, 0, 0x5c);
+      sSkillArg.nFlags = 0x2020;
+      sSkillArg.pOwner = pUnit;
+      sSkillArg.pMissile = pUnit;
+      sSkillArg.nSkillLevel = 1;
+      sSkillArg.nMissileTxtNo = MISSILE_Suicidefireexplode;
+      Missile::MakeMissile(&sSkillArg);
+      sSkillArg.nMissileTxtNo = MISSILE_Suicidecorpseexplode;
+      Missile::MakeMissile(&sSkillArg);
+      return;
     }
 
-    D2MonStats2Txt* pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
-    uint8_t byMonHeight = pMonStats2->Height;
+    int nMissileId = (uint8_t)D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId)->Height + MISSILE_Monglacialspike;
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 0x2020;
+    sSkillArg.pOwner = pUnit;
+    sSkillArg.pMissile = pUnit;
     sSkillArg.nSkillLevel = 1;
-    sSkillArg.nMissileTxtNo = byMonHeight + MISSILE_Monglacialspike;
+    sSkillArg.nMissileTxtNo = nMissileId;
     Missile::MakeMissile(&sSkillArg);
     sSkillArg.nMissileTxtNo = MISSILE_Icebreaksmoke;
     Missile::MakeMissile(&sSkillArg);

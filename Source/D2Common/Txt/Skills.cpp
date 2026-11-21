@@ -4019,14 +4019,14 @@ void __stdcall STRUCT_FillSkillsList(D2UnitStrc * pUnit) {
     }
 
     D2CharStatsTxt* pCharStatsTxt;
-    pCharStatsTxt = ITEMS::Items::sgptDataTable->pTxtCharStats;
-    if (!(pCharStatsTxt + nUnitClassId)) {
+    pCharStatsTxt = &ITEMS::Items::sgptDataTable->pTxtCharStats[nUnitClassId];
+    if (!pCharStatsTxt) {
       return;
     }
 
     AllocSkill(pUnit, SKILL_Attack);
     short int* pClassSkillEntry;
-    pClassSkillEntry = pCharStatsTxt[nUnitClassId].Skill;
+    pClassSkillEntry = pCharStatsTxt->Skill;
     for (nUnitClassId = 0; nUnitClassId < 10; nUnitClassId++) {
       short int nClassSkillId;
       nClassSkillId = *pClassSkillEntry;

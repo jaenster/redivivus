@@ -292,6 +292,12 @@ BOOL __fastcall Skills_SrvDoFunc_127_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc *
     return 1;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
 // SrvDoFunc 128: monster-side summon skill. Gets the skill's target unit, calculates a game-frame deadline via calc[0], issues CreateMinion AI command, and optionally applies srvoverlay to the target. Returns FALSE if no valid target or caster is not a monster.
 BOOL __fastcall Skills_SrvDoFunc_128_MonsterCreateMinion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2AiCmdArgumentsStrc sAiCmd;
@@ -300,22 +306,25 @@ BOOL __fastcall Skills_SrvDoFunc_128_MonsterCreateMinion(::SGAMEDATA * pGame, D2
       return 0;
     }
 
-    ::SGAMEDATA* pGameLocal = pGame;
     D2UnitStrc* pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    if (!(pTargetUnit && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
+    if (!pTargetUnit) {
+      return 0;
+    }
+
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       return 0;
     }
 
     sAiCmd.nCmdId = 1;
     sAiCmd.nCmdArg1 = pTargetUnit->eUnitType;
     sAiCmd.nCmdArg2 = pTargetUnit->nUnitGUID;
-    sAiCmd.nCmdArg3 = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[0], eSkill, nSkillLvl);
-    if (sAiCmd.nCmdArg3 < 1) {
-      sAiCmd.nCmdArg3 = 1;
+    int nDuration = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[0], eSkill, nSkillLvl);
+    if (nDuration < 1) {
+      nDuration = 1;
     }
 
-    sAiCmd.nCmdArg3 = pGameLocal->dwGameFrame + sAiCmd.nCmdArg3;
-    Ai::AiGeneral::CreateMinion(pGameLocal, pUnit, &sAiCmd);
+    sAiCmd.nCmdArg3 = pGame->dwGameFrame + nDuration;
+    Ai::AiGeneral::CreateMinion(pGame, pUnit, &sAiCmd);
     short int nOverlayId = pSkillRecord->srvoverlay;
     if (nOverlayId > 0 && (int)nOverlayId < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
       D2Common::Units::SetOverlay(pTargetUnit, (int)nOverlayId, 0);
@@ -764,15 +773,17 @@ BOOL __fastcall Skills_SrvDoFunc_134_AreaExplosionAttack(::SGAMEDATA * pGame, D2
     D2SkillsTxt* pSkillRecord;
     D2DamageStrc sDamage;
     pSkillRecord = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (pSkillRecord && pSkillRecord->srvmissile[1] > 0 && (int)pSkillRecord->srvmissile[1] < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+    int nMissileId;
+    if (pSkillRecord && (nMissileId = pSkillRecord->srvmissile[1]) > 0 && nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       int32_t nAuraRange;
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
 
       memset(&sDamage, 0, 0x70);
+      sDamage.dwHitFlags |= 1;
       sDamage.wResultFlags |= pSkillRecord->ResultFlags;
-      sDamage.dwHitFlags = sDamage.dwHitFlags | 1U | pSkillRecord->HitFlags;
+      sDamage.dwHitFlags |= pSkillRecord->HitFlags;
       if (pSkillRecord->HitClass) {
         sDamage.dwHitClass = pSkillRecord->HitClass;
       }

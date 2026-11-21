@@ -2279,7 +2279,7 @@ BOOL __fastcall Skills_SrvDoFunc_109_MonsterFrenzyAttack(::SGAMEDATA * pGame, D2
 
 // Monster skill server do-func: fires a missile whose ID is srvmissilea offset by the monster's Components[10] body-part variant. Requires a valid target. Chooses SKILLS_CreateMissileFromUnit vs CreatingAMissile based on skill flags bit 1.
 BOOL __fastcall Skills_SrvDoFunc_148_FireMissileBodyPart10(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    uint32_t nBodyPartComponent;
+    uint8_t nBodyPartComponent;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
@@ -2290,30 +2290,30 @@ BOOL __fastcall Skills_SrvDoFunc_148_FireMissileBodyPart10(::SGAMEDATA * pGame, 
       return 0;
     }
 
-    int nBaseMissileId = (int)pSkillsTxt->srvmissile[1];
-    if (!(nBaseMissileId >= 0 && nBaseMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
+    int nMissileId = (int)pSkillsTxt->srvmissile[1];
+    if (!(nMissileId >= 0 && nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster) {
       nBodyPartComponent = 0;
     } else {
-      nBodyPartComponent = (uint32_t)pUnit->pUnitData.pUnitDataMonster->Components[10];
+      nBodyPartComponent = pUnit->pUnitData.pUnitDataMonster->Components[10];
     }
 
-    eMissilesId eFinalMissileId = nBaseMissileId + nBodyPartComponent;
-    if ((int)eFinalMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+    nMissileId += nBodyPartComponent;
+    if (nMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
 
-    D2MissilesTxt* pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(eFinalMissileId);
+    D2MissilesTxt* pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById((eMissilesId)nMissileId);
     if (pMissileTxt) {
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
       if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
-        SkillsServer::SKILLS_CreateMissileFromUnit(pGame, eFinalMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
+        SkillsServer::SKILLS_CreateMissileFromUnit(pGame, (eMissilesId)nMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       } else {
-        SkillsServer::CreatingAMissile(pGame, eFinalMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
+        SkillsServer::CreatingAMissile(pGame, (eMissilesId)nMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       }
 
       return 1;
@@ -2324,7 +2324,7 @@ BOOL __fastcall Skills_SrvDoFunc_148_FireMissileBodyPart10(::SGAMEDATA * pGame, 
 
 // Monster skill server do-func: fires a missile whose ID is srvmissilea offset by the monster's Components[11] body-part variant. Identical logic to _148 but reads Components[0xb] instead of Components[10]. Requires a valid target; chooses create path by skill flags bit 1.
 BOOL __fastcall Skills_SrvDoFunc_149_FireMissileBodyPart11(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    uint32_t nBodyPartComponent;
+    uint8_t nBodyPartComponent;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
@@ -2335,30 +2335,30 @@ BOOL __fastcall Skills_SrvDoFunc_149_FireMissileBodyPart11(::SGAMEDATA * pGame, 
       return 0;
     }
 
-    int nBaseMissileId = (int)pSkillsTxt->srvmissile[1];
-    if (!(nBaseMissileId >= 0 && nBaseMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
+    int nMissileId = (int)pSkillsTxt->srvmissile[1];
+    if (!(nMissileId >= 0 && nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster) {
       nBodyPartComponent = 0;
     } else {
-      nBodyPartComponent = (uint32_t)pUnit->pUnitData.pUnitDataMonster->Components[0xb];
+      nBodyPartComponent = pUnit->pUnitData.pUnitDataMonster->Components[0xb];
     }
 
-    eMissilesId eFinalMissileId = nBaseMissileId + nBodyPartComponent;
-    if ((int)eFinalMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+    nMissileId += nBodyPartComponent;
+    if (nMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
 
-    D2MissilesTxt* pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(eFinalMissileId);
+    D2MissilesTxt* pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById((eMissilesId)nMissileId);
     if (pMissileTxt) {
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
       if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
-        SkillsServer::SKILLS_CreateMissileFromUnit(pGame, eFinalMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
+        SkillsServer::SKILLS_CreateMissileFromUnit(pGame, (eMissilesId)nMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       } else {
-        SkillsServer::CreatingAMissile(pGame, eFinalMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
+        SkillsServer::CreatingAMissile(pGame, (eMissilesId)nMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       }
 
       return 1;

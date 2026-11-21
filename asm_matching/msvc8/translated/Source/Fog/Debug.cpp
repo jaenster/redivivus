@@ -1813,7 +1813,9 @@ static char * BuildSymbolSearchPath(char * szSearchPath) {
     return cCurChar != '\0' ? (char*)szSearchPath : nullptr;
 }
 
-static void __stdcall COMPRESS_Implode(void * pAddress, char * szModulePath, int * pnSectionIndex, uint32_t * ppSectionOffset, int nBufferSize) {
+// Maps a code address to its module path, 1-based PE section index and offset within that section;
+// "unknown" and 0/0 when the address is not in a mapped image.
+static void __stdcall GetLogicalAddress(void * pAddress, char * szModulePath, int * pnSectionIndex, uint32_t * ppSectionOffset, int nBufferSize) {
     _MEMORY_BASIC_INFORMATION _Stack_20;
     uint32_t nSectionEnd;
     Storm::Source::SSTR::SStrCopy(szModulePath, "unknown", nBufferSize);
@@ -2254,7 +2256,7 @@ void __fastcall FullStackWalkWithAnnotations(HANDLE hThread, CONTEXT * pContext)
         __frame0.pszSymbolName = "unknown";
       }
 
-      COMPRESS_Implode((void*)tStackFrame.AddrPC.Offset, szModulePath, &nImplodeOutLen, &__frame0.pLineInfo, 0x104);
+      GetLogicalAddress((void*)tStackFrame.AddrPC.Offset, szModulePath, &nImplodeOutLen, &__frame0.pLineInfo, 0x104);
       pszText = strrchr(szModulePath, 0x5c);
       if (pszText) {
         pszText++;

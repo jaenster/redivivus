@@ -889,16 +889,12 @@ void __fastcall Objects_InitFn24_FloorTrap(D2ObjectInitFnArg * pInitArg) {
 void __fastcall Objects_InitFn02_Urn(D2ObjectInitFnArg * pInitArg) {
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
     D2LevelsTxt* pLevelsTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevelId);
-    D2SeedStrc* pObjSeed = pInitArg->pSeed;
-    uint32_t seedRolled = D2_SeedRoll(pObjSeed);
-    if ((int)(seedRolled % 100) < (int)(uint16_t)(pLevelsTxt->MonLvl[0] / 8 + 5U)) {
-      int32_t nRolledFrame;
-      nRolledFrame = Seed::SEED_RollRange(pInitArg->pSeed, 1, 9);
-      pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = (uint8_t)nRolledFrame;
-      return;
+    uint8_t nShrineId = 0;
+    if ((int)(D2_SeedRoll(pInitArg->pSeed) % 100) < (int)(uint16_t)(pLevelsTxt->MonLvl[0] / 8 + 5U)) {
+      nShrineId = (uint8_t)Seed::SEED_RollRange(pInitArg->pSeed, 1, 9);
     }
 
-    pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0;
+    pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = nShrineId;
 }
 
 void __fastcall Objects_InitFn27_GooPile(D2ObjectInitFnArg * pInitArg) {
@@ -1138,12 +1134,7 @@ static BOOL __stdcall ROOM_CheckSpawnCollisionSimple(D2RoomStrc * pRoom, int32_t
 
 // Spawns a game object of nObjClassId at a random collision-free tile within pRoom, respecting nXMargin/nYMargin insets. Uses the object control RNG seed (advanced via the 0x6AC690C5 LCG) to pick candidate coordinates up to 5 times, checking SPAWN_UNIT_COLLISION each attempt. Returns the spawned D2UnitStrc* on success, or null if the room is too small or all retries fail. Halts with an internal error if pRoom is null at spawn time.
 D2UnitStrc * __stdcall OBJECT_PlaceAtRandomPosition(::SGAMEDATA * pGame, int32_t nObjClassId, int32_t nXMargin, int32_t nYMargin, D2RoomStrc * pRoom) {
-    eCollisionFlags wCollisionResult;
-    int nRange;
-    uint32_t dwTmp;
-    uint32_t nY;
     D2DrlgRoomCoordsStrc sRoomCoords;
-    uint32_t nCandX;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
     if (sRoomCoords.dwXSize < 2 || sRoomCoords.dwYSize < 2) {
       return nullptr;
@@ -1151,19 +1142,13 @@ D2UnitStrc * __stdcall OBJECT_PlaceAtRandomPosition(::SGAMEDATA * pGame, int32_t
 
     D2SeedStrc* pCtrlSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
     int nSpawnRetries = 0;
+    int nX;
+    int nY;
     while (true) {
-      nRange = sRoomCoords.dwXSize - nXMargin;
-      dwTmp = nRange - 1;
-      dwTmp = D2_SeedRollLimited(pCtrlSeed, dwTmp);
-      nRange = sRoomCoords.dwYSize - nYMargin;
-      nY = nRange - 1;
-      dwTmp += sRoomCoords.dwXStart;
-      nY = D2_SeedRollLimited(pCtrlSeed, nY);
-      nY += sRoomCoords.dwYStart;
-      if (dwTmp && nY && (int)(uint16_t)dwTmp >= sRoomCoords.dwXStart + 1 && (int)(uint16_t)nY >= sRoomCoords.dwYStart + 1 && (int)(uint16_t)dwTmp < sRoomCoords.dwXStart - 1 + sRoomCoords.dwXSize && (int)(uint16_t)nY < sRoomCoords.dwYStart - 1 + sRoomCoords.dwYSize) {
-        nCandX = dwTmp;
-        wCollisionResult = D2Common::Collision::CheckCollision_Vector(pRoom, dwTmp, nY, nXMargin + 6, nYMargin + 6, 0x3f11);
-        if (wCollisionResult == COLBIT_NONE) {
+      nX = D2_SeedRollLimited(pCtrlSeed, sRoomCoords.dwXSize - nXMargin - 1) + sRoomCoords.dwXStart;
+      nY = D2_SeedRollLimited(pCtrlSeed, sRoomCoords.dwYSize - nYMargin - 1) + sRoomCoords.dwYStart;
+      if (nX && nY && (int)(uint16_t)nX >= sRoomCoords.dwXStart + 1 && (int)(uint16_t)nY >= sRoomCoords.dwYStart + 1 && (int)(uint16_t)nX < sRoomCoords.dwXStart - 1 + sRoomCoords.dwXSize && (int)(uint16_t)nY < sRoomCoords.dwYStart - 1 + sRoomCoords.dwYSize) {
+        if (D2Common::Collision::CheckCollision_Vector(pRoom, nX, nY, nXMargin + 6, nYMargin + 6, 0x3f11) == COLBIT_NONE) {
           break;
         }
       }
@@ -1182,9 +1167,7 @@ D2UnitStrc * __stdcall OBJECT_PlaceAtRandomPosition(::SGAMEDATA * pGame, int32_t
       exit(-1);
     }
 
-    D2UnitStrc* pSpawnedUnit;
-    pSpawnedUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, nObjClassId, dwTmp, nY, pGame, pRoom, 1, 0, 0);
-    return pSpawnedUnit;
+    return UNIT::SUnit::CreateUnit(UNIT_OBJECT, nObjClassId, nX, nY, pGame, pRoom, 1, 0, 0);
 }
 
 // Places a new object unit (UNIT_OBJECT) at a randomly chosen collision-free position within pRoom, subject to a caller-supplied acceptance callback. Reads room coordinates, retries up to 5 times picking random (X,Y) offsets inside the room boundary (excluding the 1-tile border), checks collision via CheckCollision_Vector, and calls pfnProc(X,Y) — only spawning if pfnProc returns non-zero and no collision. Returns the spawned D2UnitStrc* or null if all retries fail or the room is too small for nSizeX×nSizeY.
@@ -2286,49 +2269,24 @@ int32_t __fastcall OBJECT_PopulateGridObjects(::SGAMEDATA * pGame, D2RoomStrc * 
 
 // Fills a rectangular grid region with random item drops on a 2-tile stride (interior only: starts at xMin+1, yMin+1, capped to 12 cells per axis). For each cell, checks spawn collision and calls DROP_SpawnRandomItemInRoom if clear. Stops after 32 spawned items. Always returns 1.
 int32_t __fastcall OBJECT_PopulateGridItems(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2DrlgRoomCoordsStrc * pGridBounds) {
-    BOOL nCollisionResult;
     POINT sCellPos;
-    int nSpawnedCount = 0xc;
-    if (pGridBounds->dwXSize <= 0xc) {
-      nSpawnedCount = pGridBounds->dwXSize;
-    }
-
-    uint32_t nYEnd = pGridBounds->dwXStart + nSpawnedCount;
-    nSpawnedCount = 0xc;
-    if (pGridBounds->dwYSize <= 0xc) {
-      nSpawnedCount = pGridBounds->dwYSize;
-    }
-
-    uint32_t nGridPosX = pGridBounds->dwXStart + 1;
-    uint32_t nXEnd = pGridBounds->dwYStart + nSpawnedCount;
-    nSpawnedCount = 0;
-    uint32_t nXEndSave = nYEnd;
-    ::SGAMEDATA* pGameSave = pGame;
-    uint32_t nYEndSave = nXEnd;
-    D2RoomStrc* pRoomSave = pRoom;
-    while (nGridPosX < nYEnd) {
-      uint32_t nGridPosY;
-      nGridPosY = pGridBounds->dwYStart + 1;
-      if (nGridPosY < nXEnd) {
-        do {
-          sCellPos.x = nGridPosX;
-          sCellPos.y = nGridPosY;
-          nCollisionResult = ROOM_CheckSpawnCollisionSimple(pRoomSave, 1, 1, &pGridBounds->dwXStart, (int*)&sCellPos.x);
-          if (nCollisionResult == 1) {
-            ITEMS::Items::Drop::DROP_SpawnRandomItemInRoom(pGameSave, pRoomSave, &sCellPos, nullptr);
-            nSpawnedCount++;
-            if (nSpawnedCount >= 0x20) {
-              return 1;
-            }
+    uint32_t nGridPosX;
+    uint32_t nGridPosY;
+    uint32_t nXEnd = pGridBounds->dwXStart + (pGridBounds->dwXSize > 0xc ? 0xc : pGridBounds->dwXSize);
+    uint32_t nYEnd = pGridBounds->dwYStart + (pGridBounds->dwYSize > 0xc ? 0xc : pGridBounds->dwYSize);
+    int nSpawnedCount = 0;
+    for (nGridPosX = pGridBounds->dwXStart + 1; nGridPosX < nXEnd; nGridPosX += 2) {
+      for (nGridPosY = pGridBounds->dwYStart + 1; nGridPosY < nYEnd; nGridPosY += 2) {
+        sCellPos.x = nGridPosX;
+        sCellPos.y = nGridPosY;
+        if (ROOM_CheckSpawnCollisionSimple(pRoom, 1, 1, &pGridBounds->dwXStart, (int*)&sCellPos.x) == 1) {
+          ITEMS::Items::Drop::DROP_SpawnRandomItemInRoom(pGame, pRoom, &sCellPos, nullptr);
+          nSpawnedCount++;
+          if (nSpawnedCount >= 0x20) {
+            return 1;
           }
-
-          nGridPosY += 2;
-          nXEnd = nYEndSave;
-          nYEnd = nXEndSave;
-        } while (nGridPosY < nYEndSave);
+        }
       }
-
-      nGridPosX += 2;
     }
 
     return 1;

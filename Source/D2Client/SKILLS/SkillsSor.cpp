@@ -520,7 +520,8 @@ void __fastcall SKILLSSOR_CltCreateBlazeMissile(D2UnitStrc * pUnit) {
     }
 
     D2SkillsTxt* pSkillTxt = D2Common::Skills::TXT_Skills_GetLine(eSkill);
-    if (!(pSkillTxt && pSkillTxt->cltmissile[1] >= 0 && (int)pSkillTxt->cltmissile[1] < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
+    int nMissileId;
+    if (!(pSkillTxt && (nMissileId = pSkillTxt->cltmissile[1]) >= 0 && nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return;
     }
 
@@ -534,12 +535,12 @@ void __fastcall SKILLSSOR_CltCreateBlazeMissile(D2UnitStrc * pUnit) {
     int32_t nUnitY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 0x21;
-    sSkillArg.nSkillLevel = nSkillLvl;
-    sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[1];
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = nUnitX;
     sSkillArg.nY = nUnitY;
     sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nSkillLevel = nSkillLvl;
+    sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[1];
     if (pSkillTxt->cltmissile[2] >= 0) {
       if (pSkillTxt->cltmissile[3] >= 0) {
         nPathFlags = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 3);

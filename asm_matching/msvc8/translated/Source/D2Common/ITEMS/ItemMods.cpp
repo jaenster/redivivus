@@ -169,7 +169,6 @@ BOOL __stdcall ITEMMOD_SetChargedSkillCharges(D2UnitStrc * pUnit, int32_t nSkill
     D2UnitStrc* pUnit_01;
     BOOL bSubFound;
     uint32_t nMaxCharges;
-    uint32_t nNewCharges;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
@@ -184,12 +183,12 @@ BOOL __stdcall ITEMMOD_SetChargedSkillCharges(D2UnitStrc * pUnit, int32_t nSkill
           return 0;
         }
 
-        nNewCharges = (int)nNewChargeCount <= 0 ? 0 : nNewChargeCount;
-        if ((int)nNewCharges >= (int)nMaxCharges) {
-          nNewCharges = nMaxCharges;
+        nNewChargeCount = (int)nNewChargeCount <= 0 ? 0 : nNewChargeCount;
+        if ((int)nNewChargeCount >= (int)nMaxCharges) {
+          nNewChargeCount = nMaxCharges;
         }
 
-        Stats::StatsEx::STATLIST_SetStatValueInBaseArraySafe(pStatList, UNITSTAT_item_charged_skill, (nMaxCharges << 8) + (nNewCharges & 0xff), nStatKey, pUnit);
+        Stats::StatsEx::STATLIST_SetStatValueInBaseArraySafe(pStatList, UNITSTAT_item_charged_skill, (nMaxCharges << 8) + (nNewChargeCount & 0xff), nStatKey, pUnit);
         return 1;
       }
     }
@@ -1563,7 +1562,7 @@ void __stdcall ITEMMOD_ApplyEtherealBonus(D2UnitStrc * pUnit) {
     Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_armorclass, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_armorclass, 0) * 3 / 2, nLayer);
 }
 
-void Unreferenced_0065e610() {
+void __stdcall Unreferenced_0065e610(int32_t nUnused1, int32_t nUnused2, int32_t nUnused3) {
 
 }
 
@@ -2045,106 +2044,65 @@ uint32_t __fastcall ITEMPROP_AddMaxDamage(uint32_t nType, D2UnitStrc * pUnit, D2
 
 // Item-property applier for the Enhanced-Damage (% damage) affix. If no pre-rolled value (nParam12) is supplied, rolls one from the property's min/max range. For weapon item units, seeds base min/max (and 2-handed/throwable variants) damage stats from the base ItemsTxt line via ConvertItemCodeToClassIdAndGetItemsTxtLine. Computes the effective max damage and, when D2ApplyPercent of the ED% would overflow to a non-increasing value, delegates to ITEMPROP_AddMaxDamage instead. Otherwise writes the ED% as stat 0x12 and 0x11 on the item via ITEMMOD_AddStatToItem. Returns the applied value (or 0 on bad inputs).
 uint32_t __fastcall ITEMPROP_AddEnhancedDamage(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nPercent, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
-    D2ItemsTxt* pItemsTxt;
-    D2ItemsTxt* pBaseTxtLine;
-    uint32_t nIsWeapon;
-    uint32_t nBaseMaxDam;
-    D2UnitStrc** ppBaseUnit;
     D2UnitStrc* pItem = pUnit2;
     if (!pProperty) {
       return 0;
     }
+
     if (!nPercent) {
-      nPercent = ITEMMOD_RollRandomValue(pUnit2, pProperty->fmin, pProperty->fmax);
+      nPercent = ITEMMOD_RollRandomValue(pItem, pProperty->fmin, pProperty->fmax);
     }
 
-    int32_t nStateSaved = nState;
-    int32_t nStatIdSaved = nSet;
-    if ((pItem ? pItem->eUnitType : UNIT_COUNT) == UNIT_ITEM) {
-      uint8_t byMaxDam;
-      if (!pUnit || pUnit->eUnitType != UNIT_ITEM) {
-        nIsWeapon = pItem->nClassId;
-      } else {
-        nIsWeapon = pUnit->nClassId;
-      }
-
-      pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nIsWeapon);
-      if (!pItemsTxt) {
-        return 0;
-      }
-
-      ppBaseUnit = &pUnit2;
-      pBaseTxtLine = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(Items::ITEM_GetItemsTxt_szCode(pItem), (int*)ppBaseUnit);
-      if (pBaseTxtLine) {
-        nIsWeapon = Items::ITEMS_IsA(pItem, ITEMTYPE_Weapon);
-        if (nIsWeapon) {
-          if (pBaseTxtLine->nMinDam) {
-            Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_mindamage, (uint32_t)pBaseTxtLine->nMinDam, 0);
-          }
-          if (pBaseTxtLine->n2HandMinDam) {
-            Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_secondary_mindamage, (uint32_t)pBaseTxtLine->n2HandMinDam, 0);
-          }
-
-          nStatIdSaved = Items::ITEM_GetTxtItemTypes_throwable(pItem);
-          if (nStatIdSaved && pBaseTxtLine->nMinMisDam) {
-            Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_item_throw_mindamage, (uint32_t)pBaseTxtLine->nMinMisDam, 0);
-          }
-        }
-      }
-
-      ppBaseUnit = &pUnit2;
-      pBaseTxtLine = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(Items::ITEM_GetItemsTxt_szCode(pItem), (int*)ppBaseUnit);
-      if (pBaseTxtLine) {
-        nIsWeapon = Items::ITEMS_IsA(pItem, ITEMTYPE_Weapon);
-        if (nIsWeapon) {
-          if (pBaseTxtLine->nMaxDam) {
-            Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_maxdamage, (uint32_t)pBaseTxtLine->nMaxDam, 0);
-          }
-          if (pBaseTxtLine->n2HandMaxDam) {
-            Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_secondary_maxdamage, (uint32_t)pBaseTxtLine->n2HandMaxDam, 0);
-          }
-
-          nStatIdSaved = Items::ITEM_GetTxtItemTypes_throwable(pItem);
-          if (nStatIdSaved && pBaseTxtLine->nMaxMisDam) {
-            Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_item_throw_maxdamage, (uint32_t)pBaseTxtLine->nMaxMisDam, 0);
-          }
-        }
-      }
-
-      ppBaseUnit = &pUnit2;
-      DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(Items::ITEM_GetItemsTxt_szCode(pItem), (int*)ppBaseUnit);
-      ppBaseUnit = &pUnit2;
-      DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(Items::ITEM_GetItemsTxt_szCode(pItem), (int*)ppBaseUnit);
-      ppBaseUnit = &pUnit2;
-      DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(Items::ITEM_GetItemsTxt_szCode(pItem), (int*)ppBaseUnit);
-      ppBaseUnit = &pUnit2;
-      DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(Items::ITEM_GetItemsTxt_szCode(pItem), (int*)ppBaseUnit);
-      byMaxDam = pItemsTxt->n2HandMaxDam;
-      if (pItemsTxt->n2HandMaxDam <= pItemsTxt->nMaxDam) {
-        byMaxDam = pItemsTxt->nMaxDam;
-      }
-
-      nBaseMaxDam = (uint32_t)byMaxDam;
-      nIsWeapon = Items::ITEMS_IsA(pItem, ITEMTYPE_Weapon);
-      if (nIsWeapon) {
-        nStatIdSaved = DATATBLS::DataTbls::D2ApplyPercent(nBaseMaxDam, nPercent, 100);
-        if ((int)(nStatIdSaved + nBaseMaxDam) <= (int)nBaseMaxDam) {
-          nIsWeapon = ITEMPROP_AddMaxDamage(nType, pUnit, pItem, pProperty, nSet, nStatId, 0, 1, nState, dwFlags, pContextUnit);
-          return nIsWeapon;
-        }
-      }
-
-      nStateSaved = nState;
-      nStatIdSaved = nSet;
+    if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       ITEMMOD_AddStatToItem(pItem, dwFlags, pUnit, pProperty, nSet, 0x12, 0, nPercent, nState);
-      nIsWeapon = nPercent;
-      ITEMMOD_AddStatToItem(pItem, dwFlags, pUnit, pProperty, nStatIdSaved, 0x11, 0, nPercent, nStateSaved);
-      return nIsWeapon;
+      ITEMMOD_AddStatToItem(pItem, dwFlags, pUnit, pProperty, nSet, 0x11, 0, nPercent, nState);
+      return 1;
+    }
+
+    D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(pUnit && pUnit->eUnitType == UNIT_ITEM ? pUnit->nClassId : pItem->nClassId);
+    if (!pItemsTxt) {
+      return 0;
+    }
+
+    int nBaseClassId;
+    D2ItemsTxt* pBaseTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(Items::ITEM_GetItemsTxt_szCode(pItem), &nBaseClassId);
+    if (pBaseTxt && Items::ITEMS_IsA(pItem, ITEMTYPE_Weapon)) {
+      if (pBaseTxt->nMinDam) {
+        Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_mindamage, pBaseTxt->nMinDam, 0);
+      }
+      if (pBaseTxt->n2HandMinDam) {
+        Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_secondary_mindamage, pBaseTxt->n2HandMinDam, 0);
+      }
+      if (Items::ITEM_GetTxtItemTypes_throwable(pItem) && pBaseTxt->nMinMisDam) {
+        Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_item_throw_mindamage, pBaseTxt->nMinMisDam, 0);
+      }
+    }
+
+    pBaseTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(Items::ITEM_GetItemsTxt_szCode(pItem), &nBaseClassId);
+    if (pBaseTxt && Items::ITEMS_IsA(pItem, ITEMTYPE_Weapon)) {
+      if (pBaseTxt->nMaxDam) {
+        Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_maxdamage, pBaseTxt->nMaxDam, 0);
+      }
+      if (pBaseTxt->n2HandMaxDam) {
+        Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_secondary_maxdamage, pBaseTxt->n2HandMaxDam, 0);
+      }
+      if (Items::ITEM_GetTxtItemTypes_throwable(pItem) && pBaseTxt->nMaxMisDam) {
+        Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_item_throw_maxdamage, pBaseTxt->nMaxMisDam, 0);
+      }
+    }
+
+    DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(Items::ITEM_GetItemsTxt_szCode(pItem), &nBaseClassId);
+    DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(Items::ITEM_GetItemsTxt_szCode(pItem), &nBaseClassId);
+    DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(Items::ITEM_GetItemsTxt_szCode(pItem), &nBaseClassId);
+    DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(Items::ITEM_GetItemsTxt_szCode(pItem), &nBaseClassId);
+    int nMaxDam = pItemsTxt->n2HandMaxDam > pItemsTxt->nMaxDam ? pItemsTxt->n2HandMaxDam : pItemsTxt->nMaxDam;
+    if (Items::ITEMS_IsA(pItem, ITEMTYPE_Weapon) && DATATBLS::DataTbls::D2ApplyPercent(nMaxDam, nPercent, 100) + nMaxDam <= nMaxDam) {
+      return ITEMPROP_AddMaxDamage(nType, pUnit, pItem, pProperty, nSet, nStatId, 0, 1, nState, dwFlags, pContextUnit);
     }
 
     ITEMMOD_AddStatToItem(pItem, dwFlags, pUnit, pProperty, nSet, 0x12, 0, nPercent, nState);
-    ITEMMOD_AddStatToItem(pItem, dwFlags, pUnit, pProperty, nStatIdSaved, 0x11, 0, nPercent, nStateSaved);
-    return 1;
+    ITEMMOD_AddStatToItem(pItem, dwFlags, pUnit, pProperty, nSet, 0x11, 0, nPercent, nState);
+    return nPercent;
 }
 
 uint32_t __fastcall ITEMPROP_AddStat_Simple(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
@@ -3931,22 +3889,19 @@ void __fastcall ITEMMOD_ApplySetBonuses(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
       nMaxBonusCount = gnPropertyBaseValueByCode[nEquipMask];
     }
 
-    nFileIndex = pSetsLine->nTxtSetItemsCount - 1;
-    if (nMaxBonusCount < nFileIndex) {
-      nFileIndex = nMaxBonusCount;
-    }
+    nFileIndex = nMaxBonusCount < pSetsLine->nTxtSetItemsCount - 1 ? nMaxBonusCount : pSetsLine->nTxtSetItemsCount - 1;
 
     nFileIndex = nFileIndex * 2 - 2;
     nEquipMask = 0;
     if (nFileIndex > 0) {
-      D2SetsTxt* pSetsTxtIter = pSetsLine;
+      D2SetsTxtFStrc* pPartialEntry = (D2SetsTxtFStrc*)pSetsLine->aPartialBonus;
       do {
-        pSetsTxtIter = (D2SetsTxt*)pSetsTxtIter->aPartialBonus;
-        if (((D2SetsTxtPStrc*)pSetsTxtIter)->pcodea >= 0) {
-          ITEMMOD_ApplyPropertyToUnitStats(4, pUnit, (D2SetsTxtFStrc*)pSetsTxtIter, pUnit2, nullptr, nEquipMask, 0, 0, nApplyFlags, 0, nullptr);
+        if (pPartialEntry->fcode >= 0) {
+          ITEMMOD_ApplyPropertyToUnitStats(4, pUnit, pPartialEntry, pUnit2, nullptr, nEquipMask, 0, 0, nApplyFlags, 0, nullptr);
         }
 
         nEquipMask++;
+        pPartialEntry++;
       } while ((int)nEquipMask < nFileIndex);
     }
     if (nMaxBonusCount < pSetsLine->nTxtSetItemsCount) {

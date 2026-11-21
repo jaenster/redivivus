@@ -1739,14 +1739,13 @@ void __fastcall PANEL_SetBeltPanelState(int nState) {
 }
 
 BOOL __fastcall PANEL_CalculateBeltSlotIndex(D2UIMouseMsgStrc * pMsg) {
-    uint8_t abStackY_144[8];
-    uint8_t abStackY_13c[28];
     D2BeltsTxt sBeltsTxt;
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
     int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
     D2Common::DATATBLS::BeltsTbls::GetBeltsLine(gnBeltPanelState, Inv::nScreenMode, &sBeltsTxt);
     if (gnPanelBeltRowsExpanded) {
-      if (nMouseX >= *(int*)(sBeltsTxt.pad0x01 + (((uint32_t)(uint8_t)sBeltsTxt.nBoxes << 4) - 0x39)) && nMouseX <= sBeltsTxt.beltBoxes[3].nRight && nMouseY >= *(int*)(sBeltsTxt.pad0x01 + (((uint32_t)(uint8_t)sBeltsTxt.nBoxes << 4) - 0x31)) && nMouseY <= sBeltsTxt.beltBoxes[3].nBottom) {
+      D2BeltsEntryStrc* pBox = &sBeltsTxt.beltBoxes[(uint8_t)sBeltsTxt.nBoxes - 4];
+      if (nMouseX >= pBox->nLeft && nMouseX <= sBeltsTxt.beltBoxes[3].nRight && nMouseY >= pBox->nTop && nMouseY <= sBeltsTxt.beltBoxes[3].nBottom) {
         return 1;
       }
     } else {
@@ -1998,7 +1997,11 @@ void __stdcall PANEL_DrawBottomPanel() {
 
 void __stdcall DRAW_UI_BordersAndOrbsAndFillers() {
     eD2LevelId eRoomLevelId;
-    eD2RendererMode eRendererMode = D2gfx::D2GFX::D2GFX_GetRendererMode();
+    BOOL bDirectDraw = FALSE;
+    if (D2gfx::D2GFX::D2GFX_GetRendererMode() == RENDERED_DirectDraw) {
+      bDirectDraw = TRUE;
+    }
+
     DWORD eResolutionMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResolutionMode == 2) {
       uint32_t eBorderType;
@@ -2013,7 +2016,7 @@ void __stdcall DRAW_UI_BordersAndOrbsAndFillers() {
       }
     }
 
-    PANEL_DrawCharacterInfo((uint32_t)(eRendererMode == RENDERED_DirectDraw));
+    PANEL_DrawCharacterInfo(bDirectDraw);
     PANEL_DrawHealthOrb();
     PANEL_DrawManaOrb();
     PANEL_DrawGoldAmount();
@@ -2365,15 +2368,15 @@ void __stdcall PANEL_UpdatePanelFromMode(D2UIMouseMsgStrc * pMsg) {
 void __stdcall INPUT_PanelRightClick(D2UIMouseMsgStrc * pMsg) {
     D2UnitStrc* pPlayer;
     int nCursorItemType;
-    uint16_t wMouseX;
-    uint16_t wMouseY;
+    int nMouseX;
+    int nMouseY;
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     if (!bExitFlag) {
       uint32_t bIsDeadOrSlot;
       bIsDeadOrSlot = UNIT::Player::IsPlayerDead();
       if (!bIsDeadOrSlot) {
-        wMouseY = pMsg->uLParam.sMousePos.nMouseY;
-        wMouseX = pMsg->uLParam.sMousePos.nMouseX;
+        nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+        nMouseY = pMsg->uLParam.sMousePos.nMouseY;
         pPlayer = UNIT::Player::GetPlayerUnit_UI();
         bExitFlag = PANEL_CalculateBeltSlotIndex(pMsg);
         if (bExitFlag) {
@@ -2389,7 +2392,7 @@ void __stdcall INPUT_PanelRightClick(D2UIMouseMsgStrc * pMsg) {
             }
           }
 
-          bIsDeadOrSlot = PANEL_GetBeltBoxAtPoint((uint32_t)wMouseY, (uint32_t)wMouseX);
+          bIsDeadOrSlot = PANEL_GetBeltBoxAtPoint(nMouseY, nMouseX);
           if ((int)bIsDeadOrSlot < 0) {
             pMsg->bHandled = 0;
             return;

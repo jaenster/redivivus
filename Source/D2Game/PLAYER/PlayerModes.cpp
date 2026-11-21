@@ -1462,61 +1462,52 @@ static BOOL PLRMODES_RegenHp(D2UnitStrc * pUnit) {
 
 // Per-tick mana regeneration for a player unit (called from the player-mode timer). Reads current mana and max mana; if STATE_nomanaregen is absent, computes base regen from CharStatsTxt.ManaRegen scaled by manarecoverybonus stat. Adds flat manarecovery stat on top. Removes the active mana-potion stat list once mana is full. Clamps the delta to not exceed max or go below zero, then applies via STATLIST_AddUnitStat.
 static void PLRMODES_RegenMana(D2UnitStrc * pUnit) {
-    int nCharClassId;
     if (!pUnit) {
       return;
     }
 
-    int nManaRegen = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
+    int nCurMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
     int32_t nMaxMana = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
-    int32_t nBaseRegen = 0;
-    BOOL eManaPotState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_nomanaregen);
-    if (!eManaPotState) {
-      nCharClassId = pUnit->nClassId;
-      if (nCharClassId < 0) {
-        return;
-      }
-      if (nCharClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
-        return;
-      }
-      if (!(D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nCharClassId)) {
+    int32_t nRegen = 0;
+    if (!D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_nomanaregen)) {
+      int nClassId = pUnit->nClassId;
+      D2CharStatsTxt* pCharStats = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nClassId : nullptr;
+      if (!pCharStats) {
         return;
       }
 
-      nCharClassId = (uint32_t)D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats[nCharClassId].ManaRegen * 0x19;
-      if (!nCharClassId) {
-        nCharClassId = 0x1d4c;
+      int nDivisor = pCharStats->ManaRegen * 25;
+      if (!nDivisor) {
+        nDivisor = 7500;
       }
 
-      nCharClassId = nMaxMana / nCharClassId;
-      if (nCharClassId < 1) {
-        nCharClassId = 1;
+      int nBase = nMaxMana / nDivisor;
+      if (nBase < 1) {
+        nBase = 1;
       }
 
-      nBaseRegen = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nCharClassId, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_manarecoverybonus, 0) + 100, 100);
+      nRegen = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nBase, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_manarecoverybonus, 0) + 100, 100);
     }
 
-    nCharClassId = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_manarecovery, 0);
-    nCharClassId = nBaseRegen + nCharClassId;
-    if (nMaxMana <= nManaRegen && nCharClassId > 0) {
-      D2StatListExStrc* pStatList;
-      pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_manapot);
+    nRegen += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_manarecovery, 0);
+    if (nMaxMana <= nCurMana && nRegen > 0) {
+      D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_manapot);
       if (pStatList) {
         D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
         D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
       }
     }
-    if (nCharClassId > nMaxMana - nManaRegen) {
-      nCharClassId = nMaxMana - nManaRegen;
+    if (nRegen > nMaxMana - nCurMana) {
+      nRegen = nMaxMana - nCurMana;
     }
-    if (nCharClassId < -nManaRegen) {
-      nCharClassId = -nManaRegen;
+    if (nRegen < -nCurMana) {
+      nRegen = -nCurMana;
     }
-    if (!nCharClassId) {
+    if (!nRegen) {
       return;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_mana, nCharClassId, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_mana, nRegen, 0);
 }
 
 void __fastcall PLRMODES_RemoveExpiredStatLists(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
@@ -1581,6 +1572,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_15(D2UnitStrc * p) 
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+// steer-ok: generated-form FlagBit getter
 static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_0(D2UnitStrc * p) {
     if (!p) {
         return 0;
@@ -1589,6 +1581,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_0(D2UnitStrc * p) {
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+// steer-ok: generated-form FlagBit getter
 static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_0(D2UnitStrc * p) {
     if (!p) {
         return 0;

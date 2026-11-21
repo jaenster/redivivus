@@ -233,65 +233,56 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x07_ReportVersion(uint32_t dwExeHash, uint3
 }
 
 int __fastcall NET_SID_CLIENT_Send_0x06_StartVersioning() {
-    // Frame slots -288..-8 are ONE object: &dwExeChecksum is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint32_t dwExeChecksum;
-      SID_C2S_StartVersioning sPacket;
-      uint32_t dwExeVerOut;
-      uint8_t cExeInfoFirst;
-      uint8_t abExeInfoRest[255];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 280, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    uint32_t dwExeVerOut;
+    SID_C2S_StartVersioning sPacket;
+    uint32_t dwExeChecksum;
     uint32_t bPatchPending;
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(7);
     BnDownload::BNDOWNLOAD_SetPatchFilename("");
-    __frame0.sPacket.dwProductId = 0;
-    __frame0.sPacket.dwVersionByte = 0;
-    __frame0.sPacket.dwUnknown = 0;
-    __frame0.sPacket.dwPlatformId = 0x49583836;
+    memset(&sPacket, 0, sizeof(sPacket));
+    sPacket.dwPlatformId = 0x49583836;
     BOOL bIsExpansion = BnSend::D2CheckExpansionGame();
-    __frame0.sPacket.dwProductId = bIsExpansion ? 0x44325850 : 0x44324456;
-    __frame0.sPacket.dwVersionByte = 0xe;
+    sPacket.dwProductId = bIsExpansion ? 0x44325850 : 0x44324456;
+    sPacket.dwVersionByte = 0xe;
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(6);
-    int32_t nCRCOk = NET_SID_CLIENT_Send(6, (char*)&__frame0.sPacket, 0x10);
-    if (nCRCOk >= 0) {
-      bPatchPending = BnDownload::BNDOWNLOAD_HasPatchFilename();
-      while (true) {
-        if (bPatchPending) {
-          break;
-        }
+    int32_t nCRCOk = NET_SID_CLIENT_Send(6, (char*)&sPacket, 0x10);
+    if (nCRCOk < 0) {
+      return 0;
+    }
 
-        bIsExpansion = _net_sid::NET_SID_CLIENT_GetRequiredAnswer(7);
-        if (bIsExpansion) {
-          break;
-        }
-
-        bIsExpansion = _net_sid::SID_GetReadyFlag();
-        if (bIsExpansion) {
-          return 0;
-        }
-
-        /* DWORD dwMilliseconds for Sleep */ Sleep(10);
-        bPatchPending = BnDownload::BNDOWNLOAD_HasPatchFilename();
+    bPatchPending = BnDownload::BNDOWNLOAD_HasPatchFilename();
+    while (true) {
+      if (bPatchPending) {
+        break;
       }
 
-      BnDownload::BNDOWNLOAD_ResetState(0x66);
       bIsExpansion = _net_sid::NET_SID_CLIENT_GetRequiredAnswer(7);
-      if (!bIsExpansion) {
-        __frame0.cExeInfoFirst = 0;
-        memset(__frame0.abExeInfoRest, 0, 0xff);
-        nCRCOk = BnDownload::BNDOWNLOAD_PerformCheckRevision(&__frame0.dwExeVerOut, &__frame0.dwExeChecksum, &__frame0.cExeInfoFirst);
-        if (!nCRCOk) {
-          BNMESSQUEUE_SetStateIfZero(1);
-          return 0;
-        }
-
-        BNSEND_SendRawBytes(gaBnSendRawBytesHeader, 2);
-        NET_SID_CLIENT_Send_0x07_ReportVersion(__frame0.dwExeVerOut, __frame0.dwExeChecksum, (char*)&__frame0.cExeInfoFirst);
-        _net_sid::NET_SID_CLIENT_WaitForPacketId(7);
+      if (bIsExpansion) {
+        break;
       }
+
+      bIsExpansion = _net_sid::SID_GetReadyFlag();
+      if (bIsExpansion) {
+        return 0;
+      }
+
+      /* DWORD dwMilliseconds for Sleep */ Sleep(10);
+      bPatchPending = BnDownload::BNDOWNLOAD_HasPatchFilename();
+    }
+
+    BnDownload::BNDOWNLOAD_ResetState(0x66);
+    bIsExpansion = _net_sid::NET_SID_CLIENT_GetRequiredAnswer(7);
+    if (!bIsExpansion) {
+      char szExeInfo[256] = { 0 };
+      nCRCOk = BnDownload::BNDOWNLOAD_PerformCheckRevision(&dwExeVerOut, &dwExeChecksum, (uint8_t*)szExeInfo);
+      if (!nCRCOk) {
+        BNMESSQUEUE_SetStateIfZero(1);
+        return 0;
+      }
+
+      BNSEND_SendRawBytes(gaBnSendRawBytesHeader, 2);
+      NET_SID_CLIENT_Send_0x07_ReportVersion(dwExeVerOut, dwExeChecksum, szExeInfo);
+      _net_sid::NET_SID_CLIENT_WaitForPacketId(7);
     }
 
     return 0;
@@ -598,22 +589,22 @@ void * __fastcall NET_SID_CLIENT_Send_0x09_GetAdvListEx(char * szText1, char * s
     aPacketBuf.dwCondition2 = 0;
     aPacketBuf.dwCondition3 = 0;
     aPacketBuf.dwMaxGames = 0x19;
-    if (!szText1) {
-      szText1 = "";
+    char* pCursor = aPacketBuf.szData;
+    if (szText1) {
+      pCursor += Storm::Source::SSTR::SStrCopy(pCursor, szText1, 0x100) + 1;
+    } else {
+      pCursor += Storm::Source::SSTR::SStrCopy(pCursor, "", 0x100) + 1;
     }
-
-    uint32_t nGameNameLen = Storm::Source::SSTR::SStrCopy(aPacketBuf.szData, szText1, 0x100);
-    if (!szText2) {
-      szText2 = "";
+    if (szText2) {
+      pCursor += Storm::Source::SSTR::SStrCopy(pCursor, szText2, 0x100) + 1;
+    } else {
+      pCursor += Storm::Source::SSTR::SStrCopy(pCursor, "", 0x100) + 1;
     }
-
-    uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy(aPacketBuf.szData + (nGameNameLen + 1), szText2, 0x100);
-    uint32_t nDescLen = Storm::Source::SSTR::SStrCopy(aPacketBuf.szData + nPasswordLen + nGameNameLen + 2, "", 0x100);
+    size_t nPacketSize = pCursor - aPacketBuf.szData + Storm::Source::SSTR::SStrCopy(pCursor, "", 0x100) + 0x11;
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(9);
-    NET_SID_CLIENT_Send(9, (char*)&aPacketBuf, (size_t)(aPacketBuf.szData + nPasswordLen + nGameNameLen + 2 + (nDescLen + 0x11 - (intptr_t)aPacketBuf.szData)));
+    NET_SID_CLIENT_Send(9, (char*)&aPacketBuf, nPacketSize);
     _net_sid::NET_SID_CLIENT_WaitForPacketId(9);
-    void* pGameList = g_pBNetGameListData;
-    return pGameList;
+    return g_pBNetGameListData;
 }
 
 void __fastcall NET_SID_CLIENT_Send_0x22_NotifyJoin(char * szText1, char * szText2) {
@@ -793,23 +784,21 @@ uint32_t __fastcall NET_SID_CLIENT_Send_0x26_ReadUserData(char * szAccount, uint
     }
 
     char* pPacketBuf = (char*)D2_ALLOC_AT(nStringsSize + 0xc, ".\\BnSend.cpp", 0x506);
-    pPacketBuf[0] = '\x01';
-    pPacketBuf[1] = '\0';
-    pPacketBuf[2] = '\0';
-    pPacketBuf[3] = '\0';
+    *(uint32_t*)pPacketBuf = 1;
     *(uint32_t*)(pPacketBuf + 4) = nCount;
     *(uint32_t*)(pPacketBuf + 8) = nRequestId;
-    nLen = Storm::Source::SSTR::SStrCopy(pPacketBuf + 0xc, szAccount, 0x7fffffff);
-    char* szBufferOutput = pPacketBuf + (nLen + 0xd);
+    char* szBufferOutput = pPacketBuf + 0xc;
+    nLen = Storm::Source::SSTR::SStrCopy(szBufferOutput, szAccount, 0x7fffffff);
+    szBufferOutput += nLen + 1;
     for (nRequestId = 0; nRequestId < nCount; nRequestId++) {
       nLen = Storm::Source::SSTR::SStrCopy(szBufferOutput, pszKeys[nRequestId], 0x7fffffff);
       szBufferOutput += nLen + 1;
     }
 
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x26);
-    int32_t nSendResult = NET_SID_CLIENT_Send(0x26, pPacketBuf, (intptr_t)szBufferOutput - (intptr_t)pPacketBuf);
+    BOOL bResult = NET_SID_CLIENT_Send(0x26, pPacketBuf, (intptr_t)szBufferOutput - (intptr_t)pPacketBuf) >= 0;
     D2_FREE_AT(pPacketBuf, ".\\BnSend.cpp", 0x521);
-    return (uint32_t)(nSendResult >= 0);
+    return bResult != FALSE;
 }
 
 // Retrieves stored user data from previous SID_READUSERDATA (0x26) response. Copies string array data into output buffers.
@@ -874,10 +863,9 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x59_SetEmail(char * szText) {
 }
 
 BOOL __fastcall NET_SID_CLIENT_Send_0x5A_ResetPassword(char * szText1, char * szText2) {
-    uint32_t nLen2;
     int32_t nSendResult;
-    uint32_t _Size;
-    uint32_t _Size_00;
+    uint32_t nSize1;
+    uint32_t nSize2;
     char szPacketBuf[512];
     if (!szText1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x578);
@@ -887,29 +875,27 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5A_ResetPassword(char * szText1, char * sz
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x579);
       exit(-1);
     }
-
-    uint32_t nLen1;
     if (!szText2 || *szText2 == '\0') {
       return 0;
     }
 
-    nLen1 = Storm::Source::SSTR::SStrLen(szText1);
-    _Size_00 = nLen1 + 1;
-    if (!(_Size_00 <= 0x100)) {
+    nSize1 = Storm::Source::SSTR::SStrLen(szText1);
+    nSize1 += 1;
+    if (!(nSize1 <= 0x100)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x581);
       exit(-1);
     }
 
-    memcpy(szPacketBuf, szText1, _Size_00);
-    _Size = Storm::Source::SSTR::SStrLen(szText2);
-    _Size += 1;
-    if (!(_Size <= 0x100)) {
+    memcpy(szPacketBuf, szText1, nSize1);
+    nSize2 = Storm::Source::SSTR::SStrLen(szText2);
+    nSize2 += 1;
+    if (!(nSize2 <= 0x100)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x588);
       exit(-1);
     }
 
-    memcpy(szPacketBuf + (nLen1 + 1), szText2, _Size);
-    nSendResult = NET_SID_CLIENT_Send(0x5a, szPacketBuf, _Size + _Size_00);
+    memcpy(szPacketBuf + nSize1, szText2, nSize2);
+    nSendResult = NET_SID_CLIENT_Send(0x5a, szPacketBuf, nSize2 + nSize1);
     return (uint32_t)(nSendResult >= 0);
 }
 
@@ -1427,9 +1413,9 @@ int32_t __fastcall NET_SID_CLIENT_Send(uint8_t nPacketId, char * pBytes, size_t 
     char chHeader[4];
     char chRealPacket[8192];
     uint32_t dwStackCookie;
-    /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ *(uint16_t*)((char*)&chHeader + 2) = (short int)nSizeNoHeader + 4;
-    /* LONG * Destination for InterlockedCompareExchange */ chHeader[0] = -1;
+    chHeader[0] = -1;
     chHeader[1] = nPacketId;
+    *(uint16_t*)((char*)&chHeader + 2) = (short int)nSizeNoHeader + 4;
     D2NetDataStrc* pSafesock = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
     if (pSafesock) {
       LONG lInterlockedReadyFlag;
@@ -1439,12 +1425,13 @@ int32_t __fastcall NET_SID_CLIENT_Send(uint8_t nPacketId, char * pBytes, size_t 
           nSizeNoHeader = 0;
         }
 
+        size_t nPacketSize = nSizeNoHeader + 4;
         Storm::Source::SMem::SMemCopy(chRealPacket, chHeader, 4);
-        if (pBytes && nSizeNoHeader + 4 < 0x2000) {
+        if (pBytes && nPacketSize < 0x2000) {
           Storm::Source::SMem::SMemCopy(chRealPacket + 4, pBytes, nSizeNoHeader);
         }
 
-        nBytesSent = Fog::Src::Safesock::WSASocket2_Send(pSafesock, chRealPacket, nSizeNoHeader + 4);
+        nBytesSent = Fog::Src::Safesock::WSASocket2_Send(pSafesock, chRealPacket, nPacketSize);
         return nBytesSent;
       }
     }

@@ -1252,43 +1252,40 @@ D2RoomExStrc * __fastcall DRLGROOMEX_AllocRoomExTypePreset(D2DrlgLevelStrc * pLe
 
 // Moves preset units from the level's preset list into this room by checking coordinate bounds, adjusting positions to room-local, and linking them into pRoomEx->pPresetUnits.
 static void DRLGPRESET_AddAndSetPresetUnits(D2RoomExStrc * pRoomEx) {
-    BOOL _bInside;
-    bool bInside;
     D2DrlgCoordsStrc roomCoords;
     D2PresetUnitStrc* pCurrent;
-    roomCoords.WorldPosition.y = pRoomEx->sCoords.WorldPosition.y;
+    D2PresetUnitStrc* pPrevPresetUnit;
+    D2DrlgMapStrc* pMap = pRoomEx->pRoomExData.pRoomExDataPreset->pMap;
     roomCoords.WorldPosition.x = pRoomEx->sCoords.WorldPosition.x;
-    D2DrlgMapStrc* pPresetRoomDataRaw = pRoomEx->pRoomExData.pRoomExDataPreset->pMap;
+    roomCoords.WorldPosition.y = pRoomEx->sCoords.WorldPosition.y;
     roomCoords.WorldSize.x = pRoomEx->sCoords.WorldSize.x;
     roomCoords.WorldSize.y = pRoomEx->sCoords.WorldSize.y;
     Transform::CoordsRoomToWorld((int32_t*)&roomCoords, (int32_t*)&roomCoords.WorldPosition.y);
     Transform::CoordsRoomToWorld((int32_t*)&roomCoords.WorldSize.x, (int32_t*)&roomCoords.WorldSize.y);
     int nOffsetX = pRoomEx->sCoords.WorldPosition.x * 5;
+    pCurrent = pMap->pPresetUnit;
+    pPrevPresetUnit = 0;
     int nOffsetY = pRoomEx->sCoords.WorldPosition.y * 5;
-    D2PresetUnitStrc* pNextPresetUnit = pPresetRoomDataRaw->pPresetUnit;
-    D2PresetUnitStrc* pPrevPresetUnit = 0;
-    while (pCurrent = pNextPresetUnit) {
-      D2DrlgMapStrc* pMapDataRaw = pPresetRoomDataRaw;
-      _bInside = DrlgRoom::AreXYInsideCoordinates(&roomCoords, pCurrent->nPosX, pCurrent->nPosY);
-      if (_bInside) {
+    while (pCurrent) {
+      if (DrlgRoom::AreXYInsideCoordinates(&roomCoords, pCurrent->nPosX, pCurrent->nPosY)) {
         pCurrent->nPosX -= nOffsetX;
         pCurrent->nPosY -= nOffsetY;
         if (pPrevPresetUnit) {
           pPrevPresetUnit->pPresetUnitNext = pCurrent->pPresetUnitNext;
         } else {
-          pMapDataRaw->pPresetUnit = pCurrent->pPresetUnitNext;
+          pMap->pPresetUnit = pCurrent->pPresetUnitNext;
         }
 
         pCurrent->pPresetUnitNext = pRoomEx->pPresetUnit;
         pRoomEx->pPresetUnit = pCurrent;
         if (pPrevPresetUnit) {
-          pNextPresetUnit = pPrevPresetUnit->pPresetUnitNext;
+          pCurrent = pPrevPresetUnit->pPresetUnitNext;
         } else {
-          pNextPresetUnit = pMapDataRaw->pPresetUnit;
+          pCurrent = pMap->pPresetUnit;
         }
       } else {
-        pNextPresetUnit = pCurrent->pPresetUnitNext;
         pPrevPresetUnit = pCurrent;
+        pCurrent = pCurrent->pPresetUnitNext;
       }
     }
 }
@@ -1928,13 +1925,9 @@ void __fastcall DRLGPRESET_FreePresetLevelData(D2DrlgLevelStrc * pLevel, BOOL bK
 // Allocates and copies a preset unit, applying (nX,nY) offset. If the preset has a path/object list, deep-copies it and offsets each point by (nX,nY).
 // @sourcefile .\DRLG\Preset.cpp
 D2PresetUnitStrc * __fastcall CopyPresetUnit(D2PoolManagerStrc * pMemory, D2PresetUnitStrc * pPresetUnit, int32_t nX, int32_t nY) {
-    uint32_t pathIndex;
-    int* pCoordField;
+    uint32_t i;
     D2PresetUnitStrc* pNewPreset = D2_NEW_POOL_AT(pMemory, D2PresetUnitStrc, ".\\DRLG\\Preset.cpp", 0x54a);
     memset(pNewPreset, 0, sizeof(*pNewPreset));
-    pNewPreset->eType = UNIT_PLAYER;
-    pNewPreset->nPosY = 0;
-    pNewPreset->nFlags = 0;
     pNewPreset->eType = pPresetUnit->eType;
     pNewPreset->nClassId = pPresetUnit->nClassId;
     pNewPreset->nMode = pPresetUnit->nMode;
@@ -1942,18 +1935,10 @@ D2PresetUnitStrc * __fastcall CopyPresetUnit(D2PoolManagerStrc * pMemory, D2Pres
     pNewPreset->nPosY = pPresetUnit->nPosY + nY;
     pNewPreset->nFlags = pPresetUnit->nFlags;
     if (pPresetUnit->pMapAI) {
-      D2MapAIStrc* pPresetPathCopy;
-      pPresetPathCopy = DRLGPRESET_CopyMapAI(pMemory, pPresetUnit->pMapAI);
-      pathIndex = 0;
-      pNewPreset->pMapAI = pPresetPathCopy;
-      if ((uint32_t)pPresetPathCopy->nSize > 0) {
-        do {
-          pCoordField = &pNewPreset->pMapAI->pPosition[pathIndex].nXpos;
-          *pCoordField += nX;
-          pCoordField = &pNewPreset->pMapAI->pPosition[pathIndex].nYpos;
-          *pCoordField += nY;
-          pathIndex++;
-        } while (pathIndex < (uint32_t)pNewPreset->pMapAI->nSize);
+      pNewPreset->pMapAI = DRLGPRESET_CopyMapAI(pMemory, pPresetUnit->pMapAI);
+      for (i = 0; i < (uint32_t)pNewPreset->pMapAI->nSize; i++) {
+        pNewPreset->pMapAI->pPosition[i].nXpos += nX;
+        pNewPreset->pMapAI->pPosition[i].nYpos += nY;
       }
     }
 

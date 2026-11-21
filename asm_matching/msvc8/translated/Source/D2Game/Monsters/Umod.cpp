@@ -571,73 +571,75 @@ void __fastcall AuraEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown)
 
 // Applies the ExtraStrong unique-mod stat bonuses to a monster unit. Reads champion/unique damage-percent and to-hit-percent constants from MonUMod.txt rows 0xC/0xD (normal) or 0xD/0xE (bUnknown=true), scales them by the current difficulty's ChampionDamageBonus, halves damage for Viper class (nClassId==0x76), then calls STATLIST_AddUnitStat for UNITSTAT_damagepercent and UNITSTAT_item_tohit_percent.
 void __fastcall ExtraStrong(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
-    D2DifficultyLevelsTxt* pDiffLevels;
     D2MonUModTxt* pUmodEntry;
-    int nValue;
-    if (!pUnit) {
-      return;
-    }
-    if (pUnit->eUnitType != UNIT_MONSTER) {
+    int nDamageBonus;
+    int nToHitBonus;
+    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
       return;
     }
 
-    ::SGAMEDATA* pGame;
-    pGame = UNIT::SUnit::GetGamePointer(pUnit);
+    ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
     if (!pGame) {
       return;
     }
 
-    int nToHitConst;
-    nToHitConst = D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize;
+    int nUmodCount = D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize;
     if (bUnique) {
-      if (nToHitConst <= 0xf) {
-        nValue = 0;
-      } else if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod == (D2MonUModTxt*)-480) {
-        nValue = 0;
+      if (nUmodCount <= 0xf) {
+        nDamageBonus = 0;
       } else {
-        nValue = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod[0xf].constants;
+        pUmodEntry = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + 0xf;
+        if (!pUmodEntry) {
+          nDamageBonus = 0;
+        } else {
+          nDamageBonus = pUmodEntry->constants;
+        }
       }
-      if (nToHitConst <= 0xd) {
-        nToHitConst = 0;
-        goto scale_and_add_bonus;
-      }
-
-      pUmodEntry = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + 0xd;
-    } else {
-      if (nToHitConst <= 0xe) {
-        nValue = 0;
-      } else if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod == (D2MonUModTxt*)-448) {
-        nValue = 0;
+      if (nUmodCount <= 0xd) {
+        nToHitBonus = 0;
       } else {
-        nValue = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod[0xe].constants;
+        pUmodEntry = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + 0xd;
+        if (!pUmodEntry) {
+          nToHitBonus = 0;
+        } else {
+          nToHitBonus = pUmodEntry->constants;
+        }
       }
-      if (nToHitConst <= 0xc) {
-        nToHitConst = 0;
-        goto scale_and_add_bonus;
-      }
-
-      pUmodEntry = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + 0xc;
-    }
-    if (!pUmodEntry) {
-      nToHitConst = 0;
     } else {
-      nToHitConst = pUmodEntry->constants;
+      if (nUmodCount <= 0xe) {
+        nDamageBonus = 0;
+      } else {
+        pUmodEntry = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + 0xe;
+        if (!pUmodEntry) {
+          nDamageBonus = 0;
+        } else {
+          nDamageBonus = pUmodEntry->constants;
+        }
+      }
+      if (nUmodCount <= 0xc) {
+        nToHitBonus = 0;
+      } else {
+        pUmodEntry = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + 0xc;
+        if (!pUmodEntry) {
+          nToHitBonus = 0;
+        } else {
+          nToHitBonus = pUmodEntry->constants;
+        }
+      }
     }
 
-    scale_and_add_bonus:
-    pDiffLevels = D2Common::DATATBLS::DataTbls::GetDifficultyLevels((uint32_t)pGame->nDifficulty);
+    D2DifficultyLevelsTxt* pDiffLevels = D2Common::DATATBLS::DataTbls::GetDifficultyLevels((uint32_t)pGame->nDifficulty);
     if (pDiffLevels) {
-      int32_t nBaseClassId;
-      nValue = pDiffLevels->ChampionDamageBonus * nValue / 100;
-      nToHitConst = pDiffLevels->ChampionDamageBonus * nToHitConst / 100;
-      nBaseClassId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
+      nDamageBonus = pDiffLevels->ChampionDamageBonus * nDamageBonus / 100;
+      nToHitBonus = pDiffLevels->ChampionDamageBonus * nToHitBonus / 100;
+      int32_t nBaseClassId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
       if (nBaseClassId >= 0 && nBaseClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nBaseClassId == 0x76) {
-        nValue /= 2;
+        nDamageBonus /= 2;
       }
     }
 
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_damagepercent, nValue, 0);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_item_tohit_percent, nToHitConst, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_damagepercent, nDamageBonus, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_item_tohit_percent, nToHitBonus, 0);
 }
 
 void __fastcall ExtraFast(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {

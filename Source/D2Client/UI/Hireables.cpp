@@ -383,51 +383,36 @@ D2UnitStrc * Unreferenced_004934b0() {
 }
 
 int32_t __stdcall UI_CheckItemCanEquipToHireling(int32_t bPlaySound) {
-    eD2ItemTypes eItemType;
-    BOOL bMeetsReqs;
-    bMeetsReqs = GAME::Game::CLIENT_CheckExpansion();
-    if (!bMeetsReqs) {
+    if (!GAME::Game::CLIENT_CheckExpansion()) {
       return 0;
     }
 
-    int32_t bCanEquip;
-    bCanEquip = 0;
-    D2UnitStrc* pPlayer;
-    pPlayer = UNIT::Player::GetPlayerUnit_UI();
+    int32_t bCanEquip = 0;
+    D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     if (!pPlayer) {
       return 0;
     }
 
-    D2UnitStrc* pCursorItem_lcl;
-    pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
-    if (!pCursorItem_lcl) {
+    D2UnitStrc* pHandOwner = UNIT::Player::GetPlayerUnit_UI();
+    D2UnitStrc* pItem = pHandOwner ? D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pHandOwner->pInventory) : nullptr;
+    if (!pItem) {
       return 0;
     }
 
-    pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
-    if (!pCursorItem_lcl) {
-      return 0;
-    }
-
-    int32_t nMercGUID;
-    nMercGUID = GAME::RosterPets::GetRosterPetGUID(pPlayer, 7, 0);
+    int32_t nMercGUID = GAME::RosterPets::GetRosterPetGUID(pPlayer, 7, 0);
     if (nMercGUID == -1) {
       return 0;
     }
 
-    bMeetsReqs = D2Common::ITEMS::Items::CheckItemFlag(pCursorItem_lcl, ITEMFLAG_IDENTIFIED, 0x3bb, ".\\UI\\Hireables.cpp");
-    if (!bMeetsReqs || (bMeetsReqs = D2Common::ITEMS::Items::CheckItemFlag(pCursorItem_lcl, ITEMFLAG_BROKEN, 0x3bb, ".\\UI\\Hireables.cpp") , bMeetsReqs != 0)) {
-      if (!bPlaySound) {
-        return 0;
+    if (!D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_IDENTIFIED, 0x3bb, ".\\UI\\Hireables.cpp") || D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_BROKEN, 0x3bb, ".\\UI\\Hireables.cpp")) {
+      if (bPlaySound) {
+        UNIT::UnitSnd::UNITSND_PlaySoundForMercenary(nMercGUID, '\x01', 0x56);
       }
 
-      UNIT::UnitSnd::UNITSND_PlaySoundForMercenary(nMercGUID, '\x01', 0x56);
       return 0;
     }
 
-    uint32_t bIsType;
-    bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pCursorItem_lcl, ITEMTYPE_HealingPotion);
-    if (bIsType || (bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pCursorItem_lcl, ITEMTYPE_AntidotePotion) , bIsType != 0) || (bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pCursorItem_lcl, ITEMTYPE_ThawingPotion) , bIsType != 0)) {
+    if (D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_HealingPotion) || D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_AntidotePotion) || D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_ThawingPotion)) {
       if (bPlaySound) {
         UNIT::UnitSnd::UNITSND_PlaySoundForMercenary(nMercGUID, '\x01', 0x54);
       }
@@ -435,83 +420,51 @@ int32_t __stdcall UI_CheckItemCanEquipToHireling(int32_t bPlaySound) {
       return 1;
     }
 
-    bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pCursorItem_lcl, ITEMTYPE_Armor);
-    if (bIsType || (bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pCursorItem_lcl, ITEMTYPE_Helm) , bIsType != 0)) {
+    if (D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Armor) || D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Helm)) {
       bCanEquip = 1;
     }
 
-    pPlayer = UNIT::CUnit::UNITS_FindClientSideUnit(nMercGUID, UNIT_MONSTER);
-    if (!pPlayer) {
+    D2UnitStrc* pMerc = UNIT::CUnit::UNITS_FindClientSideUnit(nMercGUID, UNIT_MONSTER);
+    if (!pMerc) {
       return 0;
     }
 
-    int32_t nMercClass;
-    nMercClass = GAME::RosterPets::GetRosterClass(nMercGUID);
-    if (nMercClass <= 0x167) {
-      if (nMercClass != 0x167) {
-        if (nMercClass != 0x10f) {
-          if (nMercClass != 0x152) {
-            goto weapon_not_allowed;
-          }
-
-          bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pCursorItem_lcl, ITEMTYPE_Spear);
-          if (bIsType) {
-            goto weapon_allowed;
-          }
-
-          eItemType = ITEMTYPE_Polearm;
-        } else {
-          eItemType = ITEMTYPE_Bow;
-        }
-
-        check_weapon_type:
-        bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pCursorItem_lcl, eItemType);
-        if (!bIsType) {
-          goto weapon_not_allowed;
-        }
-      } else {
-        bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pCursorItem_lcl, ITEMTYPE_Shield);
-        if (bIsType) {
+    switch (GAME::RosterPets::GetRosterClass(nMercGUID)) {
+      case 0x10f:
+        if (D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Bow)) {
           bCanEquip = 1;
         }
-
-        bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pCursorItem_lcl, ITEMTYPE_Sword);
-        if (!bIsType || (bMeetsReqs = D2Common::ITEMS::Items::IsTwoHanded(pCursorItem_lcl) , bMeetsReqs != 0)) {
-          goto weapon_not_allowed;
+        break;
+      case 0x152:
+        if (D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Spear) || D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Polearm)) {
+          bCanEquip = 1;
         }
-      }
-
-      weapon_allowed:
-      bCanEquip = 1;
-    } else {
-      if (nMercClass != 0x230) {
-        if (nMercClass == 0x231) {
-          eItemType = ITEMTYPE_Sword;
-          goto check_weapon_type;
+        break;
+      case 0x167:
+        if (D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Shield)) {
+          bCanEquip = 1;
         }
-      } else {
-        bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pCursorItem_lcl, ITEMTYPE_Axe);
-        if (bIsType) {
-          bMeetsReqs = D2Common::ITEMS::Items::IsTwoHanded(pCursorItem_lcl);
-          if (!bMeetsReqs) {
-            goto weapon_allowed;
-          }
+        if (D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Sword) && !D2Common::ITEMS::Items::IsTwoHanded(pItem)) {
+          bCanEquip = 1;
         }
-      }
-
-      weapon_not_allowed:
-      if (!bCanEquip) {
-        if (!bPlaySound) {
-          return 0;
+        break;
+      case 0x230:
+        if (D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Axe) && !D2Common::ITEMS::Items::IsTwoHanded(pItem)) {
+          bCanEquip = 1;
         }
-
-        UNIT::UnitSnd::UNITSND_PlaySoundForMercenary(nMercGUID, '\x01', 0x55);
-        return 0;
-      }
+        break;
+      case 0x231:
+        if (D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Sword)) {
+          bCanEquip = 1;
+        }
+        break;
     }
 
-    bMeetsReqs = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pCursorItem_lcl, pPlayer, 0, nullptr, nullptr, nullptr);
-    if (!bMeetsReqs) {
+    if (!bCanEquip) {
+      if (bPlaySound) {
+        UNIT::UnitSnd::UNITSND_PlaySoundForMercenary(nMercGUID, '\x01', 0x55);
+      }
+    } else if (!D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pItem, pMerc, 0, nullptr, nullptr, nullptr)) {
       bCanEquip = 0;
     }
 

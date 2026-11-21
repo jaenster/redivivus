@@ -376,22 +376,13 @@ void __fastcall DATATBLS_BuildStatesDataList(D2AllStatesDataTbl * * ppAllStatesD
     *ppAllStatesData = pAllStates;
     memset(pAllStates, 0, MonsterTbls::sgtDataTable.nTxtStatesSize * 2);
     D2StatesTxt* pTxtStates = MonsterTbls::sgtDataTable.pTxtStates;
-    int nStateIdx = 0;
     *pCounter = 0;
-    if (MonsterTbls::sgtDataTable.nTxtStatesSize <= 0) {
-      return;
-    }
-
-    uint8_t* pStateFlagByte = (uint8_t*)((char*)pTxtStates->overlay + (((int)nFlag >> 3) + 0xe));
-    do {
-      if ((uint8_t)Fog::BitBuffer::gadwBitMasks[nFlag & 7] & *pStateFlagByte) {
+    for (int nStateIdx = 0; nStateIdx < MonsterTbls::sgtDataTable.nTxtStatesSize; nStateIdx++) {
+      if (((uint8_t*)pTxtStates[nStateIdx].overlay)[((int)nFlag >> 3) + 0xe] & Fog::BitBuffer::gadwBitMasks[nFlag & 7]) {
         (*ppAllStatesData)[*pCounter].nStateId = (short int)nStateIdx;
         (*pCounter)++;
       }
-
-      nStateIdx++;
-      pStateFlagByte += 0x3c;
-    } while (nStateIdx < MonsterTbls::sgtDataTable.nTxtStatesSize);
+    }
 }
 
 // @sourcefile .\DATATBLS\DataTbls.cpp

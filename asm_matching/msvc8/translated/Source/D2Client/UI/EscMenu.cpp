@@ -58956,13 +58956,13 @@ static void Unreferenced_0047d5b0(int32_t nMouseY) {
 }
 
 static void __stdcall ESCMENU_ClickMenuItem(D2UIMouseMsgStrc * pMsg) {
-    BOOL bIsEnabled;
-    if (!(!gpEscMenuCurrentTable[gnEscMenuSelectedIndex].fpVisibilityCheck || (bIsEnabled = gpEscMenuCurrentTable[gnEscMenuSelectedIndex].fpVisibilityCheck() , bIsEnabled != 0))) {
+    D2EscMenuItemStrc* pItemData = &gpEscMenuCurrentTable[gnEscMenuSelectedIndex];
+    if (pItemData->fpVisibilityCheck && !pItemData->fpVisibilityCheck()) {
       return;
     }
 
-    D2EscMenuItemStrc* pItemData = gpEscMenuCurrentTable + gnEscMenuSelectedIndex;
-    switch (pItemData->nMenuItemType) {
+    pItemData = &gpEscMenuCurrentTable[gnEscMenuSelectedIndex];
+    switch (gpEscMenuCurrentTable[gnEscMenuSelectedIndex].nMenuItemType) {
       case 0:
         {
           if (pItemData->fpClickCallback) {

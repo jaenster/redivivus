@@ -794,7 +794,7 @@ static BOOL __stdcall WARDEN_ResolveAndLoadModule(void * pRc4Key, uint8_t * pMod
     }
 
     bCacheReadSuccess = WARDEN_DecryptAndLoadModule(pFileData, pRc4Key, nFileSize);
-    sgpUnknownSequence->pfnCacheFreeMem(pFileData);
+    sgpUnknownSequence->pfnCacheFreeMem(pFileData, nFileSize);
     return bCacheReadSuccess;
 }
 

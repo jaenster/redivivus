@@ -1213,79 +1213,47 @@ void __fastcall DUNGEON_ClearRoomTiles(D2RoomStrc * pRoom) {
 void __stdcall DRLGROOM_RemoveRoomFromAct(D2DrlgActStrc * pDrlgAct, D2RoomStrc * pRoom) {
     D2RoomStrc* pPrevRoom;
     int i;
-    D2RoomStrc** ppNearScan;
-    uint32_t nAdjRoomListCount;
     D2RoomStrc* nearRoom;
-    uint32_t* pnListCount;
-    D2RoomStrc** ppAdjRoomList;
     int nRoom;
-    D2RoomStrc* pRoomToRemove;
-    pRoomToRemove = pRoom;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4f7);
       exit(-1);
+    }
+
+    D2RoomStrc* pCurRoom;
+    pPrevRoom = 0;
+    for (pCurRoom = pDrlgAct->pRoom; pCurRoom; pCurRoom = pCurRoom->pDrlgRoomNext) {
+      if (pCurRoom == pRoom) {
+        break;
+      }
+      pPrevRoom = pCurRoom;
+    }
+
+    if (!pCurRoom) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x502);
+      exit(-1);
+    }
+    if (pPrevRoom) {
+      pPrevRoom->pDrlgRoomNext = pCurRoom->pDrlgRoomNext;
     } else {
-      D2RoomStrc* pCurRoom;
-      nearRoom = pDrlgAct->pRoom;
-      pPrevRoom = 0;
-      if (!pDrlgAct->pRoom) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x502);
-        exit(-1);
-      } else {
-        do {
-          pCurRoom = nearRoom;
-          if (pCurRoom == pRoom) {
-            if (!pCurRoom) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x502);
-              exit(-1);
-            }
-            if (pPrevRoom) {
-              pPrevRoom->pDrlgRoomNext = pCurRoom->pDrlgRoomNext;
-            } else {
-              pDrlgAct->pRoom = pCurRoom->pDrlgRoomNext;
-            }
+      pDrlgAct->pRoom = pCurRoom->pDrlgRoomNext;
+    }
 
-            pnListCount = &pRoom->nRoomListCount;
-            nRoom = 0x0;
-            if ((int)*pnListCount > 0) {
-              do {
-                nearRoom = pRoomToRemove->ppRoomList[nRoom];
-                if (nearRoom != pRoomToRemove) {
-                  nAdjRoomListCount = nearRoom->nRoomListCount;
-                  i = 0;
-                  if ((int)nAdjRoomListCount > 0) {
-                    ppAdjRoomList = nearRoom->ppRoomList;
-                    ppNearScan = ppAdjRoomList;
-                    do {
-                      if (*ppNearScan == pRoomToRemove) {
-                        ppAdjRoomList[i] = ppAdjRoomList[nAdjRoomListCount - 1];
-                        nearRoom->nRoomListCount--;
-                        break;
-                      }
-
-                      i++;
-                      ppNearScan++;
-                    } while (i < (int)nAdjRoomListCount);
-                  }
-                }
-
-                nRoom++;
-              } while (nRoom < (int)pRoomToRemove->nRoomListCount);
-            }
-
-            Drlg::DrlgRoom::FreeDrlgRoomEx(pRoomToRemove->pRoomEx, pDrlgAct->bClientSide, pRoomToRemove->eFlags);
-            FreeRoom(pDrlgAct->pMemory, pRoomToRemove);
-            return;
+    for (nRoom = 0; nRoom < (int)pRoom->nRoomListCount; nRoom++) {
+      nearRoom = pRoom->ppRoomList[nRoom];
+      if (nearRoom != pRoom) {
+        for (i = 0; i < (int)nearRoom->nRoomListCount; i++) {
+          if (nearRoom->ppRoomList[i] == pRoom) {
+            nearRoom->ppRoomList[i] = nearRoom->ppRoomList[nearRoom->nRoomListCount - 1];
+            nearRoom->nRoomListCount--;
+            break;
           }
-
-          nearRoom = pCurRoom->pDrlgRoomNext;
-          pPrevRoom = pCurRoom;
-        } while (pCurRoom->pDrlgRoomNext);
-
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x502);
-        exit(-1);
+        }
       }
     }
+
+    Drlg::DrlgRoom::FreeDrlgRoomEx(pRoom->pRoomEx, pDrlgAct->bClientSide, pRoom->eFlags);
+    FreeRoom(pDrlgAct->pMemory, pRoom);
 }
 
 void __stdcall DRLGROOM_SwapActiveRoomExBetweenLevels(D2RoomStrc * pRoom, D2RoomStrc * pRoom2) {

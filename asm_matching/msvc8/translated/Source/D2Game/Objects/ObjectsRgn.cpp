@@ -135,7 +135,6 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
 // Tears down and frees the game's D2ObjectControlStrc. Walks and frees the pSub0x1110 linked list (arena-allocated sub-records), then frees every per-level D2ObjectRngStrc in aLevelsRng (indices 1..nTxtLevelsSize-1), then frees all 8 shrine RNG arrays in sShrinesRng.aShrinesRng, and finally frees the control block itself from the game memory pool. Halts with an internal error if pGame is NULL.
 // @sourcefile .\OBJECTS\objrgn.cpp
 void __fastcall FreeObjectControl(::SGAMEDATA * pGame) {
-    D2ObjectRngStrc** ppLevelRng;
     D2ObjectControlSub0x1110* pPrevSub;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb6);
@@ -155,14 +154,9 @@ void __fastcall FreeObjectControl(::SGAMEDATA * pGame) {
     }
 
     pObjectControl->pSub0x1110 = 0;
-    int iLevelIdx = 1;
-    if (1 < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
-      ppLevelRng = pObjectControl->aLevelsRng;
-      do {
-        ppLevelRng++;
-        D2_FREE_POOL_AT(pGame->pMemoryPool, *ppLevelRng, ".\\OBJECTS\\objrgn.cpp", 0xe2);
-        iLevelIdx++;
-      } while (iLevelIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize);
+    int iLevelIdx;
+    for (iLevelIdx = 1; iLevelIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize; iLevelIdx++) {
+      D2_FREE_POOL_AT(pGame->pMemoryPool, pObjectControl->aLevelsRng[iLevelIdx], ".\\OBJECTS\\objrgn.cpp", 0xe2);
     }
 
     uint8_t** ppShrineRng = (uint8_t**)pObjectControl->sShrinesRng.aShrinesRng;

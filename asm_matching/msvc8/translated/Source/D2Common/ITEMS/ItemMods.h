@@ -299,7 +299,7 @@ int32_t __fastcall PropertyFunc_ClassSkillsBonus(int32_t nType, struct D2UnitStr
 int32_t __fastcall PropertyFunc_ReturnTrue(int32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItemUnit, struct D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, struct D2UnitStrc * pContextUnit);
 // Variant of SimpleStatWrapper: rolls a value from property min/max range (with expansion/classic RNG difference) then applies it via PropertyFunc_SimpleStat. Used for properties where the expansion path still needs RNG but not the ITEMMOD_ApplyRandomStatValue pipeline.
 int32_t __fastcall PropertyFunc_SimpleStatWithRoll(int32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItemUnit, struct D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, struct D2UnitStrc * pContextUnit);
-void Unreferenced_0065e610();
+void __stdcall Unreferenced_0065e610(int32_t nUnused1, int32_t nUnused2, int32_t nUnused3);
 struct D2ItemsTxt * __fastcall Unreferenced_0065e9b0(struct D2UnitStrc * pUnit, struct D2UnitStrc * pFallback);
 // Rolls a random integer in [nMin, nParam] using the item's seed (via GetItemSeed for UNIT_ITEM, pUnit->sSeed otherwise). If min==max returns min with no RNG call. Returns the rolled value in EAX.
 int32_t __fastcall ITEMMOD_RollRandomValue(struct D2UnitStrc * pUnit, int32_t nMin, int32_t nMax);

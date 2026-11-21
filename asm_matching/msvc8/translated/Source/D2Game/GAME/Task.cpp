@@ -473,58 +473,51 @@ uint32_t __stdcall TASK_AllocateTaskQueue() {
 // Enqueues a game task: stamps pTaskNode->dwTimestamp with TASK_GetTimestamp(), stores dwCallbackId and dwUserData, then, under lpCriticalSection_0088caa8, links pTaskNode->sLink at the tail of the last slot in the gsTaskQueueListHead ring, under that slot's critical section, bumps the slot's nTaskCount and gnTaskQueueTailIndex, and moves the slot link to the ring tail. Returns 1 when queued, 0 when the ring was uninitialised (it only self-links the head) or empty. Halts on NULL links (lines 0x77, 0x78, 0x6c).
 // Provenance: asm 00564a00..00564b1b, EDI is the result (00564a49, 00564b15); RET 4.
 BOOL __fastcall TASK_EnqueueGameTask(D2TaskNodeStrc * pTaskNode, uint32_t dwCallbackId, uint32_t dwUserData) {
-    D2TaskQueueSlotStrc* pSlot;
-    D2LinkNodeStrc* pNewTaskLink;
-    D2LinkNodeStrc* pTailLink;
     BOOL bSuccess = 0;
-    uint32_t dwTimestamp = TASK_GetTimestamp();
-    pTaskNode->dwTimestamp = dwTimestamp;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ pTaskNode->dwCallbackId = dwCallbackId;
+    pTaskNode->dwTimestamp = TASK_GetTimestamp();
+    pTaskNode->dwCallbackId = dwCallbackId;
     pTaskNode->dwUserData = dwUserData;
-    EnterCriticalSection(&lpCriticalSection_0088caa8);
-    D2LinkNodeStrc* pSlotLink = gsTaskQueueListHead.pPrev;
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0088caa8);
     if (!gsTaskQueueListHead.pNext) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gsTaskQueueListHead.pNext = &gsTaskQueueListHead;
+      gsTaskQueueListHead.pNext = &gsTaskQueueListHead;
       gsTaskQueueListHead.pPrev = &gsTaskQueueListHead;
-      LeaveCriticalSection(&lpCriticalSection_0088caa8);
-      return 0;
-    }
-    if (gsTaskQueueListHead.pPrev != &gsTaskQueueListHead && gsTaskQueueListHead.pPrev) {
-      pSlot = (D2TaskQueueSlotStrc*)(gsTaskQueueListHead.pPrev - 2);
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(aTaskQueueCriticalSections + (intptr_t)gsTaskQueueListHead.pPrev[-2].pNext);
-      pNewTaskLink = &pTaskNode->sLink;
-      if (!(pSlotLink - 1)) {
+    } else if (gsTaskQueueListHead.pPrev != &gsTaskQueueListHead && gsTaskQueueListHead.pPrev) {
+      D2LinkNodeStrc* pSlotLink = gsTaskQueueListHead.pPrev;
+      D2TaskQueueSlotStrc* pSlot = (D2TaskQueueSlotStrc*)((char*)pSlotLink - 0x10);
+      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&aTaskQueueCriticalSections[pSlot->nSlotIndex]);
+      D2LinkNodeStrc* pNewLink = &pTaskNode->sLink;
+      D2LinkNodeStrc* pTaskList = &pSlot->sTaskList;
+      if (!pTaskList) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x77);
         exit(-1);
-      } else if (!pNewTaskLink) {
+      }
+      if (!pNewLink) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x78);
         exit(-1);
-      } else {
-        pNewTaskLink->pNext = pSlotLink - 1;
-        pTailLink = pSlotLink[-1].pPrev;
-        pTaskNode->sLink.pPrev = pTailLink;
-        pTailLink->pNext = pNewTaskLink;
-        pSlotLink[-1].pPrev = pNewTaskLink;
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + pSlot->nSlotIndex);
-        pSlotLink[-2].pPrev = (D2LinkNodeStrc*)((intptr_t)&pSlotLink[-2].pPrev->pNext + 1);
-        gnTaskQueueTailIndex++;
-        pSlotLink->pNext->pPrev = pSlotLink->pPrev;
-        pSlotLink->pPrev->pNext = pSlotLink->pNext;
-        pNewTaskLink = gsTaskQueueListHead.pNext;
-        if (!gsTaskQueueListHead.pNext) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6c);
-          exit(-1);
-        }
-
-        pSlotLink->pNext = gsTaskQueueListHead.pNext;
-        pTailLink = pNewTaskLink->pPrev;
-        pSlotLink->pPrev = pTailLink;
-        pTailLink->pNext = pSlotLink;
-        pNewTaskLink->pPrev = pSlotLink;
-        bSuccess = 1;
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0088caa8);
-        return bSuccess;
       }
+
+      pNewLink->pNext = pTaskList;
+      D2LinkNodeStrc* pTail = pTaskList->pPrev;
+      pNewLink->pPrev = pTail;
+      pTail->pNext = pNewLink;
+      pTaskList->pPrev = pNewLink;
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&aTaskQueueCriticalSections[pSlot->nSlotIndex]);
+      pSlot->nTaskCount++;
+      gnTaskQueueTailIndex++;
+      pSlotLink->pNext->pPrev = pSlotLink->pPrev;
+      pSlotLink->pPrev->pNext = pSlotLink->pNext;
+      D2LinkNodeStrc* pHead = gsTaskQueueListHead.pNext;
+      if (!pHead) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6c);
+        exit(-1);
+      }
+
+      pSlotLink->pNext = pHead;
+      pTail = pHead->pPrev;
+      pSlotLink->pPrev = pTail;
+      pTail->pNext = pSlotLink;
+      pHead->pPrev = pSlotLink;
+      bSuccess = 1;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0088caa8);

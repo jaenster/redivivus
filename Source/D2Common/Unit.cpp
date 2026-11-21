@@ -277,11 +277,10 @@ void __stdcall DRLGROOM_AddUnitToRoom(D2UnitStrc * pUnit, D2RoomStrc * pRoom) {
 
 // Unlinks pUnit from its current room's unit linked-list and clears its room reference. Walks the room's unit list via pRoomNext, patches the predecessor's link when found, then calls DRLGROOM_DecreaseAlliedCount if the unit is a player or an allied monster. Also removes the unit from the room update list and clears UNITFLAG_ISLINKREFRESHMSG. Halts with an internal error if pUnit is null or if it has a pRoomNext but no room pointer.
 void __stdcall RemoveUnitFromRoom(D2UnitStrc * pUnit) {
-    int32_t nLine;
     D2UnitStrc* pFirst;
     D2UnitStrc* pNext;
     D2UnitStrc* pPrevious;
-    bool bFound = false;
+    BOOL bFound = FALSE;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf5);
       exit(-1);
@@ -301,7 +300,7 @@ void __stdcall RemoveUnitFromRoom(D2UnitStrc * pUnit) {
       while (pNext = pFirst) {
         if (pNext == pUnit) {
           if (pNext) {
-            bFound = true;
+            bFound = TRUE;
             if (!pPrevious) {
               *pCurrent = pNext->pRoomNext;
             } else {
@@ -309,8 +308,15 @@ void __stdcall RemoveUnitFromRoom(D2UnitStrc * pUnit) {
             }
 
             pNext->pRoomNext = 0;
-            if (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER && (nLine = Stats::StatsEx::STATSEX_GetAlignment(pUnit) , nLine == 2)) {
+            switch (pUnit->eUnitType) {
+            case UNIT_PLAYER:
               DUNGEON::Dungeon::DRLGROOM_DecreaseAlliedCount(pRoom);
+              break;
+            case UNIT_MONSTER:
+              if (Stats::StatsEx::STATSEX_GetAlignment(pUnit) == 2) {
+                DUNGEON::Dungeon::DRLGROOM_DecreaseAlliedCount(pRoom);
+              }
+              break;
             }
           }
 

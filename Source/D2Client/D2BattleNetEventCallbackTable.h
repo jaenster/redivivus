@@ -81,18 +81,18 @@ struct D2BattleNetEventCallbackTable {
     /* 0x00 */ void (*fpCloseGame)(int, int);
     /* 0x04 */ void (*fpLeaveGame)(int, int, int, int, int, void *, void *, void *, int, int, void *, int, int, int, int, int, int, void *);
     /* 0x08 */ void (__fastcall *fpGetDatabaseCharacter)(struct D2ClientStrc *, LPCSTR, DWORD, LPCSTR);
-    /* 0x0C */ void (*fpSaveDatabaseCharacter)(char *, void *, int, int); // offset 0x0C - saves character data to BNet database with account ID, save buffer, size, token
+    /* 0x0C */ void (__fastcall *fpSaveDatabaseCharacter)(uint32_t *, char *, char *, void *, int, uint32_t); // offset 0x0C - saves character data to BNet database with account ID, save buffer, size, token
     /* 0x10 */ uint8_t * fpServerLogMessage;
     /* 0x14 */ void (__fastcall *fpEnterGame)(uint16_t, char *, uint16_t, uint32_t, uint32_t);
     /* 0x18 */ int (*fpFindPlayerToken)(int, void *, void *, void *, void *, void *, void *);
     /* 0x1C */ uint8_t * fpSaveDatabaseGuild;
-    /* 0x20 */ void (*fpUnlockDatabaseCharacter)(void *);
+    /* 0x20 */ void (__fastcall *fpUnlockDatabaseCharacter)(uint32_t *, char *, char *);
     /* 0x24 */ uint8_t * fpReserved1;
     /* 0x28 */ void (__fastcall *fpUpdateCharacterLadder)(char *, uint16_t, uint32_t, uint32_t, uint32_t, uint16_t, void *);
     /* 0x2C */ void (__fastcall *fpUpdateGameInformation)(WORD, char *, int32_t, int32_t);
     /* 0x30 */ void (__fastcall *fpReserved2_systemMsg)(struct D2BNetSystemInfoStrc *);
     /* 0x34 */ int (*fpSetGameData)();
-    /* 0x38 */ void (*fpRelockDatabaseCharacter)(char *);
+    /* 0x38 */ void (__fastcall *fpRelockDatabaseCharacter)(uint32_t *, char *, char *);
     /* 0x3C */ void (*fpLoadComplete)();
     /* 0x40 */ uint8_t * fpReserved3; // slot 16, offset 0x40 - never referenced in Game.exe
     /* 0x44 */ uint8_t * fpReserved4; // slot 17, offset 0x44 - never referenced in Game.exe

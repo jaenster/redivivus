@@ -412,36 +412,33 @@ void __fastcall Q31_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 // A5Q1 state-3 handler. On monster-gossip indices 0x6e..0x70 with intro shown: bump in-memory stateFlag to 3 and persist (Q31_SyncQuestProgress). On the Larzuk-leave path (index 0x6d): remove from GUID list; if stateFlag==2 and not Completed(0)/RewardAwaits(1), force stateFlag=3, and if prev==0 broadcast state 1, then re-persist.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q1.cpp
 void __fastcall Q31_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2UnitDataPlayerStrc* pPlayerData;
-    BOOL bQuestState;
-    D2BitBufferStrc* pBitBuffer;
-    ::SGAMEDATA* pGame;
-    if (pQuestArgs->sQuestArgs.sLevelChange.nNewLevel - 0x6eU <= 2) {
-      if (pQuestData->bIsNotIntroduction != '\0' && (pQuestData->nStateFlag == 1 || pQuestData->nStateFlag == 2)) {
-        QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q1.cpp", 0x229);
-        UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q31_SyncQuestProgress);
-        return;
-      }
-    } else if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel == 0x6d) {
-      QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs);
-      if (pQuestData->nStateFlag == 2) {
-        pGame = pQuestArgs->pGame;
-        pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-        pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
-        if (bQuestState != 1) {
-          bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
-          if (bQuestState != 1) {
-            QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q1.cpp", 0x23f);
-            if (!pQuestData->nStateFlagPrev) {
-              pQuestData->nQuestPacketFlags = '\0';
-              QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, 1);
-            }
+    int nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    switch (pQuestArgs->sQuestArgs.sLevelChange.nNewLevel) {
+      case 0x6e:
+      case 0x6f:
+      case 0x70:
+        if (pQuestData->bIsNotIntroduction != '\0' && (pQuestData->nStateFlag == 1 || pQuestData->nStateFlag == 2)) {
+          QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q1.cpp", 0x229);
+          UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q31_SyncQuestProgress);
+        }
+        break;
+      default:
+        if (nOldLevel == 0x6d) {
+          QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs);
+          if (pQuestData->nStateFlag == 2) {
+            D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
+            if (D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed) != 1 && D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits) != 1) {
+              QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q1.cpp", 0x23f);
+              if (!pQuestData->nStateFlagPrev) {
+                pQuestData->nQuestPacketFlags = '\0';
+                QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, 1);
+              }
 
-            UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q31_SyncQuestProgress);
+              UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q31_SyncQuestProgress);
+            }
           }
         }
-      }
+        break;
     }
 }
 

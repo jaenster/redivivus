@@ -3763,30 +3763,16 @@ static void UNITSND_PlayMonsterSkillSound(D2UnitStrc * pUnit, eD2MonsterAnimMode
     }
 
     int32_t nRecordingIdx = GAME::Game::gnRecordingIndex();
-    switch (nAnimMode) {
-      case eD2MonsterAnimMode_ns::Skill1:
-        {
-          nSoundId = pMonSoundsLine->Skill[0];
-          break;
-        }
-      case eD2MonsterAnimMode_ns::Skill2:
-        {
-          nSoundId = pMonSoundsLine->Skill[1];
-          break;
-        }
-      case eD2MonsterAnimMode_ns::Skill3:
-        {
-          nSoundId = pMonSoundsLine->Skill[2];
-          break;
-        }
-      default:
-        {
-          if (nAnimMode != eD2MonsterAnimMode_ns::Skill4) {
-            return;
-          }
-
-          nSoundId = pMonSoundsLine->Skill[3];
-        }
+    if (nAnimMode == eD2MonsterAnimMode_ns::Skill1) {
+      nSoundId = pMonSoundsLine->Skill[0];
+    } else if (nAnimMode == eD2MonsterAnimMode_ns::Skill2) {
+      nSoundId = pMonSoundsLine->Skill[1];
+    } else if (nAnimMode == eD2MonsterAnimMode_ns::Skill3) {
+      nSoundId = pMonSoundsLine->Skill[2];
+    } else if (nAnimMode == eD2MonsterAnimMode_ns::Skill4) {
+      nSoundId = pMonSoundsLine->Skill[3];
+    } else {
+      return;
     }
 
     if (nSoundId == SOUND_ALKOR_ACT3_GOSSIP_4) {

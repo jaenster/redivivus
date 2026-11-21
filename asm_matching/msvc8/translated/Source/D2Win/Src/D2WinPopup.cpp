@@ -187,7 +187,6 @@ BOOL __fastcall Draw(::D2WinPopup * pPopup) {
 }
 
 void __stdcall D2WinPopup() {
-    uint32_t uVar1;
     if (gpD2WinPopupControl) {
       D2WinMain::FORMS_DestroyControl(&gpD2WinPopupControl->sControl);
       gpD2WinPopupControl = 0;
@@ -197,9 +196,8 @@ void __stdcall D2WinPopup() {
     memset(pNewPopup, 0, 0x468);
     pNewPopup->sControl.neD2FormType = FORM_Popup;
     pNewPopup->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
-    uVar1 = pNewPopup->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];
-    pNewPopup->sControl.dwState = uVar1;
-    pNewPopup->sControl.dwState = uVar1 | Fog::BitBuffer::gadwBitMasks[3];
+    pNewPopup->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[2];
+    pNewPopup->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[3];
     pNewPopup->sControl.dwPosX = D2WinMain::nPosX;
     pNewPopup->sControl.dwPosY = D2WinMain::nPosY;
     pNewPopup->sControl.fpDraw = (::Draw)(BOOL (__fastcall *)(::D2WinPopup*))D2WinPopup::Draw;

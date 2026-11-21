@@ -382,11 +382,16 @@ void __stdcall SKILLASS_ApplyChargeUpDamage(D2UnitStrc * pUnit, D2StatListExStrc
     }
 
     SkillsServer::SetDamageOnEvent(pUnit, pDamage, eSkill, nSkillLvl);
-    if (pDVar1->EType == ELEMENTAL_COLD && nChargeLevel >= 2 && nChargeLevel <= 3) {
-      int32_t nFreezeDivisor;
-      nFreezeDivisor = D2Common::Skills::GetSkilParam1(eSkill);
-      if (nFreezeDivisor) {
-        pDamage->dwFrzLength += pDamage->dwColdLength / nFreezeDivisor;
+    if (pDVar1->EType == ELEMENTAL_COLD) {
+      switch (nChargeLevel) {
+      case 2:
+      case 3: {
+        int32_t nFreezeDivisor = D2Common::Skills::GetSkilParam1(eSkill);
+        if (nFreezeDivisor) {
+          pDamage->dwFrzLength += pDamage->dwColdLength / nFreezeDivisor;
+        }
+        break;
+      }
       }
     }
 
@@ -471,8 +476,12 @@ void __fastcall SKILLASS_ApplyProgressiveDamageToTarget(D2UnitStrc * pUnit, D2Da
           eSkill = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
           if ((int)eSkill > 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
             pSkillTxt = D2Common::Skills::TXT_Skills_GetLine(eSkill);
-            if (pSkillTxt && pSkillTxt->prgdam == '\x01') {
-              SKILLBAR_HandleWarCryStun(pStatList, pDamage, pUnit);
+            if (pSkillTxt) {
+              switch (pSkillTxt->prgdam) {
+                case 1:
+                  SKILLBAR_HandleWarCryStun(pStatList, pDamage, pUnit);
+                  break;
+              }
             }
           }
         }

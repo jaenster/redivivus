@@ -1033,7 +1033,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, char * szAccountName, D2Unit
         if (bSaveUnchanged) {
           gnBnetSaveUnchangedCount++;
           if (BattleNetServerService && BattleNetServerService->fpRelockDatabaseCharacter) {
-            BattleNetServerService->fpRelockDatabaseCharacter(szAccountName);
+            BattleNetServerService->fpRelockDatabaseCharacter(&nRealmId, nUnused, szAccountName);
           }
 
           GAME::Clients::SetRealm(pClient, nRealmId);
@@ -1052,7 +1052,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, char * szAccountName, D2Unit
         exit(-1);
       }
 
-      BattleNetServerService->fpSaveDatabaseCharacter(szAccountName, (uint8_t*)&__frame0.wPacketHeader, nSaveSizePlus2, nToken);
+      BattleNetServerService->fpSaveDatabaseCharacter(&nRealmId, nUnused, szAccountName, &__frame0.wPacketHeader, nSaveSizePlus2, nToken);
       GAME::Clients::CopySafeBuffer((D2ClientStrc*)nCompareByteIdx, __frame0.saveTempBuffer, nSaveFileBytes);
     }
 
@@ -2348,8 +2348,9 @@ int __stdcall _oldSaveGameLoadingPart9(D2UnitStrc * pUnit, uint8_t * pbParam, ui
     } while (nHotkeyIndex < 0x10);
 
     if (nParam > 0x51) {
-      eSkill = *(eD2Skills*)((char*)(pbParam + *pnBytesConsumed) + 4);
-      D2Common::Units::SetShiftLeftSkillData(pUnit, *(eD2Skills*)(pbParam + *pnBytesConsumed), -1);
+      eD2Skills* pSkills = (eD2Skills*)(pbParam + *pnBytesConsumed);
+      eSkill = pSkills[1];
+      D2Common::Units::SetShiftLeftSkillData(pUnit, pSkills[0], -1);
       D2Common::Units::SetShiftRightSkillData(pUnit, eSkill, -1);
       *pnBytesConsumed += 8;
     }

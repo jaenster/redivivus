@@ -177,6 +177,18 @@ int __stdcall NPCMENU_ShowMercResurrectDialog() {
     return 0;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 void __fastcall MERC_ClearHireInventory(D2UnitStrc * pUnit) {
     D2UnitStrc* pCarried;
     D2Client::Merc::D2MercForHire[0].bActive = 0;
@@ -204,7 +216,7 @@ void __fastcall MERC_ClearHireInventory(D2UnitStrc * pUnit) {
       pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pCurrentItem);
       pCarried = D2Common::INVENTORY::Inventory::GetCarriedItem(pCurrentItem);
       if (pCarried) {
-        UNIT::CUnit::RemoveObjectFromServerObjectTable(pCarried->nUnitGUID, pCarried->eUnitType);
+        UNIT::CUnit::RemoveObjectFromServerObjectTable(GetGUIDInline(pCarried), GetTypeInline(pCarried));
       }
 
       pCurrentItem = pNextItem;

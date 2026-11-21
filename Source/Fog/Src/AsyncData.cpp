@@ -44,7 +44,6 @@ namespace Fog::Src::AsyncData {
 
 // Registers: nEnable in ECX; nReserved (EDX) is 0 at the only call site and not read.
 void __fastcall STRUCT_AllocAsyncData(int32_t nEnable, int32_t nReserved) {
-    void* pSlot;
     if (gbAsyncDataInitialized) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x7b);
       exit(-1);
@@ -58,20 +57,14 @@ void __fastcall STRUCT_AllocAsyncData(int32_t nEnable, int32_t nReserved) {
 
     pD2AsyncDataStrc = (D2AsyncDataSlotStrc*)D2_ALLOC_AT(0x3000, ".\\Src\\AsyncData.cpp", 0x88);
     if (!pD2AsyncDataStrc) {
-      pD2AsyncDataStrc = 0;
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x89);
       exit(-1);
     }
 
-    int nSlotOffset = 0;
-    do {
-      HANDLE hEvent;
-      /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ pSlot = (void*)&pD2AsyncDataStrc[nSlotOffset].hEvent;
-      hEvent = CreateEventA((LPSECURITY_ATTRIBUTES)0x0, 1, 0, (LPCSTR)0x0);
-      nSlotOffset++;
-      *(HANDLE*)pSlot = hEvent;
-      *(uint32_t*)((char*)pSlot + 4) = 1;
-    } while (nSlotOffset < 256);
+    for (int i = 0; i < 256; i++) {
+      pD2AsyncDataStrc[i].hEvent = CreateEventA(nullptr, TRUE, FALSE, nullptr);
+      pD2AsyncDataStrc[i].bFree = TRUE;
+    }
 
     gnAsyncDataHandleBufferSize = 0x100;
     gbAsyncDataInitialized = 1;
@@ -139,13 +132,12 @@ D2AsyncDataSlotStrc * __stdcall ASYNCDATA_AllocSlot() {
     DWORD dwWaitResult;
     HANDLE hEvent;
     D2AsyncDataSlotStrc* pCandidateSlot;
-    if (!gbAsyncDataInitialized) {
-      return nullptr;
-    }
+    if (gbAsyncDataInitialized) {
 
     uint32_t nSlotIndex = 0;
-    D2AsyncDataSlotStrc* pSlot = pD2AsyncDataStrc;
+    D2AsyncDataSlotStrc* pSlot;
     if (gnAsyncDataHandleBufferSize > 0) {
+      pSlot = pD2AsyncDataStrc;
       do {
         if (pSlot->bFree) {
           pSlot->bFree = 0;
@@ -179,6 +171,7 @@ D2AsyncDataSlotStrc * __stdcall ASYNCDATA_AllocSlot() {
       pDVar1->hEvent = hEvent;
       pDVar1->bFree = 0;
       return pDVar1;
+    }
     }
 
     return nullptr;

@@ -2880,10 +2880,10 @@ void __fastcall NET_D2GS_SERVER_SrvJoinGame(int32_t nClientId, uint16_t nGameTok
       return;
     }
 
+    ::SGAMEDATA* nToken = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
     uint32_t nGameTokenLocal = (uint32_t)nGameToken;
     ::SGAMEDATA* pGame = gaQServerGameByToken[nGameTokenLocal];
-    ::SGAMEDATA* nToken = 0;
     if (pGame && pGame != (::SGAMEDATA*)-1) {
       nToken = pGame;
     }
@@ -2909,7 +2909,7 @@ void __fastcall NET_D2GS_SERVER_SrvJoinGame(int32_t nClientId, uint16_t nGameTok
           exit(-1);
         }
 
-        BattleNetServerService->fpUnlockDatabaseCharacter(pAccountName);
+        BattleNetServerService->fpUnlockDatabaseCharacter(&pGame->pBnetGameData, szPlayerName, pAccountName);
       }
 
       Server::Unlock(pGame);

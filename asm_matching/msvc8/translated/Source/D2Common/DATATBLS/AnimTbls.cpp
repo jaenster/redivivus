@@ -93,26 +93,19 @@ static BOOL __stdcall ANIMDATA_CompareNames(uint32_t * pdwName1, uint32_t * pdwN
 // Returns pointer to the matching record or NULL.
 // Source: .\\DATATBLS\\AnimTbls.cpp
 static D2AnimDataRecordStrc * ANIMDATA_GetRecordByNameHash(LPSTR szCofName) {
-    char cChar = *szCofName;
-    char* pszChar = szCofName;
-    while (cChar != '\0') {
-      cChar = *pszChar;
-      if (cChar >= 'a' && cChar <= 'z') {
-        *pszChar = cChar - 0x20;
+    char* pszChar;
+    for (pszChar = szCofName; *pszChar; pszChar++) {
+      if (*pszChar >= 'a') {
+        if (*pszChar <= 'z') {
+          *pszChar -= 0x20;
+        }
       }
-
-      pszChar++;
-      cChar = *pszChar;
     }
 
     D2AnimDataStrc* pAnimTbls = DataTbls::TXT_AnimTbls_Get();
     uint32_t nHashValue = 0;
-    uint8_t bCharValue = *szCofName;
-    uint8_t* pbCursor = (uint8_t*)szCofName;
-    while (bCharValue) {
-      pbCursor++;
-      nHashValue += bCharValue;
-      bCharValue = *pbCursor;
+    for (uint8_t* pbCursor = (uint8_t*)szCofName; *pbCursor; pbCursor++) {
+      nHashValue += *pbCursor;
     }
 
     int nRecordCount = pAnimTbls->pHashTable[nHashValue & 0xff]->nCount;

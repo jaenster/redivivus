@@ -1240,64 +1240,34 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
 // Sets the combat stats (level, AC, to-hit) on a corpse unit being revived by the Necromancer's Revive skill. If nLevel < 1, derives the minion level as 75% of the caster's level plus nParam2 (clamped to at least 1). Looks up the D2MonLvlTxt row for the final level, then adds the difficulty- and ladder-adjusted AC and TH values. Returns 1 on success, 0 if MonLvl data is out of range.
 BOOL __fastcall SKILLS_SetSummonBaseStats(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pPet, int32_t nLevel, int32_t nLevelOffset) {
-    int nLevelClamped;
-    uint32_t nDifficultyIndex;
     if (nLevel <= 0) {
-      int nLevelScaled;
-      nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_level, 0);
-      nLevelScaled = nLevel * 3 / 4 + nLevelOffset;
-      nLevelClamped = nLevelScaled;
-      if (nLevelScaled <= 1) {
-        nLevelClamped = 1;
-      }
-      if (nLevelClamped < nLevel) {
-        nLevel = nLevelScaled;
-        if (nLevelScaled <= 1) {
-          nLevel = 1;
-          goto set_minion_level;
-        }
-      }
-      if (nLevel) {
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pPet, UNITSTAT_level, nLevel, 0);
-      }
-    } else {
-      set_minion_level:
+      int nOwnerLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_level, 0);
+      nLevel = nOwnerLevel * 3 / 4 + nLevelOffset;
+      nLevel = (nLevel > 1 ? nLevel : 1) < nOwnerLevel ? (nLevel > 1 ? nLevel : 1) : nOwnerLevel;
+    }
+    if (nLevel) {
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pPet, UNITSTAT_level, nLevel, 0);
     }
 
-    nLevelClamped = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
-    if (nLevel >= nLevelClamped) {
-      nLevel = nLevelClamped;
+    int nMaxLevel = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
+    if (nLevel >= nMaxLevel) {
+      nLevel = nMaxLevel;
     }
 
-    D2MonLvlTxt* pDVar1;
-    pDVar1 = nLevel >= 0 && nLevel < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevel : nullptr;
-    if (!pDVar1) {
+    D2MonLvlTxt* pMonLvlTxt = nLevel >= 0 && nLevel < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevel : nullptr;
+    if (!pMonLvlTxt) {
       return 0;
     }
 
-    uint32_t byDifficulty;
-    byDifficulty = pGame->nDifficulty;
-    if (byDifficulty > 0) {
-      if (1 < byDifficulty) {
-        nDifficultyIndex = 2;
-        goto add_monlvl_ac_and_tohit;
-      }
-      if (byDifficulty > 0) {
-        nDifficultyIndex = (uint32_t)byDifficulty;
-        goto add_monlvl_ac_and_tohit;
-      }
-    }
-
-    nDifficultyIndex = 0;
-    add_monlvl_ac_and_tohit:
+    uint32_t nDifficultyIndex = (pGame->nDifficulty > 0 ? pGame->nDifficulty : 0) < 2 ? (pGame->nDifficulty > 0 ? pGame->nDifficulty : 0) : 2;
+    int nExpansion;
     if (pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER) {
-      nLevelClamped = 0;
+      nExpansion = 0;
     } else {
-      nLevelClamped = 1;
+      nExpansion = 1;
     }
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pPet, UNITSTAT_armorclass, pDVar1->AC[nDifficultyIndex + nLevelClamped * 3], 0);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pPet, UNITSTAT_tohit, pDVar1->TH[nLevelClamped * 3 + nDifficultyIndex], 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pPet, UNITSTAT_armorclass, pMonLvlTxt->AC[nDifficultyIndex + nExpansion * 3], 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pPet, UNITSTAT_tohit, pMonLvlTxt->TH[nExpansion * 3 + nDifficultyIndex], 0);
     return 1;
 }
 
@@ -2495,10 +2465,24 @@ BOOL __fastcall ITEMEVENT_BloodGolemLifeSteal(::SGAMEDATA * pGame, uint32_t nUni
     return 1;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
 // Item-event callback that drains life from a revived necromancer minion back to its owner. Fires when pUnit is a monster with pParam->offset_0x4c damage dealt. Looks up the owner via GetOwnerUnit, checks owner is alive and above 0xFF HP, reads the monster's Skill1 leech rate from MonStats.txt via GetSkillParam4, subtracts a percentage of the dealt damage from owner HP (floor 0x100), and reduces the tracked damage value in pParam.
 BOOL __fastcall ITEMEVENT_BloodGolemShareDamage(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nDivisor;
-    if (!(pUnit && pDamage && pUnit->eUnitType == UNIT_MONSTER && pDamage->dwDmgTotal > 0)) {
+    if (!pUnit || !pDamage) {
+      return 0;
+    }
+
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
+      return 0;
+    }
+
+    if (pDamage->dwDmgTotal <= 0) {
       return 0;
     }
 

@@ -4321,11 +4321,6 @@ BOOL __fastcall OBJOP_OpenChestSpawnMonster(D2ObjectOperateFnArg * pOperation) {
 
 // Object-operate callback for boss chests that can spawn a unique monster pack. If the chest is in Death mode or null, rolls drops via RollChestDrops (ITEMTYPE_None1). On success: marks object as updated, clears UNITFLAG_TARGETABLE, schedules an animation-end event, then rolls (via chest Parm+0x1e threshold from seed) whether to spawn a unique pack. If yes, finds the first monster-region entry for the chest's level with GetSomeMonsterStatFlag==2 (unique-capable) and calls SpawnUniquePack. Finally removes collision if HasCollision[1] is false and dispatches the operate callback. Always returns 1.
 BOOL __fastcall OBJOP_OpenBossChestSpawnUniques(D2ObjectOperateFnArg * pOperation) {
-    uint32_t dwMonStatFlag;
-    uint32_t dwClassId;
-    D2MonsterRegionFieldStrc* pMonData;
-    int nMonIdx;
-    uint8_t nMonCount;
     D2UnitStrc* pVictim = pOperation->sArg.pVictim;
     if (!(!pVictim || pVictim->eAnimMode.ePlayerMode == Death)) {
       return 1;
@@ -4352,21 +4347,13 @@ BOOL __fastcall OBJOP_OpenBossChestSpawnUniques(D2ObjectOperateFnArg * pOperatio
     if (seedNextAlt % 0xff <= (uint32_t)pTxtObjects->Parm[7]) {
       D2MonsterRegionStrc* pMonsterRegion;
       pMonsterRegion = Monster::MonsterRegion::ReturnMonsterRegionEntryForLevel(pOperation->sArg.pGame->pMonsterRegion, eLevel);
-      nMonCount = pMonsterRegion->nCounter;
-      nMonIdx = 0;
-      if (nMonCount) {
-        pMonData = pMonsterRegion->pMonData;
-        do {
-          dwClassId = (uint32_t)(short int)pMonData->nClassId;
-          dwMonStatFlag = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(dwClassId, 2);
-          if (dwMonStatFlag) {
-            Monsters::SpawnUniquePack(pOperation->sArg.pGame, D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim), 0, dwClassId, 1, 0, 0, 1);
-            break;
-          }
-
-          nMonIdx++;
-          pMonData++;
-        } while (nMonIdx < (int)(uint32_t)nMonCount);
+      int nMonCount = pMonsterRegion->nCounter;
+      for (int nMonIdx = 0; nMonIdx < nMonCount; nMonIdx++) {
+        int nClassId = (short int)pMonsterRegion->pMonData[nMonIdx].nClassId;
+        if (D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(nClassId, 2)) {
+          Monsters::SpawnUniquePack(pOperation->sArg.pGame, D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim), 0, nClassId, 1, 0, 0, 1);
+          break;
+        }
       }
     }
     if (!pTxtObjects->HasCollision[1]) {

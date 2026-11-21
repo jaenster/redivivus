@@ -19,6 +19,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/Seed.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -281,108 +282,75 @@ static void MONSTER_ApplySpecialUmods(D2UnitStrc * pUnit, D2UnknownCreateMonster
     nClassId = pCreateData->nClassId;
     ::SGAMEDATA* pGame;
     pGame = pCreateData->pGame;
-    if (nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId) {
-      nClassId = (int32_t)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].BaseId;
-    }
-    if (nClassId < 0) {
+    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    int32_t nBaseId = !pMonStatsTxt ? nClassId : pMonStatsTxt->BaseId;
+    if (nBaseId < 0) {
       return;
     }
-    if (nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+    if (nBaseId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       return;
     }
-    if (nClassId <= 0x157) {
-      if (nClassId >= 0x154) {
+    switch (nBaseId) {
+      case 0x18:
+        Monsters::InitUmods(pGame, pUnit, 0xd, 0);
+        return;
+      case 0x5b:
+        Monsters::InitUmods(pGame, pUnit, 0x14, 0);
+        return;
+      case 0x60:
+        Monsters::InitUmods(pGame, pUnit, 10, 0);
+        return;
+      case 0xd3:
+        Monsters::InitUmods(pGame, pUnit, 0xb, 0);
+        Monsters::InitUmods(pGame, pUnit, 0x16, 1);
+        return;
+      case 0x146:
+      case 0x147:
+      case 0x148:
+      case 0x149:
+      case 0x14a:
+        Monsters::InitUmods(pGame, pUnit, 0xe, 0);
+        return;
+      case 0x154:
+      case 0x155:
+      case 0x156:
+      case 0x157:
         Monsters::InitUmods(pGame, pUnit, 0xf, 0);
         return;
-      }
-      if (nClassId <= 0x60) {
-        if (nClassId == 0x60) {
-          Monsters::InitUmods(pGame, pUnit, 10, 0);
-          return;
-        }
-        if (nClassId == 0x18) {
-          Monsters::InitUmods(pGame, pUnit, 0xd, 0);
-          return;
-        }
-        if (nClassId == 0x5b) {
-          Monsters::InitUmods(pGame, pUnit, 0x14, 0);
-          return;
-        }
-      } else if (nClassId != 0xd3) {
-        if (nClassId > 0x145 && nClassId <= 0x14a) {
-          Monsters::InitUmods(pGame, pUnit, 0xe, 0);
-          return;
-        }
-      } else {
-        Monsters::InitUmods(pGame, pUnit, 0xb, 0);
-        add_quest_umod:
+      case 0x162:
+        Monsters::InitUmods(pGame, pUnit, 0xe, 0);
+        return;
+      case 0x1cd:
+        Monsters::InitUmods(pGame, pUnit, 0x21, 0);
+        return;
+      case 0x1b4:
+        Monsters::InitUmods(pGame, pUnit, 0x22, 0);
+        return;
+      case 0x1f5:
+        Monsters::InitUmods(pGame, pUnit, 0x23, 0);
+        return;
+      case 0x21c:
+      case 0x21d:
+      case 0x21e:
         Monsters::InitUmods(pGame, pUnit, 0x16, 1);
-      }
-    } else {
-      switch (nClassId) {
-        case 0x162:
-          Monsters::InitUmods(pGame, pUnit, 0xe, 0);
         return;
-        default:
-          break;
-        case 0x1cd:
-          Monsters::InitUmods(pGame, pUnit, 0x21, 0);
-        return;
-        case 0x1b4:
-          Monsters::InitUmods(pGame, pUnit, 0x22, 0);
-        return;
-        case 0x1f5:
-          Monsters::InitUmods(pGame, pUnit, 0x23, 0);
-        return;
-        case 0x21c:
-
-        case 0x21d:
-
-        case 0x21e:
-          goto add_quest_umod;
-      }
     }
 }
 
 // Convenience wrapper that spawns a monster of nClassId at the position of an existing unit pUnit. Fills a D2UnknownCreateMonsterStrc (class, anim mode, flags nParam2, spawn radius nParam, owning room/game) and resolves pUnit's X/Y from its static path (objects/unit types 4-5) or dynamic path (otherwise 0 if none), then calls CreateMonster. Returns the newly created D2UnitStrc*.
 D2UnitStrc * __fastcall SpawnMonsterAtUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int16_t nFlags) {
-    D2UnitStrc* pSpawnedAlt;
     D2UnknownCreateMonsterStrc sCreateParams;
     sCreateParams.nGUID = 0;
     sCreateParams.nClassId = nClassId;
     sCreateParams.eMode = eMode;
     sCreateParams.pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    sCreateParams.nFlags = nFlags;
-    eD2UnitType eUnitType = pUnit->eUnitType;
     sCreateParams.nSpawnRadius = nSpawnRadius;
+    sCreateParams.nFlags = nFlags;
     sCreateParams.pGame = pGame;
     sCreateParams.pCoordList = 0;
-    int nXValue;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nXValue = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nXValue = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nXValue = 0;
-    }
-
-    sCreateParams.nX = nXValue;
-    eD2UnitType eUnitTypeCheck = pUnit->eUnitType;
-    if (eUnitTypeCheck != UNIT_OBJECT && ((int)eUnitTypeCheck <= 3 || (int)eUnitTypeCheck > 5)) {
-      D2UnitStrc* pSpawned;
-      if (pUnit->pPath.pDynamicPath) {
-        sCreateParams.nY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-        pSpawned = CreateMonster(&sCreateParams);
-        return pSpawned;
-      }
-
-      sCreateParams.nY = 0;
-    } else {
-      sCreateParams.nY = pUnit->pPath.pStaticPath->nPosY;
-    }
-
-    pSpawnedAlt = CreateMonster(&sCreateParams);
-    return pSpawnedAlt;
+    sCreateParams.nX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    sCreateParams.nY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
+    return CreateMonster(&sCreateParams);
 }
 
 D2UnitStrc * __fastcall SpawnMonsterBase(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nMonsterId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int16_t nFlags) {
@@ -557,15 +525,8 @@ BOOL __stdcall FindDiagonalNonCollisionCoords(D2RoomStrc * pRoom, int * pX, int 
     }
 }; D2_STATIC_GUARD(gaPathDiagonalOffsets, "D2Game::Monster::Create::FindDiagonalNonCollisionCoords::gaPathDiagonalOffsets");
 
-    eCollisionFlags eCollision;
-    uint32_t nTileWalkFlags;
-    D2SeedStrc* pSeed;
-    POINT* pDiagOffset;
     D2DrlgRoomCoordsStrc sRoomCoords;
     uint32_t nFloorTileCount;
-    uint32_t nSavedSearchIdx;
-    int nX;
-    int nY;
     D2DrlgTileDataStrc* pFloorTiles = D2Common::DUNGEON::Dungeon::DRLGROOM_GetFloorTilesFromRoom(pRoom, (int*)&nFloorTileCount);
     if (!pFloorTiles) {
       return 0;
@@ -573,56 +534,31 @@ BOOL __stdcall FindDiagonalNonCollisionCoords(D2RoomStrc * pRoom, int * pX, int 
     if (!nFloorTileCount) {
       return 0;
     }
-    if (pRoom) {
-      pSeed = &pRoom->sSeed;
-    } else {
-      pSeed = 0;
-    }
 
-    uint32_t nSearchTileIdx = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nFloorTileCount);
-    if (!nSearchTileIdx) {
-      nSearchTileIdx = 1;
+    uint32_t nStartTileIdx = D2Common::Seed::RANDOM_RandomNumberSelector(pRoom ? &pRoom->sSeed : nullptr, nFloorTileCount);
+    if (!nStartTileIdx) {
+      nStartTileIdx = 1;
     }
 
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
+    uint32_t nSearchTileIdx = nStartTileIdx;
     uint32_t nStopTileIdx = nSearchTileIdx - 1;
-    uint32_t nWrapAroundIdx = nStopTileIdx;
-    if (nSearchTileIdx == nStopTileIdx) {
-      return 0;
-    }
-
-    do {
-      D2DrlgTileDataStrc* pFloorTile;
-      pFloorTile = pFloorTiles;
-      if (pFloorTiles[nSearchTileIdx].pTileLibraryEntry) {
-        nSavedSearchIdx = nSearchTileIdx;
-        nTileWalkFlags = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount(pFloorTiles[nSearchTileIdx].pTileLibraryEntry);
-        if (nTileWalkFlags & 2) {
-          nY = (pFloorTile[nSearchTileIdx].nPosY + sRoomCoords.sTileRect.top) * 5 + 3;
-          nX = (pFloorTile[nSearchTileIdx].nPosX + sRoomCoords.sTileRect.left) * 5 + 3;
-          eCollision = D2Common::Collision::CheckCollision_BlockPlayerMissile(pRoom, nX, nY, COLLIDE_MONSTER);
-          nStopTileIdx = nWrapAroundIdx;
-          nSearchTileIdx = nSavedSearchIdx;
-          if (eCollision == COLLIDE_NONE) {
-            pDiagOffset = gaPathDiagonalOffsets;
-            do {
-              eCollision = D2Common::Collision::CheckCollision_BlockAll_Width(pRoom, pDiagOffset->x + nX, pDiagOffset->y + nY, COLLISION_UNIT_SIZE_SMALL, 0x1c09);
-              if (eCollision == COLLIDE_NONE) {
-                *pX = nX;
-                *pY = nY;
-                return 1;
-              }
-
-              pDiagOffset++;
-              nStopTileIdx = nWrapAroundIdx;
-              nSearchTileIdx = nSavedSearchIdx;
-            } while ((intptr_t)pDiagOffset < (intptr_t)((char*)&gaPathDiagonalOffsets + sizeof(gaPathDiagonalOffsets)));
+    for (; nSearchTileIdx != nStopTileIdx; nSearchTileIdx = (nSearchTileIdx + 1) % nFloorTileCount) {
+      D2DrlgTileDataStrc* pFloorTile = &pFloorTiles[nSearchTileIdx];
+      if (pFloorTile->pTileLibraryEntry && D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount(pFloorTile->pTileLibraryEntry) & 2) {
+        int nX = (pFloorTile->nPosX + sRoomCoords.sTileRect.left) * 5 + 3;
+        int nY = (pFloorTile->nPosY + sRoomCoords.sTileRect.top) * 5 + 3;
+        if (D2Common::Collision::CheckCollision_BlockPlayerMissile(pRoom, nX, nY, COLLIDE_MONSTER) == COLLIDE_NONE) {
+          for (int i = 0; i < 4; i++) {
+            if (D2Common::Collision::CheckCollision_BlockAll_Width(pRoom, gaPathDiagonalOffsets[i].x + nX, gaPathDiagonalOffsets[i].y + nY, COLLISION_UNIT_SIZE_SMALL, 0x1c09) == COLLIDE_NONE) {
+              *pX = nX;
+              *pY = nY;
+              return 1;
+            }
           }
         }
       }
-
-      nSearchTileIdx = (nSearchTileIdx + 1) % nFloorTileCount;
-    } while (nSearchTileIdx != nStopTileIdx);
+    }
 
     return 0;
 }

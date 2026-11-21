@@ -427,31 +427,33 @@ void __fastcall SOUNDHDR_Init(BOOL bBackgroundActive) {
 }
 
 void __fastcall SOUNDHDR_AdjustReferenceCount(int32_t nSoundId, int32_t nDelta) {
-    D2SoundsTxt* pSound = nSoundId && pTxtSounds && nSoundId >= 0 && nSoundId < nTxtSoundsSize ? pTxtSounds + nSoundId : nullptr;
-    if (!(pSound && (pSound->nRefCount || nDelta != -1))) {
+    D2SoundsTxt* pSoundsTxt;
+    if (!nSoundId) {
       return;
     }
 
-    int nGroupIdx = pSound->nGroupStartIndex;
-    if (nGroupIdx >= (int)((uint32_t)pSound->Group_Size + nGroupIdx)) {
+    pSoundsTxt = pTxtSounds;
+    if (!pSoundsTxt) {
       return;
     }
 
-    D2SoundsTxt* pGroupSound = pTxtSounds + nGroupIdx;
-    do {
-      D2SoundsTxt* pCurSound;
-      if (nGroupIdx < 0 || (pCurSound = pGroupSound , nGroupIdx >= nTxtSoundsSize)) {
-        pCurSound = 0;
-      }
+    D2SoundsTxt* pSound = nSoundId >= 0 && nSoundId < nTxtSoundsSize ? &pSoundsTxt[nSoundId] : nullptr;
+    if (!pSound) {
+      return;
+    }
+    if (!pSound->nRefCount && nDelta == -1) {
+      return;
+    }
+
+    for (int i = pSound->nGroupStartIndex; i < pSound->nGroupStartIndex + pSound->Group_Size; i++) {
+      D2SoundsTxt* pCurSound = i >= 0 && i < nTxtSoundsSize ? &pSoundsTxt[i] : nullptr;
       if ((uint32_t)pCurSound->nRefCount <= 0 && nDelta == -1) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1dc);
         exit(-1);
       }
 
       pCurSound->nRefCount += nDelta;
-      nGroupIdx++;
-      pGroupSound++;
-    } while (nGroupIdx < (int)((uint32_t)pSound->Group_Size + pSound->nGroupStartIndex));
+    }
 }
 
 void __fastcall SOUNDHDR_ClearReferenceCounts(eD2Sounds eSound) {

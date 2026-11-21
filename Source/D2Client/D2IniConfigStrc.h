@@ -29,7 +29,7 @@ typedef void * (__stdcall *fnBnetLoadAndReturn)();
 #endif
 #ifndef RECON_FPTD_fnCacheFreeMem
 #define RECON_FPTD_fnCacheFreeMem
-typedef int (__fastcall *fnCacheFreeMem)(void * pMem);
+typedef int (__fastcall *fnCacheFreeMem)(void * pMem, uint32_t dwSize);
 #endif
 #ifndef RECON_FPTD_fnCacheReadData
 #define RECON_FPTD_fnCacheReadData
@@ -290,7 +290,7 @@ struct D2BNetClientCallbacksStrc {
     /* 0xBC */ BOOL (__fastcall *pfnSendResetPassword)(char *, char *);
     /* 0xC0 */ BOOL (__fastcall *pfnSendChangeEmail)(char *, char *, char *);
     /* 0xC4 */ int (__stdcall *pfnSendLeaveGame)();
-    /* 0xC8 */ int (__fastcall *pfnCacheFreeMem)(void *);
+    /* 0xC8 */ int (__fastcall *pfnCacheFreeMem)(void *, uint32_t);
     /* 0xCC */ BOOL (__fastcall *pfnCacheReadData)(char *, int *, void *, int *);
     /* 0xD0 */ BOOL (__fastcall *pfnCacheWriteData)(char *, void *, uint32_t, int *, uint32_t, int);
     /* 0xD4 */ void * pfnReserved;

@@ -1446,8 +1446,8 @@ void __fastcall MONSTER_CastAmplifyDamageOnHit(::SGAMEDATA * pGame, D2UnitStrc *
       return;
     }
 
-    uint32_t sSeedNext = D2_SeedRoll(&pUnit->sSeed);
-    if (!(sSeedNext & 3)) {
+    uint8_t nRoll = D2_SeedRoll(&pUnit->sSeed) & 3;
+    if (nRoll < 1) {
       return;
     }
 
@@ -1456,18 +1456,13 @@ void __fastcall MONSTER_CastAmplifyDamageOnHit(::SGAMEDATA * pGame, D2UnitStrc *
     if (nAmplifySkillLvl < 1) {
       nAmplifySkillLvl = 1;
     }
-    if (!(D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount > 0x42 && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills != (D2SkillsTxt*)-37752)) {
+    D2SkillsTxt* pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount > (int)SKILL_AmplifyDamage ? &D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[SKILL_AmplifyDamage] : nullptr;
+    if (!pSkillsTxt) {
       return;
     }
 
-    int32_t nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[0x42].aurarangecalc, SKILL_AmplifyDamage, nAmplifySkillLvl);
-    if (nAuraRange > 1) {
-      if (nAuraRange >= 0x28) {
-        nAuraRange = 0x28;
-      }
-    } else {
-      nAuraRange = 1;
-    }
+    int32_t nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, SKILL_AmplifyDamage, nAmplifySkillLvl);
+    nAuraRange = (nAuraRange > 1 ? nAuraRange : 1) < 0x28 ? (nAuraRange > 1 ? nAuraRange : 1) : 0x28;
 
     SKILLS::SkillsServer::SKILLS_ForEachUnitInRangeCallback(pGame, 3, pUnit, nAmplifySkillLvl, nAuraRange, (fnSkillUnitProc)MONSTER_ApplyAmplifyDamageCurse);
 }

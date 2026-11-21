@@ -992,48 +992,26 @@ void __stdcall STATES_UpdateColorShiftAndLight(D2UnitStrc * pUnit) {
 
 // Attaches visual overlay effects to a unit when a state is applied. Reads the States.txt row for eState, resolves cast/overlay/overlay2 IDs (randomly selecting from 1-of-N groups via the unit seed), and calls GFX_AddOverlayToUnit with the appropriate mode (3=normal, 4=cast, 8/9=linked-state). Skips if nooverlays is set or eState is out of range. For linked states, temporarily sets/clears the state flag to determine whether the cast overlay should be suppressed by a hide-state.
 void __fastcall STATES_AddStateOverlays(D2UnitStrc * pUnit, eD2States eState) {
-    uint32_t nRand1ofN;
     int bHideState;
     eOverlayId eOverlay;
     eOverlayId eCastOverlay;
     eOverlayId eOverlay2;
-    eD2States eLinkedState;
     D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!(pDVar1 && !(*((uint8_t*)pDVar1 + 0x14) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]))) {
       return;
     }
-    if (pDVar1->castoverlay >= 0) {
-      eCastOverlay = (eOverlayId)pDVar1->castoverlay;
-    } else {
-      eCastOverlay = ~OVERLAY_null;
-    }
-    if (pDVar1->overlay[0] >= 0) {
-      eOverlay = (eOverlayId)pDVar1->overlay[0];
-    } else {
-      eOverlay = ~OVERLAY_null;
-    }
-    if (pDVar1->overlay[1] >= 0) {
-      eOverlay2 = (eOverlayId)pDVar1->overlay[1];
-    } else {
-      eOverlay2 = ~OVERLAY_null;
-    }
-
+    eCastOverlay = pDVar1->castoverlay >= 0 ? (eOverlayId)pDVar1->castoverlay : ~OVERLAY_null;
+    eOverlay = pDVar1->overlay[0] >= 0 ? (eOverlayId)pDVar1->overlay[0] : ~OVERLAY_null;
+    eOverlay2 = pDVar1->overlay[1] >= 0 ? (eOverlayId)pDVar1->overlay[1] : ~OVERLAY_null;
     uint32_t bIsLinkedState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckStateFlagArray1(eState);
     if (eCastOverlay != ~OVERLAY_null) {
-      uint32_t nRandom1ofN;
-      nRandom1ofN = D2Common::DATATBLS::OverlayTbls::OVERLAYTBLS_Get1ofN(eCastOverlay);
-      nRand1ofN = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nRandom1ofN);
-      eCastOverlay += nRand1ofN;
+      eCastOverlay += D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, D2Common::DATATBLS::OverlayTbls::OVERLAYTBLS_Get1ofN(eCastOverlay));
     }
     if (eOverlay != ~OVERLAY_null) {
-      nRand1ofN = D2Common::DATATBLS::OverlayTbls::OVERLAYTBLS_Get1ofN(eOverlay);
-      nRand1ofN = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nRand1ofN);
-      eOverlay += nRand1ofN;
+      eOverlay += D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, D2Common::DATATBLS::OverlayTbls::OVERLAYTBLS_Get1ofN(eOverlay));
     }
     if (eOverlay2 != ~OVERLAY_null) {
-      nRand1ofN = D2Common::DATATBLS::OverlayTbls::OVERLAYTBLS_Get1ofN(eOverlay2);
-      nRand1ofN = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nRand1ofN);
-      eOverlay2 += nRand1ofN;
+      eOverlay2 += D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, D2Common::DATATBLS::OverlayTbls::OVERLAYTBLS_Get1ofN(eOverlay2));
     }
     if (bIsLinkedState) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
@@ -1055,11 +1033,9 @@ void __fastcall STATES_AddStateOverlays(D2UnitStrc * pUnit, eD2States eState) {
     }
     if (eOverlay != ~OVERLAY_null) {
       if (bIsLinkedState) {
-        eLinkedState = eState;
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay, 8, 0, eLinkedState, 0, 0, 0);
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay, 8, 0, eState, 0, 0, 0);
       } else {
-        eLinkedState = STATE_none;
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay, 3, 0, eLinkedState, 0, 0, 0);
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay, 3, 0, 0, 0, 0, 0);
       }
     }
     if (eOverlay2 == ~OVERLAY_null) {

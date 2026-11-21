@@ -2715,48 +2715,31 @@ void __fastcall HireMercFromNpc(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, int32
 // @sourcefile .\UNIT\SUNITNPC.CPP
 BOOL __fastcall SUNITNPC_OpenTradeScreen(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pNpc, D2UnitStrc * pItem, int32_t nNpcDataIdx) {
     D2NpcProxyInventoryStrc* pInteractionEntry;
-    D2UnitStrc* pCarriedItem;
-    int nPlayerUnitGUID;
-    D2UnitStrc* pTargetItem;
-    D2UnitStrc* pNpcSaved = pNpc;
-    D2GameNpcStrc* pNpcData = sunitproxy::GetGameNpcByUnit(pGame, pNpc, (int*)&pNpc);
+    int nNpcIdx;
+    D2GameNpcStrc* pNpcData = sunitproxy::GetGameNpcByUnit(pGame, pNpc, &nNpcIdx);
     if (!pNpcData) {
       return 1;
     }
 
     D2NpcPlayerInteractionStrc* pInteractionNode = sunitproxy::SUNITPROXY_AddPlayerInteraction(pGame, pNpcData, pPlayer);
-    if (!pPlayer) {
-      nPlayerUnitGUID = -1;
-    } else {
-      nPlayerUnitGUID = pPlayer->nUnitGUID;
-    }
+    int nPlayerUnitGUID = !pPlayer ? -1 : pPlayer->nUnitGUID;
     if (!pInteractionNode || *(char*)&pInteractionNode->bGambling == '\0') {
-      BOOL bIsIdentified;
-      bIsIdentified = D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_IDENTIFIED, 0x100d, ".\\UNIT\\SUNITNPC.CPP");
-      if (!bIsIdentified) {
+      if (!D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_IDENTIFIED, 0x100d, ".\\UNIT\\SUNITNPC.CPP")) {
         return 0;
       }
     } else if (!nNpcDataIdx) {
-      pNpcData = sunitproxy::GetGameNpcByUnit(pGame, pNpcSaved, &nNpcDataIdx);
-      pInteractionEntry = pNpcData->pProxyInventories;
-      while (pInteractionEntry) {
+      pNpcData = sunitproxy::GetGameNpcByUnit(pGame, pNpc, &nNpcDataIdx);
+      for (pInteractionEntry = pNpcData->pProxyInventories; pInteractionEntry; pInteractionEntry = pInteractionEntry->pNext) {
         if (pInteractionEntry->nPlayerGUID == nPlayerUnitGUID) {
           break;
         }
-
-        pInteractionEntry = pInteractionEntry->pNext;
       }
 
-      if (!pInteractionEntry) {
-        return 0;
-      }
-
-      pNpcSaved = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInteractionEntry->pInventory);
-      pTargetItem = pItem;
-      for (; pNpcSaved; pNpcSaved = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pNpcSaved)) {
-        pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pNpcSaved);
-        if (pCarriedItem == pTargetItem) {
-          return 1;
+      if (pInteractionEntry) {
+        for (D2UnitStrc* pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInteractionEntry->pInventory); pInvItem; pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvItem)) {
+          if (D2Common::INVENTORY::Inventory::GetCarriedItem(pInvItem) == pItem) {
+            return 1;
+          }
         }
       }
 

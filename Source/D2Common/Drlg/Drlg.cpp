@@ -1453,11 +1453,10 @@ void __fastcall DRLGROOMEX_InitTileData(D2RoomExStrc * pRoomEx) {
     uint32_t nDT1Mask = pRoomEx->nDT1Mask;
     for (nMaskBitIndex = 0; nDT1Mask && nMaskBitIndex < 0x20; nMaskBitIndex++) {
       if (nDT1Mask & 1) {
-        D2CMP::DUNGEON::Dungeon::TILEPROJECT_AllocSlot((uint8_t*)pRoomEx->apTiles, (char*)pLvlTypesLine);
+        D2CMP::DUNGEON::Dungeon::TILEPROJECT_AllocSlot((uint8_t*)pRoomEx->apTiles, pLvlTypesLine->File[nMaskBitIndex]);
       }
 
       nDT1Mask >>= 1;
-      pLvlTypesLine = (D2LvlTypesTxt*)(pLvlTypesLine->File + 1);
     }
 
     pathBuf[0] = '\0';
@@ -3351,9 +3350,11 @@ BOOL __fastcall DRLGPLACE_OrientedTableLookup(D2DrlgLevelPlacementStrc * pLevelU
     }
 
     int nNodeIdx = pLevelUnknown->nCurrentNode;
-    nCurDir = pLevelUnknown->aCurrentDir[nNodeIdx];
     int nPrevNodeIdx = pLevelUnknown->pLevelData->aEntry[nNodeIdx].nNodeLevelEntryIdPrev;
+    nCurDir = pLevelUnknown->aCurrentDir[nNodeIdx];
+    // steer-ok: aCurrentDir[prev] is loaded before the switch stores into aCoordsAndSize of the same struct (possible alias), as the asm shows
     int nPrevDir = pLevelUnknown->aCurrentDir[nPrevNodeIdx];
+    D2DrlgCoordsStrc* pPrevCoords = &pLevelUnknown->aCoordsAndSize[nPrevNodeIdx];
     switch (nCurDir) {
       case 0:
         {
@@ -3370,8 +3371,8 @@ BOOL __fastcall DRLGPLACE_OrientedTableLookup(D2DrlgLevelPlacementStrc * pLevelU
     }
 
     nCurDir += nPrevDir * 2;
-    pLevelUnknown->aCoordsAndSize[nNodeIdx].WorldPosition.x = gnDrlgLevelGenerationState[nCurDir * 2] + pLevelUnknown->aCoordsAndSize[nPrevNodeIdx].WorldPosition.x;
-    pLevelUnknown->aCoordsAndSize[nNodeIdx].WorldPosition.y = gnDrlgLevelGenerationState[nCurDir * 2 + 1] + pLevelUnknown->aCoordsAndSize[nPrevNodeIdx].WorldPosition.y;
+    pLevelUnknown->aCoordsAndSize[nNodeIdx].WorldPosition.x = gnDrlgLevelGenerationState[nCurDir * 2] + pPrevCoords->WorldPosition.x;
+    pLevelUnknown->aCoordsAndSize[nNodeIdx].WorldPosition.y = gnDrlgLevelGenerationState[nCurDir * 2 + 1] + pPrevCoords->WorldPosition.y;
     return 1;
 }
 

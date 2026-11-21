@@ -1310,7 +1310,9 @@ void __fastcall SOUND_SetLeftVolume(int32_t nKeepGroup1, int32_t nKeepGroup2) {
     D2SoundChannelNodeStrc* pDVar1;
     D2SoundsTxt* pSoundsTxtLine;
     D2SoundChannelStrc* nChanDataPtr;
-    for (pDVar1 = gpActiveSoundChannelsHead; pDVar1; pDVar1 = pDVar1->pNext) {
+    pDVar1 = gpActiveSoundChannelsHead;
+    if (gpActiveSoundChannelsHead) {
+    do {
       int nSoundGroup;
       nChanDataPtr = pDVar1->pChannel;
       nSoundGroup = SoundHdr::SOUNDHDR_GetSoundField0x60(nChanDataPtr->nSoundId);
@@ -1326,6 +1328,8 @@ void __fastcall SOUND_SetLeftVolume(int32_t nKeepGroup1, int32_t nKeepGroup2) {
           }
         }
       }
+      pDVar1 = pDVar1->pNext;
+    } while (pDVar1);
     }
 }
 
@@ -1333,7 +1337,9 @@ void __fastcall SOUND_SetRightVolume(int32_t nKeepGroup1, int32_t nKeepGroup2) {
     D2SoundChannelNodeStrc* pDVar1;
     D2SoundsTxt* pSoundsTxtLine;
     D2SoundChannelStrc* nChanDataPtr;
-    for (pDVar1 = gpActiveSoundChannelsHead; pDVar1; pDVar1 = pDVar1->pNext) {
+    pDVar1 = gpActiveSoundChannelsHead;
+    if (gpActiveSoundChannelsHead) {
+    do {
       int nSoundGroup;
       nChanDataPtr = pDVar1->pChannel;
       nSoundGroup = SoundHdr::SOUNDHDR_GetSoundField0x60(nChanDataPtr->nSoundId);
@@ -1349,6 +1355,8 @@ void __fastcall SOUND_SetRightVolume(int32_t nKeepGroup1, int32_t nKeepGroup2) {
           }
         }
       }
+      pDVar1 = pDVar1->pNext;
+    } while (pDVar1);
     }
 }
 

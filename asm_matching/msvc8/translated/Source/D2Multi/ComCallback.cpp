@@ -2417,30 +2417,19 @@ BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * p
     *pnKeyLo = 0;
     strcpy((char*)abKeyBuf, szChatText);
     uint8_t* pbScan = abKeyBuf;
-    uint8_t byNext = abKeyBuf[0];
-    while (byNext) {
-      byChar = *pbScan;
-      pbScan++;
-      if (0x17 < gaBnetCdKeyCharDecodeTable[byChar]) {
+    while (*pbScan) {
+      if (gaBnetCdKeyCharDecodeTable[*pbScan++] > 0x17) {
         return 0;
       }
-
-      byNext = *pbScan;
     }
 
     COMCALLBACK_RemoveUserFromList((char*)abKeyBuf, &nChecksum);
     uint32_t nHash = 3;
     uint32_t nIdx = 0;
     do {
-      nVal = tolower((int)(char)abKeyBuf[nIdx]);
-      if (!((char)nVal < 'a')) {
-        nDelta = -0x57;
-      } else {
-        nDelta = -0x30;
-      }
-
+      char cLower = (char)tolower((int)(char)abKeyBuf[nIdx]);
+      nHash += nHash * 2 ^ (cLower >= 'a' ? cLower - 0x57 : cLower - 0x30);
       nIdx++;
-      nHash += nHash * 2 ^ (char)nVal + nDelta;
     } while (nIdx < 0x10);
 
     if ((uint8_t)nHash != nChecksum) {
@@ -2450,10 +2439,9 @@ BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * p
     nVal = 0xf;
     do {
       byChar = abKeyBuf[nVal];
-      pbScan = abKeyBuf + nVal;
-      nHash = (uint32_t)(pbScan - (abKeyBuf + 0xf) + 0x16) & 0xf;
+      nHash = (uint32_t)(nVal + 0x7) & 0xf;
+      abKeyBuf[nVal] = abKeyBuf[nHash];
       nVal--;
-      *pbScan = abKeyBuf[nHash];
       abKeyBuf[nHash] = byChar;
     } while (nVal >= 0);
 
@@ -2475,10 +2463,8 @@ BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * p
 
     Storm::Source::SSTR::SStrCopy((char*)&nChecksum, (char*)abKeyBuf, 3);
     Storm::Source::SSTR::SStrCopy(szKeyLoHex, (char*)(abKeyBuf + 2), 7);
-    uint32_t nParsed = strtoul((char*)&nChecksum, nullptr, 0x10);
-    *pnKeyHi = nParsed;
-    nParsed = strtoul(szKeyLoHex, nullptr, 0x10);
-    *pnKeyLo = nParsed;
+    *pnKeyHi = strtoul((char*)&nChecksum, nullptr, 0x10);
+    *pnKeyLo = strtoul(szKeyLoHex, nullptr, 0x10);
     return 1;
 }
 

@@ -1980,15 +1980,16 @@ void __stdcall CELCMP_FixupPointersAndPrepare(DC6 * pDC6, DC6 * * ppDC6Out, char
     pDC6->nFlags = nFrameIndex | 2;
     nErrorAddr = D2_ALLOC_AT(nAllocSize, ".\\SRC\\CelCmp.cpp", 0x3a6);
     memset(nErrorAddr, 0, nAllocSize);
+    nFrameIndex = 0;
     if ((uint32_t)(pDC6->nDirections * pDC6->nFrames) > 0) {
       DC6* pFrameIter;
+      char* pBlock = (char*)nErrorAddr;
       pFrameIter = pDC6 + 1;
-      nFrameIndex = 0;
       do {
         pFrameIter->nVersion = (int)(pDC6->nTerm + (pFrameIter->nVersion - 0xc));
-        *(void**)(pFrameIter->nVersion + 0x18) = (void*)nErrorAddr;
+        *(void**)(pFrameIter->nVersion + 0x18) = (void*)pBlock;
         nFrameIndex++;
-        nErrorAddr = (void*)((char*)nErrorAddr + 0x2c);
+        pBlock += 0x2c;
         pFrameIter = (DC6*)&pFrameIter->nFlags;
       } while (nFrameIndex < (uint32_t)(pDC6->nDirections * pDC6->nFrames));
     }

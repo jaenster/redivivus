@@ -296,23 +296,23 @@ static void __stdcall TILECMP_ExtractIsometricSubTile(D2TileCmpTileNodeStrc * pS
     }
 
     iRow = 0;
-    void* pSrcDT1Pixel = (void*)((char*)pTileData + (nSubTileOffset * 0xa0 + nSubTileIndex) * 3);
+    uint8_t* pSrcPixel = (uint8_t*)pTileData + (nSubTileOffset * 0xa0 + nSubTileIndex) * 3;
+    uint8_t* pDstPixel = pSubTilePixelBuf;
     int nRowOffset = 0x2a;
-    nSubTileIndex = 0xc;
-    intptr_t nTileData = (intptr_t)pSubTilePixelBuf;
+    int nRowLength = 0xc;
     do {
-      memcpy((void*)(nRowOffset + nTileData), (void*)(nRowOffset + (char*)pSrcDT1Pixel), nSubTileIndex);
+      memcpy(pDstPixel + nRowOffset, pSrcPixel + nRowOffset, nRowLength);
       if (iRow < 7) {
-        nRowOffset += -6;
-        nSubTileIndex += 0xc;
+        nRowOffset -= 6;
+        nRowLength += 0xc;
       } else {
         nRowOffset += 6;
-        nSubTileIndex -= 0xc;
+        nRowLength -= 0xc;
       }
 
-      nTileData += 0x60;
+      pDstPixel += 0x60;
+      pSrcPixel += 0x1e0;
       iRow++;
-      pSrcDT1Pixel = (void*)((char*)pSrcDT1Pixel + 0x1e0);
     } while (iRow < 0xf);
 
     BOOL BVar1 = TILECMP_CheckTilePatternRLE(sColorKey, (char*)pSubTilePixelBuf);
@@ -1022,10 +1022,8 @@ static void __stdcall TILECMP_CompressSubTile(D2GroundSubTileStrc * pSrcSubTile,
 
     SubTile::SUBTILE_ConvertToIndexed(pDstSubTile, pSrcSubTile, dwColorKey, pfnGetPaletteIndex);
     uint8_t* nRLEBufPtr = pDstSubTile->pPixelData;
-    int iPixel = 0;
     uint8_t* pByteScan = nRLEBufPtr;
-    if (pDstSubTile->wDataLength > 0) {
-      do {
+    for (int iPixel = 0; iPixel < pDstSubTile->wDataLength; iPixel++) {
         if (*pByteScan) {
           if (pDstSubTile->wFormat & 0x1000) {
             nRLEBufPtr = (uint8_t*)SubTile::SUBTILE_CompressToRLE((char*)nRLEBufPtr, &dwColorKey);
@@ -1054,9 +1052,7 @@ static void __stdcall TILECMP_CompressSubTile(D2GroundSubTileStrc * pSrcSubTile,
           }
         }
 
-        iPixel++;
         pByteScan++;
-      } while (iPixel < (int)(uint32_t)pDstSubTile->wDataLength);
     }
 
     D2_FREE_AT(nRLEBufPtr, ".\\SRC\\Tilecmp.cpp", 0x429);
@@ -1159,7 +1155,7 @@ void __stdcall TILECMP_DeepCopyWithRecompression(D2TileLibraryHeaderStrc * pSrcT
 
 // @sourcefile .\SRC\Tilecmp.cpp
 void __stdcall TILECMP_ShallowCopyZeroPointers(D2TileLibraryHeaderStrc * pSrcDt1, void * * ppDt1Copy, size_t * pnSize) {
-    char* pTileSetEntry;
+    D2TileLibraryEntryStrc* pTiles;
     int iCount;
     size_t nAllocSize;
     if (!pSrcDt1) {
@@ -1176,16 +1172,11 @@ void __stdcall TILECMP_ShallowCopyZeroPointers(D2TileLibraryHeaderStrc * pSrcDt1
 
       memset(pDstBlock, 0, nAllocSize);
       memcpy(pDstBlock, pSrcDt1, nAllocSize);
-      pDstBlock->pTiles = (D2TileLibraryEntryStrc*)(pDstBlock + 1);
-      if (pDstBlock->nTiles > 0) {
-        pTileSetEntry = pDstBlock[1].szLibraryName + 0x48;
-        iCount = 0;
-        do {
-          *(uint32_t*)(pTileSetEntry + 4) = 0;
-          *(uint32_t*)pTileSetEntry = 0;
-          iCount++;
-          pTileSetEntry += 0x60;
-        } while (iCount < pDstBlock->nTiles);
+      pTiles = (D2TileLibraryEntryStrc*)(pDstBlock + 1);
+      pDstBlock->pTiles = pTiles;
+      for (iCount = 0; iCount < pDstBlock->nTiles; iCount++) {
+        pTiles[iCount].pSubTiles = 0;
+        pTiles[iCount].nSubTiles = 0;
       }
 
       pDstBlock->dwFlags &= 4;

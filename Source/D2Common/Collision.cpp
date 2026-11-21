@@ -369,10 +369,8 @@ uint32_t __stdcall COLLISION_IsUnitInRange(D2UnitStrc * pUnit, int * pnPosition,
       nDx = 0;
     }
 
-    int nAbsDx = *pnPosition - nDx;
-    if (nAbsDx < 0) {
-      nAbsDx = -nAbsDx;
-    }
+    int nDiffX = *pnPosition - nDx;
+    int nAbsDx = nDiffX < 0 ? -nDiffX : nDiffX;
 
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -383,10 +381,8 @@ uint32_t __stdcall COLLISION_IsUnitInRange(D2UnitStrc * pUnit, int * pnPosition,
       nDy = 0;
     }
 
-    int nAbsDy = pnPosition[1] - nDy;
-    if (nAbsDy < 0) {
-      nAbsDy = -nAbsDy;
-    }
+    int nDiffY = pnPosition[1] - nDy;
+    int nAbsDy = nDiffY < 0 ? -nDiffY : nDiffY;
 
     return (uint32_t)(nAbsDy * nAbsDy + nAbsDx * nAbsDx <= nRange * nRange);
 }

@@ -3234,41 +3234,23 @@ void __fastcall UI_TranslateWideCharacterLookup(uint16_t * wszText) {
 }
 
 uint16_t * __fastcall AppendAsWideChar(uint16_t * wszText, int nColor) {
-    // Frame slots -2064..-12 are ONE object: &wszBuffer is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    #pragma pack(push, 1)
-    struct __frame0_t {
-      uint16_t wszBuffer;
-      uint32_t wszBufferTail[511];
-      uint8_t __pad2046[2];
-      char szDigit[4];
-    };
-    #pragma pack(pop)
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 2052, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    int nFillCount;
-    uint32_t* pFill;
+    char szDigit[4];
     uint16_t wszDigit[4];
     if (*wszText != L'\0') {
-      uint16_t* wSource;
-      __frame0.wszBuffer = L'\0';
-      pFill = __frame0.wszBufferTail;
-      for (nFillCount = 0x1ff; nFillCount; nFillCount--) {
-        *pFill = 0;
-        pFill++;
+      uint16_t wszBuffer[1024];
+      wszBuffer[0] = 0;
+      for (int i = 1; i < 1024; i++) {
+        wszBuffer[i] = 0;
       }
-
-      *(uint16_t*)pFill = 0;
-      wSource = D2Lang::StrTable::strtable::GetLocaleString(0xf9a);
-      D2Lang::Unicode::UNISYS::STRING_CopyWideString(&__frame0.wszBuffer, wSource);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszBuffer, D2Lang::StrTable::strtable::GetLocaleString(0xf9a));
       wszDigit[0] = L'\0';
       wszDigit[1] = 0;
       wszDigit[2] = 0;
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(__frame0.szDigit, "%c", (int)(char)((char)nColor + '0'));
-      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDigit, __frame0.szDigit, 2);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszDigit);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszText);
-      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, &__frame0.wszBuffer);
+      wsprintfA(szDigit, "%c", (int)(char)((char)nColor + '0'));
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDigit, szDigit, 2);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszBuffer, wszDigit);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszBuffer, wszText);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, wszBuffer);
     }
 
     return wszText;
@@ -8437,8 +8419,8 @@ void __stdcall INPUT_StatScreenButtonUp(D2UIMouseMsgStrc * pMsg) {
 void __stdcall INPUT_SkillTreeButtonUp(D2UIMouseMsgStrc * pMsg) {
     BOOL bEscMenuOpen;
     uint32_t eBorderType;
-    uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
-    uint16_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    int nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    int nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     DWORD eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode == 2) {
       bEscMenuOpen = GetUIFlag(UI_ESCMENU);

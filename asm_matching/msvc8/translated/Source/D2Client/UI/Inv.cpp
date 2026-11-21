@@ -198,9 +198,7 @@ static D2InventoryEntryStrc gaPlayerBodySlotScreenCoords[11] = {0}; D2_STATIC_GU
 static uint32_t gbInvTradeWindowOpen = 0; D2_STATIC_GUARD(gbInvTradeWindowOpen, "gbInvTradeWindowOpen");
 static D2InventoryEntryStrc gaHirelingBodySlotScreenCoords[11] = {0}; D2_STATIC_GUARD(gaHirelingBodySlotScreenCoords, "gaHirelingBodySlotScreenCoords");
 static uint32_t gbInvTradeWindowOpen2 = 0; D2_STATIC_GUARD(gbInvTradeWindowOpen2, "gbInvTradeWindowOpen2");
-namespace D2Client { namespace UI { namespace Inv {
-uint32_t gbTradeConfirmationPending = 0; D2_GLOBAL_GUARD(gbTradeConfirmationPending, "D2Client::UI::Inv::gbTradeConfirmationPending");
-}}} // namespace D2Client::UI::Inv
+static uint32_t gbTradeConfirmationPending = 0; D2_STATIC_GUARD(gbTradeConfirmationPending, "gbTradeConfirmationPending");
 static uint32_t gbInvTradeAcceptClicked = 0; D2_STATIC_GUARD(gbInvTradeAcceptClicked, "gbInvTradeAcceptClicked");
 static uint32_t gbInventoryDragInProgress = 0; D2_STATIC_GUARD(gbInventoryDragInProgress, "gbInventoryDragInProgress");
 static uint32_t gbInvTradeCancelClicked = 0; D2_STATIC_GUARD(gbInvTradeCancelClicked, "gbInvTradeCancelClicked");
@@ -2187,8 +2185,7 @@ static void __stdcall INV_FormatBlockChanceText(uint16_t * wszText, D2ItemsTxt *
     }
 
     format_block_chance:
-    wszNumBuffer[0] = L'\0';
-    for (int iFill = 1; iFill < 32; iFill++) {
+    for (int iFill = 0; iFill < 32; iFill++) {
       wszNumBuffer[iFill] = L'\0';
     }
 
@@ -10661,73 +10658,40 @@ void __stdcall SelectDefaultTabForNPC() {
       return;
     }
 
-    D2UnitStrc* pNpcUnit;
-    pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nNpcGuid, UNIT_MONSTER);
-    bool bPageSelected;
-    bPageSelected = false;
+    D2UnitStrc* pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nNpcGuid, UNIT_MONSTER);
+    BOOL bPageSelected = FALSE;
     if (pNpcUnit) {
-      uint32_t uVar1;
-      uVar1 = pNpcUnit->nClassId;
-      if (uVar1 <= 0xff) {
-        if (uVar1 != 0xff) {
-          switch (uVar1) {
-            case 0x93:
-              goto select_tab_0;
-            case 0x94:
-
-            case 0xb1:
-
-            case 0xb2:
-
-            case 0xca:
-
-            case 0xfc:
-
-            case 0xfd:
-              break;
-            default:
-              goto apply_shop_page;
-            case 0x9a:
-              goto select_tab_1;
-          }
-        }
-
-        CurrentInventoryPage = 3;
-      } else if (uVar1 <= 0x1ff) {
-        if (uVar1 != 0x1ff) {
-          if (uVar1 != 0x101 && uVar1 != 0x195) {
-            goto apply_shop_page;
-          }
-
-          CurrentInventoryPage = 3;
-        } else {
-          select_tab_1:
+      switch ((uint32_t)pNpcUnit->nClassId) {
+        case 0x9a:
+        case 0x1ff:
           CurrentInventoryPage = 1;
-        }
-      } else {
-        if (uVar1 != 0x200) {
-          if (uVar1 != 0x201) {
-            goto apply_shop_page;
-          }
-
+          bPageSelected = TRUE;
+          break;
+        case 0x94:
+        case 0xb1:
+        case 0xb2:
+        case 0xca:
+        case 0xfc:
+        case 0xfd:
+        case 0xff:
+        case 0x101:
+        case 0x195:
+        case 0x201:
           CurrentInventoryPage = 3;
-        } else {
-          select_tab_0:
+          bPageSelected = TRUE;
+          break;
+        case 0x93:
+        case 0x200:
           CurrentInventoryPage = 0;
-        }
+          bPageSelected = TRUE;
+          break;
       }
-
-      bPageSelected = true;
     }
 
-    apply_shop_page:
     INV_SetShopPageFromNpc(CurrentInventoryPage);
-    if (!bPageSelected) {
-      return;
+    if (bPageSelected) {
+      gnInvShopPage = GetTickCount() + 500;
     }
-
-    DWORD dwTickCount = GetTickCount();
-    gnInvShopPage = dwTickCount + 500;
 }
 
 void __stdcall INV_HandleRightClick(D2UIMouseMsgStrc * pMsg) {

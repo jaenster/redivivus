@@ -5084,92 +5084,66 @@ eD2ServerIncomingStatus __fastcall NET_D2GS_SERVER_HandleIncomingPacketAfterClie
 // Broadcasts a PvP kill-message (opcode 0x5a) to the game when a player is killed. Resolves the killer: if a monster, walks up to its owner player. Copies victim and killer names into fixed-length buffers (16 chars each); for monster killers it stores the boss number instead of a name. For player killers it encodes the killer's char name. Calls BroadcastEventMessage to send the assembled packet to all clients. Halts with an internal error if pVictim is not a player unit.
 // @sourcefile .\PLAYER\PlrMsg.cpp
 void __fastcall PLAYERMSG_BroadcastPlayerSlain(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pVictim) {
-    bool bIsChampion;
-    int16_t nBossNo;
-    D2UnitStrc* pOwnerUnit;
-    D2ClientStrc* pClient;
-    char* szCharName;
-    uint32_t pVictimNameEnd;
-    eD2UnitType eKillerType;
     D2Packet0x5aEventStructure packet0x5a;
-    char szKillerNameTmp[16];
-    int32_t nLine;
+    char szKillerName[16];
     if ((pVictim ? pVictim->eUnitType : UNIT_COUNT) != UNIT_PLAYER) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19b4);
       exit(-1);
     }
 
-    {
-      if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
-        pOwnerUnit = Ai::AiGeneral::GetOwnerUnit(pUnit);
-        if (pOwnerUnit && pOwnerUnit->eUnitType == UNIT_PLAYER) {
-          pUnit = pOwnerUnit;
-        }
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+      D2UnitStrc* pOwnerUnit = Ai::AiGeneral::GetOwnerUnit(pUnit);
+      if (pOwnerUnit && pOwnerUnit->eUnitType == UNIT_PLAYER) {
+        pUnit = pOwnerUnit;
       }
-
-      memset(packet0x5a.szName1, 0, 16 * sizeof(packet0x5a.szName1[0]));
-      memset(packet0x5a.szName2 + 4, 0, 12 * sizeof(packet0x5a.szName2[0]));
-      packet0x5a.nPacketId = 'Z';
-      packet0x5a.nMessageType = '\x06';
-      packet0x5a.nColor = '\x04';
-      uint32_t nArgValue;
-      if (!pUnit) {
-        nArgValue = -1;
-      } else {
-        nArgValue = pUnit->nClassId;
-      }
-
-      packet0x5a.nArg = nArgValue;
-      packet0x5a.nArgTypes = '\x06';
-      if (pUnit) {
-        packet0x5a.nArgTypes = (uint8_t)pUnit->eUnitType;
-      }
-
-      *(uint32_t*)packet0x5a.szName2 = 0;
-      pClient = UNIT::SUnit::SUNIT_GetClient(pVictim, ".\\PLAYER\\PlrMsg.cpp", 0x19c9);
-      szCharName = GAME::Clients::GetCharName(pClient);
-      pVictimNameEnd = Storm::Source::SSTR::SStrLen(szCharName);
-      if (pVictimNameEnd) {
-        Storm::Source::SSTR::SStrCopy(packet0x5a.szName1, szCharName, 0x10);
-      } else {
-        *(uint32_t*)(char*)&packet0x5a.szName1 &= -256;
-      }
-
-      eKillerType = UNIT_COUNT;
-      if (pUnit) {
-        eKillerType = pUnit->eUnitType;
-      }
-
-      switch (eKillerType) {
-        case UNIT_PLAYER:
-          {
-            nLine = 0x10;
-            pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrMsg.cpp", 0x19db);
-            szCharName = GAME::Clients::GetCharName(pClient);
-            Storm::Source::SSTR::SStrCopy(szKillerNameTmp, szCharName, nLine);
-            pVictimNameEnd = Storm::Source::SSTR::SStrLen(szKillerNameTmp);
-            if (pVictimNameEnd) {
-              Storm::Source::SSTR::SStrCopy(packet0x5a.szName2, szKillerNameTmp, 0x10);
-            }
-
-            break;
-          }
-        case UNIT_MONSTER:
-          {
-            pVictimNameEnd = Monsters::CheckMonsterType(pUnit, 2);
-            if (pVictimNameEnd) {
-              nBossNo = Monsters::GetBossNo(pUnit);
-              packet0x5a.szName2[0] = (char)nBossNo;
-              packet0x5a.szName2[1] = (char)((uint16_t)nBossNo >> 8);
-            }
-
-            break;
-          }
-      }
-
-      BroadcastEventMessage(pGame, &packet0x5a);
-      return;
     }
+
+    memset(&packet0x5a, 0, sizeof(packet0x5a));
+    packet0x5a.nPacketId = 'Z';
+    packet0x5a.nMessageType = 6;
+    packet0x5a.nColor = 4;
+    uint32_t nArgValue;
+    if (!pUnit) {
+      nArgValue = -1;
+    } else {
+      nArgValue = pUnit->nClassId;
+    }
+
+    packet0x5a.nArg = nArgValue;
+    eD2UnitType eUnitType = UNIT_COUNT;
+    if (pUnit) {
+      eUnitType = pUnit->eUnitType;
+    }
+
+    packet0x5a.nArgTypes = eUnitType;
+    packet0x5a.szName2[0] = '\0';
+    char* szCharName = GAME::Clients::GetCharName(UNIT::SUnit::SUNIT_GetClient(pVictim, ".\\PLAYER\\PlrMsg.cpp", 0x19c9));
+    if (Storm::Source::SSTR::SStrLen(szCharName)) {
+      Storm::Source::SSTR::SStrCopy(packet0x5a.szName1, szCharName, 0x10);
+    } else {
+      packet0x5a.szName1[0] = '\0';
+    }
+
+    eUnitType = UNIT_COUNT;
+    if (pUnit) {
+      eUnitType = pUnit->eUnitType;
+    }
+
+    switch (eUnitType) {
+      case UNIT_PLAYER:
+        Storm::Source::SSTR::SStrCopy(szKillerName, GAME::Clients::GetCharName(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrMsg.cpp", 0x19db)), 0x10);
+        if (Storm::Source::SSTR::SStrLen(szKillerName)) {
+          Storm::Source::SSTR::SStrCopy(packet0x5a.szName2, szKillerName, 0x10);
+        }
+        break;
+      case UNIT_MONSTER:
+        if (Monsters::CheckMonsterType(pUnit, 2)) {
+          *(uint16_t*)packet0x5a.szName2 = Monsters::GetBossNo(pUnit);
+        }
+        break;
+    }
+
+    BroadcastEventMessage(pGame, &packet0x5a);
 }
 
 void __fastcall SendPlayerStopAndAtributeUpdate(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, int32_t nStopReason) {

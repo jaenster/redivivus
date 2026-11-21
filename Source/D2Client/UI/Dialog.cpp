@@ -247,10 +247,10 @@ void __stdcall INPUT_DialogMouseUp(D2UIMouseMsgStrc * pMsg) {
     int32_t nLine;
     fpDialogFunc pfnOnClick;
     D2DialogStrc* pDialog = gpDialogActual;
-    uint16_t wMouseY = pMsg->uLParam.sMousePos.nMouseY;
-    uint16_t wMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    int nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    int nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     BOOL bMiniPanelFlag = ui::GetUIFlag(UI_MINIPANEL);
-    if (!bMiniPanelFlag || (bMiniPanelFlag = MiniPanel::MINIPANEL_IsMouseInArea((uint32_t)wMouseX, (uint32_t)wMouseY) , !bMiniPanelFlag)) {
+    if (!bMiniPanelFlag || (bMiniPanelFlag = MiniPanel::MINIPANEL_IsMouseInArea(nMouseX, nMouseY) , !bMiniPanelFlag)) {
       ::UIWidget* self;
       pMsg->bHandled = 1;
       pMsg->dwResult = 0;

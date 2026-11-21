@@ -352,61 +352,40 @@ BOOL __fastcall SKILLBAR_Callback_FindTargetForTaunt(::SGAMEDATA * pGame, D2Unit
 // Server do-func 71: Taunt (Barbarian). Reads the skill's aura stats and target state from skills.txt, applies them to the target via SKILLNEC_ApplyCurseToUnit and forces the target monster's AI to re-evaluate.
 // Slot from skills.txt srvdofunc 71.
 BOOL __fastcall Skills_SrvDoFunc_071_Taunt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    uint32_t _bCanAttack;
-    bool bCanAttack;
-    BOOL nAuraStatIdx;
-    D2AiGeneralStrc* pMonsterAi;
-    D2NecroSkillArgStrc sCurseArgs;
-    short int eStatId;
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
-    if (pSkillsTxt->auratargetstate < 0) {
-      return 0;
-    }
-    if ((int)pSkillsTxt->auratargetstate >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+    if (pSkillsTxt->auratargetstate < 0 || (int)pSkillsTxt->auratargetstate >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       return 0;
     }
 
-    D2SkillsTxt* pSkillsTxt2 = pSkillsTxt;
-    D2UnitStrc* pCaster = pUnit;
-    ::SGAMEDATA* pGame2 = pGame;
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    D2UnitStrc* pTargetUnit = pTarget;
-    if (!pTarget || (nAuraStatIdx = SKILLBAR_Callback_FindTargetForTaunt(pGame2, pTarget) , !nAuraStatIdx) || (_bCanAttack = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame2, pUnit, pTarget) , !_bCanAttack)) {
-      pTarget = SkillsServer::SKILLS_ApplyAreaHitAtUnit(pGame2, pUnit, 0x14, SKILLBAR_Callback_FindTargetForTaunt);
-      pTargetUnit = pTarget;
+    if (!pTarget || !SKILLBAR_Callback_FindTargetForTaunt(pGame, pTarget) || !UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pTarget)) {
+      pTarget = SkillsServer::SKILLS_ApplyAreaHitAtUnit(pGame, pUnit, 0x14, SKILLBAR_Callback_FindTargetForTaunt);
     }
     if (!pTarget) {
       return 0;
     }
 
+    D2NecroSkillArgStrc sCurseArgs;
     int32_t nDurationFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
     memset(&sCurseArgs, 0, 0x68);
-    int nStatIdx = 0;
-    int* pAuraStatCalc = pSkillsTxt->aurastatcalc;
-    sCurseArgs.pGame = pGame2;
+    sCurseArgs.pGame = pGame;
     sCurseArgs.bRegisterExpireCallback = 1;
     sCurseArgs.eSkill = eSkill;
     sCurseArgs.nSkillLvl = nSkillLvl;
-    sCurseArgs.bUpdateAnimSpeed = 0;
-    short int* pAuraStat = pSkillsTxt->aurastat;
     sCurseArgs.pUnit = pUnit;
     sCurseArgs.nDurationInFrames = nDurationFrames;
-    do {
-      D2ItemStatCostTxt* pItemStat;
-      eStatId = *pAuraStat;
+    sCurseArgs.bUpdateAnimSpeed = 0;
+    for (int nStatIdx = 0; nStatIdx < 6; nStatIdx++) {
+      short int eStatId = pSkillsTxt->aurastat[nStatIdx];
       if (eStatId < 0 || (int)eStatId >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         sCurseArgs.eStat[nStatIdx] = ~UNITSTAT_strength;
         break;
       }
 
-      pItemStat = D2Common::DATATBLS::ItemStats::TXT_ItemStatCost_GetLine((int)eStatId);
+      D2ItemStatCostTxt* pItemStat = D2Common::DATATBLS::ItemStats::TXT_ItemStatCost_GetLine((int)eStatId);
       if (!pItemStat) {
         break;
       }
@@ -414,17 +393,13 @@ BOOL __fastcall Skills_SrvDoFunc_071_Taunt(::SGAMEDATA * pGame, D2UnitStrc * pUn
         sCurseArgs.bUpdateAnimSpeed = 1;
       }
 
-      sCurseArgs.eStat[nStatIdx] = (int)*pAuraStat;
-      nDurationFrames = D2Common::Skills::D2GetSkillCalc(pCaster, *pAuraStatCalc, eSkill, nSkillLvl);
-      sCurseArgs.aSkillCalc[nStatIdx] = nDurationFrames;
-      nStatIdx++;
-      pAuraStat++;
-      pAuraStatCalc++;
-    } while (nStatIdx < 6);
+      sCurseArgs.eStat[nStatIdx] = (int)pSkillsTxt->aurastat[nStatIdx];
+      sCurseArgs.aSkillCalc[nStatIdx] = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurastatcalc[nStatIdx], eSkill, nSkillLvl);
+    }
 
-    pTarget = pTargetUnit;
-    sCurseArgs.eAuraState = (eD2States)pSkillsTxt2->auratargetstate;
-    SkillNec::SKILLNEC_ApplyCurseToUnit(pTargetUnit, &sCurseArgs);
+    sCurseArgs.eAuraState = (eD2States)pSkillsTxt->auratargetstate;
+    SkillNec::SKILLNEC_ApplyCurseToUnit(pTarget, &sCurseArgs);
+    D2AiGeneralStrc* pMonsterAi;
     if (pTarget->eUnitType == UNIT_MONSTER && pTarget->pUnitData.pUnitDataMonster) {
       pMonsterAi = pTarget->pUnitData.pUnitDataMonster->pAiGeneral;
     } else {
@@ -433,10 +408,9 @@ BOOL __fastcall Skills_SrvDoFunc_071_Taunt(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
     Monster::AI::SetDwArgsIfNotNeg0x29a(pMonsterAi, -0x29a, -0x29a, -0x29a);
     Monster::AI::MONSTERAI_SetOwnerGUIDAndType(pTarget, nullptr);
-    ::SGAMEDATA* pGameCopy = pGame2;
-    GAME::Event::EVENT_RemoveUnitTimersByType(pGame2, pTarget, UNITEVENTCALLBACK_AITHINK, 0);
-    GAME::Event::SetEvent(pGameCopy, pTarget, 2, pGameCopy->dwGameFrame + 1, 0, 0);
-    D2Common::Units::SetTargetUnitForDynamicUnit(pTarget, pCaster);
+    GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pTarget, UNITEVENTCALLBACK_AITHINK, 0);
+    GAME::Event::SetEvent(pGame, pTarget, 2, pGame->dwGameFrame + 1, 0, 0);
+    D2Common::Units::SetTargetUnitForDynamicUnit(pTarget, pUnit);
     return 1;
 }
 
