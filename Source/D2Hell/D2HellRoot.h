@@ -171,7 +171,7 @@ uint32_t __fastcall D2FILE_OpenAndReadFile(struct D2PoolManagerStrc * pMemory, c
 void __stdcall FAULT_TerminateCurrentProcess();
 void __fastcall FAULT_ShowErrorAndTerminate(LPCSTR szText);
 void __fastcall FAULT_FormatAndShowError(LPCSTR szFile, int nLine, LPCSTR szExpression);
-struct StormLinkStrc * __thiscall LINKEDLIST_GetNodePointer(struct StormLinkStrc * pLink, int32_t nLinkOffset);
+struct StormLinkStrc * __thiscall LINKEDLIST_GetNodePointer(struct StormLinkStrc * pLink, intptr_t nLinkOffset);
 // TSLink<TMESSAGESOURCE>::Unlink: removes one link from its list and clears it.
 // Named per redivivus issue #35; a TSLink member used by every TSList<TMESSAGESOURCE> operation.
 void __fastcall TSLink_TMESSAGESOURCE_Unlink(struct StormLinkStrc * pLink);

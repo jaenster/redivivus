@@ -92,7 +92,7 @@ void __fastcall SOUNDSMP_SetEaxObstruction(struct D2SoundSmpStrc * pSoundSmp, fl
 void __fastcall SOUNDSMP_SetEaxRoomLevel(struct D2SoundSmpStrc * pSoundSmp, float fParam);
 uint32_t __fastcall SOUNDSMP_IsStreaming(struct D2SoundSmpStrc * pSound);
 void __fastcall SOUNDSMP_SetGlobalVolume(uint32_t nVolume);
-BOOL __fastcall SOUNDSMP_OpenAndStreamFile(int * * ppnParam, char * szText, int32_t nLooping, int32_t bIsLooping);
+BOOL __fastcall SOUNDSMP_OpenAndStreamFile(struct D2SoundSmpStrc * pSoundSmp, char * szText, int32_t nLooping, int32_t bIsLooping);
 void __fastcall SOUNDSMP_Stop(struct D2SoundSmpStrc * ppnParam);
 void __fastcall CleanupSoundBuffer(uint32_t nFadeTimeMs);
 // @sourcefile .\Src\D2SoundSmp.cpp

@@ -599,16 +599,23 @@ void __fastcall CallForEachMinion(D2UnitStrc * pUnit, void * pContext, void * pA
     }
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 void __fastcall GetAndRemoveMinionList(D2UnitStrc * pUnit, int * pOwnerId, eD2UnitType * pType, uint32_t * nFlagBit1, uint32_t * nFlagBit2, D2MonsterDataMinionList * * pMinionList) {
     D2AiGeneralStrc* pAiGeneral;
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       *pOwnerId = -1;
       return;
     }
-    if (false || !pUnit->pUnitData.pUnitDataMonster) {
-      pAiGeneral = 0;
-    } else {
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
       pAiGeneral = pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
+    } else {
+      pAiGeneral = 0;
     }
     if (pAiGeneral->eOwnerTypeEx != UNIT_MONSTER) {
       *pOwnerId = -1;

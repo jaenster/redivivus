@@ -95,14 +95,14 @@ D2SoundChannelStrc * __stdcall SOUND_GetChannelArray() {
 }
 
 D2SoundChannelStrc * __fastcall Unreferenced_004b9440(int nChannelHandle) {
-    D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
     if (!nChannelHandle) {
       return nullptr;
     }
 
-    for (; pDVar1; pDVar1 = pDVar1->pNext) {
-      if (pDVar1->pChannel->nChannelHandle == nChannelHandle) {
-        return pDVar1->pChannel;
+    for (D2SoundChannelNodeStrc* pNode = gpActiveSoundChannelsHead; pNode; pNode = pNode->pNext) {
+      D2SoundChannelStrc* pChannel = pNode->pChannel;
+      if (pChannel->nChannelHandle == nChannelHandle) {
+        return pChannel;
       }
     }
 
@@ -164,14 +164,14 @@ int __fastcall Unreferenced_004b9560(int nChannelHandle) {
 }
 
 uint32_t __fastcall SOUND_GetSoundId(int32_t nChannelHandle) {
-    D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
     if (!nChannelHandle) {
       return 0;
     }
 
-    for (; pDVar1; pDVar1 = pDVar1->pNext) {
-      if (pDVar1->pChannel->nChannelHandle == nChannelHandle) {
-        return (uint32_t)(pDVar1->pChannel->nPlayMode == 1);
+    for (D2SoundChannelNodeStrc* pNode = gpActiveSoundChannelsHead; pNode; pNode = pNode->pNext) {
+      D2SoundChannelStrc* pChannel = pNode->pChannel;
+      if (pChannel->nChannelHandle == nChannelHandle) {
+        return pChannel->nPlayMode == 1;
       }
     }
 
@@ -493,23 +493,19 @@ void __fastcall SOUND_PlayItemSound(D2SoundChannelStrc * nChannelData, int pItem
 }
 
 int __fastcall SOUND_GetSoundChannel(int32_t nSoundId) {
-    D2SoundListNodeStrc* pSmpData;
-    D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
     if (!nSoundId) {
       return 0;
     }
 
-    for (; pDVar1; pDVar1 = pDVar1->pNext) {
-      if (pDVar1->pChannel->nChannelHandle == nSoundId) {
-        pSmpData = pDVar1->pChannel->pUnitList;
-        if (!pSmpData) {
-          return 0;
-        }
-        if (!pSmpData->pNext) {
-          return 0;
+    for (D2SoundChannelNodeStrc* pNode = gpActiveSoundChannelsHead; pNode; pNode = pNode->pNext) {
+      D2SoundChannelStrc* pChannel = pNode->pChannel;
+      if (pChannel->nChannelHandle == nSoundId) {
+        D2SoundListNodeStrc* pSmpData = pChannel->pUnitList;
+        if (pSmpData && pSmpData->pNext) {
+          return 1;
         }
 
-        return 1;
+        return 0;
       }
     }
 

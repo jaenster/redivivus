@@ -427,29 +427,29 @@ static void __stdcall LIGHTMAP_FillGridRect(int nYStart, uint32_t nColorARGB, in
 
 void __fastcall ROOM_GetAmbientLightColor(D2RoomStrc * pRoom, uint32_t * pIntensity, char * pRed, char * pGreen, char * pBlue, uint32_t bUseLevel) {
     uint32_t nIntensity;
-    D2ColorInfo2 colorInfo;
-    *(uint16_t*)(char*)&colorInfo = (uint16_t)(uintptr_t)pRoom & 0xff;
-    colorInfo.nGreen = '\0';
-    colorInfo.nRed = '\0';
+    uint8_t nLevelIntensity;
+    char nRed = '\0';
+    char nGreen = '\0';
+    char nBlue = '\0';
     if (bUseLevel) {
-      nIntensity = Source::ClientEngine::ROOM_GetLevelLightColor(pRoom, &colorInfo.nRed, &colorInfo.nGreen, &colorInfo.nBlue);
-      if (colorInfo.nRed != '\0' || colorInfo.nGreen != '\0' || colorInfo.nBlue != '\0') {
+      nIntensity = Source::ClientEngine::ROOM_GetLevelLightColor(pRoom, &nRed, &nGreen, &nBlue);
+      if (nRed != '\0' || nGreen != '\0' || nBlue != '\0') {
         goto store_color;
       }
     }
 
-    D2Common::DUNGEON::Dungeon::GetRGB_IntensityFromRoom(pRoom, (char*)((intptr_t)&bUseLevel + 3), &colorInfo.nRed, &colorInfo.nGreen, &colorInfo.nBlue);
-    nIntensity = bUseLevel >> 0x18;
-    if (colorInfo.nRed == '\0' && colorInfo.nGreen == '\0' && colorInfo.nBlue == '\0') {
-      D2Common::Environment::DRLGENV_GetLightColorFromAct(GAME::Game::sgpDrlgAct, (uint8_t*)&colorInfo.nRed, (uint8_t*)&colorInfo.nGreen, (uint8_t*)&colorInfo.nBlue);
+    D2Common::DUNGEON::Dungeon::GetRGB_IntensityFromRoom(pRoom, (char*)&nLevelIntensity, &nRed, &nGreen, &nBlue);
+    nIntensity = nLevelIntensity;
+    if (nRed == '\0' && nGreen == '\0' && nBlue == '\0') {
+      D2Common::Environment::DRLGENV_GetLightColorFromAct(GAME::Game::sgpDrlgAct, (uint8_t*)&nRed, (uint8_t*)&nGreen, (uint8_t*)&nBlue);
       nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(GAME::Game::sgpDrlgAct);
     }
 
     store_color:
     *pIntensity = nIntensity;
-    *pRed = colorInfo.nRed;
-    *pGreen = colorInfo.nGreen;
-    *pBlue = colorInfo.nBlue;
+    *pRed = nRed;
+    *pGreen = nGreen;
+    *pBlue = nBlue;
 }
 
 void __stdcall LIGHTMAP_InitFromPlayerAndRooms(uint32_t bForceBlack) {

@@ -453,7 +453,7 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithCollisionObj(::SGAMEDATA * p
     }
 
     int16_t nSpawnFlags = 0;
-    if (*((uint8_t*)pMonStats + 0xe) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+    if (pMonStats->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
       nSpawnFlags = 8;
     }
 
@@ -743,7 +743,7 @@ D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, in
     uint32_t nSpawnClassId = MONSTER_ValidateSpawnForLevel(nResolvedClassId, eLevelId);
     *(uint16_t*)(char*)&nMonCode = 0;
     D2MonStatsTxt* pMonStatEntry = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nSpawnClassId);
-    if (*((uint8_t*)pMonStatEntry + 0xe) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+    if (pMonStatEntry->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
       *(uint16_t*)(char*)&nMonCode = 8;
     }
 
@@ -894,12 +894,15 @@ void __fastcall MONSTER_SpawnRoomMonsters(::SGAMEDATA * pGame, D2RoomStrc * pRoo
                   }
 
                   pFormationUnit = SPAWN_SpawnMonsterWithMinions(pGame, pRoom, pCoordListIter, (uint8_t)nMinGrp, (uint8_t)nMaxGrp, dwClassId);
+                  if (pFormationUnit) {
+                    bDidSpawn = true;
+                  }
                 } else {
                   pGroupOffsetTable = SKILLS::SkillItem::RollRoomSeed(pRoom);
-                  pFormationUnit = (D2UnitStrc*)SPAWN_SpawnMonsterFormation(pGame, pRoom, dwClassId, pGroupOffsetTable);
-                }
-                if (pFormationUnit) {
-                  bDidSpawn = true;
+                  BOOL bSpawned = SPAWN_SpawnMonsterFormation(pGame, pRoom, dwClassId, pGroupOffsetTable);
+                  if (bSpawned) {
+                    bDidSpawn = true;
+                  }
                 }
               } else {
                 dwClassId = SKILLS::SkillItem::MONREGION_RollRandomMonsterType(pGame, pMonsterRegion, pRoom, &pMonStatLine, 0, 1);

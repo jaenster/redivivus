@@ -28,7 +28,7 @@ void LOGGING_FilePrintf(FILE * pFile, uint32_t dwGame, uint32_t dwFrame, uint32_
 // "Game:%02d\tFrame:%d\tClient:%02d\t" plus Type:System/Type:Game and Size:%d. 00624780 is the generic
 // time/thread/level logger. Two different loggers, one name.
 // @caveat zero xrefs - called through a pointer or dead. Name derived from its format strings.
-void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nLogType, int32_t nLogTypeArg, char * szFormat, ...);
+void StoreGameLogging(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nLogType, int32_t nLogTypeArg, char * szFormat, ...);
 int32_t __fastcall LOGGING_OpenLogFile(char * szLogFileName);
 void __stdcall CloseLogging();
 #endif // D2_MODULE_D2Common

@@ -325,12 +325,12 @@ int __fastcall SKILLSNEC_CltCreateTeethMissiles(D2UnitStrc * pUnit, eD2Skills eS
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.nMissileTxtNo = eCltMissileId;
-    if (Fog::BitBuffer::gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
+    if (Fog::BitBuffer::gadwBitMasks[2] & pMonStats2->aFlagBytes[1]) {
       nScatterMax = 1;
       nScatterMin = 0;
     } else {
       D2MissilesTxt* pMissileTxt;
-      if (Fog::BitBuffer::gadwBitMasks[3] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
+      if (Fog::BitBuffer::gadwBitMasks[3] & pMonStats2->aFlagBytes[1]) {
         Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 3, 3);
         pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(eCltMissileId);
         nSubMissileId = pMissileTxt->SubMissile1;
@@ -487,7 +487,7 @@ BOOL __fastcall Skills_CltStFunc_CheckCasterRoomNotInTownNec(D2UnitStrc * pUnit,
     if (!pRoom) {
       return 0;
     }
-    if (*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+    if (pSkillTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
       return 1;
     }
 

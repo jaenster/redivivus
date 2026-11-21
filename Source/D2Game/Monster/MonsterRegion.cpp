@@ -121,7 +121,7 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
           do {
             nMonStatIdx = (int)(short int)nMonClassId;
             D2MonStatsTxt* pMonStatsTxt;
-            if ((pMonStatsTxt = nMonStatIdx >= 0 && nMonStatIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr) && *((uint8_t*)pMonStatsTxt + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
+            if ((pMonStatsTxt = nMonStatIdx >= 0 && nMonStatIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr) && pMonStatsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
               break;
             }
 
@@ -141,7 +141,7 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
             nMonClassId = aMonIdPool[nRandPick];
             nMonStatIdx = (int)(short int)nMonClassId;
             D2MonStatsTxt* pMonStatsTxt2;
-            if ((pMonStatsTxt2 = nMonStatIdx >= 0 && nMonStatIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr) && *((uint8_t*)pMonStatsTxt2 + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
+            if ((pMonStatsTxt2 = nMonStatIdx >= 0 && nMonStatIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr) && pMonStatsTxt2->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
               break;
             }
 
@@ -161,7 +161,7 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
             nMonClassId = aMonIdPool[nRandPick];
             nMonStatIdx = (int)(short int)nMonClassId;
             D2MonStatsTxt* pMonStatsTxt3;
-            if ((pMonStatsTxt3 = nMonStatIdx >= 0 && nMonStatIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr) && *((uint8_t*)pMonStatsTxt3 + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
+            if ((pMonStatsTxt3 = nMonStatIdx >= 0 && nMonStatIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr) && pMonStatsTxt3->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
               break;
             }
 
@@ -181,7 +181,7 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
             nMonClassId = aMonIdPool[nRandPick];
             nMonStatIdx = (int)(short int)nMonClassId;
             D2MonStatsTxt* pMonStatsTxt4;
-            if ((pMonStatsTxt4 = nMonStatIdx >= 0 && nMonStatIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr) && *((uint8_t*)pMonStatsTxt4 + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
+            if ((pMonStatsTxt4 = nMonStatIdx >= 0 && nMonStatIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr) && pMonStatsTxt4->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
               break;
             }
 
@@ -201,7 +201,7 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
             nMonClassId = aMonIdPool[nRandPick];
             nMonStatIdx = (int)(short int)nMonClassId;
             D2MonStatsTxt* pMonStatsTxt5;
-            if ((pMonStatsTxt5 = nMonStatIdx >= 0 && nMonStatIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr) && *((uint8_t*)pMonStatsTxt5 + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
+            if ((pMonStatsTxt5 = nMonStatIdx >= 0 && nMonStatIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr) && pMonStatsTxt5->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
               break;
             }
 
@@ -230,7 +230,7 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
 
         nMonStatIdx = (int)(short int)nMonClassId;
         pMonStats = nMonStatIdx >= 0 && nMonStatIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr;
-        if (pMonStats && *((uint8_t*)pMonStats + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+        if (pMonStats && pMonStats->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
           pMonField->nClassId = nMonClassId;
           pMonField->nRarity = pMonStats->Rarity;
           pMonsterRegion->nTotalRarity += pMonStats->Rarity;

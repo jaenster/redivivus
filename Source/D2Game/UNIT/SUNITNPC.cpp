@@ -2541,13 +2541,13 @@ void __fastcall ExecutePrayUnused(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD
     GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(pClient, 0x2a, nResult, nCurHp, nMaxMana, nTradeType);
 }
 
-// Rolls up to 5 item codes from the NPC's trade list 1 with SUNITNPC_RollTradeListItemCode, using the NPC-control seed (SUNITPROXY_GetNpcControl) and SUNITNPC_GetActCappedLevel(pGame, pUnit, nQueueEntryField0) as the unused level argument, stopping at the first roll that returns 0. Every rolled code is discarded and the function always returns 0, so its only effect is advancing that seed; the caller's free-the-queue-node branch on a nonzero result never runs.
+// Rolls up to 5 item codes from the NPC's trade list 1 with SUNITNPC_RollTradeListItemCode, using the NPC-control seed (SUNITPROXY_GetNpcControl) and SUNITNPC_GetActCappedLevel(pGame, pUnit, pPlayer) as the unused level argument, stopping at the first roll that returns 0. Every rolled code is discarded and the function always returns 0, so its only effect is advancing that seed; the caller's free-the-queue-node branch on a nonzero result never runs.
 // Provenance: 1.14d asm 00579030..00579086 (XOR EAX,EAX at 00579080); no cost is computed.
-BOOL __fastcall SUNITNPC_DiscardTradeListRolls(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nQueueEntryField0, uint32_t dwTradeEntryValue) {
+BOOL __fastcall SUNITNPC_DiscardTradeListRolls(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pPlayer, uint32_t dwTradeEntryValue) {
     uint32_t dwItemCode;
     D2SeedStrc* pNpcControl = sunitproxy::SUNITPROXY_GetNpcControl(pGame);
     int nAttempts = 0;
-    uint32_t nLevel = SUNITNPC_GetActCappedLevel(pGame, pUnit, nQueueEntryField0);
+    uint32_t nLevel = SUNITNPC_GetActCappedLevel(pGame, pUnit, (int32_t)pPlayer);
     while ((nAttempts < 5 ? SUNITNPC_RollTradeListItemCode(pGame, pUnit, pNpcControl, nLevel, &dwItemCode, &dwTradeEntryValue) : 0) != 0) {
       ++nAttempts;
     }

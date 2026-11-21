@@ -159,22 +159,22 @@ template<> CMDDEF * TSList<CMDDEF, TSGetLink<CMDDEF>>::NewNode(uint32_t nLinkTyp
 }
 
 template<> void TSList<CMDDEF, TSGetLink<CMDDEF>>::Clear() {
-    int* pBackLinkSlot;
-    int pNextNode;
+    CMDDEF** pBackLinkSlot;
+    CMDDEF* pNextNode;
     while (true) {
-      int* pObject;
-      pObject = (intptr_t)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
+      CMDDEF* pObject;
+      pObject = (CMDDEF*)(this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0);
       if (!pObject) {
         break;
       }
 
-      pNextNode = *pObject;
+      pNextNode = pObject->pPrev;
       if (pNextNode) {
-        pBackLinkSlot = (int*)D2_StormNextLink(pObject, -1);
+        pBackLinkSlot = (CMDDEF**)D2_StormNextLink(pObject, -1);
         *pBackLinkSlot = pNextNode;
-        *(int*)(*pObject + 4) = pObject[1];
-        *pObject = 0;
-        pObject[1] = 0;
+        pObject->pPrev->pNext = pObject->pNext;
+        pObject->pPrev = nullptr;
+        pObject->pNext = nullptr;
       }
 
       Storm::Source::SMem::SMemFree(pObject, s___AUCMDDEF___0074c47c, -2, 0);

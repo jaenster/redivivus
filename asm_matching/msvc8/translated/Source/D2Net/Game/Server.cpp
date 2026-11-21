@@ -476,7 +476,6 @@ void __stdcall _NullSubRet8(uint32_t dwParam) {
 
 int32_t __fastcall NET_D2GS_SERVER_Send_0xAF01(D2QServerStrc * pQServer, uint32_t nClientId, char * pszSourceFile, int nLine) {
     uint8_t aPacketFrame[4];
-    *(uint16_t*)((char*)&aPacketFrame + 2) = (uint16_t)((uintptr_t)pQServer >> 0x10);
     aPacketFrame[0] = 0xaf;
     aPacketFrame[1] = 1;
     NET_D2GS_SERVER_SendPacketToClient('\0', nClientId, (char*)aPacketFrame, 2);
@@ -493,7 +492,6 @@ int32_t __fastcall NET_D2GS_CLIENT_Send_0x70(D2QServerStrc * pQServer, uint32_t 
 
 void __stdcall NET_D2GS_SERVER_Send_0xAF00() {
     uint8_t aPacket[4];
-    *(uint16_t*)((char*)&aPacket + 2) = (uint16_t)((uint32_t)0 >> 0x10);
     aPacket[0] = 0xaf;
     aPacket[1] = 0;
     NET_D2GS_SERVER_SendPacketToClient('\0', 0, (char*)aPacket, 2);

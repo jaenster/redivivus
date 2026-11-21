@@ -93,20 +93,20 @@ HWND __stdcall WND_GetActiveWindow() {
 }
 
 // @blizzard SMsgPopRegisterState (SMSG.CPP)
-int __stdcall SMsgPopRegisterState(char * szText) {
-    Source::SEVT::SEvtPopState(0x534d5348, (uint32_t)szText);
-    Source::SEVT::SEvtPopState(0x534d5349, (uint32_t)szText);
-    Source::SEVT::SEvtPopState(0x534d534a, (uint32_t)szText);
-    Source::SEVT::SEvtPopState(0x534d5347, (uint32_t)szText);
+int __stdcall SMsgPopRegisterState(HWND hWnd) {
+    Source::SEVT::SEvtPopState(0x534d5348, (uintptr_t)hWnd);
+    Source::SEVT::SEvtPopState(0x534d5349, (uintptr_t)hWnd);
+    Source::SEVT::SEvtPopState(0x534d534a, (uintptr_t)hWnd);
+    Source::SEVT::SEvtPopState(0x534d5347, (uintptr_t)hWnd);
     return 1;
 }
 
 // @blizzard SMsgPushRegisterState (SMSG.CPP)
 uint32_t __stdcall SMsgPushRegisterState(HWND nSubId) {
-    Source::SEVT::SEvtPushState(0x534d5348, (uint32_t)nSubId);
-    Source::SEVT::SEvtPushState(0x534d5349, (uint32_t)nSubId);
-    Source::SEVT::SEvtPushState(0x534d534a, (uint32_t)nSubId);
-    Source::SEVT::SEvtPushState(0x534d5347, (uint32_t)nSubId);
+    Source::SEVT::SEvtPushState(0x534d5348, (uintptr_t)nSubId);
+    Source::SEVT::SEvtPushState(0x534d5349, (uintptr_t)nSubId);
+    Source::SEVT::SEvtPushState(0x534d534a, (uintptr_t)nSubId);
+    Source::SEVT::SEvtPushState(0x534d5347, (uintptr_t)nSubId);
     return 1;
 }
 
@@ -355,15 +355,15 @@ int * * __fastcall WND_AllocRecord(int * * ppList, int, int32_t nMode, int32_t n
     return ppRecord;
 }
 
-int * __fastcall WND_UnlinkAndFreeRecord(int * pRecord, int, uint8_t byFreeFlags) {
-    int nNext = *pRecord;
+StormWndRecStrc * __fastcall WND_UnlinkAndFreeRecord(StormWndRecStrc * pRecord, int, uint8_t byFreeFlags) {
+    StormLinkStrc* nNext = pRecord->link.pPrevLink;
     if (nNext) {
-      int* pBacklink;
-      pBacklink = (int*)D2_StormNextLink(pRecord, -1);
+      StormLinkStrc** pBacklink;
+      pBacklink = (StormLinkStrc**)D2_StormNextLink(&pRecord->link, -1);
       *pBacklink = nNext;
-      *(int*)(*pRecord + 4) = pRecord[1];
-      *pRecord = 0;
-      pRecord[1] = 0;
+      pRecord->link.pPrevLink->pNext = pRecord->link.pNext;
+      pRecord->link.pPrevLink = nullptr;
+      pRecord->link.pNext = 0;
     }
     if (byFreeFlags & 1) {
       Source::SMem::SMemFree(pRecord, "delete", -1, 0);
@@ -451,15 +451,15 @@ static void SMSG_DeleteWindow(HWND hWnd) {
       return;
     }
 
-    Source::SEVT::SEvtUnregisterType(0x534d5347, (uint32_t)hWnd);
-    Source::SEVT::SEvtUnregisterType(0x534d5348, (uint32_t)hWnd);
-    Source::SEVT::SEvtUnregisterType(0x534d534a, (uint32_t)hWnd);
-    Source::SEVT::SEvtUnregisterType(0x534d5349, (uint32_t)hWnd);
+    Source::SEVT::SEvtUnregisterType(0x534d5347, (uintptr_t)hWnd);
+    Source::SEVT::SEvtUnregisterType(0x534d5348, (uintptr_t)hWnd);
+    Source::SEVT::SEvtUnregisterType(0x534d534a, (uintptr_t)hWnd);
+    Source::SEVT::SEvtUnregisterType(0x534d5349, (uintptr_t)hWnd);
     vc8_thiscall(WND_RemoveAndFreeRecord)(&gpWndTrackingListHead, pRecord);
 }
 
 // @blizzard InternalRegister (SMSG.CPP)
-static int __stdcall SMSG_InternalRegister(HWND hWnd, int32_t pCallback, uint32_t dwEventTag, uint32_t dwContext) {
+static int __stdcall SMSG_InternalRegister(HWND hWnd, pfnSEvtHandler pCallback, uint32_t dwEventTag, uint32_t dwContext) {
     D2_CHECKS_BEGIN;
     D2_CHECK(pCallback);
     D2_CHECKS_END(Source::SErr::SErrSetLastError(0x57), 0);
@@ -468,18 +468,18 @@ static int __stdcall SMSG_InternalRegister(HWND hWnd, int32_t pCallback, uint32_
       SMSG_AddWindow(hWnd);
     }
 
-    int nResult = Source::SEVT::SEvtRegisterHandler(dwEventTag, (uint32_t)hWnd, dwContext, 0, (pfnSEvtHandler)pCallback);
+    int nResult = Source::SEVT::SEvtRegisterHandler(dwEventTag, (uintptr_t)hWnd, dwContext, 0, pCallback);
     return nResult;
 }
 
 // @blizzard InternalUnregister (SMSG.CPP)
-static void __stdcall SMSG_InternalUnregister(uint32_t nEventId, uint32_t szText1, char * szText2, HWND hWnd) {
+static void __stdcall SMSG_InternalUnregister(uint32_t nEventId, uint32_t dwKey, pfnSEvtHandler pfnHandler, HWND hWnd) {
     StormWndRecStrc* nRecord = SMSG_FindWindow(hWnd);
     if (!nRecord) {
       SMSG_AddWindow(hWnd);
     }
 
-    Source::SEVT::SEvtUnregisterHandler(nEventId, (uint32_t)hWnd, szText1, (pfnSEvtHandler)szText2);
+    Source::SEVT::SEvtUnregisterHandler(nEventId, (uintptr_t)hWnd, dwKey, pfnHandler);
 }
 
 int Unreferenced_00420ae0() {
@@ -513,27 +513,27 @@ BOOL __stdcall SMsgDispatchMessage(HWND handle, UINT uMsg, WPARAM nWParam, LPARA
 
     hMsgWnd.bHandled = 0;
     hMsgWnd.dwResult = 0;
-    uint32_t hCur = (uint32_t)handle;
+    HWND hCur = handle;
     do {
       uint32_t nMsgParam;
-      Source::SEVT::SEvtDispatch(0x534d5347, hCur, uMsg, &hMsgWnd);
+      Source::SEVT::SEvtDispatch(0x534d5347, (uintptr_t)hCur, uMsg, &hMsgWnd);
       if (uMsg == 0x111) {
         dwEventTag = 0x534d5348;
         nMsgParam = (uint16_t)nWParam;
-        Source::SEVT::SEvtDispatch(dwEventTag, hCur, nMsgParam, &hMsgWnd);
+        Source::SEVT::SEvtDispatch(dwEventTag, (uintptr_t)hCur, nMsgParam, &hMsgWnd);
       } else {
         nMsgParam = nWParam;
         if (uMsg == 0x100) {
           dwEventTag = 0x534d5349;
-          Source::SEVT::SEvtDispatch(dwEventTag, hCur, nMsgParam, &hMsgWnd);
+          Source::SEVT::SEvtDispatch(dwEventTag, (uintptr_t)hCur, nMsgParam, &hMsgWnd);
         } else {
           if (uMsg == 0x101) {
             dwEventTag = 0x534d534a;
-            Source::SEVT::SEvtDispatch(dwEventTag, hCur, nMsgParam, &hMsgWnd);
+            Source::SEVT::SEvtDispatch(dwEventTag, (uintptr_t)hCur, nMsgParam, &hMsgWnd);
           }
         }
       }
-      if (!(HWND)hCur || (HWND)hCur != gpActiveWindow) {
+      if (!hCur || hCur != gpActiveWindow) {
         if (uMsg == 0x82) {
           SMSG_DeleteWindow(handle);
         }
@@ -547,48 +547,48 @@ BOOL __stdcall SMsgDispatchMessage(HWND handle, UINT uMsg, WPARAM nWParam, LPARA
         return 1;
       }
 
-      hCur = 0;
+      hCur = nullptr;
     } while (true);
 }
 
 // @blizzard SMsgRegisterCommand (SMSG.CPP)
-void __stdcall SMsgRegisterCommand(HWND hWnd, uint32_t dwContext, int32_t pCallback) {
+void __stdcall SMsgRegisterCommand(HWND hWnd, uint32_t dwContext, pfnSEvtHandler pCallback) {
     SMSG_InternalRegister(hWnd, pCallback, 0x534d5348, dwContext);
 }
 
 // @blizzard SMsgRegisterKeyDown (SMSG.CPP)
-void __stdcall SMsgRegisterKeyDown(HWND hWnd, uint32_t dwContext, int32_t pCallback) {
+void __stdcall SMsgRegisterKeyDown(HWND hWnd, uint32_t dwContext, pfnSEvtHandler pCallback) {
     SMSG_InternalRegister(hWnd, pCallback, 0x534d5349, dwContext);
 }
 
 // @blizzard SMsgRegisterKeyUp (SMSG.CPP)
-void __stdcall SMsgRegisterKeyUp(HWND hWnd, uint32_t dwContext, int32_t pCallback) {
+void __stdcall SMsgRegisterKeyUp(HWND hWnd, uint32_t dwContext, pfnSEvtHandler pCallback) {
     SMSG_InternalRegister(hWnd, pCallback, 0x534d534a, dwContext);
 }
 
 // @blizzard SMsgRegisterMessage (SMSG.CPP)
-void __stdcall SMsgRegisterMessage(HWND hWnd, uint32_t dwContext, int32_t pCallback) {
+void __stdcall SMsgRegisterMessage(HWND hWnd, uint32_t dwContext, pfnSEvtHandler pCallback) {
     SMSG_InternalRegister(hWnd, pCallback, 0x534d5347, dwContext);
 }
 
 // @blizzard SMsgUnregisterCommand (SMSG.CPP)
-void __stdcall SMsgUnregisterCommand(HWND hWnd, uint32_t szText1, char * szText2) {
-    SMSG_InternalUnregister(0x534d5348, szText1, szText2, hWnd);
+void __stdcall SMsgUnregisterCommand(HWND hWnd, uint32_t dwKey, pfnSEvtHandler pfnHandler) {
+    SMSG_InternalUnregister(0x534d5348, dwKey, pfnHandler, hWnd);
 }
 
 // @blizzard SMsgUnregisterKeyDown (SMSG.CPP)
-void __stdcall SMsgUnregisterKeyDown(HWND hWnd, uint32_t szText1, char * szText2) {
-    SMSG_InternalUnregister(0x534d5349, szText1, szText2, hWnd);
+void __stdcall SMsgUnregisterKeyDown(HWND hWnd, uint32_t dwKey, pfnSEvtHandler pfnHandler) {
+    SMSG_InternalUnregister(0x534d5349, dwKey, pfnHandler, hWnd);
 }
 
 // @blizzard SMsgUnregisterKeyUp (SMSG.CPP)
-void __stdcall SMsgUnregisterKeyUp(HWND hWnd, uint32_t szText1, char * szText2) {
-    SMSG_InternalUnregister(0x534d534a, szText1, szText2, hWnd);
+void __stdcall SMsgUnregisterKeyUp(HWND hWnd, uint32_t dwKey, pfnSEvtHandler pfnHandler) {
+    SMSG_InternalUnregister(0x534d534a, dwKey, pfnHandler, hWnd);
 }
 
 // @blizzard SMsgUnregisterMessage (SMSG.CPP)
-void __stdcall SMsgUnregisterMessage(HWND hWnd, uint32_t szText1, char * szText2) {
-    SMSG_InternalUnregister(0x534d5347, szText1, szText2, hWnd);
+void __stdcall SMsgUnregisterMessage(HWND hWnd, uint32_t dwKey, pfnSEvtHandler pfnHandler) {
+    SMSG_InternalUnregister(0x534d5347, dwKey, pfnHandler, hWnd);
 }
 
 // Storm's registered window procedure; dispatches through SMsgDispatchMessage.

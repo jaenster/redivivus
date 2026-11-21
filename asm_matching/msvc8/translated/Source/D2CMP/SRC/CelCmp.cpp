@@ -2155,7 +2155,6 @@ void __stdcall CELCMP_DrawCelFrameFromGfxData(D2GfxDataStrc * pGfxData, int32_t 
 
 void __stdcall CELCMP_DrawCelFrameCentered(D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nDstHeight, int32_t nDstPitch, BYTE * pBlendTable, uint8_t byBlendColor) {
     int nClipRows;
-    int nDrawYCentered;
     uint32_t nRowsToRender;
     DC6Block* pFrameBlock;
     DC6* pDVar1 = pGfxData->pDC6;
@@ -2181,27 +2180,28 @@ void __stdcall CELCMP_DrawCelFrameCentered(D2GfxDataStrc * pGfxData, int32_t nDr
       }
 
       nCenteredY = pFrameBlock->nOffsetY / 2;
-      nDrawYCentered = nDrawY + nCenteredY;
+      nDrawX += pFrameBlock->nOffsetX + nCenteredY;
+      nDrawY += nCenteredY;
       nRowsToRender = (uint32_t)pFrameBlock->nHeight >> 1;
       nClipRows = 0;
-      if (nDrawYCentered - pFrameBlock->nHeight / 2 < 0) {
-        nRowsToRender = nDrawYCentered + 1;
+      if (nDrawY - pFrameBlock->nHeight / 2 < 0) {
+        nRowsToRender = nDrawY + 1;
       }
       if ((int)nRowsToRender <= 0) {
         return;
       }
-      if (nDrawYCentered >= nDstHeight) {
-        nClipRows = nDrawYCentered - nDstHeight + 1;
+      if (nDrawY >= nDstHeight) {
+        nClipRows = nDrawY - nDstHeight + 1;
         nRowsToRender -= nClipRows;
         if ((int)nRowsToRender <= 0) {
           return;
         }
 
-        nDrawYCentered = nDstHeight - 1;
+        nDrawY = nDstHeight - 1;
       }
 
-      nCenteredY = nDrawX + (pFrameBlock->nOffsetX + nCenteredY) - nClipRows;
-      FastCmp::FASTCMP_DecompressRLEWithAlpha(pFrameBlock, pDstBits + (nDrawYCentered * nDstPitch + nCenteredY), nCenteredY, nClipLeft, nClipRight, nDstPitch, nClipRows, nRowsToRender, pBlendTable, byBlendColor);
+      nDrawX -= nClipRows;
+      FastCmp::FASTCMP_DecompressRLEWithAlpha(pFrameBlock, pDstBits + (nDrawY * nDstPitch + nDrawX), nDrawX, nClipLeft, nClipRight, nDstPitch, nClipRows, nRowsToRender, pBlendTable, byBlendColor);
       return;
     }
 }
@@ -2473,9 +2473,9 @@ void __stdcall CELCMP_FreeCachedCelFrame(uint32_t dwHashVal) {
       bLockAcquired = 0;
     }
 
-    uint32_t uFrameNode = pHashEntry->m_frames.m_terminator.m_next;
-    for (uFrameNode = (int)uFrameNode <= 0 ? 0 : uFrameNode; 0 < (int)uFrameNode; uFrameNode = *(uint32_t*)(uFrameNode + 4)) {
-      D2_FREE_AT(*(void**)(uFrameNode + 0x20), ".\\SRC\\CelCmp.cpp", 0x24c);
+    intptr_t nLink = pHashEntry->m_frames.m_terminator.m_next;
+    for (nLink = nLink <= 0 ? 0 : nLink; 0 < nLink; nLink = ((::TCELENTRY*)nLink)->m_link.m_next) {
+      D2_FREE_AT(((::TCELENTRY*)nLink)->pPixels, ".\\SRC\\CelCmp.cpp", 0x24c);
     }
 
     pHashEntry->m_frames.Clear();

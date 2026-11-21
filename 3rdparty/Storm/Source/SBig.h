@@ -261,7 +261,7 @@ uint32_t * __fastcall Unreferenced_00421860(uint32_t * pData);
 // @oracle-method PLAUSIBLE. The oracle's operator= body MINUS the trailing chunk-field copy - i.e. the TSFixedArray form, which has no chunk field, as against TSGrowableArray_Ui_Assign 00421ba0 which has it.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void * __thiscall TSFixedArray_Ui_Assign(uint32_t * pArray, void * pSrcArray);
-int __fastcall Unreferenced_004218a0(int param_1);
+TSGrowableArray_Ui * __fastcall Unreferenced_004218a0(TSGrowableArray_Ui * pArray);
 // @module-history Pass 5 established the module (contiguous SBig.cpp COMDAT run 00420eb0-00421d80, moved out of D2Client::WindowHandle with a mechanical WND_ -> SBIG_ prefix swap, tail unverified). Pass 6 bound 35 of the 45 tails to oracle template methods; this one is among the 10 it did not.
 // @oracle-negative Pass 6 examined this: no oracle symbol corresponds to it. The existing descriptive name matches what the body does and was kept unchanged rather than forced onto a TS* method name.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).

@@ -34,7 +34,7 @@ static D2UIFlagInitStrc gaUIFlagInitMessageHandlers[4] = {
     {
         /* .eEventType = */ 0x1,
         /* .nMessageOrKeyCode = */ 0x9ca4,
-        /* .pfHandler = */ (fnD2InitUIFlagFunction)&D2Client::_Message::MESSAGE_OnClose
+        /* .pfHandler = */ &D2Client::_Message::MESSAGE_OnClose
     }
 }; D2_STATIC_GUARD(gaUIFlagInitMessageHandlers, "gaUIFlagInitMessageHandlers");
 
@@ -57,10 +57,10 @@ void __stdcall WndProcD(D2UIMouseMsgStrc * phWnd) {
     phWnd->dwResult = lResult;
 }
 
-void __stdcall MESSAGE_OnClose(HWND * phWnd) {
-    /* LPARAM lParam for SendMessageA */ /* WPARAM wParam for SendMessageA */ /* UINT Msg for SendMessageA */ /* HWND hWnd for SendMessageA */ SendMessageA(*phWnd, 0x10, 0, 0);
-    phWnd[6] = (HWND)0x1;
-    phWnd[7] = (HWND)0x0;
+void __stdcall MESSAGE_OnClose(D2UIMouseMsgStrc * pMsg) {
+    SendMessageA(pMsg->hWnd, WM_CLOSE, 0, 0); // steer-ok: windows.h WM_CLOSE
+    pMsg->bHandled = 1;
+    pMsg->dwResult = 0;
 }
 
 LRESULT __stdcall WndProcB(HWND hWnd, uint32_t uMsg, WPARAM wParam, LPARAM lParam) {
@@ -128,7 +128,7 @@ int32_t __fastcall MessageGameLoop(::fpGameLoopFunction nfpGameLoopFunction) {
 }
 
 // Registers a Windows event handler (message/command/keyup/keydown) based on eEventType. Filters out WM_COMMAND (0x111) from generic message handlers.
-void __fastcall MESSAGE_RegisterEventHandler(HWND hWnd, int32_t eEventType, int32_t nMessageOrKeyCode, int32_t pfHandler) {
+void __fastcall MESSAGE_RegisterEventHandler(HWND hWnd, int32_t eEventType, int32_t nMessageOrKeyCode, pfnSEvtHandler pfnHandler) {
     if (!hWnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x110);
       exit(-1);
@@ -144,17 +144,17 @@ void __fastcall MESSAGE_RegisterEventHandler(HWND hWnd, int32_t eEventType, int3
               exit(-1);
             }
 
-            Storm::WindowHandle::SMsgRegisterMessage(hWnd, nMessageOrKeyCode, pfHandler);
+            Storm::WindowHandle::SMsgRegisterMessage(hWnd, nMessageOrKeyCode, pfnHandler);
             return;
           }
         case 1:
-          Storm::WindowHandle::SMsgRegisterCommand(hWnd, nMessageOrKeyCode, pfHandler);
+          Storm::WindowHandle::SMsgRegisterCommand(hWnd, nMessageOrKeyCode, pfnHandler);
         return;
         case 2:
-          Storm::WindowHandle::SMsgRegisterKeyUp(hWnd, nMessageOrKeyCode, pfHandler);
+          Storm::WindowHandle::SMsgRegisterKeyUp(hWnd, nMessageOrKeyCode, pfnHandler);
         return;
         case 3:
-          Storm::WindowHandle::SMsgRegisterKeyDown(hWnd, nMessageOrKeyCode, pfHandler);
+          Storm::WindowHandle::SMsgRegisterKeyDown(hWnd, nMessageOrKeyCode, pfnHandler);
         default:
           return;
       }
@@ -164,7 +164,7 @@ void __fastcall MESSAGE_RegisterEventHandler(HWND hWnd, int32_t eEventType, int3
 }
 
 // Unregisters a Windows event handler (message/command/keyup/keydown) based on eEventType. Filters out WM_COMMAND (0x111) from generic message handlers.
-void __fastcall MESSAGE_UnregisterEventHandler(HWND hWnd, int32_t eEventType, int32_t nMessageOrKeyCode, char * pfHandler) {
+void __fastcall MESSAGE_UnregisterEventHandler(HWND hWnd, int32_t eEventType, int32_t nMessageOrKeyCode, pfnSEvtHandler pfnHandler) {
     if (!hWnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x131);
       exit(-1);
@@ -180,17 +180,17 @@ void __fastcall MESSAGE_UnregisterEventHandler(HWND hWnd, int32_t eEventType, in
               exit(-1);
             }
 
-            Storm::WindowHandle::SMsgUnregisterMessage(hWnd, nMessageOrKeyCode, pfHandler);
+            Storm::WindowHandle::SMsgUnregisterMessage(hWnd, nMessageOrKeyCode, pfnHandler);
             return;
           }
         case 1:
-          Storm::WindowHandle::SMsgUnregisterCommand(hWnd, nMessageOrKeyCode, pfHandler);
+          Storm::WindowHandle::SMsgUnregisterCommand(hWnd, nMessageOrKeyCode, pfnHandler);
         return;
         case 2:
-          Storm::WindowHandle::SMsgUnregisterKeyUp(hWnd, nMessageOrKeyCode, pfHandler);
+          Storm::WindowHandle::SMsgUnregisterKeyUp(hWnd, nMessageOrKeyCode, pfnHandler);
         return;
         case 3:
-          Storm::WindowHandle::SMsgUnregisterKeyDown(hWnd, nMessageOrKeyCode, pfHandler);
+          Storm::WindowHandle::SMsgUnregisterKeyDown(hWnd, nMessageOrKeyCode, pfnHandler);
         default:
           return;
       }
@@ -207,7 +207,7 @@ void __fastcall MESSAGE_RegisterEventHandlerBatch(HWND hWnd, D2UIFlagInitStrc * 
     }
 
     for (uint32_t i = 0; i < (uint32_t)nCount; i++) {
-      MESSAGE_RegisterEventHandler(hWnd, pEventHandlers[i].eEventType, pEventHandlers[i].nMessageOrKeyCode, (int32_t)pEventHandlers[i].pfHandler);
+      MESSAGE_RegisterEventHandler(hWnd, pEventHandlers[i].eEventType, pEventHandlers[i].nMessageOrKeyCode, (pfnSEvtHandler)pEventHandlers[i].pfHandler);
     }
 }
 
@@ -226,7 +226,7 @@ void __fastcall MESSAGE_UnregisterEventHandlerBatch(HWND hWnd, D2UIFlagInitStrc 
 
       pEntry = pEventHandlers;
       while (nCount != 0) {
-        MESSAGE_UnregisterEventHandler(hWnd, pEntry->eEventType, pEntry->nMessageOrKeyCode, (char*)pEntry->pfHandler);
+        MESSAGE_UnregisterEventHandler(hWnd, pEntry->eEventType, pEntry->nMessageOrKeyCode, (pfnSEvtHandler)pEntry->pfHandler);
         pEntry++;
         nCount--;
       }
@@ -246,19 +246,19 @@ BOOL __fastcall MESSAGE_RegisterWindowMessageHandlers(HWND hWnd) {
     return 1;
 }
 
-void __fastcall MESSAGE_UnregisterWindowMessageHandlers(char * szText) {
-    if (!szText) {
+void __fastcall MESSAGE_UnregisterWindowMessageHandlers(HWND hWnd) {
+    if (!hWnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x166);
       exit(-1);
     }
 
     uint32_t nByteOffset = 0;
     do {
-      MESSAGE_UnregisterEventHandler((HWND)szText, gaUIFlagInitMessageHandlers[nByteOffset].eEventType, gaUIFlagInitMessageHandlers[nByteOffset].nMessageOrKeyCode, *(char**)&gaUIFlagInitMessageHandlers[nByteOffset].pfHandler);
+      MESSAGE_UnregisterEventHandler(hWnd, gaUIFlagInitMessageHandlers[nByteOffset].eEventType, gaUIFlagInitMessageHandlers[nByteOffset].nMessageOrKeyCode, (pfnSEvtHandler)gaUIFlagInitMessageHandlers[nByteOffset].pfHandler);
       nByteOffset++;
     } while (nByteOffset < 4);
 
-    Storm::WindowHandle::SMsgPopRegisterState(szText);
+    Storm::WindowHandle::SMsgPopRegisterState(hWnd);
 }
 
 // Gets the current HWND and snapshots all registered event handlers. Used for save/restore state during modal dialogs.
@@ -270,7 +270,7 @@ void __stdcall MESSAGE_SnapshotEventHandlers() {
 // Gets the current HWND and undoes the last batch of event registrations. Restores previous snapshot state.
 void __stdcall MESSAGE_UndoLastEventRegistrations() {
     HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    Storm::WindowHandle::SMsgPopRegisterState((char*)hWnd);
+    Storm::WindowHandle::SMsgPopRegisterState(hWnd);
 }
 
 }} // namespace D2Client::_Message

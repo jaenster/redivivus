@@ -1065,7 +1065,7 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     D2DynamicPathStrc* pDynamicPath;
     pDynamicPath = pUnit->pPath.pDynamicPath;
     D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, (int)pMonStatsTxt->Velocity << 8, ".\\UNIT\\Monster.cpp", 0x208);
-    if (!pUnit->pInventory && (*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1] || nClassId == 0x123 || nClassId == 0x165 || nClassId == 0x1a1 || nClassId == 0x1a2)) {
+    if (!pUnit->pInventory && (pMonStatsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1] || nClassId == 0x123 || nClassId == 0x165 || nClassId == 0x1a1 || nClassId == 0x1a2)) {
       pInventory = D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(nullptr, pUnit);
       pUnit->pInventory = pInventory;
     }
@@ -1073,7 +1073,7 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     D2Common::Units::ChangeAnimMode(pUnit, nAnimMode);
     BOOL bResult;
     bResult = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pUnit);
-    if (bResult && !(*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
+    if (bResult && !(pMonStats2->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
       D2Common::PATH::DynamicPath::PATH_RemoveUnitCollision(pUnit, 1);
       D2Common::PATH::DynamicPath::PATH_SetUnitCollisionPattern(pUnit, 5);
       D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pUnit->pPath.pDynamicPath, 0x8000);
@@ -1082,19 +1082,19 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     uint32_t nRandStartFrame;
     nRandStartFrame = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, pUnit->nFrameCount);
     pUnit->nGfxCurrentFrame = nRandStartFrame;
-    if (*((uint8_t*)pMonStats2 + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+    if (pMonStats2->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
     } else {
       pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
     }
-    if (!(*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6])) {
+    if (!(pMonStats2->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[6])) {
       pUnit->eUnitFlags |= UNITFLAG_DRAWSHADOW;
     } else {
       pUnit->eUnitFlags &= ~UNITFLAG_DRAWSHADOW;
     }
 
     pUnit->eUnitFlags |= UNITFLAG_ISVALIDTARGET;
-    if (*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+    if (pMonStats2->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       eUpdatedFlags = pUnit->eUnitFlags | UNITFLAG_CANBEATTACKED;
     } else {
       eUpdatedFlags = pUnit->eUnitFlags & ~UNITFLAG_CANBEATTACKED;
@@ -1258,7 +1258,7 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
 
     D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, (int)pMonStatsTxtNew->Velocity << 8, ".\\UNIT\\Monster.cpp", 0x2b8);
     D2Common::PATH::DynamicPath::PATH_RestoreMonsterCollision(pUnit, 0);
-    if (*((uint8_t*)pMonStatsTxtNew + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1] && !pUnit->pInventory) {
+    if (pMonStatsTxtNew->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1] && !pUnit->pInventory) {
       pInventory = D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(nullptr, pUnit);
       pUnit->pInventory = pInventory;
     }
@@ -1281,21 +1281,21 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
     uint32_t nRandStartFrame;
     nRandStartFrame = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, pUnit->nFrameCount);
     pUnit->nGfxCurrentFrame = nRandStartFrame;
-    if (*((uint8_t*)pMonStats2 + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+    if (pMonStats2->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
     } else {
       pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
     }
 
     pUnit->eUnitFlagsEx &= ~UNITFLAGEX_NODRAW;
-    if (!(*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6])) {
+    if (!(pMonStats2->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[6])) {
       pUnit->eUnitFlags |= UNITFLAG_DRAWSHADOW;
     } else {
       pUnit->eUnitFlags &= ~UNITFLAG_DRAWSHADOW;
     }
 
     pUnit->eUnitFlags |= UNITFLAG_ISVALIDTARGET;
-    if (*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+    if (pMonStats2->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       eUpdatedFlags = pUnit->eUnitFlags | UNITFLAG_CANBEATTACKED;
     } else {
       eUpdatedFlags = pUnit->eUnitFlags & ~UNITFLAG_CANBEATTACKED;
@@ -1319,7 +1319,7 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
       nMonStats2Idx++;
     } while (nMonStats2Idx < 8);
 
-    if (!(*((uint8_t*)pMonStatsTxtNew + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
+    if (!(pMonStatsTxtNew->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
       uint32_t DVar1;
       DVar1 = D2_SeedRoll(&pUnit->sSeed);
       D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, (uint8_t)DVar1 & 0x3f);
@@ -2594,7 +2594,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
         MONSTER_SpawnDeathEffectMissiles(pUnit);
         pUnit->dwLastHitClass = pUnit->dwLastHitClass & 0xf | 0xa0;
       }
-      if (!(*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
+      if (!(pMonStats2->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
         D2Common::PATH::DynamicPath::PATH_SetCorpseCollision(pUnit, 0);
       }
 
@@ -2800,7 +2800,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       case 9:
         D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pUnit, 0);
       pPlayerUnit_lcl = Player::GetPlayerUnit_UI();
-      if (!(*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
+      if (!(pMonStats2->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
         D2Common::PATH::DynamicPath::PATH_SetCorpseCollision(pUnit, 0);
       }
 
@@ -2857,10 +2857,10 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       if (bPathCalcResult) {
         pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
       } else {
-        SetMonsterFlags(pUnit, UNITFLAG_TARGETABLE, (uint8_t)*((uint8_t*)pMonStats2 + 0x4) & Fog::BitBuffer::gadwBitMasks[3]);
+        SetMonsterFlags(pUnit, UNITFLAG_TARGETABLE, pMonStats2->aFlagBytes[0] & Fog::BitBuffer::gadwBitMasks[3]);
       }
 
-      SetMonsterFlags(pUnit, UNITFLAG_DRAWSHADOW, (uint32_t)!(*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]));
+      SetMonsterFlags(pUnit, UNITFLAG_DRAWSHADOW, (uint32_t)!(pMonStats2->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]));
       CUnit::CUNIT_ClearDeadSetAttackable(pUnit);
       if (pMessage) {
         Path::PATH_MoveUnitToPoint(pUnit, *(uint16_t*)&pMessage->nSkillId, (uint32_t)*(uint16_t*)&pMessage->nItemId, 0, 0, 0);
@@ -2996,79 +2996,51 @@ uint32_t __fastcall NPCMENU_ParseSpeechData(D2UnitStrc * pUnit, uint8_t * pParam
 
 // Client-side initialization of a mercenary unit from a network packet. Sets ISMERC|TARGETABLE flags, reads the name/seed from the packet, rolls stats via RollMercStats using the current player's level and difficulty, then assigns skills (id, level, mode) from the HirelingTxt table, sets the localized name, and recalculates equipped item stats.
 void __fastcall MERC_InitializeFromPacket(D2UnitStrc * pUnit, D2MercInitArgStrc * pMercInit) {
-    uint8_t bVar1;
-    BOOL bIsExpansion;
-    uint32_t nDifficulty;
-    int32_t nLevel;
-    uint16_t* pMercName;
-    uint16_t nNameId;
-    uint32_t nSkillModeVal;
-    int nSkillIdx;
     D2HirelingHireData sHireData;
-    D2MercInitArgStrc* pPacketData;
-    D2HirelingTxt* pHirelingTxt;
-    int nLevelDelta;
-    int* pSkillIdPtr;
-    D2UnitStrc* pMercUnit;
-    D2HirelingHireData* pHireData;
     if (!(pUnit && pMercInit)) {
       return;
     }
 
     pUnit->eUnitFlags |= UNITFLAG_ISMERC | UNITFLAG_TARGETABLE;
-    nNameId = pMercInit->wInitSeed;
-    pPacketData = pMercInit;
-    pMercUnit = pUnit;
-    nLevel = D2Common::Merc::GetMercAct(GAME::Game::CLIENT_CheckExpansion(), 0, nNameId);
-    bVar1 = GAME::Game::GetDificulity();
-    nSkillModeVal = pMercInit->nSeed;
-    nDifficulty = (uint32_t)bVar1;
-    pHireData = &sHireData;
-    bIsExpansion = D2Common::Merc::RollMercStats(GAME::Game::CLIENT_CheckExpansion(), Player::GetPlayerUnit_UI(), nSkillModeVal, nLevel, nDifficulty, pHireData);
-    if (!bIsExpansion) {
+    int nAct = D2Common::Merc::GetMercAct(GAME::Game::CLIENT_CheckExpansion(), 0, pMercInit->wInitSeed);
+    uint32_t nDifficulty = GAME::Game::GetDificulity();
+    if (!D2Common::Merc::RollMercStats(GAME::Game::CLIENT_CheckExpansion(), Player::GetPlayerUnit_UI(), pMercInit->nSeed, nAct, nDifficulty, &sHireData)) {
       return;
     }
 
-    nLevel = sHireData.nLevel;
-    pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(GAME::Game::CLIENT_CheckExpansion(), sHireData.nId, nLevel);
+    int nHireLevel = sHireData.nLevel;
+    D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(GAME::Game::CLIENT_CheckExpansion(), sHireData.nId, nHireLevel);
     if (!pHirelingTxt) {
       return;
     }
 
-    nLevelDelta = sHireData.nLevel - pHirelingTxt->level;
+    int nLevelDelta = nHireLevel - pHirelingTxt->level;
     if (nLevelDelta < 0) {
       nLevelDelta = 0;
     }
 
-    pSkillIdPtr = pHirelingTxt->nSkillId;
-    nSkillIdx = 0;
-    do {
-      eD2Skills eSkill;
-      eSkill = *pSkillIdPtr;
+    for (int nSkillIdx = 0; nSkillIdx < 6; nSkillIdx++) {
+      eD2Skills eSkill = (eD2Skills)pHirelingTxt->nSkillId[nSkillIdx];
       if ((int)eSkill <= 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         break;
       }
 
-      nLevel = ((char)pHirelingTxt->nSkillLvlPerLvl[nSkillIdx] * nLevelDelta >> 5) + (int)(char)pHirelingTxt->nSkillLevel[nSkillIdx];
+      int nLevel = ((char)pHirelingTxt->nSkillLvlPerLvl[nSkillIdx] * nLevelDelta >> 5) + (int)(char)pHirelingTxt->nSkillLevel[nSkillIdx];
       if (nLevel >= 0x20) {
         nLevel = 0x20;
       }
 
-      nSkillModeVal = (uint32_t)(char)pHirelingTxt->nSkillMode[nSkillIdx];
-      D2Common::Skills::AddSkill(pMercUnit, eSkill, nLevel, 0, ".\\UNIT\\Monster.cpp", 0x9c8);
-      D2Common::Skills::SetSkillMode(D2Common::Skills::SKILLS_GetSkillByEnum(pMercUnit, eSkill), nSkillModeVal);
-      pSkillIdPtr++;
-      nSkillIdx++;
-      pUnit = pMercUnit;
-    } while (nSkillIdx < 6);
+      uint32_t nSkillMode = (uint32_t)(char)pHirelingTxt->nSkillMode[nSkillIdx];
+      D2Common::Skills::AddSkill(pUnit, eSkill, nLevel, 0, ".\\UNIT\\Monster.cpp", 0x9c8);
+      D2Common::Skills::SetSkillMode(D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill), nSkillMode);
+    }
 
-    nNameId = pPacketData->wInitSeed;
+    uint16_t nNameId = pMercInit->wInitSeed;
     if (nNameId == 0x421) {
       nNameId = 0x2b0d;
     }
 
-    pMercName = D2Lang::StrTable::strtable::GetLocaleString(nNameId);
-    D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, pMercName);
+    D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, D2Lang::StrTable::strtable::GetLocaleString(nNameId));
     ITEM_RecalcAllEquippedItems_ECX(pUnit);
 }
 
@@ -3274,7 +3246,7 @@ void __fastcall CLIENT_UpdateUnitNameplate(D2UnitStrc * pDynamicPath) {
     if (!pMonStats) {
       return;
     }
-    if (*((uint8_t*)pMonStats + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+    if (pMonStats->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       bIsCritter = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nClassId, TXTMonStats2Field0x04DWORD_ns::critter);
       if (!bIsCritter && pDynamicPath->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral) {
         nCheckResult = D2Common::Units::CheckFlags(pDynamicPath, UNITFLAG_ISMERC);

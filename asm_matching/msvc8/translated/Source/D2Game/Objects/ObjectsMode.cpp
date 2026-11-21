@@ -730,9 +730,27 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_8(D2UnitStrc * p) {
     return p->eUnitFlags >> 8 & 1;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+// steer-ok: generated-form FlagBit getter
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_0(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 0 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+// steer-ok: generated-form FlagBit getter
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_0(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 0 & 1;
+}
+
 void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     if (pUnit) {
-      if (pUnit->eUnitFlags & UNITFLAG_DOUPDATE) {
+      if (FlagBit_D2UnitStrc_eUnitFlags_0(pUnit)) {
         OBJECT_SendStateToClient(pUnit, pClient);
       }
       if (FlagBit_D2UnitStrc_eUnitFlags_10(pUnit)) {
@@ -741,7 +759,7 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
       if (FlagBit_D2UnitStrc_eUnitFlags_8(pUnit)) {
         UNIT::SUnitMsg::PLAYER_SendHoverTextToClient(pUnit, pClient);
       }
-      if (pUnit->eUnitFlagsEx & UNITFLAGEX_HASINV) {
+      if (FlagBit_D2UnitStrc_eUnitFlagsEx_0(pUnit)) {
         UNIT::SendUpdatedItemsToClient(pGame, pUnit, pClient, nullptr);
       }
     }
@@ -1176,16 +1194,16 @@ void __fastcall OBJMODE_SpawnRandomMonsters(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2ObjectOperateFnArg sOperation;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     sOperation.pSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
-    uint32_t seedNext = D2_SeedRoll(sOperation.pSeed);
-    int nSpawnCount = (seedNext & 1) + 1;
     sOperation.sArg.pVictim = pUnit;
     sOperation.sArg.pGame = pGame;
+    uint32_t seedNext = D2_SeedRoll(sOperation.pSeed);
+    int nSpawnCount = (seedNext & 1) + 1;
     int32_t nMonClassId = ObjectsRgn::OBJECTRGN_GetTrapMonsterClassId(&sOperation.sArg);
     if (!(nMonClassId >= 0 && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
 
-    for (; nSpawnCount; nSpawnCount--) {
+    for (int i = 0; i < nSpawnCount; i++) {
       OBJMODE_SpawnMonsterFromObject(&sOperation.sArg, nMonClassId, eD2MonsterAnimMode_ns::Skill1);
     }
 }

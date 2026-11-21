@@ -697,7 +697,7 @@ D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelS
       iVar3 = D2Sound::Src::D2SoundSmp::SOUNDSMP_Play(pPlayingChannel->pSoundSmp);
     } else {
       D2Client::Sound::SoundHdr::SOUNDHDR_BuildSoundPath(pSoundDesc->nSoundId, szSoundPath);
-      iVar3 = D2Sound::Src::D2SoundSmp::SOUNDSMP_OpenAndStreamFile((int**)pPlayingChannel->pSoundSmp, szSoundPath, pSoundDescBackup->nParam, (uint32_t)pSoundTxt->Loop);
+      iVar3 = D2Sound::Src::D2SoundSmp::SOUNDSMP_OpenAndStreamFile(pPlayingChannel->pSoundSmp, szSoundPath, pSoundDescBackup->nParam, (uint32_t)pSoundTxt->Loop);
     }
     if (!iVar3) {
       pPlayingChannel->pActiveSound = 0;

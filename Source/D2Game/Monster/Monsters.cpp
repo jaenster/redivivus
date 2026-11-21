@@ -819,12 +819,12 @@ static BOOL __stdcall MONSTER_CanApplyUniqueModifier(D2MonUModTxt * pD2MonUModTx
             nExcludeIdx = pUnit->nClassId;
             if (nExcludeIdx >= 0) {
               D2MonStatsTxt* pMonStatsTxt;
-              if ((pMonStatsTxt = nExcludeIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nExcludeIdx : nullptr) && (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc) & Fog::BitBuffer::gadwBitMasks[1]) {
+              if ((pMonStatsTxt = nExcludeIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nExcludeIdx : nullptr) && pMonStatsTxt->aFlagBytes[0] & Fog::BitBuffer::gadwBitMasks[1]) {
                 return 0;
               }
 
               D2MonStatsTxt* pMonStatsTxt2;
-              if ((pMonStatsTxt2 = nExcludeIdx >= 0 && nExcludeIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nExcludeIdx : nullptr) && (uint8_t)*((uint8_t*)pMonStatsTxt2 + 0xe) & Fog::BitBuffer::gadwBitMasks[1]) {
+              if ((pMonStatsTxt2 = nExcludeIdx >= 0 && nExcludeIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nExcludeIdx : nullptr) && pMonStatsTxt2->aFlagBytes[2] & Fog::BitBuffer::gadwBitMasks[1]) {
                 return 0;
               }
             }
@@ -1266,13 +1266,13 @@ static void __stdcall UMOD_ApplyEnchantmentsToMonster(::SGAMEDATA * pGame, D2Roo
 
     int* pEnchantEntry = gnEnchantmentEffectOffset_Lightning;
     do {
-      void* pContext;
-      pContext = (void*)*pEnchantEntry;
-      if (Umod::aUmodInitTable[(intptr_t)pContext]) {
-        (*Umod::aUmodInitTable[(intptr_t)pContext])(pUnit, (int32_t)pContext, 1);
+      int32_t nUmodId;
+      nUmodId = *pEnchantEntry;
+      if (Umod::aUmodInitTable[nUmodId]) {
+        (*Umod::aUmodInitTable[nUmodId])(pUnit, nUmodId, 1);
       }
 
-      Ai::AiGeneral::CallForEachMinion(pUnit, pContext, nullptr, (pfnMinionForEachCallback)UMOD_DispatchInitFunction);
+      Ai::AiGeneral::CallForEachMinion(pUnit, (void*)(intptr_t)nUmodId, nullptr, (pfnMinionForEachCallback)UMOD_DispatchInitFunction);
       pEnchantEntry++;
     } while ((intptr_t)pEnchantEntry < (intptr_t)((char*)&gnEnchantmentEffectOffset_Lightning + sizeof(gnEnchantmentEffectOffset_Lightning)));
 
@@ -1295,7 +1295,7 @@ static void __stdcall UMOD_ApplyEnchantmentsToMonster(::SGAMEDATA * pGame, D2Roo
         (*Umod::aUmodInitTable[nUmodIdUnsigned])(pUnit, nUmodIdUnsigned, 1);
       }
 
-      Ai::AiGeneral::CallForEachMinion(pUnit, (void*)nUmodIdUnsigned, nullptr, (pfnMinionForEachCallback)UMOD_DispatchInitFunction);
+      Ai::AiGeneral::CallForEachMinion(pUnit, (void*)(uintptr_t)nUmodIdUnsigned, nullptr, (pfnMinionForEachCallback)UMOD_DispatchInitFunction);
       iUmod++;
     } while (iUmod < 9);
 }
@@ -1310,7 +1310,7 @@ static void __stdcall MONSTER_SetElementalDamageFromLevel(D2UnitStrc * pUnit, eD
       if (!pMissilesTxt) {
         return;
       }
-      if (*((uint8_t*)pMissilesTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
+      if (pMissilesTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
         return;
       }
     }
@@ -2239,7 +2239,7 @@ void __fastcall MONSTER_MissileSplitOnHit(::SGAMEDATA * pGame, D2UnitStrc * pUni
     D2UnitStrc* pMissileUnit = pUnit;
     D2UnitStrc* pOwnerUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
     D2MissilesTxt* pMissilesTxt;
-    if (!(pOwnerUnit && (pMissilesTxt = (int)nMissileId >= 0 && (int)nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr) && !(*((uint8_t*)pMissilesTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]))) {
+    if (!(pOwnerUnit && (pMissilesTxt = (int)nMissileId >= 0 && (int)nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr) && !(pMissilesTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]))) {
       return;
     }
 

@@ -131,41 +131,41 @@ void __fastcall ARCHIVE_UnlinkNode(StormLinkedListStrc * pThis, int, int * pNode
     ((StormLinkStrc*)pNode)->pNext = 0;
 }
 
-void __fastcall ARCHIVE_LinkNode(int * * ppList, int, int * * ppNode, int32_t nMode, int * * ppTarget) {
-    int** pPrevLink;
-    int** ppCurNode = ppNode;
-    if (!ppNode) {
-      ppCurNode = ppList + 1;
+void __fastcall ARCHIVE_LinkNode(StormLinkedListStrc * pList, int, StormLinkStrc * pNode, int32_t nMode, StormLinkStrc * pTarget) {
+    StormLinkStrc** pPrevLink;
+    StormLinkStrc* pCurNode = pNode;
+    if (!pNode) {
+      pCurNode = &pList->head;
     }
 
-    int* pNext = *ppCurNode;
+    StormLinkStrc* pNext = pCurNode->pPrevLink;
     if (pNext) {
-      pPrevLink = (int**)D2_StormNextLink(ppCurNode, -1);
+      pPrevLink = (StormLinkStrc**)D2_StormNextLink(pCurNode, -1);
       *pPrevLink = pNext;
-      (*ppCurNode)[1] = (int)ppCurNode[1];
-      *ppCurNode = 0;
-      ppCurNode[1] = 0;
+      pCurNode->pPrevLink->pNext = pCurNode->pNext;
+      pCurNode->pPrevLink = 0;
+      pCurNode->pNext = 0;
     }
-    if (!ppTarget) {
-      ppTarget = ppList + 1;
+    if (!pTarget) {
+      pTarget = &pList->head;
     }
 
     switch (nMode) {
       case 1:
         {
-          *ppCurNode = (int*)ppTarget;
-          ppCurNode[1] = ppTarget[1];
-          *(int***)D2_StormNextLink(ppTarget, (intptr_t)*ppList) = (int**)ppCurNode;
-          ppTarget[1] = (int*)ppNode;
+          pCurNode->pPrevLink = pTarget;
+          pCurNode->pNext = pTarget->pNext;
+          *(StormLinkStrc**)D2_StormNextLink(pTarget, pList->nLinkOffset) = pCurNode;
+          pTarget->pNext = (intptr_t)pNode;
           return;
         }
       default:
         {
-          pNext = *ppTarget;
-          *ppCurNode = pNext;
-          ppCurNode[1] = (int*)pNext[1];
-          pNext[1] = (int)ppNode;
-          *ppTarget = (int*)ppCurNode;
+          pNext = pTarget->pPrevLink;
+          pCurNode->pPrevLink = pNext;
+          pCurNode->pNext = pNext->pNext;
+          pNext->pNext = (intptr_t)pNode;
+          pTarget->pPrevLink = pCurNode;
           return;
         }
     }
@@ -179,10 +179,10 @@ intptr_t __fastcall ARCHIVE_GetNodeSize(StormLinkedListStrc * pThis, int, StormL
     return pThis->head.pNext;
 }
 
-int __fastcall Unreferenced_0045bcb0(int param_1) {
-    *(uint32_t*)param_1 = 0;
-    *(uint32_t*)(param_1 + 4) = 0;
-    return param_1;
+StormLinkStrc * __fastcall Unreferenced_0045bcb0(StormLinkStrc * pLink) {
+    pLink->pPrevLink = 0;
+    pLink->pNext = 0;
+    return pLink;
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045bcc0(StormLinkStrc * pNode) {
@@ -235,21 +235,21 @@ void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045bd90(StormLinkStrc * pNode) {
     pNode->pNext = 0;
 }
 
-int * * __fastcall ARCHIVE_AllocNode(int * * ppList, int, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags) {
-    int** ppNodeNew = (int**)Storm::Source::SMem::SMemAlloc(nSize + 0x130, s___AUTALLOCREC___00711480, -2, dwAllocFlags | 8);
-    int** ppNode;
-    if (ppNodeNew) {
-      *ppNodeNew = 0;
-      ppNodeNew[1] = 0;
-      ppNode = ppNodeNew;
+StormLinkStrc * __fastcall ARCHIVE_AllocNode(StormLinkedListStrc * pList, int, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags) {
+    StormLinkStrc* pNodeNew = (StormLinkStrc*)Storm::Source::SMem::SMemAlloc(nSize + 0x130, s___AUTALLOCREC___00711480, -2, dwAllocFlags | 8);
+    StormLinkStrc* pNode;
+    if (pNodeNew) {
+      pNodeNew->pPrevLink = 0;
+      pNodeNew->pNext = 0;
+      pNode = pNodeNew;
     } else {
-      ppNode = 0;
+      pNode = 0;
     }
     if (nLinkMode) {
-      vc8_thiscall(ARCHIVE_LinkNode)(ppList, ppNode, nLinkMode, nullptr);
+      vc8_thiscall(ARCHIVE_LinkNode)(pList, pNode, nLinkMode, nullptr);
     }
 
-    return ppNode;
+    return pNode;
 }
 
 int * __fastcall ARCHIVE_FreeNode(StormLinkStrc * pNode, int, uint8_t byFree) {
@@ -293,11 +293,11 @@ uint32_t __fastcall ARCHIVE_RemoveNode(StormLinkedListStrc * pThis, int, StormLi
 // NOTE: Callee-saved register params inferred (medium confidence): param_esi (ESI): LPOVERLAPPED, param_edi (EDI): LPOVERLAPPED, param_ebx (EBX): LPOVERLAPPED
 // @sourcefile SOURCE\D2HELL\Src\Archive.cpp
 void ARCHIVE_WriteMemoryCheckReport() {
-    int** pNewRec;
-    int* pInsertLink;
+    TALLOCREC* pNewRec;
+    StormLinkStrc** pInsertLink;
     TALLOCREC* pRec;
-    int* pPrevLink;
-    int** ppInsertAfter;
+    StormLinkStrc** pPrevLink;
+    TALLOCREC* ppInsertAfter;
     intptr_t ppTmp;
     SMemHeapDetailsStrc* pSrcInfo;
     uint16_t* pScan;
@@ -305,7 +305,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
     SMemHeapDetailsStrc sHeapDetails;
     SMemBlockDetailsStrc sBlockInfo;
     StormLinkedListStrc pListTail;
-    int* pNextNode;
+    StormLinkStrc* pNextNode;
     HANDLE hFileTmp = CreateFileA("D2Mem.txt", 0x40000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 2, 0x80, (HANDLE)0x0);
     HANDLE hFile = hFileTmp;
     ARCHIVE_WriteFormattedText(hFileTmp, "D2 MEMORY CHECK\n");
@@ -317,60 +317,60 @@ void ARCHIVE_WriteMemoryCheckReport() {
     sHeapDetails.dwSize = 0x128;
     int nResult = Storm::Source::SMem::SMemFindNextHeap(0, (int*)&nHeapId, &sHeapDetails);
     while (nResult) {
-      int** ppiVar1;
-      int** pNewRecNew = (int**)Storm::Source::SMem::SMemAlloc(0x130, s___AUTALLOCREC___00711480, -2, 8);
+      TALLOCREC* ppiVar1;
+      TALLOCREC* pNewRecNew = (TALLOCREC*)Storm::Source::SMem::SMemAlloc(0x130, s___AUTALLOCREC___00711480, -2, 8);
       if (pNewRecNew) {
-        *pNewRecNew = 0;
-        pNewRecNew[1] = 0;
+        pNewRecNew->m_link.m_prevlink = 0;
+        pNewRecNew->m_link.m_next = 0;
         pNewRec = pNewRecNew;
       } else {
         pNewRec = 0;
       }
 
       pSrcInfo = &sHeapDetails;
-      pdwCopyDst = (uint32_t*)(pNewRec + 2);
+      pdwCopyDst = (uint32_t*)&pNewRec->sHeapDetails;
       for (nResult = 0x4a; nResult; nResult--) {
         *pdwCopyDst = pSrcInfo->dwSize;
         pSrcInfo = (SMemHeapDetailsStrc*)&pSrcInfo->hHeap;
         pdwCopyDst++;
       }
 
-      if (pListTail.head.pNext <= 0 || (ppiVar1 = (int**)pListTail.head.pNext , (uintptr_t)*(int**)(pListTail.head.pNext + 300) < sHeapDetails.dwAllocatedBytes)) {
-        pNextNode = *pNewRec;
+      if (pListTail.head.pNext <= 0 || (ppiVar1 = (TALLOCREC*)pListTail.head.pNext , (uintptr_t)ppiVar1->sHeapDetails.dwAllocatedBytes < sHeapDetails.dwAllocatedBytes)) {
+        pNextNode = (StormLinkStrc*)pNewRec->m_link.m_prevlink;
         if (pNextNode) {
-          pPrevLink = pNewRec[1];
-          pPrevLink = (int*)D2_StormNextLink(pNewRec, -1);
-          *pPrevLink = (int)pNextNode;
-          (*pNewRec)[1] = (int)pNewRec[1];
-          *pNewRec = 0;
-          pNewRec[1] = 0;
+          pPrevLink = (StormLinkStrc**)pNewRec->m_link.m_next;
+          pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNewRec, -1);
+          *pPrevLink = pNextNode;
+          pNewRec->m_link.m_prevlink->m_next = pNewRec->m_link.m_next;
+          pNewRec->m_link.m_prevlink = 0;
+          pNewRec->m_link.m_next = 0;
         }
 
-        *pNewRec = (int*)&pListTail.head;
-        pNewRec[1] = (int*)pListTail.head.pNext;
+        pNewRec->m_link.m_prevlink = (TSLink<TALLOCREC>*)&pListTail.head;
+        pNewRec->m_link.m_next = pListTail.head.pNext;
         if (pListTail.head.pNext < 0) {
-          pInsertLink = (int*)~pListTail.head.pNext;
+          pInsertLink = (StormLinkStrc**)~pListTail.head.pNext;
         } else {
           ppTmp = pListTail.nLinkOffset;
           if (pListTail.nLinkOffset < 0) {
             ppTmp = (intptr_t)&pListTail + (4 - pListTail.head.pPrevLink->pNext);
           }
 
-          pInsertLink = (int*)(pListTail.head.pNext + ppTmp);
+          pInsertLink = (StormLinkStrc**)(pListTail.head.pNext + ppTmp);
         }
 
-        *pInsertLink = (int)pNewRec;
+        *pInsertLink = (StormLinkStrc*)pNewRec;
         pListTail.head.pNext = (intptr_t)pNewRec;
       } else {
         do {
           ppInsertAfter = ppiVar1;
-          ppiVar1 = (int**)ppInsertAfter[1];
+          ppiVar1 = (TALLOCREC*)ppInsertAfter->m_link.m_next;
           if ((intptr_t)ppiVar1 <= 0) {
             break;
           }
-        } while ((uintptr_t)ppiVar1[0x4b] > sHeapDetails.dwAllocatedBytes);
+        } while ((uintptr_t)ppiVar1->sHeapDetails.dwAllocatedBytes > sHeapDetails.dwAllocatedBytes);
 
-        vc8_thiscall(ARCHIVE_LinkNode)((int**)&pListTail, pNewRec, 1, ppInsertAfter);
+        vc8_thiscall(ARCHIVE_LinkNode)(&pListTail, (StormLinkStrc*)pNewRec, 1, (StormLinkStrc*)ppInsertAfter);
       }
 
       nResult = Storm::Source::SMem::SMemFindNextHeap(nHeapId, (int*)&nHeapId, &sHeapDetails);

@@ -590,19 +590,19 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
         nMinionClassId = pUnit->nUnitGUID;
       }
 
-      Ai::AiGeneral::AssignMinionOwner(pGameInst, pUnit, nMinionClassId, UNIT_MONSTER, 1, (uint8_t)*((uint8_t*)pMonStats + 0xc) & Fog::BitBuffer::gadwBitMasks[5]);
+      Ai::AiGeneral::AssignMinionOwner(pGameInst, pUnit, nMinionClassId, UNIT_MONSTER, 1, pMonStats->aFlagBytes[0] & Fog::BitBuffer::gadwBitMasks[5]);
       nMinionClassId = Seed::SEED_RollRangeInclusive(&pUnit->sSeed, (uint32_t)pMonStats->PartyMin, (uint32_t)pMonStats->PartyMax);
       SpawnMinions_ByPattern(pGameInst, pUnit, (int)pMonStats->minion1, eD2MonsterAnimMode_ns::Neutral, nMinionClassId, ~(uint32_t)(wMinionType >> 2) & 1, 0x40);
       return;
     }
-    if (Fog::BitBuffer::gadwBitMasks[4] & (uint8_t)*((uint8_t*)pMonStats + 0xc)) {
+    if (Fog::BitBuffer::gadwBitMasks[4] & pMonStats->aFlagBytes[0]) {
       if (!pUnit) {
         nMinionClassId = -1;
       } else {
         nMinionClassId = pUnit->nUnitGUID;
       }
 
-      Ai::AiGeneral::AssignMinionOwner(pGameInst, pUnit, nMinionClassId, UNIT_MONSTER, 1, (uint8_t)*((uint8_t*)pMonStats + 0xc) & Fog::BitBuffer::gadwBitMasks[5]);
+      Ai::AiGeneral::AssignMinionOwner(pGameInst, pUnit, nMinionClassId, UNIT_MONSTER, 1, pMonStats->aFlagBytes[0] & Fog::BitBuffer::gadwBitMasks[5]);
     }
 
     int nMinionTypeSlot = 0;
@@ -615,7 +615,7 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
     for (int32_t i = 0; i < nPartySize; i++) {
       D2UnitStrc* pSpawnedMinion;
       pSpawnedMinion = SpawnMonsterAtUnit(pGameInst, pUnit, (int)*(short int*)(pMonStats->Code + (nMinionTypeSlot * 2 + 0x16)), eD2MonsterAnimMode_ns::Neutral, 4, 0x40);
-      if (pSpawnedMinion && *((uint8_t*)pMonStats + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
+      if (pSpawnedMinion && pMonStats->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
         bMinionIsLeader = 0;
         nTmp = 0;
         eUnitType = UNIT_MONSTER;
@@ -880,7 +880,7 @@ D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawn
       D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_MONSTER, pMonsterSpawnData->nClassId, nSpawnX, nSpawnY, pMonsterSpawnData->pGame, pRoom, bPlaceInRoom, pMonsterSpawnData->eMode, pMonsterSpawnData->nGUID);
       if (pUnit) {
         nFlagsFiltered = nSpawnFlags & 8;
-        if (*((uint8_t*)pMonStatsTxt + 0xe) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+        if (pMonStatsTxt->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
           nFlagsFiltered = 1;
         }
 
@@ -1288,7 +1288,7 @@ BOOL __fastcall SpawnRandomMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int3
       } else {
         pMonStats = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + sCreateParams.nClassId;
       }
-    } while (!(*((uint8_t*)pMonStats + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && (nMonSearchAttempts++ , nMonSearchAttempts < (int)nLevelMonCount));
+    } while (!(pMonStats->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && (nMonSearchAttempts++ , nMonSearchAttempts < (int)nLevelMonCount));
 
     if (sCreateParams.nClassId == -1) {
       return 0;

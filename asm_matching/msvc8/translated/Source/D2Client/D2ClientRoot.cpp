@@ -1414,14 +1414,11 @@ int __stdcall D2CLIENT_GetTradePlayerGoldAmount() {
 }
 
 void __fastcall TRADE_SendGoldToPartner(uint32_t nGoldAmount) {
-    uint16_t nLayer;
     if (UI::Trade::g_nTradeWindowState != 4 && UI::Trade::g_nTradeWindowState != 5 && UI::Trade::g_nTradeWindowState != 6) {
-      eD2UnitStat eUnitStat;
-      nLayer = 0;
-      eUnitStat = UNITSTAT_gold;
-      gnTradePlayerGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, nLayer);
-      if (nGoldAmount >= gnTradePlayerGoldAmount) {
-        GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(0x4f, 8, (int16_t)(gnTradePlayerGoldAmount >> 0x10), (int16_t)gnTradePlayerGoldAmount);
+      uint32_t nPlayerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), UNITSTAT_gold, 0);
+      if (nGoldAmount >= nPlayerGold) {
+        gnTradePlayerGoldAmount = nPlayerGold;
+        GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(0x4f, 8, (int16_t)(nPlayerGold >> 0x10), (int16_t)nPlayerGold);
         return;
       }
 
@@ -3445,15 +3442,15 @@ pfnWardenCreateInterface __fastcall WARDEN_DecryptBuffer(D2WardenModuleStrc * pp
 }
 
 // Decrypt Warden anti-cheat module data using RSA/crypto operations
-uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSize, uint32_t * * ppOutput, uint32_t nOutputSize) {
+uint32_t __fastcall WARDEN_DecryptModule(D2WardenModuleStrc * pModule, uint32_t nInputSize, uint32_t * pHeader, uint32_t nOutputSize) {
     FARPROC pProcAddress;
     HANDLE hProcess;
     uint32_t nAlignedSize;
     int nIterCount;
-    uint32_t** ppuVar1;
+    uint32_t* ppuVar1;
     uint32_t nHeaderSize;
     void* pImageWritePtr;
-    uint32_t** ppSectionDataCursor;
+    uint8_t* ppSectionDataCursor;
     uint8_t bSehScratch;
     DWORD dwOldProtect;
     uint32_t nSectionIdx;
@@ -3462,7 +3459,8 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
     uint8_t* pRelocationEntry;
     int nRelOffset;
     uint32_t* pModuleBase;
-    uint32_t** ppSectionEntry;
+    uint8_t* ppSectionEntry;
+    uint32_t* pSectEntry;
     uint32_t nImportIdx;
     uint32_t nRelocationCount;
     bool bCopyPass;
@@ -3473,29 +3471,27 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
     pSavedEsp = &bSehScratch;
     int bFailed;
     bFailed = 1;
-    uint32_t** ppInputSaved;
+    D2WardenModuleStrc* ppInputSaved;
     // __try / __except (EXCEPTION_EXECUTE_HANDLER): scope table 007011a0, filter 004e0977; the handler 004e097d resumes at 004e0980, after the __try
     D2_SEH_TRY
-      uint32_t* ppFVar7 = *ppOutput;
-      ppInput[1] = ppFVar7;
-      ppInputSaved = ppInput;
-      /* DWORD flProtect for VirtualAlloc */ /* DWORD flAllocationType for VirtualAlloc */ /* SIZE_T dwSize for VirtualAlloc */ /* LPVOID lpAddress for VirtualAlloc */ ppFVar7 = (uint32_t*)VirtualAlloc((LPVOID)0x0, (SIZE_T)ppFVar7, 0x1000, 4);
-      *ppInput = ppFVar7;
+      pModule->nImageSize = pHeader[0];
+      ppInputSaved = pModule;
+      /* DWORD flProtect for VirtualAlloc */ /* DWORD flAllocationType for VirtualAlloc */ /* SIZE_T dwSize for VirtualAlloc */ /* LPVOID lpAddress for VirtualAlloc */ uint32_t* ppFVar7 = (uint32_t*)VirtualAlloc((LPVOID)0x0, (SIZE_T)pModule->nImageSize, 0x1000, 4);
+      pModule->pLibrary = ppFVar7;
       if (ppFVar7) {
         HMODULE hModule;
-        ppuVar1 = ppOutput;
+        ppuVar1 = pHeader;
         for (nIterCount = 10; nIterCount; nIterCount--) {
-          *ppFVar7 = (uint32_t)*ppuVar1;
+          *ppFVar7 = *ppuVar1;
           ppuVar1++;
           ppFVar7++;
         }
 
-        ppFVar7 = *ppInputSaved;
-        pImageWritePtr = (void*)((intptr_t)ppOutput[10] + (intptr_t)ppFVar7);
+        ppFVar7 = (uint32_t*)ppInputSaved->pLibrary;
+        pImageWritePtr = (void*)((intptr_t)pHeader[10] + (intptr_t)ppFVar7);
         nHeaderSize = *ppFVar7;
         bCopyPass = true;
-        ppuVar1 = ppInputSaved;
-        ppSectionEntry = ppOutput + (ppFVar7[9] * 3 + 10);
+        ppSectionEntry = (uint8_t*)(pHeader + (ppFVar7[9] * 3 + 10));
         while (true) {
           pCopyDst = pImageWritePtr;
           if (pImageWritePtr >= (void*)(nHeaderSize + (char*)ppFVar7)) {
@@ -3503,12 +3499,11 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
           }
 
           nModuleBase = (uint32_t)*(uint16_t*)ppSectionEntry;
-          ppSectionDataCursor = (uint32_t**)((char*)ppSectionEntry + 2);
+          ppSectionDataCursor = (uint8_t*)((char*)ppSectionEntry + 2);
           if (bCopyPass) {
             ppSectionEntry = ppSectionDataCursor;
             memcpy(pImageWritePtr, ppSectionDataCursor, nModuleBase);
-            ppSectionDataCursor = (uint32_t**)((char*)ppSectionDataCursor + (nModuleBase & 0xffff));
-            ppuVar1 = ppInputSaved;
+            ppSectionDataCursor = (uint8_t*)((char*)ppSectionDataCursor + (nModuleBase & 0xffff));
           }
 
           pImageWritePtr = (void*)((char*)pImageWritePtr + (uint32_t)(uint16_t)nModuleBase);
@@ -3521,11 +3516,11 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
           bCopyPass = !bCopyPass;
         }
 
-        pRelocationEntry = (uint8_t*)((*ppuVar1)[2] + (char*)*ppuVar1);
+        pRelocationEntry = (uint8_t*)(((uint32_t*)ppInputSaved->pLibrary)[2] + (char*)ppInputSaved->pLibrary);
         nRelOffset = 0;
         nRelocationCount = 0;
         while (true) {
-          pModuleBase = *ppuVar1;
+          pModuleBase = (uint32_t*)ppInputSaved->pLibrary;
           if (nRelocationCount >= pModuleBase[3]) {
             break;
           }
@@ -3545,14 +3540,13 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
         }
 
         pModuleBase = (uint32_t*)(pModuleBase[7] + (char*)pModuleBase);
-        for (nImportIdx = 0; nHeaderSize = nImportIdx , ppFVar7 = pModuleBase , nImportIdx < (*ppuVar1)[8]; nImportIdx++) {
-          /* LPCSTR lpLibFileName for LoadLibraryA */ hModule = LoadLibraryA((LPCSTR)(pModuleBase[nImportIdx * 2] + (char*)*ppuVar1));
-          ppuVar1 = ppInputSaved;
+        for (nImportIdx = 0; nHeaderSize = nImportIdx , ppFVar7 = pModuleBase , nImportIdx < ((uint32_t*)ppInputSaved->pLibrary)[8]; nImportIdx++) {
+          /* LPCSTR lpLibFileName for LoadLibraryA */ hModule = LoadLibraryA((LPCSTR)(pModuleBase[nImportIdx * 2] + (char*)ppInputSaved->pLibrary));
           if (!hModule) {
             goto release_if_failed;
           }
 
-          ppFVar7 = (uint32_t*)(ppFVar7[nHeaderSize * 2 + 1] + (char*)*ppInputSaved);
+          ppFVar7 = (uint32_t*)(ppFVar7[nHeaderSize * 2 + 1] + (char*)ppInputSaved->pLibrary);
           while (true) {
             nHeaderSize = *ppFVar7;
             pSectionData = ppFVar7;
@@ -3564,31 +3558,29 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
               *ppFVar7 = (uint32_t)pProcAddress;
               ppFVar7++;
             } else {
-              /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pProcAddress = GetProcAddress(hModule, (LPCSTR)((char*)*ppuVar1 + nHeaderSize));
+              /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pProcAddress = GetProcAddress(hModule, (LPCSTR)((char*)ppInputSaved->pLibrary + nHeaderSize));
               *ppFVar7 = (uint32_t)pProcAddress;
               ppFVar7++;
             }
           }
 
-          ppuVar1[2] = (uint32_t*)((char*)ppuVar1[2] + 1);
+          ppInputSaved->nLoadedLibraryCount++;
         }
 
         nHeaderSize = 0;
         while (true) {
-          ppFVar7 = *ppInputSaved;
+          ppFVar7 = (uint32_t*)ppInputSaved->pLibrary;
           nSectionIdx = nHeaderSize;
           if (nHeaderSize >= ppFVar7[9]) {
             break;
           }
 
-          ppuVar1 = ppOutput + (nHeaderSize * 3 + 10);
-          lpAddress = (LPVOID)((intptr_t)*ppuVar1 + (intptr_t)ppFVar7);
-          pModuleBase = ppuVar1[1];
-          /* PDWORD lpflOldProtect for VirtualProtect */ /* DWORD flNewProtect for VirtualProtect */ /* SIZE_T dwSize for VirtualProtect */ /* LPVOID lpAddress for VirtualProtect */ VirtualProtect(lpAddress, (SIZE_T)pModuleBase, (DWORD)ppuVar1[2], &dwOldProtect);
-          if ((uintptr_t)ppuVar1[2] & 0xf0) {
-            ppFVar7 = pModuleBase;
+          pSectEntry = pHeader + (nHeaderSize * 3 + 10);
+          lpAddress = (LPVOID)((intptr_t)pSectEntry[0] + (intptr_t)ppFVar7);
+          /* PDWORD lpflOldProtect for VirtualProtect */ /* DWORD flNewProtect for VirtualProtect */ /* SIZE_T dwSize for VirtualProtect */ /* LPVOID lpAddress for VirtualProtect */ VirtualProtect(lpAddress, (SIZE_T)pSectEntry[1], (DWORD)pSectEntry[2], &dwOldProtect);
+          if ((uintptr_t)pSectEntry[2] & 0xf0) {
             /* SIZE_T dwSize for FlushInstructionCache */ /* LPCVOID lpBaseAddress for FlushInstructionCache */ hProcess = GetCurrentProcess();
-            /* HANDLE hProcess for FlushInstructionCache */ FlushInstructionCache(hProcess, lpAddress, (SIZE_T)ppFVar7);
+            /* HANDLE hProcess for FlushInstructionCache */ FlushInstructionCache(hProcess, lpAddress, (SIZE_T)pSectEntry[1]);
           }
 
           nHeaderSize++;
@@ -3610,7 +3602,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
     release_if_failed:
     nIterCount = bFailed;
     if (bFailed) {
-      Warden::WARDEN_FreeModuleLibraries((LPVOID*)ppInputSaved);
+      Warden::WARDEN_FreeModuleLibraries(pModule);
     }
 
     return (uint32_t)!nIterCount;

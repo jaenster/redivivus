@@ -813,16 +813,21 @@ void __fastcall LightningEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUni
     MagicResist(pUnit, nIndex, bUnique);
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 // Monster modifier (umod) application for the Cold Enchanted boss affix. For a UNIT_MONSTER, derives difficulty index (0/1/2) and a single-vs-multiplayer index, reads the level-scaled damage base from MonLvl.txt DM[], and using GetUmodConstant scalars computes and adds cold min/max damage (UNITSTAT_coldmindam/coldmaxdam) and a cold-length stat. Picks the normal vs alternate (bUnknown) constant set. Then chains into MagicResist for the affix's resistance component. No return value.
 void __fastcall ColdEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
-    int32_t nMaxDamConst;
-    int nMinDamScaled;
     uint32_t nDifficulty;
     int bIsMultiplayer;
     if (!pUnit) {
       return;
     }
-    if (pUnit->eUnitType != UNIT_MONSTER) {
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       return;
     }
 
@@ -832,70 +837,43 @@ void __fastcall ColdEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) 
       return;
     }
 
-    uint32_t byGameDifficulty;
-    byGameDifficulty = pGame->nDifficulty;
-    if (byGameDifficulty > 0) {
-      if (1 < byGameDifficulty) {
-        nDifficulty = 2;
-        goto add_cold_damage;
-      }
-      if (byGameDifficulty > 0) {
-        nDifficulty = (uint32_t)byGameDifficulty;
-        goto add_cold_damage;
-      }
-    }
-
-    nDifficulty = 0;
-    add_cold_damage:
+    nDifficulty = min(max(pGame->nDifficulty, 0), 2); // steer-ok: windef.h min/max macros
     if (pGame->nGameType != SGAMETYPE_BNET_HOST || (bIsMultiplayer = 0 , pGame->eGameType != GAMETYPE_SINGLEPLAYER)) {
       bIsMultiplayer = 1;
     }
     int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    int nLvlDamage = nLevel;
-    if (nLevel <= 1) {
-      nLvlDamage = 1;
-    }
-
-    int nLevelIdx = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
-    if (nLvlDamage < nLevelIdx && (nLevelIdx = nLevel , nLevel <= 1)) {
-      nLevelIdx = 1;
-    } else if (nLevelIdx < 0) {
-      return;
-    }
-
-    D2MonLvlTxt* pMonLvlTxt = nLevelIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevelIdx : nullptr;
+    nLevel = min(max(nLevel, 1), D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1); // steer-ok: windef.h min/max macros
+    D2MonLvlTxt* pMonLvlTxt = nLevel >= 0 && nLevel < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevel : nullptr;
     if (!pMonLvlTxt) {
       return;
     }
 
+    int nLvlDamage;
     nLvlDamage = pMonLvlTxt->DM[bIsMultiplayer * 3 + nDifficulty];
+    int nMinDamage;
+    int nMaxDamage;
     if (bUnique) {
-      nMaxDamConst = GetUmodConstant(nDifficulty + 0x1c);
-      nMinDamScaled = (int)((uint64_t)((int64_t)(nMaxDamConst * nLvlDamage) * 0x51eb851f) >> 0x20);
-      nLevel = nDifficulty + 0x1f;
+      nMinDamage = GetUmodConstant(nDifficulty + 0x1c) * nLvlDamage / 100;
+      nMaxDamage = GetUmodConstant(nDifficulty + 0x1f) * nLvlDamage / 100;
     } else {
-      nMaxDamConst = GetUmodConstant(nDifficulty + 0x10);
-      nMinDamScaled = (int)((uint64_t)((int64_t)(nMaxDamConst * nLvlDamage) * 0x51eb851f) >> 0x20);
-      nLevel = nDifficulty + 0x13;
+      nMinDamage = GetUmodConstant(nDifficulty + 0x10) * nLvlDamage / 100;
+      nMaxDamage = GetUmodConstant(nDifficulty + 0x13) * nLvlDamage / 100;
     }
 
-    nMaxDamConst = GetUmodConstant(nLevel);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldmindam, (nMinDamScaled >> 5) - (nMinDamScaled >> 0x1f), 0);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldmaxdam, nMaxDamConst * nLvlDamage / 100, 0);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldlength, nLevelIdx * 5 + 100, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldmindam, nMinDamage, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldmaxdam, nMaxDamage, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldlength, nLevel * 5 + 100, 0);
     MagicResist(pUnit, nIndex, bUnique);
 }
 
 // Monster modifier (umod) application for the Poison Enchanted boss affix. Same shape as ColdEnchanted: for a UNIT_MONSTER derives difficulty (0/1/2) and SP/MP index, reads level-scaled base damage from MonLvl.txt DM[], and via GetUmodConstant scalars adds poison min/max damage (UNITSTAT_poisonmindam/poisonmaxdam) and poison length (note length uses (idx*5+0x96)*2). Selects normal vs alternate (bUnknown) constant set, then chains into MagicResist. No return value.
 void __fastcall PoisonEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
-    int32_t nMaxDamConst;
-    int nMinDamScaled;
     uint32_t nDifficulty;
     int bIsMultiplayer;
     if (!pUnit) {
       return;
     }
-    if (pUnit->eUnitType != UNIT_MONSTER) {
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       return;
     }
 
@@ -905,57 +883,32 @@ void __fastcall PoisonEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique
       return;
     }
 
-    uint32_t byGameDifficulty;
-    byGameDifficulty = pGame->nDifficulty;
-    if (byGameDifficulty > 0) {
-      if (1 < byGameDifficulty) {
-        nDifficulty = 2;
-        goto add_poison_damage;
-      }
-      if (byGameDifficulty > 0) {
-        nDifficulty = (uint32_t)byGameDifficulty;
-        goto add_poison_damage;
-      }
-    }
-
-    nDifficulty = 0;
-    add_poison_damage:
+    nDifficulty = min(max(pGame->nDifficulty, 0), 2); // steer-ok: windef.h min/max macros
     if (pGame->nGameType != SGAMETYPE_BNET_HOST || (bIsMultiplayer = 0 , pGame->eGameType != GAMETYPE_SINGLEPLAYER)) {
       bIsMultiplayer = 1;
     }
     int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    int nLvlDamage = nLevel;
-    if (nLevel <= 1) {
-      nLvlDamage = 1;
-    }
-
-    int nLevelIdx = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
-    if (nLvlDamage < nLevelIdx && (nLevelIdx = nLevel , nLevel <= 1)) {
-      nLevelIdx = 1;
-    } else if (nLevelIdx < 0) {
-      return;
-    }
-
-    D2MonLvlTxt* pMonLvlTxt = nLevelIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevelIdx : nullptr;
+    nLevel = min(max(nLevel, 1), D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1); // steer-ok: windef.h min/max macros
+    D2MonLvlTxt* pMonLvlTxt = nLevel >= 0 && nLevel < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevel : nullptr;
     if (!pMonLvlTxt) {
       return;
     }
 
+    int nLvlDamage;
     nLvlDamage = pMonLvlTxt->DM[bIsMultiplayer * 3 + nDifficulty];
+    int nMinDamage;
+    int nMaxDamage;
     if (bUnique) {
-      nMaxDamConst = GetUmodConstant(nDifficulty + 0x1c);
-      nMinDamScaled = (int)((uint64_t)((int64_t)(nMaxDamConst * nLvlDamage) * 0x51eb851f) >> 0x20);
-      nLevel = nDifficulty + 0x1f;
+      nMinDamage = GetUmodConstant(nDifficulty + 0x1c) * nLvlDamage / 100;
+      nMaxDamage = GetUmodConstant(nDifficulty + 0x1f) * nLvlDamage / 100;
     } else {
-      nMaxDamConst = GetUmodConstant(nDifficulty + 0x10);
-      nMinDamScaled = (int)((uint64_t)((int64_t)(nMaxDamConst * nLvlDamage) * 0x51eb851f) >> 0x20);
-      nLevel = nDifficulty + 0x13;
+      nMinDamage = GetUmodConstant(nDifficulty + 0x10) * nLvlDamage / 100;
+      nMaxDamage = GetUmodConstant(nDifficulty + 0x13) * nLvlDamage / 100;
     }
 
-    nMaxDamConst = GetUmodConstant(nLevel);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_poisonmindam, (nMinDamScaled >> 5) - (nMinDamScaled >> 0x1f), 0);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_poisonmaxdam, nMaxDamConst * nLvlDamage / 100, 0);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_poisonlength, (nLevelIdx * 5 + 0x96) * 2, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_poisonmindam, nMinDamage, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_poisonmaxdam, nMaxDamage, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_poisonlength, (nLevel * 5 + 0x96) * 2, 0);
     MagicResist(pUnit, nIndex, bUnique);
 }
 

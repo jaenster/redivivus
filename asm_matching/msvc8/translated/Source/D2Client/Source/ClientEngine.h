@@ -19,6 +19,7 @@ struct D2OverlayTxt;
 struct D2RoomStrc;
 struct D2SeedStrc;
 struct D2UnitStrc;
+struct D2WardenModuleStrc;
 typedef uint32_t eD2UnitType;
 #ifndef RECON_FPTD_fnRoomUnitScanCallback
 #define RECON_FPTD_fnRoomUnitScanCallback
@@ -96,8 +97,8 @@ DWORD __fastcall CLIENT_GetEffectiveClassId(struct D2UnitStrc * pUnit);
 void RENDERING_TogglePerspective_Thunk();
 void RENDERING_ToggleBlendedShadows_Thunk();
 void RENDERING_ToggleLowQuality_Thunk();
-void __fastcall WARDEN_FreeModuleLibraries_Thunk_Unref_0047f940(LPVOID * ppWardenModule);
-void __fastcall WARDEN_FreeModuleLibraries_Thunk_Unref_0047fbe0(LPVOID * ppWardenModule);
+void __fastcall WARDEN_FreeModuleLibraries_Thunk_Unref_0047f940(struct D2WardenModuleStrc * pWardenModule);
+void __fastcall WARDEN_FreeModuleLibraries_Thunk_Unref_0047fbe0(struct D2WardenModuleStrc * pWardenModule);
 #endif // D2_MODULE_D2Client
 // 19 internal functions (defined in .cpp)
 

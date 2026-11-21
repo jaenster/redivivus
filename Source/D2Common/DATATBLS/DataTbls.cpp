@@ -560,10 +560,10 @@ void __stdcall StoreDataTables(char * szFileName, void * pWriteBuffer, size_t nS
 }
 
 // @sourcefile .\DATATBLS\DataTbls.cpp
-D2ArchiveStrc * __fastcall ARCHIVE_LoadDataTables(D2PoolManagerStrc * pMemory, char * szTableName, char * szExtension, uint32_t * pSize, char * szFile, int32_t nLine) {
+void * __fastcall ARCHIVE_LoadDataTables(D2PoolManagerStrc * pMemory, char * szTableName, char * szExtension, uint32_t * pSize, char * szFile, int32_t nLine) {
     char szFilePath[260];
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", szTableName, szExtension);
-    D2ArchiveStrc* pDVar1 = (D2ArchiveStrc*)D2Hell::D2FILE_AllocAndLoadD2File(pMemory, szFilePath, pSize, ".\\DATATBLS\\DataTbls.cpp", 0x82f);
+    void* pDVar1 = D2Hell::D2FILE_AllocAndLoadD2File(pMemory, szFilePath, pSize, ".\\DATATBLS\\DataTbls.cpp", 0x82f);
     return pDVar1;
 }
 
@@ -574,14 +574,14 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
     D2BinFieldExcelStrc* pBinField;
     size_t nTxtLineCount;
     void* pDataTable;
-    D2ArchiveStrc** pParsedData;
+    void* pParsedData;
     int32_t nRecordCount;
     size_t nBinAllocSize;
     char szTableNameBuf[256];
     uint32_t dwStackCookie;
     uint32_t nSize = 0;
     if (MonsterTbls::sgtDataTable.bUseTxt) {
-      D2ArchiveStrc* pArchiveTxt;
+      void* pArchiveTxt;
       nStrCmpResult = _stricmp(szTableName, "leveldefs");
       if (!nStrCmpResult) {
         pArchiveTxt = ARCHIVE_LoadDataTables(pMemory, "levels", ".txt", &nSize, ".\\DATATBLS\\DataTbls.cpp", 0x8b9);
@@ -605,7 +605,7 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
       StoreDataTables(szTableNameBuf, pDataTable, nBinAllocSize, nTxtLineCount);
       D2_FREE_POOL_AT(nullptr, pDataTable, ".\\DATATBLS\\DataTbls.cpp", 0x8d6);
     }
-    D2ArchiveStrc* pArchive2;
+    void* pArchive2;
     if (gbTxtAllocCountHeader) {
       pArchive2 = ARCHIVE_LoadDataTables(pMemory, szTableName, ".bin", &nSize, ".\\DATATBLS\\DataTbls.cpp", 0x8de);
     } else {
@@ -621,12 +621,12 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
       exit(-1);
     }
     if (gbTxtAllocCountHeader) {
-      nRecordCount = (int32_t)pArchive2->pPrevLink;
-      pParsedData = &pArchive2->pNext;
+      nRecordCount = *(int32_t*)pArchive2;
+      pParsedData = (int32_t*)pArchive2 + 1;
     } else {
       pBinField = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData((char*)pArchive2, nSize);
       nRecordCount = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinField);
-      pParsedData = (D2ArchiveStrc**)D2_ALLOC_POOL_AT(nullptr, nRecordCount * nEndOffset, ".\\DATATBLS\\DataTbls.cpp", 0x904);
+      pParsedData = D2_ALLOC_POOL_AT(nullptr, nRecordCount * nEndOffset, ".\\DATATBLS\\DataTbls.cpp", 0x904);
       memset(pParsedData, 0, nRecordCount * nEndOffset);
       Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinField, pBinFieldInput, (char*)pParsedData, nRecordCount, nEndOffset);
       Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinField);
@@ -1165,8 +1165,8 @@ void __fastcall TXT_SaveTableToBinFile(D2PoolManagerStrc * pMemory, char * szTab
       D2_FREE_POOL_AT(nullptr, *ppInput, ".\\DATATBLS\\DataTbls.cpp", 0x275);
     }
 
-    D2ArchiveStrc* pLoadedArchive = ARCHIVE_LoadDataTables(pMemory, szTableName, ".bin", &nLoadedSize, ".\\DATATBLS\\DataTbls.cpp", 0x27a);
-    *ppInput = pLoadedArchive;
+    void* pLoadedArchive = ARCHIVE_LoadDataTables(pMemory, szTableName, ".bin", &nLoadedSize, ".\\DATATBLS\\DataTbls.cpp", 0x27a);
+    *ppInput = (D2ArchiveStrc*)pLoadedArchive;
     *pSize1 = nLoadedSize;
     *pSize2 = nLoadedSize;
 }

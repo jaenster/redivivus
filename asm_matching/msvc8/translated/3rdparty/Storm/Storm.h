@@ -357,7 +357,7 @@ struct D2SevtHandlerTableStrc {
 #define D2_DEFINED_D2SevtTypeEntryStrc
 struct D2SevtTypeEntryStrc {
     /* 0x00 */ uint32_t dwType;
-    /* 0x04 */ uint32_t dwSubType;
+    /* 0x04 */ uintptr_t dwSubType;
     /* 0x08 */ uint32_t dwSequence;
     /* 0x0C */ struct D2SevtHandlerTableStrc * pHandlerTable;
     /* 0x10 */ struct D2SevtTypeEntryStrc * pNext;
@@ -630,7 +630,7 @@ struct SCMD {
 #define D2_DEFINED_SCompCodecEntryStrc
 struct SCompCodecEntryStrc {
     /* 0x00 */ uint32_t dwMethodMask;
-    /* 0x04 */ void (__fastcall *pfnCodec)(void *, uint32_t *, void *, uint32_t, uint32_t);
+    /* 0x04 */ void (__fastcall *pfnCodec)(void *, uint32_t *, void *, uint32_t, void *);
 };
 #endif // D2_DEFINED_SCompCodecEntryStrc
 #ifndef D2_DEFINED_SCompEncodeCodecEntryStrc
@@ -1248,29 +1248,33 @@ int __stdcall TRANSTBL_Latin1ToUnicode(uint16_t * dest, uint8_t * src, int count
 namespace Storm { namespace Source { namespace SSystem {
 void __stdcall SSYSTEM_SetSystemOption(uint32_t nOptionId, uint32_t * pValue, int32_t nValueSize);
 }}} // namespace Storm::Source::SSystem
+#ifndef RECON_FPTD_pfnSEvtHandler
+#define RECON_FPTD_pfnSEvtHandler
+typedef void (__stdcall *pfnSEvtHandler)(void * pData);
+#endif
 namespace Storm { namespace WindowHandle {
 // @blizzard SMsgPopRegisterState (SMSG.CPP)
-int __stdcall SMsgPopRegisterState(char * szText);
+int __stdcall SMsgPopRegisterState(HWND hWnd);
 // @blizzard SMsgPushRegisterState (SMSG.CPP)
 uint32_t __stdcall SMsgPushRegisterState(HWND nSubId);
 // @blizzard SMsgDispatchMessage (SMSG.CPP)
 BOOL __stdcall SMsgDispatchMessage(HWND handle, UINT uMsg, WPARAM nWParam, LPARAM dwLParam, BOOL * pbHandled, LRESULT * plResult);
 // @blizzard SMsgRegisterCommand (SMSG.CPP)
-void __stdcall SMsgRegisterCommand(HWND hWnd, uint32_t dwContext, int32_t pCallback);
+void __stdcall SMsgRegisterCommand(HWND hWnd, uint32_t dwContext, pfnSEvtHandler pCallback);
 // @blizzard SMsgRegisterKeyDown (SMSG.CPP)
-void __stdcall SMsgRegisterKeyDown(HWND hWnd, uint32_t dwContext, int32_t pCallback);
+void __stdcall SMsgRegisterKeyDown(HWND hWnd, uint32_t dwContext, pfnSEvtHandler pCallback);
 // @blizzard SMsgRegisterKeyUp (SMSG.CPP)
-void __stdcall SMsgRegisterKeyUp(HWND hWnd, uint32_t dwContext, int32_t pCallback);
+void __stdcall SMsgRegisterKeyUp(HWND hWnd, uint32_t dwContext, pfnSEvtHandler pCallback);
 // @blizzard SMsgRegisterMessage (SMSG.CPP)
-void __stdcall SMsgRegisterMessage(HWND hWnd, uint32_t dwContext, int32_t pCallback);
+void __stdcall SMsgRegisterMessage(HWND hWnd, uint32_t dwContext, pfnSEvtHandler pCallback);
 // @blizzard SMsgUnregisterCommand (SMSG.CPP)
-void __stdcall SMsgUnregisterCommand(HWND hWnd, uint32_t szText1, char * szText2);
+void __stdcall SMsgUnregisterCommand(HWND hWnd, uint32_t dwKey, pfnSEvtHandler pfnHandler);
 // @blizzard SMsgUnregisterKeyDown (SMSG.CPP)
-void __stdcall SMsgUnregisterKeyDown(HWND hWnd, uint32_t szText1, char * szText2);
+void __stdcall SMsgUnregisterKeyDown(HWND hWnd, uint32_t dwKey, pfnSEvtHandler pfnHandler);
 // @blizzard SMsgUnregisterKeyUp (SMSG.CPP)
-void __stdcall SMsgUnregisterKeyUp(HWND hWnd, uint32_t szText1, char * szText2);
+void __stdcall SMsgUnregisterKeyUp(HWND hWnd, uint32_t dwKey, pfnSEvtHandler pfnHandler);
 // @blizzard SMsgUnregisterMessage (SMSG.CPP)
-void __stdcall SMsgUnregisterMessage(HWND hWnd, uint32_t szText1, char * szText2);
+void __stdcall SMsgUnregisterMessage(HWND hWnd, uint32_t dwKey, pfnSEvtHandler pfnHandler);
 }} // namespace Storm::WindowHandle
 
 // Globals

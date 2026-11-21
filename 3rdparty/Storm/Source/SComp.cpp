@@ -35,7 +35,7 @@ typedef void (__fastcall *pfnSCompEncodeCodec)(short * pDst, uint32_t * pnDstLen
 #endif
 #ifndef RECON_FPTD_pfnSCompCodec
 #define RECON_FPTD_pfnSCompCodec
-typedef void (__fastcall *pfnSCompCodec)(void * pDst, uint32_t * pnDstLen, void * pSrc, uint32_t nSrcLen, uint32_t dwParam);
+typedef void (__fastcall *pfnSCompCodec)(void * pDst, uint32_t * pnDstLen, void * pSrc, uint32_t nSrcLen, void * pvParam);
 #endif
 
 static int gnSSCompDeflateFlags[32] = {
@@ -680,7 +680,7 @@ void __fastcall SCOMP_PkwareCompress(void * pOutBuf, uint32_t * pdwOutLength, vo
 
 // @sourcefile .\SOURCE\SCOMP.CPP
 // @blizzard PkwareDecompress (SCOMP.CPP)
-void __fastcall SCOMP_PkwareDecompress(void * pOutBuf, uint32_t * pdwOutLength, void * pInBuf, uint32_t nInLen, uint32_t dwUnused) {
+void __fastcall SCOMP_PkwareDecompress(void * pOutBuf, uint32_t * pdwOutLength, void * pInBuf, uint32_t nInLen, void * pvUnused) {
     PKWARE_STREAM Stream;
     TDcmpStruct* pWorkBuf = (TDcmpStruct*)SMem::SMemAlloc(0x3134, ".\\SOURCE\\SCOMP.CPP", 0x47b, 0);
     Stream.nOutLen = *pdwOutLength;
@@ -819,7 +819,7 @@ static int __stdcall SCOMP_InflateZlibStackArena(uint32_t * pnOutLen, uint8_t * 
     return nRetInit;
 }
 
-void __fastcall SCOMP_Bzip2Decompress(uint8_t * pDst, uint32_t * pnDstLen, uint8_t * pSrc, uint32_t nSrcLen, uint32_t pUserData) {
+void __fastcall SCOMP_Bzip2Decompress(uint8_t * pDst, uint32_t * pnDstLen, uint8_t * pSrc, uint32_t nSrcLen, void * pUserData) {
     SCOMP_InflateZlibStackArena(pnDstLen, pDst, nSrcLen, pSrc);
 }
 
@@ -831,7 +831,7 @@ void __fastcall SCOMP_AdpcmMonoCompress(short * pDst, uint32_t * pnDstLen, short
 }
 
 // @blizzard AdpcmMonoDecompress (SCOMP.CPP)
-void __fastcall SCOMP_AdpcmMonoDecompress(short * pDst, uint32_t * pnDstLen, uint8_t * pSrc, int32_t nSrcLen, uint32_t pUserData) {
+void __fastcall SCOMP_AdpcmMonoDecompress(short * pDst, uint32_t * pnDstLen, uint8_t * pSrc, int32_t nSrcLen, void * pUserData) {
     uint32_t pDstEnd = SCOMP_ADPCMDecode(pDst, *pnDstLen, pSrc, 1, nSrcLen);
     *pnDstLen = pDstEnd;
 }
@@ -844,7 +844,7 @@ void __fastcall SCOMP_AdpcmStereoCompress(short * pDst, uint32_t * pnDstLen, sho
 }
 
 // @blizzard AdpcmStereoDecompress (SCOMP.CPP)
-void __fastcall SCOMP_AdpcmStereoDecompress(short * pDst, uint32_t * pnDstLen, uint8_t * pSrc, int32_t nSrcLen, uint32_t pUserData) {
+void __fastcall SCOMP_AdpcmStereoDecompress(short * pDst, uint32_t * pnDstLen, uint8_t * pSrc, int32_t nSrcLen, void * pUserData) {
     uint32_t pDstEnd = SCOMP_ADPCMDecode(pDst, *pnDstLen, pSrc, 2, nSrcLen);
     *pnDstLen = pDstEnd;
 }
@@ -1035,7 +1035,7 @@ BOOL __stdcall SCompCompress(uint8_t * pDst, uint32_t * pnDstLen, uint32_t * pSr
 // @wasnamed SCOMP_Decompress
 // @basis behaviour-confirmed and the exact inverse of SCompCompress. (dst, pdstsize, src, srcsize, flags). Reads the leading method byte that SCompCompress wrote, rejects unsupported bits (byte & 0x34), then walks the same codec dispatch table BACKWARDS - opposite direction to the compressor - ping-ponging between the destination and a scratch buffer. srcsize == dstsize short-circuits to a plain memcpy, which is the uncompressed-sector case.
 // @seealso SCompCompress 0041e570
-BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSizeIn, uint32_t dwFlags) {
+BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSizeIn, void * pvUserData) {
     // Frame slots -12..-4 are ONE object: &nSavedSize is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -1082,7 +1082,7 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
         nSrcSizeIn++;
       }
 
-      pSrc = (uint32_t*)(dwMethodFlags & -204);
+      uint32_t* pWorkBuf = nullptr;
       if (byCompressionMask & 0x34) {
         return 0;
       }
@@ -1102,9 +1102,9 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
                          0x08,0x02,0x01,0x80,0x40).
                          Any instrumentation that reads pSrc/nSrcSizeIn after 0041e7a4 reports the
                          reused value, not
-                         the caller's argument. */ bTempBufShared = (int32_t)pSrc;
+                         the caller's argument. */ bTempBufShared = 0;
       if (nSrcSizeIn >= 2 || (uint32_t*)((char*)pDst + nSrcSize) > pSrcCur && (uint32_t*)((char*)pSrcCur + nSrcSize) > pDst && nSrcSizeIn) {
-        pSrc = SCOMP_s_AllocDecompressBuffer(__frame0.nDestSize, &bTempBufShared);
+        pWorkBuf = SCOMP_s_AllocDecompressBuffer(__frame0.nDestSize, &bTempBufShared);
       }
 
       /* Codec table walk (verified): ESI starts at 0x6cfee8 =
@@ -1123,18 +1123,18 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
         pStageBuf = pSrcCur;
         if ((uintptr_t)ppMethodEntry[-1] & dwFlagsTmp) {
           nSrcSizeIn--;
-          pStageTarget = pSrc;
+          pStageTarget = pWorkBuf;
           if (!(nSrcSizeIn & 1)) {
             pStageTarget = pDst;
           }
 
           pStageBuf = pStageTarget;
-          if ((uint32_t*)((char*)pStageTarget + nSrcSize) > pSrcCur && (uint32_t*)(nSrcSize + (char*)pSrcCur) > pStageTarget && ((uint32_t*)((char*)pStageTarget + nSrcSize) <= pSrc || (pStageBuf = pDst , (uint32_t*)(nSrcSize + (char*)pSrc) <= pStageTarget))) {
-            pStageBuf = pSrc;
+          if ((uint32_t*)((char*)pStageTarget + nSrcSize) > pSrcCur && (uint32_t*)(nSrcSize + (char*)pSrcCur) > pStageTarget && ((uint32_t*)((char*)pStageTarget + nSrcSize) <= pWorkBuf || (pStageBuf = pDst , (uint32_t*)(nSrcSize + (char*)pWorkBuf) <= pStageTarget))) {
+            pStageBuf = pWorkBuf;
           }
 
           __frame0.nSavedSize = __frame0.nDestSize;
-          (**ppMethodEntry)(pStageBuf, &__frame0.nSavedSize, pSrcCur, nSrcSize, dwFlags);
+          (**ppMethodEntry)(pStageBuf, &__frame0.nSavedSize, pSrcCur, nSrcSize, pvUserData);
           dwFlagsTmp = dwMethodFlags;
           nSrcSize = __frame0.nSavedSize;
         }
@@ -1148,7 +1148,7 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
       }
 
       *pnDstSize = nSrcSize;
-      SCOMP_ReleaseTempBuffer(bTempBufShared, pSrc);
+      SCOMP_ReleaseTempBuffer(bTempBufShared, pWorkBuf);
     }
 
     return 1;
@@ -1228,7 +1228,7 @@ uint32_t __thiscall BITBUFFER_ReadBits(D2BitStreamReaderStrc * pBitBuf, uint32_t
 }
 
 void __stdcall SCOMP_DecompressSimple(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSize) {
-    SCompDecompress(pDst, pnDstSize, pSrc, nSrcSize, 0);
+    SCompDecompress(pDst, pnDstSize, pSrc, nSrcSize, nullptr);
 }
 
 int __fastcall Unreferenced_0041ea40(StormLinkStrc * pLink) {
@@ -1239,10 +1239,10 @@ uint32_t __fastcall Unreferenced_0041ea50(StormLinkStrc * pLink) {
     return pLink->pNext;
 }
 
-int __fastcall Unreferenced_0041ea60(int param_1) {
-    *(uint32_t*)param_1 = 0;
-    *(uint32_t*)(param_1 + 4) = 0;
-    return param_1;
+StormLinkStrc * __fastcall Unreferenced_0041ea60(StormLinkStrc * pLink) {
+    pLink->pPrevLink = nullptr;
+    pLink->pNext = 0;
+    return pLink;
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0041ea70(StormLinkStrc * pNode) {
@@ -1322,19 +1322,19 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(D2HuffmanContextStrc * pThis, D2BitStrea
     }
 
     uint32_t nQuickIdx = pBitBuf->dwBitBuffer;
-    uint32_t* pQuickFill = pThis->aQuickTable + (nQuickIdx & 0x7f) * 3;
-    bool bNeedRebuild = *pQuickFill != pThis->nEpoch;
+    D2HuffQuickEntryStrc* pQuickFill = &pThis->aQuickTable[nQuickIdx & 0x7f];
+    bool bNeedRebuild = pQuickFill->nEpoch != pThis->nEpoch;
     if (!bNeedRebuild) {
-      wBits = pQuickFill[1];
+      wBits = pQuickFill->nBitCount;
       if (wBits <= 7) {
         pBitBuf->nBitCount -= wBits;
         pBitBuf->dwBitBuffer = nQuickIdx >> (uint8_t)wBits;
-        return pQuickFill[2];
+        return pQuickFill->nSymbol;
       }
 
       pBitBuf->nBitCount -= 7;
       pBitBuf->dwBitBuffer = nQuickIdx >> 7;
-      pTreeNode = (D2CompressHuffNodeStrc*)pQuickFill[2];
+      pTreeNode = pQuickFill->pNode;
     } else {
       D2CompressHuffNodeStrc* pDVar1;
       pDVar1 = pThis->pActiveListSelf->pNext->nPrevOffset;
@@ -1342,7 +1342,7 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(D2HuffmanContextStrc * pThis, D2BitStrea
     }
 
     uint32_t nBitCount = 0;
-    uint32_t nBitBuf = 0x0;
+    D2CompressHuffNodeStrc* pNodeAt7 = nullptr;
     do {
       wBits = pDVar3->dwBitBuffer;
       pTreeNode = pTreeNode->pSibling;
@@ -1360,7 +1360,7 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(D2HuffmanContextStrc * pThis, D2BitStrea
 
       nBitCount++;
       if (nBitCount == 7) {
-        nBitBuf = (uint32_t)pTreeNode;
+        pNodeAt7 = pTreeNode;
       }
     } while (pTreeNode->pSibling);
 
@@ -1369,21 +1369,21 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(D2HuffmanContextStrc * pThis, D2BitStrea
     }
     if (nBitCount > (uintptr_t)0x7) {
       uVar2 = pThis->nEpoch;
-      pQuickFill[1] = nBitCount;
-      *pQuickFill = uVar2;
-      pQuickFill[2] = nBitBuf;
+      pQuickFill->nBitCount = nBitCount;
+      pQuickFill->nEpoch = uVar2;
+      pQuickFill->pNode = pNodeAt7;
       return pTreeNode->nSymbol;
     }
 
     nQuickIdx = 0xffffffffU >> D2_SHIFT_COUNT(0x20 - nBitCount) & nQuickIdx & 0x7f;
     int nQuickStep = 1 << D2_SHIFT_COUNT(nBitCount);
-    pQuickFill = pThis->aQuickTable + (nQuickIdx * 3 + 2);
+    pQuickFill = &pThis->aQuickTable[nQuickIdx];
     do {
-      pQuickFill[-2] = (uint32_t)pThis->nEpoch;
-      pQuickFill[-1] = nBitCount;
-      *pQuickFill = pTreeNode->nSymbol;
+      pQuickFill->nEpoch = (uint32_t)pThis->nEpoch;
+      pQuickFill->nBitCount = nBitCount;
+      pQuickFill->nSymbol = pTreeNode->nSymbol;
       nQuickIdx += nQuickStep;
-      pQuickFill += nQuickStep * 3;
+      pQuickFill += nQuickStep;
     } while (nQuickIdx <= 0x7f);
 
     return pTreeNode->nSymbol;
@@ -1480,18 +1480,18 @@ void * __fastcall LINKEDLIST_LinkBefore(void * pNode) {
     return pNode;
 }
 
-void __fastcall LINKEDLIST_NodeDestructor(void * pNode) {
-    int* pPrevLink;
-    int pNext = *(int*)pNode;
+void __fastcall LINKEDLIST_NodeDestructor(StormLinkStrc * pNode) {
+    StormLinkStrc** pPrevLink;
+    StormLinkStrc* pNext = pNode->pPrevLink;
     if (!pNext) {
       return;
     }
 
-    pPrevLink = (int*)D2_StormNextLink(pNode, -1);
+    pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
     *pPrevLink = pNext;
-    *(uint32_t*)(*(int*)pNode + 4) = *(uint32_t*)((char*)pNode + 4);
-    *(uint32_t*)pNode = 0;
-    *(uint32_t*)((char*)pNode + 4) = 0;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = nullptr;
+    pNode->pNext = 0;
 }
 
 D2CompressHuffNodeStrc * __thiscall HUFFMAN_AllocateNode(D2HuffmanContextStrc * pThis, int32_t nInsertMode) {
@@ -4229,7 +4229,7 @@ void __fastcall COMPRESS_FlushEncoderState(StormLinkedListStrc * pEncoder) {
 
 // Initialise a Huffman encoder/decoder context: zero all linked-list sentinels, set epoch to 1, clear node-count and quick-table epoch
 D2CompressEncoderStrc * __fastcall HUFFMAN_InitContext(D2CompressEncoderStrc * pEncoder) {
-    _eh_vector_constructor_iterator_(pEncoder->aNodePool, 0x18, 0x203, (void (__fastcall *)(void*))LINKEDLIST_LinkBefore, LINKEDLIST_NodeDestructor);
+    _eh_vector_constructor_iterator_(pEncoder->aNodePool, 0x18, 0x203, (void (__fastcall *)(void*))LINKEDLIST_LinkBefore, (void (__fastcall *)(void*))LINKEDLIST_NodeDestructor);
     pEncoder->ppFreeListTailLink = 0;
     D2CompressHuffNodeStrc** ppDVar1 = &pEncoder->pFreeListSentinel;
     *ppDVar1 = (D2CompressHuffNodeStrc*)ppDVar1;
@@ -4370,7 +4370,7 @@ void __fastcall COMPRESS_DestroyEncoderContext(D2CompressEncoderStrc * pEncoder)
       pEncoder->ppFreeListTailLink = 0;
     }
 
-    _eh_vector_destructor_iterator_(pEncoder->aNodePool, 0x18, 0x203, LINKEDLIST_NodeDestructor);
+    _eh_vector_destructor_iterator_(pEncoder->aNodePool, 0x18, 0x203, (void (__fastcall *)(void*))LINKEDLIST_NodeDestructor);
 }
 
 int __thiscall HUFFMAN_DecompressBlock(D2HuffmanContextStrc * pDecoderCtx, uint8_t * pDst, int32_t nDstMax, D2BitStreamReaderStrc * pBitBuf) {
@@ -4498,11 +4498,11 @@ D2CompressEncoderStrc * __fastcall HUFFMAN_Constructor(D2CompressEncoderStrc * p
 
 D2HuffmanContextStrc * __fastcall HUFFMAN_ConstructorWithTable(D2HuffmanContextStrc * pHuffCtx) {
     HUFFMAN_InitContext((D2CompressEncoderStrc*)pHuffCtx);
-    uint32_t* pQuickEntry = pHuffCtx->aQuickTable;
+    D2HuffQuickEntryStrc* pQuickEntry = pHuffCtx->aQuickTable;
     int nCount = 0x80;
     do {
-      *pQuickEntry = 0;
-      pQuickEntry += 3;
+      pQuickEntry->nEpoch = 0;
+      pQuickEntry++;
       nCount--;
     } while (nCount);
 
@@ -4521,7 +4521,7 @@ void __fastcall SCOMP_HuffmanCompress(uint8_t * pBitStreamCtx, uint32_t * pnByte
 }
 
 // @blizzard HuffmanDecompress (SCOMP.CPP)
-void __fastcall SCOMP_HuffmanDecompress(uint8_t * pDst, int * pnDstSize, uint32_t * pBitStreamCtx, uint32_t dwFlags, uint32_t dwParam) {
+void __fastcall SCOMP_HuffmanDecompress(uint8_t * pDst, int * pnDstSize, uint32_t * pBitStreamCtx, uint32_t dwFlags, void * pvParam) {
     D2HuffmanContextStrc aHuffCtx;
     int sListHead[3];
     LINKEDLIST_Unlink((D2BitStreamReaderStrc*)sListHead, pBitStreamCtx);

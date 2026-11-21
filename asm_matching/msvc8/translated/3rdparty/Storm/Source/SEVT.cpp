@@ -223,7 +223,7 @@ static void SEVT_DeleteIdHashTable(D2SevtHandlerTableStrc * pTable) {
 }
 
 // @blizzard FindTypeHashEntry (SEVT.CPP)
-static D2SevtTypeEntryStrc * SEVT_FindTypeHashEntry(uint32_t nSubId, uint32_t nEventId) {
+static D2SevtTypeEntryStrc * SEVT_FindTypeHashEntry(uintptr_t nSubId, uint32_t nEventId) {
     D2SevtTypeEntryStrc* pEvent;
     if (!gpEventHashBuckets || !gaEventRegistryHead) {
       pEvent = 0;
@@ -289,7 +289,7 @@ BOOL SEvtDestroy() {
 // @rename-basis Behaviour. It is the push half of a per-event handler-table stack: allocate, copy, chain the previous table, install. SEvtPopState 004269c0 is the exact inverse and is the only other user of that [3] predecessor link. The PPC SEvt module has exactly these two state functions and no other save/restore pair.
 // @former-name SEVT_SnapshotEventHandlers
 // @sourcefile .\SOURCE\SEVT.CPP
-void __stdcall SEvtPushState(uint32_t nEventId, uint32_t nSubId) {
+void __stdcall SEvtPushState(uint32_t nEventId, uintptr_t nSubId) {
     D2SevtTypeEntryStrc* pEvent;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077930c);
     if (gpEventHashBuckets && gaEventRegistryHead) {
@@ -319,7 +319,7 @@ void __stdcall SEvtPushState(uint32_t nEventId, uint32_t nSubId) {
 
 // Registers an event handler: allocates a handler node keyed by dwKey and links it into the handler table for (dwEventId, dwSubId); pfnHandler must be non-NULL and dwReserved zero. SEvtDispatch matches its key argument against the stored key.
 // Storm export SEvtRegisterHandler (export name list and Mac PPC 1.10b traceback).
-int __stdcall SEvtRegisterHandler(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey, int dwReserved, pfnSEvtHandler pfnHandler) {
+int __stdcall SEvtRegisterHandler(uint32_t dwEventId, uintptr_t dwSubId, uint32_t dwKey, int dwReserved, pfnSEvtHandler pfnHandler) {
     D2SevtTypeEntryStrc** pNewBuckets;
     D2SevtHandlerTableStrc* pDVar3;
     D2SevtHandlerNodeStrc** ppDVar4;
@@ -478,7 +478,7 @@ int __stdcall SEvtRegisterHandler(uint32_t dwEventId, uint32_t dwSubId, uint32_t
 // @rename-basis Behaviour plus argument count, both confirmed against the PPC. Four arguments here, and .SEvtUnregisterHandler reads exactly r3..r6. It finds the (eventId, subId) event, indexes its HANDLER table by arg3 and unlinks the handler nodes whose node[0] equals arg3 and whose node[2] - the callback stored by SEvtRegisterHandler - equals arg4, decrementing the per-event handler count at pEvent[3]+8. The event record itself survives. SEvtUnregisterType 00426810 takes only two arguments (and .SEvtUnregisterType reads only r3, r4), frees every handler table and deletes the event record.
 // @former-name SEVT_RemoveEventCallback (invented)
 // @note Ghidra types node[0]/node[2]/node[3] through a bogus FILE* (_ptr/_base/_flag); the record is {key, priority, pfnHandler, next}.
-BOOL __stdcall SEvtUnregisterHandler(uint32_t nEventId, uint32_t nSubId, uint32_t dwKey, pfnSEvtHandler pfnHandler) {
+BOOL __stdcall SEvtUnregisterHandler(uint32_t nEventId, uintptr_t nSubId, uint32_t dwKey, pfnSEvtHandler pfnHandler) {
     int _bRemoved;
     uint32_t nBucket;
     D2SevtHandlerNodeStrc** ppHandlerLink;
@@ -531,7 +531,7 @@ BOOL __stdcall SEvtUnregisterHandler(uint32_t nEventId, uint32_t nSubId, uint32_
 // @oracle-source Storm export name list, and the PEF traceback-named body .SEvtUnregisterType @10017290 in Mac PPC 1.10b Storm
 // @rename-basis Behaviour plus argument count, both confirmed against the PPC. Two arguments here, and .SEvtUnregisterType reads only r3 and r4 and then computes "xor r28, r26, r27" - the same eventId ^ subId bucket hash this function uses. With two arguments it cannot name a handler. It walks the event's whole stack of handler tables freeing each with SEVT_FreeEventHandlerTable, then unlinks and frees the event record from its hash bucket and decrements gnSevtRegisteredEventCount. Removing the (eventId, subId) entry itself is what "type" means here.
 // @former-name SEVT_UnregisterEvent (invented)
-BOOL __stdcall SEvtUnregisterType(uint32_t nEventId, uint32_t nSubId) {
+BOOL __stdcall SEvtUnregisterType(uint32_t nEventId, uintptr_t nSubId) {
     int _bRemoved;
     D2SevtTypeEntryStrc* pEvent;
     bool bRemoved;
@@ -632,17 +632,17 @@ void __fastcall Unreferenced_004269a0(StormLinkedListStrc * pList) {
 // @oracle-source PEF traceback-table function name .SEvtPopState @10017bd0 in Mac PPC 1.10b Storm. Internal (not in the 337-name export table), but a first-party compiler-emitted symbol.
 // @rename-basis Behaviour. The exact inverse of SEvtPushState 00426370: it consumes the [3] predecessor link that only PushState writes. Two arguments (eventId, subId), so it names no handler. Not SEvtUnregisterType - it delegates to it in the no-predecessor case, so it cannot be it.
 // @former-name SEVT_UndoLastRegistration
-void __stdcall SEvtPopState(uint32_t szText1, uint32_t szText2) {
+void __stdcall SEvtPopState(uint32_t nEventId, uintptr_t nSubId) {
     D2SevtHandlerTableStrc* pPrevHandlerTable;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077930c);
     if (gpEventHashBuckets && gaEventRegistryHead) {
       D2SevtTypeEntryStrc* pNode;
-      for (pNode = gpEventHashBuckets[(szText1 ^ szText2) & gaEventRegistryHead - 1]; pNode; pNode = pNode->pNext) {
-        if (pNode->dwType == szText1 && pNode->dwSubType == szText2) {
+      for (pNode = gpEventHashBuckets[(nEventId ^ nSubId) & gaEventRegistryHead - 1]; pNode; pNode = pNode->pNext) {
+        if (pNode->dwType == nEventId && pNode->dwSubType == nSubId) {
           if (pNode) {
             pPrevHandlerTable = pNode->pHandlerTable->pPrevState;
             if (!pPrevHandlerTable) {
-              SEvtUnregisterType(szText1, szText2);
+              SEvtUnregisterType(nEventId, nSubId);
             } else {
               SEVT_DeleteIdHashTable(pNode->pHandlerTable);
               pNode->pHandlerTable = pPrevHandlerTable;
@@ -981,16 +981,16 @@ BREAKCMD * __fastcall LINKEDLIST_UnlinkFreeAndGetCount(StormLinkedListStrc * pLi
 // @oracle-source Storm export name list, and the PEF traceback-named body .SEvtDispatch @10017d50 in Mac PPC 1.10b Storm
 // @rename-basis Behaviour. The only function in SEVT that invokes registered handler callbacks: SEVT_LookupEvent(arg1, arg2), then walks the event's handler table selecting nodes whose node[0] equals arg3 with a strictly decreasing node[1] priority, calling node[2] with arg4 as its single argument, and returning whether any handler ran. Nothing in the body is Windows-message specific - the old name's uMsg is the handler key that SEvtRegisterHandler stores at node[0], and the callback receives only arg4.
 // @former-name SEVT_DispatchWindowMessage (invented. Its caller WND_DispatchWindowMessage 00420b00 is the Windows-message layer; this is not.)
-BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey, void * pData) {
+BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uintptr_t dwSubId, uint32_t dwKey, void * pData) {
     // Static local variables (originally global data)
     static LONG * lpAddend_007792fc; D2_STATIC_GUARD_BSS(lpAddend_007792fc, "Storm::Source::SEVT::SEvtDispatch::lpAddend_007792fc");
 
     D2SevtHandlerTableStrc* pDVar1;
-    int* pBreakCmd;
+    BREAKCMD* pBreakCmd;
     D2SevtTypeEntryStrc* pEventEntry;
-    int* pLinkSlot;
+    StormLinkStrc** pLinkSlot;
     pfnSEvtHandler pfnHandler;
-    int nNextNode;
+    StormLinkStrc* nNextNode;
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_007792fc);
     D2SevtHandlerNodeStrc* pHandlerNode;
     pHandlerNode = 0;
@@ -1000,24 +1000,24 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey
     uLastPriority = -1;
     do {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077930c);
-      pBreakCmd = (int*)(gpSevtBreakCmdListHead.head.pNext <= 0 ? 0 : gpSevtBreakCmdListHead.head.pNext);
+      pBreakCmd = (BREAKCMD*)(gpSevtBreakCmdListHead.head.pNext <= 0 ? 0 : gpSevtBreakCmdListHead.head.pNext);
       if ((intptr_t)pBreakCmd > 0) {
         do {
-          if ((void*)pBreakCmd[2] == pData) {
-            nNextNode = *pBreakCmd;
+          if (pBreakCmd->pData == pData) {
+            nNextNode = pBreakCmd->m_link.pPrevLink;
             if (nNextNode) {
-              pLinkSlot = (int*)D2_StormNextLink(pBreakCmd, -1);
+              pLinkSlot = (StormLinkStrc**)D2_StormNextLink(pBreakCmd, -1);
               *pLinkSlot = nNextNode;
-              *(int*)(*pBreakCmd + 4) = pBreakCmd[1];
-              *pBreakCmd = 0;
-              pBreakCmd[1] = 0;
+              pBreakCmd->m_link.pPrevLink->pNext = pBreakCmd->m_link.pNext;
+              pBreakCmd->m_link.pPrevLink = nullptr;
+              pBreakCmd->m_link.pNext = 0;
             }
 
             SMem::SMemFree(pBreakCmd, s___AUBREAKCMD___007088d8, -2, 0);
             goto stop_dispatch;
           }
 
-          pBreakCmd = (int*)pBreakCmd[1];
+          pBreakCmd = (BREAKCMD*)pBreakCmd->m_link.pNext;
         } while ((intptr_t)pBreakCmd > 0);
 
         if (false) {

@@ -88,7 +88,8 @@ static int32_t Frames_PerSecond = 0x19; D2_STATIC_GUARD(Frames_PerSecond, "Frame
 static D2UnitIdToNameFunc PFN_UnitTypeCallbackTable[5] = { &D2Game::GAME::Server::SERVER_GetPlayerClassName, &D2Game::GAME::Server::MonsterIdToName, &D2Game::GAME::Server::ObjectIdToName, &D2Game::GAME::Server::ItemIdToName, &D2Game::GAME::Server::MissileIdToname }; D2_STATIC_GUARD(PFN_UnitTypeCallbackTable, "PFN_UnitTypeCallbackTable");
 // also labelled: lpCritical_GenerateToken, lpCriticalSection_00882d18
 static _RTL_CRITICAL_SECTION gQServerGameListCs = {0}; D2_STATIC_GUARD(gQServerGameListCs, "gQServerGameListCs");
-static ::SGAMEDATA * gaQServerGameByToken[1025] = {0}; D2_STATIC_GUARD(gaQServerGameByToken, "gaQServerGameByToken");
+static ::SGAMEDATA * gpQServerLockedGame = {0}; D2_STATIC_GUARD(gpQServerLockedGame, "gpQServerLockedGame");
+static uint32_t gaQServerGameTokens[1024] = {0}; D2_STATIC_GUARD(gaQServerGameTokens, "gaQServerGameTokens");
 static TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* gpQServerGameState = 0; D2_STATIC_GUARD(gpQServerGameState, "gpQServerGameState");
 static int g_nMemoryCounter = 0; D2_STATIC_GUARD(g_nMemoryCounter, "g_nMemoryCounter");
 static int StartingAct = 0; D2_STATIC_GUARD(StartingAct, "StartingAct");
@@ -100,20 +101,20 @@ static uint32_t Frames_TimeBetweenFrames = 0; D2_STATIC_GUARD(Frames_TimeBetween
 
 namespace D2Game { namespace GAME { namespace Server {
 
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00416880(int32_t pQServer) {
-    return *(void**)(pQServer + 4);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00416880(uint8_t * pObject) {
+    return *(void**)(pObject + 4);
 }
 
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0041e960(int32_t pQServer) {
-    return *(void**)(pQServer + 4);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0041e960(uint8_t * pObject) {
+    return *(void**)(pObject + 4);
 }
 
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00420d90(int32_t pQServer) {
-    return *(void**)(pQServer + 4);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00420d90(uint8_t * pObject) {
+    return *(void**)(pObject + 4);
 }
 
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0044bdd0(int32_t pQServer) {
-    return *(void**)(pQServer + 4);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0044bdd0(uint8_t * pObject) {
+    return *(void**)(pObject + 4);
 }
 
 void __stdcall ServerInit_nullsub_Unref_0052b8f0() {
@@ -279,8 +280,8 @@ void Unreferenced_0052bfc0() {
 
 int Unreferenced_0052bfe0() {
     int nCount = 0;
-    for (int nToken = 1; nToken < 1025; nToken++) {
-      if (gaQServerGameByToken[nToken] && gaQServerGameByToken[nToken] != (::SGAMEDATA*)-1) {
+    for (int nToken = 0; nToken < 1024; nToken++) {
+      if (gaQServerGameTokens[nToken] && gaQServerGameTokens[nToken] != 0xffffffff) {
         nCount++;
       }
     }
@@ -298,16 +299,16 @@ int __stdcall FreeServer() {
     return 1;
 }
 
-int32_t __fastcall SERVER_IsTokenValid(uint16_t nToken) {
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
-    ::SGAMEDATA* nTokenSlotValue = gaQServerGameByToken[nToken];
-    ::SGAMEDATA* nResult = 0;
-    if (nTokenSlotValue && nTokenSlotValue != (::SGAMEDATA*)-1) {
+uint32_t __fastcall SERVER_IsTokenValid(uint16_t nToken) {
+    uint32_t nResult = 0;
+    EnterCriticalSection(&gQServerGameListCs);
+    uint32_t nTokenSlotValue = gaQServerGameTokens[nToken - 1];
+    if (nTokenSlotValue && nTokenSlotValue != 0xffffffff) {
       nResult = nTokenSlotValue;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerGameListCs);
-    return (int32_t)nResult;
+    LeaveCriticalSection(&gQServerGameListCs);
+    return nResult;
 }
 
 void __stdcall QSERVER_SetGlobalInstance(TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* pQServerState, void * pInitState) {
@@ -334,10 +335,10 @@ void __stdcall SetupAsBnetServer(D2BattleNetEventCallbackTable * pBnetCallbacks)
     IsBattleNetServer = 0;
 }
 
-void __stdcall QSERVER_PutNewGameOnTokenList(::SGAMEDATA * dwGameServerAddr, uint16_t nToken) {
+void __stdcall QSERVER_PutNewGameOnTokenList(uint32_t dwGameToken, uint16_t nToken) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
-    if (gaQServerGameByToken[nToken] == (::SGAMEDATA*)-1) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gaQServerGameByToken[nToken] = dwGameServerAddr;
+    if (gaQServerGameTokens[nToken - 1] == 0xffffffff) {
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gaQServerGameTokens[nToken - 1] = dwGameToken;
       LeaveCriticalSection(&gQServerGameListCs);
       return;
     }
@@ -356,7 +357,7 @@ uint16_t __stdcall QSERVER_GenerateToken() {
       QServerNextToken = 1;
     }
 
-    while (gaQServerGameByToken[nNextToken]) {
+    while (gaQServerGameTokens[nNextToken - 1]) {
       nNextToken = QServerNextToken;
       QServerNextToken++;
       if (QServerNextToken > 0x400) {
@@ -368,7 +369,7 @@ uint16_t __stdcall QSERVER_GenerateToken() {
       }
     }
 
-    gaQServerGameByToken[nNextToken] = (::SGAMEDATA*)-1;
+    gaQServerGameTokens[nNextToken - 1] = 0xffffffff;
     LeaveCriticalSection(&gQServerGameListCs);
     return nNextToken;
 }
@@ -718,16 +719,16 @@ BOOL __fastcall NET_D2GS_SERVER_IsValidChecks(int32_t nClientID, uint16_t nGameT
 
 // Tears down game completely. First clears token from global 1024-slot table (0x882d18-0x883d38) under csGameHash lock. Then frees subsystems in order: MonsterRegion, ObjectControl, QuestControl, NpcControl, all clients, all units (5 types), inactive unit lists, timer queue, party, arena. Frees all 5 acts via FreeDungeons. Finally destroys memory pool, leaves and deletes critical section. Called after 5 min idle timeout or when game empties (frames 1500-7500 with zero clients).
 // @sourcefile .\GAME\Game.cpp
-void __fastcall GAME_DestroyGame(int32_t nGameToken, ::SGAMEDATA * pGame) {
+void __fastcall GAME_DestroyGame(uint32_t nGameToken, ::SGAMEDATA * pGame) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
-    ::SGAMEDATA** pnTokenEntry = gaQServerGameByToken + 1;
+    uint32_t* pnTokenEntry = gaQServerGameTokens;
     do {
-      if (*pnTokenEntry == (::SGAMEDATA*)nGameToken) {
+      if (*pnTokenEntry == nGameToken) {
         *pnTokenEntry = 0;
       }
 
       pnTokenEntry++;
-    } while ((intptr_t)pnTokenEntry < (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken)));
+    } while ((intptr_t)pnTokenEntry < (intptr_t)(gaQServerGameTokens + 1024));
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerGameListCs);
     Monster::MonsterRegion::FreeMonsterRegion(pGame->pMemoryPool, pGame->pMonsterRegion);
@@ -1731,16 +1732,16 @@ void __fastcall ForEachClient(::SGAMEDATA * pGame, fpForEachClientFn fpFunction,
 }
 
 void __stdcall LeaveCriticalSectionLastGameServer() {
-    if (!gaQServerGameByToken[0]) {
+    if (!gpQServerLockedGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1063);
       exit(-1);
     } else {
-      if (!gaQServerGameByToken[0]->lpCriticalSection) {
+      if (!gpQServerLockedGame->lpCriticalSection) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
         exit(-1);
       }
 
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(gaQServerGameByToken[0]->lpCriticalSection);
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(gpQServerLockedGame->lpCriticalSection);
       return;
     }
 }
@@ -1813,16 +1814,16 @@ uint32_t __stdcall ParamIsOne(int32_t nParam) {
     return (uint32_t)(nParam == 1);
 }
 
-uint32_t __fastcall QSERVER_TestGameFlags(int32_t pQServer, int, uint32_t nFlags) {
-    return *(uint32_t*)(pQServer + 0x24) & nFlags;
+uint32_t __fastcall QSERVER_TestGameFlags(uint8_t * pObject, int, uint32_t nFlags) {
+    return *(uint32_t*)(pObject + 0x24) & nFlags;
 }
 
-BOOL __fastcall QSERVER_HasActiveTaskQueue(int32_t pQServer) {
-    return (uint32_t)(*(int*)(pQServer + 4) != 0);
+BOOL __fastcall QSERVER_HasActiveTaskQueue(uint8_t * pObject) {
+    return (uint32_t)(*(int*)(pObject + 4) != 0);
 }
 
-void * __fastcall QSERVER_GetTaskQueuePointer(int32_t pQServer) {
-    return *(void**)(pQServer + 4);
+void * __fastcall QSERVER_GetTaskQueuePointer(uint8_t * pObject) {
+    return *(void**)(pObject + 4);
 }
 
 // GAME_SendSaveFileChunk - Sends save file to client in 255-byte chunks via 0xB3 packet. Iterates save buffer with offset tracking.
@@ -2044,12 +2045,12 @@ void __stdcall RequestHostedGames(int32_t nClientId) {
     uint32_t dwStackCookie;
     int nClientsCount;
     uint16_t wServerToken;
-    ::SGAMEDATA** pTokenCursor = gaQServerGameByToken + 1;
+    uint32_t* pTokenCursor = gaQServerGameTokens;
     do {
       ::SGAMEDATA* pGame;
-      pGame = *pTokenCursor;
-      if (pGame && pGame != (::SGAMEDATA*)-1) {
-        pGame = QSERVER_FindAndLockGame((uint32_t)pGame);
+      uint32_t nToken = *pTokenCursor;
+      if (nToken && nToken != 0xffffffff) {
+        pGame = QSERVER_FindAndLockGame(nToken);
         if (pGame) {
           nClientsCount = pGame->nClientsCount;
           wServerToken = pGame->nServerToken;
@@ -2065,7 +2066,7 @@ void __stdcall RequestHostedGames(int32_t nClientId) {
       }
 
       pTokenCursor++;
-    } while ((intptr_t)pTokenCursor < (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken)));
+    } while ((intptr_t)pTokenCursor < (intptr_t)(gaQServerGameTokens + 1024));
 
     ServerCmd::SERVERCMD_SendBufferToClient(nClientId, 0xffff, 0, "");
 }
@@ -2082,12 +2083,12 @@ void __stdcall QSERVER_ShutdownAllGames() {
     int bHasSaveData;
     D2ClientStrc* pNextClient;
     Task::TASK_FreeAllSlots();
-    ::SGAMEDATA** pTokenCursor = gaQServerGameByToken + 1;
+    uint32_t* pTokenCursor = gaQServerGameTokens;
     do {
-      ::SGAMEDATA* nToken;
+      uint32_t nToken;
       nToken = *pTokenCursor;
-      if (nToken && nToken != (::SGAMEDATA*)-1) {
-        pGame = QSERVER_FindAndLockGame((uint32_t)nToken);
+      if (nToken && nToken != 0xffffffff) {
+        pGame = QSERVER_FindAndLockGame(nToken);
         if (!pGame) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1206);
           exit(-1);
@@ -2118,11 +2119,11 @@ void __stdcall QSERVER_ShutdownAllGames() {
         }
 
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pGame->lpCriticalSection);
-        QSERVER_DestroyGameByToken((uint32_t)nToken);
+        QSERVER_DestroyGameByToken(nToken);
       }
 
       pTokenCursor++;
-      if ((intptr_t)pTokenCursor >= (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken))) {
+      if ((intptr_t)pTokenCursor >= (intptr_t)(gaQServerGameTokens + 1024)) {
         return;
       }
     } while (true);
@@ -2130,12 +2131,12 @@ void __stdcall QSERVER_ShutdownAllGames() {
 
 int32_t __stdcall QSERVER_CountExpansionGames() {
     int32_t nCount = 0;
-    ::SGAMEDATA** pTokenEntry = gaQServerGameByToken + 1;
+    uint32_t* pTokenEntry = gaQServerGameTokens;
     do {
       ::SGAMEDATA* pSVar1;
-      pSVar1 = *pTokenEntry;
-      if (pSVar1 && pSVar1 != (::SGAMEDATA*)-1) {
-        pSVar1 = QSERVER_FindAndLockGame((uint32_t)pSVar1);
+      uint32_t nToken = *pTokenEntry;
+      if (nToken && nToken != 0xffffffff) {
+        pSVar1 = QSERVER_FindAndLockGame(nToken);
         if (pSVar1) {
           if (pSVar1->bExpansion) {
             nCount++;
@@ -2150,7 +2151,7 @@ int32_t __stdcall QSERVER_CountExpansionGames() {
       }
 
       pTokenEntry++;
-      if ((intptr_t)pTokenEntry >= (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken))) {
+      if ((intptr_t)pTokenEntry >= (intptr_t)(gaQServerGameTokens + 1024)) {
         return nCount;
       }
     } while (true);
@@ -2160,12 +2161,12 @@ int32_t __stdcall QSERVER_CountExpansionGames() {
 void __stdcall QSERVER_GetGameListByPlayerCount(short * pHistogramOut, int32_t nMaxPlayers) {
     int nClientsCount;
     memset(pHistogramOut, 0, nMaxPlayers * 2 + 2);
-    ::SGAMEDATA** pTokenCursor = gaQServerGameByToken + 1;
+    uint32_t* pTokenCursor = gaQServerGameTokens;
     do {
       ::SGAMEDATA* pGame;
-      pGame = *pTokenCursor;
-      if (pGame && pGame != (::SGAMEDATA*)-1) {
-        pGame = QSERVER_FindAndLockGame((uint32_t)pGame);
+      uint32_t nToken = *pTokenCursor;
+      if (nToken && nToken != 0xffffffff) {
+        pGame = QSERVER_FindAndLockGame(nToken);
         if (pGame) {
           nClientsCount = pGame->nClientsCount;
           if (!pGame->lpCriticalSection) {
@@ -2183,19 +2184,19 @@ void __stdcall QSERVER_GetGameListByPlayerCount(short * pHistogramOut, int32_t n
       }
 
       pTokenCursor++;
-    } while ((intptr_t)pTokenCursor < (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken)));
+    } while ((intptr_t)pTokenCursor < (intptr_t)(gaQServerGameTokens + 1024));
 }
 
 // Generates histogram of active games by age (in minutes). Iterates global game tokens, locks each game, reads dwGameFrame (frame counter), converts to minutes via division by 0x1d4c (7500 frames = 5 min), increments histogram bucket. Caps at nMaxMinutes-1.
 void __stdcall QSERVER_GetGameListByAge(short * pHistogramOut, int32_t nMaxMinutes) {
     int nAgeMinutes;
     memset(pHistogramOut, 0, nMaxMinutes * 2);
-    ::SGAMEDATA** pTokenCursor = gaQServerGameByToken + 1;
+    uint32_t* pTokenCursor = gaQServerGameTokens;
     do {
       ::SGAMEDATA* pGame;
-      pGame = *pTokenCursor;
-      if (pGame && pGame != (::SGAMEDATA*)-1) {
-        pGame = QSERVER_FindAndLockGame((uint32_t)pGame);
+      uint32_t nToken = *pTokenCursor;
+      if (nToken && nToken != 0xffffffff) {
+        pGame = QSERVER_FindAndLockGame(nToken);
         if (pGame) {
           nAgeMinutes = pGame->dwGameFrame;
           if (!pGame->lpCriticalSection) {
@@ -2214,19 +2215,19 @@ void __stdcall QSERVER_GetGameListByAge(short * pHistogramOut, int32_t nMaxMinut
       }
 
       pTokenCursor++;
-    } while ((intptr_t)pTokenCursor < (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken)));
+    } while ((intptr_t)pTokenCursor < (intptr_t)(gaQServerGameTokens + 1024));
 }
 
 uint32_t __stdcall QSERVER_GetClientCountByServerId(uint16_t nServerId) {
-    ::SGAMEDATA* nToken = 0;
+    uint32_t nToken = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
-    ::SGAMEDATA* pGame = gaQServerGameByToken[nServerId];
-    if (pGame && pGame != (::SGAMEDATA*)-1) {
-      nToken = pGame;
+    uint32_t nSlotToken = gaQServerGameTokens[nServerId - 1];
+    if (nSlotToken && nSlotToken != 0xffffffff) {
+      nToken = nSlotToken;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerGameListCs);
-    pGame = QSERVER_FindAndLockGame((uint32_t)nToken);
+    ::SGAMEDATA* pGame = QSERVER_FindAndLockGame(nToken);
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x12c6);
       exit(-1);
@@ -2248,13 +2249,13 @@ BOOL __stdcall QSERVER_ExportGameStats(uint16_t nServerId, D2QServerGameStatsStr
     int32_t nPathSampleCount;
     uint32_t nToken = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
-    ::SGAMEDATA* pGame = gaQServerGameByToken[nServerId];
-    if (pGame && pGame != (::SGAMEDATA*)-1) {
-      nToken = (uint32_t)pGame;
+    uint32_t nSlotToken = gaQServerGameTokens[nServerId - 1];
+    if (nSlotToken && nSlotToken != 0xffffffff) {
+      nToken = nSlotToken;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerGameListCs);
-    pGame = QSERVER_FindAndLockGame(nToken);
+    ::SGAMEDATA* pGame = QSERVER_FindAndLockGame(nToken);
     if (!pGame) {
       return 0;
     }
@@ -2314,16 +2315,16 @@ BOOL __stdcall QSERVER_ExportGameStats(uint16_t nServerId, D2QServerGameStatsStr
 
 int32_t __stdcall QSERVER_FillServerTokenArray(uint16_t * pOutArray, int32_t nMaxCount) {
     int32_t nCount = 0;
-    ::SGAMEDATA** pTokenSlot = gaQServerGameByToken + 1;
+    uint32_t* pTokenSlot = gaQServerGameTokens;
     do {
       ::SGAMEDATA* pGame;
       if (nCount >= nMaxCount) {
         return nCount;
       }
 
-      pGame = *pTokenSlot;
-      if (pGame && pGame != (::SGAMEDATA*)-1) {
-        pGame = QSERVER_FindAndLockGame((uint32_t)pGame);
+      uint32_t nToken = *pTokenSlot;
+      if (nToken && nToken != 0xffffffff) {
+        pGame = QSERVER_FindAndLockGame(nToken);
         if (pGame) {
           pOutArray[nCount] = pGame->nServerToken;
           nCount++;
@@ -2337,21 +2338,21 @@ int32_t __stdcall QSERVER_FillServerTokenArray(uint16_t * pOutArray, int32_t nMa
       }
 
       pTokenSlot++;
-    } while ((intptr_t)pTokenSlot < (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken)));
+    } while ((intptr_t)pTokenSlot < (intptr_t)(gaQServerGameTokens + 1024));
 
     return nCount;
 }
 
 int32_t __stdcall GetUnitCountByServerId(uint16_t nServerId) {
-    ::SGAMEDATA* nToken = 0;
+    uint32_t nToken = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
-    ::SGAMEDATA* pGame = gaQServerGameByToken[nServerId];
-    if (pGame && pGame != (::SGAMEDATA*)-1) {
-      nToken = pGame;
+    uint32_t nSlotToken = gaQServerGameTokens[nServerId - 1];
+    if (nSlotToken && nSlotToken != 0xffffffff) {
+      nToken = nSlotToken;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerGameListCs);
-    pGame = QSERVER_FindAndLockGame((uint32_t)nToken);
+    ::SGAMEDATA* pGame = QSERVER_FindAndLockGame(nToken);
     int32_t nUnitCount = 0;
     if (pGame) {
       nUnitCount = GetUnitCount(pGame->pUnitList[0]);
@@ -2371,15 +2372,15 @@ int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, D2QServer
     D2QServerUnitRecordStrc* pOutCursor;
     int nBucketIdx;
     int32_t nExported = 0;
-    ::SGAMEDATA* nToken = 0;
+    uint32_t nToken = 0;
     EnterCriticalSection(&gQServerGameListCs);
-    ::SGAMEDATA* pGame = gaQServerGameByToken[(uint16_t)nServerId];
-    if (pGame && pGame != (::SGAMEDATA*)-1) {
-      nToken = pGame;
+    uint32_t nSlotToken = gaQServerGameTokens[(uint16_t)nServerId - 1];
+    if (nSlotToken && nSlotToken != 0xffffffff) {
+      nToken = nSlotToken;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerGameListCs);
-    pGame = QSERVER_FindAndLockGame((uint32_t)nToken);
+    ::SGAMEDATA* pGame = QSERVER_FindAndLockGame(nToken);
     if (pGame) {
       D2UnitStrc* pUnit;
       nBucketIdx = 0;
@@ -2418,18 +2419,19 @@ int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, D2QServer
 }
 
 // Dead/unused server-side helper that resolves a game token from a global server table, locks the game, selects one of the five unit-type hash-bucket arrays (player/monster/object/missile/item) by nUnitId, iterates all 128 buckets tracking statistics via GAME_TrackGameStatistics, then invokes a per-unit-type callback from PFN_UnitTypeToName_ARRAY. Not reachable in shipping 1.14d; retained for reference.
-static void __stdcall Unused_GetUnitList(D2UnitStrc * * ppUnitArray, D2Game_Line0x13af * pStatRoot, int32_t nUnitId, int * pGameStats, int32_t nGameId) {
+static void __stdcall Unused_GetUnitList(uint16_t nServerId, D2Game_Line0x13af * pStatRoot, int32_t nUnitId, int * pGameStats, int32_t nGameId) {
     D2UnitStrc* pUnit;
     D2Game_Line0x13af* nListCursor;
+    D2UnitStrc** ppUnitArray;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
-    ::SGAMEDATA* pGame = gaQServerGameByToken[(uint16_t)(uint32_t)ppUnitArray];
-    ::SGAMEDATA* nToken = 0;
-    if (pGame && pGame != (::SGAMEDATA*)-1) {
-      nToken = pGame;
+    uint32_t nSlotToken = gaQServerGameTokens[nServerId - 1];
+    uint32_t nToken = 0;
+    if (nSlotToken && nSlotToken != 0xffffffff) {
+      nToken = nSlotToken;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerGameListCs);
-    pGame = QSERVER_FindAndLockGame((uint32_t)nToken);
+    ::SGAMEDATA* pGame = QSERVER_FindAndLockGame(nToken);
     ppUnitArray = 0;
     if (!pGame) {
       return;
@@ -2487,15 +2489,15 @@ int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32
     BOOL bBadCodePtr;
     int nSearchIdx;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
-    ::SGAMEDATA* pGame = gaQServerGameByToken[nServerId];
-    ::SGAMEDATA* nToken = 0;
-    if (pGame && pGame != (::SGAMEDATA*)-1) {
-      nToken = pGame;
+    uint32_t nSlotToken = gaQServerGameTokens[nServerId - 1];
+    uint32_t nToken = 0;
+    if (nSlotToken && nSlotToken != 0xffffffff) {
+      nToken = nSlotToken;
     }
 
     uint32_t nUnitGUID = 0x52f2f8;
     LeaveCriticalSection(&gQServerGameListCs);
-    pGame = QSERVER_FindAndLockGame((uint32_t)nToken);
+    ::SGAMEDATA* pGame = QSERVER_FindAndLockGame(nToken);
     _nServerId = 0;
     if (!pGame) {
       return 0;
@@ -2543,12 +2545,12 @@ void __stdcall QSERVER_CountObjectsAndPlayersAllGames(int32_t * pBucketCountdown
     pBucketCountdown[1] = 0;
     pBucketCountdown[2] = 0;
     pBucketCountdown[3] = 0;
-    ::SGAMEDATA** pTokenCursor = gaQServerGameByToken + 1;
+    uint32_t* pTokenCursor = gaQServerGameTokens;
     do {
       ::SGAMEDATA* pGame;
-      pGame = *pTokenCursor;
-      if (pGame && pGame != (::SGAMEDATA*)-1) {
-        pGame = QSERVER_FindAndLockGame((uint32_t)pGame);
+      uint32_t nToken = *pTokenCursor;
+      if (nToken && nToken != 0xffffffff) {
+        pGame = QSERVER_FindAndLockGame(nToken);
         if (pGame) {
           ppUnitBucketCursor = pGame->pUnitList[0];
           nBucketCountdown = 0x80;
@@ -2576,7 +2578,7 @@ void __stdcall QSERVER_CountObjectsAndPlayersAllGames(int32_t * pBucketCountdown
       }
 
       pTokenCursor++;
-      if ((intptr_t)pTokenCursor >= (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken))) {
+      if ((intptr_t)pTokenCursor >= (intptr_t)(gaQServerGameTokens + 1024)) {
         return;
       }
     } while (true);
@@ -2589,11 +2591,11 @@ void __stdcall QSERVER_BroadcastPlayerMessage(int32_t nMsgType, uint32_t dwEvent
     uint32_t dwStackCookie;
     char cCurrent;
     uint32_t nToken;
-    uint32_t* pTokenCursor = (uint32_t*)(gaQServerGameByToken + 1);
+    uint32_t* pTokenCursor = gaQServerGameTokens;
     do {
       char szMessage[256];
       nToken = *pTokenCursor;
-      if (nToken && nToken != -1) {
+      if (nToken && nToken != 0xffffffff) {
         pGame = QSERVER_FindAndLockGame(nToken);
         if (!pGame) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1063);
@@ -2634,22 +2636,22 @@ void __stdcall QSERVER_BroadcastPlayerMessage(int32_t nMsgType, uint32_t dwEvent
       }
 
       pTokenCursor++;
-      if ((intptr_t)pTokenCursor >= (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken))) {
+      if ((intptr_t)pTokenCursor >= (intptr_t)(gaQServerGameTokens + 1024)) {
         return;
       }
     } while (true);
 }
 
 void __stdcall QSERVER_BroadcastChatByServerId(uint16_t nServerId, char * pMessageBuffer) {
-    ::SGAMEDATA* nToken = 0;
+    uint32_t nToken = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
-    ::SGAMEDATA* pGame = gaQServerGameByToken[nServerId];
-    if (pGame && pGame != (::SGAMEDATA*)-1) {
-      nToken = pGame;
+    uint32_t nSlotToken = gaQServerGameTokens[nServerId - 1];
+    if (nSlotToken && nSlotToken != 0xffffffff) {
+      nToken = nSlotToken;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerGameListCs);
-    pGame = QSERVER_FindAndLockGame((uint32_t)nToken);
+    ::SGAMEDATA* pGame = QSERVER_FindAndLockGame(nToken);
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1564);
       exit(-1);
@@ -2673,15 +2675,15 @@ void __stdcall QSERVER_BroadcastChatByServerId(uint16_t nServerId, char * pMessa
 }
 
 ::SGAMEDATA * __stdcall QSERVER_GetFirstActiveGame() {
-    ::SGAMEDATA* nToken = 0;
+    uint32_t nToken = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
-    if (gaQServerGameByToken[1] && gaQServerGameByToken[1] != (::SGAMEDATA*)-1) {
-      nToken = gaQServerGameByToken[1];
+    if (gaQServerGameTokens[0] && gaQServerGameTokens[0] != 0xffffffff) {
+      nToken = gaQServerGameTokens[0];
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerGameListCs);
-    gaQServerGameByToken[0] = QSERVER_FindAndLockGame((uint32_t)nToken);
-    return gaQServerGameByToken[0];
+    gpQServerLockedGame = QSERVER_FindAndLockGame(nToken);
+    return gpQServerLockedGame;
 }
 
 // lpStartAddress parameter of CreateThread
@@ -2711,12 +2713,12 @@ uint32_t __fastcall QSERVER_FindGameTokenByName(char * szGameName) {
     ::SGAMEDATA* pFoundGame;
     int32_t nCmpResult;
     LPCRITICAL_SECTION lpCriticalSection;
-    ::SGAMEDATA** pTokenCursor = gaQServerGameByToken + 1;
+    uint32_t* pTokenCursor = gaQServerGameTokens;
     do {
-      ::SGAMEDATA* nToken;
+      uint32_t nToken;
       nToken = *pTokenCursor;
       if (nToken) {
-        pFoundGame = QSERVER_FindAndLockGame((uint32_t)nToken);
+        pFoundGame = QSERVER_FindAndLockGame(nToken);
         if (pFoundGame) {
           nCmpResult = Storm::Source::SSTR::SStrCmpI(pFoundGame->szGameName, szGameName, 0x7fffffff);
           lpCriticalSection = pFoundGame->lpCriticalSection;
@@ -2727,7 +2729,7 @@ uint32_t __fastcall QSERVER_FindGameTokenByName(char * szGameName) {
             }
 
             /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
-            return (uint32_t)nToken;
+            return nToken;
           }
           if (!lpCriticalSection) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
@@ -2739,7 +2741,7 @@ uint32_t __fastcall QSERVER_FindGameTokenByName(char * szGameName) {
       }
 
       pTokenCursor++;
-      if ((intptr_t)pTokenCursor >= (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken))) {
+      if ((intptr_t)pTokenCursor >= (intptr_t)(gaQServerGameTokens + 1024)) {
         return 0;
       }
     } while (true);
@@ -2748,25 +2750,25 @@ uint32_t __fastcall QSERVER_FindGameTokenByName(char * szGameName) {
 // Inline QSERVER_GetFirstActiveGame: returns that game's pInitSeed.nSeedLow and leaves its critical section, or 0 with no game; halts (line 4196) when the game has no critical section.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 uint32_t __stdcall QSERVER_GetFirstActiveGameSeed() {
-    ::SGAMEDATA* nToken = 0;
+    uint32_t nToken = 0;
     EnterCriticalSection(&gQServerGameListCs);
-    if (gaQServerGameByToken[1] && gaQServerGameByToken[1] != (::SGAMEDATA*)-1) {
-      nToken = gaQServerGameByToken[1];
+    if (gaQServerGameTokens[0] && gaQServerGameTokens[0] != 0xffffffff) {
+      nToken = gaQServerGameTokens[0];
     }
 
     LeaveCriticalSection(&gQServerGameListCs);
-    gaQServerGameByToken[0] = QSERVER_FindAndLockGame((uint32_t)nToken);
-    if (!gaQServerGameByToken[0]) {
+    gpQServerLockedGame = QSERVER_FindAndLockGame(nToken);
+    if (!gpQServerLockedGame) {
       return 0;
     }
 
-    uint32_t nSeed = gaQServerGameByToken[0]->pInitSeed.nSeedLow;
-    if (!gaQServerGameByToken[0]->lpCriticalSection) {
+    uint32_t nSeed = gpQServerLockedGame->pInitSeed.nSeedLow;
+    if (!gpQServerLockedGame->lpCriticalSection) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
       exit(-1);
     }
 
-    LeaveCriticalSection(gaQServerGameByToken[0]->lpCriticalSection);
+    LeaveCriticalSection(gpQServerLockedGame->lpCriticalSection);
     return nSeed;
 }
 
@@ -2774,12 +2776,12 @@ uint32_t __stdcall QSERVER_GetFirstActiveGameSeed() {
 BOOL __fastcall GAME_CheckIfGameNameExistsSafely(char * szGameName) {
     int32_t nCmpResult;
     LPCRITICAL_SECTION lpCriticalSection;
-    ::SGAMEDATA** pTokenCursor = gaQServerGameByToken + 1;
+    uint32_t* pTokenCursor = gaQServerGameTokens;
     do {
       ::SGAMEDATA* pFoundGame;
-      pFoundGame = *pTokenCursor;
-      if (pFoundGame && pFoundGame != (::SGAMEDATA*)-1) {
-        pFoundGame = QSERVER_FindAndLockGame((uint32_t)pFoundGame);
+      uint32_t nToken = *pTokenCursor;
+      if (nToken && nToken != 0xffffffff) {
+        pFoundGame = QSERVER_FindAndLockGame(nToken);
         if (pFoundGame) {
           nCmpResult = Storm::Source::SSTR::SStrCmpI(szGameName, pFoundGame->szGameName, 0x10);
           lpCriticalSection = pFoundGame->lpCriticalSection;
@@ -2802,7 +2804,7 @@ BOOL __fastcall GAME_CheckIfGameNameExistsSafely(char * szGameName) {
       }
 
       pTokenCursor++;
-      if ((intptr_t)pTokenCursor >= (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken))) {
+      if ((intptr_t)pTokenCursor >= (intptr_t)(gaQServerGameTokens + 1024)) {
         return 1;
       }
     } while (true);
@@ -2855,12 +2857,12 @@ void __fastcall NET_D2GS_SERVER_SrvJoinGame(int32_t nClientId, uint16_t nGameTok
       return;
     }
 
-    ::SGAMEDATA* nToken = 0;
+    uint32_t nToken = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
     uint32_t nGameTokenLocal = (uint32_t)nGameToken;
-    ::SGAMEDATA* pGame = gaQServerGameByToken[nGameTokenLocal];
-    if (pGame && pGame != (::SGAMEDATA*)-1) {
-      nToken = pGame;
+    uint32_t nSlotToken = gaQServerGameTokens[nGameTokenLocal - 1];
+    if (nSlotToken && nSlotToken != 0xffffffff) {
+      nToken = nSlotToken;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerGameListCs);
@@ -2868,14 +2870,14 @@ void __fastcall NET_D2GS_SERVER_SrvJoinGame(int32_t nClientId, uint16_t nGameTok
       return;
     }
 
-    pGame = QSERVER_FindAndLockGame((uint32_t)nToken);
+    ::SGAMEDATA* pGame = QSERVER_FindAndLockGame(nToken);
     if (!pGame) {
       SRVLog(6, "[JOIN]  SrvJoinGame: ERROR cannot loc game - Game(%d), ClientID(%d), Player(%s)", nGameTokenLocal, nClientId, szPlayerName);
       return;
     }
 
-    D2Net::Game::Server::AssignClientToToken(nClientId, (uint32_t)nToken);
-    D2ClientStrc* pClient = Clients::CreateClient(pGame, nClientId, byCharClass, szPlayerName, pAccountName, (uint8_t*)dwRealmData, byLanguage, dwCharData1, dwCharData2);
+    D2Net::Game::Server::AssignClientToToken(nClientId, nToken);
+    D2ClientStrc* pClient = Clients::CreateClient(pGame, nClientId, byCharClass, szPlayerName, pAccountName, dwRealmData, byLanguage, dwCharData1, dwCharData2);
     if (!pClient) {
       if (BattleNetServerService && BattleNetServerService->fpUnlockDatabaseCharacter) {
         /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)BattleNetServerService->fpUnlockDatabaseCharacter);
@@ -2953,12 +2955,12 @@ int32_t __stdcall SrvProcessAllGames(int32_t bLimitFrameSkip) {
     }
 
     LastUpdateTick = updateStatTick - nFrameDelta;
-    ::SGAMEDATA** nToken;
-    nToken = gaQServerGameByToken + 1;
+    uint32_t* pTokenCursor;
+    pTokenCursor = gaQServerGameTokens;
     do {
-      pGame = *nToken;
-      if (pGame && pGame != (::SGAMEDATA*)-1) {
-        pGame = QSERVER_FindAndLockGame((uint32_t)pGame);
+      uint32_t nToken = *pTokenCursor;
+      if (nToken && nToken != 0xffffffff) {
+        pGame = QSERVER_FindAndLockGame(nToken);
         if (pGame) {
           bTickedAnyGame = 1;
           if (!gbQServerFixedStatsTick) {
@@ -2991,8 +2993,8 @@ int32_t __stdcall SrvProcessAllGames(int32_t bLimitFrameSkip) {
         }
       }
 
-      nToken++;
-      if ((intptr_t)nToken >= (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken))) {
+      pTokenCursor++;
+      if ((intptr_t)pTokenCursor >= (intptr_t)(gaQServerGameTokens + 1024)) {
         if (!bTickedAnyGame) {
           return 0;
         }
@@ -3029,12 +3031,12 @@ int32_t __stdcall QSERVER_DispatchAndCleanup(uint32_t * pTokenCursor, int32_t bF
     }
 
     gdwQServerLastDispatchTick = dwDispatchTick;
-    pTokenCursor = (uint32_t*)(gaQServerGameByToken + 1);
+    pTokenCursor = gaQServerGameTokens;
     DWORD dwThisFrameTick;
     dwThisFrameTick = dwTickCount;
     do {
       nToken = *pTokenCursor;
-      if (nToken && nToken != -1) {
+      if (nToken && nToken != 0xffffffff) {
         pGame = QSERVER_FindAndLockGame(nToken);
         if (pGame) {
           bAnyGameDispatched = 1;
@@ -3065,7 +3067,7 @@ int32_t __stdcall QSERVER_DispatchAndCleanup(uint32_t * pTokenCursor, int32_t bF
 
       next_game:
       pTokenCursor++;
-      if ((intptr_t)pTokenCursor >= (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken))) {
+      if ((intptr_t)pTokenCursor >= (intptr_t)(gaQServerGameTokens + 1024)) {
         if (!bAnyGameDispatched) {
           return 0;
         }
@@ -3323,9 +3325,9 @@ void __fastcall LeaveServer(::SGAMEDATA * pQServer, D2ClientStrc * nClientToken)
 int __stdcall QSERVER_InitializeServerState() {
     int nCount;
     Storm::Source::SReg::SRegLoadValue("Diablo II", "PlayerPos", 0, &gbQServerSendPlayerPos);
-    ::SGAMEDATA** ppSVar1 = gaQServerGameByToken;
-    for (nCount = 0x400; ppSVar1++ , nCount != 0; nCount--) {
-      *ppSVar1 = 0;
+    uint32_t* ppSVar1 = gaQServerGameTokens;
+    for (nCount = 0x400; nCount != 0; nCount--) {
+      *ppSVar1++ = 0;
     }
 
     InitializeCriticalSection(&gQServerGameListCs);
@@ -3335,9 +3337,9 @@ int __stdcall QSERVER_InitializeServerState() {
     return 1;
 }
 
-// Callback invoked when the character-server (CS) delivers save data for a joining client (JOIN step 3). Accumulates chunked save data; on completion with nCsResult==0 stores file-time fields into pClient and sends state-command 2 to advance the join sequence. On CS error or stale pClientContainer, triggers disconnect.
+// Callback invoked when the character-server (CS) delivers save data for a joining client (JOIN step 3). Accumulates chunked save data; on completion with nCsResult==0 stores file-time fields into pClient and sends state-command 2 to advance the join sequence. On CS error or stale dwPlayerData, triggers disconnect.
 // @sourcefile .\GAME\Game.cpp
-uint32_t __stdcall CLIENT_OnDatabaseCharacterReceived(uint32_t nClientId, void * pSaveData, uint16_t nChunkSize, uint16_t nTotalSize, int32_t nCsResult, uint32_t dwCharFlags, int * pFileTimeData, void * pClientContainer) {
+uint32_t __stdcall CLIENT_OnDatabaseCharacterReceived(uint32_t nClientId, void * pSaveData, uint16_t nChunkSize, uint16_t nTotalSize, int32_t nCsResult, uint32_t dwCharFlags, int * pFileTimeData, uint32_t dwPlayerData) {
     ::SGAMEDATA* pGame;
     D2ClientStrc* pClient;
     SRVLog(6, "[JOIN 3] %d clientid, %d csresult - Recv\'ed char from CS", nClientId, nCsResult);
@@ -3365,7 +3367,7 @@ uint32_t __stdcall CLIENT_OnDatabaseCharacterReceived(uint32_t nClientId, void *
           Server::Unlock(pGame);
           return 0;
         }
-        if (pClient->pClientContainer != pClientContainer) {
+        if (pClient->dwPlayerData != dwPlayerData) {
           Server::Unlock(pGame);
           QSERVER_ClientDisconnectCallback(nClientId, ".\\GAME\\Game.cpp", 0x479);
           return 0;
@@ -3450,7 +3452,7 @@ uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePass
     pGame->pInitSeed.nSeedHigh = nSeedHigh;
     UNIT::sunitproxy::SUNITPROXY_AllocNpcControl(pGame);
     Quests::QUESTS::AllocQuestControl(pGame);
-    QSERVER_PutNewGameOnTokenList((::SGAMEDATA*)nHashToken, (uint16_t)nQServerToken);
+    QSERVER_PutNewGameOnTokenList(nHashToken, (uint16_t)nQServerToken);
     uint32_t nHighResTime = Fog::Src::LogManager::LOGMGR_GetHighResolutionTime();
     pGame->dwLastActivityTime = nHighResTime;
     if (nHighResTime <= 1) {
@@ -3511,7 +3513,7 @@ void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName
     Event::EVENT_AllocTimerQueue(pGame);
     Arena::AllocArenaControl(pGame, nArena, eArenaFlags, nTemplate);
     Clients::SetGameDataHook(pGame);
-    D2ClientStrc* pClientCreated = Clients::CreateClient(pGame, nClientId, ePlayerClass, szCharName, "", nullptr, nLanguageCode, arg11, arg12);
+    D2ClientStrc* pClientCreated = Clients::CreateClient(pGame, nClientId, ePlayerClass, szCharName, "", 0, nLanguageCode, arg11, arg12);
     D2Net::Game::Server::AssignClientToToken(nClientId, dwGameToken);
     if (pGame->nGameType == SGAMETYPE_OBNET_HOST) {
       Clients::GAMECLIENT_SetFlags0x20(pClientCreated);
@@ -3523,7 +3525,7 @@ void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName
     pGame->pInitSeed.nSeedHigh = nObjectSeed;
     UNIT::sunitproxy::SUNITPROXY_AllocNpcControl(pGame);
     Quests::QUESTS::AllocQuestControl(pGame);
-    QSERVER_PutNewGameOnTokenList((::SGAMEDATA*)dwGameToken, pGame->nServerToken);
+    QSERVER_PutNewGameOnTokenList(dwGameToken, pGame->nServerToken);
     SCmd::NET_D2GS_SERVER_Send_0x01_NEWGAME(pClientCreated, 1, pGame);
     SCmd::NET_D2GS_SERVER_SendStateCommand(pClientCreated, 0);
     Clients::CLIENT_SetConnectionState(pClientCreated, 1);
@@ -3589,8 +3591,8 @@ void __stdcall _TableNullSub12_Unref_005385e0() {
 
 }
 
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00539090(int32_t pQServer) {
-    return *(void**)(pQServer + 4);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00539090(uint8_t * pObject) {
+    return *(void**)(pObject + 4);
 }
 
 void __stdcall _TableNullSub16_Unref_0053bbc0(uint32_t dwArg1, uint32_t dwArg2) {
@@ -3617,32 +3619,32 @@ void __fastcall GAME_SetObjectInitTableSetup(char nDifficulty) {
     gbObjectInitTableSetup = nDifficulty;
 }
 
-BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_00601dc0(int32_t pQServer) {
-    return (uint32_t)(*(int*)(pQServer + 4) != 0);
+BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_00601dc0(uint8_t * pObject) {
+    return (uint32_t)(*(int*)(pObject + 4) != 0);
 }
 
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00601dd0(int32_t pQServer) {
-    return *(void**)(pQServer + 4);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00601dd0(uint8_t * pObject) {
+    return *(void**)(pObject + 4);
 }
 
-BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_0060e0c0(int32_t pQServer) {
-    return (uint32_t)(*(int*)(pQServer + 4) != 0);
+BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_0060e0c0(uint8_t * pObject) {
+    return (uint32_t)(*(int*)(pObject + 4) != 0);
 }
 
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0060e230(int32_t pQServer) {
-    return *(void**)(pQServer + 4);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0060e230(uint8_t * pObject) {
+    return *(void**)(pObject + 4);
 }
 
 uint32_t __fastcall Unreferenced_0060e250(void * pLink) {
     return *(uint32_t*)((char*)pLink + 4);
 }
 
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00650e90(int32_t pQServer) {
-    return *(void**)(pQServer + 4);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00650e90(uint8_t * pObject) {
+    return *(void**)(pObject + 4);
 }
 
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00666eb0(int32_t pQServer) {
-    return *(void**)(pQServer + 4);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00666eb0(uint8_t * pObject) {
+    return *(void**)(pObject + 4);
 }
 
 void StaticInit_Frames_TimeBetweenFrames() {
@@ -3651,6 +3653,6 @@ void StaticInit_Frames_TimeBetweenFrames() {
 
 static void * keep_0052d090 = (0 ? (QSERVER_CleanupUnitChain(*(D2UnitStrc * * *)0, *(::SGAMEDATA * *)0), (void *)0) : (void *)0);
 static void * keep_0052d0c0 = (0 ? (SERVER_PopulateRoom(*(::SGAMEDATA * *)0, *(D2RoomStrc * *)0), (void *)0) : (void *)0);
-static void * keep_0052f160 = (0 ? (Unused_GetUnitList(*(D2UnitStrc * * *)0, *(D2Game_Line0x13af * *)0, *(int32_t *)0, *(int * *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_0052f160 = (0 ? (Unused_GetUnitList(*(uint16_t *)0, *(D2Game_Line0x13af * *)0, *(int32_t *)0, *(int * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 }}} // namespace D2Game::GAME::Server

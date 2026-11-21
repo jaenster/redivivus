@@ -121,7 +121,7 @@ intptr_t __fastcall Unreferenced_006c40b0(struct StormLinkedListStrc * pList);
 int __fastcall Unreferenced_006c40d0(struct StormLinkStrc * pLink);
 struct StormLinkedListStrc * __fastcall Unreferenced_006c4360(struct StormLinkedListStrc * pList);
 struct StormLinkStrc * __fastcall Unreferenced_006c4470(struct StormLinkStrc * pLink);
-::SCMD * __thiscall SCMD_FreeNode(::SCMD * pThis, uint8_t bFreeMemory);
+CMDDEF * __thiscall SCMD_FreeNode(CMDDEF * pThis, uint8_t bFreeMemory);
 // @blizzard ProcessFlags (SCMD.CPP)
 BOOL __fastcall SCMD_ProcessFlags(pfnSCmdErrorCallback pfnErrorCallback, char * szText, struct StormCmdProcessingStrc * pProcessing);
 // @blizzard SCmdCheckId (SCMD.CPP)

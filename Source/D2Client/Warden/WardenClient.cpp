@@ -66,35 +66,24 @@ static D2BNetClientCallbacksStrc * sgpUnknownSequence = 0; D2_STATIC_GUARD(sgpUn
 namespace D2Client::Warden {
 
 void __thiscall WARDEN_RC4Decrypt(D2RC4StateStrc * pState, uint8_t * pData, uint32_t nLen) {
-    uint32_t nNextByteIndex;
-    uint8_t byIndexJ;
-    uint8_t bySwapTmp;
-    uint32_t nByteIndex = 0;
-    if (nLen <= 0) {
-      return;
-    }
-
-    do {
-      uint8_t byIndexI;
+    for (uint32_t nByteIndex = 0; nByteIndex < nLen; nByteIndex++) {
       pState->nIndexI++;
-      byIndexI = pState->nIndexI;
-      pState->nIndexJ += pState->sbox[byIndexI];
-      bySwapTmp = pState->sbox[byIndexI];
-      byIndexJ = pState->nIndexJ;
-      pState->sbox[byIndexI] = pState->sbox[byIndexJ];
-      pState->sbox[byIndexJ] = bySwapTmp;
-      nNextByteIndex = nByteIndex + 1;
+      pState->nIndexJ += pState->sbox[pState->nIndexI];
+      uint8_t* pSboxI = &pState->sbox[pState->nIndexI];
+      uint8_t* pSboxJ = &pState->sbox[pState->nIndexJ];
+      uint8_t bySwapTmp = *pSboxI;
+      *pSboxI = *pSboxJ;
+      *pSboxJ = bySwapTmp;
       pData[nByteIndex] ^= pState->sbox[(uint8_t)(pState->sbox[pState->nIndexJ] + pState->sbox[pState->nIndexI])];
-      nByteIndex = nNextByteIndex;
-    } while (nNextByteIndex < nLen);
+    }
 }
 
-static uint32_t __stdcall WARDEN_CheckSignatureMagic(int32_t nDataLen, uint32_t nTotalLen, int32_t pBuffer, int * pnSigOffset) {
+static uint32_t __stdcall WARDEN_CheckSignatureMagic(int32_t nDataLen, uint32_t nTotalLen, uint8_t * pBuffer, int * pnSigOffset) {
     int nSigOffset = nTotalLen - nDataLen - 4;
     *pnSigOffset = nSigOffset;
     if (nTotalLen >= nDataLen + 4U) {
       int32_t nMagic;
-      Storm::Source::SMem::SMemCopy(&nMagic, (void*)(nSigOffset + pBuffer), 4);
+      Storm::Source::SMem::SMemCopy(&nMagic, pBuffer + nSigOffset, 4);
       return (uint32_t)(nMagic == 0x5349474e);
     }
 
@@ -174,13 +163,13 @@ static BOOL __stdcall WARDEN_VerifyModuleSignature(size_t nKeySize, char * szMod
     return (uint32_t)!nCmpResult;
 }
 
-int __fastcall Unreferenced_0047fbc0(int param_1) {
-    *(uint32_t*)param_1 = 0;
-    *(uint32_t*)(param_1 + 4) = 0;
-    *(uint32_t*)(param_1 + 8) = 0;
-    *(uint32_t*)(param_1 + 0xc) = 0;
-    *(uint32_t*)(param_1 + 0x10) = 0;
-    return param_1;
+D2WardenModuleStrc * __fastcall Unreferenced_0047fbc0(D2WardenModuleStrc * pModule) {
+    pModule->pLibrary = 0;
+    pModule->nImageSize = 0;
+    pModule->nLoadedLibraryCount = 0;
+    pModule->pModuleObject = 0;
+    pModule->pfnCreateInterface = 0;
+    return pModule;
 }
 
 // @sourcefile .\WARDEN\WardenClient.cpp
@@ -194,7 +183,7 @@ void __fastcall WARDEN_CbFreeModuleStruct(void * pModuleStruct) {
 }
 
 // @sourcefile .\WARDEN\WardenClient.cpp
-LPVOID * __thiscall WARDEN_DestroyModuleObject(LPVOID * ppModule, uint8_t bFreeStruct) {
+D2WardenModuleStrc * __thiscall WARDEN_DestroyModuleObject(D2WardenModuleStrc * ppModule, uint8_t bFreeStruct) {
     WARDEN_FreeModuleLibraries(ppModule);
     if (bFreeStruct & 1) {
       Storm::Source::SMem::SMemFree(ppModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
@@ -491,10 +480,10 @@ static BOOL __stdcall WARDEN_DecryptAndLoadModule(void * pSrcData, void * pRc4Ke
     } while (i < 10);
 
     if (gpWardenPendingModule) {
-      WARDEN_FreeModuleLibraries(&gpWardenPendingModule->pLibrary);
+      WARDEN_FreeModuleLibraries(gpWardenPendingModule);
       ppModule = gpWardenPendingModule;
       if (gpWardenPendingModule) {
-        WARDEN_FreeModuleLibraries(&gpWardenPendingModule->pLibrary);
+        WARDEN_FreeModuleLibraries(gpWardenPendingModule);
         Storm::Source::SMem::SMemFree(ppModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
       }
 
@@ -515,9 +504,9 @@ static BOOL __stdcall WARDEN_DecryptAndLoadModule(void * pSrcData, void * pRc4Ke
       return 0;
     }
 
-    uint32_t** pDecompressed;
+    uint32_t* pDecompressed;
     nDecompressedSize = *pDecrypted;
-    pDecompressed = (uint32_t**)Storm::Source::SMem::SMemAlloc(nDecompressedSize, ".\\WARDEN\\WardenClient.cpp", 0x182, 0);
+    pDecompressed = (uint32_t*)Storm::Source::SMem::SMemAlloc(nDecompressedSize, ".\\WARDEN\\WardenClient.cpp", 0x182, 0);
     if (!pDecompressed) {
       Storm::Source::SMem::SMemFree(pDecrypted, ".\\WARDEN\\WardenClient.cpp", 0x185, 0);
       return 0;
@@ -538,7 +527,7 @@ static BOOL __stdcall WARDEN_DecryptAndLoadModule(void * pSrcData, void * pRc4Ke
       ppModule->nLoadedLibraryCount = 0;
       ppModule->pModuleObject = 0;
       ppModule->pfnCreateInterface = 0;
-      bDecryptOk = WARDEN_DecryptModule((uint32_t**)&ppModule->pLibrary, dwUnusedEDX, pDecompressed, nDecompressedSize);
+      bDecryptOk = WARDEN_DecryptModule(ppModule, dwUnusedEDX, pDecompressed, nDecompressedSize);
       if ((char)bDecryptOk == '\0') {
         nErrLine = 0x1a0;
         Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x1a0, 0);
@@ -551,12 +540,12 @@ static BOOL __stdcall WARDEN_DecryptAndLoadModule(void * pSrcData, void * pRc4Ke
           return 1;
         }
 
-        WARDEN_FreeModuleLibraries(&ppModule->pLibrary);
+        WARDEN_FreeModuleLibraries(ppModule);
         nErrLine = 0x1aa;
         Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x1aa, 0);
       }
 
-      WARDEN_FreeModuleLibraries(&ppModule->pLibrary);
+      WARDEN_FreeModuleLibraries(ppModule);
       Storm::Source::SMem::SMemFree(ppModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
       return 0;
     }
@@ -891,7 +880,7 @@ void __stdcall WARDEN_UnloadActiveModule() {
     if (gpWardenActiveModule) {
       D2WardenModuleStrc* pModule;
       gpWardenActiveModule->pModuleObject->pFuncs->pfnUnload(gpWardenActiveModule->pModuleObject);
-      WARDEN_FreeModuleLibraries(&gpWardenActiveModule->pLibrary);
+      WARDEN_FreeModuleLibraries(gpWardenActiveModule);
       pModule = gpWardenActiveModule;
       if (!gpWardenActiveModule) {
         gpWardenActiveModule = 0;
@@ -899,7 +888,7 @@ void __stdcall WARDEN_UnloadActiveModule() {
       }
 
       {
-        WARDEN_FreeModuleLibraries(&gpWardenActiveModule->pLibrary);
+        WARDEN_FreeModuleLibraries(gpWardenActiveModule);
         Storm::Source::SMem::SMemFree(pModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
       }
       gpWardenActiveModule = 0;
@@ -923,10 +912,10 @@ void __fastcall WARDEN_ActivatePendingModule(uint32_t dwModuleParam) {
       D2WardenModuleStrc* pDVar1;
       if (gpWardenActiveModule) {
         gpWardenActiveModule->pModuleObject->pFuncs->pfnUnload(gpWardenActiveModule->pModuleObject);
-        WARDEN_FreeModuleLibraries(&gpWardenActiveModule->pLibrary);
+        WARDEN_FreeModuleLibraries(gpWardenActiveModule);
         pModule = gpWardenActiveModule;
         if (gpWardenActiveModule) {
-          WARDEN_FreeModuleLibraries(&gpWardenActiveModule->pLibrary);
+          WARDEN_FreeModuleLibraries(gpWardenActiveModule);
           Storm::Source::SMem::SMemFree(pModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
         }
       }
@@ -966,10 +955,10 @@ void __fastcall WARDEN_Tick(uint32_t dwTickArg) {
 void __stdcall WARDEN_Cleanup() {
     if (gpWardenPendingModule) {
       D2WardenModuleStrc* pModule;
-      WARDEN_FreeModuleLibraries(&gpWardenPendingModule->pLibrary);
+      WARDEN_FreeModuleLibraries(gpWardenPendingModule);
       pModule = gpWardenPendingModule;
       if (gpWardenPendingModule) {
-        WARDEN_FreeModuleLibraries(&gpWardenPendingModule->pLibrary);
+        WARDEN_FreeModuleLibraries(gpWardenPendingModule);
         Storm::Source::SMem::SMemFree(pModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
       }
 
@@ -1004,27 +993,27 @@ void __fastcall WARDEN_SetGlobalFlag(uint32_t dwParam) {
     gnDialogDataInitialized = dwParam;
 }
 
-void __fastcall WARDEN_FreeModuleLibraries(LPVOID * ppWardenModule) {
-    LPVOID pModuleBase = *ppWardenModule;
+void __fastcall WARDEN_FreeModuleLibraries(D2WardenModuleStrc * pModule) {
+    LPVOID pModuleBase = pModule->pLibrary;
     if (!pModuleBase) {
       return;
     }
 
     int nImportTableOffset = *(int*)((char*)pModuleBase + 0x1c);
-    LPVOID nModuleCount = ppWardenModule[2];
-    while ((intptr_t)nModuleCount > 0) {
+    uint32_t nModuleCount = pModule->nLoadedLibraryCount;
+    while ((int)nModuleCount > 0) {
       HMODULE hLibModule;
-      ppWardenModule[2] = (LPVOID)((char*)ppWardenModule[2] - 1);
-      /* LPCSTR lpModuleName for GetModuleHandleA */ hLibModule = GetModuleHandleA((LPCSTR)(*(int*)((char*)pModuleBase + (int)ppWardenModule[2] * 8 + nImportTableOffset) + (intptr_t)*ppWardenModule));
+      pModule->nLoadedLibraryCount--;
+      /* LPCSTR lpModuleName for GetModuleHandleA */ hLibModule = GetModuleHandleA((LPCSTR)(*(int*)((char*)pModuleBase + (int)pModule->nLoadedLibraryCount * 8 + nImportTableOffset) + (intptr_t)pModule->pLibrary));
       /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(hLibModule);
-      nModuleCount = ppWardenModule[2];
+      nModuleCount = pModule->nLoadedLibraryCount;
     }
 
-    /* DWORD dwFreeType for VirtualFree */ /* SIZE_T dwSize for VirtualFree */ /* LPVOID lpAddress for VirtualFree */ VirtualFree(*ppWardenModule, 0, 0x8000);
-    *ppWardenModule = (LPVOID)0x0;
-    ppWardenModule[1] = (LPVOID)0x0;
+    /* DWORD dwFreeType for VirtualFree */ /* SIZE_T dwSize for VirtualFree */ /* LPVOID lpAddress for VirtualFree */ VirtualFree(pModule->pLibrary, 0, 0x8000);
+    pModule->pLibrary = (LPVOID)0x0;
+    pModule->nImageSize = 0;
 }
 
-static void * keep_0047f950 = (0 ? (WARDEN_CheckSignatureMagic(*(int32_t *)0, *(uint32_t *)0, *(int32_t *)0, *(int * *)0), (void *)0) : (void *)0);
+static void * keep_0047f950 = (0 ? (WARDEN_CheckSignatureMagic(*(int32_t *)0, *(uint32_t *)0, *(uint8_t * *)0, *(int * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::Warden

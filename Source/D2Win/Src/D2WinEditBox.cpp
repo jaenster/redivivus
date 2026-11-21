@@ -1016,7 +1016,10 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
       uint8_t szFilteredClipText[144];
       char szConvertBuffer[256];
       uint8_t __pad2960[8];
-      uint8_t* pbClipBuf;
+      union {
+        uint16_t awKeyStr[2];
+        uint8_t* pbClipBuf;
+      } uKey;
       uint8_t abKeyBuffer[4];
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 2976, "frame group __frame0_t must reproduce the Ghidra frame layout");
@@ -1061,11 +1064,11 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
       return 0;
     }
 
-    __frame0.pbClipBuf = (uint8_t*)(uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&__frame0.pbClipBuf + 2) << 16 | (uint32_t)(uint16_t)byKeyChar);
+    __frame0.uKey.awKeyStr[0] = byKeyChar;
     BOOL bFontCharValid = D2WinFont::D2WINFONT_IsFontCharacterValid(byKeyChar);
     if (!bFontCharValid) {
       dwFlags = pEditBox->nFlags;
-      if ((!(dwFlags & 0x20) || (nPasteLen = D2WINEDITBOX_GetTextLength((uint16_t*)&__frame0.pbClipBuf) , !nPasteLen)) && (!(dwFlags & 8) || __frame0.abKeyBuffer[0] != 0xd) && (!(dwFlags & 0x10) || __frame0.abKeyBuffer[0] != 0xe) && __frame0.abKeyBuffer[0] != 0x16 && __frame0.abKeyBuffer[0] != 3 && __frame0.abKeyBuffer[0] != 0x18 && __frame0.abKeyBuffer[0] != 1) {
+      if ((!(dwFlags & 0x20) || (nPasteLen = D2WINEDITBOX_GetTextLength(__frame0.uKey.awKeyStr) , !nPasteLen)) && (!(dwFlags & 8) || __frame0.abKeyBuffer[0] != 0xd) && (!(dwFlags & 0x10) || __frame0.abKeyBuffer[0] != 0xe) && __frame0.abKeyBuffer[0] != 0x16 && __frame0.abKeyBuffer[0] != 3 && __frame0.abKeyBuffer[0] != 0x18 && __frame0.abKeyBuffer[0] != 1) {
         return 0;
       }
     }
@@ -1096,7 +1099,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
         return 0;
       }
 
-      __frame0.pbClipBuf = pbClipSrc;
+      __frame0.uKey.pbClipBuf = pbClipSrc;
       if (pEditBox->fpFilterCallback) {
         pbClipEnd = pbClipSrc + 1;
         pbClipScan = pbClipSrc;
@@ -1137,8 +1140,8 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
 
       pbClipEnd = __frame0.szFilteredClipText;
       if (!(pEditBox->nFlags & 8)) {
-        byCurChar = *__frame0.pbClipBuf;
-        pbClipSrc = __frame0.pbClipBuf;
+        byCurChar = *__frame0.uKey.pbClipBuf;
+        pbClipSrc = __frame0.uKey.pbClipBuf;
         while (byCurChar) {
           byCurChar = *pbClipSrc;
           if (byCurChar != 0xd && byCurChar != 10) {
@@ -1152,7 +1155,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
 
         *pbClipEnd = 0;
       } else {
-        strcpy((char*)__frame0.szFilteredClipText, (char*)__frame0.pbClipBuf);
+        strcpy((char*)__frame0.szFilteredClipText, (char*)__frame0.uKey.pbClipBuf);
       }
 
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(__frame0.awszPreSelText, __frame0.awszEditBuffer, nSelStart);

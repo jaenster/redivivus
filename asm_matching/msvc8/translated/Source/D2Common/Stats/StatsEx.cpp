@@ -677,8 +677,9 @@ D2StatListExStrc * __stdcall GetStatListByFlags(D2StatListExStrc * pStatsEx, uin
       }
     }
 
+    nStatListFlags &= ~0x2000;
     for (; pStatsEx; pStatsEx = pStatsEx->sStatList.pPrevLink) {
-      if (pStatsEx->sStatList.nFlags & nStatListFlags & -8193) {
+      if (pStatsEx->sStatList.nFlags & nStatListFlags) {
         return pStatsEx;
       }
     }
@@ -945,13 +946,13 @@ void __stdcall STATLIST_SetUnitState(D2UnitStrc * pUnit, eD2States eState, int32
       return;
     }
     if (bSet) {
-      if (*((uint8_t*)pStatesTxtLine + 0x12) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+      if (pStatesTxtLine->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         pUnit->eUnitFlagsEx |= UNITFLAGEX_ISSHAPESHIFTED;
         return;
       }
     } else {
       BOOL BVar1;
-      if (*((uint8_t*)pStatesTxtLine + 0x12) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+      if (pStatesTxtLine->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         BVar1 = DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x10);
         if (!BVar1) {
           pUnit->eUnitFlagsEx &= ~UNITFLAGEX_ISSHAPESHIFTED;

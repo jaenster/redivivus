@@ -673,8 +673,10 @@ bool __fastcall Q06_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
       /* If target is Wariv */ if (nTargetClassId == 0x9b) {
         BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SistersToTheSlaughter, QUESTSTATE_Completed);
         /* If quest is not in state completed */ if (BVar1 != 1) {
-          /* Active if reward awaits, inactive otherwise */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SistersToTheSlaughter, QUESTSTATE_RewardAwaits);
-          return BVar1 == 1;
+          /* Active if reward awaits, inactive otherwise */ if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SistersToTheSlaughter, QUESTSTATE_RewardAwaits) == 1) {
+            return true;
+          }
+          return false;
         }
       } else {
         /* If target is Akara */ if (nTargetClassId == 0x94) {

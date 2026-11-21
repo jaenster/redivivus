@@ -101,10 +101,10 @@ void __fastcall Destructor_UnreferencedCopy(TSExplicitList<::StringEntryNode, -5
 
 template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::ReallocData(uint32_t nAlloc) {
     TSExplicitList<::StringEntryNode, -572662307>* pBucket;
-    uint32_t* puVar1;
+    TSExplicitList<::StringEntryNode, -572662307>* pNewList;
     TSLink<::StringEntryNode>** pPrevLink2;
     TSLink<::StringEntryNode>* pTVar2;
-    uint32_t* pNewTerminator;
+    TSLink<::StringEntryNode>* pNewTerminator;
     TSLink<::StringEntryNode>* uHead;
     uint32_t uLink;
     uint32_t uNewCount;
@@ -152,15 +152,15 @@ template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<Strin
       pBucket = pBlock;
       do {
         uHead = &pBucket->m_terminator;
-        puVar1 = (uint32_t*)(-4 - (intptr_t)pBlock + (intptr_t)uHead + (int)this->m_data);
-        if (puVar1) {
-          pNewTerminator = puVar1 + 1;
-          *pNewTerminator = 0;
-          puVar1[2] = 0;
+        pNewList = (TSExplicitList<::StringEntryNode, -572662307>*)((char*)this->m_data + ((char*)pBucket - (char*)pBlock));
+        if (pNewList) {
+          pNewTerminator = &pNewList->m_terminator;
+          pNewTerminator->m_prevlink = 0;
+          pNewTerminator->m_next = 0;
           uNewCount = *(uint32_t*)((char*)(uHead - 1) + 4);
-          *pNewTerminator = (uint32_t)(uintptr_t)pNewTerminator;
-          *puVar1 = uNewCount;
-          puVar1[2] = ~(uint32_t)pNewTerminator;
+          pNewTerminator->m_prevlink = pNewTerminator;
+          pNewList->m_linkoffset = uNewCount;
+          pNewTerminator->m_next = ~(intptr_t)pNewTerminator;
         }
 
         ((TSExplicitList<::StringEntryNode, -572662307>*)((char*)(uHead - 1) + 4))->UnlinkAll();
@@ -205,7 +205,6 @@ template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::Ptr(u
 
 template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::Destructor() {
     TSExplicitList<::StringEntryNode, -572662307>* pBucket;
-    TSLink<::StringEntryNode>** pPrevLink;
     TSLink<::StringEntryNode>* nHead;
     uint32_t nBucketIdx = 0;
     if (this->m_count > 0) {
@@ -213,11 +212,10 @@ template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<Strin
       do {
         pBucket = &this->m_data[nBucketIdx];
         pBucket->UnlinkAll();
-        nHead = pBucket->m_terminator.m_prevlink;
         pTVar1 = &pBucket->m_terminator;
+        nHead = pTVar1->m_prevlink;
         if (nHead) {
-          pPrevLink = (TSLink<::StringEntryNode>**)D2_StormNextLink(pTVar1, -1);
-          *pPrevLink = nHead;
+          *(TSLink<::StringEntryNode>**)D2_StormNextLink(pTVar1, -1) = nHead;
           pTVar1->m_prevlink->m_next = pTVar1->m_next;
           pTVar1->m_prevlink = 0;
           pTVar1->m_next = 0;
@@ -657,11 +655,11 @@ template<> __declspec(noinline) inline int32_t TSHashTable<StringEntryNode, HASH
       this->nFullnessIndicator = 0;
     }
 
-    uint32_t uEntry = this->tSlotListArray.m_data[nSlot].m_terminator.m_next;
-    uEntry = (int)uEntry <= 0 ? 0 : uEntry;
+    intptr_t uEntry = this->tSlotListArray.m_data[nSlot].m_terminator.m_next;
+    uEntry = uEntry <= 0 ? 0 : uEntry;
     while (true) {
       TSExplicitList<::StringEntryNode, -572662307>* pChainLink;
-      if ((int)uEntry <= 0) {
+      if (uEntry <= 0) {
         return 0;
       }
 

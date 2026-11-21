@@ -25,8 +25,9 @@ void __fastcall RAW_CreateCelFrames(::CELLIST * pRawFile, DC6 * pCelFile) {
     size_t nFrameDataSize;
     uint32_t nFramesPerDir = pRawFile->nFrameCount / pRawFile->nDirections;
     uint32_t iFrame = 0;
-    uint32_t uVar1 = pRawFile->m_frames.m_terminator.m_next;
-    for (nDirCount = (::TCELENTRY*)((int)uVar1 <= 0 ? 0 : uVar1); 0 < (intptr_t)nDirCount; nDirCount = (::TCELENTRY*)nDirCount->m_link.m_next) {
+    intptr_t nFirstLink = pRawFile->m_frames.m_terminator.m_next;
+    uint32_t uVar1;
+    for (nDirCount = (::TCELENTRY*)(nFirstLink <= 0 ? 0 : nFirstLink); 0 < (intptr_t)nDirCount; nDirCount = (::TCELENTRY*)nDirCount->m_link.m_next) {
       DC6Block* pNewFrame;
       nFrameDataSize = nDirCount->nWidth * nDirCount->nHeight * 3;
       pNewFrame = (DC6Block*)D2_ALLOC_AT(nFrameDataSize + 0x23, ".\\SRC\\Raw.cpp", 0x22);

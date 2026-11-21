@@ -31,10 +31,10 @@ void __stdcall MONSTERS_OnInitMonster_NoOp_Unref_0063e050(D2UnitStrc * pUnit, ui
 
 }
 
-// Returns the missile id that a monster should fire at its current animation event frame. If pCurrentFrame is nonzero, scans forward through GetEventFrameInfo to find a throw/shoot event (type 1 or 2) within the delta since the last frame; returns ~MISSILE_Arrow (-1) if none found. Then indexes aMonstatsIndexUnknown by anim mode and monster class to get the missile id.
+// Returns the missile id that a monster should fire at its current animation event frame. If pCurrentFrame is nonzero, scans forward through GetEventFrameInfo to find a throw/shoot event (type 1 or 2) within the delta since the last frame; returns ~MISSILE_Arrow (-1) if none found. Then indexes gaMonStatsMissileFieldOffsets by anim mode and monster class to get the missile id.
 eMissilesId __stdcall MONSTER_GetMissileForAnimEvent(D2UnitStrc * pUnit, int32_t pCurrentFrame) {
     // Static local variables (originally global data)
-    static int aMonstatsIndexUnknown[16] = {
+    static int gaMonStatsMissileFieldOffsets[16] = {
     0x0,
     0x0,
     0x0,
@@ -51,7 +51,7 @@ eMissilesId __stdcall MONSTER_GetMissileForAnimEvent(D2UnitStrc * pUnit, int32_t
     0x0,
     0x48,
     0x0
-}; D2_STATIC_GUARD(aMonstatsIndexUnknown, "D2Common::Monsters::MONSTERS::MONSTER_GetMissileForAnimEvent::aMonstatsIndexUnknown");
+}; D2_STATIC_GUARD(gaMonStatsMissileFieldOffsets, "D2Common::Monsters::MONSTERS::MONSTER_GetMissileForAnimEvent::gaMonStatsMissileFieldOffsets");
 
     eD2MonsterAnimMode eAnimMode;
     int nPrevFrameShifted;
@@ -97,18 +97,18 @@ eMissilesId __stdcall MONSTER_GetMissileForAnimEvent(D2UnitStrc * pUnit, int32_t
       eAnimMode = pMonster->eAnimMode.ePlayerMode;
     }
 
-    short int* pMissileTable = (short int*)aMonstatsIndexUnknown[eAnimMode];
-    if (!pMissileTable) {
+    int nMissileFieldOffset = gaMonStatsMissileFieldOffsets[eAnimMode];
+    if (!nMissileFieldOffset) {
       return ~MISSILE_Arrow;
     }
     if (pMonster) {
       nEventFrame = pMonster->nClassId;
       if (nEventFrame >= 0 && nEventFrame < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
-        return (int)*(short int*)((intptr_t)pMissileTable + (intptr_t)(ITEMS::Items::sgptDataTable->pTxtMonStats[nEventFrame].Code - 0x10));
+        return (int)*(short int*)((char*)(ITEMS::Items::sgptDataTable->pTxtMonStats[nEventFrame].Code - 0x10) + nMissileFieldOffset);
       }
     }
 
-    return (int)*pMissileTable;
+    return (int)*(short int*)(intptr_t)nMissileFieldOffset;
 }
 
 uint8_t __stdcall MONSTERS_GetGfxOffsetTable1(uint8_t bParam) {
@@ -359,7 +359,7 @@ uint32_t __fastcall MONSTER_CanBeInTown(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    uint32_t dwMonStatsFlags = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsTxt + 0xd);
+    uint32_t dwMonStatsFlags = (uint32_t)pMonStatsTxt->aFlagBytes[1];
     if (Fog::BitBuffer::gadwBitMasks[0] & dwMonStatsFlags) {
       return 1;
     }
@@ -399,7 +399,7 @@ uint32_t __stdcall IsDemon(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    return (uint32_t)((*((uint8_t*)pMonStatsTxt2 + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) != 0);
+    return (uint32_t)((pMonStatsTxt2->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) != 0);
 }
 
 BOOL __stdcall MONSTER_IsMonsterUndead(D2UnitStrc * pUnit) {
@@ -413,7 +413,7 @@ BOOL __stdcall MONSTER_IsMonsterUndead(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    uint32_t dwMonStatsFlags = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsTxt2 + 0xd);
+    uint32_t dwMonStatsFlags = (uint32_t)pMonStatsTxt2->aFlagBytes[1];
     if (!(Fog::BitBuffer::gadwBitMasks[3] & dwMonStatsFlags || Fog::BitBuffer::gadwBitMasks[4] & dwMonStatsFlags)) {
       return 0;
     }
@@ -428,7 +428,7 @@ uint32_t __stdcall UnitIsMarkedBoss(D2MonStatsTxt * pMonStatsTxt, D2UnitStrc * p
         pMonStatsTxt = nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
       }
       if (pMonStatsTxt) {
-        return (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc) & Fog::BitBuffer::gadwBitMasks[6];
+        return pMonStatsTxt->aFlagBytes[0] & Fog::BitBuffer::gadwBitMasks[6];
       }
     }
 
@@ -634,7 +634,7 @@ uint32_t __stdcall MONSTERS_CheckMonStatFlag0xc_Bit7(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    return (uint8_t)*((uint8_t*)pMonStatsTxt2 + 0xc) & Fog::BitBuffer::gadwBitMasks[7];
+    return pMonStatsTxt2->aFlagBytes[0] & Fog::BitBuffer::gadwBitMasks[7];
 }
 
 // Retrieves the animation flags and valid-flags for a monster's upgrade tier by looking up its class id in the MonStats upgrade table. Writes the flags from gdwMonStatAnimFlagsTable into pdwAnimFlags and pdwValidFlags. Halts with a fatal error if the unit is not a monster or the upgrade index is out of range.

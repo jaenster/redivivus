@@ -260,8 +260,8 @@ BOOL __fastcall Skills_CltStFunc_CastMissileWithPositionOffset(D2UnitStrc * pUni
     eMissilesId neMissilesId = SkillsAss::SKILLSASS_GetCltMissileByAuraLevel(pUnit, eSkill);
     if ((int)neMissilesId >= 0 && (int)neMissilesId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       D2UnitStrc* pMissile;
-      pMissileTxtBase = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles;
-      if (!(pMissileTxtBase + neMissilesId)) {
+      pMissileTxtBase = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + neMissilesId;
+      if (!pMissileTxtBase) {
         return 0;
       }
 
@@ -277,7 +277,7 @@ BOOL __fastcall Skills_CltStFunc_CastMissileWithPositionOffset(D2UnitStrc * pUni
         return 0;
       }
 
-      nMissileRange = (int)pMissileTxtBase[neMissilesId].Range;
+      nMissileRange = (int)pMissileTxtBase->Range;
       if (nMissileRange < 1) {
         nMissileRange = 1;
       }

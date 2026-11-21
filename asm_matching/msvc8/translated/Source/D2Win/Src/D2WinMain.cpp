@@ -304,36 +304,28 @@ BOOL __stdcall D2WINMAIN_SetFocusedControl(D2ControlStrc * pControl) {
 }
 
 BOOL __stdcall FORMS_AddControlToGlobalList(D2ControlStrc * pControl) {
-    D2ControlStrc* pTail;
     if (!pFormsList) {
       pFormsList = pControl;
-    } else {
-      D2ControlStrc* pNext;
-      pNext = pFormsList->pNext;
-      pTail = pFormsList;
-      while (pNext) {
-        pTail = pTail->pNext;
-        pNext = pTail->pNext;
-      }
-
-      pTail->pNext = pControl;
+      return 1;
     }
 
+    D2ControlStrc* pTail = pFormsList;
+    while (pTail->pNext) {
+      pTail = pTail->pNext;
+    }
+
+    pTail->pNext = pControl;
     return 1;
 }
 
 BOOL __fastcall FORMS_AppendFormToDestroyQueue(D2ControlStrc * pControl) {
-    D2ControlStrc* pNext;
     pControl->pNext = 0;
     if (!pFormUnknown) {
       pFormUnknown = pControl;
     } else {
-      D2ControlStrc* pTail;
-      pNext = pFormUnknown->pNext;
-      pTail = pFormUnknown;
-      while (pNext) {
+      D2ControlStrc* pTail = pFormUnknown;
+      while (pTail->pNext) {
         pTail = pTail->pNext;
-        pNext = pTail->pNext;
       }
 
       pTail->pNext = pControl;
@@ -383,29 +375,24 @@ BOOL __stdcall FORMS_DestroyControl(D2ControlStrc * pControl) {
     if (gpEscapeButton == pControl) {
       gpEscapeButton = 0;
     }
-    if (!pFormsList) {
+    D2ControlStrc* pPrev = pFormsList;
+    if (!pPrev) {
       return 0;
     }
-    if (pFormsList == pControl) {
+    if (pPrev == pControl) {
       pFormsList = pControl->pNext;
       FORMS_AppendFormToDestroyQueue(pControl);
       return 1;
     }
 
-    D2ControlStrc* pIter = pFormsList->pNext;
-    D2ControlStrc* pPrev = pFormsList;
-    if (pFormsList->pNext) {
-      D2ControlStrc* pCurrent;
-      while ((pCurrent = pIter) != pControl) {
-        pIter = pCurrent->pNext;
-        pPrev = pCurrent;
-        if (!pCurrent->pNext) {
-          return 1;
-        }
+    for (D2ControlStrc* pCurrent = pPrev->pNext; pCurrent; pCurrent = pCurrent->pNext) {
+      if (pCurrent == pControl) {
+        pPrev->pNext = pCurrent->pNext;
+        FORMS_AppendFormToDestroyQueue(pControl);
+        return 1;
       }
 
-      pPrev->pNext = pCurrent->pNext;
-      FORMS_AppendFormToDestroyQueue(pControl);
+      pPrev = pCurrent;
     }
 
     return 1;

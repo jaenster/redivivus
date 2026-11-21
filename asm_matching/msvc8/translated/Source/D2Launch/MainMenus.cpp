@@ -5286,31 +5286,22 @@ BOOL __stdcall MAINMENU_ScrollListExUp(D2ControlMsg * pControlMsg) {
 }
 
 BOOL __stdcall MAINMENU_ScrollListExDown(D2ControlMsg * pControlMsg) {
-    int32_t nLine;
-    ::D2WinTextBox* ppForm;
-    int i = 0;
-    if (FORMS_nListExExCount >= 0) {
-      eD2FormType pFirstElement;
-      do {
-        ppForm = (::D2WinTextBox*)FORMS_pListExEx[i];
-        pFirstElement = D2Win::Src::D2WinMain::CONTROL_GetType((D2ControlStrc*)ppForm);
-        if (pFirstElement == FORM_TextBox) {
-          break;
-        }
-
-        i++;
-      } while (i <= FORMS_nListExExCount);
-
-      if (ppForm) {
-        nLine = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(ppForm);
-        nLine += 1;
-        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(ppForm, nLine);
-        return 1;
+    ::D2WinTextBox* pTextBox = nullptr;
+    for (int i = 0; i <= FORMS_nListExExCount; i++) {
+      pTextBox = (::D2WinTextBox*)FORMS_pListExEx[i];
+      if (D2Win::Src::D2WinMain::CONTROL_GetType((D2ControlStrc*)pTextBox) == FORM_TextBox) {
+        break;
       }
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcff);
-    exit(-1);
+    if (!pTextBox) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcff);
+      exit(-1);
+    }
+
+    int32_t nLine = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(pTextBox);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(pTextBox, nLine + 1);
+    return 1;
 }
 
 void __stdcall UIMENU_AreYouSureToCreateHardcoreCharacter() {
@@ -5329,33 +5320,23 @@ void __stdcall UIMENU_AreYouSureToCreateHardcoreCharacter() {
 // Validates character name input as user types. First character must be a-z or A-Z (rejects '-' and '_' at start). If nTextLen is 0 (first char position), rejects non-alpha. Also rejects consecutive '-' or '_' characters by checking if previous character was the same special char. Returns 1 if valid, 0 if invalid.
 int __stdcall MAINMENU_ValidateCharacterName(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar) {
     char szNameBuffer[32];
-    if (!((*pKeyChar < 'a' || *pKeyChar > 'z') && (*pKeyChar < 'A' || *pKeyChar > 'Z'))) {
-      return 1;
-    }
-    if (*pKeyChar != '-' && *pKeyChar != '_' || !nTextLen) {
-      return 0;
-    }
-
-    uint16_t* wszCurrentValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&pEditBox->sControl);
-    D2Lang::WideCharToUTF8(szNameBuffer, wszCurrentValue, 0x20);
-    if (szNameBuffer[0] == '\0') {
+    if ((*pKeyChar >= 'a' && *pKeyChar <= 'z') || (*pKeyChar >= 'A' && *pKeyChar <= 'Z')) {
       return 1;
     }
 
-    char* szIterator = szNameBuffer;
-    do {
-      if (szNameBuffer[0] == '-') {
-        return 0;
-      }
-      if (szNameBuffer[0] == '_') {
-        return 0;
+    if ((*pKeyChar == '-' || *pKeyChar == '_') && nTextLen) {
+      uint16_t* wszCurrentValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&pEditBox->sControl);
+      D2Lang::WideCharToUTF8(szNameBuffer, wszCurrentValue, 0x20);
+      for (int i = 0; szNameBuffer[i]; i++) {
+        if (szNameBuffer[i] == '-' || szNameBuffer[i] == '_') {
+          return 0;
+        }
       }
 
-      szNameBuffer[0] = szIterator[1];
-      szIterator++;
-    } while (szNameBuffer[0] != '\0');
+      return 1;
+    }
 
-    return 1;
+    return 0;
 }
 
 // Validates complete character name and shows/hides submit button. Retrieves name from gpaCharNameBuffers text input, checks: length 2-15, no leading/trailing '-' or '_', at most 1 special char ('-' or '_') total. Sets bCharacterCreationInProgress control visibility based on validation result (1=valid, 0=invalid).
@@ -5577,8 +5558,8 @@ BOOL __stdcall MAINMENU_FreeRealmList() {
 // Provenance: asm 00430b00 (loads [[arg]]), qsort callback pushed at 004341cc.
 int MAINMENU_CompareRealmNames(LPCVOID pRealmA, LPCVOID pRealmB) {
     bool bLess;
-    uint8_t* pName2 = (uint8_t*)**(uint32_t**)pRealmB;
-    uint8_t* pName1 = (uint8_t*)**(uint32_t**)pRealmA;
+    uint8_t* pName2 = (uint8_t*)(*(D2BNetRealmEntryStrc* const*)pRealmB)->szName;
+    uint8_t* pName1 = (uint8_t*)(*(D2BNetRealmEntryStrc* const*)pRealmA)->szName;
     while (true) {
       uint8_t byCh1;
       byCh1 = *pName1;

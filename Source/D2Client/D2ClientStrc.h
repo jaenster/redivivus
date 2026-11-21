@@ -95,7 +95,7 @@ struct __attribute__((packed)) D2ClientStrc {
     /* 0x00D */ char szCharName[16];
     /* 0x01D */ char szAccName[64];
     /* 0x05D */ uint8_t nPad5D[3];
-    /* 0x060 */ void * pClientContainer; // Opaque BNet connection handle
+    /* 0x060 */ uint32_t dwPlayerData; // Realm PLAYERDATA token (DWORD)
     /* 0x064 */ int unk0x64;
     /* 0x068 */ uint32_t pRealm;
     /* 0x06C */ int nStartSkill; // First field of save appearance buffer

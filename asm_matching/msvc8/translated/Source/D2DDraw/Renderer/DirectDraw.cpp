@@ -60,7 +60,7 @@ IDirectDrawPalette * pDirectDrawPalette = 0; D2_GLOBAL_GUARD(pDirectDrawPalette,
 uint32_t gnDDrawFlipState = 0; D2_GLOBAL_GUARD(gnDDrawFlipState, "gnDDrawFlipState");
 uint32_t gnDDrawPaletteSize = 0; D2_GLOBAL_GUARD(gnDDrawPaletteSize, "gnDDrawPaletteSize");
 static uint32_t gaD2ddDebugFontCharOffsets[96] = {0}; D2_STATIC_GUARD(gaD2ddDebugFontCharOffsets, "gaD2ddDebugFontCharOffsets");
-static void * lpBuffer_00881428[96] = {0}; D2_STATIC_GUARD(lpBuffer_00881428, "lpBuffer_00881428");
+static int gaD2ddDebugFontCharWidths[96] = {0}; D2_STATIC_GUARD(gaD2ddDebugFontCharWidths, "gaD2ddDebugFontCharWidths");
 static D2ddDebugFont * gpD2ddDebugFont = 0; D2_STATIC_GUARD(gpD2ddDebugFont, "gpD2ddDebugFont");
 uint8_t gaSmackerPaletteRemap[256] = {0}; D2_GLOBAL_GUARD(gaSmackerPaletteRemap, "gaSmackerPaletteRemap");
 void * gpSmackerImageBuffer = 0; D2_GLOBAL_GUARD(gpSmackerImageBuffer, "gpSmackerImageBuffer");
@@ -916,7 +916,7 @@ void __stdcall D2ddDebugFont_Alloc() {
       nCharCode++;
     } while ((intptr_t)pCharOffsetEntry <= (intptr_t)&gaD2ddDebugFontCharOffsets[95]);
 
-    GetCharWidthA(hdc, 0x20, 0x7f, (LPINT)lpBuffer_00881428);
+    GetCharWidthA(hdc, 0x20, 0x7f, gaD2ddDebugFontCharWidths); // steer-ok: file-static table of this unit
     DeleteObject(hBitmap);
     DeleteObject(hFont);
     DeleteDC(hdc);
@@ -933,15 +933,15 @@ void __stdcall D2ddDebugFont_Free() {
 }
 
 // DirectDraw renderer internal helpers for sprite visibility testing, clip rect computation, debug font rendering, shadow quality query, pixel/line drawing primitives, and smacker video frame blitting.
-static LPINT __stdcall RENDERER_DDRAW_DrawDebugFontChar(int32_t nX, char cCharacter, int32_t nY) {
+static int32_t __stdcall RENDERER_DDRAW_DrawDebugFontChar(int32_t nX, char cCharacter, int32_t nY) {
     uint8_t* pFontData;
     int nRowCount;
     int nColCount;
     if (nX > 0x280) {
-      return (LPINT)0x0;
+      return 0;
     }
     if (nX < 0) {
-      return (LPINT)lpBuffer_00881428[cCharacter];
+      return gaD2ddDebugFontCharWidths[cCharacter]; // steer-ok: file-static table of this unit
     }
 
     uint8_t nCharOffset = cCharacter - 0x20;
@@ -965,10 +965,10 @@ static LPINT __stdcall RENDERER_DDRAW_DrawDebugFontChar(int32_t nX, char cCharac
         pPixel = pPixel + RENDERER_nWindowWidth - 8;
       } while (nRowCount);
 
-      return (LPINT)lpBuffer_00881428[(char)nCharOffset];
+      return gaD2ddDebugFontCharWidths[(char)nCharOffset]; // steer-ok: file-static table of this unit
     }
 
-    return (LPINT)lpBuffer_00881428[0];
+    return gaD2ddDebugFontCharWidths[0]; // steer-ok: file-static table of this unit
 }
 
 void __fastcall DrawString(int32_t nPosX, int32_t nPosY, char * szFormat, va_list va) {
@@ -976,7 +976,7 @@ void __fastcall DrawString(int32_t nPosX, int32_t nPosY, char * szFormat, va_lis
     int nCharCount = wvsprintfA(szBuf, szFormat, va);
     int nStartX = nPosX;
     for (int nCharIdx = 0; nCharIdx < nCharCount; nCharIdx++) {
-      nPosX += (int)RENDERER_DDRAW_DrawDebugFontChar(nPosX, szBuf[nCharIdx], nPosY);
+      nPosX += RENDERER_DDRAW_DrawDebugFontChar(nPosX, szBuf[nCharIdx], nPosY);
       if (szBuf[nCharIdx] == '\n') {
         nPosY += 0xc;
         nPosX = nStartX;

@@ -303,7 +303,7 @@ uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnit
             *pnWeaponClassIndex = nHandedness;
             return 0x20687468;
           }
-          if (nMode && nMode != 0xc || *((uint8_t*)pMonStats2 + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+          if (nMode && nMode != 0xc || pMonStats2->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
             nHandedness = COMPOSIT_GetItemTypeIndex(pMonStats2->BaseW);
             *pnWeaponClassIndex = nHandedness;
             return pMonStats2->BaseW;

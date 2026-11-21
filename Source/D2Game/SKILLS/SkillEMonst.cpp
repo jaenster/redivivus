@@ -870,41 +870,37 @@ BOOL __fastcall Skills_SrvDoFunc_136_FireSpeedScaledMissile(::SGAMEDATA * pGame,
       return 0;
     }
 
-    ::SGAMEDATA* pGameCopy = pGame;
-    BOOL nDist = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nCursorX, &nCursorY);
-    if (!nDist) {
+    if (!SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nCursorX, &nCursorY)) {
       return 0;
     }
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2UnitStrc* pMissile = SkillsServer::SKILLS_CreateMissileAtTarget(pGameCopy, pUnit, eSkill, nSkillLvl, nMissileTxtNo, 0, 0);
+    D2UnitStrc* pMissile = SkillsServer::SKILLS_CreateMissileAtTarget(pGame, pUnit, eSkill, nSkillLvl, nMissileTxtNo, 0, 0);
     if (!pMissile) {
       return 0;
     }
 
-    pGameCopy = (::SGAMEDATA*)pMissile;
     int32_t nAnimSpeed = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[0], eSkill, nSkillLvl);
     if (nAnimSpeed > 0) {
       D2Common::Units::SetAnimationSpeed(pMissile, nAnimSpeed);
     }
 
-    nAnimSpeed = D2Common::Units::Missile::GetTotalFrames(pMissile);
+    int nTotalFrames = D2Common::Units::Missile::GetTotalFrames(pMissile);
     int nDistance = D2Common::Collision::GetDistanceToXY(pUnit, nCursorX, nCursorY);
-    ::SGAMEDATA* pMissileAlias = pGameCopy;
     if (nDistance < 1) {
       nDistance = 1;
     } else if (nDistance >= 10) {
-      nDistance = nDistance * nAnimSpeed / 0xc;
-      D2Common::Units::Missile::SetTotalFrames((D2UnitStrc*)pGameCopy, nDistance);
-      D2Common::Units::Missile::SetCurrentFrame((D2UnitStrc*)pMissileAlias, nDistance);
-      return 1;
+      nDistance = nDistance * nTotalFrames / 0xc;
+      goto set_frames;
     }
 
-    nDistance = nDistance * nAnimSpeed / 0x18 + nAnimSpeed / 2;
-    D2Common::Units::Missile::SetTotalFrames((D2UnitStrc*)pGameCopy, nDistance);
-    D2Common::Units::Missile::SetCurrentFrame((D2UnitStrc*)pMissileAlias, nDistance);
+    nDistance = nDistance * nTotalFrames / 0x18 + nTotalFrames / 2;
+set_frames:
+
+    D2Common::Units::Missile::SetTotalFrames(pMissile, nDistance);
+    D2Common::Units::Missile::SetCurrentFrame(pMissile, nDistance);
     return 1;
 }
 

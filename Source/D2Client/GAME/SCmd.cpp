@@ -2020,7 +2020,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL(D2GSPacketSrv0xA3
     if (!pSkillsTxt) {
       return;
     }
-    if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+    if (pSkillsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
       SKILLS::Skills::SKILL_ExecuteClientProgressWithAura(pUnit, pTargetUnit, eSkill, (int)(short int)pBytes->wSkillLevel, pBytes->dwValue3, pBytes->dwValue4, (uint32_t)pBytes->nParam2);
       return;
     }

@@ -347,10 +347,10 @@ namespace Fog::Src::LogManager {
 int __stdcall DetectCpuVendor() {
     char szCpuVendor[16];
     *(uint32_t*)(szCpuVendor + 12) = 0;
-    int nCpuidResult = D2_Cpuid(0);
-    *(uint32_t*)(char*)&szCpuVendor = *(uint32_t*)(nCpuidResult + 4);
-    *(uint32_t*)((char*)&szCpuVendor + 4) = *(uint32_t*)(nCpuidResult + 8);
-    *(uint32_t*)((char*)&szCpuVendor + 8) = *(uint32_t*)(nCpuidResult + 0xc);
+    uint32_t* pCpuidResult = D2_Cpuid(0);
+    *(uint32_t*)(char*)&szCpuVendor = pCpuidResult[1];
+    *(uint32_t*)((char*)&szCpuVendor + 4) = pCpuidResult[2];
+    *(uint32_t*)((char*)&szCpuVendor + 8) = pCpuidResult[3];
     bool bMatch = !strcmp(szCpuVendor, "GenuineIntel");
     if (bMatch) {
       return 1;
@@ -575,7 +575,7 @@ uint32_t __stdcall BenchmarkCpuSpeed() {
 }
 
 uint64_t __stdcall GetCpuVersionInfo() {
-    uint32_t* pVersionInfo = (uint32_t*)D2_Cpuid(1);
+    uint32_t* pVersionInfo = D2_Cpuid(1);
     return (uint64_t)((uint64_t)(uint32_t)pVersionInfo[2] << 32 | (uint64_t)(uint32_t)*pVersionInfo);
 }
 
@@ -585,16 +585,16 @@ uint32_t __stdcall GetCpuBrandId() {
     uint32_t nFamily = (uint32_t)nVersionInfo >> 8 & 0xf;
     int nVendor = DetectCpuVendor();
     if (nVendor == 1 && (nFamily >= 7 || nFamily == 6 && ((uint32_t)nVersionInfo & 0xf0) >= 0x80)) {
-      nVendor = D2_Cpuid(1);
-      nBrandId = *(uint32_t*)(nVendor + 4);
+      uint32_t* pRegs = D2_Cpuid(1);
+      nBrandId = pRegs[1];
     }
 
     return nBrandId;
 }
 
 uint32_t __fastcall DispatchCpuidCall(int32_t nLeaf) {
-    int pCpuidResult = D2_Cpuid(nLeaf);
-    return *(uint32_t*)(pCpuidResult + 8);
+    uint32_t* pCpuidResult = D2_Cpuid(nLeaf);
+    return pCpuidResult[2];
 }
 
 void __stdcall LogCpuInfo() {
@@ -1724,26 +1724,10 @@ void __stdcall StartLogWriterThread() {
     gLogWriterThreadHandle = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)LOGMANAGER_LogWriterThreadProc, (LPVOID)0x0, 0, (LPDWORD)&gLogWriterThreadId);
     /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ gLogManagerInitialized = 1;
     GetLocalTime(&gLogRealmStartupLocalTime);
-    gLogFileSlotMutex[0] = 1;
-    gLogFileSlotMutex[1] = 1;
-    gLogFileSlotMutex[2] = 1;
-    gLogFileSlotMutex[3] = 1;
-    gLogFileSlotMutex[4] = 1;
-    gLogFileSlotMutex[5] = 1;
-    gLogFileSlotMutex[6] = 1;
-    gLogFileSlotMutex[7] = 1;
-    gLogFileSlotMutex[8] = 1;
-    gLogFileSlotMutex[9] = 1;
-    gLogFileSlotMutex[10] = 1;
-    gLogFileSlotMutex[0xb] = 1;
-    gLogFileSlotMutex[0xc] = 1;
-    gLogFileSlotMutex[0xd] = 1;
-    gLogFileSlotMutex[0xe] = 1;
-    gLogFileSlotMutex[0xf] = 1;
-    gLogFileSlotMutex[0x10] = 1;
-    gLogFileSlotMutex[0x11] = 1;
-    gLogFileSlotMutex[0x12] = 1;
-    gLogFileSlotMutex[0x13] = 1;
+    for (int i = 0; i < 20; i++) {
+      gLogFileSlotMutex[i] = 1;
+    }
+
     uint32_t nByteOffset = 0;
     do {
       gLogFilePathArray[nByteOffset][0] = '\0';

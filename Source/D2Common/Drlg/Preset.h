@@ -421,7 +421,7 @@ struct D2DrlgMapStrc * __fastcall DRLGPRESET_AllocDrlgMap(struct D2DrlgLevelStrc
 int32_t __fastcall GetSizeX(int32_t nLvlPrestId);
 int32_t __fastcall GetSizeY(int32_t nLvlPrestId);
 struct D2DrlgGridStrc * __fastcall Unreferenced_00666ff0(struct D2RoomExStrc * pRoomEx);
-int __fastcall Unreferenced_00667000(struct D2RoomExStrc * pRoomEx);
+eD2GridCellFlags * __fastcall Unreferenced_00667000(struct D2RoomExStrc * pRoomEx);
 // DRLGPRESET_GetPickedFilePathFromRoomEx
 // Returns the file path string for the randomly selected preset map file.
 // Accesses pRoomEx->pRoomExDataPreset->pMap->pTxtLevelPrest->File[nRandomMapFileSelector].

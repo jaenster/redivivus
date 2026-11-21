@@ -145,13 +145,13 @@ bool __thiscall GetRC4Data(::WardenClient * pThis, void * pDest, uint32_t * pnSi
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 void __thiscall WARDEN_RC4Decrypt(struct D2RC4StateStrc * pState, uint8_t * pData, uint32_t nLen);
-int __fastcall Unreferenced_0047fbc0(int param_1);
+struct D2WardenModuleStrc * __fastcall Unreferenced_0047fbc0(struct D2WardenModuleStrc * pModule);
 // @sourcefile .\WARDEN\WardenClient.cpp
 void __fastcall WARDEN_CbAllocModuleStruct(uint32_t nSize);
 // @sourcefile .\WARDEN\WardenClient.cpp
 void __fastcall WARDEN_CbFreeModuleStruct(void * pModuleStruct);
 // @sourcefile .\WARDEN\WardenClient.cpp
-LPVOID * __thiscall WARDEN_DestroyModuleObject(LPVOID * ppModule, uint8_t bFreeStruct);
+struct D2WardenModuleStrc * __thiscall WARDEN_DestroyModuleObject(struct D2WardenModuleStrc * ppModule, uint8_t bFreeStruct);
 BOOL __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t nSize);
 ::WardenClient * __thiscall Constructor(::WardenClient * pThis);
 // @sourcefile .\WARDEN\WardenClient.cpp
@@ -164,7 +164,7 @@ void __fastcall WARDEN_Tick(uint32_t dwTickArg);
 void __stdcall WARDEN_Cleanup();
 void __fastcall WARDEN_Initialize(uint32_t dwModuleParam);
 void __fastcall WARDEN_SetGlobalFlag(uint32_t dwParam);
-void __fastcall WARDEN_FreeModuleLibraries(LPVOID * ppWardenModule);
+void __fastcall WARDEN_FreeModuleLibraries(struct D2WardenModuleStrc * pModule);
 #endif // D2_MODULE_D2Client
 // 5 internal functions (defined in .cpp)
 

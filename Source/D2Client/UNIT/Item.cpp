@@ -1049,12 +1049,7 @@ static void __stdcall ITEM_RemoveEquippedItemForSwap(D2UnitStrc * pItem, D2UnitS
 
       D2Common::INVENTORY::Inventory::NullSub_2Arg(pInventory, nBodyLocIdx);
     }
-    if (!pItem) {
-      CUnit::RemoveObjectFromServerObjectTable(-1, UNIT_COUNT);
-      return;
-    }
-
-    CUnit::RemoveObjectFromServerObjectTable(pItem->nUnitGUID, pItem->eUnitType);
+    CUnit::RemoveObjectFromServerObjectTable(!pItem ? -1 : pItem->nUnitGUID, !pItem ? UNIT_COUNT : pItem->eUnitType);
 }
 
 // Returns the drop-sound ID for an item unit. First reads wDropSound from the item's ItemsTxt row. If the item is unique (quality 7), overrides with the UniqueItemsTxt dropsound field; if set (quality 5), overrides with SetItemsTxt dropsound. Returns 0 for null input or when no positive sound is found.
@@ -2563,11 +2558,11 @@ void __fastcall HandleItemWeaponSwitch(uint8_t * pPacket) {
 void __fastcall NET_D2GS_CLIENT_HandleItemAddQuantity(uint8_t * pPacket) {
     eD2ItemFlag eD2ItemFlag2;
     D2InventoryStrc* pInventory;
-    uint8_t byPacketLen = pPacket[2];
-    uint8_t* pLoadResult = pPacket;
+    int nItemDataSize = pPacket[2] - 8;
     D2UnitStrc* pItem = CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pPacket + 4), UNIT_ITEM);
-    D2Common::ITEMS::Items::ITEM_LoadFromSaveData(pItem, pPacket + 8, byPacketLen - 8, 0, nullptr, 0x60, (int*)&pLoadResult);
-    if (pLoadResult) {
+    int nLoadResult;
+    D2Common::ITEMS::Items::ITEM_LoadFromSaveData(pItem, pPacket + 8, nItemDataSize, 0, nullptr, 0x60, &nLoadResult);
+    if (nLoadResult) {
       CUnit::RemoveObjectFromServerObjectTable(*(uint32_t*)(pPacket + 4), UNIT_ITEM);
       return;
     }

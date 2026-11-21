@@ -42,7 +42,7 @@ BOOL __fastcall MPQ_LoadAllMediaMpqFiles(::fpRequiredUserAction fpInsertPlayCd, 
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
 // @sourcefile .\Src\D2WinArchive.cpp
-int * __fastcall D2WINARCHIVE_LoadImageFromArchive(char * szText, uint32_t * pnSize, struct DC6 * pDC6);
+int * __fastcall D2WINARCHIVE_LoadImageFromArchive(char * szText, uint32_t * pnSize, BOOL bUseDccExtension);
 int Unreferenced_004fab60();
 #endif // D2_MODULE_D2Win
 

@@ -96,8 +96,8 @@ extern grBufferClear GLIDEDLL_grBufferClear_12;
 extern grChromakeyMode GLIDEDLL_grChromakeyMode_4;
 extern grBufferSwap GLIDEDLL_grBufferSwap_4;
 extern uint32_t gaGlideDebugFontTexStartAddrs[96];
-// lpBuffer parameter of GetCharWidthA
-extern void * lpBuffer_008802c8[96];
+// Advance widths filled by GetCharWidthA for 0x20..0x7f
+extern int gaGlideDebugFontCharWidths[96];
 extern void * gpGlideDebugFontTexture;
 extern uint32_t gnGlideDebugFontTMU;
 extern uint8_t * * gpnLightmapRowPointers;

@@ -3300,20 +3300,9 @@ uint16_t * __fastcall UI_RemoveColorCodesFromString(uint16_t * wszText) {
     }
 }
 
-uint16_t * __fastcall UI_WrapStringWithColorCodes(uint16_t * wszText, char cStartColor, char cEndColor) {
-    // Frame slots -1040..-18 are ONE object: &wszBuffer is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    #pragma pack(push, 1)
-    struct __frame0_t {
-      uint16_t wszBuffer;
-      uint32_t wszBufferTail[255];
-    };
-    #pragma pack(pop)
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1022, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+uint16_t * __fastcall UI_WrapStringWithColorCodes(uint16_t * wszText, int nStartColor, char cEndColor) {
+    uint16_t wszBuffer[512];
     uint16_t* pColorCode;
-    int nFillCount;
-    uint32_t* pFill;
     uint16_t wszDigit[4];
     char szDigit[4];
     if (*wszText != L'\0') {
@@ -3324,29 +3313,25 @@ uint16_t * __fastcall UI_WrapStringWithColorCodes(uint16_t * wszText, char cStar
         exit(-1);
       }
 
-      __frame0.wszBuffer = L'\0';
-      pFill = __frame0.wszBufferTail;
-      for (nFillCount = 0xff; nFillCount; nFillCount--) {
-        *pFill = 0;
-        pFill++;
+      wszBuffer[0] = L'\0';
+      for (int i = 1; i < 512; i++) {
+        wszBuffer[i] = 0;
       }
-
-      *(uint16_t*)pFill = 0;
       wszDigit[0] = L'\0';
       wszDigit[1] = 0;
       wszDigit[2] = 0;
       pColorCode = D2Lang::StrTable::strtable::GetLocaleString(0xf9a);
-      D2Lang::Unicode::UNISYS::STRING_CopyWideString(&__frame0.wszBuffer, pColorCode);
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDigit, "%c", (int)(char)(cStartColor + '0'));
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszBuffer, pColorCode);
+      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDigit, "%c", (int)(char)(nStartColor + '0'));
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDigit, szDigit, 2);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszDigit);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszText);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszBuffer, wszDigit);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszBuffer, wszText);
       pColorCode = D2Lang::StrTable::strtable::GetLocaleString(0xf9a);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, pColorCode);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszBuffer, pColorCode);
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDigit, "%c", (int)(char)(cEndColor + '0'));
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDigit, szDigit, 2);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszDigit);
-      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, &__frame0.wszBuffer);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszBuffer, wszDigit);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, wszBuffer);
     }
 
     return wszText;
@@ -4140,7 +4125,7 @@ void __stdcall UI_DrawPlayerStateOverlays() {
         pStatList = D2Common::Stats::StatsEx::GetStatsByState(pPlayerUnit_lcl, eState);
         if (pStatList) {
           pStateTxt = D2Common::DATATBLS::DataTbls::TXT_States_GetLine(eState);
-          if (pStateTxt && *((uint8_t*)pStateTxt + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4] && pStateTxt->pgsvoverlay > 0 && (int)pStateTxt->pgsvoverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
+          if (pStateTxt && pStateTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4] && pStateTxt->pgsvoverlay > 0 && (int)pStateTxt->pgsvoverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
             nStatId = pStateTxt->stat;
             if (nStatId >= 0 && (int)nStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
               nStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, (int)nStatId, 0);
@@ -4457,13 +4442,7 @@ void __stdcall UI_UpdateCursorAnimationTimer() {
 }
 
 void __stdcall UI_SendMouseMoveMessage() {
-    int nMouseY = Cursor::GetMouseY();
-    uint32_t lParam = Cursor::GetMouseX();
-    lParam = (uint32_t)(uint16_t)lParam | nMouseY << 0x10;
-    uint32_t wParam = 0;
-    UINT Msg = 0x200;
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    /* HWND hWnd for SendMessageA */ SendMessageA(hWnd, Msg, wParam, lParam);
+    SendMessageA(D2gfx::D2GFX::GetHwnd(), WM_MOUSEMOVE, 0, MAKELPARAM(Cursor::GetMouseX(), Cursor::GetMouseY())); // steer-ok: windows.h WM_MOUSEMOVE and MAKELPARAM
 }
 
 void __stdcall UI_DrawArenaKillCount() {
@@ -5200,7 +5179,7 @@ void __fastcall DRAW_MonsterHealthBar(D2UnitStrc * pUnit) {
       wszNameBuf[i] = L'\0';
     }
     int bIsMercenary = 0;
-    if (!(Fog::BitBuffer::gadwBitMasks[1] & (uint8_t)*((uint8_t*)pMonStats + 0xd)) && Fog::BitBuffer::gadwBitMasks[7] & (uint8_t)*((uint8_t*)pMonStats + 0xd) && pMonStats->NameStr) {
+    if (!(Fog::BitBuffer::gadwBitMasks[1] & pMonStats->aFlagBytes[1]) && Fog::BitBuffer::gadwBitMasks[7] & pMonStats->aFlagBytes[1] && pMonStats->NameStr) {
       D2RoomStrc* pRoom;
       if (!pUnit) {
         i = -1;
@@ -5421,7 +5400,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
         return;
       }
 
-      D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(nX, nY, 0, &__frame0.nScreenX, (int*)&__frame0.pLevelTxtResult.pLevelsTxt);
+      D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(nX, nY, 0, &__frame0.nScreenX, &__frame0.pLevelTxtResult.nLevelTxtResult);
       nResult = Path::DRAW_GetTypeOfBorder();
       switch (nResult) {
         case 1:
@@ -5438,7 +5417,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
           }
       }
 
-      gnMercenaryHealthBarScreenY = (int)__frame0.pLevelTxtResult.pLevelsTxt->MonLvl;
+      gnMercenaryHealthBarScreenY = __frame0.pLevelTxtResult.nLevelTxtResult + 0x10;
       nHealthBarScreenX = __frame0.nScreenX;
     } else {
       nX = D2Common::Units::GetScreenX(pUnit);
@@ -8612,27 +8591,19 @@ bool __stdcall UI_GetNewSkillPointsForClass(int32_t nCharClass) {
       return true;
     }
 
-    BOOL bUIFlagParty = GetUIFlag(UI_SKILLTREE);
-    if (bUIFlagParty) {
+    if (GetUIFlag(UI_SKILLTREE)) {
       return true;
     }
 
-    bUIFlagParty = GetUIFlag(UI_NPCSHOP);
-    if (bUIFlagParty) {
+    if (GetUIFlag(UI_NPCSHOP)) {
       return true;
     }
 
-    bUIFlagParty = GetUIFlag(UI_PARTYSCREEN);
-    if (!bUIFlagParty) {
-      return false;
+    if (GetUIFlag(UI_PARTYSCREEN) && GetUIFlag(UI_INVENTORY)) {
+      return true;
     }
 
-    bUIFlagParty = GetUIFlag(UI_INVENTORY);
-    if (!bUIFlagParty) {
-      return false;
-    }
-
-    return true;
+    return false;
 }
 
 void __stdcall UI_DrawLevelUpButtonRight() {

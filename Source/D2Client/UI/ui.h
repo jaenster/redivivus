@@ -133,7 +133,7 @@ void __fastcall UI_TranslateWideCharacterLookup(uint16_t * wszText);
 uint16_t * __fastcall AppendAsWideChar(uint16_t * wszText, int nColor);
 uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, int nColor);
 uint16_t * __fastcall UI_RemoveColorCodesFromString(uint16_t * wszText);
-uint16_t * __fastcall UI_WrapStringWithColorCodes(uint16_t * wszText, char cStartColor, char cEndColor);
+uint16_t * __fastcall UI_WrapStringWithColorCodes(uint16_t * wszText, int nStartColor, char cEndColor);
 void __fastcall UI_StoreGlobalTooltipText(uint16_t * wszText, int32_t nScreenX, int32_t nScreenY, int32_t nHpBarValue);
 void __fastcall UI_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nX, int32_t nY, int32_t nColor, int32_t nAlignment, int32_t nBarFill);
 void __fastcall UI_StoreGlobalUIText(uint16_t * wszText, DWORD dwTextColor);

@@ -351,7 +351,7 @@ __pragma(pack(push, 1)) struct D2AutomapStrc {
 #define D2_DEFINED_D2BattleNetEventCallbackTable
 struct D2BattleNetEventCallbackTable {
     /* 0x00 */ void (*fpCloseGame)(int, int);
-    /* 0x04 */ void (*fpLeaveGame)(int, int, int, int, int, void *, void *, void *, int, int, void *, int, int, int, int, int, int, void *);
+    /* 0x04 */ void (*fpLeaveGame)(int, int, int, int, int, void *, void *, int, int, int, void *, int, int, int, int, int, int, void *);
     /* 0x08 */ void (__fastcall *fpGetDatabaseCharacter)(struct D2ClientStrc *, LPCSTR, DWORD, LPCSTR);
     /* 0x0C */ void (__fastcall *fpSaveDatabaseCharacter)(uint32_t *, char *, char *, void *, int, uint32_t); // offset 0x0C - saves character data to BNet database with account ID, save buffer, size, token
     /* 0x10 */ uint8_t * fpServerLogMessage;
@@ -629,7 +629,7 @@ __pragma(pack(push, 1)) struct D2ClientStrc {
     /* 0x00D */ char szCharName[16];
     /* 0x01D */ char szAccName[64];
     /* 0x05D */ uint8_t nPad5D[3];
-    /* 0x060 */ void * pClientContainer; // Opaque BNet connection handle
+    /* 0x060 */ uint32_t dwPlayerData; // Realm PLAYERDATA token (DWORD)
     /* 0x064 */ int unk0x64;
     /* 0x068 */ uint32_t pRealm;
     /* 0x06C */ int nStartSkill; // First field of save appearance buffer
@@ -2336,29 +2336,32 @@ __pragma(pack(push, 1)) struct D2MonStats2Txt {
     /* 0x000 */ short Id;
     /* 0x002 */ uint8_t field_0x2;
     /* 0x003 */ uint8_t field_0x3;
-    /* 0x004 */ struct {
-        /* 0x004 */ uint8_t noGfxHitTest : 1;
-        /* 0x004 */ uint8_t noMap : 1;
-        /* 0x004 */ uint8_t noOvly : 1;
-        /* 0x004 */ uint8_t isSel : 1;
-        /* 0x004 */ uint8_t alSel : 1;
-        /* 0x004 */ uint8_t noSel : 1;
-        /* 0x004 */ uint8_t shiftSel : 1;
-        /* 0x004 */ uint8_t corpseSel : 1;
-        /* 0x005 */ uint8_t revive : 1;
-        /* 0x005 */ uint8_t isAtt : 1;
-        /* 0x005 */ uint8_t isSmall : 1; // Do not name small, this wont compile
-        /* 0x005 */ uint8_t large : 1;
-        /* 0x005 */ uint8_t soft : 1;
-        /* 0x005 */ uint8_t critter : 1;
-        /* 0x005 */ uint8_t shadow : 1;
-        /* 0x005 */ uint8_t noUniqueShift : 1;
-        /* 0x006 */ uint8_t compositeDeath : 1;
-        /* 0x006 */ uint8_t inert : 1;
-        /* 0x006 */ uint8_t objCol : 1;
-        /* 0x006 */ uint8_t deadCol : 1;
-        /* 0x006 */ uint8_t unflatDead : 1;
-        uint8_t : 3;  // unused
+    /* 0x004 */ union {
+        struct {
+            /* 0x004 */ uint8_t noGfxHitTest : 1;
+            /* 0x004 */ uint8_t noMap : 1;
+            /* 0x004 */ uint8_t noOvly : 1;
+            /* 0x004 */ uint8_t isSel : 1;
+            /* 0x004 */ uint8_t alSel : 1;
+            /* 0x004 */ uint8_t noSel : 1;
+            /* 0x004 */ uint8_t shiftSel : 1;
+            /* 0x004 */ uint8_t corpseSel : 1;
+            /* 0x005 */ uint8_t revive : 1;
+            /* 0x005 */ uint8_t isAtt : 1;
+            /* 0x005 */ uint8_t isSmall : 1; // Do not name small, this wont compile
+            /* 0x005 */ uint8_t large : 1;
+            /* 0x005 */ uint8_t soft : 1;
+            /* 0x005 */ uint8_t critter : 1;
+            /* 0x005 */ uint8_t shadow : 1;
+            /* 0x005 */ uint8_t noUniqueShift : 1;
+            /* 0x006 */ uint8_t compositeDeath : 1;
+            /* 0x006 */ uint8_t inert : 1;
+            /* 0x006 */ uint8_t objCol : 1;
+            /* 0x006 */ uint8_t deadCol : 1;
+            /* 0x006 */ uint8_t unflatDead : 1;
+            uint8_t : 3;  // unused
+        };
+        uint8_t aFlagBytes[3]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
     };
     /* 0x007 */ uint8_t field_0x7;
     /* 0x008 */ char SizeX;
@@ -2465,7 +2468,7 @@ struct D2MonsterEquipEntryStrc {
 #define D2_DEFINED_D2MonsterForEachStruct
 struct D2MonsterForEachStruct {
     /* 0x00 */ int value;
-    /* 0x04 */ uint32_t (__fastcall *pCallBack)(::SGAMEDATA *, struct D2UnitStrc *, struct D2UnitStrc *, struct D2MonsterAiParameterStruct *);
+    /* 0x04 */ struct D2UnitStrc * (__fastcall *pCallBack)(::SGAMEDATA *, struct D2UnitStrc *, struct D2UnitStrc *, struct D2MonsterAiParameterStruct *);
 };
 #endif // D2_DEFINED_D2MonsterForEachStruct
 #ifndef D2_DEFINED_D2MonsterNameStrc

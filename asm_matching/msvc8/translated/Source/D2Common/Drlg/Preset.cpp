@@ -591,6 +591,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     uint32_t i;
     int* pPathEntry;
     int32_t pClassId;
+    int32_t nPresetClassId;
     int nUnitCount;
     uint32_t nPresetCount;
     int szItemCode;
@@ -777,7 +778,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                       convert_to_object_preset:
                       eUnitType = 2;
                       nWallLayerIdx = 0;
-                      pBuffer = (char*)pClassId;
+                      nPresetClassId = pClassId;
                       break;
                     }
                   } else if (nActId == 4 && nBuffer < ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nBuffer >= 0) {
@@ -806,7 +807,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                     pClassId += -0x96;
                   }
                 } else {
-                  if ((char*)pClassId != (char*)0x23d) {
+                  if (pClassId != 0x23d) {
                     goto add_preset_unit;
                   }
 
@@ -814,7 +815,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                 }
 
                 nWallLayerIdx = 0;
-                pBuffer = (char*)pClassId;
+                nPresetClassId = pClassId;
                 break;
               }
             case 4:
@@ -946,7 +947,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                 pCursor = pCursor2;
               } while (nBuffer2);
 
-              pBuffer = 0;
+              nPresetClassId = 0;
             }
 
             goto next_path_record;
@@ -1672,8 +1673,8 @@ D2DrlgGridStrc * __fastcall Unreferenced_00666ff0(D2RoomExStrc * pRoomEx) {
     return pRoomEx->pRoomExData.pRoomExDataPreset->pMazeGrid;
 }
 
-int __fastcall Unreferenced_00667000(D2RoomExStrc * pRoomEx) {
-    return (int)pRoomEx->pRoomExData.pRoomExDataOutdoorRoom->pOrientationGrid.pCellsFlags;
+eD2GridCellFlags * __fastcall Unreferenced_00667000(D2RoomExStrc * pRoomEx) {
+    return pRoomEx->pRoomExData.pRoomExDataOutdoorRoom->pOrientationGrid.pCellsFlags;
 }
 
 // DRLGPRESET_GetPickedFilePathFromRoomEx

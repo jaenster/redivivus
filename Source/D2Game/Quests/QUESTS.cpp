@@ -327,7 +327,7 @@ static void __stdcall QUEST_DispatchBroadcast(bool bFlag1, uint8_t bFlag2, D2Que
     }
 }
 
-static void __stdcall QUEST_DispatchToUnit(D2UnitStrc * pUnit, D2QuestArgStrc * pCall) {
+static void __stdcall QUEST_DispatchToUnit(BOOL bForce, D2QuestArgStrc * pCall) {
     BOOL bIsBadPtr;
     D2UnitQuestDataListStrc* pList = pCall->pTarget->uSideData.pServerSide.pQuestEventList;
     do {
@@ -337,7 +337,7 @@ static void __stdcall QUEST_DispatchToUnit(D2UnitStrc * pUnit, D2QuestArgStrc * 
       }
 
       pQuestData = pList->pQuestData;
-      if (pQuestData->sStateFunctions.fpQuestStateHandler[pCall->nEvent] && (pQuestData->bIsActive == '\x01' || (char)(uintptr_t)pUnit != '\0')) {
+      if (pQuestData->sStateFunctions.fpQuestStateHandler[pCall->nEvent] && (pQuestData->bIsActive == '\x01' || (uint8_t)bForce != '\0')) {
         /* FARPROC lpfn for IsBadCodePtr */ bIsBadPtr = IsBadCodePtr((FARPROC)pQuestData->sStateFunctions.fpQuestStateHandler[pCall->nEvent]);
         if (bIsBadPtr) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x23e);
@@ -358,6 +358,8 @@ void __fastcall QUEST_OnMonsterKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     D2ClientStrc* pFirstClient;
     int nSuperUniqueHcIdx;
     D2QuestArgStrc questArg2;
+    int32_t nOwnerType;
+    BOOL bForce;
     uint32_t eMonQuestId;
     D2UnitStrc* pEffectiveKiller = pKiller;
     if (!pUnit->uSideData.pClientSide.nSfxMode) {
@@ -376,14 +378,14 @@ void __fastcall QUEST_OnMonsterKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     if (!pEffectiveKiller || (questArg2.pPlayer = pEffectiveKiller , pEffectiveKiller->eUnitType != UNIT_PLAYER)) {
       questArg2.pPlayer = 0;
       if (pEffectiveKiller && pEffectiveKiller->eUnitType == UNIT_MONSTER) {
-        Ai::AiGeneral::AIGENERAL_GetOwnerData(pEffectiveKiller, &eMonQuestId, (int*)&pKiller);
-        if (!pKiller) {
+        Ai::AiGeneral::AIGENERAL_GetOwnerData(pEffectiveKiller, &eMonQuestId, &nOwnerType);
+        if (!nOwnerType) {
           questArg2.pPlayer = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, eMonQuestId);
         }
       }
     }
 
-    pKiller = (D2UnitStrc*)((uintptr_t)pKiller & -256);
+    bForce = FALSE;
     _bIsSuperUnique = Monsters::CheckMonsterType(pUnit, 2);
     if (_bIsSuperUnique) {
       int16_t nBossNo;
@@ -419,7 +421,7 @@ void __fastcall QUEST_OnMonsterKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
         case 0x2d:
 
         case 0x3c:
-          pKiller = (D2UnitStrc*)(uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&pKiller + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+          bForce = TRUE;
       }
     }
 
@@ -432,10 +434,10 @@ void __fastcall QUEST_OnMonsterKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
       case 0x187:
 
       case 0x220:
-        /* baal */ pKiller = (D2UnitStrc*)(uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&pKiller + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+        /* baal */ bForce = TRUE;
     }
 
-    QUEST_DispatchToUnit(pKiller, &questArg2);
+    QUEST_DispatchToUnit(bForce, &questArg2);
 }
 
 void __fastcall QUEST_OnPlayerEnteredArea(::SGAMEDATA * pGame, int32_t ePreviousLevelId, int32_t eEnteredLevelId, D2UnitStrc * pUnit) {
@@ -525,7 +527,7 @@ void __fastcall QUEST_OnUnitInteraction_Unused(::SGAMEDATA * pGame, D2UnitStrc *
     questArg.nEvent = 0;
     questArg.pTarget = pUnit;
     questArg.pPlayer = pPlayer;
-    QUEST_DispatchToUnit(nullptr, &questArg);
+    QUEST_DispatchToUnit(FALSE, &questArg);
 }
 
 // NOTE: Register param types inferred (medium confidence): pClient (ECX): D2ClientStrc *, pUnitStrc (EDX): D2UnitStrc *
@@ -560,7 +562,7 @@ void __fastcall QUEST_OnItemPickedUp(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, 
     questArg.nEvent = 4;
     questArg.pTarget = pUnit;
     questArg.pPlayer = pPlayer;
-    QUEST_DispatchToUnit(nullptr, &questArg);
+    QUEST_DispatchToUnit(FALSE, &questArg);
 }
 
 void __fastcall QUEST_OnItemDropped(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pUnit) {
@@ -569,7 +571,7 @@ void __fastcall QUEST_OnItemDropped(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D
     questArg.nEvent = 5;
     questArg.pTarget = pUnit;
     questArg.pPlayer = pPlayer;
-    QUEST_DispatchToUnit(nullptr, &questArg);
+    QUEST_DispatchToUnit(FALSE, &questArg);
 }
 
 void __fastcall QUEST_OnItemEvent_Unused(::SGAMEDATA * pGame, D2UnitStrc * pTarget) {
@@ -578,7 +580,7 @@ void __fastcall QUEST_OnItemEvent_Unused(::SGAMEDATA * pGame, D2UnitStrc * pTarg
     questArg.nEvent = 6;
     questArg.pTarget = pTarget;
     questArg.pPlayer = 0;
-    QUEST_DispatchToUnit(nullptr, &questArg);
+    QUEST_DispatchToUnit(FALSE, &questArg);
 }
 
 // Advances the quest tick counter and fires/reschedules/frees expired quest timers in pQuestControl->pTimer.
@@ -953,7 +955,7 @@ uint32_t __fastcall QUEST_NpcWantsInteract(::SGAMEDATA * pGame, D2UnitStrc * pUn
       int nTargetClassId;
       nTargetClassId = pNpcUnit->nClassId;
       D2MonStatsTxt* pMonStatsTxt;
-      if (!(pMonStatsTxt = nTargetClassId >= 0 && nTargetClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nTargetClassId : nullptr) || !((uint8_t)*((uint8_t*)pMonStatsTxt + 0xd) & Fog::BitBuffer::gadwBitMasks[1])) {
+      if (!(pMonStatsTxt = nTargetClassId >= 0 && nTargetClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nTargetClassId : nullptr) || !(pMonStatsTxt->aFlagBytes[1] & Fog::BitBuffer::gadwBitMasks[1])) {
         return 0;
       }
 
@@ -3047,11 +3049,11 @@ void __fastcall Q12_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       return;
     }
 
-    ptPos.y = (LONG)pQuestData->pQuestSpecificData.pA2Q4;
-    if (((D2QuestDataA2Q4Strc*)ptPos.y)->bJerhynAiActive == '\x01') {
-      pPlayerData = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_MONSTER, ((D2QuestDataA2Q4Strc*)ptPos.y)->nJerhynMonsterGUID);
+    D2QuestDataA2Q4Strc* pA2Q4 = pQuestData->pQuestSpecificData.pA2Q4;
+    if (pA2Q4->bJerhynAiActive == '\x01') {
+      pPlayerData = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_MONSTER, pA2Q4->nJerhynMonsterGUID);
       if (!pPlayerData) {
-        *(uint8_t*)(ptPos.y + 0xc) = '\0';
+        pA2Q4->bJerhynAiActive = '\0';
       } else {
         if (pPlayerData->eUnitType == UNIT_MONSTER && pPlayerData->pUnitData.pUnitDataMonster) {
           pMonsterAi = pPlayerData->pUnitData.pUnitDataMonster->pMonsterAi;
@@ -3064,12 +3066,12 @@ void __fastcall Q12_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
           Monster::MonsterAI::ClearAISub(pQuestData->pGame, pPlayerData, nullptr, true);
         } else {
           GAME::Server::RemoveObjects(pPlayerData, pQuestData->pGame);
-          *(uint8_t*)(ptPos.y + 0xc) = '\0';
+          pA2Q4->bJerhynAiActive = '\0';
         }
       }
     }
-    if (*(uint8_t*)(ptPos.y + 0xd) == '\0' && *(uint8_t*)(ptPos.y + 0x11) != '\0') {
-      pPlayerData = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, *(int32_t*)(ptPos.y + 0x38));
+    if (pA2Q4->bShouldSpawnJerhyn == '\0' && pA2Q4->bPortalJerhynSpawned != '\0') {
+      pPlayerData = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pA2Q4->nJerhynObjectGUID);
       if (pPlayerData) {
         D2Common::Units::GetCoords(pPlayerData, &ptPos);
         pRoom = D2Common::Units::UNITS_GetRoom(pPlayerData);

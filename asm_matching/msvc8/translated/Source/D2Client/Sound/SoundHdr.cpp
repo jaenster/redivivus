@@ -678,14 +678,14 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, char * pszOutPath) {
 
     pszDst = pszOutPath;
     pszDst = pszDst + strlen(pszDst) + 1;
-    D2SoundsTxt* pSoundScan = pSound;
+    char* pszNameScan = pSound->Filename;
     do {
-      pScanDwordEnd = pSoundScan->Filename;
-      pSoundScan = (D2SoundsTxt*)(pSoundScan->Filename + 1);
+      pScanDwordEnd = pszNameScan;
+      pszNameScan = pszNameScan + 1;
     } while (*pScanDwordEnd != '\0');
 
-    D2SoundsTxt* pSoundCopy = pSound;
-    if (!(pszDst + (int)((intptr_t)pSoundScan + (-(int)(pSound->Filename + 1) - (intptr_t)(pszOutPath + 1))) < (char*)0x50)) {
+    char* pszNameCopy = pSound->Filename;
+    if (!((pszDst - (pszOutPath + 1)) + (pszNameScan - (pSound->Filename + 1)) < 0x50)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ab);
       exit(-1);
     }
@@ -693,9 +693,9 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, char * pszOutPath) {
     {
       uint32_t nFilenameLen;
       do {
-        pszDst = pSoundCopy->Filename;
-        pScanDwordEnd = pSoundCopy->Filename;
-        pSoundCopy = (D2SoundsTxt*)(pScanDwordEnd + 1);
+        pszDst = pszNameCopy;
+        pScanDwordEnd = pszNameCopy;
+        pszNameCopy = pScanDwordEnd + 1;
       } while (*pszDst != '\0');
 
       nFilenameLen = (intptr_t)(pScanDwordEnd + 1) - (intptr_t)pSound;

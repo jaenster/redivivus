@@ -1341,7 +1341,7 @@ uint32_t __stdcall SKILLS_CheckRequiredAttributes(D2UnitStrc * pUnit, eD2Skills 
     }
 
     D2SkillsTxt* pSkillTxt = ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
-    if (!(pSkillTxt && *((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
+    if (!(pSkillTxt && pSkillTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
       return 0;
     }
 
@@ -2486,7 +2486,7 @@ uint32_t __stdcall SKILLS_CheckSkillFlagBit1(int32_t nSkillId) {
       return 0;
     }
 
-    return (uint8_t)*((uint8_t*)pSkillsTxt + 0x6) & Fog::BitBuffer::gadwBitMasks[1];
+    return pSkillsTxt->aFlagBytes[2] & Fog::BitBuffer::gadwBitMasks[1];
 }
 
 // Removes the disguise (shapeshift) states from a unit. Iterates sgptDataTable->pAllStatesDataTblFlag0x10 (the list built with bit index 0x10, the disguise states), and for each state currently active on pUnit, removes the associated stat list via STATLIST_RemoveAndRecalc + FreeStatList and clears the state via SetState. Returns 1 if the unit type is eligible (ITEMSTATS_CheckItemStatCostFlag200Bit3), 0 otherwise.
@@ -3335,32 +3335,29 @@ void __stdcall AddSkill(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLeve
     if (!nSkillLevel) {
       if (bRemoveAtZero) {
         SKILLS_RemoveSkill(pUnit, eSkill, 0);
-        SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
-        return;
-      }
-
-      D2SkillStrc* pZeroedSkill;
-      pZeroedSkill = GetSkillByIdAndOwner(pUnit, eSkill, -1);
-      if (!pZeroedSkill) {
-        AllocSkill(pUnit, eSkill);
-        pZeroedSkill = GetSkillByIdAndOwner(pUnit, eSkill, -1);
-        if (!pZeroedSkill) {
-          return;
+      } else {
+        pSkill = GetSkillByIdAndOwner(pUnit, eSkill, -1);
+        if (!pSkill) {
+          AllocSkill(pUnit, eSkill);
+          pSkill = GetSkillByIdAndOwner(pUnit, eSkill, -1);
+          if (!pSkill) {
+            return;
+          }
         }
+
+        pSkill->nLevel = 0;
       }
-
-      pZeroedSkill->nLevel = 0;
-      SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
-      return;
-    }
-
-    pSkill = GetSkillByIdAndOwner(pUnit, eSkill, -1);
-    if (pSkill || (pSkill = AllocSkill(pUnit, eSkill) , pSkill != 0)) {
-      pSkill->nLevel = nSkillLevel;
+    } else {
+      pSkill = GetSkillByIdAndOwner(pUnit, eSkill, -1);
+      if (!pSkill) {
+        pSkill = AllocSkill(pUnit, eSkill);
+      }
+      if (pSkill) {
+        pSkill->nLevel = nSkillLevel;
+      }
     }
 
     SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
-    return;
 }
 
 // Adds or removes an item-granted skill on a player unit's skill list, keyed by (nOwnerGUID, skill record). bRemove!=0: deselects the skill if it is the current left/right/active skill, then unlinks and frees the matching D2SkillStrc node from the player's skill list. bRemove==0: if a matching item-skill node already exists it just updates its level/charges; otherwise allocates a new 0x40-byte D2SkillStrc, sets its anim-derived mode (defaults 10), level, charges, bItemSkill=1, owner GUID, and appends it to the list. No-op for non-player units, level<1, or out-of-range eSkill.
@@ -3546,7 +3543,7 @@ uint32_t __fastcall SKILLS_HasRequiredWeaponOrQuantity(D2SkillStrc * pSkill, D2U
 
     D2SkillsTxt* pDVar1 = pSkill->pRecord;
     D2InventoryStrc* pInventory = pUnit->pInventory;
-    if (!pDVar1 || !(*((uint8_t*)pDVar1 + 0x8) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
+    if (!pDVar1 || !(pDVar1->aFlagBytes[4] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
       BOOL bGotWeaponInfo;
       nWeaponReqType = pDVar1->skill;
       switch (nWeaponReqType) {
@@ -3658,7 +3655,6 @@ uint32_t __fastcall SKILLS_HasRequiredWeaponOrQuantity(D2SkillStrc * pSkill, D2U
 
 // NOTE: Callee-saved register params inferred (medium confidence): pSkillStrc (EBX): D2SkillStrc*
 static uint32_t SKILLS_CheckItemChargesRemaining(D2UnitStrc * pUnit, D2SkillStrc * pSkillStrc) {
-    D2UnitStrc* pCarriedItem;
     if (!pUnit || !pSkillStrc) {
       return 0;
     }
@@ -3671,24 +3667,16 @@ static uint32_t SKILLS_CheckItemChargesRemaining(D2UnitStrc * pUnit, D2SkillStrc
       return 1;
     }
 
-    short int nSkillId = pSkillStrc->pRecord->skill;
-    int nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkillStrc, 0);
-    D2UnitStrc* pItem = INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
-    while (true) {
-      if (!pItem) {
-        return 1;
-      }
-
-      pCarriedItem = INVENTORY::Inventory::GetCarriedItem(pItem);
+    int nSkillId = pSkillStrc->pRecord->skill;
+    int nSkillLayer = (D2Common::Skills::GetSkillLevel(pUnit, pSkillStrc, 0) & 0x3f) + (nSkillId << 6);
+    for (D2UnitStrc* pItem = INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory); pItem; pItem = INVENTORY::Inventory::INVENTORY_GetNextItem(pItem)) {
+      D2UnitStrc* pCarriedItem = INVENTORY::Inventory::GetCarriedItem(pItem);
       if (pCarriedItem && pCarriedItem->nUnitGUID == pSkillStrc->nOwnerGUID) {
-        break;
+        return (int)(Stats::StatsEx::STATSEX_GetCurrentStat(pCarriedItem, UNITSTAT_item_charged_skill, nSkillLayer) & 0xff) > 0;
       }
-
-      pItem = INVENTORY::Inventory::INVENTORY_GetNextItem(pItem);
     }
 
-    uint32_t nChargesStat = Stats::StatsEx::STATSEX_GetCurrentStat(pCarriedItem, UNITSTAT_item_charged_skill, ((uint16_t)nSkillLevel & 0x3f) + nSkillId * 0x40);
-    return (uint32_t)((int32_t)(nChargesStat & 0xff) > 0);
+    return 1;
 }
 
 static uint32_t __stdcall SKILL_IsDelayExpired(D2SkillStrc * pSkill, D2UnitStrc * pUnit) {
@@ -3857,7 +3845,7 @@ int32_t __stdcall SKILL_CalcMinDamage(D2UnitStrc * pUnit, int32_t nSkillId, int3
     if (!pSkillTxt) {
       return 1;
     }
-    if (*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+    if (pSkillTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       int nDexterity;
       if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
         nMinDmg = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
@@ -3909,7 +3897,7 @@ int32_t __stdcall SKILL_CalcMaxDamage(D2UnitStrc * pUnit, int32_t nSkillId, int3
     }
 
     int nMaxDmg = 0;
-    if (*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+    if (pSkillTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       nLevDamBonus = SKILLS_CalculateBaseDamageFromStats(0, pUnit);
       return nLevDamBonus;
     }

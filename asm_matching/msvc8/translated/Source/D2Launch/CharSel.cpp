@@ -1925,7 +1925,7 @@ void __stdcall CHARSEL_AddCreateNewEntry() {
 void __stdcall CHARSEL_AddRetrievingEntry() {
     uint16_t wszEmptyCommand[2];
     uint16_t* pwszTitle = D2Lang::StrTable::strtable::GetLocaleString(0x2b3b);
-    *(uint32_t*)wszEmptyCommand = (uint32_t)(uint16_t)wszEmptyCommand[1] << 0x10;
+    wszEmptyCommand[0] = 0;
     gnCharSelLoadingEntryIndex = TotalCurrentChars;
     CHARSEL_CreateCharEntry(pwszTitle, wszEmptyCommand, 2, '\x12');
 }

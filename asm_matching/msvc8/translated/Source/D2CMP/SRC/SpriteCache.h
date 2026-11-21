@@ -144,7 +144,7 @@ void __fastcall SPRITECACHE_ReleaseHashEntry(struct D2GfxHashEntryStrc * pHashEn
 void __stdcall SPRITECACHE_BuildPath(char * szText1, int32_t bUseDcc, char * szText2, va_list vaArgs);
 void __stdcall GFXHASH_InitIgnoreList_Thunk();
 void __stdcall CELDATAHASH_InitIgnoreList_Thunk();
-int __fastcall Unreferenced_005fee80(int param_1);
+int __fastcall Unreferenced_005fee80(void * param_1);
 // @sourcefile .\SRC\SpriteCache.cpp
 void __fastcall GFX_AllocSpriteCache(struct D2GfxMemoryStrc * pGfxMemory, struct D2PoolManagerStrc * pMemory, uint32_t pMaxMemory, fnSpriteCacheEntryRelease pfnReleaseEntry);
 // @sourcefile .\SRC\SpriteCache.cpp

@@ -890,21 +890,32 @@ void __fastcall SetDeadFlag(D2UnitStrc * pUnit) {
 }
 
 int __fastcall IsActive(D2UnitStrc * pUnit) {
-    if (!(pUnit->eUnitFlags & UNITFLAG_ISDEAD)) {
-      eD2PlayerAnimMode nAnimMode;
-      nAnimMode = pUnit->eAnimMode.ePlayerMode;
-      if (pUnit->eUnitType != UNIT_PLAYER) {
-        if (pUnit->eUnitType != UNIT_MONSTER || nAnimMode != Death && nAnimMode != Kick) {
-          return 0;
-        }
-      } else {
-        if (nAnimMode != Death && nAnimMode != eD2PlayerAnimMode_ns::Dead) {
-          return 0;
-        }
-      }
+    if (pUnit->eUnitFlags & UNITFLAG_ISDEAD) {
+      return 1;
     }
 
-    return 1;
+    eD2PlayerAnimMode nAnimMode = pUnit->eAnimMode.ePlayerMode;
+    switch (pUnit->eUnitType) {
+      case UNIT_PLAYER:
+        if (nAnimMode == Death || nAnimMode == eD2PlayerAnimMode_ns::Dead) {
+          return 1;
+        }
+        break;
+      case UNIT_MONSTER:
+        if (nAnimMode == Death || nAnimMode == Kick) {
+          return 1;
+        }
+        break;
+    }
+
+    return 0;
+}
+
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
 }
 
 // Returns true if the unit is in a "dead/dying" animation state, per unit type: player=Dead anim, monster=Kick anim (unless unflatDead flag set), object=DrawUnder flags or Walk+flag, missile=UNITFLAG_ISDEAD, item=Run anim. Returns false for null unit or no match.
@@ -912,14 +923,11 @@ int32_t __fastcall IsAlive(D2UnitStrc * pUnit) {
     BOOL _bIsUnflatDead;
     bool bIsUnflatDead;
     D2ObjectsTxt* pObjectsTxt;
-    if (!pUnit) {
-      return 0;
-    }
-
+    if (pUnit) {
     eD2ObjectAnimMode nAnimMode = pUnit->eAnimMode.eObjectMode;
     switch (pUnit->eUnitType) {
       case UNIT_OBJECT:
-        pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit->nClassId);
+        pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(GetClassIdInline(pUnit));
       if (pObjectsTxt->DrawUnder & 2U || nAnimMode == Opened && pObjectsTxt->DrawUnder & 1U) {
         return 1;
       }
@@ -944,6 +952,7 @@ int32_t __fastcall IsAlive(D2UnitStrc * pUnit) {
           return 1;
         }
       break;
+    }
     }
 
     return 0;
@@ -1259,7 +1268,7 @@ uint32_t __fastcall SKILL_IsTargetOwnedPet(D2UnitStrc * pUnit, int * pnSkillPara
     if (pSkill) {
       eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\CUnit.cpp", 0xb4a);
       pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(eSkillId);
-      if (pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (pSkillsTxt && pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         bHasPetSkill = true;
       }
     }
@@ -1268,7 +1277,7 @@ uint32_t __fastcall SKILL_IsTargetOwnedPet(D2UnitStrc * pUnit, int * pnSkillPara
     if (pSkill) {
       eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\CUnit.cpp", 0xb55);
       pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(eSkillId);
-      if (pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (pSkillsTxt && pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         nOwnerGUID = GAME::RosterPets::GetRosterOwnerGUID(pnSkillParams[3]);
         return (uint32_t)(nOwnerGUID == pUnit->nUnitGUID);
       }
@@ -1303,7 +1312,7 @@ uint32_t __fastcall SKILL_IsTargetAlliedUnit(D2UnitStrc * pUnit, int * pnSkillPa
     if (pSkill) {
       eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\CUnit.cpp", 0xb7f);
       D2SkillsTxt* pSkillsTxt;
-      if ((pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr) && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+      if ((pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr) && pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
         bHasAlliedSkill = 1;
       }
     }
@@ -1312,7 +1321,7 @@ uint32_t __fastcall SKILL_IsTargetAlliedUnit(D2UnitStrc * pUnit, int * pnSkillPa
     if (pSkill) {
       eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\CUnit.cpp", 0xb88);
       D2SkillsTxt* pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
-      if (pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+      if (pSkillsTxt && pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
         bHasAlliedSkill = 1;
       }
     }
@@ -1660,7 +1669,7 @@ void __fastcall CLIENT_TeleportUnitToPosition(D2UnitStrc * pUnit, int32_t nX, in
         pCurrentRoom = D2Common::Units::UNITS_GetRoom(pUnit);
         if (pCurrentRoom) {
           pSkill = D2Common::Units::GetCurrentSkill(pUnit);
-          if (!pSkill || (pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill) , !pSkillsTxt) || !(*((uint8_t*)pSkillsTxt + 0x8) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6])) {
+          if (!pSkill || (pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill) , !pSkillsTxt) || !(pSkillsTxt->aFlagBytes[4] & (uint8_t)Fog::BitBuffer::gadwBitMasks[6])) {
             if (bWarpFade) {
               if (pUnit->eUnitType != UNIT_PLAYER) {
                 Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x17d);
@@ -2704,7 +2713,7 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
         goto check_gfx_bounds;
       case UNIT_MONSTER:
         pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
-      if (*((uint8_t*)pMonStats2 + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+      if (pMonStats2->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         rcBounds.left = pMonStats2->nHtLeft + nScreenX;
         rcBounds.right = pMonStats2->nHtWidth + rcBounds.left;
         rcBounds.top = pMonStats2->nHtTop + nOriginY;

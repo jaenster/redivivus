@@ -781,7 +781,7 @@ void __fastcall SKILLSCLT_SetMissilePathExtended(D2UnitStrc * pUnit, intptr_t nI
 }
 
 // Variant of SKILLSCLT_CltCreateMissileAtTarget using the alternate spread tables gnMissileSpreadTableX_Alt2/Y_Alt2 and the SKILLSCLT_SetMissilePathExtended path callback. Client-side missile-fan spawner: iterates nCount missiles offset by spread tables (stepped by nSkillLevel), builds a D2SkillArgStrc, advances a per-missile LCG seed, calls MakeMissile + SetTargetX(GetSkilParam1+1). Prediction/display only.
-static void __stdcall SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath(uint32_t dwSeed, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, eMissilesId pMissileId, int32_t nX, int32_t nY, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCount) {
+static void __stdcall SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath(uint32_t dwSeed, int32_t nInitSeed, D2UnitStrc * pTargetUnit, eMissilesId pMissileId, int32_t nX, int32_t nY, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCount) {
     // Static local variables (originally global data)
     static int gnMissileSpreadTableX_Alt2[64] = {
     0x1e,
@@ -919,7 +919,7 @@ static void __stdcall SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath(uint32_
     int32_t nSkillParam1;
     D2SkillArgStrc sSkillArg;
     D2SeedStrc ullSeedPair;
-    D2Common::Seed::InitSeed_Param_666(&ullSeedPair, (int32_t)pUnit);
+    D2Common::Seed::InitSeed_Param_666(&ullSeedPair, nInitSeed);
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nX = nX;
     sSkillArg.nY = nY;
@@ -1015,10 +1015,10 @@ BOOL __fastcall SKILLS_CltDoFunc_AuraLevelMissileAtTarget_ExtendedPath(D2UnitStr
       nPrgCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, nSkillLvl);
     }
 
-    D2UnitStrc* pOwnerUnit = (D2UnitStrc*)pUnit->nInitSeed;
+    int32_t nInitSeed = pUnit->nInitSeed;
     int32_t nTargetX = D2Common::Units::GetXPosFromDynamicPathUnit(pTargetUnit);
     int32_t nTargetY = D2Common::Units::GetYPosFromDynamicPathUnit(pTargetUnit);
-    SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath(nMissileId, pOwnerUnit, pUnit, nMissileId, nTargetX, nTargetY, nSkillLvl, nPrgCalc, eSkill);
+    SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath(nMissileId, nInitSeed, pUnit, nMissileId, nTargetX, nTargetY, nSkillLvl, nPrgCalc, eSkill);
     return 1;
 }
 
@@ -1039,7 +1039,7 @@ BOOL __fastcall Skills_CltDoFunc_AuraState_OverlayOnTarget(D2UnitStrc * pUnit, e
     if (!pTargetUnit) {
       return 0;
     }
-    if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+    if (pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
       D2StatListExStrc* pStatListEx;
       sAuraState = pSkillTxt->aurastate;
       if (sAuraState >= 0 && (int)sAuraState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize && pSkillTxt->aurastat[0] >= 0 && (int)pSkillTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
@@ -1080,7 +1080,7 @@ BOOL __fastcall Skills_CltDoFunc_AuraState_OverlayOnCaster(D2UnitStrc * pUnit, e
     if (!pSkillTxt) {
       return 0;
     }
-    if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+    if (pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
       D2StatListExStrc* pStatListEx;
       sAuraState = pSkillTxt->aurastate;
       if (sAuraState >= 0 && (int)sAuraState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize && pSkillTxt->aurastat[0] >= 0 && (int)pSkillTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {

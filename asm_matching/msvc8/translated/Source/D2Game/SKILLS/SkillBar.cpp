@@ -554,10 +554,10 @@ BOOL __fastcall Skills_SrvDoFunc_075_GrimWard(::SGAMEDATA * pGame, D2UnitStrc * 
     if (!pMonStats2) {
       return 0;
     }
-    if (Fog::BitBuffer::gadwBitMasks[3] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
+    if (Fog::BitBuffer::gadwBitMasks[3] & pMonStats2->aFlagBytes[1]) {
       eMissileId = (eMissilesId)pSkillsTxt->srvmissile[3];
     } else {
-      if (Fog::BitBuffer::gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
+      if (Fog::BitBuffer::gadwBitMasks[2] & pMonStats2->aFlagBytes[1]) {
         eMissileId = (eMissilesId)pSkillsTxt->srvmissile[2];
       }
     }

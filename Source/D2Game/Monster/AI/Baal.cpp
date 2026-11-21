@@ -50,11 +50,11 @@ static char gszSrcFileAiBaal[16] = {
 
 namespace D2Game::Monster::AI::Baal {
 
-uint32_t __fastcall AI_Baal_IsPortalInRange(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * portal, D2MonsterAiParameterStruct * pAiParam) {
+D2UnitStrc * __fastcall AI_Baal_IsPortalInRange(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * portal, D2MonsterAiParameterStruct * pAiParam) {
     if (portal && portal->eUnitType == UNIT_OBJECT && portal->nClassId == 0x233) {
       int32_t nCollisionDist;
       nCollisionDist = D2Common::Collision::GetCollisionDistance(portal, pUnit);
-      return nCollisionDist > (int)pAiParam->nBestDistance ? 0 : (uint32_t)portal;
+      return nCollisionDist > (int)pAiParam->nBestDistance ? nullptr : portal;
     }
 
     return 0;

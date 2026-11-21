@@ -154,23 +154,12 @@ void __fastcall InitializeDrlgCoordList(D2RoomExStrc * pRoomEx, int nMatchIndex,
 
 // Sets grid flag 8 (door) for tiles with flag 4 and no orientation.
 static void __stdcall DRLGLOGIC_SetGridDoorFlags(D2DrlgGridStrc * pGrid, D2RoomExStrc * pRoomEx) {
-    D2DrlgTileDataStrc* pTileData;
-    D2DrlgTileGridStrc* pRoomTiles = pRoomEx->pRoomTiles;
-    uint32_t nTileIndex = 0;
-    if ((uint32_t)pRoomTiles->sRoomTiles.nWallTilesCount <= 0) {
-      return;
-    }
-
-    do {
-      uint32_t nTileFlags;
-      pTileData = pRoomTiles->sRoomTiles.pWallTiles;
-      nTileFlags = (uint32_t)pTileData[nTileIndex].nFlags;
-      if (nTileFlags & 4 && !(nTileFlags & 0x1c000)) {
-        DrlgGrid::AlterGridFlag(pGrid, pTileData[nTileIndex].nPosX, pTileData[nTileIndex].nPosY, 8, 0);
+    D2DrlgRoomTilesStrc* pRoomTiles = &pRoomEx->pRoomTiles->sRoomTiles;
+    for (uint32_t nTileIndex = 0; nTileIndex < (uint32_t)pRoomTiles->nWallTilesCount; nTileIndex++) {
+      if (pRoomTiles->pWallTiles[nTileIndex].nFlags & 4 && !(pRoomTiles->pWallTiles[nTileIndex].nFlags & 0x1c000)) {
+        DrlgGrid::AlterGridFlag(pGrid, pRoomTiles->pWallTiles[nTileIndex].nPosX, pRoomTiles->pWallTiles[nTileIndex].nPosY, 8, 0);
       }
-
-      nTileIndex++;
-    } while (nTileIndex < (uint32_t)pRoomTiles->sRoomTiles.nWallTilesCount);
+    }
 }
 
 int __fastcall Unreferenced_0066c840(D2DrlgTileDataStrc * pTileData) {

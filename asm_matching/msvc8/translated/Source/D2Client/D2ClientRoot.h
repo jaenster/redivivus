@@ -190,7 +190,7 @@ BOOL __stdcall DRAW_ShouldDrawEdges(int32_t nParam);
 int32_t __fastcall UI_GetDialogLineCount(int16_t nDialogId);
 pfnWardenCreateInterface __fastcall WARDEN_DecryptBuffer(struct D2WardenModuleStrc * ppModule, int, int32_t nOrdinal);
 // Decrypt Warden anti-cheat module data using RSA/crypto operations
-uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSize, uint32_t * * ppOutput, uint32_t nOutputSize);
+uint32_t __fastcall WARDEN_DecryptModule(struct D2WardenModuleStrc * pModule, uint32_t nInputSize, uint32_t * pHeader, uint32_t nOutputSize);
 // RC4 key schedule: fills pRc4State's 256-byte S-box with 0..255, zeroes the i/j bytes at +0x100/+0x101, then swaps S[i] with S[j], j += S[i] + pKey[i % nKeyLength].
 // The only caller, WARDEN_DecryptAndLoadModule, passes a 0x10-byte key; 1.14d asm 004e09c0..004e0a1a.
 void __fastcall WARDEN_RC4Init(struct D2RC4StateStrc * pRc4State, int, uint8_t * pKey, uint32_t nKeyLength);

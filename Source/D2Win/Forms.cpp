@@ -19,7 +19,7 @@ typedef BOOL (__stdcall *fpListEntryCallback)(D2ControlMsg * pControlMsg);
 namespace D2Win::Forms {
 
 // Registers window message/command/key handler based on type. Type 0 = message handler (rejects 0x111/0x101/0x100), type 1 = command, type 2 = key up, type 3 = key down. Forwards to appropriate WND_Register* function.
-void __fastcall D2WIN_RegisterWindowHandler(HWND hHandle, int32_t nHandlerType, int32_t nMessage, int32_t pCallback) {
+void __fastcall D2WIN_RegisterWindowHandler(HWND hHandle, int32_t nHandlerType, int32_t nMessage, pfnSEvtHandler pCallback) {
     if (!hHandle) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x13);
       exit(-1);
@@ -54,7 +54,7 @@ void __fastcall D2WIN_RegisterWindowHandler(HWND hHandle, int32_t nHandlerType, 
 }
 
 // Unregisters window message/command/key handler. Type 0 = message (rejects 0x111/0x101/0x100), type 1 = command, type 2 = key up, type 3 = key down. Forwards to appropriate WND_Unregister* function.
-void __fastcall D2WIN_UnregisterWindowHandler(HWND hHandle, int32_t nHandlerType, uint32_t nMessage, void * pCallback) {
+void __fastcall D2WIN_UnregisterWindowHandler(HWND hHandle, int32_t nHandlerType, uint32_t nMessage, pfnSEvtHandler pCallback) {
     if (!hHandle) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x30);
       exit(-1);
@@ -74,16 +74,16 @@ void __fastcall D2WIN_UnregisterWindowHandler(HWND hHandle, int32_t nHandlerType
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x36);
           exit(-1);
         }
-        Storm::WindowHandle::SMsgUnregisterMessage(hHandle, nMessage, (char*)pCallback);
+        Storm::WindowHandle::SMsgUnregisterMessage(hHandle, nMessage, pCallback);
         return;
       case 1:
-        Storm::WindowHandle::SMsgUnregisterCommand(hHandle, nMessage, (char*)pCallback);
+        Storm::WindowHandle::SMsgUnregisterCommand(hHandle, nMessage, pCallback);
         return;
       case 2:
-        Storm::WindowHandle::SMsgUnregisterKeyUp(hHandle, nMessage, (char*)pCallback);
+        Storm::WindowHandle::SMsgUnregisterKeyUp(hHandle, nMessage, pCallback);
         return;
       case 3:
-        Storm::WindowHandle::SMsgUnregisterKeyDown(hHandle, nMessage, (char*)pCallback);
+        Storm::WindowHandle::SMsgUnregisterKeyDown(hHandle, nMessage, pCallback);
         return;
     }
 }
@@ -96,7 +96,7 @@ void __fastcall D2WIN_RegisterWindowHandlerArray(HWND hHandle, D2WinWndHandlerSt
     }
 
     for (uint32_t i = 0; i < (uint32_t)nHandlerCount; i++) {
-      D2WIN_RegisterWindowHandler(hHandle, pHandlerArray[i].nType, pHandlerArray[i].nMessage, (int32_t)pHandlerArray[i].pfnCallback);
+      D2WIN_RegisterWindowHandler(hHandle, pHandlerArray[i].nType, pHandlerArray[i].nMessage, (pfnSEvtHandler)pHandlerArray[i].pfnCallback);
     }
 }
 
@@ -108,7 +108,7 @@ void __fastcall D2WIN_UnregisterWindowHandlerArray(HWND hHandle, D2WinWndHandler
     }
 
     for (uint32_t i = 0; i < (uint32_t)nHandlerCount; i++) {
-      D2WIN_UnregisterWindowHandler(hHandle, pHandlerArray[i].nType, pHandlerArray[i].nMessage, (void*)pHandlerArray[i].pfnCallback);
+      D2WIN_UnregisterWindowHandler(hHandle, pHandlerArray[i].nType, pHandlerArray[i].nMessage, (pfnSEvtHandler)pHandlerArray[i].pfnCallback);
     }
 }
 

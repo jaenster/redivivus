@@ -530,7 +530,7 @@ int __fastcall DEBUG_UnwindStackFrames(CONTEXT * pContext, int, DWORD dwThreadId
           if (__frame0.nWalkIndex >= nSkipFrames) {
             pDVar1 = __frame0.pFrameArrayBase + nFrameCount;
             pDVar1->dwReturnAddr = __frame0.nCurEip;
-            pDVar1->dw08 = (uint32_t)__frame0.pCurEsp;
+            pDVar1->dw08 = (uintptr_t)__frame0.pCurEsp;
             pDVar1->dw04 = D2_CONTEXT_FIELD(threadContext, Ebp);
             nFrameCount++;
             __frame0.nFramesWritten = nFrameCount;
@@ -555,7 +555,7 @@ int __fastcall DEBUG_UnwindStackFrames(CONTEXT * pContext, int, DWORD dwThreadId
 
           __frame0.pCurEsp = (uint32_t*)(D2_CONTEXT_FIELD(threadContext, Ebp) + 4);
           __frame0.nCurEip = *__frame0.pCurEsp;
-          D2_CONTEXT_FIELD(threadContext, Ebp) = (DWORD)pNextEbp;
+          D2_CONTEXT_FIELD(threadContext, Ebp) = (DWORD_PTR)pNextEbp;
         }
 
         tSehFrame.TryLevel = -2;

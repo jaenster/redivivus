@@ -1686,10 +1686,6 @@ D2UnitStrc * __stdcall INVENTORY_FindBackpackItemForStack(D2InventoryStrc * pInv
 
 // Scans the main inventory grid of pInventory for the first item that is socketable (per IsItemSocketable) relative to pUnit1, is not fully stacked, and — if pUnit2 is non-null — appears after pUnit2 in the item list. Returns the matching D2UnitStrc* or NULL.
 D2UnitStrc * __stdcall INVENTORY_FindEquippedItemForStack(D2InventoryStrc * pInventory, D2UnitStrc * pUnit1, D2UnitStrc * pUnit2) {
-    BOOL _bSocketable;
-    bool bSocketable;
-    int32_t nMaxStack;
-    D2UnitDataItemStrc* pItemData;
     if (!pInventory) {
       return nullptr;
     }
@@ -1703,58 +1699,46 @@ D2UnitStrc * __stdcall INVENTORY_FindEquippedItemForStack(D2InventoryStrc * pInv
       return nullptr;
     }
 
-    D2UnitStrc* pItem1;
-    pItem1 = pMainGridInfo->pFirstItem;
+    D2UnitStrc* pItem = pMainGridInfo->pFirstItem;
     if (pUnit2) {
-      while (pItem1) {
-        if (pItem1 == pUnit2) {
-          goto search_from_item;
-        }
-        if (pItem1->eUnitType != UNIT_ITEM) {
+      while (pItem && pItem != pUnit2) {
+        if (pItem->eUnitType != UNIT_ITEM) {
           return nullptr;
         }
 
-        pItemData = pItem1->pUnitData.pUnitDataItem;
+        D2UnitDataItemStrc* pItemData = pItem->pUnitData.pUnitDataItem;
         if (!pItemData) {
           return nullptr;
         }
-        if (pItemData == (D2UnitDataItemStrc*)-92) {
+
+        D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+        if (!pNode) {
           return nullptr;
         }
 
-        pItem1 = pItemData->sInvNode.pNextItemInPage;
+        pItem = pNode->pNextItemInPage;
       }
-    } else {
-      int32_t nQuantity;
-      search_from_item:
-      if (pItem1) {
-        while (true) {
-          _bSocketable = ITEMS::Items::ITEMS_AreStackablesEqual(pItem1, pUnit1);
-          if (_bSocketable) {
-            nQuantity = Stats::StatsEx::STATSEX_GetCurrentStat(pItem1, UNITSTAT_quantity, 0);
-            nMaxStack = ITEMS::Items::ITEM_GetMaxStack(pItem1);
-            if (nQuantity < nMaxStack) {
-              return pItem1;
-            }
-          }
-          if (pItem1->eUnitType != UNIT_ITEM) {
-            break;
-          }
+    }
 
-          pItemData = pItem1->pUnitData.pUnitDataItem;
-          if (!pItemData) {
-            break;
-          }
-          if (pItemData == (D2UnitDataItemStrc*)-92) {
-            break;
-          }
-
-          pItem1 = pItemData->sInvNode.pNextItemInPage;
-          if (!pItem1) {
-            return nullptr;
-          }
-        }
+    while (pItem) {
+      if (ITEMS::Items::ITEMS_AreStackablesEqual(pItem, pUnit1) && Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0) < ITEMS::Items::ITEM_GetMaxStack(pItem)) {
+        return pItem;
       }
+      if (pItem->eUnitType != UNIT_ITEM) {
+        return nullptr;
+      }
+
+      D2UnitDataItemStrc* pItemData = pItem->pUnitData.pUnitDataItem;
+      if (!pItemData) {
+        return nullptr;
+      }
+
+      D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+      if (!pNode) {
+        return nullptr;
+      }
+
+      pItem = pNode->pNextItemInPage;
     }
 
     return nullptr;
@@ -2421,9 +2405,6 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByType(D2InventoryStrc * pInventory, in
 
 // Iterates the main inventory grid linked list to find the first item of the given eD2ItemTypes, optionally starting after pAfterItem. Returns the matching D2UnitStrc* or NULL. Only searches items with X position &lt; 11 (main grid) and validates the page signature (0x1020304) first.
 D2UnitStrc * __stdcall INVENTORY_GetEquippedItemByType(D2InventoryStrc * pInventory, eD2ItemTypes nItemTypeToFind, D2UnitStrc * pAfterItem) {
-    uint32_t nPosX;
-    eD2UnitType eUnitType;
-    D2UnitDataItemStrc* pItemData;
     if (!pInventory) {
       return nullptr;
     }
@@ -2437,68 +2418,59 @@ D2UnitStrc * __stdcall INVENTORY_GetEquippedItemByType(D2InventoryStrc * pInvent
       return nullptr;
     }
 
-    D2UnitStrc* pUnit;
-    pUnit = pGridInfo->pFirstItem;
+    D2UnitStrc* pUnit = pGridInfo->pFirstItem;
     if (pAfterItem) {
-      while (pUnit) {
-        if (pUnit == pAfterItem) {
-          goto search_from_item;
-        }
+      while (pUnit && pUnit != pAfterItem) {
         if (pUnit->eUnitType != UNIT_ITEM) {
           return nullptr;
         }
 
-        pItemData = pUnit->pUnitData.pUnitDataItem;
+        D2UnitDataItemStrc* pItemData = pUnit->pUnitData.pUnitDataItem;
         if (!pItemData) {
           return nullptr;
         }
-        if (pItemData == (D2UnitDataItemStrc*)-92) {
+
+        D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+        if (!pNode) {
           return nullptr;
         }
 
-        pUnit = pItemData->sInvNode.pNextItemInPage;
+        pUnit = pNode->pNextItemInPage;
       }
-    } else {
-      uint32_t bIsOfType;
-      search_from_item:
-      if (pUnit) {
-        while (true) {
-          bIsOfType = ITEMS::Items::ITEMS_IsA(pUnit, nItemTypeToFind);
-          if (bIsOfType) {
-            eUnitType = pUnit->eUnitType;
-            if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-              nPosX = pUnit->pPath.pStaticPath->nPosX;
-            } else {
-              if (!pUnit->pPath.pDynamicPath) {
-                return pUnit;
-              }
+    }
 
-              nPosX = PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-            }
-            if (nPosX < 0xb) {
-              return pUnit;
-            }
-          }
-          if (pUnit->eUnitType != UNIT_ITEM) {
-            return nullptr;
+    while (pUnit) {
+      if (ITEMS::Items::ITEMS_IsA(pUnit, nItemTypeToFind)) {
+        uint32_t nPosX;
+        eD2UnitType eUnitType = pUnit->eUnitType;
+        if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+          nPosX = pUnit->pPath.pStaticPath->nPosX;
+        } else {
+          if (!pUnit->pPath.pDynamicPath) {
+            return pUnit;
           }
 
-          pItemData = pUnit->pUnitData.pUnitDataItem;
-          if (!pItemData) {
-            break;
-          }
-          if (pItemData == (D2UnitDataItemStrc*)-92) {
-            return nullptr;
-          }
-
-          pUnit = pItemData->sInvNode.pNextItemInPage;
-          if (!pUnit) {
-            return nullptr;
-          }
+          nPosX = PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
         }
-
+        if (nPosX < 0xb) {
+          return pUnit;
+        }
+      }
+      if (pUnit->eUnitType != UNIT_ITEM) {
         return nullptr;
       }
+
+      D2UnitDataItemStrc* pItemData = pUnit->pUnitData.pUnitDataItem;
+      if (!pItemData) {
+        return nullptr;
+      }
+
+      D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+      if (!pNode) {
+        return nullptr;
+      }
+
+      pUnit = pNode->pNextItemInPage;
     }
 
     return nullptr;
@@ -4804,9 +4776,10 @@ static BOOL CopyInventory(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
 // @sourcefile .\INVENTORY\Inventory.cpp
 static BOOL __stdcall INVENTORY_ReserveGridCells(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2GridScreenCoordinates gridDims;
-    int pnColStart;
-    uint8_t byItemHeight;
-    uint8_t byItemWidth;
+    int nX;
+    int nY;
+    uint8_t nWidth;
+    uint8_t nHeight;
     if (!pInventory) {
       return 0;
     }
@@ -4814,37 +4787,25 @@ static BOOL __stdcall INVENTORY_ReserveGridCells(D2InventoryStrc * pInventory, D
       return 0;
     }
 
-    int32_t neInventoryPage = Units::UNITS_GetInventoryRecordId(pUnit, '\0', 1);
-    DATATBLS::TokTbls::GetGridDimensions(neInventoryPage, 0, &gridDims);
+    int32_t nInventoryPage = Units::UNITS_GetInventoryRecordId(pUnit, '\0', 1);
+    DATATBLS::TokTbls::GetGridDimensions(nInventoryPage, 0, &gridDims);
     D2InventoryGridInfoStrc* pInvGridInfo = ReinitializeInventoryGrid(2, (D2InventorySizesStrc*)&gridDims, pInventory);
-    D2UnitStrc* pRowIter = pUnit2;
     if (!pInvGridInfo) {
       return 0;
     }
-
-    int nColIter = INVENTORY_FindItemGridPosition(pInventory, pUnit2, neInventoryPage, &pnColStart, (int*)&pUnit2, 0);
-    if (!nColIter) {
+    if (!INVENTORY_FindItemGridPosition(pInventory, pUnit2, nInventoryPage, &nX, &nY, 0)) {
       return 0;
     }
 
-    ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pRowIter, (char*)&byItemWidth, (char*)&byItemHeight, ".\\INVENTORY\\Inventory.cpp", 0x16d5);
-    if (byItemWidth && byItemHeight && pnColStart >= 0) {
-      int pnColEnd;
-      nColIter = (uint32_t)byItemWidth + pnColStart;
-      if (nColIter <= (int)(uint32_t)pInvGridInfo->bWidth && (intptr_t)pUnit2 >= 0 && (intptr_t)(pUnit2->unk0x19 + (byItemHeight - 0x19)) <= (int)(uint32_t)pInvGridInfo->bHeight) {
-        for (pRowIter = pUnit2; (intptr_t)pRowIter < (intptr_t)(pUnit2->unk0x19 + (byItemHeight - 0x19)); pRowIter = (D2UnitStrc*)((intptr_t)&pRowIter->eUnitType + 1)) {
-          pnColEnd = pnColStart;
-          if (pnColStart < nColIter) {
-            do {
-              pInvGridInfo->pGridCells[(uint32_t)pInvGridInfo->bWidth * (intptr_t)pRowIter + pnColEnd] = (D2UnitStrc*)-1;
-              pnColEnd++;
-              nColIter = (uint32_t)byItemWidth + pnColStart;
-            } while (pnColEnd < nColIter);
-          }
+    ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pUnit2, (char*)&nWidth, (char*)&nHeight, ".\\INVENTORY\\Inventory.cpp", 0x16d5);
+    if (nWidth && nHeight && nX >= 0 && nX + nWidth <= pInvGridInfo->bWidth && nY >= 0 && nY + nHeight <= pInvGridInfo->bHeight) {
+      for (int y = nY; y < nY + nHeight; y++) {
+        for (int x = nX; x < nX + nWidth; x++) {
+          pInvGridInfo->pGridCells[pInvGridInfo->bWidth * y + x] = (D2UnitStrc*)-1;
         }
-
-        return 1;
       }
+
+      return 1;
     }
 
     return 0;

@@ -975,13 +975,8 @@ BOOL __fastcall Skills_SrvDoFunc_151_FireDirectionalMissile(::SGAMEDATA * pGame,
     int32_t nDeltaY = 0;
     D2UnitStrc* pTargetOrMissile = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (pTargetOrMissile) {
-      int32_t nCasterY;
-      nDeltaX = D2Common::Units::GetXPosFromDynamicPathUnit(pTargetOrMissile);
-      nDeltaY = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-      nDeltaX -= nDeltaY;
-      nDeltaY = D2Common::Units::GetYPosFromDynamicPathUnit(pTargetOrMissile);
-      nCasterY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-      nDeltaY -= nCasterY;
+      nDeltaX = D2Common::Units::GetXPosFromDynamicPathUnit(pTargetOrMissile) - D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+      nDeltaY = D2Common::Units::GetYPosFromDynamicPathUnit(pTargetOrMissile) - D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     }
 
     pTargetOrMissile = SkillsServer::CreatingAMissile(pGame, eMissileId, pUnit, eSkill, nSkillLvl, nDeltaX, nDeltaY, 0, 0, 0);

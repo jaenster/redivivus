@@ -185,14 +185,13 @@ void __fastcall Q15_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2BitBufferStrc* pQuestRecord = pPlayerData->pQuestRecord[pGame->nDifficulty];
     if (nMessageIndex != 0x3b && nMessageIndex != 0x3c) {
-      /* SetQuestState(QUEST_Act2Guard4Gossip=0x1e, Completed=0) -> Jerhyn gossip done
-                         (non-intro line spoken) */ D2Common::QuestRecord::SetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_Act2Guard4Gossip, QUESTSTATE_Completed);
+      D2Common::QuestRecord::SetQuestState(pQuestRecord, QUEST_Act2Guard4Gossip, QUESTSTATE_Completed);
       return;
     }
 
-    /* SetQuestState(QUEST_Act2Guard4Gossip=0x1e, JustCompleted=0xd) -> spoke the
-                         intro line 0x3b/0x3c; arm state-2 cleanup handler */ D2Common::QuestRecord::SetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_Act2Guard4Gossip, QUESTSTATE_JustCompleted);
+    D2Common::QuestRecord::SetQuestState(pQuestRecord, QUEST_Act2Guard4Gossip, QUESTSTATE_JustCompleted);
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = Q15_Callback02_NpcDeactivate;
 }
 

@@ -767,7 +767,7 @@ static uint32_t __stdcall PLAYER_CheckSkillUsability(int * pnUsabilityCode, D2Un
       if (!pSkillsTxt) {
         return 0;
       }
-      if (nUsabilityCode > 0 && (nUsabilityCode <= 2 || nUsabilityCode == 4) && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
+      if (nUsabilityCode > 0 && (nUsabilityCode <= 2 || nUsabilityCode == 4) && pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
         pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, SKILL_Attack);
         *ppSkill = pSkill;
         nUsabilityCode = PlrSkills::PLRSKILLS_CanUseSkillCheck(pUnit, pSkill);
@@ -1532,7 +1532,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
         }
 
         nInteractRange = 2;
-        if (!(*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
+        if (!(pMonStatsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
           goto use_default_range;
         }
 
@@ -1558,14 +1558,14 @@ static uint32_t INPUT_ValidateSkillAction(D2UnderMouseStrc * pUnderMouse) {
       }
 
       pRoom = D2Common::Units::UNITS_GetRoom(pUnderMouse->pPlayer);
-      if (!(*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
+      if (!(pSkillsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
         bRoomInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
         if (bRoomInTown) {
           UnitSnd::UNITSND_PlayPlayerSound(pUnderMouse->pPlayer, 0x18);
           return 0;
         }
       }
-      if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
+      if (pSkillsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
         return 0;
       }
     }
@@ -1765,7 +1765,7 @@ static uint32_t SKILL_IsPassiveSkill(D2SkillStrc * pSkill) {
       } else {
         pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId;
       }
-      if (*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+      if (pSkillsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         return 1;
       }
     }
@@ -1812,7 +1812,7 @@ static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
       eD2Skills eSkillId;
       if (!(*(uint8_t*)&pUnderMouse->flags & 2) || nWeaponClass == 1) {
         choose_unit_or_ground:
-        if (pUnit->eUnitType != UNIT_MONSTER || (iVar1 = CUnit::IsActive(pUnit) , !iVar1) || *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+        if (pUnit->eUnitType != UNIT_MONSTER || (iVar1 = CUnit::IsActive(pUnit) , !iVar1) || pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
           goto use_on_target_unit;
         }
       } else {
@@ -1821,7 +1821,7 @@ static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
           case UNIT_OBJECT:
             case UNIT_ITEM:
               {
-                if (*((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+                if (pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
                   bForceInteract = true;
                   goto choose_unit_or_ground;
                 }
@@ -1870,7 +1870,7 @@ static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
         if (iVar1) {
           if (*ppSkill) {
             pSkillsTxt2 = D2Common::Skills::GetSkillsTxt(*ppSkill);
-            if (pSkillsTxt2 && *((uint8_t*)pSkillsTxt2 + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+            if (pSkillsTxt2 && pSkillsTxt2->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
               bValid = PLAYER_CheckSkillUsability(nullptr, pUnderMouse->pPlayer, ppSkill);
               if (!bValid) {
                 return;
@@ -1883,7 +1883,7 @@ static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
 
           bIsInteractable = pUnit->eUnitFlags >> 2 & 1;
           if (bIsInteractable) {
-            if (!(Fog::BitBuffer::gadwBitMasks[1] & (uint8_t)*((uint8_t*)pSkillsTxt + 0x7)) && !(Fog::BitBuffer::gadwBitMasks[2] & (uint8_t)*((uint8_t*)pSkillsTxt + 0x7))) {
+            if (!(Fog::BitBuffer::gadwBitMasks[1] & pSkillsTxt->aFlagBytes[3]) && !(Fog::BitBuffer::gadwBitMasks[2] & pSkillsTxt->aFlagBytes[3])) {
               bIsInteractable = CUnit::CanInteractWith(pPlayerUnit_lcl, pUnit);
             }
             if (bIsInteractable) {
@@ -1947,7 +1947,7 @@ static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
         }
         if ((uint8_t)dwFlags & 4) {
           pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
-          if (pMonStatsTxt && *((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+          if (pMonStatsTxt && pMonStatsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
             PLAYER_InteractWithUnitByType(UNIT_MONSTER, nTargetUnitGUID, pUnderMouse);
             return;
           }

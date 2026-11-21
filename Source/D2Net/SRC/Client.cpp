@@ -69,10 +69,7 @@ int32_t __stdcall NET_CLIENT_IsConnected() {
 DWORD __stdcall CLIENT_ServerConnectionThread_lpStartAddress(void * lpThreadParam) {
     // Static local variables (originally global data)
     // also labelled: sockaddr_in
-static sockaddr * name_00882b38; D2_STATIC_GUARD_BSS(name_00882b38, "D2Net::SRC::Client::CLIENT_ServerConnectionThread_lpStartAddress::name_00882b38");
-    static int nClientSockAddrIn; D2_STATIC_GUARD_BSS(nClientSockAddrIn, "D2Net::SRC::Client::CLIENT_ServerConnectionThread_lpStartAddress::nClientSockAddrIn");
-    static int gnClientSockAddrPadding0; D2_STATIC_GUARD_BSS(gnClientSockAddrPadding0, "D2Net::SRC::Client::CLIENT_ServerConnectionThread_lpStartAddress::gnClientSockAddrPadding0");
-    static int gnClientSockAddrPadding1; D2_STATIC_GUARD_BSS(gnClientSockAddrPadding1, "D2Net::SRC::Client::CLIENT_ServerConnectionThread_lpStartAddress::gnClientSockAddrPadding1");
+static sockaddr_in gClientSockAddr; D2_STATIC_GUARD_BSS(gClientSockAddr, "D2Net::SRC::Client::CLIENT_ServerConnectionThread_lpStartAddress::gClientSockAddr");
     static WSADATA gWSAData = {}; D2_STATIC_GUARD(gWSAData, "D2Net::SRC::Client::CLIENT_ServerConnectionThread_lpStartAddress::gWSAData");
 
     /* LPWSADATA lpWSAData for WSAStartup */ /* WORD wVersionRequired for WSAStartup */ gbClientConnectionShutdown = 0;
@@ -82,15 +79,13 @@ static sockaddr * name_00882b38; D2_STATIC_GUARD_BSS(name_00882b38, "D2Net::SRC:
       WSAGetLastError();
     }
 
-    /* u_short netshort for ntohs */ nClientSockAddrIn = 0;
-    gnClientSockAddrPadding0 = 0;
-    gnClientSockAddrPadding1 = 0;
-    name_00882b38 = (sockaddr*)0x2;
+    /* u_short netshort for ntohs */ memset(&gClientSockAddr, 0, sizeof(gClientSockAddr));
+    gClientSockAddr.sin_family = AF_INET;
     u_short wPortNetOrder = ntohs(4000);
-    name_00882b38 = (sockaddr*)(uint32_t)((uint32_t)(uint16_t)wPortNetOrder << 16 | (uint32_t)(uint16_t)*(uint16_t*)(char*)&name_00882b38);
+    gClientSockAddr.sin_port = wPortNetOrder;
     char* szResolvedIp = Fog::Src::Safesock::inet_nameToIp((char*)lpThreadParam);
-    /* char * cp for inet_addr */ nClientSockAddrIn = inet_addr(szResolvedIp);
-    int nConnectResult = connect(::D2Net::SRC::Client::CLIENT_SocketToServer, (sockaddr*)&name_00882b38, 0x10);
+    /* char * cp for inet_addr */ gClientSockAddr.sin_addr = inet_addr(szResolvedIp);
+    int nConnectResult = connect(::D2Net::SRC::Client::CLIENT_SocketToServer, (sockaddr*)&gClientSockAddr, sizeof(gClientSockAddr));
     if (nConnectResult == -1) {
       ::D2Net::SRC::Client::CLIENT_SocketToServer = -1;
     }

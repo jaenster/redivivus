@@ -457,7 +457,7 @@ void __stdcall Unreferenced_005248e0() {
     MPQ_d2exp = 0;
 }
 
-static uint16_t * __stdcall STRTABLE_GetStringByIndex(D2StringTableTblFileStrc * pStrTable, uint16_t * * ppEntryTable, uint16_t wRawIndex, DWORD dwErrorCode) {
+static uint16_t * __stdcall STRTABLE_GetStringByIndex(D2StringTableTblFileStrc * pStrTable, uint16_t * * ppEntryTable, uint16_t wRawIndex) {
     uint32_t _wRawIndex;
     uint16_t wBoundedIndex = wRawIndex;
     _wRawIndex = (uint32_t)wRawIndex;
@@ -498,17 +498,15 @@ void __fastcall STRTABLE_FreeMemory(void * pMemory) {
 
 uint32_t __stdcall STRTABLE_HashString(char * szText, uint32_t nBucketCount) {
     uint32_t nHash = 0;
-    char cCurrent = *szText;
-    while (cCurrent != '\0') {
-      char* pcNext;
-      nHash = (nHash << 4) + (int)cCurrent;
-      if (nHash & -268435456) {
-        nHash = ((nHash & -268435456) >> 0x18 ^ nHash) & 0xfffffff;
+    while (*szText != '\0') {
+      uint32_t nHigh;
+      nHash = (nHash << 4) + *szText;
+      nHigh = nHash & 0xf0000000;
+      if (nHigh) {
+        nHash = (nHigh >> 0x18 ^ nHash) & 0xfffffff;
       }
 
-      pcNext = szText + 1;
       szText++;
-      cCurrent = *pcNext;
     }
 
     return nHash % nBucketCount;
@@ -522,7 +520,7 @@ uint16_t * __fastcall GetLocaleString(uint16_t nStringIndex) {
       if (!gpStringTableExpansion) {
         dwRawIndex = 0x2b46;
       } else {
-        pResult = STRTABLE_GetStringByIndex(gpStringTableExpansion, gpStringIndexExpansion, nStringIndex + 0xb1e0, dwRawIndex);
+        pResult = STRTABLE_GetStringByIndex(gpStringTableExpansion, gpStringIndexExpansion, nStringIndex + 0xb1e0);
         if (pResult) {
           return pResult;
         }
@@ -531,7 +529,7 @@ uint16_t * __fastcall GetLocaleString(uint16_t nStringIndex) {
 
     uint16_t wClampedIndex = (uint16_t)dwRawIndex;
     if (gpStringTablePatchD2 && wClampedIndex >= 10000) {
-      pResult = STRTABLE_GetStringByIndex(gpStringTablePatchD2, gpStringIndexPatchD2, wClampedIndex + 0xd8f0, dwRawIndex);
+      pResult = STRTABLE_GetStringByIndex(gpStringTablePatchD2, gpStringIndexPatchD2, wClampedIndex + 0xd8f0);
       if (pResult) {
         return pResult;
       }
@@ -541,7 +539,7 @@ uint16_t * __fastcall GetLocaleString(uint16_t nStringIndex) {
       exit(-1);
     }
 
-    pResult = STRTABLE_GetStringByIndex(gpStringTableBase, gpStringIndexBase, wClampedIndex, dwRawIndex);
+    pResult = STRTABLE_GetStringByIndex(gpStringTableBase, gpStringIndexBase, wClampedIndex);
     return pResult;
 }
 
@@ -793,47 +791,22 @@ void __stdcall STRTABLE_CalculateCRC(uint16_t * pwCRC, uint8_t * pBuffer, uint32
 }
 
 void __fastcall STRTABLE_NormalizeLanguageCode(char * szText) {
-    char* pcNormalized;
-    char cChar;
-    int nIndex = 0;
-    do {
-      int nCmp;
-      nCmp = _stricmp(szText, gaLanguageTable[nIndex].pszLangCode);
-      if (!nCmp) {
-        pcNormalized = gaLanguageTable[nIndex].pszLangCodeNormalized;
-        do {
-          cChar = *pcNormalized;
-          *szText = cChar;
-          pcNormalized++;
-          szText++;
-        } while (cChar != '\0');
-
+    for (int nIndex = 0; nIndex < 13; nIndex++) {
+      if (!_stricmp(szText, gaLanguageTable[nIndex].pszLangCode)) {
+        strcpy(szText, gaLanguageTable[nIndex].pszLangCodeNormalized);
         return;
       }
+    }
 
-      nIndex++;
-      pcNormalized = gaLanguageTable[0].pszLangCodeNormalized;
-    } while ((intptr_t)&gaLanguageTable[nIndex] < (intptr_t)((char*)&gaLanguageTable + sizeof(gaLanguageTable)));
-
-    do {
-      cChar = *pcNormalized;
-      *szText = cChar;
-      szText++;
-      pcNormalized++;
-    } while (cChar != '\0');
+    strcpy(szText, gaLanguageTable[0].pszLangCodeNormalized);
 }
 
 uint32_t __fastcall STRTABLE_GetLanguageId(char * szText) {
-    int nIndex = 0;
-    do {
-      int nCmp;
-      nCmp = _stricmp(szText, gaLanguageTable[nIndex].pszLangCode);
-      if (!nCmp) {
+    for (int nIndex = 0; nIndex < (int)(sizeof(gaLanguageTable) / sizeof(gaLanguageTable[0])); nIndex++) {
+      if (!_stricmp(szText, gaLanguageTable[nIndex].pszLangCode)) {
         return gaLanguageTable[nIndex].dwLangId;
       }
-
-      nIndex++;
-    } while ((intptr_t)&gaLanguageTable[nIndex] < (intptr_t)((char*)&gaLanguageTable + sizeof(gaLanguageTable)));
+    }
 
     return 0;
 }
@@ -1135,13 +1108,13 @@ void __stdcall STRTABLE_FormatUInt64WithAbbrev(uint16_t * wszText, uint32_t dwVa
     }
 }
 
-static void STRTABLE_LoadAbbreviationSymbols(DWORD dwParam) {
+static void STRTABLE_LoadAbbreviationSymbols() {
     uint16_t* pwsAbbrevStr;
     char* pszScanPtr;
     char szAbbrevBuf[8];
     char cCurChar;
     if (gpStringTableBase) {
-      pwsAbbrevStr = STRTABLE_GetStringByIndex(gpStringTableBase, gpStringIndexBase, 0x14d0, dwParam);
+      pwsAbbrevStr = STRTABLE_GetStringByIndex(gpStringTableBase, gpStringIndexBase, 0x14d0);
       Unicode::UNISYS::UNICODE_WideToMultiByte(szAbbrevBuf, (uint16_t*)pwsAbbrevStr, 5);
       if ((uint32_t)(int)strlen(szAbbrevBuf) > 1) {
         gcAbbrevKilSymbol = 0x4b;
@@ -1149,7 +1122,7 @@ static void STRTABLE_LoadAbbreviationSymbols(DWORD dwParam) {
         gcAbbrevKilSymbol = (short int)szAbbrevBuf[0];
       }
       if (gpStringTableBase) {
-        pwsAbbrevStr = STRTABLE_GetStringByIndex(gpStringTableBase, gpStringIndexBase, 0x14d1, dwParam);
+        pwsAbbrevStr = STRTABLE_GetStringByIndex(gpStringTableBase, gpStringIndexBase, 0x14d1);
         Unicode::UNISYS::UNICODE_WideToMultiByte(szAbbrevBuf, (uint16_t*)pwsAbbrevStr, 5);
         if ((uint32_t)(int)strlen(szAbbrevBuf) > 1) {
           gcAbbrevMilSymbol = 0x4d;
@@ -1157,7 +1130,7 @@ static void STRTABLE_LoadAbbreviationSymbols(DWORD dwParam) {
           gcAbbrevMilSymbol = (short int)szAbbrevBuf[0];
         }
         if (gpStringTableBase) {
-          pwsAbbrevStr = STRTABLE_GetStringByIndex(gpStringTableBase, gpStringIndexBase, 0x14d2, dwParam);
+          pwsAbbrevStr = STRTABLE_GetStringByIndex(gpStringTableBase, gpStringIndexBase, 0x14d2);
           Unicode::UNISYS::UNICODE_WideToMultiByte(szAbbrevBuf, (uint16_t*)pwsAbbrevStr, 5);
           if ((uint32_t)(int)strlen(szAbbrevBuf) > 1) {
             gcAbbrevBilSymbol = 0x42;
@@ -1165,7 +1138,7 @@ static void STRTABLE_LoadAbbreviationSymbols(DWORD dwParam) {
             gcAbbrevBilSymbol = (short int)szAbbrevBuf[0];
           }
           if (gpStringTableBase) {
-            pwsAbbrevStr = STRTABLE_GetStringByIndex(gpStringTableBase, gpStringIndexBase, 0x14d3, dwParam);
+            pwsAbbrevStr = STRTABLE_GetStringByIndex(gpStringTableBase, gpStringIndexBase, 0x14d3);
             Unicode::UNISYS::UNICODE_WideToMultiByte(szAbbrevBuf, (uint16_t*)pwsAbbrevStr, 5);
             if ((uint32_t)(int)strlen(szAbbrevBuf) > 1) {
               gcAbbrevTrilSymbol = 0x54;
@@ -1394,7 +1367,7 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
         }
       }
 
-      STRTABLE_LoadAbbreviationSymbols((DWORD)pEntryData);
+      STRTABLE_LoadAbbreviationSymbols();
       return 1;
     }
 }

@@ -97,15 +97,15 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::ChangeLinkOffset(i
 
 // @sourcefile .\Chat\Ignorelist.cpp
 template<> ::MappingEntryNode * TSExplicitList<MappingEntryNode, -572662307>::DeleteNode(::MappingEntryNode * pNode) {
-    TSLink<::MappingEntryNode>* pListHead = !pNode ? &this->m_terminator : (TSLink<::MappingEntryNode>*)((intptr_t)&pNode->m_hashval + this->m_linkoffset);
-    intptr_t uNextOffset = pListHead->m_next;
+    TSLink<::MappingEntryNode>* pLink = pNode ? (TSLink<::MappingEntryNode>*)((intptr_t)pNode + this->m_linkoffset) : &this->m_terminator;
+    ::MappingEntryNode* pNextNode = (::MappingEntryNode*)(pLink->m_next <= 0 ? 0 : pLink->m_next);
     if (pNode->szMappedValue) {
       Storm::Source::SMem::SMemFree(pNode->szMappedValue, ".\\Chat\\Ignorelist.cpp", 0x11, 0);
     }
 
     pNode->Destructor();
     Storm::Source::SMem::SMemFree(pNode, D2Common::Chat::Ignorelist::MappingEntryNode::s___AUMappingEntryNode___0074362c, -2, 0);
-    return (::MappingEntryNode*)(uNextOffset <= 0 ? 0 : uNextOffset);
+    return pNextNode;
 }
 
 // stpl-orphan: a COMDAT copy in TSExplicitList<MappingEntryNode, -572662307> that no member owns
@@ -231,10 +231,10 @@ void __thiscall Destructor_UnreferencedCopy(TSExplicitList<::MappingEntryNode, -
 
 template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::ReallocData(uint32_t nAlloc) {
     TSExplicitList<::MappingEntryNode, -572662307>* pBucket;
-    uint32_t* puVar1;
+    TSExplicitList<::MappingEntryNode, -572662307>* pNewList;
     TSLink<::MappingEntryNode>** pPrevLink2;
     TSLink<::MappingEntryNode>* pTVar2;
-    uint32_t* pNewTerminator;
+    TSLink<::MappingEntryNode>* pNewTerminator;
     TSLink<::MappingEntryNode>* uHeadEntry;
     uint32_t uLinkOffset;
     uint32_t uNewCount;
@@ -282,15 +282,15 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
       pBucket = pBlock;
       do {
         uHeadEntry = &pBucket->m_terminator;
-        puVar1 = (uint32_t*)(-4 - (intptr_t)pBlock + (intptr_t)uHeadEntry + (int)this->m_data);
-        if (puVar1) {
-          pNewTerminator = puVar1 + 1;
-          *pNewTerminator = 0;
-          puVar1[2] = 0;
+        pNewList = (TSExplicitList<::MappingEntryNode, -572662307>*)((char*)this->m_data + ((char*)pBucket - (char*)pBlock));
+        if (pNewList) {
+          pNewTerminator = &pNewList->m_terminator;
+          pNewTerminator->m_prevlink = 0;
+          pNewTerminator->m_next = 0;
           uNewCount = *(uint32_t*)((char*)(uHeadEntry - 1) + 4);
-          *pNewTerminator = (uint32_t)(uintptr_t)pNewTerminator;
-          *puVar1 = uNewCount;
-          puVar1[2] = ~(uint32_t)pNewTerminator;
+          pNewTerminator->m_prevlink = pNewTerminator;
+          pNewList->m_linkoffset = uNewCount;
+          pNewTerminator->m_next = ~(intptr_t)pNewTerminator;
         }
 
         ((TSExplicitList<::MappingEntryNode, -572662307>*)((char*)(uHeadEntry - 1) + 4))->UnlinkAll();
@@ -314,7 +314,6 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
 
 template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::Destructor() {
     TSExplicitList<::MappingEntryNode, -572662307>* pBucket;
-    TSLink<::MappingEntryNode>** pPrevLink;
     TSLink<::MappingEntryNode>* nHead;
     uint32_t nBucketIdx = 0;
     if (this->m_count > 0) {
@@ -322,11 +321,10 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
       do {
         pBucket = &this->m_data[nBucketIdx];
         pBucket->UnlinkAll();
-        nHead = pBucket->m_terminator.m_prevlink;
         pTVar1 = &pBucket->m_terminator;
+        nHead = pTVar1->m_prevlink;
         if (nHead) {
-          pPrevLink = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pTVar1, -1);
-          *pPrevLink = nHead;
+          *(TSLink<::MappingEntryNode>**)D2_StormNextLink(pTVar1, -1) = nHead;
           pTVar1->m_prevlink->m_next = pTVar1->m_next;
           pTVar1->m_prevlink = 0;
           pTVar1->m_next = 0;
@@ -753,11 +751,11 @@ template<> __attribute__((noinline)) inline int32_t TSHashTable<MappingEntryNode
       this->nFullnessIndicator = 0;
     }
 
-    uint32_t nChainLen = this->tSlotListArray.m_data[nSlot].m_terminator.m_next;
-    nChainLen = (int)nChainLen <= 0 ? 0 : nChainLen;
+    intptr_t nChainLen = this->tSlotListArray.m_data[nSlot].m_terminator.m_next;
+    nChainLen = nChainLen <= 0 ? 0 : nChainLen;
     while (true) {
       TSExplicitList<::MappingEntryNode, -572662307>* pNode;
-      if ((int)nChainLen <= 0) {
+      if (nChainLen <= 0) {
         return 0;
       }
 

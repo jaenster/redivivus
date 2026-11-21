@@ -296,7 +296,7 @@ int __stdcall SOUND_PlayNextAmbientSound() {
           if (!dwVolume && szSoundFile) {
             D2SoundSmp::SOUNDSMP_Reset(gpMusicStreamBuffer);
             D2SoundSmp::SOUNDSMP_SetVolume(gpMusicStreamBuffer, 0x6e);
-            BVar1 = D2SoundSmp::SOUNDSMP_OpenAndStreamFile((int**)gpMusicStreamBuffer, szSoundFile, 0, 0);
+            BVar1 = D2SoundSmp::SOUNDSMP_OpenAndStreamFile(gpMusicStreamBuffer, szSoundFile, 0, 0);
             nAmbientCount = gnAmbientSoundEntryCount;
             if (BVar1) {
               /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);

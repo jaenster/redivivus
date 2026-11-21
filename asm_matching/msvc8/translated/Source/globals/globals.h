@@ -475,7 +475,7 @@ typedef uint32_t (__fastcall *fnInitiatePatchDownload)(uint8_t * pbData, uint32_
 typedef uint32_t (__fastcall *fnSendReadUserData)(char * szAccount, uint32_t nCount, uint32_t nRequestId, char * * pszKeys);
 typedef uint32_t (__fastcall *fnSendWriteUserData)(char * szAccount, uint32_t nCount, char * * pszKeys, char * * pszValues);
 typedef uint32_t (__fastcall *fpCelDecodeCachedByFormat)(::CELLIST * pDCCSrc, DC6 * pDCCDest);
-typedef uint32_t (__fastcall *fpMonsterAiForEach)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2MonsterAiParameterStruct * test);
+typedef D2UnitStrc * (__fastcall *fpMonsterAiForEach)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2MonsterAiParameterStruct * test);
 typedef uint32_t (__fastcall *fpProperties)(uint32_t param_1, D2UnitStrc * param_2, D2UnitStrc * param_3, D2SetsTxtFStrc * param_4, uint32_t param_5, int param_6, uint32_t param_7, uint32_t param_8, int param_9, uint32_t param_10, D2UnitStrc * pContextUnit);
 typedef uint64_t (__stdcall *pfnSymGetModuleBase64)(HANDLE hProcess, DWORD qwAddrLow, DWORD qwAddrHigh);
 typedef uint64_t (__stdcall *pfnSymLoadModule64)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD BaseOfDllLow, DWORD BaseOfDllHigh, DWORD SizeOfDll);
@@ -536,7 +536,7 @@ typedef void (__fastcall *pfnPartyScreenAction)(::SGAMEDATA * pGame, D2UnitStrc 
 typedef void (__fastcall *pfnPlayerModeNetMsg)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, int32_t nModeIndex);
 typedef void (__fastcall *pfnRoomExActivationHandler)(D2RoomExStrc * pRoomEx);
 typedef void (__fastcall *pfnRoomExDeactivationHandler)(D2RoomExStrc * pRoomEx);
-typedef void (__fastcall *pfnSCompCodec)(void * pDst, uint32_t * pnDstLen, void * pSrc, uint32_t nSrcLen, uint32_t dwParam);
+typedef void (__fastcall *pfnSCompCodec)(void * pDst, uint32_t * pnDstLen, void * pSrc, uint32_t nSrcLen, void * pvParam);
 typedef void (__fastcall *pfnSCompEncodeCodec)(short * pDst, uint32_t * pnDstLen, short * pSrc, uint32_t nSrcLen, void * pUserData, uint32_t nBitsPerSample);
 typedef void (__fastcall *pfnSpriteCacheValidate)(eD2UnitType eUnitType, int32_t nClassId, int32_t nMode);
 typedef void (__stdcall *D2AppModeShutdownFunc)();

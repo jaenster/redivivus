@@ -116,7 +116,7 @@ int32_t __fastcall SKILLSASS_GetCltMissileByAuraLevel(D2UnitStrc * pUnit, int32_
     if (!pSkillTxt) {
       return -1;
     }
-    if (!(*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
+    if (!(pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
       return (int)pSkillTxt->cltmissile[1];
     }
 
@@ -152,7 +152,7 @@ uint32_t __fastcall SKILLSASS_GetPrgCalcByAuraLevel(D2UnitStrc * pUnit, eD2Skill
     if (!pSkillTxt) {
       return 0;
     }
-    if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+    if (pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
       D2StatListExStrc* pStatListEx;
       sAuraState = pSkillTxt->aurastate;
       if (sAuraState < 0 || (int)sAuraState >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {

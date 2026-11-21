@@ -36,6 +36,14 @@
 #include "Source/D2Common/Drlg/OutPlace.data.h"
 #include "Source/D2Common/Txt/Skills.inline.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_POOL_AT
@@ -504,26 +512,17 @@ D2DrlgLevelWarpCoordinatesStrc * __fastcall DRLGWARP_GetWarpCoordinatesFromRoomE
 
 // If room-ex state flags exist, propagate them into each RoomEx->dwOtherFlags bit 0 based on the per-room flag array.
 static void DRLG_ApplyRoomExStateFlags(D2DrlgLevelStrc * pLevel) {
-    if (!(pLevel->nRoomExCount && pLevel->pRoomExStateFlags)) {
+    if (!pLevel->nRoomExCount || !pLevel->pRoomExStateFlags) {
       return;
     }
 
-    D2RoomExStrc* pRoomEx = pLevel->pRoomExFirst;
-    if (!pRoomEx) {
-      return;
-    }
-
-    int stateFlagOffset = 0;
-    do {
-      int* pStateFlag;
-      pStateFlag = &pLevel->pRoomExStateFlags[stateFlagOffset];
-      stateFlagOffset++;
-      if (*pStateFlag) {
+    int nIndex = 0;
+    for (D2RoomExStrc* pRoomEx = pLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
+      if (pLevel->pRoomExStateFlags[nIndex++]) {
         pRoomEx->dwOtherFlags |= 1;
       }
 
-      pRoomEx = pRoomEx->pRoomExNext;
-    } while (pRoomEx);
+    }
 }
 
 // Iterates all RoomEx entries in pDrlgLevelStrc to compute and store warp entry-point world coordinates. For each room bearing a warp flag, calls DRLGWARP_GetWarpDestinationFromArray to resolve destination, then records the room center (transformed to world space via CoordsRoomToWorld) into sWarpCoordinates.anX/anY. Returns the last resolved destination level ID.
@@ -1469,10 +1468,10 @@ void __fastcall DRLGROOMEX_InitTileData(D2RoomExStrc * pRoomEx) {
 }
 
 // Gets secondary floor grid flags at the given Y coordinate. Checks if the misc grid's sub-grid flag is set before reading from the embedded coords grid at 0xF4.
-static int __stdcall DRLGOUTDOOR_GetSecondaryFloorGridFlags(int * pLevelCtx, int32_t nGridY, int32_t nGridX) {
-    if (*(int*)(pLevelCtx[0x14] + 0x18)) {
+static int __stdcall DRLGOUTDOOR_GetSecondaryFloorGridFlags(D2LvlSubTxt * pLvlSub, int32_t nGridY, int32_t nGridX) {
+    if (pLvlSub->pDrlgFile->nFloorLayers) {
       int nFlags;
-      nFlags = DrlgGrid::GetGridFlags((D2DrlgGridStrc*)(pLevelCtx + 0x3d), nGridX, nGridY);
+      nFlags = DrlgGrid::GetGridFlags(&pLvlSub->pFloorGrid, nGridX, nGridY);
       return nFlags;
     }
 
@@ -4028,7 +4027,6 @@ void __fastcall DRLGOUTROOM_LinkOutdoorRoomExits(D2DrlgLevelStrc * pLevel) {
 
 // Estimates path distance between two grid positions (nX1,nY1) and (nX2,nY2 on stack). Uses a weighted Manhattan heuristic: min(dx,dy) + 2*max(dx,dy), which approximates diagonal+cardinal movement cost. Used by outdoor room pathfinding to rank exit connections.
 static int __stdcall DRLGOUTROOM_EstimatePathDistance(int nX1, int nY1, int nX2, int nY2) {
-    int nDist;
     int nDx = nX1 - nX2;
     if (nDx < 0) {
       nDx = -nDx;
@@ -4039,13 +4037,7 @@ static int __stdcall DRLGOUTROOM_EstimatePathDistance(int nX1, int nY1, int nX2,
       nDy = -nDy;
     }
 
-    int nMin = nDx;
-    if (!(nDx < nDy || (nDist = nDy + nDx * 2 , nMin = nDy , nDx <= nDy))) {
-      return nDist;
-    }
-
-    nDist = nMin + nDy * 2;
-    return nDist;
+    return min(nDx, nDy) + max(nDx, nDy) * 2; // steer-ok: windef.h min/max macros
 }
 
 // NOTE: Register params: pint (EAX): int *
@@ -4228,10 +4220,9 @@ D2DrlgOutRoomPathNodeStrc * __stdcall DRLGOUTROOM_PathSearchStep(D2DrlgOutRoomPa
 BOOL __fastcall DRLGOUTROOM_FindPathBetweenExits(D2DrlgLevelStrc * pLevel, int32_t nExitIndex) {
     D2DrlgVertexStrc* pAllocVertex;
     D2DrlgVertexStrc* pPathVertex;
-    int* piVar4;
     D2DrlgOutRoomPathNodeStrc* pNodeIter;
     D2DrlgOutRoomPathPoolStrc sPathPool;
-    int aInitNode[10];
+    D2DrlgOutRoomPathNodeStrc sInitNode;
     int32_t aTargetPos[2];
     int32_t nInitGCost;
     int32_t nInitHCost;
@@ -4276,7 +4267,7 @@ BOOL __fastcall DRLGOUTROOM_FindPathBetweenExits(D2DrlgLevelStrc * pLevel, int32
 
     D2DrlgOutRoomPathNodeStrc* pFoundNode;
     nExitWorldX = Path::DRLGPATH_GetPathDirection(nStartGridX, nStartGridY, aTargetPos[0], iVar5);
-    aInitNode[2] = 0;
+    sInitNode.nGCost = 0;
     if (nTargetGridYRaw < 0) {
       nTargetGridYRaw = -nTargetGridYRaw;
     }
@@ -4289,8 +4280,8 @@ BOOL __fastcall DRLGOUTROOM_FindPathBetweenExits(D2DrlgLevelStrc * pLevel, int32
       nTargetGridYRaw = iVar2;
     }
 
-    *(uint8_t*)(char*)&aInitNode[7] = (uint8_t)(nExitWorldX / 2) & 3;
-    aInitNode[1] = iVar5 + nTargetGridYRaw * 2;
+    sInitNode.nDirection = (uint8_t)(nExitWorldX / 2) & 3;
+    sInitNode.nHCost = iVar5 + nTargetGridYRaw * 2;
     sPathPool.aNodes[0].nFCost = 0;
     sPathPool.aNodes[0].nHCost = 0;
     sPathPool.aNodes[0].nGCost = 0;
@@ -4303,20 +4294,19 @@ BOOL __fastcall DRLGOUTROOM_FindPathBetweenExits(D2DrlgLevelStrc * pLevel, int32
     sPathPool.aNodes[0].pParent = 0;
     sPathPool.aNodes[0].pChild = 0;
     sPathPool.pHead = sPathPool.aNodes;
-    aInitNode[4] = nStartGridY;
-    aInitNode[3] = nStartGridX;
-    nTargetGridYRaw = aInitNode[1] / 2 + aInitNode[1];
-    aInitNode[0] = aInitNode[1];
+    sInitNode.nY = nStartGridY;
+    sInitNode.nX = nStartGridX;
+    nTargetGridYRaw = sInitNode.nHCost / 2 + sInitNode.nHCost;
+    sInitNode.nFCost = sInitNode.nHCost;
     nExitWorldX = nTargetGridYRaw + 0x23;
-    aInitNode[5] = -1;
-    aInitNode[6] = (int)gaOutRoomPathDirectionDelta;
-    aInitNode[9] = 0;
-    aInitNode[8] = 0;
+    sInitNode.nDirStepCount = -1;
+    sInitNode.pDirDelta = (char*)gaOutRoomPathDirectionDelta;
+    sInitNode.pChild = 0;
+    sInitNode.pParent = 0;
     do {
       sPathPool.nNodeCount = 1;
-      piVar4 = aInitNode;
       pNodeIter = sPathPool.pHead;
-      memcpy(pNodeIter, piVar4, 40);
+      memcpy(pNodeIter, &sInitNode, sizeof sInitNode);
       pFoundNode = DRLGOUTROOM_PathSearchStep(&sPathPool, nTargetGridYRaw, pLevel, aTargetPos);
       nTargetGridYRaw += 5;
       if (sPathPool.nNodeCount >= 900) {
@@ -4348,7 +4338,7 @@ BOOL __fastcall DRLGOUTROOM_FindPathBetweenExits(D2DrlgLevelStrc * pLevel, int32
     return 0;
 }
 
-static void * keep_0066f350 = (0 ? (DRLGOUTDOOR_GetSecondaryFloorGridFlags(*(int * *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_0066f350 = (0 ? (DRLGOUTDOOR_GetSecondaryFloorGridFlags(*(D2LvlSubTxt * *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 static void * keep_00675de0 = (0 ? (DRLGOUTPLACE_CalcEdgeBorderCoords(*(D2DrlgCoordsStrc * *)0, *(D2DrlgCoordsStrc * *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 static void * keep_00675eb0 = (0 ? (DRLGOUTPLACE_CalcEdgeBorderCoordsFlipped(*(D2DrlgCoordsStrc * *)0, *(D2DrlgCoordsStrc * *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 static void * keep_00675f80 = (0 ? (DRLGOUTPLACE_CalcCornerBorderCoords(*(D2DrlgCoordsStrc * *)0, *(D2DrlgCoordsStrc * *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);

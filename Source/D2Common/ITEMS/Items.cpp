@@ -6605,19 +6605,18 @@ int32_t __stdcall CalculateTransactionCost_Thunk(D2UnitStrc * pUnit, D2UnitStrc 
 
 // Takes only pItem. The prologue's PUSH ECX reserves the 4-byte slot for the second body location byte ([EBP-1]); ECX is not an argument.
 uint32_t __stdcall ITEMS_GetRequiredBodyType(D2UnitStrc * pItem) {
-    D2UnitStrc* pItemUnit = pItem;
     if (!(pItem && pItem->eUnitType == UNIT_ITEM)) {
       return 0;
     }
 
-    pItem = (D2UnitStrc*)((uintptr_t)pItem & 0xffffff);
-    uint32_t uBodyLoc2 = 0 & 0xffffff;
-    ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2(pItemUnit, (eD2BodyLoc*)((intptr_t)&pItem + 3), (eD2BodyLoc*)((intptr_t)&uBodyLoc2 + 3));
-    if (!(*(uint8_t*)((char*)&pItem + 3) != '\0' || *(uint8_t*)((char*)&uBodyLoc2 + 3) != '\0')) {
+    eD2BodyLoc nBodyLoc1 = 0;
+    eD2BodyLoc nBodyLoc2 = 0;
+    ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2(pItem, &nBodyLoc1, &nBodyLoc2);
+    if (!nBodyLoc1 && !nBodyLoc2) {
       return 0;
     }
 
-    eD2ItemTypes eItemType = ITEM_GetItemData_wType(pItemUnit);
+    eD2ItemTypes eItemType = ITEM_GetItemData_wType(pItem);
     D2ItemTypesTxt* pItemTypesTxt = (int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize ? sgptDataTable->pTxtItemTypes + eItemType : nullptr;
     if (pItemTypesTxt) {
       return (uint32_t)pItemTypesTxt->body;

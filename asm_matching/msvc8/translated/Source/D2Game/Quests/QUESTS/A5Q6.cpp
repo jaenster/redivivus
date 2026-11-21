@@ -941,7 +941,7 @@ void __fastcall Objects_InitFn79_Zoo(D2ObjectInitFnArg * pInitArg) {
       nAttempt++;
       pQuestSpecificA1Q4->nQuestFlags = nRolledMonId;
       D2MonStatsTxt* pMonStatsTxt;
-      if ((pMonStatsTxt = nRolledMonId >= 0 && nRolledMonId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nRolledMonId : nullptr) && (uint8_t)*((uint8_t*)pMonStatsTxt + 0xe) & Fog::BitBuffer::gadwBitMasks[6]) {
+      if ((pMonStatsTxt = nRolledMonId >= 0 && nRolledMonId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nRolledMonId : nullptr) && pMonStatsTxt->aFlagBytes[2] & Fog::BitBuffer::gadwBitMasks[6]) {
         pQuestSpecificA1Q4->field_0xA0 = '\x01';
       }
     } while (pQuestSpecificA1Q4->field_0xA0 == '\0');

@@ -73,7 +73,7 @@ char * __stdcall GetUnitClassIdToName(struct D2UnitStrc * pUnit, char * szResult
 char * __stdcall GetNameByClassIdAndType(eD2UnitType eUnitType, int16_t nClassId, char * szResult, size_t nSize);
 void __stdcall StoreDataTables(char * szFileName, void * pWriteBuffer, size_t nSize, uint32_t nRecordCount);
 // @sourcefile .\DATATBLS\DataTbls.cpp
-struct D2ArchiveStrc * __fastcall ARCHIVE_LoadDataTables(struct D2PoolManagerStrc * pMemory, char * szTableName, char * szExtension, uint32_t * pSize, char * szFile, int32_t nLine);
+void * __fastcall ARCHIVE_LoadDataTables(struct D2PoolManagerStrc * pMemory, char * szTableName, char * szExtension, uint32_t * pSize, char * szFile, int32_t nLine);
 // Loads and compiles a DataTbls .txt/.bin table into a parsed binary struct array. If sgtDataTable.bUseTxt is set, loads the .txt via ARCHIVE_LoadDataTables (mapping "leveldefs"->"levels"), parses each line into nEndOffset-sized records via Fog Excel, and writes a ".bin" cache through StoreDataTables. Then loads the table for use (.bin if gpaMiscTxtTables else freshly parsed .txt), returns the record buffer and writes the row count to *nTxtTableSize. Halts via ErrorManager on load failure.
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void * __stdcall CompileTxt(struct D2PoolManagerStrc * pMemory, char * szTableName, struct D2BinFieldInputStrc * pBinFieldInput, int * nTxtTableSize, int32_t nEndOffset);

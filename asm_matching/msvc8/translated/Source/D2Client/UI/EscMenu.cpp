@@ -58577,21 +58577,7 @@ static int __stdcall UI_SLIDER_GetValueFromPosition(int32_t nCurrentPos, int32_t
 }
 
 static uint32_t __fastcall UI_SLIDER_GetPositionFromValue(D2EscMenuItemStrc * pSliderItem, uint32_t nMinPos, uint32_t nMaxPos) {
-    float fRange = (float)(int)(nMaxPos - nMinPos);
-    if ((int)(nMaxPos - nMinPos) < 0) {
-      fRange += 4294967296.0;
-    }
-
-    uint32_t nSteps = pSliderItem->nSubImageCount - 1;
-    float fStepCount = (float)nSteps;
-    float fCurrentValue = (float)pSliderItem->nImageIndex;
-    if (pSliderItem->nImageIndex < 0) {
-      fCurrentValue += 4294967296.0;
-    }
-
-    float fBasePos = (float)nMinPos;
-    int32_t nResultPos = (int32_t)(int64_t)(fBasePos + fCurrentValue * (fRange / fStepCount));
-    return nResultPos;
+    return (uint32_t)((float)(nMaxPos - nMinPos) / (float)(uint32_t)(pSliderItem->nSubImageCount - 1) * (float)(uint32_t)pSliderItem->nImageIndex + (float)nMinPos);
 }
 
 void __fastcall UI_SLIDER_ApplyMasterVolumeFromSlider(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
@@ -59764,32 +59750,28 @@ void __fastcall ESCMENU_SwitchToSaveExitMenu(D2EscMenuItemStrc * pItem, D2UIMous
 
 void __fastcall ESCMENU_SwitchToDeleteCharMenu(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     ui::SetUIFlag(UI_ESCMENU, UI_SET, 0);
-    BOOL BVar1 = Fog::D2CheckExpansionGame();
-    if (BVar1) {
+    if (Fog::D2CheckExpansionGame()) {
       gpEscMenuItemCount = &gaEscMenuHeaderDeleteChar;
       gpEscMenuCurrentTable = gaEscMenuDeleteCharTable;
-      gnEscMenuSelectedIndex = gaEscMenuHeaderDeleteChar.nItemCount - 1;
-      return;
+    } else {
+      gpEscMenuItemCount = &gaEscMenuHeaderSwitchClass;
+      gpEscMenuCurrentTable = gaEscMenuSwitchClassTable;
     }
 
-    gpEscMenuItemCount = &gaEscMenuHeaderSwitchClass;
-    gpEscMenuCurrentTable = gaEscMenuSwitchClassTable;
-    gnEscMenuSelectedIndex = gaEscMenuHeaderSwitchClass.nItemCount - 1;
+    gnEscMenuSelectedIndex = gpEscMenuItemCount->nItemCount - 1;
 }
 
 void __fastcall ESCMENU_SwitchToExpansionSaveExitMenu(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     ui::SetUIFlag(UI_ESCMENU, UI_SET, 0);
-    BOOL BVar1 = Fog::D2CheckExpansionGame();
-    if (BVar1) {
+    if (Fog::D2CheckExpansionGame()) {
       gpEscMenuItemCount = &gaEscMenuHeaderExpansionSaveExit;
       gpEscMenuCurrentTable = gaEscMenuExpansionSaveExitTable;
-      gnEscMenuSelectedIndex = gaEscMenuHeaderExpansionSaveExit.nItemCount - 1;
-      return;
+    } else {
+      gpEscMenuItemCount = &gaEscMenuHeaderExpansionOptions;
+      gpEscMenuCurrentTable = gaEscMenuClassicSaveExitTable;
     }
 
-    gpEscMenuItemCount = &gaEscMenuHeaderExpansionOptions;
-    gpEscMenuCurrentTable = gaEscMenuClassicSaveExitTable;
-    gnEscMenuSelectedIndex = gaEscMenuHeaderExpansionOptions.nItemCount - 1;
+    gnEscMenuSelectedIndex = gpEscMenuItemCount->nItemCount - 1;
 }
 
 void __fastcall ESCMENU_ShowControlConfig(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {

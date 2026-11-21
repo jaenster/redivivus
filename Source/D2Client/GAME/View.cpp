@@ -113,13 +113,9 @@ void __stdcall DrawLight() {
 void __stdcall VIEW_Init() {
     D2Common::DUNGEON::Dungeon::SetActCallbackFunc(Game::sgpDrlgAct, (::ACTCALLBACKFN)D2Client::Draw::LightMap::ACTCALLBACKFN);
     gnLightmapInterpolationState[1] = 0;
-    int nLoopIdx = 1;
-    do {
-      uint32_t nDivisor;
-      nDivisor = (uint32_t)nLoopIdx;
-      nLoopIdx++;
-      gnLightmapInterpolationState[nLoopIdx] = (uint32_t)(0x10000 / nDivisor);
-    } while (nLoopIdx < 0x100);
+    for (int nLoopIdx = 1; nLoopIdx < 0x100; nLoopIdx++) {
+      gnLightmapInterpolationState[nLoopIdx + 1] = 0x10000u / nLoopIdx;
+    }
 }
 
 uint8_t * __stdcall VIEW_AllocByteTable(uint32_t nDim, int32_t nSteps) {

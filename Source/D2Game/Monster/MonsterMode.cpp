@@ -1003,7 +1003,7 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2ModeChangeStrc * 
 
     int nMonStatsSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
     D2MonStatsTxt* pMonStats = nClassId < nMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
-    if (!(pMonStats && (uint8_t)*((uint8_t*)pMonStats + 0xe) & Fog::BitBuffer::gadwBitMasks[4])) {
+    if (!(pMonStats && pMonStats->aFlagBytes[2] & Fog::BitBuffer::gadwBitMasks[4])) {
       return 1;
     }
     if (pVictim->eUnitType == UNIT_MONSTER && nClassId >= 0) {

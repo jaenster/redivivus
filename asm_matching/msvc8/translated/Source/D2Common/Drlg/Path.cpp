@@ -2113,38 +2113,29 @@ static void DRLGPATH_AdvanceNodeDirection(D2DrlgRoomAStarNodeStrc * pNode, D2Drl
 
 // Advances through a chain of path nodes, incrementing their visit count and updating their direction. When a node reaches visit count 5, moves to its parent. Returns the current node or 0 when the root is reached.
 static D2DrlgRoomAStarNodeStrc * __stdcall DRLGPATH_AdvancePathNodeChain(D2DrlgAStarContextStrc * pAStarCtx, D2DrlgRoomAStarNodeStrc * pNode) {
-    D2SeedStrc* pDVar1;
-    uint32_t lSeedNext;
     if (pNode->nFlags < 4) {
       pNode->pSeedPtr++;
       DRLGPATH_AdvanceNodeDirection(pNode, pAStarCtx);
     }
 
     pNode->nFlags++;
-    short int nVisitCountW = pNode->nFlags;
-    while (true) {
-      if (nVisitCountW != 5) {
-        return pNode;
-      }
+    while (pNode->nFlags == 5) {
       if (pNode == pAStarCtx->pOpenListHead) {
-        break;
+        return nullptr;
       }
 
       pNode = pNode->pParent;
       pNode->pSeedPtr++;
       if (pAStarCtx->bRandomizeDirection) {
-        pDVar1 = pAStarCtx->pSeed;
-        lSeedNext = D2_SeedRoll(pDVar1);
-        pNode->nDirection = gnDrlgMemoryMax[lSeedNext & 0x1f] + *pNode->pSeedPtr + pNode->nDirection & 7;
+        pNode->nDirection = gnDrlgMemoryMax[D2_SeedRoll(pAStarCtx->pSeed) & 0x1f] + *pNode->pSeedPtr + pNode->nDirection & 7;
       } else {
-        pNode->nDirection = pNode->nDirection + *pNode->pSeedPtr & 7;
+        pNode->nDirection = *pNode->pSeedPtr + pNode->nDirection & 7;
       }
 
       pNode->nFlags++;
-      nVisitCountW = pNode->nFlags;
     }
 
-    return nullptr;
+    return pNode;
 }
 
 // A*/IDA* pathfinding expansion step over the DRLG room path grid. Walks the open chain from the current node toward the target coords; for each node it tests the 8 directional neighbors, skips out-of-bounds and collision-blocked cells (Collision::CheckCollision_BlockPlayer_Type with the unit width and collision pattern), computes G (2 straight / 3 diagonal), Manhattan-style H and F costs, and links/allocates child nodes (capacity 0x384) from the path memory pool, deriving each child's facing direction (DRLGPATH_GetPathDirectionPacked with optional seeded RNG). Returns a pointer to the reached/best node's nFCost field, or NULL if no path (target unreached, cost over nMaxCost, pool exhausted, or >10000 iterations). Uses ppPathMemory (EDI) as both the node arena and the path-state header.

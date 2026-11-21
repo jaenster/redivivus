@@ -503,29 +503,31 @@ void __stdcall CHAT_ShutdownEmpty() {
 
 void __stdcall CHAT_DrawIMEComposition(int32_t nPosX, int32_t nPosY) {
     int32_t nWidthComposition = 0;
+    int32_t nX = nPosX;
+    int32_t nY = nPosY;
     int32_t nLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwcImeCompositionBuffer);
     if (nLen) {
       nWidthComposition = D2Win::Src::D2WinFont::DRAW_text0(gwcImeCompositionBuffer);
-      if (nWidthComposition - 0x83 + nPosX > ui::ScreenSizeX - 0x109) {
-        nPosX = 0x83;
-        nPosY += 0xf;
+      if (nWidthComposition - 0x83 + nX > ui::ScreenSizeX - 0x109) {
+        nX = 0x83;
+        nY += 0xf;
       }
 
-      D2Win::Src::D2WinFont::DRAW_text(gwcImeCompositionBuffer, nPosX, nPosY, 4, 0);
+      D2Win::Src::D2WinFont::DRAW_text(gwcImeCompositionBuffer, nX, nY, 4, 0);
     }
 
     nLen = D2Win::Src::D2WinFont::DRAW_text0(gwcIMECompositionString);
     int32_t nLenString = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwcIMECompositionString);
     if (nLenString) {
-      if (nLen + nPosX - 0x83 + nWidthComposition > ui::ScreenSizeX - 0x109) {
-        nPosX = 0x83;
-        nPosY += 0xf;
+      if (nLen + nX - 0x83 + nWidthComposition > ui::ScreenSizeX - 0x109) {
+        nX = 0x83;
+        nY += 0xf;
       }
 
-      D2Win::Src::D2WinFont::DRAW_text(gwcIMECompositionString, nPosX + nWidthComposition, nPosY, 4, 0);
+      D2Win::Src::D2WinFont::DRAW_text(gwcIMECompositionString, nX + nWidthComposition, nY, 4, 0);
     }
 
-    CHAT_DrawCursor(nPosY, nLen + nPosX - 0x83 + nWidthComposition, 4);
+    CHAT_DrawCursor(nY, nLen + nX - 0x83 + nWidthComposition, 4);
 }
 
 void __stdcall CHAT_DrawIMECandidates() {

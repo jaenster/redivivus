@@ -762,7 +762,7 @@ void __fastcall MONUNIQUE_ApplyModifierNihlathak(D2UnitStrc * pUnit, int32_t nUM
     D2UnitStrc* pMissileSelf = pUnit;
     D2UnitStrc* pOwnerUnit = CUnit::MISSILE_GetOwnerUnit(pUnit);
     D2MissilesTxt* pMissilesTxt;
-    if (!(pOwnerUnit && (pMissilesTxt = (int)eMissileClass >= 0 && (int)eMissileClass < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + eMissileClass : nullptr) && !(*((uint8_t*)pMissilesTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]))) {
+    if (!(pOwnerUnit && (pMissilesTxt = (int)eMissileClass >= 0 && (int)eMissileClass < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + eMissileClass : nullptr) && !(pMissilesTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]))) {
       return;
     }
 

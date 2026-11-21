@@ -37,37 +37,40 @@ struct __attribute__((packed)) D2MonStatsTxt {
     /* 0x008 */ uint16_t DescStr;
     /* 0x00A */ uint8_t field_0xa;
     /* 0x00B */ uint8_t field_0xb;
-    /* 0x00C */ struct {
-        /* 0x00C */ uint8_t isSpawn : 1; // 0b1
-        /* 0x00C */ uint8_t isMelee : 1; // 0b10
-        /* 0x00C */ uint8_t noRatio : 1; // 0b100
-        /* 0x00C */ uint8_t opendoors : 1; // 0b1000
-        /* 0x00C */ uint8_t SetBoss : 1; // 0b10000
-        /* 0x00C */ uint8_t BossXfer : 1; // 0b100000
-        /* 0x00C */ uint8_t boss : 1; // 0b1000000
-        /* 0x00C */ uint8_t primeevil : 1; // 0b10000000
-        /* 0x00D */ uint8_t npc : 1; // 0b1
-        /* 0x00D */ uint8_t interact : 1; // 0b01
-        /* 0x00D */ uint8_t inTown : 1; // 0b001
-        /* 0x00D */ uint8_t lUndead : 1;
-        /* 0x00D */ uint8_t hUndead : 1;
-        /* 0x00D */ uint8_t demon : 1;
-        /* 0x00D */ uint8_t flying : 1;
-        /* 0x00D */ uint8_t killable : 1;
-        /* 0x00E */ uint8_t switchai : 1;
-        /* 0x00E */ uint8_t nomultishot : 1;
-        /* 0x00E */ uint8_t neverCount : 1;
-        /* 0x00E */ uint8_t petIgnore : 1;
-        /* 0x00E */ uint8_t deathDmg : 1;
-        /* 0x00E */ uint8_t genericSpawn : 1;
-        /* 0x00E */ uint8_t zoo : 1;
-        /* 0x00E */ uint8_t placespawn : 1;
-        /* 0x00F */ uint8_t inventory : 1;
-        /* 0x00F */ uint8_t enabled : 1;
-        /* 0x00F */ uint8_t NoShldBlock : 1;
-        /* 0x00F */ uint8_t noaura : 1;
-        /* 0x00F */ uint8_t rangedtype : 1;
-        uint8_t : 3;  // unused
+    /* 0x00C */ union {
+        struct {
+            /* 0x00C */ uint8_t isSpawn : 1; // 0b1
+            /* 0x00C */ uint8_t isMelee : 1; // 0b10
+            /* 0x00C */ uint8_t noRatio : 1; // 0b100
+            /* 0x00C */ uint8_t opendoors : 1; // 0b1000
+            /* 0x00C */ uint8_t SetBoss : 1; // 0b10000
+            /* 0x00C */ uint8_t BossXfer : 1; // 0b100000
+            /* 0x00C */ uint8_t boss : 1; // 0b1000000
+            /* 0x00C */ uint8_t primeevil : 1; // 0b10000000
+            /* 0x00D */ uint8_t npc : 1; // 0b1
+            /* 0x00D */ uint8_t interact : 1; // 0b01
+            /* 0x00D */ uint8_t inTown : 1; // 0b001
+            /* 0x00D */ uint8_t lUndead : 1;
+            /* 0x00D */ uint8_t hUndead : 1;
+            /* 0x00D */ uint8_t demon : 1;
+            /* 0x00D */ uint8_t flying : 1;
+            /* 0x00D */ uint8_t killable : 1;
+            /* 0x00E */ uint8_t switchai : 1;
+            /* 0x00E */ uint8_t nomultishot : 1;
+            /* 0x00E */ uint8_t neverCount : 1;
+            /* 0x00E */ uint8_t petIgnore : 1;
+            /* 0x00E */ uint8_t deathDmg : 1;
+            /* 0x00E */ uint8_t genericSpawn : 1;
+            /* 0x00E */ uint8_t zoo : 1;
+            /* 0x00E */ uint8_t placespawn : 1;
+            /* 0x00F */ uint8_t inventory : 1;
+            /* 0x00F */ uint8_t enabled : 1;
+            /* 0x00F */ uint8_t NoShldBlock : 1;
+            /* 0x00F */ uint8_t noaura : 1;
+            /* 0x00F */ uint8_t rangedtype : 1;
+            uint8_t : 3;  // unused
+        };
+        uint8_t aFlagBytes[4]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
     };
     /* 0x010 */ char Code[4];
     /* 0x014 */ short MonSound;

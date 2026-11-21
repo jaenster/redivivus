@@ -1154,7 +1154,7 @@ static BOOL __stdcall ITEMMODE_CheckDuplicateQuestItem(D2UnitStrc * pUnit, D2Uni
         if (nCheckResult >= 0) {
           nItemQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
           pUniqueTxt = nItemQuality >= 0 && nItemQuality < D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + nItemQuality : nullptr;
-          if (pUniqueTxt && *((uint8_t*)pUniqueTxt + 0x2c) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+          if (pUniqueTxt && pUniqueTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
             nUniqueIdx = (int)(short int)pUniqueTxt->wId;
           }
         }
@@ -1313,7 +1313,7 @@ BOOL __fastcall SERVER_CheckIfPickable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         if (nCheckResult >= 0) {
           nCheckResult = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pItem);
           pUniqueTxt = D2Common::DATATBLS::ItemTbls::INV_GetUniqueItemsTxtLine(nCheckResult);
-          if (pUniqueTxt && *((uint8_t*)pUniqueTxt + 0x2c) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+          if (pUniqueTxt && pUniqueTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
             bQuestState = ITEMMODE_CheckDuplicateQuestItem(pItem, pInvItemHead, pItemsTxt);
             if (bQuestState) {
               return 0;

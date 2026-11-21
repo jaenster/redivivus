@@ -113,7 +113,7 @@ namespace D2Client { namespace UI { namespace Text {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 void __fastcall DRAW_SetMouseWorldOffsets(int nXOffset, int nYOffset);
 void __stdcall thunk_TEXT_ClearChatMessages();
-void __fastcall RENDERING_SetCurrentEngineAndIndex(pfnTextScrollComplete pfnCallback, void * pUserParam);
+void __fastcall RENDERING_SetCurrentEngineAndIndex(int32_t nEngine, uint32_t nIndex);
 void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_004967e0();
 void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_00496980();
 struct D2GSPacketSrv0x27_TextStrc * __stdcall PARTY_GetPanelInvGoldBtn();

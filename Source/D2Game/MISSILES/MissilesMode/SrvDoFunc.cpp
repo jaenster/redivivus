@@ -198,7 +198,7 @@ int32_t __fastcall fpMissileSrvDoFuncData_MissileFlagCheck(D2UnitStrc * pUnit, D
       int nClassId;
       nClassId = pUnit->nClassId;
       D2MissilesTxt* pMissilesTxt;
-      if ((pMissilesTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr) && *((uint8_t*)pMissilesTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
+      if ((pMissilesTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr) && pMissilesTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
         return 1;
       }
     }

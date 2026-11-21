@@ -497,7 +497,6 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     D2ItemsTxt* pItemTxt;
     int nPlayerClassId;
     D2GSPacketSrv0x5D nNpcNo;
-    char nRewardClassId[4];
     eD2ItemQuality eRewardQuality;
     uint32_t nMessageIndex = (uint32_t)pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
@@ -668,10 +667,9 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
       pSeed = GetQuestControlSeed(pQuestArgs->pGame);
       nRandIndex = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, pRewardList->sQuestGUID.aPlayerGUID[nPlayerClassId * 2 + 1]);
-      memcpy(nRewardClassId, (const void*)(pRewardList->sQuestGUID.aPlayerGUID[nPlayerClassId * 2] + nRandIndex * 4), sizeof(nRewardClassId));
       bQuestStateResult = 1;
       eRewardQuality = QUALITY_RARE;
-      pQuestSpecificData = ITEM_RewardItemInInventory(pQuestArgs->pGame, pQuestArgs->pPlayer, (int32_t)nRewardClassId, ITEMS::Items::Drop::GetLevel(pQuestArgs->pPlayer, LEVEL_None), eRewardQuality, bQuestStateResult);
+      pQuestSpecificData = ITEM_RewardItemInInventory(pQuestArgs->pGame, pQuestArgs->pPlayer, ((const int32_t*)pRewardList->sQuestGUID.aPlayerGUID[nPlayerClassId * 2])[nRandIndex], ITEMS::Items::Drop::GetLevel(pQuestArgs->pPlayer, LEVEL_None), eRewardQuality, bQuestStateResult);
       if (!pQuestSpecificData) {
         return;
       }

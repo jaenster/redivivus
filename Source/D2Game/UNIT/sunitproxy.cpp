@@ -930,7 +930,7 @@ void __fastcall SUNITPROXY_ProcessNpcItemQueue(::SGAMEDATA * pGame, D2UnitStrc *
           }
         }
       } else {
-        BVar1 = SUNITNPC::SUNITNPC_DiscardTradeListRolls(pGame, pNpcUnit, (int32_t)pMemoryToFree->pUnit, pMemoryToFree->nAction);
+        BVar1 = SUNITNPC::SUNITNPC_DiscardTradeListRolls(pGame, pNpcUnit, pMemoryToFree->pUnit, pMemoryToFree->nAction);
         if (BVar1) {
           if (pMemoryToFree != pNpc->pProxyQueue) {
             nSourceLine = 0x40a;
@@ -1258,14 +1258,12 @@ void __stdcall SUNITPROXY_InitAllNpcItemTables() {
 
 // @sourcefile .\UNIT\sunitproxy.cpp
 void __stdcall SUNITPROXY_FreeAllNpcItemTables() {
-    uint8_t* pMemoryToFree;
-    int nNpcIdx = 0;
-    do {
+    for (int nNpcIdx = 0; nNpcIdx < 17; nNpcIdx++) {
       if (gbaNpcItemTableBuilt[nNpcIdx] == 1) {
-        pMemoryToFree = gaNpcItemTables[nNpcIdx].pTradeItems;
+        uint8_t* pTradeItems = gaNpcItemTables[nNpcIdx].pTradeItems;
         gbaNpcItemTableBuilt[nNpcIdx] = 0;
-        if (pMemoryToFree) {
-          D2_FREE_POOL_AT(nullptr, pMemoryToFree, ".\\UNIT\\sunitproxy.cpp", 0x59d);
+        if (pTradeItems) {
+          D2_FREE_POOL_AT(nullptr, pTradeItems, ".\\UNIT\\sunitproxy.cpp", 0x59d);
           gaNpcItemTables[nNpcIdx].pTradeItems = 0;
         }
         if (gaNpcItemTables[nNpcIdx].pQuestItems) {
@@ -1273,9 +1271,7 @@ void __stdcall SUNITPROXY_FreeAllNpcItemTables() {
           gaNpcItemTables[nNpcIdx].pQuestItems = 0;
         }
       }
-
-      nNpcIdx++;
-    } while ((intptr_t)&gaNpcItemTables[nNpcIdx].pQuestItems < (intptr_t)((char*)&gaNpcItemTables + sizeof(gaNpcItemTables) + 8));
+    }
 }
 
 // Removes a specific player's proxy trade inventory from an NPC's trade list. Looks up the NPC by pProxyUnit->nClassId, then searches the trade-node linked list (unk0x08) for the node matching pPlayerUnit->nUnitGUID. If found, unlinks the node, frees its inventory via SUNITPROXY_FreeInventoryItems + STRUCT_FreeInventory, and returns the memory to pGame->pMemoryPool.

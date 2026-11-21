@@ -134,18 +134,13 @@ static int32_t WAYPOINT_GetActIndexFromMouse(int32_t nMouseX, int32_t nMouseY) {
 }
 
 static int32_t WAYPOINT_GetWaypointIndexFromMouse(int32_t nMouseX, int32_t nMouseY) {
-    uint32_t* pHitTestData;
-    int nIndex = 0;
-    int* pnRowLayout = gaWaypointRowLayout;
-    while ((pHitTestData = (uint32_t*)(pnRowLayout + 6) , gaWaypointListEntries[nIndex].bActivated == '\0' || nMouseX <= (int)pHitTestData[-1]) || nMouseX >= (int)(pHitTestData[-1] + 0x118) || nMouseY <= (int)*pHitTestData || nMouseY >= (int)(*pHitTestData + 0x1e)) {
-      nIndex++;
-      pnRowLayout = (int*)pHitTestData;
-      if ((intptr_t)&gaWaypointListEntries[nIndex].bActivated >= (intptr_t)((char*)&gaWaypointListEntries + sizeof(gaWaypointListEntries) + 4)) {
-        return -1;
+    for (int nIndex = 0; nIndex < 9; nIndex++) {
+      if (gaWaypointListEntries[nIndex].bActivated && nMouseX > gaWaypointRowLayout[nIndex * 6 + 5] && nMouseX < gaWaypointRowLayout[nIndex * 6 + 5] + 0x118 && nMouseY > gaWaypointRowLayout[nIndex * 6 + 6] && nMouseY < gaWaypointRowLayout[nIndex * 6 + 6] + 0x1e) {
+        return nIndex;
       }
     }
 
-    return nIndex;
+    return -1;
 }
 
 void Unreferenced_0049c560() {

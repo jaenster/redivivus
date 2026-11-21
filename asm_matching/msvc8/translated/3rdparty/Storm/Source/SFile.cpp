@@ -380,12 +380,12 @@ void __fastcall SFILE_ShiftSectorTable(D2MPQBlockEntryStrc * pSectorTable, int, 
     memset(pDst->abMD5, 0, 16 * sizeof(pDst->abMD5[0]));
 }
 
-void __fastcall Unreferenced_00415730(int param_1) {
-    if (!param_1) {
+void __fastcall Unreferenced_00415730(D2ArchiveStrc * pArchive) {
+    if (!pArchive) {
       return;
     }
 
-    (*(int*)(param_1 + 0x148))++;
+    pArchive->nRefCount++;
 }
 
 static int32_t SFILE_GetStreamPosition(D2StormAudioStreamRec * pStream) {
@@ -1834,7 +1834,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
                          (compressed). Destination advance is therefore bounded by nReadLen rounded up
                          to whole
                          sectors; SFILE_ReadSectors cannot itself walk pDstBuf out of the caller's
-                         buffer. */ BVar1 = SComp::SCompDecompress((uint32_t*)(__frame0.nBaseOffset + (char*)pDstBuf), &nDestSize, (uint32_t*)((char*)__frame0.pReadBuffer + nArchive + 8 - 8), nSectorSize, (uint32_t)pMpqArchive->szArchivePath);
+                         buffer. */ BVar1 = SComp::SCompDecompress((uint32_t*)(__frame0.nBaseOffset + (char*)pDstBuf), &nDestSize, (uint32_t*)((char*)__frame0.pReadBuffer + nArchive + 8 - 8), nSectorSize, pMpqArchive->szArchivePath);
                     if (!BVar1) {
                       SErr::SErrDisplayError(0x85100083, (uint32_t*)pMPQFileSaved->pArchive->szArchivePath, -4, nullptr, 0, 1);
                     }
@@ -4568,11 +4568,12 @@ void __stdcall SFILE_SelectAsyncRequest(D2ArchiveStrc * nFileHandle, uint32_t nC
     DWORD dwTickNow = GetTickCount();
     D2StormAsyncOpStrc* pRequest = (D2StormAsyncOpStrc*)(gSFileAsyncReqQueue.head.pNext <= 0 ? 0 : gSFileAsyncReqQueue.head.pNext);
     do {
+      intptr_t nPrevItem;
       uint32_t nSeekDistance;
       if ((intptr_t)pRequest <= 0) {
         return;
       }
-      if (!pRequest->pReadBufferBase || (nSeekDistance = pRequest->pPrevLink->pPrevLink->pNext , (int)nSeekDistance <= 0) || pRequest->pReadBufferBase != *(void**)(((int)nSeekDistance <= 0 ? 0 : nSeekDistance) + 0x24)) {
+      if (!pRequest->pReadBufferBase || (nPrevItem = pRequest->pPrevLink->pPrevLink->pNext , nPrevItem <= 0) || pRequest->pReadBufferBase != ((D2StormAsyncOpStrc*)nPrevItem)->pReadBufferBase) {
         nSeekDistance = 0;
         if (!gbSFileSeekOptimization || pRequest->pParentStream) {
           *ppReadyRequest = pRequest;

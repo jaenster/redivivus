@@ -19,7 +19,7 @@ template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, C
 
 // Unlinks a SGAMEDATA from up to two intrusive hash-table chains (pHashLink1/pHashLink2 with their corresponding nHashLinkOffset fields). For each non-null link, computes the back-pointer using the stored offset, patches the predecessor's next pointer to skip this node, then zeroes the game's own link field and offset. Called during game teardown to remove the game from name/token lookup tables before freeing memory.
 template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Unlink(::SGAMEDATA * pNode) {
-    int* pBackLink;
+    TSLink<::SGAMEDATA>** pBackLink;
     if (!pNode->m_linktoslot.m_next) {
       return;
     }
@@ -30,12 +30,12 @@ template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>
       intptr_t nHashLinkOffset;
       nHashLinkOffset = pNode->m_linktoslot.m_next;
       if (nHashLinkOffset < 0) {
-        pBackLink = (int*)~nHashLinkOffset;
+        pBackLink = (TSLink<::SGAMEDATA>**)~nHashLinkOffset;
       } else {
-        pBackLink = (int*)((char*)pTVar1 + (nHashLinkOffset - nLinkValue->m_next));
+        pBackLink = (TSLink<::SGAMEDATA>**)((char*)pTVar1 + (nHashLinkOffset - nLinkValue->m_next));
       }
 
-      *pBackLink = (int)nLinkValue;
+      *pBackLink = nLinkValue;
       pTVar1->m_prevlink->m_next = pNode->m_linktoslot.m_next;
       pTVar1->m_prevlink = 0;
       pNode->m_linktoslot.m_next = 0;
@@ -49,12 +49,12 @@ template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>
 
     intptr_t nHashLinkOffset2 = pNode->m_linktofull.m_next;
     if (nHashLinkOffset2 < 0) {
-      pBackLink = (int*)~nHashLinkOffset2;
+      pBackLink = (TSLink<::SGAMEDATA>**)~nHashLinkOffset2;
     } else {
-      pBackLink = (int*)((char*)pTVar1 + (nHashLinkOffset2 - nLinkValue->m_next));
+      pBackLink = (TSLink<::SGAMEDATA>**)((char*)pTVar1 + (nHashLinkOffset2 - nLinkValue->m_next));
     }
 
-    *pBackLink = (int)nLinkValue;
+    *pBackLink = nLinkValue;
     pTVar1->m_prevlink->m_next = pNode->m_linktofull.m_next;
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;
@@ -100,11 +100,11 @@ template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, C
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::DeleteNode(::SGAMEDATA * pNode) {
-    TSLink<::SGAMEDATA>* pSlotPtr = !pNode ? &this->m_terminator : (TSLink<::SGAMEDATA>*)(pNode->szGameName + (this->m_linkoffset - 0x2a));
-    intptr_t nSlotValue = pSlotPtr->m_next;
+    TSLink<::SGAMEDATA>* pSlotPtr = pNode ? (TSLink<::SGAMEDATA>*)(pNode->szGameName + (this->m_linkoffset - 0x2a)) : &this->m_terminator;
+    ::SGAMEDATA* pNext = (::SGAMEDATA*)(pSlotPtr->m_next <= 0 ? 0 : pSlotPtr->m_next);
     pNode->Destructor();
     Storm::Source::SMem::SMemFree(pNode, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
-    return (::SGAMEDATA*)(nSlotValue <= 0 ? 0 : nSlotValue);
+    return pNext;
 }
 
 // Register arguments: only this (ECX, the hash table); EDX is first written at 0052e653 from [ECX+0x1c] (1.14d asm).
@@ -312,8 +312,8 @@ template<> __declspec(noinline) inline int32_t TSHashTable<SGAMEDATA, HASHKEY_NO
       this->nFullnessIndicator = 0;
     }
 
-    uint32_t pHashData = this->tSlotListArray.m_data[nSlot].m_terminator.m_next;
-    int nSize = (int)pHashData <= 0 ? 0 : pHashData;
+    intptr_t pHashData = this->tSlotListArray.m_data[nSlot].m_terminator.m_next;
+    intptr_t nSize = pHashData <= 0 ? 0 : pHashData;
     while (true) {
       TSExplicitList<::SGAMEDATA, -572662307>* pValue;
       if (nSize <= 0) {

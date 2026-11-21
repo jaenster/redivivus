@@ -3018,7 +3018,7 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
       pIMipLevel = pCache->pNodeBuffer + nNodeIdx;
       pbPixelData = gpD3DTextureSpritePoolMemory0;
       pIMipLevel->pAssociatedTilePtr = pIVar1;
-      *(int*)((char*)pIMipLevel + 8) = nMipIdx;
+      pIMipLevel->nTileSlotIndex = nMipIdx;
       pIMipLevel->field_0x0C = pPalette;
       if (!nTmp) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x16d);
@@ -5046,8 +5046,8 @@ void __fastcall RENDERER_D3D_ApplyShadowTextureCoords(D2D3DVertexStrc * pVertex,
 }
 
 void __fastcall RENDERER_D3D_SetTextureStageColor(D2D3DVertexStrc * pVertex, uint32_t dwGamma, uint8_t byAlpha) {
-    uint32_t nLightRow = (uint8_t)dwGamma;
-    pVertex->dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)byAlpha << 8 | (uint16_t)(uint8_t)g_aLightingTable[(dwGamma >> 8 & 0xff) + (nLightRow << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint8_t)(dwGamma >> 0x10) + (nLightRow << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(dwGamma >> 0x18) + (nLightRow << 8)]);
+    uint8_t* pLightRow = &g_aLightingTable[(uint8_t)dwGamma << 8];
+    pVertex->dwDiffuse = (((uint32_t)byAlpha << 8 | pLightRow[(uint8_t)(dwGamma >> 8)]) << 8 | pLightRow[(uint8_t)(dwGamma >> 0x10)]) << 8 | pLightRow[dwGamma >> 0x18];
 }
 
 // Initializes perspective Z-division table at 0x00981748 (8192 entries). For each Z coordinate in range [-4096, 4095], calculates perspective factor as 3059712 / (Z - 3000), clamped to range Z=[-2999, 2999] to prevent divide-by-zero. Used for depth-based vertex scaling in 3D tile rendering.
@@ -5085,10 +5085,11 @@ void __fastcall SetPerspectiveScale(int nScaleX, int nScaleY) {
 void __fastcall AdjustPerspectivePosition(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust) {
     int nRotatedX = (nPosX - gnPerspectiveScaleY) * 0x18 >> 0x10;
     int nRotatedY = (nPosY - gnPerspectiveScaleZ) * 0x18 >> 0x10;
-    int nDepthIndex = nRotatedY + nRotatedX;
-    uint32_t nZDivisionScale = g_aPerspectiveZDivisionTable[(nDepthIndex * 0x9c9b8 + nBais * 0x99800 >> 0x14) - 0x1000U & 0x1fff];
+    int nDepth = (nRotatedY + nRotatedX) * 0x2d4;
+    int nHeight = nBais * 0x4cc;
+    uint32_t nZDivisionScale = g_aPerspectiveZDivisionTable[((nDepth * 0x376 + nHeight * 0x200) >> 0x14) - 0x1000 & 0x1fff];
     *pXAdjust = ((int)((nRotatedY - nRotatedX) * nZDivisionScale * 0x2d4) >> 0x14) + RENDERER_nWindowWidth / 2;
-    *pYAdjust = ((int)((nBais * 0x109a08 + nDepthIndex * -0x5a800 >> 10) * nZDivisionScale) >> 0x14) - 0x20 + RENDERER_nWindowHeight / 2;
+    *pYAdjust = ((int)((nHeight * 0x376 - nDepth * 0x200 >> 10) * nZDivisionScale) >> 0x14) - 0x20 + RENDERER_nWindowHeight / 2;
 }
 
 void __fastcall PerspectiveScalePosition(int nPosX, int nPosY, int nAngle, int * pXAdjust, int * pYAdjust, BOOL bOrder) {

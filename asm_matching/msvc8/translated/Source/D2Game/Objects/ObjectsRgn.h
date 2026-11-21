@@ -87,7 +87,7 @@ void __fastcall FreeObjectControl(::SGAMEDATA * pGame);
 struct D2ObjectRngStrc * __fastcall GetObjectLevelRng(::SGAMEDATA * pGame, eD2LevelId eLevelId);
 struct D2SeedStrc * __fastcall GetObjectControlSeed(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom);
 struct D2ObjectRngShrines * __fastcall GetShrinesRng(::SGAMEDATA * pGame);
-void __fastcall IncrementObjectTypeCount(int * pThis, uint32_t nObjectType);
+void __fastcall IncrementObjectTypeCount(::SGAMEDATA * pGame, uint32_t nObjectType);
 void __fastcall Send_0x26_Chat(struct D2ClientStrc * pClient, char * * ppMessage);
 void __fastcall SendDebugMessageToEveryone(::SGAMEDATA * pThis, int, char * pMessage);
 // @sourcefile .\OBJECTS\objrgn.cpp

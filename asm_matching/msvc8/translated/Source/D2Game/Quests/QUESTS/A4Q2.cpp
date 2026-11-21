@@ -65,16 +65,16 @@ void __fastcall Q26_CheckIzualProximity(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
 // [A4Q1 Izual helper] Returns true if NO player is near Izual: looks up The Fallen Angel quest data, then iterates all units via Q26_CheckIzualProximity to test proximity.
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
-BOOL __fastcall Q26_CheckIzualNearPlayer(::SGAMEDATA * pGame, int32_t pTargetUnit) {
+BOOL __fastcall Q26_CheckIzualNearPlayer(::SGAMEDATA * pGame, D2UnitStrc * pIzual) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheFallenAngel);
     if (pQuestData) {
-      D2QuestDataA3Q3Strc* pQuestSpecificData;
-      pQuestSpecificData = (D2QuestDataA3Q3Strc*)pQuestData->pQuestSpecificData.pA3Q3;
-      if (*(char*)((intptr_t)&pQuestSpecificData->nAltarX + 2) != '\0') {
-        pQuestSpecificData->bSerpentLocationValid = false;
-        pQuestSpecificData->nAltarY = pTargetUnit;
+      D2QuestDataA4Q1Strc* pQuestSpecificData;
+      pQuestSpecificData = pQuestData->pQuestSpecificData.pA4Q1;
+      if (pQuestSpecificData->bTalkedToIzualNpc != '\0') {
+        *(uint8_t*)&pQuestSpecificData->field_0x18 = 0;
+        pQuestSpecificData->pIzualUnit = pIzual;
         UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)Q26_CheckIzualProximity, pQuestSpecificData);
-        return (uint32_t)!pQuestSpecificData->bSerpentLocationValid;
+        return (uint32_t)!*(uint8_t*)&pQuestSpecificData->field_0x18;
       }
     }
 

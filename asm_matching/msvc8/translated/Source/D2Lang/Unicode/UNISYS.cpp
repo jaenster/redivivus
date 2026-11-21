@@ -638,15 +638,17 @@ uint16_t * __fastcall STRING_CopyCharToWCharWithSetMaxSize(uint16_t * pDestinati
 }
 
 char * __fastcall UNICODE_WideToMultiByte(char * pszDst, uint16_t * pwszSrc, int32_t nSize) {
-    char* pszResult = pszDst;
-    for (; nSize > 1 && *pwszSrc; pwszSrc++) {
-      *pszDst = (char)*pwszSrc;
+    char* pszCur = pszDst;
+    while (nSize > 1 && *pwszSrc) {
+      uint16_t* pwszCur = pwszSrc;
+      pwszSrc++;
+      *pszCur = (char)*pwszCur;
       nSize--;
-      pszDst++;
+      pszCur++;
     }
 
-    *pszDst = '\0';
-    return pszResult;
+    *pszCur = '\0';
+    return pszDst;
 }
 
 bool __fastcall UNICODE_CheckTrailingPunctuation(char * szSourceFile, int, uint16_t * pwChar) {

@@ -288,10 +288,10 @@ int32_t __stdcall QSERVER_DispatchAndCleanup(uint32_t * pTokenCursor, int32_t bF
 int __stdcall QSERVER_InitializeServerState();
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00416880(int32_t pQServer);
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0041e960(int32_t pQServer);
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00420d90(int32_t pQServer);
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0044bdd0(int32_t pQServer);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00416880(uint8_t * pObject);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0041e960(uint8_t * pObject);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00420d90(uint8_t * pObject);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0044bdd0(uint8_t * pObject);
 void __stdcall ServerInit_nullsub_Unref_0052b8f0();
 void __stdcall ServerInit_nullsub_Unref_0052b900();
 uint32_t __stdcall GAME_GetQServerListenSocket();
@@ -328,9 +328,9 @@ uint8_t * __stdcall _TableNullSub23();
 void __stdcall _TableNullSub24(uint32_t dwArg1, uint32_t dwArg2, uint32_t dwArg3, uint32_t dwArg4);
 void Unreferenced_0052bfc0();
 int Unreferenced_0052bfe0();
-int32_t __fastcall SERVER_IsTokenValid(uint16_t nToken);
+uint32_t __fastcall SERVER_IsTokenValid(uint16_t nToken);
 void __stdcall SetupAsBnetServer(struct D2BattleNetEventCallbackTable * pBnetCallbacks);
-void __stdcall QSERVER_PutNewGameOnTokenList(::SGAMEDATA * dwGameServerAddr, uint16_t nToken);
+void __stdcall QSERVER_PutNewGameOnTokenList(uint32_t dwGameToken, uint16_t nToken);
 // Allocates a 16-bit server token from the global 1024-slot token array. Locks csTokenHash critical section, increments QServerNextToken_Maybe (wraps at 0x400), scans for first unused slot (value == 0), marks it as allocated (0xffffffff), and returns the token. If all slots occupied, returns without allocating (upper 16 bits zero).
 uint16_t __stdcall QSERVER_GenerateToken();
 // Loads DRLG act and transitions client to state 2 (LoadingAct). Ensures act's dungeon generation is initialized, tells client to load act graphics/data, then advances connection state. Called after character validation during join flow.
@@ -347,7 +347,7 @@ void __fastcall LeaveHackPlayer(::SGAMEDATA * pGame, uint32_t nClientID, char * 
 BOOL __fastcall NET_D2GS_SERVER_IsValidChecks(int32_t nClientID, uint16_t nGameToken, uint8_t charClass, char * pPlayerName, uint32_t gameHash, char * byRef1, uint32_t * byRef2, uint8_t language, uint32_t * byRef3, uint32_t * byRef4, uint32_t * byRef5, uint32_t * byRef6, uint32_t dwParam);
 // Tears down game completely. First clears token from global 1024-slot table (0x882d18-0x883d38) under csGameHash lock. Then frees subsystems in order: MonsterRegion, ObjectControl, QuestControl, NpcControl, all clients, all units (5 types), inactive unit lists, timer queue, party, arena. Frees all 5 acts via FreeDungeons. Finally destroys memory pool, leaves and deletes critical section. Called after 5 min idle timeout or when game empties (frames 1500-7500 with zero clients).
 // @sourcefile .\GAME\Game.cpp
-void __fastcall GAME_DestroyGame(int32_t nGameToken, ::SGAMEDATA * pGame);
+void __fastcall GAME_DestroyGame(uint32_t nGameToken, ::SGAMEDATA * pGame);
 uint32_t __fastcall NET_IsClientAllowedToLeave(uint32_t nClientId);
 // Game-cleanup save: force-saves the disconnecting client's character (SaveGameAllGameTypes with bForceFullSave=1), then iterates all remaining clients in the game and soft-saves each (bForceFullSave=0). For non-singleplayer games, also invokes BattleNetServerService->fpUpdateCharacterLadder with the player's level, experience, char status, guild info, and file-time pointer so the ladder record stays current. No-ops if pClient or its player unit is null.
 void __fastcall SavePlayerOnCleanUp(struct D2ClientStrc * pClient, ::SGAMEDATA * pGame);
@@ -400,9 +400,9 @@ uint32_t __stdcall _TableNullSub20_Unref_0052e070();
 uint32_t __stdcall _TableNullSub20_Unref_0052e080();
 void __fastcall SERVER_EnterCriticalSection(TSExportTableSync<::SGAMEDATA, struct HSGAMEDATA__*, struct HSGAMEDATALOCK__*, CCritSect, 0>* pThis, int, int * pCriticalSection, int32_t nParam);
 uint32_t __stdcall ParamIsOne(int32_t nParam);
-uint32_t __fastcall QSERVER_TestGameFlags(int32_t pQServer, int, uint32_t nFlags);
-BOOL __fastcall QSERVER_HasActiveTaskQueue(int32_t pQServer);
-void * __fastcall QSERVER_GetTaskQueuePointer(int32_t pQServer);
+uint32_t __fastcall QSERVER_TestGameFlags(uint8_t * pObject, int, uint32_t nFlags);
+BOOL __fastcall QSERVER_HasActiveTaskQueue(uint8_t * pObject);
+void * __fastcall QSERVER_GetTaskQueuePointer(uint8_t * pObject);
 void __fastcall SendSaveFileToClient(::SGAMEDATA * pGame);
 void __fastcall FlushAllClientPackets(::SGAMEDATA * pGame);
 // Destroys a game by token using lock escalation. Locks csGameHash, looks up game, optionally notifies BattleNet service (fpCloseGame callback with player count and game time in seconds), acquires per-game lock, calls GAME_DestroyGame to tear down all units/rooms/quests, then frees game from hash-map and releases all locks.
@@ -459,9 +459,9 @@ void __stdcall QSERVER_DisconnectClientFromGame(uint32_t nClientId);
 void __fastcall NET_D2GS_SERVER_LeaveServer(uint32_t nClientId, int32_t bBroadcastLeave);
 // Removes a client from the server by token, cleaning up their connection state.
 void __fastcall LeaveServer(::SGAMEDATA * pQServer, struct D2ClientStrc * nClientToken);
-// Callback invoked when the character-server (CS) delivers save data for a joining client (JOIN step 3). Accumulates chunked save data; on completion with nCsResult==0 stores file-time fields into pClient and sends state-command 2 to advance the join sequence. On CS error or stale pClientContainer, triggers disconnect.
+// Callback invoked when the character-server (CS) delivers save data for a joining client (JOIN step 3). Accumulates chunked save data; on completion with nCsResult==0 stores file-time fields into pClient and sends state-command 2 to advance the join sequence. On CS error or stale dwPlayerData, triggers disconnect.
 // @sourcefile .\GAME\Game.cpp
-uint32_t __stdcall CLIENT_OnDatabaseCharacterReceived(uint32_t nClientId, void * pSaveData, uint16_t nChunkSize, uint16_t nTotalSize, int32_t nCsResult, uint32_t dwCharFlags, int * pFileTimeData, void * pClientContainer);
+uint32_t __stdcall CLIENT_OnDatabaseCharacterReceived(uint32_t nClientId, void * pSaveData, uint16_t nChunkSize, uint16_t nTotalSize, int32_t nCsResult, uint32_t dwCharFlags, int * pFileTimeData, uint32_t dwPlayerData);
 // GAME_CreateBattleNetGame - Creates BNet multiplayer game. Same subsystem init as SP but with 0x8000 pool size. Registers token on QSERVER, sets game metadata (name/pass/desc/difficulty/expansion/itemformat/seed).
 // @sourcefile .\GAME\Game.cpp
 uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePassword, char * szGameDescription, eD2ArenaFlags flags, uint8_t bTemplate, uint8_t bReserved, uint8_t bLadder, uint16_t * pServerTokenOut);
@@ -471,20 +471,20 @@ void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName
 void __fastcall SetStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue);
 void __stdcall _TableNullSub12_Unref_00532580();
 void __stdcall _TableNullSub12_Unref_005385e0();
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00539090(int32_t pQServer);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00539090(uint8_t * pObject);
 void __stdcall _TableNullSub16_Unref_0053bbc0(uint32_t dwArg1, uint32_t dwArg2);
 void __stdcall _TableNullSub16_Unref_0053bbd0(uint32_t dwArg1, uint32_t dwArg2);
 void __stdcall _TableNullSub16_Unref_0053bbe0(uint32_t dwArg1, uint32_t dwArg2);
 void __stdcall _TableNullSub16_Unref_0053bbf0(uint32_t dwArg1, uint32_t dwArg2);
 void __stdcall _TableNullSub16_Unref_0053bc00(uint32_t dwArg1, uint32_t dwArg2);
 void __fastcall GAME_SetObjectInitTableSetup(char nDifficulty);
-BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_00601dc0(int32_t pQServer);
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00601dd0(int32_t pQServer);
-BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_0060e0c0(int32_t pQServer);
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0060e230(int32_t pQServer);
+BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_00601dc0(uint8_t * pObject);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00601dd0(uint8_t * pObject);
+BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_0060e0c0(uint8_t * pObject);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0060e230(uint8_t * pObject);
 uint32_t __fastcall Unreferenced_0060e250(void * pLink);
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00650e90(int32_t pQServer);
-void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00666eb0(int32_t pQServer);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00650e90(uint8_t * pObject);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00666eb0(uint8_t * pObject);
 void StaticInit_Frames_TimeBetweenFrames();
 #endif // D2_MODULE_D2Game
 // 16 internal functions (defined in .cpp)

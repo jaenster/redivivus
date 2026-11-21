@@ -395,23 +395,20 @@ int __fastcall SOUNDSMP_GetVolume(D2SoundSmpStrc * pSoundSmp) {
 }
 
 void __fastcall SOUNDSMP_SetPan(D2SoundSmpStrc * ppSoundSmp, int32_t nPan) {
-    float fVar1;
     if (!ppSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ef);
       exit(-1);
     }
+    LONG nDSPan;
     if (nPan > 0x80) {
-      fVar1 = SOUNDSMP_ClampVolume(0.0, 127.0, (float)(0xff - nPan));
-      ppSoundSmp->pDSBuffer->lpVtbl->SetPan(ppSoundSmp->pDSBuffer, (int)-fVar1);
-      return;
-    }
-    if (nPan < 0x80) {
-      fVar1 = SOUNDSMP_ClampVolume(0.0, 127.0, (float)nPan);
-      ppSoundSmp->pDSBuffer->lpVtbl->SetPan(ppSoundSmp->pDSBuffer, (int)fVar1);
-      return;
+      nDSPan = (int)-SOUNDSMP_ClampVolume(0.0, 127.0, (float)(0xff - nPan));
+    } else if (nPan < 0x80) {
+      nDSPan = (int)SOUNDSMP_ClampVolume(0.0, 127.0, (float)nPan);
+    } else {
+      nDSPan = 0;
     }
 
-    ppSoundSmp->pDSBuffer->lpVtbl->SetPan(ppSoundSmp->pDSBuffer, 0);
+    ppSoundSmp->pDSBuffer->lpVtbl->SetPan(ppSoundSmp->pDSBuffer, nDSPan);
 }
 
 void __thiscall SOUNDSMP_Set3DPosition(D2SoundSmpStrc * pThis, float nSoundHandle, float fY, float pD2SoundsTxt) {
@@ -587,10 +584,10 @@ uint32_t __stdcall SOUNDSMP_GetEffectiveVolume() {
     return dwSpeakerFlag ? gnSoundGlobalVolume : 0;
 }
 
-BOOL __fastcall SOUNDSMP_OpenAndStreamFile(int * * ppnParam, char * szText, int32_t nLooping, int32_t bIsLooping) {
+BOOL __fastcall SOUNDSMP_OpenAndStreamFile(struct D2SoundSmpStrc * pSoundSmp, char * szText, int32_t nLooping, int32_t bIsLooping) {
     int32_t nLine;
     D2MPQFileStrc* pArchive;
-    if (!ppnParam) {
+    if (!pSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3db);
       exit(-1);
     }
@@ -601,16 +598,16 @@ BOOL __fastcall SOUNDSMP_OpenAndStreamFile(int * * ppnParam, char * szText, int3
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
-    BOOL pStreamHandle = Storm::Source::SFile::SFileDdaBeginEx(pArchive, (uint32_t)ppnParam[1], bIsLooping ? 0x40000 : 0, nLooping * 4, 0x7fffffff, 0x7fffffff, (IDirectSoundBuffer*)*ppnParam);
+    BOOL pStreamHandle = Storm::Source::SFile::SFileDdaBeginEx(pArchive, pSoundSmp->nBufSize, bIsLooping ? 0x40000 : 0, nLooping * 4, 0x7fffffff, 0x7fffffff, pSoundSmp->pDSBuffer);
     if (!pStreamHandle) {
       Fog::Source::SFile::ERRORMANAGER_FCloseFile(pArchive);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
       return 0;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ppnParam[0x12] = (int*)pArchive;
-    ppnParam[7] = (int*)0x1;
-    ppnParam[0xc] = (int*)-1;
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pSoundSmp->pStreamFile = pArchive;
+    pSoundSmp->bIsPlaying = 0x1;
+    pSoundSmp->nLoopEnd = -1;
     LeaveCriticalSection(&gSoundSmpCs);
     return 1;
 }

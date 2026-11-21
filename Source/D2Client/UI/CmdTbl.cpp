@@ -922,14 +922,14 @@ int32_t SORT_CompareInts(int * pA, int * pB) {
     if (*pA < *pB) {
       return -1;
     }
-    if (*pB < *pA) {
+    if (*pA > *pB) {
       return 1;
     }
     if (*(int*)((char*)pA + 6)) {
-      return (*(int*)((char*)pB + 6) != 0) - 1;
+      return *(int*)((char*)pB + 6) ? 0 : -1;
     }
 
-    return (uint32_t)(*(int*)((char*)pB + 6) != 0);
+    return *(int*)((char*)pB + 6) ? 1 : 0;
 }
 
 // Rebuilds derived mouse button bindings (0x100-0x104) from command table. Scans all key bindings and populates gKeyBindingTable slots for left/right/middle/scroll/forward mouse buttons. Invalidates bindings (sets 0xFFFF) if command has no handler or conflicts with mouse-specific restrictions.
@@ -1150,12 +1150,8 @@ uint16_t __fastcall CMD_GetKeyForCommand(int32_t nCmdIndex, int32_t nSlot) {
 
 BOOL __fastcall CMD_IsBindableKey(uint16_t wKeyCode) {
     uint32_t nKeyCode = (uint32_t)wKeyCode;
-    if ((int32_t)nKeyCode <= 0x104) {
-      if ((int32_t)nKeyCode >= 0x100) {
-        return 1;
-      }
-
-      switch (nKeyCode) {
+    {
+      switch (wKeyCode) {
         case 1:
 
         case 2:
@@ -1343,17 +1339,16 @@ BOOL __fastcall CMD_IsBindableKey(uint16_t wKeyCode) {
         case 0xdd:
 
         case 0xde:
+        case 0x100:
+        case 0x101:
+        case 0x102:
+        case 0x103:
+        case 0x104:
           return 1;
       }
     }
 
-    int bIsAlnum = isalpha(nKeyCode);
-    if (bIsAlnum) {
-      return 1;
-    }
-
-    bIsAlnum = isdigit(nKeyCode);
-    if (bIsAlnum) {
+    if (isalpha(nKeyCode) || isdigit(nKeyCode)) {
       return 1;
     }
 

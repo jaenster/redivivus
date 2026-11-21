@@ -248,7 +248,6 @@ template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<SGAME
 
 template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Destructor() {
     TSExplicitList<::SGAMEDATA, -572662307>* pSlot;
-    TSLink<::SGAMEDATA>** pPrevLink;
     TSLink<::SGAMEDATA>* pNext;
     uint32_t nIndex = 0;
     if (this->m_count > 0) {
@@ -256,11 +255,10 @@ template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<SGAME
       do {
         pSlot = &this->m_data[nIndex];
         pSlot->UnlinkAll();
-        pNext = pSlot->m_terminator.m_prevlink;
         pTVar1 = &pSlot->m_terminator;
+        pNext = pTVar1->m_prevlink;
         if (pNext) {
-          pPrevLink = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pTVar1, -1);
-          *pPrevLink = pNext;
+          *(TSLink<::SGAMEDATA>**)D2_StormNextLink(pTVar1, -1) = pNext;
           pTVar1->m_prevlink->m_next = pTVar1->m_next;
           pTVar1->m_prevlink = 0;
           pTVar1->m_next = 0;
@@ -281,15 +279,12 @@ template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unrefere
 }
 
 template<> void __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044fff0(TSGrowableArray<::SGAMEDATA>* pArray) {
-    uint32_t* puVar4;
-    TSGrowableArray<::SGAMEDATA>* pTVar1 = pArray + 1;
-    uint32_t uVar2 = pTVar1->m_alloc;
-    if (uVar2) {
-      puVar4 = (uint32_t*)D2_StormNextLink(pTVar1, -1);
-      *puVar4 = uVar2;
-      *(uint32_t*)(pTVar1->m_alloc + 4) = pTVar1->m_count;
-      pTVar1->m_alloc = 0;
-      pTVar1->m_count = 0;
+    TSLink<::SGAMEDATA>* pTVar1 = (TSLink<::SGAMEDATA>*)(pArray + 1);
+    if (pTVar1->m_prevlink) {
+      *(TSLink<::SGAMEDATA>**)D2_StormNextLink(pTVar1, -1) = pTVar1->m_prevlink;
+      pTVar1->m_prevlink->m_next = pTVar1->m_next;
+      pTVar1->m_prevlink = 0;
+      pTVar1->m_next = 0;
     }
 
     pArray->Destructor();

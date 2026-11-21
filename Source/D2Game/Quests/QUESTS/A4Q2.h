@@ -49,7 +49,7 @@ void __fastcall Q26_NotifyIzualKilledToPlayers(::SGAMEDATA * pGame);
 void __fastcall Q26_CheckIzualProximity(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2QuestDataA4Q1Strc * pQuestSpecificData);
 // [A4Q1 Izual helper] Returns true if NO player is near Izual: looks up The Fallen Angel quest data, then iterates all units via Q26_CheckIzualProximity to test proximity.
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
-BOOL __fastcall Q26_CheckIzualNearPlayer(::SGAMEDATA * pGame, int32_t pTargetUnit);
+BOOL __fastcall Q26_CheckIzualNearPlayer(::SGAMEDATA * pGame, struct D2UnitStrc * pIzual);
 // [A4Q1 Izual helper] Plays the Izual-complete sound to every player/monster unit in the game.
 void __fastcall Q26_PlayIzualCompleteSoundToAll(::SGAMEDATA * pGame);
 // [A4Q3 Terror's End] ActiveFilter for the Tyrael/Hadriel gossip NPCs (classId 0x16f=Tyrael, 0xf6=Hadriel/Hand-of-Justice angel). Decides whether a quest gossip entry is currently "active" for the NPC, gated on QUEST_TerrorsEnd states: Completed/FinishedInPreviousGame plus the per-NPC dialog-tracking steps 0x06/0x07 (classic) and 0x08/0x09 (expansion).

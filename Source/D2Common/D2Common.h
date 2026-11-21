@@ -6232,23 +6232,26 @@ struct __attribute__((packed)) D2MissilesTxt {
     /* 0x000 */ uint16_t Missile;
     /* 0x002 */ uint8_t field_0x2;
     /* 0x003 */ uint8_t field_0x3;
-    /* 0x004 */ struct {
-        /* 0x004 */ uint8_t LastCollide : 1; // missiles.txt flag bit 0 (0x1 of byte 0x04)
-        /* 0x004 */ uint8_t Explosion : 1; // missiles.txt flag bit 1 (0x2 of byte 0x04)
-        /* 0x004 */ uint8_t Pierce : 1; // missiles.txt flag bit 2 (0x4 of byte 0x04)
-        /* 0x004 */ uint8_t CanSlow : 1; // missiles.txt flag bit 3 (0x8 of byte 0x04)
-        /* 0x004 */ uint8_t CanDestroy : 1; // missiles.txt flag bit 4 (0x10 of byte 0x04)
-        /* 0x004 */ uint8_t ClientSend : 1; // missiles.txt flag bit 5 (0x20 of byte 0x04)
-        /* 0x004 */ uint8_t GetHit : 1; // missiles.txt flag bit 6 (0x40 of byte 0x04)
-        /* 0x004 */ uint8_t SoftHit : 1; // missiles.txt flag bit 7 (0x80 of byte 0x04)
-        /* 0x005 */ uint8_t ApplyMastery : 1; // missiles.txt flag bit 8 (0x1 of byte 0x05)
-        /* 0x005 */ uint8_t ReturnFire : 1; // missiles.txt flag bit 9 (0x2 of byte 0x05)
-        /* 0x005 */ uint8_t Town : 1; // missiles.txt flag bit 10 (0x4 of byte 0x05)
-        /* 0x005 */ uint8_t SrcTown : 1; // missiles.txt flag bit 11 (0x8 of byte 0x05)
-        /* 0x005 */ uint8_t NoMultiShot : 1; // missiles.txt flag bit 12 (0x10 of byte 0x05)
-        /* 0x005 */ uint8_t NoUniqueMod : 1; // missiles.txt flag bit 13 (0x20 of byte 0x05)
-        /* 0x005 */ uint8_t Half2HSrc : 1; // missiles.txt flag bit 14 (0x40 of byte 0x05)
-        /* 0x005 */ uint8_t MissileSkill : 1; // missiles.txt flag bit 15 (0x80 of byte 0x05)
+    /* 0x004 */ union {
+        struct {
+            /* 0x004 */ uint8_t LastCollide : 1; // missiles.txt flag bit 0 (0x1 of byte 0x04)
+            /* 0x004 */ uint8_t Explosion : 1; // missiles.txt flag bit 1 (0x2 of byte 0x04)
+            /* 0x004 */ uint8_t Pierce : 1; // missiles.txt flag bit 2 (0x4 of byte 0x04)
+            /* 0x004 */ uint8_t CanSlow : 1; // missiles.txt flag bit 3 (0x8 of byte 0x04)
+            /* 0x004 */ uint8_t CanDestroy : 1; // missiles.txt flag bit 4 (0x10 of byte 0x04)
+            /* 0x004 */ uint8_t ClientSend : 1; // missiles.txt flag bit 5 (0x20 of byte 0x04)
+            /* 0x004 */ uint8_t GetHit : 1; // missiles.txt flag bit 6 (0x40 of byte 0x04)
+            /* 0x004 */ uint8_t SoftHit : 1; // missiles.txt flag bit 7 (0x80 of byte 0x04)
+            /* 0x005 */ uint8_t ApplyMastery : 1; // missiles.txt flag bit 8 (0x1 of byte 0x05)
+            /* 0x005 */ uint8_t ReturnFire : 1; // missiles.txt flag bit 9 (0x2 of byte 0x05)
+            /* 0x005 */ uint8_t Town : 1; // missiles.txt flag bit 10 (0x4 of byte 0x05)
+            /* 0x005 */ uint8_t SrcTown : 1; // missiles.txt flag bit 11 (0x8 of byte 0x05)
+            /* 0x005 */ uint8_t NoMultiShot : 1; // missiles.txt flag bit 12 (0x10 of byte 0x05)
+            /* 0x005 */ uint8_t NoUniqueMod : 1; // missiles.txt flag bit 13 (0x20 of byte 0x05)
+            /* 0x005 */ uint8_t Half2HSrc : 1; // missiles.txt flag bit 14 (0x40 of byte 0x05)
+            /* 0x005 */ uint8_t MissileSkill : 1; // missiles.txt flag bit 15 (0x80 of byte 0x05)
+        };
+        uint8_t aFlagBytes[2]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
     };
     /* 0x006 */ uint8_t field_0x6;
     /* 0x007 */ uint8_t field_0x7;
@@ -6587,37 +6590,40 @@ struct __attribute__((packed)) D2MonStatsTxt {
     /* 0x008 */ uint16_t DescStr;
     /* 0x00A */ uint8_t field_0xa;
     /* 0x00B */ uint8_t field_0xb;
-    /* 0x00C */ struct {
-        /* 0x00C */ uint8_t isSpawn : 1; // 0b1
-        /* 0x00C */ uint8_t isMelee : 1; // 0b10
-        /* 0x00C */ uint8_t noRatio : 1; // 0b100
-        /* 0x00C */ uint8_t opendoors : 1; // 0b1000
-        /* 0x00C */ uint8_t SetBoss : 1; // 0b10000
-        /* 0x00C */ uint8_t BossXfer : 1; // 0b100000
-        /* 0x00C */ uint8_t boss : 1; // 0b1000000
-        /* 0x00C */ uint8_t primeevil : 1; // 0b10000000
-        /* 0x00D */ uint8_t npc : 1; // 0b1
-        /* 0x00D */ uint8_t interact : 1; // 0b01
-        /* 0x00D */ uint8_t inTown : 1; // 0b001
-        /* 0x00D */ uint8_t lUndead : 1;
-        /* 0x00D */ uint8_t hUndead : 1;
-        /* 0x00D */ uint8_t demon : 1;
-        /* 0x00D */ uint8_t flying : 1;
-        /* 0x00D */ uint8_t killable : 1;
-        /* 0x00E */ uint8_t switchai : 1;
-        /* 0x00E */ uint8_t nomultishot : 1;
-        /* 0x00E */ uint8_t neverCount : 1;
-        /* 0x00E */ uint8_t petIgnore : 1;
-        /* 0x00E */ uint8_t deathDmg : 1;
-        /* 0x00E */ uint8_t genericSpawn : 1;
-        /* 0x00E */ uint8_t zoo : 1;
-        /* 0x00E */ uint8_t placespawn : 1;
-        /* 0x00F */ uint8_t inventory : 1;
-        /* 0x00F */ uint8_t enabled : 1;
-        /* 0x00F */ uint8_t NoShldBlock : 1;
-        /* 0x00F */ uint8_t noaura : 1;
-        /* 0x00F */ uint8_t rangedtype : 1;
-        uint8_t : 3;  // unused
+    /* 0x00C */ union {
+        struct {
+            /* 0x00C */ uint8_t isSpawn : 1; // 0b1
+            /* 0x00C */ uint8_t isMelee : 1; // 0b10
+            /* 0x00C */ uint8_t noRatio : 1; // 0b100
+            /* 0x00C */ uint8_t opendoors : 1; // 0b1000
+            /* 0x00C */ uint8_t SetBoss : 1; // 0b10000
+            /* 0x00C */ uint8_t BossXfer : 1; // 0b100000
+            /* 0x00C */ uint8_t boss : 1; // 0b1000000
+            /* 0x00C */ uint8_t primeevil : 1; // 0b10000000
+            /* 0x00D */ uint8_t npc : 1; // 0b1
+            /* 0x00D */ uint8_t interact : 1; // 0b01
+            /* 0x00D */ uint8_t inTown : 1; // 0b001
+            /* 0x00D */ uint8_t lUndead : 1;
+            /* 0x00D */ uint8_t hUndead : 1;
+            /* 0x00D */ uint8_t demon : 1;
+            /* 0x00D */ uint8_t flying : 1;
+            /* 0x00D */ uint8_t killable : 1;
+            /* 0x00E */ uint8_t switchai : 1;
+            /* 0x00E */ uint8_t nomultishot : 1;
+            /* 0x00E */ uint8_t neverCount : 1;
+            /* 0x00E */ uint8_t petIgnore : 1;
+            /* 0x00E */ uint8_t deathDmg : 1;
+            /* 0x00E */ uint8_t genericSpawn : 1;
+            /* 0x00E */ uint8_t zoo : 1;
+            /* 0x00E */ uint8_t placespawn : 1;
+            /* 0x00F */ uint8_t inventory : 1;
+            /* 0x00F */ uint8_t enabled : 1;
+            /* 0x00F */ uint8_t NoShldBlock : 1;
+            /* 0x00F */ uint8_t noaura : 1;
+            /* 0x00F */ uint8_t rangedtype : 1;
+            uint8_t : 3;  // unused
+        };
+        uint8_t aFlagBytes[4]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
     };
     /* 0x010 */ char Code[4];
     /* 0x014 */ short MonSound;
@@ -6872,14 +6878,17 @@ union D2PathUnion {
 #define D2_DEFINED_D2PetTypeTxt
 struct __attribute__((packed)) D2PetTypeTxt {
     /* 0x00 */ uint32_t petType;
-    /* 0x04 */ struct {
-        /* 0x04 */ uint8_t warp : 1; // flag bit: byte 0x4 mask 0x1
-        /* 0x04 */ uint8_t range : 1; // flag bit: byte 0x4 mask 0x2
-        /* 0x04 */ uint8_t partysend : 1; // flag bit: byte 0x4 mask 0x4
-        /* 0x04 */ uint8_t unsummon : 1; // flag bit: byte 0x4 mask 0x8
-        /* 0x04 */ uint8_t automap : 1; // flag bit: byte 0x4 mask 0x10
-        /* 0x04 */ uint8_t drawhp : 1; // flag bit: byte 0x4 mask 0x20
-        uint8_t : 2;  // unused
+    /* 0x04 */ union {
+        struct {
+            /* 0x04 */ uint8_t warp : 1; // flag bit: byte 0x4 mask 0x1
+            /* 0x04 */ uint8_t range : 1; // flag bit: byte 0x4 mask 0x2
+            /* 0x04 */ uint8_t partysend : 1; // flag bit: byte 0x4 mask 0x4
+            /* 0x04 */ uint8_t unsummon : 1; // flag bit: byte 0x4 mask 0x8
+            /* 0x04 */ uint8_t automap : 1; // flag bit: byte 0x4 mask 0x10
+            /* 0x04 */ uint8_t drawhp : 1; // flag bit: byte 0x4 mask 0x20
+            uint8_t : 2;  // unused
+        };
+        uint8_t aFlagBytes[1]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
     };
     /* 0x05 */ uint8_t field_0x5;
     /* 0x06 */ uint8_t field_0x6;
@@ -7373,49 +7382,54 @@ struct __attribute__((packed)) D2SkillsTxt {
     /* 0x000 */ short skill;
     /* 0x002 */ uint8_t field_0x2;
     /* 0x003 */ uint8_t field_0x3;
-    /* 0x004 */ struct {
-        /* 0x004 */ uint8_t decquant : 1; // skills.txt flag bit 0 (byte 0x04 mask 0x1)
-        /* 0x004 */ uint8_t lob : 1; // skills.txt flag bit 1 (byte 0x04 mask 0x2)
-        /* 0x004 */ uint8_t progressive : 1; // skills.txt flag bit 2 (byte 0x04 mask 0x4)
-        /* 0x004 */ uint8_t finishing : 1; // skills.txt flag bit 3 (byte 0x04 mask 0x8)
-        /* 0x004 */ uint8_t passive : 1; // skills.txt flag bit 4 (byte 0x04 mask 0x10)
-        /* 0x004 */ uint8_t aura : 1; // skills.txt flag bit 5 (byte 0x04 mask 0x20)
-        /* 0x004 */ uint8_t periodic : 1; // skills.txt flag bit 6 (byte 0x04 mask 0x40)
-        /* 0x004 */ uint8_t prgstack : 1; // skills.txt flag bit 7 (byte 0x04 mask 0x80)
-        /* 0x005 */ uint8_t InTown : 1; // skills.txt flag bit 8 (byte 0x05 mask 0x1)
-        /* 0x005 */ uint8_t Kick : 1; // skills.txt flag bit 9 (byte 0x05 mask 0x2)
-        /* 0x005 */ uint8_t InGame : 1; // skills.txt flag bit 10 (byte 0x05 mask 0x4)
-        /* 0x005 */ uint8_t repeat : 1; // skills.txt flag bit 11 (byte 0x05 mask 0x8)
-        /* 0x005 */ uint8_t stsuccessonly : 1; // skills.txt flag bit 12 (byte 0x05 mask 0x10)
-        /* 0x005 */ uint8_t stsounddelay : 1; // skills.txt flag bit 13 (byte 0x05 mask 0x20)
-        /* 0x005 */ uint8_t weaponsnd : 1; // skills.txt flag bit 14 (byte 0x05 mask 0x40)
-        /* 0x005 */ uint8_t immediate : 1; // skills.txt flag bit 15 (byte 0x05 mask 0x80)
-        /* 0x006 */ uint8_t noammo : 1; // skills.txt flag bit 16 (byte 0x06 mask 0x1)
-        /* 0x006 */ uint8_t enhanceable : 1; // skills.txt flag bit 17 (byte 0x06 mask 0x2)
-        /* 0x006 */ uint8_t durability : 1; // skills.txt flag bit 18 (byte 0x06 mask 0x4)
-        /* 0x006 */ uint8_t UseAttackRate : 1; // skills.txt flag bit 19 (byte 0x06 mask 0x8)
-        /* 0x006 */ uint8_t TargetableOnly : 1; // skills.txt flag bit 20 (byte 0x06 mask 0x10)
-        /* 0x006 */ uint8_t SearchEnemyXY : 1; // skills.txt flag bit 21 (byte 0x06 mask 0x20)
-        /* 0x006 */ uint8_t SearchEnemyNear : 1; // skills.txt flag bit 22 (byte 0x06 mask 0x40)
-        /* 0x006 */ uint8_t SearchOpenXY : 1; // skills.txt flag bit 23 (byte 0x06 mask 0x80)
-        /* 0x007 */ uint8_t TargetCorpse : 1; // skills.txt flag bit 24 (byte 0x07 mask 0x1)
-        /* 0x007 */ uint8_t TargetPet : 1; // skills.txt flag bit 25 (byte 0x07 mask 0x2)
-        /* 0x007 */ uint8_t TargetAlly : 1; // skills.txt flag bit 26 (byte 0x07 mask 0x4)
-        /* 0x007 */ uint8_t TargetItem : 1; // skills.txt flag bit 27 (byte 0x07 mask 0x8)
-        /* 0x007 */ uint8_t AttackNoMana : 1; // skills.txt flag bit 28 (byte 0x07 mask 0x10)
-        /* 0x007 */ uint8_t ItemTgtDo : 1; // skills.txt flag bit 29 (byte 0x07 mask 0x20)
-        /* 0x007 */ uint8_t leftskill : 1; // skills.txt flag bit 30 (byte 0x07 mask 0x40)
-        /* 0x007 */ uint8_t interrupt : 1; // skills.txt flag bit 31 (byte 0x07 mask 0x80)
-    };
-    /* 0x008 */ struct {
-        /* 0x008 */ uint8_t TgtPlaceCheck : 1; // skills.txt flag bit 32 (byte 0x08 mask 0x1)
-        /* 0x008 */ uint8_t ItemCheckStart : 1; // skills.txt flag bit 33 (byte 0x08 mask 0x2)
-        /* 0x008 */ uint8_t ItemCltCheckStart : 1; // skills.txt flag bit 34 (byte 0x08 mask 0x4)
-        /* 0x008 */ uint8_t general : 1; // skills.txt flag bit 35 (byte 0x08 mask 0x8)
-        /* 0x008 */ uint8_t scroll : 1; // skills.txt flag bit 36 (byte 0x08 mask 0x10)
-        /* 0x008 */ uint8_t usemanaondo : 1; // skills.txt flag bit 37 (byte 0x08 mask 0x20)
-        /* 0x008 */ uint8_t warp : 1; // skills.txt flag bit 38 (byte 0x08 mask 0x40)
-        uint8_t : 1;  // unused
+    /* 0x004 */ union {
+        struct {
+            struct {
+                /* 0x004 */ uint8_t decquant : 1; // skills.txt flag bit 0 (byte 0x04 mask 0x1)
+                /* 0x004 */ uint8_t lob : 1; // skills.txt flag bit 1 (byte 0x04 mask 0x2)
+                /* 0x004 */ uint8_t progressive : 1; // skills.txt flag bit 2 (byte 0x04 mask 0x4)
+                /* 0x004 */ uint8_t finishing : 1; // skills.txt flag bit 3 (byte 0x04 mask 0x8)
+                /* 0x004 */ uint8_t passive : 1; // skills.txt flag bit 4 (byte 0x04 mask 0x10)
+                /* 0x004 */ uint8_t aura : 1; // skills.txt flag bit 5 (byte 0x04 mask 0x20)
+                /* 0x004 */ uint8_t periodic : 1; // skills.txt flag bit 6 (byte 0x04 mask 0x40)
+                /* 0x004 */ uint8_t prgstack : 1; // skills.txt flag bit 7 (byte 0x04 mask 0x80)
+                /* 0x005 */ uint8_t InTown : 1; // skills.txt flag bit 8 (byte 0x05 mask 0x1)
+                /* 0x005 */ uint8_t Kick : 1; // skills.txt flag bit 9 (byte 0x05 mask 0x2)
+                /* 0x005 */ uint8_t InGame : 1; // skills.txt flag bit 10 (byte 0x05 mask 0x4)
+                /* 0x005 */ uint8_t repeat : 1; // skills.txt flag bit 11 (byte 0x05 mask 0x8)
+                /* 0x005 */ uint8_t stsuccessonly : 1; // skills.txt flag bit 12 (byte 0x05 mask 0x10)
+                /* 0x005 */ uint8_t stsounddelay : 1; // skills.txt flag bit 13 (byte 0x05 mask 0x20)
+                /* 0x005 */ uint8_t weaponsnd : 1; // skills.txt flag bit 14 (byte 0x05 mask 0x40)
+                /* 0x005 */ uint8_t immediate : 1; // skills.txt flag bit 15 (byte 0x05 mask 0x80)
+                /* 0x006 */ uint8_t noammo : 1; // skills.txt flag bit 16 (byte 0x06 mask 0x1)
+                /* 0x006 */ uint8_t enhanceable : 1; // skills.txt flag bit 17 (byte 0x06 mask 0x2)
+                /* 0x006 */ uint8_t durability : 1; // skills.txt flag bit 18 (byte 0x06 mask 0x4)
+                /* 0x006 */ uint8_t UseAttackRate : 1; // skills.txt flag bit 19 (byte 0x06 mask 0x8)
+                /* 0x006 */ uint8_t TargetableOnly : 1; // skills.txt flag bit 20 (byte 0x06 mask 0x10)
+                /* 0x006 */ uint8_t SearchEnemyXY : 1; // skills.txt flag bit 21 (byte 0x06 mask 0x20)
+                /* 0x006 */ uint8_t SearchEnemyNear : 1; // skills.txt flag bit 22 (byte 0x06 mask 0x40)
+                /* 0x006 */ uint8_t SearchOpenXY : 1; // skills.txt flag bit 23 (byte 0x06 mask 0x80)
+                /* 0x007 */ uint8_t TargetCorpse : 1; // skills.txt flag bit 24 (byte 0x07 mask 0x1)
+                /* 0x007 */ uint8_t TargetPet : 1; // skills.txt flag bit 25 (byte 0x07 mask 0x2)
+                /* 0x007 */ uint8_t TargetAlly : 1; // skills.txt flag bit 26 (byte 0x07 mask 0x4)
+                /* 0x007 */ uint8_t TargetItem : 1; // skills.txt flag bit 27 (byte 0x07 mask 0x8)
+                /* 0x007 */ uint8_t AttackNoMana : 1; // skills.txt flag bit 28 (byte 0x07 mask 0x10)
+                /* 0x007 */ uint8_t ItemTgtDo : 1; // skills.txt flag bit 29 (byte 0x07 mask 0x20)
+                /* 0x007 */ uint8_t leftskill : 1; // skills.txt flag bit 30 (byte 0x07 mask 0x40)
+                /* 0x007 */ uint8_t interrupt : 1; // skills.txt flag bit 31 (byte 0x07 mask 0x80)
+            };
+            struct {
+                /* 0x008 */ uint8_t TgtPlaceCheck : 1; // skills.txt flag bit 32 (byte 0x08 mask 0x1)
+                /* 0x008 */ uint8_t ItemCheckStart : 1; // skills.txt flag bit 33 (byte 0x08 mask 0x2)
+                /* 0x008 */ uint8_t ItemCltCheckStart : 1; // skills.txt flag bit 34 (byte 0x08 mask 0x4)
+                /* 0x008 */ uint8_t general : 1; // skills.txt flag bit 35 (byte 0x08 mask 0x8)
+                /* 0x008 */ uint8_t scroll : 1; // skills.txt flag bit 36 (byte 0x08 mask 0x10)
+                /* 0x008 */ uint8_t usemanaondo : 1; // skills.txt flag bit 37 (byte 0x08 mask 0x20)
+                /* 0x008 */ uint8_t warp : 1; // skills.txt flag bit 38 (byte 0x08 mask 0x40)
+                uint8_t : 1;  // unused
+            };
+        };
+        uint8_t aFlagBytes[5]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
     };
     /* 0x009 */ uint8_t field_0x9;
     /* 0x00A */ uint8_t field_0xa;
@@ -7592,49 +7606,54 @@ struct __attribute__((packed)) D2StatesTxt {
     /* 0x0A */ short castoverlay;
     /* 0x0C */ short removerlay;
     /* 0x0E */ short pgsvoverlay;
-    /* 0x10 */ struct {
-        /* 0x10 */ uint8_t nosend : 1;
-        /* 0x10 */ uint8_t aura : 1;
-        /* 0x10 */ uint8_t hide : 1;
-        /* 0x10 */ uint8_t transform : 1;
-        /* 0x10 */ uint8_t pgsv : 1;
-        /* 0x10 */ uint8_t active : 1;
-        /* 0x10 */ uint8_t remhit : 1;
-        /* 0x10 */ uint8_t damblue : 1;
-        /* 0x11 */ uint8_t damred : 1;
-        /* 0x11 */ uint8_t attblue : 1;
-        /* 0x11 */ uint8_t attred : 1;
-        /* 0x11 */ uint8_t curse : 1;
-        /* 0x11 */ uint8_t curable : 1;
-        /* 0x11 */ uint8_t plrstaydeath : 1;
-        /* 0x11 */ uint8_t monstaydeath : 1;
-        /* 0x11 */ uint8_t bossstaydeath : 1;
-        /* 0x12 */ uint8_t disguise : 1;
-        /* 0x12 */ uint8_t restrict : 1;
-        /* 0x12 */ uint8_t blue : 1;
-        /* 0x12 */ uint8_t armblue : 1;
-        /* 0x12 */ uint8_t rfblue : 1;
-        /* 0x12 */ uint8_t rcblue : 1;
-        /* 0x12 */ uint8_t rlblue : 1;
-        /* 0x12 */ uint8_t rpblue : 1;
-        /* 0x13 */ uint8_t stambarblue : 1;
-        /* 0x13 */ uint8_t armred : 1;
-        /* 0x13 */ uint8_t rfred : 1;
-        /* 0x13 */ uint8_t rcred : 1;
-        /* 0x13 */ uint8_t rlred : 1;
-        /* 0x13 */ uint8_t rpred : 1;
-        /* 0x13 */ uint8_t exp : 1;
-        /* 0x13 */ uint8_t shatter : 1;
-    };
-    /* 0x14 */ struct {
-        /* 0x14 */ uint8_t life : 1;
-        /* 0x14 */ uint8_t udead : 1;
-        /* 0x14 */ uint8_t green : 1;
-        /* 0x14 */ uint8_t nooverlays : 1;
-        /* 0x14 */ uint8_t noclear : 1;
-        /* 0x14 */ uint8_t bossinv : 1;
-        /* 0x14 */ uint8_t meleeonly : 1;
-        /* 0x14 */ uint8_t notondead : 1;
+    /* 0x10 */ union {
+        struct {
+            struct {
+                /* 0x10 */ uint8_t nosend : 1;
+                /* 0x10 */ uint8_t aura : 1;
+                /* 0x10 */ uint8_t hide : 1;
+                /* 0x10 */ uint8_t transform : 1;
+                /* 0x10 */ uint8_t pgsv : 1;
+                /* 0x10 */ uint8_t active : 1;
+                /* 0x10 */ uint8_t remhit : 1;
+                /* 0x10 */ uint8_t damblue : 1;
+                /* 0x11 */ uint8_t damred : 1;
+                /* 0x11 */ uint8_t attblue : 1;
+                /* 0x11 */ uint8_t attred : 1;
+                /* 0x11 */ uint8_t curse : 1;
+                /* 0x11 */ uint8_t curable : 1;
+                /* 0x11 */ uint8_t plrstaydeath : 1;
+                /* 0x11 */ uint8_t monstaydeath : 1;
+                /* 0x11 */ uint8_t bossstaydeath : 1;
+                /* 0x12 */ uint8_t disguise : 1;
+                /* 0x12 */ uint8_t restrict : 1;
+                /* 0x12 */ uint8_t blue : 1;
+                /* 0x12 */ uint8_t armblue : 1;
+                /* 0x12 */ uint8_t rfblue : 1;
+                /* 0x12 */ uint8_t rcblue : 1;
+                /* 0x12 */ uint8_t rlblue : 1;
+                /* 0x12 */ uint8_t rpblue : 1;
+                /* 0x13 */ uint8_t stambarblue : 1;
+                /* 0x13 */ uint8_t armred : 1;
+                /* 0x13 */ uint8_t rfred : 1;
+                /* 0x13 */ uint8_t rcred : 1;
+                /* 0x13 */ uint8_t rlred : 1;
+                /* 0x13 */ uint8_t rpred : 1;
+                /* 0x13 */ uint8_t exp : 1;
+                /* 0x13 */ uint8_t shatter : 1;
+            };
+            struct {
+                /* 0x14 */ uint8_t life : 1;
+                /* 0x14 */ uint8_t udead : 1;
+                /* 0x14 */ uint8_t green : 1;
+                /* 0x14 */ uint8_t nooverlays : 1;
+                /* 0x14 */ uint8_t noclear : 1;
+                /* 0x14 */ uint8_t bossinv : 1;
+                /* 0x14 */ uint8_t meleeonly : 1;
+                /* 0x14 */ uint8_t notondead : 1;
+            };
+        };
+        uint8_t aFlagBytes[5]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
     };
     /* 0x15 */ uint8_t field_0x15;
     /* 0x16 */ uint8_t field_0x16;
@@ -7898,12 +7917,15 @@ struct __attribute__((packed)) D2UniqueItemsTxt {
     /* 0x24 */ short version;
     /* 0x26 */ uint16_t pad0x26; // alignment padding
     /* 0x28 */ uint32_t dwItemCode; // base item code as a fourcc (compared as a dword with ItemsTxt dwCode)
-    /* 0x2C */ struct {
-        /* 0x2C */ uint8_t enabled : 1; // flag bit: byte 0x2c mask 0x1
-        /* 0x2C */ uint8_t nolimit : 1; // flag bit: byte 0x2c mask 0x2
-        /* 0x2C */ uint8_t carry1 : 1; // flag bit: byte 0x2c mask 0x4
-        /* 0x2C */ uint8_t ladder : 1; // flag bit: byte 0x2c mask 0x8
-        uint8_t : 4;  // unused
+    /* 0x2C */ union {
+        struct {
+            /* 0x2C */ uint8_t enabled : 1; // flag bit: byte 0x2c mask 0x1
+            /* 0x2C */ uint8_t nolimit : 1; // flag bit: byte 0x2c mask 0x2
+            /* 0x2C */ uint8_t carry1 : 1; // flag bit: byte 0x2c mask 0x4
+            /* 0x2C */ uint8_t ladder : 1; // flag bit: byte 0x2c mask 0x8
+            uint8_t : 4;  // unused
+        };
+        uint8_t aFlagBytes[1]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
     };
     /* 0x2D */ uint8_t field_0x2d;
     /* 0x2E */ uint8_t field_0x2e;

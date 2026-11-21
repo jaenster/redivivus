@@ -75,14 +75,14 @@ void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045bad0(struct StormLinkStrc * pNod
 int32_t __fastcall ARCHIVE_GetNodeOrDefault(int32_t pThis, int, int32_t nNode);
 uint32_t __fastcall ARCHIVE_GetNodeValue(struct StormLinkedListStrc * pThis, int, struct StormLinkStrc * nNode);
 void __fastcall ARCHIVE_UnlinkNode(struct StormLinkedListStrc * pThis, int, int * pNode);
-void __fastcall ARCHIVE_LinkNode(int * * ppList, int, int * * ppNode, int32_t nMode, int * * ppTarget);
+void __fastcall ARCHIVE_LinkNode(struct StormLinkedListStrc * pList, int, struct StormLinkStrc * pNode, int32_t nMode, struct StormLinkStrc * pTarget);
 intptr_t __fastcall ARCHIVE_GetNodeSize(struct StormLinkedListStrc * pThis, int, struct StormLinkStrc * nNode);
-int __fastcall Unreferenced_0045bcb0(int param_1);
+struct StormLinkStrc * __fastcall Unreferenced_0045bcb0(struct StormLinkStrc * pLink);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045bcc0(struct StormLinkStrc * pNode);
 void __fastcall ARCHIVE_ClearAndFreeHead(struct StormLinkedListStrc * nList);
 uint32_t * __fastcall Unreferenced_0045bd80(uint32_t * pData);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045bd90(struct StormLinkStrc * pNode);
-int * * __fastcall ARCHIVE_AllocNode(int * * ppList, int, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags);
+struct StormLinkStrc * __fastcall ARCHIVE_AllocNode(struct StormLinkedListStrc * pList, int, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags);
 int * __fastcall ARCHIVE_FreeNode(struct StormLinkStrc * pNode, int, uint8_t byFree);
 uint32_t __fastcall ARCHIVE_RemoveNode(struct StormLinkedListStrc * pThis, int, struct StormLinkStrc * pNode);
 // NOTE: Callee-saved register params inferred (medium confidence): param_esi (ESI): LPOVERLAPPED, param_edi (EDI): LPOVERLAPPED, param_ebx (EBX): LPOVERLAPPED

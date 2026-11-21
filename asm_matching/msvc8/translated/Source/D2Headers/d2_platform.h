@@ -80,7 +80,7 @@ typedef unsigned char D2GuardBytes[32];
 // Ghidra models CPUID as one pseudo-op per leaf, each returning a pointer to
 // the four result registers, read back as *(uint32_t*)(r + 0|4|8|0xc) in the
 // SLEIGH order eax, ebx, edx, ecx - not the eax, ebx, ecx, edx of __cpuid.
-static inline int D2_Cpuid(uint32_t nLeaf) {
+static inline uint32_t* D2_Cpuid(uint32_t nLeaf) {
   static uint32_t aRegs[4];
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
   __asm__ volatile("cpuid" : "=a"(aRegs[0]), "=b"(aRegs[1]), "=d"(aRegs[2]), "=c"(aRegs[3]) : "a"(nLeaf), "c"(0u));
@@ -100,7 +100,7 @@ static inline int D2_Cpuid(uint32_t nLeaf) {
 #else
   aRegs[0] = aRegs[1] = aRegs[2] = aRegs[3] = 0;
 #endif
-  return (int)(uintptr_t)aRegs;
+  return aRegs;
 }
 
 // __debugbreak stub for non-Windows (INT 3 debug breakpoint)
@@ -123,7 +123,7 @@ union _union_1226 {
     _struct_1227 S_un_b;
     _struct_1228 S_un_w;
     unsigned long S_addr;
-    _union_1226() : S_addr(0) {}
+    _union_1226() {}
     _union_1226(unsigned long a) : S_addr(a) {}
     _union_1226(_struct_1227 b) : S_un_b(b) {}
     _union_1226(_struct_1228 w) : S_un_w(w) {}

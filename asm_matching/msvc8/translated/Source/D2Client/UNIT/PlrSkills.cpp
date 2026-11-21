@@ -156,7 +156,7 @@ static void __stdcall STATES_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nOver
 
 void __fastcall PLRSKILLS_StateSetFn01_ProgressiveCharge(D2UnitStrc * pUnit, eD2States eState) {
     D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
-    if (!(pDVar1 && *((uint8_t*)pDVar1 + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4] && pDVar1->pgsvoverlay > 0 && (int)pDVar1->pgsvoverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize && pDVar1->stat >= 0 && (int)pDVar1->stat <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
+    if (!(pDVar1 && pDVar1->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4] && pDVar1->pgsvoverlay > 0 && (int)pDVar1->pgsvoverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize && pDVar1->stat >= 0 && (int)pDVar1->stat <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
       return;
     }
 
@@ -176,7 +176,7 @@ void __fastcall PLRSKILLS_StateSetFn01_ProgressiveCharge(D2UnitStrc * pUnit, eD2
 
 void __fastcall PLRSKILLS_StateRemFn01_ProgressiveCharge(D2UnitStrc * pUnit, eD2States eState) {
     D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
-    if (!(pDVar1 && *((uint8_t*)pDVar1 + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4] && pDVar1->pgsvoverlay > 0 && (int)pDVar1->pgsvoverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize && pDVar1->stat >= 0 && (int)pDVar1->stat <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
+    if (!(pDVar1 && pDVar1->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4] && pDVar1->pgsvoverlay > 0 && (int)pDVar1->pgsvoverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize && pDVar1->stat >= 0 && (int)pDVar1->stat <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
       return;
     }
 
@@ -981,7 +981,7 @@ void __fastcall STATES_AddStateOverlays(D2UnitStrc * pUnit, eD2States eState) {
     eOverlayId eCastOverlay;
     eOverlayId eOverlay2;
     D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
-    if (!(pDVar1 && !(*((uint8_t*)pDVar1 + 0x14) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]))) {
+    if (!(pDVar1 && !(pDVar1->aFlagBytes[4] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]))) {
       return;
     }
     eCastOverlay = pDVar1->castoverlay >= 0 ? (eOverlayId)pDVar1->castoverlay : ~OVERLAY_null;
@@ -1061,7 +1061,7 @@ void __fastcall STATES_SetStateOnUnit(D2UnitStrc * pUnit, eD2States eState) {
     if (!pDVar1) {
       return;
     }
-    if (*((uint8_t*)pDVar1 + 0x14) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7] && (pUnit->eUnitType == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick || pUnit->eUnitType == UNIT_PLAYER && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead)) {
+    if (pDVar1->aFlagBytes[4] & (uint8_t)Fog::BitBuffer::gadwBitMasks[7] && (pUnit->eUnitType == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick || pUnit->eUnitType == UNIT_PLAYER && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead)) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 1);
       return;
     }
@@ -1070,7 +1070,7 @@ void __fastcall STATES_SetStateOnUnit(D2UnitStrc * pUnit, eD2States eState) {
     if (eStateLinked != STATE_none) {
       D2StatListExStrc* pStatList;
       pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
-      if (!(*((uint8_t*)pDVar1 + 0x14) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
+      if (!(pDVar1->aFlagBytes[4] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
         D2Common::Stats::StatsEx::STATLIST_RemoveAllStats(pStatList);
       }
     } else {
@@ -1093,7 +1093,7 @@ void __fastcall STATES_SetStateOnUnit(D2UnitStrc * pUnit, eD2States eState) {
         pUnit->eUnitFlags = pUnit->eUnitFlags & ~UNITFLAG_TARGETABLE | UNITFLAG_DRAWSHADOW;
       }
     }
-    if (!(*((uint8_t*)pDVar1 + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
+    if (!(pDVar1->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
       return;
     }
 
@@ -1148,7 +1148,7 @@ void __fastcall PLRSKILLS_RemoveStateFromUnit(D2UnitStrc * pUnit, eD2States eSta
     if (pDVar1->overlay[1] >= 0) {
       STATES_RemoveOverlayById(pUnit, (int)pDVar1->overlay[1]);
     }
-    if (*((uint8_t*)pDVar1 + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+    if (pDVar1->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       STATES_ResetUnitGfxAndMode(pUnit);
     }
 
@@ -1242,7 +1242,7 @@ void __fastcall STATES_DispatchSetFunc(D2UnitStrc * pUnit, eD2States eState) {
 }; D2_STATIC_GUARD(STATESSETFUNC, "D2Client::UNIT::PlrSkills::STATES_DispatchSetFunc::STATESSETFUNC");
 
     D2StatesTxt* pDVar1 = pUnit && (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
-    if (!(pDVar1 && (!(*((uint8_t*)pDVar1 + 0x14) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) || (pUnit->eUnitType != UNIT_MONSTER || pUnit->eAnimMode.ePlayerMode != Kick) && (pUnit->eUnitType != UNIT_PLAYER || pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead)))) {
+    if (!(pDVar1 && (!(pDVar1->aFlagBytes[4] & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) || (pUnit->eUnitType != UNIT_MONSTER || pUnit->eAnimMode.ePlayerMode != Kick) && (pUnit->eUnitType != UNIT_PLAYER || pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead)))) {
       return;
     }
     if (pDVar1->setfunc >= 0 && pDVar1->setfunc < 0x1f && STATESSETFUNC[pDVar1->setfunc]) {

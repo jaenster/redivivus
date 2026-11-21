@@ -83,7 +83,7 @@ void LOGGING_LogLine(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nLo
 // "Game:%02d\tFrame:%d\tClient:%02d\t" plus Type:System/Type:Game and Size:%d. 00624780 is the generic
 // time/thread/level logger. Two different loggers, one name.
 // @caveat zero xrefs - called through a pointer or dead. Name derived from its format strings.
-void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nLogType, int32_t nLogTypeArg, char * szFormat, ...) {
+void StoreGameLogging(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nLogType, int32_t nLogTypeArg, char * szFormat, ...) {
     va_list __va;
     va_start(__va, szFormat);
     char* pszScan;
@@ -94,7 +94,7 @@ void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nLo
     char cCur;
     if (pLOGFILE && bLOGFILE_ENABLED) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0096ca30);
-      Storm::Source::SSTR::SStrPrintf(szLogLine, 500, "Game:%02d\tFrame:%d\tClient:%02d\t", nGame, nFrame, (int)pClient);
+      Storm::Source::SSTR::SStrPrintf(szLogLine, 500, "Game:%02d\tFrame:%d\tClient:%02d\t", nGame, nFrame, nClient);
       pszScan = (char*)((uint8_t*)&szLogLine - 1);
       if (nLogType == 1) {
         do {

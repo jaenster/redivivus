@@ -8,6 +8,11 @@
 #error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
 #endif
 
+#ifndef RECON_FPTD_pfnSEvtHandler
+#define RECON_FPTD_pfnSEvtHandler
+typedef void (__stdcall *pfnSEvtHandler)(void * pData);
+#endif
+
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
@@ -47,19 +52,19 @@ LRESULT __stdcall WndProcB(HWND hWnd, uint32_t uMsg, WPARAM wParam, LPARAM lPara
 void __stdcall MESSAGE_OnQuitMessage(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall MESSAGE_OnActivate(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall WndProcD(struct D2UIMouseMsgStrc * phWnd);
-void __stdcall MESSAGE_OnClose(HWND * phWnd);
+void __stdcall MESSAGE_OnClose(struct D2UIMouseMsgStrc * pMsg);
 // Windows message pump + optional per-tick callback. If no messages, call callback each tick; exit when callback returns nonzero or WM_QUIT.
 int32_t __fastcall MessageGameLoop(::fpGameLoopFunction nfpGameLoopFunction);
 // Registers a Windows event handler (message/command/keyup/keydown) based on eEventType. Filters out WM_COMMAND (0x111) from generic message handlers.
-void __fastcall MESSAGE_RegisterEventHandler(HWND hWnd, int32_t eEventType, int32_t nMessageOrKeyCode, int32_t pfHandler);
+void __fastcall MESSAGE_RegisterEventHandler(HWND hWnd, int32_t eEventType, int32_t nMessageOrKeyCode, pfnSEvtHandler pfnHandler);
 // Unregisters a Windows event handler (message/command/keyup/keydown) based on eEventType. Filters out WM_COMMAND (0x111) from generic message handlers.
-void __fastcall MESSAGE_UnregisterEventHandler(HWND hWnd, int32_t eEventType, int32_t nMessageOrKeyCode, char * pfHandler);
+void __fastcall MESSAGE_UnregisterEventHandler(HWND hWnd, int32_t eEventType, int32_t nMessageOrKeyCode, pfnSEvtHandler pfnHandler);
 // Iterates D2UIFlagInitStrc array and registers nCount event handlers via MESSAGE_RegisterEventHandler. Used during UI state initialization.
 void __fastcall MESSAGE_RegisterEventHandlerBatch(HWND hWnd, struct D2UIFlagInitStrc * pEventHandlers, int32_t nCount);
 // Iterates D2UIFlagInitStrc array and unregisters nCount event handlers via MESSAGE_UnregisterEventHandler. Used during UI state cleanup.
 void __fastcall MESSAGE_UnregisterEventHandlerBatch(HWND hWnd, struct D2UIFlagInitStrc * pEventHandlers, int32_t nCount);
 BOOL __fastcall MESSAGE_RegisterWindowMessageHandlers(HWND hWnd);
-void __fastcall MESSAGE_UnregisterWindowMessageHandlers(char * szText);
+void __fastcall MESSAGE_UnregisterWindowMessageHandlers(HWND hWnd);
 // Gets the current HWND and snapshots all registered event handlers. Used for save/restore state during modal dialogs.
 void __stdcall MESSAGE_SnapshotEventHandlers();
 // Gets the current HWND and undoes the last batch of event registrations. Restores previous snapshot state.

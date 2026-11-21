@@ -2272,9 +2272,9 @@ void __stdcall thunk_TEXT_ClearChatMessages() {
     ::D2Client::UI::Text::TEXT_ClearChatMessages();
 }
 
-void __fastcall RENDERING_SetCurrentEngineAndIndex(pfnTextScrollComplete pfnCallback, void * pUserParam) {
-    GAME::Rendering::CurrentRendingEngine = (int)pfnCallback;
-    GAME::Rendering::gnCurrentEngineIndex = (uint32_t)(uintptr_t)pUserParam;
+void __fastcall RENDERING_SetCurrentEngineAndIndex(int32_t nEngine, uint32_t nIndex) {
+    GAME::Rendering::CurrentRendingEngine = nEngine;
+    GAME::Rendering::gnCurrentEngineIndex = nIndex;
 }
 
 void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_004967e0() {

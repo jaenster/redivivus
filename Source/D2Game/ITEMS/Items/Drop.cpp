@@ -136,7 +136,7 @@ static BOOL __stdcall ITEMDROP_IsItemClassEligible(D2SeedStrc * pSeed, int32_t b
 
 // Selects a random exceptional-tier item class index for a drop roll. Iterates the exceptional slice of the Items txt table (between the exceptional and elite size offsets), filters candidates via MONSTER_ShouldSpawnSuperUnique against level/TC constraints, respects the expansion flag, then picks one uniformly at random using the D2SeedStrc PRNG (power-of-two fast path or modulo). Returns the Items txt index of the chosen class, or -1 if none qualify.
 int32_t __fastcall ITEMDROP_RollArmorItemClass(::SGAMEDATA * pGame, D2SeedStrc * pSeed, int32_t nItemLevel, int32_t nItemTypeFilter, int32_t bSkipRarityRoll) {
-    int aCandidates[2048];
+    D2ItemClassCandidateStrc aCandidates[1024];
     D2ItemsTableStrc* pItemsTable = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
     D2ItemsTxt* pItemTxt = pItemsTable->pArmor;
     int nStartIdx = pItemTxt - pItemsTable->pItems;
@@ -148,8 +148,8 @@ int32_t __fastcall ITEMDROP_RollArmorItemClass(::SGAMEDATA * pGame, D2SeedStrc *
 
     for (int i = 0; i < nItemCount; i++) {
       if (ITEMDROP_IsItemClassEligible(pSeed, bSkipRarityRoll, nItemLevel, &pItemTxt[i], nItemTypeFilter) && (pGame->bExpansion || (uint16_t)pItemTxt[i].wVersion < 100) && nCandidates < 0x3ff) {
-        aCandidates[nCandidates * 2 + 1] = (int)&pItemTxt[i];
-        aCandidates[nCandidates * 2] = i + nStartIdx;
+        aCandidates[nCandidates].pItemsTxt = &pItemTxt[i];
+        aCandidates[nCandidates].nItemsTxtIdx = i + nStartIdx;
         nCandidates++;
       }
     }
@@ -164,17 +164,17 @@ int32_t __fastcall ITEMDROP_RollArmorItemClass(::SGAMEDATA * pGame, D2SeedStrc *
       return -1;
     }
 
-    int* pCandidate = &aCandidates[nRandIndex * 2];
+    D2ItemClassCandidateStrc* pCandidate = &aCandidates[nRandIndex];
     if (!pCandidate) {
       return -1;
     }
 
-    return *pCandidate;
+    return pCandidate->nItemsTxtIdx;
 }
 
 // Selects a random normal-tier item class index for a drop roll. Iterates the normal slice of the Items txt table (between the normal-start and exceptional-start size offsets), filters candidates via MONSTER_ShouldSpawnSuperUnique against level/TC constraints, respects the expansion flag, then picks one uniformly at random using the D2SeedStrc PRNG (power-of-two fast path or modulo). Returns the Items txt index of the chosen class, or -1 if none qualify. Structurally identical to ITEMDROP_RollExceptionalItemClass but over the normal tier.
 int32_t __fastcall ITEMDROP_RollWeaponItemClass(::SGAMEDATA * pGame, D2SeedStrc * pSeed, int32_t nItemLevel, int32_t nItemTypeFilter, int32_t bSkipRarityRoll) {
-    int aCandidates[2048];
+    D2ItemClassCandidateStrc aCandidates[1024];
     D2ItemsTableStrc* pItemsTable = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
     D2ItemsTxt* pItemTxt = pItemsTable->pWeapons;
     int nStartIdx = pItemTxt - pItemsTable->pItems;
@@ -186,8 +186,8 @@ int32_t __fastcall ITEMDROP_RollWeaponItemClass(::SGAMEDATA * pGame, D2SeedStrc 
 
     for (int i = 0; i < nItemCount; i++) {
       if (ITEMDROP_IsItemClassEligible(pSeed, bSkipRarityRoll, nItemLevel, &pItemTxt[i], nItemTypeFilter) && (pGame->bExpansion || (uint16_t)pItemTxt[i].wVersion < 100) && nCandidates < 0x3ff) {
-        aCandidates[nCandidates * 2 + 1] = (int)&pItemTxt[i];
-        aCandidates[nCandidates * 2] = i + nStartIdx;
+        aCandidates[nCandidates].pItemsTxt = &pItemTxt[i];
+        aCandidates[nCandidates].nItemsTxtIdx = i + nStartIdx;
         nCandidates++;
       }
     }
@@ -202,12 +202,12 @@ int32_t __fastcall ITEMDROP_RollWeaponItemClass(::SGAMEDATA * pGame, D2SeedStrc 
       return -1;
     }
 
-    int* pCandidate = &aCandidates[nRandIndex * 2];
+    D2ItemClassCandidateStrc* pCandidate = &aCandidates[nRandIndex];
     if (!pCandidate) {
       return -1;
     }
 
-    return *pCandidate;
+    return pCandidate->nItemsTxtIdx;
 }
 
 // Rolls a random elite item class index for a drop. Iterates all elite-tier ItemsTxt entries (from the elite start offset), filtering candidates via MONSTER_ShouldSpawnSuperUnique using the monster level, area level, and TC filter; also excludes non-expansion items when not in expansion. Picks a random candidate from the eligible list using the RNG seed and returns its ItemsTxt index, or -1 if none qualify.
@@ -387,7 +387,7 @@ static BOOL __stdcall ITEM_MarkUniqueAsDropped(::SGAMEDATA * pGame, D2UnitStrc *
     uint32_t nFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
     D2UniqueItemsTxt* pUniqueItemsTxt = (int)nFileIndex >= 0 && (int)nFileIndex < D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + nFileIndex : nullptr;
     if (pUniqueItemsTxt) {
-      if (*((uint8_t*)pUniqueItemsTxt + 0x2c) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (pUniqueItemsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         return 1;
       }
       if (pItemsTxt->bQuest == '\0') {
@@ -1671,37 +1671,27 @@ void __fastcall ITEM_DeleteItemAndFreeUnit(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 BOOL __fastcall AlreadyHoldingItem(D2UnitStrc * punit, D2UnitStrc * pItem, D2InventoryStrc * pInventory) {
-    D2UnitStrc* pCarriedItem;
-    if (!punit->pInventory) {
+    D2InventoryStrc* pUnitInventory = punit->pInventory;
+    if (!pUnitInventory) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xab4);
       exit(-1);
     }
 
-    D2InventoryStrc* pInventory_00 = punit->pInventory;
     if (pInventory) {
-      pInventory_00 = pInventory;
+      pUnitInventory = pInventory;
     }
 
-    D2UnitStrc* pCursorOrFirstItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory_00);
-    if (pItem == pCursorOrFirstItem) {
+    if (pItem == D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnitInventory)) {
       return 1;
     }
 
-    pCursorOrFirstItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory_00);
-    while (true) {
-      if (!pCursorOrFirstItem) {
-        return 0;
+    for (D2UnitStrc* pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnitInventory); pInvItem; pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvItem)) {
+      if (pItem == D2Common::INVENTORY::Inventory::GetCarriedItem(pInvItem)) {
+        return 1;
       }
-
-      pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pCursorOrFirstItem);
-      if (pItem == pCarriedItem) {
-        break;
-      }
-
-      pCursorOrFirstItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pCursorOrFirstItem);
     }
 
-    return 1;
+    return 0;
 }
 
 // Searches a player's inventory (cursor slot + all inventory pages, excluding corpse) for an item matching szItemCode. For quest items also validates that the item's questitemdifficulty stat is >= the current game difficulty, preventing quest items from a lower difficulty from counting. Returns the matching D2UnitStrc* or NULL.
@@ -3841,7 +3831,7 @@ void __fastcall SERVER_ITEM_RollItemAndGetTreasureClass(::SGAMEDATA * pGame, D2U
     if (pGame->bExpansion && pGame->nDifficulty > 0 && pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       D2MonStatsTxt* pMonStatsTxt;
       pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
-      if (pMonStatsTxt && !(Fog::BitBuffer::gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc)) && !(Fog::BitBuffer::gadwBitMasks[6] & (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc))) {
+      if (pMonStatsTxt && !(Fog::BitBuffer::gadwBitMasks[2] & pMonStatsTxt->aFlagBytes[0]) && !(Fog::BitBuffer::gadwBitMasks[6] & pMonStatsTxt->aFlagBytes[0])) {
         pnMonsterLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
       }
     }

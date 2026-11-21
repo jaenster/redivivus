@@ -32,7 +32,7 @@ typedef void (__fastcall *AI_Main)(::SGAMEDATA * pGame, struct D2UnitStrc * pUni
 #endif
 #ifndef RECON_FPTD_fpMonsterAiForEach
 #define RECON_FPTD_fpMonsterAiForEach
-typedef uint32_t (__fastcall *fpMonsterAiForEach)(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2MonsterAiParameterStruct * test);
+typedef struct D2UnitStrc * (__fastcall *fpMonsterAiForEach)(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2MonsterAiParameterStruct * test);
 #endif
 #ifndef RECON_FPTD_fpMonsterUModHandler
 #define RECON_FPTD_fpMonsterUModHandler
@@ -103,29 +103,32 @@ struct __attribute__((packed)) D2MonStats2Txt {
     /* 0x000 */ short Id;
     /* 0x002 */ uint8_t field_0x2;
     /* 0x003 */ uint8_t field_0x3;
-    /* 0x004 */ struct {
-        /* 0x004 */ uint8_t noGfxHitTest : 1;
-        /* 0x004 */ uint8_t noMap : 1;
-        /* 0x004 */ uint8_t noOvly : 1;
-        /* 0x004 */ uint8_t isSel : 1;
-        /* 0x004 */ uint8_t alSel : 1;
-        /* 0x004 */ uint8_t noSel : 1;
-        /* 0x004 */ uint8_t shiftSel : 1;
-        /* 0x004 */ uint8_t corpseSel : 1;
-        /* 0x005 */ uint8_t revive : 1;
-        /* 0x005 */ uint8_t isAtt : 1;
-        /* 0x005 */ uint8_t isSmall : 1; // Do not name small, this wont compile
-        /* 0x005 */ uint8_t large : 1;
-        /* 0x005 */ uint8_t soft : 1;
-        /* 0x005 */ uint8_t critter : 1;
-        /* 0x005 */ uint8_t shadow : 1;
-        /* 0x005 */ uint8_t noUniqueShift : 1;
-        /* 0x006 */ uint8_t compositeDeath : 1;
-        /* 0x006 */ uint8_t inert : 1;
-        /* 0x006 */ uint8_t objCol : 1;
-        /* 0x006 */ uint8_t deadCol : 1;
-        /* 0x006 */ uint8_t unflatDead : 1;
-        uint8_t : 3;  // unused
+    /* 0x004 */ union {
+        struct {
+            /* 0x004 */ uint8_t noGfxHitTest : 1;
+            /* 0x004 */ uint8_t noMap : 1;
+            /* 0x004 */ uint8_t noOvly : 1;
+            /* 0x004 */ uint8_t isSel : 1;
+            /* 0x004 */ uint8_t alSel : 1;
+            /* 0x004 */ uint8_t noSel : 1;
+            /* 0x004 */ uint8_t shiftSel : 1;
+            /* 0x004 */ uint8_t corpseSel : 1;
+            /* 0x005 */ uint8_t revive : 1;
+            /* 0x005 */ uint8_t isAtt : 1;
+            /* 0x005 */ uint8_t isSmall : 1; // Do not name small, this wont compile
+            /* 0x005 */ uint8_t large : 1;
+            /* 0x005 */ uint8_t soft : 1;
+            /* 0x005 */ uint8_t critter : 1;
+            /* 0x005 */ uint8_t shadow : 1;
+            /* 0x005 */ uint8_t noUniqueShift : 1;
+            /* 0x006 */ uint8_t compositeDeath : 1;
+            /* 0x006 */ uint8_t inert : 1;
+            /* 0x006 */ uint8_t objCol : 1;
+            /* 0x006 */ uint8_t deadCol : 1;
+            /* 0x006 */ uint8_t unflatDead : 1;
+            uint8_t : 3;  // unused
+        };
+        uint8_t aFlagBytes[3]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
     };
     /* 0x007 */ uint8_t field_0x7;
     /* 0x008 */ char SizeX;
@@ -257,7 +260,7 @@ struct D2MonsterEquipEntryStrc {
 #define D2_DEFINED_D2MonsterForEachStruct
 struct D2MonsterForEachStruct {
     /* 0x00 */ int value;
-    /* 0x04 */ uint32_t (__fastcall *pCallBack)(::SGAMEDATA *, struct D2UnitStrc *, struct D2UnitStrc *, struct D2MonsterAiParameterStruct *);
+    /* 0x04 */ struct D2UnitStrc * (__fastcall *pCallBack)(::SGAMEDATA *, struct D2UnitStrc *, struct D2UnitStrc *, struct D2MonsterAiParameterStruct *);
 };
 
 #endif // D2_DEFINED_D2MonsterForEachStruct

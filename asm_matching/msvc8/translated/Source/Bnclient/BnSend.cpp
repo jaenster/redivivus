@@ -79,7 +79,7 @@ void * gpBNetWriteUserData = 0; D2_GLOBAL_GUARD(gpBNetWriteUserData, "gpBNetWrit
 static D2BnReadUserDataStrc * g_pBNetReadUserData = 0; D2_STATIC_GUARD(g_pBNetReadUserData, "g_pBNetReadUserData");
 static void * g_pBNetCDKeyHashData = 0; D2_STATIC_GUARD(g_pBNetCDKeyHashData, "g_pBNetCDKeyHashData");
 static uint32_t g_nBNetConnectionState = 0; D2_STATIC_GUARD(g_nBNetConnectionState, "g_nBNetConnectionState");
-static LONG * g_pBNetSocketData = 0; D2_STATIC_GUARD(g_pBNetSocketData, "g_pBNetSocketData");
+static D2NetDataStrc * g_pBNetSocketData = 0; D2_STATIC_GUARD(g_pBNetSocketData, "g_pBNetSocketData");
 // also labelled: lpAddend_00881bf4
 static LONG * Destination_00881bf4 = 0; D2_STATIC_GUARD(Destination_00881bf4, "Destination_00881bf4");
 static uint32_t gbBNetSocketConnected = 0; D2_STATIC_GUARD(gbBNetSocketConnected, "gbBNetSocketConnected");
@@ -96,7 +96,7 @@ uint32_t g_dwNewsTimestamp = 0; D2_GLOBAL_GUARD(g_dwNewsTimestamp, "g_dwNewsTime
 
 namespace Bnclient { namespace BnSend {
 
-static LONG __stdcall Unreferenced_0051beb0(LONG nExchange, LONG nComparand);
+static D2NetDataStrc* __stdcall Unreferenced_0051beb0(D2NetDataStrc* nExchange, D2NetDataStrc* nComparand);
 
 int __stdcall NET_SID_CLIENT_Send_0x1E_ClientId2() {
     SID_C2S_ClientId2 abPacketBuf;
@@ -660,20 +660,14 @@ void * __fastcall NET_SID_CLIENT_Send_0x3E_LogonRealmEx(char * szRealmName, char
       return nullptr;
     }
 
-    uint32_t uVar1;
-    gnBNetRealmClientToken++;
-    *(uint32_t*)((char*)&abHashInput + 4) = g_nBNetServerToken;
-    int nLen = (int)strlen(szPassword);
-    *(uint32_t*)(char*)&abHashInput = gnBNetRealmClientToken;
-    _net_sid::XSHA1((D2XSHA1Strc*)(abHashInput + 8), szPassword, nLen);
-    abPacketBuf[0] = (uint8_t)gnBNetRealmClientToken;
-    abPacketBuf[1] = *(uint8_t*)((char*)&gnBNetRealmClientToken + 1);
-    abPacketBuf[2] = *(uint8_t*)((char*)&gnBNetRealmClientToken + 2);
-    abPacketBuf[3] = *(uint8_t*)((char*)&gnBNetRealmClientToken + 3);
+    *(uint32_t*)abHashInput = ++gnBNetRealmClientToken;
+    *(uint32_t*)(abHashInput + 4) = g_nBNetServerToken;
+    _net_sid::XSHA1((D2XSHA1Strc*)(abHashInput + 8), szPassword, (int)strlen(szPassword));
+    *(uint32_t*)abPacketBuf = gnBNetRealmClientToken;
     _net_sid::XSHA1((D2XSHA1Strc*)(abPacketBuf + 4), abHashInput, 0x1c);
-    uVar1 = Storm::Source::SSTR::SStrCopy(abPacketBuf + 0x18, szRealmName, 0x100);
+    int nRealmLen = Storm::Source::SSTR::SStrCopy(abPacketBuf + 0x18, szRealmName, 0x100) + 1;
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x3e);
-    nSendLen = NET_SID_CLIENT_Send(0x3e, abPacketBuf, uVar1 + 0x19);
+    nSendLen = NET_SID_CLIENT_Send(0x3e, abPacketBuf, nRealmLen + 0x18);
     if (nSendLen < 0) {
       return nullptr;
     }
@@ -806,37 +800,21 @@ uint32_t __fastcall NET_SID_CLIENT_Send_0x26_ReadUserData(char * szAccount, uint
 
 // Retrieves stored user data from previous SID_READUSERDATA (0x26) response. Copies string array data into output buffers.
 int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestId, char * * ppszOutBufs, int * pnMaxLens) {
-    intptr_t nMaxLensOffset;
-    char** ppszOutBuf;
-    char* pszSrcData;
-    int nPpszOutBufs;
-    BOOL bHasAnswer = _net_sid::NET_SID_CLIENT_GetRequiredAnswer(0x26);
-    if (!bHasAnswer) {
+    if (!_net_sid::NET_SID_CLIENT_GetRequiredAnswer(0x26)) {
       return 0;
     }
     if (g_pBNetReadUserData && g_pBNetReadUserData->nAccountCount == 1 && g_pBNetReadUserData->nKeyCount == nKeyCount && g_pBNetReadUserData->nRequestId == nRequestId) {
-      uint32_t pNextSrc;
-      pszSrcData = g_pBNetReadUserData->szValues;
-      if ((uint32_t)nKeyCount <= 0) {
-        return 1;
-      }
-
-      nMaxLensOffset = (intptr_t)pnMaxLens - (intptr_t)ppszOutBufs;
-      ppszOutBuf = ppszOutBufs;
-      nPpszOutBufs = nKeyCount;
-      do {
-        if (*pszSrcData != '\0') {
-          strncpy(*ppszOutBuf, pszSrcData, *(size_t*)(nMaxLensOffset + (char*)ppszOutBuf));
-          (*ppszOutBuf)[*(int*)(nMaxLensOffset + (char*)ppszOutBuf)] = '\0';
+      char* pszSrc = (char*)(g_pBNetReadUserData + 1);
+      for (uint32_t i = 0; i < (uint32_t)nKeyCount; i++) {
+        if (*pszSrc) {
+          strncpy(ppszOutBufs[i], pszSrc, pnMaxLens[i]);
+          ppszOutBufs[i][pnMaxLens[i]] = '\0';
         } else {
-          **ppszOutBuf = '\0';
+          ppszOutBufs[i][0] = '\0';
         }
 
-        pNextSrc = Storm::Source::SSTR::SStrLen(pszSrcData);
-        ppszOutBuf++;
-        nPpszOutBufs--;
-        pszSrcData += pNextSrc + 1;
-      } while (nPpszOutBufs);
+        pszSrc += Storm::Source::SSTR::SStrLen(pszSrc) + 1;
+      }
 
       return 1;
     }
@@ -1005,8 +983,8 @@ int Unreferenced_0051bea0() {
     return LVar1;
 }
 
-static inline LONG __stdcall Unreferenced_0051beb0(LONG nExchange, LONG nComparand) {
-    LONG LVar1 = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, nExchange, nComparand);
+static inline D2NetDataStrc* __stdcall Unreferenced_0051beb0(D2NetDataStrc* nExchange, D2NetDataStrc* nComparand) {
+    D2NetDataStrc* LVar1 = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, nExchange, nComparand); // steer-ok: winbase.h InterlockedCompareExchangePointer
     return LVar1;
 }
 
@@ -1207,24 +1185,16 @@ int __fastcall BNCLIENT_SendLogonRequest(char * szUsername, char * szPassword) {
 }
 
 BOOL __stdcall BNCLIENT_WaitForLogonResponse() {
-    BOOL bGotAnswer = _net_sid::SID_GetReadyFlag();
-    if (bGotAnswer) {
+    if (_net_sid::SID_GetReadyFlag()) {
       BNMESSQUEUE_SetStateIfZero(0x12);
-    } else {
-      DWORD DVar1;
-      DVar1 = BNCLIENT_GetBNetClientToken();
-      switch (DVar1) {
-        case 0:
-          {
-            bGotAnswer = _net_sid::NET_SID_CLIENT_GetRequiredAnswer(0x3a);
-            return bGotAnswer;
-          }
-        case 1:
-          {
-            bGotAnswer = _net_sid::NET_SID_CLIENT_GetRequiredAnswer(0x54);
-            return bGotAnswer;
-          }
-      }
+      return 0;
+    }
+
+    switch (BNCLIENT_GetBNetClientToken()) {
+      case 0:
+        return _net_sid::NET_SID_CLIENT_GetRequiredAnswer(0x3a);
+      case 1:
+        return _net_sid::NET_SID_CLIENT_GetRequiredAnswer(0x54);
     }
 
     return 0;
@@ -1359,7 +1329,7 @@ BOOL __stdcall BNSEND_Disconnect() {
       /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ nAtomicVal = InterlockedCompareExchange((LONG*)&Destination_00881bf4, 0, 0);
     }
 
-    D2NetDataStrc* pNetData = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+    D2NetDataStrc* pNetData = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
     if (pNetData) {
       D2NetDataStrc* pOldNetData;
       _net_sid::SID_SetReadyFlag();
@@ -1369,7 +1339,7 @@ BOOL __stdcall BNSEND_Disconnect() {
         /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ nAtomicVal = InterlockedCompareExchange((LONG*)&Destination_00881c00, 0, 0);
       }
 
-      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pOldNetData = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, (LONG)pNetData);
+      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pOldNetData = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, pNetData); // steer-ok: winbase.h InterlockedCompareExchangePointer
       if (pOldNetData == pNetData) {
         Fog::Src::Safesock::Free(pNetData);
       }
@@ -1403,7 +1373,7 @@ BOOL __stdcall BNSEND_Disconnect() {
 
 int __fastcall Unreferenced_0051c570(char * szText) {
     char cVar1;
-    D2NetDataStrc* pNetData = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+    D2NetDataStrc* pNetData = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
     int nLen = (int)strlen(szText);
     Fog::Src::Safesock::WSASocket2_Send(pNetData, szText, nLen);
     Fog::Src::Safesock::WSASocket2_Send(pNetData, "\n", 1);
@@ -1419,7 +1389,7 @@ int32_t __fastcall NET_SID_CLIENT_Send(uint8_t nPacketId, char * pBytes, size_t 
     chHeader[0] = -1;
     chHeader[1] = nPacketId;
     *(uint16_t*)((char*)&chHeader + 2) = (short int)nSizeNoHeader + 4;
-    D2NetDataStrc* pSafesock = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+    D2NetDataStrc* pSafesock = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
     if (pSafesock) {
       LONG lInterlockedReadyFlag;
       /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedReadyFlag = InterlockedCompareExchange(&Target_00881bfc, 0, 0);
@@ -1515,7 +1485,7 @@ void __stdcall BnetReadFunction(uint32_t dwThreadParam) {
 
     DWORD dwLastKeepaliveTick = GetTickCount();
     size_t pBufPos = 0;
-    D2NetDataStrc* pSafesock = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+    D2NetDataStrc* pSafesock = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0);
     do {
       /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ if (!pSafesock) {
         break;
@@ -1530,7 +1500,7 @@ void __stdcall BnetReadFunction(uint32_t dwThreadParam) {
       }
 
       nPollResult = Fog::Src::Safesock::Safesock_PollReadReady(pSafesock);
-      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pSafesock = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pSafesock = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0);
       /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ if (!pSafesock) {
         break;
       }
@@ -1558,14 +1528,14 @@ void __stdcall BnetReadFunction(uint32_t dwThreadParam) {
         dwLastKeepaliveTick = dwCurrentTick;
       }
 
-      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pSafesock = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pSafesock = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0);
     } while (true);
 
     /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881bf4);
 }
 
 uint32_t __fastcall BNCLIENT_GetSocketPeerName(sockaddr * pSockAddr, int * pAddrLen) {
-    D2NetDataStrc* pNetData = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+    D2NetDataStrc* pNetData = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
     if (pNetData) {
       uint32_t nResult;
       nResult = Fog::Src::Safesock::GetPeerNameDoesReturn(pNetData, pSockAddr, pAddrLen);
@@ -1577,7 +1547,7 @@ uint32_t __fastcall BNCLIENT_GetSocketPeerName(sockaddr * pSockAddr, int * pAddr
 
 // Thread-safe wrapper around Fog::Safesock::GetSockNameDoesReturn. Returns local socket address info for Battle.net connection. Used by SID_AUTH_INFO sender.
 uint32_t __fastcall BNSEND_GetSocketAddress(sockaddr * pOutAddr, int * pOutAddrLen) {
-    D2NetDataStrc* pNetData = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+    D2NetDataStrc* pNetData = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
     if (pNetData) {
       uint32_t nResult;
       nResult = Fog::Src::Safesock::GetSockNameDoesReturn(pNetData, pOutAddr, pOutAddrLen);
@@ -1600,9 +1570,9 @@ BOOL __stdcall BNCLIENT_IsSocketConnected() {
     _net_sid::SID_GetState(nSIDState);
     BOOL nReadyFlag = _net_sid::SID_GetReadyFlag();
     if (!nReadyFlag && !nSIDState[0]) {
-      LONG lSocketData;
-      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lSocketData = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
-      if (lSocketData) {
+      D2NetDataStrc* pSocketData;
+      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pSocketData = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
+      if (pSocketData) {
         return 1;
       }
     }
@@ -1639,6 +1609,7 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     DWORD dwCurrentTick;
     int nFDResult;
     LONG lInterlockedResult;
+    D2NetDataStrc* pSocketResult;
     BOOL BVar1;
     D2NetDataStrc* pCandidate;
     int32_t bAuthInfoAccepted;
@@ -1682,7 +1653,7 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     tvTimeout.tv_usec = 0;
     __frame0.nSelectTimeouts = 0;
     /* LONG * Destination for InterlockedCompareExchange */ tvTimeout.tv_sec = 1;
-    pNetData = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+    pNetData = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0);
     __frame0.pWinnerSocket = pNetData;
     if (!pNetData) {
       pCandidateSlotNext = __frame0.aCandidates;
@@ -1780,8 +1751,8 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
               /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ if (*(int*)pbVar3) {
                 nFDResult = __WSAFDIsSet((*(D2NetDataStrc**)pbVar3)->hSocket, &fdWriteSet);
                 if (nFDResult) {
-                  /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedResult = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, *(LONG*)(__frame0.aCandidates + (nLoopCounter * 0x108 + 0x100)), 0);
-                  if (!lInterlockedResult) {
+                  /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pSocketResult = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, *(D2NetDataStrc**)(__frame0.aCandidates + (nLoopCounter * 0x108 + 0x100)), 0);
+                  if (!pSocketResult) {
                     __frame0.pWinnerSocket = *(D2NetDataStrc**)(__frame0.aCandidates + (nLoopCounter * 0x108 + 0x100));
                     __frame0.pWinnerSocket->bConnected = 1;
                     __frame0.pWinnerSocket->bInit = 0;
@@ -1813,7 +1784,7 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
           /* DWORD dwMilliseconds for Sleep */ Sleep(10);
         }
 
-        /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pNetData = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+        /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pNetData = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0);
         pfnInterlocked = d2_InterlockedCompareExchange;
         __frame0.pWinnerSocket = pNetData;
         if (pNetData) {
@@ -1844,13 +1815,13 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     gbBNetSocketConnected = 1;
     _net_sid::SID_GetState(&__frame0.nSIDState);
     BVar1 = _net_sid::SID_GetReadyFlag();
-    /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ if (BVar1 || __frame0.nSIDState || (lInterlockedResult = (*pfnInterlocked)((LONG*)&g_pBNetSocketData, 0, 0) , !lInterlockedResult)) {
+    /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ if (BVar1 || __frame0.nSIDState || (pSocketResult = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0) , !pSocketResult)) {
       Debug::DEBUG_Trace("  Error, not connected.");
       return 0;
     }
 
     /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ nAddrLen = 0x10;
-    pCandidate = (D2NetDataStrc*)(*pfnInterlocked)((LONG*)&g_pBNetSocketData, 0, 0);
+    pCandidate = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0);
     if (pCandidate) {
       bAuthInfoAccepted = Fog::Src::Safesock::GetPeerNameDoesReturn(pCandidate, (sockaddr*)__frame0.sockaddrPeer, &nAddrLen);
       if (bAuthInfoAccepted) {
@@ -1876,9 +1847,9 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     if (!BVar1) {
       _net_sid::SID_GetState(&__frame0.nSIDState);
       BVar1 = _net_sid::SID_GetReadyFlag();
-      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ if (BVar1 || __frame0.nSIDState || (lInterlockedResult = (*pfnInterlocked)((LONG*)&g_pBNetSocketData, 0, 0) , !lInterlockedResult)) {
+      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ if (BVar1 || __frame0.nSIDState || (pSocketResult = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0) , !pSocketResult)) {
         Fog::Src::Safesock::Free(pNetData);
-        /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ (*pfnInterlocked)((LONG*)&g_pBNetSocketData, 0, (LONG)pNetData);
+        /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, pNetData);
         return 0;
       }
     }
@@ -1944,8 +1915,8 @@ int __stdcall BattleConnectFastest() {
     SID_SetStateFlag1(0);
     NET_SID_CLIENT_LogonSequence(EntireDnsRecordOfServers);
     Bnet::BNET_LogIndent(2, -4);
-    /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedResult = Unreferenced_0051beb0(0, 0);
-    if (!lInterlockedResult) {
+    /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ D2NetDataStrc* pSocketResult = Unreferenced_0051beb0(0, 0);
+    if (!pSocketResult) {
       /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedResult = InterlockedCompareExchange(&Target_00881bfc, 0, 0);
       if (!lInterlockedResult) {
         SID_SetStateFlag1(0xc);
@@ -1960,8 +1931,8 @@ HANDLE __fastcall ConnectingToBattleNet() {
     HANDLE hThread;
     DWORD dwThreadId;
     Bnet::BnetLog_WriteLine("Connecting to Battle.net...");
-    LONG lSocketData = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
-    if (lSocketData) {
+    D2NetDataStrc* pSocketData = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
+    if (pSocketData) {
       Debug::DEBUG_Trace("   already connected");
     } else {
       BOOL bDisconnected;
@@ -2026,16 +1997,11 @@ DWORD __stdcall BNNEWS_RoundUpToMultiple(DWORD dwValue, DWORD dwMultiple) {
 }
 
 void __fastcall Unreferenced_0051d350(uint32_t * pDst, uint32_t * pSrc) {
-    int iVar1;
     if (!pDst) {
       return;
     }
 
-    for (iVar1 = 0x102; iVar1; iVar1--) {
-      *pDst = *pSrc;
-      pSrc++;
-      pDst++;
-    }
+    memcpy(pDst, pSrc, 0x102 * sizeof(uint32_t));
 }
 
 // @sourcefile .\BNNews.cpp
@@ -3217,8 +3183,8 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x33_GetFileTime(char * szText, uint32_t dwR
     SID_C2S_GetFileTime dwFileTimeParam;
     dwFileTimeParam.dwRequestId = dwRequestId;
     dwFileTimeParam.dwUnknown = 0;
-    uint32_t nTextLen = Storm::Source::SSTR::SStrCopy(dwFileTimeParam.szFilename, szText, 0x104);
-    NET_SID_CLIENT_Send(0x33, (char*)&dwFileTimeParam, (intptr_t)&dwFileTimeParam + (nTextLen - (intptr_t)&dwFileTimeParam + 9));
+    char* pEnd = dwFileTimeParam.szFilename + Storm::Source::SSTR::SStrCopy(dwFileTimeParam.szFilename, szText, 0x104) + 1;
+    NET_SID_CLIENT_Send(0x33, (char*)&dwFileTimeParam, pEnd - (char*)&dwFileTimeParam);
     return 1;
 }
 

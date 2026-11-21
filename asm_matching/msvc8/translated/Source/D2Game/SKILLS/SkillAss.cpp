@@ -558,7 +558,7 @@ int32_t __fastcall SKILLASS_GetChargeUpMissile(D2UnitStrc * pUnit, int32_t nSkil
     if (!pSkillTxt) {
       return -1;
     }
-    if (!(*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
+    if (!(pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
       return (int)pSkillTxt->srvmissile[1];
     }
 
@@ -594,7 +594,7 @@ uint32_t __fastcall SKILLASS_GetChargeUpCalcValue(D2UnitStrc * pUnit, eD2Skills 
     if (!pSkillTxt) {
       return 0;
     }
-    if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+    if (pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
       D2StatListExStrc* pStatList;
       eAuraState = pSkillTxt->aurastate;
       if (eAuraState < 0 || (int)eAuraState >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
@@ -1164,14 +1164,7 @@ BOOL __fastcall Skills_SrvDoFunc_037_ChargeRelease_MultiElementScatter(::SGAMEDA
     uint32_t nTargetX;
     eD2Skills eSkillSlot;
     uint32_t DVar1 = D2_SeedRoll(&pUnit->sSeed);
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1200,14 +1193,7 @@ BOOL __fastcall Skills_SrvDoFunc_143_ChargeRelease_GroundStrike(::SGAMEDATA * pG
     uint32_t nTargetX;
     eD2Skills eSkillSlot;
     uint32_t DVar1 = D2_SeedRoll(&pUnit->sSeed);
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1397,7 +1383,7 @@ void __fastcall SKILLASS_ReleaseChargeUpAttack(::SGAMEDATA * pGame, D2UnitStrc *
                 nRandRoll = Archive::RollRandomSeed(pSeed);
                 D2Common::Seed::SetSeed(pSeed, nSeedSaveLow, nSeedSaveHigh);
                 nChargeLvlMax = nChargeLvl - 1;
-                if (*((uint8_t*)pDVar4 + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
+                if (pDVar4->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
                   i = 0;
                   if (nChargeLvlMax > 0) {
                     pSrvPrgFunc = pDVar4->srvprgfunc;
@@ -1907,7 +1893,7 @@ D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * 
       if (nX && nSpawnY || (_bHasPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nX, &nSpawnY) , _bHasPos != 0)) {
         nY = nSpawnY;
         pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nX, nY);
-        if (pRoom && (*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0] || (_bHasPos = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , !_bHasPos))) {
+        if (pRoom && (pSkillsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0] || (_bHasPos = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , !_bHasPos))) {
           D2MonsterCastPetHeadStrc sSummonArgs;
           memset(&sSummonArgs, 0, sizeof(sSummonArgs));
           sSummonArgs.nMode = eAnimMode;

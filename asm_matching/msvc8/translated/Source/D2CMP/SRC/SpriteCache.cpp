@@ -943,8 +943,8 @@ uint32_t __stdcall CELDATACACHE_GetMemLimit() {
     return gCelDataCacheLru.dwBufSize;
 }
 
-int __fastcall Unreferenced_005fee80(int param_1) {
-    return (uint32_t)(*(int*)(param_1 + 0x2c) != 0);
+int __fastcall Unreferenced_005fee80(void * param_1) {
+    return (uint32_t)(*(int*)((char*)param_1 + 0x2c) != 0);
 }
 
 // @sourcefile .\SRC\SpriteCache.cpp

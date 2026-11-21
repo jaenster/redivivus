@@ -186,7 +186,7 @@ static void KillHandlerPet(DWORD nUid, ::SGAMEDATA * pGame) {
     int32_t nClassId = pUnit->nClassId;
     pUnit->eUnitFlags |= UNITFLAG_NOXP;
     D2MonStatsTxt* pMonStatsTxt;
-    if (!(pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr) || !((uint8_t)*((uint8_t*)pMonStatsTxt + 0xd) & Fog::BitBuffer::gadwBitMasks[7])) {
+    if (!(pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr) || !(pMonStatsTxt->aFlagBytes[1] & Fog::BitBuffer::gadwBitMasks[7])) {
       Monster::MonsterMode::MONMODE_InitModeChange(pUnit, Death, &killData);
       killData.pTargetUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
       Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &killData, 1);
@@ -1561,7 +1561,7 @@ uint32_t __fastcall GetCarry1FlagOfitem(D2UnitStrc * pUnit) {
     nFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
     D2UniqueItemsTxt* pUniqueItemTxt = D2Common::DATATBLS::ItemTbls::INV_GetUniqueItemsTxtLine(nFileIndex);
     if (pUniqueItemTxt) {
-      return (uint32_t)((*((uint8_t*)pUniqueItemTxt + 0x2c) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) != 0);
+      return (uint32_t)((pUniqueItemTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) != 0);
     }
 
     return 0;

@@ -274,21 +274,21 @@ StormLinkStrc * __fastcall Unreferenced_006c4470(StormLinkStrc * pLink) {
     return pLink;
 }
 
-::SCMD * __thiscall SCMD_FreeNode(::SCMD * pThis, uint8_t bFreeMemory) {
-    StormLinkStrc* pListHead = *(StormLinkStrc**)pThis;
+CMDDEF * __thiscall SCMD_FreeNode(CMDDEF * pThis, uint8_t bFreeMemory) {
+    StormLinkStrc* pListHead = (StormLinkStrc*)pThis->pPrev;
     if (pListHead) {
       StormLinkStrc* pPrevLink;
       pPrevLink = (StormLinkStrc*)D2_StormNextLink(pThis, -1);
       pPrevLink->pPrevLink = pListHead;
-      *(uint32_t*)(*(int*)pThis + 4) = *(uint32_t*)(pThis + 4);
-      *(uint32_t*)pThis = 0;
-      *(uint32_t*)(pThis + 4) = 0;
+      pThis->pPrev->pNext = pThis->pNext;
+      pThis->pPrev = nullptr;
+      pThis->pNext = nullptr;
     }
     if (bFreeMemory & 1) {
       SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
-    return (::SCMD*)pThis;
+    return pThis;
 }
 
 // Registers one command-line argument definition into Storm's command list.

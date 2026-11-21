@@ -132,7 +132,7 @@ void __fastcall SUNITNPC_OnInteractHeal(::SGAMEDATA * pGame, struct D2UnitStrc *
 void __fastcall ExecutePrayUnused(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nNpcGUID);
 // Rolls up to 5 item codes from the NPC's trade list 1 with SUNITNPC_RollTradeListItemCode, using the NPC-control seed (SUNITPROXY_GetNpcControl) and SUNITNPC_GetActCappedLevel(pGame, pUnit, nQueueEntryField0) as the unused level argument, stopping at the first roll that returns 0. Every rolled code is discarded and the function always returns 0, so its only effect is advancing that seed; the caller's free-the-queue-node branch on a nonzero result never runs.
 // Provenance: 1.14d asm 00579030..00579086 (XOR EAX,EAX at 00579080); no cost is computed.
-BOOL __fastcall SUNITNPC_DiscardTradeListRolls(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nQueueEntryField0, uint32_t dwTradeEntryValue);
+BOOL __fastcall SUNITNPC_DiscardTradeListRolls(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, uint32_t dwTradeEntryValue);
 // Resurrects a player's mercenary (hireling): looks up the mercenary unit by gnMonsterSpawnTotalCount, skips units with a special AI sub. Clears and nulls the mercenary's inventory, then resets and re-runs the repair pass (SUNITNPC_RepairItem) so the merc's equipment is restored at full durability after resurrection.
 void __fastcall SUNITNPC_HandleResurrect(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall SUNITNPC_CloseNpcInteraction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pNpc);

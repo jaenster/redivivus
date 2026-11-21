@@ -4026,10 +4026,10 @@ void __fastcall MISSMODE_ApplyMissileHitDamage(::SGAMEDATA * pGame, D2UnitStrc *
     eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_uninterruptable);
     if (!eState) {
       uint32_t nSeedRoll;
-      if (Fog::BitBuffer::gadwBitMasks[6] & (uint8_t)*((uint8_t*)pMissilesTxt + 0x4)) {
+      if (Fog::BitBuffer::gadwBitMasks[6] & pMissilesTxt->aFlagBytes[0]) {
         pEvent->wResultFlags |= 4;
       } else {
-        if (Fog::BitBuffer::gadwBitMasks[7] & (uint8_t)*((uint8_t*)pMissilesTxt + 0x4)) {
+        if (Fog::BitBuffer::gadwBitMasks[7] & pMissilesTxt->aFlagBytes[0]) {
           pEvent->wResultFlags |= 0x4000;
         }
       }
@@ -4042,7 +4042,7 @@ void __fastcall MISSMODE_ApplyMissileHitDamage(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     nFlags = UNIT::SUnitDmg::DAMAGE_CheckBlockAndEvasion(pGame, pOwner, pTarget, 1, (uint32_t)(pEvent->dwPhysDamage != 0));
-    if (nFlags & 0x1f && !(*((uint8_t*)pMissilesTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) && pMissilesTxt->KnockBack == '\0') {
+    if (nFlags & 0x1f && !(pMissilesTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) && pMissilesTxt->KnockBack == '\0') {
       pEvent->wResultFlags = pEvent->wResultFlags & 0xfffeU | 0x4000;
       nFlags &= -32;
     }
@@ -4179,7 +4179,7 @@ static int getDamageTarget(D2UnitStrc * pUnit) {
     } else {
       pMissilesTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId;
     }
-    if (*((uint8_t*)pMissilesTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+    if (pMissilesTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
       nClassId = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_pierce_idx, 0);
       if (nClassId) {
         nDmgTargetMode = 2;
@@ -4305,7 +4305,7 @@ static void __stdcall MissileSrvDo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
     D2UnitStrc* pOwner;
     pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-    if (*((uint8_t*)pTxtMissile + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+    if (pTxtMissile->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       if (pOwner) {
         pOwnerRoom = D2Common::Units::UNITS_GetRoom(pOwner);
         if (pOwnerRoom) {
@@ -4323,7 +4323,7 @@ static void __stdcall MissileSrvDo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
         goto free_missile;
       }
     }
-    if (*((uint8_t*)pTxtMissile + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2] || (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , !bIsInTown)) {
+    if (pTxtMissile->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2] || (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , !bIsInTown)) {
       nClassId = (*MISSILESSRVDOFUNCS[pTxtMissile->nSrvDoFunc])(pGame, pUnit);
       if (nClassId != 2) {
         return;
@@ -4471,13 +4471,13 @@ int __fastcall Hits(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarge
     nKillFlags = 2;
     uint32_t nHitResult;
     nHitResult = 3;
-    if (*((uint8_t*)pMissilesTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+    if (pMissilesTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       nKillFlags = 0;
     }
     if (!pTarget) {
       if (pOwner) {
         if (pTarget) {
-          if (*((uint8_t*)pMissilesTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+          if (pMissilesTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
             nPierce = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_skill_pierce, 0);
             if (nPierce || (nToHitThenStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pOwner, UNITSTAT_item_pierce, 0) , nToHitThenStat != 0)) {
               nHitResult = getDamageTarget(pUnit);
@@ -4517,7 +4517,7 @@ int __fastcall Hits(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarge
         }
         if (pOwner) {
           if (pTarget) {
-            if (*((uint8_t*)pMissilesTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+            if (pMissilesTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
               nPierce = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_skill_pierce, 0);
               if (nPierce || (nToHitThenStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pOwner, UNITSTAT_item_pierce, 0) , nToHitThenStat != 0)) {
                 nHitResult = getDamageTarget(pUnit);
@@ -5738,31 +5738,22 @@ int __fastcall MISSILESMODE_SrvDoFn23_SubMissileTrail(::SGAMEDATA * pGame, D2Uni
 
 // Per-tick server update: periodically spawns SubMissile1 missiles using MISSILES_SpawnPeriodicRandom. Spawn count from SkillsTxt calc[0] and interval from calc[1] via D2GetSkillCalc. Collision flags: COLLIDE_MISSILE|COLLIDE_WALL|COLLIDE_BLOCK_PLAYER. Delegates to SrvDoFunc_001.
 int __fastcall MISSILESMODE_SrvDoFn25_EruptionCenter(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    int32_t nSpawnCount;
-    int32_t nInterval;
-    D2SkillsTxt* pSkillsTxt;
-    if (!pUnit) {
-      return 2;
-    }
+    if (pUnit) {
+      int nMissileClassId = pUnit->nClassId;
+      D2MissilesTxt* pMissilesTxt = nMissileClassId >= 0 && nMissileClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileClassId : nullptr;
+      if (pMissilesTxt && pMissilesTxt->SubMissile1) {
+        eD2Skills eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
+        D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+        if (!pSkillsTxt) {
+          return 2;
+        }
 
-    int nMissileClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissilesTxt = nMissileClassId >= 0 && nMissileClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileClassId : nullptr;
-    if (pMissilesTxt && pMissilesTxt->SubMissile1) {
-      eD2Skills eSkill;
-      eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
-      pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-      if (!pSkillsTxt) {
-        return 2;
+        int32_t nSkillLvl = D2Common::Units::Missile::GetLevel(pUnit);
+        int32_t nSpawnCount = D2Common::Skills::D2GetSkillCalc(UNIT::SUnit::GetOwnerUnit(pGame, pUnit), pSkillsTxt->calc[0], eSkill, nSkillLvl);
+        int32_t nInterval = D2Common::Skills::D2GetSkillCalc(UNIT::SUnit::GetOwnerUnit(pGame, pUnit), pSkillsTxt->calc[1], eSkill, nSkillLvl);
+        MISSILES_SpawnPeriodicRandom(pGame, nSpawnCount, (int)pMissilesTxt->SubMissile1, 0x45, nInterval, pUnit);
+        return MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
       }
-
-      nInterval = D2Common::Units::Missile::GetLevel(pUnit);
-      nMissileClassId = pSkillsTxt->calc[0];
-      nSpawnCount = D2Common::Skills::D2GetSkillCalc(UNIT::SUnit::GetOwnerUnit(pGame, pUnit), nMissileClassId, eSkill, nInterval);
-      nMissileClassId = pSkillsTxt->calc[1];
-      nInterval = D2Common::Skills::D2GetSkillCalc(UNIT::SUnit::GetOwnerUnit(pGame, pUnit), nMissileClassId, eSkill, nInterval);
-      MISSILES_SpawnPeriodicRandom(pGame, nSpawnCount, (int)pMissilesTxt->SubMissile1, 0x45, nInterval, pUnit);
-      nMissileClassId = MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
-      return nMissileClassId;
     }
 
     return 2;
@@ -6170,7 +6161,7 @@ int __fastcall MISSILESMODE_SrvDoFn31_TwinWaveMaker(::SGAMEDATA * pGame, D2UnitS
 
       UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
       uint32_t nOwner = 0x2;
-      if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (pMissileTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         nOwner = 0x0;
       }
       if (pMissileTxt->CollideKill != '\0') {

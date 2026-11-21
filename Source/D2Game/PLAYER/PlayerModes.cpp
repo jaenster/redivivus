@@ -267,7 +267,7 @@ int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, D2Un
           }
       }
     }
-    if (*((uint8_t*)pSkillTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
+    if (pSkillTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
       D2StatListExStrc* pConcStatList;
       eStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_concentration);
       if (!eStunState) {
@@ -1355,15 +1355,15 @@ static void PLRMODES_RecoverStamina(D2UnitStrc * pUnit) {
       case TownNeutral:
         break;
       case TownWalk:
-        *(uint8_t*)(char*)&nShiftAmount = 9;
+        nShiftAmount = 9;
       break;
       case Walk:
-        *(uint8_t*)(char*)&nShiftAmount = 9;
-      if (!(nCurrentStamina & -256)) {
-        return;
+        nShiftAmount = 9;
+      if (nCurrentStamina & -256) {
+        break;
       }
 
-      break;
+      return;
       default:
         if (nRecoveryBonus < 1000) {
           return;
@@ -1376,17 +1376,17 @@ static void PLRMODES_RecoverStamina(D2UnitStrc * pUnit) {
       return;
     }
 
-    int nRecoverAmount = nMaxStamina >> (int8_t)nShiftAmount;
+    int nRecoverAmount = nMaxStamina >> nShiftAmount;
     if (nRecoveryBonus) {
       nRecoverAmount += nRecoverAmount * nRecoveryBonus / 100;
     }
 
-    nRecoveryBonus = nCurrentStamina + nRecoverAmount;
-    if ((int)(nCurrentStamina + nRecoverAmount) > nMaxStamina) {
-      nRecoveryBonus = nMaxStamina;
+    nCurrentStamina += nRecoverAmount;
+    if ((int)nCurrentStamina > nMaxStamina) {
+      nCurrentStamina = nMaxStamina;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, nRecoveryBonus, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, nCurrentStamina, 0);
 }
 
 uint8_t __fastcall PLRMODES_GetHpPercent128(D2UnitStrc * pUnit) {
@@ -1949,7 +1949,7 @@ void __fastcall PLRMODES_OnModeComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       if (pSkill) {
         eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\PLAYER\\PlrModes.cpp", 0x779);
         D2SkillsTxt* pSkillsTxt;
-        if ((pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr) && *((uint8_t*)pSkillsTxt + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+        if ((pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr) && pSkillsTxt->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
           PLRMODES_CheckWeaponQuantityAndDurability(pGame, pUnit);
           PLRMODES_BreakZeroDurabilityWeapons(pGame, pUnit);
         }

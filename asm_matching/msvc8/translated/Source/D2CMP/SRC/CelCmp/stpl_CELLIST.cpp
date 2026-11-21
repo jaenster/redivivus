@@ -67,61 +67,39 @@ template<> TSExplicitList<::CELLIST, -572662307>* TSExplicitList<CELLIST, -57266
 }
 
 template<> __declspec(noinline) inline void TSExplicitList<CELLIST, -572662307>::Clear() {
-    TSLink<::CELLIST>* pTVar2;
-    TSLink<::CELLIST>* pTVar3;
-    uint32_t* pBackLink;
-    intptr_t uLinkOffset3;
-    intptr_t uLinkOffset2;
-    ::CELLIST* pObject;
-    TSLink<::TCELENTRY>* nNext;
     while (true) {
-      TSLink<::TCELENTRY>* pTVar1;
-      pObject = (::CELLIST*)this->m_terminator.m_next;
-      if ((intptr_t)pObject <= 0) {
+      ::CELLIST* pObject = (intptr_t)this->m_terminator.m_next > 0 ? (::CELLIST*)this->m_terminator.m_next : nullptr;
+      if (!pObject) {
         break;
       }
 
-      pObject->m_frames.UnlinkAll();
-      pTVar1 = &pObject->m_frames.m_terminator;
-      nNext = pTVar1->m_prevlink;
-      if (nNext) {
-        pBackLink = (uint32_t*)D2_StormNextLink(pTVar1, -1);
-        *pBackLink = (uint32_t)(uintptr_t)nNext;
-        pTVar1->m_prevlink->m_next = pTVar1->m_next;
-        pTVar1->m_prevlink = 0;
-        pTVar1->m_next = 0;
+      TSList<TCELENTRY, TSGetLink<TCELENTRY>>* pFrames = &pObject->m_frames;
+      pFrames->UnlinkAll();
+      TSLink<::TCELENTRY>* pFramesLink = &pFrames->m_terminator;
+      TSLink<::TCELENTRY>* pFramesPrev = pFramesLink->m_prevlink;
+      if (pFramesPrev) {
+        *(TSLink<::TCELENTRY>**)D2_StormNextLink(pFramesLink, -1) = pFramesPrev;
+        pFramesLink->m_prevlink->m_next = pFramesLink->m_next;
+        pFramesLink->m_prevlink = 0;
+        pFramesLink->m_next = 0;
       }
 
-      pTVar3 = pObject->m_linktofull.m_prevlink;
-      pTVar2 = &pObject->m_linktofull;
-      if (pTVar3) {
-        uLinkOffset2 = pObject->m_linktofull.m_next;
-        if (uLinkOffset2 < 0) {
-          pBackLink = (uint32_t*)~uLinkOffset2;
-        } else {
-          pBackLink = (uint32_t*)((char*)pTVar2 + (uLinkOffset2 - pTVar3->m_next));
-        }
-
-        *pBackLink = (uint32_t)(uintptr_t)pTVar3;
-        pTVar2->m_prevlink->m_next = pObject->m_linktofull.m_next;
-        pTVar2->m_prevlink = 0;
-        pObject->m_linktofull.m_next = 0;
+      TSLink<::CELLIST>* pLink = &pObject->m_linktofull;
+      TSLink<::CELLIST>* pPrev = pLink->m_prevlink;
+      if (pPrev) {
+        *(TSLink<::CELLIST>**)D2_StormNextLink(pLink, -1) = pPrev;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
       }
 
-      pTVar3 = pObject->m_linktoslot.m_prevlink;
-      pTVar2 = &pObject->m_linktoslot;
-      if (pTVar3) {
-        uLinkOffset3 = pObject->m_linktoslot.m_next;
-        if (uLinkOffset3 < 0) {
-          pBackLink = (uint32_t*)~uLinkOffset3;
-        } else {
-          pBackLink = (uint32_t*)((char*)pTVar2 + (uLinkOffset3 - pTVar3->m_next));
-        }
-
-        *pBackLink = (uint32_t)(uintptr_t)pTVar3;
-        pTVar2->m_prevlink->m_next = pObject->m_linktoslot.m_next;
-        pTVar2->m_prevlink = 0;
-        pObject->m_linktoslot.m_next = 0;
+      pLink = &pObject->m_linktoslot;
+      pPrev = pLink->m_prevlink;
+      if (pPrev) {
+        *(TSLink<::CELLIST>**)D2_StormNextLink(pLink, -1) = pPrev;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
       }
 
       Storm::Source::SMem::SMemFree(pObject, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
@@ -276,7 +254,6 @@ template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<CELLI
 
 template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor() {
     TSExplicitList<::CELLIST, -572662307>* pBucketSlot;
-    TSLink<::CELLIST>** pBackLink;
     TSLink<::CELLIST>* nNext;
     uint32_t nBucketIdx = 0;
     if (this->m_count > 0) {
@@ -284,11 +261,10 @@ template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<CELLI
       do {
         pBucketSlot = &this->m_data[nBucketIdx];
         pBucketSlot->UnlinkAll();
-        nNext = pBucketSlot->m_terminator.m_prevlink;
         pTVar1 = &pBucketSlot->m_terminator;
+        nNext = pTVar1->m_prevlink;
         if (nNext) {
-          pBackLink = (TSLink<::CELLIST>**)D2_StormNextLink(pTVar1, -1);
-          *pBackLink = nNext;
+          *(TSLink<::CELLIST>**)D2_StormNextLink(pTVar1, -1) = nNext;
           pTVar1->m_prevlink->m_next = pTVar1->m_next;
           pTVar1->m_prevlink = 0;
           pTVar1->m_next = 0;
@@ -322,29 +298,21 @@ template<> __declspec(noinline) inline ::CELLIST * TSHashTable<CELLIST, HASHKEY_
 }
 
 template<> __declspec(noinline) inline void TSGrowableArray<CELLIST>::Destructor() {
-    ::CELLIST* nEntryAddr;
-    TSLink<::TCELENTRY>** pBackLink;
-    TSLink<::TCELENTRY>* nNext;
-    uint32_t nIdx = 0;
-    if (this->m_count > 0) {
-      TSLink<::TCELENTRY>* pTVar1;
-      do {
-        nEntryAddr = &this->m_data[nIdx];
-        nEntryAddr->m_frames.UnlinkAll();
-        nNext = nEntryAddr->m_frames.m_terminator.m_prevlink;
-        pTVar1 = &nEntryAddr->m_frames.m_terminator;
-        if (nNext) {
-          pBackLink = (TSLink<::TCELENTRY>**)D2_StormNextLink(pTVar1, -1);
-          *pBackLink = nNext;
-          pTVar1->m_prevlink->m_next = pTVar1->m_next;
-          pTVar1->m_prevlink = 0;
-          pTVar1->m_next = 0;
-        }
+    for (uint32_t nIdx = 0; nIdx < this->m_count; nIdx++) {
+      ::CELLIST* pEntry = &this->m_data[nIdx];
+      TSList<::TCELENTRY, TSGetLink<::TCELENTRY>>* pFrames = &pEntry->m_frames;
+      pFrames->UnlinkAll();
+      TSLink<::TCELENTRY>* pLink = &pFrames->m_terminator;
+      if (pLink->m_prevlink) {
+        *(TSLink<::TCELENTRY>**)D2_StormNextLink(pLink, -1) = pLink->m_prevlink;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
+      }
 
-        nEntryAddr->Destructor();
-        nIdx++;
-      } while (nIdx < this->m_count);
+      pEntry->Destructor();
     }
+
     if (!this->m_data) {
       return;
     }
@@ -924,7 +892,7 @@ template<> __declspec(noinline) inline int32_t TSHashTable<CELLIST, HASHKEY_NONE
       this->nFullnessIndicator = 0;
     }
 
-    uint32_t nChainLen = this->tSlotListArray.m_data[nSlot].m_terminator.m_next;
+    intptr_t nChainLen = this->tSlotListArray.m_data[nSlot].m_terminator.m_next;
     nChainLen = (int)nChainLen <= 0 ? 0 : nChainLen;
     while (true) {
       TSExplicitList<::CELLIST, -572662307>* pBucketEntry;

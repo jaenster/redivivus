@@ -2084,37 +2084,21 @@ void __stdcall NET_SID_CLIENT_SubstitutionBoxShuffle(uint32_t * pToken) {
 }
 
 void __fastcall NET_SID_CLIENT_TransformCdKeyToken(char * nCdKeyValue, uint32_t * pOutPublic, uint32_t * pOutProduct, uint16_t * pOutHash) {
-    // Frame slots -76..-8 are ONE object: &nBigNum0 is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint32_t nBigNum0;
-      uint32_t nBigNum1;
-      uint32_t pBigNum2;
-      uint32_t nBigNum3;
-      uint8_t base5Digits[52];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 68, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    int digitIndex;
+    uint8_t abBase5Digits[52];
     if (nCdKeyValue && pOutHash) {
-      NET_SID_CLIENT_ExpandCdKeyToBase5(nCdKeyValue, __frame0.base5Digits);
-      digitIndex = 0x34;
-      __frame0.nBigNum0 = 0;
-      __frame0.nBigNum1 = 0;
-      __frame0.pBigNum2 = 0;
-      __frame0.nBigNum3 = 0;
-      do {
-        NET_SID_CLIENT_BigNumMultiplyAccumulate(4, 5, &__frame0.nBigNum0, &__frame0.nBigNum0, (uint32_t)__frame0.base5Digits[digitIndex - 1]);
-        digitIndex--;
-      } while (digitIndex > 0);
+      NET_SID_CLIENT_ExpandCdKeyToBase5(nCdKeyValue, abBase5Digits);
+      uint32_t aBigNum[4] = {0};
+      for (int i = 0x34; i > 0; i--) {
+        NET_SID_CLIENT_BigNumMultiplyAccumulate(4, 5, aBigNum, aBigNum, (uint32_t)abBase5Digits[i - 1]);
+      }
 
-      NET_SID_CLIENT_SubstitutionBoxShuffle(&__frame0.nBigNum0);
-      NET_SID_CLIENT_PermuteBitsLFSR(&__frame0.nBigNum0);
-      *pOutPublic = __frame0.nBigNum0 >> 10;
-      *pOutProduct = (__frame0.nBigNum0 & 0x3ff) << 0x10 | __frame0.nBigNum1 >> 0x10;
-      *pOutHash = (short int)__frame0.nBigNum1;
-      *(uint32_t*)(pOutHash + 1) = __frame0.pBigNum2;
-      *(uint32_t*)(pOutHash + 3) = __frame0.nBigNum3;
+      NET_SID_CLIENT_SubstitutionBoxShuffle(aBigNum);
+      NET_SID_CLIENT_PermuteBitsLFSR(aBigNum);
+      *pOutPublic = aBigNum[0] >> 10;
+      *pOutProduct = (aBigNum[0] & 0x3ff) << 0x10 | aBigNum[1] >> 0x10;
+      *pOutHash = (short int)aBigNum[1];
+      *(uint32_t*)(pOutHash + 1) = aBigNum[2];
+      *(uint32_t*)(pOutHash + 3) = aBigNum[3];
     }
 }
 

@@ -482,12 +482,10 @@ static void __stdcall GoldCalculations(D2UnitStrc * pUnit, int * pnGoldAccepted,
     int nCurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
     *pnGoldOverflow = 0;
     *pnGoldAccepted = nGoldAmount;
-    if (!(nCurrentGold + nGoldAmount > (int)nGoldLimit)) {
-      return;
+    if (nCurrentGold + nGoldAmount > (int)nGoldLimit) {
+      *pnGoldAccepted = nGoldLimit - nCurrentGold;
+      *pnGoldOverflow = nGoldAmount - *pnGoldAccepted;
     }
-
-    *pnGoldAccepted = nGoldLimit - nCurrentGold;
-    *pnGoldOverflow = nGoldAmount - (nGoldLimit - nCurrentGold);
 }
 
 // @sourcefile .\UNIT\Party.cpp

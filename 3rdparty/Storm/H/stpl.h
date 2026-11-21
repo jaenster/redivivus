@@ -798,7 +798,7 @@ template<> __attribute__((noinline)) inline void TSList<WNDREC, TSGetLink<WNDREC
 // stpl-orphan: a COMDAT copy in TSLink<SGAMEDATA> that no member owns
 // Unreferenced copy of NextLink: the link after this one.
 // Byte-identical to TSLink<CELLIST>::NextLink 00601bc0; T not proven (no xrefs), filed with the SGAMEDATA block.
-TSLink<::SGAMEDATA>* __thiscall NextLink_Unreferenced(TSLink<::SGAMEDATA>* pThis, int32_t nLinkOffset);
+TSLink<::SGAMEDATA>* __thiscall NextLink_Unreferenced(TSLink<::SGAMEDATA>* pThis, intptr_t nLinkOffset);
 // stpl-orphan: a COMDAT copy in TSExplicitList<SGAMEDATA, -572662307> that no member owns
 // Unreferenced copy of Link: address of pNode's link, or the terminator for a null node.
 // Byte-identical to TSExplicitList<CELLIST,..>::Link 00602110; T not proven (no xrefs), filed with the SGAMEDATA block.

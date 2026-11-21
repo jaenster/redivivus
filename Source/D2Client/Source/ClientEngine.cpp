@@ -2351,12 +2351,12 @@ void RENDERING_ToggleLowQuality_Thunk() {
     D2gfx::D2GFX::D2GFX_ToggleLowQuality();
 }
 
-void __fastcall WARDEN_FreeModuleLibraries_Thunk_Unref_0047f940(LPVOID * ppWardenModule) {
-    Warden::WARDEN_FreeModuleLibraries(ppWardenModule);
+void __fastcall WARDEN_FreeModuleLibraries_Thunk_Unref_0047f940(D2WardenModuleStrc * pWardenModule) {
+    Warden::WARDEN_FreeModuleLibraries(pWardenModule);
 }
 
-void __fastcall WARDEN_FreeModuleLibraries_Thunk_Unref_0047fbe0(LPVOID * ppWardenModule) {
-    Warden::WARDEN_FreeModuleLibraries(ppWardenModule);
+void __fastcall WARDEN_FreeModuleLibraries_Thunk_Unref_0047fbe0(D2WardenModuleStrc * pWardenModule) {
+    Warden::WARDEN_FreeModuleLibraries(pWardenModule);
 }
 
 } // namespace D2Client::Source::ClientEngine

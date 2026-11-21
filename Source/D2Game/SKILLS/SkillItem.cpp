@@ -604,7 +604,7 @@ int32_t __fastcall MONREGION_RollRandomMonsterType(::SGAMEDATA * pGame, D2Monste
       nClassId = pMonData->nClassId;
       nRarityBucket = (int)(short int)nClassId;
       pMonStatsTxt = nRarityBucket >= 0 && nRarityBucket < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nRarityBucket : nullptr;
-      if (pMonStatsTxt && pMonStatsTxt->spawn >= 0 && *((uint8_t*)pMonStatsTxt + 0xe) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
+      if (pMonStatsTxt && pMonStatsTxt->spawn >= 0 && pMonStatsTxt->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
         DVar1 = D2_SeedRoll(pSeed);
         if ((int)(DVar1 % 100) > (int)(uint32_t)byBaseClassChance) {
           nClassId = pMonStatsTxt->spawn;
@@ -1675,14 +1675,14 @@ BOOL __fastcall Skills_SrvDoFunc_113_UseScrollOrBook(::SGAMEDATA * pGame, D2Unit
 
 void __fastcall SKILL_ProcessPeriodicAuraTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nOwnerGUID, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = pUnit && (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!(pSkillTxt && *((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5] && pSkillTxt->aurastate >= 0 && (int)pSkillTxt->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
+    if (!(pSkillTxt && pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[5] && pSkillTxt->aurastate >= 0 && (int)pSkillTxt->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
       return;
     }
 
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, nOwnerGUID);
     int32_t pNextFrame = SkillsServer::SKILLS_CalcPerDelayInterval(pGame, pUnit, pSkillTxt, eSkill, nSkillLvl);
     GAME::Event::SetEvent(pGame, pUnit, 9, pNextFrame, nOwnerGUID, eSkill);
-    if (!(*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7])) {
+    if (!(pSkillTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[7])) {
       return;
     }
 
@@ -1691,7 +1691,7 @@ void __fastcall SKILL_ProcessPeriodicAuraTick(::SGAMEDATA * pGame, D2UnitStrc * 
 
 void __fastcall SKILL_DeactivateAura(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nOwnerGUID, eD2Skills eSkill) {
     D2SkillsTxt* pSkillTxt = pUnit && (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!(pSkillTxt && *((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5])) {
+    if (!(pSkillTxt && pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[5])) {
       return;
     }
 
@@ -1834,10 +1834,10 @@ BOOL __fastcall ITEMEVENT_Knockback(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2
       D2MonStats2Txt* pMonStats2;
       pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(GetClassIdInline(pTarget));
       if (pMonStats2) {
-        if (Fog::BitBuffer::gadwBitMasks[3] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
+        if (Fog::BitBuffer::gadwBitMasks[3] & pMonStats2->aFlagBytes[1]) {
           nSizeThreshMask = 0x20;
         } else {
-          if (Fog::BitBuffer::gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
+          if (Fog::BitBuffer::gadwBitMasks[2] & pMonStats2->aFlagBytes[1]) {
             nSizeThreshMask = 0x80;
           }
         }
@@ -2343,7 +2343,7 @@ BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent,
     if (!pSkillsTxt) {
       return 0;
     }
-    if (*((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
+    if (pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
       if (pTarget) {
         Monster::AI::SKILL_CastOnTargetUnit(pTarget, eProcSkill, nSkillLevel, pTarget, 0);
         return 1;
@@ -2602,7 +2602,7 @@ BOOL __fastcall ITEMEVENT_LaunchMissileOnOwner(::SGAMEDATA * pGame, uint32_t nUn
     }
 
     D2MissilesTxt* pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(pTarget->nClassId);
-    if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+    if (pMissileTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       D2SkillArgStrc sSkillArg;
       memset(&sSkillArg, 0, 0x5c);
       sSkillArg.nFlags = 0x20;

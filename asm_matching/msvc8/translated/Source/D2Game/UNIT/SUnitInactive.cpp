@@ -445,7 +445,7 @@ static void __stdcall SUNITINACTIVE_RestoreMonsterStateFromInactive(::SGAMEDATA 
     }
 
     uint32_t dwMonStatsFlags;
-    dwMonStatsFlags = (uint32_t)(uint8_t)*((uint8_t*)pAiCmd + 0xd);
+    dwMonStatsFlags = (uint32_t)pAiCmd->aFlagBytes[1];
     if (Fog::BitBuffer::gadwBitMasks[1] & dwMonStatsFlags || Fog::BitBuffer::gadwBitMasks[0] & dwMonStatsFlags || Fog::BitBuffer::gadwBitMasks[2] & dwMonStatsFlags) {
       D2MapAIStrc** ppMapAi;
       pAiCmdNpc = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, pUnit, 10, 0);
@@ -561,7 +561,7 @@ static void SUNITINACTIVE_SaveMonsterStateToInactive(D2InactiveMonsterRecordStrc
     }
 
     uint32_t uVar1;
-    uVar1 = (uint32_t)(uint8_t)*((uint8_t*)pAiCmd + 0xd);
+    uVar1 = (uint32_t)pAiCmd->aFlagBytes[1];
     if (Fog::BitBuffer::gadwBitMasks[1] & uVar1 || Fog::BitBuffer::gadwBitMasks[0] & uVar1 || Fog::BitBuffer::gadwBitMasks[2] & uVar1) {
       D2MapAIStrc** ppMapAi;
       pAiCmdNpc = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, pUnit, 10, 0);
@@ -885,7 +885,7 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
             } else {
               pMonStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + uSlot18.nClassId;
             }
-            if (*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
+            if (pMonStatsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
               nSpawnFlags |= 0x80;
             }
 

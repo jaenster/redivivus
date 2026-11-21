@@ -258,8 +258,11 @@ int32_t __fastcall TEXT_CompareMessagesByCode(uint16_t * pnCodeA, uint16_t * pnC
     if (*pnCodeA > *pnCodeB) {
       return 1;
     }
+    if (*pnCodeA < *pnCodeB) {
+      return -1;
+    }
 
-    return -(uint32_t)(*pnCodeB > *pnCodeA);
+    return 0;
 }
 
 void __thiscall TEXT_SortMessages(uint16_t nCount, uint16_t * pEntries, pfnTextMessageCompare pfnCompare) {

@@ -114,23 +114,20 @@ void LRUCACHE_Unlink(D2LRUCacheNodeStrc * pNode, D2LRUCacheStrc * pCache) {
 }
 
 void __fastcall LRUCACHE_ForEach(D2LRUCacheStrc * pCache, fpLRUCacheForEachFn pfnCallback, uint32_t dwCallbackData) {
-    int bContinue;
     if (!pCache) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19c);
       exit(-1);
     }
 
     D2LRUCacheNodeStrc* pEntry = pCache->pLRUHead;
-    do {
-      D2LRUCacheNodeStrc* pDVar1;
-      if (!pEntry) {
-        return;
+    while (pEntry) {
+      D2LRUCacheNodeStrc* pNext = pEntry->pNext;
+      if (!(*pfnCallback)(pEntry, dwCallbackData)) {
+        break;
       }
 
-      pDVar1 = pEntry->pNext;
-      bContinue = (*pfnCallback)(pEntry, dwCallbackData);
-      pEntry = pDVar1;
-    } while (bContinue);
+      pEntry = pNext;
+    }
 }
 
 static D2LRUCacheNodeStrc * LRUCACHE_AllocEntry(D2LRUCacheStrc * pCache, int32_t nEntrySize) {

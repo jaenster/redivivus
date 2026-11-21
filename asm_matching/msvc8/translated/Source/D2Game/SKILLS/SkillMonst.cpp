@@ -2311,7 +2311,7 @@ BOOL __fastcall Skills_SrvDoFunc_148_FireMissileBodyPart10(::SGAMEDATA * pGame, 
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
-      if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (pSkillsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         SkillsServer::SKILLS_CreateMissileFromUnit(pGame, (eMissilesId)nMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       } else {
         SkillsServer::CreatingAMissile(pGame, (eMissilesId)nMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
@@ -2356,7 +2356,7 @@ BOOL __fastcall Skills_SrvDoFunc_149_FireMissileBodyPart11(::SGAMEDATA * pGame, 
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
-      if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (pSkillsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         SkillsServer::SKILLS_CreateMissileFromUnit(pGame, (eMissilesId)nMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       } else {
         SkillsServer::CreatingAMissile(pGame, (eMissilesId)nMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
@@ -2390,7 +2390,7 @@ BOOL __fastcall Skills_SrvDoFunc_110_FireArrowModMissile(::SGAMEDATA * pGame, D2
       if ((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
         pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(eMissileId);
         if (pMissileTxt) {
-          if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+          if (pSkillsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
             SkillsServer::SKILLS_CreateMissileFromUnit(pGame, eMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
             return 1;
           }

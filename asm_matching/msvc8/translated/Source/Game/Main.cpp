@@ -727,16 +727,12 @@ int32_t __stdcall INI_FindConfigValueIndex(uint8_t * pbArgName) {
 }
 
 uint32_t __fastcall INI_IsDelimiterChar(char cChar) {
-    char szDelimiters[4];
-    memcpy(szDelimiters, " \t\n:", 4);
-    int i = 0;
-    do {
+    char szDelimiters[4] = { ' ', '\t', '\n', ':' };
+    for (int i = 0; i < 4; i++) {
       if (szDelimiters[i] == cChar) {
         return 1;
       }
-
-      i++;
-    } while (i < 4);
+    }
 
     return 0;
 }

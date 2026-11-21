@@ -1060,7 +1060,7 @@ BOOL __fastcall Skills_SrvDoFunc_145_Hurricane(::SGAMEDATA * pGame, D2UnitStrc *
       if (nAuraStateId >= 0 && (int)nAuraStateId < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
         bIsInTown = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nAuraStateId);
         if (bIsInTown) {
-          if (!(*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && (pRoom = D2Common::Units::UNITS_GetRoom(pUnit) , pRoom != 0) && (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , bIsInTown != 0)) {
+          if (!(pSkillTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && (pRoom = D2Common::Units::UNITS_GetRoom(pUnit) , pRoom != 0) && (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , bIsInTown != 0)) {
             pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillTxt->aurastate);
             if (pStatList) {
               D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
@@ -1126,7 +1126,7 @@ BOOL __fastcall Skills_SrvDoFunc_146_ArmageddonTick(::SGAMEDATA * pGame, D2UnitS
       if (nAuraStateId >= 0 && (int)nAuraStateId < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
         bIsInTown = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nAuraStateId);
         if (bIsInTown) {
-          if (!(*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && (pRoom = D2Common::Units::UNITS_GetRoom(pUnit) , pRoom != 0) && (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , bIsInTown != 0)) {
+          if (!(pSkillTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && (pRoom = D2Common::Units::UNITS_GetRoom(pUnit) , pRoom != 0) && (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , bIsInTown != 0)) {
             pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillTxt->aurastate);
             if (pStatList) {
               D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);

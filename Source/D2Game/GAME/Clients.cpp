@@ -1482,13 +1482,7 @@ void __fastcall GetGuildName(D2ClientStrc * pClient, char * szGuildName) {
 }
 
 void __fastcall SetGuildName(D2ClientStrc * pClient, char * szGuildName) {
-    char cCurrent;
-    intptr_t nGuildNameOffset = 0x464 - (intptr_t)szGuildName;
-    do {
-      cCurrent = *szGuildName;
-      szGuildName[(intptr_t)pClient + nGuildNameOffset] = cCurrent;
-      szGuildName++;
-    } while (cCurrent != '\0');
+    strcpy(pClient->szGuildName, szGuildName);
 }
 
 void __fastcall GetGuildInfo(D2ClientStrc * pClient, uint8_t * pGuildInfo1, uint8_t * pGuildInfo2, uint8_t * pGuildInfo3) {
@@ -1571,8 +1565,8 @@ void __fastcall GetAccountName(D2ClientStrc * pClient, char * szText) {
     Storm::Source::SSTR::SStrCopy(szText, pClient->szAccName, 0x32);
 }
 
-void __fastcall GetClientContainer(D2ClientStrc * pClient, void * * pdwContainer) {
-    *pdwContainer = pClient->pClientContainer;
+void __fastcall GetClientContainer(D2ClientStrc * pClient, uint32_t * pdwPlayerData) {
+    *pdwPlayerData = pClient->dwPlayerData;
 }
 
 void __fastcall GetRealm(D2ClientStrc * pClient, uint32_t * pdwRealm) {
@@ -1889,7 +1883,7 @@ int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, :
 
 // Allocates and initializes D2ClientStrc (1304 bytes). Sets client ID, 180-second timeout, class (arena template override), char/account names, language. Initializes 16 hotkey slots to -1, zeroes packet lists. Inserts into game's client linked list and two hash tables (by ID and name). Max 8 clients per game. Returns new client or null if full.
 // @sourcefile .\GAME\Clients.cpp
-D2ClientStrc * __fastcall CreateClient(::SGAMEDATA * pGame, uint32_t nClientId, uint8_t nClass, char * pCharName, char * szAccountName, uint8_t * pClientContainer, uint8_t nLanguageId, uint32_t dwUnused1, uint32_t dwUnused2) {
+D2ClientStrc * __fastcall CreateClient(::SGAMEDATA * pGame, uint32_t nClientId, uint8_t nClass, char * pCharName, char * szAccountName, uint32_t dwPlayerData, uint8_t nLanguageId, uint32_t dwUnused1, uint32_t dwUnused2) {
     D2ClientStrc* pClient;
     DWORD dwTick;
     uint32_t bIsArenaMode;
@@ -1916,7 +1910,7 @@ D2ClientStrc * __fastcall CreateClient(::SGAMEDATA * pGame, uint32_t nClientId, 
 
       Storm::Source::SSTR::SStrCopy(pClient->szCharName, pCharName, 0x7fffffff);
       Storm::Source::SSTR::SStrCopy(pClient->szAccName, szAccountName, 0x7fffffff);
-      pClient->pClientContainer = pClientContainer;
+      pClient->dwPlayerData = dwPlayerData;
       pClient->pRealm = 0;
       pClient->dwLangId = (uint32_t)nLanguageId;
       pClient->ConnectionState = 0;
@@ -2077,7 +2071,7 @@ void __fastcall CleanUpClient(::SGAMEDATA * pGame, uint32_t nClientId, int32_t b
     BOOL bBadCodePtr;
     int nExpHiShift;
     uint32_t nNameHashBucket;
-    uint8_t* pClientNode_00;
+    int bUnlock;
     char szCharName[16];
     uint32_t dwRealmToken;
     uint16_t wCharLevel;
@@ -2223,10 +2217,10 @@ void __fastcall CleanUpClient(::SGAMEDATA * pGame, uint32_t nClientId, int32_t b
             exit(-1);
           }
           if (BattleNetServerService->fpLeaveGame) {
-            dwRealmToken = (uint32_t)pRemovedClient->pClientContainer;
-            pClientNode_00 = (uint8_t*)pRemovedClient->dwSave;
+            dwRealmToken = pRemovedClient->dwPlayerData;
+            bUnlock = pRemovedClient->dwSave;
             wCharLevel = pRemovedClient->nCharacterStatus;
-            BattleNetServerService->fpLeaveGame(nStrCmp, nNameHashBucket, nExpHi, nExpHiShift, (int)wCharLevel, pRemovedClient->szCharName, (uint8_t*)&pRemovedClient->nStartSkill, pClientNode_00, 0, 0, pRemovedClient->szAccName, dwRealmToken, 0, 0, 0, 0, 0, (uint8_t*)&pRemovedClient->ftFileTime);
+            BattleNetServerService->fpLeaveGame(nStrCmp, nNameHashBucket, nExpHi, nExpHiShift, (int)wCharLevel, pRemovedClient->szCharName, (uint8_t*)&pRemovedClient->nStartSkill, bUnlock, 0, 0, pRemovedClient->szAccName, dwRealmToken, 0, 0, 0, 0, 0, (uint8_t*)&pRemovedClient->ftFileTime);
           }
         }
       } else {
@@ -2238,14 +2232,14 @@ void __fastcall CleanUpClient(::SGAMEDATA * pGame, uint32_t nClientId, int32_t b
             exit(-1);
           }
           if (BattleNetServerService->fpLeaveGame) {
-            dwRealmToken = (uint32_t)pRemovedClient->pClientContainer;
-            pClientNode_00 = (uint8_t*)pRemovedClient->dwSave;
+            dwRealmToken = pRemovedClient->dwPlayerData;
+            bUnlock = pRemovedClient->dwSave;
             wCharLevel = 0;
             nExpHiShift = 0;
             nExpHi = 0;
             nNameHashBucket = 0;
             nStrCmp = 0;
-            BattleNetServerService->fpLeaveGame(nStrCmp, nNameHashBucket, nExpHi, nExpHiShift, (int)wCharLevel, pRemovedClient->szCharName, (uint8_t*)&pRemovedClient->nStartSkill, pClientNode_00, 0, 0, pRemovedClient->szAccName, dwRealmToken, 0, 0, 0, 0, 0, (uint8_t*)&pRemovedClient->ftFileTime);
+            BattleNetServerService->fpLeaveGame(nStrCmp, nNameHashBucket, nExpHi, nExpHiShift, (int)wCharLevel, pRemovedClient->szCharName, (uint8_t*)&pRemovedClient->nStartSkill, bUnlock, 0, 0, pRemovedClient->szAccName, dwRealmToken, 0, 0, 0, 0, 0, (uint8_t*)&pRemovedClient->ftFileTime);
           }
         }
       }

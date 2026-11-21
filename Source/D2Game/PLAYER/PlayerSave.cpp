@@ -1040,9 +1040,8 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, char * szAccountName, D2Unit
       }
     }
 
-    nCompareByteIdx = (int)pClient;
     GAME::Clients::SetRealm(pClient, nRealmId);
-    ITEMS::ItemMode::SetSaveChecksum((D2ClientStrc*)nCompareByteIdx, nExistingCrc);
+    ITEMS::ItemMode::SetSaveChecksum(pClient, nExistingCrc);
     if (BattleNetServerService && BattleNetServerService->fpSaveDatabaseCharacter) {
       /* FARPROC lpfn for IsBadCodePtr */ _bLockResult = IsBadCodePtr((FARPROC)BattleNetServerService->fpSaveDatabaseCharacter);
       if (_bLockResult) {
@@ -1051,7 +1050,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, char * szAccountName, D2Unit
       }
 
       BattleNetServerService->fpSaveDatabaseCharacter(&nRealmId, nUnused, szAccountName, &__frame0.wPacketHeader, nSaveSizePlus2, nToken);
-      GAME::Clients::CopySafeBuffer((D2ClientStrc*)nCompareByteIdx, __frame0.saveTempBuffer, nSaveFileBytes);
+      GAME::Clients::CopySafeBuffer(pClient, __frame0.saveTempBuffer, nSaveFileBytes);
     }
 
     return 1;
@@ -1138,7 +1137,7 @@ BOOL __fastcall SaveGameAllGameTypes(::SGAMEDATA * pGame, D2UnitStrc * pUnit, ch
 
     pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave.cpp", 0xb67);
     GAME::Clients::GetAccountName(pClient, szAccountName);
-    GAME::Clients::GetClientContainer(pClient, (void**)&clientContainer);
+    GAME::Clients::GetClientContainer(pClient, &clientContainer);
     GAME::Clients::GetRealm(pClient, &nRealm);
     bSaveSucceeded = 1;
     if (pGame->nGameType == SGAMETYPE_OBNET_HOST || pGame->nGameType == SGAMETYPE_LAN_HOST) {
@@ -2150,25 +2149,21 @@ int32_t __fastcall _oldSaveGameLoadingPart8_part1_part1(uint16_t wHirelingId, in
 
 uint32_t __fastcall _oldSaveGameLoadingPart8_part1(::SGAMEDATA * pGame, uint16_t wHirelingId, uint32_t dwExperience) {
     int nMercLevel = 1;
-    int32_t nExpPerLevel = _oldSaveGameLoadingPart8_part1_part1(wHirelingId, 2);
-    uint32_t nExpThreshold = nExpPerLevel * 0x12;
-    int iVar1 = 2;
-    while (nExpThreshold <= dwExperience && iVar1 < 99) {
-      int nLevel;
-      nLevel = iVar1 + 1;
+    uint32_t nExpThreshold = _oldSaveGameLoadingPart8_part1_part1(wHirelingId, nMercLevel + 1) * (nMercLevel + 2) * (nMercLevel + 1) * 3;
+    while (nExpThreshold <= dwExperience && nMercLevel + 1 < 99) {
       nMercLevel++;
-      nExpPerLevel = _oldSaveGameLoadingPart8_part1_part1(wHirelingId, nLevel);
-      nExpThreshold = nExpPerLevel * (iVar1 + 2) * nLevel * 3;
-      iVar1 = nLevel;
+      nExpThreshold = _oldSaveGameLoadingPart8_part1_part1(wHirelingId, nMercLevel + 1) * (nMercLevel + 2) * (nMercLevel + 1) * 3;
     }
 
     D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)wHirelingId, nMercLevel);
-    if (!(!pHirelingTxt || (nExpThreshold = D2Common::Merc::GetBaseExperience(nMercLevel, pHirelingTxt->expPerLvl) , nExpThreshold <= dwExperience))) {
-      return nExpThreshold;
+    if (pHirelingTxt) {
+      nExpThreshold = D2Common::Merc::GetBaseExperience(nMercLevel, pHirelingTxt->expPerLvl);
+      if (nExpThreshold > dwExperience) {
+        return nExpThreshold;
+      }
     }
 
-    nExpThreshold = dwExperience;
-    return nExpThreshold;
+    return dwExperience;
 }
 
 // Legacy-save mercenary loader: parses the merc record from an older .d2s save buffer and reconstructs the hireling. For the "JM"-tagged 0x47 layout it just calls CreateMerc from type/name fields. Otherwise reads the merc block (dead flag, type, name, gold/exp), looks up HirelingTxt, converts experience for pre-0x5a versions, creates the merc, registers it as pet slot 7, then iterates the experience table to derive the merc level and applies stats (MERC_ApplyLevelStats), creating an inventory if missing and marking dead/freeing combat if the dead flag was set. Finally dispatches the merc's saved items (PLRSAVE_DispatchItemLoadByFormat), recalcs inventory and HP, and sends merc packets. Writes bytes-consumed to *pnParam2; returns 0 on success or 0xE on premature/invalid data. Custom convention (pGame in EBX).
@@ -2556,7 +2551,7 @@ static int32_t __fastcall CLIENT_ReadAndLoadSaveFile(D2ClientStrc * pClient, D2R
 }
 
 // Offline save load. The game arrives in EDI; modelled as a local, the reconstruction loaded the character through an uninitialised game pointer.
-static int32_t __fastcall CLIENT_LoadPlayerFromDisk(::SGAMEDATA * pGame, uint32_t dwParam1, char * szText, D2ClientStrc * pClient, D2UnitStrc * * pOutUnitHolder, D2RoomStrc * pRoom, uint32_t nX, uint32_t nY) {
+static int32_t __fastcall CLIENT_LoadPlayerFromDisk(::SGAMEDATA * pGame, char * szText, D2ClientStrc * pClient, D2UnitStrc * * pOutUnitHolder, D2RoomStrc * pRoom, uint32_t nX, uint32_t nY) {
     ::SGAMEDATA* pGameLocalTmp;
     D2UnitStrc* pUnit = 0;
     if (!BattleNetServerService) {
@@ -2610,7 +2605,7 @@ BOOL __fastcall CLIENT_LoadOrCreatePlayerUnit(::SGAMEDATA * pGame, D2ClientStrc 
         goto finish_player_unit;
       }
     } else if (bLoadFromSave) {
-      bResult = CLIENT_LoadPlayerFromDisk(pGame, (uint32_t)pRoomOrNull, pClientCharName, pClient, ppUnitOut, pRoomOrNull, nX, nY);
+      bResult = CLIENT_LoadPlayerFromDisk(pGame, pClientCharName, pClient, ppUnitOut, pRoomOrNull, nX, nY);
       goto finish_player_unit;
     }
 

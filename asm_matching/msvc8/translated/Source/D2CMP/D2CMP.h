@@ -103,7 +103,7 @@ struct D2CodecFrameComponentStrc {
     /* 0x0C */ uint32_t nHeight;
     /* 0x10 */ uint32_t nXOffset2;
     /* 0x14 */ uint32_t nDataOffset;
-    /* 0x18 */ uint32_t nStrideValue2;
+    /* 0x18 */ uint8_t * pData; // decoded data pointer for this component (set from nDataOffset)
     /* 0x1C */ uint32_t nEncSize;
     /* 0x20 */ uint8_t * pSrcRow;
     /* 0x24 */ uint32_t nStrideValue0;

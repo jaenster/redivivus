@@ -19,6 +19,14 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Win/Src/D2Comp.data.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_AT
@@ -3552,22 +3560,7 @@ void __stdcall D2COMP_SetAnimationSpeed(D2CharSelCompStrc * pCompUnit, uint8_t b
       exit(-1);
     }
 
-    uint32_t bySpeedCopy = bySpeed;
-    if (bySpeed <= 0) {
-      bySpeedCopy = 0;
-    }
-
-    uint32_t byClampedSpeed = pCompUnit->nNumDirections;
-    if (bySpeedCopy < byClampedSpeed) {
-      if (bySpeed > 0) {
-        pCompUnit->nAnimSpeed = bySpeed;
-        return;
-      }
-
-      byClampedSpeed = 0;
-    }
-
-    pCompUnit->nAnimSpeed = byClampedSpeed;
+    pCompUnit->nAnimSpeed = min(max(bySpeed, 0), pCompUnit->nNumDirections); // steer-ok: windef.h min/max macros
 }
 
 uint8_t __stdcall D2COMP_GetNumDirections(D2CharSelCompStrc * pCompUnit) {

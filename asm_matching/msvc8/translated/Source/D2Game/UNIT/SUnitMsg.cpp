@@ -455,7 +455,7 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
             D2StatesTxt* pStatesTxt = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
             if (!pStatesTxt) {
               nFlagDwordVal = *pFlagDword;
-            } else if (*((uint8_t*)pStatesTxt + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+            } else if (pStatesTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
               nFlagDwordVal = *pFlagDword;
             } else {
               nBitPos = Fog::BitBuffer::GetNextPositon(&bitBuf);
@@ -605,7 +605,7 @@ void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc *
             if (!pStatesTxt) {
               nFlagDwordVal = *pCurFlagDword;
             } else {
-              if (*((uint8_t*)pStatesTxt + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+              if (pStatesTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
                 nFlagDwordVal = *pCurFlagDword;
               } else {
                 eCurState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eStateId);

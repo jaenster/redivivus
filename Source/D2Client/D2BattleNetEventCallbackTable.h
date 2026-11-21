@@ -79,7 +79,7 @@ typedef void (__fastcall *fnUpdateGameInformation)(WORD nGameId, char * szCharNa
 #define D2_DEFINED_D2BattleNetEventCallbackTable
 struct D2BattleNetEventCallbackTable {
     /* 0x00 */ void (*fpCloseGame)(int, int);
-    /* 0x04 */ void (*fpLeaveGame)(int, int, int, int, int, void *, void *, void *, int, int, void *, int, int, int, int, int, int, void *);
+    /* 0x04 */ void (*fpLeaveGame)(int, int, int, int, int, void *, void *, int, int, int, void *, int, int, int, int, int, int, void *);
     /* 0x08 */ void (__fastcall *fpGetDatabaseCharacter)(struct D2ClientStrc *, LPCSTR, DWORD, LPCSTR);
     /* 0x0C */ void (__fastcall *fpSaveDatabaseCharacter)(uint32_t *, char *, char *, void *, int, uint32_t); // offset 0x0C - saves character data to BNet database with account ID, save buffer, size, token
     /* 0x10 */ uint8_t * fpServerLogMessage;

@@ -203,17 +203,15 @@ BOOL __stdcall DRLGROOM_IsUnitInRoom(D2RoomStrc * pRoom, D2UnitStrc * pUnit) {
       return 0;
     }
 
-    D2UnitStrc** ppUnitList = DUNGEON::Dungeon::DRLGROOM_GetUnitListFromRoom(pRoom);
-    D2UnitStrc* pUnitIter = *ppUnitList;
-    do {
-      if (pUnitIter == pUnit) {
-        return 1;
-      }
-
+    D2UnitStrc* pUnitIter = *DUNGEON::Dungeon::DRLGROOM_GetUnitListFromRoom(pRoom);
+    while (pUnitIter != pUnit) {
       pUnitIter = pUnitIter->pRoomNext;
-    } while (pUnitIter);
+      if (!pUnitIter) {
+        return 0;
+      }
+    }
 
-    return 0;
+    return 1;
 }
 
 // DRLGROOM_AddUnitToRoomList - Core function that prepends a unit to a room's unit linked list. Checks collision flags, links via pRoomFirstUnit, increments allied count for players/allied monsters.

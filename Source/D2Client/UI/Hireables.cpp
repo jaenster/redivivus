@@ -266,7 +266,7 @@ DC6 * __fastcall GetRosterIcon(D2UnitStrc * pUnit, int32_t nSkillId, int32_t * p
       return nullptr;
     }
     if (pFlagOut) {
-      *pFlagOut = (uint8_t)*((uint8_t*)pPetType + 0x4) & Fog::BitBuffer::gadwBitMasks[5];
+      *pFlagOut = pPetType->aFlagBytes[0] & Fog::BitBuffer::gadwBitMasks[5];
     }
 
     int32_t nSkillIdSaved = nSkillId;

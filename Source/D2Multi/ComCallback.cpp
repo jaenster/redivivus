@@ -418,6 +418,7 @@ static uint8_t COMCALLBACK_CreateChannelUser(uint8_t * pbRawData, uint32_t nStat
     pbScan = pbRawData;
     pbScan = pbScan + strlen((char*)pbScan) + 1;
     int nIndex;
+    intptr_t nCopyDelta;
     nIndex = (intptr_t)pbScan - (intptr_t)(pbRawData + 1);
     pUser->nFlags = 0;
     if (nStatusFlags & 2) {
@@ -483,10 +484,10 @@ static uint8_t COMCALLBACK_CreateChannelUser(uint8_t * pbRawData, uint32_t nStat
 
             pszDst = pUser->szUsername;
             pUser->nSortRank = 0x554e4b4e;
-            nIndex = 0x36 - (int)pszDst;
+            nCopyDelta = 0x36 - (intptr_t)pszDst;
             do {
               cCopied = *pszDst;
-              pszDst[(intptr_t)pUser + nIndex] = cCopied;
+              pszDst[(intptr_t)pUser + nCopyDelta] = cCopied;
               pszDst++;
             } while (cCopied != '\0');
 
@@ -645,10 +646,10 @@ static uint8_t COMCALLBACK_CreateChannelUser(uint8_t * pbRawData, uint32_t nStat
         pszDst = pUser->szUsername;
         pUser->nSortRank = 0x554e4b4e;
         byPortraitId = 7;
-        nIndex = 0x36 - (int)pszDst;
+        nCopyDelta = 0x36 - (intptr_t)pszDst;
         do {
           cCopied = *pszDst;
-          pszDst[(intptr_t)pUser + nIndex] = cCopied;
+          pszDst[(intptr_t)pUser + nCopyDelta] = cCopied;
           pszDst++;
         } while (cCopied != '\0');
       }
@@ -750,6 +751,7 @@ static void COMCALLBACK_FormatChannelUserData(D2ChannelUserStrc * pChannelUser) 
 // Adds or updates a channel user in gpChannelUserLinkedListHead sorted list. Allocates 0x48-byte node, copies username and raw BNet data. Updates existing entry if username matches.
 void __fastcall COMCALLBACK_AddOrUpdateChannelUser(char * szUsername, uint8_t * pbRawData) {
     int nCmpResult;
+    intptr_t nCopyDelta;
     uint8_t* pszCmpB;
     uint8_t* pNextNode;
     uint8_t byChar;
@@ -776,10 +778,10 @@ void __fastcall COMCALLBACK_AddOrUpdateChannelUser(char * szUsername, uint8_t * 
       nCmpResult = strcmp(pszCmpA->szUsername, (char*)pszCmpB);
       if (!nCmpResult) {
         if (pbCharNameKey) {
-          nCmpResult = 0x32 - (int)pbRawData;
+          nCopyDelta = 0x32 - (intptr_t)pbRawData;
           do {
             byChar = *pbRawData;
-            pbRawData[(int)((int)pbCharNameKey + nCmpResult)] = byChar;
+            pbRawData[(intptr_t)((intptr_t)pbCharNameKey + nCopyDelta)] = byChar;
             pbRawData++;
           } while (byChar);
 
@@ -802,10 +804,10 @@ void __fastcall COMCALLBACK_AddOrUpdateChannelUser(char * szUsername, uint8_t * 
 
     D2ChannelUserNameNodeStrc* pNewNode = D2_NEW_AT(D2ChannelUserNameNodeStrc, ".\\Src\\ComCallback.cpp", 0x93a);
     strcpy((char*)pNewNode, szUsername);
-    nCmpResult = 0x32 - (int)pbRawData;
+    nCopyDelta = 0x32 - (intptr_t)pbRawData;
     do {
       byChar = *pbRawData;
-      pbRawData[(intptr_t)pNewNode + nCmpResult] = byChar;
+      pbRawData[(intptr_t)pNewNode + nCopyDelta] = byChar;
       pbRawData++;
     } while (byChar);
 
@@ -1062,7 +1064,7 @@ static int __fastcall PrintChannelText(char * szText, int32_t nColor) {
     return 1;
 }
 
-static void __stdcall COMCALLBACK_AppendChatWithUser(uint32_t dwParam, char * szUsername, char * szMessage, int dwToTarget, int32_t nColor) {
+static void __stdcall COMCALLBACK_AppendChatWithUser(char * szUsername, char * szMessage, int dwToTarget, int32_t nColor) {
     int i;
     uint16_t* pStr;
     uint16_t wszMessage[576];
@@ -1457,10 +1459,9 @@ BOOL __stdcall COMCALLBACK_AppendServerMessage(uint32_t dwParam, char * szText) 
 
 // Formats and displays a Battle.net channel chat message with the username prefix in angle brackets, then forwards to the chat text display function.
 static void __stdcall COMCALLBACK_AppendChatWithColor(char * szUsername, int nColor, char * szMessage, int nParam) {
-    uint32_t dwUnused;
     char szPrefixed[256];
     sprintf(szPrefixed, "<%s> ", szUsername);
-    COMCALLBACK_AppendChatWithUser(dwUnused, szPrefixed, szMessage, nParam, nColor);
+    COMCALLBACK_AppendChatWithUser(szPrefixed, szMessage, nParam, nColor);
 }
 
 // Broadcasts chat message from local player to Battle.net channel. Retrieves current username from network interface, finds matching user in channel list to determine status flags (operator/speaker/moderator), formats message with username and clan tag prefix, then dispatches to chat system with appropriate color based on user status (0=operator red, 3=speaker/moderator yellow, 4=normal white).
@@ -1518,7 +1519,7 @@ void __fastcall COMCALLBACK_BroadcastChatMessage(char * szMessageBody) {
       sprintf(szFormattedMessage, "<%s> ", szUsername);
     }
 
-    COMCALLBACK_AppendChatWithUser((uint32_t)szMessageBody, szFormattedMessage, szMessageBody, dwStatusRank, nChatColor);
+    COMCALLBACK_AppendChatWithUser(szFormattedMessage, szMessageBody, dwStatusRank, nChatColor);
 }
 
 // Handles incoming BNet whisper message. Checks ignore list, finds sender in channel user list for status flags, formats sender/message and appends to chat with appropriate color.
@@ -1544,7 +1545,7 @@ BOOL __fastcall COMCALLBACK_HandleWhisperMessage(uint32_t dwCbArg1, uint32_t dwC
     }
 
     int nColor_lcl = 4;
-    char* pszScan = 0;
+    int nColorArg = 0;
     for (pCurUser = gpChannelUserListHead; pCurUser; pCurUser = pCurUser->pNext) {
       nCmpResult = strcmp(pCurUser->szUsername, (char*)(uint8_t*)szUsername);
       if (!nCmpResult) {
@@ -1554,8 +1555,7 @@ BOOL __fastcall COMCALLBACK_HandleWhisperMessage(uint32_t dwCbArg1, uint32_t dwC
         } else {
           if (dwStatusFlags & 1 || dwStatusFlags & 8) {
             nColor_lcl = 3;
-            szUsername = (char*)0x3;
-            pszScan = szUsername;
+            nColorArg = 3;
           }
         }
 
@@ -1563,7 +1563,6 @@ BOOL __fastcall COMCALLBACK_HandleWhisperMessage(uint32_t dwCbArg1, uint32_t dwC
       }
     }
 
-    szUsername = pszScan;
     if (strlen(szFormattedSender) != 0) {
       char szOutput[256];
       if (strlen(szClanTag) != 0) {
@@ -1581,7 +1580,7 @@ BOOL __fastcall COMCALLBACK_HandleWhisperMessage(uint32_t dwCbArg1, uint32_t dwC
       }
     }
 
-    COMCALLBACK_AppendChatWithColor(pszOutput, (int)szUsername, szText, nColor_lcl);
+    COMCALLBACK_AppendChatWithColor(pszOutput, nColorArg, szText, nColor_lcl);
     return 1;
 }
 

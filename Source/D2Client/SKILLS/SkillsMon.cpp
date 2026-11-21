@@ -1871,7 +1871,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_A(D2UnitStrc * pUni
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
-      if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, (eMissilesId)nMissileId, 0, 0, 0, 0, eSkill, nSkillLvl, 0);
       } else {
         Skills::MakeMissileAtSkillTarget(pUnit, (eMissilesId)nMissileId, eSkill, nSkillLvl);
@@ -1911,7 +1911,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_B(D2UnitStrc * pUni
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
-      if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, (eMissilesId)nMissileId, 0, 0, 0, 0, eSkill, nSkillLvl, 0);
       } else {
         Skills::MakeMissileAtSkillTarget(pUnit, (eMissilesId)nMissileId, eSkill, nSkillLvl);
@@ -1940,7 +1940,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ArrowModifier_MakeMissile(D2UnitStrc * pUni
       if ((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
         pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(eMissileId);
         if (pMissileTxt) {
-          if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+          if (pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
             UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, eMissileId, 0, 0, 0, 0, eSkill, nSkillLvl, 0);
             return 1;
           }

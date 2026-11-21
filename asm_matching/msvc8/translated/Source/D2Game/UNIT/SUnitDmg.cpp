@@ -1709,7 +1709,7 @@ void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     pRoom = D2Common::Units::UNITS_GetRoom(pVictim);
     BOOL bIsInTownOrKillable;
     bIsInTownOrKillable = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    if (bIsInTownOrKillable && (!pUnit || pUnit->eUnitType != UNIT_MONSTER || (pMonStats = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId) , !pMonStats || !(*((uint8_t*)pMonStats + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])))) {
+    if (bIsInTownOrKillable && (!pUnit || pUnit->eUnitType != UNIT_MONSTER || (pMonStats = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId) , !pMonStats || !(pMonStats->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])))) {
       pDamage->wResultFlags &= 0xfffd;
       return;
     }
@@ -2178,7 +2178,7 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
         if (!pMonStats) {
           return;
         }
-        if (!(*((uint8_t*)pMonStats + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
+        if (!(pMonStats->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
           return;
         }
       }

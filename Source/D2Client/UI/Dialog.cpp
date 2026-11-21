@@ -739,17 +739,15 @@ void __stdcall DIALOG_InitializeSystem() {
 }
 
 void __stdcall DIALOG_CleanupSystem() {
-    D2DialogStrc* pDialogNode = gpDialogActual;
     if (gnDialogStructAllocCount) {
       _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIDialogFlagInit, 0xe);
       _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &g_UIFlagInitDialogMouseWheel, 1);
       gnDialogCounter--;
-      pDialogNode = gpDialogActual;
     }
 
+    D2DialogStrc* pDialogNode = gpDialogActual;
     while (pDialogNode) {
-      D2DialogStrc* pNextDialog;
-      pNextDialog = pDialogNode->pPrev;
+      D2DialogStrc* pNextDialog = pDialogNode->pPrev;
       D2_FREE_AT(pDialogNode, ".\\UI\\dialog.cpp", 0x333);
       pDialogNode = pNextDialog;
     }

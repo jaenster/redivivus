@@ -354,38 +354,27 @@ BOOL __fastcall HasUnitInSubAi(D2MonsterAiStrc * pMonsterAiArg, D2UnitStrc * pUn
 
 // @sourcefile .\MONSTER\MonsterAI.cpp
 void __fastcall FreeSpecificAiForUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MonsterAiStrc * pAi) {
-    D2MonsterAiSubStrc* pChain;
     if (!pAi) {
       return;
     }
 
-    D2MonsterAiSubStrc* pSubAiStart = pAi->pAiSub;
-    D2MonsterAiSubStrc* pSubAiCursor = pSubAiStart;
+    D2MonsterAiSubStrc* pSubAi = pAi->pAiSub;
     D2MonsterAiSubStrc* pPrevSubAi = 0;
-    if (!pSubAiStart) {
-      return;
-    }
+    while (pSubAi) {
+      if (pSubAi->pUnit == pUnit) {
+        if (pSubAi == pAi->pAiSub) {
+          pAi->pAiSub = pSubAi->pNext;
+        } else {
+          pPrevSubAi->pNext = pSubAi->pNext;
+        }
 
-    while (true) {
-      pChain = pSubAiCursor;
-      if (pChain->pUnit == pUnit) {
-        break;
-      }
-
-      pSubAiCursor = pChain->pNext;
-      pPrevSubAi = pChain;
-      if (!pChain->pNext) {
+        D2_FREE_POOL_AT(pGame->pMemoryPool, pSubAi, ".\\MONSTER\\MonsterAI.cpp", 0x229);
         return;
       }
-    }
 
-    if (pChain == pSubAiStart) {
-      pAi->pAiSub = pChain->pNext;
-    } else {
-      pPrevSubAi->pNext = pChain->pNext;
+      pPrevSubAi = pSubAi;
+      pSubAi = pSubAi->pNext;
     }
-
-    D2_FREE_POOL_AT(pGame->pMemoryPool, pChain, ".\\MONSTER\\MonsterAI.cpp", 0x229);
 }
 
 void __fastcall NpcState_MoveState0To1(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, D2MonsterAiStrc * pMonsterAi) {
@@ -521,7 +510,7 @@ static BOOL __stdcall UnitHasSwitchAiSet(D2UnitStrc * pMonster) {
 
     int32_t nClassId = pMonster->nClassId;
     D2MonStatsTxt* pMonStatsTxt;
-    if (!((pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr) && (uint8_t)*((uint8_t*)pMonStatsTxt + 0xe) & Fog::BitBuffer::gadwBitMasks[0])) {
+    if (!((pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr) && pMonStatsTxt->aFlagBytes[2] & Fog::BitBuffer::gadwBitMasks[0])) {
       return 0;
     }
 

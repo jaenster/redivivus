@@ -22,9 +22,9 @@ namespace D2Common::Drlg::TileSub {
 
 static void __stdcall DRLGOUTDOOR_ApplySubstitutionGroup(D2UnkOutdoorStrc * pUnkOutdoor, D2LvlSubTxt * pLvlSub) {
     D2DrlgFileStrc* pFile = pLvlSub->pDrlgFile;
-    uint32_t nModulo = pFile->nSubstGroups;
-    int nGroupIter = 0;
-    uint32_t nRandStartGroup = 0;
+    D2DrlgLevelStrc* pLevel = pUnkOutdoor->pLevel;
+    int nModulo = pFile->nSubstGroups;
+    int nRandStartGroup = 0;
     if (!nModulo) {
       return;
     }
@@ -32,21 +32,13 @@ static void __stdcall DRLGOUTDOOR_ApplySubstitutionGroup(D2UnkOutdoorStrc * pUnk
       pUnkOutdoor->nPrevBorderPresetId = 0x3e;
     }
     if (!pLvlSub->BordType) {
-      nRandStartGroup = Seed::RANDOM_RandomNumberSelector(&pUnkOutdoor->pLevel->sSeed, nModulo);
+      nRandStartGroup = Seed::RANDOM_RandomNumberSelector(&pLevel->sSeed, nModulo);
     }
-    if ((int)nModulo <= 0) {
-      return;
-    }
-
-    do {
-      BOOL bPlaced;
-      bPlaced = Outdoors::DRLGOUTDOOR_PlaceRandomBorderSubTiles(pUnkOutdoor, pLvlSub, (int*)(pFile->pSubstGroups + (int)(nRandStartGroup + nGroupIter) % (int)nModulo));
-      if (bPlaced && !pLvlSub->BordType) {
+    for (int nGroupIter = 0; nGroupIter < nModulo; nGroupIter++) {
+      if (Outdoors::DRLGOUTDOOR_PlaceRandomBorderSubTiles(pUnkOutdoor, pLvlSub, (int*)(pFile->pSubstGroups + (nRandStartGroup + nGroupIter) % nModulo)) && !pLvlSub->BordType) {
         return;
       }
-
-      nGroupIter++;
-    } while (nGroupIter < (int)nModulo);
+    }
 }
 
 // Ensures pLvlSubTxtRecord->pDrlgFile is loaded, then initializes per-layer grids (wall/floor/shadow) from the DS1 tile-type layers. Also applies a per-wall-layer flag mask and validates that substitution groups exist.

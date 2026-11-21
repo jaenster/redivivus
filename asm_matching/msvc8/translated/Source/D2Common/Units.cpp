@@ -1317,7 +1317,7 @@ static BOOL __stdcall UNITS_CanAnimModeUseVelocityModifier(D2UnitStrc * pUnit, i
       }
 
       D2MonStatsTxt* pMonStatsTxt;
-      if ((pMonStatsTxt = nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr) && (uint8_t)*((uint8_t*)pMonStatsTxt + 0xd) & Fog::BitBuffer::gadwBitMasks[0]) {
+      if ((pMonStatsTxt = nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr) && pMonStatsTxt->aFlagBytes[1] & Fog::BitBuffer::gadwBitMasks[0]) {
         switch (nAnimMode) {
           case 2:
             {
@@ -1391,7 +1391,7 @@ uint32_t __fastcall UNITS_CanAnimModeUseAttackRate(int32_t nAnimMode, eD2UnitTyp
 
     eD2Skills eSkill = Skills::GetSkillId(pSkill, ".\\UNITS\\Units.cpp", 0xbfa);
     D2SkillsTxt* pSkillsTxt = Skills::TXT_Skills_GetLine(eSkill);
-    return (uint8_t)*((uint8_t*)pSkillsTxt + 0x6) & Fog::BitBuffer::gadwBitMasks[3];
+    return pSkillsTxt->aFlagBytes[2] & Fog::BitBuffer::gadwBitMasks[3];
 }
 
 static int __stdcall UNITS_IsAnimModeSpeedFixed(int32_t nAnimMode, int32_t nClassId, eD2UnitType eUnitType) {
@@ -2293,7 +2293,7 @@ int32_t __stdcall GetBlockRate(D2UnitStrc * pUnit, BOOL bExpansion) {
           nClassId = pUnit->nClassId;
           pMonStats = nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
           if (pMonStats) {
-            nShieldFlag = (uint32_t)*((uint8_t*)pMonStats + 0xf) & Fog::BitBuffer::gadwBitMasks[2];
+            nShieldFlag = (uint32_t)pMonStats->aFlagBytes[3] & Fog::BitBuffer::gadwBitMasks[2];
           }
         }
         if (nShieldFlag || HasShield(pUnit)) {
@@ -2968,11 +2968,11 @@ BOOL __fastcall CanSwitchAI(int32_t nMonsterId) {
     if (!dwStatFlag) {
       return 0;
     }
-    if (*((uint8_t*)pMonStats + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
+    if (pMonStats->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
       return 0;
     }
 
-    return (uint32_t)((*((uint8_t*)pMonStats + 0xe) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) != 0);
+    return (uint32_t)((pMonStats->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) != 0);
 }
 
 void __fastcall SetTimerArg(D2UnitStrc * pUnit, D2TimerArgStrc * pTimerArg) {
@@ -3057,10 +3057,10 @@ BOOL __stdcall IsCorpseUseable(D2UnitStrc * pUnit) {
     if (!pMonStats2) {
       return 0;
     }
-    if (*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+    if (pMonStats2->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       return 0;
     }
-    if (!(*((uint8_t*)pMonStats2 + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7])) {
+    if (!(pMonStats2->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[7])) {
       return 0;
     }
 

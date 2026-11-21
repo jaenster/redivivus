@@ -14,6 +14,11 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 
+#ifndef RECON_FPTD_pfnSEvtHandler
+#define RECON_FPTD_pfnSEvtHandler
+typedef void (__stdcall *pfnSEvtHandler)(void * pData);
+#endif
+
 // Forward declarations
 struct D2ControlMsg;
 struct D2UIMouseMsgStrc;
@@ -44,9 +49,9 @@ namespace D2Win { namespace Forms {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
 // Registers window message/command/key handler based on type. Type 0 = message handler (rejects 0x111/0x101/0x100), type 1 = command, type 2 = key up, type 3 = key down. Forwards to appropriate WND_Register* function.
-void __fastcall D2WIN_RegisterWindowHandler(HWND hHandle, int32_t nHandlerType, int32_t nMessage, int32_t pCallback);
+void __fastcall D2WIN_RegisterWindowHandler(HWND hHandle, int32_t nHandlerType, int32_t nMessage, pfnSEvtHandler pCallback);
 // Unregisters window message/command/key handler. Type 0 = message (rejects 0x111/0x101/0x100), type 1 = command, type 2 = key up, type 3 = key down. Forwards to appropriate WND_Unregister* function.
-void __fastcall D2WIN_UnregisterWindowHandler(HWND hHandle, int32_t nHandlerType, uint32_t nMessage, void * pCallback);
+void __fastcall D2WIN_UnregisterWindowHandler(HWND hHandle, int32_t nHandlerType, uint32_t nMessage, pfnSEvtHandler pCallback);
 // Registers multiple window handlers from array. Each array entry contains {type, message, callback} triplet. Iterates array and calls RegisterWindowHandler for each entry.
 void __fastcall D2WIN_RegisterWindowHandlerArray(HWND hHandle, struct D2WinWndHandlerStrc * pHandlerArray, int32_t nHandlerCount);
 // Unregisters multiple window handlers from array. Iterates array and calls UnregisterWindowHandler for each {type, message, callback} triplet.

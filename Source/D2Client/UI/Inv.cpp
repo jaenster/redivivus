@@ -5007,11 +5007,11 @@ static BOOL INV_IsMouseOverStashGoldBtn(int32_t nMouseY, int32_t nMouseX) {
       if (nMouseX < nBtnBound + 0x28) {
         bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
         if (!bIsExpansion) {
-          nBtnBound = gnPanelOffsetY - 0x41;
+          nBtnBound = gnPanelOffsetY - 0x41 + ScreenSizeY;
         } else {
-          nBtnBound = gnPanelOffsetY - 0x40;
+          nBtnBound = gnPanelOffsetY - 0x40 + ScreenSizeY;
         }
-        if (nMouseY > nBtnBound + ScreenSizeY - 0x23) {
+        if (nMouseY > nBtnBound - 0x23) {
           nGoldButtonY = INV_GetGoldButtonY();
           if (nMouseY < nGoldButtonY + 5) {
             return 1;

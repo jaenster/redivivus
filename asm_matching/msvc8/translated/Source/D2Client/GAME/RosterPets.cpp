@@ -180,27 +180,20 @@ void __fastcall AddRosterPetMerc(DWORD nRosterGUID, int32_t nOwnerGUID, int32_t 
 // @sourcefile .\GAME\RosterPets.cpp
 void __fastcall RemoveRosterPet(int32_t nRosterGUID) {
     int nPlayerGUID;
-    D2RosterPetStrc* pMemoryToFree;
-    if (!pRosterPet) {
+    D2RosterPetStrc* pPrev = 0;
+    D2RosterPetStrc* pCur;
+    for (pCur = pRosterPet; pCur; pCur = pCur->pNext) {
+      if (pCur->nRosterGUID == nRosterGUID) {
+        break;
+      }
+      pPrev = pCur;
+    }
+
+    if (!pCur) {
       return;
     }
 
-    D2RosterPetStrc* pCur = pRosterPet;
-    D2RosterPetStrc* pPrev = 0;
-    while (true) {
-      pMemoryToFree = pCur;
-      if (pMemoryToFree->nRosterGUID == nRosterGUID) {
-        break;
-      }
-
-      pCur = pMemoryToFree->pNext;
-      pPrev = pMemoryToFree;
-      if (!pMemoryToFree->pNext) {
-        return;
-      }
-    }
-
-    if (pMemoryToFree->nSkillID == 7) {
+    if (pCur->nSkillID == 7) {
       D2UnitStrc* pPlayer;
       pPlayer = UNIT::Player::GetPlayerUnit_UI();
       if (!pPlayer) {
@@ -208,18 +201,18 @@ void __fastcall RemoveRosterPet(int32_t nRosterGUID) {
       } else {
         nPlayerGUID = pPlayer->nUnitGUID;
       }
-      if (pMemoryToFree->nOwnerGUID == nPlayerGUID) {
-        pMemoryToFree->bRemoved = 1;
+      if (pCur->nOwnerGUID == nPlayerGUID) {
+        pCur->bRemoved = 1;
         return;
       }
     }
     if (pPrev) {
-      pPrev->pNext = pMemoryToFree->pNext;
+      pPrev->pNext = pCur->pNext;
     } else {
-      pRosterPet = pMemoryToFree->pNext;
+      pRosterPet = pCur->pNext;
     }
 
-    D2_FREE_AT(pMemoryToFree, ".\\GAME\\RosterPets.cpp", 0xd1);
+    D2_FREE_AT(pCur, ".\\GAME\\RosterPets.cpp", 0xd1);
 }
 
 // Returns the ownership relation of a roster pet to the local player: 0=not found or different party, 1=owned by local player, 2=owned by same-party member, 3=pet type lacks the party-share flag (nFlags&0x10==0) or skill out of range. Looks up the pet by nRosterGUID, checks PetType txt flags, then compares party IDs.
@@ -238,7 +231,7 @@ int __fastcall ROSTER_GetPetOwnershipRelation(int32_t nRosterGUID) {
 
     int nPlayerGUID = pPet->nSkillID;
     D2PetTypeTxt* pPetTypeTxt;
-    if (!(pPetTypeTxt = nPlayerGUID >= 0 && nPlayerGUID < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtPetType + nPlayerGUID : nullptr) || !(*((uint8_t*)pPetTypeTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
+    if (!(pPetTypeTxt = nPlayerGUID >= 0 && nPlayerGUID < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtPetType + nPlayerGUID : nullptr) || !(pPetTypeTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
       return 3;
     }
 

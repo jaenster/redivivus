@@ -81,14 +81,14 @@ struct __attribute__((packed)) D2CrashDumpRequestStrc {
 #define D2_DEFINED_D2CrashFrameStrc
 struct __attribute__((packed)) D2CrashFrameStrc {
     /* 0x00 */ uintptr_t dwReturnAddr;
-    /* 0x04 */ uint32_t dw04;
-    /* 0x08 */ uint32_t dw08;
+    /* 0x04 */ uintptr_t dw04;
+    /* 0x08 */ uintptr_t dw08;
     /* 0x0C */ uint32_t dw0C;
     /* 0x10 */ uint8_t b10;
     /* 0x11 */ uint8_t field_0x11;
     /* 0x12 */ uint8_t field_0x12;
     /* 0x13 */ uint8_t field_0x13;
-    /* 0x14 */ uint32_t a14[4];
+    /* 0x14 */ uintptr_t a14[4];
 };
 
 #endif // D2_DEFINED_D2CrashFrameStrc

@@ -125,22 +125,17 @@ void __fastcall SOUNDUTIL_FreeLinkedList(D2SoundListNodeStrc * * ppListHead) {
 }
 
 void __fastcall SOUNDUTIL_AppendToLinkedList(D2SoundListNodeStrc * * ppListHead, intptr_t dwNodeValue) {
-    D2SoundListNodeStrc* pTail;
     D2SoundListNodeStrc* pNewNode = D2_NEW_AT(D2SoundListNodeStrc, ".\\Src\\D2SoundUtil.cpp", 0x120);
     memset(pNewNode, 0, sizeof(*pNewNode));
     pNewNode->nItemKey = dwNodeValue;
-    D2SoundListNodeStrc* pNext = *ppListHead;
-    do {
-      pTail = pNext;
-      if (!pTail) {
-        *ppListHead = pNewNode;
+    for (D2SoundListNodeStrc* pNode = *ppListHead; pNode; pNode = pNode->pNext) {
+      if (!pNode->pNext) {
+        pNode->pNext = pNewNode;
         return;
       }
+    }
 
-      pNext = pTail->pNext;
-    } while (pTail->pNext);
-
-    pTail->pNext = pNewNode;
+    *ppListHead = pNewNode;
 }
 
 // Maps file szText read-only and copies the size-prefixed blob located at image base + the dword at e_lfanew header (signature dword 0x454c 'LE', checked at 00516b61) +0xb8 (size at +8, data at +0xc) into pBuffer; returns TRUE on success, last error 0x7a when *pnBufferSize is too small.

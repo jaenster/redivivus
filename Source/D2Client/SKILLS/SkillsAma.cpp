@@ -86,6 +86,8 @@ BOOL __fastcall Skills_CltStFunc_CheckAmmoFindClosestTarget(D2UnitStrc * pUnit, 
     return 1;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+static inline int GetGUIDInline(D2UnitStrc * pUnit);
 // Client Start handler for Amazon melee skills. Finds the closest valid melee target within GetMeleeRangePlusFour: uses the confirmed target if available, otherwise SKILL_FindClosestTargetWithStats. Caps the travel distance to the skill's calc[0] value, sets SKILL param1 (distance), then writes the target's position into the path direction and stores the target type/GUID into SKILL param2/param3. Returns TRUE on success.
 BOOL __fastcall Skills_CltStFunc_FindClosestMeleeTargetSetParams(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nTargetX;
@@ -137,8 +139,8 @@ BOOL __fastcall Skills_CltStFunc_FindClosestMeleeTargetSetParams(D2UnitStrc * pU
     }
 
     D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, nTargetX, nSkillLvl, 0);
-    D2Common::Skills::SKILL_SetParam2(pSkill, pConfirmedTarget->eUnitType);
-    D2Common::Skills::SKILL_SetParam3(pSkill, pConfirmedTarget->nUnitGUID);
+    D2Common::Skills::SKILL_SetParam2(pSkill, GetTypeInline(pConfirmedTarget));
+    D2Common::Skills::SKILL_SetParam3(pSkill, GetGUIDInline(pConfirmedTarget));
     return 1;
 }
 

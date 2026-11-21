@@ -1377,20 +1377,17 @@ bool __fastcall OBJECT_ClientFn_Zoo(D2UnitStrc * pUnit) {
       nSpawnY = 0;
     }
 
+    int nSpawnX;
     eUnitType = pUnit->eUnitType;
-    if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
-      int32_t nSpawnX;
-      if (pUnit->pPath.pDynamicPath) {
-        nSpawnX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-        UI::QuestLog::QUESTLOG_SpawnZooDummyMonsters(nSpawnX, nSpawnY);
-        return true;
-      }
-
-      UI::QuestLog::QUESTLOG_SpawnZooDummyMonsters(0, nSpawnY);
-      return true;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+      nSpawnX = pUnit->pPath.pStaticPath->nPosX;
+    } else if (pUnit->pPath.pDynamicPath) {
+      nSpawnX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+    } else {
+      nSpawnX = 0;
     }
 
-    UI::QuestLog::QUESTLOG_SpawnZooDummyMonsters(pUnit->pPath.pStaticPath->nPosX, nSpawnY);
+    UI::QuestLog::QUESTLOG_SpawnZooDummyMonsters(nSpawnX, nSpawnY);
     return true;
 }
 

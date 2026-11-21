@@ -437,7 +437,7 @@ void SFILE_DecompressLzw_BufferWrite(void * pSrc, uint32_t * pnBytes, struct D2L
 // @blizzard DecompressLzw (SFILE.CPP)
 int32_t __stdcall SFILE_DecompressLzw(uint8_t * pDstData, uint8_t * pSrcData, int32_t nSrcSize);
 void __fastcall SFILE_ShiftSectorTable(struct D2MPQBlockEntryStrc * pSectorTable, int, uint32_t nSectorCount);
-void __fastcall Unreferenced_00415730(int param_1);
+void __fastcall Unreferenced_00415730(struct D2ArchiveStrc * pArchive);
 // @blizzard BuildDefaultBasePath (SFILE.CPP)
 void __stdcall SFILE_BuildDefaultBasePath();
 // @blizzard CheckForCdRom (SFILE.CPP)

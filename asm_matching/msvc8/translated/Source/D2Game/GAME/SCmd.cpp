@@ -2052,14 +2052,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x82_PortalOwnership(::SGAMEDATA * pGame, D
 
 void __fastcall NET_D2GS_SERVER_Send_0x83_Unused(D2ClientStrc * pClient, char * szText, uint16_t wDataLen, uint16_t wExtraFlag, uint16_t wParam, void * pData) {
     D2GSPacketSrvTextData sPacket;
-    char cChar;
     sPacket.nPacketId = 0x83;
-    intptr_t nDstDelta = 1 - (intptr_t)szText;
-    do {
-      cChar = *szText;
-      szText[(intptr_t)&sPacket + nDstDelta] = cChar;
-      szText++;
-    } while (cChar != '\0');
+    strcpy(sPacket.szText, szText);
 
     sPacket.nFlag = wExtraFlag;
     sPacket.nDataLen = wDataLen;
@@ -2078,14 +2072,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x84_Unused(D2ClientStrc * pClient, uint8_t
 
 void __fastcall NET_D2GS_SERVER_Send_0x88_Unused(D2ClientStrc * pClient, char * szText, uint16_t wDataLen, uint16_t wExtraFlag, uint16_t wParam, void * pData) {
     D2GSPacketSrvTextData sPacket;
-    char cChar;
     sPacket.nPacketId = 0x88;
-    intptr_t nDstDelta = 1 - (intptr_t)szText;
-    do {
-      cChar = *szText;
-      szText[(intptr_t)&sPacket + nDstDelta] = cChar;
-      szText++;
-    } while (cChar != '\0');
+    strcpy(sPacket.szText, szText);
 
     sPacket.nFlag = wExtraFlag;
     sPacket.nDataLen = wDataLen;
@@ -2811,12 +2799,8 @@ void __fastcall Send0x9CItemHandleInShop(D2ClientStrc * pClient, D2UnitStrc * pP
 }
 
 BOOL __fastcall STRING_CheckIfStringLengthDoNotExceedSize(char * szText, int32_t nMaxLength) {
-    int nCharsRead;
-    for (nCharsRead = 0; nCharsRead < nMaxLength; nCharsRead++) {
-      char cCurrent;
-      cCurrent = *szText;
-      szText++;
-      if (cCurrent == '\0') {
+    for (int nCharsRead = 0; nCharsRead < nMaxLength; nCharsRead++) {
+      if (*szText++ == '\0') {
         return 1;
       }
     }

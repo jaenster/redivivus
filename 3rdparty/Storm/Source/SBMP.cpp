@@ -895,12 +895,12 @@ static int __thiscall SBMP_DecodeBmpFile(int * pWidth, void * palette, D2MPQFile
 
 // Load a BMP from a raw in-memory file blob; pData points at the BITMAPFILEHEADER (14 bytes) followed immediately by BITMAPINFOHEADER and palette/pixel data
 // @blizzard DecodeBmpMem (SBMP.CPP)
-static int __fastcall SBMP_DecodeBmpMem(int * pWidth, int * pHeight, uint32_t * pBpp, uint8_t * pData, int palette, void * pixels, int dstSize) {
+static int __fastcall SBMP_DecodeBmpMem(int * pWidth, int * pHeight, uint32_t * pBpp, uint8_t * pData, uint8_t * pPalette, void * pixels, int dstSize) {
     uint32_t rowWidth;
     intptr_t nPaletteByteOffset;
     uint32_t srcStride;
     uint8_t* pDstPaletteByte;
-    uint8_t* bHasPalette = (uint8_t*)palette;
+    uint8_t* bHasPalette = pPalette;
     if (pWidth) {
       *pWidth = *(int*)(pData + 0x12);
     }
@@ -914,11 +914,11 @@ static int __fastcall SBMP_DecodeBmpMem(int * pWidth, int * pHeight, uint32_t * 
       bHasPalette = 0;
     } else {
       uint8_t* pSrcPaletteByte;
-      if (palette) {
-        pDstPaletteByte = (uint8_t*)(palette + 3);
+      if (pPalette) {
+        pDstPaletteByte = pPalette + 3;
         pSrcPaletteByte = pData + 0x37;
-        nPaletteByteOffset = palette - (intptr_t)(pData + 0x36);
-        for (palette = 0; palette < 0x100; palette++) {
+        nPaletteByteOffset = pPalette - (pData + 0x36);
+        for (int nColor = 0; nColor < 0x100; nColor++) {
           pDstPaletteByte[-3] = pSrcPaletteByte[1];
           pSrcPaletteByte[nPaletteByteOffset] = *pSrcPaletteByte;
           pDstPaletteByte[-1] = pSrcPaletteByte[-1];
@@ -1288,7 +1288,7 @@ int __stdcall SBmpDecodeImage(int nFormat, void * pData, uint32_t nDataSize, voi
       switch (nFormat) {
         case 1:
           {
-            iResult = SBMP_DecodeBmpMem((int*)pnWidth, (int*)pnHeight, pnBpp, (uint8_t*)pData, (int)pPalette, pbPixels, nPixelBufSize);
+            iResult = SBMP_DecodeBmpMem((int*)pnWidth, (int*)pnHeight, pnBpp, (uint8_t*)pData, (uint8_t*)pPalette, pbPixels, nPixelBufSize);
             return iResult;
           }
         case 2:

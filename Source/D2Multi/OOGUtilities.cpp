@@ -2454,7 +2454,6 @@ void __stdcall OOGUTIL_UpdateLevelRestrictionControls() {
 // Loads the LVL_REST registry value (key "Diablo II", default 4) into the create-game level-restriction controls. If the value is missing it saves the default and returns. 0x29a means off: releases gUIGameListLevelRestrictionCheckbox; otherwise prints the value into gUILevelRestrictionEditBox and presses the checkbox. Both paths end in OOGUTIL_UpdateLevelRestrictionControls.
 // Provenance: asm 00445300..004453a4; NET_MCP_CLIENT_PrepareGameCreatePacket saves 0x29a to LVL_REST when the checkbox is released.
 void __stdcall OOGUTIL_LoadLevelRestrictionSetting() {
-    char szLevelBuf[4];
     int nLevelRestriction = 4;
     int bRegReadOk = Storm::Source::SReg::SRegLoadValue("Diablo II", "LVL_REST", 0, &nLevelRestriction);
     if (!bRegReadOk) {
@@ -2462,10 +2461,7 @@ void __stdcall OOGUTIL_LoadLevelRestrictionSetting() {
       return;
     }
 
-    szLevelBuf[0] = '4';
-    szLevelBuf[1] = '\0';
-    szLevelBuf[2] = '\0';
-    szLevelBuf[3] = '\0';
+    char szLevelBuf[4] = "4";
     if (nLevelRestriction == 0x29a) {
       D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListLevelRestrictionCheckbox, 0);
     } else {

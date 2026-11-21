@@ -21,49 +21,54 @@ __pragma(pack(push, 1)) struct D2SkillsTxt {
     /* 0x000 */ short skill;
     /* 0x002 */ uint8_t field_0x2;
     /* 0x003 */ uint8_t field_0x3;
-    /* 0x004 */ struct {
-        /* 0x004 */ uint8_t decquant : 1; // skills.txt flag bit 0 (byte 0x04 mask 0x1)
-        /* 0x004 */ uint8_t lob : 1; // skills.txt flag bit 1 (byte 0x04 mask 0x2)
-        /* 0x004 */ uint8_t progressive : 1; // skills.txt flag bit 2 (byte 0x04 mask 0x4)
-        /* 0x004 */ uint8_t finishing : 1; // skills.txt flag bit 3 (byte 0x04 mask 0x8)
-        /* 0x004 */ uint8_t passive : 1; // skills.txt flag bit 4 (byte 0x04 mask 0x10)
-        /* 0x004 */ uint8_t aura : 1; // skills.txt flag bit 5 (byte 0x04 mask 0x20)
-        /* 0x004 */ uint8_t periodic : 1; // skills.txt flag bit 6 (byte 0x04 mask 0x40)
-        /* 0x004 */ uint8_t prgstack : 1; // skills.txt flag bit 7 (byte 0x04 mask 0x80)
-        /* 0x005 */ uint8_t InTown : 1; // skills.txt flag bit 8 (byte 0x05 mask 0x1)
-        /* 0x005 */ uint8_t Kick : 1; // skills.txt flag bit 9 (byte 0x05 mask 0x2)
-        /* 0x005 */ uint8_t InGame : 1; // skills.txt flag bit 10 (byte 0x05 mask 0x4)
-        /* 0x005 */ uint8_t repeat : 1; // skills.txt flag bit 11 (byte 0x05 mask 0x8)
-        /* 0x005 */ uint8_t stsuccessonly : 1; // skills.txt flag bit 12 (byte 0x05 mask 0x10)
-        /* 0x005 */ uint8_t stsounddelay : 1; // skills.txt flag bit 13 (byte 0x05 mask 0x20)
-        /* 0x005 */ uint8_t weaponsnd : 1; // skills.txt flag bit 14 (byte 0x05 mask 0x40)
-        /* 0x005 */ uint8_t immediate : 1; // skills.txt flag bit 15 (byte 0x05 mask 0x80)
-        /* 0x006 */ uint8_t noammo : 1; // skills.txt flag bit 16 (byte 0x06 mask 0x1)
-        /* 0x006 */ uint8_t enhanceable : 1; // skills.txt flag bit 17 (byte 0x06 mask 0x2)
-        /* 0x006 */ uint8_t durability : 1; // skills.txt flag bit 18 (byte 0x06 mask 0x4)
-        /* 0x006 */ uint8_t UseAttackRate : 1; // skills.txt flag bit 19 (byte 0x06 mask 0x8)
-        /* 0x006 */ uint8_t TargetableOnly : 1; // skills.txt flag bit 20 (byte 0x06 mask 0x10)
-        /* 0x006 */ uint8_t SearchEnemyXY : 1; // skills.txt flag bit 21 (byte 0x06 mask 0x20)
-        /* 0x006 */ uint8_t SearchEnemyNear : 1; // skills.txt flag bit 22 (byte 0x06 mask 0x40)
-        /* 0x006 */ uint8_t SearchOpenXY : 1; // skills.txt flag bit 23 (byte 0x06 mask 0x80)
-        /* 0x007 */ uint8_t TargetCorpse : 1; // skills.txt flag bit 24 (byte 0x07 mask 0x1)
-        /* 0x007 */ uint8_t TargetPet : 1; // skills.txt flag bit 25 (byte 0x07 mask 0x2)
-        /* 0x007 */ uint8_t TargetAlly : 1; // skills.txt flag bit 26 (byte 0x07 mask 0x4)
-        /* 0x007 */ uint8_t TargetItem : 1; // skills.txt flag bit 27 (byte 0x07 mask 0x8)
-        /* 0x007 */ uint8_t AttackNoMana : 1; // skills.txt flag bit 28 (byte 0x07 mask 0x10)
-        /* 0x007 */ uint8_t ItemTgtDo : 1; // skills.txt flag bit 29 (byte 0x07 mask 0x20)
-        /* 0x007 */ uint8_t leftskill : 1; // skills.txt flag bit 30 (byte 0x07 mask 0x40)
-        /* 0x007 */ uint8_t interrupt : 1; // skills.txt flag bit 31 (byte 0x07 mask 0x80)
-    };
-    /* 0x008 */ struct {
-        /* 0x008 */ uint8_t TgtPlaceCheck : 1; // skills.txt flag bit 32 (byte 0x08 mask 0x1)
-        /* 0x008 */ uint8_t ItemCheckStart : 1; // skills.txt flag bit 33 (byte 0x08 mask 0x2)
-        /* 0x008 */ uint8_t ItemCltCheckStart : 1; // skills.txt flag bit 34 (byte 0x08 mask 0x4)
-        /* 0x008 */ uint8_t general : 1; // skills.txt flag bit 35 (byte 0x08 mask 0x8)
-        /* 0x008 */ uint8_t scroll : 1; // skills.txt flag bit 36 (byte 0x08 mask 0x10)
-        /* 0x008 */ uint8_t usemanaondo : 1; // skills.txt flag bit 37 (byte 0x08 mask 0x20)
-        /* 0x008 */ uint8_t warp : 1; // skills.txt flag bit 38 (byte 0x08 mask 0x40)
-        uint8_t : 1;  // unused
+    /* 0x004 */ union {
+        struct {
+            struct {
+                /* 0x004 */ uint8_t decquant : 1; // skills.txt flag bit 0 (byte 0x04 mask 0x1)
+                /* 0x004 */ uint8_t lob : 1; // skills.txt flag bit 1 (byte 0x04 mask 0x2)
+                /* 0x004 */ uint8_t progressive : 1; // skills.txt flag bit 2 (byte 0x04 mask 0x4)
+                /* 0x004 */ uint8_t finishing : 1; // skills.txt flag bit 3 (byte 0x04 mask 0x8)
+                /* 0x004 */ uint8_t passive : 1; // skills.txt flag bit 4 (byte 0x04 mask 0x10)
+                /* 0x004 */ uint8_t aura : 1; // skills.txt flag bit 5 (byte 0x04 mask 0x20)
+                /* 0x004 */ uint8_t periodic : 1; // skills.txt flag bit 6 (byte 0x04 mask 0x40)
+                /* 0x004 */ uint8_t prgstack : 1; // skills.txt flag bit 7 (byte 0x04 mask 0x80)
+                /* 0x005 */ uint8_t InTown : 1; // skills.txt flag bit 8 (byte 0x05 mask 0x1)
+                /* 0x005 */ uint8_t Kick : 1; // skills.txt flag bit 9 (byte 0x05 mask 0x2)
+                /* 0x005 */ uint8_t InGame : 1; // skills.txt flag bit 10 (byte 0x05 mask 0x4)
+                /* 0x005 */ uint8_t repeat : 1; // skills.txt flag bit 11 (byte 0x05 mask 0x8)
+                /* 0x005 */ uint8_t stsuccessonly : 1; // skills.txt flag bit 12 (byte 0x05 mask 0x10)
+                /* 0x005 */ uint8_t stsounddelay : 1; // skills.txt flag bit 13 (byte 0x05 mask 0x20)
+                /* 0x005 */ uint8_t weaponsnd : 1; // skills.txt flag bit 14 (byte 0x05 mask 0x40)
+                /* 0x005 */ uint8_t immediate : 1; // skills.txt flag bit 15 (byte 0x05 mask 0x80)
+                /* 0x006 */ uint8_t noammo : 1; // skills.txt flag bit 16 (byte 0x06 mask 0x1)
+                /* 0x006 */ uint8_t enhanceable : 1; // skills.txt flag bit 17 (byte 0x06 mask 0x2)
+                /* 0x006 */ uint8_t durability : 1; // skills.txt flag bit 18 (byte 0x06 mask 0x4)
+                /* 0x006 */ uint8_t UseAttackRate : 1; // skills.txt flag bit 19 (byte 0x06 mask 0x8)
+                /* 0x006 */ uint8_t TargetableOnly : 1; // skills.txt flag bit 20 (byte 0x06 mask 0x10)
+                /* 0x006 */ uint8_t SearchEnemyXY : 1; // skills.txt flag bit 21 (byte 0x06 mask 0x20)
+                /* 0x006 */ uint8_t SearchEnemyNear : 1; // skills.txt flag bit 22 (byte 0x06 mask 0x40)
+                /* 0x006 */ uint8_t SearchOpenXY : 1; // skills.txt flag bit 23 (byte 0x06 mask 0x80)
+                /* 0x007 */ uint8_t TargetCorpse : 1; // skills.txt flag bit 24 (byte 0x07 mask 0x1)
+                /* 0x007 */ uint8_t TargetPet : 1; // skills.txt flag bit 25 (byte 0x07 mask 0x2)
+                /* 0x007 */ uint8_t TargetAlly : 1; // skills.txt flag bit 26 (byte 0x07 mask 0x4)
+                /* 0x007 */ uint8_t TargetItem : 1; // skills.txt flag bit 27 (byte 0x07 mask 0x8)
+                /* 0x007 */ uint8_t AttackNoMana : 1; // skills.txt flag bit 28 (byte 0x07 mask 0x10)
+                /* 0x007 */ uint8_t ItemTgtDo : 1; // skills.txt flag bit 29 (byte 0x07 mask 0x20)
+                /* 0x007 */ uint8_t leftskill : 1; // skills.txt flag bit 30 (byte 0x07 mask 0x40)
+                /* 0x007 */ uint8_t interrupt : 1; // skills.txt flag bit 31 (byte 0x07 mask 0x80)
+            };
+            struct {
+                /* 0x008 */ uint8_t TgtPlaceCheck : 1; // skills.txt flag bit 32 (byte 0x08 mask 0x1)
+                /* 0x008 */ uint8_t ItemCheckStart : 1; // skills.txt flag bit 33 (byte 0x08 mask 0x2)
+                /* 0x008 */ uint8_t ItemCltCheckStart : 1; // skills.txt flag bit 34 (byte 0x08 mask 0x4)
+                /* 0x008 */ uint8_t general : 1; // skills.txt flag bit 35 (byte 0x08 mask 0x8)
+                /* 0x008 */ uint8_t scroll : 1; // skills.txt flag bit 36 (byte 0x08 mask 0x10)
+                /* 0x008 */ uint8_t usemanaondo : 1; // skills.txt flag bit 37 (byte 0x08 mask 0x20)
+                /* 0x008 */ uint8_t warp : 1; // skills.txt flag bit 38 (byte 0x08 mask 0x40)
+                uint8_t : 1;  // unused
+            };
+        };
+        uint8_t aFlagBytes[5]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
     };
     /* 0x009 */ uint8_t field_0x9;
     /* 0x00A */ uint8_t field_0xa;

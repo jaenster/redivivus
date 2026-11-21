@@ -651,7 +651,7 @@ BOOL __fastcall SKILL_ExecuteItemCast(D2UnitStrc * pUnit, eD2Skills eSkill, int3
     } else {
       D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, nTargetX, nTargetY);
     }
-    if (*((uint8_t*)pSkillTxt + 0x8) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+    if (pSkillTxt->aFlagBytes[4] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
       int bTargetIsActive;
       bCorpseStateSet = false;
       if (pTargetUnit) {

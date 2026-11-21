@@ -557,14 +557,17 @@ struct D2PassiveSkillsPerClassStrc {
 #define D2_DEFINED_D2PetTypeTxt
 struct __attribute__((packed)) D2PetTypeTxt {
     /* 0x00 */ uint32_t petType;
-    /* 0x04 */ struct {
-        /* 0x04 */ uint8_t warp : 1; // flag bit: byte 0x4 mask 0x1
-        /* 0x04 */ uint8_t range : 1; // flag bit: byte 0x4 mask 0x2
-        /* 0x04 */ uint8_t partysend : 1; // flag bit: byte 0x4 mask 0x4
-        /* 0x04 */ uint8_t unsummon : 1; // flag bit: byte 0x4 mask 0x8
-        /* 0x04 */ uint8_t automap : 1; // flag bit: byte 0x4 mask 0x10
-        /* 0x04 */ uint8_t drawhp : 1; // flag bit: byte 0x4 mask 0x20
-        uint8_t : 2;  // unused
+    /* 0x04 */ union {
+        struct {
+            /* 0x04 */ uint8_t warp : 1; // flag bit: byte 0x4 mask 0x1
+            /* 0x04 */ uint8_t range : 1; // flag bit: byte 0x4 mask 0x2
+            /* 0x04 */ uint8_t partysend : 1; // flag bit: byte 0x4 mask 0x4
+            /* 0x04 */ uint8_t unsummon : 1; // flag bit: byte 0x4 mask 0x8
+            /* 0x04 */ uint8_t automap : 1; // flag bit: byte 0x4 mask 0x10
+            /* 0x04 */ uint8_t drawhp : 1; // flag bit: byte 0x4 mask 0x20
+            uint8_t : 2;  // unused
+        };
+        uint8_t aFlagBytes[1]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
     };
     /* 0x05 */ uint8_t field_0x5;
     /* 0x06 */ uint8_t field_0x6;
@@ -759,49 +762,54 @@ struct __attribute__((packed)) D2StatesTxt {
     /* 0x0A */ short castoverlay;
     /* 0x0C */ short removerlay;
     /* 0x0E */ short pgsvoverlay;
-    /* 0x10 */ struct {
-        /* 0x10 */ uint8_t nosend : 1;
-        /* 0x10 */ uint8_t aura : 1;
-        /* 0x10 */ uint8_t hide : 1;
-        /* 0x10 */ uint8_t transform : 1;
-        /* 0x10 */ uint8_t pgsv : 1;
-        /* 0x10 */ uint8_t active : 1;
-        /* 0x10 */ uint8_t remhit : 1;
-        /* 0x10 */ uint8_t damblue : 1;
-        /* 0x11 */ uint8_t damred : 1;
-        /* 0x11 */ uint8_t attblue : 1;
-        /* 0x11 */ uint8_t attred : 1;
-        /* 0x11 */ uint8_t curse : 1;
-        /* 0x11 */ uint8_t curable : 1;
-        /* 0x11 */ uint8_t plrstaydeath : 1;
-        /* 0x11 */ uint8_t monstaydeath : 1;
-        /* 0x11 */ uint8_t bossstaydeath : 1;
-        /* 0x12 */ uint8_t disguise : 1;
-        /* 0x12 */ uint8_t restrict : 1;
-        /* 0x12 */ uint8_t blue : 1;
-        /* 0x12 */ uint8_t armblue : 1;
-        /* 0x12 */ uint8_t rfblue : 1;
-        /* 0x12 */ uint8_t rcblue : 1;
-        /* 0x12 */ uint8_t rlblue : 1;
-        /* 0x12 */ uint8_t rpblue : 1;
-        /* 0x13 */ uint8_t stambarblue : 1;
-        /* 0x13 */ uint8_t armred : 1;
-        /* 0x13 */ uint8_t rfred : 1;
-        /* 0x13 */ uint8_t rcred : 1;
-        /* 0x13 */ uint8_t rlred : 1;
-        /* 0x13 */ uint8_t rpred : 1;
-        /* 0x13 */ uint8_t exp : 1;
-        /* 0x13 */ uint8_t shatter : 1;
-    };
-    /* 0x14 */ struct {
-        /* 0x14 */ uint8_t life : 1;
-        /* 0x14 */ uint8_t udead : 1;
-        /* 0x14 */ uint8_t green : 1;
-        /* 0x14 */ uint8_t nooverlays : 1;
-        /* 0x14 */ uint8_t noclear : 1;
-        /* 0x14 */ uint8_t bossinv : 1;
-        /* 0x14 */ uint8_t meleeonly : 1;
-        /* 0x14 */ uint8_t notondead : 1;
+    /* 0x10 */ union {
+        struct {
+            struct {
+                /* 0x10 */ uint8_t nosend : 1;
+                /* 0x10 */ uint8_t aura : 1;
+                /* 0x10 */ uint8_t hide : 1;
+                /* 0x10 */ uint8_t transform : 1;
+                /* 0x10 */ uint8_t pgsv : 1;
+                /* 0x10 */ uint8_t active : 1;
+                /* 0x10 */ uint8_t remhit : 1;
+                /* 0x10 */ uint8_t damblue : 1;
+                /* 0x11 */ uint8_t damred : 1;
+                /* 0x11 */ uint8_t attblue : 1;
+                /* 0x11 */ uint8_t attred : 1;
+                /* 0x11 */ uint8_t curse : 1;
+                /* 0x11 */ uint8_t curable : 1;
+                /* 0x11 */ uint8_t plrstaydeath : 1;
+                /* 0x11 */ uint8_t monstaydeath : 1;
+                /* 0x11 */ uint8_t bossstaydeath : 1;
+                /* 0x12 */ uint8_t disguise : 1;
+                /* 0x12 */ uint8_t restrict : 1;
+                /* 0x12 */ uint8_t blue : 1;
+                /* 0x12 */ uint8_t armblue : 1;
+                /* 0x12 */ uint8_t rfblue : 1;
+                /* 0x12 */ uint8_t rcblue : 1;
+                /* 0x12 */ uint8_t rlblue : 1;
+                /* 0x12 */ uint8_t rpblue : 1;
+                /* 0x13 */ uint8_t stambarblue : 1;
+                /* 0x13 */ uint8_t armred : 1;
+                /* 0x13 */ uint8_t rfred : 1;
+                /* 0x13 */ uint8_t rcred : 1;
+                /* 0x13 */ uint8_t rlred : 1;
+                /* 0x13 */ uint8_t rpred : 1;
+                /* 0x13 */ uint8_t exp : 1;
+                /* 0x13 */ uint8_t shatter : 1;
+            };
+            struct {
+                /* 0x14 */ uint8_t life : 1;
+                /* 0x14 */ uint8_t udead : 1;
+                /* 0x14 */ uint8_t green : 1;
+                /* 0x14 */ uint8_t nooverlays : 1;
+                /* 0x14 */ uint8_t noclear : 1;
+                /* 0x14 */ uint8_t bossinv : 1;
+                /* 0x14 */ uint8_t meleeonly : 1;
+                /* 0x14 */ uint8_t notondead : 1;
+            };
+        };
+        uint8_t aFlagBytes[5]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
     };
     /* 0x15 */ uint8_t field_0x15;
     /* 0x16 */ uint8_t field_0x16;
@@ -1048,12 +1056,15 @@ struct __attribute__((packed)) D2UniqueItemsTxt {
     /* 0x24 */ short version;
     /* 0x26 */ uint16_t pad0x26; // alignment padding
     /* 0x28 */ uint32_t dwItemCode; // base item code as a fourcc (compared as a dword with ItemsTxt dwCode)
-    /* 0x2C */ struct {
-        /* 0x2C */ uint8_t enabled : 1; // flag bit: byte 0x2c mask 0x1
-        /* 0x2C */ uint8_t nolimit : 1; // flag bit: byte 0x2c mask 0x2
-        /* 0x2C */ uint8_t carry1 : 1; // flag bit: byte 0x2c mask 0x4
-        /* 0x2C */ uint8_t ladder : 1; // flag bit: byte 0x2c mask 0x8
-        uint8_t : 4;  // unused
+    /* 0x2C */ union {
+        struct {
+            /* 0x2C */ uint8_t enabled : 1; // flag bit: byte 0x2c mask 0x1
+            /* 0x2C */ uint8_t nolimit : 1; // flag bit: byte 0x2c mask 0x2
+            /* 0x2C */ uint8_t carry1 : 1; // flag bit: byte 0x2c mask 0x4
+            /* 0x2C */ uint8_t ladder : 1; // flag bit: byte 0x2c mask 0x8
+            uint8_t : 4;  // unused
+        };
+        uint8_t aFlagBytes[1]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
     };
     /* 0x2D */ uint8_t field_0x2d;
     /* 0x2E */ uint8_t field_0x2e;

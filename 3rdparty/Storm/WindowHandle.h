@@ -14,6 +14,7 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 #include "3rdparty/Storm/Source/SFile.h"
+#include "3rdparty/Storm/Source/SEVT.h"
 
 // Forward declarations
 struct BigBuffer;
@@ -36,27 +37,27 @@ namespace Storm::WindowHandle {
 
 // Function declarations
 // @blizzard SMsgPopRegisterState (SMSG.CPP)
-int __stdcall SMsgPopRegisterState(char * szText);
+int __stdcall SMsgPopRegisterState(HWND hWnd);
 // @blizzard SMsgPushRegisterState (SMSG.CPP)
 uint32_t __stdcall SMsgPushRegisterState(HWND nSubId);
 // @blizzard SMsgDispatchMessage (SMSG.CPP)
 BOOL __stdcall SMsgDispatchMessage(HWND handle, UINT uMsg, WPARAM nWParam, LPARAM dwLParam, BOOL * pbHandled, LRESULT * plResult);
 // @blizzard SMsgRegisterCommand (SMSG.CPP)
-void __stdcall SMsgRegisterCommand(HWND hWnd, uint32_t dwContext, int32_t pCallback);
+void __stdcall SMsgRegisterCommand(HWND hWnd, uint32_t dwContext, pfnSEvtHandler pCallback);
 // @blizzard SMsgRegisterKeyDown (SMSG.CPP)
-void __stdcall SMsgRegisterKeyDown(HWND hWnd, uint32_t dwContext, int32_t pCallback);
+void __stdcall SMsgRegisterKeyDown(HWND hWnd, uint32_t dwContext, pfnSEvtHandler pCallback);
 // @blizzard SMsgRegisterKeyUp (SMSG.CPP)
-void __stdcall SMsgRegisterKeyUp(HWND hWnd, uint32_t dwContext, int32_t pCallback);
+void __stdcall SMsgRegisterKeyUp(HWND hWnd, uint32_t dwContext, pfnSEvtHandler pCallback);
 // @blizzard SMsgRegisterMessage (SMSG.CPP)
-void __stdcall SMsgRegisterMessage(HWND hWnd, uint32_t dwContext, int32_t pCallback);
+void __stdcall SMsgRegisterMessage(HWND hWnd, uint32_t dwContext, pfnSEvtHandler pCallback);
 // @blizzard SMsgUnregisterCommand (SMSG.CPP)
-void __stdcall SMsgUnregisterCommand(HWND hWnd, uint32_t szText1, char * szText2);
+void __stdcall SMsgUnregisterCommand(HWND hWnd, uint32_t dwKey, pfnSEvtHandler pfnHandler);
 // @blizzard SMsgUnregisterKeyDown (SMSG.CPP)
-void __stdcall SMsgUnregisterKeyDown(HWND hWnd, uint32_t szText1, char * szText2);
+void __stdcall SMsgUnregisterKeyDown(HWND hWnd, uint32_t dwKey, pfnSEvtHandler pfnHandler);
 // @blizzard SMsgUnregisterKeyUp (SMSG.CPP)
-void __stdcall SMsgUnregisterKeyUp(HWND hWnd, uint32_t szText1, char * szText2);
+void __stdcall SMsgUnregisterKeyUp(HWND hWnd, uint32_t dwKey, pfnSEvtHandler pfnHandler);
 // @blizzard SMsgUnregisterMessage (SMSG.CPP)
-void __stdcall SMsgUnregisterMessage(HWND hWnd, uint32_t szText1, char * szText2);
+void __stdcall SMsgUnregisterMessage(HWND hWnd, uint32_t dwKey, pfnSEvtHandler pfnHandler);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 DWORD __stdcall WND_GetActiveWindow_Unref_0041c2a0();
@@ -84,7 +85,7 @@ void __fastcall WND_DetachAndClearChildren(struct StormLinkedListStrc * pWindow)
 struct StormLinkStrc * __fastcall Unreferenced_004207d0(struct StormLinkStrc * pLink);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_004207e0(struct StormLinkStrc * pNode);
 int * * __thiscall WND_AllocRecord(int * * ppList, int32_t nMode, int32_t nSize, uint32_t dwFlags);
-int * __thiscall WND_UnlinkAndFreeRecord(int * pRecord, uint8_t byFreeFlags);
+StormWndRecStrc * __thiscall WND_UnlinkAndFreeRecord(StormWndRecStrc * pRecord, uint8_t byFreeFlags);
 // @blizzard AddWindow (SMSG.CPP)
 void __stdcall SMSG_AddWindow(HWND hWnd);
 uint32_t __thiscall WND_RemoveAndFreeRecord(struct StormLinkedListStrc * pListHead, struct StormWndRecStrc * pRecord);

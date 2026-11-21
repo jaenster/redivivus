@@ -292,7 +292,7 @@ void __fastcall SPELLSEL_DrawSkillIcon(D2UnitStrc * pUnit, D2SkillStrc * pSkill,
 
     DC6* pSkillIconDC6 = SpellSel::ARCHIVE_LoadSpellsClassSkillicon(&pSkillTxt->skill);
     GLOBALPALLETE ePalette = SpellSel::SPELLSEL_GetSkillPalette(pUnit, pSkill);
-    if (!(*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
+    if (!(pSkillTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
       D2RoomStrc* pRoom;
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       if (pRoom) {
@@ -1284,26 +1284,17 @@ int Unreferenced_00498310() {
 }
 
 void __stdcall PANEL_DrawLife() {
-    uint16_t nStringId;
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (!(nMouseX >= ui::ScreenSizeX / 2 - 8 && nMouseX <= ui::ScreenSizeX / 2 + 5 && nMouseY >= Inv::ScreenSizeY - 0x27 && nMouseY <= Inv::ScreenSizeY - 0xd)) {
       return;
     }
 
-    BOOL bMiniPanel = ui::GetUIFlag(UI_MINIPANEL);
-    int32_t nTooltipFlag = 1;
-    int32_t nTooltipColor = 0;
-    if (bMiniPanel) {
-      nStringId = 0x1048;
+    if (ui::GetUIFlag(UI_MINIPANEL)) {
+      D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1048), ui::ScreenSizeX / 2 - 1, Inv::ScreenSizeY - 0x27, 0, 1);
     } else {
-      nStringId = 0x1047;
+      D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1047), ui::ScreenSizeX / 2 - 1, Inv::ScreenSizeY - 0x27, 0, 1);
     }
-
-    int32_t nTooltipY = Inv::ScreenSizeY - 0x27;
-    nMouseX = ui::ScreenSizeX / 2;
-    uint16_t* pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(nStringId);
-    D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(pwszLocale, nMouseX - 1, nTooltipY, nTooltipColor, nTooltipFlag);
 }
 
 static void PANEL_DrawCharacterInfo(int32_t nPanelOffsetY) {

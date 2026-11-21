@@ -977,13 +977,14 @@ static BOOL __fastcall DRLGROOM_ValidateClientList(D2RoomStrc * pRoom) {
 }
 
 // Sorts the client list of a room using bubble sort by client ID. Validates the list first, halts on error.
-static int DRLGROOM_SortClientList(D2RoomStrc * pRoom) {
+static void DRLGROOM_SortClientList(D2RoomStrc * pRoom) {
     uint32_t nNonNullCount;
     int j;
     bool bSwapped;
     D2ClientStrc* dwSwapTmp;
     int nOuter;
-    D2ClientStrc** bValid = (D2ClientStrc**)DRLGROOM_ValidateClientList(pRoom);
+    BOOL bValid = DRLGROOM_ValidateClientList(pRoom);
+    D2ClientStrc** ppSlot;
     if (!bValid) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45b);
       exit(-1);
@@ -994,18 +995,18 @@ static int DRLGROOM_SortClientList(D2RoomStrc * pRoom) {
         bSwapped = false;
         j = 0;
         if (nOuter <= 0) {
-          return (int)bValid;
+          return;
         }
 
         do {
           ppDVar1 = pRoom->pClients;
-          bValid = ppDVar1 + j;
+          ppSlot = ppDVar1 + j;
           if (ppDVar1[j] > ppDVar1[j + 1]) {
-            bValid = pRoom->pClients + j;
-            dwSwapTmp = *bValid;
-            *bValid = pRoom->pClients[j + 1];
-            bValid = pRoom->pClients;
-            bValid[j + 1] = dwSwapTmp;
+            ppSlot = pRoom->pClients + j;
+            dwSwapTmp = *ppSlot;
+            *ppSlot = pRoom->pClients[j + 1];
+            ppSlot = pRoom->pClients;
+            ppSlot[j + 1] = dwSwapTmp;
             bSwapped = true;
           }
 
@@ -1013,21 +1014,21 @@ static int DRLGROOM_SortClientList(D2RoomStrc * pRoom) {
         } while (j < nOuter);
 
         if (!bSwapped) {
-          return (int)bValid;
+          return;
         }
       }
 
       nNonNullCount = 0;
       if ((uint32_t)pRoom->nClientsCount <= 0) {
-        return 0;
+        return;
       }
 
-      bValid = pRoom->pClients;
-      while (*bValid) {
+      ppSlot = pRoom->pClients;
+      while (*ppSlot) {
         nNonNullCount++;
-        bValid++;
+        ppSlot++;
         if (nNonNullCount >= (uint32_t)pRoom->nClientsCount) {
-          return nNonNullCount;
+          return;
         }
       }
 
@@ -1176,11 +1177,12 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_22(D2UnitStrc * p) 
 void __fastcall FreeRoom(D2PoolManagerStrc * pMemory, D2RoomStrc * pRoom) {
     D2UnitStrc* pUnit = pRoom->pUnitList;
     while (pUnit) {
+      uint32_t nFlags = pUnit->eUnitFlags;
       if (!FlagBit_D2UnitStrc_eUnitFlags_22(pUnit)) {
         pUnit->eUnitFlagsEx |= 0x20;
       }
 
-      pUnit->eUnitFlags |= 0x800000;
+      pUnit->eUnitFlags = nFlags | 0x800000;
       Unit::DRLGROOM_ClearUnitRoomLink(pUnit);
       pUnit = pRoom->pUnitList;
     }

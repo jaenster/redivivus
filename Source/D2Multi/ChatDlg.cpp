@@ -2434,26 +2434,22 @@ void __stdcall CHATDLG_DeleteCriticalSection() {
 static D2ChatDlgUnknown_0x10 * __stdcall StoreChatMsg(int32_t nColor, int32_t nLength, char * pString) {
     D2ChatDlgUnknown_0x10* pNode = D2_NEW_AT(D2ChatDlgUnknown_0x10, ".\\Src\\ChatDlg.cpp", 0xc1d);
     memset(pNode, 0, sizeof(*pNode));
-    if (!pNode) {
-      return pNode;
-    }
-    if (!pString) {
-      pNode->pszText = 0;
+    if (pNode) {
+      if (!pString) {
+        pNode->pszText = 0;
+      } else {
+        uint32_t nTextLength = Storm::Source::SSTR::SStrLen(pString);
+        char* szBufferOutput = (char*)D2_ALLOC_AT(nTextLength + 1, ".\\Src\\ChatDlg.cpp", 0xc28);
+        pNode->pszText = szBufferOutput;
+        if (szBufferOutput) {
+          Storm::Source::SSTR::SStrCopy(szBufferOutput, pString, 0x7fffffff);
+        }
+      }
+
       pNode->nColor = nColor;
       pNode->nLength = nLength;
-      return pNode;
     }
 
-    uint32_t pszCopy = Storm::Source::SSTR::SStrLen(pString);
-    pszCopy += 1;
-    char* szBufferOutput = (char*)D2_ALLOC_AT(pszCopy, ".\\Src\\ChatDlg.cpp", 0xc28);
-    pNode->pszText = szBufferOutput;
-    if (szBufferOutput) {
-      Storm::Source::SSTR::SStrCopy(szBufferOutput, pString, 0x7fffffff);
-    }
-
-    pNode->nColor = nColor;
-    pNode->nLength = nLength;
     return pNode;
 }
 

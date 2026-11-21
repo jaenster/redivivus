@@ -958,7 +958,7 @@ static void __stdcall ZeroStruct16BytesDuplicate(void * pStruct) {
 
 void __fastcall SKILLSTXT_ZeroOutFields(D2SkillsTxt * pSkillsTxt) {
     *(uint32_t*)pSkillsTxt = 0;
-    uint8_t* puVar1 = (uint8_t*)pSkillsTxt + 0x4;
+    uint8_t* puVar1 = &pSkillsTxt->aFlagBytes[0];
     pSkillsTxt->decquant = 0;
     pSkillsTxt->interrupt = 0;
     pSkillsTxt->leftskill = 0;
@@ -1000,7 +1000,7 @@ void __fastcall SKILLSTXT_ZeroOutFields(D2SkillsTxt * pSkillsTxt) {
     pSkillsTxt->ELevLen[1] = 0;
     pSkillsTxt->ELevLen[2] = 0;
     pSkillsTxt->ELenSymPerCalc = 0;
-    *((uint8_t*)pSkillsTxt + 0x8) = 0;
+    pSkillsTxt->aFlagBytes[4] = 0;
     *(uint8_t*)&pSkillsTxt->tgtoverlay = 0;
 }
 
@@ -1467,14 +1467,12 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
 }
 
 static D2FogModuleNodeStrc * __stdcall EnumerateAndLogModules(HANDLE hProcess, uint32_t dwProcessId) {
-    D2FogModuleNodeStrc* pModuleList = EnumerateModulesToolhelp32(dwProcessId);
-    D2FogModuleNodeStrc* pModuleListHead = pModuleList;
-    if (!pModuleList) {
-      pModuleList = EnumerateModulesPsapi(hProcess);
-      pModuleListHead = pModuleList;
+    D2FogModuleNodeStrc* pModuleListHead = EnumerateModulesToolhelp32(dwProcessId);
+    if (!pModuleListHead) {
+      pModuleListHead = EnumerateModulesPsapi(hProcess);
     }
 
-    for (; pModuleList; pModuleList = pModuleList->pNext) {
+    for (D2FogModuleNodeStrc* pModuleList = pModuleListHead; pModuleList; pModuleList = pModuleList->pNext) {
       Src::LogManager::LOGMANAGER_TraceToModuleLog("", "    Base:%08lXh  Size:%7lXh  Name:%-15.15s  Path:%s", pModuleList->dwBaseAddress, pModuleList->dwSize, pModuleList->szModuleName, pModuleList);
     }
 

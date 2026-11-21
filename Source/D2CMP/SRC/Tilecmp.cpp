@@ -488,7 +488,7 @@ void __stdcall TILECMP_InitTileSetFromDT1(D2TileCmpTileSetStrc * pTileSet, void 
 
 // @sourcefile .\SRC\Tilecmp.cpp
 // @note ESI nErrLine is not a real input (ESI is only saved, then overwritten at 00609c82). It stays because the halt tail at 00609cbb is reached at two stack depths (PUSH 0x202 with ESI/EDI saved, PUSH 0x213 after POP ESI); without it the decompiler reads the 0x213 slot as unaff_ESI.
-static void __stdcall TILECMP_SerializeTileSet(D2TileCmpTileSetStrc * pSrcTileSet, D2TileLibraryEntryStrc * pDstEntry, DWORD nErrLine) {
+static void __stdcall TILECMP_SerializeTileSet(D2TileCmpTileSetStrc * pSrcTileSet, D2TileLibraryEntryStrc * pDstEntry, uintptr_t nErrLine) {
     int nCopiedNodes;
     D2GroundSubTileStrc* pDstTileNode;
     uint16_t wOrientationTmp;
@@ -600,7 +600,7 @@ static uint32_t __stdcall TILECMP_ExportCacheToBuffer(D2TileCmpTileSetListStrc *
         if (pCurTileSetChain) {
           pTileSetList = 0;
           do {
-            TILECMP_SerializeTileSet(pCurTileSetChain, (D2TileLibraryEntryStrc*)(((D2TileLibraryEntryStrc*)(pExportHeader->pTiles->abSubTileFlags - 0x28))->abSubTileFlags + (intptr_t)&pTileSetList[-3].nTileSetCount), (DWORD)pCurTileSetChain);
+            TILECMP_SerializeTileSet(pCurTileSetChain, (D2TileLibraryEntryStrc*)(((D2TileLibraryEntryStrc*)(pExportHeader->pTiles->abSubTileFlags - 0x28))->abSubTileFlags + (intptr_t)&pTileSetList[-3].nTileSetCount), (uintptr_t)pCurTileSetChain);
             pCurTileSetChain = pCurTileSetChain->pTileSetChain;
             nSerializedTileSets++;
             pTileSetList += 6;

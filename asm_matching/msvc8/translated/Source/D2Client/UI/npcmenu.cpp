@@ -4023,23 +4023,19 @@ static int NPCMENU_CalculateDialogPosition(POINT * pPoint) {
 
 BOOL __stdcall CheckSpeachVersusInteractedUnit() {
     int nSpeechIdx = 0;
-    bool bFound = false;
-    if (D2NPCSpeechCount <= 0) {
-      return 0;
-    }
-
-    do {
+    BOOL bFound = FALSE;
+    while (nSpeechIdx < D2NPCSpeechCount) {
       if (bFound) {
         break;
       }
       if (D2NPCSpeech[nSpeechIdx].nNpcID == _Interaction::nCurrentInteractedNpcClassId) {
-        bFound = true;
+        bFound = TRUE;
       } else {
         nSpeechIdx++;
       }
-    } while (nSpeechIdx < D2NPCSpeechCount);
+    }
 
-    if (bFound) {
+    if (bFound == TRUE) {
       return nSpeechIdx;
     }
 
@@ -4310,7 +4306,7 @@ void __fastcall NPCMENU_ValidateNpcForShop(D2UnitStrc * pUnit) {
 
     int nClassId = pUnit->nClassId;
     D2MonStatsTxt* pMonStatsTxt;
-    if (!((pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr) && (uint8_t)*((uint8_t*)pMonStatsTxt + 0xd) & Fog::BitBuffer::gadwBitMasks[0])) {
+    if (!((pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr) && pMonStatsTxt->aFlagBytes[1] & Fog::BitBuffer::gadwBitMasks[0])) {
       return;
     }
 

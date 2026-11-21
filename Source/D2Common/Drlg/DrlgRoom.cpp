@@ -892,37 +892,33 @@ BOOL __fastcall DRLGCOORDS_IsAdjacentOrOverlapping(D2DrlgCoordsStrc * pDrlgCoord
 }
 
 BOOL __fastcall DRLGROOM_IsRoomClearOfOthers(D2DrlgLevelStrc * pLevel, D2RoomExStrc * pRoomEx, D2RoomExStrc * pDrlgRoomEx2, int32_t nDistance) {
-    int nDistX;
-    int nDistY;
-    int nPosY2;
-    D2RoomExStrc* pRoomExIter = pLevel->pRoomExFirst;
-    do {
-      if (!pRoomExIter) {
-        return 1;
-      }
+    for (D2RoomExStrc* pRoomExIter = pLevel->pRoomExFirst; pRoomExIter; pRoomExIter = pRoomExIter->pRoomExNext) {
       if (pRoomExIter != pRoomEx && pRoomExIter != pDrlgRoomEx2) {
-        nDistX = pRoomEx->sCoords.WorldPosition.x;
-        nDistY = pRoomExIter->sCoords.WorldPosition.x;
-        if (nDistX < nDistY) {
-          nDistX = nDistY - pRoomEx->sCoords.WorldSize.x - nDistX;
+        int nDistX;
+        int nDistY;
+        int nPosX1 = pRoomEx->sCoords.WorldPosition.x;
+        int nPosX2 = pRoomExIter->sCoords.WorldPosition.x;
+        if (nPosX1 < nPosX2) {
+          nDistX = nPosX2 - pRoomEx->sCoords.WorldSize.x - nPosX1;
         } else {
-          nDistX = nDistX - pRoomExIter->sCoords.WorldSize.x - nDistY;
+          nDistX = nPosX1 - pRoomExIter->sCoords.WorldSize.x - nPosX2;
         }
 
-        nDistY = pRoomEx->sCoords.WorldPosition.y;
-        nPosY2 = pRoomExIter->sCoords.WorldPosition.y;
-        if (nDistY < nPosY2) {
-          nDistY = nPosY2 - pRoomEx->sCoords.WorldSize.y - nDistY;
+        int nPosY1 = pRoomEx->sCoords.WorldPosition.y;
+        int nPosY2 = pRoomExIter->sCoords.WorldPosition.y;
+        if (nPosY1 < nPosY2) {
+          nDistY = nPosY2 - pRoomEx->sCoords.WorldSize.y - nPosY1;
         } else {
-          nDistY = nDistY - pRoomExIter->sCoords.WorldSize.y - nPosY2;
+          nDistY = nPosY1 - pRoomExIter->sCoords.WorldSize.y - nPosY2;
         }
+
         if (nDistX < nDistance && nDistY < nDistance) {
           return 0;
         }
       }
+    }
 
-      pRoomExIter = pRoomExIter->pRoomExNext;
-    } while (true);
+    return 1;
 }
 
 // NOTE: Register params: pLevelData (ECX): D2DrlgLevelStrc *, pRoomEx (EDX): D2RoomExStrc *

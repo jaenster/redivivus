@@ -507,7 +507,7 @@ BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bI
 
     uint32_t nChampionIdx = (uint32_t)(bIsChampion != 0);
     if (nStatFlags & 1) {
-      if (*((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+      if (pMonStatsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
         pOutStats->nMinHP = (int)pMonStatsTxt->aMinHP[nClampedDiff];
         pOutStats->nMaxHP = (int)pMonStatsTxt->aMaxHP[nClampedDiff];
       } else {
@@ -518,7 +518,7 @@ BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bI
       }
     }
     if (nStatFlags & 2) {
-      if (*((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+      if (pMonStatsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
         pOutStats->nAC = (int)pMonStatsTxt->aAC[nClampedDiff];
       } else {
         nScaledStat = DataTbls::D2ApplyPercent(pMonLvlEntry->AC[nClampedDiff + nChampionIdx * 3], (int)pMonStatsTxt->aAC[nClampedDiff], 100);
@@ -526,7 +526,7 @@ BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bI
       }
     }
     if (nStatFlags & 4) {
-      if (*((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+      if (pMonStatsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
         pOutStats->nExp = (int)pMonStatsTxt->aExp[nClampedDiff];
       } else {
         nScaledStat = DataTbls::D2ApplyPercent(pMonLvlEntry->XP[nChampionIdx * 3 + nClampedDiff], (int)pMonStatsTxt->aExp[nClampedDiff], 100);
@@ -534,7 +534,7 @@ BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bI
       }
     }
     if (nStatFlags & 8) {
-      if (*((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+      if (pMonStatsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
         pOutStats->nTH = (int)pMonStatsTxt->aA1TH[nClampedDiff];
         pOutStats->nA1MinD = (int)pMonStatsTxt->aA1MinD[nClampedDiff];
         pOutStats->nA1MaxD = (int)pMonStatsTxt->aA1MaxD[nClampedDiff];
@@ -548,7 +548,7 @@ BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bI
       }
     }
     if (nStatFlags & 0x10) {
-      if (*((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+      if (pMonStatsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
         pOutStats->nTH = (int)pMonStatsTxt->aA2TH[nClampedDiff];
         pOutStats->nA2MinD = (int)pMonStatsTxt->aA2MinD[nClampedDiff];
         pOutStats->nA2MaxD = (int)pMonStatsTxt->aA2MaxD[nClampedDiff];
@@ -562,7 +562,7 @@ BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bI
       }
     }
     if (nStatFlags & 0x20) {
-      if (*((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+      if (pMonStatsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
         pOutStats->nTH = (int)pMonStatsTxt->aS1TH[nClampedDiff];
         pOutStats->nS1MinD = (int)pMonStatsTxt->aS1MinD[nClampedDiff];
         pOutStats->nS1MaxD = (int)pMonStatsTxt->aS1MaxD[nClampedDiff];
@@ -576,7 +576,7 @@ BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bI
       }
     }
     if (nStatFlags & 0x40) {
-      if (*((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+      if (pMonStatsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
         pOutStats->nS1MinD = (int)pMonStatsTxt->aEl1MinD[nClampedDiff];
         pOutStats->nS1MaxD = (int)pMonStatsTxt->aEl1MaxD[nClampedDiff];
       } else {
@@ -589,7 +589,7 @@ BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bI
       pOutStats->nElDur = (int)pMonStatsTxt->aEl1Dur[nClampedDiff];
     }
     if (nStatFlags & 0x80) {
-      if (*((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+      if (pMonStatsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
         pOutStats->nS1MinD = (int)pMonStatsTxt->aEl2MinD[nClampedDiff];
         pOutStats->nS1MaxD = (int)pMonStatsTxt->aEl2MaxD[nClampedDiff];
       } else {
@@ -602,7 +602,7 @@ BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bI
       pOutStats->nElDur = (int)pMonStatsTxt->aEl2Dur[nClampedDiff];
     }
     if (nStatFlags & 0x100) {
-      if (*((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+      if (pMonStatsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
         pOutStats->nS1MinD = (int)pMonStatsTxt->aEl3MinD[nClampedDiff];
         pOutStats->nS1MaxD = (int)pMonStatsTxt->aEl3MaxD[nClampedDiff];
       } else {
@@ -1627,38 +1627,33 @@ void __stdcall MONSTERTBLS_FreeHirelingTxt() {
 }
 
 D2HirelingTxt * __stdcall GetHirelingText(int32_t bIsExpansion, int32_t nHirelingId, int32_t nLevel) {
-    D2HirelingTxt* pResult = 0;
+    D2HirelingTxt* pResult = nullptr;
     if (nHirelingId >= 0x100) {
       return pResult;
     }
 
-    int nHirelingLineIdx = sgtDataTable.nTxtHirelingIdLines[((uint32_t)(bIsExpansion != 0) << 8) + nHirelingId];
-    if (nHirelingLineIdx < 0) {
+    uint16_t nVersion = bIsExpansion ? 100 : 0;
+    int nLineIdx = sgtDataTable.nTxtHirelingIdLines[((bIsExpansion != 0) << 8) + nHirelingId];
+    if (nLineIdx < 0) {
       return nullptr;
     }
-    if (nHirelingLineIdx >= sgtDataTable.nTxtHirelingSize) {
-      return pResult;
-    }
 
-    D2HirelingTxt* pEntry = sgtDataTable.pTxtHireling + nHirelingLineIdx;
-    D2HirelingTxt* pPrevMatch = pResult;
-    do {
-      if (pEntry->id == nHirelingId && pEntry->version == (bIsExpansion ? 100 : 0)) {
-        pResult = pEntry;
-        if (pPrevMatch && pEntry->level > nLevel) {
-          return pPrevMatch;
+    for (int i = nLineIdx; i < sgtDataTable.nTxtHirelingSize; i++) {
+      D2HirelingTxt* pEntry = &sgtDataTable.pTxtHireling[i];
+      if (pEntry->id == nHirelingId && pEntry->version == nVersion) {
+        if (!pResult) {
+          pResult = pEntry;
+        } else {
+          if (pEntry->level > nLevel) {
+            return pResult;
+          }
+
+          pResult = pEntry;
         }
-      } else {
-        pResult = pPrevMatch;
-        if (nHirelingId < pEntry->id) {
-          return pPrevMatch;
-        }
+      } else if (pEntry->id > nHirelingId) {
+        return pResult;
       }
-
-      nHirelingLineIdx++;
-      pEntry++;
-      pPrevMatch = pResult;
-    } while (nHirelingLineIdx < sgtDataTable.nTxtHirelingSize);
+    }
 
     return pResult;
 }
@@ -2437,9 +2432,6 @@ void __fastcall DATATBLS_LinkerMonsterPreset(char * pName, char * pRecord, int32
 
 // Parses monpreset.txt (Act/CHAR + Place/LINKER_BIT) via CompileTxt, then builds the per-act index arrays sgtDataTable.pTxtMonPresetPerAct[] and pTxtMonPresetPerActId[] so presets can be looked up by act number. Side-effects: sgtDataTable.pTxtMonPresetPlace, pTxtMonPresetPerAct, pTxtMonPresetPerActId.
 void __fastcall TXT_AllocTxt_monpreset(D2PoolManagerStrc * pMemory) {
-    int nActFillStep;
-    int nActEntry;
-    int nRemaining;
     D2BinFieldInputStrc monpreset[3] = {
       {"Act", FIELDTYPE_CHAR, 0, 0, 0},
       {"Place", FIELDTYPE_LINKER_BIT, 0, 0, (void*)DATATBLS_LinkerMonsterPreset},
@@ -2447,33 +2439,21 @@ void __fastcall TXT_AllocTxt_monpreset(D2PoolManagerStrc * pMemory) {
     };
     int nMonPresetSize = 0;
     D2MonPresetTxt* pTxtMonPreset = (D2MonPresetTxt*)DataTbls::CompileTxt(pMemory, "monpreset", monpreset, &nMonPresetSize, 4);
+    sgtDataTable.pTxtMonPresetPlace = (D2MonPresetTxtPlace*)pTxtMonPreset;
+    D2MonPresetTxt* pPreset = pTxtMonPreset;
+    sgtDataTable.pTxtMonPresetPerAct[0] = pTxtMonPreset;
     int nActIdx = 0;
     int nPresetIdxInAct = 0;
-    sgtDataTable.pTxtMonPresetPlace = (D2MonPresetTxtPlace*)pTxtMonPreset;
-    sgtDataTable.pTxtMonPresetPerAct[0] = pTxtMonPreset;
-    if (nMonPresetSize > 0) {
-      int nActFill;
-      nRemaining = nMonPresetSize;
-      do {
-        nActEntry = nActIdx + 1;
-        if ((int)(uint32_t)pTxtMonPreset->nAct > nActEntry) {
-          nActFill = nActIdx * 4;
-          nActFillStep = nActIdx;
-          do {
-            *(int*)((char*)sgtDataTable.pTxtMonPresetPerActId + nActFill) = nPresetIdxInAct;
-            nActIdx = nActFillStep + 1;
-            nActFill = nActFillStep * 4 + 4;
-            sgtDataTable.pTxtMonPresetPerAct[nActFillStep + 1] = pTxtMonPreset;
-            nActEntry++;
-            nPresetIdxInAct = 0;
-            nActFillStep = nActIdx;
-          } while ((int)(uint32_t)pTxtMonPreset->nAct > nActEntry);
-        }
+    for (int i = 0; i < nMonPresetSize; i++) {
+      while (pPreset->nAct > nActIdx + 1) {
+        sgtDataTable.pTxtMonPresetPerActId[nActIdx] = nPresetIdxInAct;
+        nActIdx++;
+        sgtDataTable.pTxtMonPresetPerAct[nActIdx] = pPreset;
+        nPresetIdxInAct = 0;
+      }
 
-        nPresetIdxInAct++;
-        pTxtMonPreset++;
-        nRemaining--;
-      } while (nRemaining);
+      nPresetIdxInAct++;
+      pPreset++;
     }
 
     sgtDataTable.pTxtMonPresetPerActId[nActIdx] = nPresetIdxInAct;

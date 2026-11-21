@@ -740,7 +740,6 @@ void __stdcall D2GFX_CloseSmacker(D2SmackerContextStrc * pContext) {
 }
 
 void __stdcall DRAW_HideTaskbarAppBars() {
-    HWND hWnd;
     if (bD2GFX_Windowed == 1) {
       return;
     }
@@ -749,19 +748,16 @@ void __stdcall DRAW_HideTaskbarAppBars() {
     memset(&appBarData, 0, sizeof(appBarData));
     appBarData.cbSize = 0x24;
     appBarData.hWnd = hwndD2GFX_Window;
-    UINT nEdge = 0;
-    do {
+    for (int nEdge = 0; nEdge < 4; nEdge++) {
       appBarData.uEdge = nEdge;
-      /* PAPPBARDATA pData for SHAppBarMessage */ /* DWORD dwMessage for SHAppBarMessage */ hWnd = (HWND)SHAppBarMessage(7, &appBarData);
+      HWND hWnd = (HWND)SHAppBarMessage(7, &appBarData);
       gaD2GFXWindowPlacements[nEdge].pHWND = hWnd;
       if (hWnd) {
-        /* WINDOWPLACEMENT * lpwndpl for GetWindowPlacement */ /* HWND hWnd for GetWindowPlacement */ gaD2GFXWindowPlacements[nEdge].pWindowPLacement.length = 0x2c;
+        gaD2GFXWindowPlacements[nEdge].pWindowPLacement.length = 0x2c;
         GetWindowPlacement(hWnd, &gaD2GFXWindowPlacements[nEdge].pWindowPLacement);
-        /* int nCmdShow for ShowWindow */ /* HWND hWnd for ShowWindow */ ShowWindow(gaD2GFXWindowPlacements[nEdge].pHWND, 0);
+        ShowWindow(gaD2GFXWindowPlacements[nEdge].pHWND, 0);
       }
-
-      nEdge++;
-    } while ((intptr_t)&gaD2GFXWindowPlacements[nEdge] < (intptr_t)((char*)&gaD2GFXWindowPlacements + sizeof(gaD2GFXWindowPlacements)));
+    }
 }
 
 void D2GFX_ResetViewport() {

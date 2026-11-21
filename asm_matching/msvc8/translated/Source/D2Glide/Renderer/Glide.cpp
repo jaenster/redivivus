@@ -640,7 +640,7 @@ static void * gpGlideSpritePixelBuffer = 0; D2_STATIC_GUARD(gpGlideSpritePixelBu
 uint32_t gaGlideColorDebugGradientIndices[1024] = {0}; D2_GLOBAL_GUARD(gaGlideColorDebugGradientIndices, "gaGlideColorDebugGradientIndices");
 namespace D2Glide { namespace Renderer { namespace Glide {
 uint32_t gaGlideDebugFontTexStartAddrs[96] = {0}; D2_GLOBAL_GUARD(gaGlideDebugFontTexStartAddrs, "D2Glide::Renderer::Glide::gaGlideDebugFontTexStartAddrs");
-void * lpBuffer_008802c8[96] = {0}; D2_GLOBAL_GUARD(lpBuffer_008802c8, "D2Glide::Renderer::Glide::lpBuffer_008802c8");
+int gaGlideDebugFontCharWidths[96] = {0}; D2_GLOBAL_GUARD(gaGlideDebugFontCharWidths, "D2Glide::Renderer::Glide::gaGlideDebugFontCharWidths");
 void * gpGlideDebugFontTexture = 0; D2_GLOBAL_GUARD(gpGlideDebugFontTexture, "D2Glide::Renderer::Glide::gpGlideDebugFontTexture");
 uint32_t gnGlideDebugFontTMU = 0; D2_GLOBAL_GUARD(gnGlideDebugFontTMU, "D2Glide::Renderer::Glide::gnGlideDebugFontTMU");
 uint8_t * * gpnLightmapRowPointers = 0; D2_GLOBAL_GUARD(gpnLightmapRowPointers, "D2Glide::Renderer::Glide::gpnLightmapRowPointers");
@@ -1464,7 +1464,7 @@ void __fastcall PlayCutScene(char * szFile, int32_t nResolutionMode, void * fpFr
     gbPlayingCutScene = 0;
 }
 
-static BOOL RENDERER_GLIDE_InitWindow(int32_t nParam, FxU32 dwWindowHandle) {
+static BOOL RENDERER_GLIDE_InitWindow(int32_t nParam, HWND hWnd) {
     // Static local variables (originally global data)
     static uint32_t gnGlideRendererInitialized = 0x1; D2_STATIC_GUARD(gnGlideRendererInitialized, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitWindow::gnGlideRendererInitialized");
     static int gnGlideRefreshRate640; D2_STATIC_GUARD_BSS(gnGlideRefreshRate640, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitWindow::gnGlideRefreshRate640");
@@ -1505,8 +1505,8 @@ static BOOL RENDERER_GLIDE_InitWindow(int32_t nParam, FxU32 dwWindowHandle) {
       gbGlidePerspectiveMode = 0;
       break;
     }
-    gnGlideWindowHandle = (HWND)dwWindowHandle;
-    ghGlideSstWindow = (*GLIDEDLL_grSstWinOpen_28)(dwWindowHandle, screen_resolution, refresh_rate, 2, 0, 2, 0);
+    gnGlideWindowHandle = hWnd;
+    ghGlideSstWindow = (*GLIDEDLL_grSstWinOpen_28)((FxU32)hWnd, screen_resolution, refresh_rate, 2, 0, 2, 0);
     if (ghGlideSstWindow) {
       ghGlideWindow = 1;
       if (gnGlideRendererInitialized) {
@@ -1592,7 +1592,7 @@ BOOL __fastcall CreateWindow(HWND hWnd, int32_t nResolutionMode) {
       return 1;
     }
 
-    BOOL bInitResult = RENDERER_GLIDE_InitWindow(nResolutionMode, (FxU32)hWnd);
+    BOOL bInitResult = RENDERER_GLIDE_InitWindow(nResolutionMode, hWnd);
     if (!bInitResult) {
       return 0;
     }
@@ -1630,7 +1630,7 @@ BOOL __fastcall ResizeWindow(HWND hWnd, BOOL bForceResize) {
     (*GLIDEDLL_grGlideShutdown_0)();
     (*GLIDEDLL_grGlideInit_0)();
     (*GLIDEDLL_grSstSelect_4)(0);
-    BOOL bInitResult = RENDERER_GLIDE_InitWindow(bForceResize, (FxU32)hWnd);
+    BOOL bInitResult = RENDERER_GLIDE_InitWindow(bForceResize, hWnd);
     if (!bInitResult) {
       return 0;
     }
@@ -2758,7 +2758,7 @@ void __stdcall RENDERER_GLIDE_GenerateDebugFont() {
       nTexOffset += 0x80;
     } while (nTexOffset < 0x3000);
 
-    /* LPINT lpBuffer for GetCharWidthA */ /* UINT iLast for GetCharWidthA */ /* UINT iFirst for GetCharWidthA */ /* HDC hdc for GetCharWidthA */ GetCharWidthA(hdc, 0x20, 0x7f, (LPINT)lpBuffer_008802c8);
+    /* LPINT lpBuffer for GetCharWidthA */ /* UINT iLast for GetCharWidthA */ /* UINT iFirst for GetCharWidthA */ /* HDC hdc for GetCharWidthA */ GetCharWidthA(hdc, 0x20, 0x7f, gaGlideDebugFontCharWidths);
     /* HGDIOBJ ho for DeleteObject */ DeleteObject(hBitmap);
     /* HGDIOBJ ho for DeleteObject */ DeleteObject(hFont);
     /* HDC hdc for DeleteDC */ DeleteDC(hdc);
@@ -2773,12 +2773,12 @@ void __stdcall RENDERER_GLIDE_FreeDebugFont() {
     gpGlideDebugFontTexture = 0;
 }
 
-static LPINT __stdcall RENDERER_GLIDE_DrawDebugChar(int32_t nPosX, int32_t nPosY, char byChar) {
+static int32_t __stdcall RENDERER_GLIDE_DrawDebugChar(int32_t nPosX, int32_t nPosY, char byChar) {
     if (nPosX > 0x280) {
-      return (LPINT)0x0;
+      return 0;
     }
     if (nPosX < 0) {
-      return (LPINT)lpBuffer_008802c8[byChar];
+      return gaGlideDebugFontCharWidths[byChar];
     }
     if ((uint8_t)(byChar - 0x20U) <= 0x5f) {
       gaGlideDebugFontVertices[0].fX = (float)nPosX;
@@ -2791,10 +2791,10 @@ static LPINT __stdcall RENDERER_GLIDE_DrawDebugChar(int32_t nPosX, int32_t nPosY
       gaGlideDebugFontVertices[3].fY = gaGlideDebugFontVertices[0].fY;
       (*GLIDEDLL_grTexSource_16)(gnGlideDebugFontTMU, gaGlideDebugFontTexStartAddrs[(char)(byChar - 0x20)], 3, &gTexInfoDebugFontGlide);
       (*GLIDEDLL_grDrawVertexArrayContiguous_16)(5, 4, gaGlideDebugFontVertices, 0x1c);
-      return (LPINT)lpBuffer_008802c8[(char)(byChar - 0x20)];
+      return gaGlideDebugFontCharWidths[(char)(byChar - 0x20)];
     }
 
-    return (LPINT)lpBuffer_008802c8[0];
+    return gaGlideDebugFontCharWidths[0];
 }
 
 void __fastcall DrawString(int32_t nPosX, int32_t nPosY, char * szFormat, va_list va) {
@@ -2807,9 +2807,9 @@ void __fastcall DrawString(int32_t nPosX, int32_t nPosY, char * szFormat, va_lis
     RENDERER_GLIDE_SetTextureFiltering(1);
     RENDERER_GLIDE_SetTextureMode(gnGlideDebugFontTMU);
     for (nCharIdx = 0; nCharIdx < nStrLen; nCharIdx++) {
-      LPINT nCharAdvance;
+      int32_t nCharAdvance;
       nCharAdvance = RENDERER_GLIDE_DrawDebugChar(nPosX, nPosY, szBuf[nCharIdx]);
-      nPosX += (int)nCharAdvance;
+      nPosX += nCharAdvance;
       if (szBuf[nCharIdx] == '\n') {
         nPosY += 0xc;
         nPosX = nStartX;
@@ -4011,10 +4011,11 @@ void __fastcall SetPerspectiveScale(int32_t nScaleX, int32_t nScaleY) {
 void __fastcall AdjustPerspectivePosition(int32_t nPosX, int32_t nPosY, int32_t nBais, int * pXAdjust, int * pYAdjust) {
     int nDeltaX = (nPosX - gnGlidePerspectiveOriginX) * 0x18 >> 0x10;
     int nDeltaY = (nPosY - gnGlidePerspectiveOriginY) * 0x18 >> 0x10;
-    int nDiagSum = nDeltaY + nDeltaX;
-    int nPerspScale = gpPerspectiveLookupTable[(nDiagSum * 0x9c9b8 + nBais * 0x99800 >> 0x14) - 0x1000U & 0x1fff];
+    int nDepth = (nDeltaY + nDeltaX) * 0x2d4;
+    int nHeight = nBais * 0x4cc;
+    int nPerspScale = gpPerspectiveLookupTable[((nDepth * 0x376 + nHeight * 0x200) >> 0x14) - 0x1000 & 0x1fff];
     *pXAdjust = ((nDeltaY - nDeltaX) * nPerspScale * 0x2d4 >> 0x14) + RENDERER_nWindowWidth / 2;
-    *pYAdjust = ((nBais * 0x109a08 + nDiagSum * -0x5a800 >> 10) * nPerspScale >> 0x14) - 0x20 + RENDERER_nWindowHeight / 2;
+    *pYAdjust = ((nHeight * 0x376 - nDepth * 0x200 >> 10) * nPerspScale >> 0x14) - 0x20 + RENDERER_nWindowHeight / 2;
 }
 
 void __fastcall PerspectiveScalePosition(int32_t nPosX, int32_t nPosY, int32_t nAngle, int * pXAdjust, int * pYAdjust, BOOL bOrder) {

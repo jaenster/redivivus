@@ -1574,23 +1574,19 @@ BOOL __stdcall ITEMMOD_CanApplyAutomod(D2UnitStrc * pUnit, D2MagicAffixTxt * pMa
     int nLoopIdx;
     uint16_t wVersion = Items::ITEM_GetItemData_wItemVersion(pUnit);
     if (wVersion < 100) {
-      uint32_t bIsStackable;
-      bIsStackable = Items::IsStackable(pUnit);
-      if (bIsStackable) {
-        return 0;
-      }
-
-      iVar1 = Items::ITEM_GetTxtItemTypes_throwable(pUnit);
-      if (iVar1) {
+      if (Items::IsStackable(pUnit) || Items::ITEM_GetTxtItemTypes_throwable(pUnit)) {
         return 0;
       }
     }
 
     iVar1 = Items::ITEM_GetItemsTxt_bHasInv(pUnit);
     if (!iVar1 || (nMaxSock = Items::ITEM_GetMaxSockCount(pUnit) , nMaxSock <= 0)) {
-      nLoopIdx = pMagicAffixTxt->mod[0].code;
-      if (nLoopIdx >= 0 && (nLoopIdx >= Items::sgptDataTable->nTxtPropertiesSize || !(Items::sgptDataTable->pTxtProperties + nLoopIdx) || Items::sgptDataTable->pTxtProperties[nLoopIdx].stat[0] == 0xc2)) {
-        return 0;
+      int nPropertyId = pMagicAffixTxt->mod[0].code;
+      if (nPropertyId >= 0) {
+        D2PropertiesTxt* pPropertiesTxt = nPropertyId < Items::sgptDataTable->nTxtPropertiesSize ? Items::sgptDataTable->pTxtProperties + nPropertyId : nullptr;
+        if (!pPropertiesTxt || pPropertiesTxt->stat[0] == 0xc2) {
+          return 0;
+        }
       }
     }
 
@@ -1612,24 +1608,21 @@ BOOL __stdcall ITEMMOD_CanApplyAutomod(D2UnitStrc * pUnit, D2MagicAffixTxt * pMa
 
     nLoopIdx = 0;
     pTypeEntry = pMagicAffixTxt->include_type;
-    while (true) {
+    do {
       if (*pTypeEntry <= 0) {
-        return 0;
+        break;
       }
 
       bTypeMatch = Items::ITEMS_IsA(pUnit, (int)*pTypeEntry);
       if (bTypeMatch) {
-        break;
+        return 1;
       }
 
       nLoopIdx++;
       pTypeEntry++;
-      if (nLoopIdx >= 7) {
-        return 0;
-      }
-    }
+    } while (nLoopIdx < 7);
 
-    return 1;
+    return 0;
 }
 
 // Returns 1 if the given affix (nParam points to affix txt record) may be applied to pUnit, 0 if blocked. Checks: classic-only affixes rejected on stackable/throwable items, expansion-only affixes rejected in classic mode, up to 4 exclusion item types (any match = fail), up to 7 inclusion types (must match at least one). Does not check group exclusion despite the name suggesting it.

@@ -1267,7 +1267,7 @@ static uint8_t GFX_GetUnitHealthBarColor(D2UnitStrc * pUnit) {
     } else {
       pMonStats = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId;
     }
-    if (*((uint8_t*)pMonStats + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+    if (pMonStats->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       return gbHealthBarColorBlue;
     }
 
@@ -1382,7 +1382,6 @@ void __fastcall SetParticle(D2UnitStrc * pUnit, D2ParticleStrc * pParticle) {
 
 // nPreDraw is never read here; every caller still loads EDX (12 pass 0, GFX_AddOverlayToUnit passes pOverlayTxt->PreDraw).
 void __fastcall GFX_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nPreDraw, int32_t nOverlayId) {
-    D2GfxUnknown_0xa8** ppNextOverlay;
     if (!pUnit) {
       return;
     }
@@ -1399,23 +1398,15 @@ void __fastcall GFX_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nPreDraw, int3
     }
 
     D2GfxUnknown_0xa8* pOverlay = pGfxInfo->pOverlayList;
-    if (!pOverlay) {
-      return;
-    }
-
-    while (true) {
-      ppNextOverlay = &pOverlay->pNext;
-      if (!(pOverlay->neOverlayId != nOverlayId && (pOverlay->nOverlayType != 4 && pOverlay->nOverlayType != 9 || pOverlay->nValue0 != nOverlayId && pOverlay->nValue1 != nOverlayId))) {
-        break;
-      }
-
-      pOverlay = *ppNextOverlay;
-      if (!*ppNextOverlay) {
+    while (pOverlay) {
+      D2GfxUnknown_0xa8* pNextOverlay = pOverlay->pNext;
+      if (pOverlay->neOverlayId == nOverlayId || (pOverlay->nOverlayType == 4 || pOverlay->nOverlayType == 9) && (pOverlay->nValue0 == nOverlayId || pOverlay->nValue1 == nOverlayId)) {
+        GFX_RemoveOverlayFromUnit(pUnit, pOverlay);
         return;
       }
-    }
 
-    GFX_RemoveOverlayFromUnit(pUnit, pOverlay);
+      pOverlay = pNextOverlay;
+    }
 }
 
 void __fastcall GFX_RemoveAllOverlays(D2UnitStrc * pUnit) {
@@ -1607,7 +1598,7 @@ static void __stdcall GFX_BuildMonsterCofPath(uint32_t nModeId, LPSTR szOutputPa
 
     uint32_t dwTokenChars = *(uint32_t*)pMonMode->token;
     if (!nModeId || nModeId == 0xc) {
-      if (*((uint8_t*)pMonStatsEx + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+      if (pMonStatsEx->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         *pnComponentCode = pMonStatsEx->BaseW;
       } else {
         *pnComponentCode = 0x20687468;

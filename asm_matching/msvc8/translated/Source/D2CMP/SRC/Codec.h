@@ -67,7 +67,7 @@ struct D2CodecFrameComponentStrc {
     /* 0x0C */ uint32_t nHeight;
     /* 0x10 */ uint32_t nXOffset2;
     /* 0x14 */ uint32_t nDataOffset;
-    /* 0x18 */ uint32_t nStrideValue2;
+    /* 0x18 */ uint8_t * pData; // decoded data pointer for this component (set from nDataOffset)
     /* 0x1C */ uint32_t nEncSize;
     /* 0x20 */ uint8_t * pSrcRow;
     /* 0x24 */ uint32_t nStrideValue0;
@@ -75,6 +75,27 @@ struct D2CodecFrameComponentStrc {
 };
 
 #endif // D2_DEFINED_D2CodecFrameComponentStrc
+#ifndef D2_DEFINED_D2CodecFrameIterStrc
+#define D2_DEFINED_D2CodecFrameIterStrc
+struct D2CodecFrameIterStrc {
+    /* 0x00 */ int32_t nFrameIndex; // index of the component being walked
+    /* 0x04 */ int32_t nYOffset; // nYOffset of the current component
+    /* 0x08 */ int32_t nEntryWidth; // nWidth of the current component
+    /* 0x0C */ int32_t nXStart; // first column of the component, before the 4x4 block split
+    /* 0x10 */ int32_t nYStart; // first row of the component, before the 4x4 block split
+    /* 0x14 */ uint8_t * pSrcRow; // source row pointer of the current component
+    /* 0x18 */ int32_t nStride; // nStrideValue0 of the current component
+    /* 0x1C */ int32_t nBlockIndexBase; // block index at the start of the current block row
+    /* 0x20 */ int32_t nBlockIndex; // block index of the current 4x4 block
+    /* 0x24 */ int32_t nColumnPos; // columns already covered in the current block row
+    /* 0x28 */ int32_t nRowPos; // rows already covered in the current component
+    /* 0x2C */ int32_t nRowBase; // pixel offset of the current block row
+    /* 0x30 */ int32_t nRowOffset; // pixel offset of the current block
+    /* 0x34 */ int32_t nBlockWidth; // columns in the current block (1..4)
+    /* 0x38 */ int32_t nBlockHeight; // rows in the current block (1..4)
+};
+
+#endif // D2_DEFINED_D2CodecFrameIterStrc
 #ifndef D2_DEFINED_D2CodecPixelBufferEntryStrc
 #define D2_DEFINED_D2CodecPixelBufferEntryStrc
 struct D2CodecPixelBufferEntryStrc {

@@ -1315,7 +1315,7 @@ eD2ServerIncomingStatus __fastcall SERVER_InteractOrPick(D2UnitStrc * pUnit, eD2
         nDist = D2Common::Collision::GetDistanceBetweenUnits(pUnit, pTargetUnit);
         if (nDist <= 0x32) {
           pMonTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pTargetUnit->nClassId);
-          if (pMonTxt && Fog::BitBuffer::gadwBitMasks[1] & (uint8_t)*((uint8_t*)pMonTxt + 0xd) && Fog::BitBuffer::gadwBitMasks[0] & (uint8_t)*((uint8_t*)pMonTxt + 0xd)) {
+          if (pMonTxt && Fog::BitBuffer::gadwBitMasks[1] & pMonTxt->aFlagBytes[1] && Fog::BitBuffer::gadwBitMasks[0] & pMonTxt->aFlagBytes[1]) {
             D2Common::PATH::DynamicPath::ZeroPathPointsSize(pTargetUnit->pPath.pDynamicPath);
             Ai::AiGeneral::SetAiArgument(pTargetUnit, 1, 0x28);
             GAME::Event::EVENT_RemoveUnitTimersByType(pGameTmp, pTargetUnit, UNITEVENTCALLBACK_AITHINK, 0);
@@ -1820,9 +1820,11 @@ static int32_t __stdcall CheckIfInrangeAndReassign(::SGAMEDATA * pGame, uint32_t
 // [op:1][x:u16][y:u16]
 // Calls MoveToLocation(mode=2).
 eD2ServerIncomingStatus __fastcall SCMD_0x01_WalkToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x01_WalkToLocation * pPacket, uint32_t nSize) {
-    int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, (uint16_t*)&pPacket, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
+    uint16_t nX;
+    uint16_t nY;
+    int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, &nX, &nY, pUnit, &pPacket->nCmd);
     if (!nStatus) {
-      PlayerModes::PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 2, (uintptr_t)pPacket & 0xffff, nSize & 0xffff, 0);
+      PlayerModes::PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 2, nX, nY, 0);
       nStatus = 0;
     }
 
@@ -1868,9 +1870,11 @@ eD2ServerIncomingStatus __fastcall SCMD_0x02_WalkToEntity(::SGAMEDATA * pGame, D
 // [op:1][x:u16][y:u16]
 // Calls MoveToLocation(mode=3).
 eD2ServerIncomingStatus __fastcall SCMD_0x03_RunToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x03_RunToLocation * pPacket, uint32_t nSize) {
-    int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, (uint16_t*)&pPacket, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
+    uint16_t nX;
+    uint16_t nY;
+    int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, &nX, &nY, pUnit, &pPacket->nCmd);
     if (!nStatus) {
-      PlayerModes::PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 3, (uintptr_t)pPacket & 0xffff, nSize & 0xffff, 0);
+      PlayerModes::PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 3, nX, nY, 0);
       nStatus = 0;
     }
 
@@ -1977,7 +1981,7 @@ static eD2ServerIncomingStatus __stdcall CastSkillOnLocation(D2UnitStrc * pUnit,
       if (!pSkillsTxt) {
         return SERVERSTATUS_BAD_DATA;
       }
-      if (nCanUseSkill > 0 && (nCanUseSkill <= 2 || nCanUseSkill == 4) && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
+      if (nCanUseSkill > 0 && (nCanUseSkill <= 2 || nCanUseSkill == 4) && pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
         pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, SKILL_Attack, -1);
         nCanUseSkill = D2Common::Skills::SKILLS_CanUseSkill(pUnit, pSkill);
       }
@@ -2021,7 +2025,7 @@ static void __stdcall PLAYER_ProcessSkillOnEntity(::SGAMEDATA * pGame, D2UnitStr
     if (!pSkillTxtEntry) {
       return;
     }
-    if (nSkillUsability > 0 && (nSkillUsability <= 2 || nSkillUsability == 4) && *((uint8_t*)pSkillTxtEntry + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
+    if (nSkillUsability > 0 && (nSkillUsability <= 2 || nSkillUsability == 4) && pSkillTxtEntry->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
       pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, SKILL_Attack, -1);
       nSkillUsability = D2Common::Skills::SKILLS_CanUseSkill(pUnit, pSkill);
     }
@@ -2030,7 +2034,7 @@ static void __stdcall PLAYER_ProcessSkillOnEntity(::SGAMEDATA * pGame, D2UnitStr
     }
 
     int nSkillModeIdx = D2Common::Skills::GetSkillMode(pUnit, pSkill);
-    if (!(nSkillModeIdx && (*((uint8_t*)pSkillTxtEntry + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3] || (int)eUnitType >= 0 && ((int)eUnitType <= 1 || eUnitType == UNIT_MISSILE)))) {
+    if (!(nSkillModeIdx && (pSkillTxtEntry->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3] || (int)eUnitType >= 0 && ((int)eUnitType <= 1 || eUnitType == UNIT_MISSILE)))) {
       return;
     }
 
@@ -2619,17 +2623,15 @@ eD2ServerIncomingStatus __fastcall SCMD_0x15_ChatMessage(::SGAMEDATA * pGame, D2
 
 // Builds a 0x26 chat packet inline on the stack using a D2UnitStrc as raw packet buffer, then broadcasts to all clients via ForEachClient. dwParam is packed into the locale/color byte of the 0x26 header.
 void __fastcall PrepareClientMessage(::SGAMEDATA * pGame, char * szMessage, uint8_t nColor) {
-    int nGuardResult;
     D2GSPacketSrv0x26 aPacketBuf;
-    aPacketBuf.nUnitGUID = 0;
-    aPacketBuf.szName[0] = '\0';
-    aPacketBuf.nLanguage = '\0';
     aPacketBuf.nPacketId = '&';
     aPacketBuf.nMessageType = '\x01';
     aPacketBuf.nMsgSubType = '\x02';
+    aPacketBuf.nUnitGUID = 0;
     aPacketBuf.nMessageColor = nColor;
-    char* pMsgBufDst = aPacketBuf.szMessage;
-    memcpy(pMsgBufDst, szMessage, 0x100);
+    aPacketBuf.szName[0] = '\0';
+    aPacketBuf.nLanguage = '\0';
+    memcpy(aPacketBuf.szMessage, szMessage, 0x100);
     GAME::Server::ForEachClient(pGame, (fpForEachClientFn)NET_D2GS_SERVER_Send_0x26_Chat, &aPacketBuf);
 }
 
@@ -4303,7 +4305,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x59_CommandNPC(::SGAMEDATA * pGame, D2U
     }
 
     D2MonStatsTxt* pMonStat = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pMonster->nClassId);
-    /* is NPC and interactable */ if (pMonStat && Fog::BitBuffer::gadwBitMasks[1] & (uint8_t)*((uint8_t*)pMonStat + 0xd) && Fog::BitBuffer::gadwBitMasks[0] & (uint8_t)*((uint8_t*)pMonStat + 0xd)) {
+    /* is NPC and interactable */ if (pMonStat && Fog::BitBuffer::gadwBitMasks[1] & pMonStat->aFlagBytes[1] && Fog::BitBuffer::gadwBitMasks[0] & pMonStat->aFlagBytes[1]) {
       if (pMonster->pPath.pDynamicPath) {
         D2Common::PATH::DynamicPath::ZeroPathPointsSize(pMonster->pPath.pDynamicPath);
       }

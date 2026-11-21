@@ -309,7 +309,7 @@ BOOL __fastcall Skills_CltDoFunc_Sor_FireWall(D2UnitStrc * pUnit, eD2Skills eSki
     }
 
     pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nCoordsX, nTargetPosX);
-    if (!(*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
+    if (!(pSkillTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
       bGotCoords = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
       if (bGotCoords) {
         return 0;
@@ -461,7 +461,7 @@ BOOL __fastcall Skills_CltStFunc_CheckCasterHasRoomNotInTown(D2UnitStrc * pUnit,
     if (!(pRoom && (pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr))) {
       return 0;
     }
-    if (*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+    if (pSkillsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
       return 1;
     }
 
@@ -638,7 +638,7 @@ int32_t __fastcall SKILLSSOR_StateCltEventFn01_ChillingArmor(int32_t nParam1, D2
       }
 
       pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(pMissile->nClassId);
-      if (!(*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
+      if (!(pMissileTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
         return 0;
       }
 

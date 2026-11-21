@@ -247,57 +247,45 @@ void __fastcall FASTCMP_DecompressRLE(uint8_t * pImageHeader, uint8_t * pbDstBuf
 }
 
 void __fastcall FASTCMP_DecompressRLEWithClip(uint8_t * pImageHeader, uint8_t * nDstPitch, int32_t nRowCount, int32_t pbDstBuffer, int32_t nDrawStartX, int32_t nDrawEndX, int32_t nImageWidth) {
-    int nClipEnd;
-    int nClipStart;
-    uint8_t bRLEToken;
-    int nRunLen;
-    int32_t nXPos = nDrawStartX;
-    uint8_t* nNextRowBase = nDstPitch + pbDstBuffer;
-    while (true) {
-      while (true) {
-        while (true) {
-          bRLEToken = *pImageHeader;
-          pImageHeader++;
-          if (bRLEToken & 0x80) {
+    int32_t nRowStartX = nDrawStartX;
+    uint8_t* pNextRowBase = nDstPitch + pbDstBuffer;
+    for (;;) {
+      char cToken = (char)*pImageHeader;
+      pImageHeader++;
+      if (cToken < 0) {
+        cToken &= 0x7f;
+        if (!cToken) {
+          nRowCount--;
+          if (!nRowCount) {
             break;
           }
 
-          nClipStart = nDrawEndX - nXPos;
-          if (nClipStart < 0) {
-            nClipStart = 0;
-          }
-
-          nClipEnd = -nXPos + nImageWidth;
-          nRunLen = (int)(char)bRLEToken;
-          if (nClipEnd > nRunLen) {
-            nClipEnd = nRunLen;
-          }
-          if (nClipEnd - nClipStart > 0) {
-            memcpy(nDstPitch + nClipStart, pImageHeader + nClipStart, nClipEnd - nClipStart);
-          }
-
-          pImageHeader += nRunLen;
-          nXPos += nRunLen;
-          nDstPitch += nRunLen;
+          nDrawStartX = nRowStartX;
+          nDstPitch = pNextRowBase;
+          pNextRowBase += pbDstBuffer;
+        } else {
+          nDrawStartX += cToken;
+          nDstPitch += cToken;
+        }
+      } else {
+        int nNegX = -nDrawStartX;
+        int nClipStart = nDrawEndX + nNegX;
+        if (nClipStart < 0) {
+          nClipStart = 0;
         }
 
-        bRLEToken &= 0x7f;
-        if (!bRLEToken) {
-          break;
+        int nClipEnd = nNegX + nImageWidth;
+        if (nClipEnd > cToken) {
+          nClipEnd = cToken;
+        }
+        if (nClipEnd - nClipStart > 0) {
+          memcpy(nDstPitch + nClipStart, pImageHeader + nClipStart, nClipEnd - nClipStart);
         }
 
-        nXPos += (char)bRLEToken;
-        nDstPitch += (char)bRLEToken;
+        pImageHeader += cToken;
+        nDrawStartX += cToken;
+        nDstPitch += cToken;
       }
-
-      nRowCount--;
-      if (!nRowCount) {
-        break;
-      }
-
-      nXPos = nDrawStartX;
-      nDstPitch = nNextRowBase;
-      nNextRowBase += pbDstBuffer;
     }
 }
 
@@ -1826,8 +1814,9 @@ uint32_t __fastcall FASTCMP_DecompressRLEWithPaletteConversion(::CELLIST * pDCCS
 
     uint32_t nFramesPerDir = pDCCSrc->nFrameCount / pDCCSrc->nDirections;
     uint32_t nFrameCounter = 0;
-    uint32_t nDirectionCount = pDCCSrc->m_frames.m_terminator.m_next;
-    for (nFrameInDir = (::TCELENTRY*)((int)nDirectionCount <= 0 ? 0 : nDirectionCount); 0 < (intptr_t)nFrameInDir; nFrameInDir = (::TCELENTRY*)nFrameInDir->m_link.m_next) {
+    intptr_t nFirstLink = pDCCSrc->m_frames.m_terminator.m_next;
+    uint32_t nDirectionCount = nFirstLink;
+    for (nFrameInDir = (::TCELENTRY*)(nFirstLink <= 0 ? 0 : nFirstLink); 0 < (intptr_t)nFrameInDir; nFrameInDir = (::TCELENTRY*)nFrameInDir->m_link.m_next) {
       FASTCMP_CompressToRLE(nFrameInDir->nWidth, nFrameInDir->nHeight, nFrameInDir->dwArg7, &pbCompressedData, &nCompressedSize, nFrameInDir->pPixels);
       nFrameTableIndex = nCompressedSize;
       pNewFrame = (uint32_t*)D2_ALLOC_AT(nCompressedSize + 0x23, ".\\SRC\\FastCmp.cpp", 0x82);

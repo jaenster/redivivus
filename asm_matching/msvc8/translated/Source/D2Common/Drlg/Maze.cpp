@@ -3370,12 +3370,12 @@ void __fastcall ForAllButDenOfEvil(D2DrlgLevelStrc * pLevel) {
 
 // Selects a random preset file index for a maze level using the level's seed and LvlPrest table.
 // @sourcefile .\DRLG\Maze.cpp
-static int __stdcall DRLGMAZE_SelectRandomPresetFile(int nPresetFile, D2DrlgLevelStrc * pLevel, D2DrlgMapStrc * pState) {
+static void __stdcall DRLGMAZE_SelectRandomPresetFile(int nPresetFile, D2DrlgLevelStrc * pLevel, D2DrlgMapStrc * pState) {
     D2DrlgLevelLinkNodeStrc* pNode;
     eLvlTypes nLevelType;
     if (nPresetFile != -1) {
       pState->nRandomMapFileSelector = nPresetFile;
-      return nPresetFile;
+      return;
     }
 
     uint32_t nFileCount;
@@ -3385,7 +3385,7 @@ static int __stdcall DRLGMAZE_SelectRandomPresetFile(int nPresetFile, D2DrlgLeve
     uint32_t nResult;
     nResult = pLevel->nLevelType - 3;
     if (nResult > 0x20) {
-      return nResult;
+      return;
     }
 
     nResult = (uint32_t)gaMazeLevelTypeCaseTable[pLevel->nLevelType + 1];
@@ -3436,16 +3436,16 @@ static int __stdcall DRLGMAZE_SelectRandomPresetFile(int nPresetFile, D2DrlgLeve
         nResult = 0x41c;
       break;
       case 0xf:
-        return nResult;
+        return;
     }
 
     if (nFirstFile <= (int)nResult) {
-      return nResult;
+      return;
     }
 
     nResult += 0x10;
     if (nFirstFile >= (int)nResult) {
-      return nResult;
+      return;
     }
 
     for (pNode = pLevel->pLevelLinkNodeFirst; pNode; pNode = pNode->pNext) {
@@ -3466,8 +3466,6 @@ static int __stdcall DRLGMAZE_SelectRandomPresetFile(int nPresetFile, D2DrlgLeve
     nFirstFile = (pNode->dwData2 + 1) % pNode->dwData1;
     pNode->dwData2 = nFirstFile;
     pState->nRandomMapFileSelector = nFirstFile;
-    nResult = (uint32_t)pState;
-    return nResult;
 }
 
 static void __stdcall InitAllRoomsEx(D2RoomExStrc * pRoomEx, D2DrlgLevelStrc * pLevel) {

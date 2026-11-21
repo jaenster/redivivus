@@ -201,10 +201,10 @@ BOOL __fastcall Skills_CltDoFunc_Bar_GrimWard(D2UnitStrc * pUnit, eD2Skills eSki
     if (!pMonStats2) {
       return 0;
     }
-    if (Fog::BitBuffer::gadwBitMasks[3] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
+    if (Fog::BitBuffer::gadwBitMasks[3] & pMonStats2->aFlagBytes[1]) {
       eCorpseMissile = (eMissilesId)pSkillTxt->cltmissile[3];
     } else {
-      if (Fog::BitBuffer::gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
+      if (Fog::BitBuffer::gadwBitMasks[2] & pMonStats2->aFlagBytes[1]) {
         eCorpseMissile = (eMissilesId)pSkillTxt->cltmissile[2];
       }
     }

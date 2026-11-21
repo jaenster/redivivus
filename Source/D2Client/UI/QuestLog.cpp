@@ -1034,14 +1034,11 @@ void __stdcall QUESTLOG_ResetQuestSelections_Unref_004a18f0() {
 }
 
 static int32_t __fastcall QUESTLOG_FindQuestIndexById(int32_t nQuestId) {
-    int nIndex = 0;
-    do {
+    for (int nIndex = 0; nIndex < 41; nIndex++) {
       if (gaQuestInfoTable[nIndex].nStringIndex == nQuestId) {
         return nIndex;
       }
-
-      nIndex++;
-    } while ((intptr_t)&gaQuestInfoTable[nIndex].nStringIndex < (intptr_t)((char*)&gaQuestInfoTable + sizeof(gaQuestInfoTable) + 8));
+    }
 
     return -1;
 }
@@ -1925,19 +1922,19 @@ void __stdcall QUESTLOG_DrawQuestLogButton() {
 }
 
 void __fastcall QUESTLOG_SelectQuestByIndex(int32_t nQuestId) {
-    int nActIndex = 0;
-    do {
-      if (gaQuestInfoTable[nActIndex].nStringIndex == nQuestId) {
-        if (nActIndex == -1) {
-          return;
-        }
-
-        gQuestLogSelectedQuestByAct[gaQuestInfoTable[nActIndex].nAct] = (uint32_t)gaQuestInfoTable[nActIndex].nQuestIndexInAct;
-        return;
+    int nActIndex = -1;
+    for (int nIndex = 0; nIndex < (int)(sizeof(gaQuestInfoTable) / sizeof(gaQuestInfoTable[0])); nIndex++) {
+      if (gaQuestInfoTable[nIndex].nStringIndex == nQuestId) {
+        nActIndex = nIndex;
+        break;
       }
+    }
 
-      nActIndex++;
-    } while ((intptr_t)&gaQuestInfoTable[nActIndex].nStringIndex < (intptr_t)((char*)&gaQuestInfoTable + sizeof(gaQuestInfoTable) + 8));
+    if (nActIndex == -1) {
+      return;
+    }
+
+    gQuestLogSelectedQuestByAct[gaQuestInfoTable[nActIndex].nAct] = gaQuestInfoTable[nActIndex].nQuestIndexInAct;
 }
 
 void __fastcall QUESTLOG_ClearMissileFlagCb_Missile146(void * pUnit) {

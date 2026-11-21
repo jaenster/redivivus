@@ -219,31 +219,22 @@ uint32_t __fastcall D2FILE_OpenAndReadFile(D2PoolManagerStrc * pMemory, char * s
 
 // @sourcefile .\SRC\Archive.cpp
 void * __fastcall D2FILE_AllocAndLoadD2File(D2PoolManagerStrc * pMemory, char * szFilename, uint32_t * pSize, char * szFile, int32_t nLine) {
-    // Frame slots -12..-4 are ONE object: &dwFileSizeOut is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      union {
-        DWORD dwFileSizeOut;
-        D2PoolManagerStrc* pMemoryIn;
-      };
-      D2MPQFileStrc* pFile;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    __frame0.pMemoryIn = pMemory;
-    BOOL bFileExistsResult = CheckIfFileExists(pMemory, szFilename, &__frame0.pFile, 0);
-    void* pBuffer = 0;
-    if (bFileExistsResult) {
-      DWORD dwFileSize;
-      dwFileSize = D2FILE_GetFileSize(pMemory, __frame0.pFile, &__frame0.dwFileSizeOut);
-      pBuffer = D2_ALLOC_AT(dwFileSize + 800, ".\\SRC\\Archive.cpp", 0xcf);
-      if (pBuffer) {
-        D2FILE_ReadFile(pMemory, __frame0.pFile, pBuffer, dwFileSize);
-        D2FILE_CloseFile(pMemory, __frame0.pFile);
-        if (pSize) {
-          *pSize = dwFileSize;
-        }
-      }
+    D2MPQFileStrc* pFile;
+    DWORD dwFileSizeHigh;
+    if (!CheckIfFileExists(pMemory, szFilename, &pFile, 0)) {
+      return nullptr;
+    }
+
+    DWORD dwFileSize = D2FILE_GetFileSize(pMemory, pFile, &dwFileSizeHigh);
+    void* pBuffer = D2_ALLOC_AT(dwFileSize + 800, ".\\SRC\\Archive.cpp", 0xcf);
+    if (!pBuffer) {
+      return nullptr;
+    }
+
+    D2FILE_ReadFile(pMemory, pFile, pBuffer, dwFileSize);
+    D2FILE_CloseFile(pMemory, pFile);
+    if (pSize) {
+      *pSize = dwFileSize;
     }
 
     return pBuffer;
@@ -433,14 +424,14 @@ void __fastcall FAULT_FormatAndShowError(LPCSTR szFile, int nLine, LPCSTR szExpr
     }
 }
 
-StormLinkStrc * __thiscall LINKEDLIST_GetNodePointer(StormLinkStrc * pLink, int32_t nLinkOffset) {
+StormLinkStrc * __thiscall LINKEDLIST_GetNodePointer(StormLinkStrc * pLink, intptr_t nLinkOffset) {
     StormLinkStrc* pResult;
     intptr_t pNextItem = pLink->pNext;
     if (pNextItem < 0) {
       pResult = (StormLinkStrc*)~pNextItem;
     } else {
       if (nLinkOffset < 0) {
-        nLinkOffset = (int)pLink - pLink->pPrevLink->pNext;
+        nLinkOffset = (intptr_t)pLink - pLink->pPrevLink->pNext;
       }
 
       pResult = (StormLinkStrc*)(pNextItem + nLinkOffset);
@@ -594,11 +585,7 @@ void __fastcall TSList_TMESSAGESOURCE_Destructor_5176d3(StormLinkedListStrc * pL
 // Named per redivivus issue #35; T from the delete tag .?AUTMESSAGESOURCE@@ (0072f9fc).
 void __fastcall TSList_TMESSAGESOURCE_Clear(StormLinkedListStrc * pListHead) {
     while (true) {
-      FILE* pObject;
-      pObject = (FILE*)pListHead->head.pNext;
-      if ((intptr_t)pObject <= 0) {
-        pObject = 0;
-      }
+      FILE* pObject = (intptr_t)pListHead->head.pNext > 0 ? (FILE*)pListHead->head.pNext : nullptr;
       if (!pObject) {
         break;
       }

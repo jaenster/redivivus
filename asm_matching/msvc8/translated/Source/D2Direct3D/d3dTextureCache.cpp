@@ -220,8 +220,8 @@ void __fastcall D3DTEXCACHE_InvalidateByTilePtr(D3DTextureCacheStrc * pCache) {
       ppLink[0] = 0;
       ppLink[1] = 0;
       if (pUsedNode->pAssociatedTilePtr) {
-        *(uint32_t*)((char*)pUsedNode->pAssociatedTilePtr + (int)pUsedNode->nTileSlotIndex * 8) = 0;
-        *(uint32_t*)((char*)pUsedNode->pAssociatedTilePtr + ((int)pUsedNode->nTileSlotIndex * 8 + 4)) = 0;
+        *(uint32_t*)((char*)pUsedNode->pAssociatedTilePtr + pUsedNode->nTileSlotIndex * 8) = 0;
+        *(uint32_t*)((char*)pUsedNode->pAssociatedTilePtr + (pUsedNode->nTileSlotIndex * 8 + 4)) = 0;
         pUsedNode->pAssociatedTilePtr = 0;
       }
       if (!pCache->pFreeHead) {
@@ -297,8 +297,8 @@ int32_t __fastcall D3DTEXCACHE_EnsureAvailableNode(D3DTextureCacheStrc * pCache)
           ppLink[0] = 0;
           ppLink[1] = 0;
           if (pEvictNode->pAssociatedTilePtr) {
-            *(uint32_t*)((char*)pEvictNode->pAssociatedTilePtr + (int)pEvictNode->nTileSlotIndex * 8) = 0;
-            *(uint32_t*)((char*)pEvictNode->pAssociatedTilePtr + ((int)pEvictNode->nTileSlotIndex * 8 + 4)) = 0;
+            *(uint32_t*)((char*)pEvictNode->pAssociatedTilePtr + pEvictNode->nTileSlotIndex * 8) = 0;
+            *(uint32_t*)((char*)pEvictNode->pAssociatedTilePtr + (pEvictNode->nTileSlotIndex * 8 + 4)) = 0;
             pEvictNode->pAssociatedTilePtr = 0;
           }
           if (!pCache->pFreeHead) {

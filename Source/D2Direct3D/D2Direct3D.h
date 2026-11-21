@@ -162,7 +162,7 @@ struct D3DSubtileCacheStrc {
 struct D3DTextureCacheNodeStrc {
     /* 0x00 */ int nIndex;
     /* 0x04 */ void * pAssociatedTilePtr;
-    /* 0x08 */ void * nTileSlotIndex;
+    /* 0x08 */ int32_t nTileSlotIndex;
     /* 0x0C */ void * field_0x0C;
     /* 0x10 */ struct IDirectDrawSurface7 * pSurface;
     /* 0x14 */ struct IDirect3DTexture2 * pTexture;

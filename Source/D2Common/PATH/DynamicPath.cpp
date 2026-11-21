@@ -530,11 +530,11 @@ static int32_t PATH_GetMoveTestCollisionMaskFromMonStats(D2UnitStrc * pUnit) {
     } else {
       pMonStatsTxt = ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatsIdx;
     }
-    if (*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
+    if (pMonStatsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
       return 0x1804;
     }
 
-    return *((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3] ? 0x3401 : 0x3c01;
+    return pMonStatsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3] ? 0x3401 : 0x3c01;
 }
 
 int32_t __stdcall PATH_GetDynamicPathField(int32_t nMonStatsIdx) {
@@ -549,7 +549,7 @@ int32_t __stdcall PATH_GetDynamicPathField(int32_t nMonStatsIdx) {
     int nSizeX;
     if (pMonStatsEx && (nSizeX = pMonStatsEx->SizeX, (uint32_t)nSizeX <= 3)) {
       int nSize = gaUnitTypeInteractSizes[nSizeX];
-      dwMonStats2Flags = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsEx + 0x5);
+      dwMonStats2Flags = (uint32_t)pMonStatsEx->aFlagBytes[1];
       if ((Fog::BitBuffer::gadwBitMasks[0] & dwMonStats2Flags || Fog::BitBuffer::gadwBitMasks[2] & dwMonStats2Flags) && !(Fog::BitBuffer::gadwBitMasks[1] & dwMonStats2Flags)) {
         switch (nSize) {
           case 1:

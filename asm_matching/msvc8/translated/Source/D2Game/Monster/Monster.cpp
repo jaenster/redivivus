@@ -481,7 +481,6 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     D2StatListExStrc* pStatsEx;
     D2InventoryStrc* pNpcInventory;
     D2SkillListStrc* pSkillsList;
-    D2MonsterRegionFieldStrc* pDVar2;
     uint16_t nLayer;
     D2MonStatsInitStrc sMonStats;
     D2MonsterLevelDataStrc monLevelData;
@@ -565,24 +564,25 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     }
 
     MONSTER_InitLevelDifficultyScaling(pGame, &monLevelData, pRoom, pUnit);
+    int32_t nDifficulty;
     uint32_t byDifficultyIdx;
     byDifficultyIdx = pGame->nDifficulty;
     if (byDifficultyIdx > 0) {
       if (1 < byDifficultyIdx) {
-        pMonRegionField = (D2MonsterRegionFieldStrc*)0x2;
+        nDifficulty = 0x2;
         goto init_stats_for_difficulty;
       }
       if (byDifficultyIdx > 0) {
-        pMonRegionField = (D2MonsterRegionFieldStrc*)(uint32_t)byDifficultyIdx;
+        nDifficulty = byDifficultyIdx;
         goto init_stats_for_difficulty;
       }
     }
 
-    pMonRegionField = 0;
+    nDifficulty = 0;
     init_stats_for_difficulty:
     nTmpVal = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit);
     if (nTmpVal) {
-      pMonRegionField = 0;
+      nDifficulty = 0;
     }
 
     int nPlayerCount = 1;
@@ -590,23 +590,22 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
       nPlayerCount = monLevelData.nPlayerMultiplyer3;
     }
 
-    int nMonLevel = (int)pMonStatsTxt->aLevel[(intptr_t)pMonRegionField];
+    int nMonLevel = (int)pMonStatsTxt->aLevel[nDifficulty];
     nTmpInt = pGame->bExpansion;
-    if (nTmpInt && pMonRegionField && !(Fog::BitBuffer::gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc)) && !(Fog::BitBuffer::gadwBitMasks[6] & (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc))) {
-      pDVar2 = pMonRegionField;
-      nMonLevel = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (eD2Difficulty)(uintptr_t)pDVar2, nTmpInt);
+    if (nTmpInt && nDifficulty && !(Fog::BitBuffer::gadwBitMasks[2] & pMonStatsTxt->aFlagBytes[0]) && !(Fog::BitBuffer::gadwBitMasks[6] & pMonStatsTxt->aFlagBytes[0])) {
+      nMonLevel = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (eD2Difficulty)nDifficulty, nTmpInt);
     }
 
     D2Common::Stats::StatsEx::AllocStatListEx(pUnit, 0, (fpStatListExChangeCb)ITEMS::ItemMode::STATSLISTEX_FunctionCallback, pGame);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, nMonLevel, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_monster_playercount, nPlayerCount, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_damageresist, (int)pMonStatsTxt->aResDm[(intptr_t)pMonRegionField], 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_magicresist, (int)pMonStatsTxt->aResMa[(intptr_t)pMonRegionField], 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_fireresist, (int)pMonStatsTxt->aResFi[(intptr_t)pMonRegionField], 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_lightresist, (int)pMonStatsTxt->aResLi[(intptr_t)pMonRegionField], 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_coldresist, (int)pMonStatsTxt->aResCo[(intptr_t)pMonRegionField], 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_poisonresist, (int)pMonStatsTxt->aResPo[(intptr_t)pMonRegionField], 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_toblock, (uint32_t)(pMonRegionField[3].aArray[0].aComponentVariants + 3)[(intptr_t)pMonStatsTxt], 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_damageresist, (int)pMonStatsTxt->aResDm[nDifficulty], 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_magicresist, (int)pMonStatsTxt->aResMa[nDifficulty], 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_fireresist, (int)pMonStatsTxt->aResFi[nDifficulty], 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_lightresist, (int)pMonStatsTxt->aResLi[nDifficulty], 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_coldresist, (int)pMonStatsTxt->aResCo[nDifficulty], 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_poisonresist, (int)pMonStatsTxt->aResPo[nDifficulty], 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_toblock, (uint32_t)pMonStatsTxt->aToBlock[nDifficulty], 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_attackrate, 100, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_velocitypercent, 0x4b, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_other_animrate, 100, 0);
@@ -616,7 +615,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     }
 
     memset(&sMonStats, 0, sizeof(sMonStats));
-    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(pUnit->nClassId, nRoom, (uint32_t)pMonRegionField, nMonLevel, 7, &sMonStats);
+    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(pUnit->nClassId, nRoom, nDifficulty, nMonLevel, 7, &sMonStats);
     nTmpVal = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, sMonStats.nMaxHP - sMonStats.nMinHP + 1);
     int32_t nScaledStat = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nTmpVal + sMonStats.nMinHP, monLevelData.nPlayerMultiplyer, 100);
     nTmpInt = nTmpVal + sMonStats.nMinHP + nScaledStat;
@@ -655,8 +654,8 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
       D2Common::Monsters::MONSTERS::MONSTER_ApplyDifficultyScaling(pUnit, pGame->bExpansion, pGame->nDifficulty);
       pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 1, 0, UNIT_MONSTER, pUnit->nUnitGUID);
       D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
-      if (*((uint8_t*)pMonStatsTxt + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
-        if (*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (pMonStatsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+        if (pMonStatsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
           nScaledStat = D2Common::DATATBLS::MonsterTbls::ValidateClassId(nMonClassId);
           pNpcInventory = UNIT::sunitproxy::SUNITPROXY_GetNpcInventory(pGame, nScaledStat);
           pUnit->pInventory = pNpcInventory;
@@ -686,24 +685,24 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
       if (*((uint8_t*)uMonTxt.pMonStats2Txt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         pUnit->eUnitFlags |= UNITFLAG_CANBEATTACKED;
       }
-      if (*((uint8_t*)pMonStatsTxt + 0xe) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+      if (pMonStatsTxt->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
         pUnit->eUnitFlags |= UNITFLAG_PETIGNORE;
       }
 
       uMonTxt.pMonPropTxt = MONSTER_GetMonPropTxtRecord(pUnit->nClassId);
       /* uMonTxt now holds a D2MonPropTxt* (MONSTER_GetMonPropTxtRecord); see
                          00573d35. */ if (uMonTxt.pMonPropTxt) {
-        pRoom = (D2RoomStrc*)(uMonTxt.pMonPropTxt->entry + (intptr_t)pMonRegionField);
+        pRoom = (D2RoomStrc*)(uMonTxt.pMonPropTxt->entry + (intptr_t)nDifficulty);
         nPlayerCount = 0;
         do {
           if ((intptr_t)pRoom->ppRoomList < 0) {
             break;
           }
-          if ((uint8_t)uMonTxt.pMonPropTxt->chance[(int)pMonRegionField][nPlayerCount] <= '\0') {
+          if ((uint8_t)uMonTxt.pMonPropTxt->chance[nDifficulty][nPlayerCount] <= '\0') {
             D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion(0, nullptr, pUnit, nullptr, 0, 0, (D2SetsTxtFStrc*)pRoom, 0, 0x40, nullptr);
           } else {
             DVar1 = D2_SeedRoll(&pUnit->sSeed);
-            if ((int)(DVar1 % 100) < (int)(uint32_t)(uint8_t)uMonTxt.pMonPropTxt->chance[(int)pMonRegionField][nPlayerCount]) {
+            if ((int)(DVar1 % 100) < (int)(uint32_t)(uint8_t)uMonTxt.pMonPropTxt->chance[nDifficulty][nPlayerCount]) {
               D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion(0, nullptr, pUnit, nullptr, 0, 0, (D2SetsTxtFStrc*)pRoom, 0, 0x40, nullptr);
             }
           }
@@ -785,7 +784,7 @@ BOOL __fastcall MONSTER_TransformMonsterClass(::SGAMEDATA * pGame, D2UnitStrc * 
       if (!(pMonStatsTxt = (int)nMonStatId >= 0 && (int)nMonStatId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatId : nullptr)) {
         return 0;
       }
-      if (!(*((uint8_t*)pMonStatsTxt + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
+      if (!(pMonStatsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
         return 0;
       }
 

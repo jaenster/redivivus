@@ -747,12 +747,12 @@ void * __fastcall TSFixedArray_Ui_Assign(uint32_t * pArray, int, void * pSrcArra
     return pArray;
 }
 
-int __fastcall Unreferenced_004218a0(int param_1) {
-    *(uint32_t*)param_1 = 0;
-    *(uint32_t*)(param_1 + 4) = 0;
-    *(uint32_t*)(param_1 + 8) = 0;
-    *(uint32_t*)(param_1 + 0xc) = 0;
-    return param_1;
+TSGrowableArray_Ui * __fastcall Unreferenced_004218a0(TSGrowableArray_Ui * pArray) {
+    pArray->nCapacity = 0;
+    pArray->nLen = 0;
+    pArray->pData = nullptr;
+    pArray->nGrowStep = 0;
+    return pArray;
 }
 
 // @module-history Pass 5 established the module (contiguous SBig.cpp COMDAT run 00420eb0-00421d80, moved out of D2Client::WindowHandle with a mechanical WND_ -> SBIG_ prefix swap, tail unverified). Pass 6 bound 35 of the 45 tails to oracle template methods; this one is among the 10 it did not.

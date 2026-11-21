@@ -150,7 +150,7 @@ struct D2PacketListStrc * __fastcall CLIENT_ClearDispatchList(struct D2ClientStr
 struct D2PacketListStrc * __fastcall CLIENT_GetPacketList(struct D2ClientStrc * pClient);
 struct D2PacketListStrc * __fastcall CLIENT_GetDispatchList(struct D2ClientStrc * pClient);
 void __fastcall GetAccountName(struct D2ClientStrc * pClient, char * szText);
-void __fastcall GetClientContainer(struct D2ClientStrc * pClient, void * * pdwContainer);
+void __fastcall GetClientContainer(struct D2ClientStrc * pClient, uint32_t * pdwPlayerData);
 void __fastcall GetRealm(struct D2ClientStrc * pClient, uint32_t * pdwRealm);
 void __fastcall SetRealm(struct D2ClientStrc * pClient, uint32_t dwRealm);
 struct D2PlayerBasicsData * __fastcall CLIENT_GetPlayerBasicsData(struct D2ClientStrc * pClient);
@@ -167,7 +167,7 @@ void __fastcall CLIENT_PlacePlayerInRoom(struct D2ClientStrc * pClient, struct D
 int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(struct D2ClientStrc * pClient, ::SGAMEDATA * pGame, int32_t bLoadFromSave, struct D2RoomStrc * pRoom, uint32_t nX, uint32_t nY);
 // Allocates and initializes D2ClientStrc (1304 bytes). Sets client ID, 180-second timeout, class (arena template override), char/account names, language. Initializes 16 hotkey slots to -1, zeroes packet lists. Inserts into game's client linked list and two hash tables (by ID and name). Max 8 clients per game. Returns new client or null if full.
 // @sourcefile .\GAME\Clients.cpp
-struct D2ClientStrc * __fastcall CreateClient(::SGAMEDATA * pGame, uint32_t nClientId, uint8_t nClass, char * pCharName, char * szAccountName, uint8_t * pClientContainer, uint8_t nLanguageId, uint32_t dwUnused1, uint32_t dwUnused2);
+struct D2ClientStrc * __fastcall CreateClient(::SGAMEDATA * pGame, uint32_t nClientId, uint8_t nClass, char * pCharName, char * szAccountName, uint32_t dwPlayerData, uint8_t nLanguageId, uint32_t dwUnused1, uint32_t dwUnused2);
 // Serializes a client's character header/appearance block into the save/wire buffer pbParam (used in the player save & "exit game" cleanup path). Writes a 0x0E length tag, then the player's level, two SaveCharAppearance blobs (head+body, 0xFF-padded), class code (nClassId+1, wrapped), a level byte, char status (sets the death-flag bit 8 when dead and bit 4 set), guild flags, 3 guild-info bytes (0->0xFF), and the 4-byte guild tag. Returns (in the guarded value) the buffer pointer when the record is invalid (bad level/class/status or wrong length), having zeroed the first byte; otherwise null. __fastcall(pClient, pbParam).
 void __fastcall CLIENTS_FillCharacterPreviewInfo(struct D2ClientStrc * pClient, uint8_t * pPreview);
 // Removes client from game and cleans up all resources. Optionally saves player (bSavePlayer), removes from hash tables (by ID and name), broadcasts 0x5A PlayerLeave event, frees player unit and pets, notifies quests, frees memory pools. Called on disconnect, timeout, or kick.

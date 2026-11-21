@@ -3475,7 +3475,7 @@ static void __stdcall SKILLDESC_CalcWeaponDamageRange(D2UnitStrc * pUnit, int * 
     nDamagePctBonus = nDamagePctBonus + nMinDmg + nItemBonusMin;
     nMinDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_mindamage_percent, 0);
     nMaxDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_maxdamage_percent, 0);
-    if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+    if (pSkillsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       nItemBonusMin = SKILLDESC_GetAuraBonusDamage();
       if (nItemBonusMin) {
         nDamagePctBonus += nItemBonusMin;
@@ -3700,7 +3700,7 @@ int __stdcall SKILLDESC_CalcElemDamageRange(D2UnitStrc * pUnit, int * pnMinDamag
     if (pSkill) {
       D2SkillsTxt* pSkillsTxt;
       pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill);
-      if (pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+      if (pSkillsTxt && pSkillsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
         SKILLDESC_AccumulateAuraBonusDmg(pUnit, pnMinDamage, pnMaxDamage, pnColor);
       }
     }
@@ -3807,7 +3807,7 @@ static void __stdcall SKILLDESC_CalcAttackRateBonus(int * pnAttackRate, int32_t 
     int32_t nToHitFromStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit2, UNITSTAT_item_tohit_percent, 0);
     uint32_t nSkillToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit2, (int)pSkillsTxt->skill, nSkillLevel);
     int nTotalToHitBonus = nAttackRate + nToHitFromStat + nSkillToHit;
-    if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+    if (pSkillsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       int nProgressiveToHit;
       nProgressiveToHit = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_progressive_tohit, 0);
       if (nProgressiveToHit) {
@@ -3879,7 +3879,7 @@ void __fastcall SKILLDESC_CalcCompareAttackRate(D2UnitStrc * pUnit, D2SkillStrc 
     nAttackRate = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_tohit_percent, 0);
     uint32_t nSkillToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit, (int)pSkillsTxt->skill, nSkillLevel);
     nAttackRate = nAttackRate + nSkillToHit;
-    if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+    if (pSkillsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       nProgressiveToHit = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_progressive_tohit, 0);
       if (nProgressiveToHit) {
         nAttackRate += nProgressiveToHit;

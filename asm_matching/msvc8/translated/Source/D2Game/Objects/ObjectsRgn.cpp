@@ -183,12 +183,12 @@ D2ObjectRngShrines * __fastcall GetShrinesRng(::SGAMEDATA * pGame) {
     return &pGame->pObjectControl->sShrinesRng;
 }
 
-void __fastcall IncrementObjectTypeCount(int * pThis, uint32_t nObjectType) {
+void __fastcall IncrementObjectTypeCount(::SGAMEDATA * pGame, uint32_t nObjectType) {
     if (nObjectType >= 100) {
       return;
     }
 
-    short int* pnTypeCount = (short int*)(pThis[0x43c] + 0x1048 + nObjectType * 2);
+    short int* pnTypeCount = &pGame->pObjectControl->aObjectTypeCount[nObjectType];
     (*pnTypeCount)++;
 }
 

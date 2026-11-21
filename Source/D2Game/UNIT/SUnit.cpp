@@ -1836,7 +1836,7 @@ uint32_t __fastcall UNITS_CanUseSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * 
     }
 
     D2SkillsTxt* pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(eSkill);
-    if (!(pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
+    if (!(pSkillsTxt && pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
       return 0;
     }
 
@@ -2104,7 +2104,7 @@ D2UnitStrc * __fastcall CreateUnit(eD2UnitType eUnitType, int32_t nClassId, int3
       case UNIT_MONSTER:
         {
           D2MonStatsTxt* pMonStatsTxt;
-          if (!(pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr) || !(*((uint8_t*)pMonStatsTxt + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
+          if (!(pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr) || !(pMonStatsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
             return nullptr;
           }
 

@@ -49,13 +49,13 @@ template<> uint8_t TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unref
 // Unreferenced copy of NextLink: the link after this one.
 // Byte-identical to TSLink<CELLIST>::NextLink 00601bc0; T not proven (no xrefs), filed with the SGAMEDATA block.
 // stpl-orphan: a COMDAT copy in TSLink<SGAMEDATA> that no member owns
-TSLink<::SGAMEDATA>* __fastcall NextLink_Unreferenced(TSLink<::SGAMEDATA>* pThis, int, int32_t nLinkOffset) {
+TSLink<::SGAMEDATA>* __fastcall NextLink_Unreferenced(TSLink<::SGAMEDATA>* pThis, int, intptr_t nLinkOffset) {
     intptr_t nOffset = pThis->m_next;
     if (nOffset < 0) {
       return (TSLink<::SGAMEDATA>*)~nOffset;
     }
     if (nLinkOffset < 0) {
-      nLinkOffset = (int)pThis - pThis->m_prevlink->m_next;
+      nLinkOffset = (intptr_t)pThis - pThis->m_prevlink->m_next;
     }
 
     return (TSLink<::SGAMEDATA>*)(nOffset + nLinkOffset);

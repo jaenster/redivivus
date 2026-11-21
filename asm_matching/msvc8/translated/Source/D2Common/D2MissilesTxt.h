@@ -21,23 +21,26 @@ __pragma(pack(push, 1)) struct D2MissilesTxt {
     /* 0x000 */ uint16_t Missile;
     /* 0x002 */ uint8_t field_0x2;
     /* 0x003 */ uint8_t field_0x3;
-    /* 0x004 */ struct {
-        /* 0x004 */ uint8_t LastCollide : 1; // missiles.txt flag bit 0 (0x1 of byte 0x04)
-        /* 0x004 */ uint8_t Explosion : 1; // missiles.txt flag bit 1 (0x2 of byte 0x04)
-        /* 0x004 */ uint8_t Pierce : 1; // missiles.txt flag bit 2 (0x4 of byte 0x04)
-        /* 0x004 */ uint8_t CanSlow : 1; // missiles.txt flag bit 3 (0x8 of byte 0x04)
-        /* 0x004 */ uint8_t CanDestroy : 1; // missiles.txt flag bit 4 (0x10 of byte 0x04)
-        /* 0x004 */ uint8_t ClientSend : 1; // missiles.txt flag bit 5 (0x20 of byte 0x04)
-        /* 0x004 */ uint8_t GetHit : 1; // missiles.txt flag bit 6 (0x40 of byte 0x04)
-        /* 0x004 */ uint8_t SoftHit : 1; // missiles.txt flag bit 7 (0x80 of byte 0x04)
-        /* 0x005 */ uint8_t ApplyMastery : 1; // missiles.txt flag bit 8 (0x1 of byte 0x05)
-        /* 0x005 */ uint8_t ReturnFire : 1; // missiles.txt flag bit 9 (0x2 of byte 0x05)
-        /* 0x005 */ uint8_t Town : 1; // missiles.txt flag bit 10 (0x4 of byte 0x05)
-        /* 0x005 */ uint8_t SrcTown : 1; // missiles.txt flag bit 11 (0x8 of byte 0x05)
-        /* 0x005 */ uint8_t NoMultiShot : 1; // missiles.txt flag bit 12 (0x10 of byte 0x05)
-        /* 0x005 */ uint8_t NoUniqueMod : 1; // missiles.txt flag bit 13 (0x20 of byte 0x05)
-        /* 0x005 */ uint8_t Half2HSrc : 1; // missiles.txt flag bit 14 (0x40 of byte 0x05)
-        /* 0x005 */ uint8_t MissileSkill : 1; // missiles.txt flag bit 15 (0x80 of byte 0x05)
+    /* 0x004 */ union {
+        struct {
+            /* 0x004 */ uint8_t LastCollide : 1; // missiles.txt flag bit 0 (0x1 of byte 0x04)
+            /* 0x004 */ uint8_t Explosion : 1; // missiles.txt flag bit 1 (0x2 of byte 0x04)
+            /* 0x004 */ uint8_t Pierce : 1; // missiles.txt flag bit 2 (0x4 of byte 0x04)
+            /* 0x004 */ uint8_t CanSlow : 1; // missiles.txt flag bit 3 (0x8 of byte 0x04)
+            /* 0x004 */ uint8_t CanDestroy : 1; // missiles.txt flag bit 4 (0x10 of byte 0x04)
+            /* 0x004 */ uint8_t ClientSend : 1; // missiles.txt flag bit 5 (0x20 of byte 0x04)
+            /* 0x004 */ uint8_t GetHit : 1; // missiles.txt flag bit 6 (0x40 of byte 0x04)
+            /* 0x004 */ uint8_t SoftHit : 1; // missiles.txt flag bit 7 (0x80 of byte 0x04)
+            /* 0x005 */ uint8_t ApplyMastery : 1; // missiles.txt flag bit 8 (0x1 of byte 0x05)
+            /* 0x005 */ uint8_t ReturnFire : 1; // missiles.txt flag bit 9 (0x2 of byte 0x05)
+            /* 0x005 */ uint8_t Town : 1; // missiles.txt flag bit 10 (0x4 of byte 0x05)
+            /* 0x005 */ uint8_t SrcTown : 1; // missiles.txt flag bit 11 (0x8 of byte 0x05)
+            /* 0x005 */ uint8_t NoMultiShot : 1; // missiles.txt flag bit 12 (0x10 of byte 0x05)
+            /* 0x005 */ uint8_t NoUniqueMod : 1; // missiles.txt flag bit 13 (0x20 of byte 0x05)
+            /* 0x005 */ uint8_t Half2HSrc : 1; // missiles.txt flag bit 14 (0x40 of byte 0x05)
+            /* 0x005 */ uint8_t MissileSkill : 1; // missiles.txt flag bit 15 (0x80 of byte 0x05)
+        };
+        uint8_t aFlagBytes[2]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
     };
     /* 0x006 */ uint8_t field_0x6;
     /* 0x007 */ uint8_t field_0x7;

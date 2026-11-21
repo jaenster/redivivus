@@ -346,13 +346,13 @@ void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel) {
     } while (nRainGradient < 0x1e0);
 
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\UncompOverlays\\Rain1", "DATA\\GLOBAL");
-    DC6_UncompOverlays_Rain[0] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, nullptr);
+    DC6_UncompOverlays_Rain[0] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, FALSE);
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\UncompOverlays\\Rain2", "DATA\\GLOBAL");
-    DC6_UncompOverlays_Rain[1] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, nullptr);
+    DC6_UncompOverlays_Rain[1] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, FALSE);
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\UncompOverlays\\Rain3", "DATA\\GLOBAL");
-    DC6_UncompOverlays_Rain[2] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, nullptr);
+    DC6_UncompOverlays_Rain[2] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, FALSE);
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\UncompOverlays\\Rain4", "DATA\\GLOBAL");
-    DC6_UncompOverlays_Rain[3] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, nullptr);
+    DC6_UncompOverlays_Rain[3] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, FALSE);
     nGradientIndex = 0;
     do {
       nFrameCount = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(*(DC6**)((char*)DC6_UncompOverlays_Rain + nGradientIndex));
@@ -361,13 +361,13 @@ void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel) {
     } while (nGradientIndex < 0x10);
 
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\UncompOverlays\\bubble1", "DATA\\GLOBAL");
-    DC6_UncompOverlays_bubble[0] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, nullptr);
+    DC6_UncompOverlays_bubble[0] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, FALSE);
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\UncompOverlays\\bubble2", "DATA\\GLOBAL");
-    DC6_UncompOverlays_bubble[1] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, nullptr);
+    DC6_UncompOverlays_bubble[1] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, FALSE);
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\UncompOverlays\\bubble3", "DATA\\GLOBAL");
-    DC6_UncompOverlays_bubble[2] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, nullptr);
+    DC6_UncompOverlays_bubble[2] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, FALSE);
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\UncompOverlays\\bubble4", "DATA\\GLOBAL");
-    DC6_UncompOverlays_bubble[3] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, nullptr);
+    DC6_UncompOverlays_bubble[3] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, FALSE);
     nGradientIndex = 0;
     do {
       nFrameCount = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(*(DC6**)((char*)DC6_UncompOverlays_bubble + nGradientIndex));
@@ -424,10 +424,10 @@ void __fastcall WEATHER_InitBlizzardState(int nSpellId) {
 // Registers: pSeed (ECX) is passed by WeatherEffects but not read.
 void __fastcall WEATHER_UpdateSplashes(D2SeedStrc * pSeed) {
     uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
-    short int* pSplashData = (short int*)pEnvironmentSplashes->pData;
-    int nIndex = 0;
     D2DataArrayStrc* pSplashArray = pEnvironmentSplashes;
-    if (pEnvironmentSplashes->nHighestUsedIndex < 0) {
+    short int* pSplashData = (short int*)pSplashArray->pData;
+    int nIndex = 0;
+    if (pSplashArray->nHighestUsedIndex < 0) {
       return;
     }
 
@@ -441,8 +441,7 @@ void __fastcall WEATHER_UpdateSplashes(D2SeedStrc * pSeed) {
         (*(int*)(pSplashData + 10))--;
         if (*(int*)(pSplashData + 10) <= 0) {
           (*(int*)(pSplashData + 8))++;
-          pSplashData[10] = 2;
-          pSplashData[0xb] = 0;
+          *(int*)(pSplashData + 10) = 2;
           if (*(int*)(pSplashData + 8) >= DC6_UncompOverlays_Rain_FrameCount[*(int*)(pSplashData + 6)]) {
             Fog::Src::DataArrays::FOG_ArrayFreeAtIndex(pSplashArray, nIndex << 0x10);
             pSplashArray = pEnvironmentSplashes;
@@ -458,10 +457,10 @@ void __fastcall WEATHER_UpdateSplashes(D2SeedStrc * pSeed) {
 // Registers: pSeed (ECX) is passed by WeatherEffects but not read.
 void __fastcall WEATHER_UpdateBubbles(D2SeedStrc * pSeed) {
     uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
-    short int* pBubbleData = (short int*)pEnvironmentBubbles->pData;
-    int nIndex = 0;
     D2DataArrayStrc* pArray = pEnvironmentBubbles;
-    if (pEnvironmentBubbles->nHighestUsedIndex < 0) {
+    short int* pBubbleData = (short int*)pArray->pData;
+    int nIndex = 0;
+    if (pArray->nHighestUsedIndex < 0) {
       return;
     }
 
@@ -475,8 +474,7 @@ void __fastcall WEATHER_UpdateBubbles(D2SeedStrc * pSeed) {
         (*(int*)(pBubbleData + 10))--;
         if (*(int*)(pBubbleData + 10) <= 0) {
           (*(int*)(pBubbleData + 8))++;
-          pBubbleData[10] = 2;
-          pBubbleData[0xb] = 0;
+          *(int*)(pBubbleData + 10) = 2;
           if (*(int*)(pBubbleData + 8) >= DC6_UncompOverlays_bubble_FrameCount[*(int*)(pBubbleData + 6)]) {
             Fog::Src::DataArrays::FOG_ArrayFreeAtIndex(pArray, nIndex << 0x10);
             pArray = pEnvironmentBubbles;
