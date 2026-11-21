@@ -870,17 +870,16 @@ BOOL __fastcall SKILLDRUID_SrvStFn58_FireClaws(::SGAMEDATA * pGame, D2UnitStrc *
     memset(&sDamage, 0, 0x70);
     SkillsServer::SKILLS_CalcToHitAndApply(pGameLocal, pUnit, pTarget, pSkillTxt, eSkill, nSkillLvl, &sDamage, 0);
     if ((uint8_t)sDamage.wResultFlags & 1) {
-      ::SGAMEDATA* pGameAfterHit;
-      sDamage.dwHitFlags = sDamage.dwHitFlags | 2U | pSkillTxt->HitFlags;
+      sDamage.dwHitFlags |= 2;
+      sDamage.dwHitFlags |= pSkillTxt->HitFlags;
       if (pSkillTxt->HitClass) {
         sDamage.dwHitClass = pSkillTxt->HitClass;
       }
 
       sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
-      pGameAfterHit = pGameLocal;
       UNIT::SUnitDmg::DAMAGE_CalculateOffensiveDamage(pGameLocal, pUnit, pTarget, &sDamage, 0, pSkillTxt->SrcDam);
       SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
-      UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGameAfterHit, pUnit, pTarget, &sDamage, 0x80);
+      UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGameLocal, pUnit, pTarget, &sDamage, 0x80);
     }
 
     return 1;
@@ -907,7 +906,8 @@ BOOL __fastcall Skills_SrvDoFunc_122_Hunger(::SGAMEDATA * pGame, D2UnitStrc * pU
     SkillsServer::SKILLS_CalcToHitAndApply(pGame, pUnit, pTarget, pSkillTxt, eSkill, nSkillLvl, &sDamage, 0);
     if (sDamage.wResultFlags & 1U) {
       int32_t nBonusDmg;
-      sDamage.dwHitFlags = sDamage.dwHitFlags | 2U | pSkillTxt->HitFlags;
+      sDamage.dwHitFlags |= 2;
+      sDamage.dwHitFlags |= pSkillTxt->HitFlags;
       sDamage.wResultFlags |= pSkillTxt->ResultFlags;
       if (pSkillTxt->HitClass) {
         sDamage.dwHitClass = pSkillTxt->HitClass;

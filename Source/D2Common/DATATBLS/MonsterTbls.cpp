@@ -936,20 +936,18 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
     }
 }
 
-static void __stdcall Unreferenced_006543c0(char * szText) {
+static char * __stdcall Unreferenced_006543c0(char * szText) {
     if (*szText == '\"') {
       szText++;
     }
 
-    char cVar1 = *szText;
-    while (cVar1 != '\0') {
-      if (*szText == '\"') {
-        *szText = '\0';
+    for (char* pCursor = szText; *pCursor; pCursor++) {
+      if (*pCursor == '\"') {
+        *pCursor = '\0';
       }
-
-      szText++;
-      cVar1 = *szText;
     }
+
+    return szText;
 }
 
 static int32_t TC_ExtractNextIntModifier(char cSeparator, uint32_t * * ppCursor) {

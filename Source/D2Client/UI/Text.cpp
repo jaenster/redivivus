@@ -6441,6 +6441,7 @@ void __stdcall TEXT_ClearChatMessages() {
     }
 }
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit);
 void __fastcall TEXT_SetUnitOverheadFromSoundTable(D2UnitStrc * pUnitAnim, uint32_t nSoundId) {
     // Static local variables (originally global data)
     static D2SoundStringKeyStrc * gnTextAnimState[7] = { (D2SoundStringKeyStrc*)&gaClassSoundStringKeys, (D2SoundStringKeyStrc*)&gaClassSoundStringKeys[1][0].nSoundId, (D2SoundStringKeyStrc*)&gaClassSoundStringKeys[2][0].nSoundId, (D2SoundStringKeyStrc*)&gaClassSoundStringKeys[3][0].nSoundId, (D2SoundStringKeyStrc*)&gaClassSoundStringKeys[4][0].nSoundId, (D2SoundStringKeyStrc*)&gaClassSoundStringKeys[5][0].nSoundId, (D2SoundStringKeyStrc*)&gaClassSoundStringKeys[6][0].nSoundId }; D2_STATIC_GUARD(gnTextAnimState, "D2Client::UI::Text::TEXT_SetUnitOverheadFromSoundTable::gnTextAnimState");
@@ -6472,17 +6473,15 @@ void __fastcall TEXT_SetUnitOverheadFromSoundTable(D2UnitStrc * pUnitAnim, uint3
     }
     if (pUnitAnim->eUnitType == UNIT_PLAYER) {
       uint32_t dwScratch;
-      nTableIdx = 0;
-      do {
-        if (gnTextAnimState[pUnitAnim->nClassId][nTableIdx].nSoundId == nSoundId) {
-          sprintf(szSoundText, "%c%c%d", 0xff, 0xff, (uint32_t)gnTextAnimState[pUnitAnim->nClassId][nTableIdx].nStringKey);
+      D2SoundStringKeyStrc* pKeys = gnTextAnimState[GetClassIdInline(pUnitAnim)];
+      for (nTableIdx = 0; nTableIdx < 0x4a; nTableIdx++) {
+        if (pKeys[nTableIdx].nSoundId == nSoundId) {
+          sprintf(szSoundText, "%c%c%d", -1, -1, (uint32_t)pKeys[nTableIdx].nStringKey);
           nLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
           TEXT_SetUnitHoverText(dwScratch, szSoundText, (uint8_t)nLanguageCode, pUnitAnim);
           return;
         }
-
-        nTableIdx++;
-      } while (nTableIdx < 0x4a);
+      }
 
       return;
     }
@@ -6490,17 +6489,14 @@ void __fastcall TEXT_SetUnitOverheadFromSoundTable(D2UnitStrc * pUnitAnim, uint3
       return;
     }
 
-    nTableIdx = 0;
-    while (gaSoundStringLookup[nTableIdx * 2] != nSoundId) {
-      nTableIdx++;
-      if (nTableIdx >= 6) {
+    for (nTableIdx = 0; nTableIdx < 6; nTableIdx++) {
+      if (gaSoundStringLookup[nTableIdx * 2] == nSoundId) {
+        sprintf(szSoundText, "%d", (uint32_t)gaSoundStringLookup[nTableIdx * 2 + 1]);
+        nLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
+        TEXT_SetUnitHoverText(dwScratch2, szSoundText, (uint8_t)nLanguageCode, pUnitAnim);
         return;
       }
     }
-
-    sprintf(szSoundText, "%d", (uint32_t)gaSoundStringLookup[nTableIdx * 2 + 1]);
-    nLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
-    TEXT_SetUnitHoverText(dwScratch2, szSoundText, (uint8_t)nLanguageCode, pUnitAnim);
 }
 
 void __stdcall TEXT_CloseMessageUI() {

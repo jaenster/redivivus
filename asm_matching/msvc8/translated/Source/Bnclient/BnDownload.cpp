@@ -260,30 +260,18 @@ void __fastcall BNDOWNLOAD_ExtractFileFromArchive(char * szFileName, D2ArchiveSt
 }
 
 static BOOL BNDOWNLOAD_LaunchVerifiedExecutables(LPCSTR szText1, LPCSTR szText2) {
-    uint32_t pcFileEnd;
-    char cFirstChar = (char)*szText2;
-    while (true) {
-      HINSTANCE hShellExec;
-      if (cFirstChar == '\0') {
-        return 1;
+    while (*szText2) {
+      if (!D2Hell::D2FILE_VerifyFileSignature(szText2)) {
+        return 0;
+      }
+      if ((intptr_t)ShellExecuteA((HWND)0x0, (LPCSTR)0x0, szText2, (LPCSTR)0x0, szText1, 1) <= 0x20) {
+        return 0;
       }
 
-      cFirstChar = D2Hell::D2FILE_VerifyFileSignature(szText2);
-      /* INT nShowCmd for ShellExecuteA */ /* LPCSTR lpDirectory for ShellExecuteA */ /* LPCSTR lpParameters for ShellExecuteA */ /* LPCSTR lpFile for ShellExecuteA */ /* LPCSTR lpOperation for ShellExecuteA */ /* HWND hwnd for ShellExecuteA */ if (cFirstChar == '\0') {
-        break;
-      }
-
-      hShellExec = ShellExecuteA((HWND)0x0, (LPCSTR)0x0, szText2, (LPCSTR)0x0, szText1, 1);
-      if ((intptr_t)hShellExec <= 0x20) {
-        break;
-      }
-
-      pcFileEnd = Storm::Source::SSTR::SStrLen((char*)szText2);
-      cFirstChar = szText2[pcFileEnd + 1];
-      szText2 += pcFileEnd + 1;
+      szText2 += Storm::Source::SSTR::SStrLen((char*)szText2) + 1;
     }
 
-    return 0;
+    return 1;
 }
 
 void __fastcall BNDOWNLOAD_UpdateProgressPercent(uint32_t dwUnused, int32_t nBytesDone, uint32_t nTotalSize) {
@@ -615,23 +603,19 @@ int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
 }
 
 int __fastcall BNDOWNLOAD_ApplyPrepatch(BOOL * pbPatcherLaunched) {
-    int pResultLocal = (int)pbPatcherLaunched;
-    BNDOWNLOAD_ProcessPrepatchList(&pResultLocal);
-    switch (pResultLocal) {
+    int nResult;
+    BNDOWNLOAD_ProcessPrepatchList(&nResult);
+    switch (nResult) {
       case 0:
-        case 1:
-          {
-            return 1;
-          }
+        return 1;
+      case 1:
+        return 1;
       case 2:
-        {
-          *pbPatcherLaunched = 1;
-        }
-      default:
-        {
-          return 0;
-        }
+        *pbPatcherLaunched = 1;
+        return 0;
     }
+
+    return 0;
 }
 
 uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {

@@ -1681,10 +1681,10 @@ static int __stdcall PATH_MoveObjectToPosition(D2RoomStrc * pRoom, uint32_t nTar
 }
 
 BOOL __stdcall PATH_GetCollisionMaskAt(D2DynamicPathStrc * pDynamicPath, D2UnitStrc * pUnit, D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY) {
-    uint32_t _wPosX;
-    _wPosX = (uint32_t)((uint32_t)(uint16_t)wPosY << 16 | (uint32_t)(uint16_t)wPosX);
-    BOOL bMoved = PATH_MoveUnitToPosition(pRoom, _wPosX, pDynamicPath);
-    if (!bMoved) {
+    D2PathPointStrc tPoint;
+    tPoint.nX = wPosX;
+    tPoint.nY = wPosY;
+    if (!PATH_MoveUnitToPosition(pRoom, tPoint, pDynamicPath)) {
       return 0;
     }
 
@@ -1699,10 +1699,10 @@ int32_t __stdcall PATH_GetCollisionTypeAt(D2DynamicPathStrc * pDynamicPath, D2Un
 }
 
 BOOL __stdcall PATH_MoveUnitToRoomPosition(D2DynamicPathStrc * pDynamicPath, D2UnitStrc * dwUnused, D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY) {
-    uint32_t _wPosX;
-    _wPosX = (uint32_t)((uint32_t)(uint16_t)wPosY << 16 | (uint32_t)(uint16_t)wPosX);
-    BOOL bMoved = PATH_MoveUnitToPosition(pRoom, _wPosX, pDynamicPath);
-    if (!bMoved) {
+    D2PathPointStrc tPoint;
+    tPoint.nX = wPosX;
+    tPoint.nY = wPosY;
+    if (!PATH_MoveUnitToPosition(pRoom, tPoint, pDynamicPath)) {
       return 0;
     }
 

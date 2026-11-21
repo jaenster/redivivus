@@ -21,58 +21,40 @@ DWORD __stdcall QSERVER_CooperativeThreadMain(void * lpThreadParam) {
     D2BNetClientCallbacksStrc* pGameVersionInfo;
     int nCurrentGameCount;
     uint32_t nFlags;
-    int nLastGameCount;
-    nLastGameCount = 0;
-    int32_t bHasActiveGames;
-    bHasActiveGames = 0;
-    EnterCriticalSection(&Game::gHostGameStateCs);
-    int bEnteringGame;
-    bEnteringGame = EnteringGame;
+    int nLastGameCount = 0;
+    int32_t bHasActiveGames = 0;
     int bExitingGame;
+    int bEnteringGame;
+    EnterCriticalSection(&Game::gHostGameStateCs);
     bExitingGame = ExitingGame;
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&Game::gHostGameStateCs);
-    do {
-      if (bExitingGame) {
-        D2Game::GAME::Server::QSERVER_ShutdownAllGames();
-        D2Game::GAME::Server::QSERVER_DispatchAndCleanup(nullptr, 1);
-        /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&Game::gHostGameStateCs);
-        /* LPCSTR lpOutputString for OutputDebugStringA */ OutputDebugStringA("Open server thread shut down\n");
-        return 1;
-      }
+    bEnteringGame = EnteringGame;
+    LeaveCriticalSection(&Game::gHostGameStateCs);
+    while (!bExitingGame) {
       if (bEnteringGame) {
         D2Game::GAME::Server::NET_D2GS_SERVER_HandleAnyIncomingPacket();
         bHasActiveGames = D2Game::GAME::Server::SrvProcessAllGames(1);
         if (bHasActiveGames) {
           D2Game::GAME::Server::QSERVER_DispatchAndCleanup(nullptr, 0);
-          goto update_game_advert;
         }
-
-        idle_sleep:
-        /* DWORD dwMilliseconds for Sleep */ Sleep(10);
-      } else {
-        update_game_advert:
-        /* This is mostlikely where it creates new games straight from the d2inidata */ if (!bHasActiveGames) {
-          goto idle_sleep;
-        }
-        /* DWORD dwMilliseconds for Sleep */ Sleep(0x1e);
+      }
+      if (bHasActiveGames) {
+        Sleep(0x1e);
         pGameVersionInfo = ClientModeInGame::CLIENT_GetBNetClientCallbacks();
         if (pGameVersionInfo) {
           nCurrentGameCount = D2Game::GAME::Server::GetUnitCountByServerId(1);
           if (nCurrentGameCount != nLastGameCount) {
-            /* entering game becomes here the game (last) token */ if (nLastGameCount < _StaticFour) {
-              nLastGameCount = nCurrentGameCount;
+            if (nLastGameCount < _StaticFour) {
               if (nCurrentGameCount >= _StaticFour) {
                 pGameVersionInfo->pfnSendKeepAlive();
               }
             } else {
-              nLastGameCount = nCurrentGameCount;
               if (nCurrentGameCount < _StaticFour) {
                 nFlags = 0;
                 if (ClientModeInGame::D2IniData_client->nDifficulty == 1) {
                   nFlags = 1;
                 }
                 if (ClientModeInGame::D2IniData_client->nDifficulty == 2) {
-                  nFlags = 2;
+                  nFlags |= 2;
                 }
                 if (ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Hardcore) {
                   nFlags |= 4;
@@ -84,15 +66,25 @@ DWORD __stdcall QSERVER_CooperativeThreadMain(void * lpThreadParam) {
                 pGameVersionInfo->pfnSendStartAdvEx3(ClientModeInGame::D2IniData_client->szGAMENAME, ClientModeInGame::D2IniData_client->szGamePassword, ClientModeInGame::D2IniData_client->szGameDescription, nFlags);
               }
             }
+
+            nLastGameCount = nCurrentGameCount;
           }
         }
+      } else {
+        Sleep(10);
       }
 
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&Game::gHostGameStateCs);
-      bEnteringGame = EnteringGame;
+      EnterCriticalSection(&Game::gHostGameStateCs);
       bExitingGame = ExitingGame;
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&Game::gHostGameStateCs);
-    } while (true);
+      bEnteringGame = EnteringGame;
+      LeaveCriticalSection(&Game::gHostGameStateCs);
+    }
+
+    D2Game::GAME::Server::QSERVER_ShutdownAllGames();
+    D2Game::GAME::Server::QSERVER_DispatchAndCleanup(nullptr, 1);
+    DeleteCriticalSection(&Game::gHostGameStateCs);
+    OutputDebugStringA("Open server thread shut down\n");
+    return 1;
 }
 
 }}} // namespace D2Client::GAME::Server

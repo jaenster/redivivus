@@ -367,7 +367,6 @@ void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
 
 void __fastcall PARTICLE_InitProjectile(D2UnitStrc * pUnit, int32_t nInitialHeight, int32_t nBounceCount) {
     int nClampedBounceCount;
-    int nGravity;
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (!pParticle) {
       return;
@@ -379,19 +378,17 @@ void __fastcall PARTICLE_InitProjectile(D2UnitStrc * pUnit, int32_t nInitialHeig
       pParticle->nBounceCount = 1;
     }
 
-    nGravity = pParticle->pOffsets[1].nOffsetZ;
     pParticle->nPosX = 0;
     pParticle->nPosY = 0;
     pParticle->nPosZ = nInitialHeight * 0x800;
-    if (!nGravity) {
+    if (!pParticle->pOffsets[1].nOffsetZ) {
       pParticle->pOffsets[1].nOffsetZ = -0x1000;
     }
 
-    nGravity = pParticle->pOffsets[1].nOffsetZ;
     nClampedBounceCount = pParticle->nBounceCount;
     pParticle->pOffsets[0].nOffsetX = 0;
     pParticle->pOffsets[0].nOffsetY = 0;
-    pParticle->pOffsets[0].nOffsetZ = (nInitialHeight * -0x800 - nGravity * nClampedBounceCount * nClampedBounceCount / 2) / nClampedBounceCount;
+    pParticle->pOffsets[0].nOffsetZ = (-pParticle->nPosZ - pParticle->pOffsets[1].nOffsetZ * nClampedBounceCount * nClampedBounceCount / 2) / nClampedBounceCount;
 }
 
 void __fastcall PARTICLE_SetAttachedToOwner(D2UnitStrc * pUnit, BOOL bReset) {

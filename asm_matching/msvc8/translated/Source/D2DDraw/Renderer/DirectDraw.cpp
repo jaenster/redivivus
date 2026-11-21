@@ -143,12 +143,7 @@ BOOL __fastcall SetPalette(LPPALETTEENTRY pPalette) {
     uint8_t aGammaCurve[256];
     uint8_t byGreenBlue;
     double dPaletteSize = (double)gnDirectDrawPaletteSize;
-    PALETTEENTRY* ptEntry = gaPaletteEntries;
-    for (nIndex = 0x100; nIndex; nIndex--) {
-      *ptEntry = *pPalette;
-      pPalette++;
-      ptEntry++;
-    }
+    memcpy(gaPaletteEntries, pPalette, sizeof(PALETTEENTRY) * 0x100);
 
     Fog::Src::DataArrays::FOG_FillArrayWithRandomInts(gnDirectDrawGamma, (uint32_t*)aGammaCurve, dPaletteSize, 1, 0x100, 0xff);
     nIndex = 0;
@@ -1814,8 +1809,6 @@ void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFram
     static uint32_t gbBinkDDrawVideoExitRequested; D2_STATIC_GUARD_BSS(gbBinkDDrawVideoExitRequested, "D2DDraw::Renderer::DirectDraw::BINK_PlayVideoFile::gbBinkDDrawVideoExitRequested");
     static unsigned int gdwBinkVideoLastClickTick; D2_STATIC_GUARD_BSS(gdwBinkVideoLastClickTick, "D2DDraw::Renderer::DirectDraw::BINK_PlayVideoFile::gdwBinkVideoLastClickTick");
 
-    DWORD dwCurrentTick;
-    int nBinkWaitResult;
     uint32_t nOpenFlags;
     tagMSG msgPeek;
     HANDLE pFileHandle;
@@ -1838,7 +1831,7 @@ void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFram
 
     Storm::Source::SFile::SFileOpenFileEx(nullptr, szFileName, nFileOpenMode, &pFileHandle);
     if (pFileHandle) {
-      DWORD dwStartTick;
+      DWORD dwEndTick;
       nOpenFlags = 0x800000;
       switch (nParam) {
         case 1:
@@ -1859,15 +1852,17 @@ void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFram
       }
 
       gpBinkVideoDirectDraw = (BINK*)BinkOpen(pFileHandle, nOpenFlags);
-      if (gpBinkVideoDirectDraw) {
+      if (!gpBinkVideoDirectDraw) {
+        /* HANDLE hObject for CloseHandle */ CloseHandle(pFileHandle);
+      } else {
         gnBinkDDrawXOffset = RENDERER_nWindowWidth - gpBinkVideoDirectDraw->Width >> 1;
         if (gnBinkDDrawXOffset & 3) {
           gnBinkDDrawXOffset = (gnBinkDDrawXOffset | 3) + 1;
         }
 
         gnBinkDDrawYOffset = RENDERER_nWindowHeight - gpBinkVideoDirectDraw->Height >> 1;
-        dwStartTick = GetTickCount();
-        while ((!g_bBinkDDrawVideoQuitRequested || (dwCurrentTick = GetTickCount() , dwCurrentTick < dwStartTick + 500)) && !gnRenderState) {
+        dwEndTick = GetTickCount() + 500;
+        while ((!g_bBinkDDrawVideoQuitRequested || GetTickCount() < dwEndTick) && !gnRenderState) {
           if (pfnFrameCallback) {
             (*pfnFrameCallback)();
           }
@@ -1875,33 +1870,25 @@ void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFram
             break;
           }
 
-          /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ bDirectCommand = PeekMessageA(&msgPeek, (HWND)0x0, 0, 0, 1);
-          if (bDirectCommand) {
-            if (msgPeek.message <= 0x201) {
-              if (msgPeek.message == 0x201) {
-                goto request_skip;
-              }
-              if (msgPeek.message != 0x12) {
-                if (msgPeek.message == 0x102) {
-                  goto request_skip;
-                }
-              } else {
+          /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ if (PeekMessageA(&msgPeek, (HWND)0x0, 0, 0, 1)) {
+            switch (msgPeek.message) {
+              case 0x12:
                 g_bBinkDDrawVideoQuitRequested = 1;
                 gbBinkDDrawVideoExitRequested = 1;
-              }
-            } else {
-              if (!(msgPeek.message != 0x204 && msgPeek.message != 0x207)) {
-                request_skip:
+                break;
+              case 0x102:
+              case 0x201:
+              case 0x204:
+              case 0x207:
                 bClickedToSkip = 1;
                 gdwBinkVideoLastClickTick = GetTickCount();
-              }
+                break;
             }
 
             /* MSG * lpMsg for TranslateMessage */ TranslateMessage(&msgPeek);
             /* MSG * lpMsg for DispatchMessageA */ DispatchMessageA(&msgPeek);
           } else {
-            nBinkWaitResult = BinkWait(gpBinkVideoDirectDraw);
-            if (!nBinkWaitResult) {
+            if (!BinkWait(gpBinkVideoDirectDraw)) {
               BINK_RenderVideoFrame();
             } else {
               /* DWORD dwMilliseconds for Sleep */ Sleep(1);
@@ -1922,8 +1909,6 @@ void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFram
 
         exit(-1);
       }
-
-      /* HANDLE hObject for CloseHandle */ CloseHandle(pFileHandle);
     }
     if (!gpBinkVideoDirectDraw) {
       return;

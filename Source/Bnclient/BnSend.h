@@ -231,7 +231,7 @@ void __fastcall NET_SID_CLIENT_Send_0x0E_ChatCommand(uint8_t * szChatText);
 int __stdcall NET_SID_CLIENT_Send_0x15_CheckAd();
 // Registers: ECX and EDX are loaded by the only caller but not read.
 int __fastcall NET_SID_CLIENT_Send_0x21_DisplayAd(char * szDestPath, void * pPoolMgr);
-void __fastcall NET_SID_CLIENT_Send_0x1C_StartAdVex3(char * szGameName, char * szGamePassword, char * szGameDescription, int32_t nFlags);
+BOOL __fastcall NET_SID_CLIENT_Send_0x1C_StartAdVex3(char * szGameName, char * szGamePassword, char * szGameDescription, int32_t nFlags);
 DWORD __stdcall BNCLIENT_SendKeepAlive();
 uint32_t __fastcall thunk_NET_SID_CLIENT_Send(uint8_t nPacketId, char * szText);
 int __stdcall NET_SID_CLIENT_Send_0x1F_LeaveGame();

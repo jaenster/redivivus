@@ -51,7 +51,7 @@ int8_t __fastcall Open(::Report * pThis, int, char * szFileName) {
     if (gszCrashLogTempDir[0] == '\0') {
       bSuccess = File::FILETOOLS_GetTempPath_UTF8(gszCrashLogTempDir);
       if (bSuccess) {
-        bSuccess = File::STRING_AppendBlizzardErrorSubfolderToPath(gszCrashLogTempDir);
+        bSuccess = File::STRING_AppendBlizzardErrorSubfolderToPath(0, gszCrashLogTempDir);
         if (!bSuccess) {
           return '\0';
         }

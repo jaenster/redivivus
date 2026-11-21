@@ -953,41 +953,19 @@ uint32_t __fastcall OOGUTIL_CheckCharacterLevel(uint8_t * pszLevelChars) {
 // Copies: +8 gameid -> gwGameListCacheEntryPort; +0x14 -> gwOOGLobbyScreenState; +0x1c -> gszLanGameListEntryName;
 // +0x2c -> gszLanGameListEntryDescription. Called once per incoming MCP 0x05 game packet from JoinOrCreateGame.
 void __fastcall OOGMENU_AddGameToCache(D2McpGameInfoStrc * pGameInfo) {
-    char cChar;
-    int nIndex = 0;
-    if (nGameListDifficultyFilter > 0) {
-      uint16_t* pwCachePort;
-      pwCachePort = &gbLanGameListEntryNamePadding2[0].nJoinId;
-      do {
-        if (*pwCachePort == (uint16_t)pGameInfo->dwGameId) {
-          return;
-        }
-
-        nIndex++;
-        pwCachePort = (uint16_t*)((char*)pwCachePort + 0x3b);
-      } while (nIndex < nGameListDifficultyFilter);
+    int nCount = nGameListDifficultyFilter;
+    for (int nIndex = 0; nIndex < nCount; nIndex++) {
+      if (gbLanGameListEntryNamePadding2[nIndex].nJoinId == (uint16_t)pGameInfo->dwGameId) {
+        return;
+      }
     }
 
-    gbLanGameListEntryNamePadding2[nGameListDifficultyFilter].nJoinId = (uint16_t)pGameInfo->dwGameId;
-    gbLanGameListEntryNamePadding2[nGameListDifficultyFilter].dwIpAddr = 0;
-    gbLanGameListEntryNamePadding2[nGameListDifficultyFilter].wDisplayedCount = (uint16_t)pGameInfo->nPlayerCount;
-    char* pszSrc = pGameInfo->szGameName;
-    nIndex = nGameListDifficultyFilter * 0x3b + (intptr_t)&gbLanGameListEntryNamePadding2[0].szName - (intptr_t)pszSrc;
-    do {
-      cChar = *pszSrc;
-      pszSrc[nIndex] = cChar;
-      pszSrc++;
-    } while (cChar != '\0');
-
-    pszSrc = pGameInfo->szGameDescription;
-    nIndex = nGameListDifficultyFilter * 0x3b + (intptr_t)&gbLanGameListEntryNamePadding2[0].szDescription - (intptr_t)pszSrc;
-    do {
-      cChar = *pszSrc;
-      pszSrc[nIndex] = cChar;
-      pszSrc++;
-    } while (cChar != '\0');
-
-    nGameListDifficultyFilter++;
+    gbLanGameListEntryNamePadding2[nCount].nJoinId = (uint16_t)pGameInfo->dwGameId;
+    gbLanGameListEntryNamePadding2[nCount].dwIpAddr = 0;
+    gbLanGameListEntryNamePadding2[nCount].wDisplayedCount = (uint16_t)pGameInfo->nPlayerCount;
+    strcpy(gbLanGameListEntryNamePadding2[nCount].szName, pGameInfo->szGameName);
+    strcpy(gbLanGameListEntryNamePadding2[nCount].szDescription, pGameInfo->szGameDescription);
+    nGameListDifficultyFilter = nCount + 1;
 }
 
 void __stdcall OOGMENU_RefreshGameListDisplay() {
@@ -1378,7 +1356,7 @@ BOOL __stdcall OOGUTIL_SendPasswordPacket(DWORD dwParam1, DWORD dwParam2, char *
 }
 
 BOOL __stdcall OOGUTIL_IsFirstCharPrintableAscii(DWORD dwParam1, DWORD dwParam2, char * szText) {
-    if (*szText >= ' ' && *szText <= '\x7f') {
+    if (*szText >= ' ' && *szText < 0x80) {
       return 1;
     }
 
@@ -1386,7 +1364,7 @@ BOOL __stdcall OOGUTIL_IsFirstCharPrintableAscii(DWORD dwParam1, DWORD dwParam2,
 }
 
 BOOL __stdcall OOGUTIL_FilterPrintableAsciiChar(DWORD dwParam1, DWORD dwParam2, char * szText) {
-    if (*szText >= ' ' && *szText <= '\x7f') {
+    if (*szText >= ' ' && *szText < 0x80) {
       return 1;
     }
 
@@ -2969,14 +2947,6 @@ void __fastcall OOGUTIL_CreateViewProfileDialog(char * szUserName, char * szChar
     /* .nFlagsOrType = */ 0x0
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e830, "D2Multi::OOGUtilities::OOGUTIL_CreateViewProfileDialog::FORMS_PredefinedFormStrc_0070e830");
 
-    // Frame slots -8..-4 are ONE object: &wCrLfDelim is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint16_t wCrLfDelim;
-      uint8_t byTokenDelimNul;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 4, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     char szDescription[204];
     char szLocation[44];
     char szSex[12];
@@ -3000,12 +2970,11 @@ void __fastcall OOGUTIL_CreateViewProfileDialog(char * szUserName, char * szChar
     gpProfileViewLocation = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e800);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpProfileViewLocation, szLocation);
     gpProfileViewDescription = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e830);
-    __frame0.wCrLfDelim = 0xa0d;
-    __frame0.byTokenDelimNul = 0;
-    char* pszDescLine = strtok(szDescription, (char*)&__frame0.wCrLfDelim);
+    char szDelim[] = "\r\n";
+    char* pszDescLine = strtok(szDescription, szDelim);
     while (pszDescLine) {
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpProfileViewDescription, pszDescLine);
-      pszDescLine = strtok(nullptr, (char*)&__frame0.wCrLfDelim);
+      pszDescLine = strtok(nullptr, szDelim);
     }
 
     gpProfileOKButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e950);

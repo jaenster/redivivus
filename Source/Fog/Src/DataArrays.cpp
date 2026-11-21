@@ -41,33 +41,17 @@ void __fastcall FreeWeatherPointer(void * pDataArray) {
 }
 
 void __fastcall FOG_InitDataArray(D2DataArrayStrc * pDataArray) {
-    int nObjectIndex;
-    int nObjectOffset;
     if (!pDataArray->bInitialized) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x68);
       exit(-1);
     }
 
-    {
-      uint8_t* puVar1;
-      nObjectIndex = 0;
-      pDataArray->nHighestUsedIndex = -1;
-      pDataArray->nUsedCount = 0;
-      pDataArray->nNextFreeIndex = 0;
-      pDataArray->nMagic = -0x8000;
-      if (pDataArray->numObjects <= 0) {
-        return;
-      }
-
-      do {
-        puVar1 = pDataArray->pData;
-        nObjectOffset = pDataArray->nObjectSize * nObjectIndex;
-        nObjectIndex++;
-        (puVar1 + nObjectOffset)[0] = '\0';
-        (puVar1 + nObjectOffset)[1] = '\0';
-      } while (nObjectIndex < pDataArray->numObjects);
-
-      return;
+    pDataArray->nHighestUsedIndex = -1;
+    pDataArray->nUsedCount = 0;
+    pDataArray->nNextFreeIndex = 0;
+    pDataArray->nMagic = -0x8000;
+    for (int nObjectIndex = 0; nObjectIndex < pDataArray->numObjects; nObjectIndex++) {
+      *(uint16_t*)(pDataArray->pData + pDataArray->nObjectSize * nObjectIndex) = 0;
     }
 }
 

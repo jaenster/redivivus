@@ -44,9 +44,7 @@ static inline bool __stdcall ARENA_TestFlag(::SGAMEDATA * pGame, uint32_t dwFlag
 // EDX nArena: 0 from GAME_CreateBattleNetGame, the arena argument from GAME_CreateSingleplayerGame; not read here.
 void __fastcall AllocArenaControl(::SGAMEDATA * pGame, int32_t nArena, eD2ArenaFlags eArenaFlags, uint8_t nTemplate) {
     D2ArenaControlStrc* pArenaCtrl = D2_NEW_POOL_AT(pGame->pMemoryPool, D2ArenaControlStrc, ".\\GAME\\Arena.cpp", 0x32);
-    pArenaCtrl->eLevelId = LEVEL_None;
-    pArenaCtrl->nArenaTxtRecord = 0;
-    pArenaCtrl->nTemplateLevel = 0;
+    memset(pArenaCtrl, 0, sizeof(D2ArenaControlStrc));
     pGame->pArenaCtrl = pArenaCtrl;
     pArenaCtrl->eArenaFlags = eArenaFlags & 0x3179c7;
     *(uint8_t*)&pArenaCtrl->nTemplateLevel = nTemplate;

@@ -391,7 +391,8 @@ struct D2BeltsEntryStrc {
 struct __attribute__((packed)) D2BeltsTxt {
     /* 0x00 */ uint8_t nIndex;
     /* 0x01 */ uint8_t pad0x01[3];
-    /* 0x04 */ int nBoxes;
+    /* 0x04 */ uint8_t nBoxes;
+    /* 0x05 */ uint8_t pad0x05[3];
     /* 0x08 */ D2BeltsEntryStrc beltBoxes[16];
 };
 #endif // D2_DEFINED_D2BeltsTxt
@@ -411,7 +412,7 @@ struct D2BNetClientCallbacksStrc {
     /* 0x28 */ int (__fastcall *pfnGetStateAndClear)(int *);
     /* 0x2C */ void (__fastcall *pfnSendGetFileTime)(char *, uint32_t);
     /* 0x30 */ int (__stdcall *pfnSendCheckAd)();
-    /* 0x34 */ void (__fastcall *pfnSendStartAdvEx3)(char *, char *, char *, int);
+    /* 0x34 */ BOOL (__fastcall *pfnSendStartAdvEx3)(char *, char *, char *, int);
     /* 0x38 */ void * (__fastcall *pfnSendGetAdvListEx)(char *, char *, uint32_t, uint32_t);
     /* 0x3C */ void (__fastcall *pfnSendNotifyJoin)(char *, char *);
     /* 0x40 */ void * (__stdcall *pfnSendQueryRealms2)();

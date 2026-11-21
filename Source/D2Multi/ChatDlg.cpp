@@ -2575,18 +2575,16 @@ int __stdcall CHATDLG_EnqueueClearMessage() {
     D2ChatDlgUnknown_0x10* pNode = D2_NEW_AT(D2ChatDlgUnknown_0x10, ".\\Src\\ChatDlg.cpp", 0xc1d);
     memset(pNode, 0, sizeof(*pNode));
     if (pNode) {
-      D2ChatDlgUnknown_0x10* pNewHead;
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ pNode->pszText = 0;
+      pNode->pszText = 0;
       pNode->nColor = 0;
       pNode->nLength = 1;
       EnterCriticalSection(&lpCriticalSection_0077ae28);
-      pNewHead = pNode;
       if (gpChatMessageQueueHead) {
         gpChatMessageQueueTail->pNext = pNode;
-        pNewHead = gpChatMessageQueueHead;
+      } else {
+        gpChatMessageQueueHead = pNode;
       }
 
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gpChatMessageQueueHead = pNewHead;
       gpChatMessageQueueTail = pNode;
       LeaveCriticalSection(&lpCriticalSection_0077ae28);
     }

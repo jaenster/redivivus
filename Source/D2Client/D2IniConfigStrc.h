@@ -205,7 +205,7 @@ typedef BOOL (__fastcall *fnSendSetEmail)(char * szEmail);
 #endif
 #ifndef RECON_FPTD_fnSendStartAdvEx3
 #define RECON_FPTD_fnSendStartAdvEx3
-typedef void (__fastcall *fnSendStartAdvEx3)(char * szName, char * szPass, char * szDesc, int nFlags);
+typedef BOOL (__fastcall *fnSendStartAdvEx3)(char * szName, char * szPass, char * szDesc, int nFlags);
 #endif
 #ifndef RECON_FPTD_fnSendWriteUserData
 #define RECON_FPTD_fnSendWriteUserData
@@ -253,7 +253,7 @@ struct D2BNetClientCallbacksStrc {
     /* 0x28 */ int (__fastcall *pfnGetStateAndClear)(int *);
     /* 0x2C */ void (__fastcall *pfnSendGetFileTime)(char *, uint32_t);
     /* 0x30 */ int (__stdcall *pfnSendCheckAd)();
-    /* 0x34 */ void (__fastcall *pfnSendStartAdvEx3)(char *, char *, char *, int);
+    /* 0x34 */ BOOL (__fastcall *pfnSendStartAdvEx3)(char *, char *, char *, int);
     /* 0x38 */ void * (__fastcall *pfnSendGetAdvListEx)(char *, char *, uint32_t, uint32_t);
     /* 0x3C */ void (__fastcall *pfnSendNotifyJoin)(char *, char *);
     /* 0x40 */ void * (__stdcall *pfnSendQueryRealms2)();

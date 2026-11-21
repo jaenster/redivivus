@@ -83,38 +83,33 @@ void __fastcall AllocPlayerListSub(int32_t nUnitGUID, int32_t nRosterGUID) {
 
 // @sourcefile .\UNIT\PlayerList.cpp
 void __fastcall FreePlayerListSub(int32_t nUnitGUID, int32_t nRosterGUID) {
-    D2PlayerListSubStrc* pMemoryToFree;
     D2PlayerListStrc* pPlayerList = GAME::Roster::GetPlayerList(nUnitGUID);
+    D2PlayerListSubStrc* pPrevEntry = nullptr;
     if (!pPlayerList) {
       return;
     }
 
-    D2PlayerListSubStrc* pPrevEntry = pPlayerList->pEntry;
-    D2PlayerListSubStrc* pCurEntry = 0;
-    if (!pPlayerList->pEntry) {
-      return;
-    }
-
-    while (true) {
-      pMemoryToFree = pPrevEntry;
-      if (pMemoryToFree->nRosterGUID == nRosterGUID) {
+    D2PlayerListSubStrc* pEntry = pPlayerList->pEntry;
+    while (pEntry) {
+      if (pEntry->nRosterGUID == nRosterGUID) {
         break;
       }
 
-      pPrevEntry = pMemoryToFree->pNext;
-      pCurEntry = pMemoryToFree;
-      if (!pMemoryToFree->pNext) {
-        return;
-      }
+      pPrevEntry = pEntry;
+      pEntry = pEntry->pNext;
     }
 
-    if (pCurEntry) {
-      pCurEntry->pNext = pMemoryToFree->pNext;
+    if (!pEntry) {
+      return;
+    }
+
+    if (pPrevEntry) {
+      pPrevEntry->pNext = pEntry->pNext;
     } else {
-      pPlayerList->pEntry = pMemoryToFree->pNext;
+      pPlayerList->pEntry = pEntry->pNext;
     }
 
-    D2_FREE_AT(pMemoryToFree, ".\\UNIT\\PlayerList.cpp", 0x97);
+    D2_FREE_AT(pEntry, ".\\UNIT\\PlayerList.cpp", 0x97);
 }
 
 void __fastcall SetUnsetFlags(int32_t nUnitGUID, int32_t nRosterGUID, uint32_t nFlag, BOOL bSetUnset) {

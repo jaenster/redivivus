@@ -597,25 +597,16 @@ BOOL __stdcall TXT_LvlTypes_CheckIfTypeIsAssignedToAct(int32_t nLvlTypeId, char 
 }
 
 void __stdcall LVLTBLS_GetLvlTypeFilename(int32_t nLvlType, int32_t nFileIndex, uint8_t * szFilename) {
-    char cCurrent;
     if (!pTxtLvlTypes) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x251);
       exit(-1);
     }
 
-    D2LvlTypesTxt* pLvlTypeTxt = pTxtLvlTypes + nLvlType;
+    D2LvlTypesTxt* pLvlTypeTxt = &pTxtLvlTypes[nLvlType];
     *szFilename = 0;
-    if (!(pLvlTypeTxt && nFileIndex < 0x20)) {
-      return;
+    if (pLvlTypeTxt && nFileIndex < 0x20) {
+      strcpy((char*)szFilename, pLvlTypeTxt->File[nFileIndex]);
     }
-
-    char (*pFileSlot)[60] = pLvlTypeTxt->File + nFileIndex;
-    intptr_t nDstOffset = (intptr_t)szFilename - (intptr_t)pFileSlot;
-    do {
-      cCurrent = (*pFileSlot)[0];
-      *(char*)((char*)pFileSlot + nDstOffset) = cCurrent;
-      pFileSlot = (char (*)[60])(*pFileSlot + 1);
-    } while (cCurrent != '\0');
 }
 
 // Loads and compiles the lvlprest.txt data table (preset-area level definitions) via CompileTxt, populating the field schema (Def, LevelId, Populate, sizes, AutoMap, Expansion flag, File1-File6 ASCII paths, Dt1Mask, etc.) into sgtDataTable.pTxtLvlPrest. When nParam!=0 also allocates pTxtLvlTbls (6 DRLG-file pointers per row) and, for each row visible in the current game mode (expansion rows skipped in classic), normalizes file path slashes and allocates a D2DrlgFileStrc for each non-empty File path. Side effects: sets global table pointers and size.

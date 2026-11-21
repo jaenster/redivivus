@@ -244,15 +244,14 @@ D2DrlgEnvironmentStrc * __fastcall DRLGENV_AllocEnvironment(D2PoolManagerStrc * 
     D2DrlgEnvironmentStrc* pEnv = D2_NEW_POOL_AT(pMemory, D2DrlgEnvironmentStrc, ".\\ENVIRONMENT\\Env.cpp", 0x12a);
     memset(pEnv, 0, 0x38);
     pEnv->nTimeIndex = 2;
-    uint32_t nTimeRate = gnTimeRates[pEnv->nTimeRateIndex];
-    pEnv->nTimeRate = nTimeRate;
+    pEnv->nTimeRate = gnTimeRates[pEnv->nTimeRateIndex];
     D2DrlgActEnvironmentData* pDataTable = (D2DrlgActEnvironmentData*)(aENVIRONMENTDATA1 + 6);
     if (pEnv->bEclipse) {
       pDataTable = aENVIRONMENTDATA2 + 2;
     }
 
     pEnv->nEnvironmentData = pDataTable->nEnvData;
-    pEnv->nTicks = nTimeRate * pDataTable->nLenght;
+    pEnv->nTicks = pEnv->nTimeRate * pDataTable->nLenght;
     DRLGENV_UpdateLightIntensity(pEnv, LEVEL_None, 0);
     DRLGENV_UpdateLightColor(0, pEnv);
     pEnv->nUnused = 0;
@@ -416,15 +415,14 @@ int32_t __stdcall DRLGENV_GetPeriodOfDayFromAct(D2DrlgActStrc * pDrlgAct, int32_
 
       return 0;
     }
-    if (!pBaseTime) {
-      return pEnv->nEnvironmentData;
-    }
-    if (pEnv->nTimeRate) {
-      *pBaseTime = pEnv->nTicks / pEnv->nTimeRate;
-      return pEnv->nEnvironmentData;
+    if (pBaseTime) {
+      if (pEnv->nTimeRate) {
+        *pBaseTime = pEnv->nTicks / pEnv->nTimeRate;
+      } else {
+        *pBaseTime = 0;
+      }
     }
 
-    *pBaseTime = 0;
     return pEnv->nEnvironmentData;
 }
 

@@ -13,6 +13,14 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -659,17 +667,8 @@ void __fastcall ExtraFast(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     }
 
     int32_t nValue = (int)(0x800 / (int)nBaseVelocity) - 0x80;
-    if (nValue > 0xa) {
-      if (nValue >= 100) {
-        nValue = 100;
-      }
-
-      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, nValue, 0);
-      return;
-    }
-
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, 10, 0);
-    return;
+    nValue = min(max(nValue, 10), 100); // steer-ok: windef.h min/max macros
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, nValue, 0);
 }
 
 // Applies the Fire Enchanted monster modifier (umod) to pUnit. Requires a live UNIT_MONSTER with a game pointer. Derives difficulty (0-2) and a single/multiplayer flag (BNET_HOST + SINGLEPLAYER => 0 else 1), reads the unit level, and indexes monlvl.txt DM[mp*3+diff] for a base damage. Computes fire min/max damage from GetUmodConstant: index diff+0x10/+0x13 when bUnknown==0 else diff+0x1c/+0x1f (min uses a /100 reciprocal-multiply, max uses *base/100), adds UNITSTAT_firemindam/firemaxdam, then chains MagicResist. No-op if unit/game null or monlvl row out of range.

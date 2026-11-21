@@ -48,22 +48,24 @@ int __fastcall NET_MCP_CLIENT_SendPacketToSafesocket(D2NetDataStrc * pSafesocket
     }
 
     LPCRITICAL_SECTION lpCriticalSection = &pSafesocket->pSync;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
+    EnterCriticalSection(lpCriticalSection);
+    int nResult;
     int nBytesSent = send(pSafesocket->hSocket, pBytes, nSize, 0);
     if (nBytesSent == -1) {
       int nWSAError = WSAGetLastError();
       pSafesocket->nWSALastError = nWSAError;
       if (nWSAError == 0x2733) {
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
-        return 0;
+        nResult = 0;
+      } else {
+        pSafesocket->nError = 4;
+        return -1;
       }
-
-      pSafesocket->nError = 4;
-      return -1;
+    } else {
+      nResult = nBytesSent;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
-    return nBytesSent;
+    LeaveCriticalSection(lpCriticalSection);
+    return nResult;
 }
 
 BOOL __stdcall QSSOCKET_SendWithTimeout(D2QSSocketStrc * pQSSocket, char * pBuffer, uint16_t nLength) {

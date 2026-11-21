@@ -163,16 +163,15 @@ template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Ptr
 
 template<> TSExplicitList<::MappingEntryNode, -572662307>* TSExplicitList<MappingEntryNode, -572662307>::ScalarDeletingDestructor(uint32_t dwFlags) {
     this->UnlinkAll();
-    TSLink<::MappingEntryNode>* nHead = this->m_terminator.m_prevlink;
-    TSLink<::MappingEntryNode>* pTVar1 = &this->m_terminator;
-    if (nHead) {
-      TSLink<::MappingEntryNode>** pListHead;
-      pListHead = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pTVar1, -1);
-      *pListHead = nHead;
-      pTVar1->m_prevlink->m_next = pTVar1->m_next;
-      pTVar1->m_prevlink = 0;
-      pTVar1->m_next = 0;
+    TSLink<::MappingEntryNode>* pLink = &this->m_terminator;
+    TSLink<::MappingEntryNode>* pPrev = pLink->m_prevlink;
+    if (pPrev) {
+      *(TSLink<::MappingEntryNode>**)D2_StormNextLink(pLink, -1) = pPrev;
+      pLink->m_prevlink->m_next = pLink->m_next;
+      pLink->m_prevlink = 0;
+      pLink->m_next = 0;
     }
+
     if (dwFlags & 1 && this) {
       Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     }

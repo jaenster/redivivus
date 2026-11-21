@@ -368,12 +368,16 @@ static void CLIENT_SendIdlePlayerMessage(D2UnitStrc * pUnit) {
     }
 
     eD2PlayerAnimMode eAnimMode = pUnit->eAnimMode.ePlayerMode;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!(pRoom && (eAnimMode == eD2PlayerAnimMode_ns::Neutral || eAnimMode == TownNeutral))) {
+    if (!D2Common::Units::UNITS_GetRoom(pUnit)) {
       return;
     }
 
-    Player::PlayerMessage(7, pUnit, nullptr, 1);
+    switch (eAnimMode) {
+      case eD2PlayerAnimMode_ns::Neutral:
+      case TownNeutral:
+        Player::PlayerMessage(7, pUnit, nullptr, 1);
+        break;
+    }
 }
 
 static void __stdcall CUNIT_IterateHashTableWithCallback(D2UnitStrc * * UnitHashTable, fnUnitIterCallback pfnCallback) {

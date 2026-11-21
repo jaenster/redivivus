@@ -76,70 +76,40 @@ namespace D2Common::Drlg::DrlgAnim {
 
 // Scans every cell in the room's grid, looks up the tile in all tile projects, and for any tile whose library flags include bit 0x100 (animated) adds (matchCount-1) to the floor, wall, or roof animated tile counters in pRoomTiles and sets the animated-room flag 0x8000000 on pRoomEx.
 void __fastcall DRLGROOMTILE_CountAnimTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pGrid, D2DrlgGridStrc * pOrientGrid, int32_t pUnused, int nKillEdgeX, int nKillEdgeY) {
-    uint32_t nGridFlags;
-    uint32_t nMatchCount;
-    uint32_t nTileLibFlags;
-    uint8_t nMainIndex;
-    uint32_t nSubIndex;
     D2TileLibraryEntryStrc* aTileResults[40];
     int nWidth = (uint32_t)!nKillEdgeX + pRoomEx->sCoords.WorldSize.x;
-    bool bFullHeight = !nKillEdgeY;
-    nKillEdgeY = 0;
-    int nCellY = (uint32_t)bFullHeight + pRoomEx->sCoords.WorldSize.y;
-    D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
-    int nHeight = nCellY;
-    D2DrlgGridStrc* pGridCtx = pGrid;
-    D2RoomExStrc* pRoomExCtx = pRoomEx;
-    if (nCellY <= 0) {
-      return;
-    }
-
-    do {
-      int nCellX;
-      nCellX = 0;
-      if (nWidth > 0) {
-        do {
-          nGridFlags = DrlgGrid::GetGridFlags(pGridCtx, nCellX, nKillEdgeY);
-          if (nGridFlags & 0x8000003) {
-            nCellY = pUnused;
-            if (pOrientGrid) {
-              nCellY = DrlgGrid::GetGridFlags(pOrientGrid, nCellX, nKillEdgeY);
-            }
-            if (nGridFlags) {
-              nMainIndex = (uint8_t)(nGridFlags >> 0x14) & 0x3f;
-              nSubIndex = nGridFlags >> 8;
-            } else {
-              nMainIndex = 0;
-              nSubIndex = 0;
-            }
-
-            nMatchCount = D2CMP::DUNGEON::Dungeon::TILEPROJECT_LookupTilesInAllProjects(pRoomExCtx->apTiles, nCellY, (uint32_t)nMainIndex, (uint8_t)nSubIndex, aTileResults, 0x28);
-            if (nMatchCount) {
-              nTileLibFlags = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount(aTileResults[0]);
-              if (nTileLibFlags & 0x100) {
-                nCellY = nMatchCount - 1;
-                if (nGridFlags & 2) {
-                  pTileGrid->sRoomTiles.nFloorTilesCount += nCellY;
-                } else {
-                  if (nGridFlags & 1) {
-                    pTileGrid->sRoomTiles.nWallTilesCount += nCellY;
-                  } else {
-                    pTileGrid->sRoomTiles.nRoofTilesCount += nCellY;
-                  }
-                }
-
-                pRoomExCtx->eRoomExFlags |= 0x8000000;
-              }
-            }
+    int nHeight = (uint32_t)!nKillEdgeY + pRoomEx->sCoords.WorldSize.y;
+    D2DrlgRoomTilesStrc* pRoomTiles = &pRoomEx->pRoomTiles->sRoomTiles;
+    for (int nY = 0; nY < nHeight; nY++) {
+      for (int nX = 0; nX < nWidth; nX++) {
+        uint32_t nGridFlags = DrlgGrid::GetGridFlags(pGrid, nX, nY);
+        if (nGridFlags & 0x8000003) {
+          int32_t nOrientation = pOrientGrid ? DrlgGrid::GetGridFlags(pOrientGrid, nX, nY) : pUnused;
+          uint8_t nMainIndex;
+          uint8_t nSubIndex;
+          if (nGridFlags) {
+            nMainIndex = (uint8_t)(nGridFlags >> 0x14) & 0x3f;
+            nSubIndex = (uint8_t)(nGridFlags >> 8);
+          } else {
+            nMainIndex = 0;
+            nSubIndex = 0;
           }
 
-          nCellX++;
-          nCellY = nHeight;
-        } while (nCellX < nWidth);
-      }
+          uint32_t nMatchCount = D2CMP::DUNGEON::Dungeon::TILEPROJECT_LookupTilesInAllProjects(pRoomEx->apTiles, nOrientation, nMainIndex, nSubIndex, aTileResults, 0x28);
+          if (nMatchCount && (D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount(aTileResults[0]) & 0x100)) {
+            if (nGridFlags & 2) {
+              pRoomTiles->nFloorTilesCount += nMatchCount - 1;
+            } else if (nGridFlags & 1) {
+              pRoomTiles->nWallTilesCount += nMatchCount - 1;
+            } else {
+              pRoomTiles->nRoofTilesCount += nMatchCount - 1;
+            }
 
-      nKillEdgeY++;
-    } while (nKillEdgeY < nCellY);
+            pRoomEx->eRoomExFlags |= 0x8000000;
+          }
+        }
+      }
+    }
 }
 
 static void AnimateTile(D2RoomExStrc * pRoomEx) {

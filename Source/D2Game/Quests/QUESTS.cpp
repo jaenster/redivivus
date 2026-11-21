@@ -1515,40 +1515,30 @@ static BOOL __stdcall INTRONPC_FillInPacketWithIntroNpcIds(D2UnitDataPlayerInter
 // @sourcefile .\QUESTS\QUESTS.CPP
 // @returns void: EAX at the epilogue is leftover from the last call, and all four call sites in IterateNpcIntroUnits (void) discard it. Found by KierTaylor on the Mac twin (Redivivus proposal #1215).
 void __fastcall INTRONPC_FillInPacketWithIntroNpcIdsInAct(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eAct nActNo) {
-    bool bNeedSend;
-    int* aNpcList;
     D2GSPacketSrv0x91 pD2GSPacketSrv0x91;
-    int32_t nListSize;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    BOOL bNeedToBeSent;
+    D2UnitDataPlayerInteractedNPCStrc* pInteractedNPCs = D2Common::Units::GetPlayerData(pUnit)->pInteractedNPCs[pGame->nDifficulty];
     switch (nActNo) {
       case ACT_I:
-        nListSize = 6;
-      aNpcList = NPCINTRO_ListAct1;
-      break;
+        bNeedToBeSent = INTRONPC_FillInPacketWithIntroNpcIds(pInteractedNPCs, NPCINTRO_ListAct1, 6, &pD2GSPacketSrv0x91);
+        break;
       case ACT_II:
-        nListSize = 11;
-      aNpcList = NPCINTRO_ListAct2;
-      break;
+        bNeedToBeSent = INTRONPC_FillInPacketWithIntroNpcIds(pInteractedNPCs, NPCINTRO_ListAct2, 11, &pD2GSPacketSrv0x91);
+        break;
       case ACT_III:
-        nListSize = 7;
-      aNpcList = NPCINTRO_ListAct3;
-      break;
-      default:
-        {
-          return;
-        }
+        bNeedToBeSent = INTRONPC_FillInPacketWithIntroNpcIds(pInteractedNPCs, NPCINTRO_ListAct3, 7, &pD2GSPacketSrv0x91);
+        break;
       case ACT_V:
-        nListSize = 7;
-      aNpcList = NPCINTRO_ListAct5;
+        bNeedToBeSent = INTRONPC_FillInPacketWithIntroNpcIds(pInteractedNPCs, NPCINTRO_ListAct5, 7, &pD2GSPacketSrv0x91);
+        break;
+      default:
+        return;
     }
 
-    BOOL bNeedToBeSent = INTRONPC_FillInPacketWithIntroNpcIds(pPlayerData->pInteractedNPCs[pGame->nDifficulty], aNpcList, nListSize, &pD2GSPacketSrv0x91);
     if (bNeedToBeSent) {
-      D2ClientStrc* pClient;
       pD2GSPacketSrv0x91.nPacketId = 0x91;
       pD2GSPacketSrv0x91.nAct = nActNo;
-      pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xab7);
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x91_WELCOME_BACK(pClient, &pD2GSPacketSrv0x91);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x91_WELCOME_BACK(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xab7), &pD2GSPacketSrv0x91);
     }
 }
 

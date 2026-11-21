@@ -855,13 +855,11 @@ void __fastcall SetHotkey(D2SaveHotKeyStrc * pSaveHotKey, uint32_t * pnSkillId, 
 
     *pnSkillId = pSaveHotKey->nSkillIdAndHand & 0xfff;
     *pnHand = (uint32_t)(pSaveHotKey->nSkillIdAndHand >> 0xf);
-    uint16_t nRawItemIndex = pSaveHotKey->nItemIndex;
-    *nItemIndex = (uint32_t)nRawItemIndex;
-    if (nRawItemIndex) {
-      return;
+    uint32_t nRawItemIndex = (uint16_t)pSaveHotKey->nItemIndex;
+    *nItemIndex = nRawItemIndex;
+    if (!nRawItemIndex) {
+      *nItemIndex = -1;
     }
-
-    *nItemIndex = -1;
 }
 
 void __fastcall PLAYERSAVE_LinkPlayerToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient) {

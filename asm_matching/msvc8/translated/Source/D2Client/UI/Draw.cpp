@@ -44,6 +44,14 @@
 #include "Source/D2Client/GAME/Game/Game.data.h"
 #include "Source/D2Client/UI/ui.data.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -732,35 +740,18 @@ void __fastcall CLIENT_AdjustMemoryBudget(D2PoolManagerStrc * pMemory, int32_t b
     dwAvailMemOverride = uVar1 - 0xb00000;
     uint32_t dwCelCacheSize;
     dwCelCacheSize = dwAvailMemOverride * 10 / 100;
-    if (dwCelCacheSize > 0x300000) {
-      if (dwCelCacheSize >= 0x500000) {
-        dwCelCacheSize = 0x500000;
-      }
-    } else {
-      dwCelCacheSize = 0x300000;
-    }
+    dwCelCacheSize = min(max(dwCelCacheSize, 0x300000), 0x500000); // steer-ok: windef.h min/max macros
 
     Sound::SoundHdr::SOUNDHDR_SetGlobal4(dwCelCacheSize);
-    int nRemainingBytes;
+    uint32_t nRemainingBytes;
     nRemainingBytes = dwAvailMemOverride - dwCelCacheSize;
     if (bInitSpriteCache) {
-      nRemainingBytes += -0x600000;
+      nRemainingBytes -= 0x600000;
       D2CMP::SRC::SpriteCache::GFX_InitLRUCache(pMemory, 0x600000);
     }
 
-    dwCelCacheSize = (nRemainingBytes - 0x200000U) / 3;
-    if (dwCelCacheSize > 0x1800000) {
-      if (dwCelCacheSize >= 0x4000000) {
-        dwCelCacheSize = 0x4000000;
-        goto init_caches;
-      }
-      if (dwCelCacheSize > 0x1800000) {
-        goto init_caches;
-      }
-    }
-
-    dwCelCacheSize = 0x1800000;
-    init_caches:
+    nRemainingBytes -= 0x200000;
+    dwCelCacheSize = min(max(nRemainingBytes / 3, 0x1800000), 0x4000000); // steer-ok: windef.h min/max macros
     D2CMP::SRC::SpriteCache::GFX_InitCelDataCache(pMemory, dwCelCacheSize, 0x7d000, dwAvailMemOverride);
     Engine::Gfx::GFX_InitCofSystem(0x200000);
 }

@@ -1038,14 +1038,15 @@ int32_t __fastcall GetCreateTime(D2ClientStrc * pClient) {
 }
 
 BOOL __fastcall IsUnitNearClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
-    uint32_t nClientIdx;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
       return 0;
     }
 
-    for (nClientIdx = 0; nClientIdx < (uint32_t)pRoom->nClientsCount; nClientIdx++) {
-      if (pRoom->pClients[nClientIdx] == pClient) {
+    uint32_t nClientsCount = pRoom->nClientsCount;
+    D2ClientStrc** ppClients = pRoom->pClients;
+    for (uint32_t nClientIdx = 0; nClientIdx < nClientsCount; nClientIdx++) {
+      if (ppClients[nClientIdx] == pClient) {
         return 1;
       }
     }
@@ -2383,23 +2384,22 @@ static void __stdcall CLIENT_SendRoomUnitUpdates(D2RoomStrc * pRoom, D2ClientStr
 }
 
 void __fastcall UnusedUpdateFunctionForUnits(D2RoomStrc * pRoom, D2ClientStrc * pClient) {
-    uint32_t nRoomIdx;
     D2RoomStrc** ppAdjacentRooms;
-    uint32_t nRoomCount;
-    D2UnitStrc* pUnit;
+    int nRoomCount;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x75);
       exit(-1);
     }
 
-    D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nRoomCount);
-    for (nRoomIdx = 0; nRoomIdx < nRoomCount; nRoomIdx++) {
-      if (!ppAdjacentRooms[nRoomIdx]) {
+    D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, &nRoomCount);
+    for (uint32_t nRoomIdx = 0; nRoomIdx < (uint32_t)nRoomCount; nRoomIdx++) {
+      D2RoomStrc* pAdjacentRoom = ppAdjacentRooms[nRoomIdx];
+      if (!pAdjacentRoom) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x62);
         exit(-1);
       }
 
-      for (pUnit = ppAdjacentRooms[nRoomIdx]->pUnitList; pUnit; pUnit = pUnit->pRoomNext) {
+      for (D2UnitStrc* pUnit = pAdjacentRoom->pUnitList; pUnit; pUnit = pUnit->pRoomNext) {
         UNIT::SUnit::UNITS_SendUnitUpdateToClient(pUnit, pClient);
       }
     }

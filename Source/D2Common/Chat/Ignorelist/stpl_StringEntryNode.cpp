@@ -45,16 +45,15 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::Destructor() {
 
 template<> TSExplicitList<::StringEntryNode, -572662307>* TSExplicitList<StringEntryNode, -572662307>::ScalarDeletingDestructor(uint32_t dwFlags) {
     this->UnlinkAll();
-    TSLink<::StringEntryNode>* nHeadEntry = this->m_terminator.m_prevlink;
-    TSLink<::StringEntryNode>* pTVar1 = &this->m_terminator;
-    if (nHeadEntry) {
-      TSLink<::StringEntryNode>** pPrevLink;
-      pPrevLink = (TSLink<::StringEntryNode>**)D2_StormNextLink(pTVar1, -1);
-      *pPrevLink = nHeadEntry;
-      pTVar1->m_prevlink->m_next = pTVar1->m_next;
-      pTVar1->m_prevlink = 0;
-      pTVar1->m_next = 0;
+    TSLink<::StringEntryNode>* pLink = &this->m_terminator;
+    TSLink<::StringEntryNode>* pPrev = pLink->m_prevlink;
+    if (pPrev) {
+      *(TSLink<::StringEntryNode>**)D2_StormNextLink(pLink, -1) = pPrev;
+      pLink->m_prevlink->m_next = pLink->m_next;
+      pLink->m_prevlink = 0;
+      pLink->m_next = 0;
     }
+
     if (dwFlags & 1 && this) {
       Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     }

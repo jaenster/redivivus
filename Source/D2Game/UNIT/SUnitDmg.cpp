@@ -140,11 +140,7 @@ static int32_t __stdcall DAMAGE_ApplyManaToUnit(int32_t nManaAmount, D2UnitStrc 
 
     int32_t nMaxMana = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
     int nCurMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
-    int nValue = nCurMana + nManaAmount;
-    if (nCurMana + nManaAmount >= nMaxMana) {
-      nValue = nMaxMana;
-    }
-
+    int nValue = nCurMana + nManaAmount < nMaxMana ? nCurMana + nManaAmount : nMaxMana;
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, nValue, 0);
     if (nValue != nMaxMana) {
       return nManaAmount;
@@ -1078,35 +1074,28 @@ static int32_t DAMAGE_CalculateResistance(D2ResistTableEntry * pEntry, D2DamageC
 // Reduces nDamage via the defender's percent-absorb and flat-absorb stats (from pEntry). Percent absorb is capped at 40%; the absorbed amount is added to pCtx->pDamage->dwAbsLife (restores life). Flat absorb is applied after percent. Returns the remaining damage after both absorbs.
 static int32_t DAMAGE_AbsorbDamageByPercent(D2DamageContext * pCtx, D2ResistTableEntry * pEntry, int32_t nDamage) {
     int nFlatAbsorbAmt;
+    int32_t nAbsorbPct;
     if (pEntry->eAbsorbPctStat == ~UNITSTAT_strength) {
       return nDamage;
     }
 
-    int32_t nAbsorbPct;
     nAbsorbPct = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCtx->pDefender, pEntry->eAbsorbPctStat, 0);
     if (nAbsorbPct >= 0x28) {
       nAbsorbPct = 0x28;
-    } else {
-      if (nAbsorbPct <= 0) {
-        goto apply_flat_absorb;
-      }
+    }
+    if (nAbsorbPct > 0) {
+      nAbsorbPct = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDamage, nAbsorbPct, 100);
+      pCtx->pDamage->dwAbsLife += nAbsorbPct;
+      nDamage -= nAbsorbPct;
     }
 
-    nAbsorbPct = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDamage, nAbsorbPct, 100);
-    int* pAbsLifePool;
-    pAbsLifePool = &pCtx->pDamage->dwAbsLife;
-    *pAbsLifePool += nAbsorbPct;
-    nDamage -= nAbsorbPct;
-    apply_flat_absorb:
-    nFlatAbsorbAmt = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCtx->pDefender, pEntry->eAbsorbFlatStat, 0);
-    nFlatAbsorbAmt *= 0x100;
+    nFlatAbsorbAmt = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCtx->pDefender, pEntry->eAbsorbFlatStat, 0) << 8;
     if (nFlatAbsorbAmt > 0) {
       if (nFlatAbsorbAmt >= nDamage) {
         nFlatAbsorbAmt = nDamage;
       }
 
-      pAbsLifePool = &pCtx->pDamage->dwAbsLife;
-      *pAbsLifePool += nFlatAbsorbAmt;
+      pCtx->pDamage->dwAbsLife += nFlatAbsorbAmt;
       nDamage -= nFlatAbsorbAmt;
     }
 
@@ -1827,16 +1816,15 @@ void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 // @sourcefile .\UNIT\SUnitDmg.cpp
 void __fastcall FreeCombat(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2CombatEntryStrc* pNextCombatEntry;
-    if (!(D2CombatEntryStrc*)pUnit->pCombat) {
+    D2CombatEntryStrc* pPrevCombatEntry;
+    D2CombatEntryStrc* pCombatEntry = (D2CombatEntryStrc*)pUnit->pCombat;
+    if (!pCombatEntry) {
       return;
     }
 
-    D2CombatEntryStrc* pPrevCombatEntry = 0;
-    D2CombatEntryStrc* pCombatEntry = (D2CombatEntryStrc*)pUnit->pCombat;
-    do {
-      D2CombatEntryStrc* pCurCombatEntry;
+    pPrevCombatEntry = 0;
+    while (pCombatEntry) {
       pNextCombatEntry = pCombatEntry->pNext;
-      pCurCombatEntry = pCombatEntry;
       if (pCombatEntry->eAttackerType == pUnit->eUnitType && pCombatEntry->nAttackerGUID == pUnit->nUnitGUID) {
         if (!pPrevCombatEntry) {
           pUnit->pCombat = (uint8_t*)pNextCombatEntry;
@@ -1845,12 +1833,12 @@ void __fastcall FreeCombat(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
         }
 
         D2_FREE_POOL_AT(pGame->pMemoryPool, pCombatEntry, ".\\UNIT\\SUnitDmg.cpp", 0x769);
-        pCurCombatEntry = pPrevCombatEntry;
+      } else {
+        pPrevCombatEntry = pCombatEntry;
       }
 
       pCombatEntry = pNextCombatEntry;
-      pPrevCombatEntry = pCurCombatEntry;
-    } while (pNextCombatEntry);
+    }
 }
 
 // @sourcefile .\UNIT\SUnitDmg.cpp
@@ -3646,6 +3634,13 @@ void __fastcall DAMAGE_SetUnitToLevel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
     }
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 // Server-side melee hit resolution between attacker pUnit and defender pUnit2. Validates both are player/monster, can attack each other, and are within melee range (range widened by nParam2 + the attacker's melee range; monster attackers get +2). Sets a "moving" flag if a player defender is running, then rolls the attack (DAMAGE_RollAttackHit using nParam1) and checks block/evasion (DAMAGE_CheckBlockAndEvasion), folding the resulting STATE_* flags into a packed uint16 result (hit / block / dodge / evade / parry bits, plus an uninterruptable-stun bit). Returns the packed hit-result word (0 = out of range / cannot attack).
 // Registers: pGame in ECX and pUnit in EDX (__fastcall); EAX is not an input.
 uint16_t __fastcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nToHitBonusExtra, int32_t nExtraRange) {
@@ -3687,7 +3682,7 @@ uint16_t __fastcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * p
     }
 
     int32_t nRangeCheck;
-    nRangeCheck = pUnit->eUnitType == UNIT_MONSTER ? 0x3U : 0x1U;
+    nRangeCheck = GetTypeInline(pUnit) == UNIT_MONSTER ? 0x3U : 0x1U;
     if (nExtraRange) {
       nMeleeRange = D2Common::Units::GetMeleeRange(pUnit);
       nRangeCheck -= nMeleeRange + nExtraRange;
@@ -3697,12 +3692,11 @@ uint16_t __fastcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * p
     if (!_bInMeleeRange) {
       return 0;
     }
-    if (!wHitFlags) {
-      _bInMeleeRange = DAMAGE_RollAttackHit(pUnit, pUnit2, nToHitBonusExtra, 0);
-      if (_bInMeleeRange) {
-        wHitFlags = 1;
+    if (!(wHitFlags & 1)) {
+      if (DAMAGE_RollAttackHit(pUnit, pUnit2, nToHitBonusExtra, 0)) {
+        wHitFlags |= 1;
       }
-      if (!wHitFlags) {
+      if (!(wHitFlags & 1)) {
         goto finalize_hit_flags;
       }
     }

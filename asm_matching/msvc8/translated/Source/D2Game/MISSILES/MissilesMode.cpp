@@ -1577,7 +1577,6 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaDamageWithSpawnPattern(::SGAMEDATA * pGa
 
 // Initialises a missile unit's travel range and targeting after launch. Computes total frames from missiles.txt Range + (level-1)*LevRange and sets both TotalFrames and CurrentFrame (countdown). If a live target unit is supplied, links the dynamic path to it (target-track mode, targetX=5) and calls GetCollisionDistance; otherwise resolves the fixed destination coords from the missile's embedded XY offset and uses GetDistanceToXY (point-target mode, targetX=6). If the resulting range is under 25 tiles, immediately runs PATH_CalculatePath.
 static void __stdcall MISSILE_SetupTargetAndRange(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    int nPosY;
     eD2UnitType eUnitType;
     int nRange;
     D2MissilesTxt* pMissileTxt = pUnit2 && (nRange = pUnit2->nClassId) >= 0 && nRange < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nRange : nullptr;
@@ -1592,8 +1591,7 @@ static void __stdcall MISSILE_SetupTargetAndRange(D2UnitStrc * pUnit, D2UnitStrc
       }
     }
 
-    int32_t nSkillLvl = D2Common::Units::Missile::GetLevel(pUnit2);
-    nRange = (nSkillLvl - 1) * (int)pMissileTxt->LevRange + (int)pMissileTxt->Range;
+    nRange = (int)pMissileTxt->Range + (D2Common::Units::Missile::GetLevel(pUnit2) - 1) * (int)pMissileTxt->LevRange;
     D2Common::Units::Missile::SetTotalFrames(pUnit2, nRange);
     D2Common::Units::Missile::SetCurrentFrame(pUnit2, nRange);
     D2DynamicPathStrc* pDynamicPath = pUnit2->pPath.pDynamicPath;
@@ -1602,30 +1600,33 @@ static void __stdcall MISSILE_SetupTargetAndRange(D2UnitStrc * pUnit, D2UnitStrc
       D2Common::Units::Missile::SetTargetX(pUnit2, 5);
       nRange = D2Common::Collision::GetCollisionDistance(pUnit2, pUnit);
     } else {
-      nSkillLvl = D2Common::Units::Missile::GetTargetY(pUnit2);
+      int nPos;
+      int nTargetX;
+      uint32_t nTargetOffset = D2Common::Units::Missile::GetTargetY(pUnit2);
+      uint32_t nOffsetY = nTargetOffset >> 0x10; // steer-ok: the original shifts the target offset right after GetTargetY, before the X position fetch
       eUnitType = pUnit2->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nRange = pUnit2->pPath.pStaticPath->nPosX;
+        nPos = pUnit2->pPath.pStaticPath->nPosX;
       } else if (pUnit2->pPath.pDynamicPath) {
-        nRange = D2Common::PATH::DynamicPath::GetXPos(pUnit2->pPath.pDynamicPath);
+        nPos = D2Common::PATH::DynamicPath::GetXPos(pUnit2->pPath.pDynamicPath);
       } else {
-        nRange = 0;
+        nPos = 0;
       }
 
-      nRange = (short int)nSkillLvl + nRange;
+      nTargetX = (short int)nTargetOffset + nPos;
       eUnitType = pUnit2->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nPosY = pUnit2->pPath.pStaticPath->nPosY;
+        nPos = pUnit2->pPath.pStaticPath->nPosY;
       } else if (pUnit2->pPath.pDynamicPath) {
-        nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit2->pPath.pDynamicPath);
+        nPos = D2Common::PATH::DynamicPath::GetYPos(pUnit2->pPath.pDynamicPath);
       } else {
-        nPosY = 0;
+        nPos = 0;
       }
 
-      nPosY = (short int)((uint32_t)nSkillLvl >> 0x10) + nPosY;
-      D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nRange, (int16_t)nPosY);
+      int nTargetY = (short int)nOffsetY + nPos;
+      D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nTargetX, (int16_t)nTargetY);
       D2Common::Units::Missile::SetTargetX(pUnit2, 6);
-      nRange = D2Common::Collision::GetDistanceToXY(pUnit2, nRange, nPosY);
+      nRange = D2Common::Collision::GetDistanceToXY(pUnit2, nTargetX, nTargetY);
     }
     if (nRange >= 0x19) {
       return;
@@ -3869,12 +3870,10 @@ void __fastcall Missiles_SrvDmgFunc_SetStunLengthFromSkillParam(::SGAMEDATA * pG
     if (nClassId <= 0) {
       D2SkillsTxt* pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
       if (!pSkillsTxt) {
-        pDamage->dwStunLen = 0;
-        pDamage->dwHitClass = 0x60;
-        return;
+        nClassId = 0;
+      } else {
+        nClassId = pSkillsTxt->Param[1];
       }
-
-      nClassId = pSkillsTxt->Param[1];
     }
 
     pDamage->dwStunLen = nClassId;

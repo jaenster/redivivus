@@ -113,25 +113,15 @@ static void INVENTORY_UnlinkItemFromList(D2UnitStrc * * pItemListHead, D2UnitStr
 }
 
 static BOOL __stdcall INVENTORY_IsGridRectEmpty(int32_t nStartRow, uint8_t byWidth, int32_t nStartCol, uint8_t byHeight, D2InventoryGridInfoStrc * pGridInfo) {
-    int32_t nColIter;
-    int nRowEndY = (uint32_t)byHeight + nStartRow;
-    if (nStartRow >= nRowEndY) {
-      return 1;
-    }
-
-    D2UnitStrc** pRowCells = pGridInfo->pGridCells + (uint32_t)pGridInfo->bWidth * nStartRow;
-    int nColIdx = nStartCol;
-    do {
-      for (; nColIdx < (int)((uint32_t)byWidth + nStartCol); nColIdx++) {
-        if (pRowCells[nColIdx]) {
+    D2UnitStrc** pRowCells;
+    for (int nRow = nStartRow; nRow < nStartRow + byHeight; nRow++) {
+      pRowCells = &pGridInfo->pGridCells[nRow * pGridInfo->bWidth];
+      for (int nCol = nStartCol; nCol < nStartCol + byWidth; nCol++) {
+        if (pRowCells[nCol]) {
           return 0;
         }
       }
-
-      nStartRow++;
-      pRowCells += pGridInfo->bWidth;
-      nColIdx = nStartCol;
-    } while (nStartRow < nRowEndY);
+    }
 
     return 1;
 }
@@ -319,7 +309,6 @@ D2InventoryStrc * __stdcall STRUCT_CreatePlayerInventory(D2PoolManagerStrc * pMe
 // Destroys a D2InventoryStrc and frees all associated memory. Removes the cursor item and every item in the linked list via INVENTORY_RemoveItemFromInventory, frees each grid cell array, the grids array itself, the pending-update list, and the corpse-delete list, then frees the inventory struct itself. Clears the back-pointer on the owner unit. Guards on nSignatureMagic == 0x1020304.
 // @sourcefile .\INVENTORY\Inventory.cpp
 void __stdcall STRUCT_FreeInventory(D2InventoryStrc * pInventory) {
-    D2InventoryGridStrc* pInventoryGrid;
     D2CorpseStrc* pNextCorpse;
     D2InventoryToBeUpdatedStrc* pNextUpdate;
     if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
@@ -335,19 +324,11 @@ void __stdcall STRUCT_FreeInventory(D2InventoryStrc * pInventory) {
       pUnit = pInventory->pFirstItem;
     }
 
-    int nGridIdx = 0;
-    if (pInventory->nGridCount > 0) {
-      int nGridOffset;
-      nGridOffset = 0;
-      do {
-        pInventoryGrid = *(D2InventoryGridStrc**)&pInventory->pGrids[nGridOffset].pGridCells;
-        if (pInventoryGrid) {
-          D2_FREE_POOL_AT(pInventory->pMemory, pInventoryGrid, ".\\INVENTORY\\Inventory.cpp", 0x261);
-        }
-
-        nGridIdx++;
-        nGridOffset++;
-      } while (nGridIdx < pInventory->nGridCount);
+    for (int i = 0; i < pInventory->nGridCount; i++) {
+      D2InventoryGridInfoStrc* pGrid = &pInventory->pGrids[i];
+      if (pGrid->pGridCells) {
+        D2_FREE_POOL_AT(pInventory->pMemory, pGrid->pGridCells, ".\\INVENTORY\\Inventory.cpp", 0x261);
+      }
     }
     if (pInventory->pGrids) {
       D2_FREE_POOL_AT(pInventory->pMemory, pInventory->pGrids, ".\\INVENTORY\\Inventory.cpp", 0x267);
@@ -2223,17 +2204,20 @@ BOOL __stdcall INVENTORY_CheckHasArmorEquipped(D2InventoryStrc * pInventory) {
 }
 
 uint32_t __stdcall INVENTORY_CanMoveEquippedToPage(D2InventoryStrc * pInventory, D2UnitStrc * pPlayer, uint32_t nBodyLoc, int32_t ePage) {
-    uint32_t nSlot = nBodyLoc;
-    D2InventoryStrc* pInventoryCopy = pInventory;
-    if (!(pInventory && pInventory->nSignatureMagic == 0x1020304 && nBodyLoc <= 0xc)) {
+    D2InventoryGridInfoStrc* pEquippedGrid;
+    D2UnitStrc* pItem;
+    int nX;
+    int nY;
+    if (!pInventory || pInventory->nSignatureMagic != 0x1020304 || nBodyLoc > 0xc) {
       return 0;
     }
 
-    D2InventoryGridInfoStrc* pEquippedGrid = ReinitializeInventoryGrid(0, &gsInventoryBodyLocGridSize, pInventory);
-    if (pEquippedGrid && pEquippedGrid->pGridCells[nSlot] && pPlayer) {
-      int bCanFitOnPage;
-      bCanFitOnPage = INVENTORY_FindItemGridPosition(pInventoryCopy, pEquippedGrid->pGridCells[nSlot], ePage, (int*)&nBodyLoc, (int*)&pInventory, 0);
-      return (uint32_t)(bCanFitOnPage != 0);
+    pEquippedGrid = ReinitializeInventoryGrid(0, &gsInventoryBodyLocGridSize, pInventory);
+    if (pEquippedGrid) {
+      pItem = pEquippedGrid->pGridCells[nBodyLoc];
+      if (pItem && pPlayer) {
+        return INVENTORY_FindItemGridPosition(pInventory, pItem, ePage, &nX, &nY, 0) != 0;
+      }
     }
 
     return 0;

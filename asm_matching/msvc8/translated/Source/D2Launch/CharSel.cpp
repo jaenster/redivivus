@@ -2171,58 +2171,45 @@ void __stdcall CHARSEL_ParseRealmCharList(char * szRealmName, char * szText, int
 
 BOOL __stdcall CHARSEL_OnPressPumpRealmCharListLoad(D2ControlMsg * pControlMsg) {
     char* szText;
-    uint32_t nMcpThreadStatus;
-    int nSendResult;
-    int32_t nStatusCode;
-    bool bShowStatus;
     switch (gnCharSelBNetLoadState) {
       case 1:
-        {
+        if (gnCharSelSelectedIndex) {
+          D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLineColor(gpWinTextBoxRealmSelect, -1, 4);
+        }
+
+        CHARSEL_SelectRealmInDropdown(gszPendingRealmName);
+        MainMenus::MAINMENU_ConnectToRealm((uint8_t*)gszPendingRealmName, 1);
+        gnCharSelBNetLoadState = 2;
+        gbCharSelScreenWaitTimeout = GetTickCount();
+        break;
+      case 2:
+        CHARSEL_ShowWaitTimeout();
+        switch (MainMenus::MAINMENU_PollMCPThreadStatus()) {
+          case 0:
+            D2MCPClient::McpConnect::CopyCharListToGlobal(nullptr, 0);
+            gnCharSelBNetLoadState = 3;
+            if (!D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x19_CharList2()) {
+              CHARSEL_SetStatusMessage(D2MCPClient::McpConnect::GetD2GSJoinResult());
+            }
+            break;
+          case 2:
+            CHARSEL_SetStatusMessage(D2MCPClient::McpConnect::GetD2GSJoinResult());
+            break;
+        }
+        break;
+      case 3:
+        CHARSEL_ShowWaitTimeout();
+        D2MCPClient::McpConnect::NET_MCP_CLIENT_ReadAndParsePacket();
+        szText = (char*)D2MCPClient::McpConnect::MCPCONNECT_GetCharListPacket();
+        if (szText) {
+          gnCharSelBNetLoadState = 0;
           if (gnCharSelSelectedIndex) {
             D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLineColor(gpWinTextBoxRealmSelect, -1, 4);
           }
 
-          CHARSEL_SelectRealmInDropdown(gszPendingRealmName);
-          MainMenus::MAINMENU_ConnectToRealm((uint8_t*)gszPendingRealmName, 1);
-          gnCharSelBNetLoadState = 2;
-          gbCharSelScreenWaitTimeout = GetTickCount();
-          return 1;
+          CHARSEL_ParseRealmCharList(gszPendingRealmName, szText, 1);
         }
-      case 2:
-        {
-          CHARSEL_ShowWaitTimeout();
-          nMcpThreadStatus = MainMenus::MAINMENU_PollMCPThreadStatus();
-          if (nMcpThreadStatus) {
-            bShowStatus = nMcpThreadStatus == 2;
-          } else {
-            D2MCPClient::McpConnect::CopyCharListToGlobal(nullptr, 0);
-            gnCharSelBNetLoadState = 3;
-            nSendResult = D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x19_CharList2();
-            bShowStatus = !nSendResult;
-          }
-          if (bShowStatus) {
-            nStatusCode = D2MCPClient::McpConnect::GetD2GSJoinResult();
-            CHARSEL_SetStatusMessage(nStatusCode);
-          }
-
-          break;
-        }
-      case 3:
-        {
-          CHARSEL_ShowWaitTimeout();
-          D2MCPClient::McpConnect::NET_MCP_CLIENT_ReadAndParsePacket();
-          szText = (char*)D2MCPClient::McpConnect::MCPCONNECT_GetCharListPacket();
-          if (szText) {
-            gnCharSelBNetLoadState = 0;
-            if (gnCharSelSelectedIndex) {
-              D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLineColor(gpWinTextBoxRealmSelect, -1, 4);
-            }
-
-            CHARSEL_ParseRealmCharList(gszPendingRealmName, szText, 1);
-          }
-
-          return 1;
-        }
+        break;
     }
 
     return 1;

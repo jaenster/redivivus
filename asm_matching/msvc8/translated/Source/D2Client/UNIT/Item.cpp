@@ -1329,22 +1329,16 @@ void __fastcall ITEM_RemoveClientSide(D2UnitStrc * pUnit) {
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
 BOOL __fastcall PlayerIsUnInterruptable(D2UnitStrc * pUnit) {
-    D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByFlags(pUnit, 2);
-    if (pStatList) {
-      return 1;
+    if (D2Common::Stats::StatsEx::GetStatsByFlags(pUnit, 2)) {
+      return TRUE;
     }
 
-    D2UnitStrc* pPlayerUnit_lcl = Player::GetPlayerUnit_UI();
-    if (!pPlayerUnit_lcl) {
-      return 0;
+    D2UnitStrc* pPlayerUnit = Player::GetPlayerUnit_UI();
+    if (pPlayerUnit && D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayerUnit, STATE_uninterruptable)) {
+      return TRUE;
     }
 
-    BOOL eStateResult = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayerUnit_lcl, STATE_uninterruptable);
-    if (!eStateResult) {
-      return 0;
-    }
-
-    return 1;
+    return FALSE;
 }
 
 // Handles an item break/repair state-change packet (pPacket carries item GUID at +6, owner unit type/id at +1/+2, action code at +10, broken flag at +0xe). Action 0x100 = item broke: sets ITEMFLAG_BROKEN, removes the item from the body and recalculates equipped stats, then iterates the owner's body slots disabling items whose equip requirements no longer hold and re-enabling charms; loops (up to 100 passes) to settle dependent gear, restores skill selections, and reloads the unit's GFX/COF. Action 0x200 = item repaired: clears ITEMFLAG_BROKEN, re-equips it on the body, and recalculates all equipped items. No-op if item or owner unit can't be found.

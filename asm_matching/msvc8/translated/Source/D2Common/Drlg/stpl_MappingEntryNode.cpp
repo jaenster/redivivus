@@ -108,11 +108,8 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::LinkNode(::Mapping
 }
 
 template<> ::MappingEntryNode * TSExplicitList<MappingEntryNode, -572662307>::RawNext(::MappingEntryNode * pNode) {
-    if (pNode) {
-      return *(::MappingEntryNode**)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset);
-    }
-
-    return (::MappingEntryNode*)this->m_terminator.m_next;
+    TSLink<::MappingEntryNode>* pLink = pNode ? (TSLink<::MappingEntryNode>*)((intptr_t)pNode + this->m_linkoffset) : &this->m_terminator;
+    return (::MappingEntryNode*)pLink->m_next;
 }
 
 template<> void TSExplicitList<MappingEntryNode, -572662307>::UnlinkNode(::MappingEntryNode * pNode) {

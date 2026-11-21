@@ -2061,11 +2061,12 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL(D2GSPacketSrv0xA5 * 
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0xA4_PRELOAD_MONSTER(char * pBytes) {
-    if ((int)(uint32_t)*(uint16_t*)(pBytes + 1) >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+    uint16_t nMonStatsId = *(uint16_t*)(pBytes + 1);
+    if (nMonStatsId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       return;
     }
 
-    Engine::Gfx::GFX_PrecacheMonsterAllModes((uint32_t)*(uint16_t*)(pBytes + 1), 0);
+    Engine::Gfx::GFX_PrecacheMonsterAllModes(nMonStatsId, 0);
 }
 
 // Server→client handler for stat-set/add opcodes 0x19–0x1F targeting the local player. Opcodes 0x19–0x1B add gold or experience (delta from bytes 1–4, varying width); 0x1C sets experience outright; 0x1D–0x1F set an arbitrary stat (id=byte 1, value bytes 2+, byte/word/dword). Calls STATLIST_SetUnitStat then SCMD_HandleStatChangeEffect to apply side-effects (level-up UI, sound, etc.).
@@ -2321,17 +2322,16 @@ void __fastcall NET_D2GS_CLIENT_RecvSkillTabBonusDelta(char * pBytes) {
 
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall NET_D2GS_CLIENT_Incoming0x94_SETALLSKILLS(char * pBytes) {
-    uint32_t nRemaining;
+    int32_t nUnitGUID = *(int32_t*)(pBytes + 2); // steer-ok: the asm reads the packet GUID before the count byte
     uint8_t nSkillCount = pBytes[1];
     D2GSPacketSrv0x94SkillStrc* pSkillEntry = (D2GSPacketSrv0x94SkillStrc*)(pBytes + 6);
-    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), UNIT_PLAYER);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nUnitGUID, UNIT_PLAYER);
     if (!pUnit) {
       return;
     }
 
-    for (nRemaining = (uint32_t)nSkillCount; nRemaining; nRemaining--) {
-      D2Common::Skills::AddSkill(pUnit, (eD2Skills)pSkillEntry->wSkillId, (uint32_t)pSkillEntry->nSkillLevel, 0, ".\\GAME\\SCmd.cpp", 0xab7);
-      pSkillEntry++;
+    for (int i = 0; i < nSkillCount; i++) {
+      D2Common::Skills::AddSkill(pUnit, (eD2Skills)pSkillEntry[i].wSkillId, (uint32_t)pSkillEntry[i].nSkillLevel, 0, ".\\GAME\\SCmd.cpp", 0xab7);
     }
 }
 
@@ -2876,12 +2876,14 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x7E(D2GSPacketSrv0x7E * pBytes) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x7F(D2GSPacketSrv0x7F * pBytes) {
+    int nUnitGUID = pBytes->nUnitGUID;
+    uint16_t nUnitLife = pBytes->nUnitLife;
+    uint16_t nAreaId = pBytes->nAreaID;
     if (pBytes->nUnitType) {
-      Roster::SetRosterHpAndArea(pBytes->nUnitGUID, (uint32_t)pBytes->nUnitLife, pBytes->nAreaID);
-      return;
+      Roster::SetRosterHpAndArea(nUnitGUID, nUnitLife, nAreaId);
+    } else {
+      RosterPets::UpdateLifeAndArea(nUnitGUID, nUnitLife, nAreaId);
     }
-
-    RosterPets::UpdateLifeAndArea(pBytes->nUnitGUID, (uint32_t)pBytes->nUnitLife, pBytes->nAreaID);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x90_PARTYLOCUPDATE(D2GSPacketSrv0x90 * pBytes) {

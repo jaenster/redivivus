@@ -2797,9 +2797,9 @@ int32_t __fastcall SetDamageOnEvent(D2UnitStrc * pUnit, D2DamageStrc * pEvent, e
     int32_t nSynergy = D2Common::Skills::SKILLS_GetElementalLength(pUnit, eSkill, nSkillLvl, 1);
     int32_t nMinDamage = D2Common::Skills::SERVER_MinDamage(pUnit, eSkill, nSkillLvl, 1);
     int32_t nMaxDamage = D2Common::Skills::SERVER_MaxDamage(pUnit, eSkill, nSkillLvl, 1);
-    uint32_t nRandDamage = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nMaxDamage - nMinDamage);
-    SERVER_AppendDamageToUnitEvent(pUnit, pEvent, (eSkillEType)pSkillsTxt->EType, nRandDamage + nMinDamage, nSynergy, nullptr, nullptr);
-    return nRandDamage + nMinDamage;
+    int32_t nDamage = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nMaxDamage - nMinDamage) + nMinDamage;
+    SERVER_AppendDamageToUnitEvent(pUnit, pEvent, (eSkillEType)pSkillsTxt->EType, nDamage, nSynergy, nullptr, nullptr);
+    return nDamage;
 }
 
 void __fastcall SKILLS_AddRandomSkillDamage(D2UnitStrc * pUnit, int32_t * pDamageAccum, eD2Skills eSkill, int32_t nSkillLevel) {
@@ -3055,20 +3055,16 @@ uint16_t __fastcall SKILLS_CalcToHitAndApply(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 uint16_t __fastcall SKILLS_CalcMissileToHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit2, D2UnitStrc * pUnit, uint32_t dwResultFlags, int32_t nToHitBonusExtra, D2DamageStrc * pDamage, int32_t nExtraRange) {
-    uint16_t wResultFlags = (uint16_t)dwResultFlags;
     if (!(dwResultFlags & 1)) {
-      uint16_t uVar1;
-      uVar1 = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit2, pUnit, nToHitBonusExtra, nExtraRange);
-      pDamage->wResultFlags = uVar1;
-      if (uVar1 & 1) {
-        pDamage->wResultFlags = uVar1 | wResultFlags;
+      pDamage->wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit2, pUnit, nToHitBonusExtra, nExtraRange);
+      if (pDamage->wResultFlags & 1) {
+        pDamage->wResultFlags |= (uint16_t)dwResultFlags;
       }
-
-      return pDamage->wResultFlags;
+    } else {
+      pDamage->wResultFlags = (uint16_t)dwResultFlags;
     }
 
-    pDamage->wResultFlags = wResultFlags;
-    return wResultFlags;
+    return pDamage->wResultFlags;
 }
 
 // Creates and queues a SUnitEvent for an aura skill proc on pUnit. Validates nItemEventFuncId is within the ITEMSTATCOST_ITEMEVENTFUNC table (max 0x32) and the entry is non-null, then calls SUNITEVENT_Alloc with the resolved function pointer. Returns the new event, or null on failure.

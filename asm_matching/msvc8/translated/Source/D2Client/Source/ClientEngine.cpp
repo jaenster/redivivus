@@ -1493,13 +1493,13 @@ static void __stdcall CLIENT_SendMonsterMoveToRandomNearbyPosMessage(uint32_t nO
       nMonsterY = 0;
     }
 
-    uint32_t nOffsetY = nOffsetRange & 0xff;
+    uint32_t nOffsetX = nOffsetRange & 0xff;
+    uint32_t nOffsetY = nOffsetX;
     D2SeedStrc sSeed = D2_SEED_NEXT(pUnit->sSeed);
     pUnit->sSeed.nSeedHigh = sSeed.nSeedHigh;
     pUnit->sSeed.nSeedLow = sSeed.nSeedLow;
-    uint32_t nOffsetX = nOffsetY;
     if (sSeed.nSeedLow & 1) {
-      nOffsetX = -nOffsetY;
+      nOffsetX = -nOffsetX;
     }
 
     sSeed = D2_SEED_NEXT_VAL(sSeed);

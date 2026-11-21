@@ -465,8 +465,9 @@ D2RoomCoordListStrc * __fastcall DRLGLOGIC_GetCoordListFromSubtilePos(D2RoomExSt
       return pCoordList->pCoord;
     }
 
-    D2RoomCoordListStrc* pCoordEntry = (D2RoomCoordListStrc*)DrlgGrid::GetGridFlags(&pCoordList->sCoordIndexGrid, nX / 5 - pRoomEx->sCoords.WorldPosition.x, nY / 5 - pRoomEx->sCoords.WorldPosition.y);
-    return pCoordEntry;
+    int nGridX = nX / 5 - pRoomEx->sCoords.WorldPosition.x; // steer-ok: the original computes nX/5 - x before nY/5 - y, against right-to-left argument order
+    int nGridY = nY / 5 - pRoomEx->sCoords.WorldPosition.y;
+    return (D2RoomCoordListStrc*)DrlgGrid::GetGridFlags(&pCoordList->sCoordIndexGrid, nGridX, nGridY);
 }
 
 D2RoomCoordListStrc * __fastcall GetCoordList(D2RoomExStrc * pRoomEx) {

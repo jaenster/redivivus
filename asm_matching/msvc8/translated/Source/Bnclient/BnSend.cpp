@@ -526,7 +526,7 @@ int __fastcall NET_SID_CLIENT_Send_0x21_DisplayAd(char * szDestPath, void * pPoo
     return 1;
 }
 
-void __fastcall NET_SID_CLIENT_Send_0x1C_StartAdVex3(char * szGameName, char * szGamePassword, char * szGameDescription, int32_t nFlags) {
+BOOL __fastcall NET_SID_CLIENT_Send_0x1C_StartAdVex3(char * szGameName, char * szGamePassword, char * szGameDescription, int32_t nFlags) {
     SID_C2S_StartAdvex3 adwHeader;
     adwHeader.dwTimeSinceStart = 0;
     adwHeader.dwGameType = nFlags;
@@ -547,6 +547,7 @@ void __fastcall NET_SID_CLIENT_Send_0x1C_StartAdVex3(char * szGameName, char * s
     uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy(adwHeader.szStrings + (nGameNameLen + 1), szGamePassword, 0x100);
     uint32_t nDescLen = Storm::Source::SSTR::SStrCopy(adwHeader.szStrings + nPasswordLen + nGameNameLen + 2, szGameDescription, 0x100);
     NET_SID_CLIENT_Send(0x1c, (char*)&adwHeader, (size_t)(adwHeader.szStrings + nPasswordLen + nGameNameLen + 2 + (nDescLen + 0x15 - (intptr_t)adwHeader.szStrings)));
+    return 1;
 }
 
 DWORD __stdcall BNCLIENT_SendKeepAlive() {

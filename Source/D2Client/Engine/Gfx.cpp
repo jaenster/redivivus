@@ -1203,6 +1203,7 @@ void __fastcall GFX_FreeUnitGfxInfoList(D2UnitStrc * pUnit) {
 
 // @sourcefile .\ENGINE\Gfx.cpp
 void __fastcall GFX_FreeNonBaseGfxInfoEntries(D2UnitStrc * pUnit) {
+    D2GfxInfoUnkStrc* pCurrent;
     D2GfxInfoUnkStrc* pNext;
     D2GfxInfoUnkStrc* pPrev;
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
@@ -1211,31 +1212,21 @@ void __fastcall GFX_FreeNonBaseGfxInfoEntries(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    {
-      D2GfxInfoUnkStrc* pMemoryToFree;
-      pNext = pGfxInfo->pGfxInfoUnk;
-      pMemoryToFree = 0;
-      while (true) {
-        pPrev = pMemoryToFree;
-        pMemoryToFree = pNext;
-        if (!pMemoryToFree) {
-          break;
+    pCurrent = pGfxInfo->pGfxInfoUnk;
+    pPrev = 0;
+    while (pCurrent) {
+      pNext = pCurrent->pNext;
+      if (pCurrent->nAnimMode && pCurrent->nAnimMode != 0x11) {
+        D2_FREE_AT(pCurrent, ".\\ENGINE\\Gfx.cpp", 0x847);
+        if (!pPrev) {
+          pGfxInfo->pGfxInfoUnk = pNext;
+        } else {
+          pPrev->pNext = pNext;
         }
-
-        pNext = pMemoryToFree->pNext;
-        if (pMemoryToFree->nAnimMode && pMemoryToFree->nAnimMode != 0x11) {
-          D2_FREE_AT(pMemoryToFree, ".\\ENGINE\\Gfx.cpp", 0x847);
-          if (!pPrev) {
-            pGfxInfo->pGfxInfoUnk = pNext;
-            pMemoryToFree = pPrev;
-          } else {
-            pPrev->pNext = pNext;
-            pMemoryToFree = pPrev;
-          }
-        }
+      } else {
+        pPrev = pCurrent;
       }
-
-      return;
+      pCurrent = pNext;
     }
 }
 

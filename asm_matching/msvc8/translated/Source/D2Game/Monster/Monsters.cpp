@@ -606,9 +606,11 @@ uint32_t __fastcall MONSTER_CheckMonTypeHasFlag(D2UnitStrc * pUnit, int32_t nMon
 }
 
 int32_t __fastcall GetUmodConstant(int32_t nUmodId) {
-    D2MonUModTxt* pMonUmodTxt = nUmodId >= 0 && nUmodId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + nUmodId : nullptr;
-    if (pMonUmodTxt) {
-      return pMonUmodTxt->constants;
+    if (nUmodId >= 0 && nUmodId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize) {
+      D2MonUModTxt* pMonUmodTxt = &D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod[nUmodId];
+      if (pMonUmodTxt) {
+        return pMonUmodTxt->constants;
+      }
     }
 
     return 0;

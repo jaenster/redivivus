@@ -365,9 +365,7 @@ void __fastcall UNITS_InsertUnitIntoHashTable(D2UnitStrc * pUnit, ::SGAMEDATA * 
 
 // Removes pUnit from the game's per-type unit hash table (same slot logic as InsertUnitIntoHashTable). Walks the singly-linked bucket list to find the unit and unlinks it; no-ops silently if the unit is not found. Despite the name, contains no client-notification logic — it is purely a hash-table unlink.
 static void UNITS_RemoveUnitFromHashTable(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    D2UnitStrc* pCurUnit;
     D2UnitStrc** ppHashSlot;
-    eD2UnitType eUnitType;
     eD2UnitType eUnitTypeSwitch = pUnit->eUnitType;
     if (eUnitTypeSwitch == UNIT_WARP) {
       ppHashSlot = &pGame->pWarpTileList;
@@ -377,29 +375,26 @@ static void UNITS_RemoveUnitFromHashTable(::SGAMEDATA * pGame, D2UnitStrc * pUni
       ppHashSlot = 0;
     }
 
-    D2UnitStrc* pPrevUnit = 0;
-    D2UnitStrc* pListHead = *ppHashSlot;
-    if (!*ppHashSlot) {
-      return;
-    }
-
-    while ((pCurUnit = pListHead) != pUnit) {
-      pListHead = pCurUnit->pListNext;
-      pPrevUnit = pCurUnit;
-      if (!pCurUnit->pListNext) {
-        return;
+    D2UnitStrc* pPrevUnit = nullptr;
+    D2UnitStrc* pCurUnit = *ppHashSlot;
+    while (pCurUnit) {
+      if (pCurUnit == pUnit) {
+        break;
       }
+
+      pPrevUnit = pCurUnit;
+      pCurUnit = pCurUnit->pListNext;
     }
 
     if (!pCurUnit) {
       return;
     }
+
     if (!pPrevUnit) {
       *ppHashSlot = pCurUnit->pListNext;
-      return;
+    } else {
+      pPrevUnit->pListNext = pCurUnit->pListNext;
     }
-
-    pPrevUnit->pListNext = pCurUnit->pListNext;
 }
 
 static int32_t IsRoomOccupied(D2UnitStrc * pUnit) {
@@ -1294,11 +1289,26 @@ uint32_t __fastcall UNITS_CheckIfCanAttackTarget(::SGAMEDATA * pGame, D2UnitStrc
     return (uint32_t)!bIsAlly;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill) {
-    if (pUnit && pTarget && (pUnit->eUnitType == UNIT_PLAYER || pTarget->eUnitType == UNIT_MONSTER) && (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill && *((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill] + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
-      Ai::AiGeneral::AIGENERAL_GetOwnerData(pTarget, &eSkill, (int*)&pTarget);
-      if (!pTarget && eSkill == pUnit->nUnitGUID) {
-        return 1;
+    if (pUnit && pTarget && (GetTypeInline(pUnit) == UNIT_PLAYER || GetTypeInline(pTarget) == UNIT_MONSTER)) {
+      D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? &D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill] : nullptr;
+      if (pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+        Ai::AiGeneral::AIGENERAL_GetOwnerData(pTarget, &eSkill, (int*)&pTarget);
+        if (!pTarget && eSkill == GetGUIDInline(pUnit)) {
+          return 1;
+        }
       }
     }
 
@@ -1998,7 +2008,7 @@ BOOL __fastcall SUNIT_RelocateUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
 void __fastcall TakeStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pObject) {
     D2UnitStrc* pStaircaseUnit;
     D2RoomStrc* pDestRoom;
-    int32_t iVar1;
+    uint8_t nLifePct;
     D2RoomStrc* pFreeRoom;
     eD2LevelId eSourceLevelId;
     eD2LevelId eDestLevelId;
@@ -2053,7 +2063,7 @@ void __fastcall TakeStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc *
       return;
     }
 
-    bQuestCondMet = sD2SUnitStairs.nY;
+    bQuestCondMet = sD2SUnitStairs.nY; // steer-ok: the original reads the stair Y before the SUNIT_RelocateUnit call
     bRelocated = sD2SUnitStairs.nX;
     bAllowNeighboorRooms = SUNIT_RelocateUnit(sD2SUnitStairs.pGame, pUnit, sD2SUnitStairs.pRoom, sD2SUnitStairs.nX, sD2SUnitStairs.nY, 0, 0);
     if (!bAllowNeighboorRooms) {
@@ -2064,8 +2074,8 @@ void __fastcall TakeStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc *
     nFinalX = sD2SUnitStairs.pRoomEx->ExitWalkX + bRelocated;
     bRelocOk = sD2SUnitStairs.pRoomEx->ExitWalkY + bQuestCondMet;
     PLAYER::PlayerModes::PLRMODES_MoveToLocation(sD2SUnitStairs.pGame, pUnit, nullptr, 2, nFinalX, bRelocOk, 0);
-    iVar1 = D2Common::Units::GetCurrentLifePercentage(pUnit);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY((D2ClientStrc*)sD2SUnitStairs.pRoom, '\r', (uint8_t)pUnit->eUnitType, pUnit->nUnitGUID, '\x01', (uint16_t)nFinalX, (uint16_t)bRelocOk, '\0', (uint8_t)iVar1);
+    nLifePct = D2Common::Units::GetCurrentLifePercentage(pUnit);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY((D2ClientStrc*)sD2SUnitStairs.pRoom, '\r', GetTypeInline(pUnit), GetGUIDInline(pUnit), '\x01', (uint16_t)nFinalX, (uint16_t)bRelocOk, '\0', nLifePct);
     return;
 }
 
@@ -2446,15 +2456,18 @@ D2UnitStrc * __fastcall SpawnUnitByType(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
 void __fastcall SUNIT_SpawnPresetUnit(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2PresetUnitStrc * pPresetUnit) {
     D2DrlgRoomCoordsStrc roomCoords;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
-    D2UnitStrc* pUnit = SpawnUnitByType(pGame, pRoom, pPresetUnit->eType, pPresetUnit->nClassId, pPresetUnit->nPosX + roomCoords.dwXStart, pPresetUnit->nPosY + roomCoords.dwYStart, pPresetUnit->nMode, 0);
+    int32_t nX = pPresetUnit->nPosX + roomCoords.dwXStart; // steer-ok: the original evaluates nY, then nMode, then nX for the spawn call
+    int32_t nY = pPresetUnit->nPosY + roomCoords.dwYStart; // steer-ok: the original evaluates nY, then nMode, then nX for the spawn call
+    D2UnitStrc* pUnit = SpawnUnitByType(pGame, pRoom, pPresetUnit->eType, pPresetUnit->nClassId, nX, nY, pPresetUnit->nMode, 0);
     if (!pUnit) {
       return;
     }
     if (pPresetUnit->eType == UNIT_MONSTER) {
       D2MapAIStrc** ppMapAiDrlgFile;
+      D2MapAIStrc** ppPresetMapAI = &pPresetUnit->pMapAI;
       ppMapAiDrlgFile = Ai::AiGeneral::GetMonsterMapAi(pUnit);
-      if (pPresetUnit->pMapAI) {
-        D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(&pPresetUnit->pMapAI, ppMapAiDrlgFile);
+      if (*ppPresetMapAI) {
+        D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(ppPresetMapAI, ppMapAiDrlgFile);
         return;
       }
     } else if (pPresetUnit->eType == UNIT_OBJECT) {

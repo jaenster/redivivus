@@ -154,9 +154,11 @@ template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::DeleteNode(::CELLIST
     }
 
     intptr_t uReturnLink = pLinkField->m_next;
-    pNode->m_frames.UnlinkAll();
-    TSLink<::TCELENTRY>* nNext = pNode->m_frames.m_terminator.m_prevlink;
-    TSLink<::TCELENTRY>* pTVar1 = &pNode->m_frames.m_terminator;
+    ::CELLIST* pNextNode = (::CELLIST*)(uReturnLink <= 0 ? 0 : uReturnLink); // steer-ok: the asm computes the returned node before UnlinkAll and keeps it in ebx
+    TSList<TCELENTRY, TSGetLink<TCELENTRY>>* pList = &pNode->m_frames;
+    pList->UnlinkAll();
+    TSLink<::TCELENTRY>* pTVar1 = &pList->m_terminator;
+    TSLink<::TCELENTRY>* nNext = pTVar1->m_prevlink;
     if (nNext) {
       TSLink<::TCELENTRY>** pBackLink;
       pBackLink = (TSLink<::TCELENTRY>**)D2_StormNextLink(pTVar1, -1);
@@ -168,7 +170,7 @@ template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::DeleteNode(::CELLIST
 
     pNode->Destructor();
     Storm::Source::SMem::SMemFree(pNode, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
-    return (::CELLIST*)(uReturnLink <= 0 ? 0 : uReturnLink);
+    return pNextNode;
 }
 
 // stpl-orphan: a COMDAT copy in D2CMP::SRC::CelCmp::CELLIST that no member owns
@@ -633,15 +635,13 @@ template<> TSHashTable<::CELLIST, HASHKEY_NONE>* __fastcall TSHashTable<CELLIST,
 }
 
 template<> TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* TSHashObjectChunk<CELLIST, HASHKEY_NONE>::ScalarDeletingDestructor(uint32_t dwFlags) {
-    TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* nNext = this->m_link.m_prevlink;
-    TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* pTVar1 = &this->m_link;
-    if (nNext) {
-      TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>** pBackLink;
-      pBackLink = (TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>**)D2_StormNextLink(pTVar1, -1);
-      *pBackLink = nNext;
-      pTVar1->m_prevlink->m_next = pTVar1->m_next;
-      pTVar1->m_prevlink = 0;
-      pTVar1->m_next = 0;
+    TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* pLink = &this->m_link;
+    TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* pPrev = pLink->m_prevlink;
+    if (pPrev) {
+      *(TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>**)D2_StormNextLink(pLink, -1) = pPrev;
+      pLink->m_prevlink->m_next = pLink->m_next;
+      pLink->m_prevlink = 0;
+      pLink->m_next = 0;
     }
 
     ((TSGrowableArray<::CELLIST>*)this)->Destructor();

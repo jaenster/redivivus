@@ -2401,7 +2401,7 @@ uint32_t __fastcall AI_ForEachFn05_ScanTargetsByThreat(::SGAMEDATA * pGame, D2Un
               pGridIndex = D2Common::Units::GetYPosFromDynamicPathUnit(pOther);
               pGridIndex = D2Common::DUNGEON::Dungeon::GetGridIndex(D2Common::Units::UNITS_GetRoom(pOther), D2Common::Units::GetXPosFromDynamicPathUnit(pOther), pGridIndex);
               if (pScan->nGridIndex == pGridIndex) {
-                *(uint16_t*)&pAiGeneral->nAiFlags = (uint16_t)pAiGeneral->nAiFlags | 8;
+                *(uint16_t*)&pAiGeneral->nAiFlags |= 8;
                 pScan->bNeedLOS = 0;
               }
             }
@@ -2412,7 +2412,7 @@ uint32_t __fastcall AI_ForEachFn05_ScanTargetsByThreat(::SGAMEDATA * pGame, D2Un
       pGridIndex = AI::GetDistance(pOther, pUnit);
       if (pGridIndex <= pScan->nMaxScanRadius) {
         _bCanAttack = MONSTERAI_GetThreatLevel(pOther);
-        if ((int)_bCanAttack >= 2) {
+        if ((int)_bCanAttack > 1) {
           if (pGridIndex >= pScan->nBestDistance) {
             return 0;
           }
@@ -5931,31 +5931,20 @@ void __fastcall MONSTERAI_UpdateClosestTarget(D2UnitStrc * pUnit, D2UnitStrc * p
 }
 
 void __fastcall AI_Fn1_SiegeTower(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    D2MonsterAiParameterStruct DStack_2c;
-    D2MonStatsTxt* pMonStats;
-    pMonStats = pAiParam->pMonStats;
-    D2UnitStrc* pNeutralTarget;
-    pNeutralTarget = pAiParam->pTarget;
-    D2UnitStrc* pUnit_00;
-    pUnit_00 = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-    if (pUnit_00) {
-      BOOL bOwnerDead;
-      bOwnerDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit_00);
-      if (!bOwnerDead) {
-        goto idle;
-      }
-    }
-    if (pNeutralTarget) {
-      DStack_2c.pBestUnit = (D2UnitStrc*)0x190;
-      DStack_2c.nBestDistance = 0;
-      pNeutralTarget = (D2UnitStrc*)ForEach(pGame, pUnit, &DStack_2c, (fpMonsterAiForEach)MONSTERAI_FindUnassignedImpInRange, 1);
-      if (pNeutralTarget) {
-        MONSTERAI_UpdateClosestTarget(pNeutralTarget, pUnit);
+    D2MonsterAiParameterStruct sParam;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
+    D2UnitStrc* pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
+    if ((!pOwner || UNIT::SUnit::CheckForModeZeroDeath(pOwner)) && pTarget) {
+      sParam.pBestUnit = (D2UnitStrc*)0x190;
+      sParam.nBestDistance = 0;
+      D2UnitStrc* pImp = (D2UnitStrc*)ForEach(pGame, pUnit, &sParam, (fpMonsterAiForEach)MONSTERAI_FindUnassignedImpInRange, 1);
+      if (pImp) {
+        MONSTERAI_UpdateClosestTarget(pImp, pUnit);
         PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[0][pGame->nDifficulty]);
       }
     }
 
-    idle:
     PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[0][pGame->nDifficulty]);
 }
 
@@ -22511,7 +22500,7 @@ BOOL __fastcall SKILL_CastOnTargetUnit(D2UnitStrc * pUnit, eD2Skills eSkill, int
         nTargetGUID = nOutGUID;
       }
 
-      UNIT::SUnitMsg::UnitQueuePacket0x99(pUnit, (uint16_t)eSavedSkill, (uint8_t)nSubSkill, (uint8_t)nPacketUnitType, nTargetGUID, (uint8_t)nParam);
+      UNIT::SUnitMsg::UnitQueuePacket0x99(pUnit, eSavedSkill, (uint8_t)nSubSkill, (uint8_t)nPacketUnitType, nTargetGUID, (uint8_t)nParam);
       return 1;
     }
 

@@ -375,8 +375,7 @@ static void __stdcall MISSILE_SetupHoming(D2UnitStrc * pUnit, D2UnitStrc * pUnit
       }
     }
 
-    int32_t nLevelOrTargetOffset = D2Common::Units::Missile::GetLevel(pUnit2);
-    nClassId = (nLevelOrTargetOffset - 1) * (int)pMissileTxt->LevRange + (int)pMissileTxt->Range;
+    nClassId = (int)pMissileTxt->Range + (D2Common::Units::Missile::GetLevel(pUnit2) - 1) * (int)pMissileTxt->LevRange;
     D2Common::Units::Missile::SetTotalFrames(pUnit2, nClassId);
     D2Common::Units::Missile::SetCurrentFrame(pUnit2, nClassId);
     D2DynamicPathStrc* pDynamicPath = pUnit2->pPath.pDynamicPath;
@@ -385,31 +384,33 @@ static void __stdcall MISSILE_SetupHoming(D2UnitStrc * pUnit, D2UnitStrc * pUnit
       D2Common::Units::Missile::SetTargetX(pUnit2, 5);
       nClassId = D2Common::Collision::GetCollisionDistance(pUnit2, pUnit);
     } else {
-      int nTargetY;
-      nLevelOrTargetOffset = D2Common::Units::Missile::GetTargetY(pUnit2);
+      int nPos;
+      int nTargetX;
+      uint32_t nTargetOffset = D2Common::Units::Missile::GetTargetY(pUnit2);
+      uint32_t nOffsetY = nTargetOffset >> 0x10; // steer-ok: the original shifts the target offset right after GetTargetY, before the X position fetch
       eUnitType = pUnit2->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nClassId = pUnit2->pPath.pStaticPath->nPosX;
+        nPos = pUnit2->pPath.pStaticPath->nPosX;
       } else if (pUnit2->pPath.pDynamicPath) {
-        nClassId = D2Common::PATH::DynamicPath::GetXPos(pUnit2->pPath.pDynamicPath);
+        nPos = D2Common::PATH::DynamicPath::GetXPos(pUnit2->pPath.pDynamicPath);
       } else {
-        nClassId = 0;
+        nPos = 0;
       }
 
-      nClassId = (short int)nLevelOrTargetOffset + nClassId;
+      nTargetX = (short int)nTargetOffset + nPos;
       eUnitType = pUnit2->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nTargetY = pUnit2->pPath.pStaticPath->nPosY;
+        nPos = pUnit2->pPath.pStaticPath->nPosY;
       } else if (pUnit2->pPath.pDynamicPath) {
-        nTargetY = D2Common::PATH::DynamicPath::GetYPos(pUnit2->pPath.pDynamicPath);
+        nPos = D2Common::PATH::DynamicPath::GetYPos(pUnit2->pPath.pDynamicPath);
       } else {
-        nTargetY = 0;
+        nPos = 0;
       }
 
-      nTargetY = (short int)((uint32_t)nLevelOrTargetOffset >> 0x10) + nTargetY;
-      D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nClassId, (int16_t)nTargetY);
+      int nTargetY = (short int)nOffsetY + nPos;
+      D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nTargetX, (int16_t)nTargetY);
       D2Common::Units::Missile::SetTargetX(pUnit2, 6);
-      nClassId = D2Common::Collision::GetDistanceToXY(pUnit2, nClassId, nTargetY);
+      nClassId = D2Common::Collision::GetDistanceToXY(pUnit2, nTargetX, nTargetY);
     }
     if (nClassId >= 0x19) {
       return;
@@ -772,6 +773,7 @@ static void MISSILE_UpdateLightFlicker(D2UnitStrc * pUnitRaw) {
     Draw::LightMap::SetRadiusY(pLightMap, nFlickerOffset + pMissileTxt->Light);
 }
 
+static inline int GetGUIDInline(D2UnitStrc * pUnit);
 int32_t __fastcall MISSILE_CltHitFn40_HealingBolt(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     if (!pTarget) {
       return 1;
@@ -781,12 +783,15 @@ int32_t __fastcall MISSILE_CltHitFn40_HealingBolt(D2UnitStrc * pUnit, D2UnitStrc
     if (!pOwner) {
       return 1;
     }
-    if (!(pOwner->eUnitType == UNIT_PLAYER && pTarget->eUnitType == UNIT_MONSTER)) {
+    if (pOwner->eUnitType != UNIT_PLAYER) {
+      return 0;
+    }
+    if (pTarget->eUnitType != UNIT_MONSTER) {
       return 0;
     }
 
     DWORD nRosterOwnerGUID = GAME::RosterPets::GetRosterOwnerGUID(pTarget->nUnitGUID);
-    return (uint32_t)(nRosterOwnerGUID == pOwner->nUnitGUID);
+    return nRosterOwnerGUID == GetGUIDInline(pOwner);
 }
 
 static int32_t MISSILE_GetSpeedTier(int32_t nRemainingFrames) {
@@ -4690,25 +4695,17 @@ static void __stdcall MISSILE_CreateBaalLightningBolt(D2UnitStrc * pUnit, D2Unit
     D2SkillArgStrc sSkillArg;
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.pOwner = pUnit;
-    D2SeedStrc newSeed = D2_SEED_NEXT(pUnit2->sSeed);
-    pUnit2->sSeed = newSeed;
-    int32_t nTargetX = (int)(newSeed.nSeedLow / 0x28) * 0x28 - newSeed.nSeedLow + 0x14;
-    newSeed = D2_SEED_NEXT_VAL(newSeed);
-    int nTargetY = (int)(newSeed.nSeedLow / 0x28) * 0x28 - newSeed.nSeedLow + 0x14;
+    int32_t nTargetX = 20 - (int)(D2_SeedRoll(&pUnit2->sSeed) % 40);
     sSkillArg.nFlags = 2;
-    pUnit2->sSeed = newSeed;
-    sSkillArg.nMissileTxtNo = MISSILE_Brdeathlightningbolt;
     sSkillArg.pMissile = pUnit2;
     sSkillArg.nUnitX = nTargetX;
+    int32_t nTargetY = 20 - (int)(D2_SeedRoll(&pUnit2->sSeed) % 40);
     sSkillArg.nUnitY = nTargetY;
+    sSkillArg.nMissileTxtNo = MISSILE_Brdeathlightningbolt;
     sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit2);
     sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit2);
     if (!nTargetX && !nTargetY) {
-      int nDiv;
-      newSeed = D2_SEED_NEXT(pUnit2->sSeed);
-      nDiv = (int)((uint64_t)newSeed.nSeedLow * 0xaf286bcb >> 0x20);
-      pUnit2->sSeed = newSeed;
-      nTargetX = newSeed.nSeedLow + ((newSeed.nSeedLow - nDiv >> 1) + nDiv >> 4) * -0x13 + 1;
+      nTargetX = (int)(D2_SeedRoll(&pUnit2->sSeed) % 19) + 1;
       sSkillArg.nUnitX = nTargetX;
     }
 

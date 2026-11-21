@@ -102,11 +102,8 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::LinkNode(::StringEn
 }
 
 template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::RawNext(::StringEntryNode * pNode) {
-    if (pNode) {
-      return *(::StringEntryNode**)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset);
-    }
-
-    return (::StringEntryNode*)this->m_terminator.m_next;
+    TSLink<::StringEntryNode>* pLink = pNode ? (TSLink<::StringEntryNode>*)((intptr_t)pNode + this->m_linkoffset) : &this->m_terminator;
+    return (::StringEntryNode*)pLink->m_next;
 }
 
 template<> void TSExplicitList<StringEntryNode, -572662307>::UnlinkNode(::StringEntryNode * pNode) {

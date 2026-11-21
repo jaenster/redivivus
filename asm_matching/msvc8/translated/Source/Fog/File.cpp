@@ -381,7 +381,7 @@ bool __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, uint32
     return (uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) < nDestSize;
 }
 
-bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(char * szPath) {
+bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(int nUnused, char * szPath) {
     char* pScan = szPath;
     char* pTerminator = pScan + strlen(pScan);
     pScan = pTerminator + 1;

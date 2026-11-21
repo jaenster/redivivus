@@ -726,35 +726,19 @@ bool __fastcall Q05_SequenceFilter(D2QuestDataStrc * pQuestData) {
 }
 
 bool __fastcall Q05_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    int iCharacterGuid = !pUnit ? -1 : pUnit->nUnitGUID;
-    uint32_t iBufferSize = (uint32_t)pQuestData->pQuestSpecificData.pA1Q5->nPlayersForRewardCount;
-    int iTmpCount = 0;
-    if (!iBufferSize) {
-      /* If no quest specific data: inactive */ return false;
-    }
-
-    int32_t* pBufferElement = pQuestData->pQuestSpecificData.pA1Q5->aPlayersForRewardGUIDs;
-    do {
-      /* If the character GUID is in the buffer at offset 52 (0x34) */ if (*pBufferElement == iCharacterGuid) {
-        /* If target is Wariv; inactive */ switch (nTargetClassId) {
-          case 0x9b:
-            {
-              return false;
-            }
-          case 0x93:
-            {
-              return false;
-            }
+    D2QuestDataA1Q5Strc* pQuestDataEx = pQuestData->pQuestSpecificData.pA1Q5;
+    int nUnitGUID = !pUnit ? -1 : pUnit->nUnitGUID;
+    for (int i = 0; i < pQuestDataEx->nPlayersForRewardCount; i++) {
+      if (pQuestDataEx->aPlayersForRewardGUIDs[i] == nUnitGUID) {
+        if (nTargetClassId == 0x9b || nTargetClassId == 0x93) {
+          return false;
         }
 
-        /* Otherwise active */ return true;
+        return true;
       }
+    }
 
-      iTmpCount++;
-      pBufferElement++;
-    } while (iTmpCount < (int)iBufferSize);
-
-    /* If no quest specific data: inactive */ return false;
+    return false;
 }
 
 BOOL __fastcall Q05_SetCannotCompleteInGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {

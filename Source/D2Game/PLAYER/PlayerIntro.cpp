@@ -99,29 +99,29 @@ BOOL __fastcall PLAYER_CheckIfSpokenWithNPC(D2UnitStrc * pUnit, ::SGAMEDATA * pG
 }
 
 void __fastcall INTRONPC_SetSpokenWithNPC_Intro2(D2UnitDataPlayerInteractedNPCStrc * pInteractedNPCs, int32_t nMonStatsId) {
-    int i;
-    for (i = 0; i < gnNPCSpokenBitIndexMapCount; i++) {
+    int nBitIndex;
+    for (int i = 0; i < gnNPCSpokenBitIndexMapCount; i++) {
       if (gaNPCSpokenBitIndexMap[i][0] == nMonStatsId) {
-        Fog::BitBuffer::SetBitAtOffset((char*)pInteractedNPCs->pIntro2->pBuffer, gaNPCSpokenBitIndexMap[i][1]);
-        return;
+        nBitIndex = gaNPCSpokenBitIndexMap[i][1];
+        goto found;
       }
     }
-
-    Fog::BitBuffer::SetBitAtOffset((char*)pInteractedNPCs->pIntro2->pBuffer, 0);
+    nBitIndex = 0;
+found:
+    Fog::BitBuffer::SetBitAtOffset((char*)pInteractedNPCs->pIntro2->pBuffer, nBitIndex);
 }
 
 BOOL __fastcall INTRONPC_CheckIfSpokenWithNPC_Intro2(D2UnitDataPlayerInteractedNPCStrc * pInteractedNPCs, int32_t nMonStatsId) {
-    int i;
-    BOOL bSpoken;
-    for (i = 0; i < gnNPCSpokenBitIndexMapCount; i++) {
+    int nBitIndex;
+    for (int i = 0; i < gnNPCSpokenBitIndexMapCount; i++) {
       if (gaNPCSpokenBitIndexMap[i][0] == nMonStatsId) {
-        bSpoken = Fog::BitBuffer::CheckBitAtOffset((char*)pInteractedNPCs->pIntro2->pBuffer, gaNPCSpokenBitIndexMap[i][1]);
-        return bSpoken;
+        nBitIndex = gaNPCSpokenBitIndexMap[i][1];
+        goto found;
       }
     }
-
-    bSpoken = Fog::BitBuffer::CheckBitAtOffset((char*)pInteractedNPCs->pIntro2->pBuffer, 0);
-    return bSpoken;
+    nBitIndex = 0;
+found:
+    return Fog::BitBuffer::CheckBitAtOffset((char*)pInteractedNPCs->pIntro2->pBuffer, nBitIndex);
 }
 
 void __fastcall PLAYER_UnsetSpokenWithNPC_Intro2(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nMonStatsId) {

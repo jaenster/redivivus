@@ -642,33 +642,30 @@ void __fastcall DRLGLEVEL_AdjustRoomCoordinates(D2DrlgLevelStrc * pLevel) {
     if (!pLevel) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e3);
       exit(-1);
-    } else {
-      D2RoomExStrc* pRoomEx;
-      pRoomEx = pLevel->pRoomExFirst;
-      if (!pRoomEx) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e4);
-        exit(-1);
-      } else {
-        GetMinAndMaxCoordinatesFromLevel(pLevel, &nMinX, &nMinY, &nMaxX, &nMaxY);
-        if (pLevel->sCoordinatesAndSize.WorldSize.x < nMaxX - nMinX) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2eb);
-          exit(-1);
-        } else {
-          if (!(pLevel->sCoordinatesAndSize.WorldSize.y >= nMaxY - nMinY)) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ec);
-            exit(-1);
-          }
-
-          do {
-            pRoomEx->sCoords.WorldPosition.x += pLevel->sCoordinatesAndSize.WorldPosition.x - nMinX;
-            pRoomEx->sCoords.WorldPosition.y += pLevel->sCoordinatesAndSize.WorldPosition.y - nMinY;
-            pRoomEx = pRoomEx->pRoomExNext;
-          } while (pRoomEx);
-
-          return;
-        }
-      }
     }
+
+    D2RoomExStrc* pRoomEx = pLevel->pRoomExFirst;
+    if (!pRoomEx) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e4);
+      exit(-1);
+    }
+
+    GetMinAndMaxCoordinatesFromLevel(pLevel, &nMinX, &nMinY, &nMaxX, &nMaxY);
+    D2RoomExStrc* pCurrent = pRoomEx;
+    if (pLevel->sCoordinatesAndSize.WorldSize.x < nMaxX - nMinX) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2eb);
+      exit(-1);
+    }
+    if (pLevel->sCoordinatesAndSize.WorldSize.y < nMaxY - nMinY) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ec);
+      exit(-1);
+    }
+
+    do {
+      pCurrent->sCoords.WorldPosition.x += pLevel->sCoordinatesAndSize.WorldPosition.x - nMinX;
+      pCurrent->sCoords.WorldPosition.y += pLevel->sCoordinatesAndSize.WorldPosition.y - nMinY;
+      pCurrent = pCurrent->pRoomExNext;
+    } while (pCurrent);
 }
 
 D2RoomExStrc * __fastcall GetRoomOfCoord(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY) {

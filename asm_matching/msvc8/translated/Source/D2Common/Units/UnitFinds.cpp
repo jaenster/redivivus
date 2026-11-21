@@ -83,10 +83,7 @@ BOOL __stdcall AreUnitsInNeighboredRooms(D2UnitStrc * pUnit, D2UnitStrc * pSrcUn
 
 // Searches all rooms adjacent to pRoom for a unit matching eUnitType and nClassId. Gets the adjacent room list via DRLGROOM_GetAdjacentRoomsList, then iterates each room's pUnitList chain comparing eUnitType and nClassId. Returns the first matching D2UnitStrc*, or NULL if not found. Halts with an internal error if pRoom is null.
 D2UnitStrc * __stdcall FindUnitInNeighboredRooms(D2RoomStrc * pRoom, eD2UnitType eUnitType, int32_t nClassId) {
-    eD2UnitType eType;
-    int nUnitClassId;
     D2RoomStrc** ppAdjacentRooms;
-    D2UnitStrc* pUnitIter;
     int nRoom;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x31);
@@ -94,29 +91,13 @@ D2UnitStrc * __stdcall FindUnitInNeighboredRooms(D2RoomStrc * pRoom, eD2UnitType
     }
 
     DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nRoom);
-    int nAdjacentRoomIdx = 0;
-    /* Room turns to nCounter */ if (nRoom <= 0) {
-      return nullptr;
-    }
-
-    do {
-      for (pUnitIter = ppAdjacentRooms[nAdjacentRoomIdx]->pUnitList; pUnitIter; pUnitIter = pUnitIter->pRoomNext) {
-        eType = UNIT_COUNT;
-        eType = pUnitIter->eUnitType;
-        if (eType == eUnitType) {
-          if (!pUnitIter) {
-            nUnitClassId = -1;
-          } else {
-            nUnitClassId = pUnitIter->nClassId;
-          }
-          if (nUnitClassId == nClassId) {
-            return pUnitIter;
-          }
+    for (int nAdjacentRoomIdx = 0; nAdjacentRoomIdx < nRoom; nAdjacentRoomIdx++) {
+      for (D2UnitStrc* pUnitIter = ppAdjacentRooms[nAdjacentRoomIdx]->pUnitList; pUnitIter; pUnitIter = pUnitIter->pRoomNext) {
+        if ((!pUnitIter ? UNIT_COUNT : pUnitIter->eUnitType) == eUnitType && (!pUnitIter ? -1 : pUnitIter->nClassId) == nClassId) {
+          return pUnitIter;
         }
       }
-
-      nAdjacentRoomIdx++;
-    } while (nAdjacentRoomIdx < nRoom);
+    }
 
     return nullptr;
 }

@@ -1413,24 +1413,18 @@ void __stdcall DRAW_UI_BorderRight() {
 
 static int32_t __stdcall PANEL_GetBeltBoxAtPoint(int32_t nMouseY, int32_t nMouseX) {
     D2BeltsTxt sBeltsTxt;
+    int nResult = -1;
     D2Common::DATATBLS::BeltsTbls::GetBeltsLine(gnBeltPanelState, Inv::nScreenMode, &sBeltsTxt);
-    int nBoxId = 0;
-    int t1_c0 = sBeltsTxt.nBoxes;
-    if ((uint8_t)t1_c0 <= 0) {
-      return -1;
-    }
-
-    do {
+    for (int nBoxId = 0; nBoxId < (uint8_t)sBeltsTxt.nBoxes; nBoxId++) {
       D2BeltsEntryStrc sInvRect;
       D2Common::DATATBLS::BeltsTbls::GetInvRectFromBeltsTxt(gnBeltPanelState, Inv::nScreenMode, &sInvRect.nLeft, nBoxId);
       if (nMouseX >= sInvRect.nLeft && nMouseX <= sInvRect.nRight && nMouseY >= sInvRect.nTop && nMouseY <= sInvRect.nBottom) {
-        return nBoxId;
+        nResult = nBoxId;
+        break;
       }
+    }
 
-      nBoxId++;
-    } while (nBoxId < (int)(uint32_t)(uint8_t)t1_c0);
-
-    return -1;
+    return nResult;
 }
 
 static void __stdcall ClickBelt(D2InventoryStrc * pInventory, int32_t nMouseX, int32_t nMouseY) {

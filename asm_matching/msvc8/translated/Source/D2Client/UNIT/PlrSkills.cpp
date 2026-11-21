@@ -25,6 +25,7 @@
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -724,28 +725,11 @@ void __fastcall PLRSKILLS_StateRemFn10_Pregnant(D2UnitStrc * pUnit) {
 }
 
 void __fastcall PLRSKILLS_StateSetFn14_Shapeshift(D2UnitStrc * pUnit, eD2States eState) {
-    D2ServerMessageHandleStrc nPosX = {0};
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nPosX.nSkillId = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nPosX.nSkillId = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nPosX.nSkillId = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    uint32_t nItemIdValue;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nItemIdValue = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nItemIdValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nItemIdValue = 0;
-    }
-
-    nPosX.nItemId = nItemIdValue;
-    UnitMode::HandleMessage(0x19, pUnit, &nPosX, 0);
+    D2ServerMessageHandleStrc sMsg;
+    memset(&sMsg, 0, sizeof(sMsg));
+    sMsg.nSkillId = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    sMsg.nItemId = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
+    UnitMode::HandleMessage(0x19, pUnit, &sMsg, 0);
     D2Common::PATH::DynamicPath::PATH_SetNewDirection(pUnit->pPath.pDynamicPath, 0);
 }
 

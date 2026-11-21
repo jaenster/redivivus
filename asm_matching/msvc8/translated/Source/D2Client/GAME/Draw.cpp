@@ -634,25 +634,23 @@ void __fastcall DrawFloorTile(D2DrawFloorStrc * pFloor, int, D2DrlgTileDataStrc 
 
 void __fastcall DRAW_DrawEdgeFloorTile(D2DrawFloorStrc * pDrawFloor, int, int32_t nWorldX, int32_t nParam) {
     D2DrlgTileDataStrc* pTileData;
-    int32_t nWorldY_00 = nParam;
-    int32_t nWorldY = nWorldX;
     int32_t nScreenX = nWorldX;
-    nWorldX = nParam + 5;
-    D2Common::Drlg::Transform::CoordsMapToScreen(&nScreenX, &nWorldX);
-    nWorldX += 0x28;
+    int32_t nScreenY = nParam + 5;
+    D2Common::Drlg::Transform::CoordsMapToScreen(&nScreenX, &nScreenY);
+    nScreenY += 0x28;
     if (!Game::sgpDrlgAct) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdf);
       exit(-1);
     }
 
     nScreenX += pDrawFloor->nX;
-    nWorldX += pDrawFloor->nY;
+    nScreenY += pDrawFloor->nY;
     pTileData = D2Common::DUNGEON::Dungeon::GetTileDataFromAct(Game::sgpDrlgAct);
     if (!pTileData) {
       return;
     }
 
-    vc8_thiscall(DrawFloorTile)(pDrawFloor, pTileData, (void*)0x1, nScreenX, nWorldX, nWorldY, nWorldY_00);
+    vc8_thiscall(DrawFloorTile)(pDrawFloor, pTileData, (void*)0x1, nScreenX, nScreenY, nWorldX, nParam);
 }
 
 void __fastcall DrawSubTile(D2DrawFloorStrc * pDrawFloor, int, int32_t nTileX, int32_t nTileY, int32_t nStepX, int32_t nStepY) {
@@ -1318,7 +1316,9 @@ void __fastcall dWallPass(D2GameViewStrc * pGameView) {
 void __fastcall DRAW_WORLD_UnderFloor(D2GameViewStrc * pGameView) {
     int nGridCount = pGameView->sWall2.nWall2GridDim;
     D2Wall2CellStrc* pWall2Entry = pGameView->sWall2.pWall2;
-    for (nGridCount *= nGridCount; nGridCount; nGridCount--) {
+    nGridCount *= nGridCount;
+    while (nGridCount) {
+      nGridCount--;
       WALL2_DrawUnderFloorTiles(pGameView, pWall2Entry);
       pWall2Entry++;
     }

@@ -2254,7 +2254,7 @@ void __fastcall Shrines_SkillBoostFunction(D2ObjectOperateFnArg * pArguments, D2
 BOOL __fastcall OBJOP_ActivateShrine(D2ObjectOperateFnArg * pOperation) {
     D2HoverTextStrc* pHoverText;
     D2ShrinesTxt* pTxtShrines_lcl;
-    uint32_t nShrineCode;
+    int nShrineCode;
     BOOL bBadCode;
     D2ObjectsTxt* pTxtObjects;
     int nTmp;
@@ -2263,14 +2263,18 @@ BOOL __fastcall OBJOP_ActivateShrine(D2ObjectOperateFnArg * pOperation) {
     ::SGAMEDATA* pGame;
     D2UnitStrc* pUnit;
     D2UnitStrc* pShrineObject;
+    D2UnitStrc* pPlayer = pOperation->pAttacker;
     pShrineObject = pOperation->sArg.pVictim;
-    if (pShrineObject->pUnitData.pUnitDataObject->nActivatingPlayerGUID || pShrineObject->eAnimMode.ePlayerMode != Death) {
+    if (pShrineObject->pUnitData.pUnitDataObject->nActivatingPlayerGUID) {
       return 0;
     }
-    if (!pOperation->pAttacker) {
+    if (pShrineObject->eAnimMode.ePlayerMode != Death) {
+      return 0;
+    }
+    if (!pPlayer) {
       nTmp = -1;
     } else {
-      nTmp = pOperation->pAttacker->nUnitGUID;
+      nTmp = pPlayer->nUnitGUID;
     }
 
     pShrineObject->pUnitData.pUnitDataObject->nActivatingPlayerGUID = nTmp + 1;
@@ -2305,8 +2309,8 @@ BOOL __fastcall OBJOP_ActivateShrine(D2ObjectOperateFnArg * pOperation) {
     }
 
     pTxtShrines_lcl = D2Common::Units::GetShrineTxtRecordFromObject(pShrineObject);
-    nShrineCode = (uint32_t)pTxtShrines_lcl->nCode;
-    if (true && (int)nShrineCode < SHRINESCOUNT) {
+    nShrineCode = pTxtShrines_lcl->nCode;
+    if (nShrineCode >= 0 && nShrineCode < SHRINESCOUNT) {
       lpfn = OBJECTSHRINEFUNCTION[nShrineCode].fpShrineHandler;
       if (lpfn) {
         /* FARPROC lpfn for IsBadCodePtr */ bBadCode = IsBadCodePtr((FARPROC)lpfn);

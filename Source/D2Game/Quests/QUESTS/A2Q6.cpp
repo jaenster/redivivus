@@ -1380,13 +1380,16 @@ BOOL __fastcall OBJOP_A2Q6_UseHoradricOrifice(D2ObjectOperateFnArg * pOperation)
     } else {
       eOrificeAnimMode = pInteractedNpc->eAnimMode.ePlayerMode;
     }
-    if (eOrificeAnimMode != eD2ObjectAnimMode_ns::Neutral) {
-      if (!(eOrificeAnimMode == Operating && pVictim == pInteractedNpc)) {
-        return 0;
+    switch (eOrificeAnimMode) {
+    case eD2ObjectAnimMode_ns::Neutral:
+      break;
+    case Operating:
+      if (pVictim == pInteractedNpc) {
+        UNIT::SUnit::ClearInteractInfo(pOperation->pAttacker);
+        D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 2);
       }
-
-      UNIT::SUnit::ClearInteractInfo(pOperation->pAttacker);
-      D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 2);
+      return 0;
+    default:
       return 0;
     }
 

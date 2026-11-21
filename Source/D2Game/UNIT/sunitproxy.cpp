@@ -62,17 +62,12 @@ D2MonsterAiStrc * __fastcall GetMonsterAI(D2UnitStrc * pUnit) {
 }
 
 D2GameNpcStrc * __fastcall GetGameNpcbyClassId(::SGAMEDATA * pGame, int32_t nNpcClassId, int * pNpcIndex) {
-    int iNpc;
     D2GameNpcArrayStrc* pNpcArray = pGame->pNpcControl->pNpc;
-    *pNpcIndex = 0;
-    do {
-      iNpc = *pNpcIndex;
-      if (pNpcArray->pNpc[iNpc].nMonStatsId == nNpcClassId) {
-        return pNpcArray->pNpc + iNpc;
+    for (*pNpcIndex = 0; *pNpcIndex < 0x40; ++*pNpcIndex) {
+      if (pNpcArray->pNpc[*pNpcIndex].nMonStatsId == nNpcClassId) {
+        return &pNpcArray->pNpc[*pNpcIndex];
       }
-
-      *pNpcIndex = iNpc + 1;
-    } while (iNpc + 1 < 0x40);
+    }
 
     if (!nNpcClassId) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x72);
@@ -756,22 +751,17 @@ static void __stdcall SUNITPROXY_AddTradeQueueEntry(D2UnitStrc * pUnit, uint32_t
 }
 
 void __fastcall SUNITPROXY_QueueTradeAction(D2UnitStrc * pNpcUnit, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwTradeParam, uint32_t nTradeAction) {
-    int nNpcClassId;
     int nNpcIndex;
+    D2NpcTradeStateStrc* pTrade;
     DWORD dwTickCount = GetTickCount();
-    if (!pNpcUnit) {
-      nNpcClassId = -1;
-    } else {
-      nNpcClassId = pNpcUnit->nClassId;
+    D2GameNpcStrc* pNpc = GetGameNpcbyClassId(pGame, !pNpcUnit ? -1 : pNpcUnit->nClassId, &nNpcIndex);
+    if (pNpc) {
+      pTrade = &pNpc->sTrade;
+      if (pTrade && pTrade->bHasStore == 1 && pTrade->bStoreFilled == 1 && pNpc->bTrading == 1) {
+        SUNITPROXY_AddTradeQueueEntry(pUnit, dwTradeParam, nTradeAction, pGame, pNpc);
+        pTrade->dwLastTradeTick = dwTickCount;
+      }
     }
-
-    D2GameNpcStrc* pNpc = GetGameNpcbyClassId(pGame, nNpcClassId, &nNpcIndex);
-    if (!(pNpc && &pNpc->sTrade && pNpc->sTrade.bHasStore == 1 && pNpc->sTrade.bStoreFilled == 1 && pNpc->bTrading == 1)) {
-      return;
-    }
-
-    SUNITPROXY_AddTradeQueueEntry(pUnit, dwTradeParam, nTradeAction, pGame, pNpc);
-    pNpc->sTrade.dwLastTradeTick = dwTickCount;
 }
 
 // IterateAllUnits callback: when pUnit has a room (UNITS_GetRoom) whose level

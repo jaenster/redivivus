@@ -534,24 +534,19 @@ void __stdcall GetSubtileRect(D2RoomStrc * pRoom, RECT * pRect) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1e3);
       exit(-1);
-    } else {
-      int nRightEdge;
-      pRect->top = pRoom->sCoords.dwYStart;
-      pRect->bottom = pRoom->sCoords.dwYSize + pRoom->sCoords.dwYStart;
-      pRect->left = pRoom->sCoords.dwXStart;
-      nRightEdge = pRoom->sCoords.dwXStart + pRoom->sCoords.dwXSize;
-      pRect->right = nRightEdge;
-      if (pRect->top > pRect->bottom) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1eb);
-        exit(-1);
-      } else {
-        if (!(pRect->left <= nRightEdge)) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ec);
-          exit(-1);
-        }
+    }
 
-        return;
-      }
+    pRect->top = pRoom->sCoords.dwYStart;
+    pRect->bottom = pRoom->sCoords.dwYStart + pRoom->sCoords.dwYSize;
+    pRect->left = pRoom->sCoords.dwXStart;
+    pRect->right = pRoom->sCoords.dwXStart + pRoom->sCoords.dwXSize;
+    if (pRect->top > pRect->bottom) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1eb);
+      exit(-1);
+    }
+    if (pRect->left > pRect->right) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ec);
+      exit(-1);
     }
 }
 
@@ -1780,23 +1775,14 @@ void __fastcall InitNearRooms(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomE
 
 // Initializes room data for the given room extension at the specified recursion depth. Allocates near rooms and populates tile data via preset/outdoor/maze handlers.
 static void AddRoomDataActual(D2RoomExStrc * pRoomEx, uint8_t nInitDepth) {
-    uint16_t* pnRefCount;
-    D2DrlgStrc* pAct;
     InitNearRooms(pRoomEx->pLevel->pDrlg->pMemoryPool, pRoomEx, nInitDepth + 1);
-    int nDepth;
-    nDepth = (int)nInitDepth;
+    int nDepth = (int)nInitDepth;
     if (pRoomEx->fRoomStatus >= nDepth) {
-      int nRefCheckIndex;
-      nRefCheckIndex = 0;
-      pnRefCount = pRoomEx->awRoomsInList;
-      do {
-        if (*pnRefCount) {
+      for (int i = 0; i <= nDepth; i++) {
+        if (pRoomEx->awRoomsInList[i]) {
           goto count_reference;
         }
-
-        nRefCheckIndex++;
-        pnRefCount++;
-      } while (nRefCheckIndex <= nDepth);
+      }
 
       (*gaRoomExActivationHandlers[nDepth])(pRoomEx);
     }

@@ -162,6 +162,13 @@ static void __stdcall PLAYER_SetStartingLevelForAct(uint8_t nAct, ::SGAMEDATA * 
     SUnitDmg::DAMAGE_SetUnitToLevel(pGame, pUnit, gaStartingLevelByAct[uVar1]);
 }
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 // Sets all base stats for a newly created player unit from CharStats.txt (str, dex, vit, energy, HP, mana, stamina at fixed-point *256, level=1, nextexp for level 1, attack/velocity/animrate=100). If nAct != 0, also raises the unit to gaStartingLevelByAct[nAct] via DAMAGE_SetUnitToLevel. The third argument is the act (both call sites pass D2Game::Game::Clients::GetAct(pClient)), not a character class.
 void __fastcall PLAYER_InitBaseStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t nAct) {
     if (nAct >= 5) {
@@ -190,21 +197,22 @@ void __fastcall PLAYER_InitBaseStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, ui
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, nStatValue, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxstamina, nStatValue, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, 1, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_nextexp, D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(pUnit->nClassId, 1), 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_nextexp, D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(GetClassIdInline(pUnit), 1), 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_attackrate, 100, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_velocitypercent, 100, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_other_animrate, 100, 0);
     if (nAct <= 0) {
       return;
     }
-    if (nAct >= 5) {
-      nAct = 4;
+    uint8_t nActIndex = nAct;
+    if (nActIndex >= 5) {
+      nActIndex = 4;
     }
-    if ((int)(uint32_t)nAct >= gnActCount) {
-      nAct = 0;
+    if ((int)nActIndex >= gnActCount) {
+      nActIndex = 0;
     }
 
-    SUnitDmg::DAMAGE_SetUnitToLevel(pGame, pUnit, gaStartingLevelByAct[nAct]);
+    SUnitDmg::DAMAGE_SetUnitToLevel(pGame, pUnit, gaStartingLevelByAct[nActIndex]);
 }
 
 void __fastcall thunk_NET_D2GS_SERVER_Send_0x75_PlayerPartyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOtherUnit) {
@@ -782,6 +790,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     }
     return (eD2UnitType)6;
 }
+
 void __fastcall UNITMSG_SendSoundPacketToClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     D2GSPacketSrv0x2C sPacket;
     D2UnitStrc* pUpdateUnit = pUnit->uSideData.pServerSide.pUpdateUnit;
@@ -801,18 +810,16 @@ void __fastcall UNITMSG_SendSoundPacketToClient(D2UnitStrc * pUnit, D2ClientStrc
 }
 
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall UnitQueuePacket0x99(D2UnitStrc * pUnit, uint16_t wSkillId, uint8_t byArg1, uint8_t byArg2, uint32_t dwTargetGUID, uint8_t bParam) {
-    D2PoolManagerStrc* pSyncPool = 0;
-    if (pUnit) {
-      pSyncPool = pUnit->pMemory;
-    }
+void __fastcall UnitQueuePacket0x99(D2UnitStrc * pUnit, int32_t nSkillId, uint8_t byArg1, uint8_t byArg2, uint32_t dwTargetGUID, uint8_t bParam)
+{
+    D2PoolManagerStrc* pSyncPool = !pUnit ? nullptr : pUnit->pMemory;
 
     D2SUnitMsgStrc* pMsg = (D2SUnitMsgStrc*)D2_ALLOC_POOL_AT(pSyncPool, 0x14, ".\\UNIT\\SUnitMsg.cpp", 0x284);
     pMsg->uArgs.s99.nSkillLevel = byArg1;
     pMsg->uArgs.s99.nTargetType = byArg2;
     pMsg->nOpcode = 0x99;
     pMsg->pNext = 0;
-    pMsg->uArgs.s99.nSkillId = wSkillId;
+    pMsg->uArgs.s99.nSkillId = nSkillId;
     pMsg->uArgs.s99.dwTargetGUID = dwTargetGUID;
     pMsg->uArgs.s99.field_0x8 = bParam;
     if (!pUnit->pMsgFirst) {
@@ -1111,8 +1118,10 @@ void __fastcall SERVER_UnitQueuePacket0xA4(D2UnitStrc * pUnit, int16_t nClassId)
 
 // @sourcefile .\UNIT\SUnitMsg.cpp
 void __fastcall SERVER_SendPacket0x23(D2UnitStrc * pMemory, int byTypeId, uint16_t wCoords, uint32_t dwData) {
-    D2PoolManagerStrc* pAllocPool = 0;
-    if (pMemory) {
+    D2PoolManagerStrc* pAllocPool;
+    if (!pMemory) {
+      pAllocPool = 0;
+    } else {
       pAllocPool = pMemory->pMemory;
     }
 

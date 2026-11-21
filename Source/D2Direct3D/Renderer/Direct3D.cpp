@@ -613,34 +613,23 @@ void __fastcall RENDERER_D3D_ConvertPalettedTo32Bit(uint8_t * pSrc8Bit, uint32_t
 }
 
 void __fastcall RENDERER_D3D_SetBlendMode(int nBlendMode) {
-    DWORD dwValue;
-    if (!(!g_nCurrentTextureOpMode || nBlendMode != g_nCurrentTextureOpMode)) {
+    if (g_nCurrentTextureOpMode && nBlendMode == g_nCurrentTextureOpMode) {
       return;
     }
 
     switch (nBlendMode) {
       case 1:
-        {
-          g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 1, 4);
-          g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 4, 4);
-          dwValue = 1;
-          break;
-        }
-      default:
-        {
-          g_nCurrentTextureOpMode = nBlendMode;
-          return;
-        }
+        g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 1, 4);
+        g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 4, 4);
+        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0xf, 1);
+        break;
       case 2:
-        {
-          g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 1, 3);
-          g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 4, 3);
-          dwValue = 0;
-          break;
-        }
+        g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 1, 3);
+        g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 4, 3);
+        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0xf, 0);
+        break;
     }
 
-    g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0xf, dwValue);
     g_nCurrentTextureOpMode = nBlendMode;
 }
 
@@ -686,32 +675,21 @@ void __fastcall SetBlendMode(int nBlendMode) {
 }
 
 void __fastcall RENDERER_D3D_SetTextureFilterMode(int nFilterMode) {
-    DWORD dwValue;
-    if (!(!g_nCurrentFilterMode || nFilterMode != g_nCurrentFilterMode)) {
+    if (g_nCurrentFilterMode && nFilterMode == g_nCurrentFilterMode) {
       return;
     }
 
     switch (nFilterMode) {
       case 1:
-        {
-          g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 0x10, 1);
-          dwValue = 1;
-          break;
-        }
-      default:
-        {
-          g_nCurrentFilterMode = nFilterMode;
-          return;
-        }
+        g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 0x10, 1);
+        g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 0x11, 1);
+        break;
       case 2:
-        {
-          g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 0x10, 2);
-          dwValue = 2;
-          break;
-        }
+        g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 0x10, 2);
+        g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 0x11, 2);
+        break;
     }
 
-    g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 0x11, dwValue);
     g_nCurrentFilterMode = nFilterMode;
 }
 
@@ -3856,25 +3834,20 @@ void __stdcall RENDERER_D3D_CreateFontTextures() {
 }
 
 void __fastcall Unreferenced_006b74f0(void * pPalette) {
-    DWORD nResult;
     if (!pPalette) {
       return;
     }
 
-    void** ppvVar2 = g_pFontTextureSurface;
-    do {
-      int* piVar1;
-      piVar1 = (int*)*ppvVar2;
-      if (piVar1) {
-        nResult = (**(code**)((char*)*(void**)piVar1 + 124))(piVar1, pPalette);
+    for (int i = 0; i < 96; i++) {
+      IDirectDrawSurface7* pSurface = (IDirectDrawSurface7*)g_pFontTextureSurface[i];
+      if (pSurface) {
+        DWORD nResult = pSurface->lpVtbl->SetPalette(pSurface, (IDirectDrawPalette*)pPalette);
         if (nResult) {
           DIRECTD3D_LogError("SetPalette (debug font surface)", nResult);
           return;
         }
       }
-
-      ppvVar2++;
-    } while ((intptr_t)ppvVar2 < (intptr_t)((char*)&g_pFontTextureSurface + sizeof(g_pFontTextureSurface)));
+    }
 }
 
 static int __stdcall RENDERER_D3D_DrawGlyph(char cGlyph, int nPosX, int nPosY) {
@@ -5074,7 +5047,8 @@ void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue) {
 }
 
 void __fastcall RENDERER_D3D_ApplyShadowTextureCoords(D2D3DVertexStrc * pVertex, uint8_t nLightIndex, uint8_t byAlpha) {
-    pVertex->dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)byAlpha << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)GlobalRed + ((uint32_t)nLightIndex << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)GlobalGreen + ((uint32_t)nLightIndex << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)GlobalBlue + ((uint32_t)nLightIndex << 8)]);
+    const uint8_t* pLightRow = &g_aLightingTable[nLightIndex << 8];
+    pVertex->dwDiffuse = (((uint32_t)byAlpha << 8 | pLightRow[GlobalRed]) << 8 | pLightRow[GlobalGreen]) << 8 | pLightRow[GlobalBlue];
 }
 
 void __fastcall RENDERER_D3D_SetTextureStageColor(D2D3DVertexStrc * pVertex, uint32_t dwGamma, uint8_t byAlpha) {

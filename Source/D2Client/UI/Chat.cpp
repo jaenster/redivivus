@@ -1076,7 +1076,6 @@ BOOL __stdcall CHAT_ProcessBattleNetMessage() {
 static BOOL CHAT_HandleResignCommand(char * szCommandName, char * szInput) {
     char szUsageMessage[256];
     MessageStrc MStack_124;
-    char szDelimiter[4];
     char cScanChar;
     char* pScan;
     int nStrLen;
@@ -1086,38 +1085,28 @@ static BOOL CHAT_HandleResignCommand(char * szCommandName, char * szInput) {
       return 0;
     }
 
-    szDelimiter[0] = ' ';
-    szDelimiter[1] = '\0';
+    char szDelimiter[] = " ";
     int nCopyCount = 0;
-    pScan = strtok(szInput, szDelimiter);
-    if (pScan) {
-      D2BNetClientCallbacksStrc* pCallbacks;
-      do {
-        if (nCopyCount >= 2) {
-          break;
-        }
-
-        nCopyCount++;
-        pScan = strtok(nullptr, szDelimiter);
-      } while (pScan);
-
-      if (nCopyCount == 1) {
-        pCallbacks = ClientModeInGame::CLIENT_GetBNetClientCallbacks();
-        if (pCallbacks) {
-          pCallbacks->pfnSendChatCommand((uint8_t*)szInput);
-        }
-
-        return 1;
-      }
+    for (pScan = strtok(szInput, szDelimiter); pScan && nCopyCount < 2; pScan = strtok(nullptr, szDelimiter)) {
+      nCopyCount++;
     }
 
-    MStack_124.messageType = 4;
-    MStack_124.messageColor = 3;
-    sprintf(szUsageMessage, "<BattleNet>: Correct usage is: %s", szCommandName);
-    pScan = szUsageMessage;
-    char* pdwMsgDst = MStack_124.message;
-    memcpy(pdwMsgDst, pScan, 0x100);
-    Text::TEXT_ProcessChatMessage(&MStack_124);
+    if (nCopyCount != 1) {
+      MStack_124.messageType = 4;
+      MStack_124.messageColor = 3;
+      sprintf(szUsageMessage, "<BattleNet>: Correct usage is: %s", szCommandName);
+      pScan = szUsageMessage;
+      char* pdwMsgDst = MStack_124.message;
+      memcpy(pdwMsgDst, pScan, 0x100);
+      Text::TEXT_ProcessChatMessage(&MStack_124);
+      return 1;
+    }
+
+    D2BNetClientCallbacksStrc* pCallbacks = ClientModeInGame::CLIENT_GetBNetClientCallbacks();
+    if (pCallbacks) {
+      pCallbacks->pfnSendChatCommand((uint8_t*)szInput);
+    }
+
     return 1;
 }
 
@@ -1150,61 +1139,58 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
     pScan = strtok(szInput, gszChatWhisperTargetName);
     int nTokenCount;
     nTokenCount = 0;
-    if (pScan) {
-      D2RosterStrc* pRoster;
-      do {
-        nTokenCount++;
-        if (nTokenCount == 2) {
-          strcpy(szTargetName, pScan);
-        } else if (nTokenCount == 3) {
-          pScan += (intptr_t)&sWhisperPacket + (0x10 - (intptr_t)szInput);
-          strcpy(szMessageText, pScan);
-          goto send_whisper;
-        }
-
-        pScan = strtok(nullptr, gszChatWhisperTargetName);
-      } while (pScan);
-
-      if (nTokenCount == 3) {
-        send_whisper:
-        if (bInGame) {
-          for (pRoster = GAME::Roster::GetNextRosterPlayer(nullptr); pRoster; pRoster = GAME::Roster::GetNextRosterPlayer(pRoster)) {
-            nTokenCount = _stricmp(GAME::Roster::GetRosterName(pRoster), szTargetName);
-            if (!nTokenCount) {
-              strncpy(sWhisperPacket.szMsg, szMessageText, 0xff);
-              sWhisperPacket.szMsg[0xff] = '\0';
-              nTokenCount = 0;
-              do {
-                cScanChar = szTargetName[nTokenCount];
-                sWhisperPacket.szTarget[nTokenCount] = cScanChar;
-                nTokenCount++;
-              } while (cScanChar != '\0');
-
-              sWhisperPacket.nIMEMode = (uint8_t)gnLanguageCode;
-              sWhisperPacket.nMsgType = '\x02';
-              sWhisperPacket.nCmd = '\x15';
-              GAME::Msg::NET_D2GS_CLIENT_Send_Chat(&sWhisperPacket);
-              return 1;
-            }
-          }
-        }
-        sprintf(szInput, "%s %s %s", szCommandName, szTargetName, szMessageText);
-        pCallbacks = ClientModeInGame::CLIENT_GetBNetClientCallbacks();
-        if (pCallbacks) {
-          pCallbacks->pfnSendChatCommand((uint8_t*)szInput);
-        }
-
-        return 1;
+    D2RosterStrc* pRoster;
+    while (pScan) {
+      nTokenCount++;
+      if (nTokenCount == 2) {
+        strcpy(szTargetName, pScan);
+      } else if (nTokenCount == 3) {
+        pScan += (intptr_t)&sWhisperPacket + (0x10 - (intptr_t)szInput);
+        strcpy(szMessageText, pScan);
+        break;
       }
+
+      pScan = strtok(nullptr, gszChatWhisperTargetName);
     }
 
-    MStack_334.messageType = 4;
-    MStack_334.messageColor = 3;
-    sprintf(sWhisperPacket.szMsg + 0xd, "<BattleNet>: Correct usage is: %s (name) (message)", szCommandName);
-    pScan = sWhisperPacket.szMsg + 0xd;
-    char* pdwMsgDst = MStack_334.message;
-    memcpy(pdwMsgDst, pScan, 0x100);
-    Text::TEXT_ProcessChatMessage(&MStack_334);
+    if (nTokenCount != 3) {
+      MStack_334.messageType = 4;
+      MStack_334.messageColor = 3;
+      sprintf(sWhisperPacket.szMsg + 0xd, "<BattleNet>: Correct usage is: %s (name) (message)", szCommandName);
+      pScan = sWhisperPacket.szMsg + 0xd;
+      char* pdwMsgDst = MStack_334.message;
+      memcpy(pdwMsgDst, pScan, 0x100);
+      Text::TEXT_ProcessChatMessage(&MStack_334);
+      return 1;
+    }
+
+    if (bInGame) {
+      for (pRoster = GAME::Roster::GetNextRosterPlayer(nullptr); pRoster; pRoster = GAME::Roster::GetNextRosterPlayer(pRoster)) {
+        nTokenCount = _stricmp(GAME::Roster::GetRosterName(pRoster), szTargetName);
+        if (!nTokenCount) {
+          strncpy(sWhisperPacket.szMsg, szMessageText, 0xff);
+          sWhisperPacket.szMsg[0xff] = '\0';
+          nTokenCount = 0;
+          do {
+            cScanChar = szTargetName[nTokenCount];
+            sWhisperPacket.szTarget[nTokenCount] = cScanChar;
+            nTokenCount++;
+          } while (cScanChar != '\0');
+
+          sWhisperPacket.nIMEMode = (uint8_t)gnLanguageCode;
+          sWhisperPacket.nMsgType = '\x02';
+          sWhisperPacket.nCmd = '\x15';
+          GAME::Msg::NET_D2GS_CLIENT_Send_Chat(&sWhisperPacket);
+          return 1;
+        }
+      }
+    }
+    sprintf(szInput, "%s %s %s", szCommandName, szTargetName, szMessageText);
+    pCallbacks = ClientModeInGame::CLIENT_GetBNetClientCallbacks();
+    if (pCallbacks) {
+      pCallbacks->pfnSendChatCommand((uint8_t*)szInput);
+    }
+
     return 1;
 }
 

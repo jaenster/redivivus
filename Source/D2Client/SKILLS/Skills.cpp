@@ -827,12 +827,7 @@ uint32_t __fastcall SKILLS_GetTargetTypeForSkill(D2UnitStrc * pUnit, D2UnitStrc 
         }
       }
     }
-    if (!pUnit) {
-      bInSameParty = GAME::Roster::ROSTER_CheckPlayersInSameParty(-1, nResolvedTargetGUID);
-    } else {
-      bInSameParty = GAME::Roster::ROSTER_CheckPlayersInSameParty(pUnit->nUnitGUID, nResolvedTargetGUID);
-    }
-
+    bInSameParty = GAME::Roster::ROSTER_CheckPlayersInSameParty(!pUnit ? -1 : pUnit->nUnitGUID, nResolvedTargetGUID);
     return (uint32_t)(bInSameParty != 0);
 }
 

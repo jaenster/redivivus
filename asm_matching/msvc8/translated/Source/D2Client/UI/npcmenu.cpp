@@ -3907,7 +3907,7 @@ static bool inline_NPC_IsInteractableSideNpc(int32_t nNpcClassId) {
 int __stdcall NPCMENU_ShowSelectedDialogOption() {
     D2GSPacketSrv0x27_TextStrc* pOverheadText;
     int32_t nSelectedIndex = Dialog::DIALOG_GetSelectedIndex(Dialog::gpNpcGossipDialog);
-    int nDialogBaseOffset = 3 - (uint32_t)D2NPCSpeech[gnNpcMenuCainIdentifyGUID].bNoIntro;
+    int nDialogBaseOffset = D2NPCSpeech[gnNpcMenuCainIdentifyGUID].bNoIntro ? 2 : 3;
     if (!(nSelectedIndex >= nDialogBaseOffset && _Interaction::bInteractingWithNpc)) {
       return 0;
     }
@@ -3915,14 +3915,14 @@ int __stdcall NPCMENU_ShowSelectedDialogOption() {
     D2UnitStrc* pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     if (pNpcUnit) {
       uint16_t wDialogStringId;
-      nSelectedIndex = Dialog::DIALOG_GetSelectedIndex(Dialog::gpNpcGossipDialog);
+      int nMessageIndex = Dialog::DIALOG_GetSelectedIndex(Dialog::gpNpcGossipDialog) - nDialogBaseOffset;
       pOverheadText = Text::TEXT_GetOverheadGlobalPointer();
       if (!pOverheadText) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x710);
         exit(-1);
       }
 
-      wDialogStringId = D2Common::Text::TEXT_GetMessageByIndex(pOverheadText, nSelectedIndex - nDialogBaseOffset);
+      wDialogStringId = D2Common::Text::TEXT_GetMessageByIndex(pOverheadText, nMessageIndex);
       gnNpcMenuScrollCompleteMode = wDialogStringId;
       if (_Interaction::bInteractingWithNpc) {
         pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);

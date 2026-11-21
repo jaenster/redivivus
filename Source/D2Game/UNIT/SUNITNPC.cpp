@@ -2036,16 +2036,12 @@ void __fastcall SUNITNPC_HandleIdentify(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 static BOOL __stdcall UnitHasItemInInventory(int32_t guid, D2UnitStrc * pUnit) {
-    D2UnitStrc* pDVar1;
-    pDVar1 = pUnit->pInventory ? D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory) : 0;
-    if (!pDVar1) {
-      return 0;
-    }
-    if (pDVar1->nUnitGUID != guid) {
-      return 0;
+    D2UnitStrc* pHandItem = pUnit->pInventory ? D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory) : nullptr;
+    if (pHandItem && GetGUIDInline(pHandItem) == guid) {
+      return TRUE;
     }
 
-    return 1;
+    return FALSE;
 }
 
 // @sourcefile .\UNIT\SUNITNPC.CPP
@@ -3064,8 +3060,8 @@ void __fastcall SUNITNPC_ResurrectHireling(::SGAMEDATA * pGame, D2UnitStrc * pPl
     if (pExistingMerc) {
       int nUnitGUID;
       Ai::AiGeneral::AssignMinionOwner(pGame, pExistingMerc, -1, UNIT_MONSTER, 0, 0);
-      PLAYER::PlayerPets::RemovePetByGuidAndNotify(pGame, pPlayer, pExistingMerc->nUnitGUID, 0);
-      nUnitGUID = pExistingMerc->nUnitGUID;
+      PLAYER::PlayerPets::RemovePetByGuidAndNotify(pGame, pPlayer, GetGUIDInline(pExistingMerc), 0);
+      nUnitGUID = pExistingMerc->nUnitGUID; // steer-ok: the original reads the GUID before the UNITS_GetRoom call
       eMonsterType = UNIT_MONSTER;
       D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pExistingMerc), eMonsterType, nUnitGUID);
       SUnit::FreeServerUnit(pGame, pExistingMerc);
@@ -3081,9 +3077,7 @@ void __fastcall SUNITNPC_ResurrectHireling(::SGAMEDATA * pGame, D2UnitStrc * pPl
     pHireling->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC | UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
     pHireling->eUnitFlagsEx &= ~UNITFLAGEX_NODRAW;
     SUNITNPC_RefreshHirelingItemStats(pHireling);
-    eMonsterType = pPlayer->eUnitType;
     wPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pPlayer);
-    eMonsterType = pPlayer->eUnitType;
     nPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pPlayer);
     PLAYER::PlayerPets::PETS_ManagePetsByType(pGame, pPlayer, nPosX, wPosY);
     D2Game::Monster::MonsterAI::SendMercPackets(pGame, pPlayer, 0);

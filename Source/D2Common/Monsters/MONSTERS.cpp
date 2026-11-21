@@ -422,9 +422,14 @@ BOOL __stdcall MONSTER_IsMonsterUndead(D2UnitStrc * pUnit) {
 }
 
 uint32_t __stdcall UnitIsMarkedBoss(D2MonStatsTxt * pMonStatsTxt, D2UnitStrc * pUnit) {
-    int nClassId;
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && (pMonStatsTxt || (nClassId = pUnit->nClassId , nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) && (pMonStatsTxt = ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId , pMonStatsTxt != 0))) {
-      return (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc) & Fog::BitBuffer::gadwBitMasks[6];
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+      if (!pMonStatsTxt) {
+        int nClassId = pUnit->nClassId;
+        pMonStatsTxt = nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
+      }
+      if (pMonStatsTxt) {
+        return (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc) & Fog::BitBuffer::gadwBitMasks[6];
+      }
     }
 
     return 0;

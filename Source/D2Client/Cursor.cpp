@@ -107,7 +107,7 @@ namespace D2Client::Cursor {
 int MouseY = 0; D2_GLOBAL_GUARD(MouseY, "D2Client::Cursor::MouseY");
 int MouseX = 0; D2_GLOBAL_GUARD(MouseX, "D2Client::Cursor::MouseX");
 } // namespace D2Client::Cursor
-static uint32_t gnCursorType = 0; D2_STATIC_GUARD(gnCursorType, "gnCursorType");
+static int gnCursorType = 0; D2_STATIC_GUARD(gnCursorType, "gnCursorType");
 static D2UnitStrc * pCursorItem = 0; D2_STATIC_GUARD(pCursorItem, "pCursorItem");
 namespace D2Client::Cursor {
 DC6 * pCursorsDC6[7] = {}; D2_GLOBAL_GUARD(pCursorsDC6, "D2Client::Cursor::pCursorsDC6");
@@ -380,32 +380,19 @@ void __stdcall UI_UpdateCursorAnimation() {
 }
 
 void __stdcall MOUSE_DrawCursorSprite() {
-    int32_t nPositionY;
     D2GfxDataStrc sGfxData;
-    int nMouseX = gnCursorType + MouseX;
+    int nPositionX = MouseX + (int)gnCursorType;
+    int nPositionY = MouseY;
     if (MouseY < 0) {
       nPositionY = 0;
-    } else {
-      nPositionY = MouseY;
-      if (MouseY > UI::Inv::ScreenSizeY - 1) {
-        nPositionY = UI::Inv::ScreenSizeY - 1;
-      }
+    } else if (MouseY > UI::Inv::ScreenSizeY - 1) {
+      nPositionY = UI::Inv::ScreenSizeY - 1;
     }
-
-    int nPositionX = gnCursorType;
-    if (nMouseX >= gnCursorType) {
-      int nMaxX;
-      nMaxX = UI::ui::ScreenSizeX - gnCursorType - 1;
-      nPositionX = nMouseX;
-      if (nMouseX > nMaxX) {
-        nPositionX = nMaxX;
-      }
-    }
-
+    nPositionX = nPositionX < (int)gnCursorType ? (int)gnCursorType : (nPositionX > UI::ui::ScreenSizeX - (int)gnCursorType - 1 ? UI::ui::ScreenSizeX - (int)gnCursorType - 1 : nPositionX);
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = pCursorsDC6[nCursorDataIndex];
-    sGfxData.nFrameNumber = gCursorAnimationFrame >> 8;
     sGfxData.nDirection = 0;
+    sGfxData.nFrameNumber = gCursorAnimationFrame >> 8;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, nPositionY, -1, DRAW_SOLID, nullptr);
     UI_UpdateCursorAnimation();
 }

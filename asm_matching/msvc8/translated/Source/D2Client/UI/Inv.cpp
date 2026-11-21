@@ -406,16 +406,14 @@ static BOOL IsInBankPageScreenRange(int32_t nX, int32_t nY) {
 }
 
 static BOOL IsInBankPageScreenRangeOpenTop(int32_t nX, int32_t nY) {
-    BOOL bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-    int nRight = pBankPageScreenCoordinates.nRight;
-    int nBottom = pBankPageScreenCoordinates.nBottom;
-    int nLeft = pBankPageScreenCoordinates.nLeft;
-    if (bIsExpansion) {
-      nRight = BigBankPageScreenCoordinates.nRight;
-      nBottom = BigBankPageScreenCoordinates.nBottom;
-      nLeft = BigBankPageScreenCoordinates.nLeft;
+    if (GAME::Game::CLIENT_CheckExpansion()) {
+      if (nX >= BigBankPageScreenCoordinates.nLeft && nX < BigBankPageScreenCoordinates.nRight && nY >= 0 && nY <= BigBankPageScreenCoordinates.nBottom) {
+        return 1;
+      }
+
+      return 0;
     }
-    if (nX >= nLeft && nX < nRight && nY >= 0 && nY <= nBottom) {
+    if (nX >= pBankPageScreenCoordinates.nLeft && nX < pBankPageScreenCoordinates.nRight && nY >= 0 && nY <= pBankPageScreenCoordinates.nBottom) {
       return 1;
     }
 
@@ -6848,21 +6846,18 @@ void __stdcall INV_PanelKeyNoOp(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __fastcall INV_ExtractTextBetweenBrackets(uint16_t * wszText, short * wszDelimStart) {
-    int nZeroCount;
     uint16_t wszExtracted[100];
-    uint16_t wszCloseDelim[2];
-    for (nZeroCount = 0; nZeroCount < 0x64; nZeroCount++) {
-      wszExtracted[nZeroCount] = L'\0';
+    uint16_t wszCloseDelim[2] = {0x5b, 0};
+    for (int i = 0; i < 100; i++) {
+      wszExtracted[i] = 0;
     }
 
-    wszCloseDelim[0] = 0x5b;
-    wszCloseDelim[1] = 0;
-    uint16_t* pwOpenBracket = D2Lang::Unicode::UNISYS::UNICODE_FindSubstring((uint16_t*)wszText, (uint16_t*)wszDelimStart);
-    if (!pwOpenBracket) {
+    uint16_t* pwInnerStart = D2Lang::Unicode::UNISYS::UNICODE_FindSubstring((uint16_t*)wszText, (uint16_t*)wszDelimStart);
+    if (!pwInnerStart) {
       return;
     }
 
-    uint16_t* pwInnerStart = (uint16_t*)(pwOpenBracket + 4);
+    pwInnerStart += 4;
     int32_t nInnerLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwInnerStart);
     uint16_t* pwClose = (uint16_t*)D2Lang::Unicode::UNISYS::UNICODE_FindSubstring((uint16_t*)pwInnerStart, wszCloseDelim);
     nInnerLen -= D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwClose);

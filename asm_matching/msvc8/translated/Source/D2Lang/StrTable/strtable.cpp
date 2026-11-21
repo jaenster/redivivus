@@ -781,18 +781,15 @@ uint16_t __fastcall Unreferenced_00525010(uint16_t wValue) {
 }
 
 void __stdcall STRTABLE_CalculateCRC(uint16_t * pwCRC, uint8_t * pBuffer, uint32_t nOffset, uint32_t nEndOffset) {
-    uint8_t* pbData;
     if (nOffset >= nEndOffset) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ea);
       exit(-1);
     }
 
     *pwCRC = 0xffff;
-    do {
-      pbData = pBuffer + nOffset;
-      nOffset++;
-      *pwCRC = *pwCRC << 8 ^ gwStrTableDefaultEncoding[(uint32_t)*pbData ^ (uint32_t)(*pwCRC >> 8)];
-    } while (nOffset < nEndOffset);
+    for (uint32_t i = nOffset; i < nEndOffset; i++) {
+      *pwCRC = (*pwCRC << 8) ^ gwStrTableDefaultEncoding[(*pwCRC >> 8) ^ pBuffer[i]];
+    }
 }
 
 void __fastcall STRTABLE_NormalizeLanguageCode(char * szText) {

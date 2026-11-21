@@ -588,20 +588,18 @@ int32_t __fastcall SAVE_SerializeItemIfValid(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 static uint16_t GetCarriedItemsCount(D2InventoryStrc * pInventory) {
+    uint16_t nCount = 0;
     if (!pInventory) {
       return 0;
     }
 
-    D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-    uint16_t nCount = 0;
-    if (pItem != 0) {
+    if (D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory)) {
       nCount = 1;
     }
 
-    pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
+    D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
     while (pItem) {
-      D2UnitStrc* pCarriedItem;
-      pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pItem);
+      D2UnitStrc* pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pItem);
       pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pItem);
       if (pCarriedItem) {
         nCount++;
@@ -1462,34 +1460,17 @@ int __fastcall _oldSaveGameLoadingPart3(D2UnitStrc * pUnit, uint32_t * pdwSaveDa
 }
 
 int __fastcall _oldSaveGameLoadingPart4(D2UnitStrc * pUnit, uint32_t * pdwSaveCursor, uint32_t dwUnused, uint32_t * pnBytesConsumed) {
-    int nIntroOffset;
     D2SaveFileNpcStrc aIntroBlock;
-    uint32_t dwCopyWord;
     *pnBytesConsumed = 0;
-    D2SaveFileNpcStrc* pCopyDst = &aIntroBlock;
-    for (nIntroOffset = 0xd; nIntroOffset; nIntroOffset--) {
-      dwCopyWord = *pdwSaveCursor;
-      pCopyDst->szMagic = (short int)dwCopyWord;
-      pCopyDst->nSize = (short int)((uint32_t)dwCopyWord >> 0x10);
-      pdwSaveCursor++;
-      pCopyDst = (D2SaveFileNpcStrc*)pCopyDst->pActNpcData;
-    }
-
+    aIntroBlock = *(D2SaveFileNpcStrc*)pdwSaveCursor;
     if (aIntroBlock.szMagic != 0x7701) {
       return 0xb;
     }
 
-    nIntroOffset = 0x60;
-    uint8_t (*pIntroBufPos)[8] = aIntroBlock.pActNpcBitInfo;
-    do {
-      D2UnitDataPlayerStrc* pPlayerData;
-      pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-      PlayerIntro::PLAYERINTRO_CopyIntroData8Bytes(*(D2UnitDataPlayerInteractedNPCStrc**)(pPlayerData->szCharName + nIntroOffset), (uint32_t*)(pIntroBufPos - 3));
-      pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-      PlayerIntro::PLAYERINTRO_CopyIntroDataIndirect(*(D2UnitDataPlayerInteractedNPCStrc**)(pPlayerData->szCharName + nIntroOffset), (uint32_t*)pIntroBufPos);
-      nIntroOffset += 4;
-      pIntroBufPos++;
-    } while (nIntroOffset < 0x6c);
+    for (int i = 0; i < 3; i++) {
+      PlayerIntro::PLAYERINTRO_CopyIntroData8Bytes(D2Common::Units::GetPlayerData(pUnit)->pInteractedNPCs[i], (uint32_t*)aIntroBlock.pActNpcData[i]);
+      PlayerIntro::PLAYERINTRO_CopyIntroDataIndirect(D2Common::Units::GetPlayerData(pUnit)->pInteractedNPCs[i], (uint32_t*)aIntroBlock.pActNpcBitInfo[i]);
+    }
 
     *pnBytesConsumed = 0x34;
     return 0;

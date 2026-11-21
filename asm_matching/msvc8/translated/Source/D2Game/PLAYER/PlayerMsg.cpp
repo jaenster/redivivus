@@ -921,37 +921,15 @@ void __fastcall SendPlayerStop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Client
 }
 
 void __fastcall PLRMSG_SendPlayerStopToOtherClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, int32_t nModeIndex) {
-    int32_t wPosY;
-    int32_t wPosX;
-    int32_t nPos;
-    D2UnitStrc* pSelfUnit = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
-    if (pUnit == pSelfUnit) {
+    if (pUnit == GAME::Clients::CLIENTS_GetControlUnit(pClient, 0)) {
       return;
     }
 
-    int32_t nLifePct = D2Common::Units::GetCurrentLifePercentage(pUnit);
-    eD2UnitType eUnitType = pUnit->eUnitType;
+    uint8_t nLifePct = (uint8_t)D2Common::Units::GetCurrentLifePercentage(pUnit);
     int32_t dwMoveMode = gaPlayerModeNetMsgTable[nModeIndex].nMoveModeByte;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nPos = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      wPosY = nPos;
-    } else {
-      wPosY = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nPos = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      wPosX = nPos;
-    } else {
-      wPosX = 0;
-    }
-
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(pClient, '\r', '\0', pUnit->nUnitGUID, (uint8_t)dwMoveMode, wPosX, wPosY, '\0', (uint8_t)nLifePct);
+    int32_t wPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
+    int32_t wPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(pClient, '\r', '\0', GetGUIDInline(pUnit), (uint8_t)dwMoveMode, wPosX, wPosY, '\0', nLifePct);
 }
 
 // Reads pUnit->eAnimMode.ePlayerMode and indexes gaPlayerModeNetMsgTable @0x007319e8 (D2PlayerModeNetMsgStrc, stride 12, 20 entries - one per eD2PlayerAnimMode value), then calls that mode's pfnSend to push the matching network message to nearby clients when a player's animation state changes.
@@ -1223,7 +1201,7 @@ static void __stdcall StartModeID(eD2Skills eSkillId, ::SGAMEDATA * pGame, D2Uni
 
 // Returns SERVERSTATUS_OK (0) when both units are in the same act, or 2 when they differ - the act check every cross-act packet handler gates on.
 // Returns a FULL 32-bit value. The single return path is SBB EBX,EBX / AND EBX,0x2 / MOV EAX,EBX at 00548ab1-00548ab6, which writes the whole of EAX.
-static int32_t __stdcall IsOtherAct(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+static eD2ServerIncomingStatus __stdcall IsOtherAct(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     eAct eActThis = D2Common::Drlg::GetActNoFromLevelNumber(eLevelId);
@@ -2167,63 +2145,57 @@ eD2ServerIncomingStatus __fastcall SCMD_0x07_LeftSkillOnEntityEx(::SGAMEDATA * p
 // [op:1][x:u16][y:u16]
 // Held mouse: extra validation then delegates to handler 0x05.
 eD2ServerIncomingStatus __fastcall SCMD_0x08_LeftSkillOnLocationEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x08_LeftSkillOnLocationEx * pPacket, uint32_t nSize) {
-    uint32_t nSizeCopy = nSize;
-    ::SGAMEDATA* pGameCopy = pGame;
-    int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, (uint16_t*)&pGameCopy, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
+    uint16_t nX;
+    uint16_t nY;
+    int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, &nX, &nY, pUnit, &pPacket->nCmd);
     if (nStatus) {
       return (eD2ServerIncomingStatus)nStatus;
     }
 
-    D2SkillStrc* pLeftSkill = D2Common::Units::GetLeftSkill(pUnit);
-    if (!pLeftSkill) {
+    if (!D2Common::Units::GetLeftSkill(pUnit)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    SCMD_0x05_LeftSkillOnLocation(pGame, pUnit, (D2GSPacketClt0x05_LeftSkillOnLocation*)pPacket, nSizeCopy);
-    nStatus = 0;
-    return (eD2ServerIncomingStatus)nStatus;
+    SCMD_0x05_LeftSkillOnLocation(pGame, pUnit, (D2GSPacketClt0x05_LeftSkillOnLocation*)pPacket, nSize);
+    return SERVERSTATUS_OK;
 }
 
 // C->S Packet 0x09 - Left Skill on Unit, Repeat (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Held mouse: delegates to handler 0x06.
 eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x09_CheckRangeThenLeftSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x09_LeftSkillOnEntityEx2 * pPacket, uint32_t nSize) {
-    eD2UnitType eOutUnitType;
-    uint32_t nSize_00 = nSize;
-    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, &eOutUnitType, &nSize, pUnit, &pPacket->nCmd);
+    eD2UnitType eUnitType;
+    uint32_t nUnitGUID;
+    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, &eUnitType, &nUnitGUID, pUnit, &pPacket->nCmd);
     if (nStatus != SERVERSTATUS_OK) {
-      return (eD2ServerIncomingStatus)nStatus;
+      return nStatus;
     }
 
-    D2SkillStrc* pLeftSkill = D2Common::Units::GetLeftSkill(pUnit);
-    if (!pLeftSkill) {
+    if (!D2Common::Units::GetLeftSkill(pUnit)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    SCMD_0x06_LeftSkillOnEntity(pGame, pUnit, (D2GSPacketClt0x06_LeftSkillOnEntity*)pPacket, nSize_00);
-    nStatus = SERVERSTATUS_OK;
-    return (eD2ServerIncomingStatus)nStatus;
+    SCMD_0x06_LeftSkillOnEntity(pGame, pUnit, (D2GSPacketClt0x06_LeftSkillOnEntity*)pPacket, nSize);
+    return SERVERSTATUS_OK;
 }
 
 // C->S Packet 0x0A - Left Skill on Unit, Repeat+Shift (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Held+shift: delegates to handler 0x07.
 eD2ServerIncomingStatus __fastcall SCMD_0x0A_LeftSkillOnEntityEx3(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x0A_LeftSkillOnEntityEx3 * pPacket, uint32_t nSize) {
-    eD2UnitType eOutUnitType;
-    uint32_t nSize_00 = nSize;
-    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, &eOutUnitType, &nSize, pUnit, &pPacket->nCmd);
+    eD2UnitType eUnitType;
+    uint32_t nUnitGUID;
+    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, &eUnitType, &nUnitGUID, pUnit, &pPacket->nCmd);
     if (nStatus != SERVERSTATUS_OK) {
-      return (eD2ServerIncomingStatus)nStatus;
+      return nStatus;
     }
 
-    D2SkillStrc* pLeftSkill = D2Common::Units::GetLeftSkill(pUnit);
-    if (!pLeftSkill) {
+    if (!D2Common::Units::GetLeftSkill(pUnit)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    SCMD_0x07_LeftSkillOnEntityEx(pGame, pUnit, (D2GSPacketClt0x07_LeftSkillOnEntityEx*)pPacket, nSize_00);
-    nStatus = SERVERSTATUS_OK;
-    return (eD2ServerIncomingStatus)nStatus;
+    SCMD_0x07_LeftSkillOnEntityEx(pGame, pUnit, (D2GSPacketClt0x07_LeftSkillOnEntityEx*)pPacket, nSize);
+    return SERVERSTATUS_OK;
 }
 
 // C->S Packet 0x0B - Keepalive/Noop (1 byte)
@@ -2302,63 +2274,57 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0E_RightSkillOnEntityEx(::SGAMEDATA * 
 // [op:1][x:u16][y:u16]
 // Held mouse: delegates to handler 0x0C.
 eD2ServerIncomingStatus __fastcall SCMD_0x0F_RightSkillOnLocationEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x0F_RightSkillOnLocationEx * pPacket, uint32_t nSize) {
-    uint32_t nSizeCopy = nSize;
-    ::SGAMEDATA* pGameCopy = pGame;
-    int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, (uint16_t*)&pGameCopy, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
+    uint16_t nX;
+    uint16_t nY;
+    int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, &nX, &nY, pUnit, &pPacket->nCmd);
     if (nStatus) {
       return (eD2ServerIncomingStatus)nStatus;
     }
 
-    D2SkillStrc* pRightSkill = D2Common::Units::GetRightSkill(pUnit);
-    if (!pRightSkill) {
+    if (!D2Common::Units::GetRightSkill(pUnit)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    SCMD_0x0C_RightSkillOnLocation(pGame, pUnit, (D2GSPacketClt0x0C_RightSkillOnLocation*)pPacket, nSizeCopy);
-    nStatus = 0;
-    return (eD2ServerIncomingStatus)nStatus;
+    SCMD_0x0C_RightSkillOnLocation(pGame, pUnit, (D2GSPacketClt0x0C_RightSkillOnLocation*)pPacket, nSize);
+    return SERVERSTATUS_OK;
 }
 
 // C->S Packet 0x10 - Right Skill on Unit, Repeat (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Held mouse: delegates to handler 0x0D.
 eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x10_CheckRangeThenRightSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x10_RightSkillOnEntityEx2 * pPacket, uint32_t nSize) {
-    eD2UnitType eOutUnitType;
-    uint32_t nSize_00 = nSize;
-    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, &eOutUnitType, &nSize, pUnit, &pPacket->nCmd);
+    eD2UnitType eUnitType;
+    uint32_t nUnitGUID;
+    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, &eUnitType, &nUnitGUID, pUnit, &pPacket->nCmd);
     if (nStatus != SERVERSTATUS_OK) {
-      return (eD2ServerIncomingStatus)nStatus;
+      return nStatus;
     }
 
-    D2SkillStrc* pRightSkill = D2Common::Units::GetRightSkill(pUnit);
-    if (!pRightSkill) {
+    if (!D2Common::Units::GetRightSkill(pUnit)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    SCMD_0x0D_RightSkillOnEntity(pGame, pUnit, (D2GSPacketClt0x0D_RightSkillOnEntity*)pPacket, nSize_00);
-    nStatus = SERVERSTATUS_OK;
-    return (eD2ServerIncomingStatus)nStatus;
+    SCMD_0x0D_RightSkillOnEntity(pGame, pUnit, (D2GSPacketClt0x0D_RightSkillOnEntity*)pPacket, nSize);
+    return SERVERSTATUS_OK;
 }
 
 // C->S Packet 0x11 - Right Skill on Unit, Repeat+Shift (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Held+shift: delegates to handler 0x0E.
 eD2ServerIncomingStatus __fastcall SCMD_0x11_RightSkillOnEntityEx3(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x11_RightSkillOnEntityEx3 * pPacket, uint32_t nSize) {
-    eD2UnitType eOutUnitType;
-    uint32_t nSize_00 = nSize;
-    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, &eOutUnitType, &nSize, pUnit, &pPacket->nCmd);
+    eD2UnitType eUnitType;
+    uint32_t nUnitGUID;
+    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, &eUnitType, &nUnitGUID, pUnit, &pPacket->nCmd);
     if (nStatus != SERVERSTATUS_OK) {
-      return (eD2ServerIncomingStatus)nStatus;
+      return nStatus;
     }
 
-    D2SkillStrc* pRightSkill = D2Common::Units::GetRightSkill(pUnit);
-    if (!pRightSkill) {
+    if (!D2Common::Units::GetRightSkill(pUnit)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    SCMD_0x0E_RightSkillOnEntityEx(pGame, pUnit, (D2GSPacketClt0x0E_RightSkillOnEntityEx*)pPacket, nSize_00);
-    nStatus = SERVERSTATUS_OK;
-    return (eD2ServerIncomingStatus)nStatus;
+    SCMD_0x0E_RightSkillOnEntityEx(pGame, pUnit, (D2GSPacketClt0x0E_RightSkillOnEntityEx*)pPacket, nSize);
+    return SERVERSTATUS_OK;
 }
 
 // C->S Packet 0x12 - Cancel Channeled Skill (1 byte)

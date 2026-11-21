@@ -501,10 +501,8 @@ template<> __declspec(noinline) inline ::SGAMEDATA * TSGrowableArray<SGAMEDATA>:
       if (!nGranularity) {
         nGranularity = this->CalcChunkSize(nNeeded);
       }
-      if (nNeeded % nGranularity) {
-        nNeeded = nGranularity - nNeeded % nGranularity + nNeeded;
-      }
 
+      nNeeded = D2_RoundUp(nNeeded, nGranularity);
       this->ReallocData(nNeeded);
     }
 
@@ -516,9 +514,7 @@ template<> __declspec(noinline) inline ::SGAMEDATA * TSGrowableArray<SGAMEDATA>:
       pNewEntry->m_linktofull.m_next = 0;
     }
 
-    nNeeded = this->m_count;
-    this->m_count = nNeeded + 1;
-    return this->m_data + nNeeded;
+    return &this->m_data[this->m_count++];
 }
 
 // Grows the capacity to m_count + nCount without rounding.

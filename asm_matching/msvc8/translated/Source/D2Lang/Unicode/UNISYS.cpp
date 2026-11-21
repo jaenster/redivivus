@@ -189,26 +189,17 @@ uint16_t * __fastcall AppendToBuffer(uint16_t * wszText1, uint16_t * wszText2) {
 }
 
 uint16_t * __fastcall UNICODE_AppendWideStringN(uint16_t * pwszDst, uint16_t * pwszSrc, int32_t nMaxChars) {
-    uint16_t* puVar1 = pwszDst;
-    uint16_t wCurChar = *pwszDst;
-    while (wCurChar) {
-      pwszDst++;
-      wCurChar = *pwszDst;
+    uint16_t* pwszCur = pwszDst;
+    while (*pwszCur) {
+      pwszCur++;
     }
 
-    while (nMaxChars) {
-      nMaxChars--;
-      if (!*pwszSrc) {
-        break;
-      }
-
-      *pwszDst = *pwszSrc;
-      pwszDst++;
-      pwszSrc++;
+    while (nMaxChars-- && *pwszSrc) {
+      *pwszCur++ = *pwszSrc++;
     }
 
-    *pwszDst = 0;
-    return puVar1;
+    *pwszCur = 0;
+    return pwszDst;
 }
 
 uint16_t * __fastcall WSTRING_PutWideCharIntoBuffer(uint16_t * pDestination, uint16_t * wszChar, size_t nSizeMaybe) {
@@ -242,16 +233,13 @@ uint16_t * __fastcall WSTRING_PutWideCharIntoBuffer(uint16_t * pDestination, uin
 }
 
 uint16_t * __fastcall STRING_CopyWideString(uint16_t * wDestination, uint16_t * wSource) {
-    uint16_t wCurChar;
-    uint16_t* pWVar1 = wDestination;
+    uint16_t* pDest = wDestination;
     do {
-      *wDestination = *wSource;
-      wCurChar = *wSource;
-      wDestination++;
-      wSource++;
-    } while (wCurChar != L'\0');
+      *pDest = *wSource;
+      pDest++;
+    } while (*wSource++ != L'\0');
 
-    return pWVar1;
+    return wDestination;
 }
 
 int32_t __fastcall STRING_GetWideStringLength(uint16_t * wszString) {

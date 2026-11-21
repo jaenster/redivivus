@@ -390,11 +390,9 @@ D2LvlWarpTxt * __fastcall DRLGROOM_GetLvlWarpTxtForWarpUnit(D2RoomExStrc * pRoom
 
 // Finds the Nth occurrence of a level ID in the vis array. Used to resolve which vis slot corresponds to a specific warp when multiple warps connect to the same level.
 static int DRLGWARP_FindNthVisEntryForLevel(D2DrlgStrc * pDrlg, eD2LevelId eLevelIdVis, eD2LevelId eLevelId, int nOccurrenceIndex) {
-    uint8_t nNextSlot;
     int* pVisArray = DRLGWARP_GetVisArrayFromLevelId(pDrlg, eLevelIdVis);
     int nMatchCount = 0;
-    uint32_t nVisIndex = 0;
-    do {
+    for (uint8_t nVisIndex = 0; nVisIndex < 8; nVisIndex++) {
       if (pVisArray[nVisIndex] == eLevelId) {
         if (nMatchCount == nOccurrenceIndex) {
           return nVisIndex;
@@ -402,10 +400,7 @@ static int DRLGWARP_FindNthVisEntryForLevel(D2DrlgStrc * pDrlg, eD2LevelId eLeve
 
         nMatchCount++;
       }
-
-      nNextSlot = (char)nVisIndex + 1;
-      nVisIndex = (uint32_t)nNextSlot;
-    } while (nNextSlot < 8);
+    }
 
     return -1;
 }
@@ -675,42 +670,31 @@ void __fastcall DRLGROOMEX_FreeDrlgRoomTile(D2PoolManagerStrc * pMemory, D2RoomE
 
 // @sourcefile .\DRLG\DrlgRoom.cpp
 void __fastcall FreeRoomData(D2PoolManagerStrc * pMemory, D2DrlgOrthStrc * pDrlgRoomData) {
-    while (pDrlgRoomData) {
-      D2DrlgOrthStrc* pNextRoomData;
-      pNextRoomData = pDrlgRoomData->pNext;
-      D2_FREE_POOL_AT(pMemory, pDrlgRoomData, ".\\DRLG\\DrlgRoom.cpp", 0xbd);
-      pDrlgRoomData = pNextRoomData;
+    D2DrlgOrthStrc* pNextRoomData = pDrlgRoomData;
+    while (pNextRoomData) {
+      D2DrlgOrthStrc* pCurRoomData = pNextRoomData;
+      pNextRoomData = pNextRoomData->pNext;
+      D2_FREE_POOL_AT(pMemory, pCurRoomData, ".\\DRLG\\DrlgRoom.cpp", 0xbd);
     }
 }
 
 // Allocates a D2DrlgOrthStrc (nType=1, room link) connecting pRoomEx to pDrlgRoomEx2. Checks if connection already exists (matching pRoomEx pointer at offset 0). Prepends to pRoomEx->pOrth linked list.
 // @sourcefile .\DRLG\DrlgRoom.cpp
 void __fastcall DRLGROOMEX_AllocNodesFromRoomExToRoomEx(D2RoomExStrc * pRoomEx, D2RoomExStrc * pDrlgRoomEx2, int32_t neDrlgDirection) {
-    D2DrlgOrthStrc* pNewOrth;
-    D2DrlgOrthStrc* pOrthIter = pRoomEx->pOrth;
-    while (true) {
-      if (!pOrthIter) {
-        pNewOrth = D2_NEW_POOL_AT(pRoomEx->pLevel->pDrlg->pMemoryPool, D2DrlgOrthStrc, ".\\DRLG\\DrlgRoom.cpp", 0xd4);
-        pNewOrth->pLink.pRoomEx = 0;
-        pNewOrth->neDrlgDirection = DIRECTION_SOUTHEAST;
-        pNewOrth->bIsDrlgTypePresetArea = 0;
-        pNewOrth->nType = 0;
-        pNewOrth->psCoordinatesAndSize = 0;
-        pNewOrth->pNext = 0;
-        pNewOrth->pNext = pRoomEx->pOrth;
-        pRoomEx->pOrth = pNewOrth;
-        pNewOrth->pLink.pRoomEx = pDrlgRoomEx2;
-        pNewOrth->neDrlgDirection = neDrlgDirection;
-        pNewOrth->nType = 1;
-        pNewOrth->psCoordinatesAndSize = &pDrlgRoomEx2->sCoords;
+    for (D2DrlgOrthStrc* pOrth = pRoomEx->pOrth; pOrth; pOrth = pOrth->pNext) {
+      if (pOrth->pLink.pRoomEx == pDrlgRoomEx2) {
         return;
       }
-      if (pOrthIter->pLink.pRoomEx == pDrlgRoomEx2) {
-        break;
-      }
-
-      pOrthIter = pOrthIter->pNext;
     }
+
+    D2DrlgOrthStrc* pNewOrth = D2_NEW_POOL_AT(pRoomEx->pLevel->pDrlg->pMemoryPool, D2DrlgOrthStrc, ".\\DRLG\\DrlgRoom.cpp", 0xd4);
+    memset(pNewOrth, 0, sizeof(*pNewOrth));
+    pNewOrth->pNext = pRoomEx->pOrth;
+    pRoomEx->pOrth = pNewOrth;
+    pNewOrth->pLink.pRoomEx = pDrlgRoomEx2;
+    pNewOrth->neDrlgDirection = neDrlgDirection;
+    pNewOrth->nType = 1;
+    pNewOrth->psCoordinatesAndSize = &pDrlgRoomEx2->sCoords;
 }
 
 // Creates bidirectional D2DrlgOrthStrc links between two rooms. Allocates A->B with eDirection, then B->A with the opposite direction ((eDirection-2) & 3).

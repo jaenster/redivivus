@@ -875,8 +875,6 @@ uint32_t __fastcall LAUNCHER_WriteSaveFileToD2s(char * szCharacterName) {
 
 // Deletes all files associated with a character in the save directory. Constructs a search pattern "savepath\character.*" and iterates through all matching files, skipping directories, deleting each file found. If a subdirectory is specified, creates and operates within that subdirectory. Halts with unrecoverable error if character name is empty.
 void __fastcall LAUNCHER_DeleteCharacterFiles(D2CharSelStrc * pCharSel, char * szSubdirectory) {
-    DWORD dwFileAttributes;
-    BOOL bSuccess;
     char szSearchPattern[500];
     char szFullFilePath[500];
     char szSubdirPath[260];
@@ -896,31 +894,24 @@ void __fastcall LAUNCHER_DeleteCharacterFiles(D2CharSelStrc * pCharSel, char * s
 
     sprintf(szSearchPattern, "%s%s.*", szSavePath, pCharSel->szCharname);
     HANDLE hFindFile = FindFirstFileA(szSearchPattern, &findData);
-    while (true) {
-      while (true) {
-        if (hFindFile == (HANDLE)-1) {
-          return;
-        }
-
-        sprintf(szFullFilePath, "%s%s", szSavePath, findData.cFileName);
-        /* LPCSTR lpFileName for GetFileAttributesA */ dwFileAttributes = GetFileAttributesA(szFullFilePath);
-        if (!(dwFileAttributes & 0x10)) {
-          break;
-        }
-
-        /* LPWIN32_FIND_DATAA lpFindFileData for FindNextFileA */ /* HANDLE hFindFile for FindNextFileA */ bSuccess = FindNextFileA(hFindFile, &findData);
-        if (!bSuccess) {
-          return;
-        }
-      }
-
-      /* LPCSTR lpFileName for DeleteFileA */ bSuccess = DeleteFileA(szFullFilePath);
-      if (!bSuccess) {
-        break;
-      }
-
-      /* LPWIN32_FIND_DATAA lpFindFileData for FindFirstFileA */ /* LPCSTR lpFileName for FindFirstFileA */ hFindFile = FindFirstFileA(szSearchPattern, &findData);
+    if (hFindFile == (HANDLE)-1) {
+      return;
     }
+
+    do {
+      sprintf(szFullFilePath, "%s%s", szSavePath, findData.cFileName);
+      if (GetFileAttributesA(szFullFilePath) & 0x10) {
+        if (!FindNextFileA(hFindFile, &findData)) {
+          return;
+        }
+      } else {
+        if (!DeleteFileA(szFullFilePath)) {
+          return;
+        }
+
+        hFindFile = FindFirstFileA(szSearchPattern, &findData);
+      }
+    } while (hFindFile != (HANDLE)-1);
 }
 
 // Loads character appearance data from a .d2s save file for display in character selection. Reads up to 8KB from the save file, validates the magic number (0xaa55aa55), extracts equipment and visual data based on save file version (pre-0x5c vs 0x5c-0x60), and writes encoded appearance info to output buffer including class, level, and equipped items. Returns 1 on success, 0 on failure.

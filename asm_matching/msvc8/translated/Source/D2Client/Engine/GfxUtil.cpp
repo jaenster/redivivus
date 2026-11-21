@@ -442,25 +442,24 @@ void __fastcall GFXUTIL_GetArmorAppearanceFromTorso(D2UnitStrc * pUnitStrc, D2In
 
 uint32_t __fastcall GFXUTIL_IsDC6BlockOnScreen(DC6Block * pDC6Block, int32_t nDrawX, int32_t nScreenY, BOOL bFlipped) {
     int32_t nHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
-    int32_t nOffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
-    int32_t nOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    int nScreenX = nOffsetX + nDrawX;
+    int nY = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block) + nScreenY;
+    int nX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block) + nDrawX;
     int nWidth = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     if (bFlipped) {
-      nScreenX -= nHeight;
+      nX -= nHeight;
       nWidth += nHeight;
     }
-    if (!(nScreenX <= UI::ui::ScreenSizeX)) {
+    if (nX > UI::ui::ScreenSizeX) {
       return 0;
     }
-    if (nWidth + nScreenX < 0) {
+    if (nWidth + nX < 0) {
       return 0;
     }
-    if (!(nOffsetY + nScreenY - nHeight <= UI::Inv::ScreenSizeY)) {
+    if (nY - nHeight > UI::Inv::ScreenSizeY) {
       return 0;
     }
 
-    return (uint32_t)(nOffsetY + nScreenY + nHeight >= 0);
+    return nY + nHeight >= 0;
 }
 
 // @sourcefile .\ENGINE\GfxUtil.cpp
@@ -914,17 +913,16 @@ static void __stdcall GFXUTIL_UpdateDirectionForMode(uint8_t nDirection, int32_t
 }
 
 static void GFXUTIL_ConvertDirectionBits(int32_t nFromDirs, int32_t nToDirs, uint32_t * pnDirection) {
-    uint32_t nConvertedDir;
+    uint32_t nDirection;
     if (nToDirs == 8) {
-      uint32_t nShiftedDir;
       if (nFromDirs == 4) {
-        nShiftedDir = D2CMP::SRC::CelCmp::CELCMP_GetPaletteShiftValue((*pnDirection & 0x1fffffff) >> 3, 8, 4, 0);
-        *pnDirection = (nShiftedDir & 0x3ffffff) << 3;
+        nDirection = *pnDirection * 8 / 64;
+        *pnDirection = D2CMP::SRC::CelCmp::CELCMP_GetPaletteShiftValue(nDirection, 8, 4, 0) * 64 / 8;
         return;
       }
     } else if (nToDirs == 0x10 && nFromDirs == 8) {
-      nConvertedDir = D2CMP::SRC::CelCmp::CELCMP_GetPaletteShiftValue((*pnDirection & 0xfffffff) >> 2, 0x10, 8, 0);
-      *pnDirection = (nConvertedDir & 0x3ffffff) << 2;
+      nDirection = *pnDirection * 16 / 64;
+      *pnDirection = D2CMP::SRC::CelCmp::CELCMP_GetPaletteShiftValue(nDirection, 0x10, 8, 0) * 64 / 16;
     }
 }
 

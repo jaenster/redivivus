@@ -2144,7 +2144,8 @@ BOOL __fastcall ITEMEVENT_CrushingBlow(::SGAMEDATA * pGame, uint32_t nUnitEvent,
     nChance = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nCrushDivisor, nChance, 100);
     nCrushDivisor -= nChance;
     apply_crush_damage:
-    nNewHP = nTargetHP - nCrushDivisor <= 0 ? 0 : nTargetHP - nCrushDivisor;
+    nTargetHP -= nCrushDivisor;
+    nNewHP = nTargetHP <= 0 ? 0 : nTargetHP;
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_hitpoints, nNewHP, 0);
     if ((int)nNewHP <= 0 && pDamage) {
       pDamage->wResultFlags |= 2;

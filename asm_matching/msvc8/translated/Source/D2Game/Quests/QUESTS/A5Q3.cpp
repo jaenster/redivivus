@@ -765,10 +765,9 @@ void __fastcall Q33_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     BOOL bQuestStateResult;
     D2ModeChangeStrc sKillInfo;
     int nTargetClassId;
-    eD2QuestState eQuestState;
     uint32_t nGossipIndex;
     ::SGAMEDATA* pGame;
-    pGame = pQuestData->pGame;
+    pGame = pQuestData->pGame; // steer-ok: the original reads pQuestData->pGame before the GetPlayerData call
     D2UnitDataPlayerStrc* pPlayerData;
     pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
     D2BitBufferStrc* pBitBuffer;
@@ -830,26 +829,19 @@ void __fastcall Q33_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 
     bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
     if (bQuestStateResult) {
-      switch (nTargetClassId) {
-        case 0x200:
-          {
-            eQuestState = QUESTSTATE_Step0x09;
-            LAB_00589c8f:
-            bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, eQuestState);
-            if (bQuestStateResult) {
-              return;
-            }
-
-            break;
-          }
-        case 0x201:
-          {
-            eQuestState = QUESTSTATE_Step0x08;
-            goto LAB_00589c8f;
-          }
+      if (nTargetClassId == 0x200) {
+        bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_Step0x09);
+        if (bQuestStateResult) {
+          return;
+        }
+      } else if (nTargetClassId == 0x201) {
+        bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_Step0x08);
+        if (bQuestStateResult) {
+          return;
+        }
       }
 
-      nGossipIndex = 5;
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 5);
     } else {
       int32_t nPlayerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
       bQuestStateResult = QUEST_HasPlayerParticipated(pQuestData, nPlayerGUID);
@@ -874,9 +866,9 @@ void __fastcall Q33_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       if (nGossipIndex >= 10) {
         return;
       }
-    }
 
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nGossipIndex);
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nGossipIndex);
+    }
 }
 
 // Q33_Callback_10 (PrisonOfIce, state-0xa handler): on player leave/cleanup, removes the player GUID from both quest

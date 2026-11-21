@@ -27,17 +27,15 @@ void __fastcall Q08_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     short int nNPCNo = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
     uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     if (nNPCNo == 0xc9) {
-      D2UnitDataPlayerStrc* pGame;
       if (nMessageIndex == 0xfd) {
         pPlayerData = pQuestArgs->pGame;
-        pGame = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-        /* SetQuestState(rec, QUEST_SpokeToJerhyn, QUESTSTATE_Completed=0) — record
-                         talked-to-Jerhyn as done for self difficulty */ D2Common::QuestRecord::SetQuestState(pGame->pQuestRecord[pPlayerData->nDifficulty], QUEST_SpokeToJerhyn, QUESTSTATE_Completed);
-        /* SetQuestRecordState(game, QUEST_SpokeToJerhyn, QUESTSTATE_JustCompleted=0xd)
-                         — broadcast just-completed -> opens Warriv->Act3 travel */ QUEST_SetQuestRecordState(pQuestArgs->pGame, QUEST_SpokeToJerhyn, QUESTSTATE_JustCompleted);
+        D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer)->pQuestRecord[pPlayerData->nDifficulty];
+        D2Common::QuestRecord::SetQuestState(pQuestRecord, QUEST_SpokeToJerhyn, QUESTSTATE_Completed);
+        QUEST_SetQuestRecordState(pQuestArgs->pGame, QUEST_SpokeToJerhyn, QUESTSTATE_JustCompleted);
       }
     } else if (nNPCNo == 0xf4 && nMessageIndex == 0x7d) {
-      QUESTGUID_AddPlayerToList(&pQuestData->pQuestSpecificData.pA2Q0->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
+      D2QuestDataA2Q0Strc* pQuestDataEx = pQuestData->pQuestSpecificData.pA2Q0; // steer-ok: the original loads pQuestSpecificData before the GUID null test
+      QUESTGUID_AddPlayerToList(&pQuestDataEx->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
       return;
     }
 }

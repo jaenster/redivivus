@@ -4393,7 +4393,8 @@ static void __stdcall UNITSND_PlayModeChangeSound(int32_t nMode, D2UnitStrc * pU
     eD2UnitType eUnitType;
     eUnitType = GetSndUnitType(pUnit);
     uint32_t nSfxTick;
-    nSfxTick = pUnit->dwLastHitClass;
+    uint32_t nHitClass;
+    nHitClass = pUnit->dwLastHitClass;
     if (eUnitType == UNIT_MONSTER) {
       eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_invis);
       if (eUnitState) {
@@ -4401,7 +4402,7 @@ static void __stdcall UNITSND_PlayModeChangeSound(int32_t nMode, D2UnitStrc * pU
       }
     }
 
-    UNITSND_ResolveSoundFromFlags(pUnit, nSfxTick, nMode, (int*)&eResolvedSound2, (int*)&eResolvedSound1);
+    UNITSND_ResolveSoundFromFlags(pUnit, nHitClass, nMode, (int*)&eResolvedSound2, (int*)&eResolvedSound1);
     int nSoundChannel;
     nSoundChannel = Sound::SOUND_PlaySound(eResolvedSound2, pUnit, 0, 0, 0);
     Sound::SOUND_PlaySound(eResolvedSound1, pUnit, 0, 0, 0);
@@ -4421,7 +4422,7 @@ static void __stdcall UNITSND_PlayModeChangeSound(int32_t nMode, D2UnitStrc * pU
     if (eUnitState) {
       return;
     }
-    if (((uint8_t)nSfxTick & 0xf0) == 0xa0) {
+    if ((nHitClass & 0xf0) == 0xa0) {
       return;
     }
     if (eUnitType == UNIT_MONSTER) {
@@ -4449,8 +4450,8 @@ static void __stdcall UNITSND_PlayModeChangeSound(int32_t nMode, D2UnitStrc * pU
       }
 
       Sound::SOUND_PlaySound(SOUND_GOATMAN_HIT_1, pUnit, 0x6a, 0, 0);
-      nDelay = 0xc1;
-      eHitOrDeathSound = SOUND_GOATMAN_HIT_2;
+      Sound::SOUND_PlaySound(SOUND_GOATMAN_HIT_2, pUnit, 0xc1, 0, 0);
+      goto record_sfx_time;
     } else {
       if (eUnitType != UNIT_PLAYER) {
         goto record_sfx_time;

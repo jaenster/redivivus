@@ -583,25 +583,24 @@ uint32_t __fastcall ROSTER_IsUnitHostileToPlayer(D2UnitStrc * pUnit) {
 }
 
 void __fastcall ROSTER_UpdateMercHostileColors(int32_t nOwnerGUID) {
-    D2UnitStrc* pRosterUnit;
-    int32_t nPalShift;
-    uint32_t bHostile;
-    int32_t nGfxSeq;
-    D2RosterPetStrc* pRosterIter;
-    for (pRosterIter = pRosterPet; pRosterIter; pRosterIter = pRosterIter->pNext) {
-      if (pRosterIter->nOwnerGUID == nOwnerGUID && pRosterIter->nRosterClass - 0x16bU <= 1) {
-        pRosterUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pRosterIter->nRosterGUID, UNIT_MONSTER);
-        if (pRosterUnit) {
-          nPalShift = UNIT::CUnit::GetPalShiftIndex(pRosterUnit);
-          bHostile = ROSTER_IsUnitHostileToPlayer(pRosterUnit);
-          nGfxSeq = UNIT::CUnit::GetGfxSequenceData(pRosterUnit);
-          if (nPalShift == nGfxSeq) {
-            BOOL bNotHostile = !bHostile;
-            UNIT::CUnit::SetPalShiftIndex(pRosterUnit, bNotHostile);
-          }
+    for (D2RosterPetStrc* pRosterIter = pRosterPet; pRosterIter; pRosterIter = pRosterIter->pNext) {
+      if (pRosterIter->nOwnerGUID == nOwnerGUID) {
+        switch (pRosterIter->nRosterClass) {
+          case 0x16b:
+          case 0x16c:
+            {
+              D2UnitStrc* pRosterUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pRosterIter->nRosterGUID, UNIT_MONSTER);
+              if (pRosterUnit) {
+                int32_t nPalShift = UNIT::CUnit::GetPalShiftIndex(pRosterUnit);
+                BOOL bNotHostile = !ROSTER_IsUnitHostileToPlayer(pRosterUnit);
+                if (nPalShift == UNIT::CUnit::GetGfxSequenceData(pRosterUnit)) {
+                  UNIT::CUnit::SetPalShiftIndex(pRosterUnit, bNotHostile);
+                }
 
-          BOOL bNotHostile_ = !bHostile;
-          UNIT::CUnit::SetGfxSequenceData(pRosterUnit, bNotHostile_);
+                UNIT::CUnit::SetGfxSequenceData(pRosterUnit, bNotHostile);
+              }
+            }
+            break;
         }
       }
     }

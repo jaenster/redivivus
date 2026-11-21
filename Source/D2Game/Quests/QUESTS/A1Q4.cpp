@@ -663,12 +663,8 @@ BOOL __fastcall Q04_MarkCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
     D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_CannotCompleteQuestInGame);
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSearchForCain);
-    if (!pUnit) {
-      QUESTGUID_AddPlayerToList(&pQuestData->pQuestSpecificData.pA1Q4->sQuestGUID1, -1);
-      return 0;
-    }
-
-    QUESTGUID_AddPlayerToList(&pQuestData->pQuestSpecificData.pA1Q4->sQuestGUID1, pUnit->nUnitGUID);
+    D2QuestDataA1Q4Strc* pA1Q4Data = pQuestData->pQuestSpecificData.pA1Q4; // steer-ok: the original loads pA1Q4 before the pUnit test of the GUID argument
+    QUESTGUID_AddPlayerToList(&pA1Q4Data->sQuestGUID1, !pUnit ? -1 : pUnit->nUnitGUID);
     return 0;
 }
 
@@ -2286,15 +2282,13 @@ void __fastcall Q04_ForceStartQuestProgression(::SGAMEDATA * pGame) {
 // state machine for the quest.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
 void __fastcall Q04_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2UnitDataPlayerStrc* pPlayerData;
     BOOL bQuestState;
     int32_t nY;
     int nPlayerGUID;
     D2QuestDataA1Q4Strc* pA1Q4SubCast;
     D2BitBufferStrc* pBitBuffer;
-    ::SGAMEDATA* pGame;
-    int32_t nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
     D2QuestDataA1Q4Strc* pA1Q4Sub = pQuestData->pQuestSpecificData.pA1Q4;
+    int32_t nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel; // steer-ok: the original reads the old level on entry, before the quest calls
     int nGossipIndex = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     if (nGossipIndex == 0x26 && pA1Q4Sub->sSub.bCairnMonsterSaved == '\0' && pA1Q4Sub->sSub.bQuestObjectsActivated == '\0' && pQuestData->nStateFlag >= 6) {
       QUEST_DebugPrint(pQuestData->pGame, "Started quest", "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q4.cpp", 599);
@@ -2312,9 +2306,7 @@ void __fastcall Q04_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       }
 
       QUESTGUID_RemovePlayerFromList(&pA1Q4Sub->sQuestGUID1, nPlayerGUID);
-      pGame = pQuestArgs->pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+      pBitBuffer = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
       bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
       if (bQuestState == 1) {
         return;
@@ -2340,9 +2332,7 @@ void __fastcall Q04_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
         }
       }
     } else if (nGossipIndex == 0x28) {
-      pGame = pQuestArgs->pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+      pBitBuffer = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
       bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
       if (bQuestState != 1) {
         bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);

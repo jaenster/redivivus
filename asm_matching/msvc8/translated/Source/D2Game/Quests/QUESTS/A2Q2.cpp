@@ -84,25 +84,11 @@ bool __fastcall Q10_IsRadamentCompleted(::SGAMEDATA * pGame) {
 // returns 0 once fully closed out. Drives whether to push a quest-log update to client.
 static BOOL __stdcall Q10_CheckHoradricStaffState(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pUnit);
-    BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Completed);
-    if (!BVar2) {
-      BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_FinishedInPreviousGame);
-      if (!BVar2) {
-        return 1;
-      }
-    }
-
-    BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_JustCompleted);
-    if (BVar2) {
+    if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Completed) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_FinishedInPreviousGame)) {
       return 1;
     }
 
-    BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_CannotCompleteQuestInGame);
-    if (BVar2) {
-      return 1;
-    }
-
-    return 0;
+    return D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_JustCompleted) || D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_CannotCompleteQuestInGame);
 }
 
 // Q10_NotifyHoradricStaffActive. If Q10_CheckHoradricStaffState says the quest is
@@ -325,6 +311,13 @@ void __fastcall Q10_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
                           */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x03);
 }
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 // Q10_Callback_00. Drognan (NPC 0xf4) gossip-MENU builder. Picks which gossip line
 // to offer based on quest state, then AddGossipMessageOnMonster. Read-only on quest
 // state. Selection: RewardAwaits -> msg 4; else if a quest item is held -> item msg
@@ -334,22 +327,19 @@ void __fastcall Q10_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 void __fastcall Q10_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nPlayerGUID;
     uint8_t byItemDialogMsg;
-    uint32_t nGossipMsgIndex;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bIsJustCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_JustCompleted);
     BOOL bRewardAwaits = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Completed);
-    if (!pQuestArgs->pTarget) {
-      return;
-    }
-    if (pQuestArgs->pTarget->nClassId != 0xf4) {
+    if (GetClassIdInline(pQuestArgs->pTarget) != 0xf4) {
       return;
     }
 
     BOOL bIsCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_RewardAwaits);
     if (bIsCompleted) {
-      nGossipMsgIndex = 4;
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf4, 4);
+      return;
     } else {
       bool bHasQuestItem;
       bHasQuestItem = (bool)Q10_CheckQuestItemsForDialog(pQuestData, pQuestArgs->pPlayer, &byItemDialogMsg);
@@ -362,7 +352,8 @@ void __fastcall Q10_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 
         bIsCompleted = QUEST_HasPlayerParticipated(pQuestData, nPlayerGUID);
         if (bIsCompleted) {
-          nGossipMsgIndex = 5;
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf4, 5);
+          return;
         } else {
           if (bRewardAwaits == 1) {
             if (!bIsJustCompleted) {
@@ -381,14 +372,14 @@ void __fastcall Q10_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
             byItemDialogMsg = 6;
           }
 
-          nGossipMsgIndex = (uint32_t)byItemDialogMsg;
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf4, byItemDialogMsg);
+          return;
         }
       } else {
-        nGossipMsgIndex = (uint32_t)byItemDialogMsg;
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf4, byItemDialogMsg);
+        return;
       }
     }
-
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf4, nGossipMsgIndex);
 }
 
 // Q10_Callback_03. Gossip sub-event handler: when the text-control id == 0x28,

@@ -470,12 +470,7 @@ void __fastcall SOUNDHDR_ClearReferenceCounts(eD2Sounds eSound) {
 
     D2SoundsTxt* pGroupSound = pTxtSounds + nGroupIdx;
     do {
-      D2SoundsTxt* pCurSound;
-      if (nGroupIdx < 0 || (pCurSound = pGroupSound , nGroupIdx >= nSoundsCount)) {
-        pCurSound = 0;
-      }
-
-      pCurSound->nRefCount = 0;
+      (nGroupIdx >= 0 && nGroupIdx < nSoundsCount ? pGroupSound : nullptr)->nRefCount = 0;
       nGroupIdx++;
       pGroupSound++;
     } while (nGroupIdx < (int)((uint32_t)pSound->Group_Size + pSound->nGroupStartIndex));

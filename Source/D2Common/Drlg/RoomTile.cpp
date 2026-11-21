@@ -1046,23 +1046,19 @@ void __fastcall DRLGROOMTILE_CountTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGr
 
 // Secondary counting pass for specific wall/shadow flag combos.
 void __fastcall DRLGROOMTILE_CountWallTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pFloorGrid, D2DrlgGridStrc * pOrientGrid, int bKillEdgeX, int bKillEdgeY) {
-    int nTileType;
-    int nY;
-    int nColIdx;
-    D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
     int nWidth = (uint32_t)!bKillEdgeX + pRoomEx->sCoords.WorldSize.x;
     int nHeight = (uint32_t)!bKillEdgeY + pRoomEx->sCoords.WorldSize.y;
-    for (nY = 0; nY < nHeight; nY++) {
-      for (nColIdx = 0; nColIdx < nWidth; nColIdx++) {
-        nTileType = DrlgGrid::GetGridFlags(pOrientGrid, nColIdx, nY);
+    D2DrlgRoomTilesStrc* pRoomTiles = &pRoomEx->pRoomTiles->sRoomTiles;
+    for (int nY = 0; nY < nHeight; nY++) {
+      for (int nX = 0; nX < nWidth; nX++) {
+        int nTileType = DrlgGrid::GetGridFlags(pOrientGrid, nX, nY);
         if (nTileType == 3) {
-          pTileGrid->sRoomTiles.nWallTilesCount++;
+          pRoomTiles->nWallTilesCount++;
         } else if (nTileType >= 0xa && nTileType <= 0xb) {
-          nTileType = DrlgGrid::GetGridFlags(pFloorGrid, nColIdx, nY);
-          if (nTileType >= 0) {
-            pTileGrid->sRoomTiles.nWallTilesCount++;
+          if (DrlgGrid::GetGridFlags(pFloorGrid, nX, nY) & 0x80000000) {
+            pRoomTiles->nFloorTilesCount += 6;
           } else {
-            pTileGrid->sRoomTiles.nFloorTilesCount += 6;
+            pRoomTiles->nWallTilesCount++;
           }
         }
       }

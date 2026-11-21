@@ -328,52 +328,39 @@ void __fastcall SKILL_InitChargedBoltPath(D2UnitStrc * pUnit, intptr_t nMissileI
 
 // Server do-func for Sorceress Charged Bolt (skill 17). Sets UNITFLAG_SKSRVDOFUNC, looks up the charge-up missile ID (SKILLASS_GetChargeUpMissile), evaluates calc[0] for bolt count, then loops that many times calling CreatingMissile with a per-bolt D2SkillArgStrc (fpFunction = SKILL_InitChargedBoltPath, flags 0x21, target from SKILLS_GetTargetOrCursorPos). Each bolt gets an independent random path initialised by SKILL_InitChargedBoltPath.
 BOOL __fastcall Skills_SrvDoFunc_017_ChargedBolt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    BOOL _bGotTarget;
-    bool bGotTarget;
-    int32_t nMissileCount;
-    int nMissileLoopIdx;
     D2SkillArgStrc sSkillArg;
-    D2SkillsTxt* pSkillTxtBase;
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
-    if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
-      eMissilesId eMissileId;
-      pSkillTxtBase = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
-      if (pSkillTxtBase + eSkill) {
-        eMissileId = SkillAss::SKILLASS_GetChargeUpMissile(pUnit, eSkill);
-        if ((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-          nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase[eSkill].calc[0], eSkill, nSkillLvl);
-          memset(&sSkillArg, 0, 0x5c);
-          sSkillArg.nFlags = 0x21;
-          sSkillArg.pOwner = pUnit;
-          sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-          sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-          sSkillArg.eSkillNo = eSkill;
-          nMissileLoopIdx = 0;
-          sSkillArg.nSkillLevel = nSkillLvl;
-          sSkillArg.nMissileTxtNo = eMissileId;
-          sSkillArg.fpFunction = SKILL_InitChargedBoltPath;
-          if (nMissileCount <= 0) {
-            return 1;
-          }
 
-          do {
-            sSkillArg.nFunctionParam = nMissileLoopIdx;
-            _bGotTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
-            if (_bGotTarget && sSkillArg.nUnitX && sSkillArg.nUnitY) {
-              MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-            }
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
+      return 0;
+    }
 
-            nMissileLoopIdx++;
-          } while (nMissileLoopIdx < nMissileCount);
+    eMissilesId eMissileId = SkillAss::SKILLASS_GetChargeUpMissile(pUnit, eSkill);
+    if ((int)eMissileId < 0 || (int)eMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+      return 0;
+    }
 
-          return 1;
-        }
+    int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
+    memset(&sSkillArg, 0, 0x5c);
+    sSkillArg.nFlags = 0x21;
+    sSkillArg.pOwner = pUnit;
+    sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+    sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+    sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nSkillLevel = nSkillLvl;
+    sSkillArg.nMissileTxtNo = eMissileId;
+    sSkillArg.fpFunction = SKILL_InitChargedBoltPath;
+    for (int i = 0; i < nMissileCount; i++) {
+      sSkillArg.nFunctionParam = i;
+      if (SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY) && sSkillArg.nUnitX && sSkillArg.nUnitY) {
+        MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       }
     }
 
-    return 0;
+    return 1;
 }
 
 // @sourcefile .\SKILLS\SkillSor.cpp

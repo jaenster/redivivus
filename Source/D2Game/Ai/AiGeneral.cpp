@@ -333,19 +333,17 @@ void __fastcall CreateAiCmdAndFill(::SGAMEDATA * pGame, D2UnitStrc * pmonster, D
 }
 
 D2MonsterAiCmdStrc * __fastcall AI_CreateCmdIfNotExists(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int nId, int32_t nId2) {
-    D2MonsterAiCmdStrc* pAiCmd = FindMonsterAiCmd(pUnit, nId, nId2);
-    if (!pAiCmd) {
+    if (!FindMonsterAiCmd(pUnit, nId, nId2)) {
       D2AiCmdArgumentsStrc aiCmdArgs;
       aiCmdArgs.nCmdId = nId;
-      aiCmdArgs.nCmdArg1 = (int)pAiCmd;
-      aiCmdArgs.nCmdArg2 = (int)pAiCmd;
-      aiCmdArgs.nCmdArg3 = (int)pAiCmd;
-      aiCmdArgs.nCmdArg4 = (int)pAiCmd;
+      aiCmdArgs.nCmdArg1 = 0;
+      aiCmdArgs.nCmdArg2 = 0;
+      aiCmdArgs.nCmdArg3 = 0;
+      aiCmdArgs.nCmdArg4 = 0;
       CreateAiCmdAndFill(pGame, pUnit, &aiCmdArgs);
     }
 
-    pAiCmd = FindMonsterAiCmd(pUnit, nId, nId2);
-    return pAiCmd;
+    return FindMonsterAiCmd(pUnit, nId, nId2);
 }
 
 D2MapAIStrc * * __stdcall GetMonsterMapAi(D2UnitStrc * pMonster) {

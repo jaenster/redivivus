@@ -98,9 +98,7 @@ void __stdcall ROOM_LinkUnitToUpdateList(D2UnitStrc * pUnit) {
 // Sorts the room's unit linked list (pRoom->pUnitList via pRoomNext) in ascending order of target Y coordinate using an in-place bubble sort. Used to establish rendering/update draw order for units in a room tile.
 void __stdcall SortUnitListByTargetY(D2RoomStrc * pRoom) {
     int32_t nTargetYCur;
-    int32_t nTargetYNext;
-    D2UnitStrc* pNextNext;
-    bool bSwapped;
+    BOOL bSwapped;
     D2UnitStrc** ppUnitList = DUNGEON::Dungeon::DRLGROOM_GetUnitListFromRoom(pRoom);
     D2UnitStrc* pUnitCur = *ppUnitList;
     D2UnitStrc* pPrev = 0;
@@ -110,15 +108,14 @@ void __stdcall SortUnitListByTargetY(D2RoomStrc * pRoom) {
 
     D2UnitStrc* pUnit = pUnitCur->pRoomNext;
     do {
-      bSwapped = false;
+      bSwapped = FALSE;
       if (!pUnit) {
         return;
       }
 
       do {
         nTargetYCur = Units::GetScreenY(pUnitCur);
-        nTargetYNext = Units::GetScreenY(pUnit);
-        if (nTargetYCur > nTargetYNext) {
+        if (nTargetYCur > Units::GetScreenY(pUnit)) {
           if (pPrev) {
             pPrev->pRoomNext = pUnit;
           } else {
@@ -127,17 +124,15 @@ void __stdcall SortUnitListByTargetY(D2RoomStrc * pRoom) {
 
           pUnitCur->pRoomNext = pUnit->pRoomNext;
           pUnit->pRoomNext = pUnitCur;
-          pNextNext = pUnitCur->pRoomNext;
-          bSwapped = true;
           pPrev = pUnit;
+          pUnit = pUnitCur->pRoomNext;
+          bSwapped = TRUE;
         } else {
-          pNextNext = pUnit->pRoomNext;
           pPrev = pUnitCur;
           pUnitCur = pUnit;
+          pUnit = pUnit->pRoomNext;
         }
-
-        pUnit = pNextNext;
-      } while (pNextNext);
+      } while (pUnit);
     } while (bSwapped);
 }
 

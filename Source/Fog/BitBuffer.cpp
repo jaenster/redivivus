@@ -131,42 +131,20 @@ void __stdcall BITBUF_OrBuffers(uint8_t * pBufferA, uint32_t * pBufferB, uint8_t
 }
 
 void __stdcall BITBUF_NotBuffer(uint8_t * pSrc, uint32_t * pDest, int32_t nBitCount) {
-    int nByteOffset = nBitCount + 7 + (nBitCount + 7 >> 0x1f & 7U);
-    int nByteCount = nByteOffset >> 3;
-    int nDwordCount = (int)(nByteCount + (nByteOffset >> 0x1f & 3U)) >> 2;
-    int nRemaining = nDwordCount * 4;
-    nByteOffset = 0;
-    if (nRemaining > 0) {
-      uint32_t* pCursorDest;
-      nRemaining = (nRemaining - 1U >> 2) + 1;
-      nByteOffset = nRemaining * 4;
-      pCursorDest = pDest;
-      do {
-        *pCursorDest = ~*(uint32_t*)((intptr_t)pSrc - (intptr_t)pDest + (char*)pCursorDest);
-        pCursorDest++;
-        nRemaining--;
-      } while (nRemaining);
+    int nByteCount = (nBitCount + 7) / 8;
+    int nDwordBytes = nByteCount / 4 * 4;
+    int i;
+    for (i = 0; i < nDwordBytes; i += 4) {
+      *(uint32_t*)((uint8_t*)pDest + i) = ~*(uint32_t*)(pSrc + i);
     }
 
-    nByteCount += nDwordCount * -4;
-    switch (nByteCount) {
-      default:
-        {
-          return;
-        }
+    switch (nByteCount - nDwordBytes) {
       case 3:
-        {
-          *(uint8_t*)(nByteOffset + 2 + (char*)pDest) = ~pSrc[nByteOffset + 2];
-        }
+        ((uint8_t*)pDest)[i + 2] = ~pSrc[i + 2];
       case 2:
-        {
-          *(uint8_t*)(nByteOffset + 1 + (char*)pDest) = ~pSrc[nByteOffset + 1];
-        }
+        ((uint8_t*)pDest)[i + 1] = ~pSrc[i + 1];
       case 1:
-        {
-          *(uint8_t*)(nByteOffset + (char*)pDest) = ~pSrc[nByteOffset];
-          return;
-        }
+        ((uint8_t*)pDest)[i] = ~pSrc[i];
     }
 }
 

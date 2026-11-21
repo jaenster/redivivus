@@ -1179,22 +1179,15 @@ BOOL __fastcall SetOption(int32_t nOption, int32_t nValue) {
 }
 
 void __fastcall RENDERER_GLIDE_SetTextureMode(int32_t nTextureMode) {
-    int nPrevMode = gnGlideTextureMode;
     if (nTextureMode != gnGlideTextureMode) {
       if (nTextureMode == 1) {
         (*GLIDEDLL_grTexCombine_28)(0, 3, 8, 3, 8, 0, 0);
-        gnGlideTextureMode = nTextureMode;
-        return;
-      }
-
-      nPrevMode = nTextureMode;
-      if (!nTextureMode) {
+      } else if (!nTextureMode) {
         (*GLIDEDLL_grTexCombine_28)(0, 1, 0, 1, 0, 0, 0);
-        nPrevMode = nTextureMode;
       }
-    }
 
-    gnGlideTextureMode = nPrevMode;
+      gnGlideTextureMode = nTextureMode;
+    }
 }
 
 void __fastcall RENDERER_GLIDE_SetColorCombine(int32_t nCombineMode) {
@@ -1251,30 +1244,26 @@ void __fastcall RENDERER_GLIDE_SetAlphaBlendMode(int32_t nAlphaBlendMode) {
 }
 
 void __fastcall RENDERER_GLIDE_SetTextureFiltering(int32_t nFilteringMode) {
-    int nFilterMode;
-    if (!gnGlideTextureFilteringMode || (nFilterMode = gnGlideTextureFilteringMode , nFilteringMode != gnGlideTextureFilteringMode)) {
-      if (nFilteringMode != 1) {
-        nFilterMode = nFilteringMode;
-        if (nFilteringMode == 2) {
-          (*GLIDEDLL_grTexFilterMode_12)(0, 1, 1);
-          nFilterMode = nFilteringMode;
-          if (gnGlideTextureMemoryUsed > 1) {
-            (*GLIDEDLL_grTexFilterMode_12)(1, 1, 1);
-            gnGlideTextureFilteringMode = nFilteringMode;
-            return;
-          }
-        }
-      } else {
-        (*GLIDEDLL_grTexFilterMode_12)(0, 0, 0);
-        nFilterMode = nFilteringMode;
-        if (gnGlideTextureMemoryUsed > 1) {
-          (*GLIDEDLL_grTexFilterMode_12)(1, 0, 0);
-          nFilterMode = nFilteringMode;
-        }
-      }
+    if (gnGlideTextureFilteringMode && nFilteringMode == gnGlideTextureFilteringMode) {
+      return;
     }
 
-    gnGlideTextureFilteringMode = nFilterMode;
+    switch (nFilteringMode) {
+      case 1:
+        (*GLIDEDLL_grTexFilterMode_12)(0, 0, 0);
+        if (gnGlideTextureMemoryUsed > 1) {
+          (*GLIDEDLL_grTexFilterMode_12)(1, 0, 0);
+        }
+        break;
+      case 2:
+        (*GLIDEDLL_grTexFilterMode_12)(0, 1, 1);
+        if (gnGlideTextureMemoryUsed > 1) {
+          (*GLIDEDLL_grTexFilterMode_12)(1, 1, 1);
+        }
+        break;
+    }
+
+    gnGlideTextureFilteringMode = nFilteringMode;
 }
 
 int * __fastcall GetRenderStatistics() {

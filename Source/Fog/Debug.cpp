@@ -832,7 +832,7 @@ DWORD __stdcall DEBUG_CrashDumpRequestThreadProc(void * lpThreadParam) {
     return 0;
 }
 
-bool __fastcall CrashDumpWriterThread(LPCSTR szDumpPath, char * pExceptionPtrs, _EXCEPTION_POINTERS * nEventHandle, DWORD dwThreadId) {
+bool __fastcall CrashDumpWriterThread(LPCSTR szDumpPath, char * szComment, _EXCEPTION_POINTERS * pExceptionPointers, DWORD dwThreadId) {
     uint32_t bLoadOk;
     HANDLE hResult;
     D2CrashDumpRequestStrc sDumpRequest;
@@ -863,9 +863,9 @@ bool __fastcall CrashDumpWriterThread(LPCSTR szDumpPath, char * pExceptionPtrs, 
         }
 
         pCrashDumpInfo = &sDumpRequest;
-        sDumpRequest.szComment = pExceptionPtrs;
+        sDumpRequest.szComment = szComment;
         sDumpRequest.dwThreadId = dwThreadId;
-        /* HANDLE hEvent for SetEvent */ sDumpRequest.pExceptionPointers = nEventHandle;
+        /* HANDLE hEvent for SetEvent */ sDumpRequest.pExceptionPointers = pExceptionPointers;
         sDumpRequest.bSuccess = 0;
         SetEvent(hCrashDumpRequestEvent);
         /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ WaitForSingleObject(hCrashDumpCompleteEvent, -1);
@@ -1714,32 +1714,16 @@ static D2FogModuleNodeStrc * __stdcall LoadSymbolsForAllModules(HANDLE hProcess,
 }
 
 BOOL __fastcall FILETOOLS_GetExecutableFolderPath(LPSTR lpFilename, DWORD nSize) {
+    int32_t nScanIndex;
     /* DWORD nSize for GetModuleFileNameA */ /* LPSTR lpFilename for GetModuleFileNameA */ /* HMODULE hModule for GetModuleFileNameA */ *lpFilename = '\0';
-    DWORD nPathLen = GetModuleFileNameA((HMODULE)0x0, lpFilename, nSize);
-    if (!nPathLen) {
+    if (!GetModuleFileNameA((HMODULE)0x0, lpFilename, nSize)) {
       return 0;
     }
 
-    LPSTR pszEnd = lpFilename;
-    pszEnd = pszEnd + strlen(pszEnd) + 1;
-    int32_t nScanIndex = (intptr_t)pszEnd + (-1 - (intptr_t)(lpFilename + 1));
-    if (nScanIndex <= 0) {
-      return 0;
-    }
-
-    while (true) {
-      char chCur;
-      chCur = lpFilename[nScanIndex];
-      if (!(chCur != '\\' && chCur != '/')) {
+    for (nScanIndex = strlen(lpFilename) - 1; nScanIndex > 0; nScanIndex--) {
+      char chCur = lpFilename[nScanIndex];
+      if (chCur == '\\' || chCur == '/' || chCur == ':') {
         break;
-      }
-      if (chCur == ':') {
-        break;
-      }
-
-      nScanIndex--;
-      if (nScanIndex <= 0) {
-        return 0;
       }
     }
 

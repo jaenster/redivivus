@@ -704,12 +704,10 @@ BOOL __fastcall CheckErrorDuringError(char * szText, int32_t nLine, char * szRea
 void FOG_ErrorHandler(eFOG_ErrorType eErrorType, char * szFile, int32_t nLine, char * szReasonFormat, ...) {
     va_list __va;
     va_start(__va, szReasonFormat);
-    char cTmp;
     char* szRelativeFile;
     char szErrorMessageBuffer[4096];
     char szFormattedReasonBuffer[4096];
-    uint32_t local_8;
-    bool bIsFatalErrorType;
+    BOOL bIsFatalErrorType;
     uint32_t bDebuggerPresent;
     int32_t nLineSaved;
     if (eErrorType == ERROR_Deadlock) {
@@ -725,14 +723,12 @@ void FOG_ErrorHandler(eFOG_ErrorType eErrorType, char * szFile, int32_t nLine, c
 
       LogManager::LogWithCategoryVarArgs("", "%s", "---finished error callback---\n");
       LogManager::ExitOrCrashCleanUpJmp();
-      if (eErrorType == ERROR_AssertionFailure || eErrorType == ERROR_Halt || (bIsFatalErrorType = false , eErrorType == ERROR_OutOfMemoryError)) {
-        bIsFatalErrorType = true;
-      }
+      bIsFatalErrorType = eErrorType == ERROR_AssertionFailure || eErrorType == ERROR_Halt || eErrorType == ERROR_OutOfMemoryError; // steer-ok: the original evaluates the fatal-type test before the debugger check and the message calls
 
       bDebuggerPresent = _3rdparty::crashy::isDebuggerPresent();
       if ((char)bDebuggerPresent == '\0') {
         Storm::Source::SSTR::SStrPrintf(szFormattedReasonBuffer, 0x1000, szReasonFormat, __va);
-        nLineSaved = nLine;
+        nLineSaved = nLine; // steer-ok: the original saves nLine before the StripPathPrefixToRelative call
         szRelativeFile = StripPathPrefixToRelative(szFile);
         Storm::Source::SSTR::SStrPrintf(szErrorMessageBuffer, 0x1000, "[%s] (%s) failed at %s(%i)", gaErrorTypeNames[eErrorType], szFormattedReasonBuffer, szRelativeFile, nLineSaved);
         CRASH_FillupCrashTxt(szErrorMessageBuffer, szFormattedReasonBuffer, nullptr, 0, nLine, false);

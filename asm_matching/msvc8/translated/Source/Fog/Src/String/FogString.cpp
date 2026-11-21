@@ -12,8 +12,7 @@
 namespace Fog { namespace Src { namespace String { namespace FogString {
 
 void __stdcall SMEM_TitleCaseString(char * pMcpData) {
-    int nCasedChar;
-    bool bAtWordStart = true;
+    BOOL bAtWordStart = TRUE;
     if (!pMcpData) {
       return;
     }
@@ -33,20 +32,16 @@ void __stdcall SMEM_TitleCaseString(char * pMcpData) {
 
       cCurChar = pMcpData[nIndex];
       if (cCurChar == ' ') {
-        bAtWordStart = true;
-      } else {
-        if (bAtWordStart) {
-          bAtWordStart = false;
-          nCasedChar = toupper((int)cCurChar);
-          cCurChar = (char)nCasedChar;
-        } else {
-          nCasedChar = tolower((int)cCurChar);
-          cCurChar = (char)nCasedChar;
-        }
-
-        pMcpData[nIndex] = cCurChar;
+        bAtWordStart = TRUE;
+        nIndex++;
+        continue;
       }
-
+      if (bAtWordStart) {
+        bAtWordStart = FALSE;
+        pMcpData[nIndex] = (char)toupper((int)cCurChar);
+      } else {
+        pMcpData[nIndex] = (char)tolower((int)cCurChar);
+      }
       nIndex++;
     } while (nIndex < nLen);
 }

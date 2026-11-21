@@ -182,11 +182,8 @@ template<> __attribute__((noinline)) inline void TSHashTable<CELLIST, HASHKEY_NO
 }
 
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::RawNext(::CELLIST * pNode) {
-    if (pNode) {
-      return *(::CELLIST**)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset);
-    }
-
-    return (::CELLIST*)this->m_terminator.m_next;
+    TSLink<::CELLIST>* pLink = pNode ? (TSLink<::CELLIST>*)((intptr_t)pNode + this->m_linkoffset) : &this->m_terminator;
+    return (::CELLIST*)pLink->m_next;
 }
 
 // stpl-orphan: a COMDAT copy in TSExplicitList<CELLIST, -572662307> that no member owns

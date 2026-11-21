@@ -49,13 +49,12 @@ BOOL __fastcall SKILLSDRU_CltCreateElementalMissiles(D2UnitStrc * pUnit, int32_t
     D2SkillArgStrc sSkillArg;
     int nCoordY;
     int nCoordX;
-    int nCountdown = nNumMissiles;
     BOOL bGotCoords = Skills::GetCooordinates(pUnit, &nCoordX, &nCoordY);
     if (!bGotCoords) {
       return 0;
     }
     if (bSpawnLeadMissile) {
-      nCountdown--;
+      nNumMissiles--;
       pLeadMissile = Skills::MakeMissileAtSkillTarget(pUnit, eMissileId, eSkill, nSkillLevel);
       if (pLeadMissile) {
         if (bClearPathFlag0x40) {
@@ -91,7 +90,6 @@ BOOL __fastcall SKILLSDRU_CltCreateElementalMissiles(D2UnitStrc * pUnit, int32_t
     }
 
     sSkillArg.nY = nYValue;
-    int nMissileCount = nCountdown;
     sSkillArg.nUnitX = nCoordX;
     sSkillArg.nUnitY = nCoordY;
     sSkillArg.eSkillNo = eSkill;
@@ -101,12 +99,7 @@ BOOL __fastcall SKILLSDRU_CltCreateElementalMissiles(D2UnitStrc * pUnit, int32_t
     if (bClearPathFlag0x40) {
       sSkillArg.nFlags |= 0x2000;
     }
-    if (nCountdown <= 0) {
-      return 1;
-    }
-
-    int nMissileIdx = 0;
-    do {
+    for (int nMissileIdx = 0; nMissileIdx < nNumMissiles; nMissileIdx++) {
       sSkillArg.nFunctionParam = nMissileIdx;
       pLeadMissile = UNIT::Missile::MakeMissile(&sSkillArg);
       if (pLeadMissile) {
@@ -116,9 +109,7 @@ BOOL __fastcall SKILLSDRU_CltCreateElementalMissiles(D2UnitStrc * pUnit, int32_t
 
         D2Common::Units::SetAnimationSpeed(pLeadMissile, nAnimSpeed);
       }
-
-      nMissileIdx++;
-    } while (nMissileIdx < nMissileCount);
+    }
 
     return 1;
 }

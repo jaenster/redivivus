@@ -699,32 +699,22 @@ void __fastcall WALL2_UpdateScheduledSound(int32_t nDelayedSoundOffset, int32_t 
 
 // @sourcefile .\GAME\Wall2.cpp
 static void WALL2_AllocDrawList(D2GameViewStrc * pGameView) {
-    int nGridWidth;
-    nGridWidth = (pGameView->pView.right - pGameView->pView.left) / 0xa0 + 0xb;
-    int nGridHeight;
-    nGridHeight = (pGameView->pView.bottom - pGameView->pView.top) / 0x50;
-    D2Wall2CellStrc* pPrevWall2;
-    pPrevWall2 = pGameView->sWall2.pWall2;
-    int nGridDim;
-    nGridDim = nGridHeight + 0xb + nGridWidth;
-    int nGridCellCount;
-    nGridCellCount = nGridDim * nGridDim;
-    if (pPrevWall2) {
-      if (!(nGridCellCount - pGameView->sWall2.nWall2CellCount)) {
-        goto store_grid_dims;
+    int nGridWidth = (pGameView->pView.right - pGameView->pView.left) / 0xa0 + 0xb;
+    int nGridHeight = (pGameView->pView.bottom - pGameView->pView.top) / 0x50 + 0xc;
+    int nGridDim = nGridHeight + nGridWidth - 1;
+    int nGridCellCount = nGridDim * nGridDim;
+    if (!pGameView->sWall2.pWall2 || nGridCellCount != pGameView->sWall2.nWall2CellCount) {
+      if (pGameView->sWall2.pWall2) {
+        D2_FREE_AT(pGameView->sWall2.pWall2, ".\\GAME\\Wall2.cpp", 0x3a);
       }
-      if (pPrevWall2) {
-        D2_FREE_AT(pPrevWall2, ".\\GAME\\Wall2.cpp", 0x3a);
-      }
+
+      pGameView->sWall2.pWall2 = (D2Wall2CellStrc*)D2_ALLOC_AT(nGridCellCount * 0x24, ".\\GAME\\Wall2.cpp", 0x3d);
+      pGameView->sWall2.nWall2CellCount = nGridCellCount;
     }
 
-    pPrevWall2 = (D2Wall2CellStrc*)D2_ALLOC_AT(nGridCellCount * 0x24, ".\\GAME\\Wall2.cpp", 0x3d);
-    pGameView->sWall2.pWall2 = pPrevWall2;
-    pGameView->sWall2.nWall2CellCount = nGridCellCount;
-    store_grid_dims:
     pGameView->sWall2.nWall2GridDim = nGridDim;
     pGameView->sWall2.nWall2GridWidth = nGridWidth;
-    pGameView->sWall2.nWall2GridHeight = nGridHeight + 0xc;
+    pGameView->sWall2.nWall2GridHeight = nGridHeight;
 }
 
 void __fastcall ResetWall2Data(D2GameViewStrc * pGameView) {

@@ -2070,30 +2070,18 @@ static uint32_t WalkToCoordOrUnit(D2UnderMouseStrc * pMouse) {
     D2Common::Units::GetRunAndWalkVelocityForPlayer(pPlayerUnit_lcl, nClassId, &nWalkVelocity, &nRunVelocity);
     nWalkVelocity <<= 8;
     pDynamicPath = pMouse->pPlayer->pPath.pDynamicPath;
-    nClassId = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMouse->pPlayer, UNITSTAT_velocitypercent, 0);
-    nClassId *= nWalkVelocity;
+    nClassId = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMouse->pPlayer, UNITSTAT_velocitypercent, 0) * nWalkVelocity / 100;
     nCurVelocity = D2Common::PATH::DynamicPath::GetVelocity(pDynamicPath);
     dwFlags = pMouse->flags;
-    if (nCurVelocity == nClassId / 100) {
-      if (!(dwFlags & 0x40)) {
-        goto dispatch_move_command;
+    if (nCurVelocity == nClassId) {
+      if (dwFlags & 0x40) {
+        bRunWalkMismatch = 1;
       }
-    } else if (dwFlags & 0x40) {
-      goto dispatch_move_command;
+    } else if (!(dwFlags & 0x40)) {
+      bRunWalkMismatch = 1;
     }
 
-    bRunWalkMismatch = 1;
-    dispatch_move_command:
-    if (!pMouse->pTarget) {
-      if (!(dwFlags & 0x20)) {
-        pPlayerUnit_lcl = pMouse->pPlayer;
-        if (pPlayerUnit_lcl && pPlayerUnit_lcl->eUnitType == UNIT_PLAYER && pPlayerUnit_lcl->pUnitData.pUnitDataPlayer && pPlayerUnit_lcl->pUnitData.pUnitDataPlayer->eQueuedSkillId) {
-          return 1;
-        }
-
-        pMouse->flags = dwFlags | 0x80;
-      }
-    } else {
+    if (pMouse->pTarget) {
       pPlayerUnit_lcl = CUnit::GetConfirmedTargetUnit(pMouse->pPlayer);
       if (pMouse->pTarget != pPlayerUnit_lcl || bRunWalkMismatch) {
         D2Common::PATH::DynamicPath::SetTarget(pDynamicPath, pMouse->pTarget);
@@ -2101,6 +2089,13 @@ static uint32_t WalkToCoordOrUnit(D2UnderMouseStrc * pMouse) {
         INPUT_ExecuteSkillCommand(pMouse);
         return 1;
       }
+    } else if (!(dwFlags & 0x20)) {
+      pPlayerUnit_lcl = pMouse->pPlayer;
+      if (pPlayerUnit_lcl && pPlayerUnit_lcl->eUnitType == UNIT_PLAYER && pPlayerUnit_lcl->pUnitData.pUnitDataPlayer && pPlayerUnit_lcl->pUnitData.pUnitDataPlayer->eQueuedSkillId) {
+        return 1;
+      }
+
+      pMouse->flags = dwFlags | 0x80;
     }
     INPUT_ExecuteSkillCommand(pMouse);
     return 1;
@@ -2142,8 +2137,12 @@ static BOOL ClickMapRightSkill(D2UnderMouseStrc * pUnderMouse) {
         } else {
           pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId;
         }
-        if (pSkillsTxt->range == '\x01' && !(pUnderMouse->flags & 0x40)) {
-          pUnderMouse->flags |= 0x80;
+        switch (pSkillsTxt->range) {
+          case 1:
+            if (!(pUnderMouse->flags & 0x40)) {
+              pUnderMouse->flags |= 0x80;
+            }
+            break;
         }
 
         INPUT_ExecuteSkillCommand(pUnderMouse);
@@ -2170,8 +2169,12 @@ static BOOL INPUT_HandleRightClickRepeat(D2UnderMouseStrc * pUnderMouse) {
         } else {
           pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId;
         }
-        if (pSkillsTxt->range == '\x01' && !(pUnderMouse->flags & 0x40)) {
-          pUnderMouse->flags |= 0x80;
+        switch (pSkillsTxt->range) {
+          case 1:
+            if (!(pUnderMouse->flags & 0x40)) {
+              pUnderMouse->flags |= 0x80;
+            }
+            break;
         }
 
         INPUT_ExecuteSkillCommand(pUnderMouse);

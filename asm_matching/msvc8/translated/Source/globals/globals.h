@@ -505,7 +505,7 @@ typedef void (__fastcall *fnSendChatCommand)(uint8_t * pbCmd);
 typedef void (__fastcall *fnSendGetFileTime)(char * szFile, uint32_t dwTime);
 typedef void (__fastcall *fnSendJoinChannel)(char * szChan, int nFlags, int nParam);
 typedef void (__fastcall *fnSendNotifyJoin)(char * szName, char * szPass);
-typedef void (__fastcall *fnSendStartAdvEx3)(char * szName, char * szPass, char * szDesc, int nFlags);
+typedef BOOL (__fastcall *fnSendStartAdvEx3)(char * szName, char * szPass, char * szDesc, int nFlags);
 typedef void (__fastcall *fnSetLoggingFlag)(D2IniConfigStrc * dwParam);
 typedef void (__fastcall *fnShrineClientOverlayUpdate)(D2UnitStrc * pUnit, D2ShrinesTxt * pShrinesTxt);
 typedef void (__fastcall *fnShrineServerActivate)(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, D2ShrinesTxt * dwParam);

@@ -818,7 +818,6 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
     int* pAuraStatCalc;
     short int wCurAuraStatId;
     short int* pSkill;
-    eD2Skills eSkillSaved = eSkill;
     pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (pSkillsTxt && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       int32_t nRadius;
@@ -830,18 +829,16 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
       nDurationCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
       nDurationCalc = SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, nDurationCalc);
       memset(&pGameArg, 0, 0x68);
-      pAuraStatCalc = pSkillsTxt->aurastatcalc;
+      pGameArg.pGame = pGame;
+      pGameArg.pCaster = pUnit;
+      pGameArg.nDurationInFrames = nDurationCalc;
       pGameArg.eSkill = eSkill;
       pGameArg.nSkillLvl = nSkillLvl;
       pGameArg.bUpdateAnimRate = 0;
       iAuraStatIdx = 1;
-      pGameArg.pGame = pGame;
-      pGameArg.pCaster = pUnit;
-      pGameArg.nDurationInFrames = nDurationCalc;
-      pSkill = (short int*)pSkillsTxt->aurastat;
+      pAuraStatCalc = &pSkillsTxt->aurastatcalc[1];
+      pSkill = (short int*)&pSkillsTxt->aurastat[1];
       do {
-        pAuraStatCalc++;
-        pSkill += 1;
         wCurAuraStatId = *pSkill;
         if (wCurAuraStatId < 0 || (int)wCurAuraStatId >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
           pGameArg.anStatIds[iAuraStatIdx] = -1;
@@ -857,9 +854,11 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
         }
 
         pGameArg.anStatIds[iAuraStatIdx] = (int)*pSkill;
-        nDurationCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraStatCalc, eSkillSaved, nSkillLvl);
+        nDurationCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraStatCalc, eSkill, nSkillLvl);
         pGameArg.anStatValues[iAuraStatIdx] = nDurationCalc;
         iAuraStatIdx++;
+        pSkill++;
+        pAuraStatCalc++;
       } while (iAuraStatIdx < 6);
 
       pGameArg.eAuraState = (int32_t)pSkillsTxt->auratargetstate;

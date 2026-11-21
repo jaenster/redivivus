@@ -136,37 +136,30 @@ void __fastcall FreePartyControl(::SGAMEDATA * pGame) {
 }
 
 static uint16_t PARTY_UpdateNextPartyId(::SGAMEDATA * pGame) {
-    D2UnitPartyControlSub** ppPrevSub;
-    D2UnitPartyControl* pDVar1 = pGame->pPartyControl;
-    uint16_t uVar2 = pDVar1->nPartyId;
-    if (uVar2 < 3) {
-      uVar2 = 3;
+    D2UnitPartyControl* pPartyControl = pGame->pPartyControl;
+    uint16_t nPartyId = pPartyControl->nPartyId;
+    if (nPartyId < 3) {
+      nPartyId = 3;
     }
 
     while (true) {
-      D2UnitPartyControlSub* pSub;
-      pSub = pDVar1->pSub;
-      if (!pDVar1->pSub) {
+      D2UnitPartyControlSub* pSub = pPartyControl->pSub;
+      while (pSub && pSub->nPartyId != nPartyId) {
+        pSub = pSub->pPrev;
+      }
+
+      if (!pSub) {
         break;
       }
 
-      while (pSub->nPartyId != uVar2) {
-        ppPrevSub = &pSub->pPrev;
-        pSub = *ppPrevSub;
-        if (!*ppPrevSub) {
-          pDVar1->nPartyId = uVar2 + 1;
-          return uVar2;
-        }
-      }
-
-      uVar2++;
-      if (uVar2 < 3) {
-        uVar2 = 3;
+      nPartyId++;
+      if (nPartyId < 3) {
+        nPartyId = 3;
       }
     }
 
-    pDVar1->nPartyId = uVar2 + 1;
-    return uVar2;
+    pPartyControl->nPartyId = nPartyId + 1;
+    return nPartyId;
 }
 
 // @sourcefile .\UNIT\Party.cpp

@@ -211,19 +211,14 @@ int __fastcall SOUND_GetSoundByIndex(int32_t nChannelHandle) {
 }
 
 int __fastcall SOUND_StopSound(int32_t nSoundId) {
-    D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
-    while (true) {
-      if (!pDVar1) {
-        return 0;
+    for (D2SoundChannelNodeStrc* pNode = gpActiveSoundChannelsHead; pNode; pNode = pNode->pNext) {
+      D2SoundChannelStrc* pChannel = pNode->pChannel;
+      if (pChannel->nSoundId == nSoundId) {
+        return pChannel->nChannelHandle;
       }
-      if (pDVar1->pChannel->nSoundId == nSoundId) {
-        break;
-      }
-
-      pDVar1 = pDVar1->pNext;
     }
 
-    return pDVar1->pChannel->nChannelHandle;
+    return 0;
 }
 
 int32_t __fastcall SOUND_IsChannelPlaying(int32_t nSoundGroup) {
@@ -461,14 +456,14 @@ int __fastcall SOUND_PlaySound(eD2Sounds nSoundId, D2UnitStrc * pUnit, int32_t n
 }
 
 int __fastcall SOUND_SetMasterVolume(int32_t nSoundId) {
-    D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
     if (!nSoundId) {
       return 0;
     }
 
-    for (; pDVar1; pDVar1 = pDVar1->pNext) {
-      if (pDVar1->pChannel->nChannelHandle == nSoundId) {
-        return pDVar1->pChannel->nPriority;
+    for (D2SoundChannelNodeStrc* pNode = gpActiveSoundChannelsHead; pNode; pNode = pNode->pNext) {
+      D2SoundChannelStrc* pChannel = pNode->pChannel;
+      if (pChannel->nChannelHandle == nSoundId) {
+        return pChannel->nPriority;
       }
     }
 
@@ -479,21 +474,14 @@ void __fastcall SOUND_SetChannelPriority(int32_t nSoundId, int32_t nPriority) {
     if (!nSoundId) {
       return;
     }
-    if (!gpActiveSoundChannelsHead) {
-      return;
-    }
 
-    D2SoundChannelNodeStrc* pChannel = gpActiveSoundChannelsHead;
-    while (pChannel->pChannel->nChannelHandle != nSoundId) {
-      D2SoundChannelNodeStrc** pNextNode;
-      pNextNode = &pChannel->pNext;
-      pChannel = *pNextNode;
-      if (!*pNextNode) {
+    for (D2SoundChannelNodeStrc* pNode = gpActiveSoundChannelsHead; pNode; pNode = pNode->pNext) {
+      D2SoundChannelStrc* pChannel = pNode->pChannel;
+      if (pChannel->nChannelHandle == nSoundId) {
+        pChannel->nPriority = nPriority;
         return;
       }
     }
-
-    pChannel->pChannel->nPriority = nPriority;
 }
 
 void __fastcall SOUND_PlayItemSound(D2SoundChannelStrc * nChannelData, int pItemData, int32_t nStartTick, int32_t nDuration) {
@@ -565,14 +553,14 @@ BOOL __stdcall SOUND_GetAmbientMusicState() {
 }
 
 int __fastcall SOUND_GetSoundIdByChannelHandle(int32_t nChannelHandle) {
-    D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
     if (!nChannelHandle) {
       return 0;
     }
 
-    for (; pDVar1; pDVar1 = pDVar1->pNext) {
-      if (pDVar1->pChannel->nChannelHandle == nChannelHandle) {
-        return pDVar1->pChannel->nSoundId;
+    for (D2SoundChannelNodeStrc* pNode = gpActiveSoundChannelsHead; pNode; pNode = pNode->pNext) {
+      D2SoundChannelStrc* pChannel = pNode->pChannel;
+      if (pChannel->nChannelHandle == nChannelHandle) {
+        return pChannel->nSoundId;
       }
     }
 
@@ -614,23 +602,20 @@ void __stdcall SOUND_ResumeAll() {
 }
 
 uint32_t __fastcall SOUND_GetCurrentMusic(int32_t nSoundId) {
-    uint32_t nStreamProgress;
-    D2ClientSoundChannelStrc* pChan;
-    D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
     if (!nSoundId) {
       return 0;
     }
 
-    for (; pDVar1; pDVar1 = pDVar1->pNext) {
-      if (pDVar1->pChannel->nChannelHandle == nSoundId) {
-        pChan = pDVar1->pChannel->pClientChannel;
+    for (D2SoundChannelNodeStrc* pNode = gpActiveSoundChannelsHead; pNode; pNode = pNode->pNext) {
+      D2SoundChannelStrc* pChannel = pNode->pChannel;
+      if (pChannel->nChannelHandle == nSoundId) {
+        D2ClientSoundChannelStrc* pChan = pChannel->pClientChannel;
         if (!pChan) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45a);
           exit(-1);
         }
 
-        nStreamProgress = GAME::Sound::SOUND_GetStreamProgress(pChan);
-        return nStreamProgress;
+        return GAME::Sound::SOUND_GetStreamProgress(pChan);
       }
     }
 

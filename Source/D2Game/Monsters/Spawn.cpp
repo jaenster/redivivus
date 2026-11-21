@@ -108,12 +108,13 @@ BOOL __fastcall SPAWN_FindRandomPositionForMonster(::SGAMEDATA * pGame, D2RoomSt
     ::SGAMEDATA* pGameLocal = pGame;
     D2RoomStrc* pRoomWork = pRoom;
     GetRoomCorners(pRoom, &nRoomWidth, &nRoomLeft, &nRoomHeight, (int*)&nRoomTop, pCoordList);
+    uint32_t bUseCoordList = 0;
     int nCoordListIdx = 0;
     if (pCoordList) {
       nCoordListIdx = pCoordList->nIndex;
+      bUseCoordList = 1;
     }
 
-    uint32_t bUseCoordList = (uint32_t)(pCoordList != 0);
     if (pRoomWork) {
       pRoomSeed = &pRoomWork->sSeed;
     } else {
@@ -989,19 +990,15 @@ static void __stdcall MONSTER_InitWanderingForLevel(::SGAMEDATA * pGame, eD2Leve
 }
 
 void __fastcall MONSTER_TrySpawnWanderingMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom) {
-    D2SeedStrc* pRoomSeed = !pRoom ? 0 : &pRoom->sSeed;
-    uint32_t seedNext = D2_SeedRoll(pRoomSeed);
-    if (!(!(seedNext & 0x7fff) && !pRoom->nClientsCount)) {
+    if ((D2_SeedRoll(pRoom ? &pRoom->sSeed : nullptr) & 0x7fff) || pRoom->nClientsCount) {
       return;
     }
 
     eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     D2LevelsTxt* pLevelsTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
-    if (!(pLevelsTxt->MonWndr != '\0' && pLevelsTxt != (D2LevelsTxt*)-28)) {
-      return;
+    if (pLevelsTxt->MonWndr && pLevelsTxt->MonDen) {
+      MONSTER_InitWanderingForLevel(pGame, eLevel, pRoom, pLevelsTxt);
     }
-
-    MONSTER_InitWanderingForLevel(pGame, eLevel, pRoom, pLevelsTxt);
 }
 
 static void * keep_0054e260 = (0 ? (MONSTER_SpawnUniquePackInRoom(*(D2RoomStrc * *)0, *(::SGAMEDATA * *)0, *(D2RoomCoordListStrc * *)0, *(uint32_t *)0), (void *)0) : (void *)0);

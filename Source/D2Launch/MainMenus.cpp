@@ -5264,32 +5264,25 @@ BOOL __stdcall MAINMENU_OnPressCreateBattleNetAccount(D2ControlMsg * pControlMsg
 
 BOOL __stdcall MAINMENU_ScrollListExUp(D2ControlMsg * pControlMsg) {
     int32_t nLine;
-    ::D2WinTextBox* ppForm;
-    int i = 0;
-    if (FORMS_nListExExCount >= 0) {
-      eD2FormType pFirstElement;
-      do {
-        ppForm = (::D2WinTextBox*)FORMS_pListExEx[i];
-        pFirstElement = D2Win::Src::D2WinMain::CONTROL_GetType((D2ControlStrc*)ppForm);
-        if (pFirstElement == FORM_TextBox) {
-          break;
-        }
-
-        i++;
-      } while (i <= FORMS_nListExExCount);
-
-      if (ppForm) {
-        nLine = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(ppForm);
-        if (nLine > 0) {
-          D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(ppForm, nLine - 1);
-        }
-
-        return 1;
+    ::D2WinTextBox* ppForm = nullptr;
+    for (int i = 0; i <= FORMS_nListExExCount; i++) {
+      ppForm = (::D2WinTextBox*)FORMS_pListExEx[i];
+      if (D2Win::Src::D2WinMain::CONTROL_GetType((D2ControlStrc*)ppForm) == FORM_TextBox) {
+        break;
       }
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xce8);
-    exit(-1);
+    if (!ppForm) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xce8);
+      exit(-1);
+    }
+
+    nLine = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(ppForm);
+    if (nLine > 0) {
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(ppForm, nLine - 1);
+    }
+
+    return 1;
 }
 
 BOOL __stdcall MAINMENU_ScrollListExDown(D2ControlMsg * pControlMsg) {
@@ -6190,9 +6183,7 @@ uint32_t __fastcall MAINMENU_DetectDoubleClick(D2ControlMsg * pMsg) {
     }
 
     /* LPPOINT lpPoint for GetCursorPos */ GetCursorPos(&cursorPos);
-    uint32_t nSignX = cursorPos.x - gnDoubleClickLastX >> 0x1f;
-    uint32_t nSignY = cursorPos.y - gnDoubleClickLastY >> 0x1f;
-    if ((int)((cursorPos.x - gnDoubleClickLastX ^ nSignX) - nSignX + ((cursorPos.y - gnDoubleClickLastY ^ nSignY) - nSignY)) > 4) {
+    if (abs(cursorPos.y - gnDoubleClickLastY) + abs(cursorPos.x - gnDoubleClickLastX) > 4) {
       bIsDoubleClick = 0;
     }
 

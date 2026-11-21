@@ -623,52 +623,39 @@ void __stdcall ActualLevelGeneration(D2DrlgLevelStrc * pLevel) {
 // @sourcefile .\DRLG\Maze.cpp
 static void __stdcall DRLGMAZE_ExpandRoomsWithPresets(D2DrlgLevelStrc * pLevel, uint32_t argDefaultPresetId, D2RoomExStrc * argSkipRoom) {
     int bReplaced;
-    D2RoomExStrc** pRoomPtr;
+    int nDir;
     D2LvlMazeTxt* pLvlMazeTxt;
     D2DrlgPresetRoomStrc* pRoomExData;
+    D2RoomExStrc* pExpandedRoom;
     D2PoolManagerStrc* pMemPool = pLevel->pDrlg->pMemoryPool;
     D2RoomExStrc** pRoomPtrArray = (D2RoomExStrc**)D2_ALLOC_POOL_AT(pMemPool, pLevel->nRoomExCount * 4, ".\\DRLG\\Maze.cpp", 0x271);
     D2RoomExStrc* pRoomIter = pLevel->pRoomExFirst;
     int nRoomCount = pLevel->nRoomExCount;
-    int nRoomIdx = 0;
-    if (nRoomCount > 0) {
-      D2RoomExStrc* pExpandedRoom;
-      do {
-        pRoomPtrArray[nRoomIdx] = pRoomIter;
-        pRoomIter = pRoomIter->pRoomExNext;
-        nRoomIdx++;
-      } while (nRoomIdx < nRoomCount);
+    for (int i = 0; i < nRoomCount; i++) {
+      pRoomPtrArray[i] = pRoomIter;
+      pRoomIter = pRoomIter->pRoomExNext;
+    }
 
-      pRoomPtr = pRoomPtrArray;
-      if (nRoomCount > 0) {
-        do {
-          if (*pRoomPtr != argSkipRoom) {
-            nRoomIdx = 0;
-            do {
-              pRoomIter = *pRoomPtr;
-              pExpandedRoom = DrlgRoom::DRLGROOMEX_AllocRoomEx(pRoomIter->pLevel, 2);
-              pLvlMazeTxt = pExpandedRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
-              pExpandedRoom->sCoords.WorldSize.x = pLvlMazeTxt->SizeX;
-              pExpandedRoom->sCoords.WorldSize.y = pLvlMazeTxt->SizeY;
-              bReplaced = DRLGMAZE_PlaceRoomAdjacent(nRoomIdx, pExpandedRoom, pRoomIter);
-              if (!bReplaced) {
-                DrlgRoom::DRLGROOMEX_FreeDrlgRoomEx(pExpandedRoom);
-              } else {
-                DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pRoomIter, pExpandedRoom, nRoomIdx);
-                DrlgRoom::AddRoomExToLevel(pRoomIter->pLevel, pExpandedRoom);
-                pRoomExData = pExpandedRoom->pRoomExData.pRoomExDataPreset;
-                pRoomExData->nFlags |= 2;
-                pRoomExData->nLevelPrest = argDefaultPresetId;
-                pRoomExData->nPickedFile = -1;
-              }
-
-              nRoomIdx++;
-            } while (nRoomIdx < 8);
+    for (int i = 0; i < nRoomCount; i++) {
+      if (pRoomPtrArray[i] != argSkipRoom) {
+        for (nDir = 0; nDir < 8; nDir++) {
+          pRoomIter = pRoomPtrArray[i];
+          pExpandedRoom = DrlgRoom::DRLGROOMEX_AllocRoomEx(pRoomIter->pLevel, 2);
+          pLvlMazeTxt = pExpandedRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
+          pExpandedRoom->sCoords.WorldSize.x = pLvlMazeTxt->SizeX;
+          pExpandedRoom->sCoords.WorldSize.y = pLvlMazeTxt->SizeY;
+          bReplaced = DRLGMAZE_PlaceRoomAdjacent(nDir, pExpandedRoom, pRoomIter);
+          if (!bReplaced) {
+            DrlgRoom::DRLGROOMEX_FreeDrlgRoomEx(pExpandedRoom);
+          } else {
+            DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pRoomIter, pExpandedRoom, nDir);
+            DrlgRoom::AddRoomExToLevel(pRoomIter->pLevel, pExpandedRoom);
+            pRoomExData = pExpandedRoom->pRoomExData.pRoomExDataPreset;
+            pRoomExData->nFlags |= 2;
+            pRoomExData->nLevelPrest = argDefaultPresetId;
+            pRoomExData->nPickedFile = -1;
           }
-
-          nRoomCount--;
-          pRoomPtr++;
-        } while (nRoomCount);
+        }
       }
     }
 

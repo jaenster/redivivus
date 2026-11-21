@@ -377,20 +377,20 @@ void __thiscall HACKL_RemoveIpFromHacklist(D2QServerStrc * pQServer, uint32_t nI
       }
 
       pEntry = pCurEntry->pNext;
-      pPrevEntry = pCurEntry;
       if (pCurEntry->ipAddress.S_un.S_addr == nIpAddress) {
         if (pNextEntry) {
           pNextEntry->pNext = pEntry;
           D2_FREE_AT(pCurEntry, ".\\Src\\QServer\\QServer.cpp", 0x4d0);
+          pCurEntry = pNextEntry;
         } else {
           pQServer->ppHacklistBuckets[nBucketIndex] = pQServer->ppHacklistBuckets[nBucketIndex]->pNext;
           D2_FREE_AT(pCurEntry, ".\\Src\\QServer\\QServer.cpp", 0x4d7);
-          pNextEntry = 0;
+          pCurEntry = 0;
         }
 
         pQServer->nHacklistSize--;
-        pPrevEntry = pNextEntry;
       }
+      pPrevEntry = pCurEntry;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pQServer->csHacklist);
@@ -986,26 +986,17 @@ void __stdcall _NullSubRet8(D2QServerStrc * dwArg1, uint32_t dwArg2) {
 
 // Adds a token-filter entry (expected masked token + mask-table index) to QServer's game-token filter table.
 void __fastcall AddGameTokenFilter(D2QServerStrc * pQServer, uint32_t nMaskTableIndex, uint32_t nExpectedMaskedToken) {
-    int nFilterCount = pQServer->nGameTokenFilterCount;
-    if (nFilterCount >= 0x100) {
+    if (pQServer->nGameTokenFilterCount >= 0x100) {
       return;
     }
 
-    int nFilterIdx = 0;
-    if (nFilterCount > 0) {
-      D2QServerTokenFilterEntryStrc* pFilterEntry;
-      pFilterEntry = pQServer->aGameTokenFilters;
-      do {
-        if (pFilterEntry->nExpectedMaskedToken == nExpectedMaskedToken) {
-          return;
-        }
-
-        nFilterIdx++;
-        pFilterEntry++;
-      } while (nFilterIdx < nFilterCount);
+    for (int nFilterIdx = 0; nFilterIdx < pQServer->nGameTokenFilterCount; nFilterIdx++) {
+      if (pQServer->aGameTokenFilters[nFilterIdx].nExpectedMaskedToken == nExpectedMaskedToken) {
+        return;
+      }
     }
 
-    pQServer->aGameTokenFilters[nFilterCount].nExpectedMaskedToken = nExpectedMaskedToken;
+    pQServer->aGameTokenFilters[pQServer->nGameTokenFilterCount].nExpectedMaskedToken = nExpectedMaskedToken;
     pQServer->aGameTokenFilters[pQServer->nGameTokenFilterCount].nMaskTableIndex = nMaskTableIndex;
     pQServer->nGameTokenFilterCount++;
 }
@@ -1074,21 +1065,12 @@ int __fastcall MatchesGameTokenFilter_Thunk(D2QServerStrc * pQServer, uint32_t n
 }
 
 void __fastcall CopyWorkerTelemetrySnapshot(D2QServerStrc * pQServer, D2QServerWorkerTelemetryStrc * pOutTelemetry, int nWorkers) {
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csWorkerTelemetry);
+    EnterCriticalSection(&pQServer->csWorkerTelemetry);
     memcpy(pOutTelemetry, pQServer->aWorkerTelemetry, nWorkers * 0xb0);
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pQServer->csWorkerTelemetry);
-    if (nWorkers <= 0) {
-      return;
+    LeaveCriticalSection(&pQServer->csWorkerTelemetry);
+    for (int i = 0; i < nWorkers; i++) {
+      pOutTelemetry[i].dwWorkerSlotValue = pQServer->aWorkerSlotValues[i];
     }
-
-    uint32_t* pOutSlotValue = &pOutTelemetry->dwWorkerSlotValue;
-    int* pWorkerSlotValue = pQServer->aWorkerSlotValues;
-    do {
-      *pOutSlotValue = *pWorkerSlotValue;
-      pWorkerSlotValue++;
-      pOutSlotValue += 0x2c;
-      nWorkers--;
-    } while (nWorkers);
 }
 
 void __stdcall _NullSub() {
@@ -1240,9 +1222,9 @@ D2QServerClientContainerStrc * __fastcall AddClient(D2QServerStrc * pQServer, SO
     pQServer->clientsCount++;
     uint32_t nToken = pQServer->clientsCount;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pQServer->csClientLifecycle);
-    client->client.ipAddress.S_un.S_addr = nIp;
     client->client.nClientToken = nToken;
     client->client.socket = pSock;
+    client->client.ipAddress.S_un.S_addr = nIp;
     client->client.dwSpamWindowStartTick = 0;
     client->client.nSpamBytesAccum = 0;
     client->client.pSendQueueHead = 0;
@@ -1254,11 +1236,11 @@ D2QServerClientContainerStrc * __fastcall AddClient(D2QServerStrc * pQServer, SO
     client->client.dwLastSendTick = hiResTime;
     client->client.dwReservedInitTickA4 = hiResTime;
     InitializeCriticalSection(&client->client.clientLock);
-    nToken = pQServer->nClientHashMask & nToken;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(pQServer->pClientBucketLocks + nToken);
-    client->client.pNextByToken = pQServer->pQServerClientList[nToken];
-    pQServer->pQServerClientList[nToken] = &client->client;
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pQServer->pClientBucketLocks + nToken);
+    uint32_t nBucket = pQServer->nClientHashMask & nToken;
+    EnterCriticalSection(pQServer->pClientBucketLocks + nBucket);
+    client->client.pNextByToken = pQServer->pQServerClientList[nBucket];
+    pQServer->pQServerClientList[nBucket] = &client->client;
+    LeaveCriticalSection(pQServer->pClientBucketLocks + nBucket);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csTokenHash);
     nToken = pQServer->nClientHashMask & nIp;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ client->client.pNextByIpHash = pQServer->pIpHashBuckets[nToken];
@@ -1269,9 +1251,7 @@ D2QServerClientContainerStrc * __fastcall AddClient(D2QServerStrc * pQServer, SO
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&client->client.nRefCount);
     pQServer->nConnectedClients++;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pQServer->csClientLifecycle);
-    SOCKET sock = client->client.socket;
-    char* szIpStr = inet_ntoa((in_addr)client->client.ipAddress.S_un.S_un_b);
-    QSERVER_LOG("QSRV", "[QSrvAddClient]  Added client %d %s on socket %d", client->client.nClientToken, szIpStr, sock);
+    QSERVER_LOG("QSRV", "[QSrvAddClient]  Added client %d %s on socket %d", client->client.nClientToken, inet_ntoa(client->client.ipAddress), client->client.socket);
     return client;
 }
 

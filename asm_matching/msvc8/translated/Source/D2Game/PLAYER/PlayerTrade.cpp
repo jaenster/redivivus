@@ -1696,21 +1696,17 @@ void __fastcall SendEventMsg(D2UnitStrc * pUnit, uint8_t nMessageType, char * sz
 
 // Checks if player has any items in the cube. Returns 1 if at least one item is in INVPAGE_CUBE, 0 otherwise. Used by trade validation to prevent trading while items are in the cube.
 static BOOL CUBE_HasAnyItemsInCube(D2UnitStrc * pPlayer) {
-    eInventoryPage eInvPage;
-    D2UnitStrc* pItemNode = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pPlayer->pInventory);
-    do {
-      D2UnitStrc* pNextItem;
-      if (!pItemNode) {
-        return 0;
+    D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pPlayer->pInventory);
+    while (pItem) {
+      D2UnitStrc* pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pItem);
+      if (D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(D2Common::INVENTORY::Inventory::GetCarriedItem(pItem)) == INVPAGE_CUBE) {
+        return 1;
       }
 
-      pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pItemNode);
-      pItemNode = D2Common::INVENTORY::Inventory::GetCarriedItem(pItemNode);
-      eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItemNode);
-      pItemNode = pNextItem;
-    } while (eInvPage != INVPAGE_CUBE);
+      pItem = pNextItem;
+    }
 
-    return 1;
+    return 0;
 }
 
 // Server-side trade initiation check between two players. Verifies neither player is already trading, the classic game is not completed (A4Q3), and both are in town. Enforces a 5-second accept-trade cooldown and a 1-second throttle on repeated trade messages. On success, sets mutual interact info, sends 0x77 TradeAction packets to both clients (initiator=0, target=1), and sets dwTradeState to 1/2 respectively.

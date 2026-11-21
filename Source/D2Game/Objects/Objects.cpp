@@ -2670,12 +2670,12 @@ static void OBJECT_RemapClassIdFromParm(D2UnitStrc * pUnit) {
     int32_t nClassId = !pUnit ? -1 : pUnit->nClassId;
     D2ObjectsTxt* pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassId);
     int nParmClassId = pObjectsTxt->Parm[1];
+    int nNewClassId = 0x54;
     if (nParmClassId && nParmClassId < 0x23d) {
-      pUnit->nClassId = nParmClassId;
-      return;
+      nNewClassId = nParmClassId;
     }
 
-    pUnit->nClassId = 0x54;
+    pUnit->nClassId = nNewClassId;
 }
 
 void __fastcall OBJECTS_SetUnitIdInTimerArg(D2UnitStrc * pUnit, int32_t nUnitGUID) {

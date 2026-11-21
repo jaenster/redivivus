@@ -342,18 +342,16 @@ int32_t __fastcall SOUNDSMP_IsPlaying(D2SoundSmpStrc * pSound) {
 }
 
 uint32_t __fastcall SOUNDSMP_GetStatus(D2SoundSmpStrc * ppSoundSmp) {
-    D2SoundSmpStrc* dwStatus = ppSoundSmp;
+    DWORD dwStatus;
     if (ppSoundSmp && ppSoundSmp->pDSBuffer) {
-      HRESULT nHResult;
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ nHResult = ppSoundSmp->pDSBuffer->lpVtbl->GetStatus(ppSoundSmp->pDSBuffer, (DWORD*)&dwStatus);
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (nHResult < 0) {
+      EnterCriticalSection(&gSoundSmpCs);
+      if (ppSoundSmp->pDSBuffer->lpVtbl->GetStatus(ppSoundSmp->pDSBuffer, &dwStatus) < 0) {
         LeaveCriticalSection(&gSoundSmpCs);
         return 0;
       }
 
       LeaveCriticalSection(&gSoundSmpCs);
-      return (uintptr_t)dwStatus & 1;
+      return (uint8_t)dwStatus & 1;
     }
 
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2b0);

@@ -1598,32 +1598,27 @@ void __stdcall DRAW_WORLD_SetWarpFadeTimer() {
 // @wasnamed DRAW_WORLD_FadeEffectJustWarped
 // Draws the post-warp black fade-out over the play area, ramping alpha down over 500 ms.
 void __stdcall dSceneTransitionDraw() {
-    int32_t nXStart = 0;
     if (!gdwWarpFadeExpireTime) {
       return;
     }
 
     DWORD dwTickCount = GetTickCount();
-    int nXEnd = UI::ui::ScreenSizeX;
     if (dwTickCount > gdwWarpFadeExpireTime) {
       gdwWarpFadeExpireTime = 0;
       return;
     }
 
-    int nTimeRemaining = gdwWarpFadeExpireTime - dwTickCount;
-    int nYEnd = UI::Inv::ScreenSizeY - 0x2f;
-    uint32_t nBorderType = UI::Path::DRAW_GetTypeOfBorder();
-    switch (nBorderType) {
+    int nTimeRemaining = gdwWarpFadeExpireTime - dwTickCount; // steer-ok: the original computes the remaining time before the border-type call
+    int nYEnd = UI::Inv::ScreenSizeY - 0x2f; // steer-ok: the asm stores ScreenSizeY-0x2f to the frame before the border-type call
+    int32_t nXStart = 0;
+    int nXEnd = UI::ui::ScreenSizeX;
+    switch (UI::Path::DRAW_GetTypeOfBorder()) {
       case 1:
-        {
-          nXEnd -= UI::ui::ScreenSizeX / 2;
-          break;
-        }
+        nXEnd -= UI::ui::ScreenSizeX / 2;
+        break;
       case 2:
-        {
-          nXStart = UI::ui::ScreenSizeX / 2;
-          break;
-        }
+        nXStart = UI::ui::ScreenSizeX / 2;
+        break;
     }
 
     D2gfx::D2GFX::D2GFX_DrawSolidRectAlpha(nXStart, 0, nXEnd, nYEnd, 0, nTimeRemaining * 0xff / 500);

@@ -211,7 +211,8 @@ BOOL __fastcall SKILLEMONST_SrvStFn60_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc 
     SkillsServer::SKILLS_CalcToHitAndApply(pGameLocal, pUnit, pTargetUnit, pSkillRecord, eSkill, nSkillLvl, &sDamage, 0);
     if ((uint8_t)sDamage.wResultFlags & 1) {
       int32_t nCalcResult;
-      sDamage.dwHitFlags = sDamage.dwHitFlags | 2U | pSkillRecord->HitFlags;
+      sDamage.dwHitFlags |= 2;
+      sDamage.dwHitFlags |= pSkillRecord->HitFlags;
       if (pSkillRecord->HitClass) {
         sDamage.dwHitClass = pSkillRecord->HitClass;
       }
@@ -222,8 +223,8 @@ BOOL __fastcall SKILLEMONST_SrvStFn60_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc 
       sDamage.dwPhysDamage += nCalcResult;
       nLifeLeech = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[1], eSkill, nSkillLvl);
       nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[2], eSkill, nSkillLvl);
-      sDamage.dwManaLeech += nCalcResult;
       sDamage.dwLifeLeech += nLifeLeech;
+      sDamage.dwManaLeech += nCalcResult;
       UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGameLocal, pUnit, pTargetUnit, &sDamage, 0x80);
     }
 

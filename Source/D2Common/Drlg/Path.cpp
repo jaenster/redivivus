@@ -1976,29 +1976,10 @@ void __fastcall DRLGPATH_ScaleVelocityVector(int32_t nVelocityScale, POINT * pPo
     int nVelY = pPoint->y * nVelocityScale >> 8;
     pPoint->x = nVelX;
     pPoint->y = nVelY;
-    int nAbsVelX = nVelX;
-    if (nVelX < 0) {
-      nAbsVelX = -nVelX;
+    if (((nVelX < 0 ? -nVelX : nVelX) > (nVelY < 0 ? -nVelY : nVelY) ? (nVelX < 0 ? -nVelX : nVelX) : (nVelY < 0 ? -nVelY : nVelY)) >= 0x200000) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x331);
+      exit(-1);
     }
-
-    int nAbsVelY = nVelY;
-    if (nVelY < 0) {
-      nAbsVelY = -nVelY;
-    }
-    if (nAbsVelX > nAbsVelY) {
-      nVelY = nVelX;
-      if (nVelX < 0) {
-        nVelY = -nVelX;
-      }
-    } else if (nVelY < 0) {
-      nVelY = -nVelY;
-    }
-    if (nVelY < 0x200000) {
-      return;
-    }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x331);
-    exit(-1);
 }
 
 // Checks if a ray from source to target position is collision-free. Normalizes the direction vector and delegates to DRLGPATH_RaycastCollisionLine. Used when waypoints are more than 1 tile apart.
@@ -2551,28 +2532,25 @@ D2DrlgPathNodeStrc * __stdcall DRLGPATH_FindNodeInClosedList(D2DrlgPathSearchCtx
 
 // Inserts a node into the open list hash table and the sorted priority linked list. Nodes are sorted by their f-cost (ascending) for efficient best-first retrieval.
 static void DRLGPATH_InsertNodeSorted(D2DrlgPathSearchCtxStrc * pSearchCtx, D2DrlgPathNodeStrc * pNode) {
-    D2DrlgPathNodeStrc* pNextSortedNode = (D2DrlgPathNodeStrc*)pSearchCtx->pSortedHead;
-    uint32_t nHashIdx = gnPathNodeMax[(uint8_t)pNode->nY & 0x7f] + gnPathSearchMax[(uint8_t)pNode->nX & 0x7f] & 0x7f;
+    D2DrlgPathNodeStrc* pSortedNode = (D2DrlgPathNodeStrc*)pSearchCtx->pSortedHead;
+    D2DrlgPathNodeStrc* pPrevSortedNode = 0;
+    uint32_t nHashIdx = (gnPathNodeMax[(uint8_t)pNode->nY & 0x7f] + gnPathSearchMax[(uint8_t)pNode->nX & 0x7f]) & 0x7f;
     pNode->pHashNext = pSearchCtx->apOpenBuckets[nHashIdx];
     pSearchCtx->apOpenBuckets[nHashIdx] = pNode;
-    D2DrlgPathNodeStrc* pPrevSortedNode = 0;
-    if (pNextSortedNode) {
-      D2DrlgPathNodeStrc* pSortedNode;
-      do {
-        pSortedNode = pNextSortedNode;
-        if (pNode->nFCost <= pSortedNode->nFCost) {
-          break;
-        }
-
-        pNextSortedNode = pSortedNode->pSortedNext;
-        pPrevSortedNode = pSortedNode;
-      } while (pNextSortedNode);
-
-      if (pPrevSortedNode) {
-        pPrevSortedNode->pSortedNext = pNode;
-        pNode->pSortedNext = pNextSortedNode;
-        return;
+    int nFCost = pNode->nFCost;
+    while (pSortedNode) {
+      if (pSortedNode->nFCost >= nFCost) {
+        break;
       }
+
+      pPrevSortedNode = pSortedNode;
+      pSortedNode = pSortedNode->pSortedNext;
+    }
+
+    if (pPrevSortedNode) {
+      pPrevSortedNode->pSortedNext = pNode;
+      pNode->pSortedNext = pSortedNode;
+      return;
     }
 
     pNode->pSortedNext = (D2DrlgPathNodeStrc*)pSearchCtx->pSortedHead;
@@ -2581,37 +2559,29 @@ static void DRLGPATH_InsertNodeSorted(D2DrlgPathSearchCtxStrc * pSearchCtx, D2Dr
 
 // Removes the best (lowest f-cost) node from the open priority list and moves it to the closed list hash table. This is the standard A* open list pop operation.
 static int32_t * DRLGPATH_PopBestNodeFromOpenList(D2DrlgPathSearchCtxStrc * nOpenListBase) {
-    D2DrlgPathNodeStrc* pDVar1;
-    pDVar1 = (D2DrlgPathNodeStrc*)nOpenListBase->pSortedHead;
-    if (!pDVar1) {
-      return (int32_t*)pDVar1;
+    D2DrlgPathNodeStrc* pNode = (D2DrlgPathNodeStrc*)nOpenListBase->pSortedHead;
+    if (!pNode) {
+      return (int32_t*)pNode;
     }
 
-    nOpenListBase->pSortedHead = pDVar1->pSortedNext;
-    uint32_t nHashIdx;
-    nHashIdx = gnPathNodeMax[(uint8_t)pDVar1->nY & 0x7f] + gnPathSearchMax[(uint8_t)pDVar1->nX & 0x7f] & 0x7f;
-    D2DrlgPathNodeStrc* pBucketNode;
-    pBucketNode = nOpenListBase->apOpenBuckets[nHashIdx];
-    if (nOpenListBase->apOpenBuckets[nHashIdx] != pDVar1) {
-      D2DrlgPathNodeStrc* pHashWalker;
-      do {
-        pHashWalker = pBucketNode;
-        pBucketNode = pHashWalker->pHashNext;
-      } while (pHashWalker->pHashNext != pDVar1);
-
-      if (pHashWalker) {
-        pHashWalker->pHashNext = pDVar1->pHashNext;
-        goto push_to_closed_list;
-      }
+    nOpenListBase->pSortedHead = pNode->pSortedNext;
+    uint32_t nHashIdx = gnPathNodeMax[(uint8_t)pNode->nY & 0x7f] + gnPathSearchMax[(uint8_t)pNode->nX & 0x7f] & 0x7f;
+    D2DrlgPathNodeStrc* pPrev = nullptr;
+    for (D2DrlgPathNodeStrc* pCur = nOpenListBase->apOpenBuckets[nHashIdx]; pCur != pNode; pCur = pCur->pHashNext) {
+      pPrev = pCur;
     }
 
-    nOpenListBase->apOpenBuckets[nHashIdx] = pDVar1->pHashNext;
-    push_to_closed_list:
-    pDVar1->pHashNext = 0;
-    nHashIdx = gnPathNodeMax[(uint8_t)pDVar1->nY & 0x7f] + gnPathSearchMax[(uint8_t)pDVar1->nX & 0x7f] & 0x7f;
-    pDVar1->pHashNext = nOpenListBase->apClosedBuckets[nHashIdx];
-    nOpenListBase->apClosedBuckets[nHashIdx] = pDVar1;
-    return (int32_t*)pDVar1;
+    if (!pPrev) {
+      nOpenListBase->apOpenBuckets[nHashIdx] = pNode->pHashNext;
+    } else {
+      pPrev->pHashNext = pNode->pHashNext;
+    }
+
+    pNode->pHashNext = 0;
+    nHashIdx = gnPathNodeMax[(uint8_t)pNode->nY & 0x7f] + gnPathSearchMax[(uint8_t)pNode->nX & 0x7f] & 0x7f;
+    pNode->pHashNext = nOpenListBase->apClosedBuckets[nHashIdx];
+    nOpenListBase->apClosedBuckets[nHashIdx] = pNode;
+    return (int32_t*)pNode;
 }
 
 // Propagates improved path costs through the A* node graph. When a shorter path is found to a node, updates its g-cost and recursively updates all 8 directional neighbors that could benefit from the shorter path.

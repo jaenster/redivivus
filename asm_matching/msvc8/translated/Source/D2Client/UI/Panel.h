@@ -40,7 +40,8 @@ struct D2BeltsEntryStrc {
 __pragma(pack(push, 1)) struct D2BeltsTxt {
     /* 0x00 */ uint8_t nIndex;
     /* 0x01 */ uint8_t pad0x01[3];
-    /* 0x04 */ int nBoxes;
+    /* 0x04 */ uint8_t nBoxes;
+    /* 0x05 */ uint8_t pad0x05[3];
     /* 0x08 */ D2BeltsEntryStrc beltBoxes[16];
 }; __pragma(pack(pop))
 

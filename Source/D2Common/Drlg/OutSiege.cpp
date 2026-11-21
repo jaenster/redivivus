@@ -54,13 +54,12 @@ static void DRLGOUTROOM_PlaceAct5SpecialPresets(D2DrlgLevelStrc * pLevel) {
     int nX;
     int32_t nLvlPrestId;
     D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
-    int* pTableEntry = &gaAct5SpecialPresetTable_0[0].nLvlPrestHorz;
-    do {
-      if (pLevel->eD2LevelId == ((D2Act5SpecialPresetStrc*)(pTableEntry - 4))->eLevelId) {
+    for (int i = 0; i < 3; i++) {
+      if (pLevel->eD2LevelId == gaAct5SpecialPresetTable_0[i].eLevelId) {
         if (pLevel->sCoordinatesAndSize.WorldSize.x > pLevel->sCoordinatesAndSize.WorldSize.y) {
-          nLvlPrestId = *pTableEntry;
+          nLvlPrestId = gaAct5SpecialPresetTable_0[i].nLvlPrestHorz;
           DATATBLS::LvlTbls::TXT_LvlPrest_GetLine(nLvlPrestId);
-          if (pTableEntry[-2]) {
+          if (gaAct5SpecialPresetTable_0[i].bFarSide) {
             nX = pWildData->nGridCoordsWidth - 2;
             nY = 2;
           } else {
@@ -68,21 +67,19 @@ static void DRLGOUTROOM_PlaceAct5SpecialPresets(D2DrlgLevelStrc * pLevel) {
             nY = 2;
           }
         } else {
-          nLvlPrestId = pTableEntry[-1];
+          nLvlPrestId = gaAct5SpecialPresetTable_0[i].nLvlPrestVert;
           DATATBLS::LvlTbls::TXT_LvlPrest_GetLine(nLvlPrestId);
           nX = 2;
-          if (pTableEntry[-2]) {
+          if (gaAct5SpecialPresetTable_0[i].bFarSide) {
             nY = pWildData->nGridCoordsHeight - 2;
           } else {
             nY = 0;
           }
         }
 
-        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, nLvlPrestId, pTableEntry[-3], 0);
+        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, nLvlPrestId, gaAct5SpecialPresetTable_0[i].nPresetArg, 0);
       }
-
-      pTableEntry += 5;
-    } while ((intptr_t)pTableEntry < (intptr_t)((char*)gaAct5SpecialPresetTable_0 + 76));
+    }
 }
 
 // Checks if the grid cell at (nX, nY) is flagged, and if so spawns a preset at that location.
@@ -390,47 +387,34 @@ static void DRLGOUTROOM_PlaceAct5SecondaryBorder(D2DrlgLevelStrc * pLevel) {
 // Places random scenery presets for Act5 outdoor levels from static table.
 void __stdcall DRLGOUTROOM_PlaceAct5SceneryPresets(D2DrlgLevelStrc * pLevel) {
     BOOL bSuccess;
-    int nCount;
     int32_t nPresetId;
-    int32_t nErrCode;
-    int nWidth;
-    nWidth = pLevel->sCoordinatesAndSize.WorldSize.x;
-    int nHeight;
-    nHeight = pLevel->sCoordinatesAndSize.WorldSize.y;
-    int* pTableEntry;
-    pTableEntry = gaAct5SceneryPresetTable_0[0] + 1;
-    do {
-      if (pLevel->eD2LevelId == (*(int (*)[7])(pTableEntry - 1))[0]) {
-        if (nWidth < nHeight) {
-          nPresetId = *pTableEntry;
+    BOOL bTaller = pLevel->sCoordinatesAndSize.WorldSize.x < pLevel->sCoordinatesAndSize.WorldSize.y;
+    for (int i = 0; i < 15; i++) {
+      if (pLevel->eD2LevelId == gaAct5SceneryPresetTable_0[i][0]) {
+        if (bTaller) {
+          nPresetId = gaAct5SceneryPresetTable_0[i][1];
         } else {
-          nPresetId = pTableEntry[1];
+          nPresetId = gaAct5SceneryPresetTable_0[i][2];
         }
 
-        nErrCode = pTableEntry[2];
-        nCount = 0;
-        if (pTableEntry[4] > 0) {
+        int32_t nErrCode = gaAct5SceneryPresetTable_0[i][3];
+        int nCount = 0;
+        if (gaAct5SceneryPresetTable_0[i][5] > 0) {
           do {
             bSuccess = Outdoors::SpawnOutdoorLevelPreset(pLevel, nPresetId, nErrCode, 0, '\x0f');
             nCount++;
-          } while (nCount < pTableEntry[4]);
+          } while (nCount < gaAct5SceneryPresetTable_0[i][5]);
 
           if (bSuccess) {
-            goto next_entry;
+            continue;
           }
         }
-        if (pTableEntry[5]) {
+        if (gaAct5SceneryPresetTable_0[i][6]) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x219);
           exit(-1);
         }
       }
-
-      next_entry:
-      pTableEntry += 7;
-      if ((intptr_t)pTableEntry >= (intptr_t)((char*)&gaAct5SceneryPresetTable_0 + sizeof(gaAct5SceneryPresetTable_0) + 4)) {
-        return;
-      }
-    } while (true);
+    }
 }
 
 // Places random decorative presets in Act 5 Bloody Foothills (level 0x6F). Tries up to 90 random positions to place up to 3 presets on empty grid cells, using seed-based random offsets and grid wrapping.

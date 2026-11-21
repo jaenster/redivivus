@@ -185,7 +185,6 @@ static int32_t STATLIST_BinarySearchChangedInsertPos(D2ChangedStatArrayStrc * pS
 
 // Records a changed stat into the D2StatListExStrc dirty-tracking array so it can be saved later. Guards: only runs if the stat-list has the dirty-tracking flag (bit 31), skips volatile stats (hp/mana/stamina/exp/gold), skips stats not in ItemStatCost or lacking the SAVED flag. Finds the sorted insertion position via binary search; if the changed-stat array is full, reallocates it (+4 slots via Fog ReAllocServerMemory). Shifts existing entries and inserts the shifted-stat id, then increments wCount.
 static void __stdcall STATLIST_TrackChangedStat(int32_t nShiftedStat, D2StatListExStrc * pStatEx) {
-    D2PoolManagerStrc* pMemory;
     if (!(pStatEx->sStatList.nFlags & 0x80000000U)) {
       return;
     }
@@ -204,7 +203,7 @@ static void __stdcall STATLIST_TrackChangedStat(int32_t nShiftedStat, D2StatList
         return;
     }
 
-    D2ItemStatCostTxt* pItemStatCostTxt = (int)nUnitStatId < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + nUnitStatId : nullptr;
+    D2ItemStatCostTxt* pItemStatCostTxt = (int)nUnitStatId >= 0 && (int)nUnitStatId < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + nUnitStatId : nullptr;
     if (!pItemStatCostTxt) {
       return;
     }
@@ -212,28 +211,24 @@ static void __stdcall STATLIST_TrackChangedStat(int32_t nShiftedStat, D2StatList
       return;
     }
 
-    D2ChangedStatArrayStrc* pStatInfo = &pStatEx->sChangedStats;
-    int32_t nInsertPos = STATLIST_BinarySearchChangedInsertPos(pStatInfo, nShiftedStat);
+    int32_t nInsertPos = STATLIST_BinarySearchChangedInsertPos(&pStatEx->sChangedStats, nShiftedStat);
     if (nInsertPos < 0) {
       return;
     }
 
     short int nNewCapacity = pStatEx->sChangedStats.wCapacity;
     if (pStatEx->sChangedStats.wCount >= nNewCapacity) {
-      int* pReallocBuf;
-      pMemory = pStatEx->sStatList.pMemory;
       nNewCapacity += 4;
       pStatEx->sChangedStats.wCapacity = nNewCapacity;
-      pReallocBuf = (int*)D2_REALLOC_POOL_AT(pMemory, pStatInfo->pChangedStatIds, nNewCapacity * 4, ".\\Stats\\StatsEx.cpp", 0x162);
-      pStatInfo->pChangedStatIds = pReallocBuf;
+      pStatEx->sChangedStats.pChangedStatIds = (int*)D2_REALLOC_POOL_AT(pStatEx->sStatList.pMemory, pStatEx->sChangedStats.pChangedStatIds, nNewCapacity * 4, ".\\Stats\\StatsEx.cpp", 0x162);
     }
 
     int nCount = (int)pStatEx->sChangedStats.wCount;
     if (nInsertPos < nCount) {
-      memmove(pStatInfo->pChangedStatIds + nInsertPos + 1, pStatInfo->pChangedStatIds + nInsertPos, (nCount - nInsertPos) * 4);
+      memmove(pStatEx->sChangedStats.pChangedStatIds + nInsertPos + 1, pStatEx->sChangedStats.pChangedStatIds + nInsertPos, (nCount - nInsertPos) * 4);
     }
 
-    pStatInfo->pChangedStatIds[nInsertPos] = nShiftedStat;
+    pStatEx->sChangedStats.pChangedStatIds[nInsertPos] = nShiftedStat;
     pStatEx->sChangedStats.wCount++;
 }
 

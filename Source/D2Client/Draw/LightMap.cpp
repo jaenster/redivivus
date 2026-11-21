@@ -1261,9 +1261,7 @@ static void __stdcall LIGHTMAP_UpdateSingleLight(int nQuality, D2LightMapStrc * 
 }
 
 void __stdcall LIGHTMAP_BuildCollisionFlags() {
-    eCollisionFlags eCollision;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    int nCellY = 0;
     if (!pUnit) {
       return;
     }
@@ -1273,27 +1271,17 @@ void __stdcall LIGHTMAP_BuildCollisionFlags() {
       return;
     }
 
-    int nYOffset = 0;
-    do {
-      int nCellX;
-      nCellX = 0;
-      do {
+    for (int nCellY = 0; nCellY < 0x30; nCellY++) {
+      for (int nCellX = 0; nCellX < 0x30; nCellX++) {
         pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, gnLightmapWorldRefreshFlag + nCellX, gnLightmapBufferState + nCellY);
         if (!pRoom) {
           pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
         }
-
-        eCollision = D2Common::Collision::CheckCollision_BlockPlayerMissile(pRoom, gnLightmapWorldRefreshFlag + nCellX, gnLightmapBufferState + nCellY, COLLIDE_BLANK | COLLIDE_BLOCK_MISSILE);
-        if (eCollision != COLLIDE_NONE) {
-          gaLightMapCells[nYOffset + nCellX].nCollisionGrid = 1;
+        if (D2Common::Collision::CheckCollision_BlockPlayerMissile(pRoom, gnLightmapWorldRefreshFlag + nCellX, gnLightmapBufferState + nCellY, COLLIDE_BLANK | COLLIDE_BLOCK_MISSILE)) {
+          gaLightMapCells[nCellY * 0x30 + nCellX].nCollisionGrid = 1;
         }
-
-        nCellX++;
-      } while (nCellX < 0x30);
-
-      nYOffset += 0x30;
-      nCellY++;
-    } while (nYOffset < 0x900);
+      }
+    }
 }
 
 int __stdcall LIGHTMAP_GetQualityLevel() {

@@ -108,16 +108,15 @@ template<> __attribute__((noinline)) inline void TSExplicitList<SGAMEDATA, -5726
 // Same code as TSExplicitList<CELLIST,..>::ScalarDeletingDestructor 00602b70; T from its call to UnlinkAll 0044f8e0.
 template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -572662307>::ScalarDeletingDestructor(uint32_t dwFlags) {
     this->UnlinkAll();
-    TSLink<::SGAMEDATA>* pNext = this->m_terminator.m_prevlink;
-    TSLink<::SGAMEDATA>* pTVar1 = &this->m_terminator;
-    if (pNext) {
-      TSLink<::SGAMEDATA>** pPrevLink;
-      pPrevLink = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pTVar1, -1);
-      *pPrevLink = pNext;
-      pTVar1->m_prevlink->m_next = pTVar1->m_next;
-      pTVar1->m_prevlink = 0;
-      pTVar1->m_next = 0;
+    TSLink<::SGAMEDATA>* pLink = &this->m_terminator;
+    TSLink<::SGAMEDATA>* pPrev = pLink->m_prevlink;
+    if (pPrev) {
+      *(TSLink<::SGAMEDATA>**)D2_StormNextLink(pLink, -1) = pPrev;
+      pLink->m_prevlink->m_next = pLink->m_next;
+      pLink->m_prevlink = 0;
+      pLink->m_next = 0;
     }
+
     if (dwFlags & 1 && this) {
       Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     }
@@ -334,15 +333,13 @@ void __thiscall Destructor_UnwindThunk(TSGrowableArray<TSExplicitList<SGAMEDATA,
 }
 
 template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>::ScalarDeletingDestructor(uint32_t dwFlags) {
-    TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pNext = this->m_link.m_prevlink;
-    TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pTVar1 = &this->m_link;
-    if (pNext) {
-      TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>** pPrevLink;
-      pPrevLink = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)D2_StormNextLink(pTVar1, -1);
-      *pPrevLink = pNext;
-      pTVar1->m_prevlink->m_next = pTVar1->m_next;
-      pTVar1->m_prevlink = 0;
-      pTVar1->m_next = 0;
+    TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pLink = &this->m_link;
+    TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pPrev = pLink->m_prevlink;
+    if (pPrev) {
+      *(TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)D2_StormNextLink(pLink, -1) = pPrev;
+      pLink->m_prevlink->m_next = pLink->m_next;
+      pLink->m_prevlink = 0;
+      pLink->m_next = 0;
     }
 
     ((TSGrowableArray<::SGAMEDATA>*)this)->Destructor();

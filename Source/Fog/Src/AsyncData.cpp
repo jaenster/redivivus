@@ -181,16 +181,15 @@ D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManager
     DWORD nSeekResult;
     D2AsyncDataSlotStrc* pSlot;
     int i;
-    D2AsyncDataCallbackStrc* pCallbackTable;
-    D2AsyncDataCallbackStrc* pCallbackDst;
     D2AsyncData_Line0x128* pAsyncData = D2_NEW_POOL_AT(pMemory, D2AsyncData_Line0x128, ".\\Src\\AsyncData.cpp", 0x128);
     memset(pAsyncData, 0, 0x54);
     pAsyncData->nFlags = 0x41737960;
-    int32_t nErrorLine = Source::SFile::ARCHIVE_OpenD2FileWrap(szText1, &pAsyncData->pFile);
-    if (!nErrorLine) {
-      nErrorLine = 0x135;
+    if (!Source::SFile::ARCHIVE_OpenD2FileWrap(szText1, &pAsyncData->pFile)) {
       D2_FREE_POOL_AT(pMemory, pAsyncData, ".\\Src\\AsyncData.cpp", 0x135);
-    } else {
+      return nullptr;
+    }
+
+    {
       D2MPQFileStrc* pFileHandle;
       pAsyncData->pMemory = pMemory;
       pAsyncData->nPriority = nPriority;
@@ -202,28 +201,26 @@ D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManager
         }
       }
       if ((int)nReadSize <= 0) {
-        nReadSize = Source::SFile::ERRORMANAGER_FGetFileSize(pAsyncData->pFile, (LPDWORD)0x0);
+        pAsyncData->nReadSize = Source::SFile::ERRORMANAGER_FGetFileSize(pAsyncData->pFile, (LPDWORD)0x0);
+      } else {
+        pAsyncData->nReadSize = nReadSize;
       }
 
-      pAsyncData->nReadSize = nReadSize;
       if (pReadBuffer) {
         pAsyncData->nFlags &= -3;
+        pAsyncData->pReadBuffer = pReadBuffer;
       } else {
-        pReadBuffer = Memory::Alloc(pMemory, pAsyncData->nReadSize, szText2, nLine);
+        pAsyncData->pReadBuffer = Memory::Alloc(pMemory, pAsyncData->nReadSize, szText2, nLine);
         pAsyncData->nFlags |= 2;
       }
-
-      pAsyncData->pReadBuffer = pReadBuffer;
-      pCallbackTable = 0;
       if (pCallback) {
-        pCallbackTable = &pAsyncData->tCallback;
-        pCallbackDst = pCallbackTable;
-        *pCallbackDst = *pCallback;
+        pAsyncData->tCallback = *pCallback;
+        pCallback = &pAsyncData->tCallback;
       }
       if (!bAsync || !gbAsyncDataInitialized) {
         Source::SFile::ERRORMANAGER_FReadFile(pAsyncData->pFile, pAsyncData->pReadBuffer, pAsyncData->nReadSize, nullptr, (LPOVERLAPPED)0x0, nullptr, nPriority);
-        if (pCallbackTable && pCallbackTable->pfnCallback) {
-          pCallbackTable->pfnCallback(pAsyncData->pReadBuffer, pAsyncData->nReadSize, pCallbackTable);
+        if (pCallback && pCallback->pfnCallback) {
+          pCallback->pfnCallback(pAsyncData->pReadBuffer, pAsyncData->nReadSize, pCallback);
         }
 
         ASYNCDATA_CancelAndCleanup(pAsyncData);
@@ -232,27 +229,26 @@ D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManager
 
       pSlot = ASYNCDATA_AllocSlot();
       pAsyncData->pSlot = pSlot;
-      if (pSlot) {
-        pSlot->pRequest = pAsyncData;
-        pAsyncData->tOverlapped.hEvent = pAsyncData->pSlot->hEvent;
-        pFileHandle = pAsyncData->pFile;
-        pAsyncData->tOverlapped.Offset = nFileOffset;
-        Source::SFile::ERRORMANAGER_FReadFile(pFileHandle, pAsyncData->pReadBuffer, pAsyncData->nReadSize, nullptr, &pAsyncData->tOverlapped, (D2StormAsyncCompletionStrc*)pCallbackTable, nPriority);
-        return pAsyncData;
-      }
-      if (pAsyncData->pFile) {
-        Source::SFile::ERRORMANAGER_FCloseFile(pAsyncData->pFile);
-        pAsyncData->pFile = 0;
-      }
-      if (pAsyncData->nFlags & 2) {
-        D2_FREE_POOL_AT(pMemory, pAsyncData->pReadBuffer, ".\\Src\\AsyncData.cpp", 0x184);
+      if (!pSlot) {
+        if (pAsyncData->pFile) {
+          Source::SFile::ERRORMANAGER_FCloseFile(pAsyncData->pFile);
+          pAsyncData->pFile = 0;
+        }
+        if (pAsyncData->nFlags & 2) {
+          D2_FREE_POOL_AT(pMemory, pAsyncData->pReadBuffer, ".\\Src\\AsyncData.cpp", 0x184);
+        }
+
+        D2_FREE_POOL_AT(pMemory, pAsyncData, ".\\Src\\AsyncData.cpp", 0x186);
+        return nullptr;
       }
 
-      nErrorLine = 0x186;
-      D2_FREE_POOL_AT(pMemory, pAsyncData, ".\\Src\\AsyncData.cpp", 0x186);
+      pSlot->pRequest = pAsyncData;
+      pAsyncData->tOverlapped.hEvent = pAsyncData->pSlot->hEvent;
+      pFileHandle = pAsyncData->pFile;
+      pAsyncData->tOverlapped.Offset = nFileOffset;
+      Source::SFile::ERRORMANAGER_FReadFile(pFileHandle, pAsyncData->pReadBuffer, pAsyncData->nReadSize, nullptr, &pAsyncData->tOverlapped, (D2StormAsyncCompletionStrc*)pCallback, nPriority);
+      return pAsyncData;
     }
-
-    return nullptr;
 }
 
 uint32_t __fastcall ASYNCDATA_IsComplete(D2AsyncData_Line0x128 * pAsyncData) {

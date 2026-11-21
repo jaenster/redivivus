@@ -20,94 +20,72 @@ namespace D2Win::Forms {
 
 // Registers window message/command/key handler based on type. Type 0 = message handler (rejects 0x111/0x101/0x100), type 1 = command, type 2 = key up, type 3 = key down. Forwards to appropriate WND_Register* function.
 void __fastcall D2WIN_RegisterWindowHandler(HWND hHandle, int32_t nHandlerType, int32_t nMessage, int32_t pCallback) {
-    if (hHandle) {
-      switch (nHandlerType) {
-        case 0:
-          {
-            switch (nMessage) {
-              case 0x111:
-                {
-                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x17);
-                  exit(-1);
-                }
-              case 0x101:
-                {
-                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x18);
-                  exit(-1);
-                }
-              default:
-                {
-                  Storm::WindowHandle::SMsgRegisterMessage(hHandle, nMessage, pCallback);
-                  return;
-                }
-              case 0x100:
-                {
-                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19);
-                  exit(-1);
-                }
-            }
-          }
-        case 1:
-          Storm::WindowHandle::SMsgRegisterCommand(hHandle, nMessage, pCallback);
-        return;
-        case 2:
-          Storm::WindowHandle::SMsgRegisterKeyUp(hHandle, nMessage, pCallback);
-        return;
-        case 3:
-          Storm::WindowHandle::SMsgRegisterKeyDown(hHandle, nMessage, pCallback);
-        default:
-          return;
-      }
+    if (!hHandle) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x13);
+      exit(-1);
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x13);
-    exit(-1);
+    switch (nHandlerType) {
+      case 0:
+        if (nMessage == 0x111) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x17);
+          exit(-1);
+        }
+        if (nMessage == 0x101) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x18);
+          exit(-1);
+        }
+        if (nMessage == 0x100) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19);
+          exit(-1);
+        }
+        Storm::WindowHandle::SMsgRegisterMessage(hHandle, nMessage, pCallback);
+        return;
+      case 1:
+        Storm::WindowHandle::SMsgRegisterCommand(hHandle, nMessage, pCallback);
+        return;
+      case 2:
+        Storm::WindowHandle::SMsgRegisterKeyUp(hHandle, nMessage, pCallback);
+        return;
+      case 3:
+        Storm::WindowHandle::SMsgRegisterKeyDown(hHandle, nMessage, pCallback);
+        return;
+    }
 }
 
 // Unregisters window message/command/key handler. Type 0 = message (rejects 0x111/0x101/0x100), type 1 = command, type 2 = key up, type 3 = key down. Forwards to appropriate WND_Unregister* function.
 void __fastcall D2WIN_UnregisterWindowHandler(HWND hHandle, int32_t nHandlerType, uint32_t nMessage, void * pCallback) {
-    if (hHandle) {
-      switch (nHandlerType) {
-        case 0:
-          {
-            switch (nMessage) {
-              case 0x111:
-                {
-                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x34);
-                  exit(-1);
-                }
-              case 0x101:
-                {
-                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x35);
-                  exit(-1);
-                }
-              default:
-                {
-                  Storm::WindowHandle::SMsgUnregisterMessage(hHandle, nMessage, (char*)pCallback);
-                  return;
-                }
-              case 0x100:
-                {
-                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x36);
-                  exit(-1);
-                }
-            }
-          }
-        case 1:
-          Storm::WindowHandle::SMsgUnregisterCommand(hHandle, nMessage, (char*)pCallback);
-        return;
-        case 2:
-          Storm::WindowHandle::SMsgUnregisterKeyUp(hHandle, nMessage, (char*)pCallback);
-        return;
-        case 3:
-          Storm::WindowHandle::SMsgUnregisterKeyDown(hHandle, nMessage, (char*)pCallback);
-        default:
-          return;
-      }
+    if (!hHandle) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x30);
+      exit(-1);
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x30);
-    exit(-1);
+    switch (nHandlerType) {
+      case 0:
+        if (nMessage == 0x111) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x34);
+          exit(-1);
+        }
+        if (nMessage == 0x101) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x35);
+          exit(-1);
+        }
+        if (nMessage == 0x100) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x36);
+          exit(-1);
+        }
+        Storm::WindowHandle::SMsgUnregisterMessage(hHandle, nMessage, (char*)pCallback);
+        return;
+      case 1:
+        Storm::WindowHandle::SMsgUnregisterCommand(hHandle, nMessage, (char*)pCallback);
+        return;
+      case 2:
+        Storm::WindowHandle::SMsgUnregisterKeyUp(hHandle, nMessage, (char*)pCallback);
+        return;
+      case 3:
+        Storm::WindowHandle::SMsgUnregisterKeyDown(hHandle, nMessage, (char*)pCallback);
+        return;
+    }
 }
 
 // Registers multiple window handlers from array. Each array entry contains {type, message, callback} triplet. Iterates array and calls RegisterWindowHandler for each entry.

@@ -4510,11 +4510,8 @@ void __stdcall UI_DrawPartyRoster() {
     D2RosterStrc* pRoster = GAME::Roster::GetNextRosterPlayer(nullptr);
     D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xfa4), 0x96, 0x37, 4, 0);
     int nRowBaseY = gnPartyRosterRowHeight * 2 + 0x1e;
-    do {
+    while (pRoster) {
       uint16_t nPartyId;
-      if (!pRoster) {
-        return;
-      }
 
       pszRosterName = GAME::Roster::GetRosterName(pRoster);
       memset(wszRosterName, 0, 16 * sizeof(wszRosterName[0]));
@@ -4533,8 +4530,7 @@ void __stdcall UI_DrawPartyRoster() {
         wszPartyIdNum[0] = L'\0';
         wszPartyIdNum[1] = L'\0';
         wszPartyIdNum[2] = L'\0';
-        nPartyId = GAME::Roster::GetRosterPartyId(pRoster);
-        /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPartyIdText, "%d", (uint32_t)nPartyId);
+        wsprintfA(szPartyIdText, "%d", GAME::Roster::GetRosterPartyId(pRoster));
         D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszPartyIdNum, szPartyIdText, 2);
         pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0xfb0);
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszPartyText, pwszLabel);
@@ -4555,7 +4551,10 @@ void __stdcall UI_DrawPartyRoster() {
 
       pRoster = GAME::Roster::GetNextRosterPlayer(pRoster);
       nRowBaseY += gnPartyRosterRowHeight;
-    } while (nRowBaseY <= 0x145 - gnPartyRosterRowHeight);
+      if (nRowBaseY > 0x145 - gnPartyRosterRowHeight) {
+        break;
+      }
+    }
 }
 
 void __stdcall UI_LoadAllPanelAssets() {
@@ -8795,11 +8794,9 @@ static int32_t UI_GetStatDescriptionStringId(D2UnitStrc * nUnit) {
 }
 
 static void __fastcall DRAW_UI_StatWindow_III(int32_t nX, int32_t nY, int32_t nValue) {
-    uint16_t* wszFmt;
     int iClearIdx;
     uint16_t wszMessage[128];
     int nWeaponClass;
-    int32_t nErrorLine;
     if (nValue < 5) {
       nValue = 5;
     } else if (nValue > 0x5f) {
@@ -8834,14 +8831,10 @@ static void __fastcall DRAW_UI_StatWindow_III(int32_t nX, int32_t nY, int32_t nV
       exit(-1);
     }
 
-    nErrorLine = nValue;
-    uint16_t* pwszClear = D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr);
     if (nBlockRateOrDescStrId) {
-      pwszClear = D2Lang::StrTable::strtable::GetLocaleString(0x2779);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszMessage, pwszClear, nBlockRateOrDescStrId, nValue);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszMessage, D2Lang::StrTable::strtable::GetLocaleString(0x2779), nBlockRateOrDescStrId, nValue, D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr), nValue);
     } else {
-      wszFmt = D2Lang::StrTable::strtable::GetLocaleString(0x2778);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszMessage, wszFmt, pwszClear, nErrorLine);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszMessage, D2Lang::StrTable::strtable::GetLocaleString(0x2778), D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr), nValue);
     }
 
     D2Win::Src::D2WinFont::D2WINFONT_DrawTextWithBackgroundRect(wszMessage, Inv::gnPanelOffsetX + 0x8b, Inv::gnPanelOffsetY - 0x13b + Inv::ScreenSizeY, (uint32_t)gbUIStatWindowDrawFlag, DRAW_LESSTRANSPARENT, 0);

@@ -546,64 +546,43 @@ int32_t __stdcall PATH_GetDynamicPathField(int32_t nMonStatsIdx) {
       nMonStatsExId = (int)ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatsIdx].MonStatsEx;
       pMonStatsEx = nMonStatsExId >= 0 && nMonStatsExId < ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr;
     }
-    if (!pMonStatsEx) {
-      return 1;
-    }
-    if ((uint32_t)(int)pMonStatsEx->SizeX > 3) {
-      return 1;
-    }
-
-    dwMonStats2Flags = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsEx + 0x5);
-    nMonStatsExId = gaUnitTypeInteractSizes[pMonStatsEx->SizeX];
-    if (!((Fog::BitBuffer::gadwBitMasks[0] & dwMonStats2Flags || Fog::BitBuffer::gadwBitMasks[2] & dwMonStats2Flags) && !(Fog::BitBuffer::gadwBitMasks[1] & dwMonStats2Flags))) {
-      return nMonStatsExId;
-    }
-
-    switch (nMonStatsExId) {
-      case 1:
-        {
-          nMonStatsExId = 3;
-          break;
+    int nSizeX;
+    if (pMonStatsEx && (nSizeX = pMonStatsEx->SizeX, (uint32_t)nSizeX <= 3)) {
+      int nSize = gaUnitTypeInteractSizes[nSizeX];
+      dwMonStats2Flags = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsEx + 0x5);
+      if ((Fog::BitBuffer::gadwBitMasks[0] & dwMonStats2Flags || Fog::BitBuffer::gadwBitMasks[2] & dwMonStats2Flags) && !(Fog::BitBuffer::gadwBitMasks[1] & dwMonStats2Flags)) {
+        switch (nSize) {
+          case 1:
+            nSize = 3;
+            break;
+          case 2:
+            nSize = 4;
+            break;
         }
-      case 2:
-        {
-          return 4;
-        }
+      }
+
+      return nSize;
     }
 
-    return nMonStatsExId;
+    return 1;
 }
 
 int32_t __stdcall GetInteractSize(D2UnitStrc * pUnit, int32_t nSizeX) {
+    int nSize;
     if ((uint32_t)nSizeX <= 3) {
-      int nBaseSize = gaUnitTypeInteractSizes[nSizeX];
-      if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
-        return nBaseSize;
-      }
-
-      uint32_t bIsBossOrChamp = Monsters::MONSTERS::MONSTER_CanBeInTown(pUnit);
-      if (!bIsBossOrChamp) {
-        return nBaseSize;
-      }
-
-      BOOL bHasInteractFlag = DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(pUnit->nClassId, interact);
-      if (bHasInteractFlag) {
-        return nBaseSize;
-      }
-
-      switch (nBaseSize) {
-        case 1:
-          {
-            nBaseSize = 3;
+      nSize = gaUnitTypeInteractSizes[nSizeX];
+      if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && Monsters::MONSTERS::MONSTER_CanBeInTown(pUnit) && !DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(pUnit->nClassId, interact)) {
+        switch (nSize) {
+          case 1:
+            nSize = 3;
             break;
-          }
-        case 2:
-          {
-            return 4;
-          }
+          case 2:
+            nSize = 4;
+            break;
+        }
       }
 
-      return nBaseSize;
+      return nSize;
     }
 
     return 1;

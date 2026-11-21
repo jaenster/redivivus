@@ -105,8 +105,8 @@ void __stdcall MINIPANEL_DrawButton(int32_t nFrameNumber, int32_t nPositionX, in
 
 static void MINIPANEL_CalculateButtonPositions(int32_t bIsExpansion) {
     int bSinglePlayer = gbMiniPanelSinglePlayer;
-    uint32_t nButtonCount = 8;
-    if (gbMiniPanelSinglePlayer) {
+    int nButtonCount = 8;
+    if (bSinglePlayer) {
       nButtonCount = 7;
     }
 
@@ -116,31 +116,28 @@ static void MINIPANEL_CalculateButtonPositions(int32_t bIsExpansion) {
       return;
     }
 
-    int nButtonIndex = ui::ScreenSizeX / 2;
-    int nButtonX = nButtonIndex - 0x54;
-    if (gbMiniPanelSinglePlayer) {
-      nButtonX = nButtonIndex - 0x4a;
+    int nCenterX = ui::ScreenSizeX / 2;
+    int nButtonX = nCenterX - 0x54;
+    if (bSinglePlayer) {
+      nButtonX = nCenterX - 0x4a;
     }
 
     uint32_t nButtonY = Inv::ScreenSizeY - 0x32;
     if (bIsExpansion == 1) {
-      nButtonX = nButtonIndex - 0xca;
-    } else if (bIsExpansion == 3 && (nButtonX = nButtonIndex + 0x39 , !gbMiniPanelSinglePlayer)) {
-      nButtonX = nButtonIndex + 0x23;
+      nButtonX = nCenterX - 0xca;
+    } else if (bIsExpansion == 3) {
+      nButtonX = nCenterX + 0x39;
+      if (!bSinglePlayer) {
+        nButtonX = nCenterX + 0x23;
+      }
     }
 
     gnMiniPanelButtonFrame[0] = 0;
     gnMiniPanelButtonState6[0] = 0;
-    uint32_t nButton = 1;
     gnMiniPanelButtonX[0] = nButtonX;
     gnMiniPanelButtonY[0] = nButtonY;
-    if (1 >= nButtonCount) {
-      return;
-    }
-
-    do {
-      uint32_t nFrameBase;
-      nButtonX += 0x15;
+    nButtonX += 0x15;
+    for (int nButton = 1; nButton < nButtonCount; nButton++) {
       gnMiniPanelButtonX[nButton] = nButtonX;
       gnMiniPanelButtonY[nButton] = nButtonY;
       if (bSinglePlayer) {
@@ -150,15 +147,14 @@ static void MINIPANEL_CalculateButtonPositions(int32_t bIsExpansion) {
         }
 
         gnMiniPanelButtonFrame[nButton] = nStateAdjust + nButton;
-        nFrameBase = nFrameAdjust + nButton * 2;
+        gnMiniPanelButtonState6[nButton] = nFrameAdjust + nButton * 2;
       } else {
         gnMiniPanelButtonFrame[nButton] = nButton;
-        nFrameBase = nButton * 2;
+        gnMiniPanelButtonState6[nButton] = nButton * 2;
       }
 
-      gnMiniPanelButtonState6[nButton] = nFrameBase;
-      nButton++;
-    } while ((int)nButton < (int)nButtonCount);
+      nButtonX += 0x15;
+    }
 }
 
 void __stdcall MINIPANEL_DrawAllButtons(int32_t bVisible) {
@@ -521,7 +517,6 @@ void __stdcall INPUT_MiniPanelMouseUp(D2UIMouseMsgStrc * pMsg) {
 void __stdcall INPUT_MiniPanelMouseDown(D2UIMouseMsgStrc * pMsg) {
     BOOL bEscMenuOpen;
     eD2GSGameType eGameType;
-    bool bSignedLess;
     int nButtonCount;
     nButtonCount = 8;
     if (gbMiniPanelSinglePlayer) {
@@ -554,29 +549,29 @@ void __stdcall INPUT_MiniPanelMouseDown(D2UIMouseMsgStrc * pMsg) {
     nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
     int32_t nMouseX;
     nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
-    int nButtonIndex;
-    nButtonIndex = 0;
+    int nOffsetX;
+    nOffsetX = 0;
     uint32_t bBeltHover;
     bBeltHover = Panel::PANEL_GetBeltSlotHoverFlag();
     if (bBeltHover) {
       int nBeltUseBlocked;
       nBeltUseBlocked = Panel::PANEL_CheckBeltUseBlocked();
       if (nBeltUseBlocked > 1) {
-        nButtonIndex = -0x76;
+        nOffsetX = -0x76;
       }
     }
     if (gnMiniPanelRightScreen) {
-      nButtonIndex += -0x76;
+      nOffsetX += -0x76;
     }
     if (gnMiniPanelLeftScreen) {
-      nButtonIndex += 0x77;
+      nOffsetX += 0x77;
     }
 
-    nButtonIndex = ui::ScreenSizeX / 2 + nButtonIndex;
-    if (nMouseX <= nButtonIndex - 0x54) {
+    int nCenterX = ui::ScreenSizeX / 2 + nOffsetX;
+    if (nMouseX <= nCenterX - 0x54) {
       return;
     }
-    if (nMouseX >= nButtonIndex + 0x59) {
+    if (nMouseX >= nCenterX + 0x59) {
       return;
     }
     if (nMouseY <= Inv::ScreenSizeY - 0x45) {
@@ -586,8 +581,8 @@ void __stdcall INPUT_MiniPanelMouseDown(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    nButtonIndex = 0;
-    if (!nButtonCount) {
+    int nButtonIndex = 0;
+    if (nButtonCount <= 0) {
       return;
     }
 
@@ -607,11 +602,10 @@ void __stdcall INPUT_MiniPanelMouseDown(D2UIMouseMsgStrc * pMsg) {
       if (bEscMenuOpen) {
         eGameType = GAME::Game::CLIENT_GetD2GSGameType();
         if (eGameType == GAMETYPE_SINGLEPLAYER) {
-          bSignedLess = nButtonIndex < 4;
-        } else {
-          bSignedLess = nButtonIndex < 5;
-        }
-        if (bSignedLess) {
+          if (nButtonIndex < 4) {
+            goto consume_click;
+          }
+        } else if (nButtonIndex < 5) {
           goto consume_click;
         }
       }
@@ -627,27 +621,23 @@ void __stdcall INPUT_MiniPanelMouseDown(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall MINIPANEL_Init() {
-    eD2GSGameType eGameType = GAME::Game::CLIENT_GetD2GSGameType();
-    if (eGameType != GAMETYPE_SINGLEPLAYER) {
+    int nButtonCount;
+    if (GAME::Game::CLIENT_GetD2GSGameType() != GAMETYPE_SINGLEPLAYER) {
       gpMiniPanelBackgroundDC6 = ui::ARCHIVE_LoadOverlayImageUsedInGame("Panel\\minipanel");
+      gbMiniPanelSinglePlayer = 0;
     } else {
       gpMiniPanelBackgroundDC6 = ui::ARCHIVE_LoadOverlayImageUsedInGame("Panel\\minipanel_s");
+      gbMiniPanelSinglePlayer = 1;
     }
 
-    gbMiniPanelSinglePlayer = (uint32_t)(eGameType == GAMETYPE_SINGLEPLAYER);
     gpMiniPanelButtonsDC6 = ui::ARCHIVE_LoadOverlayImageUsedInGame("Panel\\minipanelbtn");
-    int nButtonCount = 8;
+    nButtonCount = 8;
     if (gbMiniPanelSinglePlayer) {
       nButtonCount = 7;
     }
-    if (!nButtonCount) {
-      return;
-    }
 
-    uint32_t* pButtonState = gnMiniPanelButtonState;
-    for (; nButtonCount; nButtonCount--) {
-      *pButtonState = 0;
-      pButtonState++;
+    for (int i = 0; i < nButtonCount; i++) {
+      gnMiniPanelButtonState[i] = 0;
     }
 }
 

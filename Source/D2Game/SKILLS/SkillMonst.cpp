@@ -1513,7 +1513,8 @@ BOOL __fastcall Skills_SrvDoFunc_100_FreezingMeleeAttack(::SGAMEDATA * pGame, D2
     if (pTarget) {
       int nTargetHp;
       memset(&sDamage, 0, 0x70);
-      sDamage.wResultFlags = sDamage.wResultFlags | 1U | pSkillsTxt->ResultFlags;
+      sDamage.wResultFlags |= 1;
+      sDamage.wResultFlags |= pSkillsTxt->ResultFlags;
       sDamage.dwHitFlags |= pSkillsTxt->HitFlags;
       if (pSkillsTxt->HitClass) {
         sDamage.dwHitClass = pSkillsTxt->HitClass;

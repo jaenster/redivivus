@@ -278,26 +278,14 @@ void Unreferenced_0052bfc0() {
 }
 
 int Unreferenced_0052bfe0() {
-    int iVar1 = 0;
-    ::SGAMEDATA** ppSVar2 = gaQServerGameByToken + 2;
-    do {
-      if (ppSVar2[-1] && ppSVar2[-1] != (::SGAMEDATA*)-1) {
-        iVar1++;
+    int nCount = 0;
+    for (int nToken = 1; nToken < 1025; nToken++) {
+      if (gaQServerGameByToken[nToken] && gaQServerGameByToken[nToken] != (::SGAMEDATA*)-1) {
+        nCount++;
       }
-      if (*ppSVar2 && *ppSVar2 != (::SGAMEDATA*)-1) {
-        iVar1++;
-      }
-      if (ppSVar2[1] && ppSVar2[1] != (::SGAMEDATA*)-1) {
-        iVar1++;
-      }
-      if (ppSVar2[2] && ppSVar2[2] != (::SGAMEDATA*)-1) {
-        iVar1++;
-      }
+    }
 
-      ppSVar2 += 4;
-    } while ((intptr_t)ppSVar2 < (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken) + 4));
-
-    return iVar1;
+    return nCount;
 }
 
 int __stdcall FreeServer() {
@@ -326,13 +314,10 @@ void __stdcall QSERVER_SetGlobalInstance(TSExportTableSync<::SGAMEDATA, HSGAMEDA
     if (!pQServerState) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x15b);
       exit(-1);
-    } else {
-      gpQServerGameState = pQServerState;
-      if (pInitState) {
-        return;
-      }
+    }
 
-      gpQServerGameState = pQServerState;
+    gpQServerGameState = pQServerState;
+    if (!pInitState) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x15d);
       exit(-1);
     }
@@ -1697,17 +1682,9 @@ void __fastcall MonsterIdToName(char * szText, int32_t nId) {
 }
 
 void __fastcall ObjectIdToName(char * szText, int32_t nId) {
-    char cChar;
-    D2ObjectsTxt* pDVar1 = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nId);
-    if (pDVar1) {
-      intptr_t nDstOffset;
-      nDstOffset = (intptr_t)szText - (intptr_t)pDVar1;
-      do {
-        cChar = pDVar1->Name[0];
-        *(char*)(nDstOffset + (char*)pDVar1) = cChar;
-        pDVar1 = (D2ObjectsTxt*)(pDVar1->Name + 1);
-      } while (cChar != '\0');
-
+    D2ObjectsTxt* pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nId);
+    if (pObjectsTxt) {
+      strcpy(szText, pObjectsTxt->Name);
       return;
     }
 

@@ -1071,10 +1071,11 @@ void __fastcall AUTOMAP_SerializeCellTree(D2AutomapCellStrc * pAutomapCell) {
     for (; pAutomapCell; pAutomapCell = pAutomapCell->pMore) {
       AUTOMAP_SerializeCellTree(pAutomapCell->pLess);
       if (!*(int*)pAutomapCell) {
-        *pClientAutomapCellActual = pAutomapCell->nCellNo;
-        pClientAutomapCellActual[1] = pAutomapCell->xPixel;
-        pClientAutomapCellActual[2] = pAutomapCell->yPixel;
-        pClientAutomapCellActual += 3;
+        uint16_t* pCursor = pClientAutomapCellActual;
+        *pCursor++ = pAutomapCell->nCellNo;
+        *pCursor++ = pAutomapCell->xPixel;
+        *pCursor++ = pAutomapCell->yPixel;
+        pClientAutomapCellActual = pCursor;
       }
     }
 }
@@ -1437,9 +1438,10 @@ void __stdcall AUTOMAP_SwitchLayer(D2AutomapLayerStrc * pAutomapLayer) {
 // @sourcefile .\UI\automap.cpp
 void __stdcall AUTOMAP_AllocLayer(int32_t nLayer) {
     D2AutomapLayerStrc* pLayer = D2_NEW_AT(D2AutomapLayerStrc, ".\\UI\\automap.cpp", 0x5ed);
+    D2AutomapLayerStrc* pNext = sgpAutomapLayer;
     memset(pLayer, 0, sizeof(*pLayer));
     pLayer->nLayer = nLayer;
-    pLayer->pNext = sgpAutomapLayer;
+    pLayer->pNext = pNext;
     sgpAutomapLayer = pLayer;
 }
 

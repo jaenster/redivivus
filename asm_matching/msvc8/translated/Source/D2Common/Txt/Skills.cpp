@@ -624,11 +624,25 @@ eD2Skills __stdcall GetSkillId(D2SkillStrc * pSkill, char * szName, int32_t nLin
     return (int)pSkill->pRecord->skill;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
 uint32_t __fastcall GetSequenceId(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     if (!pUnit || !pSkill) {
       return 0;
     }
-    if (pUnit->eUnitType == UNIT_PLAYER) {
+    eD2UnitType eUnitType = GetTypeInline(pUnit);
+    int nClassId = GetClassIdInline(pUnit);
+    if (eUnitType == UNIT_PLAYER) {
       return (uint32_t)(uint8_t)pSkill->pRecord->seqnum;
     }
 
@@ -637,7 +651,7 @@ uint32_t __fastcall GetSequenceId(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
       return 0;
     }
 
-    D2MonStatsTxt* pMonStats = DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
+    D2MonStatsTxt* pMonStats = DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nClassId);
     int i = 0;
     short int* pSkillEntry = pMonStats->aSkill;
     do {
@@ -1456,10 +1470,7 @@ static int32_t __stdcall SKILLS_CalculateBaseDamageFromStats(int32_t nType, D2Un
       nDamage = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
       nDamage *= 3;
     } else {
-      int nDexterity;
-      nDexterity = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_dexterity, 0);
-      nDamage = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_strength, 0);
-      nDamage += nDexterity - 0x14;
+      nDamage = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_dexterity, 0) + Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_strength, 0) - 0x14;
     }
     if (nDamage < 1) {
       nDamage = 1;
@@ -3168,28 +3179,15 @@ void __stdcall SKILLS_UpdatePassiveSkillStats(D2UnitStrc * pUnit, eD2Skills eSki
 }
 
 void __stdcall SKILLS_UpdateAllPassiveSkills(D2UnitStrc * pUnit) {
-    D2SkillStrc* pSkillInst;
-    BOOL ePassiveState;
-    eD2Skills eSkill;
-    int32_t nPassiveSkillCount;
-    int i = ITEMS::Items::sgptDataTable->nPassiveSkillsCount;
-    D2DataTableTxtStrc* pDataTable = ITEMS::Items::sgptDataTable;
-    for (nPassiveSkillCount = 0; nPassiveSkillCount < i; nPassiveSkillCount++) {
-      short int nSkillId = nPassiveSkillCount < 0 || nPassiveSkillCount >= pDataTable->nPassiveSkillsCount ? -1 : pDataTable->pPassiveSkillsPerClassStrc[nPassiveSkillCount].nSkillId;
-      eSkill = (eD2Skills)nSkillId;
-      D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < pDataTable->nTxtSkillsCount ? pDataTable->pTxtSkills + eSkill : nullptr;
+    int nCount = ITEMS::Items::sgptDataTable->nPassiveSkillsCount;
+    for (int i = 0; i < nCount; i++) {
+      short nSkillId = i < 0 || i >= ITEMS::Items::sgptDataTable->nPassiveSkillsCount ? -1 : ITEMS::Items::sgptDataTable->pPassiveSkillsPerClassStrc[i].nSkillId;
+      eD2Skills eSkill = (eD2Skills)nSkillId;
+      D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
       if (pSkillsTxt) {
-        nSkillId = pSkillsTxt->passivestate;
-        if (nSkillId > 0) {
-          pSkillInst = GetSkill(pUnit, eSkill);
-          if (pSkillInst) {
-            ePassiveState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nSkillId);
-            pDataTable = ITEMS::Items::sgptDataTable;
-            if (ePassiveState) {
-              SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
-              pDataTable = ITEMS::Items::sgptDataTable;
-            }
-          }
+        short nPassiveState = pSkillsTxt->passivestate;
+        if (nPassiveState > 0 && GetSkill(pUnit, eSkill) && DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, nPassiveState)) {
+          SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
         }
       }
     }
@@ -3283,51 +3281,53 @@ D2SkillStrc * __stdcall AllocSkill(D2UnitStrc * pUnit, eD2Skills eSkill) {
 
     for (pSkill = Units::GetFirstSkill(pUnit); pSkill; pSkill = pSkill->pNext) {
       if (pSkill->pRecord == pSkillListStrc && pSkill->nOwnerGUID == -1) {
-        nCurrentLevel = pSkill->nLevel;
-        nMaxLevel = SKILL_GetMaxLevelForSkill(eSkill);
-        if (nCurrentLevel < nMaxLevel || pUnit->eUnitType == UNIT_MONSTER) {
-          pSkill->nLevel = nCurrentLevel + 1;
+        break;
+      }
+    }
+
+    if (!pSkill) {
+      D2SkillListStrc* pSkillsList = pUnit->pSkillsList;
+      if (!pSkillsList) {
+        return nullptr;
+      }
+
+      D2SkillStrc* pNewSkill = D2_NEW_POOL_AT(pSkillsList->pMemory, D2SkillStrc, ".\\SKILLS\\Skills.cpp", 0x539);
+      memset(pNewSkill, 0, 0x40);
+      pNewSkill->pRecord = pSkillListStrc;
+      if (pUnit->eUnitType == UNIT_MONSTER) {
+        pNewSkill->nMode = pSkillListStrc->monanim;
+      } else if (pUnit->eUnitType == UNIT_PLAYER && pUnit->nClassId == 6 && eSkill == SKILL_LeftHandSwing) {
+        pNewSkill->nMode = 0x10;
+      } else {
+        pNewSkill->nMode = pSkillListStrc->anim;
+      }
+
+      pNewSkill->nLevel = 1;
+      pNewSkill->nOwnerGUID = -1;
+      pNewSkill->pNext = 0;
+      D2SkillStrc* pLastSkill = pSkillsList->pFirstSkill;
+      if (pLastSkill) {
+        while (pLastSkill->pNext) {
+          pLastSkill = pLastSkill->pNext;
         }
 
-        SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
-        return pSkill;
-      }
-    }
-
-    D2SkillListStrc* pSkillsList = pUnit->pSkillsList;
-    if (!pSkillsList) {
-      return nullptr;
-    }
-
-    D2SkillStrc* pNewSkill = D2_NEW_POOL_AT(pSkillsList->pMemory, D2SkillStrc, ".\\SKILLS\\Skills.cpp", 0x539);
-    memset(pNewSkill, 0, 0x40);
-    pNewSkill->pRecord = pSkillListStrc;
-    int nModeValue;
-    if (pUnit->eUnitType == UNIT_MONSTER) {
-      nModeValue = (int)pSkillListStrc->monanim;
-    } else if (pUnit->eUnitType == UNIT_PLAYER && pUnit->nClassId == 6 && eSkill == SKILL_LeftHandSwing) {
-      nModeValue = 0x10;
-    } else {
-      nModeValue = (int)pSkillListStrc->anim;
-    }
-
-    pNewSkill->nMode = nModeValue;
-    pNewSkill->nLevel = 1;
-    pNewSkill->nOwnerGUID = -1;
-    pNewSkill->pNext = 0;
-    D2SkillStrc* pLastSkill = pSkillsList->pFirstSkill;
-    if (pLastSkill) {
-      while (pLastSkill->pNext) {
-        pLastSkill = pLastSkill->pNext;
+        pLastSkill->pNext = pNewSkill;
+      } else {
+        pSkillsList->pFirstSkill = pNewSkill;
       }
 
-      pLastSkill->pNext = pNewSkill;
-    } else {
-      pSkillsList->pFirstSkill = pNewSkill;
+      SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
+      return pNewSkill;
+    }
+
+    nCurrentLevel = pSkill->nLevel;
+    nMaxLevel = SKILL_GetMaxLevelForSkill(eSkill);
+    if (nCurrentLevel < nMaxLevel || pUnit->eUnitType == UNIT_MONSTER) {
+      pSkill->nLevel = nCurrentLevel + 1;
     }
 
     SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
-    return pNewSkill;
+    return pSkill;
 }
 
 void __stdcall AddSkill(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t bRemoveAtZero, char * szFile, int32_t nLine) {
@@ -3695,23 +3695,18 @@ static uint32_t __stdcall SKILL_IsDelayExpired(D2SkillStrc * pSkill, D2UnitStrc 
       return 1;
     }
 
-    BOOL eDelayState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_skilldelay);
-    if (!eDelayState) {
-      return 1;
-    }
-    if (!pSkill) {
+    if (!DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_skilldelay)) {
       return 1;
     }
 
-    D2SkillsTxt* pSkillTxt = pSkill->pRecord;
+    D2SkillsTxt* pSkillTxt = pSkill ? pSkill->pRecord : nullptr;
     if (!pSkillTxt) {
       return 1;
     }
 
-    short int nSkillId = pSkillTxt->skill;
+    int nSkillId = pSkillTxt->skill;
     int32_t nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-    int32_t nDelayFrames = D2GetSkillCalc(pUnit, pSkillTxt->delay, (int)nSkillId, nSkillLevel);
-    return (uint32_t)(nDelayFrames <= 0);
+    return D2GetSkillCalc(pUnit, pSkillTxt->delay, nSkillId, nSkillLevel) <= 0;
 }
 
 // Validates whether pUnit can currently activate pSkill. Returns an error code: 0=ok/can use (via SKILL_IsDelayExpired returning non-zero producing 8), 1=not enough mana or start-mana check failed, 2=no item charges or missing required weapon/quantity, 3=skill record missing or flag2 bit2 clear (not usable), 4=restriction check failed, 5=skill flag bit4 set, 6=skill flag bit5 set, 7=skill level zero. Halts with an internal error if pSkill is null.

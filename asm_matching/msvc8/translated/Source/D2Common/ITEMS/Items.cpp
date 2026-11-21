@@ -1354,26 +1354,23 @@ int32_t __stdcall TXT_Items_GetMaxStack(uint32_t nItemClassId) {
 
 // Returns max stack size (base from ItemsTxt + stat bonus), capped at 511. Halts if unit is null or not an item.
 int __stdcall ITEM_GetMaxStack(D2UnitStrc * pUnit) {
-    int32_t nLine;
+    int nMaxStack;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd5a);
       exit(-1);
-    } else {
-      int nMaxStack;
-      if (pUnit->eUnitType != UNIT_ITEM) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd5b);
-        exit(-1);
-      }
-
-      nLine = TXT_Items_GetMaxStack(pUnit->nClassId);
-      nMaxStack = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_extra_stack, 0);
-      nMaxStack = nLine + nMaxStack;
-      if (nMaxStack >= 0x1ff) {
-        nMaxStack = 0x1ff;
-      }
-
-      return nMaxStack;
     }
+    if (pUnit->eUnitType != UNIT_ITEM) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd5b);
+      exit(-1);
+    }
+
+    nMaxStack = TXT_Items_GetMaxStack(pUnit->nClassId);
+    nMaxStack += Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_extra_stack, 0);
+    if (nMaxStack >= 0x1ff) {
+      nMaxStack = 0x1ff;
+    }
+
+    return nMaxStack;
 }
 
 int32_t __stdcall TXT_Items_GetSpawnStack(uint32_t nItemClassId) {
@@ -5493,6 +5490,7 @@ void __stdcall ExtractItemDetails(uint8_t * pBytesAfterId, size_t size, BOOL isS
 
 // Deserialises an item unit from a binary save-data bit buffer into pUnit. Validates the 0x4D4A ("JM") magic header when nParam1 is set, reads the 32-bit item flags word, strips invalid flags, resets all affix/prefix/suffix fields on the unit to clean state, then delegates to ITEM_DeserializeFromBitBuffer (full items) or ITEMS_DeserializeItemHeader (compact items). Returns the number of bits consumed.
 int32_t __stdcall ITEM_LoadFromSaveData(D2UnitStrc * pUnit, uint8_t * pSaveData, size_t nSize, uint32_t bCheckHeader, uint32_t * pnSocketedItemCount, uint32_t nVersion, int * pUnitDataItemDetails) {
+    BOOL bIsExtended = FALSE;
     int32_t nBitsConsumed;
     int32_t nDeserializeResult;
     D2BitBufferStrc sBitBuffer;
@@ -5507,13 +5505,13 @@ int32_t __stdcall ITEM_LoadFromSaveData(D2UnitStrc * pUnit, uint8_t * pSaveData,
 
     *pUnitDataItemDetails = 0;
     eD2ItemFlag eItemFlags = Fog::BitBuffer::ReadUnsigned(&sBitBuffer, 0x20);
-    bool bIsExtended = (eItemFlags & ITEMFLAG_CRUDE) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
-    if (bIsExtended) {
+    if (eItemFlags & ITEMFLAG_CRUDE) {
+      bIsExtended = TRUE;
       eItemFlags &= ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD;
     }
     if (pUnit) {
       eD2ItemFlag* pItemFlags;
-      if (pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
+      if (GetTypeInline(pUnit) == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
         pUnit->pUnitData.pUnitDataItem->dwItemFlags = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
       }
       if (pUnit->eUnitType == UNIT_ITEM) {
@@ -5577,11 +5575,14 @@ int32_t __stdcall ITEM_LoadFromSaveData(D2UnitStrc * pUnit, uint8_t * pSaveData,
       if (pnSocketedItemCount) {
         *pnSocketedItemCount = 0;
       }
+      if (nDeserializeResult <= 0) {
+        *pUnitDataItemDetails = 1;
+      }
     } else {
       nDeserializeResult = ITEM_DeserializeFromBitBuffer(pUnit, &sBitBuffer, bCheckHeader, (uint32_t)bIsExtended, pnSocketedItemCount, nVersion);
-    }
-    if (nDeserializeResult < 1) {
-      *pUnitDataItemDetails = 1;
+      if (nDeserializeResult <= 0) {
+        *pUnitDataItemDetails = 1;
+      }
     }
 
     nBitsConsumed = Fog::BitBuffer::GetNextPositon(&sBitBuffer);
@@ -5970,24 +5971,19 @@ BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCha
 }
 
 int32_t __stdcall ITEMS_CheckBodyLocationFit(D2UnitStrc * pItem, uint32_t eBodyLoc) {
-    D2UnitStrc* pItemSaved = pItem;
-    if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
-      return 0;
-    }
-
-    pItem = (D2UnitStrc*)((uintptr_t)pItem & 0xffffff);
-    uint32_t dwBodyLoc2Scratch = (uint32_t)0;
-    ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2(pItemSaved, (eD2BodyLoc*)((intptr_t)&pItem + 3), (eD2BodyLoc*)((intptr_t)&dwBodyLoc2Scratch + 3));
-    if (*(uint8_t*)((char*)&pItem + 3) != eBodyLoc && *(uint8_t*)((char*)&dwBodyLoc2Scratch + 3) != eBodyLoc) {
-      if (eBodyLoc != 0xb && eBodyLoc != 0xc) {
-        return 0;
+    if ((pItem ? pItem->eUnitType : UNIT_COUNT) == UNIT_ITEM) {
+      uint8_t nBodyLoc1 = 0;
+      uint8_t nBodyLoc2 = 0;
+      ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2(pItem, (eD2BodyLoc*)&nBodyLoc1, (eD2BodyLoc*)&nBodyLoc2);
+      if (nBodyLoc1 == eBodyLoc || nBodyLoc2 == eBodyLoc) {
+        return 1;
       }
-      if (*(uint8_t*)((char*)&pItem + 3) != 4 && *(uint8_t*)((char*)&dwBodyLoc2Scratch + 3) != 4 && *(uint8_t*)((char*)&pItem + 3) != 5 && *(uint8_t*)((char*)&dwBodyLoc2Scratch + 3) != 5) {
-        return 0;
+      if ((eBodyLoc == 0xb || eBodyLoc == 0xc) && (nBodyLoc1 == 4 || nBodyLoc2 == 4 || nBodyLoc1 == 5 || nBodyLoc2 == 5)) {
+        return 1;
       }
     }
 
-    return 1;
+    return 0;
 }
 
 // Adjusts buy/sell/repair prices in-place for items whose type has a staffmods class restriction. Iterates the item's skill-bonus stat list (stat 0x6b), and for each qualifying skill entry scales the price deltas using the skill's costmult/costadd fields and the skill level (2*lvl-1). The accumulated deltas are divided by nDivisor before being added to *pBuy, *pSell, and *pRepair. No-ops if pItem is null, not an item unit, or the item type has no staffmods class.

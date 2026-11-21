@@ -348,7 +348,7 @@ bool __stdcall WalkStackFrame(HANDLE hThread, void * pStackFrame, void * pContex
 void __stdcall WriteCrashDumpViaThread();
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall DEBUG_CrashDumpRequestThreadProc(void * lpThreadParam);
-bool __fastcall CrashDumpWriterThread(LPCSTR szDumpPath, char * pExceptionPtrs, struct _EXCEPTION_POINTERS * nEventHandle, DWORD dwThreadId);
+bool __fastcall CrashDumpWriterThread(LPCSTR szDumpPath, char * szComment, struct _EXCEPTION_POINTERS * pExceptionPointers, DWORD dwThreadId);
 bool __stdcall DEBUG_GetDbgHelpModuleRange(LPVOID * ppBaseOfDll, DWORD * pdwSizeOfImage);
 void __stdcall CleanupDebugSymbols();
 uint32_t * __fastcall ZeroStruct36Bytes(uint32_t * pStruct);

@@ -61,11 +61,8 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::RawNext(::SGAMEDATA * pNode) {
-    if (pNode) {
-      return *(::SGAMEDATA**)(pNode->szGameName + (this->m_linkoffset - 0x26));
-    }
-
-    return (::SGAMEDATA*)this->m_terminator.m_next;
+    TSLink<::SGAMEDATA>* pLink = pNode ? (TSLink<::SGAMEDATA>*)((intptr_t)pNode + this->m_linkoffset) : &this->m_terminator;
+    return (::SGAMEDATA*)pLink->m_next;
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::Next(::SGAMEDATA * pNode) {

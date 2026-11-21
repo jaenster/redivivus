@@ -469,30 +469,20 @@ void __fastcall DecreaseMonKillCount(D2MonsterRegionStrc * * ppMonsterRegion, D2
 }
 
 void __fastcall UpdateMonsterRegion(D2MonsterRegionStrc * * ppMonsterRegion, eD2LevelId eLevel, eD2LevelId eLevel2, int32_t nMonFlags, BOOL bIsDead, int32_t nParam, D2UnitStrc * pUnit) {
-    uint32_t bIsUnique;
-    uint32_t* pnSpawnCount;
+    D2MonsterRegionStrc* pOldRegion = ppMonsterRegion[eLevel];
     D2MonsterRegionStrc* pNewRegion = ppMonsterRegion[eLevel2];
     if (pUnit) {
-      int32_t nAlignment;
-      if (pNewRegion != ppMonsterRegion[eLevel]) {
+      if (pNewRegion != pOldRegion) {
         SetLevelId(pUnit, eLevel);
       }
-      if (!nParam) {
-        nAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
-        if (!nAlignment) {
-          pNewRegion->dwMonSpawnCount--;
-          bIsUnique = Monsters::CheckMonsterType(pUnit, 1);
-          if (bIsUnique) {
-            pNewRegion->dwUniqueCount--;
-            return;
-          }
+      if (!nParam && !D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit)) {
+        pNewRegion->dwMonSpawnCount--;
+        if (Monsters::CheckMonsterType(pUnit, 1)) {
+          pNewRegion->dwUniqueCount--;
         }
       }
-    } else {
-      if (!nParam && !bIsDead && !nMonFlags) {
-        pnSpawnCount = (uint32_t*)&ppMonsterRegion[eLevel]->dwMonSpawnCount;
-        (*pnSpawnCount)--;
-      }
+    } else if (!nParam && !bIsDead && !nMonFlags) {
+      pOldRegion->dwMonSpawnCount--;
     }
 }
 

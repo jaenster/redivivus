@@ -293,14 +293,14 @@ void __fastcall SRP_FreeParameters(D2Srp * * ppSrp) {
 }
 
 void __thiscall SRP_ClientGenerateVerifier(void * pThis, char * szUsername, uint32_t * szPassword, uint32_t * pSaltOut, void * pVerifierOut) {
-    uint32_t* pSalt = pSaltOut;
     SRP_ExtractSessionKeyBytes((D2Srp**)pThis, pSaltOut, 0x20);
-    SRP_ComputePasswordHash(*(D2Srp**)pThis, pSalt, szUsername, (char*)szPassword, (BigData**)&pSaltOut);
+    BigData* pPasswordHash;
+    SRP_ComputePasswordHash(*(D2Srp**)pThis, pSaltOut, szUsername, (char*)szPassword, &pPasswordHash);
     BigData* pVerifier = SHA::SHA1_BigIntFromUnsigned(0);
-    szPassword = (uint32_t*)pVerifier;
-    SRP_ComputeScramblingParam(*(D2Srp**)pThis, (BigData**)&pSaltOut, (BigData**)&szPassword);
+    BigData* pVerifierArg = pVerifier;
+    SRP_ComputeScramblingParam(*(D2Srp**)pThis, &pPasswordHash, &pVerifierArg);
     SHA::SHA1_ToBigIntBytes(pVerifier, (uint8_t*)pVerifierOut, 0x20);
-    SHA::SHA1_BigIntFree((BigData*)pSaltOut);
+    SHA::SHA1_BigIntFree(pPasswordHash);
     SHA::SHA1_BigIntFree(pVerifier);
 }
 

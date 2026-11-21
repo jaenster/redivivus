@@ -179,19 +179,12 @@ static void __stdcall MONSTERMODE_ConsumeStoredPosition(int * pX, int * pY, char
     pMonData->nStepsOverride = '\0';
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
 void __fastcall ResetEngagedCombatAndStats(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
-      D2MonsterPathParamStrc* pAiParam;
-      pAiParam = pUnit->pUnitData.pUnitDataMonster->pPathParamOrName.pPathParam;
-      pAiParam->nPathTypeOverride = 0;
-      pAiParam->nVelocityOverride = 0;
-      pAiParam->nStepsOverride = '\0';
-      return;
-    }
-
-    *(volatile uint8_t*)0x18 = 0;
-    *(volatile uint8_t*)0x1c = 0;
-    *(volatile uint8_t*)0x20 = 0;
+    D2MonsterPathParamStrc* pAiParam = GetTypeInline(pUnit) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster ? pUnit->pUnitData.pUnitDataMonster->pPathParamOrName.pPathParam : nullptr;
+    pAiParam->nPathTypeOverride = 0;
+    pAiParam->nVelocityOverride = 0;
+    pAiParam->nStepsOverride = '\0';
 }
 
 void __fastcall MONSTERMODE_GetStoredPosition(D2MonsterPathParamStrc * pMonData, int32_t * pOutStoredX, int32_t * pOutStoredY, uint8_t * pOutStoredFlags) {
@@ -560,10 +553,8 @@ void __fastcall MONSTERMODE_TryDropTreasure(::SGAMEDATA * pGame, D2ObjectOperate
 static void SetAiState(D2UnitStrc * pUnit, uint32_t nNewAiState) {
     int nAiState = GetAiState(pUnit);
     if (nAiState >= 0x10) {
-      D2Game::Monster::SetAiState(pUnit, nAiState - 0x10);
-      return;
-    }
-    if (nAiState == 0xd && nNewAiState == 3) {
+      nNewAiState = nAiState - 0x10;
+    } else if (nAiState == 0xd && nNewAiState == 3) {
       nNewAiState = 0xd;
     }
 
@@ -572,24 +563,14 @@ static void SetAiState(D2UnitStrc * pUnit, uint32_t nNewAiState) {
 
 // Periodic server HP-regen/poison-tick event handler for a unit (reschedules itself each game frame). Computes net HP regen (subtracting the server-side hpregen component when a progressive state applies); unless STATE_preventheal blocks healing, applies the delta to UNITSTAT_hitpoints clamped to TxtMaxHp. Town rooms skip damage so you don't die in town. When the HP% changes by more than the threshold it broadcasts packet 0xAB and updates last_sent_hp_pct. If HP reaches zero (and not already dying), it locates the poison/state attacker via GetStatsByState/owner-GUID lookup and either sets STATE_death_delay (if uninterruptable) or calls SERVER_KillMonster and dispatches death (event 10) and kill-credit (event 9) events.
 void __fastcall RegenAndPsnDecreaser(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
-    bool bHasProgressiveState;
     D2RoomStrc* pUnitRoom;
-    bool bIsInTown;
-    uint32_t nHpPct128;
-    int32_t nAttackerGUID;
-    eD2UnitType eUnitType;
     eD2States aPoisonStateSearch[2];
-    ::SGAMEDATA* pGameSaved = pGame;
     int32_t nHpRegen = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hpregen, 0);
-    BOOL eUnitState = D2Common::DATATBLS::ItemStats::STATES_HasLifeFlagState(pUnit);
-    if (eUnitState) {
-      int32_t nCurrentHpRaw;
-      nCurrentHpRaw = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_hpregen, 0);
-      nHpRegen -= nCurrentHpRaw;
+    if (D2Common::DATATBLS::ItemStats::STATES_HasLifeFlagState(pUnit)) {
+      nHpRegen -= D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_hpregen, 0);
     }
 
-    eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_preventheal);
-    if (!(!eUnitState || nHpRegen < 0)) {
+    if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_preventheal) && nHpRegen >= 0) {
       return;
     }
 
@@ -599,74 +580,70 @@ void __fastcall RegenAndPsnDecreaser(::SGAMEDATA * pGame, D2UnitStrc * pUnit, in
       return;
     }
 
-    int iPoisonSearch = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    aPoisonStateSearch[1] = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
-    if (!(nHpRegen >= 0 || iPoisonSearch >= 0x100 || (pUnitRoom = D2Common::Units::UNITS_GetRoom(pUnit) , pUnitRoom && (eUnitState = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pUnitRoom) , !eUnitState)))) {
-      return;
+    int nHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
+    int nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
+    if (nHpRegen < 0 && nHp < 0x100) {
+      pUnitRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+      if (!pUnitRoom || D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pUnitRoom)) {
+        return;
+      }
     }
 
-    eD2States nHpNew = iPoisonSearch + nHpRegen;
-    if (iPoisonSearch + nHpRegen > (int)aPoisonStateSearch[1]) {
-      GAME::Event::EVENT_RemoveUnitTimersByType(pGameSaved, pUnit, UNITEVENTCALLBACK_STATREGEN, 0);
-      nHpNew = aPoisonStateSearch[1];
+    nHp += nHpRegen;
+    if (nHp > nMaxHp) {
+      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 0);
+      nHp = nMaxHp;
     }
-    if ((int)nHpNew < 1) {
-      nHpNew = STATE_none;
+    if (nHp < 1) {
+      nHp = 0;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nHpNew, 0);
-    iPoisonSearch = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_last_sent_hp_pct, 0);
-    int byPrevHpPct = (uint8_t)iPoisonSearch;
-    *(uint8_t*)(char*)&nHpPct128 = Monsters::MONSTER_GetHpPercent128(pUnit);
-    nHpPct128 = (uint32_t)(uint8_t)nHpPct128;
-    iPoisonSearch = byPrevHpPct - nHpPct128;
-    if (iPoisonSearch < 0) {
-      iPoisonSearch = -iPoisonSearch;
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nHp, 0);
+    uint8_t nPrevHpPct = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_last_sent_hp_pct, 0);
+    uint8_t nHpPct = Monsters::MONSTER_GetHpPercent128(pUnit);
+    int nDiff = nPrevHpPct - nHpPct;
+    if (nDiff < 0) {
+      nDiff = -nDiff;
     }
-    if (iPoisonSearch > 4) {
-      UNIT::SUnitMsg::UnitQueuePacket0xAB(pUnit, (uint8_t)nHpPct128);
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, nHpPct128, 0);
+    if (nDiff > 4) {
+      UNIT::SUnitMsg::UnitQueuePacket0xAB(pUnit, nHpPct);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, nHpPct, 0);
     }
-    if (!(nHpNew == STATE_none && pUnit && pUnit->eAnimMode.ePlayerMode != Death && pUnit->eAnimMode.ePlayerMode != Kick)) {
+    if (nHp || !pUnit || pUnit->eAnimMode.ePlayerMode == Death || pUnit->eAnimMode.ePlayerMode == Kick) {
       return;
     }
 
     D2StatListExStrc* pStatList = 0;
     aPoisonStateSearch[0] = STATE_poison;
-    aPoisonStateSearch[1] = 0x3e;
-    iPoisonSearch = 0;
+    aPoisonStateSearch[1] = (eD2States)0x3e;
+    int i = 0;
     do {
       if (pStatList) {
         break;
       }
 
-      pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, aPoisonStateSearch[iPoisonSearch]);
-      iPoisonSearch++;
-    } while (iPoisonSearch < 2);
+      pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, aPoisonStateSearch[i]);
+      i++;
+    } while (i < 2);
 
     D2UnitStrc* pAttacker = 0;
     pUnit->dwLastHitClass = 0;
-    ::SGAMEDATA* pGameKill = pGameSaved;
     if (pStatList) {
-      nAttackerGUID = D2Common::Stats::StatsEx::GetOwnerGUID(pStatList);
-      eUnitType = D2Common::Stats::StatsEx::GetOwnerType(pStatList);
-      pGameKill = pGameSaved;
-      pAttacker = UNIT::SUnit::FindUnitFromTable(pGameSaved, eUnitType, nAttackerGUID);
+      pAttacker = UNIT::SUnit::FindUnitFromTable(pGame, D2Common::Stats::StatsEx::GetOwnerType(pStatList), D2Common::Stats::StatsEx::GetOwnerGUID(pStatList));
     }
 
-    eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-    if (eUnitState) {
+    if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable)) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_death_delay, 1);
       return;
     }
 
-    UNIT::SUnitDmg::SERVER_KillMonster(pGameKill, pUnit, pAttacker, 1);
-    UNIT::SUnitEvent::UNITEVENT_DispatchEventsByType(pGameKill, 10, pUnit, pAttacker, nullptr);
+    UNIT::SUnitDmg::SERVER_KillMonster(pGame, pUnit, pAttacker, 1);
+    UNIT::SUnitEvent::UNITEVENT_DispatchEventsByType(pGame, 10, pUnit, pAttacker, nullptr);
     if (!pAttacker) {
       return;
     }
 
-    UNIT::SUnitEvent::UNITEVENT_DispatchEventsByType(pGameKill, 9, pAttacker, pUnit, nullptr);
+    UNIT::SUnitEvent::UNITEVENT_DispatchEventsByType(pGame, 9, pAttacker, pUnit, nullptr);
 }
 
 // Queries whether a monster supports a given animation mode (eAnimMode, 0..0xF). Consults the global gnMonsterAnimModeSequenceFlags table: returns 1 if that mode has sequence flags set, or if its alt-flags are clear and it requires MonStats it checks the unit's MonStats2 movement-flag bit ((&byMvFlags0)[mode>>3] & bitmask[mode&7]). Returns nonzero if the anim mode is available for this unit, 0 otherwise (incl. null unit or mode>=0x10). Pure lookup, no side effects.

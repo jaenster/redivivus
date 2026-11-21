@@ -987,31 +987,14 @@ void __stdcall GetRunAndWalkVelocityForPlayer(D2UnitStrc * nUnused, int32_t ePla
 }
 
 static void UNITS_AddRunVelocityBonus(D2UnitStrc * pUnit, int32_t ePlayerClassId) {
-    D2PoolManagerStrc* pMemory;
-    eD2UnitType eUnitType;
-    int32_t nUnitGUID;
-    D2CharStatsTxt* pCharStatsTxt;
-    if (!pUnit) {
-      nUnitGUID = -1;
-      eUnitType = UNIT_COUNT;
-      pMemory = 0;
-    } else {
-      nUnitGUID = pUnit->nUnitGUID;
-      eUnitType = pUnit->eUnitType;
-      pMemory = pUnit->pMemory;
-    }
-
-    D2StatListExStrc* pStatEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(pMemory, 4, 0, eUnitType, nUnitGUID);
-    if (ePlayerClassId < 0 || ePlayerClassId >= ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
-      pCharStatsTxt = 0;
-    } else {
-      pCharStatsTxt = ITEMS::Items::sgptDataTable->pTxtCharStats + ePlayerClassId;
-    }
-    if (!pCharStatsTxt->WalkVelocity) {
+    D2StatListExStrc* pStatEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(!pUnit ? nullptr : pUnit->pMemory, 4, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
+    D2CharStatsTxt* pCharStatsTxt = ePlayerClassId >= 0 && ePlayerClassId < ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? ITEMS::Items::sgptDataTable->pTxtCharStats + ePlayerClassId : nullptr;
+    int nWalkVelocity = pCharStatsTxt->WalkVelocity;
+    if (!nWalkVelocity) {
       return;
     }
 
-    Stats::StatsEx::STATLIST_SetStatValue(pStatEx, UNITSTAT_velocitypercent, (int)((int)((uint32_t)pCharStatsTxt->RunVelocity * 100) / (int)(uint32_t)pCharStatsTxt->WalkVelocity) - 100, 0);
+    Stats::StatsEx::STATLIST_SetStatValue(pStatEx, UNITSTAT_velocitypercent, pCharStatsTxt->RunVelocity * 100 / nWalkVelocity - 100, 0);
     Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatEx, 1);
 }
 
@@ -1419,11 +1402,13 @@ static int __stdcall UNITS_IsAnimModeSpeedFixed(int32_t nAnimMode, int32_t nClas
         }
       case UNIT_MONSTER:
         {
+          int* pAnimRow;
           if (nClassId < 0x19a) {
-            return gaAnimTableClassic[nAnimMode * 5 + 4];
+            pAnimRow = &gaAnimTableClassic[nAnimMode * 5];
+          } else {
+            pAnimRow = &gaAnimTableExpansion[nAnimMode * 5];
           }
-
-          return gaAnimTableExpansion[nAnimMode * 5 + 4];
+          return pAnimRow[4];
         }
       default:
         {
@@ -1640,34 +1625,23 @@ BOOL __stdcall HasCollision(D2UnitStrc * pUnit) {
 }
 
 D2SkillStrc * __stdcall GetSkillFromSkillId(D2UnitStrc * pUnit, eD2Skills eSkill) {
-    D2SkillsTxt* pSkillsTxt;
-    if ((int)eSkill < 0 || (int)eSkill >= ITEMS::Items::sgptDataTable->nTxtSkillsCount || (pSkillsTxt = ITEMS::Items::sgptDataTable->pTxtSkills , !(pSkillsTxt + eSkill))) {
+    D2SkillsTxt* pSkillsTxtRecord = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? &ITEMS::Items::sgptDataTable->pTxtSkills[eSkill] : nullptr;
+    if (!pSkillsTxtRecord) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdfb);
       exit(-1);
-    } else {
-      D2SkillStrc* pSkillIter;
-      if (!pUnit) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x638);
-        exit(-1);
-      }
+    }
+    if (!pUnit) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x638);
+      exit(-1);
+    }
 
-      {
-        D2SkillListStrc* pSkillsList = pUnit->pSkillsList;
-        pSkillIter = Skills::GetFirstSkill(pSkillsList);
-        while (true) {
-          if (!pSkillIter) {
-            return nullptr;
-          }
-          if (pSkillIter->pRecord == pSkillsTxt + eSkill) {
-            break;
-          }
-
-          pSkillIter = pSkillIter->pNext;
-        }
-
-        return pSkillIter;
+    for (D2SkillStrc* pSkill = Skills::GetFirstSkill(pUnit->pSkillsList); pSkill; pSkill = pSkill->pNext) {
+      if (pSkill->pRecord == pSkillsTxtRecord) {
+        return pSkill;
       }
     }
+
+    return nullptr;
 }
 
 BOOL __stdcall IsDoor(D2UnitStrc * pUnit) {

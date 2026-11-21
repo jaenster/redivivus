@@ -174,7 +174,7 @@ static void TASK_InsertTaskAtTimestamp(D2TaskQueueSlotStrc * pSlot, D2TaskNodeSt
     D2LinkNodeStrc* pInsertPos;
     pTaskNode->dwTimestamp += nDelay;
     pInsertPos = pSlot->sTaskList.pNext;
-    while (pInsertPos != &pSlot->sTaskList && pInsertPos[-2].pPrev != (D2LinkNodeStrc*)pTaskNode->dwTimestamp && -1 < (intptr_t)pInsertPos[-2].pPrev - (int)pTaskNode->dwTimestamp) {
+    while (pInsertPos != &pSlot->sTaskList && (int32_t)(((D2TaskNodeStrc*)((char*)pInsertPos - 0xc))->dwTimestamp - pTaskNode->dwTimestamp) > 0) {
       pInsertPos = pInsertPos->pNext;
     }
 

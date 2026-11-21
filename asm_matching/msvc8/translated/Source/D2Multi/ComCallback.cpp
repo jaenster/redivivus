@@ -376,17 +376,12 @@ static int COMCALLBACK_HandleBannerAdFile(D2BnBannerAdMsgStrc * pBannerAdData) {
 }
 
 int Unreferenced_00446ca0() {
-    int nFlags;
     if (lpFileName_00798e30[0] == '\0') {
       return 0;
     }
-
-    DWORD DVar1 = GetFileAttributesA(lpFileName_00798e30);
-    if (DVar1 != -1) {
-      char* pcVar2;
-      pcVar2 = strrchr(lpFileName_00798e30, 0x2e);
-      nFlags = tolower((int)pcVar2[1]);
-      D2Win::Src::D2WinSmack::D2WINSMACK_LoadAndDecodeSmacker(gpLobbyForm0.pCtlLobbyLadderMode, lpFileName_00798e30, nFlags);
+    if (GetFileAttributesA(lpFileName_00798e30) != -1) {
+      char* pExtension = strrchr(lpFileName_00798e30, 0x2e) + 1;
+      D2Win::Src::D2WinSmack::D2WINSMACK_LoadAndDecodeSmacker(gpLobbyForm0.pCtlLobbyLadderMode, lpFileName_00798e30, tolower((int)*pExtension));
       return 1;
     }
 
@@ -1474,16 +1469,13 @@ void __fastcall COMCALLBACK_BroadcastChatMessage(char * szMessageBody) {
     char szChatMessageBuffer[256];
     char szClanTag[256];
     char szFormattedMessage[256];
-    char szUsername[260];
+    char szUsername[256];
     uint32_t dwColorParam;
     char cScan;
     uint32_t dwStatusFlags;
     D2ChannelUserStrc* pCurUser;
-    int32_t nMaxLen;
-    nMaxLen = 0x7fffffff;
     char* pszScan;
-    pszScan = (char*)pNetworkUnknown->pfnGetChannelNamePtr();
-    Storm::Source::SSTR::SStrCopy(szUsername, pszScan, nMaxLen);
+    Storm::Source::SSTR::SStrCopy(szUsername, (char*)pNetworkUnknown->pfnGetChannelNamePtr(), 0x7fffffff);
     int dwStatusRank;
     dwStatusRank = 4;
     int32_t nChatColor;
@@ -1502,7 +1494,10 @@ void __fastcall COMCALLBACK_BroadcastChatMessage(char * szMessageBody) {
         if (dwStatusFlags & 2) {
           dwStatusRank = 0;
         } else {
-          if (dwStatusFlags & 1 || dwStatusFlags & 8) {
+          if (dwStatusFlags & 1) {
+            dwStatusRank = 3;
+            nChatColor = 3;
+          } else if (dwStatusFlags & 8) {
             dwStatusRank = 3;
             nChatColor = 3;
           }
@@ -1513,20 +1508,16 @@ void __fastcall COMCALLBACK_BroadcastChatMessage(char * szMessageBody) {
     }
 
     COMCALLBACK_FormatChatMessage(szUsername, szChatMessageBuffer, szClanTag);
-    if (strlen(szClanTag) != 0) {
-      pszNameKey = szChatMessageBuffer;
-      pszNameKey = pszNameKey + strlen(pszNameKey) + 1;
-      pszScan = szClanTag;
-      if (pszNameKey != szChatMessageBuffer + 1) {
-        sprintf(szFormattedMessage, "<%s%s> ", szChatMessageBuffer, pszScan);
-        goto append_message;
+    if (strlen(szClanTag)) {
+      if (strlen(szChatMessageBuffer)) {
+        sprintf(szFormattedMessage, "<%s%s> ", szChatMessageBuffer, szClanTag);
+      } else {
+        sprintf(szFormattedMessage, "<%s> ", szClanTag);
       }
     } else {
-      pszScan = szUsername;
+      sprintf(szFormattedMessage, "<%s> ", szUsername);
     }
 
-    sprintf(szFormattedMessage, "<%s> ", pszScan);
-    append_message:
     COMCALLBACK_AppendChatWithUser((uint32_t)szMessageBody, szFormattedMessage, szMessageBody, dwStatusRank, nChatColor);
 }
 
@@ -2188,19 +2179,18 @@ BOOL __fastcall COMCALLBACK_AddChannelUser(uint32_t dwStatusFlags, uint32_t dwCb
 }
 
 static void COMCALLBACK_OnChannelUserJoined(uint32_t * pCharData, uint32_t dwStatusFlags, uint32_t * pszUsername) {
-    char szNotifyMsg[504];
-    char cNameChar;
+    char szNotifyMsg[500];
     D2ChannelUserStrc* pCreatedUser = COMCALLBACK_CreateChannelUserEntry((char*)pszUsername, pCharData, dwStatusFlags);
     if (!gnNotifyEnabled) {
       return;
     }
 
-    char* pszFormattedName;
     if (strlen(pCreatedUser->szFormattedName) != 0) {
-      pszUsername = (uint32_t*)pCreatedUser->szFormattedName;
+      sprintf(szNotifyMsg, "%s has joined the channel.", pCreatedUser->szFormattedName);
+    } else {
+      sprintf(szNotifyMsg, "%s has joined the channel.", (char*)pszUsername);
     }
 
-    sprintf(szNotifyMsg, "%s has joined the channel.", (char*)pszUsername);
     PrintChannelText(szNotifyMsg, 5);
 }
 

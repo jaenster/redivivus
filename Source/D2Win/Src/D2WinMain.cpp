@@ -753,104 +753,78 @@ int __fastcall Unreferenced_004f9b30(D2ControlStrc * pControl) {
 }
 
 void __stdcall INPUT_FormKeyHandler(D2UIMouseMsgStrc * pMsg) {
-    BOOL bCallbackResult;
+    WPARAM nKey = pMsg->nWParam;
     if (pFormTextAndEditBox) {
-      ::D2WinEditBox* pEditBoxScan;
-      pEditBoxScan = (::D2WinEditBox*)pFormImage;
-      if (!pFormImage) {
-        send_to_focused_editbox:
-        bCallbackResult = D2WinEditBox::D2WINEDITBOX_HandleKeyPress(pFormTextAndEditBox, (uint8_t)pMsg->nWParam);
-        if (bCallbackResult) {
-          goto consume_message;
-        }
-      } else {
-        for (; pEditBoxScan; pEditBoxScan = (::D2WinEditBox*)pEditBoxScan->sControl.pNext) {
+      BOOL bInForm = 1;
+      if (pFormImage) {
+        bInForm = 0;
+        for (::D2WinEditBox* pEditBoxScan = (::D2WinEditBox*)pFormImage; pEditBoxScan; pEditBoxScan = (::D2WinEditBox*)pEditBoxScan->sControl.pNext) {
           if (pEditBoxScan == pFormTextAndEditBox) {
-            goto send_to_focused_editbox;
+            bInForm = 1;
+            break;
           }
         }
       }
-    }
-
-    D2ControlStrc* pFormIter;
-    pFormIter = pFormImage;
-    D2ControlStrc* pFormHead;
-    pFormHead = pFormsList;
-    if (pFormImage) {
-      goto try_control_handler;
-    }
-
-    while (true) {
-      pFormIter = pFormHead;
-      if (!pFormHead) {
-        break;
+      if (bInForm && D2WinEditBox::D2WINEDITBOX_HandleKeyPress(pFormTextAndEditBox, (uint8_t)nKey)) {
+        Storm::SMsgBreakHandlerChain(pMsg);
+        return;
       }
+    }
 
-      try_control_handler:
-      if (pFormIter->fpListCheck) {
-        pMsg->hWnd = (HWND)pFormIter;
+    D2ControlStrc* pControl = pFormImage;
+    if (!pControl) {
+      pControl = pFormsList;
+    }
+    for (; pControl; pControl = pControl->pNext) {
+      if (pControl->fpListCheck) {
+        pMsg->hWnd = (HWND)pControl;
         D2WinButton::gnFormControlCount++;
-        bCallbackResult = pFormIter->fpListCheck((D2ControlMsg*)pMsg);
+        BOOL bCallbackResult = pControl->fpListCheck((D2ControlMsg*)pMsg);
         D2WinButton::gnFormControlCount--;
         if (bCallbackResult) {
           break;
         }
       }
-      pFormHead = pFormIter->pNext;
     }
 
-    consume_message:
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
 void __stdcall INPUT_FormKeyDownHandler(D2UIMouseMsgStrc * pMsg) {
-    BOOL bCallbackResult;
+    WPARAM nKey = pMsg->nWParam;
     if (pFormTextAndEditBox) {
-      ::D2WinEditBox* pEditBoxScan;
-      pEditBoxScan = (::D2WinEditBox*)pFormImage;
-      if (!pFormImage) {
-        send_to_focused_editbox:
-        bCallbackResult = D2WinEditBox::D2WINEDITBOX_HandleKeyDown(pFormTextAndEditBox, (char)pMsg->nWParam);
-        if (bCallbackResult) {
-          goto consume_message;
-        }
-      } else {
-        for (; pEditBoxScan; pEditBoxScan = (::D2WinEditBox*)pEditBoxScan->sControl.pNext) {
+      BOOL bInForm = 1;
+      if (pFormImage) {
+        bInForm = 0;
+        for (::D2WinEditBox* pEditBoxScan = (::D2WinEditBox*)pFormImage; pEditBoxScan; pEditBoxScan = (::D2WinEditBox*)pEditBoxScan->sControl.pNext) {
           if (pEditBoxScan == pFormTextAndEditBox) {
-            goto send_to_focused_editbox;
+            bInForm = 1;
+            break;
           }
         }
       }
-    }
-
-    D2ControlStrc* pFormIter;
-    pFormIter = pFormImage;
-    D2ControlStrc* pFormHead;
-    pFormHead = pFormsList;
-    if (pFormImage) {
-      goto try_control_handler;
-    }
-
-    while (true) {
-      pFormIter = pFormHead;
-      if (!pFormHead) {
-        break;
+      if (bInForm && D2WinEditBox::D2WINEDITBOX_HandleKeyDown(pFormTextAndEditBox, (char)nKey)) {
+        Storm::SMsgBreakHandlerChain(pMsg);
+        return;
       }
+    }
 
-      try_control_handler:
-      if (pFormIter->fpKey) {
-        pMsg->hWnd = (HWND)pFormIter;
+    D2ControlStrc* pControl = pFormImage;
+    if (!pControl) {
+      pControl = pFormsList;
+    }
+    for (; pControl; pControl = pControl->pNext) {
+      if (pControl->fpKey) {
+        pMsg->hWnd = (HWND)pControl;
         D2WinButton::gnFormControlCount++;
-        bCallbackResult = pFormIter->fpKey((D2ControlMsg*)pMsg);
+        BOOL bCallbackResult = pControl->fpKey((D2ControlMsg*)pMsg);
         D2WinButton::gnFormControlCount--;
         if (bCallbackResult) {
           break;
         }
       }
-      pFormHead = pFormIter->pNext;
     }
 
-    consume_message:
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 

@@ -27,8 +27,7 @@ namespace D2Sound::D2SoundUntil {
 // NOTE: Register params: pListHead (ECX): void *, pItem (EDX): void *
 void __fastcall SOUND_sD2SoundSmp_Alloc(void * pListHead, intptr_t pItem) {
     intptr_t* pNewNode = (intptr_t*)D2_ALLOC_AT(8, ".\\Src\\D2SoundUtil.cpp", 0xd5);
-    *pNewNode = 0;
-    pNewNode[1] = 0;
+    memset(pNewNode, 0, 8);
     intptr_t dwOldHead = *(intptr_t*)pListHead;
     *pNewNode = pItem;
     pNewNode[1] = dwOldHead;

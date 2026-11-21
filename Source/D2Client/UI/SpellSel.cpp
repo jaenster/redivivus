@@ -805,13 +805,11 @@ void __fastcall SPELLSEL_HandleSkillSelection(int32_t nSlotIndex) {
     int nMouseY;
     int nSlotScreenY;
     int nSlotScreenX;
-    bool bIsRightHand;
     int32_t nSkillSlotValue;
-    D2SpellSelGridRegionStrc* pSlotSkillXPtr = &gSpellSelGridRegion;
-    do {
+    for (int i = 0; i < 60; i++) {
       int nMouseX;
-      nSlotScreenY = pSlotSkillXPtr->aSkillGridRow2[0];
-      nSlotScreenX = pSlotSkillXPtr->aSkillGrid[0];
+      nSlotScreenY = gSpellSelGridRegion.aSkillGridRow2[i];
+      nSlotScreenX = gSpellSelGridRegion.aSkillGrid[i];
       nMouseX = Cursor::GetMouseX();
       nMouseY = Cursor::GetMouseY();
       if (nMouseX >= nSlotScreenX && nMouseX <= nSlotScreenX + 0x30 && nMouseY >= nSlotScreenY - 0x30 && nMouseY <= nSlotScreenY) {
@@ -819,16 +817,15 @@ void __fastcall SPELLSEL_HandleSkillSelection(int32_t nSlotIndex) {
           GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x51, nSlotIndex * 0x10000 + 0xffff, -1);
         }
 
-        bIsRightHand = !gbSpellSelMouseHandFlag;
-        nSlotScreenY = pSlotSkillXPtr->aLeftHandSlots[0];
+        nSlotScreenY = gSpellSelGridRegion.aLeftHandSlots[i];
         gSpellSelectionSkillIDs[nSlotIndex] = nSlotScreenY;
-        if (bIsRightHand) {
+        if (!gbSpellSelMouseHandFlag) {
           gSpellSelRightSkillBindings[nSlotIndex] = 0;
         } else {
           gSpellSelRightSkillBindings[nSlotIndex] = 1;
         }
 
-        nSkillSlotValue = pSlotSkillXPtr->aRightHandSlots[0];
+        nSkillSlotValue = gSpellSelGridRegion.aRightHandSlots[i];
         gSpellSelLeftSkillBindings[nSlotIndex] = nSkillSlotValue;
         GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x51, nSlotIndex * 0x10000 + (gSpellSelRightSkillBindings[nSlotIndex] ? 0x8000 : 0) + nSlotScreenY, nSkillSlotValue);
         nSlotScreenY = 0;
@@ -845,9 +842,7 @@ void __fastcall SPELLSEL_HandleSkillSelection(int32_t nSlotIndex) {
           nSlotScreenY++;
         } while (nSlotScreenX < 0x10ffff);
       }
-
-      pSlotSkillXPtr = (D2SpellSelGridRegionStrc*)(pSlotSkillXPtr->aSkillGrid + 1);
-    } while ((intptr_t)pSlotSkillXPtr < (intptr_t)((char*)&gSpellSelGridRegion + 240));
+    }
 }
 
 static int SPELLSEL_IsSkillSlotValid(int32_t nSlot) {
