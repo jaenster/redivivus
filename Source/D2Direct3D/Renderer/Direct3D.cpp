@@ -3905,17 +3905,17 @@ void __fastcall DrawString(int nPosX, int nPosY, char * szFormat, va_list va) {
     int iChar;
     char szText[512];
     int nCharCount = wvsprintfA(szText, szFormat, va);
+    int nStartX = nPosX;
     RENDERER_D3D_SetBlendMode(1);
     SetBlendMode(1);
     RENDERER_D3D_SetTextureFilterMode(1);
-    int nCurPosX = nPosX;
     for (iChar = 0; iChar < nCharCount; iChar++) {
       int nGlyphAdvance;
-      nGlyphAdvance = RENDERER_D3D_DrawGlyph(szText[iChar], nCurPosX, nPosY);
-      nCurPosX += nGlyphAdvance;
+      nGlyphAdvance = RENDERER_D3D_DrawGlyph(szText[iChar], nPosX, nPosY);
+      nPosX += nGlyphAdvance;
       if (szText[iChar] == '\n') {
         nPosY += 0xc;
-        nCurPosX = nPosX;
+        nPosX = nStartX;
       }
     }
 }
@@ -5085,24 +5085,18 @@ void __fastcall RENDERER_D3D_SetTextureStageColor(D2D3DVertexStrc * pVertex, uin
 // Initializes perspective Z-division table at 0x00981748 (8192 entries). For each Z coordinate in range [-4096, 4095], calculates perspective factor as 3059712 / (Z - 3000), clamped to range Z=[-2999, 2999] to prevent divide-by-zero. Used for depth-based vertex scaling in 3D tile rendering.
 void __stdcall RENDERER_D3D_InitPerspectiveTransformTable() {
     int nZ = -0x1000;
-    int nEntriesLeft = 0x2000;
-    uint32_t* pTableEntry = g_aPerspectiveZDivisionTable;
-    do {
+    for (int i = 0; i < 0x2000; i++) {
       int nClampedZ;
-      if (nZ > -0xbb7) {
+      if (nZ > -2999 && nZ < 2999) {
         nClampedZ = nZ;
-        if (nZ >= 0xbb7) {
-          nClampedZ = 2999;
-        }
-      } else {
+      } else if (nZ <= -2999) {
         nClampedZ = -2999;
+      } else {
+        nClampedZ = 2999;
       }
-
+      g_aPerspectiveZDivisionTable[i] = (uint32_t)(0x2ee000 / (nClampedZ - 3000));
       nZ++;
-      nEntriesLeft--;
-      *pTableEntry = (uint32_t)(0x2ee000 / (nClampedZ - 3000));
-      pTableEntry++;
-    } while (nEntriesLeft);
+    }
 
     g_aSmackerSurfaceArray = 0x100;
 }
@@ -5328,16 +5322,12 @@ static void __thiscall RENDERER_D3D_BlitSmackerFrame(int nHeight, D2SmackerConte
 }
 
 static void __thiscall RENDERER_D3D_CopySmackerRowWithAlpha(uint16_t * pSrc, uint8_t * pDest, int nPitch) {
-    int nPixelsRemaining;
-    for (int nRowsRemaining = 0; nRowsRemaining < 0x40; nRowsRemaining++) {
-      uint16_t* pSrcPixel;
-      nPixelsRemaining = 0x100;
-      pSrcPixel = pSrc;
-      do {
-        *(uint16_t*)((intptr_t)pDest - (intptr_t)pSrc + (char*)pSrcPixel) = *pSrcPixel | 0x8000;
-        pSrcPixel++;
-        nPixelsRemaining--;
-      } while (nPixelsRemaining);
+    for (int nRow = 0; nRow < 0x40; nRow++) {
+      uint16_t* pSrcPixel = pSrc;
+      uint16_t* pDestPixel = (uint16_t*)pDest;
+      for (int nPixel = 0; nPixel < 0x100; nPixel++) {
+        *pDestPixel++ = *pSrcPixel++ | 0x8000;
+      }
 
       pDest += nPitch;
       pSrc += 0x200;

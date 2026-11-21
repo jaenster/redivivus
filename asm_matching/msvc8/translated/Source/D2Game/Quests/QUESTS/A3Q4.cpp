@@ -729,7 +729,6 @@ void __fastcall Q21_InitData(D2QuestDataStrc * pQuestData) {
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q4.cpp
 void __fastcall Q21_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nDroppedItemGUID;
-    ::SGAMEDATA* pGame;
     D2QuestArgStrc* pQuestArgsSaved = pQuestArgs;
     QUEST_DebugPrint(pQuestData->pGame, "killed boss for quest", "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q4.cpp", 0x354);
     D2QuestDataA3Q4Strc* pQuestSpecificDataA3Q5 = pQuestData->pQuestSpecificData.pA3Q4;
@@ -738,9 +737,8 @@ void __fastcall Q21_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     }
     if (pQuestArgs->pPlayer) {
       BOOL bAlreadyCompleted;
-      pGame = pQuestData->pGame;
       /* GetQuestState(nQuestIdReal=Golden Bird, Completed=0): bail if killer already
-                         finished the quest, to avoid a duplicate Jade Figurine drop */ D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+                         finished the quest, to avoid a duplicate Jade Figurine drop */ D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer);
       bAlreadyCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
       pQuestArgs = pQuestArgsSaved;
       if (bAlreadyCompleted) {
@@ -755,7 +753,7 @@ void __fastcall Q21_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
       pQuestSpecificDataA3Q5->nBirdItemCount++;
       pQuestSpecificDataA3Q5->bBirdDropEnabled = false;
       pQuestSpecificDataA3Q5->bBirdItemGiven = true;
-      if (!pQuestData->nStateFlag) {
+      if (pQuestData->nStateFlag < 1) {
         QUEST_SetStateFlag(pQuestData, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q4.cpp", 0x36f);
       }
       if (!pQuestData->nStateFlagPrev) {

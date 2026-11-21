@@ -928,33 +928,14 @@ BOOL __fastcall SKILLS_ApplyAreaDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 uint32_t __fastcall SKILLS_AreaEffect_FindNearestUnit(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pTargetUnit) {
-    int nDeltaX;
-    int nUnitY;
-    int nDistSq;
-    eD2UnitType eTargetType;
     D2AreaHitNearestCtx* pSearchContext = (D2AreaHitNearestCtx*)pContext->pCallbackArg;
-    if (pSearchContext->pfnFilter) {
-      BOOL bAccepted;
-      bAccepted = pSearchContext->pfnFilter(pContext->pGame, pTargetUnit);
-      if (!bAccepted) {
-        return 0;
-      }
+    if (pSearchContext->pfnFilter && !pSearchContext->pfnFilter(pContext->pGame, pTargetUnit)) {
+      return 0;
     }
 
-    eD2UnitType eUnitType = pTargetUnit->eUnitType;
-    nDeltaX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pTargetUnit);
-    nDeltaX -= pSearchContext->nX;
-    eTargetType = pTargetUnit->eUnitType;
-    if (eTargetType == UNIT_OBJECT || (int)eTargetType > 3 && (int)eTargetType <= 5) {
-      nUnitY = pTargetUnit->pPath.pStaticPath->nPosY;
-    } else if (pTargetUnit->pPath.pDynamicPath) {
-      nUnitY = D2Common::PATH::DynamicPath::GetYPos(pTargetUnit->pPath.pDynamicPath);
-    } else {
-      nUnitY = 0;
-    }
-
-    nUnitY -= pSearchContext->nY;
-    nDistSq = nUnitY * nUnitY + nDeltaX * nDeltaX;
+    int nDeltaX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pTargetUnit) - pSearchContext->nX;
+    int nDeltaY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pTargetUnit) - pSearchContext->nY;
+    int nDistSq = nDeltaY * nDeltaY + nDeltaX * nDeltaX;
     if (nDistSq < pSearchContext->nBestDistSq) {
       pSearchContext->nBestDistSq = nDistSq;
       pSearchContext->pNearest = pTargetUnit;
@@ -1717,9 +1698,17 @@ BOOL __fastcall SKILLS_SrvStFn02_Kick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, e
     return 1;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+static inline int GetGUIDInline(D2UnitStrc * pUnit);
 BOOL __fastcall SKILLS_SrvStFn03_Unsummon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    if (!((pTarget ? pTarget->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
+    if (!pTarget) {
+      return 0;
+    }
+    if (GetTypeInline(pTarget) != UNIT_MONSTER) {
+      return 0;
+    }
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_PLAYER) {
       return 0;
     }
 
@@ -1742,7 +1731,7 @@ BOOL __fastcall SKILLS_SrvStFn03_Unsummon(::SGAMEDATA * pGame, D2UnitStrc * pUni
       return 0;
     }
 
-    D2Common::Skills::SKILL_SetParam1(pSkill, pTarget->nUnitGUID);
+    D2Common::Skills::SKILL_SetParam1(pSkill, GetGUIDInline(pTarget));
     return 1;
 }
 
@@ -4462,12 +4451,12 @@ void __fastcall Server_SelectSkill(D2UnitStrc * pUnit, int32_t leftOrRight, eD2S
 
     ownerId = -1;
     D2Common::Skills::SKILLS_GetSkillData(pSkill, (int32_t*)&ownerId, nullptr, nullptr, nullptr);
-    if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
-      dwPlayerGUID = pUnit->nUnitGUID;
+    if (GetTypeInline(pUnit) == UNIT_PLAYER) {
+      dwPlayerGUID = GetGUIDInline(pUnit);
       nHandedness = leftOrRight;
       ePrevSkillId = eSkill;
       dwSkillOwnerId = ownerId;
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x23_SetSkill(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0xdab), '\0', dwPlayerGUID, (uint8_t)nHandedness, (uint16_t)ePrevSkillId, dwSkillOwnerId);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x23_SetSkill(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0xdab), (uint8_t)GetTypeInline(pUnit), dwPlayerGUID, (uint8_t)nHandedness, (uint16_t)ePrevSkillId, dwSkillOwnerId);
     }
     if (leftOrRight) {
       return;

@@ -578,9 +578,19 @@ void __fastcall AI_ClearSwitchAiTargetParams(D2UnitStrc * pUnit) {
     pMonsterData->nAiRelated1 = 0;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
 uint32_t __fastcall NpcStateIsntZero(D2UnitStrc * pUnit, D2UnitStrc * pPlayer) {
+    if (!pUnit) {
+      return 0;
+    }
+
     D2MonsterAiStrc* pMonsterAi = nullptr;
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+    if (GetTypeInline(pUnit) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
       pMonsterAi = pUnit->pUnitData.pUnitDataMonster->pMonsterAi;
     }
     if (!pMonsterAi) {

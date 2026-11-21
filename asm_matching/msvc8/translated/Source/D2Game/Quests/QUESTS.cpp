@@ -661,56 +661,33 @@ void __fastcall AddQuestTimer(D2QuestDataStrc * pQuestData, QUESTUPDATE fpQuestU
 
 // Determines the display byte to write into the quest-log packet for a single quest. Reads QUESTSTATE_JustCompleted and QUESTSTATE_CannotCompleteQuestInGame from the bit buffer, applies special-case logic for TheSearchForCain (Cain rescued check) and TheTaintedSun, and writes the resulting state byte into pQuestData2->nQuestNoInternal for the caller to pack into the log packet.
 void __fastcall QUEST_GetQuestLogDisplayState(D2QuestDataStrc * pQuestData, uint8_t * pQuestData2, D2BitBufferStrc * pBitBuffer) {
-    bool bCainRescued;
     BOOL bCannotComplete = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_CannotCompleteQuestInGame);
-    if (!(pQuestData->nStateFlag < pQuestData->nInitNo)) {
-      BOOL bJustCompleted;
-      bJustCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
-      if (bJustCompleted == 1) {
+    if (pQuestData->nStateFlag >= pQuestData->nInitNo) {
+      if (D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted) == 1) {
         if ((int)pQuestData->nQuestIdReal >= 0x29) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x455);
           exit(-1);
         }
 
         *pQuestData2 = pQuestData->nStateFlagPrev;
-        return;
-      }
-      if (pQuestData->nQuestNoInternal != QUESTINT_TheSearchForCain || !bCannotComplete) {
-        if (pQuestData->nQuestNoInternal == QUESTINT_TheTaintedSun) {
-          *pQuestData2 = pQuestData->nStateFlagPrev == 4 ? 0x4 : 0xc;
-          return;
+      } else if (pQuestData->nQuestNoInternal == QUESTINT_TheSearchForCain && bCannotComplete) {
+        if (pQuestData->nStateFlag == 6) {
+          *pQuestData2 = 0xc;
+        } else {
+          *pQuestData2 = pQuestData->nStateFlagPrev;
         }
-
+      } else if (pQuestData->nQuestNoInternal == QUESTINT_TheTaintedSun) {
+        *pQuestData2 = pQuestData->nStateFlagPrev == 4 ? 0x4 : 0xc;
+      } else {
         *pQuestData2 = 0xc;
-        return;
       }
-
-      bCainRescued = false;
-      if (pQuestData->nStateFlag == 6) {
-        bCainRescued = true;
-      }
+    } else if (bCannotComplete) {
+      *pQuestData2 = 0xc;
+    } else if (pQuestData->nQuestNoInternal == QUESTINT_TheSearchForCain && pQuestData->nStateFlagPrev == 6 && !D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted)) {
+      *pQuestData2 = 0xc;
     } else {
-      if (bCannotComplete) {
-        *pQuestData2 = 0xc;
-        return;
-      }
-      if (pQuestData->nQuestNoInternal != QUESTINT_TheSearchForCain || pQuestData->nStateFlagPrev != 6) {
-        *pQuestData2 = pQuestData->nStateFlagPrev;
-        return;
-      }
-
-      bCannotComplete = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
-      bCainRescued = false;
-      if (!bCannotComplete) {
-        bCainRescued = true;
-      }
-    }
-    if (!bCainRescued) {
       *pQuestData2 = pQuestData->nStateFlagPrev;
-      return;
     }
-
-    *pQuestData2 = 0xc;
 }
 
 void __fastcall QUEST_DebugPrint(::SGAMEDATA * pGame, char * szMessage, char * szFile, int32_t nLine) {

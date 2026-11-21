@@ -63,21 +63,10 @@ uint32_t __fastcall AI_Baal_IsPortalInRange(::SGAMEDATA * pGame, D2UnitStrc * pU
 // Calculate threat/risk score for Baal monster based on target distance, resistances, and skill levels
 // @sourcefile .\Ai\AiBaal.cpp
 static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTarget, void * pAnchorData) {
-    int32_t nLifePercent;
-    eD2Skills eSkillId;
-    uint32_t nRightAttackRank;
-    uint32_t bWallCollision;
-    int nMonClassId;
     BOOL bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0);
     int nAnchorBonus = 0;
-    if (pAnchorData) {
-      nLifePercent = AI_GetWeightedDistanceToPoint(pUnit, *(int32_t*)((char*)pAnchorData + 0xc), *(int32_t*)((char*)pAnchorData + 0x10));
-      if (nLifePercent > 0x4b) {
-        nLifePercent = AI_GetWeightedDistanceToPoint(pTarget, *(int32_t*)((char*)pAnchorData + 0xc), *(int32_t*)((char*)pAnchorData + 0x10));
-        if (nLifePercent < 0x4b) {
-          nAnchorBonus = 100;
-        }
-      }
+    if (pAnchorData && AI_GetWeightedDistanceToPoint(pUnit, *(int32_t*)((char*)pAnchorData + 0xc), *(int32_t*)((char*)pAnchorData + 0x10)) > 0x4b && AI_GetWeightedDistanceToPoint(pTarget, *(int32_t*)((char*)pAnchorData + 0xc), *(int32_t*)((char*)pAnchorData + 0x10)) < 0x4b) {
+      nAnchorBonus = 100;
     }
 
     int nPhysRes = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_damageresist, 0);
@@ -85,69 +74,58 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
     int nLightRes = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_lightresist, 0);
     int nMagicRes = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_magicresist, 0);
     int nColdRes = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_coldresist, 0);
+    int nRisk = (nColdRes + nLightRes + (nPhysRes + nMagicRes * 2) * 4 + nFireRes) / 0xf;
     int nTotalMaxDam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_maxdamage, 0);
     int nFireMaxDam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_firemaxdam, 0);
     int nLightMaxDam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_lightmaxdam, 0);
     int nMagicMaxDam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_magicmaxdam, 0);
     int nColdMaxDam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_coldmaxdam, 0);
-    int nPoisonMaxDam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_poisonmaxdam, 0) >> 8;
-    BOOL eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_cold);
-    nLifePercent = D2Common::Units::GetCurrentLifePercentage(pTarget);
+    int nDamScore = ((D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_poisonmaxdam, 0) >> 8) + nColdMaxDam + nMagicMaxDam + nLightMaxDam + nFireMaxDam + nTotalMaxDam) / 2;
+    int nColdScore = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_cold) ? 100 : 0;
+    int nLifeScore = D2Common::Units::GetCurrentLifePercentage(pTarget) < 0x14 ? 100 : 0;
     int nLeftSkillLevel = 0;
-    int nMeleeScore = 0;
+    int nRightSkillLevel = 0;
     uint32_t nLeftAttackRank = 0;
+    uint32_t nRightAttackRank = 0;
     D2SkillStrc* pSkill = D2Common::Units::GetLeftSkill(pTarget);
     if (pSkill) {
-      D2SkillsTxt* pSkillTxt;
       nLeftSkillLevel = D2Common::Skills::GetSkillLevel(pTarget, pSkill, 1);
-      eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\Ai\\AiBaal.cpp", 0x75);
-      if ((int)eSkillId < 0 || (int)eSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
-        pSkillTxt = 0;
-      } else {
-        pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId;
-      }
-
-      nLeftAttackRank = (uint32_t)pSkillTxt->attackrank;
+      eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\Ai\\AiBaal.cpp", 0x75);
+      nLeftAttackRank = ((int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr)->attackrank;
     }
 
-    pSkill = D2Common::Units::GetRightSkill(pTarget);
-    if (pSkill) {
-      nMeleeScore = D2Common::Skills::GetSkillLevel(pTarget, pSkill, 1);
-      eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\Ai\\AiBaal.cpp", 0x7b);
-      if ((int)eSkillId < 0 || (int)eSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
-        nRightAttackRank = (uint32_t)*(volatile uint8_t*)0x18e;
-      } else {
-        nRightAttackRank = (uint32_t)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkillId].attackrank;
-      }
-    } else {
-      nRightAttackRank = 0;
+    D2SkillStrc* pRightSkill = D2Common::Units::GetRightSkill(pTarget);
+    if (pRightSkill) {
+      nRightSkillLevel = D2Common::Skills::GetSkillLevel(pTarget, pRightSkill, 1);
+      eD2Skills eSkillId = D2Common::Skills::GetSkillId(pRightSkill, ".\\Ai\\AiBaal.cpp", 0x7b);
+      nRightAttackRank = ((int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr)->attackrank;
     }
 
-    int nSkillThreatScore = nRightAttackRank * nMeleeScore + nLeftAttackRank * nLeftSkillLevel;
-    nMeleeScore = 0;
+    int nThreatScore = (int)(nRightAttackRank * nRightSkillLevel + nLeftAttackRank * nLeftSkillLevel) / 4;
+    int nMeleeScore = 0;
     if (bInMeleeRange) {
       nMeleeScore = 100;
-    } else {
-      bWallCollision = CollisionWithWall(pUnit, pTarget);
-      if (bWallCollision) {
-        nMeleeScore = 0x4b;
-      }
+    } else if (CollisionWithWall(pUnit, pTarget)) {
+      nMeleeScore = 0x4b;
     }
     if (pTarget && pTarget->eUnitType == UNIT_MONSTER) {
-      nMonClassId = pTarget->nClassId;
-      D2MonStatsTxt* pMonStatsTxt;
-      if (!(pMonStatsTxt = nMonClassId >= 0 && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId : nullptr) || pMonStatsTxt->threat <= 1) {
+      int nMonClassId = pTarget->nClassId;
+      D2MonStatsTxt* pMonStatsTxt = nMonClassId >= 0 && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId : nullptr;
+      if (!pMonStatsTxt) {
+        return 0;
+      }
+      if (pMonStatsTxt->threat <= 1) {
         return 0;
       }
     }
 
-    nPhysRes = (int)((nLifePercent < 0x14 ? 0x64 : 0) * 3 + (nColdRes + nLightRes + (nPhysRes + nMagicRes * 2) * 4 + nFireRes) / 0xf + (nAnchorBonus + nMeleeScore) * 5 + (nSkillThreatScore / 4 + (eUnitState ? 100 : 0) * 2 + (nPoisonMaxDam + nColdMaxDam + nMagicMaxDam + nLightMaxDam + nFireMaxDam + nTotalMaxDam) / 2) * 2) / 0x16;
-    if (nPhysRes) {
-      return nPhysRes;
+    nThreatScore += nColdScore * 2 + nDamScore;
+    nRisk = (nLifeScore * 3 + nRisk + (nAnchorBonus + nMeleeScore) * 5 + nThreatScore * 2) / 0x16;
+    if (!nRisk) {
+      nRisk = 1;
     }
 
-    nPhysRes = 1;
-    return nPhysRes;
+    return nRisk;
 }
 
 // Baal-AI target selector: scans the game's per-act player unit-node lists (pGame->pUnitNodes[0..]) to pick the highest-scoring player target for the Baal monster pUnit2. For the first list it calls an indirect predicate (pUnit, called as code ptr) to gate candidates, skipping dead/dying players, then scores survivors via RiskAssignmentBaal; later lists are filtered by matching act. Tracks a separate best-of-secondary-list candidate and, if it's very close (collision dist <5) and not already in melee range, repaths Baal toward it (SetTarget/PATH_CalculatePath); if no path, that candidate becomes the result. Writes candidate count to *pnParam2 and best score to *pnParam1; returns the chosen target unit. Halts via Fog error if pUnit is null or a node holds a non-player. Custom calling convention (pUnit2 in EBX).

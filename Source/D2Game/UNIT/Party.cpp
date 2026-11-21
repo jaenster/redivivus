@@ -559,61 +559,65 @@ int16_t __fastcall GetPartyIdFromUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     }
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 // Removes a player unit from its current party. Looks up the unit's party ID, finds the D2UnitPartyControlSub, then walks the linked list of D2UnitPartyControlSubSub entries to find and unlink the matching GUID node. Broadcasts updated party info to all players via SendAllPlayersPartyInfo and sends packet 0x8D (AssignPlayerToParty) to notify the client. Frees the node from the server memory pool. If the party drops below 2 members, calls PARTY_DisbandParty. Halts on null-unit or missing party sub (error lines 0x130/0x138).
 // @sourcefile .\UNIT\Party.cpp
 void __fastcall PARTY_RemoveUnitFromParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    int16_t nPartyId;
+    uint16_t nPartyId;
     D2UnitPartyControlSub* pPartySub;
-    int32_t nMemberCount;
     int nUnitGUID;
     D2UnitPartyControlSubSub* pSubSub;
     D2UnitPartyControlSubSub* pPrevSubSub = 0;
-    if (pUnit) {
-      D2UnitPartyControlSubSub* pMemoryToFree;
-      nUnitGUID = pUnit->nUnitGUID;
-      if (pUnit->eUnitType == UNIT_PLAYER) {
-        nPartyId = GetPartyIdFromUnit(pGame, pUnit);
-        if (nPartyId == -1) {
-          return;
-        }
-
-        pPartySub = FindPartyControlSub(pGame, nPartyId);
-        if (!pPartySub) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x138);
-          exit(-1);
-        }
-
-        pSubSub = pPartySub->pSub;
-        while (pMemoryToFree = pSubSub) {
-          if (pMemoryToFree->nUnitGUID == nUnitGUID) {
-            if (pPrevSubSub) {
-              pPrevSubSub->pNext = pMemoryToFree->pNext;
-            } else {
-              pPartySub->pSub = pMemoryToFree->pNext;
-            }
-
-            PLAYER::PlayerScreen::SendAllPlayersPartyInfo(pGame, pUnit);
-            GAME::SCmd::NET_D2GS_SERVER_Send_0x8D_PLAYERPARTY(pUnit, pUnit);
-            D2_FREE_POOL_AT(pGame->pMemoryPool, pMemoryToFree, ".\\UNIT\\Party.cpp", 0x148);
-            break;
-          }
-
-          pPrevSubSub = pMemoryToFree;
-          pSubSub = pMemoryToFree->pNext;
-        }
-
-        nMemberCount = CountPartyControlSubSize(pGame, nPartyId);
-        if (nMemberCount > 1) {
-          return;
-        }
-
-        PARTY_DisbandParty(pGame, nPartyId);
-        return;
-      }
+    nUnitGUID = GetGUIDInline(pUnit);
+    if (GetTypeInline(pUnit) != UNIT_PLAYER) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x130);
+      exit(-1);
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x130);
-    exit(-1);
+    nPartyId = GetPartyIdFromUnit(pGame, pUnit);
+    if (nPartyId == 0xffff) {
+      return;
+    }
+
+    pPartySub = FindPartyControlSub(pGame, nPartyId);
+    if (!pPartySub) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x138);
+      exit(-1);
+    }
+
+    for (pSubSub = pPartySub->pSub; pSubSub; pSubSub = pSubSub->pNext) {
+      if (pSubSub->nUnitGUID == nUnitGUID) {
+        if (pPrevSubSub) {
+          pPrevSubSub->pNext = pSubSub->pNext;
+        } else {
+          pPartySub->pSub = pSubSub->pNext;
+        }
+
+        PLAYER::PlayerScreen::SendAllPlayersPartyInfo(pGame, pUnit);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x8D_PLAYERPARTY(pUnit, pUnit);
+        D2_FREE_POOL_AT(pGame->pMemoryPool, pSubSub, ".\\UNIT\\Party.cpp", 0x148);
+        break;
+      }
+
+      pPrevSubSub = pSubSub;
+    }
+
+    if (CountPartyControlSubSize(pGame, nPartyId) > 1) {
+      return;
+    }
+
+    PARTY_DisbandParty(pGame, nPartyId);
 }
 
 uint32_t __fastcall GetPartiedUnitsLevelSum(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {

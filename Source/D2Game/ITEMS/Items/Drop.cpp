@@ -2390,9 +2390,9 @@ void __fastcall FreeUnusedItems(::SGAMEDATA * pGame, int32_t nAct) {
 
     int nGameFrame = pGame->dwGameFrame;
     for (pRoomIter = D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomFromAct(pGame->pAct[nAct]); pRoomIter; pRoomIter = pRoomIter->pDrlgRoomNext) {
-      D2UnitStrc* pUnitNext;
-      pUnitNext = pRoomIter->pUnitList;
-      while (pUnit = pUnitNext) {
+      D2UnitStrc* pUnitNext = pRoomIter->pUnitList;
+      while (pUnitNext) {
+        pUnit = pUnitNext;
         pUnitNext = pUnit->pRoomNext;
         if (pUnit->eUnitType == UNIT_ITEM) {
           nExpireFrame = pUnit->pUnitData.pUnitDataItem->nActionStamp;

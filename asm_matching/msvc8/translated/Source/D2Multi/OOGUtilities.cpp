@@ -1074,25 +1074,23 @@ void __stdcall OOGMENU_RequestGameInfo() {
 }
 
 static void OOGUTIL_ShowGameListEntryDetails(int32_t nEntryIndex) {
-    char byChar;
     if (!gpOogGameListDetailsPanelControl) {
       return;
     }
 
+    D2GameListEntryStrc* pEntry = &gbLanGameListEntryNamePadding2[nEntryIndex];
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpOogGameListDetailsPanelControl);
-    char* pbDescEnd = gbLanGameListEntryNamePadding2[nEntryIndex].szDescription;
-    pbDescEnd = pbDescEnd + strlen(pbDescEnd) + 1;
-    if (pbDescEnd != gbLanGameListEntryNamePadding2[nEntryIndex].szDescription + 1) {
-      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, gbLanGameListEntryNamePadding2[nEntryIndex].szDescription);
+    if (strlen(pEntry->szDescription)) {
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, pEntry->szDescription);
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, "");
     }
 
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpOogGameListDetailsPanelControl, 0);
-    if (!gbLanGameListEntryNamePadding2[nEntryIndex].szName) {
+    if (!pEntry->szName) {
       return;
     }
 
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpOogGamePasswordEditControl, gbLanGameListEntryNamePadding2[nEntryIndex].szName);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpOogGamePasswordEditControl, pEntry->szName);
     D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
 }
 

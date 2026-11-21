@@ -10,6 +10,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Game/D2Game.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -303,23 +304,9 @@ int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg)
       return 0;
     }
 
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nUnitFindArg = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nUnitFindArg = PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nUnitFindArg = 0x0;
-    }
+    nUnitFindArg = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
 
-    eD2UnitType eUnitTypeY = pTestUnit->eUnitType;
-    if (eUnitTypeY == UNIT_OBJECT || (int)eUnitTypeY > 3 && (int)eUnitTypeY <= 5) {
-      nUnit = (int)*(D2UnitStrc**)&pTestUnit->pPath.pDynamicPath->nTargetX;
-    } else if (pTestUnit->pPath.pDynamicPath) {
-      nUnit = PATH::DynamicPath::GetYPos(pTestUnit->pPath.pDynamicPath);
-    } else {
-      nUnit = 0x0;
-    }
+    nUnit = D2Common::Units::GetYPosFromDynamicPathUnitInline(pTestUnit);
 
     int nOffsetX = nUnitFindArg - pArgs->nX;
     int nOffsetY = nUnit - pArgs->nY;
@@ -385,8 +372,7 @@ int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg)
 
       break;
       case UNIT_OBJECT:
-        bFailed = !(pArgs->nFlags & 0x10);
-      if (bFailed) {
+        if (!(pArgs->nFlags & 0x10)) {
         return 0;
       }
 

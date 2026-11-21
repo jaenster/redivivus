@@ -107,7 +107,7 @@ char * __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(D2TileLibraryEntryStrc * pC
 
 // Returns the larger of two doubles; fParam2 when equal or unordered (FCOM, TEST AH,0x41).
 double __stdcall D2CMP_MaxDouble(double fParam1, double fParam2) {
-    if (fParam2 < fParam1) {
+    if (fParam1 > fParam2) {
       return fParam1;
     }
 

@@ -803,22 +803,10 @@ void __fastcall OBJECT_SpawnFireballGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlaye
 // Spawns a 6-missile ring of MISSILE_Explosivepotion around pUnit's position in a fixed ±6-tile grid pattern. pPlayer is the owner; skill level (nToHit) is clamped to [1,8] from pPlayer's level/5. Called when an explosive potion object triggers.
 void __fastcall OBJECT_SpawnExplosivePotionGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, D2ShrinesTxt * pShrinesTxt) {
     D2SkillArgStrc sSkillArg;
-    int anYOffsets[12];
+    int anXOffsets[6] = { -6, -6, 0, 0, 6, 6 };
+    int anYOffsets[6] = { 6, -6, 6, -6, 6, -6 };
     eD2UnitType eUnitType;
-    int nByteIdx = 0;
-    anYOffsets[0] = -6;
-    anYOffsets[1] = -6;
-    anYOffsets[2] = 0;
-    anYOffsets[3] = 0;
-    anYOffsets[4] = 6;
-    anYOffsets[5] = 6;
-    anYOffsets[6] = 6;
-    anYOffsets[7] = -6;
-    anYOffsets[8] = 6;
-    anYOffsets[9] = -6;
-    anYOffsets[10] = 6;
-    anYOffsets[0xb] = -6;
-    do {
+    for (int i = 0; i < 6; i++) {
       int nLevel;
       memset(&sSkillArg, 0, 0x5c);
       eUnitType = pUnit->eUnitType;
@@ -844,43 +832,31 @@ void __fastcall OBJECT_SpawnExplosivePotionGrid(D2UnitStrc * pUnit, D2UnitStrc *
       }
 
       sSkillArg.nY = nYValue;
-      sSkillArg.nUnitX = anYOffsets[nByteIdx] + sSkillArg.nX;
-      sSkillArg.nUnitY = anYOffsets[nByteIdx + 6] + sSkillArg.nY;
+      sSkillArg.nUnitX = anXOffsets[i] + sSkillArg.nX;
+      sSkillArg.nUnitY = anYOffsets[i] + sSkillArg.nY;
       sSkillArg.pOwner = pPlayer;
       sSkillArg.pMissile = pUnit;
       sSkillArg.nParticleParam = 1;
       sSkillArg.nMissileTxtNo = MISSILE_Explosivepotion;
-      nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_level, 0);
-      sSkillArg.nSkillLevel = nLevel / 5;
-      if (sSkillArg.nSkillLevel < 1) {
-        sSkillArg.nSkillLevel = 1;
-      } else if (sSkillArg.nSkillLevel > 8) {
-        sSkillArg.nSkillLevel = 8;
+      nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_level, 0) / 5;
+      if (nLevel < 1) {
+        nLevel = 1;
+      } else if (nLevel > 8) {
+        nLevel = 8;
       }
+      sSkillArg.nSkillLevel = nLevel;
 
       Missile::MakeMissile(&sSkillArg);
-      nByteIdx++;
-    } while (nByteIdx < 6);
+    }
 }
 
 // Identical structure to OBJECT_SpawnExplosivePotionGrid but fires MISSILE_Chokinggaspoition. Spawns 6 choking-gas missiles in a ±6-tile ring around pUnit; pPlayer owns them with level-scaled nToHit [1,8]. Called when a choking-gas potion object triggers.
 void __fastcall OBJECT_SpawnChokingGasGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, D2ShrinesTxt * pShrinesTxt) {
     D2SkillArgStrc sSkillArg;
-    int anYOffsets[12];
+    int anXOffsets[6] = { -6, -6, 0, 0, 6, 6 };
+    int anYOffsets[6] = { 6, -6, 6, -6, 6, -6 };
     eD2UnitType eUnitType;
-    int nByteIdx = 0;
-    anYOffsets[0] = -6;
-    anYOffsets[1] = -6;
-    anYOffsets[2] = 0;
-    anYOffsets[3] = 0;
-    anYOffsets[4] = 6;
-    anYOffsets[5] = 6;
-    anYOffsets[6] = 6;
-    anYOffsets[7] = -6;
-    anYOffsets[8] = 6;
-    anYOffsets[9] = -6;
-    anYOffsets[10] = 6;
-    anYOffsets[0xb] = -6;
+    int nIndex = 0;
     do {
       int nLevel;
       memset(&sSkillArg, 0, 0x5c);
@@ -907,23 +883,24 @@ void __fastcall OBJECT_SpawnChokingGasGrid(D2UnitStrc * pUnit, D2UnitStrc * pPla
       }
 
       sSkillArg.nY = nYValue;
-      sSkillArg.nUnitX = anYOffsets[nByteIdx] + sSkillArg.nX;
-      sSkillArg.nUnitY = anYOffsets[nByteIdx + 6] + sSkillArg.nY;
+      sSkillArg.nUnitX = anXOffsets[nIndex] + sSkillArg.nX;
+      sSkillArg.nUnitY = anYOffsets[nIndex] + sSkillArg.nY;
       sSkillArg.pOwner = pPlayer;
       sSkillArg.pMissile = pUnit;
       sSkillArg.nParticleParam = 1;
       sSkillArg.nMissileTxtNo = MISSILE_Chokinggaspoition;
-      nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_level, 0);
-      sSkillArg.nSkillLevel = nLevel / 5;
-      if (sSkillArg.nSkillLevel < 1) {
-        sSkillArg.nSkillLevel = 1;
-      } else if (sSkillArg.nSkillLevel > 8) {
-        sSkillArg.nSkillLevel = 8;
+      nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_level, 0) / 5;
+      if (nLevel < 1) {
+        nLevel = 1;
+      } else if (nLevel > 8) {
+        nLevel = 8;
       }
 
+      sSkillArg.nSkillLevel = nLevel;
+
       Missile::MakeMissile(&sSkillArg);
-      nByteIdx++;
-    } while (nByteIdx < 6);
+      nIndex++;
+    } while (nIndex < 6);
 }
 
 void __fastcall OBJECT_UpdateShrineOverlay(D2UnitStrc * pUnit, D2ShrinesTxt * pShrinesTxt) {
@@ -993,7 +970,7 @@ static void __stdcall OBJECT_DispatchShrineServerActivate(int * pMessage, D2Unit
     if (!pPlayer) {
       return;
     }
-    if (nShrineCode && nShrineCode < nShrineDispatchTableSize && aShrineDispatchTable[nShrineCode].fpServerActivate) {
+    if (nShrineCode > 0 && nShrineCode < nShrineDispatchTableSize && aShrineDispatchTable[nShrineCode].fpServerActivate) {
       aShrineDispatchTable[nShrineCode].fpServerActivate(pUnit, pPlayer, pShrinesTxt);
     }
 
@@ -1177,7 +1154,7 @@ bool __fastcall OBJECT_ClientFn_TimedSpecial1_20to30s(D2UnitStrc * pUnit) {
       D2Common::Units::ChangeAnimMode(pUnit, 3);
       Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
     }
-    if (Walk < pUnit->eAnimMode.ePlayerMode) {
+    if (pUnit->eAnimMode.ePlayerMode >= 3) {
       D2ObjectsTxt* pDVar1;
       pDVar1 = pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine;
       if (pUnit->nGfxCurrentFrame == pDVar1->FrameCnt[pUnit->eAnimMode.ePlayerMode] - 0x100) {
@@ -1422,7 +1399,7 @@ bool __fastcall OBJECT_ClientFn_Zoo(D2UnitStrc * pUnit) {
 bool __fastcall OBJECT_ExecuteClientFunction(D2UnitStrc * pUnit) {
     D2ObjectsTxt* pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit->nClassId);
     eD2ObjectClientFn byClientFn = pObjectsTxt->ClientFn;
-    if (OBJCLIENTFN_ZOO_KEEPER < byClientFn) {
+    if (byClientFn >= sizeof(gpObjectClientFunctionDispatchTable) / sizeof(gpObjectClientFunctionDispatchTable[0])) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x546);
       exit(-1);
     }

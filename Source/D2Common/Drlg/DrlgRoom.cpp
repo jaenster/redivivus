@@ -665,10 +665,9 @@ void __fastcall FreeDrlgRoomEx(D2RoomExStrc * pRoomEx, int32_t nUnused, uint32_t
 void __fastcall DRLGROOMEX_FreeDrlgRoomTile(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx) {
     D2DrlgRoomExRoomTileNodeStrc* pTileGrid = pRoomEx->pRoomTileNodes;
     while (pTileGrid) {
-      D2DrlgRoomExRoomTileNodeStrc* pNextTileGrid;
-      pNextTileGrid = pTileGrid->pRoomTileNext;
-      D2_FREE_POOL_AT(pMemory, pTileGrid, ".\\DRLG\\DrlgRoom.cpp", 0x58);
-      pTileGrid = pNextTileGrid;
+      D2DrlgRoomExRoomTileNodeStrc* pTileGridToFree = pTileGrid;
+      pTileGrid = pTileGrid->pRoomTileNext;
+      D2_FREE_POOL_AT(pMemory, pTileGridToFree, ".\\DRLG\\DrlgRoom.cpp", 0x58);
     }
 
     pRoomEx->pRoomTileNodes = 0;

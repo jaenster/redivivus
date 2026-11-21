@@ -478,6 +478,12 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(D2UnitStrc * pUnit, eD2Skills eSkill
     return 1;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
 // Client do-func 21: Fend, also used by Zeal and Fury. Each call advances one hit of the multi-hit sequence: re-targets the nearest valid melee target when the stored one is out of range, decrements the remaining hit count (param 1), rotates the path toward the next target, applies the per-hit damage reduction and plays the hit sound. Returns 1 while hits remain.
 // Slot from skills.txt cltdofunc 21.
 // @sourcefile .\SKILLS\SkillsAma.cpp
@@ -505,9 +511,9 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Fend(D2UnitStrc * pUnit, eD2Skills eSkill, 
       }
     }
 
-    nShotsLeft = D2Common::Skills::SKILL_GetParam1(pSkill);
-    D2Common::Skills::SKILL_SetParam1(pSkill, nShotsLeft - 1);
-    if (!(nShotsLeft - 1 > 0)) {
+    int nShots = D2Common::Skills::SKILL_GetParam1(pSkill) - 1;
+    D2Common::Skills::SKILL_SetParam1(pSkill, nShots);
+    if (nShots <= 0) {
       return 1;
     }
     if (!pNextTarget) {
@@ -522,8 +528,8 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Fend(D2UnitStrc * pUnit, eD2Skills eSkill, 
     }
 
     D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, D2Common::Units::GetXPosFromDynamicPathUnit(pNextTarget), D2Common::Units::GetYPosFromDynamicPathUnit(pNextTarget), 0);
-    D2Common::Skills::SKILL_SetParam2(pSkill, pNextTarget->eUnitType);
-    D2Common::Skills::SKILL_SetParam3(pSkill, pNextTarget->nUnitGUID);
+    D2Common::Skills::SKILL_SetParam2(pSkill, GetTypeInline(pNextTarget));
+    D2Common::Skills::SKILL_SetParam3(pSkill, GetGUIDInline(pNextTarget));
     eD2Skills eCurrentSkill = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\SkillsAma.cpp", 0x250);
     nShotsLeft = D2Common::Skills::GetSkilParam1(eCurrentSkill);
     Skills::SKILLS_ApplyDamageReduction(pUnit, nShotsLeft);

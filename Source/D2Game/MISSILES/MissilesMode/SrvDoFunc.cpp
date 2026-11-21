@@ -111,7 +111,10 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
 static BOOL __stdcall fpMissileDoSrvFuncHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2MissilesTxt * pMissileTxt, D2UnitStrc * pUnit2) {
     bool bIsOwner;
     BOOL eState;
-    if (!(pUnit2 && FlagBit_D2UnitStrc_eUnitFlags_3(pUnit2) && FlagBit_D2UnitStrc_eUnitFlags_2(pUnit2))) {
+    if (!FlagBit_D2UnitStrc_eUnitFlags_3(pUnit2)) {
+      return 0;
+    }
+    if (!FlagBit_D2UnitStrc_eUnitFlags_2(pUnit2)) {
       return 0;
     }
     if (pMissileTxt->NextHit != '\0') {

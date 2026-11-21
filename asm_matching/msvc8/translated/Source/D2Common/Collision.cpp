@@ -1312,17 +1312,9 @@ void __fastcall RemoveCollision_BoundingBox(D2RoomStrc * pRoom, D2BoundingBoxStr
     }
 
     CollisionGrid_RemoveCollision_BoundingBox(pCollisionGrid, aBboxSplit, eCollisionFlag);
-    if (nBboxCount <= 1) {
-      return;
+    for (int i = 1; i < nBboxCount; i++) {
+      RemoveCollision_BoundingBox(pNewRoom, &aBboxSplit[i], eCollisionFlag);
     }
-
-    D2BoundingBoxStrc* pBoundngBox2 = aBboxSplit;
-    int iBboxRemaining = nBboxCount - 1;
-    do {
-      pBoundngBox2++;
-      RemoveCollision_BoundingBox(pNewRoom, pBoundngBox2, eCollisionFlag);
-      iBboxRemaining--;
-    } while (iBboxRemaining);
 }
 
 void __fastcall AddCollision_BoundingBox(D2RoomStrc * pRoom, D2BoundingBoxStrc * pBoundingBox, int32_t eCollisionFlag) {

@@ -438,7 +438,6 @@ static D2InventoryGridInfoStrc * __stdcall ReinitializeInventoryGrid(int32_t nNe
         }
       }
     } else {
-      uint8_t byHeight;
       if (!pInventorySize) {
         return nullptr;
       }
@@ -447,12 +446,10 @@ static D2InventoryGridInfoStrc * __stdcall ReinitializeInventoryGrid(int32_t nNe
       pInventory->pGrids = pGridInfo;
       memset(pGridInfo + pInventory->nGridCount, 0, (nNewGridSize - pInventory->nGridCount + 1) * 0x10);
       pInventory->nGridCount = nNewGridSize + 1;
-      byWidth = pInventorySize->Width;
       pGridInfo = pInventory->pGrids + nNewGridSize;
-      pGridInfo->bWidth = byWidth;
-      byHeight = pInventorySize->Height;
-      pGridInfo->bHeight = byHeight;
-      pNewGrid = (D2UnitStrc**)D2_ALLOC_POOL_AT(pInventory->pMemory, (uint32_t)byWidth * (uint32_t)byHeight * 4, ".\\INVENTORY\\Inventory.cpp", 0x2eb);
+      pGridInfo->bWidth = pInventorySize->Width;
+      pGridInfo->bHeight = pInventorySize->Height;
+      pNewGrid = (D2UnitStrc**)D2_ALLOC_POOL_AT(pInventory->pMemory, (uint32_t)pGridInfo->bWidth * (uint32_t)pGridInfo->bHeight * 4, ".\\INVENTORY\\Inventory.cpp", 0x2eb);
       pGridInfo->pGridCells = pNewGrid;
       memset(pNewGrid, 0, (uint32_t)pGridInfo->bWidth * (uint32_t)pGridInfo->bHeight * 4);
     }
@@ -1461,7 +1458,6 @@ BOOL __stdcall INVENTORY_HasEquippedWeaponClass(D2InventoryStrc * pInventory, in
 }
 
 D2UnitStrc * __stdcall GetEquipedWeapon(D2InventoryStrc * pInventory) {
-    uint32_t bIsWeaponType;
     D2InventoryGridInfoStrc* pGridInfo;
     D2UnitStrc* pUnit;
     if (!pInventory) {
@@ -1470,8 +1466,26 @@ D2UnitStrc * __stdcall GetEquipedWeapon(D2InventoryStrc * pInventory) {
     if (pInventory->nSignatureMagic != 0x1020304) {
       return nullptr;
     }
-    if (pInventory->dwPrimaryWeaponGUID != -1 && ((pGridInfo = ReinitializeInventoryGrid(0, &gsInventoryBodyLocGridSize, pInventory) , pGridInfo && (pUnit = pGridInfo->pGridCells[5] , pUnit != 0)) && (bIsWeaponType = ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Weapon) , bIsWeaponType != 0) && pUnit->nUnitGUID == pInventory->dwPrimaryWeaponGUID || pInventory->nSignatureMagic == 0x1020304 && (pGridInfo = ReinitializeInventoryGrid(0, &gsInventoryBodyLocGridSize, pInventory) , pGridInfo != 0) && (pUnit = pGridInfo->pGridCells[4] , pUnit && (bIsWeaponType = ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Weapon) , bIsWeaponType && pUnit->nUnitGUID == pInventory->dwPrimaryWeaponGUID)))) {
-      return pUnit;
+    if (pInventory->dwPrimaryWeaponGUID == -1) {
+      return nullptr;
+    }
+
+    pGridInfo = ReinitializeInventoryGrid(0, &gsInventoryBodyLocGridSize, pInventory);
+    if (pGridInfo) {
+      pUnit = pGridInfo->pGridCells[5];
+      if (pUnit && ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Weapon) && GetGUIDInline(pUnit) == pInventory->dwPrimaryWeaponGUID) {
+        return pUnit;
+      }
+    }
+
+    if (pInventory->nSignatureMagic == 0x1020304) {
+      pGridInfo = ReinitializeInventoryGrid(0, &gsInventoryBodyLocGridSize, pInventory);
+      if (pGridInfo) {
+        pUnit = pGridInfo->pGridCells[4];
+        if (pUnit && ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Weapon) && GetGUIDInline(pUnit) == pInventory->dwPrimaryWeaponGUID) {
+          return pUnit;
+        }
+      }
     }
 
     return nullptr;
@@ -1943,73 +1957,60 @@ BOOL __stdcall INVENTORY_CanAutoBeltItem(D2InventoryStrc * pInventory, D2UnitStr
 // Finds the best belt slot index for pUnit (a potion item) and writes it to *dwParam. Prefers a column already containing the same potion type (stacking behaviour), falling back to any empty slot if the item's txt entry has bAutoBelt set. Only considers 1x1 beltable items; slot count is capped by the equipped belt's nBoxes. Does nothing if no valid slot is found.
 // @sourcefile .\INVENTORY\Inventory.cpp
 BOOL __stdcall INVENTORY_FindBeltSlotForPotion(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int * pnOutSlotIndex) {
-    BOOL _bSamePotion;
-    bool bSamePotion;
-    int32_t iVar1;
     D2UnitStrc* pBeltItem;
     int32_t nBeltTypeId;
     D2InventoryGridInfoStrc* pGridInfo;
-    D2UnitStrc** ppBeltCell;
     D2ItemsTxt* pItemsTxtLine;
     int nSlotIndex;
     int32_t iBeltSlot;
     char byItemW;
     char byItemH;
     D2BeltsTxt sBeltsLine;
-    if (pInventory && pInventory->nSignatureMagic == 0x1020304 && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM) {
-      iVar1 = ITEMS::Items::ITEM_GetTxtItemTypes_beltable(pUnit);
-      if (iVar1) {
-        ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pUnit, &byItemW, &byItemH, ".\\INVENTORY\\Inventory.cpp", 0xb27);
-        if (byItemW == '\x01' && byItemH == '\x01') {
-          pBeltItem = INVENTORY_GetItemByGridOffset(pInventory, 8);
-          nBeltTypeId = 2;
-          if (pBeltItem) {
-            nBeltTypeId = Units::GetBeltType(pBeltItem);
+    if (!pInventory) {
+      return 0;
+    }
+    if (pInventory->nSignatureMagic != 0x1020304 || (pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
+      return 0;
+    }
+    if (!ITEMS::Items::ITEM_GetTxtItemTypes_beltable(pUnit)) {
+      return 0;
+    }
+
+    ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pUnit, &byItemW, &byItemH, ".\\INVENTORY\\Inventory.cpp", 0xb27);
+    if (byItemW != '\x01' || byItemH != '\x01') {
+      return 0;
+    }
+
+    pBeltItem = INVENTORY_GetItemByGridOffset(pInventory, 8);
+    nBeltTypeId = 2;
+    if (pBeltItem) {
+      nBeltTypeId = Units::GetBeltType(pBeltItem);
+    }
+
+    DATATBLS::BeltsTbls::GetBeltsLine(nBeltTypeId, 0, &sBeltsLine);
+    pGridInfo = ReinitializeInventoryGrid(1, &g_InventorySizesDefaultConfig, pInventory);
+    if (!pGridInfo) {
+      return 0;
+    }
+
+    for (iBeltSlot = 0; iBeltSlot < 4; iBeltSlot++) {
+      D2UnitStrc* pCellItem = pGridInfo->pGridCells[iBeltSlot];
+      if (pCellItem && ITEMS::Items::ITEM_CheckIfBothItemsAreSameTypeOfPotions(pUnit, pCellItem)) {
+        for (nSlotIndex = iBeltSlot; nSlotIndex < (int)(uint32_t)(uint8_t)sBeltsLine.nBoxes; nSlotIndex += 4) {
+          if (!pGridInfo->pGridCells[nSlotIndex]) {
+            *pnOutSlotIndex = nSlotIndex;
+            return 1;
           }
+        }
+      }
+    }
 
-          DATATBLS::BeltsTbls::GetBeltsLine(nBeltTypeId, 0, &sBeltsLine);
-          pGridInfo = ReinitializeInventoryGrid(1, &g_InventorySizesDefaultConfig, pInventory);
-          if (pGridInfo) {
-            iBeltSlot = 0;
-            do {
-              if (pGridInfo->pGridCells[iBeltSlot]) {
-                _bSamePotion = ITEMS::Items::ITEM_CheckIfBothItemsAreSameTypeOfPotions(pUnit, pGridInfo->pGridCells[iBeltSlot]);
-                if (_bSamePotion && iBeltSlot < (int)(uint32_t)(uint8_t)sBeltsLine.nBoxes) {
-                  ppBeltCell = pGridInfo->pGridCells + iBeltSlot;
-                  nSlotIndex = iBeltSlot;
-                  do {
-                    if (!*ppBeltCell) {
-                      *pnOutSlotIndex = nSlotIndex;
-                      return 1;
-                    }
-
-                    nSlotIndex += 4;
-                    ppBeltCell += 4;
-                  } while (nSlotIndex < (int)(uint32_t)(uint8_t)sBeltsLine.nBoxes);
-                }
-              }
-
-              iBeltSlot++;
-            } while (iBeltSlot < 4);
-
-            int nClassId = pUnit->nClassId;
-            pItemsTxtLine = DATATBLS::ItemTbls::TXT_Items_GetLine(nClassId);
-            if (pItemsTxtLine && pItemsTxtLine->bAutoBelt != '\0') {
-              ppBeltCell = pGridInfo->pGridCells;
-              nSlotIndex = 0;
-              do {
-                if (!*ppBeltCell) {
-                  *pnOutSlotIndex = nSlotIndex;
-                  return 1;
-                }
-
-                nSlotIndex++;
-                ppBeltCell++;
-              } while (nSlotIndex < 4);
-            }
-          }
-
-          return 0;
+    pItemsTxtLine = DATATBLS::ItemTbls::TXT_Items_GetLine(GetClassIdInline(pUnit));
+    if (pItemsTxtLine && pItemsTxtLine->bAutoBelt) {
+      for (nSlotIndex = 0; nSlotIndex < 4; nSlotIndex++) {
+        if (!pGridInfo->pGridCells[nSlotIndex]) {
+          *pnOutSlotIndex = nSlotIndex;
+          return 1;
         }
       }
     }
@@ -2208,13 +2209,11 @@ BOOL __stdcall INVENTORY_GetEquippedWeaponInfo(D2InventoryStrc * pInventory, D2U
 }
 
 BOOL __stdcall INVENTORY_CheckHasArmorEquipped(D2InventoryStrc * pInventory) {
-    uint32_t bIsArmor;
     if (pInventory && pInventory->nSignatureMagic == 0x1020304) {
-      D2InventoryGridInfoStrc* pGridInfo;
-      pGridInfo = ReinitializeInventoryGrid(0, &gsInventoryBodyLocGridSize, pInventory);
-      if (pGridInfo && pGridInfo->pGridCells[3]) {
-        bIsArmor = ITEMS::Items::ITEMS_IsA(pGridInfo->pGridCells[3], ITEMTYPE_Armor);
-        if (bIsArmor) {
+      D2InventoryGridInfoStrc* pGridInfo = ReinitializeInventoryGrid(0, &gsInventoryBodyLocGridSize, pInventory);
+      if (pGridInfo) {
+        D2UnitStrc* pArmor = pGridInfo->pGridCells[3];
+        if (pArmor && ITEMS::Items::ITEMS_IsA(pArmor, ITEMTYPE_Armor)) {
           return 1;
         }
       }

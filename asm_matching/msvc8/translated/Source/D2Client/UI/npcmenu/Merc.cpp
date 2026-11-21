@@ -156,11 +156,10 @@ void __stdcall NPCMENU_ResurrectMerc() {
 }
 
 int __stdcall NPCMENU_ShowMercResurrectDialog() {
-    BOOL bIsExpansion;
     Sound::SOUND_PlaySound(SOUND_CURSOR_SELECT, nullptr, 0, 0, 0);
     gnNpcMenuMercHireCost1 = vc8_thiscall(gpNpcMenuMercListBox->pVtable->GetValue)(gpNpcMenuMercListBox);
     gnNpcMenuMercHireCost2 = _Interaction::nCurrentInteractedNpcGUID;
-    if (gnNpcMenuMercHireCost1 >= 10) {
+    if ((int)gnNpcMenuMercHireCost1 >= 10) {
       return 0;
     }
 
@@ -169,21 +168,9 @@ int __stdcall NPCMENU_ShowMercResurrectDialog() {
       return 0;
     }
 
-    int32_t nRosterPetGUID = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
-    if (nRosterPetGUID == -1) {
-      D2UnitStrc* pMerc;
-      bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-      if (!bIsExpansion) {
-        NPCMENU_HireMerc();
-        return 0;
-      }
-
-      pMerc = UNIT::Player::GetPlayerUnit_UI();
-      nRosterPetGUID = GAME::RosterPets::CountRostersForUnitFilterBySkill(pMerc, 7);
-      if (!nRosterPetGUID && nMercNameId == -1) {
-        NPCMENU_HireMerc();
-        return 0;
-      }
+    if (GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0) == -1 && (!GAME::Game::CLIENT_CheckExpansion() || !GAME::RosterPets::CountRostersForUnitFilterBySkill(UNIT::Player::GetPlayerUnit_UI(), 7) && (uint16_t)nMercNameId == 0xffff)) {
+      NPCMENU_HireMerc();
+      return 0;
     }
 
     NPCMENU_ResurrectMerc();

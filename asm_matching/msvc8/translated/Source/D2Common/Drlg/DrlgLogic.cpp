@@ -443,7 +443,9 @@ int32_t __fastcall DRLG_ROOMEX_GetGridIndex(D2RoomExStrc * pRoomEx, int32_t nX, 
     if (pCoordList->eFlags & 1) {
       pCoordEntry = pCoordList->pCoord;
     } else {
-      pCoordEntry = (D2RoomCoordListStrc*)DrlgGrid::GetGridFlags(&pCoordList->sCoordIndexGrid, nX / 5 - pRoomEx->sCoords.WorldPosition.x, nY / 5 - pRoomEx->sCoords.WorldPosition.y);
+      nX = nX / 5 - pRoomEx->sCoords.WorldPosition.x;
+      nY = nY / 5 - pRoomEx->sCoords.WorldPosition.y;
+      pCoordEntry = (D2RoomCoordListStrc*)DrlgGrid::GetGridFlags(&pCoordList->sCoordIndexGrid, nX, nY);
     }
     if (pCoordEntry) {
       return pCoordEntry->nIndex;
@@ -574,8 +576,6 @@ void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, D2DrlgGridS
     int nCoordIndexStart;
     D2DrlgLevelStrc* pLevel = pRoomEx->pLevel;
     D2PoolManagerStrc* pPoolManagerStrc = pLevel->pDrlg->pMemoryPool;
-    D2DrlgGridStrc* nOrientGridFlagsSave = nOrientGridFlags;
-    D2DrlgLevelStrc* pLevelCtx = pLevel;
     D2DrlgCoordListStrc* pCoordListStrc = D2_NEW_POOL_AT(pPoolManagerStrc, D2DrlgCoordListStrc, ".\\DRLG\\DrlgLogic.cpp", 0xdf);
     memset(pCoordListStrc, 0, 0x34);
     pRoomEx->pDrlgCoordList = pCoordListStrc;
@@ -587,18 +587,18 @@ void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, D2DrlgGridS
     }
 
     nCoordCount = pLevel->nLastRoomExCoordsIndex;
-    nCoordIndexStart = nCoordCount;
+    nCoordIndexStart = nCoordCount; // steer-ok: the original captures the start index before the calls that fill the coord list
     DrlgGrid::FillGrid(&sLocalGrid, pRoomEx->sCoords.WorldSize.x + 1, pRoomEx->sCoords.WorldSize.y + 1, aCellsFlags, aCellsRowOffsets);
     DRLGLOGIC_SetGridWallFlags(pRoomEx, &sLocalGrid);
     D2DrlgCoordIndexCtxStrc sCoordCtx;
     memset(&sCoordCtx, 0, sizeof(sCoordCtx));
     sCoordCtx.pCoordGrid = &pCoordListStrc->sOrientationGrid;
-    sCoordCtx.pOrientGrid = nOrientGridFlagsSave;
-    sCoordCtx.pFloorGrid = &sLocalGrid;
-    sCoordCtx.nCoordIndex = nCoordCount;
+    sCoordCtx.pOrientGrid = nOrientGridFlags;
     sCoordCtx.pRoomEx = pRoomEx;
     sCoordCtx.nReserved0C = pGrid;
     sCoordCtx.nCallerArg10 = nFloorGridFlags;
+    sCoordCtx.pFloorGrid = &sLocalGrid;
+    sCoordCtx.nCoordIndex = nCoordCount;
     DRLGLOGIC_PopulateGridCoordIndices(&sCoordCtx);
     DrlgGrid::ResetGrid(&sLocalGrid);
     nCoordCount = sCoordCtx.nCoordIndex - nCoordIndexStart + 1;
@@ -606,7 +606,7 @@ void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, D2DrlgGridS
     pAllocCoordArray = (D2RoomCoordListStrc*)D2_ALLOC_POOL_AT(pPoolManagerStrc, nCoordCount * 0x30, ".\\DRLG\\DrlgLogic.cpp", 0xe9);
     pCoordListStrc->pCoord = pAllocCoordArray;
     memset(pAllocCoordArray, 0, pCoordListStrc->nListSize * 0x30);
-    pLevelCtx->nLastRoomExCoordsIndex += pCoordListStrc->nListSize;
+    pLevel->nLastRoomExCoordsIndex += pCoordListStrc->nListSize;
     DRLGLOGIC_BuildCoordRegions(pRoomEx, pCoordListStrc);
     DRLGLOGIC_FillTileGridFlags(pRoomEx);
     DRLGLOGIC_LinkBorderCoordLists(pRoomEx);

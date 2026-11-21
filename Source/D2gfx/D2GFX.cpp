@@ -1059,16 +1059,15 @@ int Unreferenced_004f6610() {
 }
 
 int Unreferenced_004f6640() {
-    int iVar1 = gnD2GFX_RequestedScaleFactor;
     if (gnD2GFX_RequestedScaleFactor > 0x100) {
-      iVar1 = gnD2GFX_RequestedScaleFactor - 0x20;
-      gnD2GFX_RequestedScaleFactor = iVar1;
-      if (iVar1 < 0x100) {
+      int nScale = gnD2GFX_RequestedScaleFactor -= 0x20;
+      if (nScale < 0x100) {
         gnD2GFX_RequestedScaleFactor = 0x100;
       }
+      return nScale;
     }
 
-    return iVar1;
+    return gnD2GFX_RequestedScaleFactor;
 }
 
 void __stdcall D2GFX_SetPerspectiveScale(int32_t nXScale, int32_t nYScale) {
@@ -1304,102 +1303,87 @@ void __fastcall D2GFX_DrawTileAdvanced(uint8_t * pbSrcBase, uint8_t * pbDstBase,
 }
 
 void __fastcall D2GFX_DrawWallTileBasic(uint8_t * pbTileData, uint8_t * pbDstRow, uint8_t * pbPaletteRow, int32_t nRowsLeft) {
-    uint8_t* pbTileDataNext;
-    uint32_t nRunLength;
-    uint8_t* pbDstRowPtr = pbDstRow;
-    uint8_t* pbDstRowStart = pbDstRow;
-    do {
-      uint8_t* pbDstWritePtr;
-      while (true) {
-        if (!nRowsLeft) {
-          return;
-        }
-
-        nRunLength = (uint32_t)pbTileData[1];
-        pbTileDataNext = pbTileData + 2;
-        if (*pbTileData || nRunLength) {
-          break;
-        }
-
+    uint8_t* pbDst = pbDstRow;
+    while (nRowsLeft) {
+      uint32_t nSkip = *pbTileData++;
+      uint32_t nRunLength = *pbTileData++;
+      if (!nSkip && !nRunLength) {
         nRowsLeft--;
-        pbDstRow = pbDstRowPtr + gRenderBufferPitch;
-        pbTileData = pbTileDataNext;
-        pbDstRowPtr = pbDstRow;
-        pbDstRowStart = pbDstRow;
+        pbDstRow += gRenderBufferPitch;
+        pbDst = pbDstRow;
+        continue;
       }
 
-      pbDstWritePtr = pbDstRow + *pbTileData;
+      pbDst += nSkip;
       switch (nRunLength) {
         case 0x20:
-          pbDstWritePtr[0x1f] = pbPaletteRow[pbTileData[0x21]];
+          pbDst[0x1f] = pbPaletteRow[pbTileData[0x1f]];
         case 0x1f:
-          pbDstWritePtr[0x1e] = pbPaletteRow[pbTileData[0x20]];
+          pbDst[0x1e] = pbPaletteRow[pbTileData[0x1e]];
         case 0x1e:
-          pbDstWritePtr[0x1d] = pbPaletteRow[pbTileData[0x1f]];
+          pbDst[0x1d] = pbPaletteRow[pbTileData[0x1d]];
         case 0x1d:
-          pbDstWritePtr[0x1c] = pbPaletteRow[pbTileData[0x1e]];
+          pbDst[0x1c] = pbPaletteRow[pbTileData[0x1c]];
         case 0x1c:
-          pbDstWritePtr[0x1b] = pbPaletteRow[pbTileData[0x1d]];
+          pbDst[0x1b] = pbPaletteRow[pbTileData[0x1b]];
         case 0x1b:
-          pbDstWritePtr[0x1a] = pbPaletteRow[pbTileData[0x1c]];
+          pbDst[0x1a] = pbPaletteRow[pbTileData[0x1a]];
         case 0x1a:
-          pbDstWritePtr[0x19] = pbPaletteRow[pbTileData[0x1b]];
+          pbDst[0x19] = pbPaletteRow[pbTileData[0x19]];
         case 0x19:
-          pbDstWritePtr[0x18] = pbPaletteRow[pbTileData[0x1a]];
+          pbDst[0x18] = pbPaletteRow[pbTileData[0x18]];
         case 0x18:
-          pbDstWritePtr[0x17] = pbPaletteRow[pbTileData[0x19]];
+          pbDst[0x17] = pbPaletteRow[pbTileData[0x17]];
         case 0x17:
-          pbDstWritePtr[0x16] = pbPaletteRow[pbTileData[0x18]];
+          pbDst[0x16] = pbPaletteRow[pbTileData[0x16]];
         case 0x16:
-          pbDstWritePtr[0x15] = pbPaletteRow[pbTileData[0x17]];
+          pbDst[0x15] = pbPaletteRow[pbTileData[0x15]];
         case 0x15:
-          pbDstWritePtr[0x14] = pbPaletteRow[pbTileData[0x16]];
+          pbDst[0x14] = pbPaletteRow[pbTileData[0x14]];
         case 0x14:
-          pbDstWritePtr[0x13] = pbPaletteRow[pbTileData[0x15]];
+          pbDst[0x13] = pbPaletteRow[pbTileData[0x13]];
         case 0x13:
-          pbDstWritePtr[0x12] = pbPaletteRow[pbTileData[0x14]];
+          pbDst[0x12] = pbPaletteRow[pbTileData[0x12]];
         case 0x12:
-          pbDstWritePtr[0x11] = pbPaletteRow[pbTileData[0x13]];
+          pbDst[0x11] = pbPaletteRow[pbTileData[0x11]];
         case 0x11:
-          pbDstWritePtr[0x10] = pbPaletteRow[pbTileData[0x12]];
+          pbDst[0x10] = pbPaletteRow[pbTileData[0x10]];
         case 0x10:
-          pbDstWritePtr[0xf] = pbPaletteRow[pbTileData[0x11]];
+          pbDst[0xf] = pbPaletteRow[pbTileData[0xf]];
         case 0xf:
-          pbDstWritePtr[0xe] = pbPaletteRow[pbTileData[0x10]];
+          pbDst[0xe] = pbPaletteRow[pbTileData[0xe]];
         case 0xe:
-          pbDstWritePtr[0xd] = pbPaletteRow[pbTileData[0xf]];
+          pbDst[0xd] = pbPaletteRow[pbTileData[0xd]];
         case 0xd:
-          pbDstWritePtr[0xc] = pbPaletteRow[pbTileData[0xe]];
+          pbDst[0xc] = pbPaletteRow[pbTileData[0xc]];
         case 0xc:
-          pbDstWritePtr[0xb] = pbPaletteRow[pbTileData[0xd]];
+          pbDst[0xb] = pbPaletteRow[pbTileData[0xb]];
         case 0xb:
-          pbDstWritePtr[10] = pbPaletteRow[pbTileData[0xc]];
-        case 10:
-          pbDstWritePtr[9] = pbPaletteRow[pbTileData[0xb]];
-        case 9:
-          pbDstWritePtr[8] = pbPaletteRow[pbTileData[10]];
-        case 8:
-          pbDstWritePtr[7] = pbPaletteRow[pbTileData[9]];
-        case 7:
-          pbDstWritePtr[6] = pbPaletteRow[pbTileData[8]];
-        case 6:
-          pbDstWritePtr[5] = pbPaletteRow[pbTileData[7]];
-        case 5:
-          pbDstWritePtr[4] = pbPaletteRow[pbTileData[6]];
-        case 4:
-          pbDstWritePtr[3] = pbPaletteRow[pbTileData[5]];
-        case 3:
-          pbDstWritePtr[2] = pbPaletteRow[pbTileData[4]];
-        case 2:
-          pbDstWritePtr[1] = pbPaletteRow[pbTileData[3]];
-        case 1:
-          *pbDstWritePtr = pbPaletteRow[*pbTileDataNext];
-        pbDstRowPtr = pbDstRowStart;
-        default:
-          pbDstRow = pbDstWritePtr + nRunLength;
-        pbTileData = pbTileDataNext + nRunLength;
+          pbDst[0xa] = pbPaletteRow[pbTileData[0xa]];
+        case 0xa:
+          pbDst[0x9] = pbPaletteRow[pbTileData[0x9]];
+        case 0x9:
+          pbDst[0x8] = pbPaletteRow[pbTileData[0x8]];
+        case 0x8:
+          pbDst[0x7] = pbPaletteRow[pbTileData[0x7]];
+        case 0x7:
+          pbDst[0x6] = pbPaletteRow[pbTileData[0x6]];
+        case 0x6:
+          pbDst[0x5] = pbPaletteRow[pbTileData[0x5]];
+        case 0x5:
+          pbDst[0x4] = pbPaletteRow[pbTileData[0x4]];
+        case 0x4:
+          pbDst[0x3] = pbPaletteRow[pbTileData[0x3]];
+        case 0x3:
+          pbDst[0x2] = pbPaletteRow[pbTileData[0x2]];
+        case 0x2:
+          pbDst[0x1] = pbPaletteRow[pbTileData[0x1]];
+        case 0x1:
+          pbDst[0x0] = pbPaletteRow[pbTileData[0x0]];
       }
-    } while (true);
+      pbDst += nRunLength;
+      pbTileData += nRunLength;
+    }
 }
 
 void __fastcall D2GFX_DrawWallTileWithPerspective(uint8_t * pbTileData, uint8_t * pbDstRow, int32_t nLightAccumX, int32_t nLightStepX, int32_t nLightAccumY, int32_t nLightStepY, int32_t nRowsLeft, uint8_t byShift) {
@@ -1763,50 +1747,26 @@ void __fastcall D2GFX_DrawGroundTileWithPerspective(int32_t nClipOriginX, int32_
 }
 
 void __stdcall D2GFX_InitializeLineBuffer() {
-    int nBlendValue;
-    uint32_t uVar1;
-    int iPixel;
-    int nColorStep;
-    uint8_t (*pbTileRowPtr)[32];
-    int iTileRow = 0;
-    int nNegColorBase = 0;
-    uint8_t (*pbCurTileEntry)[32] = gpLineBufferTileArray[0];
-    do {
-      int nExpectedEndVal;
-      nExpectedEndVal = 0;
-      nColorStep = nNegColorBase;
-      pbTileRowPtr = pbCurTileEntry;
-      do {
-        iPixel = 0;
-        uVar1 = iTileRow << 0x18;
-        do {
-          nBlendValue = (int)uVar1 <= 0 ? 0 : uVar1;
-          if (nBlendValue >= 0x1f000000) {
-            nBlendValue = 0x1f000000;
+    for (int i = 0; i < 32; i++) {
+      for (int j = 0; j < 32; j++) {
+        int nValue = i << 0x18;
+        int nStep = ((j - i) << 0x18) >> 5;
+        for (int k = 0; k < 32; k++) {
+          nValue = nValue <= 0 ? 0 : nValue;
+          if (nValue >= 0x1f000000) {
+            nValue = 0x1f000000;
           }
 
-          (*(uint8_t (*)[32])*pbTileRowPtr)[iPixel] = (uint8_t)(nBlendValue >> 0x18);
-          iPixel++;
-          uVar1 = nBlendValue + (nColorStep >> 5);
-        } while (iPixel < 0x20);
+          gpLineBufferTileArray[i][j][k] = (uint8_t)(nValue >> 0x18);
+          nValue += nStep;
+        }
 
-        if ((int)uVar1 >> 0x18 != nExpectedEndVal) {
+        if (nValue >> 0x18 != j) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x285);
           exit(-1);
         }
-
-        nExpectedEndVal++;
-        nColorStep += 0x1000000;
-        pbTileRowPtr++;
-      } while (nExpectedEndVal < 0x20);
-
-      pbCurTileEntry += 0x20;
-      iTileRow++;
-      nNegColorBase += -0x1000000;
-      if ((intptr_t)pbCurTileEntry >= (intptr_t)((char*)&gpLineBufferTileArray + sizeof(gpLineBufferTileArray))) {
-        return;
       }
-    } while (true);
+    }
 }
 
 void __fastcall D2GFX_FillYBufferFast(int32_t nScreenWidth, int32_t nScreenHeight) {

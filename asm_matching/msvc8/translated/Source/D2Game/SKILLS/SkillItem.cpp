@@ -2327,8 +2327,9 @@ BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent,
       return 0;
     }
 
-    uint32_t eSkillLevel = (uint16_t)(D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & eSkill);
-    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits);
+    int nChargedSkill = (uint16_t)eSkill;
+    eD2Skills eProcSkill = (eD2Skills)(nChargedSkill >> D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits);
+    int nSkillLevel = nChargedSkill & D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask;
     if (!(!pDamage || pDamage->dwHitFlags & 0x20)) {
       return 0;
     }
@@ -2340,20 +2341,20 @@ BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent,
     }
     if (*((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
       if (pTarget) {
-        Monster::AI::SKILL_CastOnTargetUnit(pTarget, eProcSkill, eSkillLevel, pTarget, 0);
+        Monster::AI::SKILL_CastOnTargetUnit(pTarget, eProcSkill, nSkillLevel, pTarget, 0);
         return 1;
       }
     } else {
       
       nProcChance = 1;
       if (pTarget) {
-        Monster::AI::SKILL_CastOnTargetUnit(pUnit, eProcSkill, eSkillLevel, pTarget, 1);
+        Monster::AI::SKILL_CastOnTargetUnit(pUnit, eProcSkill, nSkillLevel, pTarget, 1);
         return 1;
       }
 
       
       
-      Monster::AI::MONSTERAI_CastItemEffectSkill(pUnit, eProcSkill, eSkillLevel, (uint32_t)(D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath)), (uint32_t)(D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath)), nProcChance);
+      Monster::AI::MONSTERAI_CastItemEffectSkill(pUnit, eProcSkill, nSkillLevel, (uint32_t)(D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath)), (uint32_t)(D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath)), nProcChance);
     }
 
     return 1;
@@ -2406,8 +2407,9 @@ BOOL __fastcall ITEMEVENT_CastOnDeath(::SGAMEDATA * pGame, uint32_t nUnitEvent, 
       return 0;
     }
 
-    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits);
-    uint32_t eSkillLevel = (uint16_t)(D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & eSkill);
+    int nSkillId = (uint16_t)eSkill;
+    eD2Skills eProcSkill = (eD2Skills)(nSkillId >> D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits);
+    uint32_t eSkillLevel = nSkillId & D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask;
     uint32_t DVar1 = D2_SeedRoll(&pUnit->sSeed);
     if (!((int)(DVar1 % 100) < nProcChance)) {
       return 0;

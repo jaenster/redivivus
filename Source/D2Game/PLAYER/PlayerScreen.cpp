@@ -197,42 +197,32 @@ void __fastcall PARTYSCREEN_AcceptPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * 
     struct __frame0_t {
       D2UnitStrc* pIterArg0;
       D2UnitStrc* pIterArg1;
-      uint32_t nInviteeGUID;
+      uint16_t nPartyId;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    uint32_t pUnitGid;
-    D2UnitStrc* pInviteeCopy = pInvitee;
-    uint16_t nIsPartied = UNIT::SUnit::GetPartyId(pInvitee);
+    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pInvitee);
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pInvitee);
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pInvitee, pUnit);
-    uint16_t uVar1 = UNIT::PlayerList::PLAYERLIST_IsPartied(pUnit, pInvitee);
-    if (uVar1 != 2) {
+    if (UNIT::PlayerList::PLAYERLIST_IsPartied(pUnit, pInvitee) != 2) {
       UNIT::PlayerList::Send0x8bRelationshipStatus(pInvitee, pUnit);
       UNIT::PlayerList::Send0x8bRelationshipStatus(pUnit, pInvitee);
       return;
     }
-    if (nIsPartied == 0xffff) {
-      uVar1 = UNIT::Party::PARTY_CreateParty(pGame);
-      UNIT::Party::PARTY_AddUnitToParty(pGame, uVar1, pInvitee);
-      UNIT::Party::PARTY_AddUnitToParty(pGame, uVar1, pUnit);
+    if (nPartyId == 0xffff) {
+      nPartyId = UNIT::Party::PARTY_CreateParty(pGame);
+      UNIT::Party::PARTY_AddUnitToParty(pGame, nPartyId, pInvitee);
+      UNIT::Party::PARTY_AddUnitToParty(pGame, nPartyId, pUnit);
       UNIT::PlayerList::PARTY_RefreshPlayerListRelationships(pGame, pInvitee);
-      *(uint16_t*)(char*)&pInvitee = uVar1;
     } else {
-      UNIT::Party::PARTY_AddUnitToParty(pGame, nIsPartied, pUnit);
-      *(uint16_t*)(char*)&pInvitee = nIsPartied;
+      UNIT::Party::PARTY_AddUnitToParty(pGame, nPartyId, pUnit);
     }
 
     UNIT::PlayerList::PARTY_RefreshPlayerListRelationships(pGame, pUnit);
-    if (!pInviteeCopy) {
-      pUnitGid = -1;
-    } else {
-      pUnitGid = pInviteeCopy->nUnitGUID;
-    }
-
-    SendPlayerEvent(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PartyScreen.cpp", 0xe9), pUnitGid, '\b');
-    __frame0.nInviteeGUID = (uint32_t)(uint16_t)(uintptr_t)pInvitee;
-    __frame0.pIterArg0 = pInviteeCopy;
+    SendPlayerEvent(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PartyScreen.cpp", 0xe9), !pInvitee ? -1 : pInvitee->nUnitGUID, '\b');
+    __frame0_t __frame0;
+    memset(&__frame0, 0, sizeof(__frame0));
+    __frame0.nPartyId = nPartyId;
+    __frame0.pIterArg0 = pInvitee;
     __frame0.pIterArg1 = pUnit;
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)AssignPlayerToParty, &__frame0.pIterArg0);
 }

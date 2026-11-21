@@ -645,27 +645,16 @@ static int32_t D2WINTEXTBOX_GetVisibleLinesFromScroll(::D2WinTextBox * pTextBox)
 }
 
 static int32_t __stdcall D2WINTEXTBOX_TruncateStringToFitWidth(int32_t nMaxWidth, uint16_t * wszText) {
-    int nSize;
     int nCharsKept = 0;
     int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
-    if (nStrLen > 0) {
-      do {
-        int32_t nPixelWidth;
-        nSize = nCharsKept + 1;
-        nPixelWidth = D2WinFont::D2WINFONT_GetStringPixelWidth(wszText, nSize);
-        if (nPixelWidth >= nMaxWidth) {
-          break;
-        }
-
-        nCharsKept = nSize;
-      } while (nSize < nStrLen);
-
-      wszText[nCharsKept] = L'\0';
-      return nCharsKept;
+    for (; nCharsKept < nStrLen; nCharsKept++) {
+      if (D2WinFont::D2WINFONT_GetStringPixelWidth(wszText, nCharsKept + 1) >= nMaxWidth) {
+        break;
+      }
     }
 
-    *wszText = L'\0';
-    return 0;
+    wszText[nCharsKept] = L'\0';
+    return nCharsKept;
 }
 
 BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {

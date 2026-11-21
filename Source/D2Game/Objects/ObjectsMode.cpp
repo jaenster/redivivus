@@ -2708,28 +2708,33 @@ void __thiscall OBJECT_UpdateCollisionOnModeChange(::SGAMEDATA * pThis, DWORD nG
     }
 }
 
+static inline eD2PlayerAnimMode GetAnimModeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eAnimMode.ePlayerMode;
+    }
+    return (eD2PlayerAnimMode)0;
+}
 BOOL __fastcall OBJOP_A2Q4_ArcaneSanctuaryPortal(D2ObjectOperateFnArg * pOperation) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim);
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
-    if (pUnit && pUnit->eAnimMode.ePlayerMode != Death) {
-      if (eLevelId == LEVEL_ArcaneSanctuary) {
-        GAME::Level::InitLevel(pOperation->sArg.pGame, pOperation->pAttacker, LEVEL_PalaceCellarLevel3, 0);
-        Quests::QUESTS::A2Q4::Q12_SetObjectOperateState(pOperation->sArg.pGame, 0x4a);
-        return 0;
-      }
-      if (eLevelId == LEVEL_PalaceCellarLevel3) {
-        GAME::Level::InitLevel(pOperation->sArg.pGame, pOperation->pAttacker, LEVEL_ArcaneSanctuary, 0xb);
-        Quests::QUESTS::A2Q4::Q12_SetObjectOperateState(pOperation->sArg.pGame, 0x36);
-      }
-
+    if (GetAnimModeInline(pUnit) == Death) {
+      D2Common::Units::ChangeAnimMode(pUnit, 1);
+      D2ObjectsTxt* pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
+      ::SGAMEDATA* pGame = pOperation->sArg.pGame;
+      GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pTxtObjects->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
       return 0;
     }
+    if (eLevelId == LEVEL_ArcaneSanctuary) {
+      GAME::Level::InitLevel(pOperation->sArg.pGame, pOperation->pAttacker, LEVEL_PalaceCellarLevel3, 0);
+      Quests::QUESTS::A2Q4::Q12_SetObjectOperateState(pOperation->sArg.pGame, 0x4a);
+      return 0;
+    }
+    if (eLevelId == LEVEL_PalaceCellarLevel3) {
+      GAME::Level::InitLevel(pOperation->sArg.pGame, pOperation->pAttacker, LEVEL_ArcaneSanctuary, 0xb);
+      Quests::QUESTS::A2Q4::Q12_SetObjectOperateState(pOperation->sArg.pGame, 0x36);
+    }
 
-    D2Common::Units::ChangeAnimMode(pUnit, 1);
-    D2ObjectsTxt* pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
-    ::SGAMEDATA* pGame = pOperation->sArg.pGame;
-    GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pTxtObjects->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
     return 0;
 }
 
@@ -3819,14 +3824,8 @@ D2UnitStrc * * __fastcall RollChestDrops(D2ObjectOperateFnArg * pUnitKill, eD2It
     { LEVEL_Harrogath, LEVEL_UberTristram }
 }; D2_STATIC_GUARD(eLevelId_ActLevels, "D2Game::Objects::ObjectsMode::RollChestDrops::eLevelId_ActLevels");
 
-    // Frame slots -12..-4 are ONE object: &nResultsItemSize is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nResultsItemSize;
-      int32_t nMonLvl;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    int nResultsItemSize;
+    int32_t nMonLvl;
     ::SGAMEDATA* pGame;
     D2ObjectsTxt* pTxtObjects;
     D2RoomStrc* pRoom;
@@ -3862,7 +3861,7 @@ D2UnitStrc * * __fastcall RollChestDrops(D2ObjectOperateFnArg * pUnitKill, eD2It
 
         eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
         neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-        __frame0.nMonLvl = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(eLevel, pGame->nDifficulty, pGame->bExpansion);
+        nMonLvl = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(eLevel, pGame->nDifficulty, pGame->bExpansion);
         nAct = (uint32_t)neAct;
         nActMonLvlMin = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(eLevelId_ActLevels[nAct][0], pGame->nDifficulty, pGame->bExpansion);
         nVictimLevel = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(eLevelId_ActLevels[nAct][1], pGame->nDifficulty, pGame->bExpansion);
@@ -3872,10 +3871,10 @@ D2UnitStrc * * __fastcall RollChestDrops(D2ObjectOperateFnArg * pUnitKill, eD2It
         }
 
         nVictimLevel = (nVictimLevel + 1) / 3;
-        if (__frame0.nMonLvl < nVictimLevel + nActMonLvlMin) {
+        if (nMonLvl < nVictimLevel + nActMonLvlMin) {
           nVictimLevel = 0;
         } else {
-          nVictimLevel = __frame0.nMonLvl >= nActMonLvlMin + nVictimLevel * 2 ? 2 : 1;
+          nVictimLevel = nMonLvl >= nActMonLvlMin + nVictimLevel * 2 ? 2 : 1;
         }
 
         pTreasure = D2Common::DATATBLS::MonsterTbls::DATATBLS_GetChestTreasureClass((uint32_t)pGame->nDifficulty, nAct, nVictimLevel);
@@ -3883,9 +3882,9 @@ D2UnitStrc * * __fastcall RollChestDrops(D2ObjectOperateFnArg * pUnitKill, eD2It
           return nullptr;
         }
 
-        __frame0.nResultsItemSize = 0;
+        nResultsItemSize = 0;
         memset(aResultsItemList, 0, 6 * sizeof(aResultsItemList[0]));
-        ITEMS::Items::Drop::SERVER_ITEM_RollItemToDrop(pGame, pUnitKill->sArg.pVictim, pUnitKill->pAttacker, pTreasure, eQuality, nVictimLevel, 0, aResultsItemList, &__frame0.nResultsItemSize, 6);
+        ITEMS::Items::Drop::SERVER_ITEM_RollItemToDrop(pGame, pUnitKill->sArg.pVictim, pUnitKill->pAttacker, pTreasure, eQuality, nVictimLevel, 0, aResultsItemList, &nResultsItemSize, 6);
         return (D2UnitStrc**)aResultsItemList[0];
       }
     }

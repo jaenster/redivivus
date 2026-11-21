@@ -655,27 +655,18 @@ BOOL __fastcall Skills_SrvDoFunc_038_ChargeRelease_AreaExplosion(::SGAMEDATA * p
 
 // Server skill handler for Assassin charge-release skills (e.g. Dragon Tail / Tiger Strike release). Advances the unit RNG seed, resolves the accumulated charge-up missile id and radius (aurarangecalc fallback), then scatters radius^2 missiles randomly within a circle of that radius around the skill target using rejection sampling. Each candidate point is validated against the nearby room before spawning. Returns TRUE on success.
 BOOL __fastcall Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2RoomStrc* pNearRoom;
     int nOffsetY;
     int nOffsetX;
     D2SkillArgStrc sSkillArg;
     D2SeedStrc sSeedCopy;
-    uint32_t nTargetY;
     uint32_t nTargetX;
+    uint32_t nTargetY;
     uint32_t sSeedAdvanced = D2_SeedRoll(&pUnit->sSeed);
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxtBase = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
-    if (!(pSkillTxtBase + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? &D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill] : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
-    ::SGAMEDATA* pGameCopy = pGame;
     BOOL nHasPosOrRadiusSq = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &nTargetY);
     if (!nHasPosOrRadiusSq) {
       return 0;
@@ -688,7 +679,7 @@ BOOL __fastcall Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn(::SGAMEDATA * pGa
 
     uint32_t nRadius = SKILLASS_GetChargeUpCalcValue(pUnit, eSkill, nSkillLvl);
     if (!nRadius) {
-      nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase[eSkill].aurarangecalc, eSkill, nSkillLvl);
+      nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
     }
 
     memset(&sSkillArg, 0, 0x5c);
@@ -699,29 +690,18 @@ BOOL __fastcall Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn(::SGAMEDATA * pGa
     sSkillArg.nMissileTxtNo = eMissileId;
     D2Common::Seed::InitSeed_Param_666(&sSeedCopy, sSeedAdvanced);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    int iVar1 = nRadius * nRadius;
-    nSkillLvl = iVar1;
-    if (iVar1 <= 0) {
-      return 1;
-    }
-
-    do {
-      uint32_t nRandVal;
-      nRandVal = D2Common::Seed::UNIT_GetModuloFromSeed(&sSeedCopy, nRadius * 2);
-      nOffsetX = nRadius - nRandVal;
-      nRandVal = D2Common::Seed::UNIT_GetModuloFromSeed(&sSeedCopy, nRadius * 2);
-      nOffsetY = nRadius - nRandVal;
-      if (nOffsetY * nOffsetY + nOffsetX * nOffsetX <= iVar1) {
-        sSkillArg.nY = nTargetY + nOffsetY;
+    int nRadiusSq = nRadius * nRadius;
+    for (int i = 0; i < nRadiusSq; i++) {
+      nOffsetX = nRadius - D2Common::Seed::UNIT_GetModuloFromSeed(&sSeedCopy, nRadius * 2);
+      nOffsetY = nRadius - D2Common::Seed::UNIT_GetModuloFromSeed(&sSeedCopy, nRadius * 2);
+      if (nOffsetY * nOffsetY + nOffsetX * nOffsetX <= nRadiusSq) {
         sSkillArg.nX = nTargetX + nOffsetX;
-        pNearRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, sSkillArg.nX, sSkillArg.nY);
-        if (pNearRoom) {
-          MISSILES::Missiles::CreatingMissile(pGameCopy, &sSkillArg);
+        sSkillArg.nY = nTargetY + nOffsetY;
+        if (D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, sSkillArg.nX, sSkillArg.nY)) {
+          MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
         }
       }
-
-      nSkillLvl--;
-    } while (nSkillLvl);
+    }
 
     return 1;
 }
@@ -2098,7 +2078,6 @@ void __fastcall SKILLASS_ClearAllChargeUpStates(D2UnitStrc * pUnit) {
     D2StatListExStrc* pStatList;
     uint32_t aStateBitWords[8];
     eD2States eState;
-    D2UnitStrc* pUnitAlias = pUnit;
     _bHasChargeUpState = D2Common::DATATBLS::ItemStats::STATES_HasRemHitFlagState(pUnit);
     if (!_bHasChargeUpState) {
       return;
@@ -2117,25 +2096,25 @@ void __fastcall SKILLASS_ClearAllChargeUpStates(D2UnitStrc * pUnit) {
     int nStateWordsLeft = nStateWordCount;
     do {
       uint32_t nStateBits;
+      int nBitIndex;
       nStateBits = *pStateWord;
-      nStateWordCount = Fog::SMem::FOG_GetLowestSetBitIndex(nStateBits);
-      if (nStateWordCount >= 0) {
+      nBitIndex = Fog::SMem::FOG_GetLowestSetBitIndex(nStateBits);
+      if (nBitIndex >= 0) {
         do {
-          eState = nStateWordCount + nStateIdBitBase;
-          nStateBits &= ~(1 << D2_SHIFT_COUNT(nStateWordCount));
+          nStateBits &= ~(1 << D2_SHIFT_COUNT(nBitIndex));
+          eState = nBitIndex + nStateIdBitBase;
           if (Fog::BitBuffer::gadwBitMasks[eState & STATE_venomclaws] & D2Common::ITEMS::Items::sgptDataTable->pSingleStateDataTbl[6]->nStateBitmask[(int)eState >> 5]) {
             pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
             if (pStatList) {
-              D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnitAlias, pStatList);
+              D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
               D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
             }
 
-            D2Common::DATATBLS::ItemStats::SetState(pUnitAlias, eState, 0);
-            pUnit = pUnitAlias;
+            D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
           }
 
-          nStateWordCount = Fog::SMem::FOG_GetLowestSetBitIndex(nStateBits);
-        } while (nStateWordCount >= 0);
+          nBitIndex = Fog::SMem::FOG_GetLowestSetBitIndex(nStateBits);
+        } while (nBitIndex >= 0);
 
         *pStateWord = nStateBits;
       }
@@ -2513,7 +2492,6 @@ void __fastcall SKILLASS_EquipSummonItems(::SGAMEDATA * pGame, D2UnitStrc * pOwn
 
 // Server-side Assassin skill helper called when a charge-up or multi-level minion is summoned at level > 1. Scales the minion's max HP by the per-level HP bonus from SkillsTxt Param[0], then allocates a fresh stat list and populates it with up to 6+5 skill calc stats (from the skill data block offsets 0x54 and 0x98). Optionally applies unique monster modifiers (umod) if the skill entry specifies one. Called after SKILL_CreateSummon to buff the newly spawned unit.
 static void __stdcall SKILLASS_ApplyLevelScaledBuffs(::SGAMEDATA * pGame, D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nSkillLvl, D2UnitStrc * pUnit) {
-    eD2UnitType eUnitType;
     int nHpBonusPerLevelPct;
     if (nSkillLvl <= 1) {
       return;
@@ -2530,15 +2508,7 @@ static void __stdcall SKILLASS_ApplyLevelScaledBuffs(::SGAMEDATA * pGame, D2Skil
     int32_t nHpBonus = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nValue, (nSkillLvl - 1) * nHpBonusPerLevelPct, 100);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, nValue + nHpBonus, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nValue + nHpBonus, 0);
-    if (!pUnit) {
-      nValue = -1;
-      eUnitType = UNIT_COUNT;
-    } else {
-      nValue = pUnit->nUnitGUID;
-      eUnitType = pUnit->eUnitType;
-    }
-
-    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0, 0, eUnitType, nValue);
+    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
     if (!pStatsEx) {
       return;
     }
@@ -2565,12 +2535,9 @@ static void __stdcall SKILLASS_ApplyLevelScaledBuffs(::SGAMEDATA * pGame, D2Skil
       pStatPtr++;
     }
 
-    short int nUniqueModCode = pSkillsTxt->sumumod;
-    if (!(nUniqueModCode > 0 && nUniqueModCode < 0x2b)) {
-      return;
+    if (pSkillsTxt->sumumod > 0 && pSkillsTxt->sumumod < 0x2b) {
+      Monsters::InitUmods(pGame, pUnit, pSkillsTxt->sumumod, 1);
     }
-
-    Monsters::InitUmods(pGame, pUnit, (int)nUniqueModCode, 1);
 }
 
 // Server skill DoFunc #49 (Assassin Sentry-type summons, e.g. shadow/sentry): summons a monster for pUnit. Validates eSkill, resolves the summon class id and pet type from the skill's pettype/petmax columns, builds a D2MonsterCastPetStrc and calls SKILL_CreateSummon. Sets the summon's level to the caster's, applies level-scaled buffs, equips summon items, kicks off its AI think + periodic events, applies the skill's aurastate to the summon, stores the caster as owner, and—if the skill has an auralencalc lifetime—schedules an expiry event and inits umods. Returns 1 on success, 0 if the skill is invalid or the summon could not be created. Sets UNITFLAG_SKSRVDOFUNC on the caster.

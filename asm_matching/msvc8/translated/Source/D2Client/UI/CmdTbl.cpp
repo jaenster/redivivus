@@ -2027,7 +2027,7 @@ void __stdcall CMD_LoadUserKeyBindings() {
     D2KeyBindStrc* pDstCopy;
     D2KeyFileStrc wFileMagic;
     DWORD dwBytesRead;
-    bool bFound;
+    BOOL bFound;
     HANDLE hFile;
     hFile = GetKeyFileHandle(0x80000000, 3);
     if (hFile != (HANDLE)-1) {
@@ -2040,19 +2040,17 @@ void __stdcall CMD_LoadUserKeyBindings() {
       if (dwBytesRead == 0x476 && wFileMagic.wVersion == 0x25) {
         nCmdIndex = 0;
         while (true) {
-          bFound = false;
+          bFound = 0;
           nInnerIndex = 0;
-          pBindingRow = wFileMagic.aBindings + 1;
           do {
-            if (bFound || pBindingRow[-1].nCmdIndex == nCmdIndex || pBindingRow->nCmdIndex == nCmdIndex || pBindingRow[1].nCmdIndex == nCmdIndex || pBindingRow[2].nCmdIndex == nCmdIndex || pBindingRow[3].nCmdIndex == nCmdIndex) {
+            if (bFound || wFileMagic.aBindings[nInnerIndex].nCmdIndex == nCmdIndex || wFileMagic.aBindings[nInnerIndex + 1].nCmdIndex == nCmdIndex || wFileMagic.aBindings[nInnerIndex + 2].nCmdIndex == nCmdIndex || wFileMagic.aBindings[nInnerIndex + 3].nCmdIndex == nCmdIndex || wFileMagic.aBindings[nInnerIndex + 4].nCmdIndex == nCmdIndex) {
               goto next_command;
             }
-            if (pBindingRow[4].nCmdIndex == nCmdIndex) {
-              bFound = true;
+            if (wFileMagic.aBindings[nInnerIndex + 5].nCmdIndex == nCmdIndex) {
+              bFound = 1;
             }
 
             nInnerIndex += 6;
-            pBindingRow += 6;
           } while (nInnerIndex < 0x72);
 
           if (!bFound) {
@@ -2105,9 +2103,8 @@ void __stdcall CMD_LoadUserKeyBindings() {
       pDstTable += 5;
     } while ((intptr_t)pDstTable < (intptr_t)&g_KeyBindingsTable + 1144);
 
-    int* pDefaultSrc = gaKeyBindingsDefault;
     pBindingRow = g_KeyBindingsTable;
-    memcpy(pBindingRow, pDefaultSrc, 0x474);
+    memcpy(pBindingRow, gaKeyBindingsDefault, 0x474);
     CMD_RebuildDerivedBindings();
     CMD_WriteKeyFile();
 }
@@ -2146,15 +2143,15 @@ void __fastcall CMD_InitKeyConfigUI(int32_t nFadeInDuration, int32_t nHoldDurati
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x67);
       exit(-1);
     }
+    gRoomLightPulse.nFadeInDuration = nFadeInDuration;
+    gRoomLightPulse.nHoldDuration = nHoldDuration;
     if (!nFadeOutDuration) {
       nFadeOutDuration = 0x19;
     }
 
+    gRoomLightPulse.nFadeOutDuration = nFadeOutDuration;
     gRoomLightPulse.nTotalDuration = nFadeInDuration + nHoldDuration + nFadeOutDuration;
     gRoomLightPulse.eLevelId = eLevelId;
-    gRoomLightPulse.nFadeInDuration = nFadeInDuration;
-    gRoomLightPulse.nFadeOutDuration = nFadeOutDuration;
-    gRoomLightPulse.nHoldDuration = nHoldDuration;
 }
 
 void StaticInit_6caab0() {

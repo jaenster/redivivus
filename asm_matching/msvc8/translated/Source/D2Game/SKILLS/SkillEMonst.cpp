@@ -55,23 +55,20 @@ void __fastcall SKILLEMONST_ApplyReflectedDamage(::SGAMEDATA * pGame, D2UnitStrc
 
 // Server do-function for skill 125 (Catapult Fire Bomb, Act 5 siege engine). Resolves the charge-up missile, gets the target/cursor position, computes the delta vector from the unit's current position to the target, spawns the firebomb missile with flags=2 (lobbed), then sets the missile's TargetX/Y to the rotated delta vector (perpendicular). Returns 1 on success, 0 on invalid skill or out-of-range missile ID.
 BOOL __fastcall Skills_SrvDoFunc_125_CatapultFireBomb(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    BOOL _bHasTarget;
-    bool bHasTarget;
     D2SkillArgStrc sSkillArg;
-    uint32_t nTargetYOrX;
-    eD2Skills eSkillSlot;
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    uint32_t nTargetX;
+    uint32_t nTargetY;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
-    ::SGAMEDATA* pGameLocal = pGame;
     eMissilesId eMissileId = SkillAss::SKILLASS_GetChargeUpMissile(pUnit, eSkill);
     if (!((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
 
-    _bHasTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGameLocal, pUnit, &eSkillSlot, &nTargetYOrX);
-    if (!_bHasTarget) {
+    if (!SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &nTargetY)) {
       return 0;
     }
     if (pUnit) {
@@ -85,14 +82,12 @@ BOOL __fastcall Skills_SrvDoFunc_125_CatapultFireBomb(::SGAMEDATA * pGame, D2Uni
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
     sSkillArg.eSkillNo = eSkill;
-    int32_t nTmpPos = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-    sSkillArg.nUnitX = eSkillSlot - nTmpPos;
-    nTmpPos = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-    sSkillArg.nUnitY = nTargetYOrX - nTmpPos;
-    D2UnitStrc* pUnit_00 = MISSILES::Missiles::CreatingMissile(pGameLocal, &sSkillArg);
-    if (pUnit_00) {
-      D2Common::Units::Missile::SetTargetX(pUnit_00, -sSkillArg.nUnitY);
-      D2Common::Units::Missile::SetTargetY(pUnit_00, sSkillArg.nUnitX);
+    sSkillArg.nUnitX = nTargetX - D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+    sSkillArg.nUnitY = nTargetY - D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+    D2UnitStrc* pMissile = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+    if (pMissile) {
+      D2Common::Units::Missile::SetTargetX(pMissile, -sSkillArg.nUnitY);
+      D2Common::Units::Missile::SetTargetY(pMissile, sSkillArg.nUnitX);
       return 1;
     }
 
@@ -902,12 +897,11 @@ BOOL __fastcall Skills_SrvDoFunc_136_FireSpeedScaledMissile(::SGAMEDATA * pGame,
 }
 
 BOOL __fastcall Skills_SrvDoFunc_137_CorpseConsumptionAura(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
+    D2SkillsTxt* pSkillRecord = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillRecord) {
       return 0;
     }
-
-    D2SkillsTxt* pSkillRecord = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
-    if (!(pSkillRecord && pSkillRecord->aurastate >= 0 && (int)pSkillRecord->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
+    if (pSkillRecord->aurastate < 0 || (int)pSkillRecord->aurastate >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       return 0;
     }
     if (pUnit) {

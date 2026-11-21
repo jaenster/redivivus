@@ -2463,7 +2463,7 @@ static uint8_t __stdcall D2COMP_ValidateComponentType(uint32_t dwComponentMask, 
 static int32_t __stdcall D2COMP_LoadLayerSpritesAndCalcHeight(uint8_t * pbLayerCount, uint8_t * nLayerTypeArray, int * pnMaxHeight, uint8_t bPaletteShift, uint32_t nFrameNumber, D2CharSelCompStrc * nCOFContext) {
     int32_t nOffsetY;
     D2GfxDataStrc sGfxData;
-    uint8_t byComponentType;
+    int nComponentType;
     int nLayerIndex = 0;
     if (!nCOFContext) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x587);
@@ -2474,17 +2474,17 @@ static int32_t __stdcall D2COMP_LoadLayerSpritesAndCalcHeight(uint8_t * pbLayerC
     if (*pbLayerCount > 0) {
       int nLoadedCount;
       do {
-        byComponentType = nLayerTypeArray[nLayerIndex];
-        if (0xf < byComponentType) {
+        nComponentType = nLayerTypeArray[nLayerIndex];
+        if (nComponentType >= 0x10) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x58e);
           exit(-1);
         }
 
         memset(&sGfxData, 0, 0x48);
-        sGfxData.nFrameNumber = nFrameNumber;
         sGfxData.pDC6 = 0;
         sGfxData.nDirection = (int)bPaletteShift;
-        sGfxData.nComponentType = byComponentType;
+        sGfxData.nFrameNumber = nFrameNumber;
+        sGfxData.nComponentType = nComponentType;
         D2COMP_PopulateComponentFromCOF(nCOFContext, &sGfxData);
         sGfxData.dwRenderFlags |= 2;
         nLoadedCount = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
@@ -3795,24 +3795,13 @@ void __stdcall D2COMP_InitEmblemColorTables() {
     0x0
 }; D2_STATIC_GUARD(gbCompItemEmblemColorTableTemp3, "D2Win::Src::D2Comp::D2COMP_InitEmblemColorTables::gbCompItemEmblemColorTableTemp3");
 
-    uint8_t bVar1;
-    int i = 0;
-    uint8_t* pColorEntry = gbD2CompColorInitR + 1;
-    do {
-      bVar1 = D2WinPalette::D2GFX_GetColorFromCurrentPallete(pColorEntry[-1], *pColorEntry, pColorEntry[1]);
-      gaGlideEmblemPrimaryColorTableEntries[i] = bVar1;
-      pColorEntry += 3;
-      i++;
-    } while ((intptr_t)pColorEntry < (intptr_t)&gbD2CompColorInitR + 31);
+    for (int i = 0; i < 10; i++) {
+      gaGlideEmblemPrimaryColorTableEntries[i] = D2WinPalette::D2GFX_GetColorFromCurrentPallete(gbD2CompColorInitR[i * 3], gbD2CompColorInitR[i * 3 + 1], gbD2CompColorInitR[i * 3 + 2]);
+    }
 
-    pColorEntry = gbCompItemEmblemColorTableTemp3 + 1;
-    i = 0;
-    do {
-      bVar1 = D2WinPalette::D2GFX_GetColorFromCurrentPallete(pColorEntry[-1], *pColorEntry, pColorEntry[1]);
-      gaGlideEmblemSecondaryColorTableEntries[i] = bVar1;
-      pColorEntry += 3;
-      i++;
-    } while ((intptr_t)pColorEntry < (intptr_t)&gbCompItemEmblemColorTableTemp3 + 31);
+    for (int i = 0; i < 10; i++) {
+      gaGlideEmblemSecondaryColorTableEntries[i] = D2WinPalette::D2GFX_GetColorFromCurrentPallete(gbCompItemEmblemColorTableTemp3[i * 3], gbCompItemEmblemColorTableTemp3[i * 3 + 1], gbCompItemEmblemColorTableTemp3[i * 3 + 2]);
+    }
 }
 
 char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank, int32_t bExpansion) {

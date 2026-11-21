@@ -351,7 +351,8 @@ template<> __attribute__((noinline)) inline ::SGAMEDATA * TSHashTable<SGAMEDATA,
       nIdInBucket = dwHashVal & this->nSlotMask;
     }
 
-    ::SGAMEDATA* pGame = this->pVtable->InternalNew(this, this->tSlotListArray.m_data + nIdInBucket, nExtraBytes, dwFlags);
+    TSExplicitList<::SGAMEDATA, -572662307>* pSlotList = this->tSlotListArray.m_data + nIdInBucket; // steer-ok: the original computes the slot list argument before loading nExtraBytes and dwFlags (TSHashTable::New argument order)
+    ::SGAMEDATA* pGame = this->pVtable->InternalNew(this, pSlotList, nExtraBytes, dwFlags);
     if (pGame) {
       ppActiveListLink = (TSLink<::SGAMEDATA>*)(pGame->szGameName + (this->tFullList.m_linkoffset - 0x2a));
     } else {

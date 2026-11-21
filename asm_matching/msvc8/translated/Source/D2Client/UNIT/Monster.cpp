@@ -3071,8 +3071,12 @@ void __fastcall MERC_InitializeFromPacket(D2UnitStrc * pUnit, D2MercInitArgStrc 
     ITEM_RecalcAllEquippedItems_ECX(pUnit);
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
 int __fastcall MONSTER_CanBeConverted(D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+    if (!pUnit) {
+      return 0;
+    }
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       return 0;
     }
 

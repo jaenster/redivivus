@@ -2749,7 +2749,6 @@ void __stdcall AUTOMAP_Init() {
 // Source: .\\UI\\automap.cpp
 // @sourcefile .\UI\automap.cpp
 void __stdcall AUTOMAP_Free() {
-    D2AutomapLayerStrc* pMemoryToFree;
     AUTOMAP_SaveCurrentLayer();
     AUTOMAP_FreeCurrentLayerCells();
     DC6** ppDC6 = pAutoMapDC6;
@@ -2760,14 +2759,13 @@ void __stdcall AUTOMAP_Free() {
 
       *ppDC6 = 0;
       ppDC6++;
-      pMemoryToFree = sgpAutomapLayer;
     } while ((intptr_t)ppDC6 < (intptr_t)((char*)&pAutoMapDC6 + sizeof(pAutoMapDC6)));
 
-    while (pMemoryToFree) {
-      D2AutomapLayerStrc* pNextLayer;
-      pNextLayer = pMemoryToFree->pNext;
+    D2AutomapLayerStrc* pLayer = sgpAutomapLayer;
+    while (pLayer) {
+      D2AutomapLayerStrc* pMemoryToFree = pLayer;
+      pLayer = pLayer->pNext;
       D2_FREE_AT(pMemoryToFree, ".\\UI\\automap.cpp", 0xc06);
-      pMemoryToFree = pNextLayer;
     }
 
     sgpAutomapLayerEx = 0;
@@ -2807,6 +2805,7 @@ void __fastcall AUTOMAP_SetMiniMapType(int32_t nMiniMapType) {
       return;
     }
 
+    MiniMapType = nMiniMapType;
     nAutoMapZoomDivisor = 10;
     switch (nMiniMapType) {
       case 1:
@@ -2816,7 +2815,6 @@ void __fastcall AUTOMAP_SetMiniMapType(int32_t nMiniMapType) {
         }
     }
 
-    MiniMapType = nMiniMapType;
     AUTOMAP_LoadDC6Sprites();
     AUTOMAP_CenterOnPlayer(1);
 }

@@ -178,12 +178,11 @@ void __stdcall LoadGameRecordFromFile() {
 
 // @sourcefile .\GAME\Record.cpp
 void __stdcall FreeGameRecord() {
-    D2GameRecordStrc* pMemoryToFree = gsGameRecordContext.pNext;
-    while (pMemoryToFree) {
-      D2GameRecordStrc* pNextRecord;
-      pNextRecord = pMemoryToFree->pNext;
+    D2GameRecordStrc* pRecord = gsGameRecordContext.pNext;
+    while (pRecord) {
+      D2GameRecordStrc* pMemoryToFree = pRecord;
+      pRecord = pRecord->pNext;
       D2_FREE_AT(pMemoryToFree, ".\\GAME\\Record.cpp", 0x120);
-      pMemoryToFree = pNextRecord;
     }
 }
 

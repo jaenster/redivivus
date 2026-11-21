@@ -206,20 +206,8 @@ void __fastcall MESSAGE_RegisterEventHandlerBatch(HWND hWnd, D2UIFlagInitStrc * 
       exit(-1);
     }
 
-    {
-      int32_t* pnMessageCode;
-      if ((uint32_t)nCount <= 0) {
-        return;
-      }
-
-      pnMessageCode = &pEventHandlers->nMessageOrKeyCode;
-      do {
-        MESSAGE_RegisterEventHandler(hWnd, ((D2UIFlagInitStrc*)(pnMessageCode - 1))->eEventType, *pnMessageCode, (int32_t)pnMessageCode[1]);
-        pnMessageCode += 3;
-        nCount--;
-      } while (nCount);
-
-      return;
+    for (uint32_t i = 0; i < (uint32_t)nCount; i++) {
+      MESSAGE_RegisterEventHandler(hWnd, pEventHandlers[i].eEventType, pEventHandlers[i].nMessageOrKeyCode, (int32_t)pEventHandlers[i].pfHandler);
     }
 }
 

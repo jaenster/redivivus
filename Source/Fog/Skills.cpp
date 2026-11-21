@@ -729,39 +729,28 @@ char * __fastcall SKILLS_ParseSkillDescription(CalcGetKeyWordToNumber_t pFuncLoo
 
 // Returns the operator precedence level for a skill formula opcode used by the calc compiler. Switches on the opcode byte (in AL): opcode 1 invokes a callback via pFunctionTable; opcodes 10-20 (0xa-0x14) return precedence 2; 0x15 returns 1; 0x16 returns 3; others return 0. Part of the skill formula expression evaluator (SKILLS_CompileSkillFormula).
 static int __fastcall SKILLS_GetOpcodePrecedence(uint8_t opcode, CalcGetFunctionParameterCount_t pFunctionTable, uint32_t nFunctionArg) {
-    int iVar1;
     switch (opcode) {
-      case '\x01':
-        if (pFunctionTable) {
-          iVar1 = (*pFunctionTable)(nFunctionArg);
-          return iVar1;
-        }
+      case '\x16':
+        return 3;
       case '\n':
-
       case '\v':
-
       case '\f':
-
       case '\r':
-
       case '\x0e':
-
       case '\x0f':
-
       case '\x10':
-
       case '\x11':
-
       case '\x12':
-
       case '\x13':
-
       case '\x14':
         return 2;
       case '\x15':
         return 1;
-      case '\x16':
-        return 3;
+      case '\x01':
+        if (pFunctionTable) {
+          return (*pFunctionTable)(nFunctionArg);
+        }
+        return 2;
     }
 
     return 0;

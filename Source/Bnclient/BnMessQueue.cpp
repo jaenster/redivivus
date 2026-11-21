@@ -49,13 +49,11 @@ int __fastcall BNMESSQUEUE_EnqueueBytes(int32_t nEventType, char * pBytes, size_
     ::BnMessQueue* pNewMessage = D2_NEW_AT(::BnMessQueue, ".\\BnMessQueue.cpp", 0x37);
     if (nSize > 0x120) {
       nSize = 0x120;
-      memcpy(pNewMessage->bBuffer, pBytes, 0x120);
+    }
+    if (nSize) {
+      memcpy(pNewMessage->bBuffer, pBytes, nSize);
     } else {
-      if (nSize) {
-        memcpy(pNewMessage->bBuffer, pBytes, nSize);
-      } else {
-        pNewMessage->bBuffer[0] = '\0';
-      }
+      pNewMessage->bBuffer[0] = '\0';
     }
 
     pNewMessage->nDataSize = nSize;
@@ -66,15 +64,13 @@ int __fastcall BNMESSQUEUE_EnqueueBytes(int32_t nEventType, char * pBytes, size_
       exit(-1);
     }
 
-    ::BnMessQueue* pFirstMessage;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
-    pFirstMessage = pNewMessage;
-    if (nLobbyChatCurrentMessage) {
+    EnterCriticalSection(&lpCriticalSection_00882004);
+    if (!nLobbyChatCurrentMessage) {
+      nLobbyChatCurrentMessage = pNewMessage;
+    } else {
       nLobbyChatQueueMessages->pNext = pNewMessage;
-      pFirstMessage = nLobbyChatCurrentMessage;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ nLobbyChatCurrentMessage = pFirstMessage;
     nLobbyChatQueueMessages = pNewMessage;
     LeaveCriticalSection(&lpCriticalSection_00882004);
     return 1;

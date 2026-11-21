@@ -703,12 +703,13 @@ void __fastcall FacePlayer(D2UnitStrc * pUnit) {
 // Rotates the local player unit to face pUnit when the player is in Neutral or TownNeutral anim mode. Reads pUnit's position (static or dynamic path) and calls PATH_SetDirectionToTarget on the player's dynamic path. No-ops if the player is moving or has no dynamic path (halts fatally on null path).
 void __fastcall CLIENT_TurnPlayerToFaceUnit(D2UnitStrc * pUnit) {
     int nTargetY;
-    int32_t nTargetX_00;
-    if (!(pPlayerUnit && (pPlayerUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral || pPlayerUnit->eAnimMode.ePlayerMode == TownNeutral))) {
+    int32_t nTargetX;
+    D2UnitStrc* pPlayer = pPlayerUnit;
+    if (!(pPlayer && (pPlayer->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral || pPlayer->eAnimMode.ePlayerMode == TownNeutral))) {
       return;
     }
 
-    D2DynamicPathStrc* pDynamicPath = pPlayerUnit->pPath.pDynamicPath;
+    D2DynamicPathStrc* pDynamicPath = pPlayer->pPath.pDynamicPath;
     if (!pDynamicPath) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x802);
       exit(-1);
@@ -723,9 +724,8 @@ void __fastcall CLIENT_TurnPlayerToFaceUnit(D2UnitStrc * pUnit) {
       nTargetY = 0;
     }
 
-    eUnitType = pUnit->eUnitType;
-    nTargetX_00 = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
-    D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, nTargetX_00, nTargetY, 0);
+    nTargetX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, nTargetX, nTargetY, 0);
 }
 
 static uint32_t __stdcall SKILL_IsSequenceInputReady(D2UnitStrc * pUnit, D2SkillStrc * pSkillUnused) {

@@ -1653,18 +1653,21 @@ int32_t __stdcall SKILLS_GetCharClassFromSkillId(int32_t eSkillId) {
 }
 
 uint32_t __stdcall SKILLS_GetCharClassFromSkillId_Validated(int32_t eSkillId, int * pOutCharClass) {
-    int nCharClass;
-    char cCharClass;
     if (!pOutCharClass) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd79);
       exit(-1);
     }
-    if (eSkillId < 0 || eSkillId >= ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId) || (cCharClass = ITEMS::Items::sgptDataTable->pTxtSkills[eSkillId].charclass , nCharClass = (int)cCharClass , cCharClass < '\0')) {
+
+    D2SkillsTxt* pSkillsTxt = eSkillId >= 0 && eSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? &ITEMS::Items::sgptDataTable->pTxtSkills[eSkillId] : nullptr;
+    int nCharClass;
+    if (pSkillsTxt && pSkillsTxt->charclass >= 0) {
+      nCharClass = pSkillsTxt->charclass;
+    } else {
       nCharClass = 7;
     }
 
     *pOutCharClass = nCharClass;
-    return (uint32_t)(nCharClass != 7);
+    return nCharClass != 7;
 }
 
 int32_t __stdcall SKILL_GetQuantity(D2SkillStrc * pSkill) {
@@ -1719,9 +1722,15 @@ int __stdcall SKILLS_ValidateAnimModeForMonster(int32_t eAnimMode, int32_t nMonI
     0xd
 }; D2_STATIC_GUARD(gdwAnimModeValidFlagsTable, "D2Common::Skills::SKILLS_ValidateAnimModeForMonster::gdwAnimModeValidFlagsTable");
 
-    int nMonStats2Id;
     uint32_t uAnimFlag = gdwAnimModeValidFlagsTable[eAnimMode];
-    while (nMonId < 0 || nMonId >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize || (nMonStats2Id = (int)ITEMS::Items::sgptDataTable->pTxtMonStats[nMonId].MonStatsEx , nMonStats2Id < 0) || nMonStats2Id >= ITEMS::Items::sgptDataTable->nTxtMonStatsExSize || !(ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStats2Id) || !((uint32_t)ITEMS::Items::sgptDataTable->pTxtMonStatsEx[nMonStats2Id].mDT[(int)uAnimFlag >> 3] & Fog::BitBuffer::gadwBitMasks[uAnimFlag & 7])) {
+    while (true) {
+      if (nMonId >= 0 && nMonId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+        int nMonStats2Id = ITEMS::Items::sgptDataTable->pTxtMonStats[nMonId].MonStatsEx;
+        D2MonStats2Txt* pMonStats2 = nMonStats2Id >= 0 && nMonStats2Id < ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStats2Id : nullptr;
+        if (pMonStats2 ? pMonStats2->mDT[(int)uAnimFlag >> 3] & Fog::BitBuffer::gadwBitMasks[uAnimFlag & 7] : 0) {
+          return uAnimFlag;
+        }
+      }
       switch (uAnimFlag) {
         case 0xf:
           uAnimFlag = 2;
@@ -1935,18 +1944,16 @@ uint32_t __stdcall D2CheckIfCorpseIsConsumable(D2UnitStrc * pUnit, int32_t bChec
 }
 
 uint32_t __stdcall SKILLS_IsCorpseValidForRevive(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick)) {
-      return 0;
+    BOOL bCorpseSelFlag = 0;
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick && !DATATBLS::ItemStats::STATES_HasUdeadFlagState(pUnit)) {
+      bCorpseSelFlag = DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, corpseSel);
     }
 
-    int bHasPassiveState = DATATBLS::ItemStats::STATES_HasUdeadFlagState(pUnit);
-    BOOL bCorpseSelFlag = !bHasPassiveState ? DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, corpseSel) : 0;
     if (!bCorpseSelFlag) {
       return 0;
     }
 
-    bCorpseSelFlag = Units::IsSoftMonster(pUnit);
-    return (uint32_t)(bCorpseSelFlag != 0);
+    return (uint32_t)(Units::IsSoftMonster(pUnit) != 0);
 }
 
 int __stdcall SKILLS_IsSelectableCorpse(D2UnitStrc * pUnit) {
@@ -1966,18 +1973,16 @@ int __stdcall SKILLS_IsSelectableCorpse(D2UnitStrc * pUnit) {
 }
 
 uint32_t __stdcall SKILL_CanReviveMonster(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick)) {
-      return 0;
+    BOOL bCorpseSelFlag = 0;
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick && !DATATBLS::ItemStats::STATES_HasUdeadFlagState(pUnit)) {
+      bCorpseSelFlag = DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, corpseSel);
     }
 
-    int bHasPassiveState = DATATBLS::ItemStats::STATES_HasUdeadFlagState(pUnit);
-    BOOL bCorpseSelFlag = !bHasPassiveState ? DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, corpseSel) : 0;
     if (!bCorpseSelFlag) {
       return 0;
     }
 
-    bCorpseSelFlag = Units::IsSoftMonster(pUnit);
-    return (uint32_t)(bCorpseSelFlag != 0);
+    return (uint32_t)(Units::IsSoftMonster(pUnit) != 0);
 }
 
 int __stdcall SKILLS_IsSelectableCorpse2(D2UnitStrc * pUnit) {
@@ -3479,67 +3484,51 @@ void __stdcall thunk_SKILLS_AddOrRemoveItemSkill(D2UnitStrc * pUnit, int32_t nOw
 
 // Returns nonzero if pUnit has sufficient mana (or HP under Blood Mana state) to cast pSkillStrc. Computes effective skill level, applies lvlmana+mana formula with manashift, checks STATE_blood_mana; special-cases charged skills (nCharges) and Berserk (stat cost flag 0x200 bit 3). Returns 0 or 1.
 static BOOL SKILLS_HasEnoughManaForSkill(D2SkillStrc * pSkillStrc, D2UnitStrc * pUnitStrc) {
-    int32_t pSkillTxt;
     int32_t nClampedLevel;
-    eD2States eVenomState;
-    int32_t nCurrentStatValue;
-    uint32_t bIsBerserk;
-    int iVar1;
-    uint32_t nEffectiveLevel;
-    uint32_t pMaxLevelEntry;
+    int nEffectiveLevel;
+    int nLevel;
     int32_t nManaCost;
-    uint8_t byManaShift;
-    D2SkillsTxt* pSkillTxt2;
-    if (pSkillStrc) {
-      {
-        int32_t nLevelBonusCalc;
-        if (pSkillStrc->nOwnerGUID != -1) {
-          return (uint32_t)(pSkillStrc->nCharges > 0);
-        }
-
-        pSkillTxt2 = pSkillStrc->pRecord;
-        if (pUnitStrc) {
-          iVar1 = pSkillStrc->nLevel;
-          iVar1 += SKILL_GetLevelBonus(pSkillStrc, pUnitStrc);
-          nEffectiveLevel = iVar1;
-          pMaxLevelEntry = (int)nEffectiveLevel <= 0 ? 0 : nEffectiveLevel;
-          pSkillTxt = DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
-          if ((int)pMaxLevelEntry >= pSkillTxt) {
-            pMaxLevelEntry = DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
-          }
-        } else {
-          pMaxLevelEntry = 0;
-        }
-
-        nClampedLevel = pMaxLevelEntry - 1;
-        if (!pSkillTxt2) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6ee);
-          exit(-1);
-        }
-        if (nClampedLevel < 0) {
-          nClampedLevel = 0;
-        }
-
-        nManaCost = pSkillTxt2->lvlmana * nClampedLevel + (int)pSkillTxt2->mana << D2_SHIFT_COUNT(pSkillTxt2->manashift);
-        eVenomState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnitStrc, STATE_blood_mana);
-        if (eVenomState != STATE_none) {
-          nCurrentStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnitStrc, UNITSTAT_hitpoints, 0);
-          return (uint32_t)(nCurrentStatValue >= nManaCost);
-        }
-        if (pSkillTxt2->srvdofunc == 0x74) {
-          bIsBerserk = DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnitStrc);
-          if (bIsBerserk) {
-            return 1;
-          }
-        }
-
-        iVar1 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnitStrc, UNITSTAT_mana, 0);
-        return (uint32_t)(iVar1 >= nManaCost);
-      }
+    D2SkillsTxt* pSkillTxt;
+    if (!pSkillStrc) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x637);
+      exit(-1);
+    }
+    if (pSkillStrc->nOwnerGUID != -1) {
+      return (uint32_t)(pSkillStrc->nCharges > 0);
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x637);
-    exit(-1);
+    pSkillTxt = pSkillStrc->pRecord;
+    if (pUnitStrc) {
+      nEffectiveLevel = pSkillStrc->nLevel;
+      nEffectiveLevel += SKILL_GetLevelBonus(pSkillStrc, pUnitStrc);
+      nEffectiveLevel = nEffectiveLevel <= 0 ? 0 : nEffectiveLevel;
+      if (nEffectiveLevel < DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0)) {
+        nLevel = nEffectiveLevel;
+      } else {
+        nLevel = DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
+      }
+    } else {
+      nLevel = 0;
+    }
+
+    nClampedLevel = nLevel - 1;
+    if (!pSkillTxt) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6ee);
+      exit(-1);
+    }
+    if (nClampedLevel < 0) {
+      nClampedLevel = 0;
+    }
+
+    nManaCost = pSkillTxt->lvlmana * nClampedLevel + (int)pSkillTxt->mana << D2_SHIFT_COUNT(pSkillTxt->manashift);
+    if (DATATBLS::ItemStats::UNIT_GetUnitState(pUnitStrc, STATE_blood_mana)) {
+      return (uint32_t)(Stats::StatsEx::STATSEX_GetCurrentStat(pUnitStrc, UNITSTAT_hitpoints, 0) >= nManaCost);
+    }
+    if (pSkillTxt->srvdofunc == 0x74 && DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnitStrc)) {
+      return 1;
+    }
+
+    return (uint32_t)(Stats::StatsEx::STATSEX_GetCurrentStat(pUnitStrc, UNITSTAT_mana, 0) >= nManaCost);
 }
 
 // Checks whether the unit satisfies a skill's weapon/ammo requirement before the skill can be used. If the skill record has flag 0x10 set it instead checks the skill's nQuantity (charge/ammo count > 0). Otherwise it branches on the skill record's weapon-requirement code: 2 and 4 require an equipped throwable weapon (or its item_throwable stat) in main/alt hand via INVENTORY_GetEquippedWeaponInfo + SKILLS_GetWeaponByHand; 5 requires a melee weapon of ITEMTYPE_Weapon and dual-wield capability. Any other code returns 1 (no requirement). Returns nonzero if the requirement is met, 0 otherwise.

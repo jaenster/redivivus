@@ -694,7 +694,8 @@ template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::New(u
       nBucketIdx = dwHashVal & this->nSlotMask;
     }
 
-    ::StringEntryNode* pEntry = this->pVtable->InternalNew(this, this->tSlotListArray.m_data + nBucketIdx, nExtraBytes, dwFlags);
+    TSExplicitList<::StringEntryNode, -572662307>* pSlotList = this->tSlotListArray.m_data + nBucketIdx; // steer-ok: the original computes the slot list argument before loading nExtraBytes and dwFlags (TSHashTable::New argument order)
+    ::StringEntryNode* pEntry = this->pVtable->InternalNew(this, pSlotList, nExtraBytes, dwFlags);
     if (pEntry) {
       pListNode = (TSLink<::StringEntryNode>*)((intptr_t)&pEntry->m_hashval + this->tFullList.m_linkoffset);
     } else {

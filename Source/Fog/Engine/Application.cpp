@@ -459,24 +459,16 @@ static uint8_t DEBUG_ParseNB01DebugInfo(CV_INFO_PDB20 * pDebugRecord, D2FogDebug
 }
 
 static uint8_t DEBUG_ParseRSDSDebugInfo(CV_INFO_PDB70 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo) {
-    BOOL bIsBadPtr = IsBadReadPtr(pDebugRecord, 0x1c);
-    if (bIsBadPtr) {
+    if (IsBadReadPtr(pDebugRecord, 0x1c)) {
       return 0;
     }
-
-    /* UINT_PTR ucchMax for IsBadStringPtrA */ /* LPCSTR lpsz for IsBadStringPtrA */ bIsBadPtr = IsBadStringPtrA((LPCSTR)(pDebugRecord + 1), 0x104);
-    if (bIsBadPtr) {
+    if (IsBadStringPtrA((LPCSTR)(pDebugRecord + 1), 0x104)) {
       return 0;
     }
 
     strncpy_s(pModuleInfo->szImagePath, 0x100, (char*)(pDebugRecord + 1), -1);
     pModuleInfo->dwPdbAge = pDebugRecord->Age;
-    pModuleInfo->guidPdb.Data1 = pDebugRecord->Signature.Data1;
-    uint16_t uVar1 = pDebugRecord->Signature.Data3;
-    pModuleInfo->guidPdb.Data2 = pDebugRecord->Signature.Data2;
-    pModuleInfo->guidPdb.Data3 = uVar1;
-    *(uint32_t*)pModuleInfo->guidPdb.Data4 = *(uint32_t*)pDebugRecord->Signature.Data4;
-    *(uint32_t*)(pModuleInfo->guidPdb.Data4 + 4) = *(uint32_t*)(pDebugRecord->Signature.Data4 + 4);
+    pModuleInfo->guidPdb = pDebugRecord->Signature;
     return 1;
 }
 

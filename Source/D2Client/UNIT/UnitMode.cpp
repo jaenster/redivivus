@@ -281,27 +281,28 @@ void __fastcall ClickWithSkillOnUnitOrCoord(eD2UnitModeAction eModeAction, D2Uni
     }
 
     switch (eModeAction) {
+      case UNITMODEACTION_INTERACT:
+      case UNITMODEACTION_INTERACT_ALT:
+        GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT((uint8_t)eModeAction, (int16_t)nTargetOrX, (int16_t)nUnitGUIDOrY);
+        return;
       case UNITMODEACTION_ATTACK:
-
       case UNITMODEACTION_ATTACK_ALT:
-
       case UNITMODEACTION_LEFTSKILL_UNIT:
-
       case UNITMODEACTION_LEFTSKILL_UNIT2:
-
       case UNITMODEACTION_LEFTSKILL_UNIT3:
-
       case UNITMODEACTION_LEFTSKILL_UNIT4:
-
       case UNITMODEACTION_RIGHTSKILL_UNIT:
-
       case UNITMODEACTION_RIGHTSKILL_UNIT2:
-
       case UNITMODEACTION_RIGHTSKILL_UNIT3:
-
       case UNITMODEACTION_RIGHTSKILL_UNIT4:
         GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT((uint8_t)eModeAction, nTargetOrX, nUnitGUIDOrY);
-      return;
+        return;
+      case UNITMODEACTION_LEFTSKILL_COORD:
+      case UNITMODEACTION_LEFTSKILL_COORD2:
+      case UNITMODEACTION_LEFTSKILL_0B:
+      case UNITMODEACTION_RIGHTSKILL_COORD:
+      case UNITMODEACTION_RIGHTSKILL_COORD2:
+        break;
     }
 
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT((uint8_t)eModeAction, (int16_t)nTargetOrX, (int16_t)nUnitGUIDOrY);

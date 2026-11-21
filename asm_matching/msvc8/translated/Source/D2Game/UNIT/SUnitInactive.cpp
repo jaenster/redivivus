@@ -359,9 +359,9 @@ static void SUNITINACTIVE_RemoveInactiveMonsterByClassId(uint8_t byActNo, ::SGAM
 
 // @sourcefile .\UNIT\SUnitInactive.cpp
 static void SUNITINACTIVE_FreeInactiveMonsterList(::SGAMEDATA * pGame, D2InactiveUnitListStrc * pInactiveUnitList) {
-    D2InactiveMonsterRecordStrc* pCurMonster = pInactiveUnitList->pInactiveMonsters;
-    while (pCurMonster) {
-      D2InactiveMonsterRecordStrc* pNextMonster;
+    D2InactiveMonsterRecordStrc* pNextMonster = pInactiveUnitList->pInactiveMonsters;
+    while (pNextMonster) {
+      D2InactiveMonsterRecordStrc* pCurMonster = pNextMonster;
       pNextMonster = pCurMonster->pNext;
       Ai::AiGeneral::ClearMinionList(pGame, pCurMonster->pMinionList);
       if (pCurMonster->pAiGeneral) {
@@ -369,7 +369,6 @@ static void SUNITINACTIVE_FreeInactiveMonsterList(::SGAMEDATA * pGame, D2Inactiv
       }
 
       D2_FREE_POOL_AT(pGame->pMemoryPool, pCurMonster, ".\\UNIT\\SUnitInactive.cpp", 0x8c);
-      pCurMonster = pNextMonster;
     }
 }
 
@@ -1072,31 +1071,25 @@ BOOL __fastcall SUNITINACTIVE_CheckDeadMonsterAtCoords(::SGAMEDATA * pGame, D2Ro
 
 // @sourcefile .\UNIT\SUnitInactive.cpp
 void __fastcall SUNITINACTIVE_FreeUnusedItems(::SGAMEDATA * pGame, int32_t nAct) {
-    D2InactiveItemRecordStrc* pDVar1;
     D2InactiveUnitListStrc* pCurList;
-    D2InactiveItemRecordStrc* pNextItemRec;
     for (pCurList = pGame->pInactiveUnitList[nAct]; pCurList; pCurList = pCurList->pNext) {
-      D2InactiveItemRecordStrc* pMemoryToFree;
-      pNextItemRec = pCurList->pInactiveItems;
-      pMemoryToFree = 0;
-      while (true) {
-        pDVar1 = pMemoryToFree;
-        pMemoryToFree = pNextItemRec;
-        if (!pMemoryToFree) {
-          break;
-        }
-
-        pNextItemRec = pMemoryToFree->pNext;
-        if (pMemoryToFree->nDespawnTimer && pGame->dwGameFrame > pMemoryToFree->nDespawnTimer) {
-          if (pDVar1) {
-            pDVar1->pNext = pNextItemRec;
+      D2InactiveItemRecordStrc* pPrevItemRec = nullptr;
+      D2InactiveItemRecordStrc* pItemRec = pCurList->pInactiveItems;
+      while (pItemRec) {
+        D2InactiveItemRecordStrc* pNextItemRec = pItemRec->pNext;
+        if (pItemRec->nDespawnTimer && pGame->dwGameFrame > pItemRec->nDespawnTimer) {
+          if (pPrevItemRec) {
+            pPrevItemRec->pNext = pNextItemRec;
           } else {
             pCurList->pInactiveItems = pNextItemRec;
           }
 
-          D2_FREE_POOL_AT(pGame->pMemoryPool, pMemoryToFree, ".\\UNIT\\SUnitInactive.cpp", 0x723);
-          pMemoryToFree = pDVar1;
+          D2_FREE_POOL_AT(pGame->pMemoryPool, pItemRec, ".\\UNIT\\SUnitInactive.cpp", 0x723);
+        } else {
+          pPrevItemRec = pItemRec;
         }
+
+        pItemRec = pNextItemRec;
       }
     }
 }

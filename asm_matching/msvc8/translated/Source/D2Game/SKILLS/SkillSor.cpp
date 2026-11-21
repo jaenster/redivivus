@@ -135,33 +135,23 @@ BOOL __fastcall INFERNO_CastInfernoTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // Starts or sustains a channelled Inferno cast. On first call (no STATE_inferno stat list), allocates a stat list, schedules a 0xC event at frame+20, attaches it, sets the expire callback, and activates STATE_inferno. On subsequent calls, refreshes the stat-list timeout to frame+6, reschedules the event, and calls INFERNO_CastInfernoTick to spawn the next missile tick. For monster casters, param1 is set to game-frame + calc[1] duration.
 BOOL __fastcall INFERNO_BeginOrContinueChannel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl2, eMissilesId eMissileId) {
     int nCalcDuration;
-    eD2UnitType eUnitType;
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
-      nCalcDuration = D2Common::Skills::D2GetSkillCalc(pUnit, D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].calc[1], eSkill, nSkillLvl2);
+      nCalcDuration = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl2);
       if (nCalcDuration < 1) {
         nCalcDuration = 1;
       }
 
-      nCalcDuration = pGame->dwGameFrame + nCalcDuration;
-      D2Common::Skills::SKILL_SetParam1(D2Common::Units::GetCurrentSkill(pUnit), nCalcDuration);
+      D2Common::Skills::SKILL_SetParam1(D2Common::Units::GetCurrentSkill(pUnit), pGame->dwGameFrame + nCalcDuration);
     }
 
     D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_inferno);
     if (!pStatList) {
-      int32_t nExpireFrame;
       nCalcDuration = pGame->dwGameFrame + 0x14;
-      if (!pUnit) {
-        nExpireFrame = -1;
-        eUnitType = UNIT_COUNT;
-      } else {
-        nExpireFrame = pUnit->nUnitGUID;
-        eUnitType = pUnit->eUnitType;
-      }
-
-      pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nCalcDuration, eUnitType, nExpireFrame);
+      pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nCalcDuration, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
       if (!pStatList) {
         return 0;
       }

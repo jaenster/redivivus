@@ -309,15 +309,14 @@ D2UnitStrc * __fastcall MakeRandomShrine(::SGAMEDATA * pGame, D2RoomStrc * pRoom
     void* nShrineId;
     int32_t nLine;
     if (nMonStatsId >= 0x23e && nMonStatsId <= 0x243) {
-      int nObjClassOffset = nMonStatsId * 3;
+      int* pShrineEntry = &aOBJECTCLASSID[(nMonStatsId - 0x23e) * 3];
       if (!pRoom) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xde);
         exit(-1);
       }
 
-      D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, aOBJECTCLASSID[nObjClassOffset - 0x6ba], nPosX, nPosY, pGame, pRoom, 1, bUseMonStats, 0);
-      uint32_t nRandOffset = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, aOBJECTCLASSID[nObjClassOffset - 0x6b8] - aOBJECTCLASSID[nObjClassOffset - 0x6b9]);
-      nLine = nRandOffset + aOBJECTCLASSID[nObjClassOffset - 0x6b9];
+      D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, pShrineEntry[0], nPosX, nPosY, pGame, pRoom, 1, bUseMonStats, 0);
+      nLine = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, pShrineEntry[2] - pShrineEntry[1]) + pShrineEntry[1];
       if (nLine == 5 || nLine == 4) {
         nLine = 2;
       }
@@ -2687,15 +2686,14 @@ void __fastcall OBJECT_FreeObjectData(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 void __fastcall FreeObjects(::SGAMEDATA * pGame) {
-    D2UnitStrc* pNextUnit;
     D2UnitStrc** ppUnitList = pGame->pUnitList[2];
     for (int nBuckets = 0; nBuckets < 0x80; nBuckets++) {
       D2UnitStrc* pUnit;
       pUnit = *ppUnitList;
       while (pUnit) {
-        pNextUnit = UNIT::SUnit::GetNextUnit(pUnit);
-        UNIT::SUnit::FreeServerUnit(pGame, pUnit);
-        pUnit = pNextUnit;
+        D2UnitStrc* pFreeUnit = pUnit;
+        pUnit = UNIT::SUnit::GetNextUnit(pUnit);
+        UNIT::SUnit::FreeServerUnit(pGame, pFreeUnit);
       }
 
       ppUnitList++;

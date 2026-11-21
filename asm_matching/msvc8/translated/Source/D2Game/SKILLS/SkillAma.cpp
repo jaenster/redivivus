@@ -409,49 +409,43 @@ BOOL __fastcall Skills_SrvDoFunc_006_InnerSight_SlowMissiles(::SGAMEDATA * pGame
 // Power Strike do-func: performs the melee hit resolution for the skill. Calculates ToHit, recalculates monster combat stats if caster is UNIT_PLAYER (type==1), applies hit check, sets enhanced-damage (calc[0]) and elemental conversion (calc[3]/EType), calls SetDamageOnEvent, applies damage, then processes the combat queue entry to deliver the hit result.
 BOOL __fastcall Skills_SrvDoFunc_007_Jab(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
-    eD2Skills eSkillOrig = eSkill;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
 
-    D2UnitStrc* pUnit2 = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    if (!pUnit2) {
+    D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
+    if (!pTarget) {
       return 0;
     }
 
     memset(&sDamage, 0, 0x70);
-    if (!pUnit) {
-      eSkill = SKILL_MagicArrow;
-    } else {
-      eSkill = pUnit->eUnitType;
-    }
-
-    uint32_t nToHitBonusExtra = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkillOrig, nSkillLvl);
-    if (eSkill == SKILL_Kick) {
+    int nUnitType = !pUnit ? 6 : pUnit->eUnitType;
+    uint32_t nToHitBonusExtra = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
+    if (nUnitType == 1) {
       Monsters::MONSTER_RecalculateCombatStats(pUnit, eD2MonsterAnimMode_ns::Skill1);
     }
 
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, nToHitBonusExtra, 0);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nToHitBonusExtra, 0);
     if (sDamage.wResultFlags & 1U) {
-      sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkillOrig, nSkillLvl);
+      sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
       if ((uint8_t)pSkillsTxt->EType > ELEMENTAL_NONE) {
-        sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[3], eSkillOrig, nSkillLvl);
+        sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[3], eSkill, nSkillLvl);
         if (sDamage.dwConvPct > 0) {
           sDamage.nConvType = pSkillsTxt->EType;
         }
       }
 
-      SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkillOrig, nSkillLvl);
+      SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
     }
 
-    *(uint8_t*)(char*)&nSkillLvl = pSkillsTxt->SrcDam;
-    if (!(uint8_t)nSkillLvl) {
-      *(uint8_t*)(char*)&nSkillLvl = 0x80;
+    uint8_t nSrcDam = pSkillsTxt->SrcDam;
+    if (!nSrcDam) {
+      nSrcDam = 0x80;
     }
 
-    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pUnit2, &sDamage, (uint8_t)nSkillLvl);
-    UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pUnit2, 0);
+    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, nSrcDam);
+    UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
     return 1;
 }
 
@@ -860,9 +854,9 @@ BOOL __fastcall Skills_SrvDoFunc_013_MultiHitAttack(::SGAMEDATA * pGame, D2UnitS
 
       UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pNextTarget, &sDamage, (uint8_t)nSkillLvl);
       UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pNextTarget, 4);
-      nHitsLeft = D2Common::Skills::SKILL_GetParam1(pSkill);
-      D2Common::Skills::SKILL_SetParam1(pSkill, nHitsLeft - 1);
-      if (nHitsLeft - 1 > 0) {
+      nHitsLeft = D2Common::Skills::SKILL_GetParam1(pSkill) - 1;
+      D2Common::Skills::SKILL_SetParam1(pSkill, nHitsLeft);
+      if (nHitsLeft > 0) {
         if (!pNextTarget) {
           nHitResult = -1;
         } else {
@@ -871,8 +865,8 @@ BOOL __fastcall Skills_SrvDoFunc_013_MultiHitAttack(::SGAMEDATA * pGame, D2UnitS
 
         pNextTarget = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, nMeleeSearchRange, 0x20003, nHitResult, nullptr);
         if (pNextTarget) {
-          D2Common::Skills::SKILL_SetParam2(pSkill, pNextTarget->eUnitType);
-          D2Common::Skills::SKILL_SetParam3(pSkill, pNextTarget->nUnitGUID);
+          D2Common::Skills::SKILL_SetParam2(pSkill, GetTypeInline(pNextTarget));
+          D2Common::Skills::SKILL_SetParam3(pSkill, GetGUIDInline(pNextTarget));
           nMeleeSearchRange = D2Common::Skills::GetSkilParam1(eSkill);
           SkillsServer::SKILLS_SetupAnimTimerPercent(pUnit, nMeleeSearchRange);
         }

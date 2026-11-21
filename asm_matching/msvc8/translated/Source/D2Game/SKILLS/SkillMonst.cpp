@@ -734,9 +734,10 @@ BOOL __fastcall Skills_SrvDoFunc_090_SetAnimFrameFromCalc(::SGAMEDATA * pGame, D
 
 BOOL __fastcall SKILLMONST_SrvStFn49_NestSpawn(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     eD2MonsterAnimMode eAnimMode;
+    int32_t nSpawnX;
     int32_t nSpawnY;
-    eD2Skills eSkillOrig = eSkill;
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
 
@@ -745,18 +746,17 @@ BOOL __fastcall SKILLMONST_SrvStFn49_NestSpawn(::SGAMEDATA * pGame, D2UnitStrc *
       return 0;
     }
 
-    int32_t nMonClassId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 1, eSkillOrig, nSkillLvl, (int*)&eAnimMode, &nSpawnY, (int*)&eSkill);
+    int32_t nMonClassId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 1, eSkill, nSkillLvl, (int*)&eAnimMode, &nSpawnX, &nSpawnY);
     if (nMonClassId < 0) {
       return 0;
     }
 
     D2Common::Skills::SKILL_SetParam1(pSkill, nMonClassId);
-    D2Common::Skills::SKILL_SetParam2(pSkill, nSpawnY);
-    D2Common::Skills::SKILL_SetParam3(pSkill, eSkill);
+    D2Common::Skills::SKILL_SetParam2(pSkill, nSpawnX);
+    D2Common::Skills::SKILL_SetParam3(pSkill, nSpawnY);
     D2Common::Skills::SKILL_SetParam4(pSkill, eAnimMode);
-    eSkillOrig = eSkill;
-    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nSpawnY, eSkillOrig);
-    D2Common::Collision::AddCollision_Type(pRoom, nSpawnY, eSkill, COLLISION_PATTERN_SMALL_UNIT_PRESENCE, 0x100);
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nSpawnX, nSpawnY);
+    D2Common::Collision::AddCollision_Type(pRoom, nSpawnX, nSpawnY, COLLISION_PATTERN_SMALL_UNIT_PRESENCE, 0x100);
     UNIT::SUnit::SetUninterruptableState(pUnit, 1);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
     return 1;
@@ -2584,7 +2584,8 @@ BOOL __fastcall Skills_SrvDoFunc_111_ApplyFetishAura(::SGAMEDATA * pGame, D2Unit
       pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     }
 
-    D2UnitFindDataStrc* pFindData = SkillsServer::SKILLS_FindUnitsInRange(pGame, pUnit, pSkillsTxt->Param[3] + nSkillLvl * 2, nTargetY, nTargetX);
+    int nRange = pSkillsTxt->Param[3] + nSkillLvl * 2; // steer-ok: the original computes the radius before loading the target coordinates
+    D2UnitFindDataStrc* pFindData = SkillsServer::SKILLS_FindUnitsInRange(pGame, pUnit, nRange, nTargetY, nTargetX);
     int nUnitIdx = 0;
     if (pFindData->nCountedUnits > 0) {
       uint32_t bCanAttack;

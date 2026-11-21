@@ -546,9 +546,9 @@ void __fastcall CLIENT_SpawnAncientDeathMissile(D2UnitStrc * pUnit) {
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 0x420;
     sSkillArg.nMissileTxtNo = MISSILE_AncientDeathCenter;
-    eFindType = pTarget->eUnitType;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
+    eFindType = pTarget->eUnitType;
     int nUnitXValue;
     if (eFindType == UNIT_OBJECT || (int)eFindType > 3 && (int)eFindType <= 5) {
       nUnitXValue = pTarget->pPath.pStaticPath->nPosX;
@@ -576,7 +576,7 @@ void __fastcall CLIENT_SpawnAncientDeathMissile(D2UnitStrc * pUnit) {
       return;
     }
 
-    D2Common::Units::Missile::SetTargetX(pMissile, pTarget->nUnitGUID);
+    D2Common::Units::Missile::SetTargetX(pMissile, GetGUIDInline(pTarget));
 }
 
 void __fastcall HandleIncoming0x89(int32_t nEventId) {
@@ -2312,17 +2312,16 @@ eD2UnitType __fastcall CLIENT_GetEffectiveUnitType(D2UnitStrc * pUnit) {
 int __fastcall CLIENT_GetEffectiveAnimMode(D2UnitStrc * pUnit) {
     int nClassId;
     int32_t pnEffectiveAnimMode;
-    if (pUnit && FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
-      eD2UnitType eUnitType;
-      eUnitType = pUnit->eUnitType;
-      nClassId = pUnit->nClassId;
-      pnEffectiveAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
-      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &pnEffectiveAnimMode, "d:\\diablo2\\Diablo2\\Source\\D2Client/Engine.h", 0x104);
-      return pnEffectiveAnimMode;
+    if (!FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
+      return D2Common::Units::GetAnimOrSeqMode(pUnit);
     }
 
-    int32_t pnAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
-    return pnAnimMode;
+    eD2UnitType eUnitType;
+    eUnitType = pUnit->eUnitType;
+    nClassId = pUnit->nClassId;
+    pnEffectiveAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
+    D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &pnEffectiveAnimMode, "d:\\diablo2\\Diablo2\\Source\\D2Client/Engine.h", 0x104);
+    return pnEffectiveAnimMode;
 }
 
 DWORD __fastcall CLIENT_GetEffectiveClassId(D2UnitStrc * pUnit) {

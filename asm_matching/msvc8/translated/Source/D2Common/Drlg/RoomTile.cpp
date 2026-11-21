@@ -159,12 +159,12 @@ static void __stdcall DRLGROOMTILE_SetWallTileFlags(D2DrlgTileDataStrc * pTileDa
 // Converts world tile coordinates to screen position and room-relative offsets. Output: [0]=screenX, [1]=screenY+40, [2]=relativeX (world-roomOrigin), [3]=relativeY. Calls CoordsMiniMapToScreen for isometric transform.
 static void __stdcall DRLGROOMTILE_WorldToTileScreenPos(int * pOutCoords, D2RoomExStrc * pRoomEx, int nWorldX, int nWorldY) {
     pOutCoords[2] = nWorldX - pRoomEx->sCoords.WorldPosition.x;
-    int nScreenX = nWorldY - pRoomEx->sCoords.WorldPosition.y;
+    pOutCoords[3] = nWorldY - pRoomEx->sCoords.WorldPosition.y;
     nWorldY++;
-    pOutCoords[3] = nScreenX;
     Transform::CoordsMiniMapToScreen(&nWorldX, &nWorldY);
-    *pOutCoords = nWorldX;
-    pOutCoords[1] = nWorldY + 0x28;
+    nWorldY += 0x28;
+    pOutCoords[0] = nWorldX;
+    pOutCoords[1] = nWorldY;
 }
 
 // Allocates the next wall tile slot in pRoomEx's tile grid, links it into the *ppTileHead list, converts minimap coords to screen coords, sets colour/type/flags, then recursively creates a shadow tile (type 4) when nTileType==3 and propagates nGridFlags bits into that shadow tile's flags.
@@ -1209,7 +1209,6 @@ static void DRLGROOMTILE_FreeTileArrays(D2RoomExStrc * pLevelCtx, D2PoolManagerS
 
 // @sourcefile .\DRLG\RoomTile.cpp
 void __fastcall DRLGROOMTILE_FreeRoomTilesAll(D2RoomExStrc * pRoomEx) {
-    D2DrlgAnimTileGridStrc* pNextAnimGrid;
     D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
     DRLGROOMTILE_FreeTileArrays(pRoomEx, pMemory);
     D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
@@ -1219,19 +1218,18 @@ void __fastcall DRLGROOMTILE_FreeRoomTilesAll(D2RoomExStrc * pRoomEx) {
 
     D2DrlgTileLinkStrc* pTileLink = pTileGrid->pMapLinks;
     while (pTileLink) {
-      D2DrlgTileLinkStrc* pNextTileLink;
-      pNextTileLink = pTileLink->pNext;
-      D2_FREE_POOL_AT(pMemory, pTileLink, ".\\DRLG\\RoomTile.cpp", 0x5ad);
-      pTileLink = pNextTileLink;
+      D2DrlgTileLinkStrc* pFreeLink = pTileLink;
+      pTileLink = pTileLink->pNext;
+      D2_FREE_POOL_AT(pMemory, pFreeLink, ".\\DRLG\\RoomTile.cpp", 0x5ad);
     }
 
     pTileGrid->pMapLinks = 0;
     D2DrlgAnimTileGridStrc* pMemoryToFree = pTileGrid->pAnimTiles;
     while (pMemoryToFree) {
-      pNextAnimGrid = pMemoryToFree->pNext;
-      D2_FREE_POOL_AT(pMemory, pMemoryToFree->ppTileData, ".\\DRLG\\RoomTile.cpp", 0x5b9);
-      D2_FREE_POOL_AT(pMemory, pMemoryToFree, ".\\DRLG\\RoomTile.cpp", 0x5ba);
-      pMemoryToFree = pNextAnimGrid;
+      D2DrlgAnimTileGridStrc* pAnimGrid = pMemoryToFree;
+      pMemoryToFree = pMemoryToFree->pNext;
+      D2_FREE_POOL_AT(pMemory, pAnimGrid->ppTileData, ".\\DRLG\\RoomTile.cpp", 0x5b9);
+      D2_FREE_POOL_AT(pMemory, pAnimGrid, ".\\DRLG\\RoomTile.cpp", 0x5ba);
     }
 
     D2_FREE_POOL_AT(pMemory, pTileGrid, ".\\DRLG\\RoomTile.cpp", 0x5bd);

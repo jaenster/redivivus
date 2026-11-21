@@ -192,6 +192,7 @@
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/SKILLS/SkillAss.h"
+#include "Source/D2Common/Units.twin.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -475,52 +476,11 @@ namespace D2Client { namespace SKILLS { namespace Skills {
 
 // Computes a world-tile coordinate one step in front of pUnit based on its facing direction. Reads the 3-bit direction (GetDirection >> 3), applies precomputed cos/sin offset tables (8 directions), and writes result to *pX/*pY. Handles both dynamic-path and static-path units (objects/missiles). Falls back to (0, offsetY) if pDynamicPath is null.
 void __fastcall GetPositionNextToPlayerDirection(D2UnitStrc * pUnit, int32_t * pX, int32_t * pY) {
-    int nX;
-    int32_t aOffsetsY[8];
-    int32_t aOffsetsX[8];
-    eD2UnitType eUnitTypeY;
-    uint8_t nDirection = D2Common::Units::GetDirection(pUnit);
-    aOffsetsX[5] = 1;
-    aOffsetsX[7] = 1;
-    aOffsetsY[1] = 1;
-    aOffsetsY[7] = 1;
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    nDirection >>= 3;
-    aOffsetsX[0] = 0;
-    aOffsetsX[1] = -1;
-    aOffsetsX[2] = -2;
-    aOffsetsX[3] = -1;
-    aOffsetsX[4] = 0;
-    aOffsetsX[6] = 2;
-    aOffsetsY[0] = 2;
-    aOffsetsY[2] = 0;
-    aOffsetsY[3] = -1;
-    aOffsetsY[4] = -2;
-    aOffsetsY[5] = -1;
-    aOffsetsY[6] = 0;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nX = 0;
-    }
-
-    *pX = aOffsetsX[nDirection] + nX;
-    eUnitTypeY = pUnit->eUnitType;
-    if (eUnitTypeY != UNIT_OBJECT && ((int)eUnitTypeY <= 3 || (int)eUnitTypeY > 5)) {
-      int32_t nY;
-      if (pUnit->pPath.pDynamicPath) {
-        nY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-        *pY = aOffsetsY[nDirection] + nY;
-        return;
-      }
-
-      *pY = aOffsetsY[nDirection];
-      return;
-    }
-
-    *pY = aOffsetsY[nDirection] + pUnit->pPath.pStaticPath->nPosY;
+    int nDirection = D2Common::Units::GetDirection(pUnit) >> 3;
+    int32_t aOffsetsX[8] = { 0, -1, -2, -1, 0, 1, 2, 1 };
+    int32_t aOffsetsY[8] = { 2, 1, 0, -1, -2, -1, 0, 1 };
+    *pX = aOffsetsX[nDirection] + D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    *pY = aOffsetsY[nDirection] + D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
 }
 
 // Resolves the target coordinates for a skill cast. If pUnit has a confirmed target, returns that target's world position; otherwise uses the unit's sub-tile path SP1 destination (cursor position). If both coordinates are zero, falls back to GetPositionNextToPlayerDirection. Always returns TRUE.
@@ -2169,8 +2129,7 @@ void __fastcall SKILLS_CreateMissileSpiralGrid(int32_t nSkillLevel, D2SkillArgSt
     static int gaSkillSpiralGridOffsets_3[4] = { -0x1, 0x1, 0x1, -0x1 }; D2_STATIC_GUARD(gaSkillSpiralGridOffsets_3, "D2Client::SKILLS::Skills::SKILLS_CreateMissileSpiralGrid::gaSkillSpiralGridOffsets_3");
 
     int nGridOffset;
-    int nRingsRemaining = nSkillLevel - 1;
-    if (nRingsRemaining / 5 > 7) {
+    if ((nSkillLevel - 1) / 5 > 7) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x848);
       exit(-1);
     }
@@ -2178,14 +2137,13 @@ void __fastcall SKILLS_CreateMissileSpiralGrid(int32_t nSkillLevel, D2SkillArgSt
     pSkillArg->nUnitX = 0xe;
     pSkillArg->nUnitY = -0xe;
     UNIT::Missile::MakeMissile(pSkillArg);
-    int nRingOffset = 0;
-    do {
+    int nRingsRemaining = nSkillLevel - 1;
+    for (int nRingOffset = 0; nRingOffset < 7; nRingOffset++) {
       if (!nRingsRemaining) {
         return;
       }
 
-      nGridOffset = 0;
-      do {
+      for (nGridOffset = 0; nGridOffset < 4; nGridOffset++) {
         if (nRingsRemaining <= 0) {
           break;
         }
@@ -2196,19 +2154,14 @@ void __fastcall SKILLS_CreateMissileSpiralGrid(int32_t nSkillLevel, D2SkillArgSt
         pSkillArg->nUnitX = gaSkillSpiralGridOffsets_3[nGridOffset] * gaSkillSpiralGridOffsets_0[nRingOffset];
         pSkillArg->nUnitY = gaSkillSpiralGridOffsets_1[nGridOffset] * gaSkillSpiralGridOffsets_2[nRingOffset];
         UNIT::Missile::MakeMissile(pSkillArg);
-        nRingsRemaining += -2;
-        nGridOffset++;
-      } while (nGridOffset < 4);
+        nRingsRemaining -= 2;
+      }
 
       pSkillArg->nUnitX = gaSpiralGridOffsetTableX[nRingOffset];
       pSkillArg->nUnitY = gaSpiralGridOffsetTableY[nRingOffset];
       UNIT::Missile::MakeMissile(pSkillArg);
       nRingsRemaining--;
-      nRingOffset++;
-      if (nRingOffset >= 7) {
-        return;
-      }
-    } while (true);
+    }
 }
 
 // Client-side tick: iterates all states flagged in pAllStatesDataTblFlag0x05, and for each that is active on pUnit and has a valid cltactivefunc, dispatches the corresponding SKILLCLTDOFUNCS handler. Reads the state's stat list to pass the originating skill ID and level to the handler. Called each client frame to sustain aura/state visual/missile effects.

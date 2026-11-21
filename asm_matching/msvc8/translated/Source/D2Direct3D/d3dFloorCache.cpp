@@ -99,25 +99,20 @@ int __fastcall D3DFLOOR_Initialize(D3DFloorCacheStrc * pCache, int nBaseMemoryUs
 }
 
 void __fastcall D3DFLOOR_SetPalette(D3DFloorCacheStrc * pCache, void * pPalette) {
-    DWORD nResult;
-    IDirectDrawSurface7* pSurface;
     if (!pPalette) {
       return;
     }
 
-    int nNodeIndex = 0;
-    if (!(pCache->nMaxNodes != 1 && -1 < pCache->nMaxNodes - 1)) {
-      return;
-    }
-
-    while (!pCache->pNodeBuffer[nNodeIndex].pSurface || (pSurface = pCache->pNodeBuffer[nNodeIndex].pSurface , nResult = pSurface->lpVtbl->SetPalette(pSurface, (IDirectDrawPalette*)pPalette) , !nResult)) {
-      nNodeIndex++;
-      if (nNodeIndex >= pCache->nMaxNodes - 1) {
-        return;
+    for (int nNodeIndex = 0; nNodeIndex < pCache->nMaxNodes - 1; nNodeIndex++) {
+      D3DFloorCacheNodeStrc* pNode = &pCache->pNodeBuffer[nNodeIndex];
+      if (pNode->pSurface) {
+        DWORD nResult = pNode->pSurface->lpVtbl->SetPalette(pNode->pSurface, (IDirectDrawPalette*)pPalette);
+        if (nResult) {
+          Renderer::DIRECTD3D_LogError("SetPalette (floor surface)", nResult);
+          return;
+        }
       }
     }
-
-    Renderer::DIRECTD3D_LogError("SetPalette (floor surface)", nResult);
 }
 
 static void __fastcall D3DFLOOR_InsertNodeAtTail(D3DFloorCacheNodeStrc * pNode, D3DFloorCacheStrc * pCache) {

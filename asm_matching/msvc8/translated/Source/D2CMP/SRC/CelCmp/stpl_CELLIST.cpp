@@ -1019,7 +1019,8 @@ template<> __declspec(noinline) inline ::CELLIST * TSHashTable<CELLIST, HASHKEY_
       nBucketIndex = dwHashVal & this->nSlotMask;
     }
 
-    ::CELLIST* pNewEntry = vc8_thiscall(this->pVtable->InternalNew)(this, this->tSlotListArray.m_data + nBucketIndex, nExtraBytes, dwFlags);
+    TSExplicitList<::CELLIST, -572662307>* pSlotList = this->tSlotListArray.m_data + nBucketIndex; // steer-ok: the original computes the slot list argument before loading nExtraBytes and dwFlags (TSHashTable::New argument order)
+    ::CELLIST* pNewEntry = vc8_thiscall(this->pVtable->InternalNew)(this, pSlotList, nExtraBytes, dwFlags);
     if (pNewEntry) {
       ppBucketSlot = (TSLink<::CELLIST>*)((intptr_t)&pNewEntry->m_hashval + this->tFullList.m_linkoffset);
     } else {

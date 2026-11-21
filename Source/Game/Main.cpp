@@ -694,15 +694,11 @@ void __stdcall MISC_GetValueFromD2Ini(D2IniConfigStrc * pD2IniData) {
 }
 
 void __fastcall Unreferenced_00405550(char * szString) {
-    char cVar1 = *szString;
-    while (cVar1 != '\0') {
-      cVar1 = *szString;
-      if (cVar1 >= 'A' && cVar1 <= 'Z') {
-        *szString = cVar1 + ' ';
+    while (*szString) {
+      if (*szString >= 'A' && *szString <= 'Z') {
+        *szString += ' ';
       }
-
       szString++;
-      cVar1 = *szString;
     }
 }
 

@@ -2719,9 +2719,10 @@ D2DrlgPathNodeStrc * __fastcall DRLGPATH_AllocPathNode(D2DrlgPathSearchCtxStrc *
       return nullptr;
     }
 
+    D2DrlgPathNodeStrc* pNode = &nPathCtx->aNodePool[nPoolIndex];
     nPathCtx->nPoolCount = nPoolIndex + 1;
-    memset(nPathCtx->aNodePool + nPoolIndex, 0, 0x38);
-    return nPathCtx->aNodePool + nPoolIndex;
+    memset(pNode, 0, 0x38);
+    return pNode;
 }
 
 // Attempts to expand a neighbor node in the A* search. Checks if the node exists in open or closed lists, creates new nodes as needed, and updates costs if a better path is found. Links the node as a child of the parent (up to 8 children).

@@ -655,7 +655,6 @@ static int DIALOG_HandleEnterKeyEvent(void * pDialog, uint32_t nKeyCode) {
 }
 
 void __stdcall INPUT_DialogEnterKey(D2UIMouseMsgStrc * pMsg) {
-    int32_t* pCallbackParam;
     fpDialogFunc pfnCallback;
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
@@ -676,18 +675,11 @@ void __stdcall INPUT_DialogEnterKey(D2UIMouseMsgStrc * pMsg) {
 
     iSelectedLine = pDialog->nSelectedLine;
     if (iSelectedLine < 0 || iSelectedLine >= pDialog->nSubCounter) {
-      iSelectedLine = 0;
-      if (pDialog->nSubCounter > 0) {
-        pCallbackParam = &pDialog->aStringData[0].nCallbackParam;
-        while (!*pCallbackParam) {
-          iSelectedLine++;
-          pCallbackParam += 0x44;
-          if (iSelectedLine >= pDialog->nSubCounter) {
-            return;
-          }
+      for (iSelectedLine = 0; iSelectedLine < pDialog->nSubCounter; iSelectedLine++) {
+        if (pDialog->aStringData[iSelectedLine].nCallbackParam) {
+          pDialog->nSelectedLine = iSelectedLine;
+          return;
         }
-
-        pDialog->nSelectedLine = iSelectedLine;
       }
     } else {
       pfnCallback = pDialog->aStringData[iSelectedLine].fpOnClick;

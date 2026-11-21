@@ -608,23 +608,17 @@ uint16_t __stdcall GetClientPeerPortByToken(D2QServerStrc * pQServer, uint32_t n
 void __stdcall GetClientIpStringByClientId(D2QServerStrc * pQServer, int nClientId, char * szIpAddress, int nBufferSize) {
     uint32_t nBucketIndex = pQServer->nClientHashMask & nClientId;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
-    D2QServerClientConnectionStrc* pDVar1 = pQServer->pQServerClientList[nBucketIndex];
-    while (true) {
-      if (!pDVar1) {
+    for (D2QServerClientConnectionStrc* pClient = pQServer->pQServerClientList[nBucketIndex]; pClient; pClient = pClient->pNextByToken) {
+      if (pClient->nClientToken == nClientId) {
+        char* szBufferInput = inet_ntoa(pClient->ipAddress);
+        Storm::Source::SSTR::SStrCopy(szIpAddress, szBufferInput, nBufferSize);
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
-        *szIpAddress = '\0';
         return;
       }
-      if (pDVar1->nClientToken == nClientId) {
-        break;
-      }
-
-      pDVar1 = pDVar1->pNextByToken;
     }
 
-    char* szBufferInput = inet_ntoa((in_addr)pDVar1->ipAddress.S_un.S_un_b);
-    Storm::Source::SSTR::SStrCopy(szIpAddress, szBufferInput, nBufferSize);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
+    *szIpAddress = '\0';
 }
 
 uint32_t __stdcall GetClientIpByToken(D2QServerStrc * pQServer, uint32_t nToken) {
@@ -838,12 +832,8 @@ static int NET_QServer_DecrementPerIpConnectionCount(in_addr * pClientIp, D2QSer
 static int PruneIpRateList(D2QServerStrc * pQServer) {
     DWORD dwNow = GetTickCount();
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csClientLifecycle);
-    D2QServerIpRateEntryStrc* pEntry = pQServer->pIpRateListHead;
-    while (true) {
-      if (!pEntry) {
-        break;
-      }
-
+    D2QServerIpRateEntryStrc* pEntry;
+    while (pQServer->pIpRateListHead) {
       pEntry = pQServer->pIpRateListHead;
       if (dwNow - pEntry->dwLastAttemptTick <= 15000) {
         break;
@@ -851,7 +841,6 @@ static int PruneIpRateList(D2QServerStrc * pQServer) {
 
       pQServer->pIpRateListHead = pEntry->pNext;
       D2_FREE_AT(pEntry, ".\\Src\\QServer\\QServer.cpp", 0x980);
-      pEntry = pQServer->pIpRateListHead;
     }
 
     pEntry = pQServer->pIpRateListHead;
@@ -877,12 +866,11 @@ static int PruneIpRateList(D2QServerStrc * pQServer) {
 // @sourcefile .\Src\QServer\QServer.cpp
 static void FreeIpRateList(D2QServerStrc * pQServer) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csClientLifecycle);
-    D2QServerIpRateEntryStrc* pMemoryToFree = pQServer->pIpRateListHead;
-    while (pMemoryToFree) {
-      D2QServerIpRateEntryStrc* pNext;
+    D2QServerIpRateEntryStrc* pNext = pQServer->pIpRateListHead;
+    while (pNext) {
+      D2QServerIpRateEntryStrc* pMemoryToFree = pNext;
       pNext = pMemoryToFree->pNext;
       D2_FREE_AT(pMemoryToFree, ".\\Src\\QServer\\QServer.cpp", 0x9b0);
-      pMemoryToFree = pNext;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQServer->pIpRateListHead = 0;
@@ -1698,22 +1686,19 @@ void __stdcall thunk_CloseRemoteConnection(D2QServerStrc * pQServer, int nClient
 }
 
 void __stdcall QSDisconnectIP(D2QServerStrc * pQServer, in_addr addr, char * szText, int nLine) {
-    char* szIpStr;
     D2QServerClientConnectionStrc* pFoundClient;
-    uint32_t nHashMask = pQServer->nClientHashMask;
+    uint32_t nBucket = pQServer->nClientHashMask & (uint32_t)addr.S_un;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csTokenHash);
-    for (pFoundClient = pQServer->pIpHashBuckets[nHashMask & (uint32_t)addr.S_un]; pFoundClient && (_union_1226)pFoundClient->ipAddress.S_un.S_addr != addr.S_un; pFoundClient = pFoundClient->pNextByIpHash) {}
+    for (pFoundClient = pQServer->pIpHashBuckets[nBucket]; pFoundClient && (_union_1226)pFoundClient->ipAddress.S_un.S_addr != addr.S_un; pFoundClient = pFoundClient->pNextByIpHash) {}
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pQServer->csTokenHash);
     if (pFoundClient) {
       CloseRemoteConnection(pQServer, pFoundClient->nClientToken, szText, nLine);
     } else {
-      /* in_addr in for inet_ntoa */ szIpStr = inet_ntoa(addr);
-      LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  Client %s is already closed", szIpStr);
+      LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  Client %s is already closed", inet_ntoa(addr));
     }
 
-    /* in_addr in for inet_ntoa */ szIpStr = inet_ntoa(addr);
-    LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  IP:%s  QSDisconnectIP() from FILE:%s  LINE:%d", szIpStr, szText, nLine);
+    LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  IP:%s  QSDisconnectIP() from FILE:%s  LINE:%d", inet_ntoa(addr), szText, nLine);
 }
 
 // pQServerStrc arrives in EDI; the other three arguments are on the stack (RET 0xc).

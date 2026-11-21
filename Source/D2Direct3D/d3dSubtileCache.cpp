@@ -77,25 +77,20 @@ int __fastcall D3DSUBTILE_Initialize(D3DSubtileCacheStrc * pCache, int nBaseMemo
 }
 
 void __fastcall D3DSUBTILE_SetPalette(D3DSubtileCacheStrc * pCache, void * pPalette) {
-    DWORD nResult;
-    IDirectDrawSurface7* pSurface;
     if (!pPalette) {
       return;
     }
 
-    int nNodeIndex = 0;
-    if (!(pCache->nMaxNodes != 1 && -1 < pCache->nMaxNodes - 1)) {
-      return;
-    }
-
-    while (!pCache->pNodeBuffer[nNodeIndex].pSurface || (pSurface = pCache->pNodeBuffer[nNodeIndex].pSurface , nResult = pSurface->lpVtbl->SetPalette(pSurface, (IDirectDrawPalette*)pPalette) , !nResult)) {
-      nNodeIndex++;
-      if (nNodeIndex >= pCache->nMaxNodes - 1) {
-        return;
+    for (int nNodeIndex = 0; nNodeIndex < pCache->nMaxNodes - 1; nNodeIndex++) {
+      D3DSubtileCacheNodeStrc* pNode = &pCache->pNodeBuffer[nNodeIndex];
+      if (pNode->pSurface) {
+        DWORD nResult = pNode->pSurface->lpVtbl->SetPalette(pNode->pSurface, (IDirectDrawPalette*)pPalette);
+        if (nResult) {
+          Renderer::DIRECTD3D_LogError("SetPalette (subtile surface)", nResult);
+          return;
+        }
       }
     }
-
-    Renderer::DIRECTD3D_LogError("SetPalette (subtile surface)", nResult);
 }
 
 static void __fastcall D3DSUBTILE_InsertNodeAtTail(D3DSubtileCacheNodeStrc * pNode, D3DSubtileCacheStrc * pCache) {

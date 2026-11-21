@@ -4854,8 +4854,8 @@ void __stdcall MAINMENU_UpdateProgressBar() {
       nProgressPercent = 100;
     }
 
-    int nFrameCount = D2Win::Src::D2WinImage::D2WINIMAGE_GetFrameCount(gpCtlPatchProgressAnimImage);
-    D2Win::Src::D2WinImage::D2WINIMAGE_SetFrame(gpCtlPatchProgressAnimImage, nFrameCount * nProgressPercent / 100);
+    int nFrame = D2Win::Src::D2WinImage::D2WINIMAGE_GetFrameCount(gpCtlPatchProgressAnimImage) * nProgressPercent / 100;
+    D2Win::Src::D2WinImage::D2WINIMAGE_SetFrame(gpCtlPatchProgressAnimImage, nFrame);
     sprintf(szPercentBuffer, "%d%%", nProgressPercent);
     if (!gpPatchProgressTextBox) {
       return;
@@ -6273,29 +6273,24 @@ int __stdcall MAINMENU_HandleNetworkPacket(int nFrameIndex) {
     char szPacketBuffer[512];
     size_t nPacketSize;
     nPacketSize = D2Net::SRC::Client::NET_D2GS_CLIENT_ExtractPacketSize_from0xAE(szPacketBuffer, 0x200);
-    if (nPacketSize == -1) {
-      check_connection_state:
-      if (gnBnetConnectionSuccessFlag) {
-        goto stop_message_loop;
+    if (nPacketSize != -1) {
+      switch ((uint8_t)szPacketBuffer[0]) {
+        case 0xaf:
+          gnBnetConnectionSuccessFlag = 1;
+          D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
+          return 1;
+        case 0xb0:
+          gnBnetConnectionSuccessFlag = 0;
+          if (gnMainMenuConnectFlag) {
+            D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
+          }
+          return 1;
       }
-    } else {
-      if (szPacketBuffer[0] == -0x51) {
-        gnBnetConnectionSuccessFlag = 1;
-        D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
-        return 1;
-      }
-      if (szPacketBuffer[0] != -0x50) {
-        goto check_connection_state;
-      }
-
-      gnBnetConnectionSuccessFlag = 0;
     }
-    if (!gnMainMenuConnectFlag) {
-      return 1;
+    if (gnBnetConnectionSuccessFlag || gnMainMenuConnectFlag) {
+      D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     }
 
-    stop_message_loop:
-    D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;
 }
 
@@ -8992,7 +8987,7 @@ void __stdcall UIMENU_ConfirmCreateCharacter() {
 
 // BNet account creation handler. Validates username/password from gbPasswordChangeInProgress inputs (2-15 chars, matching confirmation), shows please-read dialog on success or error popup on validation failure.
 BOOL __stdcall MAINMENU_OnSubmitCreateBattleNetAccount(D2ControlStrc * pControl) {
-    uint16_t wErrorStringId;
+    uint16_t* wszMessage;
     if (!pControl) {
       UIMENU_MainMenuAgain();
       return 1;
@@ -9002,32 +8997,35 @@ BOOL __stdcall MAINMENU_OnSubmitCreateBattleNetAccount(D2ControlStrc * pControl)
     uint16_t* wszAccount = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpBnetAccountEditBox->sControl);
     uint16_t* wszPassword = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpBnetPasswordEditBox->sControl);
     uint16_t* wszConfirmPassword = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpBnetPasswordConfirmEditBox->sControl);
-    int32_t nLenOrCmp = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszAccount);
-    if (nLenOrCmp < 2) {
-      wErrorStringId = 0x1460;
-    } else if (nLenOrCmp > 0xf) {
-      wErrorStringId = 0x1461;
-    } else {
-      nLenOrCmp = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsNoCase((uint16_t*)wszPassword, (uint16_t*)wszConfirmPassword);
-      if (nLenOrCmp) {
-        wErrorStringId = 0x1462;
-      } else {
-        nLenOrCmp = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszPassword);
-        if (nLenOrCmp < 2) {
-          wErrorStringId = 0x1463;
-        } else {
-          if (nLenOrCmp <= 0x14) {
-            UIMENU_PleaseReadAfterCreatingAccount();
-            return 1;
-          }
-
-          wErrorStringId = 0x1464;
-        }
-      }
+    int32_t nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszAccount);
+    if (nLength < 2) {
+      wszMessage = D2Lang::StrTable::strtable::GetLocaleString(0x1460);
+      MAINMENU_ShowPopupDialog(wszMessage, UIMENU_CreateBattleNetAccount, 1);
+      return 1;
+    }
+    if (nLength > 0xf) {
+      wszMessage = D2Lang::StrTable::strtable::GetLocaleString(0x1461);
+      MAINMENU_ShowPopupDialog(wszMessage, UIMENU_CreateBattleNetAccount, 1);
+      return 1;
+    }
+    if (D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsNoCase(wszPassword, wszConfirmPassword)) {
+      wszMessage = D2Lang::StrTable::strtable::GetLocaleString(0x1462);
+      MAINMENU_ShowPopupDialog(wszMessage, UIMENU_CreateBattleNetAccount, 1);
+      return 1;
+    }
+    nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszPassword);
+    if (nLength < 2) {
+      wszMessage = D2Lang::StrTable::strtable::GetLocaleString(0x1463);
+      MAINMENU_ShowPopupDialog(wszMessage, UIMENU_CreateBattleNetAccount, 1);
+      return 1;
+    }
+    if (nLength > 0x14) {
+      wszMessage = D2Lang::StrTable::strtable::GetLocaleString(0x1464);
+      MAINMENU_ShowPopupDialog(wszMessage, UIMENU_CreateBattleNetAccount, 1);
+      return 1;
     }
 
-    wszAccount = D2Lang::StrTable::strtable::GetLocaleString(wErrorStringId);
-    MAINMENU_ShowPopupDialog(wszAccount, UIMENU_CreateBattleNetAccount, 1);
+    UIMENU_PleaseReadAfterCreatingAccount();
     return 1;
 }
 
@@ -9156,9 +9154,9 @@ BOOL __stdcall MAINMENU_OnPressAcceptEmailAddress(D2ControlMsg * pControlMsg) {
 void __stdcall MAINMENU_EnterEmailCleanup() {
     uint16_t* wszEmail = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpnEmailBuffer->sControl);
     uint16_t* wszEmailConfirm = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpCtlEnterEmailInput->sControl);
-    int32_t nEmailLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszEmail);
-    int32_t nEmailConfirmLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszEmailConfirm);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlEmailConfirmButton, (uint32_t)(nEmailLen > 0 || nEmailConfirmLen > 0));
+    BOOL bVisible = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszEmail) > 0;
+    bVisible |= D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszEmailConfirm) > 0;
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlEmailConfirmButton, bVisible);
 }
 
 // Edit-box change callback installed via D2WINEDITBOX_SetInputMode @004fdb00 into D2WinEditBox+0x26c (fpChangeCallback). Signature proven by RET 0x4 (1 stack arg, callee cleans) and MOV EAX,1.
@@ -9205,9 +9203,8 @@ BOOL __stdcall MAINMENU_EnterEmailCallback() {
 
 void __stdcall MAINMENU_ShowDisconnectMessage() {
     uint16_t* pwszText = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpCharSelPasswordInputControl->sControl);
-    int32_t nLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszText);
-    BOOL bEnableOk = 0;
-    if (0 < nLen) {
+    BOOL bEnableOk = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszText) > 0;
+    if (bEnableOk) {
       char szPassword[256];
       pwszText = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpCtlDisconnectDialog->sControl);
       D2Lang::WideCharToUTF8(szPassword, pwszText, 0x100);
@@ -9300,25 +9297,20 @@ BOOL __stdcall MAINMENU_OnPressReturnToMainMenuAgain_ForBnetDisconnected2(D2Cont
 }
 
 void __stdcall MAINMENU_ShowDisconnectMessage2() {
-    BOOL _bFieldValid;
-    bool bFieldValid;
     char szField1[256];
     char szField3[256];
+    char szField2[256];
     uint16_t* pwszText = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpCharSelAccountNameInputControl->sControl);
-    int32_t nLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszText);
-    BOOL bVisible = 0;
-    if (2 < nLen) {
-      char szField2[256];
+    BOOL bVisible = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszText) > 2;
+    if (bVisible) {
       pwszText = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpCtlDisconnectMessage1->sControl);
       D2Lang::WideCharToUTF8(szField1, pwszText, 0x100);
-      _bFieldValid = MAINMENU_IsValidEmailAddress(szField1);
-      bVisible = 0;
-      if (_bFieldValid) {
+      bVisible = MAINMENU_IsValidEmailAddress(szField1);
+      if (bVisible) {
         pwszText = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpCtlDisconnectMessage3->sControl);
         D2Lang::WideCharToUTF8(szField3, pwszText, 0x100);
-        _bFieldValid = MAINMENU_IsValidEmailAddress(szField3);
-        bVisible = 0;
-        if (_bFieldValid) {
+        bVisible = MAINMENU_IsValidEmailAddress(szField3);
+        if (bVisible) {
           pwszText = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpCtlDisconnectMessage2->sControl);
           D2Lang::WideCharToUTF8(szField2, pwszText, 0x100);
           bVisible = MAINMENU_IsValidEmailAddress(szField2);

@@ -1784,21 +1784,18 @@ void __fastcall UNITS_RelocateUnitToRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 int32_t __fastcall UNITS_ProcessUnitMovement(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    uint32_t _bNeedsRoomUpdate;
-    bool bNeedsRoomUpdate;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x72e);
       exit(-1);
     }
 
     GetTarget(pGame, pUnit);
-    BOOL nAdvanceResult = D2Common::PATH::Path::PATH_AdvanceUnitAlongPath(pUnit, 0x400);
-    _bNeedsRoomUpdate = D2Common::Units::NeedsRoomUpdate(pUnit);
-    if (_bNeedsRoomUpdate) {
+    int32_t nResult = D2Common::PATH::Path::PATH_AdvanceUnitAlongPath(pUnit, 0x400) != 0 ? 1 : 2;
+    if (D2Common::Units::NeedsRoomUpdate(pUnit)) {
       UNITS_UpdateRoomClientVisibility(pGame, pUnit, nullptr);
     }
 
-    return nAdvanceResult != 0 ? 0x1U : 0x2U;
+    return nResult;
 }
 
 D2UnitStrc * __fastcall GetInteractedNpc(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
@@ -2377,24 +2374,19 @@ void __fastcall FreeServerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // 2022.01.09 - dzik
 void __fastcall FreeWarpUnits(::SGAMEDATA * pGame) {
-    D2UnitStrc* pUnit;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x12d);
       exit(-1);
     }
 
-    {
-      D2UnitStrc* pNextUnit;
-      pUnit = pGame->pWarpTileList;
-      while (pUnit) {
-        pNextUnit = pUnit->pListNext;
-        FreeServerUnit(pGame, pUnit);
-        pUnit = pNextUnit;
-      }
-
-      pGame->pWarpTileList = 0;
-      return;
+    D2UnitStrc* pNextUnit = pGame->pWarpTileList;
+    while (pNextUnit) {
+      D2UnitStrc* pUnit = pNextUnit;
+      pNextUnit = pUnit->pListNext;
+      FreeServerUnit(pGame, pUnit);
     }
+
+    pGame->pWarpTileList = 0;
 }
 
 D2UnitStrc * __fastcall SpawnUnitByType(::SGAMEDATA * pGame, D2RoomStrc * pRoom, eD2UnitType eUnitType, int nClassId, int32_t nX, int32_t nY, int32_t bInitItem, uint32_t dwParam8) {

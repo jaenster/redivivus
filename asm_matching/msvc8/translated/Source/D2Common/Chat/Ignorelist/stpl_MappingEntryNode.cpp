@@ -790,7 +790,8 @@ template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::New
       nBucketIdx = dwHashVal & this->nSlotMask;
     }
 
-    ::MappingEntryNode* pEntry = vc8_thiscall(this->pVtable->InternalNew)(this, this->tSlotListArray.m_data + nBucketIdx, nExtraBytes, dwFlags);
+    TSExplicitList<::MappingEntryNode, -572662307>* pSlotList = this->tSlotListArray.m_data + nBucketIdx; // steer-ok: the original computes the slot list argument before loading nExtraBytes and dwFlags (TSHashTable::New argument order)
+    ::MappingEntryNode* pEntry = vc8_thiscall(this->pVtable->InternalNew)(this, pSlotList, nExtraBytes, dwFlags);
     if (pEntry) {
       pListNode = (TSLink<::MappingEntryNode>*)((intptr_t)&pEntry->m_hashval + this->tFullList.m_linkoffset);
     } else {

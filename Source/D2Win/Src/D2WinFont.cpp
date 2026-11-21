@@ -1022,21 +1022,23 @@ void __fastcall D2WINFONT_FreeWordWrapList(void * * ppNodeList) {
 
 // @sourcefile .\Src\D2WinFont.cpp
 D2TextLineStrc * __stdcall D2WINFONT_AllocWordWrapNode(uint16_t * pwszText, size_t nSize, int32_t bTrimLeadingSpace) {
+    uint16_t* pText = pwszText;
     D2TextLineStrc* pNode = D2_NEW_AT(D2TextLineStrc, ".\\Src\\D2WinFont.cpp", 0x588);
-    if (bTrimLeadingSpace && (uint16_t)*pwszText < 0x100) {
+    int nLen = nSize;
+    if (bTrimLeadingSpace && (uint16_t)*pText < 0x100) {
       int bIsSpace;
-      bIsSpace = isspace((uint32_t)(uint16_t)*pwszText);
+      bIsSpace = isspace((uint32_t)(uint16_t)*pText);
       if (bIsSpace) {
-        nSize--;
-        pwszText++;
+        nLen--;
+        pText++;
       }
     }
 
-    uint16_t* pNodeText = (uint16_t*)D2_ALLOC_AT(nSize * 2 + 2, ".\\Src\\D2WinFont.cpp", 0x591);
+    uint16_t* pNodeText = (uint16_t*)D2_ALLOC_AT(nLen * 2 + 2, ".\\Src\\D2WinFont.cpp", 0x591);
     pNode->wszLine = pNodeText;
     pNode->pNext = 0;
-    D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pNodeText, pwszText, nSize);
-    pNode->wszLine[nSize] = L'\0';
+    D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pNodeText, pText, nLen);
+    pNode->wszLine[nLen] = L'\0';
     return pNode;
 }
 

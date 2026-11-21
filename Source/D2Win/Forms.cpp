@@ -117,20 +117,8 @@ void __fastcall D2WIN_RegisterWindowHandlerArray(HWND hHandle, D2WinWndHandlerSt
       exit(-1);
     }
 
-    {
-      int32_t* pHandlerEntry;
-      if ((uint32_t)nHandlerCount <= 0) {
-        return;
-      }
-
-      pHandlerEntry = &pHandlerArray->nMessage;
-      do {
-        D2WIN_RegisterWindowHandler(hHandle, ((D2WinWndHandlerStrc*)(pHandlerEntry - 1))->nType, *pHandlerEntry, (int32_t)pHandlerEntry[1]);
-        pHandlerEntry += 3;
-        nHandlerCount--;
-      } while (nHandlerCount);
-
-      return;
+    for (uint32_t i = 0; i < (uint32_t)nHandlerCount; i++) {
+      D2WIN_RegisterWindowHandler(hHandle, pHandlerArray[i].nType, pHandlerArray[i].nMessage, (int32_t)pHandlerArray[i].pfnCallback);
     }
 }
 
@@ -141,20 +129,8 @@ void __fastcall D2WIN_UnregisterWindowHandlerArray(HWND hHandle, D2WinWndHandler
       exit(-1);
     }
 
-    {
-      int32_t* pHandlerEntry;
-      if ((uint32_t)nHandlerCount <= 0) {
-        return;
-      }
-
-      pHandlerEntry = &pHandlerArray->nMessage;
-      do {
-        D2WIN_UnregisterWindowHandler(hHandle, pHandlerEntry[-1], *pHandlerEntry, (void*)pHandlerEntry[1]);
-        pHandlerEntry += 3;
-        nHandlerCount--;
-      } while (nHandlerCount);
-
-      return;
+    for (uint32_t i = 0; i < (uint32_t)nHandlerCount; i++) {
+      D2WIN_UnregisterWindowHandler(hHandle, pHandlerArray[i].nType, pHandlerArray[i].nMessage, (void*)pHandlerArray[i].pfnCallback);
     }
 }
 

@@ -1740,12 +1740,11 @@ D2GambleTableStrc * __stdcall GetGambleTableSize() {
 
 // Breadth-first traversal of the itemtypes.txt equiv1/equiv2 parent-type tree to test whether nItemTypeId is a subtype of nTargetTypeId. Returns 1 if nTargetTypeId &lt; 1 (wildcard), 1 if target found in the type hierarchy, 0 if out-of-range or stack depth exceeds 124. Used by item-type membership checks.
 BOOL __fastcall ITEMTBLS_CheckItemTypeRecursive(int32_t nItemTypeId, int32_t nTargetTypeId) {
-    int nNewStackSize;
     int anTypeStack[128];
-    short int wEquiv2;
     if (nTargetTypeId <= 0) {
       return 1;
     }
+
     if (nItemTypeId <= 0 || nItemTypeId >= MonsterTbls::sgtDataTable.nTxtItemTypesSize) {
       return 0;
     }
@@ -1753,30 +1752,25 @@ BOOL __fastcall ITEMTBLS_CheckItemTypeRecursive(int32_t nItemTypeId, int32_t nTa
     anTypeStack[0] = nItemTypeId;
     int nStackSize = 1;
     do {
-      int nCurTypeId;
-      nCurTypeId = anTypeStack[nStackSize - 1];
-      nNewStackSize = nStackSize - 1;
+      int nCurTypeId = anTypeStack[--nStackSize];
       if (nTargetTypeId == nCurTypeId) {
         return 1;
       }
       if (nCurTypeId >= MonsterTbls::sgtDataTable.nTxtItemTypesSize) {
         return 0;
       }
-      if (nNewStackSize > 0x7c) {
+      if (nStackSize > 0x7c) {
         return 0;
       }
-      if (MonsterTbls::sgtDataTable.pTxtItemTypes[nCurTypeId].equiv1 > 0) {
-        wEquiv2 = MonsterTbls::sgtDataTable.pTxtItemTypes[nCurTypeId].equiv2;
-        anTypeStack[nNewStackSize] = (int)MonsterTbls::sgtDataTable.pTxtItemTypes[nCurTypeId].equiv1;
-        nNewStackSize = nStackSize;
-        if (wEquiv2) {
-          anTypeStack[nStackSize] = (int)wEquiv2;
-          nNewStackSize = nStackSize + 1;
+
+      D2ItemTypesTxt* pItemType = &MonsterTbls::sgtDataTable.pTxtItemTypes[nCurTypeId];
+      if (pItemType->equiv1 > 0) {
+        anTypeStack[nStackSize++] = pItemType->equiv1;
+        if (pItemType->equiv2) {
+          anTypeStack[nStackSize++] = pItemType->equiv2;
         }
       }
-
-      nStackSize = nNewStackSize;
-    } while (nNewStackSize);
+    } while (nStackSize);
 
     return 0;
 }

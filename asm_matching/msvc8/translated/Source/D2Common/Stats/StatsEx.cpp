@@ -2295,11 +2295,16 @@ void __stdcall STATLIST_RemoveAllStats(D2StatListExStrc * pStatList) {
 
 void __stdcall STATLIST_RemoveAllStatsFromOverlay(D2UnitStrc * pUnit) {
     D2StatListExStrc* pStatsEx;
-    if (!(pUnit && pUnit->pStatsEx)) {
+    if (!pUnit) {
       return;
     }
 
-    pUnit->pStatsEx->sStatList.nFlags &= -257;
+    pStatsEx = pUnit->pStatsEx;
+    if (!pStatsEx) {
+      return;
+    }
+
+    pStatsEx->sStatList.nFlags &= -257;
     pStatsEx = pUnit->pStatsEx;
     if (!(pStatsEx && pStatsEx->sStatList.nFlags & 0x80000000U)) {
       return;

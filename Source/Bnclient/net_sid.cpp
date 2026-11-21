@@ -909,16 +909,16 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogonProof(char * pPacketData
       Debug::DEBUG_Trace("INVALID: AuthAccountLogonProof");
       return 0;
     }
-    if (*(int*)pPacketData) {
-      if (*(int*)pPacketData == 2) {
-        Debug::DEBUG_Trace("Logon Proof failed: Invalid password");
-        BNMESSQUEUE_SetStateIfZero(0xe);
-        g_nRealmLogonResult = 2;
-        return 1;
-      }
-
+    switch (*(int*)pPacketData) {
+    default:
       Debug::DEBUG_Trace("Logon Proof failed: Unknown result");
-    } else {
+      break;
+    case 2:
+      Debug::DEBUG_Trace("Logon Proof failed: Invalid password");
+      BNMESSQUEUE_SetStateIfZero(0xe);
+      g_nRealmLogonResult = 2;
+      return 1;
+    case 0: {
       int32_t bProofValid;
       bProofValid = NET_SID_CLIENT_VerifyServerProof(pPacketData + 4);
       if (bProofValid) {
@@ -928,6 +928,8 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogonProof(char * pPacketData
       }
 
       Debug::DEBUG_Trace("Logon Proof failed: Server didn\'t know our password but told us it did!");
+      break;
+    }
     }
 
     BNMESSQUEUE_SetStateIfZero(0x12);

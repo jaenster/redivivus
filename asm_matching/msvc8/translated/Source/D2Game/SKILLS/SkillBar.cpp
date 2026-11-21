@@ -1338,18 +1338,28 @@ static BOOL __stdcall SKILLBAR_CanTargetPosition(D2UnitStrc * pUnit, int32_t nX,
     return 0;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 // Server-side skill StFunc 40: start/setup handler for a charge-leap movement skill (e.g. Leap/Charge). Validates the skill id and the unit's current skill. For player units it resolves the target/cursor position and validates it (SKILLBAR_CanTargetPosition / SKILLBAR_FindValidLeapTarget). For monster units it derives a leap-past destination from the target's position (or cursor) and finds free collision coordinates. It then reserves the destination room, adds a COLLIDE_PLAYER collision marker at the landing point, sets the unit uninterruptible + STATE_skill_move, and stores the destination X/Y (and target type/GUID for monsters) into the skill params with flag 0x80. Returns TRUE on success, FALSE if validation fails (clearing the current skill).
 BOOL __fastcall SKILLBAR_SrvStFn40_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget;
     BOOL nResult;
     D2RoomStrc* pRoom;
-    int32_t eCollisionFlag;
     POINT sDestPoint;
     uint32_t nDestY;
-    POINT* pTargetPoint;
-    eD2Skills eSkillOrig;
-    eSkillOrig = eSkill;
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    uint32_t nDestX;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? &D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill] : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
@@ -1373,7 +1383,7 @@ BOOL __fastcall SKILLBAR_SrvStFn40_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       int32_t nCoordOrWidth;
       pTarget = UNIT::SUnit::GetTargetEx(pGame2, pUnit);
       if (!pTarget) {
-        nResult = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame2, pUnit, &eSkill, &nDestY);
+        nResult = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame2, pUnit, &nDestX, &nDestY);
         if (!nResult) {
           goto cancel_skill;
         }
@@ -1386,59 +1396,54 @@ BOOL __fastcall SKILLBAR_SrvStFn40_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
           return 0;
         }
 
-        eSkill = D2Common::Units::GetXPosFromDynamicPathUnit(pTarget);
+        nDestX = D2Common::Units::GetXPosFromDynamicPathUnit(pTarget);
         nDestY = D2Common::Units::GetYPosFromDynamicPathUnit(pTarget);
         nCoordOrWidth = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-        eSkill = eSkill * 2 - nCoordOrWidth;
+        nDestX = nDestX * 2 - nCoordOrWidth;
         nCoordOrWidth = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
         nDestY = nDestY * 2 - nCoordOrWidth;
       }
 
-      nResult = 0;
-      eCollisionFlag = 0x3c01;
-      sDestPoint.x = eSkill;
+      sDestPoint.x = nDestX;
       sDestPoint.y = nDestY;
-      nCoordOrWidth = D2Common::Units::GetUnitSizeX(pUnit);
-      pTargetPoint = &sDestPoint;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, pTargetPoint, nCoordOrWidth, eCollisionFlag, nResult);
+      pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(D2Common::Units::UNITS_GetRoom(pUnit), &sDestPoint, D2Common::Units::GetUnitSizeX(pUnit), 0x3c01, 0);
       if (!pRoom) {
         cancel_skill:
         D2Common::Units::SetCurrentSkill(pUnit, nullptr);
         return 0;
       }
 
-      eSkill = sDestPoint.x;
+      nDestX = sDestPoint.x;
       nDestY = sDestPoint.y;
     } else {
-      nResult = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame2, pUnit, &eSkill, &nDestY);
+      nResult = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame2, pUnit, &nDestX, &nDestY);
       if (!nResult) {
         return 0;
       }
 
-      nResult = SKILLBAR_CanTargetPosition(pUnit, eSkill, nDestY, eSkillOrig);
+      nResult = SKILLBAR_CanTargetPosition(pUnit, nDestX, nDestY, eSkill);
       if (!nResult) {
         return 0;
       }
 
-      nResult = SKILLBAR_FindValidLeapTarget(pUnit, nSkillLvl, (int*)&eSkill, (int*)&nDestY, eSkillOrig);
+      nResult = SKILLBAR_FindValidLeapTarget(pUnit, nSkillLvl, (int*)&nDestX, (int*)&nDestY, eSkill);
       if (!nResult) {
         return 0;
       }
     }
 
     uint32_t nDestYSaved = nDestY;
-    pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), eSkill, nDestYSaved);
-    D2Common::Collision::AddCollision_Type(pRoom, eSkill, nDestY, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), 0x80);
+    pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nDestX, nDestYSaved);
+    D2Common::Collision::AddCollision_Type(pRoom, nDestX, nDestY, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), 0x80);
     UNIT::SUnit::SetUninterruptableState(pUnit, 1);
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 1);
-    D2Common::Skills::SKILL_SetParam1(pSkill, eSkill);
+    D2Common::Skills::SKILL_SetParam1(pSkill, nDestX);
     D2Common::Skills::SKILL_SetParam2(pSkill, nDestY);
     if (bIsMonsterUnit) {
       pTarget = UNIT::SUnit::GetTargetEx(pGame2, pUnit);
       if (pTarget) {
-        D2Common::Skills::SKILL_SetParam3(pSkill, pTarget->eUnitType);
-        D2Common::Skills::SKILL_SetParam4(pSkill, pTarget->nUnitGUID);
+        D2Common::Skills::SKILL_SetParam3(pSkill, GetTypeInline(pTarget));
+        D2Common::Skills::SKILL_SetParam4(pSkill, GetGUIDInline(pTarget));
       }
     }
 

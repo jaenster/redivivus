@@ -115,38 +115,27 @@ void __stdcall TEXT_HandleMouseMove() {
 }
 
 void __fastcall TEXT_HandleItemUse(int32_t nMouseX, int32_t nMouseY) {
-    int nClearCount;
-    int nItemCount = nCashDisplayItemCount;
-    if (nCashDisplayItemCount > 0) {
-      uint8_t* pHitTestEntry;
-      pHitTestEntry = &gaNpcCashTabs[0].nHitTestState;
-      nClearCount = nCashDisplayItemCount;
-      do {
-        pHitTestEntry[1] = 0;
-        *pHitTestEntry = 0;
-        pHitTestEntry += 0x28;
-        nClearCount--;
-      } while (nClearCount);
-    }
-    if (nItemCount <= 0) {
-      return;
+    int i;
+    for (i = 0; i < nCashDisplayItemCount; i++) {
+      gaNpcCashTabs[i].bVisible = 0;
+      gaNpcCashTabs[i].nHitTestState = 0;
     }
 
-    uint32_t* pBoundsEntry = (uint32_t*)&gaNpcCashTabs[0].nHitBoxX2;
-    nClearCount = 0;
-    do {
-      if (nMouseX >= (int)pBoundsEntry[-1] && nMouseX <= (int)*pBoundsEntry && nMouseY >= (int)pBoundsEntry[1] && nMouseY <= (int)pBoundsEntry[2]) {
+    for (i = 0; i < nCashDisplayItemCount; i++) {
+      if (nMouseX >= gaNpcCashTabs[i].nHitBoxX1 && nMouseX <= gaNpcCashTabs[i].nHitBoxX2 && nMouseY >= gaNpcCashTabs[i].nHitBoxY1 && nMouseY <= gaNpcCashTabs[i].nHitBoxY2) {
         Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
-        nItemCount = nCashDisplayItemCount;
-        *(uint8_t*)((char*)pBoundsEntry + 0x11) = 1;
-        *(uint8_t*)(pBoundsEntry + 4) = 1;
+        gaNpcCashTabs[i].bVisible = 1;
+        gaNpcCashTabs[i].nHitTestState = 1;
       }
-
-      nClearCount++;
-      pBoundsEntry += 10;
-    } while (nClearCount < nItemCount);
+    }
 }
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
 // @sourcefile .\UI\UseItem.cpp
 void __stdcall INPUT_UseItemClick(D2UIMouseMsgStrc * pMsg) {
     int nHandled;
@@ -177,37 +166,33 @@ void __stdcall INPUT_UseItemClick(D2UIMouseMsgStrc * pMsg) {
       TEXT_HandleItemUse(nMouseX, uMouseY);
     }
 
-    D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    if (!pPlayerUnit_lcl) {
+    D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
+    if (!pPlayer) {
       return;
     }
 
-    pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayerUnit_lcl->pInventory);
-    if (!(pPlayerUnit_lcl && nMouseX - 0x7b <= 0x58 && uMouseY - 0x6a <= 0x72)) {
+    D2InventoryStrc* pInventory = pPlayer->pInventory;
+    D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
+    if (!(pItem && nMouseX - 0x7b <= 0x58 && uMouseY - 0x6a <= 0x72)) {
       return;
     }
 
-    D2ItemsTxt* pItemTxtRow = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pPlayerUnit_lcl->nClassId);
+    D2ItemsTxt* pItemTxtRow = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(GetClassIdInline(pItem));
     if (!pItemTxtRow) {
       return;
     }
 
-    BOOL bIsIdentified = D2Common::ITEMS::Items::CheckItemFlag(pPlayerUnit_lcl, ITEMFLAG_IDENTIFIED, 0x210, ".\\UI\\UseItem.cpp");
-    if (bIsIdentified) {
-      int32_t nNpcClassId;
-      if (nHoradricCubeUIState == 1) {
-        nNpcClassId = npcmenu::GetInteractedUnitClassId();
-        if (nNpcClassId == 0x9a && (bIsIdentified = D2Common::ITEMS::Items::IsValidImbumeItem(pPlayerUnit_lcl) , bIsIdentified != 0) || (nNpcClassId = npcmenu::GetInteractedUnitClassId() , nNpcClassId == 0x1ff && (bIsIdentified = D2Common::ITEMS::Items::ITEM_CheckIfItemCanHaveSockets(pPlayerUnit_lcl) , bIsIdentified != 0)) || (nNpcClassId = npcmenu::GetInteractedUnitClassId() , nNpcClassId == 0x200 && (bIsIdentified = D2Common::ITEMS::Items::ITEM_CheckIfItemCanBeNamed(pPlayerUnit_lcl) , bIsIdentified != 0))) {
-          ITEM_ToggleHandState(pPlayerUnit_lcl);
-          return;
-        }
-      } else if (!nHoradricCubeUIState && pItemTxtRow->dwCode == 0x20747368) {
-        ITEM_ToggleHandState(pPlayerUnit_lcl);
-        return;
-      }
+    if (!(D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_IDENTIFIED, 0x210, ".\\UI\\UseItem.cpp")
+        && (nHoradricCubeUIState == 1
+            ? (npcmenu::GetInteractedUnitClassId() == 0x9a && D2Common::ITEMS::Items::IsValidImbumeItem(pItem))
+              || (npcmenu::GetInteractedUnitClassId() == 0x1ff && D2Common::ITEMS::Items::ITEM_CheckIfItemCanHaveSockets(pItem))
+              || (npcmenu::GetInteractedUnitClassId() == 0x200 && D2Common::ITEMS::Items::ITEM_CheckIfItemCanBeNamed(pItem))
+            : !nHoradricCubeUIState && pItemTxtRow->dwCode == 0x20747368))) {
+      Sound::SOUND_PlaySound(SOUND_CURSOR_ERROR, nullptr, 0, 0, 0);
+      return;
     }
 
-    Sound::SOUND_PlaySound(SOUND_CURSOR_ERROR, nullptr, 0, 0, 0);
+    ITEM_ToggleHandState(pItem);
 }
 
 void __stdcall INPUT_UseItemPassthrough(D2UIMouseMsgStrc * pMsg) {

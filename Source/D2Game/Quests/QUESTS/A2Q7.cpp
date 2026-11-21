@@ -152,14 +152,13 @@ void __fastcall Q14_SetTyraelState(D2QuestDataStrc * pQuestData, char bClear) {
       return;
     }
     if (bClear == '\0') {
-      eD2HostGameType eGameType;
-      eGameType = pA4Q1Data->pGame->nGameType;
-      pSevenTombsData->bIzualLocationSet = 1;
-      if (eGameType == SGAMETYPE_SINGLEPLAYER) {
+      if (pA4Q1Data->pGame->nGameType == SGAMETYPE_SINGLEPLAYER) {
+        pSevenTombsData->bIzualLocationSet = 1;
         pSevenTombsData->nStatusCode = 8;
         return;
       }
 
+      pSevenTombsData->bIzualLocationSet = 1;
       pSevenTombsData->nStatusCode = 9;
       return;
     }

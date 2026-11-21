@@ -739,8 +739,6 @@ BOOL __fastcall OBJOP_A2Q4_ReadHorazonsJournal(D2ObjectOperateFnArg * pOperation
 
 // A2Q4 \"The Arcane Sanctuary\" — object init-fn for the Sanctuary portal and Palace Cellar Level 3 objects. Reads the A1Q4 quest-specific sSub to determine whether the object is in LEVEL_ArcaneSanctuary (syncs nPortalGUID[1] slot) or LEVEL_PalaceCellarLevel3 (syncs field_0x2C slot). Sets the object update flag and schedules its first activation event using the object's FrameCnt[1]. No quest-record state writes.
 void __fastcall Objects_InitFn29_ArcaneSanctuaryPortal(D2ObjectInitFnArg * pInitArg) {
-    int32_t nClassId;
-    D2UnitStrc* pObject;
     D2ObjectsTxt* pObjectsTxt;
     D2QuestDataStrc* pQuestData;
     pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheArcaneSanctuary);
@@ -759,11 +757,8 @@ void __fastcall Objects_InitFn29_ArcaneSanctuaryPortal(D2ObjectInitFnArg * pInit
       }
 
       pA1Q4Data->nObjectOperateState1 = 2;
-      pObject = pInitArg->pObject;
-      if (!pObject) {
-        nClassId = -1;
-        goto schedule_mode_advance;
-      }
+      pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(!pInitArg->pObject ? -1 : pInitArg->pObject->nClassId);
+      GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 1, (pObjectsTxt->FrameCnt[1] >> 8) + 1 + pInitArg->pGame->dwGameFrame, 0, 0);
     } else {
       if (eLevelId != LEVEL_PalaceCellarLevel3) {
         return;
@@ -775,17 +770,10 @@ void __fastcall Objects_InitFn29_ArcaneSanctuaryPortal(D2ObjectInitFnArg * pInit
       }
 
       pA1Q4Data->nObjectOperateState2 = 2;
-      pObject = pInitArg->pObject;
-      if (!pObject) {
-        nClassId = -1;
-        goto schedule_mode_advance;
-      }
+      pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(!pInitArg->pObject ? -1 : pInitArg->pObject->nClassId);
+      GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 1, (pObjectsTxt->FrameCnt[1] >> 8) + 1 + pInitArg->pGame->dwGameFrame, 0, 0);
     }
 
-    nClassId = pObject->nClassId;
-    schedule_mode_advance:
-    pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassId);
-    GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 1, (pObjectsTxt->FrameCnt[1] >> 8) + 1 + pInitArg->pGame->dwGameFrame, 0, 0);
 }
 
 // A2Q4 - SetObjectOperateState. Toggles the two paired Sanctuary-portal substate fields when an object is operated. nParam 0x4a: if Cellar field unset, set it to 1 and mark portal substate 2. nParam 0x36: if portal substate unset, set portal 1 and Cellar field 2. Keeps the Cellar<->Sanctuary portal pair consistent. No quest-record writes.

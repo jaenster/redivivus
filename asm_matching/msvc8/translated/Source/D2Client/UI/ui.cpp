@@ -4182,18 +4182,20 @@ void __stdcall Unreferenced_004535d0() {
     UNIT::CUnit::CUNIT_IterateServerUnitsWithCallback((fnUnitIterCallback)UI_DrawPlayerNameOverhead);
 }
 
-static void __stdcall UI_SetButtonKeyBinding(D2UIKeyBindingSetStrc * pButtonContainer, uint16_t nDefaultKey, int32_t nCommandId, int32_t nButtonIndex, int32_t nCmdCategory) {
+static void __stdcall UI_SetButtonKeyBinding(D2UIKeyBindingSetStrc * pButtonContainer, uint16_t nDefaultKey, int32_t nCmdCategory, int32_t nButtonIndex, int32_t nCommandId) {
     uint16_t wKey;
+    uint32_t nKey;
     if (nButtonIndex == -1) {
       return;
     }
 
-    uint32_t nResult = CmdTbl::CMD_IsCommandBound(nCmdCategory, nCommandId);
-    if (!nResult || (wKey = CmdTbl::CMD_GetKeyForCommand(nCmdCategory, nCommandId) , wKey == 0xffff) || wKey > 0xdf) {
-      wKey = nDefaultKey;
+    if (!CmdTbl::CMD_IsCommandBound(nCmdCategory, nCommandId) || (wKey = CmdTbl::CMD_GetKeyForCommand(nCmdCategory, nCommandId)) == 0xffff || wKey > 0xdf) {
+      nKey = nDefaultKey;
+    } else {
+      nKey = wKey;
     }
 
-    pButtonContainer->pHandlers[nButtonIndex].nMessageOrKeyCode = (uint32_t)wKey;
+    pButtonContainer->pHandlers[nButtonIndex].nMessageOrKeyCode = nKey;
 }
 
 static void UI_SetMultipleButtonKeyBindings(D2UIKeyBindingSetStrc * pnButtonIndices) {
@@ -4332,7 +4334,7 @@ static void UI_SetMultipleButtonKeyBindings(D2UIKeyBindingSetStrc * pnButtonIndi
 }
 
 BOOL __fastcall GetUIFlag(eD2UIvars eUI) {
-    if (UI_RECIPESCROLL < eUI) {
+    if (eUI >= UI_RECIPESCROLL + 1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc34);
       exit(-1);
     }
@@ -5160,8 +5162,8 @@ static void __stdcall DRAW_CenteredText(int32_t nFontId, int32_t nY, DWORD dwCol
 
     int32_t nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(nFontId);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszBuf, wszText);
-    int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszBuf) >> 1;
-    D2Win::Src::D2WinFont::DRAW_text(wszBuf, (anBounds[2] + anBounds[0] >> 1) - nTextWidth, nY, dwColor, 1);
+    int nX = (anBounds[0] + anBounds[2] >> 1) - (D2Win::Src::D2WinFont::DRAW_text0(wszBuf) >> 1);
+    D2Win::Src::D2WinFont::DRAW_text(wszBuf, nX, nY, dwColor, 1);
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 
@@ -9039,31 +9041,26 @@ int32_t __stdcall UI_BuildStatWindowDescriptions() {
 }
 
 int __fastcall UI_AppendColorCodeToString(uint16_t * pWszString, uint16_t * * pNextLineOut) {
+    uint16_t* pCurChar = pWszString;
     *pNextLineOut = 0;
     int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pWszString);
-    uint16_t wCurChar = *pWszString;
     int nIdx = 0;
-    uint16_t* pCurChar = pWszString;
-    while (true) {
-      if (wCurChar == L'\0') {
-        return 0;
-      }
-      if (wCurChar == L'\n') {
-        break;
+    while (*pCurChar != L'\0') {
+      if (*pCurChar == L'\n') {
+        pWszString[nIdx] = L'\0';
+        if (nIdx >= nStrLen) {
+          return 0;
+        }
+
+        *pNextLineOut = pCurChar + 1;
+        return 1;
       }
 
-      wCurChar = pCurChar[1];
       pCurChar++;
       nIdx++;
     }
 
-    pWszString[nIdx] = L'\0';
-    if (nIdx >= nStrLen) {
-      return 0;
-    }
-
-    *pNextLineOut = pCurChar + 1;
-    return 1;
+    return 0;
 }
 
 static int INPUT_HighResLeftPanelClick(D2UIMouseMsgStrc * pMsg) {

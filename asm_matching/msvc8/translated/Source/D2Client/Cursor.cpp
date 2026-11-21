@@ -422,7 +422,6 @@ void __stdcall UI_DrawCursorIcon() {
 
 void __stdcall DrawCursor() {
     int nSpriteLoaded;
-    uint32_t nDimension;
     D2GfxDataStrc sGfxData;
     int nOutValue;
     D2UnitStrc* pUnit = pCursorItem;
@@ -443,10 +442,7 @@ void __stdcall DrawCursor() {
             exit(-1);
           }
 
-          nDimension = D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block);
-          nSpriteLoaded = MouseY - (nDimension >> 1);
-          nDimension = D2CMP::SRC::CelCmp::GetDC6Width(sGfxData.pDC6Block);
-          Engine::Gfx::DrawItemGfx(pCursorItem, gnCursorType - (nDimension >> 1) + MouseX, nSpriteLoaded);
+          Engine::Gfx::DrawItemGfx(pCursorItem, gnCursorType - ((uint32_t)D2CMP::SRC::CelCmp::GetDC6Width(sGfxData.pDC6Block) >> 1) + MouseX, MouseY - ((uint32_t)D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block) >> 1));
           return;
         }
       }

@@ -189,10 +189,12 @@ void __fastcall D2FILE_ReadFile(D2PoolManagerStrc * pMemory, D2MPQFileStrc * pFi
     int bReadOk = Fog::Source::SFile::ERRORMANAGER_FReadFile(pFile, pBuffer, nBytesToRead, &nBytesRead, (LPOVERLAPPED)0x0, nullptr, 0);
     if (!bReadOk) {
       Storm::Source::SFile::SFileGetFileName(pFile, szArchivePath, 0x104);
-      D2FILE_ReadFile_HaltTail(0x8f);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8f);
+      exit(-1);
     }
     if (nBytesToRead != nBytesRead) {
-      D2FILE_ReadFile_HaltTail(0x92);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x92);
+      exit(-1);
     }
 }
 

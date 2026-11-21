@@ -302,9 +302,9 @@ void __fastcall CRASH_SetExceptionHandler(pfnFogExceptionFilter pfnFilter, void 
 }
 
 static bool __stdcall FILETOOLS_ExtractDirectory(char * szDest, uint32_t nDestSize, char * szSrcPath) {
-    char* pSep = strrchr(szSrcPath, 0x2f);
     char* pLastSep = 0;
-    if ((uintptr_t)pSep > 0) {
+    char* pSep = strrchr(szSrcPath, 0x2f);
+    if (pSep > pLastSep) {
       pLastSep = pSep;
     }
 

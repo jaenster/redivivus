@@ -529,17 +529,18 @@ char * __stdcall ITEM_GetItemData_szPlayerName(D2UnitStrc * pUnit) {
 }
 
 void __stdcall ITEMS_SetPlayerName(D2UnitStrc * pItem, char * szName) {
-    char cCh;
     if (!(pItem && pItem->eUnitType == UNIT_ITEM && pItem->pUnitData.pUnitDataItem)) {
       return;
     }
 
-    char* pDstName = (char*)((intptr_t)pItem->pUnitData.pUnitDataItem + (0x4a - (intptr_t)szName));
+    char cCh;
+    char* pSrc = szName;
+    char* pDstName = pItem->pUnitData.pUnitDataItem->szPlayerName;
     do {
-      cCh = *szName;
-      pDstName[(intptr_t)szName] = cCh;
-      szName++;
-    } while (cCh != '\0');
+      cCh = *pSrc;
+      pDstName[pSrc - szName] = cCh;
+      pSrc++;
+    } while (cCh != 0);
 }
 
 uint8_t __stdcall ITEM_GetItemData_nEarLevel(D2UnitStrc * pUnit) {
@@ -896,49 +897,50 @@ BOOL __stdcall ITEM_CheckIfBothItemsAreSameTypeOfPotions(D2UnitStrc * pUnit, D2U
       return 0;
     }
 
+    uint32_t nUnitClassId = pUnit->nClassId;
     uint32_t nItemClassId = pItemEx->nClassId;
-    if (pUnit->nClassId == nItemClassId) {
+    if (nUnitClassId == nItemClassId) {
       return 1;
     }
 
-    D2ItemsTxt* pItemsTxtUnit = DATATBLS::ItemTbls::TXT_Items_GetLine(pUnit->nClassId);
+    D2ItemsTxt* pItemsTxtUnit = DATATBLS::ItemTbls::TXT_Items_GetLine(nUnitClassId);
     D2ItemsTxt* pItemsTxtItemEx = DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
-    bool bMatchUnit = false;
-    bool bMatchItemEx = false;
+    BOOL bMatchUnit = FALSE;
+    BOOL bMatchItemEx = FALSE;
     for (nIdx = 0; nIdx < gnHealingPotionCodeCount; nIdx++) {
       if (!bMatchUnit && pItemsTxtUnit->dwCode == gadwHealingPotionCodes[nIdx]) {
-        bMatchUnit = true;
+        bMatchUnit = TRUE;
       }
       if (!bMatchItemEx && pItemsTxtItemEx->dwCode == gadwHealingPotionCodes[nIdx]) {
-        bMatchItemEx = true;
+        bMatchItemEx = TRUE;
       }
       if (bMatchUnit && bMatchItemEx) {
         return 1;
       }
     }
 
-    bMatchUnit = false;
-    bMatchItemEx = false;
+    bMatchUnit = FALSE;
+    bMatchItemEx = FALSE;
     for (nIdx = 0; nIdx < gnManaPotionCodeCount; nIdx++) {
       if (!bMatchUnit && pItemsTxtUnit->dwCode == gadwManaPotionCodes[nIdx]) {
-        bMatchUnit = true;
+        bMatchUnit = TRUE;
       }
       if (!bMatchItemEx && pItemsTxtItemEx->dwCode == gadwManaPotionCodes[nIdx]) {
-        bMatchItemEx = true;
+        bMatchItemEx = TRUE;
       }
       if (bMatchUnit && bMatchItemEx) {
         return 1;
       }
     }
 
-    bMatchUnit = false;
-    bMatchItemEx = false;
+    bMatchUnit = FALSE;
+    bMatchItemEx = FALSE;
     for (nIdx = 0; nIdx < gnRejuvPotionCodeCount; nIdx++) {
       if (!bMatchUnit && pItemsTxtUnit->dwCode == gadwRejuvPotionCodes[nIdx]) {
-        bMatchUnit = true;
+        bMatchUnit = TRUE;
       }
       if (!bMatchItemEx && pItemsTxtItemEx->dwCode == gadwRejuvPotionCodes[nIdx]) {
-        bMatchItemEx = true;
+        bMatchItemEx = TRUE;
       }
       if (bMatchUnit && bMatchItemEx) {
         return 1;

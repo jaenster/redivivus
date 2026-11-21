@@ -130,25 +130,24 @@ BOOL __stdcall SOUND_IsAmbientStreaming() {
 
 void __stdcall SOUND_ResetAmbientSoundFlags() {
     int i = 0;
-    DWORD dwLangCode = gnAmbientSoundLanguageCode;
-    int nCount = gnAmbientSoundEntryCount;
     if (gnAmbientSoundEntryCount <= 0) {
       return;
     }
+
+    DWORD dwLangCode = gnAmbientSoundLanguageCode;
 
     do {
       int* pEntry;
       if (!gbAmbientSoundLangInitialized) {
         gbAmbientSoundLangInitialized = 1;
         dwLangCode = SOUND_GetLanguageCode();
-        nCount = gnAmbientSoundEntryCount;
         gnAmbientSoundLanguageCode = dwLangCode;
       }
-      if (nCount != gnAmbientSoundCount) {
+      if (gnAmbientSoundEntryCount != gnAmbientSoundCount) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x52);
         exit(-1);
       }
-      if (i >= nCount) {
+      if (i >= gnAmbientSoundEntryCount) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x53);
         exit(-1);
       }
@@ -160,7 +159,7 @@ void __stdcall SOUND_ResetAmbientSoundFlags() {
 
       i++;
       pEntry[1] = 0;
-    } while (i < nCount);
+    } while (i < gnAmbientSoundEntryCount);
 }
 
 void __fastcall SOUND_SetMusicEnabled(int32_t nEnabled) {

@@ -2158,44 +2158,30 @@ BOOL __fastcall DrawFlag0x8(::D2WinEditBox * pEditBox) {
 
 // @sourcefile .\Src\D2WinEditBox.cpp
 ::D2WinEditBox * __fastcall D2WinEditBox(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, int32_t nInsetX, int32_t nInsetY, DC6 * pDC6, fpD2WinEditBoxSubmit pfnSubmit, OnPress pfnOnPress, uint32_t nFlags, uint32_t * pFontIds) {
-    uint32_t dwState;
-    ::Push pfnPush;
-    ::Draw pfnDraw;
     ::D2WinEditBox* pNewEditBox = D2_NEW_AT(::D2WinEditBox, ".\\Src\\D2WinEditBox.cpp", 0x39);
     memset(pNewEditBox, 0, 0x284);
     pNewEditBox->sControl.neD2FormType = FORM_EditBox;
     pNewEditBox->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
-    dwState = pNewEditBox->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];
+    pNewEditBox->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[2];
     pNewEditBox->sControl.pDC6 = pDC6;
-    pNewEditBox->sControl.dwState = dwState;
+    pNewEditBox->sControl.dwPosX = nPosX;
     pNewEditBox->sControl.dwSizeX = nSizeX;
     pNewEditBox->sControl.dwSizeY = nSizeY;
-    pNewEditBox->sControl.dwPosX = nPosX;
-    pNewEditBox->nInsetY = nInsetY;
     pNewEditBox->nInsetX = nInsetX;
+    pNewEditBox->nInsetY = nInsetY;
     pNewEditBox->nMaxLength = 0x100;
     pNewEditBox->sControl.dwPosY = nPosY;
     pNewEditBox->nScrollStart = 0;
     pNewEditBox->nScrollEnd = 0;
     pNewEditBox->nSelAnchor = -1;
-    pfnDraw = (::Draw)(BOOL (__fastcall *)(::D2WinEditBox*))D2WinEditBox::Draw;
-    if (!(nFlags & 8)) {
-      pfnDraw = (::Draw)DrawFlag0x8;
-    }
-
-    pNewEditBox->sControl.fpDraw = pfnDraw;
-    pfnPush = D2WinEditBox::Push;
-    if (!(nFlags & 8)) {
-      pfnPush = PushFlag0x8;
-    }
-
-    pNewEditBox->sControl.fpPush = pfnPush;
-    pNewEditBox->pfnSubmit = pfnSubmit;
+    pNewEditBox->sControl.fpDraw = (nFlags & 8) ? (::Draw)(BOOL (__fastcall *)(::D2WinEditBox*))D2WinEditBox::Draw : (::Draw)DrawFlag0x8;
+    pNewEditBox->sControl.fpPush = (nFlags & 8) ? (::Push)D2WinEditBox::Push : (::Push)PushFlag0x8;
     pNewEditBox->sControl.fpMouse = D2WinEditBox::Mouse;
     pNewEditBox->sControl.fpListCheck = 0;
     pNewEditBox->sControl.fpKey = 0;
     pNewEditBox->fpFilterCallback = 0;
     pNewEditBox->sControl.fpOnPress = pfnOnPress;
+    pNewEditBox->pfnSubmit = pfnSubmit;
     pNewEditBox->sControl.pNext = 0;
     pNewEditBox->wszText[0] = L'\0';
     pNewEditBox->nCursorIndex = 0;

@@ -318,7 +318,7 @@ uint32_t __stdcall GetMouseClickFlags() {
       flags = 8;
     }
     if (gnAlwaysRun) {
-      flags = 8;
+      flags |= 8;
     }
     if (gClickModifierDown) {
       flags |= 4;
@@ -363,7 +363,7 @@ void __stdcall UnderMouse_PrimaryClick(D2UIMouseMsgStrc * pMsg) {
       mouseEventFlags = 8;
     }
     if (gnAlwaysRun) {
-      mouseEventFlags = 8;
+      mouseEventFlags |= 8;
     }
     if (gClickModifierDown) {
       mouseEventFlags |= 4;
@@ -425,7 +425,7 @@ void __stdcall ProcessPrimaryClickImmediate() {
       mouseEventFlags = 8;
     }
     if (gnAlwaysRun) {
-      mouseEventFlags = 8;
+      mouseEventFlags |= 8;
     }
     if (gClickModifierDown) {
       mouseEventFlags |= 4;
@@ -498,7 +498,7 @@ void __stdcall ProcessQueuedSecondaryClick() {
       mouseEventFlags = 8;
     }
     if (gnAlwaysRun) {
-      mouseEventFlags = 8;
+      mouseEventFlags |= 8;
     }
     if (gClickModifierDown) {
       mouseEventFlags |= 4;
@@ -948,6 +948,7 @@ void __stdcall DrawLoadingMessage() {
     uint16_t nStringId;
     uint32_t iLine;
     int nLineX;
+    D2TextLineStrc* pLineList;
     D2TextLineStrc* pLine;
     uint32_t nLineCount;
     int32_t nTextWidth;
@@ -982,33 +983,24 @@ void __stdcall DrawLoadingMessage() {
 
     draw_message:
     nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wMessage);
-    if (!(nTextWidth >= UI::SpellSel::WindowSizeX - 0x28)) {
+    if (nTextWidth < UI::SpellSel::WindowSizeX - 0x28) {
       D2Win::Src::D2WinFont::DRAW_text(wMessage, UI::SpellSel::WindowSizeX - nTextWidth >> 1, 200, 0, 0);
-      D2Win::Src::D2WinMain::RENDERER_DrawOutOfGameScene();
-      D2gfx::D2GFX::D2GFX_EndScene();
-      return;
-    }
-
-    D2TextLineStrc* pLineList;
-    D2Win::Src::D2WinFont::SetAndReturnLastFont(2);
-    pLineList = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(wMessage, (int*)&nLineCount, 600);
-    if (nLineCount > 0) {
-      iLine = 0;
+    } else {
+      D2Win::Src::D2WinFont::SetAndReturnLastFont(2);
+      pLineList = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(wMessage, (int*)&nLineCount, 600);
       pLine = pLineList;
-      do {
+      for (iLine = 0; iLine < nLineCount; iLine++) {
         nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(pLine->wszLine);
-        bSceneBegun = 0;
-        nLineX = UI::SpellSel::WindowSizeX - nTextWidth;
-        D2Win::Src::D2WinFont::DRAW_text(pLine->wszLine, nLineX >> 1, D2Win::Src::D2WinFont::D2WINFONT_GetCurrentFontHeight() * iLine * 2 + 200, 0, bSceneBegun);
+        nLineX = UI::SpellSel::WindowSizeX - nTextWidth >> 1;
+        D2Win::Src::D2WinFont::DRAW_text(pLine->wszLine, nLineX, D2Win::Src::D2WinFont::D2WINFONT_GetCurrentFontHeight() * iLine * 2 + 200, 0, 0);
         pLine = pLine->pNext;
-        iLine++;
-      } while (iLine < nLineCount);
+      }
+
+      D2Win::Src::D2WinFont::D2WINFONT_FreeWordWrapList((void**)&pLineList->wszLine);
     }
 
-    D2Win::Src::D2WinFont::D2WINFONT_FreeWordWrapList((void**)&pLineList->wszLine);
     D2Win::Src::D2WinMain::RENDERER_DrawOutOfGameScene();
     D2gfx::D2GFX::D2GFX_EndScene();
-    return;
 }
 
 // Compute frame-skip level based on elapsed ticks and fps_drawn.
@@ -1245,21 +1237,16 @@ uint32_t __stdcall DrawBetaScreen(uint32_t dwUnused) {
     if (!nCutsceneState) {
       BOOL bSceneBegun;
       bSceneBegun = D2gfx::D2GFX::D2GFX_BeginScene(1, 0, 0, 0);
-      if (!bSceneBegun) {
-        return 0;
-      }
-
+      if (bSceneBegun) {
       nScreenIndex = (uint32_t)gBetaScreenIndex;
       if ((int)nScreenIndex < gnBetaScreenCount) {
         /* `DrawBetaScreen` caches the DC6 at `gD2QServer.congratsBgImage` when nullptr.
                           */ if (!gBetaScreenEntries[nScreenIndex].cachedImage) {
           /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szImagePath, "%s\\ui\\betascreens\\%s", "DATA\\GLOBAL", gBetaScreenEntries[nScreenIndex].fileName);
           pLoadedImage = Core::Archive::IMAGE_LoadDC6Ex(szImagePath, 0);
-          nScreenIndex = (uint32_t)gBetaScreenIndex;
           gBetaScreenEntries[gBetaScreenIndex].cachedImage = pLoadedImage;
-          dwNowTick = GetTickCount();
-          gBetaScreenEntries[nScreenIndex].lastLoadTick = dwNowTick;
-          D2Win::Src::D2WinPalette::D2WINPAL_LoadActPalette(gBetaScreenEntries[nScreenIndex].paletteIndex);
+          gBetaScreenEntries[gBetaScreenIndex].lastLoadTick = GetTickCount();
+          D2Win::Src::D2WinPalette::D2WINPAL_LoadActPalette(gBetaScreenEntries[gBetaScreenIndex].paletteIndex);
         }
 
         memset(&sGfxData, 0, 0x48);
@@ -1280,6 +1267,9 @@ uint32_t __stdcall DrawBetaScreen(uint32_t dwUnused) {
       }
 
       D2gfx::D2GFX::D2GFX_EndScene();
+      } else {
+        return 0;
+      }
     }
     if (!((int)(uint32_t)gBetaScreenIndex >= gnBetaScreenCount || (dwNowTick = GetTickCount() , dwNowTick > gBetaScreenEntries[gBetaScreenIndex].lastLoadTick + 10000))) {
       return 0;
@@ -1348,20 +1338,21 @@ int32_t __fastcall GAMEDATA_GetCenteredTextX(uint16_t nStringId, int32_t nCenter
 void __stdcall GAMEDATA_DrawLoadingScreenText() {
     int iLoop;
     uint16_t wszText[100];
+    int nCenterX = UI::ui::ScreenSizeX / 2;
     for (iLoop = 0; iLoop < 0x64; iLoop++) {
       wszText[iLoop] = L'\0';
     }
 
-    iLoop = UI::ui::ScreenSizeX / 2;
     uint16_t* pClearPtr = D2Lang::StrTable::strtable::GetLocaleString(0x13ea);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pClearPtr);
-    int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszText);
+    int32_t nTextWidth;
+    int32_t nTextX = nCenterX - D2Win::Src::D2WinFont::DRAW_text0(wszText) / 2;
     int32_t nTextY = 0x3e;
     if (gClientGameData.CLIENT_bExpansion) {
       nTextY = 100;
     }
 
-    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x13ea), iLoop - nTextWidth / 2, nTextY, 4, 0);
+    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x13ea), nTextX, nTextY, 4, 0);
     if (!gClientGameData.CLIENT_bExpansion) {
       nTextWidth = GAMEDATA_GetCenteredTextX(0x13eb, UI::ui::ScreenSizeX / 2);
       D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x13eb), nTextWidth, 0x6b, 4, 0);
@@ -1372,15 +1363,15 @@ void __stdcall GAMEDATA_DrawLoadingScreenText() {
       nTextWidth = 0x110;
     }
 
+    nCenterX = UI::ui::ScreenSizeX / 2;
     for (iLoop = 0; iLoop < 0x64; iLoop++) {
       wszText[iLoop] = L'\0';
     }
 
-    iLoop = UI::ui::ScreenSizeX / 2;
     pClearPtr = D2Lang::StrTable::strtable::GetLocaleString(0x13ec);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pClearPtr);
-    nTextY = D2Win::Src::D2WinFont::DRAW_text0(wszText);
-    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x13ec), iLoop - nTextY / 2, nTextWidth, 4, 0);
+    nTextX = nCenterX - D2Win::Src::D2WinFont::DRAW_text0(wszText) / 2;
+    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x13ec), nTextX, nTextWidth, 4, 0);
 }
 
 // Set gExitCutscenePlayed flag.

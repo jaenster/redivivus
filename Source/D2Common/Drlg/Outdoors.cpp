@@ -591,69 +591,46 @@ void __fastcall SpawnOutdoorLevelPresetEx(D2DrlgLevelStrc * pLevel, int nX, int 
 
 // Outdoor DRLG preset placement: scans all interior grid cells of pLevel (using the level's RNG seed for a randomized start offset) for a spot where TestOutdoorLevelPreset succeeds, picking the candidate cell whose Manhattan-ish weighted distance from the level's reference coord (pDrlgCoord) is greatest (i.e. farthest away). On success calls SpawnOutdoorLevelPresetEx at the best cell and returns TRUE; returns FALSE if no valid cell found. Mutates pLevel->sSeed as it draws randoms.
 BOOL __fastcall SpawnPresetFarAway(D2DrlgLevelStrc * pLevel, D2DrlgCoordStrc * pDrlgCoord, int32_t nLvlPrestId, int32_t nRand, int32_t nOffset, char nFlags) {
-    BOOL bCanPlace;
-    int nDistX;
-    int nDistY;
-    int nY;
-    int nX;
-    uint32_t nRandOffsetY;
-    uint32_t nRandOffsetX;
+    D2DrlgLevelDataWildernessLevel* pOutdoors = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     int nWorldX = pLevel->sCoordinatesAndSize.WorldPosition.x;
-    int nGridWidth = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->nGridCoordsHeight;
-    int nGridHeight = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->nGridCoordsWidth;
-    uint32_t nRangeX = nGridHeight - 2;
     int nWorldY = pLevel->sCoordinatesAndSize.WorldPosition.y;
-    uint32_t nRangeY = nGridWidth - 2;
-    nRandOffsetY = D2_SeedRollLimited(&pLevel->sSeed, nRangeX);
-    nRandOffsetX = D2_SeedRollLimited(&pLevel->sSeed, nRangeY);
-    nGridWidth = pDrlgCoord->nWidth;
-    nGridHeight = pDrlgCoord->nPosX;
+    int nRangeX = pOutdoors->nGridCoordsWidth - 2;
+    int nRangeY = pOutdoors->nGridCoordsHeight - 2;
+    int nRandOffsetY = D2_SeedRollLimited(&pLevel->sSeed, nRangeX);
+    int nRandOffsetX = D2_SeedRollLimited(&pLevel->sSeed, nRangeY);
+    int nCenterX = pDrlgCoord->nWidth / 2 + pDrlgCoord->nPosX;
+    int nCenterY = pDrlgCoord->nHeight / 2 + pDrlgCoord->nPosY;
     int nBestDist = 0;
-    int nCoordHeight = pDrlgCoord->nHeight;
-    int nCoordPosY = pDrlgCoord->nPosY;
     int nBestX = -1;
     int nBestY = -1;
-    int nLoopY = 0;
-    if ((int)nRangeY < 0) {
-      return 0;
-    }
+    for (int nLoopY = 0; nLoopY <= nRangeY; nLoopY++) {
+      for (int nLoopX = 0; nLoopX <= nRangeX; nLoopX++) {
+        int nY = (nLoopY + nRandOffsetX) % nRangeY + 1;
+        int nX = (nRandOffsetY + nLoopX) % nRangeX + 1;
+        if (TestOutdoorLevelPreset(pLevel, nX, nY, nLvlPrestId, nOffset, nFlags)) {
+          int nOffsetX = nX * 8 - nCenterX + 4 + nWorldX;
+          int nDistX = nOffsetX < 0 ? -nOffsetX : nOffsetX;
 
-    do {
-      int nLoopX;
-      nLoopX = 0;
-      if ((int)nRangeX >= 0) {
-        nY = (int)(nLoopY + nRandOffsetX) % (int)nRangeY + 1;
-        do {
-          nX = (int)(nRandOffsetY + nLoopX) % (int)nRangeX + 1;
-          bCanPlace = TestOutdoorLevelPreset(pLevel, nX, nY, nLvlPrestId, nOffset, nFlags);
-          if (bCanPlace) {
-            nDistX = nX * 8 - (nGridWidth / 2 + nGridHeight) + 4 + nWorldX;
-            if (nDistX < 0) {
-              nDistX = -nDistX;
-            }
-
-            nDistY = nY * 8 - (nCoordHeight / 2 + nCoordPosY) + 4 + nWorldY;
-            if (nDistY < 0) {
-              nDistY = -nDistY;
-            }
-            if (nDistX > nDistY) {
-              nDistY += nDistX * 2;
-            } else {
-              nDistY = nDistX + nDistY * 2;
-            }
-            if (nBestDist < nDistY / 2) {
-              nBestY = nY;
-              nBestX = nX;
-              nBestDist = nDistY / 2;
-            }
+          int nDistY = nY * 8 - nCenterY + 4 + nWorldY;
+          if (nDistY < 0) {
+            nDistY = -nDistY;
           }
 
-          nLoopX++;
-        } while (nLoopX <= (int)nRangeX);
-      }
+          int nDist;
+          if (nDistX > nDistY) {
+            nDist = nDistY + nDistX * 2;
+          } else {
+            nDist = nDistX + nDistY * 2;
+          }
 
-      nLoopY++;
-    } while (nLoopY <= (int)nRangeY);
+          if (nBestDist < nDist / 2) {
+            nBestDist = nDist / 2;
+            nBestX = nX;
+            nBestY = nY;
+          }
+        }
+      }
+    }
 
     if (nBestX != -1 && nBestY != -1) {
       SpawnOutdoorLevelPresetEx(pLevel, nBestX, nBestY, nLvlPrestId, nRand, 0);

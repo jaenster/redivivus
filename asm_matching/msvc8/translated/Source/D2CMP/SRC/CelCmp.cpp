@@ -2586,16 +2586,13 @@ void __stdcall GFX_DestroyGlobalCriticalSection() {
 }
 
 void __fastcall CELCMP_ApplyColorKeyToAllPixels(void * pFrameData, pfnTilecmpPixelCallback pfnPixelCallback, uint32_t dwColorKey) {
-    uint32_t nColorKeyR = dwColorKey >> 0x10;
-    uint32_t nColorKeyG = dwColorKey >> 8;
-    uint32_t nColorKeyB = (uint8_t)dwColorKey;
-    uint8_t* pPixel = (uint8_t*)((char*)pFrameData + 0x20);
+    uint32_t dwColorKeyRGB = (((uint8_t)(dwColorKey >> 0x10) << 8) + (uint8_t)(dwColorKey >> 8) << 8) + (uint8_t)dwColorKey;
+    uint8_t* pPixel = (uint8_t*)pFrameData + 0x20;
     for (dwColorKey = 0; dwColorKey < (uint32_t)(*(int*)((char*)pFrameData + 4) * *(int*)((char*)pFrameData + 8)); dwColorKey++) {
-      uint32_t dwPixelRGB;
-      dwPixelRGB = d2_load24((uint8_t*)pPixel);
+      uint32_t dwPixelRGB = ((pPixel[2] << 8) + pPixel[1] << 8) + pPixel[0];
       pPixel += 3;
-      if ((uint32_t)dwPixelRGB != (((uint32_t)(uint8_t)nColorKeyR << 8) + (uint8_t)nColorKeyG << 8) + nColorKeyB) {
-        (*pfnPixelCallback)((uint32_t)dwPixelRGB);
+      if (dwPixelRGB != dwColorKeyRGB) {
+        (*pfnPixelCallback)(dwPixelRGB);
       }
     }
 }

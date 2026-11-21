@@ -344,15 +344,13 @@ int __stdcall EDITBOX_Cb_COMCALLBACK_ClearChannelUserList(void * pUnused) {
 static int COMCALLBACK_HandleBannerAdFile(D2BnBannerAdMsgStrc * pBannerAdData) {
     char* pszExtension;
     int nExtChar;
-    char szTempPath[260];
     char szTempFileName[260];
+    char szTempPath[260];
     DWORD dwBytesWritten;
-    char byNameChar;
     D2Win::Src::D2WinSmack::D2WINSMACK_CloseAndDeleteFile(gpLobbyForm0.pCtlLobbyLadderMode);
     DWORD dwTempPathLen = GetTempPathA(0x104, szTempPath);
     if (!dwTempPathLen) {
-      szTempPath[0] = '.';
-      szTempPath[1] = '\0';
+      strcpy(szTempPath, ".");
     }
 
     UINT nTempFileResult = GetTempFileNameA(szTempPath, "BNetAd", 0, szTempFileName);
@@ -365,15 +363,10 @@ static int COMCALLBACK_HandleBannerAdFile(D2BnBannerAdMsgStrc * pBannerAdData) {
         Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
       }
 
-      pszExtension = strrchr(pBannerAdData->szFileName, 0x2e);
-      nExtChar = tolower((int)pszExtension[1]);
+      pszExtension = strrchr(pBannerAdData->szFileName, '.') + 1;
+      nExtChar = tolower(*pszExtension);
       D2Win::Src::D2WinSmack::D2WINSMACK_LoadAndDecodeSmacker(gpLobbyForm0.pCtlLobbyLadderMode, szTempFileName, nExtChar);
-      nExtChar = 0;
-      do {
-        byNameChar = szTempFileName[nExtChar];
-        lpFileName_00798e30[nExtChar] = byNameChar;
-        nExtChar++;
-      } while (byNameChar != '\0');
+      strcpy(lpFileName_00798e30, szTempFileName);
     }
 
     ghBannerAdProcess = pBannerAdData->dwBannerId;
@@ -1836,33 +1829,25 @@ static void __fastcall COMCALLBACK_ValidateEmoteTarget(char * szPlayerName, char
 }
 
 BOOL __fastcall COMCALLBACK_ProcessEmoteCommand(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szText, char * szEmoteArg) {
-    char szFormattedMsg[256];
-    char szEmoteTarget[256];
     char szEmoteBody[256];
-    char ch;
+    char szEmoteTarget[256];
+    char szFormattedMsg[256];
     COMCALLBACK_FormatChatMessage(szText, szEmoteTarget, szEmoteBody);
-    char* pchScan;
     if (strlen(szEmoteBody) != 0) {
       if (strlen(szEmoteTarget) != 0) {
         sprintf(szFormattedMsg, "%s%s", szEmoteTarget, szEmoteBody);
-        COMCALLBACK_ValidateEmoteTarget(szFormattedMsg, szEmoteArg);
-        return 1;
+      } else {
+        strcpy(szFormattedMsg, szEmoteBody);
       }
-
-      int i = 0;
-      do {
-        pchScan = szEmoteBody + i;
-        szFormattedMsg[i] = *pchScan;
-        i++;
-      } while (*pchScan != '\0');
 
       COMCALLBACK_ValidateEmoteTarget(szFormattedMsg, szEmoteArg);
       return 1;
     }
 
-    char* pszNameKey;
-    pchScan = Storm::Source::SSTR::SStrChr(szText, '*');
-    if (!pchScan || (pszNameKey = pchScan + 1 , pchScan[1] == '\0')) {
+    char* pszNameKey = Storm::Source::SSTR::SStrChr(szText, '*');
+    if (pszNameKey && pszNameKey[1]) {
+      pszNameKey++;
+    } else {
       pszNameKey = szText;
     }
 
@@ -2359,8 +2344,6 @@ BOOL __fastcall COMCALLBACK_HandleJoinedChannel(uint32_t dwCbArg1, uint32_t dwCb
     uint16_t* pwszClear;
     uint16_t wszChannelMsg[576];
     char szFormatted[500];
-    char ch;
-    uint8_t ch2;
     sprintf(szFormatted, "You have joined channel: %s", szChannelName);
     for (i = 0; i < 0x240; i++) {
       wszChannelMsg[i] = L'\0';
@@ -2370,24 +2353,9 @@ BOOL __fastcall COMCALLBACK_HandleJoinedChannel(uint32_t dwCbArg1, uint32_t dwCb
     OOGUtilities::OOGUTIL_AppendChatText(wszChannelMsg);
     ChatDlg::CHATDLG_AppendTextToTextBox_ForComCallback(wszChannelMsg, 5);
     strcpy((char*)gszCurrentChannelName, szChannelName);
-    uint8_t* pbLastChannelDst = OOGUtilities::D2IniData_multiplayer->padding_0x35F + 2;
-    char* pszSrc = gszCurrentChannelName;
-    do {
-      ch2 = *pszSrc;
-      *pbLastChannelDst = ch2;
-      pszSrc++;
-      pbLastChannelDst++;
-    } while (ch2);
-
-    pbLastChannelDst = OOGUtilities::D2IniData_multiplayer->padding_0x35F + 0x22;
-    if (!*pbLastChannelDst) {
-      pszSrc = gszCurrentChannelName;
-      do {
-        ch2 = *pszSrc;
-        *pbLastChannelDst = ch2;
-        pszSrc++;
-        pbLastChannelDst++;
-      } while (ch2);
+    strcpy((char*)(OOGUtilities::D2IniData_multiplayer->padding_0x35F + 2), gszCurrentChannelName);
+    if (!OOGUtilities::D2IniData_multiplayer->padding_0x35F[0x22]) {
+      strcpy((char*)(OOGUtilities::D2IniData_multiplayer->padding_0x35F + 0x22), gszCurrentChannelName);
     }
 
     ::D2WinButton** ppChatUserBtn = gaChatUserListButtonArray;

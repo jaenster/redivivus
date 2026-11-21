@@ -426,25 +426,14 @@ int __thiscall OnChar(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) 
     uint8_t nCharCode;
     nCharCode = (uint8_t)pMsg->nWParam;
     if (pThis->pfnCharFilter) {
-      uint16_t* pWVar1;
       bIsValidChar = pThis->pfnCharFilter((::UIWidget*)pThis, pMsg);
       apply_char:
       if (nCharCode == 8) {
         if (pThis->nTextLength > 0) {
-          bIsValidChar = pThis->nCursorPos;
-          if (bIsValidChar != pThis->nTextLength && bIsValidChar) {
-            bIsValidChar--;
-            while (true) {
-              nLimit = (uint32_t)pThis->nMaxLength;
-              if (pThis->nTextLength < (int)(uint32_t)pThis->nMaxLength) {
-                nLimit = pThis->nTextLength;
-              }
-              if (bIsValidChar >= (int)(nLimit - 1)) {
-                break;
-              }
-
-              pThis->wszString[bIsValidChar] = (pThis->wszString + bIsValidChar)[1];
-              bIsValidChar++;
+          int nCursor = pThis->nCursorPos;
+          if (nCursor != pThis->nTextLength && nCursor) {
+            for (int i = nCursor - 1; i < (pThis->nTextLength < (int)pThis->nMaxLength ? pThis->nTextLength : (int)pThis->nMaxLength) - 1; i++) {
+              pThis->wszString[i] = pThis->wszString[i + 1];
             }
           }
 
@@ -460,19 +449,10 @@ int __thiscall OnChar(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) 
       }
       if (nCharCode == 0x2e) {
         if (pThis->nTextLength > 0) {
-          bIsValidChar = pThis->nCursorPos;
-          if (bIsValidChar != pThis->nTextLength) {
-            while (true) {
-              nLimit = (uint32_t)pThis->nMaxLength;
-              if (pThis->nTextLength < (int)(uint32_t)pThis->nMaxLength) {
-                nLimit = pThis->nTextLength;
-              }
-              if (bIsValidChar >= (int)nLimit) {
-                break;
-              }
-
-              pThis->wszString[bIsValidChar] = (pThis->wszString + bIsValidChar)[1];
-              bIsValidChar++;
+          int nCursor = pThis->nCursorPos;
+          if (nCursor != pThis->nTextLength) {
+            for (int i = nCursor; i < (pThis->nTextLength < (int)pThis->nMaxLength ? pThis->nTextLength : (int)pThis->nMaxLength); i++) {
+              pThis->wszString[i] = pThis->wszString[i + 1];
             }
 
             pThis->wszString[pThis->nTextLength - 1] = L'\0';
@@ -499,10 +479,8 @@ int __thiscall OnChar(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) 
             }
             if ((int)nLimit >= (int)nInsertPos) {
               do {
-                bIsValidChar = nLimit - 1;
-                pWVar1 = pThis->wszString + nLimit;
+                pThis->wszString[nLimit] = pThis->wszString[nLimit - 1];
                 nLimit--;
-                *pWVar1 = pThis->wszString[bIsValidChar];
               } while ((int)nLimit >= pThis->nCursorPos);
             }
             if (pThis->nTextLength < (int)(uint32_t)pThis->nMaxLength) {

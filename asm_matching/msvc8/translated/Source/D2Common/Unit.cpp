@@ -159,7 +159,6 @@ void __stdcall ROOM_ClearUnitUpdateList(D2RoomStrc * pRoom) {
 void __stdcall DRLGROOM_RemoveUnitFromUpdateList(D2UnitStrc * pUnit) {
     D2UnitStrc* pCurrent;
     D2UnitStrc* pPrevious;
-    D2UnitStrc* pNext;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x12d);
       exit(-1);
@@ -174,16 +173,16 @@ void __stdcall DRLGROOM_RemoveUnitFromUpdateList(D2UnitStrc * pUnit) {
     } else {
       D2UnitStrc** ppUpdateList;
       ppUpdateList = DUNGEON::Dungeon::DRLGROOM_GetUnitUpdateListFromRoom(pRoom, 0);
-      pNext = *ppUpdateList;
+      pCurrent = *ppUpdateList;
       pPrevious = 0;
-      if (*ppUpdateList) {
-        while ((pCurrent = pNext) != pUnit) {
-          pNext = pCurrent->pChangeNextUnit;
-          pPrevious = pCurrent;
-          if (!pCurrent->pChangeNextUnit) {
-            return;
+      if (pCurrent) {
+        do {
+          if (pCurrent == pUnit) {
+            break;
           }
-        }
+          pPrevious = pCurrent;
+          pCurrent = pCurrent->pChangeNextUnit;
+        } while (pCurrent);
 
         if (pCurrent) {
           if (!pPrevious) {
@@ -241,7 +240,10 @@ BOOL __stdcall DRLGROOM_AddUnitToRoomList(D2UnitStrc * pUnit, D2RoomStrc * pRoom
         exit(-1);
       } else {
         ppUnitList = DUNGEON::Dungeon::DRLGROOM_GetUnitListFromRoom(pRoom);
-        if (ppUnitList) {
+        if (!ppUnitList) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x57);
+          exit(-1);
+        } else {
           pUnit->pRoomNext = *ppUnitList;
           *ppUnitList = pUnit;
           ROOM_LinkUnitToUpdateList(pUnit);
@@ -264,9 +266,6 @@ BOOL __stdcall DRLGROOM_AddUnitToRoomList(D2UnitStrc * pUnit, D2RoomStrc * pRoom
               }
           }
         }
-
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x57);
-        exit(-1);
       }
     }
 }

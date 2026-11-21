@@ -826,29 +826,21 @@ void __stdcall AllocDrlgDelete(D2RoomStrc * pRoom, eD2UnitType eUnitType, int32_
 
 // @sourcefile .\DUNGEON\Dungeon.cpp
 void __stdcall DRLGROOM_FreeDrlgDelete(D2RoomStrc * pRoom) {
-    D2PoolManagerStrc* pMemory;
-    D2DrlgDeleteStrc* pNext;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x390);
       exit(-1);
     }
 
-    {
-      D2DrlgDeleteStrc* pCurrent;
-      pCurrent = pRoom->pDrlgDelete;
-      pMemory = pRoom->pDrlgAct->pMemory;
-      if (!pCurrent) {
-        return;
-      }
-
+    D2DrlgDeleteStrc* pCurrent = pRoom->pDrlgDelete;
+    D2PoolManagerStrc* pMemory = pRoom->pDrlgAct->pMemory;
+    if (pCurrent) {
       do {
-        pNext = pCurrent->pNext;
-        D2_FREE_POOL_AT(pMemory, pCurrent, ".\\DUNGEON\\Dungeon.cpp", 0x39c);
-        pCurrent = pNext;
-      } while (pNext);
+        D2DrlgDeleteStrc* pDelete = pCurrent;
+        pCurrent = pCurrent->pNext;
+        D2_FREE_POOL_AT(pMemory, pDelete, ".\\DUNGEON\\Dungeon.cpp", 0x39c);
+      } while (pCurrent);
 
       pRoom->pDrlgDelete = 0;
-      return;
     }
 }
 

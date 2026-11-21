@@ -621,24 +621,8 @@ void __fastcall CLIENT_FreePlayerUnit(D2UnitStrc * pUnit) {
 }
 
 static void CLIENT_UpdateUnitRoomPops(D2UnitStrc * pUnit) {
-    int32_t nX;
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    int nY = 0;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nX = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    }
-
+    int32_t nX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    int32_t nY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     uint32_t bOtherRoom = D2Common::Units::NeedsRoomUpdate(pUnit);
     D2Common::DUNGEON::Dungeon::UpdatePops(pRoom, nX, nY, bOtherRoom);
@@ -2954,13 +2938,19 @@ void __stdcall CUNIT_UpdateClientFramesAndAI(D2UnitStrc * * pUnitHashTable) {
     }
 }
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
 void __fastcall HANDSHAKE_SetClientPlayerUnit(D2UnitStrc * pUnit) {
     if (CUnit::pPlayerUnit) {
       UI::ui::UI_FreeAllPanelAssets();
     }
     if (pUnit) {
       D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pUnit->pPath.pDynamicPath, 0);
-      nD2PlayerClassID = (eD2PlayerClassID)pUnit->nClassId;
+      nD2PlayerClassID = (eD2PlayerClassID)GetClassIdInline(pUnit);
       GAME::Game::GAMEDATA_SetClickModifier(0);
       UI::ui::UI_LoadAllPanelAssets();
     }

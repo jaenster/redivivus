@@ -1634,19 +1634,19 @@ void __stdcall DRAW_WORLD_ClearWarpFadeTimer() {
 }
 
 int __fastcall CUNITEVENT_DispatchCallbacks(int nClientEvent, D2UnitStrc * pOwnerUnit, D2UnitStrc * pMissile, uint32_t dwParam4) {
-    D2CUnitEventStrc* pNextCallback;
-    int32_t dwResult = 0;
-    if (pOwnerUnit) {
-      D2CUnitEventStrc* pDVar1;
-      pNextCallback = pOwnerUnit->uSideData.pClientSide.pCUnitEventList;
-      while (pDVar1 = pNextCallback) {
-        pNextCallback = pDVar1->pPrev;
-        if (pDVar1->nClientEvent == nClientEvent) {
-          dwResult = pDVar1->pfnCallback(nClientEvent, pOwnerUnit, pMissile, dwParam4, pDVar1->dwEventData1, pDVar1->dwEventData2);
-        }
-      }
+    if (!pOwnerUnit) {
+      return 0;
     }
 
+    int32_t dwResult = 0;
+    D2CUnitEventStrc* pEvent = pOwnerUnit->uSideData.pClientSide.pCUnitEventList;
+    while (pEvent) {
+      D2CUnitEventStrc* pNextCallback = pEvent->pPrev;
+      if (pEvent->nClientEvent == nClientEvent) {
+        dwResult = pEvent->pfnCallback(nClientEvent, pOwnerUnit, pMissile, dwParam4, pEvent->dwEventData1, pEvent->dwEventData2);
+      }
+      pEvent = pNextCallback;
+    }
     return dwResult;
 }
 

@@ -1108,11 +1108,12 @@ void __stdcall D2WIN_ToggleMusicOptions(D2UIMouseMsgStrc * pMsg) {
 
 static BOOL __fastcall Unreferenced_004fa1b0(POINT * pPoint, D2ControlStrc * pControl) {
     if (pControl->fpHitTest) {
-      BOOL BVar1;
-      BVar1 = pControl->fpHitTest(pControl);
-      return BVar1;
+      return pControl->fpHitTest(pControl);
     }
-    if (pPoint->x >= pControl->dwPosX && pPoint->y >= pControl->dwPosY - pControl->dwSizeY && pPoint->x < pControl->dwSizeX + pControl->dwPosX && pPoint->y < pControl->dwPosY) {
+
+    int nPosX = pControl->dwPosX;
+    int nPosY = pControl->dwPosY;
+    if (pPoint->x >= nPosX && pPoint->y >= nPosY - pControl->dwSizeY && pPoint->x < pControl->dwSizeX + nPosX && pPoint->y < nPosY) {
       return 1;
     }
 

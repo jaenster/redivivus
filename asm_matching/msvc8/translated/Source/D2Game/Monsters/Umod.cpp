@@ -33,28 +33,23 @@ void __fastcall MONUMOD_RollNameSeed(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
 
 static void UMOD_IncreaseMonsterHp(uint32_t nUmodConstant, D2UnitStrc * pUnit) {
     int nHpBonus;
-    uint32_t nBaseHp;
-    nBaseHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
-    if ((int)nBaseHp > 0x100000) {
-      if ((int)(nBaseHp & -16) >= 0x640) {
-        nHpBonus = (int)nBaseHp / 100 * nUmodConstant;
-        goto apply_hp_bonus;
+    int nBaseHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
+    if (nBaseHp > 0x100000) {
+      if (nBaseHp >> 4 < 100) {
+        nHpBonus = (int)((int64_t)nBaseHp * (int64_t)(int)nUmodConstant / 100);
+      } else {
+        nHpBonus = nBaseHp / 100 * (int)nUmodConstant;
+      }
+    } else if ((int)nUmodConstant > 0x10000) {
+      if ((int)nUmodConstant >> 4 < 100) {
+        nHpBonus = (int)((int64_t)nBaseHp * (int64_t)(int)nUmodConstant / 100);
+      } else {
+        nHpBonus = (int)nUmodConstant / 100 * nBaseHp;
       }
     } else {
-      if ((int)nUmodConstant <= 0x10000) {
-        nHpBonus = (int)(nBaseHp * nUmodConstant) / 100;
-        goto apply_hp_bonus;
-      }
-      if ((int)(nUmodConstant & -16) >= 0x640) {
-        nHpBonus = (int)nUmodConstant / 100 * nBaseHp;
-        goto apply_hp_bonus;
-      }
+      nHpBonus = nBaseHp * (int)nUmodConstant / 100;
     }
 
-    int64_t nDivResult;
-    nDivResult = (int64_t)(int)nBaseHp * (int64_t)(int)nUmodConstant / 100;
-    nHpBonus = (int)nDivResult;
-    apply_hp_bonus:
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, nBaseHp + nHpBonus, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nBaseHp + nHpBonus, 0);
 }

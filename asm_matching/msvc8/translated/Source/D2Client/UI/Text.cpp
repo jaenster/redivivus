@@ -6106,8 +6106,8 @@ uint16_t * __fastcall TEXT_LookupSoundStringIndex(uint16_t nSoundId) {
 void __stdcall TEXT_CloseScrollingText() {
     int32_t nHandlerCount;
     GAME::Select::SELECT_SetExclusionRect(nullptr);
-    D2TextBoxStrc* pMemoryToFree = gpTextScrollingBox;
     if (gpTextScrollingBox) {
+      D2TextBoxStrc* pMemoryToFree = gpTextScrollingBox;
       TEXT_FreeTextLineList(gpTextScrollingBox->pLineList);
       D2_FREE_AT(pMemoryToFree, ".\\UI\\text.cpp", 0x68e);
       gpTextScrollingBox = 0;
@@ -6301,7 +6301,7 @@ void __stdcall TEXT_OnEscCloseQuestScroll(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall TEXT_OnClickCloseQuestScroll(D2UIMouseMsgStrc * pMsg) {
-    if (!((int)(uint32_t)pMsg->uLParam.sMousePos.nMouseY < Inv::ScreenSizeY - 0x30 && (int)(uint32_t)pMsg->uLParam.sMousePos.nMouseX < ui::ScreenSizeX / 2)) {
+    if (!((int)((uint32_t)pMsg->uLParam.nLParam >> 16) < Inv::ScreenSizeY - 0x30 && (int)(uint16_t)pMsg->uLParam.nLParam < ui::ScreenSizeX / 2)) {
       return;
     }
 
@@ -7166,12 +7166,12 @@ void __fastcall TEXT_ShowNpcDialog(D2UnitStrc * pUnit, uint16_t wDialogStringId,
       gpTextScrollBoxDC6 = SOUND_NONE;
     }
 
-    D2TextBoxStrc* pPopupToFree = gpStaticTextPopup;
     gpTextScrollBoxBuffer = 0;
     if (!pUnit) {
       if (gbTextStaticPopupActive) {
         if (gpStaticTextPopup) {
-          TEXT_FreeTextLineList(gpStaticTextPopup->pLineList);
+          D2TextBoxStrc* pPopupToFree = gpStaticTextPopup;
+          TEXT_FreeTextLineList(pPopupToFree->pLineList);
           D2_FREE_AT(pPopupToFree, ".\\UI\\text.cpp", 0x68e);
           gpStaticTextPopup = 0;
         }
@@ -7195,10 +7195,7 @@ void __fastcall TEXT_ShowNpcDialog(D2UnitStrc * pUnit, uint16_t wDialogStringId,
     }
 
     nExclusionXOff.top = gnScrollingTextBoxTopY;
-    nExclusionXOff.bottom = gnScrollingTextBoxTopY + 0xb6;
-    if ((int)(gnScrollingTextBoxTopY + 0xb6) >= Inv::ScreenSizeY - 0x35) {
-      nExclusionXOff.bottom = Inv::ScreenSizeY - 0x35;
-    }
+    nExclusionXOff.bottom = nExclusionXOff.top + 0xb6 < Inv::ScreenSizeY - 0x35 ? nExclusionXOff.top + 0xb6 : Inv::ScreenSizeY - 0x35;
 
     nExclusionXOff.left = gnTextBoxExclusionX - 10;
     nExclusionXOff.right = gnTextBoxExclusionX + 0x14f;
@@ -7228,7 +7225,7 @@ void __fastcall TEXT_ShowNpcDialog(D2UnitStrc * pUnit, uint16_t wDialogStringId,
       gpTextScrollBoxDC6 = nSoundId;
     }
 
-    bool bNeedRegister = !gbTextEventHandlersRegistered;
+    int bNeedRegister = !gbTextEventHandlersRegistered;
     gpTextScrollingBox->nState = 0;
     gbTextScrollBoxActive = 1;
     if (!bNeedRegister) {

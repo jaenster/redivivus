@@ -321,8 +321,9 @@ static void GFX_ExtractFilenameFromPath(char * szPath, char * szOutFilename) {
       cCh = *pcCur;
     }
 
-    strncpy(szOutFilename, pcCur + 1, nLen - 1U);
-    szOutFilename[nLen - 1U] = '\0';
+    nLen--;
+    strncpy(szOutFilename, pcCur + 1, nLen);
+    szOutFilename[nLen] = '\0';
 }
 
 void * __stdcall GFX_FindTextureInCache(D2CofCacheStrc * pTextureCache, char * szPath) {
@@ -2463,23 +2464,14 @@ void __fastcall GFX_LoadUnitModeCof(D2UnitStrc * pUnit, int32_t nUnused) {
 void __fastcall GFX_GetUnitSpriteOffset(D2UnitStrc * pUnit, int byComponent, int32_t * pOffsetX, int32_t * pOffsetY) {
     // Frame slots -32..-16 are ONE object: &nFrameResult is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nFrameResult;
-      int32_t nTransformGfx;
-      uint8_t __pad8;
-      uint8_t __pad9;
-      uint8_t __pad10;
-      uint8_t __pad11;
-      D2PathUnion uPathUnion;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 16, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    int nFrameResult;
+    int32_t nTransformGfx;
+    D2PathUnion uPathUnion;
     BOOL nFrameShifted;
     D2UnitStrc* pOwnerUnit;
     D2InventoryStrc* pInventoryUsed;
     D2GfxDataStrc sSpriteParams;
-    uint8_t nComponentType = (uint8_t)byComponent;
-    __frame0.uPathUnion = pUnit->pPath;
+    uPathUnion = pUnit->pPath;
     eD2UnitType eUnitType = pUnit->eUnitType;
     int nClassId = pUnit->nClassId;
     int32_t pSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
@@ -2490,7 +2482,7 @@ void __fastcall GFX_GetUnitSpriteOffset(D2UnitStrc * pUnit, int byComponent, int
       pInventoryUsed = pOwnerUnit->pInventory;
     }
 
-    uint32_t nWeaponClass = D2Common::COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit, pInventoryUsed, (uint32_t*)&__frame0.nTransformGfx, pSeqMode, 0);
+    uint32_t nWeaponClass = D2Common::COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit, pInventoryUsed, (uint32_t*)&nTransformGfx, pSeqMode, 0);
     D2GfxInfoUnkStrc* pGfxInfoUnk = GFX_FindGfxInfoByModeAndWeapon(pUnit, nWeaponClass, -1);
     if (!pGfxInfoUnk) {
       pGfxInfoUnk = GFX_EnsureUnitCofLoaded(pUnit, nWeaponClass, -1);
@@ -2522,16 +2514,11 @@ void __fastcall GFX_GetUnitSpriteOffset(D2UnitStrc * pUnit, int byComponent, int
     }
 
     memset(&sSpriteParams, 0, 0x48);
-    nErrLine = -1;
-    int* pResolvedAnimMode = &__frame0.nFrameResult;
-    int nResultTmp = pUnit->nGfxCurrentFrame >> 8;
-    nErrLine = GfxUtil::DC6_AssignParams(&sSpriteParams, pUnit, nullptr, (uint32_t)D2Common::PATH::DynamicPath::GetDirection(__frame0.uPathUnion.pDynamicPath), nResultTmp, pResolvedAnimMode, nComponentType, nErrLine);
-    if (!nErrLine) {
+    if (!GfxUtil::DC6_AssignParams(&sSpriteParams, pUnit, nullptr, (uint32_t)D2Common::PATH::DynamicPath::GetDirection(uPathUnion.pDynamicPath), pUnit->nGfxCurrentFrame >> 8, &nFrameResult, (uint8_t)byComponent, -1)) {
       return;
     }
 
-    nResultTmp = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sSpriteParams, 0, 1);
-    if (!nResultTmp) {
+    if (!D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sSpriteParams, 0, 1)) {
       return;
     }
     if (!sSpriteParams.pDC6Block) {
@@ -2539,10 +2526,8 @@ void __fastcall GFX_GetUnitSpriteOffset(D2UnitStrc * pUnit, int byComponent, int
       exit(-1);
     }
 
-    nErrLine = D2CMP::SRC::CelCmp::GetDC6OffsetX(sSpriteParams.pDC6Block);
-    *pOffsetX = nErrLine;
-    nErrLine = D2CMP::SRC::CelCmp::GetDC6OffsetY(sSpriteParams.pDC6Block);
-    *pOffsetY = nErrLine;
+    *pOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(sSpriteParams.pDC6Block);
+    *pOffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(sSpriteParams.pDC6Block);
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp

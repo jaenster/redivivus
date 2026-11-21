@@ -401,17 +401,17 @@ static void __stdcall SUBTILE_CompressIsometricShape(D2GroundSubTileStrc * pSubT
 }
 
 void __stdcall SUBTILE_ExtractIsometricPixels(D2GroundSubTileStrc * pSubTileEntry, uint8_t * pSrcPixelData) {
-    uint8_t* pPixelBuf = (uint8_t*)D2_ALLOC_AT(0x100, ".\\SRC\\SubTile.cpp", 0x185);
-    if (!pPixelBuf) {
+    uint8_t* pDst = (uint8_t*)D2_ALLOC_AT(0x100, ".\\SRC\\SubTile.cpp", 0x185);
+    if (!pDst) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x186);
       exit(-1);
     }
 
-    memset(pPixelBuf, 0, 0x100);
+    uint8_t* pPixelBuf = pDst; // steer-ok: the original takes the start pointer before the memset
+    memset(pDst, 0, 0x100);
     int iRow = 0;
     int nXOff = 0xe;
     size_t nRowWidth = 4;
-    uint8_t* pDst = pPixelBuf;
     do {
       memcpy(pDst, pSrcPixelData + nXOff, nRowWidth);
       pSrcPixelData += 0x20;

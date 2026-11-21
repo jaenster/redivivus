@@ -347,43 +347,26 @@ void __stdcall HELP_DrawHelpButtonTooltip() {
 
 void __stdcall HELP_DrawHelpButton() {
     D2GfxDataStrc sGfxData;
-    BOOL bUIFlag = ui::GetUIFlag(UI_SKILLTREE);
-    if (!bUIFlag) {
-      int32_t nSeenHelp;
-      bUIFlag = ui::GetUIFlag(UI_SKILLSELECT);
-      if (!bUIFlag) {
-        bUIFlag = ui::GetUIFlag(UI_INVENTORY);
-        if (!bUIFlag) {
-          bUIFlag = ui::GetUIFlag(UI_NPCSHOP);
-          if (!bUIFlag) {
-            bUIFlag = ui::GetUIFlag(UI_MPTRADE);
-            if (!bUIFlag) {
-              gpHelpScrollButtonUp = ui::GetUIFlag(UI_STASH);
-              if (!gpHelpScrollButtonUp) {
-                nSeenHelp = GetSeenHelpMenuValue();
-                if (!nSeenHelp) {
-                  memset(&sGfxData, 0, 0x48);
-                  HELP_DrawHelpButtonTooltip();
-                  sGfxData.pDC6 = gpUIStatLevelUpButtonImages;
-                  sGfxData.nDirection = 0;
-                  sGfxData.nFrameNumber = 0;
-                  D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - 0x4b, Inv::ScreenSizeY - 0xa0, -1, DRAW_SOLID, nullptr);
-                  sGfxData.nFrameNumber = (int)(gpHelpScrollButtonDown != 0);
-                  sGfxData.pDC6 = gpUIStatLevelUpPanelImages;
-                  D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - 0x48, Inv::ScreenSizeY - 0xa4, -1, DRAW_SOLID, nullptr);
-                  return;
-                }
-
-                ui::SetUIFlag(UI_HELPSCREENBTN, UI_RESET, 0);
-                return;
-              }
-            }
-          }
-        }
-      }
+    if (ui::GetUIFlag(UI_SKILLTREE) || ui::GetUIFlag(UI_SKILLSELECT) || ui::GetUIFlag(UI_INVENTORY) || ui::GetUIFlag(UI_NPCSHOP) || ui::GetUIFlag(UI_MPTRADE) || ui::GetUIFlag(UI_STASH)) {
+      gpHelpScrollButtonUp = 1;
+      return;
     }
 
-    gpHelpScrollButtonUp = 1;
+    gpHelpScrollButtonUp = 0;
+    if (!GetSeenHelpMenuValue()) {
+      memset(&sGfxData, 0, 0x48);
+      HELP_DrawHelpButtonTooltip();
+      sGfxData.pDC6 = gpUIStatLevelUpButtonImages;
+      sGfxData.nDirection = 0;
+      sGfxData.nFrameNumber = 0;
+      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - 0x4b, Inv::ScreenSizeY - 0xa0, -1, DRAW_SOLID, nullptr);
+      sGfxData.pDC6 = gpUIStatLevelUpPanelImages;
+      sGfxData.nFrameNumber = (int)(gpHelpScrollButtonDown != 0);
+      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - 0x48, Inv::ScreenSizeY - 0xa4, -1, DRAW_SOLID, nullptr);
+      return;
+    }
+
+    ui::SetUIFlag(UI_HELPSCREENBTN, UI_RESET, 0);
 }
 
 void __stdcall INPUT_HelpScrollButtonDown(D2UIMouseMsgStrc * pMsg) {

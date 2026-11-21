@@ -703,11 +703,12 @@ BOOL __stdcall WAYPOINT_IsMouseInMiniPanel() {
           nPanelX = ui::ScreenSizeX / 2 + 0x23;
         }
 
+        int nPanelY = Inv::ScreenSizeY - 0x32;
         nButtonCount = 8;
         if (gbMiniPanelSinglePlayer) {
           nButtonCount = 7;
         }
-        if (nMouseX > nPanelX && nMouseX < nPanelX + nButtonCount * 0x14 && nMouseY > Inv::ScreenSizeY - 0x4c && nMouseY < Inv::ScreenSizeY - 0x32) {
+        if (nMouseX > nPanelX && nMouseX < nPanelX + nButtonCount * 0x14 && nMouseY > nPanelY - 0x1a && nMouseY < nPanelY) {
           return 1;
         }
       }
@@ -797,7 +798,7 @@ static void __stdcall MINIPANEL_ShowTooltip(int32_t nX, int32_t nY, int32_t nBut
 static void MINIPANEL_HandleMouseHover(int32_t nLayout) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
-    int nButtonIndex = 0;
+    int nOffsetX = 0;
     int nButtonCount = 8;
     if (gbMiniPanelSinglePlayer) {
       nButtonCount = 7;
@@ -806,29 +807,22 @@ static void MINIPANEL_HandleMouseHover(int32_t nLayout) {
       return;
     }
     if (nLayout == 1) {
-      nButtonIndex = -0x76;
+      nOffsetX = -0x76;
     } else if (nLayout == 3) {
-      nButtonIndex = 0x77;
+      nOffsetX = 0x77;
     }
 
-    nButtonIndex = ui::ScreenSizeX / 2 + nButtonIndex;
-    if (!(nMouseX > nButtonIndex - 0x54 && nMouseX < nButtonIndex + 0x59 && nMouseY > Inv::ScreenSizeY - 0x45 && nMouseY < Inv::ScreenSizeY - 0x2f)) {
+    int nCenterX = ui::ScreenSizeX / 2 + nOffsetX;
+    if (!(nMouseX > nCenterX - 0x54 && nMouseX < nCenterX + 0x59 && nMouseY > Inv::ScreenSizeY - 0x45 && nMouseY < Inv::ScreenSizeY - 0x2f)) {
       return;
     }
 
-    nButtonIndex = 0;
-    if (!nButtonCount) {
-      return;
-    }
-
-    do {
-      nMouseY = gnMiniPanelButtonX[nButtonIndex];
-      if (nMouseX > nMouseY && nMouseX < nMouseY + 0x14) {
-        MINIPANEL_ShowTooltip(nMouseY, gnMiniPanelButtonY[nButtonIndex], gnMiniPanelButtonFrame[nButtonIndex]);
+    for (int nButtonIndex = 0; nButtonIndex < nButtonCount; nButtonIndex++) {
+      int nButtonX = gnMiniPanelButtonX[nButtonIndex];
+      if (nMouseX > nButtonX && nMouseX < nButtonX + 0x14) {
+        MINIPANEL_ShowTooltip(nButtonX, gnMiniPanelButtonY[nButtonIndex], gnMiniPanelButtonFrame[nButtonIndex]);
       }
-
-      nButtonIndex++;
-    } while (nButtonIndex < nButtonCount);
+    }
 }
 
 void __stdcall DRAW_UI_MiniPanel() {

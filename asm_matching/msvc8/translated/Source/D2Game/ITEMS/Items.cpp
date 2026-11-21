@@ -11,15 +11,14 @@
 namespace D2Game { namespace ITEMS { namespace Items {
 
 void __fastcall MISSILES_RemoveAll(::SGAMEDATA * pGame) {
-    D2UnitStrc* pNextUnit;
     D2UnitStrc** ppUnitSlot = pGame->pUnitList[4];
     for (int nRemainingSlots = 0; nRemainingSlots < 0x80; nRemainingSlots++) {
       D2UnitStrc* pUnit;
       pUnit = *ppUnitSlot;
       while (pUnit) {
-        pNextUnit = UNIT::SUnit::GetNextUnit(pUnit);
-        UNIT::SUnit::FreeServerUnit(pGame, pUnit);
-        pUnit = pNextUnit;
+        D2UnitStrc* pFreeUnit = pUnit;
+        pUnit = UNIT::SUnit::GetNextUnit(pUnit);
+        UNIT::SUnit::FreeServerUnit(pGame, pFreeUnit);
       }
 
       ppUnitSlot++;

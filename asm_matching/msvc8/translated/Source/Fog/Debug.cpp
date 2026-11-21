@@ -316,40 +316,43 @@ void __stdcall Unreferenced_00401c80() {
 }
 
 bool __stdcall InitializeDebugSymbols() {
-    DWORD dwProcessId;
-    BOOL bSymInitOk;
+    DWORD dwOptions;
     char szSymbolPath[32768];
-    if (bDebugSymbolsInitialized != '\0') {
+    if (bDebugSymbolsInitialized) {
       return true;
     }
-    if (hDbgHelpDll && pSymSetOptionsApi && pSymInitializeApi) {
-      char* pLastBackslash;
-      dwProcessId = (*pSymGetOptionsApi)();
-      dwProcessId |= 0x214;
-      (*pSymSetOptionsApi)(dwProcessId);
-      if (szCustomSymbolSearchPath[0] == '\0') {
-        /* DWORD nSize for GetModuleFileNameA */ /* LPSTR lpFilename for GetModuleFileNameA */ /* HMODULE hModule for GetModuleFileNameA */ GetModuleFileNameA((HMODULE)0x0, szSymbolPath, 0x8000);
-        szSymbolPath[0x7fff] = '\0';
-        pLastBackslash = strrchr(szSymbolPath, 0x5c);
-        if (pLastBackslash) {
-          *pLastBackslash = '\0';
-        }
-      } else {
-        strncpy_s(szSymbolPath, 0x8000, szCustomSymbolSearchPath, -1);
-      }
-      if (ghCurrentProcessHandle == (HANDLE)-1) {
-        ghCurrentProcessHandle = GetCurrentProcess();
-      }
-
-      /* HANDLE Process for GetProcessId */ dwProcessId = GetProcessId(ghCurrentProcessHandle);
-      bSymInitOk = (*pSymInitializeApi)(ghCurrentProcessHandle, szSymbolPath, (uint32_t)(dwProcessId != 0));
-      if (bSymInitOk) {
-        bDebugSymbolsInitialized = '\x01';
-        return true;
-      }
+    if (!hDbgHelpDll) {
+      return false;
+    }
+    if (!pSymSetOptionsApi) {
+      return false;
+    }
+    if (!pSymInitializeApi) {
+      return false;
     }
 
-    return false;
+    dwOptions = (*pSymGetOptionsApi)();
+    (*pSymSetOptionsApi)(dwOptions | 0x214);
+    if (szCustomSymbolSearchPath[0] == '\0') {
+      GetModuleFileNameA(nullptr, szSymbolPath, 0x8000);
+      szSymbolPath[0x7fff] = '\0';
+      char* pLastBackslash = strrchr(szSymbolPath, '\\');
+      if (pLastBackslash) {
+        *pLastBackslash = '\0';
+      }
+    } else {
+      strncpy_s(szSymbolPath, 0x8000, szCustomSymbolSearchPath, -1);
+    }
+    if (ghCurrentProcessHandle == (HANDLE)-1) {
+      ghCurrentProcessHandle = GetCurrentProcess();
+    }
+
+    if (!(*pSymInitializeApi)(ghCurrentProcessHandle, szSymbolPath, GetProcessId(ghCurrentProcessHandle) ? 1 : 0)) {
+      return false;
+    }
+
+    bDebugSymbolsInitialized = 1;
+    return true;
 }
 
 void __stdcall Unreferenced_00401dd0() {

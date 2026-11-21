@@ -758,8 +758,7 @@ void __fastcall Q14_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 
 // A2Q6 "The Seven Tombs" — state-3 callback: level-transition handler keyed on level id (nIndex). Caches the Horadric-staff tomb level id (the randomly-chosen true tomb) on first use. When the player enters the staff tomb (iVar1==tomb id): if nStateFlag!=2 sets flag 2 and, if prev>1, advances the record (Q14_UpdateQuestRecordStep). Entering Duriel's Lair (0x2e): sets flag 2 + record step, then broadcasts state 1 (reward awaits) if prev==0. Entering Lut Gholein (0x49): sets flag 2 if flag<=1. Tail broadcasts state 2 (in-progress) + syncs record. Read/writes nStateFlag, not the bitbuffer record directly.
 void __fastcall Q14_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    int nLevelId;
-    nLevelId = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
+    int nLevelId = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     if (nLevelId - 0x28U > 0x22) {
       return;
     }
@@ -770,55 +769,54 @@ void __fastcall Q14_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       return;
     }
 
-    D2QuestDataA2Q6Strc* pA2Q6Specific;
-    pA2Q6Specific = pQuestData->pQuestSpecificData.pA2Q6;
+    D2QuestDataA2Q6Strc* pA2Q6Specific = pQuestData->pQuestSpecificData.pA2Q6;
     if (!pA2Q6Specific->bTombEntered) {
-      eD2LevelId eTrueStaffTombLevel;
       if (!pA2Q6Specific->nHoradricStaffTombLevelId) {
-        eTrueStaffTombLevel = D2Common::DUNGEON::Dungeon::GetHoradricStaffTombLevelId(pQuestArgs->pGame->pAct[1]);
-        pA2Q6Specific->nHoradricStaffTombLevelId = eTrueStaffTombLevel;
+        pA2Q6Specific->nHoradricStaffTombLevelId = D2Common::DUNGEON::Dungeon::GetHoradricStaffTombLevelId(pQuestArgs->pGame->pAct[1]);
       }
       if (!pA2Q6Specific->nHoradricStaffTombLevelId) {
         return;
       }
-      if (nLevelId != pA2Q6Specific->nHoradricStaffTombLevelId) {
-        if (nLevelId == 0x2e) {
-          if (!pQuestData->nStateFlag) {
-            QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q6.cpp", 0x381);
-            Q14_UpdateQuestRecordStep(pQuestArgs->pGame, pQuestArgs->pPlayer, nullptr);
-          }
-          if (pQuestData->nStateFlagPrev) {
-            return;
-          }
-
-          pQuestData->nQuestPacketFlags = '\0';
-          QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, 1);
+      if (nLevelId == pA2Q6Specific->nHoradricStaffTombLevelId) {
+        if (pQuestData->nStateFlag == 2) {
           return;
         }
 
-        goto check_duriels_lair;
-      }
-      if (pQuestData->nStateFlag == 2) {
-        return;
-      }
+        QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q6.cpp", 0x371);
+        if (pQuestData->nStateFlagPrev > 1) {
+          goto record_player_step;
+        }
 
-      QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q6.cpp", 0x371);
-      if (pQuestData->nStateFlagPrev > 1) {
-        goto record_player_step;
-      }
-    } else {
-      check_duriels_lair:
-      if (nLevelId != 0x49) {
+        pQuestData->nQuestPacketFlags = '\0';
+        QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, 0);
+        Q14_UpdateQuestRecordStep(pQuestArgs->pGame, pQuestArgs->pPlayer, nullptr);
         return;
       }
-      if (pQuestData->nStateFlag > 1) {
-        return;
-      }
+      if (nLevelId == 0x2e) {
+        if (!pQuestData->nStateFlag) {
+          QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q6.cpp", 0x381);
+          Q14_UpdateQuestRecordStep(pQuestArgs->pGame, pQuestArgs->pPlayer, nullptr);
+        }
+        if (pQuestData->nStateFlagPrev) {
+          return;
+        }
 
-      QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q6.cpp", 0x390);
-      if (pQuestData->nStateFlagPrev > 1) {
+        pQuestData->nQuestPacketFlags = '\0';
+        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, 1);
         return;
       }
+    }
+
+    if (nLevelId != 0x49) {
+      return;
+    }
+    if (pQuestData->nStateFlag > 1) {
+      return;
+    }
+
+    QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q6.cpp", 0x390);
+    if (pQuestData->nStateFlagPrev > 1) {
+      return;
     }
 
     pQuestData->nQuestPacketFlags = '\0';
@@ -1092,20 +1090,17 @@ uint32_t __fastcall A2Q6_GetNextFalseTombPortalClassId(D2QuestDataStrc * pQuestD
     // Static local variables (originally global data)
     static uint32_t gaArkaneThingIdTable[7] = { 0x139, 0x138, 0x134, 0x136, 0x137, 0x135, 0x133 }; D2_STATIC_GUARD(gaArkaneThingIdTable, "D2Game::Quests::QUESTS::A2Q6::A2Q6_GetNextFalseTombPortalClassId::gaArkaneThingIdTable");
 
-    int32_t* pnDecoyRingEntry;
-    int nDecoysPlaced;
-    int nTombsLeft;
     eD2LevelId eTombLevel = D2Common::DUNGEON::Dungeon::GetHoradricStaffTombLevelId(pQuestData->pGame->pAct[1]);
     if (eTombLevel != LEVEL_None) {
       D2QuestDataA2Q6Strc* pSpecificData = pQuestData->pQuestSpecificData.pA2Q6;
-      if (pSpecificData->bFalseTombRingInit == '\0') {
-        int iTomb;
-        nDecoysPlaced = 0;
-        pSpecificData->bFalseTombRingInit = '\x01';
-        iTomb = 0;
-        pnDecoyRingEntry = pSpecificData->anFalseTombPortalClassId;
-        for (nTombsLeft = 0; nTombsLeft < 7; nTombsLeft++) {
-          if (iTomb == eTombLevel - LEVEL_TalRashasTomb1) {
+      int nRealTomb = eTombLevel - LEVEL_TalRashasTomb1;
+      if (!pSpecificData->bFalseTombRingInit) {
+        int nDecoysPlaced = 0;
+        pSpecificData->bFalseTombRingInit = 1;
+        int iTomb = 0;
+        int32_t* pnDecoyRingEntry = pSpecificData->anFalseTombPortalClassId;
+        for (int nTombsLeft = 0; nTombsLeft < 7; nTombsLeft++) {
+          if (iTomb == nRealTomb) {
             iTomb++;
           } else if (iTomb < 7 && nDecoysPlaced < 6) {
             *pnDecoyRingEntry = gaArkaneThingIdTable[iTomb];
@@ -1141,6 +1136,12 @@ uint32_t __fastcall A2Q6_GetNextFalseTombPortalClassIdForGame(::SGAMEDATA * pGam
     return 0x133;
 }
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
 // A2Q7 (The Tainted Sun) timer callback that creates the two warp portals after the Horadric Staff is placed. If the pending-create flag (offset +0xd) is set: waits for the orifice object to reach Death/open anim and fires its open event; spawns the red town-portal object (class 100) in a nearby room and toggles HasPortal flags on both rooms. On success sets portal-created flag (+0xb=1) and clears the pending flag. No quest-record state change.
 uint8_t __fastcall Q14_TimerCreatePortal(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     D2ObjectsTxt* pOrificeTxt;
@@ -1161,7 +1162,7 @@ uint8_t __fastcall Q14_TimerCreatePortal(::SGAMEDATA * pGame, D2QuestDataStrc * 
               D2Common::Units::ChangeAnimMode(pDVar1, 2);
             } else {
               D2Common::Units::ChangeAnimMode(pDVar1, 1);
-              pOrificeTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pDVar1->nClassId);
+              pOrificeTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(GetClassIdInline(pDVar1));
               GAME::Event::SetEvent(pQuestData->pGame, pDVar1, 1, (pOrificeTxt->FrameCnt[1] >> 8) + pQuestData->pGame->dwGameFrame, 0, 0);
             }
           }
@@ -1170,11 +1171,11 @@ uint8_t __fastcall Q14_TimerCreatePortal(::SGAMEDATA * pGame, D2QuestDataStrc * 
       if (pQuestSpecific->bOrificeObjectPresent) {
         pDVar1 = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, pQuestSpecific->nOrificeObjectGUID);
         if (pDVar1) {
-          nOrificeX = D2Common::Units::GetXPosFromDynamicPathUnit(pDVar1);
-          nOrificeY = D2Common::Units::GetYPosFromDynamicPathUnit(pDVar1);
-          pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pDVar1), nOrificeX - 0xd, nOrificeY + 3);
+          nOrificeX = D2Common::Units::GetXPosFromDynamicPathUnit(pDVar1) - 0xd;
+          nOrificeY = D2Common::Units::GetYPosFromDynamicPathUnit(pDVar1) + 3;
+          pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pDVar1), nOrificeX, nOrificeY);
           if (pNearbyRoom) {
-            pUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 100, nOrificeX - 0xd, nOrificeY + 3, pGame, pNearbyRoom, 1, 1, 0);
+            pUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 100, nOrificeX, nOrificeY, pGame, pNearbyRoom, 1, 1, 0);
             if (pUnit) {
               nObjectsReady++;
               if (pQuestSpecific->nStateResumeFlag) {

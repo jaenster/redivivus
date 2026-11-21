@@ -497,24 +497,14 @@ static uint32_t __stdcall SELECT_IsUnitBehindDoor(D2UnitStrc * pUnit, D2UnitStrc
     D2Common::Units::GetCoords(pUnit2, &ptDoorCoord);
     D2Common::Units::GetCoords(pUnit, &ptTargetCoord);
     if (pObjectsTxt->Orientation == '\x01') {
-      if ((uint32_t)ptTargetCoord.y <= (uint32_t)ptDoorCoord.y || (uint32_t)ptDoorCoord.y <= (uint32_t)ptPlayerCoord.y) {
-        if ((uint32_t)ptDoorCoord.y <= (uint32_t)ptTargetCoord.y) {
-          return 0;
-        }
-        if ((uint32_t)ptDoorCoord.y >= (uint32_t)ptPlayerCoord.y) {
-          return 0;
-        }
+      if (((uint32_t)ptTargetCoord.y > (uint32_t)ptDoorCoord.y && (uint32_t)ptDoorCoord.y > (uint32_t)ptPlayerCoord.y) || ((uint32_t)ptTargetCoord.y < (uint32_t)ptDoorCoord.y && (uint32_t)ptDoorCoord.y < (uint32_t)ptPlayerCoord.y)) {
+        return 1;
       }
-    } else if ((uint32_t)ptTargetCoord.x >= (uint32_t)ptDoorCoord.x || (uint32_t)ptDoorCoord.x >= (uint32_t)ptPlayerCoord.x) {
-      if ((uint32_t)ptTargetCoord.x <= (uint32_t)ptDoorCoord.x) {
-        return 0;
-      }
-      if ((uint32_t)ptDoorCoord.x <= (uint32_t)ptPlayerCoord.x) {
-        return 0;
-      }
+    } else if (((uint32_t)ptTargetCoord.x < (uint32_t)ptDoorCoord.x && (uint32_t)ptDoorCoord.x < (uint32_t)ptPlayerCoord.x) || ((uint32_t)ptTargetCoord.x > (uint32_t)ptDoorCoord.x && (uint32_t)ptDoorCoord.x > (uint32_t)ptPlayerCoord.x)) {
+      return 1;
     }
 
-    return 1;
+    return 0;
 }
 
 static int32_t SELECT_GetDistanceSquared(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {

@@ -653,114 +653,86 @@ BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc 
     return 0;
 }
 
+static inline int GetGUIDInline(D2UnitStrc * pUnit);
 // Server start-func 31 for a Paladin charge-style movement skill. Validates the skill row and the unit's current skill/static path. If a target is in melee range it just force-attacks (players) or switches the monster into its attack anim and dispatches a monster AI lifecycle transition. Otherwise it stores the target's unit type/GUID into skill Param1/Param2 (or 6/0 when none), computes a charge velocity from the unit's RunVelocity (CharStats) or monster Run (MonStats) scaled by the velocity-percent stat and the skill's mana-cost multiplier, writes it onto the dynamic path, calculates the path, sets skill flags 0x1001 and applies STATE_skill_move. Returns TRUE.
 BOOL __fastcall SKILPAL_SrvStFn31_Charge(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    // The values VC8 kept in nBaseVel's one frame slot, one member each: a frame object reaches the slot.
-    union nBaseVel_u {
-      int32_t nBaseVel2;
-      ::SGAMEDATA* pBaseVel;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(nBaseVel_u) == 4, "nBaseVel_u must stay one 4-byte frame slot");
-    int32_t nClassId;
-    D2CharStatsTxt* pCharStatsTxt;
-    D2MonStatsTxt* pMonStatsTxt;
-    int nVelocityPct;
-    int32_t nChargeCalc;
-    eD2MonsterAnimMode eAttackMode;
-    D2ModeChangeStrc sMonsterKill;
-    nBaseVel_u nBaseVel;
-    D2DynamicPathStrc* pDynPath;
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
-    nBaseVel.pBaseVel = (::SGAMEDATA*)pGame;
-    D2SkillStrc* pSkill;
-    pSkill = D2Common::Units::GetCurrentSkill(pUnit);
+    D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
       return 0;
     }
 
-    D2DynamicPathStrc* pDynPathCharge;
-    pDynPathCharge = (D2DynamicPathStrc*)pUnit->pPath.pStaticPath;
-    if (!pDynPathCharge) {
+    D2DynamicPathStrc* pDynPath = pUnit->pPath.pDynamicPath;
+    if (!pDynPath) {
       return 0;
     }
 
-    D2UnitStrc* pTarget;
-    pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
+    D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (pTarget) {
-      BOOL bInMeleeRange;
-      bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0);
-      nChargeCalc = (int32_t)nBaseVel.pBaseVel;
-      if (bInMeleeRange) {
+      if (D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0)) {
         if (pUnit->eUnitType == UNIT_PLAYER) {
-          bInMeleeRange = SkillsServer::SKILLS_ForceAttackTarget(nBaseVel.pBaseVel, pUnit, pTarget);
-          return bInMeleeRange;
+          return SkillsServer::SKILLS_ForceAttackTarget(pGame, pUnit, pTarget);
         }
 
-        UNIT::SUnit::FreeCombatAndChangeAnimMode(nBaseVel.pBaseVel, pUnit, 1);
+        UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 1);
         D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-        nClassId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
-        nClassId = D2Common::DATATBLS::MonsterTbls::ValidateClassId(nClassId);
+        int32_t nClassId = D2Common::DATATBLS::MonsterTbls::ValidateClassId(D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit));
+        eD2MonsterAnimMode eAttackMode;
         if (nClassId != 0x49) {
           eAttackMode = (nClassId == 0xd3) + eD2MonsterAnimMode_ns::Attack1;
         } else {
           eAttackMode = eD2MonsterAnimMode_ns::Attack2;
         }
 
-        Monster::MonsterMode::MONMODE_InitModeChange(pUnit, eAttackMode, &sMonsterKill);
-        sMonsterKill.pTargetUnit = pTarget;
-        nChargeCalc = Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition((::SGAMEDATA*)nChargeCalc, &sMonsterKill, 1);
-        return nChargeCalc;
+        D2ModeChangeStrc sModeChange;
+        Monster::MonsterMode::MONMODE_InitModeChange(pUnit, eAttackMode, &sModeChange);
+        sModeChange.pTargetUnit = pTarget;
+        return Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sModeChange, 1);
       }
 
-      bInMeleeRange = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_uninterruptable);
-      if (!bInMeleeRange) {
-        D2Common::Skills::SKILL_SetParam1(pSkill, pTarget->eUnitType);
-        nVelocityPct = pTarget->nUnitGUID;
-        goto start_charge;
-      }
-    }
-
-    D2Common::Skills::SKILL_SetParam1(pSkill, 6);
-    nVelocityPct = 0;
-    start_charge:
-    D2Common::Skills::SKILL_SetParam2(pSkill, nVelocityPct);
-    D2Common::Skills::SKILL_SetParam4(pSkill, 7);
-    nBaseVel.nBaseVel2 = 0x100;
-    if (pUnit->eUnitType == UNIT_PLAYER) {
-      pCharStatsTxt = D2Common::DATATBLS::DataTbls::INV_GetCharStatsTxtLine(pUnit->nClassId);
-      if (pCharStatsTxt) {
-        nBaseVel.nBaseVel2 = (uint32_t)pCharStatsTxt->RunVelocity << 8;
+      if (!D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_uninterruptable)) {
+        D2Common::Skills::SKILL_SetParam1(pSkill, GetTypeInline(pTarget));
+        D2Common::Skills::SKILL_SetParam2(pSkill, GetGUIDInline(pTarget));
+      } else {
+        D2Common::Skills::SKILL_SetParam1(pSkill, 6);
+        D2Common::Skills::SKILL_SetParam2(pSkill, 0);
       }
     } else {
-      nChargeCalc = pUnit->nClassId;
-      pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nChargeCalc);
+      D2Common::Skills::SKILL_SetParam1(pSkill, 6);
+      D2Common::Skills::SKILL_SetParam2(pSkill, 0);
+    }
+
+    D2Common::Skills::SKILL_SetParam4(pSkill, 7);
+    int nBaseVel = 0x100;
+    if (pUnit->eUnitType == UNIT_PLAYER) {
+      D2CharStatsTxt* pCharStatsTxt = D2Common::DATATBLS::DataTbls::INV_GetCharStatsTxtLine(pUnit->nClassId);
+      if (pCharStatsTxt) {
+        nBaseVel = (uint32_t)pCharStatsTxt->RunVelocity << 8;
+      }
+    } else {
+      int32_t nClassId = pUnit->nClassId;
+      D2MonStatsTxt* pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nClassId);
       if (pMonStatsTxt) {
-        nBaseVel.nBaseVel2 = (int)pMonStatsTxt->Run << 8;
-        if (nChargeCalc == 0xd3) {
+        nBaseVel = (int)pMonStatsTxt->Run << 8;
+        if (nClassId == 0xd3) {
           D2Common::Skills::SKILL_SetParam4(pSkill, 0xf);
         }
 
-        pDynPath = pDynPathCharge;
-        D2Common::PATH::DynamicPath::ResetSP2(pDynPathCharge);
+        D2Common::PATH::DynamicPath::ResetSP2(pDynPath);
         D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pDynPath, 0x14);
       }
     }
 
-    nVelocityPct = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_velocitypercent, 0);
+    int nVelocityPct = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_velocitypercent, 0);
     if (nVelocityPct <= 0x32) {
       nVelocityPct = 0x32;
     }
 
-    int32_t nLine = 0x330;
-    char* pVelFileRef = ".\\SKILLS\\SkilPal.cpp";
-    nClassId = 100;
-    nChargeCalc = D2Common::Skills::SKILLS_GetManaCostMultiplier(eSkill);
-    nChargeCalc = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nBaseVel.nBaseVel2, nChargeCalc + nVelocityPct, nClassId);
-    pDynPath = pDynPathCharge;
-    D2Common::PATH::DynamicPath::SetVelocities(pDynPathCharge, nChargeCalc, pVelFileRef, nLine);
+    D2Common::PATH::DynamicPath::SetVelocities(pDynPath, D2Common::DATATBLS::DataTbls::D2ApplyPercent(nBaseVel, D2Common::Skills::SKILLS_GetManaCostMultiplier(eSkill) + nVelocityPct, 100), ".\\SKILLS\\SkilPal.cpp", 0x330);
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynPath, pUnit, 0);
     D2Common::Skills::SKILL_SetFlags(pSkill, 0x1001);
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 1);

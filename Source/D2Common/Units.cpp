@@ -2285,13 +2285,12 @@ BOOL __fastcall HasShield(D2UnitStrc * pUnit) {
 
 // Returns the effective block chance (0–75, capped at 0x4B) for a unit. For players: requires a shield equipped; sums UNITSTAT_toblock with the class BlockFactor from CharStats.txt; in Expansion mode applies the dex/level scaling formula ((dex-15)*toblock)/(level*2). For monsters: uses UNITSTAT_toblock if the monster has NoShldBlock set or HasShield returns true. Returns 0 for all other unit types.
 int32_t __stdcall GetBlockRate(D2UnitStrc * pUnit, BOOL bExpansion) {
-    BOOL nClassId;
-    int nToBlock;
-    int32_t nShieldResult;
-    D2CharStatsTxt* pCharStats;
-    int nLevel;
-    int nUnitClassId;
+    int nToBlock = 0;
+    D2MonStatsTxt* pMonStats;
+    int nClassId;
     int nDexterity;
+    int nLevel;
+    uint32_t nShieldFlag;
     eD2UnitType eUnitType = UNIT_COUNT;
     if (pUnit) {
       eUnitType = pUnit->eUnitType;
@@ -2299,21 +2298,10 @@ int32_t __stdcall GetBlockRate(D2UnitStrc * pUnit, BOOL bExpansion) {
 
     switch (eUnitType) {
       case UNIT_PLAYER:
-        {
-          nShieldResult = INVENTORY::Inventory::INVENTORY_GetEquippedShield(pUnit->pInventory, nullptr);
-          if (!nShieldResult) {
-            return 0;
-          }
-
+        if (INVENTORY::Inventory::INVENTORY_GetEquippedShield(pUnit->pInventory, nullptr)) {
           nToBlock = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_toblock, 0);
-          nLevel = pUnit->nClassId;
-          if (nLevel < 0 || nLevel >= ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
-            pCharStats = 0;
-          } else {
-            pCharStats = ITEMS::Items::sgptDataTable->pTxtCharStats + nLevel;
-          }
-
-          nToBlock += (uint32_t)pCharStats->BlockFactor;
+          nClassId = pUnit->nClassId;
+          nToBlock += (nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? ITEMS::Items::sgptDataTable->pTxtCharStats + nClassId : nullptr)->BlockFactor;
           if (bExpansion) {
             nDexterity = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_dexterity, 0);
             nLevel = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
@@ -2323,25 +2311,21 @@ int32_t __stdcall GetBlockRate(D2UnitStrc * pUnit, BOOL bExpansion) {
 
             nToBlock = (nDexterity - 0xf) * nToBlock / (nLevel * 2);
           }
-
-          break;
         }
-      default:
-        {
-          return 0;
-        }
+        break;
       case UNIT_MONSTER:
-        {
-          if (!pUnit || (nUnitClassId = pUnit->nClassId , nUnitClassId < 0) || nUnitClassId >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(ITEMS::Items::sgptDataTable->pTxtMonStats + nUnitClassId) || !((uint8_t)*((uint8_t*)&ITEMS::Items::sgptDataTable->pTxtMonStats[nUnitClassId] + 0xf) & Fog::BitBuffer::gadwBitMasks[2])) {
-            nClassId = HasShield(pUnit);
-            if (!nClassId) {
-              return 0;
-            }
+        nShieldFlag = 0;
+        if (pUnit) {
+          nClassId = pUnit->nClassId;
+          pMonStats = nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
+          if (pMonStats) {
+            nShieldFlag = (uint32_t)*((uint8_t*)pMonStats + 0xf) & Fog::BitBuffer::gadwBitMasks[2];
           }
-
-          nToBlock = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_toblock, 0);
-          break;
         }
+        if (nShieldFlag || HasShield(pUnit)) {
+          nToBlock = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_toblock, 0);
+        }
+        break;
     }
 
     if (nToBlock < 0x4b) {
@@ -2395,12 +2379,13 @@ int32_t __stdcall GetMeleeRange(D2UnitStrc * pUnit) {
         {
           pMonStats2 = DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
           if (pMonStats2) {
-            if (pMonStats2->MeleeRng == 0xff) {
+            int nMeleeRng = pMonStats2->MeleeRng;
+            if (nMeleeRng == 0xff) {
               COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit_00, pUnit_00->pInventory, (uint32_t*)&pUnit, -1, 1);
               return pUnit == (D2UnitStrc*)0x6 ? 0x2 : 0;
             }
 
-            return (uint32_t)pMonStats2->MeleeRng;
+            return nMeleeRng;
           }
 
           break;
@@ -2698,24 +2683,24 @@ BOOL __stdcall IsInMovingModeEx(D2UnitStrc * pUnit) {
 
 uint32_t __stdcall UNITS_GetHealingCost(D2UnitStrc * nMpDeficit) {
     D2UnitStrc* pUnit = nMpDeficit;
-    uint32_t nMinHp = Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(nMpDeficit);
-    uint32_t nMinMp = Stats::StatsEx::STATLIST_GetMaxManaFromUnit(nMpDeficit);
-    uint32_t nHp = Stats::StatsEx::STATSEX_GetCurrentStat(nMpDeficit, UNITSTAT_hitpoints, 0);
-    uint32_t nMp = Stats::StatsEx::STATSEX_GetCurrentStat(nMpDeficit, UNITSTAT_mana, 0);
-    uint32_t nHpDeficit = 0;
-    nMpDeficit = 0;
-    if (nMinHp > nHp) {
-      nHpDeficit = nMinHp - nHp >> 8;
+    uint32_t nMaxHp = Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
+    uint32_t nMaxMp = Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
+    uint32_t nHp = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
+    uint32_t nMp = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
+    uint32_t nHpLack = 0;
+    uint32_t nMpLack = 0;
+    if (nMaxHp > nHp) {
+      nHpLack = (nMaxHp - nHp) >> 8;
     }
-    if (nMinMp > nMp) {
-      nMpDeficit = (D2UnitStrc*)(nMinMp - nMp >> 8);
+    if (nMaxMp > nMp) {
+      nMpLack = (nMaxMp - nMp) >> 8;
     }
-    if (!nHpDeficit && !nMpDeficit) {
+    if (!nHpLack && !nMpLack) {
       return 0;
     }
 
     int nLevel = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    return (uint32_t)(nLevel * (int)(nMpDeficit->unk0x19 + (nHpDeficit - 0x19))) >> 2;
+    return (uint32_t)(nLevel * (nHpLack + nMpLack)) >> 2;
 }
 
 uint32_t __stdcall GetInventoryGoldLimit(D2UnitStrc * pUnit) {

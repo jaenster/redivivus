@@ -2104,30 +2104,26 @@ void __fastcall DRLGPRESET_CreateMonsterPresets(D2RoomExStrc * pRoomEx) {
       DRLGPRESET_AddPresetUnitToDrlgMap(pMemory, pDrlgMap, &pRoomEx->sSeed);
     }
     if (pDrlgMap->bInited == 1) {
-      int nLvlPrestId;
-      nLvlPrestId = pDrlgMap->nNumber;
       pDrlgMap->bInited = 0;
-      if (nLvlPrestId <= 7) {
-        if (nLvlPrestId >= 4) {
+      switch (pDrlgMap->nNumber) {
+        case 1:
+        case 3:
+        case 0x1a:
+        case 0x1b:
+        case 0x1c:
+        case 300:
+          if (pRoomEx->eRoomExFlags & 0x40000U) {
+            CreateObjectPresetsForMap(pDrlgMap, pMemory);
+          }
+          break;
+        case 4:
+        case 5:
+        case 6:
+        case 7:
           if (pRoomEx->pLevel->eD2LevelId == 2 && pDrlgMap->nRandomMapFileSelector == 3) {
             CreateMonsterPreset(pMemory, pDrlgMap);
-            pRoomEx->eRoomExFlags |= 0x2000000;
-            return;
           }
-
-          pRoomEx->eRoomExFlags |= 0x2000000;
-          return;
-        }
-        if (nLvlPrestId != 1 && nLvlPrestId != 3) {
-          pRoomEx->eRoomExFlags |= 0x2000000;
-          return;
-        }
-      } else if (nLvlPrestId < 0x1a || nLvlPrestId > 0x1c && nLvlPrestId != 300) {
-        pRoomEx->eRoomExFlags |= 0x2000000;
-        return;
-      }
-      if (pRoomEx->eRoomExFlags & 0x40000U) {
-        CreateObjectPresetsForMap(pDrlgMap, pMemory);
+          break;
       }
     }
 
@@ -2575,43 +2571,43 @@ void __fastcall DRLGPRESET_ReleaseDrlgFile(D2DrlgFileStrc * * ppDrlgFile) {
 // Walks the entire D2DrlgMapStrc linked list (pDrlgMap->pNext) and frees every allocation: grid (DRLGGRID_FreeGrid), vertices (DRLGVER_FreeVertices), DS1 file ref (DRLGPRESET_ReleaseDrlgFile), all preset units (including their path coordinate arrays), and the POPS placement arrays (pPopsIndex/SubIndex/Orientation/PosLocation). Finally frees each map node itself.
 // @sourcefile .\DRLG\Preset.cpp
 void __fastcall DRLGPRESET_FreeDrlgMapList(D2PoolManagerStrc * pMemory, D2DrlgMapStrc * pDrlgMap) {
-    D2PresetUnitStrc* pNextPresetUnit;
     D2MapAIStrc* pPath;
     D2PresetUnitStrc* pPresetUnit;
-    while (pDrlgMap) {
+    D2DrlgMapStrc* pMap = pDrlgMap;
+    while (pMap) {
       D2DrlgMapStrc* pNext;
-      pNext = pDrlgMap->pNext;
-      DrlgGrid::DRLGGRID_FreeGrid(pMemory, &pDrlgMap->pMapGrid);
-      DrlgVer::DRLGVER_FreeVertices(pMemory, &pDrlgMap->pVertices);
-      DRLGPRESET_ReleaseDrlgFile(&pDrlgMap->pDrlgFile);
-      pPresetUnit = pDrlgMap->pPresetUnit;
+      pNext = pMap->pNext;
+      DrlgGrid::DRLGGRID_FreeGrid(pMemory, &pMap->pMapGrid);
+      DrlgVer::DRLGVER_FreeVertices(pMemory, &pMap->pVertices);
+      DRLGPRESET_ReleaseDrlgFile(&pMap->pDrlgFile);
+      pPresetUnit = pMap->pPresetUnit;
       while (pPresetUnit) {
-        pPath = pPresetUnit->pMapAI;
-        pNextPresetUnit = pPresetUnit->pPresetUnitNext;
+        D2PresetUnitStrc* pCurrent = pPresetUnit;
+        pPresetUnit = pCurrent->pPresetUnitNext;
+        pPath = pCurrent->pMapAI;
         if (pPath) {
           D2_FREE_POOL_AT(pMemory, pPath->pPosition, ".\\DRLG\\Preset.cpp", 0x597);
           D2_FREE_POOL_AT(pMemory, pPath, ".\\DRLG\\Preset.cpp", 0x598);
         }
 
-        D2_FREE_POOL_AT(pMemory, pPresetUnit, ".\\DRLG\\Preset.cpp", 0x56b);
-        pPresetUnit = pNextPresetUnit;
+        D2_FREE_POOL_AT(pMemory, pCurrent, ".\\DRLG\\Preset.cpp", 0x56b);
       }
 
-      if (pDrlgMap->pPopsIndex) {
-        D2_FREE_POOL_AT(pMemory, pDrlgMap->pPopsIndex, ".\\DRLG\\Preset.cpp", 0x9fa);
+      if (pMap->pPopsIndex) {
+        D2_FREE_POOL_AT(pMemory, pMap->pPopsIndex, ".\\DRLG\\Preset.cpp", 0x9fa);
       }
-      if (pDrlgMap->pPopsSubIndex) {
-        D2_FREE_POOL_AT(pMemory, pDrlgMap->pPopsSubIndex, ".\\DRLG\\Preset.cpp", 0x9fb);
+      if (pMap->pPopsSubIndex) {
+        D2_FREE_POOL_AT(pMemory, pMap->pPopsSubIndex, ".\\DRLG\\Preset.cpp", 0x9fb);
       }
-      if (pDrlgMap->pPopsOrientation) {
-        D2_FREE_POOL_AT(pMemory, pDrlgMap->pPopsOrientation, ".\\DRLG\\Preset.cpp", 0x9fc);
+      if (pMap->pPopsOrientation) {
+        D2_FREE_POOL_AT(pMemory, pMap->pPopsOrientation, ".\\DRLG\\Preset.cpp", 0x9fc);
       }
-      if (pDrlgMap->pPosLocation) {
-        D2_FREE_POOL_AT(pMemory, pDrlgMap->pPosLocation, ".\\DRLG\\Preset.cpp", 0x9fd);
+      if (pMap->pPosLocation) {
+        D2_FREE_POOL_AT(pMemory, pMap->pPosLocation, ".\\DRLG\\Preset.cpp", 0x9fd);
       }
 
-      D2_FREE_POOL_AT(pMemory, pDrlgMap, ".\\DRLG\\Preset.cpp", 0x9ff);
-      pDrlgMap = pNext;
+      D2_FREE_POOL_AT(pMemory, pMap, ".\\DRLG\\Preset.cpp", 0x9ff);
+      pMap = pNext;
     }
 }
 

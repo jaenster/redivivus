@@ -1521,9 +1521,9 @@ void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDat
       }
     }
 
-    uint32_t nLen1 = Storm::Source::SSTR::SStrLen(szText1);
-    uint32_t pWrite = Storm::Source::SSTR::SStrLen(szText2);
-    int nPayloadSize = nLen1 + 0x16 + pWrite;
+    int nPayloadSize = Storm::Source::SSTR::SStrLen(szText1) + 0x15;
+    nPayloadSize += Storm::Source::SSTR::SStrLen(szText2) + 1;
+    uint32_t nLen1;
     if (!bSkipData) {
       nPayloadSize += nDataLen;
     }
@@ -1535,16 +1535,18 @@ void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDat
     pNode->nType = 2;
     pNode->bTimestamp = 1;
     GetLocalTime(&pNode->tTime);
-    nLen1 = Storm::Source::SSTR::SStrCopy((char*)(pNode + 1), szText1, 0x7fffffff);
-    char* pMessageFields = (char*)((intptr_t)&pNode[1].tLink.pPrevLink + (nLen1 + 1));
-    *(size_t*)(pMessageFields + 4) = nDataLen;
+    char* pText = (char*)(pNode + 1);
+    nLen1 = Storm::Source::SSTR::SStrCopy(pText, szText1, 0x7fffffff);
+    char* pMessageFields = pText + nLen1 + 1;
     *(void**)pMessageFields = (void*)pData;
+    *(size_t*)(pMessageFields + 4) = nDataLen;
     *(void**)(pMessageFields + 8) = (void*)pCategory;
     *(BOOL*)(pMessageFields + 0xc) = bSkipData;
     *(uint32_t*)(pMessageFields + 0x10) = (uint32_t)!nVerbose;
-    nLen1 = Storm::Source::SSTR::SStrCopy(pMessageFields + 0x14, szText2, 0x7fffffff);
+    pText = pMessageFields + 0x14;
+    pText += Storm::Source::SSTR::SStrCopy(pText, szText2, 0x7fffffff) + 1;
     if (!bSkipData) {
-      memcpy(pMessageFields + (nLen1 + 0x15), pData, nDataLen);
+      memcpy(pText, pData, nDataLen);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);
@@ -1557,12 +1559,13 @@ void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDat
       pNode->tLink.pNext = 0;
     }
 
-    pNode->tLink.pPrevLink = gLogMessageQueueHead.head.pPrevLink;
-    pNode->tLink.pNext = gLogMessageQueueHead.head.pPrevLink->pNext;
-    gLogMessageQueueHead.head.pPrevLink->pNext = (intptr_t)pNode;
+    StormLinkStrc* pTail = gLogMessageQueueHead.head.pPrevLink;
+    pNode->tLink.pPrevLink = pTail;
+    pNode->tLink.pNext = pTail->pNext;
+    pTail->pNext = (intptr_t)pNode;
     gLogMessageQueueCount++;
-    gLogMessageQueueTotalBytes += pNode->nSize;
     gLogMessageQueueHead.head.pPrevLink = &pNode->tLink;
+    gLogMessageQueueTotalBytes += pNode->nSize;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gLogMessageQueueCS);
 }
 

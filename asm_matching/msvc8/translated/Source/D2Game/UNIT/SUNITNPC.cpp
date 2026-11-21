@@ -450,6 +450,12 @@ D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(D2UnitStrc * pUnit, uint32_t d
     }
 }
 
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 void __fastcall SUNITNPC_RefreshNpcItem(D2UnitStrc * pPlayerUnit, D2UnitStrc * pUnit, D2UnitStrc * pItem, ::SGAMEDATA * pGame, int32_t nParam2) {
     D2UnitStrc* pItemSlot;
     if (!(pItem && pUnit)) {
@@ -461,7 +467,7 @@ void __fastcall SUNITNPC_RefreshNpcItem(D2UnitStrc * pPlayerUnit, D2UnitStrc * p
       return;
     }
 
-    ITEMS::ItemMode::SERVER_TakeItemToCursor(pGame, pUnit, pItem->nUnitGUID, (uint32_t*)&pItemSlot, 0, 0, pInventory, 0);
+    ITEMS::ItemMode::SERVER_TakeItemToCursor(pGame, pUnit, GetGUIDInline(pItem), (uint32_t*)&pItemSlot, 0, 0, pInventory, 0);
     if (nParam2) {
       pItem->eUnitFlagsEx |= UNITFLAGEX_ITEMINIT;
       D2Common::Units::RefreshInventory(pUnit, 1);
@@ -474,31 +480,30 @@ void __fastcall SUNITNPC_RefreshNpcItem(D2UnitStrc * pPlayerUnit, D2UnitStrc * p
 }
 
 void __fastcall SUNITNPC_RemoveStoreItem(D2UnitStrc * pNpc, D2UnitStrc * pItem, ::SGAMEDATA * pGame, int32_t bQueueDelete) {
-    ::SGAMEDATA* pGame_00 = pGame;
+    uint32_t dwTakeResult;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a7);
       exit(-1);
-    } else if (!pNpc) {
+    }
+    if (!pNpc) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a8);
       exit(-1);
-    } else {
-      if (!pItem) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a9);
-        exit(-1);
-      }
+    }
+    if (!pItem) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a9);
+      exit(-1);
+    }
 
-      ITEMS::ItemMode::SERVER_TakeItemToCursor(pGame, pNpc, pItem->nUnitGUID, (uint32_t*)&pGame, 0, 0, nullptr, 0);
-      if (bQueueDelete) {
-        pItem->eUnitFlagsEx |= UNITFLAGEX_ITEMINIT;
-        D2Common::Units::RefreshInventory(pNpc, 1);
-        D2Common::INVENTORY::Inventory::UpsertToUpdateList(pNpc->pInventory, pItem);
-        D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pItem, ITEMCMD_DELETE, 1);
-        return;
-      }
-
-      ITEMS::Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame_00, pItem);
+    ITEMS::ItemMode::SERVER_TakeItemToCursor(pGame, pNpc, GetGUIDInline(pItem), &dwTakeResult, 0, 0, nullptr, 0);
+    if (bQueueDelete) {
+      pItem->eUnitFlagsEx |= UNITFLAGEX_ITEMINIT;
+      D2Common::Units::RefreshInventory(pNpc, 1);
+      D2Common::INVENTORY::Inventory::UpsertToUpdateList(pNpc->pInventory, pItem);
+      D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pItem, ITEMCMD_DELETE, 1);
       return;
     }
+
+    ITEMS::Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame, pItem);
 }
 
 // Server-side handler that sends the mercenary-for-hire list to a client when they interact with an NPC hireling vendor (Kashya, Greiz, Farah, Meshif). Validates the NPC class ID, initialises the NPC inventory on first interaction, then iterates the available hire slots and sends a 0x4E packet for each available (unsold, unstocked) mercenary entry. Calls ERROR_Halt on bad NPC or name-range data.
@@ -2282,20 +2287,15 @@ void __fastcall GAMBLE_GenerateGambleInventory(::SGAMEDATA * pGame, D2UnitStrc *
 
 void __fastcall SUNITNPC_ValidateNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pPlayerUnit, D2GameNpcStrc * nNpcGameData) {
     int nPlayerGUID = !pPlayerUnit ? -1 : pPlayerUnit->nUnitGUID;
-    D2NpcProxyInventoryStrc* pInteractNode = nNpcGameData->pProxyInventories;
-    if (pInteractNode) {
-      bool bAlreadyInteracted = false;
-      do {
-        if (pInteractNode->nPlayerGUID == nPlayerGUID) {
-          bAlreadyInteracted = true;
-        }
-
-        pInteractNode = pInteractNode->pNext;
-      } while (pInteractNode);
-
-      if (bAlreadyInteracted) {
-        return;
+    BOOL bAlreadyInteracted = FALSE;
+    for (D2NpcProxyInventoryStrc* pInteractNode = nNpcGameData->pProxyInventories; pInteractNode; pInteractNode = pInteractNode->pNext) {
+      if (pInteractNode->nPlayerGUID == nPlayerGUID) {
+        bAlreadyInteracted = TRUE;
       }
+    }
+
+    if (bAlreadyInteracted) {
+      return;
     }
 
     GAMBLE_GenerateGambleInventory(pGame, pUnit, pPlayerUnit, nNpcGameData);
@@ -3109,81 +3109,42 @@ void __fastcall SUNITNPC_ResurrectHireling(::SGAMEDATA * pGame, D2UnitStrc * pPl
 // Server-side handler for the mercenary-revive request at a hireable NPC (nNpcGUID). Validates the interacted NPC matches and is a valid merc-trader class id; finds the player's hireable pet (merc). Computes the revive cost (GetReviveCost) and checks the player can afford it; on success clears the merc's ISDEAD flag, restores it to full HP, runs sale confirmation, and sends a 0x9B merc-revive-cost packet. Always replies with a 0x2A NPC-transaction packet carrying a result code (5=ok, 9=invalid, 0xC=cannot afford), the player's gold, the merc GUID, and a trade-type byte.
 // @sourcefile .\UNIT\SUNITNPC.CPP
 void __fastcall SUNITNPC_ResurrectMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nNpcGUID) {
-    int nGold;
-    BOOL bCanAfford;
-    D2ClientStrc* pClient;
-    bool bIsTrader;
-    int32_t nLine;
-    int nMercGUID;
-    uint8_t nResult;
-    uint8_t nTradeType;
-    D2UnitStrc* pNpcOrMerc;
-    pNpcOrMerc = SUnit::GetInteractedNpc(pGame, pUnit);
-    D2UnitStrc* pNpcUnit;
-    pNpcUnit = SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nNpcGUID);
-    if (!pNpcUnit || pNpcOrMerc != pNpcUnit) {
-      nTradeType = 0;
-      nMercGUID = -1;
-      nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-      nResult = 9;
-      nLine = 0x95d;
-      goto send_transaction_result;
+    D2UnitStrc* pInteractedNpc = SUnit::GetInteractedNpc(pGame, pUnit);
+    D2UnitStrc* pNpcUnit = SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nNpcGUID);
+    if (!pNpcUnit || pInteractedNpc != pNpcUnit) {
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x95d), 0x2a, 9, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0), -1, 0);
+      return;
     }
 
-    uint32_t nNpcClassId;
-    nNpcClassId = pNpcUnit->nClassId;
-    if (nNpcClassId <= 0xfc) {
-      if (nNpcClassId != 0xfc && nNpcClassId != 0x96) {
-        bIsTrader = nNpcClassId == 0xc6;
-        require_resurrect_npc:
-        if (!bIsTrader) {
-          nTradeType = 0;
-          nMercGUID = -1;
-          nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-          nResult = 9;
-          nLine = 0x96c;
-          goto send_transaction_result;
-        }
-      }
-    } else if (nNpcClassId != 0x16f) {
-      bIsTrader = nNpcClassId == 0x203;
-      goto require_resurrect_npc;
+    switch ((uint32_t)pNpcUnit->nClassId) {
+    case 0x96:
+    case 0xc6:
+    case 0xfc:
+    case 0x16f:
+    case 0x203:
+      break;
+    default:
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x96c), 0x2a, 9, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0), -1, 0);
+      return;
     }
 
-    pNpcOrMerc = PLAYER::PlayerPets::SERVER_GetUnitPetByTypeId(pGame, pUnit, PETTYPE_hireable, 1);
-    if (!pNpcOrMerc) {
-      nMercGUID = -1;
-      nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-      nTradeType = (uint8_t)(uintptr_t)pNpcOrMerc;
-      nResult = 9;
-      nLine = 0x973;
-    } else {
-      uint32_t nReviveCost;
-      nReviveCost = D2Common::Merc::GetReviveCost(pNpcOrMerc);
-      bCanAfford = CheckIfPlayerCanAffordCost(pGame, pUnit, nReviveCost);
-      if (!bCanAfford) {
-        nMercGUID = -1;
-        nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-        nTradeType = (uint8_t)bCanAfford;
-        nResult = 0xc;
-        nLine = 0x994;
-      } else {
-        pNpcOrMerc->eUnitFlags &= ~UNITFLAG_ISDEAD;
-        D2Common::Units::ChangeAnimMode(pNpcOrMerc, 1);
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNpcOrMerc, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pNpcOrMerc), 0);
-        SUNITNPC_ResurrectHireling(pGame, pUnit, pNpcOrMerc);
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x9B_MercReviveCost(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x99d), 0xffff, 0);
-        nMercGUID = pNpcOrMerc->nUnitGUID;
-        nTradeType = 0;
-        nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-        nResult = 5;
-        nLine = 0x99e;
-      }
+    D2UnitStrc* pMerc = PLAYER::PlayerPets::SERVER_GetUnitPetByTypeId(pGame, pUnit, PETTYPE_hireable, 1);
+    if (!pMerc) {
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x973), 0x2a, 9, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0), -1, 0);
+      return;
     }
 
-    send_transaction_result:
-    pClient = SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", nLine);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(pClient, 0x2a, nResult, nGold, nMercGUID, nTradeType);
+    if (!CheckIfPlayerCanAffordCost(pGame, pUnit, D2Common::Merc::GetReviveCost(pMerc))) {
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x994), 0x2a, 0xc, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0), -1, 0);
+      return;
+    }
+
+    pMerc->eUnitFlags &= ~UNITFLAG_ISDEAD;
+    D2Common::Units::ChangeAnimMode(pMerc, 1);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pMerc), 0);
+    SUNITNPC_ResurrectHireling(pGame, pUnit, pMerc);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x9B_MercReviveCost(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x99d), 0xffff, 0);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x99e), 0x2a, 5, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0), GetGUIDInline(pMerc), 0);
 }
 
 // Server-side NPC "use/talk" dispatcher: given the interacted NPC monster GUID and quest-state selector, performs the right NPC menu action and replies with a 0x58 OpenUI packet. Validates the monster (monstats interact flag, UNIT_MONSTER, has AI) then branches: trade-reward states route to NpcState_MoveState1To2 + SUNITNPC_HandleTradeAction for the appropriate vendor set; mercenary state sends the for-hire list. Handles act-specific quest actions by NPC class: Charsi imbue (A1Q3 ToolsOfTheTrade), Akara respec/skill-clear (A1Q1 Respec), Larzuk socketing (A5Q1), Anya personalize (A5Q4), and travel NPCs (Warriv/Meshif/Tyrael/Cain) loading the destination act level and enabling its waypoint. The imbue/socket/personalize branches create the reward item, place it in inventory or drop it at FindBestSpotToSpawnItem, and send OpenUI menu code 6 (success) or 7 (fail/drop). __fastcall: pGame(ECX), pUnit(EDX); pQState, item GUID, target-item GUID on stack.

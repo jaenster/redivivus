@@ -421,8 +421,8 @@ void __stdcall TASK_FreeAllSlots() {
           exit(-1);
         }
 
-        pSlotLink->pNext->pPrev = pSlot->sSlotLink.pPrev;
-        pSlot->sSlotLink.pPrev->pNext = pSlotLink->pNext;
+        pSlotLink->pNext->pPrev = pSlotLink->pPrev;
+        pSlotLink->pPrev->pNext = pSlotLink->pNext;
         D2_FREE_POOL_AT(nullptr, (void*)gaTaskQueueHeadArray[nSlotOffset], ".\\GAME\\Task.cpp", 0x330);
         *(uint32_t*)&gaTaskQueueHeadArray[nSlotOffset] = 0;
       }

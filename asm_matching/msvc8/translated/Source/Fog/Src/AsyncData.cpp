@@ -293,23 +293,24 @@ void __fastcall ASYNCDATA_SetPriority(D2AsyncData_Line0x128 * pAsyncData, int nP
 
     uint32_t nFlags = pAsyncData->nFlags;
     if ((nFlags & -16) != 0x41737960) {
-      ASYNCDATA_HaltSetPriorityAtLine(0x1db);
+      ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x1db);
+      exit(-1);
     }
     if (nPriority > 0) {
-      ASYNCDATA_HaltSetPriorityAtLine(0x1dc);
+      ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x1dc);
+      exit(-1);
     }
     if (gnAsyncDataPriorityDeferDepth > 0) {
-      if (!(nFlags & 8)) {
+      if (nFlags & 8) {
+        if (nPriority > pAsyncData->nPriority) {
+          pAsyncData->nPriority = nPriority;
+        }
+      } else {
         pAsyncData->nPriorityBeforeDefer = pAsyncData->nPriority;
         pAsyncData->nPriority = nPriority;
         pAsyncData->nFlags = nFlags | 8;
         pAsyncData->pNextDeferred = gpAsyncDataDeferredList;
         gpAsyncDataDeferredList = pAsyncData;
-        return;
-      }
-      if (nPriority > pAsyncData->nPriority) {
-        pAsyncData->nPriority = nPriority;
-        return;
       }
     } else {
       if (nPriority != pAsyncData->nPriority) {

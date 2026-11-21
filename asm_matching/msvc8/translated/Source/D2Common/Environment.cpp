@@ -227,15 +227,17 @@ static void __stdcall DRLGENV_UpdateLightColor(int32_t nActNo, D2DrlgEnvironment
 
 // Initializes a DRLG environment cycle from the current time index. Sets the environment data type and tick count from lookup tables, using eclipse-specific tables when pEclipse is active.
 static void DRLGENV_InitEnvironmentCycle(D2DrlgEnvironmentStrc * pDrlgEnvironment) {
-    int nCurTimeIndex = pDrlgEnvironment->nTimeIndex;
+    D2DrlgActEnvironmentData* pEnvData;
     if (!pDrlgEnvironment->bEclipse) {
-      pDrlgEnvironment->nEnvironmentData = aENVIRONMENTDATA1[nCurTimeIndex * 3 + 1];
-      pDrlgEnvironment->nTicks = pDrlgEnvironment->nTimeRate * aENVIRONMENTDATA1[nCurTimeIndex * 3];
+      pEnvData = &((D2DrlgActEnvironmentData*)aENVIRONMENTDATA1)[pDrlgEnvironment->nTimeIndex];
+      pDrlgEnvironment->nEnvironmentData = pEnvData->nEnvData;
+      pDrlgEnvironment->nTicks = pDrlgEnvironment->nTimeRate * pEnvData->nLenght;
       return;
     }
 
-    pDrlgEnvironment->nEnvironmentData = aENVIRONMENTDATA2[nCurTimeIndex].nEnvData;
-    pDrlgEnvironment->nTicks = pDrlgEnvironment->nTimeRate * aENVIRONMENTDATA2[nCurTimeIndex].nLenght;
+    pEnvData = &aENVIRONMENTDATA2[pDrlgEnvironment->nTimeIndex];
+    pDrlgEnvironment->nEnvironmentData = pEnvData->nEnvData;
+    pDrlgEnvironment->nTicks = pDrlgEnvironment->nTimeRate * pEnvData->nLenght;
 }
 
 D2DrlgEnvironmentStrc * __fastcall DRLGENV_AllocEnvironment(D2PoolManagerStrc * pMemory) {

@@ -1851,8 +1851,8 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_A(D2UnitStrc * pUni
       return 0;
     }
 
-    int nBaseMissileId = (int)pSkillTxt->cltmissile[1];
-    if (!(nBaseMissileId >= 0 && nBaseMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
+    int nMissileId = pSkillTxt->cltmissile[1];
+    if (nMissileId < 0 || nMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster) {
@@ -1861,20 +1861,20 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_A(D2UnitStrc * pUni
       byComponentIdx = pUnit->pUnitData.pUnitDataMonster->Components[10];
     }
 
-    eMissilesId eMissileIdOffset = nBaseMissileId + (uint32_t)byComponentIdx;
-    if ((int)eMissileIdOffset >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+    nMissileId += byComponentIdx;
+    if (nMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
 
-    D2MissilesTxt* pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(eMissileIdOffset);
+    D2MissilesTxt* pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById((eMissilesId)nMissileId);
     if (pMissileTxt) {
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
       if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
-        UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, eMissileIdOffset, 0, 0, 0, 0, eSkill, nSkillLvl, 0);
+        UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, (eMissilesId)nMissileId, 0, 0, 0, 0, eSkill, nSkillLvl, 0);
       } else {
-        Skills::MakeMissileAtSkillTarget(pUnit, eMissileIdOffset, eSkill, nSkillLvl);
+        Skills::MakeMissileAtSkillTarget(pUnit, (eMissilesId)nMissileId, eSkill, nSkillLvl);
       }
 
       return 1;
@@ -1891,8 +1891,8 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_B(D2UnitStrc * pUni
       return 0;
     }
 
-    int nBaseMissileId = (int)pSkillTxt->cltmissile[1];
-    if (!(nBaseMissileId >= 0 && nBaseMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
+    int nMissileId = (int)pSkillTxt->cltmissile[1];
+    if (!(nMissileId >= 0 && nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster) {
@@ -1901,20 +1901,20 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_B(D2UnitStrc * pUni
       byComponentIdx = pUnit->pUnitData.pUnitDataMonster->Components[0xb];
     }
 
-    eMissilesId eMissileIdOffset = nBaseMissileId + (uint32_t)byComponentIdx;
-    if ((int)eMissileIdOffset >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+    nMissileId += byComponentIdx;
+    if (nMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
 
-    D2MissilesTxt* pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(eMissileIdOffset);
+    D2MissilesTxt* pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById((eMissilesId)nMissileId);
     if (pMissileTxt) {
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
       if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
-        UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, eMissileIdOffset, 0, 0, 0, 0, eSkill, nSkillLvl, 0);
+        UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, (eMissilesId)nMissileId, 0, 0, 0, 0, eSkill, nSkillLvl, 0);
       } else {
-        Skills::MakeMissileAtSkillTarget(pUnit, eMissileIdOffset, eSkill, nSkillLvl);
+        Skills::MakeMissileAtSkillTarget(pUnit, (eMissilesId)nMissileId, eSkill, nSkillLvl);
       }
 
       return 1;

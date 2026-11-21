@@ -763,29 +763,29 @@ int32_t __fastcall SKILLNEC_ApplyConvertToUnit(D2UnitStrc * pUnit, D2SkillAuraCt
     }
 
     eD2UnitStat eStatId = pCtx->anStatIds[0];
-    D2StateExArgStrc sStateExArg;
-    memset(&sStateExArg, 0, sizeof(sStateExArg));
-    sStateExArg.nSkillCalc = SKILLNEC_ClampResistPenalty(pUnit, eStatId, pCtx->anStatValues[0]);
-    if (!sStateExArg.nSkillCalc) {
+    int32_t nSkillCalc = SKILLNEC_ClampResistPenalty(pUnit, eStatId, pCtx->anStatValues[0]);
+    if (!nSkillCalc) {
       eStatId = ~UNITSTAT_strength;
     }
 
-    sStateExArg.eSkill = pCtx->eSkill;
+    D2StateExArgStrc sStateExArg;
+    memset(&sStateExArg, 0, sizeof(sStateExArg));
     sStateExArg.pUnit = pCtx->pCaster;
+    sStateExArg.eSkill = pCtx->eSkill;
     sStateExArg.nSkillLvl = pCtx->nSkillLvl;
-    sStateExArg.nDurationInFrames = pCtx->nDurationInFrames;
-    sStateExArg.eAuraState = pCtx->eAuraState;
+    sStateExArg.nSkillCalc = nSkillCalc;
     sStateExArg.pTarget = pUnit;
+    sStateExArg.nDurationInFrames = pCtx->nDurationInFrames;
     sStateExArg.eStat = eStatId;
+    sStateExArg.eAuraState = pCtx->eAuraState;
     sStateExArg.pFunction = SKILLNEC_OnConvertExpire;
     D2StatListExStrc* pStatListEx = SkillsServer::SetStateWithExpiryTime(&sStateExArg);
     if (!pStatListEx) {
       return 0;
     }
 
-    int32_t* pStatIdCursor = pCtx->anStatIds;
+    int32_t* pStatIdCursor = &pCtx->anStatIds[1];
     for (int iStatLoop = 0; iStatLoop < 5; iStatLoop++) {
-      pStatIdCursor++;
       eStatId = *pStatIdCursor;
       if ((int)eStatId >= 0 && (int)eStatId < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         nClampedStatCalc = SKILLNEC_ClampResistPenalty(pUnit, eStatId, pStatIdCursor[6]);
@@ -793,6 +793,7 @@ int32_t __fastcall SKILLNEC_ApplyConvertToUnit(D2UnitStrc * pUnit, D2SkillAuraCt
           D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatListEx, *pStatIdCursor, nClampedStatCalc, 0);
         }
       }
+      pStatIdCursor++;
     }
 
     if (pCtx->bUpdateAnimRate) {
@@ -2265,7 +2266,13 @@ BOOL __fastcall ITEMEVENT_AuraThornsWithLifeSteal(::SGAMEDATA * pGame, uint32_t 
 // Item-event callback for aura-based healing (e.g. Necromancer Life Tap). Given a target unit, looks up the aura's target state on pUnit to find the caster's stat list, computes heal amount via the skill's calc[0] expression scaled by a percentage from pParam, clamps result to [1, maxHP], and writes it back via STATLIST_SetUnitStat UNITSTAT_hitpoints. Also plays the skill's prgoverlay effect on the target. Returns TRUE if heal was applied.
 BOOL __fastcall ITEMEVENT_AuraHealTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pSkillLvlCast, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTargetUnit = pSkillLvlCast;
-    if (!(pUnit && pSkillLvlCast && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER) && (pSkillLvlCast->eUnitType == UNIT_PLAYER || pSkillLvlCast->eUnitType == UNIT_MONSTER))) {
+    if (!pUnit || !pSkillLvlCast) {
+      return 0;
+    }
+    if (pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER) {
+      return 0;
+    }
+    if (pSkillLvlCast->eUnitType != UNIT_PLAYER && pSkillLvlCast->eUnitType != UNIT_MONSTER) {
       return 0;
     }
 
@@ -2305,23 +2312,18 @@ BOOL __fastcall ITEMEVENT_AuraHealTarget(::SGAMEDATA * pGame, uint32_t nUnitEven
     int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_hitpoints, 0);
     int nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pTargetUnit);
     if (nCurHp > 0 && nMaxHp > 0) {
-      int nHpMin;
       nCurHp += nHealCalc;
-      nHpMin = 1;
-      if (nCurHp >= 1) {
-        nHpMin = nCurHp;
-      }
-      if (nHpMin < nMaxHp) {
-        nMaxHp = nCurHp;
+      if ((nCurHp < 1 ? 1 : nCurHp) < nMaxHp) {
         if (nCurHp < 1) {
-          nMaxHp = 1;
+          nCurHp = 1;
         }
+      } else {
+        nCurHp = nMaxHp;
       }
 
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_hitpoints, nMaxHp, 0);
-      nAuraTargetState = pSkillTxt->prgoverlay;
-      if (nAuraTargetState > 0 && (int)nAuraTargetState < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
-        D2Common::Units::SetOverlay(pTargetUnit, (int)nAuraTargetState, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_hitpoints, nCurHp, 0);
+      if (pSkillTxt->prgoverlay > 0 && pSkillTxt->prgoverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
+        D2Common::Units::SetOverlay(pTargetUnit, pSkillTxt->prgoverlay, 0);
       }
 
       return 1;

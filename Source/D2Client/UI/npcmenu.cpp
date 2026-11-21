@@ -3876,29 +3876,20 @@ void __fastcall NPCMENU_AddHandledMessageId(short wMsgId) {
 // Runs the NPC quest-dependent menu-option enablers. For each of nEntryCount entries of pCallbackTable whose nNpcClassId matches: reads GetQuestState(pBitBuffer, nQuestId, nQuestFlag); with bCheckState != 0 calls pfnCallback when the state is set, with bCheckState == 0 when it is clear.
 // Returns the last called callback's result, or 1 when none ran (EDI starts at 1). Custom storage: table in ECX, count in EAX, RET 8.
 static int32_t __stdcall NPCMENU_CheckQuestDependentCallbacks(D2NpcQuestCallbackEntry * pCallbackTable, int32_t nNpcClassId, D2BitBufferStrc * pBitBuffer, int32_t nEntryCount) {
-    int32_t* peEntry;
     int nResult = 1;
-    if (nEntryCount > 0) {
-      BOOL bQuestState;
-      peEntry = &pCallbackTable->nQuestFlag;
-      do {
-        if (((D2NpcQuestCallbackEntry*)(peEntry - 2))->nNpcClassId == nNpcClassId) {
-          if (peEntry[1] != QUESTSTATE_Completed) {
-            bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, peEntry[-1], *peEntry);
-            if (bQuestState) {
-              nResult = (*(D2NpcMenuOptionFunc)peEntry[2])();
-            }
-          } else {
-            bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, peEntry[-1], *peEntry);
-            if (!bQuestState) {
-              nResult = (*(D2NpcMenuOptionFunc)peEntry[2])();
-            }
+    for (int i = 0; i < nEntryCount; i++) {
+      D2NpcQuestCallbackEntry* pEntry = &pCallbackTable[i];
+      if (pEntry->nNpcClassId == nNpcClassId) {
+        if (pEntry->bCheckState) {
+          if (D2Common::QuestRecord::GetQuestState(pBitBuffer, pEntry->nQuestId, pEntry->nQuestFlag)) {
+            nResult = pEntry->pfnCallback();
+          }
+        } else {
+          if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, pEntry->nQuestId, pEntry->nQuestFlag)) {
+            nResult = pEntry->pfnCallback();
           }
         }
-
-        peEntry += 5;
-        nEntryCount--;
-      } while (nEntryCount);
+      }
     }
 
     return nResult;
@@ -4977,11 +4968,10 @@ void __stdcall NPCMENU_ShowTransactionConfirmDialog() {
     int nTransactionCostOut;
     fpDialogFunc pfnStringCallback;
     uint32_t bStringEnabled;
-    int32_t nErrorLine;
     uint32_t nStringColor;
     uint32_t nStringFontSize;
     if (Dialog::gpNpcTransactionConfirmDialog) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nErrorLine);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x151b);
       exit(-1);
     }
 
@@ -5151,29 +5141,16 @@ int __stdcall NPCMENU_GetCurrentShopMode() {
 // Packet S->C 0x91 body, called by NET_D2GS_CLIENT_Incoming0x91_WELCOME_BACK.
 // Reads 12 word NPC class ids from the packet at +2. For each id below the MonStats count, sets bUpdated = 1 on every D2NPCSpeech entry with that nNpcID. Nothing in it is about trade or money.
 void __fastcall NPCMENU_MarkNpcSpeechesUpdated(D2GSPacketSrv0x91 * pBytes) {
-    uint8_t* pSpeech;
-    int nSpeechCounter;
-    int D2NPCSpeechCount_lcl = D2NPCSpeechCount;
-    int nMessageCount = 12;
-    do {
-      uint16_t* nNpcID;
-      nNpcID = pBytes->nNpcID;
-      if ((int)(uint32_t)*nNpcID < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2NPCSpeechCount_lcl > 0) {
-        pSpeech = &D2NPCSpeech[0].bUpdated;
-        nSpeechCounter = D2NPCSpeechCount_lcl;
-        do {
-          if (((D2NPCSpeechStrc*)(pSpeech - 0x12))->nNpcID == (uint32_t)*nNpcID) {
-            *pSpeech = '\x01';
+    int nCount = D2NPCSpeechCount;
+    for (int i = 0; i < 12; i++) {
+      if (pBytes->nNpcID[i] < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+        for (int j = 0; j < nCount; j++) {
+          if (D2NPCSpeech[j].nNpcID == pBytes->nNpcID[i]) {
+            D2NPCSpeech[j].bUpdated = 1;
           }
-
-          pSpeech += 0x16;
-          nSpeechCounter--;
-        } while (nSpeechCounter);
+        }
       }
-
-      nMessageCount--;
-      pBytes = (D2GSPacketSrv0x91*)nNpcID;
-    } while (nMessageCount);
+    }
 }
 
 uint8_t * __fastcall Unreferenced_004b3560(uint8_t * pData) {
@@ -5717,27 +5694,27 @@ int __stdcall NPCMENU_CainIdentifyCallback() {
       nPlayerClass = pPlayer->nClassId;
     }
     if (_Interaction::bInteractingWithNpc) {
-      int nNpcClass;
       pPlayer = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pPlayer) {
-        nNpcClass = pPlayer->nClassId;
-        if (nNpcClass != 0x201) {
-          if (nNpcClass != 0x202) {
-            if (nNpcClass == 0x203 && nPlayerClass == 3) {
-              NPCMENU_SendCainIdentifyItems('\0', 10);
+        switch (pPlayer->nClassId) {
+          case 0x201:
+            if (nPlayerClass == 4) {
+              NPCMENU_SendCainIdentifyItems('\0', 0xf);
               return 1;
             }
-          } else {
+            break;
+          case 0x202:
             if (nPlayerClass == 2) {
               NPCMENU_SendCainIdentifyItems('\0', 0xb);
               return 1;
             }
-          }
-        } else {
-          if (nPlayerClass == 4) {
-            NPCMENU_SendCainIdentifyItems('\0', 0xf);
-            return 1;
-          }
+            break;
+          case 0x203:
+            if (nPlayerClass == 3) {
+              NPCMENU_SendCainIdentifyItems('\0', 10);
+              return 1;
+            }
+            break;
         }
       }
     }

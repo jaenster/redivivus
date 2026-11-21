@@ -118,7 +118,7 @@ void __fastcall DRAW_ConvertPaletteRGBtoHSL(D2HSLColorStrc * pHSLOut, uint8_t * 
 
 // No register arguments: EAX is first written by FNSTSW AX at 00604fee and only carries the x87 status word (1.14d asm).
 double __stdcall DRAW_GetHueSector(double m1, double m2, double dHue) {
-    if (360.0 < dHue) {
+    if (dHue > 360.0) {
       dHue -= 360.0;
     }
     if (dHue < 0.0) {
@@ -130,7 +130,7 @@ double __stdcall DRAW_GetHueSector(double m1, double m2, double dHue) {
     if (dHue < 180.0) {
       return m2;
     }
-    if (!(240.0 <= dHue)) {
+    if (dHue < 240.0) {
       return (m2 - m1) * (240.0 - dHue) / 60.0 + m1;
     }
 

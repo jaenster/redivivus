@@ -288,18 +288,20 @@ uint32_t __stdcall OVERLAYTBLS_GetMonsterComponentOverlay(int32_t nMonStatId, ui
     if (nComponentIdx >= 0x10) {
       return 0;
     }
-    if (!(nMonStatId >= 0 && nMonStatId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
+
+    D2MonStats2Txt* pMonStats2 = nullptr;
+    if (nMonStatId >= 0 && nMonStatId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+      int nMonStats2Idx = (int)ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatId].MonStatsEx;
+      pMonStats2 = nMonStats2Idx >= 0 && nMonStats2Idx < ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStats2Idx : nullptr;
+    }
+    if (!pMonStats2) {
+      return 0;
+    }
+    if (pMonStats2->aComponents[nComponentIdx] <= nVariantIdx) {
       return 0;
     }
 
-    int nMonStats2Idx = (int)ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatId].MonStatsEx;
-    D2MonStats2Txt* pMonStats2 = nMonStats2Idx >= 0 && nMonStats2Idx < ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStats2Idx : nullptr;
-    if (!(pMonStats2 && pMonStats2->aComponents[nComponentIdx] > nVariantIdx)) {
-      return 0;
-    }
-
-    uint32_t pCompCodeResult = DataTbls::DATATBLS_GetCompCodeByIndex((uint32_t)pMonStats2->aCompCodes[nVariantIdx + nComponentIdx * 0xc]);
-    return pCompCodeResult;
+    return DataTbls::DATATBLS_GetCompCodeByIndex((uint32_t)pMonStats2->aCompCodes[nVariantIdx + nComponentIdx * 0xc]);
 }
 
 }}} // namespace D2Common::DATATBLS::OverlayTbls

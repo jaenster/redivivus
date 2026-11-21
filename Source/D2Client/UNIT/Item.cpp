@@ -901,7 +901,6 @@ void __fastcall ITEM_FreeItemUnit(D2UnitStrc * pUnit) {
 // Updates a ground-item unit's animation state and targetability flag each frame. Death/Neutral/Walk/GetHit/TownWalk modes clear UNITFLAG_TARGETABLE. Run mode sets UNITFLAG_TARGETABLE and adds OVERLAY_itemgleam if not already present. TownNeutral advances the frame and transitions to Run when the cycle ends. Halts on unexpected anim mode or null unit.
 void __fastcall ITEM_UpdateItemAnimation(D2UnitStrc * pUnit) {
     BOOL bHasOverlay;
-    int32_t nLine;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x348);
       exit(-1);
@@ -912,13 +911,13 @@ void __fastcall ITEM_UpdateItemAnimation(D2UnitStrc * pUnit) {
       switch (pUnit->eAnimMode.ePlayerMode) {
         case TownNeutral:
           bAtEndOfCycle = D2Common::Units::IsAtEndOfFrameCycle(pUnit);
-        if (!bAtEndOfCycle) {
-          D2Common::Units::UpdateFrame(pUnit);
-          return;
+        if (bAtEndOfCycle) {
+          pUnit->eAnimMode.ePlayerMode = eD2PlayerAnimMode_ns::Run;
+          break;
         }
 
-        pUnit->eAnimMode.ePlayerMode = eD2PlayerAnimMode_ns::Run;
-        break;
+        D2Common::Units::UpdateFrame(pUnit);
+        return;
         case eD2PlayerAnimMode_ns::Run:
           pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
         bHasOverlay = Engine::Gfx::GFX_HasOverlayOfType(pUnit, 0x46);
@@ -939,7 +938,6 @@ void __fastcall ITEM_UpdateItemAnimation(D2UnitStrc * pUnit) {
           pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
         return;
         default:
-          nLine = 0x362;
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x362);
         exit(-1);
       }

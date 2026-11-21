@@ -864,6 +864,12 @@ static void __stdcall Q27_ActivateAllSealsKillChaos(D2QuestDataA4Q2Strc * pQuest
     }
 }
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
 // [A4Q3 Terror's End] Monster-kill handler (callback slot 0x08). If the killed unit is Diablo (0xf3): notify (classic), record Diablo's room, mark quest completed in the A4Q2 struct, set state 0xd (JustCompleted) & broadcast, then iterate players to credit/propagate completion and send state (Q27_PlayerCheckNearDiablo / PropagateCompletionToParty / SetCannotComplete / CheckCompletionSendState), and arm the QuitGameAfterDia timer. If a non-Diablo seal-boss dies: count it; once 3 bosses + all 5 seals are down, trigger Q27_ActivateAllSealsKillChaos and arm the spawn-Diablo timer.
 void __fastcall Q27_Callback_08_KillHandler(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2RoomStrc* pDiabloRoom;
@@ -871,9 +877,8 @@ void __fastcall Q27_Callback_08_KillHandler(D2QuestDataStrc * pQuestData, D2Ques
     BOOL bKillerCompleted;
     int iNotify;
     bool bKillerNotCompleted;
-    ::SGAMEDATA* pGame;
     D2QuestDataA4Q2Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA4Q2;
-    if (!pQuestArgs->pTarget || pQuestArgs->pTarget->nClassId != 0xf3) {
+    if (GetClassIdInline(pQuestArgs->pTarget) != 0xf3) {
       int iSealIdx;
       pQuestSpecificData->nSealBossKillCount++;
       if (pQuestSpecificData->nSealBossKillCount == 3) {
@@ -914,16 +919,14 @@ void __fastcall Q27_Callback_08_KillHandler(D2QuestDataStrc * pQuestData, D2Ques
             pQuestData->pQuestSpecificData.pA4Q2->bDiabloDeathNotified = 1;
             pQuestData->pQuestSpecificData.pA4Q2->bSaveFileSent = 0;
             pQuestData->pQuestSpecificData.pA4Q2->bDiabloSpawnStarted = 1;
-            dwKillTick = GetTickCount();
-            pQuestData->pQuestSpecificData.pA4Q2->nDiabloKillTick = dwKillTick;
+            pQuestData->pQuestSpecificData.pA4Q2->nDiabloKillTick = GetTickCount();
             AddQuestTimer(pQuestData, QuitGameAfterDia, 1);
           }
           if (pQuestData->bIsNotIntroduction == '\0') {
             return;
           }
 
-          pGame = pQuestArgs->pGame;
-          D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+          D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
           bKillerCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TerrorsEnd, QUESTSTATE_Completed);
           if (!bKillerCompleted) {
             bKillerNotCompleted = true;
@@ -1027,69 +1030,55 @@ void __fastcall Objects_InitFn56_Seal(D2ObjectInitFnArg * pInitArg) {
 
 // [A4Q3 Terror's End] Object operate-fn for the 5 Chaos Sanctuary seal objects (class 0x188-0x18c). On activation sets the corresponding per-seal flag in the A4Q2 struct; once all 5 seals + 3 seal-bosses are done, calls Q27_ActivateAllSealsKillChaos (summon Diablo) and arms the spawn timer.
 BOOL __fastcall OBJOP_A4Q2_DiabloSealActivateKillChaos(D2ObjectOperateFnArg * pOperation) {
-    int nSealClassId;
     D2UnitStrc* pVictim = pOperation->sArg.pVictim;
-    if (!(!pVictim || pVictim->eAnimMode.ePlayerMode == Death)) {
-      return 0;
-    }
+    if (!pVictim || pVictim->eAnimMode.ePlayerMode == Death) {
+      D2Common::Units::ChangeAnimMode(pVictim, 1);
+      D2ObjectsTxt* pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
+      ::SGAMEDATA* pGame = pOperation->sArg.pGame;
+      GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjectsTxt->FrameCnt[1] >> 7) + pGame->dwGameFrame, 0, 0);
+      D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TerrorsEnd);
+      if (pQuestData) {
+        pVictim = pOperation->sArg.pVictim;
+        D2QuestDataA4Q2Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA4Q2;
+        switch (!pVictim ? -1 : pVictim->nClassId) {
+          case 0x188:
+            pQuestSpecificData->abSealActivated[0] = 1;
+          break;
+          case 0x189:
+            pQuestSpecificData->abSealActivated[1] = 1;
+          break;
+          case 0x18a:
+            pQuestSpecificData->abSealActivated[2] = 1;
+          break;
+          case 0x18b:
+            pQuestSpecificData->abSealActivated[3] = 1;
+          break;
+          case 0x18c:
+            pQuestSpecificData->abSealActivated[4] = 1;
+        }
 
-    D2Common::Units::ChangeAnimMode(pVictim, 1);
-    D2ObjectsTxt* pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
-    ::SGAMEDATA* pGame = pOperation->sArg.pGame;
-    GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjectsTxt->FrameCnt[1] >> 7) + pGame->dwGameFrame, 0, 0);
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TerrorsEnd);
-    if (!pQuestData) {
-      return 0;
-    }
+        int nSeal = 0;
+        do {
+          if (!pQuestSpecificData->abSealActivated[nSeal]) {
+            return 0;
+          }
 
-    pVictim = pOperation->sArg.pVictim;
-    D2QuestDataA4Q2Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA4Q2;
-    if (!pVictim) {
-      nSealClassId = -1;
-    } else {
-      nSealClassId = pVictim->nClassId;
-    }
+          nSeal++;
+        } while (nSeal < 5);
 
-    switch (nSealClassId) {
-      case 0x188:
-        pQuestSpecificData->abSealActivated[0] = 1;
-      break;
-      case 0x189:
-        pQuestSpecificData->abSealActivated[1] = 1;
-      break;
-      case 0x18a:
-        pQuestSpecificData->abSealActivated[2] = 1;
-      break;
-      case 0x18b:
-        pQuestSpecificData->abSealActivated[3] = 1;
-      break;
-      case 0x18c:
-        pQuestSpecificData->abSealActivated[4] = 1;
-    }
-
-    nSealClassId = 0;
-    do {
-      if (!pQuestSpecificData->abSealActivated[nSealClassId]) {
-        return 0;
+        if (pQuestSpecificData->nSealBossKillCount == 3) {
+          Q27_ActivateAllSealsKillChaos(pQuestSpecificData, pOperation->sArg.pGame);
+          if (!pQuestSpecificData->bDiabloSpawnStarted) {
+            pQuestSpecificData->nDiabloKillTick = 0;
+            pQuestSpecificData->bWaitingForDiabloSpawn = 1;
+            pQuestSpecificData->bDiabloKilled = 0;
+            pQuestSpecificData->bDiabloSpawnStarted = 1;
+            AddQuestTimer(pQuestData, QuitGameAfterDia, 1);
+          }
+        }
       }
-
-      nSealClassId++;
-    } while (nSealClassId < 5);
-
-    if (pQuestSpecificData->nSealBossKillCount != 3) {
-      return 0;
     }
 
-    Q27_ActivateAllSealsKillChaos(pQuestSpecificData, pOperation->sArg.pGame);
-    if (pQuestSpecificData->bDiabloSpawnStarted) {
-      return 0;
-    }
-
-    pQuestSpecificData->nDiabloKillTick = 0;
-    pQuestSpecificData->bWaitingForDiabloSpawn = 1;
-    pQuestSpecificData->bDiabloKilled = 0;
-    pQuestSpecificData->bDiabloSpawnStarted = 1;
-    AddQuestTimer(pQuestData, QuitGameAfterDia, 1);
     return 0;
 }
 

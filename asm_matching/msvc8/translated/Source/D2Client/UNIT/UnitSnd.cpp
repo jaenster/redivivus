@@ -2668,7 +2668,9 @@ void __fastcall UNITSND_ResolveSoundFromFlags(D2UnitStrc * pUnit, uint32_t nAnim
       }
     }
 
-    switch (nAnimFlags & 0xf) {
+    uint32_t nSecondaryFlags = nAnimFlags & 0xf0;
+    nAnimFlags &= 0xf;
+    switch (nAnimFlags) {
       case 1:
         *pnSoundIdOut = 0x141;
       break;
@@ -2700,7 +2702,7 @@ void __fastcall UNITSND_ResolveSoundFromFlags(D2UnitStrc * pUnit, uint32_t nAnim
         *pnSoundIdOut = 0x145;
     }
 
-    switch (nAnimFlags & 0xf0) {
+    switch (nSecondaryFlags) {
       case 0x20:
         *pnSecondarySoundIdOut = 0x161 + (*pnSoundIdOut ? 3 : 0);
       return;

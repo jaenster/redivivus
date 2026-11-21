@@ -1331,106 +1331,73 @@ int32_t __fastcall ITEMMOD_GetScrollBookIndex(D2UnitStrc * pUnit, int32_t bMatch
 
 // Selects and applies a set-item affix to pUnit during item generation. Builds a weighted candidate list from pTxtSetItems entries whose item code, level, and version match the item; if pItemGenContext->dwFileIndex (1-based) names a matching set item it is used directly, otherwise one is chosen by weighted random from the item's seed. Calls ApplyRuneAndGemStats(4) to stamp the set stats. Returns 1 on success, 0 if no candidate found.
 static BOOL __stdcall ITEMMOD_GenerateSetItem(D2ItemGenContextStrc * pItemGenContext, D2UnitStrc * pUnit) {
-    DWORD aDStack2072[512];
-    DWORD nSetItemWeight;
-    int nCandidateCount;
-    nCandidateCount = 0;
-    uint32_t nAccumWeight;
-    nAccumWeight = -1;
-    uint32_t nTotalWeight;
-    nTotalWeight = 0;
-    DWORD nForcedSetItemIdx;
-    nForcedSetItemIdx = -1;
-    if (pUnit) {
-      nAccumWeight = pUnit->nClassId;
-    }
-
-    D2ItemsTxt* pItemsTxt;
-    pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nAccumWeight);
+    int aCandidates[256][2];
+    int nTotalWeight = 0;
+    int nCandidateCount = 0;
+    int nForcedSetItemIdx = -1;
+    D2ItemsTxt* pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pUnit ? pUnit->nClassId : -1);
     if (!pItemsTxt) {
       return 0;
     }
 
-    uint16_t wItemVersion;
-    wItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
-    uint32_t nItemCode;
-    nItemCode = pItemsTxt->dwCode;
-    uint32_t nItemVersionCached;
-    nItemVersionCached = (uint32_t)wItemVersion;
-    int32_t nItemLvl;
-    nItemLvl = D2Common::ITEMS::Items::ITEM_GetItemData_nItemLevel(pUnit);
-    int nSetItemsCount;
-    nSetItemsCount = D2Common::ITEMS::Items::sgptDataTable->nTxtSetItemsSize;
-    DWORD nSetItemIdx;
-    nSetItemIdx = 0;
+    int nItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
+    uint32_t nItemCode = pItemsTxt->dwCode;
+    int32_t nItemLvl = D2Common::ITEMS::Items::ITEM_GetItemData_nItemLevel(pUnit);
+    D2SetItemsTxt* pSetItemTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSetItems;
+    int nSetItemsCount = D2Common::ITEMS::Items::sgptDataTable->nTxtSetItemsSize;
+    int nSetItemIdx = 0;
     if (nSetItemsCount <= 0) {
       return 0;
     }
 
-    short int* pSetItemLvl;
-    pSetItemLvl = &D2Common::ITEMS::Items::sgptDataTable->pTxtSetItems->lvl;
     do {
-      if (((uint16_t)pSetItemLvl[-7] < 100 || (uint16_t)nItemVersionCached >= 100) && *pSetItemLvl <= nItemLvl && nItemCode == *(uint32_t*)(pSetItemLvl - 4) && (pSetItemLvl[-2] != 0x1d || (pItemGenContext->nFlags & ITEMFLAG_RELOAD) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
+      if (((uint16_t)pSetItemTxt->version < 100 || (uint16_t)nItemVersion >= 100) && pSetItemTxt->lvl <= nItemLvl && nItemCode == pSetItemTxt->dwItemCode && (pSetItemTxt->set != 0x1d || (pItemGenContext->nFlags & ITEMFLAG_RELOAD) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
         if (pItemGenContext->dwFileIndex > 0 && pItemGenContext->dwFileIndex - 1 == nSetItemIdx) {
           nForcedSetItemIdx = nSetItemIdx;
         }
 
-        nSetItemWeight = *(DWORD*)(pSetItemLvl + 2);
-        aDStack2072[nCandidateCount * 2] = nSetItemIdx;
-        aDStack2072[nCandidateCount * 2 + 1] = nSetItemWeight;
-        if (!nSetItemWeight) {
-          aDStack2072[nCandidateCount * 2 + 1] = 1;
+        aCandidates[nCandidateCount][0] = nSetItemIdx;
+        aCandidates[nCandidateCount][1] = pSetItemTxt->rarity;
+        if (!aCandidates[nCandidateCount][1]) {
+          aCandidates[nCandidateCount][1] = 1;
         }
 
-        nTotalWeight += aDStack2072[nCandidateCount * 2 + 1];
+        nTotalWeight += aCandidates[nCandidateCount][1];
         nCandidateCount++;
       }
 
-      nAccumWeight = nTotalWeight;
       nSetItemIdx++;
-      pSetItemLvl += 0xdc;
-    } while ((int)nSetItemIdx < nSetItemsCount);
+      pSetItemTxt++;
+    } while (nSetItemIdx < nSetItemsCount);
 
     nSetItemIdx = nForcedSetItemIdx;
-    if ((int)nForcedSetItemIdx >= 0) {
-      apply_set_item:
-      D2Common::ITEMS::Items::ITEM_SetItemData_nFileIndex(pUnit, nSetItemIdx);
-      D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0);
-      D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(4, nullptr, pUnit, nullptr, 0, 0);
-      return 1;
-    }
-    if (!nTotalWeight) {
-      return 0;
-    }
-
-    D2SeedStrc* pSeed = D2Common::ITEMS::Items::GetItemSeed(pUnit);
-    nAccumWeight = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nAccumWeight);
-    nSetItemsCount = 0;
-    if (nCandidateCount <= 0) {
-      return 0;
-    }
-
-    while (true) {
-      int iCandidateStride;
-      iCandidateStride = nSetItemsCount * 2;
-      if ((int)nAccumWeight < (int)aDStack2072[iCandidateStride + 1]) {
-        break;
-      }
-
-      nSetItemsCount++;
-      nAccumWeight -= aDStack2072[iCandidateStride + 1];
-      if (nSetItemsCount >= nCandidateCount) {
+    if (nSetItemIdx < 0) {
+      if (!nTotalWeight) {
         return 0;
       }
+
+      int nRoll = D2Common::Seed::RANDOM_RandomNumberSelector(D2Common::ITEMS::Items::GetItemSeed(pUnit), nTotalWeight);
+      int nPick = -1;
+      for (int nCandidate = 0; nCandidate < nCandidateCount; nCandidate++) {
+        if (nRoll < aCandidates[nCandidate][1]) {
+          nPick = nCandidate;
+          break;
+        }
+
+        nRoll -= aCandidates[nCandidate][1];
+      }
+
+      if (nPick < 0) {
+        return 0;
+      }
+
+      nSetItemIdx = aCandidates[nPick][0];
     }
 
-    if (nSetItemsCount < 0) {
-      return 0;
-    }
-
-    nSetItemIdx = aDStack2072[nSetItemsCount * 2];
-    goto apply_set_item;
-    return 0;
+    D2Common::ITEMS::Items::ITEM_SetItemData_nFileIndex(pUnit, nSetItemIdx);
+    D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0);
+    D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(4, nullptr, pUnit, nullptr, 0, 0);
+    return 1;
 }
 
 // Body continues at 005c276a, the JNZ target of 005c2761 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'ITEMMOD_GenerateUniqueItemInternal'; that made EBP look like a parameter and turned this frame's locals into wild pointers.

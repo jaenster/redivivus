@@ -331,24 +331,19 @@ int32_t __fastcall DRLGOUTDOOR_GetSecondaryBorderPresetFromLvlSub(D2DrlgLevelStr
       exit(-1);
     }
 
-    {
-      uint32_t* pLvlSubEntry;
-      pLvlSubEntry = gaAct5BorderPresetTable;
-      do {
-        if (nBorderType == *pLvlSubEntry && nPresetIndex >= (int)pLvlSubEntry[1] && nPresetIndex <= (int)pLvlSubEntry[2]) {
-          if (pLevel->eD2LevelId == 0x75) {
-            return pLvlSubEntry[4] - pLvlSubEntry[1] + nPresetIndex;
-          }
-
-          return pLvlSubEntry[3] - pLvlSubEntry[1] + nPresetIndex;
+    BOOL bIsLevel75 = pLevel->eD2LevelId == 0x75;
+    for (uint32_t* pLvlSubEntry = gaAct5BorderPresetTable; (intptr_t)pLvlSubEntry < (intptr_t)(gaAct5BorderPresetTable + 50); pLvlSubEntry += 5) {
+      if (nBorderType == *pLvlSubEntry && nPresetIndex >= (int)pLvlSubEntry[1] && nPresetIndex <= (int)pLvlSubEntry[2]) {
+        if (bIsLevel75) {
+          return pLvlSubEntry[4] - pLvlSubEntry[1] + nPresetIndex;
         }
 
-        pLvlSubEntry += 5;
-      } while ((intptr_t)pLvlSubEntry < (intptr_t)((char*)&gaAct5BorderPresetTable + sizeof(gaAct5BorderPresetTable)));
-
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a5);
-      exit(-1);
+        return pLvlSubEntry[3] - pLvlSubEntry[1] + nPresetIndex;
+      }
     }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a5);
+    exit(-1);
 }
 
 // Validates whether a secondary border preset can be placed at a grid cell.

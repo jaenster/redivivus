@@ -1982,11 +1982,19 @@ static void __stdcall DAMAGE_RemoveObjectAtSameCoords(int32_t nClassId, D2UnitSt
     } while (true);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_31(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 31 & 1;
+}
+
 // Server-side kill handler for player and monster units. Guards against already-dead or unkillable units (MonStats killable flag). For monsters: optionally removes the unit from its owner's pet list, awards kill XP and arena credit to the attacker, fires the Death lifecycle transition (computing facing direction from attacker position), triggers quest callbacks, and handles objCol-flagged monster cleanup (e.g. removing companion objects at coords 0x23B/0x23C). No-ops on invalid unit types.
 void __fastcall SERVER_KillMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, BOOL bRemoveFromOwner) {
     bool bCanKill;
     D2UnitStrc* pOwner;
-    int32_t nDirection;
+    uint8_t nDirection;
     BOOL bMonStats2_objCol;
     D2ModeChangeStrc pMonsterKill;
     eD2UnitType eVictimType = UNIT_COUNT;
@@ -2059,10 +2067,10 @@ void __fastcall SERVER_KillMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Un
       nDirection = D2Common::PATH::DynamicPath::GetDirection(pUnit->pPath.pDynamicPath);
     }
 
-    pMonsterKill.nAnimatedMode1 = (uint8_t)nDirection;
+    pMonsterKill.nAnimatedMode1 = nDirection;
     pMonsterKill.pTargetUnit = pAttacker;
     D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &pMonsterKill, 1);
-    if ((int)pUnit->eUnitFlags >= 0) {
+    if (!FlagBit_D2UnitStrc_eUnitFlags_31(pUnit)) {
       Quests::QUESTS::QUEST_OnMonsterKilled(pGame, pUnit, pAttacker);
     }
 
@@ -2504,7 +2512,6 @@ void __fastcall DAMAGE_ProcessCombatQueueEntry(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     D2CombatEntryStrc* pCombatEntry = (D2CombatEntryStrc*)pUnit->pCombat;
-    ::SGAMEDATA* pGameCopy = pGame;
     if (!pCombatEntry) {
       return;
     }
@@ -2520,17 +2527,27 @@ void __fastcall DAMAGE_ProcessCombatQueueEntry(::SGAMEDATA * pGame, D2UnitStrc *
     D2DamageStrc* pSrcDmgData = &pCombatEntry->sDamage;
     D2DamageStrc sDamage = *pSrcDmgData;
     _bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pVictim, eEntryAttackerType == UNIT_MONSTER ? 0x3U : 0x1U);
-    ::SGAMEDATA* pGameLocal = pGameCopy;
     if (_bInMeleeRange) {
       uint32_t nHitClass;
       if ((uint8_t)sDamage.wResultFlags & 1) {
         eEntryAttackerType = pUnit->eUnitType;
-        if (eEntryAttackerType != UNIT_OBJECT && (eEntryAttackerType == UNIT_PLAYER || eEntryAttackerType == UNIT_MONSTER) && pUnit->eAnimMode.ePlayerMode == Death) {
-          return;
+        if (eEntryAttackerType != UNIT_OBJECT) {
+          switch (eEntryAttackerType) {
+          case UNIT_PLAYER:
+            if (pUnit->eAnimMode.ePlayerMode == Death) {
+              return;
+            }
+            break;
+          case UNIT_MONSTER:
+            if (pUnit->eAnimMode.eMonsterMode == eD2MonsterAnimMode_ns::Death) {
+              return;
+            }
+            break;
+          }
         }
 
         sDamage.dwHitFlags = 0x20;
-        DAMAGE_ApplyDamageToUnit(pGameCopy, pUnit, pVictim, 0, &sDamage);
+        DAMAGE_ApplyDamageToUnit(pGame, pUnit, pVictim, 0, &sDamage);
         if (sDamage.nOverlay > 0) {
           D2Common::Units::SetOverlay(pVictim, sDamage.nOverlay, 0);
         }
@@ -2539,26 +2556,35 @@ void __fastcall DAMAGE_ProcessCombatQueueEntry(::SGAMEDATA * pGame, D2UnitStrc *
           sDamage.dwHitClass |= nHitClass;
         }
 
-        DAMAGE_ReduceEquipmentDurability(pGameLocal, pVictim, pUnit);
+        DAMAGE_ReduceEquipmentDurability(pGame, pVictim, pUnit);
       }
 
-      SUnitEvent::UNITEVENT_DispatchEventsByType(pGameLocal, 7, pUnit, pVictim, &sDamage);
-      SUnitEvent::UNITEVENT_DispatchEventsByType(pGameLocal, 3, pVictim, pUnit, &sDamage);
+      SUnitEvent::UNITEVENT_DispatchEventsByType(pGame, 7, pUnit, pVictim, &sDamage);
+      SUnitEvent::UNITEVENT_DispatchEventsByType(pGame, 3, pVictim, pUnit, &sDamage);
       if ((uint8_t)sDamage.wResultFlags & 1) {
         eEntryAttackerType = pUnit->eUnitType;
-        if (eEntryAttackerType != UNIT_OBJECT && (eEntryAttackerType == UNIT_PLAYER || eEntryAttackerType == UNIT_MONSTER) && pUnit->eAnimMode.ePlayerMode == Death) {
-          return;
+        if (eEntryAttackerType != UNIT_OBJECT) {
+          switch (eEntryAttackerType) {
+          case UNIT_PLAYER:
+            if (pUnit->eAnimMode.ePlayerMode == Death) {
+              return;
+            }
+            break;
+          case UNIT_MONSTER:
+            if (pUnit->eAnimMode.eMonsterMode == eD2MonsterAnimMode_ns::Death) {
+              return;
+            }
+            break;
+          }
         }
 
-        SKILLS::SkillEMonst::SKILLEMONST_ApplyReflectedDamage(pGameLocal, pUnit, pVictim, &sDamage);
+        SKILLS::SkillEMonst::SKILLEMONST_ApplyReflectedDamage(pGame, pUnit, pVictim, &sDamage);
       }
 
-      SERVER_GetHitCalculation(pGameLocal, pUnit, pVictim, &sDamage);
-      DAMAGE_RemoveDamageListEntry(pGameLocal, pUnit, pVictim);
-      return;
+      SERVER_GetHitCalculation(pGame, pUnit, pVictim, &sDamage);
     }
 
-    DAMAGE_RemoveDamageListEntry(pGameCopy, pUnit, pVictim);
+    DAMAGE_RemoveDamageListEntry(pGame, pUnit, pVictim);
 }
 
 D2DamageStrc * __fastcall DAMAGE_FindCombatEntry(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {

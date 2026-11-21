@@ -172,100 +172,49 @@ static BOOL PLRMODES_HasEndAnimEventAndSeqInput(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Checks if the player unit can interrupt its current animation mode to start the specified new mode. Returns TRUE if the new mode can interrupt.
 static BOOL PLRMODES_CanInterruptCurrentMode(uint32_t nNewMode, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    // Static local variables (originally global data)
-    static uint8_t PLRMODES_CanInterruptCaseIndex[18] = {
-    0x0,
-    0x0,
-    0x1,
-    0x1,
-    0x1,
-    0x0,
-    0x1,
-    0x1,
-    0x1,
-    0x1,
-    0x1,
-    0x1,
-    0x1,
-    0x1,
-    0x1,
-    0x1,
-    0x1,
-    0x0
-}; D2_STATIC_GUARD(PLRMODES_CanInterruptCaseIndex, "D2Game::PLAYER::PlayerModes::PLRMODES_CanInterruptCurrentMode::PLRMODES_CanInterruptCaseIndex");
-
-    D2UnitStrc* pCursorItem_lcl;
-    int32_t iVar1;
-    BOOL BVar2;
-    if (!pUnit->pInventory || (pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory) , !pCursorItem_lcl) || !nNewMode) {
-      if (nNewMode > 0x11) {
-        goto check_current_mode;
-      }
-    } else if (nNewMode != 0x11) {
+    if (pUnit->pInventory && D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory) && nNewMode && nNewMode != 0x11) {
       return 0;
-    }
-
-    switch (PLRMODES_CanInterruptCaseIndex[nNewMode]) {
-      case 0:
-        return 1;
-    }
-
-    check_current_mode:
-    ;
-    switch (pUnit->eAnimMode.ePlayerMode) {
-      case Death:
-
-      case eD2PlayerAnimMode_ns::GetHit:
-
-      case eD2PlayerAnimMode_ns::Block:
-
-      case eD2PlayerAnimMode_ns::Dead:
-        return 0;
-      case Kick:
-        iVar1 = PLRMODES_HasAnimEventLastOrComing5Frames(pGame, pUnit);
-      return (uint32_t)(iVar1 != 0);
-      case eD2PlayerAnimMode_ns::Skill1:
-        if (pUnit->nClassId) {
-          return 1;
-        }
-      return 0;
-      case eD2PlayerAnimMode_ns::Skill3:
-        if (pUnit->nClassId != 5) {
-          return 1;
-        }
-      return 0;
-      case eD2PlayerAnimMode_ns::Sequence:
-        BVar2 = PLRMODES_HasEndAnimEventAndSeqInput(pGame, pUnit);
-      return BVar2;
-      default:
-        return 1;
-      case eD2PlayerAnimMode_ns::Attack1:
-
-      case eD2PlayerAnimMode_ns::Attack2:
-
-      case eD2PlayerAnimMode_ns::Cast:
-
-      case Throw:
-        break;
-    }
-
-    iVar1 = PLRMODES_HasAnimEventLastOrComing5Frames(pGame, pUnit);
-    if (iVar1) {
-      return 1;
     }
 
     switch (nNewMode) {
-      case 4:
-        {
-          return 1;
-        }
-      case 9:
-        {
-          return 1;
-        }
+      case 0:
+      case 1:
+      case 5:
+      case 0x11:
+        return 1;
     }
 
-    return 0;
+    switch (pUnit->eAnimMode.ePlayerMode) {
+      case Death:
+      case eD2PlayerAnimMode_ns::GetHit:
+      case eD2PlayerAnimMode_ns::Block:
+      case eD2PlayerAnimMode_ns::Dead:
+        return 0;
+      case eD2PlayerAnimMode_ns::Attack1:
+      case eD2PlayerAnimMode_ns::Attack2:
+      case eD2PlayerAnimMode_ns::Cast:
+      case Throw:
+        if (!PLRMODES_HasAnimEventLastOrComing5Frames(pGame, pUnit) && nNewMode != 4 && nNewMode != 9) {
+          return 0;
+        }
+        break;
+      case Kick:
+        return PLRMODES_HasAnimEventLastOrComing5Frames(pGame, pUnit) ? 1 : 0;
+      case eD2PlayerAnimMode_ns::Skill1:
+        if (!pUnit->nClassId) {
+          return 0;
+        }
+        break;
+      case eD2PlayerAnimMode_ns::Skill3:
+        if (pUnit->nClassId == 5) {
+          return 0;
+        }
+        break;
+      case eD2PlayerAnimMode_ns::Sequence:
+        return PLRMODES_HasEndAnimEventAndSeqInput(pGame, pUnit);
+    }
+
+    return 1;
 }
 
 // Extern entry for hand-written callers: PLRMODES_CanInterruptCurrentMode itself keeps its unit's linkage.
@@ -1086,7 +1035,6 @@ void __fastcall PLRMODES_StartCastAtEntity(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 static void __stdcall PLRMODES_ReequipWeaponAfterThrow(::SGAMEDATA * pGame, uint8_t nBodyLocFlags, D2UnitStrc * pUnit) {
-    eD2BodyLoc eBodyLoc;
     BOOL bHasBodyLoc;
     uint32_t nBestBodyLoc = (uint32_t)nBodyLocFlags;
     uint32_t dwFindGUID = D2Common::Units::GetWeaponGUID(pUnit);
@@ -1104,14 +1052,14 @@ static void __stdcall PLRMODES_ReequipWeaponAfterThrow(::SGAMEDATA * pGame, uint
         if (bHasBodyLoc) {
           bHasBodyLoc = ITEMS::ItemMode::ITEMMODE_FindBestBodyLocForItem(pUnit, pWeaponItem, &nBestBodyLoc, 0);
           if (bHasBodyLoc) {
-            eBodyLoc = (eD2BodyLoc)nBestBodyLoc;
+            nBodyLocFlags = (uint8_t)nBestBodyLoc;
             pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nBestBodyLoc);
             if (pWeaponItem) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4ea);
               exit(-1);
             }
 
-            ITEMS::ItemMode::ITEMMODE_EquipStoredItem(pGame, pUnit, dwFindGUID, eBodyLoc);
+            ITEMS::ItemMode::ITEMMODE_EquipStoredItem(pGame, pUnit, dwFindGUID, (eD2BodyLoc)nBodyLocFlags);
           }
         }
       }
@@ -1632,61 +1580,60 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_15(D2UnitStrc * p) 
     return p->eUnitFlags >> 15 & 1;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_0(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 0 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_0(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 0 & 1;
+}
+
 // Flushes all pending per-unit network state to a single client after a mode change. Sends ReassignPlayer if the unit is warping or is a remote player. If bSendItems is set, sends updated inventory items (0x9C packet) plus two equipped-item-recalc packets (0x47, 0x48). Dispatches the mode-change net message if DOUPDATE is flagged. Then drains the unit's packet queue, sends pending sound/hover-text/life-class/state/overlay packets, and fires attribute-update callbacks for velocity, attack-rate, level, strength, and dexterity stats that changed.
 void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, BOOL bSendItems) {
-    D2UnitStrc* pLocalPlayer;
-    pLocalPlayer = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
+    D2UnitStrc* pLocalPlayer = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
     if (pUnit) {
-      uint8_t bIsWarping;
       if (FlagBit_D2UnitStrc_eUnitFlagsEx_16(pUnit)) {
-        bIsWarping = '\x01';
-      } else {
-        if (!FlagBit_D2UnitStrc_eUnitFlagsEx_11(pUnit) || pUnit == pLocalPlayer) {
-          goto send_items_and_mode;
-        }
-
-        bIsWarping = '\0';
+        PlayerMsg::SendReassignPlayer(pUnit, pClient, 1);
+      } else if (FlagBit_D2UnitStrc_eUnitFlagsEx_11(pUnit) && pUnit != pLocalPlayer) {
+        PlayerMsg::SendReassignPlayer(pUnit, pClient, 0);
       }
-
-      PlayerMsg::SendReassignPlayer(pUnit, pClient, bIsWarping);
     }
 
-    send_items_and_mode:
-    if (!bSendItems) {
-      if (!pUnit) {
-        goto send_unit_updates;
-      }
-      if (pUnit->eUnitFlagsEx & UNITFLAGEX_HASINV) {
+    if (bSendItems || pUnit) {
+      if (!bSendItems && FlagBit_D2UnitStrc_eUnitFlagsEx_0(pUnit)) {
         UNIT::SendUpdatedItemsToClient(pGame, pUnit, pClient, nullptr);
         GAME::SCmd::NET_D2GS_SERVER_Send_0x47_ITEMUPDATEMODIFIERS(pClient, pUnit);
         GAME::SCmd::NET_D2GS_SERVER_Send_0x48_ITEMUPDATEREQUIREMENTSMET(pClient, pUnit, '\0');
       }
-    }
-    if (pUnit && pUnit->eUnitFlags & UNITFLAG_DOUPDATE) {
-      PlayerMsg::DispatchPlayerModeNetMsg(pGame, pUnit, pClient);
+      if (FlagBit_D2UnitStrc_eUnitFlags_0(pUnit)) {
+        PlayerMsg::DispatchPlayerModeNetMsg(pGame, pUnit, pClient);
+      }
     }
 
-    send_unit_updates:
     UNIT::SUnitMsg::SERVER_UnitQueuePacketSend(pUnit, pClient);
     if (pUnit) {
       if (FlagBit_D2UnitStrc_eUnitFlags_10(pUnit)) {
         UNIT::SUnitMsg::UNITMSG_SendSoundPacketToClient(pUnit, pClient);
       }
       if (FlagBit_D2UnitStrc_eUnitFlags_8(pUnit)) {
-        /* Is Valid Target */ UNIT::SUnitMsg::PLAYER_SendHoverTextToClient(pUnit, pClient);
+        UNIT::SUnitMsg::PLAYER_SendHoverTextToClient(pUnit, pClient);
       }
       if (FlagBit_D2UnitStrc_eUnitFlags_15(pUnit)) {
         PlayerMsg::UpgradeLifeAndHitClass(pUnit, pClient);
       }
     }
-
-    BOOL bHasGfxFlag = D2Common::DATATBLS::ItemStats::STATES_HasAnyGfxFlag(pUnit);
-    if (bHasGfxFlag) {
+    if (D2Common::DATATBLS::ItemStats::STATES_HasAnyGfxFlag(pUnit)) {
       UNIT::SUnitMsg::PLAYER_SendStateUpdate(pUnit, pClient, 0);
     }
-
-    uint32_t bStatsChanged = D2Common::Stats::StatsEx::STATLIST_IsOverlayPending(pUnit);
-    if (bStatsChanged) {
+    if (D2Common::Stats::StatsEx::STATLIST_IsOverlayPending(pUnit)) {
       UNIT::SUnitMsg::PLAYER_SendOverlayToClient(pUnit, pClient);
     }
 
@@ -1946,13 +1893,13 @@ void __fastcall PLRMODES_Death(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nM
           }
         }
 
-        /* FARPROC lpfn for IsBadCodePtr */ bBadPtr = IsBadCodePtr((FARPROC)PLRMODES_SetIdleMode);
+        bBadPtr = IsBadCodePtr((FARPROC)gaPlayerModeMoveFuncs[1].pfnMoveToLocation);
         if (bBadPtr) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x812);
           exit(-1);
         }
 
-        PLRMODES_SetIdleMode(pGame, pUnit, 1, 0, 0);
+        gaPlayerModeMoveFuncs[1].pfnMoveToLocation(pGame, pUnit, 1, 0, 0);
         return;
       }
     }
@@ -2158,11 +2105,9 @@ void __fastcall PLRMODES_ProcessPlayerMode(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 void __fastcall PLAYEREVENT_DefaultCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t nArg1, int32_t nArg2) {
-    if (!(eTimerType < UNITEVENTCALLBACK_COUNT && GAME::Event::Dispatch::Player::pTimerMethods.fpFunctionExByType[eTimerType])) {
-      return;
+    if (eTimerType <= UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN && GAME::Event::Dispatch::Player::pTimerMethods.fpFunctionExByType[eTimerType]) {
+      (*GAME::Event::Dispatch::Player::pTimerMethods.fpFunctionExByType[eTimerType])(pGame, pUnit, nArg1, nArg2);
     }
-
-    (*GAME::Event::Dispatch::Player::pTimerMethods.fpFunctionExByType[eTimerType])(pGame, pUnit, nArg1, nArg2);
 }
 
 }}} // namespace D2Game::PLAYER::PlayerModes

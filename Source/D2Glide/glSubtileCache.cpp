@@ -321,8 +321,9 @@ int __fastcall GLSUBTILE_EnsureCapacity(GlSubtileCacheStrc * pCache) {
             pCache->pActiveTail = 0;
           }
 
-          pEvictedNode->pNext = 0;
-          pEvictedNode->pPrev = 0;
+          GlSubtileCacheNodeStrc** ppLink = &pEvictedNode->pNext;
+          ppLink[0] = 0;
+          ppLink[1] = 0;
           if (pEvictedNode->pSubTile) {
             pEvictedNode->pSubTile->nTextureCacheIndex = 0;
             pEvictedNode->pSubTile = 0;

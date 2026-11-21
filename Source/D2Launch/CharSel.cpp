@@ -1694,67 +1694,49 @@ BOOL __stdcall CHARSEL_HandleKeyNavExpansion(D2ControlMsg * pKeyMsg) {
 }
 
 BOOL __stdcall CHARSEL_HandleKeyNavClassic(D2ControlMsg * pKeyMsg) {
-    int nNavigationIndex;
-    BOOL bIsExpansion;
-    bIsExpansion = Fog::D2CheckExpansionGame();
-    if (bIsExpansion) {
-      bIsExpansion = CHARSEL_HandleKeyNavExpansion(pKeyMsg);
-      return bIsExpansion;
+    if (Fog::D2CheckExpansionGame()) {
+      return CHARSEL_HandleKeyNavExpansion(pKeyMsg);
     }
-    if (pKeyMsg->uMsg == 0x102) {
-      return 0;
-    }
-    if (!false) {
+    if (pKeyMsg->uMsg != 0x102) {
       switch (pKeyMsg->wParam) {
         case 0x28:
-          if (nSelectedCharIndex >= TotalCurrentChars - 1) {
-            break;
+          if (nSelectedCharIndex < TotalCurrentChars - 1) {
+            nSelectedCharIndex++;
+            if (nSelectedCharIndex < g_nCharSelNavigationIndex) {
+              g_nCharSelNavigationIndex = nSelectedCharIndex;
+            } else if (nSelectedCharIndex > gnCharSelScreenSlotCount - 1 + g_nCharSelNavigationIndex) {
+              g_nCharSelNavigationIndex = nSelectedCharIndex - gnCharSelScreenSlotCount + 1;
+            }
           }
-        nSelectedCharIndex++;
-        nNavigationIndex = nSelectedCharIndex;
-        if (nSelectedCharIndex < g_nCharSelNavigationIndex) {
-          goto scroll_and_redraw;
-        }
-
-        scroll_if_below_view:
-        if (nSelectedCharIndex > gnCharSelScreenSlotCount - 1 + g_nCharSelNavigationIndex) {
-          nNavigationIndex = nSelectedCharIndex - gnCharSelScreenSlotCount + 1;
-          scroll_and_redraw:
-          g_nCharSelNavigationIndex = nNavigationIndex;
-          DRAW_LocalCharsInSelectionScreen0();
-          CHARSEL_UpdateSelectedCharDisplay();
-          return 1;
-        }
-        break;
+          break;
         case 0x26:
-          if (nSelectedCharIndex <= 0) {
-            break;
+          if (nSelectedCharIndex > 0) {
+            nSelectedCharIndex--;
+            if (nSelectedCharIndex < g_nCharSelNavigationIndex) {
+              g_nCharSelNavigationIndex = nSelectedCharIndex;
+            } else if (nSelectedCharIndex > gnCharSelScreenSlotCount - 1 + g_nCharSelNavigationIndex) {
+              g_nCharSelNavigationIndex = nSelectedCharIndex - gnCharSelScreenSlotCount + 1;
+            }
           }
-        nSelectedCharIndex--;
-        if (nSelectedCharIndex < g_nCharSelNavigationIndex) {
-          g_nCharSelNavigationIndex = nSelectedCharIndex;
-          DRAW_LocalCharsInSelectionScreen0();
-          CHARSEL_UpdateSelectedCharDisplay();
-          return 1;
-        }
-
-        goto scroll_if_below_view;
+          break;
         case 0x24:
           nSelectedCharIndex = 0;
-        g_nCharSelNavigationIndex = 0;
-        break;
+          g_nCharSelNavigationIndex = 0;
+          break;
         case 0x23:
           if (TotalCurrentChars > gnCharSelScreenSlotCount) {
             g_nCharSelNavigationIndex = TotalCurrentChars - gnCharSelScreenSlotCount;
           }
-        nSelectedCharIndex = TotalCurrentChars - 1;
-        break;
+          nSelectedCharIndex = TotalCurrentChars - 1;
+          break;
       }
+
+      DRAW_LocalCharsInSelectionScreen0();
+      CHARSEL_UpdateSelectedCharDisplay();
+      return 1;
     }
 
-    DRAW_LocalCharsInSelectionScreen0();
-    CHARSEL_UpdateSelectedCharDisplay();
-    return 1;
+    return 0;
 }
 
 static void CHARSEL_SetStatusMessage(int32_t nStatusCode) {

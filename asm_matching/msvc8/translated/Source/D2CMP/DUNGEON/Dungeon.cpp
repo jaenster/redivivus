@@ -25,23 +25,18 @@ int * __stdcall TILEPROJECT_AllocSlot(void * pTileProject, char * szFilename) {
     }
 
     D2TileLibraryHeaderStrc* pDVar1;
-    i = 0;
-    do {
+    for (i = 0; i < 0x20; i++) {
       if (!*(int*)((uint8_t*)pTileProject + i * 4)) {
         pDVar1 = SRC::TileProjects::Alloc((D2TileLibraryHashStrc**)((uint8_t*)pTileProject + i * 4), szFilename);
-        if (!(i < 0x20)) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2a);
-          exit(-1);
-        }
-
-        return &pDVar1->nVersion;
+        break;
       }
+    }
+    if (!(i < 0x20)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2a);
+      exit(-1);
+    }
 
-      i++;
-    } while (i < 0x20);
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2a);
-    exit(-1);
+    return &pDVar1->nVersion;
 }
 
 void __stdcall TILEPROJECT_FreeSlot(int32_t * pnProjectIds, D2TileLibraryHeaderStrc * pTileLibrary) {

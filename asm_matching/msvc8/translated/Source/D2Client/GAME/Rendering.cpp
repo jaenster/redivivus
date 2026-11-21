@@ -125,15 +125,15 @@ void __stdcall DRAW_UI_FPSStats() {
     
     int32_t nAsyncFiles;
     int32_t nCelCacheCurrent;
-    _MEMORYSTATUS memStatus;
     char szVideoMode[32];
-    char* szRendererName;
+    _MEMORYSTATUS memStatus;
     DWORD dwTick = GetTickCount();
+    DWORD dwElapsed = dwTick - gdwFPSLastSecondTick; // steer-ok: the original reads gdwFPSLastSecondTick before the stores to the FPS statics
     if (gbFPSStatsEnabled && !gdwFPSStatsStartTick) {
-      gnFPSFrameCounterAccum = 0;
       gdwFPSStatsStartTick = dwTick;
+      gnFPSFrameCounterAccum = 0;
     }
-    if (dwTick - gdwFPSLastSecondTick <= 0x3e8) {
+    if (dwElapsed <= 0x3e8) {
       gnFPSFrameCounter++;
       gnFPSFrameCounterAccum++;
     } else {
@@ -158,31 +158,30 @@ void __stdcall DRAW_UI_FPSStats() {
     eRendererMode_lcl = D2gfx::D2GFX::D2GFX_GetRendererMode();
     switch (eRendererMode_lcl) {
       case RENDERER_Windowed:
-        szRendererName = "Software";
+        sprintf(szVideoMode, "Software");
       break;
       case RENDERED_DirectDraw:
-        szRendererName = "DirectDraw";
+        sprintf(szVideoMode, "DirectDraw");
       break;
       case RENDERER_Glide:
-        szRendererName = "Glide";
+        sprintf(szVideoMode, "Glide");
       break;
       case RENDERED_Unused5:
-        szRendererName = "OpenGL";
+        sprintf(szVideoMode, "OpenGL");
       break;
       case RENDERER_Direct3D:
-        szRendererName = "Direct3D";
+        sprintf(szVideoMode, "Direct3D");
       break;
       case RENDERER_Unused2:
-        szRendererName = "Software";
+        sprintf(szVideoMode, "Software");
       break;
       case RENDERER_COUNT:
-        szRendererName = "RAVE";
+        sprintf(szVideoMode, "RAVE");
       break;
       default:
-        szRendererName = "Unknown";
+        sprintf(szVideoMode, "Unknown");
     }
 
-    sprintf(szVideoMode, szRendererName);
     D2gfx::D2GFX::D2GFX_DrawString(500, 2, "Video: %s", szVideoMode);
     if (gbHideExtendedFPSStats) {
       return;

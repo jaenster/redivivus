@@ -847,19 +847,16 @@ uint32_t __stdcall MISC_GetLanguageCode() {
     static int gnLanguageCode; D2_STATIC_GUARD_BSS(gnLanguageCode, "D2Lang::StrTable::strtable::MISC_GetLanguageCode::gnLanguageCode");
     static uint8_t gbLanguageCodeCached; D2_STATIC_GUARD_BSS(gbLanguageCodeCached, "D2Lang::StrTable::strtable::MISC_GetLanguageCode::gbLanguageCodeCached");
 
-    if (gbLanguageCodeCached != '\0') {
-      return gnLanguageCode;
-    }
-
-    gbLanguageCodeCached = '\x01';
-    uint8_t* pMemoryToFree = (uint8_t*)D2Hell::D2FILE_AllocAndLoadD2File((D2PoolManagerStrc*)MPQ_d2data, "data\\local\\use", nullptr, ".\\StrTable\\strtable.cpp", 1099);
-    if (pMemoryToFree) {
-      gnLanguageCode = (int)*pMemoryToFree;
-      D2_FREE_AT(pMemoryToFree, ".\\StrTable\\strtable.cpp", 0x450);
-    }
-    if (gnLanguageCode >= 0xe) {
-      gnLanguageCode = 0;
-      return 0;
+    if (!gbLanguageCodeCached) {
+      gbLanguageCodeCached = '\x01';
+      uint8_t* pMemoryToFree = (uint8_t*)D2Hell::D2FILE_AllocAndLoadD2File((D2PoolManagerStrc*)MPQ_d2data, "data\\local\\use", nullptr, ".\\StrTable\\strtable.cpp", 1099);
+      if (pMemoryToFree) {
+        gnLanguageCode = *pMemoryToFree;
+        D2_FREE_AT(pMemoryToFree, ".\\StrTable\\strtable.cpp", 0x450);
+      }
+      if (gnLanguageCode >= 0xe) {
+        gnLanguageCode = 0;
+      }
     }
 
     return gnLanguageCode;
@@ -902,8 +899,6 @@ uint32_t __stdcall STRTABLE_GetRegistryLanguage() {
 }
 
 void __stdcall TABLES_GetLangAbbreviation(char * szOutAbbrev, int32_t nFormat) {
-    char* pcAbbrev;
-    char cChar;
     uint32_t nLangCode = MISC_GetLanguageCode();
     if (gaLanguageTable[0].dwLangId) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x490);
@@ -912,13 +907,11 @@ void __stdcall TABLES_GetLangAbbreviation(char * szOutAbbrev, int32_t nFormat) {
 
     int nLangIdx = 0;
     if ((int)nLangCode < 0xe) {
-      do {
+      for (nLangIdx = 0; nLangIdx < 13; nLangIdx++) {
         if (gaLanguageTable[nLangIdx].dwLangId == nLangCode) {
           break;
         }
-
-        nLangIdx++;
-      } while ((intptr_t)&gaLanguageTable[nLangIdx].dwLangId < (intptr_t)((char*)&gaLanguageTable + sizeof(gaLanguageTable) + 20));
+      }
 
       if (nLangIdx >= 0xe) {
         nLangIdx = 0;
@@ -927,46 +920,17 @@ void __stdcall TABLES_GetLangAbbreviation(char * szOutAbbrev, int32_t nFormat) {
 
     switch (nFormat) {
       case 1:
-        {
-          pcAbbrev = gaLanguageTable[nLangIdx].pszLangNameEng;
-          do {
-            cChar = *pcAbbrev;
-            *szOutAbbrev = cChar;
-            pcAbbrev++;
-            szOutAbbrev++;
-          } while (cChar != '\0');
-
-          return;
-        }
+        strcpy(szOutAbbrev, gaLanguageTable[nLangIdx].pszLangNameEng);
+        return;
       case 2:
-        {
-          pcAbbrev = gaLanguageTable[nLangIdx].pszLangAbbrev;
-          do {
-            cChar = *pcAbbrev;
-            *szOutAbbrev = cChar;
-            pcAbbrev++;
-            szOutAbbrev++;
-          } while (cChar != '\0');
-
-          return;
-        }
+        strcpy(szOutAbbrev, gaLanguageTable[nLangIdx].pszLangAbbrev);
+        return;
       case 3:
-        {
-          *(uint32_t*)szOutAbbrev = *(uint32_t*)gaLanguageTable[nLangIdx].szLangTag;
-          return;
-        }
+        *(uint32_t*)szOutAbbrev = *(uint32_t*)gaLanguageTable[nLangIdx].szLangTag;
+        return;
       default:
-        {
-          pcAbbrev = gaLanguageTable[nLangIdx].pszLangCodeNormalized;
-          do {
-            cChar = *pcAbbrev;
-            *szOutAbbrev = cChar;
-            pcAbbrev++;
-            szOutAbbrev++;
-          } while (cChar != '\0');
-
-          return;
-        }
+        strcpy(szOutAbbrev, gaLanguageTable[nLangIdx].pszLangCodeNormalized);
+        return;
     }
 }
 

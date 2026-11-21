@@ -446,6 +446,9 @@ uint32_t __fastcall SOUNDSMP_GetStreamProgress(D2SoundSmpStrc * pSound) {
         LeaveCriticalSection(&gSoundSmpCs);
         return nByteOffset >> 2;
       }
+
+      LeaveCriticalSection(&gSoundSmpCs);
+      return 0;
     }
 
     LeaveCriticalSection(&gSoundSmpCs);

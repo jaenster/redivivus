@@ -51,57 +51,42 @@ static void __stdcall DRLGOUTDOOR_ApplySubstitutionGroup(D2UnkOutdoorStrc * pUnk
 
 // Ensures pLvlSubTxtRecord->pDrlgFile is loaded, then initializes per-layer grids (wall/floor/shadow) from the DS1 tile-type layers. Also applies a per-wall-layer flag mask and validates that substitution groups exist.
 void __fastcall InitializeDrlgFile(D2PoolManagerStrc * pMemory, D2LvlSubTxt * pLvlSubTxtRecord) {
-    int nWallLayerIdx;
-    D2DrlgCoordStrc gridInitCtx;
-    D2DrlgGridStrc* pDStack_8;
-    D2DrlgFileStrc** ppDrlgFile = &pLvlSubTxtRecord->pDrlgFile;
-    if (*ppDrlgFile) {
+    D2DrlgCoordStrc tDrlgCoord;
+    int nGridWidth;
+    int nGridHeight;
+    int i;
+    if (pLvlSubTxtRecord->pDrlgFile) {
       return;
     }
 
-    Preset::AllocDrlgFile(ppDrlgFile, pMemory, pLvlSubTxtRecord->File);
-    D2DrlgFileStrc* pDrlgFile = *ppDrlgFile;
-    int nGridWidth = pDrlgFile->nWidth + 1;
-    gridInitCtx.nPosX = 0;
-    gridInitCtx.nPosY = 0;
-    gridInitCtx.nWidth = nGridWidth;
-    gridInitCtx.nHeight = pDrlgFile->nHeight + 1;
-    if (!pDrlgFile->nSubstGroups) {
+    Preset::AllocDrlgFile(&pLvlSubTxtRecord->pDrlgFile, pMemory, pLvlSubTxtRecord->File);
+    nGridWidth = pLvlSubTxtRecord->pDrlgFile->nWidth + 1;
+    nGridHeight = pLvlSubTxtRecord->pDrlgFile->nHeight + 1;
+    tDrlgCoord.nPosX = 0;
+    tDrlgCoord.nPosY = 0;
+    tDrlgCoord.nWidth = nGridWidth;
+    tDrlgCoord.nHeight = nGridHeight;
+    if (!pLvlSubTxtRecord->pDrlgFile->nSubstGroups) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2b6);
       exit(-1);
     }
 
-    int nWallLayer = 0;
-    if (pDrlgFile->nWallLayers > 0) {
-      pDStack_8 = pLvlSubTxtRecord->pTileTypeGrid;
-      nWallLayerIdx = 0x1c;
-      do {
-        DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, pDStack_8 + 4, *(eD2GridCellFlags**)((char*)pDrlgFile->pTileTypeLayer + (nWallLayerIdx - 0xc)), &gridInitCtx, nGridWidth);
-        DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, pDStack_8, *(eD2GridCellFlags**)((char*)(*ppDrlgFile)->pTileTypeLayer + (nWallLayerIdx - 0x1c)), &gridInitCtx, nGridWidth);
-        pDrlgFile = *ppDrlgFile;
-        pDStack_8++;
-        nWallLayer++;
-        nWallLayerIdx += 4;
-      } while (nWallLayer < pDrlgFile->nWallLayers);
+    for (i = 0; i < pLvlSubTxtRecord->pDrlgFile->nWallLayers; i++) {
+      DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, &pLvlSubTxtRecord->pWallGrid[i], (eD2GridCellFlags*)pLvlSubTxtRecord->pDrlgFile->pWallLayer[i], &tDrlgCoord, nGridWidth);
+      DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, &pLvlSubTxtRecord->pTileTypeGrid[i], (eD2GridCellFlags*)pLvlSubTxtRecord->pDrlgFile->pTileTypeLayer[i], &tDrlgCoord, nGridWidth);
     }
 
-    nWallLayerIdx = 1;
-    if (1 < (*ppDrlgFile)->nWallLayers) {
-      pDStack_8 = pLvlSubTxtRecord->pWallGrid;
-      do {
-        pDStack_8++;
-        DrlgGrid::AlterAllGridFlags(pDStack_8, nWallLayerIdx << 0x12, 0);
-        nWallLayerIdx++;
-      } while (nWallLayerIdx < (*ppDrlgFile)->nWallLayers);
-    }
-    if ((*ppDrlgFile)->nFloorLayers) {
-      DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, &pLvlSubTxtRecord->pFloorGrid, (eD2GridCellFlags*)(*ppDrlgFile)->pFloorLayer[0], &gridInitCtx, nGridWidth);
-    }
-    if (!(*ppDrlgFile)->pShadowLayer) {
-      return;
+    for (i = 1; i < pLvlSubTxtRecord->pDrlgFile->nWallLayers; i++) {
+      DrlgGrid::AlterAllGridFlags(&pLvlSubTxtRecord->pWallGrid[i], i << 18, 0);
     }
 
-    DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, &pLvlSubTxtRecord->pShadowGrid, (eD2GridCellFlags*)(*ppDrlgFile)->pShadowLayer, &gridInitCtx, nGridWidth);
+    if (pLvlSubTxtRecord->pDrlgFile->nFloorLayers) {
+      DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, &pLvlSubTxtRecord->pFloorGrid, (eD2GridCellFlags*)pLvlSubTxtRecord->pDrlgFile->pFloorLayer[0], &tDrlgCoord, nGridWidth);
+    }
+
+    if (pLvlSubTxtRecord->pDrlgFile->pShadowLayer) {
+      DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, &pLvlSubTxtRecord->pShadowGrid, (eD2GridCellFlags*)pLvlSubTxtRecord->pDrlgFile->pShadowLayer, &tDrlgCoord, nGridWidth);
+    }
 }
 
 void __fastcall AddSecondaryBorder(D2UnkOutdoorStrc * pOutdoorCtx) {

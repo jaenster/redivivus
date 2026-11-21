@@ -362,17 +362,12 @@ int32_t __fastcall GFXUTIL_GetUnitToken(D2UnitStrc * pUnitStrc, eD2UnitType eUni
         }
       case UNIT_MONSTER:
         {
-          if (nId < 0) {
+          D2MonStatsTxt* pMonStatsTxt = nId >= 0 && nId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? &D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nId] : nullptr;
+          if (!pMonStatsTxt) {
             return 0;
-          }
-          if (nId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
-            return 0;
-          }
-          if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nId) {
-            return *(int32_t*)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nId].Code;
           }
 
-          return 0;
+          return *(int32_t*)pMonStatsTxt->Code;
         }
       default:
         {
@@ -470,17 +465,11 @@ uint32_t __fastcall GFXUTIL_IsDC6BlockOnScreen(DC6Block * pDC6Block, int32_t nDr
 
 // @sourcefile .\ENGINE\GfxUtil.cpp
 static void GFXUTIL_SetItemGfxFile(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit) {
-    bool bIsIdentified;
-    D2SetItemsTxt* pSetItemsTxt;
     int iVar1;
-    D2UniqueItemsTxt* pUniqueItemsTxt;
-    char* pcGfxFile;
     D2UniqueItemsTxt* pUniqueItemsTxtFlippy;
     D2SetItemsTxt* pSetItemsTxtFlippy;
     char* szGfxFile;
     int nQuality3;
-    int nFileIndex;
-    int nQuality;
     int nQuality2;
     uint32_t nItemClassId = Source::ClientEngine::CLIENT_GetEffectiveClassId(pUnit);
     D2ItemsTxt* pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
@@ -488,35 +477,41 @@ static void GFXUTIL_SetItemGfxFile(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit)
       return;
     }
     if (pGfxData->nMode == 4) {
-      uint32_t nVariant = D2Common::ITEMS::Items::ITEM_GetItemData_bVariant(pUnit);
-      BOOL bItemIdentified = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0x196, ".\\ENGINE\\GfxUtil.cpp");
-      if (bItemIdentified) {
-        int eQuality;
-        eQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
-        if (eQuality == 5) {
-          nFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-          pSetItemsTxt = D2Common::DATATBLS::ItemTbls::GetSetItemsLine(nFileIndex);
-          if (pSetItemsTxt && (szGfxFile = pSetItemsTxt->invfile , *szGfxFile != '\0') || (szGfxFile = pItemsTxt->szSetInvFile , pItemsTxt->szSetInvFile[0] != '\0')) {
-            pGfxData->dwFlags |= 0x10;
-            pGfxData->szFilename = szGfxFile;
-            return;
-          }
+      uint8_t nVariant = (uint8_t)D2Common::ITEMS::Items::ITEM_GetItemData_bVariant(pUnit);
+      if (D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0x196, ".\\ENGINE\\GfxUtil.cpp") && D2Common::ITEMS::Items::GetItemQuality(pUnit) == 5) {
+        D2SetItemsTxt* pSetItemsTxt = D2Common::DATATBLS::ItemTbls::GetSetItemsLine(D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit));
+        if (pSetItemsTxt && pSetItemsTxt->invfile[0]) {
+          pGfxData->dwFlags |= 0x10;
+          pGfxData->szFilename = pSetItemsTxt->invfile;
+          return;
+        }
+        if (pItemsTxt->szSetInvFile[0]) {
+          pGfxData->dwFlags |= 0x10;
+          pGfxData->szFilename = pItemsTxt->szSetInvFile;
+          return;
         }
       }
 
-      bItemIdentified = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0x1ae, ".\\ENGINE\\GfxUtil.cpp");
-      if (bItemIdentified) {
-        nQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
-        if (nQuality == 7 && ((iVar1 = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit) , iVar1 > 0 && (pUniqueItemsTxt = D2Common::DATATBLS::ItemTbls::INV_GetUniqueItemsTxtLine(iVar1) , pUniqueItemsTxt && (pcGfxFile = pUniqueItemsTxt->invfile , *pcGfxFile != '\0'))) || (pcGfxFile = pItemsTxt->szUniqueInvFile , pItemsTxt->szUniqueInvFile[0] != '\0'))) {
+      if (D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0x1ae, ".\\ENGINE\\GfxUtil.cpp") && D2Common::ITEMS::Items::GetItemQuality(pUnit) == 7) {
+        int nFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
+        if (nFileIndex > 0) {
+          D2UniqueItemsTxt* pUniqueItemsTxt = D2Common::DATATBLS::ItemTbls::INV_GetUniqueItemsTxtLine(nFileIndex);
+          if (pUniqueItemsTxt && pUniqueItemsTxt->invfile[0]) {
+            pGfxData->dwFlags |= 1;
+            pGfxData->szFilename = pUniqueItemsTxt->invfile;
+            return;
+          }
+        }
+        if (pItemsTxt->szUniqueInvFile[0]) {
           pGfxData->dwFlags |= 1;
-          pGfxData->szFilename = pcGfxFile;
+          pGfxData->szFilename = pItemsTxt->szUniqueInvFile;
           return;
         }
       }
 
       uint8_t bHasVarInvGfx = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_varinvgfx(pUnit);
       if (bHasVarInvGfx) {
-        char* pacInvGfx = *D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_invgfx(pUnit, (uint32_t)(uint8_t)nVariant);
+        char* pacInvGfx = *D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_invgfx(pUnit, nVariant);
         pGfxData->szFilename = pacInvGfx;
         return;
       }
@@ -1092,49 +1087,43 @@ uint8_t * __fastcall GFXUTIL_GetItemColorForBodyLoc(D2UnitStrc * pUnit, int32_t 
     if (nBodyLoc >= 0x10) {
       return pDefaultColor;
     }
-    if (!pUnit) {
-      return pDefaultColor;
+    if (pUnit && Source::ClientEngine::CLIENT_GetEffectiveUnitType(pUnit) == UNIT_PLAYER) {
+      if (!FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit) || (bHasState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !bHasState || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit))) {
+        pInventory = pUnit->pInventory;
+      } else {
+        pInventory = pOwnerUnit->pInventory;
+      }
+      if (!pInventory) {
+        return pDefaultColor;
+      }
+
+      D2UnitStrc* pUnit_00 = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, nBodyLoc);
+      if (!(pUnit_00 || nBodyLoc != 1 && (_bIsBrokenOrDisabled = D2Common::COMPOSIT::Composit::DoesBodyHaveAppearanceColors(nBodyLoc) , _bIsBrokenOrDisabled != 0) && (pUnit_00 = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 1) , pUnit_00 != 0))) {
+        return pDefaultColor;
+      }
+
+      _bIsBrokenOrDisabled = D2Common::ITEMS::Items::CheckItemFlag(pUnit_00, ITEMFLAG_BROKEN, 0x656, ".\\ENGINE\\GfxUtil.cpp");
+      if (_bIsBrokenOrDisabled) {
+        return pDefaultColor;
+      }
+
+      _bIsBrokenOrDisabled = D2Common::ITEMS::Items::CheckItemFlag(pUnit_00, ITEMFLAG_DISABLED, 0x657, ".\\ENGINE\\GfxUtil.cpp");
+      if (_bIsBrokenOrDisabled) {
+        return pDefaultColor;
+      }
+
+      int32_t nAlternateGfx = D2Common::ITEMS::Items::ITEM_GetItemsTxt_dwAlternateGfxIfExists(pUnit_00);
+      if (nAlternateGfx == 0x2074696c) {
+        return nullptr;
+      }
+
+      uint8_t* pColor = D2Common::ITEMS::Items::GetItemColor(pUnit, pUnit_00, &byColorScratch, 0);
+      if (pColor) {
+        return pColor;
+      }
     }
 
-    eD2UnitType eUnitType = Source::ClientEngine::CLIENT_GetEffectiveUnitType(pUnit);
-    if (eUnitType != UNIT_PLAYER) {
-      return pDefaultColor;
-    }
-    if (!FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit) || (bHasState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !bHasState || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit))) {
-      pInventory = pUnit->pInventory;
-    } else {
-      pInventory = pOwnerUnit->pInventory;
-    }
-    if (!pInventory) {
-      return pDefaultColor;
-    }
-
-    D2UnitStrc* pUnit_00 = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, nBodyLoc);
-    if (!(pUnit_00 || nBodyLoc != 1 && (_bIsBrokenOrDisabled = D2Common::COMPOSIT::Composit::DoesBodyHaveAppearanceColors(nBodyLoc) , _bIsBrokenOrDisabled != 0) && (pUnit_00 = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 1) , pUnit_00 != 0))) {
-      return pDefaultColor;
-    }
-
-    _bIsBrokenOrDisabled = D2Common::ITEMS::Items::CheckItemFlag(pUnit_00, ITEMFLAG_BROKEN, 0x656, ".\\ENGINE\\GfxUtil.cpp");
-    if (_bIsBrokenOrDisabled) {
-      return pDefaultColor;
-    }
-
-    _bIsBrokenOrDisabled = D2Common::ITEMS::Items::CheckItemFlag(pUnit_00, ITEMFLAG_DISABLED, 0x657, ".\\ENGINE\\GfxUtil.cpp");
-    if (_bIsBrokenOrDisabled) {
-      return pDefaultColor;
-    }
-
-    int32_t nAlternateGfx = D2Common::ITEMS::Items::ITEM_GetItemsTxt_dwAlternateGfxIfExists(pUnit_00);
-    if (nAlternateGfx == 0x2074696c) {
-      return nullptr;
-    }
-
-    uint8_t* pColor = D2Common::ITEMS::Items::GetItemColor(pUnit, pUnit_00, &byColorScratch, 0);
-    if (!pColor) {
-      return pDefaultColor;
-    }
-
-    return pColor;
+    return pDefaultColor;
 }
 
 uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(D2UnitStrc * pUnit, uint32_t nUnitDirection) {

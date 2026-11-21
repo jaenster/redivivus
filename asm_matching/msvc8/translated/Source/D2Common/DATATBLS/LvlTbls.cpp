@@ -621,10 +621,7 @@ void __stdcall LVLTBLS_GetLvlTypeFilename(int32_t nLvlType, int32_t nFileIndex, 
 // Loads and compiles the lvlprest.txt data table (preset-area level definitions) via CompileTxt, populating the field schema (Def, LevelId, Populate, sizes, AutoMap, Expansion flag, File1-File6 ASCII paths, Dt1Mask, etc.) into sgtDataTable.pTxtLvlPrest. When nParam!=0 also allocates pTxtLvlTbls (6 DRLG-file pointers per row) and, for each row visible in the current game mode (expansion rows skipped in classic), normalizes file path slashes and allocates a D2DrlgFileStrc for each non-empty File path. Side effects: sets global table pointers and size.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
 void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t bLoadDrlgFiles) {
-    char (*pFileScan)[60];
-    char (*szFile)[60];
     uint32_t nFileIdx;
-    char* pScanChar;
     D2BinFieldInputStrc lvlprest[24] = {
       {"Def", FIELDTYPE_INT, 0, 0, 0},
       {"LevelId", FIELDTYPE_INT, 0, 4, 0},
@@ -666,34 +663,18 @@ void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t bLoad
       return;
     }
 
-    char (*pFirstFile)[60] = pLvlPrestTxt->File;
-    int nRowByteOffset = 0;
     do {
-      if (bIsExpansion || !*(int*)((char*)(pFirstFile - 1) + 0x18)) {
-        nFileIdx = 0;
-        szFile = pFirstFile;
-        do {
-          LVLTBLS_FixPathSlashes("DATA\\GLOBAL\\TILES", *szFile);
-          if (bLoadDrlgFiles) {
-            pFileScan = szFile;
-            do {
-              pScanChar = *pFileScan;
-              pFileScan = (char (*)[60])(*pFileScan + 1);
-            } while (*pScanChar != '\0');
-
-            if ((uint32_t)((intptr_t)pFileScan - (intptr_t)(*szFile + 1)) > 1) {
-              Drlg::Preset::AllocDrlgFile(pTxtLvlTbls + (nRowByteOffset + nFileIdx), nullptr, *szFile);
-            }
+      D2LvlPrestTxt* pRow = &pLvlPrestTxt[nRowCount];
+      if (bIsExpansion || !pRow->Expansion) {
+        for (nFileIdx = 0; nFileIdx < 6; nFileIdx++) {
+          LVLTBLS_FixPathSlashes("DATA\\GLOBAL\\TILES", pRow->File[nFileIdx]);
+          if (bLoadDrlgFiles && strlen(pRow->File[nFileIdx]) > 1) {
+            Drlg::Preset::AllocDrlgFile(&pTxtLvlTbls[nRowCount * 6 + nFileIdx], nullptr, pRow->File[nFileIdx]);
           }
-
-          nFileIdx++;
-          szFile++;
-        } while (nFileIdx < 6);
+        }
       }
 
-      nRowByteOffset += 6;
       nRowCount++;
-      pFirstFile = (char (*)[60])((char*)(pFirstFile + 7) + 0xc);
     } while (nRowCount < ITEMS::Items::sgptDataTable->nTxtLvlPrestSize);
 }
 
@@ -819,29 +800,18 @@ void __stdcall TXT_FreeTxt_LvlMaze() {
 }
 
 D2LvlMazeTxt * __fastcall TXT_LvlMaze_FindLineByLevelId(int32_t nLevelId) {
-    D2LvlMazeTxt* pLvlMazeEntry;
-    if (sgpTxtLvlMaze) {
-      {
-        int nLoopIdx;
-        nLoopIdx = 0;
-        pLvlMazeEntry = sgpTxtLvlMaze;
-        if (nTxtLvlMazeSize > 0) {
-          do {
-            if (pLvlMazeEntry->Level == nLevelId) {
-              return sgpTxtLvlMaze + nLoopIdx;
-            }
+    if (!sgpTxtLvlMaze) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x363);
+      exit(-1);
+    }
 
-            nLoopIdx++;
-            pLvlMazeEntry++;
-          } while (nLoopIdx < nTxtLvlMazeSize);
-        }
-
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x36c);
-        exit(-1);
+    for (int i = 0; i < nTxtLvlMazeSize; i++) {
+      if (sgpTxtLvlMaze[i].Level == nLevelId) {
+        return &sgpTxtLvlMaze[i];
       }
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x363);
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x36c);
     exit(-1);
 }
 

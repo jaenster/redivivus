@@ -698,11 +698,12 @@ D2WaypointStrc * __fastcall GetWaypointsForCurrentDifficulty(::SGAMEDATA * pGame
     return pPlayerData->pWaypoint[pGame->nDifficulty];
 }
 
+static inline int GetGUIDInline(D2UnitStrc * pUnit);
 void __fastcall UpgradeLifeAndHitClass(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     uint32_t wPosY;
     uint32_t wPosX;
-    uint32_t dwLastHitClass = pUnit->dwLastHitClass;
-    int32_t nPlayerLife = D2Common::Units::GetCurrentLifePercentage(pUnit);
+    uint8_t dwLastHitClass = pUnit->dwLastHitClass;
+    uint8_t nPlayerLife = D2Common::Units::GetCurrentLifePercentage(pUnit);
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       wPosY = pUnit->pPath.pStaticPath->nPosY;
@@ -721,7 +722,7 @@ void __fastcall UpgradeLifeAndHitClass(D2UnitStrc * pUnit, D2ClientStrc * pClien
       wPosX = 0;
     }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(pClient, '\r', '\0', pUnit->nUnitGUID, '\x13', (uint16_t)wPosX, (uint16_t)wPosY, (uint8_t)dwLastHitClass, (uint8_t)nPlayerLife);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(pClient, '\r', '\0', GetGUIDInline(pUnit), '\x13', (uint16_t)wPosX, (uint16_t)wPosY, (uint8_t)dwLastHitClass, (uint8_t)nPlayerLife);
 }
 
 // GetGUID as its callers inlined it: two returns, the value in a register of its own.
@@ -1423,20 +1424,18 @@ static eD2ServerIncomingStatus __stdcall CheckIfCoordsAreInRange(D2UnitStrc * pU
       nUnitY = 0;
     }
 
-    nUnitX -= (uint32_t)nX;
-    if (nUnitX < 0) {
-      nUnitX = -nUnitX;
+    int nDistX = nUnitX - nX;
+    if (nDistX < 0) {
+      nDistX = -nDistX;
     }
-    if (nUnitX > nRange) {
-      return SERVERSTATUS_BAD_TARGET;
-    }
-
-    nUnitY -= (uint32_t)nY;
-    if (nUnitY < 0) {
-      nUnitY = -nUnitY;
-    }
-    if (nUnitY <= nRange) {
-      return SERVERSTATUS_OK;
+    if (nDistX <= nRange) {
+      int nDistY = nUnitY - nY;
+      if (nDistY < 0) {
+        nDistY = -nDistY;
+      }
+      if (nDistY <= nRange) {
+        return SERVERSTATUS_OK;
+      }
     }
 
     return SERVERSTATUS_BAD_TARGET;
@@ -2737,26 +2736,27 @@ eD2ServerIncomingStatus __fastcall SCMD_0x13_InteractWithEntity(::SGAMEDATA * pG
 // [op:1][unitType:u32][GUID:u32][bSetting:BOOL]
 // Prevents self-interaction on player units.
 eD2ServerIncomingStatus __fastcall SCMD_0x16_InteractWithEntityEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x16_PickUpItem * pPacket, uint32_t nSize) {
-    uint32_t dwSelfGUID;
     if (nSize != 0xd) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
     eD2UnitType eUnitType = pPacket->eUnitType;
+    uint32_t dwTargetGUID = pPacket->dwTargetGUID;
+    uint32_t nParam = pPacket->bParam; // steer-ok: the original loads nParam with the other packet fields before the range check and the dwSelfGUID store
     if (eUnitType >= UNIT_COUNT) {
       return SERVERSTATUS_BAD_DATA;
     }
+    uint32_t dwSelfGUID;
     if (!pUnit) {
       dwSelfGUID = -1;
     } else {
       dwSelfGUID = pUnit->nUnitGUID;
     }
-    if (dwSelfGUID == pPacket->dwTargetGUID && eUnitType == UNIT_PLAYER) {
+    if (dwSelfGUID == dwTargetGUID && eUnitType == UNIT_PLAYER) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    eD2ServerIncomingStatus eStatusResult = SERVER_InteractOrPick(pUnit, eUnitType, pPacket->dwTargetGUID, pPacket->bParam, pGame);
-    return (eD2ServerIncomingStatus)eStatusResult;
+    return SERVER_InteractOrPick(pUnit, eUnitType, dwTargetGUID, nParam, pGame);
 }
 
 // C2S packet 0x17 handler (5 bytes): [opcode:1][itemGUID:u32]. Drops item from cursor to ground. Validates item is on cursor via SERVER_IsItemOnCursor, checks player is not in active trade, then calls SERVER_DropItemFromPlayer which finds a collision-free tile near the player and spawns the item. Special handling for Horadric Cube (clears cube contents) and socketed items (sets ITEMFLAG_RELOAD).
@@ -2800,12 +2800,12 @@ eD2ServerIncomingStatus __fastcall SCMD_0x18_ItemToInventory(::SGAMEDATA * pGame
 
     int32_t nDestX;
     nDestX = pPacket->nX;
+    int32_t nDestY;
+    nDestY = pPacket->nY;
     uint32_t dwItemGUID;
     dwItemGUID = pPacket->dwItemGUID;
     uint32_t bufferId;
     bufferId = pPacket->nBufferId;
-    int32_t nDestY;
-    nDestY = pPacket->nY;
     eD2ServerIncomingStatus eVar1;
     eVar1 = SERVER_IsItemOnCursor(pGame, pUnit, dwItemGUID);
     if (eVar1 != SERVERSTATUS_OK) {
@@ -2865,8 +2865,6 @@ eD2ServerIncomingStatus __fastcall SCMD_0x18_ItemToInventory(::SGAMEDATA * pGame
 // [op:1][itemGUID:u32]
 // Direct-to-inventory pickup, skips cursor. Rejects corpse items.
 eD2ServerIncomingStatus __fastcall SCMD_0x19_PickUpToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x19_RemoveItemFromBuffer * pPacket, uint32_t nSize) {
-    uint32_t nMovePermission;
-    BOOL nTakeToCursorResult;
     if (nSize != 5) {
       return SERVERSTATUS_BAD_PARAMS;
     }
@@ -2880,30 +2878,26 @@ eD2ServerIncomingStatus __fastcall SCMD_0x19_PickUpToCursor(::SGAMEDATA * pGame,
     D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory);
     if (pItem) {
       PLAYER_SendInventoryFullMessage(pUnit);
-    } else {
-      eInventoryPage invPage;
-      pItem = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_ITEM, nItemGid);
-      if (pItem) {
-        invPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem);
-        if (invPage == INVPAGE_TRADEGRID1) {
-          return SERVERSTATUS_BAD_PARAMS;
-        }
+      return SERVERSTATUS_BAD_DATA;
+    }
 
-        nMovePermission = Player::CheckItemMovePermission(pGame, pUnit, pItem);
-        if (nMovePermission) {
-          nSize = 0;
-          nTakeToCursorResult = ITEMS::ItemMode::SERVER_TakeItemToCursor(pGame, pUnit, nItemGid, &nSize, 1, 0, nullptr, 0);
-          if (!nTakeToCursorResult && nSize) {
-            return SERVERSTATUS_BAD_PARAMS;
-          }
-        }
+    pItem = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_ITEM, nItemGid);
+    if (!pItem) {
+      return SERVERSTATUS_BAD_DATA;
+    }
 
-        eVar1 = SERVERSTATUS_OK;
-        return (eD2ServerIncomingStatus)eVar1;
+    if (D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem) == INVPAGE_TRADEGRID1) {
+      return SERVERSTATUS_BAD_PARAMS;
+    }
+
+    if (Player::CheckItemMovePermission(pGame, pUnit, pItem)) {
+      nSize = 0;
+      if (!ITEMS::ItemMode::SERVER_TakeItemToCursor(pGame, pUnit, nItemGid, &nSize, 1, 0, nullptr, 0) && nSize) {
+        return SERVERSTATUS_BAD_PARAMS;
       }
     }
 
-    return SERVERSTATUS_BAD_DATA;
+    return SERVERSTATUS_OK;
 }
 
 // C->S 0x1A Equip Item (9 bytes)

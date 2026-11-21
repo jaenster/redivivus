@@ -389,10 +389,7 @@ BOOL __stdcall MONSTER_IsSandLeaper(D2UnitStrc * pUnit, int32_t nParam) {
 }
 
 uint32_t __stdcall IsDemon(D2UnitStrc * pUnit) {
-    if (!pUnit) {
-      return 0;
-    }
-    if (pUnit->eUnitType != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -622,10 +619,7 @@ int32_t __stdcall GetMonsterBaseId(D2RoomStrc * pRoom, int32_t nMonsterId) {
 }
 
 uint32_t __stdcall MONSTERS_CheckMonStatFlag0xc_Bit7(D2UnitStrc * pUnit) {
-    if (!pUnit) {
-      return 0;
-    }
-    if (pUnit->eUnitType != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -687,19 +681,16 @@ uint32_t __stdcall MONSTER_GetMercType(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    uint32_t nClassId = pUnit->nClassId;
-    if (nClassId <= 359) {
-      if (nClassId == 359) {
-        return 3;
-      }
-      if (nClassId == 271) {
+    switch ((uint32_t)pUnit->nClassId) {
+      case 271:
         return 1;
-      }
-      if (nClassId == 338) {
+      case 338:
         return 2;
-      }
-    } else if (nClassId >= 0x230 && nClassId <= 0x231) {
-      return 4;
+      case 359:
+        return 3;
+      case 0x230:
+      case 0x231:
+        return 4;
     }
 
     return 0;

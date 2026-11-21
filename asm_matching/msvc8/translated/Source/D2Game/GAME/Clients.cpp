@@ -328,12 +328,11 @@ static void Unreferenced_00537ab0(D2RoomStrc * pRoom2, D2RoomStrc * pRoom1) {
 
 // @sourcefile .\GAME\Clients.cpp
 void __fastcall FreeClientList(::SGAMEDATA * pGame) {
-    D2ClientStrc* pMemoryToFree = pGame->pClient;
-    while (pMemoryToFree) {
-      D2ClientStrc* pNextClient;
-      pNextClient = pMemoryToFree->pNext;
+    D2ClientStrc* pClient = pGame->pClient;
+    while (pClient) {
+      D2ClientStrc* pMemoryToFree = pClient;
+      pClient = pClient->pNext;
       D2_FREE_POOL_AT(pGame->pMemoryPool, pMemoryToFree, ".\\GAME\\Clients.cpp", 0x617);
-      pMemoryToFree = pNextClient;
     }
 }
 

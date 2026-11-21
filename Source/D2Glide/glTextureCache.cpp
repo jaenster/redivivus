@@ -218,8 +218,9 @@ void __fastcall GLTEXCACHE_EvictLRU(GlTextureCacheStrc * pCache) {
         pCache->pActiveTail = 0;
       }
 
-      pEvictNode->pNext = 0;
-      pEvictNode->pPrev = 0;
+      GlTextureCacheNodeStrc** ppLink = &pEvictNode->pNext;
+      ppLink[0] = 0;
+      ppLink[1] = 0;
       if (pEvictNode->pHashTable) {
         *(uint32_t*)((char*)pEvictNode->pHashTable + pEvictNode->nHashIndex * 8) = 0;
         *(uint32_t*)((char*)pEvictNode->pHashTable + (pEvictNode->nHashIndex * 8 + 4)) = 0;
@@ -276,8 +277,9 @@ int __fastcall GLTEXCACHE_EnsureCapacity(GlTextureCacheStrc * pCache) {
             pCache->pActiveTail = 0;
           }
 
-          pEvictNode->pNext = 0;
-          pEvictNode->pPrev = 0;
+          GlTextureCacheNodeStrc** ppLink = &pEvictNode->pNext;
+          ppLink[0] = 0;
+          ppLink[1] = 0;
           if (pEvictNode->pHashTable) {
             *(uint32_t*)((char*)pEvictNode->pHashTable + pEvictNode->nHashIndex * 8) = 0;
             *(uint32_t*)((char*)pEvictNode->pHashTable + (pEvictNode->nHashIndex * 8 + 4)) = 0;

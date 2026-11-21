@@ -2812,18 +2812,18 @@ void __fastcall DrawString(int32_t nPosX, int32_t nPosY, char * szFormat, va_lis
     int nCharIdx;
     char szBuf[512];
     int nStrLen = wvsprintfA(szBuf, szFormat, va);
+    int nStartX = nPosX;
     RENDERER_GLIDE_SetColorCombine(1);
     RENDERER_GLIDE_SetAlphaBlendMode(1);
     RENDERER_GLIDE_SetTextureFiltering(1);
     RENDERER_GLIDE_SetTextureMode(gnGlideDebugFontTMU);
-    int nCurX = nPosX;
     for (nCharIdx = 0; nCharIdx < nStrLen; nCharIdx++) {
       LPINT nCharAdvance;
-      nCharAdvance = RENDERER_GLIDE_DrawDebugChar(nCurX, nPosY, szBuf[nCharIdx]);
-      nCurX += (int)nCharAdvance;
+      nCharAdvance = RENDERER_GLIDE_DrawDebugChar(nPosX, nPosY, szBuf[nCharIdx]);
+      nPosX += (int)nCharAdvance;
       if (szBuf[nCharIdx] == '\n') {
         nPosY += 0xc;
-        nCurX = nPosX;
+        nPosX = nStartX;
       }
     }
 }
@@ -3988,25 +3988,20 @@ void __stdcall RENDERER_GLIDE_FreePerspectiveLUT() {
 }
 
 void __stdcall RENDERER_GLIDE_BuildPerspectiveLUT() {
-    int nZ = -0x1000;
-    int nCount = 0x2000;
     int32_t* pLutEntry = gpPerspectiveLookupTable;
-    do {
+    int nZ = -0x1000;
+    for (int i = 0; i < 0x2000; i++) {
       int nClampedZ;
-      if (nZ > -0xbb7) {
+      if (nZ > -2999 && nZ < 2999) {
         nClampedZ = nZ;
-        if (nZ >= 0xbb7) {
-          nClampedZ = 2999;
-        }
-      } else {
+      } else if (nZ <= -2999) {
         nClampedZ = -2999;
+      } else {
+        nClampedZ = 2999;
       }
-
+      pLutEntry[i] = (int32_t)(0x2ee000 / (nClampedZ - 3000));
       nZ++;
-      nCount--;
-      *pLutEntry = (int32_t)(0x2ee000 / (nClampedZ - 3000));
-      pLutEntry++;
-    } while (nCount);
+    }
 
     gnGlidePerspectiveScale = 0x100;
 }

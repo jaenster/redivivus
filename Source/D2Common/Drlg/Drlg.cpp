@@ -407,27 +407,25 @@ static void __stdcall DRLGLEVEL_FreeLevelSubStructs(D2PoolManagerStrc * pMemory,
 }
 
 void __fastcall DRLGACT_FreeDrlgActMisc(D2DrlgStrc * pDrlg) {
-    D2DrlgActWarpsInfoStrc* pNextWarpsInfo;
     D2DrlgLevelStrc* pLevel = pDrlg->pLevel;
-    if (pDrlg->pLevel) {
-      D2DrlgLevelStrc* pNextLevel;
+    if (pLevel) {
       do {
-        pNextLevel = pLevel->pLevelNext;
-        DRLGLEVEL_FreeLevelSubStructs(pDrlg->pMemoryPool, 0, pLevel);
-        D2_FREE_POOL_AT(pDrlg->pMemoryPool, pLevel, ".\\DRLG\\Drlg.cpp", 0xdd);
-        pLevel = pNextLevel;
-      } while (pNextLevel);
+        D2DrlgLevelStrc* pCurLevel = pLevel;
+        pLevel = pLevel->pLevelNext;
+        DRLGLEVEL_FreeLevelSubStructs(pDrlg->pMemoryPool, 0, pCurLevel);
+        D2_FREE_POOL_AT(pDrlg->pMemoryPool, pCurLevel, ".\\DRLG\\Drlg.cpp", 0xdd);
+      } while (pLevel);
 
       pDrlg->pLevel = 0;
     }
 
     D2DrlgActWarpsInfoStrc* pWarpsInfo = pDrlg->pWarpsInfo;
-    if (pDrlg->pWarpsInfo) {
+    if (pWarpsInfo) {
       do {
-        pNextWarpsInfo = pWarpsInfo->pNext;
-        D2_FREE_POOL_AT(pDrlg->pMemoryPool, pWarpsInfo, ".\\DRLG\\Drlg.cpp", 0xec);
-        pWarpsInfo = pNextWarpsInfo;
-      } while (pNextWarpsInfo);
+        D2DrlgActWarpsInfoStrc* pCurWarpsInfo = pWarpsInfo;
+        pWarpsInfo = pWarpsInfo->pNext;
+        D2_FREE_POOL_AT(pDrlg->pMemoryPool, pCurWarpsInfo, ".\\DRLG\\Drlg.cpp", 0xec);
+      } while (pWarpsInfo);
 
       pDrlg->pWarpsInfo = 0;
     }
@@ -1327,22 +1325,12 @@ void __fastcall DRLGANIM_PropagateAnimationData(D2RoomExStrc * pRoomExSrc, D2Roo
     }
 
     int nCurrentFrame = 0;
-    int nDefaultFrame = 0;
     if (pRoomExSrc) {
-      D2RoomExStrc** ppNearRoomEx;
-      i = 0;
-      if (pRoomExSrc->nDrlgRoomsExNearCount > 0) {
-        ppNearRoomEx = pRoomExSrc->ppDrlgRoomsExNear;
-        do {
-          if ((*ppNearRoomEx)->pRoomTiles && (*ppNearRoomEx)->pRoomTiles->pAnimTiles) {
-            nCurrentFrame = pRoomExSrc->ppDrlgRoomsExNear[i]->pRoomTiles->pAnimTiles->nCurrentFrame;
-            break;
-          }
-
-          i++;
-          ppNearRoomEx++;
-          nCurrentFrame = nDefaultFrame;
-        } while (i < pRoomExSrc->nDrlgRoomsExNearCount);
+      for (i = 0; i < pRoomExSrc->nDrlgRoomsExNearCount; i++) {
+        if (pRoomExSrc->ppDrlgRoomsExNear[i]->pRoomTiles && pRoomExSrc->ppDrlgRoomsExNear[i]->pRoomTiles->pAnimTiles) {
+          nCurrentFrame = pRoomExSrc->ppDrlgRoomsExNear[i]->pRoomTiles->pAnimTiles->nCurrentFrame;
+          break;
+        }
       }
     }
 
@@ -1844,20 +1832,13 @@ void __stdcall DoNotCheckAll(D2DrlgWallLayerGridsStrc * pRoomCtx, D2LvlSubTxt * 
 
 // Frees all grid and file data from a maze room's preset data.
 void __fastcall DRLGTILESUB_FreeDrlgFile(D2LvlSubTxt * pLvlSubTxtRecord) {
-    int i;
     if (!pLvlSubTxtRecord->pDrlgFile) {
       return;
     }
-    if (pLvlSubTxtRecord->pDrlgFile->nWallLayers > 0) {
-      D2DrlgGridStrc* pCurrentGrid;
-      pCurrentGrid = pLvlSubTxtRecord->pTileTypeGrid;
-      i = 0;
-      do {
-        DrlgGrid::DRLGGRID_FreeGrid(nullptr, pCurrentGrid + 4);
-        DrlgGrid::DRLGGRID_FreeGrid(nullptr, pCurrentGrid);
-        i++;
-        pCurrentGrid++;
-      } while (i < pLvlSubTxtRecord->pDrlgFile->nWallLayers);
+
+    for (int i = 0; i < pLvlSubTxtRecord->pDrlgFile->nWallLayers; i++) {
+      DrlgGrid::DRLGGRID_FreeGrid(nullptr, &pLvlSubTxtRecord->pWallGrid[i]);
+      DrlgGrid::DRLGGRID_FreeGrid(nullptr, &pLvlSubTxtRecord->pTileTypeGrid[i]);
     }
 
     DrlgGrid::DRLGGRID_FreeGrid(nullptr, &pLvlSubTxtRecord->pFloorGrid);
@@ -2082,7 +2063,11 @@ static void __stdcall DRLGOUTPLACE_CalcCornerBorderCoords(D2DrlgCoordsStrc * pLe
       case 0:
         pOutCoords->WorldPosition.x = pLevelCoords->WorldPosition.x;
       pOutCoords->WorldPosition.y = pLevelCoords->WorldSize.y + pLevelCoords->WorldPosition.y;
-      goto shift_x_left_if_variant;
+      if (nVariant == 1) {
+        pOutCoords->WorldPosition.x -= pOutCoords->WorldSize.x / 2 + 8;
+        return;
+      }
+      break;
       case 1:
         pOutCoords->WorldPosition.x = pLevelCoords->WorldPosition.x;
       pOutCoords->WorldPosition.y = pLevelCoords->WorldSize.y + pLevelCoords->WorldPosition.y;
@@ -2115,9 +2100,8 @@ static void __stdcall DRLGOUTPLACE_CalcCornerBorderCoords(D2DrlgCoordsStrc * pLe
       case 4:
         pOutCoords->WorldPosition.x = pLevelCoords->WorldPosition.x;
       pOutCoords->WorldPosition.y = pLevelCoords->WorldPosition.y - pOutCoords->WorldSize.y;
-      shift_x_left_if_variant:
       if (nVariant == 1) {
-        pOutCoords->WorldPosition.x += -8 - pOutCoords->WorldSize.x / 2;
+        pOutCoords->WorldPosition.x -= pOutCoords->WorldSize.x / 2 + 8;
         return;
       }
       break;
@@ -2711,26 +2695,17 @@ int32_t __fastcall DRLGPLACE_ACT1_ValidatePlacementList1(D2DrlgLevelPlacementStr
     0x1
 }; D2_STATIC_GUARD(RogueEncampentLayout, "D2Common::Drlg::DRLGPLACE_ACT1_ValidatePlacementList1::RogueEncampentLayout");
 
-    int _bNoOverlap;
-    bool bNoOverlap;
     int* pLevelDataEntryPtr;
     int* pCurrentDirPtr;
     int nPrevId = ACT1_D2DrlgLevelData1.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
     int i = 0;
     if (nIndexMax > 0) {
-      D2DrlgCoordsStrc* pCoords;
-      pCoords = pLevelUnknown->aCoordsAndSize;
-      do {
-        if (i != nPrevId) {
-          _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
-          if (!_bNoOverlap) {
-            return 0;
-          }
+      D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
+      for (; i < nIndexMax; i++, pCoords++) {
+        if (i != nPrevId && !DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0)) {
+          return 0;
         }
-
-        pCoords++;
-        i++;
-      } while (i < nIndexMax);
+      }
     }
 
     eD2LevelId eLevelId = ACT1_D2DrlgLevelData1.aEntry[nIndexMax].neD2LevelId;

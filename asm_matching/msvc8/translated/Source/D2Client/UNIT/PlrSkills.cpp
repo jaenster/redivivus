@@ -276,22 +276,15 @@ void __fastcall PLRSKILLS_StateSetFn05_ChangeClass(D2UnitStrc * pUnit, eD2States
     int nMonClassId = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_shortparam1, 0);
     eD2PlayerAnimMode ePrevAnimMode = pUnit->eAnimMode.ePlayerMode;
     Monster::MONSTER_TransformToClassId(pUnit, nMonClassId);
-    eD2PlayerAnimMode eNewAnimMode = eD2PlayerAnimMode_ns::Attack2;
-    if (ePrevAnimMode != eD2PlayerAnimMode_ns::Attack2) {
-      eNewAnimMode = eD2PlayerAnimMode_ns::Neutral;
+    if (ePrevAnimMode == eD2PlayerAnimMode_ns::Attack2) {
+      UnitMode::UNITMODE_SetAnimMode(pUnit, eD2PlayerAnimMode_ns::Attack2);
+    } else {
+      UnitMode::UNITMODE_SetAnimMode(pUnit, eD2PlayerAnimMode_ns::Neutral);
     }
-
-    UnitMode::UNITMODE_SetAnimMode(pUnit, eNewAnimMode);
-    if (nMonClassId != 0x21f) {
-      return;
+    if (nMonClassId == 0x21f) {
+      D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
+      D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit) + 10, 1);
     }
-
-    D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    int32_t nDir = 1;
-    int32_t nYPos = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-    
-    
-    D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, (int32_t)(D2Common::Units::GetXPosFromDynamicPathUnit(pUnit)), (int)(nYPos + 10), nDir);
 }
 
 static int32_t __stdcall STATES_CalcDamageSeverityTier(int32_t nMax, int32_t nValue) {
@@ -879,18 +872,16 @@ void __fastcall PLRSKILLS_StateSetFn17_RestInPeace(D2UnitStrc * pUnit, eD2States
     }
 
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.nMissileTxtNo = (eMissilesId)pDVar1->missile;
-    eD2Skills eSkillNoValue;
-    if (pDVar1->skill >= 0) {
-      eSkillNoValue = (eD2Skills)pDVar1->skill;
-    } else {
-      eSkillNoValue = SKILL_Attack;
-    }
-
-    sSkillArg.eSkillNo = eSkillNoValue;
-    sSkillArg.nSkillLevel = 1;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
+    sSkillArg.nMissileTxtNo = (eMissilesId)pDVar1->missile;
+    if (pDVar1->skill >= 0) {
+      sSkillArg.eSkillNo = (eD2Skills)pDVar1->skill;
+    } else {
+      sSkillArg.eSkillNo = SKILL_Attack;
+    }
+
+    sSkillArg.nSkillLevel = 1;
     Missile::MakeMissile(&sSkillArg);
 }
 
@@ -903,18 +894,15 @@ void __fastcall PLRSKILLS_StateSetFn18_CorpseExp(D2UnitStrc * pUnit, eD2States e
     }
 
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.nMissileTxtNo = (eMissilesId)pDVar1->missile;
-    eD2Skills eSkillNoValue;
-    if (pDVar1->skill >= 0) {
-      eSkillNoValue = (eD2Skills)pDVar1->skill;
-    } else {
-      eSkillNoValue = SKILL_Attack;
-    }
-
-    sSkillArg.eSkillNo = eSkillNoValue;
-    sSkillArg.nSkillLevel = 1;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
+    sSkillArg.nMissileTxtNo = (eMissilesId)pDVar1->missile;
+    if (pDVar1->skill >= 0) {
+      sSkillArg.eSkillNo = (eD2Skills)pDVar1->skill;
+    } else {
+      sSkillArg.eSkillNo = SKILL_Attack;
+    }
+    sSkillArg.nSkillLevel = 1;
     Missile::MakeMissile(&sSkillArg);
 }
 
@@ -1207,6 +1195,18 @@ void __fastcall PLRSKILLS_RemoveStateFromUnit(D2UnitStrc * pUnit, eD2States eSta
     D2Common::Units::UpdateAnimSpeed(pUnit, ".\\UNIT\\PlrSkills.cpp", 0x59c);
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 // @sourcefile .\UNIT\PlrSkills.cpp
 D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUnit, D2StatListExStrc * pStatList, eD2States eState, eD2UnitStat eUnitStat, eD2Skills eSkill, uint32_t nLayer) {
     if (!pUnit) {
@@ -1221,7 +1221,7 @@ D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUn
       int nBaseStatVal;
       pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
       if (!pStatList) {
-        pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 0, 0, pUnit->eUnitType, pUnit->nUnitGUID);
+        pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 0, 0, GetTypeInline(pUnit), GetGUIDInline(pUnit));
         D2Common::Stats::StatsEx::SetState(pStatList, eState);
         D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
       } else {
@@ -1233,12 +1233,10 @@ D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUn
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, eUnitStat, eSkill, nLayer);
     if (eUnitStat == UNITSTAT_alignment) {
       Player::CLIENT_UpdateMonsterAllegiance(pUnit, (uint8_t)byOldAlignment, (uint8_t)eSkill);
-    } else if ((int)eUnitStat < 0) {
-      return pStatList;
     }
 
     D2ItemStatCostTxt* pItemStatCostTxt;
-    if ((pItemStatCostTxt = (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr) && *(uint8_t*)((intptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+    if ((pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr) && *(uint8_t*)((intptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       D2Common::Units::UpdateAnimSpeed(pUnit, ".\\UNIT\\PlrSkills.cpp", 0x5d2);
     }
 

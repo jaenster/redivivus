@@ -1866,6 +1866,18 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x29_GAMEQUESTRECORD(D2GSPacketSrv0x29 *
     UI::npcmenu::NPCMENU_ReadGameQuestRecord(pBytes->szQuestBits);
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 // Constructs a fake S2C 0x47 packet from a unit's type/GUID and feeds it directly to ITEM_CltRecalcAllEquippedItems. Used client-side when stat changes are detected locally (e.g., level-up via SCMD_HandleStatChangeEffect) without waiting for the server packet.
 static void ITEM_CltRecalcEquippedFromUnit(D2UnitStrc * pUnit) {
     D2GSPacketSrv0x47 sFakePacket;
@@ -1873,9 +1885,9 @@ static void ITEM_CltRecalcEquippedFromUnit(D2UnitStrc * pUnit) {
       return;
     }
 
-    sFakePacket.nUnitGUID = pUnit->nUnitGUID;
-    sFakePacket.eUnitType = (uint8_t)pUnit->eUnitType;
+    sFakePacket.eUnitType = (uint8_t)GetTypeInline(pUnit);
     sFakePacket.nPacketId = 0x47;
+    sFakePacket.nUnitGUID = GetGUIDInline(pUnit);
     UNIT::ITEM_CltRecalcAllEquippedItems(&sFakePacket, 0);
 }
 
@@ -2562,22 +2574,21 @@ void __fastcall NET_D2GS_CLIENT_RecvRecalcEquippedItems2(char * pBytes) {
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x53(D2GSPacketSrv0x53 * pBytes) {
     D2GSPacketSrv0x47 recalcPacket;
+    int32_t nIndex = pBytes->nCycleIndex; // steer-ok: the original reads nIndex from the packet before calling GetPlayerUnit_UI
     int32_t nAngle = pBytes->nTicks;
-    int32_t nIndex = pBytes->nCycleIndex;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     if (Game::sgpDrlgAct != pPlayer->pDrlgAct) {
       return;
     }
 
-    uint32_t nState = (uint32_t)pBytes->bEclipse;
-    D2Common::Environment::DRLGENV_InitializeEnvironment(Game::sgpDrlgAct, UNIT::CUnit::GetCurrentRoom(), nIndex, nAngle, nState);
+    D2Common::Environment::DRLGENV_InitializeEnvironment(Game::sgpDrlgAct, UNIT::CUnit::GetCurrentRoom(), nIndex, nAngle, pBytes->bEclipse);
     UNIT::CUnit::UpdateObjectAutoLightOnPeriodChange();
     pPlayer = UNIT::Player::GetPlayerUnit_UI();
     if (!pPlayer) {
       return;
     }
 
-    recalcPacket.eUnitType = (uint8_t)pPlayer->eUnitType;
+    recalcPacket.eUnitType = (uint8_t)GetTypeInline(pPlayer);
     recalcPacket.nUnitGUID = pPlayer->nUnitGUID;
     recalcPacket.nPacketId = 0x47;
     UNIT::ITEM_CltRecalcAllEquippedItems(&recalcPacket, 0);

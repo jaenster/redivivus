@@ -222,9 +222,16 @@ BOOL __fastcall Q18_PlayerUpdateTomeState(::SGAMEDATA * pGame, D2UnitStrc * pUni
                          pending */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_RewardAwaits);
       if (bQuestState != 1) {
         pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_LamEsensTome);
-        if (pQuestData && (pQuestData->nStateFlag == 2 || pQuestData->nStateFlag == 3)) {
-          /* SetQuestState(LamEsensTome, state 2=Step0x02) — persist "in progress" when
+        if (pQuestData) {
+          switch (pQuestData->nStateFlag) {
+          case 2:
+            D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_Step0x02);
+            break;
+          case 3:
+            /* SetQuestState(LamEsensTome, state 2=Step0x02) — persist "in progress" when
                          live state is 2/3 */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_Step0x02);
+            break;
+          }
         }
       }
     }
@@ -441,13 +448,10 @@ void __fastcall QUEST_StateHandler_PlayTomeHandInSound(D2QuestDataStrc * pQuestD
 // Q18_Callback_11 — Lam Esen's Tome, NPC-message handler for Alkor (monstats 0xfe). Only runs if record not yet Completed. msg 0x225: accept quest -> set live state 2 (a3q1.cpp:0x1a1), broadcast state 1, sync all players. msg 0x234 (hand in tome): if not Completed and player carries the Tome, remove it, mark bTomePickedUp + install the QUEST_StateHandler_PlayTomeHandInSound handler; then if bCanComplete run the completion pipeline over all players (CompleteQuestStates -> RewardStatPoints -> LockCompletingQuest), broadcast state 0xd (JustCompleted), add player to GUID list; if JustCompleted now set, advance to live state 5 and fire the sequence filter to unlock the next quest. The quest's terminal/commit path.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
 void __fastcall Q18_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    int32_t nPlayerGUID;
-    D2QuestDataA3Q1Strc* pA3Q1DataUnused;
-    uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
-    ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2QuestDataA3Q1Strc* pA3Q1Data = pQuestData->pQuestSpecificData.pA3Q1;
     short int nNPCNo = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
-    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_Completed);
     if (!(bQuestState != 1 && nNPCNo == 0xfe)) {
       return;
@@ -475,13 +479,8 @@ void __fastcall Q18_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     if (pTomeItem) {
       QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20626262);
       pA3Q1Data->bTomePickedUp = '\x01';
-      if (!pQuestArgs->pPlayer) {
-        pA3Q1Data->nTomePickerGUID = -1;
-        pQuestData->sStateFunctions.fpQuestStateHandler[2] = QUEST_StateHandler_PlayTomeHandInSound;
-      } else {
-        pA3Q1Data->nTomePickerGUID = pQuestArgs->pPlayer->nUnitGUID;
-        pQuestData->sStateFunctions.fpQuestStateHandler[2] = QUEST_StateHandler_PlayTomeHandInSound;
-      }
+      pA3Q1Data->nTomePickerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
+      pQuestData->sStateFunctions.fpQuestStateHandler[2] = QUEST_StateHandler_PlayTomeHandInSound;
     }
     if (pA3Q1Data->bCanComplete == '\x01') {
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)CompleteQuestStates);
@@ -492,13 +491,7 @@ void __fastcall Q18_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
     pQuestData->nQuestPacketFlags = '\0';
     QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, 0);
-    if (!pQuestArgs->pPlayer) {
-      nPlayerGUID = -1;
-    } else {
-      nPlayerGUID = pQuestArgs->pPlayer->nUnitGUID;
-    }
-
-    QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, nPlayerGUID);
+    QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
     /* GetQuestState(LamEsensTome[q0x11], state 0xd=JustCompleted) — only fire
                          sequence if completed self game */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_JustCompleted);
     /* SetQuestRecordState(0x544720)(game, LamEsensTome, 0xd=JustCompleted) —

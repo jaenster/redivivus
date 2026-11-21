@@ -271,27 +271,22 @@ void __stdcall INPUT_HandleIMENotify(D2UIMouseMsgStrc * pMsg) {
 
 uint8_t __stdcall CHAT_CheckIMELanguage() {
     LANGID nLangId;
-    BOOL bIsIme;
     if (gnLanguageCode == 9) {
       nLangId = GetSystemDefaultLangID();
-      if (nLangId != 0x404 && nLangId != 0xc04) {
-        return 0;
+      if (nLangId == 0x404 || nLangId == 0xc04) {
+        return 1;
       }
-    } else {
-      HKL hKbLayout;
-      if (gnLanguageCode != 8) {
-        /* DWORD idThread for GetKeyboardLayout */ hKbLayout = GetKeyboardLayout(0);
-        /* HKL param_1 for ImmIsIME */ bIsIme = ImmIsIME(hKbLayout);
-        return bIsIme != 0;
-      }
-
+      return 0;
+    }
+    if (gnLanguageCode == 8) {
       nLangId = GetSystemDefaultLangID();
-      if (nLangId != 0x804 && nLangId != 0x1004) {
-        return 0;
+      if (nLangId == 0x804 || nLangId == 0x1004) {
+        return 1;
       }
+      return 0;
     }
 
-    return 1;
+    return ImmIsIME(GetKeyboardLayout(0)) != 0;
 }
 
 void __stdcall CHAT_ResetIMEState(D2UIMouseMsgStrc * pMsg) {

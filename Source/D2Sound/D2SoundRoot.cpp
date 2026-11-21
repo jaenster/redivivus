@@ -106,60 +106,41 @@ BOOL __fastcall SOUND_ToggleEAXEnvironmentPreset(int nPresetType) {
 }
 
 char * __fastcall SOUND_GetDirectSoundErrorString(int hResult) {
-    if (hResult <= -0x7787fff6) {
-      if (hResult == -0x7787fff6) {
+    switch (hResult) {
+      case -0x7787fff6:
         return "DSERR_ALLOCATED";
-      }
-      if (hResult <= -0x7ffbfef0) {
-        if (hResult == -0x7ffbfef0) {
-          return "DSERR_NOAGGREGATION";
-        }
-        if (hResult == -0x7fffbfff) {
-          return "DSERR_UNSUPPORTED";
-        }
-        if (hResult == -0x7fffbffe) {
-          return "DSERR_NOINTERFACE";
-        }
-        if (hResult == -0x7fffbffb) {
-          return "DSERR_GENERIC";
-        }
-      } else {
-        if (hResult == -0x7ff8fff2) {
-          return "DSERR_OUTOFMEMORY";
-        }
-        if (hResult == -0x7ff8ffa9) {
-          return "DSERR_INVALIDPARAM";
-        }
-      }
-    } else if (hResult <= -0x7787ff7e) {
-      if (hResult == -0x7787ff7e) {
+      case -0x7787ff7e:
         return "DSERR_ALREADYINITIALIZED";
-      }
-
-      switch (hResult) {
-        case -0x7787ff9c:
-          return "DSERR_BADFORMAT";
-        case -0x7787ffe2:
-          return "DSERR_CONTROLUNAVAIL";
-        case -0x7787ffce:
-          return "DSERR_INVALIDCALL";
-        case -0x7787ff88:
-          return "DSERR_NODRIVER";
-        case -0x7787ffba:
-          return "DSERR_PRIOLEVELNEEDED";
-      }
-    } else if (hResult <= -0x7787ff56) {
-      if (hResult == -0x7787ff56) {
-        return "DSERR_UNINITIALIZED";
-      }
-      if (hResult == -0x7787ff6a) {
+      case -0x7787ff9c:
+        return "DSERR_BADFORMAT";
+      case -0x7787ff6a:
         return "DSERR_BUFFERLOST";
-      }
-      if (hResult == -0x7787ff60) {
+      case -0x7787ffe2:
+        return "DSERR_CONTROLUNAVAIL";
+      case -0x7fffbffb:
+        return "DSERR_GENERIC";
+      case -0x7787ffce:
+        return "DSERR_INVALIDCALL";
+      case -0x7ff8ffa9:
+        return "DSERR_INVALIDPARAM";
+      case -0x7ffbfef0:
+        return "DSERR_NOAGGREGATION";
+      case -0x7787ff88:
+        return "DSERR_NODRIVER";
+      case -0x7fffbffe:
+        return "DSERR_NOINTERFACE";
+      case -0x7787ff60:
         return "DSERR_OTHERAPPHASPRIO";
-      }
-    } else if (!hResult) {
-      return "DS_OK";
+      case -0x7ff8fff2:
+        return "DSERR_OUTOFMEMORY";
+      case -0x7787ffba:
+        return "DSERR_PRIOLEVELNEEDED";
+      case -0x7787ff56:
+        return "DSERR_UNINITIALIZED";
+      case -0x7fffbfff:
+        return "DSERR_UNSUPPORTED";
+      case 0:
+        return "DS_OK";
     }
 
     return nullptr;

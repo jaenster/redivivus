@@ -170,15 +170,14 @@ void __fastcall PLAYER_FreeAllResources(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
 }
 
 void __fastcall FreePlayers(::SGAMEDATA * pGame) {
-    D2UnitStrc* pNextUnit;
     D2UnitStrc** ppBucket = pGame->pUnitList[0];
     for (int nBucketCount = 0; nBucketCount < 0x80; nBucketCount++) {
       D2UnitStrc* pUnit;
       pUnit = *ppBucket;
       while (pUnit) {
-        pNextUnit = UNIT::SUnit::GetNextUnit(pUnit);
-        UNIT::SUnit::FreeServerUnit(pGame, pUnit);
-        pUnit = pNextUnit;
+        D2UnitStrc* pFreeUnit = pUnit;
+        pUnit = UNIT::SUnit::GetNextUnit(pUnit);
+        UNIT::SUnit::FreeServerUnit(pGame, pFreeUnit);
       }
 
       ppBucket++;
@@ -985,14 +984,14 @@ static void __stdcall EXP_ApplyDeathExpPenalty(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     int nExpPrevLevel = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(eClassId, nLevel - 1);
-    DWORD nExpCurLevel = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(eClassId, nLevel);
-    int nCurrentExp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0);
-    int nExpPenalty = pDiffLevelTxt[1] * (nExpCurLevel - nExpPrevLevel) / 100;
+    int nExpRange = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(eClassId, nLevel) - nExpPrevLevel;
+    int nNewExp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0);
+    int nExpPenalty = pDiffLevelTxt[1] * nExpRange / 100;
     if (!nExpPenalty) {
       return;
     }
 
-    int nNewExp = nCurrentExp - nExpPenalty;
+    nNewExp -= nExpPenalty;
     if ((uint32_t)nNewExp <= (uint32_t)nExpPrevLevel) {
       nExpPenalty += nNewExp - nExpPrevLevel;
       if (nExpPenalty < 0) {

@@ -2520,8 +2520,7 @@ void __fastcall MONSTER_AoEPhysicalDamage(::SGAMEDATA * pGame, D2UnitStrc * pUni
     uint32_t nDmgRange = (int)pMonStatsTxt->aEl1MaxD[0] - (int)pMonStatsTxt->aEl1MinD[0];
     nDmgRoll = D2_SeedRollLimited(&pUnit->sSeed, nDmgRange);
     int nClassId = (int)pMonStatsTxt->aEl1MinD[0] + nDmgRoll << 8;
-    int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    short int nRadiusPerLevel = pMonStatsTxt->aip[2][pGame->nDifficulty];
+    nRadius = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0) * pMonStatsTxt->aip[2][pGame->nDifficulty];
     memset(&sDamage, 0, 0x70);
     eD2UnitType eUnitType = pUnit->eUnitType;
     sDamage.dwFireDmg = nClassId;
@@ -2542,7 +2541,7 @@ void __fastcall MONSTER_AoEPhysicalDamage(::SGAMEDATA * pGame, D2UnitStrc * pUni
       nPosY = 0;
     }
 
-    UNIT::SUnitDmg::DAMAGE_ApplyAreaOfEffectDamage(pGame, pUnit, nClassId, nPosY, nLevel * nRadiusPerLevel, &sDamage, 0, 0, nullptr, 0);
+    UNIT::SUnitDmg::DAMAGE_ApplyAreaOfEffectDamage(pGame, pUnit, nClassId, nPosY, nRadius, &sDamage, 0, 0, nullptr, 0);
 }
 
 void __fastcall MONSTER_HandleModeTransition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {

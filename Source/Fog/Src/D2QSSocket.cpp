@@ -67,26 +67,19 @@ int __fastcall NET_MCP_CLIENT_SendPacketToSafesocket(D2NetDataStrc * pSafesocket
 }
 
 BOOL __stdcall QSSOCKET_SendWithTimeout(D2QSSocketStrc * pQSSocket, char * pBuffer, uint16_t nLength) {
-    uint16_t nBytesSentActual;
-    D2NetDataStrc* pSafesock;
-    int32_t nSendResult;
-    pSafesock = pQSSocket ? pQSSocket->pSafesock : 0;
-    if (!pSafesock) {
-      return 0;
-    }
-    if (!pSafesock->bConnected) {
-      return 0;
+    D2NetDataStrc* pSafesock = pQSSocket ? pQSSocket->pSafesock : 0;
+    if (pSafesock && pSafesock->bConnected) {
+      int32_t nBytesSent = 0;
+      Safesock::SAFESOCK_EnterCriticalSection(pSafesock);
+      if (pBuffer && nLength) {
+        nBytesSent = Safesock::WSASocket2_SendOrCloseOnTimeout(pQSSocket->pSafesock, pBuffer, nLength);
+      }
+
+      Safesock::LeaveCriticalSection_Safesock(pQSSocket->pSafesock);
+      return nLength == (uint16_t)nBytesSent;
     }
 
-    nBytesSentActual = 0;
-    Safesock::SAFESOCK_EnterCriticalSection(pSafesock);
-    if (pBuffer && nLength) {
-      nSendResult = Safesock::WSASocket2_SendOrCloseOnTimeout(pQSSocket->pSafesock, pBuffer, (uint32_t)nLength);
-      nBytesSentActual = (uint16_t)nSendResult;
-    }
-
-    Safesock::LeaveCriticalSection_Safesock(pQSSocket->pSafesock);
-    return (uint32_t)(nLength == nBytesSentActual);
+    return 0;
 }
 
 int __stdcall ReadBytesFromSocket(D2QSSocketStrc * pMCPQSocket, char * pOutBuf, int nMaxBytes) {

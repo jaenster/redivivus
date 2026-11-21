@@ -960,6 +960,12 @@ void __fastcall NET_D2GS_SERVER_Send_0x96_PLAYERCOMMONSTATCHANGE_SMALL(D2ClientS
     SCMD_QueuePacketForClient(pClient, pktBuf, nSize);
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(D2ClientStrc * pClient, D2UnitStrc * pUnit, eD2Skills eSkill, uint8_t nBaseAmount, uint8_t bRemove) {
     D2GSPacketSrv0x22_0x23 packet;
@@ -1260,7 +1266,12 @@ static BOOL SCMD_ShouldSendLifeUpdate(D2PartyDataStrc * pLifeState, int32_t nLif
       if (nDelta < 0) {
         nDelta = -nDelta;
       }
-      if (nDelta > 8 || (pLifeState->nSkippedUpdates++ , pLifeState->nSkippedUpdates > 6)) {
+      if (nDelta > 8) {
+        pLifeState->nSkippedUpdates = 0;
+        pLifeState->nLifePercent = nLifePercent;
+        return 1;
+      }
+      if (++pLifeState->nSkippedUpdates > 6) {
         pLifeState->nSkippedUpdates = 0;
         pLifeState->nLifePercent = nLifePercent;
         return 1;

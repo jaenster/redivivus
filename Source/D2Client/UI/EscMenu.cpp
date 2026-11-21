@@ -59072,10 +59072,9 @@ void __stdcall INPUT_EscMenuMouseDown(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall INPUT_EscMenuMouseUp(D2UIMouseMsgStrc * pMsg) {
+    int nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     if (gbEscMenuSliderDragging) {
-      int32_t nHitIndex;
-      nHitIndex = ESCMENU_GetItemIndexFromMouseY((uint32_t)pMsg->uLParam.sMousePos.nMouseY);
-      if (nHitIndex == gnEscMenuSelectedIndex) {
+      if (ESCMENU_GetItemIndexFromMouseY(nMouseY) == gnEscMenuSelectedIndex) {
         ESCMENU_ClickMenuItem(pMsg);
       }
     }

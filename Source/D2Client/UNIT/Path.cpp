@@ -404,8 +404,8 @@ void __fastcall CLIENT_UpdateUnitFrame(D2UnitStrc * pDynamicPath) {
         eUnitType = UNIT_COUNT;
         bIsServerSide = 0;
       } else {
-        nUnitGUID = pDynamicPath->nUnitGUID;
         eUnitType = pDynamicPath->eUnitType;
+        nUnitGUID = pDynamicPath->nUnitGUID;
         bIsServerSide = pDynamicPath->eUnitFlags >> 0x15 & 1;
       }
 
@@ -437,7 +437,7 @@ void __fastcall CLIENT_UpdateUnitFrame(D2UnitStrc * pDynamicPath) {
       }
     } else {
       if (FlagBit_D2UnitStrc_eUnitFlagsEx_5(pDynamicPath)) {
-        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x4b, pDynamicPath->eUnitType, pDynamicPath->nUnitGUID);
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x4b, !pDynamicPath ? UNIT_COUNT : pDynamicPath->eUnitType, !pDynamicPath ? -1 : pDynamicPath->nUnitGUID);
         pDynamicPath->eUnitFlags &= -8388609;
         pDynamicPath->eUnitFlagsEx &= -33;
       }

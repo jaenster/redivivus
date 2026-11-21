@@ -75,25 +75,20 @@ int __fastcall RENDERER_D3D_InitializeTextureCachePool(D3DTextureCacheStrc * pCa
 }
 
 void __fastcall D3DTEXCACHE_SetPalette(D3DTextureCacheStrc * pCache, void * pPalette) {
-    DWORD nResult;
-    IDirectDrawSurface7* pSurface;
     if (!pPalette) {
       return;
     }
 
-    int nNodeIndex = 0;
-    if (!(pCache->nMaxNodes != 1 && -1 < pCache->nMaxNodes - 1)) {
-      return;
-    }
-
-    while (!pCache->pNodeBuffer[nNodeIndex].pSurface || (pSurface = pCache->pNodeBuffer[nNodeIndex].pSurface , nResult = pSurface->lpVtbl->SetPalette(pSurface, (IDirectDrawPalette*)pPalette) , !nResult)) {
-      nNodeIndex++;
-      if (nNodeIndex >= pCache->nMaxNodes - 1) {
-        return;
+    for (int nNodeIndex = 0; nNodeIndex < pCache->nMaxNodes - 1; nNodeIndex++) {
+      D3DTextureCacheNodeStrc* pNode = &pCache->pNodeBuffer[nNodeIndex];
+      if (pNode->pSurface) {
+        DWORD nResult = pNode->pSurface->lpVtbl->SetPalette(pNode->pSurface, (IDirectDrawPalette*)pPalette);
+        if (nResult) {
+          Renderer::DIRECTD3D_LogError("SetPalette (texture surface)", nResult);
+          return;
+        }
       }
     }
-
-    Renderer::DIRECTD3D_LogError("SetPalette (texture surface)", nResult);
 }
 
 static void __fastcall D3DTEXCACHE_InsertNodeAtTail(D3DTextureCacheNodeStrc * pNode, D3DTextureCacheStrc * pCache) {
@@ -221,8 +216,9 @@ void __fastcall D3DTEXCACHE_InvalidateByTilePtr(D3DTextureCacheStrc * pCache) {
         pCache->pUsedTail = 0;
       }
 
-      pUsedNode->pNext = 0;
-      pUsedNode->pPrev = 0;
+      D3DTextureCacheNodeStrc** ppLink = &pUsedNode->pNext;
+      ppLink[0] = 0;
+      ppLink[1] = 0;
       if (pUsedNode->pAssociatedTilePtr) {
         *(uint32_t*)((char*)pUsedNode->pAssociatedTilePtr + (int)pUsedNode->nTileSlotIndex * 8) = 0;
         *(uint32_t*)((char*)pUsedNode->pAssociatedTilePtr + ((int)pUsedNode->nTileSlotIndex * 8 + 4)) = 0;
@@ -312,8 +308,9 @@ int32_t __fastcall D3DTEXCACHE_EnsureAvailableNode(D3DTextureCacheStrc * pCache)
             pCache->pUsedTail = 0;
           }
 
-          pEvictNode->pNext = 0;
-          pEvictNode->pPrev = 0;
+          D3DTextureCacheNodeStrc** ppLink = &pEvictNode->pNext;
+          ppLink[0] = 0;
+          ppLink[1] = 0;
           if (pEvictNode->pAssociatedTilePtr) {
             *(uint32_t*)((char*)pEvictNode->pAssociatedTilePtr + (int)pEvictNode->nTileSlotIndex * 8) = 0;
             *(uint32_t*)((char*)pEvictNode->pAssociatedTilePtr + ((int)pEvictNode->nTileSlotIndex * 8 + 4)) = 0;

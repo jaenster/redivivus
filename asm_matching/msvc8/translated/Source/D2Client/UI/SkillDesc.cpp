@@ -2495,13 +2495,13 @@ uint16_t __fastcall SKILLDESC_GetStatNameString(int32_t nSkillId, int32_t nStatO
 }
 
 static int16_t GetSkillLongDescription(eD2Skills eSkill) {
+    D2SkillDescTxt* pSkillDescTxt = nullptr;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!pSkillsTxt) {
-      return 0x1506;
+    if (pSkillsTxt) {
+      int nSkillDescId = (int)pSkillsTxt->skilldesc;
+      pSkillDescTxt = nSkillDescId >= 0 && nSkillDescId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nSkillDescId : nullptr;
     }
 
-    int nSkillDescId = (int)pSkillsTxt->skilldesc;
-    D2SkillDescTxt* pSkillDescTxt = nSkillDescId >= 0 && nSkillDescId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nSkillDescId : nullptr;
     if (!pSkillDescTxt) {
       return 0x1506;
     }
@@ -2510,13 +2510,13 @@ static int16_t GetSkillLongDescription(eD2Skills eSkill) {
 }
 
 static int16_t GetAltSkillDescription(eD2Skills eSkillId) {
+    D2SkillDescTxt* pSkillDescTxt = nullptr;
     D2SkillsTxt* pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
-    if (!pSkillsTxt) {
-      return 0x1506;
+    if (pSkillsTxt) {
+      int nSkillDescId = (int)pSkillsTxt->skilldesc;
+      pSkillDescTxt = nSkillDescId >= 0 && nSkillDescId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nSkillDescId : nullptr;
     }
 
-    int nSkillDescId = (int)pSkillsTxt->skilldesc;
-    D2SkillDescTxt* pSkillDescTxt = nSkillDescId >= 0 && nSkillDescId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nSkillDescId : nullptr;
     if (!pSkillDescTxt) {
       return 0x1506;
     }
@@ -4963,7 +4963,6 @@ void __fastcall SKILLDESC_DrawSkillDmgRanged(D2UnitStrc * pUnit, D2SkillStrc * p
     uint16_t wszPhysDmgW[32];
     uint16_t wszElemDmgW[32];
     char szDmgTextA[32];
-    char* szFmtStr;
     if (!pSkill) {
       return;
     }
@@ -4986,12 +4985,6 @@ void __fastcall SKILLDESC_DrawSkillDmgRanged(D2UnitStrc * pUnit, D2SkillStrc * p
     int32_t nElemColorIdx;
     nElemColorIdx = 0;
     SKILLDESC_CalcSkillElemDamage(pUnit, &nElemMinDmg, &nElemMaxDmg, &nElemColorIdx, pSkillsTxt, nSkillLevel);
-    int nPhysMaxCopy;
-    nPhysMaxCopy = nPhysMaxDmg;
-    int nElemMinCopy;
-    nElemMinCopy = nElemMinDmg;
-    int nPhysMinCopy;
-    nPhysMinCopy = nPhysMinDmg;
     if (!nPhysMinDmg && !nPhysMaxDmg) {
       SKILLDESC_DrawDamageNumbers(nElemMinDmg, nElemMaxDmg, nElemColorIdx, nXLeft, nY, nXRight);
       return;
@@ -5002,46 +4995,26 @@ void __fastcall SKILLDESC_DrawSkillDmgRanged(D2UnitStrc * pUnit, D2SkillStrc * p
     }
 
     Fog::File::CONTAINER_InitializeBuffer(wszPhysDmgW, 2, 0x20, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-    if (nPhysMinCopy == nPhysMaxCopy) {
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDmgTextA, "%d", nPhysMinCopy);
+    if (nPhysMinDmg == nPhysMaxDmg) {
+      wsprintfA(szDmgTextA, "%d", nPhysMinDmg);
+    } else if (nPhysMinDmg < 10000 && nPhysMaxDmg < 10000) {
+      wsprintfA(szDmgTextA, "%d-%d", nPhysMinDmg, nPhysMaxDmg);
+    } else if (nPhysMinDmg >= 10000) {
+      wsprintfA(szDmgTextA, "%s%dK-%dK", "", (nPhysMinDmg + 500) / 1000, (nPhysMaxDmg + 500) / 1000);
     } else {
-      if (nPhysMinCopy < 10000) {
-        if (nPhysMaxCopy < 10000) {
-          /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDmgTextA, "%d-%d", nPhysMinCopy, nPhysMaxCopy);
-          goto format_second_range;
-        }
-
-        szFmtStr = "%s%d-%dK";
-      } else {
-        nPhysMinCopy = (nPhysMinCopy + 500) / 1000;
-        szFmtStr = "%s%dK-%dK";
-      }
-
-      /* LPSTR param_1 for wsprintfA */ wsprintfA(szDmgTextA, szFmtStr, "", nPhysMinCopy, (nPhysMaxCopy + 500) / 1000);
+      wsprintfA(szDmgTextA, "%s%d-%dK", "", nPhysMinDmg, (nPhysMaxDmg + 500) / 1000);
     }
-
-    format_second_range:
     D2Lang::UTF8_ConvertToWideChar(wszPhysDmgW, szDmgTextA, 0x20);
     Fog::File::CONTAINER_InitializeBuffer(wszElemDmgW, 2, 0x20, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-    if (nElemMinCopy == nElemMaxDmg) {
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDmgTextA, "%d", nElemMinCopy);
+    if (nElemMinDmg == nElemMaxDmg) {
+      wsprintfA(szDmgTextA, "%d", nElemMinDmg);
+    } else if (nElemMinDmg < 10000 && nElemMaxDmg < 10000) {
+      wsprintfA(szDmgTextA, "%d-%d", nElemMinDmg, nElemMaxDmg);
+    } else if (nElemMinDmg >= 10000) {
+      wsprintfA(szDmgTextA, "%s%dK-%dK", "", (nElemMinDmg + 500) / 1000, (nElemMaxDmg + 500) / 1000);
     } else {
-      if (nElemMinCopy < 10000) {
-        if (nElemMaxDmg < 10000) {
-          /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDmgTextA, "%d-%d", nElemMinCopy, nElemMaxDmg);
-          goto draw_both_ranges;
-        }
-
-        /* LPCSTR param_2 for wsprintfA */ szFmtStr = "%s%d-%dK";
-        wsprintfA(szDmgTextA, "%s%d-%dK", "", nElemMinCopy, (nElemMaxDmg + 500) / 1000);
-      } else {
-        nElemMinCopy = (nElemMinCopy + 500) / 1000;
-        szFmtStr = "%s%dK-%dK";
-        wsprintfA(szDmgTextA, "%s%dK-%dK", "", nElemMinCopy, (nElemMaxDmg + 500) / 1000);
-      }
+      wsprintfA(szDmgTextA, "%s%d-%dK", "", nElemMinDmg, (nElemMaxDmg + 500) / 1000);
     }
-
-    draw_both_ranges:
     D2Lang::UTF8_ConvertToWideChar(wszElemDmgW, szDmgTextA, 0x20);
     SKILLDESC_DrawTwoLineText(wszPhysDmgW, wszElemDmgW, nXLeft, nY, nXRight, nPhysColorIdx, nElemColorIdx);
 }
