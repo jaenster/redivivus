@@ -2691,10 +2691,10 @@ BOOL __fastcall InteractWithObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint
     return pResultFlags;
 }
 
-void __fastcall OBJECT_UpdateCollisionOnModeChange(::SGAMEDATA * pThis, int, DWORD nGid) {
+void __fastcall OBJECT_UpdateCollisionOnModeChange(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, DWORD nGid) {
     eCollisionFlags wCollisionResult;
     POINT ptPos;
-    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pThis, UNIT_OBJECT, nGid);
+    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, nGid);
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd37);
       exit(-1);

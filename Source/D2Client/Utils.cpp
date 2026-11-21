@@ -11,7 +11,7 @@
 
 namespace D2Client::_Utils {
 
-void __stdcall UTILS_OnUnitModeChange_NoOp() {
+void __fastcall UTILS_OnUnitModeChange_NoOp(D2UnitStrc * pUnit) {
 
 }
 

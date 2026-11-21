@@ -766,7 +766,6 @@ static bool UNICODE_CheckLeadingPunctuation(char * pszTable, uint16_t * wszText)
 
 void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wszText2, uint16_t * wszSuffix, int32_t nMaxChars, int32_t nLang) {
     // Static local variables (originally global data)
-    static int gnUIMinWidth = 0x7a73; D2_STATIC_GUARD(gnUIMinWidth, "D2Lang::Unicode::UNISYS::UNICODE_FormatPossessiveName::gnUIMinWidth");
 
     char* pszSuffix;
     int nCharIdx;
@@ -887,7 +886,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
         break;
         case 2:
           STRING_CopyWideString(wszText1, wszText2);
-        bIsPunct = UNICODE_CheckLeadingPunctuation((char*)&gnUIMinWidth, wszText2);
+        bIsPunct = UNICODE_CheckLeadingPunctuation("sz", wszText2);
         if (bIsPunct) {
           szSuffix[0] = '\'';
           szSuffix[1] = ' ';

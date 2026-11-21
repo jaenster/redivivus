@@ -127,7 +127,7 @@ char * __fastcall GetPortalOwnerName(int32_t nPortalGUID);
 BOOL __fastcall CheckIfUnitHasPartiedRosters(struct D2UnitStrc * pUnit);
 struct D2PlayerListStrc * __fastcall GetPlayerList(int32_t nRosterGUID);
 void __fastcall SetRosterPartyId(int32_t nRosterGUID, uint16_t nPartyId);
-void __fastcall SetRosterInParty(int32_t nRosterGUID, bool bInParty);
+void __fastcall SetRosterInParty(int32_t nRosterGUID, uint8_t bInParty);
 void __fastcall ROSTER_SetPlayerHostileFlag(int32_t nUnitGUID, int32_t nRosterGUID, uint16_t nFlag);
 // @sourcefile .\GAME\Roster.cpp
 void __fastcall AllocRosterOther(int32_t nOwnerGUID, int32_t nRosterGUID);

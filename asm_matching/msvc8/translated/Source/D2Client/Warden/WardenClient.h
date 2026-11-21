@@ -157,7 +157,7 @@ BOOL __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t nSize)
 // @sourcefile .\WARDEN\WardenClient.cpp
 void __stdcall WARDEN_UnloadActiveModule();
 // @sourcefile .\WARDEN\WardenClient.cpp
-void __fastcall WARDEN_ActivatePendingModule(uint32_t dwModuleParam);
+void __fastcall WARDEN_ActivatePendingModule();
 void __fastcall WARDEN_HandleServerPacket(void * pPacket, uint32_t nPacketLen);
 void __fastcall WARDEN_Tick(uint32_t dwTickArg);
 // @sourcefile .\WARDEN\WardenClient.cpp

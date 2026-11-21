@@ -2082,7 +2082,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x88_Unused(D2ClientStrc * pClient, char * 
     SCMD_QueuePacketForClient(pClient, &sPacket.nPacketId, wDataLen + 0xb);
 }
 
-void __fastcall NET_D2GS_SERVER_Send_0x8B_PlayerRelationship(D2ClientStrc * pClient, uint32_t dwTargetArg, bool byTypeArg) {
+void __fastcall NET_D2GS_SERVER_Send_0x8B_PlayerRelationship(D2ClientStrc * pClient, uint32_t dwTargetArg, uint8_t byTypeArg) {
     D2GSPacketSrv0x8B byPacketId;
     byPacketId.nUnitGUID = dwTargetArg;
     byPacketId.nPacketId = 0x8b;

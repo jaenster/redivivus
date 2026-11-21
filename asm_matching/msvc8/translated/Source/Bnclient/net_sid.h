@@ -370,7 +370,7 @@ uint32_t __fastcall NET_SID_CLIENT_ExtractCDKeyNibble(uint32_t * pCdKeyData, uin
 void __fastcall NET_SID_CLIENT_SetCDKeyNibble(uint32_t * pCdKeyData, uint32_t nNibbleIndex, uint8_t nNibbleValue);
 int __fastcall Unreferenced_00522570(uint32_t * pBits, int nBitIndex);
 void __fastcall NET_SID_CLIENT_SetCDKeyBit(uint32_t * pCdKeyData, uint32_t nBitIndex, uint8_t nBitValue);
-void __fastcall NET_SID_CLIENT_BigNumMultiplyAccumulate(int32_t nWords, uint32_t multiplier, uint32_t * pSrc, uint32_t * pDst, uint32_t carryIn);
+uint32_t __fastcall NET_SID_CLIENT_BigNumMultiplyAccumulate(int32_t nWords, uint32_t multiplier, uint32_t * pSrc, uint32_t * pDst, uint32_t carryIn);
 void __fastcall NET_SID_CLIENT_ExpandCdKeyToBase5(char * pCdKeyString, uint8_t * pOutBase5);
 void __stdcall NET_SID_CLIENT_SubstitutionBoxShuffle(uint32_t * pToken);
 void __fastcall NET_SID_CLIENT_TransformCdKeyToken(char * nCdKeyValue, uint32_t * pOutPublic, uint32_t * pOutProduct, uint16_t * pOutHash);

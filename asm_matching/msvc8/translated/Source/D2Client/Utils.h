@@ -22,7 +22,7 @@ namespace D2Client { namespace _Utils {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-void __stdcall UTILS_OnUnitModeChange_NoOp();
+void __fastcall UTILS_OnUnitModeChange_NoOp(struct D2UnitStrc * pUnit);
 void __stdcall UTILS_OnUnitModeChange_NoOp_Unref_004e4030();
 void __fastcall ANIM_OnSkillCastStub(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
 float __stdcall UTILS_SqrtFloat(float fInput);

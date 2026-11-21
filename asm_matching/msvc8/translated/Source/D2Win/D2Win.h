@@ -518,7 +518,7 @@ BOOL __stdcall FORMS_SetGlobalFormImage(struct D2ControlStrc * pControl, int32_t
 eD2FormType __stdcall CONTROL_GetType(struct D2ControlStrc * pControl);
 BOOL __stdcall D2GFX_PreSetupBeforeCreatingWindow(HINSTANCE hInstance, eD2RendererMode eRenderedMode, BOOL bWindowed, BOOL bDontUseCompression);
 BOOL __stdcall FreeInGameGFX();
-void __stdcall MessagePump(pfnFramePump pfnFrameCallback);
+BOOL __stdcall MessagePump(pfnFramePump pfnFrameCallback);
 // @sourcefile .\Src\D2WinMain.cpp
 void __stdcall TakeScreenshot();
 }}} // namespace D2Win::Src::D2WinMain

@@ -335,30 +335,31 @@ BOOL __fastcall FORMS_AppendFormToDestroyQueue(D2ControlStrc * pControl) {
 }
 
 // @sourcefile .\Src\D2WinMain.cpp
-void __stdcall D2WINMAIN_FreeLeadingFormControls() {
-    D2ControlStrc* pDVar1;
-    if (!(D2WinButton::gnFormControlCount <= 0 && pFormUnknown)) {
-      return;
-    }
-
-    while (!(pFormUnknown->dwState & Fog::BitBuffer::gadwBitMasks[0])) {
-      pDVar1 = pFormUnknown->pNext;
-      D2_FREE_AT(pFormUnknown, ".\\Src\\D2WinMain.cpp", 0x25a);
-      pFormUnknown = pDVar1;
-      if (!pDVar1) {
-        return;
-      }
-    }
-
-    do {
-      if (pFormUnknown->dwState & Fog::BitBuffer::gadwBitMasks[1]) {
-        return;
+BOOL __stdcall D2WINMAIN_FreeLeadingFormControls()
+{
+    D2ControlStrc* pNext;
+    if (D2WinButton::gnFormControlCount <= 0 && pFormUnknown) {
+      while (!(pFormUnknown->dwState & Fog::BitBuffer::gadwBitMasks[0])) {
+        pNext = pFormUnknown->pNext;
+        D2_FREE_AT(pFormUnknown, ".\\Src\\D2WinMain.cpp", 0x25a);
+        pFormUnknown = pNext;
+        if (!pNext) {
+          return 1;
+        }
       }
 
-      pDVar1 = pFormUnknown->pNext;
-      D2_FREE_AT(pFormUnknown, ".\\Src\\D2WinMain.cpp", 0x263);
-      pFormUnknown = pDVar1;
-    } while (pDVar1);
+      do {
+        if (pFormUnknown->dwState & Fog::BitBuffer::gadwBitMasks[1]) {
+          break;
+        }
+
+        pNext = pFormUnknown->pNext;
+        D2_FREE_AT(pFormUnknown, ".\\Src\\D2WinMain.cpp", 0x263);
+        pFormUnknown = pNext;
+      } while (pNext);
+    }
+
+    return 1;
 }
 
 BOOL __stdcall FORMS_DestroyControl(D2ControlStrc * pControl) {
@@ -1286,7 +1287,8 @@ BOOL __stdcall FreeInGameGFX() {
     return 1;
 }
 
-void __stdcall MessagePump(pfnFramePump pfnFrameCallback) {
+BOOL __stdcall MessagePump(pfnFramePump pfnFrameCallback)
+{
     DWORD TickCountA;
     uint32_t dwSleepMs;
     tagMSG windowMsg;
@@ -1342,11 +1344,10 @@ void __stdcall MessagePump(pfnFramePump pfnFrameCallback) {
     }
 
     RENDERER_DrawOutOfGameScene();
-    if (ghwndMsgHook) {
-      return;
+    if (!ghwndMsgHook) {
+      gbMessageLoopActive = 1;
     }
-
-    gbMessageLoopActive = 1;
+    return 0;
 }
 
 void __stdcall MOUSE_CaptureMousePosition(D2UIMouseMsgStrc * phWnd) {

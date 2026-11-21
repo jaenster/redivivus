@@ -352,7 +352,7 @@ bool __fastcall CrashDumpWriterThread(LPCSTR szDumpPath, char * szComment, struc
 bool __stdcall DEBUG_GetDbgHelpModuleRange(LPVOID * ppBaseOfDll, DWORD * pdwSizeOfImage);
 void __stdcall CleanupDebugSymbols();
 uint32_t * __fastcall ZeroStruct36Bytes(uint32_t * pStruct);
-void __fastcall SKILLSTXT_ZeroOutFields(struct D2SkillsTxt * pSkillsTxt);
+struct D2SkillsTxt * __fastcall SKILLSTXT_ZeroOutFields(struct D2SkillsTxt * pSkillsTxt);
 int CompareUintDescending(LPCVOID pLeft, LPCVOID pRight);
 bool __fastcall Unreferenced_00402c30(struct D2FogDebugModuleEntryStrc * pSrcEntry, struct D2FogDebugModuleTableStrc * pTable);
 void __fastcall FormatAddressDebugString(struct D2CrashFrameStrc * pAddrInfo, char * pSymInfo, char * szOutput);

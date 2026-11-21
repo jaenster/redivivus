@@ -956,41 +956,9 @@ static void __stdcall ZeroStruct16BytesDuplicate(void * pStruct) {
     *(uint32_t*)((char*)pStruct + 0xc) = 0;
 }
 
-void __fastcall SKILLSTXT_ZeroOutFields(D2SkillsTxt * pSkillsTxt) {
+D2SkillsTxt * __fastcall SKILLSTXT_ZeroOutFields(D2SkillsTxt * pSkillsTxt) {
     *(uint32_t*)pSkillsTxt = 0;
-    uint8_t* puVar1 = &pSkillsTxt->aFlagBytes[0];
-    pSkillsTxt->decquant = 0;
-    pSkillsTxt->interrupt = 0;
-    pSkillsTxt->leftskill = 0;
-    pSkillsTxt->ItemTgtDo = 0;
-    pSkillsTxt->AttackNoMana = 0;
-    pSkillsTxt->TargetItem = 0;
-    pSkillsTxt->TargetAlly = 0;
-    pSkillsTxt->TargetPet = 0;
-    pSkillsTxt->TargetCorpse = 0;
-    pSkillsTxt->SearchOpenXY = 0;
-    pSkillsTxt->SearchEnemyNear = 0;
-    pSkillsTxt->SearchEnemyXY = 0;
-    pSkillsTxt->TargetableOnly = 0;
-    pSkillsTxt->UseAttackRate = 0;
-    pSkillsTxt->durability = 0;
-    pSkillsTxt->enhanceable = 0;
-    pSkillsTxt->noammo = 0;
-    pSkillsTxt->immediate = 0;
-    pSkillsTxt->weaponsnd = 0;
-    pSkillsTxt->stsounddelay = 0;
-    pSkillsTxt->stsuccessonly = 0;
-    pSkillsTxt->repeat = 0;
-    pSkillsTxt->InGame = 0;
-    pSkillsTxt->Kick = 0;
-    pSkillsTxt->InTown = 0;
-    pSkillsTxt->prgstack = 0;
-    pSkillsTxt->periodic = 0;
-    pSkillsTxt->aura = 0;
-    pSkillsTxt->passive = 0;
-    pSkillsTxt->finishing = 0;
-    pSkillsTxt->progressive = 0;
-    pSkillsTxt->lob = 0;
+    *(uint32_t*)pSkillsTxt->aFlagBytes = 0;
     pSkillsTxt->EMaxLev[3] = 0;
     pSkillsTxt->EMaxLev[4] = 0;
     *(uint16_t*)&pSkillsTxt->EDmgSymPerCalc = 0;
@@ -1002,6 +970,7 @@ void __fastcall SKILLSTXT_ZeroOutFields(D2SkillsTxt * pSkillsTxt) {
     pSkillsTxt->ELenSymPerCalc = 0;
     pSkillsTxt->aFlagBytes[4] = 0;
     *(uint8_t*)&pSkillsTxt->tgtoverlay = 0;
+    return pSkillsTxt;
 }
 
 int CompareUintDescending(LPCVOID pLeft, LPCVOID pRight) {

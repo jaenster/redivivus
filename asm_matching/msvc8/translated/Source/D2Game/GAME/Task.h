@@ -100,7 +100,7 @@ BOOL __fastcall TASK_EnqueueGameTask(struct D2TaskNodeStrc * pTaskNode, uint32_t
 // Tail fragment that leaves the critical section for the specified task slot index.
 int32_t __fastcall TASK_DequeueReadyTask(uint32_t nSlotToken, struct D2TaskNodeStrc * * ppTaskOut);
 void __fastcall TASK_Dispatch(uint32_t nParam, struct D2TaskNodeStrc * pTaskNode);
-BOOL __stdcall TASK_ReturnTrue();
+BOOL __fastcall TASK_ReturnTrue(struct D2UnitStrc * pItem);
 // Registers: pItem (ECX) is passed by the callers but not read.
 void __fastcall TASK_Nop(struct D2UnitStrc * pItem);
 void StaticInit_CriticalSection_0088caa8();

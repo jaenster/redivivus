@@ -418,7 +418,7 @@ void QSERVER_LOG(char * szModul, char * szFormatString, ...);
 void __stdcall _unused_SetupDefaultValues(int * pnQServerSettings);
 void __stdcall StartListening(struct D2QServerStrc * pQServer, uint32_t nToken);
 // @sourcefile .\Src\QServer\QServer.cpp
-bool __stdcall ClearModePacketQueues(struct D2QServerStrc * pQServer);
+BOOL __stdcall ClearModePacketQueues(struct D2QServerStrc * pQServer);
 uint32_t __stdcall IsSingleplayer(struct D2QServerStrc * pQServer);
 struct FogCritSectLockStrc * __thiscall EnterCriticalSection_QServer(struct FogCritSectLockStrc * pQServer, LPCRITICAL_SECTION pCriticalSection);
 // Leaves the critical section a QServer frame local holds: LeaveCriticalSection(*ppCriticalSection). ECX = &local,

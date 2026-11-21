@@ -1935,8 +1935,7 @@ struct __attribute__((packed)) D2QuestDataA4Q2Strc {
 #ifndef D2_DEFINED_D2QuestDataA4Q3Strc
 #define D2_DEFINED_D2QuestDataA4Q3Strc
 struct D2QuestDataA4Q3Strc {
-    /* 0x00 */ uint8_t nForgeStage; // Hellforge object stage: 0 untouched, 2 when the soulstone is placed, 3 when the 3rd hammer strike smashes it (OBJOP_A4Q3_HellforgeSmash 0x005b5c10)
-    /* 0x01 */ uint8_t byForgeStageHigh; // reserved
+    /* 0x00 */ uint16_t nForgeStage; // Hellforge object stage: 0 untouched, 2 when the soulstone is placed, 3 when the 3rd hammer strike smashes it (OBJOP_A4Q3_HellforgeSmash 0x005b5c10)
     /* 0x02 */ uint8_t bForgeQuestAccepted; // Cain talked - quest accepted
     /* 0x03 */ uint8_t bDropActive; // Forge rune drop sequence active
     /* 0x04 */ uint8_t bSetupUpdateFlag; // Unit setup update flag set

@@ -459,7 +459,7 @@ void __fastcall UNITMODE_ShowElementalHitOverlay(D2UnitStrc * pUnit, int32_t nAn
 }
 
 static BOOL __stdcall UNITMODE_SetModeAndLoadCof(int32_t nAnimMode, D2UnitStrc * pUnit) {
-    _Utils::UTILS_OnUnitModeChange_NoOp();
+    _Utils::UTILS_OnUnitModeChange_NoOp(pUnit);
     if (pUnit) {
       pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
     }
@@ -474,7 +474,7 @@ static BOOL __stdcall UNITMODE_SetModeAndLoadCof(int32_t nAnimMode, D2UnitStrc *
 }
 
 void __fastcall UNITMODE_SetAnimMode(D2UnitStrc * pUnit, eD2PlayerAnimMode nAnimMode) {
-    _Utils::UTILS_OnUnitModeChange_NoOp();
+    _Utils::UTILS_OnUnitModeChange_NoOp(pUnit);
     if (pUnit) {
       pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
     }
@@ -490,7 +490,7 @@ void __fastcall UNITMODE_SetAnimMode(D2UnitStrc * pUnit, eD2PlayerAnimMode nAnim
 }
 
 void __fastcall UNITMODE_SetAnimModeSilent(D2UnitStrc * pUnit, int32_t nAnimMode) {
-    _Utils::UTILS_OnUnitModeChange_NoOp();
+    _Utils::UTILS_OnUnitModeChange_NoOp(pUnit);
     if (pUnit) {
       pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
     }

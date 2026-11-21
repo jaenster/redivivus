@@ -189,7 +189,7 @@ typedef char * (__fastcall *fnSendQueryAdURL)(uint32_t dwParam);
 #endif
 #ifndef RECON_FPTD_fnSendQueryRealms2
 #define RECON_FPTD_fnSendQueryRealms2
-typedef void * (__stdcall *fnSendQueryRealms2)();
+typedef void * (__fastcall *fnSendQueryRealms2)(int);
 #endif
 #ifndef RECON_FPTD_fnSendReadUserData
 #define RECON_FPTD_fnSendReadUserData
@@ -255,8 +255,8 @@ struct D2BNetClientCallbacksStrc {
     /* 0x30 */ int (__stdcall *pfnSendCheckAd)();
     /* 0x34 */ BOOL (__fastcall *pfnSendStartAdvEx3)(char *, char *, char *, int);
     /* 0x38 */ void * (__fastcall *pfnSendGetAdvListEx)(char *, char *, uint32_t, uint32_t);
-    /* 0x3C */ void (__fastcall *pfnSendNotifyJoin)(char *, char *);
-    /* 0x40 */ void * (__stdcall *pfnSendQueryRealms2)();
+    /* 0x3C */ BOOL (__fastcall *pfnSendNotifyJoin)(char *, char *);
+    /* 0x40 */ void * (__fastcall *pfnSendQueryRealms2)(int);
     /* 0x44 */ void * (__fastcall *pfnSendLogonRealmEx)(char *, char *);
     /* 0x48 */ int (__fastcall *pfnApplyPrepatch)(int *);
     /* 0x4C */ int (__stdcall *pfnGetDownloadProgress)();

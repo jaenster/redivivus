@@ -1095,9 +1095,11 @@ void __fastcall UnitQueuePacket0xA5(D2UnitStrc * pUnit, uint16_t wSkillId) {
 }
 
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall SERVER_UnitQueuePacket0xA4(D2UnitStrc * pUnit, int16_t nClassId) {
-    D2PoolManagerStrc* pMemory = 0;
-    if (pUnit) {
+void __fastcall SERVER_UnitQueuePacket0xA4(D2UnitStrc * pUnit, int32_t nClassId) {
+    D2PoolManagerStrc* pMemory;
+    if (!pUnit) {
+      pMemory = 0;
+    } else {
       pMemory = pUnit->pMemory;
     }
 

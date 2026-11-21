@@ -7482,19 +7482,14 @@ void __stdcall MAINMENU_QueryAndBuildRealmList() {
     // Static local variables (originally global data)
     static uint8_t * gpRealmQueryResultBuffer; D2_STATIC_GUARD_BSS(gpRealmQueryResultBuffer, "D2Launch::MainMenus::MAINMENU_QueryAndBuildRealmList::gpRealmQueryResultBuffer");
 
-    D2BNetRealmEntryStrc** pRealmArray;
     D2BNetRealmEntryStrc* pRealmEntry;
-    uint8_t* pszDescDst;
     char* pcVar1;
     uint8_t* pszSrc;
-    uint8_t* pszNameSrc;
-    int nRemaining;
-    uint8_t chScan;
     size_t nAllocSize;
     UIMENU_PleaseWaitWithCancelButton();
     D2Win::Src::D2WinMain::MessagePump(MAINMENU_ClearLoopFlagPump);
     if (Launcher::gpBNetCallbacks) {
-      gpRealmQueryResultBuffer = (uint8_t*)Launcher::gpBNetCallbacks->pfnSendQueryRealms2();
+      gpRealmQueryResultBuffer = (uint8_t*)Launcher::gpBNetCallbacks->pfnSendQueryRealms2(0);
     }
 
     FORMS_DestroyList();
@@ -7511,40 +7506,33 @@ void __stdcall MAINMENU_QueryAndBuildRealmList() {
 
     pszSrc = gpRealmQueryResultBuffer + 8;
     MAINMENU_FreeRealmList();
-    if (!gnRealmListCount) {
+    int nCount = gnRealmListCount;
+    if (!nCount) {
       return;
     }
 
-    nRemaining = gnRealmListCount;
-    nAllocSize = gnRealmListCount * 4;
-    pRealmArray = (D2BNetRealmEntryStrc**)D2_ALLOC_AT(nAllocSize, ".\\Src\\MainMenus.cpp", 0x118c);
-    g_pBNetRealmList = pRealmArray;
-    memset(pRealmArray, 0, nAllocSize);
-    if (nRemaining > 0) {
-      do {
+    nAllocSize = nCount * 4;
+    g_pBNetRealmList = (D2BNetRealmEntryStrc**)D2_ALLOC_AT(nAllocSize, ".\\Src\\MainMenus.cpp", 0x118c);
+    memset(g_pBNetRealmList, 0, nAllocSize);
+    for (int i = 0; i < nCount; i++) {
+      {
         pRealmEntry = D2_NEW_AT(D2BNetRealmEntryStrc, ".\\Src\\MainMenus.cpp", 0x1192);
-        pszNameSrc = pszSrc + 4;
-        pszDescDst = pszNameSrc;
-        pszDescDst = pszDescDst + strlen((char*)pszDescDst) + 1;
-        pszDescDst += 1 - (intptr_t)(pszSrc + 5);
-        pcVar1 = (char*)D2_ALLOC_AT((size_t)pszDescDst, ".\\Src\\MainMenus.cpp", 0x119f);
+        pszSrc += 4;
+        size_t nNameLen = strlen((char*)pszSrc) + 1;
+        pcVar1 = (char*)D2_ALLOC_AT(nNameLen, ".\\Src\\MainMenus.cpp", 0x119f);
         pRealmEntry->szName = pcVar1;
-        Storm::Source::SSTR::SStrCopy(pcVar1, (char*)pszNameSrc, (int32_t)pszDescDst);
-        pszNameSrc += (intptr_t)pszDescDst;
-        pszSrc = pszNameSrc;
-        pszSrc = pszSrc + strlen((char*)pszSrc) + 1;
-        pszSrc += 1 - (intptr_t)(pszNameSrc + 1);
-        pcVar1 = (char*)D2_ALLOC_AT((size_t)pszSrc, ".\\Src\\MainMenus.cpp", 0x11a4);
+        Storm::Source::SSTR::SStrCopy(pcVar1, (char*)pszSrc, (int32_t)nNameLen);
+        pszSrc += nNameLen;
+        size_t nDescLen = strlen((char*)pszSrc) + 1;
+        pcVar1 = (char*)D2_ALLOC_AT(nDescLen, ".\\Src\\MainMenus.cpp", 0x11a4);
         pRealmEntry->szDescription = pcVar1;
-        Storm::Source::SSTR::SStrCopy(pcVar1, (char*)pszNameSrc, (int32_t)pszSrc);
-        pszSrc = pszNameSrc + (intptr_t)pszSrc;
+        Storm::Source::SSTR::SStrCopy(pcVar1, (char*)pszSrc, (int32_t)nDescLen);
+        pszSrc += nDescLen;
         MAINMENU_AddRealmToList(pRealmEntry);
-        nRemaining--;
-        pRealmArray = g_pBNetRealmList;
-      } while (nRemaining);
+      }
     }
 
-    qsort(pRealmArray, gnRealmListCount, 4, MAINMENU_CompareRealmNames);
+    qsort(g_pBNetRealmList, gnRealmListCount, 4, MAINMENU_CompareRealmNames);
     return;
 }
 

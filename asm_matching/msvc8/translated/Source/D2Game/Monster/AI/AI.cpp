@@ -15122,7 +15122,7 @@ void __fastcall AI_Fn1_BaalThrone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
             return;
           }
 
-          UNIT::SUnitMsg::SERVER_UnitQueuePacket0xA4(pUnit, (int16_t)nWaveMonClassId);
+          UNIT::SUnitMsg::SERVER_UnitQueuePacket0xA4(pUnit, nWaveMonClassId);
           switch (nWaveMonClassId) {
             case 62:
               {

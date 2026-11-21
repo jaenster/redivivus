@@ -567,7 +567,7 @@ typedef void * (__fastcall *fnSendGetAdvListEx)(char * szName, char * szPass, ui
 typedef void * (__fastcall *fnSendLogonRealmEx)(char * szRealm, char * szPass);
 typedef void * (__stdcall *fnBnetLoadAndReturn)();
 typedef void * (__stdcall *fnGetChannelNamePtr)();
-typedef void * (__stdcall *fnSendQueryRealms2)();
+typedef void * (__fastcall *fnSendQueryRealms2)(int);
 typedef void * (__stdcall *pfnSymFunctionTableAccess64)(HANDLE hProcess, DWORD AddrBaseLow, DWORD AddrBaseHigh);
 
 // Full type definitions (used by value in globals)

@@ -239,7 +239,7 @@ BOOL __fastcall BNCLIENT_GetEnterChatResponseFlags(uint32_t * pOutFlags);
 // @sourcefile .\BnSend.cpp
 void __stdcall BNSEND_FreeGameListData();
 void * __fastcall NET_SID_CLIENT_Send_0x09_GetAdvListEx(char * szText1, char * szText2, uint32_t dwParam1, uint32_t dwParam2);
-void __fastcall NET_SID_CLIENT_Send_0x22_NotifyJoin(char * szText1, char * szText2);
+BOOL __fastcall NET_SID_CLIENT_Send_0x22_NotifyJoin(char * szText1, char * szText2);
 // @sourcefile .\BnSend.cpp
 void __fastcall BNSEND_StoreUserProfileData(uint8_t * pbProfileData, size_t nDataSize);
 // SID_LOGONREALMEX (0x3E) client request sender. Computes double-SHA1 password hash for realm logon. Packet format: (DWORD)ClientToken, (BYTE[20])PasswordHash, (STRING)RealmName. Hash computed as SHA1(SHA1(ClientToken, ServerToken, Password)). Sends request, waits for 0x3E response containing MCP server connection info. Increments gnBNetRealmClientToken client token counter.

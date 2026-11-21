@@ -204,7 +204,7 @@ DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DW
 BOOL __fastcall UI_CloseActivePanels(int32_t bForceAutomap, int32_t bAdjustMouse);
 void * __fastcall MoveArgumentToEAX_Unref_0045ba90(void * pParam);
 uint32_t __stdcall DRAW_IsCharScreenOkPressed();
-bool __stdcall UI_ShowPopupDialog();
+BOOL __stdcall UI_ShowPopupDialog();
 void __stdcall nullSub_CharonGameDraw_Unref_00463d70();
 void __stdcall nullSub_CharonGameDraw();
 void __stdcall UI_ToggleHelpScreen();

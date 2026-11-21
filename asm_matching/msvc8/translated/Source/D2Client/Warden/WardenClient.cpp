@@ -899,7 +899,7 @@ void __stdcall WARDEN_UnloadActiveModule() {
 }
 
 // @sourcefile .\WARDEN\WardenClient.cpp
-void __fastcall WARDEN_ActivatePendingModule(uint32_t dwModuleParam) {
+void __fastcall WARDEN_ActivatePendingModule() {
     // Static local variables (originally global data)
     static ::WardenClient gWardenClient = {
     /* ._vfptr = */ (WardenClientVtable*)&D2Client::Warden::vftable
@@ -907,7 +907,7 @@ void __fastcall WARDEN_ActivatePendingModule(uint32_t dwModuleParam) {
 
     D2WardenModuleObjectStrc* pVtable;
     D2WardenModuleStrc* pModule;
-    uint32_t initArg = dwModuleParam;
+    uint32_t initArg;
     while (gpWardenPendingModule) {
       D2WardenModuleStrc* pDVar1;
       if (gpWardenActiveModule) {
@@ -931,24 +931,22 @@ void __fastcall WARDEN_ActivatePendingModule(uint32_t dwModuleParam) {
 }
 
 void __fastcall WARDEN_HandleServerPacket(void * pPacket, uint32_t nPacketLen) {
-    uint32_t dwUnusedParam;
     if (!gpWardenActiveModule) {
       return;
     }
 
     uint32_t nResult = 0;
     vc8_thiscall(gpWardenActiveModule->pModuleObject->pFuncs->pfnHandlePacket)(gpWardenActiveModule->pModuleObject, pPacket, nPacketLen, &nResult);
-    WARDEN_ActivatePendingModule(dwUnusedParam);
+    WARDEN_ActivatePendingModule();
 }
 
 void __fastcall WARDEN_Tick(uint32_t dwTickArg) {
-    uint32_t dwUnusedParam = dwTickArg;
     if (!gpWardenActiveModule) {
       return;
     }
 
     vc8_thiscall(gpWardenActiveModule->pModuleObject->pFuncs->pfnTick)(gpWardenActiveModule->pModuleObject, dwTickArg);
-    WARDEN_ActivatePendingModule(dwUnusedParam);
+    WARDEN_ActivatePendingModule();
 }
 
 // @sourcefile .\WARDEN\WardenClient.cpp
@@ -977,7 +975,6 @@ void __stdcall WARDEN_Cleanup() {
 }
 
 void __fastcall WARDEN_Initialize(uint32_t dwModuleParam) {
-    uint32_t dwUnusedParam = dwModuleParam;
     WARDEN_Cleanup();
     gpWardenModuleParam = dwModuleParam;
     sgpUnknownSequence = Bnclient::NET_GetLobbyChatQueue();
@@ -986,7 +983,7 @@ void __fastcall WARDEN_Initialize(uint32_t dwModuleParam) {
     }
 
     WARDEN_ResolveAndLoadModule(gabWardenModuleRc4Key, gabWardenEmbeddedModuleHash);
-    WARDEN_ActivatePendingModule(dwUnusedParam);
+    WARDEN_ActivatePendingModule();
 }
 
 void __fastcall WARDEN_SetGlobalFlag(uint32_t dwParam) {

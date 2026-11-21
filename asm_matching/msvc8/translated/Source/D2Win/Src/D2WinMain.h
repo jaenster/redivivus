@@ -121,7 +121,7 @@ BOOL __stdcall FORMS_SetGlobalFormImage(struct D2ControlStrc * pControl, int32_t
 eD2FormType __stdcall CONTROL_GetType(struct D2ControlStrc * pControl);
 BOOL __stdcall D2GFX_PreSetupBeforeCreatingWindow(HINSTANCE hInstance, eD2RendererMode eRenderedMode, BOOL bWindowed, BOOL bDontUseCompression);
 BOOL __stdcall FreeInGameGFX();
-void __stdcall MessagePump(pfnFramePump pfnFrameCallback);
+BOOL __stdcall MessagePump(pfnFramePump pfnFrameCallback);
 // @sourcefile .\Src\D2WinMain.cpp
 void __stdcall TakeScreenshot();
 // Module-private: no other module references these
@@ -131,7 +131,7 @@ BOOL __stdcall D2WINMAIN_ClearCurrentRenderedFunctions();
 BOOL __stdcall FORMS_AddControlToGlobalList(struct D2ControlStrc * pControl);
 BOOL __fastcall FORMS_AppendFormToDestroyQueue(struct D2ControlStrc * pControl);
 // @sourcefile .\Src\D2WinMain.cpp
-void __stdcall D2WINMAIN_FreeLeadingFormControls();
+BOOL __stdcall D2WINMAIN_FreeLeadingFormControls();
 BOOL __stdcall FORMS_DestroyControl(struct D2ControlStrc * pControl);
 // Returns pControl->dwState & gadwBitMasks[2], the active bit D2WINMAIN_SetControlActive sets; halts (line 858) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.

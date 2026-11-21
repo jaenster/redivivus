@@ -5977,13 +5977,13 @@ static int __stdcall SKILLDESC_DescLine42_CalcByIndex(int32_t nCalcResult, uint1
     return nInitLoop;
 }
 
-static void __stdcall SKILLDESC_DescLine27_SkillElemCalc(D2UnitStrc * pUnit, uint16_t * pOutText, eD2Skills eSkill, int32_t nCalcInputA, D2SkillsTxt * pSkillsTxt) {
+static BOOL __stdcall SKILLDESC_DescLine27_SkillElemCalc(D2UnitStrc * pUnit, uint16_t * pOutText, eD2Skills eSkill, int32_t nCalcInputA, D2SkillsTxt * pSkillsTxt) {
     int32_t nCalcValue;
     D2MonStatsInitStrc sMonStats;
     int nMonStatIdx = (int)pSkillsTxt->summon;
     D2MonStatsTxt* pMonStatsTxt = nMonStatIdx >= 0 && nMonStatIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr;
     if (!pMonStatsTxt) {
-      return;
+      return 0;
     }
 
     memset(&sMonStats, 0, 0x38);
@@ -6073,6 +6073,7 @@ static void __stdcall SKILLDESC_DescLine27_SkillElemCalc(D2UnitStrc * pUnit, uin
     }
 
     DamgeTypeToText(0, 0x10a0, nMinDmgFinal, nMaxDmgFinal, pOutText);
+    return 1;
 }
 
 void __stdcall SKILLDESC_DescLine29_FormatMonster(uint16_t * wszText, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nMaxDmgBonus) {

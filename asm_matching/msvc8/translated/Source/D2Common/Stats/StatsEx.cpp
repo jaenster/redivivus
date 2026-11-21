@@ -2533,7 +2533,7 @@ int32_t __stdcall UNITS_CalcCombinedStatValue(D2UnitStrc * pUnit, eD2UnitStat eU
 }
 
 // Activates an item's stat contributions on pUnit. If the item's StatsEx is attached to pUnit and currently inactive (NOCALCBONUS flag set), clears the flag and propagates all damage-related stats upward. Otherwise delegates to STATLIST_SetItemStatActive. Returns 1 on success, 0 if already active or not attached.
-void __stdcall STATLIST_ActivateItemStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
+BOOL __stdcall STATLIST_ActivateItemStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     int nShiftedStat;
     D2StatInfoStrc* pEffectiveStats;
     D2ItemStatCostTxt* pStatCostTxt;
@@ -2541,15 +2541,16 @@ void __stdcall STATLIST_ActivateItemStats(D2UnitStrc * pUnit, D2UnitStrc * pItem
     uint32_t nFlags;
     D2StatListExStrc* pStatsEx;
     if (!(pUnit && pItem)) {
-      return;
+      return 0;
     }
 
     D2StatListExStrc* pItemStatsEx = pItem->pStatsEx;
     if (!pItemStatsEx) {
-      return;
+      return 0;
     }
     if (pItemStatsEx->sStatList.pUnitAttached != pUnit) {
       STATLIST_SetItemStatActive(pUnit, pItem, 1);
+      return 0;
     } else {
       D2StatStrc* pDVar1;
       pStatsEx = pUnit->pStatsEx;
@@ -2568,10 +2569,12 @@ void __stdcall STATLIST_ActivateItemStats(D2UnitStrc * pUnit, D2UnitStrc * pItem
             }
           }
 
-          return;
+          return 1;
         }
       }
     }
+
+    return 0;
 }
 
 void __stdcall STATLIST_SetItemStatActive(D2UnitStrc * pUnit, D2UnitStrc * pItem, int32_t bActive) {
@@ -2641,7 +2644,7 @@ BOOL __stdcall STATLIST_ToggleStateDisabled(D2UnitStrc * pUnit, eD2States eState
 }
 
 // Deactivates an item's stat contributions on pUnit. If the item's StatsEx is attached to pUnit and currently active (NOCALCBONUS flag clear), sets the flag and propagates all damage-related stats with negated deltas to remove their effect. Otherwise delegates to STATLIST_SetItemStatActive(0). Returns 1 on success, 0 if already inactive or not attached.
-void __stdcall STATLIST_DeactivateItemStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
+BOOL __stdcall STATLIST_DeactivateItemStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     int nShiftedStat;
     D2StatInfoStrc* pEffectiveStats;
     D2ItemStatCostTxt* pStatCostTxt;
@@ -2649,15 +2652,16 @@ void __stdcall STATLIST_DeactivateItemStats(D2UnitStrc * pUnit, D2UnitStrc * pIt
     uint32_t nFlags;
     D2StatListExStrc* pStatsEx;
     if (!(pUnit && pItem)) {
-      return;
+      return 0;
     }
 
     D2StatListExStrc* pItemStatsEx = pItem->pStatsEx;
     if (!pItemStatsEx) {
-      return;
+      return 0;
     }
     if (pItemStatsEx->sStatList.pUnitAttached != pUnit) {
       STATLIST_SetItemStatActive(pUnit, pItem, 0);
+      return 0;
     } else {
       D2StatStrc* pDVar1;
       pStatsEx = pUnit->pStatsEx;
@@ -2676,10 +2680,12 @@ void __stdcall STATLIST_DeactivateItemStats(D2UnitStrc * pUnit, D2UnitStrc * pIt
             }
           }
 
-          return;
+          return 1;
         }
       }
     }
+
+    return 0;
 }
 
 BOOL __fastcall SKILLS_ValidateSkillDescIndex(int32_t nSkillId) {

@@ -608,23 +608,17 @@ void * __fastcall NET_SID_CLIENT_Send_0x09_GetAdvListEx(char * szText1, char * s
     return g_pBNetGameListData;
 }
 
-void __fastcall NET_SID_CLIENT_Send_0x22_NotifyJoin(char * szText1, char * szText2) {
-    // Frame slots -520..-8 are ONE object: &cGameNameFirst is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      char cGameNameFirst;
-      char aPacketBufMid[9];
-      char aPacketBufTail[502];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 512, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+BOOL __fastcall NET_SID_CLIENT_Send_0x22_NotifyJoin(char * szText1, char * szText2) {
+    char szData[512];
     int adwHeader[2];
     BOOL bIsExpansion = BnSend::D2CheckExpansionGame();
     adwHeader[0] = bIsExpansion ? 0x44325850 : 0x44324456;
     adwHeader[1] = 0xe;
-    uint32_t nGameNameLen = Storm::Source::SSTR::SStrCopy(&__frame0.cGameNameFirst, szText1, 0x100);
-    uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy(__frame0.aPacketBufMid + nGameNameLen, szText2, 0x100);
-    NET_SID_CLIENT_Send(0x22, (char*)adwHeader, (size_t)(__frame0.aPacketBufMid + nGameNameLen + (nPasswordLen + 9 - (intptr_t)&__frame0.cGameNameFirst)));
+    char* pCursor = szData;
+    pCursor += Storm::Source::SSTR::SStrCopy(pCursor, szText1, 0x100) + 1;
+    uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy(pCursor, szText2, 0x100);
+    NET_SID_CLIENT_Send(0x22, (char*)adwHeader, pCursor - szData + nPasswordLen + 9);
+    return 1;
 }
 
 // @sourcefile .\BnSend.cpp

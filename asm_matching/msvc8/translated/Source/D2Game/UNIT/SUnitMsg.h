@@ -195,7 +195,7 @@ void __fastcall SERVER_SendUnitMessagePacket(struct D2UnitStrc * pUnit, struct D
 // @sourcefile .\UNIT\SUnitMsg.cpp
 void __fastcall UnitQueuePacket0xA5(struct D2UnitStrc * pUnit, uint16_t wSkillId);
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall SERVER_UnitQueuePacket0xA4(struct D2UnitStrc * pUnit, int16_t nClassId);
+void __fastcall SERVER_UnitQueuePacket0xA4(struct D2UnitStrc * pUnit, int32_t nClassId);
 // @sourcefile .\UNIT\SUnitMsg.cpp
 void __fastcall SERVER_SendPacket0x23(struct D2UnitStrc * pMemory, int byTypeId, uint16_t wCoords, uint32_t dwData);
 // Drains a unit's outbound message queue and sends each pending packet to the given client. Iterates pUnit->pMsgFirst, dispatching on nPacketId: 0x23=SetSkill, 0x99=UnitCastSkill (targeted), 0x9A=UnitCastSkill (XY), 0x9E=MercAttribute, 0xA1=MercExperience, 0xA3=SkillAuraStat, 0xA4=BaalWaves, 0xA5=StateSkillMove, 0xAB=NpcHeal (only if attacker can legally attack the unit).

@@ -993,7 +993,7 @@ int __fastcall Unreferenced_00438f40(char * szName) {
     return 0;
 }
 
-void __stdcall CHARSEL_EnumerateLocalSaves() {
+BOOL __stdcall CHARSEL_EnumerateLocalSaves() {
     // Static local variables (originally global data)
     static int gnLocalSaveFileCount; D2_STATIC_GUARD_BSS(gnLocalSaveFileCount, "D2Launch::CharSel::CHARSEL_EnumerateLocalSaves::gnLocalSaveFileCount");
 
@@ -1012,29 +1012,21 @@ void __stdcall CHARSEL_EnumerateLocalSaves() {
     sprintf(szFindPattern, "%s*.d2s", szSavePath);
     HANDLE hFindFile = FindFirstFileA(szFindPattern, &findData);
     if (hFindFile == (HANDLE)-1) {
-      return;
+      return 1;
     }
 
     do {
-      pszNameDst = gszLocalSaveFilenameBuffer;
-      cNameChar = findData.cFileName[0];
-      while (cNameChar != '\0' && cNameChar != '.') {
-        *pszNameDst = cNameChar;
-        pszNameSrc = pszNameDst + ((uint8_t*)&findData + 45 - (uint8_t*)&gszLocalSaveFilenameBuffer);
-        pszNameDst++;
-        cNameChar = *pszNameSrc;
+      char* pDst = gszLocalSaveFilenameBuffer;
+      char* pSrc = findData.cFileName;
+      while (*pSrc != '\0' && *pSrc != '.') {
+        *pDst++ = *pSrc++;
       }
 
-      *pszNameDst = '\0';
-      pszNameDst = gszLocalSaveFilenameBuffer;
-      pszNameSrc = pszNameDst + strlen(pszNameDst);
-      pszNameDst = pszNameSrc + 1;
-      if ((char*)(pszNameSrc - ((char*)&gszLocalSaveFilenameBuffer + 2)) < (char*)0xe && pszNameSrc[-1] != '-' && gszLocalSaveFilenameBuffer[0] != '_') {
-        bLoadOk = Launcher::LAUNCHER_LoadCharacterAppearanceFromD2s(gszLocalSaveFilenameBuffer, abSaveData);
-        if (bLoadOk) {
-          ftLastWriteTime.dwHighDateTime = findData.ftLastWriteTime.dwHighDateTime;
-          ftLastWriteTime.dwLowDateTime = findData.ftLastWriteTime.dwLowDateTime;
-          SAVEFILE_ParseSaveData(nullptr, gszLocalSaveFilenameBuffer, (char*)abSaveData, 0, ftLastWriteTime);
+      *pDst = '\0';
+      uint32_t nLen = strlen(gszLocalSaveFilenameBuffer);
+      if (nLen - 2 <= 0xd && gszLocalSaveFilenameBuffer[nLen - 1] != '-' && gszLocalSaveFilenameBuffer[0] != '_') {
+        if (Launcher::LAUNCHER_LoadCharacterAppearanceFromD2s(gszLocalSaveFilenameBuffer, abSaveData)) {
+          SAVEFILE_ParseSaveData(nullptr, gszLocalSaveFilenameBuffer, (char*)abSaveData, 0, findData.ftLastWriteTime);
           gnLocalSaveFileCount++;
         }
       }
@@ -1043,6 +1035,7 @@ void __stdcall CHARSEL_EnumerateLocalSaves() {
     } while (bFindNext);
 
     /* HANDLE hFindFile for FindClose */ FindClose(hFindFile);
+    return 1;
 }
 
 int __stdcall CHARSEL_UpdateSelectionExpansion() {

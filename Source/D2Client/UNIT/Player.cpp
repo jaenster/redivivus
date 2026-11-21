@@ -1108,7 +1108,7 @@ static void __stdcall PLAYER_ExecuteModeBasedAction(int32_t nActionContext, D2Un
     }
 }
 
-static BOOL __stdcall CLIENT_MovePlayerToPosition(D2UnitStrc * pUnit, int16_t nX, int16_t nY, int32_t nSkillActionMode) {
+static BOOL __stdcall CLIENT_MovePlayerToPosition(D2UnitStrc * pUnit, int nX, int nY, int32_t nSkillActionMode) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, nX, nY);
     uint32_t bHasPath = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
@@ -1279,7 +1279,7 @@ static int PLAYER_ExecuteSkillWithAura(int32_t nTargetGUID, eD2UnitType eTargetU
         nDstX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget);
         nDstY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pTarget);
         nCurDist = (nDstY - nCurDist) * nStepsRemaining / nTotalDist + nCurDist;
-        CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, (short int)((nDstX - nSrcXPos) * nStepsRemaining / nTotalDist) + (short int)nSrcXPos, (int16_t)nCurDist, pUnderMouse->nMoveActionType);
+        CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, (nDstX - nSrcXPos) * nStepsRemaining / nTotalDist + nSrcXPos, nCurDist, pUnderMouse->nMoveActionType);
         return 1;
       }
     }
@@ -1455,7 +1455,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
               if (!bCollides) {
                 nTargetY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pTarget);
                 nTargetX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget);
-                CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, (int16_t)nTargetX, (int16_t)nTargetY, pUnderMouse->nMoveActionType);
+                CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, nTargetX, nTargetY, pUnderMouse->nMoveActionType);
                 if (bCanInteract) {
                   D2Common::Skills::StoreLastSkillHit(0x13, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
                   GAME::Game::GAME_SetMouseButtonEventPending();
@@ -1636,29 +1636,24 @@ static void INPUT_ContinuePlayerMovement(D2UnderMouseStrc * pMouse) {
       return;
     }
 
-    D2UnitStrc* pTargetUnit = CUnit::GetConfirmedTargetUnit(pUnit);
-    if (pTargetUnit) {
+    if (CUnit::GetConfirmedTargetUnit(pUnit)) {
       return;
     }
 
-    eD2PlayerAnimMode ePlayerMode = pUnit->eAnimMode.ePlayerMode;
-    switch (ePlayerMode) {
+    int nSkillActionMode;
+    switch (pUnit->eAnimMode.ePlayerMode) {
       case eD2PlayerAnimMode_ns::Run:
-        {
-          CLIENT_MovePlayerToPosition(pUnit, (int16_t)pMouse->nX, (int16_t)pMouse->nY, 3);
-          return;
-        }
-      default:
-        {
-          return;
-        }
+        nSkillActionMode = 3;
+        break;
       case Walk:
-        case TownWalk:
-          {
-            CLIENT_MovePlayerToPosition(pUnit, (int16_t)pMouse->nX, (int16_t)pMouse->nY, 1);
-            break;
-          }
+      case TownWalk:
+        nSkillActionMode = 1;
+        break;
+      default:
+        return;
     }
+
+    CLIENT_MovePlayerToPosition(pUnit, pMouse->nX, pMouse->nY, nSkillActionMode);
 }
 
 // Computes the effective movement target for a player unit given the current mouse context. Reads the player's current tile position (static or dynamic path), computes the X/Y delta to the mouse cursor, clamps the minimum step distance based on mouse context flags (e.g. run/walk/attack modifiers), and writes the adjusted target back into pMouseCtx. Returns 1 if the movement should be committed (delta large enough and run-frame throttle not exceeded), 0 otherwise.

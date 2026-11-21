@@ -4493,10 +4493,10 @@ void __fastcall ClearSkills(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // Applies STATE_stunned to a non-boss, non-special monster unit. Skips if already STATE_uninterruptable. Allocates a stat list expiring in 100 game frames, attaches STATE_stunned state, schedules a game event, then interrupts the monster's current AI by calling SetCurrentSkill(Neutral) and MONSTERAI_ExecuteLifecycleTransition. Extends existing stun timeout if a stun statlist is already present.
-void __fastcall SKILL_ApplyStunState(::SGAMEDATA * pThis, int, D2UnitStrc * pUnit, eD2States eState) {
+void __fastcall SKILL_ApplyStunState(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, D2UnitStrc * pUnit, eD2States eState) {
     int pExtendedExpiryFrame;
     D2ModeChangeStrc sMonsterKill;
-    ::SGAMEDATA* pGameSaved = pThis;
+    ::SGAMEDATA* pGameSaved = pGame;
     BOOL eExistingStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
     if (!(!eExistingStunState && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return;
@@ -4515,25 +4515,25 @@ void __fastcall SKILL_ApplyStunState(::SGAMEDATA * pThis, int, D2UnitStrc * pUni
     D2StatListExStrc* pStatListEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
     if (!pStatListEx) {
       uint32_t dwStunExpireFrame;
-      dwStunExpireFrame = pThis->dwGameFrame + 100;
-      pStatListEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pThis->pMemoryPool, 2, dwStunExpireFrame, GetTypeInline(pUnit), GetGUIDInline(pUnit));
-      pThis = pGameSaved;
+      dwStunExpireFrame = pGame->dwGameFrame + 100;
+      pStatListEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, dwStunExpireFrame, GetTypeInline(pUnit), GetGUIDInline(pUnit));
+      pGame = pGameSaved;
       if (pStatListEx) {
         GAME::Event::SetEvent(pGameSaved, pUnit, 0xc, dwStunExpireFrame, 0, 0);
         D2Common::Stats::StatsEx::SetState(pStatListEx, STATE_stunned);
         D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStatListEx, DefaultExpireFunction);
         D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatListEx, 1);
         D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_stunned, 1);
-        pThis = pGameSaved;
+        pGame = pGameSaved;
       }
     } else {
-      pExtendedExpiryFrame = pThis->dwGameFrame + eState;
+      pExtendedExpiryFrame = pGame->dwGameFrame + eState;
       D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatListEx, pExtendedExpiryFrame);
-      GAME::Event::SetEvent(pThis, pUnit, 0xc, pExtendedExpiryFrame, 0, 0);
+      GAME::Event::SetEvent(pGame, pUnit, 0xc, pExtendedExpiryFrame, 0, 0);
     }
 
     Monster::MonsterMode::MONMODE_InitModeChange(pUnit, eD2MonsterAnimMode_ns::Neutral, &sMonsterKill);
-    Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pThis, &sMonsterKill, 1);
+    Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
     pUnit->eUnitFlags &= ~UNITFLAG_DOUPDATE;
 }
 

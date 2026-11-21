@@ -6418,7 +6418,8 @@ uint32_t __stdcall DRAW_IsCharScreenOkPressed() {
     return (uint32_t)(Engine::gbCharScreenOkPressed != 0);
 }
 
-bool __stdcall UI_ShowPopupDialog() {
+BOOL __stdcall UI_ShowPopupDialog() {
+    BOOL bResult = TRUE;
     Engine::gbCharScreenCancelPressed = 0;
     Engine::gbCharScreenOkButtonConfirmed = 0;
     D2Win::Src::D2WinPalette::D2WINPALETTE_SetPaletteIndex(0);
@@ -6427,17 +6428,16 @@ bool __stdcall UI_ShowPopupDialog() {
     IMG_okcancelbtn = (D2ArchiveStrc*)Core::Archive::IMAGE_LoadDC6Ex("Data\\Global\\UI\\Menu\\okcancelbtn", 0);
     D2Win::Src::D2WinPalette::D2WINPAL_LoadActPalette(0);
     GAME::Game::GAMEDATA_SetDrawFunction(2);
-    int32_t nEventCount = 4;
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_RegisterEventHandlerBatch(hWnd, gsUIEngineFlagInit2, nEventCount);
+    _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIEngineFlagInit2, 4);
     _Message::MessageGameLoop((::fpGameLoopFunction)LOADER_PopupGameLoopCallback);
-    bool bNotCancelled = !Engine::gbCharScreenCancelPressed;
-    nEventCount = 4;
-    hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, gsUIEngineFlagInit2, nEventCount);
+    if (Engine::gbCharScreenCancelPressed) {
+      bResult = FALSE;
+    }
+
+    _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIEngineFlagInit2, 4);
     GAME::Game::GAMEDATA_SetDrawFunction(0);
     Engine::LOADER_FreePopupImages();
-    return bNotCancelled;
+    return bResult;
 }
 
 void __stdcall nullSub_CharonGameDraw_Unref_00463d70() {

@@ -37,7 +37,7 @@ struct D2GSPacketSrv0x27_EntryStrc {
 #define D2_DEFINED_D2GSPacketSrv0x27_TextStrc
 struct D2GSPacketSrv0x27_TextStrc {
     /* 0x00 */ struct D2PoolManagerStrc * pMemory;
-    /* 0x04 */ short nCount;
+    /* 0x04 */ uint16_t nCount;
     /* 0x06 */ uint8_t field_0x6;
     /* 0x07 */ uint8_t field_0x7;
     /* 0x08 */ struct D2GSPacketSrv0x27_EntryStrc * pMessage;

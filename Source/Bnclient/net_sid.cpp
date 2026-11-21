@@ -38,7 +38,7 @@ char * KeyClassic = 0; D2_GLOBAL_GUARD(KeyClassic, "Bnclient::_net_sid::KeyClass
 char * KeyExpansion = 0; D2_GLOBAL_GUARD(KeyExpansion, "Bnclient::_net_sid::KeyExpansion");
 char * KeyOwner = 0; D2_GLOBAL_GUARD(KeyOwner, "Bnclient::_net_sid::KeyOwner");
 } // namespace Bnclient::_net_sid
-static uint8_t g_SHA1Contexts[276] = {}; D2_STATIC_GUARD(g_SHA1Contexts, "g_SHA1Contexts");
+static D2BnSha1ContextStrc g_SHA1Contexts[3] = {}; D2_STATIC_GUARD(g_SHA1Contexts, "g_SHA1Contexts");
 
 namespace Bnclient::_net_sid {
 
@@ -1654,26 +1654,19 @@ void __fastcall NET_SID_CLIENT_SetCDKeyBit(uint32_t * pCdKeyData, uint32_t nBitI
     pCdKeyData[nWordIndex] = (nBitValue & 1) << byBitPos | ~(1 << byBitPos) & pCdKeyData[nWordIndex];
 }
 
-void __fastcall NET_SID_CLIENT_BigNumMultiplyAccumulate(int32_t nWords, uint32_t multiplier, uint32_t * pSrc, uint32_t * pDst, uint32_t carryIn) {
-    uint64_t carryExpanded;
-    uint32_t* pSrcWord;
-    uint32_t* srcPtr = pSrc + nWords;
+uint32_t __fastcall NET_SID_CLIENT_BigNumMultiplyAccumulate(int32_t nWords, uint32_t multiplier, uint32_t * pSrc, uint32_t * pDst, uint32_t carryIn)
+{
+    uint32_t* pSrcWord = pSrc + nWords;
     uint32_t* pOutWord = pDst + nWords;
-    if ((uint32_t)nWords <= 0) {
-      return;
+    if (nWords == 0) {
+      return carryIn;
     }
-
     do {
-      int64_t product64;
-      carryExpanded = (uint64_t)carryIn;
-      pSrcWord = srcPtr - 1;
-      srcPtr--;
-      nWords--;
-      product64 = (int64_t)*pSrcWord * multiplier;
-      carryIn = (uint32_t)(product64 + carryExpanded >> 0x20);
-      pOutWord--;
-      *pOutWord = (uint32_t)(product64 + carryExpanded);
-    } while ((uint32_t)nWords > 0);
+      uint64_t product = (uint64_t)*--pSrcWord * multiplier + carryIn;
+      *--pOutWord = (uint32_t)product;
+      carryIn = (uint32_t)(product >> 32);
+    } while (--nWords != 0);
+    return carryIn;
 }
 
 void __fastcall NET_SID_CLIENT_ExpandCdKeyToBase5(char * pCdKeyString, uint8_t * pOutBase5) {
@@ -2860,73 +2853,41 @@ void __fastcall NET_SID_CLIENT_GetSHAState(int32_t nCtxIndex, uint32_t * pdwStat
       return;
     }
 
-    int nCtxOffset = nCtxIndex * 0x5c;
-    *pdwStateOut = *(uint32_t*)(g_SHA1Contexts + nCtxOffset);
-    pdwStateOut[1] = *(uint32_t*)(g_SHA1Contexts + nCtxOffset + 4);
-    pdwStateOut[2] = *(uint32_t*)(g_SHA1Contexts + nCtxOffset + 8);
-    pdwStateOut[3] = *(uint32_t*)(g_SHA1Contexts + nCtxOffset + 0xc);
-    pdwStateOut[4] = *(uint32_t*)(g_SHA1Contexts + nCtxOffset + 0x10);
+    pdwStateOut[0] = g_SHA1Contexts[nCtxIndex].aState[0];
+    pdwStateOut[1] = g_SHA1Contexts[nCtxIndex].aState[1];
+    pdwStateOut[2] = g_SHA1Contexts[nCtxIndex].aState[2];
+    pdwStateOut[3] = g_SHA1Contexts[nCtxIndex].aState[3];
+    pdwStateOut[4] = g_SHA1Contexts[nCtxIndex].aState[4];
 }
 
 void __fastcall NET_SID_CLIENT_SHA1Compress(int32_t nCtxIndex, uint32_t * pdwBlock, uint32_t * pdwOutHash) {
-    int nCtxOffset = nCtxIndex * 0x5c;
-    int nCtxOffset2 = *(int*)(g_SHA1Contexts + (nCtxOffset + 0x14)) + 0x200;
-    if (nCtxOffset2 < *(int*)(g_SHA1Contexts + (nCtxOffset + 0x14))) {
-      *(int*)(g_SHA1Contexts + nCtxOffset + 0x18) = *(int*)(g_SHA1Contexts + (nCtxOffset + 0x18)) + 1;
+    D2BnSha1ContextStrc* pCtx = &g_SHA1Contexts[nCtxIndex];
+    int nBitCount = pCtx->nBitCountLow + 0x200;
+    if (nBitCount < (int)pCtx->nBitCountLow) {
+      pCtx->nBitCountHigh++;
     }
 
-    *(int*)(g_SHA1Contexts + (nCtxOffset + 0x14)) = nCtxOffset2;
-    uint32_t* pCtxBlock = (uint32_t*)(g_SHA1Contexts + (nCtxOffset + 0x1c));
-    for (nCtxOffset2 = 0x10; nCtxOffset2; nCtxOffset2--) {
-      *pCtxBlock = *pdwBlock;
-      pdwBlock++;
-      pCtxBlock++;
-    }
-
-    SHA0_Transform((uint32_t*)(g_SHA1Contexts + nCtxOffset));
+    pCtx->nBitCountLow = nBitCount;
+    memcpy(pCtx->abyBlock, pdwBlock, sizeof(pCtx->abyBlock));
+    SHA0_Transform(pCtx->aState);
     if (!pdwOutHash) {
       return;
     }
 
-    nCtxOffset2 = nCtxIndex * 0x5c;
-    *pdwOutHash = *(uint32_t*)(g_SHA1Contexts + nCtxOffset2);
-    pdwOutHash[1] = *(uint32_t*)(g_SHA1Contexts + (nCtxOffset2 + 4));
-    pdwOutHash[2] = *(uint32_t*)(g_SHA1Contexts + (nCtxOffset2 + 8));
-    pdwOutHash[3] = *(uint32_t*)(g_SHA1Contexts + (nCtxOffset2 + 0xc));
-    pdwOutHash[4] = *(uint32_t*)(g_SHA1Contexts + (nCtxOffset2 + 0x10));
+    for (int i = 0; i < 5; i++) {
+      pdwOutHash[i] = g_SHA1Contexts[nCtxIndex].aState[i];
+    }
 }
 
 void __fastcall NET_SID_CLIENT_InitSHAContext(int32_t nCtxIndex) {
-    int nCtxOffset = nCtxIndex * 0x5c;
-    uint8_t* pSHAContextField = g_SHA1Contexts + nCtxOffset;
-    pSHAContextField[0] = 1;
-    pSHAContextField[1] = 0x23;
-    pSHAContextField[2] = 0x45;
-    pSHAContextField[3] = 0x67;
-    pSHAContextField = g_SHA1Contexts + (nCtxOffset + 4);
-    pSHAContextField[0] = 0x89;
-    pSHAContextField[1] = 0xab;
-    pSHAContextField[2] = 0xcd;
-    pSHAContextField[3] = 0xef;
-    pSHAContextField = g_SHA1Contexts + (nCtxOffset + 8);
-    pSHAContextField[0] = 0xfe;
-    pSHAContextField[1] = 0xdc;
-    pSHAContextField[2] = 0xba;
-    pSHAContextField[3] = 0x98;
-    pSHAContextField = g_SHA1Contexts + (nCtxOffset + 0xc);
-    pSHAContextField[0] = 0x76;
-    pSHAContextField[1] = 0x54;
-    pSHAContextField[2] = 0x32;
-    pSHAContextField[3] = 0x10;
-    pSHAContextField = g_SHA1Contexts + (nCtxOffset + 0x10);
-    pSHAContextField[0] = 0xf0;
-    pSHAContextField[1] = 0xe1;
-    pSHAContextField[2] = 0xd2;
-    pSHAContextField[3] = 0xc3;
-    pSHAContextField = g_SHA1Contexts + (nCtxOffset + 0x14);
-    memset(pSHAContextField, 0, 4 * sizeof(pSHAContextField[0]));
-    pSHAContextField = g_SHA1Contexts + (nCtxOffset + 0x18);
-    memset(pSHAContextField, 0, 4 * sizeof(pSHAContextField[0]));
+    D2BnSha1ContextStrc* pCtx = &g_SHA1Contexts[nCtxIndex];
+    pCtx->aState[0] = 0x67452301;
+    pCtx->aState[1] = 0xefcdab89;
+    pCtx->aState[2] = 0x98badcfe;
+    pCtx->aState[3] = 0x10325476;
+    pCtx->aState[4] = 0xc3d2e1f0;
+    pCtx->nBitCountLow = 0;
+    pCtx->nBitCountHigh = 0;
 }
 
 uint32_t __fastcall NET_SID_CLIENT_IDEAMultInverse(uint32_t value) {

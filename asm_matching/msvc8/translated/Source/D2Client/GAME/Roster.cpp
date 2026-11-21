@@ -1175,7 +1175,7 @@ void __fastcall SetRosterPartyId(int32_t nRosterGUID, uint16_t nPartyId) {
     UI::Party::ResetPartyUi();
 }
 
-void __fastcall SetRosterInParty(int32_t nRosterGUID, bool bInParty) {
+void __fastcall SetRosterInParty(int32_t nRosterGUID, uint8_t bInParty) {
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nRosterGUID);
     if (!pRoster) {
       return;

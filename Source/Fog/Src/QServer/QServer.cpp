@@ -122,20 +122,17 @@ int __stdcall SwapWorkerSlotValue(D2QServerStrc * pQServer, int nWorkerIndex, in
 }
 
 // @sourcefile .\Src\QServer\QServer.cpp
-bool __stdcall ClearModePacketQueues(D2QServerStrc * pQServer) {
-    D2QServerModePacketNodeStrc* pDVar1;
-    int nMode;
-    for (nMode = 0; nMode < pQServer->nModeCount; nMode++) {
-      D2QServerModePacketNodeStrc* pMemoryToFree;
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csClientLifecycle);
-      pMemoryToFree = pQServer->ppModePacketQueueHeads[nMode];
+BOOL __stdcall ClearModePacketQueues(D2QServerStrc * pQServer) {
+    for (int nMode = 0; nMode < pQServer->nModeCount; nMode++) {
+      EnterCriticalSection(&pQServer->csClientLifecycle);
+      D2QServerModePacketNodeStrc* pNode = pQServer->ppModePacketQueueHeads[nMode];
       pQServer->ppModePacketQueueHeads[nMode] = 0;
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQServer->ppModePacketQueueTails[nMode] = 0;
+      pQServer->ppModePacketQueueTails[nMode] = 0;
       LeaveCriticalSection(&pQServer->csClientLifecycle);
-      while (pMemoryToFree) {
-        pDVar1 = pMemoryToFree->pNext;
+      while (pNode) {
+        D2QServerModePacketNodeStrc* pMemoryToFree = pNode;
+        pNode = pNode->pNext;
         D2_FREE_AT(pMemoryToFree, ".\\Src\\QServer\\QServer.cpp", 0x1b9);
-        pMemoryToFree = pDVar1;
       }
     }
 

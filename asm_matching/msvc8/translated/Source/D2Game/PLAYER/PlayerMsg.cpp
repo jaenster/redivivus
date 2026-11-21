@@ -3770,7 +3770,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3D_ActivateObject(::SGAMEDATA * pGame,
     uint32_t nUid = pPacket->dwObjectGUID;
     eD2ServerIncomingStatus nInteractResult = CloseEnoughToInteract(pGame, UNIT_OBJECT, pUnit, nUid, 10);
     if (nInteractResult == SERVERSTATUS_OK) {
-      vc8_thiscall(Objects::ObjectsMode::OBJECT_UpdateCollisionOnModeChange)(pGame, nUid);
+      Objects::ObjectsMode::OBJECT_UpdateCollisionOnModeChange(pGame, pUnit, nUid);
       nInteractResult = SERVERSTATUS_OK;
     }
 

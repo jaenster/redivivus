@@ -1681,56 +1681,49 @@ static D2UnitStrc * __stdcall SKILLBAR_AcquireNextTarget(::SGAMEDATA * pGame, D2
 
 // Server skill-start function for Barbarian skill index 41 (Leap Attack). Looks up the skill, finds a teleport destination via SKILL_FindTeleportPosition. If a valid position is found, marks a collision tile, sets the unit uninterruptable, stores destination coords in skill params 1-2, sets SKILL_MOVE state, and optionally stuns the target. If no teleport pos is found but a target is in melee range, forces a direct attack instead. Returns 1 on success, 0 if the skill is not present.
 BOOL __fastcall SKILLBAR_SrvStFn41_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    uint32_t _bFoundTeleportPos;
-    bool bFoundTeleportPos;
-    BOOL bIsInMeleeRange;
-    eD2CollisionShapeType nWidth;
     uint32_t nDestY;
     D2SkillStrc* pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
     if (!pSkill) {
       return 0;
     }
 
-    D2UnitStrc* pUnit_00 = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    _bFoundTeleportPos = D2Common::Skills::SKILL_FindTeleportPosition(pUnit, pUnit_00, &eSkill, &nDestY);
-    if (!_bFoundTeleportPos) {
-      if (pUnit_00) {
-        bIsInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pUnit_00, 0);
-        if (bIsInMeleeRange) {
-          SkillsServer::SKILLS_ForceAttackTarget(pGame, pUnit, pUnit_00);
-          return 1;
-        }
+    D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
+    if (!D2Common::Skills::SKILL_FindTeleportPosition(pUnit, pTarget, &eSkill, &nDestY)) {
+      if (!pTarget) {
+        return 0;
       }
-    } else {
-      D2RoomStrc* pRoom;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      if (pRoom) {
-        nWidth = D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit);
-        D2Common::Collision::AddCollision_Type(pRoom, eSkill, nDestY, nWidth, 0x80);
-        UNIT::SUnit::SetUninterruptableState(pUnit, 1);
-        D2Common::Skills::SKILL_SetParam1(pSkill, eSkill);
-        D2Common::Skills::SKILL_SetParam2(pSkill, nDestY);
-        if (pUnit_00) {
-          D2Common::Skills::SKILL_SetParam3(pSkill, pUnit_00->eUnitType);
-          D2Common::Skills::SKILL_SetParam4(pSkill, pUnit_00->nUnitGUID);
-        } else {
-          D2Common::Skills::SKILL_SetParam3(pSkill, 6);
-        }
-
-        D2Common::Skills::SKILL_SetFlags(pSkill, 0x1080);
-        D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 1);
-        if (pUnit_00) {
-          bIsInMeleeRange = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_uninterruptable);
-          if (bIsInMeleeRange) {
-            SkillsServer::SKILL_ApplyStunState(pGame, pUnit_00, STATE_healthpot);
-          }
-        }
-
-        return 1;
+      if (!D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0)) {
+        return 0;
       }
+
+      SkillsServer::SKILLS_ForceAttackTarget(pGame, pUnit, pTarget);
+      return 1;
     }
 
-    return 0;
+    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+    if (!pRoom) {
+      return 0;
+    }
+
+    eD2CollisionShapeType nWidth = D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit);
+    D2Common::Collision::AddCollision_Type(pRoom, eSkill, nDestY, nWidth, 0x80);
+    UNIT::SUnit::SetUninterruptableState(pUnit, 1);
+    D2Common::Skills::SKILL_SetParam1(pSkill, eSkill);
+    D2Common::Skills::SKILL_SetParam2(pSkill, nDestY);
+    if (pTarget) {
+      D2Common::Skills::SKILL_SetParam3(pSkill, GetTypeInline(pTarget));
+      D2Common::Skills::SKILL_SetParam4(pSkill, GetGUIDInline(pTarget));
+    } else {
+      D2Common::Skills::SKILL_SetParam3(pSkill, 6);
+    }
+
+    D2Common::Skills::SKILL_SetFlags(pSkill, 0x1080);
+    D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 1);
+    if (pTarget && D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_uninterruptable)) {
+      SkillsServer::SKILL_ApplyStunState(pGame, pUnit, pTarget, STATE_healthpot);
+    }
+
+    return 1;
 }
 
 // Server-side hit cycle for the Whirlwind skill. Acquires the next target in the spin arc via SKILLBAR_AcquireNextTarget, performs a to-hit check, and if it lands: calculates and applies physical + elemental damage, removes any stun state list from the target, and applies the skill's server overlay. Returns 1 if a target was hit, 0 if no valid target or skill entry found.

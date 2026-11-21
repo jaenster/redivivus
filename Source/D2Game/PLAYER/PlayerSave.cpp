@@ -574,7 +574,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_15(D2UnitStrc * p
 int32_t __fastcall SAVE_SerializeItemIfValid(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, char * szText, size_t nSize, int32_t nParam1, int32_t nParam2, int32_t nParam3) {
     BOOL bTaskResult;
     int32_t nSerializeResult;
-    if (!pItem || FlagBit_D2UnitStrc_eUnitFlagsEx_15(pItem) || !nParam1 && nParam2 && !nParam3 && (bTaskResult = GAME::Task::TASK_ReturnTrue() , !bTaskResult)) {
+    if (!pItem || FlagBit_D2UnitStrc_eUnitFlagsEx_15(pItem) || !nParam1 && nParam2 && !nParam3 && (bTaskResult = GAME::Task::TASK_ReturnTrue(pItem) , !bTaskResult)) {
       nSerializeResult = 0;
     } else {
       nSerializeResult = D2Common::ITEMS::Items::SerializeItem(pItem, (uint8_t*)szText, nSize, (D2StatListExStrc*)0x1, 1, 0);

@@ -565,7 +565,7 @@ void __fastcall TASK_Dispatch(uint32_t nParam, D2TaskNodeStrc * pTaskNode) {
     TASK_GameTickCallback(nParam, pTaskNode);
 }
 
-BOOL __stdcall TASK_ReturnTrue() {
+BOOL __fastcall TASK_ReturnTrue(D2UnitStrc * pItem) {
     return 1;
 }
 

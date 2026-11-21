@@ -574,7 +574,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x82_PortalOwnership(::SGAMEDATA * pGame, s
 void __fastcall NET_D2GS_SERVER_Send_0x83_Unused(struct D2ClientStrc * pClient, char * szText, uint16_t wDataLen, uint16_t wExtraFlag, uint16_t wParam, void * pData);
 void __fastcall NET_D2GS_SERVER_Send_0x84_Unused(struct D2ClientStrc * pClient, uint8_t byFlag, uint16_t wDataLen, void * pData);
 void __fastcall NET_D2GS_SERVER_Send_0x88_Unused(struct D2ClientStrc * pClient, char * szText, uint16_t wDataLen, uint16_t wExtraFlag, uint16_t wParam, void * pData);
-void __fastcall NET_D2GS_SERVER_Send_0x8B_PlayerRelationship(struct D2ClientStrc * pClient, uint32_t dwTargetArg, bool byTypeArg);
+void __fastcall NET_D2GS_SERVER_Send_0x8B_PlayerRelationship(struct D2ClientStrc * pClient, uint32_t dwTargetArg, uint8_t byTypeArg);
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall NET_D2GS_SERVER_Send_0x8C_PLAYERFLAGS_Argument(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x8C * pPacket);
 void __fastcall NET_D2GS_SERVER_Send_0x8C_RelationshipUpdate_Sender(::SGAMEDATA * pGame, uint32_t nUnitGUID, uint32_t nOtherUnitGUID, uint16_t wRelationFlags);
