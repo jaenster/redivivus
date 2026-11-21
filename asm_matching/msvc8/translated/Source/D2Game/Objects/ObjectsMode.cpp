@@ -2806,7 +2806,10 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
       uint32_t nSpawnPosY;
-      D2BitBufferStrc* pQuestRecord;
+      union {
+        D2BitBufferStrc* pQuestRecord;
+        int32_t nSpawnPosX;
+      };
       D2UnitStrc* pPortalOwnerObj;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
@@ -2959,7 +2962,7 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
       pnSpawnY = &__frame0.nSpawnPosY;
       pnSpawnX = (uint32_t*)&__frame0.pQuestRecord;
       pRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(pOperation->sArg.pGame->pAct[D2Common::Drlg::GetActNoFromLevelNumber(eLevelId)], eLevelId, 0, (int*)pnSpawnX, (int*)pnSpawnY, nCollisionFlagsArg);
-      ptDest.x = (LONG)__frame0.pQuestRecord;
+      ptDest.x = __frame0.nSpawnPosX;
       ptDest.y = __frame0.nSpawnPosY;
     } else {
       dest_from_paired_portal:
@@ -2972,8 +2975,7 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
     }
 
     uint8_t byPortalFlags = D2Common::Units::GetObjectPortalFlags(pOperation->sArg.pVictim);
-    pClient = (D2ClientStrc*)((uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&pClient + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byPortalFlags) | 5);
-    D2Common::Units::SetObjectPortalFlags(pOperation->sArg.pVictim, (uint8_t)(uintptr_t)pClient);
+    D2Common::Units::SetObjectPortalFlags(pOperation->sArg.pVictim, byPortalFlags | 5);
     D2RoomStrc* pAttackerRoom = D2Common::Units::UNITS_GetRoom(pOperation->pAttacker);
     dwHostileDelay = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pAttackerRoom);
     if (dwHostileDelay) {

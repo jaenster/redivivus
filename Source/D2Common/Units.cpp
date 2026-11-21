@@ -2542,10 +2542,10 @@ BOOL __stdcall TestCollisionBetweenInteractingUnits(D2UnitStrc * pUnit, D2UnitSt
       nSize1 = GetUnitSizeX(pUnitA);
       nSize2 = GetUnitSizeX(pUnitB);
       bCollides = D2Common::Units::TestCollision(nX1, nSize1, nX2, nY, nSize2, nY2, pRoom, eCollisionFlag);
-      if ((D2UnitStrc*)nUnit) {
+      if (nUnit) {
         PATH::DynamicPath::PATH_AddUnitCollision(pUnitB);
       }
-      if ((D2UnitStrc*)nUnit2) {
+      if (nUnit2) {
         PATH::DynamicPath::PATH_AddUnitCollision(pUnitA);
       }
 
@@ -3946,7 +3946,7 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
     int64_t lVar1;
     int32_t nClassId;
     eD2UnitType eUnitType;
-    D2UnitStrc* pAnimMode;
+    int pAnimMode;
     short int wFrameDelta;
     int nUnitArg;
     D2UnitStrc* pUnit_00 = pUnitArg;
@@ -3959,18 +3959,18 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
       short int wAnimSpeed;
       pUnitArg->nActionFrame = 0;
       nWeaponAnimClass = UNITS_GetFrameBonus(pUnitArg);
-      nUnitArg = (int)*(D2UnitStrc**)&pUnit_00->eAnimMode;
+      nUnitArg = pUnit_00->eAnimMode.ePlayerMode;
       nClassId = pUnit_00->nClassId;
       pUnit_00->nGfxCurrentFrame = nWeaponAnimClass << 8;
       eUnitType = pUnit_00->eUnitType;
       Skills::SKILLS_GetStateTransformGfx(pUnit_00, &eUnitType, &nClassId, &nUnitArg, ".\\UNITS\\Units.cpp", 0x958);
-      pAnimMode = (D2UnitStrc*)nUnitArg;
+      pAnimMode = nUnitArg;
       switch (eUnitType) {
         case UNIT_PLAYER:
-          if ((D2UnitStrc*)nUnitArg == (D2UnitStrc*)0x3 || (D2UnitStrc*)nUnitArg == (D2UnitStrc*)0x13) {
+          if (nUnitArg == 0x3 || nUnitArg == 0x13) {
             UNITS_AddRunVelocityBonus(pUnit_00, nClassId);
           }
-        if ((D2UnitStrc*)nUnitArg != (D2UnitStrc*)0x12) {
+        if (nUnitArg != 0x12) {
           pUnit_00->pAnimSeq = 0;
           UpdateAnimSpeed(pUnit_00, ".\\UNITS\\Units.cpp", 0x96a);
           pUnit_00->nFrameCount = pUnit_00->pAnimData->nFrames << 8;
@@ -3981,10 +3981,10 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
         UpdateAnimSpeed(pUnit_00, ".\\UNITS\\Units.cpp", 0x967);
         return;
         case UNIT_MONSTER:
-          if (pUnit_00->eUnitType == UNIT_PLAYER && (bIsShapeshifted = DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit_00) , bIsShapeshifted != 0) && ((D2UnitStrc*)nUnitArg == (D2UnitStrc*)0xd || (D2UnitStrc*)nUnitArg == (D2UnitStrc*)0xf)) {
+          if (pUnit_00->eUnitType == UNIT_PLAYER && (bIsShapeshifted = DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit_00) , bIsShapeshifted != 0) && (nUnitArg == 0xd || nUnitArg == 0xf)) {
             UNITS_AddRunVelocityBonus(pUnit_00, pUnit_00->nClassId);
           }
-        if ((D2UnitStrc*)nUnitArg != (D2UnitStrc*)0xe) {
+        if (nUnitArg != 0xe) {
           UpdateAnimSpeed(pUnit_00, ".\\UNITS\\Units.cpp", 0x980);
           pUnit_00->pAnimSeq = 0;
           pUnit_00->nFrameCount = pUnit_00->pAnimData->nFrames << 8;
@@ -3997,9 +3997,9 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
         case UNIT_OBJECT:
           if (nUnitArg < 8) {
             pObjTxt = DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit_00->nClassId);
-            pUnit_00->nFrameCount = pObjTxt->FrameCnt[(intptr_t)pAnimMode];
-            wFrameDelta = pObjTxt->FrameDelta[(intptr_t)pAnimMode];
-            pUnit_00->nGfxCurrentFrame = (uint32_t)pObjTxt->Start[(intptr_t)pAnimMode] << 8;
+            pUnit_00->nFrameCount = pObjTxt->FrameCnt[pAnimMode];
+            wFrameDelta = pObjTxt->FrameDelta[pAnimMode];
+            pUnit_00->nGfxCurrentFrame = (uint32_t)pObjTxt->Start[pAnimMode] << 8;
             if (pObjTxt->Sync) {
               pUnit_00->nAnimSpeed = wFrameDelta;
               return;
@@ -4018,13 +4018,13 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x98a);
         exit(-1);
         case UNIT_ITEM:
-          if ((D2UnitStrc*)nUnitArg == (D2UnitStrc*)0x3) {
+          if (nUnitArg == 0x3) {
             pUnit_00->nAnimSpeed = 0;
             pUnit_00->nFrameCount = 0x1100;
             pUnit_00->nGfxCurrentFrame = 0x1000;
             return;
           }
-        if ((D2UnitStrc*)nUnitArg == (D2UnitStrc*)0x5) {
+        if (nUnitArg == 0x5) {
           pUnit_00->nAnimSpeed = 0x100;
           pUnit_00->nFrameCount = 0x1100;
           return;

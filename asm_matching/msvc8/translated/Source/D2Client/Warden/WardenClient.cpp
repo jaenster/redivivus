@@ -93,8 +93,9 @@ static uint32_t __stdcall WARDEN_CheckSignatureMagic(int32_t nDataLen, uint32_t 
     int nSigOffset = nTotalLen - nDataLen - 4;
     *pnSigOffset = nSigOffset;
     if (nTotalLen >= nDataLen + 4U) {
-      Storm::Source::SMem::SMemCopy(&pBuffer, (void*)(nSigOffset + pBuffer), 4);
-      return (uint32_t)(pBuffer == 0x5349474e);
+      int32_t nMagic;
+      Storm::Source::SMem::SMemCopy(&nMagic, (void*)(nSigOffset + pBuffer), 4);
+      return (uint32_t)(nMagic == 0x5349474e);
     }
 
     return 0;

@@ -516,11 +516,12 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     pList->sEntriesControl.nSelectedIndex = -1;
     pList->sEntriesControl.nMaxVisibleIndex = nSizeY / (pList->sEntriesControl.nFontHeight + (eFontType >> 2) * 2) - 1;
     D2WinFont::SetAndReturnLastFont(*pnFontType);
+    int* pnCursor;
     if (*pnItemArray) {
-      nSizeX = pnItemArray + 1;
+      pnCursor = pnItemArray + 1;
       do {
         pNewEntry = D2_NEW_AT(D2WinListEntry, ".\\Src\\D2WinList.cpp", 0x56);
-        wszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(*(uint16_t*)(nSizeX - 1));
+        wszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(*(uint16_t*)(pnCursor - 1));
         nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszLocaleStr);
         if (nStrLen >= 0x100) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x58);
@@ -535,13 +536,13 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
         }
 
         pNewEntry->nTextWidth = nPnFontType;
-        pNewEntry->pfnOnActivate = (fpListEntryCallback)nSizeX[2];
+        pNewEntry->pfnOnActivate = (fpListEntryCallback)pnCursor[2];
         pNewEntry->nLeft = 0;
         pNewEntry->nRight = 0;
         pNewEntry->nTop = 0;
         pNewEntry->nBottom = 0;
-        pNewEntry->bItemFlags = (uint8_t)*nSizeX;
-        pNewEntry->nUserData = nSizeX[1];
+        pNewEntry->bItemFlags = (uint8_t)*pnCursor;
+        pNewEntry->nUserData = pnCursor[1];
         pNewEntry->pNext = 0;
         pTailEntry = pList->sEntriesControl.pFirstEntry;
         if (pTailEntry) {
@@ -556,8 +557,8 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
 
         pItemCountPtr = &pList->sEntriesControl.nItemCount;
         (*pItemCountPtr)++;
-        pItemCountPtr = nSizeX + 3;
-        nSizeX += 4;
+        pItemCountPtr = pnCursor + 3;
+        pnCursor += 4;
       } while (*pItemCountPtr);
     }
 

@@ -1706,7 +1706,7 @@ void __fastcall DRLGPRESET_GetDrlgFileSize(D2RoomExStrc * pDrlgMap, int32_t * pn
 static void __stdcall DRLGPRESET_UpdatePopTiles(int nTickCount, D2RoomExStrc * pRoomEx, D2DrlgCoordsStrc * pPopLocation, uint32_t nMatchTileLibIndex, uint32_t bFadeIn) {
     BOOL _bInside;
     bool bInside;
-    int* pTileFlags;
+    D2DrlgTileDataStrc* pTileFlags;
     D2DrlgCoordsStrc searchBox;
     int nTileCount;
     uint8_t nFadeAlpha;
@@ -1726,45 +1726,45 @@ static void __stdcall DRLGPRESET_UpdatePopTiles(int nTickCount, D2RoomExStrc * p
         return;
       }
 
-      pTileFlags = &pRoomEx->pRoomTiles->sRoomTiles.pWallTiles->nFlags;
+      pTileFlags = pRoomEx->pRoomTiles->sRoomTiles.pWallTiles;
       do {
-        if (!(*pTileFlags & 0x200U) || (_bInside = DrlgRoom::AreXYInsideCoordinates(&searchBox, pTileFlags[-3] + pRoomEx->sCoords.WorldPosition.x, pTileFlags[-2] + pRoomEx->sCoords.WorldPosition.y) , !_bInside)) {
-          if (!(*pTileFlags & 0x100U)) {
-            nTileLibIndex = D2CMP::DUNGEON::Dungeon::GetIndex((D2TileLibraryEntryStrc*)pTileFlags[1]);
+        if (!(pTileFlags->nFlags & 0x200U) || (_bInside = DrlgRoom::AreXYInsideCoordinates(&searchBox, pTileFlags->nPosX + pRoomEx->sCoords.WorldPosition.x, pTileFlags->nPosY + pRoomEx->sCoords.WorldPosition.y) , !_bInside)) {
+          if (!(pTileFlags->nFlags & 0x100U)) {
+            nTileLibIndex = D2CMP::DUNGEON::Dungeon::GetIndex(pTileFlags->pTileLibraryEntry);
             if (nTileLibIndex == nMatchTileLibIndex) {
-              _bInside = DrlgRoom::AreXYInsideCoordinates(&searchBox, pTileFlags[-3] + pRoomEx->sCoords.WorldPosition.x, pTileFlags[-2] + pRoomEx->sCoords.WorldPosition.y);
+              _bInside = DrlgRoom::AreXYInsideCoordinates(&searchBox, pTileFlags->nPosX + pRoomEx->sCoords.WorldPosition.x, pTileFlags->nPosY + pRoomEx->sCoords.WorldPosition.y);
               if (_bInside) {
-                pTileFlags[4] |= 2;
-                nFadeAlpha = *(uint8_t*)(pTileFlags + 5);
+                pTileFlags->nTransitionFlags |= 2;
+                nFadeAlpha = pTileFlags->nCurrentAlpha;
                 if (bFadeIn) {
-                  *(uint8_t*)((char*)pTileFlags + 0x15) = '\0';
-                  *(uint8_t*)((char*)pTileFlags + 0x16) = 0xff;
+                  pTileFlags->nAlphaStart = '\0';
+                  pTileFlags->nAlphaEnd = 0xff;
                   if (!nFadeAlpha) {
-                    pTileFlags[6] = nTickCount;
+                    pTileFlags->nFadeEndTime = nTickCount;
                   } else {
-                    pTileFlags[6] = nTickCount - (uint32_t)nFadeAlpha * 500 / 0xff;
+                    pTileFlags->nFadeEndTime = nTickCount - (uint32_t)nFadeAlpha * 500 / 0xff;
                   }
                 } else {
-                  *(uint8_t*)((char*)pTileFlags + 0x15) = 0xff;
-                  *(uint8_t*)((char*)pTileFlags + 0x16) = '\0';
+                  pTileFlags->nAlphaStart = 0xff;
+                  pTileFlags->nAlphaEnd = '\0';
                   if (nFadeAlpha == 0xff) {
-                    pTileFlags[6] = nTickCount;
+                    pTileFlags->nFadeEndTime = nTickCount;
                   } else {
-                    pTileFlags[6] = (int)((nFadeAlpha - 0xff) * 500) / 0xff + nTickCount;
+                    pTileFlags->nFadeEndTime = (int)((nFadeAlpha - 0xff) * 500) / 0xff + nTickCount;
                   }
                 }
               }
             }
           }
         } else if (bFadeIn) {
-          pTileFlags[4] |= 4;
-          pTileFlags[6] = nTickCount;
+          pTileFlags->nTransitionFlags |= 4;
+          pTileFlags->nFadeEndTime = nTickCount;
         } else {
-          pTileFlags[4] &= -5;
-          *pTileFlags &= -9;
+          pTileFlags->nTransitionFlags &= -5;
+          pTileFlags->nFlags &= -9;
         }
 
-        pTileFlags += 0xc;
+        pTileFlags++;
         nTileCount--;
       } while (nTileCount);
 
@@ -2119,6 +2119,7 @@ void __fastcall DRLGPRESET_CreateMonsterPresets(D2RoomExStrc * pRoomEx) {
 // @sourcefile .\DRLG\Preset.cpp
 static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2DrlgLevelStrc * pLevel, D2DrlgGridStrc * pDrlgGrid, int32_t nFlags, BOOL bSingleRoom) {
     int nWarpDestLevel;
+    int nCellX;
     D2DrlgCoordStrc* pPosLocationArray;
     D2ObjectsTxt* pObjectsTxt;
     int32_t nObjCellX;
@@ -2212,13 +2213,11 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
             nFlags = 0;
             if (pDrlgFile->nHeight > 0) {
               do {
-                nXIndex = 0;
+                nCellX = 0;
                 if (pFile->nWidth > 0) {
-                  nPopPosOffset = nPopCount << 4;
                   do {
-                    pMemoryOrXIndex = nXIndex;
-                    nCellFlags = DrlgGrid::GetGridFlags(&wallGrid, (int)nXIndex, nFlags);
-                    nFlagBit = DrlgGrid::GetGridFlags(&tileGrid, (int)pMemoryOrXIndex, nFlags);
+                    nCellFlags = DrlgGrid::GetGridFlags(&wallGrid, nCellX, nFlags);
+                    nFlagBit = DrlgGrid::GetGridFlags(&tileGrid, nCellX, nFlags);
                     nPopSubIndex = nFlagBit >> 8 & 0xff;
                     nTileType = nFlagBit >> 0x14 & 0x3f;
                     if (nCellFlags == 0xb || nCellFlags == 10) {
@@ -2227,7 +2226,7 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
                           nCellFlags = 0;
                           nErrLine = 0;
                         } else {
-                          nCellFlags = (int)((int)pMemoryOrXIndex->pPools + (((intptr_t)pMemoryOrXIndex >> 0x1f & 7U) - 0x20)) >> 3;
+                          nCellFlags = (nCellX + (nCellX >> 0x1f & 7)) >> 3;
                           nErrLine = nFlags / 8;
                         }
 
@@ -2239,9 +2238,8 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
                           pIndexIter = (uint32_t*)pDrlgMap->pPopsIndex;
                           do {
                             if (*pIndexIter == nTileType) {
-                              pDrlgMap->pPosLocation[nVisIndex].nWidth = (int)pMemoryOrXIndex;
+                              pDrlgMap->pPosLocation[nVisIndex].nWidth = nCellX;
                               pDrlgMap->pPosLocation[nVisIndex].nHeight = nFlags;
-                              pMemoryOrXIndex = nXIndex;
                               break;
                             }
 
@@ -2252,14 +2250,13 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
                         if (nVisIndex == nPopCount) {
                           pDrlgMap->pPopsIndex[nPopCount] = nTileType;
                           pDrlgMap->pPopsSubIndex[nPopCount] = nPopSubIndex;
-                          *(D2PoolManagerStrc**)((intptr_t)&pDrlgMap->pPosLocation->nPosX + nPopPosOffset) = (D2PoolManagerStrc*)pMemoryOrXIndex;
-                          *(int32_t*)((intptr_t)&pDrlgMap->pPosLocation->nPosY + nPopPosOffset) = nFlags;
-                          nPopPosOffset += 0x10;
+                          pDrlgMap->pPosLocation[nPopCount].nPosX = nCellX;
+                          pDrlgMap->pPosLocation[nPopCount].nPosY = nFlags;
                           nPopCount++;
                         }
                       }
                       if (nScanMode && nTileType >= 0x1e && nTileType <= 0x21) {
-                        pLevel->aSpawnPoints[pLevel->nSpawnPointCount].nX = (int)pMemoryOrXIndex->pPools + (pDrlgMap->nRealOffsetX - 0x20);
+                        pLevel->aSpawnPoints[pLevel->nSpawnPointCount].nX = nCellX + pDrlgMap->nRealOffsetX;
                         pLevel->aSpawnPoints[pLevel->nSpawnPointCount].nY = pDrlgMap->nRealOffsetY + nFlags;
                         switch (nTileType) {
                           case 0x1e:
@@ -2279,8 +2276,8 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
                       }
                     }
 
-                    nXIndex = (D2PoolManagerStrc*)((intptr_t)&pMemoryOrXIndex->nPoolId + 1);
-                  } while ((intptr_t)nXIndex < pFile->nWidth);
+                    nCellX++;
+                  } while (nCellX < pFile->nWidth);
                 }
 
                 nFlags++;

@@ -316,7 +316,7 @@ void __stdcall DRAW_DrawRoomWallTiles(D2RoomStrc * pRoom) {
     int32_t* pX;
     uint32_t nTileFlags;
     int nScreenYArg;
-    int* pTile;
+    D2DrlgTileDataStrc* pTile;
     int nTmp;
     D2DrlgRoomCoordsStrc roomCoords;
     RECT rect;
@@ -335,14 +335,14 @@ void __stdcall DRAW_DrawRoomWallTiles(D2RoomStrc * pRoom) {
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
     uint32_t i = 0;
     if (nTileCount > 0) {
-      pTile = &pWallTiles->nPosY;
+      pTile = pWallTiles;
       do {
-        if ((D2RoomCoordListStrc*)pTile[1]) {
-          nScreenX = (pTile[-1] + roomCoords.sTileRect.left) * 5 + 3;
-          nScreenY = (*pTile + roomCoords.sTileRect.top) * 5 + 3;
+        if (pTile->pRoomCoordList) {
+          nScreenX = (pTile->nPosX + roomCoords.sTileRect.left) * 5 + 3;
+          nScreenY = (pTile->nPosY + roomCoords.sTileRect.top) * 5 + 3;
           D2Common::Drlg::Transform::CoordsMapToScreen(&nScreenX, &nScreenY);
-          if (pTile[4] != 0xf && (pTile[2] & 0x1c000U) == 0x4000) {
-            nTileFlags = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount((D2TileLibraryEntryStrc*)pTile[3]);
+          if (pTile->nTileType != 0xf && (pTile->nFlags & 0x1c000U) == 0x4000) {
+            nTileFlags = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount(pTile->pTileLibraryEntry);
             if (nTileFlags & 4) {
               rect.right = nScreenX + 0x20 - MouseXOffset;
               rect.left = rect.right - 0x10;
@@ -351,7 +351,7 @@ void __stdcall DRAW_DrawRoomWallTiles(D2RoomStrc * pRoom) {
               rect.bottom = rect.top + 0x10;
               D2gfx::D2GFX::D2GFX_DrawRect(&rect, 'x');
             } else {
-              if (pTile[2] & 0x800U) {
+              if (pTile->nFlags & 0x800U) {
                 byColor = 'x';
                 nTmp = nScreenX + 0x10;
                 nScreenYArg = nScreenY + 8;
@@ -366,12 +366,12 @@ void __stdcall DRAW_DrawRoomWallTiles(D2RoomStrc * pRoom) {
 
             nScreenY -= MouseYOffset;
             nScreenX += -7 - MouseXOffset;
-            D2gfx::D2GFX::D2GFX_DrawString(nScreenX, nScreenY, "%d", ((D2RoomCoordListStrc*)pTile[1])->nIndex);
+            D2gfx::D2GFX::D2GFX_DrawString(nScreenX, nScreenY, "%d", pTile->pRoomCoordList->nIndex);
           }
         }
 
         i++;
-        pTile += 0xc;
+        pTile++;
       } while (i < nTileCount);
     }
 
@@ -380,7 +380,7 @@ void __stdcall DRAW_DrawRoomWallTiles(D2RoomStrc * pRoom) {
       return;
     }
 
-    for (pRoomCoordList = D2Common::DUNGEON::Dungeon::GetCoordList(pRoom); pRoomCoordList; pRoomCoordList = (D2RoomCoordListStrc*)*(int*)((char*)pRoomCoordList + 0x2c)) {
+    for (pRoomCoordList = D2Common::DUNGEON::Dungeon::GetCoordList(pRoom); pRoomCoordList; pRoomCoordList = pRoomCoordList->pNext) {
       rect.left = pRoomCoordList->pBox.nPosX;
       rect.right = pRoomCoordList->pBox.nWidth;
       anYCoords[0] = pRoomCoordList->pBox.nPosY;

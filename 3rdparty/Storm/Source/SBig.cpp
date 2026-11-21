@@ -3993,9 +3993,10 @@ static void __stdcall BigBuffer_PowMod(BigBuffer * pnResult, BigBuffer * pnBase,
     nWordIdx = pnExponent->nCount - pnExponent->nStartWord;
     if (nWordIdx) {
       uint32_t dwExpWord;
-      pnBase = (BigBuffer*)(nWordIdx + 1);
+      uint32_t nWordCounter;
+      nWordCounter = nWordIdx + 1;
       do {
-        pnBase = (BigBuffer*)((intptr_t)&pnBase[-1].nStartWord + 3);
+        nWordCounter--;
         nWordIdx--;
         dwExpWord = nWordIdx + pnExponent->nStartWord;
         if (dwExpWord < pnExponent->nCount) {
@@ -4005,7 +4006,7 @@ static void __stdcall BigBuffer_PowMod(BigBuffer * pnResult, BigBuffer * pnBase,
         }
 
         nBitPos = 0x20;
-        if (pnBase == (BigBuffer*)(pnExponent->nCount - pnExponent->nStartWord) && !(dwExpWord & 0xc0000000)) {
+        if (nWordCounter == pnExponent->nCount - pnExponent->nStartWord && !(dwExpWord & 0xc0000000)) {
           do {
             dwExpWord *= 4;
             nBitPos += -2;

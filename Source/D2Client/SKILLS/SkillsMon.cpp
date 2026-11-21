@@ -2009,7 +2009,6 @@ D2UnitStrc * __fastcall SKILLSMON_CltCreateSpiderLay(D2UnitStrc * pUnit) {
       nDirOffset[7] = 0xc;
       byDir = D2Common::PATH::DynamicPath::UpdateDirection(nCompositeDir);
       byDir = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2(byDir);
-      nCompositeDir = (D2DynamicPathStrc*)(uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nCompositeDir + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)nDirOffset[byDir]);
       D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(nDirOffset[byDir], &nOffsetX, &nOffsetY);
       nUnitX += nOffsetX;
       nUnitY += nOffsetY;

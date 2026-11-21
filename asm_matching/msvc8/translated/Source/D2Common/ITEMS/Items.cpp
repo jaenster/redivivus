@@ -2956,12 +2956,12 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
     int32_t nItemsTxtLine = 0x0;
     int nStatListEx = 0x0;
     ITEM_GetItemData_0x1Cand0x20(pItem, (int*)&nItemsTxtLine, &nStatListEx);
-    D2StatListExStrc* pSeedHigh = (D2StatListExStrc*)nStatListEx;
+    int32_t pSeedHigh = nStatListEx;
     nErrLine = 1;
-    if ((D2StatListExStrc*)nStatListEx) {
+    if (nStatListEx) {
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 1, 1);
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nItemsTxtLine, 0x20);
-      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, (int32_t)pSeedHigh, 0x20);
+      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, pSeedHigh, 0x20);
       nErrLine = 0x20;
     }
 
@@ -4806,6 +4806,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
       }
     }
 
+    D2ItemStatCostTxt* pStatCostSave;
     uint32_t nStatIndex;
     nStatIndex = 0;
     if (nFileVersion < 0x5d) {
@@ -4815,13 +4816,13 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
     nBitVal = ITEMS_IsA(pUnit, ITEMTYPE_AnyArmor);
     if (nBitVal) {
       if (sgptDataTable->nTxtItemStatCostSize <= 0x1f) {
-        bIsExtended = 0;
+        pStatCostSave = 0;
       } else {
-        bIsExtended = (int32_t)(sgptDataTable->pTxtItemStatCost + 0x1f);
+        pStatCostSave = sgptDataTable->pTxtItemStatCost + 0x1f;
       }
 
-      nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, (uint32_t)*(uint8_t*)(bIsExtended + 0x19 + nStatIndex));
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_armorclass, nBitVal - *(int*)(bIsExtended + 0x1c + nStatIndex * 4), 0);
+      nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, (uint32_t)pStatCostSave->saveBits[nStatIndex]);
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_armorclass, nBitVal - pStatCostSave->saveAdd[nStatIndex], 0);
       if (!pUnit) {
         nBitVal = -1;
       } else {
@@ -4837,13 +4838,13 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
       Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_toblock, (uint32_t)pItemsTxt->bBlock, 0);
       Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_velocitypercent, -pItemsTxt->dwSpeed, 0);
       if (sgptDataTable->nTxtItemStatCostSize <= 0x49) {
-        bIsExtended = 0;
+        pStatCostSave = 0;
       } else {
-        bIsExtended = (int32_t)(sgptDataTable->pTxtItemStatCost + 0x49);
+        pStatCostSave = sgptDataTable->pTxtItemStatCost + 0x49;
       }
 
-      nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, (uint32_t)*(uint8_t*)(bIsExtended + 0x19 + nStatIndex));
-      nStatVal = nBitVal - *(int*)(bIsExtended + 0x1c + nStatIndex * 4);
+      nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, (uint32_t)pStatCostSave->saveBits[nStatIndex]);
+      nStatVal = nBitVal - pStatCostSave->saveAdd[nStatIndex];
       Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxdurability, nStatVal, 0);
       if (nStatVal) {
         if (sgptDataTable->nTxtItemStatCostSize <= 0x48) {

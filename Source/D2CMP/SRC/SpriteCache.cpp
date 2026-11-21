@@ -718,10 +718,11 @@ static D2CelFileCacheEntryStrc * __stdcall SPRITECACHE_LoadDCC(char * szText, ch
 
       pCacheEntry = (D2CelFileCacheEntryStrc*)ppLruSlot->pBuf;
       memset(pCacheEntry, 0, 0xc0);
-      iVar1 = 0xa0 - (int)szCelName;
+      char* pszCelNameDst = pCacheEntry->szCelName;
       do {
         cFilenameChar = *szCelName;
-        szCelName[(intptr_t)pCacheEntry + iVar1] = cFilenameChar;
+        *pszCelNameDst = cFilenameChar;
+        pszCelNameDst++;
         szCelName++;
       } while (cFilenameChar != '\0');
 

@@ -466,7 +466,7 @@ BOOL __fastcall SaveStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * p
               if (byCsvBitWidth > 0) {
                 nClampedValue = nRawStatValue;
                 if (byCsvBitWidth < 0x20) {
-                  if (*(uint8_t*)((intptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
+                  if ((pStatCostTxt->dwItemStatFlags >> 8) & Fog::BitBuffer::gadwBitMasks[5]) {
                     nClampMask = -1 << byCsvBitWidth - 1;
                     nClamped = nRawStatValue;
                     if ((int)nRawStatValue <= (int)nClampMask) {
@@ -912,6 +912,7 @@ static int32_t __stdcall PLAYERSAVE_CreateNewCharacter(D2ClientStrc * pSaveConte
 
 // Parses the .d2s save-file header during game join/load, validates it, and creates the player's server unit. Verifies the stored checksum (zeroing the checksum field before recomputing), the recorded file size, and the file-version range (0x5c-0x60); confirms the saved character name matches the client's. Applies CalculateGetFlags policy (may reject or return code 2 for a 'hardcore dead' / status-bit-1 file). Sets the client's class, weapon-swap flag, file flags, create time, and current act from the per-difficulty progress byte; recovers the map seed for single-player. Creates the UNIT_PLAYER unit (pOutUnit), links it to the client, sends the init-unit packet, and restores all 16 hotkeys plus the L/R and weapon-swap skill assignments and guild info. ppSaveFileHeader is advanced past the consumed header on success. Returns 0 on success, 2 to signal a status-bit case, or error codes 3-7.
 int32_t __fastcall PLAYERSAVE_ParseHeaderAndCreateUnit(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2SaveFileHeaderStrc * * ppSaveFileHeader, D2SaveFileHeaderStrc * pHeader, D2UnitStrc * * pOutUnit) {
+    int32_t nRecoverSeed;
     uint16_t wCharStatusHigh;
     uint32_t dwWeaponSwapRaw;
     uint32_t nHand;
@@ -926,12 +927,11 @@ int32_t __fastcall PLAYERSAVE_ParseHeaderAndCreateUnit(::SGAMEDATA * pGame, D2Cl
       return 4;
     }
 
-    D2SaveFileHeaderStrc* pDVar3 = (D2SaveFileHeaderStrc*)pSaveFile->dwChecksum;
+    uint32_t nFileChecksum = pSaveFile->dwChecksum;
     uint32_t nFileSize = (intptr_t)pHeader - (intptr_t)pSaveFile;
     pSaveFile->dwChecksum = 0;
-    pHeader = pDVar3;
     uint32_t nStoredChecksum = Fog::Save::CalculateChecksum((uint8_t*)pSaveFile, nFileSize);
-    if ((D2SaveFileHeaderStrc*)nStoredChecksum != pHeader) {
+    if (nStoredChecksum != nFileChecksum) {
       return 6;
     }
     if (nFileSize != pSaveFile->nFileSize) {
@@ -971,14 +971,14 @@ int32_t __fastcall PLAYERSAVE_ParseHeaderAndCreateUnit(::SGAMEDATA * pGame, D2Cl
       GAME::Clients::SetWeaponSwap(pClient, pSaveFile->bWeaponSwapped & 1);
       GAME::Clients::SetFileFlags(pClient, (int16_t)pSaveFile->dwCharacterStatus);
       GAME::Clients::SetCreateTime(pClient, pSaveFile->nCreateTime);
-      pHeader = (D2SaveFileHeaderStrc*)(pSaveFile->pDifficulty[pGame->nDifficulty] & 0x80);
+      nRecoverSeed = pSaveFile->pDifficulty[pGame->nDifficulty] & 0x80;
       uint8_t nAct = pSaveFile->pDifficulty[pGame->nDifficulty] & 0x7f;
       if (nAct >= 5) {
         nAct = 0;
       }
 
       GAME::Clients::CLIENT_SetAct(pClient, nAct);
-      /* Recovering Map Seed in Single Player */ if (pGame->nGameType == SGAMETYPE_SINGLEPLAYER && !pGame->bInitSeed && pHeader) {
+      /* Recovering Map Seed in Single Player */ if (pGame->nGameType == SGAMETYPE_SINGLEPLAYER && !pGame->bInitSeed && nRecoverSeed) {
         pGame->pInitSeed.nSeedLow = pSaveFile->nInitSeed;
       }
 
@@ -1141,7 +1141,7 @@ static int __fastcall ReadStatsLong(D2UnitStrc * pUnit, short * * ppReadPos, sho
       }
 
       byCsvBitWidth = pStatCostTxt->csvbits;
-      if (byCsvBitWidth < 0x20 && *(uint8_t*)((intptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
+      if (byCsvBitWidth < 0x20 && (pStatCostTxt->dwItemStatFlags >> 8) & Fog::BitBuffer::gadwBitMasks[5]) {
         nValue = Fog::BitBuffer::ReadSigned(&bitBuf, (uint32_t)byCsvBitWidth);
       } else {
         nValue = Fog::BitBuffer::ReadUnsigned(&bitBuf, (uint32_t)byCsvBitWidth);
@@ -1373,6 +1373,7 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
 D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MercSaveDataStrc * pMercSaveData, uint32_t dwFileVersion) {
     D2UnitStrc* pMerc;
     int32_t nMaxLevel;
+    int32_t nMercLevel;
     uint32_t exp;
     uint32_t nMinExp;
     int nCopyCount;
@@ -1403,7 +1404,7 @@ D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Merc
     PlayerPets::PETS_UpdatePetData(pUnit, PETTYPE_hireable, pMerc->nUnitGUID, &sPetData);
     D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     nMaxLevel = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
-    pMercSaveData = (D2MercSaveDataStrc*)0x1;
+    nMercLevel = 1;
     exp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMerc, UNITSTAT_experience, 0);
     nMinExp = (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&sMercSave.dwExperience + 2) << 16 | (uint32_t)(uint16_t)sMercSave.dwExperience);
     if (exp < nMinExp) {
@@ -1413,10 +1414,10 @@ D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Merc
     UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0xd, nMinExp);
     pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)sMercSave.wHirelingId, 1);
     while (pHirelingTxt) {
-      D2MercSaveDataStrc* pSaveCopyDst;
-      pSaveCopyDst = (D2MercSaveDataStrc*)((intptr_t)&pMercSaveData->dwFlags + 1);
-      if ((intptr_t)pSaveCopyDst > nMaxLevel || (nMinExp = D2Common::Merc::GetBaseExperience((int32_t)pSaveCopyDst, pHirelingTxt->expPerLvl) , (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&sMercSave.dwExperience + 2) << 16 | (uint32_t)(uint16_t)sMercSave.dwExperience) < nMinExp)) {
-        Monster::MonsterAI::MERC_ApplyLevelStats(pGame, pUnit, pMerc, (int32_t)pMercSaveData);
+      int32_t nNextLevel;
+      nNextLevel = nMercLevel + 1;
+      if (nNextLevel > nMaxLevel || (nMinExp = D2Common::Merc::GetBaseExperience(nNextLevel, pHirelingTxt->expPerLvl) , (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&sMercSave.dwExperience + 2) << 16 | (uint32_t)(uint16_t)sMercSave.dwExperience) < nMinExp)) {
+        Monster::MonsterAI::MERC_ApplyLevelStats(pGame, pUnit, pMerc, nMercLevel);
         if (sMercSave.dwFlags & 0x10000) {
           PlayerPets::SERVERUNIT_RemovePetFromUnit(pGame, pUnit, pMerc);
           pMerc->eUnitFlags |= UNITFLAG_ISDEAD;
@@ -1430,8 +1431,8 @@ D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Merc
         return pMerc;
       }
 
-      pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)sMercSave.wHirelingId, (int32_t)pSaveCopyDst);
-      pMercSaveData = pSaveCopyDst;
+      pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)sMercSave.wHirelingId, nNextLevel);
+      nMercLevel = nNextLevel;
     }
 
     UNIT::SUnit::FreeServerUnit(pGame, pMerc);

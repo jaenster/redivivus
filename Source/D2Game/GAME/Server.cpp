@@ -2383,13 +2383,12 @@ int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, D2QServer
     if (pGame) {
       D2UnitStrc* pUnit;
       nBucketIdx = 0;
-      nServerId = (uint32_t)pGame->pUnitList;
       do {
         if (nExported >= nMaxCount) {
           break;
         }
 
-        pUnit = *(D2UnitStrc**)nServerId;
+        pUnit = pGame->pUnitList[0][nBucketIdx];
         if (pUnit) {
           pOutCursor = pOutBuffer + nExported;
           do {
@@ -2404,7 +2403,6 @@ int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, D2QServer
           } while (pUnit);
         }
 
-        nServerId += 4;
         nBucketIdx++;
       } while (nBucketIdx < 0x80);
 

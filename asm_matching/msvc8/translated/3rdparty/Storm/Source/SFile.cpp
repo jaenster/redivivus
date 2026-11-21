@@ -1248,9 +1248,10 @@ int __stdcall SFileGetFileCompressedSize(D2MPQFileStrc * pArchive, void * pdwSiz
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
-    int bIsValidHandle = SFILE_CheckFileHandle(pArchive, (D2MPQFileStrc**)&pdwSizeHigh);
-    if (bIsValidHandle && *(int*)((char*)pdwSizeHigh + 0x110) == -1) {
-      pArchiveName = *(int*)(*(int*)((char*)pdwSizeHigh + 0x118) + 4);
+    D2MPQFileStrc * pFileSlot;
+    int bIsValidHandle = SFILE_CheckFileHandle(pArchive, &pFileSlot);
+    if (bIsValidHandle && (intptr_t)pFileSlot->hFile == -1) {
+      pArchiveName = pFileSlot->pBlockEntry->dwCompressedSize;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
@@ -1260,51 +1261,49 @@ int __stdcall SFileGetFileCompressedSize(D2MPQFileStrc * pArchive, void * pdwSiz
 // @blizzard SFileGetFileSize (SFILE.CPP)
 DWORD __stdcall SFileGetFileSize(D2MPQFileStrc * pMPQFile, LPDWORD pdwFileSizeHigh) {
     DWORD dwFileSize;
-    LPDWORD pdwFileSizeHighSlot;
+    D2MPQFileStrc * pFileSlot;
     if (pdwFileSizeHigh) {
       *pdwFileSizeHigh = 0;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
-    int bIsValidHandle = SFILE_CheckFileHandle(pMPQFile, (D2MPQFileStrc**)&pdwFileSizeHighSlot);
+    int bIsValidHandle = SFILE_CheckFileHandle(pMPQFile, &pFileSlot);
     if (!bIsValidHandle) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
       return -1;
     }
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (pdwFileSizeHighSlot[0x44] != -1) {
-      LPDWORD pMPQFileSaved = pdwFileSizeHighSlot;
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if ((intptr_t)pFileSlot->hFile != -1) {
       LeaveCriticalSection(&lpCriticalSection_00779068);
-      /* LPDWORD lpFileSizeHigh for GetFileSize */ /* HANDLE hFile for GetFileSize */ dwFileSize = GetFileSize((HANDLE)pMPQFileSaved[0x44], pdwFileSizeHigh);
+      /* LPDWORD lpFileSizeHigh for GetFileSize */ /* HANDLE hFile for GetFileSize */ dwFileSize = GetFileSize(pFileSlot->hFile, pdwFileSizeHigh);
       return dwFileSize;
     }
 
-    dwFileSize = *(DWORD*)(pdwFileSizeHighSlot[0x46] + 8);
+    dwFileSize = pFileSlot->pBlockEntry->dwFileSize;
     LeaveCriticalSection(&lpCriticalSection_00779068);
     return dwFileSize;
 }
 
 int __stdcall SFILE_GetFileTimestamp(D2MPQFileStrc * pArchive, LPFILETIME pFileTime) {
-    LPFILETIME pFileTimeSlot;
+    D2MPQFileStrc * pFileSlot;
     D2_CHECKS_BEGIN;
     D2_CHECK(pFileTime);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
-    int bIsValidHandle = SFILE_CheckFileHandle(pArchive, (D2MPQFileStrc**)&pFileTimeSlot);
-    LPFILETIME pMPQFileSaved = pFileTimeSlot;
+    int bIsValidHandle = SFILE_CheckFileHandle(pArchive, &pFileSlot);
     if (!bIsValidHandle) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
       return 0;
     }
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (pFileTimeSlot[0x22].dwLowDateTime != -1) {
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if ((intptr_t)pFileSlot->hFile != -1) {
       BOOL bGotFileTime;
       LeaveCriticalSection(&lpCriticalSection_00779068);
-      /* LPFILETIME lpLastWriteTime for GetFileTime */ /* LPFILETIME lpLastAccessTime for GetFileTime */ /* LPFILETIME lpCreationTime for GetFileTime */ /* HANDLE hFile for GetFileTime */ bGotFileTime = GetFileTime((HANDLE)pMPQFileSaved[0x22].dwLowDateTime, (LPFILETIME)0x0, (LPFILETIME)0x0, pFileTime);
+      /* LPFILETIME lpLastWriteTime for GetFileTime */ /* LPFILETIME lpLastAccessTime for GetFileTime */ /* LPFILETIME lpCreationTime for GetFileTime */ /* HANDLE hFile for GetFileTime */ bGotFileTime = GetFileTime(pFileSlot->hFile, (LPFILETIME)0x0, (LPFILETIME)0x0, pFileTime);
       return bGotFileTime;
     }
 
-    DWORD pMpqFileRecord = pFileTimeSlot[0x23].dwLowDateTime;
-    pFileTime->dwLowDateTime = *(DWORD*)(pMpqFileRecord + 0x10);
-    pFileTime->dwHighDateTime = *(DWORD*)(pMpqFileRecord + 0x14);
+    D2MPQBlockEntryStrc * pBlockEntry = pFileSlot->pBlockEntry;
+    pFileTime->dwLowDateTime = pBlockEntry->ftFileTime.dwLowDateTime;
+    pFileTime->dwHighDateTime = pBlockEntry->ftFileTime.dwHighDateTime;
     LeaveCriticalSection(&lpCriticalSection_00779068);
     return 1;
 }
@@ -1377,29 +1376,29 @@ DWORD __stdcall SFileSetFilePointer(D2MPQFileStrc * pMPQFile, int32_t nDistanceT
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     int bIsValidHandle;
-    bIsValidHandle = SFILE_CheckFileHandle(pMPQFile, (D2MPQFileStrc**)&pnDistanceToMoveHigh);
+    D2MPQFileStrc * pFileSlot;
+    bIsValidHandle = SFILE_CheckFileHandle(pMPQFile, &pFileSlot);
     if (!bIsValidHandle) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
       return -1;
     }
-    if (pnDistanceToMoveHigh[0x44] != -1) {
-      int* pMPQFileSaved = pnDistanceToMoveHigh;
+    if ((intptr_t)pFileSlot->hFile != -1) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
-      /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ dwResult = SetFilePointer((HANDLE)pMPQFileSaved[0x44], nDistanceToMove, (PLONG)0x0, dwMoveMethod);
+      /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ dwResult = SetFilePointer(pFileSlot->hFile, nDistanceToMove, (PLONG)0x0, dwMoveMethod);
       return dwResult;
     }
     if (!dwMoveMethod) {
       seek_absolute:
-      pnDistanceToMoveHigh[0x48] = nDistanceToMove;
+      pFileSlot->nFilePos = nDistanceToMove;
     } else {
       switch (dwMoveMethod) {
         case 1:
           {
-            if (!(nDistanceToMove >= 0 || (uint32_t)pnDistanceToMoveHigh[0x48] >= (uint32_t)-nDistanceToMove)) {
+            if (!(nDistanceToMove >= 0 || pFileSlot->nFilePos >= (uint32_t)-nDistanceToMove)) {
               break;
             }
 
-            pnDistanceToMoveHigh[0x48] += nDistanceToMove;
+            pFileSlot->nFilePos += nDistanceToMove;
             goto finish_seek;
           }
         default:
@@ -1408,8 +1407,8 @@ DWORD __stdcall SFileSetFilePointer(D2MPQFileStrc * pMPQFile, int32_t nDistanceT
           }
         case 2:
           {
-            if (nDistanceToMove >= 0 || *(uint32_t*)(pnDistanceToMoveHigh[0x46] + 8) >= (uint32_t)-nDistanceToMove) {
-              nDistanceToMove = *(int*)(pnDistanceToMoveHigh[0x46] + 8) + nDistanceToMove;
+            if (nDistanceToMove >= 0 || pFileSlot->pBlockEntry->dwFileSize >= (uint32_t)-nDistanceToMove) {
+              nDistanceToMove = pFileSlot->pBlockEntry->dwFileSize + nDistanceToMove;
               goto seek_absolute;
             }
 
@@ -1417,13 +1416,13 @@ DWORD __stdcall SFileSetFilePointer(D2MPQFileStrc * pMPQFile, int32_t nDistanceT
           }
       }
 
-      pnDistanceToMoveHigh[0x48] = 0;
+      pFileSlot->nFilePos = 0;
     }
 
     finish_seek:
-    pnDistanceToMoveHigh[0x4f] = 0;
-    pnDistanceToMoveHigh[0x50] = 0;
-    dwResult = pnDistanceToMoveHigh[0x48];
+    pFileSlot->nBytesRead = 0;
+    pFileSlot->nBufferSize = 0;
+    dwResult = pFileSlot->nFilePos;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
     return dwResult;
 }
@@ -1648,6 +1647,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
     uint32_t nDestSize;
     uint32_t nSectorIdx;
     int nArchive;
+    uint32_t nCursor;
     D2MPQFileStrc* pMPQFileSaved;
     pMPQFileSaved = pArchive;
     D2ArchiveStrc* pMpqArchive;
@@ -1725,7 +1725,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
         if (pArchive->pBlockEntry->dwFlags & 0x10000) {
           nSectorSize = pArchive->pArchive->nSectorSize;
           __frame0.nReadCount = nFileOffset / nSectorSize;
-          pArchive = 0;
+          nCursor = 0;
           nSectorSize = (nSectorSize - 1 + nReadLen) / nSectorSize;
           while (__frame0.nReadCount < pMPQFileSaved->nSectorCount) {
             __frame0.nBaseOffset = nSectorSize - 1;
@@ -1736,8 +1736,8 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
               nSectorIndex = pMPQFileSaved->pSectorTable[__frame0.nReadCount + 1] - pMPQFileSaved->pSectorTable[__frame0.nReadCount];
             } else {
               nSectorSize = pMPQFileSaved->pArchive->nSectorSize;
-              nSectorIndex = nReadLen - (int)pArchive;
-              if (nSectorSize < nReadLen - (intptr_t)pArchive) {
+              nSectorIndex = nReadLen - nCursor;
+              if (nSectorSize < nReadLen - nCursor) {
                 nSectorIndex = nSectorSize;
               }
               if (__frame0.nReadCount == pMPQFileSaved->nSectorCount - 1) {
@@ -1748,8 +1748,8 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
               }
             }
 
-            SFILE_Decrypt(pMPQFileSaved->nDecryptKey + __frame0.nReadCount, (uint32_t*)((intptr_t)__frame0.pReadBuffer + (intptr_t)pArchive), nSectorIndex & -4);
-            pArchive = (D2MPQFileStrc*)(pArchive->szFileName + (nSectorIndex - 8));
+            SFILE_Decrypt(pMPQFileSaved->nDecryptKey + __frame0.nReadCount, (uint32_t*)((intptr_t)__frame0.pReadBuffer + nCursor), nSectorIndex & -4);
+            nCursor += nSectorIndex;
             __frame0.nReadCount++;
             nSectorSize = __frame0.nBaseOffset;
           }
@@ -4885,7 +4885,8 @@ void __stdcall SFILE_SetRequestPriorityByBuffer(void * pReadBuffer, int nPriorit
 // @blizzard SFileReadFileEx2 (Storm 1.10b PPC)
 int __stdcall SFileReadFileEx2(D2MPQFileStrc * pFileHandle, void * pOutputBuffer, uint32_t nBytesToRead, uint32_t * pBytesRead, LPOVERLAPPED lpOverlapped, int dwReadFlags, D2StormAsyncCompletionStrc * pCompletion) {
     uint32_t nChunkBytes;
-    D2MPQFileStrc* pDVar1;
+    uint32_t nBytesAvail;
+    uint32_t nCursor;
     uint32_t nActualBytesRead;
     D2StormAsyncOpStrc* pAsyncRequest;
     bool bChecksumMatch;
@@ -4896,7 +4897,6 @@ int __stdcall SFileReadFileEx2(D2MPQFileStrc * pFileHandle, void * pOutputBuffer
     uint32_t nReadFilePos;
     uint32_t nTotalReadSize;
     uint32_t nChunkCount;
-    char* pAsyncResultBuf;
     uint8_t* pTargetBuffer;
     pTargetBuffer = (uint8_t*)pOutputBuffer;
     if (pBytesRead) {
@@ -4992,18 +4992,16 @@ int __stdcall SFileReadFileEx2(D2MPQFileStrc * pFileHandle, void * pOutputBuffer
         nReadFilePos = pValidatedFile->nFilePos;
       }
 
-      pFileHandle = 0;
+      nCursor = 0;
       if (pValidatedFile->hFile == (HANDLE)-1 && !pValidatedFile->pArchive->nArchiveType) {
-        pFileHandle = (D2MPQFileStrc*)SFILE_InternalReadUnaligned(pValidatedFile, pTargetBuffer, nTotalReadSize, nReadFilePos);
+        nBytesAvail = SFILE_InternalReadUnaligned(pValidatedFile, pTargetBuffer, nTotalReadSize, nReadFilePos);
         if (pValidatedFile->bChecksumEnabled && pValidatedFile->nChecksumState == 2 && pValidatedFile->nExpectedFileSize == pValidatedFile->pBlockEntry->dwFileSize) {
           CrcBuffer(nullptr, 0, &pValidatedFile->dwComputedCRC, 4);
           pValidatedFile->nChecksumState = 4;
         }
 
-        pDVar1 = pFileHandle;
         if (lpOverlapped && lpOverlapped->hEvent) {
           /* HANDLE hEvent for SetEvent */ SetEvent(lpOverlapped->hEvent);
-          pDVar1 = pFileHandle;
         }
       } else {
         SFILE_CreateCdThread();
@@ -5033,7 +5031,7 @@ int __stdcall SFileReadFileEx2(D2MPQFileStrc * pFileHandle, void * pOutputBuffer
 
             pAsyncRequest = SFILE_IssueRequest(nReadFilePos + nChunkOffset, pTargetBuffer + (nReadFilePos + nChunkOffset - nReadFilePos), pTargetBuffer, nullptr, 0, nullptr, nThisChunkSize, 0x7fffffff, (uint32_t)bChecksumMatch, bIsLastChunk2 ? hAsyncIOEvent : nullptr, nSectorRemainder, bIsLastChunk2, bIsLastChunk2 ? (D2StormAsyncCompletionStrc*)pCompletion : nullptr, pValidatedFile);
             if (!bIsLastChunk2) {
-              pFileHandle = (D2MPQFileStrc*)(pFileHandle->szFileName + (nThisChunkSize - 8));
+              nCursor += nThisChunkSize;
             }
 
             nChunkOffset += nChunkCount;
@@ -5050,20 +5048,19 @@ int __stdcall SFileReadFileEx2(D2MPQFileStrc * pFileHandle, void * pOutputBuffer
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
         /* HANDLE hObject for CloseHandle */ CloseHandle(hAsyncIOEvent);
         nSectorRemainder = pAsyncRequest->nChunkBytesRead;
-        pAsyncResultBuf = pFileHandle->szFileName;
         SFILE_ReleaseAsyncRequest(pAsyncRequest);
         SMem::SMemFree(pAsyncRequest, "delete", -1, 0);
-        pDVar1 = (D2MPQFileStrc*)(pAsyncResultBuf + (nSectorRemainder - 8));
+        nBytesAvail = nCursor + nSectorRemainder;
       }
 
       nActualBytesRead = nBytesToRead;
-      if (nBytesToRead >= (uintptr_t)pDVar1) {
-        nActualBytesRead = (uint32_t)pDVar1;
+      if (nBytesToRead >= nBytesAvail) {
+        nActualBytesRead = nBytesAvail;
       }
       if (pTargetBuffer != (unsigned char*)pOutputBuffer) {
         SMem::SMemCopy(pOutputBuffer, pTargetBuffer, nActualBytesRead);
         pValidatedFile->nBytesRead = nActualBytesRead;
-        pValidatedFile->nBufferSize = (uint32_t)pDVar1;
+        pValidatedFile->nBufferSize = nBytesAvail;
       }
       if (!lpOverlapped) {
         pValidatedFile->nFilePos += nActualBytesRead;

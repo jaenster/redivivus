@@ -2215,7 +2215,7 @@ BOOL __fastcall Skills_SrvDoFunc_047_CloakOfShadows(::SGAMEDATA * pGame, D2UnitS
     ::SGAMEDATA* pGameSaved = pGame;
     D2UnitStrc* pUnitSaved = pUnit;
     sStateExpiryArgs.nDurationInFrames = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)eAuraState);
-    if ((PFN_StatExpireCallback)sStateExpiryArgs.nDurationInFrames) {
+    if (sStateExpiryArgs.nDurationInFrames) {
       return 0;
     }
 
@@ -2251,7 +2251,7 @@ BOOL __fastcall Skills_SrvDoFunc_047_CloakOfShadows(::SGAMEDATA * pGame, D2UnitS
 
       pCalcPtr++;
       uSlot14.nPassiveStatsLeft--;
-    } while ((short int*)uSlot14.nPassiveStatsLeft);
+    } while (uSlot14.nPassiveStatsLeft);
 
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_modifierlist_skill, eSkillOrig, 0);
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_modifierlist_level, nSkillLvl, 0);

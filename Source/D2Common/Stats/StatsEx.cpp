@@ -242,7 +242,7 @@ static int32_t __stdcall STATLIST_LookupBaseStatWithMinAccr(D2ItemStatCostTxt * 
     }
 
     int nLo = pDVar1->nStatValue;
-    if (pItemStatCostLine && *(uint8_t*)((intptr_t)&pItemStatCostLine->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2] && pStatList->sStatList.nFlags & 0x80000000U) {
+    if (pItemStatCostLine && ((uint8_t*)&pItemStatCostLine->dwItemStatFlags)[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2] && pStatList->sStatList.nFlags & 0x80000000U) {
       D2UnitStrc* pOwner;
       pOwner = pStatList->pOwner;
       if ((pOwner && pOwner->eUnitType == UNIT_PLAYER || pStatList->pOwner && pStatList->pOwner->eUnitType == UNIT_MONSTER) && nLo < pItemStatCostLine->minaccr) {
@@ -273,7 +273,7 @@ static int32_t __stdcall STATLIST_GetStatValueByKey(D2ItemStatCostTxt * pItemSta
     }
 
     int nLo = pStatInfoRecord->nStatValue;
-    if (pItemStatCostLine && *(uint8_t*)((intptr_t)&pItemStatCostLine->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2] && (nListFlags & 0x80000000)) {
+    if (pItemStatCostLine && ((uint8_t*)&pItemStatCostLine->dwItemStatFlags)[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2] && (nListFlags & 0x80000000)) {
       D2UnitStrc* pUnit;
       pUnit = pStatEx->pOwner;
       if (pUnit && (pUnit->eUnitType == UNIT_PLAYER || pStatEx->pOwner && pStatEx->pOwner->eUnitType == UNIT_MONSTER) && nLo < pItemStatCostLine->minaccr) {
@@ -369,7 +369,7 @@ static int32_t __stdcall STATLIST_PropagateStatDelta(int32_t nShiftedStat, int32
       pPoolManager1 = pSkillsTxt->sStatList.pMemory;
       STATLIST_RemoveStatFromArray(pPoolManager1, pStatEntry, pPoolManager1, pStatInfo);
     }
-    if (pSkillsTxt->fpCallback && *(uint8_t*)((intptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+    if (pSkillsTxt->fpCallback && ((uint8_t*)&pItemStatCostTxt->dwItemStatFlags)[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       pSkillsTxt->fpCallback(pSkillsTxt->pGame, pSkillsTxt->pOwner, nCallbackArg, nShiftedStat, nOldValue, nNewValue);
     }
 
@@ -401,7 +401,7 @@ static void __stdcall STATLIST_SetFullStatValue(int32_t nStatKey, int32_t nNewVa
         pSkillsTxt->sStatList.nFlags |= 0x20000000;
       }
     }
-    if (!(nOldValue != nNewValue && pSkillsTxt->fpCallback && *(uint8_t*)((intptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
+    if (!(nOldValue != nNewValue && pSkillsTxt->fpCallback && ((uint8_t*)&pItemStatCostTxt->dwItemStatFlags)[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
       return;
     }
 
@@ -1328,7 +1328,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
     int32_t nRelatedStatShifted;
     int32_t nPeriod2;
     int32_t nPeriod;
-    short int* pOpRelationSaved;
+    D2ItemStatCostOpRelationStrc* pOpRelationSaved;
     D2StatInfoStrc* pBaseStatInfo;
     D2StatStrc* pBaseStatEntry;
     eD2UnitType eOwnerType;
@@ -1352,19 +1352,19 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
       return nCombinedValue;
     }
 
-    short int* pOpRelation;
-    pOpRelation = &pItemStatCostLine->aOpRelations[0].nSourceStat;
+    D2ItemStatCostOpRelationStrc* pOpRelation;
+    pOpRelation = &pItemStatCostLine->aOpRelations[0];
     int32_t nOpIdx;
     nOpIdx = 0;
     int32_t nOwnerStat;
     nOwnerStat = nCombinedValue;
     do {
-      if (!*(uint8_t*)(pOpRelation + 1)) {
+      if (!pOpRelation->nSourceOp) {
         return nCombinedValue;
       }
 
       pOpRelationSaved = pOpRelation;
-      switch (*(uint8_t*)(pOpRelation + 1)) {
+      switch (pOpRelation->nSourceOp) {
         case 1:
           pOwner = pStatList->pOwner;
         if (pOwner) {
@@ -1382,7 +1382,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
         case 2:
           eOwnerType = pStatList->sStatList.eOwnerType;
         if (eOwnerType == UNIT_PLAYER || eOwnerType == UNIT_MONSTER) {
-          wBaseStat = ((D2ItemStatCostOpRelationStrc*)(pOpRelation - 1))->nOpBaseStat;
+          wBaseStat = pOpRelation->nOpBaseStat;
           if (wBaseStat != 0xffff) {
             pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine((eD2UnitStat)wBaseStat);
             if (pItemStatCostLine) {
@@ -1391,9 +1391,9 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
               add_opbase_scaled:
               nApplyResult3 >>= D2_SHIFT_COUNT(byValShift);
               if (nApplyResult3 > 0) {
-                nRelatedStatVal = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)*pOpRelation << 0x10);
+                nRelatedStatVal = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)pOpRelation->nSourceStat << 0x10);
                 if (nRelatedStatVal) {
-                  nApplyResult2 = nRelatedStatVal * nApplyResult3 >> D2_SHIFT_COUNT(*(uint8_t*)((char*)pOpRelation + 3));
+                  nApplyResult2 = nRelatedStatVal * nApplyResult3 >> D2_SHIFT_COUNT(pOpRelation->nSourceOpParam);
                   goto add_to_total;
                 }
               }
@@ -1405,7 +1405,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
         case 3:
           eOwnerType = pStatList->sStatList.eOwnerType;
         if (eOwnerType == UNIT_PLAYER || eOwnerType == UNIT_MONSTER) {
-          wBaseStat = ((D2ItemStatCostOpRelationStrc*)(pOpRelation - 1))->nOpBaseStat;
+          wBaseStat = pOpRelation->nOpBaseStat;
           if (wBaseStat != 0xffff) {
             pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine((eD2UnitStat)wBaseStat);
             if (pItemStatCostLine) {
@@ -1414,9 +1414,9 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
               add_opbase_scaled_percent:
               nApplyResult3 >>= D2_SHIFT_COUNT(byValShift);
               if (nApplyResult3 > 0) {
-                nRelatedStatVal = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)*pOpRelation << 0x10);
+                nRelatedStatVal = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)pOpRelation->nSourceStat << 0x10);
                 if (nRelatedStatVal) {
-                  nApplyResult = nRelatedStatVal * nApplyResult3 >> D2_SHIFT_COUNT(*(uint8_t*)((char*)pOpRelation + 3));
+                  nApplyResult = nRelatedStatVal * nApplyResult3 >> D2_SHIFT_COUNT(pOpRelation->nSourceOpParam);
                   goto add_percent;
                 }
               }
@@ -1430,7 +1430,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
         if (pOwner) {
           eOwnerType = pOwner->eUnitType;
           if (eOwnerType == UNIT_PLAYER || eOwnerType == UNIT_MONSTER) {
-            wBaseStat = ((D2ItemStatCostOpRelationStrc*)(pOpRelation - 1))->nOpBaseStat;
+            wBaseStat = pOpRelation->nOpBaseStat;
             if (wBaseStat != 0xffff) {
               pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine((eD2UnitStat)wBaseStat);
               if (pItemStatCostLine) {
@@ -1448,7 +1448,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
         if (pOwner) {
           eOwnerType = pOwner->eUnitType;
           if (eOwnerType == UNIT_PLAYER || eOwnerType == UNIT_MONSTER) {
-            wBaseStat = ((D2ItemStatCostOpRelationStrc*)(pOpRelation - 1))->nOpBaseStat;
+            wBaseStat = pOpRelation->nOpBaseStat;
             if (wBaseStat != 0xffff) {
               pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine((eD2UnitStat)wBaseStat);
               if (pItemStatCostLine) {
@@ -1462,7 +1462,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
 
         break;
         case 6:
-          if (pStatList->pOwner && (pDrlgAct = pStatList->pOwner->pDrlgAct , pDrlgAct != 0) && (nRelatedStatVal = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)*pOpRelation << 0x10) , nRelatedStatVal != 0)) {
+          if (pStatList->pOwner && (pDrlgAct = pStatList->pOwner->pDrlgAct , pDrlgAct != 0) && (nRelatedStatVal = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)pOpRelation->nSourceStat << 0x10) , nRelatedStatVal != 0)) {
             nPeriod = 0;
             nBaseStatLookup = Environment::DRLGENV_GetPeriodOfDayFromAct(pDrlgAct, &nPeriod);
             nApplyResult2 = ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nRelatedStatVal, nBaseStatLookup, nPeriod, nullptr, nullptr, nullptr);
@@ -1471,7 +1471,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
           }
         break;
         case 7:
-          if (pStatList->pOwner && (pDrlgAct = pStatList->pOwner->pDrlgAct , pDrlgAct != 0) && (nRelatedStatVal = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)*pOpRelation << 0x10) , nRelatedStatVal != 0)) {
+          if (pStatList->pOwner && (pDrlgAct = pStatList->pOwner->pDrlgAct , pDrlgAct != 0) && (nRelatedStatVal = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)pOpRelation->nSourceStat << 0x10) , nRelatedStatVal != 0)) {
             nPeriod2 = 0;
             nBaseStatLookup = Environment::DRLGENV_GetPeriodOfDayFromAct(pDrlgAct, &nPeriod2);
             n100Percent = 100;
@@ -1486,7 +1486,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
         if (pOwner && pOwner->eUnitType == UNIT_PLAYER) {
           pCharStatsTxt = DATATBLS::DataTbls::INV_GetCharStatsTxtLine(pOwner->nClassId);
           if (pCharStatsTxt) {
-            wBaseStat = *pOpRelation;
+            wBaseStat = pOpRelation->nSourceStat;
             pBaseStatInfo = &pStatList->sStatList.sBaseStats;
             nSearchResult = STATLIST_BinarySearchStatById((uint32_t)wBaseStat << 0x10, pBaseStatInfo);
             D2StatStrc* pStatInfoRecord = nSearchResult >= 0 ? pBaseStatInfo->pStatInfo + nSearchResult : nullptr;
@@ -1511,7 +1511,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
           pCharStatsTxt = DATATBLS::DataTbls::INV_GetCharStatsTxtLine(pOwner->nClassId);
           if (pCharStatsTxt) {
             pListBaseStats = &pStatList->sStatList.sBaseStats;
-            nRelatedStatShifted = (uint32_t)(uint16_t)*pOpRelation << 0x10;
+            nRelatedStatShifted = (uint32_t)(uint16_t)pOpRelation->nSourceStat << 0x10;
             nRelatedStatIdx = STATLIST_BinarySearchStatById(nRelatedStatShifted, pListBaseStats);
             if (nRelatedStatIdx < 0 || (pRelatedStatEntry = pListBaseStats->pStatInfo + nRelatedStatIdx , !pRelatedStatEntry)) {
               nApplyResult3 = 0;
@@ -1536,7 +1536,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
         case 0xb:
           if (nOwnerStat && (pOwner = pStatList->pOwner , pOwner != 0) && (pOwner->eUnitType == UNIT_PLAYER || pOwner && pOwner->eUnitType == UNIT_MONSTER)) {
             add_opstat_percent:
-            nApplyResult = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)*pOpRelation << 0x10);
+            nApplyResult = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)pOpRelation->nSourceStat << 0x10);
             if (nApplyResult) {
               add_percent:
               nApplyResult2 = DATATBLS::DataTbls::D2ApplyPercent(nOwnerStat, nApplyResult, 100);
@@ -1553,7 +1553,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
       }
 
       nOpIdx++;
-      pOpRelation += 3;
+      pOpRelation++;
     } while (nOpIdx < 0x10);
 
     return nCombinedValue;
@@ -2073,7 +2073,7 @@ void __stdcall STATLIST_AddStatValue(D2StatListExStrc * pStatsEx, eD2UnitStat eU
     int* pnBaseStatValue = &pStatEntry->nStatValue;
     *pnBaseStatValue += nValue;
     if (!*pnBaseStatValue) {
-      STATLIST_RemoveStatFromArray((D2PoolManagerStrc*)nValue, pStatEntry, pStatsEx->sStatList.pMemory, pStatInfo);
+      STATLIST_RemoveStatFromArray(pStatsEx->sStatList.pMemory, pStatEntry, pStatsEx->sStatList.pMemory, pStatInfo);
     }
 
     STATLIST_PropagateStatChange(pStatsEx, nShiftedStat, nValue, nullptr);
@@ -2454,6 +2454,7 @@ void __stdcall ItemUpdateStatsAfterSocketing(D2UnitStrc * pUnit, D2UnitStrc * pU
     D2ItemStatCostTxt* pStatCostTxt;
     uint16_t wOpStatIndex;
     int nUnit2;
+    short int* pnOpStat;
     D2UnitStrc* pOwnerUnit = pUnit;
     if (!(pUnit && pUnit2 && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER))) {
       return;
@@ -2476,10 +2477,10 @@ void __stdcall ItemUpdateStatsAfterSocketing(D2UnitStrc * pUnit, D2UnitStrc * pU
         pStatCostTxt = pDataTable->pTxtItemStatCost + uVar1;
       }
       if ((uint8_t)(pStatCostTxt->op - 6) <= 1) {
-        pUnit = (D2UnitStrc*)&pStatCostTxt->opStat1;
+        pnOpStat = &pStatCostTxt->opStat1;
         nUnit2 = 0x0;
         do {
-          wOpStatIndex = (uint16_t)pUnit->eUnitType;
+          wOpStatIndex = (uint16_t)*pnOpStat;
           if (wOpStatIndex == 0xffff) {
             break;
           }
@@ -2493,7 +2494,7 @@ void __stdcall ItemUpdateStatsAfterSocketing(D2UnitStrc * pUnit, D2UnitStrc * pU
 
           nCombinedStatVal = STATLIST_CalcCombinedStatValue(pOwnerUnit->pStatsEx, nOpStatIndex << 0x10);
           STATLIST_SetFullStatValue(nOpStatIndex << 0x10, nCombinedStatVal, pStatCostTxt, pOwnerUnit, pOwnerUnit->pStatsEx);
-          pUnit = (D2UnitStrc*)((intptr_t)&pUnit->eUnitType + 2);
+          pnOpStat++;
           nUnit2++;
           pDataTable = ITEMS::Items::sgptDataTable;
         } while (nUnit2 < 3);

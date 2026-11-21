@@ -974,7 +974,7 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2ModeChangeStrc * 
     int32_t nPosYCoord;
     int32_t nPosY;
     ::SGAMEDATA* pGameSaved;
-    D2ModeChangeStrc* pMonsterKillSaved;
+    int32_t pMonsterKillSaved;
     eD2UnitType eUnitType;
     ::SGAMEDATA* pGameCE;
     int* pScaledStatsOut;
@@ -1015,9 +1015,9 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2ModeChangeStrc * 
       if (nClassId >= 0 && nClassId < nMonStatsSize) {
         if (nClassId == 0xd4) {
           if (false || false) {
-            pMonsterKillSaved = (D2ModeChangeStrc*)pVictim->pPath.pStaticPath->nPosX;
+            pMonsterKillSaved = pVictim->pPath.pStaticPath->nPosX;
           } else if (pVictim->pPath.pDynamicPath) {
-            pMonsterKillSaved = (D2ModeChangeStrc*)D2Common::PATH::DynamicPath::GetXPos(pVictim->pPath.pDynamicPath);
+            pMonsterKillSaved = D2Common::PATH::DynamicPath::GetXPos(pVictim->pPath.pDynamicPath);
           } else {
             pMonsterKillSaved = 0;
           }
@@ -1031,7 +1031,7 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2ModeChangeStrc * 
             nPosY = 0;
           }
 
-          pUnit_00 = SKILLS::SkillsServer::CreatingAMissile(pGame, MISSILE_Monstercorpseexplode, pVictim, SKILL_Attack, 1, 0, 0, (int32_t)pMonsterKillSaved, nPosY, 1);
+          pUnit_00 = SKILLS::SkillsServer::CreatingAMissile(pGame, MISSILE_Monstercorpseexplode, pVictim, SKILL_Attack, 1, 0, 0, pMonsterKillSaved, nPosY, 1);
           if (!pUnit_00) {
             return 1;
           }
@@ -1061,7 +1061,7 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2ModeChangeStrc * 
           memset(&sDamage, 0, 0x70);
           nRandCEOffset = D2Common::Seed::RANDOM_RandomNumberSelector(&pVictim->sSeed, nCEDamageScaled - nClassId);
           sDamage.dwPhysDamage = nRandCEOffset + nClassId << 7;
-          UNIT::SUnitDmg::DAMAGE_ApplyAreaOfEffectDamage(pGame, pUnit_00, (int32_t)pMonsterKillSaved, nPosY, 5, &sDamage, 0, 0, nullptr, 0x581);
+          UNIT::SUnitDmg::DAMAGE_ApplyAreaOfEffectDamage(pGame, pUnit_00, pMonsterKillSaved, nPosY, 5, &sDamage, 0, 0, nullptr, 0x581);
           return 1;
         }
         if (nClassId == 0x1b9) {

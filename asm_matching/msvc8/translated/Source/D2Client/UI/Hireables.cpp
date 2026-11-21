@@ -767,15 +767,16 @@ static BOOL __stdcall UI_DrawPartyMembersHirelingIcons(int * pnY, int * pnYOffse
 static BOOL __stdcall HIRELING_DrawPortraitIcon(D2UnitStrc * pUnit, int * pnYToggle, int * pnY, int * pnX) {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, 0x48);
-    sGfxData.pDC6 = GetRosterIcon(pUnit, 7, (int32_t*)&pUnit, nullptr);
+    int32_t nRosterGUID;
+    sGfxData.pDC6 = GetRosterIcon(pUnit, 7, &nRosterGUID, nullptr);
     if (!sGfxData.pDC6) {
       return 0;
     }
 
-    DrawHealthBar((uint32_t)pUnit, 7, *pnX);
+    DrawHealthBar(nRosterGUID, 7, *pnX);
     int nY_00 = *pnY;
     int nY = *pnX;
-    UI_DrawHirelingNameFromUnit(UNIT::CUnit::UNITS_FindClientSideUnit((int32_t)pUnit, UNIT_MONSTER), nY, nY_00);
+    UI_DrawHirelingNameFromUnit(UNIT::CUnit::UNITS_FindClientSideUnit(nRosterGUID, UNIT_MONSTER), nY, nY_00);
     if (*pnYToggle) {
       *pnY -= *pnYToggle;
       *pnYToggle = 0;
@@ -810,12 +811,13 @@ static BOOL __stdcall HIRELING_DrawPortraitIcon(D2UnitStrc * pUnit, int * pnYTog
 static BOOL __stdcall HIRELING_DrawPetIcon(D2UnitStrc * pUnit, int * nX, int * pnYToggle, uint32_t nPetType, int * nY) {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, 0x48);
-    sGfxData.pDC6 = GetRosterIcon(pUnit, nPetType, (int32_t*)&pUnit, nullptr);
+    int32_t nRosterGUID;
+    sGfxData.pDC6 = GetRosterIcon(pUnit, nPetType, &nRosterGUID, nullptr);
     if (!sGfxData.pDC6) {
       return 0;
     }
 
-    DrawHealthBar((uint32_t)pUnit, nPetType, *nX);
+    DrawHealthBar(nRosterGUID, nPetType, *nX);
     int* pnXCursor = nX;
     GetAndDrawHirelingName(*nX, *nY, nPetType);
     if (*pnYToggle) {
@@ -871,12 +873,13 @@ static BOOL __stdcall HIRELING_DrawSummonIcon(D2UnitStrc * pUnit, int32_t * nY, 
 static BOOL __stdcall HIRELING_DrawGenericPetIcon(D2UnitStrc * pUnit, int * pnX, int * pnYToggle, uint32_t nPetType, int * pnY) {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, 0x48);
-    sGfxData.pDC6 = GetRosterIcon(pUnit, nPetType, (int32_t*)&pUnit, nullptr);
+    int32_t nRosterGUID;
+    sGfxData.pDC6 = GetRosterIcon(pUnit, nPetType, &nRosterGUID, nullptr);
     if (!sGfxData.pDC6) {
       return 0;
     }
 
-    DrawHealthBar((uint32_t)pUnit, nPetType, *pnX);
+    DrawHealthBar(nRosterGUID, nPetType, *pnX);
     int* pnXCursor = pnX;
     GetAndDrawHirelingName(*pnX, *pnY, nPetType);
     if (*pnYToggle) {

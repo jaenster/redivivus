@@ -1862,7 +1862,7 @@ D2UnitStrc * __fastcall LinkPortal(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2U
     D2RoomStrc* pRoom2 = D2Common::DUNGEON::Dungeon::SpawnUnit(pGame->pAct[neAct], eSrcLevelId, 0xb, &nSpawnX, &nSpawnY, 3);
     D2RoomStrc* pSpawnRoom = pRoom2;
     GAME::Server::SetSomeRoomFlags(pGame, pRoom2);
-    if ((eD2LevelId)pRoom2 == LEVEL_None) {
+    if (!pRoom2) {
       if (!pUnit) {
         nUnitGUID = -1;
       } else {
@@ -1881,7 +1881,7 @@ D2UnitStrc * __fastcall LinkPortal(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2U
     if (BVar1) {
       pRoom2 = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom2, ptPortalPos.x, ptPortalPos.y);
     }
-    if ((eD2LevelId)pRoom2 == LEVEL_None) {
+    if (!pRoom2) {
       pRoom2 = pSpawnRoom;
       ptPortalPos.x = nSpawnX;
       ptPortalPos.y = nSpawnY;

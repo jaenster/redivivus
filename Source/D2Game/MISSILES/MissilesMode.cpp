@@ -5185,8 +5185,8 @@ int __fastcall MISSILESMODE_SrvDoFn13_BoneWallMaker(::SGAMEDATA * pGame, D2UnitS
         return 2;
       }
 
-      sMonsterCastPet.pSkillTxt = (D2SkillsTxt*)SKILLS::SkillsServer::SKILLS_GetSummonMonsterClassId(pOwner, 0, eSkillId, nSkillLevel, &sMonsterCastPet.nPetType, nullptr, nullptr);
-      if ((intptr_t)sMonsterCastPet.pSkillTxt < 0) {
+      sMonsterCastPet.classId = SKILLS::SkillsServer::SKILLS_GetSummonMonsterClassId(pOwner, 0, eSkillId, nSkillLevel, &sMonsterCastPet.nPetType, nullptr, nullptr);
+      if (sMonsterCastPet.classId < 0) {
         return 0;
       }
 
@@ -5198,7 +5198,6 @@ int __fastcall MISSILESMODE_SrvDoFn13_BoneWallMaker(::SGAMEDATA * pGame, D2UnitS
       nDirFlags = D2Common::Units::Missile::GetTargetX(pUnit);
       pSummonedMinion = (D2SkillsTxt*)UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nDirFlags);
       if (pSummonedMinion) {
-        sMonsterCastPet.classId = (int32_t)sMonsterCastPet.pSkillTxt;
         sMonsterCastPet.nX = 0;
         sMonsterCastPet.nY2 = 0;
         sMonsterCastPet.nType = 0;
@@ -6183,7 +6182,7 @@ int __fastcall MISSILESMODE_SrvDoFn31_TwinWaveMaker(::SGAMEDATA * pGame, D2UnitS
         UNIT::SUnitEvent::UNITEVENT_DispatchEventsByType(pGameSaved, 0, nullptr, pUnit, nullptr);
         nProgOverlay = pMissileTxt->nSrvHitFunc;
         if (nProgOverlay > 0 && nProgOverlay < MISSILESSRVHITFUNCS_SIZE) {
-          nOwner = (uint32_t)(D2UnitStrc*)(*MISSILESSRVHITFUNCS[nProgOverlay])(pGameLocal, pUnit, nullptr);
+          nOwner = (uint32_t)(*MISSILESSRVHITFUNCS[nProgOverlay])(pGameLocal, pUnit, nullptr);
           if (nOwner & 4) {
             return 2;
           }

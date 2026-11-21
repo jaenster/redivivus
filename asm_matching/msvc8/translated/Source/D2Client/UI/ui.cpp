@@ -9062,7 +9062,7 @@ static int INPUT_HighResLeftPanelClick(D2UIMouseMsgStrc * pMsg) {
 
 void __stdcall INPUT_StatScreenMouseDown(D2UIMouseMsgStrc * pMsg) {
     int32_t nStatPts;
-    uint32_t* pBtnEntry;
+    D2StatScreenButtonStrc* pBtnEntry;
     int nBtnY;
     int nMsg;
     D2UIMouseMsgStrc* pBtnIdx = pMsg;
@@ -9082,10 +9082,10 @@ void __stdcall INPUT_StatScreenMouseDown(D2UIMouseMsgStrc * pMsg) {
       nStatPts = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_statpts, 0);
       if (nStatPts) {
         nMsg = 0x0;
-        pBtnEntry = (uint32_t*)gaStatScreenButtons;
+        pBtnEntry = gaStatScreenButtons;
         do {
-          nBtnY = Inv::ScreenSizeY + (pBtnEntry[1] + Inv::gnPanelOffsetY);
-          if (nMouseY > nBtnY - 0x1f6 && nMouseY < nBtnY - 0x1e0 && nMouseX > (int)(*pBtnEntry + Inv::gnPanelOffsetX) && nMouseX < (int)(*pBtnEntry + Inv::gnPanelOffsetX + 0x28)) {
+          nBtnY = Inv::ScreenSizeY + (pBtnEntry->nY + Inv::gnPanelOffsetY);
+          if (nMouseY > nBtnY - 0x1f6 && nMouseY < nBtnY - 0x1e0 && nMouseX > (int)(pBtnEntry->nX + Inv::gnPanelOffsetX) && nMouseX < (int)(pBtnEntry->nX + Inv::gnPanelOffsetX + 0x28)) {
             gaStatScreenButtons[nMsg].bHitTest = 1;
             Cursor::UI_HandleCursorMouseMove(pBtnIdx);
             pBtnIdx->bHandled = 1;
@@ -9096,7 +9096,7 @@ void __stdcall INPUT_StatScreenMouseDown(D2UIMouseMsgStrc * pMsg) {
           }
 
           nMsg++;
-          pBtnEntry = (uint32_t*)((char*)pBtnEntry + 0xe);
+          pBtnEntry++;
         } while ((intptr_t)pBtnEntry < (intptr_t)((char*)&gaStatScreenButtons + sizeof(gaStatScreenButtons)));
       }
 
@@ -9115,7 +9115,7 @@ void __stdcall INPUT_StatScreenMouseDown(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall INPUT_StatScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
-    uint32_t* pBtnEntry;
+    D2StatScreenButtonStrc* pBtnEntry;
     int nBtnY;
     int nBtnIdx;
     int dwScreenSizeY;
@@ -9143,12 +9143,12 @@ void __stdcall INPUT_StatScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
     if (nStatPts) {
       SHORT wShiftKey;
       nBtnIdx = 0;
-      pBtnEntry = (uint32_t*)&gaStatScreenButtons[0].nY;
+      pBtnEntry = &gaStatScreenButtons[0];
       do {
-        nBtnY = *pBtnEntry + Inv::gnPanelOffsetY;
-        pBtnEntry[1] = 0;
+        nBtnY = pBtnEntry->nY + Inv::gnPanelOffsetY;
+        pBtnEntry->bHitTest = 0;
         nBtnY += dwScreenSizeY;
-        if (nMouseY > nBtnY - 0x1f6 && nMouseY < nBtnY - 0x1e0 && nMouseX > (int)(pBtnEntry[-1] + Inv::gnPanelOffsetX) && nMouseX < (int)(pBtnEntry[-1] + Inv::gnPanelOffsetX + 0x28)) {
+        if (nMouseY > nBtnY - 0x1f6 && nMouseY < nBtnY - 0x1e0 && nMouseX > (int)(pBtnEntry->nX + Inv::gnPanelOffsetX) && nMouseX < (int)(pBtnEntry->nX + Inv::gnPanelOffsetX + 0x28)) {
           dwScreenSizeY = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_statpts, 0);
           /* int nVirtKey for GetKeyState */ wShiftKey = GetKeyState(0x10);
           if (!(wShiftKey & 0x8000)) {
@@ -9173,8 +9173,8 @@ void __stdcall INPUT_StatScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
         }
 
         nBtnIdx++;
-        pBtnEntry = (uint32_t*)((char*)pBtnEntry + 0xe);
-      } while ((intptr_t)pBtnEntry < (intptr_t)((char*)&gaStatScreenButtons + sizeof(gaStatScreenButtons) + 4));
+        pBtnEntry++;
+      } while ((intptr_t)pBtnEntry < (intptr_t)((char*)&gaStatScreenButtons + sizeof(gaStatScreenButtons)));
     }
 
     GAME::Game::GAMEDATA_ClearQueuedClicks();
@@ -9411,7 +9411,9 @@ void __stdcall DRAW_UI_StatWindow_I() {
     uint32_t nLangCode;
     uint16_t* pWszLine;
     uint32_t nDisplayVal;
-    uint32_t* pBtnEntry;
+    D2StatScreenButtonStrc* pBtnEntry;
+    int nStatRow;
+    int nPrevFont;
     int iVar2;
     uint16_t wszStatDescBuf[100];
     uint16_t wszTextBuf[128];
@@ -9505,31 +9507,31 @@ void __stdcall DRAW_UI_StatWindow_I() {
 
     iVar8 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayer, UNITSTAT_statpts, 0);
     if (iVar8) {
-      pBtnEntry = (uint32_t*)&gaStatScreenButtons[0].nY;
+      pBtnEntry = &gaStatScreenButtons[0];
       do {
-        iVar2 = pBtnEntry[-1] + Inv::gnPanelOffsetX;
-        nDrawY = *pBtnEntry + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY;
+        iVar2 = pBtnEntry->nX + Inv::gnPanelOffsetX;
+        nDrawY = pBtnEntry->nY + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY;
         sGfxData.pDC6 = gpUIStatLevelUpButtonImages;
         sGfxData.nFrameNumber = 0;
         D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar2 + 5, nDrawY + 5, -1, DRAW_SOLID, nullptr);
-        sGfxData.nFrameNumber = (int)(pBtnEntry[1] != 0);
+        sGfxData.nFrameNumber = (int)(pBtnEntry->bHitTest != 0);
         sGfxData.pDC6 = gpUIStatLevelUpPanelImages;
         D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar2 + 8, nDrawY + 1, -1, DRAW_SOLID, nullptr);
-        pBtnEntry = (uint32_t*)((char*)pBtnEntry + 0xe);
-      } while ((intptr_t)pBtnEntry < (intptr_t)((char*)&gaStatScreenButtons + sizeof(gaStatScreenButtons) + 4));
+        pBtnEntry++;
+      } while ((intptr_t)pBtnEntry < (intptr_t)((char*)&gaStatScreenButtons + sizeof(gaStatScreenButtons)));
     }
 
     D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
-    uSlot10.nStatRowOffset = 0;
+    nStatRow = 0;
     do {
       for (nDrawY = 0; nDrawY < 0x64; nDrawY++) {
         wszStatDescBuf[nDrawY] = L'\0';
       }
 
-      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszStatDescBuf, D2Lang::StrTable::strtable::GetLocaleString(*(uint16_t*)((intptr_t)&gaStatDescRows[0].nStringId + uSlot10.nStatRowOffset)), 99);
-      nDrawX = *(int*)((intptr_t)&gaStatDescRows[0].nX1 + uSlot10.nStatRowOffset) + Inv::gnPanelOffsetX;
-      nWidth = *(int*)((intptr_t)&gaStatDescRows[0].nX2 + uSlot10.nStatRowOffset) + Inv::gnPanelOffsetX;
-      nDrawY = *(int*)((intptr_t)&gaStatDescRows[0].nY + uSlot10.nStatRowOffset) + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY;
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszStatDescBuf, D2Lang::StrTable::strtable::GetLocaleString(gaStatDescRows[nStatRow].nStringId), 99);
+      nDrawX = gaStatDescRows[nStatRow].nX1 + Inv::gnPanelOffsetX;
+      nWidth = gaStatDescRows[nStatRow].nX2 + Inv::gnPanelOffsetX;
+      nDrawY = gaStatDescRows[nStatRow].nY + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY;
       nStatPts2 = wszStatDescBuf;
       wszStatDescBuf[99] = L'\0';
       iVar8 = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(nStatPts2);
@@ -9575,8 +9577,8 @@ void __stdcall DRAW_UI_StatWindow_I() {
       pWszLine = wszStatDescBuf;
       draw_final_line:
       D2Win::Src::D2WinFont::DRAW_text(pWszLine, nDrawX, nDrawY, 0, 0);
-      uSlot10.pCharStatsTxt = (D2CharStatsTxt*)(uSlot10.nStatRowOffset + 0x12);
-    } while (uSlot10.nStatRowOffset < 0x10e);
+      nStatRow++;
+    } while (nStatRow < 15);
 
     SkillDesc::DRAW_UI_STAT_Damage(pPlayer);
     D2Win::Src::D2WinFont::SetAndReturnLastFont(0);
@@ -9891,9 +9893,9 @@ void __stdcall DRAW_UI_StatWindow_I() {
 
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTextBuf, szValueAscii, 0x80);
       wszTextBuf[0x7f] = L'\0';
-      uSlot10.pCharStatsTxt = (D2CharStatsTxt*)0xe;
+      nPrevFont = 0xe;
       if (bResistAtCap && ((int)nDisplayVal >= 1000 || (D2Win::Src::D2WinFont::TEXT_CalcTextDimensions(wszTextBuf, &nTextWidth4, &nTextHeight4) , nTextWidth4 >= gaStatPanelRows[nStatEntryIdx].nX2 - gaStatPanelRows[nStatEntryIdx].nX1))) {
-        uSlot10.pCharStatsTxt = (D2CharStatsTxt*)D2Win::Src::D2WinFont::SetAndReturnLastFont(0);
+        nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(0);
       }
 
       nTmp = gaStatPanelRows[nStatEntryIdx].nY + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY;
@@ -9905,8 +9907,8 @@ void __stdcall DRAW_UI_StatWindow_I() {
       }
 
       D2Win::Src::D2WinFont::DRAW_text(wszTextBuf, nDrawX, nTmp, nColorIdx, 0);
-      if (uSlot10.pCharStatsTxt != (D2CharStatsTxt*)0xe) {
-        D2Win::Src::D2WinFont::SetAndReturnLastFont((int32_t)uSlot10.pCharStatsTxt);
+      if (nPrevFont != 0xe) {
+        D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
       }
     }
 }

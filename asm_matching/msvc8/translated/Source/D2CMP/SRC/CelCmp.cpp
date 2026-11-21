@@ -1767,7 +1767,8 @@ void __stdcall CELCMP_FixupOffsetsAndSerialize(int * pOldFile, uint32_t * ppSeri
     int nTotalFrames;
     uint32_t* pDstFrameOffset;
     size_t _Size;
-    int* pSerializedEnd;
+    size_t nFrameTableBytes;
+    size_t nSerializedSize;
     char* pFrameEntry2;
     int* pSrcParam = pOldFile;
     if (!(pOldFile[1] & 1U)) {
@@ -1799,22 +1800,19 @@ void __stdcall CELCMP_FixupOffsetsAndSerialize(int * pOldFile, uint32_t * ppSeri
       }
 
       nTotalFrames = pOldFile[4] * pOldFile[5];
-      pFrameOffsets = (int*)(nTotalFrames * 4 + 0x18);
-      pSerializedEnd = pFrameOffsets;
+      nFrameTableBytes = nTotalFrames * 4 + 0x18;
+      nSerializedSize = nFrameTableBytes;
       if ((uint32_t)nTotalFrames > 0) {
         pFrameSlot = pOldFile + 0xd;
         pFrameEntry = nTotalFrames;
-        pOldFile = pFrameOffsets;
         do {
-          pOldFile = (int*)((intptr_t)pOldFile + *(int*)(*pFrameSlot + 0x24) + *(int*)(*pFrameSlot + 0x1c) + 0x23);
+          nSerializedSize = nSerializedSize + *(int*)(*pFrameSlot + 0x24) + *(int*)(*pFrameSlot + 0x1c) + 0x23;
           pFrameSlot++;
           pFrameEntry--;
-          pSerializedEnd = pOldFile;
         } while (pFrameEntry);
       }
 
-      pOldFile = pSerializedEnd;
-      pSerializedBlock = (uint32_t*)D2_ALLOC_AT((size_t)pOldFile, ".\\SRC\\CelCmp.cpp", 0x2e3);
+      pSerializedBlock = (uint32_t*)D2_ALLOC_AT(nSerializedSize, ".\\SRC\\CelCmp.cpp", 0x2e3);
       *pSerializedBlock = 6;
       pSerializedBlock[1] = *(uint8_t*)(pSrcParam + 1) & 4 | 1;
       pSerializedBlock[2] = 0;
@@ -1824,7 +1822,7 @@ void __stdcall CELCMP_FixupOffsetsAndSerialize(int * pOldFile, uint32_t * ppSeri
       if ((uint32_t)nTotalFrames > 0) {
         pDstFrameOffset = pSerializedBlock + 6;
         pSrcParam += 0xd;
-        pDstFrame = (uint32_t*)((intptr_t)pFrameOffsets + (intptr_t)pSerializedBlock);
+        pDstFrame = (uint32_t*)((intptr_t)nFrameTableBytes + (intptr_t)pSerializedBlock);
         do {
           *pDstFrameOffset = (intptr_t)pDstFrame - (intptr_t)pSerializedBlock;
           *pDstFrame = *(uint32_t*)(*pSrcParam + 4);
@@ -1854,7 +1852,7 @@ void __stdcall CELCMP_FixupOffsetsAndSerialize(int * pOldFile, uint32_t * ppSeri
       }
 
       *ppSerializedOut = (uint32_t)(uintptr_t)pSerializedBlock;
-      *pnSize = (size_t)pOldFile;
+      *pnSize = nSerializedSize;
       return;
     }
 }
@@ -1924,7 +1922,7 @@ BOOL __stdcall CELCMP_SerializeCelFileToMemory(DC6 * pDCCSrc, uint32_t * ppDCCDe
     iFrame = 0;
     if (nFrameCount > 0) {
       do {
-        _Size = *(int*)(*(int*)(pDCCSrc[1].nTerm + (iFrame * 4 - 0xc)) + 0x1c) + 0x23;
+        _Size = pDCCSrc->pBlocks[iFrame]->nLength + 0x23;
         pWriteCursor[iFrame + 6] = (intptr_t)pDstFrameCursor - (intptr_t)pWriteCursor;
         memcpy(pDstFrameCursor, *(void**)(pDCCSrc[1].nTerm + (iFrame * 4 - 0xc)), _Size);
         pFrameStrc = *(D2InventoryGridStrc**)(pDCCSrc[1].nTerm + (iFrame * 4 - 0xc));
@@ -2017,17 +2015,17 @@ void __stdcall CELCMP_InvokeFormatSpecificCleanup(DC6 * pDC6, BYTE * pPaletteRem
     }
 
     {
-      DC6* ppFrameBlock;
+      DC6Block** ppFrameBlock;
       iFrame = 0;
       if ((uint32_t)(pDC6->nDirections * pDC6->nFrames) <= 0) {
         return;
       }
 
-      ppFrameBlock = pDC6 + 1;
+      ppFrameBlock = pDC6->pBlocks;
       do {
-        (*gapfnCelRemapFrameByFormat[pDC6->nFormat])((DC6Block*)ppFrameBlock->nVersion, pPaletteRemap);
+        (*gapfnCelRemapFrameByFormat[pDC6->nFormat])(*ppFrameBlock, pPaletteRemap);
         iFrame++;
-        ppFrameBlock = (DC6*)&ppFrameBlock->nFlags;
+        ppFrameBlock++;
       } while (iFrame < (uint32_t)(pDC6->nDirections * pDC6->nFrames));
 
       return;

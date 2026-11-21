@@ -1910,6 +1910,7 @@ static void RENDERER_GLIDE_CalculateTextureSize(GlideTexInfoStrc * pTexInfo) {
 // Glide texture cache: uploads a DC6 frame to video memory. Determines LOD level based on texture size, allocates cache slot, renders frame to buffer, encrypts with hash, and downloads to TMU via grTexDownloadMipMap.
 static int32_t __stdcall RENDERER_GLIDE_UploadTextureToCache(GlideTexInfoStrc * pTexInfo, BYTE * pPalette, uint8_t nOutlineColor, int32_t nMode) {
     void* nErrorAddress;
+    uint32_t dwTmuAddress;
     uint8_t* pbyPalettePixel;
     uint8_t* pOutlinePixel;
     GrTexInfo grTexInfo;
@@ -1957,8 +1958,8 @@ static int32_t __stdcall RENDERER_GLIDE_UploadTextureToCache(GlideTexInfoStrc * 
     grTexInfo.largeLodLog2 = grTexInfo.smallLodLog2;
     if (nNewCacheNode && (*(uint8_t**)&gGlideVertex0.aTextureCache[nCacheBucket - 1].pNodes[nNewCacheNode - 1].field_0x10 == pPalette || nModeSaved == 4)) {
       glTextureCache::GLTEXCACHE_PromoteNodeToMRU(gGlideVertex0.aTextureCache + (nCacheBucket - 1), *pnCacheEntryIndex);
-      nErrorAddress = (void*)gGlideVertex0.aTextureCache[nCacheBucket - 1].pNodes[*pnCacheEntryIndex - 1].dwAddress;
-      (*GLIDEDLL_grTexSource_16)(gnGlideTMUIndex, (FxU32)nErrorAddress, 3, &grTexInfo);
+      dwTmuAddress = gGlideVertex0.aTextureCache[nCacheBucket - 1].pNodes[*pnCacheEntryIndex - 1].dwAddress;
+      (*GLIDEDLL_grTexSource_16)(gnGlideTMUIndex, dwTmuAddress, 3, &grTexInfo);
       RENDERER_GLIDE_SetTextureMode(gnGlideTMUIndex);
       return 1;
     }
@@ -1971,7 +1972,7 @@ static int32_t __stdcall RENDERER_GLIDE_UploadTextureToCache(GlideTexInfoStrc * 
     gGlideVertex0.aTextureCache[nCacheBucket - 1].pNodes[*pnCacheEntryIndex - 1].nHashIndex = nMode;
     *(uint8_t**)&gGlideVertex0.aTextureCache[nCacheBucket - 1].pNodes[*pnCacheEntryIndex - 1].field_0x10 = (uint8_t*)pPalette;
     uint8_t* pSrcPixelRow = gpGlideSpriteBuffer;
-    nTexStartAddress = (void*)gGlideVertex0.aTextureCache[nCacheBucket - 1].pNodes[*pnCacheEntryIndex - 1].dwAddress;
+    dwTmuAddress = gGlideVertex0.aTextureCache[nCacheBucket - 1].pNodes[*pnCacheEntryIndex - 1].dwAddress;
     if (!gpGlideSpriteBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x184);
       exit(-1);
@@ -2042,9 +2043,8 @@ static int32_t __stdcall RENDERER_GLIDE_UploadTextureToCache(GlideTexInfoStrc * 
         grTexInfo.data = nErrorAddress;
       }
 
-      (*GLIDEDLL_grTexDownloadMipMap_16)(gnGlideTMUIndex, (FxU32)nTexStartAddress, 3, &grTexInfo);
-      nErrorAddress = nTexStartAddress;
-      (*GLIDEDLL_grTexSource_16)(gnGlideTMUIndex, (FxU32)nErrorAddress, 3, &grTexInfo);
+      (*GLIDEDLL_grTexDownloadMipMap_16)(gnGlideTMUIndex, dwTmuAddress, 3, &grTexInfo);
+      (*GLIDEDLL_grTexSource_16)(gnGlideTMUIndex, dwTmuAddress, 3, &grTexInfo);
       RENDERER_GLIDE_SetTextureMode(gnGlideTMUIndex);
       return 1;
     }

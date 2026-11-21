@@ -3369,7 +3369,8 @@ void __stdcall SKILLS_AddOrRemoveItemSkill(D2UnitStrc * pUnit, int32_t nOwnerGUI
     D2SkillStrc* pCurSkill;
     D2SkillStrc* pNewSkill;
     short int nRightSkillId;
-    D2UnitStrc* pPrevSkill;
+    D2SkillStrc* pPrevSkill;
+    D2SkillStrc* pTailSkill;
     if (!pUnit) {
       return;
     }
@@ -3430,19 +3431,19 @@ void __stdcall SKILLS_AddOrRemoveItemSkill(D2UnitStrc * pUnit, int32_t nOwnerGUI
       return;
     }
 
-    pUnit = 0;
-    D2UnitStrc* pIterSkill;
-    pIterSkill = (D2UnitStrc*)pSkillsList->pFirstSkill;
+    pTailSkill = 0;
+    D2SkillStrc* pIterSkill;
+    pIterSkill = pSkillsList->pFirstSkill;
     while (pPrevSkill = pIterSkill) {
-      if (pPrevSkill->nSeqFrameCount == nOwnerGUID && (D2SkillsTxt*)pPrevSkill->eUnitType == pSkillTxt) {
-        pPrevSkill->nInitSeed = nLevel;
-        pPrevSkill->nSeqAnimSpeed = 1;
-        pPrevSkill->nSeqFrame = nCharges;
+      if (pPrevSkill->nOwnerGUID == nOwnerGUID && pPrevSkill->pRecord == pSkillTxt) {
+        pPrevSkill->nLevel = nLevel;
+        pPrevSkill->bItemSkill = 1;
+        pPrevSkill->nCharges = nCharges;
         return;
       }
 
-      pUnit = pPrevSkill;
-      pIterSkill = (D2UnitStrc*)pPrevSkill->nClassId;
+      pTailSkill = pPrevSkill;
+      pIterSkill = pPrevSkill->pNext;
     }
 
     pNewSkill = D2_NEW_POOL_AT(pSkillsList->pMemory, D2SkillStrc, ".\\SKILLS\\Skills.cpp", 0x5fe);
@@ -3469,8 +3470,8 @@ void __stdcall SKILLS_AddOrRemoveItemSkill(D2UnitStrc * pUnit, int32_t nOwnerGUI
     pNewSkill->nCharges = nCharges;
     pNewSkill->nOwnerGUID = nOwnerGUID;
     pNewSkill->pNext = 0;
-    if (pUnit) {
-      pUnit->nClassId = (int)pNewSkill;
+    if (pTailSkill) {
+      pTailSkill->pNext = pNewSkill;
       return;
     }
 

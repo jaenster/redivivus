@@ -1911,13 +1911,13 @@ void __fastcall MISSILE_CreateRandomSubInRadius(D2UnitStrc * pUnit, D2UnitStrc *
             if (pSubMissile) {
               Engine::Particle::AllocParticle(pSubMissile);
               if (nRadius != 6) {
-                Engine::Particle::SetPosVectorShifted(pSubMissile, 0, 0, *(int32_t*)((eMissilesId)pMissilesTxt + MISSILE_Freezingarrowexp1));
-                Engine::Particle::SetOffsetVector(pSubMissile, 0, 0, -*(int*)((eMissilesId)pMissilesTxt + MISSILE_Blessedhammer), 1);
+                Engine::Particle::SetPosVectorShifted(pSubMissile, 0, 0, pMissilesTxt->CltParam1);
+                Engine::Particle::SetOffsetVector(pSubMissile, 0, 0, -pMissilesTxt->CltParam2, 1);
                 return;
               }
 
-              Engine::Particle::SetPosVectorShifted(pSubMissile, 0, 0, *(int*)((eMissilesId)pMissilesTxt + MISSILE_Freezingarrowexp1) * 2);
-              Engine::Particle::SetOffsetVector(pSubMissile, 0, 0, *(int*)((eMissilesId)pMissilesTxt + MISSILE_Blessedhammer) * -2, 1);
+              Engine::Particle::SetPosVectorShifted(pSubMissile, 0, 0, pMissilesTxt->CltParam1 * 2);
+              Engine::Particle::SetOffsetVector(pSubMissile, 0, 0, pMissilesTxt->CltParam2 * -2, 1);
               return;
             }
           }
@@ -2000,7 +2000,7 @@ void __fastcall MISSILE_SpawnMissilesInArea(D2UnitStrc * pUnit, int32_t nCenterX
 
           sSkillArg.nX = iOffsetXCur + nCenterX;
           sSkillArg.nY = iOffsetYCur + nCenterY;
-          nRandResult = *(uint32_t*)((eMissilesId)pMissilesTxt + MISSILE_IzualMistLoop);
+          nRandResult = pMissilesTxt->RandStart;
           if (nRandResult) {
             if ((int)nRandResult <= 0) {
               sSkillArg.nStartFrame = 0;
@@ -5447,7 +5447,7 @@ void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
     D2UnitStrc* pOwner;
     D2RoomStrc* pRoom;
     uint32_t eAnimMode;
-    D2DynamicPathStrc* pDynPath;
+    BOOL bDynPath;
     D2MissileCltCollideCtxStrc sCollideCtx;
     D2PathPointStrc* sPathPoint;
     uint32_t nCollidePathSteps;
@@ -5479,9 +5479,8 @@ void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
       eCollisionFlags eCollision;
       nCurFrame = D2Common::Units::Missile::GetCurrentFrame(pUnit);
       nActivateFrame = D2Common::Units::Missile::GetActivateFrame(pUnit);
-      pDynPath = (D2DynamicPathStrc*)(uint32_t)(nCurFrame <= nActivateFrame);
-      pCurDynPath = pDynPath;
-      if (pDynPath) {
+      bDynPath = nCurFrame <= nActivateFrame;
+      if (bDynPath) {
         nCurFrame = D2Common::Units::Missile::GetRemainingFrames(pUnit);
         if (nCurFrame > (int)(uint32_t)pDVar2->InitSteps) {
           pUnit->eUnitFlagsEx &= ~UNITFLAGEX_NODRAW;
@@ -5492,7 +5491,7 @@ void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
       if (!bIsStopped) {
         break;
       }
-      if (pDynPath) {
+      if (bDynPath) {
         if (pDVar2->LoopAnim == '\0') {
           nAtEndOfCycle = D2Common::Units::IsAtEndOfFrameCycle(pUnit);
           if (!nAtEndOfCycle) {
@@ -5506,10 +5505,8 @@ void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
             nCurFrame = D2Common::Units::Missile::GetCurrentFrame(pUnit);
             if (!(nCurFrame > (int)((uint32_t)pDVar2->AnimLen - (uint32_t)bySubStop + 1))) {
               D2Common::Units::UpdateFrame(pUnit);
-              pDynPath = pCurDynPath;
             } else {
               D2Common::Units::SetFrameNonRate(pUnit, (uint32_t)pDVar2->SubStart, (uint32_t)bySubStop);
-              pDynPath = pCurDynPath;
             }
           }
         }
@@ -5530,7 +5527,7 @@ void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
         MISSILE_ClientHitExplode(pUnit, nullptr, 0);
         return;
       }
-      if (!pDynPath) {
+      if (!bDynPath) {
         return;
       }
       if (pDVar2->CltSrcTown > '\0') {

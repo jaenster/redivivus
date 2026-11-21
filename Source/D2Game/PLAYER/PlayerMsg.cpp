@@ -2232,7 +2232,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0C_RightSkillOnLocation(::SGAMEDATA * 
 // [op:1][unitType:u32][GUID:u32]
 // Right skill on target, approach=1 (walk to target).
 eD2ServerIncomingStatus __fastcall SCMD_0x0D_RightSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x0D_RightSkillOnEntity * pPacket, uint32_t nSize) {
-    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, (eD2UnitType*)&pPacket, &nSize, pUnit, &pPacket->nCmd);
+    eD2UnitType eTargetType;
+    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, &eTargetType, &nSize, pUnit, &pPacket->nCmd);
     if (nStatus != SERVERSTATUS_OK) {
       return (eD2ServerIncomingStatus)nStatus;
     }
@@ -2242,9 +2243,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0D_RightSkillOnEntity(::SGAMEDATA * pG
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     int32_t nPierceIdx = 1;
-    D2GSPacketClt0x0D_RightSkillOnEntity* nTargetGUID = pPacket;
     uint32_t nTargetGUID_00 = nSize;
-    PLAYER_ProcessSkillOnEntity(pGame, pUnit, D2Common::Units::GetRightSkill(pUnit), (eD2UnitType)nTargetGUID, nTargetGUID_00, nPierceIdx);
+    PLAYER_ProcessSkillOnEntity(pGame, pUnit, D2Common::Units::GetRightSkill(pUnit), eTargetType, nTargetGUID_00, nPierceIdx);
     nStatus = SERVERSTATUS_OK;
     return (eD2ServerIncomingStatus)nStatus;
 }
@@ -2253,7 +2253,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0D_RightSkillOnEntity(::SGAMEDATA * pG
 // [op:1][unitType:u32][GUID:u32]
 // Right skill on target, approach=0 (hold position).
 eD2ServerIncomingStatus __fastcall SCMD_0x0E_RightSkillOnEntityEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x0E_RightSkillOnEntityEx * pPacket, uint32_t nSize) {
-    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, (eD2UnitType*)&pPacket, &nSize, pUnit, &pPacket->nCmd);
+    eD2UnitType eTargetType;
+    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, &eTargetType, &nSize, pUnit, &pPacket->nCmd);
     if (nStatus != SERVERSTATUS_OK) {
       return (eD2ServerIncomingStatus)nStatus;
     }
@@ -2263,9 +2264,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0E_RightSkillOnEntityEx(::SGAMEDATA * 
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     int32_t nPierceIdx = 0;
-    D2GSPacketClt0x0E_RightSkillOnEntityEx* nTargetGUID = pPacket;
     uint32_t nTargetGUID_00 = nSize;
-    PLAYER_ProcessSkillOnEntity(pGame, pUnit, D2Common::Units::GetRightSkill(pUnit), (eD2UnitType)nTargetGUID, nTargetGUID_00, nPierceIdx);
+    PLAYER_ProcessSkillOnEntity(pGame, pUnit, D2Common::Units::GetRightSkill(pUnit), eTargetType, nTargetGUID_00, nPierceIdx);
     nStatus = SERVERSTATUS_OK;
     return (eD2ServerIncomingStatus)nStatus;
 }
@@ -2914,9 +2914,9 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1B_EquipToSwapSlot(::SGAMEDATA * pGame
       return SERVERSTATUS_BAD_DATA;
     }
 
-    BOOL nPacket = 0x0;
-    BOOL nSwapOk = ITEMS::ItemMode::ITEMMODE_EquipItemToSwapBodyLoc(pGame, pUnit, dwItemGUID, (eD2BodyLoc)nSize, 0, &nPacket);
-    if (!nSwapOk && (D2GSPacketClt0x1B_UnequipItem*)nPacket) {
+    BOOL bBadParams = 0x0;
+    BOOL nSwapOk = ITEMS::ItemMode::ITEMMODE_EquipItemToSwapBodyLoc(pGame, pUnit, dwItemGUID, (eD2BodyLoc)nSize, 0, &bBadParams);
+    if (!nSwapOk && bBadParams) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
@@ -2958,7 +2958,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1C_UnequipToCursor(::SGAMEDATA * pGame
 eD2ServerIncomingStatus __fastcall SCMD_0x1D_SwapBodyItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x1D_Swap2HandItem * pPacket, uint32_t nSize) {
     int32_t nTradeCheck;
     BOOL nSwapResult;
-    uint32_t nPacket;
+    uint32_t bBadParams;
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
     }
@@ -2984,9 +2984,9 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1D_SwapBodyItem(::SGAMEDATA * pGame, D
       pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pUnit->pInventory, nGridOffset);
       nMovePermission = Player::CheckItemMovePermission(pGame, pUnit, pItem);
       if (nMovePermission) {
-        nPacket = 0x0;
-        nSwapResult = ITEMS::ItemMode::SERVER_Swap2HandItem(pGame, pUnit, dwItemGUID, static_cast<eD2BodyLoc>(nBodyLoc), 0, &nPacket);
-        if (!nSwapResult && (D2GSPacketClt0x1D_Swap2HandItem*)nPacket) {
+        bBadParams = 0x0;
+        nSwapResult = ITEMS::ItemMode::SERVER_Swap2HandItem(pGame, pUnit, dwItemGUID, static_cast<eD2BodyLoc>(nBodyLoc), 0, &bBadParams);
+        if (!nSwapResult && bBadParams) {
           return SERVERSTATUS_BAD_PARAMS;
         }
       }
@@ -3006,7 +3006,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1E_EquipToWeaponSwap(::SGAMEDATA * pGa
 
     DWORD dwItemGUID = pPacket->dwItemGUID;
     eD2BodyLoc eTargetBodyLoc = (eD2BodyLoc)pPacket->dwBeltSlot;
-    int pSwappedOutItem = (int)pGame;
+    int pSwappedOutItem = 0;
     eD2ServerIncomingStatus eStatus = SERVER_IsItemOnCursor(pGame, pUnit, dwItemGUID);
     if (eStatus != SERVERSTATUS_OK) {
       return (eD2ServerIncomingStatus)eStatus;
@@ -3301,7 +3301,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x26_UseItemAtPlayerCoords(::SGAMEDATA *
     }
 
     DWORD nItemGid = pPacket->dwItemGUID;
-    int32_t nUseMercArg = pPacket->nArg;
+    int32_t nUseMercArg = pPacket->nArg; // steer-ok: generated form, kept as emitted
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nSize = pUnit->pPath.pStaticPath->nPosX;
@@ -3326,13 +3326,13 @@ eD2ServerIncomingStatus __fastcall SCMD_0x26_UseItemAtPlayerCoords(::SGAMEDATA *
     }
 
     nInteractResult = CheckIfCoordsAreInRange(pUnit, 0x32, (uint16_t)nSize, (uint16_t)nUnitPosY);
-    if ((D2GSPacketClt0x26_UseItemAtPlayerCoords*)nInteractResult) {
+    if (nInteractResult) {
       return (eD2ServerIncomingStatus)nInteractResult;
     }
 
-    pPacket = (D2GSPacketClt0x26_UseItemAtPlayerCoords*)nInteractResult;
-    BOOL nUseResult = ITEMS::ItemMode::SERVER_UseItemAtCoords(pGame, pUnit, nItemGid, nSize, nUnitPosY, (int32_t*)&pPacket, nUseMercArg);
-    if (!nUseResult && pPacket) {
+    int32_t nUseToken = nInteractResult;
+    BOOL nUseResult = ITEMS::ItemMode::SERVER_UseItemAtCoords(pGame, pUnit, nItemGid, nSize, nUnitPosY, &nUseToken, nUseMercArg);
+    if (!nUseResult && nUseToken) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 

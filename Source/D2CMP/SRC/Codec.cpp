@@ -826,7 +826,7 @@ BOOL __fastcall CODEC_EncodeRLE(D2CodecFrameComponentStrc * pSrcImage, DC6Block 
         pDst++;
       } while (iRow < (int)pSrcImage->nWidth);
     }
-    if (pDst != (uint8_t*)((intptr_t)&pFrameHeader[1].nFlip + pFrameHeader->nLength)) {
+    if (pDst != (uint8_t*)pFrameHeader->data + pFrameHeader->nLength) {
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("Sprite Decompression Error");
       return 0;
     }

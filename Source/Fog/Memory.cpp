@@ -770,7 +770,7 @@ DWORD getDwMemory(D2PoolManagerStrc * pMemory) {
 void * __fastcall Alloc(D2PoolManagerStrc * pMemory, size_t MemSize, char * szFile, int32_t Line) {
     void* pOverflowResult;
     size_t nBlockSize;
-    uint32_t* pBitmapWord;
+    DWORD* pBitmapWord;
     D2PoolBlockStrc* pNextBlock;
     D2PoolBlockStrc* pPoolBlock;
     if (!pMemory) {
@@ -805,25 +805,25 @@ void * __fastcall Alloc(D2PoolManagerStrc * pMemory, size_t MemSize, char * szFi
         Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x4f8);
         exit(-1);
       } else {
-        (*(int*)((char*)pPoolBlock + 8))++;
+        pPoolBlock->nBlocks++;
         nBitmapByteOff = ((int)nSlotIndex >> 5) * 4;
-        if (*(uint32_t*)(nBitmapByteOff + *(int*)((char*)pPoolBlock + 4)) & BitBuffer::gadwBitMasks[nSlotIndex & 0x1f]) {
+        if (pPoolBlock->pUsage[(int)nSlotIndex >> 5] & BitBuffer::gadwBitMasks[nSlotIndex & 0x1f]) {
           Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x4ff);
           exit(-1);
         }
 
-        pBitmapWord = (uint32_t*)(nBitmapByteOff + *(int*)((char*)pPoolBlock + 4));
+        pBitmapWord = &pPoolBlock->pUsage[(int)nSlotIndex >> 5];
         *pBitmapWord |= BitBuffer::gadwBitMasks[nSlotIndex & 0x1f];
-        if (*(int*)((char*)pPoolBlock + 8) >= (int)pPool->nBlocks && *(int*)((char*)pPoolBlock + 0x10)) {
-          pNextBlock = *(D2PoolBlockStrc**)((char*)pPoolBlock + 0x10);
+        if ((int)pPoolBlock->nBlocks >= (int)pPool->nBlocks && pPoolBlock->pNext) {
+          pNextBlock = pPoolBlock->pNext;
           if ((int)pNextBlock->nBlocks < (int)pPool->nBlocks) {
-            if (!*(int*)((char*)pPoolBlock + 0xc)) {
+            if (!pPoolBlock->pPrev) {
               pPool->pBlocks = pNextBlock;
             } else {
-              *(D2PoolBlockStrc**)(*(int*)((char*)pPoolBlock + 0xc) + 0x10) = (D2PoolBlockStrc*)pNextBlock;
+              pPoolBlock->pPrev->pNext = pNextBlock;
             }
-            if (*(int*)((char*)pPoolBlock + 0x10)) {
-              *(uint32_t*)(*(int*)((char*)pPoolBlock + 0x10) + 0xc) = *(uint32_t*)((char*)pPoolBlock + 0xc);
+            if (pPoolBlock->pNext) {
+              pPoolBlock->pNext->pPrev = pPoolBlock->pPrev;
             }
             if (!pPool->pTail) {
               Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x50d);
@@ -831,9 +831,9 @@ void * __fastcall Alloc(D2PoolManagerStrc * pMemory, size_t MemSize, char * szFi
             }
 
             pPool->pTail->pNext = pPoolBlock;
-            *(D2PoolBlockStrc**)((char*)pPoolBlock + 0xc) = pPool->pTail;
+            pPoolBlock->pPrev = pPool->pTail;
             pPool->pTail = pPoolBlock;
-            *(uint32_t*)((char*)pPoolBlock + 0x10) = 0;
+            pPoolBlock->pNext = nullptr;
           }
         }
 

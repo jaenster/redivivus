@@ -347,7 +347,7 @@ BOOL __stdcall DRLGENV_UpdatePeriodOfDay(D2DrlgActStrc * pDrlgAct, D2RoomStrc * 
     DRLGENV_UpdateEnvironmentCycle(pEnv, dwActNo);
     DRLGENV_UpdateLightIntensity(pEnv, nDrlgAct, dwActNo);
     DRLGENV_UpdateLightColor(dwActNo, pEnv);
-    if ((D2DrlgActStrc*)nDrlgAct == (D2DrlgActStrc*)LEVEL_ArreatSummit) {
+    if (nDrlgAct == LEVEL_ArreatSummit) {
       pEnv->nGlobalLightRed = 0xf5;
       pEnv->nGlobalLightGreen = 0xf0;
       pEnv->nGlobalLightBlue = 0xff;
@@ -458,7 +458,7 @@ void __stdcall DRLGENV_NextEnvCycle(D2DrlgActStrc * pDrlgAct, D2RoomStrc * pRoom
     eAct eActNo = Drlg::GetActNoFromLevelNumber(nDrlgAct);
     DRLGENV_UpdateLightIntensity(pEnv, nDrlgAct, (uint32_t)eActNo);
     DRLGENV_UpdateLightColor((uint32_t)eActNo, pEnv);
-    if ((D2DrlgActStrc*)nDrlgAct != (D2DrlgActStrc*)LEVEL_ArreatSummit) {
+    if (nDrlgAct != LEVEL_ArreatSummit) {
       return;
     }
 
@@ -517,7 +517,7 @@ void __stdcall DRLGENV_InitializeEnvironment(D2DrlgActStrc * pDrlgAct, D2RoomStr
         DRLGENV_UpdateLightIntensity(pEnv, nDrlgAct, nActNo);
         DRLGENV_UpdateLightColor(nActNo, pEnv);
       }
-      if ((D2DrlgActStrc*)nDrlgAct != (D2DrlgActStrc*)LEVEL_ArreatSummit) {
+      if (nDrlgAct != LEVEL_ArreatSummit) {
         return;
       }
 
@@ -574,7 +574,7 @@ void __stdcall DRLGENV_SetNextTimeRate(D2DrlgActStrc * pDrlgAct, D2RoomStrc * pR
     eAct eActNo = Drlg::GetActNoFromLevelNumber(nDrlgAct);
     DRLGENV_UpdateLightIntensity(pEnv, nDrlgAct, (uint32_t)eActNo);
     DRLGENV_UpdateLightColor((uint32_t)eActNo, pEnv);
-    if ((D2DrlgActStrc*)nDrlgAct != (D2DrlgActStrc*)LEVEL_ArreatSummit) {
+    if (nDrlgAct != LEVEL_ArreatSummit) {
       return;
     }
 

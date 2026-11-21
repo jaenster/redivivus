@@ -387,6 +387,7 @@ static void __stdcall DRAW_CalcRoofLightGridOrtho(D2GfxLightExStrc * pLightEntry
 // Populates a 6×6 grid of D2GfxLightExStrc entries for orthographic roof lighting. Reads the act's ambient light intensity and RGB color via DRLGENV_GetIntensityFromAct / DRLGENV_GetLightColorFromAct. Adjusts nScreenX by ±ScreenSizeX/4 for split-screen sides (nSplitSide 1/2). For each grid cell (skipping interior cells when bBorderOnly), sets screen-space X/Y position and either samples dynamic light (outdoor: DRAW_CoordIsInCoord) or fills with the flat ambient color (indoor). Output is written into the pParam array.
 void __stdcall DRAW_CalcRoofLightOrtho(D2GfxLightExStrc * pLightGrid, int32_t nScreenX, int32_t nScreenY, int32_t nTileX, int32_t nTileY, int32_t nIndoorFlag, int32_t nSplitSide, int32_t bBorderOnly) {
     int nHalfWidthAdj;
+    int nRowY;
     D2GfxLightExStrc* pCurLight;
     uint32_t dwLightColor;
     int32_t nIntensity;
@@ -414,7 +415,7 @@ void __stdcall DRAW_CalcRoofLightOrtho(D2GfxLightExStrc * pLightGrid, int32_t nS
     D2Common::Environment::DRLGENV_GetLightColorFromAct(Game::sgpDrlgAct, (uint8_t*)((intptr_t)&dwLightColor + 2), (uint8_t*)&dwLightColor, (uint8_t*)((intptr_t)&dwLightColor + 1));
     nHalfWidthAdj = 0;
     pCurLight = pLightGrid;
-    pLightGrid = (D2GfxLightExStrc*)(nTileY * 8);
+    nRowY = nTileY * 8;
     do {
       int nCol;
       nCol = 0;
@@ -428,7 +429,7 @@ void __stdcall DRAW_CalcRoofLightOrtho(D2GfxLightExStrc * pLightGrid, int32_t nS
             pCurLight->sLight.nBlue = *(uint8_t*)((char*)&dwLightColor + 1);
             pCurLight->sLight.nGreen = (uint8_t)dwLightColor;
           } else {
-            View::DRAW_CoordIsInCoord((nCol + nTileX) * 8, (int32_t)pLightGrid, (uint8_t*)pCurLight, &pCurLight->sLight.nRed, &pCurLight->sLight.nGreen, &pCurLight->sLight.nBlue);
+            View::DRAW_CoordIsInCoord((nCol + nTileX) * 8, nRowY, (uint8_t*)pCurLight, &pCurLight->sLight.nRed, &pCurLight->sLight.nGreen, &pCurLight->sLight.nBlue);
           }
         }
 
@@ -436,7 +437,7 @@ void __stdcall DRAW_CalcRoofLightOrtho(D2GfxLightExStrc * pLightGrid, int32_t nS
         pCurLight++;
       } while (nCol < 6);
 
-      pLightGrid = (D2GfxLightExStrc*)&pLightGrid->nY;
+      nRowY += 8;
       nHalfWidthAdj++;
     } while (nHalfWidthAdj < 6);
 }
@@ -486,7 +487,7 @@ void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * nRow, int32_t nTileX, int
     uint8_t byRed;
     uint8_t byBlue;
     uint8_t byGreen;
-    uint8_t* pScreenX;
+    int* pScreenX;
     D2GfxLightExStrc* pLightEntry = (D2GfxLightExStrc*)nRow;
     int32_t nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(Game::sgpDrlgAct);
     uint8_t byIntensity = (uint8_t)nIntensity;
@@ -535,14 +536,14 @@ void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * nRow, int32_t nTileX, int
       nSplitSide = 0;
       do {
         if (!bBorderOnly || (!nSplitSide || nSplitSide == 5) && (!nRow || nRow == (uint8_t*)0x5)) {
-          pScreenX = (uint8_t*)((char*)pLightEntry + 4);
-          D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition((nSplitSide + nTileX) * 0x10000, (int)(nRow + nTileY) * 0x10000, 0, (int*)pScreenX, (int*)((char*)pLightEntry + 8));
-          *(int*)pScreenX += nScreenHalfAdj;
+          pScreenX = &pLightEntry->nX;
+          D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition((nSplitSide + nTileX) * 0x10000, (int)(nRow + nTileY) * 0x10000, 0, pScreenX, &pLightEntry->nY);
+          *pScreenX += nScreenHalfAdj;
           View::DRAW_CoordIsInCoord((nSplitSide + nTileX) * 8, (int)(nRow + nTileY) * 8, (uint8_t*)pLightEntry, (uint8_t*)((char*)pLightEntry + 1), (uint8_t*)((char*)pLightEntry + 2), (uint8_t*)((char*)pLightEntry + 3));
         }
 
         nSplitSide++;
-        pLightEntry = (D2GfxLightExStrc*)((char*)pLightEntry + 0xc);
+        pLightEntry++;
       } while (nSplitSide < 6);
 
       nRow++;
@@ -1354,7 +1355,8 @@ void __fastcall dShadowPass(D2GameViewStrc * pGameView) {
           bIsPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
           if (pShadowNode->dwType & 1) {
             if (bIsPerspective) {
-              D2gfx::D2GFX::D2GFX_DrawShadowTile(*(D2TileLibraryEntryStrc**)((char*)pShadowNode->pData + 0x18), pShadowNode->nX, pShadowNode->nY, 4, nScreenPanels);
+              pWallTileEntry = (D2DrlgTileDataStrc*)pShadowNode->pData;
+              D2gfx::D2GFX::D2GFX_DrawShadowTile(pWallTileEntry->pTileLibraryEntry, pShadowNode->nX, pShadowNode->nY, 4, nScreenPanels);
             } else {
               pWallTileEntry = (D2DrlgTileDataStrc*)pShadowNode->pData;
               D2gfx::D2GFX::D2GFX_DrawShadowTile(pWallTileEntry->pTileLibraryEntry, pGameView->pView.left - pGameView->nCenterX + pWallTileEntry->nScreenX, pWallTileEntry->nScreenY - pGameView->nCenterY + pGameView->pView.top, 4, nScreenPanels);

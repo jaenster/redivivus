@@ -199,15 +199,17 @@ D2UnitStrc * __stdcall TakeStairsInternal(D2RoomStrc * pRoom, eD2LevelId eLevelI
       exit(-1);
     } else {
       D2RoomStrc* pDVar2;
-      pDVar2 = Drlg::DrlgRoom::DRLGWARP_GetWarpDestinationRoom(pRoom->pRoomEx, eLevelId, (int*)&pRoom, (D2LvlWarpTxt**)&eLevelId);
+      int nOrth;
+      D2LvlWarpTxt* pWarpTxt;
+      pDVar2 = Drlg::DrlgRoom::DRLGWARP_GetWarpDestinationRoom(pRoom->pRoomEx, eLevelId, &nOrth, &pWarpTxt);
       if (!pDVar2) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x71);
         exit(-1);
       }
 
-      for (pDVar1 = pDVar2->pUnitList; pDVar1 && (pDVar1->eUnitType != UNIT_WARP || (D2RoomStrc*)pDVar1->nClassId != pRoom); pDVar1 = pDVar1->pRoomNext) {}
+      for (pDVar1 = pDVar2->pUnitList; pDVar1 && (pDVar1->eUnitType != UNIT_WARP || pDVar1->nClassId != nOrth); pDVar1 = pDVar1->pRoomNext) {}
 
-      *ppRoomEx = (D2LvlWarpTxt*)eLevelId;
+      *ppRoomEx = pWarpTxt;
       return pDVar1;
     }
 }
@@ -1580,14 +1582,14 @@ D2RoomStrc * __stdcall SpawnUnit(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, in
       exit(-1);
     } else {
       {
-        D2DrlgStrc** ppDVar1;
+        D2DrlgStrc** ppDVar1; // steer-ok: generated form, kept as emitted
         ppDVar1 = &pDrlgAct->pDrlg;
         nDrlgAct = 0x0;
         nLocalY = 0;
         pSpawnRoom = Drlg::DrlgRoom::DRLGSPAWN_FindSpawnLocationInLevel(*ppDVar1, eLevel, nSpawnTypeOrMode, &nDrlgAct, &nLocalY);
         if (pSpawnRoom) {
           Drlg::Transform::CoordsRoomToWorld(&nDrlgAct, &nLocalY);
-          ptSpawnCoord.x = (intptr_t)&((D2DrlgActStrc*)nDrlgAct)->eLevelIdFirst + 3;
+          ptSpawnCoord.x = nDrlgAct + 3;
           ptSpawnCoord.y = nLocalY + 3;
           pFreeCoordRoom = Collision::GetFreeCoordinates_WithNeighboorRooms(pSpawnRoom, &ptSpawnCoord, nUnitSize, 0x1c09, 0);
           if (!pFreeCoordRoom) {

@@ -200,7 +200,7 @@ template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>
     TSLink<::SGAMEDATA>* pNodeData;
     pendingList.m_terminator.m_prevlink = &pendingList.m_terminator;
     uint32_t nNewMask = pThis->nSlotMask + 1;
-    uint32_t* nNewBucketCount = (uint32_t*)(nNewMask * 2);
+    uint32_t nNewBucketCount = nNewMask * 2;
     intptr_t nOldBucket = ~(uintptr_t)pendingList.m_terminator.m_prevlink;
     pendingList.m_linkoffset = -0x22222223;
     pendingList.m_terminator.m_next = nOldBucket;
@@ -240,12 +240,13 @@ template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>
       } while (nBucketIdx.nBucketIdx2 < nNewMask);
     }
 
-    uint32_t* pOldBucket = nNewBucketCount;
-    pThis->tSlotListArray.SetCount((uint32_t)nNewBucketCount);
+    uint32_t pOldBucket = nNewBucketCount;
+    pThis->tSlotListArray.SetCount(nNewBucketCount);
     if (pOldBucket) {
       int nResetBucketOffset;
+      uint32_t nResetCount;
       nResetBucketOffset = 0;
-      nBucketIdx.pBucketIdx = pOldBucket;
+      nResetCount = pOldBucket;
       do {
         pNodeNext = &pThis->tSlotListArray.m_data[nResetBucketOffset];
         if (pNodeNext->m_linkoffset != 4) {
@@ -257,14 +258,14 @@ template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>
         }
 
         nResetBucketOffset++;
-        nBucketIdx.pBucketIdx = (uint32_t*)((char*)nBucketIdx.pBucketIdx - 1);
-      } while (nBucketIdx.pBucketIdx);
+        nResetCount--;
+      } while (nResetCount);
 
       nBucketIdx.nBucketIdx2 = 0;
       pOldBucket = nNewBucketCount;
     }
 
-    pThis->nSlotMask = (int)pOldBucket - 1;
+    pThis->nSlotMask = pOldBucket - 1;
     while (0 < pendingList.m_terminator.m_next) {
       int nSavedNode = pendingList.m_terminator.m_next;
       pNodeNext = pThis->tSlotListArray.m_data + (*(uint32_t*)pendingList.m_terminator.m_next & pThis->nSlotMask);
@@ -356,12 +357,12 @@ template<> __declspec(noinline) inline ::SGAMEDATA * TSHashTable<SGAMEDATA, HASH
       ppActiveListLink = &this->tFullList.m_terminator;
     }
 
-    int pExistingHead = (int)ppActiveListLink->m_prevlink;
+    TSLink<::SGAMEDATA>* pExistingHead = ppActiveListLink->m_prevlink;
     if (pExistingHead) {
       char* pBackLink;
       nIdInBucket = ppActiveListLink->m_next;
       pBackLink = (char*)D2_StormNextLink(ppActiveListLink, -1);
-      *(int*)pBackLink = pExistingHead;
+      *(TSLink<::SGAMEDATA>**)pBackLink = pExistingHead;
       ppActiveListLink->m_prevlink->m_next = ppActiveListLink->m_next;
       ppActiveListLink->m_prevlink = 0;
       ppActiveListLink->m_next = 0;

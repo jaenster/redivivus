@@ -10,15 +10,15 @@ Diablo II: Lord of Destruction 1.14d, reverse-engineered into C++ that builds an
 |Build|every translation unit compiles with a strict `-std=c++17`, no `-fpermissive`; the executable links with no undefined symbol|
 |Play|single player works; a full playthrough has been completed on the Visual C++ 2005 build|
 |Modules|22 libraries, one per original module; 4 strict, with no include the original DLL imports did not allow|
-|64-bit|a 64-bit build links (mingw x86-64, -fpermissive, 20 stubbed 32-bit-only imports); never run; 836 pointer-width casts left (from 7,955), [counted](asm_matching/msvc8/x64/README.md) with Visual C++ 2005 x64|
+|64-bit|a 64-bit build links (mingw x86-64, -fpermissive, 20 stubbed 32-bit-only imports); never run; 502 pointer-width casts left (from 7,955), [counted](asm_matching/msvc8/x64/README.md) with Visual C++ 2005 x64|
 
 Machine code identical to 1.14d, compiled with Visual C++ 2005 SP1, the compiler of the original:
 
 |Measure|Identical machine code|
 |-|-|
-|Functions|10,556 of 14,900 (70.8%), of which 1,331 hand-written|
+|Functions|10,556 of 14,900 (70.8%), of which 1,362 hand-written|
 |Code|1,154,087 of 2,612,801 bytes (44.17%)|
-|Instructions|1,993,277 of 2,612,801 bytes (76.3%), counting identical instructions in functions that still differ|
+|Instructions|1,994,111 of 2,612,801 bytes (76.3%), counting identical instructions in functions that still differ|
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">

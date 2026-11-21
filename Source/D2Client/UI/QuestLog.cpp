@@ -1694,16 +1694,16 @@ void __fastcall QUESTLOG_AcknowledgeNewQuests(int32_t nAct) {
       return;
     }
 
-    int32_t* pQuestEntry = &gQuestLog.aQuestLogEntries[0].eQuestId;
+    D2QuestLogEntryStrc* pQuestEntry = &gQuestLog.aQuestLogEntries[0];
     do {
-      if (!*(uint32_t*)((char*)pQuestEntry + 0x265)) {
+      if (!pQuestEntry->nDisplayState) {
         pBitBuffer = npcmenu::GetQuestInfo();
-        D2Common::QuestRecord::SetQuestState(pBitBuffer, *pQuestEntry, QUESTSTATE_BoxGrayed);
-        GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('X', (short int)*pQuestEntry);
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, pQuestEntry->eQuestId, QUESTSTATE_BoxGrayed);
+        GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('X', (short int)pQuestEntry->eQuestId);
       }
 
       nIndex++;
-      pQuestEntry = (int32_t*)((char*)pQuestEntry + 0x26a);
+      pQuestEntry++;
     } while (nIndex < gQuestLog.nQuestLogQuestCount);
 }
 

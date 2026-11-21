@@ -512,7 +512,7 @@ uint8_t __stdcall MONSTERS_GetMaxLightRadiusFromEquipment(D2UnitStrc * pUnit) {
     }
 
     D2UnitDataUnion* pDVar1 = &pUnit->pUnitData;
-    pUnit = 0;
+    uint8_t nLightRadiusMax = 0;
     if (!pDVar1->pUnitDataPlayer) {
       return '\0';
     }
@@ -528,15 +528,15 @@ uint8_t __stdcall MONSTERS_GetMaxLightRadiusFromEquipment(D2UnitStrc * pUnit) {
       pComponentOverlay = DATATBLS::OverlayTbls::MONSTER_GetComponentOverlay(pUnitSaved, nComponentIdx, (uint32_t)(uint8_t)pComponents[nComponentIdx]);
       if (pComponentOverlay && pComponentOverlay != 0x2074696c && pComponentOverlay != 0x2064656d && pComponentOverlay != 0x20797668) {
         pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(pComponentOverlay, &nClassId);
-        if (pItemsTxt && (uint8_t)pItemsTxt->bLightRadius > *(uint8_t*)((char*)&pUnit + 3)) {
-          pUnit = (D2UnitStrc*)((uint32_t)(uint8_t)pItemsTxt->bLightRadius << 0x18);
+        if (pItemsTxt && (uint8_t)pItemsTxt->bLightRadius > nLightRadiusMax) {
+          nLightRadiusMax = (uint8_t)pItemsTxt->bLightRadius;
         }
       }
 
       nComponentIdx++;
     } while ((int)nComponentIdx < 0x10);
 
-    return *(uint8_t*)((char*)&pUnit + 3);
+    return nLightRadiusMax;
 }
 
 // Resolves which monster class ID should actually spawn in a room for a given nMonsterId, accounting for level-specific monster tables and difficulty upgrades. Looks up the base class ID via D2MonStatsTxt.BaseId, scans the level's valid monster array (LevelsTxt.mon) for a match, and if not found walks the NextInClass chain up to nUpgradeCount steps as long as the upgraded monster's level does not exceed the level cap. Returns the best matching class ID, or the original nMonsterId if no suitable upgrade is found.

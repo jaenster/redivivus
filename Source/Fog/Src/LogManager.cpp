@@ -1061,7 +1061,7 @@ void __fastcall CloseLogFileByName(uint8_t * szFileName) {
       }
 
       nSlot++;
-      pSlotName = (char (*)[16])((char*)pSlotName + 0x10);
+      pSlotName++;
       if (nSlot >= 0x14) {
         return;
       }
@@ -1604,7 +1604,7 @@ DWORD __stdcall LOGMANAGER_LogWriterThreadProc(void * lpThreadParam) {
           }
 
           gLogMessageQueueCount--;
-          gLogMessageQueueTotalBytes -= *(int*)((char*)pNode + 8);
+          gLogMessageQueueTotalBytes -= pNode->nSize;
         }
       } else {
         pNode = 0;

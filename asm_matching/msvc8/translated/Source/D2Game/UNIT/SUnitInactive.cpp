@@ -1109,6 +1109,7 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
     int nRemainingGrowSteps;
     SUNITINACTIVE_RoomInit_Slotm14 uSlot14;
     D2ObjectsTxt* pObjTxtGrowable;
+    int32_t nGrowCursor;
     uint8_t byMaxStage;
     uint8_t byNewStage;
     int32_t nLine;
@@ -1213,10 +1214,10 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
                     if (bObjectMode < byMaxStage) {
                       nRemainingGrowSteps = (uint32_t)byMaxStage - (uint32_t)bObjectMode;
                       if (nRemainingGrowSteps > 0) {
-                        pObjTxtGrowable = (D2ObjectsTxt*)uSlot14.nGrowInterval;
+                        nGrowCursor = uSlot14.nGrowInterval;
                         do {
-                          GAME::Event::SetEvent(pGame, pUnit, 2, (int)(pObjTxtGrowable->Name + pGame->dwGameFrame), 0, 0);
-                          pObjTxtGrowable = (D2ObjectsTxt*)(pObjTxtGrowable->Name + (intptr_t)uSlot14.pInactiveItemList);
+                          GAME::Event::SetEvent(pGame, pUnit, 2, nGrowCursor + pGame->dwGameFrame, 0, 0);
+                          nGrowCursor = nGrowCursor + (intptr_t)uSlot14.pInactiveItemList;
                           nRemainingGrowSteps--;
                         } while (nRemainingGrowSteps);
                       }

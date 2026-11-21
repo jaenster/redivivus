@@ -531,7 +531,7 @@ int32_t __fastcall PropertyFunc_SimpleStatWithContext(int32_t nType, D2UnitStrc 
       {
         D2StatListExStrc* pStatList;
         nProperty = pProperty->fparam;
-        if (!(D2SetsTxtFStrc*)nProperty) {
+        if (!nProperty) {
           return 0;
         }
         if ((int)eStatCode >= 0x10 && (int)eStatCode <= 0x12 || nType == 1) {
@@ -786,7 +786,7 @@ int32_t __fastcall PropertyFunc_MinDamage(int32_t nType, D2UnitStrc * pUnit, D2U
     uint32_t nRolled;
     int32_t nRangeLow;
     int32_t nRangeB;
-    D2SetsTxtFStrc* nRangeA;
+    int32_t nRangeA;
     int32_t nErrLine;
     int32_t nProperty;
     if (!pProperty) {
@@ -795,14 +795,14 @@ int32_t __fastcall PropertyFunc_MinDamage(int32_t nType, D2UnitStrc * pUnit, D2U
     }
 
     uint16_t wItemVersion;
-    nRangeA = (D2SetsTxtFStrc*)pProperty->fmin;
+    nRangeA = pProperty->fmin;
     nRangeB = pProperty->fmax;
-    nProperty = (int32_t)nRangeA;
-    if (nRangeA != (D2SetsTxtFStrc*)nRangeB) {
-      nRangeLow = (int32_t)nRangeA;
-      if (nRangeB < (intptr_t)nRangeA) {
+    nProperty = nRangeA;
+    if (nRangeA != nRangeB) {
+      nRangeLow = nRangeA;
+      if (nRangeB < nRangeA) {
         nRangeLow = nRangeB;
-        nRangeB = (int32_t)nRangeA;
+        nRangeB = nRangeA;
       }
 
       wItemVersion = Items::ITEM_GetItemData_wItemVersion(pItemUnit);
@@ -869,7 +869,7 @@ int32_t __fastcall PropertyFunc_MaxDamage(int32_t nType, D2UnitStrc * pUnit, D2U
     uint32_t nRolled;
     int32_t nRangeLow;
     int32_t nRangeB;
-    D2SetsTxtFStrc* nRangeA;
+    int32_t nRangeA;
     int32_t nErrLine;
     int32_t nProperty;
     if (!pProperty) {
@@ -878,14 +878,14 @@ int32_t __fastcall PropertyFunc_MaxDamage(int32_t nType, D2UnitStrc * pUnit, D2U
     }
 
     uint16_t wItemVersion;
-    nRangeA = (D2SetsTxtFStrc*)pProperty->fmin;
+    nRangeA = pProperty->fmin;
     nRangeB = pProperty->fmax;
-    nProperty = (int32_t)nRangeA;
-    if (nRangeA != (D2SetsTxtFStrc*)nRangeB) {
-      nRangeLow = (int32_t)nRangeA;
-      if (nRangeB < (intptr_t)nRangeA) {
+    nProperty = nRangeA;
+    if (nRangeA != nRangeB) {
+      nRangeLow = nRangeA;
+      if (nRangeB < nRangeA) {
         nRangeLow = nRangeB;
-        nRangeB = (int32_t)nRangeA;
+        nRangeB = nRangeA;
       }
 
       wItemVersion = Items::ITEM_GetItemData_wItemVersion(pItemUnit);

@@ -4806,6 +4806,7 @@ static BOOL __stdcall INVENTORY_ReserveGridCells(D2InventoryStrc * pInventory, D
     D2GridScreenCoordinates gridDims;
     int pnColStart;
     uint8_t byItemHeight;
+    uint8_t byItemWidth;
     if (!pInventory) {
       return 0;
     }
@@ -4826,10 +4827,10 @@ static BOOL __stdcall INVENTORY_ReserveGridCells(D2InventoryStrc * pInventory, D
       return 0;
     }
 
-    ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pRowIter, (char*)((intptr_t)&pUnit + 3), (char*)&byItemHeight, ".\\INVENTORY\\Inventory.cpp", 0x16d5);
-    if (*(uint8_t*)((char*)&pUnit + 3) && byItemHeight && pnColStart >= 0) {
+    ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pRowIter, (char*)&byItemWidth, (char*)&byItemHeight, ".\\INVENTORY\\Inventory.cpp", 0x16d5);
+    if (byItemWidth && byItemHeight && pnColStart >= 0) {
       int pnColEnd;
-      nColIter = (uint32_t)*(uint8_t*)((char*)&pUnit + 3) + pnColStart;
+      nColIter = (uint32_t)byItemWidth + pnColStart;
       if (nColIter <= (int)(uint32_t)pInvGridInfo->bWidth && (intptr_t)pUnit2 >= 0 && (intptr_t)(pUnit2->unk0x19 + (byItemHeight - 0x19)) <= (int)(uint32_t)pInvGridInfo->bHeight) {
         for (pRowIter = pUnit2; (intptr_t)pRowIter < (intptr_t)(pUnit2->unk0x19 + (byItemHeight - 0x19)); pRowIter = (D2UnitStrc*)((intptr_t)&pRowIter->eUnitType + 1)) {
           pnColEnd = pnColStart;
@@ -4837,7 +4838,7 @@ static BOOL __stdcall INVENTORY_ReserveGridCells(D2InventoryStrc * pInventory, D
             do {
               pInvGridInfo->pGridCells[(uint32_t)pInvGridInfo->bWidth * (intptr_t)pRowIter + pnColEnd] = (D2UnitStrc*)-1;
               pnColEnd++;
-              nColIter = (uint32_t)*(uint8_t*)((char*)&pUnit + 3) + pnColStart;
+              nColIter = (uint32_t)byItemWidth + pnColStart;
             } while (pnColEnd < nColIter);
           }
         }

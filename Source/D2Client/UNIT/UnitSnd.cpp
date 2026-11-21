@@ -4199,7 +4199,7 @@ void __fastcall MuteOrUnmuteUnitSounds(D2UnitStrc * pUnit, int32_t nMuteDelta) {
       }
     }
 
-    *(uint32_t*)((intptr_t)&pUnit->uSideData + 0x24) = (uint32_t)(nMuteDelta > 0);
+    pUnit->uSideData.pClientSide.bHasActiveSound = nMuteDelta > 0;
     if (nUnitType == 1) {
       D2MonSoundsTxt* pMonSoundsLine;
       pMonSoundsLine = TxtGetSoundIdLineFromUnit(pUnit);

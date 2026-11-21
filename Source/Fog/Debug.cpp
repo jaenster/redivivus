@@ -1510,7 +1510,10 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame1_t {
       DWORD nBytesRemaining;
-      int pBytesToDump;
+      union {
+        int pBytesToDump;
+        char* pszSymText;
+      };
       uint32_t aSymInfo[4];
       uint32_t nMaxNameLen;
       char szSymbol[260];
@@ -1646,20 +1649,20 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
 
         bBadPtr = (*pSymGetSymFromAddr)(hSymProc, (DWORD)pAsciiOut, &__frame0.nSymDisplacement, __frame1.aSymInfo);
         if (bBadPtr) {
-          __frame1.pBytesToDump = (int)__frame1.szSymbol;
+          __frame1.pszSymText = __frame1.szSymbol;
         } else {
-          __frame1.pBytesToDump = (int)s_unknown_006cd5fc;
+          __frame1.pszSymText = s_unknown_006cd5fc;
         }
 
-        nByteOffset = _stricmp((char*)__frame1.pBytesToDump, "`string\'");
+        nByteOffset = _stricmp(__frame1.pszSymText, "`string\'");
         if (!nByteOffset && !__frame0.nSymDisplacement) {
           pEscapedStr = Src::String::FogString::SMemEscapeString(__frame1.aEscapedString, pAsciiOut, 0x50, 0);
           pBytesRemaining = "\n                           // 0x%08X - %s - %s=\'%s\'\n\n";
-          Src::LogManager::LogWithCategoryVarArgs("", "\n                           // 0x%08X - %s - %s=\'%s\'\n\n", pAsciiOut, pDVar1->szModuleName, __frame1.pBytesToDump, pEscapedStr);
+          Src::LogManager::LogWithCategoryVarArgs("", "\n                           // 0x%08X - %s - %s=\'%s\'\n\n", pAsciiOut, pDVar1->szModuleName, __frame1.pszSymText, pEscapedStr);
         } else {
           pBytesRemaining = "\n                           // 0x%08X - %s - %s+%04X\n\n";
           pEscapedStr = __frame0.nSymDisplacement;
-          Src::LogManager::LogWithCategoryVarArgs("", "\n                           // 0x%08X - %s - %s+%04X\n\n", pAsciiOut, pDVar1->szModuleName, __frame1.pBytesToDump, pEscapedStr);
+          Src::LogManager::LogWithCategoryVarArgs("", "\n                           // 0x%08X - %s - %s+%04X\n\n", pAsciiOut, pDVar1->szModuleName, __frame1.pszSymText, pEscapedStr);
         }
 
         nLinesEmitted += 3;

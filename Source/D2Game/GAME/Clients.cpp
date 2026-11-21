@@ -1674,6 +1674,7 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
     D2DrlgRoomCoordsStrc sRoomCoords;
     POINT ptCorpsePos;
     int32_t nSpawnX;
+    int32_t nSpawnY;
     int32_t nErrorLine;
     eD2LevelId nRoom;
     D2DrlgActStrc** pX;
@@ -1687,7 +1688,7 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
       pX = pGame_00->pAct + bActNo;
       nRoom = (eD2LevelId)D2Common::DUNGEON::Dungeon::GetTownLevelIdFromAct(pGame_00->pAct[bActNo]);
       dwCorpseGUID = D2Common::Units::GetUnitSizeX(pUnit);
-      pRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(*pX, nRoom, 0, &nSpawnX, (int*)&pGame, dwCorpseGUID);
+      pRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(*pX, nRoom, 0, &nSpawnX, &nSpawnY, dwCorpseGUID);
       if (!pRoom) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a1);
         exit(-1);
@@ -1697,13 +1698,13 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
       SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal(pClient, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (uint16_t)sRoomCoords.sTileRect.left, (uint16_t)sRoomCoords.sTileRect.top);
     } else {
       nSpawnX = nX;
-      pGame = (::SGAMEDATA*)nY;
+      nSpawnY = nY;
     }
 
     CLIENT_SetRoom(pClient, pRoom);
-    UNIT::SUnit::UNITS_PlaceUnitInRoom(pUnit, nSpawnX, (int32_t)pGame, pGame_00, pRoom, 0);
+    UNIT::SUnit::UNITS_PlaceUnitInRoom(pUnit, nSpawnX, nSpawnY, pGame_00, pRoom, 0);
     pClient->fClientFlags &= -2;
-    SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', pUnit->eUnitType, pUnit->nUnitGUID, (uint16_t)nSpawnX, (uint16_t)(uintptr_t)pGame, '\x01');
+    SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', pUnit->eUnitType, pUnit->nUnitGUID, (uint16_t)nSpawnX, (uint16_t)nSpawnY, '\x01');
     SCmd::NET_D2GS_SERVER_Send_0x7E_LoadMonsterCof(pClient, pGame_00->dwMonSeed);
     pRoom = (D2RoomStrc*)D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(pUnit->pInventory);
     while (pRoom) {

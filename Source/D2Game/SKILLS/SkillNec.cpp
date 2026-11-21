@@ -616,7 +616,7 @@ void __fastcall SKILLNEC_ApplyDimVision(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       if (!pItemStatCostTxt) {
         goto apply_curse;
       }
-      if (*(uint8_t*)((intptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (pItemStatCostTxt->dwItemStatFlags & ITEMSTATCOSTFLAG_UPDATEANIMRATE) {
         sNecroArg.bUpdateAnimSpeed = 1;
       }
 
@@ -1052,7 +1052,7 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
     }
 
     int* pPassiveCalcCursor = pSkillsTxt->passivecalc;
-    int* pPassiveStatCursor = (int*)pSkillsTxt->passivestat;
+    short int* pPassiveStatCursor = pSkillsTxt->passivestat;
     int iStatLoop = 5;
     D2DataTableTxtStrc* pDataTable = D2Common::ITEMS::Items::sgptDataTable;
     do {
@@ -1083,22 +1083,22 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
         }
       }
 
-      pPassiveStatCursor = (int*)((char*)pPassiveStatCursor + 2);
+      pPassiveStatCursor++;
       pPassiveCalcCursor++;
       iStatLoop--;
     } while (iStatLoop);
 
     pSummonStatList = 0;
     iStatLoop = 0;
-    pPassiveStatCursor = pSkillsTxt->aurastatcalc;
-    pPassiveCalcCursor = (int*)pSkillsTxt->aurastat;
+    int* pAuraCalcCursor = pSkillsTxt->aurastatcalc;
+    short int* pAuraStatCursor = pSkillsTxt->aurastat;
     do {
-      if ((short int)*pPassiveCalcCursor >= 0) {
-        eStatId = (eD2UnitStat)(short int)*pPassiveCalcCursor;
+      if ((short int)*pAuraStatCursor >= 0) {
+        eStatId = (eD2UnitStat)(short int)*pAuraStatCursor;
         if ((int)eStatId < pDataTable->nTxtItemStatCostSize && (int)eStatId >= 0) {
           pStatCostTxt = pDataTable->pTxtItemStatCost + eStatId;
           if (pStatCostTxt) {
-            nStatCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pPassiveStatCursor, eSkill, nSkillLvl);
+            nStatCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraCalcCursor, eSkill, nSkillLvl);
             pDataTable = D2Common::ITEMS::Items::sgptDataTable;
             if (nStatCalc) {
               if (!pSummonStatList) {
@@ -1133,8 +1133,8 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
         }
       }
 
-      pPassiveCalcCursor = (int*)((char*)pPassiveCalcCursor + 2);
-      pPassiveStatCursor++;
+      pAuraStatCursor++;
+      pAuraCalcCursor++;
       iStatLoop++;
     } while (iStatLoop < 6);
 
@@ -1800,6 +1800,7 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
     uint32_t nCursorYRaw;
     uint32_t nTargetX;
     short int nSrvMissileId;
+    int32_t nHalfRadius;
     sCastPetArgs.nPetType = (int32_t)pGame;
     BOOL bInTown = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &nCursorYRaw);
     if (!bInTown) {
@@ -1876,8 +1877,8 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
     if (!bInTown) {
       D2UnitStrc* pMissile;
       nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, sCastPetArgs.pSkillTxt->calc[1], eSkill, nSkillLvl);
-      sCastPetArgs.pSkillTxt = (D2SkillsTxt*)(nRadius / 2);
-      if ((intptr_t)sCastPetArgs.pSkillTxt <= 1) {
+      nHalfRadius = nRadius / 2;
+      if (nHalfRadius <= 1) {
         return 1;
       }
 
@@ -1907,7 +1908,7 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
       pMissile = MISSILES::Missiles::CreatingMissile((::SGAMEDATA*)sCastPetArgs.nPetType, &sSkillArg);
       if (pMissile) {
         D2Common::Units::Missile::SetTargetX(pMissile, pGolem->nUnitGUID);
-        D2Common::Units::Missile::SetTargetY(pMissile, (int32_t)sCastPetArgs.pSkillTxt);
+        D2Common::Units::Missile::SetTargetY(pMissile, nHalfRadius);
       }
 
       sSkillArg.nUnitX = nDirOffsetY + nTargetX;
@@ -1915,7 +1916,7 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
       pMissile = MISSILES::Missiles::CreatingMissile((::SGAMEDATA*)sCastPetArgs.nPetType, &sSkillArg);
       if (pMissile) {
         D2Common::Units::Missile::SetTargetX(pMissile, pGolem->nUnitGUID);
-        D2Common::Units::Missile::SetTargetY(pMissile, (int32_t)sCastPetArgs.pSkillTxt);
+        D2Common::Units::Missile::SetTargetY(pMissile, nHalfRadius);
       }
 
       return 1;
@@ -2033,7 +2034,7 @@ BOOL __fastcall Skills_SrvDoFunc_062_BonePrison(::SGAMEDATA * pGame, D2UnitStrc 
         if (!pFirstMinion) {
           nPosY = 1;
           pFirstMinion = pUnit_00;
-          Ai::AiGeneral::AssignMinionOwner(pGame, pUnit_00, D2Common::Units::GetGUID(pUnit_01), D2Common::Units::GetType(pOwnerUnit), (int32_t)pPrevFirstMinion, nPosY);
+          Ai::AiGeneral::AssignMinionOwner(pGame, pUnit_00, D2Common::Units::GetGUID(pUnit_01), D2Common::Units::GetType(pOwnerUnit), 0, nPosY);
         } else {
           Ai::AiGeneral::AssignMinionOwner(pGame, pUnit_00, pFirstMinion->nUnitGUID, pFirstMinion->eUnitType, 0, 0);
           Ai::AiGeneral::AddMinionToList(pGame, pPrevFirstMinion, pUnit_00);

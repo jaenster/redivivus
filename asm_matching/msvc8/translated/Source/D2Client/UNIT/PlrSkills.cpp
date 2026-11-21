@@ -902,7 +902,7 @@ void __stdcall STATES_UpdateColorShiftAndLight(D2UnitStrc * pUnit) {
     uint32_t bIsWindowMode;
     D2UnitStrc* pDVar3;
     D2DataTableTxtStrc* pDataTable;
-    int nStateColorOffset;
+    D2StatesTxt* pStateTxt;
     int nTxtOffset;
     uint8_t byColorPriority;
     int nTxtSize = D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize;
@@ -915,12 +915,12 @@ void __stdcall STATES_UpdateColorShiftAndLight(D2UnitStrc * pUnit) {
       pDataTable = D2Common::ITEMS::Items::sgptDataTable;
       do {
         if (nStateIdx >= 0 && nStateIdx < nTxtSize) {
-          nStateColorOffset = (int)pDataTable->pTxtStates->overlay + (nTxtOffset - 2);
-          if (nStateColorOffset) {
+          pStateTxt = pDataTable->pTxtStates + nStateIdx;
+          if (pStateTxt) {
             eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, nStateIdx);
             pDataTable = D2Common::ITEMS::Items::sgptDataTable;
             if (eUnitState != STATE_none) {
-              byColorPriority = *(uint8_t*)(nStateColorOffset + 0x20);
+              byColorPriority = (uint8_t)pStateTxt->colorpri;
               if (byColorPriority > byBestPriority) {
                 nBestStateIdx = nStateIdx;
                 byBestPriority = byColorPriority;
@@ -942,7 +942,7 @@ void __stdcall STATES_UpdateColorShiftAndLight(D2UnitStrc * pUnit) {
         if (pDVar1->colorshift == 'h' && (pLocalPlayerUnit = Player::GetPlayerUnit_UI() , pUnit == pLocalPlayerUnit) && (bIsWindowMode = D2gfx::D2GFX::IsWindowMode() , bIsWindowMode != 0)) {
           pUnit->uSideData.pClientSide.nPaletteIndex = 0;
         } else {
-          *(uint32_t*)((intptr_t)&pUnit->uSideData + 8) = (uint32_t)(uint8_t)pDVar1->colorshift;
+          pUnit->uSideData.pClientSide.nPaletteIndex = (uint32_t)(uint8_t)pDVar1->colorshift;
         }
 
         pDVar3 = Player::GetPlayerUnit_UI();

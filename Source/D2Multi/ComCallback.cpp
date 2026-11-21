@@ -2068,10 +2068,10 @@ D2ChannelUserStrc * __stdcall COMCALLBACK_CreateChannelUserEntry(char * szUserna
       if (!pNewUser) {
         pNewUser = D2_NEW_AT(D2ChannelUserStrc, ".\\Src\\ComCallback.cpp", 0x6d4);
         memset(pNewUser, 0, 0xb4);
-        nResult = 4 - (int)szUsername;
+        intptr_t nDstOffset = pNewUser->szUsername - szUsername;
         do {
           cNameChar = *szUsername;
-          szUsername[(intptr_t)pNewUser + nResult] = cNameChar;
+          szUsername[nDstOffset] = cNameChar;
           szUsername++;
         } while (cNameChar != '\0');
 

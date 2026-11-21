@@ -590,17 +590,18 @@ D2UnitStrc * __stdcall CallCollisionFunction(D2RoomStrc * pRoom, int32_t nX, int
     int nAdjRoomIdx;
     eD2UnitType eUnitType;
     D2UnitStrc* pUnit;
+    D2RoomStrc** ppAdjRooms;
     if (!pRoom || nWidth - 1U > 2) {
       return nullptr;
     }
 
     nWidth = nWidth * 3 - 3;
-    DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, (D2RoomStrc***)&pRoom, &nAdjacentRoomCount);
+    DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjRooms, &nAdjacentRoomCount);
     for (nAdjRoomIdx = 0; nAdjRoomIdx < nAdjacentRoomCount; nAdjRoomIdx = iVar1 + 1) {
       iVar1 = nAdjRoomIdx;
-      _bCandidateInRoom = CoordIsInRoom((D2RoomStrc*)pRoom->nLastDeadGUIDs[nAdjRoomIdx - 0xe], nX, 2, nY);
+      _bCandidateInRoom = CoordIsInRoom(ppAdjRooms[nAdjRoomIdx], nX, 2, nY);
       if (_bCandidateInRoom) {
-        pUnit = *(D2UnitStrc**)(pRoom->nLastDeadGUIDs[iVar1 - 0xe] + 0x74);
+        pUnit = ppAdjRooms[iVar1]->pUnitList;
         for (; pUnit; pUnit = pUnit->pRoomNext) {
           if (!false) {
             switch (pUnit->eUnitType) {
@@ -862,24 +863,24 @@ static void __stdcall TileLibrary_SetupCollision(D2DrlgTileDataStrc * pTileData,
       return;
     }
 
-    D2TileLibraryEntryStrc** pTileLibraryEntry = &pTileData->pTileLibraryEntry;
+    D2DrlgTileDataStrc* pTile = pTileData;
     int nCounter = nTilesSize;
     do {
       BOOL bIsInsideRoom;
-      nWorldX = (int)pTileLibraryEntry[-4] + pCollisionMapCurrent->sCoords.sTileRect.left;
-      nWorldY = pCollisionMapCurrent->sCoords.sTileRect.top + (int)pTileLibraryEntry[-3];
+      nWorldX = pTile->nPosX + pCollisionMapCurrent->sCoords.sTileRect.left;
+      nWorldY = pCollisionMapCurrent->sCoords.sTileRect.top + pTile->nPosY;
       Drlg::Transform::CoordsRoomToWorld(&nWorldX, &nWorldY);
       bIsInsideRoom = DUNGEON::Dungeon::AreSubtileCoordinatesInsideRoom((D2DrlgCoordsStrc*)pCollisionMap, nWorldX, nWorldY);
       if (bIsInsideRoom) {
         nY = nWorldX - pCollisionMap->sCoords.dwXStart;
         nX = nWorldY - pCollisionMap->sCoords.dwYStart;
         if (bReplace) {
-          TileLibrary_SetCollision(*pTileLibraryEntry, nX, nY, pCollisionMap);
+          TileLibrary_SetCollision(pTile->pTileLibraryEntry, nX, nY, pCollisionMap);
         } else {
-          TileLibrary_AddCollision(nY, nX, *pTileLibraryEntry, pCollisionMap);
+          TileLibrary_AddCollision(nY, nX, pTile->pTileLibraryEntry, pCollisionMap);
         }
 
-        nTileFlags = (uint32_t)pTileLibraryEntry[-1];
+        nTileFlags = (uint32_t)pTile->nFlags;
         eCollisionFlag = 0;
         if (nTileFlags & 2) {
           eCollisionFlag = 0x10;
@@ -895,7 +896,7 @@ static void __stdcall TileLibrary_SetupCollision(D2DrlgTileDataStrc * pTileData,
         }
       }
 
-      pTileLibraryEntry += 0xc;
+      pTile++;
       nCounter--;
     } while (nCounter);
 }
@@ -2148,10 +2149,11 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
     int32_t nXBound;
     int nBresenhamErr;
     int nBresenhamErr2;
-    D2RoomStrc* nRoomYStart;
+    int32_t nRoomYStart;
     eCollisionFlags* peCellStop;
-    POINT* nY1;
-    nY1 = (POINT*)nIterY->y;
+    int32_t nY1;
+    int32_t nCurY;
+    nY1 = nIterY->y;
     int nX1;
     nX1 = nIterY->x;
     int nX2;
@@ -2159,14 +2161,14 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
     int nY2;
     nY2 = pPoint2->y;
     int nDifferenceX;
-    nDifferenceX = nY2 - (int)nY1;
+    nDifferenceX = nY2 - nY1;
     int nDifferenceY;
     nDifferenceY = nX2 - nX1;
     int nDirX;
     nDirX = 1;
     int nDirY;
     nDirY = 1;
-    nIterY = nY1;
+    nCurY = nY1;
     if (pRoom) {
       D2RoomStrc* pCurrentRoom;
       if (nDifferenceY < 0) {
@@ -2179,29 +2181,28 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
       }
 
       nRoomXStart = pRoom->sCoords.dwXStart;
-      nRoomYStart = (D2RoomStrc*)pRoom->sCoords.dwYStart;
-      nRoomYEnd = (int)nRoomYStart->nLastDeadGUIDs + (pRoom->sCoords.dwYSize - 0x38);
+      nRoomYStart = pRoom->sCoords.dwYStart;
+      nRoomYEnd = nRoomYStart + pRoom->sCoords.dwYSize;
       nRoomXEnd = pRoom->sCoords.dwXSize + nRoomXStart;
-      if (nX1 < nRoomXStart || nX1 >= nRoomXEnd || (intptr_t)nY1 < (intptr_t)nRoomYStart || (pCurrentRoom = pRoom , (intptr_t)nY1 >= nRoomYEnd)) {
-        pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX1, (int32_t)nY1);
+      if (nX1 < nRoomXStart || nX1 >= nRoomXEnd || nY1 < nRoomYStart || (pCurrentRoom = pRoom , nY1 >= nRoomYEnd)) {
+        pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX1, nY1);
         if (!pCurrentRoom) {
           goto report_blocked;
         }
 
         nRoomXStart = pCurrentRoom->sCoords.dwXStart;
-        nRoomYStart = (D2RoomStrc*)pCurrentRoom->sCoords.dwYStart;
-        nRoomYEnd = (int)nRoomYStart->nLastDeadGUIDs + (pCurrentRoom->sCoords.dwYSize - 0x38);
+        nRoomYStart = pCurrentRoom->sCoords.dwYStart;
+        nRoomYEnd = nRoomYStart + pCurrentRoom->sCoords.dwYSize;
         nRoomXEnd = pCurrentRoom->sCoords.dwXSize + nRoomXStart;
-        if (nX1 < nRoomXStart || nX1 >= nRoomXEnd || (intptr_t)nY1 < (intptr_t)nRoomYStart || (intptr_t)nY1 >= nRoomYEnd) {
+        if (nX1 < nRoomXStart || nX1 >= nRoomXEnd || nY1 < nRoomYStart || nY1 >= nRoomYEnd) {
           goto report_blocked;
         }
       }
 
-      pRoom = nRoomYStart;
       if (!nDifferenceY) {
         if (!nDifferenceX) {
           pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pCurrentRoom);
-          if (!(eCollisionFlag & (uint32_t)pCollisionGrid->pMapStart[((intptr_t)nY1 - (intptr_t)pRoom) * pCollisionGrid->sCoords.dwXSize - nRoomXStart + nX1])) {
+          if (!(eCollisionFlag & (uint32_t)pCollisionGrid->pMapStart[(nY1 - nRoomYStart) * pCollisionGrid->sCoords.dwXSize - nRoomXStart + nX1])) {
             return 0;
           }
         } else {
@@ -2210,19 +2211,19 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
             nBresenhamErr2 = 0;
             if (nDirY > 0) {
               if (nY2 >= nRoomYEnd) {
-                nBresenhamErr2 = nDifferenceX - (nRoomYEnd - (int)nIterY);
-                nDifferenceX = nRoomYEnd - (int)nIterY;
+                nBresenhamErr2 = nDifferenceX - (nRoomYEnd - nCurY);
+                nDifferenceX = nRoomYEnd - nCurY;
               }
             } else {
-              if (nY2 < (intptr_t)pRoom) {
-                nX2 = (intptr_t)nIterY + (1 - (intptr_t)pRoom);
+              if (nY2 < nRoomYStart) {
+                nX2 = nCurY + (1 - nRoomYStart);
                 nBresenhamErr2 = nDifferenceX - nX2;
                 nDifferenceX = nX2;
               }
             }
 
             pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pCurrentRoom);
-            peCellCurrent = pCollisionGrid->pMapStart + (((intptr_t)nIterY - (intptr_t)pRoom) * pCollisionGrid->sCoords.dwXSize - nRoomXStart) + nX1;
+            peCellCurrent = pCollisionGrid->pMapStart + ((nCurY - nRoomYStart) * pCollisionGrid->sCoords.dwXSize - nRoomXStart) + nX1;
             nX2 = pCurrentRoom->sCoords.dwXSize * nDirY;
             peCellStop = peCellCurrent + nX2 * nDifferenceX;
             for (; peCellCurrent != peCellStop; peCellCurrent += nX2) {
@@ -2230,22 +2231,22 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
                 goto report_blocked;
               }
 
-              nIterY = (POINT*)((intptr_t)&nIterY->x + nDirY);
+              nCurY += nDirY;
             }
 
             if (!nBresenhamErr2) {
               return 0;
             }
 
-            pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, (int32_t)nIterY);
+            pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, nCurY);
             if (!pCurrentRoom) {
               break;
             }
 
-            pRoom = (D2RoomStrc*)pCurrentRoom->sCoords.dwYStart;
+            nRoomYStart = pCurrentRoom->sCoords.dwYStart;
             nRoomXStart = pCurrentRoom->sCoords.dwXStart;
-            nRoomYEnd = (int)pRoom->nLastDeadGUIDs + (pCurrentRoom->sCoords.dwYSize - 0x38);
-            if (nX1 < nRoomXStart || nX1 >= pCurrentRoom->sCoords.dwXSize + nRoomXStart || (intptr_t)nIterY < (intptr_t)pRoom || (intptr_t)nIterY >= nRoomYEnd) {
+            nRoomYEnd = nRoomYStart + pCurrentRoom->sCoords.dwYSize;
+            if (nX1 < nRoomXStart || nX1 >= pCurrentRoom->sCoords.dwXSize + nRoomXStart || nCurY < nRoomYStart || nCurY >= nRoomYEnd) {
               break;
             }
 
@@ -2272,7 +2273,7 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
             }
 
             pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pCurrentRoom);
-            peCellCurrent = pCollisionGrid->pMapStart + (((intptr_t)nY1 - (intptr_t)pRoom) * pCollisionGrid->sCoords.dwXSize - nRoomXStart) + nX1;
+            peCellCurrent = pCollisionGrid->pMapStart + ((nY1 - nRoomYStart) * pCollisionGrid->sCoords.dwXSize - nRoomXStart) + nX1;
             peCellStop = peCellCurrent + nDirX * nDifferenceY;
             for (; peCellCurrent != peCellStop; peCellCurrent += nDirX) {
               if (eCollisionFlag & (uint32_t)*peCellCurrent) {
@@ -2286,15 +2287,15 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
               return 0;
             }
 
-            pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, (int32_t)nY1);
+            pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, nY1);
             if (!pCurrentRoom) {
               goto report_blocked;
             }
 
             nRoomXStart = pCurrentRoom->sCoords.dwXStart;
-            pRoom = (D2RoomStrc*)pCurrentRoom->sCoords.dwYStart;
+            nRoomYStart = pCurrentRoom->sCoords.dwYStart;
             nRoomXEnd = pCurrentRoom->sCoords.dwXSize + nRoomXStart;
-            if (nX1 < nRoomXStart || nX1 >= nRoomXEnd || (intptr_t)nY1 < (intptr_t)pRoom || (intptr_t)nY1 >= (intptr_t)pRoom->nLastDeadGUIDs + (pCurrentRoom->sCoords.dwYSize - 0x38)) {
+            if (nX1 < nRoomXStart || nX1 >= nRoomXEnd || nY1 < nRoomYStart || nY1 >= nRoomYStart + pCurrentRoom->sCoords.dwYSize) {
               goto report_blocked;
             }
 
@@ -2311,14 +2312,14 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
 
             nRoomXEnd = nRoomYEnd;
             if (nDirY < 0) {
-              nRoomXEnd = (intptr_t)&pRoom[-1].pDrlgRoomNext + 3;
+              nRoomXEnd = nRoomYStart - 1;
             }
-            if ((intptr_t)nIterY >= nRoomYEnd) {
+            if (nCurY >= nRoomYEnd) {
               break;
             }
 
             pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pCurrentRoom);
-            peCellCurrent = pCollisionGrid->pMapStart + (((intptr_t)nIterY - (intptr_t)pRoom) * pCollisionGrid->sCoords.dwXSize - nRoomXStart) + nX1;
+            peCellCurrent = pCollisionGrid->pMapStart + ((nCurY - nRoomYStart) * pCollisionGrid->sCoords.dwXSize - nRoomXStart) + nX1;
             while (true) {
               if (eCollisionFlag & (uint32_t)*peCellCurrent) {
                 goto report_blocked;
@@ -2328,12 +2329,12 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
               nX1 += nDirX;
               if (nBresenhamErr >= nDifferenceY) {
                 nBresenhamErr -= nDifferenceY;
-                nIterY = (POINT*)((intptr_t)&nIterY->x + nDirY);
+                nCurY += nDirY;
                 peCellCurrent += pCurrentRoom->sCoords.dwXSize * nDirY;
               }
 
               peCellCurrent += nDirX;
-              if (nX1 == nXBound || nIterY == (POINT*)nRoomXEnd) {
+              if (nX1 == nXBound || nCurY == nRoomXEnd) {
                 break;
               }
               if (nX1 == nX2 + nDirX) {
@@ -2345,16 +2346,16 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
               return 0;
             }
 
-            pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, (int32_t)nIterY);
+            pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, nCurY);
             if (!pCurrentRoom) {
               break;
             }
 
             nRoomXStart = pCurrentRoom->sCoords.dwXStart;
-            pRoom = (D2RoomStrc*)pCurrentRoom->sCoords.dwYStart;
+            nRoomYStart = pCurrentRoom->sCoords.dwYStart;
             nRoomXEnd = pCurrentRoom->sCoords.dwXSize + nRoomXStart;
-            nRoomYEnd = (int)pRoom->nLastDeadGUIDs + (pCurrentRoom->sCoords.dwYSize - 0x38);
-            if (nX1 < nRoomXStart || nX1 >= nRoomXEnd || (intptr_t)nIterY < (intptr_t)pRoom || (intptr_t)nIterY >= nRoomYEnd) {
+            nRoomYEnd = nRoomYStart + pCurrentRoom->sCoords.dwYSize;
+            if (nX1 < nRoomXStart || nX1 >= nRoomXEnd || nCurY < nRoomYStart || nCurY >= nRoomYEnd) {
               break;
             }
           }
@@ -2367,20 +2368,20 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
 
             nXBound = nRoomYEnd;
             if (nDirY < 0) {
-              nXBound = (intptr_t)&pRoom[-1].pDrlgRoomNext + 3;
+              nXBound = nRoomYStart - 1;
             }
-            if ((intptr_t)nIterY >= nRoomYEnd) {
+            if (nCurY >= nRoomYEnd) {
               break;
             }
 
             pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pCurrentRoom);
-            peCellCurrent = pCollisionGrid->pMapStart + (((intptr_t)nIterY - (intptr_t)pRoom) * pCollisionGrid->sCoords.dwXSize - nRoomXStart) + nX1;
+            peCellCurrent = pCollisionGrid->pMapStart + ((nCurY - nRoomYStart) * pCollisionGrid->sCoords.dwXSize - nRoomXStart) + nX1;
             while (true) {
               if (eCollisionFlag & (uint32_t)*peCellCurrent) {
                 goto report_blocked;
               }
 
-              nIterY = (POINT*)((intptr_t)&nIterY->x + nDirY);
+              nCurY += nDirY;
               nBresenhamErr2 += nDifferenceY;
               if (nBresenhamErr2 >= nDifferenceX) {
                 nBresenhamErr2 -= nDifferenceX;
@@ -2389,28 +2390,28 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
               }
 
               peCellCurrent += pCurrentRoom->sCoords.dwXSize * nDirY;
-              if (nX1 == nRoomXEnd || nIterY == (POINT*)nXBound) {
+              if (nX1 == nRoomXEnd || nCurY == nXBound) {
                 break;
               }
-              if (nIterY == (POINT*)(nY2 + nDirY)) {
+              if (nCurY == nY2 + nDirY) {
                 return 0;
               }
             }
 
-            if (nIterY == (POINT*)(nY2 + nDirY)) {
+            if (nCurY == nY2 + nDirY) {
               return 0;
             }
 
-            pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, (int32_t)nIterY);
+            pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, nCurY);
             if (!pCurrentRoom) {
               break;
             }
 
             nRoomXStart = pCurrentRoom->sCoords.dwXStart;
-            pRoom = (D2RoomStrc*)pCurrentRoom->sCoords.dwYStart;
+            nRoomYStart = pCurrentRoom->sCoords.dwYStart;
             nRoomXEnd = pCurrentRoom->sCoords.dwXSize + nRoomXStart;
-            nRoomYEnd = (int)pRoom->nLastDeadGUIDs + (pCurrentRoom->sCoords.dwYSize - 0x38);
-            if (nX1 < nRoomXStart || nX1 >= nRoomXEnd || (intptr_t)nIterY < (intptr_t)pRoom || (intptr_t)nIterY >= nRoomYEnd) {
+            nRoomYEnd = nRoomYStart + pCurrentRoom->sCoords.dwYSize;
+            if (nX1 < nRoomXStart || nX1 >= nRoomXEnd || nCurY < nRoomYStart || nCurY >= nRoomYEnd) {
               break;
             }
           }
@@ -2420,7 +2421,7 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
 
     report_blocked:
     pPoint2->x = nX1;
-    pPoint2->y = (LONG)nIterY;
+    pPoint2->y = nCurY;
     return 1;
 }
 

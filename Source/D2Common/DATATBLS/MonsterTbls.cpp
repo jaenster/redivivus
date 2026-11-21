@@ -189,7 +189,7 @@ void __fastcall MONSTERTBLS_ParseMonStatsField(char * szText, char * pRecord, ui
     char* pcEndPtr;
     int nStrLen;
     nStrLen = (int)strlen(szText);
-    uint32_t dwModeCode = (uint32_t)szText;
+    uint32_t dwModeCode;
     if ((uint32_t)(int)nStrLen <= 3) {
       char cModeChar;
       pcEndPtr = szText;
@@ -1066,7 +1066,7 @@ static void __stdcall TC_ParseTreasureClassEntry(D2ParsedTreasureClassStrc * pPa
     apply_prob_and_modifiers:
     AdjustRarities(pParsedTC, pTCEntry, nProb, bIsExpansionItem);
     do {
-      if (!(D2ParsedTreasureClassStrc*)pScanPtr) {
+      if (!pScanPtr) {
         return;
       }
 
@@ -1091,8 +1091,8 @@ static void __stdcall TC_ParseTreasureClassEntry(D2ParsedTreasureClassStrc * pPa
         }
 
         nStrCmpLen--;
-        bModifierMatch = (char)((D2ParsedTreasureClassStrc*)pScanPtr)->nGroup == *szModKey;
-        pScanPtr = (char*)((intptr_t)&((D2ParsedTreasureClassStrc*)pScanPtr)->nGroup + 1);
+        bModifierMatch = *pScanPtr == *szModKey;
+        pScanPtr++;
         szModKey++;
       } while (bModifierMatch);
 

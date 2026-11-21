@@ -667,18 +667,18 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
 
       pSkillsList = D2Common::Skills::STRUCT_CreateSkillsList(pGame->pMemoryPool);
       pUnit->pSkillsList = pSkillsList;
-      pRoom = (D2RoomStrc*)pMonStatsTxt->aSkill;
+      short int* pnSkillCursor = pMonStatsTxt->aSkill;
       nTmpInt = 0;
       do {
-        if (*(short int*)&pRoom->ppRoomList >= 0 && pMonStatsTxt->aSkLvl[nTmpInt] > '\0') {
-          SKILLS::SkillsServer::SetSkill(pUnit, (int)*(short int*)&pRoom->ppRoomList, (int)pMonStatsTxt->aSkLvl[nTmpInt] + monLevelData.nMonsterSkillBonus, 0);
+        if (*pnSkillCursor >= 0 && pMonStatsTxt->aSkLvl[nTmpInt] > '\0') {
+          SKILLS::SkillsServer::SetSkill(pUnit, *pnSkillCursor, (int)pMonStatsTxt->aSkLvl[nTmpInt] + monLevelData.nMonsterSkillBonus, 0);
           if (pMonStatsTxt->aSkMode[nTmpInt] >= 0) {
             nTmpVal = (uint32_t)pMonStatsTxt->aSkMode[nTmpInt];
-            D2Common::Skills::SetSkillMode(D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)*(short int*)&pRoom->ppRoomList), nTmpVal);
+            D2Common::Skills::SetSkillMode(D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, *pnSkillCursor), nTmpVal);
           }
         }
 
-        pRoom = (D2RoomStrc*)((intptr_t)&pRoom->ppRoomList + 2);
+        pnSkillCursor++;
         nTmpInt++;
       } while (nTmpInt < 8);
 

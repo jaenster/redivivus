@@ -222,12 +222,15 @@ void * __fastcall D2FILE_AllocAndLoadD2File(D2PoolManagerStrc * pMemory, char * 
     // Frame slots -12..-4 are ONE object: &dwFileSizeOut is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
-      DWORD dwFileSizeOut;
+      union {
+        DWORD dwFileSizeOut;
+        D2PoolManagerStrc* pMemoryIn;
+      };
       D2MPQFileStrc* pFile;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    __frame0.dwFileSizeOut = (DWORD)pMemory;
+    __frame0.pMemoryIn = pMemory;
     BOOL bFileExistsResult = CheckIfFileExists(pMemory, szFilename, &__frame0.pFile, 0);
     void* pBuffer = 0;
     if (bFileExistsResult) {

@@ -22,7 +22,7 @@ namespace D2Glide::glSubtileCache {
 // Initializes Glide subtile cache with LRU eviction policy. Allocates node array (0x14 bytes per entry). Halts with error 0x2a if allocation fails.
 // @sourcefile .\Src\glSubtileCache.cpp
 int __fastcall GLSUBTILE_Initialize(GlSubtileCacheStrc * pCache, int nVramStart, int nVramEnd, uint32_t dwSubtileSize) {
-    int* pNode;
+    GlSubtileCacheNodeStrc* pNode;
     uint32_t* pDebugScan;
     uint32_t nEntryCount = (uint32_t)(nVramEnd - nVramStart) / dwSubtileSize;
     pCache->dwEntrySize = dwSubtileSize;
@@ -36,23 +36,21 @@ int __fastcall GLSUBTILE_Initialize(GlSubtileCacheStrc * pCache, int nVramStart,
     }
 
     memset(pNodeArray, 0, nAllocSize);
-    int nByteOffset = 0;
     int nNodeIndex = 0;
     int nVramAddr = nVramStart;
     if ((int)(pCache->nMaxEntries - 1) >= 0) {
       do {
-        pNode = (int*)((intptr_t)&pCache->pNodes->nIndex + nByteOffset);
-        *pNode = nNodeIndex;
+        pNode = pCache->pNodes + nNodeIndex;
+        pNode->nIndex = nNodeIndex;
         if (nNodeIndex < (int)(pCache->nMaxEntries - 1)) {
-          pNode[3] = (intptr_t)&pCache->pNodes[1].nIndex + nByteOffset;
+          pNode->pNext = pCache->pNodes + (nNodeIndex + 1);
         }
         if (nNodeIndex > 0) {
-          pNode[4] = (intptr_t)&pCache->pNodes[-1].nIndex + nByteOffset;
+          pNode->pPrev = pCache->pNodes + (nNodeIndex - 1);
         }
 
-        pNode[1] = nVramAddr;
+        pNode->dwAddress = nVramAddr;
         nNodeIndex++;
-        nByteOffset += 0x14;
         nVramAddr += dwSubtileSize;
       } while (nNodeIndex <= (int)(pCache->nMaxEntries - 1));
     }

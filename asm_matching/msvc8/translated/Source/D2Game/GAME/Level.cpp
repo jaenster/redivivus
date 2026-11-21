@@ -185,15 +185,15 @@ void __fastcall SendAdjacentRoomUpdates(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     }
 
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, (D2RoomStrc***)&pGameSave, (int*)&nClient);
-    D2ClientStrc* pRoomIdx = 0;
+    int nRoomIdx = 0;
     if (nClient <= 0) {
       return;
     }
 
     do {
-      SendRoomUnitUpdates(pGame, *(D2RoomStrc**)(pGameSave->szGameName + (intptr_t)pRoomIdx * 4 - 0x2a), pRoomEnd);
-      pRoomIdx = (D2ClientStrc*)((intptr_t)&pRoomIdx->nClientNo + 1);
-    } while (pRoomIdx < (D2ClientStrc*)nClient);
+      SendRoomUnitUpdates(pGame, *(D2RoomStrc**)(pGameSave->szGameName + nRoomIdx * 4 - 0x2a), pRoomEnd);
+      nRoomIdx++;
+    } while (nRoomIdx < nClient);
 }
 
 // Sends SCMD 0x0A (RemoveObject) packets to pClient for every entry in the DrlgDelete list of each adjacent room, skipping the client's own player unit. Iterates all adjacent rooms of pRoom, walks each room's pDrlgDelete linked list, and calls NET_D2GS_SERVER_Send_0x0A_RemoveObject for non-self entries. Halts fatally if pRoom is null or the player unit cannot be resolved.

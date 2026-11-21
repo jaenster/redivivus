@@ -1937,12 +1937,12 @@ void __stdcall CLIENT_UpdateUnitGfxState() {
       ppBucket++;
     } while ((intptr_t)ppBucket < (intptr_t)((char*)&ServerSideUnitHashTables + 2560));
 
-    D2UnitStrc* (*papDVar1)[128] = ServerSideUnitHashTables;
+    ppBucket = ServerSideUnitHashTables[0];
     do {
-      for (pTmp = (*papDVar1)[0]; pTmp; pTmp = pTmp->pListNext) {}
+      for (pTmp = *ppBucket; pTmp; pTmp = pTmp->pListNext) {}
 
-      papDVar1 = (D2UnitStrc* (*)[128])((char*)papDVar1 + 4);
-    } while ((intptr_t)papDVar1 < (intptr_t)((char*)&ServerSideUnitHashTables + 512));
+      ppBucket++;
+    } while ((intptr_t)ppBucket < (intptr_t)((char*)&ServerSideUnitHashTables + 512));
 
     ppBucket = ServerSideUnitHashTables[1];
     do {
@@ -2605,6 +2605,7 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
     int nResult;
     nResult = Cursor::GetMouseX();
     uint32_t uResult;
+    uint32_t nPieceIdx;
     uResult = UI::Path::DRAW_GetTypeOfBorder();
     D2UnitStrc* pPlayerUnitLocal;
     pPlayerUnitLocal = pPlayerUnit;
@@ -2796,10 +2797,10 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
       return 1;
     }
     if (bMultiPiece) {
-      pObjectsTxt = 0;
-      while ((uResult = CUNIT_CalculateSpriteBounds(nFrameCount, (uint32_t)pObjectsTxt, pUnit, (int*)&rcBounds.left) , !uResult || (uResult = Engine::GfxUtil::GFXUTIL_GetUnitCofDirectionOnScreen(pUnit, (uint32_t)pObjectsTxt) , !uResult)) || nClickXSaved < rcBounds.left || nClickXSaved > rcBounds.right || nClickY < rcBounds.bottom || nClickY > rcBounds.top) {
-        pObjectsTxt = (D2ObjectsTxt*)(pObjectsTxt->Name + 1);
-        if ((D2ObjectsTxt*)0xf < pObjectsTxt) {
+      nPieceIdx = 0;
+      while ((uResult = CUNIT_CalculateSpriteBounds(nFrameCount, nPieceIdx, pUnit, (int*)&rcBounds.left) , !uResult || (uResult = Engine::GfxUtil::GFXUTIL_GetUnitCofDirectionOnScreen(pUnit, nPieceIdx) , !uResult)) || nClickXSaved < rcBounds.left || nClickXSaved > rcBounds.right || nClickY < rcBounds.bottom || nClickY > rcBounds.top) {
+        nPieceIdx++;
+        if (0xf < nPieceIdx) {
           return 0;
         }
       }

@@ -533,7 +533,7 @@ int32_t __stdcall CACHE_Open() {
     uint8_t* pHashTableBuf;
     int nInitCounter;
     uint32_t nTableByteSize;
-    D2BnCacheFileHeaderStrc* pHashEntryInit;
+    uint8_t* pHashEntryInit;
     DWORD nBytesRead;
     DWORD nBytesRead2;
     char szFilePath[260];
@@ -641,12 +641,12 @@ int32_t __stdcall CACHE_Open() {
             gpCacheFileHeader->dwHeaderCrc32 = 0;
             nCrc32 = -1;
             nInitCounter = 0x2c;
-            pHashEntryInit = pHeaderBuf;
+            pHashEntryInit = (uint8_t*)pHeaderBuf;
             do {
               nErrorCode = nInitCounter;
-              nCrc32 = nCrc32 >> 8 ^ gaBnCacheCrc32Table[((uint8_t)pHashEntryInit->dwSignature ^ nCrc32) & 0xff];
+              nCrc32 = nCrc32 >> 8 ^ gaBnCacheCrc32Table[(*pHashEntryInit ^ nCrc32) & 0xff];
               nInitCounter = nErrorCode - 1;
-              pHashEntryInit = (D2BnCacheFileHeaderStrc*)((intptr_t)&pHashEntryInit->dwSignature + 1);
+              pHashEntryInit += 1;
             } while (nInitCounter);
 
             if (nTableByteSize != ~nCrc32) {
@@ -750,7 +750,7 @@ BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * 
     LONG nFileTimeCmp;
     uint32_t* pDataAlloc;
     int nBlockTableOffset;
-    D2BnCacheEntryHeaderStrc* pCrc32Cursor;
+    uint8_t* pCrc32Cursor;
     char* szCorruptKey;
     DWORD nHeaderWriteSize;
     CACHE_ReadData_Slotm160 uSlot160;
@@ -811,12 +811,12 @@ BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * 
                 if (nBytesRead == 0x140) {
                   entryHeader.dwHeaderCrc32 = 0;
                   nBlockTableOffset = 0x144;
-                  pCrc32Cursor = &entryHeader;
+                  pCrc32Cursor = (uint8_t*)&entryHeader;
                   nCrc32Computed = -1;
                   do {
-                    nCrc32Computed = nCrc32Computed >> 8 ^ gaBnCacheCrc32Table[((uint8_t)pCrc32Cursor->dwHeaderSize ^ nCrc32Computed) & 0xff];
+                    nCrc32Computed = nCrc32Computed >> 8 ^ gaBnCacheCrc32Table[(*pCrc32Cursor ^ nCrc32Computed) & 0xff];
                     nBlockTableOffset--;
-                    pCrc32Cursor = (D2BnCacheEntryHeaderStrc*)((intptr_t)&pCrc32Cursor->dwHeaderSize + 1);
+                    pCrc32Cursor += 1;
                   } while (nBlockTableOffset);
 
                   szKey = szKeySaved;
@@ -870,12 +870,12 @@ BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * 
           /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(ghCacheFileHandle, gpCacheBlockTable[uVar1].nFileOffset, (PLONG)0x0, 0);
           entryHeader.dwHeaderCrc32 = 0;
           nBlockTableOffset = 0x144;
-          pCrc32Cursor = &entryHeader;
+          pCrc32Cursor = (uint8_t*)&entryHeader;
           nCrc32Computed = -1;
           do {
-            nCrc32Computed = nCrc32Computed >> 8 ^ gaBnCacheCrc32Table[((uint8_t)pCrc32Cursor->dwHeaderSize ^ nCrc32Computed) & 0xff];
+            nCrc32Computed = nCrc32Computed >> 8 ^ gaBnCacheCrc32Table[(*pCrc32Cursor ^ nCrc32Computed) & 0xff];
             nBlockTableOffset--;
-            pCrc32Cursor = (D2BnCacheEntryHeaderStrc*)((intptr_t)&pCrc32Cursor->dwHeaderSize + 1);
+            pCrc32Cursor += 1;
           } while (nBlockTableOffset);
 
           entryHeader.dwHeaderCrc32 = ~nCrc32Computed;
@@ -931,9 +931,10 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
     uint32_t nProbeSlot;
     DWORD* pHashEntry;
     int nStrCopyOffset;
+    char* pszKeyDst;
     uint32_t* pBlockEntry;
-    D2BnCacheEntryHeaderStrc* pEncryptBuf;
-    D2BnCacheFileHeaderStrc* pCrc32Cursor;
+    uint8_t* pEncryptBuf;
+    uint8_t* pCrc32Cursor;
     DWORD nBytesReadWrite;
     D2BnCacheEntryHeaderStrc entryHeaderSize;
     D2BnCacheEntryHeaderStrc abEntryHeader;
@@ -1053,21 +1054,22 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
         pCurrentFileTime = CACHE_GetFileTime(0);
         abEntryHeader.ftCurrent.dwLowDateTime = pCurrentFileTime->dwLowDateTime;
         abEntryHeader.ftCurrent.dwHighDateTime = pCurrentFileTime->dwHighDateTime;
-        nStrCopyOffset = 0x40 - (int)szCacheKey;
+        pszKeyDst = (char*)&abEntryHeader + 0x40;
         do {
           cKeyCh = *szCacheKey;
-          szCacheKey[(intptr_t)&abEntryHeader + nStrCopyOffset] = cKeyCh;
+          *pszKeyDst = cKeyCh;
+          pszKeyDst++;
           szCacheKey++;
         } while (cKeyCh != '\0');
 
         abEntryHeader.dwDataCrc32 = CACHE_ComputeCRC32(nDataSize, (uint8_t*)pDataToWrite);
         nStrCopyOffset = 0x144;
-        pEncryptBuf = &abEntryHeader;
+        pEncryptBuf = (uint8_t*)&abEntryHeader;
         nHashCount = -1;
         do {
-          nHashCount = nHashCount >> 8 ^ gaBnCacheCrc32Table[((uint8_t)pEncryptBuf->dwHeaderSize ^ nHashCount) & 0xff];
+          nHashCount = nHashCount >> 8 ^ gaBnCacheCrc32Table[(*pEncryptBuf ^ nHashCount) & 0xff];
           nStrCopyOffset--;
-          pEncryptBuf = (D2BnCacheEntryHeaderStrc*)((intptr_t)&pEncryptBuf->dwHeaderSize + 1);
+          pEncryptBuf += 1;
         } while (nStrCopyOffset);
 
         abEntryHeader.dwHeaderCrc32 = ~nHashCount;
@@ -1125,11 +1127,11 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
                 gpCacheFileHeader->dwHeaderCrc32 = 0;
                 nStrCopyOffset = 0x2c;
                 nBlockIdx = -1;
-                pCrc32Cursor = pFileHeader;
+                pCrc32Cursor = (uint8_t*)pFileHeader;
                 do {
-                  nBlockIdx = nBlockIdx >> 8 ^ gaBnCacheCrc32Table[((uint8_t)pCrc32Cursor->dwSignature ^ nBlockIdx) & 0xff];
+                  nBlockIdx = nBlockIdx >> 8 ^ gaBnCacheCrc32Table[(*pCrc32Cursor ^ nBlockIdx) & 0xff];
                   nStrCopyOffset--;
-                  pCrc32Cursor = (D2BnCacheFileHeaderStrc*)((intptr_t)&pCrc32Cursor->dwSignature + 1);
+                  pCrc32Cursor += 1;
                 } while (nStrCopyOffset);
 
                 /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ pFileHeader->dwHeaderCrc32 = ~nBlockIdx;

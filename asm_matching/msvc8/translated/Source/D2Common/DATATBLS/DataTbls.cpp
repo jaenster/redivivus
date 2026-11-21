@@ -1667,12 +1667,12 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
         pMemory2 = 0;
         do {
           pSrvPrgFunc = MonsterTbls::sgtDataTable.pTxtSkills->srvprgfunc;
-          nPetType = *(char*)((intptr_t)&((D2PoolManagerStrc*)pMemory2)->pPools[0].pSync.DebugInfo + (char*)(pSrvPrgFunc - 0x22));
+          nPetType = MonsterTbls::sgtDataTable.pTxtSkills[nCounter].charclass;
           if (nPetType >= 0 && nPetType < '\a') {
             MonsterTbls::sgtDataTable.pSkillsPerClassStrc[nPetType * MonsterTbls::sgtDataTable.nSkillCountMaxPerClass + (&MonsterTbls::sgtDataTable.pSkillsPerClassCounter->Amazon)[nPetType]] = (int16_t)nCounter;
-            (&MonsterTbls::sgtDataTable.pSkillsPerClassCounter->Amazon)[*(char*)((intptr_t)&((D2PoolManagerStrc*)pMemory2)->pPools[0].pSync.DebugInfo + (char*)(pSrvPrgFunc - 0x22))]++;
+            (&MonsterTbls::sgtDataTable.pSkillsPerClassCounter->Amazon)[nPetType]++;
           }
-          if (*(short int*)((intptr_t)&((D2PoolManagerStrc*)pMemory2)->pPools[0].pSync.DebugInfo + (char*)(pSrvPrgFunc + 0x22)) >= 0) {
+          if (MonsterTbls::sgtDataTable.pTxtSkills[nCounter].passivestate >= 0) {
             MonsterTbls::sgtDataTable.pPassiveSkillsPerClassStrc[MonsterTbls::sgtDataTable.nPassiveSkillsCount].nSkillId = (int16_t)nCounter;
             MonsterTbls::sgtDataTable.nPassiveSkillsCount++;
           }

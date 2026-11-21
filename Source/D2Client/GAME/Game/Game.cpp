@@ -546,7 +546,8 @@ void __stdcall INPUT_HandleMouseWheel(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    gnMouseWheelScrollAccumulator += *(short int*)((intptr_t)&pMsg->nWParam + 2);
+    short int nWheelDelta = pMsg->nWParam >> 16;
+    gnMouseWheelScrollAccumulator += nWheelDelta;
     if (abs(gnMouseWheelScrollAccumulator) >= 0x78) {
       UI::CmdTbl::CMD_InvokeCallbackByParam(gnMouseWheelScrollAccumulator / 0x78);
       gnMouseWheelScrollAccumulator = 0;
@@ -584,7 +585,7 @@ void __stdcall INPUT_HandlePageUpDown(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    short int nScrollDir = *(short int*)((intptr_t)&pMsg->nWParam + 2);
+    short int nScrollDir = pMsg->nWParam >> 16;
     if (nScrollDir == 1) {
       UI::CmdTbl::CMD_InvokeCallback_0x1152();
     } else if (nScrollDir == 2) {
@@ -601,7 +602,7 @@ void __stdcall INPUT_HandleScrollToEnd(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    short int nScrollDir = *(short int*)((intptr_t)&pMsg->nWParam + 2);
+    short int nScrollDir = pMsg->nWParam >> 16;
     if (nScrollDir == 1) {
       UI::CmdTbl::CMDTBL_InvokeMouseRightButtonHandler();
     } else if (nScrollDir == 2) {
@@ -1230,7 +1231,7 @@ uint32_t __stdcall DrawBetaScreen(uint32_t dwUnused) {
     DWORD dwNowTick;
     int nScreenCount;
     uint32_t nScreenIndex;
-    DC6** ppCachedImage;
+    BetaScreenEntry * ppCachedImage;
     char szImagePath[260];
     D2GfxDataStrc sGfxData;
     int32_t nCutsceneState = D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState();
@@ -1282,18 +1283,18 @@ uint32_t __stdcall DrawBetaScreen(uint32_t dwUnused) {
 
     int iScreen = 0;
     if (gnBetaScreenCount > 0) {
-      ppCachedImage = &gBetaScreenEntries[0].cachedImage;
+      ppCachedImage = &gBetaScreenEntries[0];
       nScreenCount = gnBetaScreenCount;
       do {
-        if (*ppCachedImage) {
-          Core::Archive::DC6_FreeAndDelete(*ppCachedImage);
+        if (ppCachedImage->cachedImage) {
+          Core::Archive::DC6_FreeAndDelete(ppCachedImage->cachedImage);
           nScreenCount = gnBetaScreenCount;
-          *ppCachedImage = 0;
-          ((BetaScreenEntry*)(ppCachedImage - 1))->lastLoadTick = 0;
+          ppCachedImage->cachedImage = 0;
+          ppCachedImage->lastLoadTick = 0;
         }
 
         iScreen++;
-        ppCachedImage = (DC6**)((char*)ppCachedImage + 0xd);
+        ppCachedImage++;
       } while (iScreen < nScreenCount);
     }
 
@@ -2256,12 +2257,7 @@ void __stdcall GAMEDATA_DrawCharacterPortrait() {
       return;
     }
 
-    nTitleIndex = 100 - (int)pSrcChar;
-    do {
-      cChar = *pSrcChar;
-      pSrcChar[(intptr_t)&sText + nTitleIndex] = cChar;
-      pSrcChar++;
-    } while (cChar != '\0');
+    strcpy(sText.szTitle, pSrcChar);
 
     D2CharPortraitTextStrc* pDstChar = &sText;
     do {
@@ -2912,7 +2908,7 @@ static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D
 
     bool bPlayCongrats = true;
     if (gExitCutsceneState.cutscenePlayed) {
-      byPlayerStatus = *(uint8_t*)((intptr_t)&ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus + 1) & 0x1f;
+      byPlayerStatus = (ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus >> 8) & 0x1f;
       if (CLIENT_nDifficulty) {
         if (CLIENT_nDifficulty == 1 && byPlayerStatus == 0xc) {
           bPlayCongrats = false;

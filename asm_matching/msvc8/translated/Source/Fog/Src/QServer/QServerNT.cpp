@@ -672,8 +672,8 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
     sockaddr bindAddr;
     uint32_t* pIocp2;
     uint32_t nPortLocal = nPort;
-    int32_t pIocp = (int32_t)CreateIoCompletionPort((HANDLE)-1, (HANDLE)0x0, 0, 0);
-    if (!(HANDLE)pIocp) {
+    HANDLE pIocp = CreateIoCompletionPort((HANDLE)-1, (HANDLE)0x0, 0, 0);
+    if (!pIocp) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x4e);
       exit(-1);
     }
@@ -711,7 +711,7 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
 
     nResult = pQServer->nListeningWorkers;
     pQServer->nListeningWorkers = nResult + 1;
-    pQServer->aIoCompletionPorts[nResult] = (HANDLE)pIocp;
+    pQServer->aIoCompletionPorts[nResult] = pIocp;
     pQServer->aListenPorts[nResult] = (u_short)nPortLocal;
     pQServer->aListenSockets[nResult] = hListenSocket;
     pQServer->aWorkerSlotValues[nResult] = 1;

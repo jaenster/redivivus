@@ -1382,7 +1382,6 @@ void __fastcall SKILLPAL_OnFreezeExpire(D2UnitStrc * pUnit, eD2States eState, ui
 // Per-target hit callback. Skips monsters already cold-affected for the current difficulty, copies damage params from the arg struct into a D2DamageStrc, optionally applies an aura state, then applies damage + hit calculation. Advances the unit RNG and sets/clears STATE_shatter on a 20% roll. Returns 1 when processed, 0 if skipped.
 uint32_t __fastcall SKILL_HitTargetApplyDamageAndShatter(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
     int nIdx;
-    intptr_t nAuraArgDelta;
     uint32_t* pCopySrc;
     uint32_t* pCopyDst;
     D2DamageAuraArgUnion uScratch;
@@ -1398,20 +1397,16 @@ uint32_t __fastcall SKILL_HitTargetApplyDamageAndShatter(D2SkillCallbackContextS
       }
     }
     if (pAuraArgs->nFlag) {
-      int32_t* pSrcCalc;
       memset(&uScratch.sAura.sAuraArg, 0, 0x50);
       uScratch.sAura.sAuraArg.nAuraState = pAuraArgs->nAuraState;
       uScratch.sAura.sAuraArg.nSkillLvl = pAuraArgs->nSkillLvl;
       uScratch.sAura.sAuraArg.eSkill = pAuraArgs->eSkill;
       uScratch.sAura.sAuraArg.nDelayFrame = pAuraArgs->nDelayFrame;
       nIdx = 0;
-      pSrcCalc = pAuraArgs->anCalcs;
-      nAuraArgDelta = (intptr_t)&uScratch + (0x20 - (intptr_t)pAuraArgs);
       do {
-        *(int32_t*)((intptr_t)&uScratch + (nIdx * 4 + 0x30)) = pSrcCalc[-6];
-        *(int32_t*)(nAuraArgDelta + (char*)pSrcCalc) = *pSrcCalc;
+        uScratch.sAura.sAuraArg.anStats[nIdx] = pAuraArgs->anStats[nIdx];
+        uScratch.sAura.sAuraArg.anCalcs[nIdx] = pAuraArgs->anCalcs[nIdx];
         nIdx++;
-        pSrcCalc++;
       } while (nIdx < 6);
 
       sContext.pUnit = pCaster;

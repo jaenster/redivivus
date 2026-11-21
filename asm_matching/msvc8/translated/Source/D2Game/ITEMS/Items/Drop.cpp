@@ -2750,7 +2750,7 @@ void __fastcall DROP_SpawnWeaponItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, PO
     D2SeedStrc* pRoomSeed;
     D2ItemGenContextStrc sItemGenCtx;
     LONG nCoordsIn;
-    D2RoomStrc* pCoordsIn = (D2RoomStrc*)pCoords;
+    D2RoomStrc* pCoordsIn;
     D2RoomStrc* pRoomSaved = pRoom;
     eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     int32_t nEffectiveMonLevel = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(eLevel, pGame->nDifficulty, pGame->bExpansion);
@@ -2778,8 +2778,8 @@ void __fastcall DROP_SpawnWeaponItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, PO
 
     if ((int)nItemClassId >= 0) {
       D2RoomStrc* pSpawnRoom;
-      ptCandidatePos.x = (LONG)pCoordsIn->ppRoomList;
-      ptCandidatePos.y = pCoordsIn->nClientsMax;
+      ptCandidatePos.x = pCoords->x;
+      ptCandidatePos.y = pCoords->y;
       nCoordsIn = ptCandidatePos.x + 2;
       nRollRetry = ptCandidatePos.y + 3;
       pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoomSaved, nCoordsIn, nRollRetry);

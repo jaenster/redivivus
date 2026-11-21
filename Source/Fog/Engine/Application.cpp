@@ -384,8 +384,9 @@ bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList) {
     }
 
     tSehFrame.TryLevel = 0;
-    uint32_t* pListHead = (uint32_t*)(*(int*)((char*)*(void**)((char*)NtCurrentTeb() + 0x30) + 0xc) + 0x14);
-    uint32_t* pEntry = (uint32_t*)*pListHead;
+    uint8_t* pbLdr = *(uint8_t**)((char*)*(void**)((char*)NtCurrentTeb() + 0x30) + 0xc);
+    uint32_t* pListHead = (uint32_t*)(pbLdr + 0x14);
+    uint32_t* pEntry = *(uint32_t**)pListHead;
     while (true) {
       bool bVar1;
       if (pEntry == pListHead) {
@@ -393,12 +394,12 @@ bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList) {
         return true;
       }
 
-      bVar1 = DEBUG_AddModuleToList(pModuleList, (LPCWSTR)pEntry[8], (uint32_t)*(uint16_t*)(pEntry + 7), (short int*)pEntry[4]);
+      bVar1 = DEBUG_AddModuleToList(pModuleList, *(LPCWSTR*)(pEntry + 8), (uint32_t)*(uint16_t*)(pEntry + 7), *(short int**)(pEntry + 4));
       if (!bVar1) {
         break;
       }
 
-      pEntry = (uint32_t*)*pEntry;
+      pEntry = *(uint32_t**)pEntry;
     }
 
     ExceptionList = tSehFrame.Next;

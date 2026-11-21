@@ -899,8 +899,7 @@ int __stdcall OOGUTIL_SendChatMessageWide(uint16_t * wszText) {
       nCopyIndex++;
     } while (*pszCur != '\0');
 
-    wszText = (uint16_t*)(uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&wszText + 2) << 16 | (uint32_t)(uint16_t)0x20);
-    pszCur = strtok(szTokenCopy, (char*)&wszText);
+    pszCur = strtok(szTokenCopy, " ");
     if (!pszCur) {
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextWide(gpChatDlgInputEditBox, nullptr);
       return 1;
@@ -969,7 +968,7 @@ void __fastcall OOGMENU_AddGameToCache(D2McpGameInfoStrc * pGameInfo) {
 }
 
 void __stdcall OOGMENU_RefreshGameListDisplay() {
-    uint16_t* pwEntryPort;
+    D2GameListEntryStrc* pEntry;
     uint8_t szSelectedName[256];
     char szPortText[16];
     int32_t nLastLineIndex;
@@ -996,17 +995,17 @@ void __stdcall OOGMENU_RefreshGameListDisplay() {
     int32_t bHasPeer = D2MCPClient::McpConnect::HasPeerName();
     memcpy(gbLanGameListEntryNamePadding, gbLanGameListEntryNamePadding2, nGameListDifficultyFilter * 0x3b);
     if (gnFilteredGameListCount > 0) {
-      pwEntryPort = &gbLanGameListEntryNamePadding[0].wDisplayedCount;
+      pEntry = &gbLanGameListEntryNamePadding[0];
       do {
-        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOOGGameListTextBox, (char*)(pwEntryPort - 0x18));
+        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOOGGameListTextBox, pEntry->szName);
         nLastLineIndex = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetLastLineIndex(gpOOGGameListTextBox);
         if (bHasPeer) {
-          _itoa((uint32_t)*pwEntryPort, szPortText, 10);
+          _itoa((uint32_t)pEntry->wDisplayedCount, szPortText, 10);
           D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLineCellTextA(gpOOGGameListTextBox, szPortText, nLastLineIndex, 1);
         }
 
         nEntryIndex++;
-        pwEntryPort = (uint16_t*)((char*)pwEntryPort + 0x3b);
+        pEntry++;
       } while (nEntryIndex < gnFilteredGameListCount);
     }
     if (bHasSelection) {
@@ -3167,7 +3166,7 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
       Storm::Source::SReg::SRegSaveValue("Diablo II", "DIFF_LEVEL", 0, 0);
     }
 
-    int nActLevel = *(uint8_t*)((intptr_t)&D2IniData_multiplayer->eCTEMP_eD2PlayerStatus + 1) & 0x1f;
+    int nActLevel = (D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & 0x1f00) >> 8;
     gUIGameListDifficultyHellButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x52);
     gUIGameListActLabel = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x55);
     gUIGameListDifficultyNightmareButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x51);

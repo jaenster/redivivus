@@ -1643,7 +1643,7 @@ static void __stdcall GFX_BuildMonsterCofPath(uint32_t nModeId, LPSTR szOutputPa
 
 static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt, uint32_t nModeId, int32_t bSync, short * pComponentTable) {
     int32_t bParamsValid1;
-    DC6* pDC6;
+    int32_t bSpriteLoaded;
     uint32_t nComponentRow;
     char szCofPath[260];
     D2GfxDataStrc sGfxData2;
@@ -1690,9 +1690,9 @@ static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt
                     bParamsValid1 = GfxUtil::GFXUTIL_InitAndBuildMonsterCofParams(&sGfxData, 0, 0, byComponent, nModeId, nComponentCode, pCofFile, pComponentTable, pMonStatsTxt, nComponentRow);
                     if (bParamsValid1) {
                       if (bSync) {
-                        pDC6 = (DC6*)D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 1, 1);
-                        if (!pDC6) {
-                          sGfxData.pDC6 = pDC6;
+                        bSpriteLoaded = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 1, 1);
+                        if (!bSpriteLoaded) {
+                          sGfxData.pDC6 = nullptr;
                           D2CMP::SRC::SpriteCache::SPRITECACHE_PrecacheSpriteSync(&sGfxData);
                         }
                       } else {
@@ -1708,9 +1708,9 @@ static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt
                 bParamsValid1 = GfxUtil::GFXUTIL_InitAndBuildMonsterCofParams(&sGfxData2, 0, 0, byComponent, nModeId, nComponentCode, pCofFile, pComponentTable, pMonStatsTxt, 0);
                 if (bParamsValid1) {
                   if (bSync) {
-                    pDC6 = (DC6*)D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData2, 1, 1);
-                    if (!pDC6) {
-                      sGfxData2.pDC6 = pDC6;
+                    bSpriteLoaded = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData2, 1, 1);
+                    if (!bSpriteLoaded) {
+                      sGfxData2.pDC6 = nullptr;
                       D2CMP::SRC::SpriteCache::SPRITECACHE_PrecacheSpriteSync(&sGfxData2);
                     }
                   } else {

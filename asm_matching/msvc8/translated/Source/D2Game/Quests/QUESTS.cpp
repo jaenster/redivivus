@@ -156,7 +156,7 @@ static BOOL __stdcall QUEST_AttachToUnit(::SGAMEDATA * pGame, D2QuestDataStrc * 
 
     D2UnitQuestDataListStrc* pQuestListNode = D2_NEW_POOL_AT(pGame->pMemoryPool, D2UnitQuestDataListStrc, ".\\QUESTS\\QUESTS.CPP", 0x68);
     pQuestListNode->pQuestData = pQuestData;
-    pQuestListNode->pNext = (D2UnitQuestDataListStrc*)pUnit->uSideData.pClientSide.nSfxMode;
+    pQuestListNode->pNext = pUnit->uSideData.pServerSide.pQuestEventList;
     pUnit->uSideData.pServerSide.pQuestEventList = pQuestListNode;
     return 1;
 }
@@ -2435,7 +2435,7 @@ void __fastcall QUEST_OnPlayerJoinGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     BOOL bBadCodePtr;
     D2ClientStrc* pClient;
     int nExtendedIndex;
-    void* pQuestInitEntry;
+    D2QuestInitDataExtended* pQuestInitEntry;
     D2QuestDataStrc* pQuestDataIter;
     D2QuestArgStrc sQuestArgs;
     D2QuestJoinFrameSlotUnion uSavedGameOrPacket0x89;
@@ -2537,25 +2537,25 @@ void __fastcall QUEST_OnPlayerJoinGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       if (gbQuestReconnectMode != '\0') {
         nExtendedIndex = 0;
         if (nQuestDataExtendedSize > 0) {
-          pQuestInitEntry = &aQuestInitDataExtended[0].nQuestIdReal;
+          pQuestInitEntry = &aQuestInitDataExtended[0];
           do {
-            /* nAct */ if (*(uint8_t*)((char*)pQuestInitEntry - 0x10) >= 5) {
+            /* nAct */ if (pQuestInitEntry->nAct >= 5) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x637);
               exit(-1);
             }
-            /* offset 0x0C */ if (*(char*)((char*)pQuestInitEntry - 8) == '\0') {
-              bBadCodePtr = D2Common::QuestRecord::GetQuestState(pQuestRecordPool, *(eD2Quests*)pQuestInitEntry, QUESTSTATE_Completed);
-              if (bBadCodePtr || (bBadCodePtr = D2Common::QuestRecord::GetQuestState(pQuestRecordPool, *(eD2Quests*)pQuestInitEntry, QUESTSTATE_FinishedInPreviousGame) , bBadCodePtr != 0)) {
-                QUEST_ResetQuestDataForReconnect(*(eD2QuestsInternal*)((char*)pQuestInitEntry - 4), uSavedGameOrPacket0x89.pGameSaved);
-                nQuestId_00 = *(eD2Quests*)pQuestInitEntry;
+            /* offset 0x0C */ if (pQuestInitEntry->field3_0xc == 0) {
+              bBadCodePtr = D2Common::QuestRecord::GetQuestState(pQuestRecordPool, pQuestInitEntry->nQuestIdReal, QUESTSTATE_Completed);
+              if (bBadCodePtr || (bBadCodePtr = D2Common::QuestRecord::GetQuestState(pQuestRecordPool, pQuestInitEntry->nQuestIdReal, QUESTSTATE_FinishedInPreviousGame) , bBadCodePtr != 0)) {
+                QUEST_ResetQuestDataForReconnect(pQuestInitEntry->nQuestNoInternal, uSavedGameOrPacket0x89.pGameSaved);
+                nQuestId_00 = pQuestInitEntry->nQuestIdReal;
                 pBitBuffer = pQuestControl->pQuestFlags;
-                (&sQuestArgs.pTarget)[*(uint8_t*)((char*)pQuestInitEntry - 0x10)] = (D2UnitStrc*)((intptr_t)&(&sQuestArgs.pTarget)[*(uint8_t*)((char*)pQuestInitEntry - 0x10)]->eUnitType + 1);
+                (&sQuestArgs.pTarget)[pQuestInitEntry->nAct] = (D2UnitStrc*)((intptr_t)&(&sQuestArgs.pTarget)[pQuestInitEntry->nAct]->eUnitType + 1);
                 D2Common::QuestRecord::SetQuestState(pBitBuffer, nQuestId_00, QUESTSTATE_FinishedInPreviousGame);
               }
             }
 
             nExtendedIndex++;
-            pQuestInitEntry = (void*)((char*)pQuestInitEntry + 0x18);
+            pQuestInitEntry++;
           } while (nExtendedIndex < nQuestDataExtendedSize);
         }
       }
@@ -2674,6 +2674,7 @@ D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, D2UnitSt
     POINT sDropCoords;
     int32_t nFindRadius;
     D2RoomStrc** pRoomsNear;
+    D2RoomStrc* pRoomNear;
     D2ItemsTxt* pItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(szRewardCode, &szRewardCode);
     if (!pItemsTxt) {
       return nullptr;
@@ -2709,9 +2710,9 @@ D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, D2UnitSt
       D2Common::Units::GetCoords(pUnit, &sDropCoords);
       nSearchIterations = 100;
       nFindRadius = 5;
-      pRoomsNear = (D2RoomStrc**)&nRewardLevel;
+      pRoomsNear = &pRoomNear;
       FindSpawnableLocation(D2Common::Units::UNITS_GetRoom(pUnit), &sDropCoords, 1, 0x3e01, pRoomsNear, nFindRadius, nSearchIterations);
-      ITEMS::Items::Drop::DropItem(pGame, nullptr, pRewardItem, (D2RoomStrc*)nRewardLevel, sDropCoords.x, sDropCoords.y);
+      ITEMS::Items::Drop::DropItem(pGame, nullptr, pRewardItem, pRoomNear, sDropCoords.x, sDropCoords.y);
       return pRewardItem;
     }
 

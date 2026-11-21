@@ -22,7 +22,7 @@ namespace D2Glide { namespace glFloorCache {
 // Initializes Glide floor cache with LRU eviction policy. Allocates node array (0x14 bytes per entry). Halts with error 0x2a if allocation fails.
 // @sourcefile .\Src\glFloorCache.cpp
 int __fastcall GLFLOOR_Initialize(GlFloorCacheStrc * pCache, int nVramStart, int nVramEnd, uint32_t dwFloorSize) {
-    int* pNode;
+    GlFloorCacheNodeStrc* pNode;
     uint32_t* pVramAddr;
     uint32_t nEntryCount = (uint32_t)(nVramEnd - nVramStart) / dwFloorSize;
     pCache->dwEntrySize = dwFloorSize;
@@ -36,23 +36,21 @@ int __fastcall GLFLOOR_Initialize(GlFloorCacheStrc * pCache, int nVramStart, int
     }
 
     memset(pNodes, 0, nAllocSize);
-    int nByteOffset = 0;
     int nEntryIndex = 0;
     int nVramAddr = nVramStart;
     if ((int)(pCache->nMaxEntries - 1) >= 0) {
       do {
-        pNode = (int*)((intptr_t)&pCache->pNodes->nIndex + nByteOffset);
-        *pNode = nEntryIndex;
+        pNode = &pCache->pNodes[nEntryIndex];
+        pNode->nIndex = nEntryIndex;
         if (nEntryIndex < (int)(pCache->nMaxEntries - 1)) {
-          pNode[3] = (intptr_t)&pCache->pNodes[1].nIndex + nByteOffset;
+          pNode->pNext = &pCache->pNodes[nEntryIndex + 1];
         }
         if (nEntryIndex > 0) {
-          pNode[4] = (intptr_t)&pCache->pNodes[-1].nIndex + nByteOffset;
+          pNode->pPrev = &pCache->pNodes[nEntryIndex - 1];
         }
 
-        pNode[1] = nVramAddr;
+        pNode->dwAddress = nVramAddr;
         nEntryIndex++;
-        nByteOffset += 0x14;
         nVramAddr += dwFloorSize;
       } while (nEntryIndex <= (int)(pCache->nMaxEntries - 1));
     }

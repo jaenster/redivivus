@@ -44,23 +44,21 @@ void __stdcall XorBitAtOffset(char * pBuffer, int32_t nOffset) {
 
 void __stdcall BITBUF_AndBuffers(uint32_t * pBufferA, uint32_t * pBufferB, uint32_t * pDest, int32_t nBitCount) {
     uint32_t dwValB;
-    uint32_t* pCursorA;
     int nByteOffset = nBitCount + 7 + (nBitCount + 7 >> 0x1f & 7U);
     int nByteCount = nByteOffset >> 3;
     int nDwordCount = (int)(nByteCount + (nByteOffset >> 0x1f & 3U)) >> 2;
     int nRemaining = nDwordCount * 4;
     nByteOffset = 0;
     if (nRemaining > 0) {
-      uint32_t* pCursorB;
+      int nWord;
       nRemaining = (nRemaining - 1U >> 2) + 1;
       nByteOffset = nRemaining * 4;
-      pCursorB = pBufferB;
+      nWord = 0;
       do {
-        pCursorA = (uint32_t*)((intptr_t)pBufferA - (intptr_t)pBufferB + (char*)pCursorB);
-        dwValB = *pCursorB;
-        pCursorB++;
+        dwValB = pBufferB[nWord];
+        pDest[nWord] = pBufferA[nWord] & dwValB;
+        nWord++;
         nRemaining--;
-        *(uint32_t*)((intptr_t)pDest + (-4 - (intptr_t)pBufferB) + (char*)pCursorB) = *pCursorA & dwValB;
       } while (nRemaining);
     }
 
@@ -274,6 +272,7 @@ int32_t __stdcall Read(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
     uint8_t byMask;
     uint32_t dwBitMask;
     size_t nBitsAtPos;
+    int nBitShift;
     D2BitBufferStrc* pBuf = pBitBuffer;
     int nBitsThisStep = pBitBuffer->nCurrentPos * 8 - pBitBuffer->nBitsInBuffer + nSize + pBitBuffer->nBitsAtPos;
     if (nBitsThisStep < 0) {
@@ -286,7 +285,7 @@ int32_t __stdcall Read(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
     }
 
     nSize = 0;
-    pBitBuffer = 0;
+    nBitShift = 0;
     if (nBitsRemaining > 0) {
       do {
         uint8_t byCurrent;
@@ -300,7 +299,7 @@ int32_t __stdcall Read(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
         byMask = gbGameSaveFileMarker[nBitsAtPos];
         dwBitMask = gdwBitBufferSeed[nBitsThisStep];
         pBuf->nBitsAtPos = nBitsAtPos + nBitsThisStep;
-        nSize += ((uint8_t)((byMask & byCurrent) >> D2_SHIFT_COUNT(nBitsAtPos)) & dwBitMask) << D2_SHIFT_COUNT((uintptr_t)pBitBuffer);
+        nSize += ((uint8_t)((byMask & byCurrent) >> D2_SHIFT_COUNT(nBitsAtPos)) & dwBitMask) << D2_SHIFT_COUNT(nBitShift);
         nBitsRemaining -= nBitsThisStep;
         if (nBitsAtPos + nBitsThisStep == 8) {
           pBuf->nCurrentPos++;
@@ -308,7 +307,7 @@ int32_t __stdcall Read(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
           pBuf->nBitsAtPos = 0;
         }
 
-        pBitBuffer = (D2BitBufferStrc*)((intptr_t)&pBitBuffer->pBuffer + nBitsThisStep);
+        nBitShift += nBitsThisStep;
       } while (nBitsRemaining > 0);
 
       return nSize;

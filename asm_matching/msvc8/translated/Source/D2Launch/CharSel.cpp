@@ -2131,13 +2131,13 @@ void __stdcall CHARSEL_ParseRealmCharList(char * szRealmName, char * szText, int
       szCharacterName = (uint32_t*)aSaveData;
       if (byRecordType == '\x19') {
         dwCharFlags = *(uint32_t*)aSaveData;
-        aSaveData = (char*)((char*)aSaveData + 4);
+        aSaveData += 4;
         szCharacterName = (uint32_t*)aSaveData;
       }
 
       do {
         dwScanByte = *(uint32_t*)aSaveData;
-        aSaveData = (char*)((char*)aSaveData + 1);
+        aSaveData++;
         pSaveDataCursor = aSaveData;
       } while ((char)dwScanByte != '\0');
 

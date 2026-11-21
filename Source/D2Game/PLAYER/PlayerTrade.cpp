@@ -1900,7 +1900,6 @@ static uint8_t __stdcall LoopsOverAllItemsAndPutInInventory(D2UnitStrc * pUnit, 
     pClonedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pItemNode);
     eInventoryPage eItemPage;
     eItemPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pClonedItem);
-    pUnit2 = (D2UnitStrc*)(uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&pUnit2 + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eItemPage);
     pItemNode = pCorpseItem;
     if (eItemPage == INVPAGE_TRADEGRID1) {
       goto remove_source_item;
@@ -1911,7 +1910,7 @@ static uint8_t __stdcall LoopsOverAllItemsAndPutInInventory(D2UnitStrc * pUnit, 
       remove_source_item:
       nUnit = (eD2ItemFlag)0x0;
       D2Common::ITEMS::Items::ITEM_SetServerSideFlag((uint32_t*)&nUnit, 0x20, 1);
-      D2Common::ITEMS::Items::ITEM_SetItemData_ePreviousPage(pClonedItem, (uint8_t)(uintptr_t)pUnit2);
+      D2Common::ITEMS::Items::ITEM_SetItemData_ePreviousPage(pClonedItem, eItemPage);
       GAME::SCmd::Send0x9DRemoveItemFromContainer(pClient, pOwner, pClonedItem, nUnit);
       ITEMS::ItemMode::ITEMMODE_DeleteItemFromInventory(pGame, pOwner, pClonedItem, 0);
     }
@@ -2620,7 +2619,7 @@ eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, D2UnitStrc *
       } else {
         nPartnerUnit = (int)D2Common::Units::GetInventoryGoldLimit(pTradePartner);
         nPartnerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTradePartner, UNITSTAT_gold, 0);
-        if ((D2UnitStrc*)(nPartnerGold + nGoldAmount) > (D2UnitStrc*)nPartnerUnit) {
+        if (nPartnerGold + nGoldAmount > nPartnerUnit) {
           nGoldAmount = nPartnerUnit - nPartnerGold;
         }
         if (pPlayerData->pTradeCopyInventory) {

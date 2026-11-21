@@ -1222,6 +1222,8 @@ static BOOL __stdcall GFXUTIL_BuildCofParams(D2GfxDataStrc * pGfxData, D2UnitStr
     uint32_t nWeaponClass;
     int nItemClassId;
     D2UnitStrc* pEffectiveMode;
+    int32_t nEffectiveMode;
+    int32_t nPadToken;
     GFXUTIL_BuildCofParams_Slotmc uSlotC;
     uint8_t byPaletteIdx;
     uint8_t byComponentType;
@@ -1234,12 +1236,12 @@ static BOOL __stdcall GFXUTIL_BuildCofParams(D2GfxDataStrc * pGfxData, D2UnitStr
     if (pUnit) {
       eEffectiveUnitType = pUnit->eUnitType;
       uSlotC.nEffectiveClassId = pUnit->nClassId;
-      pEffectiveMode = (D2UnitStrc*)D2Common::Units::GetAnimOrSeqMode(pUnit);
-      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eEffectiveUnitType, &uSlotC.nEffectiveClassId, (int*)&pEffectiveMode, ".\\ENGINE\\GfxUtil.cpp", 0x2f0);
+      nEffectiveMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
+      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eEffectiveUnitType, &uSlotC.nEffectiveClassId, &nEffectiveMode, ".\\ENGINE\\GfxUtil.cpp", 0x2f0);
       pGfxData->eUnitType = eEffectiveUnitType;
       pGfxData->nClassId = uSlotC.nEffectiveClassId;
       if (pEquipContext == -1) {
-        pEquipContext = (int32_t)pEffectiveMode;
+        pEquipContext = nEffectiveMode;
       }
 
       pGfxData->nMode = pEquipContext;
@@ -1342,16 +1344,16 @@ static BOOL __stdcall GFXUTIL_BuildCofParams(D2GfxDataStrc * pGfxData, D2UnitStr
                   }
 
                   finalize_gfx_tokens:
-                  pEffectiveMode = 0;
-                  GFXUTIL_PadTokenString((char*)(uSlotC.pCofLayer + 5), (char*)&pEffectiveMode);
-                  pGfxData->nWeaponClass = (int)pEffectiveMode;
+                  nPadToken = 0;
+                  GFXUTIL_PadTokenString((char*)(uSlotC.pCofLayer + 5), (char*)&nPadToken);
+                  pGfxData->nWeaponClass = nPadToken;
                   if (!pGfxData->nCompositToken) {
                     return 0;
                   }
                   if (!pGfxData->nUnitToken) {
                     return 0;
                   }
-                  if (!pEffectiveMode) {
+                  if (!nPadToken) {
                     return 0;
                   }
                   if (!pGfxData->nModeToken) {

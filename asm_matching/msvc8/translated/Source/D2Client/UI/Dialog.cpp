@@ -441,7 +441,7 @@ void __stdcall INPUT_DialogMouseWheel(D2UIMouseMsgStrc * pMsg) {
     int nScrollSign;
     D2DialogSubStrc* pDialogSub;
     D2DialogStrc* pDialog = gpDialogActual;
-    short int wWheelDelta = *(short int*)((intptr_t)&pMsg->nWParam + 2);
+    short int wWheelDelta = pMsg->nWParam >> 16;
     if (wWheelDelta) {
       ::UIWidget* self;
       nScrollSign = (int)wWheelDelta >> 0x1f;

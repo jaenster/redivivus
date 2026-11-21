@@ -132,7 +132,7 @@ void __stdcall CopyQuestBitBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pOutpu
     /* Input is an array of 24x uint */ for (iCount = 0x18; iCount; iCount--) {
       *(uint32_t*)pOutputBuffer = *pInputAddress;
       pInputAddress++;
-      pOutputBuffer = (uint8_t*)((char*)pOutputBuffer + 4);
+      pOutputBuffer = pOutputBuffer + 4;
     }
 }
 

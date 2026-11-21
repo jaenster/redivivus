@@ -22,7 +22,6 @@ namespace D2Glide { namespace glTextureCache {
 // Initializes Glide texture cache with LRU eviction policy. Allocates node array (0x1C bytes per entry), sets up active/free lists, and constrains capacity to 2MB in debug builds.
 // @sourcefile .\Src\glTextureCache.cpp
 int __fastcall GLTEXCACHE_Initialize(GlTextureCacheStrc * pCache, int nVramStart, int nVramEnd, uint32_t dwTextureSize) {
-    int nByteOffset;
     uint32_t* pDebugScan;
     int nVramAddr;
     uint32_t nEntryCount = (uint32_t)(nVramEnd - nVramStart) / dwTextureSize;
@@ -34,23 +33,21 @@ int __fastcall GLTEXCACHE_Initialize(GlTextureCacheStrc * pCache, int nVramStart
     memset(pNodeArray, 0, nAllocSize);
     int iNode = 0;
     if ((int)(pCache->nMaxEntries - 1) >= 0) {
-      int* pNode;
-      nByteOffset = 0;
+      GlTextureCacheNodeStrc* pNode;
       nVramAddr = nVramStart;
       do {
-        pNode = (int*)((intptr_t)&pCache->pNodes->nIndex + nByteOffset);
-        *pNode = iNode;
+        pNode = pCache->pNodes + iNode;
+        pNode->nIndex = iNode;
         if (iNode < (int)(pCache->nMaxEntries - 1)) {
-          pNode[5] = (intptr_t)&pCache->pNodes[1].nIndex + nByteOffset;
+          pNode->pNext = pCache->pNodes + (iNode + 1);
         }
         if (iNode > 0) {
-          pNode[6] = (intptr_t)&pCache->pNodes[-1].nIndex + nByteOffset;
+          pNode->pPrev = pCache->pNodes + (iNode - 1);
         }
 
-        pNode[1] = nVramAddr;
+        pNode->dwAddress = nVramAddr;
         nVramAddr += dwTextureSize;
         iNode++;
-        nByteOffset += 0x1c;
       } while (iNode <= (int)(pCache->nMaxEntries - 1));
     }
 

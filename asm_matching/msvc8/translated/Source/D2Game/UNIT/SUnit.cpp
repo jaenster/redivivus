@@ -1520,11 +1520,12 @@ void __fastcall UNITS_UpdateRoomClientVisibility(::SGAMEDATA * pGame, D2UnitStrc
       ppCurrentClientList = pCurrentRoom->pClients;
     }
 
-    pRoom = 0;
+    D2ClientStrc** ppTargetClients;
+    ppTargetClients = 0;
     uint32_t nTargetClientsCount;
     nTargetClientsCount = 0;
     if (pTargetRoom) {
-      pRoom = (D2RoomStrc*)pTargetRoom->pClients;
+      ppTargetClients = pTargetRoom->pClients;
       nTargetClientsCount = pTargetRoom->nClientsCount;
     }
 
@@ -1557,10 +1558,10 @@ void __fastcall UNITS_UpdateRoomClientVisibility(::SGAMEDATA * pGame, D2UnitStrc
               D2Common::PATH::DynamicPath::SetUnset0x02Flag(pUnit->pPath.pDynamicPath, 0);
               return;
             }
-            while (pRoom) {
-              pOwnerUnit = GAME::Clients::CLIENTS_GetControlUnit((D2ClientStrc*)pRoom->nLastDeadGUIDs[nNewClientIdx - 0xe], 0);
+            while (ppTargetClients) {
+              pOwnerUnit = GAME::Clients::CLIENTS_GetControlUnit(ppTargetClients[nNewClientIdx], 0);
               if (pUnit != pOwnerUnit) {
-                SUnitMsg::SendRemoveObject(pUnit, (D2ClientStrc*)pRoom->nLastDeadGUIDs[nNewClientIdx - 0xe]);
+                SUnitMsg::SendRemoveObject(pUnit, ppTargetClients[nNewClientIdx]);
               }
 
               nNewClientIdx++;
@@ -1580,13 +1581,13 @@ void __fastcall UNITS_UpdateRoomClientVisibility(::SGAMEDATA * pGame, D2UnitStrc
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x106);
           exit(-1);
         }
-        if (!pRoom) {
+        if (!ppTargetClients) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x107);
           exit(-1);
         }
 
         pClient = ppCurrentClientList[nOldClientIdx];
-        pClient_00 = (D2ClientStrc*)pRoom->nLastDeadGUIDs[nNewClientIdx - 0xe];
+        pClient_00 = ppTargetClients[nNewClientIdx];
         if (pClient < pClient_00) {
           pOwnerUnit = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
           if (pUnit != pOwnerUnit) {
@@ -1598,7 +1599,7 @@ void __fastcall UNITS_UpdateRoomClientVisibility(::SGAMEDATA * pGame, D2UnitStrc
           if (pClient_00 < pClient) {
             pOwnerUnit = GAME::Clients::CLIENTS_GetControlUnit(pClient_00, 0);
             if (pUnit != pOwnerUnit) {
-              SUnitMsg::SendRemoveObject(pUnit, (D2ClientStrc*)pRoom->nLastDeadGUIDs[nNewClientIdx - 0xe]);
+              SUnitMsg::SendRemoveObject(pUnit, ppTargetClients[nNewClientIdx]);
             }
           } else {
             nOldClientIdx++;
@@ -1842,7 +1843,7 @@ uint32_t __fastcall UNITS_CanUseSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * 
     uint32_t nTarget = (uint32_t)pTargetUnit->nUnitGUID;
     if (eTargetUnitType == UNIT_MONSTER) {
       Ai::AiGeneral::AIGENERAL_GetOwnerData(pTargetUnit, &nTarget, (int*)&eMonsterOwnerType);
-      if ((D2UnitStrc*)nTarget == (D2UnitStrc*)-1) {
+      if (nTarget == 0xffffffff) {
         return 0;
       }
       if (eMonsterOwnerType != UNIT_PLAYER) {

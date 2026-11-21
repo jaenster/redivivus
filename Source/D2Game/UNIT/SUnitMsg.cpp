@@ -1001,8 +1001,8 @@ void __fastcall SERVER_SendUnitMessagePacket(D2UnitStrc * pUnit, D2UnitStrc * pT
     pMsg->pad_0x5[1] = '\0';
     pMsg->pad_0x5[2] = '\0';
     *(uint8_t*)&pMsg->uArgs = '\0';
-    *(uint8_t*)((intptr_t)&pMsg->uArgs + 1) = 0;
-    *(uint16_t*)((intptr_t)&pMsg->uArgs + 2) = 0;
+    pMsg->uArgs.sA3.field_0x1 = 0;
+    pMsg->uArgs.sA3.nSkillId = 0;
     *(uint32_t*)&pMsg->uArgs.sA3.nSkillLevel = 0;
     pMsg->uArgs.sA3.eUnitType = UNIT_PLAYER;
     pMsg->uArgs.sA3.nUnitGUID = 0;

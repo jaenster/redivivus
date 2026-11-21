@@ -736,9 +736,8 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
             lExpTimes75 = (uint64_t)((uint64_t)(uint32_t)nExpQuotient << 32 | (uint64_t)(uint32_t)(nExpQuotient - iVar3));
           }
 
-          pCorpseInventory = (D2InventoryStrc*)lExpTimes75;
           GAME::Clients::SetExperienceLoss(pClient, 0);
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_experience, (int32_t)pCorpseInventory, 0);
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_experience, (int32_t)lExpTimes75, 0);
           D2Common::INVENTORY::Inventory::INVENTORY_AddCorpse(pPlayerInventory, pUnit_00->nUnitGUID, 0, UNIT_MONSTER);
           pCorpseInventory = pUnit_00->pInventory;
           if (pUnit_00->nUnitGUID == pUnit->nUnitGUID) {

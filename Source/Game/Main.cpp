@@ -802,7 +802,6 @@ static void INI_StripDelimiters(char * szText) {
 int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, char * pOutValue) {
     char szArgNameBuf[256];
     char cChar;
-    int nDstOffset;
     char* pCursor;
     int nCmdLen = (int)strlen(szCmdLine);
     int nNameLen = 0;
@@ -812,14 +811,13 @@ int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, ch
       exit(-1);
     }
     if (nCmdLen > 0) {
-      nDstOffset = -(int)szCmdLine;
       do {
         cChar = *szCmdLine;
         if (cChar == '-' || cChar == '\0') {
           break;
         }
 
-        szCmdLine[(intptr_t)(szArgNameBuf + nDstOffset)] = cChar;
+        szArgNameBuf[nNameLen] = cChar;
         nNameLen++;
         szCmdLine++;
       } while (nNameLen < nCmdLen);

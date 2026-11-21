@@ -77,7 +77,7 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
         pLevelsTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
         memset(pLevelObjRng, 0, 0x90);
         pLevelObjRng->nMonClassId = -1;
-        pLevelObjRng->nAct = *(uint8_t*)((char*)pLevelsTxt + 3);
+        pLevelObjRng->nAct = pLevelsTxt->Act;
         pLevelObjRng->nLevelRooms = 0x7fffffff;
         *uSlot8.ppLevelRngIter = pLevelObjRng;
         uSlot8.ppLevelRngIter++;

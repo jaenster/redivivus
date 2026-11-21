@@ -287,7 +287,7 @@ void __fastcall D2WINEDITBOX_LinkTabOrder(::D2WinEditBox * pEditBox, ::D2WinEdit
 
 // Handles mouse click in D2 edit box. Converts wide text to multi-byte, wraps lines to fit box width, calculates cursor position relative to click point.
 static int32_t __stdcall D2WINEDITBOX_GetTextHeight(int * pEditBox, short * wszText) {
-    short int* psVar1;
+    int32_t nWszStart;
     int32_t nCharPixelWidth;
     int nZeroCount;
     char* pszCurChar;
@@ -312,7 +312,7 @@ static int32_t __stdcall D2WINEDITBOX_GetTextHeight(int * pEditBox, short * wszT
       if (*pEditBox == 1) {
         D2WinFont::SetAndReturnLastFont(pEditBox[0x9c]);
         nFontH = D2WinFont::D2WINFONT_GetCurrentFontHeight();
-        psVar1 = (short int*)(nFontH + (pEditBox[0x11] - pEditBox[6]) + pEditBox[4]);
+        nWszStart = nFontH + (pEditBox[0x11] - pEditBox[6]) + pEditBox[4];
         szCursorChar[0] = '_';
         szCursorChar[1] = '\0';
         wszCursorChar[0] = L'\0';
@@ -328,10 +328,10 @@ static int32_t __stdcall D2WINEDITBOX_GetTextHeight(int * pEditBox, short * wszT
         nFontH = D2WinFont::D2WINFONT_GetCurrentFontHeight();
         nZeroCount = pEditBox[0x10];
         nSizeX = pEditBox[5];
-        nWszText = (int)psVar1;
+        nWszText = nWszStart;
         do {
           if (szDecodedText[0] == '\0') {
-            return nWszText - (int)psVar1;
+            return nWszText - nWszStart;
           }
 
           bLineWrapped = false;
@@ -1034,7 +1034,6 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
     int32_t nSelStart;
     int32_t nSelEnd;
     int nCurSel;
-    intptr_t nCursorOffset;
     int nSelCursor;
     uint8_t byCurChar;
     __frame0.abKeyBuffer[0] = byKeyChar;
@@ -1104,14 +1103,13 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
         pbClipScan = pbClipScan + strlen((char*)pbClipScan) + 1;
         nHasText2 = 0;
         if ((intptr_t)pbClipScan - (intptr_t)pbClipEnd > 0) {
-          nCursorOffset = pEditBox->nCursorIndex - (intptr_t)pbClipSrc;
           do {
             bFontCharValid = D2WinFont::D2WINFONT_IsFontCharacterValid(*pbClipSrc);
             if (!bFontCharValid) {
               return 0;
             }
 
-            nFilterResult = pEditBox->fpFilterCallback(pEditBox, (int)(pbClipSrc + nCursorOffset), (char*)pbClipSrc);
+            nFilterResult = pEditBox->fpFilterCallback(pEditBox, pEditBox->nCursorIndex, (char*)pbClipSrc);
             if (!nFilterResult) {
               return 0;
             }

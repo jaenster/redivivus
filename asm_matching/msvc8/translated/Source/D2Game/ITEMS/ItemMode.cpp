@@ -2229,12 +2229,12 @@ void __fastcall ITEMS_RecalcEquippedItemStates(::SGAMEDATA * pGame, D2UnitStrc *
       pInventory = pInventoryCopy;
     } while (nBodyLocIdx < 0xb);
 
+    int nBodyLocIter;
     do {
       bAnyItemReenabled = 0;
-      pBodyLocIter = (D2UnitStrc*)0x1;
+      nBodyLocIter = 1;
       do {
-        pCurItem = pBodyLocIter;
-        pSocketedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventoryCopy, (int32_t)pBodyLocIter);
+        pSocketedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventoryCopy, nBodyLocIter);
         if (pSocketedItem) {
           bIsBrokenOrDisabled = D2Common::ITEMS::Items::CheckItemFlag(pSocketedItem, ITEMFLAG_BROKEN, 0xaa4, ".\\ITEMS\\ItemMode.cpp");
           if (!bIsBrokenOrDisabled) {
@@ -2256,14 +2256,13 @@ void __fastcall ITEMS_RecalcEquippedItemStates(::SGAMEDATA * pGame, D2UnitStrc *
                 }
 
                 bAnyItemReenabled = 1;
-                pCurItem = pBodyLocIter;
               }
             }
           }
         }
 
-        pBodyLocIter = (D2UnitStrc*)((char*)pCurItem + 1);
-      } while ((intptr_t)pBodyLocIter < 0xb);
+        nBodyLocIter++;
+      } while (nBodyLocIter < 0xb);
     } while (bAnyItemReenabled);
 
     bAnyItemReenabled = 1;
@@ -4996,7 +4995,7 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
     D2ClientStrc* pClient;
     eD2Skills eSkillId;
     D2UnitStrc** ppSwapSlotItem;
-    eD2BodyLocDWORD* pSwapBodyLocIter;
+    D2WeaponSwapSlotStrc* pSwapSlot;
     eD2Skills eRightSkillId;
     uint32_t nRightSkillOwner;
     eD2Skills eLeftSkillId;
@@ -5089,11 +5088,11 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
       } while (nSwapSlotIdx < 4);
 
       nSwapSlotIdx = 0;
-      pSwapBodyLocIter = &aSwapSlots[0].eTargetBodyLoc;
+      pSwapSlot = &aSwapSlots[0];
       do {
-        pCurItem = (D2UnitStrc*)pSwapBodyLocIter[-1];
+        pCurItem = pSwapSlot->pItem;
         if (pCurItem) {
-          nPutResult = D2Common::INVENTORY::Inventory::INVENTORY_GetItemAtBodyLoc(pInventorySaved, pCurItem, *pSwapBodyLocIter);
+          nPutResult = D2Common::INVENTORY::Inventory::INVENTORY_GetItemAtBodyLoc(pInventorySaved, pCurItem, pSwapSlot->eTargetBodyLoc);
           if (!nPutResult) {
             pbSwapDone[0] = true;
             pbSwapDone[1] = false;
@@ -5102,7 +5101,7 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
             return 0;
           }
 
-          nPutItemResult = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventorySaved, pCurItem, pSwapBodyLocIter[1]);
+          nPutItemResult = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventorySaved, pCurItem, pSwapSlot->nPutItemParam);
           if (!nPutItemResult) {
             reject_bad_params:
             pbSwapDone[0] = true;
@@ -5112,8 +5111,8 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
             return 0;
           }
 
-          D2Common::ITEMS::Items::SetBodyLoc(pCurItem, (eD2BodyLoc)*pSwapBodyLocIter);
-          if (*pSwapBodyLocIter == BODYLOC_R_ARM || *pSwapBodyLocIter == BODYLOC_L_ARM) {
+          D2Common::ITEMS::Items::SetBodyLoc(pCurItem, (eD2BodyLoc)pSwapSlot->eTargetBodyLoc);
+          if (pSwapSlot->eTargetBodyLoc == BODYLOC_R_ARM || pSwapSlot->eTargetBodyLoc == BODYLOC_L_ARM) {
             D2Common::INVENTORY::Inventory::INVENTORY_UpdatePrimaryWeapon(pInventorySaved, pCurItem);
             ITEMMODE_AddStatsList(pGameSaved, pCurItem, pUnit, 0);
             D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pCurItem, ITEMFLAG_ADDED, 1);
@@ -5132,7 +5131,7 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
         }
 
         nSwapSlotIdx++;
-        pSwapBodyLocIter += 4;
+        pSwapSlot++;
       } while (nSwapSlotIdx < 4);
 
       ITEMS_RecalcEquippedItemStates(pGameSaved, pUnit, 0);

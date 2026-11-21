@@ -491,7 +491,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<StringEntryNode, HA
     // The values VC8 kept in nIterCount's one frame slot, one member each: a frame object reaches the slot.
     union nIterCount_u {
       uint32_t nIterCount2;
-      uint32_t* pIterCount;
+      uint32_t nIterLeft;
     };
     static_assert(sizeof(void*) != 4 || sizeof(nIterCount_u) == 4, "nIterCount_u must stay one 4-byte frame slot");
     TSLink<::StringEntryNode>* pBucket;
@@ -506,7 +506,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<StringEntryNode, HA
     TSLink<::StringEntryNode>* pPrevLink;
     tempList.m_terminator.m_prevlink = &tempList.m_terminator;
     uint32_t nOldBucketCount = pThis->nSlotMask + 1;
-    uint32_t* pNewBucketCount = (uint32_t*)(nOldBucketCount * 2);
+    uint32_t dwNewBucketCount = nOldBucketCount * 2;
     intptr_t nCurEntry = ~(uintptr_t)tempList.m_terminator.m_prevlink;
     tempList.m_linkoffset = -0x22222223;
     tempList.m_terminator.m_next = nCurEntry;
@@ -547,11 +547,11 @@ template<> __attribute__((noinline)) inline void TSHashTable<StringEntryNode, HA
       } while (nIterCount.nIterCount2 < nOldBucketCount);
     }
 
-    uint32_t* pCurEntry = pNewBucketCount;
-    pThis->tSlotListArray.SetCount((uint32_t)pNewBucketCount);
-    if (pCurEntry) {
+    uint32_t dwCurEntry = dwNewBucketCount;
+    pThis->tSlotListArray.SetCount(dwNewBucketCount);
+    if (dwCurEntry) {
       nBucketOffset = 0;
-      nIterCount.pIterCount = pCurEntry;
+      nIterCount.nIterLeft = dwCurEntry;
       do {
         pPrevPtr = &pThis->tSlotListArray.m_data[nBucketOffset];
         if (pPrevPtr->m_linkoffset != 4) {
@@ -563,14 +563,14 @@ template<> __attribute__((noinline)) inline void TSHashTable<StringEntryNode, HA
         }
 
         nBucketOffset++;
-        nIterCount.pIterCount = (uint32_t*)((char*)nIterCount.pIterCount - 1);
-      } while (nIterCount.pIterCount);
+        nIterCount.nIterLeft -= 1;
+      } while (nIterCount.nIterLeft);
 
       nIterCount.nIterCount2 = 0;
-      pCurEntry = pNewBucketCount;
+      dwCurEntry = dwNewBucketCount;
     }
 
-    pThis->nSlotMask = (int)pCurEntry - 1;
+    pThis->nSlotMask = dwCurEntry - 1;
     while (0 < tempList.m_terminator.m_next) {
       int nSavedNode = tempList.m_terminator.m_next;
       pPrevPtr = pThis->tSlotListArray.m_data + (*(uint32_t*)tempList.m_terminator.m_next & pThis->nSlotMask);

@@ -536,7 +536,7 @@ static void __stdcall TILECMP_SerializeTileSet(D2TileCmpTileSetStrc * pSrcTileSe
         pDstTileNode->nOffsetX = pSrcTileNode->wOffsetX;
         pDstTileNode->nOffsetY = pSrcTileNode->wOffsetY;
         pDstTileNode->nSubIdxLo = *(uint8_t*)&pSrcTileNode->wUnk_04;
-        pDstTileNode->nSubIdxHi = *(uint8_t*)((intptr_t)&pSrcTileNode->wUnk_04 + 1);
+        pDstTileNode->nSubIdxHi = pSrcTileNode->wUnk_04 >> 8;
         pDstTileNode->wFormat = pSrcTileNode->wFlags;
         pDstTileNode->wDataLength = pSrcTileNode->wPixelSize;
         pDstTileNode->pPixelData = pSrcTileNode->pPixelBuf;
@@ -806,11 +806,12 @@ void __stdcall TILECMP_FixupPointersInPlace(D2TileLibraryHeaderStrc * pTileCmpHd
 
       pTileCmpHdr->pTiles = (D2TileLibraryEntryStrc*)(pTileCmpHdr->szLibraryName + (intptr_t)(pTileCmpHdr->pTiles->abSubTileFlags - 0x30));
       if (szText) {
-        nCurTilePixelTotal = 8 - (int)szText;
+        char* pszDst = pTileCmpHdr->szLibraryName;
         do {
           byStrChar = *szText;
-          szText[(intptr_t)pTileCmpHdr + nCurTilePixelTotal] = byStrChar;
+          *pszDst = byStrChar;
           szText++;
+          pszDst++;
         } while (byStrChar != '\0');
       }
 
@@ -935,7 +936,7 @@ static void TILECMP_ApplyFunctionToPixels(uint8_t * pPixelData, int32_t nPixelBy
     int nPixelCount = (nPixelBytes - 1U) / 3 + 1;
     do {
       (*pPixelCallback)((uint32_t)d2_load24((uint8_t*)pPixelData));
-      pPixelData = (uint8_t*)((char*)pPixelData + 3);
+      pPixelData += 3;
       nPixelCount--;
     } while (nPixelCount);
 }

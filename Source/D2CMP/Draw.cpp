@@ -706,8 +706,10 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
     uint8_t bVar3;
     D2HSLColorStrc* pHSLLoopPtr;
     D2HSLColorStrc* pHSLCopySrc;
-    int nEntryCount;
+    D2HSLColorStrc* pHSLSrcBase = pHSLPalette;
+    D2HSLColorStrc* pHSLSrc;
     int nHSLSrcOffset;
+    int nEntryCount;
     uint32_t nColorIdx;
     long double fColorMagnitude;
     D2HSLColorStrc ahslBuffer[256];
@@ -725,48 +727,36 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
       nHSLSrcOffset = 0x40;
       pHSLCopySrc = pDVar4;
       do {
-        *(uint32_t*)&pHSLLoopPtr[-1].dHue = *(uint32_t*)&pHSLCopySrc[-2].dHue;
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr[-1].dHue + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[-2].dHue + 4);
-        *(uint32_t*)&pHSLLoopPtr[-1].dSaturation = *(uint32_t*)&pHSLCopySrc[-2].dSaturation;
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr[-1].dSaturation + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[-2].dSaturation + 4);
-        *(uint32_t*)&pHSLLoopPtr[-1].dLightness = *(uint32_t*)&pHSLCopySrc[-2].dLightness;
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr[-1].dLightness + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[-2].dLightness + 4);
+        pHSLLoopPtr[-1].dHue = pHSLCopySrc[-2].dHue;
+        pHSLLoopPtr[-1].dSaturation = pHSLCopySrc[-2].dSaturation;
+        pHSLLoopPtr[-1].dLightness = pHSLCopySrc[-2].dLightness;
         dHueWrapped = dVar1 + pHSLLoopPtr[-1].dHue;
         pHSLLoopPtr[-1].dHue = dHueWrapped;
         if (360.0 < dHueWrapped) {
           pHSLLoopPtr[-1].dHue = dHueWrapped - 360.0;
         }
 
-        *(uint32_t*)&pHSLLoopPtr->dHue = *(uint32_t*)&pHSLCopySrc[-1].dHue;
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr->dHue + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[-1].dHue + 4);
-        *(uint32_t*)&pHSLLoopPtr->dSaturation = *(uint32_t*)&pHSLCopySrc[-1].dSaturation;
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr->dSaturation + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[-1].dSaturation + 4);
-        *(uint32_t*)&pHSLLoopPtr->dLightness = *(uint32_t*)&pHSLCopySrc[-1].dLightness;
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr->dLightness + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[-1].dLightness + 4);
+        pHSLLoopPtr->dHue = pHSLCopySrc[-1].dHue;
+        pHSLLoopPtr->dSaturation = pHSLCopySrc[-1].dSaturation;
+        pHSLLoopPtr->dLightness = pHSLCopySrc[-1].dLightness;
         dHueWrapped = pHSLLoopPtr->dHue + dVar1;
         pHSLLoopPtr->dHue = dHueWrapped;
         if (360.0 < dHueWrapped) {
           pHSLLoopPtr->dHue = dHueWrapped - 360.0;
         }
 
-        *(uint32_t*)&pHSLLoopPtr[1].dHue = *(uint32_t*)&pHSLCopySrc->dHue;
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr[1].dHue + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc->dHue + 4);
-        *(uint32_t*)&pHSLLoopPtr[1].dSaturation = *(uint32_t*)&pHSLCopySrc->dSaturation;
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr[1].dSaturation + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc->dSaturation + 4);
-        *(uint32_t*)&pHSLLoopPtr[1].dLightness = *(uint32_t*)&pHSLCopySrc->dLightness;
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr[1].dLightness + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc->dLightness + 4);
+        pHSLLoopPtr[1].dHue = pHSLCopySrc->dHue;
+        pHSLLoopPtr[1].dSaturation = pHSLCopySrc->dSaturation;
+        pHSLLoopPtr[1].dLightness = pHSLCopySrc->dLightness;
         dHueWrapped = dVar1 + pHSLLoopPtr[1].dHue;
         pHSLLoopPtr[1].dHue = dHueWrapped;
         if (360.0 < dHueWrapped) {
           pHSLLoopPtr[1].dHue = dHueWrapped - 360.0;
         }
 
-        *(uint32_t*)&pHSLLoopPtr[2].dHue = *(uint32_t*)&pHSLCopySrc[1].dHue;
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr[2].dHue + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dHue + 4);
-        *(uint32_t*)&pHSLLoopPtr[2].dSaturation = *(uint32_t*)&pHSLCopySrc[1].dSaturation;
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr[2].dSaturation + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dSaturation + 4);
-        *(uint32_t*)&pHSLLoopPtr[2].dLightness = *(uint32_t*)&pHSLCopySrc[1].dLightness;
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr[2].dLightness + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dLightness + 4);
+        pHSLLoopPtr[2].dHue = pHSLCopySrc[1].dHue;
+        pHSLLoopPtr[2].dSaturation = pHSLCopySrc[1].dSaturation;
+        pHSLLoopPtr[2].dLightness = pHSLCopySrc[1].dLightness;
         dHueWrapped = dVar1 + pHSLLoopPtr[2].dHue;
         pHSLLoopPtr[2].dHue = dHueWrapped;
         if (360.0 < dHueWrapped) {
@@ -790,19 +780,16 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
       pDestEntry += 0x40;
     } while (nTableIdx < 0x18);
 
-    nHSLSrcOffset = (intptr_t)pHSLPalette - (intptr_t)ahslBuffer;
     uint32_t nHueShift = 0;
     pDestEntry = pPalette + 0x15340;
     do {
       fHueFloat = (float)nHueShift;
       pHSLLoopPtr = ahslBuffer;
+      pHSLSrc = pHSLSrcBase;
       for (nEntryCount = 0; nEntryCount < 0x100; nEntryCount++) {
-        *(uint32_t*)&pHSLLoopPtr->dHue = *(uint32_t*)(nHSLSrcOffset + (char*)pHSLLoopPtr);
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr->dHue + 4) = *(uint32_t*)(nHSLSrcOffset + 4 + (char*)pHSLLoopPtr);
-        *(uint32_t*)&pHSLLoopPtr->dSaturation = *(uint32_t*)(nHSLSrcOffset + 8 + (char*)pHSLLoopPtr);
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr->dSaturation + 4) = *(uint32_t*)(nHSLSrcOffset + 0xc + (char*)pHSLLoopPtr);
-        *(uint32_t*)&pHSLLoopPtr->dLightness = *(uint32_t*)(nHSLSrcOffset + 0x10 + (char*)pHSLLoopPtr);
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr->dLightness + 4) = *(uint32_t*)(nHSLSrcOffset + 0x14 + (char*)pHSLLoopPtr);
+        pHSLLoopPtr->dHue = pHSLSrc->dHue;
+        pHSLLoopPtr->dSaturation = pHSLSrc->dSaturation;
+        pHSLLoopPtr->dLightness = pHSLSrc->dLightness;
         fHueWrapped = (float)pHSLLoopPtr->dHue + fHueFloat * 15.0;
         pHSLLoopPtr->dHue = (double)fHueWrapped;
         if (360.0 < fHueWrapped) {
@@ -817,6 +804,7 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
         }
 
         pHSLLoopPtr++;
+        pHSLSrc++;
       }
 
       DRAW_ConvertPaletteHSLtoRGB(ahslBuffer, &rgbBuffer[0].rgbBlue);
@@ -836,13 +824,11 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
     do {
       fHueFloat = (float)nHueShift;
       pHSLLoopPtr = ahslBuffer;
+      pHSLSrc = pHSLSrcBase;
       for (nEntryCount = 0; nEntryCount < 0x100; nEntryCount++) {
-        *(uint32_t*)&pHSLLoopPtr->dHue = *(uint32_t*)(nHSLSrcOffset + (char*)pHSLLoopPtr);
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr->dHue + 4) = *(uint32_t*)(nHSLSrcOffset + 4 + (char*)pHSLLoopPtr);
-        *(uint32_t*)&pHSLLoopPtr->dSaturation = *(uint32_t*)(nHSLSrcOffset + 8 + (char*)pHSLLoopPtr);
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr->dSaturation + 4) = *(uint32_t*)(nHSLSrcOffset + 0xc + (char*)pHSLLoopPtr);
-        *(uint32_t*)&pHSLLoopPtr->dLightness = *(uint32_t*)(nHSLSrcOffset + 0x10 + (char*)pHSLLoopPtr);
-        *(uint32_t*)((intptr_t)&pHSLLoopPtr->dLightness + 4) = *(uint32_t*)(nHSLSrcOffset + 0x14 + (char*)pHSLLoopPtr);
+        pHSLLoopPtr->dHue = pHSLSrc->dHue;
+        pHSLLoopPtr->dSaturation = pHSLSrc->dSaturation;
+        pHSLLoopPtr->dLightness = pHSLSrc->dLightness;
         fHueWrapped = fHueFloat * 15.0 + (float)pHSLLoopPtr->dHue;
         pHSLLoopPtr->dHue = (double)fHueWrapped;
         if (360.0 < fHueWrapped) {
@@ -857,6 +843,7 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
         }
 
         pHSLLoopPtr++;
+        pHSLSrc++;
       }
 
       DRAW_ConvertPaletteHSLtoRGB(ahslBuffer, &rgbBuffer[0].rgbBlue);
@@ -873,15 +860,15 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
     } while (nHueShift < 0x18);
 
     pHSLLoopPtr = ahslBuffer;
+    pHSLSrc = pHSLSrcBase;
     do {
-      *(uint32_t*)&pHSLLoopPtr->dHue = *(uint32_t*)(nHSLSrcOffset + (char*)pHSLLoopPtr);
-      *(uint32_t*)((intptr_t)&pHSLLoopPtr->dHue + 4) = *(uint32_t*)(nHSLSrcOffset + 4 + (char*)pHSLLoopPtr);
-      *(uint32_t*)&pHSLLoopPtr->dLightness = *(uint32_t*)(nHSLSrcOffset + 0x10 + (char*)pHSLLoopPtr);
-      *(uint32_t*)((intptr_t)&pHSLLoopPtr->dLightness + 4) = *(uint32_t*)(nHSLSrcOffset + 0x14 + (char*)pHSLLoopPtr);
+      pHSLLoopPtr->dHue = pHSLSrc->dHue;
+      pHSLLoopPtr->dLightness = pHSLSrc->dLightness;
       pHSLLoopPtr->dSaturation = 0.0;
       nEntryCount--;
       pHSLLoopPtr->dLightness *= 0.5;
       pHSLLoopPtr++;
+      pHSLSrc++;
     } while (nEntryCount);
 
     DRAW_ConvertPaletteHSLtoRGB(ahslBuffer, &rgbBuffer[0].rgbBlue);
@@ -894,15 +881,15 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
 
     nEntryCount = 0x100;
     pHSLLoopPtr = ahslBuffer;
+    pHSLSrc = pHSLSrcBase;
     do {
-      *(uint32_t*)&pHSLLoopPtr->dHue = *(uint32_t*)(nHSLSrcOffset + (char*)pHSLLoopPtr);
-      *(uint32_t*)((intptr_t)&pHSLLoopPtr->dHue + 4) = *(uint32_t*)(nHSLSrcOffset + 4 + (char*)pHSLLoopPtr);
-      *(uint32_t*)&pHSLLoopPtr->dLightness = *(uint32_t*)(nHSLSrcOffset + 0x10 + (char*)pHSLLoopPtr);
-      *(uint32_t*)((intptr_t)&pHSLLoopPtr->dLightness + 4) = *(uint32_t*)(nHSLSrcOffset + 0x14 + (char*)pHSLLoopPtr);
+      pHSLLoopPtr->dHue = pHSLSrc->dHue;
+      pHSLLoopPtr->dLightness = pHSLSrc->dLightness;
       pHSLLoopPtr->dSaturation = 0.0;
       nEntryCount--;
       pHSLLoopPtr->dLightness = (pHSLLoopPtr->dLightness + 0.20000000298023224) / 1.2000000476837158;
       pHSLLoopPtr++;
+      pHSLSrc++;
     } while (nEntryCount);
 
     DRAW_ConvertPaletteHSLtoRGB(ahslBuffer, &rgbBuffer[0].rgbBlue);
@@ -913,11 +900,11 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
       nTableIdx++;
     } while (nTableIdx < 0x100);
 
-    nEntryCount = -(int)pHSLPalette;
-    intptr_t iVar5 = (intptr_t)ahslBuffer + (nEntryCount + 0x18);
-    int iVar2 = -(int)pHSLPalette;
+    intptr_t nPaletteNeg = -(intptr_t)pHSLPalette;
+    intptr_t iVar5 = (intptr_t)ahslBuffer + (nPaletteNeg + 0x18);
+    intptr_t iVar2 = -(intptr_t)pHSLPalette;
     intptr_t nHSLEntryBufOffset = (intptr_t)ahslBuffer + iVar2;
-    pHSLPalette = (D2HSLColorStrc*)(pPalette + 0x15fc0);
+    uint8_t* pbHSLDest = (uint8_t*)(pPalette + 0x15fc0);
     nHueShift = 0;
     do {
       pHSLLoopPtr = ahslBuffer + 1;
@@ -926,12 +913,9 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
       do {
         if (45.0 < pHSLCopySrc[-2].dHue && pHSLCopySrc[-2].dHue < 315.0) {
           dVar1 = (double)(int)nHueShift;
-          *(uint32_t*)&pHSLLoopPtr[-1].dHue = *(uint32_t*)&pHSLCopySrc[-2].dHue;
-          *(uint32_t*)((intptr_t)&pHSLLoopPtr[-1].dHue + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[-2].dHue + 4);
-          *(uint32_t*)&pHSLLoopPtr[-1].dSaturation = *(uint32_t*)&pHSLCopySrc[-2].dSaturation;
-          *(uint32_t*)((intptr_t)&pHSLLoopPtr[-1].dSaturation + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[-2].dSaturation + 4);
-          *(uint32_t*)&pHSLLoopPtr[-1].dLightness = *(uint32_t*)&pHSLCopySrc[-2].dLightness;
-          *(uint32_t*)((intptr_t)&pHSLLoopPtr[-1].dLightness + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[-2].dLightness + 4);
+          pHSLLoopPtr[-1].dHue = pHSLCopySrc[-2].dHue;
+          pHSLLoopPtr[-1].dSaturation = pHSLCopySrc[-2].dSaturation;
+          pHSLLoopPtr[-1].dLightness = pHSLCopySrc[-2].dLightness;
           if ((int)nHueShift < 0) {
             dVar1 += 4294967296.0;
           }
@@ -944,12 +928,9 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
         }
         if (45.0 < pHSLCopySrc[-1].dHue && pHSLCopySrc[-1].dHue < 315.0) {
           dVar1 = (double)(int)nHueShift;
-          *(uint32_t*)&pHSLLoopPtr->dHue = *(uint32_t*)&pHSLCopySrc[-1].dHue;
-          *(uint32_t*)((intptr_t)&pHSLLoopPtr->dHue + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[-1].dHue + 4);
-          *(uint32_t*)&pHSLLoopPtr->dSaturation = *(uint32_t*)&pHSLCopySrc[-1].dSaturation;
-          *(uint32_t*)((intptr_t)&pHSLLoopPtr->dSaturation + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[-1].dSaturation + 4);
-          *(uint32_t*)&pHSLLoopPtr->dLightness = *(uint32_t*)&pHSLCopySrc[-1].dLightness;
-          *(uint32_t*)((intptr_t)&pHSLLoopPtr->dLightness + 4) = *(uint32_t*)((intptr_t)&pHSLCopySrc[-1].dLightness + 4);
+          pHSLLoopPtr->dHue = pHSLCopySrc[-1].dHue;
+          pHSLLoopPtr->dSaturation = pHSLCopySrc[-1].dSaturation;
+          pHSLLoopPtr->dLightness = pHSLCopySrc[-1].dLightness;
           if ((int)nHueShift < 0) {
             dVar1 += 4294967296.0;
           }
@@ -981,11 +962,11 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
         if (45.0 < pHSLCopySrc[1].dHue && pHSLCopySrc[1].dHue < 315.0) {
           dVar1 = (double)(int)nHueShift;
           *(uint32_t*)(iVar5 + (char*)pHSLCopySrc) = *(uint32_t*)&pHSLCopySrc[1].dHue;
-          *(uint32_t*)((intptr_t)ahslBuffer + (nEntryCount + (intptr_t)pHSLCopySrc)) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dHue + 4);
-          *(uint32_t*)((intptr_t)ahslBuffer + (nEntryCount + (intptr_t)pHSLCopySrc)) = *(uint32_t*)&pHSLCopySrc[1].dSaturation;
-          *(uint32_t*)((intptr_t)ahslBuffer + (nEntryCount + (intptr_t)pHSLCopySrc)) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dSaturation + 4);
-          *(uint32_t*)((intptr_t)ahslBuffer + (nEntryCount + (intptr_t)pHSLCopySrc)) = *(uint32_t*)&pHSLCopySrc[1].dLightness;
-          *(uint32_t*)((intptr_t)ahslBuffer + (nEntryCount + (intptr_t)pHSLCopySrc)) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dLightness + 4);
+          *(uint32_t*)((intptr_t)ahslBuffer + (nPaletteNeg + (intptr_t)pHSLCopySrc)) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dHue + 4);
+          *(uint32_t*)((intptr_t)ahslBuffer + (nPaletteNeg + (intptr_t)pHSLCopySrc)) = *(uint32_t*)&pHSLCopySrc[1].dSaturation;
+          *(uint32_t*)((intptr_t)ahslBuffer + (nPaletteNeg + (intptr_t)pHSLCopySrc)) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dSaturation + 4);
+          *(uint32_t*)((intptr_t)ahslBuffer + (nPaletteNeg + (intptr_t)pHSLCopySrc)) = *(uint32_t*)&pHSLCopySrc[1].dLightness;
+          *(uint32_t*)((intptr_t)ahslBuffer + (nPaletteNeg + (intptr_t)pHSLCopySrc)) = *(uint32_t*)((intptr_t)&pHSLCopySrc[1].dLightness + 4);
           if ((int)nHueShift < 0) {
             dVar1 += 4294967296.0;
           }
@@ -1006,11 +987,11 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
       nTableIdx = 0;
       do {
         bVar3 = D2GFX_FindNearestPaletteIndex(pPalette, 0x100, (uint32_t)rgbBuffer[nTableIdx].rgbBlue, (uint32_t)rgbBuffer[nTableIdx].rgbGreen, (uint32_t)rgbBuffer[nTableIdx].rgbRed);
-        *(uint8_t*)((intptr_t)&pHSLPalette->dHue + nTableIdx) = bVar3;
+        pbHSLDest[nTableIdx] = bVar3;
         nTableIdx++;
       } while (nTableIdx < 0x100);
 
-      pHSLPalette = (D2HSLColorStrc*)&pHSLPalette[10].dLightness;
+      pbHSLDest += 0x100;
       nHueShift++;
     } while (nHueShift < 0x18);
 
@@ -1021,13 +1002,14 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
       fHueFloat = (float)nHueShift;
       nEntryCount = 0x100;
       pHSLEntry = ahslBuffer;
+      pHSLSrc = pHSLSrcBase;
       do {
-        *(uint32_t*)&pHSLEntry->dLightness = *(uint32_t*)(nHSLSrcOffset + 0x10 + (char*)pHSLEntry);
-        *(uint32_t*)((intptr_t)&pHSLEntry->dLightness + 4) = *(uint32_t*)(nHSLSrcOffset + 0x14 + (char*)pHSLEntry);
+        pHSLEntry->dLightness = pHSLSrc->dLightness;
         pHSLEntry->dHue = (double)(fHueFloat * 30.0);
         nEntryCount--;
         pHSLEntry->dSaturation = 1.0;
         pHSLEntry++;
+        pHSLSrc++;
       } while (nEntryCount);
 
       DRAW_ConvertPaletteHSLtoRGB(ahslBuffer, &rgbBuffer[0].rgbBlue);

@@ -944,6 +944,7 @@ BOOL __stdcall SCompCompress(uint8_t * pDst, uint32_t * pnDstLen, uint32_t * pSr
     nSrcLenCur = nSrcLen;
     uint32_t* pSrcCur;
     pSrcCur = pSrc;
+    SCompEncodeCodecEntryStrc* pEntry;
     if (!((pDst && pnDstLen ? (*pnDstLen < nSrcLen) - 1 : 0) & (pSrc != 0 ? (uint32_t)-1 : 0))) {
       SErr::SErrSetLastError(0x57);
     } else {
@@ -965,16 +966,15 @@ BOOL __stdcall SCompCompress(uint8_t * pDst, uint32_t * pnDstLen, uint32_t * pSr
       nUnsupportedMask = nMethodMask & -204;
       if (!nUnsupportedMask) {
         if (nSrcLen >= 2 || (__frame0.pTempBuf = 0 , pDst + nSrcLenCur > (unsigned char*)pSrc && (uint8_t*)((char*)pSrc + nSrcLenCur) > pDst) && nSrcLen) {
-          __frame0.pTempBuf = (uint32_t*)nUnsupportedMask;
           __frame0.pTempBuf = SCOMP_s_AllocDecompressBuffer(nSrcLenCur, (int32_t*)&nUnsupportedMask);
         }
 
-        pSrc = &paSCompCompressCodecTable[0].dwMethodMask;
+        pEntry = &paSCompCompressCodecTable[0];
         nMethodBit = nMethodMask;
         do {
           _Src = pSrcCur;
           _Size = nSrcLenCur;
-          if (*pSrc & nMethodBit) {
+          if (pEntry->dwMethodMask & nMethodBit) {
             nSrcLen--;
             pScratch = __frame0.pTempBuf;
             if (!(nSrcLen & 1)) {
@@ -990,21 +990,21 @@ BOOL __stdcall SCompCompress(uint8_t * pDst, uint32_t * pnDstLen, uint32_t * pSr
             }
 
             __frame0.nResultLen = nSrcLenCur - 1;
-            ((pfnSCompEncodeCodec)pSrc[1])((short int*)_Src, &__frame0.nResultLen, (short int*)pSrcCur, nSrcLenCur, &nLevel, dwUserData);
+            pEntry->pfnCodec((short int*)_Src, &__frame0.nResultLen, (short int*)pSrcCur, nSrcLenCur, &nLevel, dwUserData);
             nMethodBit = nMethodMask;
             _Size = __frame0.nResultLen;
             if (__frame0.nResultLen + 1 >= nSrcLenCur) {
-              nMethodMask &= ~*pSrc;
+              nMethodMask &= ~pEntry->dwMethodMask;
               nMethodBit = nMethodMask;
               _Src = pSrcCur;
               _Size = nSrcLenCur;
             }
           }
 
-          pSrc += 2;
+          pEntry++;
           pSrcCur = _Src;
           nSrcLenCur = _Size;
-        } while ((intptr_t)pSrc < (intptr_t)((char*)&paSCompCompressCodecTable + sizeof(paSCompCompressCodecTable)));
+        } while ((intptr_t)pEntry < (intptr_t)((char*)&paSCompCompressCodecTable + sizeof(paSCompCompressCodecTable)));
 
         if (_Src != (uint32_t*)pDst) {
           if (_Src != (uint32_t*)(pDst + 1)) {
@@ -1358,8 +1358,8 @@ int32_t __fastcall HUFFMAN_DecodeSymbol(D2HuffmanContextStrc * pThis, int, D2Bit
         pTreeNode = pTreeNode->nPrevOffset;
       }
 
-      nBitCount = (intptr_t)&((D2CompressHuffNodeStrc*)nBitCount)->pNext + 1;
-      if ((D2CompressHuffNodeStrc*)nBitCount == (D2CompressHuffNodeStrc*)0x7) {
+      nBitCount++;
+      if (nBitCount == 7) {
         nBitBuf = (uint32_t)pTreeNode;
       }
     } while (pTreeNode->pSibling);

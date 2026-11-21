@@ -45,7 +45,7 @@ static BOOL __stdcall NET_CopyDllFromArchive(D2ArchiveStrc * pArchive, char * ps
     void* lpBuffer;
     HANDLE hFile;
     char cTmp2;
-    D2MPQFileStrc* pMpqFile = 0;
+    BOOL pMpqFile = 0;
     D2MPQFileStrc* pMpqFileLocal = 0;
     char* pExtDot;
     int nStrLen;
@@ -74,7 +74,7 @@ static BOOL __stdcall NET_CopyDllFromArchive(D2ArchiveStrc * pArchive, char * ps
             Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
           }
 
-          pMpqFile = (D2MPQFileStrc*)(uint32_t)(hFile != (HANDLE)-1);
+          pMpqFile = (hFile != (HANDLE)-1);
           Storm::Source::SMem::SMemFree(lpBuffer, ".\\BnDownload.cpp", 0x111, 0);
         }
       }
@@ -83,7 +83,7 @@ static BOOL __stdcall NET_CopyDllFromArchive(D2ArchiveStrc * pArchive, char * ps
       Storm::Source::SFile::SFileCloseFile(pMpqFileLocal);
     }
 
-    return (BOOL)(uintptr_t)pMpqFile;
+    return pMpqFile;
 }
 
 void __stdcall BNDOWNLOAD_SetCancelFlag() {
@@ -860,6 +860,7 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
     FILETIME ftCacheTime;
     uint32_t nThreadId;
     uint32_t* pCachedBuf;
+    DWORD nCachedSize;
     char cNameChar;
     char* szBufferInput = szText1;
     if (!(szText1 && *szText1 != '\0')) {
@@ -871,24 +872,24 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
 
     int32_t pCacheData = pDownloadCtx;
     uint32_t nDownloadFlags = dwDownloadFlags;
-    BOOL bCacheHit = Cache::CACHE_ReadData(szText1, (uint32_t*)&ftCacheTime.dwLowDateTime, &pCachedBuf, (LPDWORD)&szText1);
+    BOOL bCacheHit = Cache::CACHE_ReadData(szText1, (uint32_t*)&ftCacheTime.dwLowDateTime, &pCachedBuf, &nCachedSize);
     if (bCacheHit) {
       LONG nTimeCmp;
       /* FILETIME * lpFileTime2 for CompareFileTime */ /* FILETIME * lpFileTime1 for CompareFileTime */ nTimeCmp = CompareFileTime(pFileTime, &ftCacheTime);
       if (!nTimeCmp) {
         if (nDownloadFlags & 2) {
-          BNDOWNLOAD_WriteFileWithTimestamp(szBufferInput, (LPCVOID)pCachedBuf, (DWORD)szText1, pFileTime);
+          BNDOWNLOAD_WriteFileWithTimestamp(szBufferInput, (LPCVOID)pCachedBuf, nCachedSize, pFileTime);
         }
 
-        NET_BNFTP_CLIENT_ProcessFile(pCacheData, nDownloadFlags, eFileType, nOpcode, (LPCSTR)pFileTime, szBufferInput, szText2, pCachedBuf, (int32_t)szText1, 1);
-        Cache::CACHE_FreeMem(pCachedBuf, (uint32_t)szText1);
+        NET_BNFTP_CLIENT_ProcessFile(pCacheData, nDownloadFlags, eFileType, nOpcode, (LPCSTR)pFileTime, szBufferInput, szText2, pCachedBuf, (int32_t)nCachedSize, 1);
+        Cache::CACHE_FreeMem(pCachedBuf, nCachedSize);
         return;
       }
 
-      Cache::CACHE_FreeMem(pCachedBuf, (uint32_t)szText1);
+      Cache::CACHE_FreeMem(pCachedBuf, nCachedSize);
     }
 
-    short int* pThreadCtx = (short int*)Storm::Source::SMem::SMemAlloc(0x230, ".\\BnDownload.cpp", 0xa6, 0);
+    D2BnetDownloadStateStrc* pThreadCtx = (D2BnetDownloadStateStrc*)Storm::Source::SMem::SMemAlloc(0x230, ".\\BnDownload.cpp", 0xa6, 0);
     if (!pThreadCtx) {
       return;
     }
@@ -896,23 +897,20 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
     memset(pThreadCtx, 0, 0x230);
     char* pcNameEnd = szBufferInput;
     pcNameEnd = pcNameEnd + strlen(pcNameEnd) + 1;
-    *(uint32_t*)(pThreadCtx + 6) = eFileType;
-    *pThreadCtx = (short int)(uintptr_t)pcNameEnd - ((short int)(uintptr_t)szBufferInput + 1) + 0x21;
-    *(uint8_t*)(pThreadCtx + 1) = 0;
-    *(uint32_t*)(pThreadCtx + 0x116) = nDownloadFlags;
-    *(uint8_t*)((char*)pThreadCtx + 3) = 1;
-    pThreadCtx[2] = 0x3836;
-    pThreadCtx[3] = 0x4958;
-    pThreadCtx[4] = 0x4456;
-    pThreadCtx[5] = 0x4432;
-    *(uint32_t*)(pThreadCtx + 8) = nOpcode;
-    pThreadCtx[10] = 0;
-    pThreadCtx[0xb] = 0;
-    *(int32_t*)(pThreadCtx + 0x114) = pCacheData;
-    *(DWORD*)(pThreadCtx + 0xc) = pFileTime->dwLowDateTime;
-    *(DWORD*)(pThreadCtx + 0xe) = pFileTime->dwHighDateTime;
-    Storm::Source::SSTR::SStrCopy((char*)(pThreadCtx + 0x10), szBufferInput, 0x104);
-    Storm::Source::SSTR::SStrCopy((char*)(pThreadCtx + 0x92), szText2, 0x104);
+    pThreadCtx->nUnk0x0C = eFileType;
+    pThreadCtx->nSendSize = (short int)(pcNameEnd - szBufferInput) - 1 + 0x21;
+    pThreadCtx->nUnk0x02 = 0;
+    pThreadCtx->nFileType = nDownloadFlags;
+    pThreadCtx->nUnk0x03 = 1;
+    pThreadCtx->dwPlatformId = 0x49583836;
+    pThreadCtx->dwProductId = 0x44324456;
+    pThreadCtx->nUnk0x10 = nOpcode;
+    pThreadCtx->nCachedFileSize = 0;
+    pThreadCtx->nConnMode = pCacheData;
+    pThreadCtx->ftFileTime.dwLowDateTime = pFileTime->dwLowDateTime;
+    pThreadCtx->ftFileTime.dwHighDateTime = pFileTime->dwHighDateTime;
+    Storm::Source::SSTR::SStrCopy(pThreadCtx->szFileName, szBufferInput, 0x104);
+    Storm::Source::SSTR::SStrCopy(pThreadCtx->szOutputPath, szText2, 0x104);
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_00881d5c);
     HANDLE hObject = (HANDLE)_beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId);
     if (!hObject) {

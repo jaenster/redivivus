@@ -1901,7 +1901,7 @@ void __fastcall D2COMP_PopulateComponentFromCOF(D2CharSelCompStrc * pCOFData, D2
       pGfxData->nArmorToken = pCOFData->dwComponentCodes[nComponentType];
     }
 
-    D2CharSelCompStrc* nWeaponClassToken = pCOFData;
+    int32_t nWeaponClassToken;
     if (!pCOFData->ppCofCacheEntries) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x502);
       exit(-1);
@@ -1930,7 +1930,7 @@ void __fastcall D2COMP_PopulateComponentFromCOF(D2CharSelCompStrc * pCOFData, D2
 
             nWeaponClassToken = 0;
             D2COMP_PadStringTo4Chars((char*)(pLayerEntry + 5), (char*)&nWeaponClassToken);
-            pGfxData->nWeaponClass = (int)nWeaponClassToken;
+            pGfxData->nWeaponClass = nWeaponClassToken;
             break;
           }
 

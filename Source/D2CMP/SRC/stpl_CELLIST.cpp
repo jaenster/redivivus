@@ -625,7 +625,7 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
     // The values VC8 kept in nIndex's one frame slot, one member each: a frame object reaches the slot.
     union nIndex_u {
       uint32_t nIndex2;
-      uint32_t* pIndex;
+      uint32_t nCount;
     };
     static_assert(sizeof(void*) != 4 || sizeof(nIndex_u) == 4, "nIndex_u must stay one 4-byte frame slot");
     TSLink<::CELLIST>* pNextLink;
@@ -640,7 +640,7 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
     TSLink<::CELLIST>* pNodeHead;
     nTempSentinel.m_terminator.m_prevlink = &nTempSentinel.m_terminator;
     uint32_t nNewSize = pThis->nSlotMask + 1;
-    uint32_t* nDoubleBucketCount = (uint32_t*)(nNewSize * 2);
+    uint32_t nDoubleBucketCount = nNewSize * 2;
     uint32_t* pBucket = (uint32_t*)~(uintptr_t)nTempSentinel.m_terminator.m_prevlink;
     nTempSentinel.m_linkoffset = -0x22222223;
     nTempSentinel.m_terminator.m_next = (intptr_t)pBucket;
@@ -681,11 +681,11 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
       } while (nIndex.nIndex2 < nNewSize);
     }
 
-    uint32_t* puVar1 = nDoubleBucketCount;
-    pThis->tSlotListArray.SetCount((uint32_t)nDoubleBucketCount);
+    uint32_t puVar1 = nDoubleBucketCount;
+    pThis->tSlotListArray.SetCount(nDoubleBucketCount);
     if (puVar1) {
       nBucketByteOffset = 0;
-      nIndex.pIndex = puVar1;
+      nIndex.nCount = puVar1;
       do {
         pPrevLink = &pThis->tSlotListArray.m_data[nBucketByteOffset];
         if (pPrevLink->m_linkoffset != 4) {
@@ -697,14 +697,14 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
         }
 
         nBucketByteOffset++;
-        nIndex.pIndex = (uint32_t*)((char*)nIndex.pIndex - 1);
-      } while (nIndex.pIndex);
+        nIndex.nCount--;
+      } while (nIndex.nCount);
 
       nIndex.nIndex2 = 0;
       puVar1 = nDoubleBucketCount;
     }
 
-    pThis->nSlotMask = (int)puVar1 - 1;
+    pThis->nSlotMask = puVar1 - 1;
     while (0 < nTempSentinel.m_terminator.m_next) {
       int nSavedNode = nTempSentinel.m_terminator.m_next;
       pPrevLink = pThis->tSlotListArray.m_data + (*(uint32_t*)nTempSentinel.m_terminator.m_next & pThis->nSlotMask);

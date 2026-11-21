@@ -479,13 +479,13 @@ void __fastcall Sha1_Append(D2Sha1ContextStrc * pCtx, int, uint8_t * pData, uint
       nBufIndex = 0;
     }
     if (nLen >= 0x40) {
-      pData = (uint8_t*)(nLen >> 6);
+      uint32_t nBlocks = nLen >> 6;
       do {
         Sha1_Pump(pCtx->aState, pCursor);
         nLen -= 0x40;
         pCursor += 0x40;
-        pData--;
-      } while (pData);
+        nBlocks--;
+      } while (nBlocks);
     }
 
     for (; nBufIndex < nLen; nBufIndex++) {

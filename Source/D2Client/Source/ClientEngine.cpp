@@ -2170,7 +2170,6 @@ void __stdcall CLIENT_ClearActiveUnitSlotArray() {
 // Called from CUNIT_UpdateClientFramesAndAI
 void __fastcall CLIENT_DispatchMonsterAiBehavior(D2UnitStrc * pUnit) {
     int32_t nClosestDist;
-    nClosestDist = (int32_t)pUnit;
     int32_t* pnAiDelay;
     pnAiDelay = UNIT::Monster::GetMonsterAi(pUnit);
     if (!pnAiDelay) {

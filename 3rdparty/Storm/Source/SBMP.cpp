@@ -72,7 +72,7 @@ static BOOL __fastcall SBMP_DecodeTGAPixels(uint8_t * pSrcData, uint8_t * pTgaHe
     int32_t pRLECur;
     int nRowStride;
     uint8_t byPacketHeader;
-    uint8_t* nPixelsLeftInRow;
+    int nPixelsLeftInRow;
     uint8_t* pSrcDataEnd;
     int32_t nWidth = (int32_t)*(uint16_t*)(pTgaHeader + 0xc);
     int nBytesPerPixelStored = (int)(pTgaHeader[0x10] + 7) >> 3;
@@ -153,7 +153,7 @@ static BOOL __fastcall SBMP_DecodeTGAPixels(uint8_t * pSrcData, uint8_t * pTgaHe
       case 10:
         nPixelCount = (int)nBytesToProcess / nBytesPerPixelStored;
       pSrcDataEnd = pSrcData + nSrcDataSize;
-      nPixelsLeftInRow = (uint8_t*)nWidth;
+      nPixelsLeftInRow = nWidth;
       do {
         while (true) {
           pSrcEnd = pSrcData;
@@ -198,14 +198,14 @@ static BOOL __fastcall SBMP_DecodeTGAPixels(uint8_t * pSrcData, uint8_t * pTgaHe
             }
 
             pSrcEnd = pDstPixels + nHStep;
-            pDstPixels = nPixelsLeftInRow - 1;
-            if (!pDstPixels) {
+            int nNextLeft = nPixelsLeftInRow - 1;
+            if (!nNextLeft) {
               pSrcEnd += nRowStride;
-              pDstPixels = (uint8_t*)nWidth;
+              nNextLeft = nWidth;
             }
 
             nColRemaining += nBytesPerPixelStored;
-            nPixelsLeftInRow = pDstPixels;
+            nPixelsLeftInRow = nNextLeft;
             pDstPixels = pSrcEnd;
           }
         }
@@ -244,7 +244,7 @@ static BOOL __fastcall SBMP_DecodeTGAPixels(uint8_t * pSrcData, uint8_t * pTgaHe
           nPixelsLeftInRow--;
           if (!nPixelsLeftInRow) {
             pDstPixels += nRowStride;
-            nPixelsLeftInRow = (uint8_t*)nWidth;
+            nPixelsLeftInRow = nWidth;
           }
         }
       } while (true);

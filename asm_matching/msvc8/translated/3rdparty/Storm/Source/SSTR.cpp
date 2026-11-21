@@ -1275,8 +1275,7 @@ uint32_t __stdcall SStrLen(char * szText) {
     uint32_t dwCarry = -1;
     for (szToCheck = szText; pNext = szToCheck , dwAlignSaved = guStringAlignmentTemp , ((uintptr_t)szToCheck & 3) != 0; szToCheck++) {
       if (*szToCheck == '\0') {
-        szToCheck += -(intptr_t)szText;
-        return (uint32_t)szToCheck;
+        return (uint32_t)(szToCheck - szText);
       }
     }
 
@@ -1306,8 +1305,7 @@ uint32_t __stdcall SStrLen(char * szText) {
     } while (dwWord & -16777216);
 
     szToCheck = pStrPos + 3;
-    szToCheck += -(intptr_t)szText;
-    return (uint32_t)szToCheck;
+    return (uint32_t)(szToCheck - szText);
 }
 
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.

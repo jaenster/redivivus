@@ -8212,11 +8212,11 @@ BOOL __stdcall MAINMENU_OnPressCancelTermsOfServiceDownload(D2ControlMsg * pCont
 }
 
 void __stdcall PlaysBlizzardNorthCutScene() {
-    D2ArchiveStrc* pBnetRegEntry;
+    BOOL bBnetRegEntry;
     BOOL bIsExpansion;
     uint32_t bBnetIpFlag;
     D2ArchiveStrc* pVideoArchive;
-    int32_t nLine;
+    int32_t nLine; // steer-ok: generated form, kept as emitted
     if (D2IniData_launcher->padding_0x35F[0]) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8d4);
       exit(-1);
@@ -8238,9 +8238,9 @@ void __stdcall PlaysBlizzardNorthCutScene() {
         D2gfx::D2GFX::D2GFX_PlayCutScene("Data\\Local\\Video\\BlizNorth640x240.bik", 2, nullptr);
       }
 
-      pBnetRegEntry = (D2ArchiveStrc*)MAINMENU_ReadBattleNetRegistry();
-      if (!pBnetRegEntry) {
-        pVideoArchive = pBnetRegEntry;
+      bBnetRegEntry = MAINMENU_ReadBattleNetRegistry();
+      if (!bBnetRegEntry) {
+        pVideoArchive = nullptr;
         Storm::Source::SFile::SFileOpenArchive("d2video.mpq", (int*)0x64, 0, &pVideoArchive);
         if (pVideoArchive) {
           MAINMENU_PlayD2Intro();
@@ -9430,19 +9430,19 @@ BOOL __stdcall MAINMENU_OnPressSubmitEmailAddress(D2ControlMsg * pControlMsg) {
     int32_t nMsgBoxArg5;
     int32_t nMsgBoxArg7;
     int32_t nMsgBoxArg8;
-    OnPress pAccountResult;
+    BOOL bEmailValid;
     uint16_t* pwszEmail1 = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpnEmailBuffer->sControl);
     uint16_t* pwszEmail2 = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpCtlEnterEmailInput->sControl);
     int32_t nEmailCmp = D2Lang::Unicode::UNISYS::STRING_CompareWideStrings(pwszEmail1, pwszEmail2);
     if (!nEmailCmp) {
       D2Lang::WideCharToUTF8(szEmail, pwszEmail1, 0x100);
-      pAccountResult = (OnPress)MAINMENU_IsValidEmailAddress(szEmail);
-      if (!pAccountResult) {
+      bEmailValid = MAINMENU_IsValidEmailAddress(szEmail);
+      if (!bEmailValid) {
         OnPress pfnBtn1Press;
         nMsgBoxArg5 = 1;
         nEmailCmp = 0x13ee;
         pfnBtn1Press = (OnPress)MAINMENU_DismissPopup;
-        MAINMENU_CreateMessageBox(D2Lang::StrTable::strtable::GetLocaleString(0x2b5c), D2Lang::StrTable::strtable::GetLocaleString(0x2b5d), nEmailCmp, (int32_t)pAccountResult, pfnBtn1Press, pAccountResult, nMsgBoxArg5, (int32_t)pAccountResult);
+        MAINMENU_CreateMessageBox(D2Lang::StrTable::strtable::GetLocaleString(0x2b5c), D2Lang::StrTable::strtable::GetLocaleString(0x2b5d), nEmailCmp, 0, pfnBtn1Press, nullptr, nMsgBoxArg5, 0);
         return 1;
       }
 
@@ -9453,9 +9453,8 @@ BOOL __stdcall MAINMENU_OnPressSubmitEmailAddress(D2ControlMsg * pControlMsg) {
 
     nMsgBoxArg8 = 0;
     nMsgBoxArg7 = 1;
-    pAccountResult = 0;
     pfnOnPress1 = (OnPress)MAINMENU_DismissPopup;
-    MAINMENU_CreateMessageBox(nullptr, D2Lang::StrTable::strtable::GetLocaleString(0x2b5b), 0x13ee, 0, pfnOnPress1, pAccountResult, nMsgBoxArg7, nMsgBoxArg8);
+    MAINMENU_CreateMessageBox(nullptr, D2Lang::StrTable::strtable::GetLocaleString(0x2b5b), 0x13ee, 0, pfnOnPress1, nullptr, nMsgBoxArg7, nMsgBoxArg8);
     return 1;
 }
 

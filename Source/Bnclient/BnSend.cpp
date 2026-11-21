@@ -730,9 +730,11 @@ uint32_t __fastcall NET_SID_CLIENT_Send_0x27_WriteUserData(char * szAccount, uin
     if (nCount > 0) {
       uint32_t nValueLen;
       ppszValueScan = pszValues;
+      char** ppszKeyScan = pszKeys;
       nIdx = nCount;
       do {
-        nLen = Storm::Source::SSTR::SStrLen(*(char**)((intptr_t)pszKeys - (intptr_t)pszValues + (char*)ppszValueScan));
+        nLen = Storm::Source::SSTR::SStrLen(*ppszKeyScan);
+        ppszKeyScan++;
         nValueLen = Storm::Source::SSTR::SStrLen(*ppszValueScan);
         ppszValueScan++;
         nIdx--;
@@ -806,7 +808,7 @@ uint32_t __fastcall NET_SID_CLIENT_Send_0x26_ReadUserData(char * szAccount, uint
 int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestId, char * * ppszOutBufs, int * pnMaxLens) {
     intptr_t nMaxLensOffset;
     char** ppszOutBuf;
-    D2BnReadUserDataStrc* pszSrcData;
+    char* pszSrcData;
     int nPpszOutBufs;
     BOOL bHasAnswer = _net_sid::NET_SID_CLIENT_GetRequiredAnswer(0x26);
     if (!bHasAnswer) {
@@ -814,7 +816,7 @@ int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestI
     }
     if (g_pBNetReadUserData && g_pBNetReadUserData->nAccountCount == 1 && g_pBNetReadUserData->nKeyCount == nKeyCount && g_pBNetReadUserData->nRequestId == nRequestId) {
       uint32_t pNextSrc;
-      pszSrcData = g_pBNetReadUserData + 1;
+      pszSrcData = g_pBNetReadUserData->szValues;
       if ((uint32_t)nKeyCount <= 0) {
         return 1;
       }
@@ -823,17 +825,17 @@ int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestI
       ppszOutBuf = ppszOutBufs;
       nPpszOutBufs = nKeyCount;
       do {
-        if ((char)pszSrcData->nAccountCount != '\0') {
-          strncpy(*ppszOutBuf, (char*)pszSrcData, *(size_t*)(nMaxLensOffset + (char*)ppszOutBuf));
+        if (*pszSrcData != '\0') {
+          strncpy(*ppszOutBuf, pszSrcData, *(size_t*)(nMaxLensOffset + (char*)ppszOutBuf));
           (*ppszOutBuf)[*(int*)(nMaxLensOffset + (char*)ppszOutBuf)] = '\0';
         } else {
           **ppszOutBuf = '\0';
         }
 
-        pNextSrc = Storm::Source::SSTR::SStrLen((char*)pszSrcData);
+        pNextSrc = Storm::Source::SSTR::SStrLen(pszSrcData);
         ppszOutBuf++;
         nPpszOutBufs--;
-        pszSrcData = (D2BnReadUserDataStrc*)((intptr_t)&pszSrcData->nAccountCount + (pNextSrc + 1));
+        pszSrcData += pNextSrc + 1;
       } while (nPpszOutBufs);
 
       return 1;
@@ -1034,7 +1036,7 @@ DWORD __stdcall GetDnsResults(void * lpThreadParam) {
     uint32_t dwAddrSwapTmp;
     int32_t nErrorAddress;
     char* szOutBuf = *(char**)lpThreadParam;
-    char* szWriteCursor = *(char**)((char*)lpThreadParam + 4);
+    char* szWriteCursor = ((char**)lpThreadParam)[1];
     int nAddrCount = isdigit((int)*szWriteCursor);
     /* char * cp for inet_addr */ if (nAddrCount) {
       uint32_t dwInetAddr;
@@ -1776,7 +1778,7 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
             pbVar3 = __frame0.aCandidates + 0x100;
             do {
               /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ if (*(int*)pbVar3) {
-                nFDResult = __WSAFDIsSet(*(SOCKET*)(*(int*)pbVar3 + 8), &fdWriteSet);
+                nFDResult = __WSAFDIsSet((*(D2NetDataStrc**)pbVar3)->hSocket, &fdWriteSet);
                 if (nFDResult) {
                   /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedResult = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, *(LONG*)(__frame0.aCandidates + (nLoopCounter * 0x108 + 0x100)), 0);
                   if (!lInterlockedResult) {
@@ -2462,13 +2464,13 @@ BOOL __stdcall BNNEWS_LoadCachedNews() {
     __frame0_t __frame0;
     uint32_t nPageSize;
     D2BnNewsEntryStrc* pNewEntry;
-    uint32_t* pStrEnd;
+    char* pStrEnd;
     int nStrLen;
-    uint32_t* pMsgText;
+    char* pMsgText;
     uint32_t nEntryCount;
     uint32_t* pEntryData;
     uint32_t adwCacheHeader[2];
-    intptr_t nCopyOffset;
+    char* pDstText;
     __frame0.bLoadSuccess = 0;
     __frame0.pCacheData = 0;
     BOOL bCacheReadOk;
@@ -2506,24 +2508,25 @@ BOOL __stdcall BNNEWS_LoadCachedNews() {
             pNewEntry = g_nNewsMaxCacheSize.pEntries + g_nNewsMaxCacheSize.nCount;
             g_nNewsMaxCacheSize.nCount++;
             pNewEntry->dwFlags = 0;
-            pMsgText = pEntryData + 1;
+            pMsgText = (char*)(pEntryData + 1);
             pNewEntry->dwTimestamp = *pEntryData;
             pStrEnd = pMsgText;
             do {
               uVar1 = *pStrEnd;
-              pStrEnd = (uint32_t*)((char*)pStrEnd + 1);
+              pStrEnd++;
             } while ((char)uVar1 != '\0');
 
-            nStrLen = (intptr_t)pStrEnd - ((intptr_t)pEntryData + 5);
+            nStrLen = pStrEnd - pMsgText - 1;
             if (nStrLen >= 0x400) {
               goto reset_news_table;
             }
 
-            nCopyOffset = 8 - (intptr_t)pMsgText;
+            pDstText = pNewEntry->szText;
             do {
               uVar1 = *pMsgText;
-              *(char*)((intptr_t)pNewEntry + nCopyOffset + (intptr_t)pMsgText) = (char)uVar1;
-              pMsgText = (uint32_t*)((char*)pMsgText + 1);
+              *pDstText = (char)uVar1;
+              pDstText++;
+              pMsgText++;
             } while ((char)uVar1 != '\0');
 
             nPageSize = pNewEntry->dwTimestamp;

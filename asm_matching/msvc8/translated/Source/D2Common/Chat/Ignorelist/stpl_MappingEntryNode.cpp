@@ -587,7 +587,7 @@ template<> __declspec(noinline) inline void TSHashTable<MappingEntryNode, HASHKE
     // The values VC8 kept in nIterCount's one frame slot, one member each: a frame object reaches the slot.
     union nIterCount_u {
       uint32_t nIterCount2;
-      uint32_t* pIterCount;
+      uint32_t pIterCount;
     };
     static_assert(sizeof(void*) != 4 || sizeof(nIterCount_u) == 4, "nIterCount_u must stay one 4-byte frame slot");
     TSLink<::MappingEntryNode>* pBucket;
@@ -602,7 +602,7 @@ template<> __declspec(noinline) inline void TSHashTable<MappingEntryNode, HASHKE
     TSLink<::MappingEntryNode>* pPrevLink;
     tempList.m_terminator.m_prevlink = &tempList.m_terminator;
     uint32_t nOldBucketCount = pThis->nSlotMask + 1;
-    uint32_t* pNewBucketCount = (uint32_t*)(nOldBucketCount * 2);
+    uint32_t nNewBucketCount = nOldBucketCount * 2;
     intptr_t nCurEntry = ~(uintptr_t)tempList.m_terminator.m_prevlink;
     tempList.m_linkoffset = -0x22222223;
     tempList.m_terminator.m_next = nCurEntry;
@@ -643,8 +643,8 @@ template<> __declspec(noinline) inline void TSHashTable<MappingEntryNode, HASHKE
       } while (nIterCount.nIterCount2 < nOldBucketCount);
     }
 
-    uint32_t* pCurEntry = pNewBucketCount;
-    pThis->tSlotListArray.SetCount((uint32_t)pNewBucketCount);
+    uint32_t pCurEntry = nNewBucketCount;
+    pThis->tSlotListArray.SetCount(nNewBucketCount);
     if (pCurEntry) {
       nBucketOffset = 0;
       nIterCount.pIterCount = pCurEntry;
@@ -659,14 +659,14 @@ template<> __declspec(noinline) inline void TSHashTable<MappingEntryNode, HASHKE
         }
 
         nBucketOffset++;
-        nIterCount.pIterCount = (uint32_t*)((char*)nIterCount.pIterCount - 1);
+        nIterCount.pIterCount = nIterCount.pIterCount - 1;
       } while (nIterCount.pIterCount);
 
       nIterCount.nIterCount2 = 0;
-      pCurEntry = pNewBucketCount;
+      pCurEntry = nNewBucketCount;
     }
 
-    pThis->nSlotMask = (int)pCurEntry - 1;
+    pThis->nSlotMask = pCurEntry - 1;
     while (0 < tempList.m_terminator.m_next) {
       int nSavedNode = tempList.m_terminator.m_next;
       pPrevPtr = pThis->tSlotListArray.m_data + (*(uint32_t*)tempList.m_terminator.m_next & pThis->nSlotMask);

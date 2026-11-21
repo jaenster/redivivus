@@ -1652,8 +1652,8 @@ uint32_t __stdcall PATH_CalculatePath(D2DynamicPathStrc * pDynamicPath, D2UnitSt
 
     uint16_t sCurX = pDynamicPath->Coords.tSubtile.nPosX;
     uint16_t sCurY = pDynamicPath->Coords.tSubtile.nPosY;
-    pDynamicPath = (D2DynamicPathStrc*)(uint32_t)((uint32_t)(uint16_t)sCurY << 16 | (uint32_t)(uint16_t)sCurX);
-    sPathTypeArg.tStartCoord = d2_bits_as<D2PathPointStrc>(pDynamicPath);
+    uint32_t dwStartCoordBits = (uint32_t)(uint16_t)sCurY << 16 | (uint32_t)(uint16_t)sCurX;
+    sPathTypeArg.tStartCoord = d2_bits_as<D2PathPointStrc>(dwStartCoordBits);
     if (sCurX || sCurY) {
       sPathTypeArg.nUnitSize = pDynamicPath_00->nUnitSize;
       sPathTypeArg.nCollisionPattern = pDynamicPath_00->nCollisionPattern;

@@ -238,6 +238,8 @@ int32_t __stdcall SRegLoadData(uint32_t * pszSubKey, char * szValueName, int32_t
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
 int32_t __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nFlags, LPSTR szOutBuf, DWORD dwOutBufSize) {
     DWORD pTermPos;
+    DWORD dwType;
+    DWORD dwDataLen;
     D2_CHECKS_BEGIN;
     D2_CHECK(szSubKey);
     D2_CHECK(*szSubKey != '\0');
@@ -247,17 +249,17 @@ int32_t __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nF
     D2_CHECK(dwOutBufSize);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     BOOL bReadOk;
-    bReadOk = SREG_InternalLoadEntry((LPDWORD)&szSubKey, (LPBYTE)szOutBuf, szSubKey, (uint8_t)nFlags, dwOutBufSize, szValueName, (LPDWORD)&szValueName);
+    bReadOk = SREG_InternalLoadEntry(&dwType, (LPBYTE)szOutBuf, szSubKey, (uint8_t)nFlags, dwOutBufSize, szValueName, &dwDataLen);
     if (bReadOk) {
-      if (szSubKey != (char*)0x1) {
-        if (szSubKey == (char*)(void*)0x4) {
+      if (dwType != 1) {
+        if (dwType == 4) {
           /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szOutBuf, "%u", *(uint32_t*)szOutBuf);
           return 1;
         }
       } else {
         pTermPos = dwOutBufSize - 1;
-        if (pTermPos >= (uintptr_t)szValueName) {
-          pTermPos = (DWORD)szValueName;
+        if (pTermPos >= dwDataLen) {
+          pTermPos = dwDataLen;
         }
 
         szOutBuf[pTermPos] = '\0';

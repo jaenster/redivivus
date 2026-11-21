@@ -102,8 +102,8 @@ void __fastcall FASTCMP_RemapFramePaletteIndices(DC6Block * pFrame, BYTE * pPale
     uint8_t* pStreamCursor = (uint8_t*)(pFrame + 1);
     do {
       while (true) {
-        byRleControl = (uint8_t)((DC6Block*)pStreamCursor)->nFlip;
-        pStreamCursor = (uint8_t*)((intptr_t)&((DC6Block*)pStreamCursor)->nFlip + 1);
+        byRleControl = *pStreamCursor;
+        pStreamCursor++;
         if (byRleControl & 0x80) {
           break;
         }
@@ -1685,10 +1685,11 @@ void __stdcall DRAW_DebugFillRect(uint8_t * nRowStart, int32_t nRowStride) {
 }
 
 void __fastcall FASTCMP_DecompressRLEWithAlpha(DC6Block * pFrameBlock, BYTE * pDst, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint32_t nDstPitch, int32_t nSkipRows, int32_t nRowCount, BYTE * pBlendTable, uint8_t byBlendColor) {
-    int iVar1;
+    uint8_t* iVar1;
     uint8_t bRLEToken;
     uint32_t nCopyCount;
     uint8_t* puDstLimit;
+    uint8_t* pDstRow;
     int nNegPitch;
     uint32_t nClipSkip;
     uint32_t nRunLen;
@@ -1700,37 +1701,37 @@ void __fastcall FASTCMP_DecompressRLEWithAlpha(DC6Block * pFrameBlock, BYTE * pD
       exit(-1);
     }
 
-    DC6Block* pbRLEData;
-    pbRLEData = pFrameBlock + 1;
+    char* pbRLEData;
+    pbRLEData = pFrameBlock->data;
     for (nNegPitch = nSkipRows * 2; nNegPitch; nNegPitch--) {
       do {
         while (true) {
-          bRLEToken = (uint8_t)pbRLEData->nFlip;
-          pbRLEData = (DC6Block*)((intptr_t)&pbRLEData->nFlip + 1);
+          bRLEToken = (uint8_t)*pbRLEData;
+          pbRLEData++;
           if (bRLEToken & 0x80) {
             break;
           }
 
-          pbRLEData = (DC6Block*)((intptr_t)&pbRLEData->nFlip + (int)(char)bRLEToken);
+          pbRLEData += (int)(char)bRLEToken;
         }
       } while (bRLEToken & 0x7f);
     }
 
     nNegPitch = -nDstPitch;
-    nDstPitch = nNegPitch + (int)pDst;
+    pDstRow = pDst + nNegPitch;
     do {
       while (true) {
         while (true) {
-          bRLEToken = (uint8_t)pbRLEData->nFlip;
-          pbRLEData = (DC6Block*)((intptr_t)&pbRLEData->nFlip + 1);
+          bRLEToken = (uint8_t)*pbRLEData;
+          pbRLEData++;
           if (!(bRLEToken & 0x80)) {
             break;
           }
 
           bRLEToken &= 0x7f;
           if (!bRLEToken) {
-            iVar1 = nDstPitch - 1;
-            pDst = (uint8_t*)(nDstPitch - 1);
+            iVar1 = pDstRow - 1;
+            pDst = iVar1;
             nDrawX = nDrawXSave - 1;
             nRowCount--;
             if (!nRowCount) {
@@ -1738,15 +1739,15 @@ void __fastcall FASTCMP_DecompressRLEWithAlpha(DC6Block * pFrameBlock, BYTE * pD
             }
 
             do {
-              bRLEToken = (uint8_t)pbRLEData->nFlip;
-              pbRLEData = (DC6Block*)((intptr_t)&pbRLEData->nFlip + 1);
+              bRLEToken = (uint8_t)*pbRLEData;
+              pbRLEData++;
               if ((char)bRLEToken > 0) {
-                pbRLEData = (DC6Block*)((intptr_t)&pbRLEData->nFlip + (int)(char)bRLEToken);
+                pbRLEData += (int)(char)bRLEToken;
               } else {
                 bRLEToken &= 0x7f;
               }
 
-              nDstPitch = iVar1 + nNegPitch;
+              pDstRow = iVar1 + nNegPitch;
               nDrawXSave = nDrawX;
             } while (bRLEToken);
           } else {
@@ -1780,7 +1781,7 @@ void __fastcall FASTCMP_DecompressRLEWithAlpha(DC6Block * pFrameBlock, BYTE * pD
 
         advance_past_run:
         nDrawX += nRunLen;
-        pbRLEData = (DC6Block*)((intptr_t)&pbRLEData->nFlip + nRunLen);
+        pbRLEData += nRunLen;
         pDst = puDstRunEnd;
       }
 
@@ -1803,7 +1804,7 @@ void __fastcall FASTCMP_DecompressRLEWithAlpha(DC6Block * pFrameBlock, BYTE * pD
       } while (pDst < puDstLimit);
 
       nDrawX += nRunLen;
-      pbRLEData = (DC6Block*)((intptr_t)&pbRLEData->nFlip + nRunLen);
+      pbRLEData += nRunLen;
       pDst = puDstRunEnd;
     } while (true);
 }

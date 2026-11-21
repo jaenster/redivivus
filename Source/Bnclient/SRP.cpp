@@ -160,14 +160,14 @@ int __thiscall SRP_ClientComputeSharedSecret(D2Srp * pSrp, BigData * * pPrivateK
 }
 
 int __thiscall SRP_ServerComputeSharedSecret(D2Srp * pThis, BigData * * ppClientPublic, int * ppServerPublic, BigData * * ppPrivateKey, BigData * * ppVerifier, BigData * * ppSharedSecret) {
-    SRP_HashBigNumToU32(pThis, (BigData**)ppServerPublic, (uint32_t*)&ppServerPublic);
-    int* pScramblingHash = ppServerPublic;
-    if (!ppServerPublic) {
+    uint32_t nScramblingHash;
+    SRP_HashBigNumToU32(pThis, (BigData**)ppServerPublic, &nScramblingHash);
+    if (!nScramblingHash) {
       return 0;
     }
 
     BigData* pSharedBase = SHA::SHA1_BigIntFromUnsigned(0);
-    SHA::SHA1_BigIntPowModValue(pSharedBase, *ppVerifier, (uint32_t)pScramblingHash, pThis->pModulusN);
+    SHA::SHA1_BigIntPowModValue(pSharedBase, *ppVerifier, nScramblingHash, pThis->pModulusN);
     SHA::SHA1_BigIntMulMod(pSharedBase, *ppClientPublic, pSharedBase, pThis->pModulusN);
     int32_t nCmpResult = SHA::SHA1_BigIntCompareValue(pSharedBase, 1);
     if (nCmpResult > 0) {
