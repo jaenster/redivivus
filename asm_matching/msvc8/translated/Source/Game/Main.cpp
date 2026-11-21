@@ -978,57 +978,49 @@ int32_t __stdcall ApplicationRunCurrentMode(D2IniConfigStrc * pD2IniData) {
 }
 
 void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
-    // Frame slots -1296..-4 are ONE object: &langInfo is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint32_t langInfo;
-      char szExePathBuf[1024];
-      char szLocaleFilePath[260];
-      uint32_t dwSecurityCookie;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1292, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    uint32_t langInfo;
+    char szExePathBuf[1024];
+    char szLocaleFilePath[260];
     char* szBufferOutput;
-    uint32_t pszLocaleSuffix;
     FILE* pLocaleFile;
     BOOL bIsExpansion;
-    D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation((char*)&__frame0.langInfo, 3);
-    int bAppDataPathOk = Fog::Source::SFile::SFILE_GetBlizzardAppDataPath(__frame0.szLocaleFilePath, 0x104);
+    D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation((char*)&langInfo, 3);
+    int bAppDataPathOk = Fog::Source::SFile::SFILE_GetBlizzardAppDataPath(szLocaleFilePath, 0x104);
     if (bAppDataPathOk) {
-      Storm::Source::SSTR::SStrPack(__frame0.szLocaleFilePath, "System Survey\\ProductData\\", 0x104);
-      pszLocaleSuffix = Storm::Source::SSTR::SStrLen(__frame0.szLocaleFilePath);
-      szBufferOutput = __frame0.szLocaleFilePath + pszLocaleSuffix;
-      Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2DV\\locale", (intptr_t)&__frame0.dwSecurityCookie - (intptr_t)szBufferOutput);
-      Fog::Source::SFile::SafeCreateDirectoryTree(__frame0.szLocaleFilePath);
-      pLocaleFile = fopen(__frame0.szLocaleFilePath, "w");
+      Storm::Source::SSTR::SStrPack(szLocaleFilePath, "System Survey\\ProductData\\", 0x104);
+      szBufferOutput = szLocaleFilePath + Storm::Source::SSTR::SStrLen(szLocaleFilePath);
+      const intptr_t nRemaining = szLocaleFilePath + sizeof(szLocaleFilePath) - szBufferOutput;
+      Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2DV\\locale", nRemaining);
+      Fog::Source::SFile::SafeCreateDirectoryTree(szLocaleFilePath);
+      pLocaleFile = fopen(szLocaleFilePath, "w");
       if (pLocaleFile) {
-        fputc(__frame0.langInfo >> 0x18, pLocaleFile);
-        fputc(__frame0.langInfo >> 0x10 & 0xff, pLocaleFile);
-        fputc(__frame0.langInfo >> 8 & 0xff, pLocaleFile);
-        fputc(__frame0.langInfo & 0xff, pLocaleFile);
+        fputc(langInfo >> 0x18, pLocaleFile);
+        fputc(langInfo >> 0x10 & 0xff, pLocaleFile);
+        fputc(langInfo >> 8 & 0xff, pLocaleFile);
+        fputc(langInfo & 0xff, pLocaleFile);
         fclose(pLocaleFile);
       }
 
       bIsExpansion = Fog::D2CheckExpansionGame();
       if (bIsExpansion) {
-        Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2XP\\locale", (intptr_t)&__frame0.dwSecurityCookie - (intptr_t)szBufferOutput);
-        Fog::Source::SFile::SafeCreateDirectoryTree(__frame0.szLocaleFilePath);
-        pLocaleFile = fopen(__frame0.szLocaleFilePath, "w");
+        Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2XP\\locale", nRemaining);
+        Fog::Source::SFile::SafeCreateDirectoryTree(szLocaleFilePath);
+        pLocaleFile = fopen(szLocaleFilePath, "w");
         if (pLocaleFile) {
-          fputc(__frame0.langInfo >> 0x18, pLocaleFile);
-          fputc(__frame0.langInfo >> 0x10 & 0xff, pLocaleFile);
-          fputc(__frame0.langInfo >> 8 & 0xff, pLocaleFile);
-          fputc(__frame0.langInfo & 0xff, pLocaleFile);
+          fputc(langInfo >> 0x18, pLocaleFile);
+          fputc(langInfo >> 0x10 & 0xff, pLocaleFile);
+          fputc(langInfo >> 8 & 0xff, pLocaleFile);
+          fputc(langInfo & 0xff, pLocaleFile);
           fclose(pLocaleFile);
         }
       }
     }
 
-    Fog::Source::SFile::SFILE_GetExecutableDirectory(__frame0.szExePathBuf, 0x400);
-    Storm::Source::SSTR::SStrPack(__frame0.szExePathBuf, "SystemSurvey.exe", 0x400);
-    char bSignatureValid = D2Hell::D2FILE_VerifyFileSignature(__frame0.szExePathBuf);
+    Fog::Source::SFile::SFILE_GetExecutableDirectory(szExePathBuf, 0x400);
+    Storm::Source::SSTR::SStrPack(szExePathBuf, "SystemSurvey.exe", 0x400);
+    char bSignatureValid = D2Hell::D2FILE_VerifyFileSignature(szExePathBuf);
     if (bSignatureValid != '\0') {
-      D2Hell::D2FILE_CreateProcess(__frame0.szExePathBuf);
+      D2Hell::D2FILE_CreateProcess(szExePathBuf);
     }
 }
 

@@ -91,8 +91,8 @@ the same run as [`audit.tsv.summary`](asm_matching/msvc8/evidence/audit.tsv.summ
   bytes repeat a named function. They stay in the denominator; the README's second row leaves
   the identical ones out of the identical count only.
 
-Over the whole binary, runtime included, at this commit: 10,422 of 16,020
-functions (65.1%), 1,089,655 of 2,764,824 bytes (39.41%).
+Over the whole binary, runtime included, at this commit: 10,504 of 16,020
+functions (65.6%), 1,134,078 of 2,764,824 bytes (41.02%).
 
 ## What it does not say
 

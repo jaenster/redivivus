@@ -776,6 +776,12 @@ void __fastcall PLAYER_SendHoverTextToClient(D2UnitStrc * pUnit, D2ClientStrc * 
     GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(pClient, 0x76, _byUnitTypeFallback, nGUIDFallback);
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
 void __fastcall UNITMSG_SendSoundPacketToClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     D2GSPacketSrv0x2C sPacket;
     D2UnitStrc* pUpdateUnit = pUnit->uSideData.pServerSide.pUpdateUnit;
@@ -790,7 +796,7 @@ void __fastcall UNITMSG_SendSoundPacketToClient(D2UnitStrc * pUnit, D2ClientStrc
     sPacket.nUnitGUID = pUnit->nUnitGUID;
     sPacket.nSoundId = *(uint16_t*)((intptr_t)&pUnit->uSideData + 10);
     sPacket.nPacketId = ',';
-    sPacket.nUnitType = (uint8_t)pUnit->eUnitType;
+    sPacket.nUnitType = GetTypeInline(pUnit);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x2C_PlaySound(pClient, &sPacket);
 }
 

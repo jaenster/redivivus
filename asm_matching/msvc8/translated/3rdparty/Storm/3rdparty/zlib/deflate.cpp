@@ -629,382 +629,200 @@ int32_t __fastcall deflate_stored(deflate_state * s, int32_t flush) {
 
 // zlib deflate_fast() - hash-chain matching, single pass compression strategy
 int32_t __fastcall deflate_fast(deflate_state * s, int32_t flush) {
-    uint16_t nDist;
-    uint16_t nDistIdx;
-    uint32_t nInsertCount;
-    uint8_t* pBlockStart;
-    bool bBlockFull;
-    uint8_t byCode;
-    int nBlockStartOff;
-    uint32_t nMatchLenSaved;
-    uint32_t* pMatchLenField;
-    deflate_state* pPendingState;
-    z_stream* pStream;
-    do {
-      uint32_t nHashHead;
-      nHashHead = s->lookahead;
-      if (nHashHead < 0x106) {
+    uint32_t hash_head;
+    int bflush;
+    for (;;) {
+      if (s->lookahead < 0x106) {
         fill_window(s);
-        nHashHead = s->lookahead;
-        if (nHashHead < 0x106 && !flush) {
-          return 0;
+        if (s->lookahead < 0x106 && flush == 0) {
+          return need_more;
         }
-        if (!nHashHead) {
-          nHashHead = s->strstart;
-          nInsertCount = nHashHead;
-          if (nHashHead >= 2) {
-            nInsertCount = 2;
-          }
-
-          s->insert = nInsertCount;
-          if (flush == 4) {
-            nBlockStartOff = s->block_start;
-            if (nBlockStartOff >= 0) {
-              pBlockStart = s->window + nBlockStartOff;
-            } else {
-              pBlockStart = 0;
-            }
-
-            trees::_tr_flush_block(s, (char*)pBlockStart, nHashHead - nBlockStartOff, 1);
-            s->block_start = s->strstart;
-            flush_pending(s->strm);
-            return s->strm->avail_out != 0 ? 3 : 2;
-          }
-          if (s->last_lit) {
-            nBlockStartOff = s->block_start;
-            if (nBlockStartOff >= 0) {
-              pBlockStart = s->window + nBlockStartOff;
-            } else {
-              pBlockStart = 0;
-            }
-
-            trees::_tr_flush_block(s, (char*)pBlockStart, nHashHead - nBlockStartOff, 0);
-            s->block_start = s->strstart;
-            flush_pending(s->strm);
-            if (!s->strm->avail_out) {
-              return 0;
-            }
-          }
-
-          return 1;
+        if (s->lookahead == 0) {
+          break;
         }
       }
-      if (nHashHead >= 3) {
-        nHashHead = (s->ins_h << D2_SHIFT_COUNT(s->hash_shift) ^ (uint32_t)s->window[s->strstart + 2]) & s->hash_mask;
-        s->ins_h = nHashHead;
-        s->prev[s->w_mask & s->strstart] = s->head[nHashHead];
-        nHashHead = (uint32_t)s->prev[s->strstart & s->w_mask];
+      hash_head = 0;
+      if (s->lookahead >= 3) {
+        s->ins_h = ((s->ins_h << D2_SHIFT_COUNT(s->hash_shift)) ^ s->window[s->strstart + 2]) & s->hash_mask;
+        hash_head = s->prev[s->strstart & s->w_mask] = s->head[s->ins_h];
         s->head[s->ins_h] = (uint16_t)s->strstart;
-        if (nHashHead && s->strstart - nHashHead <= s->w_size - 0x106) {
-          nHashHead = longest_match(nHashHead, s);
-          s->match_length = nHashHead;
-        }
+      }
+      if (hash_head != 0 && s->strstart - hash_head <= s->w_size - 0x106) {
+        s->match_length = longest_match(hash_head, s);
       }
       if (s->match_length >= 3) {
-        nDist = (short int)s->strstart - (short int)s->match_start;
-        nMatchLenSaved = s->match_length;
-        s->d_buf[s->last_lit] = nDist;
-        byCode = (char)nMatchLenSaved - 3;
-        s->l_buf[s->last_lit] = byCode;
-        s->last_lit++;
-        s->dyn_ltree[_length_code[byCode] + 0x101].fc++;
-        nDistIdx = nDist - 1;
-        if (nDistIdx < 0x100) {
-          byCode = _dist_code[nDistIdx];
-        } else {
-          byCode = _dist_code[(nDistIdx >> 7) + 0x100];
-        }
-
-        s->dyn_dtree[byCode].fc++;
-        nHashHead = s->match_length;
-        bBlockFull = s->last_lit == s->lit_bufsize - 1;
-        s->lookahead -= nHashHead;
-        if (nHashHead > s->max_lazy_match || s->lookahead < 3) {
-          s->strstart += nHashHead;
-          s->match_length = 0;
-          nHashHead = (uint32_t)s->window[s->strstart];
-          s->ins_h = nHashHead;
-          s->ins_h = (nHashHead << D2_SHIFT_COUNT(s->hash_shift) ^ (uint32_t)(s->window + s->strstart)[1]) & s->hash_mask;
-        } else {
-          s->match_length = nHashHead - 1;
+        uint8_t len = (uint8_t)(s->match_length - 3);
+        uint16_t dist = (uint16_t)(s->strstart - s->match_start);
+        s->d_buf[s->last_lit] = dist;
+        s->l_buf[s->last_lit++] = len;
+        dist--;
+        s->dyn_ltree[_length_code[len] + 0x101].fc++;
+        s->dyn_dtree[dist < 0x100 ? (uint32_t)_dist_code[dist] : (uint32_t)_dist_code[0x100 + (dist >> 7)]].fc++;
+        bflush = s->last_lit == s->lit_bufsize - 1;
+        s->lookahead -= s->match_length;
+        if (s->match_length <= s->max_lazy_match && s->lookahead >= 3) {
+          s->match_length--;
           do {
             s->strstart++;
-            nHashHead = ((uint32_t)s->window[s->strstart + 2] ^ s->ins_h << D2_SHIFT_COUNT(s->hash_shift)) & s->hash_mask;
-            s->ins_h = nHashHead;
-            s->prev[s->w_mask & s->strstart] = s->head[nHashHead];
+            s->ins_h = ((s->ins_h << D2_SHIFT_COUNT(s->hash_shift)) ^ s->window[s->strstart + 2]) & s->hash_mask;
+            hash_head = s->prev[s->strstart & s->w_mask] = s->head[s->ins_h];
             s->head[s->ins_h] = (uint16_t)s->strstart;
-            pMatchLenField = &s->match_length;
-            (*pMatchLenField)--;
-          } while (*pMatchLenField);
-
+          } while (--s->match_length != 0);
           s->strstart++;
+        } else {
+          s->strstart += s->match_length;
+          s->match_length = 0;
+          s->ins_h = s->window[s->strstart];
+          s->ins_h = ((s->ins_h << D2_SHIFT_COUNT(s->hash_shift)) ^ s->window[s->strstart + 1]) & s->hash_mask;
         }
       } else {
-        byCode = s->window[s->strstart];
+        uint8_t cc = s->window[s->strstart];
         s->d_buf[s->last_lit] = 0;
-        s->l_buf[s->last_lit] = byCode;
-        s->last_lit++;
-        s->dyn_ltree[byCode].fc++;
-        bBlockFull = s->last_lit == s->lit_bufsize - 1;
+        s->l_buf[s->last_lit++] = cc;
+        s->dyn_ltree[cc].fc++;
+        bflush = s->last_lit == s->lit_bufsize - 1;
         s->lookahead--;
         s->strstart++;
       }
-      if (bBlockFull) {
-        nBlockStartOff = s->block_start;
-        if (nBlockStartOff >= 0) {
-          pBlockStart = s->window + nBlockStartOff;
-        } else {
-          pBlockStart = 0;
-        }
-
-        trees::_tr_flush_block(s, (char*)pBlockStart, s->strstart - nBlockStartOff, 0);
-        pStream = s->strm;
+      if (bflush) {
+        trees::_tr_flush_block(s, s->block_start >= 0 ? (char*)&s->window[(uint32_t)s->block_start] : nullptr, s->strstart - s->block_start, 0);
         s->block_start = s->strstart;
-        pPendingState = (deflate_state*)pStream->state;
-        trees::_tr_flush_bits(pPendingState);
-        nHashHead = pPendingState->pending;
-        if (pPendingState->pending > pStream->avail_out) {
-          nHashHead = pStream->avail_out;
-        }
-        if (nHashHead) {
-          memcpy(pStream->next_out, pPendingState->pending_out, nHashHead);
-          pStream->next_out += nHashHead;
-          pPendingState->pending_out += nHashHead;
-          pStream->total_out += nHashHead;
-          pStream->avail_out -= nHashHead;
-          pMatchLenField = &pPendingState->pending;
-          *pMatchLenField -= nHashHead;
-          if (!*pMatchLenField) {
-            pPendingState->pending_out = pPendingState->pending_buf;
-          }
-        }
-        if (!s->strm->avail_out) {
-          return 0;
+        flush_pending(s->strm);
+        if (s->strm->avail_out == 0) {
+          return need_more;
         }
       }
-    } while (true);
+    }
+    s->insert = s->strstart < 2 ? s->strstart : 2;
+    if (flush == 4) {
+      trees::_tr_flush_block(s, s->block_start >= 0 ? (char*)&s->window[(uint32_t)s->block_start] : nullptr, s->strstart - s->block_start, 1);
+      s->block_start = s->strstart;
+      flush_pending(s->strm);
+      return s->strm->avail_out == 0 ? finish_started : finish_done;
+    }
+    if (s->last_lit) {
+      trees::_tr_flush_block(s, s->block_start >= 0 ? (char*)&s->window[(uint32_t)s->block_start] : nullptr, s->strstart - s->block_start, 0);
+      s->block_start = s->strstart;
+      flush_pending(s->strm);
+      if (s->strm->avail_out == 0) {
+        return need_more;
+      }
+    }
+    return block_done;
 }
 
 int32_t __fastcall deflate_slow(deflate_state * s, int32_t flush) {
-    uint32_t nLookahead;
-    uint32_t nMatchLen;
-    uint32_t nInsHash;
-    uint16_t nDistIdx;
-    short int nDistShort;
-    uint8_t* pBlockStart;
-    uint8_t byCode;
-    int nBlockStartOff2;
-    uint32_t nLookaheadAtMatch;
-    uint32_t nPrevLenSaved;
-    uint32_t nSymNextSaved;
-    uint32_t* pPendingCountField;
-    deflate_state* pPendingState;
-    z_stream* pStream;
-    do {
-      uint32_t nHashHead;
-      nLookahead = s->lookahead;
-      if (nLookahead < 0x106) {
-        fill_window(s);
-        nLookahead = s->lookahead;
-        if (nLookahead < 0x106 && !flush) {
-          return 0;
-        }
-        if (!nLookahead) {
-          if (s->match_available) {
-            byCode = s->window[s->strstart - 1];
-            s->d_buf[s->last_lit] = 0;
-            s->l_buf[s->last_lit] = byCode;
-            s->last_lit++;
-            s->dyn_ltree[byCode].fc++;
-            s->match_available = 0;
-          }
-
-          nLookahead = s->strstart;
-          nInsHash = nLookahead;
-          if (nLookahead >= 2) {
-            nInsHash = 2;
-          }
-
-          s->insert = nInsHash;
-          if (flush != 4) {
-            if (s->last_lit) {
-              nBlockStartOff2 = s->block_start;
-              if (nBlockStartOff2 >= 0) {
-                pBlockStart = s->window + nBlockStartOff2;
-              } else {
-                pBlockStart = 0;
-              }
-
-              trees::_tr_flush_block(s, (char*)pBlockStart, nLookahead - nBlockStartOff2, 0);
-              s->block_start = s->strstart;
-              flush_pending(s->strm);
-              if (!s->strm->avail_out) {
+    uint32_t hash_head;
+    int bflush;
+    for (;;) {
+        if (s->lookahead < 0x106) {
+            fill_window(s);
+            if (s->lookahead < 0x106 && flush == 0) {
                 return 0;
-              }
             }
-
-            return 1;
-          }
-
-          nBlockStartOff2 = s->block_start;
-          if (nBlockStartOff2 >= 0) {
-            pBlockStart = s->window + nBlockStartOff2;
-          } else {
-            pBlockStart = 0;
-          }
-
-          trees::_tr_flush_block(s, (char*)pBlockStart, nLookahead - nBlockStartOff2, 1);
-          s->block_start = s->strstart;
-          flush_pending(s->strm);
-          return s->strm->avail_out != 0 ? 3 : 2;
-        }
-      }
-
-      nHashHead = 0;
-      if (nLookahead >= 3) {
-        nLookahead = (s->ins_h << D2_SHIFT_COUNT(s->hash_shift) ^ (uint32_t)s->window[s->strstart + 2]) & s->hash_mask;
-        s->ins_h = nLookahead;
-        s->prev[s->w_mask & s->strstart] = s->head[nLookahead];
-        nHashHead = (uint32_t)s->prev[s->strstart & s->w_mask];
-        s->head[s->ins_h] = (uint16_t)s->strstart;
-      }
-
-      nLookahead = s->match_length;
-      s->prev_length = nLookahead;
-      s->prev_match = s->match_start;
-      s->match_length = 2;
-      if (nHashHead && nLookahead < s->max_lazy_match && s->strstart - nHashHead <= s->w_size - 0x106) {
-        nMatchLen = longest_match(nHashHead, s);
-        s->match_length = nMatchLen;
-        if (nMatchLen <= 5 && (s->strategy == 1 || nMatchLen == 3 && s->strstart - s->match_start > 0x1000)) {
-          s->match_length = 2;
-        }
-      }
-      if (s->prev_length < 3 || s->match_length > s->prev_length) {
-        if (!s->match_available) {
-          s->strstart++;
-          s->lookahead--;
-          s->match_available = 1;
-          continue;
-        }
-
-        byCode = s->window[s->strstart - 1];
-        s->d_buf[s->last_lit] = 0;
-        s->l_buf[s->last_lit] = byCode;
-        s->last_lit++;
-        s->dyn_ltree[byCode].fc++;
-        if (s->last_lit == s->lit_bufsize - 1) {
-          nBlockStartOff2 = s->block_start;
-          if (nBlockStartOff2 >= 0) {
-            pBlockStart = s->window + nBlockStartOff2;
-          } else {
-            pBlockStart = 0;
-          }
-
-          trees::_tr_flush_block(s, (char*)pBlockStart, s->strstart - nBlockStartOff2, 0);
-          pStream = s->strm;
-          s->block_start = s->strstart;
-          pPendingState = (deflate_state*)pStream->state;
-          trees::_tr_flush_bits(pPendingState);
-          nLookahead = pPendingState->pending;
-          if (pPendingState->pending > pStream->avail_out) {
-            nLookahead = pStream->avail_out;
-          }
-          if (nLookahead) {
-            memcpy(pStream->next_out, pPendingState->pending_out, nLookahead);
-            pStream->next_out += nLookahead;
-            pPendingState->pending_out += nLookahead;
-            pStream->total_out += nLookahead;
-            pStream->avail_out -= nLookahead;
-            pPendingCountField = &pPendingState->pending;
-            *pPendingCountField -= nLookahead;
-            if (!*pPendingCountField) {
-              pPendingState->pending_out = pPendingState->pending_buf;
+            if (s->lookahead == 0) {
+                break;
             }
-          }
         }
-
-        s->strstart++;
-        s->lookahead--;
-        nHashHead = s->strm->avail_out;
-      } else {
-        nHashHead = s->strstart;
-        nLookaheadAtMatch = s->lookahead;
-        nDistShort = (short int)s->strstart - (short int)s->prev_match;
-        nPrevLenSaved = s->prev_length;
-        s->d_buf[s->last_lit] = nDistShort - 1;
-        byCode = (char)nPrevLenSaved - 3;
-        s->l_buf[s->last_lit] = byCode;
-        s->last_lit++;
-        s->dyn_ltree[_length_code[byCode] + 0x101].fc++;
-        nDistIdx = nDistShort - 2;
-        if (nDistIdx < 0x100) {
-          byCode = _dist_code[nDistIdx];
-        } else {
-          byCode = _dist_code[(nDistIdx >> 7) + 0x100];
-        }
-
-        s->dyn_dtree[byCode].fc++;
-        nPrevLenSaved = s->lit_bufsize;
-        nSymNextSaved = s->last_lit;
-        s->lookahead += 1 - s->prev_length;
-        s->prev_length -= 2;
-        do {
-          s->strstart++;
-          nLookahead = s->strstart;
-          if (nLookahead <= nHashHead - 3 + nLookaheadAtMatch) {
-            nInsHash = (s->ins_h << D2_SHIFT_COUNT(s->hash_shift) ^ (uint32_t)s->window[nLookahead + 2]) & s->hash_mask;
-            s->ins_h = nInsHash;
-            s->prev[s->w_mask & nLookahead] = s->head[nInsHash];
+        hash_head = 0;
+        if (s->lookahead >= 3) {
+            s->ins_h = ((s->ins_h << D2_SHIFT_COUNT(s->hash_shift)) ^ s->window[s->strstart + 2]) & s->hash_mask;
+            hash_head = s->prev[s->strstart & s->w_mask] = s->head[s->ins_h];
             s->head[s->ins_h] = (uint16_t)s->strstart;
-          }
-
-          pPendingCountField = &s->prev_length;
-          (*pPendingCountField)--;
-        } while (*pPendingCountField);
-
-        s->strstart++;
-        s->match_available = 0;
+        }
+        s->prev_length = s->match_length;
+        s->prev_match = s->match_start;
         s->match_length = 2;
-        if (nSymNextSaved != nPrevLenSaved - 1) {
-          continue;
+        if (hash_head != 0 && s->prev_length < s->max_lazy_match && s->strstart - hash_head <= s->w_size - 0x106) {
+            s->match_length = longest_match(hash_head, s);
+            if (s->match_length <= 5 && (s->strategy == 1 || (s->match_length == 3 && s->strstart - s->match_start > 0x1000))) {
+                s->match_length = 2;
+            }
         }
-
-        nBlockStartOff2 = s->block_start;
-        if (nBlockStartOff2 >= 0) {
-          pBlockStart = s->window + nBlockStartOff2;
+        if (s->prev_length >= 3 && s->match_length <= s->prev_length) {
+            uint32_t max_insert = s->strstart + s->lookahead - 3;
+            uint8_t len = (uint8_t)(s->prev_length - 3);
+            uint16_t dist = (uint16_t)(s->strstart - 1 - s->prev_match);
+            s->d_buf[s->last_lit] = dist;
+            s->l_buf[s->last_lit++] = len;
+            dist--;
+            s->dyn_ltree[_length_code[len] + 0x101].fc++;
+            uint32_t dcode;
+            if (dist < 256) {
+                dcode = _dist_code[dist];
+            } else {
+                dcode = _dist_code[256 + (dist >> 7)];
+            }
+            s->dyn_dtree[dcode].fc++;
+            bflush = (s->last_lit == s->lit_bufsize - 1);
+            s->lookahead -= s->prev_length - 1;
+            s->prev_length -= 2;
+            do {
+                if (++s->strstart <= max_insert) {
+                    s->ins_h = ((s->ins_h << D2_SHIFT_COUNT(s->hash_shift)) ^ s->window[s->strstart + 2]) & s->hash_mask;
+                    s->prev[s->strstart & s->w_mask] = s->head[s->ins_h];
+                    s->head[s->ins_h] = (uint16_t)s->strstart;
+                }
+            } while (--s->prev_length != 0);
+            s->match_available = 0;
+            s->match_length = 2;
+            s->strstart++;
+            if (bflush) {
+                trees::_tr_flush_block(s, (s->block_start >= 0 ? (char*)&s->window[(unsigned)s->block_start] : (char*)0), (long)s->strstart - s->block_start, 0);
+                s->block_start = s->strstart;
+                flush_pending(s->strm);
+                if (s->strm->avail_out == 0) {
+                    return 0;
+                }
+            }
+        } else if (s->match_available) {
+            uint8_t cc = s->window[s->strstart - 1];
+            s->d_buf[s->last_lit] = 0;
+            s->l_buf[s->last_lit++] = cc;
+            s->dyn_ltree[cc].fc++;
+            bflush = (s->last_lit == s->lit_bufsize - 1);
+            if (bflush) {
+                trees::_tr_flush_block(s, (s->block_start >= 0 ? (char*)&s->window[(unsigned)s->block_start] : (char*)0), (long)s->strstart - s->block_start, 0);
+                s->block_start = s->strstart;
+                flush_pending(s->strm);
+            }
+            s->strstart++;
+            s->lookahead--;
+            if (s->strm->avail_out == 0) {
+                return 0;
+            }
         } else {
-          pBlockStart = 0;
+            s->match_available = 1;
+            s->strstart++;
+            s->lookahead--;
         }
-
-        trees::_tr_flush_block(s, (char*)pBlockStart, s->strstart - nBlockStartOff2, 0);
-        pStream = s->strm;
+    }
+    if (s->match_available) {
+        uint8_t cc = s->window[s->strstart - 1];
+        s->d_buf[s->last_lit] = 0;
+        s->l_buf[s->last_lit++] = cc;
+        s->dyn_ltree[cc].fc++;
+        s->match_available = 0;
+    }
+    s->insert = s->strstart < 2 ? s->strstart : 2;
+    if (flush == 4) {
+        trees::_tr_flush_block(s, (s->block_start >= 0 ? (char*)&s->window[(unsigned)s->block_start] : (char*)0), (long)s->strstart - s->block_start, 1);
         s->block_start = s->strstart;
-        pPendingState = (deflate_state*)pStream->state;
-        trees::_tr_flush_bits(pPendingState);
-        nLookahead = pPendingState->pending;
-        if (pPendingState->pending > pStream->avail_out) {
-          nLookahead = pStream->avail_out;
+        flush_pending(s->strm);
+        if (s->strm->avail_out == 0) {
+            return 2;
         }
-        if (nLookahead) {
-          memcpy(pStream->next_out, pPendingState->pending_out, nLookahead);
-          pStream->next_out += nLookahead;
-          pPendingState->pending_out += nLookahead;
-          pStream->total_out += nLookahead;
-          pStream->avail_out -= nLookahead;
-          pPendingCountField = &pPendingState->pending;
-          *pPendingCountField -= nLookahead;
-          if (!*pPendingCountField) {
-            pPendingState->pending_out = pPendingState->pending_buf;
-          }
+        return 3;
+    }
+    if (s->last_lit) {
+        trees::_tr_flush_block(s, (s->block_start >= 0 ? (char*)&s->window[(unsigned)s->block_start] : (char*)0), (long)s->strstart - s->block_start, 0);
+        s->block_start = s->strstart;
+        flush_pending(s->strm);
+        if (s->strm->avail_out == 0) {
+            return 0;
         }
-
-        nHashHead = s->strm->avail_out;
-      }
-      if (!nHashHead) {
-        return 0;
-      }
-    } while (true);
+    }
+    return 1;
 }
 
 static block_state __stdcall deflate_rle(int32_t flush, deflate_state * s) {

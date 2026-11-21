@@ -362,7 +362,7 @@ void __fastcall MISSILE_SetDamage(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2Un
     uint32_t dwTmp;
     int iVar2;
     D2StatStrc aStatBonusValues[128];
-    int16_t nMonType;
+    int nMonType;
     int nDamage;
     D2DamageStrc* pDamageOut = pDamage;
     memset(pDamage, 0, 0x70);
@@ -370,18 +370,18 @@ void __fastcall MISSILE_SetDamage(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2Un
     if (nStatValue <= 0) {
       nPhysDamage = 0;
     } else {
-      nPhysDamage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mindamage, 0);
-      if (nPhysDamage <= 0) {
+      int nMinDamage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mindamage, 0);
+      if (nMinDamage <= 0) {
         nPhysDamage = 0;
       } else {
-        iVar2 = nStatValue;
-        if (nPhysDamage > nStatValue) {
-          iVar2 = nPhysDamage;
-          nPhysDamage = nStatValue;
+        if (nMinDamage > nStatValue) {
+          int nSwap = nMinDamage;
+          nMinDamage = nStatValue;
+          nStatValue = nSwap;
         }
 
-        dwTmp = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, iVar2 - nPhysDamage);
-        nPhysDamage = dwTmp + nPhysDamage;
+        dwTmp = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nStatValue - nMinDamage);
+        nPhysDamage = dwTmp + nMinDamage;
       }
     }
 
@@ -435,8 +435,8 @@ void __fastcall MISSILE_SetDamage(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2Un
         nStatValue = pTarget->nClassId;
         D2MonStatsTxt* pMonStatsTxt = nStatValue >= 0 && nStatValue < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nStatValue : nullptr;
         if (pMonStatsTxt) {
-          nMonType = pMonStatsTxt->MonType;
-          if (nMonType > 0) {
+          if (pMonStatsTxt->MonType > 0) {
+            nMonType = pMonStatsTxt->MonType;
             nElemDamage = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0xb4, aStatBonusValues, 0x80);
             for (nStatValue = 0; nStatValue < nElemDamage; nStatValue++) {
               dwTmp = UNIT::SUnitDmg::DAMAGE_CheckMonsterTypeVsMonsterType((uint32_t)(uint16_t)aStatBonusValues[nStatValue].uKey.sKey.wSubIndex, (int)nMonType);
@@ -447,7 +447,7 @@ void __fastcall MISSILE_SetDamage(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2Un
           }
         }
       }
-      if (nDamage < -0x59) {
+      if (nDamage <= -90) {
         nDamage = -90;
       }
 
@@ -456,8 +456,8 @@ void __fastcall MISSILE_SetDamage(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2Un
 
     nStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_deadlystrike, 0);
     if (nStatValue) {
-      pDamageOut->wResultFlags |= 0x2000;
       pDamageOut->dwPhysDamage *= 2;
+      pDamageOut->wResultFlags |= 0x2000;
     }
 
     nStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_skill_bypass_undead, 0);
@@ -1505,6 +1505,7 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnMonsterAtHit(::SGAMEDATA * pGame, D2Uni
     return 1;
 }
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit);
 // Server-side missile hit handler that spawns a sub-missile ring/pattern at impact and then applies area elemental damage. Looks up the missile's skill/level on the owner unit, evaluates HitSubMissile1 spawn count and SHitCalc1 radius via skill calcs, calls MISSILES_SpawnAreaPattern, then calculates elemental damage (MISSILES_CalculateElementalDamage) and applies it to all units in radius via SKILLS_ApplyAreaDamage. Returns 3 on success, 1 on invalid missile.
 BOOL __fastcall Missiles_SrvHitFunc_AreaDamageWithSpawnPattern(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     uint32_t nSubMissileParam;
@@ -1537,7 +1538,7 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaDamageWithSpawnPattern(::SGAMEDATA * pGa
         }
       }
 
-      nSubMissileParam = D2Common::Units::Missile::MISSILE_EvalMissileCalc(pUnit, pOwnerUnit, pMissileTxtLine->SHitCalc1, pUnit->nClassId, nSkillLvl);
+      nSubMissileParam = D2Common::Units::Missile::MISSILE_EvalMissileCalc(pUnit, pOwnerUnit, pMissileTxtLine->SHitCalc1, GetClassIdInline(pUnit), nSkillLvl);
       MISSILES_SpawnAreaPattern(pGame, pUnit, nClassId, (int)pMissileTxtLine->HitSubMissile1, nSubMissileParam);
     }
 
@@ -5529,14 +5530,12 @@ int __fastcall MISSMODE_SrvDoFn18_TowerChestSpawner(::SGAMEDATA * pGame, D2UnitS
     uint32_t nRandDelta;
     D2RoomStrc* pRoom;
     int nSpawnInterval;
-    eD2Difficulty nDifficulty;
     D2ObjectOperateFnArg sOperateArg;
     POINT ptMissileCenter;
     POINT ptSpawnCenter;
     int32_t nCurrentFrame;
     D2ItemGenContextStrc sItemGenCtx;
     uint8_t bySpawnFlag;
-    int32_t bIsExpansion;
     uint32_t nItemSpawnWidth;
     POINT* pBestSpawnPos;
     D2MissilesTxt* pMissilesTxt;
@@ -5580,29 +5579,28 @@ int __fastcall MISSMODE_SrvDoFn18_TowerChestSpawner(::SGAMEDATA * pGame, D2UnitS
       }
       if (!(nCurrentFrame % nSpawnInterval)) {
         D2Common::Units::GetCoords(pUnit, &ptSpawnCenter);
+        D2SeedStrc* pSeed = &pUnit->sSeed;
         nSpawnInterval = pMissilesTxt->Param3;
-        nRandDelta = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nSpawnInterval * 2 + 1);
+        nRandDelta = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nSpawnInterval * 2 + 1);
         ptSpawnCenter.x += nRandDelta - nSpawnInterval;
-        nRandDelta = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nSpawnInterval * 2 + 1);
+        nRandDelta = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nSpawnInterval * 2 + 1);
         bySpawnFlag = 1;
         nItemSpawnWidth = 1;
         pBestSpawnPos = &ptMissileCenter;
         ptSpawnCenter.y += nRandDelta - nSpawnInterval;
         pRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit), &ptSpawnCenter, pBestSpawnPos, nItemSpawnWidth, bySpawnFlag);
         if (pRoom) {
-          bIsExpansion = pGame->bExpansion;
-          nDifficulty = pGame->nDifficulty;
-          nCurrentFrame = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), nDifficulty, bIsExpansion);
+          nCurrentFrame = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), pGame->nDifficulty, pGame->bExpansion);
           memset(&sItemGenCtx, 0, 0x84);
-          sItemGenCtx.wItemFormat = pGame->wItemFormat;
-          sItemGenCtx.pSeed = 0;
           sItemGenCtx.pUnit = pUnit;
+          sItemGenCtx.pSeed = 0;
           sItemGenCtx.pGame = pGame;
+          sItemGenCtx.wItemFormat = pGame->wItemFormat;
           sItemGenCtx.nItemClassid = D2Common::DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId(0x20646c67);
-          sItemGenCtx.nPosY = ptMissileCenter.y;
-          sItemGenCtx.nItemLevel = nCurrentFrame;
           sItemGenCtx.dwMode = 3;
           sItemGenCtx.nPosX = ptMissileCenter.x;
+          sItemGenCtx.nPosY = ptMissileCenter.y;
+          sItemGenCtx.nItemLevel = nCurrentFrame;
           sItemGenCtx.pDrlgRoom = pRoom;
           sItemGenCtx.usually_one = 1;
           sItemGenCtx.eQuality = QUALITY_NORMAL;

@@ -35,13 +35,13 @@ BOOL __fastcall Skills_CltDoFunc_BaalCorpseExplosion(D2UnitStrc * pUnit, eD2Skil
     int32_t nCorpseMissileFrames;
     int32_t nCorpseIdx;
     D2SkillsTxt* pSkillTxt;
-    uint32_t seedNext;
-    if (D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount <= 0x11d || (pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills , pSkillTxt == (D2SkillsTxt*)-163020)) {
+    pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount > 0x11d ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + 0x11d : nullptr;
+    if (!pSkillTxt) {
       nExplosionRadius = 0;
     } else if (nSkillLvl <= 0) {
       nExplosionRadius = 0;
     } else {
-      nExplosionRadius = (nSkillLvl - 1) * pSkillTxt[0x11d].Param[5] + pSkillTxt[0x11d].Param[4];
+      nExplosionRadius = (nSkillLvl - 1) * pSkillTxt->Param[5] + pSkillTxt->Param[4];
     }
 
     eD2UnitType eUnitType = pUnit->eUnitType;
@@ -67,9 +67,9 @@ BOOL __fastcall Skills_CltDoFunc_BaalCorpseExplosion(D2UnitStrc * pUnit, eD2Skil
     D2UnitFindArgStrc* pUnitFindArg = &sUnitFindArg;
     UNITFINDTEST fpUnitTest = 0;
     sUnitFindArg.nFlags = 0x3002;
+    sUnitFindArg.pAttacker = pUnit;
     sUnitFindArg.nX = nCorpseIdx;
     int32_t nCorpsePosY = nCorpseIdx;
-    sUnitFindArg.pAttacker = pUnit;
     sUnitFindArg.nY = nPosY;
     sUnitFindArg.nDistance = nExplosionRadius;
     D2Common::Units::UnitFinds::InitializeUnitFindData(nullptr, &sUnitFindData, D2Common::Units::UNITS_GetRoom(pUnit), nCorpsePosY, nPosY, nExplosionRadius, fpUnitTest, pUnitFindArg);
@@ -101,10 +101,9 @@ BOOL __fastcall Skills_CltDoFunc_BaalCorpseExplosion(D2UnitStrc * pUnit, eD2Skil
       pCorpse = UNIT::Missile::CastAttack(pUnit, MISSILE_Baalcorpseexplodedelay, nCorpsePosX, nCorpsePosY, eSavedSkillNo, nSkillLvl);
       if (pCorpse) {
         nCorpseMissileFrames = D2Common::Units::Missile::GetTotalFrames(pCorpse);
-        seedNext = D2_SeedRoll(&pUnit->sSeed);
-        nExplosionRadius = nCorpseMissileFrames - 10 + seedNext + (int)(seedNext / 0x14) * -0x14;
-        D2Common::Units::Missile::SetTotalFrames(pCorpse, nExplosionRadius);
-        D2Common::Units::Missile::SetCurrentFrame(pCorpse, nExplosionRadius);
+        nCorpseMissileFrames = nCorpseMissileFrames + D2_SeedRoll(&pUnit->sSeed) % 20 - 10;
+        D2Common::Units::Missile::SetTotalFrames(pCorpse, nCorpseMissileFrames);
+        D2Common::Units::Missile::SetCurrentFrame(pCorpse, nCorpseMissileFrames);
         nPosY = nCorpseIdx;
       }
     }

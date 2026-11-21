@@ -773,13 +773,10 @@ void __fastcall D3D_PlayBinkVideo(char * szVideoPath, int nAudioMode, fnBinkFram
     static uint32_t gbBinkVideoExitProcess; D2_STATIC_GUARD_BSS(gbBinkVideoExitProcess, "D2Direct3D::d3dFloorCache::D3D_PlayBinkVideo::gbBinkVideoExitProcess");
     static unsigned int gdwBinkVideoClickTime; D2_STATIC_GUARD_BSS(gdwBinkVideoClickTime, "D2Direct3D::d3dFloorCache::D3D_PlayBinkVideo::gdwBinkVideoClickTime");
 
-    uint32_t dwTickNow;
-    int nBinkWaitResult;
     uint32_t dwBinkOpenFlags;
     tagMSG sMsg;
     HANDLE hVideoFile;
-    bool bSkipRequested;
-    bSkipRequested = false;
+    BOOL bSkipRequested = FALSE;
     gbBinkVideoShouldStop = 0;
     if (!(!gpBinkVideoD3D && !gnRenderState)) {
       return;
@@ -789,15 +786,12 @@ void __fastcall D3D_PlayBinkVideo(char * szVideoPath, int nAudioMode, fnBinkFram
     BinkSetSoundSystem(BinkOpenDirectSound, 0);
     uint32_t nOpenFlags;
     nOpenFlags = 4;
-    BOOL BVar1;
-    BVar1 = Fog::Source::SFile::GetUseDirectCommand();
-    if (BVar1) {
+    if (Fog::Source::SFile::GetUseDirectCommand()) {
       nOpenFlags = 5;
     }
 
     Storm::Source::SFile::SFileOpenFileEx(nullptr, szVideoPath, nOpenFlags, &hVideoFile);
     if (hVideoFile) {
-      uint32_t dwTickStart;
       dwBinkOpenFlags = 0x800000;
       switch (nAudioMode) {
         case 1:
@@ -818,73 +812,59 @@ void __fastcall D3D_PlayBinkVideo(char * szVideoPath, int nAudioMode, fnBinkFram
       }
 
       gpBinkVideoD3D = (BINK*)BinkOpen(hVideoFile, dwBinkOpenFlags);
-      if (gpBinkVideoD3D) {
+      if (!gpBinkVideoD3D) {
+        CloseHandle(hVideoFile);
+      } else {
         gnD3DBinkVideoXOffset = RENDERER_nWindowWidth - gpBinkVideoD3D->Width >> 1;
         if (gnD3DBinkVideoXOffset & 3) {
           gnD3DBinkVideoXOffset = (gnD3DBinkVideoXOffset | 3) + 1;
         }
 
         gnD3DBinkVideoYOffset = RENDERER_nWindowHeight - gpBinkVideoD3D->Height >> 1;
-        dwTickStart = GetTickCount();
-        do {
-          while (true) {
-            if (gbBinkVideoShouldStop && (dwTickNow = GetTickCount() , dwTickNow >= dwTickStart + 500) || gnRenderState || bSkipRequested) {
-              if (gpBinkVideoD3D) {
-                D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0);
-                BinkClose(gpBinkVideoD3D);
-                /* HANDLE hObject for CloseHandle */ CloseHandle(hVideoFile);
-                D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0xff);
-                gpBinkVideoD3D = 0;
-              }
-              if (!gbBinkVideoExitProcess) {
-                return;
-              }
-
-              exit(-1);
+        uint32_t dwStopTick = GetTickCount() + 500;
+        while (true) {
+          if (gbBinkVideoShouldStop && GetTickCount() >= dwStopTick || gnRenderState || bSkipRequested) {
+            if (gpBinkVideoD3D) {
+              D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0);
+              BinkClose(gpBinkVideoD3D);
+              CloseHandle(hVideoFile);
+              D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0xff);
+              gpBinkVideoD3D = 0;
             }
-            if (pfnCallback) {
-              (*pfnCallback)();
+            if (!gbBinkVideoExitProcess) {
+              return;
             }
 
-            /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ BVar1 = PeekMessageA(&sMsg, (HWND)0x0, 0, 0, 1);
-            if (BVar1) {
-              break;
-            }
-
-            nBinkWaitResult = BinkWait(gpBinkVideoD3D);
-            if (!nBinkWaitResult) {
-              D3D_RenderBinkVideoFrame();
-            } else {
-              /* DWORD dwMilliseconds for Sleep */ Sleep(1);
-            }
+            exit(-1);
+          }
+          if (pfnCallback) {
+            pfnCallback();
           }
 
-          if (sMsg.message <= 0x201) {
-            if (sMsg.message == 0x201) {
-              goto request_skip;
+          if (PeekMessageA(&sMsg, (HWND)0x0, 0, 0, 1)) {
+            switch (sMsg.message) {
+              case 0x12:
+                gbBinkVideoShouldStop = 1;
+                gbBinkVideoExitProcess = 1;
+                break;
+              case 0x102:
+              case 0x201:
+              case 0x204:
+              case 0x207:
+                bSkipRequested = TRUE;
+                gdwBinkVideoClickTime = GetTickCount();
+                break;
             }
-            if (sMsg.message != 0x12) {
-              if (sMsg.message == 0x102) {
-                goto request_skip;
-              }
-            } else {
-              gbBinkVideoShouldStop = 1;
-              gbBinkVideoExitProcess = 1;
-            }
+
+            TranslateMessage(&sMsg);
+            DispatchMessageA(&sMsg);
+          } else if (!BinkWait(gpBinkVideoD3D)) {
+            D3D_RenderBinkVideoFrame();
           } else {
-            if (!(sMsg.message != 0x204 && sMsg.message != 0x207)) {
-              request_skip:
-              bSkipRequested = true;
-              gdwBinkVideoClickTime = GetTickCount();
-            }
+            Sleep(1);
           }
-
-          /* MSG * lpMsg for TranslateMessage */ TranslateMessage(&sMsg);
-          /* MSG * lpMsg for DispatchMessageA */ DispatchMessageA(&sMsg);
-        } while (true);
+        }
       }
-
-      /* HANDLE hObject for CloseHandle */ CloseHandle(hVideoFile);
     }
     if (!gpBinkVideoD3D) {
       return;

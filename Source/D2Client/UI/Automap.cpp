@@ -3066,27 +3066,17 @@ static void AUTOMAP_DrawPartyMember(D2RosterStrc * pRoster) {
 }
 
 void __stdcall AUTOMAP_DrawPlayersAndParty() {
-    // Frame slots -12..-4 are ONE object: &pRoomList is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      D2RoomStrc** pRoomList;
-      int nRoomCount;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     uint16_t nMemberPartyId;
     D2RosterStrc* pRoster = GAME::Roster::GetNextRosterPlayer(nullptr);
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    int* pNumRooms = &__frame0.nRoomCount;
-    D2RoomStrc*** pppRoomList = &__frame0.pRoomList;
     int i = 0;
-    __frame0.pRoomList = 0;
-    __frame0.nRoomCount = 0;
-    D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(D2Common::Units::UNITS_GetRoom(pUnit), pppRoomList, pNumRooms);
-    int nNumRooms = __frame0.nRoomCount;
-    if (__frame0.nRoomCount > 0) {
+    D2RoomStrc** pRoomList = 0;
+    int nRoomCount = 0;
+    D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(D2Common::Units::UNITS_GetRoom(pUnit), &pRoomList, &nRoomCount);
+    int nNumRooms = nRoomCount;
+    if (nRoomCount > 0) {
       do {
-        for (pUnit = __frame0.pRoomList[i]->pUnitList; pUnit; pUnit = pUnit->pRoomNext) {
+        for (pUnit = pRoomList[i]->pUnitList; pUnit; pUnit = pUnit->pRoomNext) {
           AUTOMAP_DrawUnitMarker(pUnit);
         }
 

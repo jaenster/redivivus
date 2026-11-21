@@ -1185,13 +1185,7 @@ static void __stdcall TC_ParseTreasureClassEntry(D2ParsedTreasureClassStrc * pPa
 
 // Loads and compiles TreasureClassEx.txt (drop tables). Builds the D2BinFieldInputStrc descriptor array (treasure class name, group, level, picks, unique/set/rare/magic chances, nodrop, and item1..item10 with prob1..prob10), compiles into D2TreasureClassExTxt records, then post-processes each line: allocates a parsed-TC record via TC_ExtendTreasureClassSize, fills group(+base offset)/level/prob(min 1)/nodrop/magic/rare/set/unique, and parses up to 10 item entries via TC_ParseTreasureClassEntry. Frees the raw bin afterward (UnloadBin). One-time table init; allocates from pMemory. Note: many fields accessed via raw pointer arithmetic over D2PoolManagerStrc casts (decompiler smell), not real pool fields.
 void __stdcall TXT_AllocTxt_TreasureClassEx(D2PoolManagerStrc * pMemory) {
-    int nTCCount;
-    D2TreasureClassExSubSubTxt* pSubSubPointer;
     int nTxtTreasureClassExSize;
-    D2TreasureClassExSubSubTxt* nSubOffset;
-    int nOffset;
-    HANDLE* pTCItemArray;
-    short int nGroupField;
     D2BinFieldInputStrc treasureclassex[30] = {
       {"treasure class", FIELDTYPE_ASCII, 0x20, 0, 0},
       {"group", FIELDTYPE_SHORT, 0, 0x24, 0},
@@ -1224,61 +1218,37 @@ void __stdcall TXT_AllocTxt_TreasureClassEx(D2PoolManagerStrc * pMemory) {
       {"prob10", FIELDTYPE_INT, 0, 0x2dc, 0},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
+
     D2TreasureClassExTxt* pTxtTreasureClassEx = (D2TreasureClassExTxt*)DataTbls::CompileTxt(pMemory, "treasureclassex", treasureclassex, &nTxtTreasureClassExSize, 0x2e0);
-    int nIndex = 0;
-    if (nTxtTreasureClassExSize > 0) {
-      D2ParsedTreasureClassStrc* pParsedTCTmp;
-      /* This here should be new variable... As it is now it is complete mess... */ pMemory = (D2PoolManagerStrc*)&pTxtTreasureClassEx->group;
-      pSubSubPointer = (D2TreasureClassExSubSubTxt*)&pTxtTreasureClassEx->rare;
-      nOffset = 0xae;
-      do {
-        nSubOffset = pSubSubPointer;
-        if ((char)pMemory[-1].dwMemory == '\0') {
-          break;
+    for (int nIndex = 0; nIndex < nTxtTreasureClassExSize; nIndex++) {
+      if (!pTxtTreasureClassEx[nIndex].treasure_class[0]) {
+        break;
+      }
+
+      D2ParsedTreasureClassStrc* pParsedTC = TC_ExtendTreasureClassSize(pTxtTreasureClassEx[nIndex].treasure_class);
+      if (pParsedTC) {
+        if (pTxtTreasureClassEx[nIndex].group) {
+          pParsedTC->nGroup = pTxtTreasureClassEx[nIndex].group + (short int)gnAutoItemTypeTCCount;
         }
 
-        pParsedTCTmp = TC_ExtendTreasureClassSize((char*)&pMemory[-1].dwMemory);
-        if (pParsedTCTmp) {
-          nGroupField = (short int)pMemory->nPoolId;
-          if (nGroupField) {
-            pParsedTCTmp->nGroup = nGroupField + (short int)gnAutoItemTypeTCCount;
-          }
-
-          pParsedTCTmp->nLevel = *(int16_t*)((intptr_t)&pMemory->nPoolId + 2);
-          nTCCount = *(int*)(pMemory[-1].szName + 0x1c);
-          pParsedTCTmp->nProb = nTCCount;
-          if (!nTCCount) {
-            pParsedTCTmp->nProb = 1;
-          }
-
-          pParsedTCTmp->nNoDrop = (int32_t)pMemory->pSync.OwningThread;
-          pParsedTCTmp->nMagic = *(int16_t*)((char*)pSubSubPointer[-1].prob + 0x26);
-          pParsedTCTmp->nRare = pSubSubPointer->rare;
-          pParsedTCTmp->nSet = pSubSubPointer->set;
-          pParsedTCTmp->nUnique = pSubSubPointer->unique;
-          pParsedTCTmp->nFromTCOffset0x30 = pSubSubPointer->field3_0x6;
-          nTCCount = 0;
-          pTCItemArray = &pMemory->pSync.LockSemaphore;
-          pParsedTCTmp->nFromTCOffset0x32 = pSubSubPointer->field4_0x8;
-          do {
-            pSubSubPointer = nSubOffset;
-            if (*(char*)pTCItemArray == '\0') {
-              break;
-            }
-
-            TC_ParseTreasureClassEntry(pParsedTCTmp, *(int32_t*)(pTxtTreasureClassEx->treasure_class + (nTCCount + nOffset) * 4), (char*)pTCItemArray);
-            pTCItemArray += 0x10;
-            nTCCount++;
-            pSubSubPointer = nSubOffset;
-          } while (nTCCount < 10);
+        pParsedTC->nLevel = pTxtTreasureClassEx[nIndex].level;
+        pParsedTC->nProb = pTxtTreasureClassEx[nIndex].picks;
+        if (!pParsedTC->nProb) {
+          pParsedTC->nProb = 1;
         }
 
-        pMemory = (D2PoolManagerStrc*)&pMemory->pPools[0xe].nSize;
-        nOffset += 0xb8;
-        nIndex++;
-        pSubSubPointer = (D2TreasureClassExSubSubTxt*)(pSubSubPointer[1].item[0] + 0x1c);
-        nSubOffset = pSubSubPointer;
-      } while (nIndex < nTxtTreasureClassExSize);
+        pParsedTC->nNoDrop = pTxtTreasureClassEx[nIndex].nodrop;
+        for (int nChance = 0; nChance < 6; nChance++) {
+          (&pParsedTC->nMagic)[nChance] = (&pTxtTreasureClassEx[nIndex].magic)[nChance];
+        }
+        for (int nItem = 0; nItem < 10; nItem++) {
+          if (!pTxtTreasureClassEx[nIndex].item[nItem][0]) {
+            break;
+          }
+
+          TC_ParseTreasureClassEntry(pParsedTC, pTxtTreasureClassEx[nIndex].prob[nItem], pTxtTreasureClassEx[nIndex].item[nItem]);
+        }
+      }
     }
 
     DataTbls::UnloadBin(pTxtTreasureClassEx);

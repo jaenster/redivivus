@@ -3218,51 +3218,29 @@ void __fastcall TEXT_PrintGameString(uint16_t * wMessage, uint8_t nColor) {
 }
 
 void __fastcall TEXT_PrintPartyMessage(uint16_t * wszText, uint8_t byColor) {
-    int32_t nPixelWidth;
     BOOL bIsLineBreak;
     uint32_t nMsgCount;
-    size_t nLineLen;
     char szUtf8[1024];
     uint16_t* pwszLineSeg;
     ScreenMessage_t* pTailMsg;
     ScreenMessage_t** ppNextMsg;
     uint16_t* pwszText = wszText;
-    uint8_t byColorSaved = byColor;
     int32_t nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);
     ScreenMessage_t* pNewMsg = D2_NEW_AT(ScreenMessage_t, ".\\UI\\text.cpp", 0xdad);
-    memset(pNewMsg->apwszLines, 0, 6 * sizeof(pNewMsg->apwszLines[0]));
-    *(uint32_t*)&pNewMsg->nLineCount = 0;
-    *(uint32_t*)((intptr_t)&pNewMsg->color + 2) = 0;
-    *(uint32_t*)((intptr_t)&pNewMsg->dwMessageExpiration + 2) = 0;
-    pNewMsg->pNext = 0;
-    DWORD dwNow = GetTickCount();
-    pNewMsg->dwMessageExpiration = dwNow + 10000;
-    int nTotalLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
+    memset(pNewMsg, 0, 0x24);
+    pNewMsg->pNext = nullptr;
+    pNewMsg->dwMessageExpiration = GetTickCount() + 10000;
+    int nLineLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
+    int nTotalLen = nLineLen;
     pNewMsg->nLineCount = 0;
-    size_t nSegLen = nTotalLen;
-    size_t nOffset = 0;
+    int nOffset = 0;
     while (true) {
-      uint16_t* pwszLine;
-      while (true) {
-        nLineLen = nSegLen;
-        if (!((int)nLineLen > 0 && (nPixelWidth = D2Win::Src::D2WinFont::D2WINFONT_GetStringPixelWidthN((uint16_t*)(pwszText + nOffset), nLineLen) , nPixelWidth > ui::ScreenSizeX - 0x46))) {
-          break;
-        }
-
-        nSegLen = nLineLen - 1;
+      while (nLineLen > 0 && D2Win::Src::D2WinFont::D2WINFONT_GetStringPixelWidthN(pwszText + nOffset, nLineLen) > ui::ScreenSizeX - 0x46) {
+        nLineLen--;
       }
 
       if (nOffset + nLineLen != nTotalLen) {
-        while (true) {
-          if ((int)nLineLen <= 0) {
-            break;
-          }
-
-          bIsLineBreak = D2Lang::Unicode::UNISYS::UNICODE_CheckLineBreakPosition(pwszText + nOffset, nLineLen + 1);
-          if (bIsLineBreak) {
-            break;
-          }
-
+        while (nLineLen > 0 && !D2Lang::Unicode::UNISYS::UNICODE_CheckLineBreakPosition(pwszText + nOffset, nLineLen + 1)) {
           nLineLen--;
         }
       }
@@ -3276,28 +3254,26 @@ void __fastcall TEXT_PrintPartyMessage(uint16_t * wszText, uint8_t byColor) {
         break;
       }
 
-      nSegLen = nLineLen * 2 + 2;
-      pwszLine = (uint16_t*)D2_ALLOC_AT(nSegLen, ".\\UI\\text.cpp", 0xdd7);
-      pNewMsg->apwszLines[pNewMsg->nLineCount] = pwszLine;
-      memset(pNewMsg->apwszLines[pNewMsg->nLineCount], 0, nSegLen);
+      size_t nAllocSize = nLineLen * 2 + 2;
+      pNewMsg->apwszLines[pNewMsg->nLineCount] = (uint16_t*)D2_ALLOC_AT(nAllocSize, ".\\UI\\text.cpp", 0xdd7);
+      memset(pNewMsg->apwszLines[pNewMsg->nLineCount], 0, nAllocSize);
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pNewMsg->apwszLines[pNewMsg->nLineCount], pwszLineSeg, nLineLen);
       pNewMsg->nLineCount++;
-      nSegLen = nTotalLen - nLineLen;
       nOffset = nLineLen;
+      nLineLen = nTotalLen - nLineLen;
     }
 
-    pNewMsg->color = (uint32_t)byColorSaved;
-    ScreenMessage_t* pSVar1 = pNewMsg;
+    pNewMsg->color = (uint32_t)byColor;
     if (ScreenPartyMessages.pHead) {
       nMsgCount = 0;
       ppNextMsg = &ScreenPartyMessages.pHead->pNext;
-      pSVar1 = ScreenPartyMessages.pHead->pNext;
       pTailMsg = ScreenPartyMessages.pHead;
-      while (pSVar1) {
-        pTailMsg = *ppNextMsg;
-        ppNextMsg = &pTailMsg->pNext;
-        nMsgCount++;
-        pSVar1 = *ppNextMsg;
+      if (*ppNextMsg) {
+        do {
+          pTailMsg = *ppNextMsg;
+          ppNextMsg = &pTailMsg->pNext;
+          nMsgCount++;
+        } while (*ppNextMsg);
       }
 
       if ((uint16_t)nMsgCount != ScreenPartyMessages.nCount - 1) {
@@ -3306,16 +3282,16 @@ void __fastcall TEXT_PrintPartyMessage(uint16_t * wszText, uint8_t byColor) {
       }
 
       pTailMsg->pNext = pNewMsg;
-      pSVar1 = ScreenPartyMessages.pHead;
+    } else {
+      ScreenPartyMessages.pHead = pNewMsg;
     }
 
-    ScreenPartyMessages.pHead = pSVar1;
     ScreenPartyMessages.nCount++;
     TEXT_InsertScreenMessage(pNewMsg);
-    pNewMsg = ScreenPartyMessages.pHead;
     if (ScreenPartyMessages.nCount > 2) {
-      ScreenPartyMessages.pHead = ScreenPartyMessages.pHead->pNext;
-      TEXT_FreeScreenMessage(pNewMsg);
+      ScreenMessage_t* pOldest = ScreenPartyMessages.pHead;
+      ScreenPartyMessages.pHead = pOldest->pNext;
+      TEXT_FreeScreenMessage(pOldest);
       ScreenPartyMessages.nCount--;
     }
 
@@ -7366,6 +7342,12 @@ void __fastcall TEXT_ShowStaticTextPopup(uint16_t wStringId) {
     gaTextStaticPopupRect[0] = 0x140 - (uint32_t)(gpStaticTextPopup->nWidth >> 1);
 }
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
 void __fastcall TEXT_HandleOverheadTextPacket(D2GSPacketSrv0x27 * pPacket) {
     D2UnitStrc* pUnit;
     char szMsgBuffer[20];
@@ -7401,7 +7383,7 @@ void __fastcall TEXT_HandleOverheadTextPacket(D2GSPacketSrv0x27 * pPacket) {
       gpOverHeadUnitClassId = 0;
       gpOverHeadUnitGUID = pPacket->nUnitGUID;
       if (pUnit) {
-        gpOverHeadUnitClassId = (short int)pUnit->nClassId;
+        gpOverHeadUnitClassId = GetClassIdInline(pUnit);
       }
 
       TEXT_ShowScrollingText(pPacket->aMessages[0].nMessage, 0, 1);

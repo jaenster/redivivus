@@ -1255,178 +1255,185 @@ void __fastcall RENDERER_D3D_CopySurfacePixels(IDirectDrawSurface7 * pSrcSurface
 }
 
 void __fastcall RENDERER_DIRECT3D_ErrorLog(char * szText, DWORD dwHResult) {
+    const char * pszName;
+
     if ((int)dwHResult <= 0) {
-      if (!dwHResult) {
-        Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3D_OK", 0);
-        return;
+      if (dwHResult) {
+        switch (dwHResult) {
+          case 0x887602bc:
+            pszName = "D3DERR_BADMAJORVERSION";
+            break;
+          case 0x887602bd:
+            pszName = "D3DERR_BADMINORVERSION";
+            break;
+          case 0x887602c1:
+            pszName = "D3DERR_INVALID_DEVICE";
+            break;
+          case 0x887602c2:
+            pszName = "D3DERR_INITFAILED";
+            break;
+          case 0x887602c3:
+            pszName = "D3DERR_DEVICEAGGREGATED";
+            break;
+          case 0x887602c6:
+            pszName = "D3DERR_EXECUTE_CREATE_FAILED";
+            break;
+          case 0x887602c7:
+            pszName = "D3DERR_EXECUTE_DESTROY_FAILED";
+            break;
+          case 0x887602c8:
+            pszName = "D3DERR_EXECUTE_LOCK_FAILED";
+            break;
+          case 0x887602c9:
+            pszName = "D3DERR_EXECUTE_UNLOCK_FAILED";
+            break;
+          case 0x887602ca:
+            pszName = "D3DERR_EXECUTE_LOCKED";
+            break;
+          case 0x887602cb:
+            pszName = "D3DERR_EXECUTE_NOT_LOCKED";
+            break;
+          case 0x887602cc:
+            pszName = "D3DERR_EXECUTE_FAILED";
+            break;
+          case 0x887602cd:
+            pszName = "D3DERR_EXECUTE_CLIPPED_FAILED";
+            break;
+          case 0x887602d0:
+            pszName = "D3DERR_TEXTURE_NO_SUPPORT";
+            break;
+          case 0x887602d1:
+            pszName = "D3DERR_TEXTURE_CREATE_FAILED";
+            break;
+          case 0x887602d2:
+            pszName = "D3DERR_TEXTURE_DESTROY_FAILED";
+            break;
+          case 0x887602d3:
+            pszName = "D3DERR_TEXTURE_LOCK_FAILED";
+            break;
+          case 0x887602d4:
+            pszName = "D3DERR_TEXTURE_UNLOCK_FAILED";
+            break;
+          case 0x887602d5:
+            pszName = "D3DERR_TEXTURE_LOAD_FAILED";
+            break;
+          case 0x887602d6:
+            pszName = "D3DERR_TEXTURE_SWAP_FAILED";
+            break;
+          case 0x887602d7:
+            pszName = "D3DERR_TEXTURE_LOCKED";
+            break;
+          case 0x887602d8:
+            pszName = "D3DERR_TEXTURE_NOT_LOCKED";
+            break;
+          case 0x887602d9:
+            pszName = "D3DERR_TEXTURE_GETSURF_FAILED";
+            break;
+          case 0x887602da:
+            pszName = "D3DERR_MATRIX_CREATE_FAILED";
+            break;
+          case 0x887602db:
+            pszName = "D3DERR_MATRIX_DESTROY_FAILED";
+            break;
+          case 0x887602dc:
+            pszName = "D3DERR_MATRIX_SETDATA_FAILED";
+            break;
+          case 0x887602dd:
+            pszName = "D3DERR_MATRIX_GETDATA_FAILED";
+            break;
+          case 0x887602de:
+            pszName = "D3DERR_SETVIEWPORTDATA_FAILED";
+            break;
+          case 0x887602df:
+            pszName = "D3DERR_INVALIDCURRENTVIEWPORT";
+            break;
+          case 0x887602e0:
+            pszName = "D3DERR_INVALIDPRIMITIVETYPE";
+            break;
+          case 0x887602e1:
+            pszName = "D3DERR_INVALIDVERTEXTYPE";
+            break;
+          case 0x887602e2:
+            pszName = "D3DERR_TEXTURE_BADSIZE";
+            break;
+          case 0x887602e3:
+            pszName = "D3DERR_INVALIDRAMPTEXTURE";
+            break;
+          case 0x887602e4:
+            pszName = "D3DERR_MATERIAL_CREATE_FAILED";
+            break;
+          case 0x887602e5:
+            pszName = "D3DERR_MATERIAL_DESTROY_FAILED";
+            break;
+          case 0x887602e6:
+            pszName = "D3DERR_MATERIAL_SETDATA_FAILED";
+            break;
+          case 0x887602e7:
+            pszName = "D3DERR_MATERIAL_GETDATA_FAILED";
+            break;
+          case 0x887602e8:
+            pszName = "D3DERR_INVALIDPALETTE";
+            break;
+          case 0x887602e9:
+            pszName = "D3DERR_ZBUFF_NEEDS_SYSTEMMEMORY";
+            break;
+          case 0x887602ea:
+            pszName = "D3DERR_ZBUFF_NEEDS_VIDEOMEMORY";
+            break;
+          case 0x887602eb:
+            pszName = "D3DERR_SURFACENOTINVIDMEM";
+            break;
+          case 0x887602ee:
+            pszName = "D3DERR_LIGHT_SET_FAILED";
+            break;
+          case 0x887602ef:
+            pszName = "D3DERR_LIGHTHASVIEWPORT";
+            break;
+          case 0x887602f0:
+            pszName = "D3DERR_LIGHTNOTINTHISVIEWPORT";
+            break;
+          case 0x887602f8:
+            pszName = "D3DERR_SCENE_IN_SCENE";
+            break;
+          case 0x887602f9:
+            pszName = "D3DERR_SCENE_NOT_IN_SCENE";
+            break;
+          case 0x887602fa:
+            pszName = "D3DERR_SCENE_BEGIN_FAILED";
+            break;
+          case 0x887602fb:
+            pszName = "D3DERR_SCENE_END_FAILED";
+            break;
+          case 0x88760302:
+            pszName = "D3DERR_INBEGIN";
+            break;
+          case 0x88760303:
+            pszName = "D3DERR_NOTINBEGIN";
+            break;
+          case 0x88760304:
+            pszName = "D3DERR_NOVIEWPORTS";
+            break;
+          case 0x88760305:
+            pszName = "D3DERR_VIEWPORTDATANOTSET";
+            break;
+          case 0x88760306:
+            pszName = "D3DERR_VIEWPORTHASNODEVICE";
+            break;
+          case 0x88760307:
+            pszName = "D3DERR_NOCURRENTVIEWPORT";
+            break;
+          default:
+            goto Fallback;
+        }
+      } else {
+        pszName = "D3D_OK";
       }
 
-      switch (dwHResult) {
-        case 0x887602bc:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_BADMAJORVERSION", dwHResult);
-        return;
-        case 0x887602bd:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_BADMINORVERSION", dwHResult);
-        return;
-        case 0x887602c1:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_INVALID_DEVICE", dwHResult);
-        return;
-        case 0x887602c2:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_INITFAILED", dwHResult);
-        return;
-        case 0x887602c3:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_DEVICEAGGREGATED", dwHResult);
-        return;
-        case 0x887602c6:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_EXECUTE_CREATE_FAILED", dwHResult);
-        return;
-        case 0x887602c7:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_EXECUTE_DESTROY_FAILED", dwHResult);
-        return;
-        case 0x887602c8:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_EXECUTE_LOCK_FAILED", dwHResult);
-        return;
-        case 0x887602c9:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_EXECUTE_UNLOCK_FAILED", dwHResult);
-        return;
-        case 0x887602ca:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_EXECUTE_LOCKED", dwHResult);
-        return;
-        case 0x887602cb:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_EXECUTE_NOT_LOCKED", dwHResult);
-        return;
-        case 0x887602cc:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_EXECUTE_FAILED", dwHResult);
-        return;
-        case 0x887602cd:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_EXECUTE_CLIPPED_FAILED", dwHResult);
-        return;
-        case 0x887602d0:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_TEXTURE_NO_SUPPORT", dwHResult);
-        return;
-        case 0x887602d1:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_TEXTURE_CREATE_FAILED", dwHResult);
-        return;
-        case 0x887602d2:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_TEXTURE_DESTROY_FAILED", dwHResult);
-        return;
-        case 0x887602d3:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_TEXTURE_LOCK_FAILED", dwHResult);
-        return;
-        case 0x887602d4:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_TEXTURE_UNLOCK_FAILED", dwHResult);
-        return;
-        case 0x887602d5:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_TEXTURE_LOAD_FAILED", dwHResult);
-        return;
-        case 0x887602d6:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_TEXTURE_SWAP_FAILED", dwHResult);
-        return;
-        case 0x887602d7:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_TEXTURE_LOCKED", dwHResult);
-        return;
-        case 0x887602d8:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_TEXTURE_NOT_LOCKED", dwHResult);
-        return;
-        case 0x887602d9:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_TEXTURE_GETSURF_FAILED", dwHResult);
-        return;
-        case 0x887602da:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_MATRIX_CREATE_FAILED", dwHResult);
-        return;
-        case 0x887602db:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_MATRIX_DESTROY_FAILED", dwHResult);
-        return;
-        case 0x887602dc:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_MATRIX_SETDATA_FAILED", dwHResult);
-        return;
-        case 0x887602dd:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_MATRIX_GETDATA_FAILED", dwHResult);
-        return;
-        case 0x887602de:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_SETVIEWPORTDATA_FAILED", dwHResult);
-        return;
-        case 0x887602df:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_INVALIDCURRENTVIEWPORT", dwHResult);
-        return;
-        case 0x887602e0:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_INVALIDPRIMITIVETYPE", dwHResult);
-        return;
-        case 0x887602e1:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_INVALIDVERTEXTYPE", dwHResult);
-        return;
-        case 0x887602e2:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_TEXTURE_BADSIZE", dwHResult);
-        return;
-        case 0x887602e3:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_INVALIDRAMPTEXTURE", dwHResult);
-        return;
-        case 0x887602e4:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_MATERIAL_CREATE_FAILED", dwHResult);
-        return;
-        case 0x887602e5:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_MATERIAL_DESTROY_FAILED", dwHResult);
-        return;
-        case 0x887602e6:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_MATERIAL_SETDATA_FAILED", dwHResult);
-        return;
-        case 0x887602e7:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_MATERIAL_GETDATA_FAILED", dwHResult);
-        return;
-        case 0x887602e8:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_INVALIDPALETTE", dwHResult);
-        return;
-        case 0x887602e9:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_ZBUFF_NEEDS_SYSTEMMEMORY", dwHResult);
-        return;
-        case 0x887602ea:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_ZBUFF_NEEDS_VIDEOMEMORY", dwHResult);
-        return;
-        case 0x887602eb:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_SURFACENOTINVIDMEM", dwHResult);
-        return;
-        case 0x887602ee:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_LIGHT_SET_FAILED", dwHResult);
-        return;
-        case 0x887602ef:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_LIGHTHASVIEWPORT", dwHResult);
-        return;
-        case 0x887602f0:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_LIGHTNOTINTHISVIEWPORT", dwHResult);
-        return;
-        case 0x887602f8:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_SCENE_IN_SCENE", dwHResult);
-        return;
-        case 0x887602f9:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_SCENE_NOT_IN_SCENE", dwHResult);
-        return;
-        case 0x887602fa:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_SCENE_BEGIN_FAILED", dwHResult);
-        return;
-        case 0x887602fb:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_SCENE_END_FAILED", dwHResult);
-        return;
-        case 0x88760302:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_INBEGIN", dwHResult);
-        return;
-        case 0x88760303:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_NOTINBEGIN", dwHResult);
-        return;
-        case 0x88760304:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_NOVIEWPORTS", dwHResult);
-        return;
-        case 0x88760305:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_VIEWPORTDATANOTSET", dwHResult);
-        return;
-        case 0x88760306:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_VIEWPORTHASNODEVICE", dwHResult);
-        return;
-        case 0x88760307:
-          Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, "D3DERR_NOCURRENTVIEWPORT", dwHResult);
-        return;
-      }
+      Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** Direct3D error: %s - %s (0x%x)", szText, pszName, dwHResult);
+      return;
     }
 
+Fallback:
     DIRECTD3D_LogError(szText, dwHResult);
 }
 

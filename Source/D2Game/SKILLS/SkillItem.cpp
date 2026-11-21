@@ -1280,10 +1280,8 @@ BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * p
 // Applies timed buff stats from a consumable item (e.g. potions with duration) to pUnit. Looks up the item's TXT row, validates the associated state, computes stacked duration (existing remaining frames + new duration), allocates or reuses a stat-list for the state, sets a game-event timer for expiry, then iterates the item's three stat/calc pairs adding each to the stat list. Handles stamina fill-to-max as a special case for UNITSTAT_staminarecoverybonus.
 BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     uint32_t nItemDuration;
-    eD2UnitType eUnitType;
     D2ItemStatCostTxt* pStatCost;
     int nCurrentStamina;
-    int32_t nUnitGUID;
     eD2UnitStat eUnitStat;
     if (!pItem) {
       nItemDuration = -1;
@@ -1317,15 +1315,7 @@ BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
     int nStatValue = pGame->dwGameFrame + nPrevBuffFrames + nItemDuration;
     if (!pStatList) {
-      if (!pUnit) {
-        nUnitGUID = -1;
-        eUnitType = UNIT_COUNT;
-      } else {
-        nUnitGUID = pUnit->nUnitGUID;
-        eUnitType = pUnit->eUnitType;
-      }
-
-      pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, 0, eUnitType, nUnitGUID);
+      pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
       if (!pStatList) {
         return 0;
       }
@@ -2173,19 +2163,15 @@ BOOL __fastcall ITEMEVENT_ReplenishManaFlat(::SGAMEDATA * pGame, uint32_t nUnitE
       return 0;
     }
 
-    uint32_t nMaxMana = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
+    int nMaxMana = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
     int nCurMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
-    if (nCurMana >= (int)nMaxMana) {
+    if (nCurMana >= nMaxMana) {
       return 0;
     }
 
-    uint32_t nNewMana = nCurMana + nStatPct * 0x100;
-    nNewMana = (int)nNewMana <= 0 ? 0 : nNewMana;
-    if ((int)nNewMana < (int)nMaxMana) {
-      nMaxMana = nNewMana;
-    }
-
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, nMaxMana, 0);
+    nCurMana += nStatPct << 8;
+    nCurMana = nCurMana <= 0 ? 0 : nCurMana;
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, nCurMana < nMaxMana ? nCurMana : nMaxMana, 0);
     D2Common::Units::SetOverlay(pUnit, 0x98, 0);
     return 1;
 }
@@ -2454,15 +2440,25 @@ BOOL __fastcall ITEMEVENT_SetRestInPeace(::SGAMEDATA * pGame, uint32_t nUnitEven
     return 0;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 // Item reanimate event callback (not the Necromancer Revive skill): validates the corpse (consumable check, MonStats bounds), removes its collision, spawns a monster of class nMonsterClassId in a nearby room, sets ISREVIVE flags and STATE_revive, attaches minion AI, assigns the owner (GUID in nOwnerGUID) and schedules AI-think and expiry events. Returns 1 on success, 0 on any validation failure.
 BOOL __fastcall SKILLITEM_ReanimateMonsterCallback(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pAttacker, D2UnitStrc * pTarget, D2DamageStrc * pDamage, int32_t nMonsterClassId, int32_t nOwnerGUID) {
-    uint32_t dwAlignPad = nUnitEvent;
     D2ModeChangeStrc sKillStrc;
-    if ((pAttacker ? pAttacker->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
-      return 0;
+    D2UnitStrc* pOwnerUnit = nullptr;
+    if ((pAttacker ? pAttacker->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
+      pOwnerUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, nOwnerGUID);
     }
-
-    D2UnitStrc* pOwnerUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, nOwnerGUID);
     if (!pOwnerUnit) {
       return 0;
     }
@@ -2501,7 +2497,7 @@ BOOL __fastcall SKILLITEM_ReanimateMonsterCallback(::SGAMEDATA * pGame, uint32_t
     pRevived->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC | UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
     Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pRevived, UNIT::Monster::GetAiGeneral(pRevived), 0);
     Monster::MONSTERAI_RescheduleThink(pGame, pRevived);
-    Ai::AiGeneral::AssignMinionOwner(pGame, pRevived, pOwnerUnit->nUnitGUID, pOwnerUnit->eUnitType, 0, 0);
+    Ai::AiGeneral::AssignMinionOwner(pGame, pRevived, GetGUIDInline(pOwnerUnit), GetTypeInline(pOwnerUnit), 0, 0);
     Monster::AI::MONSTERAI_SetOwnerGUIDAndType(pRevived, pOwnerUnit);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pRevived, UNITEVENTCALLBACK_AITHINK, 0);
     GAME::Event::SetEvent(pGame, pRevived, 2, pGame->dwGameFrame + 0x19, 0, 0);

@@ -637,14 +637,12 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
     D2GfxDataStrc sGfxData;
     int32_t nScreenWidth;
     int nScreenHeight;
-    DC6* pBackgroundDC6;
-    int32_t nSceneState = D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState();
-    D2ControlStrc* pForm = pFormsList;
-    if (nSceneState) {
+    D2ControlStrc* pForm;
+    if (D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState()) {
       return;
     }
 
-    for (; pForm; pForm = pForm->pNext) {
+    for (pForm = pFormsList; pForm; pForm = pForm->pNext) {
       if (pForm->fpDrawEx) {
         pForm->fpDrawEx(pForm);
       }
@@ -655,15 +653,12 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
     }
 
     D2gfx::D2GFX::D2GFX_GetScreenSize(&nScreenWidth, &nScreenHeight);
-    BOOL bSceneBegun = D2gfx::D2GFX::D2GFX_BeginScene(0, 0, 0, 0);
-    if (bSceneBegun) {
+    if (D2gfx::D2GFX::D2GFX_BeginScene(0, 0, 0, 0)) {
       int nPositionX;
       D2gfx::D2GFX::D2GFX_ClearScreen(0);
-      pBackgroundDC6 = gpOutOfGameBackgroundDC6;
-      pForm = pFormsList;
       if (gpOutOfGameBackgroundDC6) {
         memset(&sGfxData, 0, 0x48);
-        sGfxData.pDC6 = pBackgroundDC6;
+        sGfxData.pDC6 = gpOutOfGameBackgroundDC6;
         sGfxData.nDirection = 0;
         sGfxData.nFrameNumber = 0;
         nPosition = 0x100;
@@ -683,24 +678,21 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
           D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPosition, nScreenHeight - 1, -1, DRAW_SOLID, nullptr);
           sGfxData.nFrameNumber++;
           nPosition += 0x100;
-          pForm = pFormsList;
         } while (nPosition < 0x400);
       }
 
-      for (; pForm; pForm = pForm->pNext) {
+      for (pForm = pFormsList; pForm; pForm = pForm->pNext) {
         if (pForm->fpDraw && !(pForm->dwState & Fog::BitBuffer::gadwBitMasks[3])) {
           pForm->fpDraw(pForm);
         }
       }
 
       DRAW_UI_Sprites();
-      pForm = pFormsList;
       if (gnInitialFormState) {
         D2gfx::D2GFX::D2GFX_DrawSolidRectAlpha(0, 0, nScreenWidth, nScreenHeight, 0, 0x7f);
-        pForm = pFormsList;
       }
 
-      for (; pForm; pForm = pForm->pNext) {
+      for (pForm = pFormsList; pForm; pForm = pForm->pNext) {
         if (pForm->fpDraw && pForm->dwState & Fog::BitBuffer::gadwBitMasks[3]) {
           pForm->fpDraw(pForm);
         }

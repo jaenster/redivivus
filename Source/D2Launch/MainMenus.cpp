@@ -5988,42 +5988,30 @@ void __fastcall UIMENU_PleaseInsertExpansionCdWithNotWorkingCancelButton(int32_t
 }
 
 BOOL __stdcall MAINMENU_ShowCinematicsMenu(D2ControlMsg * pControlMsg) {
-    uint16_t* pwTitle;
-    D2ControlStrc* pBtn1;
-    D2ControlStrc* pBtn2;
     uint8_t byCineLevel;
     char szRegVersion[100];
-    long int nVerMajor;
-    long int nVerMinor;
-    D2ControlStrc* pForm4;
-    D2ControlStrc* nFlagsOrForm5;
-    uint32_t nFlagsOrForm52;
     D2Sound::Src::D2SoundSmp::CleanupSoundBuffer(0xb4);
     D2Sound::Src::D2SoundFast::SOUND_StopMusic();
     D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0xff);
     Launcher::UIMENU_MainMenuWithoutMenuButWithDiabloLogo();
-    int32_t nReadResult = Storm::Source::SReg::SRegLoadString("Diablo II", "Aux Battle.net", 0, szRegVersion, 100);
-    if (nReadResult) {
-      nFlagsOrForm52 = 0x22;
-      sscanf(szRegVersion, "%ld.%ld.%ld.%ld", &nVerMajor, &nVerMinor, (long int*)&pForm4, (long int*)&nFlagsOrForm52);
-      if (nFlagsOrForm52 & 1) {
+    if (Storm::Source::SReg::SRegLoadString("Diablo II", "Aux Battle.net", 0, szRegVersion, 100)) {
+      long int nVerMajor;
+      long int nVerMinor;
+      long int nVerBuild;
+      long int nVerFlags = 0x22;
+      sscanf(szRegVersion, "%ld.%ld.%ld.%ld", &nVerMajor, &nVerMinor, &nVerBuild, &nVerFlags);
+      if (nVerFlags & 1) {
         byCineLevel = 7;
+      } else if (nVerFlags & 0x80) {
+        byCineLevel = 6;
+      } else if (nVerFlags & 0x10) {
+        byCineLevel = 5;
+      } else if (nVerFlags & 8) {
+        byCineLevel = 4;
+      } else if (nVerFlags & 0x40) {
+        byCineLevel = 3;
       } else {
-        if (nFlagsOrForm52 & 0x80) {
-          byCineLevel = 6;
-        } else if (nFlagsOrForm52 & 0x10) {
-          byCineLevel = 5;
-        } else {
-          if (nFlagsOrForm52 & 8) {
-            byCineLevel = 4;
-          } else {
-            if (nFlagsOrForm52 & 0x40) {
-              byCineLevel = 3;
-            } else {
-              byCineLevel = (nFlagsOrForm52 & 4) != 0 ? 2 : 1;
-            }
-          }
-        }
+        byCineLevel = (nVerFlags & 4) != 0 ? 2 : 1;
       }
     } else {
       byCineLevel = 1;
@@ -6031,38 +6019,34 @@ BOOL __stdcall MAINMENU_ShowCinematicsMenu(D2ControlMsg * pControlMsg) {
       Storm::Source::SReg::SRegSaveString("Diablo II", "Aux Battle.net", 0, szRegVersion);
     }
 
-    BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    if (!bIsExpansion) {
-      ::D2WinTextBox* pTextBox;
-      FORMS_CreateAnyFormFromListExEx(0x32);
-      pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x33);
-      pwTitle = D2Lang::StrTable::strtable::GetLocaleString(0x13fa);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(pTextBox, pwTitle);
-      FORMS_CreateAnyFormFromListExEx(0x34);
-      pBtn1 = FORMS_CreateAnyFormFromListExEx(0x35);
-      pBtn2 = FORMS_CreateAnyFormFromListExEx(0x36);
-      nFlagsOrForm5 = FORMS_CreateAnyFormFromListExEx(0x37);
-      pForm4 = FORMS_CreateAnyFormFromListExEx(0x38);
-      switch (byCineLevel) {
-        default:
-          D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(pBtn1, 0);
-        case 2:
-          D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(pBtn2, 0);
-        case 3:
-          D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(nFlagsOrForm5, 0);
-        case 4:
-          D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(pForm4, 0);
-        case 5:
-
-        case 6:
-
-        case 7:
-          FORMS_CreateAnyFormFromListExEx(0x39);
-        return 1;
-      }
+    if (Fog::D2CheckExpansionGame()) {
+      UIMENU_SelectCinematics((uint32_t)byCineLevel);
+      return 1;
     }
 
-    UIMENU_SelectCinematics((uint32_t)byCineLevel);
+    FORMS_CreateAnyFormFromListExEx(0x32);
+    ::D2WinTextBox* pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x33);
+    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x13fa));
+    FORMS_CreateAnyFormFromListExEx(0x34);
+    D2ControlStrc* pBtn1 = FORMS_CreateAnyFormFromListExEx(0x35);
+    D2ControlStrc* pBtn2 = FORMS_CreateAnyFormFromListExEx(0x36);
+    D2ControlStrc* pBtn3 = FORMS_CreateAnyFormFromListExEx(0x37);
+    D2ControlStrc* pBtn4 = FORMS_CreateAnyFormFromListExEx(0x38);
+    switch (byCineLevel) {
+      default:
+        D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(pBtn1, 0);
+      case 2:
+        D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(pBtn2, 0);
+      case 3:
+        D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(pBtn3, 0);
+      case 4:
+        D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(pBtn4, 0);
+      case 5:
+      case 6:
+      case 7:
+        FORMS_CreateAnyFormFromListExEx(0x39);
+    }
+
     return 1;
 }
 

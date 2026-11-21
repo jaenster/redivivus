@@ -833,11 +833,6 @@ void __fastcall COMCALLBACK_AddOrUpdateChannelUser(char * szUsername, uint8_t * 
 }
 
 void __fastcall COMCALLBACK_FormatChatMessage(char * szText1, char * szText2, char * szFormattedOutput) {
-    int32_t nCmpResult;
-    int nUserCmp;
-    uint32_t dwFlags;
-    int32_t nBufferOutputLength;
-    D2ChannelUserStrc* pUserListNode;
     *szFormattedOutput = '\0';
     *szText2 = '\0';
     if (*szText1 == '*') {
@@ -845,58 +840,47 @@ void __fastcall COMCALLBACK_FormatChatMessage(char * szText1, char * szText2, ch
       return;
     }
 
-    char* pCurNode;
-    pCurNode = Storm::Source::SSTR::SStrChr(szText1, '@');
-    char* pszStarPos;
-    pszStarPos = Storm::Source::SSTR::SStrChr(szText1, '*');
-    D2ChannelUserNameNodeStrc* _Str1;
-    _Str1 = gpChannelUserLinkedListHead;
-    if (pCurNode && pszStarPos && pCurNode < pszStarPos) {
+    char* pszAtPos = Storm::Source::SSTR::SStrChr(szText1, '@');
+    char* pszStarPos = Storm::Source::SSTR::SStrChr(szText1, '*');
+    if (pszAtPos && pszStarPos && pszAtPos < pszStarPos) {
       Storm::Source::SSTR::SStrCopy(szFormattedOutput, szText1, 0x7fffffff);
-      pCurNode = Storm::Source::SSTR::SStrChr(szFormattedOutput, '*');
-      *pCurNode = '\0';
+      *Storm::Source::SSTR::SStrChr(szFormattedOutput, '*') = '\0';
       return;
     }
 
-    for (; _Str1; _Str1 = _Str1->pNext) {
-      nCmpResult = _stricmp(_Str1->szUsername, szText1);
-      if (!nCmpResult) {
-        pUserListNode = gpChannelUserListHead;
-        if (_Str1) {
-          goto scan_user_list;
-        }
-
+    D2ChannelUserNameNodeStrc* pNameNode;
+    for (pNameNode = gpChannelUserLinkedListHead; pNameNode; pNameNode = pNameNode->pNext) {
+      if (!_stricmp(pNameNode->szUsername, szText1)) {
         break;
       }
     }
 
-    for (; !(*szText1 != '*' && (pCurNode = Storm::Source::SSTR::SStrChr(szText1, '*') , pCurNode != 0)); Storm::Source::SSTR::SStrCopy(szFormattedOutput, _Str1->szFormattedName, 0x7fffffff)) {
-      Storm::Source::SSTR::SStrCopy(szFormattedOutput, szText1, 0x7fffffff);
-      return;
-      scan_user_list:
-      if (!pUserListNode) {
-        continue;
-      }
-      nUserCmp = _stricmp(pUserListNode->szUsername, szText1);
-      if (!nUserCmp) {
-        if (pUserListNode) {
-          dwFlags = D2Win::Src::D2Comp::D2COMP_GetFlags(pUserListNode->pComposite);
-          if (Fog::BitBuffer::gadwBitMasks[6] & dwFlags || Fog::BitBuffer::gadwBitMasks[7] & dwFlags) {
-            nBufferOutputLength = 0x7fffffff;
-            pCurNode = D2Win::Src::D2Comp::D2COMP_GetTitlePrefix((uint32_t)pUserListNode->nCharClassId, (dwFlags >> 5 & 1) * 3 + (dwFlags >> 7 & 1) * 2 + (dwFlags >> 6 & 1), dwFlags >> 0xc & 1);
-            Storm::Source::SSTR::SStrCopy(szText2, pCurNode, nBufferOutputLength);
-          }
+    if (pNameNode) {
+      D2ChannelUserStrc* pUserListNode;
+      for (pUserListNode = gpChannelUserListHead; pUserListNode; pUserListNode = pUserListNode->pNext) {
+        if (!_stricmp(pUserListNode->szUsername, szText1)) {
+          break;
         }
-
-        continue;
       }
 
-      pUserListNode = pUserListNode->pNext;
-      goto scan_user_list;
+      if (pUserListNode) {
+        uint32_t dwFlags = D2Win::Src::D2Comp::D2COMP_GetFlags(pUserListNode->pComposite);
+        if (Fog::BitBuffer::gadwBitMasks[6] & dwFlags || Fog::BitBuffer::gadwBitMasks[7] & dwFlags) {
+          Storm::Source::SSTR::SStrCopy(szText2, D2Win::Src::D2Comp::D2COMP_GetTitlePrefix((uint32_t)pUserListNode->nCharClassId, (dwFlags >> 5 & 1) * 3 + (dwFlags >> 7 & 1) * 2 + (dwFlags >> 6 & 1), dwFlags >> 0xc & 1), 0x7fffffff);
+        }
+      }
+
+      Storm::Source::SSTR::SStrCopy(szFormattedOutput, pNameNode->szFormattedName, 0x7fffffff);
     }
 
-    memcpy(szFormattedOutput, szText1, (intptr_t)pCurNode - (intptr_t)szText1);
-    szFormattedOutput[(intptr_t)pCurNode - (intptr_t)szText1] = '\0';
+    char* pszNameEnd;
+    if (*szText1 != '*' && (pszNameEnd = Storm::Source::SSTR::SStrChr(szText1, '*')) != nullptr) {
+      memcpy(szFormattedOutput, szText1, pszNameEnd - szText1);
+      szFormattedOutput[pszNameEnd - szText1] = '\0';
+      return;
+    }
+
+    Storm::Source::SSTR::SStrCopy(szFormattedOutput, szText1, 0x7fffffff);
 }
 
 BOOL __fastcall COMCALLBACK_HandleGameListError(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t dwParam1, char * szChannelName) {
@@ -910,24 +894,19 @@ BOOL __fastcall COMCALLBACK_ReturnFalse(uint32_t dwCbArg1, uint32_t dwCbArg2, ch
 }
 
 static int32_t COMCALLBACK_CheckUserListFlags(uint32_t * pnEventData) {
-    uint32_t nChar;
-    uint32_t* szText1 = pnEventData + 6;
-    char* pszScan = (char*)szText1;
-    do {
-      nChar = *(uint32_t*)pszScan;
-      pszScan = (char*)((char*)pszScan + 1);
-    } while ((char)nChar != '\0');
-
-    if (!(*pnEventData < 0x18 && gaComCallbackDispatch[*pnEventData])) {
-      return 1;
+    uint32_t nEventId = pnEventData[0];
+    uint32_t nArg1 = pnEventData[1];
+    uint32_t nArg2 = pnEventData[2];
+    char* szText1 = (char*)(pnEventData + 6);
+    char* szText2 = szText1 + strlen(szText1) + 1;
+    if (nEventId < 0x18 && gaComCallbackDispatch[nEventId]) {
+      BOOL nHandlerResult = gaComCallbackDispatch[nEventId](nArg1, nArg2, szText1, szText2);
+      if (nHandlerResult) {
+        return nHandlerResult;
+      }
     }
 
-    BOOL nHandlerResult = (*gaComCallbackDispatch[*pnEventData])(pnEventData[1], pnEventData[2], (char*)szText1, pszScan + (1 - ((intptr_t)pnEventData + 0x19)) + (intptr_t)szText1);
-    if (!nHandlerResult) {
-      return 1;
-    }
-
-    return nHandlerResult;
+    return 1;
 }
 
 void __stdcall COMCALLBACK_ClearChannelUserList() {

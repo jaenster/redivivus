@@ -1440,12 +1440,12 @@ D2StatListExStrc * __fastcall ApplyShrineBonus(D2UnitStrc * pUnit, D2UnitStrc * 
     stateArg.pUnit = pUnit;
     stateArg.eSkill = SKILL_Attack;
     stateArg.nSkillLvl = 0;
-    stateArg.eStat = eStat;
     stateArg.pTarget = pAttacker;
     stateArg.nDurationInFrames = nDurationInFrames;
-    stateArg.pFunction = pFunction;
+    stateArg.eStat = eStat;
     stateArg.nSkillCalc = nSkillCalc;
     stateArg.eAuraState = eAuraState;
+    stateArg.pFunction = pFunction;
     D2StatListExStrc* pDVar1 = SKILLS::SkillsServer::SetStateWithExpiryTime(&stateArg);
     return pDVar1;
 }
@@ -1708,8 +1708,8 @@ void __fastcall Shrines_StormShrineFunction(D2ObjectOperateFnArg * pArguments, D
       if (pTargetUnit && (pTargetUnit->eUnitType == UNIT_MONSTER || pTargetUnit->eUnitType == UNIT_PLAYER)) {
         bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pTargetUnit);
         if (!bIsDead) {
-          nHpReduction = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_hitpoints, 0);
-          D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pTargetUnit, UNITSTAT_hitpoints, (int)(uSlot8.pTxtShrinesLocal->dwArg0 * (nHpReduction >> 8)) / -100 * 0x100, 0);
+          nHpReduction = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_hitpoints, 0) >> 8;
+          D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pTargetUnit, UNITSTAT_hitpoints, (int)(uSlot8.pTxtShrinesLocal->dwArg0 * nHpReduction) / -100 * 0x100, 0);
         }
       }
     }
@@ -1719,8 +1719,7 @@ void __fastcall Shrines_StormShrineFunction(D2ObjectOperateFnArg * pArguments, D
     uSlot8.nNegRingOffset = -5;
     uSlotC.nRingOffset = 5;
     do {
-      bool bAltSide;
-      bAltSide = true;
+      int nCol = 1;
       nRowParity = nRingRow & 1;
       nNegColOffset = -5;
       nUnitIdx = 5;
@@ -1757,25 +1756,26 @@ void __fastcall Shrines_StormShrineFunction(D2ObjectOperateFnArg * pArguments, D
           sSkillArg.nUnitX = uSlot8.nNegRingOffset;
         }
 
-        sSkillArg.nUnitY = nUnitIdx;
-        if (!bAltSide) {
+        if (nCol & 1) {
+          sSkillArg.nUnitY = nUnitIdx;
+        } else {
           sSkillArg.nUnitY = nNegColOffset;
         }
 
         sSkillArg.pOwner = pArguments->pAttacker;
         sSkillArg.nMissileTxtNo = MISSILE_Fireball;
-        sSkillArg.nSkillLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(sSkillArg.pOwner, UNITSTAT_level, 0);
-        sSkillArg.nSkillLevel /= 5;
-        if (sSkillArg.nSkillLevel < 1) {
-          sSkillArg.nSkillLevel = 1;
-        } else if (sSkillArg.nSkillLevel > 8) {
-          sSkillArg.nSkillLevel = 8;
+        int nSkillLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(sSkillArg.pOwner, UNITSTAT_level, 0) / 5;
+        if (nSkillLevel < 1) {
+          nSkillLevel = 1;
+        } else if (nSkillLevel > 8) {
+          nSkillLevel = 8;
         }
+        sSkillArg.nSkillLevel = nSkillLevel;
 
         MISSILES::Missiles::CreatingMissile(pArguments->sArg.pGame, &sSkillArg);
         nNegColOffset += -5;
         nUnitIdx += 5;
-        bAltSide = (bool)(bAltSide ^ 1);
+        nCol++;
       } while (nUnitIdx < 0x19);
 
       nRingRow++;
@@ -3186,15 +3186,9 @@ BOOL __fastcall OBJOP_ActivateWaypoint(D2ObjectOperateFnArg * pOperation) {
 
 // @sourcefile .\OBJECTS\ObjMode.cpp
 void __fastcall TakeWaypoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nwpId, uint16_t nWaypointMasks) {
-    // Frame slots -16..-4 are ONE object: &nSpawnX is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nSpawnX;
-      int nSpawnY;
-      int16_t eWaypointLevelId;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    int nSpawnX;
+    int nSpawnY;
+    int16_t eWaypointLevelId;
     int _nWaypointMasks;
     D2ClientStrc* pClient;
     POINT ptPos;
@@ -3219,12 +3213,12 @@ void __fastcall TakeWaypoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nwpI
     }
 
     D2WaypointStrc* pWaypointData = PLAYER::PlayerMsg::GetWaypointsForCurrentDifficulty(pGame, pUnit);
-    BOOL bFound = D2Common::Waypoints::FindWaypointIdByLevelId(eLevel, &__frame0.eWaypointLevelId);
+    BOOL bFound = D2Common::Waypoints::FindWaypointIdByLevelId(eLevel, &eWaypointLevelId);
     if (!bFound) {
       return;
     }
 
-    uint32_t bWaypointEnabled = D2Common::Waypoints::CheckWaypoint(pWaypointData, __frame0.eWaypointLevelId);
+    uint32_t bWaypointEnabled = D2Common::Waypoints::CheckWaypoint(pWaypointData, eWaypointLevelId);
     if (!bWaypointEnabled) {
       return;
     }
@@ -3238,8 +3232,8 @@ void __fastcall TakeWaypoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nwpI
     pRoomOther = D2Common::Units::UNITS_GetRoom(pUnit);
     if (pRoomOther) {
       D2RoomStrc* pRoomSpawn;
-      pY = &__frame0.nSpawnY;
-      pX = &__frame0.nSpawnX;
+      pY = &nSpawnY;
+      pX = &nSpawnX;
       pRoomSpawn = D2Common::DUNGEON::Dungeon::FindActSpawnLocation(pGame->pAct[D2Common::Drlg::GetActNoFromLevelNumber(eLevel)], eLevel, _nWaypointMasks, pX, pY);
       if (pRoomOther == pRoomSpawn) {
         pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\OBJECTS\\ObjMode.cpp", 0x1072);

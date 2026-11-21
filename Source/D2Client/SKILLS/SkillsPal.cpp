@@ -132,6 +132,18 @@ BOOL __fastcall Skills_CltDoFunc_Pal_BlessedHammer(D2UnitStrc * pUnit, eD2Skills
     return 0;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 BOOL __fastcall Skills_CltDoFunc_Pal_FistOfHeavens(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -160,16 +172,16 @@ BOOL __fastcall Skills_CltDoFunc_Pal_FistOfHeavens(D2UnitStrc * pUnit, eD2Skills
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pTarget);
     sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pTarget);
-    sSkillArg.nMissileTxtNo = eCltMissileId;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLvl;
+    sSkillArg.nMissileTxtNo = eCltMissileId;
     D2UnitStrc* pMissileUnit = UNIT::Missile::MakeMissile(&sSkillArg);
     if (!pMissileUnit) {
       return 0;
     }
 
-    D2Common::Units::Missile::SetTargetX(pMissileUnit, pTarget->eUnitType);
-    D2Common::Units::Missile::SetTargetY(pMissileUnit, pTarget->nUnitGUID);
+    D2Common::Units::Missile::SetTargetX(pMissileUnit, GetTypeInline(pTarget));
+    D2Common::Units::Missile::SetTargetY(pMissileUnit, GetGUIDInline(pTarget));
     return 1;
 }
 
@@ -533,8 +545,8 @@ BOOL __fastcall Skills_CltDoFunc_Pal_Charge(D2UnitStrc * pUnit, eD2Skills eSkill
             bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pFindResult, 0);
             if (bInMeleeRange) {
               D2Common::Skills::SKILL_SetFlags(pSkill, 0);
-              D2Common::Skills::SKILL_SetParam1(pSkill, pFindResult->eUnitType);
-              D2Common::Skills::SKILL_SetParam2(pSkill, pFindResult->nUnitGUID);
+              D2Common::Skills::SKILL_SetParam1(pSkill, GetTypeInline(pFindResult));
+              D2Common::Skills::SKILL_SetParam2(pSkill, GetGUIDInline(pFindResult));
               return 1;
             }
           }
@@ -578,10 +590,12 @@ BOOL __fastcall Skills_CltDoFunc_Pal_Charge(D2UnitStrc * pUnit, eD2Skills eSkill
       D2Common::Skills::SKILL_SetParam1(pSkill, 0);
       D2Common::Skills::SKILL_SetParam2(pSkill, 0);
       pUnit->nFrameCount = (nFrameRate - (pUnit->nSeqFrame >> 8)) * 0x100;
-      if (pCurrentTarget || (pCurrentTarget = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, 3, 3, -1, nullptr) , pCurrentTarget != 0)) {
-        D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, D2Common::Units::GetXPosFromDynamicPathUnit(pCurrentTarget), D2Common::Units::GetYPosFromDynamicPathUnit(pCurrentTarget), 0);
-        return 1;
+      if (!pCurrentTarget && !(pCurrentTarget = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, 3, 3, -1, nullptr))) {
+        return 0;
       }
+
+      D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, D2Common::Units::GetXPosFromDynamicPathUnit(pCurrentTarget), D2Common::Units::GetYPosFromDynamicPathUnit(pCurrentTarget), 0);
+      return 1;
     } else {
       UNIT::UnitSnd::UNITSND_PlayAttackSound(pUnit, pUnit->eAnimMode.ePlayerMode, 0);
     }

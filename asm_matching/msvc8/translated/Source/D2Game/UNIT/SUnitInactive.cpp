@@ -285,9 +285,9 @@ static void __stdcall SUNITINACTIVE_SerializeAndDeactivateItem(D2InactiveUnitLis
     int32_t nSerializedLen = D2Common::ITEMS::Items::SerializeItem(pUnit, sRecord.itemData, 0x400, (D2StatListExStrc*)0x1, 1, 0);
     sRecord.nItemDataSize = (int16_t)nSerializedLen;
     sRecord.nDespawnTimer = ITEMS::Items::Drop::ITEM_CalculateDespawnTimer(pGame, pUnit);
-    uint32_t nSerializedBytes = (uint32_t)(uint16_t)sRecord.nItemDataSize;
-    D2InactiveItemRecordStrc* pNewInactiveRecord = (D2InactiveItemRecordStrc*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, nSerializedBytes + 0xf, ".\\UNIT\\SUnitInactive.cpp", 0x1e2);
-    memcpy(pNewInactiveRecord, &sRecord, nSerializedBytes + 0xf);
+    const uint32_t nRecordSize = (uint16_t)sRecord.nItemDataSize + 0xf;
+    D2InactiveItemRecordStrc* pNewInactiveRecord = (D2InactiveItemRecordStrc*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, nRecordSize, ".\\UNIT\\SUnitInactive.cpp", 0x1e2);
+    memcpy(pNewInactiveRecord, &sRecord, nRecordSize);
     int32_t iVar1 = D2Common::ITEMS::Items::ITEM_GetItemsTxt_bHasInv(pUnit);
     if (iVar1) {
       D2UnitStrc* pSocketedItem;

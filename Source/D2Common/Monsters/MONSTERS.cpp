@@ -717,7 +717,6 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t bExpan
     int nDivisor;
     int32_t nValue;
     int nPercent;
-    uint16_t nLayer;
     if (!(!bExpansion && byDifficulty && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return;
     }
@@ -727,22 +726,20 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t bExpan
       return;
     }
 
-    int* pScalingEntry = gMonLvl_U_UniqueMonsterLevelChance2[0] + 2;
+    int* pRow = gMonLvl_U_UniqueMonsterLevelChance2[0];
     for (int nEntriesLeft = 0; nEntriesLeft < 3; nEntriesLeft++) {
-      int nCurrentStatVal;
-      nCurrentStatVal = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (*(int (*)[5])(pScalingEntry - 2))[0], 0);
+      int nCurrentStatVal = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, pRow[0], 0);
       if (byDifficulty == 1) {
-        nPercent = pScalingEntry[-1];
-        nDivisor = *pScalingEntry;
+        nPercent = pRow[1];
+        nDivisor = pRow[2];
       } else {
-        nPercent = pScalingEntry[1];
-        nDivisor = pScalingEntry[2];
+        nPercent = pRow[3];
+        nDivisor = pRow[4];
       }
 
-      nLayer = 0;
       nValue = DATATBLS::DataTbls::D2ApplyPercent(nCurrentStatVal, nPercent, nDivisor);
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, (*(int (*)[5])(pScalingEntry - 2))[0], nValue, nLayer);
-      pScalingEntry += 5;
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, pRow[0], nValue, 0);
+      pRow += 5;
     }
 
     Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, (int)pMonStats->aLevel[0] + (uint32_t)byDifficulty * 0x19, 0);

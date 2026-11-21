@@ -75,67 +75,62 @@ BOOL __stdcall CHARSEL_HandleRealmChange(D2ControlMsg * pMsg) {
 }
 
 BOOL __stdcall HandleUpdateToExpansion(D2ControlMsg * pControlMsg) {
-    uint32_t bUpgradeOk;
-    int32_t nJoinResult;
-    uint16_t* pwszMessage;
     uint16_t awszCharName[256];
     uint8_t aszCommandAnsi[256];
     D2CharSelStrc* pSelectedCharacter;
     char* pwszCommandString;
-    BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    if (!bIsExpansion) {
-      return 1;
-    }
-
-    int nCharIndex = 0;
-    for (pSelectedCharacter = CharSel::D2CharSelStrcFirst; pSelectedCharacter; pSelectedCharacter = pSelectedCharacter->pNext) {
-      uint16_t awszFormattedMsg[256];
-      if (CharSel::nSelectedCharIndex == nCharIndex) {
-        if (!pSelectedCharacter) {
-          break;
-        }
-        if (pSelectedCharacter->nCharacterFlags & 0x20) {
-          return 1;
-        }
-
-        pwszCommandString = pSelectedCharacter->szCommandStringTable;
-        if (!pwszCommandString || !*(short int*)pwszCommandString) {
-          bIsExpansion = UpdateSaveFileToExpansion(pSelectedCharacter->szCharname);
-          if (!bIsExpansion) {
-            MainMenus::UIMENU_AnotherSmallPopupWithContentAndSomeKindofTypeSelection(D2Lang::StrTable::strtable::GetLocaleString(0x5570), CharSel::UIMENU_CharacterSelectAllGameTypes, 1);
+    if (Fog::D2CheckExpansionGame()) {
+      int nCharIndex = 0;
+      for (pSelectedCharacter = CharSel::D2CharSelStrcFirst; pSelectedCharacter; pSelectedCharacter = pSelectedCharacter->pNext) {
+        uint16_t awszFormattedMsg[256];
+        if (CharSel::nSelectedCharIndex == nCharIndex) {
+          if (!pSelectedCharacter) {
             break;
           }
-        } else {
+          if (pSelectedCharacter->nCharacterFlags & 0x20) {
+            return 1;
+          }
+
+          pwszCommandString = pSelectedCharacter->szCommandStringTable;
+          if (!pwszCommandString || !*(short int*)pwszCommandString) {
+            if (UpdateSaveFileToExpansion(pSelectedCharacter->szCharname)) {
+              pSelectedCharacter->nCharacterFlags |= 0x20;
+              CharSel::DRAW_LocalCharsInSelectionScreen0();
+              MainMenus::FORMS_DestroyList();
+            } else {
+              MainMenus::UIMENU_AnotherSmallPopupWithContentAndSomeKindofTypeSelection(D2Lang::StrTable::strtable::GetLocaleString(0x5570), CharSel::UIMENU_CharacterSelectAllGameTypes, 1);
+            }
+            break;
+          }
+
           D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte((char*)aszCommandAnsi, (uint16_t*)pwszCommandString, 0xff);
-          bUpgradeOk = MainMenus::MAINMENU_UpgradeCharacterToExpansion(pSelectedCharacter, aszCommandAnsi);
-          if (!bUpgradeOk) {
-            nJoinResult = D2MCPClient::McpConnect::GetD2GSJoinResult();
-            if (nJoinResult != 0x7b) {
-              pwszMessage = D2Lang::StrTable::strtable::GetLocaleString(0x145b);
+          if (!MainMenus::MAINMENU_UpgradeCharacterToExpansion(pSelectedCharacter, aszCommandAnsi)) {
+            if (D2MCPClient::McpConnect::GetD2GSJoinResult() != 0x7b) {
+              MainMenus::MAINMENU_ShowPopupWithCancel(D2Lang::StrTable::strtable::GetLocaleString(0x145b), CharSel::UIMENU_CharacterSelectAllGameTypes);
             } else {
               Fog::File::CONTAINER_InitializeBuffer(awszFormattedMsg, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               Fog::File::CONTAINER_InitializeBuffer(awszCharName, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszCharName, pSelectedCharacter->szCharname, 0x100);
               D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, awszFormattedMsg, D2Lang::StrTable::strtable::GetLocaleString(0x2b89), awszCharName);
-              pwszMessage = awszFormattedMsg;
+              MainMenus::MAINMENU_ShowPopupWithCancel(awszFormattedMsg, CharSel::UIMENU_CharacterSelectAllGameTypes);
             }
 
-            MainMenus::MAINMENU_ShowPopupWithCancel(pwszMessage, CharSel::UIMENU_CharacterSelectAllGameTypes);
             gbCharSelectInProgress = 0;
             return 1;
           }
+
+          pSelectedCharacter->nCharacterFlags |= 0x20;
+          CharSel::DRAW_LocalCharsInSelectionScreen0();
+          MainMenus::FORMS_DestroyList();
+          break;
         }
 
-        pSelectedCharacter->nCharacterFlags |= 0x20;
-        CharSel::DRAW_LocalCharsInSelectionScreen0();
-        MainMenus::FORMS_DestroyList();
-        break;
+        nCharIndex++;
       }
 
-      nCharIndex++;
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCharSelScreenControl->sControl, 0);
     }
 
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCharSelScreenControl->sControl, 0);
     return 1;
 }
 
@@ -538,12 +533,10 @@ uint32_t __stdcall CLIENT_ConnectToBattleNet() {
     uint32_t nErrorResult;
     int nResult;
     D2BNetGatewayAccessStr* pGatewayAccess;
-    HANDLE hProcess;
-    bool bSkipToOpen;
+    uint32_t bSkipToOpen;
     D2OogErrorDataStrc sBNetConnectState;
     D2OogErrorDataStrc sOogErrorPrepatchFail;
     D2OogErrorDataStrc sOogError;
-    UINT uExitCode;
     if (!gpBNetCallbacks) {
       return 0;
     }
@@ -592,17 +585,18 @@ uint32_t __stdcall CLIENT_ConnectToBattleNet() {
       sOogError.pCustomData = 0;
       nResult = gpBNetCallbacks->pfnApplyPrepatch((int*)&sOogError.pCustomData);
       if (sOogError.pCustomData) {
-        bSkipToOpen = MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET_OPEN_Unsure;
+        bSkipToOpen = 0;
+        if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET_OPEN_Unsure) {
+          bSkipToOpen = 1;
+        }
         Storm::Source::SReg::SRegSaveValue("Diablo II", "UseCmdLine", 0, 1);
-        Storm::Source::SReg::SRegSaveValue("Diablo II", "Skip To Open", 0, (uint32_t)bSkipToOpen);
+        Storm::Source::SReg::SRegSaveValue("Diablo II", "Skip To Open", 0, bSkipToOpen);
         D2Win::D2GFX::D2GFX_ShutdownSpriteCacheAndWindow();
         gpBNetCallbacks->pfnDisconnect();
         gnBNetConnectInProgress = 0;
         pGatewayAccess = (D2BNetGatewayAccessStr*)gpBNetCallbacks->pfnBnetLoadAndReturn();
         Bnclient::BNGatewayAccess::SaveAndUnload(pGatewayAccess);
-        /* UINT uExitCode for TerminateProcess */ uExitCode = 0;
-        hProcess = GetCurrentProcess();
-        /* HANDLE hProcess for TerminateProcess */ TerminateProcess(hProcess, uExitCode);
+        TerminateProcess(GetCurrentProcess(), 0);
         return 0;
       }
       if (!nResult) {

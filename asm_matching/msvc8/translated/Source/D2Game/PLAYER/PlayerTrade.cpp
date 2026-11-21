@@ -2067,6 +2067,12 @@ int32_t __fastcall CopyInventory(D2UnitStrc * pUnit, uint8_t * pBuffer, int32_t 
     return pTradeCopy->nSaveSize;
 }
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
 // Server-side guard and initiator for a player-to-player trade session. Verifies both parties are alive (flag 0x800000 clear), Diablo has not been killed (classic trade restriction), the other player's trade inventory exists, and no prohibited item (monster-dropped or quest item with the "box" cube exception) is being offered. On success sets both players' dwTradeState to 7, fires event 0xD on the next frame for each, and sends NET packet 0x77 opcode 6 (TradeAccepted) to both clients. Returns 1 if the offered item needs re-validation, 0 if trade is blocked, or <5 trade-state guard on early-out paths.
 // @sourcefile .\PLAYER\PlrTrade.cpp
 uint32_t __fastcall PLRTRADE_ValidateAndInitiateTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit) {
@@ -2082,81 +2088,81 @@ uint32_t __fastcall PLRTRADE_ValidateAndInitiateTrade(::SGAMEDATA * pGame, D2Uni
     uint32_t bTradeAllowed;
     D2UnitDataPlayerStrc* pSelfData = D2Common::Units::GetPlayerData(pUnit);
     _bInteractValid = UNIT::SUnit::GetInteractInfo(pUnit, &eInteractType, &dwInteractGUID);
-    if (!_bInteractValid) {
-      return (uint32_t)(pSelfData->dwTradeState <= 4);
-    }
-    if (eInteractType != UNIT_PLAYER) {
-      return 1;
-    }
+    if (_bInteractValid) {
+      if (eInteractType != UNIT_PLAYER) {
+        return 1;
+      }
 
     D2UnitStrc* pOtherUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, dwInteractGUID);
-    if (pOtherUnit) {
-      D2UnitDataPlayerStrc* pOtherData;
-      pOtherData = D2Common::Units::GetPlayerData(pOtherUnit);
-      if (!pOtherData->pTradeCopyInventory) {
-        return 0;
-      }
-
-      _bInteractValid = Quests::QUESTS::A4Q3::Q27_IsClassicGameCompleted(pGame);
-      if (_bInteractValid) {
-        return 0;
-      }
-
-      bDeadFlag = D2Common::Units::CheckFlagWithMask(pUnit, 0x800000);
-      if (bDeadFlag) {
-        return 0;
-      }
-
-      dwOtherDeadFlag = D2Common::Units::CheckFlagWithMask(pOtherUnit, 0x800000);
-      if (dwOtherDeadFlag) {
-        return 0;
-      }
-      if (!pSelfData->pTradeCopyInventory) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd3c);
-        exit(-1);
-      }
-
-      bTradeAllowed = 1;
-      if (pSelfData->dwTradeState == 4) {
-        bTradeAllowed = 0;
-      }
-      if (pItemUnit && pItemUnit->eUnitType == UNIT_ITEM) {
-        pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pItemUnit->nClassId);
-        if (pItemTxt->bQuest != '\0') {
-          /* box */ if (pItemTxt->dwCode == 0x20786f62) {
-            _bInteractValid = CUBE_HasAnyItemsInCube(pUnit);
+      if (pOtherUnit) {
+        D2UnitDataPlayerStrc* pOtherData;
+        pOtherData = D2Common::Units::GetPlayerData(pOtherUnit);
+        if (!pOtherData->pTradeCopyInventory) {
+          return 0;
+        }
+  
+        _bInteractValid = Quests::QUESTS::A4Q3::Q27_IsClassicGameCompleted(pGame);
+        if (_bInteractValid) {
+          return 0;
+        }
+  
+        bDeadFlag = D2Common::Units::CheckFlagWithMask(pUnit, 0x800000);
+        if (bDeadFlag) {
+          return 0;
+        }
+  
+        dwOtherDeadFlag = D2Common::Units::CheckFlagWithMask(pOtherUnit, 0x800000);
+        if (dwOtherDeadFlag) {
+          return 0;
+        }
+        if (!pSelfData->pTradeCopyInventory) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd3c);
+          exit(-1);
+        }
+  
+        bTradeAllowed = 1;
+        if (pSelfData->dwTradeState == 4) {
+          bTradeAllowed = 0;
+        }
+        if (pItemUnit && pItemUnit->eUnitType == UNIT_ITEM) {
+          pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(GetClassIdInline(pItemUnit));
+          if (pItemTxt->bQuest != '\0') {
+            /* box */ if (pItemTxt->dwCode == 0x20786f62) {
+              _bInteractValid = CUBE_HasAnyItemsInCube(pUnit);
+              if (_bInteractValid) {
+                bTradeAllowed = 0;
+                SendEventMsg(pUnit, '\n', nullptr);
+              }
+            }
+  
+            pQuestItem = ITEMS::Items::Drop::HasQuestItem(pGame, pOtherUnit, pItemTxt->dwCode);
+            if (pQuestItem) {
+              bTradeAllowed = 0;
+            }
+          } else {
+            _bInteractValid = D2Common::ITEMS::Items::CheckItemFlag(pItemUnit, ITEMFLAG_MONSTER, 0xd58, ".\\PLAYER\\PlrTrade.cpp");
             if (_bInteractValid) {
               bTradeAllowed = 0;
-              SendEventMsg(pUnit, '\n', nullptr);
+            } else {
+              D2Common::ITEMS::Items::GetItemQuality(pItemUnit);
             }
           }
-
-          pQuestItem = ITEMS::Items::Drop::HasQuestItem(pGame, pOtherUnit, pItemTxt->dwCode);
-          if (pQuestItem) {
-            bTradeAllowed = 0;
-          }
-        } else {
-          _bInteractValid = D2Common::ITEMS::Items::CheckItemFlag(pItemUnit, ITEMFLAG_MONSTER, 0xd58, ".\\PLAYER\\PlrTrade.cpp");
-          if (_bInteractValid) {
-            bTradeAllowed = 0;
-          } else {
-            D2Common::ITEMS::Items::GetItemQuality(pItemUnit);
-          }
         }
+        if (pUnit) {
+          pUnit->eUnitFlagsEx |= 0x400000;
+        }
+  
+        pSelfData->dwTradeState = 7;
+        pOtherData->dwTradeState = 7;
+        GAME::Event::SetEvent(pGame, pUnit, 0xd, pGame->dwGameFrame + 1, 0, 0);
+        GAME::Event::SetEvent(pGame, pOtherUnit, 0xd, pGame->dwGameFrame + 1, 0, 0);
+        pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0xd6e);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 6);
+        pClient = UNIT::SUnit::SUNIT_GetClient(pOtherUnit, ".\\PLAYER\\PlrTrade.cpp", 0xd6f);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 6);
+        return bTradeAllowed;
       }
-      if (pUnit) {
-        pUnit->eUnitFlagsEx |= 0x400000;
-      }
-
-      pSelfData->dwTradeState = 7;
-      pOtherData->dwTradeState = 7;
-      GAME::Event::SetEvent(pGame, pUnit, 0xd, pGame->dwGameFrame + 1, 0, 0);
-      GAME::Event::SetEvent(pGame, pOtherUnit, 0xd, pGame->dwGameFrame + 1, 0, 0);
-      pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0xd6e);
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 6);
-      pClient = UNIT::SUnit::SUNIT_GetClient(pOtherUnit, ".\\PLAYER\\PlrTrade.cpp", 0xd6f);
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 6);
-      return bTradeAllowed;
+  
     }
 
     return (uint32_t)(pSelfData->dwTradeState <= 4);

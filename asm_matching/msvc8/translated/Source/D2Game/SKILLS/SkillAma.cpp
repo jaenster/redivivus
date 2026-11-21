@@ -472,10 +472,7 @@ BOOL __fastcall Skills_SrvDoFunc_008_MultipleShot(::SGAMEDATA * pGame, D2UnitStr
     }
 
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!pSkillTxt) {
-      return 0;
-    }
-
+    if (pSkillTxt) {
     BOOL bHasTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &nTargetY);
     if (bHasTargetPos) {
       eD2Skills nArrowSpread = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
@@ -530,8 +527,8 @@ BOOL __fastcall Skills_SrvDoFunc_008_MultipleShot(::SGAMEDATA * pGame, D2UnitStr
       sSkillArg.nActivateFrame = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
       sSkillArg.nFlags |= 0x10000;
       nSideCount = (int)(nArrowSpread - nCenterCount) / 2;
-      eSkill = nSideCount;
       if ((int)nSideCount > 0) {
+        eSkill = nSideCount;
         do {
           sSkillArg.nUnitX = nTargetX;
           sSkillArg.nUnitY = nTargetY;
@@ -571,6 +568,8 @@ BOOL __fastcall Skills_SrvDoFunc_008_MultipleShot(::SGAMEDATA * pGame, D2UnitStr
     }
 
     return 1;
+    }
+    return 0;
 }
 
 void __fastcall SKILLS_AmazonDamagePercentCallback(D2UnitStrc * pUnit, intptr_t nDamagePercent) {

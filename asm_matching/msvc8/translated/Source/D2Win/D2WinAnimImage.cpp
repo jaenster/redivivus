@@ -213,11 +213,12 @@ BOOL __fastcall Draw(::D2WinAnimImage * pAnimImage) {
     DC6* pOverlayDC6 = 0;
     if (eFrameType) {
       pOverlayEntry = eFrameType[pAnimImage->nAnimState].ppBaseImage;
+      DC6** ppOverlay = eFrameType[pAnimImage->nAnimState].ppOverlayImage;
       if (pOverlayEntry) {
         pDC6 = *pOverlayEntry;
       }
-      if (eFrameType[pAnimImage->nAnimState].ppOverlayImage) {
-        pOverlayDC6 = *eFrameType[pAnimImage->nAnimState].ppOverlayImage;
+      if (ppOverlay) {
+        pOverlayDC6 = *ppOverlay;
       }
 
       eOverlayDrawMode = eFrameType[pAnimImage->nAnimState].nDrawMode;
@@ -228,6 +229,7 @@ BOOL __fastcall Draw(::D2WinAnimImage * pAnimImage) {
       pDC6 = pAnimImage->sControl.pDC6;
       pOverlayDC6 = 0;
       nDrawMode = pAnimImage->eDrawMode;
+      eOverlayDrawMode = nDrawMode;
       nFrameCount = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pDC6);
       pDC6Block = pAnimImage->nStaticFrameDelay;
       sGfxData.pDC6 = pDC6;
@@ -238,7 +240,6 @@ BOOL __fastcall Draw(::D2WinAnimImage * pAnimImage) {
       nPosY -= nLine;
       nLine = D2CMP::SRC::CelCmp::GetDC6OffsetX(pFirstDC6Block);
       nPosX -= nLine;
-      eOverlayDrawMode = nDrawMode;
     }
     if (pDC6) {
       sGfxData.nFrameNumber = pAnimImage->nCurrentFrame;
@@ -262,8 +263,9 @@ BOOL __fastcall Draw(::D2WinAnimImage * pAnimImage) {
             dwTick = GetTickCount();
             nFrameIntervalMs = (dwTick - pAnimImage->dwAnimStartTick) / nFrameIntervalMs;
             pAnimImage->nCurrentFrame = nFrameIntervalMs;
-            if ((int)nFrameIntervalMs >= (int)(nFrameCount - 1U)) {
-              nFrameIntervalMs = nFrameCount - 1U;
+            int nLastFrame = nFrameCount - 1;
+            if ((int)nFrameIntervalMs >= nLastFrame) {
+              nFrameIntervalMs = nLastFrame;
             }
 
             pAnimImage->nCurrentFrame = nFrameIntervalMs;

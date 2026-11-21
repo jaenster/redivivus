@@ -395,8 +395,7 @@ int32_t __stdcall fAPPMODE_client_ReturnAppMode(HMODULE hModule, D2IniConfigStrc
     }
 
     D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation((char*)&D2IniDataSlot, 0);
-    uint32_t bIsOBNetHost = (uint32_t)(D2IniData->nGAMETYPE == GAMETYPE_OBNET_HOST);
-    D2Common::DATATBLS::DataTbls::TXT_InitTxtFiles(D2Win::Src::D2WinArchive::ReturnZero(), 0, bIsOBNetHost);
+    D2Common::DATATBLS::DataTbls::TXT_InitTxtFiles(D2Win::Src::D2WinArchive::ReturnZero(), 0, D2IniData->nGAMETYPE == GAMETYPE_OBNET_HOST);
     gdwAppMode = APPMODE_SAVE;
     gbQuitGame = 1;
     do {
@@ -409,36 +408,38 @@ int32_t __stdcall fAPPMODE_client_ReturnAppMode(HMODULE hModule, D2IniConfigStrc
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x28f);
         exit(-1);
       }
-      if (gdwAppMode == APPMODE_CONTINUE) {
-        /* After game it will "continue" to where it was. It cleans everything up */ D2Win::Src::D2WinMain::FreeInGameGFX();
-        D2Common::DATATBLS::DataTbls::FreeTables();
-        D2Lang::StrTable::strtable::STRINGTABLE_FreeStringTables();
-        GAME::Game::FreeLanguage();
-        D2Common::Logging::ProfCore::D2ProfileDump();
-        FreeQServer();
-        if (!gbQuitGame) {
-          switch (D2IniData->nGAMETYPE) {
-            case GAMETYPE_BNET_BETA:
+    } while (gdwAppMode != APPMODE_CONTINUE);
 
-            case GAMETYPE_BNET:
-
-            case GAMETYPE_OBNET_HOST:
-
-            case GAMETYPE_OBNET_JOIN:
-              /* D2Multi */ LastReturnTypeClientMode = 3;
-            /* Go back to lobby after game */ return 3;
-          }
-
-          /* D2Launch */ /* Go back to main menu after game */ LastReturnTypeClientMode = 4;
-          return 4;
-        }
-
-        LastReturnTypeClientMode = 0;
-        /* Kill the game if that is setup (never seen it actually set up) */ return 0;
+    /* After game it will "continue" to where it was. It cleans everything up */ D2Win::Src::D2WinMain::FreeInGameGFX();
+    D2Common::DATATBLS::DataTbls::FreeTables();
+    D2Lang::StrTable::strtable::STRINGTABLE_FreeStringTables();
+    GAME::Game::FreeLanguage();
+    D2Common::Logging::ProfCore::D2ProfileDump();
+    FreeQServer();
+    int nReturnMode;
+    if (gbQuitGame) {
+      nReturnMode = 0;
+    } else {
+      switch (D2IniData->nGAMETYPE) {
+        case GAMETYPE_SINGLEPLAYER:
+        case GAMETYPE_LAN_HOST:
+        case GAMETYPE_LAN_JOIN:
+          nReturnMode = 4;
+          break;
+        case GAMETYPE_BNET_BETA:
+        case GAMETYPE_BNET:
+        case GAMETYPE_OBNET_HOST:
+        case GAMETYPE_OBNET_JOIN:
+          nReturnMode = 3;
+          break;
+        default:
+          nReturnMode = 4;
+          break;
       }
-    } while (true);
+    }
 
-    return 0;
+    LastReturnTypeClientMode = nReturnMode;
+    return nReturnMode;
 }
 
 void __fastcall CLIENT_SetScreenResolution(DWORD RequestedScreenModeMaybe) {

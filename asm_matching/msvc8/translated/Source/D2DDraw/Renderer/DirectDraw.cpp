@@ -886,58 +886,45 @@ void __stdcall D2ddDebugFont_Alloc() {
     static uint32_t gnD2ddDebugFontTextColor = 0xffffff; D2_STATIC_GUARD(gnD2ddDebugFontTextColor, "D2DDraw::Renderer::DirectDraw::D2ddDebugFont_Alloc::gnD2ddDebugFontTextColor");
     static COLORREF gnD2ddDebugFontBkColor = 0; D2_STATIC_GUARD(gnD2ddDebugFontBkColor, "D2DDraw::Renderer::DirectDraw::D2ddDebugFont_Alloc::gnD2ddDebugFontBkColor");
 
-    COLORREF CVar1;
-    int x;
     tagRECT rcCharRect;
-    HFONT hFont;
-    HBITMAP hBitmap;
     char cCurrentChar;
     HDC hdc = CreateDCA("DISPLAY", (LPCSTR)0x0, (LPCSTR)0x0, nullptr);
-    HFONT h = CreateFontA(10, 0, 0, 0, 400, 0, 0, 0, 0, 0, 0, 0, 1, "Courier");
-    HBITMAP h_00 = CreateBitmap(8, 0x10, 1, 8, nullptr);
-    /* HGDIOBJ h for SelectObject */ /* HDC hdc for SelectObject */ SelectObject(hdc, h);
-    /* HGDIOBJ h for SelectObject */ /* HDC hdc for SelectObject */ SelectObject(hdc, h_00);
-    /* COLORREF color for SetTextColor */ /* HDC hdc for SetTextColor */ SetTextColor(hdc, gnD2ddDebugFontTextColor);
-    /* COLORREF color for SetBkColor */ /* HDC hdc for SetBkColor */ SetBkColor(hdc, gnD2ddDebugFontBkColor);
-    /* int mode for SetBkMode */ /* HDC hdc for SetBkMode */ SetBkMode(hdc, 2);
-    /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rcCharRect, 0, 0, 8, 0x10);
-    D2ddDebugFont* pDVar1 = D2_NEW_AT(D2ddDebugFont, ".\\Src\\ddDebugFont.cpp", 0x3a);
+    HFONT hFont = CreateFontA(10, 0, 0, 0, 400, 0, 0, 0, 0, 0, 0, 0, 1, "Courier");
+    HBITMAP hBitmap = CreateBitmap(8, 0x10, 1, 8, nullptr);
+    SelectObject(hdc, hFont);
+    SelectObject(hdc, hBitmap);
+    SetTextColor(hdc, gnD2ddDebugFontTextColor);
+    SetBkColor(hdc, gnD2ddDebugFontBkColor);
+    SetBkMode(hdc, 2);
+    SetRect(&rcCharRect, 0, 0, 8, 0x10);
+    gpD2ddDebugFont = D2_NEW_AT(D2ddDebugFont, ".\\Src\\ddDebugFont.cpp", 0x3a);
+    uint8_t* pPixel = (uint8_t*)gpD2ddDebugFont;
     int nFontDataOffset = 0;
     int nCharCode = 0x20;
     uint32_t* pCharOffsetEntry = gaD2ddDebugFontCharOffsets;
-    gpD2ddDebugFont = pDVar1;
     do {
-      int nRow;
-      /* UINT format for DrawTextA */ /* LPRECT lprc for DrawTextA */ /* int cchText for DrawTextA */ /* LPCSTR lpchText for DrawTextA */ /* HDC hdc for DrawTextA */ cCurrentChar = (char)nCharCode;
+      cCurrentChar = (char)nCharCode;
       DrawTextA(hdc, &cCurrentChar, 1, &rcCharRect, 0);
-      nRow = 0;
-      do {
-        x = 0;
-        do {
-          /* int y for GetPixel */ /* int x for GetPixel */ /* HDC hdc for GetPixel */ CVar1 = GetPixel(hdc, x, nRow);
-          if (CVar1 == gnD2ddDebugFontTextColor) {
-            *(uint8_t*)pDVar1 = 0xff;
+      for (int nRow = 0; nRow < 0x10; nRow++) {
+        for (int x = 0; x < 8; x++) {
+          if (GetPixel(hdc, x, nRow) == gnD2ddDebugFontTextColor) {
+            *pPixel++ = 0xff;
           } else {
-            *(uint8_t*)pDVar1 = 0;
+            *pPixel++ = 0;
           }
+        }
+      }
 
-          x++;
-          pDVar1 = (D2ddDebugFont*)((uint8_t*)pDVar1 + 0x1);
-        } while (x < 8);
-
-        nRow++;
-      } while (nRow < 0x10);
-
-      nCharCode++;
       *pCharOffsetEntry = nFontDataOffset;
-      pCharOffsetEntry++;
       nFontDataOffset += 0x80;
-    } while ((intptr_t)pCharOffsetEntry <= (intptr_t)((char*)&gaD2ddDebugFontCharOffsets + 380));
+      pCharOffsetEntry++;
+      nCharCode++;
+    } while ((intptr_t)pCharOffsetEntry <= (intptr_t)&gaD2ddDebugFontCharOffsets[95]);
 
-    /* LPINT lpBuffer for GetCharWidthA */ /* UINT iLast for GetCharWidthA */ /* UINT iFirst for GetCharWidthA */ /* HDC hdc for GetCharWidthA */ GetCharWidthA(hdc, 0x20, 0x7f, (LPINT)lpBuffer_00881428);
-    /* HGDIOBJ ho for DeleteObject */ DeleteObject(h_00);
-    /* HGDIOBJ ho for DeleteObject */ DeleteObject(h);
-    /* HDC hdc for DeleteDC */ DeleteDC(hdc);
+    GetCharWidthA(hdc, 0x20, 0x7f, (LPINT)lpBuffer_00881428);
+    DeleteObject(hBitmap);
+    DeleteObject(hFont);
+    DeleteDC(hdc);
 }
 
 // @sourcefile .\Src\ddDebugFont.cpp

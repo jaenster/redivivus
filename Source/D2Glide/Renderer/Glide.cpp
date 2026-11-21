@@ -691,222 +691,266 @@ BOOL __stdcall RENDERER_GLIDE_LoadLibrarySymbols() {
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDrawPoint_4 = (grDrawPoint)GetProcAddress(lpGLIDE3x_dll, "_grDrawPoint@4");
     if (!GLIDEDLL_grDrawPoint_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa1);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa1);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL__grDrawLine_8 = (grDrawLine)GetProcAddress(lpGLIDE3x_dll, "_grDrawLine@8");
     if (!GLIDEDLL__grDrawLine_8) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa2);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa2);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDrawTriangle_12 = (grDrawTriangle)GetProcAddress(lpGLIDE3x_dll, "_grDrawTriangle@12");
     if (!GLIDEDLL_grDrawTriangle_12) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa3);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa3);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grVertexLayout_12 = (grVertexLayout)GetProcAddress(lpGLIDE3x_dll, "_grVertexLayout@12");
     if (!GLIDEDLL_grVertexLayout_12) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa4);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa4);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDrawVertexArray_12 = (pfnGlideDrawVertexArray)GetProcAddress(lpGLIDE3x_dll, "_grDrawVertexArray@12");
     if (!GLIDEDLL_grDrawVertexArray_12) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa5);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa5);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDrawVertexArrayContiguous_16 = (grDrawVertexArrayContiguous)GetProcAddress(lpGLIDE3x_dll, "_grDrawVertexArrayContiguous@16");
     if (!GLIDEDLL_grDrawVertexArrayContiguous_16) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa6);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa6);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grBufferClear_12 = (grBufferClear)GetProcAddress(lpGLIDE3x_dll, "_grBufferClear@12");
     if (!GLIDEDLL_grBufferClear_12) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa8);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa8);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grBufferSwap_4 = (grBufferSwap)GetProcAddress(lpGLIDE3x_dll, "_grBufferSwap@4");
     if (!GLIDEDLL_grBufferSwap_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa9);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa9);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grFinish_0 = (grFinish)GetProcAddress(lpGLIDE3x_dll, "_grFinish@0");
     if (!GLIDEDLL_grFinish_0) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xaa);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xaa);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grSstWinOpen_28 = (grSstWinOpen)GetProcAddress(lpGLIDE3x_dll, "_grSstWinOpen@28");
     if (!GLIDEDLL_grSstWinOpen_28) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xab);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xab);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ _GLIDEDLL_grSstWinClose_4 = (grSstWinClose)GetProcAddress(lpGLIDE3x_dll, "_grSstWinClose@4");
     if (!_GLIDEDLL_grSstWinClose_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xac);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xac);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grSstSelect_4 = (grSstSelect)GetProcAddress(lpGLIDE3x_dll, "_grSstSelect@4");
     if (!GLIDEDLL_grSstSelect_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xad);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xad);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grAlphaBlendFunction_16 = (grAlphaBlendFunction)GetProcAddress(lpGLIDE3x_dll, "_grAlphaBlendFunction@16");
     if (!GLIDEDLL_grAlphaBlendFunction_16) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xae);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xae);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grAlphaCombine_20 = (grAlphaCombine)GetProcAddress(lpGLIDE3x_dll, "_grAlphaCombine@20");
     if (!GLIDEDLL_grAlphaCombine_20) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xaf);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xaf);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grChromakeyMode_4 = (grChromakeyMode)GetProcAddress(lpGLIDE3x_dll, "_grChromakeyMode@4");
     if (!GLIDEDLL_grChromakeyMode_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb0);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb0);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grChromakeyValue_4 = (grChromakeyValue)GetProcAddress(lpGLIDE3x_dll, "_grChromakeyValue@4");
     if (!GLIDEDLL_grChromakeyValue_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb1);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb1);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grClipWindow_16 = (grClipWindow)GetProcAddress(lpGLIDE3x_dll, "_grClipWindow@16");
     if (!GLIDEDLL_grClipWindow_16) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb2);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb2);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grColorCombine_20 = (grColorCombine)GetProcAddress(lpGLIDE3x_dll, "_grColorCombine@20");
     if (!GLIDEDLL_grColorCombine_20) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb3);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb3);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grColorMask_8 = (grColorMask)GetProcAddress(lpGLIDE3x_dll, "_grColorMask@8");
     if (!GLIDEDLL_grColorMask_8) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb4);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb4);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grConstantColorValue_4 = (grConstantColorValue)GetProcAddress(lpGLIDE3x_dll, "_grConstantColorValue@4");
     if (!GLIDEDLL_grConstantColorValue_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb5);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb5);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDepthBufferFunction_4 = (grDepthBufferFunction)GetProcAddress(lpGLIDE3x_dll, "_grDepthBufferFunction@4");
     if (!GLIDEDLL_grDepthBufferFunction_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb6);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb6);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDepthBufferMode_4 = (grDepthBufferMode)GetProcAddress(lpGLIDE3x_dll, "_grDepthBufferMode@4");
     if (!GLIDEDLL_grDepthBufferMode_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb7);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb7);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDepthMask_4 = (grDepthMask)GetProcAddress(lpGLIDE3x_dll, "_grDepthMask@4");
     if (!GLIDEDLL_grDepthMask_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb8);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb8);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDitherMode_4 = (grDitherMode)GetProcAddress(lpGLIDE3x_dll, "_grDitherMode@4");
     if (!GLIDEDLL_grDitherMode_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb9);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb9);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grLoadGammaTable_16 = (grLoadGammaTable)GetProcAddress(lpGLIDE3x_dll, "_grLoadGammaTable@16");
     if (!GLIDEDLL_grLoadGammaTable_16) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xba);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xba);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grGet_12 = (grGet)GetProcAddress(lpGLIDE3x_dll, "_grGet@12");
     if (!GLIDEDLL_grGet_12) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xbb);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xbb);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grGetString_4 = (grGetString)GetProcAddress(lpGLIDE3x_dll, "_grGetString@4");
     if (!GLIDEDLL_grGetString_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xbc);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xbc);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grGetProcAddress_4 = (grGetProcAddress)GetProcAddress(lpGLIDE3x_dll, "_grGetProcAddress@4");
     if (!GLIDEDLL_grGetProcAddress_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xbd);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xbd);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grEnable_4 = (grEnable)GetProcAddress(lpGLIDE3x_dll, "_grEnable@4");
     if (!GLIDEDLL_grEnable_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xbe);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xbe);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDisable_4 = (grDisable)GetProcAddress(lpGLIDE3x_dll, "_grDisable@4");
     if (!GLIDEDLL_grDisable_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xbf);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xbf);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grCoordinateSpace_4 = (grCoordinateSpace)GetProcAddress(lpGLIDE3x_dll, "_grCoordinateSpace@4");
     if (!GLIDEDLL_grCoordinateSpace_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc0);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc0);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexTextureMemRequired_8 = (grTexTextureMemRequired)GetProcAddress(lpGLIDE3x_dll, "_grTexTextureMemRequired@8");
     if (!GLIDEDLL_grTexTextureMemRequired_8) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc1);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc1);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexMinAddress_4 = (grTexMinAddress)GetProcAddress(lpGLIDE3x_dll, "_grTexMinAddress@4");
     if (!GLIDEDLL_grTexMinAddress_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc2);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc2);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexMaxAddress_4 = (grTexMaxAddress)GetProcAddress(lpGLIDE3x_dll, "_grTexMaxAddress@4");
     if (!GLIDEDLL_grTexMaxAddress_4) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc3);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc3);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexSource_16 = (grTexSource)GetProcAddress(lpGLIDE3x_dll, "_grTexSource@16");
     if (!GLIDEDLL_grTexSource_16) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc4);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc4);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexCombine_28 = (grTexCombine)GetProcAddress(lpGLIDE3x_dll, "_grTexCombine@28");
     if (!GLIDEDLL_grTexCombine_28) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc5);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc5);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexFilterMode_12 = (grTexFilterMode)GetProcAddress(lpGLIDE3x_dll, "_grTexFilterMode@12");
     if (!GLIDEDLL_grTexFilterMode_12) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc6);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc6);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexDownloadMipMap_16 = (grTexDownloadMipMap)GetProcAddress(lpGLIDE3x_dll, "_grTexDownloadMipMap@16");
     if (!GLIDEDLL_grTexDownloadMipMap_16) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(199);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 199);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexDownloadTable_8 = (grTexDownloadTable)GetProcAddress(lpGLIDE3x_dll, "_grTexDownloadTable@8");
     if (!GLIDEDLL_grTexDownloadTable_8) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(200);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 200);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexMipMapMode_12 = (grTexMipMapMode)GetProcAddress(lpGLIDE3x_dll, "_grTexMipMapMode@12");
     if (!GLIDEDLL_grTexMipMapMode_12) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc9);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc9);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grLfbLock_24 = (grLfbLock)GetProcAddress(lpGLIDE3x_dll, "_grLfbLock@24");
     if (!GLIDEDLL_grLfbLock_24) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xca);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xca);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grLfbUnlock_8 = (grLfbUnlock)GetProcAddress(lpGLIDE3x_dll, "_grLfbUnlock@8");
     if (!GLIDEDLL_grLfbUnlock_8) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xcb);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcb);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grGlideInit_0 = (grGlideInit)GetProcAddress(lpGLIDE3x_dll, "_grGlideInit@0");
     if (!GLIDEDLL_grGlideInit_0) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xcc);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcc);
+      exit(-1);
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grGlideShutdown_0 = (grGlideShutdown)GetProcAddress(lpGLIDE3x_dll, "_grGlideShutdown@0");
     if (!GLIDEDLL_grGlideShutdown_0) {
-      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xcd);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcd);
+      exit(-1);
     }
 
     return 1;

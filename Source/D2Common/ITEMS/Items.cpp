@@ -2577,6 +2577,7 @@ static int __stdcall ITEMS_DeserializeItemHeader(int32_t bIsOnGround, uint32_t n
 // Reads one item stat from a bit-buffer during .d2s / stash deserialization. Applies legacy file-version fixups (versions below 0x58/0x5a/0x5d remap specific stats and narrow their bit-widths), reads the param-lo nibble if the stat has a size field, then calls D2AddStatToStatsListEx to append the decoded stat to pStatList.
 static void __stdcall ITEMS_DeserializeSingleStat(uint32_t nFileVersion, eD2UnitStat eUnitStat, D2BitBufferStrc * pBitBuffer, D2StatListExStrc * pStatList, D2ItemStatCostTxt * pItemStatCost, int32_t nStatIndex) {
     uint32_t uVar1;
+    int32_t nSaveParamBits = pItemStatCost->saveAdd[nStatIndex + 2];
     uint32_t nSaveBits = (uint32_t)pItemStatCost->saveBits[nStatIndex];
     int32_t nSaveAdd = pItemStatCost->saveAdd[nStatIndex];
     int32_t nParamLo = 0;
@@ -2658,8 +2659,8 @@ static void __stdcall ITEMS_DeserializeSingleStat(uint32_t nFileVersion, eD2Unit
         }
     }
 
-    if (pItemStatCost->saveAdd[nStatIndex + 2] > 0) {
-      uVar1 = Fog::BitBuffer::ReadUnsigned(pBitBuffer, pItemStatCost->saveAdd[nStatIndex + 2]);
+    if (nSaveParamBits > 0) {
+      uVar1 = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nSaveParamBits);
       nParamLo = (uint16_t)uVar1;
     }
 
@@ -6634,13 +6635,13 @@ int32_t __stdcall ITEMS_CalculateRepairAllCost(::SGAMEDATA * unk, D2UnitStrc * p
     BOOL BVar1;
     int nCurStack;
     BOOL nChargedCount;
-    bool bRepairNeeded;
+    BOOL bRepairNeeded;
     if (!pPlayer) {
       return 0;
     }
 
-    D2InventoryStrc* pInventory = pPlayer->pInventory;
     int nTotalCost = 0;
+    D2InventoryStrc* pInventory = pPlayer->pInventory;
     if (!pInventory) {
       return 0;
     }
@@ -6650,7 +6651,7 @@ int32_t __stdcall ITEMS_CalculateRepairAllCost(::SGAMEDATA * unk, D2UnitStrc * p
       D2UnitStrc* pItem;
       pItem = INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nGridOffset);
       if (pItem) {
-        bRepairNeeded = false;
+        bRepairNeeded = FALSE;
         bCanRepair = ITEM_CanBeRepaired(pItem);
         if (bCanRepair) {
           bCanRepair = ITEM_CheckIfItemHasDurability(pItem);
@@ -6658,7 +6659,7 @@ int32_t __stdcall ITEMS_CalculateRepairAllCost(::SGAMEDATA * unk, D2UnitStrc * p
             nRepairCost = Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pItem);
             nMaxStack = Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_durability, 0);
             if (nRepairCost && nMaxStack != nRepairCost) {
-              bRepairNeeded = true;
+              bRepairNeeded = TRUE;
             }
           }
         }
@@ -6668,7 +6669,7 @@ int32_t __stdcall ITEMS_CalculateRepairAllCost(::SGAMEDATA * unk, D2UnitStrc * p
           nMaxStack = ITEM_GetMaxStack(pItem);
           nCurStack = Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0);
           if (nCurStack < nMaxStack) {
-            bRepairNeeded = true;
+            bRepairNeeded = TRUE;
           }
         }
 

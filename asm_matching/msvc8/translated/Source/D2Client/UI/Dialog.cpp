@@ -339,18 +339,16 @@ void __stdcall INPUT_DialogMouseDown(D2UIMouseMsgStrc * pMsg) {
     }
 
     for (pDVar1 = pDialog->pDialogSub; pDVar1; pDVar1 = pDVar1->pNext) {
-      self = pDVar1->pWidget;
-      if (self) {
-        iResult = vc8_thiscall(self->pVtable->OnMouseDown)(self, pMsg);
-        if (iResult == 1) {
-          goto consume_click;
-        }
+      if (pDVar1->pWidget && vc8_thiscall(pDVar1->pWidget->pVtable->OnMouseDown)(pDVar1->pWidget, pMsg) == 1) {
+        pMsg->bHandled = 1;
+        pMsg->dwResult = 0;
+        Storm::SMsgBreakHandlerChain(pMsg);
+        return;
       }
     }
 
     pDialog->nDrawMode = 1;
-    iResult = DIALOG_HandleMouseDownEvent(pDialog, pMsg);
-    if (!iResult) {
+    if (!DIALOG_HandleMouseDownEvent(pDialog, pMsg)) {
       BOOL bMiniPanelFlag;
       nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
       iResult = pDialog->pCoords2.x;
@@ -388,18 +386,15 @@ void __stdcall INPUT_DialogMouseDown(D2UIMouseMsgStrc * pMsg) {
           if (!bMiniPanelFlag) {
             return;
           }
-        } else {
-          if (!pDialog->fpDialogFunc1) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1aa);
-            exit(-1);
-          }
-
+        } else if (pDialog->fpDialogFunc1) {
           pDialog->fpDialogFunc1();
+        } else {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1aa);
+          exit(-1);
         }
       }
     }
 
-    consume_click:
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);

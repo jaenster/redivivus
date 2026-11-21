@@ -583,16 +583,7 @@ int32_t __fastcall DRLGPATH_GetApproxDistance(int32_t nY1, int32_t nY2, int32_t 
     if (nDy < 0) {
       nDy = -nDy;
     }
-
-    int nMin = nDx;
-    if (nDx >= nDy) {
-      nMin = nDy;
-      if (nDx > nDy) {
-        return nDy + nDx * 2;
-      }
-    }
-
-    return nMin + nDy * 2;
+    return (nDx < nDy ? nDx : nDy) + (nDx > nDy ? nDx : nDy) * 2;
 }
 
 // Computes an approximate isometric distance between two packed coordinate points.

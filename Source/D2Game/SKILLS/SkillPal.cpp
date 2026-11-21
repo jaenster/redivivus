@@ -540,6 +540,12 @@ uint32_t __fastcall SKILLPAL_AuraCallback_OffensiveAura(D2SkillCallbackContextSt
     return 1;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
 // Server skill handler for Conviction - reduces enemy resistances in area of effect
 BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc * pCaster, eD2Skills eSkill, int32_t nSkillLvl) {
     int nMana;
@@ -552,9 +558,6 @@ BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc 
     D2DamageStrc sDamage;
     D2SkillAuraArgStrc nAuraStateId;
     D2SkillAuraArgStrc nAuraTargetStateId;
-    int nStatLoopIdx;
-    Skills_SrvDoFunc_066_Conviction_Slotmc uSlotC;
-    Skills_SrvDoFunc_066_Conviction_Slotm8 uSlot8;
     pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (pSkillsTxt && pSkillsTxt->aurastate >= 0 && (int)pSkillsTxt->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       int32_t nManaCost;
@@ -566,20 +569,20 @@ BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc 
       nAuraStateId.nSkillLvl = nSkillLvl;
       nAuraStateId.eSkill = eSkill;
       nAuraStateId.nAuraState = (int32_t)pSkillsTxt->aurastate;
-      uSlot8.pnPassiveCalc = pSkillsTxt->passivecalc;
-      uSlotC.psValue = pSkillsTxt->passivestat;
-      nStatLoopIdx = 0;
       nAuraStateId.nDelayFrame = nStatIdx;
+      int nStatLoopIdx = 0;
+      int* pnPassiveCalc = pSkillsTxt->passivecalc;
+      int16_t* psPassiveStat = pSkillsTxt->passivestat;
       do {
-        nAuraStateId.anStats[nStatLoopIdx] = (int)*uSlotC.psValue;
+        nAuraStateId.anStats[nStatLoopIdx] = (int)*psPassiveStat;
         eUnitType = D2Common::Units::GetType(pCaster);
         if (eUnitType != UNIT_PLAYER || nMana >= nManaCost) {
-          nCalcVal = D2Common::Skills::D2GetSkillCalc(pCaster, *uSlot8.pnPassiveCalc, eSkill, nSkillLvl);
+          nCalcVal = D2Common::Skills::D2GetSkillCalc(pCaster, *pnPassiveCalc, eSkill, nSkillLvl);
           nAuraStateId.anCalcs[nStatLoopIdx] = nCalcVal;
         }
 
-        uSlotC.psValue++;
-        uSlot8.pnPassiveCalc++;
+        psPassiveStat++;
+        pnPassiveCalc++;
         nStatLoopIdx++;
       } while (nStatLoopIdx < 5);
 
@@ -598,25 +601,26 @@ BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc 
       nAuraTargetStateId.nAppliedCount = 0;
       nAuraTargetStateId.nFlag = 0;
       if (pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
-        uSlotC.pnValue = pSkillsTxt->aurastatcalc;
-        uSlot8.psAuraStat = pSkillsTxt->aurastat;
-        nStatIdx = 0;
+
+        int nStatIdx2 = 0;
+        int* pnAuraCalc = pSkillsTxt->aurastatcalc;
+        int16_t* psAuraStat = pSkillsTxt->aurastat;
         do {
-          nAuraTargetStateId.anStats[nStatIdx] = (int)*uSlot8.psAuraStat;
+          nAuraTargetStateId.anStats[nStatIdx2] = (int)*psAuraStat;
           if (!(nMana < nManaCost)) {
-            nCalcVal = D2Common::Skills::D2GetSkillCalc(pCaster, *uSlotC.pnValue, eSkill, nSkillLvl);
-            nAuraTargetStateId.anCalcs[nStatIdx] = nCalcVal;
+            nCalcVal = D2Common::Skills::D2GetSkillCalc(pCaster, *pnAuraCalc, eSkill, nSkillLvl);
+            nAuraTargetStateId.anCalcs[nStatIdx2] = nCalcVal;
             if (nCalcVal) {
               nAuraTargetStateId.nFlag = 1;
             }
           } else {
-            nAuraTargetStateId.anCalcs[nStatIdx] = 0;
+            nAuraTargetStateId.anCalcs[nStatIdx2] = 0;
           }
 
-          uSlot8.psAuraStat++;
-          uSlotC.pnValue++;
-          nStatIdx++;
-        } while (nStatIdx < 6);
+          psAuraStat++;
+          pnAuraCalc++;
+          nStatIdx2++;
+        } while (nStatIdx2 < 6);
       }
 
       memset(&sDamage, 0, 0x70);
@@ -634,16 +638,15 @@ BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc 
 
       nCalcVal = D2Common::Skills::D2GetSkillCalc(pCaster, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
       SkillsServer::SKILLS_ApplyAreaEffect(pGame, pCaster, 0, 0, nCalcVal, pSkillsTxt->aurafilter, SKILLPAL_AuraCallback_OffensiveAura, &nAuraTargetStateId, 0, ".\\SKILLS\\SkilPal.cpp", 0x2ba);
-      if (!(nManaCost > 0 && pCaster && pCaster->eUnitType == UNIT_PLAYER)) {
+      if (!(nManaCost > 0 && GetTypeInline(pCaster) == UNIT_PLAYER)) {
         return 1;
       }
       if (nAuraTargetStateId.nAppliedCount > 0) {
         D2Common::DATATBLS::ItemStats::SetState(pCaster, STATE_nomanaregen, 1);
         SkillsServer::SKILLS_DeductManaCost(pCaster, nManaCost);
-        return 1;
+      } else {
+        D2Common::DATATBLS::ItemStats::SetState(pCaster, STATE_nomanaregen, 0);
       }
-
-      D2Common::DATATBLS::ItemStats::SetState(pCaster, STATE_nomanaregen, 0);
       return 1;
     }
 
@@ -995,7 +998,6 @@ BOOL __fastcall SKILPAL_SrvStFn35_Vengeance(::SGAMEDATA * pGame, D2UnitStrc * pU
     int32_t nFireCalcPct;
     D2DamageStrc sDamage;
     int32_t nRandDmg;
-    eD2Skills eSkill_00 = eSkill;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
@@ -1016,32 +1018,33 @@ BOOL __fastcall SKILPAL_SrvStFn35_Vengeance(::SGAMEDATA * pGame, D2UnitStrc * pU
     if (sDamage.wResultFlags & 1U) {
       int32_t nMasteryCalc;
       sDamage.dwPhysDamage = UNIT::SUnitDmg::DAMAGE_CalculatePhysicalDamage(pUnit, 1, nullptr, 0, 0, 0, 0, pSkillsTxt->SrcDam);
+      sDamage.dwHitFlags = 1;
       sDamage.wResultFlags |= pSkillsTxt->ResultFlags;
-      sDamage.dwHitFlags = pSkillsTxt->HitFlags | 1;
+      sDamage.dwHitFlags |= pSkillsTxt->HitFlags;
       nRandDmg = SKILLPAL_RollRandomDamage(pUnit);
-      eSkill = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
-      if (eSkill != SKILL_Attack) {
+      int32_t nCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
+      if (nCalc) {
         nMasteryBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_fire_mastery, 0);
         if (nMasteryBonus) {
-          nMasteryCalc = D2Common::DATATBLS::DataTbls::D2ApplyPercent(eSkill, nMasteryBonus, 100);
-          eSkill += nMasteryCalc;
+          nMasteryCalc = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nCalc, nMasteryBonus, 100);
+          nCalc += nMasteryCalc;
         }
       }
 
-      nMasteryCalc = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nRandDmg, eSkill, 100);
+      nMasteryCalc = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nRandDmg, nCalc, 100);
       sDamage.dwFireDmg += nMasteryCalc;
-      eSkill = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill_00, nSkillLvl);
-      if (eSkill != SKILL_Attack) {
+      nCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl);
+      if (nCalc) {
         nMasteryBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_cold_mastery, 0);
         if (nMasteryBonus) {
-          nMasteryCalc = D2Common::DATATBLS::DataTbls::D2ApplyPercent(eSkill, nMasteryBonus, 100);
-          eSkill += nMasteryCalc;
+          nMasteryCalc = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nCalc, nMasteryBonus, 100);
+          nCalc += nMasteryCalc;
         }
       }
 
-      nMasteryCalc = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nRandDmg, eSkill, 100);
+      nMasteryCalc = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nRandDmg, nCalc, 100);
       sDamage.dwColdDmg += nMasteryCalc;
-      nMasteryCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[2], eSkill_00, nSkillLvl);
+      nMasteryCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[2], eSkill, nSkillLvl);
       if (nMasteryCalc) {
         nMasteryBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_ltng_mastery, 0);
         if (nMasteryBonus) {
@@ -1052,7 +1055,7 @@ BOOL __fastcall SKILPAL_SrvStFn35_Vengeance(::SGAMEDATA * pGame, D2UnitStrc * pU
 
       nRandDmg = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nRandDmg, nMasteryCalc, 100);
       sDamage.dwLtngDamage += nRandDmg;
-      nRandDmg = D2Common::Skills::SKILLS_GetElementalLength(pUnit, eSkill_00, nSkillLvl, 1);
+      nRandDmg = D2Common::Skills::SKILLS_GetElementalLength(pUnit, eSkill, nSkillLvl, 1);
       sDamage.dwColdLength += nRandDmg;
       nRandDmg = D2Common::Skills::SKILL_GetParam1(pSkill);
       switch (nRandDmg) {
@@ -1338,6 +1341,12 @@ BOOL __fastcall Skills_SrvDoFunc_079_Conversion(::SGAMEDATA * pGame, D2UnitStrc 
     return 1;
 }
 
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 // Server do-function for skill 80 (Smite). Gets the current attack target, spawns the Smite missile via CreatingMissile aimed at the target's position, sets the missile's target unit type/GUID, and applies the skill's srvoverlay to the target unit. Returns 1 on success, 0 on invalid skill, no missile ID, or no target.
 BOOL __fastcall Skills_SrvDoFunc_080_FistOfTheHeavens(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
@@ -1361,16 +1370,16 @@ BOOL __fastcall Skills_SrvDoFunc_080_FistOfTheHeavens(::SGAMEDATA * pGame, D2Uni
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit_00);
     sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit_00);
-    sSkillArg.nMissileTxtNo = eChargeUpMissile;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLvl;
+    sSkillArg.nMissileTxtNo = eChargeUpMissile;
     D2UnitStrc* pUnit_01 = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
     if (!pUnit_01) {
       return 0;
     }
 
-    D2Common::Units::Missile::SetTargetX(pUnit_01, pUnit_00->eUnitType);
-    D2Common::Units::Missile::SetTargetY(pUnit_01, pUnit_00->nUnitGUID);
+    D2Common::Units::Missile::SetTargetX(pUnit_01, GetTypeInline(pUnit_00));
+    D2Common::Units::Missile::SetTargetY(pUnit_01, GetGUIDInline(pUnit_00));
     short int nOverlayId = pSkillsTxt->srvoverlay;
     if (nOverlayId >= 0 && (int)nOverlayId < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
       D2Common::Units::SetOverlay(pUnit_00, (int)nOverlayId, 0);

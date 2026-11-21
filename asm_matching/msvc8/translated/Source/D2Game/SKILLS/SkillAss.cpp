@@ -2809,25 +2809,15 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
     int32_t nMaxHpShifted;
     int nHpScaledFull;
     uint32_t nAlignment;
-    int nHpFinal;
     uint32_t nConvertRoll = SKILLASS_RollMindBlastConversion(pUnit2, nParam->nConvertChance, pUnit);
     if (!nConvertRoll) {
       return 0;
     }
 
-    nConvertRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit2->sSeed, nParam->nConvertLengthRange);
-    int nExpireFrame = nConvertRoll + pGame->dwGameFrame + nParam->nConvertLength;
+    int nExpireFrame = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit2->sSeed, nParam->nConvertLengthRange) + pGame->dwGameFrame + nParam->nConvertLength;
     D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_conversion);
     if (!pStatList) {
-      if (!pUnit2) {
-        nMaxHpShifted = -1;
-        eOwnerUnitType = UNIT_COUNT;
-      } else {
-        nMaxHpShifted = pUnit2->nUnitGUID;
-        eOwnerUnitType = pUnit2->eUnitType;
-      }
-
-      pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0x802, nExpireFrame, eOwnerUnitType, nMaxHpShifted);
+      pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0x802, nExpireFrame, !pUnit2 ? UNIT_COUNT : pUnit2->eUnitType, !pUnit2 ? -1 : pUnit2->nUnitGUID);
       if (!pStatList) {
         return 0;
       }
@@ -2861,26 +2851,18 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
     if (pStatList) {
       return 1;
     }
-    if (!pUnit) {
-      nHpScaledFull = -1;
-      eOwnerUnitType = UNIT_COUNT;
-    } else {
-      nHpScaledFull = pUnit->nUnitGUID;
-      eOwnerUnitType = pUnit->eUnitType;
-    }
-
-    pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0, 0, eOwnerUnitType, nHpScaledFull);
+    pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
     if (pStatList) {
       int32_t nHpShifted;
       D2Common::Stats::StatsEx::SetState(pStatList, STATE_conversion_save);
       D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
-      nHpScaledFull = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-      nMaxHpShifted = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
+      nHpScaledFull = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) >> 8;
+      nMaxHpShifted = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit) >> 8;
       D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_conversion_level, nExpireFrame, 0);
-      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_conversion_maxhp, nMaxHpShifted >> 8, 0);
-      nHpShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nHpScaledFull >> 8, nCasterLevel, nExpireFrame);
+      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_conversion_maxhp, nMaxHpShifted, 0);
+      nHpShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nHpScaledFull, nCasterLevel, nExpireFrame);
       nHpScaledFull = nHpShifted * 0x100;
-      nMaxHpShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxHpShifted >> 8, nCasterLevel, nExpireFrame);
+      nMaxHpShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxHpShifted, nCasterLevel, nExpireFrame);
       nExpireFrame = nMaxHpShifted * 0x100;
       if (nExpireFrame < 1) {
         nExpireFrame = 1;
@@ -2891,16 +2873,16 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
         nHpResultLo = 1;
       }
 
-      nHpFinal = nExpireFrame;
       if (nHpResultLo < nExpireFrame) {
-        nHpFinal = nHpScaledFull;
         if (nHpScaledFull <= 1) {
-          nHpFinal = 1;
+          nHpScaledFull = 1;
         }
+      } else {
+        nHpScaledFull = nExpireFrame;
       }
 
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, nCasterLevel, 0);
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nHpFinal, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nHpScaledFull, 0);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, nExpireFrame, 0);
     }
 

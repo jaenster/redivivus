@@ -851,32 +851,20 @@ void __stdcall PANEL_DrawExperienceBar() {
     uint16_t wszTooltip[384];
     uint16_t wszItemName[128];
     wszStatText[0] = L'\0';
-    uint16_t* pClearDst = wszStatText + 1;
-    for (iTmp = 0x7f; iTmp; iTmp--) {
-      pClearDst[0] = L'\0';
-      pClearDst[1] = L'\0';
-      pClearDst += 2;
+    for (iTmp = 1; iTmp < 256; iTmp++) {
+      wszStatText[iTmp] = L'\0';
     }
 
-    *pClearDst = L'\0';
     wszItemName[0] = L'\0';
-    pClearDst = wszItemName + 1;
-    for (iTmp = 0x3f; iTmp; iTmp--) {
-      pClearDst[0] = L'\0';
-      pClearDst[1] = L'\0';
-      pClearDst += 2;
+    for (iTmp = 1; iTmp < 128; iTmp++) {
+      wszItemName[iTmp] = L'\0';
     }
 
-    *pClearDst = L'\0';
     wszTooltip[0] = L'\0';
-    pClearDst = wszTooltip + 1;
-    for (iTmp = 0xbf; iTmp; iTmp--) {
-      pClearDst[0] = L'\0';
-      pClearDst[1] = L'\0';
-      pClearDst += 2;
+    for (iTmp = 1; iTmp < 384; iTmp++) {
+      wszTooltip[iTmp] = L'\0';
     }
 
-    *pClearDst = L'\0';
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     if (!(gpPanelBeltSlot && gpPanelBeltHoverItem)) {
       return;

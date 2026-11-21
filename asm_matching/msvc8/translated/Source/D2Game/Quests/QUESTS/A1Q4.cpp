@@ -555,6 +555,12 @@ BOOL __fastcall Q04_RemoveCainFromTristram(::SGAMEDATA * pGame, D2UnitStrc * pUn
     return 1;
 }
 
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 // A1Q4 — Q04_SpawnDeckardCainNpc: spawns the rescued Deckard Cain NPC unit
 // (monster classId 0x109) at/near a given room tile. Validates the requested tile
 // is inside the room, then retries FindSpawnableLocation + SpawnMonster up to ~0x14
@@ -575,9 +581,9 @@ static void __stdcall Q04_SpawnDeckardCainNpc(::SGAMEDATA * pGame, D2RoomStrc * 
     pSpawnRoomOut = pRoom;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
     int iRetry;
-    iRetry = 0;
     ptCainSpawnPos.x = nX;
     ptCainSpawnPos.y = nY;
+    iRetry = 0;
     do {
       if (ptCainSpawnPos.x >= sRoomCoords.dwXStart && ptCainSpawnPos.y >= sRoomCoords.dwYStart && ptCainSpawnPos.x < sRoomCoords.dwXSize - 1 + sRoomCoords.dwXStart && ptCainSpawnPos.y < sRoomCoords.dwYSize - 1 + sRoomCoords.dwYStart) {
         goto spawn_cain;
@@ -592,9 +598,9 @@ static void __stdcall Q04_SpawnDeckardCainNpc(::SGAMEDATA * pGame, D2RoomStrc * 
     spawn_cain:
     FindSpawnableLocation(pRoom, &ptCainSpawnPos, 2, 0x100, &pSpawnRoomOut, 1, 100);
     if (!pSpawnRoomOut) {
+      pSpawnRoomOut = pRoom;
       ptCainSpawnPos.x = nX;
       ptCainSpawnPos.y = nY;
-      pSpawnRoomOut = pRoom;
     }
 
     D2UnitStrc* pSpawnedCain;
@@ -602,20 +608,20 @@ static void __stdcall Q04_SpawnDeckardCainNpc(::SGAMEDATA * pGame, D2RoomStrc * 
     if (!pSpawnedCain) {
       iRetry = 0;
       do {
-        ptCainSpawnPos.y++;
         ptCainSpawnPos.x++;
+        ptCainSpawnPos.y++;
         pSpawnRoomOut = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pSpawnRoomOut, ptCainSpawnPos.x, ptCainSpawnPos.y);
         if (!pSpawnRoomOut) {
+          pSpawnRoomOut = pRoom;
           ptCainSpawnPos.x = nX;
           ptCainSpawnPos.y = nY;
-          pSpawnRoomOut = pRoom;
         }
 
         FindSpawnableLocation(pSpawnRoomOut, &ptCainSpawnPos, 2, 0x100, &pSpawnRoomOut, 2, 100);
         if (!pSpawnRoomOut) {
+          pSpawnRoomOut = pRoom;
           ptCainSpawnPos.x = nX;
           ptCainSpawnPos.y = nY;
-          pSpawnRoomOut = pRoom;
         }
 
         iRetry++;
@@ -635,7 +641,7 @@ static void __stdcall Q04_SpawnDeckardCainNpc(::SGAMEDATA * pGame, D2RoomStrc * 
     pSpawnedCain->eUnitFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
     pA1Q4Specific->sSub.bCairnMonsterSaved = '\x01';
     pA1Q4Specific->sSub.bPendingCairnActivation = '\0';
-    pA1Q4Specific->sSub.nCainMonsterGUID = pSpawnedCain->nUnitGUID;
+    pA1Q4Specific->sSub.nCainMonsterGUID = GetGUIDInline(pSpawnedCain);
 }
 
 // A1Q4 — Q04_MarkCannotComplete (per-player iterate callback).

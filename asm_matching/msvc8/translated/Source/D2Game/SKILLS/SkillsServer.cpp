@@ -521,6 +521,7 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
     D2MissilesTxt* pMissileTxt;
     BOOL bInTown;
     ::SGAMEDATA* pGame;
+    D2UnitStrc* pOwner;
     D2MonStatsTxt* pMonStats;
     uint32_t nCheckResult;
     D2RoomStrc* pRoom2;
@@ -529,9 +530,7 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
     POINT ptDst;
     eD2PlayerAnimMode eAnimMode;
     D2UnitStrc* pTargetUnit;
-    if (!pUnit2) {
-      return 0;
-    }
+    if (pUnit2) {
 
     switch (pUnit2->eUnitType) {
       case UNIT_PLAYER:
@@ -636,10 +635,12 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
       if (nTargetFlags & 0x10000) {
         if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
           pGame = UNIT::SUnit::GetGamePointer(pUnit);
-          pUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-          if (!pUnit) {
+          pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
+          if (!pOwner) {
             return 0;
           }
+
+          pUnit = pOwner;
         }
 
         pTargetUnit = pUnit2;
@@ -660,10 +661,12 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
       if (nTargetFlags & 0x8000) {
         if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
           pGame = UNIT::SUnit::GetGamePointer(pUnit);
-          pUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-          if (!pUnit) {
+          pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
+          if (!pOwner) {
             return 0;
           }
+
+          pUnit = pOwner;
         }
 
         pTargetUnit = pUnit2;
@@ -675,10 +678,12 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
       if (nTargetFlags & 0x20000) {
         if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
           pGame = UNIT::SUnit::GetGamePointer(pUnit);
-          pUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-          if (!pUnit) {
+          pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
+          if (!pOwner) {
             return 0;
           }
+
+          pUnit = pOwner;
         }
 
         bInTown = D2Common::Units::IsInMeleeRange(pUnit, pUnit2, 0);
@@ -706,6 +711,8 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
           }
         }
       }
+    }
+
     }
 
     return 0;
@@ -3880,15 +3887,9 @@ BOOL __fastcall SKILLS_SrvStartSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD
     D2SkillsTxt* pSkillsTxt;
     uint32_t nTargetX;
     uint32_t nTargetY;
-    ::SGAMEDATA* pGameCtx;
     short int nSrvStFuncId;
     D2RoomStrc* pRoom;
-    pRoom = 0;
-    if (pGame && pUnit) {
-      pGameCtx = pGame;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    }
-    if (!pRoom) {
+    if (!pGame || !pUnit || !D2Common::Units::UNITS_GetRoom(pUnit)) {
       return 0;
     }
 
@@ -3900,16 +3901,16 @@ BOOL __fastcall SKILLS_SrvStartSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       if (!pRoom || (bHasLOS = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , bHasLOS != 0)) {
         D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-        if (pUnit->eUnitType != UNIT_PLAYER) {
+        if (GetTypeInline(pUnit) != UNIT_PLAYER) {
           return 0;
         }
 
-        PLAYER::PlayerModes::PLRMODES_MoveToLocation(pGameCtx, pUnit, nullptr, 5, 0, 0, 1);
+        PLAYER::PlayerModes::PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 5, 0, 0, 1);
         return 0;
       }
     }
     if (pSkillsTxt->lineofsight != '\0') {
-      bHasLOS = SKILLS_GetTargetOrCursorPos(pGameCtx, pUnit, &nTargetX, &nTargetY);
+      bHasLOS = SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &nTargetY);
       if (bHasLOS) {
         switch (pSkillsTxt->lineofsight) {
           default:
@@ -3948,16 +3949,13 @@ BOOL __fastcall SKILLS_SrvStartSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD
     if (!SKILLSRVSTFUNCS[nSrvStFuncId]) {
       bHasLOS = 1;
     } else {
-      bHasLOS = (*SKILLSRVSTFUNCS[nSrvStFuncId])(pGameCtx, pUnit, eSkill, nSkillLvl);
-      if (!bHasLOS) {
-        return 0;
-      }
-      if (!(*((uint8_t*)pSkillsTxt + 0x8) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) && !bSkipManaCost) {
-        CalculateManaUse(pGameCtx, pUnit, eSkill, nSkillLvl);
+      bHasLOS = (*SKILLSRVSTFUNCS[nSrvStFuncId])(pGame, pUnit, eSkill, nSkillLvl);
+      if (bHasLOS && !(*((uint8_t*)pSkillsTxt + 0x8) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) && !bSkipManaCost) {
+        CalculateManaUse(pGame, pUnit, eSkill, nSkillLvl);
       }
     }
-    if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
-      GAME::Event::EVENT_RemoveUnitTimersByType(pGameCtx, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, 0);
+    if (bHasLOS && *((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
+      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, 0);
     }
 
     return bHasLOS;

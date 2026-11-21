@@ -780,7 +780,6 @@ void __fastcall SKILLBAR_StateCallback_Whirlwind(D2UnitStrc * pUnit, eD2States e
 BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bHasTargetPos;
     D2PathPointStrc* pPathPoints;
-    SKILLBAR_SrvStFn38_Whirlwind_Slotm18 uSlot18;
     uint32_t nTargetY;
     uint32_t nTargetX;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -805,12 +804,12 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
       return 0;
     }
 
-    uSlot18.pNearbyTarget = UNIT::SUnit::GetTargetEx(pGame2, pUnit);
-    if (uSlot18.pNearbyTarget) {
-      bHasTargetPos = D2Common::Units::IsInMeleeRange(pUnit, uSlot18.pNearbyTarget, 0);
+    D2UnitStrc* pNearbyTarget = UNIT::SUnit::GetTargetEx(pGame2, pUnit);
+    if (pNearbyTarget) {
+      bHasTargetPos = D2Common::Units::IsInMeleeRange(pUnit, pNearbyTarget, 0);
       if (bHasTargetPos) {
         UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
-        bHasTargetPos = SkillsServer::SKILLS_ForceAttackTarget(pGame2, pUnit, uSlot18.pNearbyTarget);
+        bHasTargetPos = SkillsServer::SKILLS_ForceAttackTarget(pGame2, pUnit, pNearbyTarget);
         return bHasTargetPos;
       }
     }
@@ -819,6 +818,7 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
     if (pUnit) {
       eUnitType = pUnit->eUnitType;
     }
+    BOOL bIsPlayer = eUnitType == UNIT_PLAYER;
 
     D2DynamicPathStrc* pDynPath = pUnit->pPath.pDynamicPath;
     if (!pDynPath) {
@@ -826,13 +826,13 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
       return 0;
     }
 
-    uSlot18.nCollisionPattern = eUnitType == UNIT_PLAYER ? 0x1c09 : 0x3c01;
+    int32_t nCollisionPattern = bIsPlayer ? 0x1c09 : 0x3c01;
     D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynPath, 0xc01);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynPath, 7);
     uint32_t bPathOk = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynPath, pUnit, 0);
     if (!bPathOk) {
       UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
-      D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynPath, uSlot18.nCollisionPattern);
+      D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynPath, nCollisionPattern);
       return 0;
     }
 
@@ -843,18 +843,13 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
     int32_t nCalcResult = D2Common::PATH::DynamicPath::GetPathPoint(pDynPath, &pPathPoints);
     if (nCalcResult <= 0) {
       UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
-      D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynPath, uSlot18.nCollisionPattern);
+      D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynPath, nCollisionPattern);
       return 0;
     }
 
     nTargetX = (uint32_t)pPathPoints[nCalcResult - 1].nX;
     nTargetY = (uint32_t)pPathPoints[nCalcResult - 1].nY;
-    int eCollisionFlag = eUnitType == UNIT_PLAYER ? 0x80 : 0x100;
-    eD2CollisionShapeType nType = D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit);
-    uint32_t nCollideX = nTargetX;
-    
-    
-    D2Common::Collision::AddCollision_Type((D2RoomStrc*)(D2Common::Units::UNITS_GetRoom(pUnit)), nCollideX, (uint32_t)(nTargetY), nType, eCollisionFlag);
+    D2Common::Collision::AddCollision_Type(D2Common::Units::UNITS_GetRoom(pUnit), nTargetX, nTargetY, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), bIsPlayer ? 0x80 : 0x100);
     UNIT::SUnit::SetUninterruptableState(pUnit, 1);
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 1);
     D2SkillStrc* pSkill = pCurrentSkill;
@@ -891,16 +886,16 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
     if (pSkillsTxt->auraevent[0] >= 0) {
       short int* pAuraEventCursor = pSkillsTxt->auraevent;
       UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(pGame2, pUnit, 1, (int)pSkillsTxt->aurastate);
-      uSlot18.nAuraEventIdx = 0;
+      int32_t nAuraEventIdx = 0;
       do {
         if (*pAuraEventCursor < 0) {
           break;
         }
 
         SkillsServer::D2SetAuraEvent(pGame2, pUnit, (int)*pAuraEventCursor, eSkill, nSkillLvl, (int)pAuraEventCursor[3], 1, (int)pSkillsTxt->aurastate);
-        uSlot18.nAuraEventIdx++;
+        nAuraEventIdx++;
         pAuraEventCursor++;
-      } while (uSlot18.nAuraEventIdx < 3);
+      } while (nAuraEventIdx < 3);
     }
 
     D2Common::DATATBLS::ItemStats::D2StatesTogglegfx(pUnit, (int)pSkillsTxt->aurastate, 1);
@@ -1117,14 +1112,12 @@ BOOL __fastcall Skills_SrvDoFunc_076_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc *
 BOOL __fastcall SKILLBAR_SrvStFn39_Berserk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     int32_t nExpireGameFrame;
-    if ((int)eSkill < 0) {
-      return 0;
+    D2SkillsTxt* pSkillsTxt;
+    if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
+      pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    } else {
+      pSkillsTxt = nullptr;
     }
-    if ((int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -1154,12 +1147,12 @@ BOOL __fastcall SKILLBAR_SrvStFn39_Berserk(::SGAMEDATA * pGame, D2UnitStrc * pUn
       SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
     }
 
-    *(uint8_t*)(char*)&nExpireGameFrame = pSkillsTxt->SrcDam;
-    if (!(uint8_t)nExpireGameFrame) {
-      *(uint8_t*)(char*)&nExpireGameFrame = 0x80;
+    uint8_t nSrcDam = pSkillsTxt->SrcDam;
+    if (!nSrcDam) {
+      nSrcDam = 0x80;
     }
 
-    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pUnit2, &sDamage, (uint8_t)nExpireGameFrame);
+    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pUnit2, &sDamage, nSrcDam);
     if (!(pSkillsTxt->aurastate >= 0 && (int)pSkillsTxt->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
       return 1;
     }
@@ -1173,16 +1166,7 @@ BOOL __fastcall SKILLBAR_SrvStFn39_Berserk(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
     D2StatListExStrc* pStatsEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillsTxt->aurastate);
     if (!pStatsEx) {
-      eD2UnitType eUnitType;
-      if (!pUnit) {
-        nDurationFrames = -1;
-        eUnitType = UNIT_COUNT;
-      } else {
-        nDurationFrames = pUnit->nUnitGUID;
-        eUnitType = pUnit->eUnitType;
-      }
-
-      pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nExpireGameFrame, eUnitType, nDurationFrames);
+      pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nExpireGameFrame, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
       if (!pStatsEx) {
         return 1;
       }
@@ -1562,8 +1546,15 @@ static BOOL __stdcall SKILLBAR_UpdateLeap(::SGAMEDATA * pGame, D2SkillStrc * pSk
 
     int32_t nX = D2Common::Skills::SKILL_GetParam1(pSkill);
     int32_t nY = D2Common::Skills::SKILL_GetParam2(pSkill);
-    bool bIsNotMonster = pUnit->eUnitType != UNIT_MONSTER;
-    if (bIsNotMonster || (nMonBaseId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit) , nMonBaseId < 0) || nMonBaseId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+    BOOL bIsMonster = pUnit->eUnitType == UNIT_MONSTER;
+    if (bIsMonster) {
+      int nBaseId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
+      if (nBaseId >= 0 && nBaseId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+        nMonBaseId = nBaseId;
+      } else {
+        nMonBaseId = -1;
+      }
+    } else {
       nMonBaseId = -1;
     }
 
@@ -1579,7 +1570,7 @@ static BOOL __stdcall SKILLBAR_UpdateLeap(::SGAMEDATA * pGame, D2SkillStrc * pSk
       eD2Skills eCurrentSkill;
       nCollisionWidth = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
       if (nCollisionWidth == nY) {
-        if (!bIsNotMonster) {
+        if (bIsMonster) {
           D2Common::Collision::RemoveCollision_Type(pRoom, nX, nY, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), 0x100);
           D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, 0x100);
           D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynamicPath, 0x3c01);
@@ -1606,7 +1597,7 @@ static BOOL __stdcall SKILLBAR_UpdateLeap(::SGAMEDATA * pGame, D2SkillStrc * pSk
         return 1;
       }
     }
-    if (!bIsNotMonster) {
+    if (bIsMonster) {
       nCollisionWidth = 0;
       if (nMonBaseId == 0x4e) {
         nCollisionWidth = 8;

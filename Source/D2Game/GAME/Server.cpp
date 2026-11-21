@@ -2269,9 +2269,9 @@ uint32_t __stdcall QSERVER_GetClientCountByServerId(uint16_t nServerId) {
 // Fills a caller-supplied output buffer with a snapshot of the game instance identified by nServerId. Locks the server table to resolve the server token, then locks the game to read: token, seed, client/unit counts per type, path-timing histograms (with rolling reset after 200 samples), game name/password/description, arena flags, memory pool pointer, template/ladder flags, uptime, and cycle rate. Returns true on success; halts via ERROR_UnrecoverableInternalError_Halt if the game lock is missing.
 BOOL __stdcall QSERVER_ExportGameStats(uint16_t nServerId, D2QServerGameStatsStrc * pStats) {
     int32_t nPathSampleCount;
+    uint32_t nToken = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
     ::SGAMEDATA* pGame = gaQServerGameByToken[nServerId];
-    uint32_t nToken = 0;
     if (pGame && pGame != (::SGAMEDATA*)-1) {
       nToken = (uint32_t)pGame;
     }
@@ -2315,8 +2315,7 @@ BOOL __stdcall QSERVER_ExportGameStats(uint16_t nServerId, D2QServerGameStatsStr
     }
 
     Storm::Source::SSTR::SStrCopy(pStats->szGameName, pGame->szGameName, 0x10);
-    DWORD dwTickCount = GetTickCount();
-    pStats->nUptimeMinutes = (dwTickCount - pGame->dwStatsTick) / 60000;
+    pStats->nUptimeMinutes = (GetTickCount() - pGame->dwStatsTick) / 1000 / 60;
     pStats->nGameFrameDiv100 = pGame->dwGameFrame / 100;
     pStats->dwCycleLastSecond = pGame->dwCycleLastSecond;
     pStats->nTemplateLevel = pGame->nTemplateLevel;

@@ -64,12 +64,10 @@ void __stdcall DrawRenderStats() {
     int nMisses;
     ULONG_PTR nAccesses;
     D2FloatIntUnion fValue;
-    float fKilobytes;
     D2CMP::SRC::SpriteCache::SPRITECACHE_GetStats(&nCacheSize, &nMisses, &nAccesses, &nPercentUtilized);
     if ((int)nAccesses > 0) {
       fValue.fValue = (float)nMisses * 100.0 / (float)(int)nAccesses;
-      fKilobytes = (float)nCacheSize;
-      sprintf(szStatLine, "Tile Cache: (%.2fK) %3.2f%%, Misses: %d, %d percent utilized\n", (double)(fKilobytes * 0.0009765625), (double)fValue.fValue, nMisses, nPercentUtilized);
+      sprintf(szStatLine, "Tile Cache: (%.2fK) %3.2f%%, Misses: %d, %d percent utilized\n", (double)((float)nCacheSize * 0.0009765625), (double)fValue.fValue, nMisses, nPercentUtilized);
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x30, szStatLine);
     }
 
@@ -78,61 +76,37 @@ void __stdcall DrawRenderStats() {
       return;
     }
 
-    fValue.nValue = *pRenderStats;
-    if (fValue.nValue) {
-      fKilobytes = (float)fValue.nValue;
-      if (fValue.nValue < 0) {
-        fKilobytes += 4294967296.0;
-      }
-
-      sprintf(szStatLine, "Floor Cache: (%.2fK) Misses: %d\n", (double)(fKilobytes * 0.0009765625), pRenderStats[2]);
+    uint32_t nCacheBytes;
+    nCacheBytes = pRenderStats[0];
+    if (nCacheBytes) {
+      sprintf(szStatLine, "Floor Cache: (%.2fK) Misses: %d\n", (float)nCacheBytes * 0.0009765625, pRenderStats[2]);
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x3c, szStatLine);
     }
 
-    fValue = d2_bits_as<D2FloatIntUnion>(((D2FloatIntUnion*)(pRenderStats + 3))->nValue);
-    if (fValue.nValue) {
-      fKilobytes = (float)fValue.nValue;
-      if (fValue.nValue < 0) {
-        fKilobytes += 4294967296.0;
-      }
-
-      sprintf(szStatLine, "Subtile Cache: (%.2fK) Misses: %d\n", (double)(fKilobytes * 0.0009765625), pRenderStats[5]);
+    nCacheBytes = pRenderStats[3];
+    if (nCacheBytes) {
+      sprintf(szStatLine, "Subtile Cache: (%.2fK) Misses: %d\n", (float)nCacheBytes * 0.0009765625, pRenderStats[5]);
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x48, szStatLine);
     }
 
-    fValue = d2_bits_as<D2FloatIntUnion>(((D2FloatIntUnion*)(pRenderStats + 6))->nValue);
-    if (fValue.nValue) {
-      fKilobytes = (float)fValue.nValue;
-      if (fValue.nValue < 0) {
-        fKilobytes += 4294967296.0;
-      }
-
-      sprintf(szStatLine, "Sprite Cache 1: (%.2fK) Misses: %d, Accesses Per Frame: %d\n", (double)(fKilobytes * 0.0009765625), pRenderStats[0xc], pRenderStats[0x12]);
+    nCacheBytes = pRenderStats[6];
+    if (nCacheBytes) {
+      sprintf(szStatLine, "Sprite Cache 1: (%.2fK) Misses: %d, Accesses Per Frame: %d\n", (float)nCacheBytes * 0.0009765625, pRenderStats[0xc], pRenderStats[0x12]);
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x54, szStatLine);
     }
 
-    fValue = d2_bits_as<D2FloatIntUnion>(((D2FloatIntUnion*)(pRenderStats + 7))->nValue);
-    if (fValue.nValue) {
-      fKilobytes = (float)fValue.nValue;
-      if (fValue.nValue < 0) {
-        fKilobytes += 4294967296.0;
-      }
-
-      sprintf(szStatLine, "Sprite Cache 2: (%.2fK) Misses: %d, Accesses Per Frame: %d\n", (double)(fKilobytes * 0.0009765625), pRenderStats[0xd], pRenderStats[0x13]);
+    nCacheBytes = pRenderStats[7];
+    if (nCacheBytes) {
+      sprintf(szStatLine, "Sprite Cache 2: (%.2fK) Misses: %d, Accesses Per Frame: %d\n", (float)nCacheBytes * 0.0009765625, pRenderStats[0xd], pRenderStats[0x13]);
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x60, szStatLine);
     }
 
-    fValue = d2_bits_as<D2FloatIntUnion>(((D2FloatIntUnion*)(pRenderStats + 8))->nValue);
-    if (!fValue.nValue) {
+    nCacheBytes = pRenderStats[8];
+    if (!nCacheBytes) {
       return;
     }
 
-    fKilobytes = (float)fValue.nValue;
-    if (fValue.nValue < 0) {
-      fKilobytes += 4294967296.0;
-    }
-
-    sprintf(szStatLine, "Sprite Cache 3: (%.2fK) Misses: %d, Accesses Per Frame: %d\n", (double)(fKilobytes * 0.0009765625), pRenderStats[0xe], pRenderStats[0x14]);
+    sprintf(szStatLine, "Sprite Cache 3: (%.2fK) Misses: %d, Accesses Per Frame: %d\n", (float)nCacheBytes * 0.0009765625, pRenderStats[0xe], pRenderStats[0x14]);
     D2gfx::D2GFX::D2GFX_DrawString(10, 0x6c, szStatLine);
 }
 

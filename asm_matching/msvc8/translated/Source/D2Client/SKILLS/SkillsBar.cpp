@@ -950,8 +950,8 @@ BOOL __fastcall Skills_CltStFunc_FindTeleportPositionForTarget(D2UnitStrc * pUni
 BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     eD2UnitType eUnitType;
     D2UnitStrc* pTargetUnit;
-    int nDestY;
     int32_t nDestX;
+    int32_t nDestY;
     D2SkillStrc* pSkill;
     pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
     if (!pSkill) {
@@ -975,48 +975,38 @@ BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2UnitStrc * pUnit, 
 
       eUnitType = D2Common::Skills::SKILL_GetParam3(pSkill);
       nDestX = D2Common::Skills::SKILL_GetParam4(pSkill);
-      if ((eUnitType == UNIT_COUNT || (pTargetUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nDestX, eUnitType) , !pTargetUnit)) && (pTargetUnit = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, 3, 0, -1, nullptr) , !pTargetUnit)) {
-        pUnit->nFrameCount = 0x400;
+      if (eUnitType != UNIT_COUNT) {
+        pTargetUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nDestX, eUnitType);
       } else {
+        pTargetUnit = nullptr;
+      }
+      if (!pTargetUnit) {
+        pTargetUnit = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, 3, 0, -1, nullptr);
+      }
+      if (pTargetUnit) {
         D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pTargetUnit);
         UNIT::CUnit::FaceTarget(pUnit, 0);
         Sound::SOUND_PlaySound(UNIT::UnitSnd::UNITSND_GetSkillCastSound(pUnit, D2Common::Units::GetHitClassForPlayerOrMonster(pUnit)), pUnit, 0, 0, 0);
         bFoundTarget = 1;
+      } else {
+        pUnit->nFrameCount = 0x400;
       }
     }
-    if (!(nSkillFlags & 2)) {
-      if (nSkillFlags & 0x80) {
-        SKILL_SetupLeapPath(pUnit, pSkill);
-        SKILL_CreateLeapArcParticle(pUnit, pSkill);
-        return 1;
-      }
-
-      D2Common::Skills::SKILL_SetFlags(pSkill, 0x1000);
-      return bFoundTarget;
+    if (nSkillFlags & 2) {
+      finish_landing:
+      nDestY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
+      PATH_ResetCollisionOnLanding(nDestY, D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit), pUnit);
+      D2Common::Skills::SKILL_SetFlags(pSkill, 0);
+      return 1;
+    }
+    if (nSkillFlags & 0x80) {
+      SKILL_SetupLeapPath(pUnit, pSkill);
+      SKILL_CreateLeapArcParticle(pUnit, pSkill);
+      return 1;
     }
 
-    finish_landing:
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nDestY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nDestY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nDestY = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nDestX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nDestX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nDestX = 0;
-    }
-
-    PATH_ResetCollisionOnLanding(nDestY, nDestX, pUnit);
-    D2Common::Skills::SKILL_SetFlags(pSkill, 0);
-    return 1;
+    D2Common::Skills::SKILL_SetFlags(pSkill, 0x1000);
+    return bFoundTarget;
 }
 
 // Renders pUnit at a rotated facing direction for skill animation (e.g. Whirlwind dual-weapon draw). Rotates the unit's dynamic-path direction by +0x2A (full) or +0x15 (half) steps depending on bHalfRotation, computes screen position in both perspective and orthographic modes, calls DRAW_WORLD_Unit_1 to draw the unit, then restores the original direction.

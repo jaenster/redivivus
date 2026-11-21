@@ -190,6 +190,7 @@
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/SKILLS/SkillAss.h"
 #include "Source/D2Game/Seed.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -4041,9 +4042,8 @@ static void __stdcall MISSILE_CreateRandomOffsetHit(int32_t nRadius, eMissilesId
     uint32_t nRandX;
     D2SkillArgStrc sSkillArg;
     uint32_t nRandY;
-    uint32_t nRandY2 = nRadius * 2;
-    nRandX = D2_SeedRollLimited(&pUnit->sSeed, nRandY2);
-    nRandY2 = D2_SeedRollLimited(&pUnit->sSeed, nRandY2);
+    int nOffsetX = D2_SeedRollLimited(&pUnit->sSeed, nRadius * 2) - nRadius;
+    int nOffsetY = D2_SeedRollLimited(&pUnit->sSeed, nRadius * 2) - nRadius;
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
@@ -4078,7 +4078,7 @@ static void __stdcall MISSILE_CreateRandomOffsetHit(int32_t nRadius, eMissilesId
       nPosXorY = 0;
     }
 
-    sSkillArg.nUnitX = nPosXorY + (nRandX - nRadius);
+    sSkillArg.nUnitX = nPosXorY + nOffsetX;
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nPosXorY = pUnit->pPath.pStaticPath->nPosY;
@@ -4088,7 +4088,7 @@ static void __stdcall MISSILE_CreateRandomOffsetHit(int32_t nRadius, eMissilesId
       nPosXorY = 0;
     }
 
-    sSkillArg.nUnitY = nPosXorY + (nRandY2 - nRadius);
+    sSkillArg.nUnitY = nPosXorY + nOffsetY;
     sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
     sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
     sSkillArg.nMissileTxtNo = nMissileId;
@@ -4609,7 +4609,6 @@ int32_t __fastcall MISSILE_CltHitFn41_DurielDeathRock(D2UnitStrc * pUnit, D2Unit
 static void __stdcall MISSILE_CreateAtMonsterFacing(D2UnitStrc * pUnit, eMissilesId nMissileId, D2UnitStrc * pUnit2) {
     D2MissilesTxt* pMissileTxt;
     D2SkillArgStrc sSkillArg;
-    int nPosXorY = 0;
     uint32_t nUpgradeDX = 0;
     uint32_t nUpgradeDY = 0;
     D2Common::Monsters::MONSTERS::MONSTERS_GetUpgradeSkillsAndCount(pUnit, &nUpgradeDX, &nUpgradeDY);
@@ -4624,26 +4623,10 @@ static void __stdcall MISSILE_CreateAtMonsterFacing(D2UnitStrc * pUnit, eMissile
     sSkillArg.nMissileTxtNo = nMissileId;
     sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit2);
     sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit2);
-    eD2UnitType eUnitType = pUnit2->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nPosXorY = pUnit2->pPath.pStaticPath->nPosX;
-    } else if (pUnit2->pPath.pDynamicPath) {
-      nPosXorY = D2Common::PATH::DynamicPath::GetXPos(pUnit2->pPath.pDynamicPath);
-    }
-
-    uint32_t DVar1 = D2_SeedRoll(&pUnit2->sSeed);
-    sSkillArg.nX = DVar1 % 0x14 - 10 + nPosXorY;
-    eUnitType = pUnit2->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nPosXorY = pUnit2->pPath.pStaticPath->nPosY;
-    } else if (pUnit2->pPath.pDynamicPath) {
-      nPosXorY = D2Common::PATH::DynamicPath::GetYPos(pUnit2->pPath.pDynamicPath);
-    } else {
-      nPosXorY = 0;
-    }
-
-    DVar1 = D2_SeedRoll(&pUnit2->sSeed);
-    sSkillArg.nY = DVar1 % 0x14 - 10 + nPosXorY;
+    const int32_t nPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit2);
+    sSkillArg.nX = D2_SeedRoll(&pUnit2->sSeed) % 0x14 - 10 + nPosX;
+    const int32_t nPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit2);
+    sSkillArg.nY = D2_SeedRoll(&pUnit2->sSeed) % 0x14 - 10 + nPosY;
     D2UnitStrc* pNewMissile = Missile::MakeMissile(&sSkillArg);
     if (!pNewMissile) {
       return;
@@ -9299,93 +9282,52 @@ static D2BaalFxSpiritSpawnStrc gaBaalFxSpiritSpawnSchedule[5] = {
 
 // Client-side do-function for Paladin Holy Bolt / Fist-of-the-Heavens orbiting missile (func 065). Tracks a parent missile via TargetX/TargetY slots; if the parent has advanced its state it computes a perpendicular orbit offset, updates the dynamic-path SP1 and recalculates the path. Falls through to CltDoFunc_001 each tick. Side-effects: velocity and SP1 mutation on the missile's DynamicPath.
 void __fastcall MISSILE_CltDoFn65_BaalFxSpirit(D2UnitStrc * pUnit) {
-    short int nX;
-    uint32_t nSkipRand;
-    uint32_t nRandRoll2;
-    int32_t nSelfX;
-    int32_t nTargetMissileId;
-    int nDeltaY;
-    int nDeltaX;
-    uint32_t sNewSeed;
-    D2SeedStrc* pSeed;
-    pSeed = &pUnit->sSeed;
-    int32_t nState;
-    nState = D2Common::Units::Missile::GetTargetY(pUnit);
-    D2DynamicPathStrc* pDynamicPath;
-    pDynamicPath = pUnit->pPath.pDynamicPath;
+    D2SeedStrc* pSeed = &pUnit->sSeed;
+    int32_t nState = D2Common::Units::Missile::GetTargetY(pUnit);
+    D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     if (!pDynamicPath) {
       MISSILE_CltDoFn01_BasicMissile(pUnit);
       return;
     }
 
-    int32_t nTargetMissileState;
-    nTargetMissileState = D2Common::Units::Missile::GetTargetX(pUnit);
-    D2UnitStrc* pTargetMissile;
-    pTargetMissile = CUnit::UNITS_FindServerSideUnit(nTargetMissileState, UNIT_MISSILE);
+    int32_t nTargetState = D2Common::Units::Missile::GetTargetX(pUnit);
+    D2UnitStrc* pTargetMissile = CUnit::UNITS_FindServerSideUnit(nTargetState, UNIT_MISSILE);
     if (pTargetMissile) {
-      short int nY;
-      nTargetMissileState = D2Common::Units::Missile::GetTargetX(pTargetMissile);
-      if (nState == nTargetMissileState || nTargetMissileState < 2 || (nSkipRand = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 0x19) , nSkipRand != 0)) {
-        if (!nState) {
-          sNewSeed = D2_SeedRoll(pSeed);
-          if (sNewSeed % 10 == 0) {
-            D2Common::Units::Missile::SetTargetY(pUnit, 1);
-            Engine::Particle::PARTICLE_SetStoppedWithFade(pUnit);
-            D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, 0xf00, ".\\UNIT\\Missile.cpp", 0x19e6);
-            nRandRoll2 = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 2);
-            if (nRandRoll2) {
-              Engine::Particle::SetOffsetVector(pUnit, 0, 0, 1, 1);
-              MISSILE_CltDoFn01_BasicMissile(pUnit);
-              return;
-            }
+      nTargetState = D2Common::Units::Missile::GetTargetX(pTargetMissile);
+      if (nState != nTargetState && nTargetState >= 2 && !D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 0x19)) {
+        D2Common::Units::Missile::SetTargetY(pUnit, nTargetState);
+        switch (nTargetState) {
+          case 2:
+            D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, 0xf00, ".\\UNIT\\Missile.cpp", 0x19db);
+            D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, 0x3b1f, 0x170c);
+            D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
+            break;
+        }
+      } else if (nState == 0) {
+        if (D2_SeedRoll(pSeed) % 10 == 0) {
+          D2Common::Units::Missile::SetTargetY(pUnit, 1);
+          Engine::Particle::PARTICLE_SetStoppedWithFade(pUnit);
+          D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, 0xf00, ".\\UNIT\\Missile.cpp", 0x19e6);
+          if (D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 2)) {
+            Engine::Particle::SetOffsetVector(pUnit, 0, 0, 1, 1);
+            MISSILE_CltDoFn01_BasicMissile(pUnit);
+            return;
           }
-
-          goto chain_basic_missile;
         }
-        if (nState != 1) {
-          goto chain_basic_missile;
-        }
-
-        nTargetMissileState = D2Common::Units::GetXPosFromDynamicPathUnit(pTargetMissile);
-        nSelfX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-        nDeltaX = nSelfX - nTargetMissileState;
-        nTargetMissileState = D2Common::Units::GetYPosFromDynamicPathUnit(pTargetMissile);
-        nTargetMissileId = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-        nDeltaY = nTargetMissileId - nTargetMissileState;
+      } else if (nState == 1) {
+        int nDeltaX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit) - D2Common::Units::GetXPosFromDynamicPathUnit(pTargetMissile);
+        int nDeltaY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit) - D2Common::Units::GetYPosFromDynamicPathUnit(pTargetMissile);
         if (pUnit->nUnitGUID & 2) {
           nDeltaX = -nDeltaX;
           nDeltaY = -nDeltaY;
         }
-        if (!nDeltaX && !nDeltaY) {
-          goto chain_basic_missile;
-        }
-
-        nTargetMissileState = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-        nY = (short int)nTargetMissileState + (short int)nDeltaX;
-        nTargetMissileState = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-        nX = (short int)nTargetMissileState - (short int)nDeltaY;
-      } else {
-        D2Common::Units::Missile::SetTargetY(pUnit, nTargetMissileState);
-        switch (nTargetMissileState) {
-          default:
-            {
-              goto chain_basic_missile;
-            }
-          case 2:
-            {
-              D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, 0xf00, ".\\UNIT\\Missile.cpp", 0x19db);
-              nY = 0x170c;
-              nX = 0x3b1f;
-              break;
-            }
+        if (nDeltaX || nDeltaY) {
+          D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (short)(D2Common::Units::GetXPosFromDynamicPathUnit(pUnit) - nDeltaY), (short)(D2Common::Units::GetYPosFromDynamicPathUnit(pUnit) + nDeltaX));
+          D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
         }
       }
-
-      D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, nX, nY);
-      D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
     }
 
-    chain_basic_missile:
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 

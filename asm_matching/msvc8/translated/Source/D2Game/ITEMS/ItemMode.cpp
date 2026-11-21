@@ -2409,8 +2409,6 @@ static eD2Skills ITEMMODE_GetItemCastSkill(D2UnitStrc * pUnit) {
 // @sourcefile .\ITEMS\ItemMode.cpp
 static void __stdcall ITEMMODE_DecrementBookSkillQuantity(eD2Skills eSkill, D2UnitStrc * pUnit) {
     int32_t nRemainingQty;
-    int nUnitGUID;
-    int32_t byUnitType;
     D2SkillStrc* pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);
     if (pSkill) {
       D2SkillStrc* pRightSkill;
@@ -2426,15 +2424,7 @@ static void __stdcall ITEMMODE_DecrementBookSkillQuantity(eD2Skills eSkill, D2Un
       }
 
       D2Common::Skills::SKILL_SetQuantity(pSkill, nRemainingQty);
-      if (!pUnit) {
-        nUnitGUID = -1;
-        byUnitType = 6;
-      } else {
-        nUnitGUID = pUnit->nUnitGUID;
-        byUnitType = pUnit->eUnitType;
-      }
-
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0xfc2), byUnitType, nUnitGUID, eSkill, (uint8_t)nRemainingQty);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0xfc2), !pUnit ? 6 : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID, eSkill, (uint8_t)nRemainingQty);
       return;
     }
 

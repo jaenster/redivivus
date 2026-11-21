@@ -1138,40 +1138,33 @@ uint8_t * __fastcall GFXUTIL_GetItemColorForBodyLoc(D2UnitStrc * pUnit, int32_t 
 }
 
 uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(D2UnitStrc * pUnit, uint32_t nUnitDirection) {
-    // Frame slots -12..-4 are ONE object: &nScreenY is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nScreenY;
-      int nScreenX;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    int nScreenX;
+    int nScreenY;
     uint32_t nResult;
     BOOL bHasState0x25;
     D2UnitStrc* pOwnerUnit;
     D2InventoryStrc* pInventory;
     int* pYAdjust;
-    uint32_t nWeaponClass[2];
+    uint32_t nWeaponClass;
     int32_t nBais;
     int* pXAdjust;
-    __frame0.nScreenX = 0;
-    __frame0.nScreenY = 0;
-    uint32_t nDirection = nUnitDirection;
+    nScreenX = 0;
+    nScreenY = 0;
     uint32_t bIsPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     if (bIsPerspective) {
-      pYAdjust = &__frame0.nScreenY;
-      pXAdjust = &__frame0.nScreenX;
+      pYAdjust = &nScreenY;
+      pXAdjust = &nScreenX;
       D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(D2Common::Units::GetPrecisionX(pUnit), D2Common::Units::GetPrecisionY(pUnit), 0, pXAdjust, pYAdjust);
       nResult = UI::Path::DRAW_GetTypeOfBorder();
       switch (nResult) {
         case 1:
           {
-            __frame0.nScreenX -= UI::ui::ScreenSizeX / 4;
+            nScreenX -= UI::ui::ScreenSizeX / 4;
             break;
           }
         case 2:
           {
-            __frame0.nScreenX += UI::ui::ScreenSizeX / 4;
+            nScreenX += UI::ui::ScreenSizeX / 4;
             break;
           }
       }
@@ -1179,13 +1172,13 @@ uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(D2UnitStrc * pUnit, uint
       int32_t nWorldOffset;
       nBais = D2Common::Units::GetScreenX(pUnit);
       nBais -= UI::Path::DRAW_GetWorldOffsetX();
-      __frame0.nScreenX = nBais;
+      nScreenX = nBais;
       nBais = D2Common::Units::GetScreenY(pUnit);
       nBais -= UI::Path::DRAW_GetWorldOffsetY();
-      __frame0.nScreenY = nBais;
+      nScreenY = nBais;
     }
 
-    BOOL pGfxInfo = Gfx::GFX_IsUnitOnScreen(pUnit, __frame0.nScreenX, __frame0.nScreenY, 0, 0);
+    BOOL pGfxInfo = Gfx::GFX_IsUnitOnScreen(pUnit, nScreenX, nScreenY, 0, 0);
     if (!pGfxInfo) {
       return 0;
     }
@@ -1195,7 +1188,7 @@ uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(D2UnitStrc * pUnit, uint
       pInventory = pOwnerUnit->pInventory;
     }
 
-    nResult = D2Common::COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit, pInventory, nWeaponClass, -1, 1);
+    nResult = D2Common::COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit, pInventory, &nWeaponClass, -1, 1);
     D2GfxInfoUnkStrc* pCofGfxInfo = Gfx::GFX_FindGfxInfoByModeAndWeapon(pUnit, nResult, -1);
     if (!pCofGfxInfo) {
       pCofGfxInfo = Gfx::GFX_EnsureUnitCofLoaded(pUnit, nResult, -1);
@@ -1210,7 +1203,7 @@ uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(D2UnitStrc * pUnit, uint
       return 0;
     }
 
-    nResult = GFXUTIL_GetCofDirection(pCofData, nDirection);
+    nResult = GFXUTIL_GetCofDirection(pCofData, nUnitDirection);
     return nResult;
 }
 

@@ -461,23 +461,23 @@ static void DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets(D2DrlgLevelStrc *
       exit(-1);
     }
 
-    nAttempts = 0;
+    int nTry = 0;
     nPlacedCount = 0;
     do {
       if (nPlacedCount >= 3) {
         break;
       }
 
-      nGridX = Seed::UNIT_GetModuloFromSeed(&pLevel->sSeed, pLevelData->nGridCoordsWidth / 2);
-      nGridY = Seed::UNIT_GetModuloFromSeed(&pLevel->sSeed, pLevelData->nGridCoordsHeight / 2);
-      nPresetCoord = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridX * 2, nGridY * 2);
+      nGridX = Seed::UNIT_GetModuloFromSeed(&pLevel->sSeed, pLevelData->nGridCoordsWidth / 2) * 2;
+      nGridY = Seed::UNIT_GetModuloFromSeed(&pLevel->sSeed, pLevelData->nGridCoordsHeight / 2) * 2;
+      nPresetCoord = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridX, nGridY);
       if (nPresetCoord >= 0x393 && nPresetCoord <= 0x39a) {
-        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridX * 2, nGridY * 2, nPresetCoord + 0x10, -1, 0);
+        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridX, nGridY, nPresetCoord + 0x10, -1, 0);
         nPlacedCount++;
       }
 
-      nAttempts++;
-    } while (nAttempts < 0x5a);
+      nTry++;
+    } while (nTry < 0x5a);
 
     nStartX = pLevelData->nGridCoordsWidth / 2;
     nStartX = D2_SeedRollLimited(&pLevel->sSeed, nStartX);
@@ -488,17 +488,14 @@ static void DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets(D2DrlgLevelStrc *
         return;
       }
 
-      nGridWidth = pLevelData->nGridCoordsWidth;
-      for (nXIter = 0; nXIter < nGridWidth && nPlacedCount < 3; nXIter++) {
-        nGridWidth = (int)(nXIter + nStartX * 2) % nGridWidth;
+      for (nXIter = 0; nXIter < pLevelData->nGridCoordsWidth && nPlacedCount < 3; nXIter++) {
+        nGridWidth = (int)(nXIter + nStartX * 2) % pLevelData->nGridCoordsWidth;
         nY = (int)(nAttempts + nStartY * 2) % pLevelData->nGridCoordsHeight;
         nGridPresetId = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridWidth, nY);
         if (nGridPresetId >= 0x393 && nGridPresetId <= 0x39a) {
           Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridWidth, nY, nGridPresetId + 0x10, -1, 0);
           nPlacedCount++;
         }
-
-        nGridWidth = pLevelData->nGridCoordsWidth;
       }
     }
 

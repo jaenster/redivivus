@@ -265,7 +265,7 @@ uint32_t __stdcall STATES_DoesStateStayOnDeath(D2UnitStrc * pUnit, int nStateId)
     if (nStateId < 0 || nStateId >= ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       return 0;
     }
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[nStateId >> 5] & Fog::BitBuffer::gadwBitMasks[nStateId & 0x1f];
     }
 

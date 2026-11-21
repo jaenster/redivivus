@@ -318,16 +318,14 @@ BOOL __fastcall Skills_CltDoFunc_Sor_FireWall(D2UnitStrc * pUnit, eD2Skills eSki
 
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nX = nCoordsX;
-    sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.nFlags = 0x21;
-    sSkillArg.nY = nTargetPosX;
     sSkillArg.pOwner = pUnit;
-    sSkillArg.nMissileTxtNo = ePrimaryMissileId;
+    sSkillArg.nY = nTargetPosX;
     sSkillArg.eSkillNo = eSkill;
-    int32_t nCasterY = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-    int nCasterToTargetDX = nCasterY - nCoordsX;
-    nCasterY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-    int nDeltaX = nCasterY - nTargetPosX;
+    sSkillArg.nSkillLevel = nSkillLvl;
+    sSkillArg.nMissileTxtNo = ePrimaryMissileId;
+    int nCasterToTargetDX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit) - nCoordsX;
+    int nDeltaX = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit) - nTargetPosX;
     sSkillArg.nUnitX = nCoordsX - nDeltaX;
     sSkillArg.nUnitY = nTargetPosX + nCasterToTargetDX;
     UNIT::Missile::MakeMissile(&sSkillArg);

@@ -836,56 +836,47 @@ void __stdcall DRAW_UI_MiniPanel() {
     int nButtonX;
     BOOL bLeftOpen = IsLeftScreenOpen();
     BOOL bRightOpen = IsRightScreenOpen();
-    if (bLeftOpen) {
-      if (!bRightOpen) {
-        memset(&sGfxData, 0, 0x48);
-        sGfxData.pDC6 = gpMiniPanelBackgroundDC6;
-        if (gbMiniPanelSinglePlayer) {
-          nButtonX = ui::ScreenSizeX / 2 + 0x38;
-        } else {
-          nButtonX = ui::ScreenSizeX / 2 + 0x23;
-        }
-
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nButtonX - 2, Inv::ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
-        MINIPANEL_CalculateButtonPositions(3);
-        MINIPANEL_DrawAllButtons(1);
-        MINIPANEL_HandleMouseHover(3);
-        gnMiniPanelMouseOverButton = 0;
-        return;
-      }
-
-      Cursor::GetMouseX();
-      Cursor::GetMouseY();
-      gnMiniPanelMouseOverButton = 1;
-      return;
-    }
-
-    int nOffsetX;
-    if (!bRightOpen) {
+    if (bLeftOpen && !bRightOpen) {
       memset(&sGfxData, 0, 0x48);
       sGfxData.pDC6 = gpMiniPanelBackgroundDC6;
       if (gbMiniPanelSinglePlayer) {
-        nOffsetX = -0x4a;
+        nButtonX = ui::ScreenSizeX / 2 + 0x38;
       } else {
-        nOffsetX = -0x54;
+        nButtonX = ui::ScreenSizeX / 2 + 0x23;
       }
 
-      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX / 2 + nOffsetX - 3, Inv::ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
+      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nButtonX - 2, Inv::ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
+      MINIPANEL_CalculateButtonPositions(3);
+      MINIPANEL_DrawAllButtons(1);
+      MINIPANEL_HandleMouseHover(3);
+      gnMiniPanelMouseOverButton = 0;
+    } else if (!bLeftOpen && !bRightOpen) {
+      memset(&sGfxData, 0, 0x48);
+      sGfxData.pDC6 = gpMiniPanelBackgroundDC6;
+      if (gbMiniPanelSinglePlayer) {
+        nButtonX = ui::ScreenSizeX / 2 - 0x4a;
+      } else {
+        nButtonX = ui::ScreenSizeX / 2 - 0x54;
+      }
+
+      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nButtonX - 3, Inv::ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
       MINIPANEL_CalculateButtonPositions(2);
       MINIPANEL_DrawAllButtons(1);
       MINIPANEL_HandleMouseHover(2);
       gnMiniPanelMouseOverButton = 0;
-      return;
+    } else if (!bLeftOpen) {
+      memset(&sGfxData, 0, 0x48);
+      sGfxData.pDC6 = gpMiniPanelBackgroundDC6;
+      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX / 2 - 0xcd, Inv::ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
+      MINIPANEL_CalculateButtonPositions(1);
+      MINIPANEL_DrawAllButtons(1);
+      MINIPANEL_HandleMouseHover(1);
+      gnMiniPanelMouseOverButton = 0;
+    } else {
+      Cursor::GetMouseX();
+      Cursor::GetMouseY();
+      gnMiniPanelMouseOverButton = 1;
     }
-
-    memset(&sGfxData, 0, 0x48);
-    sGfxData.pDC6 = gpMiniPanelBackgroundDC6;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX / 2 - 0xcd, Inv::ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
-    MINIPANEL_CalculateButtonPositions(1);
-    MINIPANEL_DrawAllButtons(1);
-    MINIPANEL_HandleMouseHover(1);
-    gnMiniPanelMouseOverButton = 0;
-    return;
 }
 
 static void * keep_0047e770 = (0 ? (MINIPANEL_DrawBackground(*(int32_t *)0), (void *)0) : (void *)0);

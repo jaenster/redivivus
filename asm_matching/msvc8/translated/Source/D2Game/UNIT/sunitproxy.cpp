@@ -1388,57 +1388,45 @@ void __stdcall SUNITPROXY_UpdateNpcProxiesForAct(::SGAMEDATA * pGame, char nAct,
 
 // Called when a player enters an act town level. For the town level (eLevel), counts the players already in that level (IterateAllUnits walks pUnitList[0], the player list) and updates the NPC proxy table for the corresponding act (acts I–V). For the destination level (eLevelIdTwo), fills the intro-NPC packet for the act; also force-starts Act I quest 4, The Search for Cain (A1Q4::ForceStartQuest, a1q4.cpp), when entering Lut Gholein.
 void __fastcall IterateNpcIntroUnits(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2LevelId eLevel, eD2LevelId eLevelIdTwo) {
-    BOOL bNoPlayersInTown;
     D2LevelPlayerCountArgStrc sArgs;
-    char nAct;
     sArgs.eLevelId = eLevel;
     sArgs.nCount = 0;
     switch (eLevel) {
       case LEVEL_RogueEncampment:
         SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)SUNITPROXY_CountPlayerInLevel, &sArgs);
-      bNoPlayersInTown = (BOOL)!sArgs.nCount;
-      nAct = '\0';
-      break;
-      default:
-        goto fill_destination_intro_npcs;
+        SUNITPROXY_UpdateNpcProxiesForAct(pGame, 0, !sArgs.nCount);
+        break;
       case LEVEL_LutGholein:
         SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)SUNITPROXY_CountPlayerInLevel, &sArgs);
-      bNoPlayersInTown = (BOOL)!sArgs.nCount;
-      nAct = '\x01';
-      break;
+        SUNITPROXY_UpdateNpcProxiesForAct(pGame, 1, !sArgs.nCount);
+        break;
       case LEVEL_KurastDocktown:
         SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)SUNITPROXY_CountPlayerInLevel, &sArgs);
-      bNoPlayersInTown = (BOOL)!sArgs.nCount;
-      nAct = '\x02';
-      break;
+        SUNITPROXY_UpdateNpcProxiesForAct(pGame, 2, !sArgs.nCount);
+        break;
       case LEVEL_ThePandemoniumFortress:
         SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)SUNITPROXY_CountPlayerInLevel, &sArgs);
-      bNoPlayersInTown = (BOOL)!sArgs.nCount;
-      nAct = '\x03';
-      break;
+        SUNITPROXY_UpdateNpcProxiesForAct(pGame, 3, !sArgs.nCount);
+        break;
       case LEVEL_Harrogath:
         SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)SUNITPROXY_CountPlayerInLevel, &sArgs);
-      bNoPlayersInTown = (BOOL)!sArgs.nCount;
-      nAct = '\x04';
+        SUNITPROXY_UpdateNpcProxiesForAct(pGame, 4, !sArgs.nCount);
+        break;
     }
 
-    SUNITPROXY_UpdateNpcProxiesForAct(pGame, nAct, bNoPlayersInTown);
-    fill_destination_intro_npcs:
-    {
-      switch (eLevelIdTwo) {
-        case LEVEL_RogueEncampment:
-          Quests::QUESTS::INTRONPC_FillInPacketWithIntroNpcIdsInAct(pGame, pUnit, ACT_I);
+    switch (eLevelIdTwo) {
+      case LEVEL_RogueEncampment:
+        Quests::QUESTS::INTRONPC_FillInPacketWithIntroNpcIdsInAct(pGame, pUnit, ACT_I);
         return;
-        case LEVEL_LutGholein:
-          Quests::QUESTS::INTRONPC_FillInPacketWithIntroNpcIdsInAct(pGame, pUnit, ACT_II);
+      case LEVEL_LutGholein:
+        Quests::QUESTS::INTRONPC_FillInPacketWithIntroNpcIdsInAct(pGame, pUnit, ACT_II);
         Quests::QUESTS::A1Q4::ForceStartQuest(pGame, pUnit);
         return;
-        case LEVEL_KurastDocktown:
-          Quests::QUESTS::INTRONPC_FillInPacketWithIntroNpcIdsInAct(pGame, pUnit, ACT_III);
+      case LEVEL_KurastDocktown:
+        Quests::QUESTS::INTRONPC_FillInPacketWithIntroNpcIdsInAct(pGame, pUnit, ACT_III);
         return;
-        case LEVEL_Harrogath:
-          Quests::QUESTS::INTRONPC_FillInPacketWithIntroNpcIdsInAct(pGame, pUnit, ACT_V);
-      }
+      case LEVEL_Harrogath:
+        Quests::QUESTS::INTRONPC_FillInPacketWithIntroNpcIdsInAct(pGame, pUnit, ACT_V);
     }
 }
 

@@ -35,7 +35,7 @@ static uint8_t DEBUG_ParseNB01DebugInfo(CV_INFO_PDB20 * pDebugRecord, D2FogDebug
 static uint8_t DEBUG_ParseRSDSDebugInfo(CV_INFO_PDB70 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo);
 
 int Unreferenced_004046d0() {
-    return (intptr_t)&ExceptionList;
+    return (int)NtCurrentTeb();
 }
 
 static uint32_t DEBUG_GetPEImageType(short * nMagic) {

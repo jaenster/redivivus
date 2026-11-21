@@ -583,26 +583,19 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
     D2BinFieldExcelStrc* pBinField;
     size_t nTxtLineCount;
     void* pDataTable;
-    char* szEffectiveName;
-    char* pNameEnd;
     D2ArchiveStrc** pParsedData;
     int32_t nRecordCount;
     size_t nBinAllocSize;
     char szTableNameBuf[256];
     uint32_t dwStackCookie;
-    int32_t nErrorLine;
     uint32_t nSize = 0;
     if (MonsterTbls::sgtDataTable.bUseTxt) {
       D2ArchiveStrc* pArchiveTxt;
       nStrCmpResult = _stricmp(szTableName, "leveldefs");
       if (!nStrCmpResult) {
-        nErrorLine = 0x8b9;
-        szEffectiveName = "levels";
-        pArchiveTxt = ARCHIVE_LoadDataTables(pMemory, szEffectiveName, ".txt", &nSize, ".\\DATATBLS\\DataTbls.cpp", 0x8b9);
+        pArchiveTxt = ARCHIVE_LoadDataTables(pMemory, "levels", ".txt", &nSize, ".\\DATATBLS\\DataTbls.cpp", 0x8b9);
       } else {
-        nErrorLine = 0x8c0;
-        szEffectiveName = szTableName;
-        pArchiveTxt = ARCHIVE_LoadDataTables(pMemory, szEffectiveName, ".txt", &nSize, ".\\DATATBLS\\DataTbls.cpp", 0x8c0);
+        pArchiveTxt = ARCHIVE_LoadDataTables(pMemory, szTableName, ".txt", &nSize, ".\\DATATBLS\\DataTbls.cpp", 0x8c0);
       }
       if (!pArchiveTxt) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8c2);
@@ -617,32 +610,21 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
       Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinField, pBinFieldInput, (char*)pDataTable, nTxtLineCount, nEndOffset);
       Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinField);
       strcpy(szTableNameBuf, szTableName);
-      szEffectiveName = (char*)((intptr_t)&szTableNameBuf - 1);
-      do {
-        pNameEnd = szEffectiveName;
-        szEffectiveName = pNameEnd + 1;
-      } while (pNameEnd[1] != '\0');
-
-      memcpy(pNameEnd + 1, ".bin", 5);
+      strcat(szTableNameBuf, ".bin");
       StoreDataTables(szTableNameBuf, pDataTable, nBinAllocSize, nTxtLineCount);
       D2_FREE_POOL_AT(nullptr, pDataTable, ".\\DATATBLS\\DataTbls.cpp", 0x8d6);
     }
+    D2ArchiveStrc* pArchive2;
     if (gbTxtAllocCountHeader) {
-      nErrorLine = 0x8de;
-      szEffectiveName = ".bin";
+      pArchive2 = ARCHIVE_LoadDataTables(pMemory, szTableName, ".bin", &nSize, ".\\DATATBLS\\DataTbls.cpp", 0x8de);
     } else {
       nStrCmpResult = _stricmp(szTableName, "leveldefs");
       if (!nStrCmpResult) {
-        nErrorLine = 0x8e2;
-        szEffectiveName = ".txt";
-        szTableName = "levels";
+        pArchive2 = ARCHIVE_LoadDataTables(pMemory, "levels", ".txt", &nSize, ".\\DATATBLS\\DataTbls.cpp", 0x8e2);
       } else {
-        nErrorLine = 0x8e4;
-        szEffectiveName = ".txt";
+        pArchive2 = ARCHIVE_LoadDataTables(pMemory, szTableName, ".txt", &nSize, ".\\DATATBLS\\DataTbls.cpp", 0x8e4);
       }
     }
-
-    D2ArchiveStrc* pArchive2 = ARCHIVE_LoadDataTables(pMemory, szTableName, szEffectiveName, &nSize, ".\\DATATBLS\\DataTbls.cpp", nErrorLine);
     if (!pArchive2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8e7);
       exit(-1);

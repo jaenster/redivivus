@@ -1604,21 +1604,21 @@ static void __stdcall DRLGPRESET_InitDrlgMapPopLocations(int32_t nPopCount, D2Dr
       if (nY0 >= nY1) {
         nMinY = nY1;
       }
+      int nMaxX = nX0;
       if (nX0 <= nX1) {
-        nX0 = nX1;
+        nMaxX = nX1;
       }
+      int nMaxY = nY0;
       if (nY0 <= nY1) {
-        nY0 = nY1;
+        nMaxY = nY1;
       }
 
       *pPos = pDrlgMap->nRealOffsetX + nMinX;
       pPos[1] = pDrlgMap->nRealOffsetY + nMinY;
-      pPos[2] = nX0 - nMinX + 1;
-      pPos[3] = nY0 - nMinY + 1;
-      pPos = pDrlgMap->pPopsIndex + nPopIndex;
-      nX0 = *pPos;
+      pPos[2] = nMaxX - nMinX + 1;
+      pPos[3] = nMaxY - nMinY + 1;
+      pDrlgMap->pPopsIndex[nPopIndex] = pDrlgMap->pPopsIndex[nPopIndex] / 4 - 1;
       nPopIndex++;
-      *pPos = nX0 / 4 - 1;
     } while (nPopIndex < nPopCount);
 }
 

@@ -215,6 +215,18 @@ void __stdcall SetOwner(D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
     pUnitData->nOwnerGUID = -1;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 BOOL __stdcall CheckUnitIfOwner(D2UnitStrc * pMissile, D2UnitStrc * pUnit) {
     int nClassId;
     if (pMissile && pUnit && pMissile->eUnitType == UNIT_MISSILE) {
@@ -223,7 +235,7 @@ BOOL __stdcall CheckUnitIfOwner(D2UnitStrc * pMissile, D2UnitStrc * pUnit) {
       D2MissilesTxt* pMissilesTxt;
       if ((pMissilesTxt = nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr) && *((uint8_t*)pMissilesTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         pDVar1 = pMissile->pUnitData.pUnitDataMissile;
-        if (pDVar1 && pDVar1->eOwnerType == pUnit->eUnitType && pDVar1->nOwnerGUID == pUnit->nUnitGUID) {
+        if (pDVar1 && pDVar1->eOwnerType == GetTypeInline(pUnit) && pDVar1->nOwnerGUID == GetGUIDInline(pUnit)) {
           return 1;
         }
       }

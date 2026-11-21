@@ -235,24 +235,20 @@ static uint32_t CHARSEL_IsBetaRealm(uint16_t * wszText) {
 
     char szName[256];
     if (gbBetaRealmNamesInitialized == '\0') {
-      memcpy(szName, "Testv104", 8);
-      *(uint16_t*)((char*)&szName + 8) &= 0xff00;
       gbBetaRealmNamesInitialized = '\x01';
+      strcpy(szName, "Testv104");
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(pBetaRealmNames[0], szName, 0xff);
-      memcpy(szName, "FatRealm", 8);
-      *(uint16_t*)((char*)&szName + 8) &= 0xff00;
+      strcpy(szName, "FatRealm");
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(pBetaRealmNames[1], szName, 0xff);
-      memcpy(szName, "BetaWest", 8);
-      *(uint16_t*)((char*)&szName + 8) &= 0xff00;
+      strcpy(szName, "BetaWest");
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(pBetaRealmNames[2], szName, 0xff);
-      memcpy(szName, "BetaEurope", 0xb);
+      strcpy(szName, "BetaEurope");
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(pBetaRealmNames[3], szName, 0xff);
-      memcpy(szName, "BetaUSWest", 0xb);
+      strcpy(szName, "BetaUSWest");
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(pBetaRealmNames[4], szName, 0xff);
-      memcpy(szName, "BetaUSEast", 0xb);
+      strcpy(szName, "BetaUSEast");
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(pBetaRealmNames[5], szName, 0xff);
-      memcpy(szName, "BetaAsia", 8);
-      *(uint16_t*)((char*)&szName + 8) &= 0xff00;
+      strcpy(szName, "BetaAsia");
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(pBetaRealmNames[6], szName, 0xff);
     }
 

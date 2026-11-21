@@ -11413,7 +11413,7 @@ void __stdcall INPUT_CubeLeftClick(D2UIMouseMsgStrc * pMsg) {
     if (!bInRange && (bInRange = IsInTransmogrifyScreenRange(nX, nY) , !bInRange)) {
       bInRange = INV_IsMouseOverGoldButton(nX, nY);
       if (!bInRange) {
-        if (nX >= pTranspogrifyBoxScreenCoordinates.nLeft && nX < pTranspogrifyBoxScreenCoordinates.nRight && true && nY <= pTranspogrifyBoxScreenCoordinates.nBottom) {
+        if (nX >= pTranspogrifyBoxScreenCoordinates.nLeft && nX < pTranspogrifyBoxScreenCoordinates.nRight && nY >= 0 && nY <= pTranspogrifyBoxScreenCoordinates.nBottom) {
           gbInventoryDragInProgress = 0;
           gbTradeConfirmationPending = 0;
           gShopTradeUIState = 0;
@@ -11462,8 +11462,8 @@ void __stdcall DrawMercInventory() {
       return;
     }
 
-    int32_t nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
-    if (nMercGuid == -1) {
+    uint32_t nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
+    if (nMercGuid == 0xffffffff) {
       ui::SetUIFlag(UI_MERCINV, UI_TOGGLE, 0);
       return;
     }

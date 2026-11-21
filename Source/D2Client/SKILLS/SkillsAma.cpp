@@ -392,6 +392,12 @@ BOOL __fastcall Skills_CltDoFunc_Ama_LinearMissileSpray(D2UnitStrc * pUnit, eD2S
     return 0;
 }
 
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 // Client-side do-function for the Amazon Strafe skill. Each call fires one missile (cltmissilea or cltmissileb based on weapon class) toward the current or nearest valid target within aura range, decrements the remaining shot counter (SKILL_GetParam1), and if shots remain, finds the next closest target (excluding the one just shot), redirects the unit's dynamic path toward it, and updates the stored target GUID/type in skill params 2/3. Returns FALSE when no target or no shots left.
 BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int pCltMissileId;
@@ -428,10 +434,10 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(D2UnitStrc * pUnit, eD2Skills eSkill
       return 0;
     }
 
-    nPrevTargetGUID = (eMissilesId)pSkillsTxt->cltmissile[1];
+    eMissilesId eDefaultMissileId = (eMissilesId)pSkillsTxt->cltmissile[1];
     uint32_t nWeaponClass = D2Common::Units::GetWeaponClass(pUnit);
     if (nWeaponClass == 1 || (eMissileId = (int)pSkillsTxt->cltmissile[2] , pSkillsTxt->cltmissile[2] < 0)) {
-      eMissileId = nPrevTargetGUID;
+      eMissileId = eDefaultMissileId;
     }
     if (!((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
@@ -444,12 +450,13 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(D2UnitStrc * pUnit, eD2Skills eSkill
     sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     sSkillArg.eSkillNo = eCurrentSkill;
     sSkillArg.nSkillLevel = nSkillLvl;
+    sSkillArg.nMissileTxtNo = eMissileId;
     sSkillArg.nUnitX = nTargetY;
     sSkillArg.nUnitY = nTargetX2;
-    sSkillArg.nMissileTxtNo = eMissileId;
     UNIT::Missile::MakeMissile(&sSkillArg);
-    D2Common::Skills::SKILL_SetParam1(pSkill, nShotsLeft - 1);
-    if (!(nShotsLeft - 1 > 0)) {
+    nShotsLeft--;
+    D2Common::Skills::SKILL_SetParam1(pSkill, nShotsLeft);
+    if (nShotsLeft <= 0) {
       return 1;
     }
     if (pTargetUnit) {
@@ -465,7 +472,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(D2UnitStrc * pUnit, eD2Skills eSkill
 
     D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, D2Common::Units::GetXPosFromDynamicPathUnit(pNextTarget), D2Common::Units::GetYPosFromDynamicPathUnit(pNextTarget), 0);
     D2Common::Skills::SKILL_SetParam2(pSkill, pNextTarget->eUnitType);
-    D2Common::Skills::SKILL_SetParam3(pSkill, pNextTarget->nUnitGUID);
+    D2Common::Skills::SKILL_SetParam3(pSkill, GetGUIDInline(pNextTarget));
     nShotsLeft = D2Common::Skills::GetTxtSkillParam5(eCurrentSkill);
     Skills::SKILLS_ApplyDamageReduction(pUnit, nShotsLeft);
     return 1;

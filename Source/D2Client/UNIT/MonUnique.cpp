@@ -21,6 +21,7 @@
 #include "Source/D2Client/SKILLS/SkillsMon.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -666,7 +667,6 @@ static void __stdcall MONUNIQUE_SpawnDirectionalMissiles(D2UnitStrc * pUnit, eMi
     int nPosX;
     int nPosY;
     D2SkillArgStrc sSkillArg;
-    int anDirOffsets[8];
     int nDirX;
     int nDirY;
     if (!nToHit) {
@@ -677,78 +677,38 @@ static void __stdcall MONUNIQUE_SpawnDirectionalMissiles(D2UnitStrc * pUnit, eMi
     }
 
     memset(&sSkillArg, 0, 0x5c);
-    eD2UnitType eUnitType = pUnit->eUnitType;
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
-    int nXValue;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nXValue = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nXValue = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nXValue = 0;
-    }
-
-    sSkillArg.nX = nXValue;
-    eUnitType = pUnit->eUnitType;
-    int nYValue;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nYValue = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nYValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nYValue = 0;
-    }
-
-    sSkillArg.nY = nYValue;
+    sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
     sSkillArg.eSkillNo = SKILL_Attack;
+    sSkillArg.nSkillLevel = nToHit;
     sSkillArg.nMissileTxtNo = eMissileId;
     if (eMissileId != MISSILE_Queenpoisoncloud) {
       sSkillArg.fpFunction = SKILLS::SkillsMon::SKILLSMON_SetMissilePathLinear;
     }
 
-    anDirOffsets[4] = 0;
-    anDirOffsets[5] = 1;
-    anDirOffsets[6] = 0;
-    anDirOffsets[7] = -1;
-    anDirOffsets[0] = -1;
-    anDirOffsets[1] = 0;
-    anDirOffsets[2] = 1;
-    anDirOffsets[3] = 0;
-    eMissileId = MISSILE_Arrow;
-    sSkillArg.nSkillLevel = nToHit;
+    int anDirX[4] = {0, 1, 0, -1};
+    int anDirY[4] = {-1, 0, 1, 0};
+    int nDir = 0;
     do {
       int32_t nMissileCopyIdx;
-      nPosX = 0;
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nPosX = pUnit->pPath.pStaticPath->nPosX;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      }
+      nPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+      nPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
 
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nPosY = pUnit->pPath.pStaticPath->nPosY;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nPosY = 0;
-      }
-
-      nDirX = *(int*)((intptr_t)anDirOffsets + (eMissileId + MISSILE_Cr_Arrow4));
-      nDirY = *(int*)((char*)anDirOffsets + eMissileId);
+      nDirX = anDirX[nDir] + nPosX;
+      nDirY = anDirY[nDir] + nPosY;
       nMissileCopyIdx = 0;
       do {
         sSkillArg.nFunctionParam = nMissileCopyIdx;
-        sSkillArg.nUnitX = nDirX + nPosX;
-        sSkillArg.nUnitY = nDirY + nPosY;
+        sSkillArg.nUnitX = nDirX;
+        sSkillArg.nUnitY = nDirY;
         Missile::MakeMissile(&sSkillArg);
         nMissileCopyIdx++;
       } while (nMissileCopyIdx < 2);
 
-      eMissileId += MISSILE_Bighead3;
-    } while ((int)eMissileId < 0x10);
+      nDir++;
+    } while (nDir < 4);
 }
 
 void __fastcall MONUNIQUE_ApplyModifierGriswold(D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion) {

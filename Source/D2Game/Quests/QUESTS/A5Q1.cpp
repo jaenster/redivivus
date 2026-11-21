@@ -600,6 +600,12 @@ void __fastcall Objects_InitFn70(D2ObjectInitFnArg * pInitArg) {
 
 }
 
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 // A5Q1 object init fn 71: spawns Shenk the Overseer (monstats 0x1ff) once per quest at a valid location in the room, records his unit GUID + spawn-guard flags, and copies the preset DRLG map file for his AI. Guards via per-quest "already spawned" byte. No quest-record bit changes.
 void __fastcall Objects_InitFn71_LarzukStandard(D2ObjectInitFnArg * pInitArg) {
     D2MapAIStrc** pMonsterMapAi;
@@ -615,8 +621,8 @@ void __fastcall Objects_InitFn71_LarzukStandard(D2ObjectInitFnArg * pInitArg) {
       return;
     }
 
-    sSpawnPos.y = pInitArg->nY;
     sSpawnPos.x = pInitArg->nX;
+    sSpawnPos.y = pInitArg->nY;
     FindSpawnableLocation(pInitArg->pRoom, &sSpawnPos, 2, 0x100, &pSpawnRoom, 0x10, 100);
     if (!pSpawnRoom) {
       return;
@@ -628,7 +634,7 @@ void __fastcall Objects_InitFn71_LarzukStandard(D2ObjectInitFnArg * pInitArg) {
     }
 
     ppSrcMapAI->bShenkSpawned = 1;
-    ppSrcMapAI->nShenkMonsterGUID = pSpawnedUnit->nUnitGUID;
+    ppSrcMapAI->nShenkMonsterGUID = GetGUIDInline(pSpawnedUnit);
     pSpawnedUnit->eUnitFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
     if (!(ppSrcMapAI->pPresetDrlgFile && ppSrcMapAI->pPresetDrlgFile->pPosition && !ppSrcMapAI->bDrlgMapTaken)) {
       return;
