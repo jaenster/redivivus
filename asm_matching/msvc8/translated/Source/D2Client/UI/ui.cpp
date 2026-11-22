@@ -4952,48 +4952,21 @@ DC6 * __stdcall GetBuySellBtnDC6() {
 
 // @sourcefile .\UI\ui.cpp
 void * __fastcall UI_LoadFileToMemory(LPCSTR szFilename, size_t * pSize) {
-    uint32_t nCopyCount;
-    char* pCopySrc;
     char szNameCopy[260];
     DWORD dwBytesRead;
-    char cChar;
-    size_t* pSizeOut = pSize;
     strcpy(szNameCopy, szFilename);
-    char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension(0);
-    char* pExtEnd;
-    int nStrLen;
-    nStrLen = (int)strlen(szExtension);
-    char* pCopyDst = (char*)((uint8_t*)&szNameCopy - 1);
-    do {
-      pCopySrc = pCopyDst + 1;
-      pCopyDst++;
-    } while (*pCopySrc != '\0');
-
-    /* HANDLE hTemplateFile for CreateFileA */ pCopySrc = szExtension;
-    for (nCopyCount = (uint32_t)((int)nStrLen + 1) >> 2; nCopyCount; nCopyCount--) {
-      *(uint32_t*)pCopyDst = *(uint32_t*)pCopySrc;
-      pCopySrc += 4;
-      pCopyDst += 4;
-    }
-
-    /* LPCSTR lpFileName for CreateFileA */ /* DWORD dwFlagsAndAttributes for CreateFileA */ /* DWORD dwCreationDisposition for CreateFileA */ /* LPSECURITY_ATTRIBUTES lpSecurityAttributes for CreateFileA */ /* DWORD dwShareMode for CreateFileA */ /* DWORD dwDesiredAccess for CreateFileA */ for (nCopyCount = (int)nStrLen + 1 & 3; nCopyCount; nCopyCount--) {
-      *pCopyDst = *pCopySrc;
-      pCopySrc++;
-      pCopyDst++;
-    }
-
-    HANDLE hFile = CreateFileA(szFilename, 0x80000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 3, 0x80, (HANDLE)0x0);
+    strcat(szNameCopy, D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension(0));
+    HANDLE hFile = CreateFileA(szFilename, 0x80000000, 0, nullptr, 3, 0x80, nullptr);
     if (hFile == (HANDLE)-1) {
       return nullptr;
     }
 
-    DWORD dwFileSize = GetFileSize(hFile, (LPDWORD)0x0);
-    size_t* pSizeTmp = pSizeOut;
-    *pSizeOut = dwFileSize;
+    DWORD dwFileSize = GetFileSize(hFile, nullptr);
+    *pSize = dwFileSize;
     void* pBuffer = D2_ALLOC_AT(dwFileSize, ".\\UI\\ui.cpp", 0x18ad);
-    memset(pBuffer, 0, *pSizeTmp);
-    /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, pBuffer, *pSizeTmp, &dwBytesRead, (LPOVERLAPPED)0x0);
-    /* HANDLE hObject for CloseHandle */ CloseHandle(hFile);
+    memset(pBuffer, 0, *pSize);
+    ReadFile(hFile, pBuffer, *pSize, &dwBytesRead, nullptr);
+    CloseHandle(hFile);
     return pBuffer;
 }
 

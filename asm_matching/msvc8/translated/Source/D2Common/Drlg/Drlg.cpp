@@ -306,34 +306,21 @@ void __fastcall PLAYER_SetSkillHitFlagAndStoreTarget(D2UnitStrc * pUnit, eD2Skil
 
 // Loads act-specific town tile project (.dt1) for Acts I–III by building a DATA\GLOBAL\Tiles path and loading into pDrlg->apTileProjects.
 void __fastcall DRLGACTMISC_LoadTileProjects(D2DrlgStrc * pDrlg) {
-    char szPath[260];
-    LPCSTR pszFmtStr;
-    szPath[0] = '\0';
-    memset(szPath + 1, 0, 0x103);
-    uint8_t byActNo = pDrlg->nActNo;
-    switch (byActNo) {
+    char szPath[260] = {0};
+    switch (pDrlg->nActNo) {
       case 0:
-        {
-          /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ pszFmtStr = "%s\\Tiles\\Act1\\Town\\Floor.dt1";
-          break;
-        }
+        wsprintfA(szPath, "%s\\Tiles\\Act1\\Town\\Floor.dt1", "DATA\\GLOBAL");
+        break;
       case 1:
-        {
-          pszFmtStr = "%s\\Tiles\\Act2\\Town\\Ground.dt1";
-          break;
-        }
-      default:
-        {
-          return;
-        }
+        wsprintfA(szPath, "%s\\Tiles\\Act2\\Town\\Ground.dt1", "DATA\\GLOBAL");
+        break;
       case 2:
-        {
-          pszFmtStr = "%s\\Tiles\\ACT3\\Kurast\\sets.dt1";
-          break;
-        }
+        wsprintfA(szPath, "%s\\Tiles\\ACT3\\Kurast\\sets.dt1", "DATA\\GLOBAL");
+        break;
+      default:
+        return;
     }
 
-    wsprintfA(szPath, pszFmtStr, "DATA\\GLOBAL");
     D2CMP::DUNGEON::Dungeon::TILEPROJECT_AllocSlot((uint8_t*)pDrlg->apTileProjects, szPath);
 }
 

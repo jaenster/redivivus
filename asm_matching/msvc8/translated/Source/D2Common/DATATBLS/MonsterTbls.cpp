@@ -172,45 +172,31 @@ int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, ui
 
 // TXT field linker for a MonStats skill slot (index nSkillIdx, max 7): zeroes the skill mode byte and sequence ID, then resolves szText as a monster mode name (via FilterNameString + monmode link) or falls back to a monster sequence ID (via monseq link). Writes mode byte to pMonStats+0x180+idx and seq short to +0x188+idx*2.
 void __fastcall MONSTERTBLS_ParseMonStatsField(char * szText, char * pRecord, uint32_t nSkillIdx, int32_t nMonStatsOffset, int32_t nReserved1, int32_t nReserved2) {
-    int32_t nModeId;
-    uint32_t nSlotIdx = nSkillIdx;
     if (!(pRecord && nSkillIdx <= 7)) {
       return;
     }
 
     pRecord[nSkillIdx + 0x180] = '\0';
     short int nSkillId = *(short int*)(pRecord + (nSkillIdx * 2 + 0x170));
-    (pRecord + (nSkillIdx * 2 + 0x188))[0] = -1;
-    (pRecord + (nSkillIdx * 2 + 0x188))[1] = -1;
+    *(short int*)(pRecord + (nSkillIdx * 2 + 0x188)) = -1;
     if (!(nSkillId >= 0 && szText)) {
       return;
     }
 
-    char* pcEndPtr;
-    int nStrLen;
-    nStrLen = (int)strlen(szText);
-    uint32_t dwModeCode;
-    if ((uint32_t)(int)nStrLen <= 3) {
-      char cModeChar;
-      pcEndPtr = szText;
-      do {
-        cModeChar = *pcEndPtr;
-        pcEndPtr[(intptr_t)&nSkillIdx - (intptr_t)szText] = cModeChar;
-        pcEndPtr++;
-      } while (cModeChar != '\0');
-
-      FilterNameString((char*)&nSkillIdx, (char*)&dwModeCode);
-      nModeId = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtMonModeLink, dwModeCode, 1);
-      cModeChar = (char)nModeId;
-      pRecord[nSlotIdx + 0x180] = cModeChar;
-      if (cModeChar >= 0 && cModeChar != '\x0e') {
+    if (strlen(szText) <= 3) {
+      char szModeName[4];
+      uint32_t dwModeCode;
+      strcpy(szModeName, szText);
+      FilterNameString(szModeName, (char*)&dwModeCode);
+      char nModeId = (char)Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtMonModeLink, dwModeCode, 1);
+      pRecord[nSkillIdx + 0x180] = nModeId;
+      if (nModeId >= 0 && nModeId != '\x0e') {
         return;
       }
     }
 
-    pRecord[nSlotIdx + 0x180] = '\x0e';
-    nModeId = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtMonSeqLink, szText, 1);
-    *(short int*)(pRecord + (nSlotIdx * 2 + 0x188)) = (short int)nModeId;
+    pRecord[nSkillIdx + 0x180] = '\x0e';
+    *(short int*)(pRecord + (nSkillIdx * 2 + 0x188)) = (short int)Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtMonSeqLink, szText, 1);
 }
 
 // Loads and compiles monstats.txt into the engine's runtime MonStats table. Builds the column schema as a stack D2BinFieldInputStrc array (Id/BaseId/NextInClass/NameStr/DescStr/Code/TransLvl/... with per-field type/offset/linker), wiring the field linkers to sgtDataTable.pTxtMonStatsLink (most fields), pTxtMonSoundsLink (sound fields), and DATATBLS_LookupStringId for the string-key name/desc columns, then hands the schema + pMemory to the standard DATATBLS bin-compile/alloc routine to populate the MonStats table. pMemory passed in ECX (thiscall/fastcall-style); large alloca'd stack frame.
