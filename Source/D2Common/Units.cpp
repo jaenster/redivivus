@@ -1352,23 +1352,22 @@ static BOOL __stdcall UNITS_CanAnimModeUseVelocityModifier(D2UnitStrc * pUnit, i
 // @sourcefile .\UNITS\Units.cpp
 uint32_t __fastcall UNITS_CanAnimModeUseAttackRate(int32_t nAnimMode, eD2UnitType eUnitType, D2UnitStrc * pUnit, int32_t nClassId) {
     int* pAnimModeEntry;
-    if (eUnitType != UNIT_PLAYER) {
-      if (eUnitType != UNIT_MONSTER) {
-        if (eUnitType == UNIT_PLAYER) {
-          return 0;
-        }
-        if (eUnitType != UNIT_MONSTER) {
+    switch (eUnitType) {
+      case UNIT_PLAYER:
+        pAnimModeEntry = gaPlayerAnimModeCheckTable + nAnimMode * 5;
+        break;
+      case UNIT_MONSTER:
+        pAnimModeEntry = (int*)UNITS_GetAnimTableEntry(nClassId, nAnimMode);
+        break;
+      default:
+        if (eUnitType != UNIT_PLAYER && eUnitType != UNIT_MONSTER) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0xbef);
           exit(-1);
         }
 
         return 0;
-      }
-
-      pAnimModeEntry = (int*)UNITS_GetAnimTableEntry(nClassId, nAnimMode);
-    } else {
-      pAnimModeEntry = gaPlayerAnimModeCheckTable + nAnimMode * 5;
     }
+
     if (pAnimModeEntry[3]) {
       return 1;
     }
