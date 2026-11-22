@@ -495,27 +495,25 @@ static BOOL PATH_FindAlternateAroundObstacle(D2PathTypeArg * pPathState) {
 }
 
 static uint32_t PATH_CanMonsterPathInArea(D2UnitStrc * pUnit, uint16_t * pPathData) {
-    uint16_t nMidY;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 1;
     }
-
-    uint32_t bIsBossOrChamp = Monsters::MONSTERS::MONSTER_CanBeInTown(pUnit);
-    if (bIsBossOrChamp) {
+    if (Monsters::MONSTERS::MONSTER_CanBeInTown(pUnit)) {
       return 1;
     }
 
-    D2RoomStrc* pRoom = *(D2RoomStrc**)(pPathData + 6);
+    D2PathTypeArg* pArg = (D2PathTypeArg*)pPathData;
+    D2RoomStrc* pRoom = pArg->pRoomNext;
     if (!pRoom) {
-      uint16_t nMidX;
-      nMidX = pPathData[2];
-      nMidY = pPathData[3];
-      pRoom = Collision::DRLGROOM_FindBetterNearbyRoom(*(D2RoomStrc**)(pPathData + 4), (int)((uint32_t)nMidX - (uint32_t)*pPathData) / 2 + (uint32_t)*pPathData, (int)((uint32_t)nMidY - (uint32_t)pPathData[1]) / 2 + (uint32_t)pPathData[1]);
-      pRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint32_t)nMidX, (uint32_t)nMidY);
+      uint16_t nStartX = pArg->tStartCoord.nX;
+      uint16_t nStartY = pArg->tStartCoord.nY;
+      uint16_t nTargetX = pArg->tTargetCoord.nX;
+      uint16_t nTargetY = pArg->tTargetCoord.nY;
+      pRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pArg->pRoom, (nTargetX - nStartX) / 2 + nStartX, (nTargetY - nStartY) / 2 + nStartY);
+      pRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nTargetX, nTargetY);
     }
 
-    BOOL bIsTown = DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    return (uint32_t)!bIsTown;
+    return !DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
 }
 
 void __stdcall STRUCT_FreePath(D2PoolManagerStrc * pMemory, void * pPath) {

@@ -885,29 +885,20 @@ void __fastcall Q10_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2
 // pIzualUnit (SP vs MP variant). No QuestRecord writes.
 void __fastcall Q10_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataStrc* pOtherQuestData;
-    eD2HostGameType eGameType;
     D2QuestDataA2Q2Strc* pA2Q2Data = pQuestData->pQuestSpecificData.pA2Q2;
-    uint32_t dwItemCode = D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pQuestArgs->pTarget);
-    if (dwItemCode <= 0x20747368) {
-      switch (dwItemCode) {
-        case 0x20747368:
-          {
-            pA2Q2Data->nHstCount--;
-            break;
-          }
-        case 0x2066736d:
-          {
-            pA2Q2Data->nMsfCount--;
-            break;
-          }
-        case 0x20706976:
-          {
-            pA2Q2Data->nVipCount--;
-            break;
-          }
-      }
-    } else if (dwItemCode == 0x20786f62) {
-      pA2Q2Data->nBoxCount--;
+    switch (D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pQuestArgs->pTarget)) {
+      case 0x20747368:
+        pA2Q2Data->nHstCount--;
+        break;
+      case 0x2066736d:
+        pA2Q2Data->nMsfCount--;
+        break;
+      case 0x20706976:
+        pA2Q2Data->nVipCount--;
+        break;
+      case 0x20786f62:
+        pA2Q2Data->nBoxCount--;
+        break;
     }
     if (pA2Q2Data->bAllItemsAccountedFor) {
       return;
@@ -926,18 +917,17 @@ void __fastcall Q10_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQue
 
     pOtherQuestData = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_TheSevenTombs);
     if (pOtherQuestData && pOtherQuestData->bIsNotIntroduction != '\0') {
-      D2QuestDataA2Q6Strc* pA4Q1Data;
-      pA4Q1Data = pOtherQuestData->pQuestSpecificData.pA2Q6;
-      if (pA4Q1Data->bStaffInserted != 1) {
-        eGameType = pOtherQuestData->pGame->nGameType;
-        pA4Q1Data->bIzualLocationSet = 1;
-        if (eGameType == SGAMETYPE_SINGLEPLAYER) {
-          pA4Q1Data->nStatusCode = 8;
+      D2QuestDataA2Q6Strc* pSevenTombsData = pOtherQuestData->pQuestSpecificData.pA2Q6;
+      if (pSevenTombsData->bStaffInserted != 1) {
+        if (pOtherQuestData->pGame->nGameType == SGAMETYPE_SINGLEPLAYER) {
+          pSevenTombsData->bIzualLocationSet = 1;
+          pSevenTombsData->nStatusCode = 8;
           pA2Q2Data->bAllItemsAccountedFor = true;
           return;
         }
 
-        pA4Q1Data->nStatusCode = 9;
+        pSevenTombsData->bIzualLocationSet = 1;
+        pSevenTombsData->nStatusCode = 9;
       }
     }
 

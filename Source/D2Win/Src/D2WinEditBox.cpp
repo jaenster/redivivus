@@ -286,7 +286,7 @@ void __fastcall D2WINEDITBOX_LinkTabOrder(::D2WinEditBox * pEditBox, ::D2WinEdit
 }
 
 // Handles mouse click in D2 edit box. Converts wide text to multi-byte, wraps lines to fit box width, calculates cursor position relative to click point.
-static int32_t __stdcall D2WINEDITBOX_GetTextHeight(int * pEditBox, short * wszText) {
+static int32_t __stdcall D2WINEDITBOX_GetTextHeight(::D2WinEditBox * pEditBox, short * wszText) {
     uint16_t wszLineBuffer[256];
     char szLineBuffer[256];
     char szDecodedText[256];
@@ -295,13 +295,13 @@ static int32_t __stdcall D2WINEDITBOX_GetTextHeight(int * pEditBox, short * wszT
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5ea);
       exit(-1);
     }
-    if (*pEditBox != 1) {
+    if (pEditBox->sControl.neD2FormType != 1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5ec);
       exit(-1);
     }
 
-    D2WinFont::SetAndReturnLastFont(pEditBox[0x9c]);
-    int nStartY = D2WinFont::D2WINFONT_GetCurrentFontHeight() + (pEditBox[0x11] - pEditBox[6]) + pEditBox[4];
+    D2WinFont::SetAndReturnLastFont(pEditBox->nFontId);
+    int nStartY = D2WinFont::D2WINFONT_GetCurrentFontHeight() + (pEditBox->nInsetY - pEditBox->sControl.dwSizeY) + pEditBox->sControl.dwPosY;
     char szCursorChar[2] = "_";
     wszCursorChar[0] = L'\0';
     wszCursorChar[1] = L'\0';
@@ -316,7 +316,7 @@ static int32_t __stdcall D2WINEDITBOX_GetTextHeight(int * pEditBox, short * wszT
     char* pszCurChar = szDecodedText;
     int nY = nStartY;
     int nFontHeight = D2WinFont::D2WINFONT_GetCurrentFontHeight();
-    int nMaxWidth = pEditBox[5] - pEditBox[0x10] * 2;
+    int nMaxWidth = pEditBox->sControl.dwSizeX - pEditBox->nInsetX * 2;
     if (szDecodedText[0] != '\0') {
       do {
         BOOL bLineWrapped = FALSE;
@@ -364,7 +364,7 @@ static int32_t __stdcall D2WINEDITBOX_GetTextHeight(int * pEditBox, short * wszT
 }
 
 // Calculate text cursor position from edit box state. Iterates text lines and calculates pixel X,Y position of cursor based on character index. Outputs screen coordinates via pX and pY.
-static void __stdcall D2WINEDITBOX_GetCaretPosition(int * pEditBox, int * pX, int * pY) {
+static void __stdcall D2WINEDITBOX_GetCaretPosition(::D2WinEditBox * pEditBox, int * pX, int * pY) {
     uint32_t nFontHeight;
     int32_t nCharPixelWidth;
     int32_t nLoopCount;
@@ -393,16 +393,16 @@ static void __stdcall D2WINEDITBOX_GetCaretPosition(int * pEditBox, int * pX, in
       exit(-1);
     } else {
       char* pcVar1;
-      if (*pEditBox == 1) {
+      if (pEditBox->sControl.neD2FormType == 1) {
         for (nLineWidth = 0; nLineWidth < 0x12c; nLineWidth++) {
           wszEditText[nLineWidth] = L'\0';
         }
 
-        D2WinFont::SetAndReturnLastFont(pEditBox[0x9c]);
-        nLineWidth = pEditBox[3] + pEditBox[0x10];
+        D2WinFont::SetAndReturnLastFont(pEditBox->nFontId);
+        nLineWidth = pEditBox->sControl.dwPosX + pEditBox->nInsetX;
         nFontHeight = D2WinFont::D2WINFONT_GetCurrentFontHeight();
-        nPadding = nFontHeight + (pEditBox[0x11] - pEditBox[6]) + pEditBox[4];
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszEditText, (uint16_t*)(pEditBox + 0x17));
+        nPadding = nFontHeight + (pEditBox->nInsetY - pEditBox->sControl.dwSizeY) + pEditBox->sControl.dwPosY;
+        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszEditText, pEditBox->wszText);
         szCursorChar[0] = '_';
         szCursorChar[1] = '\0';
         wszCursorChar[0] = L'\0';
@@ -413,10 +413,10 @@ static void __stdcall D2WINEDITBOX_GetCaretPosition(int * pEditBox, int * pX, in
           wszLineWidthBuf[nClampedY] = L'\0';
         }
 
-        D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szEditText, (uint16_t*)(pEditBox + 0x17), 0x100);
+        D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szEditText, pEditBox->wszText, 0x100);
         nLineHeight = D2WinFont::D2WINFONT_GetCurrentFontHeight();
-        nMaxLinePixels = pEditBox[5] + pEditBox[0x10] * -2;
-        nClampedY = pEditBox[6] + pEditBox[0x11] * -2;
+        nMaxLinePixels = pEditBox->sControl.dwSizeX + pEditBox->nInsetX * -2;
+        nClampedY = pEditBox->sControl.dwSizeY + pEditBox->nInsetY * -2;
         *pX = -1;
         *pY = -1;
         nCurrentLineY = nPadding;
@@ -427,16 +427,16 @@ static void __stdcall D2WINEDITBOX_GetCaretPosition(int * pEditBox, int * pX, in
               return;
             }
 
-            *pX = *pX - pEditBox[3] - 1;
-            *pY += pEditBox[6] - pEditBox[4] - 1;
+            *pX = *pX - pEditBox->sControl.dwPosX - 1;
+            *pY += pEditBox->sControl.dwSizeY - pEditBox->sControl.dwPosY - 1;
             nLineWidth = *pX;
-            nPadding = pEditBox[0x10];
+            nPadding = pEditBox->nInsetX;
             nClampedY = nLineWidth;
             if (nLineWidth <= nPadding) {
               nClampedY = nPadding;
             }
 
-            nClampedX = pEditBox[5] - nPadding - 1;
+            nClampedX = pEditBox->sControl.dwSizeX - nPadding - 1;
             if (nClampedY < nClampedX) {
               nClampedX = nPadding;
               if (nLineWidth > nPadding) {
@@ -446,13 +446,13 @@ static void __stdcall D2WINEDITBOX_GetCaretPosition(int * pEditBox, int * pX, in
 
             *pX = nClampedX;
             nLineWidth = *pY;
-            nPadding = pEditBox[0x11];
+            nPadding = pEditBox->nInsetY;
             nClampedY = nLineWidth;
             if (nLineWidth <= nPadding) {
               nClampedY = nPadding;
             }
 
-            nClampedX = pEditBox[6] - nPadding - 1;
+            nClampedX = pEditBox->sControl.dwSizeY - nPadding - 1;
             if (nClampedY < nClampedX) {
               nClampedX = nPadding;
               if (nLineWidth > nPadding) {
@@ -489,7 +489,7 @@ static void __stdcall D2WINEDITBOX_GetCaretPosition(int * pEditBox, int * pX, in
 
           bLineWrapped = true;
           locate_cursor_and_advance:
-          nPcVar1 = (int)(szEditText - pcVar1 + pEditBox[0x97]);
+          nPcVar1 = (int)(szEditText - pcVar1 + pEditBox->nCursorIndex);
           if (*pX == -1 && nPcVar1 >= 0 && nPcVar1 <= nLoopCount) {
             nClampedX = nLineWidth;
             if (nPcVar1) {
@@ -517,7 +517,7 @@ static void __stdcall D2WINEDITBOX_GetCaretPosition(int * pEditBox, int * pX, in
                 nClampedX += 2;
                 pszCurChar += 2;
                 nCurrentLineY += nLineHeight;
-                if (*pX == -1 && pEditBox[0x97] == nClampedX && nLineOffsetY < nClampedY) {
+                if (*pX == -1 && pEditBox->nCursorIndex == nClampedX && nLineOffsetY < nClampedY) {
                   *pX = nLineWidth;
                   *pY = nCurrentLineY;
                 }
@@ -528,7 +528,7 @@ static void __stdcall D2WINEDITBOX_GetCaretPosition(int * pEditBox, int * pX, in
                 nClampedX++;
                 pszCurChar++;
                 nCurrentLineY += nLineHeight;
-                if (*pX == -1 && pEditBox[0x97] == nClampedX && nLineOffsetY < nClampedY) {
+                if (*pX == -1 && pEditBox->nCursorIndex == nClampedX && nLineOffsetY < nClampedY) {
                   *pX = nLineWidth;
                   *pY = nCurrentLineY;
                 }
@@ -1220,7 +1220,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
 
     nHasText2 = pEditBox->nInsetY;
     int nSizeY = pEditBox->sControl.dwSizeY;
-    if (!(pEditBox->nFlags & 8) || (nCallbackResult = D2WINEDITBOX_GetTextHeight((int*)pEditBox, (short*)__frame0.awszEditBuffer) , nCallbackResult < nSizeY + nHasText2 * -2)) {
+    if (!(pEditBox->nFlags & 8) || (nCallbackResult = D2WINEDITBOX_GetTextHeight(pEditBox, (short*)__frame0.awszEditBuffer) , nCallbackResult < nSizeY + nHasText2 * -2)) {
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(pEditBox->wszText, __frame0.awszEditBuffer);
       pEditBox->nCursorIndex = (intptr_t)pwszCursor - (intptr_t)__frame0.awszEditBuffer >> 1;
       D2WINEDITBOX_UpdateCursorPosition(pEditBox);
@@ -1330,7 +1330,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyDown(::D2WinEditBox * pEditBox, char nVirt
         if (!(pEditBox->nFlags & 8)) {
           goto move_cursor_to_start;
         }
-      D2WINEDITBOX_GetCaretPosition((int*)pEditBox, &nSelStart, &nSelEnd);
+      D2WINEDITBOX_GetCaretPosition(pEditBox, &nSelStart, &nSelEnd);
       nFontHeight = D2WinFont::D2WINFONT_GetCurrentFontHeight();
       bMouseResult = nSelEnd - nFontHeight;
       nLine = nSelStart;
@@ -1344,7 +1344,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyDown(::D2WinEditBox * pEditBox, char nVirt
         return 0;
       case '(':
         if (pEditBox->nFlags & 8) {
-          D2WINEDITBOX_GetCaretPosition((int*)pEditBox, &nSelEnd, &nSelStart);
+          D2WINEDITBOX_GetCaretPosition(pEditBox, &nSelEnd, &nSelStart);
           nFontHeight = D2WinFont::D2WINFONT_GetCurrentFontHeight();
           bMouseResult = nFontHeight + nSelStart;
           nLine = nSelEnd;

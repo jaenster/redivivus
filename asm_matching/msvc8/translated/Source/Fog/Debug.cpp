@@ -1788,19 +1788,19 @@ static void __stdcall GetLogicalAddress(void * pAddress, char * szModulePath, in
       Storm::Source::SSTR::SStrCopy(szModulePath, "unknown", nBufferSize);
       return;
     }
-    if (!(_Stack_20.AllocationBase && (short int)((HMODULE)_Stack_20.AllocationBase)->unused == 0x5a4d && ((HMODULE)((char*)_Stack_20.AllocationBase + 0x3c))->unused)) {
+    if (!(_Stack_20.AllocationBase && ((IMAGE_DOS_HEADER*)_Stack_20.AllocationBase)->e_magic == 0x5a4d && ((IMAGE_DOS_HEADER*)_Stack_20.AllocationBase)->e_lfanew)) {
       return;
     }
 
-    int* pNtHeader = (int*)((intptr_t)&((HMODULE)_Stack_20.AllocationBase)->unused + ((HMODULE)((char*)_Stack_20.AllocationBase + 0x3c))->unused);
-    if (*pNtHeader != 0x4550) {
+    IMAGE_NT_HEADERS* pNtHeader = (IMAGE_NT_HEADERS*)((char*)_Stack_20.AllocationBase + ((IMAGE_DOS_HEADER*)_Stack_20.AllocationBase)->e_lfanew);
+    if (pNtHeader->Signature != 0x4550) {
       return;
     }
 
     uint32_t nSectionVSize = (intptr_t)pAddress - (intptr_t)_Stack_20.AllocationBase;
-    uint32_t* pSectionHeader = (uint32_t*)((uint32_t)*(uint16_t*)(pNtHeader + 5) + (char*)pNtHeader);
+    uint32_t* pSectionHeader = (uint32_t*)((uint32_t)pNtHeader->FileHeader.SizeOfOptionalHeader + (char*)pNtHeader);
     uint32_t nSectionIdx = 0;
-    if (*(uint16_t*)((char*)pNtHeader + 6) <= 0) {
+    if (pNtHeader->FileHeader.NumberOfSections <= 0) {
       return;
     }
 
@@ -1817,7 +1817,7 @@ static void __stdcall GetLogicalAddress(void * pAddress, char * szModulePath, in
 
       nSectionIdx++;
       pSectionHeader += 10;
-      if (nSectionIdx >= *(uint16_t*)((char*)pNtHeader + 6)) {
+      if (nSectionIdx >= pNtHeader->FileHeader.NumberOfSections) {
         return;
       }
     }

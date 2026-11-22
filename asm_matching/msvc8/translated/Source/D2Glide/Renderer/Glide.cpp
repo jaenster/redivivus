@@ -7,6 +7,7 @@
 #include "Source/D2Client/GAME/Draw.h"
 #include "Source/D2DDraw/Renderer/DirectDraw.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.h"
+#include "Source/D2Gdi/D2Gdi.h"
 #include "Source/D2Glide/glBlocks.h"
 #include "Source/D2Glide/glFloorCache.h"
 #include "Source/D2Glide/glSubtileCache.h"
@@ -4314,7 +4315,7 @@ void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
             }
 
             SmackDoFrame(hSmack);
-            if (*(int*)((char*)hSmack + 0x374) == *(int*)((char*)hSmack + 0xc)) {
+            if ((int)((Smack*)hSmack)->FrameNum == (int)((Smack*)hSmack)->Frames) {
               Glide::CloseSmacker(pContext);
             } else {
               SmackNextFrame(hSmack);
@@ -4323,14 +4324,14 @@ void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
               return;
             }
 
-            GLSMACK_ConvertPaletteToRGB565((uint8_t*)((char*)hSmack + 0x6c));
+            GLSMACK_ConvertPaletteToRGB565(((Smack*)hSmack)->Palette);
             GLSMACK_UploadTextures();
           }
           if (gnRenderState) {
             return;
           }
 
-          GLSMACK_DrawSmackerQuad(pContext, *(int32_t*)((char*)hSmack + 8), *(int32_t*)((char*)hSmack + 4));
+          GLSMACK_DrawSmackerQuad(pContext, (int32_t)((Smack*)hSmack)->Height, (int32_t)((Smack*)hSmack)->Width);
         }
       case 'p':
         {

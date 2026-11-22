@@ -3083,7 +3083,7 @@ static BOOL __stdcall SKILLDESC_FormatValueTwoStrings(int32_t nValue, uint16_t n
     return 1;
 }
 
-static void __stdcall SKILLDESC_FormatTwoValuesSigned(uint16_t nSingularLabelId, uint16_t nPluralLabelId, int32_t bPrefixSign, int32_t nValue, uint16_t * wszText) {
+static BOOL __stdcall SKILLDESC_FormatTwoValuesSigned(int32_t nSingularLabelId, int32_t nPluralLabelId, int32_t bPrefixSign, int32_t nValue, uint16_t * wszText) {
     uint16_t wszNumBuf[32];
     char szBuf[32];
     for (int iFill = 0; iFill < 32; iFill++) {
@@ -3091,24 +3091,19 @@ static void __stdcall SKILLDESC_FormatTwoValuesSigned(uint16_t nSingularLabelId,
     }
 
     if (!nValue) {
-      return;
+      return 0;
     }
     if (!bPrefixSign || nValue < 0) {
-      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d", nValue);
+      wsprintfA(szBuf, "%d", nValue);
     } else {
       wsprintfA(szBuf, "+%d", nValue);
     }
 
     D2Lang::UTF8_ConvertToWideChar(wszNumBuf, szBuf, 0x20);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszNumBuf);
-    if (nValue != 1) {
-      nSingularLabelId = nPluralLabelId;
-    }
-
-    uint16_t* pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(nSingularLabelId);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
-    pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, D2Lang::StrTable::strtable::GetLocaleString(nValue == 1 ? nSingularLabelId : nPluralLabelId));
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, D2Lang::StrTable::strtable::GetLocaleString(0xf9e));
+    return 1;
 }
 
 static BOOL __stdcall SKILLDESC_FormatSignedRangeOrValue(int32_t nValue, uint16_t nPrefixLabelId, uint16_t nSuffixLabelId, int32_t bPrefixSign, uint16_t * wszText) {
@@ -5337,21 +5332,17 @@ void __fastcall SKILLDESC_DrawSkillDmgSummon(D2UnitStrc * pUnit, D2SkillStrc * p
 
     eD2Skills eSkillId = (eD2Skills)pSkillsTxt->skill;
     uint32_t nElemType = SKILLDESC_ElemTypeToColorIndex((eD2ElementalDamageTypeDWORD)pSkillsTxt->EType);
-    int32_t nMinDmgShifted = D2Common::Skills::SKILL_CalcMinDamage(pUnit, eSkillId, nSkillLevel, 0);
-    int32_t nMaxDmgShifted = D2Common::Skills::SKILL_CalcMaxDamage(pUnit, eSkillId, nSkillLevel, 0);
+    int32_t nMinDmgShifted = D2Common::Skills::SKILL_CalcMinDamage(pUnit, eSkillId, nSkillLevel, 0) >> 8;
+    int32_t nMaxDmgShifted = D2Common::Skills::SKILL_CalcMaxDamage(pUnit, eSkillId, nSkillLevel, 0) >> 8;
     int32_t nAuraBonusDmg = SKILLDESC_GetAuraBonusDamage();
     int nMaxDamage = 0;
     int nMinDamage = 0;
     int32_t nKickBonusPct = nAuraBonusDmg;
     D2Common::Skills::SKILL_CalcKickDamage(pUnit, &nMaxDamage, &nMinDamage, &nKickBonusPct);
     int32_t nKickMinBonus = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxDamage, nKickBonusPct, 100);
-    int32_t nSkillCalcBonus = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMinDmgShifted >> 8, nAuraBonusDmg, 100);
-    nSkillCalcBonus += nKickMinBonus;
-    nMaxDamage += nSkillCalcBonus;
-    nMinDmgShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMinDamage, nKickBonusPct, 100);
-    nAuraBonusDmg = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxDmgShifted >> 8, nAuraBonusDmg, 100);
-    nAuraBonusDmg += nMinDmgShifted;
-    nMinDamage += nAuraBonusDmg;
+    nMaxDamage += nKickMinBonus + nMinDmgShifted + D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMinDmgShifted, nAuraBonusDmg, 100);
+    int32_t nKickMaxBonus = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMinDamage, nKickBonusPct, 100);
+    nMinDamage += nKickMaxBonus + nMaxDmgShifted + D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxDmgShifted, nAuraBonusDmg, 100);
     nMinDmgShifted = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkillId, nSkillLevel);
     nMaxDmgSaved = nMaxDamage;
     nMaxDmgShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxDamage, nMinDmgShifted, 100);
@@ -6151,10 +6142,10 @@ static int SKILLDESC_DescLine2D_SkillPassive(int32_t nSkillLevel, uint16_t * wsz
     return 1;
 }
 
-BOOL __stdcall SKILLDESC_DescLine22_SkillSynergies(D2UnitStrc * pUnit, uint16_t * wszText, eD2Skills eSkill, short * pSkillsTxt, int32_t nSkillLevel) {
+BOOL __stdcall SKILLDESC_DescLine22_SkillSynergies(D2UnitStrc * pUnit, uint16_t * wszText, eD2Skills eSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel) {
     int32_t nCalcValue;
     D2MonStatsInitStrc sMonStats;
-    int nMonStatIdx = (int)pSkillsTxt[0x5e];
+    int nMonStatIdx = (int)pSkillsTxt->summon;
     D2MonStatsTxt* pMonStatsTxt = nMonStatIdx >= 0 && nMonStatIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr;
     if (!pMonStatsTxt) {
       return 0;
@@ -6168,10 +6159,10 @@ BOOL __stdcall SKILLDESC_DescLine22_SkillSynergies(D2UnitStrc * pUnit, uint16_t 
     bVar1 = GAME::Game::GetDificulity();
     uint32_t nMinDamage = (uint32_t)bVar1;
     uint32_t nCalcResult = GAME::Game::GAMEDATA_GetLadderOrGameType();
-    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats((int)pSkillsTxt[0x5e], nCalcResult, nMinDamage, nMonStatIdx, nStatCount, pOutStats);
+    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats((int)pSkillsTxt->summon, nCalcResult, nMinDamage, nMonStatIdx, nStatCount, pOutStats);
     uint32_t nElemPctBonus = 0;
-    int32_t* pCalcIdIter = (int32_t*)(pSkillsTxt + 0x34);
-    short int* pElemTypeIter = pSkillsTxt + 0x2a;
+    int32_t* pCalcIdIter = pSkillsTxt->aurastatcalc;
+    short int* pElemTypeIter = pSkillsTxt->aurastat;
     int nMinDmgFinal = sMonStats.nA1MaxD;
     int nLoopCount = 6;
     nMinDamage = sMonStats.nA1MinD;
@@ -6191,8 +6182,8 @@ BOOL __stdcall SKILLDESC_DescLine22_SkillSynergies(D2UnitStrc * pUnit, uint16_t 
       nLoopCount--;
     } while (nLoopCount);
 
-    pCalcIdIter = (int32_t*)(pSkillsTxt + 0x52);
-    short* pSkillsTxt2 = pSkillsTxt + 0x4c;
+    pCalcIdIter = pSkillsTxt->passivecalc;
+    short* pSkillsTxt2 = pSkillsTxt->passivestat;
     for (nLoopCount = 0; nLoopCount < 5; nLoopCount++) {
       if (*(short int*)pSkillsTxt2 == 0x19) {
         nCalcValue = D2Common::Skills::D2GetSkillCalc(pUnit, *pCalcIdIter, eSkill, nSkillLevel);
@@ -6944,7 +6935,7 @@ BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOut
       pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(wDescTextB);
       goto append_and_newline;
       case 0x22:
-        SKILLDESC_DescLine22_SkillSynergies(pUnitLocal, pwszOutput, eSkill, &pSkillsTxt->skill, nSkillLevel);
+        SKILLDESC_DescLine22_SkillSynergies(pUnitLocal, pwszOutput, eSkill, pSkillsTxt, nSkillLevel);
       return 1;
       case 0x23:
         pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(wDescTextA);

@@ -227,8 +227,8 @@ void __fastcall RENDERER_WINDOWED_DrawPixel(int nPosX, int nPosY, BYTE byColor);
 void __fastcall DrawLine(int nXStart, int nYStart, int nXEnd, int nYEnd, BYTE dwColor, BYTE nAlpha);
 // Bresenham line drawing with 16-bit fixed-point sub-pixel tracking. Calculates delta vector and integer distance via crude integer square root. Steps along line with nDeltaX/nDeltaY accumulators (±0xFFFF threshold triggers pixel advance). Aggressively clips during iteration - exits early if coordinates leave window bounds. Plots pixel via direct ppvBits_007c9154 write at (nX + nY*RENDERER_nWindowWidth).
 void __fastcall RENDERER_WINDOWED_DrawLineBresenham(POINT * pnEndPoint, POINT * pnStartPoint, BYTE byColorParam);
-void __fastcall DrawRect(uint8_t * pRect, int nPaletteIndex);
-void __fastcall DrawRectEx(uint8_t * pRect, int nPaletteIndex);
+void __fastcall DrawRect(RECT * pRect, int nPaletteIndex);
+void __fastcall DrawRectEx(RECT * pRect, int nPaletteIndex);
 void __fastcall DrawSolidRect(tagRECT * pRect, uint8_t nPaletteIndex);
 void __stdcall DrawSolidRect_HaltTail(int nLine);
 void __fastcall DrawSolidSquare(POINT * pPoint, BYTE nSize, BYTE nPaletteIndex);

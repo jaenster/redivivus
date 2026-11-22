@@ -86,26 +86,21 @@ static int32_t STATLIST_BinarySearchInsertPos(int32_t nStatKey, D2StatInfoStrc *
 }
 
 static int32_t __stdcall STATLIST_BinarySearchStatInfoArray(int32_t nStatKey, D2StatInfoStrc * pStatInfo) {
-    int nEntryKey;
-    int nCount = (int)pStatInfo->wStatCount;
+    int nHi = (int)pStatInfo->wStatCount;
     int nLo = 0;
-    int nHi = nCount;
-    if (nCount > 0) {
-      int nMid;
-      do {
-        nMid = (nHi - nLo) / 2 + nLo;
-        nEntryKey = pStatInfo->pStatInfo[nMid].uKey.nPackedStatId;
-        if (nStatKey > nEntryKey) {
-          nLo = nMid + 1;
-          nMid = nHi;
-        } else if (nEntryKey <= nStatKey) {
-          return nMid;
-        }
-
+    D2StatStrc* pStats = pStatInfo->pStatInfo;
+    while (nLo < nHi) {
+      int nMid = (nHi - nLo) / 2 + nLo;
+      int nEntryKey = pStats[nMid].uKey.nPackedStatId;
+      if (nStatKey > nEntryKey) {
+        nLo = nMid + 1;
+      } else if (nStatKey < nEntryKey) {
         nHi = nMid;
-      } while (nLo < nMid);
+      } else {
+        return nMid;
+      }
     }
-    if (nLo >= nCount) {
+    if (nLo >= (int)pStatInfo->wStatCount) {
       return -1;
     }
 

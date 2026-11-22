@@ -6060,25 +6060,20 @@ void __stdcall GetAndDispatchAllPossible() {
 
 static void __stdcall UIMENU_PlayCutScene(char * szSceneName, D2ControlMsg * pControlMsg) {
     char szFilePath[260];
-    char pFourccTail[8];
-    int32_t nFlags;
+    char szResolution[8];
     FORMS_DestroyLists();
     FORMS_DestroyList();
     GetAndDispatchAllPossible();
-    DWORD bBegun = D2Win::D2GFX::BeginCutSceneAtResolutionMode0();
-    if (bBegun) {
-      BOOL nLoggerState;
-      nFlags = 0;
-      nLoggerState = Fog::Src::LogManager::GetLoggerState_Stub();
-      if (!nLoggerState) {
-        memcpy(pFourccTail + 4, "292", 4);
+    if (D2Win::D2GFX::BeginCutSceneAtResolutionMode0()) {
+      int32_t nFlags = 0;
+      if (!Fog::Src::LogManager::GetLoggerState_Stub()) {
+        strcpy(szResolution, "640x292");
       } else {
         nFlags = 2;
-        memcpy(pFourccTail + 4, "146", 4);
+        strcpy(szResolution, "640x146");
       }
 
-      memcpy(pFourccTail, "640x", 4);
-      MAINMENU_GetLocalizedFilePath(szSceneName, szFilePath, pFourccTail);
+      MAINMENU_GetLocalizedFilePath(szSceneName, szFilePath, szResolution);
       D2gfx::D2GFX::D2GFX_PlayCutScene(szFilePath, nFlags, nullptr);
       D2Win::D2GFX::SetResolutionModeWithEndCutScene(1);
     }

@@ -304,15 +304,15 @@ void __thiscall SRP_ClientGenerateVerifier(void * pThis, char * szUsername, uint
     SHA::SHA1_BigIntFree(pVerifier);
 }
 
-void __thiscall SRP_GenerateAccountCredentials(D2Srp * * pThis, char * pCredsBuf, char * szUsername, char * szPassword) {
-    Storm::Source::SSTR::SStrCopy(pCredsBuf, szUsername, 0x7fffffff);
-    Storm::Source::SSTR::SStrCopy(pCredsBuf + 0x20, szPassword, 0x7fffffff);
-    SRP_ExtractSessionKeyBytes(pThis, pCredsBuf + 0x40, 0x20);
-    BigData* pPasswordHash = SHA::SHA1_FromBigIntBytes(pCredsBuf + 0x40, 0x20);
+void __thiscall SRP_GenerateAccountCredentials(D2Srp * * pThis, D2SrpCredentialsStrc * pCreds, char * szUsername, char * szPassword) {
+    Storm::Source::SSTR::SStrCopy(pCreds->szUsername, szUsername, 0x7fffffff);
+    Storm::Source::SSTR::SStrCopy(pCreds->szPassword, szPassword, 0x7fffffff);
+    SRP_ExtractSessionKeyBytes(pThis, pCreds->aClientPrivateKey_a, 0x20);
+    BigData* pPasswordHash = SHA::SHA1_FromBigIntBytes(pCreds->aClientPrivateKey_a, 0x20);
     BigData* pVerifier = SHA::SHA1_BigIntFromUnsigned(0);
     SHA::SHA1_BigIntPowMod(pVerifier, (*pThis)->pGenerator, pPasswordHash, (*pThis)->pModulusN);
     SHA::SHA1_BigIntFree(pPasswordHash);
-    SHA::SHA1_ToBigIntBytes(pVerifier, (uint8_t*)(pCredsBuf + 0x60), 0x20);
+    SHA::SHA1_ToBigIntBytes(pVerifier, pCreds->aClientPublicKey_A, 0x20);
     SHA::SHA1_BigIntFree(pVerifier);
 }
 
@@ -352,11 +352,11 @@ BOOL __thiscall SRP_ClientKeyExchange(D2Srp * * pThis, D2SrpCredentialsStrc * pC
     }
 }
 
-BOOL __thiscall SRP_ClientVerifyServerProof(D2Srp * * pThis, void * pSrpContext, uint8_t * pServerProof) {
+BOOL __thiscall SRP_ClientVerifyServerProof(D2Srp * * pThis, D2SrpCredentialsStrc * pSrpContext, uint8_t * pServerProof) {
     int nCmpSign;
     int nCmpDiff;
     uint8_t computedProofBuf[20];
-    SRP_ComputeServerProof(*pThis, (void*)((char*)pSrpContext + 0x60), (void*)((char*)pSrpContext + 0xa8), (void*)((char*)pSrpContext + 0x80), computedProofBuf);
+    SRP_ComputeServerProof(*pThis, pSrpContext->aClientPublicKey_A, pSrpContext->aClientProof_M1, pSrpContext->aSessionKey_K, computedProofBuf);
     uint32_t nRemaining;
     nRemaining = 0x14;
     uint8_t* pComputedProof;
@@ -405,30 +405,10 @@ BOOL __thiscall SRP_ClientVerifyServerProof(D2Srp * * pThis, void * pSrpContext,
 }
 
 uint32_t __stdcall SRP_ParseChallenge(uint32_t * pContext, char * szText, uint32_t * pModulusN, uint32_t * pGenerator, uint32_t * pServerPublicBBytes) {
-    int i;
     Storm::Source::SSTR::SStrCopy((char*)(pContext + 0x10), szText, 0x7fffffff);
-    uint32_t* pDst = pContext;
-    for (i = 8; i; i--) {
-      *pDst = *pModulusN;
-      pModulusN++;
-      pDst++;
-    }
-
-    pDst = pContext + 8;
-    for (i = 8; i; i--) {
-      *pDst = *pGenerator;
-      pGenerator++;
-      pDst++;
-    }
-
-    pDst = pServerPublicBBytes;
-    uint32_t* pDst2 = pContext + 0x18;
-    for (i = 8; i; i--) {
-      *pDst2 = *pDst;
-      pDst++;
-      pDst2++;
-    }
-
+    memcpy(pContext, pModulusN, 0x20);
+    memcpy(pContext + 8, pGenerator, 0x20);
+    memcpy(pContext + 0x18, pServerPublicBBytes, 0x20);
     BigData* pServerPublicB = SHA::SHA1_FromBigIntBytes(pServerPublicBBytes, 0x20);
     int32_t nCompareResult = SHA::SHA1_BigIntCompareValue(pServerPublicB, 0);
     SHA::SHA1_BigIntFree(pServerPublicB);

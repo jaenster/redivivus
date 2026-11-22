@@ -950,10 +950,10 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
         if (hMsgInfo) {
           bSuccess = CryptMsgGetParam(hCryptMsg, 6, 0, hMsgInfo, &__frame0.nMsgInfoSize);
           if (bSuccess) {
-            sCertInfo.Issuer.cbData = *(DWORD*)((char*)hMsgInfo + 4);
-            sCertInfo.Issuer.pbData = *(uint8_t**)((char*)hMsgInfo + 8);
-            sCertInfo.SerialNumber.cbData = *(DWORD*)((char*)hMsgInfo + 0xc);
-            sCertInfo.SerialNumber.pbData = *(uint8_t**)((char*)hMsgInfo + 0x10);
+            sCertInfo.Issuer.cbData = ((PCMSG_SIGNER_INFO)hMsgInfo)->Issuer.cbData;
+            sCertInfo.Issuer.pbData = ((PCMSG_SIGNER_INFO)hMsgInfo)->Issuer.pbData;
+            sCertInfo.SerialNumber.cbData = ((PCMSG_SIGNER_INFO)hMsgInfo)->SerialNumber.cbData;
+            sCertInfo.SerialNumber.pbData = ((PCMSG_SIGNER_INFO)hMsgInfo)->SerialNumber.pbData;
             /* PCCERT_CONTEXT pPrevCertContext for CertFindCertificateInStore */ /* void * pvFindPara for CertFindCertificateInStore */ /* DWORD dwFindType for CertFindCertificateInStore */ /* DWORD dwFindFlags for CertFindCertificateInStore */ /* DWORD dwCertEncodingType for CertFindCertificateInStore */ /* HCERTSTORE hCertStore for CertFindCertificateInStore */ pCertContext = CertFindCertificateInStore(hCertStore, 0x10001, 0, 0xb0000, &sCertInfo, (PCCERT_CONTEXT)0x0);
             /* DWORD cchNameString for CertGetNameStringW */ /* LPWSTR pszNameString for CertGetNameStringW */ /* void * pvTypePara for CertGetNameStringW */ /* DWORD dwFlags for CertGetNameStringW */ /* DWORD dwType for CertGetNameStringW */ /* PCCERT_CONTEXT pCertContext for CertGetNameStringW */ if (pCertContext) {
               __frame0.uSlot38.nOrgNameChars = CertGetNameStringW(pCertContext, 3, 0, (void*)"2.5.4.10", (LPWSTR)0x0, 0);

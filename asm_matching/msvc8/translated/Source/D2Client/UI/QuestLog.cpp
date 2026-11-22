@@ -2316,7 +2316,7 @@ void __stdcall QUESTLOG_LoadQuestIconsForAct(int nActIndex, int32_t bResetSelect
             pQuestEntryBuf++;
           }
 
-          byQuestEntryHeader.eQuestId = *(int32_t*)(pQuestIconEntry + 0xb);
+          byQuestEntryHeader.eQuestId = (int32_t)((D2QuestLogInfoStrc*)(pQuestIconEntry - 1))->nQuestId;
           QUESTLOG_PopulateQuestEntry(&byQuestEntryHeader);
           if (byQuestEntryHeader.bStepAdvanced != '\0' || !byQuestEntryHeader.nDisplayState) {
             gQuestLog.nQuestLogActiveAct = (uint32_t)byQuestEntryHeader.nQuestTableIndex;
@@ -2571,7 +2571,7 @@ void __stdcall DRAW_UI_Quest() {
       do {
         nQuestIconIndex = -1;
         if (!((uint32_t)pQuestEntry[1] != gQuestLog.nQuestLogActiveAct_b || !((D2QuestLogInfoStrc*)(pQuestEntry - 2))->bValid || pQuestEntry[-1] >= 0x1b || !gQuestLog.pQuestLogActImages[pQuestEntry[-1]] || nActIndex >= 6)) {
-          gQuestLog.aQuestLogEntries[nActIndex].eQuestId = *(uint32_t*)(pQuestEntry + 10);
+          gQuestLog.aQuestLogEntries[nActIndex].eQuestId = ((D2QuestLogInfoStrc*)(pQuestEntry - 2))->nQuestId;
           QUESTLOG_PopulateQuestEntry(gQuestLog.aQuestLogEntries + gQuestLog.nQuestLogQuestCount);
           switch (gQuestLog.aQuestLogEntries[gQuestLog.nQuestLogQuestCount].nDisplayState) {
             case 0:
@@ -2580,8 +2580,8 @@ void __stdcall DRAW_UI_Quest() {
             if (nActIndex >= 0x19) {
               nActIndex = 0x18;
               pQuestInfo = npcmenu::GetQuestInfo();
-              D2Common::QuestRecord::SetQuestState(pQuestInfo, *(eD2Quests*)(pQuestEntry + 10), QUESTSTATE_BoxGrayed);
-              GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('X', (uint16_t)*(uint32_t*)(pQuestEntry + 10));
+              D2Common::QuestRecord::SetQuestState(pQuestInfo, (eD2Quests)((D2QuestLogInfoStrc*)(pQuestEntry - 2))->nQuestId, QUESTSTATE_BoxGrayed);
+              GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('X', (uint16_t)((D2QuestLogInfoStrc*)(pQuestEntry - 2))->nQuestId);
             }
 
             sGfxData.pDC6 = gQuestLog.pQuestLogActImages[pQuestEntry[-1]];

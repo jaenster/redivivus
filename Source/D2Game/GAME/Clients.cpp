@@ -595,7 +595,7 @@ static void __stdcall CLIENT_PopulateVisibilityPacketBuffer(D2UnitProximityNodeS
         nCoord = ppnSlotCursor->pUnit->nUnitGUID;
       }
 
-      *(int*)(pClient->nPad1AE + pClient->nPacketBuffer.nCount * 9 + 0x1f) = nCoord;
+      pClient->nPacketBuffer.aEntries[pClient->nPacketBuffer.nCount].nUnitGUID = nCoord;
       pSlotUnit = ppnSlotCursor->pUnit;
       eUnitType = pSlotUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -606,7 +606,7 @@ static void __stdcall CLIENT_PopulateVisibilityPacketBuffer(D2UnitProximityNodeS
         wCoord = 0;
       }
 
-      *(uint16_t*)(pClient->nPad1AE + pClient->nPacketBuffer.nCount * 9 + 0x23) = (uint16_t)wCoord;
+      pClient->nPacketBuffer.aEntries[pClient->nPacketBuffer.nCount].nX = (uint16_t)wCoord;
       pSlotUnit = ppnSlotCursor->pUnit;
       eUnitType = pSlotUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -617,7 +617,7 @@ static void __stdcall CLIENT_PopulateVisibilityPacketBuffer(D2UnitProximityNodeS
         nPosY = 0;
       }
 
-      *(uint16_t*)(pClient->nPad1AE + pClient->nPacketBuffer.nCount * 9 + 0x25) = (uint16_t)nPosY;
+      pClient->nPacketBuffer.aEntries[pClient->nPacketBuffer.nCount].nY = (uint16_t)nPosY;
       pClient->nPacketBuffer.nCount++;
       ppnSlotCursor = pNodes + ppnSlotCursor->nNext;
     } while (ppnSlotCursor->nNext);

@@ -55,7 +55,7 @@ void __fastcall Clear(::ListBoxImplementation * pThis, int) {
         pItemCols[3][0] = L'\0';
         pItemCols[4][0] = L'\0';
         nItemIdx++;
-        pItemCols = (uint16_t (*)[1024])((char*)(pItemCols + 6) + 0xe);
+        pItemCols = (uint16_t (*)[1024])((char*)pItemCols + sizeof(D2ListBoxItemStrc));
       } while (nItemIdx < (int)(uint32_t)pThis->nItemCount);
     }
 
@@ -101,7 +101,7 @@ void __fastcall DrawScrollbar(::ListBoxImplementation * pThis, int) {
         }
 
         nFirstVisible++;
-        pItemEntry = (uint16_t (*)[1024])((char*)(pItemEntry + 6) + 0xe);
+        pItemEntry = (uint16_t (*)[1024])((char*)pItemEntry + sizeof(D2ListBoxItemStrc));
       } while (nFirstVisible < (int)(uint32_t)pThis->nItemCount);
     }
 
@@ -815,11 +815,11 @@ int __fastcall OnMouseUp(::ListBoxImplementation * pThis, int, D2UIMouseMsgStrc 
       pRowPtr[2][0] = L'\0';
       pRowPtr[3][0] = L'\0';
       pRowPtr[4][0] = L'\0';
-      *(uint16_t*)(pRowPtr + 5) = 0;
-      *(uint32_t*)((char*)(pRowPtr + 5) + 6) = 0;
-      *(uint32_t*)((char*)(pRowPtr + 5) + 10) = 1;
-      *(uint32_t*)((char*)(pRowPtr + 5) + 2) = 0;
-      pRowPtr = (uint16_t (*)[1024])((char*)(pRowPtr + 6) + 0xe);
+      ((D2ListBoxItemStrc*)(pRowPtr - 1))->field_0x3000 = 0;
+      ((D2ListBoxItemStrc*)(pRowPtr - 1))->dwValue = 0;
+      ((D2ListBoxItemStrc*)(pRowPtr - 1))->dwAuxData = 1;
+      ((D2ListBoxItemStrc*)(pRowPtr - 1))->dwItemData = 0;
+      pRowPtr = (uint16_t (*)[1024])((char*)pRowPtr + sizeof(D2ListBoxItemStrc));
       nItemIdx--;
     } while (nItemIdx);
 

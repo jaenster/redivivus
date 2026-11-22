@@ -1226,7 +1226,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x78_TRADENAME(D2ClientStrc * pClient, D2GS
 }
 
 // Server-to-client summon log update. Opcode 0x7A.
-void __fastcall NET_D2GS_SERVER_Send_0x7A_UPDATEPET(D2ClientStrc * pClient, uint8_t nAction, uint8_t nPetType, uint32_t dwGUID, uint32_t dwMercGUID, uint16_t wClassId) {
+void __fastcall NET_D2GS_SERVER_Send_0x7A_UPDATEPET(D2ClientStrc * pClient, uint8_t nAction, int32_t nPetType, uint32_t dwGUID, uint32_t dwMercGUID, uint16_t wClassId) {
     D2GSPacketSrv0x7A aPacket;
     memset(&aPacket, 0, sizeof(aPacket));
     aPacket.nPetType = nPetType;
@@ -1239,7 +1239,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x7A_UPDATEPET(D2ClientStrc * pClient, uint
 }
 
 // DL bUnused: both callers set DL=1 (as for 0x7A); overwritten here before any read.
-void __fastcall NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(D2ClientStrc * pClient, uint8_t bUnused, uint8_t byAction, uint32_t dwPetGUID, uint32_t dwMercUnitGUID, uint16_t wMercType, uint32_t dwOwnerUnitGUID, uint32_t dwMercExperience) {
+void __fastcall NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(D2ClientStrc * pClient, uint8_t bUnused, int32_t byAction, uint32_t dwPetGUID, uint32_t dwMercUnitGUID, uint16_t wMercType, uint32_t dwOwnerUnitGUID, uint32_t dwMercExperience) {
     D2GSPacketSrv0x81 sPacket;
     memset(&sPacket, 0, sizeof(sPacket));
     sPacket.nSkillId = byAction;

@@ -1627,23 +1627,29 @@ namespace D2Win { namespace Src { namespace D2Comp {
 // Pads input string to exactly 4 characters with spaces. Used for COF component code normalization.
 static void D2COMP_PadStringTo4Chars(char * szInput, char * szOutput) {
     if (*szInput == '\0') {
-      memcpy(szOutput, "    ", 4);
+      szOutput[0] = ' ';
+      szOutput[1] = ' ';
+      szOutput[2] = ' ';
+      szOutput[3] = ' ';
       return;
     }
 
-    *szOutput = *szInput;
+    szOutput[0] = szInput[0];
     if (szInput[1] == '\0') {
       szOutput[1] = ' ';
       szOutput[2] = ' ';
-    } else {
-      szOutput[1] = szInput[1];
-      if (szInput[2] == '\0') {
-        szOutput[2] = ' ';
-      } else {
-        szOutput[2] = szInput[2];
-      }
+      szOutput[3] = ' ';
+      return;
     }
 
+    szOutput[1] = szInput[1];
+    if (szInput[2] == '\0') {
+      szOutput[2] = ' ';
+      szOutput[3] = ' ';
+      return;
+    }
+
+    szOutput[2] = szInput[2];
     szOutput[3] = ' ';
 }
 

@@ -156,11 +156,7 @@ D2PetTypeTxt * __fastcall GetPetTypeTxtById(int32_t nPetId) {
 
 // @sourcefile .\PLAYER\PlayerPets.cpp
 void __fastcall Send0x7aSummonLog(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2PetArgStrc * pPetArgs) {
-    uint16_t nPetType = pPetArgs->nPetClassId;
-    uint32_t nNameId = pPetArgs->nOwnerGUID;
-    uint32_t nPetGUID = pPetArgs->nPetGUID;
-    uint8_t byIndexId = (uint8_t)pPetArgs->nPetType;
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x7A_UPDATEPET(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlayerPets.cpp", 0x43), '\0', byIndexId, nPetGUID, nNameId, nPetType);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x7A_UPDATEPET(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlayerPets.cpp", 0x43), '\0', pPetArgs->nPetType, pPetArgs->nPetGUID, pPetArgs->nOwnerGUID, pPetArgs->nPetClassId);
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
@@ -414,25 +410,12 @@ static void __stdcall KillingPets(uint32_t nTargetGUID, D2PetListStrc * pPetList
 
 // @sourcefile .\PLAYER\PlayerPets.cpp
 void __fastcall PLAYERPETS_SendPetUpdateCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2PetArgStrc * pSummonArgs) {
-    uint32_t uVar1;
-    int32_t byIndexId2;
-    uint16_t wMinionClassId2;
-    uint32_t uVar2 = pSummonArgs->nSeed;
-    if (!uVar2 && !pSummonArgs->nNameId) {
-      wMinionClassId2 = pSummonArgs->nPetClassId;
-      uVar2 = pSummonArgs->nOwnerGUID;
-      uVar1 = pSummonArgs->nPetGUID;
-      byIndexId2 = pSummonArgs->nPetType;
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x7A_UPDATEPET(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlayerPets.cpp", 0x33e), '\x01', byIndexId2, uVar1, uVar2, wMinionClassId2);
+    if (!pSummonArgs->nSeed && !pSummonArgs->nNameId) {
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x7A_UPDATEPET(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlayerPets.cpp", 0x33e), '\x01', pSummonArgs->nPetType, pSummonArgs->nPetGUID, pSummonArgs->nOwnerGUID, pSummonArgs->nPetClassId);
       return;
     }
 
-    uVar1 = pSummonArgs->nNameId;
-    wMinionClassId2 = pSummonArgs->nPetClassId;
-    uint32_t nMercFlags = pSummonArgs->nOwnerGUID;
-    uint32_t dwPetGUID = pSummonArgs->nPetGUID;
-    byIndexId2 = pSummonArgs->nPetType;
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlayerPets.cpp", 0x345), '\x01', byIndexId2, dwPetGUID, nMercFlags, wMinionClassId2, uVar2, uVar1);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlayerPets.cpp", 0x345), '\x01', pSummonArgs->nPetType, pSummonArgs->nPetGUID, pSummonArgs->nOwnerGUID, pSummonArgs->nPetClassId, pSummonArgs->nSeed, pSummonArgs->nNameId);
 }
 
 void __fastcall PETS_UpdatePetData(D2UnitStrc * pUnit, ePetType nPetType, int32_t nTargetPetGUID, D2PetDataStrc * pNewPetData) {
@@ -645,10 +628,10 @@ static void __stdcall PETS_TeleportToRoom(D2UnitStrc * pUnit, ::SGAMEDATA * pGam
 
 static void __stdcall ROOM_SpawnPetsFromSaveData(D2RoomStrc * pRoom, uint16_t wPosX, ::SGAMEDATA * pGame, uint8_t * * ppPetListHead, uint16_t wPosY) {
     D2UnitStrc* pUnit;
-    uint8_t* pPetNode;
-    for (pPetNode = *ppPetListHead; pPetNode; pPetNode = *(uint8_t**)(pPetNode + 0x14)) {
-      if (!(*pPetNode & 1)) {
-        pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, *(uint32_t*)(pPetNode + 4));
+    D2PetStrc* pPetNode;
+    for (pPetNode = (D2PetStrc*)*ppPetListHead; pPetNode; pPetNode = pPetNode->pNext) {
+      if (!(pPetNode->nFlags & 1)) {
+        pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pPetNode->nPetGUID);
         if (pUnit) {
           PETS_TeleportToRoom(pUnit, pGame, wPosX, wPosY, pRoom);
         }
@@ -787,7 +770,7 @@ void __fastcall PLAYERPETS_SendPetListToClient(D2ClientStrc * pClient, D2UnitStr
             if (pPetUnit) {
               nClassId = pPetUnit->nClassId;
               if (nPetTypeIdx != 7) {
-                GAME::SCmd::NET_D2GS_SERVER_Send_0x7A_UPDATEPET(pClient, '\x01', (uint8_t)nPetTypeIdx, pPetNode->nPetGUID, nOwnerGUID, (uint16_t)nClassId);
+                GAME::SCmd::NET_D2GS_SERVER_Send_0x7A_UPDATEPET(pClient, '\x01', nPetTypeIdx, pPetNode->nPetGUID, nOwnerGUID, (uint16_t)nClassId);
               } else {
                 GAME::SCmd::NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(pClient, '\x01', '\a', pPetNode->nPetGUID, nOwnerGUID, (uint16_t)nClassId, pPetNode->pPetData.nSeed, pPetNode->pPetData.nNameId);
               }
@@ -958,12 +941,12 @@ static void __stdcall PETS_RemoveDistantPets(::SGAMEDATA * pGame, D2UnitStrc * p
     int32_t nPetPosY;
     eD2UnitType eUnitType;
     eD2UnitType eCurUnitType;
-    uint8_t* pCurPetNode;
-    uint8_t* pPetNode = *ppPetListHead;
+    D2PetStrc* pCurPetNode;
+    D2PetStrc* pPetNode = (D2PetStrc*)*ppPetListHead;
     while (pCurPetNode = pPetNode) {
-      pPetNode = *(uint8_t**)(pCurPetNode + 0x14);
-      if (!(*pCurPetNode & 1)) {
-        pPetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, *(uint32_t*)(pCurPetNode + 4));
+      pPetNode = pCurPetNode->pNext;
+      if (!(pCurPetNode->nFlags & 1)) {
+        pPetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pCurPetNode->nPetGUID);
         if (pPetUnit) {
           eUnitType = pPetUnit->eUnitType;
           if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -1003,7 +986,7 @@ static void __stdcall PETS_RemoveDistantPets(::SGAMEDATA * pGame, D2UnitStrc * p
 
           nCalcDist = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nOwnerX, nDist, nPetPosX, nPetPosY);
           if (nCalcDist > nMaxDistanceSq) {
-            RemovePetByGuidAndNotify(pGame, pUnit, *(DWORD*)(pCurPetNode + 4), 1);
+            RemovePetByGuidAndNotify(pGame, pUnit, pCurPetNode->nPetGUID, 1);
           }
         }
       }
@@ -1092,7 +1075,7 @@ void __fastcall SendAllyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2PetStrc* pPetListEntry;
     D2UnitStrc* pAllyUnit;
     char* pTxtPetTypeEntry;
-    uint8_t* pPetNode;
+    D2PetStrc* pPetNode;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2UnitDataPlayerPetsStrc* pPets = pPlayerData->pPets;
     if (!pPets) {
@@ -1114,9 +1097,9 @@ void __fastcall SendAllyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
         if (pPetListEntry) {
           pTxtPetTypeEntry = (char*)&pDataTable->pTxtPetType[nPetTypeIdx].petType;
           if (pTxtPetTypeEntry && pTxtPetTypeEntry[4] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
-            for (pPetNode = *(uint8_t**)pPetListEntry; pPetNode; pPetNode = *(uint8_t**)(pPetNode + 0x14)) {
-              if (!(*pPetNode & 1)) {
-                pAllyUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, *(uint32_t*)(pPetNode + 4));
+            for (pPetNode = *(D2PetStrc**)pPetListEntry; pPetNode; pPetNode = pPetNode->pNext) {
+              if (!(pPetNode->nFlags & 1)) {
+                pAllyUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pPetNode->nPetGUID);
                 if (pAllyUnit) {
                   GAME::SCmd::NET_D2GS_SERVER_Send_0x7F_AllyPartyInfo_0x90_PartyAutoMapInfo(pClient, pAllyUnit);
                 }

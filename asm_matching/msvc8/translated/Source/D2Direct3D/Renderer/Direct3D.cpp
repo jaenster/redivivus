@@ -2928,7 +2928,7 @@ static void __stdcall RENDERER_D3D_CalculateTextureSize(D2D3DSpriteInfoStrc * pS
 }
 
 // Direct3D texture cache: uploads a DC6 frame to video memory. Determines mipmap level based on size, allocates cache slot, renders frame to memory surface, copies to texture via LockRect/memcpy, and sets as active texture.
-static int32_t __fastcall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfoStrc * pTexInfo, int, BYTE * pPalette, uint8_t nOutlineColor, int32_t nMode) {
+static int32_t __stdcall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfoStrc * pTexInfo, BYTE * pPalette, uint8_t nOutlineColor, int32_t nMode) {
     // Static local variables (originally global data)
     static uint8_t DAT_00970eac; D2_STATIC_GUARD_BSS(DAT_00970eac, "D2Direct3D::Renderer::RENDERER_DIRECT3D_UploadTextureToCache::DAT_00970eac");
     static int INT_00970ec4; D2_STATIC_GUARD_BSS(INT_00970ec4, "D2Direct3D::Renderer::RENDERER_DIRECT3D_UploadTextureToCache::INT_00970ec4");
@@ -2955,29 +2955,29 @@ static int32_t __fastcall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
     }
 
     char* pIVar1 = (char*)D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData(pDC6Block);
-    int nMipIdx = nMode;
+    int32_t nOrigMode = nMode;
     if (nMode == 4) {
-      nMipIdx = 1;
+      nMode = 1;
     }
-    if (!*(int*)(pIVar1 + nMipIdx * 8)) {
+    if (!*(int*)(pIVar1 + nMode * 8)) {
       iMipLevel = pTexInfo->nWidth;
       if (iMipLevel <= 0x20 && pTexInfo->nHeight <= 0x20) {
-        *(uint32_t*)(pIVar1 + nMipIdx * 8) = 3;
+        *(uint32_t*)(pIVar1 + nMode * 8) = 3;
       } else if (iMipLevel <= 0x80 && pTexInfo->nHeight <= 0x80) {
-        *(uint32_t*)(pIVar1 + nMipIdx * 8) = 2;
+        *(uint32_t*)(pIVar1 + nMode * 8) = 2;
       } else {
         if (iMipLevel > 0x100 || pTexInfo->nHeight > 0x100) {
           return 0;
         }
 
-        *(uint32_t*)(pIVar1 + nMipIdx * 8) = 1;
+        *(uint32_t*)(pIVar1 + nMode * 8) = 1;
       }
     }
 
-    iMipLevel = *(int*)(pIVar1 + nMipIdx * 8);
-    int* pnCacheNodeIdx = (int*)(pIVar1 + 4 + nMipIdx * 8);
+    iMipLevel = *(int*)(pIVar1 + nMode * 8);
+    int* pnCacheNodeIdx = (int*)(pIVar1 + 4 + nMode * 8);
     D3DTextureCacheStrc* pCache = (D3DTextureCacheStrc*)(&DAT_00970eac + iMipLevel * 0x1c);
-    if (*pnCacheNodeIdx && (pCache->pNodeBuffer[*pnCacheNodeIdx - 1].field_0x0C == pPalette || nMode == 4)) {
+    if (*pnCacheNodeIdx && (pCache->pNodeBuffer[*pnCacheNodeIdx - 1].field_0x0C == pPalette || nOrigMode == 4)) {
       d3dTextureCache::D3DTEXCACHE_InvalidateByIndex(pCache, *pnCacheNodeIdx);
       dwHResult = g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, pCache->pNodeBuffer[*pnCacheNodeIdx - 1].pTexture);
       if (!dwHResult) {
@@ -3009,7 +3009,7 @@ static int32_t __fastcall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
       pIMipLevel = pCache->pNodeBuffer + nNodeIdx;
       pbPixelData = gpD3DTextureSpritePoolMemory0;
       pIMipLevel->pAssociatedTilePtr = pIVar1;
-      pIMipLevel->nTileSlotIndex = nMipIdx;
+      pIMipLevel->nTileSlotIndex = nMode;
       pIMipLevel->field_0x0C = pPalette;
       if (!nTmp) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x16d);
@@ -3025,7 +3025,7 @@ static int32_t __fastcall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
         exit(-1);
       } else {
         memset(pcSrcPixel, 0, pTexInfo->nTexArea);
-        switch (nMipIdx) {
+        switch (nMode) {
           case 1:
 
           case 4:
@@ -3274,35 +3274,30 @@ static void __stdcall RENDERER_DIRECT3D_DrawPalettedQuad(D2D3DSpriteInfoStrc * p
 
 // Sets blend mode based on draw mode enum (0-7) and returns the appropriate alpha value. Mode 0=25%, 1=50%, 2=75%, 3=additive, 4=modulate, 5/7=opaque, default=100% alpha.
 static uint8_t __stdcall SetDrawModeAndGetAlpha(int nDrawMode) {
+    uint8_t nAlpha = 0xff;
     switch (nDrawMode) {
       case 5:
-
       case 7:
         SetBlendMode(1);
-      return 0xff;
+        break;
       case 3:
         SetBlendMode(2);
-      return 0xff;
+        break;
       case 4:
         SetBlendMode(3);
-      return 0xff;
+        break;
+      default:
+        SetBlendMode(4);
+        if (nDrawMode == 0) {
+          nAlpha = 0x40;
+        } else if (nDrawMode == 1) {
+          nAlpha = 0x80;
+        } else if (nDrawMode == 2) {
+          nAlpha = 0xc0;
+        }
+        break;
     }
-
-    SetBlendMode(4);
-    if (!nDrawMode) {
-      return '@';
-    }
-    if (nDrawMode == 1) {
-      return 0x80;
-    }
-
-    uint8_t uVar1 = 0xc0;
-    if (nDrawMode == 2) {
-      return uVar1;
-    }
-
-    uVar1 = 0xff;
-    return uVar1;
+    return nAlpha;
 }
 
 // Stack-slot reuse: the nScreenMode slot first holds the clip bottom RENDERER_nWindowHeight - 0x2f (whole dword, 006b694e) that the quad's y coordinates are tested against; then its low byte holds the alpha returned by SetDrawModeAndGetAlpha(nDrawMode) (006b6999).
@@ -3381,7 +3376,7 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int nPosX, int nPosY
 
     uVar1 = SetDrawModeAndGetAlpha(nDrawMode);
     nScreenMode = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nScreenMode + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)uVar1);
-    bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&spriteInfo, 0, pPalette, 0, 1);
+    bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&spriteInfo, pPalette, 0, 1);
     if (!bTextureUploaded) {
       return;
     }
@@ -3424,7 +3419,7 @@ BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwG
       nUploadMode = 1;
     }
 
-    int32_t bUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&aSpriteInfo, 0, pPalette, 0, nUploadMode);
+    int32_t bUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&aSpriteInfo, pPalette, 0, nUploadMode);
     if (bUploaded) {
       RENDERER_DIRECT3D_DrawPalettedQuad(&aSpriteInfo, nPosX, nPosY, dwGamma, 0, nAlpha, 0);
     }
@@ -3432,21 +3427,37 @@ BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwG
     return 1;
 }
 
-void __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nGlobalPaletteShift) {
+BOOL __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nGlobalPaletteShift) {
     D2D3DSpriteInfoStrc aSpriteInfo;
-    BOOL nExtractResult = RENDERER_D3D_ExtractSpriteInfo(pData, &aSpriteInfo);
-    if (!(nExtractResult && aSpriteInfo.nOffsetX + nPosX <= RENDERER_nWindowWidth && aSpriteInfo.nWidth + (aSpriteInfo.nOffsetX + nPosX) >= 0 && aSpriteInfo.nOffsetY + nPosY >= 0 && aSpriteInfo.nOffsetY + nPosY - aSpriteInfo.nHeight < RENDERER_nWindowHeight)) {
-      return;
+    if (!RENDERER_D3D_ExtractSpriteInfo(pData, &aSpriteInfo)) {
+      return 0;
+    }
+
+    int32_t nX = aSpriteInfo.nOffsetX + nPosX;
+    if (nX > RENDERER_nWindowWidth) {
+      return 0;
+    }
+    if (aSpriteInfo.nWidth + nX < 0) {
+      return 0;
+    }
+
+    int32_t nY = aSpriteInfo.nOffsetY + nPosY;
+    if (nY < 0) {
+      return 0;
+    }
+    if (nY - aSpriteInfo.nHeight >= RENDERER_nWindowHeight) {
+      return 0;
     }
 
     RENDERER_D3D_CalculateTextureSize(&aSpriteInfo);
-    int32_t bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&aSpriteInfo, 0, nullptr, 0, 1);
+    int32_t bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&aSpriteInfo, nullptr, 0, 1);
     if (!bTextureUploaded) {
-      return;
+      return 0;
     }
 
     uint8_t nAlpha = SetDrawModeAndGetAlpha(nDrawMode);
     RENDERER_DIRECT3D_DrawPalettedQuad(&aSpriteInfo, nPosX, nPosY, dwGamma, nGlobalPaletteShift, nAlpha, 0);
+    return 1;
 }
 
 void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int nPosX, int nPosY, int nSkipLines, int nDrawLines, int nDrawMode) {
@@ -3460,7 +3471,7 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int nPosX, int nPos
     }
 
     RENDERER_D3D_CalculateTextureSize(&spriteInfo);
-    int32_t bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&spriteInfo, 0, nullptr, 0, 1);
+    int32_t bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&spriteInfo, nullptr, 0, 1);
     if (!bTextureUploaded) {
       return;
     }
@@ -3557,7 +3568,7 @@ void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int nPosX, int nPosY, vo
     }
 
     RENDERER_D3D_CalculateTextureSize(&spriteInfo);
-    int32_t bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&spriteInfo, 0, nullptr, 0, 1);
+    int32_t bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&spriteInfo, nullptr, 0, 1);
     if (!bTextureUploaded) {
       return;
     }
@@ -3598,7 +3609,7 @@ void __fastcall DrawShadow(D2GfxDataStrc * pData, int nPosX, int nPosY) {
     }
 
     RENDERER_D3D_CalculateTextureSize(&spriteInfo);
-    int32_t bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&spriteInfo, 0, nullptr, 0, 4);
+    int32_t bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&spriteInfo, nullptr, 0, 4);
     if (!bTextureUploaded) {
       return;
     }
@@ -3628,7 +3639,7 @@ void __fastcall DrawImageFast(D2GfxDataStrc * pData, int nPosX, int nPosY, BYTE 
     aSpriteInfo.nWidth += 2;
     aSpriteInfo.nHeight += 2;
     RENDERER_D3D_CalculateTextureSize(&aSpriteInfo);
-    bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&aSpriteInfo, 0, nullptr, nPaletteIndex, 3);
+    bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&aSpriteInfo, nullptr, nPaletteIndex, 3);
     if (!bTextureUploaded) {
       return;
     }

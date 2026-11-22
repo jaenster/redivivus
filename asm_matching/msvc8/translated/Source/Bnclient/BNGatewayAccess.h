@@ -55,7 +55,7 @@ void __stdcall Load(struct D2BNetGatewayAccessStr * pGatewayAccess);
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 // Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
 int32_t __fastcall GetSystemTimeZone(struct D2BNetGatewayAccessStr * pGatewayAccess, int);
-char * __fastcall Nth(void * pThis, int, int nIndex);
+char * __fastcall Nth(struct D2BNetGatewayAccessStr * pThis, int, int nIndex);
 char * __stdcall DNS(struct D2BNetGatewayAccessStr * pGatewayAccess, int nIndex);
 int32_t __stdcall GMT(struct D2BNetGatewayAccessStr * pGatewayAccess, int nIndex);
 // GetGatewayList(this=ECX, szValueName on stack) __thiscall, ret 4. Reads the gateway
@@ -65,7 +65,7 @@ int32_t __stdcall GMT(struct D2BNetGatewayAccessStr * pGatewayAccess, int nIndex
 // Load falls to UpdateGatewaysFromIni -> assert (see 0x518850).
 // An "Override.." value name sets bIsOverride=1 @0x51827f.
 // @sourcefile .\BNetGW.cpp
-void __fastcall GetGatewayList(void * pThis, int, char * szText);
+void __fastcall GetGatewayList(struct D2BNetGatewayAccessStr * pThis, int, char * szText);
 void __fastcall GetBattlenetGatewayList(struct D2BNetGatewayAccessStr * nGatewayAccess);
 void __fastcall GetBattlenetRealmsList(struct D2BNetGatewayAccessStr * nGatewayAccess);
 void __fastcall WriteDefaultGatewayList(char * szText);
@@ -76,7 +76,7 @@ char * __fastcall SkipEOL(struct D2BNetGatewayAccessStr * pGatewayAccess, int, c
 char * __fastcall FindSection(struct D2BNetGatewayAccessStr * pThis, int, char * szText1, char * szText2);
 // Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
 char * __fastcall FindKey(struct D2BNetGatewayAccessStr * pGatewayAccess, int, char * szText1, char * szText2);
-void __fastcall PickClosestZone(void * pThis, int, int32_t nGmtMinutes);
+void __fastcall PickClosestZone(struct D2BNetGatewayAccessStr * pThis, int, int32_t nGmtMinutes);
 // UpdateGatewaysFromIni(this, szIni) __stdcall (both args on stack: [ebp+8]=this,
 // [ebp+0xc]=szIni), ret 8. Parses a gateway ini (default via WriteDefaultGatewayList, or
 // server-pushed via NET_BNFTP_CLIENT_ProcessFile) and writes the registry/struct. Asserts

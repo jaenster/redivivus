@@ -411,7 +411,7 @@ __declspec(noinline) void * __stdcall GetInstructionPointer() {
 }
 
 // Formats debug output with optional timestamp and outputs to debugger/log. Supports flags: 0x04=prepend timestamp (HH:MM:SS.mmm format via GetLocalTime), 0x02=skip OutputDebugStringA, 0x01=write to LOG category via LogManager, 0x18=check CapsLock state. Uses a 4096-byte buffer for vsnprintf formatting with varargs, appending formatted text after timestamp if present.
-static void __stdcall FormatDebugOutput(uint8_t bFlags, va_list vaArgs, char * szText) {
+static void __stdcall FormatDebugOutput(int bFlags, char * szText, va_list vaArgs) {
     char szOutputBuffer[4096];
     char cCurrent;
     szOutputBuffer[0] = '\0';
@@ -462,16 +462,16 @@ void OutputDebugStringIfCapsLock(char * szText, ...) {
     va_end(__va);
 }
 
-void FormatDebugOutputVariadic(uint8_t bFlags, char * szText, ...) {
+void FormatDebugOutputVariadic(int bFlags, char * szText, ...) {
     va_list __va;
     va_start(__va, szText);
-    FormatDebugOutput(bFlags, __va, szText);
+    FormatDebugOutput(bFlags, szText, __va);
 }
 
 void FormatDebugOutputLogOnly(char * szText, ...) {
     va_list __va;
     va_start(__va, szText);
-    FormatDebugOutput(1, __va, szText);
+    FormatDebugOutput(1, szText, __va);
 }
 
 // The registered Fog exception filter. Its ABI is measured at the only dispatch,

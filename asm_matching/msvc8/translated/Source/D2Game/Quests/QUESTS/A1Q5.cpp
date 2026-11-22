@@ -276,104 +276,74 @@ void __fastcall Q05_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     // Static local variables (originally global data)
     static int32_t gdwQuestDataIntialMask[6] = { -0x1, -0x1, 0x0, 0x1, 0x2, 0x3 }; D2_STATIC_GUARD(gdwQuestDataIntialMask, "D2Game::Quests::QUESTS::A1Q5::Q05_Callback00_NpcActivate::gdwQuestDataIntialMask");
 
-    int i;
-    int32_t* pListEntry;
-    int nPlayerGUID;
-    int32_t nNpcClassId;
-    uint32_t nGossipLineIdx;
     if (pQuestData->bIsNotIntroduction == '\0') {
       return;
     }
 
-    ::SGAMEDATA* pGame;
-    pGame = pQuestArgs->pGame;
-    D2UnitDataPlayerStrc* pPlayerData;
-    pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-    D2BitBufferStrc* pBitBuffer;
-    pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    BOOL bCompleted;
-    bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ForgottenTower, QUESTSTATE_Completed);
-    BOOL bJustCompleted;
-    bJustCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ForgottenTower, QUESTSTATE_JustCompleted);
-    if (!(bCompleted != 1 || bJustCompleted)) {
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
+    BOOL bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ForgottenTower, QUESTSTATE_Completed);
+    BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ForgottenTower, QUESTSTATE_JustCompleted);
+    if (bCompleted == 1 && !bJustCompleted) {
       return;
     }
+
+    int nNpcClassId;
     if (!pQuestArgs->pTarget) {
       nNpcClassId = -1;
     } else {
       nNpcClassId = pQuestArgs->pTarget->nClassId;
     }
+
+    int nPlayerGUID;
     if (!pQuestArgs->pPlayer) {
       nPlayerGUID = -1;
     } else {
       nPlayerGUID = pQuestArgs->pPlayer->nUnitGUID;
     }
 
-    D2QuestDataA1Q5Strc* pQuestSpecific;
-    pQuestSpecific = pQuestData->pQuestSpecificData.pA1Q5;
+    D2QuestDataA1Q5Strc* pA1Q5Data = pQuestData->pQuestSpecificData.pA1Q5;
     if (pQuestData->nStateFlag >= 4) {
-      i = 0;
-      if (pQuestSpecific->nPlayersForRewardCount) {
-        pListEntry = pQuestSpecific->aPlayersForRewardGUIDs;
-        do {
-          if (*pListEntry == nPlayerGUID) {
-            goto pick_gossip;
-          }
-
-          i++;
-          pListEntry++;
-        } while (i < (int)(uint32_t)pQuestSpecific->nPlayersForRewardCount);
-      }
-
-      i = 0;
-      if (!pQuestSpecific->nPlayersInTowerCount) {
-        return;
-      }
-
-      while (pQuestSpecific->aPlayersInTowerGUIDs[i] != nPlayerGUID) {
-        i++;
-        if (i >= (int)(uint32_t)pQuestSpecific->nPlayersInTowerCount) {
-          return;
+      for (int i = 0; i < pA1Q5Data->nPlayersForRewardCount; i++) {
+        if (pA1Q5Data->aPlayersForRewardGUIDs[i] == nPlayerGUID) {
+          goto pick_gossip;
         }
       }
+
+      for (int i = 0; i < pA1Q5Data->nPlayersInTowerCount; i++) {
+        if (pA1Q5Data->aPlayersInTowerGUIDs[i] == nPlayerGUID) {
+          goto pick_gossip;
+        }
+      }
+
+      return;
     }
 
     pick_gossip:
-    i = 0;
-    if (pQuestSpecific->nPlayersForRewardCount) {
-      pListEntry = pQuestSpecific->aPlayersForRewardGUIDs;
-      do {
-        if (*pListEntry == nPlayerGUID) {
-          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNpcClassId, 2);
-          return;
-        }
-
-        i++;
-        pListEntry++;
-      } while (i < (int)(uint32_t)pQuestSpecific->nPlayersForRewardCount);
+    for (int i = 0; i < pA1Q5Data->nPlayersForRewardCount; i++) {
+      if (pA1Q5Data->aPlayersForRewardGUIDs[i] == nPlayerGUID) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNpcClassId, 2);
+        return;
+      }
     }
-    if (bCompleted == 1 && bJustCompleted == 1) {
-      i = 0;
-      if (!pQuestSpecific->nPlayersInTowerCount) {
-        return;
-      }
 
-      while (pQuestSpecific->aPlayersInTowerGUIDs[i] != nPlayerGUID) {
-        i++;
-        if (i >= (int)(uint32_t)pQuestSpecific->nPlayersInTowerCount) {
+    if (bCompleted == 1 && bJustCompleted == 1) {
+      for (int i = 0; i < pA1Q5Data->nPlayersInTowerCount; i++) {
+        if (pA1Q5Data->aPlayersInTowerGUIDs[i] == nPlayerGUID) {
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNpcClassId, 3);
           return;
         }
       }
 
-      nGossipLineIdx = 3;
-    } else {
-      nGossipLineIdx = gdwQuestDataIntialMask[pQuestData->nStateFlag];
-      if (nGossipLineIdx == -1) {
-        return;
-      }
-      if (nGossipLineIdx >= 5) {
-        return;
-      }
+      return;
+    }
+
+    uint32_t nGossipLineIdx = gdwQuestDataIntialMask[pQuestData->nStateFlag];
+    if (nGossipLineIdx == -1) {
+      return;
+    }
+
+    if (nGossipLineIdx >= 5) {
+      return;
     }
 
     AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNpcClassId, nGossipLineIdx);
@@ -529,11 +499,8 @@ BOOL __fastcall Q05_MarkCompleteForPlayersInTower(::SGAMEDATA * pGame, D2UnitStr
 // loot sequence still pending); otherwise it clears a busy flag (+0xa) marking the handler finished.
 static void __fastcall Q05_OnTowerComplete(D2QuestDataStrc * pQuestData) {
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q05_MarkCompleteForPlayersInTower);
-    /* QUEST_SetQuestRecordState(ForgottenTower, JustCompleted=0xd) — game-wide
-                         quest record */ QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_ForgottenTower, QUESTSTATE_JustCompleted);
-    D2QuestDataA1Q4Strc* unionfacet5_594ff0 = pQuestData->pQuestSpecificData.pA1Q4;
-    short int sVar1 = (short int)((uint32_t)(uint8_t)unionfacet5_594ff0->sSub.field_0x4C | (uint32_t)(uint8_t)unionfacet5_594ff0->sSub.field_0x4D << 8);
-    if (!sVar1) {
+    QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_ForgottenTower, QUESTSTATE_JustCompleted);
+    if (!pQuestData->pQuestSpecificData.pA1Q5->nPlayersForRewardCount) {
       pQuestData->bIsActive = '\0';
     } else {
       pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q05_Callback10_PlayerLeavesGame;

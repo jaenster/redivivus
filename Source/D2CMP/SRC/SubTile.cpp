@@ -173,20 +173,7 @@ void __fastcall SUBTILE_ConvertToIndexed(D2GroundSubTileStrc * pDstFrame, D2Grou
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x84);
       exit(-1);
     } else {
-      sVar1 = pSrcFrame->nOffsetY;
-      pDstFrame->nOffsetX = pSrcFrame->nOffsetX;
-      pDstFrame->nOffsetY = sVar1;
-      cIndexed = pSrcFrame->nSubIdxLo;
-      bVar2 = pSrcFrame->nSubIdxHi;
-      pDstFrame->nTextureCacheIndex = pSrcFrame->nTextureCacheIndex;
-      pDstFrame->nSubIdxLo = cIndexed;
-      pDstFrame->nSubIdxHi = bVar2;
-      uVar3 = pSrcFrame->wDataLength;
-      pDstFrame->wFormat = pSrcFrame->wFormat;
-      pDstFrame->wDataLength = uVar3;
-      uVar3 = pSrcFrame->wField0E;
-      *(uint16_t*)&pDstFrame->field_0xc = *(uint16_t*)&pSrcFrame->field_0xc;
-      pDstFrame->wField0E = uVar3;
+      memcpy(pDstFrame, pSrcFrame, 0x10);
       pDstFrame->wFormat &= 0xfffe;
       pDstFrame->pPixelData = 0;
       pDstFrame->wDataLength = 0;
@@ -210,14 +197,9 @@ void __fastcall SUBTILE_ConvertToIndexed(D2GroundSubTileStrc * pDstFrame, D2Grou
         pDstFrame->wDataLength = (uint16_t)nAllocSize;
         pDstIdx = pSrcFrame->pPixelData;
         pSrcRGB = pDstFrame->pPixelData;
-        i = 0;
-        if (!nAllocSize) {
-          return;
-        }
-
-        do {
+        for (i = 0; i < (int)nAllocSize; i++) {
           cIndexed = 0;
-          if (*pDstIdx != (uint8_t)dwColorKey || pDstIdx[1] != (uint8_t)(dwColorKey >> 8) || pDstIdx[2] != *(uint8_t*)((char*)&dwColorKey + 2)) {
+          if (*pDstIdx != ((uint8_t*)&dwColorKey)[0] || pDstIdx[1] != ((uint8_t*)&dwColorKey)[1] || pDstIdx[2] != ((uint8_t*)&dwColorKey)[2]) {
             cIndexed = (*pfnGetPaletteIndex)(*pDstIdx, pDstIdx[1], pDstIdx[2]);
             if (!cIndexed) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa1);
@@ -226,10 +208,9 @@ void __fastcall SUBTILE_ConvertToIndexed(D2GroundSubTileStrc * pDstFrame, D2Grou
           }
 
           *pSrcRGB = cIndexed;
-          i++;
           pSrcRGB++;
           pDstIdx += 3;
-        } while (i < (int)nAllocSize);
+        }
 
         return;
       }

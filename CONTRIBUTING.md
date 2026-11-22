@@ -112,6 +112,35 @@ Sometimes the source *should* differ from 1.14d - a string that must read "Rediv
 but they are kept apart from the byte-match figures. Say plainly in the PR that this is what you
 are doing.
 
+### Work items
+
+Curated tasks are on <https://redivivus.app/work>: functions a few instructions off a byte match,
+file-statics whose register convention holds their callers back, and declaration facts, each with
+a diagnosis and a suggested approach. With the Redivivus MCP server your agent reads them with
+`list_work` and `get_work` (the brief, including the `oracle build`, `check` and `diff` lines to run).
+
+1. Claim the item first (`claim_work`), so nobody duplicates the work. A claim is a 48-hour lease,
+   renewable up to 7 days. Translation units marked "maintainers (lane ...)" on /work are being
+   worked through by the maintainers and cannot be claimed until the lane ends.
+2. Work it the way any function body is worked (see "A function body that does not match the
+   original" above): faithful source only, `oracle check` on the unit shows no lost MATCH.
+3. Open the pull request with one line per item in its description:
+
+   ```
+   Work-Item: <id>
+   ```
+
+   `pr_template {ids: [...]}` writes the whole description, with each function's status before and
+   after and the callers it unlocks that now match. The line links the pull request to the item and
+   hands it in for you as the PR's author; you can still call `submit_work` with the PR link and a
+   note. A Work-Item line naming an item someone else holds is flagged on /work, not linked.
+4. Once the merged change shows every function of the item MATCH in the published measurement, the
+   item closes on its own and counts for you. A pull request closed without merging puts the item
+   back in the pool after three days, unless you hand it in again with another one.
+
+Declaration facts (a prototype or type the original evidently had) land in Ghidra through
+`propose`, not in a pull request; put the proposal id in `submit_work`'s note.
+
 ## Reading the databases yourself
 
 The Ghidra databases behind the tree - 1.14d Windows and the Intel Mac build from the same source

@@ -498,9 +498,9 @@ void __fastcall NET_D2GS_SERVER_Send_0x5C_REMOVECLIENT(struct D2ClientStrc * pCl
 void __fastcall NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(struct D2ClientStrc * pClient, uint8_t byTradeAction);
 void __fastcall NET_D2GS_SERVER_Send_0x78_TRADENAME(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x78 * pPacketData);
 // Server-to-client summon log update. Opcode 0x7A.
-void __fastcall NET_D2GS_SERVER_Send_0x7A_UPDATEPET(struct D2ClientStrc * pClient, uint8_t nAction, uint8_t nPetType, uint32_t dwGUID, uint32_t dwMercGUID, uint16_t wClassId);
+void __fastcall NET_D2GS_SERVER_Send_0x7A_UPDATEPET(struct D2ClientStrc * pClient, uint8_t nAction, int32_t nPetType, uint32_t dwGUID, uint32_t dwMercGUID, uint16_t wClassId);
 // DL bUnused: both callers set DL=1 (as for 0x7A); overwritten here before any read.
-void __fastcall NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(struct D2ClientStrc * pClient, uint8_t bUnused, uint8_t byAction, uint32_t dwPetGUID, uint32_t dwMercUnitGUID, uint16_t wMercType, uint32_t dwOwnerUnitGUID, uint32_t dwMercExperience);
+void __fastcall NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(struct D2ClientStrc * pClient, uint8_t bUnused, int32_t byAction, uint32_t dwPetGUID, uint32_t dwMercUnitGUID, uint16_t wMercType, uint32_t dwOwnerUnitGUID, uint32_t dwMercExperience);
 // Server-to-client gold amount in trade. Opcode 0x79.
 void __fastcall NET_D2GS_SERVER_Send_0x79_TRADEGOLD(struct D2ClientStrc * pClient, uint32_t dwGold, uint8_t nTradeId);
 // Server-to-client ally/party info update. Always sends 0x7F (ally party info: GUID, life%, level).

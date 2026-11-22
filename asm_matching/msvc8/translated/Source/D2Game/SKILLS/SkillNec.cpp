@@ -647,24 +647,24 @@ void __fastcall SKILLS_NecroShredAlignmentCallback(D2UnitStrc * pUnit, eD2States
     GAME::Targets::MONSTER_FreeUnitNodes(pGame, pUnit);
 }
 
-BOOL __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(D2UnitStrc * pUnit, void * pSkillData) {
+BOOL __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(D2UnitStrc * pUnit, D2CorpseSkillEventArgStrc * pSkillData) {
     int32_t nSwitchAiMode;
     uint32_t nTargetGUID;
-    uint32_t bValidTarget = SKILLNEC_ValidateCorpseTarget(*(::SGAMEDATA**)pSkillData, *(D2UnitStrc**)((char*)pSkillData + 4), pUnit);
+    uint32_t bValidTarget = SKILLNEC_ValidateCorpseTarget(pSkillData->pGame, pSkillData->pUnit, pUnit);
     if (!bValidTarget) {
       return 0;
     }
-    if (*(char*)((char*)pSkillData + 0x10) == '\0') {
-      nTargetGUID = *(uint32_t*)((char*)pSkillData + 0x14);
+    if (pSkillData->nCorpseUnitType == '\0') {
+      nTargetGUID = (uint32_t)pSkillData->nCorpseGUID;
       nSwitchAiMode = 1;
       Monster::MonsterAI::AI_SetSwitchAiTargetParams(pUnit, nSwitchAiMode, nTargetGUID);
     } else {
-      nTargetGUID = *(uint32_t*)((char*)pSkillData + 0x14);
+      nTargetGUID = (uint32_t)pSkillData->nCorpseGUID;
       nSwitchAiMode = 2;
       Monster::MonsterAI::AI_SetSwitchAiTargetParams(pUnit, nSwitchAiMode, nTargetGUID);
     }
 
-    GAME::Event::SetEvent(*(::SGAMEDATA**)pSkillData, pUnit, 10, (*(::SGAMEDATA**)pSkillData)->dwGameFrame + *(int*)((char*)pSkillData + 0x18), 0, 0);
+    GAME::Event::SetEvent(pSkillData->pGame, pUnit, 10, pSkillData->pGame->dwGameFrame + pSkillData->nDuration, 0, 0);
     return 1;
 }
 

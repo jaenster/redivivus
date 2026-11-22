@@ -1283,7 +1283,7 @@ void __fastcall D3D_PixelDataFreeCallback_ClearCacheNodes(int * pCacheIndices);
 // Stack-slot reuse: the nScreenMode slot first holds the clip bottom RENDERER_nWindowHeight - 0x2f (whole dword, 006b694e) that the quad's y coordinates are tested against; then its low byte holds the alpha returned by SetDrawModeAndGetAlpha(nDrawMode) (006b6999).
 void __fastcall DrawPerspectiveImage(struct D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nScreenMode, BYTE * pPalette);
 BOOL __fastcall DrawImage(struct D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, BYTE * pPalette);
-void __fastcall DrawShiftedImage(struct D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nGlobalPaletteShift);
+BOOL __fastcall DrawShiftedImage(struct D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nGlobalPaletteShift);
 void __fastcall DrawVerticalCropImage(struct D2GfxDataStrc * pData, int nPosX, int nPosY, int nSkipLines, int nDrawLines, int nDrawMode);
 void __fastcall DrawClippedImage(struct D2GfxDataStrc * pData, int nPosX, int nPosY, void * pCropRect, int nDrawMode);
 // Draws the shadow sprite as one Direct3D quad through RENDERER_D3D_DrawShadowQuad, passing its D2D3DSpriteInfoStrc.

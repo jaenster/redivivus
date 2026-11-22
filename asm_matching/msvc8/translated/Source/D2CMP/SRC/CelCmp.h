@@ -83,7 +83,7 @@ void __stdcall CELCMP_FreeCachedCelFrame(uint32_t dwHashVal);
 uint32_t __stdcall CELCMP_CreateCelFileFromCache(uint32_t nCelListKey, struct DC6 * * ppCelFileOut);
 uint32_t __stdcall CELCMP_RoundUpToMultiple_Unreferenced(uint32_t nValue, uint32_t nMultiple);
 uint8_t * __fastcall BITSTREAM_GetByteOffset(struct D2CodecBitStateStrc * pBitState);
-void __fastcall BITSTREAM_AdvanceBits(uint8_t * pThis, int, int32_t nBitCount);
+void __fastcall BITSTREAM_AdvanceBits(struct D2CodecBitStateStrc * pThis, int, int32_t nBitCount);
 void __stdcall GFX_InitGlobalCriticalSection();
 void __stdcall GFX_DestroyGlobalCriticalSection();
 void __fastcall CELCMP_ApplyColorKeyToAllPixels(void * pFrameData, pfnTilecmpPixelCallback pfnPixelCallback, uint32_t dwColorKey);

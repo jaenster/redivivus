@@ -101,9 +101,9 @@ BOOL __fastcall SRP_SetParameters(struct D2Srp * * ppSrp, int, uint32_t nGenerat
 void __fastcall SRP_SeedRandom(struct D2Srp * * ppSrp, int, uint32_t dwSeed);
 void __fastcall SRP_FreeParameters(struct D2Srp * * ppSrp);
 void __fastcall SRP_ClientGenerateVerifier(void * pThis, int, char * szUsername, uint32_t * szPassword, uint32_t * pSaltOut, void * pVerifierOut);
-void __fastcall SRP_GenerateAccountCredentials(struct D2Srp * * pThis, int, char * pCredsBuf, char * szUsername, char * szPassword);
+void __fastcall SRP_GenerateAccountCredentials(struct D2Srp * * pThis, int, struct D2SrpCredentialsStrc * pCreds, char * szUsername, char * szPassword);
 BOOL __fastcall SRP_ClientKeyExchange(struct D2Srp * * pThis, int, struct D2SrpCredentialsStrc * pContext, void * pSaltBytes, void * pServerPublicBytes);
-BOOL __fastcall SRP_ClientVerifyServerProof(struct D2Srp * * pThis, int, void * pSrpContext, uint8_t * pServerProof);
+BOOL __fastcall SRP_ClientVerifyServerProof(struct D2Srp * * pThis, int, struct D2SrpCredentialsStrc * pSrpContext, uint8_t * pServerProof);
 uint32_t __stdcall SRP_ParseChallenge(uint32_t * pContext, char * szText, uint32_t * pModulusN, uint32_t * pGenerator, uint32_t * pServerPublicBBytes);
 void __fastcall SRP_ServerComputePublicB(struct D2Srp * * pThis, int, uint8_t * nContextBase);
 void __fastcall SRP_ClientVerifyAndComputeKey(void * pThis, int, void * pContext, uint32_t * pServerProof);

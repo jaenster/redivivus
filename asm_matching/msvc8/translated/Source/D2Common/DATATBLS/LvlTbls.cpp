@@ -1809,7 +1809,7 @@ int32_t __fastcall GetRandomCellNo(int32_t nLevelType, int32_t nOrientation, int
 
     int* pIndexField = &pAutoMapLvlTbls[nUpperBound].nIndex;
     do {
-      if (((D2AutoMapLvlTbls*)(pIndexField - 2))->nLevelType == nLevelType && pIndexField[-1] == nOrientation && ((uint8_t)*pIndexField == 0xff || (uint32_t)(uint8_t)*pIndexField == nIndex) && (*(uint8_t*)((char*)pIndexField + 1) == 0xff || (int)(uint32_t)*(uint8_t*)((char*)pIndexField + 1) <= nSubIndex && (int)(uint32_t)*(uint8_t*)((char*)pIndexField + 2) >= nSubIndex)) {
+      if (((D2AutoMapLvlTbls*)(pIndexField - 2))->nLevelType == nLevelType && ((D2AutoMapLvlTbls*)(pIndexField - 2))->nOrientation == nOrientation && ((uint8_t)*pIndexField == 0xff || (uint32_t)(uint8_t)*pIndexField == nIndex) && (((uint8_t*)pIndexField)[1] == 0xff || (int)(uint32_t)((uint8_t*)pIndexField)[1] <= nSubIndex && (int)(uint32_t)((uint8_t*)pIndexField)[2] >= nSubIndex)) {
         nRandIdx = Seed::RANDOM_RandomNumberSelector(psDataTableSeed, pAutoMapLvlTbls[nUpperBound].nSize);
         return pAutoMapLvlTblsBase[nUpperBound].nCellNo[nRandIdx];
       }

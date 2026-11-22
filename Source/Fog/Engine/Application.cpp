@@ -62,19 +62,19 @@ static bool DEBUG_ParsePEDebugDirectory(uint32_t * pnSize, int * pnRVA, short * 
     *pnRVA = 0;
     *pnSize = -1;
     if (nDirRVA == 2) {
-      if (*(uint32_t*)(pOptHeader + 0x36) <= 6) {
+      if (((IMAGE_OPTIONAL_HEADER64*)pOptHeader)->NumberOfRvaAndSizes <= 6) {
         return false;
       }
 
-      nDirRVA = *(int*)(pOptHeader + 0x50);
-      nDirSize = *(uint32_t*)(pOptHeader + 0x52);
+      nDirRVA = (int)((IMAGE_OPTIONAL_HEADER64*)pOptHeader)->DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].VirtualAddress;
+      nDirSize = ((IMAGE_OPTIONAL_HEADER64*)pOptHeader)->DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].Size;
     } else {
-      if (*(uint32_t*)(pOptHeader + 0x2e) <= 6) {
+      if (((IMAGE_OPTIONAL_HEADER32*)pOptHeader)->NumberOfRvaAndSizes <= 6) {
         return false;
       }
 
-      nDirRVA = *(int*)(pOptHeader + 0x48);
-      nDirSize = *(uint32_t*)(pOptHeader + 0x4a);
+      nDirRVA = (int)((IMAGE_OPTIONAL_HEADER32*)pOptHeader)->DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].VirtualAddress;
+      nDirSize = ((IMAGE_OPTIONAL_HEADER32*)pOptHeader)->DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].Size;
     }
 
     *pnSize = nDirSize;
@@ -152,25 +152,25 @@ static uint8_t __stdcall DEBUG_ParseModuleHeaders(D2FogDebugModuleEntryStrc * pp
       return 0;
     }
 
-    int* pNtHeader = (int*)(*(int*)(pModuleBase + 0x1e) + (intptr_t)pModuleBase);
+    IMAGE_NT_HEADERS32* pNtHeader = (IMAGE_NT_HEADERS32*)((char*)pModuleBase + ((IMAGE_DOS_HEADER*)pModuleBase)->e_lfanew);
     /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(pNtHeader, 4);
-    if (!(!bIsBadPtr && *pNtHeader == 0x4550)) {
+    if (!(!bIsBadPtr && pNtHeader->Signature == 0x4550)) {
       return 0;
     }
 
-    /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(pNtHeader + 1, 0x14);
+    /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(&pNtHeader->FileHeader, 0x14);
     if (bIsBadPtr) {
       return 0;
     }
 
-    /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(pNtHeader + 6, (uint32_t)*(uint16_t*)(pNtHeader + 5));
-    uint32_t bIsValidImage = !bIsBadPtr ? DEBUG_GetPEImageType((short int*)(pNtHeader + 6)) : 0;
+    /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(&pNtHeader->OptionalHeader, (uint32_t)pNtHeader->FileHeader.SizeOfOptionalHeader);
+    uint32_t bIsValidImage = !bIsBadPtr ? DEBUG_GetPEImageType((short int*)&pNtHeader->OptionalHeader) : 0;
     if (!bIsValidImage) {
       return 0;
     }
 
-    ppModuleBase->nImageSize = pNtHeader[0x14];
-    ppModuleBase->dwImageTimeDateStamp = pNtHeader[2];
+    ppModuleBase->nImageSize = pNtHeader->OptionalHeader.SizeOfImage;
+    ppModuleBase->dwImageTimeDateStamp = pNtHeader->FileHeader.TimeDateStamp;
     if (pModuleBase[0x1c] == -0x48b1 && pModuleBase[0x1d] == 0x2d98) {
       bIsValidImage = *(uint32_t*)(pModuleBase + 0x1a);
       ppModuleBase->dwTimestamp = bIsValidImage;
@@ -181,7 +181,7 @@ static uint8_t __stdcall DEBUG_ParseModuleHeaders(D2FogDebugModuleEntryStrc * pp
 
     int nDirRVA = 0;
     uint32_t nDirSize = 0;
-    bool bVar1 = DEBUG_ParsePEDebugDirectory(&nDirSize, &nDirRVA, (short int*)(pNtHeader + 6));
+    bool bVar1 = DEBUG_ParsePEDebugDirectory(&nDirSize, &nDirRVA, (short int*)&pNtHeader->OptionalHeader);
     uint32_t nCount = nDirSize;
     if (bVar1 && nDirRVA && nDirSize) {
       uint8_t* pDebugDir;

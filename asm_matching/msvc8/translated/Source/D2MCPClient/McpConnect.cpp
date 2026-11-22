@@ -54,7 +54,7 @@ namespace D2MCPClient { namespace McpConnect {
 uint32_t D2GSGameToken = 0; D2_GLOBAL_GUARD(D2GSGameToken, "D2MCPClient::McpConnect::D2GSGameToken");
 D2QSSocketStrc * MCPD2QSSocket = 0; D2_GLOBAL_GUARD(MCPD2QSSocket, "D2MCPClient::McpConnect::MCPD2QSSocket");
 }} // namespace D2MCPClient::McpConnect
-static uint8_t gMCPConnectionState[328] = {0}; D2_STATIC_GUARD(gMCPConnectionState, "gMCPConnectionState");
+static uint32_t gMCPConnectionState[0x52] = {0}; D2_STATIC_GUARD(gMCPConnectionState, "gMCPConnectionState");
 static uint32_t g_bMCPListGameSuccess = 0; D2_STATIC_GUARD(g_bMCPListGameSuccess, "g_bMCPListGameSuccess");
 static uint32_t g_nMCPJoinTimestamp = 0; D2_STATIC_GUARD(g_nMCPJoinTimestamp, "g_nMCPJoinTimestamp");
 D2McpGameInfoStrc g_CharSelectBuffer = {0}; D2_GLOBAL_GUARD(g_CharSelectBuffer, "g_CharSelectBuffer");
@@ -423,9 +423,9 @@ void __stdcall McpConnectionLoop(int * pnParam) {
 // lpStartAddress parameter of CreateThread
 uint32_t __stdcall ThreadHandler() {
     char bySendByte;
-    char* szIpAddress = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(*(uint32_t*)((char*)&gMCPConnectionState + 16));
+    char* szIpAddress = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(gMCPConnectionState[4]);
     D2GSJoinResult = 0;
-    D2QSSocketStrc* NET_MCP_CLIENT_D2QSSocket = Fog::Src::D2QSSocket::STRUCT_D2QSSocket_Init(szIpAddress, *(uint32_t*)((char*)&gMCPConnectionState + 20), "clt->mcp");
+    D2QSSocketStrc* NET_MCP_CLIENT_D2QSSocket = Fog::Src::D2QSSocket::STRUCT_D2QSSocket_Init(szIpAddress, gMCPConnectionState[5], "clt->mcp");
     MCPD2QSSocket = NET_MCP_CLIENT_D2QSSocket;
     Fog::Src::D2QSSocket::QSSOCKET_SetCallbackHandler1(NET_MCP_CLIENT_D2QSSocket, (void*)MCPCONNECT_SocketCallback_Dispatch, nullptr);
     Fog::Src::D2QSSocket::NET_MCP_CLIENT_CreateConnectionThread(NET_MCP_CLIENT_D2QSSocket);

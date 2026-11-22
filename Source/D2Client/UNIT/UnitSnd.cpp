@@ -3011,10 +3011,12 @@ static void __stdcall SetHasActiveSound(D2UnitStrc * pUnit, BOOL bHasActiveSound
     pUnit->uSideData.pClientSide.bHasActiveSound = bHasActiveSound;
 }
 
-static int * UNITSND_GetTileDataAtPosition(int32_t nPosX, D2RoomStrc * pRoom, int32_t nPosY) {
+static int * UNITSND_GetTileDataAtPosition(D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY) {
     D2DrlgRoomCoordsStrc sRoomCoords;
     uint32_t nTileCount;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
+    int nTileX = (nPosX - sRoomCoords.dwXStart) / 5;
+    int nTileY = (nPosY - sRoomCoords.dwYStart) / 5;
     D2DrlgTileDataStrc* pTileData = D2Common::DUNGEON::Dungeon::DRLGROOM_GetFloorTilesFromRoom(pRoom, (int*)&nTileCount);
     uint32_t nTileIdx = 0;
     if (nTileCount <= 0) {
@@ -3023,8 +3025,9 @@ static int * UNITSND_GetTileDataAtPosition(int32_t nPosX, D2RoomStrc * pRoom, in
 
     int* piTilePosY = &pTileData->nPosY;
     do {
-      if (piTilePosY[-1] == (nPosX - sRoomCoords.dwXStart) / 5 && *piTilePosY == (nPosY - sRoomCoords.dwYStart) / 5) {
-        return &((D2DrlgTileDataStrc*)(piTilePosY - 3))->nScreenX;
+      int* pResult = &((D2DrlgTileDataStrc*)(piTilePosY - 3))->nScreenX;
+      if (piTilePosY[-1] == nTileX && *piTilePosY == nTileY) {
+        return pResult;
       }
 
       nTileIdx++;
@@ -3100,7 +3103,7 @@ int32_t __fastcall UNITSND_GetGroundMaterial(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    D2DrlgTileDataStrc* pTileData = (D2DrlgTileDataStrc*)UNITSND_GetTileDataAtPosition(nPosX, pRoom, nPosY);
+    D2DrlgTileDataStrc* pTileData = (D2DrlgTileDataStrc*)UNITSND_GetTileDataAtPosition(pRoom, nPosX, nPosY);
     if (!pTileData) {
       int nAdjRoomIdx;
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, &nAdjacentRoomCount);
@@ -3110,7 +3113,7 @@ int32_t __fastcall UNITSND_GetGroundMaterial(D2UnitStrc * pUnit) {
       }
 
       while (true) {
-        pTileData = (D2DrlgTileDataStrc*)UNITSND_GetTileDataAtPosition(nPosX, ppAdjacentRooms[nAdjRoomIdx], nPosY);
+        pTileData = (D2DrlgTileDataStrc*)UNITSND_GetTileDataAtPosition(ppAdjacentRooms[nAdjRoomIdx], nPosX, nPosY);
         if (pTileData) {
           break;
         }

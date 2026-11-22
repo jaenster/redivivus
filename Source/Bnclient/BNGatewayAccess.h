@@ -55,7 +55,7 @@ void __stdcall Load(struct D2BNetGatewayAccessStr * pGatewayAccess);
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 // Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
 int32_t __thiscall GetSystemTimeZone(struct D2BNetGatewayAccessStr * pGatewayAccess);
-char * __thiscall Nth(void * pThis, int nIndex);
+char * __thiscall Nth(struct D2BNetGatewayAccessStr * pThis, int nIndex);
 char * __stdcall DNS(struct D2BNetGatewayAccessStr * pGatewayAccess, int nIndex);
 int32_t __stdcall GMT(struct D2BNetGatewayAccessStr * pGatewayAccess, int nIndex);
 // GetGatewayList(this=ECX, szValueName on stack) __thiscall, ret 4. Reads the gateway
@@ -65,7 +65,7 @@ int32_t __stdcall GMT(struct D2BNetGatewayAccessStr * pGatewayAccess, int nIndex
 // Load falls to UpdateGatewaysFromIni -> assert (see 0x518850).
 // An "Override.." value name sets bIsOverride=1 @0x51827f.
 // @sourcefile .\BNetGW.cpp
-void __thiscall GetGatewayList(void * pThis, char * szText);
+void __thiscall GetGatewayList(struct D2BNetGatewayAccessStr * pThis, char * szText);
 void __fastcall GetBattlenetGatewayList(struct D2BNetGatewayAccessStr * nGatewayAccess);
 void __fastcall GetBattlenetRealmsList(struct D2BNetGatewayAccessStr * nGatewayAccess);
 void __fastcall WriteDefaultGatewayList(char * szText);
@@ -76,7 +76,7 @@ char * __thiscall SkipEOL(struct D2BNetGatewayAccessStr * pGatewayAccess, char *
 char * __thiscall FindSection(struct D2BNetGatewayAccessStr * pThis, char * szText1, char * szText2);
 // Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
 char * __thiscall FindKey(struct D2BNetGatewayAccessStr * pGatewayAccess, char * szText1, char * szText2);
-void __thiscall PickClosestZone(void * pThis, int32_t nGmtMinutes);
+void __thiscall PickClosestZone(struct D2BNetGatewayAccessStr * pThis, int32_t nGmtMinutes);
 // UpdateGatewaysFromIni(this, szIni) __stdcall (both args on stack: [ebp+8]=this,
 // [ebp+0xc]=szIni), ret 8. Parses a gateway ini (default via WriteDefaultGatewayList, or
 // server-pushed via NET_BNFTP_CLIENT_ProcessFile) and writes the registry/struct. Asserts

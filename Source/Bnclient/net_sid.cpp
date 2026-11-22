@@ -1490,7 +1490,7 @@ int __fastcall NET_SID_CLIENT_Send_0x53_AuthAccountLogon(char * pUsername, char 
     Storm::Source::SSTR::SStrUpper(usernameUpper);
     Storm::Source::SSTR::SStrCopy(passwordUpper, pPassword, 0x100);
     Storm::Source::SSTR::SStrUpper(passwordUpper);
-    SRP::SRP_GenerateAccountCredentials(&g_pSrpContext, g_srpCredentials.szUsername, usernameUpper, passwordUpper);
+    SRP::SRP_GenerateAccountCredentials(&g_pSrpContext, &g_srpCredentials, usernameUpper, passwordUpper);
     Storm::Source::SMem::SMemCopy(&packet, g_srpCredentials.aClientPublicKey_A, 0x20);
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(packet.szUsername, pUsername, 0x100);
     nUsernameLen += 0x21;
@@ -1552,7 +1552,7 @@ int __fastcall NET_SID_CLIENT_Send_0x55_AuthAccountChange(char * pUsername, char
     Storm::Source::SSTR::SStrCopy(newPasswordUpperBuf, pNewPassword, 0x100);
     Storm::Source::SSTR::SStrUpper(newPasswordUpperBuf);
     SRP::SRP_ClientGenerateVerifier(&g_pSrpContext, usernameUpper, (uint32_t*)newPasswordUpperBuf, (uint32_t*)&g_srpSaltVerifier, g_srpSaltVerifier.aVerifier);
-    SRP::SRP_GenerateAccountCredentials(&g_pSrpContext, g_srpCredentials.szUsername, usernameUpper, oldPasswordUpper);
+    SRP::SRP_GenerateAccountCredentials(&g_pSrpContext, &g_srpCredentials, usernameUpper, oldPasswordUpper);
     Storm::Source::SMem::SMemCopy(&packet, g_srpCredentials.aClientPublicKey_A, 0x20);
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(packet.szUsername, pUsername, 0x100);
     nUsernameLen += 0x21;

@@ -1619,7 +1619,7 @@ static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt
       exit(-1);
     } else {
       uint8_t* pLayerCount;
-      pLayerData = *(uint8_t**)((char*)pCofFile + 0x14);
+      pLayerData = ((D2CofTextureCacheEntryStrc*)pCofFile)->pFileData;
       if (!pLayerData) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xec9);
         exit(-1);

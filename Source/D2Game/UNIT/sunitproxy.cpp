@@ -776,29 +776,28 @@ void __fastcall SUNITPROXY_CountPlayerInLevel(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // @sourcefile .\UNIT\sunitproxy.cpp
 void __thiscall SUNITPROXY_RefreshGambleForAllNpcs(::SGAMEDATA * pThis, int32_t dwGameTick) {
-    int32_t* pNewQueueEntry;
+    D2SUnitProxyStrc_Line0x85* pNewQueueEntry;
     int nNpcIdx = 0;
     D2GameNpcControlStrc* pNpcCtrl = pThis->pNpcControl;
-    uint8_t* pNpcArrayBase = (uint8_t*)pNpcCtrl->pNpc;
+    D2GameNpcStrc* pNpc = pNpcCtrl->pNpc->pNpc;
     GetTickCount();
     if (pNpcCtrl->nNpcCount <= 0) {
       return;
     }
 
-    uint8_t* pNpcEntryFlags = pNpcArrayBase + 0x20;
     do {
-      if (pNpcEntryFlags[3] == 1 && *pNpcEntryFlags == 1 && *(int*)(pNpcEntryFlags - 4) == 1) {
-        pNewQueueEntry = (int32_t*)D2_ALLOC_POOL_AT(pThis->pMemoryPool, 0x14, ".\\UNIT\\sunitproxy.cpp", 0x263);
-        pNewQueueEntry[4] = *(int32_t*)(pNpcEntryFlags - 0xc);
-        pNewQueueEntry[3] = 0;
-        *pNewQueueEntry = dwGameTick;
-        pNewQueueEntry[2] = 1;
-        pNewQueueEntry[1] = 4;
-        *(int32_t**)(pNpcEntryFlags - 0xc) = (int32_t*)pNewQueueEntry;
+      if (pNpc->sTrade.bHasStore == 1 && pNpc->sTrade.bStoreFilled == 1 && pNpc->bTrading == 1) {
+        pNewQueueEntry = (D2SUnitProxyStrc_Line0x85*)D2_ALLOC_POOL_AT(pThis->pMemoryPool, sizeof(D2SUnitProxyStrc_Line0x85), ".\\UNIT\\sunitproxy.cpp", 0x263);
+        pNewQueueEntry->pNext = pNpc->pProxyQueue;
+        pNewQueueEntry->nEntryType = 0;
+        pNewQueueEntry->pUnit = (D2UnitStrc*)(intptr_t)dwGameTick;
+        pNewQueueEntry->dwTradeParam = 1;
+        pNewQueueEntry->nAction = 4;
+        pNpc->pProxyQueue = pNewQueueEntry;
       }
 
       nNpcIdx++;
-      pNpcEntryFlags += 0x44;
+      pNpc++;
     } while (nNpcIdx < pNpcCtrl->nNpcCount);
 }
 
@@ -1292,36 +1291,37 @@ void __stdcall SUNITPROXY_UpdateNpcProxiesForAct(::SGAMEDATA * pGame, char nAct,
       return;
     }
 
-    uint8_t* pNpcEntry = &pNpcArray->pNpc[0].sTrade.bRefillStorePending;
+    D2GameNpcStrc* pNpc = &pNpcArray->pNpc[0];
     do {
-      if (pNpcEntry != (uint8_t*)0x7 && pNpcEntry[-5] == (uint8_t)nAct && pNpcEntry[-4] == 1 && *(int*)(pNpcEntry - 0xb) == 1 && ((D2NpcTradeStateStrc*)(pNpcEntry - 7))->bStoreFilled == 1) {
+      D2NpcTradeStateStrc* pTrade = &pNpc->sTrade;
+      if (pTrade && pTrade->nAct == (uint8_t)nAct && pTrade->bHasStore == 1 && pNpc->bTrading == 1 && pTrade->bStoreFilled == 1) {
         if (bResult) {
-          pLiveUnit = SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, *(uint32_t*)(pNpcEntry + 0x19));
-          if (!pLiveUnit || pLiveUnit->nClassId != *(int*)(pNpcEntry - 0x27)) {
-            SUNITPROXY_FreeNpcProxyData((D2GameNpcStrc*)(pNpcEntry - 0x27), pGame);
-            ((D2NpcTradeStateStrc*)(pNpcEntry - 7))->bStoreFilled = 0;
-            *(uint32_t*)(pNpcEntry + 1) = 0;
+          pLiveUnit = SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pNpc->nNpcGUID);
+          if (!pLiveUnit || pLiveUnit->nClassId != pNpc->nMonStatsId) {
+            SUNITPROXY_FreeNpcProxyData(pNpc, pGame);
+            pTrade->bStoreFilled = 0;
+            pTrade->dwLastTradeTick = 0;
             pNewInventory = D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(pGame->pMemoryPool, nullptr);
-            *(D2InventoryStrc**)(pNpcEntry - 0x23) = (D2InventoryStrc*)pNewInventory;
+            pNpc->pInventory = (D2InventoryStrc*)pNewInventory;
           } else {
             pMonAi = GetMonsterAI(pLiveUnit);
             nMonsterCount = D2Game::Monster::MonsterAI::CountMonstersByAi(pMonAi);
             if (!nMonsterCount) {
-              SUNITPROXY_ResetNpcProxy(pGame, (D2GameNpcStrc*)(pNpcEntry - 0x27), pLiveUnit);
+              SUNITPROXY_ResetNpcProxy(pGame, pNpc, pLiveUnit);
             } else {
-              *pNpcEntry = 1;
+              pTrade->bRefillStorePending = 1;
             }
           }
         } else {
-          if (dwNow > *(uint32_t*)(pNpcEntry + 1) + 240000) {
-            *pNpcEntry = 1;
-            *(DWORD*)(pNpcEntry + 1) = dwNow;
+          if (dwNow > pTrade->dwLastTradeTick + 240000) {
+            pTrade->bRefillStorePending = 1;
+            pTrade->dwLastTradeTick = dwNow;
           }
         }
       }
 
       nNpcIdx++;
-      pNpcEntry += 0x44;
+      pNpc++;
     } while (nNpcIdx < pNpcControl->nNpcCount);
 }
 

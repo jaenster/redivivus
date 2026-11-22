@@ -122,7 +122,7 @@ void __fastcall StubHook2_Unref_00408070(int32_t nReserved);
 void __fastcall StubHook2_Unref_00408080(int32_t nReserved);
 void OutputDebugStringSimple(char * szText, ...);
 void OutputDebugStringIfCapsLock(char * szText, ...);
-void FormatDebugOutputVariadic(uint8_t bFlags, char * szText, ...);
+void FormatDebugOutputVariadic(int bFlags, char * szText, ...);
 void FormatDebugOutputLogOnly(char * szText, ...);
 // The registered Fog exception filter. Its ABI is measured at the only dispatch,
 // 00403f21 'call dword ptr [gpCurrentExceptionFilter]' with NO pushes: ECX = &crashInfo

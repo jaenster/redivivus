@@ -657,7 +657,7 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
       nPort = ntohs(0x17e0);
       /* char * cp for inet_addr */ sSockAddr.sa_data[0] = (char)nPort;
       sSockAddr.sa_data[1] = (char)(nPort >> 8);
-      *(uint32_t*)((char*)&sSockAddr.sa_data + 2) = inet_addr(pcToken);
+      ((sockaddr_in*)&sSockAddr)->sin_addr = inet_addr(pcToken);
     } else {
       /* u_short netshort for ntohs */ nPort = ntohs(0x17e0);
       sSockAddr.sa_data[0] = (char)nPort;
@@ -819,7 +819,7 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
         break;
       }
 
-      /* char * cp for inet_addr */ *(uint32_t*)((char*)&sSockAddr.sa_data + 2) = inet_addr(pcCurrentIp);
+      /* char * cp for inet_addr */ ((sockaddr_in*)&sSockAddr)->sin_addr = inet_addr(pcCurrentIp);
       retry_with_new_socket:
       /* int protocol for socket */ /* int type for socket */ /* int af for socket */ hSocket = socket(2, 1, 0);
       lpThreadParam = (void*)pDownloadCtx;

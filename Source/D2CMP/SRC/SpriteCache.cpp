@@ -815,17 +815,15 @@ static DC6Block * __stdcall SPRITECACHE_FindFrameBlock(D2GfxDataStrc * pGfxData,
 // Waits for the cache block's async load, copies nFramesPerDir into pGfxData->nFrameCount and returns
 // SPRITECACHE_FindFrameBlock over the loaded buffer. No hash is involved.
 static DC6Block * SPRITECACHE_GetFrameBlock(D2CelCacheBlockStrc * pCacheBlock, D2GfxDataStrc * pGfxData) {
-    DC6Block* pFrameBlock;
-    if (pCacheBlock && pCacheBlock->tDecode.pAsyncData) {
-      uint8_t* pAsyncResult;
-      pAsyncResult = (uint8_t*)Fog::Src::AsyncData::ASYNCDATA_GetResult(pCacheBlock->tDecode.pAsyncData);
-      if (pAsyncResult) {
-        pGfxData->nFrameCount = (uint32_t)pCacheBlock->tDecode.nFramesPerDir;
-        pFrameBlock = SPRITECACHE_FindFrameBlock(pGfxData, pAsyncResult, &pCacheBlock->tDecode);
-        return pFrameBlock;
-      }
-
+    if (!pCacheBlock || !pCacheBlock->tDecode.pAsyncData) {
       return nullptr;
+    }
+
+    D2CelDecodeStateStrc* pDecode = &pCacheBlock->tDecode;
+    uint8_t* pAsyncResult = (uint8_t*)Fog::Src::AsyncData::ASYNCDATA_GetResult(pDecode->pAsyncData);
+    if (pAsyncResult) {
+      pGfxData->nFrameCount = (uint32_t)pDecode->nFramesPerDir;
+      return SPRITECACHE_FindFrameBlock(pGfxData, pAsyncResult, pDecode);
     }
 
     return nullptr;

@@ -86,52 +86,27 @@ void LOGGING_LogLine(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nLo
 void StoreGameLogging(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nLogType, int32_t nLogTypeArg, char * szFormat, ...) {
     va_list __va;
     va_start(__va, szFormat);
-    char* pszScan;
-    size_t nPrefixLen;
-    char* pszBody;
-    size_t nSize;
     char szLogLine[500];
-    char cCur;
     if (pLOGFILE && bLOGFILE_ENABLED) {
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0096ca30);
+      EnterCriticalSection(&lpCriticalSection_0096ca30);
       Storm::Source::SSTR::SStrPrintf(szLogLine, 500, "Game:%02d\tFrame:%d\tClient:%02d\t", nGame, nFrame, nClient);
-      pszScan = (char*)((uint8_t*)&szLogLine - 1);
       if (nLogType == 1) {
-        do {
-          pszBody = pszScan;
-          pszScan = pszBody + 1;
-        } while (pszBody[1] != '\0');
-
-        memcpy(pszBody + 1, "Type:System\t", 0xd);
+        strcat(szLogLine, "Type:System\t");
       } else {
-        do {
-          pszBody = pszScan;
-          pszScan = pszBody + 1;
-        } while (pszBody[1] != '\0');
-
-        memcpy(pszBody + 1, "Type:Game\t", 0xb);
+        strcat(szLogLine, "Type:Game\t");
       }
 
-      pszScan = szLogLine;
-      pszScan = pszScan + strlen(pszScan) + 1;
-      pszBody = szLogLine + ((intptr_t)pszScan - (intptr_t)(szLogLine + 1));
-      nSize = 500 - ((intptr_t)pszScan - (intptr_t)(szLogLine + 1));
-      nPrefixLen = Storm::Source::SSTR::SStrPrintf(pszBody, nSize, "Size:%d\n", nLogTypeArg);
-      Storm::Source::SSTR::SStrVPrintf(pszBody + nPrefixLen, nSize - nPrefixLen, szFormat, __va);
-      pszScan = pszBody + nPrefixLen - 1;
-      do {
-        pszBody = pszScan;
-        pszScan = pszBody + 1;
-      } while (pszBody[1] != '\0');
-
-      pszScan[0] = '\n';
-      pszScan[1] = '\n';
-      pszScan = szLogLine;
-      pszBody[3] = '\0';
-      pszScan = pszScan + strlen(pszScan) + 1;
-      fwrite(szLogLine, (intptr_t)pszScan - (intptr_t)(szLogLine + 1), 1, pLOGFILE);
+      int nLength = strlen(szLogLine);
+      char* pszBody = szLogLine + nLength;
+      int nSize = 500 - nLength;
+      int nPrefixLen = Storm::Source::SSTR::SStrPrintf(pszBody, nSize, "Size:%d\n", nLogTypeArg);
+      nSize -= nPrefixLen;
+      pszBody += nPrefixLen;
+      Storm::Source::SSTR::SStrVPrintf(pszBody, nSize, szFormat, __va);
+      strcat(pszBody, "\n\n");
+      fwrite(szLogLine, strlen(szLogLine), 1, pLOGFILE);
       fflush(pLOGFILE);
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0096ca30);
+      LeaveCriticalSection(&lpCriticalSection_0096ca30);
     }
 }
 

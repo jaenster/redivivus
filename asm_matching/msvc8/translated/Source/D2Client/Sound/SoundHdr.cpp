@@ -646,81 +646,27 @@ int32_t __fastcall SOUNDHDR_RandomizeSoundFromGroup(int32_t nSoundId) {
 
 void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, char * pszOutPath) {
     D2SoundsTxt* pSound;
-    char* pScanDwordEnd;
-    char* pszDst;
-    uint32_t nDwordCount;
-    char cChar;
     if (!pTxtSounds || nSoundId < 0 || nSoundId >= nTxtSoundsSize) {
       pSound = 0;
     } else {
       pSound = pTxtSounds + nSoundId;
     }
     if (nSoundId >= 0xb76 && nSoundId <= 0x1230) {
-      memcpy(pszOutPath, "DATA\\LOCAL", 0xb);
+      strcpy(pszOutPath, "DATA\\LOCAL");
     } else {
-      memcpy(pszOutPath, "DATA\\GLOBAL", 0xc);
+      strcpy(pszOutPath, "DATA\\GLOBAL");
     }
     if (nSoundId >= 0x1231 && nSoundId <= 0x125a) {
-      pszDst = pszOutPath - 1;
-      do {
-        pScanDwordEnd = pszDst;
-        pszDst = pScanDwordEnd + 1;
-      } while (pScanDwordEnd[1] != '\0');
-
-      memcpy(pScanDwordEnd + 1, "\\MUSIC\\", 8);
+      strcat(pszOutPath, "\\MUSIC\\");
     } else {
-      pszDst = pszOutPath - 1;
-      do {
-        pScanDwordEnd = pszDst;
-        pszDst = pScanDwordEnd + 1;
-      } while (pScanDwordEnd[1] != '\0');
-
-      memcpy(pScanDwordEnd + 1, "\\SFX\\", 6);
+      strcat(pszOutPath, "\\SFX\\");
     }
-
-    pszDst = pszOutPath;
-    pszDst = pszDst + strlen(pszDst) + 1;
-    char* pszNameScan = pSound->Filename;
-    do {
-      pScanDwordEnd = pszNameScan;
-      pszNameScan = pszNameScan + 1;
-    } while (*pScanDwordEnd != '\0');
-
-    char* pszNameCopy = pSound->Filename;
-    if (!((pszDst - (pszOutPath + 1)) + (pszNameScan - (pSound->Filename + 1)) < 0x50)) {
+    if (!(strlen(pszOutPath) + strlen(pSound->Filename) < 0x50)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ab);
       exit(-1);
     }
 
-    {
-      uint32_t nFilenameLen;
-      do {
-        pszDst = pszNameCopy;
-        pScanDwordEnd = pszNameCopy;
-        pszNameCopy = pScanDwordEnd + 1;
-      } while (*pszDst != '\0');
-
-      nFilenameLen = (intptr_t)(pScanDwordEnd + 1) - (intptr_t)pSound;
-      pszDst = pszOutPath - 1;
-      do {
-        pScanDwordEnd = pszDst + 1;
-        pszDst++;
-      } while (*pScanDwordEnd != '\0');
-
-      for (nDwordCount = nFilenameLen >> 2; nDwordCount; nDwordCount--) {
-        *(uint32_t*)pszDst = *(uint32_t*)pSound->Filename;
-        pSound = (D2SoundsTxt*)(pSound->Filename + 4);
-        pszDst += 4;
-      }
-
-      for (nFilenameLen &= 3; nFilenameLen; nFilenameLen--) {
-        *pszDst = pSound->Filename[0];
-        pSound = (D2SoundsTxt*)(pSound->Filename + 1);
-        pszDst++;
-      }
-
-      return;
-    }
+    strcat(pszOutPath, pSound->Filename);
 }
 
 void __fastcall SOUNDHDR_UpdateLRUTimestamp(int32_t nSoundId) {

@@ -2633,12 +2633,12 @@ BOOL __fastcall InteractWithObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint
       nUnitId = pUnit_00->nClassId;
     }
 
-    intptr_t nTxt = (intptr_t)D2Common::Units::GetObjectTxtRecordFromObject(pUnit_00);
+    D2ObjectsTxt* pObjTxt = D2Common::Units::GetObjectTxtRecordFromObject(pUnit_00);
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER && ((bResult = UNIT::SUnit::GetInteractInfo(pUnit, &eInteractType, (uint32_t*)&pUId) , bResult || (pPlayerData = D2Common::Units::GetPlayerData(pUnit) , pPlayerData->bCutscenePending != 0)) || (pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory) , pCursorItem_lcl && nUnitId != 0x10b))) {
       return 0;
     }
 
-    uint8_t byOperateFn = *(uint8_t*)(nTxt + 0x1b3);
+    uint8_t byOperateFn = (uint8_t)pObjTxt->OperateFn;
     if (byOperateFn < 0x65) {
       D2RoomStrc* pRoom;
       if (nUnitId != 0x79 && nUnitId != 0x7a && nUnitId != 0x16 && OBJECTSOPERATEFN[byOperateFn]) {
@@ -2648,7 +2648,7 @@ BOOL __fastcall InteractWithObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint
         pRoom = D2Common::Units::UNITS_GetRoom(pUnit_00);
         sOperation.pSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
         sOperation.nObjectClassId = nUnitId;
-        bResult = (*OBJECTSOPERATEFN[*(uint8_t*)(nTxt + 0x1b3)])(&sOperation);
+        bResult = (*OBJECTSOPERATEFN[(uint8_t)pObjTxt->OperateFn])(&sOperation);
         return bResult;
       }
       if (byOperateFn < 0x65) {

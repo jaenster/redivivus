@@ -783,31 +783,26 @@ static void __stdcall TileLibrary_RemoveCollision(uint32_t nY, uint32_t nX, D2Ti
 }
 
 static void __stdcall TileLibrary_SetCollision(D2TileLibraryEntryStrc * pTileLibraryEntry, int32_t nX, int32_t nY, D2RoomCollisionGridStrc * pCollisionMap) {
-    if (!(pCollisionMap && pCollisionMap->pMapStart)) {
+    if (!pCollisionMap || !pCollisionMap->pMapStart) {
       return;
     }
 
     uint8_t* pTileFlags = D2CMP::DUNGEON::Dungeon::TILE_GetTileFlags(pTileLibraryEntry);
     int nGridXSize = pCollisionMap->sCoords.dwXSize;
-    uint32_t nXClamped = nX <= 0 ? 0 : nX;
-    uint8_t* pSubTileFlags = pTileFlags + ((nX - nXClamped + 4) * 5 - nY);
-    if (!((int)nXClamped < nX + 5)) {
-      return;
-    }
-
-    int nRowByteOffset = nXClamped * nGridXSize * 2;
-    int nColsRemaining = nX + 5 - nXClamped;
-    do {
-      eCollisionFlags* pMapBase;
-      pMapBase = pCollisionMap->pMapStart;
-      for (nXClamped = nY <= 0 ? 0 : nY; (int)nXClamped < nY + 5; nXClamped++) {
-        *(uint16_t*)((char*)pMapBase + (nXClamped * 2 + nRowByteOffset)) = (uint16_t)pSubTileFlags[nXClamped];
+    int nRowStart = nY <= 0 ? 0 : nY;
+    int nColStart = nX <= 0 ? 0 : nX;
+    int nRowEnd = nY + 5;
+    int nColEnd = nX + 5;
+    uint8_t* pFlagRow = pTileFlags + (nY - nRowStart + 4) * 5 + (nColStart - nX);
+    int nRowOffset = nRowStart * nGridXSize;
+    for (int nRow = nRowStart; nRow < nRowEnd; nRow++) {
+      eCollisionFlags* pMapRow = pCollisionMap->pMapStart + nRowOffset;
+      for (int nCol = nColStart; nCol < nColEnd; nCol++) {
+        pMapRow[nCol] = (uint16_t)pFlagRow[nCol - nColStart];
       }
-
-      nRowByteOffset += nGridXSize * 2;
-      pSubTileFlags += -5;
-      nColsRemaining--;
-    } while (nColsRemaining);
+      nRowOffset += nGridXSize;
+      pFlagRow -= 5;
+    }
 }
 
 static void __stdcall AddCollisionFlagToCoords(int32_t nY, int32_t nX, D2RoomCollisionGridStrc * pCollisionMap, eCollisionFlags eCollisionFlag) {

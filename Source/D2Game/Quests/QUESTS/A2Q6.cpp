@@ -827,131 +827,51 @@ void __fastcall Q14_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 
 // A2Q6 "The Seven Tombs" — fpActiveFilter: decides whether a given NPC currently has active quest dialogue. Jerhyn(0xc9): active only while not Completed and (flag set & not Step0x03 & not Step0x04) OR record Step0x03. Drognan(0xd2): active iff record Step0x04. Cain(0xfb): active iff bIsNotIntroduction & specific-data field_0x01 & !bJerhynInitial. Other NPCs (Tyrael 0xb1, Meshif 0xb0, Geglash 0xaf, Warriv 0xca, Lysander 0xf4, Fara 0xb2): active only post-JustCompleted and only if their per-NPC "talked" record bit (Step0x06..0x11) is NOT yet set. Read-only on quest state.
 bool __fastcall Q14_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    BOOL bQuestStateResult;
-    bool bNpcActive;
     if (nTargetClassId == MonsterUnitJerhyn) {
-      /* GetQuestState(TheSevenTombs, 0=Completed) — Jerhyn: inactive once quest
-                         complete */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Completed);
-      if (bQuestStateResult == 1) {
-        return false;
-      }
-      /* GetQuestState(TheSevenTombs, 3=Step0x03=Duriel-dead) */ /* GetQuestState(TheSevenTombs, 4=Step0x04) — Jerhyn active if flag set &
-                         neither Step0x03/0x04 yet */ if (pQuestData->nStateFlag == 1) {
-        bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x03);
-        if (!bQuestStateResult) {
-          bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x04);
-          if (!bQuestStateResult) {
-            return true;
-          }
-        }
-      }
-
-      /* GetQuestState(TheSevenTombs, state) — shared "required-state" test:
-                         Jerhyn->Step0x03(3), Drognan(0xd2)->Step0x04(4) (jumps here with 4 pushed).
-                         Active iff set. */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x03);
-    } else {
-      if (nTargetClassId != MonsterUnitMeshif) {
-        if (nTargetClassId == MonsterUnitTyrael2) {
-          if (pQuestData->bIsNotIntroduction != '\x01') {
-            return false;
-          }
-          if (pQuestData->pQuestSpecificData.pA2Q6->bTombEntered != 1) {
-            return false;
-          }
-
-          bNpcActive = false;
-          if (!pQuestData->pQuestSpecificData.pA2Q6->bTyraelPortalSpawnLock) {
-            bNpcActive = true;
-          }
-        } else {
-          /* GetQuestState(TheSevenTombs, 0xd=JustCompleted) — post-win NPCs only active
-                         after Duriel just-completed */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_JustCompleted);
-          if (!bQuestStateResult) {
-            return false;
-          }
-          if (nTargetClassId == MonsterUnitAtma) {
-            /* GetQuestState(TheSevenTombs, 6=Step0x06) — Meshif(0xb0) active only if not
-                         yet talked-to */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x06);
-            bNpcActive = false;
-            if (!bQuestStateResult) {
-              bNpcActive = true;
-            }
-          } else if (nTargetClassId == MonsterUnitWarrivAct2) {
-            /* GetQuestState(TheSevenTombs, 7=Step0x07) — Geglash(0xaf) active only if not
-                         yet talked-to */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x07);
-            bNpcActive = false;
-            if (!bQuestStateResult) {
-              bNpcActive = true;
-            }
-          } else {
-            switch (nTargetClassId) {
-              case MonsterUnitDrognan:
-                {
-                  /* GetQuestState(TheSevenTombs, 8=Step0x08) — Tyrael(0xb1) active only if not
-                         yet talked-to */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x08);
-                  bNpcActive = false;
-                  if (!bQuestStateResult) {
-                    bNpcActive = true;
-                  }
-
-                  break;
-                }
-              case MonsterUnitLysander:
-                {
-                  /* GetQuestState(TheSevenTombs, 9=Step0x09) — Warriv(0xca) active only if not
-                         yet talked-to */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x09);
-                  bNpcActive = false;
-                  if (!bQuestStateResult) {
-                    bNpcActive = true;
-                  }
-
-                  break;
-                }
-              case MonsterUnitDeckardCain2:
-                {
-                  /* GetQuestState(TheSevenTombs, 0xa=Step0x10) — Lysander(0xf4) active only if
-                         not yet talked-to */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x10);
-                  bNpcActive = false;
-                  if (!bQuestStateResult) {
-                    bNpcActive = true;
-                  }
-
-                  break;
-                }
-              default:
-                {
-                  if (nTargetClassId != MonsterUnitFara) {
-                    return false;
-                  }
-
-                  /* GetQuestState(TheSevenTombs, 0xb=Step0x11) — Fara(0xb2) active only if not
-                         yet talked-to */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x11);
-                  bNpcActive = false;
-                  if (!bQuestStateResult) {
-                    bNpcActive = true;
-                  }
-                }
-            }
-          }
-        }
-        if (bNpcActive) {
+      if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Completed) != 1) {
+        if (pQuestData->nStateFlag == 1 && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x03) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x04)) {
           return true;
         }
 
-        return false;
+        if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x03) == 1) {
+          return true;
+        }
       }
-
-      /* GetQuestState(TheSevenTombs, state) — shared "required-state" test:
-                         Jerhyn->Step0x03(3), Drognan(0xd2)->Step0x04(4) (jumps here with 4 pushed).
-                         Active iff set. */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x04);
-    }
-
-    bNpcActive = false;
-    if (bQuestStateResult == 1) {
-      bNpcActive = true;
-    }
-    if (bNpcActive) {
-      return true;
+    } else if (nTargetClassId == MonsterUnitMeshif) {
+      if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x04) == 1) {
+        return true;
+      }
+    } else if (nTargetClassId == MonsterUnitTyrael2) {
+      D2QuestDataA2Q6Strc* pA2Q6Data = pQuestData->pQuestSpecificData.pA2Q6;
+      if (pQuestData->bIsNotIntroduction == '\x01' && pA2Q6Data->bTombEntered == 1 && !pA2Q6Data->bTyraelPortalSpawnLock) {
+        return true;
+      }
+    } else if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_JustCompleted)) {
+      if (nTargetClassId == MonsterUnitAtma) {
+        if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x06)) {
+          return true;
+        }
+      } else if (nTargetClassId == MonsterUnitWarrivAct2) {
+        if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x07)) {
+          return true;
+        }
+      } else if (nTargetClassId == MonsterUnitDrognan) {
+        if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x08)) {
+          return true;
+        }
+      } else if (nTargetClassId == MonsterUnitLysander) {
+        if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x09)) {
+          return true;
+        }
+      } else if (nTargetClassId == MonsterUnitDeckardCain2) {
+        if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x10)) {
+          return true;
+        }
+      } else if (nTargetClassId == MonsterUnitFara) {
+        if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x11)) {
+          return true;
+        }
+      }
     }
 
     return false;

@@ -2921,7 +2921,7 @@ int32_t __stdcall SrvProcessAllGames(int32_t bLimitFrameSkip) {
         }
 
         /* LARGE_INTEGER * lpPerformanceCount for QueryPerformanceCounter */ QueryPerformanceCounter(&qpcEnd);
-        return qpcEnd.u.LowPart - *(uint32_t*)(char*)&qpcStart;
+        return qpcEnd.u.LowPart - qpcStart.u.LowPart;
       }
     } while (true);
 }
@@ -2994,7 +2994,7 @@ int32_t __stdcall QSERVER_DispatchAndCleanup(uint32_t * pTokenCursor, int32_t bF
         }
 
         /* LARGE_INTEGER * lpPerformanceCount for QueryPerformanceCounter */ QueryPerformanceCounter(&qpcEndHigh);
-        return qpcEndHigh.u.LowPart - *(uint32_t*)(char*)&qpcStartHigh;
+        return qpcEndHigh.u.LowPart - qpcStartHigh.u.LowPart;
       }
     } while (true);
 }

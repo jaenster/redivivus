@@ -199,43 +199,23 @@ bool __fastcall Q20_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 //  - 0xfc (merc/NPC): active if Step0x06 set and Step0x07 NOT yet set.
 // Step0x06 = Khalim's Will assembled; Step0x07/0x08 = post-orb-smash outcomes still pending.
 bool __fastcall Q20_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    D2UnitStrc* pQuestItem;
-    BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Completed);
-    if (bQuestState) {
-      return false;
-    }
-    if (nTargetClassId == 0xfd) {
-      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20333367);
-      if (!pQuestItem && pQuestData->nStateFlag == 1) {
-        return true;
-      }
-    } else {
-      if (nTargetClassId == 0xff) {
-        pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20333367);
-        if (pQuestItem) {
+    if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Completed)) {
+      if (nTargetClassId == 0xfd) {
+        if (!ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20333367) && pQuestData->nStateFlag == 1) {
+          return true;
+        }
+      } else if (nTargetClassId == 0xff) {
+        if (ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20333367)) {
           return true;
         }
 
-        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06);
-        if (!bQuestState) {
-          return false;
+        if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08)) {
+          return true;
         }
-
-        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08);
-      } else {
-        if (nTargetClassId != 0xfc) {
-          return false;
+      } else if (nTargetClassId == 0xfc) {
+        if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x07)) {
+          return true;
         }
-
-        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06);
-        if (!bQuestState) {
-          return false;
-        }
-
-        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x07);
-      }
-      if (!bQuestState) {
-        return true;
       }
     }
 
@@ -253,79 +233,68 @@ void __fastcall Q20_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     // Static local variables (originally global data)
     static int32_t gdwQ17QuestStateMessages[6] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4 }; D2_STATIC_GUARD(gdwQ17QuestStateMessages, "D2Game::Quests::QUESTS::A3Q3::Q20_Callback00_NpcActivate::gdwQ17QuestStateMessages");
 
-    BOOL bQuestState;
     int nNPCClassId;
-    uint32_t nGossipLine;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    BOOL bStep07Set = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Completed);
+    BOOL bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Completed);
     if (!pQuestArgs->pTarget) {
       nNPCClassId = -1;
     } else {
       nNPCClassId = pQuestArgs->pTarget->nClassId;
     }
-    if (bStep07Set == 1) {
-      int32_t nPlayerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
-      bStep07Set = QUEST_HasPlayerParticipated(pQuestData, nPlayerGUID);
-      if (!bStep07Set) {
-        return;
+    if (bCompleted == 1) {
+      if (QUEST_HasPlayerParticipated(pQuestData, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID)) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 4);
       }
-
-      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 4);
       return;
     }
 
-    D2UnitStrc* pWillQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20333367);
-    if (!pWillQuestItem || (bStep07Set = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x05) , !bStep07Set) || (bStep07Set = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08) , bStep07Set != 0)) {
-      bStep07Set = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06);
-      if (bStep07Set) {
-        bStep07Set = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08);
-        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x07);
-        if (nNPCClassId == 0xfc) {
-          if (!bQuestState) {
-            AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xfc, 5);
-            return;
-          }
-        } else {
-          if (nNPCClassId == 0xff && !bStep07Set) {
-            AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xff, 6);
-            return;
-          }
-          if (!bQuestState) {
-            AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 5);
-            return;
-          }
-        }
-        if (bStep07Set) {
+    D2UnitStrc* pGidbinnItem = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20333367);
+    if (pGidbinnItem && D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x05) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08)) {
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 3);
+      return;
+    }
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06)) {
+      BOOL bNotStep08 = !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08);
+      BOOL bNotStep07 = !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x07);
+      if (nNPCClassId == 0xfc) {
+        if (bNotStep07) {
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 5);
           return;
         }
-
+      } else {
+        if (nNPCClassId == 0xff && bNotStep08) {
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 6);
+          return;
+        }
+        if (bNotStep07) {
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 5);
+          return;
+        }
+      }
+      if (bNotStep08) {
         AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 6);
-        return;
       }
+      return;
+    }
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x05)) {
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 4);
+      return;
+    }
+    if (pQuestData->nStateFlag >= 4) {
+      return;
+    }
+    if (pGidbinnItem) {
+      return;
+    }
 
-      bStep07Set = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x05);
-      if (bStep07Set) {
-        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 4);
-        return;
-      }
-      if (pQuestData->nStateFlag >= 4) {
-        return;
-      }
-      if (pWillQuestItem) {
-        return;
-      }
-
-      nGossipLine = gdwQ17QuestStateMessages[pQuestData->nStateFlag];
-      if (nGossipLine == -1) {
-        return;
-      }
-      if (nGossipLine >= 8) {
-        return;
-      }
-    } else {
-      nGossipLine = 3;
+    uint32_t nGossipLine = gdwQ17QuestStateMessages[pQuestData->nStateFlag];
+    if (nGossipLine == -1) {
+      return;
+    }
+    if (nGossipLine >= 8) {
+      return;
     }
 
     AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, nGossipLine);

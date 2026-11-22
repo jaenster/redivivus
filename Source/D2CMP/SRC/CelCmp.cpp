@@ -2560,10 +2560,10 @@ uint8_t * __fastcall BITSTREAM_GetByteOffset(D2CodecBitStateStrc * pBitState) {
     return (uint8_t*)(nBitPosAligned / 8 + (char*)pBitState->pCurWord);
 }
 
-void __thiscall BITSTREAM_AdvanceBits(uint8_t * pThis, int32_t nBitCount) {
-    uint32_t nNewBitPos = *(int*)(pThis + 0xc) + nBitCount;
-    *(uint32_t*)(pThis + 0xc) = nNewBitPos & 0x1f;
-    *(int*)(pThis + 4) += (int)nNewBitPos / 32 * 4;
+void __thiscall BITSTREAM_AdvanceBits(D2CodecBitStateStrc * pThis, int32_t nBitCount) {
+    uint32_t nNewBitPos = pThis->nBitOffset + nBitCount;
+    pThis->nBitOffset = nNewBitPos & 0x1f;
+    pThis->pCurWord += (int)nNewBitPos / 32;
 }
 
 void __stdcall GFX_InitGlobalCriticalSection() {

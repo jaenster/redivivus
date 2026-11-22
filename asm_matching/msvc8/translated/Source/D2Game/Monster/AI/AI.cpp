@@ -4025,41 +4025,28 @@ D2UnitStrc * __fastcall MONSTERAI_GetAliveKillerUnit(::SGAMEDATA * pGame, D2Unit
 
 // Already documented.
 D2UnitStrc * __fastcall MONSTERAI_GetTarget_WithWander(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiGeneralStrc * pMonsterAiGeneral, int32_t * pnDistanceToTarget, BOOL * bEngagedInCombat) {
-    int32_t nX;
-    uint32_t bHasStatFlag;
-    int32_t nAiDelayFrames;
-    int32_t nUnitWidth;
     D2UnitStrc* pFoundTarget = MONSTERAI_FindBestTarget(pGame, pUnit, pMonsterAiGeneral, pnDistanceToTarget, bEngagedInCombat);
     if (pFoundTarget) {
       return pFoundTarget;
     }
 
-    BOOL bIsAttacking = MONSTERAI_IsMonsterAttacking(pUnit);
-    if (bIsAttacking) {
-      uint32_t bHasWanderFlag;
-      if (!pUnit) {
-        nUnitWidth = -1;
-      } else {
-        nUnitWidth = pUnit->nClassId;
-      }
-
-      bHasWanderFlag = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(nUnitWidth, 2);
-      if (bHasWanderFlag) {
-        WalkRandomOffset(pGame, pUnit, 5);
-        return nullptr;
-      }
+    if (MONSTERAI_IsMonsterAttacking(pUnit) && D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(!pUnit ? -1 : pUnit->nClassId, 2)) {
+      WalkRandomOffset(pGame, pUnit, 5);
+      return nullptr;
     }
 
     eD2CollisionShapeType nType = D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit);
+    int32_t nY;
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nUnitWidth = pUnit->pPath.pStaticPath->nPosY;
+      nY = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
-      nUnitWidth = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+      nY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
     } else {
-      nUnitWidth = 0;
+      nY = 0;
     }
 
+    int32_t nX;
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nX = pUnit->pPath.pStaticPath->nPosX;
@@ -4069,29 +4056,23 @@ D2UnitStrc * __fastcall MONSTERAI_GetTarget_WithWander(::SGAMEDATA * pGame, D2Un
       nX = 0;
     }
 
-    nUnitWidth = D2Common::Collision::CheckCollision_BlockPlayer_Type(D2Common::Units::UNITS_GetRoom(pUnit), nX, nUnitWidth, nType, 0x40);
-    if (nUnitWidth) {
-      bHasStatFlag = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(pUnit->nClassId, 2);
-      if (bHasStatFlag) {
-        WalkRandomOffset(pGame, pUnit, 5);
-        return nullptr;
-      }
+    if (D2Common::Collision::CheckCollision_BlockPlayer_Type(D2Common::Units::UNITS_GetRoom(pUnit), nX, nY, nType, 0x40)
+        && D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(pUnit->nClassId, 2)) {
+      WalkRandomOffset(pGame, pUnit, 5);
+      return nullptr;
     }
 
-    int nDistToTarget = *pnDistanceToTarget;
-    if (nDistToTarget >= 0x23) {
+    int32_t nAiDelayFrames = *pnDistanceToTarget;
+    if (nAiDelayFrames >= 0x23) {
       nAiDelayFrames = 0x19;
+    } else if (nAiDelayFrames < 0x19) {
+      nAiDelayFrames = 10;
     } else {
-      if (nDistToTarget < 0x19) {
-        nAiDelayFrames = 10;
-      } else {
-        nAiDelayFrames = nDistToTarget - 10;
-      }
+      nAiDelayFrames -= 10;
     }
 
     PlanNextAiMove(pGame, pUnit, nAiDelayFrames);
-    pFoundTarget = 0;
-    return pFoundTarget;
+    return nullptr;
 }
 
 static inline int GetClassIdInline(D2UnitStrc * pUnit) {

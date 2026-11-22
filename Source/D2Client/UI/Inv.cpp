@@ -2941,7 +2941,7 @@ BOOL __stdcall INV_IsInteractiveModeEx() {
     return 0;
 }
 
-static void __stdcall INV_CalcGridCellFromMouse(D2UnitStrc * pUnit, int32_t nMouseX, int32_t nMouseY, uint32_t * pnCol, uint32_t * pnRow, uint8_t * pGridLayout) {
+static void __stdcall INV_CalcGridCellFromMouse(D2UnitStrc * pUnit, int32_t nMouseX, int32_t nMouseY, uint32_t * pnCol, uint32_t * pnRow, D2InventoryLayout * pGridLayout) {
     uint32_t nOverlayHeight;
     uint32_t nOverlayWidth;
     uint8_t byItemWidth;
@@ -2951,24 +2951,24 @@ static void __stdcall INV_CalcGridCellFromMouse(D2UnitStrc * pUnit, int32_t nMou
       exit(-1);
     }
 
-    uint32_t nCol = (uint32_t)(nMouseX - *(int*)(pGridLayout + 4)) / (uint32_t)pGridLayout[0x14];
-    uint32_t nRow = (uint32_t)(nMouseY - *(int*)(pGridLayout + 0xc)) / (uint32_t)pGridLayout[0x15];
+    uint32_t nCol = (uint32_t)(nMouseX - (int)pGridLayout->left) / (uint32_t)pGridLayout->SlotPixelWidth;
+    uint32_t nRow = (uint32_t)(nMouseY - (int)pGridLayout->top) / (uint32_t)pGridLayout->SlotPixelHeigth;
     D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pUnit, (char*)&byItemWidth, (char*)&byItemHeight, "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
     Engine::GfxUtil::GFXUTIL_GetOverlayDimensions(pUnit, 0, 0, &nOverlayWidth, &nOverlayHeight);
     bool bIsEvenSize = !(byItemWidth & 1);
     if (bIsEvenSize) {
-      nCol = ((nOverlayWidth >> 2) - *(int*)(pGridLayout + 4) + nMouseX) / (uint32_t)pGridLayout[0x14];
+      nCol = ((nOverlayWidth >> 2) - (int)pGridLayout->left + nMouseX) / (uint32_t)pGridLayout->SlotPixelWidth;
     }
-    if (byItemWidth == *pGridLayout) {
-      nCol = (uint32_t)(*pGridLayout >> 1);
+    if (byItemWidth == pGridLayout->slotWidth) {
+      nCol = (uint32_t)(pGridLayout->slotWidth >> 1);
     }
 
     bIsEvenSize = !(byItemHeight & 1);
     if (bIsEvenSize) {
-      nRow = ((nOverlayHeight >> 2) - *(int*)(pGridLayout + 0xc) + nMouseY) / (uint32_t)pGridLayout[0x15];
+      nRow = ((nOverlayHeight >> 2) - (int)pGridLayout->top + nMouseY) / (uint32_t)pGridLayout->SlotPixelHeigth;
     }
-    if (byItemHeight == pGridLayout[1]) {
-      nRow = (uint32_t)(pGridLayout[1] >> 1);
+    if (byItemHeight == pGridLayout->slotHeight) {
+      nRow = (uint32_t)(pGridLayout->slotHeight >> 1);
     }
 
     *pnCol = nCol;
@@ -9371,7 +9371,7 @@ static BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInven
           }
         }
 
-        INV_CalcGridCellFromMouse(pCursorItem_lcl, x, y, (uint32_t*)&nInventory, (uint32_t*)&nUnit, &pInvLayout->slotWidth);
+        INV_CalcGridCellFromMouse(pCursorItem_lcl, x, y, (uint32_t*)&nInventory, (uint32_t*)&nUnit, pInvLayout);
         nItemType = D2Common::INVENTORY::Inventory::INVENTORY_CheckGridCollisions(pInventory_00, pCursorItem_lcl, nInventory, nUnit, eInvPage, (D2UnitStrc**)&nGridCellY, (int*)&nGridCellX, nPage);
         if (!nItemType) {
           return bReturnValue;

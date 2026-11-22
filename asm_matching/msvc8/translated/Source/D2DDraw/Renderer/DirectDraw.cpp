@@ -7,6 +7,7 @@
 #include "Source/D2Client/GAME/Draw.h"
 #include "Source/D2DDraw/ddSprite.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.h"
+#include "Source/D2Gdi/D2Gdi.h"
 #include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Sound/D2Sound.h"
 #include "Source/Fog/Fog.h"
@@ -1682,10 +1683,10 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       nResult = (void*)SmackOpen(szSmacker, 0xfe000, -1);
       pBuffer->hSmack = nResult;
       if (nResult) {
-        pImageBuffer = D2_ALLOC_AT(*(int*)((char*)nResult + 4) * *(int*)((char*)nResult + 8), ".\\Src\\ddSmack.cpp", 0x42);
+        pImageBuffer = D2_ALLOC_AT((int)((Smack*)nResult)->Width * (int)((Smack*)nResult)->Height, ".\\Src\\ddSmack.cpp", 0x42);
         gpSmackerImageBuffer = pImageBuffer;
-        memset(pImageBuffer, 0, *(int*)((char*)nResult + 4) * *(int*)((char*)nResult + 8));
-        SmackToBuffer(pBuffer->hSmack, 0, 0, *(uint32_t*)((char*)nResult + 4), *(uint32_t*)((char*)nResult + 8), pImageBuffer, 0);
+        memset(pImageBuffer, 0, (int)((Smack*)nResult)->Width * (int)((Smack*)nResult)->Height);
+        SmackToBuffer(pBuffer->hSmack, 0, 0, ((Smack*)nResult)->Width, ((Smack*)nResult)->Height, pImageBuffer, 0);
         gbSmackerPaletteDirty = 0;
         return;
       }
@@ -1735,9 +1736,9 @@ void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
           if (!gnGlideWindowHandle) {
             return;
           }
-          if (*(int*)((char*)nSmackHandle + 0x68)) {
+          if (((Smack*)nSmackHandle)->NewPalette) {
             nWaitResult = 0;
-            pPaletteEntry = (uint8_t*)((char*)nSmackHandle + 0x6d);
+            pPaletteEntry = ((Smack*)nSmackHandle)->Palette + 1;
             do {
               bVar1 = D2CMP::Draw::D2GFX_FindNearestPaletteIndex((LPPALETTEENTRY)gaDirectDrawDitherPaletteRemap, 0x100, (uint32_t)pPaletteEntry[-1], (uint32_t)*pPaletteEntry, (uint32_t)pPaletteEntry[1]);
               gaSmackerPaletteRemap[nWaitResult] = bVar1;
@@ -1749,14 +1750,14 @@ void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
           }
 
           SmackDoFrame(nSmackHandle);
-          if (*(int*)((char*)nSmackHandle + 0x374) == *(int*)((char*)nSmackHandle + 0xc)) {
+          if ((int)((Smack*)nSmackHandle)->FrameNum == (int)((Smack*)nSmackHandle)->Frames) {
             DirectDraw::CloseSmacker(pContext);
           } else {
             SmackNextFrame(nSmackHandle);
           }
         }
         if (!gnRenderState && gbSmackerPaletteDirty) {
-          RENDERER_DDRAW_BlitSmackerFrame(*(int32_t*)((char*)nSmackHandle + 8), *(int32_t*)((char*)nSmackHandle + 4), pContext);
+          RENDERER_DDRAW_BlitSmackerFrame((int32_t)((Smack*)nSmackHandle)->Height, (int32_t)((Smack*)nSmackHandle)->Width, pContext);
         }
       }
     } else {

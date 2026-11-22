@@ -88,60 +88,26 @@ void __fastcall Q26_PlayIzualCompleteSoundToAll(::SGAMEDATA * pGame) {
 
 // [A4Q3 Terror's End] ActiveFilter for the Tyrael/Hadriel gossip NPCs (classId 0x16f=Tyrael, 0xf6=Hadriel/Hand-of-Justice angel). Decides whether a quest gossip entry is currently "active" for the NPC, gated on QUEST_TerrorsEnd states: Completed/FinishedInPreviousGame plus the per-NPC dialog-tracking steps 0x06/0x07 (classic) and 0x08/0x09 (expansion).
 bool __fastcall Q27_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    BOOL BVar1;
     if (nTargetClassId == 0x16f) {
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
-      if (!BVar1) {
-        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_FinishedInPreviousGame);
-        if (!BVar1 && pQuestData->nStateFlag == 1) {
-          return true;
-        }
-      }
-      if (!pQuestData->pGame->bExpansion) {
-        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
-        if (BVar1) {
-          BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x07);
-          if (BVar1) {
-            return true;
-          }
-        }
-      }
-      if (!pQuestData->pGame->bExpansion) {
-        return false;
+      if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_FinishedInPreviousGame) && pQuestData->nStateFlag == 1) {
+        return true;
       }
 
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
-      if (!BVar1) {
-        return false;
+      if (!pQuestData->pGame->bExpansion && D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed) && D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x07)) {
+        return true;
       }
 
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x09);
-    } else {
-      if (nTargetClassId != 0xf6) {
-        return false;
+      if (pQuestData->pGame->bExpansion && D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x09)) {
+        return true;
       }
-      if (!pQuestData->pGame->bExpansion) {
-        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
-        if (BVar1) {
-          BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x06);
-          if (BVar1) {
-            return true;
-          }
-        }
-      }
-      if (!pQuestData->pGame->bExpansion) {
-        return false;
+    } else if (nTargetClassId == 0xf6) {
+      if (!pQuestData->pGame->bExpansion && D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed) && D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x06)) {
+        return true;
       }
 
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
-      if (!BVar1) {
-        return false;
+      if (pQuestData->pGame->bExpansion && D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x08)) {
+        return true;
       }
-
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x08);
-    }
-    if (!BVar1) {
-      return true;
     }
 
     return false;
@@ -269,119 +235,87 @@ void __fastcall Q27_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     // Static local variables (originally global data)
     static int32_t gdwQ14QuestStateMessages[5] = { -0x1, 0x0, 0x1, -0x1, -0x1 }; D2_STATIC_GUARD(gdwQ14QuestStateMessages, "D2Game::Quests::QUESTS::A4Q2::Q27_Callback00_NpcActivate::gdwQ14QuestStateMessages");
 
-    BOOL bCompletedB;
-    BOOL bJustCompletedB;
-    BOOL bStep0x09b;
-    BOOL bStep0x08b;
-    BOOL bStep0x07b;
-    BOOL bStep0x06b;
     int nTargetClassId;
-    uint32_t nGossipMsgIdx;
-    uint8_t nStateFlag;
-    ::SGAMEDATA* pGame;
-    pGame = pQuestArgs->pGame;
-    D2UnitDataPlayerStrc* pPlayerData;
-    pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-    D2BitBufferStrc* pBitBuffer;
-    pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    BOOL bCompleted;
-    bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
-    BOOL bStep0x08;
-    bStep0x08 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
+    ::SGAMEDATA* pGame = pQuestArgs->pGame;
+    D2BitBufferStrc* pBitBuffer = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer)->pQuestRecord[pGame->nDifficulty];
+    BOOL bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
+    BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
     if (!pQuestArgs->pTarget) {
       nTargetClassId = -1;
     } else {
       nTargetClassId = pQuestArgs->pTarget->nClassId;
     }
 
-    BOOL bJustCompleted;
-    bJustCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x07);
-    BOOL bStep0x09;
-    bStep0x09 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x06);
-    BOOL bStep0x07;
-    bStep0x07 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x09);
-    BOOL bStep0x06;
-    bStep0x06 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x08);
-    int bIsExpansion;
-    bIsExpansion = pQuestData->pGame->bExpansion;
-    if (!bIsExpansion) {
-      if (bJustCompleted && nTargetClassId == 0x16f) {
-        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x16f, 2);
+    BOOL bStep0x07 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x07);
+    BOOL bStep0x06 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x06);
+    BOOL bStep0x09 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x09);
+    BOOL bStep0x08 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x08);
+    int bExpansion = pQuestData->pGame->bExpansion;
+    if (!bExpansion) {
+      if (bStep0x07 && nTargetClassId == 0x16f) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 2);
         return;
       }
-      if (bStep0x09 && nTargetClassId == 0xf6) {
-        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf6, 2);
+      if (bStep0x06 && nTargetClassId == 0xf6) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 2);
         return;
       }
-      if (bJustCompleted) {
-        if (nTargetClassId != 0xf6) {
+      if (bStep0x07) {
+        if (nTargetClassId == 0xf6) {
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 3);
+        }
+        return;
+      }
+      if (bStep0x06) {
+        if (nTargetClassId == 0x16f) {
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 3);
+        }
+        return;
+      }
+    }
+    if (bCompleted == 1) {
+      if (!bExpansion) {
+        return;
+      }
+      if (!bStep0x09) {
+        if (nTargetClassId == 0x16f) {
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 4);
+        } else if (nTargetClassId == 0xf6) {
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 5);
+        }
+      }
+      if (!bStep0x08) {
+        if (nTargetClassId == 0xf6) {
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 4);
           return;
         }
-
-        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf6, 3);
-        return;
-      }
-      if (bStep0x09) {
-        if (nTargetClassId != 0x16f) {
-          return;
+        if (nTargetClassId == 0x16f) {
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 5);
         }
-
-        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x16f, 3);
-        return;
       }
-    }
-    if (bCompleted != 1) {
-      nStateFlag = pQuestData->nStateFlag;
-      if (nStateFlag >= 4 && !bStep0x08) {
-        return;
-      }
-      if (pQuestData->bIsNotIntroduction == '\0') {
-        return;
-      }
-      if (!nStateFlag) {
-        return;
-      }
-
-      nGossipMsgIdx = gdwQ14QuestStateMessages[nStateFlag];
-      if (nGossipMsgIdx == -1) {
-        return;
-      }
-      if (nGossipMsgIdx >= 7) {
-        return;
-      }
-
-      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nGossipMsgIdx);
       return;
     }
-    if (!bIsExpansion) {
+
+    uint8_t nStateFlag = pQuestData->nStateFlag;
+    if (nStateFlag >= 4 && !bJustCompleted) {
       return;
     }
-    if (!bStep0x07) {
-      int32_t nExpGossipMsgIdx;
-      if (nTargetClassId == 0x16f) {
-        nExpGossipMsgIdx = 4;
-      } else {
-        if (nTargetClassId != 0xf6) {
-          goto gossip_if_step8_unset;
-        }
-
-        nExpGossipMsgIdx = 5;
-      }
-
-      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nExpGossipMsgIdx);
+    if (pQuestData->bIsNotIntroduction == '\0') {
+      return;
+    }
+    if (!nStateFlag) {
+      return;
     }
 
-    gossip_if_step8_unset:
-    if (!bStep0x06) {
-      if (nTargetClassId == 0xf6) {
-        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf6, 4);
-        return;
-      }
-      if (nTargetClassId == 0x16f) {
-        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x16f, 5);
-        return;
-      }
+    uint32_t nGossipMsgIdx = gdwQ14QuestStateMessages[nStateFlag];
+    if (nGossipMsgIdx == -1) {
+      return;
     }
+    if (nGossipMsgIdx >= 7) {
+      return;
+    }
+
+    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nGossipMsgIdx);
 }
 
 // [A4Q3 Terror's End] Per-player: if QUEST_TerrorsEnd not yet Completed, mark it CannotCompleteQuestInGame (you joined after Diablo was already killed) and send quest-state packet 0x17. Iterated over party on Diablo death.

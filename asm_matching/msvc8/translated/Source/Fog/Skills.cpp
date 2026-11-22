@@ -757,7 +757,7 @@ static int __fastcall SKILLS_GetOpcodePrecedence(uint8_t opcode, CalcGetFunction
 }
 
 // Shunting-yard step for compiling a skill calc (skills.txt formula) into RPN bytecode. Given the current output write pointer, an operator-stack/parser-state struct (count at +0x140, accumulated precedence at +0x144, op array at base, arg array at +0x40), the output buffer/size, and an incoming token (bToken) with its function/arg payload: pops higher-or-equal precedence operators from the stack into the output (respecting the INT_ARRAY_006fc874 precedence table and SKILLS_GetOpcodePrecedence) until a lower-precedence/paren/end is hit, then either pushes the new operator/operand or, for end-of-expression (token 0), terminates the output with a 0 byte. Returns the advanced write pointer, or NULL on buffer overflow / stack overflow (writing a 0 to the buffer start to mark failure).
-static uint8_t * __stdcall SKILLS_EmitFormulaBytecode(uint8_t * pWritePtr, uint8_t * pOperatorStack, uint8_t * pBuffer, int nBufferSize, uint8_t bToken, CalcGetFunctionParameterCount_t pFunction, uint32_t nFunctionArg) {
+static uint8_t * __stdcall SKILLS_EmitFormulaBytecode(uint8_t * pWritePtr, D2SkillCalcOperandStackStrc * pOperatorStack, uint8_t * pBuffer, int nBufferSize, uint8_t bToken, CalcGetFunctionParameterCount_t pFunction, uint32_t nFunctionArg) {
     // Static local variables (originally global data)
     static uint8_t gaCalcOpcodePrecedence[24] = {
     0x17,
@@ -788,17 +788,17 @@ static uint8_t * __stdcall SKILLS_EmitFormulaBytecode(uint8_t * pWritePtr, uint8
 
     int nPrecedence;
     int nWriteOffset;
-    if (*(int*)(pOperatorStack + 0x140) > 0) {
+    if (pOperatorStack->nTop > 0) {
       uint8_t opcode;
       nWriteOffset = (intptr_t)pWritePtr - (intptr_t)pBuffer;
       do {
-        opcode = pOperatorStack[*(int*)(pOperatorStack + 0x140) - 1];
+        opcode = pOperatorStack->abTokenTypes[pOperatorStack->nTop - 1];
         if (opcode == 1 || bToken == 1 || opcode >= 0x17 || gaCalcOpcodePrecedence[opcode] < bToken) {
           break;
         }
 
         nPrecedence = SKILLS_GetOpcodePrecedence(opcode, pFunction, nFunctionArg);
-        if (*(int*)(pOperatorStack + 0x144) < nPrecedence) {
+        if (*(int*)((char*)pOperatorStack + 0x144) < nPrecedence) {
           goto clear_and_fail;
         }
         if (nWriteOffset >= nBufferSize) {
@@ -808,23 +808,23 @@ static uint8_t * __stdcall SKILLS_EmitFormulaBytecode(uint8_t * pWritePtr, uint8
 
         nWriteOffset++;
         *pWritePtr = opcode;
-        (*(int*)(pOperatorStack + 0x140))--;
-        *(int*)(pOperatorStack + 0x144) += 1 - nPrecedence;
+        pOperatorStack->nTop--;
+        *(int*)((char*)pOperatorStack + 0x144) += 1 - nPrecedence;
         pWritePtr++;
-      } while (*(int*)(pOperatorStack + 0x140) > 0);
+      } while (pOperatorStack->nTop > 0);
     }
     if (bToken != 0x17 && bToken != 3) {
       if (!bToken) {
         goto emit_terminator;
       }
-      if (*(int*)(pOperatorStack + 0x140) >= 0x40) {
+      if (pOperatorStack->nTop >= 0x40) {
         *pBuffer = 0;
         return nullptr;
       }
 
-      pOperatorStack[*(int*)(pOperatorStack + 0x140)] = bToken;
-      *(uint32_t*)(pOperatorStack + (*(int*)(pOperatorStack + 0x140) * 4 + 0x40)) = nFunctionArg;
-      (*(int*)(pOperatorStack + 0x140))++;
+      pOperatorStack->abTokenTypes[pOperatorStack->nTop] = bToken;
+      pOperatorStack->adwTokenValues[pOperatorStack->nTop] = nFunctionArg;
+      pOperatorStack->nTop++;
     }
     if (bToken) {
       return pWritePtr;
@@ -1030,10 +1030,10 @@ int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pb
         break;
         case 4:
           if (!__frame0.bLastWasValue) {
-            pbWritePtr = SKILLS_EmitFormulaBytecode(pbWritePtr, __frame0.sOpStack.abTokenTypes, pbByteCodeOutput, nMaxOutputSize, 0x15, nullptr, 0);
+            pbWritePtr = SKILLS_EmitFormulaBytecode(pbWritePtr, &__frame0.sOpStack, pbByteCodeOutput, nMaxOutputSize, 0x15, nullptr, 0);
             __frame0.bLastWasValue = 0;
           } else {
-            pbWritePtr = SKILLS_EmitFormulaBytecode(pbWritePtr, __frame0.sOpStack.abTokenTypes, pbByteCodeOutput, nMaxOutputSize, 0x11, nullptr, 0);
+            pbWritePtr = SKILLS_EmitFormulaBytecode(pbWritePtr, &__frame0.sOpStack, pbByteCodeOutput, nMaxOutputSize, 0x11, nullptr, 0);
             __frame0.bLastWasValue = 0;
           }
         goto finish_token;
@@ -1070,14 +1070,14 @@ int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pb
         case 8:
           bToken = 0x17;
         emit_separator_or_ternary:
-        pbWritePtr = SKILLS_EmitFormulaBytecode(pbWritePtr, __frame0.sOpStack.abTokenTypes, pbByteCodeOutput, nMaxOutputSize, bToken, nullptr, 0);
+        pbWritePtr = SKILLS_EmitFormulaBytecode(pbWritePtr, &__frame0.sOpStack, pbByteCodeOutput, nMaxOutputSize, bToken, nullptr, 0);
         goto finish_token;
         case 2:
           bToken = 3;
         goto emit_separator_or_ternary;
       }
 
-      pbWritePtr = SKILLS_EmitFormulaBytecode(pbWritePtr, __frame0.sOpStack.abTokenTypes, pbByteCodeOutput, nMaxOutputSize, bEmitOpcode, nullptr, 0);
+      pbWritePtr = SKILLS_EmitFormulaBytecode(pbWritePtr, &__frame0.sOpStack, pbByteCodeOutput, nMaxOutputSize, bEmitOpcode, nullptr, 0);
       __frame0.bLastWasValue = 0;
       finish_token:
       if (!pbWritePtr) {
@@ -1087,13 +1087,13 @@ int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pb
       __frame0.aTokenBuf = 0;
     }
 
-    pbWritePtr = SKILLS_EmitFormulaBytecode(pbWritePtr, (uint8_t*)&__frame0.sOpStack, pbByteCodeOutput, nMaxOutputSize, 0, nullptr, 0);
+    pbWritePtr = SKILLS_EmitFormulaBytecode(pbWritePtr, &__frame0.sOpStack, pbByteCodeOutput, nMaxOutputSize, 0, nullptr, 0);
     if (pbWritePtr) {
       uint32_t nConstValue;
       if (!bHasVarRef) {
         nConstValue = FOG_EvaluateCalcExpression((uint32_t*)pbByteCodeOutput, (intptr_t)pbWritePtr - (intptr_t)pbByteCodeOutput, nullptr, nullptr, 0, nullptr);
         pbWritePtr = SKILLS_WriteValueToBuffer(pbByteCodeOutput, nConstValue, nMaxOutputSize, (D2QuestDataA5Q2Strc*)&__frame0.sOpStack, pbByteCodeOutput);
-        pbWritePtr = SKILLS_EmitFormulaBytecode(pbWritePtr, (uint8_t*)&__frame0.sOpStack, pbByteCodeOutput, nMaxOutputSize, 0, nullptr, 0);
+        pbWritePtr = SKILLS_EmitFormulaBytecode(pbWritePtr, &__frame0.sOpStack, pbByteCodeOutput, nMaxOutputSize, 0, nullptr, 0);
       }
 
       return (intptr_t)pbWritePtr - (intptr_t)pbByteCodeOutput;

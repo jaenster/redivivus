@@ -2984,24 +2984,19 @@ static void __stdcall ReplaceJerhyn(D2RoomStrc * pRoom, D2QuestDataStrc * pQuest
 
 // A2Q4 - Callback_03 (quest state 3 handler). Index 0x4a: advance stateFlag to 4 (if <4) and broadcast state 4 via QUEST_SetStateAndBroadcast, then persist via UpdateQuestRecord. Index 0x32: directly set record Step0x08+Step0x07. For the Jerhyn (0x28) path: tear down/respawn Jerhyn's monster AI, optionally ReplaceJerhyn at his location, remove player from the participation list, and if not Completed(0)/RewardAwaits(1) and stateFlag==3 advance to 4 + persist.
 void __fastcall Q12_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2UnitDataPlayerStrc* pJerhynUnit;
-    D2UnitStrc* pPlayerData;
-    D2MonsterAiStrc* pMonsterAi;
-    D2RoomStrc* pRoom;
-    BOOL bQuestDone;
-    POINT ptPos;
-    ::SGAMEDATA* pGame;
-    ptPos.y = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    int nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel; // steer-ok: the original reads the old level on entry and spills it, before the new-level compare
     int nLevelId = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     if (nLevelId == 0x4a) {
-      bool bFlagOver3 = 3 < pQuestData->nStateFlag;
-      if (!bFlagOver3) {
+      bool bAdvanced = false;
+      if (pQuestData->nStateFlag < 4) {
+        bAdvanced = true;
         QUEST_SetStateFlag(pQuestData, 4, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x297);
       }
+
       if (pQuestData->nStateFlagPrev < 4) {
         pQuestData->nQuestPacketFlags = '\0';
         QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)A2Q4::Q12_NotifyArcaneComplete, 1);
-      } else if (bFlagOver3) {
+      } else if (!bAdvanced) {
         return;
       }
 
@@ -3009,67 +3004,58 @@ void __fastcall Q12_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       return;
     }
 
-    D2BitBufferStrc* pBitBuffer;
     if (nLevelId == 0x32) {
-      pGame = pQuestData->pGame;
-      pJerhynUnit = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      /* SetQuestState Step0x08 - journal sub-state (index 0x32 path) */ D2Common::QuestRecord::SetQuestState(pJerhynUnit->pQuestRecord[pGame->nDifficulty], QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x08);
-      pGame = pQuestData->pGame;
-      pJerhynUnit = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      /* SetQuestState Step0x07 - journal sub-state (index 0x32 path) */ D2Common::QuestRecord::SetQuestState(pJerhynUnit->pQuestRecord[pGame->nDifficulty], QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x07);
+      D2Common::QuestRecord::SetQuestState(GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer), QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x08);
+      D2Common::QuestRecord::SetQuestState(GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer), QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x07);
     }
-    if (ptPos.y != 0x28) {
+
+    if (nOldLevel != 0x28) {
       return;
     }
 
     D2QuestDataA2Q4Strc* pA2Q4 = pQuestData->pQuestSpecificData.pA2Q4;
     if (pA2Q4->bJerhynAiActive == '\x01') {
-      pPlayerData = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_MONSTER, pA2Q4->nJerhynMonsterGUID);
-      if (!pPlayerData) {
+      D2UnitStrc* pJerhyn = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_MONSTER, pA2Q4->nJerhynMonsterGUID);
+      if (!pJerhyn) {
         pA2Q4->bJerhynAiActive = '\0';
       } else {
-        if (pPlayerData->eUnitType == UNIT_MONSTER && pPlayerData->pUnitData.pUnitDataMonster) {
-          pMonsterAi = pPlayerData->pUnitData.pUnitDataMonster->pMonsterAi;
+        D2MonsterAiStrc* pMonsterAi;
+        if (pJerhyn->eUnitType == UNIT_MONSTER && pJerhyn->pUnitData.pUnitDataMonster) {
+          pMonsterAi = pJerhyn->pUnitData.pUnitDataMonster->pMonsterAi;
         } else {
           pMonsterAi = 0;
         }
 
-        bQuestDone = Monster::MonsterAI::HasAiSub(pMonsterAi);
-        if (bQuestDone) {
-          Monster::MonsterAI::ClearAISub(pQuestData->pGame, pPlayerData, nullptr, true);
+        if (Monster::MonsterAI::HasAiSub(pMonsterAi)) {
+          Monster::MonsterAI::ClearAISub(pQuestData->pGame, pJerhyn, nullptr, true);
         } else {
-          GAME::Server::RemoveObjects(pPlayerData, pQuestData->pGame);
+          GAME::Server::RemoveObjects(pJerhyn, pQuestData->pGame);
           pA2Q4->bJerhynAiActive = '\0';
         }
       }
     }
+
     if (pA2Q4->bShouldSpawnJerhyn == '\0' && pA2Q4->bPortalJerhynSpawned != '\0') {
-      pPlayerData = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pA2Q4->nJerhynObjectGUID);
-      if (pPlayerData) {
-        D2Common::Units::GetCoords(pPlayerData, &ptPos);
-        pRoom = D2Common::Units::UNITS_GetRoom(pPlayerData);
-        ReplaceJerhyn(pRoom, pQuestData, &ptPos);
+      D2UnitStrc* pJerhynObject = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pA2Q4->nJerhynObjectGUID);
+      if (pJerhynObject) {
+        POINT ptPos;
+        D2Common::Units::GetCoords(pJerhynObject, &ptPos);
+        ReplaceJerhyn(D2Common::Units::UNITS_GetRoom(pJerhynObject), pQuestData, &ptPos);
       }
     }
 
     QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs);
-    pGame = pQuestArgs->pGame;
-    pJerhynUnit = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-    pBitBuffer = pJerhynUnit->pQuestRecord[pGame->nDifficulty];
-    /* GetQuestState Completed(0) - skip Jerhyn-path advance if already done */ bQuestDone = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed);
-    /* GetQuestState RewardAwaits(1) - skip advance if reward pending; else
-                         stateFlag 3->4 */ if (bQuestDone == 1) {
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed) == 1) {
       return;
     }
 
-    bQuestDone = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
-    if (!(bQuestDone != 1 && pQuestData->nStateFlag == 3)) {
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits) == 1 || pQuestData->nStateFlag != 3) {
       return;
     }
 
     QUEST_SetStateFlag(pQuestData, 4, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x2de);
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)A2Q4::Q12_UpdateQuestRecord);
-    return;
 }
 
 // A2Q4 - InitData. Quest registration/init. Allocates the A2Q4 quest-specific data block (0x48), zeroes state functions, wires the gossip table and the state-handler callbacks (0->Callback_00, 2->Callback_02, 3->Callback_03, 0xa->Callback_10, 0xb->Callback_11, 0xd->Callback_13), sets nQuestIdReal=TheArcaneSanctuary, fpActiveFilter=Q12_ActiveFilter, fpSequenceFilter=Q12_SequenceFilter, nSequenceQuestId=TheSummoner, and clears the Summoner/sun sub-flags.

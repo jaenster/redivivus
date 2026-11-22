@@ -267,62 +267,54 @@ void __fastcall DRLGENV_FreeEnvironment(D2PoolManagerStrc * pMemory, D2DrlgEnvir
 
 // Advances the day/night environment cycle by one tick. Act 2 and 3 have accelerated cycle rates. Updates phase index and intensity when thresholds are crossed.
 static D2DrlgEnvironmentStrc * DRLGENV_UpdateEnvironmentCycle(D2DrlgEnvironmentStrc * pEnvironment, int nActNo) {
+    D2DrlgActEnvironmentData* pEnvData1 = (D2DrlgActEnvironmentData*)aENVIRONMENTDATA1;
     D2DrlgActEnvironmentData* pNextData;
     pEnvironment->nTicks++;
-    int nTicks;
-    nTicks = pEnvironment->nTicks;
-    int bEclipse;
-    bEclipse = pEnvironment->bEclipse;
+    int bEclipse = pEnvironment->bEclipse;
     if (!bEclipse) {
       if (nActNo == 3) {
-        nTicks += 0xf;
-      } else {
-        if (aENVIRONMENTDATA1[pEnvironment->nTimeIndex * 3 + 1] != 2 || (pEnvironment->nTicks = nTicks + 1 , nActNo != 2)) {
-          goto advance_time_period;
+        pEnvironment->nTicks += 0xf;
+      } else if (pEnvData1[pEnvironment->nTimeIndex].nEnvData == 2) {
+        pEnvironment->nTicks++;
+        if (nActNo == 2) {
+          pEnvironment->nTicks += 8;
         }
-
-        nTicks += 9;
       }
-
-      pEnvironment->nTicks = nTicks;
     }
 
-    advance_time_period:
-    nTicks = pEnvironment->nTimeRate;
-    if (pEnvironment->nTicks >= nTicks * 0x168) {
+    int nTimeRate = pEnvironment->nTimeRate;
+    if (pEnvironment->nTicks >= nTimeRate * 0x168) {
       pEnvironment->nTicks = 0;
     }
 
-    int nTimeIndexPlus1 = pEnvironment->nTimeIndex + 1;
-    int nNextTimeIndex = nTimeIndexPlus1;
-    if (nTimeIndexPlus1 >= 6) {
+    int nNextTimeIndex = pEnvironment->nTimeIndex + 1;
+    if (nNextTimeIndex >= 6) {
       nNextTimeIndex = 0;
     }
     if (!bEclipse) {
-      pNextData = (D2DrlgActEnvironmentData*)(aENVIRONMENTDATA1 + nNextTimeIndex * 3);
+      pNextData = &pEnvData1[nNextTimeIndex];
     } else if (nActNo == 3) {
-      pNextData = aENVIRONMENTDATA3 + nNextTimeIndex;
+      pNextData = &aENVIRONMENTDATA3[nNextTimeIndex];
     } else {
-      pNextData = aENVIRONMENTDATA2 + nNextTimeIndex;
+      pNextData = &aENVIRONMENTDATA2[nNextTimeIndex];
     }
-    if (!(pEnvironment->nTicks > pNextData->nLenght * nTicks)) {
+    if (pEnvironment->nTicks <= pNextData->nLenght * nTimeRate) {
       return pEnvironment;
     }
 
-    pEnvironment->nTimeIndex = nTimeIndexPlus1;
-    if (nTimeIndexPlus1 >= 6) {
+    pEnvironment->nTimeIndex++;
+    if (pEnvironment->nTimeIndex >= 6) {
       pEnvironment->nTimeIndex = 0;
     }
 
-    nTimeIndexPlus1 = pEnvironment->nTimeIndex;
     if (!bEclipse) {
-      pEnvironment->nEnvironmentData = aENVIRONMENTDATA1[nTimeIndexPlus1 * 3 + 1];
-      pEnvironment->nTicks = aENVIRONMENTDATA1[nTimeIndexPlus1 * 3] * nTicks;
-      return pEnvironment;
+      pNextData = &pEnvData1[pEnvironment->nTimeIndex];
+    } else {
+      pNextData = &aENVIRONMENTDATA2[pEnvironment->nTimeIndex];
     }
 
-    pEnvironment->nEnvironmentData = aENVIRONMENTDATA2[nTimeIndexPlus1].nEnvData;
-    pEnvironment->nTicks = aENVIRONMENTDATA2[nTimeIndexPlus1].nLenght * nTicks;
+    pEnvironment->nEnvironmentData = pNextData->nEnvData;
+    pEnvironment->nTicks = pNextData->nLenght * nTimeRate;
     return pEnvironment;
 }
 

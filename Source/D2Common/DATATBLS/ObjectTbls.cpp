@@ -192,18 +192,18 @@ void __fastcall TXT_AllocTxt_objects(D2PoolManagerStrc * pMemory) {
     }
 
     do {
-      char* pObjRow;
-      pObjRow = sgpTxtObjects[nObjIdx].Name;
-      memset(pObjRow + 0x40, 0, 0x80);
-      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer((uint16_t*)(pObjRow + 0x40), D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)pObjRow), 0x40);
-      *(uint32_t*)(pObjRow + 0xd8) <<= 8;
-      *(uint32_t*)(pObjRow + 0xdc) <<= 8;
-      *(uint32_t*)(pObjRow + 0xe0) <<= 8;
-      *(uint32_t*)(pObjRow + 0xe4) <<= 8;
-      *(uint32_t*)(pObjRow + 0xe8) <<= 8;
-      *(uint32_t*)(pObjRow + 0xec) <<= 8;
-      *(uint32_t*)(pObjRow + 0xf0) <<= 8;
-      *(uint32_t*)(pObjRow + 0xf4) <<= 8;
+      D2ObjectsTxt* pObjRow;
+      pObjRow = &sgpTxtObjects[nObjIdx];
+      memset(pObjRow->NameWideString, 0, sizeof(pObjRow->NameWideString));
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pObjRow->NameWideString, D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)pObjRow->Name), 0x40);
+      pObjRow->FrameCnt[0] <<= 8;
+      pObjRow->FrameCnt[1] <<= 8;
+      pObjRow->FrameCnt[2] <<= 8;
+      pObjRow->FrameCnt[3] <<= 8;
+      pObjRow->FrameCnt[4] <<= 8;
+      pObjRow->FrameCnt[5] <<= 8;
+      pObjRow->FrameCnt[6] <<= 8;
+      pObjRow->FrameCnt[7] <<= 8;
       nObjIdx++;
     } while (nObjIdx < nTxtObjectsSize);
 }

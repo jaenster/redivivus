@@ -37,6 +37,21 @@ See CONTRIBUTING.md for the long version. Delete this comment block and fill in 
 
 <!-- One or two sentences. -->
 
+## Work items
+
+<!--
+If this pull request works items from https://redivivus.app/work, name each one on a line of its
+own, exactly like this (outside this comment):
+
+  Work-Item: static-0045a2b0
+
+The pr_template tool on the Redivivus MCP server writes this section for you, with each
+function's status before and after. A Work-Item line hands the item in for you as the author of
+this pull request, even without submit_work, and /work shows the pull request against it. An item
+someone else holds is flagged instead, not linked: claim it (claim_work) before you work it.
+Leave the section empty when the change is not a work item.
+-->
+
 ## Which kind of change is it?
 
 - [ ] A function body that now matches the original (`oracle diff <name>` output below)

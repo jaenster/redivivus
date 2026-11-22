@@ -761,7 +761,7 @@ void __fastcall TILECMP_DeserializeAndFixup(int32_t pThis, int, D2TileLibraryHea
         }
 
         pTileSetData->dwFlags |= 2;
-        *(uint32_t*)((char*)nErrAddress + 4) |= 6;
+        ((D2TileLibraryHeaderStrc*)nErrAddress)->dwFlags |= 6;
         return;
       }
     }
@@ -1016,9 +1016,9 @@ void __stdcall TILECMP_DeepCopyWithRecompression(D2TileLibraryHeaderStrc * pSrcT
     void* nErrAddress;
     D2TileLibraryHeaderStrc* pDstHeader;
     D2TileLibraryEntryStrc* pTileSetArray;
-    uint8_t* pDstTileSet;
+    D2TileLibraryEntryStrc* pDstTileSet;
     int nCopyWords;
-    uint8_t* pCopyWordSrc;
+    D2TileLibraryEntryStrc* pCopyWordSrc;
     D2TileLibraryHeaderStrc* pCopySrc;
     uint8_t* pSrcTileSet;
     D2TileLibraryHeaderStrc* pCopyDst;
@@ -1056,10 +1056,10 @@ void __stdcall TILECMP_DeepCopyWithRecompression(D2TileLibraryHeaderStrc * pSrcT
         iTileSet = 0;
         if (pSrcTileCmpHdr->nTiles > 0) {
           do {
-            pDstTileSet = (uint8_t*)(unsigned char*)&pDstHeader->pTiles[iTileSet].nDirection;
-            pCopyWordSrc = (uint8_t*)(unsigned char*)&pSrcTileCmpHdr->pTiles[iTileSet].nDirection;
-            pSrcTileSet = pCopyWordSrc;
-            pCopyWordDst = pDstTileSet;
+            pDstTileSet = &pDstHeader->pTiles[iTileSet];
+            pCopyWordSrc = &pSrcTileCmpHdr->pTiles[iTileSet];
+            pSrcTileSet = (uint8_t*)pCopyWordSrc;
+            pCopyWordDst = (uint8_t*)pDstTileSet;
             for (nCopyWords = 0x18; nCopyWords; nCopyWords--) {
               *(uint32_t*)pCopyWordDst = *(uint32_t*)pSrcTileSet;
               pSrcTileSet += 4;
@@ -1067,16 +1067,16 @@ void __stdcall TILECMP_DeepCopyWithRecompression(D2TileLibraryHeaderStrc * pSrcT
             }
 
             nCopyWords = 0;
-            *(uint32_t*)(pDstTileSet + 0x54) = 0;
-            if (*(int*)(pDstTileSet + 0x50)) {
-              nAllocSize = *(int*)(pDstTileSet + 0x50) * 0x14;
+            pDstTileSet->pSubTiles = nullptr;
+            if (pDstTileSet->nSubTiles) {
+              nAllocSize = pDstTileSet->nSubTiles * 0x14;
               if (!nAllocSize) {
                 Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x470);
                 exit(-1);
               }
 
               nErrAddress = D2_ALLOC_AT(nAllocSize, ".\\SRC\\Tilecmp.cpp", 0x472);
-              *(void**)(pDstTileSet + 0x54) = (void*)nErrAddress;
+              pDstTileSet->pSubTiles = (D2GroundSubTileStrc*)nErrAddress;
               if (!nErrAddress) {
                 Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x473);
                 exit(-1);
@@ -1084,12 +1084,12 @@ void __stdcall TILECMP_DeepCopyWithRecompression(D2TileLibraryHeaderStrc * pSrcT
 
               memset(nErrAddress, 0, nAllocSize);
               iNode = 0;
-              if (*(int*)(pCopyWordSrc + 0x50) > 0) {
+              if (pCopyWordSrc->nSubTiles > 0) {
                 do {
-                  TILECMP_CompressSubTile((D2GroundSubTileStrc*)(*(int*)(pCopyWordSrc + 0x54) + nCopyWords), (D2GroundSubTileStrc*)(*(int*)(pDstTileSet + 0x54) + nCopyWords), (pfnRGBToPaletteIndex)pPaletteContext, *(uint32_t*)(pCopyWordSrc + 0x24));
+                  TILECMP_CompressSubTile((D2GroundSubTileStrc*)((char*)pCopyWordSrc->pSubTiles + nCopyWords), (D2GroundSubTileStrc*)((char*)pDstTileSet->pSubTiles + nCopyWords), (pfnRGBToPaletteIndex)pPaletteContext, (uint32_t)pCopyWordSrc->transparentColorRGB24);
                   iNode++;
                   nCopyWords += 0x14;
-                } while (iNode < *(int*)(pCopyWordSrc + 0x50));
+                } while (iNode < pCopyWordSrc->nSubTiles);
               }
             }
 

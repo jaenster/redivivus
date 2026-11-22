@@ -1037,33 +1037,33 @@ void __fastcall RENDERER_WINDOWED_DrawLineBresenham(POINT * pnEndPoint, POINT * 
     }
 }
 
-void __fastcall DrawRect(uint8_t * pRect, int nPaletteIndex) {
+void __fastcall DrawRect(RECT * pRect, int nPaletteIndex) {
     uint8_t byColorParam;
     POINT nMidX;
     POINT nRight;
     POINT nTopX;
     POINT nTop;
-    nTop.x = *(LONG*)pRect;
-    if (nTop.x > *(int*)(pRect + 8)) {
+    nTop.x = pRect->left;
+    if (nTop.x > pRect->right) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x126);
       exit(-1);
     } else {
       uint32_t uHeight;
-      nRight.y = *(LONG*)(pRect + 0xc);
-      nMidX.y = *(LONG*)(pRect + 4);
+      nRight.y = pRect->bottom;
+      nMidX.y = pRect->top;
       if (!(nMidX.y <= nRight.y)) {
         nTop.y = nRight.y;
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x127);
         exit(-1);
       }
 
-      uHeight = *(int*)(pRect + 8) - nTop.x;
+      uHeight = pRect->right - nTop.x;
       if (!(uHeight && nRight.y - nMidX.y)) {
         return;
       }
 
-      nTopX.x = *(LONG*)(pRect + 8);
-      nTopX.y = *(int*)(pRect + 4) + ((uint32_t)(nRight.y - nMidX.y) >> 1);
+      nTopX.x = pRect->right;
+      nTopX.y = pRect->top + ((uint32_t)(nRight.y - nMidX.y) >> 1);
       nMidX.x = (uHeight >> 1) + nTop.x;
       byColorParam = (uint8_t)nPaletteIndex;
       nRight.x = nMidX.x;
@@ -1076,28 +1076,28 @@ void __fastcall DrawRect(uint8_t * pRect, int nPaletteIndex) {
     }
 }
 
-void __fastcall DrawRectEx(uint8_t * pRect, int nPaletteIndex) {
+void __fastcall DrawRectEx(RECT * pRect, int nPaletteIndex) {
     POINT nX1;
     POINT nX1_copy;
     POINT nX2_save;
     POINT nX2_copy;
-    nX1.x = *(LONG*)pRect;
-    if (nX1.x > *(int*)(pRect + 8)) {
+    nX1.x = pRect->left;
+    if (nX1.x > pRect->right) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x142);
       exit(-1);
     } else {
       uint8_t byColorParam;
-      nX1_copy.y = *(LONG*)(pRect + 4);
-      if (!(nX1_copy.y <= *(int*)(pRect + 0xc))) {
+      nX1_copy.y = pRect->top;
+      if (!(nX1_copy.y <= pRect->bottom)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x143);
         exit(-1);
       }
-      if (!(*(int*)(pRect + 8) != nX1.x && *(int*)(pRect + 0xc) != nX1_copy.y)) {
+      if (!(pRect->right != nX1.x && pRect->bottom != nX1_copy.y)) {
         return;
       }
 
-      nX2_save.x = *(LONG*)(pRect + 8);
-      nX1.y = *(LONG*)(pRect + 0xc);
+      nX2_save.x = pRect->right;
+      nX1.y = pRect->bottom;
       byColorParam = (uint8_t)nPaletteIndex;
       nX1_copy.x = nX1.x;
       nX2_save.y = nX1.y;
@@ -1284,7 +1284,7 @@ BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int
             aCornerLight[1] = (uint32_t)pLight[bAllocOk + 1].nIntensity;
             aCornerLight[2] = aCornerLight[1];
             aCornerLight[3] = aCornerLight[0];
-            D2GfxRendereInitFunctionsStrc->nfpDrawRoofTile(*(int*)(psTileEntry + 8), nScreenX, a3, aCornerLight, nAlpha);
+            D2GfxRendereInitFunctionsStrc->nfpDrawRoofTile((int)(intptr_t)((D2GroundSubTileStrc*)psTileEntry)->pPixelData, nScreenX, a3, aCornerLight, nAlpha);
             nLightIdx = 1;
           }
 
@@ -1337,7 +1337,7 @@ BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nPos
           bDrawn = 1;
           aCornerLight[2] = aCornerLight[1];
           aCornerLight[3] = aCornerLight[0];
-          D2GfxRendereInitFunctionsStrc->nfpDrawWallTile(*(int*)(psTileEntry + 8), nScreenX, a3, aCornerLight);
+          D2GfxRendereInitFunctionsStrc->nfpDrawWallTile((int)(intptr_t)((D2GroundSubTileStrc*)psTileEntry)->pPixelData, nScreenX, a3, aCornerLight);
         }
 
         nScreenPanels++;

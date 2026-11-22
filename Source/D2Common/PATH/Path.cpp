@@ -275,30 +275,23 @@ static void __stdcall DRLGPATH_UpdateUnitRoom(D2RoomStrc * pRoom, D2DynamicPathS
 }
 
 // DRLGPATH_SetPathPosition - Sets the world position of a dynamic path, converts to screen coordinates via DRLG_MapWorldToScreenCoords, and triggers room transfer if the unit has moved to a different room.
-static void __stdcall DRLGPATH_SetPathPosition(uint32_t nOffsetX, uint32_t nOffsetY, D2RoomStrc * pRoom, D2DynamicPathStrc * pDynamicPath) {
-    uint32_t nOffsetYCopy = nOffsetY;
+static void __stdcall DRLGPATH_SetPathPosition(POINT tFixed, D2RoomStrc * pRoom, D2DynamicPathStrc * pDynamicPath) {
     if (pDynamicPath->nFlags & 0x40000U) {
-      D2RoomStrc* pValidRoom;
-      pValidRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pDynamicPath->pRoom, nOffsetX >> 0x10, nOffsetY >> 0x10);
-      if (!pValidRoom) {
+      if (!Collision::DRLGROOM_FindBetterNearbyRoom(pDynamicPath->pRoom, (uint32_t)tFixed.x >> 0x10, (uint32_t)tFixed.y >> 0x10)) {
         pDynamicPath->dwPathPoints = 0;
         return;
       }
     }
 
-    pDynamicPath->Coords.tFixed.x = nOffsetX;
-    pDynamicPath->Coords.tFixed.y = nOffsetYCopy;
-    nOffsetY = nOffsetX >> 0xb;
-    uint32_t nScreenY = nOffsetYCopy >> 0xb;
-    Drlg::Transform::DRLG_MapWorldToScreenCoords((int32_t*)&nOffsetY, (int32_t*)&nScreenY);
-    D2UnitStrc* pOwner = pDynamicPath->pOwner;
-    pDynamicPath->ScreenPos.x = nOffsetY;
+    pDynamicPath->Coords.tFixed = tFixed;
+    int32_t nScreenX = (uint32_t)tFixed.x >> 0xb;
+    int32_t nScreenY = (uint32_t)tFixed.y >> 0xb;
+    Drlg::Transform::DRLG_MapWorldToScreenCoords(&nScreenX, &nScreenY);
+    pDynamicPath->ScreenPos.x = nScreenX;
     pDynamicPath->ScreenPos.y = nScreenY;
-    if (!(pOwner && pDynamicPath->nFlags & 1)) {
-      return;
+    if (pDynamicPath->pOwner && pDynamicPath->nFlags & 1) {
+      DRLGPATH_UpdateUnitRoom(pRoom, pDynamicPath);
     }
-
-    DRLGPATH_UpdateUnitRoom(pRoom, pDynamicPath);
 }
 
 // DRLGPATH_ClearPathPosition - Zeroes out a dynamic path's world and screen coordinates, resets path points, removes the unit from its room, and sets the pending-room-change flag (0x2).
@@ -1448,7 +1441,10 @@ BOOL __stdcall PATH_HasReachedTarget(D2UnitStrc * pUnit) {
 }
 
 void __stdcall PATH_SnapPositionToTile(D2DynamicPathStrc * pDynamicPath) {
-    DRLGPATH_SetPathPosition((pDynamicPath->Coords.tFixed.x & 0xffff0000U) + 0x8000, (pDynamicPath->Coords.tFixed.y & 0xffff0000U) + 0x8000, nullptr, pDynamicPath);
+    POINT tPos;
+    tPos.x = (pDynamicPath->Coords.tFixed.x & 0xffff0000U) + 0x8000;
+    tPos.y = (pDynamicPath->Coords.tFixed.y & 0xffff0000U) + 0x8000;
+    DRLGPATH_SetPathPosition(tPos, nullptr, pDynamicPath);
 }
 
 uint32_t __stdcall Get8FlagsFromDynamicPath(D2DynamicPathStrc * pDynamicPath) {
@@ -1482,7 +1478,10 @@ void __stdcall PATH_MoveUnitToUnitPosition(D2UnitStrc * pUnit, D2UnitStrc * pTar
         pSrcPath->nFlags |= 1;
       }
 
-      DRLGPATH_SetPathPosition(pTargetPath->Coords.tFixed.x, pTargetPath->Coords.tFixed.y, pTargetPath->pRoom, pSrcPath);
+      
+    
+    
+    DRLGPATH_SetPathPosition(pTargetPath->Coords.tFixed, pTargetPath->pRoom, pSrcPath);
       return;
     }
 }
@@ -1540,12 +1539,15 @@ static bool __stdcall PATH_ComputeMovementStep(uint32_t * pnOutX, uint32_t * pnO
 }
 
 static void PATH_ResetPathState(D2DynamicPathStrc * pDynamicPath) {
-    DRLGPATH_SetPathPosition((pDynamicPath->Coords.tFixed.x & 0xffff0000U) + 0x8000, (pDynamicPath->Coords.tFixed.y & 0xffff0000U) + 0x8000, nullptr, pDynamicPath);
+    POINT tPos;
+    tPos.x = (pDynamicPath->Coords.tFixed.x & 0xffff0000U) + 0x8000;
+    tPos.y = (pDynamicPath->Coords.tFixed.y & 0xffff0000U) + 0x8000;
+    DRLGPATH_SetPathPosition(tPos, nullptr, pDynamicPath);
     pDynamicPath->nFlags &= -33;
     pDynamicPath->dwPathPoints = 0;
     pDynamicPath->nPathPointIndex = 0;
-    pDynamicPath->nVelocityX = 0;
-    pDynamicPath->nVelocityY = 0;
+    pDynamicPath->nVelocityX = gnPathCalcDirectionVectorX_Pad0;
+    pDynamicPath->nVelocityY = gnPathCalcDirectionVectorY_Pad0;
 }
 
 D2DynamicPathStrc * __fastcall Unreferenced_00650800(D2UnitStrc * pUnit) {
@@ -1579,12 +1581,12 @@ BOOL __stdcall PATH_AdvanceUnitAlongPath(D2UnitStrc * pUnit, int pExternalPath) 
     if (nPathFlags & 0x40000) {
       pDynamicPath->eCollisionFlag = 0;
     }
-    if (nPathFlags & 0x20 && pDynamicPath->dwPathPoints > 0 && pDynamicPath->dwVelocity && (nPathFlags & 0x40000 || (nTargetReached = PATH_CheckIfTargetReached(pDynamicPath) , nTargetReached != 0)) && pDynamicPath->nPathPointIndex < pDynamicPath->dwPathPoints) {
-      D2CoordStrc sNewPos;
+    if (nPathFlags & 0x20 && pDynamicPath->dwPathPoints > 0 && pDynamicPath->dwVelocity && (pDynamicPath->nFlags & 0x40000 || (nTargetReached = PATH_CheckIfTargetReached(pDynamicPath) , nTargetReached != 0)) && pDynamicPath->nPathPointIndex < pDynamicPath->dwPathPoints) {
+      POINT tNewPos;
       PATH_UpdateVelocityWithAcceleration(pExternalPath, pDynamicPath);
       if (pDynamicPath->nVelocityX || pDynamicPath->nVelocityY) {
-        PATH_ComputeMovementStep((uint32_t*)&sNewPos, (uint32_t*)&pUnit, pDynamicPath);
-        DRLGPATH_SetPathPosition(sNewPos.nX, sNewPos.nY, nullptr, pDynamicPath);
+        PATH_ComputeMovementStep((uint32_t*)&tNewPos, (uint32_t*)&pUnit, pDynamicPath);
+        DRLGPATH_SetPathPosition(tNewPos, nullptr, pDynamicPath);
         if (pDynamicPath->ePathType != 4 && pDynamicPath->nPathPointIndex < pDynamicPath->dwPathPoints) {
           DRLGPATH_AdvanceAlongPathPoints(pDynamicPath, 1, 1);
         }
@@ -1634,7 +1636,10 @@ static BOOL __stdcall PATH_MoveUnitToPosition(D2RoomStrc * pRoom, uint32_t nTarg
       pPath->nFlags |= 1;
     }
 
-    DRLGPATH_SetPathPosition((nTargetPos << 0x10) + 0x8000, ((uint32_t)nTargetY << 0x10) + 0x8000, pRoom, pPath);
+    POINT tPos;
+    tPos.x = (nTargetPos << 0x10) + 0x8000;
+    tPos.y = ((uint32_t)nTargetY << 0x10) + 0x8000;
+    DRLGPATH_SetPathPosition(tPos, pRoom, pPath);
     if (nTargetPos || false) {
       D2RoomStrc* pBetterRoom;
       pBetterRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint16_t)nTargetPos, (uint32_t)nTargetY);
@@ -1666,7 +1671,10 @@ static int __stdcall PATH_MoveObjectToPosition(D2RoomStrc * pRoom, uint32_t nTar
       pPath->nFlags |= 1;
     }
 
-    DRLGPATH_SetPathPosition((nTargetPos << 0x10) + 0x8000, ((uint32_t)*(uint16_t*)((char*)&nTargetPos + 2) << 0x10) + 0x8000, pRoom, pPath);
+    POINT tPos;
+    tPos.x = (nTargetPos << 0x10) + 0x8000;
+    tPos.y = ((uint32_t)*(uint16_t*)((char*)&nTargetPos + 2) << 0x10) + 0x8000;
+    DRLGPATH_SetPathPosition(tPos, pRoom, pPath);
     if (nTargetPos || false) {
       D2RoomStrc* pBetterRoom;
       pBetterRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2));
@@ -1721,7 +1729,7 @@ BOOL __stdcall PATH_TestLineOfSight(D2DynamicPathStrc * pDynamicPath, int * pbCo
       exit(-1);
     }
 
-    uint16_t eCollisionResult2;
+    int eCollisionResult2;
     eCollisionResult2 = Collision::UpdateGetCollision_Type(pDynamicPath->pRoom, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosX, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosY, pRoom, nTargetX, nTargetY, pDynamicPath->nCollisionPattern, pDynamicPath->nCollisionFlag, pDynamicPath->nMoveTestCollisionMask);
     if (eCollisionResult2) {
       return 0;
@@ -1730,7 +1738,10 @@ BOOL __stdcall PATH_TestLineOfSight(D2DynamicPathStrc * pDynamicPath, int * pbCo
       pDynamicPath->nFlags |= 1;
     }
 
-    DRLGPATH_SetPathPosition(nTargetX * 0x10000 + 0x8000, nTargetY * 0x10000 + 0x8000, pRoom, pDynamicPath);
+    POINT tPos;
+    tPos.x = nTargetX * 0x10000 + 0x8000;
+    tPos.y = nTargetY * 0x10000 + 0x8000;
+    DRLGPATH_SetPathPosition(tPos, pRoom, pDynamicPath);
     pBetterRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nTargetX, nTargetY);
     if (!pBetterRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x524);
