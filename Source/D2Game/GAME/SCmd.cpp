@@ -486,12 +486,11 @@ void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH_Ex(D2ClientSt
 void __fastcall NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH_Ex(D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nMonsterGUID, uint8_t nMoveType, uint16_t wDestXParam, uint16_t wDestY, uint8_t nDistance, uint8_t nHpPercent, uint8_t nHitClass) {
     D2GSPacketSrv0x67 byPacketBuf;
     memset(&byPacketBuf, 0, sizeof(byPacketBuf));
-    byPacketBuf.nMoveType = nMoveType;
-    byPacketBuf.wY = wDestY;
-    d2_store24((char*)&byPacketBuf.dwMonsterGUID, (uint32_t)nMonsterGUID & 0xffffffu);
     byPacketBuf.nPacketId = nPacketId;
-    *(uint8_t*)((char*)&byPacketBuf.dwMonsterGUID + 3) = (uint8_t)(nMonsterGUID >> 0x18);
+    byPacketBuf.dwMonsterGUID = nMonsterGUID;
+    byPacketBuf.nMoveType = nMoveType;
     byPacketBuf.wX = wDestXParam;
+    byPacketBuf.wY = wDestY;
     D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(Clients::CLIENT_GetGame(pClient), UNIT_MONSTER, nMonsterGUID);
     if (!pUnit) {
       return;
@@ -519,13 +518,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH_Ex(D2ClientSt
     }
 
     int nVelocityPct = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_velocitypercent, 0);
-    if (nVelocityPct > -0x8000) {
-      if (nVelocityPct >= 0x7fff) {
-        nVelocityPct = 0x7fff;
-      }
-    } else {
-      nVelocityPct = -0x8000;
-    }
+    nVelocityPct = min(max(nVelocityPct, -0x8000), 0x7fff); // steer-ok: windef.h min/max macros
 
     byPacketBuf.wVelocityPct = (uint16_t)nVelocityPct;
     byPacketBuf.nParam4 = nHpPercent;
