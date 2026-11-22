@@ -5998,8 +5998,9 @@ void __fastcall CrcBuffer(uint8_t * pbData, int32_t nLength, uint32_t * pdwCrc, 
       dwCrc = -1;
     }
     if (byFlags & 2) {
-      for (; nLength; nLength--) {
+      while (nLength) {
         dwCrc = dwCrc >> 8 ^ gdwSFileCompressionMethod[(*pbData ^ dwCrc) & 0xff];
+        nLength--;
         pbData++;
       }
     }
