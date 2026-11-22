@@ -4111,51 +4111,19 @@ BOOL __stdcall ITEM_CheckIfItemCanBeNamed(D2UnitStrc * pUnit) {
 // Returns true if the item is eligible to receive sockets (e.g. via Larzuk quest or cube recipe). Rejects gold, quest items (unless code is 'leg'), items that already have socketed children, already have ITEMFLAG_SOCKETED, or have ITEM_GetMaxSockCount==0. Returns true only when current socket count is 0.
 // @sourcefile .\ITEMS\Items.cpp
 BOOL __stdcall ITEM_CheckIfItemCanHaveSockets(D2UnitStrc * pUnit) {
-    eD2ItemTypes eItemType;
-    uint32_t dwItemCode;
-    int32_t nErrOrSocketCount;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x67d);
       exit(-1);
     }
-    if (pUnit->eUnitType == UNIT_ITEM) {
-      eItemType = TXT_Items_GetType(pUnit->nClassId);
-      if (eItemType == ITEMTYPE_Gold) {
-        return 0;
+
+    if (!(GetTypeInline(pUnit) == UNIT_ITEM && TXT_Items_GetType(pUnit->nClassId) == ITEMTYPE_Gold) && !CheckItemFlagInline(pUnit, ITEMFLAG_MONSTER)) {
+      D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(GetClassIdInline(pUnit));
+      if ((!pItemsTxt->bQuest || ITEM_GetItemsTxt_szCode(pUnit) == 0x2067656c) && !CheckItemFlagInline(pUnit, ITEMFLAG_BROKEN) && !ITEMS_HasSocketedItems(pUnit) && !CheckItemFlag(pUnit, ITEMFLAG_SOCKETED, 0x132b, ".\\ITEMS\\Items.cpp") && ITEM_GetMaxSockCount(pUnit)) {
+        return (char)ITEM_GetSocketsCount(pUnit) == '\0';
       }
     }
-    if (!(pUnit->eUnitType != UNIT_ITEM || !pUnit->pUnitData.pUnitDataItem || (pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_MONSTER) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
-      return 0;
-    }
 
-    D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(pUnit->nClassId);
-    if (pItemsTxt->bQuest != '\0') {
-      dwItemCode = ITEM_GetItemsTxt_szCode(pUnit);
-      if (dwItemCode != 0x2067656c) {
-        return 0;
-      }
-    }
-    if (!(pUnit->eUnitType != UNIT_ITEM || !pUnit->pUnitData.pUnitDataItem || (pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_BROKEN) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
-      return 0;
-    }
-
-    BOOL bHasSocketedItems = ITEMS_HasSocketedItems(pUnit);
-    if (bHasSocketedItems) {
-      return 0;
-    }
-
-    bHasSocketedItems = CheckItemFlag(pUnit, ITEMFLAG_SOCKETED, 0x132b, ".\\ITEMS\\Items.cpp");
-    if (bHasSocketedItems) {
-      return 0;
-    }
-
-    uint8_t cMaxSockets = ITEM_GetMaxSockCount(pUnit);
-    if (!cMaxSockets) {
-      return 0;
-    }
-
-    nErrOrSocketCount = ITEM_GetSocketsCount(pUnit);
-    return (uint32_t)((char)nErrOrSocketCount == '\0');
+    return 0;
 }
 
 // Tests whether two item units are "identical enough" to be socketed/stacked together. Returns TRUE only if both items match on: class id, item quality (defaulting to 2 if not an item or no item data), file index (variant), stackable flag (must be stackable), ethereal flag, both qualities can-have-sockets, all damage stats (min/max, secondary min/max, throw min/max), and both have zero sockets. Returns FALSE on any mismatch. Pure comparison predicate, no side effects.
