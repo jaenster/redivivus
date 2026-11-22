@@ -1196,7 +1196,7 @@ void __stdcall SetStepNum(D2DynamicPathStrc * pDynamicPath, uint8_t nStepNum) {
     if (!pDynamicPath) {
       return;
     }
-    if ((uint8_t)(nStepNum - 1) <= 0x12) {
+    if (nStepNum >= 1 && nStepNum <= 0x13) {
       pDynamicPath->nStepNum = nStepNum - 1;
       return;
     }
