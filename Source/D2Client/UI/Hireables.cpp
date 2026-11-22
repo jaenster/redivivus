@@ -59,77 +59,22 @@ uint32_t __stdcall HIREABLE_IsNotInMercPurchaseMode() {
 }
 
 void __stdcall LoadClassIcons() {
-    DC6* pIconDC6;
-    char aExpansionIconPaths[7][32];
-    char aBaseIconPaths[5][32];
-    char cStrByte;
-    memcpy(aBaseIconPaths[0], "Hireables\\AmazonIcon", 0x15);
-    memset(aBaseIconPaths[0] + 21, 0, 11 * sizeof(aBaseIconPaths[0][0]));
-    memcpy(aBaseIconPaths[1], "Hireables\\SorceressIcon", 0x18);
-    memset(aBaseIconPaths[1] + 24, 0, 8 * sizeof(aBaseIconPaths[1][0]));
-    memcpy(aBaseIconPaths[2], "Hireables\\BarbarianIcon", 0x18);
-    memset(aBaseIconPaths[2] + 24, 0, 8 * sizeof(aBaseIconPaths[2][0]));
-    memcpy(aBaseIconPaths[3], "Hireables\\PaladinIcon", 0x16);
-    memset(aBaseIconPaths[3] + 22, 0, 10 * sizeof(aBaseIconPaths[3][0]));
-    int nClassCount = 6;
-    char* ppSrcStr = "Hireables\\NecromancerIcon";
-    char* pDstCopy = aBaseIconPaths[4];
-    for (; nClassCount; nClassCount--) {
-      *(uint32_t*)pDstCopy = *(uint32_t*)ppSrcStr;
-      ppSrcStr += 4;
-      pDstCopy += 4;
-    }
-
-    *(uint16_t*)pDstCopy = *(uint16_t*)ppSrcStr;
-    nClassCount = 5;
-    ppSrcStr = "Hireables\\AssassinIcon";
-    pDstCopy = aExpansionIconPaths[0];
-    for (; nClassCount; nClassCount--) {
-      *(uint32_t*)pDstCopy = *(uint32_t*)ppSrcStr;
-      ppSrcStr += 4;
-      pDstCopy += 4;
-    }
-
-    *(uint16_t*)pDstCopy = *(uint16_t*)ppSrcStr;
-    pDstCopy[2] = ppSrcStr[2];
-    memset(aBaseIconPaths[4] + 26, 0, 6 * sizeof(aBaseIconPaths[4][0]));
-    memset(aExpansionIconPaths[0] + 23, 0, 9 * sizeof(aExpansionIconPaths[0][0]));
-    memcpy(aExpansionIconPaths[1], "Hireables\\DruidIcon", 0x14);
-    memset(aExpansionIconPaths[1] + 20, 0, 12 * sizeof(aExpansionIconPaths[1][0]));
-    memset(aExpansionIconPaths + 2, 0, 0xa0);
-    ClassIcons[0] = 0;
-    ClassIcons[1] = 0;
-    ClassIcons[2] = 0;
-    ClassIcons[3] = 0;
-    ClassIcons[4] = 0;
-    ClassIcons[5] = 0;
-    ClassIcons[6] = 0;
+    char aBaseIconPaths[5][32] = {"Hireables\\AmazonIcon", "Hireables\\SorceressIcon", "Hireables\\BarbarianIcon", "Hireables\\PaladinIcon", "Hireables\\NecromancerIcon"};
+    char aExpansionIconPaths[7][32] = {"Hireables\\AssassinIcon", "Hireables\\DruidIcon"};
+    memset(ClassIcons, 0, sizeof(ClassIcons));
     int nIndex = 0;
-    char (*ppClassEntry)[32] = aBaseIconPaths;
-    for (nClassCount = 0; nClassCount < 5; nClassCount++) {
-      pIconDC6 = ui::ARCHIVE_LoadOverlayImageUsedInGame(*ppClassEntry);
-      ClassIcons[nIndex] = pIconDC6;
-      ppClassEntry++;
-      nIndex++;
+    for (int i = 0; i < 5; i++, nIndex++) {
+      ClassIcons[nIndex] = ui::ARCHIVE_LoadOverlayImageUsedInGame(aBaseIconPaths[i]);
     }
 
-    BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    if (bIsExpansion) {
-      DC6** ppExpIcon;
-      ppExpIcon = ClassIcons + nIndex;
-      nClassCount = 0;
-      ppSrcStr = aExpansionIconPaths[0];
-      do {
-        if (strlen(ppSrcStr) == 0) {
+    if (Fog::D2CheckExpansionGame()) {
+      for (int i = 0; i < 7; i++, nIndex++) {
+        if (strlen(aExpansionIconPaths[i]) == 0) {
           break;
         }
 
-        pIconDC6 = ui::ARCHIVE_LoadOverlayImageUsedInGame(ppSrcStr);
-        *ppExpIcon = pIconDC6;
-        nClassCount++;
-        ppSrcStr += 0x20;
-        ppExpIcon++;
-      } while (nClassCount < 7);
+        ClassIcons[nIndex] = ui::ARCHIVE_LoadOverlayImageUsedInGame(aExpansionIconPaths[i]);
+      }
     }
 
     size_t nAllocSize = D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize * 0x14;
