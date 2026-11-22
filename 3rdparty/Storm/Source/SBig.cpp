@@ -1135,28 +1135,26 @@ void __thiscall TSGrowableArray_Ui_SetCount(BigBuffer * pDwordArray, uint32_t nN
 int32_t __thiscall SBIG_AppendBytes(TSGrowableArray_Uc * pByteArray, uint32_t nByteCount, uint8_t * pSrcBytes) {
     uint32_t nNewLen = pByteArray->nLen + nByteCount;
     if (nNewLen > pByteArray->nCapacity) {
-      uint32_t i;
-      i = pByteArray->nGrowStep;
-      if (!i) {
-        i = TSGrowableArray_UcAlt_CalcChunkSize((BigBuffer*)pByteArray, nNewLen);
-      }
-      if (nNewLen % i) {
-        nNewLen = i - nNewLen % i + nNewLen;
+      uint32_t nGranularity = pByteArray->nGrowStep;
+      if (!nGranularity) {
+        nGranularity = TSGrowableArray_UcAlt_CalcChunkSize((BigBuffer*)pByteArray, nNewLen);
       }
 
-      TSFixedArray_UcAlt_ReallocData(pByteArray, nNewLen);
+      uint32_t nNewCapacity = nNewLen;
+      if (nNewLen % nGranularity) {
+        nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
+      }
+
+      TSFixedArray_UcAlt_ReallocData(pByteArray, nNewCapacity);
     }
 
-    uint32_t uVar1 = 0;
-    if (nByteCount > 0) {
-      do {
-        if (pByteArray->pData + (pByteArray->nLen + uVar1)) {
-          pByteArray->pData[pByteArray->nLen + uVar1] = *pSrcBytes;
-        }
+    for (uint32_t i = 0; i < nByteCount; i++) {
+      uint8_t* pSlot = &pByteArray->pData[pByteArray->nLen + i];
+      if (pSlot) {
+        *pSlot = *pSrcBytes;
+      }
 
-        uVar1++;
-        pSrcBytes++;
-      } while (uVar1 < nByteCount);
+      pSrcBytes++;
     }
 
     pByteArray->nLen += nByteCount;
