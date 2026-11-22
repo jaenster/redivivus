@@ -209,9 +209,8 @@ static void SFILE_Decrypt(uint32_t nSeed, uint32_t * pData, uint32_t nByteLen) {
 static uint32_t __stdcall SFILE_Hash(int32_t nHashKind, char * szText) {
     uint32_t nHash = 0x7fed7fed;
     int nSeed = -0x11111112;
-    for (; szText && *szText != '\0'; szText++) {
-      uint32_t nUpper;
-      nUpper = toupper((int)*szText);
+    while (szText && *szText != '\0') {
+      uint32_t nUpper = toupper(*szText++);
       nHash = nHash + nSeed ^ g_pStormMpqCryptTable[nHashKind * 0x100 + (uint32_t)(uint8_t)nUpper];
       nSeed = nSeed * 0x21 + (uint32_t)(uint8_t)nUpper + 3 + nHash;
     }
