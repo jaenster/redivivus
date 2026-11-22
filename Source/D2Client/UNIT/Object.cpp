@@ -1202,7 +1202,7 @@ bool __fastcall OBJECT_ClientFn_Nop_0B(D2UnitStrc * pUnit) {
 bool __fastcall OBJECT_ClientFn_OperateCycle_3s(D2UnitStrc * pUnit) {
     int32_t nDelayMs;
     DWORD DVar1 = GetTickCount();
-    if (pUnit->eAnimMode.ePlayerMode == Death) {
+    if (pUnit->eAnimMode.eObjectMode == eD2ObjectAnimMode_ns::Neutral) {
       if (pUnit->dwTickCount < DVar1) {
         pUnit->dwTickCount = DVar1 + 3000;
         pUnit->nGfxCurrentFrame = (uint32_t)pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Start[1];
@@ -1210,7 +1210,7 @@ bool __fastcall OBJECT_ClientFn_OperateCycle_3s(D2UnitStrc * pUnit) {
         Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
         return true;
       }
-    } else if (pUnit->eAnimMode.ePlayerMode != Death && pUnit->dwTickCount < DVar1) {
+    } else if (pUnit->eAnimMode.eObjectMode >= eD2ObjectAnimMode_ns::Operating && pUnit->dwTickCount < DVar1) {
       nDelayMs = D2Game::Seed::SEED_RollRange(&pUnit->sSeed, 0x9c4, 0x1d4c);
       pUnit->dwTickCount = nDelayMs + DVar1;
       D2Common::Units::ChangeAnimMode(pUnit, 0);
