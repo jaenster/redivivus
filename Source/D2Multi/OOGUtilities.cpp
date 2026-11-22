@@ -441,8 +441,10 @@ int __stdcall OOGUTIL_JoinDefaultChannel(D2ControlMsg * pControlMsg) {
       ChatDlg::CHATDLG_EnqueueClearMessage();
       ChatDlg::CHATDLG_CreateAllForms();
       int32_t bRegLoaded = Storm::Source::SReg::SRegLoadString("Diablo II", "Default Channel", 0, szDefaultChannel, 0x20);
-      char* szChannelName = szDefaultChannel;
-      if (!bRegLoaded) {
+      char* szChannelName;
+      if (bRegLoaded) {
+        szChannelName = szDefaultChannel;
+      } else {
         szChannelName = "";
       }
 
