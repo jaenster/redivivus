@@ -1953,20 +1953,10 @@ int32_t __stdcall ITEM_CheckItemData_ItemQualityIsMagicOrBetter(D2UnitStrc * pUn
     return 0;
 }
 
+static inline BOOL CheckItemFlagInline(D2UnitStrc * pUnit, eD2ItemFlag eItemFlag);
+
 BOOL __stdcall ITEM_CheckItemData_eD2ItemFlag_Monster(D2UnitStrc * pUnit) {
-    uint32_t nClassId;
-    if (pUnit) {
-      if (pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem && (pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_MONSTER) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
-        return 0;
-      }
-
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
-    }
-
-    uint32_t bResult = TXT_Items_IsNotQuestOrHammerType(nClassId);
-    if (bResult) {
+    if (!CheckItemFlagInline(pUnit, ITEMFLAG_MONSTER) && TXT_Items_IsNotQuestOrHammerType(!pUnit ? -1 : pUnit->nClassId)) {
       return 1;
     }
 
