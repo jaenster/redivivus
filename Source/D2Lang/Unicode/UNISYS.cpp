@@ -1274,37 +1274,24 @@ int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nMaxCh
 }
 
 int32_t __fastcall UNICODE_GetWideCharCount(char * szText, int32_t szSourceFile) {
-    char cTmp;
-    char* pcLenBase;
     if (!gpUnicodeCodeToMapTable) {
-      pcLenBase = szText + 1;
-      szText = szText + strlen(szText) + 1;
-      return (intptr_t)szText - (intptr_t)pcLenBase;
+      return strlen(szText);
     }
 
-    int pszCount = 0;
-    int i = 0;
-    if (szSourceFile <= 0) {
-      return pszCount;
-    }
-
-    do {
-      int32_t nIsControl;
+    int nCount = 0;
+    for (int i = 0; i < szSourceFile; nCount++) {
       if (!szText[i]) {
-        return pszCount;
+        break;
       }
 
-      nIsControl = UNICODE_IsControlChar(szText[i]);
-      if (nIsControl) {
+      if (UNICODE_IsControlChar(szText[i])) {
         i += 2;
       } else {
         i++;
       }
+    }
 
-      pszCount++;
-    } while (i < szSourceFile);
-
-    return pszCount;
+    return nCount;
 }
 
 static void * keep_00527b00 = (0 ? (UNICODE_BinarySearchKamap(*(uint16_t *)0), (void *)0) : (void *)0);
