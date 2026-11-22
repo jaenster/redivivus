@@ -1061,8 +1061,6 @@ uint32_t __stdcall SMemHeapCreate(int32_t nReserved, uint32_t nMaxSize, uint32_t
 }
 
 int32_t __stdcall SMemHeapDestroy(LPVOID nHeapId) {
-    LPVOID* pCurHeap;
-    LPVOID* ppNextHeapIter;
     if (!g_SMemInitialized) {
       SMemInitialize();
       if (!g_SMemInitialized) {
@@ -1074,21 +1072,19 @@ int32_t __stdcall SMemHeapDestroy(LPVOID nHeapId) {
     uint32_t nBucketIndex = (uintptr_t)nHeapId & 0xff;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + nBucketIndex);
     int32_t nDestroyed = 0;
-    if (g_SMemHeapBuckets[nBucketIndex]) {
-      void** ppPrevLink;
-      nDestroyed = 0;
-      ppPrevLink = g_SMemHeapBuckets + nBucketIndex;
-      pCurHeap = (LPVOID*)g_SMemHeapBuckets[nBucketIndex];
+    D2FogHeapDescStrc* pHeap = (D2FogHeapDescStrc*)g_SMemHeapBuckets[nBucketIndex];
+    if (pHeap) {
+      LPVOID* ppHeapLink = &g_SMemHeapBuckets[nBucketIndex];
       do {
-        if (pCurHeap[1] == nHeapId) {
+        if (pHeap->nHash == (uint32_t)nHeapId) {
           nDestroyed = 1;
-          pCurHeap = SMEM_DestroyHeap(ppPrevLink);
+          ppHeapLink = SMEM_DestroyHeap(ppHeapLink);
+        } else {
+          ppHeapLink = (LPVOID*)&pHeap->pNext;
         }
 
-        ppNextHeapIter = (LPVOID*)*pCurHeap;
-        ppPrevLink = (void**)pCurHeap;
-        pCurHeap = ppNextHeapIter;
-      } while (ppNextHeapIter);
+        pHeap = (D2FogHeapDescStrc*)*ppHeapLink;
+      } while (pHeap);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + nBucketIndex);
