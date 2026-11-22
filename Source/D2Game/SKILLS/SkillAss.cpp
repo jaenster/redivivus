@@ -23,6 +23,7 @@
 #include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 #include "Source/D2Game/D2GameRoot.h"
 #include "Source/D2Game/SKILLS/SkillsServer.data.h"
 
@@ -1743,71 +1744,34 @@ BOOL __fastcall Skills_SrvDoFunc_042_DragonTalon(::SGAMEDATA * pGame, D2UnitStrc
 
 // Server-side Assassin skill handler that fires a scatter pattern of missiles toward or around the target cursor position. With nParam1/nParam2 both ≥ 2, spawns nParam1 missiles each at a random offset within ±nParam2 tiles of the target (skipping positions within 3 units of the caster). Falls back to a single on-target missile if either spread parameter is less than 2. Seeds the unit's RNG with the target X position before each scatter run.
 BOOL __fastcall SKILLASS_CastScatterMissiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOwner, eMissilesId pMissileTxtId, int32_t nMissileCount, int32_t nSpread, eD2Skills eSkill, int32_t nSkillLevel) {
-    uint32_t nRandOffset;
-    int nMissilePosY;
-    int32_t nDistOrPosX;
-    int x2;
     D2SkillArgStrc sSkillArg;
     uint32_t nTargetY;
     uint32_t nTargetX;
-    eD2UnitType eUnitTypeCheck;
-    int32_t nOwner;
-    BOOL bGotTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &nTargetY);
-    if (!bGotTargetPos) {
+    if (!SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &nTargetY)) {
       return 0;
     }
 
     D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, nTargetX);
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.pOwner = pOwner;
-    sSkillArg.nMissileTxtNo = pMissileTxtId;
     sSkillArg.nFlags = 0x420;
+    sSkillArg.pOwner = pOwner;
     sSkillArg.pMissile = pUnit;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLevel;
+    sSkillArg.nMissileTxtNo = pMissileTxtId;
     if (nMissileCount <= 1 || nSpread < 2) {
-      sSkillArg.nUnitY = nTargetY;
       sSkillArg.nUnitX = nTargetX;
+      sSkillArg.nUnitY = nTargetY;
       MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       return 1;
     }
-    if (nMissileCount > 0) {
-      nOwner = nMissileCount;
-      do {
-        nRandOffset = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nSpread * 2);
-        x2 = nRandOffset + (nTargetX - nSpread);
-        sSkillArg.nUnitX = x2;
-        nRandOffset = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nSpread * 2);
-        eUnitTypeCheck = pUnit->eUnitType;
-        sSkillArg.nUnitY = nRandOffset + (nTargetY - nSpread);
-        if (eUnitTypeCheck == UNIT_OBJECT || (int)eUnitTypeCheck > 3 && (int)eUnitTypeCheck <= 5) {
-          nMissilePosY = pUnit->pPath.pStaticPath->nPosY;
-        } else if (pUnit->pPath.pDynamicPath) {
-          nMissilePosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-          x2 = sSkillArg.nUnitX;
-        } else {
-          nMissilePosY = 0;
-        }
 
-        eUnitTypeCheck = pUnit->eUnitType;
-        if (eUnitTypeCheck == UNIT_OBJECT || (int)eUnitTypeCheck > 3 && (int)eUnitTypeCheck <= 5) {
-          nDistOrPosX = pUnit->pPath.pStaticPath->nPosX;
-        } else if (pUnit->pPath.pDynamicPath) {
-          nDistOrPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-          x2 = sSkillArg.nUnitX;
-        } else {
-          nDistOrPosX = 0;
-        }
-
-        nDistOrPosX = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nDistOrPosX, nMissilePosY, x2, sSkillArg.nUnitY);
-        if (nDistOrPosX >= 4) {
-          MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-        }
-
-        nOwner = nOwner - 4 + 3;
-      } while (nOwner);
-
-      return 1;
+    for (int i = 0; i < nMissileCount; i++) {
+      sSkillArg.nUnitX = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nSpread * 2) + (nTargetX - nSpread);
+      sSkillArg.nUnitY = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nSpread * 2) + (nTargetY - nSpread);
+      if (D2Common::PATH::DynamicPath::GetDistanceSquaredXY(D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit), D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit), sSkillArg.nUnitX, sSkillArg.nUnitY) >= 4) {
+        MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+      }
     }
 
     return 1;
