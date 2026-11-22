@@ -2288,38 +2288,27 @@ static void __stdcall BigBuffer_Xor(BigBuffer * pLhs, BigBuffer * pRhs, BigBuffe
 // @oracle Mac PPC 1.10b Storm mangled symbol .FromBinary__FR9BigBufferPCvUi @1009b7b0 -- sole target of SBigFromBinary's forwarder; also the sole bignum callee of .FromStream, matching 1.14d FromStream. Was SBIG_ImportBytes.
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static void __stdcall BigBuffer_FromBinary(void * pSrcBytes, uint32_t nByteCount, BigBuffer * pResult) {
-    uint32_t nWordIndex;
-    uint32_t nChunkSize;
-    uint32_t nAlignedCount;
-    uint32_t nAlignedCount2;
-    uint8_t byValue;
-    uint32_t nNeededCount;
-    uint32_t nByteInWord = pResult->nStartWord;
-    if (nByteInWord > pResult->nCount && nByteInWord > pResult->nCapacity) {
-      nWordIndex = pResult->nGrowStep;
-      if (!nWordIndex) {
-        nWordIndex = TSGrowableArray_Ui_CalcChunkSize(pResult, nByteInWord);
+    uint32_t nNewCount = pResult->nStartWord;
+    if (nNewCount > pResult->nCount && nNewCount > pResult->nCapacity) {
+      uint32_t nGranularity = pResult->nGrowStep;
+      if (!nGranularity) {
+        nGranularity = TSGrowableArray_Ui_CalcChunkSize(pResult, nNewCount);
       }
 
-      nAlignedCount = nByteInWord;
-      if (nByteInWord % nWordIndex) {
-        nAlignedCount = nWordIndex - nByteInWord % nWordIndex + nByteInWord;
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
       }
 
-      TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
+      TSFixedArray_Ui_ReallocData(pResult, nNewCapacity);
     }
 
-    pResult->nCount = nByteInWord;
-    uint32_t i = 0;
-    if (nByteCount <= 0) {
-      return;
-    }
-
-    do {
+    pResult->nCount = nNewCount;
+    for (uint32_t i = 0; i < nByteCount; i++) {
+      uint32_t nWordIndex = i >> 2;
+      uint32_t nByteInWord = i & 3;
+      uint32_t nByte = ((uint8_t*)pSrcBytes)[i]; // steer-ok: the original reads the source byte before the SBIG_GrowToIndex call
       uint32_t dwCurWord;
-      byValue = *(uint8_t*)(i + (char*)pSrcBytes);
-      nWordIndex = i >> 2;
-      nByteInWord = i & 3;
       if (nByteInWord) {
         SBIG_GrowToIndex(pResult, nWordIndex);
         dwCurWord = pResult->pData[pResult->nStartWord + nWordIndex];
@@ -2327,30 +2316,29 @@ static void __stdcall BigBuffer_FromBinary(void * pSrcBytes, uint32_t nByteCount
         dwCurWord = 0;
       }
 
-      nAlignedCount = pResult->nStartWord + nWordIndex;
-      if (nAlignedCount >= pResult->nCount) {
-        nNeededCount = nAlignedCount + 1;
-        if (nNeededCount > pResult->nCapacity) {
-          nChunkSize = pResult->nGrowStep;
-          if (!nChunkSize) {
-            nChunkSize = TSGrowableArray_Ui_CalcChunkSize(pResult, nNeededCount);
+      uint32_t nDestIndex = pResult->nStartWord + nWordIndex;
+      if (nDestIndex >= pResult->nCount) {
+        uint32_t nNewLen = nDestIndex + 1;
+        if (nNewLen > pResult->nCapacity) {
+          uint32_t nGranularity = pResult->nGrowStep;
+          if (!nGranularity) {
+            nGranularity = TSGrowableArray_Ui_CalcChunkSize(pResult, nNewLen);
           }
 
-          nAlignedCount2 = nNeededCount;
-          if (nNeededCount % nChunkSize) {
-            nAlignedCount2 = nChunkSize - nNeededCount % nChunkSize + nNeededCount;
+          uint32_t nNewCapacity = nNewLen;
+          if (nNewLen % nGranularity) {
+            nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
           }
 
-          TSFixedArray_Ui_ReallocData(pResult, nAlignedCount2);
+          TSFixedArray_Ui_ReallocData(pResult, nNewCapacity);
         }
 
-        SMem::SMemZero(pResult->pData + pResult->nCount, (nAlignedCount - pResult->nCount) * 4 + 4);
-        pResult->nCount = nNeededCount;
+        SMem::SMemZero(pResult->pData + pResult->nCount, (nDestIndex - pResult->nCount) * 4 + 4);
+        pResult->nCount = nNewLen;
       }
 
-      i++;
-      pResult->pData[pResult->nStartWord + nWordIndex] = ((uint32_t)byValue << (char)nByteInWord * '\b') + dwCurWord;
-    } while (i < nByteCount);
+      pResult->pData[pResult->nStartWord + nWordIndex] = (nByte << nByteInWord * 8) + dwCurWord;
+    }
 }
 
 // @renamed-from SBIG_ImportDecimalString (2026-08-28, Storm PowerPC oracle pass 4)
