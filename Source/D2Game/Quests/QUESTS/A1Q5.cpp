@@ -529,11 +529,8 @@ BOOL __fastcall Q05_MarkCompleteForPlayersInTower(::SGAMEDATA * pGame, D2UnitStr
 // loot sequence still pending); otherwise it clears a busy flag (+0xa) marking the handler finished.
 static void __fastcall Q05_OnTowerComplete(D2QuestDataStrc * pQuestData) {
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q05_MarkCompleteForPlayersInTower);
-    /* QUEST_SetQuestRecordState(ForgottenTower, JustCompleted=0xd) — game-wide
-                         quest record */ QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_ForgottenTower, QUESTSTATE_JustCompleted);
-    D2QuestDataA1Q4Strc* unionfacet5_594ff0 = pQuestData->pQuestSpecificData.pA1Q4;
-    short int sVar1 = (short int)((uint32_t)(uint8_t)unionfacet5_594ff0->sSub.field_0x4C | (uint32_t)(uint8_t)unionfacet5_594ff0->sSub.field_0x4D << 8);
-    if (!sVar1) {
+    QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_ForgottenTower, QUESTSTATE_JustCompleted);
+    if (!pQuestData->pQuestSpecificData.pA1Q5->nPlayersForRewardCount) {
       pQuestData->bIsActive = '\0';
     } else {
       pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q05_Callback10_PlayerLeavesGame;
