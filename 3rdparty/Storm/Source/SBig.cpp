@@ -1761,79 +1761,70 @@ static void __stdcall BigBuffer_Or(BigBuffer * pLhs, BigBuffer * pRhs, BigBuffer
 // @oracle Mac PPC 1.10b Storm mangled symbol .Set2Exp__FR9BigBufferUi @1009c730 -- sole target of SBigSet2Exp's forwarder; also called by .FindPrime where 1.14d FindPrime calls this. Sets the value to 2^n. Was SBIG_SetBit.
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static void __stdcall BigBuffer_Set2Exp(uint32_t nBitPos, BigBuffer * pResult) {
-    uint32_t nChunkSize;
-    uint32_t nNeededCount;
-    uint32_t nAlignedCount;
-    uint32_t nIndex = 0;
-    uint32_t i = 0;
-    if (nBitPos >> 5) {
-      do {
-        nIndex = pResult->nStartWord + i;
-        if (nIndex >= pResult->nCount) {
-          nNeededCount = nIndex + 1;
-          if (nNeededCount > pResult->nCapacity) {
-            nChunkSize = pResult->nGrowStep;
-            if (!nChunkSize) {
-              nChunkSize = TSGrowableArray_Ui_CalcChunkSize(pResult, nNeededCount);
-            }
-
-            nAlignedCount = nNeededCount;
-            if (nNeededCount % nChunkSize) {
-              nAlignedCount = nChunkSize - nNeededCount % nChunkSize + nNeededCount;
-            }
-
-            TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
+    uint32_t i;
+    for (i = 0; i < nBitPos >> 5; i++) {
+      uint32_t nWordIndex = pResult->nStartWord + i;
+      if (nWordIndex >= pResult->nCount) {
+        uint32_t nNewLen = nWordIndex + 1;
+        if (nNewLen > pResult->nCapacity) {
+          uint32_t nGranularity = pResult->nGrowStep;
+          if (!nGranularity) {
+            nGranularity = TSGrowableArray_Ui_CalcChunkSize(pResult, nNewLen);
           }
 
-          SMem::SMemZero(pResult->pData + pResult->nCount, (nIndex - pResult->nCount) * 4 + 4);
-          pResult->nCount = nNeededCount;
+          uint32_t nNewCapacity = nNewLen;
+          if (nNewLen % nGranularity) {
+            nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
+          }
+
+          TSFixedArray_Ui_ReallocData(pResult, nNewCapacity);
         }
 
-        nIndex = i + 1;
-        pResult->pData[pResult->nStartWord + i] = 0;
-        i = nIndex;
-      } while (nIndex < nBitPos >> 5);
+        SMem::SMemZero(pResult->pData + pResult->nCount, (nWordIndex - pResult->nCount) * 4 + 4);
+        pResult->nCount = nNewLen;
+      }
+
+      pResult->pData[pResult->nStartWord + i] = 0;
     }
 
-    nNeededCount = pResult->nStartWord + nIndex;
-    if (nNeededCount >= pResult->nCount) {
-      uint32_t nChunkSize2;
-      nChunkSize = nNeededCount + 1;
-      if (nChunkSize > pResult->nCapacity) {
-        nChunkSize2 = pResult->nGrowStep;
-        if (!nChunkSize2) {
-          nChunkSize2 = TSGrowableArray_Ui_CalcChunkSize(pResult, nChunkSize);
+    uint32_t nWordIndex = pResult->nStartWord + i;
+    if (nWordIndex >= pResult->nCount) {
+      uint32_t nNewLen = nWordIndex + 1;
+      if (nNewLen > pResult->nCapacity) {
+        uint32_t nGranularity = pResult->nGrowStep;
+        if (!nGranularity) {
+          nGranularity = TSGrowableArray_Ui_CalcChunkSize(pResult, nNewLen);
         }
 
-        nAlignedCount = nChunkSize;
-        if (nChunkSize % nChunkSize2) {
-          nAlignedCount = nChunkSize2 - nChunkSize % nChunkSize2 + nChunkSize;
+        uint32_t nNewCapacity = nNewLen;
+        if (nNewLen % nGranularity) {
+          nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
         }
 
-        TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
+        TSFixedArray_Ui_ReallocData(pResult, nNewCapacity);
       }
 
-      SMem::SMemZero(pResult->pData + pResult->nCount, (nNeededCount - pResult->nCount) * 4 + 4);
-      pResult->nCount = nChunkSize;
+      SMem::SMemZero(pResult->pData + pResult->nCount, (nWordIndex - pResult->nCount) * 4 + 4);
+      pResult->nCount = nNewLen;
     }
 
-    pResult->pData[pResult->nStartWord + nIndex] = 1 << D2_SHIFT_COUNT(nBitPos);
-    nIndex = pResult->nStartWord + 1 + nIndex;
-    if (nIndex > pResult->nCount && nIndex > pResult->nCapacity) {
-      nNeededCount = pResult->nGrowStep;
-      if (!nNeededCount) {
-        nNeededCount = TSGrowableArray_Ui_CalcChunkSize(pResult, nIndex);
+    pResult->pData[pResult->nStartWord + i] = 1 << (nBitPos & 0x1f);
+    uint32_t nNewCount = pResult->nStartWord + i + 1;
+    if (nNewCount > pResult->nCount && nNewCount > pResult->nCapacity) {
+      uint32_t nGranularity = pResult->nGrowStep;
+      if (!nGranularity) {
+        nGranularity = TSGrowableArray_Ui_CalcChunkSize(pResult, nNewCount);
       }
 
-      nChunkSize = nIndex;
-      if (nIndex % nNeededCount) {
-        nChunkSize = nNeededCount - nIndex % nNeededCount + nIndex;
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
       }
 
-      TSFixedArray_Ui_ReallocData(pResult, nChunkSize);
+      TSFixedArray_Ui_ReallocData(pResult, nNewCapacity);
     }
 
-    pResult->nCount = nIndex;
+    pResult->nCount = nNewCount;
 }
 
 // @renamed-from SBIG_SetToOne (2026-08-28, Storm PowerPC oracle pass 4)
