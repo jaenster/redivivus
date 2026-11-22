@@ -2513,17 +2513,13 @@ void __fastcall MONSTER_HandleModeTransition(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Trigger suicide monster explosion. Loads MonStats treasure class, rolls damage, chooses missile based on TC result (fire/corpse/ice), spawns missile at unit location and applies area damage.
 void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nUnused1, uint32_t nUnused2) {
-    int32_t nMissileSpawnY;
-    int32_t nMissileSpawnX;
-    D2UnitStrc* pUnit_00;
-    eMissilesId eMissileId;
+    D2UnitStrc* pMissile;
     int nClassId;
     D2DamageStrc sDamage;
     D2MonStatsInitStrc sMonStats;
-    int32_t bIsMultiplayerB;
+    int32_t bIsMultiplayer;
     int32_t nMonClassId;
     D2MonStatsTxt* pMonStatsTxt;
-    eD2UnitType eUnitType;
     if (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       pMonStatsTxt = 0;
     } else {
@@ -2531,9 +2527,9 @@ void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     int nDifficulty = (int)pGame->nDifficulty;
-    nClassId = (int)pMonStatsTxt->aip[0][nDifficulty];
-    if (pGame->nGameType != SGAMETYPE_BNET_HOST || (bIsMultiplayerB = 0 , pGame->eGameType != GAMETYPE_SINGLEPLAYER)) {
-      bIsMultiplayerB = 1;
+    int nExplodeType = (int)pMonStatsTxt->aip[0][nDifficulty];
+    if (pGame->nGameType != SGAMETYPE_BNET_HOST || (bIsMultiplayer = 0 , pGame->eGameType != GAMETYPE_SINGLEPLAYER)) {
+      bIsMultiplayer = 1;
     }
 
     memset(&sMonStats, 0, 0x38);
@@ -2543,102 +2539,29 @@ void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       nMonClassId = pUnit->nClassId;
     }
 
-    D2MonStatsInitStrc* pScaledStats = &sMonStats;
-    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonClassId, bIsMultiplayerB, nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), 8, pScaledStats);
-    uint32_t nDmgRange = sMonStats.nA1MaxD - sMonStats.nA1MinD;
-    nDmgRange = D2_SeedRollLimited(&pUnit->sSeed, nDmgRange);
-    int nPosX = nDmgRange + sMonStats.nA1MinD << 8;
+    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonClassId, bIsMultiplayer, nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), 8, &sMonStats);
+    int nDamage = sMonStats.nA1MinD + D2_SeedRollLimited(&pUnit->sSeed, sMonStats.nA1MaxD - sMonStats.nA1MinD) << 8;
     memset(&sDamage, 0, 0x70);
     sDamage.wResultFlags |= 8;
-    eUnitType = pUnit->eUnitType;
-    sDamage.dwPhysDamage = nPosX;
-    if (nClassId == 1) {
-      sDamage.dwFireDmg = nPosX;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nMissileSpawnY = pUnit->pPath.pStaticPath->nPosY;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nMissileSpawnY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nMissileSpawnY = 0;
-      }
-
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nMissileSpawnX = pUnit->pPath.pStaticPath->nPosX;
-        eMissileId = MISSILE_Suicidefireexplode;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nMissileSpawnX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-        eMissileId = MISSILE_Suicidefireexplode;
-      } else {
-        nMissileSpawnX = 0;
-        eMissileId = MISSILE_Suicidefireexplode;
-      }
-    } else if (nClassId >= 2) {
-      sDamage.dwColdDmg = nPosX;
-      sDamage.dwColdLength = nClassId;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nMissileSpawnY = pUnit->pPath.pStaticPath->nPosY;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nMissileSpawnY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nMissileSpawnY = 0;
-      }
-
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nMissileSpawnX = pUnit->pPath.pStaticPath->nPosX;
-        eMissileId = MISSILE_Suicideiceexplode;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nMissileSpawnX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-        eMissileId = MISSILE_Suicideiceexplode;
-      } else {
-        nMissileSpawnX = 0;
-        eMissileId = MISSILE_Suicideiceexplode;
-      }
+    sDamage.dwPhysDamage = nDamage;
+    if (nExplodeType == 1) {
+      sDamage.dwFireDmg = nDamage;
+      pMissile = SKILLS::SkillsServer::CreatingAMissile(pGame, MISSILE_Suicidefireexplode, pUnit, SKILL_Attack, 1, 0, 0, D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit), D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit), 1);
+    } else if (nExplodeType >= 2) {
+      sDamage.dwColdDmg = nDamage;
+      sDamage.dwColdLength = nExplodeType;
+      pMissile = SKILLS::SkillsServer::CreatingAMissile(pGame, MISSILE_Suicideiceexplode, pUnit, SKILL_Attack, 1, 0, 0, D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit), D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit), 1);
     } else {
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nMissileSpawnY = pUnit->pPath.pStaticPath->nPosY;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nMissileSpawnY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nMissileSpawnY = 0;
-      }
-
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nMissileSpawnX = pUnit->pPath.pStaticPath->nPosX;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nMissileSpawnX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nMissileSpawnX = 0;
-      }
-
-      eMissileId = MISSILE_Suicidecorpseexplode;
+      pMissile = SKILLS::SkillsServer::CreatingAMissile(pGame, MISSILE_Suicidecorpseexplode, pUnit, SKILL_Attack, 1, 0, 0, D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit), D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit), 1);
     }
 
-    pUnit_00 = SKILLS::SkillsServer::CreatingAMissile(pGame, eMissileId, pUnit, SKILL_Attack, 1, 0, 0, nMissileSpawnX, nMissileSpawnY, 1);
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nClassId = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nClassId = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nClassId = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nMissileSpawnY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nMissileSpawnY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nMissileSpawnY = 0;
-    }
-    if (!pUnit_00) {
+    int nX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    int nY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
+    if (!pMissile) {
       return;
     }
 
-    UNIT::SUnitDmg::DAMAGE_ApplyAreaOfEffectDamage(pGame, pUnit_00, nClassId, nMissileSpawnY, (int)pMonStatsTxt->aip[3][pGame->nDifficulty], &sDamage, 0, 0, nullptr, 0x581);
+    UNIT::SUnitDmg::DAMAGE_ApplyAreaOfEffectDamage(pGame, pMissile, nX, nY, (int)pMonStatsTxt->aip[3][pGame->nDifficulty], &sDamage, 0, 0, nullptr, 0x581);
 }
 
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 40. On death (or no unit) spawns monster 0x227 and sets STATE_corpse_nodraw.
