@@ -284,12 +284,10 @@ static void Waypoint_SetWaypointArea(int32_t nAct) {
     eQuestId = QUEST_AbleGoToAct2;
     bQuestComplete = D2Common::QuestRecord::GetQuestState(npcmenu::GetQuestInfo(), eQuestId, eQuestState);
     if (!bQuestComplete) {
-      WaypointCurrentSelectedAct = 0;
-      return;
+      nAct = 0;
     }
 
     WaypointCurrentSelectedAct = nAct;
-    return;
 }
 
 void __stdcall WAYPOINT_PopulateList() {
