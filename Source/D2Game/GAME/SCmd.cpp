@@ -723,30 +723,31 @@ void __fastcall NET_D2GS_SERVER_Send_0x1A_0x1B_0x1C_Experience(D2ClientStrc * pC
 
 // Server-to-client attribute update (life, mana, stamina). Size-based opcode: 0x1D (3 bytes), 0x1E (4), 0x1F (6). The attribute id is 16-bit: 0053be46 is CMP DX,0xff, not a byte compare, so typing it from DL truncated the range check that selects the opcode.
 void __fastcall NET_D2GS_SERVER_Send_0x1D_0x1E_0x1F_SetAttribute(D2ClientStrc * pClient, uint16_t nAttributeId, uint32_t nValue) {
-    D2GSPacketSrv0x1F aPacket;
-    uint32_t nValueSave = nValue;
     if (nAttributeId >= 0xff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3cb);
       exit(-1);
     }
 
-    aPacket.nStatId = (uint8_t)nAttributeId;
     if (nValue < 0xff) {
-      uint8_t byValue;
-      byValue = (uint8_t)nValue;
-      *(uint16_t*)(char*)&nValue = (uint16_t)((uint16_t)(uint8_t)aPacket.nStatId << 8 | (uint16_t)(uint8_t)0x1d);
-      nValue = (uint32_t)((uint32_t)((uint16_t)(uint8_t)*(uint8_t*)((char*)&nValue + 3) << 8 | (uint16_t)(uint8_t)byValue) << 16 | (uint32_t)(uint16_t)nValue);
-      SCMD_QueuePacketForClient(pClient, (uint8_t*)&nValue, 3);
+      uint8_t aPacket0x1D[3];
+      aPacket0x1D[0] = 0x1d;
+      aPacket0x1D[1] = (uint8_t)nAttributeId;
+      aPacket0x1D[2] = (uint8_t)nValue;
+      SCMD_QueuePacketForClient(pClient, aPacket0x1D, 3);
       return;
     }
     if (nValue < 0xffff) {
-      *(uint16_t*)(char*)&nValue = (uint16_t)((uint16_t)(uint8_t)aPacket.nStatId << 8 | (uint16_t)(uint8_t)0x1e);
-      nValue = (uint32_t)((uint32_t)(uint16_t)(short int)nValueSave << 16 | (uint32_t)(uint16_t)nValue);
-      SCMD_QueuePacketForClient(pClient, (uint8_t*)&nValue, 4);
+      uint8_t aPacket0x1E[4];
+      aPacket0x1E[0] = 0x1e;
+      aPacket0x1E[1] = (uint8_t)nAttributeId;
+      *(uint16_t*)&aPacket0x1E[2] = (uint16_t)nValue;
+      SCMD_QueuePacketForClient(pClient, aPacket0x1E, 4);
       return;
     }
 
-    aPacket.nPacketId = '\x1f';
+    D2GSPacketSrv0x1F aPacket;
+    aPacket.nPacketId = 0x1f;
+    aPacket.nStatId = (uint8_t)nAttributeId;
     aPacket.dwValue = nValue;
     SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 6);
 }
