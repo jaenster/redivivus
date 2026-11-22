@@ -2305,19 +2305,19 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_3(D2UnitStrc * p)
 }
 
 eD2UnitType __fastcall CLIENT_GetEffectiveUnitType(D2UnitStrc * pUnit) {
-    if (pUnit) {
-      if (!FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
-        return pUnit->eUnitType;
-      }
-
-      eD2UnitType eEffectiveType = pUnit->eUnitType;
-      int nClassId = pUnit->nClassId;
-      int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
-      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eEffectiveType, &nClassId, &nAnimMode, "d:\\diablo2\\Diablo2\\Source\\D2Client/Engine.h", 0xf2);
-      return eEffectiveType;
+    if (pUnit && !FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
+      return pUnit->eUnitType;
     }
 
-    return UNIT_COUNT;
+    if (!pUnit) {
+      return UNIT_COUNT;
+    }
+
+    eD2UnitType eEffectiveType = pUnit->eUnitType;
+    int nClassId = pUnit->nClassId;
+    int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
+    D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eEffectiveType, &nClassId, &nAnimMode, "d:\\diablo2\\Diablo2\\Source\\D2Client/Engine.h", 0xf2);
+    return eEffectiveType;
 }
 
 int __fastcall CLIENT_GetEffectiveAnimMode(D2UnitStrc * pUnit) {
