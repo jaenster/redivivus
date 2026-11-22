@@ -8039,24 +8039,23 @@ void __stdcall INPUT_ConfigKeyBind(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall INPUT_ConfigKeyBindAlternate(D2UIMouseMsgStrc * pMsg) {
-    BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
-    if (bExitFlag) {
+    if (GAME::Game::GAMEDATA_GetExitFlag3()) {
       pMsg->bHandled = 0;
       return;
     }
+    int nPendingKeyStrId = 0;
     if (gnConfigBindingFirstClick) {
-      int nPendingKeyStrId = 0;
-      bExitFlag = CmdTbl::CMD_SetKeyBinding(gpStatDescriptorTable[g_ControlConfigUIState].nCmdIndex, nConfigControlSelected, (uint32_t)(uint16_t)pMsg->nWParam, (uint16_t*)&nPendingKeyStrId);
-      if (bExitFlag) {
+      if (CmdTbl::CMD_SetKeyBinding(gpStatDescriptorTable[g_ControlConfigUIState].nCmdIndex, nConfigControlSelected, (uint32_t)(uint16_t)pMsg->nWParam, (uint16_t*)&nPendingKeyStrId)) {
         UI_ConfigKeyBindModeDisable(1);
         Sound::SOUND_PlaySound(SOUND_CURSOR_SELECT, nullptr, 0, 0, 0);
       }
-      if ((short int)nPendingKeyStrId) {
-        *(uint16_t*)(char*)&gnUICtrlConfigPendingKeyStrId = (short int)nPendingKeyStrId;
-        gdwUICtrlConfigKeyBindTimestamp = GetTickCount();
-      }
     } else {
       gnConfigBindingFirstClick = 1;
+    }
+
+    if ((short int)nPendingKeyStrId) {
+      *(uint16_t*)(char*)&gnUICtrlConfigPendingKeyStrId = (short int)nPendingKeyStrId;
+      gdwUICtrlConfigKeyBindTimestamp = GetTickCount();
     }
 
     pMsg->bHandled = 1;
