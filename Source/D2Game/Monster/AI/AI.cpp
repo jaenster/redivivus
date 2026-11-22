@@ -2891,11 +2891,10 @@ uint32_t __fastcall GetFlagBit(D2AiGeneralStrc * pAiGeneral, uint16_t nFlags) {
 
 void __fastcall SetUnsetAiFlag(D2AiGeneralStrc * pAiGeneral, uint16_t nAiFlag, BOOL bSet) {
     if (bSet) {
-      *(uint16_t*)&pAiGeneral->nAiFlags = (uint16_t)pAiGeneral->nAiFlags | nAiFlag;
-      return;
+      *(uint16_t*)&pAiGeneral->nAiFlags |= nAiFlag;
+    } else {
+      *(uint16_t*)&pAiGeneral->nAiFlags &= ~nAiFlag;
     }
-
-    *(uint16_t*)&pAiGeneral->nAiFlags = (uint16_t)pAiGeneral->nAiFlags & ~nAiFlag;
 }
 
 void __fastcall SetUnsetAiFlags0x20(D2UnitStrc * pUnit, BOOL bSet) {
