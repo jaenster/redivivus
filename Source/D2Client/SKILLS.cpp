@@ -1040,16 +1040,9 @@ BOOL __fastcall Skills_CltDoFunc_AuraState_OverlayOnCaster(D2UnitStrc * pUnit, e
         pStatListEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)sAuraState);
         if (pStatListEx) {
           nAuraStat = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, (int)pSkillTxt->aurastat[0], 0);
-          if (nAuraStat > 1) {
-            if (nAuraStat >= 3) {
-              nAuraStat = 3;
-            }
-          } else {
-            nAuraStat = 1;
-          }
-
-          eOverlay = (int)pSkillTxt->prgoverlay + (nAuraStat - 1);
-          nSoundId = (int)pSkillTxt->prgsound + (nAuraStat - 1);
+          int nLevelOffset = min(max(nAuraStat, 1), 3) - 1; // steer-ok: windef.h min/max macros
+          eOverlay = (int)pSkillTxt->prgoverlay + nLevelOffset;
+          nSoundId = (int)pSkillTxt->prgsound + nLevelOffset;
           goto play_overlay_and_sound;
         }
       }
