@@ -113,6 +113,14 @@
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_POOL_AT
@@ -2726,12 +2734,7 @@ BOOL __stdcall ReadInfoFromStreamVersioned(uint8_t * pBytesAfterId, size_t size,
 
 void __fastcall ITEMS_WriteClampedValueToBitBuffer(int32_t nBits, uint32_t nValue, D2BitBufferStrc * pBitBuffer) {
     if (nBits != 0x20) {
-      uint32_t uClamped;
-      uClamped = nValue ? nValue : 0;
-      nValue = (1 << D2_SHIFT_COUNT(nBits)) - 1;
-      if (uClamped < nValue) {
-        nValue = uClamped;
-      }
+      nValue = min(max(nValue, 0), (1 << D2_SHIFT_COUNT(nBits)) - 1); // steer-ok: windef.h min/max macros
     }
 
     Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nValue, nBits);

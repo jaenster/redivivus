@@ -564,14 +564,7 @@ void __fastcall SetPaletteTable(BYTE * * ppPaletteTable) {
     // also labelled: gpGlidePaletteTable
 static BYTE * gaGlidePaletteTable[72] = {0}; D2_STATIC_GUARD(gaGlidePaletteTable, "D2Direct3D::Renderer::SetPaletteTable::gaGlidePaletteTable");
 
-    int nEntriesRemaining;
-    uint8_t** pDestPaletteEntry = gaGlidePaletteTable;
-    for (nEntriesRemaining = 0x48; nEntriesRemaining; nEntriesRemaining--) {
-      *pDestPaletteEntry = *ppPaletteTable;
-      ppPaletteTable++;
-      pDestPaletteEntry++;
-    }
-
+    memcpy(gaGlidePaletteTable, ppPaletteTable, sizeof(gaGlidePaletteTable));
     gpPaletteTable = gaGlidePaletteTable;
 }
 

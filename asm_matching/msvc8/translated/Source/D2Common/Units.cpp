@@ -1244,24 +1244,16 @@ static int32_t UNITS_GetBaseWalkVelocity(eD2UnitType eUnitType, int32_t nClassId
     switch (eUnitType) {
       case UNIT_PLAYER:
         {
-          if (nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
-            return (uint32_t)ITEMS::Items::sgptDataTable->pTxtCharStats[nClassId].WalkVelocity << 8;
-          }
-
-          return (uint32_t)*(volatile uint8_t*)0x40 << 8;
+          D2CharStatsTxt* pCharStatsTxt = nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? ITEMS::Items::sgptDataTable->pTxtCharStats + nClassId : nullptr;
+          return pCharStatsTxt->WalkVelocity << 8;
         }
       case UNIT_MONSTER:
         {
-          if (nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
-            return (int)ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].Velocity << 8;
-          }
-
-          return (int)*(volatile uint8_t*)0x32 << 8;
+          D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
+          return pMonStatsTxt->Velocity << 8;
         }
       default:
-        {
-          return 0;
-        }
+        return 0;
     }
 }
 

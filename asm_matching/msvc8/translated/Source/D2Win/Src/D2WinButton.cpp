@@ -146,25 +146,21 @@ void __fastcall D2WINBUTTON_SetImageIndex(::D2WinButton * pButton, int32_t nImag
 
 // Handles mouse wheel input for scrollable buttons. Checks scroll up/down flags (bits 3-4 of field 0x10), invokes wheel callback (field 0xd) if delta is non-zero. Uses global recursion counter.
 BOOL __fastcall D2WINBUTTON_HandleMouseWheel(::D2WinButton * pButton, int32_t nWheelDelta) {
-    uint32_t dwControlState;
     if (pButton->sControl.neD2FormType != FORM_Button) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe2);
       exit(-1);
     }
 
-    D2ControlMsg sMsg;
-    dwControlState = pButton->sControl.dwState;
-    if (Fog::BitBuffer::gadwBitMasks[0] & dwControlState && Fog::BitBuffer::gadwBitMasks[2] & dwControlState && !pButton->bPressed && !pButton->bPressedInside && (nWheelDelta > 0 && pButton->nButtonFlags & 8 || nWheelDelta < 0 && pButton->nButtonFlags & 0x10)) {
-      sMsg.uMsg = 0;
-      sMsg.wParam = 0;
-      sMsg.uLParam.nLParam = 0;
-      sMsg.nCmdCode = 0;
-      sMsg.dwReserved = 0;
-      sMsg.bHandled = 0;
-      sMsg.dwResult = 0;
+    uint32_t dwControlState = pButton->sControl.dwState;
+    if (!(Fog::BitBuffer::gadwBitMasks[0] & dwControlState) || !(Fog::BitBuffer::gadwBitMasks[2] & dwControlState) || pButton->bPressed || pButton->bPressedInside) {
+      return 0;
+    }
+
+    if (nWheelDelta > 0 && pButton->nButtonFlags & 8 || nWheelDelta < 0 && pButton->nButtonFlags & 0x10) {
+      D2ControlMsg sMsg = {0};
+      sMsg.pControl = &pButton->sControl;
       if (pButton->sControl.fpOnPress) {
         gnFormControlCount++;
-        sMsg.pControl = &pButton->sControl;
         pButton->sControl.fpOnPress(&sMsg);
         gnFormControlCount--;
       }
