@@ -2524,14 +2524,8 @@ static DWORD GetSndUnitClassId(D2UnitStrc * pUnit) {
 }
 
 static eD2UnitType GetSndUnitType(D2UnitStrc * pUnit) {
-    int nClassId;
-    eD2UnitType eUnitType = UNIT_COUNT;
-    if (pUnit) {
-      eUnitType = pUnit->eUnitType;
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
-    }
+    eD2UnitType eUnitType = GetUnitTypeOrDefaultInline(pUnit);
+    int nClassId = GetUnitClassIdOrNoneInline(pUnit);
 
     int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     if (eUnitType == UNIT_PLAYER) {
