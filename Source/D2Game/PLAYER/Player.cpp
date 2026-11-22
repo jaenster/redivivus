@@ -521,55 +521,36 @@ void __fastcall PLAYER_EndInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 // Ends the player's active interaction with any unit type (player trade, NPC, object, or Horadric Cube item). Dispatches to the appropriate close handler per unit type, then sends packet 0x62 (MakeUnitTargetable) to notify the client the interaction has ended.
 // @sourcefile .\PLAYER\Player.cpp
 void __fastcall PLAYER_CancelInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    D2UnitStrc* pInteractUnit;
-    uint32_t nInteractUnitId;
     eD2UnitType eInteractUnitType;
-    int byPacketUnitType;
-    int nInteractGUID;
-    int32_t nLine;
-    BOOL bHasInteraction;
-    bHasInteraction = UNIT::SUnit::GetInteractInfo(pUnit, &eInteractUnitType, &nInteractUnitId);
-    if (!bHasInteraction || (pInteractUnit = UNIT::SUnit::FindUnitFromTable(pGame, eInteractUnitType, nInteractUnitId) , !pInteractUnit) || false) {
-      no_interact_target:
-      nInteractGUID = 0;
-      byPacketUnitType = '\x06';
-      nLine = 0x217;
-    } else {
-      D2ItemsTxt* pItemTxt;
-      switch (eInteractUnitType) {
-        case UNIT_MONSTER:
-          UNIT::SUNITNPC::SUNITNPC_CloseNpcInteraction(pGame, pUnit, pInteractUnit);
-        nInteractGUID = pInteractUnit->nUnitGUID;
-        byPacketUnitType = '\x01';
-        nLine = 0x202;
-        break;
-        case UNIT_OBJECT:
-          Objects::ObjectsMode::OBJMODE_HandleObjectDeactivation(pGame, pUnit, pInteractUnit);
-        nInteractGUID = pInteractUnit->nUnitGUID;
-        byPacketUnitType = '\x02';
-        nLine = 0x206;
-        break;
-        default:
-          goto no_interact_target;
-        case UNIT_PLAYER:
-          PlayerTrade::ClickButton(pGame, pUnit, 6, 0);
-        return;
-        case UNIT_ITEM:
-          pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pInteractUnit->nClassId);
-        if (pItemTxt->dwCode != 0x20786f62) {
-          return;
-        }
+    uint32_t nInteractUnitId;
+    if (UNIT::SUnit::GetInteractInfo(pUnit, &eInteractUnitType, &nInteractUnitId)) {
+      D2UnitStrc* pInteractUnit = UNIT::SUnit::FindUnitFromTable(pGame, eInteractUnitType, nInteractUnitId);
+      if (pInteractUnit) {
+        switch (eInteractUnitType) {
+          case UNIT_MONSTER:
+            UNIT::SUNITNPC::SUNITNPC_CloseNpcInteraction(pGame, pUnit, pInteractUnit);
+            GAME::SCmd::NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\Player.cpp", 0x202), 'b', UNIT_MONSTER, GetGUIDInline(pInteractUnit), 0);
+            return;
+          case UNIT_OBJECT:
+            Objects::ObjectsMode::OBJMODE_HandleObjectDeactivation(pGame, pUnit, pInteractUnit);
+            GAME::SCmd::NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\Player.cpp", 0x206), 'b', UNIT_OBJECT, GetGUIDInline(pInteractUnit), 0);
+            return;
+          case UNIT_PLAYER:
+            PlayerTrade::ClickButton(pGame, pUnit, 6, 0);
+            return;
+          case UNIT_ITEM:
+            if (D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pInteractUnit->nClassId)->dwCode != 0x20786f62) {
+              return;
+            }
 
-        PlayerTrade::CUBE_OnCubeInteractionEnd(pGame, pUnit);
-        nInteractGUID = pInteractUnit->nUnitGUID;
-        byPacketUnitType = '\x04';
-        nLine = 0x211;
+            PlayerTrade::CUBE_OnCubeInteractionEnd(pGame, pUnit);
+            GAME::SCmd::NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\Player.cpp", 0x211), 'b', UNIT_ITEM, GetGUIDInline(pInteractUnit), 0);
+            return;
+        }
       }
     }
 
-    uint32_t uVar6 = 0;
-    D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\Player.cpp", nLine);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP(pClient, 'b', byPacketUnitType, nInteractGUID, uVar6);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\Player.cpp", 0x217), 'b', UNIT_COUNT, 0, 0);
 }
 
 void __fastcall PLAYER_PlaceCorpse(::SGAMEDATA * pGame, D2RoomStrc * pRoom, DWORD dwPlayerId, POINT * pPoint) {
