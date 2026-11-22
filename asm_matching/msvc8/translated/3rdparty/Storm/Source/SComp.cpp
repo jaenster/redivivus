@@ -277,25 +277,16 @@ void __fastcall BITSTREAM_WriteBits(D2BitStreamWriterStrc * pBitStream, int, int
 }
 
 void __fastcall BITSTREAM_Flush(D2BitStreamWriterStrc * pBitStream) {
-    uint32_t nBitsTmp;
-    int nBitsHeld = pBitStream->nBitsHeld;
-    while (nBitsHeld) {
-      uint32_t nShift;
+    while (pBitStream->nBitsHeld) {
       if (pBitStream->nBytesRemaining) {
         *pBitStream->pOutPtr = (uint8_t)pBitStream->nBitAccum;
         pBitStream->pOutPtr++;
         pBitStream->nBytesRemaining--;
       }
 
-      nBitsTmp = pBitStream->nBitsHeld;
+      uint32_t nBitsHeld = pBitStream->nBitsHeld;
       pBitStream->nBitAccum >>= 8;
-      nShift = 8;
-      if (nBitsTmp <= 8) {
-        nShift = nBitsTmp;
-      }
-
-      nBitsHeld = nBitsTmp - nShift;
-      pBitStream->nBitsHeld = nBitsHeld;
+      pBitStream->nBitsHeld = nBitsHeld - (nBitsHeld > 8 ? 8 : nBitsHeld);
     }
 }
 
