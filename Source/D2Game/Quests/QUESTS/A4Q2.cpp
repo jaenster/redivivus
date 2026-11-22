@@ -88,60 +88,26 @@ void __fastcall Q26_PlayIzualCompleteSoundToAll(::SGAMEDATA * pGame) {
 
 // [A4Q3 Terror's End] ActiveFilter for the Tyrael/Hadriel gossip NPCs (classId 0x16f=Tyrael, 0xf6=Hadriel/Hand-of-Justice angel). Decides whether a quest gossip entry is currently "active" for the NPC, gated on QUEST_TerrorsEnd states: Completed/FinishedInPreviousGame plus the per-NPC dialog-tracking steps 0x06/0x07 (classic) and 0x08/0x09 (expansion).
 bool __fastcall Q27_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    BOOL BVar1;
     if (nTargetClassId == 0x16f) {
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
-      if (!BVar1) {
-        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_FinishedInPreviousGame);
-        if (!BVar1 && pQuestData->nStateFlag == 1) {
-          return true;
-        }
-      }
-      if (!pQuestData->pGame->bExpansion) {
-        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
-        if (BVar1) {
-          BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x07);
-          if (BVar1) {
-            return true;
-          }
-        }
-      }
-      if (!pQuestData->pGame->bExpansion) {
-        return false;
+      if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_FinishedInPreviousGame) && pQuestData->nStateFlag == 1) {
+        return true;
       }
 
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
-      if (!BVar1) {
-        return false;
+      if (!pQuestData->pGame->bExpansion && D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed) && D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x07)) {
+        return true;
       }
 
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x09);
-    } else {
-      if (nTargetClassId != 0xf6) {
-        return false;
+      if (pQuestData->pGame->bExpansion && D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x09)) {
+        return true;
       }
-      if (!pQuestData->pGame->bExpansion) {
-        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
-        if (BVar1) {
-          BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x06);
-          if (BVar1) {
-            return true;
-          }
-        }
-      }
-      if (!pQuestData->pGame->bExpansion) {
-        return false;
+    } else if (nTargetClassId == 0xf6) {
+      if (!pQuestData->pGame->bExpansion && D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed) && D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x06)) {
+        return true;
       }
 
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
-      if (!BVar1) {
-        return false;
+      if (pQuestData->pGame->bExpansion && D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x08)) {
+        return true;
       }
-
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x08);
-    }
-    if (!BVar1) {
-      return true;
     }
 
     return false;
