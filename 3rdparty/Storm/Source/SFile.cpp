@@ -1158,12 +1158,11 @@ int __stdcall SFILE_GetFilePlatform(D2ArchiveStrc * pArchive, uint32_t * pPlatfo
       return 0;
     }
 
-    uint32_t* pArchiveData;
-    pArchiveData = (uint32_t*)pArchive->pMpqFileRecord;
-    *pPlatformInfo = pArchiveData[7];
-    pPlatformInfo[1] = pArchiveData[8];
-    pPlatformInfo[2] = pArchiveData[9];
-    pPlatformInfo[3] = pArchiveData[10];
+    uint32_t* pPlatform = (uint32_t*)pArchive->pMpqFileRecord + 7;
+    pPlatformInfo[0] = pPlatform[0];
+    pPlatformInfo[1] = pPlatform[1];
+    pPlatformInfo[2] = pPlatform[2];
+    pPlatformInfo[3] = pPlatform[3];
     LeaveCriticalSection(&lpCriticalSection_00779068);
     return 1;
 }
