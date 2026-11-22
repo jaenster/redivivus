@@ -962,18 +962,8 @@ void __stdcall D2GFX_SetPalette(LPPALETTEENTRY pPalette) {
     // Static local variables (originally global data)
     static tagPALETTEENTRY gaPaletteCurrentBuffer[256] = {}; D2_STATIC_GUARD(gaPaletteCurrentBuffer, "D2gfx::D2GFX::D2GFX_SetPalette::gaPaletteCurrentBuffer");
 
-    LPPALETTEENTRY pSrcEntry;
-    tagPALETTEENTRY* pDstEntry;
     if (pPalette) {
-      int nCount;
-      pSrcEntry = pPalette;
-      pDstEntry = gaPaletteCurrentBuffer;
-      for (nCount = 0x100; nCount; nCount--) {
-        *pDstEntry = *pSrcEntry;
-        pSrcEntry++;
-        pDstEntry++;
-      }
-
+      memcpy(gaPaletteCurrentBuffer, pPalette, sizeof(gaPaletteCurrentBuffer));
       RENDERER_CurrentRenderedFunctions->nfpSetPalette(pPalette);
       return;
     }
