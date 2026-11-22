@@ -568,20 +568,15 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_GetFileTime(char * pBytes, size_t nSize)
 // BATTLE.NET SID_CHECKAD (0x15) HANDLER
 // Receives banner ad info containing: DWORD ad_id, DWORD file_extension, FILETIME(8) file_time, null-terminated filename, null-terminated URL. Checks if the ad_id differs from the last cached ad (g_dwLastAdId), and if both filename and URL are non-empty, initiates asynchronous download via BNDOWNLOAD_InitiateFileDownload with the ad's file timestamp and URL.
 BOOL __fastcall NET_SID_CLIENT_Incoming_CheckAd(char * pBytes, size_t nSize) {
-    char* szFilenameScan;
-    char cChar;
-    uint32_t dwAdIdReg = *(uint32_t*)pBytes;
-    if (nSize >= 0x11 && dwAdIdReg != g_dwLastAdId) {
-      char* szText1;
-      szText1 = pBytes + 0x10;
-      szFilenameScan = szText1;
-      szFilenameScan = szFilenameScan + strlen(szFilenameScan) + 1;
-      g_dwLastAdId = dwAdIdReg;
-      if (*szText1 != '\0' && szText1[(int)(szFilenameScan - (pBytes + 0x11) + 1)] != '\0') {
-        BnDownload::BNDOWNLOAD_InitiateFileDownload(-0x7ffffffd, 5, dwAdIdReg, *(uint32_t*)(pBytes + 4), (FILETIME*)(pBytes + 8), szText1, szText1 + (int)(szFilenameScan - (pBytes + 0x11) + 1));
+    uint32_t dwAdId = *(uint32_t*)pBytes;
+    if (nSize >= 0x11 && dwAdId != g_dwLastAdId) {
+      FILETIME* pFileTime = (FILETIME*)(pBytes + 8);
+      char* szFileName = (char*)(pFileTime + 1);
+      g_dwLastAdId = dwAdId;
+      char* szUrl = szFileName + strlen(szFileName) + 1;
+      if (*szFileName != '\0' && *szUrl != '\0') {
+        BnDownload::BNDOWNLOAD_InitiateFileDownload(-0x7ffffffd, 5, dwAdId, *(uint32_t*)(pBytes + 4), pFileTime, szFileName, szUrl);
       }
-
-      return 1;
     }
 
     return 1;
