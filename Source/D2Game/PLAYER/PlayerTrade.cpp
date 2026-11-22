@@ -1919,22 +1919,16 @@ static uint8_t __stdcall LoopsOverAllItemsAndPutInInventory(D2UnitStrc * pUnit, 
 }
 
 static BOOL __stdcall HasMercItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit2, D2UnitStrc * pUnit) {
-    eInventoryPage eInvPage;
-    bool bPickable;
-    D2UnitStrc* pItem;
-    BOOL nPickable;
     D2UnitStrc* pItemNode = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit2->pInventory);
-    do {
-      if (!pItemNode) {
-        return 1;
-      }
-
-      pItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pItemNode);
+    while (pItemNode) {
+      D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pItemNode);
       pItemNode = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pItemNode);
-      eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem);
-    } while (eInvPage != INVPAGE_TRADEGRID2 || (nPickable = ITEMS::ItemMode::SERVER_CheckIfPickable(pGame, pUnit, pItem) , nPickable != 0));
+      if (D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem) == INVPAGE_TRADEGRID2 && !ITEMS::ItemMode::SERVER_CheckIfPickable(pGame, pUnit, pItem)) {
+        return 0;
+      }
+    }
 
-    return 0;
+    return 1;
 }
 
 // Called when player ends interaction with the Horadric Cube item. Clears the interact info and performs item level check. Ensures proper cleanup when cube UI is closed.
