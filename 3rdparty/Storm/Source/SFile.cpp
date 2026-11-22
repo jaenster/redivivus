@@ -1499,7 +1499,8 @@ int __fastcall Unreferenced_00416850(StormLinkStrc * pLink) {
 }
 
 int32_t __fastcall Unreferenced_00416860(void * pHandle) {
-    return (int)*(uint32_t*)(**(int**)pHandle + 4) <= 0 ? 0 : *(uint32_t*)(**(int**)pHandle + 4);
+    StormLinkStrc* pLink = **(StormLinkStrc***)pHandle;
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
 uint32_t __thiscall SFILE_CompareFileTime2(StormLinkStrc * pLink, intptr_t pLeft) {
