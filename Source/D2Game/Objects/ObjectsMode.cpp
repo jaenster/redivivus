@@ -3545,29 +3545,15 @@ int __fastcall _x44PacketHandler(::SGAMEDATA * pGame, DWORD dwPlayerGUID, DWORD 
 }
 
 void __fastcall OBJMODE_HandleObjectDeactivation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pObject) {
-    DWORD dwPlayerGUID;
     if (pObject) {
-      short int nClassId;
-      nClassId = (short int)pObject->nClassId;
-      if (nClassId == 0x50 || nClassId == 0x5a) {
-        if (!pUnit) {
-          dwPlayerGUID = -1;
-        } else {
-          dwPlayerGUID = pUnit->nUnitGUID;
-        }
-
-        _x44PacketHandler(pGame, dwPlayerGUID, pObject->nUnitGUID, 0, 2);
-      } else {
-        if (nClassId == 0x151) {
-          OBJMODE_ClearObjectUnitLink(pGame, pUnit, pObject);
-          UNIT::SUnit::ClearInteractInfo(pUnit);
-          return;
-        }
-        if (nClassId == 0x98) {
-          D2Common::Units::ChangeAnimMode(pObject, 0);
-          UNIT::SUnit::ClearInteractInfo(pUnit);
-          return;
-        }
+      int nClassId = pObject->nClassId;
+      if ((short)nClassId == 0x50 || (short)nClassId == 0x5a) {
+        DWORD dwObjectGUID = pObject->nUnitGUID; // steer-ok: the original reads the object GUID before testing pUnit
+        _x44PacketHandler(pGame, !pUnit ? -1 : pUnit->nUnitGUID, dwObjectGUID, 0, 2);
+      } else if ((short)nClassId == 0x151) {
+        OBJMODE_ClearObjectUnitLink(pGame, pUnit, pObject);
+      } else if ((short)nClassId == 0x98) {
+        D2Common::Units::ChangeAnimMode(pObject, 0);
       }
     }
 
