@@ -12,6 +12,14 @@
 #include "Source/D2Common/D2CommonRoot.h"
 #include "Source/D2Common/DATATBLS/DataTbls.inline.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_POOL_AT
@@ -331,17 +339,8 @@ void __stdcall SetAnimSpeed(D2UnitStrc * pUnit, int32_t nAnimSpeed) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
       return;
     }
-    if (nAnimSpeed > -0x8000) {
-      if (nAnimSpeed >= 0x7fff) {
-        nAnimSpeed = 0x7fff;
-      }
 
-      pUnit->nAnimSpeed = (short int)nAnimSpeed;
-      return;
-    }
-
-    pUnit->nAnimSpeed = -0x8000;
-    return;
+    pUnit->nAnimSpeed = (short int)min(max(nAnimSpeed, -0x8000), 0x7fff); // steer-ok: windef.h min/max macros
 }
 
 void __fastcall SetStream(D2UnitStrc * pUnit, D2MissileStreamStrc * pStream) {

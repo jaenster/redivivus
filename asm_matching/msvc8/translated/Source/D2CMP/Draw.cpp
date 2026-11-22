@@ -448,14 +448,7 @@ void __stdcall DRAW_SetDarkThresholdEnabled(BOOL bEnabled) {
 }
 
 void __stdcall DRAW_SetPaletteMask(uint8_t * pMaskData) {
-    int nDwordCount;
-    uint8_t* pDest = gaPaletteMaskData;
-    for (nDwordCount = 0x40; nDwordCount; nDwordCount--) {
-      *(uint32_t*)pDest = *(uint32_t*)pMaskData;
-      pMaskData += 4;
-      pDest += 4;
-    }
-
+    memcpy(gaPaletteMaskData, pMaskData, sizeof(gaPaletteMaskData));
     gbPaletteMaskEnabled = 1;
 }
 
