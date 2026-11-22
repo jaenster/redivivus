@@ -287,9 +287,6 @@ BOOL __fastcall Skills_CltStFunc_CheckSelectableCorpseSetParams(D2UnitStrc * pUn
 // Client-side missile creation for the Necromancer Teeth skill. Validates the skill and its cltmissilea against the missiles table and the target coords/monster (TXT_MonStats2 of nParam2), sets the unit's SKSRVDOFUNC flag, and builds a D2SkillArgStrc with seed-jittered spawn position. Emits a scatter of teeth missiles sized by the target's body size (isSmall/large), optionally swapping to the missile's SubMissile1/2 for larger targets, then fires the skill's cltmissileb/cltmissilec follow-up missiles and plays the skill target sound. Returns 1 on success, 0 if validation fails.
 int __fastcall SKILLSNEC_CltCreateTeethMissiles(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl, int32_t nTargetX, int32_t nTargetY, int32_t nTargetClassId) {
     D2SkillArgStrc sSkillArg;
-    int32_t nScatterMax;
-    int32_t nScatterMin;
-    short int nSubMissileId;
     D2SkillsTxt* pSkillsTxt;
     pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -326,37 +323,23 @@ int __fastcall SKILLSNEC_CltCreateTeethMissiles(D2UnitStrc * pUnit, eD2Skills eS
     sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.nMissileTxtNo = eCltMissileId;
     if (Fog::BitBuffer::gadwBitMasks[2] & pMonStats2->aFlagBytes[1]) {
-      nScatterMax = 1;
-      nScatterMin = 0;
+      Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 0, 1);
+    } else if (Fog::BitBuffer::gadwBitMasks[3] & pMonStats2->aFlagBytes[1]) {
+      Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 3, 3);
+      short int nSubMissileId = D2Common::DATATBLS::MissileTbls::GetMissleById(eCltMissileId)->SubMissile1;
+      if (nSubMissileId > 0 && nSubMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+        sSkillArg.nMissileTxtNo = nSubMissileId;
+        Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 2, 4);
+      }
     } else {
-      D2MissilesTxt* pMissileTxt;
-      if (Fog::BitBuffer::gadwBitMasks[3] & pMonStats2->aFlagBytes[1]) {
-        Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 3, 3);
-        pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(eCltMissileId);
-        nSubMissileId = pMissileTxt->SubMissile1;
-        if (nSubMissileId <= 0 || (int)nSubMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-          goto spawn_target_missiles;
-        }
-
-        nScatterMax = 4;
-        nScatterMin = 2;
-        sSkillArg.nMissileTxtNo = (int)nSubMissileId;
-      } else {
-        Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 2, 2);
-        pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(eCltMissileId);
-        nSubMissileId = pMissileTxt->SubMissile2;
-        if (nSubMissileId <= 0 || (int)nSubMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-          goto spawn_target_missiles;
-        }
-
-        nScatterMax = 3;
-        nScatterMin = 1;
-        sSkillArg.nMissileTxtNo = (int)nSubMissileId;
+      Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 2, 2);
+      short int nSubMissileId = D2Common::DATATBLS::MissileTbls::GetMissleById(eCltMissileId)->SubMissile2;
+      if (nSubMissileId > 0 && nSubMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+        sSkillArg.nMissileTxtNo = nSubMissileId;
+        Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 1, 3);
       }
     }
 
-    Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, nScatterMin, nScatterMax);
-    spawn_target_missiles:
     sSkillArg.nY = nTargetY;
     sSkillArg.nX = nTargetX;
     eCltMissileId = (eMissilesId)pSkillsTxt->cltmissile[2];
